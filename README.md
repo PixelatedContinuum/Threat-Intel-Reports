@@ -43,6 +43,7 @@ High-level overview for quick triage.
 - MITRE ATT&CK mapping to observed behaviors  
 
 ### IOCs
+
 | Type   | Value                   |
 |--------|-------------------------|
 | SHA256 | abc123...               |
