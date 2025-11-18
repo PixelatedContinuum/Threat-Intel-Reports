@@ -24,3 +24,5 @@ High-level overview for quick triage.
 ## Detection Opportunities
 - Sigma/YARA rules
 - Splunk/Elastic queries
+
+#Closing Summary and Analyst Input
