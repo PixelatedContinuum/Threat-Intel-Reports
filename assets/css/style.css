@@ -10,47 +10,17 @@ html, body {
 
 /* Center the main content column */
 .page-content,
-.main-content,
-.wrapper {
-  max-width: 900px;       /* Medium-style width */
-  margin: 0 auto;         /* centers horizontally */
+.page-content .wrapper,
+.page-content .main-content {
+  max-width: 900px;      /* Medium-style width */
+  margin: 0 auto;        /* centers horizontally */
   padding: 40px 20px;
+  box-sizing: border-box;
 }
 
 /* Optional card look */
-.page-content,
-.main-content {
+.page-content .main-content {
   background-color: #181818;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0,0,0,0.6);
-}
-
-/* Headings */
-h1, h2, h3, h4 {
-  color: #ffffff;
-  margin-top: 1.4em;
-  margin-bottom: 0.6em;
-  font-weight: 600;
-}
-
-/* Links */
-a { color: #64b5f6; text-decoration: none; }
-a:hover { color: #bbdefb; text-decoration: underline; }
-
-/* Paragraphs */
-p { margin: 1em 0; font-size: 1.05em; }
-
-/* Tables */
-table { border-collapse: collapse; width: 100%; margin: 1.5em 0; }
-th, td { border: 1px solid #333; padding: 10px; }
-th { background-color: #1e1e1e; color: #ffffff; }
-td { background-color: #1a1a1a; }
-
-/* Code blocks */
-pre, code {
-  background-color: #1e1e1e;
-  color: #cfcfcf;
-  padding: 6px 8px;
-  border-radius: 4px;
-  font-family: Consolas, "Courier New", monospace;
 }
