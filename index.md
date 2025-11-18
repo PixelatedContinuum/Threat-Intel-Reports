@@ -42,6 +42,8 @@ High-level overview for quick triage.
 - Behavior observed (networking, privilege escalation, anti-analysis)  
 - MITRE ATT&CK mapping to observed behaviors  
 
+---
+
 ### IOCs
 
 | Type   | Value                   |
@@ -49,6 +51,8 @@ High-level overview for quick triage.
 | SHA256 | abc123...               |
 | Domain | malicious-example[.]com |
 | IP     | 192.168.1.50            |
+
+---
 
 ### Detection Opportunities
 - Sigma/YARA rules  
