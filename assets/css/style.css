@@ -8,10 +8,16 @@ html, body {
   line-height: 1.7;
 }
 
-/* Center the wrapper */
-.wrapper {
+/* Center the page content */
+.page-content {
+  display: flex;
+  justify-content: center;   /* centers horizontally */
+}
+
+.page-content .wrapper {
   max-width: 900px;          /* Medium-style width */
-  margin: 0 auto;            /* centers horizontally */
+  width: 100%;
+  margin: 0 auto;
   padding: 40px 20px;
   background-color: #181818; /* subtle contrast card */
   border-radius: 8px;
