@@ -74,7 +74,8 @@ High-level overview for quick triage.
 ## 🤝 Contributing
 Contributions are welcome!  
 - Fork the repo and submit a PR with new reports, detections, or IOCs.  
-- Follow the report format for consistency.  
+- Follow the report format for consistency.
+- Or simply reach out to me and we disscuss and I can post something on your behalf.
 
 ---
 
