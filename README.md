@@ -5,7 +5,7 @@ The goal is to present findings from my own research and hunting that are action
 
 ---
 
-## 📌 Mission
+## Mission
 - Share reproducible research and technical reports from my own research and hunting
 - Provide **IOCs** that can be used in threat hunting or detection engineering (Indicators of Compromise)
 - Map findings to **MITRE ATT&CK** techniques to assist in making my findings as usful as possible
@@ -14,4 +14,4 @@ The goal is to present findings from my own research and hunting that are action
   
 ---
 
-## 📂 Repository Structure
+## Repository Structure
