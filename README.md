@@ -12,6 +12,8 @@ The goal is to present findings from my own research and hunting that are action
 - Publish **detection logic** for the threats in my reports (Sigma, YARA, Splunk, etc.)
 - Above all, I hope enable community collaboration and knowledge transfer
   
+NOTE: This is not a collection of open source intel reports, IOCs, TTPs, etc. This will be from my own research and hunting but, may have some overlap from known threats. If you are looking for a open source collection of intel let me know! I can help there too. 
+
 ---
 
 ## Repository Structure
