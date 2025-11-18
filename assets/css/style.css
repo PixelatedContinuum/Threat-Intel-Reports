@@ -1,57 +1,99 @@
-/* Base reset */
+/* Base dark mode */
 html, body {
   margin: 0;
   padding: 0;
-  background: #121212 !important;
-  color: #e0e0e0 !important;
+  background-color: #121212;
+  color: #e0e0e0;
   font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.7;
 }
 
-/* Cayman header areas */
-.page-header,
-.site-header,
-.project-name,
-.project-tagline {
-  background: #161616 !important;
-  color: #ffffff !important;
-}
-
-/* Links */
-a { color: #64b5f6; text-decoration: none; }
-a:hover { color: #bbdefb; text-decoration: underline; }
-
-/* Main page content wrapper used by Cayman */
+/* Centered reading column */
 .page-content {
   display: flex;
-  justify-content: center;    /* center horizontally */
-  background: transparent !important;
+  justify-content: center;
 }
 
-.page-content .wrapper,
-.wrapper, .container, .main-content {
-  max-width: 900px;           /* reading column width */
+.page-content .wrapper {
+  max-width: 900px;          /* Medium-style width */
   width: 100%;
   padding: 40px 20px;
-  line-height: 1.65;
-  background: #181818;        /* subtle card contrast */
+  background-color: #181818; /* subtle contrast card */
   border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
 /* Headings */
-h1, h2, h3, h4 { color: #ffffff; margin-top: 1.2em; margin-bottom: 0.6em; }
+h1, h2, h3, h4 {
+  color: #ffffff;
+  margin-top: 1.4em;
+  margin-bottom: 0.6em;
+  font-weight: 600;
+}
+
+/* Links */
+a {
+  color: #64b5f6;
+  text-decoration: none;
+}
+a:hover {
+  color: #bbdefb;
+  text-decoration: underline;
+}
+
+/* Paragraphs */
+p {
+  margin: 1em 0;
+  font-size: 1.05em;
+}
 
 /* Tables */
-table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-th, td { border: 1px solid #333; padding: 8px; }
-th { background: #1e1e1e; color: #ffffff; }
-td { background: #1a1a1a; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+}
+th, td {
+  border: 1px solid #333;
+  padding: 10px;
+}
+th {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+td {
+  background-color: #1a1a1a;
+}
 
 /* Code blocks */
 pre, code {
-  background: #1e1e1e !important;
-  color: #cfcfcf !important;
-  padding: 4px 6px;
+  background-color: #1e1e1e;
+  color: #cfcfcf;
+  padding: 6px 8px;
   border-radius: 4px;
   font-family: Consolas, "Courier New", monospace;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid #64b5f6;
+  padding-left: 16px;
+  color: #b0bec5;
+  font-style: italic;
+  margin: 1.2em 0;
+}
+
+/* Navigation bar (optional) */
+.navbar {
+  background-color: #161616;
+  padding: 12px 20px;
+  text-align: center;
+}
+.navbar a {
+  color: #e0e0e0;
+  margin: 0 12px;
+  font-weight: 500;
+}
+.navbar a:hover {
+  color: #64b5f6;
 }
