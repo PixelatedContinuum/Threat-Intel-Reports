@@ -1,8 +1,5 @@
-title: Threat Intelligence by Joseph
+title: Hunter’s Ledger By Joseph
 description: Actionable reports, detections, and IOCs for threat hunting
-theme: jekyll-theme-cayman
-
-# Force GitHub-Flavored Markdown (so tables render correctly)
 markdown: kramdown
 kramdown:
   input: GFM
