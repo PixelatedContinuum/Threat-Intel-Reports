@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/assets/css/style.css">
+
 # Reports
 
 This section contains detailed malware analysis and reverse engineering notes.  
