@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/assets/css/style.css">
+
 # Threat-Intel-Reports
 
 Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  
