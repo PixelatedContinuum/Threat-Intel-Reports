@@ -77,12 +77,6 @@ Contributions are welcome!
 
 ---
 
-## 📜 License
-This repository is licensed under the **MIT License**.  
-Feel free to use, adapt, and share with attribution.
-
----
-
 ## 🔗 Resources
 - [MITRE ATT&CK](https://attack.mitre.org/)
 - [Sigma Rules](https://github.com/SigmaHQ/sigma)
