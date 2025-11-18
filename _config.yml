@@ -1,5 +1,5 @@
-title: Hunter’s Ledger By Joseph
-description: Actionable reports, detections, and IOCs for threat hunting
+title: The Hunter's Ledger
+description: Actionable reports, detections, and IOCs for the cyber communitiy
 markdown: kramdown
 kramdown:
   input: GFM
