@@ -1,4 +1,4 @@
-/* Base dark mode */
+/* Dark mode base */
 html, body {
   margin: 0;
   padding: 0;
@@ -8,15 +8,10 @@ html, body {
   line-height: 1.7;
 }
 
-/* Centered reading column */
-.page-content {
-  display: flex;
-  justify-content: center;
-}
-
-.page-content .wrapper {
+/* Center the wrapper */
+.wrapper {
   max-width: 900px;          /* Medium-style width */
-  width: 100%;
+  margin: 0 auto;            /* centers horizontally */
   padding: 40px 20px;
   background-color: #181818; /* subtle contrast card */
   border-radius: 8px;
@@ -72,28 +67,4 @@ pre, code {
   padding: 6px 8px;
   border-radius: 4px;
   font-family: Consolas, "Courier New", monospace;
-}
-
-/* Blockquotes */
-blockquote {
-  border-left: 4px solid #64b5f6;
-  padding-left: 16px;
-  color: #b0bec5;
-  font-style: italic;
-  margin: 1.2em 0;
-}
-
-/* Navigation bar (optional) */
-.navbar {
-  background-color: #161616;
-  padding: 12px 20px;
-  text-align: center;
-}
-.navbar a {
-  color: #e0e0e0;
-  margin: 0 12px;
-  font-weight: 500;
-}
-.navbar a:hover {
-  color: #64b5f6;
 }
