@@ -1,0 +1,45 @@
+/* Dark mode base */
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+  color: #ffffff;
+}
+
+/* Links */
+a {
+  color: #64b5f6;
+}
+a:hover {
+  color: #bbdefb;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+th, td {
+  border: 1px solid #333;
+  padding: 8px;
+}
+th {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+td {
+  background-color: #1a1a1a;
+}
+
+/* Code blocks */
+pre, code {
+  background-color: #1e1e1e;
+  color: #cfcfcf;
+  padding: 4px;
+  border-radius: 4px;
+}
