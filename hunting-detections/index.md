@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/assets/css/style.css">
+
 # Hunting Detections
 
 This section contains detection logic for SIEM/EDR platforms, including Sigma and YARA rules.  
