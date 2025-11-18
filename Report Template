@@ -1,0 +1,37 @@
+# Report: <Malware/Operation Name>
+**Date:** YYYY-MM-DD  
+**Author:** Joseph  
+**ATT&CK Mapping:** TXXXX, TYYYY, TZZZZ
+
+## Executive summary
+- **Impact:** …
+- **Targets:** …
+- **Key behaviors:** …
+
+## Technical details
+- **Entry point:** …
+- **Obfuscation:** …
+- **Persistence:** …
+- **Credential access:** …
+- **Network behavior:** …
+
+## IOCs
+| **Type** | **Value** | **Context** |
+|----------|-----------|-------------|
+| SHA256   | <hash>    | Sample A    |
+| Domain   | example[.]com | C2       |
+| IP       | 1.2.3.4   | C2          |
+| Path     | C:\…      | Persistence |
+
+## Detection opportunities
+- **Sigma:** rule names + links to files in `/hunting-detections/sigma/`
+- **YARA:** rule names + links to files in `/hunting-detections/yara/`
+- **Queries:** Splunk/Elastic/KQL snippets
+
+## Artifacts and notes
+- **PE offsets:** …
+- **Decoded strings:** …
+- **Anti-analysis:** …
+
+## References
+- MITRE techniques pages, vendor analyses, your prior notes
