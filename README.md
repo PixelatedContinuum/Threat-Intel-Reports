@@ -31,7 +31,7 @@ The goal is to present findings from my own research and hunting that are action
 ---
 
 ## 📝 Report Format
-Each report follows a consistent structure: [Report Teamplate](/Report-Template)
+Each report follows a consistent structure: [Report Template](/Report-Template)
 
 ### Executive Summary
 High-level overview for quick triage.
@@ -69,6 +69,7 @@ High-level overview for quick triage.
 Contributions are welcome!  
 - Fork the repo and submit a PR with new reports, detections, or IOCs.  
 - Follow the report format for consistency.  
+- Or just contact me and we can discuss and I can post for you. 
 
 ---
 
