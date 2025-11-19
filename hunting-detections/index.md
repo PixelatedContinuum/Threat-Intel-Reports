@@ -1,9 +1,4 @@
-<div class="navbar">
-  <a href="/reports/">Reports</a>
-  <a href="/hunting-detections/">Detections</a>
-  <a href="/ioc-feeds/">IOCs</a>
-  <a href="/report-template/">Template</a>
-</div>
+<link rel="stylesheet" href="/assets/css/style.css">
 
 <div class="content">
 
