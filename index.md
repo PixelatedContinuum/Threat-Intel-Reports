@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # The Hunter's Ledger
 
 Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  
