@@ -17,8 +17,6 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 ### Current Reports
 - [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-powershell/)
 
-*(Add new reports here as you create new folders — each folder should contain its own `index.md`.)*
-
 ---
 
 ## 📜 Usage Notes
