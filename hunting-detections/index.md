@@ -15,7 +15,7 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 ---
 
 ## 📑 Available Detections
-- [Suspicious PowerShell Execution](powershell-detection.md)
+- [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-detections.md)
 
 *(Add new detections here as you create them — each detection can be a `.md` file in this folder.)*
 

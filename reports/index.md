@@ -14,7 +14,7 @@ Welcome to the **Hunter’s Ledger Reports** section.
 Each report contains detailed malware analysis, reverse engineering notes, IOCs, and detection opportunities.
 
 ### Current Reports
-- [Malware Sample 1](malware-sample-1/)
+- [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-powershell/)
 
 *(Add new reports here as you create new folders — each folder should contain its own `index.md`.)*
 

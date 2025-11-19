@@ -15,7 +15,7 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 ---
 
 ## 📑 Available IOC Feeds
-- [Malware Campaign Feed](malware-campaign.json)
+- [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-powershell.json)
 
 *(Add new feeds here as you create them — keep them in this folder for clean URLs.)*
 
