@@ -1,16 +1,18 @@
 ---
+title: The Hunter's Ledger
 layout: default
+permalink: /
 ---
 
 Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  
-The goal is to present findings from my own research and hunting that are actionable for detection engineering, threat hunting, and incident response teams. Feel free to contribute or just reach out with information, questions, or suggestions! 
+The goal is to present findings from my own research and hunting that are actionable for detection engineering, threat hunting, and incident response teams. Feel free to contribute or just reach out with information, questions, or suggestions!
 
 ---
 
 ## 🎯 Mission
 - Share reproducible research and technical reports from my own investigations and hunting  
 - Provide IOCs that can be used in threat hunting or detection engineering (Indicators of Compromise)  
-- Map findings to MITRE ATT&CK techniques to assist in making findings as useful as possible to anyone 
+- Map findings to MITRE ATT&CK techniques to assist in making findings as useful as possible to anyone  
 - Publish detection logic for the threats in my reports where possible (Sigma, YARA, Splunk, etc.)  
 - Above all, enable community collaboration and knowledge transfer so everyone is safer
 
@@ -21,27 +23,27 @@ The goal is to present findings from my own research and hunting that are action
 ---
 
 ## 📂 Repository Structure
-- [Reports](reports/) → Detailed malware analysis and reverse engineering notes.  
+- [Reports](/reports/) → Detailed malware analysis and reverse engineering notes.  
   *License: All Rights Reserved — free to read, but reuse requires written permission.*
 
-- [Hunting Detections](hunting-detections/) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
+- [Hunting Detections](/hunting-detections/) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [IOC Feeds](ioc-feeds/) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
+- [IOC Feeds](/ioc-feeds/) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [Report Templates](report-templates/) → Consistent format for reports.
+- [Report Templates](/report-templates/) → Consistent format for reports.
 
 ---
 
 ## 📝 Report Format
-Each report follows a consistent structure: [Report Templates](report-templates/)
+Each report follows a consistent structure: [Report Templates](/report-templates/)
 
 ---
 
 ## ⚡ Usage
 - Import IOC feeds into your SIEM/EDR and threat hunting workflows  
-- Adapt detection logic for your environment or use them for quick hunts
+- Adapt detection logic for your environment or use them for quick hunts  
 - Use ATT&CK mappings for threat modeling or attack simulation  
 - Reference reverse engineering notes for deeper analysis  
 - Import into your CTI platform of choice  
@@ -67,7 +69,7 @@ Contributions are welcome!
 
 ### License for Reports Section
 © 2025 Joseph. All rights reserved.  
-The reports in [Reports](reports/) are made publicly available for **reading and reference purposes only**.  
+The reports in [Reports](/reports/) are made publicly available for **reading and reference purposes only**.  
 They may not be reproduced, redistributed, modified, or incorporated into other projects without **prior written permission** from the author.
 
 **Permissions**
@@ -82,7 +84,7 @@ They may not be reproduced, redistributed, modified, or incorporated into other 
 ---
 
 ### License for Detections and IOCs Sections
-The detection rules in [Hunting Detections](hunting-detections/) and IOC feeds in [IOC Feeds](ioc-feeds/) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
+The detection rules in [Hunting Detections](/hunting-detections/) and IOC feeds in [IOC Feeds](/ioc-feeds/) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
 
 **Permissions**
 - You are free to use, adapt, and share the detection rules and IOC feeds for **non-commercial purposes**.  

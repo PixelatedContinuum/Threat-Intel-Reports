@@ -1,10 +1,10 @@
 ---
+title: Hunting Detections
 layout: default
+permalink: /hunting-detections/
 ---
 
 # Hunting Detections
-
-[Home](../) | [Reports](../reports/) | [Hunting Detections](./) | [IOC Feeds](../ioc-feeds/) | [Report Templates](../report-templates/)
 
 ---
 

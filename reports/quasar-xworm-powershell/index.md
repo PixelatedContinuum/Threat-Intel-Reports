@@ -1,73 +1,81 @@
 ---
+title: QuasarRAT + Xworm + PowerShell Loader
 layout: default
+permalink: /reports/quasar-xworm-powershell/
 ---
 
-# QuasarRAT + Xworm + PowerShell Loader Campaign
+# Campaign Report: QuasarRAT + Xworm + PowerShell Loader
 
-## 📌 Executive Summary
-This campaign combines commodity RATs (QuasarRAT, Xworm) with a VBScript + PowerShell loader.  
+---
+
+## 📌 Overview
+This campaign combines commodity RATs (QuasarRAT and Xworm) with a VBScript + PowerShell loader.  
 The loader disguises its payload as an image (`update.png`) but actually downloads and executes a PowerShell script in memory.  
 That script disables Microsoft Defender by adding broad exclusions, then facilitates RAT deployment.
 
 ---
 
-## 📌 Overview
-Malware families observed:
-- **QuasarRAT** (multiple samples, 2–3 MB typical size, one tagged with APT10).
-- **Xworm** (smaller binaries, ~70 KB).
-
-**Loader mechanism:**
-- VBScript stager creates a PowerShell command string.
-- PowerShell uses .NET’s `System.Net.Http.HttpClient` to fetch a remote file named `update.png` from `193.233.164.21`.
-- Despite the `.png` extension, the file is a PowerShell script delivered as text.
-- Script disables Microsoft Defender by adding exclusions for:
-  - Entire `C:\` drive
-  - Processes: `powershell.exe`, `wscript.exe`, `cmd.exe`, `cvtres.exe`
-
-**Infrastructure:**
-- `dns4up.duckdns[.]org` — dynamic DNS domain hosting QuasarRAT, Xworm, and scripts.
-- `193.233.164.21` — IP hosting payloads including `update.png`.
-
-**TTPs:**
-- Fileless execution: PowerShell loads script content directly into memory.
-- Defense evasion: Defender exclusions.
-- RAT deployment: QuasarRAT and Xworm provide remote access, persistence, and data theft.
+## 🧩 Loader Mechanism
+- **VBScript stager** constructs a PowerShell command string.  
+- **PowerShell execution** uses `.NET System.Net.Http.HttpClient` to fetch `update.png` from a remote server.  
+- Despite the `.png` extension, the file is a **text‑based PowerShell script**, not an image.  
+- The script is read into memory, compiled into a `[ScriptBlock]`, and executed immediately with `.Invoke()`.  
 
 ---
 
-## 🧾 Indicators of Compromise (IOCs)
-See full feed: [Quasar/Xworm IOC Feed](../../ioc-feeds/quasar-xworm-powershell.json)
+## 🛡️ Defense Evasion
+The PowerShell payload disables Microsoft Defender by adding exclusions for:
+- Entire `C:\` drive.  
+- Processes: `powershell.exe`, `wscript.exe`, `cmd.exe`, `cvtres.exe`.  
 
-### Key IOCs
-- **Domains/IPs:** `dns4up.duckdns[.]org`, `193.233.164.21`  
-- **File Hashes:**  
-  - QuasarRAT: `6167ced165bdcc193cd9cb0898ef6c41fd50918fa2f1183aab82e478800c901a` …  
-  - Xworm: `5a1424830fb4e19be0f79f543ba998aded16e9890a97977d0424062cfb28cbec` …  
-- **Scripts:** `update.png` PowerShell payload, VBScript loader  
-- **Strings:** `Add-MpPreference -ExclusionPath C:\`, `HttpClient.GetAsync('193.233.164.21/update.png')`
+This effectively blinds Defender to subsequent malicious activity.
 
 ---
 
-## 🛡️ Detection Opportunities
-See full rules: [Quasar/Xworm Detections](../../hunting-detections/quasar-xworm-detections.md)
+## 🖥️ RAT Deployment
+Once exclusions are in place, the loader hands off to RAT binaries:
+- **QuasarRAT**: .NET‑based remote access trojan, ~2–3 MB, often with configs embedded in resources.  
+- **Xworm**: smaller (~70 KB), obfuscated strings, commodity RAT functionality.  
+Both provide persistence, remote control, and data theft capabilities.
 
-### Highlights
-- **YARA:** Match Defender exclusion script strings  
-- **Sigma:** Detect VBScript spawning PowerShell with HttpClient + `update.png`  
-- **Suricata:** Alert on `/update.png` URI and DuckDNS domains
+---
+
+## 🌐 Infrastructure
+- Dynamic DNS domain: `dns4up.duckdns[.]org`  
+- Hosting IP: `193.233.164.21`  
+Both serve QuasarRAT, Xworm, and loader scripts.
+
+---
+
+## 🔍 Tactics, Techniques, and Procedures (TTPs)
+- **Fileless execution**: PowerShell loads and executes script content directly in memory.  
+- **Defense evasion**: Microsoft Defender exclusions.  
+- **Remote access**: RAT deployment for persistence and control.  
+- **Living off the land**: Abuse of legitimate scripting engines (VBScript, PowerShell).  
+
+---
+
+## 🧭 Pivoting Strategy
+Analysts can pivot on:
+- **File names**: `update.png`, `update.ps1`.  
+- **Strings**: `Add-MpPreference`, `ExclusionPath`, `HttpClient.GetAsync`.  
+- **Domains/IPs**: DuckDNS subdomains, `193.233.164.21`.  
+- **Malware traits**: QuasarRAT’s embedded configs, Xworm’s obfuscation patterns.  
+
+---
+
+## 📝 Final Summary
+This campaign demonstrates a layered loader strategy:
+1. VBScript launches PowerShell.  
+2. PowerShell fetches a disguised payload (`update.png`).  
+3. Payload disables Defender and executes in memory.  
+4. RATs (QuasarRAT, Xworm) are deployed for persistence and remote control.  
+
+Key insight: the `.png` extension is a deliberate misdirection — the payload is a PowerShell script, not an image.  
+This is a classic “living off the land” technique, leveraging native scripting tools for stealth and evasion.
 
 ---
 
 ## 📜 License
 © 2025 Joseph. All rights reserved.  
-The reports in [Reports](reports/) are made publicly available for **reading and reference purposes only**.  
-They may not be reproduced, redistributed, modified, or incorporated into other projects without **prior written permission** from the author.
-
-**Permissions**
-- You may view and reference the reports for personal or organizational research.  
-- You may cite the reports in academic or professional work with proper attribution.  
-
-**Restrictions**
-- Redistribution of the reports in whole or in part is prohibited without written consent.  
-- Commercial use, including incorporation into products, services, or paid publications, is prohibited without written consent.  
-- Modification or derivative works based on these reports are prohibited without written consent.
+Free to read, but reuse requires written permission.

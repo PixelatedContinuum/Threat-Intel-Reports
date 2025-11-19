@@ -1,5 +1,7 @@
 ---
+title: Detection Rules – QuasarRAT + Xworm Campaign
 layout: default
+permalink: /hunting-detections/quasar-xworm-detections/
 ---
 
 # Detection Rules – QuasarRAT + Xworm Campaign

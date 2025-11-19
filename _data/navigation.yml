@@ -1,0 +1,10 @@
+- name: Home
+  link: /
+- name: Reports
+  link: /reports/
+- name: Hunting Detections
+  link: /hunting-detections/
+- name: IOC Feeds
+  link: /ioc-feeds/
+- name: Report Templates
+  link: /report-templates/

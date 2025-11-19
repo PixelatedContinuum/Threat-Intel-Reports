@@ -1,12 +1,31 @@
 title: The Hunter's Ledger
 description: Threat Intelligence Reports and Hunting Resources
+
 url: "https://pixelatedcontinuum.github.io"
 baseurl: "/Threat-Intel-Reports"
 
-theme: jekyll-theme-architect
+# Use Type-on-Strap remote theme
+remote_theme: sylhare/Type-on-Strap
+plugins:
+  - jekyll-remote-theme
 
+# Global defaults (use theme's default layout)
 defaults:
   - scope:
       path: ""
     values:
-      layout: "default"
+      layout: default
+
+# Navigation and branding
+logo: "/assets/images/logo.png"   # ensure the file exists at assets/images/logo.png
+
+# Type-on-Strap options (safe, easy accents)
+theme_settings:
+  header_color: "#0f0f0f"
+  accent_color: "#4dabf7"
+  footer_color: "#1f1f1f"
+
+# Optional metadata
+markdown: kramdown
+highlighter: rouge
+permalink: pretty

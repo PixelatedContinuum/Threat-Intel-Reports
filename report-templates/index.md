@@ -1,16 +1,16 @@
 ---
+title: Report Templates
 layout: default
+permalink: /report-templates/
 ---
 
 # Report Templates
-
-[Home](../) | [Reports](../reports/) | [Hunting Detections](../hunting-detections/) | [IOC Feeds](../ioc-feeds/) | [Report Templates](./)
 
 ---
 
 ## 📌 Purpose
 This section provides a **standardized template** for creating new reports in *The Hunter’s Ledger*.  
-All reports can follow this format to ensure consistency, reproducibility, and presentation. Feel free to contribute your own report templates! 
+All reports can follow this format to ensure consistency, reproducibility, and presentation. Feel free to contribute your own report templates!
 
 ---
 
@@ -20,13 +20,12 @@ All reports can follow this format to ensure consistency, reproducibility, and p
 High‑level overview for quick triage.
 
 ### Technical Details
-- File structure analysis (PE headers, offsets, payloads)  
-- Reverse engineering notes (entry points, obfuscation, persistence)  
-- Behavior observed (networking, privilege escalation, anti‑analysis)  
-- MITRE ATT&CK mapping to observed behaviors  
+- File structure analysis (PE headers, offsets, payloads)
+- Reverse engineering notes (entry points, obfuscation, persistence)
+- Behavior observed (networking, privilege escalation, anti‑analysis)
+- MITRE ATT&CK mapping to observed behaviors
 
 ### IOCs
-
 | Type   | Value                   |
 |--------|-------------------------|
 | SHA256 | abc123...               |
@@ -34,18 +33,18 @@ High‑level overview for quick triage.
 | IP     | 192.168.1.50            |
 
 ### Detection Opportunities
-- Sigma/YARA rules  
-- Splunk/Elastic queries  
+- Sigma/YARA rules
+- Splunk/Elastic queries
 
 ---
 
 ## ⚡ Usage
-- Copy this template into a new folder under `/reports/` (e.g., `/reports/malware-sample-1/`).  
-- Replace placeholder content with your actual findings.  
-- Add cross‑links to related IOC feeds and detections.  
+- Copy this template into a new folder under `/reports/` (e.g., `/reports/malware-sample-1/`).
+- Replace placeholder content with your actual findings.
+- Add cross‑links to related IOC feeds and detections.
 
 ---
 
 ## 📜 License
-- Reports are © 2025 Joseph. All rights reserved.  
-- Free to read, but reuse requires written permission.  
+- Reports are © 2025 Joseph. All rights reserved.
+- Free to read, but reuse requires written permission.
