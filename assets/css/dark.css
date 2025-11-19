@@ -1,14 +1,17 @@
-/* Full-page background */
+/* Full-page background override */
 html, body {
   background-color: #1f1f1f !important;
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Outer container */
 .container-lg {
   background-color: #1f1f1f !important;
   border: none !important;
+  box-shadow: none !important;
 }
 
 /* Main content wrapper */
@@ -18,6 +21,7 @@ html, body {
   max-width: 900px;
   margin: 0 auto;
   border: none !important;
+  box-shadow: none !important;
 }
 
 /* Nav bar */
@@ -26,6 +30,7 @@ html, body {
   padding: 0.5rem;
   border-radius: 6px;
   border: none !important;
+  box-shadow: none !important;
   text-align: center;
   display: inline-block;
   width: auto;
@@ -50,7 +55,7 @@ html, body {
   color: #e0e0e0 !important;
   border: none !important;
   border-radius: 6px;
-  overflow: hidden;
+  box-shadow: none !important;
 }
 .markdown-body th,
 .markdown-body td {
@@ -77,6 +82,7 @@ footer {
   text-align: center;
   background-color: #1f1f1f !important;
   border: none !important;
+  box-shadow: none !important;
 }
 footer a {
   color: #4dabf7;
