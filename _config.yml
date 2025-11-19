@@ -1,7 +1,5 @@
-title: The Hunter's Ledger By Joseph Harrison
+title: Hunter's Ledger By Joseph Harrison
 description: Actionable reports, detections, and IOCs for the cyber communitiy
-theme: jekyll-theme-cayman
-
 markdown: kramdown
 kramdown:
   input: GFM
