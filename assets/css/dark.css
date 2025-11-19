@@ -76,8 +76,6 @@ html, body {
   margin: 1rem auto;
   max-width: 900px;
   border-radius: 8px;
-  border: none !important;
-  box-shadow: none !important;
   text-align: center;
 }
 .markdown-body header nav a {
@@ -85,6 +83,11 @@ html, body {
   margin: 0 0.6rem;
   font-weight: 500;
   text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-right: 1px solid #2a2a2a; /* subtle separator */
+}
+.markdown-body header nav a:last-child {
+  border-right: none; /* remove separator after last link */
 }
 .markdown-body header nav a:hover {
   color: #82cfff !important;
@@ -94,24 +97,25 @@ html, body {
 /* Tables */
 .markdown-body table {
   width: 100%;
-  border-collapse: collapse; /* prevents edge bleed */
+  border-collapse: collapse;
   margin: 1.5rem 0;
   background-color: #1f1f1f !important;
   color: #e0e0e0 !important;
-  border: none !important;
-  box-shadow: none !important;
 }
 .markdown-body th,
 .markdown-body td {
   padding: 0.75rem 1rem;
-  border: none !important;
   background-color: #1f1f1f !important;
   color: #e0e0e0 !important;
+  border-bottom: 1px solid #2a2a2a; /* subtle row separator */
 }
 .markdown-body th {
   background-color: #0f0f0f !important;
   color: #4dabf7 !important;
   text-align: left;
+}
+.markdown-body tr:last-child td {
+  border-bottom: none; /* remove separator after last row */
 }
 .markdown-body tr:nth-child(even) td {
   background-color: #262626 !important;
