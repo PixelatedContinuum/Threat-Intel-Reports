@@ -4,7 +4,7 @@ layout: default
 
 # IOC Feeds
 
-[Home](../) | [Reports](../reports/) | [Hunting Detections](../hunting-detections/) | [IOC Feeds](./) | [Report Template](../report-template/)
+[Home](../) | [Reports](../reports/) | [Hunting Detections](../hunting-detections/) | [IOC Feeds](./) | [Report Templates](../report-templates/)
 
 ---
 

@@ -37,7 +37,7 @@ The goal is to present findings from my own research and hunting that are action
 ---
 
 ## 📝 Report Format
-Each report follows a consistent structure: [Report Template](report-templates/)
+Each report follows a consistent structure: [Report Templates](report-templates/)
 
 ### Executive Summary
 High-level overview for quick triage.
