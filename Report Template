@@ -1,7 +1,3 @@
-<link rel="stylesheet" href="/assets/css/style.css">
-
-<div class="content">
-
 # Report Template
 
 Each report follows this consistent structure:
@@ -10,10 +6,10 @@ Each report follows this consistent structure:
 High-level overview for quick triage.
 
 ## Technical Details
-- File structure analysis  
-- Reverse engineering notes  
-- Observed behaviors  
-- MITRE ATT&CK mapping  
+- File structure analysis
+- Reverse engineering notes
+- Observed behaviors
+- MITRE ATT&CK mapping
 
 ## IOCs
 | Type   | Value                   |
@@ -22,7 +18,5 @@ High-level overview for quick triage.
 | Domain | malicious-example[.]com |
 
 ## Detection Opportunities
-- Sigma/YARA rules  
-- Splunk/Elastic queries  
-
-</div>
+- Sigma/YARA rules
+- Splunk/Elastic queries

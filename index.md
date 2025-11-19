@@ -1,17 +1,6 @@
-<link rel="stylesheet" href="/assets/css/style.css">
-
 <header>
   <h1 class="site-title">Hunter’s Ledger</h1>
 </header>
-
-<div class="navbar">
-  <a href="/reports/">Reports</a>
-  <a href="/hunting-detections/">Detections</a>
-  <a href="/ioc-feeds/">IOCs</a>
-  <a href="/report-template/">Template</a>
-</div>
-
-<div class="content">
 
 # Threat-Intel-Reports
 
@@ -34,21 +23,21 @@ The goal is to present findings from my own research and hunting that are action
 ---
 
 ## 📂 Repository Structure
-- [Reports](/reports/) → Detailed malware analysis and reverse engineering notes.  
+- [Reports](/reports) → Detailed malware analysis and reverse engineering notes.  
   *License: All Rights Reserved — free to read, but reuse requires written permission.*
 
-- [Hunting Detections](/hunting-detections/) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
+- [Hunting Detections](/hunting-detections) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [IOC Feeds](/ioc-feeds/) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
+- [IOC Feeds](/ioc-feeds) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [Report Template](/report-template/) → Consistent format for reports.
+- [Report Template](/report-template) → Consistent format for reports.
 
 ---
 
 ## 📝 Report Format
-Each report follows a consistent structure: [Report Template](/report-template/)
+Each report follows a consistent structure: [Report Template](/report-template)
 
 ### Executive Summary
 High-level overview for quick triage.
@@ -133,5 +122,3 @@ The detection rules in [Hunting Detections](/hunting-detections/) and IOC feeds 
 **Attribution**
 Please credit as:  
 “Threat Intelligence Reports by Joseph” (https://github.com/PixelatedContinuum/Threat-Intel-Reports/)
-
-</div>
