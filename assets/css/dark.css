@@ -1,4 +1,4 @@
-/* Force full-page background */
+/* Full-page background */
 html, body {
   background-color: #1f1f1f !important;
   margin: 0;
@@ -8,6 +8,7 @@ html, body {
 /* Outer container */
 .container-lg {
   background-color: #1f1f1f !important;
+  border: none !important;
 }
 
 /* Main content wrapper */
@@ -16,6 +17,7 @@ html, body {
   background-color: #1f1f1f !important;
   max-width: 900px;
   margin: 0 auto;
+  border: none !important;
 }
 
 /* Nav bar */
@@ -23,7 +25,7 @@ html, body {
   background-color: #1f1f1f !important;
   padding: 0.5rem;
   border-radius: 6px;
-  border: 1px solid #2a2a2a;
+  border: none !important;
   text-align: center;
   display: inline-block;
   width: auto;
@@ -46,14 +48,14 @@ html, body {
   margin: 1.5rem 0;
   background-color: #1f1f1f !important;
   color: #e0e0e0 !important;
-  border: 1px solid #2a2a2a;
+  border: none !important;
   border-radius: 6px;
   overflow: hidden;
 }
 .markdown-body th,
 .markdown-body td {
   padding: 0.75rem 1rem;
-  border: 1px solid #2a2a2a;
+  border: none !important;
   background-color: #1f1f1f !important;
   color: #e0e0e0 !important;
 }
@@ -74,6 +76,7 @@ footer {
   color: #aaaaaa;
   text-align: center;
   background-color: #1f1f1f !important;
+  border: none !important;
 }
 footer a {
   color: #4dabf7;
