@@ -9,7 +9,8 @@
       margin: 2rem auto;
       max-width: 900px;
       line-height: 1.6;
-      color: #333;
+      background-color: #121212;   /* dark background */
+      color: #e0e0e0;              /* light text */
     }
     header {
       text-align: center;
@@ -18,28 +19,39 @@
     header h1 {
       margin: 0;
       font-size: 2.2rem;
-      color: #222;
+      color: #ffffff;              /* white heading */
     }
     nav {
       margin-top: 0.5rem;
+      background-color: #1f1f1f;   /* dark nav bar */
+      padding: 0.5rem;
+      border-radius: 6px;
     }
     nav a {
       margin: 0 0.5rem;
       text-decoration: none;
-      color: #0066cc;
+      color: #4dabf7;              /* sleek blue accent */
     }
     nav a:hover {
+      color: #82cfff;              /* lighter blue hover */
       text-decoration: underline;
     }
     footer {
       margin-top: 3rem;
       text-align: center;
       font-size: 0.9rem;
-      color: #666;
+      color: #aaaaaa;              /* muted footer text */
     }
     footer a {
-      color: #0066cc;
+      color: #4dabf7;
       text-decoration: none;
+    }
+    footer a:hover {
+      color: #82cfff;
+    }
+    hr {
+      border: 0;
+      border-top: 1px solid #333;  /* subtle divider */
     }
   </style>
 </head>
@@ -52,7 +64,6 @@
       <a href="{{ '/hunting-detections/' | relative_url }}">Hunting Detections</a> |
       <a href="{{ '/ioc-feeds/' | relative_url }}">IOC Feeds</a> |
       <a href="{{ '/main-report-template/' | relative_url }}">Report Templates</a>
-</a>
     </nav>
     <hr>
   </header>
