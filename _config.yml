@@ -1,14 +1,12 @@
 # SITE CONFIGURATION
-baseurl: "/Threat-Intel-Reports"   # your repo name
+baseurl: "/Threat-Intel-Reports"
 url: "https://pixelatedcontinuum.github.io"
 
 # THEME-SPECIFIC CONFIGURATION
 title: The Hunter's Ledger
 description: "Threat Intelligence Reports and Hunting Resources"
 
-logo: "/assets/images/header.png"       # logo in header
-avatar: "/assets/images/header.png"     # optional avatar in nav bar
-favicon: "/assets/images/header.png" # optional browser tab icon
+favicon: "/assets/images/favicon.ico"
 
 # Header and footer text
 header_text: The Hunter's Ledger
@@ -20,13 +18,13 @@ footer_text: >
 # Blog / Post settings
 excerpt: true
 post_navigation: true
-color_image: /assets/images/lineart.png   # optional accent image
-color_theme: dark                         # force dark mode
+color_image: /assets/images/lineart.png
+color_theme: dark
 
 # Features
-katex: true              # enable math markup
-mermaid: default         # enable mermaid diagrams
-google_analytics:        # add ID if you want tracking
+katex: true
+mermaid: default
+google_analytics:
 cookie_consent: false
 
 # PAGINATION
@@ -54,4 +52,3 @@ exclude:
 
 # Theme activation
 remote_theme: sylhare/Type-on-Strap
-
