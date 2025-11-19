@@ -5,6 +5,8 @@
   <title>{{ page.title | default: site.title | default: "The Hunter's Ledger" }}</title>
   <!-- Jekyll/Theme CSS is injected automatically -->
   {% include head-custom.html %}
+
+  <!-- Load custom dark theme CSS last so it overrides the theme -->
   <link rel="stylesheet" href="{{ '/assets/css/dark.css' | relative_url }}">
 </head>
 <body>
@@ -12,8 +14,11 @@
     <header style="text-align: center;">
       <!-- Logo centered above the title -->
       <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="Hunter's Ledger logo">
-      
-      <!-- Navigation bar centered below the title -->
+
+      <!-- Optional site title (uncomment if you want the text heading) -->
+      <!-- <h1>The Hunter's Ledger</h1> -->
+
+      <!-- Navigation bar -->
       <nav>
         <a href="{{ '/' | relative_url }}">Home</a>
         <a href="{{ '/reports/' | relative_url }}">Reports</a>

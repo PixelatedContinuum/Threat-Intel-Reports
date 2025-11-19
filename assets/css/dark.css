@@ -61,7 +61,44 @@ body {
   padding: 12px;
 }
 
-/* Tables */
+/* Logo styling: make it visible on dark background */
+header img {
+  display: block;
+  margin: 0 auto 1rem auto;
+  max-width: 220px;
+  background-color: #ffffff; /* white frame so neon logo pops */
+  padding: 8px;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 6px #4dabf7);
+}
+
+/* Nav bar: stronger specificity to beat theme */
+.markdown-body header nav {
+  background-color: #1f1f1f !important;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #2a2a2a;
+  text-align: center;
+}
+.markdown-body header nav a {
+  color: #4dabf7 !important;
+  margin: 0 0.6rem;
+  font-weight: 500;
+}
+.markdown-body header nav a:hover {
+  color: #82cfff !important;
+  border-bottom: 2px solid #4dabf7;
+}
+
+/* Card feel around main content */
+main {
+  background: #1a1a1a;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.35);
+}
+
+/* Tables: explicitly style cells to avoid white backgrounds */
 .markdown-body table {
   width: 100%;
   border-collapse: collapse;
@@ -72,73 +109,28 @@ body {
   border-radius: 6px;
   overflow: hidden;
 }
-
 .markdown-body th,
 .markdown-body td {
   padding: 0.75rem 1rem;
   border: 1px solid #2a2a2a;
+  background-color: #1f1f1f !important; /* force dark cell background */
+  color: #e0e0e0 !important;
 }
-
 .markdown-body th {
-  background-color: #0f0f0f;
-  color: #4dabf7;
+  background-color: #0f0f0f !important;
+  color: #4dabf7 !important;
   text-align: left;
 }
-
-.markdown-body tr {
-  background-color: #1f1f1f; /* default dark background */
+.markdown-body tr:nth-child(even) td {
+  background-color: #262626 !important; /* alternating row shading */
 }
-
-.markdown-body tr:nth-child(even) {
-  background-color: #262626; /* alternating row shading */
-}
-
-.markdown-body tr:hover {
-  background-color: #333333; /* highlight row on hover */
+.markdown-body tr:hover td {
+  background-color: #333333 !important; /* highlight row on hover */
 }
 
 /* Anchors injected by anchor.js */
 .anchorjs-link { color: #888; }
 .anchorjs-link:hover { color: #bbb; }
-
-/* Card feel around main content */
-main {
-  background: #1a1a1a;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.35);
-}
-
-/* Logo styling */
-header img {
-  display: block;
-  margin: 0 auto 1rem auto;
-  max-width: 220px;
-  background-color: #ffffff; /* white frame */
-  padding: 8px;
-  border-radius: 8px;
-  filter: drop-shadow(0 0 6px #4dabf7);
-}
-
-/* Nav bar */
-.markdown-body header nav {
-  background-color: #1f1f1f !important;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #2a2a2a;
-  text-align: center;
-}
-
-.markdown-body header nav a {
-  color: #4dabf7 !important;
-  margin: 0 0.6rem;
-  font-weight: 500;
-}
-
-.markdown-body header nav a:hover {
-  color: #82cfff !important;
-  border-bottom: 2px solid #4dabf7;
-}
 
 /* Footer */
 footer {

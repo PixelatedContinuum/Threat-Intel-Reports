@@ -2,3 +2,10 @@ title: The Hunter's Ledger
 description: Threat Intelligence Reports and Hunting Resources
 url: "https://pixelatedcontinuum.github.io"
 baseurl: "/Threat-Intel-Reports"
+
+# Force default layout for all pages, posts, and Markdown files
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
