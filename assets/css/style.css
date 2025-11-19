@@ -1,7 +1,66 @@
-/* Center the content column */
+/* Center the site title */
+.site-title, header h1 {
+  text-align: center;
+  margin: 20px 0;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Navbar */
+.navbar {
+  text-align: center;
+  margin: 20px 0;
+}
+.navbar a {
+  margin: 0 12px;
+  color: #64b5f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* Centered content column */
 .content {
-  max-width: 800px;   /* adjust width to taste */
-  margin: 0 auto;     /* centers horizontally */
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
+}
+
+/* Dark mode base */
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.7;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Links */
+a { color: #64b5f6; text-decoration: none; }
+a:hover { color: #bbdefb; text-decoration: underline; }
+
+/* Paragraphs */
+p { margin: 1em 0; font-size: 1.05em; }
+
+/* Tables */
+table { border-collapse: collapse; width: 100%; margin: 1.5em 0; }
+th, td { border: 1px solid #333; padding: 10px; }
+th { background-color: #1e1e1e; color: #ffffff; }
+td { background-color: #1a1a1a; }
+
+/* Code blocks */
+pre, code {
+  background-color: #1e1e1e;
+  color: #cfcfcf;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-family: Consolas, "Courier New", monospace;
 }
