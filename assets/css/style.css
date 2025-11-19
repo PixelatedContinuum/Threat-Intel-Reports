@@ -8,6 +8,29 @@ body {
 
 /* Keep Cayman layout: don't touch .page-content or .wrapper positioning */
 
+/* NEW: Centered navbar */
+.navbar {
+  text-align: center;
+  margin: 20px 0;
+}
+.navbar a {
+  margin: 0 12px;
+  color: #007acc;              /* you can change this to match your palette */
+  text-decoration: none;
+  font-weight: 500;
+}
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* NEW: Centered content column */
+.content {
+  max-width: 900px;            /* Medium-style width */
+  margin: 0 auto;              /* centers horizontally */
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
 /* Headings */
 h1, h2, h3, h4 {
   color: #ffffff;
