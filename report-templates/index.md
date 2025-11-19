@@ -1,6 +1,5 @@
 ---
 layout: default
-title: Report Templates
 ---
 
 # Report Templates
@@ -48,6 +47,5 @@ High‑level overview for quick triage.
 ---
 
 ## 📜 License
-This template is © 2025 Joseph.  
-Free to use for creating reports within *The Hunter’s Ledger*.  
-Redistribution outside this project requires attribution.
+- Reports are © 2025 Joseph. All rights reserved.  
+- Free to read, but reuse requires written permission.  

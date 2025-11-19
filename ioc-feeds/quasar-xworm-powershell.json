@@ -1,0 +1,36 @@
+{
+  "campaign": "QuasarRAT + Xworm + PowerShell Loader",
+  "domains": [
+    "dns4up.duckdns.org"
+  ],
+  "ips": [
+    "193.233.164.21"
+  ],
+  "file_hashes": {
+    "QuasarRAT": [
+      "6167ced165bdcc193cd9cb0898ef6c41fd50918fa2f1183aab82e478800c901a",
+      "1490ded01ff88ad9e57edad2c7ecc547b99d3ac9b9ae1476b8999dca28821d12",
+      "62875fbcbbd446d7e2ed49860ddc76c8e6ac2c9ee91491e21788fdcc768d581d",
+      "34a84033d292c3631172efb2e47c9c6d184f1c21e122179faa14e180587a7089",
+      "bf3b17a68cb437d8cf16bea481796dbdfbc82053056c47e25e841a06e2fd4ea6",
+      "4ea9a321958b4d2c43cadbb62e2b037b958ed5f9984033aa3a9d10a5423fd006",
+      "7e08939d4d431e427806e76daceff2186d26727fa591871f9f3ad49f3d2e91a4"
+    ],
+    "Xworm": [
+      "5a1424830fb4e19be0f79f543ba998aded16e9890a97977d0424062cfb28cbec",
+      "dd000e90853f1a78b47e080439588eead0e4cf7c1bb274cd20af626160df1249"
+    ],
+    "Scripts": [
+      "4ae132de21ab60da7d562f4c2d1f6d26650bbc0c80c542537bc7eb973d05f127",
+      "153a6d225dffd61913f37ac68d19eb61c1c35374f03b9f94faf28a9bb16ede4b"
+    ]
+  },
+  "script_strings": [
+    "Add-MpPreference -ExclusionPath C:\\",
+    "Add-MpPreference -ExclusionProcess powershell.exe",
+    "Add-MpPreference -ExclusionProcess wscript.exe",
+    "Add-MpPreference -ExclusionProcess cmd.exe",
+    "Add-MpPreference -ExclusionProcess cvtres.exe",
+    "HttpClient).GetAsync('hxxp://193.233.164.21/update.png')"
+  ]
+}

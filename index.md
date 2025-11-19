@@ -10,15 +10,15 @@ The goal is to present findings from my own research and hunting that are action
 ---
 
 ## 🎯 Mission
-- Share reproducible research and technical reports from my own research and hunting  
+- Share reproducible research and technical reports from my own investigations and hunting  
 - Provide IOCs that can be used in threat hunting or detection engineering (Indicators of Compromise)  
-- Map findings to MITRE ATT&CK techniques to assist in making my findings as useful as possible  
-- Publish detection logic for the threats in my reports (Sigma, YARA, Splunk, etc.)  
-- Above all, enable community collaboration and knowledge transfer  
+- Map findings to MITRE ATT&CK techniques to assist in making findings as useful as possible to anyone 
+- Publish detection logic for the threats in my reports where possible (Sigma, YARA, Splunk, etc.)  
+- Above all, enable community collaboration and knowledge transfer so everyone is safer
 
 > **Note:** This is not a collection of open source intel reports, IOCs, or TTPs.  
-> These findings are from my own research and hunting, though they may overlap with known threats.  
-> If you are looking for an open source collection of intel, let me know — I can help point you there.
+> These findings are from my own research and hunting as well as others that contribute, though they may overlap with known threats.  
+> If you are looking for an open source collection of intel, let me know — I can help point you to sources or to learn how to make your own!
 
 ---
 
@@ -39,36 +39,11 @@ The goal is to present findings from my own research and hunting that are action
 ## 📝 Report Format
 Each report follows a consistent structure: [Report Templates](report-templates/)
 
-### Executive Summary
-High-level overview for quick triage.
-
-### Technical Details
-- File structure analysis (PE headers, offsets, payloads)  
-- Reverse engineering notes (entry points, obfuscation, persistence)  
-- Behavior observed (networking, privilege escalation, anti-analysis)  
-- MITRE ATT&CK mapping to observed behaviors  
-
----
-
-### IOCs
-
-| Type   | Value                   |
-|--------|-------------------------|
-| SHA256 | abc123...               |
-| Domain | malicious-example[.]com |
-| IP     | 192.168.1.50            |
-
----
-
-### Detection Opportunities
-- Sigma/YARA rules  
-- Splunk/Elastic queries  
-
 ---
 
 ## ⚡ Usage
 - Import IOC feeds into your SIEM/EDR and threat hunting workflows  
-- Adapt detection logic for your environment  
+- Adapt detection logic for your environment or use them for quick hunts
 - Use ATT&CK mappings for threat modeling or attack simulation  
 - Reference reverse engineering notes for deeper analysis  
 - Import into your CTI platform of choice  
@@ -79,7 +54,7 @@ High-level overview for quick triage.
 Contributions are welcome!  
 - Fork the repo and submit a PR with new reports, detections, or IOCs.  
 - Follow the report format for consistency.  
-- Or simply reach out to me and we can discuss — I can post something on your behalf.
+- Or simply reach out to me and we can discuss — I can post something on your behalf as a co-author.
 
 ---
 
