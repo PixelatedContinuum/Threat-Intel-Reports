@@ -3,12 +3,10 @@ body {
   background-color: #121212;
 }
 
-/* Centered content container is added by the theme; keep it but make it transparent */
 .container-lg {
   background: transparent;
 }
 
-/* Main content wrapper */
 .markdown-body {
   color: #e0e0e0;
   background: transparent;
@@ -61,36 +59,39 @@ body {
   padding: 12px;
 }
 
-/* Logo styling: make it visible on dark background */
+/* Logo styling */
 header img {
   display: block;
   margin: 0 auto 1rem auto;
   max-width: 220px;
-  background-color: #ffffff; /* white frame so neon logo pops */
+  background-color: #ffffff;
   padding: 8px;
   border-radius: 8px;
   filter: drop-shadow(0 0 6px #4dabf7);
 }
 
-/* Nav bar: stronger specificity to beat theme */
+/* Nav bar */
 .markdown-body header nav {
   background-color: #1f1f1f !important;
   padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid #2a2a2a;
   text-align: center;
+  display: inline-block;
+  width: auto;
 }
 .markdown-body header nav a {
   color: #4dabf7 !important;
   margin: 0 0.6rem;
   font-weight: 500;
+  text-decoration: none;
 }
 .markdown-body header nav a:hover {
   color: #82cfff !important;
   border-bottom: 2px solid #4dabf7;
 }
 
-/* Card feel around main content */
+/* Main content card */
 main {
   background: #1a1a1a;
   padding: 1.5rem;
@@ -98,13 +99,13 @@ main {
   box-shadow: 0 0 12px rgba(0,0,0,0.35);
 }
 
-/* Tables: explicitly style cells to avoid white backgrounds */
+/* Tables */
 .markdown-body table {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
-  background-color: #1f1f1f;
-  color: #e0e0e0;
+  background-color: #1f1f1f !important;
+  color: #e0e0e0 !important;
   border: 1px solid #2a2a2a;
   border-radius: 6px;
   overflow: hidden;
@@ -113,7 +114,7 @@ main {
 .markdown-body td {
   padding: 0.75rem 1rem;
   border: 1px solid #2a2a2a;
-  background-color: #1f1f1f !important; /* force dark cell background */
+  background-color: #1f1f1f !important;
   color: #e0e0e0 !important;
 }
 .markdown-body th {
@@ -122,10 +123,10 @@ main {
   text-align: left;
 }
 .markdown-body tr:nth-child(even) td {
-  background-color: #262626 !important; /* alternating row shading */
+  background-color: #262626 !important;
 }
 .markdown-body tr:hover td {
-  background-color: #333333 !important; /* highlight row on hover */
+  background-color: #333333 !important;
 }
 
 /* Anchors injected by anchor.js */
