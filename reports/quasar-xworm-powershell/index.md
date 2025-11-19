@@ -1,6 +1,5 @@
 ---
 layout: default
-title: QuasarRAT + Xworm + PowerShell Loader
 ---
 
 # QuasarRAT + Xworm + PowerShell Loader Campaign
