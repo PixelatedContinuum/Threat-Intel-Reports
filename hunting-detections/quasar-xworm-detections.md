@@ -27,6 +27,7 @@ detection:
       - "update.png"
   condition: selection
 level: high
+```
 
 ## YARA – Defender Exclusion Script
 ```yara
@@ -39,10 +40,9 @@ rule PS_Defender_Exclusion {
   condition:
     all of them
 }
-
+```
 # Suricata Detection Rules
 
-```suricata
 alert http any any -> any any (msg:"Malware Loader update.png"; http.uri; content:"/update.png"; sid:200001;)
 alert dns any any -> any any (msg:"Suspicious DuckDNS Domain"; dns.query; content:"dns4up.duckdns.org"; sid:200002;)
 
