@@ -76,8 +76,8 @@ html, body {
   margin: 1rem auto;
   max-width: 900px;
   border-radius: 8px;
-  border: 1px solid #2a2a2a;
-  box-shadow: 0 0 4px rgba(0,0,0,0.4);
+  border: none !important;
+  box-shadow: none !important;
   text-align: center;
 }
 .markdown-body header nav a {
@@ -94,33 +94,30 @@ html, body {
 /* Tables */
 .markdown-body table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse; /* prevents edge bleed */
   margin: 1.5rem 0;
-  background-color: #1f1f1f;
-  color: #e0e0e0;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 0 4px rgba(0,0,0,0.4);
+  background-color: #1f1f1f !important;
+  color: #e0e0e0 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 .markdown-body th,
 .markdown-body td {
   padding: 0.75rem 1rem;
-  border: none;
-  background-color: #1f1f1f;
-  color: #e0e0e0;
+  border: none !important;
+  background-color: #1f1f1f !important;
+  color: #e0e0e0 !important;
 }
 .markdown-body th {
-  background-color: #0f0f0f;
-  color: #4dabf7;
+  background-color: #0f0f0f !important;
+  color: #4dabf7 !important;
   text-align: left;
 }
 .markdown-body tr:nth-child(even) td {
-  background-color: #262626;
+  background-color: #262626 !important;
 }
 .markdown-body tr:hover td {
-  background-color: #333333;
+  background-color: #333333 !important;
 }
 
 /* Footer */
