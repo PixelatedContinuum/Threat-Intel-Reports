@@ -1,6 +1,6 @@
 ---
 title: Report Templates
-layout: default
+layout: page
 permalink: /report-templates/
 position: 5
 ---

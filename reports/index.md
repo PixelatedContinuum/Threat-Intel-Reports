@@ -1,6 +1,6 @@
 ---
 title: Reports
-layout: default
+layout: page
 permalink: /reports/
 position: 2
 ---

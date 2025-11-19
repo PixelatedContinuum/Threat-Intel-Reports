@@ -1,6 +1,6 @@
 ---
 title: The Hunter's Ledger
-layout: default
+layout: home
 permalink: /
 position: 1
 ---

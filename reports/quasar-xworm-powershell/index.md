@@ -1,6 +1,6 @@
 ---
 title: QuasarRAT + Xworm + PowerShell Loader
-layout: default
+layout: post
 permalink: /reports/quasar-xworm-powershell/
 hide: true
 ---

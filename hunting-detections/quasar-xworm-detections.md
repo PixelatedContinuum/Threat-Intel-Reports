@@ -1,6 +1,6 @@
 ---
 title: Detection Rules – QuasarRAT + Xworm Campaign
-layout: default
+layout: post
 permalink: /hunting-detections/quasar-xworm-detections/
 hide: true
 ---
