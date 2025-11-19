@@ -24,16 +24,61 @@ html, body {
   box-shadow: none !important;
 }
 
+/* Headings */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+/* Text and lists */
+.markdown-body p,
+.markdown-body li,
+.markdown-body blockquote {
+  color: #e0e0e0;
+}
+
+/* Links */
+.markdown-body a {
+  color: #4dabf7;
+  text-decoration: none;
+}
+.markdown-body a:hover {
+  color: #82cfff;
+  text-decoration: underline;
+}
+
+/* Horizontal rule */
+.markdown-body hr {
+  border: 0;
+  border-top: 1px solid #333;
+}
+
+/* Code blocks and inline code */
+.markdown-body pre,
+.markdown-body code {
+  background-color: #1e1e1e;
+  color: #dcdcdc;
+  border-radius: 6px;
+}
+.markdown-body pre {
+  padding: 12px;
+}
+
 /* Nav bar */
 .markdown-body header nav {
   background-color: #1f1f1f !important;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: none !important;
-  box-shadow: none !important;
+  padding: 0.75rem 1rem;
+  margin: 1rem auto;
+  max-width: 900px;
+  border-radius: 8px;
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 0 4px rgba(0,0,0,0.4);
   text-align: center;
-  display: inline-block;
-  width: auto;
 }
 .markdown-body header nav a {
   color: #4dabf7 !important;
@@ -49,31 +94,33 @@ html, body {
 /* Tables */
 .markdown-body table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 1.5rem 0;
-  background-color: #1f1f1f !important;
-  color: #e0e0e0 !important;
-  border: none !important;
-  border-radius: 6px;
-  box-shadow: none !important;
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgba(0,0,0,0.4);
 }
 .markdown-body th,
 .markdown-body td {
   padding: 0.75rem 1rem;
-  border: none !important;
-  background-color: #1f1f1f !important;
-  color: #e0e0e0 !important;
+  border: none;
+  background-color: #1f1f1f;
+  color: #e0e0e0;
 }
 .markdown-body th {
-  background-color: #0f0f0f !important;
-  color: #4dabf7 !important;
+  background-color: #0f0f0f;
+  color: #4dabf7;
   text-align: left;
 }
 .markdown-body tr:nth-child(even) td {
-  background-color: #262626 !important;
+  background-color: #262626;
 }
 .markdown-body tr:hover td {
-  background-color: #333333 !important;
+  background-color: #333333;
 }
 
 /* Footer */
@@ -90,3 +137,7 @@ footer a {
 footer a:hover {
   color: #82cfff;
 }
+
+/* Anchors injected by anchor.js */
+.anchorjs-link { color: #888; }
+.anchorjs-link:hover { color: #bbb; }
