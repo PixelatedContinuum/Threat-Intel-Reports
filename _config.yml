@@ -1,22 +1,57 @@
-title: The Hunter's Ledger
-description: Threat Intelligence Reports and Hunting Resources
-
+# SITE CONFIGURATION
+baseurl: "/Threat-Intel-Reports"   # your repo name
 url: "https://pixelatedcontinuum.github.io"
-baseurl: "/Threat-Intel-Reports"
 
-remote_theme: sylhare/Type-on-Strap
+# THEME-SPECIFIC CONFIGURATION
+title: The Hunter's Ledger
+description: "Threat Intelligence Reports and Hunting Resources"
+
+logo: "/assets/images/header.png"       # logo in header
+avatar: "/assets/images/header.png"     # optional avatar in nav bar
+favicon: "/assets/images/header.png" # optional browser tab icon
+
+# Header and footer text
+header_text: The Hunter's Ledger
+header_feature_image: /assets/images/header.png
+header_feature_image_responsive: true
+footer_text: >
+  Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+
+# Blog / Post settings
+excerpt: true
+post_navigation: true
+color_image: /assets/images/lineart.png   # optional accent image
+color_theme: dark                         # force dark mode
+
+# Features
+katex: true              # enable math markup
+mermaid: default         # enable mermaid diagrams
+google_analytics:        # add ID if you want tracking
+cookie_consent: false
+
+# PAGINATION
+paginate: 5
+paginate_path: "/blog/page:num"
+
+# BUILD SETTINGS
+sass:
+  style: compressed
+  quiet_deps: true
+
 plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll-feed
 
-color_theme: dark   # force dark mode (use 'auto' for toggle)
-logo: "/assets/images/logo.png"
+exclude:
+  - ".jekyll-cache"
+  - ".jekyll-metadata"
+  - ".idea"
+  - "vendor/*"
+  - "assets/node_modules/*"
+  - ".github/*"
 
-# Optional metadata
-markdown: kramdown
-highlighter: rouge
-permalink: pretty
+# Theme activation
+remote_theme: sylhare/Type-on-Strap
 
-paginate: 5
-paginate_path: "blog/page:num"
