@@ -1,4 +1,11 @@
-<link rel="stylesheet" href="/assets/css/style.css">
+<div class="navbar">
+  <a href="/reports/">Reports</a>
+  <a href="/hunting-detections/">Detections</a>
+  <a href="/ioc-feeds/">IOCs</a>
+  <a href="/report-template/">Template</a>
+</div>
+
+<div class="content">
 
 # Hunting Detections
 
@@ -7,3 +14,5 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 
 ## Available Detections
 - 
+
+</div>
