@@ -1,8 +1,4 @@
-<header>
-  <h1 class="site-title">The Hunter’s Ledger</h1>
-</header>
-
-# Threat-Intel-Reports
+# The Hunter's Ledger
 
 Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  
 The goal is to present findings from my own research and hunting that are actionable for detection engineering, threat hunting, and incident response teams.
