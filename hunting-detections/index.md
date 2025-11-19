@@ -2,6 +2,7 @@
 title: Hunting Detections
 layout: default
 permalink: /hunting-detections/
+position: 3
 ---
 
 # Hunting Detections

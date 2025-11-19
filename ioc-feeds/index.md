@@ -2,6 +2,7 @@
 title: IOC Feeds
 layout: default
 permalink: /ioc-feeds/
+position: 4
 ---
 
 # IOC Feeds

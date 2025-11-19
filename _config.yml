@@ -4,29 +4,19 @@ description: Threat Intelligence Reports and Hunting Resources
 url: "https://pixelatedcontinuum.github.io"
 baseurl: "/Threat-Intel-Reports"
 
-# Use Type-on-Strap remote theme
 remote_theme: sylhare/Type-on-Strap
 plugins:
   - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-paginate
 
-# Global defaults
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default
-
-# Branding
-logo: "/assets/images/logo.png"
-
-# Theme settings
 color_theme: dark   # force dark mode (use 'auto' for toggle)
-theme_settings:
-  header_color: "#0f0f0f"
-  accent_color: "#4dabf7"
-  footer_color: "#1f1f1f"
+logo: "/assets/images/logo.png"
 
 # Optional metadata
 markdown: kramdown
 highlighter: rouge
 permalink: pretty
+
+paginate: 5
+paginate_path: "blog/page:num"

@@ -2,6 +2,7 @@
 title: The Hunter's Ledger
 layout: default
 permalink: /
+position: 1
 ---
 
 Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  

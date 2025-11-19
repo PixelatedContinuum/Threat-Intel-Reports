@@ -2,6 +2,7 @@
 title: Detection Rules – QuasarRAT + Xworm Campaign
 layout: default
 permalink: /hunting-detections/quasar-xworm-detections/
+hide: true
 ---
 
 # Detection Rules – QuasarRAT + Xworm Campaign

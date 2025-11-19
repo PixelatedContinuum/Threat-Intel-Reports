@@ -2,6 +2,7 @@
 title: QuasarRAT + Xworm + PowerShell Loader
 layout: default
 permalink: /reports/quasar-xworm-powershell/
+hide: true
 ---
 
 # Campaign Report: QuasarRAT + Xworm + PowerShell Loader
