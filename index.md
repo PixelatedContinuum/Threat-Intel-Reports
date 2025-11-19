@@ -32,12 +32,12 @@ The goal is to present findings from my own research and hunting that are action
 - [IOC Feeds](ioc-feeds/) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [Report Template](report-template/) → Consistent format for reports.
+- [Report Templates](report-templates/) → Consistent format for reports.
 
 ---
 
 ## 📝 Report Format
-Each report follows a consistent structure: [Report Template](report-template/)
+Each report follows a consistent structure: [Report Template](report-templates/)
 
 ### Executive Summary
 High-level overview for quick triage.
