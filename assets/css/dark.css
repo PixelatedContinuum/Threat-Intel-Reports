@@ -1,15 +1,19 @@
-/* Base */
-body {
-  background-color: #1f1f1f; /* match nav/table background */
+/* Force full-page background */
+html, body {
+  background-color: #1f1f1f !important;
+  margin: 0;
+  padding: 0;
 }
 
+/* Outer container */
 .container-lg {
-  background: transparent;
+  background-color: #1f1f1f !important;
 }
 
+/* Main content wrapper */
 .markdown-body {
   color: #e0e0e0;
-  background: transparent;
+  background-color: #1f1f1f !important;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -69,6 +73,7 @@ body {
 footer {
   color: #aaaaaa;
   text-align: center;
+  background-color: #1f1f1f !important;
 }
 footer a {
   color: #4dabf7;
