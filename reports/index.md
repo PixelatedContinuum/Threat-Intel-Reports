@@ -1,6 +1,3 @@
-<link rel="stylesheet" href="/assets/css/style.css">
-
-<div class="content">
 
 # Reports
 
@@ -9,5 +6,3 @@ Each report follows a consistent format with an executive summary, technical det
 
 ## Available Reports
 - [Emotet Dropper Analysis](/reports/report-1)
-
-</div>

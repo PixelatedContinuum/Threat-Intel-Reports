@@ -1,6 +1,3 @@
-<link rel="stylesheet" href="/assets/css/style.css">
-
-<div class="content">
 
 # IOC Feeds
 
@@ -9,5 +6,3 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 
 ## Available IOC Feeds
 - [Malware Campaign Feed](/ioc-feeds/malware-campaign.json)
-
-</div>
