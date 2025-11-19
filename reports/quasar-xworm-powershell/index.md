@@ -37,7 +37,7 @@ Malware families observed:
 ---
 
 ## 🧾 Indicators of Compromise (IOCs)
-See full feed: [Quasar/Xworm IOC Feed](../../ioc-feeds/quasar-xworm-feed.json)
+See full feed: [Quasar/Xworm IOC Feed](../../ioc-feeds/quasar-xworm-powershell.json)
 
 ### Key IOCs
 - **Domains/IPs:** `dns4up.duckdns[.]org`, `193.233.164.21`  
@@ -56,12 +56,6 @@ See full rules: [Quasar/Xworm Detections](../../hunting-detections/quasar-xworm-
 - **YARA:** Match Defender exclusion script strings  
 - **Sigma:** Detect VBScript spawning PowerShell with HttpClient + `update.png`  
 - **Suricata:** Alert on `/update.png` URI and DuckDNS domains
-
----
-
-## 🔗 Related Sections
-- [IOC Feed](../../ioc-feeds/quasar-xworm-feed.json)  
-- [Detections](../../hunting-detections/quasar-xworm-detections.md)
 
 ---
 
