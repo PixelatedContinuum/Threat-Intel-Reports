@@ -5,24 +5,22 @@
   <title>{{ page.title | default: site.title | default: "The Hunter's Ledger" }}</title>
   <!-- Jekyll/Theme CSS is injected automatically -->
   {% include head-custom.html %}
+  <link rel="stylesheet" href="{{ '/assets/css/dark.css' | relative_url }}">
 </head>
 <body>
   <div class="container-lg px-3 my-5 markdown-body">
     <header style="text-align: center;">
       <!-- Logo centered above the title -->
-      <img src="{{ '/assets/images/logo.png' | relative_url }}"
-     alt="Hunter's Ledger logo"
-     style="max-width:220px; margin-bottom:1rem; display:block; margin-left:auto; margin-right:auto; background-color:#0f0f0f; padding:8px; border-radius:8px; filter: drop-shadow(0 0 6px #4dabf7);">
+      <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="Hunter's Ledger logo">
       
       <!-- Navigation bar centered below the title -->
-    <nav style="margin-top:1rem; background-color:#1f1f1f; padding:0.5rem; border-radius:6px; border:1px solid #2a2a2a;">
-        <a href="{{ '/' | relative_url }}" style="color:#4dabf7; margin:0 0.6rem; font-weight:500;">Home</a>
-        <a href="{{ '/reports/' | relative_url }}" style="color:#4dabf7; margin:0 0.6rem; font-weight:500;">Reports</a>
-        <a href="{{ '/hunting-detections/' | relative_url }}" style="color:#4dabf7; margin:0 0.6rem; font-weight:500;">Hunting Detections</a>
-        <a href="{{ '/ioc-feeds/' | relative_url }}" style="color:#4dabf7; margin:0 0.6rem; font-weight:500;">IOC Feeds</a>
-        <a href="{{ '/report-templates/' | relative_url }}" style="color:#4dabf7; margin:0 0.6rem; font-weight:500;">Report Templates</a>
-    </nav>
-
+      <nav>
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <a href="{{ '/reports/' | relative_url }}">Reports</a>
+        <a href="{{ '/hunting-detections/' | relative_url }}">Hunting Detections</a>
+        <a href="{{ '/ioc-feeds/' | relative_url }}">IOC Feeds</a>
+        <a href="{{ '/report-templates/' | relative_url }}">Report Templates</a>
+      </nav>
       <hr>
     </header>
 
@@ -30,7 +28,7 @@
       {{ content }}
     </main>
 
-    <footer style="text-align: center; margin-top:2rem;">
+    <footer>
       <hr>
       <p>© 2025 Joseph — The Hunter's Ledger</p>
       <p>

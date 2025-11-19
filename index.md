@@ -2,8 +2,6 @@
 layout: default
 ---
 
-# The Hunter's Ledger
-
 Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  
 The goal is to present findings from my own research and hunting that are actionable for detection engineering, threat hunting, and incident response teams. Feel free to contribute or just reach out with information, questions, or suggestions! 
 

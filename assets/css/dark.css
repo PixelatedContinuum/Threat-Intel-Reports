@@ -12,7 +12,7 @@ body {
 .markdown-body {
   color: #e0e0e0;
   background: transparent;
-  max-width: 900px;        /* keep it centered and readable */
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -66,9 +66,9 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
-  background-color: #1f1f1f;   /* dark background */
-  color: #e0e0e0;              /* light text */
-  border: 1px solid #2a2a2a;   /* subtle border */
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  border: 1px solid #2a2a2a;
   border-radius: 6px;
   overflow: hidden;
 }
@@ -80,24 +80,28 @@ body {
 }
 
 .markdown-body th {
-  background-color: #0f0f0f;   /* darker header row */
-  color: #4dabf7;              /* cyber-blue header text */
+  background-color: #0f0f0f;
+  color: #4dabf7;
   text-align: left;
 }
 
+.markdown-body tr {
+  background-color: #1f1f1f; /* default dark background */
+}
+
 .markdown-body tr:nth-child(even) {
-  background-color: #262626;   /* alternating row shading */
+  background-color: #262626; /* alternating row shading */
 }
 
 .markdown-body tr:hover {
-  background-color: #333333;   /* highlight row on hover */
+  background-color: #333333; /* highlight row on hover */
 }
 
 /* Anchors injected by anchor.js */
 .anchorjs-link { color: #888; }
 .anchorjs-link:hover { color: #bbb; }
 
-/* Optional: card feel around main content if you like */
+/* Card feel around main content */
 main {
   background: #1a1a1a;
   padding: 1.5rem;
@@ -105,27 +109,45 @@ main {
   box-shadow: 0 0 12px rgba(0,0,0,0.35);
 }
 
-/* Optional: custom nav/footer if you add them in your layout */
-header h1 {
-  font-family: 'Roboto Mono', monospace;
-  color: #ffffff;
+/* Logo styling */
+header img {
+  display: block;
+  margin: 0 auto 1rem auto;
+  max-width: 220px;
+  background-color: #ffffff; /* white frame */
+  padding: 8px;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 6px #4dabf7);
 }
-nav {
-  background: #1f1f1f;
+
+/* Nav bar */
+.markdown-body header nav {
+  background-color: #1f1f1f !important;
   padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid #2a2a2a;
   text-align: center;
 }
-nav a {
-  color: #4dabf7;
+
+.markdown-body header nav a {
+  color: #4dabf7 !important;
   margin: 0 0.6rem;
   font-weight: 500;
 }
-nav a:hover {
-  color: #82cfff;
+
+.markdown-body header nav a:hover {
+  color: #82cfff !important;
   border-bottom: 2px solid #4dabf7;
 }
-footer { color: #aaaaaa; }
-footer a { color: #4dabf7; }
-footer a:hover { color: #82cfff; }
+
+/* Footer */
+footer {
+  color: #aaaaaa;
+  text-align: center;
+}
+footer a {
+  color: #4dabf7;
+}
+footer a:hover {
+  color: #82cfff;
+}
