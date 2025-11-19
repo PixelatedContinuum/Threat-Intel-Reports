@@ -69,6 +69,17 @@ html, body {
   padding: 12px;
 }
 
+/* Logo styling */
+.site-logo {
+  display: block;
+  margin: 0 auto 1rem auto;
+  max-width: 220px;
+  background-color: #ffffff; /* ensures visibility against dark bg */
+  padding: 8px;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 6px #4dabf7);
+}
+
 /* Nav bar */
 .markdown-body header nav {
   background-color: #1f1f1f !important;
