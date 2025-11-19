@@ -1,0 +1,115 @@
+/* Base */
+body {
+  background-color: #121212;
+}
+
+/* Centered content container is added by the theme; keep it but make it transparent */
+.container-lg {
+  background: transparent;
+}
+
+/* Main content wrapper */
+.markdown-body {
+  color: #e0e0e0;
+  background: transparent;
+  max-width: 900px;        /* keep it centered and readable */
+  margin: 0 auto;
+}
+
+/* Headings */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+/* Text and lists */
+.markdown-body p,
+.markdown-body li,
+.markdown-body blockquote {
+  color: #e0e0e0;
+}
+
+/* Links */
+.markdown-body a {
+  color: #4dabf7;
+  text-decoration: none;
+}
+.markdown-body a:hover {
+  color: #82cfff;
+  text-decoration: underline;
+}
+
+/* Horizontal rule */
+.markdown-body hr {
+  border: 0;
+  border-top: 1px solid #333;
+}
+
+/* Code blocks and inline code */
+.markdown-body pre,
+.markdown-body code {
+  background-color: #1e1e1e;
+  color: #dcdcdc;
+  border-radius: 6px;
+}
+.markdown-body pre {
+  padding: 12px;
+}
+
+/* Tables */
+.markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #1a1a1a;
+}
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid #333;
+  padding: 8px;
+  color: #e0e0e0;
+}
+.markdown-body th {
+  background-color: #2a2a2a;
+}
+
+/* Anchors injected by anchor.js */
+.anchorjs-link { color: #888; }
+.anchorjs-link:hover { color: #bbb; }
+
+/* Optional: card feel around main content if you like */
+main {
+  background: #1a1a1a;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.35);
+}
+
+/* Optional: custom nav/footer if you add them in your layout */
+header h1 {
+  font-family: 'Roboto Mono', monospace;
+  color: #ffffff;
+}
+nav {
+  background: #1f1f1f;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #2a2a2a;
+  text-align: center;
+}
+nav a {
+  color: #4dabf7;
+  margin: 0 0.6rem;
+  font-weight: 500;
+}
+nav a:hover {
+  color: #82cfff;
+  border-bottom: 2px solid #4dabf7;
+}
+footer { color: #aaaaaa; }
+footer a { color: #4dabf7; }
+footer a:hover { color: #82cfff; }

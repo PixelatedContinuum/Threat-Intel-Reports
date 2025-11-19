@@ -2,85 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>The Hunter's Ledger</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 2rem auto;
-      max-width: 900px;
-      line-height: 1.6;
-      background-color: #121212;   /* dark background */
-      color: #e0e0e0;              /* light text */
-    }
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.2rem;
-      color: #ffffff;              /* white heading */
-    }
-    nav {
-      margin-top: 0.5rem;
-      background-color: #1f1f1f;   /* dark nav bar */
-      padding: 0.5rem;
-      border-radius: 6px;
-    }
-    nav a {
-      margin: 0 0.5rem;
-      text-decoration: none;
-      color: #4dabf7;              /* sleek blue accent */
-    }
-    nav a:hover {
-      color: #82cfff;              /* lighter blue hover */
-      text-decoration: underline;
-    }
-    footer {
-      margin-top: 3rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #aaaaaa;              /* muted footer text */
-    }
-    footer a {
-      color: #4dabf7;
-      text-decoration: none;
-    }
-    footer a:hover {
-      color: #82cfff;
-    }
-    hr {
-      border: 0;
-      border-top: 1px solid #333;  /* subtle divider */
-    }
-  </style>
+  <title>{{ page.title | default: site.title | default: "The Hunter's Ledger" }}</title>
+  <!-- Jekyll/Theme CSS is injected automatically -->
+  {% include head-custom.html %}
 </head>
 <body>
-  <header>
-    <h1>The Hunter's Ledger</h1>
-    <nav>
-      <a href="{{ '/' | relative_url }}">Home</a> |
-      <a href="{{ '/reports/' | relative_url }}">Reports</a> |
-      <a href="{{ '/hunting-detections/' | relative_url }}">Hunting Detections</a> |
-      <a href="{{ '/ioc-feeds/' | relative_url }}">IOC Feeds</a> |
-      <a href="{{ '/main-report-template/' | relative_url }}">Report Templates</a>
-    </nav>
-    <hr>
-  </header>
+  <div class="container-lg px-3 my-5 markdown-body">
+    <header style="text-align: center;">
+      <!-- Logo centered above the title -->
+      <img src="{{ '/assets/images/logo.png' | relative_url }}" 
+           alt="Hunter's Ledger logo" 
+           style="max-width:180px; margin-bottom:0.8rem;">
+      <h1 style="margin-top:0;">The Hunter's Ledger</h1>
+      
+      <!-- Navigation bar centered below the title -->
+      <nav style="margin-top:1rem;">
+        <a href="{{ '/' | relative_url }}">Home</a> |
+        <a href="{{ '/reports/' | relative_url }}">Reports</a> |
+        <a href="{{ '/hunting-detections/' | relative_url }}">Hunting Detections</a> |
+        <a href="{{ '/ioc-feeds/' | relative_url }}">IOC Feeds</a> |
+        <a href="{{ '/report-templates/' | relative_url }}">Report Templates</a>
+      </nav>
+      <hr>
+    </header>
 
-  <main>
-    {{ content }}
-  </main>
+    <main>
+      {{ content }}
+    </main>
 
-  <footer>
-    <hr>
-    <p>© 2025 Joseph — The Hunter's Ledger</p>
-    <p>
-      Licensed content: Reports (All Rights Reserved) | Detections & IOCs (CC BY-NC 4.0) <br>
-      <a href="https://attack.mitre.org/">MITRE ATT&CK</a> |
-      <a href="https://github.com/SigmaHQ/sigma">Sigma Rules</a> |
-      <a href="https://virustotal.github.io/yara/">YARA</a>
-    </p>
-  </footer>
+    <footer style="text-align: center; margin-top:2rem;">
+      <hr>
+      <p>© 2025 Joseph — The Hunter's Ledger</p>
+      <p>
+        Licensed content: Reports (All Rights Reserved) | Detections & IOCs (CC BY-NC 4.0) <br>
+        <a href="https://attack.mitre.org/">MITRE ATT&CK</a> |
+        <a href="https://github.com/SigmaHQ/sigma">Sigma Rules</a> |
+        <a href="https://virustotal.github.io/yara/">YARA</a>
+      </p>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js"></script>
+  <script>anchors.add();</script>
 </body>
 </html>
