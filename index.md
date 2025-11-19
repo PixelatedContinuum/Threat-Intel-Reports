@@ -1,7 +1,15 @@
----
-layout: default
-title: Hunter’s Ledger
----
+<link rel="stylesheet" href="/assets/css/style.css">
+
+<header>
+  <h1 class="site-title">Hunter’s Ledger</h1>
+</header>
+
+<div class="navbar">
+  <a href="/reports/">Reports</a>
+  <a href="/hunting-detections/">Detections</a>
+  <a href="/ioc-feeds/">IOCs</a>
+  <a href="/report-template/">Template</a>
+</div>
 
 <div class="content">
 

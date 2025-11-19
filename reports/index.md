@@ -1,7 +1,4 @@
----
-layout: default
-title: Reports
----
+<link rel="stylesheet" href="/assets/css/style.css">
 
 <div class="content">
 

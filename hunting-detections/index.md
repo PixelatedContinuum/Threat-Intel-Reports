@@ -1,7 +1,4 @@
----
-layout: default
-title: Hunting Detections
----
+<link rel="stylesheet" href="/assets/css/style.css">
 
 <div class="content">
 

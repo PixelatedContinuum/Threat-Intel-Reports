@@ -1,7 +1,0 @@
-title: Hunter’s Ledger
-description: Actionable reports, detections, and IOCs for the cyber community
-url: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
-baseurl: https://github.com/PixelatedContinuum/Threat-Intel-Reports
-markdown: kramdown
-kramdown:
-  input: GFM
