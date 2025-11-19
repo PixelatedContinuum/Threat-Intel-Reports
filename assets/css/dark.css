@@ -1,6 +1,6 @@
 /* Base */
 body {
-  background-color: #121212;
+  background-color: #1f1f1f; /* match nav/table background */
 }
 
 .container-lg {
@@ -63,4 +63,16 @@ body {
 }
 .markdown-body tr:hover td {
   background-color: #333333 !important;
+}
+
+/* Footer */
+footer {
+  color: #aaaaaa;
+  text-align: center;
+}
+footer a {
+  color: #4dabf7;
+}
+footer a:hover {
+  color: #82cfff;
 }
