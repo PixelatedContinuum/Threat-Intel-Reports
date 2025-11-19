@@ -19,21 +19,21 @@ The goal is to present findings from my own research and hunting that are action
 ---
 
 ## 📂 Repository Structure
-- [Reports](/reports/) → Detailed malware analysis and reverse engineering notes.  
+- [Reports](reports/) → Detailed malware analysis and reverse engineering notes.  
   *License: All Rights Reserved — free to read, but reuse requires written permission.*
 
-- [Hunting Detections](/hunting-detections/) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
+- [Hunting Detections](hunting-detections/) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [IOC Feeds](/ioc-feeds/) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
+- [IOC Feeds](ioc-feeds/) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [Report Template](/report-template/) → Consistent format for reports.
+- [Report Template](report-template/) → Consistent format for reports.
 
 ---
 
 ## 📝 Report Format
-Each report follows a consistent structure: [Report Template](/report-template/)
+Each report follows a consistent structure: [Report Template](report-template/)
 
 ### Executive Summary
 High-level overview for quick triage.
@@ -90,7 +90,7 @@ Contributions are welcome!
 
 ### License for Reports Section
 © 2025 Joseph. All rights reserved.  
-The reports in [Reports](/reports/) are made publicly available for **reading and reference purposes only**.  
+The reports in [Reports](reports/) are made publicly available for **reading and reference purposes only**.  
 They may not be reproduced, redistributed, modified, or incorporated into other projects without **prior written permission** from the author.
 
 **Permissions**
@@ -105,7 +105,7 @@ They may not be reproduced, redistributed, modified, or incorporated into other 
 ---
 
 ### License for Detections and IOCs Sections
-The detection rules in [Hunting Detections](/hunting-detections/) and IOC feeds in [IOC Feeds](/ioc-feeds/) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
+The detection rules in [Hunting Detections](hunting-detections/) and IOC feeds in [IOC Feeds](ioc-feeds/) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
 
 **Permissions**
 - You are free to use, adapt, and share the detection rules and IOC feeds for **non-commercial purposes**.  
