@@ -14,62 +14,6 @@ body {
   margin: 0 auto;
 }
 
-/* Headings */
-.markdown-body h1,
-.markdown-body h2,
-.markdown-body h3,
-.markdown-body h4,
-.markdown-body h5,
-.markdown-body h6 {
-  color: #ffffff;
-  letter-spacing: 0.3px;
-}
-
-/* Text and lists */
-.markdown-body p,
-.markdown-body li,
-.markdown-body blockquote {
-  color: #e0e0e0;
-}
-
-/* Links */
-.markdown-body a {
-  color: #4dabf7;
-  text-decoration: none;
-}
-.markdown-body a:hover {
-  color: #82cfff;
-  text-decoration: underline;
-}
-
-/* Horizontal rule */
-.markdown-body hr {
-  border: 0;
-  border-top: 1px solid #333;
-}
-
-/* Code blocks and inline code */
-.markdown-body pre,
-.markdown-body code {
-  background-color: #1e1e1e;
-  color: #dcdcdc;
-  border-radius: 6px;
-}
-.markdown-body pre {
-  padding: 12px;
-}
-
-/* Logo styling */
-header img {
-  display: block;
-  margin: 0 auto 1rem auto;
-  max-width: 220px;
-  background-color: #ffffff;
-  padding: 8px;
-  border-radius: 8px;
-  filter: drop-shadow(0 0 6px #4dabf7);
-}
-
 /* Nav bar */
 .markdown-body header nav {
   background-color: #1f1f1f !important;
@@ -89,14 +33,6 @@ header img {
 .markdown-body header nav a:hover {
   color: #82cfff !important;
   border-bottom: 2px solid #4dabf7;
-}
-
-/* Main content card */
-main {
-  background: #1a1a1a;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.35);
 }
 
 /* Tables */
@@ -127,20 +63,4 @@ main {
 }
 .markdown-body tr:hover td {
   background-color: #333333 !important;
-}
-
-/* Anchors injected by anchor.js */
-.anchorjs-link { color: #888; }
-.anchorjs-link:hover { color: #bbb; }
-
-/* Footer */
-footer {
-  color: #aaaaaa;
-  text-align: center;
-}
-footer a {
-  color: #4dabf7;
-}
-footer a:hover {
-  color: #82cfff;
 }
