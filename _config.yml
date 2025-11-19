@@ -3,7 +3,7 @@ description: Threat Intelligence Reports and Hunting Resources
 url: "https://pixelatedcontinuum.github.io"
 baseurl: "/Threat-Intel-Reports"
 
-theme: null
+theme: jekyll-theme-architect
 
 defaults:
   - scope:

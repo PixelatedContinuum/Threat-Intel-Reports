@@ -12,16 +12,56 @@ html, body {
   line-height: 1.6;
   background-color: #1f1f1f;
   color: #e0e0e0;
+  display: flex;
 }
 
-/* ===== Layout Container ===== */
-.container-lg {
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 240px;
+  background-color: #0f0f0f;
+  padding: 1rem;
+  border-right: 1px solid #2a2a2a;
+}
+
+.site-logo {
+  display: block;
+  margin: 0 auto 1rem auto;
+  max-width: 180px;
+  background-color: #ffffff;
+  padding: 6px;
+  border-radius: 6px;
+  filter: drop-shadow(0 0 6px #4dabf7);
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.sidebar nav a {
+  color: #4dabf7;
+  margin: 0.4rem 0;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-left: 3px solid transparent;
+}
+
+.sidebar nav a:hover {
+  color: #82cfff;
+  border-left: 3px solid #4dabf7;
+  background-color: #1f1f1f;
+}
+
+/* ===== Main Content ===== */
+.main-content {
+  flex: 1;
+  padding: 2rem;
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
-/* ===== Typography ===== */
 h1, h2, h3, h4, h5, h6 {
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
@@ -75,42 +115,6 @@ pre {
   overflow-x: auto;
 }
 
-/* ===== Logo ===== */
-.site-logo {
-  display: block;
-  margin: 0 auto 1rem auto;
-  max-width: 220px;
-  background-color: #ffffff; /* ensures visibility */
-  padding: 8px;
-  border-radius: 8px;
-  filter: drop-shadow(0 0 6px #4dabf7);
-}
-
-/* ===== Navigation ===== */
-header nav {
-  background-color: #1f1f1f;
-  padding: 0.75rem 1rem;
-  margin: 1rem auto;
-  max-width: 900px;
-  border-radius: 8px;
-  text-align: center;
-}
-header nav a {
-  color: #4dabf7;
-  margin: 0 0.6rem;
-  font-weight: 500;
-  text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  border-right: 1px solid #2a2a2a;
-}
-header nav a:last-child {
-  border-right: none;
-}
-header nav a:hover {
-  color: #82cfff;
-  border-bottom: 2px solid #4dabf7;
-}
-
 /* ===== Tables ===== */
 table {
   width: 100%;
@@ -154,16 +158,26 @@ footer a:hover {
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .container-lg {
-    padding: 0 0.5rem;
+  body {
+    flex-direction: column;
   }
-  header nav {
-    display: flex;
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #2a2a2a;
+    text-align: center;
+  }
+  .sidebar nav {
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
   }
-  header nav a {
+  .sidebar nav a {
     margin: 0.4rem;
-    border-right: none;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+  }
+  .sidebar nav a:hover {
+    border-bottom: 2px solid #4dabf7;
   }
 }
