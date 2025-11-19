@@ -63,18 +63,34 @@ body {
 
 /* Tables */
 .markdown-body table {
-  border-collapse: collapse;
   width: 100%;
-  background-color: #1a1a1a;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background-color: #1f1f1f;   /* dark background */
+  color: #e0e0e0;              /* light text */
+  border: 1px solid #2a2a2a;   /* subtle border */
+  border-radius: 6px;
+  overflow: hidden;
 }
+
 .markdown-body th,
 .markdown-body td {
-  border: 1px solid #333;
-  padding: 8px;
-  color: #e0e0e0;
+  padding: 0.75rem 1rem;
+  border: 1px solid #2a2a2a;
 }
+
 .markdown-body th {
-  background-color: #2a2a2a;
+  background-color: #0f0f0f;   /* darker header row */
+  color: #4dabf7;              /* cyber-blue header text */
+  text-align: left;
+}
+
+.markdown-body tr:nth-child(even) {
+  background-color: #262626;   /* alternating row shading */
+}
+
+.markdown-body tr:hover {
+  background-color: #333333;   /* highlight row on hover */
 }
 
 /* Anchors injected by anchor.js */
