@@ -9,17 +9,18 @@ remote_theme: sylhare/Type-on-Strap
 plugins:
   - jekyll-remote-theme
 
-# Global defaults (use theme's default layout)
+# Global defaults
 defaults:
   - scope:
       path: ""
     values:
       layout: default
 
-# Navigation and branding
-logo: "/assets/images/logo.png"   # ensure the file exists at assets/images/logo.png
+# Branding
+logo: "/assets/images/logo.png"
 
-# Type-on-Strap options (safe, easy accents)
+# Theme settings
+color_theme: dark   # force dark mode (use 'auto' for toggle)
 theme_settings:
   header_color: "#0f0f0f"
   accent_color: "#4dabf7"
