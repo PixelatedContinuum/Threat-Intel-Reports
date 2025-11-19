@@ -1,28 +1,31 @@
+---
+layout: default
+title: Report Template
+---
+
+<div class="content">
+
 # Report Template
 
-Use this template when creating new reports.  
-It ensures consistency across all contributions.
-
----
+Each report follows this consistent structure:
 
 ## Executive Summary
 High-level overview for quick triage.
 
 ## Technical Details
-- File structure analysis (PE headers, offsets, payloads)
-- Reverse engineering notes (entry points, obfuscation, persistence)
-- Behavior observed (networking, privilege escalation, anti-analysis)
-- MITRE ATT&CK mapping to observed behaviors
+- File structure analysis  
+- Reverse engineering notes  
+- Observed behaviors  
+- MITRE ATT&CK mapping  
 
 ## IOCs
 | Type   | Value                   |
 |--------|-------------------------|
 | SHA256 | abc123...               |
 | Domain | malicious-example[.]com |
-| IP     | 192.168.1.50            |
 
 ## Detection Opportunities
-- Sigma/YARA rules
-- Splunk/Elastic queries
+- Sigma/YARA rules  
+- Splunk/Elastic queries  
 
-#Closing Summary and Analyst Input
+</div>

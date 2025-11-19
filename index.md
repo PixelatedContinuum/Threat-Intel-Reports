@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="/assets/css/style.css">
+---
+layout: default
+title: Hunter’s Ledger
+---
 
 <div class="content">
 
@@ -23,19 +26,21 @@ The goal is to present findings from my own research and hunting that are action
 ---
 
 ## 📂 Repository Structure
-- [Reports](/reports) → Detailed malware analysis and reverse engineering notes.  
+- [Reports](/reports/) → Detailed malware analysis and reverse engineering notes.  
   *License: All Rights Reserved — free to read, but reuse requires written permission.*
 
-- [Hunting Detections](/hunting-detections) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
+- [Hunting Detections](/hunting-detections/) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [IOC Feeds](/ioc-feeds) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
+- [IOC Feeds](/ioc-feeds/) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
+
+- [Report Template](/report-template/) → Consistent format for reports.
 
 ---
 
 ## 📝 Report Format
-Each report follows a consistent structure: [Report Template](/Report-Template)
+Each report follows a consistent structure: [Report Template](/report-template/)
 
 ### Executive Summary
 High-level overview for quick triage.
@@ -76,8 +81,8 @@ High-level overview for quick triage.
 ## 🤝 Contributing
 Contributions are welcome!  
 - Fork the repo and submit a PR with new reports, detections, or IOCs.  
-- Follow the report format for consistency.
-- Or simply reach out to me and we discuss and I can post something on your behalf.
+- Follow the report format for consistency.  
+- Or simply reach out to me and we can discuss — I can post something on your behalf.
 
 ---
 
@@ -89,39 +94,36 @@ Contributions are welcome!
 ---
 
 ## 📜 License
-# License for Reports Section
 
-© 2025 Joseph. All rights reserved.
-
-The reports in [Reports](/reports) are made publicly available for **reading and reference purposes only**.  
+### License for Reports Section
+© 2025 Joseph. All rights reserved.  
+The reports in [Reports](/reports/) are made publicly available for **reading and reference purposes only**.  
 They may not be reproduced, redistributed, modified, or incorporated into other projects without **prior written permission** from the author.
 
-## Permissions
-- You may view and reference the reports for personal or organizational research.
-- You may cite the reports in academic or professional work with proper attribution.
+**Permissions**
+- You may view and reference the reports for personal or organizational research.  
+- You may cite the reports in academic or professional work with proper attribution.  
 
-## Restrictions
-- Redistribution of the reports in whole or in part is prohibited without written consent.
-- Commercial use, including incorporation into products, services, or paid publications, is prohibited without written consent.
-- Modification or derivative works based on these reports are prohibited without written consent.
+**Restrictions**
+- Redistribution of the reports in whole or in part is prohibited without written consent.  
+- Commercial use, including incorporation into products, services, or paid publications, is prohibited without written consent.  
+- Modification or derivative works based on these reports are prohibited without written consent.  
 
-## Contact
-For permissions or licensing inquiries, please contact the author directly.
+---
 
-# License for Detections and IOCs Sections
+### License for Detections and IOCs Sections
+The detection rules in [Hunting Detections](/hunting-detections/) and IOC feeds in [IOC Feeds](/ioc-feeds/) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
 
-The detection rules in [Hunting Detections](/hunting-detections) and IOC feeds in [IOC Feeds](/ioc-feeds) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
+**Permissions**
+- You are free to use, adapt, and share the detection rules and IOC feeds for **non-commercial purposes**.  
+- You must provide appropriate attribution to the author when using or adapting the work.  
 
-## Permissions
-- You are free to use, adapt, and share the detection rules and IOC feeds for **non-commercial purposes**.
-- You must provide appropriate attribution to the author when using or adapting the work.
+**Restrictions**
+**Commercial use is prohibited.** You may not sell, license, or incorporate these detections/IOCs into paid products or services without prior written permission.  
+- Redistribution must include attribution and a link back to this repository.  
 
-## Restrictions
-- **Commercial use is prohibited.** You may not sell, license, or incorporate these detections/IOCs into paid products or services without prior written permission.
-- Redistribution must include attribution and a link back to this repository.
-
-## Attribution
+**Attribution**
 Please credit as:  
-“Threat Intelligence Reports by Joseph "(https://github.com/PixelatedContinuum/Threat-Intel-Reports/)”
+“Threat Intelligence Reports by Joseph” (https://github.com/PixelatedContinuum/Threat-Intel-Reports/)
 
 </div>

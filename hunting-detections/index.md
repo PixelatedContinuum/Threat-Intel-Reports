@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="/assets/css/style.css">
+---
+layout: default
+title: Hunting Detections
+---
 
 <div class="content">
 
@@ -8,6 +11,6 @@ This section contains detection logic for SIEM/EDR platforms, including Sigma an
 Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 
 ## Available Detections
-- 
+- [Suspicious PowerShell Execution](/hunting-detections/powershell-detection.md)
 
 </div>
