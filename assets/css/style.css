@@ -1,7 +1,18 @@
-.banner-full img {
+.full-bleed {
+  /* Make the element span the full viewport width */
+  width: 100vw;
+
+  /* Pull it out of the centered content container */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* Optional spacing below the banner */
+  margin-bottom: 2rem;
+}
+
+.full-bleed img {
   width: 100%;
-  max-height: 300px;
-  object-fit: cover;
+  height: 300px;            /* adjust as you like */
+  object-fit: cover;        /* fills the banner nicely */
   display: block;
-  margin: 0;
 }

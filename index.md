@@ -4,7 +4,7 @@ permalink: /
 position: 1
 ---
 
-<div class="banner-full">
+<div class="full-bleed">
   <img src="{{ "/assets/images/header.png" | relative_url }}" alt="The Hunter's Ledger Banner">
 </div>
 
