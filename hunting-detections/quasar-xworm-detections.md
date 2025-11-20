@@ -2,7 +2,7 @@
 title: Detection Rules - QuasarRAT + Xworm + PowerShell Loader
 date: '2025-10-17'
 layout: post
-permalink: /reports/quasar-xworm-powershell/
+permalink: /hunting-detections/quasar-xworm-powershell/
 hide: true
 ---
 
