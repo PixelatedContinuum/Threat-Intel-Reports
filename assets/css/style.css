@@ -1,18 +1,21 @@
-.full-bleed {
-  /* Make the element span the full viewport width */
-  width: 100vw;
-
-  /* Pull it out of the centered content container */
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-
-  /* Optional spacing below the banner */
-  margin-bottom: 2rem;
+/* Site title (top left home button) */
+.site-title {
+  color: #00ffcc; /* cyber teal */
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
-.full-bleed img {
-  width: 100%;
-  height: 150px;            /* adjust as you like */
-  object-fit: cover;        /* fills the banner nicely */
-  display: block;
+.site-title:hover {
+  color: #ff0066; /* accent pink on hover */
+  text-decoration: none;
+}
+
+/* Nav bar labels */
+.navbar-label {
+  color: #00ffcc; /* cyber teal */
+  font-weight: 500;
+}
+
+.navbar-label:hover {
+  color: #ff0066; /* accent pink */
 }

@@ -29,16 +29,16 @@ High‑level overview for quick triage.
 ### IOCs
 
 SHA256  
-    HASH1  
-    HASH2  
+- HASH1  
+- HASH2  
 
 Domain  
-    malicious-example[.]com  
-    another-malicious[.]net  
+- malicious-example[.]com  
+- another-malicious[.]net  
 
 IP  
-    192.168.1.50  
-    10.0.0.25
+- 192.168.1.50  
+- 10.0.0.25
 
 ### Detection Opportunities
 - Sigma/YARA rules
