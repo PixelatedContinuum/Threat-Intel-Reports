@@ -4,9 +4,9 @@ permalink: /
 position: 1
 ---
 
-<div class="full-bleed">
-  <img src="{{ "/assets/images/header.png" | relative_url }}" alt="The Hunter's Ledger Banner">
-</div>
+<img src="{{ "/assets/images/header.png" | relative_url }}" 
+     alt="The Hunter's Ledger Banner" 
+     style="width:100%; max-height:300px; object-fit:cover; display:block; margin-bottom:-5rem;">
 
 Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  
 The goal is to present findings from my own research and hunting that are actionable for detection engineering, threat hunting, and incident response teams. Feel free to contribute or just reach out with information, questions, or suggestions!
