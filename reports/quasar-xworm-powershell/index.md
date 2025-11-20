@@ -74,6 +74,14 @@ This is a classic “living off the land” technique, leveraging native scripti
 
 ---
 
+## IOCs
+- [From Webshells to The Cloud IOCs]({{ "/ioc-feeds/quasar-xworm-powershell.json" | relative_url }})
+
+## Detections
+- [From Webshells to The Cloud Detections]({{ "/hunting-detections/quasar-xworm-detections.md" | relative_url }})
+
+---
+
 ## License
 © 2025 Joseph. All rights reserved.  
 Free to read, but reuse requires written permission.
