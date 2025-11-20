@@ -6,7 +6,7 @@ permalink: /reports/quasar-xworm-powershell/
 hide: true
 ---
 
-# Campaign Report: QuasarRAT + Xworm + PowerShell Loader
+# Report: QuasarRAT + Xworm + PowerShell Loader
 
 ---
 
