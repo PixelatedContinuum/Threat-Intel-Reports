@@ -181,3 +181,7 @@ These rules provide coverage across:
 - **Persistence** (new accounts, shell uploads)  
 - **Exfiltration** (Rclone, Dropbox, AWS S3)  
 - **Infrastructure automation** (WordPress installs, reverse proxy configs)  
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

@@ -18,6 +18,7 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 ## Available IOC Feeds
 - [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-powershell.json)
 - [From Webshells to The Cloud](quasar-xworm-powershell.json)
+- [AdvancedRouterScanner](AdvancedRouterScanner.json)
 
 ---
 
