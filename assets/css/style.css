@@ -1,21 +1,15 @@
-/* Site title (top left home button) */
-.site-title {
-  color: #00ffcc; /* cyber teal */
+/* Force site title color */
+header.site-header .site-title {
+  color: #00ffcc !important;
   font-weight: bold;
-  text-transform: uppercase;
 }
 
-.site-title:hover {
-  color: #ff0066; /* accent pink on hover */
-  text-decoration: none;
-}
-
-/* Nav bar labels */
-.navbar-label {
-  color: #00ffcc; /* cyber teal */
+/* Force nav link colors */
+header.site-header .navbar-label {
+  color: #00ffcc !important;
   font-weight: 500;
 }
 
-.navbar-label:hover {
-  color: #ff0066; /* accent pink */
+header.site-header .navbar-label:hover {
+  color: #ff0066 !important;
 }
