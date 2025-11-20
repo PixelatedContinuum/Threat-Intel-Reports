@@ -1,7 +1,7 @@
 ---
 title: From Webshells to the Cloud - A Modular Intrusion Chain
 date: '2025-10-20'
-layout: page
+layout: post
 permalink: /reports/webshells-to-the-cloud/
 hide: true
 ---

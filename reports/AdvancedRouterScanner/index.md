@@ -1,7 +1,7 @@
 ---
 title: AdvancedRouterScanner - A Custom Python Tool for Global Router Exploitation
 date: '2025-10-25'
-layout: page
+layout: post
 permalink: /reports/AdvancedRouterScanner/
 hide: true
 ---
