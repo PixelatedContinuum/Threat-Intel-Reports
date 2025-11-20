@@ -6,12 +6,12 @@ position: 2
 
 ---
 
-## Available Reports
+# Available Reports
 
 Welcome to the **Hunter’s Ledger Reports** section.  
 Each report contains detailed malware analysis, reverse engineering notes, IOCs, and detection opportunities.
 
-### Current Reports
+## Current Reports
 - [Quasar + XWorm + PowerShell Report]({{ "/reports/quasar-xworm-powershell/" | relative_url }})
 - [From Webshells to The Cloud]({{ "/reports/webshells-to-the-cloud/" | relative_url }})
 - [AdvancedRouterScanner]({{ "/reports/AdvancedRouterScanner/" | relative_url }})
