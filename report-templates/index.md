@@ -47,7 +47,7 @@ IP
 ---
 
 ## Usage
-- Copy this template into a new folder under `/reports/` (e.g., `/reports/malware-sample-1/`).
+- Copy this template into a new folder under `/reports/` (e.g., `/reports/malware-sample-1/index.md`).
 - Replace placeholder content with your actual findings.
 - Add cross‑links to related IOC feeds and detections.
 
