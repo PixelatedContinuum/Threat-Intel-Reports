@@ -1,6 +1,8 @@
+<img src="/assets/images/header.png" alt="The Hunter's Ledger Banner" style="width:100%; max-height:300px; object-fit:cover; display:block; margin-bottom:2rem;">
+
 ---
 title: The Hunter's Ledger
-layout: home
+layout: page
 permalink: /
 position: 1
 ---
