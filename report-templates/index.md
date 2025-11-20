@@ -9,13 +9,13 @@ position: 5
 
 ---
 
-## 📌 Purpose
+## Purpose
 This section provides a **standardized template** for creating new reports in *The Hunter’s Ledger*.  
 All reports can follow this format to ensure consistency, reproducibility, and presentation. Feel free to contribute your own report templates!
 
 ---
 
-## 📝 Report Structure
+## Report Structure
 
 ### Executive Summary
 High‑level overview for quick triage.
@@ -39,13 +39,13 @@ High‑level overview for quick triage.
 
 ---
 
-## ⚡ Usage
+## Usage
 - Copy this template into a new folder under `/reports/` (e.g., `/reports/malware-sample-1/`).
 - Replace placeholder content with your actual findings.
 - Add cross‑links to related IOC feeds and detections.
 
 ---
 
-## 📜 License
+## License
 - Reports are © 2025 Joseph. All rights reserved.
 - Free to read, but reuse requires written permission.

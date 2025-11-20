@@ -9,7 +9,7 @@ position: 2
 
 ---
 
-## 📑 Available Reports
+## Available Reports
 
 Welcome to the **Hunter’s Ledger Reports** section.  
 Each report contains detailed malware analysis, reverse engineering notes, IOCs, and detection opportunities.
@@ -19,7 +19,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 ---
 
-## 📜 Usage Notes
+## Usage Notes
 - Each report follows the [Report Templates](/report-templates/) for consistency.  
 - Reports are © 2025 Joseph. All rights reserved.  
 - Free to read, but reuse requires written permission.

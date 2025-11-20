@@ -5,7 +5,7 @@ The goal is to present findings from my own research and hunting that are action
 
 ---
 
-## 🎯 Mission
+## Mission
 - Share reproducible research and technical reports from my own research and hunting  
 - Provide IOCs that can be used in threat hunting or detection engineering (Indicators of Compromise)  
 - Map findings to MITRE ATT&CK techniques to assist in making my findings as useful as possible  
@@ -18,7 +18,7 @@ The goal is to present findings from my own research and hunting that are action
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 - [Reports](/reports) → Detailed malware analysis and reverse engineering notes.  
   *License: All Rights Reserved — free to read, but reuse requires written permission.*
 
@@ -30,7 +30,7 @@ The goal is to present findings from my own research and hunting that are action
 
 ---
 
-## 📝 Report Format
+## Report Format
 Each report follows a consistent structure: [Report Templates](/report-templates)
 
 ### Executive Summary
@@ -56,7 +56,7 @@ High-level overview for quick triage.
 
 ---
 
-## ⚡ Usage
+## Usage
 - Import IOC feeds into your SIEM/EDR and threat hunting workflows  
 - Adapt detection logic for your environment  
 - Use ATT&CK mappings for threat modeling or attack simulation  
@@ -65,7 +65,7 @@ High-level overview for quick triage.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 Contributions are welcome!  
 - Fork the repo and submit a PR with new reports, detections, or IOCs.  
 - Follow the report format for consistency.  
@@ -73,14 +73,14 @@ Contributions are welcome!
 
 ---
 
-## 🔗 Resources
+## Resources
 - [MITRE ATT&CK](https://attack.mitre.org/)  
 - [Sigma Rules](https://github.com/SigmaHQ/sigma)  
 - [YARA](https://virustotal.github.io/yara/)  
 
 ---
 
-## 📜 License
+## License
 # License for Reports Section
 
 © 2025 Joseph. All rights reserved.
