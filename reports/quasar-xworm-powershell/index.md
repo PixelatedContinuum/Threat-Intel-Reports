@@ -75,10 +75,10 @@ This is a classic “living off the land” technique, leveraging native scripti
 ---
 
 ## IOCs
-- [From Webshells to The Cloud IOCs]({{ "/ioc-feeds/quasar-xworm-powershell.json" | relative_url }})
+- [QuasarRAT + Xworm + PowerShell Loader IOCs]({{ "/ioc-feeds/quasar-xworm-powershell.json" | relative_url }})
 
 ## Detections
-- [From Webshells to The Cloud Detections]({{ "/hunting-detections/quasar-xworm-detections.md" | relative_url }})
+- [QuasarRAT + Xworm + PowerShell Loader Detections]({{ "/hunting-detections/quasar-xworm-powershell/" | relative_url }})
 
 ---
 
