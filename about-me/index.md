@@ -11,12 +11,12 @@ Not going to spend a lot of time here but, if you are interested in my story or 
 ---
 
 ## Hunt.io Article
-https://hunt.io/blog/interview-joseph-harrison-threat-detection
+[Hunt.io](https://hunt.io/blog/interview-joseph-harrison-threat-detection)
 
 ## Linkedin Profile
-https://www.linkedin.com/in/josephrharrison
+[LinkedIn](https://www.linkedin.com/in/josephrharrison)
 
 ## Splunk Conf25 Talk
-https://conf.splunk.com/files/2025/recordings/SEC1929.mp4
+[Splunk Conf - UEBA](https://conf.splunk.com/files/2025/recordings/SEC1929.mp4)
 
 ---
