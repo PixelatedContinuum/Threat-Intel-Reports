@@ -21,24 +21,25 @@ The goal is to present findings from my own research and hunting that are action
 - Above all, enable community collaboration and knowledge transfer so everyone is safer
 
 > **Note:** This is not a collection of open source intel reports, IOCs, or TTPs.  
-> These findings are from my own research and hunting as well as others that contribute, though they may overlap with known threats.  
-> If you are looking for an open source collection of intel, let me know — I can help point you to sources or to learn how to make your own!
+> Findings are from my own research as well as others that contribute, though they may overlap with known threats.  
+> Looking for an open source collection? let me know, I can help point you to sources or to learn how to make your own!
 
 ---
 
 ## Repository Structure
-- [Reports]({{ "/reports" | relative_url }}) → Detailed malware analysis and reverse engineering notes.
 
-- [Hunting Detections]({{ "/hunting-detections" | relative_url }}) → Sigma/YARA rules and detection logic.
+- [Reports]({{ site.baseurl }}/reports/) → Detailed malware analysis and reverse engineering notes
 
-- [IOC Feeds]({{ "/ioc-feeds" | relative_url }}) → Indicators of Compromise feeds.
+- [Hunting Detections]({{ site.baseurl }}/hunting-detections/) → Sigma/YARA rules and detection logic
 
-- [Report Templates]({{ "/report-templates" | relative_url }}) → Consistent format for reports.
+- [IOC Feeds]({{ site.baseurl }}/ioc-feeds/) → Indicators of Compromise feeds
+
+- [Report Templates]({{ site.baseurl }}/report-templates/) → Consistent format for reports
 
 ---
 
 ## Report Format
-Each report follows a consistent structure: [Reports]({{ "/reports" | relative_url }})
+Each report follows a consistent structure: [Report Templates]({{ site.baseurl }}/report-templates/)
 
 ---
 
@@ -70,7 +71,7 @@ Contributions are welcome!
 
 ### License for Reports Section
 © 2025 Joseph. All rights reserved.  
-The reports in [Reports]({{ "/reports" | relative_url }}) are made publicly available for **reading and reference purposes only**.  
+The reports in [Reports]({{ site.baseurl }}/reports/) are made publicly available for **reading and reference purposes only**.  
 They may not be reproduced, redistributed, modified, or incorporated into other projects without **prior written permission** from the author.
 
 **Permissions**
@@ -85,7 +86,7 @@ They may not be reproduced, redistributed, modified, or incorporated into other 
 ---
 
 ### License for Detections and IOCs Sections
-The detection rules in [Hunting Detections]({{ "/hunting-detections" | relative_url }}) and IOC feeds in [IOC Feeds]({{ "/ioc-feeds" | relative_url }}) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
+The detection rules in [Hunting Detections]({{ site.baseurl }}/hunting-detections/) and IOC feeds in [IOC Feeds]({{ site.baseurl }}/ioc-feeds/) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
 
 **Permissions**
 - You are free to use, adapt, and share the detection rules and IOC feeds for **non-commercial purposes**.  
