@@ -1,5 +1,6 @@
 ---
 title: Detection Rules – QuasarRAT + Xworm Campaign
+date: '2025-10-17'
 layout: post
 permalink: /hunting-detections/quasar-xworm-detections/
 hide: true
