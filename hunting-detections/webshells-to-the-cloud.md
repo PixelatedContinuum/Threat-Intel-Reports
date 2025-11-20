@@ -2,7 +2,7 @@
 title: Detection Rules – From Webshells to the Cloud
 date: '2025-10-20'
 layout: post
-permalink: /hunting-detections/quasar-xworm-powershell/
+permalink: /hunting-detections/webshells-to-the-cloud/
 hide: true
 ---
 
