@@ -126,3 +126,9 @@ This campaign is modular, layered, and resilient:
 
 ## Detections
 - [From Webshells to The Cloud Detections]({{ "/hunting-detections/webshells-to-the-cloud/" | relative_url }})
+
+---
+
+## License
+© 2025 Joseph. All rights reserved.  
+Free to read, but reuse requires written permission.
