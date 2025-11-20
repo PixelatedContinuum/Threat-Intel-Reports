@@ -26,6 +26,12 @@ The goal is to present findings from my own research and hunting that are action
 
 ---
 
+## About Me
+
+- [About Me]({{ site.baseurl }}/about-me/)
+
+---
+
 ## Repository Structure
 
 - [Reports]({{ site.baseurl }}/reports/) → Detailed malware analysis and reverse engineering notes
