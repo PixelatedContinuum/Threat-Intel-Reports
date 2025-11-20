@@ -5,10 +5,6 @@ permalink: /report-templates/
 position: 5
 ---
 
-# Report Templates
-
----
-
 ## Purpose
 This section provides a **standardized template** for creating new reports in *The Hunter’s Ledger*.  
 All reports can follow this format to ensure consistency, reproducibility, and presentation. Feel free to contribute your own report templates!
