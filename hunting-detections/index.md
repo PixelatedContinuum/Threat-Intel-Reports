@@ -5,10 +5,6 @@ permalink: /hunting-detections/
 position: 3
 ---
 
-# Hunting Detections
-
----
-
 ## Overview
 This section contains detection logic for SIEM/EDR platforms, including Sigma and YARA rules.  
 Rules are mapped to MITRE ATT&CK techniques for triage and hunting.

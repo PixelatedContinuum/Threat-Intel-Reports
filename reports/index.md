@@ -3,9 +3,6 @@ title: Reports
 layout: page
 permalink: /reports/
 position: 2
----
-
-# Reports
 
 ---
 
