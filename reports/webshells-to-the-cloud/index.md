@@ -122,7 +122,7 @@ This campaign is modular, layered, and resilient:
 ---
 
 ## IOCs
-- [From Webshells to The Cloud IOCs]({{ "/hunting-detections/webshells-to-the-cloud/" | relative_url }})
+- [From Webshells to The Cloud IOCs]({{ "/ioc-feeds/webshells-to-the-cloud.json" | relative_url }})
 
 ## Detections
 - [From Webshells to The Cloud Detections]({{ "/hunting-detections/webshells-to-the-cloud/" | relative_url }})

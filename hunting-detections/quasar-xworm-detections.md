@@ -16,7 +16,7 @@ Rules are provided in Sigma and Suricata formats for SIEM/EDR and IDS/IPS integr
 
 ## Sigma – Suspicious VBScript Downloading PowerShell Payload
 
-```yaml
+
 title: Suspicious VBScript Downloading PowerShell Payload
 logsource:
   category: process_creation
@@ -34,7 +34,7 @@ level: high
 ```
 
 ## YARA – Defender Exclusion Script
-```yara
+
 rule PS_Defender_Exclusion {
   strings:
     $a = "Add-MpPreference"

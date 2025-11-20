@@ -12,7 +12,7 @@ hide: true
 
 ### Suspicious Access to File Manager / phpMyAdmin
 **Sigma (Web Logs)**
-```yaml
+
 title: Suspicious File Manager Access  
 logsource:  
   category: webserver  
@@ -28,7 +28,7 @@ level: high
 
 ### Suspicious Cookie Values
 **WAF Rule**  
-```yaml
+
 title: Suspicious clp-fm Cookie  
 logsource:  
   category: webserver  
@@ -60,7 +60,7 @@ alert http any any -> any any (msg:"Suspicious POST param mxx"; http.request_bod
 
 ### New User Creation (`zeroday`)
 **Auditd**  
-```yaml
+
 title: Suspicious User Creation  
 logsource:  
   category: auditd  
@@ -76,7 +76,7 @@ level: critical
 
 ### Webshell File Creation
 **EDR Rule**  
-```yaml
+
 title: Webshell File Creation  
 logsource:  
   category: file  
@@ -94,7 +94,7 @@ level: high
 
 ### Rclone Process Execution
 **Sysmon**  
-```yaml
+
 title: Rclone Execution  
 logsource:  
   category: process_creation  
@@ -110,7 +110,7 @@ level: high
 
 ### Dropbox API Traffic
 **Proxy Logs**  
-```yaml
+
 title: Dropbox API Traffic  
 logsource:  
   category: proxy  
@@ -124,7 +124,7 @@ level: medium
 
 ### Unexpected S3 Bucket Activity
 **CloudTrail**  
-```yaml
+
 title: Suspicious S3 Activity  
 logsource:  
   category: aws.cloudtrail  
@@ -143,7 +143,7 @@ level: high
 
 ### Unusual WordPress Installs
 **Web Logs**  
-```yaml
+
 title: Suspicious WordPress Install  
 logsource:  
   category: webserver  
@@ -158,7 +158,7 @@ level: medium
 
 ### Reverse Proxy Creation
 **Nginx Logs**  
-```yaml
+
 title: Reverse Proxy Config Changes  
 logsource:  
   category: webserver  
