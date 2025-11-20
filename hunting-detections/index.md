@@ -18,6 +18,7 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 ## Available Detections
 - [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-detections.md)
 - [From Webshells to The Cloud](webshells-to-the-cloud.md)
+- [AdvancedRouterScanner](AdvancedRouterScanner.md)
 
 ---
 

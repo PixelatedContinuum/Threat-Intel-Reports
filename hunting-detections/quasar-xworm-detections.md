@@ -16,7 +16,7 @@ Rules are provided in Sigma and Suricata formats for SIEM/EDR and IDS/IPS integr
 
 ## Sigma – Suspicious VBScript Downloading PowerShell Payload
 
-
+```
 title: Suspicious VBScript Downloading PowerShell Payload
 logsource:
   category: process_creation
@@ -47,9 +47,10 @@ rule PS_Defender_Exclusion {
 ```
 # Suricata Detection Rules
 
+```
 alert http any any -> any any (msg:"Malware Loader update.png"; http.uri; content:"/update.png"; sid:200001;)
 alert dns any any -> any any (msg:"Suspicious DuckDNS Domain"; dns.query; content:"dns4up.duckdns.org"; sid:200002;)
-
+```
 ---
 
 ## License

@@ -12,7 +12,7 @@ hide: true
 
 ### Suspicious Access to File Manager / phpMyAdmin
 **Sigma (Web Logs)**
-
+```
 title: Suspicious File Manager Access  
 logsource:  
   category: webserver  
@@ -23,12 +23,12 @@ detection:
       - "phpmyadmin/js/"  
 condition: selection  
 level: high  
-
+```
 ---
 
 ### Suspicious Cookie Values
 **WAF Rule**  
-
+```
 title: Suspicious clp-fm Cookie  
 logsource:  
   category: webserver  
@@ -37,7 +37,7 @@ detection:
     http.cookie|contains: "clp-fm="  
 condition: selection  
 level: high  
-
+```
 ---
 
 ## Webshell Layer
@@ -46,12 +46,15 @@ level: high
 
 ### Outbound Requests with `?cmd=`
 **Suricata IDS**  
+```
 alert http any any -> any any (msg:"Webshell Command Execution"; http.uri; content:"cmd="; nocase; sid:100001; rev:1;)
+```
 
 ### POST Parameter `mxx`
 **Suricata IDS**  
+```
 alert http any any -> any any (msg:"Suspicious POST param mxx"; http.request_body; content:"mxx="; nocase; sid:100002; rev:1;)
-
+```
 ---
 
 ## Persistence Layer
@@ -60,7 +63,7 @@ alert http any any -> any any (msg:"Suspicious POST param mxx"; http.request_bod
 
 ### New User Creation (`zeroday`)
 **Auditd**  
-
+```
 title: Suspicious User Creation  
 logsource:  
   category: auditd  
@@ -71,12 +74,12 @@ detection:
     a0: "zeroday"  
 condition: selection  
 level: critical  
-
+```
 ---
 
 ### Webshell File Creation
 **EDR Rule**  
-
+```
 title: Webshell File Creation  
 logsource:  
   category: file  
@@ -85,7 +88,7 @@ detection:
     file.path|endswith: "/htdocs/app/files/public/shell.php"  
 condition: selection  
 level: high  
-
+```
 ---
 
 ## Exfiltration Layer
@@ -94,7 +97,7 @@ level: high
 
 ### Rclone Process Execution
 **Sysmon**  
-
+```
 title: Rclone Execution  
 logsource:  
   category: process_creation  
@@ -105,12 +108,12 @@ detection:
       - "rclone.exe"  
 condition: selection  
 level: high  
-
+```
 ---
 
 ### Dropbox API Traffic
 **Proxy Logs**  
-
+```
 title: Dropbox API Traffic  
 logsource:  
   category: proxy  
@@ -119,12 +122,12 @@ detection:
     dst_domain: "api.dropboxapi.com"  
 condition: selection  
 level: medium  
-
+```
 ---
 
 ### Unexpected S3 Bucket Activity
 **CloudTrail**  
-
+```
 title: Suspicious S3 Activity  
 logsource:  
   category: aws.cloudtrail  
@@ -136,14 +139,14 @@ detection:
     userIdentity.type: "IAMUser"  
 condition: selection  
 level: high  
-
+```
 ---
 
 ## Infrastructure Automation Layer
 
 ### Unusual WordPress Installs
 **Web Logs**  
-
+```
 title: Suspicious WordPress Install  
 logsource:  
   category: webserver  
@@ -153,12 +156,12 @@ detection:
     http.method: "POST"  
 condition: selection  
 level: medium  
-
+```
 ---
 
 ### Reverse Proxy Creation
 **Nginx Logs**  
-
+```
 title: Reverse Proxy Config Changes  
 logsource:  
   category: webserver  
@@ -168,7 +171,7 @@ detection:
     upstream|contains: "external"  
 condition: selection  
 level: high  
-
+```
 ---
 
 ## Summary

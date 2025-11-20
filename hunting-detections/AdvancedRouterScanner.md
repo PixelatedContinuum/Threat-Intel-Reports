@@ -13,6 +13,7 @@ hide: true
 ## Exploit Layer
 
 ### Suspicious Access to Router CGI Endpoints
+```
 Sigma (Web Logs)
 title: Suspicious Router CGI Access
 logsource:
@@ -30,12 +31,13 @@ detection:
       - "/shell?command="
 condition: selection
 level: high
-
+```
 ---
 
 ## Credential Layer
 
 ### Default Credential Brute Force
+```
 Sigma (Auth Logs)
 title: Default Credential Brute Force
 logsource:
@@ -54,20 +56,22 @@ detection:
       - "changeme"
 condition: selection
 level: high
-
+```
 ---
 
 ## Execution Layer
 
 ### Reverse Shell Establishment
+```
 Suricata IDS
 alert tcp any any -> 107.189.4.201 3778 (msg:"Reverse Shell to C2"; sid:200001; rev:1;)
-
+```
 ---
 
 ## Persistence Layer
 
 ### Dropped Files in /tmp
+```
 Sigma (File Monitoring)
 title: Suspicious Dropped Files in /tmp
 logsource:
@@ -77,12 +81,13 @@ detection:
     file.path|contains: "/tmp/bn"
 condition: selection
 level: medium
-
+```
 ---
 
 ## Exfiltration Layer
 
 ### Payload Downloads
+```
 Sigma (Proxy Logs)
 title: Payload Download from Known Hosts
 logsource:
@@ -95,7 +100,7 @@ detection:
       - "107.189.4.201"
 condition: selection
 level: high
-
+```
 ---
 
 ## Summary
