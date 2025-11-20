@@ -26,7 +26,7 @@ High‑level overview for quick triage.
 - Behavior observed (networking, privilege escalation, anti‑analysis)
 - MITRE ATT&CK mapping to observed behaviors
 
-### IOCs
+### IOCs - Put Into IOCs Section
 
 SHA256  
 - HASH1  
@@ -40,7 +40,7 @@ IP
 - 192.168.1.50  
 - 10.0.0.25
 
-### Detection Opportunities
+### Detection Opportunities - Put Into Detections Section
 - Sigma/YARA rules
 - Splunk/Elastic queries
 

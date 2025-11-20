@@ -16,6 +16,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 ### Current Reports
 - [Quasar + XWorm + PowerShell Report]({{ "/reports/quasar-xworm-powershell/" | relative_url }})
+- [From Webshells to The Cloud]({{ "/reports/webshells-to-the-cloud/" | relative_url }})
 
 ---
 

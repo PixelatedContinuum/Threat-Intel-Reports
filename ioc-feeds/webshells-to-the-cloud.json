@@ -1,0 +1,49 @@
+{
+  "IOCs": {
+    "IPs": [
+      "45.118.144.151:8081",
+      "152.32.191.156:8081",
+      "108.187.4.119"
+    ],
+    "Domains": [
+      "juyu1.yifanyi.app",
+      "shellcp.info"
+    ],
+    "SHA256": [
+      "1b62bd9aef9d0a881a9fba620bc62d9934bc098657c7d03c67593a27c7070642",
+      "f75f22a3828a995759c3aeb21db02ccbb16362b68bd65e2005eae7ee819a5136",
+      "4213d1a7643745c41c67fde44f7251ac146de3ad10ef28bbcb3ef4bd3cd8607b",
+      "4f4fad2fd314581f83dd0e9b4e0f36859a04e165a5abbd15d5ffeb4c63fc28c0",
+      "83c29e70cd7fa3c3b0e43cd6df9bfc6915c8578693b16457de8401157228fdf8",
+      "d98c2874389934881b1ae0162c7b11e7bd01535b7c46e3f873168fca2021deda",
+      "c0f67589eea4e605a31975b5c469e57c024576282a96d010a7dc4b1ecc339005",
+      "02ed1649179ffd6136c2e5d6e48556255644aba38f03589e7b1c98ce66de8297"
+    ],
+    "FilesAndPaths": {
+      "RSA_Public_Key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRZwZsogAMdPj4ypbV4Liw8khOp/dTEFNjfGRgumJR0SXQjDrXDEku0i++kbPbQ9bqtbHgV8e8CCpZGftP9BgxQK4QHKmOZHKmQyYow6q/rzbMxeF9RVZpvVDremBIiQR8r8tz3rR6hsIhkuEIC0yI9byasG1TLLTbT7iW8cRtIwIDAQAB",
+      "Cookies": ["clp-fm"],
+      "POST_Params": ["mxx"],
+      "Paths": [
+        "/phpmyadmin/js/shell.php",
+        "/file-manager/backend/makefile",
+        "/htdocs/app/files/public/"
+      ],
+      "Filenames": [
+        "WordPressInstaller.php",
+        "ReverseProxySite.php",
+        "Rclone.php",
+        "Ami.php"
+      ]
+    },
+    "Accounts": [
+      {
+        "Username": "zeroday",
+        "Password": "Etharus@1337"
+      }
+    ],
+    "BannersAndStrings": [
+      "CloudPanel 0day Version : 2.0.0 >= 2.3.0",
+      "目标 WebShell 上传成功"
+    ]
+  }
+}

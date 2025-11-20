@@ -1,13 +1,9 @@
 ---
 title: QuasarRAT + Xworm + PowerShell Loader
 date: '2025-10-17'
-layout: post
+layout: page
 permalink: /reports/quasar-xworm-powershell/
 hide: true
----
-
-# Report: QuasarRAT + Xworm + PowerShell Loader
-
 ---
 
 ## Overview
