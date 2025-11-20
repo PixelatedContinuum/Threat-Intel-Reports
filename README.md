@@ -18,6 +18,12 @@ The goal is to present findings from my own research and hunting that are action
 
 ---
 
+## About Me
+
+- [About Me]({{ site.baseurl }}/about-me/)
+
+---
+
 ## Repository Structure
 - [Reports](/reports) → Detailed malware analysis and reverse engineering notes.  
   *License: All Rights Reserved — free to read, but reuse requires written permission.*
@@ -27,6 +33,8 @@ The goal is to present findings from my own research and hunting that are action
 
 - [IOC Feeds](/ioc-feeds) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
+
+- [Report Templates]({{ site.baseurl }}/report-templates/) → Consistent format for reports
 
 ---
 
