@@ -51,3 +51,6 @@ exclude:
 
 # Theme activation
 remote_theme: sylhare/Type-on-Strap
+
+head_scripts:
+  - head-custom.html
