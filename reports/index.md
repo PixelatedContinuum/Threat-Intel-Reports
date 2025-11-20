@@ -15,6 +15,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 - [Quasar + XWorm + PowerShell Report]({{ "/reports/quasar-xworm-powershell/" | relative_url }})
 - [From Webshells to The Cloud]({{ "/reports/webshells-to-the-cloud/" | relative_url }})
 - [AdvancedRouterScanner]({{ "/reports/AdvancedRouterScanner/" | relative_url }})
+- [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play]({{ "/reports/malware-analysis-houselet/" | relative_url }})
 
 ---
 

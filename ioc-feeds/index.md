@@ -15,6 +15,7 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 - [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-powershell.json)
 - [From Webshells to The Cloud](quasar-xworm-powershell.json)
 - [AdvancedRouterScanner](AdvancedRouterScanner.json)
+- [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play](malware-analysis-houselet.json)
 
 ---
 
