@@ -6,7 +6,7 @@ permalink: /about-me/
 hide: true
 ---
 
-Not going to spend a lot of time here but, if you are interested in my story or credentials check out these links. 
+If you are interested in learning more about me and my story here are some links for you to check out.  
 
 ---
 
