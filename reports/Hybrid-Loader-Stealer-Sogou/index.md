@@ -75,7 +75,7 @@ This is an active, live infrastructure blending malware distribution, credential
 - Presents a familiar “Install Wizard” interface.  
 - Executes persistence, LNK manipulation, and payload execution in the background.  
 
-# Capa Findings Summary
+# Capability Findings Summary
 
 - **File System:** Create/delete/copy/move files, read/write, enumerate recursively, read .ini files.  
 - **Registry:** Create/open/delete registry keys and values.  
@@ -88,7 +88,7 @@ This is an active, live infrastructure blending malware distribution, credential
 
 ---
 
-# Expanded Capa Findings
+# Expanded Capability Findings
 
 ## File System Manipulation
 - **Evidence:** Capa flagged capabilities to create, delete, copy, and move files and directories, as well as read/write operations and recursive enumeration. It also detected the ability to read .ini files.  
