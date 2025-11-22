@@ -537,13 +537,13 @@ The discovery of the exposed directory and live QingLong Panel confirmed the eco
 ---
 
 ## Analyst Note
-Grouped this way, the artifacts reveal a layered design:  
-- Execution and delivery handled by loader and downloader components.  
-- Networking and C2 managed through helper DLLs, disguised schedulers, and encoded signature databases.  
-- Persistence and user data manipulation embedded in export modules.  
-- UI disguise achieved through themed resource files with Photoshop metadata.  
+>Grouped this way, the artifacts reveal a layered design:  
+>- Execution and delivery handled by loader and downloader components.  
+>- Networking and C2 managed through helper DLLs, disguised schedulers, and encoded signature databases.  
+>- Persistence and user data manipulation embedded in export modules.  
+>- UI disguise achieved through themed resource files with Photoshop metadata.  
 
-Together, these artifacts demonstrate how the operator blends stealth, persistence, communication, and legitimacy cues to maintain control and monetize infections.  
+>Together, these artifacts demonstrate how the operator blends stealth, persistence, communication, and legitimacy cues to maintain control and monetize infections.  
 
 ---
 
