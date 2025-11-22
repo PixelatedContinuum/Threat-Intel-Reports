@@ -381,7 +381,7 @@ The peframe static analysis provided additional context on the malware’s struc
 
 **Operational Impact:** Both IPs confirm reliance on cheap ccTLDs + disposable hosting/cloud services to maintain short-lived, churnable C2 servers.  
 
-# Behavioral Assessment (Expanded with Evidence & Impact)
+# Behavioral Assessment
 
 ## Masquerade
 - **Evidence:** The installer metadata explicitly claims to be “Sogou Input Method v15.1.0.1570,” a legitimate release line. However, the packaging format is NSIS (not used by Sogou), and the binary contains XOR‑encoded configuration blobs, disposable domains, and persistence mechanisms. Legitimate Sogou installers do not include anti‑VM checks, screenshot capture, or clipboard theft.  
