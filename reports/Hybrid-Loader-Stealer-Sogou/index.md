@@ -301,7 +301,7 @@ The peframe static analysis provided additional context on the malware’s struc
   - J.im → 52.20.84.62 (Amazon AWS).  
   - Others expired or placeholders. 
 
-# Infrastructure Analysis (Text-Based)
+# Infrastructure Analysis
 
 ## WHOIS & IP Enrichment
 
