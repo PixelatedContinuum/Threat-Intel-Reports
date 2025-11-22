@@ -843,7 +843,7 @@ The infection chain demonstrates a **hybrid loader + stealer/RAT model**:
 ---
 
 ## IOCs
-- [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou]({{ "/ioc-feeds/Hybrid-Loader-Stealer-Sogou" | relative_url }})
+- [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou]({{ "/ioc-feeds/Hybrid-Loader-Stealer-Sogou.json" | relative_url }})
 
 ## Detections
 - [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou]({{ "/hunting-detections/Hybrid-Loader-Stealer-Sogou/" | relative_url }})
