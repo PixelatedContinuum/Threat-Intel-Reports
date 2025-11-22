@@ -18,6 +18,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 # November 2025
 
 - [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play]({{ "/reports/malware-analysis-houselet/" | relative_url }})
+- [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou]({{ "/reports/Hybrid-Loader-Stealer-Sogou/" | relative_url }})
 
 ---
 

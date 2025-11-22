@@ -1,0 +1,99 @@
+{
+  "Consolidated_IOCs": {
+    "Domains": [
+      {
+        "domain": "6.ar",
+        "resolved_ip": "149.50.136.243",
+        "location": "Argentina, Donweb/Cogent",
+        "evidence": "Active DNS resolution during analysis",
+        "impact": "Disposable VPS infrastructure used for short-lived C2 servers"
+      },
+      {
+        "domain": "J.im",
+        "resolved_ip": "52.20.84.62",
+        "location": "Amazon AWS, Ashburn VA",
+        "evidence": "Active DNS resolution confirmed",
+        "impact": "Reliance on churnable cloud IPs for resilient C2"
+      },
+      {
+        "domain": "5bNG.ar",
+        "resolved_ip": null,
+        "evidence": "Present in XOR-decoded config but not actively resolving",
+        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+      },
+      {
+        "domain": "B.tk",
+        "resolved_ip": null,
+        "evidence": "Present in XOR-decoded config but not actively resolving",
+        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+      },
+      {
+        "domain": "K.ct",
+        "resolved_ip": null,
+        "evidence": "Present in XOR-decoded config but not actively resolving",
+        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+      },
+      {
+        "domain": "Q.ar",
+        "resolved_ip": null,
+        "evidence": "Present in XOR-decoded config but not actively resolving",
+        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+      },
+      {
+        "domain": "rlh.cq",
+        "resolved_ip": null,
+        "evidence": "Present in XOR-decoded config but not actively resolving",
+        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+      },
+      {
+        "domain": "s0.ndf",
+        "resolved_ip": null,
+        "evidence": "Present in XOR-decoded config but not actively resolving",
+        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+      },
+      {
+        "domain": "vpl.gu",
+        "resolved_ip": null,
+        "evidence": "Present in XOR-decoded config but not actively resolving",
+        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+      },
+      {
+        "domain": "X.pg",
+        "resolved_ip": null,
+        "evidence": "Present in XOR-decoded config but not actively resolving",
+        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+      }
+    ],
+    "IPs": [
+      {
+        "ip": "149.50.136.243",
+        "location": "Argentina, Donweb/Cogent",
+        "services": "Hosting dozens of .ar domains, FTP/mail/Apache services",
+        "impact": "Shared hosting exploited for disposable C2 and phishing"
+      },
+      {
+        "ip": "52.20.84.62",
+        "location": "Amazon AWS, Ashburn VA",
+        "services": "Hosting ~1.5M domains, numeric naming conventions",
+        "impact": "Large-scale abuse of cloud infrastructure for phishing/malware"
+      }
+    ],
+    "File_Hashes": {
+      "Installer": {
+        "MD5": "259b7806c2c9cade90acb0f18d940197",
+        "SHA1": "97f5b1508079584568d7f773d166d441097064b4",
+        "SHA256": "4e987719ab96064594c98b62000612f90fe4c34c08161c290ec3898f100f6891",
+        "impact": "Concrete detection artifacts for defenders to block or hunt"
+      }
+    },
+    "Mutex": {
+      "evidence": "Mutex string identified in binary",
+      "impact": "Ensures single instance execution; forensic detection opportunity"
+    },
+    "Promotional_Identifiers": {
+      "Taobao_Shop": "如意素材库 (Ruyi Material Library)",
+      "WeChat_ID": "rysc2019",
+      "impact": "Non-technical identifiers linking infrastructure to monetization channels"
+    }
+  }
+}

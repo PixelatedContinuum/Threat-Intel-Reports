@@ -20,7 +20,7 @@ The goal is to present findings from my own research and hunting that are action
 
 ## About Me
 
-- [About Me]({{ site.baseurl }}/about-me/)
+- [About Me](/about-me)
 
 ---
 
