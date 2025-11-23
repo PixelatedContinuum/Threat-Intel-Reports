@@ -378,6 +378,9 @@ The peframe static analysis provided additional context on the malware’s struc
 ## Analyst Notes
 >**149.50.136.243:** Hosted in Argentina via Donweb/Dattatec, registered under Cogent Communications (US). Dual attribution highlights attacker’s use of regional hosting with international upstreams.  
 >**52.20.84.62:** Amazon EC2 node in Ashburn, VA. Massive domain count shows shared cloud environment abuse. Attackers exploit churnable infrastructure for stealth and scalability.  
+>Later on in follow up investigations after upgrading my platform, I found a domain in a LNK file going to **423down[.]com**
+>This domain reports back to IP address **45.151.132[.]50** as of 11/23/2025 the site was up and going to a download page with links to other sites and downloads likely linked to the other reported activities on this directory. 
+>Added these artifacts to the IOCs section 11/23/2025
 
 **Operational Impact:** Both IPs confirm reliance on cheap ccTLDs + disposable hosting/cloud services to maintain short-lived, churnable C2 servers.  
 

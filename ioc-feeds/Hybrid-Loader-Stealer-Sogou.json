@@ -8,6 +8,13 @@
         "evidence": "Active DNS resolution during analysis",
         "impact": "Disposable VPS infrastructure used for short-lived C2 servers"
       },
+      { 
+        "domain": "423down.com",
+        "resolved_ip": "45.151.132.50",
+        "location": "Seattle Washington Spartan Host Ltd",
+        "evidence": "Found in LNK File after disassembling the installer",
+        "impact": "Looks like a download site to download payloads or go to other sites, like to trick the user"
+      },
       {
         "domain": "J.im",
         "resolved_ip": "52.20.84.62",
