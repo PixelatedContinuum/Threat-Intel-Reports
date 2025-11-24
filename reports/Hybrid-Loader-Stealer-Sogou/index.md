@@ -6,11 +6,6 @@ permalink: /reports/Hybrid-Loader-Stealer-Sogou/
 hide: true
 ---
 
-# NOTE
->This report is not final, I am currently building my own dynamic sandbox lab setup and learning how to use it!
->There are some DLLs in this report that are for calling network connections from the malware. 
->Going through the decompiled code this DLL only writes the IPs and domains at execution so.... dynamic sandbox. 
-
 # Executive Summary
 
 ## Key Takeaways
