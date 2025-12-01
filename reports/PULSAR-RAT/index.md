@@ -109,23 +109,8 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 
 ## Table of Contents
 
-- [1. Executive Summary](#1-executive-summary)
-- [2. Business Risk Assessment](#2-business-risk-assessment)
-- [3. Malware Identification](#3-what-is-serverexe)
-- [4. Technical Capabilities](#4-technical-capabilities-deep-dive)
-  - [4.1 Persistence Mechanisms](#41-persistence-mechanisms---critical-finding-recovery-partition-persistence---understanding-the-risks)
-  - [4.2 Command & Control Infrastructure](#42-command--control-c2-infrastructure)
-  - [4.3 Surveillance & Data Theft](#43-surveillance--data-theft-capabilities---hidden-virtual-network-computing-hvnc---covert-access-with-realistic-detection-considerations)
-  - [4.4 Privilege Escalation & Lateral Movement](#44-privilege-escalation--lateral-movement)
-- [5. Evasion & Anti-Analysis Techniques](#5-evasion--anti-analysis-techniques)
-- [6. Incident Response Procedures](#6-incident-response-procedures)
-- [7. Long-term Defensive Strategy](#7-long-term-defensive-strategy)
-- [8. FAQ](#8-faq---addressing-common-questions)
-- [9. Key Takeaways](#9-key-takeaways---what-matters-most)
-- [10. Immediate Actions](#10-immediate-actions---what-to-do-now)
-- [11. Confidence Levels Summary](#11-confidence-levels-summary)
-- [12. Research References](#12-appendix-a-research-references--further-reading)
-- [IOCs and Detections](#iocs-and-detections)
+* This will be replaced with automatic TOC
+{:toc}
 
 ---
 

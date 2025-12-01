@@ -35,10 +35,12 @@ header.site-header .navbar-label:hover {
   border: none;
   padding: 1rem 0.75rem;
   text-align: left;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #1a1a1a !important;
+  background: linear-gradient(135deg, #00ffcc 0%, #00d4aa 100%);
 }
 
 .professional-table tbody tr {
@@ -62,7 +64,7 @@ header.site-header .navbar-label:hover {
   text-align: left;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #2c3e50;
+  color: #2c3e50 !important;
 }
 
 /* Numeric column alignment */
@@ -138,6 +140,20 @@ header.site-header .navbar-label:hover {
     padding: 0.75rem 0.5rem;
     font-size: 0.8rem;
   }
+}
+
+/* Additional contrast fixes for table readability */
+.professional-table thead th {
+  color: #1a1a1a !important;
+  font-weight: 700 !important;
+}
+
+.professional-table tbody tr {
+  color: #2c3e50 !important;
+}
+
+.professional-table tbody tr td {
+  color: #2c3e50 !important;
 }
 
 /* Print optimization */
