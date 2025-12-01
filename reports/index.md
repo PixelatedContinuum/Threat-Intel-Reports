@@ -15,6 +15,18 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 ---
 
+# Featured Report
+
+- [PULSAR RAT (server.exe) - Technical Analysis & Business Risk Assessment]({{ "/reports/PULSAR-RAT/" | relative_url }})
+
+---
+
+# December 2025
+
+- [PULSAR RAT (server.exe) - Technical Analysis & Business Risk Assessment]({{ "/reports/PULSAR-RAT/" | relative_url }})
+
+---
+
 # November 2025
 
 - [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play]({{ "/reports/malware-analysis-houselet/" | relative_url }})

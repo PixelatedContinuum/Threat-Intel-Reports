@@ -1,0 +1,134 @@
+{
+  "name": "Pulsar RAT Variant (server.exe)",
+  "reference": "Internal Malware Analysis Report",
+  "iocs": {
+    "files": [
+      {
+        "type": "MD5",
+        "value": "b5491b58348600c2766f86a5af2b867f",
+        "confidence": "DEFINITE",
+        "use_case": "Quick file identification, legacy systems"
+      },
+      {
+        "type": "SHA1",
+        "value": "dc795961c8e63782fc0f53c08e7ca2e593df99fa",
+        "confidence": "DEFINITE",
+        "use_case": "Chain-of-custody evidence"
+      },
+      {
+        "type": "SHA256",
+        "value": "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766",
+        "confidence": "DEFINITE",
+        "use_case": "Primary identifier, forensics, blockchain logging"
+      },
+      {
+        "type": "File Size",
+        "value": "1571840",
+        "unit": "bytes",
+        "confidence": "HIGH",
+        "use_case": "Filter during file scans (note: packing can change this)"
+      },
+      {
+        "type": "Embedded DLL",
+        "value": "Pulsar.Common.dll v1.7.4.0",
+        "confidence": "HIGH",
+        "use_case": "Memory analysis, identification of related samples"
+      }
+    ],
+    "registry": [
+      {
+        "key": "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce",
+        "purpose": "System-wide persistence",
+        "severity": "HIGH"
+      },
+      {
+        "key": "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce",
+        "purpose": "User-specific persistence",
+        "severity": "HIGH"
+      },
+      {
+        "key": "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\...\RunOnce",
+        "purpose": "32-bit persistence on 64-bit systems",
+        "severity": "HIGH"
+      },
+      {
+        "path": "%SYSTEMDRIVE%\Recovery\OEM\",
+        "purpose": "Recovery partition persistence",
+        "severity": "CRITICAL"
+      }
+    ],
+    "network": [
+      {
+        "indicator": "pastebin.com",
+        "type": "Domain",
+        "purpose": "C2 config retrieval",
+        "confidence": "MODERATE",
+        "notes": "Also includes variants like paste.ee, hastebin.com"
+      },
+      {
+        "indicator": "hxxps://ipwho.is/",
+        "type": "URL",
+        "purpose": "Victim IP geolocation",
+        "confidence": "HIGH",
+        "notes": "Low business impact to block"
+      },
+      {
+        "indicator": "hxxps://www.amyuni.com/downloads/usbmmidd_v2.zip",
+        "type": "URL",
+        "purpose": "Virtual display driver (HVNC)",
+        "confidence": "HIGH",
+        "notes": "Low business impact to block (unless Amyuni customers)"
+      }
+    ],
+    "behavioral": [
+      {
+        "behavior": "Registry `RunOnce` modification",
+        "detection": "Sysmon Event ID 13, EDR monitoring",
+        "severity": "HIGH",
+        "false_positive_risk": "Low"
+      },
+      {
+        "behavior": "WinRE partition access",
+        "detection": "File system monitoring for `\Recovery\OEM\`",
+        "severity": "CRITICAL",
+        "false_positive_risk": "Very Low"
+      },
+      {
+        "behavior": "Headless command execution",
+        "detection": "Process monitoring for `conhost --headless`",
+        "severity": "HIGH",
+        "false_positive_risk": "Low"
+      },
+      {
+        "behavior": "Browser credential database access by non-browser process",
+        "detection": "Monitor non-browser access to `Login Data` / `logins.json`",
+        "severity": "HIGH",
+        "false_positive_risk": "Medium"
+      },
+      {
+        "behavior": "Pastebin/paste site connections from workstations",
+        "detection": "DNS/HTTP monitoring",
+        "severity": "MODERATE",
+        "false_positive_risk": "High"
+      },
+      {
+        "behavior": "Geolocation service queries",
+        "detection": "Monitor connections to ipwho.is",
+        "severity": "MODERATE",
+        "false_positive_risk": "Low"
+      },
+      {
+        "behavior": "Process injection attempts",
+        "detection": "Monitor `CreateRemoteThread` API calls",
+        "severity": "HIGH",
+        "false_positive_risk": "Medium"
+      },
+      {
+        "behavior": "Token manipulation",
+        "detection": "Monitor `AdjustTokenPrivileges`, `ImpersonateLoggedOnUser`",
+        "severity": "HIGH",
+        "false_positive_risk": "Medium"
+      }
+    ]
+  }
+}

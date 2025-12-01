@@ -17,6 +17,7 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 - [AdvancedRouterScanner](AdvancedRouterScanner.md)
 - [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play](malware-analysis-houselet.md)
 - [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou](Hybrid-Loader-Stealer-Sogou.md)
+- [Detection Rules - PULSAR RAT (server.exe)](PULSAR-RAT.md)
 
 ---
 
