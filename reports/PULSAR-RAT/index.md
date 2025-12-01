@@ -18,14 +18,47 @@ hide: true
 Pulsar RAT provides attackers with complete control over infected systems, enabling data theft, credential harvesting, and network-wide compromise. This represents a CRITICAL (9.2/10) threat requiring immediate executive attention and organizational response.
 
 ### Key Risk Factors
-| Risk Factor | Score | Status |
-|-------------|-------|--------|
-| **Overall Risk** | **9.2/10** | **CRITICAL** |
-| **Data Exfiltration** | 10/10 | CONFIRMED |
-| **System Compromise** | 10/10 | CONFIRMED |
-| **Persistence Difficulty** | 9/10 | LIKELY |
-| **Evasion Capability** | 9/10 | CONFIRMED |
-| **Lateral Movement** | 8/10 | CONFIRMED |
+<table style="border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.9rem;">
+  <thead>
+    <tr style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
+      <th style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left; font-weight: 600;">Risk Factor</th>
+      <th style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left; font-weight: 600;">Score</th>
+      <th style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left; font-weight: 600;">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background-color: #ffffff;">
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Overall Risk</strong></td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>9.2/10</strong></td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong style="color: #dc3545;">CRITICAL</strong></td>
+    </tr>
+    <tr style="background-color: #ffffff;">
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Data Exfiltration</strong></td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">10/10</td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">CONFIRMED</td>
+    </tr>
+    <tr style="background-color: #ffffff;">
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>System Compromise</strong></td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">10/10</td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">CONFIRMED</td>
+    </tr>
+    <tr style="background-color: #ffffff;">
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Persistence Difficulty</strong></td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">9/10</td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">LIKELY</td>
+    </tr>
+    <tr style="background-color: #ffffff;">
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Evasion Capability</strong></td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">9/10</td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">CONFIRMED</td>
+    </tr>
+    <tr style="background-color: #ffffff;">
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Lateral Movement</strong></td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">8/10</td>
+      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">CONFIRMED</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Technical Summary
 **What This Malware Enables:**
@@ -120,15 +153,52 @@ This additional context confirms the critical nature of any connection to this I
 
 ## Risk Rating: CRITICAL
 
-| Risk Factor | Score | Justification |
-|-------------|-------|---------------|
-| **Data Exfiltration** | 10/10 | Full filesystem access + automated credential harvesting modules confirmed in code |
-| **System Compromise** | 10/10 | Complete remote control capabilities with administrative privilege escalation |
-| **Persistence Difficulty** | 9/10 | Advanced techniques including recovery partition abuse (requires verification per system) |
-| **Evasion Capability** | 9/10 | Multi-layered anti-analysis confirmed (VM, debugger, sandbox detection) |
-| **Lateral Movement** | 8/10 | SOCKS proxy + credential theft + network tunneling capabilities present |
-| **Encryption/Detection** | 9/10 | BCrypt encryption + dynamic C2 infrastructure complicates network detection |
-| **OVERALL RISK** | **9.2/10** | **CRITICAL** |
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Risk Factor</th>
+      <th class="numeric">Score</th>
+      <th>Justification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Data Exfiltration</strong></td>
+      <td class="numeric critical">10/10</td>
+      <td>Full filesystem access + automated credential harvesting modules confirmed in code</td>
+    </tr>
+    <tr>
+      <td><strong>System Compromise</strong></td>
+      <td class="numeric critical">10/10</td>
+      <td>Complete remote control capabilities with administrative privilege escalation</td>
+    </tr>
+    <tr>
+      <td><strong>Persistence Difficulty</strong></td>
+      <td class="numeric high">9/10</td>
+      <td>Advanced techniques including recovery partition abuse (requires verification per system)</td>
+    </tr>
+    <tr>
+      <td><strong>Evasion Capability</strong></td>
+      <td class="numeric high">9/10</td>
+      <td>Multi-layered anti-analysis confirmed (VM, debugger, sandbox detection)</td>
+    </tr>
+    <tr>
+      <td><strong>Lateral Movement</strong></td>
+      <td class="numeric high">8/10</td>
+      <td>SOCKS proxy + credential theft + network tunneling capabilities present</td>
+    </tr>
+    <tr>
+      <td><strong>Encryption/Detection</strong></td>
+      <td class="numeric high">9/10</td>
+      <td>BCrypt encryption + dynamic C2 infrastructure complicates network detection</td>
+    </tr>
+    <tr>
+      <td><strong>OVERALL RISK</strong></td>
+      <td class="numeric critical"><strong>9.2/10</strong></td>
+      <td class="critical"><strong>CRITICAL</strong></td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
@@ -140,14 +210,54 @@ Before diving into technical details, it's important to understand what this mal
 
 ## Financial Impact Scenarios
 
-| Scenario | Likelihood | Potential Cost Range | Explanation |
-|----------|-----------|---------------------|-------------|
-| **Credential theft leading to financial fraud** | HIGH | $50K - $500K+ | Stolen banking, payment, or corporate credentials used for unauthorized transactions |
-| **Data breach/regulatory penalties** | HIGH | $100K - $5M+ | Exfiltrated PII/PHI triggering GDPR, HIPAA, or other compliance violations |
-| **Business disruption during remediation** | VERY HIGH | $10K - $200K per day | System rebuilds, incident response, productivity loss during investigation |
-| **Intellectual property theft** | MEDIUM | $500K - $50M+ | Depends on value of accessible data; most impactful for R&D, manufacturing |
-| **Ransomware deployment (follow-on)** | MEDIUM | $100K - $10M+ | RAT access often precedes ransomware; attackers assess value before deploying |
-| **Reputational damage** | MEDIUM-HIGH | Unquantifiable | Customer trust erosion, media coverage, competitive disadvantage |
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Likelihood</th>
+      <th class="numeric">Potential Cost Range</th>
+      <th>Explanation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Credential theft leading to financial fraud</strong></td>
+      <td class="high">HIGH</td>
+      <td class="numeric">$50K - $500K+</td>
+      <td>Stolen banking, payment, or corporate credentials used for unauthorized transactions</td>
+    </tr>
+    <tr>
+      <td><strong>Data breach/regulatory penalties</strong></td>
+      <td class="high">HIGH</td>
+      <td class="numeric">$100K - $5M+</td>
+      <td>Exfiltrated PII/PHI triggering GDPR, HIPAA, or other compliance violations</td>
+    </tr>
+    <tr>
+      <td><strong>Business disruption during remediation</strong></td>
+      <td class="critical">VERY HIGH</td>
+      <td class="numeric">$10K - $200K per day</td>
+      <td>System rebuilds, incident response, productivity loss during investigation</td>
+    </tr>
+    <tr>
+      <td><strong>Intellectual property theft</strong></td>
+      <td class="medium">MEDIUM</td>
+      <td class="numeric">$500K - $50M+</td>
+      <td>Depends on value of accessible data; most impactful for R&D, manufacturing</td>
+    </tr>
+    <tr>
+      <td><strong>Ransomware deployment (follow-on)</strong></td>
+      <td class="medium">MEDIUM</td>
+      <td class="numeric">$100K - $10M+</td>
+      <td>RAT access often precedes ransomware; attackers assess value before deploying</td>
+    </tr>
+    <tr>
+      <td><strong>Reputational damage</strong></td>
+      <td class="high">MEDIUM-HIGH</td>
+      <td class="numeric">Unquantifiable</td>
+      <td>Customer trust erosion, media coverage, competitive disadvantage</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Operational Impact Timeline
 
@@ -167,23 +277,80 @@ Before diving into technical details, it's important to understand what this mal
 
 ## Classification & Identification
 
-| Attribute | Value | Confidence Level |
-|-----------|-------|------------------|
-| **Malware Type** | Remote Access Trojan (RAT) | CONFIRMED |
-| **Family** | Pulsar RAT / Quasar Derivative | HIGHLY CONFIDENT (95%) |
-| **Sophistication** | Advanced / Professional-Grade | CONFIRMED |
-| **Development** | .NET Framework 4.7.2, Microsoft Visual Studio | CONFIRMED |
-| **Status** | Active - ongoing development and variants | LIKELY (based on recent variants in threat intelligence) |
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Attribute</th>
+      <th>Value</th>
+      <th>Confidence Level</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Malware Type</strong></td>
+      <td>Remote Access Trojan (RAT)</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td><strong>Family</strong></td>
+      <td>Pulsar RAT / Quasar Derivative</td>
+      <td class="likely">HIGHLY CONFIDENT (95%)</td>
+    </tr>
+    <tr>
+      <td><strong>Sophistication</strong></td>
+      <td>Professional-grade</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td><strong>Threat Actor Type</strong></td>
+      <td>Professional cybercriminals (likely)</td>
+      <td class="possible">LIKELY (60% analytical)</td>
+    </tr>
+    <tr>
+      <td><strong>Primary Motivation</strong></td>
+      <td>Financial gain</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+    <tr>
+      <td><strong>Target Profile</strong></td>
+      <td>Broad - opportunistic</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+  </tbody>
+</table>
 
 ## File Identifiers
 
-| Hash Type | Value |
-|-----------|-------|
-| **MD5** | b5491b58348600c2766f86a5af2b867f |
-| **SHA1** | dc795961c8e63782fc0f53c08e7ca2e593df99fa |
-| **SHA256** | 2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766 |
-| **File Size** | 1,571,840 bytes (1.5 MB) |
-| **Compilation** | PE32 .NET Executable (32-bit x86) |
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Hash Type</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MD5</strong></td>
+      <td><code>b5491b58348600c2766f86a5af2b867f</code></td>
+    </tr>
+    <tr>
+      <td><strong>SHA1</strong></td>
+      <td><code>dc795961c8e63782fc0f53c08e7ca2e593df99fa</code></td>
+    </tr>
+    <tr>
+      <td><strong>SHA256</strong></td>
+      <td><code>2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766</code></td>
+    </tr>
+    <tr>
+      <td><strong>File Size</strong></td>
+      <td>1,571,840 bytes (1.5 MB)</td>
+    </tr>
+    <tr>
+      <td><strong>Compilation</strong></td>
+      <td>PE32 .NET Executable (32-bit x86)</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Why This Is Professional-Grade Malware
 
@@ -669,12 +836,37 @@ Pulsar includes **multi-layered evasion** targeting analysis environments, makin
 
 **What Pulsar Checks For:**
 
-| VM Type | Detection Method | Reliability |
-|---------|------------------|-------------|
-| **VMware** | Registry keys, vmtoolsd.exe process, MAC address patterns | High |
-| **VirtualBox** | VBoxGuest.sys, VBoxService.exe, hardware IDs | High |
-| **QEMU** | QEMU-specific DLLs, device names | Medium |
-| **Hyper-V** | WMI queries, specific registry keys | High |
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>VM Type</th>
+      <th>Detection Method</th>
+      <th>Reliability</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>VMware</strong></td>
+      <td>Registry keys, vmtoolsd.exe process, MAC address patterns</td>
+      <td class="high">High</td>
+    </tr>
+    <tr>
+      <td><strong>VirtualBox</strong></td>
+      <td>VBoxGuest.sys, VBoxService.exe, hardware IDs</td>
+      <td class="high">High</td>
+    </tr>
+    <tr>
+      <td><strong>QEMU</strong></td>
+      <td>QEMU-specific DLLs, device names</td>
+      <td class="medium">Medium</td>
+    </tr>
+    <tr>
+      <td><strong>Hyper-V</strong></td>
+      <td>WMI queries, specific registry keys</td>
+      <td class="medium">Medium</td>
+    </tr>
+  </tbody>
+</table>
 
 **Why This Matters:**
 
@@ -1015,16 +1207,57 @@ DISM /Online /Cleanup-Image /RestoreHealth
 
 Use this matrix to guide your decision:
 
-| Factor | Points for Rebuild | Points for Cleanup |
-|--------|-------------------|-------------------|
-| WinRE persistence suspected | +5 | 0 |
-| Admin privileges compromised | +3 | 0 |
-| Sensitive data access | +4 | 0 |
-| Compliance requirements | +3 | 0 |
-| EDR visibility pre-infection | 0 | +2 |
-| Business continuity critical | 0 | +3 |
-| Skilled IR team available | +1 | +2 |
-| Re-infection acceptable risk | 0 | +2 |
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Factor</th>
+      <th class="numeric">Points for Rebuild</th>
+      <th class="numeric">Points for Cleanup</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>WinRE persistence suspected</td>
+      <td class="numeric high">+5</td>
+      <td class="numeric">0</td>
+    </tr>
+    <tr>
+      <td>Admin privileges compromised</td>
+      <td class="numeric high">+3</td>
+      <td class="numeric">0</td>
+    </tr>
+    <tr>
+      <td>Sensitive data access</td>
+      <td class="numeric high">+4</td>
+      <td class="numeric">0</td>
+    </tr>
+    <tr>
+      <td>Compliance requirements</td>
+      <td class="numeric high">+3</td>
+      <td class="numeric">0</td>
+    </tr>
+    <tr>
+      <td>EDR visibility pre-infection</td>
+      <td class="numeric">0</td>
+      <td class="numeric medium">+2</td>
+    </tr>
+    <tr>
+      <td>Business continuity critical</td>
+      <td class="numeric">0</td>
+      <td class="numeric high">+3</td>
+    </tr>
+    <tr>
+      <td>Skilled IR team available</td>
+      <td class="numeric low">+1</td>
+      <td class="numeric medium">+2</td>
+    </tr>
+    <tr>
+      <td>Re-infection acceptable risk</td>
+      <td class="numeric">0</td>
+      <td class="numeric medium">+2</td>
+    </tr>
+  </tbody>
+</table>
 
 **Scoring:**
 - **8+ points for rebuild**: Rebuild is clearly recommended

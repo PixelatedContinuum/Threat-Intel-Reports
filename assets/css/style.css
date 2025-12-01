@@ -13,3 +13,148 @@ header.site-header .navbar-label {
 header.site-header .navbar-label:hover {
   color: #ff0066 !important;
 }
+
+/* Professional Table Styling for Threat Intelligence Reports */
+.professional-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.professional-table thead {
+  background: linear-gradient(135deg, #00ffcc 0%, #00d4aa 100%);
+  color: #1a1a1a;
+}
+
+.professional-table th {
+  border: none;
+  padding: 1rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.professional-table tbody tr {
+  border-bottom: 1px solid #e8f4f2;
+  transition: all 0.2s ease;
+}
+
+.professional-table tbody tr:nth-child(even) {
+  background-color: #f8fffe;
+}
+
+.professional-table tbody tr:hover {
+  background-color: #e8fffc;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 255, 204, 0.1);
+}
+
+.professional-table td {
+  border: none;
+  padding: 0.875rem 0.75rem;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #2c3e50;
+}
+
+/* Numeric column alignment */
+.professional-table td.numeric,
+.professional-table th.numeric {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+}
+
+/* Status/Severity styling */
+.professional-table td.critical {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.professional-table td.high {
+  color: #f39c12;
+  font-weight: 600;
+}
+
+.professional-table td.medium {
+  color: #f1c40f;
+  font-weight: 600;
+}
+
+.professional-table td.low {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* Confidence level styling */
+.professional-table td.confirmed {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.professional-table td.likely {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.professional-table td.possible {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Responsive design for mobile */
+@media screen and (max-width: 768px) {
+  .professional-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .professional-table th,
+  .professional-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Print optimization */
+@media print {
+  .professional-table {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .professional-table thead {
+    background: #f0f0f0 !important;
+    color: #000 !important;
+  }
+  
+  .professional-table tbody tr:hover {
+    background: transparent !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
