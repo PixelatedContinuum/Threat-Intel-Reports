@@ -156,6 +156,40 @@ header.site-header .navbar-label:hover {
   color: #2c3e50 !important;
 }
 
+/* Extra specificity for Key Risk Factors table */
+table.professional-table thead tr th {
+  color: #1a1a1a !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #00ffcc 0%, #00d4aa 100%) !important;
+}
+
+table.professional-table tbody tr td {
+  color: #2c3e50 !important;
+  background-color: #ffffff !important;
+}
+
+table.professional-table tbody tr:nth-child(even) td {
+  background-color: #f8fffe !important;
+  color: #2c3e50 !important;
+}
+
+/* Force styling on first table (Key Risk Factors) */
+.professional-table:first-child thead tr th {
+  color: #1a1a1a !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #00ffcc 0%, #00d4aa 100%) !important;
+}
+
+.professional-table:first-child tbody tr td {
+  color: #2c3e50 !important;
+  background-color: #ffffff !important;
+}
+
+.professional-table:first-child tbody tr:nth-child(even) td {
+  background-color: #f8fffe !important;
+  color: #2c3e50 !important;
+}
+
 /* Print optimization */
 @media print {
   .professional-table {

@@ -109,8 +109,16 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 
 ## Table of Contents
 
-* This will be replaced with automatic TOC
+* This will be replaced with automatic TOC - Major Sections Only
 {:toc}
+
+---
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [PULSAR-RAT Detections]({{ "/hunting-detections/PULSAR-RAT/" | relative_url }})
+- [PULSAR-RAT IOCs]({{ "/ioc-feeds/PULSAR-RAT.json" | relative_url }})
 
 ---
 
@@ -2047,12 +2055,6 @@ mountvol X: /d
 
 3. **CISA Alerts and Reports**: Various alerts mentioning Quasar RAT in campaigns
    - Government threat intelligence on RAT family usage
-
-## IOCs
-- [PULSAR-RAT IOCs]({{ "/ioc-feeds/PULSAR-RAT.json" | relative_url }})
-
-## Detections
-- [PULSAR-RAT Detections]({{ "/hunting-detections/PULSAR-RAT/" | relative_url }})
 
 ## License
 © 2025 Joseph. All rights reserved.  
