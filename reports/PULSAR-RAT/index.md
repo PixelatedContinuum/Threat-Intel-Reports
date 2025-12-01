@@ -6,9 +6,7 @@ permalink: /reports/PULSAR-RAT/
 hide: true
 ---
 
-# PULSAR RAT (server.exe): Technical Analysis & Business Risk Assessment
-
-### A Comprehensive, Evidence-Based Guide for Security Decision-Makers
+## A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 
 ---
 
