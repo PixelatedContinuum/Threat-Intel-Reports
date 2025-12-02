@@ -15,7 +15,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 ---
 
-# Featured Report
+# Most Recent Report
 
 - [PULSAR RAT (server.exe) - Technical Analysis & Business Risk Assessment]({{ "/reports/PULSAR-RAT/" | relative_url }})
 

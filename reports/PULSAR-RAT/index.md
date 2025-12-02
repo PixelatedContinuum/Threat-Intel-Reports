@@ -18,44 +18,44 @@ hide: true
 Pulsar RAT provides attackers with complete control over infected systems, enabling data theft, credential harvesting, and network-wide compromise. This represents a high-priority threat (9.2/10) requiring executive review and organizational response.
 
 ### Key Risk Factors
-<table style="border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.9rem;">
+<table class="professional-table">
   <thead>
-    <tr style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
-      <th style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left; font-weight: 600;">Risk Factor</th>
-      <th style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left; font-weight: 600;">Score</th>
-      <th style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left; font-weight: 600;">Status</th>
+    <tr>
+      <th>Risk Factor</th>
+      <th class="numeric">Score</th>
+      <th>Business Impact</th>
     </tr>
   </thead>
   <tbody>
-    <tr style="background-color: #ffffff;">
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Overall Risk</strong></td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>9.2/10</strong></td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong style="color: #dc3545;">CRITICAL</strong></td>
+    <tr>
+      <td><strong>Overall Risk</strong></td>
+      <td class="numeric critical"><strong>9.2/10</strong></td>
+      <td class="critical"><strong>CRITICAL</strong></td>
     </tr>
-    <tr style="background-color: #ffffff;">
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Data Exfiltration</strong></td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">10/10</td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">CONFIRMED</td>
+    <tr>
+      <td><strong>Data Exfiltration</strong></td>
+      <td class="numeric critical">10/10</td>
+      <td>Full filesystem access + automated credential harvesting modules confirmed in code</td>
     </tr>
-    <tr style="background-color: #ffffff;">
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>System Compromise</strong></td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">10/10</td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">CONFIRMED</td>
+    <tr>
+      <td><strong>System Compromise</strong></td>
+      <td class="numeric critical">10/10</td>
+      <td>Complete remote control capabilities with administrative privilege escalation</td>
     </tr>
-    <tr style="background-color: #ffffff;">
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Persistence Difficulty</strong></td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">9/10</td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">LIKELY</td>
+    <tr>
+      <td><strong>Persistence Difficulty</strong></td>
+      <td class="numeric high">9/10</td>
+      <td>Advanced techniques including recovery partition abuse (requires verification per system)</td>
     </tr>
-    <tr style="background-color: #ffffff;">
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Evasion Capability</strong></td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">9/10</td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">CONFIRMED</td>
+    <tr>
+      <td><strong>Evasion Capability</strong></td>
+      <td class="numeric high">9/10</td>
+      <td>Multi-layered anti-analysis confirmed (VM, debugger, sandbox detection)</td>
     </tr>
-    <tr style="background-color: #ffffff;">
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;"><strong>Lateral Movement</strong></td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">8/10</td>
-      <td style="border: 1px solid #dee2e6; padding: 0.75rem; text-align: left;">CONFIRMED</td>
+    <tr>
+      <td><strong>Lateral Movement</strong></td>
+      <td class="numeric high">8/10</td>
+      <td>SOCKS proxy + credential theft + network tunneling capabilities present</td>
     </tr>
   </tbody>
 </table>
