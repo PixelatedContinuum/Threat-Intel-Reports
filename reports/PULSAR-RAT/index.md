@@ -381,12 +381,43 @@ Based on analysis of embedded strings and YARA rule matches, **server.exe** is c
 > **Key Takeaway:** Professional-grade malware requiring comprehensive response approach
 
 ### Quick Reference: Pulsar RAT Capabilities Matrix
-| Capability | Impact | Detection Difficulty | Confidence |
-|------------|--------|---------------------|------------|
-| Persistence | High | Medium | CONFIRMED |
-| C2 Communication | Critical | High | CONFIRMED |
-| Surveillance | Critical | High | CONFIRMED |
-| Lateral Movement | High | Medium | CONFIRMED |
+
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Capability</th>
+      <th>Impact</th>
+      <th>Detection Difficulty</th>
+      <th>Confidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Persistence</td>
+      <td>High</td>
+      <td>Medium</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>C2 Communication</td>
+      <td>Critical</td>
+      <td>High</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>Surveillance</td>
+      <td>Critical</td>
+      <td>High</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>Lateral Movement</td>
+      <td>High</td>
+      <td>Medium</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+  </tbody>
+</table>
 
 ## 4.1 PERSISTENCE MECHANISMS
 
@@ -683,24 +714,74 @@ Result:     Funds sent to attacker instead of intended recipient
 
 **Specific Evidence (CONFIRMED in code):**
 
-Bitcoin Cash address detection regex:
-```
-^(bitcoincash:)?(q|p)[a-z0-9]{41}$
-```
+### Bitcoin Cash Address Detection
 
-This shows the attacker specifically targets Bitcoin Cash transactions. Code inspection reveals similar patterns for Bitcoin (BTC), Ethereum (ETH), and other cryptocurrencies.
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Pattern</th>
+      <th>Description</th>
+      <th>Attacker Target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>^(bitcoincash:)?(q|p)[a-z0-9]{41}$</code></td>
+      <td>This shows to attacker specifically targets Bitcoin Cash transactions. Code inspection reveals similar patterns for Bitcoin (BTC), Ethereum (ETH), and other cryptocurrencies.</td>
+      <td>Cryptocurrency theft and money laundering</td>
+    </tr>
+    <tr>
+      <td><code>^(bitcoincash:)?(q|p)[a-z0-9]{41}$</code></td>
+      <td>Bitcoin Cash transactions</td>
+      <td>Individuals and organizations using Bitcoin ATMs</td>
+    </tr>
+    <tr>
+      <td><code>^(bitcoincash:)?(q|p)[a-z0-9]{41}$</code></td>
+      <td>Ransomware payments</td>
+      <td>Dark web market transactions</td>
+    </tr>
+    <tr>
+      <td><code>^(bitcoincash:)?(q|p)[a-z0-9]{41}$</code></td>
+      <td>Privacy-focused users</td>
+    </tr>
+  </tbody>
+</table>
 
 **Why Cryptocurrency Theft Is Permanent:**
 
 Unlike bank transfers (reversible) or credit cards (chargeback protection), blockchain transactions are:
 - Irreversible once confirmed
 - Anonymous (difficult to trace to real-world identity)
-- Permanent (no authority can reverse the transaction)
+- No recovery mechanism exists
 
 **Real-World Impact:**
+
 - Individual losses: $100 - $500,000+ per incident (documented cases)
 - Organizational treasury theft: Multi-million dollar losses possible
 - No recovery mechanism exists
+
+---
+
+### Screen Capture & Video Recording
+
+>CONFIDENCE LEVEL: CONFIRMED (modules present)
+
+**Capabilities:**
+- Continuous screen capture at configurable intervals
+- Video encoding with JPEG compression (bandwidth efficiency)
+- Webcam access and image capture
+- Microphone/audio recording
+
+**Attacker Use Cases:**
+- Visual surveillance of user activity
+- Capture sensitive documents displayed on screen
+- Reconnaissance to understand network layout from visible applications
+- Evidence gathering for social engineering or extortion
+
+**Detection:**
+- EDR monitoring of screen capture APIs (BitBlt, GDI+)
+- Webcam/microphone usage indicators (modern OS shows camera usage)
+- Unusual CPU usage during idle periods
 
 ---
 
