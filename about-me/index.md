@@ -11,12 +11,12 @@ If you are interested in learning more about me and my story here are some links
 ---
 
 ## Hunt.io Article
-[Hunt.io](https://hunt.io/blog/interview-joseph-harrison-threat-detection)
+[From Munitions to Malware: Interview with Joseph Harrison About His Path to Threat Intelligence](https://hunt.io/blog/interview-joseph-harrison-threat-detection)
 
 ## Linkedin Profile
 [LinkedIn](https://www.linkedin.com/in/josephrharrison)
 
 ## Splunk Conf25 Talk
-[Splunk Conf - UEBA](https://conf.splunk.com/files/2025/recordings/SEC1929.mp4)
+[Rebooting Splunk UEBA: Leveraging the New UEBA's AI/ML Models](https://conf.splunk.com/files/2025/recordings/SEC1929.mp4)
 
 ---
