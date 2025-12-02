@@ -230,14 +230,13 @@ This additional context confirms the critical nature of any connection to this I
 
 Before diving into technical details, it's important to understand what this malware means for your organization in business terms.
 
-## Financial Impact Scenarios
+## Impact Scenarios
 
 <table class="professional-table">
   <thead>
     <tr>
       <th>Scenario</th>
       <th>Likelihood</th>
-      <th class="numeric">Potential Cost Range</th>
       <th>Explanation</th>
     </tr>
   </thead>
@@ -245,37 +244,31 @@ Before diving into technical details, it's important to understand what this mal
     <tr>
       <td><strong>Credential theft leading to financial fraud</strong></td>
       <td class="high">HIGH</td>
-      <td class="numeric">$50K - $500K+</td>
       <td>Stolen banking, payment, or corporate credentials used for unauthorized transactions</td>
     </tr>
     <tr>
       <td><strong>Data breach/regulatory penalties</strong></td>
       <td class="high">HIGH</td>
-      <td class="numeric">$100K - $5M+</td>
       <td>Exfiltrated PII/PHI triggering GDPR, HIPAA, or other compliance violations</td>
     </tr>
     <tr>
       <td><strong>Business disruption during remediation</strong></td>
       <td class="critical">VERY HIGH</td>
-      <td class="numeric">$10K - $200K per day</td>
       <td>System rebuilds, incident response, productivity loss during investigation</td>
     </tr>
     <tr>
       <td><strong>Intellectual property theft</strong></td>
       <td class="medium">MEDIUM</td>
-      <td class="numeric">$500K - $50M+</td>
       <td>Depends on value of accessible data; most impactful for R&D, manufacturing</td>
     </tr>
     <tr>
       <td><strong>Ransomware deployment (follow-on)</strong></td>
       <td class="medium">MEDIUM</td>
-      <td class="numeric">$100K - $10M+</td>
       <td>RAT access often precedes ransomware; attackers assess value before deploying</td>
     </tr>
     <tr>
       <td><strong>Reputational damage</strong></td>
       <td class="high">MEDIUM-HIGH</td>
-      <td class="numeric">Unquantifiable</td>
       <td>Customer trust erosion, media coverage, competitive disadvantage</td>
     </tr>
   </tbody>
@@ -785,8 +778,8 @@ Unlike bank transfers (reversible) or credit cards (chargeback protection), bloc
 
 **Real-World Impact:**
 
-- Individual losses: $100 - $500,000+ per incident (documented cases)
-- Organizational treasury theft: Multi-million dollar losses possible
+- Individual losses: Significant financial impact per incident (documented cases)
+- Organizational treasury theft: Substantial losses possible
 - No recovery mechanism exists
 
 ---
@@ -1231,7 +1224,7 @@ The malware uses:
 **Business Impact:**
 - **Downtime**: several hours per system (user productivity loss)
 - **IT effort**: several hours per system (IT staff time)
-- **Cost**: Primarily labor cost ($200-800 per system at $50/hr IT rate)
+- **Cost**: Primarily labor cost for IT staff time
 - **Risk reduction**: Highest assurance of clean state
 
 ---
@@ -1295,7 +1288,7 @@ DISM /Online /Cleanup-Image /RestoreHealth
 **Business Impact:**
 - **Downtime**: several hours
 - **IT effort**: several hours initially + ongoing monitoring overhead
-- **Cost**: Lower immediate cost, but potential re-infection cost much higher
+- **Cost**: Lower immediate cost, but potential re-infection risk much higher
 - **Risk**: Moderate-High residual risk of incomplete remediation
 
 **Residual Risk with Cleanup:**
@@ -1374,7 +1367,7 @@ Use this matrix to guide your decision:
 ## 7. LONG-TERM DEFENSIVE STRATEGY
 
 ### Executive Impact Summary
-> **Investment Required:** Medium - $50-100 per endpoint annually for EDR
+> **Investment Required:** Medium - Annual EDR licensing
 > **Implementation Timeline:** Medium - several weeks for initial deployment
 > **Business Impact:** Medium - Some operational disruption during deployment
 > **Risk Reduction:** High - Prevents most commodity malware execution
@@ -1396,9 +1389,9 @@ Use this matrix to guide your decision:
 - Carbon Black
 
 **Cost vs. Benefit:**
-- Investment: $50-100 per endpoint annually
+- Investment: Annual licensing per endpoint
 - Benefit: Detects threats like Pulsar BEFORE significant damage
-- ROI: Typical ransomware incident costs $200K-5M; EDR pays for itself preventing one incident
+- ROI: EDR typically pays for itself by preventing major incidents
 
 ---
 
@@ -1538,7 +1531,7 @@ Modern security platforms can detect:
 - Celebrate improvements and good reporting
 
 **ROI of training:**
-- Cost: ~$50/user/year for quality training program
+- Investment: Annual per-user training program
 - Benefit: Users are last line of defense; well-trained users prevent 60-90% of social engineering attacks
 - One prevented RAT infection pays for years of training
 
@@ -1667,8 +1660,8 @@ Modern security platforms can detect:
 - User self-service rebuild for standard workstations (with IT support)
 
 **Accept the risk equation:**
-- Rebuild cost: Known, quantifiable, one-time
-- Retained compromise cost: Unknown, potentially massive, ongoing risk
+- Rebuild cost: Known, one-time
+- Retained compromise cost: Unknown, potentially significant ongoing risk
 - Insurance and regulatory perspective: Favors demonstrated due diligence (rebuild)
 
 --- 
@@ -1848,16 +1841,16 @@ Modern security platforms can detect:
 
 --- 
 
-### 5. Business Impact - Understand the Full Cost
+### 5. Business Impact - Understand the Full Scope
 
-**Direct costs:**
-- Incident response (forensics, analysis, remediation): $50K-500K
-- System rebuilds and downtime: $10K-200K
-- Credential rotation and security enhancements: $20K-100K
+**Direct impacts:**
+- Incident response (forensics, analysis, remediation)
+- System rebuilds and downtime
+- Credential rotation and security enhancements
 
-**Indirect costs:**
+**Indirect impacts:**
 - Productivity loss during investigation and remediation
-- Regulatory fines if breach notification triggered ($100K-5M+)
+- Regulatory fines if breach notification triggered
 - Customer notification costs
 - Credit monitoring services if PII compromised
 - Legal fees
@@ -1873,8 +1866,6 @@ Modern security platforms can detect:
 - Competitive disadvantage
 - Media coverage (if significant breach)
 - Loss of business opportunities
-
-**Total typical cost for RAT compromise: $200K-2M depending on scope, sensitivity, and regulatory environment.**
 
 ---
 
