@@ -1039,8 +1039,8 @@ The infection chain demonstrates a **hybrid loader + stealer/RAT model**:
 
 ## Incident Response Procedures
 
-### Priority 1: Initial Response (First 60 Minutes)
-1. **ISOLATE** all systems with Sogou Input Method installations
+### Priority 1: Initial Response
+1. **ISOLATE** all systems with Sogou Input Method installations immediately
 2. **BLOCK** network access to identified infrastructure:
    - 27.184.28.134:8081 (QingLong Panel)
    - 6.ar → 149.50.136.243 (Argentina)
@@ -1048,15 +1048,16 @@ The infection chain demonstrates a **hybrid loader + stealer/RAT model**:
 3. **IDENTIFY** all users who may have installed cracked Sogou software
 4. **COLLECT** forensic evidence including memory dumps and network logs
 5. **DOCUMENT** all affected systems and user accounts
+6. **ASSESS** regulatory notification requirements for credential theft
 
-### Priority 2: Investigation & Analysis (Hours 1-6)
+### Priority 2: Investigation & Analysis
 1. **FORENSIC ANALYSIS** of collected artifacts for persistence mechanisms
 2. **LOG ANALYSIS** for JD.com credential theft and financial impact
 3. **NETWORK ANALYSIS** for additional C2 infrastructure and data exfiltration
 4. **USER INTERVIEWS** to determine infection vector and timeline
 5. **REGULATORY ASSESSMENT** for credential theft notification requirements
 
-### Priority 3: Remediation & Recovery (Hours 6-24)
+### Priority 3: Remediation & Recovery
 1. **REBUILD** affected systems from known-good images
 2. **RESET** all credentials for potentially compromised accounts
 3. **UPDATE** endpoint detection and response signatures
@@ -1080,31 +1081,31 @@ The infection chain demonstrates a **hybrid loader + stealer/RAT model**:
     <tr>
       <td><strong>Credential Theft</strong></td>
       <td class="high">HIGH</td>
-      <td>3-6 months</td>
+      <td>extended period</td>
     </tr>
     <tr>
       <td><strong>System Compromise</strong></td>
       <td class="high">HIGH</td>
-      <td>1-2 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Operational Disruption</strong></td>
       <td class="medium">MEDIUM</td>
-      <td>2-4 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Compliance Impact</strong></td>
       <td class="high">HIGH</td>
-      <td>6-12 months</td>
+      <td>extended period</td>
     </tr>
   </tbody>
 </table>
 
 ### Operational Impact Timeline
-- **Immediate (0-24 hours):** System isolation, service disruption, credential reset
-- **Short-term (1-7 days):** Investigation, impact assessment
-- **Medium-term (1-4 weeks):** System recovery, enhanced monitoring deployment
-- **Long-term (1-6 months):** Process improvements, compliance activities
+- **Immediate Response:** System isolation, service disruption, credential reset
+- **Investigation Phase:** Forensic analysis and impact assessment
+- **Recovery Phase:** System recovery and enhanced monitoring deployment
+- **Long-term Phase:** Process improvements and compliance activities
 
 ---
 

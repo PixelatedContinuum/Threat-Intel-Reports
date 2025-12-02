@@ -127,9 +127,9 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 - [3. INFECTION VECTORS](#3-infection-vectors)
 - [4. MITRE ATT&CK MAPPING](#4-mitre-attck-mapping)
 - [5. INCIDENT RESPONSE PROCEDURES](#5-incident-response-procedures)
-  - [Priority 1: Immediate Response (First 60 Minutes)](#priority-1-immediate-response-first-60-minutes)
-  - [Priority 2: Investigation & Analysis (Hours 1-6)](#priority-2-investigation--analysis-hours-1-6)
-  - [Priority 3: Remediation & Recovery (Hours 6-24)](#priority-3-remediation--recovery-hours-6-24)
+   - [Priority 1: Immediate Response](#priority-1-immediate-response)
+   - [Priority 2: Investigation & Analysis](#priority-2-investigation--analysis)
+   - [Priority 3: Remediation & Recovery](#priority-3-remediation--recovery)
 - [6. LONG-TERM DEFENSIVE STRATEGY](#6-long-term-defensive-strategy)
   - [Technology Enhancements](#technology-enhancements)
   - [Process Improvements](#process-improvements)
@@ -285,10 +285,10 @@ Before diving into technical details, it's important to understand what this mal
 
 **If infection confirmed:**
 
-- **Hour 0-4**: Emergency response, system isolation, evidence preservation
-- **Day 1-3**: Forensic analysis, credential rotation, threat hunting across environment
-- **Week 1-2**: System rebuilds or intensive cleanup, continued monitoring
-- **Month 1-3**: Enhanced monitoring, security control improvements, compliance reporting
+- **Initial Phase**: Emergency response, system isolation, evidence preservation
+- **Investigation Phase**: Forensic analysis, credential rotation, threat hunting across environment
+- **Remediation Phase**: System rebuilds or intensive cleanup, continued monitoring
+- **Enhanced Monitoring Phase**: Enhanced monitoring, security control improvements, compliance reporting
 - **Ongoing**: Potential long-term monitoring if data breach confirmed
 
 **Total organizational effort:** Typically 200-500 person-hours depending on scope.
@@ -1070,7 +1070,7 @@ The malware uses:
 
 ---
 
-### Priority 1: Within 1 Hour (CRITICAL - Confirmed Compromise)
+### Priority 1: Immediate Response (CRITICAL - Confirmed Compromise)
 
 #### Isolation (Do First)
 
@@ -1145,7 +1145,7 @@ The malware uses:
 
 ---
 
-### Priority 2: Investigation Phase (1-4 Hours)
+### Priority 2: Investigation Phase
 
 #### Deploy Detection Signatures
 
@@ -1173,7 +1173,7 @@ The malware uses:
 
 --- 
 
-### Priority 3: Remediation Phase (4-24 Hours)
+### Priority 3: Remediation Phase
 
 #### Forensic Analysis
 
@@ -1206,7 +1206,7 @@ The malware uses:
 
 --- 
 
-### Priority 4: Within 1 Week - Remediation Decision Framework
+### Priority 4: Remediation Decision Framework
 
 >The Critical Question: Rebuild vs. Cleanup? This is often the most contentious decision in incident response. Here's an evidence-based framework.
 
@@ -1218,7 +1218,7 @@ The malware uses:
 - [ ] System contains or accesses highly sensitive data (financial, healthcare, trade secrets)
 - [ ] Compliance requirements mandate assured clean state (PCI-DSS, HIPAA)
 - [ ] Multiple persistence mechanisms detected
-- [ ] Attacker dwell time exceeds 48 hours (more time for additional implants)
+- [ ] Attacker dwell time exceeds extended period (more time for additional implants)
 
 **When this is STRONGLY RECOMMENDED:**
 - [ ] You cannot definitively rule out WinRE persistence
@@ -1229,8 +1229,8 @@ The malware uses:
 **Rebuild Process:** See Appendix A.1 for detailed step-by-step procedures
 
 **Business Impact:**
-- **Downtime**: 4-8 hours per system (user productivity loss)
-- **IT effort**: 4-8 hours per system (IT staff time)
+- **Downtime**: several hours per system (user productivity loss)
+- **IT effort**: several hours per system (IT staff time)
 - **Cost**: Primarily labor cost ($200-800 per system at $50/hr IT rate)
 - **Risk reduction**: Highest assurance of clean state
 
@@ -1270,9 +1270,9 @@ Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOn
    - Remove any dropped files in AppData, Temp directories
    - Check startup folders for malicious entries
 
-4. **Clean recovery partition** (1 hour) - **HIGH RISK OPERATION**: See Appendix A.2 for detailed procedures
+4. **Clean recovery partition** (significant time) - **HIGH RISK OPERATION**: See Appendix A.2 for detailed procedures
 
-5. **Anti-malware scan** (1-2 hours):
+5. **Anti-malware scan** (several hours):
    - Run multiple AV engines (Microsoft Defender, Malwarebytes, etc.)
    - Run rootkit scanner (GMER, TDSSKiller)
    - Scan in both Safe Mode and Normal Mode
@@ -1286,15 +1286,15 @@ sfc /scannow
 DISM /Online /Cleanup-Image /RestoreHealth
 ```
 
-7. **Enhanced monitoring** (60 days minimum):
+7. **Enhanced monitoring** (extended period):
    - Daily EDR review for this system
    - User awareness training (report ANY unusual behavior)
    - Network traffic analysis for C2 indicators
    - Be prepared to rebuild if ANY signs of re-infection
 
 **Business Impact:**
-- **Downtime**: 2-4 hours
-- **IT effort**: 3-6 hours initially + ongoing monitoring overhead
+- **Downtime**: several hours
+- **IT effort**: several hours initially + ongoing monitoring overhead
 - **Cost**: Lower immediate cost, but potential re-infection cost much higher
 - **Risk**: Moderate-High residual risk of incomplete remediation
 
@@ -1375,7 +1375,7 @@ Use this matrix to guide your decision:
 
 ### Executive Impact Summary
 > **Investment Required:** Medium - $50-100 per endpoint annually for EDR
-> **Implementation Timeline:** Medium - 2-4 weeks for initial deployment
+> **Implementation Timeline:** Medium - several weeks for initial deployment
 > **Business Impact:** Medium - Some operational disruption during deployment
 > **Risk Reduction:** High - Prevents most commodity malware execution
 
@@ -1415,8 +1415,8 @@ Use this matrix to guide your decision:
 - Third-party solutions (Carbon Black, Airlock, etc.)
 
 **Realistic deployment:**
-- Initial deployment: 2-4 weeks (application inventory, policy creation)
-- Ongoing maintenance: ~2 hours/week (approve legitimate new applications)
+- Initial deployment: several weeks (application inventory, policy creation)
+- Ongoing maintenance: regular time (approve legitimate new applications)
 - Business impact: Moderate (may initially block some legitimate software)
 - Security benefit: High (prevents most commodity malware execution)
 
@@ -1595,7 +1595,7 @@ Modern security platforms can detect:
 **If you must attempt cleanup:**
 - Complete forensic analysis first (understand ALL attacker activity)
 - Remove ALL identified persistence mechanisms simultaneously
-- Intensive 60-90 day monitoring period
+- Intensive extended monitoring period
 - Prepare to rebuild at first sign of re-infection
 
 **Better approach:** Rebuild system, eliminate all uncertainty, move on with confidence.
@@ -1655,7 +1655,7 @@ Modern security platforms can detect:
 
 **For Tier 3 systems (if rebuild not feasible):**
 - Deploy or upgrade EDR if not present
-- Enhanced monitoring for 90 days minimum
+- Enhanced monitoring for extended period
 - User awareness (report ANY unusual behavior)
 - Priority response if any indicators detected
 - Plan to rebuild if compromise confirmed
@@ -1755,9 +1755,9 @@ Modern security platforms can detect:
 - For scoping: Assume all activity during possible window is potentially compromised
 
 **Practical guidance:**
-- 0-7 days: Limited attacker reconnaissance, probably automated credential theft only
-- 7-30 days: Possible manual attacker activity, network reconnaissance, lateral movement attempts
-- 30+ days: Assume comprehensive reconnaissance, possible additional implants, potential data staging for exfiltration
+- Early stage: Limited attacker reconnaissance, probably automated credential theft only
+- Mid stage: Possible manual attacker activity, network reconnaissance, lateral movement attempts
+- Extended stage: Assume comprehensive reconnaissance, possible additional implants, potential data staging for exfiltration
 
 --- 
 
@@ -1882,27 +1882,27 @@ Modern security platforms can detect:
 
 ### If You've Identified This Malware (CONFIRMED infection):
 
-**Initial Response (Hour 0):**
+**Initial Response:**
 1. ✓ Isolate affected system(s) from network (unplug cable, disable WiFi)
 2. ✓ DO NOT SHUT DOWN (preserve memory evidence)
 3. ✓ Alert CISO/security leadership immediately
 4. ✓ Initiate incident response procedures (see Priority 1 section)
 5. ✓ Document timeline and initial observations
 
-**First Hour:**
+**Response Phase 1:**
 1. ✓ Capture memory dump
 2. ✓ Reset credentials for all accounts used on infected system
 3. ✓ Block C2 infrastructure at network perimeter
 4. ✓ Notify legal and compliance teams
 5. ✓ Begin evidence preservation
 
-**First 4 Hours:**
+**Response Phase 2:**
 1. ✓ Deploy detection signatures across environment
 2. ✓ Initiate network-wide threat hunt
 3. ✓ Collect and analyze event logs
 4. ✓ Assess scope of potential compromise
 
-**First 24 Hours:**
+**Response Phase 3:**
 1. ✓ Complete forensic imaging
 2. ✓ Scope assessment (how many systems, what data, what accounts)
 3. ✓ Breach notification assessment
@@ -1975,7 +1975,7 @@ To help you assess the reliability of findings in this report:
 > **Note:** This appendix contains step-by-step technical procedures. See Section 6 for high-level decision framework.
 
 #### A.1 Complete System Rebuild Process
-**Rebuild Process (Estimated time: 4-8 hours per system):**
+**Rebuild Process (Estimated time: several hours per system):**
 
 1. **Pre-rebuild** (30 minutes):
    - Complete forensic imaging (already done in Priority 3)
@@ -1984,7 +1984,7 @@ To help you assess the reliability of findings in this report:
    - Inventory applications requiring reinstallation
    - Back up user data files ONLY (not executables or system files)
 
-2. **Scan backup data** (1-2 hours):
+2. **Scan backup data** (several hours):
    - Scan all backed-up files with updated AV/EDR
    - Validate file types (no .exe/.dll/.scr in "documents")
    - Consider uploading suspicious files to VirusTotal (if not sensitive)
@@ -1994,13 +1994,13 @@ To help you assess the reliability of findings in this report:
    - Repartition entire disk including recovery partition
    - Verify all partitions wiped
 
-4. **Clean installation** (1-2 hours):
+4. **Clean installation** (several hours):
    - Install Windows from known-good, verified media
    - Apply all security patches BEFORE network connection
    - Install EDR/AV BEFORE network connection
    - Configure with hardened security baseline
 
-5. **Application restore** (2-3 hours):
+5. **Application restore** (several hours):
    - Install applications from trusted sources only
    - Apply application security patches
    - Configure application security settings
@@ -2012,9 +2012,9 @@ To help you assess the reliability of findings in this report:
    - Test application functionality
    - Validate user can access required resources
 
-7. **Monitoring** (ongoing 30 days):
+7. **Monitoring** (ongoing period):
    - Enhanced monitoring for this system
-   - Weekly check-ins with user for unusual behavior
+    - Regular check-ins with user for unusual behavior
    - Review EDR alerts with lower threshold
    - Document any anomalies
 
@@ -2084,8 +2084,8 @@ mountvol X: /d
 - Monitor and log ALL paste site access
 - Alert on unusual patterns:
   - Access from non-developer systems
-  - High-frequency access (>20 requests/day from single system)
-  - After-hours access from unexpected users
+   - High-frequency access from single system
+   - Unusual timing access from unexpected users
   - Access immediately after executable download
 - Correlate paste site access with other IOCs
 

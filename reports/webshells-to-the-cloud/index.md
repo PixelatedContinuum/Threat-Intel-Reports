@@ -56,14 +56,14 @@ The "From Webshells to the Cloud" campaign represents a sophisticated, multi-pha
 5. **COLLECT** forensic evidence including web server logs, memory dumps, and network captures
 6. **RESET** all credentials for potentially compromised systems and cloud accounts
 
-#### Priority 2: Investigation & Analysis (Hours 1-6)
+#### Priority 2: Investigation & Analysis
 1. **FORENSIC ANALYSIS** of web server logs for exploitation patterns and timeline reconstruction
 2. **LOG ANALYSIS** for connections to known malicious infrastructure and data exfiltration indicators
 3. **CLOUD AUDIT** for unauthorized API access, unusual data transfers, and privilege escalation
 4. **MALWARE ANALYSIS** of recovered PHP backdoors and exploit kits
 5. **THREAT HUNTING** for additional compromised systems and lateral movement within infrastructure
 
-#### Priority 3: Remediation & Recovery (Hours 6-24)
+#### Priority 3: Remediation & Recovery
 1. **REBUILD** compromised web servers from known-good images or deploy clean instances
 2. **UPDATE** all web applications and frameworks to latest secure versions
 3. **IMPLEMENT** web application firewalls with PHP backdoor detection capabilities
@@ -112,8 +112,8 @@ The "From Webshells to the Cloud" campaign represents a sophisticated, multi-pha
   - [Attribution Fingerprints](#attribution-fingerprints)
 - [Incident Response Procedures](#incident-response-procedures)
   - [Priority 1: Initial Response (First 60 Minutes)](#priority-1-initial-response-first-60-minutes)
-  - [Priority 2: Investigation & Analysis (Hours 1-6)](#priority-2-investigation--analysis-hours-1-6)
-  - [Priority 3: Remediation & Recovery (Hours 6-24)](#priority-3-remediation--recovery-hours-6-24)
+   - [Priority 2: Investigation & Analysis](#priority-2-investigation--analysis)
+   - [Priority 3: Remediation & Recovery](#priority-3-remediation--recovery)
 - [Operational Impact Assessment](#operational-impact-assessment)
   - [Impact Scenarios](#impact-scenarios)
   - [Operational Impact Timeline](#operational-impact-timeline)
@@ -348,7 +348,7 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
 
 ## Incident Response Procedures
 
-### Priority 1: Initial Response (First 60 Minutes)
+### Priority 1: Initial Response
 1. **ISOLATE** all web servers with potential PHP backdoor infections
 2. **BLOCK** known malicious infrastructure at network perimeter
 3. **SCAN** all web servers for suspicious PHP files and backdoors
@@ -356,14 +356,14 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
 5. **COLLECT** forensic evidence including web server logs and memory dumps
 6. **RESET** all credentials for potentially compromised systems and cloud accounts
 
-### Priority 2: Investigation & Analysis (Hours 1-6)
+### Priority 2: Investigation & Analysis
 1. **FORENSIC ANALYSIS** of web server logs for exploitation patterns
 2. **LOG ANALYSIS** for connections to known malicious infrastructure
 3. **CLOUD AUDIT** for unauthorized API access and data exfiltration
 4. **MALWARE ANALYSIS** of recovered PHP backdoors and exploit kits
 5. **THREAT HUNTING** for additional compromised systems and lateral movement
 
-### Priority 3: Remediation & Recovery (Hours 6-24)
+### Priority 3: Remediation & Recovery
 1. **REBUILD** compromised web servers from known-good images
 2. **UPDATE** all web applications and frameworks to latest versions
 3. **IMPLEMENT** web application firewalls with PHP backdoor detection
@@ -387,31 +387,31 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
     <tr>
       <td><strong>Data Compromise</strong></td>
       <td class="high">HIGH</td>
-      <td>3-6 months</td>
+      <td>extended period</td>
     </tr>
     <tr>
       <td><strong>System Compromise</strong></td>
       <td class="high">HIGH</td>
-      <td>1-2 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Cloud Service Abuse</strong></td>
       <td class="medium">MEDIUM</td>
-      <td>1-4 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Operational Disruption</strong></td>
       <td class="high">HIGH</td>
-      <td>2-4 weeks</td>
+      <td>several weeks</td>
     </tr>
   </tbody>
 </table>
 
 ### Operational Impact Timeline
-- **Immediate (0-24 hours):** Web server isolation, service disruption, emergency response
-- **Short-term (1-7 days):** System rebuilding, security hardening, enhanced monitoring
-- **Medium-term (1-4 weeks):** Process improvements, cloud security implementation
-- **Long-term (1-3 months):** Security architecture review, compliance activities
+- **Immediate Response:** Web server isolation, service disruption, emergency response
+- **Investigation Phase:** System rebuilding, security hardening, enhanced monitoring
+- **Recovery Phase:** Process improvements, cloud security implementation
+- **Long-term Phase:** Security architecture review, compliance activities
 
 ---
 

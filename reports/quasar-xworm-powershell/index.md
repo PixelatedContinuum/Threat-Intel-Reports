@@ -73,8 +73,8 @@ The QuasarRAT + Xworm + PowerShell campaign represents a sophisticated multi-sta
   - [Threat Hunting Indicators](#threat-hunting-indicators)
 - [Incident Response Procedures](#incident-response-procedures)
   - [Priority 1: Initial Response (First 60 Minutes)](#priority-1-initial-response-first-60-minutes)
-  - [Priority 2: Investigation & Analysis (Hours 1-6)](#priority-2-investigation--analysis-hours-1-6)
-  - [Priority 3: Remediation & Recovery (Hours 6-24)](#priority-3-remediation--recovery-hours-6-24)
+   - [Priority 2: Investigation & Analysis](#priority-2-investigation--analysis)
+   - [Priority 3: Remediation & Recovery](#priority-3-remediation--recovery)
 - [Operational Impact Assessment](#operational-impact-assessment)
   - [Impact Scenarios](#impact-scenarios)
   - [Operational Impact Timeline](#operational-impact-timeline)
@@ -313,22 +313,22 @@ This is a classic “living off the land” technique, leveraging native scripti
 
 ## Incident Response Procedures
 
-### Priority 1: Initial Response (First 60 Minutes)
+### Priority 1: Initial Response
 1. **ISOLATE** potentially compromised systems from network
 2. **RESTORE** Microsoft Defender functionality and remove all exclusions
-3. **BLOCK** access to known malicious infrastructure at network perimeter
-4. **SCAN** all systems for QuasarRAT and Xworm binaries
-5. **AUDIT** PowerShell execution logs for suspicious script blocks
-6. **DOCUMENT** all potentially compromised systems and user accounts
+3. **SCAN** all systems for QuasarRAT and Xworm binaries
+4. **AUDIT** PowerShell execution logs for suspicious script blocks
+5. **BLOCK** access to known malicious infrastructure (dns4up.duckdns.org, 193.233.164.21)
+6. **RESET** all credentials for potentially compromised accounts
 
-### Priority 2: Investigation & Analysis (Hours 1-6)
+### Priority 2: Investigation & Analysis
 1. **FORENSIC ANALYSIS** of PowerShell logs for script block execution
 2. **MEMORY ANALYSIS** for fileless execution artifacts
 3. **NETWORK ANALYSIS** for connections to C2 infrastructure
 4. **MALWARE ANALYSIS** of recovered RAT binaries
 5. **THREAT HUNTING** for additional compromised systems and lateral movement
 
-### Priority 3: Remediation & Recovery (Hours 6-24)
+### Priority 3: Remediation & Recovery
 1. **REBUILD** compromised systems from known-good images
 2. **RESET** all credentials for potentially compromised accounts
 3. **IMPLEMENT** PowerShell logging and monitoring
@@ -352,48 +352,48 @@ This is a classic “living off the land” technique, leveraging native scripti
     <tr>
       <td><strong>Data Compromise</strong></td>
       <td class="high">HIGH</td>
-      <td>2-4 months</td>
+      <td>extended period</td>
     </tr>
     <tr>
       <td><strong>System Compromise</strong></td>
       <td class="high">HIGH</td>
-      <td>1-2 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Operational Disruption</strong></td>
       <td class="medium">MEDIUM</td>
-      <td>1-3 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Security Control Recovery</strong></td>
       <td class="high">HIGH</td>
-      <td>1-2 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Long-term Monitoring</strong></td>
       <td class="medium">MEDIUM</td>
-      <td>6-12 months</td>
+      <td>extended period</td>
     </tr>
     <tr>
       <td><strong>Compliance Impact</strong></td>
       <td class="high">HIGH</td>
-      <td>6-18 months</td>
+      <td>extended period</td>
     </tr>
   </tbody>
 </table>
 
 ### Operational Impact Timeline
-- **Immediate (0-24 hours):** System isolation, security control restoration, emergency response
-- **Short-term (1-7 days):** System rebuilding, enhanced monitoring deployment, credential rotation
-- **Medium-term (1-4 weeks):** Process improvements, security hardening, user training
-- **Long-term (1-6 months):** Security architecture review, compliance activities
-- **Extended (6-18 months):** Ongoing monitoring, regulatory compliance
+- **Immediate Response:** System isolation, security control restoration, emergency response
+- **Investigation Phase:** System rebuilding, enhanced monitoring deployment, credential rotation
+- **Recovery Phase:** Process improvements, security hardening, user training
+- **Long-term Phase:** Security architecture review, compliance activities
+- **Extended Phase:** Ongoing monitoring and regulatory compliance
 
 ### Operational Impact Timeline
-- **Immediate (0-24 hours):** System isolation, security control restoration, emergency response
-- **Short-term (1-7 days):** System rebuilding, enhanced monitoring deployment
-- **Medium-term (1-4 weeks):** Process improvements, security hardening
-- **Long-term (1-3 months):** Security architecture review, compliance activities
+- **Immediate:** System isolation, security control restoration, emergency response
+- **Short-term:** System rebuilding, enhanced monitoring deployment
+- **Medium-term:** Process improvements, security hardening
+- **Long-term:** Security architecture review, compliance activities
 
 ---
 

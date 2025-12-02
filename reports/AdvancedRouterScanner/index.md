@@ -84,9 +84,9 @@ AdvancedRouterScanner represents a sophisticated, custom exploitation framework 
 - [Additional Findings After Pivots (176[.]65[.]137[.]13)](#additional-findings-after-pivots-1766513713)
 - [MITRE ATT&CK Mapping](#mitre-attck-mapping)
 - [Incident Response Procedures](#incident-response-procedures)
-  - [Priority 1: Initial Response (First 60 Minutes)](#priority-1-initial-response-first-60-minutes)
-  - [Priority 2: Investigation & Analysis (Hours 1-6)](#priority-2-investigation--analysis-hours-1-6)
-  - [Priority 3: Remediation & Recovery (Hours 6-24)](#priority-3-remediation--recovery-hours-6-24)
+   - [Priority 1: Initial Response](#priority-1-initial-response)
+   - [Priority 2: Investigation & Analysis](#priority-2-investigation--analysis)
+   - [Priority 3: Remediation & Recovery](#priority-3-remediation--recovery)
 - [Operational Impact Assessment](#operational-impact-assessment)
   - [Impact Scenarios](#impact-scenarios)
   - [Operational Impact Timeline](#operational-impact-timeline)
@@ -548,21 +548,21 @@ This host functioned as an operator hub, staging tools, scanning, and launching 
 
 ## Incident Response Procedures
 
-### Priority 1: Initial Response (First 60 Minutes)
+### Priority 1: Initial Response
 1. **BLOCK** known malicious infrastructure at network perimeter
 2. **ISOLATE** potentially compromised network devices from critical systems
 3. **AUDIT** all exposed network devices, particularly Huawei/Four-Faith OEM equipment
 4. **MONITOR** for exploitation patterns and credential brute-forcing attempts
 5. **DOCUMENT** all potentially compromised devices and network segments
 
-### Priority 2: Investigation & Analysis (Hours 1-6)
+### Priority 2: Investigation & Analysis
 1. **FORENSIC ANALYSIS** of network device logs for exploitation attempts
 2. **LOG ANALYSIS** for connections to known malicious IPs (185.38.150.7, 176.65.137.13)
 3. **VULNERABILITY ASSESSMENT** of all embedded network devices
 4. **TRAFFIC ANALYSIS** for unusual scanning patterns and command injection attempts
 5. **THREAT HUNTING** for AdvancedRouterScanner artifacts in network traffic
 
-### Priority 3: Remediation & Recovery (Hours 6-24)
+### Priority 3: Remediation & Recovery
 1. **UPDATE** firmware on all embedded network devices
 2. **RESET** credentials on all potentially compromised devices
 3. **IMPLEMENT** network segmentation to isolate critical infrastructure
@@ -586,31 +586,31 @@ This host functioned as an operator hub, staging tools, scanning, and launching 
     <tr>
       <td><strong>Infrastructure Compromise</strong></td>
       <td class="high">HIGH</td>
-      <td>2-4 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>DDoS Attack Impact</strong></td>
       <td class="high">HIGH</td>
-      <td>1-3 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Device Replacement</strong></td>
       <td class="medium">MEDIUM</td>
-      <td>1-2 weeks</td>
+      <td>several weeks</td>
     </tr>
     <tr>
       <td><strong>Operational Disruption</strong></td>
       <td class="high">HIGH</td>
-      <td>3-6 weeks</td>
+      <td>several weeks</td>
     </tr>
   </tbody>
 </table>
 
 ### Operational Impact Timeline
-- **Immediate (0-24 hours):** Network isolation, service disruption, emergency response
-- **Short-term (1-7 days):** Device assessment, firmware updates, security hardening
-- **Medium-term (1-4 weeks):** Infrastructure recovery, enhanced monitoring deployment
-- **Long-term (1-3 months):** Process improvements, vendor management, security architecture review
+- **Immediate Response:** Network isolation, service disruption, emergency response
+- **Investigation Phase:** Device assessment, firmware updates, security hardening
+- **Recovery Phase:** Infrastructure recovery, enhanced monitoring deployment
+- **Long-term Phase:** Process improvements, vendor management, security architecture review
 
 ---
 
