@@ -524,31 +524,31 @@ The analyzed sample was obtained from an open web directory:
 ### Defense Strategies by Attack Vector
 
 **Email Security:**
-- [ ] Deploy email filtering with attachment scanning (blocks .exe attachments from external senders)
-- [ ] Implement DMARC/SPF/DKIM to prevent email spoofing
-- [ ] Use email sandboxing for suspicious attachments
-- [ ] Block executable attachments or require ZIP password (communicated separately)
-- [ ] User training on phishing recognition
+[ ] Deploy email filtering with attachment scanning (blocks .exe attachments from external senders)
+[ ] Implement DMARC/SPF/DKIM to prevent email spoofing
+[ ] Use email sandboxing for suspicious attachments
+[ ] Block executable attachments or require ZIP password (communicated separately)
+[ ] User training on phishing recognition
 
 **Web Security:**
-- [ ] Deploy web filtering to block known-malicious domains and IPs
-- [ ] Block access to open directory listings (may indicate malware distribution)
-- [ ] Implement DNS filtering to block malicious domains
-- [ ] Use browser isolation for untrusted sites
-- [ ] Restrict downloads to approved file types
+[ ] Deploy web filtering to block known-malicious domains and IPs
+[ ] Block access to open directory listings (may indicate malware distribution)
+[ ] Implement DNS filtering to block malicious domains
+[ ] Use browser isolation for untrusted sites
+[ ] Restrict downloads to approved file types
 
 **Endpoint Protection:**
-- [ ] Application whitelisting to prevent unauthorized executables
-- [ ] EDR with behavioral detection to catch evasive malware
-- [ ] Disable macros by default in Office applications
-- [ ] User Account Control (UAC) enforced
-- [ ] Regular security awareness training
+[ ] Application whitelisting to prevent unauthorized executables
+[ ] EDR with behavioral detection to catch evasive malware
+[ ] Disable macros by default in Office applications
+[ ] User Account Control (UAC) enforced
+[ ] Regular security awareness training
 
 **Network Controls:**
-- [ ] Egress filtering to block connections to known-malicious infrastructure
-- [ ] Network segmentation to limit spread after initial compromise
-- [ ] Monitor for connections to paste sites from unexpected systems
-- [ ] IDS/IPS signatures for known RAT traffic patterns
+[ ] Egress filtering to block connections to known-malicious infrastructure
+[ ] Network segmentation to limit spread after initial compromise
+[ ] Monitor for connections to paste sites from unexpected systems
+[ ] IDS/IPS signatures for known RAT traffic patterns
 
 ### User Awareness: The Most Critical Control
 
@@ -1467,29 +1467,6 @@ Unlike bank transfers (reversible) or credit cards (chargeback protection), bloc
 ### Screen Capture & Video Recording
 
 >CONFIDENCE LEVEL: CONFIRMED (modules present)
-
-**Capabilities:**
-- Continuous screen capture at configurable intervals
-- Video encoding with JPEG compression (bandwidth efficiency)
-- Webcam access and image capture
-- Microphone/audio recording
-
-**Attacker Use Cases:**
-- Visual surveillance of user activity
-- Capture sensitive documents displayed on screen
-- Reconnaissance to understand network layout from visible applications
-- Evidence gathering for social engineering or extortion
-
-**Detection:**
-- EDR monitoring of screen capture APIs (BitBlt, GDI+)
-- Webcam/microphone usage indicators (modern OS shows camera usage)
-- Unusual CPU usage during idle periods
-
----
-
-### Screen Capture & Video Recording
-
->CONFIDENCE LEVEL: CONFIRMED (modules present)**
 
 **Capabilities:**
 - Continuous screen capture at configurable intervals
