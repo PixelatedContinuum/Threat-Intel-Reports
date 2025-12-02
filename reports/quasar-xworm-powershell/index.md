@@ -57,8 +57,7 @@ The QuasarRAT + Xworm + PowerShell campaign represents a sophisticated multi-sta
 ---
 
 ## Table of Contents
-* This will be replaced with automatic TOC - Major Sections Only
-{:toc_levels: 2}
+{:toc}
 
 ---
 
@@ -308,45 +307,57 @@ This is a classic “living off the land” technique, leveraging native scripti
 
 ---
 
-## Business Risk Assessment
+## Operational Impact Assessment
 
-### Financial Impact Scenarios
+### Impact Scenarios
 <table class="professional-table">
   <thead>
     <tr>
       <th>Impact Category</th>
-      <th>Low Estimate</th>
-      <th>High Estimate</th>
-      <th>Time to Recovery</th>
+      <th>Severity Level</th>
+      <th>Recovery Time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Data Breach Costs</strong></td>
-      <td>$50,000</td>
-      <td>$500,000</td>
+      <td><strong>Data Compromise</strong></td>
+      <td class="high">HIGH</td>
       <td>2-4 months</td>
     </tr>
     <tr>
-      <td><strong>System Remediation</strong></td>
-      <td>$25,000</td>
-      <td>$250,000</td>
+      <td><strong>System Compromise</strong></td>
+      <td class="high">HIGH</td>
       <td>1-2 weeks</td>
     </tr>
     <tr>
-      <td><strong>Business Disruption</strong></td>
-      <td>$30,000</td>
-      <td>$300,000</td>
+      <td><strong>Operational Disruption</strong></td>
+      <td class="medium">MEDIUM</td>
       <td>1-3 weeks</td>
     </tr>
     <tr>
       <td><strong>Security Control Recovery</strong></td>
-      <td>$15,000</td>
-      <td>$150,000</td>
+      <td class="high">HIGH</td>
       <td>1-2 weeks</td>
+    </tr>
+    <tr>
+      <td><strong>Long-term Monitoring</strong></td>
+      <td class="medium">MEDIUM</td>
+      <td>6-12 months</td>
+    </tr>
+    <tr>
+      <td><strong>Compliance Impact</strong></td>
+      <td class="high">HIGH</td>
+      <td>6-18 months</td>
     </tr>
   </tbody>
 </table>
+
+### Operational Impact Timeline
+- **Immediate (0-24 hours):** System isolation, security control restoration, emergency response
+- **Short-term (1-7 days):** System rebuilding, enhanced monitoring deployment, credential rotation
+- **Medium-term (1-4 weeks):** Process improvements, security hardening, user training
+- **Long-term (1-6 months):** Security architecture review, compliance activities
+- **Extended (6-18 months):** Ongoing monitoring, regulatory compliance
 
 ### Operational Impact Timeline
 - **Immediate (0-24 hours):** System isolation, security control restoration, emergency response
@@ -359,25 +370,36 @@ This is a classic “living off the land” technique, leveraging native scripti
 ## Long-term Defensive Strategy
 
 ### Technology Enhancements
-1. **Application Control** to prevent unauthorized script execution
-2. **PowerShell Constrained Language Mode** for restrictive execution policies
-3. **Advanced Endpoint Protection** with fileless execution detection
-4. **Network Traffic Analysis** for C2 communication detection
-5. **Security Information and Event Management (SIEM)** with PowerShell integration
+1. **Endpoint Detection & Response (EDR)** with fileless execution capabilities and behavioral analysis
+2. **Application Control** to prevent unauthorized script execution and unknown software deployment
+3. **PowerShell Constrained Language Mode** with restrictive execution policies and enhanced logging
+4. **Advanced Threat Protection** with real-time fileless attack detection and memory forensics
+5. **Network Traffic Analysis** for C2 communication detection and anomaly identification
+6. **Security Information and Event Management (SIEM)** with PowerShell integration and correlation rules
+7. **Cloud Access Security Broker (CASB)** for monitoring cloud-based exfiltration attempts
 
 ### Process Improvements
-1. **PowerShell Logging** with script block logging and module logging
-2. **Application Whitelisting** for script execution and file downloads
-3. **Regular Security Assessments** including penetration testing of endpoint defenses
-4. **Incident Response Playbooks** specific to fileless malware attacks
-5. **Change Management** procedures with security approval requirements
+1. **PowerShell Logging** with script block logging, module logging, and transcription capabilities
+2. **Application Whitelisting** for script execution, file downloads, and PowerShell commands
+3. **Regular Security Assessments** including penetration testing of endpoint defenses and fileless attack simulations
+4. **Incident Response Playbooks** specific to fileless malware attacks and RAT remediation
+5. **Change Management** procedures with security approval requirements and rollback capabilities
+6. **Threat Hunting Program** with regular hunts for fileless attack indicators and RAT infrastructure
 
 ### Organizational Measures
-1. **Security Awareness Training** on social engineering and malicious scripts
-2. **Regular Security Assessments** including red team exercises
-3. **Threat Intelligence Subscription** for emerging fileless malware threats
-4. **Executive Security Briefings** on living-off-the-land attack techniques
-5. **Investment in Security Tools** and personnel training for advanced threat detection
+1. **Security Awareness Training** on social engineering, malicious scripts, and RAT detection
+2. **Regular Security Assessments** including red team exercises and fileless attack scenarios
+3. **Threat Intelligence Subscription** for emerging fileless malware threats and RAT infrastructure monitoring
+4. **Executive Security Briefings** on living-off-the-land attack techniques and business impact
+5. **Investment in Security Tools** and personnel training for advanced threat detection and response
+6. **Security Champions Program** to promote security culture and incident reporting
+
+### Resource Investment Summary
+- **Technology Investment:** EDR and advanced protection deployment across endpoints
+- **Training Investment:** Security awareness and specialized training for personnel
+- **Process Investment:** Security program development and maintenance activities
+- **Total Investment:** Comprehensive fileless attack protection capabilities
+- **Expected Outcome:** Prevention of fileless attack incidents and improved detection capabilities
 
 ---
 

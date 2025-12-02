@@ -57,8 +57,7 @@ AdvancedRouterScanner represents a sophisticated, custom exploitation framework 
 ---
 
 ## Table of Contents
-* This will be replaced with automatic TOC - Major Sections Only
-{:toc_levels: 2}
+{:toc}
 
 ---
 
@@ -189,10 +188,34 @@ Timeline Analysis
 ---
 
 # 8. Threat Assessment
-- Nature: Custom/semi‑private router exploitation tool.  
-- Scope: Global IP list, confirmed exploitation in Vietnam.  
-- Intent: Botnet recruitment, proxy infrastructure, or resale of access.  
-- Attribution Value: High.  
+
+### Overall Assessment
+- **Nature:** Custom/semi-private router exploitation tool
+- **Scope:** Global IP list, confirmed exploitation in Vietnam
+- **Intent:** Botnet recruitment, proxy infrastructure, or resale of access
+- **Attribution Value:** High
+
+### Confidence Levels
+
+**CONFIRMED (Highest Confidence):**
+- Tool uniqueness and custom development (AdvancedRouterScanner class)
+- Global targeting scope and IP enrichment data
+- Exploitation confirmation in Vietnam (Huawei router compromise)
+- Infrastructure analysis and operational hubs
+- Results file format and scanning methodology
+- Geographic distribution and ISP targeting patterns
+
+**LIKELY (Strong Evidence):**
+- Botnet recruitment intent and operationalization
+- Transition from research to operational exploitation
+- Vendor-specific exploitation logic and success rates
+- Infrastructure abuse for DDoS and proxy services
+
+**POSSIBLE (Analytical Judgment):**
+- Specific threat actor identification and attribution
+- Full scope of global campaign (unseen portions)
+- Exact timeline of operationalization
+- Relationship to other known campaigns or threat groups
 
 ---
 
@@ -507,41 +530,36 @@ This host functioned as an operator hub, staging tools, scanning, and launching 
 
 ---
 
-## Business Risk Assessment
+## Operational Impact Assessment
 
-### Financial Impact Scenarios
+### Impact Scenarios
 <table class="professional-table">
   <thead>
     <tr>
       <th>Impact Category</th>
-      <th>Low Estimate</th>
-      <th>High Estimate</th>
-      <th>Time to Recovery</th>
+      <th>Severity Level</th>
+      <th>Recovery Time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><strong>Infrastructure Compromise</strong></td>
-      <td>$75,000</td>
-      <td>$750,000</td>
+      <td class="high">HIGH</td>
       <td>2-4 weeks</td>
     </tr>
     <tr>
-      <td><strong>DDoS Attack Costs</strong></td>
-      <td>$50,000</td>
-      <td>$500,000</td>
+      <td><strong>DDoS Attack Impact</strong></td>
+      <td class="high">HIGH</td>
       <td>1-3 weeks</td>
     </tr>
     <tr>
       <td><strong>Device Replacement</strong></td>
-      <td>$25,000</td>
-      <td>$250,000</td>
+      <td class="medium">MEDIUM</td>
       <td>1-2 weeks</td>
     </tr>
     <tr>
-      <td><strong>Business Disruption</strong></td>
-      <td>$100,000</td>
-      <td>$1,000,000</td>
+      <td><strong>Operational Disruption</strong></td>
+      <td class="high">HIGH</td>
       <td>3-6 weeks</td>
     </tr>
   </tbody>

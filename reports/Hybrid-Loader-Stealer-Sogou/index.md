@@ -57,8 +57,7 @@ The Hybrid Loader/Stealer ecosystem represents an active, live cybercrime infras
 ---
 
 ## Table of Contents
-* This will be replaced with automatic TOC - Major Sections Only
-{:toc_levels: 2}
+{:toc}
 
 ---
 
@@ -990,41 +989,36 @@ The infection chain demonstrates a **hybrid loader + stealer/RAT model**:
 
 ---
 
-## Business Risk Assessment
+## Operational Impact Assessment
 
-### Financial Impact Scenarios
+### Impact Scenarios
 <table class="professional-table">
   <thead>
     <tr>
       <th>Impact Category</th>
-      <th>Low Estimate</th>
-      <th>High Estimate</th>
-      <th>Time to Recovery</th>
+      <th>Severity Level</th>
+      <th>Recovery Time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Credential Theft Losses</strong></td>
-      <td>$100,000</td>
-      <td>$1,000,000+</td>
+      <td><strong>Credential Theft</strong></td>
+      <td class="high">HIGH</td>
       <td>3-6 months</td>
     </tr>
     <tr>
-      <td><strong>System Remediation</strong></td>
-      <td>$25,000</td>
-      <td>$250,000</td>
+      <td><strong>System Compromise</strong></td>
+      <td class="high">HIGH</td>
       <td>1-2 weeks</td>
     </tr>
     <tr>
-      <td><strong>Business Disruption</strong></td>
-      <td>$50,000</td>
-      <td>$500,000</td>
+      <td><strong>Operational Disruption</strong></td>
+      <td class="medium">MEDIUM</td>
       <td>2-4 weeks</td>
     </tr>
     <tr>
-      <td><strong>Regulatory Fines</strong></td>
-      <td>$0</td>
-      <td>$2,000,000+</td>
+      <td><strong>Compliance Impact</strong></td>
+      <td class="high">HIGH</td>
       <td>6-12 months</td>
     </tr>
   </tbody>
@@ -1032,9 +1026,9 @@ The infection chain demonstrates a **hybrid loader + stealer/RAT model**:
 
 ### Operational Impact Timeline
 - **Immediate (0-24 hours):** System isolation, service disruption, credential reset
-- **Short-term (1-7 days):** Investigation, financial impact assessment
+- **Short-term (1-7 days):** Investigation, impact assessment
 - **Medium-term (1-4 weeks):** System recovery, enhanced monitoring deployment
-- **Long-term (1-6 months):** Process improvements, compliance activities, legal proceedings
+- **Long-term (1-6 months):** Process improvements, compliance activities
 
 ---
 

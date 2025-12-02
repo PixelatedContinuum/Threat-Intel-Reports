@@ -47,18 +47,55 @@ The "From Webshells to the Cloud" campaign represents a sophisticated, multi-pha
 </table>
 
 ### Recommended Actions
-1. **SCAN** all web servers for PHP backdoors and suspicious files
-2. **BLOCK** known malicious infrastructure (45.118.144.151:8081, 152.32.191.156:8081)
-3. **ISOLATE** potentially compromised web servers from internal networks
-4. **AUDIT** cloud service usage for unauthorized access and data exfiltration
-5. **COLLECT** forensic evidence including web server logs and memory dumps
+
+#### Priority 1: Immediate Response (First 60 Minutes)
+1. **ISOLATE** all web servers with potential PHP backdoor infections from production networks
+2. **BLOCK** known malicious infrastructure at network perimeter (45.118.144.151:8081, 152.32.191.156:8081)
+3. **SCAN** all web servers for PHP backdoors and suspicious files using provided IOCs
+4. **AUDIT** cloud service access logs for unauthorized API usage and data exfiltration
+5. **COLLECT** forensic evidence including web server logs, memory dumps, and network captures
 6. **RESET** all credentials for potentially compromised systems and cloud accounts
+
+#### Priority 2: Investigation & Analysis (Hours 1-6)
+1. **FORENSIC ANALYSIS** of web server logs for exploitation patterns and timeline reconstruction
+2. **LOG ANALYSIS** for connections to known malicious infrastructure and data exfiltration indicators
+3. **CLOUD AUDIT** for unauthorized API access, unusual data transfers, and privilege escalation
+4. **MALWARE ANALYSIS** of recovered PHP backdoors and exploit kits
+5. **THREAT HUNTING** for additional compromised systems and lateral movement within infrastructure
+
+#### Priority 3: Remediation & Recovery (Hours 6-24)
+1. **REBUILD** compromised web servers from known-good images or deploy clean instances
+2. **UPDATE** all web applications and frameworks to latest secure versions
+3. **IMPLEMENT** web application firewalls with PHP backdoor detection capabilities
+4. **DEPLOY** enhanced monitoring for cloud service API abuse and unusual data transfers
+5. **ESTABLISH** secure coding practices and code review processes for web development
+
+### Organizational Guidance
+
+#### For Executive Leadership
+- **Resource Allocation:** Assess incident response team deployment, system rebuilding costs, and cloud security investments
+- **Business Continuity:** Evaluate web service disruption impact and customer communication strategies
+- **Compliance Obligations:** Review data breach notification requirements for web application compromises
+- **Stakeholder Communication:** Plan internal and external notification strategies for web service incidents
+- **Strategic Security:** Consider web application security investments and cloud security posture improvements
+
+#### For Technical Teams
+**Recommended Actions:**
+- **Deploy Detection Signatures:** Implement YARA rules and IOCs across web infrastructure
+- **Hunt for Compromise Indicators:** Search for PHP backdoors, unusual file modifications, and suspicious network connections
+- **Network Segmentation:** Isolate web servers from internal networks to prevent lateral movement
+- **Cloud Security Monitoring:** Implement comprehensive logging and alerting for cloud service API usage
+- **Security Hardening:** Apply secure coding practices, regular patching, and configuration management
+
+**For Detailed Technical Procedures:**
+- Incident response procedures: See Section 8 (Incident Response Procedures)
+- Forensic analysis guidelines: See Section 4 (Technical Analysis)
+- Infrastructure investigation: See Section 3 (Infrastructure Overview)
 
 ---
 
 ## Table of Contents
-* This will be replaced with automatic TOC - Major Sections Only
-{:toc_levels: 2}
+{:toc}
 
 ---
 
@@ -305,41 +342,36 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
 
 ---
 
-## Business Risk Assessment
+## Operational Impact Assessment
 
-### Financial Impact Scenarios
+### Impact Scenarios
 <table class="professional-table">
   <thead>
     <tr>
       <th>Impact Category</th>
-      <th>Low Estimate</th>
-      <th>High Estimate</th>
-      <th>Time to Recovery</th>
+      <th>Severity Level</th>
+      <th>Recovery Time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Data Breach Costs</strong></td>
-      <td>$100,000</td>
-      <td>$1,000,000+</td>
+      <td><strong>Data Compromise</strong></td>
+      <td class="high">HIGH</td>
       <td>3-6 months</td>
     </tr>
     <tr>
-      <td><strong>System Remediation</strong></td>
-      <td>$50,000</td>
-      <td>$500,000</td>
+      <td><strong>System Compromise</strong></td>
+      <td class="high">HIGH</td>
       <td>1-2 weeks</td>
     </tr>
     <tr>
       <td><strong>Cloud Service Abuse</strong></td>
-      <td>$25,000</td>
-      <td>$250,000</td>
+      <td class="medium">MEDIUM</td>
       <td>1-4 weeks</td>
     </tr>
     <tr>
-      <td><strong>Business Disruption</strong></td>
-      <td>$75,000</td>
-      <td>$750,000</td>
+      <td><strong>Operational Disruption</strong></td>
+      <td class="high">HIGH</td>
       <td>2-4 weeks</td>
     </tr>
   </tbody>
