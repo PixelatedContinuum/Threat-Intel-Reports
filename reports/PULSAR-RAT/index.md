@@ -12,10 +12,10 @@ hide: true
 
 # BLUF (Bottom Line Up Front)
 
-## CRITICAL SECURITY INCIDENT - EXECUTIVE ATTENTION REQUIRED
+## Executive Summary
 
 ### Business Impact Summary
-Pulsar RAT provides attackers with complete control over infected systems, enabling data theft, credential harvesting, and network-wide compromise. This represents a CRITICAL (9.2/10) threat requiring immediate executive attention and organizational response.
+Pulsar RAT provides attackers with complete control over infected systems, enabling data theft, credential harvesting, and network-wide compromise. This represents a high-priority threat (9.2/10) requiring executive review and organizational response.
 
 ### Key Risk Factors
 <table style="border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.9rem;">
@@ -82,7 +82,7 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 - **Strategic Security:** Consider long-term security investments for prevention
 
 #### For Technical Teams
-**Immediate Actions Required:**
+**Recommended Actions:**
 - **Deploy Detection Signatures:** Check detections page for hunting rules and deploy across environment
 - **Hunt for IOCs:** Search systems for indicators of compromise using provided hashes and patterns
 - **Network Analysis:** Review logs for connections to malicious infrastructure
@@ -1116,7 +1116,7 @@ The malware uses:
 
 ---
 
-### Priority 2: Within 4 Hours
+### Priority 2: Investigation Phase (1-4 Hours)
 
 #### Deploy Detection Signatures
 
@@ -1144,7 +1144,7 @@ The malware uses:
 
 --- 
 
-### Priority 3: Within 24 Hours
+### Priority 3: Remediation Phase (4-24 Hours)
 
 #### Forensic Analysis
 
@@ -1849,31 +1849,31 @@ Modern security platforms can detect:
 
 ---
 
-## 10. IMMEDIATE ACTIONS - WHAT TO DO NOW
+## 10. Response Timeline - Recommended Actions
 
 ### If You've Identified This Malware (CONFIRMED infection):
 
-**RIGHT NOW (Hour 0):**
+**Initial Response (Hour 0):**
 1. ✓ Isolate affected system(s) from network (unplug cable, disable WiFi)
 2. ✓ DO NOT SHUT DOWN (preserve memory evidence)
 3. ✓ Alert CISO/security leadership immediately
 4. ✓ Initiate incident response procedures (see Priority 1 section)
 5. ✓ Document timeline and initial observations
 
-**WITHIN 1 HOUR:**
+**First Hour:**
 1. ✓ Capture memory dump
 2. ✓ Reset credentials for all accounts used on infected system
 3. ✓ Block C2 infrastructure at network perimeter
 4. ✓ Notify legal and compliance teams
 5. ✓ Begin evidence preservation
 
-**WITHIN 4 HOURS:**
+**First 4 Hours:**
 1. ✓ Deploy detection signatures across environment
 2. ✓ Initiate network-wide threat hunt
 3. ✓ Collect and analyze event logs
 4. ✓ Assess scope of potential compromise
 
-**WITHIN 24 HOURS:**
+**First 24 Hours:**
 1. ✓ Complete forensic imaging
 2. ✓ Scope assessment (how many systems, what data, what accounts)
 3. ✓ Breach notification assessment

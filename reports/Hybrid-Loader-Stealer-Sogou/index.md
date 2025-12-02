@@ -8,10 +8,10 @@ hide: true
 
 # BLUF (Bottom Line Up Front)
 
-## CRITICAL SECURITY INCIDENT - EXECUTIVE ATTENTION REQUIRED
+## Executive Summary
 
 ### Business Impact Summary
-The Hybrid Loader/Stealer ecosystem represents an active, live cybercrime infrastructure blending malware distribution, credential theft, and IPTV piracy. This is not an isolated incident but an ongoing criminal operation with live authentication tokens and active automation frameworks. Immediate containment and comprehensive investigation are required.
+The Hybrid Loader/Stealer ecosystem represents an active, live cybercrime infrastructure blending malware distribution, credential theft, and IPTV piracy. This is not an isolated incident but an ongoing criminal operation with live authentication tokens and active automation frameworks. Containment and comprehensive investigation are recommended.
 
 ### Key Risk Factors
 <table class="professional-table">
@@ -46,7 +46,7 @@ The Hybrid Loader/Stealer ecosystem represents an active, live cybercrime infras
   </tbody>
 </table>
 
-### Immediate Actions Required
+### Recommended Actions
 1. **ISOLATE** all systems with Sogou Input Method installations immediately
 2. **BLOCK** network access to identified infrastructure (27.184.28.134:8081, related domains)
 3. **INVESTIGATE** potential JD.com credential compromise and financial impact
@@ -964,7 +964,7 @@ The infection chain demonstrates a **hybrid loader + stealer/RAT model**:
 
 ## Incident Response Procedures
 
-### Priority 1: Immediate Containment (First 60 Minutes)
+### Priority 1: Initial Response (First 60 Minutes)
 1. **ISOLATE** all systems with Sogou Input Method installations
 2. **BLOCK** network access to identified infrastructure:
    - 27.184.28.134:8081 (QingLong Panel)
