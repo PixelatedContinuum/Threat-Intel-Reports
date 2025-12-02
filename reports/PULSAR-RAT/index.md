@@ -109,8 +109,37 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 
 ## Table of Contents
 
-* This will be replaced with automatic TOC - Major Sections Only
-{:toc}
+- [Quick Reference](#quick-reference)
+- [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
+  - [Executive Summary](#executive-summary)
+  - [Organizational Guidance](#organizational-guidance)
+- [1. EXECUTIVE SUMMARY](#1-executive-summary)
+  - [The Threat in Clear Terms - Open Directory hxxp://185[.]208[.]159[.]182/d/server[.]exe](#the-threat-in-clear-terms-open-directory-hxxp185208159182dserverexe)
+  - [IP Address 185[.]208[.]159[.]182: OSINT Profile](#ip-address-185208159182-osint-profile)
+  - [Risk Rating: CRITICAL](#risk-rating-critical)
+- [2. TECHNICAL ANALYSIS](#2-technical-analysis)
+  - [2.1 Static Analysis](#21-static-analysis)
+  - [2.2 Dynamic Analysis](#22-dynamic-analysis)
+  - [2.3 Network Infrastructure](#23-network-infrastructure)
+  - [2.4 Malware Capabilities](#24-malware-capabilities)
+  - [2.5 Persistence Mechanisms](#25-persistence-mechanisms)
+  - [2.6 Anti-Analysis Features](#26-anti-analysis-features)
+- [3. INFECTION VECTORS](#3-infection-vectors)
+- [4. MITRE ATT&CK MAPPING](#4-mitre-attck-mapping)
+- [5. INCIDENT RESPONSE PROCEDURES](#5-incident-response-procedures)
+  - [Priority 1: Immediate Response (First 60 Minutes)](#priority-1-immediate-response-first-60-minutes)
+  - [Priority 2: Investigation & Analysis (Hours 1-6)](#priority-2-investigation--analysis-hours-1-6)
+  - [Priority 3: Remediation & Recovery (Hours 6-24)](#priority-3-remediation--recovery-hours-6-24)
+- [6. LONG-TERM DEFENSIVE STRATEGY](#6-long-term-defensive-strategy)
+  - [Technology Enhancements](#technology-enhancements)
+  - [Process Improvements](#process-improvements)
+  - [Organizational Measures](#organizational-measures)
+- [7. FREQUENTLY ASKED QUESTIONS](#7-frequently-asked-questions)
+  - [Technical Questions](#technical-questions)
+  - [Business Questions](#business-questions)
+- [8. CONCLUSION](#8-conclusion)
+- [9. IOCs](#9-iocs)
+- [10. DETECTIONS](#10-detections)
 
 ---
 

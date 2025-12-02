@@ -57,7 +57,37 @@ The QuasarRAT + Xworm + PowerShell campaign represents a sophisticated multi-sta
 ---
 
 ## Table of Contents
-{:toc}
+
+- [Quick Reference](#quick-reference)
+- [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
+  - [Executive Summary](#executive-summary)
+  - [Recommended Actions](#recommended-actions)
+- [Technical Analysis](#technical-analysis)
+  - [Infrastructure Overview](#infrastructure-overview)
+  - [Attack Chain Components](#attack-chain-components)
+  - [Tactics, Techniques, and Procedures (TTPs)](#tactics-techniques-and-procedures-ttps)
+  - [Pivoting Strategy](#pivoting-strategy)
+  - [Final Summary](#final-summary)
+- [Attack Tactics & Procedures](#attack-tactics--procedures)
+  - [MITRE ATT&CK Mapping](#mitre-attck-mapping)
+  - [Threat Hunting Indicators](#threat-hunting-indicators)
+- [Incident Response Procedures](#incident-response-procedures)
+  - [Priority 1: Initial Response (First 60 Minutes)](#priority-1-initial-response-first-60-minutes)
+  - [Priority 2: Investigation & Analysis (Hours 1-6)](#priority-2-investigation--analysis-hours-1-6)
+  - [Priority 3: Remediation & Recovery (Hours 6-24)](#priority-3-remediation--recovery-hours-6-24)
+- [Operational Impact Assessment](#operational-impact-assessment)
+  - [Impact Scenarios](#impact-scenarios)
+  - [Operational Impact Timeline](#operational-impact-timeline)
+- [Long-term Defensive Strategy](#long-term-defensive-strategy)
+  - [Technology Enhancements](#technology-enhancements)
+  - [Process Improvements](#process-improvements)
+  - [Organizational Measures](#organizational-measures)
+  - [Resource Investment Summary](#resource-investment-summary)
+- [Frequently Asked Questions](#frequently-asked-questions)
+  - [Technical Questions](#technical-questions)
+  - [Business Questions](#business-questions)
+- [IOCs](#iocs)
+- [Detections](#detections)
 
 ---
 

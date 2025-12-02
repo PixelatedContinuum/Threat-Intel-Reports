@@ -95,7 +95,37 @@ The "From Webshells to the Cloud" campaign represents a sophisticated, multi-pha
 ---
 
 ## Table of Contents
-{:toc}
+
+- [Quick Reference](#quick-reference)
+- [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
+  - [Executive Summary](#executive-summary)
+  - [Recommended Actions](#recommended-actions)
+  - [Organizational Guidance](#organizational-guidance)
+- [Technical Analysis](#technical-analysis)
+  - [Infrastructure Overview](#infrastructure-overview)
+  - [Phase 1: Initial Discovery (45.118.144[.]151)](#phase-1-initial-discovery-45118144151)
+  - [Phase 2: Pivot & Exploitation (152.32.191[.]156)](#phase-2-pivot--exploitation-15232191156)
+  - [Phase 3: Exfiltration & Cloud Abuse](#phase-3-exfiltration--cloud-abuse)
+  - [Phase 4: Infrastructure Automation](#phase-4-infrastructure-automation)
+- [Attack Chain Analysis](#attack-chain-analysis)
+  - [Campaign Structure Summary](#campaign-structure-summary)
+  - [Attribution Fingerprints](#attribution-fingerprints)
+- [Incident Response Procedures](#incident-response-procedures)
+  - [Priority 1: Initial Response (First 60 Minutes)](#priority-1-initial-response-first-60-minutes)
+  - [Priority 2: Investigation & Analysis (Hours 1-6)](#priority-2-investigation--analysis-hours-1-6)
+  - [Priority 3: Remediation & Recovery (Hours 6-24)](#priority-3-remediation--recovery-hours-6-24)
+- [Operational Impact Assessment](#operational-impact-assessment)
+  - [Impact Scenarios](#impact-scenarios)
+  - [Operational Impact Timeline](#operational-impact-timeline)
+- [Long-term Defensive Strategy](#long-term-defensive-strategy)
+  - [Technology Enhancements](#technology-enhancements)
+  - [Process Improvements](#process-improvements)
+  - [Organizational Measures](#organizational-measures)
+- [Frequently Asked Questions](#frequently-asked-questions)
+  - [Technical Questions](#technical-questions)
+  - [Business Questions](#business-questions)
+- [IOCs](#iocs)
+- [Detections](#detections)
 
 ---
 
