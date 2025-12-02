@@ -12,12 +12,12 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 ---
 
 ## Available Detections
-- [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-detections.md)
-- [From Webshells to The Cloud](webshells-to-the-cloud.md)
-- [AdvancedRouterScanner](AdvancedRouterScanner.md)
-- [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play](malware-analysis-houselet.md)
-- [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou](Hybrid-Loader-Stealer-Sogou.md)
 - [Detection Rules - PULSAR RAT (server.exe)](PULSAR-RAT.md)
+- [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou](Hybrid-Loader-Stealer-Sogou.md)
+- [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play](malware-analysis-houselet.md)
+- [AdvancedRouterScanner](AdvancedRouterScanner.md)
+- [From Webshells to The Cloud](webshells-to-the-cloud.md)
+- [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-detections.md)
 
 ---
 
