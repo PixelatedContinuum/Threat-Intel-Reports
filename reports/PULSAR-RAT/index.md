@@ -117,29 +117,44 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
   - [The Threat in Clear Terms - Open Directory hxxp://185[.]208[.]159[.]182/d/server[.]exe](#the-threat-in-clear-terms-open-directory-hxxp185208159182dserverexe)
   - [IP Address 185[.]208[.]159[.]182: OSINT Profile](#ip-address-185208159182-osint-profile)
   - [Risk Rating: CRITICAL](#risk-rating-critical)
-- [2. TECHNICAL ANALYSIS](#2-technical-analysis)
-  - [2.1 Static Analysis](#21-static-analysis)
-  - [2.2 Dynamic Analysis](#22-dynamic-analysis)
-  - [2.3 Network Infrastructure](#23-network-infrastructure)
-  - [2.4 Malware Capabilities](#24-malware-capabilities)
-  - [2.5 Persistence Mechanisms](#25-persistence-mechanisms)
-  - [2.6 Anti-Analysis Features](#26-anti-analysis-features)
-- [3. INFECTION VECTORS](#3-infection-vectors)
-- [4. MITRE ATT&CK MAPPING](#4-mitre-attck-mapping)
-- [5. INCIDENT RESPONSE PROCEDURES](#5-incident-response-procedures)
-   - [Priority 1: Immediate Response](#priority-1-immediate-response)
-   - [Priority 2: Investigation & Analysis](#priority-2-investigation--analysis)
-   - [Priority 3: Remediation & Recovery](#priority-3-remediation--recovery)
-- [6. LONG-TERM DEFENSIVE STRATEGY](#6-long-term-defensive-strategy)
-  - [Technology Enhancements](#technology-enhancements)
-  - [Process Improvements](#process-improvements)
-  - [Organizational Measures](#organizational-measures)
-- [7. FREQUENTLY ASKED QUESTIONS](#7-frequently-asked-questions)
-  - [Technical Questions](#technical-questions)
-  - [Business Questions](#business-questions)
-- [8. CONCLUSION](#8-conclusion)
-- [9. IOCs](#9-iocs)
-- [10. DETECTIONS](#10-detections)
+- [2. BUSINESS RISK ASSESSMENT](#2-business-risk-assessment)
+  - [Understanding the Real-World Impact](#understanding-the-real-world-impact)
+  - [Impact Scenarios](#impact-scenarios)
+  - [Operational Impact Timeline](#operational-impact-timeline)
+- [3. WHAT IS server.exe?](#3-what-is-serverexe)
+  - [Classification & Identification](#classification--identification)
+  - [File Identifiers](#file-identifiers)
+  - [Why This Is Professional-Grade Malware](#why-this-is-professional-grade-malware)
+  - [Internal String Analysis](#31-internal-string-analysis-unveiling-pulsars-architecture)
+- [4. INFECTION VECTORS](#4-infection-vectors)
+  - [Primary Distribution Method](#primary-distribution-method)
+  - [Common Social Engineering Tactics](#common-social-engineering-tactics)
+  - [Defense Strategies by Attack Vector](#defense-strategies-by-attack-vector)
+- [5. MITRE ATT&CK MAPPING](#5-mitre-attck-mapping)
+  - [What is MITRE ATT&CK?](#what-is-mitre-attck)
+  - [Pulsar RAT: Full Technique Mapping](#pulsar-rat-full-technique-mapping)
+  - [Detection and Mitigation Priorities](#detection-and-mitigation-priorities-by-tactic)
+  - [Using This Mapping for Threat Hunting](#using-this-mapping-for-threat-hunting)
+- [6. TECHNICAL CAPABILITIES DEEP-DIVE](#6-technical-capabilities-deep-dive)
+  - [6.1 Persistence Mechanisms](#61-persistence-mechanisms)
+  - [6.2 Command & Control Infrastructure](#62-command--control-c2-infrastructure)
+  - [6.3 Surveillance & Data Theft](#63-surveillance--data-theft-capabilities---hidden-virtual-network-computing-hvnc---covert-access-with-realistic-detection-considerations)
+  - [6.4 Privilege Escalation & Lateral Movement](#64-privilege-escalation--lateral-movement)
+- [7. EVASION & ANTI-ANALYSIS TECHNIQUES](#7-evasion--anti-analysis-techniques)
+- [8. INCIDENT RESPONSE PROCEDURES](#8-incident-response-procedures)
+   - [Priority 1: Immediate Response](#priority-1-immediate-response-critical---confirmed-compromise)
+   - [Priority 2: Investigation & Analysis](#priority-2-investigation-phase)
+   - [Priority 3: Remediation & Recovery](#priority-3-remediation-phase)
+- [9. LONG-TERM DEFENSIVE STRATEGY](#9-long-term-defensive-strategy)
+  - [Endpoint Security Enhancements](#endpoint-security-enhancements)
+  - [Network Security Hardening](#network-security-hardening)
+  - [Threat Monitoring & Detection](#threat-monitoring--detection)
+  - [User Awareness & Training](#user-awareness--training)
+- [10. FAQ - ADDRESSING COMMON QUESTIONS](#10-faq---addressing-common-questions)
+- [11. KEY TAKEAWAYS - WHAT MATTERS MOST](#11-key-takeaways---what-matters-most)
+- [12. Response Timeline - Recommended Actions](#12-response-timeline---recommended-actions)
+- [13. CONFIDENCE LEVELS SUMMARY](#13-confidence-levels-summary)
+- [14. APPENDICES](#14-appendices)
 
 ---
 
@@ -394,7 +409,672 @@ Based on analysis of embedded strings and YARA rule matches, **server.exe** is c
 
 ---
 
-# 4. TECHNICAL CAPABILITIES DEEP-DIVE
+# 4. INFECTION VECTORS
+
+## How Pulsar RAT Reaches Target Systems
+
+### Executive Impact Summary
+> **Delivery Risk:** High - Multiple infection pathways identified
+> **User Awareness Importance:** Critical - Human interaction required for initial compromise
+> **Technical Controls Needed:** Email filtering, web filtering, endpoint protection
+> **Key Takeaway:** Prevention at delivery stage is most cost-effective defense
+
+### Primary Distribution Method
+
+**Open Directory Distribution (CONFIRMED)**
+
+The analyzed sample was obtained from an open web directory:
+- **URL:** hxxp://185[.]208[.]159[.]182/d/server[.]exe
+- **Access Method:** Direct HTTP download (no authentication required)
+- **Risk Level:** HIGH - Publicly accessible malware distribution point
+
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Distribution Method</th>
+      <th>Likelihood</th>
+      <th>Detection Difficulty</th>
+      <th>User Interaction Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Phishing Email Attachment</strong></td>
+      <td class="critical">VERY HIGH</td>
+      <td class="medium">Medium</td>
+      <td>Yes - User must open attachment</td>
+    </tr>
+    <tr>
+      <td><strong>Malicious Link in Email</strong></td>
+      <td class="high">HIGH</td>
+      <td class="medium">Medium</td>
+      <td>Yes - User must click link and execute</td>
+    </tr>
+    <tr>
+      <td><strong>Drive-by Download</strong></td>
+      <td class="medium">MEDIUM</td>
+      <td class="high">High</td>
+      <td>Minimal - Exploits browser vulnerabilities</td>
+    </tr>
+    <tr>
+      <td><strong>Malicious Website</strong></td>
+      <td class="high">HIGH</td>
+      <td class="medium">Medium</td>
+      <td>Yes - User must visit and execute</td>
+    </tr>
+    <tr>
+      <td><strong>Software Bundling</strong></td>
+      <td class="medium">MEDIUM</td>
+      <td class="high">High</td>
+      <td>Yes - User installs "legitimate" software</td>
+    </tr>
+    <tr>
+      <td><strong>Watering Hole Attack</strong></td>
+      <td class="low">LOW-MEDIUM</td>
+      <td class="high">High</td>
+      <td>Minimal - Compromised legitimate site</td>
+    </tr>
+    <tr>
+      <td><strong>Removable Media (USB)</strong></td>
+      <td class="low">LOW</td>
+      <td class="low">Low</td>
+      <td>Yes - User must execute from USB</td>
+    </tr>
+  </tbody>
+</table>
+
+### Common Social Engineering Tactics
+
+**Phishing Email Themes (Based on RAT Distribution Patterns):**
+
+1. **Financial/Invoice Themes**
+   - "Urgent: Unpaid Invoice #[number]"
+   - "Payment Confirmation Required"
+   - "Bank Statement - Action Required"
+   - Attachment names: `invoice.exe`, `payment_receipt.exe`, `statement.pdf.exe`
+
+2. **Shipping/Delivery Notifications**
+   - "FedEx/UPS/DHL Delivery Failure"
+   - "Package Tracking Information"
+   - "Shipment Delayed - Action Required"
+   - Attachment names: `tracking.exe`, `delivery_info.exe`, `label.pdf.exe`
+
+3. **IT/Security Themes**
+   - "Urgent Security Update Required"
+   - "Password Expiration Notice"
+   - "System Maintenance Tool"
+   - Attachment names: `security_update.exe`, `system_check.exe`, `it_tool.exe`
+
+4. **Business Communication**
+   - "Q4 Report - Please Review"
+   - "Contract for Signature"
+   - "Meeting Notes Attached"
+   - Attachment names: `report.exe`, `contract.pdf.exe`, `notes.exe`
+
+### File Naming Techniques to Evade Suspicion
+
+**CONFIRMED filename from distribution:** `server.exe`
+
+**Common RAT distribution filenames:**
+- Generic system names: `server.exe`, `client.exe`, `update.exe`, `setup.exe`
+- Double extensions: `document.pdf.exe`, `invoice.doc.exe` (exploits Windows hiding of extensions)
+- Trusted software names: `chrome_installer.exe`, `office_update.exe`, `adobe_reader.exe`
+- Legitimate-sounding utilities: `system_repair.exe`, `disk_cleanup.exe`, `network_tool.exe`
+
+### Defense Strategies by Attack Vector
+
+**Email Security:**
+- [ ] Deploy email filtering with attachment scanning (blocks .exe attachments from external senders)
+- [ ] Implement DMARC/SPF/DKIM to prevent email spoofing
+- [ ] Use email sandboxing for suspicious attachments
+- [ ] Block executable attachments or require ZIP password (communicated separately)
+- [ ] User training on phishing recognition
+
+**Web Security:**
+- [ ] Deploy web filtering to block known-malicious domains and IPs
+- [ ] Block access to open directory listings (may indicate malware distribution)
+- [ ] Implement DNS filtering to block malicious domains
+- [ ] Use browser isolation for untrusted sites
+- [ ] Restrict downloads to approved file types
+
+**Endpoint Protection:**
+- [ ] Application whitelisting to prevent unauthorized executables
+- [ ] EDR with behavioral detection to catch evasive malware
+- [ ] Disable macros by default in Office applications
+- [ ] User Account Control (UAC) enforced
+- [ ] Regular security awareness training
+
+**Network Controls:**
+- [ ] Egress filtering to block connections to known-malicious infrastructure
+- [ ] Network segmentation to limit spread after initial compromise
+- [ ] Monitor for connections to paste sites from unexpected systems
+- [ ] IDS/IPS signatures for known RAT traffic patterns
+
+### User Awareness: The Most Critical Control
+
+**Key Training Messages:**
+
+✓ **Never run executables from email** - Even if they appear to come from trusted sources
+✓ **Verify sender before opening attachments** - Call sender using known phone number, don't reply to email
+✓ **Be suspicious of urgency** - "Urgent action required" is a red flag
+✓ **Check file extensions** - Enable "File name extensions" in Windows Explorer
+✓ **Report suspicious emails** - IT/Security team can protect others if notified quickly
+✓ **When in doubt, don't click** - Forward to security team for verification
+
+> **ROI of Security Awareness:** One prevented infection pays for years of training programs. User awareness is the most cost-effective security control available.
+
+---
+
+# 5. MITRE ATT&CK MAPPING
+
+## Comprehensive Threat Intelligence Mapping
+
+### Executive Impact Summary
+> **Framework Purpose:** Industry-standard classification of adversary tactics and techniques
+> **Business Value:** Enables threat hunting, detection engineering, and gap analysis
+> **Intelligence Sharing:** Common language for discussing threats across organizations
+> **Key Takeaway:** Understanding attacker techniques enables proactive defense
+
+### What is MITRE ATT&CK?
+
+MITRE ATT&CK is a globally accessible knowledge base of adversary tactics and techniques based on real-world observations. It provides a common framework for describing how cyber adversaries operate, enabling organizations to:
+- Develop threat-informed defenses
+- Perform gap analysis of security controls
+- Share threat intelligence using common terminology
+- Prioritize detection and response capabilities
+
+### Pulsar RAT: Full Technique Mapping
+
+The following table maps all confirmed Pulsar RAT capabilities to MITRE ATT&CK techniques:
+
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Tactic</th>
+      <th>Technique ID</th>
+      <th>Technique Name</th>
+      <th>Pulsar Implementation</th>
+      <th>Confidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="3"><strong>Initial Access</strong></td>
+      <td>T1566.001</td>
+      <td>Phishing: Spearphishing Attachment</td>
+      <td>Primary delivery via email attachments</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+    <tr>
+      <td>T1566.002</td>
+      <td>Phishing: Spearphishing Link</td>
+      <td>Links to open directory hosting malware</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1189</td>
+      <td>Drive-by Compromise</td>
+      <td>Possible distribution via compromised websites</td>
+      <td class="possible">POSSIBLE</td>
+    </tr>
+    <tr>
+      <td rowspan="4"><strong>Execution</strong></td>
+      <td>T1204.002</td>
+      <td>User Execution: Malicious File</td>
+      <td>User executes server.exe</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1059.003</td>
+      <td>Command and Scripting Interpreter: Windows Command Shell</td>
+      <td>Remote shell module (Pulsar.Common.Messages.Administration.RemoteShell)</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1569.002</td>
+      <td>System Services: Service Execution</td>
+      <td>Potential service installation for persistence</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+    <tr>
+      <td>T1106</td>
+      <td>Native API</td>
+      <td>Windows API calls for various functions</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td rowspan="3"><strong>Persistence</strong></td>
+      <td>T1547.001</td>
+      <td>Boot or Logon Autostart: Registry Run Keys</td>
+      <td>HKLM/HKCU RunOnce registry keys</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1542.001</td>
+      <td>Pre-OS Boot: System Firmware</td>
+      <td>Windows Recovery Environment persistence</td>
+      <td class="likely">HIGHLY LIKELY</td>
+    </tr>
+    <tr>
+      <td>T1543.003</td>
+      <td>Create or Modify System Process: Windows Service</td>
+      <td>Potential service creation</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+    <tr>
+      <td rowspan="4"><strong>Privilege Escalation</strong></td>
+      <td>T1548.002</td>
+      <td>Abuse Elevation Control Mechanism: Bypass UAC</td>
+      <td>UAC bypass module present</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+    <tr>
+      <td>T1134.001</td>
+      <td>Access Token Manipulation: Token Impersonation/Theft</td>
+      <td>AdjustTokenPrivileges, ImpersonateLoggedOnUser APIs</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1055</td>
+      <td>Process Injection</td>
+      <td>Code injection into legitimate processes</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1547.001</td>
+      <td>Boot or Logon Autostart Execution</td>
+      <td>RunOnce persistence provides privilege escalation opportunity</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td rowspan="7"><strong>Defense Evasion</strong></td>
+      <td>T1497.001</td>
+      <td>Virtualization/Sandbox Evasion: System Checks</td>
+      <td>VM detection (VMware, VirtualBox, QEMU, Hyper-V)</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1497.003</td>
+      <td>Virtualization/Sandbox Evasion: Time Based Evasion</td>
+      <td>Timing checks to detect debuggers</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1140</td>
+      <td>Deobfuscate/Decode Files or Information</td>
+      <td>Runtime decryption of configurations and strings</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1027</td>
+      <td>Obfuscated Files or Information</td>
+      <td>BCrypt encryption, Base64 encoding, cryptographic obfuscation</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1055</td>
+      <td>Process Injection</td>
+      <td>Injection into explorer.exe, svchost.exe</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1218</td>
+      <td>System Binary Proxy Execution</td>
+      <td>Potential abuse of legitimate Windows binaries</td>
+      <td class="possible">POSSIBLE</td>
+    </tr>
+    <tr>
+      <td>T1562.001</td>
+      <td>Impair Defenses: Disable or Modify Tools</td>
+      <td>Anti-analysis techniques target security tools</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+    <tr>
+      <td rowspan="6"><strong>Credential Access</strong></td>
+      <td>T1056.001</td>
+      <td>Input Capture: Keylogging</td>
+      <td>Keylogger module (Pulsar.Common.Messages.Monitoring.KeyLogger)</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1555.003</td>
+      <td>Credentials from Password Stores: Web Browsers</td>
+      <td>Browser password theft (Chrome, Firefox, Edge, Opera)</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1056.002</td>
+      <td>Input Capture: GUI Input Capture</td>
+      <td>Screen capture of credential entry</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1539</td>
+      <td>Steal Web Session Cookie</td>
+      <td>Browser data theft capabilities</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+    <tr>
+      <td>T1134</td>
+      <td>Access Token Manipulation</td>
+      <td>Token theft and impersonation</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1557</td>
+      <td>Adversary-in-the-Middle</td>
+      <td>SOCKS proxy enables traffic interception</td>
+      <td class="possible">POSSIBLE</td>
+    </tr>
+    <tr>
+      <td rowspan="5"><strong>Discovery</strong></td>
+      <td>T1082</td>
+      <td>System Information Discovery</td>
+      <td>System reconnaissance capabilities</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1083</td>
+      <td>File and Directory Discovery</td>
+      <td>Filesystem enumeration via file manager module</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1057</td>
+      <td>Process Discovery</td>
+      <td>Task manager and process enumeration</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1012</td>
+      <td>Query Registry</td>
+      <td>Registry editing module</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1016</td>
+      <td>System Network Configuration Discovery</td>
+      <td>Network reconnaissance, geolocation (ipwho.is)</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td rowspan="6"><strong>Collection</strong></td>
+      <td>T1056.001</td>
+      <td>Input Capture: Keylogging</td>
+      <td>Comprehensive keystroke logging</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1113</td>
+      <td>Screen Capture</td>
+      <td>Screen capture and video recording</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1125</td>
+      <td>Video Capture</td>
+      <td>Webcam access module</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1123</td>
+      <td>Audio Capture</td>
+      <td>Microphone recording</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1115</td>
+      <td>Clipboard Data</td>
+      <td>Clipboard monitoring and cryptocurrency address replacement</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1005</td>
+      <td>Data from Local System</td>
+      <td>File system access and data collection</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td rowspan="6"><strong>Command and Control</strong></td>
+      <td>T1071.001</td>
+      <td>Application Layer Protocol: Web Protocols</td>
+      <td>HTTPS for C2 configuration retrieval (pastebin)</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1573.001</td>
+      <td>Encrypted Channel: Symmetric Cryptography</td>
+      <td>BCrypt encryption for C2 communications</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1102.001</td>
+      <td>Web Service: Dead Drop Resolver</td>
+      <td>Pastebin for dynamic C2 configuration</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1090.001</td>
+      <td>Proxy: Internal Proxy</td>
+      <td>SOCKS proxy module for traffic routing</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1132.001</td>
+      <td>Data Encoding: Standard Encoding</td>
+      <td>Base64 encoding, MessagePack serialization</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td>T1219</td>
+      <td>Remote Access Software</td>
+      <td>RAT functionality (HVNC, remote desktop)</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+    <tr>
+      <td rowspan="2"><strong>Lateral Movement</strong></td>
+      <td>T1021</td>
+      <td>Remote Services</td>
+      <td>Ability to pivot through compromised systems</td>
+      <td class="likely">LIKELY</td>
+    </tr>
+    <tr>
+      <td>T1534</td>
+      <td>Internal Spearphishing</td>
+      <td>Stolen credentials enable internal movement</td>
+      <td class="possible">POSSIBLE</td>
+    </tr>
+    <tr>
+      <td><strong>Impact</strong></td>
+      <td>T1565.001</td>
+      <td>Data Manipulation: Stored Data Manipulation</td>
+      <td>Clipboard hijacking modifies cryptocurrency addresses</td>
+      <td class="confirmed">CONFIRMED</td>
+    </tr>
+  </tbody>
+</table>
+
+### ATT&CK Tactic Coverage Analysis
+
+Pulsar RAT demonstrates comprehensive coverage across the MITRE ATT&CK framework:
+
+<table class="professional-table">
+  <thead>
+    <tr>
+      <th>Tactic</th>
+      <th>Techniques Observed</th>
+      <th>Coverage Level</th>
+      <th>Business Impact</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Initial Access</strong></td>
+      <td class="numeric">3</td>
+      <td class="medium">MEDIUM</td>
+      <td>Standard phishing and web-based delivery</td>
+    </tr>
+    <tr>
+      <td><strong>Execution</strong></td>
+      <td class="numeric">4</td>
+      <td class="high">HIGH</td>
+      <td>Multiple execution methods increase success rate</td>
+    </tr>
+    <tr>
+      <td><strong>Persistence</strong></td>
+      <td class="numeric">3</td>
+      <td class="critical">CRITICAL</td>
+      <td>Advanced WinRE persistence difficult to remediate</td>
+    </tr>
+    <tr>
+      <td><strong>Privilege Escalation</strong></td>
+      <td class="numeric">4</td>
+      <td class="critical">CRITICAL</td>
+      <td>UAC bypass and token manipulation enable full control</td>
+    </tr>
+    <tr>
+      <td><strong>Defense Evasion</strong></td>
+      <td class="numeric">7</td>
+      <td class="critical">CRITICAL</td>
+      <td>Comprehensive evasion defeats standard security controls</td>
+    </tr>
+    <tr>
+      <td><strong>Credential Access</strong></td>
+      <td class="numeric">6</td>
+      <td class="critical">CRITICAL</td>
+      <td>Complete credential theft capabilities</td>
+    </tr>
+    <tr>
+      <td><strong>Discovery</strong></td>
+      <td class="numeric">5</td>
+      <td class="high">HIGH</td>
+      <td>Comprehensive reconnaissance capabilities</td>
+    </tr>
+    <tr>
+      <td><strong>Collection</strong></td>
+      <td class="numeric">6</td>
+      <td class="critical">CRITICAL</td>
+      <td>All user activity and data accessible</td>
+    </tr>
+    <tr>
+      <td><strong>Command and Control</strong></td>
+      <td class="numeric">6</td>
+      <td class="critical">CRITICAL</td>
+      <td>Encrypted, dynamic C2 hard to detect and block</td>
+    </tr>
+    <tr>
+      <td><strong>Lateral Movement</strong></td>
+      <td class="numeric">2</td>
+      <td class="high">HIGH</td>
+      <td>Enables network-wide compromise</td>
+    </tr>
+    <tr>
+      <td><strong>Impact</strong></td>
+      <td class="numeric">1</td>
+      <td class="medium">MEDIUM</td>
+      <td>Clipboard hijacking causes financial losses</td>
+    </tr>
+  </tbody>
+</table>
+
+### Detection and Mitigation Priorities by Tactic
+
+**CRITICAL PRIORITY (Implement Immediately):**
+
+1. **Defense Evasion Detection** (7 techniques)
+   - Deploy EDR with behavioral detection
+   - Implement memory scanning
+   - Monitor for process injection
+   - Alert on VM/sandbox evasion attempts
+
+2. **Credential Access Prevention** (6 techniques)
+   - Deploy Credential Guard
+   - Implement MFA universally
+   - Monitor browser credential store access
+   - Deploy anti-keylogging controls
+
+3. **Persistence Detection** (3 techniques)
+   - Monitor registry RunOnce modifications
+   - Audit recovery partition access
+   - Alert on boot configuration changes
+
+**HIGH PRIORITY (Implement This Quarter):**
+
+4. **Command and Control Disruption** (6 techniques)
+   - Implement egress filtering
+   - Deploy DNS filtering
+   - Monitor paste site access
+   - Inspect encrypted traffic where possible
+
+5. **Collection Prevention** (6 techniques)
+   - Deploy DLP controls
+   - Monitor screen capture APIs
+   - Implement clipboard protection
+   - User awareness training
+
+### Using This Mapping for Threat Hunting
+
+**Detection Engineering:**
+
+```
+FOR EACH technique in table:
+  1. Review existing detection coverage
+  2. Identify gaps (no detection rule exists)
+  3. Develop detection logic using technique details
+  4. Deploy detection rule to SIEM/EDR
+  5. Tune to reduce false positives
+  6. Document in security runbooks
+```
+
+**SIEM Query Development Example:**
+
+Based on T1102.001 (Web Service: Dead Drop Resolver):
+```spl
+# Splunk query to detect paste site C2 configuration retrieval
+index=proxy OR index=dns OR index=firewall
+(dest="pastebin.com" OR dest="paste.ee" OR dest="hastebin.com")
+| stats count by src_ip, dest, url
+| where count > 5
+| table src_ip, dest, url, count
+```
+
+**EDR Hunting Query Example:**
+
+Based on T1555.003 (Browser Credential Theft):
+```
+process_name:"*.exe"
+AND file_path:*Login Data*
+AND (file_path:*Chrome* OR file_path:*Firefox* OR file_path:*Edge*)
+AND NOT process_name:(chrome.exe OR firefox.exe OR msedge.exe)
+```
+
+### Gap Analysis Framework
+
+Use this mapping to assess your organization's security control coverage:
+
+**Step 1: Control Mapping**
+- For each technique, document existing controls (prevention, detection, response)
+
+**Step 2: Gap Identification**
+- Identify techniques with no coverage
+- Identify techniques with detection only (no prevention)
+- Identify techniques with prevention only (no detection)
+
+**Step 3: Risk Prioritization**
+- Rank gaps by business impact (use table above)
+- Consider ease of exploitation
+- Consider organizational risk tolerance
+
+**Step 4: Remediation Planning**
+- Develop implementation plan for critical gaps
+- Allocate resources to high-priority improvements
+- Track progress against remediation timeline
+
+> **Actionable Takeaway:** Organizations should review this mapping against their current security controls and prioritize closing gaps in Defense Evasion, Credential Access, and Persistence detection capabilities.
+
+---
+
+# 6. TECHNICAL CAPABILITIES DEEP-DIVE
 
 ### Executive Impact Summary
 > **Business Risk:** Critical - Complete system compromise possible
@@ -441,7 +1121,7 @@ Based on analysis of embedded strings and YARA rule matches, **server.exe** is c
   </tbody>
 </table>
 
-## 4.1 PERSISTENCE MECHANISMS
+## 6.1 PERSISTENCE MECHANISMS
 
 ### Executive Summary
 > **Persistence Risk:** High - Multiple mechanisms including advanced recovery partition abuse
@@ -569,7 +1249,7 @@ Write-Host "Consider imaging the partition first for forensic preservation" -For
 
 ---
 
-### 4.2 COMMAND & CONTROL (C2) INFRASTRUCTURE
+### 6.2 COMMAND & CONTROL (C2) INFRASTRUCTURE
 
 #### The Encrypted, Dynamic C2 Protocol
 
@@ -605,7 +1285,7 @@ Write-Host "Consider imaging the partition first for forensic preservation" -For
 
 ---
 
-### 4.3 SURVEILLANCE & DATA THEFT CAPABILITIES - Hidden Virtual Network Computing (HVNC) - Covert Access with Realistic Detection Considerations
+### 6.3 SURVEILLANCE & DATA THEFT CAPABILITIES - Hidden Virtual Network Computing (HVNC) - Covert Access with Realistic Detection Considerations
 
 >CONFIDENCE LEVEL: HIGHLY LIKELY (code present, requires driver installation to function)
 
@@ -830,7 +1510,7 @@ Unlike bank transfers (reversible) or credit cards (chargeback protection), bloc
 
 ---
 
-## 4.4 PRIVILEGE ESCALATION & LATERAL MOVEMENT
+## 6.4 PRIVILEGE ESCALATION & LATERAL MOVEMENT
 
 #### UAC Bypass
 
@@ -914,7 +1594,7 @@ Internet → Infected Workstation (SOCKS Proxy) → Internal Database Server
 
 ---
 
-## 5. EVASION & ANTI-ANALYSIS TECHNIQUES
+## 6. EVASION & ANTI-ANALYSIS TECHNIQUES
 
 ### Why Attackers Use Evasion
 
@@ -1042,7 +1722,7 @@ The malware uses:
 
 
 
-## 6. INCIDENT RESPONSE PROCEDURES
+## 7. INCIDENT RESPONSE PROCEDURES
 
 ### Executive Impact Summary
 > **Response Urgency:** Critical - Immediate isolation required
@@ -1364,7 +2044,7 @@ Use this matrix to guide your decision:
 
 --- 
 
-## 7. LONG-TERM DEFENSIVE STRATEGY
+## 8. LONG-TERM DEFENSIVE STRATEGY
 
 ### Executive Impact Summary
 > **Investment Required:** Medium - Annual EDR licensing
@@ -1537,7 +2217,7 @@ Modern security platforms can detect:
 
 --- 
 
-## 8. FAQ - ADDRESSING COMMON QUESTIONS
+## 9. FAQ - ADDRESSING COMMON QUESTIONS
 
 ### Q1: "How do I know if my system has WinRE persistence?"
 
@@ -1754,7 +2434,7 @@ Modern security platforms can detect:
 
 --- 
 
-## 9. KEY TAKEAWAYS - WHAT MATTERS MOST
+## 10. KEY TAKEAWAYS - WHAT MATTERS MOST
 
 ### 1. Complete System Compromise - Understand the Scope
 
@@ -1869,7 +2549,7 @@ Modern security platforms can detect:
 
 ---
 
-## 10. Response Timeline - Recommended Actions
+## 11. Response Timeline - Recommended Actions
 
 ### If You've Identified This Malware (CONFIRMED infection):
 
@@ -1932,7 +2612,7 @@ Modern security platforms can detect:
 
 ---
 
-## 11. CONFIDENCE LEVELS SUMMARY
+## 12. CONFIDENCE LEVELS SUMMARY
 
 To help you assess the reliability of findings in this report:
 
@@ -1959,7 +2639,7 @@ To help you assess the reliability of findings in this report:
 - APT usage (25% analytical estimate - capability suitable but not confirmed)
 - Specific threat actor identification (requires additional intelligence)
 
-## 12. APPENDICES
+## 13. APPENDICES
 
 ### Appendix A: Detailed Rebuild Procedures
 
