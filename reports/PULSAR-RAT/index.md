@@ -524,31 +524,31 @@ The analyzed sample was obtained from an open web directory:
 ### Defense Strategies by Attack Vector
 
 **Email Security:**
-[ ] Deploy email filtering with attachment scanning (blocks .exe attachments from external senders)
-[ ] Implement DMARC/SPF/DKIM to prevent email spoofing
-[ ] Use email sandboxing for suspicious attachments
-[ ] Block executable attachments or require ZIP password (communicated separately)
-[ ] User training on phishing recognition
+1. Deploy email filtering with attachment scanning (blocks .exe attachments from external senders)
+2. Implement DMARC/SPF/DKIM to prevent email spoofing
+3. Use email sandboxing for suspicious attachments
+4. Block executable attachments or require ZIP password (communicated separately)
+5. User training on phishing recognition
 
 **Web Security:**
-[ ] Deploy web filtering to block known-malicious domains and IPs
-[ ] Block access to open directory listings (may indicate malware distribution)
-[ ] Implement DNS filtering to block malicious domains
-[ ] Use browser isolation for untrusted sites
-[ ] Restrict downloads to approved file types
+1. Deploy web filtering to block known-malicious domains and IPs
+2. Block access to open directory listings (may indicate malware distribution)
+3. Implement DNS filtering to block malicious domains
+4. Use browser isolation for untrusted sites
+5. Restrict downloads to approved file types
 
 **Endpoint Protection:**
-[ ] Application whitelisting to prevent unauthorized executables
-[ ] EDR with behavioral detection to catch evasive malware
-[ ] Disable macros by default in Office applications
-[ ] User Account Control (UAC) enforced
-[ ] Regular security awareness training
+1. Application whitelisting to prevent unauthorized executables
+2. EDR with behavioral detection to catch evasive malware
+3. Disable macros by default in Office applications
+4. User Account Control (UAC) enforced
+5. Regular security awareness training
 
 **Network Controls:**
-[ ] Egress filtering to block connections to known-malicious infrastructure
-[ ] Network segmentation to limit spread after initial compromise
-[ ] Monitor for connections to paste sites from unexpected systems
-[ ] IDS/IPS signatures for known RAT traffic patterns
+1. Egress filtering to block connections to known-malicious infrastructure
+2. Network segmentation to limit spread after initial compromise
+3. Monitor for connections to paste sites from unexpected systems
+4. IDS/IPS signatures for known RAT traffic patterns
 
 ### User Awareness: The Most Critical Control
 
@@ -1724,11 +1724,11 @@ The malware uses:
 
 #### Isolation (Do First)
 
-[ ] **Network isolation** - Physically disconnect network cable (preferred) OR disable network adapter
-[ ] **WiFi isolation** - Disable WiFi hardware switch or adapter
-[ ] **USB removal** - Disconnect all USB network adapters
-[ ] **Keep system powered on** - Do NOT shut down (preserves memory for forensics)
-[ ] **Document time** - Record exact time of isolation for incident timeline
+1. **Network isolation** - Physically disconnect network cable (preferred) OR disable network adapter
+2. **WiFi isolation** - Disable WiFi hardware switch or adapter
+3. **USB removal** - Disconnect all USB network adapters
+4. **Keep system powered on** - Do NOT shut down (preserves memory for forensics)
+5. **Document time** - Record exact time of isolation for incident timeline
 
 **Why we isolate but don't shut down:**
 - Prevents continued C2 communication and data exfiltration
@@ -1737,10 +1737,10 @@ The malware uses:
 
 #### Alert Leadership
 
-[ ] **Notify CISO** immediately (critical security incident)
-[ ] **Notify Legal** (potential data breach with regulatory implications)
-[ ] **Notify Chief Compliance Officer** (possible GDPR, HIPAA, SOX implications)
-[ ] **Establish incident command** (designate incident commander, define roles)
+1. **Notify CISO** immediately (critical security incident)
+2. **Notify Legal** (potential data breach with regulatory implications)
+3. **Notify Chief Compliance Officer** (possible GDPR, HIPAA, SOX implications)
+4. **Establish incident command** (designate incident commander, define roles)
 
 **Why leadership notification is critical:**
 - RAT compromises often trigger breach notification requirements
@@ -1750,13 +1750,13 @@ The malware uses:
 
 #### Preserve Evidence
 
-[ ] **Memory dump** - Capture RAM before system powers off
-  - Tools: Magnet RAM Capture (free), winpmem, FTK Imager
-  - Save to external drive, not compromised system
-[ ] **Document system state** - Screenshot running processes, network connections
-[ ] **Initiate chain of custody** - Log who handles evidence, when, why
-[ ] **Plan forensic imaging** - Prepare clean write-blocker and forensic workstation
-[ ] **Do NOT reboot** before imaging (destroys memory evidence)
+1. **Memory dump** - Capture RAM before system powers off
+   - Tools: Magnet RAM Capture (free), winpmem, FTK Imager
+   - Save to external drive, not compromised system
+2. **Document system state** - Screenshot running processes, network connections
+3. **Initiate chain of custody** - Log who handles evidence, when, why
+4. **Plan forensic imaging** - Prepare clean write-blocker and forensic workstation
+5. **Do NOT reboot** before imaging (destroys memory evidence)
 
 **Why evidence preservation matters:**
 - May be needed for law enforcement investigation
@@ -1768,11 +1768,11 @@ The malware uses:
 
 **CRITICAL: Assume all credentials used on infected system are compromised**
 
-[ ] **Reset user account password** - All accounts logged into compromised system
-[ ] **Reset service accounts** - Any service accounts with cached credentials
-[ ] **Reset admin passwords** - Any administrator accounts used on system
-[ ] **Force re-authentication** - Invalidate all active sessions for affected accounts
-[ ] **Enable MFA** - If not already enabled, require multi-factor authentication
+1. **Reset user account password** - All accounts logged into compromised system
+2. **Reset service accounts** - Any service accounts with cached credentials
+3. **Reset admin passwords** - Any administrator accounts used on system
+4. **Force re-authentication** - Invalidate all active sessions for affected accounts
+5. **Enable MFA** - If not already enabled, require multi-factor authentication
 
 **Important:** Change passwords from a DIFFERENT, CLEAN system. Do not change passwords from the compromised system (malware may capture new passwords).
 
@@ -1785,11 +1785,11 @@ The malware uses:
 
 #### Block C2 Infrastructure (Network Level)
 
-[ ] **Block paste sites** (see considerations below) - pastebin.com, paste.ee, hastebin.com
-[ ] **Block geolocation services** - ipwho.is, ip-api.com
-[ ] **Block identified C2 IPs/domains** - If any identified from network logs
-[ ] **Monitor for C2 attempts** - Set up alerts for blocked connection attempts
-[ ] **Document blocks** - Maintain list of what was blocked and when
+1. **Block paste sites** (see considerations below) - pastebin.com, paste.ee, hastebin.com
+2. **Block geolocation services** - ipwho.is, ip-api.com
+3. **Block identified C2 IPs/domains** - If any identified from network logs
+4. **Monitor for C2 attempts** - Set up alerts for blocked connection attempts
+5. **Document blocks** - Maintain list of what was blocked and when
 
 >Note: See "Pastebin Blocking Decision Framework" section for business impact considerations.
 
@@ -1799,21 +1799,21 @@ The malware uses:
 
 #### Deploy Detection Signatures
 
-[ ] **Deploy YARA rule** to EDR/AV platforms across environment
-[ ] **Deploy network signatures** to IDS/IPS (if C2 traffic patterns identified)
-[ ] **Update SIEM** with behavioral detection rules (threat hunting queries)
-[ ] **Enable enhanced logging** - Process creation, registry changes, file access
-[ ] **Alert SOC team** - Brief on indicators and expected alert patterns
+1. **Deploy YARA rule** to EDR/AV platforms across environment
+2. **Deploy network signatures** to IDS/IPS (if C2 traffic patterns identified)
+3. **Update SIEM** with behavioral detection rules (threat hunting queries)
+4. **Enable enhanced logging** - Process creation, registry changes, file access
+5. **Alert SOC team** - Brief on indicators and expected alert patterns
 
 #### Network-Wide Threat Hunt
 
 **Assumption: If one system is infected, others may be as well**
 
-[ ] **Run YARA across all systems** - Endpoint sweep for file hash matches
-[ ] **Search for IOC hashes** - File hash search across file servers, workstations
-[ ] **Scan registry keys** - Automated check for RunOnce persistence across fleet
-[ ] **Check for services** - Look for suspicious or unauthorized services
-[ ] **Review network connections** - Identify other systems connecting to paste sites
+1. **Run YARA across all systems** - Endpoint sweep for file hash matches
+2. **Search for IOC hashes** - File hash search across file servers, workstations
+3. **Scan registry keys** - Automated check for RunOnce persistence across fleet
+4. **Check for services** - Look for suspicious or unauthorized services
+5. **Review network connections** - Identify other systems connecting to paste sites
 
 **Tools for enterprise threat hunting:**
 - SIEM correlation (Splunk queries provided above)
@@ -1827,11 +1827,11 @@ The malware uses:
 
 #### Forensic Analysis
 
-[ ] **Complete disk imaging** - Forensic bit-for-bit image of compromised system
-[ ] **Memory analysis** - Analyze captured RAM dump for artifacts
-[ ] **Timeline analysis** - Reconstruct sequence of events from logs and artifacts
-[ ] **Malware extraction** - Safely extract malware sample for further analysis
-[ ] **Chain of custody maintenance** - Document all evidence handling
+1. **Complete disk imaging** - Forensic bit-for-bit image of compromised system
+2. **Memory analysis** - Analyze captured RAM dump for artifacts
+3. **Timeline analysis** - Reconstruct sequence of events from logs and artifacts
+4. **Malware extraction** - Safely extract malware sample for further analysis
+5. **Chain of custody maintenance** - Document all evidence handling
 
 **Forensic Questions to Answer:**
 - When did initial infection occur?
@@ -1842,11 +1842,11 @@ The malware uses:
 
 #### Scope Assessment
 
-[ ] **Identify affected user accounts** - All accounts used on compromised system
-[ ] **Identify accessed data** - File access logs, database query logs
-[ ] **Identify network propagation** - Lateral movement to other systems
-[ ] **Identify external communication** - Data exfiltration volumes, C2 communication
-[ ] **Regulatory impact assessment** - Determine if breach notification required
+1. **Identify affected user accounts** - All accounts used on compromised system
+2. **Identify accessed data** - File access logs, database query logs
+3. **Identify network propagation** - Lateral movement to other systems
+4. **Identify external communication** - Data exfiltration volumes, C2 communication
+5. **Regulatory impact assessment** - Determine if breach notification required
 
 **Breach Notification Triggers (varies by jurisdiction):**
 - GDPR: Personal data of EU residents accessed
@@ -1863,18 +1863,18 @@ The malware uses:
 ##### OPTION A: Complete System Rebuild (RECOMMENDED)
 
 **When this is MANDATORY:**
-[ ] WinRE persistence confirmed or strongly suspected (recovery partition accessed)
-[ ] Administrative privileges confirmed compromised
-[ ] System contains or accesses highly sensitive data (financial, healthcare, trade secrets)
-[ ] Compliance requirements mandate assured clean state (PCI-DSS, HIPAA)
-[ ] Multiple persistence mechanisms detected
-[ ] Attacker dwell time exceeds extended period (more time for additional implants)
+1. WinRE persistence confirmed or strongly suspected (recovery partition accessed)
+2. Administrative privileges confirmed compromised
+3. System contains or accesses highly sensitive data (financial, healthcare, trade secrets)
+4. Compliance requirements mandate assured clean state (PCI-DSS, HIPAA)
+5. Multiple persistence mechanisms detected
+6. Attacker dwell time exceeds extended period (more time for additional implants)
 
 **When this is STRONGLY RECOMMENDED:**
-[ ] You cannot definitively rule out WinRE persistence
-[ ] EDR/advanced logging was not present before infection (can't see full attacker activity)
-[ ] Any uncertainty about scope of compromise
-[ ] Organization has resources and processes for rebuild (lower business impact)
+1. You cannot definitively rule out WinRE persistence
+2. EDR/advanced logging was not present before infection (can't see full attacker activity)
+3. Any uncertainty about scope of compromise
+4. Organization has resources and processes for rebuild (lower business impact)
 
 **Rebuild Process:** See Appendix A.1 for detailed step-by-step procedures
 
@@ -1889,12 +1889,12 @@ The malware uses:
 ##### OPTION B: Aggressive Cleanup (HIGHER RESIDUAL RISK)
 
 **ONLY consider this when:**
-[ ] WinRE persistence DEFINITIVELY ruled out (recovery partition forensically analyzed, confirmed clean)
-[ ] Full EDR visibility existed BEFORE and DURING infection (complete attacker activity logged)
-[ ] System does NOT contain/access sensitive data
-[ ] Business continuity demands (critical system, rebuild timeline unacceptable)
-[ ] You have skilled incident response team to perform thorough cleanup
-[ ] You accept residual risk and can compensate with intensive monitoring
+1. WinRE persistence DEFINITIVELY ruled out (recovery partition forensically analyzed, confirmed clean)
+2. Full EDR visibility existed BEFORE and DURING infection (complete attacker activity logged)
+3. System does NOT contain/access sensitive data
+4. Business continuity demands (critical system, rebuild timeline unacceptable)
+5. You have skilled incident response team to perform thorough cleanup
+6. You accept residual risk and can compensate with intensive monitoring
 
 >WARNING: Cleanup is inherently less reliable than rebuild**
 
