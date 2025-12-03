@@ -1928,13 +1928,8 @@ Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOn
    - Scan in both Safe Mode and Normal Mode
 
 6. **System integrity checks** (30 minutes):
-```powershell
-# System File Checker
-sfc /scannow
-
-# DISM repair
-DISM /Online /Cleanup-Image /RestoreHealth
-```
+   - Run System File Checker: `sfc /scannow`
+   - Run DISM repair: `DISM /Online /Cleanup-Image /RestoreHealth`
 
 7. **Enhanced monitoring** (extended period):
    - Daily EDR review for this system
