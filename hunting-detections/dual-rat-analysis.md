@@ -1,5 +1,5 @@
 ---
-title: Detection Rules - Dual-RAT Analysis: Quasar RAT vs. NjRAT/XWorm
+title: Detection Rules - Dual-RAT Analysis - Quasar RAT vs. NjRAT/XWorm
 date: '2025-12-06'
 layout: post
 permalink: /hunting-detections/dual-rat-analysis/
