@@ -1,16 +1,16 @@
 {
-  "campaign": "Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm",
-  "description": "Comprehensive IOCs for two distinct .NET RAT families representing different operational philosophies - stealth-focused Pulsar RAT and resilience-focused NjRAT/XWorm",
+  "campaign": "Dual-RAT Analysis: Quasar RAT vs. NjRAT/XWorm",
+  "description": "Comprehensive IOCs for two distinct .NET RAT families representing different operational philosophies - stealth-focused Quasar RAT and resilience-focused NjRAT/XWorm",
   "file_hashes": {
-    "Pulsar_RAT": {
+    "Quasar_RAT": {
       "sha256": "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766",
       "md5": "b5491b58348600c2766f86a5af2b867f",
       "sha1": "dc795961c8e63782fc0f53c08e7ca2e593df99fa",
       "size": "1571840",
       "type": "C# .NET executable",
       "original_filename": "client.exe",
-      "family": "Pulsar RAT",
-      "yara_signatures": ["HKTL_NET_GUID_Pulsar"]
+      "family": "Quasar RAT",
+      "yara_signatures": ["HKTL_NET_GUID_Quasar"]
     },
     "NjRAT_XWorm": {
       "sha256": "950aadba6993619858294599b3458d5d2221f10fe72b3db3e49883d496a705bb",

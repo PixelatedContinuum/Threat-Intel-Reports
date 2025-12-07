@@ -1,12 +1,12 @@
 ---
-title: Dual-RAT Analysis - Pulsar RAT vs. NjRAT/XWorm - Technical Deep-Dive
+title: Dual-RAT Analysis - Quasar RAT vs. NjRAT/XWorm - Technical Deep-Dive
 date: '2025-12-06'
 layout: post
 permalink: /reports/dual-rat-analysis/
 hide: true
 ---
 
-> **Investigation Continuation Note**: This analysis is a continuation of the original [PULSAR RAT (server.exe)]({{ "/reports/PULSAR-RAT/" | relative_url }}) investigation. While analyzing the original server.exe sample over several weeks, two additional files appeared in the investigation directory at IP `185.208.159.182`. These new samples (client.exe and server (1).exe) suggest the threat actors may be testing or retooling their capabilities with different RAT implementations.
+> **Investigation Continuation Note**: This analysis is a continuation of the original [QUASAR RAT (server.exe)]({{ "/reports/PULSAR-RAT/" | relative_url }}) investigation. While analyzing the original server.exe sample over several weeks, two additional files appeared in the investigation directory at IP `185.208.159.182`. These new samples (client.exe and server (1).exe) suggest the threat actors may be testing or retooling their capabilities with different RAT implementations.
 
 ---
 
@@ -15,14 +15,14 @@ hide: true
 ## Executive Summary
 
 ### Business Impact Summary
-This analysis examines two sophisticated .NET Remote Access Trojans (RATs) discovered during an ongoing investigation of a [PULSAR RAT sample]({{ "/reports/PULSAR-RAT/" | relative_url }}), representing fundamentally different operational philosophies. **Pulsar RAT** demonstrates professional-grade espionage capabilities with stealth-focused design, while **NjRAT/XWorm** employs aggressive resilience mechanisms for mass deployment. Both samples enable complete system compromise but differ significantly in their approach to persistence, detection evasion, and infrastructure management.
+This analysis examines two sophisticated .NET Remote Access Trojans (RATs) discovered during an ongoing investigation of a [QUASAR RAT sample]({{ "/reports/PULSAR-RAT/" | relative_url }}), representing fundamentally different operational philosophies. **Quasar RAT** demonstrates professional-grade espionage capabilities with stealth-focused design, while **NjRAT/XWorm** employs aggressive resilience mechanisms for mass deployment. Both samples enable complete system compromise but differ significantly in their approach to persistence, detection evasion, and infrastructure management.
 
 ### Key Risk Factors
 <table class="professional-table">
   <thead>
     <tr>
       <th>Risk Factor</th>
-      <th class="numeric">Pulsar RAT</th>
+      <th class="numeric">Quasar RAT</th>
       <th class="numeric">NjRAT/XWorm</th>
       <th>Business Impact</th>
     </tr>
@@ -32,13 +32,13 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
       <td><strong>Overall Risk</strong></td>
       <td class="numeric high">8.5/10 HIGH</td>
       <td class="numeric high">7.8/10 HIGH</td>
-       <td>Both enable full system compromise; Pulsar higher due to stealth</td>
+       <td>Both enable full system compromise; Quasar higher due to stealth</td>
     </tr>
     <tr>
       <td><strong>Data Exfiltration</strong></td>
       <td class="numeric critical">9/10 CRITICAL</td>
       <td class="numeric high">8/10 HIGH</td>
-      <td>Pulsar: 134 capabilities, NjRAT: 62 capabilities</td>
+      <td>Quasar: 134 capabilities, NjRAT: 62 capabilities</td>
     </tr>
     <tr>
       <td><strong>Persistence Resilience</strong></td>
@@ -50,7 +50,7 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
       <td><strong>Detection Difficulty</strong></td>
       <td class="numeric high">8/10 HIGH</td>
       <td class="numeric medium">5/10 MEDIUM</td>
-      <td>Pulsar's stealth vs NjRAT's aggressive behavior</td>
+      <td>Quasar's stealth vs NjRAT's aggressive behavior</td>
     </tr>
     <tr>
       <td><strong>Infrastructure Resilience</strong></td>
@@ -74,7 +74,7 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
 ## Table of Contents
 
 - [Quick Reference](#quick-reference)
-- [Sample 1: Pulsar RAT Analysis](#sample-1-pulsar-rat-analysis)
+- [Sample 1: Quasar RAT Analysis](#sample-1-pulsar-rat-analysis)
   - [Executive Technical Summary](#executive-technical-summary)
   - [Deep Technical Analysis](#deep-technical-analysis)
   - [Dynamic Sandbox Analysis](#dynamic-sandbox-analysis)
@@ -100,22 +100,22 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
 
 ---
 
-# Sample 1: Pulsar RAT Analysis
+# Sample 1: Quasar RAT Analysis
 
 ## File Identification
 - **Original Filename**: client.exe
 - **SHA256**: 2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766
 - **File Size**: 1,571,840 bytes
 - **Type**: C# .NET executable
-- **Family**: Pulsar RAT (open-source, formerly xRAT)
-- **YARA Detection**: HKTL_NET_GUID_Pulsar
+- **Family**: Quasar RAT (open-source, formerly xRAT)
+- **YARA Detection**: HKTL_NET_GUID_Quasar
 
-**Discovery Context**: This sample appeared in the investigation directory at IP 185.208.159.182 during analysis of the original [PULSAR RAT server.exe]({{ "/reports/PULSAR-RAT/" | relative_url }}), suggesting the threat actors were actively deploying multiple RAT variants.
+**Discovery Context**: This sample appeared in the investigation directory at IP 185.208.159.182 during analysis of the original [QUASAR RAT server.exe]({{ "/reports/PULSAR-RAT/" | relative_url }}), suggesting the threat actors were actively deploying multiple RAT variants.
 
 ## Executive Technical Summary
 
 ### Business Context
-Pulsar RAT represents a **professional-grade espionage tool** frequently associated with APT10 and sophisticated threat actors. Its design prioritizes **stealth and long-term access** over aggressive persistence, making it particularly dangerous for high-value targets where detection could compromise broader operations.
+Quasar RAT represents a **professional-grade espionage tool** frequently associated with APT10 and sophisticated threat actors. Its design prioritizes **stealth and long-term access** over aggressive persistence, making it particularly dangerous for high-value targets where detection could compromise broader operations.
 
 ### Key Business Impacts
 - **Long-term Espionage**: 134 detected capabilities enable comprehensive intelligence gathering
@@ -130,7 +130,7 @@ Pulsar RAT represents a **professional-grade espionage tool** frequently associa
 - **Minimal Persistence**: Single scheduled task reduces event log footprint
 
 ### Executive Risk Assessment
-**HIGH RISK** - Pulsar RAT's professional development and APT10 association suggest targeted espionage operations. The combination of comprehensive capabilities and stealth-focused design creates significant risk for intellectual property theft and long-term compromise.
+**HIGH RISK** - Quasar RAT's professional development and APT10 association suggest targeted espionage operations. The combination of comprehensive capabilities and stealth-focused design creates significant risk for intellectual property theft and long-term compromise.
 
 ---
 
@@ -139,21 +139,21 @@ Pulsar RAT represents a **professional-grade espionage tool** frequently associa
 ### Code Architecture & Design Philosophy
 
 #### Deep Technical Analysis
-Pulsar RAT is compiled as a C# .NET assembly with sophisticated modular architecture. The analysis revealed a structured namespace organization with dedicated modules for core functionality, surveillance, system control, and network operations. CAPA analysis detected 134 distinct functions, including process injection capabilities, privilege escalation mechanisms, surveillance functions like keylogging and screenshot capture, and credential harvesting from web browsers. The malware also includes extensive anti-analysis features, such as VM detection for VirtualBox, VMware, and QEMU environments, debugger evasion techniques, and sandbox detection methods.
+Quasar RAT is compiled as a C# .NET assembly with sophisticated modular architecture. The analysis revealed a structured namespace organization with dedicated modules for core functionality, surveillance, system control, and network operations. CAPA analysis detected 134 distinct functions, including process injection capabilities, privilege escalation mechanisms, surveillance functions like keylogging and screenshot capture, and credential harvesting from web browsers. The malware also includes extensive anti-analysis features, such as VM detection for VirtualBox, VMware, and QEMU environments, debugger evasion techniques, and sandbox detection methods.
 
 #### Executive Technical Context
-**What This Means**: Pulsar's modular C# architecture allows threat actors to customize capabilities for specific operations. The 134 detected functions indicate a comprehensive feature set comparable to commercial remote access software.
+**What This Means**: Quasar's modular C# architecture allows threat actors to customize capabilities for specific operations. The 134 detected functions indicate a comprehensive feature set comparable to commercial remote access software.
 
 **Business Impact**: The professional code quality and extensive anti-analysis features suggest state-sponsored or highly sophisticated criminal operations. This isn't opportunistic malware—it's a purpose-built espionage tool.
 
 **Detection Implications**: Traditional signature-based detection is ineffective due to easy recompilation with modified signatures, process injection hiding malicious activity in legitimate processes, and encrypted C2 communications preventing network inspection.
 
-**Resource Allocation**: Defending against Pulsar requires behavioral EDR solutions with process injection detection, advanced network monitoring for encrypted C2 patterns, and security research team with reverse engineering capabilities.
+**Resource Allocation**: Defending against Quasar requires behavioral EDR solutions with process injection detection, advanced network monitoring for encrypted C2 patterns, and security research team with reverse engineering capabilities.
 
 ### Persistence Mechanism Analysis
 
 #### Deep Technical Analysis
-Pulsar RAT establishes persistence through a single, well-camouflaged scheduled task. The analysis observed the creation of a task named "RuntimeBroker" that executes on user logon with highest privileges, running the malware from a user-writable directory. Registry artifacts were created in the TaskCache, including the task GUID and execution parameters.
+Quasar RAT establishes persistence through a single, well-camouflaged scheduled task. The analysis observed the creation of a task named "RuntimeBroker" that executes on user logon with highest privileges, running the malware from a user-writable directory. Registry artifacts were created in the TaskCache, including the task GUID and execution parameters.
 
 #### Executive Technical Context
 **What This Means**: The "RuntimeBroker" task name mimics a legitimate Windows process, attempting to blend in with normal system operations. However, legitimate RuntimeBroker is a system process, not a scheduled task, making this detectable with proper baseline knowledge.
@@ -167,7 +167,7 @@ Pulsar RAT establishes persistence through a single, well-camouflaged scheduled 
 ### Command & Control Infrastructure
 
 #### Deep Technical Analysis
-Pulsar RAT uses direct TCP connection to fixed C2 infrastructure. The analysis observed connections to IP address 185.208.159.182 on port 4782 with custom encryption. The malware includes pre-beacon reconnaissance capabilities, making HTTP requests to external IP discovery services like ipwho.is and api.ipify.org before establishing the C2 connection.
+Quasar RAT uses direct TCP connection to fixed C2 infrastructure. The analysis observed connections to IP address 185.208.159.182 on port 4782 with custom encryption. The malware includes pre-beacon reconnaissance capabilities, making HTTP requests to external IP discovery services like ipwho.is and api.ipify.org before establishing the C2 connection.
 
 #### Executive Technical Context
 **What This Means**: Direct IP connection creates single point of failure for C2 infrastructure. If defenders block 185.208.159.182, the malware loses all communication capabilities.
@@ -181,7 +181,7 @@ Pulsar RAT uses direct TCP connection to fixed C2 infrastructure. The analysis o
 ### Mark of the Web Removal Capability
 
 #### Deep Technical Analysis
-Pulsar RAT implements Zone.Identifier stream removal to bypass Windows security warnings. The analysis observed the malware using the DeleteFile API to remove the alternate data stream ":Zone.Identifier" from downloaded files, effectively removing the "mark of the web" that Windows uses to identify potentially dangerous downloads.
+Quasar RAT implements Zone.Identifier stream removal to bypass Windows security warnings. The analysis observed the malware using the DeleteFile API to remove the alternate data stream ":Zone.Identifier" from downloaded files, effectively removing the "mark of the web" that Windows uses to identify potentially dangerous downloads.
 
 #### Executive Technical Context
 **What This Means**: The malware actively removes security markers that Windows uses to warn users about downloaded files, making the malware appear as if it originated locally.
@@ -277,7 +277,7 @@ Purpose: Establish command and control channel
 ### Behavioral Analysis Summary
 
 #### Executive Technical Context
-**What This Timeline Shows**: Pulsar RAT executes a methodical, multi-phase infection with clear separation between installation, persistence, reconnaissance, and C2 establishment.
+**What This Timeline Shows**: Quasar RAT executes a methodical, multi-phase infection with clear separation between installation, persistence, reconnaissance, and C2 establishment.
 
 **Key Behavioral Indicators**:
 1. **Security Bypass**: Immediate Zone.Identifier removal
@@ -301,13 +301,13 @@ Purpose: Establish command and control channel
 ## File Identification
 - **Original Filename**: server (1).exe
 - **SHA256**: 950aadba6993619858294599b3458d5d2221f10fe72b3db3e49883d496a705bb
-- **File Size**: 37,888 bytes (26x smaller than Pulsar)
+- **File Size**: 37,888 bytes (26x smaller than Quasar)
 - **Type**: VB.NET executable
 - **Family**: NjRAT/XWorm (Bladabindi variant)
 - **Version**: XWorm 3.0-5.0 (DiE confirmed)
 - **YARA Detection**: Njrat, BlackWorm
 
-**Discovery Context**: This sample also appeared in the investigation directory at IP 185.208.159.182 alongside the Pulsar sample, indicating the threat actors were simultaneously deploying multiple RAT families during the [PULSAR RAT investigation]({{ "/reports/PULSAR-RAT/" | relative_url }}).
+**Discovery Context**: This sample also appeared in the investigation directory at IP 185.208.159.182 alongside the Quasar sample, indicating the threat actors were simultaneously deploying multiple RAT families during the [PULSAR RAT investigation]({{ "/reports/PULSAR-RAT/" | relative_url }}).
 
 ## Executive Technical Summary
 
@@ -339,7 +339,7 @@ NjRAT/XWorm represents a commodity malware optimized for mass deployment with ag
 NjRAT/XWorm is compiled as a VB.NET executable with compact, efficient design. The analysis revealed a module-based structure with dedicated components for client-server communication, surveillance operations, and persistence mechanisms. CAPA analysis detected 62 distinct functions, including persistence via registry keys and scheduled tasks, surveillance capabilities like webcam streaming and keylogging, data compression using GZip, and C2 infrastructure resolution through Pastebin dead-drops. The malware also includes critical process protection and anti-sleep mechanisms to maintain operational continuity.
 
 #### Executive Technical Context
-**What This Means**: The VB.NET codebase and compact 37KB size indicate efficiency-focused design prioritizing rapid deployment over feature breadth. The 62 detected functions represent core RAT capabilities without the extensive feature set of Pulsar.
+**What This Means**: The VB.NET codebase and compact 37KB size indicate efficiency-focused design prioritizing rapid deployment over feature breadth. The 62 detected functions represent core RAT capabilities without the extensive feature set of Quasar.
 
 **Business Impact**: NjRAT's prevalence (18,459+ infections H1 2025) demonstrates high effectiveness despite simplicity. The compact size enables evasion of file-size-based detection heuristics and rapid distribution through phishing campaigns.
 
@@ -495,9 +495,9 @@ Purpose: System crash handling
 
 ## Common Infection Vectors
 
-Both Pulsar RAT and NjRAT/XWorm primarily reach victims through **phishing and social engineering attacks**, though their delivery mechanisms reflect their different operational philosophies.
+Both Quasar RAT and NjRAT/XWorm primarily reach victims through **phishing and social engineering attacks**, though their delivery mechanisms reflect their different operational philosophies.
 
-### Pulsar RAT Delivery Patterns
+### Quasar RAT Delivery Patterns
 **Targeted Delivery Approach**:
 - **Spear-phishing emails** with malicious Office documents (Word, Excel) containing macros
 - **Weaponized PDFs** with embedded exploits or malicious JavaScript
@@ -536,7 +536,7 @@ Both Pulsar RAT and NjRAT/XWorm primarily reach victims through **phishing and s
 
 ## Emerging Capabilities to Watch
 
-As commodity RAT development continues, both Pulsar and NjRAT families are likely to evolve with enhanced capabilities that challenge current detection approaches.
+As commodity RAT development continues, both Quasar and NjRAT families are likely to evolve with enhanced capabilities that challenge current detection approaches.
 
 ### Technical Evolution Trends
 **Enhanced Evasion Techniques**:
@@ -592,7 +592,7 @@ Organizations should prepare for these trends by:
 
 ### Stealth vs. Resilience Trade-off
 
-**Pulsar RAT - Stealth-First Approach**:
+**Quasar RAT - Stealth-First Approach**:
 - **Minimal Persistence**: Single scheduled task reduces event log footprint
 - **Process Injection**: Hides malicious activity within legitimate processes
 - **Extensive Anti-Analysis**: VM, debugger, and sandbox detection
@@ -609,22 +609,22 @@ Organizations should prepare for these trends by:
 ### Business Impact Assessment
 
 **Target Environment Optimization**:
-- **Pulsar RAT**: Optimized for high-value targets where detection compromises broader operations
+- **Quasar RAT**: Optimized for high-value targets where detection compromises broader operations
 - **NjRAT/XWorm**: Optimized for mass deployment where some detections are acceptable
 
 **Remediation Complexity**:
-- **Pulsar RAT**: **MEDIUM** - Single persistence mechanism but thorough forensics required
+- **Quasar RAT**: **MEDIUM** - Single persistence mechanism but thorough forensics required
 - **NjRAT/XWorm**: **HIGH** - Triple persistence requires systematic cleanup and critical process handling
 
 **Detection Surface**:
-- **Pulsar RAT**: **LOW** - Stealth-focused design minimizes detection opportunities
+- **Quasar RAT**: **LOW** - Stealth-focused design minimizes detection opportunities
 - **NjRAT/XWorm**: **HIGH** - Aggressive behavior creates multiple detection opportunities
 
 ---
 
 # MITRE ATT&CK Mapping
 
-## Pulsar RAT - ATT&CK Mapping
+## Quasar RAT - ATT&CK Mapping
 
 <table class="professional-table">
   <thead>
@@ -823,8 +823,8 @@ Organizations should prepare for these trends by:
 
 ## Technical Questions
 
-**Q: Why does Pulsar RAT use process injection while NjRAT/XWorm doesn't?**  
-A: Pulsar's stealth-focused design prioritizes evading detection by hiding malicious code within legitimate processes. NjRAT's resilience-focused design accepts higher detection risk in favor of aggressive persistence and rapid recovery.
+**Q: Why does Quasar RAT use process injection while NjRAT/XWorm doesn't?**  
+A: Quasar's stealth-focused design prioritizes evading detection by hiding malicious code within legitimate processes. NjRAT's resilience-focused design accepts higher detection risk in favor of aggressive persistence and rapid recovery.
 
 **Q: How effective is Pastebin dead-drop architecture for C2 resilience?**  
 A: Highly effective - threat actors can change C2 infrastructure in seconds by editing Pastebin content, making takedown operations ineffective. Defenders must either block Pastebin entirely (causing business impact) or implement behavior-based detection.
@@ -838,10 +838,10 @@ A: Windows stores download source information in alternate data streams (file:Zo
 ## Business Questions
 
 **Q: Which malware poses greater business risk?**  
-A: Pulsar RAT poses greater risk for high-value targets due to its stealth capabilities and APT10 association. NjRAT/XWorm poses greater risk for mass compromise due to its prevalence and resilience.
+A: Quasar RAT poses greater risk for high-value targets due to its stealth capabilities and APT10 association. NjRAT/XWorm poses greater risk for mass compromise due to its prevalence and resilience.
 
 **Q: Should we rebuild systems compromised by these RATs?**  
-A: **REBUILD** is strongly recommended for both, but especially for Pulsar RAT due to its sophisticated capabilities and potential for long-term, stealthy access.
+A: **REBUILD** is strongly recommended for both, but especially for Quasar RAT due to its sophisticated capabilities and potential for long-term, stealthy access.
 
 **Q: How can we detect these threats if they evade traditional antivirus?**  
 A: Implement behavioral EDR solutions, monitor for scheduled task anomalies, track Pastebin access patterns, and deploy the provided YARA/Sigma detection rules.
