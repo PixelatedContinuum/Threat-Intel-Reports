@@ -6,7 +6,7 @@ permalink: /reports/dual-rat-analysis/
 hide: true
 ---
 
-> **Investigation Continuation Note**: This analysis is a continuation of the original [QUASAR RAT (server.exe)]({{ "/reports/PULSAR-RAT/" | relative_url }}) investigation. While analyzing the original server.exe sample over several weeks, two additional files appeared in the investigation directory at IP `185.208.159.182`. These new samples (client.exe and server (1).exe) suggest the threat actors may be testing or retooling their capabilities with different RAT implementations.
+> **Investigation Continuation Note**: This analysis is a continuation of the original [PULSAR RAT (server.exe)]({{ "/reports/PULSAR-RAT/" | relative_url }}) investigation. While analyzing the original server.exe sample over several weeks, two additional files appeared in the investigation directory at IP `185.208.159.182`. These new samples (client.exe and server (1).exe) suggest the threat actors may be testing or retooling their capabilities with different RAT implementations.
 
 ---
 
@@ -15,7 +15,7 @@ hide: true
 ## Executive Summary
 
 ### Business Impact Summary
-This analysis examines two sophisticated .NET Remote Access Trojans (RATs) discovered during an ongoing investigation of a [QUASAR RAT sample]({{ "/reports/PULSAR-RAT/" | relative_url }}), representing fundamentally different operational philosophies. **Quasar RAT** demonstrates professional-grade espionage capabilities with stealth-focused design, while **NjRAT/XWorm** employs aggressive resilience mechanisms for mass deployment. Both samples enable complete system compromise but differ significantly in their approach to persistence, detection evasion, and infrastructure management.
+This analysis examines two sophisticated .NET Remote Access Trojans (RATs) discovered during an ongoing investigation of a [PULSAR RAT sample]({{ "/reports/PULSAR-RAT/" | relative_url }}), representing fundamentally different operational philosophies. **Quasar RAT** demonstrates professional-grade espionage capabilities with stealth-focused design, while **NjRAT/XWorm** employs aggressive resilience mechanisms for mass deployment. Both samples enable complete system compromise but differ significantly in their approach to persistence, detection evasion, and infrastructure management.
 
 ### Key Risk Factors
 <table class="professional-table">
@@ -110,7 +110,7 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
 - **Family**: Quasar RAT (open-source, formerly xRAT)
 - **YARA Detection**: HKTL_NET_GUID_Quasar
 
-**Discovery Context**: This sample appeared in the investigation directory at IP 185.208.159.182 during analysis of the original [QUASAR RAT server.exe]({{ "/reports/PULSAR-RAT/" | relative_url }}), suggesting the threat actors were actively deploying multiple RAT variants.
+**Discovery Context**: This sample appeared in the investigation directory at IP 185.208.159.182 during analysis of the original [PULSAR RAT server.exe]({{ "/reports/PULSAR-RAT/" | relative_url }}), suggesting the threat actors were actively deploying multiple RAT variants.
 
 ## Executive Technical Summary
 
