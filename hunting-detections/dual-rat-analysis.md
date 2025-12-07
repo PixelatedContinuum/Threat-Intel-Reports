@@ -19,7 +19,7 @@ Rules are provided in YARA and Sigma formats for SIEM/EDR and threat hunting int
 ### Pulsar RAT Detection Rules
 
 #### YARA Rule - Pulsar RAT Core Detection
-```yara
+```yaml
 rule Pulsar_RAT_Core_Detection {
     meta:
         description = "Detects Pulsar RAT based on GUID, imports, and string patterns"
@@ -78,7 +78,7 @@ rule Pulsar_RAT_Core_Detection {
 ```
 
 #### YARA Rule - Pulsar RAT Mark of the Web Removal
-```yara
+```yaml
 rule Pulsar_RAT_MarkOfWeb_Removal {
     meta:
         description = "Detects Zone.Identifier stream removal behavior characteristic of Pulsar RAT"
@@ -102,7 +102,7 @@ rule Pulsar_RAT_MarkOfWeb_Removal {
 ### NjRAT/XWorm Detection Rules
 
 #### YARA Rule - NjRAT/XWorm Core Detection
-```yara
+```yaml
 rule NjRAT_XWorm_Core_Detection {
     meta:
         description = "Detects NjRAT/XWorm based on VB.NET characteristics, size, and configuration strings"
@@ -168,7 +168,7 @@ rule NjRAT_XWorm_Core_Detection {
 ```
 
 #### YARA Rule - Triple Persistence Detection
-```yara
+```yaml
 rule NjRAT_XWorm_Triple_Persistence {
     meta:
         description = "Detects NjRAT/XWorm triple persistence mechanism establishment"
