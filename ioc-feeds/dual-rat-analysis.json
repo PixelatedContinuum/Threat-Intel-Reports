@@ -1,16 +1,16 @@
 {
-  "campaign": "Dual-RAT Analysis: Quasar RAT vs. NjRAT/XWorm",
-  "description": "Comprehensive IOCs for two distinct .NET RAT families representing different operational philosophies - stealth-focused Quasar RAT and resilience-focused NjRAT/XWorm",
+  "campaign": "Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm",
+  "description": "Comprehensive IOCs for two distinct .NET RAT families representing different operational philosophies - stealth-focused Pulsar RAT and resilience-focused NjRAT/XWorm",
   "file_hashes": {
-    "Quasar_RAT": {
+    "Pulsar_RAT": {
       "sha256": "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766",
       "md5": "b5491b58348600c2766f86a5af2b867f",
       "sha1": "dc795961c8e63782fc0f53c08e7ca2e593df99fa",
       "size": "1571840",
       "type": "C# .NET executable",
       "original_filename": "client.exe",
-      "family": "Quasar RAT",
-      "yara_signatures": ["HKTL_NET_GUID_Quasar"]
+      "family": "Pulsar RAT",
+      "yara_signatures": ["HKTL_NET_GUID_Pulsar"]
     },
     "NjRAT_XWorm": {
       "sha256": "950aadba6993619858294599b3458d5d2221f10fe72b3db3e49883d496a705bb",
@@ -26,7 +26,7 @@
   },
   "network_indicators": {
     "c2_infrastructure": {
-      "quasar_rat": {
+      "pulsar_rat": {
         "ip": "185.208.159.182",
         "port": 4782,
         "protocol": "TCP with custom encryption",
@@ -51,7 +51,7 @@
   },
   "persistence_indicators": {
     "scheduled_tasks": {
-      "quasar_rat": {
+      "pulsar_rat": {
         "name": "RuntimeBroker",
         "trigger": "ONLOGON",
         "action": "%AppData%\\SubDir\\Client.exe",
@@ -73,7 +73,7 @@
       }
     },
     "startup_files": {
-      "quasar_rat": {
+      "pulsar_rat": {
         "path": "%AppData%\\SubDir\\Client.exe",
         "description": "Primary payload location"
       },
@@ -86,7 +86,7 @@
   },
   "behavioral_indicators": {
     "process_masquerading": {
-      "quasar_rat": "RuntimeBroker task name (mimics legitimate Windows process)",
+      "pulsar_rat": "RuntimeBroker task name (mimics legitimate Windows process)",
       "njrat_xworm": "conhost.exe filename and task name (mimics Console Host process)"
     },
     "security_bypass": {
@@ -131,7 +131,7 @@
     }
   },
   "attribution_indicators": {
-    "quasar_rat": {
+    "pulsar_rat": {
       "threat_actors": ["APT10 (Stone Panda, Cicada)", "Sophisticated threat actors"],
       "targeting": ["High-value targets", "Espionage operations", "Intellectual property theft"],
       "confidence": "High for APT10 association, unknown for this specific sample"
@@ -143,7 +143,7 @@
     }
   },
   "remediation_guidance": {
-    "quasar_rat": {
+    "pulsar_rat": {
       "complexity": "MEDIUM",
       "key_steps": ["Remove RuntimeBroker scheduled task", "Delete %AppData%\\SubDir\\Client.exe", "Scan for process injection artifacts", "Review logs for reconnaissance activity"],
       "forensics_required": "Thorough analysis for dwell time and data exfiltration scope"

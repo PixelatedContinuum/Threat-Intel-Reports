@@ -1,37 +1,37 @@
 ---
-title: Detection Rules - Dual-RAT Analysis - Quasar RAT vs. NjRAT/XWorm
+title: Detection Rules - Dual-RAT Analysis - Pulsar RAT vs. NjRAT/XWorm
 date: '2025-12-06'
 layout: post
 permalink: /hunting-detections/dual-rat-analysis/
 hide: true
 ---
 
-# Detection Rules – Dual-RAT Analysis: Quasar RAT vs. NjRAT/XWorm
+# Detection Rules – Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm
 
 ## Overview
-Detection coverage for both Quasar RAT and NjRAT/XWorm includes host-based, process-based, and network indicators.  
+Detection coverage for both Pulsar RAT and NjRAT/XWorm includes host-based, process-based, and network indicators.  
 Rules are provided in YARA and Sigma formats for SIEM/EDR and threat hunting integration.
 
 ---
 
 ## YARA Rules
 
-### Quasar RAT Detection Rules
+### Pulsar RAT Detection Rules
 
-#### YARA Rule - Quasar RAT Core Detection
+#### YARA Rule - Pulsar RAT Core Detection
 ```yara
-rule Quasar_RAT_Core_Detection {
+rule Pulsar_RAT_Core_Detection {
     meta:
-        description = "Detects Quasar RAT based on GUID, imports, and string patterns"
+        description = "Detects Pulsar RAT based on GUID, imports, and string patterns"
         author = "Hunter's Ledger"
         date = "2025-12-06"
         hash1 = "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766"
         ref = "https://hunter-ledger.com/reports/dual-rat-analysis/"
-        malpedia_family = "Quasar"
+        malpedia_family = "Pulsar"
         malpedia_reference = "https://malpedia.org/reference/quasar"
 
     strings:
-        // Core Quasar GUID pattern
+        // Core Pulsar GUID pattern
         $guid1 = { 8A 3B 1D 8C 6C 3A 4A 9B 5E 27 6F 9B 5A 3D 8F 6E 3A 4B 8C 6D 3E 4F 90 81 72 63 6F 6E 74 65 6E 74 }
         
         // Process injection related strings
@@ -77,11 +77,11 @@ rule Quasar_RAT_Core_Detection {
 }
 ```
 
-#### YARA Rule - Quasar RAT Mark of the Web Removal
+#### YARA Rule - Pulsar RAT Mark of the Web Removal
 ```yara
-rule Quasar_RAT_MarkOfWeb_Removal {
+rule Pulsar_RAT_MarkOfWeb_Removal {
     meta:
-        description = "Detects Zone.Identifier stream removal behavior characteristic of Quasar RAT"
+        description = "Detects Zone.Identifier stream removal behavior characteristic of Pulsar RAT"
         author = "Hunter's Ledger"
         date = "2025-12-06"
         hash1 = "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766"
@@ -194,14 +194,14 @@ rule NjRAT_XWorm_Triple_Persistence {
 
 ## Sigma Rules
 
-### Quasar RAT Detection Rules
+### Pulsar RAT Detection Rules
 
-#### Sigma Rule - Quasar RAT Scheduled Task Persistence
+#### Sigma Rule - Pulsar RAT Scheduled Task Persistence
 ```yaml
-title: Quasar RAT Scheduled Task Persistence
+title: Pulsar RAT Scheduled Task Persistence
 id: 8b5c3d1a-8f4e-4b9a-9c6d-3e4f9081
 status: experimental
-description: Detects Quasar RAT persistence through RuntimeBroker scheduled task creation
+description: Detects Pulsar RAT persistence through RuntimeBroker scheduled task creation
 author: Hunter's Ledger
 date: 2025/12/06
 modified: 2025/12/06
@@ -225,15 +225,15 @@ tags:
     - attack.persistence
     - defense_evasion
     - t1053.005
-    - quasar_rat
+    - pulsar_rat
 ```
 
-#### Sigma Rule - Quasar RAT Process Injection
+#### Sigma Rule - Pulsar RAT Process Injection
 ```yaml
-title: Quasar RAT Process Injection Activity
+title: Pulsar RAT Process Injection Activity
 id: a7b2c3d9-4e5f-8a9b-2c6d-4f7e9081
 status: experimental
-description: Detects potential Quasar RAT process injection behavior
+description: Detects potential Pulsar RAT process injection behavior
 author: Hunter's Ledger
 date: 2025/12/06
 modified: 2025/12/06
@@ -258,15 +258,15 @@ tags:
     - attack.privilege_escalation
     - t1055.003
     - t1055
-    - quasar_rat
+    - pulsar_rat
 ```
 
-#### Sigma Rule - Quasar RAT Zone.Identifier Removal
+#### Sigma Rule - Pulsar RAT Zone.Identifier Removal
 ```yaml
-title: Quasar RAT Mark of the Web Removal
+title: Pulsar RAT Mark of the Web Removal
 id: c9d4e5f2-6a7b-3c8d-4e9f-5a6b9081
 status: experimental
-description: Detects Zone.Identifier alternate data stream deletion characteristic of Quasar RAT
+description: Detects Zone.Identifier alternate data stream deletion characteristic of Pulsar RAT
 author: Hunter's Ledger
 date: 2025/12/06
 modified: 2025/12/06
@@ -287,15 +287,15 @@ tags:
     - attack.defense_evasion
     - attack.initial_access
     - t1070.004
-    - quasar_rat
+    - pulsar_rat
 ```
 
-#### Sigma Rule - Quasar RAT C2 Communication
+#### Sigma Rule - Pulsar RAT C2 Communication
 ```yaml
-title: Quasar RAT Command and Control Communication
+title: Pulsar RAT Command and Control Communication
 id: d1e5f6a3-7b8c-4d9e-5f0a-6a7b9081
 status: experimental
-description: Detects Quasar RAT C2 communication patterns
+description: Detects Pulsar RAT C2 communication patterns
 author: Hunter's Ledger
 date: 2025/12/06
 modified: 2025/12/06
@@ -317,7 +317,7 @@ tags:
     - t1071.001
     - t1573
     - t1041
-    - quasar_rat
+    - pulsar_rat
 ```
 
 ### NjRAT/XWorm Detection Rules
@@ -454,11 +454,11 @@ tags:
 
 ## PowerShell Hunting Queries
 
-### Quasar RAT Hunting Queries
+### Pulsar RAT Hunting Queries
 
-#### PowerShell - Hunt for Quasar RAT Scheduled Tasks
+#### PowerShell - Hunt for Pulsar RAT Scheduled Tasks
 ```powershell
-# Hunt for Quasar RAT RuntimeBroker scheduled task
+# Hunt for Pulsar RAT RuntimeBroker scheduled task
 Get-ScheduledTask | Where-Object {$_.TaskName -eq "RuntimeBroker" -and $_.Actions.Command -like "*Client.exe*"} | ForEach-Object {
     [PSCustomObject]@{
         TaskName = $_.TaskName
@@ -466,8 +466,8 @@ Get-ScheduledTask | Where-Object {$_.TaskName -eq "RuntimeBroker" -and $_.Action
         Trigger = $_.Triggers | Select-Object -First 1 | ForEach-Object {$_.Type}
         Date = $_.Date
         Author = $_.Author
-        Risk = "High - Quasar RAT persistence indicator"
-        Recommendation = "Investigate system for Quasar RAT infection"
+        Risk = "High - Pulsar RAT persistence indicator"
+        Recommendation = "Investigate system for Pulsar RAT infection"
     }
 }
 ```
@@ -482,8 +482,8 @@ Get-WinEvent -LogName Security -Where-Object {$_.Id -eq 4663 -and $_.Message -li
         ProcessName = $_.Process.Name
         FileName = $_.File.Name
         Operation = "Zone.Identifier stream deletion"
-        Risk = "Medium - Potential Quasar RAT security bypass"
-        Recommendation = "Scan system for Quasar RAT infection"
+        Risk = "Medium - Potential Pulsar RAT security bypass"
+        Recommendation = "Scan system for Pulsar RAT infection"
     }
 }
 ```
@@ -569,16 +569,16 @@ Get-WinEvent -LogName Microsoft-Windows-Sysmon/Network -MaxEvents 1000 | Where-O
 
 ## Network Detection Rules (Suricata/Snort)
 
-### Quasar RAT Network Detection
+### Pulsar RAT Network Detection
 
-#### Suricata Rule - Quasar RAT C2 Connection
+#### Suricata Rule - Pulsar RAT C2 Connection
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"Quasar RAT C2 Connection"; flow:established,to_server; content:"|2c 43 87 ce 18 be 27 9e a7 35 ec 4f 00 92 69 85 34 92 10 30 aa 69 94 98 ae 80 e4 1a 5c 73 76 66"; depth:8; offset:0; metadata:service quasar_rat_c2, malware_family Quasar; sid:2100001; rev:1; classtype:trojan-activity; priority:1; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"Pulsar RAT C2 Connection"; flow:established,to_server; content:"|2c 43 87 ce 18 be 27 9e a7 35 ec 4f 00 92 69 85 34 92 10 30 aa 69 94 98 ae 80 e4 1a 5c 73 76 66"; depth:8; offset:0; metadata:service pulsar_rat_c2, malware_family Pulsar; sid:2100001; rev:1; classtype:trojan-activity; priority:1; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)
 ```
 
-#### Suricata Rule - Quasar RAT IP Geolocation
+#### Suricata Rule - Pulsar RAT IP Geolocation
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET 443 (msg:"Quasar RAT IP Geolocation"; flow:established,to_server; content:"Host: ipwho.is|Host: api.ipify.org"; http.method; content:"GET"; http.uri; content:"/"; depth:0; offset:0; metadata:service quasar_rat_recon, malware_family Quasar; sid:2100002; rev:1; classtype:trojan-activity; priority:2; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 443 (msg:"Pulsar RAT IP Geolocation"; flow:established,to_server; content:"Host: ipwho.is|Host: api.ipify.org"; http.method; content:"GET"; http.uri; content:"/"; depth:0; offset:0; metadata:service pulsar_rat_recon, malware_family Pulsar; sid:2100002; rev:1; classtype:trojan-activity; priority:2; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)
 ```
 
 ### NjRAT/XWorm Network Detection
