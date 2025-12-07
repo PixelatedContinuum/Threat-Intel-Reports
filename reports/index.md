@@ -19,6 +19,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 # December 2025
 
+- [Dual-RAT Analysis: Quasar RAT vs. NjRAT/XWorm - Technical Deep-Dive]({{ "/reports/dual-rat-analysis/" | relative_url }})
 - [PULSAR RAT (server.exe) - Technical Analysis & Business Risk Assessment]({{ "/reports/PULSAR-RAT/" | relative_url }})
 
 ---
