@@ -103,7 +103,7 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 
 > **Assessment Basis:** Static code analysis, behavioral indicators, and correlation with known RAT families. Confidence levels provided throughout to distinguish confirmed findings from analytical judgments.
 > 
-> **Investigation Status:** Ongoing with further reverse engineering and dynamic analysis planned. Report will be updated with new findings. 
+> **Investigation Status:** Follow up investigations were done and can be found in the report [Dual-RAT Analysis (server.exe)]({{ "/reports/dual-rat-analysis/" | relative_url }})  
 
 ---
 
