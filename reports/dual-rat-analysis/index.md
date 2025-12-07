@@ -1,5 +1,5 @@
 ---
-title: Dual-RAT Analysis: Quasar RAT vs. NjRAT/XWorm - Technical Deep-Dive
+title: Dual-RAT Analysis - Quasar RAT vs. NjRAT/XWorm - Technical Deep-Dive
 date: '2025-12-06'
 layout: post
 permalink: /reports/dual-rat-analysis/
