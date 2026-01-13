@@ -1,0 +1,315 @@
+{
+  "campaign": "agent.exe (PoetRAT) - Open Directory 109.230.231.37",
+  "description": "Comprehensive IOCs for agent.exe, a professional-grade Golang-compiled Remote Access Trojan (RAT) with MODERATE confidence attribution to the PoetRAT malware family. Discovered on open directory at IP 109.230.231.37, this malware demonstrates sophisticated persistence, anti-analysis, and comprehensive offensive capabilities including keylogging, PowerShell execution, and RDP access.",
+  "severity": "CRITICAL",
+  "confidence_level": "High",
+  "file_hashes": {
+    "agent_exe": {
+      "sha256": "e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385",
+      "sha1": "e0fe41acd28cae74d75fcbf2f9309ff523c0f36a",
+      "md5": "b1d5e55b1c15b7cb839138625d9d2efa",
+      "size": "1571840",
+      "type": "PE32+ executable (console) x86-64, Golang-compiled",
+      "original_filename": "agent.exe",
+      "family": "PoetRAT",
+      "family_confidence": "MODERATE (60%)",
+      "yara_signatures": [
+        "Agent_exe_PoetRAT_Comprehensive",
+        "Golang_RAT_Generic_Detection"
+      ]
+    },
+    "windefendersvc_exe": {
+      "sha256": "4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1",
+      "size": "Unknown (persistence component)",
+      "type": "Dropped file - persistence component",
+      "original_filename": "WinDefenderSvc.exe",
+      "location": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\",
+      "purpose": "Startup folder persistence mechanism",
+      "yara_signatures": [
+        "PoetRAT_Persistence_Component"
+      ]
+    }
+  },
+  "network_indicators": {
+    "distribution_infrastructure": {
+      "ip": "109.230.231.37",
+      "description": "Confirmed malware distribution point - open directory serving multiple RAT variants",
+      "confidence": "CONFIRMED",
+      "threat_type": "Malware distribution",
+      "action": "BLOCK at network perimeter immediately"
+    },
+    "c2_infrastructure": {
+      "status": "NOT OBSERVED",
+      "description": "C2 infrastructure not observed during sandbox analysis due to environment-aware dormant behavior. Malware likely activates C2 after extended runtime or upon validation of non-sandbox environment.",
+      "expected_behavior": "Encrypted C2 traffic using AES, ChaCha20, RSA cryptography",
+      "detection_strategy": "Monitor for unusual encrypted outbound connections from Golang executables in user directories"
+    }
+  },
+  "persistence_indicators": {
+    "startup_folder": {
+      "file_path": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\WinDefenderSvc.exe",
+      "file_hash": "4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1",
+      "execution_trigger": "User login",
+      "privileges_required": "User-level",
+      "evasion_technique": "Masquerades as Windows Defender Service",
+      "confidence": "CONFIRMED"
+    },
+    "registry_run_key": {
+      "registry_path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+      "value_name": "WindowsDefenderUpdate",
+      "value_data": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\WinDefenderSvc.exe",
+      "execution_trigger": "User login",
+      "privileges_required": "User-level",
+      "evasion_technique": "Masquerades as Windows Defender Update",
+      "confidence": "CONFIRMED"
+    },
+    "installation_marker": {
+      "file_path": "%LocalAppData%\\Temp\\.wd_installed",
+      "file_hash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "purpose": "Installation flag to prevent duplicate installations",
+      "detection_value": "HIGH - High-confidence indicator of compromise",
+      "confidence": "CONFIRMED"
+    }
+  },
+  "behavioral_indicators": {
+    "process_masquerading": {
+      "technique": "T1036.005 - Masquerading: Match Legitimate Name or Location",
+      "indicators": [
+        "WinDefenderSvc.exe filename (mimics Windows Defender Service)",
+        "WindowsDefenderUpdate registry value name (mimics Windows Defender Update)"
+      ],
+      "impact": "Evades casual inspection by administrators",
+      "detection": "Verify digital signatures - legitimate Windows Defender files are signed by Microsoft Corporation"
+    },
+    "dual_persistence": {
+      "technique": "T1547.001 - Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "mechanisms": [
+        "Startup folder file creation",
+        "Registry Run key creation"
+      ],
+      "impact": "Redundant survival - removal of one mechanism does not eliminate persistence",
+      "detection": "Monitor for simultaneous creation of both persistence mechanisms"
+    },
+    "golang_compilation": {
+      "characteristic": "64-bit Golang-compiled PE executable",
+      "indicators": [
+        "runtime.main string",
+        "runtime.goexit string",
+        "go.buildid string",
+        "Larger file size compared to C/C++ equivalents"
+      ],
+      "impact": "Inherent obfuscation complicates reverse engineering",
+      "detection": "Identify Golang runtime strings and library imports"
+    },
+    "anti_debugging": {
+      "techniques": [
+        "NtQueryInformationProcess API (ProcessDebugPort detection)",
+        "SetConsoleCtrlHandler manipulation",
+        "SEH (Structured Exception Handling) debugger detection"
+      ],
+      "impact": "Hinders malware analysis and defeats standard debugging tools",
+      "detection": "Monitor for processes making anti-debug API calls"
+    },
+    "cryptographic_capabilities": {
+      "algorithms": [
+        "AES (Advanced Encryption Standard)",
+        "ChaCha20 (stream cipher)",
+        "RSA (asymmetric encryption)",
+        "SHA (Secure Hash Algorithm)"
+      ],
+      "impact": "Encrypted C2 communications prevent network inspection",
+      "detection": "Behavioral analysis of encrypted traffic patterns"
+    },
+    "environment_aware_c2": {
+      "behavior": "Dormant C2 activation - no network traffic observed in sandbox",
+      "likely_triggers": [
+        "Extended runtime (>24-48 hours)",
+        "Validation of non-sandbox environment",
+        "Geolocation validation",
+        "Manual threat actor authorization"
+      ],
+      "impact": "Defeats time-limited sandbox analysis",
+      "detection": "Long-term behavioral monitoring and network anomaly detection"
+    }
+  },
+  "capabilities": {
+    "keylogging": {
+      "technique": "T1056.001 - Input Capture: Keylogging",
+      "confidence": "CONFIRMED (code present via YARA)",
+      "impact": "CRITICAL - Credential theft, sensitive data harvesting",
+      "mitigation": "MANDATORY credential rotation for all users on compromised systems"
+    },
+    "powershell_execution": {
+      "technique": "T1059.001 - Command and Scripting Interpreter: PowerShell",
+      "confidence": "CONFIRMED (code present via YARA)",
+      "impact": "CRITICAL - Full scripting access to Windows internals",
+      "detection": "Enable PowerShell Script Block Logging (Event ID 4104)"
+    },
+    "rdp_access": {
+      "technique": "T1021.001 - Remote Services: Remote Desktop Protocol",
+      "confidence": "CONFIRMED (code present via YARA)",
+      "impact": "CRITICAL - Full GUI control and persistent access",
+      "detection": "Monitor for new RDP sessions from unexpected IP addresses"
+    },
+    "privilege_escalation": {
+      "technique": "T1068 - Exploitation for Privilege Escalation",
+      "confidence": "CONFIRMED (code present via YARA)",
+      "impact": "CRITICAL - SYSTEM-level access, credential dumping, security control bypass",
+      "detection": "Monitor for UAC bypass attempts and token manipulation"
+    },
+    "service_creation": {
+      "technique": "T1543.003 - Create or Modify System Process: Windows Service",
+      "confidence": "CONFIRMED (code present via YARA)",
+      "impact": "HIGH - Service-based persistence, execution as SYSTEM",
+      "detection": "Alert on new service installations from unusual file paths"
+    },
+    "network_listener": {
+      "capability": "TCP/UDP network listener (bind shell)",
+      "confidence": "CONFIRMED (code present via YARA)",
+      "impact": "CRITICAL - Direct attacker connection to compromised system",
+      "detection": "Monitor for unexpected listening ports on endpoints"
+    },
+    "encrypted_c2": {
+      "technique": "T1573 - Encrypted Channel",
+      "confidence": "CONFIRMED (cryptographic libraries present)",
+      "impact": "HIGH - Traffic inspection ineffective, forensic reconstruction limited",
+      "detection": "Behavioral network analysis for encrypted C2 patterns"
+    }
+  },
+  "detection_opportunities": {
+    "high_confidence_indicators": [
+      "File hash match: e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385 or 4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1",
+      "File creation: .wd_installed in %LocalAppData%\\Temp\\",
+      "File creation: WinDefenderSvc.exe in Startup folder",
+      "Registry creation: WindowsDefenderUpdate Run key",
+      "Network connection to 109.230.231.37"
+    ],
+    "behavioral_patterns": [
+      "Golang executable creating persistence mechanisms",
+      "Unsigned or non-Microsoft-signed process named WinDefender*",
+      "Process making anti-debugging API calls combined with network activity",
+      "Encrypted outbound connections from user-writable directories",
+      "Simultaneous creation of dual persistence mechanisms"
+    ],
+    "forensic_artifacts": [
+      "Startup folder modification logs",
+      "Registry Run key modification events",
+      ".wd_installed marker file",
+      "Process creation events for Golang executables",
+      "PowerShell execution logs (if keylogging or RDP activated)"
+    ]
+  },
+  "mitre_attack_techniques": {
+    "execution": [
+      "T1204.002 - User Execution: Malicious File",
+      "T1059.001 - Command and Scripting Interpreter: PowerShell"
+    ],
+    "persistence": [
+      "T1547.001 - Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "T1543.003 - Create or Modify System Process: Windows Service"
+    ],
+    "privilege_escalation": [
+      "T1068 - Exploitation for Privilege Escalation"
+    ],
+    "defense_evasion": [
+      "T1036.005 - Masquerading: Match Legitimate Name or Location",
+      "T1622 - Debugger Evasion",
+      "T1027 - Obfuscated Files or Information"
+    ],
+    "credential_access": [
+      "T1056.001 - Input Capture: Keylogging"
+    ],
+    "discovery": [
+      "T1082 - System Information Discovery"
+    ],
+    "lateral_movement": [
+      "T1021.001 - Remote Services: Remote Desktop Protocol"
+    ],
+    "collection": [
+      "T1005 - Data from Local System"
+    ],
+    "command_and_control": [
+      "T1071.001 - Application Layer Protocol: Web Protocols",
+      "T1573 - Encrypted Channel"
+    ],
+    "exfiltration": [
+      "T1041 - Exfiltration Over C2 Channel"
+    ]
+  },
+  "remediation_guidance": {
+    "complexity": "HIGH - Complete system rebuild strongly recommended",
+    "recommended_approach": "REBUILD",
+    "rationale": "Professional-grade malware with unknown C2 infrastructure, potential privilege escalation, comprehensive capabilities, and anti-forensic features create significant residual risk with cleanup-only approaches",
+    "rebuild_steps": [
+      "Isolate infected systems from network immediately",
+      "Capture memory dumps and disk images for forensic analysis",
+      "Identify all users who authenticated during infection window",
+      "Complete disk wipe and clean OS installation from trusted media",
+      "Apply all security updates before network reconnection",
+      "Restore user data after malware scanning",
+      "MANDATORY credential rotation for all affected users",
+      "30-day enhanced monitoring period post-rebuild"
+    ],
+    "cleanup_steps_high_risk": [
+      "Remove WinDefenderSvc.exe from Startup folder",
+      "Delete WindowsDefenderUpdate registry Run key from HKCU\\...\\Run",
+      "Delete .wd_installed marker file from %LocalAppData%\\Temp\\",
+      "Full antimalware scan with updated signatures",
+      "Memory forensics to confirm process termination",
+      "Hunt for additional persistence mechanisms (services, scheduled tasks)",
+      "Network monitoring for C2 reactivation",
+      "MANDATORY credential rotation",
+      "30-day enhanced monitoring period"
+    ],
+    "credential_rotation": {
+      "priority": "CRITICAL - Mandatory action",
+      "scope": "All users who authenticated to infected systems during infection window",
+      "rationale": "Keylogging capability means all credentials entered on infected systems must be considered compromised",
+      "includes": [
+        "User account passwords",
+        "Service account credentials accessible from infected systems",
+        "Privileged account credentials (domain admin, enterprise admin)",
+        "Application passwords and API tokens",
+        "VPN credentials",
+        "MFA device re-enrollment if codes were typed"
+      ]
+    }
+  },
+  "threat_actor_assessment": {
+    "family": "PoetRAT",
+    "family_confidence": "MODERATE (60%)",
+    "attribution_basis": "Behavioral patterns (Golang compilation, RAT capabilities, persistence mechanisms) consistent with known PoetRAT samples",
+    "threat_actor_type": "Organized cybercrime / APT-adjacent",
+    "sophistication": "Professional-grade development",
+    "motivation": "Espionage / Financial gain",
+    "targeting": "Opportunistic (broad distribution via open directory)",
+    "historical_context": "PoetRAT has previously targeted government and private sector organizations (Cisco Talos, 2020)"
+  },
+  "response_priorities": {
+    "immediate_0-4_hours": [
+      "Isolate infected systems from network",
+      "Block distribution IP 109.230.231.37 at network perimeter",
+      "Alert leadership (CISO/IT Director) of confirmed RAT infection",
+      "Preserve evidence (memory dumps, disk images)",
+      "Deploy IOC hunt across enterprise"
+    ],
+    "short_term_4-24_hours": [
+      "Execute threat hunting for file hashes and persistence artifacts",
+      "Review network logs for connections to 109.230.231.37",
+      "Identify all users on infected systems during infection window",
+      "Begin credential rotation for affected users",
+      "Initiate forensic analysis to determine dwell time"
+    ],
+    "medium_term_1-7_days": [
+      "Complete system rebuild or aggressive cleanup",
+      "Finish mandatory credential rotation",
+      "Deploy enhanced monitoring and detection rules",
+      "Conduct lessons learned and control gap analysis",
+      "Update incident response procedures based on findings"
+    ]
+  },
+  "timestamp": "2026-01-12T00:00:00Z",
+  "analyst": "Threat Intelligence Team",
+  "report_version": "1.0",
+  "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+}

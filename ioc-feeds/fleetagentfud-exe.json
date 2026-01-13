@@ -1,0 +1,583 @@
+{
+  "campaign": "FleetAgentFUD.exe - WebSocket RAT with FUD Evasion (Open Directory 109.230.231.37)",
+  "description": "Comprehensive IOCs for FleetAgentFUD.exe, a 'Fully Undetectable' Remote Access Trojan with WebSocket-based command and control, PowerShell Execution Policy bypass, clipboard data theft, and file download capabilities. This .NET-compiled malware demonstrates professional FUD design through minimal file size (17.5 KB), aggressive evasion techniques, and WebSocket protocol usage to masquerade as legitimate web traffic. Discovered on open directory at IP 109.230.231.37 alongside other malware families (PoetRAT, NjRAT, FleetAgentAdvanced.exe).",
+  "severity": "HIGH",
+  "confidence_level": "High",
+  "discovery_date": "2026-01-04",
+  "analysis_date": "2026-01-12",
+  "file_hashes": {
+    "fleetagentfud_exe": {
+      "sha256": "072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff",
+      "sha1": "51aa8b08dc67cb91435ce58d4453a8ae5e0dd577",
+      "md5": "5b37f5fc42384834b7aac5081a5bac85",
+      "size": "17920",
+      "type": "PE32 executable, .NET Framework (CLR v4.0.30319), Windows GUI",
+      "original_filename": "FleetAgentFUD.exe",
+      "compilation": "Microsoft Visual C# .NET, Linker 11.0",
+      "entropy": "5.2171",
+      "family": "FleetAgentFUD",
+      "family_confidence": "HIGH (95%)",
+      "role": "RAT with FUD evasion",
+      "agent_version": "3.0.0",
+      "yara_signatures": [
+        "FleetAgentFUD_FileHash_Exact",
+        "FleetAgentFUD_WebSocket_C2_Pattern",
+        "FleetAgentFUD_PowerShell_Bypass",
+        "FleetAgentFUD_FUD_RAT_Behavioral_Pattern",
+        "FleetAgent_Family_General"
+      ]
+    }
+  },
+  "network_indicators": {
+    "distribution_infrastructure": {
+      "ip": "109.230.231.37",
+      "description": "CONFIRMED malware distribution point - open directory serving multiple trojan and RAT variants",
+      "confidence": "CONFIRMED",
+      "threat_type": "Malware distribution server",
+      "action": "BLOCK at network perimeter immediately",
+      "first_seen": "2026-01-04",
+      "last_seen": "2026-01-12 (still active)",
+      "associated_campaigns": [
+        "agent.exe (PoetRAT)",
+        "agent_xworm.exe (NjRAT/XWorm)",
+        "agent_xworm_v2.exe (NjRAT/XWorm v2)",
+        "FleetAgentAdvanced.exe (persistence trojan)",
+        "FleetAgentFUD.exe (this campaign)"
+      ]
+    },
+    "c2_infrastructure": {
+      "status": "NOT OBSERVED",
+      "description": "C2 infrastructure not observed during static analysis. WebSocket-based C2 expected to use encrypted HTTPS traffic (port 443) with custom authentication via X-Agent-Secret header.",
+      "protocol": "WebSocket (ws:// or wss:// - likely wss:// over TLS)",
+      "expected_behavior": "WebSocket upgrade handshake with custom headers, encrypted bi-directional C2 communication, heartbeat messages",
+      "detection_strategy": "Monitor for WebSocket connections from .NET executables in AppData; inspect TLS traffic for WebSocket upgrade patterns; alert on X-Agent-Secret header presence",
+      "potential_ports": [
+        "80 (ws:// - HTTP WebSocket)",
+        "443 (wss:// - HTTPS WebSocket - MOST LIKELY)",
+        "8080 (alternate HTTP)",
+        "8443 (alternate HTTPS)"
+      ]
+    }
+  },
+  "behavioral_indicators": {
+    "powershell_execution_policy_bypass": {
+      "technique": "T1562.001 - Impair Defenses: Disable or Modify Tools + T1059.001 - PowerShell",
+      "command_line_patterns": [
+        "-NoP -NonI -W Hidden -Exec Bypass -C ",
+        "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass",
+        "powershell.exe -Exec Bypass",
+        "powershell.exe -ExecutionPolicy Bypass"
+      ],
+      "indicators": [
+        "PowerShell launched with -Exec Bypass or -ExecutionPolicy Bypass parameters",
+        "Parent process: .NET executable from AppData directory",
+        "Hidden window execution (-W Hidden or -WindowStyle Hidden)",
+        "Output redirection (RedirectStandardOutput, RedirectStandardError)",
+        "No PowerShell profile loading (-NoProfile)"
+      ],
+      "impact": "Complete PowerShell access with security controls bypassed; enables arbitrary command execution, credential theft, lateral movement, ransomware deployment",
+      "detection": "Monitor EventID 4688 (Process Creation) or Sysmon EventID 1 for powershell.exe with -Exec Bypass arguments; Enable PowerShell Script Block Logging (EventID 4104)",
+      "business_impact": "CRITICAL - Standard PowerShell Execution Policy protection bypassed; requires additional controls (AppLocker, EDR)"
+    },
+    "clipboard_data_theft": {
+      "technique": "T1115 - Clipboard Data",
+      "command": "Get-Clipboard",
+      "indicators": [
+        "Repeated PowerShell Get-Clipboard executions (10+ per hour indicates monitoring)",
+        "Parent process: Suspicious .NET executable from AppData",
+        "No user-initiated PowerShell activity corresponding to executions",
+        "Periodic execution pattern (every 5-60 seconds)"
+      ],
+      "stolen_data_types": [
+        "Passwords copied from password managers (1Password, LastPass, KeePass)",
+        "Multi-factor authentication (MFA) tokens and codes",
+        "Credit card numbers and financial information",
+        "Social Security Numbers and personal identifiable information (PII)",
+        "Cryptocurrency wallet addresses",
+        "VPN credentials and SSH keys",
+        "Confidential business documents and emails"
+      ],
+      "impact": "CRITICAL - Credential theft, MFA bypass, confidential data leakage, regulatory compliance violations (GDPR, HIPAA, PCI-DSS)",
+      "detection": "Monitor PowerShell logs (EventID 4104) for Get-Clipboard; alert on 10+ executions within 1 hour window; correlate with suspicious parent processes",
+      "business_impact": "HIGH - Assume credential compromise; mandatory password rotation for all users on infected systems"
+    },
+    "websocket_c2_communication": {
+      "technique": "T1071.001 - Application Layer Protocol: Web Protocols + T1573 - Encrypted Channel",
+      "protocol_characteristics": [
+        "HTTP Upgrade request with 'Connection: Upgrade' header",
+        "Sec-WebSocket-Key header (standard WebSocket handshake)",
+        "Sec-WebSocket-Version: 13 header",
+        "X-Agent-Secret header (CUSTOM authentication - HIGH confidence FleetAgentFUD indicator)",
+        "Registration message with JSON structure (type: register, machine_id, hostname, os_version, ip_address, agent_ver: 3.0.0)",
+        "Heartbeat messages: {\"type\":\"heartbeat\"}",
+        "Bi-directional communication over single persistent connection"
+      ],
+      "indicators": [
+        "WebSocket connection from .NET executable in AppData directory",
+        ".NET WebClient User-Agent (not browser-based)",
+        "Encrypted TLS traffic (wss://) to untrusted destinations",
+        "Self-signed or untrusted SSL certificates",
+        "Persistent connection (no repeated beaconing like traditional HTTP C2)"
+      ],
+      "evasion_benefits": [
+        "Mimics legitimate web application traffic (Slack, Discord, Teams use WebSocket)",
+        "Single persistent connection avoids beaconing signature",
+        "TLS encryption prevents deep packet inspection without SSL decryption",
+        "Standard ports (80, 443) bypass restrictive firewalls",
+        "No distinctive malware C2 signatures in protocol"
+      ],
+      "detection": "TLS/SSL inspection required to view WebSocket handshake; monitor for WebSocket connections from non-browser processes; alert on X-Agent-Secret header; User-Agent analysis",
+      "business_impact": "HIGH - Network-based C2 detection ineffective without TLS inspection; requires behavioral endpoint detection"
+    },
+    "file_download_capability": {
+      "technique": "T1105 - Ingress Tool Transfer",
+      "api": "System.Net.WebClient.DownloadFile()",
+      "indicators": [
+        "WebClient API calls from .NET executables in AppData",
+        "Executable file downloads (.exe, .dll, .scr, .bat, .ps1) from untrusted sources",
+        "File creation in C:\\Users\\Public, C:\\Windows\\Temp, or AppData directories",
+        "Small initial malware (17.5 KB) downloading larger payloads (ransomware 1-5 MB typical)",
+        "Immediate execution after download (download → execute sequence within 30-60 seconds)"
+      ],
+      "attack_scenarios": [
+        "Ransomware deployment (LockBit, BlackCat, ALPHV, Conti)",
+        "Cobalt Strike beacon staging (professional post-exploitation framework)",
+        "Cryptocurrency miner deployment (XMRig, CryptoNight)",
+        "Credential stealer deployment (browser password extractors, keyloggers)",
+        "Additional RAT payloads (AsyncRAT, QuasarRAT, NanoCore)"
+      ],
+      "impact": "CRITICAL - Enables rapid post-exploitation; ransomware deployment within minutes of initial infection; complete system compromise",
+      "detection": "Monitor Sysmon EventID 3 (Network Connection) for downloads from AppData executables; Sysmon EventID 11 (FileCreated) for .exe creation in Public/Temp; correlate download + execution within short timeframe",
+      "business_impact": "CRITICAL - Initial access (FleetAgentFUD) can escalate to ransomware deployment within 24-72 hours"
+    },
+    "system_reconnaissance": {
+      "technique": "T1082 - System Information Discovery + T1033 - System Owner/User Discovery + T1087 - Account Discovery",
+      "command_types": [
+        "sysinfo: Detailed system information (OS, hardware, domain membership)",
+        "processes: Running process enumeration (identify security software)",
+        "network: Network configuration (IP, DNS, domain, interfaces)",
+        "users: Local user account enumeration",
+        "disk: Drive enumeration and storage capacity",
+        "clipboard: Clipboard contents monitoring",
+        "firewall: Windows Firewall configuration"
+      ],
+      "powershell_commands": [
+        "Get-WmiObject Win32_ComputerSystem",
+        "Get-Process | Select Name, Id, Path",
+        "ipconfig /all",
+        "Get-LocalUser | Select Name, Enabled, LastLogon",
+        "Get-WmiObject Win32_LogicalDisk | Select DeviceID, Size, FreeSpace",
+        "Get-Clipboard",
+        "netsh advfirewall show allprofiles"
+      ],
+      "profiling_data_collected": [
+        "Operating system version and build",
+        "Hostname and domain membership (WORKGROUP vs company.local)",
+        "IP address and network configuration",
+        "Current user and privilege level (standard vs administrator)",
+        "Running processes (security software, EDR agents, monitoring tools)",
+        "Disk capacity and mapped network drives",
+        "Firewall status and configuration"
+      ],
+      "impact": "HIGH - Enables targeted attack planning; distinguishes high-value targets (domain-joined, large storage, admin rights) from low-value (home users); multiplies ransomware success rate by 2.5-4x",
+      "detection": "Rapid-fire PowerShell commands (3+ enumeration commands within 5 minutes); monitor for Get-WmiObject Win32_*, Get-Process, Get-LocalUser, ipconfig executions from suspicious parent processes",
+      "business_impact": "MEDIUM - Reconnaissance phase extends attack from opportunistic to targeted; increases ransomware ransom demands based on victim profiling"
+    },
+    "virtualprotect_rwx_memory": {
+      "technique": "T1055 - Process Injection (Potential)",
+      "api": "VirtualProtect",
+      "capability": "Allocate or change memory protection to RWX (Read-Write-Execute)",
+      "protection_flag": "PAGE_EXECUTE_READWRITE (0x40)",
+      "indicators": [
+        "VirtualProtect API call with RWX permissions from .NET executable",
+        "Memory allocation in process address space with executable permissions",
+        "Potential shellcode execution from allocated RWX memory",
+        "Runtime code generation or unpacking"
+      ],
+      "attack_techniques": [
+        "Shellcode execution in local process memory (fileless attack)",
+        "Runtime code unpacking or decryption",
+        ".NET JIT (Just-In-Time) compilation for dynamically generated code",
+        "Potential process injection preparation (if combined with VirtualAllocEx)"
+      ],
+      "impact": "HIGH - Enables fileless malware execution; shellcode runs in memory without disk artifacts; evades signature-based antivirus",
+      "detection": "EDR monitoring for VirtualProtect(PAGE_EXECUTE_READWRITE) from AppData executables; behavioral detection for RWX memory allocation patterns; Microsoft Defender ATP MemoryProtectionModified events",
+      "business_impact": "MEDIUM - Advanced evasion capability; requires behavioral EDR for detection; traditional antivirus ineffective",
+      "note": "VirtualProtect API present in binary but NOT observed during static analysis; capability exists but usage conditions unknown"
+    },
+    "fud_design_philosophy": {
+      "description": "Fully Undetectable (FUD) malware design optimized for antivirus and EDR evasion",
+      "characteristics": [
+        "Minimal file size (17,920 bytes / 17.5 KB) - significantly smaller than typical RATs (100-500 KB)",
+        "Low entropy (5.2171) - avoids packer detection triggers",
+        "Minimal static signatures (285 unique strings vs typical 500+)",
+        ".NET compilation for inherent obfuscation and easy recompilation",
+        "Runtime API loading via GetProcAddress (T1129 - dynamic linking)",
+        "WebSocket protocol hiding (legitimate traffic pattern)",
+        "No traditional persistence mechanisms observed (network-dependent model)",
+        "Hidden window execution (invisible operation)"
+      ],
+      "evasion_benefits": [
+        "Signature-based antivirus: INEFFECTIVE (minimal static signatures)",
+        "Heuristic detection: REDUCED (low entropy, small size)",
+        "Behavioral detection: REQUIRED (only effective countermeasure)",
+        "Network IDS: INEFFECTIVE (WebSocket protocol mimics legitimate traffic)",
+        "Sandboxing: PARTIAL (may detect PowerShell bypass but not full capabilities)"
+      ],
+      "market_context": "FUD branding indicates commercial malware-as-a-service (MaaS) offering; premium pricing for detection evasion; underground marketplace distribution",
+      "impact": "CRITICAL - Organizations relying on traditional antivirus are VULNERABLE; modern behavioral EDR REQUIRED for detection",
+      "detection": "Behavioral analysis essential; monitor for PowerShell bypass, clipboard monitoring, WebSocket connections from untrusted processes; correlate multiple indicators",
+      "business_impact": "HIGH - Significant investment in modern security controls required; traditional signature-based AV provides ZERO protection"
+    },
+    "hidden_window_execution": {
+      "technique": "T1564.003 - Hide Artifacts: Hidden Window",
+      "api": "ShowWindow",
+      "indicators": [
+        "GUI application (PE subsystem: Windows GUI) with no visible window",
+        "ShowWindow(hWnd, SW_HIDE) API call",
+        "Process running without corresponding window in Task Manager GUI view",
+        "CreateNoWindow flag for spawned processes (PowerShell, cmd.exe)"
+      ],
+      "impact": "MEDIUM - User never sees malware window; invisible operation prevents visual detection; process runs without user awareness",
+      "detection": "Monitor for GUI processes without visible windows; alert on ShowWindow(SW_HIDE) from untrusted executables; behavioral EDR detection",
+      "business_impact": "MEDIUM - Users cannot visually detect malware; extends dwell time before user-initiated investigation"
+    },
+    "runtime_api_loading": {
+      "technique": "T1129 - Shared Modules (Runtime Linking)",
+      "api": "GetProcAddress",
+      "indicators": [
+        "GetProcAddress calls to load Windows APIs dynamically at runtime",
+        "Import table shows minimal APIs; true capabilities hidden until execution",
+        "Dynamic loading of kernel32.dll, user32.dll functions"
+      ],
+      "impact": "MEDIUM - Static analysis of import table misses dynamically loaded APIs; true capabilities only visible during runtime execution or memory forensics",
+      "detection": "Behavioral EDR monitoring for GetProcAddress call sequences; memory analysis to capture loaded APIs; sandbox execution to observe runtime behavior",
+      "business_impact": "LOW-MEDIUM - Complicates static analysis; requires dynamic analysis or memory forensics for full capability assessment"
+    }
+  },
+  "capabilities": {
+    "command_and_control": {
+      "mechanisms": [
+        "WebSocket protocol with custom authentication (X-Agent-Secret header)",
+        "Registration handshake with victim profiling (machine_id, hostname, os_version, ip_address)",
+        "Heartbeat keep-alive messages",
+        "Bi-directional JSON command/response structure",
+        "Encrypted channel via TLS (wss://)"
+      ],
+      "confidence": "CONFIRMED (strings and API analysis)",
+      "impact": "CRITICAL - Complete remote control; real-time command execution; encrypted communications"
+    },
+    "remote_command_execution": {
+      "mechanisms": [
+        "PowerShell arbitrary command execution",
+        "Execution Policy bypass built-in",
+        "Hidden window PowerShell execution",
+        "Output redirection and exfiltration to C2"
+      ],
+      "confidence": "CONFIRMED (command-line strings and CAPA)",
+      "impact": "CRITICAL - Unrestricted command execution; lateral movement; credential theft; data exfiltration; ransomware deployment"
+    },
+    "credential_theft": {
+      "mechanisms": [
+        "Clipboard monitoring (Get-Clipboard repeated execution)",
+        "Password capture as users type/paste",
+        "MFA token theft (6-digit codes)",
+        "Cryptocurrency wallet address theft"
+      ],
+      "confidence": "CONFIRMED (Get-Clipboard string)",
+      "impact": "CRITICAL - Account compromise; MFA bypass; financial fraud; data breach"
+    },
+    "file_download_and_execution": {
+      "mechanisms": [
+        "WebClient.DownloadFile() API",
+        "Download to Public/Temp directories",
+        "Immediate execution via Process.Start()",
+        "Support for .exe, .dll, .scr, .bat, .ps1 payloads"
+      ],
+      "confidence": "CAPABLE (DownloadFile API present)",
+      "impact": "CRITICAL - Ransomware deployment; Cobalt Strike staging; cryptocurrency miners; additional RAT payloads"
+    },
+    "system_reconnaissance": {
+      "capabilities": [
+        "OS version detection (Environment.OSVersion)",
+        "Hostname retrieval (Environment.MachineName)",
+        "User enumeration (Environment.UserName, GetCurrent, IsInRole)",
+        "Network configuration (ipconfig /all via PowerShell)",
+        "Process enumeration (Get-Process via PowerShell)",
+        "Disk enumeration (Get-WmiObject Win32_LogicalDisk)",
+        "Firewall status (netsh advfirewall)",
+        "Privilege level detection (Administrator vs Standard User)"
+      ],
+      "confidence": "CONFIRMED (CAPA + strings)",
+      "impact": "HIGH - Victim profiling; targeted attack planning; high-value target identification; ransomware demand calculation"
+    },
+    "anti_forensics_and_evasion": {
+      "techniques": [
+        "FUD design (minimal signatures, small file size)",
+        "Hidden window execution (ShowWindow)",
+        "PowerShell Execution Policy bypass",
+        "WebSocket protocol hiding (legitimate traffic pattern)",
+        "Runtime API loading (GetProcAddress - import table obfuscation)",
+        ".NET compilation (IL obfuscation)",
+        "Low entropy (5.2171 - avoids packer detection)",
+        "Base64 encoding (obfuscation capability)"
+      ],
+      "confidence": "CONFIRMED (multiple indicators)",
+      "impact": "HIGH - Evades signature-based AV; complicates analysis; extends dwell time; requires behavioral EDR"
+    },
+    "memory_manipulation": {
+      "techniques": [
+        "VirtualProtect for RWX memory allocation",
+        "Potential shellcode execution in memory",
+        "Fileless malware execution capability"
+      ],
+      "confidence": "CAPABLE (VirtualProtect API present; not observed active)",
+      "impact": "HIGH - Fileless attack capability; evades disk-based scanning; requires memory forensics"
+    },
+    "network_capabilities": {
+      "protocols": [
+        "TCP client (System.Net.Sockets.TcpClient)",
+        "WebSocket (ws:// or wss://)",
+        "HTTP/HTTPS (WebClient for file downloads)",
+        "Encrypted TLS communications"
+      ],
+      "confidence": "CONFIRMED (CAPA + strings)",
+      "impact": "CRITICAL - C2 communications; encrypted channel; file downloads; data exfiltration"
+    },
+    "no_observed_persistence": {
+      "assessment": "No disk-based persistence mechanisms observed during analysis",
+      "mechanisms_not_found": [
+        "No registry Run keys created",
+        "No scheduled tasks created",
+        "No startup folder entries created",
+        "No service creation",
+        "No DLL hijacking or COM object abuse"
+      ],
+      "operational_model": "Network-dependent RAT - requires active C2 connection for operation; likely relies on user re-execution or alternate persistence not observed in 25-minute analysis window",
+      "impact": "MEDIUM - Simplifies remediation (process termination may be sufficient); however, unknown persistence mechanisms may exist or be created by C2 commands",
+      "note": "Lack of observed persistence distinguishes FleetAgentFUD.exe from FleetAgentAdvanced.exe (quad-persistence trojan); different operational philosophies"
+    }
+  },
+  "detection_opportunities": {
+    "high_confidence_indicators": [
+      "File hash match: SHA256 072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff",
+      "Exact file size: 17,920 bytes",
+      "PowerShell execution with -Exec Bypass or -ExecutionPolicy Bypass from AppData parent",
+      "Repeated Get-Clipboard execution (10+ times per hour)",
+      "WebSocket connection from .NET executable in AppData",
+      "X-Agent-Secret HTTP header in WebSocket handshake",
+      "Network connection to 109.230.231.37 (distribution infrastructure)",
+      "File download from AppData process to C:\\Users\\Public or C:\\Windows\\Temp",
+      "VirtualProtect RWX memory allocation from AppData .NET executable"
+    ],
+    "behavioral_patterns": [
+      "Small .NET executable (<50 KB) establishing WebSocket connection",
+      "PowerShell bypass + clipboard monitoring + network activity within 10-minute window (multi-stage correlation)",
+      "Rapid system reconnaissance commands (3+ enumeration commands within 5 minutes)",
+      "Hidden window GUI application from AppData",
+      ".NET WebClient User-Agent with WebSocket upgrade headers",
+      "Executable download → immediate execution sequence (within 30-60 seconds)",
+      "Repeated PowerShell executions from same parent process (clipboard monitoring pattern)"
+    ],
+    "forensic_artifacts": [
+      "FleetAgentFUD.exe file in Downloads, Temp, AppData, or desktop directories",
+      "PowerShell logs (EventID 4104) showing -Exec Bypass and Get-Clipboard commands",
+      "Sysmon EventID 1 (Process Creation) - powershell.exe with bypass arguments",
+      "Sysmon EventID 3 (Network Connection) - AppData executable to port 443",
+      "Sysmon EventID 11 (FileCreated) - .exe files in Public or Temp folders",
+      "Memory artifacts: WebSocket handshake headers, X-Agent-Secret values, C2 commands in process memory",
+      "Network traffic: WebSocket upgrade handshake, encrypted TLS traffic, heartbeat messages",
+      "Windows Security EventID 4688 (Process Creation) - powershell.exe with CommandLine containing 'Bypass'"
+    ],
+    "network_traffic_patterns": [
+      "HTTP 101 Switching Protocols response (WebSocket upgrade)",
+      "Connection: Upgrade header",
+      "Sec-WebSocket-Key header",
+      "X-Agent-Secret header (CUSTOM - high confidence FleetAgentFUD)",
+      "Persistent TCP connection to port 443 (no repeated beaconing)",
+      ".NET WebClient User-Agent string",
+      "Self-signed or untrusted SSL certificate (potential)",
+      "JSON message structure with 'type', 'command_id', 'cmd_type' fields"
+    ]
+  },
+  "mitre_attack_techniques": {
+    "execution": [
+      "T1059.001 - Command and Scripting Interpreter: PowerShell (CONFIRMED)",
+      "T1204.002 - User Execution: Malicious File (CONFIRMED)"
+    ],
+    "persistence": [
+      "NONE OBSERVED - Network-dependent operational model"
+    ],
+    "privilege_escalation": [
+      "T1055 - Process Injection (CAPABLE - VirtualProtect API present, not observed active)"
+    ],
+    "defense_evasion": [
+      "T1140 - Deobfuscate/Decode Files or Information (Base64 - CAPABLE)",
+      "T1027 - Obfuscated Files or Information (CONFIRMED - .NET IL, FUD design)",
+      "T1564.003 - Hide Artifacts: Hidden Window (CONFIRMED)",
+      "T1562.001 - Impair Defenses: Disable or Modify Tools (CONFIRMED - PowerShell Execution Policy Bypass)",
+      "T1055 - Process Injection (CAPABLE - not confirmed)",
+      "T1129 - Shared Modules (CAPABLE - GetProcAddress runtime linking)"
+    ],
+    "credential_access": [
+      "T1555 - Credentials from Password Stores (LIKELY - clipboard monitoring captures password manager data)"
+    ],
+    "discovery": [
+      "T1082 - System Information Discovery (CONFIRMED)",
+      "T1033 - System Owner/User Discovery (CONFIRMED)",
+      "T1087 - Account Discovery (CAPABLE)",
+      "T1083 - File and Directory Discovery (CAPABLE)"
+    ],
+    "collection": [
+      "T1115 - Clipboard Data (CONFIRMED)",
+      "T1005 - Data from Local System (LIKELY)"
+    ],
+    "command_and_control": [
+      "T1071.001 - Application Layer Protocol: Web Protocols (CONFIRMED - WebSocket)",
+      "T1573 - Encrypted Channel (LIKELY - TLS encryption)",
+      "T1001.002 - Data Obfuscation: Steganography (POSSIBLE - WebSocket protocol hiding)"
+    ],
+    "exfiltration": [
+      "T1041 - Exfiltration Over C2 Channel (LIKELY)"
+    ],
+    "impact": [
+      "T1486 - Data Encrypted for Impact (CAPABLE - file download enables ransomware deployment)"
+    ]
+  },
+  "remediation_guidance": {
+    "complexity": "LOW-MEDIUM - No observed persistence simplifies remediation; however, unknown payloads or persistence mechanisms may exist",
+    "recommended_approach": "ISOLATE + TERMINATE + CREDENTIAL ROTATION (rebuild if high-value system or long dwell time)",
+    "rationale": "Network-dependent operational model suggests process termination may be sufficient; however, clipboard theft and unknown C2 commands create credential compromise risk. Rebuild recommended for high-value systems or if dwell time exceeds 48 hours (unknown payload downloads).",
+    "immediate_actions": [
+      "ISOLATE infected system from network immediately (disconnect Ethernet, disable WiFi)",
+      "Capture memory dump for forensic analysis (preserve C2 commands, WebSocket traffic, clipboard data)",
+      "TERMINATE FleetAgentFUD.exe process via Task Manager or PowerShell Stop-Process",
+      "Scan for persistence mechanisms (registry Run keys, scheduled tasks, startup folder LNK files) - VERIFY none exist",
+      "Scan C:\\Users\\Public and C:\\Windows\\Temp for downloaded payloads (.exe, .dll, .scr files created within infection window)",
+      "Review PowerShell logs (EventID 4104) for executed commands and clipboard theft events",
+      "Identify all users who authenticated during infection window for credential rotation",
+      "Block distribution IP 109.230.231.37 at network perimeter"
+    ],
+    "process_termination_procedure": [
+      "Step 1: Network isolation FIRST (prevent C2 communication during termination)",
+      "Step 2: Identify FleetAgentFUD.exe process (Task Manager or Get-Process | Where-Object {(Get-FileHash $_.Path).Hash -eq '072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff'})",
+      "Step 3: Capture memory dump (ProcDump or Task Manager 'Create dump file')",
+      "Step 4: Terminate process: Stop-Process -Id [PID] -Force",
+      "Step 5: Delete FleetAgentFUD.exe file from disk",
+      "Step 6: Verify no persistence mechanisms exist (See verification checklist)",
+      "Step 7: Scan for downloaded payloads and remove",
+      "Step 8: 48-hour enhanced monitoring (watch for reinfection or persistence reactivation)"
+    ],
+    "verification_checklist": [
+      "Process terminated: Get-Process | Where-Object {$_.ProcessName -like '*FleetAgent*'} should return empty",
+      "File deleted: Test-Path for FleetAgentFUD.exe should return False",
+      "No persistence: Check registry Run keys (HKCU/HKLM), scheduled tasks, startup folders - should be empty",
+      "No payloads: Scan Public, Temp, AppData for suspicious recent .exe files",
+      "Network connectivity: No WebSocket connections to unknown destinations from AppData processes",
+      "PowerShell activity: No ongoing -Exec Bypass executions or Get-Clipboard commands"
+    ],
+    "credential_rotation": {
+      "priority": "CRITICAL - Mandatory action regardless of remediation approach",
+      "scope": "All users who authenticated to infected system during infection window (assume entire dwell time if unknown)",
+      "rationale": "Clipboard monitoring captures passwords, MFA tokens, VPN credentials typed by users; assume FULL credential compromise",
+      "includes": [
+        "User account passwords (Active Directory, local accounts)",
+        "Privileged account credentials (domain admin, enterprise admin, local admin if used on infected system)",
+        "Service account credentials accessible from infected system",
+        "Application passwords and API tokens",
+        "VPN credentials and certificates",
+        "MFA device re-enrollment (if TOTP codes typed on infected system)",
+        "SSH keys and certificates from user profiles",
+        "Cryptocurrency wallet passwords (if accessed during infection)",
+        "Email account passwords",
+        "Cloud service passwords (O365, AWS, Azure if accessed)"
+      ],
+      "timeline": "Within 24 hours of detection - HIGH PRIORITY"
+    },
+    "rebuild_recommended_when": [
+      "High-value system (executives, finance, IT administrators, domain controllers)",
+      "Dwell time exceeds 48 hours (unknown payload downloads likely)",
+      "Evidence of secondary payload execution (suspicious processes, file creations)",
+      "Domain-joined system with privileged access to network resources",
+      "System with access to sensitive data (PII, PHI, financial, intellectual property)",
+      "Compliance requirements mandate forensic-grade remediation (HIPAA, PCI-DSS)",
+      "Uncertainty about persistence mechanisms or downloaded payloads"
+    ],
+    "cleanup_acceptable_when": [
+      "Low-privilege standard user workstation",
+      "Infection caught within 1-4 hours (minimal dwell time)",
+      "No evidence of payload downloads (Public/Temp folders empty)",
+      "No evidence of persistence creation (registry/tasks/startup clean)",
+      "Non-critical business function",
+      "Skilled IR team available for thorough cleanup and 48-hour monitoring"
+    ],
+    "post_remediation_monitoring": {
+      "duration": "48-72 hours minimum (7 days recommended)",
+      "monitoring_points": [
+        "Daily PowerShell log review (EventID 4104) - watch for Get-Clipboard or -Exec Bypass reappearance",
+        "Network connection monitoring (Sysmon EventID 3) - watch for WebSocket connections from AppData",
+        "Process creation monitoring (Sysmon EventID 1) - watch for suspicious .NET executables",
+        "File creation monitoring (Sysmon EventID 11) - watch for .exe creation in Public/Temp",
+        "Memory dumps (weekly) - verify no malicious code in memory",
+        "EDR behavioral alerts - watch for clipboard monitoring or PowerShell bypass patterns"
+      ]
+    }
+  },
+  "threat_actor_assessment": {
+    "family": "FleetAgentFUD (custom development - UNKNOWN attribution)",
+    "family_confidence": "HIGH (95%) - Unique code, no matches to known public RAT families",
+    "attribution_basis": "FUD branding indicates commercial malware-as-a-service; professional development quality; WebSocket C2 sophistication; clipboard theft focus",
+    "threat_actor_type": "Organized cybercrime / Commercial MaaS (Malware-as-a-Service) provider / Access broker",
+    "sophistication": "HIGH - Professional development, FUD evasion optimization, WebSocket protocol implementation",
+    "motivation": "Financial gain via access brokering, credential theft, ransomware deployment, cryptocurrency mining",
+    "targeting": "Opportunistic (broad distribution via open directory); likely MaaS model serving multiple threat actor clients",
+    "historical_context": "Open directory 109.230.231.37 serves multiple malware families (PoetRAT, NjRAT, FleetAgentAdvanced.exe, FleetAgentFUD.exe), suggesting centralized distribution infrastructure for access brokering operations",
+    "infrastructure_assessment": "Professional malware distribution operation; multiple families indicate MaaS platform or access broker serving diverse threat actor clients",
+    "relationship_to_fleetagentadvanced": "Same distribution infrastructure but DIFFERENT operational philosophy - FleetAgentAdvanced.exe focuses on long-term persistence; FleetAgentFUD.exe focuses on immediate operational access with detection evasion"
+  },
+  "response_priorities": {
+    "immediate_0_4_hours": [
+      "Isolate infected systems from network (physical disconnection preferred)",
+      "Block distribution IP 109.230.231.37 at network perimeter (firewall, IPS)",
+      "Alert leadership (CISO/IT Director) of confirmed HIGH-severity RAT infection with credential theft",
+      "Preserve forensic evidence: memory dumps, PowerShell logs, network flow logs",
+      "Deploy IOC hunt across enterprise: file hash, PowerShell bypass events, clipboard monitoring, WebSocket connections",
+      "Initiate credential impact assessment (identify users who authenticated during infection window)"
+    ],
+    "short_term_4_24_hours": [
+      "Execute enterprise-wide threat hunting for FleetAgentFUD IOCs using provided PowerShell scripts and Sigma rules",
+      "Review PowerShell logs (EventID 4104) for Get-Clipboard executions and -Exec Bypass commands",
+      "Review network logs for WebSocket connections from AppData executables and connections to 109.230.231.37",
+      "Forensic analysis of memory dumps to extract C2 commands, clipboard data, WebSocket traffic",
+      "Begin credential rotation for confirmed infected systems (user accounts, service accounts)",
+      "Deploy detection rules: YARA signatures to EDR, Sigma rules to SIEM, PowerShell hunting scripts scheduled",
+      "Determine infection dwell time and scope (number of systems, user accounts affected)",
+      "Assess clipboard theft impact (passwords, MFA tokens, sensitive data captured)"
+    ],
+    "medium_term_1_7_days": [
+      "Complete process termination + verification OR system rebuild (rebuild strongly recommended for high-value systems)",
+      "Finish mandatory credential rotation for all affected users and accessible service accounts",
+      "Deploy enhanced monitoring: EDR rules for PowerShell bypass, clipboard monitoring, WebSocket patterns",
+      "Conduct lessons learned session with IT/Security teams (root cause analysis, control gap assessment)",
+      "Update incident response procedures for FUD malware and WebSocket C2 detection",
+      "Implement PowerShell Constrained Language Mode and enhanced logging (Module + Script Block + Transcription)",
+      "Review and enhance security awareness training (phishing resistance, suspicious file identification, clipboard security)"
+    ],
+    "long_term_7_30_days": [
+      "48-72 hour enhanced monitoring period: daily PowerShell log review, network anomaly detection, process monitoring",
+      "Threat intelligence integration: monitor for new FleetAgentFUD variants, related infrastructure (109.230.231.37 peers)",
+      "Control enhancements: Deploy TLS/SSL inspection for WebSocket detection, Application Whitelisting (AppLocker), EDR behavioral detection",
+      "Penetration testing / purple team exercise simulating FUD malware and WebSocket C2 to validate detection coverage",
+      "Quarterly review of PowerShell logs and network traffic for FUD malware indicators"
+    ]
+  },
+  "timeline": {
+    "discovery_date": "2026-01-04T17:20:18Z",
+    "analysis_date": "2026-01-05T20:01:50Z",
+    "report_date": "2026-01-12T00:00:00Z",
+    "last_updated": "2026-01-12T00:00:00Z"
+  },
+  "analyst": "Threat Intelligence Team",
+  "report_version": "1.0",
+  "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+}

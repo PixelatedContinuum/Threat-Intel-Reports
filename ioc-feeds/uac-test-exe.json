@@ -1,0 +1,364 @@
+{
+  "campaign": "uac_test.exe (UAC Bypass PoC) - Open Directory 109.230.231.37",
+  "description": "Comprehensive IOCs for uac_test.exe, a security research and penetration testing tool designed to demonstrate User Account Control (UAC) bypass techniques on Windows systems. This is NOT weaponized malware—it lacks C2 infrastructure, persistence mechanisms, and malicious payloads. The tool implements two well-documented UAC bypass methods: CMSTPLUA COM interface abuse and Fodhelper registry hijacking. Discovered on open directory at IP 109.230.231.37 alongside weaponized RAT variants.",
+  "severity": "MEDIUM",
+  "confidence_level": "High",
+  "tool_classification": "Security Research Tool / UAC Bypass Proof-of-Concept",
+  "file_hashes": {
+    "uac_test_exe": {
+      "sha256": "18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760",
+      "sha1": "08feb675d0553f98007c52b7658a725dee22d696",
+      "md5": "36191c81f6b9fa40dceaa4700ff86800",
+      "size": "285184",
+      "type": "PE32+ executable (console) x86-64, Rust-compiled",
+      "original_filename": "uac_test.exe",
+      "classification": "UAC Bypass PoC / Security Research Tool",
+      "malicious": false,
+      "policy_violation_risk": "HIGH (unauthorized security tool usage)",
+      "yara_signatures": [
+        "UAC_Test_PoC_Comprehensive",
+        "Generic_UAC_Bypass_Behavior",
+        "Rust_Compiled_UAC_Bypass"
+      ]
+    }
+  },
+  "network_indicators": {
+    "distribution_infrastructure": {
+      "ip": "109.230.231.37",
+      "description": "Confirmed malware distribution point - open directory serving multiple RAT variants (agent.exe/PoetRAT, FleetAgent, XWorm) and UAC bypass tools",
+      "confidence": "CONFIRMED",
+      "threat_type": "Malware distribution / Security tool hosting",
+      "action": "BLOCK at network perimeter immediately",
+      "context": "This IP hosts an open directory containing both weaponized malware and security research tools; presence of uac_test.exe alongside RAT variants suggests penetration testing infrastructure compromise or threat actor testing/development activity"
+    },
+    "c2_infrastructure": {
+      "status": "NOT APPLICABLE",
+      "description": "uac_test.exe is a local UAC bypass tool with NO network communication capabilities. No C2 infrastructure, no data exfiltration, no beaconing behavior.",
+      "expected_behavior": "Tool operates entirely locally; no network traffic generated during execution"
+    }
+  },
+  "persistence_indicators": {
+    "status": "NONE",
+    "description": "uac_test.exe does NOT implement any persistence mechanisms. Analysis confirmed zero registry Run keys, zero scheduled tasks, zero services, zero startup folder modifications. This is a key differentiator from weaponized malware.",
+    "autoruns_analysis": {
+      "baseline_entries": 1556,
+      "new_entries": 0,
+      "removed_entries": 0,
+      "confidence": "CONFIRMED"
+    }
+  },
+  "behavioral_indicators": {
+    "uac_bypass_cmstplua": {
+      "technique": "T1548.002 - Abuse Elevation Control Mechanism: Bypass User Account Control",
+      "method": "CMSTPLUA COM Interface Abuse",
+      "clsid": "{6EDD6D74-C007-4E75-B76A-E5740995E24C}",
+      "interface": "ICMLuaUtil",
+      "elevation_moniker": "Elevation:Administrator!new:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}",
+      "target_os": "Windows 7, 8, 8.1, 10 (patched in some Windows 10 builds)",
+      "effectiveness": "LOW on fully-patched Windows 10/11 (technique publicly known since 2016, mitigations deployed)",
+      "indicators": [
+        "COM object instantiation of CLSID {6EDD6D74-C007-4E75-B76A-E5740995E24C}",
+        "Process spawning from DllHost.exe without UAC prompt",
+        "Elevation from medium integrity to high integrity",
+        "No corresponding UAC consent event (Event ID 4103)"
+      ],
+      "confidence": "CONFIRMED (code present via static analysis, not executed in sandbox due to existing admin privileges)"
+    },
+    "uac_bypass_fodhelper": {
+      "technique": "T1548.002 - Abuse Elevation Control Mechanism: Bypass User Account Control",
+      "method": "Fodhelper Registry Hijacking",
+      "registry_path": "HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command",
+      "target_binary": "C:\\Windows\\System32\\fodhelper.exe",
+      "privileges_required": "User-level (HKCU access only)",
+      "target_os": "Windows 10, 11 (effective on current builds as of 2026)",
+      "effectiveness": "HIGH (70-85% success rate on current Windows 10/11 systems)",
+      "indicators": [
+        "Registry key creation under HKCU\\Software\\Classes\\ms-settings\\",
+        "Unexpected process spawning from fodhelper.exe",
+        "Process elevation without UAC prompt",
+        "Registry value DelegateExecute set to empty string"
+      ],
+      "confidence": "CONFIRMED (code present via static analysis, not executed in sandbox)"
+    },
+    "privilege_detection": {
+      "technique": "T1033 - System Owner/User Discovery",
+      "method": "Token membership check via CheckTokenMembership() API",
+      "apis": [
+        "AllocateAndInitializeSid",
+        "CheckTokenMembership",
+        "FreeSid"
+      ],
+      "purpose": "Determines if process already has administrative privileges before attempting UAC bypass",
+      "significance": "This conditional logic is DEFINITIVE EVIDENCE that uac_test.exe is a proof-of-concept tool rather than weaponized malware. Malware would not skip bypass logic if already elevated.",
+      "confidence": "CONFIRMED (executed in sandbox analysis)"
+    },
+    "educational_design": {
+      "characteristic": "User-facing status messages and transparent operation",
+      "indicators": [
+        "Status messages: '[+] Already running as administrator!'",
+        "Status messages: '[+] No UAC bypass needed.'",
+        "Status messages: 'UAC Bypass Test - Rust Implementation'",
+        "Status messages: '[1] Testing COM-based UAC Bypass (CMSTPLUA)...'",
+        "Status messages: '[2] Testing Registry-based UAC Bypass (fodhelper)...'",
+        "Clean exit after privilege check (no malicious payload execution)"
+      ],
+      "impact": "Confirms tool's educational and demonstration purpose; malware would not include transparent logging",
+      "confidence": "CONFIRMED"
+    },
+    "rust_compilation": {
+      "language": "Rust",
+      "compiler": "rustc (LLVM-based toolchain)",
+      "compiler_version": "rustc 1.x (exact version: unknown)",
+      "indicators": [
+        "Library paths: library\\alloc\\src\\string.rs",
+        "Library paths: library\\core\\src\\slice\\memchr.rs",
+        "Library paths: /rustc/6b00bc3880198600130e1cf62b8f8a93494488cc\\library\\...",
+        "Panic handler strings: 'library\\std\\src\\panicking.rs'",
+        "Runtime functions: Rust runtime initialization, panic abort handling"
+      ],
+      "impact": "Rust compilation provides some inherent obfuscation (larger binary size, complex runtime), but is increasingly popular with security researchers for memory safety",
+      "detection_difficulty": "MODERATE - Higher than C/C++ but lower than packed/obfuscated malware",
+      "confidence": "CONFIRMED (FLOSS language detection + static analysis)"
+    },
+    "anti_analysis": {
+      "techniques": [
+        "SEH (Structured Exception Handling) - Standard Rust exception handling",
+        "VirtualProtect API usage - Memory page permission modification (standard for Rust)"
+      ],
+      "sophistication": "LOW - Minimal anti-analysis beyond standard compiler output",
+      "missing_techniques": [
+        "No VM detection",
+        "No sandbox evasion (no sleep delays, user interaction requirements)",
+        "No anti-disassembly tricks",
+        "No code packing/encryption",
+        "No string obfuscation",
+        "No advanced debugger detection"
+      ],
+      "impact": "Absence of sophisticated anti-analysis techniques CONFIRMS tool's educational purpose",
+      "confidence": "CONFIRMED"
+    }
+  },
+  "capabilities": {
+    "uac_bypass": {
+      "technique": "T1548.002",
+      "methods": [
+        "CMSTPLUA COM Interface",
+        "Fodhelper Registry Hijack"
+      ],
+      "confidence": "CONFIRMED (code present)",
+      "impact": "MEDIUM - Can escalate to administrative privileges if UAC bypass successful",
+      "actual_execution": "NOT OBSERVED (tool detected existing admin privileges and exited without attempting bypass)"
+    },
+    "privilege_detection": {
+      "technique": "T1033",
+      "confidence": "CONFIRMED (executed in analysis)",
+      "impact": "LOW - Information gathering only"
+    },
+    "no_malicious_capabilities": {
+      "persistence": "NONE",
+      "c2_communication": "NONE",
+      "data_exfiltration": "NONE",
+      "keylogging": "NONE",
+      "credential_theft": "NONE",
+      "lateral_movement": "NONE",
+      "destructive_actions": "NONE",
+      "significance": "Complete absence of malicious post-exploitation capabilities confirms this is a demonstration tool, not weaponized malware"
+    }
+  },
+  "detection_opportunities": {
+    "high_confidence_indicators": [
+      "File hash match: SHA-256 18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760",
+      "File hash match: MD5 36191c81f6b9fa40dceaa4700ff86800",
+      "File hash match: SHA-1 08feb675d0553f98007c52b7658a725dee22d696",
+      "Registry creation: HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command",
+      "COM object instantiation: CLSID {6EDD6D74-C007-4E75-B76A-E5740995E24C}",
+      "Network connection to distribution IP: 109.230.231.37"
+    ],
+    "behavioral_patterns": [
+      "Rust executable making privilege elevation checks via CheckTokenMembership()",
+      "Process creating Fodhelper registry hijack keys",
+      "Process making COM elevation moniker calls (Elevation:Administrator!new:...)",
+      "Process spawning from fodhelper.exe (unexpected child processes)",
+      "Process spawning from DllHost.exe with high integrity level (no UAC consent)"
+    ],
+    "forensic_artifacts": [
+      "Prefetch file: C:\\Windows\\Prefetch\\uac_test.exe-*.pf",
+      "Event ID 4688: Process creation events",
+      "Event ID 4657: Registry modification events (if Fodhelper technique used)",
+      "Event ID 4672: Token elevation events (if bypass successful)",
+      "Event ID 4103: UAC consent events (absence indicates bypass)"
+    ]
+  },
+  "mitre_attack_techniques": {
+    "privilege_escalation": [
+      "T1548.002 - Abuse Elevation Control Mechanism: Bypass User Account Control"
+    ],
+    "defense_evasion": [
+      "T1622 - Debugger Evasion (SEH-based, minimal)"
+    ],
+    "discovery": [
+      "T1033 - System Owner/User Discovery",
+      "T1082 - System Information Discovery"
+    ],
+    "execution": [
+      "T1129 - Shared Modules (dynamic API loading via GetProcAddress)"
+    ],
+    "techniques_not_observed": {
+      "persistence": "NONE",
+      "command_and_control": "NONE",
+      "collection": "NONE",
+      "exfiltration": "NONE",
+      "impact": "NONE",
+      "lateral_movement": "NONE",
+      "significance": "Minimal ATT&CK coverage (4 techniques total vs. 15-25 for typical RAT) confirms single-purpose demonstration tool"
+    }
+  },
+  "remediation_guidance": {
+    "complexity": "MINIMAL - Simple file deletion sufficient",
+    "recommended_approach": "FILE DELETION",
+    "rationale": "This is a proof-of-concept tool without persistence, C2 infrastructure, or data exfiltration capabilities. No system rebuild required. Focus on investigating authorization status and hardening UAC configurations rather than extensive forensic analysis.",
+    "cleanup_steps": [
+      "Delete uac_test.exe from system: Remove-Item -Path 'C:\\Path\\To\\uac_test.exe' -Force",
+      "Verify no Fodhelper registry keys exist: Get-Item 'HKCU:\\Software\\Classes\\ms-settings\\shell\\open\\command' -ErrorAction SilentlyContinue",
+      "Clear prefetch artifacts (optional): Remove-Item 'C:\\Windows\\Prefetch\\uac_test.exe-*.pf' -Force",
+      "Document incident and determine authorization status",
+      "No credential rotation required (tool has no keylogging or credential theft capabilities)"
+    ],
+    "investigation_priorities": [
+      "Determine if execution was authorized security testing",
+      "Identify user who executed tool",
+      "Review user activity for additional security tools or malware",
+      "Verify UAC configuration meets security baselines",
+      "Check for registry keys indicating Fodhelper bypass was attempted"
+    ],
+    "no_rebuild_justification": [
+      "Zero persistence mechanisms (Autoruns: 0 new entries, 0 removed entries)",
+      "Zero network communication (no C2 infrastructure)",
+      "Zero data exfiltration capabilities",
+      "Clean process termination (Volatility: no code injection, no zombie processes)",
+      "No kernel-level components or drivers"
+    ]
+  },
+  "threat_actor_assessment": {
+    "tool_type": "Security Research / Penetration Testing Tool",
+    "classification_confidence": "HIGH (95%)",
+    "attribution_basis": [
+      "Educational logging messages indicate demonstration purpose",
+      "Conditional bypass logic (skips if already admin) not found in malware",
+      "No malicious payload or post-exploitation capabilities",
+      "Rust development (popular with security researchers)",
+      "Transparent naming (uac_test.exe clearly indicates purpose)"
+    ],
+    "likely_scenarios": [
+      {
+        "scenario": "Authorized Security Testing",
+        "likelihood": "HIGH (60%)",
+        "description": "IT security team or authorized penetration testers using PoC for UAC testing"
+      },
+      {
+        "scenario": "Unauthorized Research Activity",
+        "likelihood": "MEDIUM (30%)",
+        "description": "Curious employee or contractor experimenting with security tools without approval"
+      },
+      {
+        "scenario": "Downloaded from Open Directory",
+        "likelihood": "MEDIUM (25%)",
+        "description": "User downloaded from IP 109.230.231.37 alongside other samples for testing/curiosity"
+      },
+      {
+        "scenario": "Part of Malware Toolkit",
+        "likelihood": "LOW (10%)",
+        "description": "Downloaded alongside actual malware as part of attacker toolkit (requires investigation of other files)"
+      }
+    ],
+    "threat_level": "LOW - Proof-of-concept tool, not weaponized malware",
+    "recommended_response": "Investigate authorization status first before attributing malicious intent"
+  },
+  "response_priorities": {
+    "immediate_0-1_hours": [
+      "Verify authorization with IT security team and penetration testing coordinators",
+      "Identify user context (who executed tool, from which system)",
+      "Preserve forensic artifacts if unauthorized execution confirmed (Event Logs, Prefetch)",
+      "Check for additional security tools or malware on same system"
+    ],
+    "short_term_1-24_hours": [
+      "Delete tool from system if unauthorized",
+      "Review UAC configuration on affected system and across enterprise",
+      "Document incident (authorization status, user intent, findings)",
+      "Deploy detection signatures for UAC bypass techniques",
+      "No credential rotation required (tool has no credential theft capabilities)"
+    ],
+    "medium_term_1-7_days": [
+      "Implement UAC hardening per CIS Benchmarks",
+      "Deploy application control policies to prevent unauthorized PoC tool execution",
+      "Update acceptable use policies to clarify security tool usage requirements",
+      "Conduct user awareness training on authorized vs. unauthorized security testing",
+      "Block distribution infrastructure IP 109.230.231.37 at network perimeter"
+    ]
+  },
+  "sandbox_analysis_summary": {
+    "environment": "Windows 10 x64 Sandbox VM (isolated, no network access)",
+    "execution_duration": "< 1 second (immediate exit after privilege check)",
+    "baseline_autoruns_entries": 1556,
+    "post_execution_autoruns_entries": 1556,
+    "new_persistence_mechanisms": 0,
+    "removed_persistence_mechanisms": 0,
+    "registry_modifications": 0,
+    "network_connections": 0,
+    "child_processes_spawned": 0,
+    "volatility_plugins_successful": "5/5 (pslist, pstree, netscan, malfind, cmdline)",
+    "code_injection_detected": false,
+    "suspicious_memory_regions": 0,
+    "key_observations": [
+      "Tool detected existing administrative privileges via CheckTokenMembership() API",
+      "Tool printed '[+] Already running as administrator!' and '[+] No UAC bypass needed.'",
+      "Tool exited cleanly with status code 0 (success)",
+      "No UAC bypass techniques were executed (CMSTPLUA or Fodhelper)",
+      "Zero malicious behavior observed during 24-minute monitoring window",
+      "This behavior confirms tool's educational/PoC design rather than weaponized malware"
+    ],
+    "why_bypass_not_attempted": "The tool's internal logic includes a privilege check that executes BEFORE any bypass attempt. The analysis environment (Windows 10 sandbox VM) was configured with administrative privileges for comprehensive malware analysis. When the tool detected existing admin rights, it skipped the bypass logic and exited immediately. This is expected behavior for a proof-of-concept testing tool."
+  },
+  "context_within_investigation": {
+    "campaign": "Open Directory 109.230.231.37 Investigation",
+    "total_samples": 6,
+    "uac_test_position": "6 of 6 (FINAL SAMPLE)",
+    "related_samples": [
+      {
+        "filename": "agent.exe",
+        "classification": "PoetRAT (MODERATE confidence)",
+        "severity": "CRITICAL",
+        "capabilities": "Full-featured RAT with keylogging, PowerShell execution, RDP access"
+      },
+      {
+        "filename": "agent_xworm.exe",
+        "classification": "XWorm RAT",
+        "severity": "CRITICAL",
+        "capabilities": "Remote access, file management, process manipulation, credential theft"
+      },
+      {
+        "filename": "agent_xworm_v2.exe",
+        "classification": "XWorm RAT (updated variant)",
+        "severity": "CRITICAL",
+        "capabilities": "Enhanced XWorm with additional evasion and C2 resilience"
+      },
+      {
+        "filename": "FleetAgentAdvanced.exe",
+        "classification": "FleetAgent RAT",
+        "severity": "CRITICAL",
+        "capabilities": "Advanced RAT with comprehensive surveillance and control"
+      },
+      {
+        "filename": "FleetAgentFUD.exe",
+        "classification": "FleetAgent RAT (FUD variant)",
+        "severity": "CRITICAL",
+        "capabilities": "Fully Undetectable variant with enhanced anti-analysis"
+      }
+    ],
+    "significance": "uac_test.exe is the ONLY non-malicious sample in the open directory investigation. Its presence alongside weaponized RAT variants suggests either: (1) penetration testing infrastructure compromise, (2) threat actor testing/development environment, or (3) security researcher's sample collection. The fact that this is a legitimate UAC bypass PoC (not weaponized malware) is a key differentiator from the other 5 samples."
+  },
+  "timestamp": "2026-01-12T00:00:00Z",
+  "analyst": "Threat Intelligence Team",
+  "report_version": "1.0",
+  "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+}

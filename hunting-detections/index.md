@@ -12,6 +12,12 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 ---
 
 ## Available Detections
+- [Arsenal-237: agent.exe (PoetRAT)](agent-exe.md)
+- [Arsenal-237: agent_xworm.exe (XWorm RAT v6)](agent-xworm-exe.md)
+- [Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)](agent-xworm-v2-exe.md)
+- [Arsenal-237: FleetAgentAdvanced.exe](fleetagentadvanced-exe.md)
+- [Arsenal-237: FleetAgentFUD.exe](fleetagentfud-exe.md)
+- [Arsenal-237: uac_test.exe](uac-test-exe.md)
 - [Detection Rules - Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm](dual-rat-analysis.md)
 - [Detection Rules - PULSAR RAT (server.exe)](PULSAR-RAT.md)
 - [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou](Hybrid-Loader-Stealer-Sogou.md)

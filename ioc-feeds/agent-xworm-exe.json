@@ -1,0 +1,394 @@
+{
+  "campaign": "agent_xworm.exe (XWorm RAT) - Open Directory 109.230.231.37",
+  "description": "Comprehensive IOCs for agent_xworm.exe, a confirmed XWorm RAT variant discovered on open directory at 109.230.231.37. XWorm is a professional-grade .NET Remote Access Trojan operating as Malware-as-a-Service (MaaS) with global scale (18,459 devices compromised in single campaign). This sample features hardcoded C2 infrastructure, Base64-encoded communications, PowerShell execution capabilities, and modular plugin architecture. XWorm campaigns frequently deploy secondary payloads (78% multi-malware rate) including AsyncRAT and LockBit Black ransomware.",
+  "severity": "CRITICAL",
+  "confidence_level": "High",
+  "malware_family": "XWorm RAT",
+  "family_confidence": "CONFIRMED (95%)",
+  "version": "Likely v5.x or early v6.x",
+  "discovery_date": "2026-01-05",
+  "report_date": "2026-01-12",
+  "file_hashes": {
+    "agent_xworm_exe": {
+      "sha256": "0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc",
+      "sha1": "0102782950619820bbcd60efca256c907403cfb0",
+      "md5": "9d963f85812fd02e382a48c41fc0387e",
+      "size": "16384",
+      "type": "PE32 executable (console) Intel 80386, .NET assembly",
+      "original_filename": "agent_xworm.exe",
+      "framework": ".NET Framework v4.0.30319",
+      "family": "XWorm RAT",
+      "yara_signatures": [
+        "Agent_Xworm_Specific_Hash",
+        "XWorm_RAT_Generic",
+        "XWorm_PowerShell_Recon_Commands"
+      ]
+    }
+  },
+  "network_indicators": {
+    "c2_infrastructure": {
+      "ip": "109.230.231.37",
+      "description": "Hardcoded C2 server IP - confirmed malware distribution point (open directory)",
+      "confidence": "CONFIRMED",
+      "threat_type": "Command and Control + Malware Distribution",
+      "action": "BLOCK at network perimeter immediately - CRITICAL",
+      "status": "Offline during analysis (common XWorm evasion)",
+      "protocol": "TCP",
+      "authentication_secret": "AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d"
+    },
+    "c2_characteristics": {
+      "heartbeat_mechanism": "Periodic keepalive beacons (interval defined in HEARTBEAT_MS)",
+      "reconnection_logic": "Automatic retry after connection failures (RECONNECT_MS delay)",
+      "encoding": "Base64 for command and data transmission",
+      "authentication": "Shared secret validation (AgentSec_...)",
+      "traffic_pattern": "Bi-directional TCP with frame-based protocol (BuildFrame function)"
+    }
+  },
+  "behavioral_indicators": {
+    "hidden_console": {
+      "technique": "T1564.003 - Hide Artifacts: Hidden Window",
+      "indicators": [
+        "ShowWindow API called with SW_HIDE (0)",
+        "GetConsoleWindow API usage",
+        "Process executes without visible window"
+      ],
+      "impact": "User has no visual indication of malware execution",
+      "detection": "Monitor for processes with hidden windows creating network connections"
+    },
+    "powershell_execution": {
+      "technique": "T1059.001 - Command and Scripting Interpreter: PowerShell",
+      "embedded_commands": [
+        "-NoP -C Get-Process|Sort CPU -Desc|Select -First 20 Name,Id,CPU,WS|FT",
+        "-NoP -C Get-Service|?{$_.Status -eq 'Running'}|Select Name,Status,StartType|FT",
+        "-NoP -C Get-WmiObject Win32_ComputerSystem|Select Name,PartOfDomain,Domain,DomainRole"
+      ],
+      "impact": "CRITICAL - Full PowerShell execution capability enables unlimited post-exploitation",
+      "detection": "Enable PowerShell Script Block Logging (Event ID 4104)",
+      "mitigation": "Deploy Constrained Language Mode where full PowerShell not required"
+    },
+    "base64_encoding": {
+      "technique": "T1027 - Obfuscated Files or Information",
+      "indicators": [
+        "ToBase64String API usage for network traffic",
+        "FromBase64String for command decoding"
+      ],
+      "impact": "Obfuscates C2 communications from simple network inspection",
+      "detection": "Base64-aware IDS/IPS rules, DPI appliances"
+    },
+    "dotnet_compilation": {
+      "characteristic": ".NET Framework v4.0.30319 (Microsoft Visual Studio)",
+      "indicators": [
+        "mscorlib references",
+        "System.Net.Sockets usage",
+        "System.Diagnostics.Process spawning",
+        "System.Security.Cryptography libraries"
+      ],
+      "impact": "Inherent complexity in reverse engineering, easy recompilation for signature evasion",
+      "detection": "Monitor .NET processes from user-writable directories with network activity"
+    },
+    "machine_fingerprinting": {
+      "technique": "Unique victim identification",
+      "implementation": "GetMachineId() - MD5 hash of system identifiers (hostname, username, hardware)",
+      "purpose": "Track individual victims, prevent duplicate infections in C2 panel",
+      "detection": "Monitor for MD5 hashing operations combined with system enumeration"
+    },
+    "xworm_plugin_system": {
+      "architecture": "In-memory DLL loading via .NET reflection (Assembly.Load)",
+      "capabilities": [
+        "Keylogger plugin (keyboard hooks for credential theft)",
+        "Screenshot plugin (desktop capture)",
+        "Webcam plugin (camera surveillance)",
+        "File exfiltration plugin (recursive directory scanning)",
+        "Crypto miner plugin (Monero/Bitcoin mining)"
+      ],
+      "impact": "Modular capability extension without disk writes (evades file-based detection)",
+      "detection": "Monitor for Assembly.Load from byte arrays, unsigned DLL loads into .NET processes"
+    }
+  },
+  "capabilities": {
+    "system_reconnaissance": {
+      "techniques": ["T1082", "T1033", "T1087", "T1016"],
+      "confidence": "CONFIRMED (CAPA analysis)",
+      "information_collected": [
+        "OS version, architecture, .NET runtime (T1082)",
+        "Hostname, machine ID via MD5 fingerprinting (T1082)",
+        "Username, administrator privileges via IsAdmin() (T1033)",
+        "Local IP address via GetLocalIP() (T1016)",
+        "Domain membership, domain role via WMI (T1016)",
+        "Running processes via Get-Process (T1057)",
+        "Running services via Get-Service (T1007)"
+      ],
+      "impact": "Enables targeted post-exploitation based on victim value (domain + admin = high priority)",
+      "detection": "Rapid sequential WMI queries, domain enumeration, privilege checking from unusual processes"
+    },
+    "file_download": {
+      "technique": "T1105 - Ingress Tool Transfer",
+      "confidence": "CONFIRMED (CAPA - WebClient.DownloadFile)",
+      "implementation": "System.Net.WebClient for HTTP/HTTPS file downloads",
+      "impact": "Multi-stage attack deployment - 78% of XWorm campaigns deliver secondary malware",
+      "common_payloads": [
+        "AsyncRAT (credential harvesting, lateral movement)",
+        "LockBit Black ransomware (encryption + exfiltration)",
+        "RedLine Stealer, Raccoon Stealer (infostealer deployment)"
+      ],
+      "detection": "Monitor HTTP/HTTPS downloads from .NET processes to suspicious locations (AppData, Temp)"
+    },
+    "command_execution": {
+      "technique": "T1059.001 - PowerShell Execution",
+      "confidence": "CONFIRMED (embedded templates + CAPA)",
+      "implementation": "ProcessStartInfo with UseShellExecute=false, RedirectStandardOutput=true, CreateNoWindow=true",
+      "impact": "CRITICAL - Unlimited capability without additional uploads (mimikatz, lateral movement, persistence)",
+      "detection": "PowerShell spawned from non-administrative processes, -NoP flag usage, hidden WindowStyle"
+    },
+    "credential_access": {
+      "technique": "T1056.001 - Input Capture: Keylogging",
+      "confidence": "HIGHLY LIKELY (XWorm plugin capability)",
+      "implementation": "Modular keylogger plugin via in-memory DLL loading",
+      "impact": "CRITICAL - All credentials entered during infection window must be rotated",
+      "mitigation": "MANDATORY credential rotation for all users on compromised systems"
+    },
+    "persistence": {
+      "techniques": ["T1547.001", "T1053.005"],
+      "confidence": "HIGHLY LIKELY (XWorm family capability)",
+      "mechanisms": [
+        "Registry Run keys (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run)",
+        "Startup folder entries",
+        "Scheduled tasks",
+        "WMI event subscriptions (PowerShell-based)"
+      ],
+      "impact": "Malware survives system reboots and user logoffs",
+      "detection": "Monitor for startup folder modifications, registry Run key creation, scheduled task additions"
+    },
+    "defense_evasion": {
+      "techniques": ["T1564.003", "T1027", "T1562.001"],
+      "confirmed": [
+        "Hidden console window (ShowWindow API)",
+        "Base64 encoding for C2 traffic"
+      ],
+      "xworm_v6_advanced": [
+        "AMSI bypass (disables PowerShell script inspection)",
+        "ETW tampering (prevents Script Block Logging)",
+        "Process injection",
+        "DLL side-loading"
+      ],
+      "impact": "Advanced variants evade PowerShell logging and runtime malware scanning",
+      "detection": "AMSI and ETW integrity monitoring, behavioral EDR with .NET process analysis"
+    }
+  },
+  "mitre_attack_techniques": {
+    "execution": [
+      "T1204.002 - User Execution: Malicious File",
+      "T1059.001 - Command and Scripting Interpreter: PowerShell"
+    ],
+    "persistence": [
+      "T1547.001 - Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "T1053.005 - Scheduled Task/Job: Scheduled Task"
+    ],
+    "defense_evasion": [
+      "T1564.003 - Hide Artifacts: Hidden Window",
+      "T1027 - Obfuscated Files or Information",
+      "T1562.001 - Impair Defenses: Disable or Modify Tools (AMSI/ETW bypass in v6)"
+    ],
+    "credential_access": [
+      "T1056.001 - Input Capture: Keylogging"
+    ],
+    "discovery": [
+      "T1082 - System Information Discovery",
+      "T1033 - System Owner/User Discovery",
+      "T1087 - Account Discovery",
+      "T1083 - File and Directory Discovery",
+      "T1057 - Process Discovery",
+      "T1007 - System Service Discovery",
+      "T1016 - System Network Configuration Discovery"
+    ],
+    "collection": [
+      "T1005 - Data from Local System",
+      "T1113 - Screen Capture (plugin)",
+      "T1125 - Video Capture (plugin)"
+    ],
+    "command_and_control": [
+      "T1071.001 - Application Layer Protocol: Web Protocols",
+      "T1132.001 - Data Encoding: Standard Encoding",
+      "T1573 - Encrypted Channel",
+      "T1105 - Ingress Tool Transfer"
+    ],
+    "exfiltration": [
+      "T1041 - Exfiltration Over C2 Channel"
+    ],
+    "impact": [
+      "T1486 - Data Encrypted for Impact (secondary payload - LockBit)"
+    ]
+  },
+  "detection_opportunities": {
+    "high_confidence_indicators": [
+      "File hash match: SHA256 0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc",
+      "Network connection to 109.230.231.37",
+      "Authentication secret 'AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d' in memory/network",
+      "Embedded PowerShell commands: -NoP -C Get-Process|Sort CPU",
+      "Embedded PowerShell commands: -NoP -C Get-Service",
+      "Embedded PowerShell commands: -NoP -C Get-WmiObject Win32_ComputerSystem"
+    ],
+    "behavioral_patterns": [
+      ".NET process from AppData/Temp with hidden window + network connection",
+      "PowerShell spawned by .NET executable with -NoP flag from user directory",
+      "Base64-encoded TCP traffic to non-standard ports from .NET process",
+      "Rapid sequential WMI queries (OS, processes, services, domain) from single process",
+      "WebClient.DownloadFile API calls from non-browser .NET process",
+      "Assembly.Load from byte arrays (in-memory plugin loading)",
+      "MD5 hashing combined with system enumeration (machine fingerprinting)"
+    ],
+    "forensic_artifacts": [
+      "Process creation events for .NET executables from user-writable directories",
+      "PowerShell Script Block Logging (Event ID 4104) showing reconnaissance commands",
+      "Network connections to 109.230.231.37 in firewall/proxy logs",
+      "Registry Run key modifications (if persistence deployed)",
+      "Scheduled task creation events (if persistence deployed)",
+      "Memory dumps containing 'AgentSec_' authentication strings",
+      "File system: agent_xworm.exe in AppData, Temp, or Downloads"
+    ]
+  },
+  "secondary_malware_risk": {
+    "multi_malware_campaigns": "78% of XWorm campaigns deliver additional malware",
+    "common_secondary_payloads": {
+      "rats": {
+        "percentage": "60%+",
+        "families": ["AsyncRAT", "QuasarRAT", "DcRAT", "NjRAT"]
+      },
+      "ransomware": {
+        "percentage": "25%",
+        "families": ["LockBit Black", "Conti", "Hive"]
+      },
+      "infostealers": {
+        "percentage": "15%",
+        "families": ["RedLine Stealer", "Raccoon Stealer", "Vidar"]
+      }
+    },
+    "typical_attack_chain": [
+      "XWorm RAT (initial access, 16KB lightweight payload)",
+      "System reconnaissance (processes, services, domain membership)",
+      "AsyncRAT deployment (credential harvesting, lateral movement)",
+      "Privilege escalation (mimikatz, PowerShell exploits)",
+      "LockBit Black ransomware (encryption + exfiltration)"
+    ],
+    "detection_strategy": "XWorm detection must trigger comprehensive hunt for AsyncRAT, LockBit, and other secondary malware"
+  },
+  "remediation_guidance": {
+    "complexity": "HIGH - Complete system rebuild strongly recommended",
+    "recommended_approach": "REBUILD (not cleanup)",
+    "rationale": "XWorm's modular plugin architecture means unknown capabilities may have been loaded. 78% of campaigns deliver secondary malware (AsyncRAT, LockBit). Cleanup approaches have 20-30% residual risk.",
+    "rebuild_steps": [
+      "Isolate infected systems from network immediately (disable adapter, do NOT shut down)",
+      "Capture memory dumps and disk images for forensic analysis (evidence preservation)",
+      "Identify all users who authenticated during infection window (credential rotation scope)",
+      "Hunt enterprise-wide for secondary malware (AsyncRAT persistence, LockBit precursors)",
+      "Complete disk wipe and clean OS installation from trusted media",
+      "Apply all security updates before network reconnection",
+      "Restore user data after malware scanning (from pre-infection backups)",
+      "MANDATORY credential rotation for all affected users (see below)",
+      "Deploy enhanced monitoring for 30 days post-rebuild (hunt for reinfection)"
+    ],
+    "cleanup_steps_high_risk": [
+      "Boot to WinRE/WinPE for offline scanning",
+      "Full antimalware scan with multiple engines",
+      "Manual persistence check (registry Run keys, scheduled tasks, startup folder, WMI subscriptions)",
+      "Hunt for secondary malware (AsyncRAT, LockBit indicators)",
+      "Memory forensics to confirm process termination",
+      "Network monitoring for C2 reactivation (48-hour baseline)",
+      "MANDATORY credential rotation",
+      "30-day enhanced monitoring with daily threat hunting",
+      "Accept 20-30% residual risk of incomplete remediation"
+    ],
+    "credential_rotation": {
+      "priority": "CRITICAL - Mandatory action",
+      "scope": "ALL users who authenticated to infected systems during infection window",
+      "rationale": "XWorm keylogging plugin (modular capability) means all credentials entered must be considered compromised",
+      "includes": [
+        "User account passwords (all users on infected systems)",
+        "Service account credentials accessible from infected systems",
+        "Privileged account credentials (domain admin, enterprise admin, local admin)",
+        "Application passwords and API tokens",
+        "VPN credentials",
+        "MFA device re-enrollment if codes were typed (not recommended - physical tokens preferred)",
+        "Browser saved passwords (assume keylogger captured during autofill)"
+      ],
+      "timeline": "Complete within 24-48 hours of detection"
+    }
+  },
+  "threat_actor_assessment": {
+    "malware_family": "XWorm RAT",
+    "maa": "Malware-as-a-Service (MaaS)",
+    "family_confidence": "CONFIRMED (95%)",
+    "attribution_basis": "Code patterns (HEARTBEAT_MS, GetMachineId, BuildFrame), authentication mechanism (AgentSec_), PowerShell reconnaissance templates match known XWorm samples",
+    "threat_actor_types": {
+      "commodity_cybercriminals": "60% - financial gain via ransomware, data theft, crypto mining",
+      "initial_access_brokers": "10% - selling compromised credentials and network access",
+      "ransomware_affiliates": "25% - LockBit deployment via XWorm initial access",
+      "state_sponsored": "5% - Ukrainian intelligence reported Russian hackers using XWorm in H1 2024"
+    },
+    "sophistication": "Professional-grade development (modular architecture, MaaS builder tools)",
+    "motivation": "Financial gain (primary), espionage (secondary)",
+    "targeting": "Opportunistic (mass distribution via open directories, phishing, ClickFix social engineering)",
+    "scale": "18,459 devices compromised in single builder campaign (global threat)",
+    "evolution": "XWorm v6 released June 4, 2025 - 'fully re-coded, RCE-Fixed, AMSI bypass, ETW tampering'"
+  },
+  "delivery_mechanisms": {
+    "confirmed": "Open directory 109.230.231.37 (mass distribution)",
+    "common_xworm_vectors": [
+      "Email phishing attachments (.vbs, .bat, .ps1, .hta, Office macros with malicious VBA)",
+      "Drive-by downloads (compromised websites, exploit kits)",
+      "ClickFix social engineering (fake error messages instructing PowerShell execution)",
+      "Software supply chain (bundled with pirated software, cracks, keygens)",
+      "Malvertising (malicious ads redirecting to XWorm downloads)",
+      "USB/removable media (worm-like spreading in some variants)"
+    ]
+  },
+  "response_priorities": {
+    "immediate_0_4_hours": [
+      "Isolate infected systems from network (disable adapter, preserve memory)",
+      "Block C2 IP 109.230.231.37 at network perimeter and internal firewalls - CRITICAL",
+      "Alert leadership (CISO, IT Director) of CRITICAL XWorm RAT infection",
+      "Preserve evidence (memory dumps, disk images, network captures)",
+      "Deploy IOC hunt across enterprise (file hashes, C2 IP, authentication secret)",
+      "Begin threat hunt for secondary malware (AsyncRAT, LockBit Black indicators)"
+    ],
+    "short_term_4_24_hours": [
+      "Execute comprehensive threat hunting (file hashes, persistence artifacts, PowerShell logs)",
+      "Review network logs for connections to 109.230.231.37 (identify infection timeline)",
+      "Identify all users on infected systems during infection window (credential rotation scope)",
+      "Hunt for secondary malware (AsyncRAT: svchost.exe in AppData, LockBit: VSS deletion, backup service stops)",
+      "Begin MANDATORY credential rotation for affected users",
+      "Initiate forensic analysis to determine dwell time and data access"
+    ],
+    "medium_term_1_7_days": [
+      "Complete system rebuild (strongly recommended) or aggressive cleanup (high residual risk)",
+      "Finish MANDATORY credential rotation (all users, service accounts, privileged accounts)",
+      "Deploy enhanced monitoring and XWorm-specific detection rules",
+      "Hunt for persistence mechanisms (registry Run keys, scheduled tasks, WMI subscriptions)",
+      "Validate cleanup effectiveness (30-day monitoring, daily threat hunting)",
+      "Conduct lessons learned and control gap analysis",
+      "Update incident response procedures based on XWorm findings"
+    ],
+    "estimated_cost": "$100,000 - $400,000 per incident (labor, tools, business disruption, potential ransomware payment if LockBit deployed)"
+  },
+  "xworm_family_intelligence": {
+    "first_observed": "Mid-2022 (dark-web marketplaces)",
+    "maa": "Malware-as-a-Service (builder tools available)",
+    "version_history": {
+      "v4": "2022 - initial MaaS release",
+      "v5": "2023 - enhanced capabilities, modular plugins",
+      "v6": "June 4, 2025 - fully re-coded, AMSI bypass, ETW tampering, RCE-Fixed"
+    },
+    "scale": "18,459 devices compromised worldwide (single builder campaign)",
+    "state_usage": "Ukrainian State Service reported Russian hackers using XWorm in H1 2024",
+    "multi_malware_rate": "78% of campaigns deliver secondary payloads",
+    "common_chains": [
+      "XWorm → AsyncRAT → LockBit Black",
+      "XWorm → QuasarRAT → RedLine Stealer",
+      "XWorm → DcRAT → Conti Ransomware"
+    ]
+  },
+  "timestamp": "2026-01-12T00:00:00Z",
+  "analyst": "Threat Intelligence Team",
+  "report_version": "1.0",
+  "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+}

@@ -15,7 +15,11 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 ---
 
+# January 2026
 
+- [Arsenal-237: Threat Actor R&D Repository Exposed]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }})
+
+---
 
 # December 2025
 

@@ -12,6 +12,12 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 ---
 
 ## Available IOC Feeds
+- [Arsenal-237: agent.exe (PoetRAT)](agent-exe.json)
+- [Arsenal-237: agent_xworm.exe (XWorm RAT v6)](agent-xworm-exe.json)
+- [Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)](agent-xworm-v2-exe.json)
+- [Arsenal-237: FleetAgentAdvanced.exe](fleetagentadvanced-exe.json)
+- [Arsenal-237: FleetAgentFUD.exe](fleetagentfud-exe.json)
+- [Arsenal-237: uac_test.exe](uac-test-exe.json)
 - [Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm](dual-rat-analysis.json)
 - [PULSAR RAT (server.exe)](PULSAR-RAT.json)
 - [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou](Hybrid-Loader-Stealer-Sogou.json)
