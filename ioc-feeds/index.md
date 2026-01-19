@@ -18,6 +18,7 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 - [Arsenal-237: FleetAgentAdvanced.exe](fleetagentadvanced-exe.json)
 - [Arsenal-237: FleetAgentFUD.exe](fleetagentfud-exe.json)
 - [Arsenal-237: uac_test.exe](uac-test-exe.json)
+- [Arsenal-237: enc/dec Ransomware Family](enc-dec-ransomware-family.json)
 - [Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm](dual-rat-analysis.json)
 - [PULSAR RAT (server.exe)](PULSAR-RAT.json)
 - [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou](Hybrid-Loader-Stealer-Sogou.json)

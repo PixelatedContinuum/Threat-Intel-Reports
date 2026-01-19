@@ -18,6 +18,7 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 - [Arsenal-237: FleetAgentAdvanced.exe](fleetagentadvanced-exe.md)
 - [Arsenal-237: FleetAgentFUD.exe](fleetagentfud-exe.md)
 - [Arsenal-237: uac_test.exe](uac-test-exe.md)
+- [Arsenal-237: enc/dec Ransomware Family](enc-dec-ransomware-family.md)
 - [Detection Rules - Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm](dual-rat-analysis.md)
 - [Detection Rules - PULSAR RAT (server.exe)](PULSAR-RAT.md)
 - [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou](Hybrid-Loader-Stealer-Sogou.md)
