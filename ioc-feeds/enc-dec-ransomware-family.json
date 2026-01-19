@@ -1,21 +1,17 @@
 {
-  "campaign": "enc/dec Ransomware Family - Arsenal-237 Toolkit (PoetRAT APT)",
-  "description": "Comprehensive IOCs for the enc/dec ransomware family, a sophisticated custom-developed ransomware toolkit with HIGH confidence (90-95%) attribution to the PoetRAT Advanced Persistent Threat (APT) group. This represents PoetRAT's first publicly documented ransomware capability, indicating operational expansion from pure espionage to dual-purpose missions (intelligence collection + financial extortion). The toolkit employs professional-grade hybrid RSA-2048 + ChaCha20 encryption with custom hand-coded cryptographic implementation featuring AVX-512/AVX2/SSE hardware optimization. Discovered within the Arsenal-237 malware development environment on open directory 109.230.231.37.",
+  "campaign": "enc/dec Ransomware Family",
+  "description": "Comprehensive IOCs for the enc/dec ransomware family, a sophisticated custom-developed ransomware toolkit discovered in a malware development repository. The toolkit employs professional-grade hybrid RSA-2048 + ChaCha20 encryption with custom hand-coded cryptographic implementation featuring AVX-512/AVX2/SSE hardware optimization. Discovered on open directory 109.230.231.37.",
   "severity": "CRITICAL",
   "confidence_level": "Very High",
-  "threat_actor": {
-    "name": "PoetRAT APT",
-    "attribution_confidence": "HIGH (90-95%)",
-    "attribution_basis": [
-      "YARA signature matches on core espionage tools (agent.exe, steal_browser.exe)",
-      "Shared infrastructure (109.230.231.37 distribution point)",
-      "Consistent TTP patterns (GoLang/Rust compilation, extensive anti-analysis)",
-      "Signature anti-debugging loops across all Arsenal-237 samples",
-      "Professional R&D environment with versioned builds and testing utilities"
-    ],
-    "sophistication": "Professional/Advanced (state-sponsored capabilities)",
-    "motivation": "Dual-purpose: Espionage + Financial Extortion",
-    "historical_context": "PoetRAT previously focused on government, military, and energy sectors in Central/South Asia. This ransomware capability represents strategic evolution to hybrid operations."
+  "development_characteristics": {
+    "sophistication": "Professional malware development",
+    "capabilities": "Dual-purpose: Espionage + Financial Extortion",
+    "indicators": [
+      "Custom cryptographic implementation",
+      "Professional R&D environment with versioned builds and testing utilities",
+      "Hardware-optimized encryption (AVX-512/AVX2/SSE)",
+      "Multi-variant toolkit (5 encryptors, 5 decryptors)"
+    ]
   },
   "file_hashes": {
     "enc_exe": {
@@ -34,11 +30,11 @@
         "Volume Shadow Copy deletion"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant",
-        "Arsenal237_VSS_Deletion",
-        "Arsenal237_Rust_Artifacts",
-        "Arsenal237_AntiDebug_StackCheck",
-        "Arsenal237_Comprehensive"
+        "EncDec_ChaCha20_Constant",
+        "EncDec_VSS_Deletion",
+        "EncDec_Rust_Artifacts",
+        "EncDec_AntiDebug_StackCheck",
+        "EncDec_Comprehensive"
       ]
     },
     "enc_v2_exe": {
@@ -61,11 +57,11 @@
         "Rust debug paths visible in binary"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant",
-        "Arsenal237_VSS_Deletion",
-        "Arsenal237_Rust_Artifacts",
-        "Arsenal237_AntiDebug_StackCheck",
-        "Arsenal237_Comprehensive"
+        "EncDec_ChaCha20_Constant",
+        "EncDec_VSS_Deletion",
+        "EncDec_Rust_Artifacts",
+        "EncDec_AntiDebug_StackCheck",
+        "EncDec_Comprehensive"
       ]
     },
     "updated_enc_exe": {
@@ -83,11 +79,11 @@
         "Ransom note template: README.txt"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant",
-        "Arsenal237_VSS_Deletion",
-        "Arsenal237_Rust_Artifacts",
-        "Arsenal237_AntiDebug_StackCheck",
-        "Arsenal237_Comprehensive"
+        "EncDec_ChaCha20_Constant",
+        "EncDec_VSS_Deletion",
+        "EncDec_Rust_Artifacts",
+        "EncDec_AntiDebug_StackCheck",
+        "EncDec_Comprehensive"
       ]
     },
     "enc_pervictim_exe": {
@@ -109,11 +105,11 @@
         "netusesrc/modules/disks.rs"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant",
-        "Arsenal237_VSS_Deletion",
-        "Arsenal237_Rust_Artifacts",
-        "Arsenal237_AntiDebug_StackCheck",
-        "Arsenal237_Comprehensive"
+        "EncDec_ChaCha20_Constant",
+        "EncDec_VSS_Deletion",
+        "EncDec_Rust_Artifacts",
+        "EncDec_AntiDebug_StackCheck",
+        "EncDec_Comprehensive"
       ]
     },
     "test_gui_enc_v2_exe": {
@@ -130,8 +126,8 @@
         "Development/QA build"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant",
-        "Arsenal237_Rust_Artifacts"
+        "EncDec_ChaCha20_Constant",
+        "EncDec_Rust_Artifacts"
       ]
     },
     "dec_exe": {
@@ -157,7 +153,7 @@
         "SipHash"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant"
+        "EncDec_ChaCha20_Constant"
       ]
     },
     "dec_fast_exe": {
@@ -173,7 +169,7 @@
         "Rapid file recovery"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant"
+        "EncDec_ChaCha20_Constant"
       ]
     },
     "dec_pc3_exe": {
@@ -189,7 +185,7 @@
         "Specialized configuration"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant"
+        "EncDec_ChaCha20_Constant"
       ]
     },
     "dec_unique_exe": {
@@ -205,7 +201,7 @@
         "Specialized parameters"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant"
+        "EncDec_ChaCha20_Constant"
       ]
     },
     "test_decryptor_exe": {
@@ -221,7 +217,7 @@
         "Testing functionality"
       ],
       "yara_signatures": [
-        "Arsenal237_ChaCha20_Constant"
+        "EncDec_ChaCha20_Constant"
       ]
     },
     "ransom_note_exec_exe": {
@@ -234,7 +230,7 @@
   "network_indicators": {
     "distribution_infrastructure": {
       "ip": "109.230.231.37",
-      "description": "Arsenal-237 malware distribution point - open directory serving 38 malicious executables including enc/dec ransomware family, PoetRAT espionage tools (agent.exe, steal_browser.exe), commodity RATs (Xworm), and persistence droppers (FleetAgent family)",
+      "description": "enc/dec malware distribution point - open directory serving 38 malicious executables including enc/dec ransomware family, espionage tools (agent.exe, steal_browser.exe), commodity RATs (Xworm), and persistence droppers (FleetAgent family)",
       "confidence": "CONFIRMED",
       "threat_type": "Malware distribution + potential C2 infrastructure",
       "action": "BLOCK at network perimeter immediately (all ports, all protocols, inbound AND outbound)",
@@ -246,7 +242,7 @@
     },
     "c2_infrastructure": {
       "status": "NOT DIRECTLY OBSERVED",
-      "description": "No active C2 communication observed during analysis (R&D environment samples, not operational deployment). Associated Xworm variants in Arsenal-237 use 109.230.231.37 for C2.",
+      "description": "No active C2 communication observed during analysis (R&D environment samples, not operational deployment). Associated Xworm variants in enc/dec use 109.230.231.37 for C2.",
       "expected_behavior": "Encrypted C2 traffic using RSA, ChaCha20 cryptography",
       "detection_strategy": "Monitor for unusual encrypted outbound connections from Rust executables, especially to 109.230.231.37"
     }
@@ -270,7 +266,7 @@
     "file_extensions": {
       "lockbox": {
         "extension": ".lockbox",
-        "description": "Referenced in some Arsenal-237 reports (not directly confirmed in enc/dec samples)",
+        "description": "Referenced in some enc/dec reports (not directly confirmed in enc/dec samples)",
         "confidence": "MEDIUM",
         "note": "Encrypted files may preserve original extension or use custom extension"
       }
@@ -372,7 +368,7 @@
         "string": "netusesrc/modules/disks.rs",
         "description": "Rust source file debug artifact - network share module",
         "fidelity": "VERY HIGH",
-        "confidence": "CONFIRMED in Arsenal-237 samples"
+        "confidence": "CONFIRMED in enc/dec samples"
       }
     }
   },
@@ -429,11 +425,11 @@
       "File modification events showing rapid encryption pattern"
     ],
     "yara_rules": [
-      "Arsenal237_ChaCha20_Constant (highest fidelity)",
-      "Arsenal237_VSS_Deletion (high fidelity)",
-      "Arsenal237_Rust_Artifacts (very high fidelity - unique debug paths)",
-      "Arsenal237_AntiDebug_StackCheck (medium fidelity - signature TTP)",
-      "Arsenal237_Comprehensive (medium fidelity - combined indicators)"
+      "EncDec_ChaCha20_Constant (highest fidelity)",
+      "EncDec_VSS_Deletion (high fidelity)",
+      "EncDec_Rust_Artifacts (very high fidelity - unique debug paths)",
+      "EncDec_AntiDebug_StackCheck (medium fidelity - signature TTP)",
+      "EncDec_Comprehensive (medium fidelity - combined indicators)"
     ]
   },
   "cryptographic_analysis": {
@@ -464,7 +460,7 @@
       "Block 109.230.231.37 at network perimeter (all ports, all protocols, inbound + outbound)",
       "Isolate infected systems from network (preserve power for forensics)",
       "Secure offline backups (verify integrity, create additional copies)",
-      "Deploy Arsenal-237 detection signatures (YARA, Sigma, EDR rules)",
+      "Deploy enc/dec detection signatures (YARA, Sigma, EDR rules)",
       "Execute threat hunting queries (identify all infected systems)"
     ],
     "short_term_4_24_hours": [
@@ -474,10 +470,10 @@
       "Stakeholder communication (executive briefing, user notifications)"
     ],
     "eradication_days_2_3": [
-      "Remove Arsenal-237 malware from all systems",
-      "Eliminate PoetRAT persistence mechanisms (Registry, Scheduled Tasks, LNK files)",
+      "Remove enc/dec malware from all systems",
+      "Eliminate malware persistence mechanisms (Registry, Scheduled Tasks, LNK files)",
       "System rebuilds (48-72 hours per critical system - servers first)",
-      "Credential resets (assume all credentials compromised by PoetRAT espionage tools)"
+      "Credential resets (assume all credentials compromised by espionage tools)"
     ],
     "recovery_days_3_7": [
       "Restore data from pre-infection backups",
@@ -499,23 +495,22 @@
         "Encourages future attacks",
         "Payment to sanctioned entities may violate OFAC regulations"
       ],
-      "backup_dependency": "Arsenal-237 deletes Volume Shadow Copies - offline backups are ESSENTIAL",
+      "backup_dependency": "enc/dec deletes Volume Shadow Copies - offline backups are ESSENTIAL",
       "recovery_path": "Restore from pre-infection offline backups (verified and tested)"
     }
   },
   "strategic_intelligence": {
-    "poetrat_evolution": {
-      "2020": "Python-based RATs, government/military/energy focus, Central/South Asia geographic targeting",
-      "2023": "Migration to GoLang (agent.exe, steal_browser.exe), performance improvements",
-      "2025": "Rust ransomware development (Arsenal-237), custom ChaCha20+RSA, hardware optimization",
-      "2026_projected": "Dual-purpose operations (espionage + ransomware), hybrid state/criminal funding"
+    "development_timeline": {
+      "characteristics": "Professional malware development environment with versioned builds and testing utilities",
+      "capabilities": "Dual-purpose operations (espionage + ransomware), custom cryptographic implementations",
+      "sophistication": "Custom ChaCha20+RSA implementation with hardware optimization (AVX-512/AVX2/SSE)"
     },
     "dual_threat_assessment": {
       "ransomware": "Data encryption for financial extortion, operational disruption, recovery costs",
-      "espionage": "Arsenal-237 contains espionage tools likely deployed alongside ransomware - potential for intellectual property theft, credential compromise, long-term persistent access, future repeat attacks"
+      "espionage": "Repository contains espionage tools likely deployed alongside ransomware - potential for intellectual property theft, credential compromise, long-term persistent access, future repeat attacks"
     },
     "strategic_concerns": [
-      "Nation-state nexus: PoetRAT sophistication suggests state-sponsored or state-tolerated operations",
+      "Professional development sophistication suggests well-resourced threat actors",
       "Per-victim key generation indicates targeting capability beyond opportunistic attacks",
       "Repeat attack risk if espionage tools remain undetected",
       "Supply chain risk if organization is supplier/partner to higher-value targets"
@@ -548,7 +543,6 @@
   "report_version": "1.0",
   "related_reports": [
     "/reports/enc-dec-ransomware-family/",
-    "/reports/poetrat-attribution-analysis/",
     "/hunting-detections/enc-dec-ransomware-family/"
   ],
   "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."

@@ -1,18 +1,17 @@
 ---
-title: Detection Rules - enc/dec Ransomware Family (Arsenal-237)
+title: Detection Rules - enc/dec Ransomware Family
 date: '2026-01-18'
 layout: post
 permalink: /hunting-detections/enc-dec-ransomware-family/
 hide: true
 ---
 
-# Detection Rules – enc/dec Ransomware Family (Arsenal-237)
+# Detection Rules – enc/dec Ransomware Family
 
 ## Overview
-Comprehensive detection coverage for the Arsenal-237 enc/dec ransomware family includes static file signatures, process behavior patterns, and network indicators. Rules are provided in YARA and Sigma formats for SIEM/EDR integration and proactive threat hunting.
+Comprehensive detection coverage for the enc/dec ransomware family includes static file signatures, process behavior patterns, and network indicators. Rules are provided in YARA and Sigma formats for SIEM/EDR integration and proactive threat hunting.
 
-**Malware Family**: Arsenal-237 enc/dec ransomware
-**Threat Actor**: PoetRAT APT (90-95% confidence)
+**Malware Family**: enc/dec ransomware
 **Severity**: CRITICAL
 **Last Updated**: 2026-01-18
 
@@ -39,13 +38,12 @@ Comprehensive detection coverage for the Arsenal-237 enc/dec ransomware family i
 **Fidelity:** VERY HIGH (few false positives - legitimate ChaCha20 usage in VPNs, secure messaging)
 
 ```yara
-rule Arsenal237_ChaCha20_Constant {
+rule EncDec_ChaCha20_Constant {
     meta:
-        description = "Detects Arsenal-237 enc/dec ransomware by ChaCha20 constant"
+        description = "Detects enc/dec ransomware by ChaCha20 constant"
         author = "Threat Intelligence Team"
         date = "2026-01-18"
-        threat_actor = "PoetRAT APT"
-        malware_family = "Arsenal-237 enc/dec ransomware"
+        malware_family = "enc/dec ransomware"
         confidence = "HIGH"
         severity = "CRITICAL"
         reference = "RFC 8439 ChaCha20 Constant"
@@ -61,7 +59,7 @@ rule Arsenal237_ChaCha20_Constant {
 
 **Detection Context:**
 - The ChaCha20 constant is a standardized initialization string defined in RFC 8439
-- Arsenal-237's custom ChaCha20 implementation uses this constant in its keystream generation
+- This custom ChaCha20 implementation uses this constant in its keystream generation
 - False positives: Legitimate encryption software (VPN clients, secure messaging apps)
 - **Recommended Action:** Correlate with other indicators (VSS deletion, rapid file modification)
 
@@ -71,16 +69,15 @@ rule Arsenal237_ChaCha20_Constant {
 
 **Description:** Detects the unique concatenated string artifact created during Volume Shadow Copy deletion.
 
-**Fidelity:** HIGH (this exact string concatenation is unique to Arsenal-237)
+**Fidelity:** HIGH (this exact string concatenation is unique to this ransomware family)
 
 ```yara
-rule Arsenal237_VSS_Deletion_Signature {
+rule EncDec_VSS_Deletion_Signature {
     meta:
-        description = "Detects Arsenal-237 ransomware by unique VSS deletion string"
+        description = "Detects enc/dec ransomware by unique VSS deletion string"
         author = "Threat Intelligence Team"
         date = "2026-01-18"
-        threat_actor = "PoetRAT APT"
-        malware_family = "Arsenal-237 enc/dec ransomware"
+        malware_family = "enc/dec ransomware"
         confidence = "HIGH"
         severity = "CRITICAL"
 
@@ -103,18 +100,17 @@ rule Arsenal237_VSS_Deletion_Signature {
 
 ### Rule 3: Rust Ransomware Artifacts
 
-**Description:** Detects Arsenal-237 Rust ransomware by debug artifacts and operational strings.
+**Description:** Detects enc/dec Rust ransomware by debug artifacts and operational strings.
 
 **Fidelity:** MEDIUM-HIGH (Rust debug paths are unique, operational strings may have false positives)
 
 ```yara
-rule Arsenal237_Rust_Ransomware_Artifacts {
+rule EncDec_Rust_Ransomware_Artifacts {
     meta:
-        description = "Detects Arsenal-237 Rust ransomware by debug artifacts"
+        description = "Detects enc/dec Rust ransomware by debug artifacts"
         author = "Threat Intelligence Team"
         date = "2026-01-18"
-        threat_actor = "PoetRAT APT"
-        malware_family = "Arsenal-237 enc/dec ransomware"
+        malware_family = "enc/dec ransomware"
         confidence = "MEDIUM-HIGH"
         severity = "CRITICAL"
 
@@ -140,20 +136,19 @@ rule Arsenal237_Rust_Ransomware_Artifacts {
 
 ---
 
-### Rule 4: PoetRAT Anti-Debug Signature
+### Rule 4: Anti-Debug Signature
 
-**Description:** Detects the stack-based anti-debugging technique shared across Arsenal-237 toolkit components.
+**Description:** Detects the stack-based anti-debugging technique shared across enc/dec toolkit components.
 
 **Fidelity:** MEDIUM (Sleep(1000) pattern may have false positives, use as correlation signal)
 
 ```yara
-rule Arsenal237_PoetRAT_AntiDebug_Signature {
+rule EncDec_AntiDebug_Signature {
     meta:
-        description = "Detects PoetRAT anti-debug technique shared across Arsenal-237"
+        description = "Detects anti-debug technique shared across enc/dec"
         author = "Threat Intelligence Team"
         date = "2026-01-18"
-        threat_actor = "PoetRAT APT"
-        malware_family = "Arsenal-237 toolkit (all components)"
+        malware_family = "enc/dec toolkit (all components)"
         confidence = "MEDIUM"
         severity = "HIGH"
         reference = "Shared across agent.exe, steal_browser.exe, enc/dec ransomware"
@@ -173,24 +168,23 @@ rule Arsenal237_PoetRAT_AntiDebug_Signature {
 - This anti-debugging loop continuously checks the thread's stack base address
 - If stack base changes (debugger attached), malware sleeps for 1 second
 - Also serves as sandbox evasion (delays analysis)
-- **Recommended Action:** Use as correlation signal with other Arsenal-237 indicators
+- **Recommended Action:** Use as correlation signal with other enc/dec indicators
 
 ---
 
-### Rule 5: Comprehensive Arsenal-237 Family Detection
+### Rule 5: Comprehensive enc/dec Family Detection
 
-**Description:** Multi-indicator detection rule for Arsenal-237 ransomware family with layered logic.
+**Description:** Multi-indicator detection rule for enc/dec ransomware family with layered logic.
 
 **Fidelity:** HIGH when ChaCha20 constant detected, MEDIUM when relying on combined indicators
 
 ```yara
-rule Arsenal237_enc_dec_Family_Comprehensive {
+rule EncDec_enc_dec_Family_Comprehensive {
     meta:
-        description = "Comprehensive detection for Arsenal-237 enc/dec ransomware family"
+        description = "Comprehensive detection for enc/dec ransomware family"
         author = "Threat Intelligence Team"
         date = "2026-01-18"
-        threat_actor = "PoetRAT APT"
-        malware_family = "Arsenal-237 enc/dec ransomware"
+        malware_family = "enc/dec ransomware"
         confidence = "HIGH"
         severity = "CRITICAL"
 
@@ -249,12 +243,12 @@ rule Arsenal237_enc_dec_Family_Comprehensive {
 **Fidelity:** HIGH (legitimate VSS deletion is rare outside maintenance windows)
 
 ```yaml
-title: Arsenal-237 Ransomware VSS Deletion Activity
+title: enc/dec Ransomware VSS Deletion Activity
 id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 status: stable
-description: Detects Volume Shadow Copy deletion commands consistent with Arsenal-237 ransomware family
+description: Detects Volume Shadow Copy deletion commands consistent with enc/dec ransomware family
 references:
-    - Arsenal-237 enc/dec ransomware technical analysis
+    - enc/dec ransomware technical analysis
 author: Threat Intelligence Team
 date: 2026/01/18
 tags:
@@ -297,10 +291,10 @@ level: critical
 **Fidelity:** MEDIUM-HIGH (backup software and inventory tools may false positive)
 
 ```yaml
-title: Arsenal-237 Ransomware Multi-Drive Enumeration
+title: enc/dec Ransomware Multi-Drive Enumeration
 id: b2c3d4e5-f6a7-8901-bcde-f12345678901
 status: experimental
-description: Detects rapid sequential drive enumeration characteristic of Arsenal-237 ransomware
+description: Detects rapid sequential drive enumeration characteristic of enc/dec ransomware
 author: Threat Intelligence Team
 date: 2026/01/18
 tags:
@@ -324,7 +318,7 @@ level: high
 **Implementation Notes:**
 - Adjust threshold based on environment (20+ drives in 10 seconds is aggressive)
 - Whitelist known backup software and inventory tools
-- Correlate with other Arsenal-237 indicators for high-fidelity alerts
+- Correlate with other enc/dec indicators for high-fidelity alerts
 
 ---
 
@@ -335,7 +329,7 @@ level: high
 **Fidelity:** MEDIUM (legitimate encryption software will false positive)
 
 ```yaml
-title: Arsenal-237 ChaCha20 Cryptographic Operations
+title: enc/dec ChaCha20 Cryptographic Operations
 id: c3d4e5f6-a7b8-9012-cdef-123456789012
 status: experimental
 description: Detects processes loading or executing ChaCha20 cryptographic operations
@@ -371,9 +365,9 @@ level: medium
 
 ## Threat Hunting Queries
 
-### Hunt 1: Arsenal-237 Infrastructure Communication
+### Hunt 1: enc/dec Infrastructure Communication
 
-**Objective:** Identify systems communicating with Arsenal-237 distribution/C2 infrastructure.
+**Objective:** Identify systems communicating with enc/dec distribution/C2 infrastructure.
 
 **Fidelity:** VERY HIGH (109.230.231.37 is confirmed malicious infrastructure)
 
@@ -393,7 +387,7 @@ NetworkCommunicationEvents
 ```
 
 **Hunting Guidance:**
-- Search 30+ days historical data (Arsenal-237 may have long dwell times)
+- Search 30+ days historical data (enc/dec may have long dwell times)
 - Any communication to 109.230.231.37 is HIGH PRIORITY investigation
 - Check for Xworm RAT C2 traffic patterns (TCP/WebSocket)
 - Correlate with file system activity (downloads from this IP)
@@ -423,7 +417,7 @@ DeviceProcessEvents
 **Hunting Guidance:**
 - `--pass` flag indicates password-protected decryption operation
 - `--file` and `--folder` flags indicate encryption/decryption targets
-- Check process hash against Arsenal-237 IOC feed
+- Check process hash against enc/dec IOC feed
 - Review file system activity for mass file modifications
 
 ---
@@ -492,7 +486,7 @@ DeviceFileEvents
 ```kql
 // Using YARA scanning via EDR
 index=endpoint earliest=-24h
-| search yara_rule="Arsenal237_ChaCha20_Constant"
+| search yara_rule="EncDec_ChaCha20_Constant"
 | table _time, ComputerName, User, ProcessName, ProcessPath, yara_matches
 
 // Manual Memory Scanning
@@ -504,7 +498,7 @@ index=endpoint earliest=-24h
 - Requires EDR with YARA memory scanning capability OR manual memory forensics
 - ChaCha20 constant detection in memory = active encryption process
 - Legitimate hits: VPN clients (OpenVPN), secure messaging apps
-- Cross-reference with Arsenal-237 file hashes and behavioral indicators
+- Cross-reference with enc/dec file hashes and behavioral indicators
 
 ---
 
@@ -526,7 +520,7 @@ index=endpoint earliest=-24h
 
 **3. Rust Debug Artifact Detection**
 - **Method:** Scan executables for "chacha20_pervictim.rs", "netusesrc/modules/disks.rs"
-- **Fidelity:** VERY HIGH (unique to Arsenal-237)
+- **Fidelity:** VERY HIGH (unique to enc/dec)
 - **Tools:** Static file scanning with YARA
 - **Recommendation:** Deploy across all endpoints
 
@@ -562,7 +556,7 @@ index=endpoint earliest=-24h
 - **Method:** Detect processes with unusual Sleep(1000ms) patterns
 - **Fidelity:** LOW (many legitimate uses)
 - **Tools:** EDR with API monitoring
-- **Recommendation:** Correlate with stack-checking behavior and other Arsenal-237 indicators
+- **Recommendation:** Correlate with stack-checking behavior and other enc/dec indicators
 
 ---
 
@@ -583,7 +577,7 @@ index=endpoint earliest=-24h
 **Phase 3: Continuous Monitoring (Ongoing)**
 7. **Threat Hunting Program:** Schedule monthly hunts using provided queries
 8. **Detection Tuning:** Adjust thresholds based on false positive rates
-9. **IOC Updates:** Monitor for new Arsenal-237 variants and update signatures
+9. **IOC Updates:** Monitor for new enc/dec variants and update signatures
 
 ### False Positive Management
 
@@ -606,7 +600,7 @@ index=endpoint earliest=-24h
 
 **SIEM Integration (Splunk, Sentinel, etc.):**
 - Deploy Sigma rules as correlation searches
-- Create dashboards for Arsenal-237 indicator tracking
+- Create dashboards for enc/dec indicator tracking
 - Configure CRITICAL alerts for VSS deletion and ChaCha20 detection
 
 **EDR Integration (CrowdStrike, SentinelOne, Defender for Endpoint):**
@@ -615,7 +609,7 @@ index=endpoint earliest=-24h
 - Configure process memory scanning for ChaCha20 constant
 
 **Threat Intelligence Platforms:**
-- Ingest Arsenal-237 IOC feed (JSON) for automated blocking
+- Ingest enc/dec IOC feed (JSON) for automated blocking
 - Configure threat hunting workflows using provided queries
 - Share detections with industry ISACs
 
@@ -631,23 +625,23 @@ index=endpoint earliest=-24h
 2. **HIGH Alert (Rust Artifacts, Multi-Drive Access):**
    - **Action:** Detailed investigation, correlate with other indicators
    - **Timeline:** 0-30 minutes from alert
-   - **Next Steps:** If confirmed Arsenal-237, escalate to CRITICAL workflow
+   - **Next Steps:** If confirmed enc/dec, escalate to CRITICAL workflow
 
 3. **MEDIUM Alert (Behavioral Anomalies):**
    - **Action:** Analyst review, correlate with threat intelligence
    - **Timeline:** 0-2 hours from alert
-   - **Next Steps:** Tune detection or escalate if Arsenal-237 confirmed
+   - **Next Steps:** Tune detection or escalate if enc/dec confirmed
 
 ### Testing and Validation
 
 **Detection Validation:**
-- Test YARA rules against Arsenal-237 samples in isolated environment
+- Test YARA rules against enc/dec samples in isolated environment
 - Validate Sigma rules generate alerts for known VSS deletion events
 - Execute threat hunting queries against test data to verify query logic
 
 **Continuous Improvement:**
 - Review detection performance weekly (true positives, false positives, missed detections)
-- Update signatures based on new Arsenal-237 variant discoveries
+- Update signatures based on new enc/dec variant discoveries
 - Share detection lessons learned with community
 
 ---
@@ -658,8 +652,8 @@ index=endpoint earliest=-24h
 - [enc/dec Ransomware Family Analysis](/reports/enc-dec-ransomware-family/) - Complete technical analysis
 - [IOC Feed (JSON)](/ioc-feeds/enc-dec-ransomware-family.json) - Machine-readable indicators
 
-**Arsenal-237 Toolkit Components:**
-- [agent.exe Detection Rules](/hunting-detections/agent-exe/) - PoetRAT backdoor signatures
+**enc/dec Toolkit Components:**
+- [agent.exe Detection Rules](/hunting-detections/agent-exe/) - Golang RAT backdoor signatures
 - [agent_xworm.exe Detection Rules](/hunting-detections/agent-xworm-exe/) - Xworm RAT v1
 - [agent_xworm_v2.exe Detection Rules](/hunting-detections/agent-xworm-v2-exe/) - Xworm RAT v2.4.0
 - [FleetAgentAdvanced.exe Detection Rules](/hunting-detections/fleetagentadvanced-exe/) - Persistence dropper
