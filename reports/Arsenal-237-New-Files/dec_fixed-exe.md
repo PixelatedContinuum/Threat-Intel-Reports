@@ -116,10 +116,10 @@ If your organization encounters this file:
 - [dec_fixed.exe IOCs]({{ "/ioc-feeds/arsenal-237-dec_fixed-exe.json" | relative_url }})
 
 **Related Reports:**
-- [enc_c2.exe C2-enabled Ransomware]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) - Encryption counterpart with C2
-- [new_enc.exe Ransomware]({{ "/reports/new-enc-exe/" | relative_url }}) - Offline encryption variant
-- [full_test_enc.exe Advanced Ransomware]({{ "/reports/arsenal-237-new-files/full_test_enc-exe/" | relative_url }}) - Most advanced ransomware variant
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [enc_c2.exe C2-enabled Ransomware](/reports/arsenal-237-new-files/enc_c2-exe/) - Encryption counterpart with C2
+- [new_enc.exe Ransomware](/reports/new-enc-exe/) - Offline encryption variant
+- [full_test_enc.exe Advanced Ransomware](/reports/arsenal-237-new-files/full_test_enc-exe/) - Most advanced ransomware variant
+- [Arsenal-237 Executive Overview](/reports/109.230.231.37-Executive-Overview/) - Full toolkit analysis
 
 ### File Information
 

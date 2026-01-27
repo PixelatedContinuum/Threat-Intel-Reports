@@ -47,9 +47,9 @@ echo "$(($(echo "16" | sed "s#.##") + 1))." [Key Takeaways](#key-takeaways)
 - [BdApiUtil64.sys IOCs]({{ "/ioc-feeds/arsenal-237-BdApiUtil64-sys.json" | relative_url }})
 
 **Related Reports:**
-- [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Primary BYOVD implementation
-- [killer_crowdstrike.dll Variant]({{ "/reports/arsenal-237-new-files/killer-crowdstrike-dll/" | relative_url }}) - CrowdStrike-specific variant
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [killer.dll BYOVD Module](/reports/arsenal-237-new-files/killer-dll/) - Primary BYOVD implementation
+- [killer_crowdstrike.dll Variant](/reports/arsenal-237-new-files/killer-crowdstrike-dll/) - CrowdStrike-specific variant
+- [Arsenal-237 Executive Overview](/reports/109.230.231.37-Executive-Overview/) - Full toolkit analysis
 
 ---
 
