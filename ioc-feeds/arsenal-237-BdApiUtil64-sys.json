@@ -1,0 +1,424 @@
+{
+  "campaign": "BdApiUtil64.sys (Weaponized Baidu Driver) - Arsenal-237 Malware Toolkit",
+  "description": "Comprehensive IOCs for BdApiUtil64.sys, a weaponized legitimate Baidu Antivirus kernel driver used in BYOVD (Bring Your Own Vulnerable Driver) attacks. Discovered on open directory at IP 109.230.231.37, this legitimately-signed driver (expired 2015) provides kernel-level Ring-0 access enabling: (1) security product termination via direct and SSDT-bypass methods, (2) malicious service creation, (3) credential theft and sensitive file access. Acts as critical defense evasion enabler in Arsenal-237 attack chain after lpe.exe privilege escalation, allowing killer.dll and ransomware payloads to execute unopposed.",
+  "severity": "CRITICAL",
+  "confidence_level": "High",
+  "file_hashes": {
+    "BdApiUtil64_sys": {
+      "md5": "ced47b89212f3260ebeb41682a4b95ec",
+      "sha1": "148c0cde4f2ef807aea77d7368f00f4c519f47ef",
+      "sha256": "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428",
+      "size": "116800 bytes (114 KB)",
+      "type": "PE64 kernel driver",
+      "original_filename": "BdApiUtil64.sys",
+      "family": "Arsenal-237 BYOVD Component",
+      "family_confidence": "CONFIRMED (100%)",
+      "original_purpose": "Baidu Antivirus kernel driver",
+      "weaponized_purpose": "Kernel-level defense evasion, security product termination, credential theft",
+      "digital_signature": {
+        "signer": "Baidu Online Network Technology (Beijing) Co., Ltd",
+        "issuer": "VeriSign Class 3 Code Signing 2010 CA",
+        "valid_from": "2012-04-24",
+        "valid_to": "2015-04-24",
+        "status": "EXPIRED (but still loadable on Windows)",
+        "thumbprint": "65439929B67973EB192D6FF243E6767ADF0834E4"
+      },
+      "pdb_path": "D:\\jenkins\\workspace\\bav_5.0_workspace\\BavOutput\\Pdb\\Release\\BdApiUtil64.pdb",
+      "version": "5.0.3.84333"
+    }
+  },
+  "network_indicators": {
+    "distribution_infrastructure": {
+      "ip": "109.230.231.37",
+      "description": "Arsenal-237 malware distribution point - open directory serving complete attack toolkit",
+      "confidence": "CONFIRMED",
+      "threat_type": "Malware distribution, command and control infrastructure",
+      "action": "BLOCK at network perimeter immediately"
+    }
+  },
+  "deployment_indicators": {
+    "typical_deployment_method": {
+      "service_creation": "sc create Bprotect type= kernel binPath= C:\\Windows\\System32\\drivers\\BdApiUtil64.sys",
+      "service_start": "sc start Bprotect",
+      "alternative_methods": [
+        "net start Bprotect",
+        "Custom loader via DeviceIoControl",
+        "Persistence via registry: HKLM\\SYSTEM\\CurrentControlSet\\Services\\Bprotect"
+      ],
+      "required_privileges": "SYSTEM (typically deployed after lpe.exe privilege escalation)",
+      "deployment_context": "Stage 3 in Arsenal-237 attack chain - deployed after lpe.exe privilege escalation, enables killer.dll effectiveness",
+      "typical_file_locations": [
+        "C:\\Windows\\System32\\drivers\\BdApiUtil64.sys",
+        "C:\\Windows\\Temp\\BdApiUtil64.sys",
+        "C:\\ProgramData\\BdApiUtil64.sys"
+      ]
+    },
+    "kernel_objects": {
+      "device_object": "\\Device\\BdApiUtil",
+      "symbolic_link": "\\DosDevices\\BdApiUtil",
+      "service_name": "Bprotect",
+      "callback_object": "\\Callback\\bdProtectExpCallBack"
+    },
+    "registry_indicators": {
+      "service_key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Bprotect",
+      "inst_path_value": "InstPath (installation path)",
+      "image_path_value": "ImagePath (driver file path)"
+    }
+  },
+  "behavioral_indicators": {
+    "capability_1_direct_process_termination": {
+      "technique": "T1562.001 - Disable or Modify Tools (Direct Process Termination)",
+      "ioctl_code": "0x800024b4",
+      "description": "Direct kernel-mode process termination using standard Windows APIs",
+      "input_buffer": "4-byte process ID (DWORD)",
+      "output_buffer": "None",
+      "api_sequence": [
+        "PsLookupProcessByProcessId (get PEPROCESS object from PID)",
+        "ObOpenObjectByPointer (create kernel handle with PROCESS_ALL_ACCESS)",
+        "ZwTerminateProcess (terminate with standard exit status)",
+        "ObDereferenceObject (cleanup)"
+      ],
+      "target_processes": [
+        "MsMpEng.exe (Microsoft Defender)",
+        "CSFalconService.exe (CrowdStrike)",
+        "ekrn.exe (ESET)",
+        "avp.exe (Kaspersky)",
+        "SophosHealth.exe (Sophos)",
+        "cb.exe (Carbon Black)",
+        "MBAMService.exe (Malwarebytes)",
+        "procexp64.exe (Process Explorer)",
+        "ProcessHacker.exe (Process Hacker)"
+      ],
+      "indicators": [
+        "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x800024b4",
+        "4-byte input buffers containing security product PIDs",
+        "Security product processes terminated with no event logging",
+        "Process termination from kernel mode (no user-mode call stack)"
+      ],
+      "evasion_capabilities": "Bypasses user-mode security restrictions, can terminate Protected Process Light (PPL) processes",
+      "detection": "Monitor DeviceIoControl calls to \\\\.\BdApiUtil; correlate security product terminations with driver load events (within 60 seconds)"
+    },
+    "capability_2_edr_evading_termination": {
+      "technique": "T1562.001 - Disable or Modify Tools (SSDT Bypass) + T1027.010 - Command Obfuscation",
+      "ioctl_code": "0x800024b8",
+      "description": "Advanced EDR-evading process termination using SSDT (System Service Descriptor Table) bypass with hook detection",
+      "input_buffer": "4-byte process ID (DWORD)",
+      "output_buffer": "None",
+      "advanced_evasion_mechanism": {
+        "hook_detection": {
+          "method": "Check if first byte of ZwTerminateProcess == 0xb8 (MOV EAX instruction)",
+          "if_hooked": "Switch to SSDT bypass method",
+          "if_unhooked": "Use direct termination"
+        },
+        "ssdt_bypass": {
+          "step_1": "Resolve KeServiceDescriptorTable via MmGetSystemRoutineAddress",
+          "step_2": "Extract service number from ZwTerminateProcess (+1 offset)",
+          "step_3": "Look up function in SSDT: *(SSDT_base + (service_num << 2))",
+          "step_4": "Call function indirectly, bypassing all user-mode and kernel-mode hooks"
+        }
+      },
+      "api_sequence": [
+        "Check *ZwTerminateProcess == 0xb8 (hook detection)",
+        "MmGetSystemRoutineAddress('KeServiceDescriptorTable') (SSDT resolution)",
+        "Extract service number from hooked API",
+        "Indirect system call via SSDT lookup",
+        "Process termination via unhooking path"
+      ],
+      "indicators": [
+        "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x800024b8",
+        "MmGetSystemRoutineAddress calls for KeServiceDescriptorTable",
+        "SSDT access patterns in kernel memory",
+        "Security products terminated despite kernel hook detection",
+        "Multiple termination method attempts (fallback pattern)"
+      ],
+      "evasion_effectiveness": "Defeats most EDR kernel hooks, extremely difficult to detect, near-guaranteed termination success",
+      "detection": "Monitor SSDT access attempts; detect KeServiceDescriptorTable resolution from non-Microsoft drivers; alert on multiple process termination methods from same driver"
+    },
+    "capability_3_service_manipulation": {
+      "technique": "T1543.003 - Create or Modify System Process: Windows Service",
+      "ioctl_code": "0x80002324",
+      "description": "Create Windows services with kernel privileges for persistence and backdoor installation",
+      "input_buffer": "Exactly 0x224 bytes (548 bytes) - Service configuration structure",
+      "output_buffer": "Service handle (HANDLE)",
+      "buffer_structure": {
+        "offset_0x002": "Service name (Unicode string, 260 characters)",
+        "offset_0x084": "Service type (kernel driver, Win32 service, etc.)",
+        "offset_0x085": "Start type (auto-start, manual, demand)",
+        "offset_0x086": "Error control",
+        "offset_0x087": "Service tag",
+        "offset_0x088": "Desired access rights",
+        "offset_0x08C": "Binary path (260 characters)",
+        "offset_0x138": "Service DLL path (260 characters)",
+        "offset_0x1E4": "Service flags",
+        "offset_0x1E8": "Service description (128 characters)"
+      },
+      "api_sequence": [
+        "Service object creation via sub_142f0",
+        "ObInsertObject (create kernel handle)",
+        "Set service object flag 0x40000",
+        "Return service handle to caller"
+      ],
+      "malicious_service_examples": [
+        {
+          "name": "WindowsUpdateService",
+          "binary_path": "C:\\ProgramData\\WindowsUpdater.exe",
+          "start_type": "SERVICE_AUTO_START",
+          "purpose": "Persistence masquerading as legitimate update service"
+        },
+        {
+          "name": "Microsoft Security Agent",
+          "binary_path": "C:\\Windows\\Temp\\agent.exe",
+          "start_type": "SERVICE_AUTO_START",
+          "purpose": "Backdoor disguised as security software"
+        }
+      ],
+      "indicators": [
+        "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x80002324",
+        "0x224-byte input buffers with service configuration",
+        "Service creation outside of legitimate installers",
+        "Service names impersonating Microsoft/security tools",
+        "Services pointing to temporary or suspicious locations (C:\\Temp, C:\\ProgramData)",
+        "Event ID 4697 (service installation) with unusual parent process"
+      ],
+      "abuse_potential": "Install persistent malicious services, create backdoors with system privileges, maintain access across reboots",
+      "detection": "Monitor Event ID 4697 for service creation; alert on services created by non-installer processes; detect service name impersonation patterns"
+    },
+    "capability_4_file_access_and_data_theft": {
+      "technique": "T1005 - Data from Information Repositories + T1555 - Credentials from Password Stores",
+      "ioctl_codes": ["0x80002648", "0x8000264c"],
+      "description": "Direct kernel-mode file access bypassing security restrictions for credential theft and sensitive data exfiltration",
+      "input_buffer": "Minimum 0x208 bytes (520 bytes) - File path at offset 0x18",
+      "output_buffer": "File contents or access status",
+      "file_path_structure": {
+        "offset_0x18": "File path (Unicode string, 259 characters)"
+      },
+      "api_sequence": [
+        "RtlInitUnicodeString (initialize file path)",
+        "IoCreateFile with DesiredAccess 0x120089 (Read/Write/Delete)",
+        "File data extraction via sub_13d30",
+        "ZwClose (cleanup)"
+      ],
+      "target_files": {
+        "credentials": [
+          "C:\\Windows\\System32\\config\\SAM (Windows user credentials)",
+          "C:\\Windows\\System32\\config\\SYSTEM (System credentials)",
+          "C:\\ProgramData\\Microsoft\\Credentials\\* (Stored credentials)",
+          "C:\\Users\\*\\AppData\\Roaming\\Microsoft\\Credentials\\* (User credentials)"
+        ],
+        "browser_data": [
+          "C:\\Users\\*\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Login Data",
+          "C:\\Users\\*\\AppData\\Local\\Mozilla\\Firefox\\Profiles\\*\\logins.json",
+          "C:\\Users\\*\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Login Data"
+        ],
+        "security_configs": [
+          "C:\\Program Files\\Windows Defender\\*.config",
+          "C:\\Program Files\\CrowdStrike\\*.conf",
+          "C:\\Program Files\\ESET\\*.xml",
+          "C:\\Program Files\\Kaspersky Lab\\*.cfg"
+        ],
+        "encryption_keys": [
+          "C:\\Users\\*\\AppData\\Roaming\\Microsoft\\Crypto\\RSA\\*",
+          "C:\\ProgramData\\Microsoft\\Crypto\\*",
+          "C:\\Windows\\System32\\Microsoft\\Protect\\*"
+        ]
+      },
+      "indicators": [
+        "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x80002648 or 0x8000264c",
+        "0x208+ byte input buffers containing file paths",
+        "File access to protected locations (SAM, SYSTEM, Credentials)",
+        "IoCreateFile calls from BdApiUtil64.sys driver",
+        "Unusual file access patterns (bulk reading of credential stores)"
+      ],
+      "impact": "Complete credential compromise, security configuration theft, encryption key recovery, browser password extraction",
+      "detection": "Monitor file access events for protected locations; alert on IoCreateFile from non-system drivers; detect bulk credential file access patterns"
+    },
+    "additional_capabilities": {
+      "minifilter_enumeration": {
+        "technique": "T1518.001 - Security Software Discovery",
+        "apis": [
+          "FltEnumerateFilters (enumerate all minifilter drivers)",
+          "FltEnumerateInstances (get filter instances)",
+          "FltGetFilterInformation (get filter details)",
+          "FltObjectDereference (cleanup)"
+        ],
+        "target_minifilters": [
+          "csagent.sys (CrowdStrike Falcon)",
+          "sentinelmonitor.sys (SentinelOne)",
+          "WdFilter.sys (Microsoft Defender)",
+          "cbk7.sys (Carbon Black)"
+        ],
+        "purpose": "Identify EDR/AV kernel components before termination",
+        "detection": "Monitor Filter Manager API calls from non-Microsoft drivers"
+      },
+      "registry_callback_registration": {
+        "technique": "T1112 - Modify Registry + T1562.001 - Disable or Modify Tools",
+        "apis": [
+          "CmRegisterCallback (intercept registry operations)",
+          "CmUnRegisterCallback (remove callback)"
+        ],
+        "purpose": "Block security products from re-enabling themselves via registry",
+        "target_keys": [
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services (service configuration)",
+          "HKLM\\SOFTWARE\\Policies (security policies)"
+        ],
+        "detection": "Monitor registry callback registration from non-Microsoft drivers"
+      },
+      "system_reconnaissance": {
+        "technique": "T1082 - System Information Discovery",
+        "apis": [
+          "PsGetVersion (OS version detection)",
+          "ZwQuerySystemInformation (process/driver enumeration)",
+          "MmIsAddressValid (memory validation)"
+        ],
+        "purpose": "OS fingerprinting, process enumeration, environment assessment",
+        "detection": "Monitor system information queries from non-system drivers"
+      }
+    },
+    "attack_timeline": {
+      "driver_load_to_termination": "50-150 milliseconds (near-instant neutralization)",
+      "full_security_suite_neutralization": "Within 60 seconds of driver load",
+      "service_creation_for_persistence": "1-5 minutes after initial compromise",
+      "credential_theft_operations": "2-10 minutes (bulk file access)",
+      "impact": "Extremely fast defense evasion defeats manual response - automated detection required"
+    }
+  },
+  "detection_opportunities": {
+    "high_confidence_indicators": [
+      "File hash match: 47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428",
+      "Driver load: BdApiUtil64.sys with Baidu digital signature",
+      "Service creation: Bprotect (on system without Baidu AV)",
+      "Device object creation: \\Device\\BdApiUtil",
+      "Symbolic link creation: \\DosDevices\\BdApiUtil",
+      "Registry key: HKLM\\SYSTEM\\CurrentControlSet\\Services\\Bprotect",
+      "Network connection to 109.230.231.37",
+      "Driver with expired certificate (2015) loading in current year",
+      "PDB path reference: D:\\jenkins\\workspace\\bav_5.0_workspace\\BavOutput\\Pdb\\Release\\BdApiUtil64.pdb"
+    ],
+    "behavioral_patterns": [
+      "Driver load followed by security product termination (within 60 seconds)",
+      "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x800024b4, 0x800024b8, 0x80002324, 0x80002648, 0x8000264c",
+      "Multiple security product processes terminated simultaneously",
+      "Service creation via kernel driver (not sc.exe or services.exe)",
+      "File access to protected locations (SAM, SYSTEM, credentials) from kernel driver",
+      "Registry callback registration blocking security modifications",
+      "Minifilter enumeration followed by process termination",
+      "SSDT access patterns (MmGetSystemRoutineAddress for KeServiceDescriptorTable)",
+      "Hook detection byte pattern analysis (checking 0xb8 opcode)"
+    ],
+    "forensic_artifacts": [
+      "Sysmon Event ID 6 (Driver Loaded) with BdApiUtil64.sys",
+      "Sysmon Event ID 10 (Process Access) targeting security processes",
+      "Event ID 4697 (Service Installation) for Bprotect service",
+      "Event ID 4672 (Special privileges assigned) after driver load",
+      "Registry keys: HKLM\\SYSTEM\\CurrentControlSet\\Services\\Bprotect",
+      "File artifacts: BdApiUtil64.sys in C:\\Windows\\System32\\drivers\\",
+      "Memory dump: Driver loaded at kernel address space",
+      "Callback object: \\Callback\\bdProtectExpCallBack in kernel",
+      "Process termination events (Event ID 4689) for security products",
+      "File access events (Event ID 4663) for protected credential stores"
+    ]
+  },
+  "mitre_attack_techniques": {
+    "persistence": [
+      "T1547.006 - Kernel Modules & Extensions",
+      "T1543.003 - Create or Modify System Process: Windows Service"
+    ],
+    "privilege_escalation": [
+      "T1068 - Exploitation for Privilege Escalation (BYOVD technique)"
+    ],
+    "defense_evasion": [
+      "T1562.001 - Disable or Modify Tools",
+      "T1070.004 - Indicator Removal: File Deletion",
+      "T1562.002 - Disable Windows Event Logging",
+      "T1222 - File and Directory Permissions Modification",
+      "T1112 - Modify Registry",
+      "T1014 - Rootkit",
+      "T1027.010 - Command Obfuscation"
+    ],
+    "discovery": [
+      "T1082 - System Information Discovery",
+      "T1057 - Process Discovery",
+      "T1518.001 - Security Software Discovery"
+    ],
+    "impact": [
+      "T1489 - Service Stop"
+    ],
+    "collection": [
+      "T1005 - Data from Information Repositories",
+      "T1555 - Credentials from Password Stores"
+    ],
+    "execution": [
+      "T1129 - Shared Modules"
+    ]
+  },
+  "remediation_guidance": {
+    "complexity": "CRITICAL - Complete system rebuild MANDATORY",
+    "recommended_approach": "REBUILD REQUIRED",
+    "rationale": "Kernel-level Ring-0 compromise enables complete system control including: bootkit installation, kernel driver deployment, credential harvesting from LSASS, covert persistence mechanisms (registry callbacks, service manipulation, file system hiding), complete bypass of user-mode security controls. Aggressive cleanup CANNOT provide confidence in complete eradication from kernel-level compromise.",
+    "rebuild_steps": [
+      "Immediately isolate infected systems from network",
+      "Capture memory dumps and disk images for forensic analysis before shutdown",
+      "Identify all systems where BdApiUtil64.sys loaded",
+      "Identify timeframe when driver was active",
+      "Complete disk wipe and clean OS installation from trusted media",
+      "Apply all security updates before network reconnection",
+      "Restore user data after malware scanning",
+      "Deploy Microsoft Vulnerable Driver Blocklist (Windows 11 with HVCI)",
+      "Implement enhanced EDR monitoring for BYOVD techniques",
+      "30-day enhanced monitoring period post-rebuild"
+    ],
+    "post_incident_actions": {
+      "credential_rotation": "MANDATORY - kernel access enables LSASS credential harvesting via IOCTL 0x80002648",
+      "log_review": "Review security logs for timeframe when driver had kernel access - assume attacker actions occurred",
+      "threat_hunting": "Hunt for Arsenal-237 toolkit components: lpe.exe, killer.dll, killer_crowdstrike.dll, rootkit.dll, enc_*.exe",
+      "control_gaps": "Address control gaps that allowed driver loading and service creation"
+    }
+  },
+  "threat_actor_assessment": {
+    "family": "Arsenal-237 Malware Toolkit",
+    "family_confidence": "CONFIRMED (100%)",
+    "attribution_basis": "Discovered on Arsenal-237 open directory (109.230.231.37), integrated with lpe.exe, killer.dll, rootkit.dll, and enc_*.exe from same toolkit",
+    "threat_actor_type": "Organized cybercrime with professional development resources OR state-affiliated groups",
+    "sophistication": "High - professional BYOVD exploitation, SSDT bypass implementation, multi-capability kernel driver, comprehensive Windows version coverage, anti-forensics cleanup",
+    "motivation": "Financial (ransomware deployment) / Espionage (APT operations)",
+    "targeting": "Opportunistic - broad toolkit availability suggests multiple campaigns across industries",
+    "historical_context": "Part of ongoing Arsenal-237 investigation - fourth of 11 deep-dive samples analyzed. Critical Stage 3 module enabling all subsequent attack phases by neutralizing kernel-level security controls.",
+    "real_world_campaigns": [
+      "BlackByte Ransomware (2022-2023)",
+      "Cuba Ransomware (2022)",
+      "ALPHV/BlackCat Ransomware (2022-present)",
+      "AvosLocker Ransomware (2022)",
+      "Targeted APT operations (various groups)"
+    ]
+  },
+  "response_priorities": {
+    "immediate": [
+      "Isolate infected systems from network immediately",
+      "Block Arsenal-237 infrastructure (109.230.231.37) at network perimeter",
+      "Alert leadership (CISO/Security Director) of CRITICAL kernel-level compromise",
+      "Preserve evidence (memory dumps, disk images) before system shutdown",
+      "Identify all systems where BdApiUtil64.sys may have loaded",
+      "Activate ransomware incident response procedures immediately (do NOT wait for ransomware confirmation)"
+    ],
+    "urgent": [
+      "Execute threat hunting for file hashes and BYOVD behavioral patterns",
+      "Hunt for Arsenal-237 toolkit components (lpe.exe, killer.dll, rootkit.dll, enc_*.exe)",
+      "Review logs for timeframe when driver had kernel access",
+      "Deploy EDR rules for all IOCTL capabilities and SSDT bypass patterns",
+      "Initiate forensic analysis to determine attack timeline and scope",
+      "Rotate all credentials (user accounts, service accounts, administrative credentials, API keys)"
+    ],
+    "critical": [
+      "Begin system rebuilds (cleanup NOT recommended for kernel-level compromise)",
+      "Deploy Microsoft Vulnerable Driver Blocklist (Windows 11 with HVCI)",
+      "Implement enhanced EDR monitoring for BYOVD techniques",
+      "Review and strengthen least privilege controls",
+      "Conduct lessons learned and control gap analysis",
+      "Implement driver signature enforcement and tamper protection"
+    ]
+  },
+  "timestamp": "2026-01-26T00:00:00Z",
+  "analyst": "Threat Intelligence Team",
+  "report_version": "1.0",
+  "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+}

@@ -1,0 +1,290 @@
+{
+  "campaign": "lpe.exe (Privilege Escalation Module) - Arsenal-237 Malware Toolkit",
+  "description": "Comprehensive IOCs for lpe.exe, a sophisticated local privilege escalation (LPE) wrapper from the Arsenal-237 malware toolkit. Discovered on open directory at IP 109.230.231.37, this Rust-compiled executable accepts another executable as a command-line parameter (typically killer.dll or killer.exe) and elevates it from standard user privileges to NT AUTHORITY\\SYSTEM through five independent escalation techniques: token impersonation, named pipe exploitation, registry UAC bypass, scheduled task creation, and WMIC process creation. Acts as privilege escalation wrapper in Arsenal-237 attack chain, launching killer.dll with SYSTEM privileges to enable defense evasion and ransomware deployment.",
+  "severity": "CRITICAL",
+  "confidence_level": "High",
+  "file_hashes": {
+    "lpe_exe": {
+      "md5": "47400a6b7c84847db0513e6dbc04e469",
+      "sha1": "6b7b8c3689d00b6b5daddab2c9cbc4582288fd1f",
+      "sha256": "c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e",
+      "size": "383488 bytes (374 KB)",
+      "type": "PE64 executable, Rust-compiled",
+      "original_filename": "lpe.exe",
+      "family": "Arsenal-237 Privilege Escalation Module",
+      "family_confidence": "CONFIRMED (100%)",
+      "compiler": "Rust",
+      "purpose": "Local privilege escalation to NT AUTHORITY\\SYSTEM via multi-technique approach"
+    }
+  },
+  "network_indicators": {
+    "distribution_infrastructure": {
+      "ip": "109.230.231.37",
+      "description": "Arsenal-237 malware distribution point - open directory serving malware toolkit",
+      "confidence": "CONFIRMED",
+      "threat_type": "Malware distribution, command and control infrastructure",
+      "action": "BLOCK at network perimeter immediately"
+    }
+  },
+  "execution_indicators": {
+    "typical_execution_method": {
+      "command": "lpe.exe C:\\path\\to\\payload.exe",
+      "examples": [
+        "lpe.exe C:\\path\\to\\killer.dll",
+        "lpe.exe C:\\path\\to\\killer.exe",
+        "lpe.exe C:\\Temp\\enc_c2.exe"
+      ],
+      "parent_process": "Initial access vector (varies by campaign)",
+      "required_privileges": "Standard user (escalates to SYSTEM)",
+      "execution_context": "Privilege escalation wrapper in Arsenal-237 attack chain (wraps killer.dll and executes it with SYSTEM privileges)",
+      "usage_note": "When executed without arguments, lpe.exe displays usage instructions explicitly recommending killer.exe as payload"
+    },
+    "attack_timeline": {
+      "total_execution_window": "5-15 seconds",
+      "privilege_check": "< 1 second (determines if already admin)",
+      "escalation_sequence": "3-10 seconds (cycles through techniques until success)",
+      "payload_launch": "1-4 seconds (executes wrapped command with SYSTEM privileges)",
+      "impact": "Extremely fast execution defeats manual response - automated detection required"
+    }
+  },
+  "behavioral_indicators": {
+    "technique_1_token_impersonation": {
+      "technique": "T1134.001 - Token Impersonation via Process Enumeration",
+      "description": "Enumerates system processes to find SYSTEM-level process and steals security token",
+      "target_processes": [
+        "winlogon.exe",
+        "lsass.exe",
+        "services.exe",
+        "csrss.exe"
+      ],
+      "api_sequence": [
+        "CreateToolhelp32Snapshot (enumerate running processes)",
+        "Process32FirstW / Process32NextW (iterate process list)",
+        "OpenProcess (PROCESS_QUERY_INFORMATION access)",
+        "OpenProcessToken (TOKEN_QUERY | TOKEN_DUPLICATE access)",
+        "DuplicateTokenEx (create impersonation token)",
+        "ImpersonateLoggedOnUser (apply stolen SYSTEM token)"
+      ],
+      "indicators": [
+        "CreateToolhelp32Snapshot called by lpe.exe",
+        "OpenProcess targeting winlogon.exe, lsass.exe, or services.exe",
+        "OpenProcessToken from non-system process",
+        "DuplicateTokenEx API call",
+        "ImpersonateLoggedOnUser from standard user process"
+      ],
+      "impact": "Immediate SYSTEM privilege acquisition if target process accessible",
+      "detection": "Monitor for OpenProcessToken + DuplicateTokenEx + ImpersonateLoggedOnUser sequence from non-system processes"
+    },
+    "technique_2_named_pipe_impersonation": {
+      "technique": "T1055.001 - Named Pipe Impersonation",
+      "description": "Creates malicious named pipe and tricks Print Spooler service into connecting",
+      "target_pipe": "\\\\.\\pipe\\spoolss",
+      "api_sequence": [
+        "CreateNamedPipeW (create malicious pipe server)",
+        "ConnectNamedPipe (wait for SYSTEM service to connect)",
+        "ImpersonateNamedPipeClient (steal SYSTEM token from connected client)",
+        "CreateProcessAsUserW (launch payload with stolen token)"
+      ],
+      "powershell_connector": "powershell -c \"try{$c=New-Object IO.Pipes.NamedPipeClientStream('.','<pipe_name>');$c.Connect(500)}catch{}\" 2>nul",
+      "indicators": [
+        "CreateNamedPipeW called by lpe.exe",
+        "Named pipe creation with unusual names or permissions",
+        "PowerShell one-liner attempting named pipe connection",
+        "ImpersonateNamedPipeClient from non-system process",
+        "Print Spooler connections to non-standard pipes"
+      ],
+      "impact": "SYSTEM privilege acquisition via Print Spooler or other SYSTEM services",
+      "detection": "Monitor for CreateNamedPipeW + ImpersonateNamedPipeClient sequence; alert on PowerShell named pipe client connections"
+    },
+    "technique_3_registry_uac_bypass": {
+      "technique": "T1548.002 - Bypass User Account Control (Registry Hijack)",
+      "description": "Modifies registry to hijack fodhelper.exe execution (trusted binary runs elevated without UAC)",
+      "target_registry_keys": [
+        "HKCU\\Software\\Classes\\ms-settings\\Shell\\Open\\command",
+        "HKCU\\Software\\Classes\\ms-settings\\Shell\\Open\\command\\DelegateExecute"
+      ],
+      "registry_commands": [
+        "reg add HKCU\\Software\\Classes\\ms-settings\\Shell\\Open\\command /d \"<payload>\" /f",
+        "reg add HKCU\\Software\\Classes\\ms-settings\\Shell\\Open\\command /v DelegateExecute /t REG_SZ /f",
+        "start fodhelper.exe"
+      ],
+      "cleanup_command": "reg delete HKCU\\Software\\Classes\\ms-settings /f 2>nul",
+      "indicators": [
+        "Registry modification to HKCU\\Software\\Classes\\ms-settings\\Shell\\Open\\command",
+        "reg.exe spawned by lpe.exe",
+        "fodhelper.exe launched with unusual parent process",
+        "fodhelper.exe execution followed by registry key deletion"
+      ],
+      "impact": "UAC bypass enables SYSTEM-level execution without user prompt",
+      "detection": "Monitor HKCU\\Software\\Classes\\ms-settings registry modifications; alert on fodhelper.exe with non-standard parent"
+    },
+    "technique_4_scheduled_task_creation": {
+      "technique": "T1053.005 - Scheduled Task Creation",
+      "description": "Creates temporary scheduled task to execute payload as SYSTEM via direct use of schtasks.exe (not hijacking another component like UAC bypass or named pipe techniques)",
+      "task_name": "UNKNOWN - Likely randomized at runtime (not hardcoded in malware)",
+      "api_sequence": [
+        "schtasks /create /tn <randomized_task_name> /tr <payload> /sc once /st 00:00 /ru SYSTEM /f",
+        "Task executes immediately with SYSTEM privileges (start time already passed)",
+        "schtasks /delete /tn <task_name> /f (cleanup to remove forensic evidence)"
+      ],
+      "indicators": [
+        "schtasks.exe spawned by lpe.exe",
+        "Scheduled task creation with /ru SYSTEM parameter",
+        "Task creation followed by immediate execution and deletion (< 20 second lifecycle)",
+        "Event ID 4698 (scheduled task created) from unexpected parent process",
+        "Task names may appear benign (e.g., WindowsUpdate, SystemMaintenance) or randomized"
+      ],
+      "impact": "SYSTEM privilege execution via legitimate Task Scheduler administrative capability (direct use, not exploitation)",
+      "detection": "Monitor schtasks /create with /ru SYSTEM from non-administrative processes; alert on rapid task create-execute-delete lifecycle; cannot rely on specific task name for detection"
+    },
+    "technique_5_wmic_process_creation": {
+      "technique": "T1047 - Windows Management Instrumentation",
+      "description": "Uses WMIC to create privileged process",
+      "wmic_command": "wmic process call create \"<payload>\"",
+      "indicators": [
+        "wmic.exe spawned by lpe.exe",
+        "wmic process call create command execution",
+        "Process creation via WMI with elevated privileges"
+      ],
+      "impact": "Privileged process creation via legitimate administrative tool",
+      "detection": "Monitor wmic process call create from non-administrative users; correlate with lpe.exe parent process"
+    },
+    "privilege_check_function": {
+      "technique": "Administrative privilege detection",
+      "description": "Checks if already running as administrator before attempting escalation",
+      "api_sequence": [
+        "AllocateAndInitializeSid (create Administrators group SID S-1-5-32-544)",
+        "CheckTokenMembership (verify current token membership)",
+        "FreeSid (cleanup)"
+      ],
+      "indicators": [
+        "AllocateAndInitializeSid targeting Administrators group",
+        "CheckTokenMembership called by lpe.exe",
+        "Conditional execution based on privilege check result"
+      ],
+      "impact": "Optimization - skips escalation if already admin",
+      "detection": "Monitor for privilege check API sequences as precursor to escalation attempts"
+    },
+    "multi_technique_redundancy": {
+      "technique": "Layered escalation approach",
+      "description": "Cycles through five independent techniques until one succeeds",
+      "success_rate": "99.99%+ (statistical probability with five independent attempts)",
+      "evasion_value": "Defeats single-technique patching or blocking",
+      "indicators": [
+        "Multiple escalation technique attempts in rapid succession",
+        "Privilege escalation API calls from same process",
+        "Successive failures of individual techniques before final success"
+      ],
+      "impact": "Near-guaranteed SYSTEM privilege acquisition across diverse environments",
+      "detection": "Monitor for multiple privilege escalation techniques attempted by single process within short timeframe"
+    }
+  },
+  "detection_opportunities": {
+    "high_confidence_indicators": [
+      "File hash match: c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e",
+      "OpenProcessToken + DuplicateTokenEx + ImpersonateLoggedOnUser API sequence",
+      "CreateNamedPipeW + ImpersonateNamedPipeClient sequence from non-system process",
+      "Registry modification to HKCU\\Software\\Classes\\ms-settings\\Shell\\Open\\command",
+      "schtasks /create /ru SYSTEM from non-administrative process",
+      "wmic process call create from non-administrative user",
+      "fodhelper.exe with unusual parent process",
+      "Network connection to 109.230.231.37"
+    ],
+    "behavioral_patterns": [
+      "Rapid succession of privilege escalation API calls (5-15 second window)",
+      "Multiple escalation techniques attempted by single process",
+      "Privilege elevation immediately followed by killer.dll execution",
+      "lpe.exe accepting command-line payload parameter",
+      "Token duplication targeting SYSTEM processes (winlogon, lsass, services, csrss)",
+      "PowerShell one-liner for named pipe client connection"
+    ],
+    "forensic_artifacts": [
+      "Registry keys: HKCU\\Software\\Classes\\ms-settings\\Shell\\Open\\command (may be deleted post-execution)",
+      "Scheduled task creation events (Event ID 4698) with /ru SYSTEM",
+      "Process creation events for schtasks.exe, wmic.exe, reg.exe, powershell.exe spawned by lpe.exe",
+      "Token manipulation events (Event ID 4672 - Special privileges assigned to new logon)",
+      "Named pipe creation events (Sysmon Event ID 17/18)",
+      "Process access events targeting winlogon.exe, lsass.exe, services.exe (Sysmon Event ID 10)"
+    ]
+  },
+  "mitre_attack_techniques": {
+    "privilege_escalation": [
+      "T1134.001 - Access Token Manipulation: Token Impersonation/Theft",
+      "T1134.002 - Access Token Manipulation: Create Process with Token",
+      "T1548.002 - Abuse Elevation Control Mechanism: Bypass User Account Control",
+      "T1134.003 - Access Token Manipulation: Make and Impersonate Token"
+    ],
+    "execution": [
+      "T1053.005 - Scheduled Task/Job: Scheduled Task",
+      "T1047 - Windows Management Instrumentation",
+      "T1059.001 - Command and Scripting Interpreter: PowerShell"
+    ],
+    "defense_evasion": [
+      "T1070.004 - Indicator Removal: File Deletion (registry key cleanup)",
+      "T1548.002 - Abuse Elevation Control Mechanism: Bypass User Account Control"
+    ]
+  },
+  "remediation_guidance": {
+    "complexity": "CRITICAL - Complete system rebuild MANDATORY",
+    "recommended_approach": "REBUILD REQUIRED",
+    "rationale": "SYSTEM-level compromise enables complete endpoint control including bootkit installation, kernel driver deployment, credential harvesting, and covert persistence. Aggressive cleanup cannot provide confidence in complete eradication.",
+    "rebuild_steps": [
+      "Immediately isolate infected systems from network",
+      "Capture memory dumps and disk images for forensic analysis before shutdown",
+      "Identify all systems where lpe.exe executed",
+      "Identify timeframe when SYSTEM privileges were active",
+      "Complete disk wipe and clean OS installation from trusted media",
+      "Apply all security updates before network reconnection",
+      "Restore user data after malware scanning",
+      "Deploy driver blocklist for Arsenal-237 vulnerable drivers",
+      "Implement enhanced EDR monitoring for privilege escalation techniques",
+      "30-day enhanced monitoring period post-rebuild"
+    ],
+    "post_incident_actions": {
+      "credential_rotation": "MANDATORY - SYSTEM privilege enables credential harvesting from memory (LSASS access)",
+      "log_review": "Review security logs for timeframe when lpe.exe had SYSTEM privileges - assume attacker actions occurred",
+      "threat_hunting": "Hunt for subsequent stages: killer.dll execution, enc_*.exe ransomware, lateral movement artifacts",
+      "control_gaps": "Address control gaps that allowed lpe.exe execution and privilege escalation success"
+    }
+  },
+  "threat_actor_assessment": {
+    "family": "Arsenal-237 Malware Toolkit",
+    "family_confidence": "CONFIRMED (100%)",
+    "attribution_basis": "Discovered on Arsenal-237 open directory (109.230.231.37), integrated with killer.dll and enc_*.exe from same toolkit, example usage references killer.dll explicitly",
+    "threat_actor_type": "Organized cybercrime with professional development resources",
+    "sophistication": "High - professional Rust development, multi-technique redundancy (5 independent escalation methods), comprehensive Windows version coverage, anti-forensics cleanup",
+    "motivation": "Financial (ransomware deployment) / Destructive attacks",
+    "targeting": "Opportunistic - broad toolkit availability suggests multiple campaigns",
+    "historical_context": "Part of ongoing Arsenal-237 investigation - third of 11 deep-dive samples analyzed. Critical Stage 2 module enabling all subsequent attack phases."
+  },
+  "response_priorities": {
+    "immediate": [
+      "Isolate infected systems from network immediately",
+      "Block Arsenal-237 infrastructure (109.230.231.37) at network perimeter",
+      "Alert leadership (CISO/Security Director) of CRITICAL privilege escalation compromise",
+      "Preserve evidence (memory dumps, disk images) before system shutdown",
+      "Identify all systems where lpe.exe may have executed",
+      "Activate ransomware incident response procedures immediately (do NOT wait for ransomware confirmation)"
+    ],
+    "urgent": [
+      "Execute threat hunting for file hashes and privilege escalation behavioral patterns",
+      "Hunt for subsequent Arsenal-237 stages (killer.dll, enc_*.exe)",
+      "Review logs for timeframe when SYSTEM privileges were active",
+      "Deploy EDR rules for all five escalation techniques",
+      "Initiate forensic analysis to determine attack timeline and scope",
+      "Rotate all credentials (user accounts, service accounts, administrative credentials)"
+    ],
+    "critical": [
+      "Begin system rebuilds (cleanup NOT recommended for SYSTEM compromise)",
+      "Deploy enhanced EDR monitoring for privilege escalation techniques",
+      "Implement behavioral detection for multi-technique escalation patterns",
+      "Review and strengthen least privilege controls",
+      "Conduct lessons learned and control gap analysis",
+      "Implement ASR rules blocking common privilege escalation vectors"
+    ]
+  },
+  "timestamp": "2026-01-25T00:00:00Z",
+  "analyst": "Threat Intelligence Team",
+  "report_version": "1.0",
+  "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+}

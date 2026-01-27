@@ -1,0 +1,423 @@
+{
+  "metadata": {
+    "report_title": "dec_fixed.exe (Arsenal-237 Ransomware Decryptor) IOC Feed",
+    "report_date": "2026-01-26",
+    "analysis_type": "Threat Intelligence - Per-Victim Decryptor",
+    "malware_family": "Arsenal-237",
+    "sample_type": "Ransomware Recovery Tool (Decryptor)",
+    "confidence_level": "CONFIRMED",
+    "threat_level": "MEDIUM (Threat Intelligence Value)",
+    "note": "This is a RECOVERY TOOL (decryptor), not an attack tool. Presence indicates prior ransomware infection and victim ransom payment. Low detection priority."
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802",
+        "filename": "dec_fixed.exe",
+        "type": "PE64 Ransomware Decryptor",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "md5": [
+      {
+        "value": "7c5493a0a5df52682a5c2ba433634601",
+        "filename": "dec_fixed.exe",
+        "type": "PE64 Ransomware Decryptor",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "29014d4d6fc42219cd9cdc130b868382cf2c14c2",
+        "filename": "dec_fixed.exe",
+        "type": "PE64 Ransomware Decryptor",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "cryptographic_indicators": {
+    "hardcoded_keys": [
+      {
+        "key": "1e0d8597856270d1926cfcf252af1b14a776c20b3b50168df9311314202e73ba",
+        "key_type": "ChaCha20 Victim-Specific Decryption Key",
+        "key_size_bits": 256,
+        "key_format": "Hexadecimal String (64 characters)",
+        "key_location": "Binary .rdata section (static data)",
+        "purpose": "Decrypts files encrypted by Arsenal-237 encryptors (enc_c2.exe, new_enc.exe)",
+        "scope": "Per-Victim (ONE victim only, different key in each decryptor)",
+        "confidence": "CONFIRMED",
+        "related_samples": {
+          "new_enc.exe_key": "67e6096a85ae67bb72f36e3c3af54fa57f520e518c68059babd9831f19cde05b",
+          "key_comparison": "DIFFERENT - confirms per-victim architecture (NOT universal master key)"
+        }
+      }
+    ],
+    "cryptographic_algorithm": [
+      {
+        "algorithm": "ChaCha20-Poly1305 AEAD",
+        "standard": "RFC 7539",
+        "key_size": "256 bits (32 bytes)",
+        "nonce_size": "96 bits (12 bytes)",
+        "auth_tag_size": "128 bits (16 bytes)",
+        "purpose": "Authenticated decryption of Arsenal-237 encrypted files",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "operational_significance": "Per-victim key architecture proves professional RaaS operations. Each victim receives unique decryptor with embedded victim-specific key."
+  },
+  "behavioral_indicators": {
+    "command_line": [
+      {
+        "process": "dec_fixed.exe",
+        "arguments": "--folder-a <directory_path>",
+        "purpose": "Batch decryption of victim's encrypted files",
+        "description": "Recursively processes A-Z subdirectories for encrypted file decryption",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "file_operations": [
+      {
+        "operation_type": "Read",
+        "target": "Recursively enumerate A-Z subdirectories",
+        "pattern": "Arsenal-237 encrypted files matching custom format",
+        "detection_method": "Directory access patterns, file enumeration monitoring",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "operation_type": "Write",
+        "target": "Original filenames in decrypted form",
+        "pattern": "File creation with original filename restoration",
+        "detection_method": "File creation monitoring in encrypted directories",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "operation_type": "Delete",
+        "target": "Original encrypted files and readme.txt ransom notes",
+        "pattern": "Post-decryption cleanup of encryption artifacts",
+        "detection_method": "File deletion monitoring, ransom note cleanup tracking",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "directory_structure": [
+      {
+        "organization": "A-Z subdirectory enumeration",
+        "description": "Mirrors Arsenal-237 encryptor's file organization by first character",
+        "pattern": "root_directory/A/, root_directory/B/, ... root_directory/Z/",
+        "significance": "Indicates proper integration with Arsenal-237 campaign infrastructure",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "static_strings": [
+    {
+      "string": "--folder-a",
+      "type": "Command-line Flag",
+      "context": "Directory parameter for batch decryption",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "expand 32-byte k",
+      "type": "ChaCha20 RFC 7539 Constant",
+      "context": "Cryptographic algorithm identifier",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "Decryption failed - wrong key or corrupted file",
+      "type": "Error Message",
+      "context": "Poly1305 authentication tag verification failure",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "File corrupted - encrypted size mismatch",
+      "type": "Error Message",
+      "context": "File structure validation failure",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "File corrupted - no filename",
+      "type": "Error Message",
+      "context": "Filename length field is zero",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "File too small",
+      "type": "Error Message",
+      "context": "File size less than minimum (16 bytes for auth tag)",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "Could not find filename",
+      "type": "Error Message",
+      "context": "Filename length exceeds MAX_PATH (260 bytes)",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "Invalid victim key hex",
+      "type": "Error Message",
+      "context": "Master key parsing failure (should not occur with hardcoded key)",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "readme.txt",
+      "type": "Ransom Note Filename",
+      "context": "Target for automatic deletion after successful decryption",
+      "confidence": "CONFIRMED"
+    }
+  ],
+  "encrypted_file_format": {
+    "format_specification": [
+      {
+        "field": "Encrypted Data",
+        "position": "Bytes 0 to (file_size - 4 - filename_length - 16)",
+        "size": "Variable",
+        "description": "Original file content encrypted with ChaCha20",
+        "encryption": "ChaCha20 stream cipher",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "field": "Poly1305 Authentication Tag",
+        "position": "Bytes (file_size - 4 - filename_length - 16) to (file_size - 4 - filename_length)",
+        "size": "16 bytes",
+        "description": "AEAD authentication tag for integrity verification",
+        "algorithm": "Poly1305 MAC",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "field": "Encrypted Filename",
+        "position": "Bytes (file_size - 4 - filename_length) to (file_size - 4)",
+        "size": "Variable (max 260 bytes)",
+        "description": "Original filename encrypted with ChaCha20",
+        "encryption": "ChaCha20 stream cipher (separate nonce)",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "field": "Filename Length",
+        "position": "Last 4 bytes (file_size - 4 to file_size)",
+        "size": "4 bytes (u32 little-endian)",
+        "description": "Length of encrypted filename field",
+        "encoding": "Little-endian unsigned 32-bit integer",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "file_format_example": {
+      "description": "Logical layout of Arsenal-237 encrypted file",
+      "layout": "[Encrypted Data (variable)] + [Poly1305 Tag (16B)] + [Encrypted Filename (≤260B)] + [Length (4B LE)]",
+      "total_overhead": "20 bytes minimum (16B tag + 4B length)",
+      "confidence": "CONFIRMED"
+    },
+    "validation_checks": [
+      {
+        "check": "Minimum file size",
+        "requirement": "File must be >= 16 bytes",
+        "failure_message": "File too small",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "check": "Filename length bounds",
+        "requirement": "Filename length <= 260 bytes (MAX_PATH)",
+        "failure_message": "Could not find filename",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "check": "File structure consistency",
+        "requirement": "file_size >= 16 + filename_length + 4",
+        "failure_message": "File corrupted - encrypted size mismatch",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "check": "Filename existence",
+        "requirement": "Filename length > 0",
+        "failure_message": "File corrupted - no filename",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "check": "Authentication tag verification",
+        "requirement": "Poly1305 MAC must match computed value",
+        "failure_message": "Decryption failed - wrong key or corrupted file",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "mitre_attack_mapping": [
+    {
+      "tactic": "Defense Evasion",
+      "technique": "T1622",
+      "technique_name": "Debugger Evasion",
+      "evidence": "TEB-based debugger detection in initialization sequence",
+      "context": "Inherited from encryptor samples; defense mechanism for reverse engineering prevention",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "tactic": "Discovery",
+      "technique": "T1083",
+      "technique_name": "File and Directory Discovery",
+      "evidence": "Recursive enumeration of A-Z subdirectories; structure-based file identification",
+      "context": "Locates encrypted files matching Arsenal-237 campaign encryption pattern",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "tactic": "Impact",
+      "technique": "T1486",
+      "technique_name": "Data Encrypted for Impact (REVERSAL)",
+      "evidence": "ChaCha20-Poly1305 AEAD decryption; reverses ransomware encryption",
+      "context": "REVERSES encryption, NOT applies it; enables victim file recovery",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "tactic": "Execution",
+      "technique": "T1059",
+      "technique_name": "Command and Scripting Interpreter",
+      "evidence": "Command-line argument parsing (--folder-a directory parameter)",
+      "context": "Standard CLI tool usage pattern for batch decryption specification",
+      "confidence": "CONFIRMED"
+    }
+  ],
+  "attribution_indicators": {
+    "per_victim_architecture": {
+      "finding": "Per-victim key architecture CONFIRMED (NOT universal master key)",
+      "evidence": [
+        "new_enc.exe hardcoded key: 67e6096a85ae67bb72f36e3c3af54fa57f520e518c68059babd9831f19cde05b",
+        "dec_fixed.exe hardcoded key: 1e0d8597856270d1926cfcf252af1b14a776c20b3b50168df9311314202e73ba",
+        "Keys are DIFFERENT (56 of 64 hex characters differ)",
+        "Confirms per-victim key system, not universal master key"
+      ],
+      "confidence": "CONFIRMED (100%)",
+      "operational_significance": "Each victim receives unique decryptor with their specific victim key embedded. Professional RaaS model."
+    },
+    "victim_count_estimate": {
+      "minimum_victims": "3+ victims",
+      "basis": "Multiple different hardcoded keys across analyzed samples",
+      "confidence": "HIGH (85%)",
+      "implication": "Arsenal-237 is active, ongoing campaign with multiple successful victims"
+    },
+    "operational_model": {
+      "classification": "Ransomware-as-a-Service (RaaS)",
+      "evidence": [
+        "Per-victim key deployment",
+        "Custom decryptor generation per victim",
+        "Post-payment support model (dec_fixed version suggests corrected decryptor)",
+        "Professional error handling and customer communication",
+        "Version management (dec_fixed implies initial version failure and fix)"
+      ],
+      "confidence": "HIGHLY LIKELY (85%)",
+      "implication": "Organized, professional threat actor with established business processes"
+    },
+    "threat_actor_profile": {
+      "experience_level": "Professional/Established",
+      "sophistication": "MEDIUM-HIGH",
+      "indicators": [
+        "Proper cryptographic implementation (RFC 7539 compliance)",
+        "Secure coding practices (constant-time comparison, path traversal prevention)",
+        "Robust error handling with descriptive messages",
+        "Professional code organization and structure",
+        "Responsive customer support (version corrections)"
+      ],
+      "confidence": "HIGH (85-90%)",
+      "geographic_origin": "Unknown (no language-specific indicators)",
+      "specific_group_identification": "Cannot determine from available data"
+    }
+  },
+  "related_samples": [
+    {
+      "filename": "enc_c2.exe",
+      "type": "Arsenal-237 Encryptor (Tor-based C2)",
+      "relationship": "Encryptor variant with same cryptographic parameters",
+      "shared_features": "ChaCha20-Poly1305 AEAD, TEB debugger detection, A-Z directory structure",
+      "key": "Unknown (different per victim)",
+      "note": "dec_fixed.exe decrypts files encrypted by enc_c2.exe"
+    },
+    {
+      "filename": "new_enc.exe",
+      "type": "Arsenal-237 Encryptor (Offline variant)",
+      "relationship": "Encryptor variant with hardcoded key",
+      "shared_features": "ChaCha20-Poly1305 AEAD, encrypted file format, A-Z directory structure",
+      "key": "67e6096a85ae67bb72f36e3c3af54fa57f520e518c68059babd9831f19cde05b",
+      "note": "dec_fixed.exe can decrypt files encrypted by new_enc.exe IF key matches (it doesn't for this sample)"
+    }
+  ],
+  "threat_intelligence_value": {
+    "primary_value": "Confirms professional per-victim key architecture in Arsenal-237 RaaS operations",
+    "secondary_value": "Demonstrates post-payment support model and customer service infrastructure",
+    "tertiary_value": "Provides cryptographic implementation details for detection rule development",
+    "forensic_value": "Hardcoded key enables victim identification and recovery capability assessment",
+    "campaign_tracking": "Per-victim keys indicate multiple victims; key diversity enables victim count estimation",
+    "overall_significance": "MEDIUM-HIGH - Represents operational confirmation of professional RaaS model, not isolated incident"
+  },
+  "detection_methodology": {
+    "hash_based": [
+      {
+        "method": "Direct hash matching",
+        "indicator": "SHA256: d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802",
+        "priority": "LOW (recovery tool, not active threat)",
+        "use_case": "Victim identification and forensic investigation"
+      }
+    ],
+    "string_based": [
+      {
+        "method": "Hardcoded key search",
+        "indicator": "1e0d8597856270d1926cfcf252af1b14a776c20b3b50168df9311314202e73ba",
+        "priority": "MEDIUM (victim-specific indicator)",
+        "use_case": "Victim decryptor identification"
+      },
+      {
+        "method": "ChaCha20 constant detection",
+        "indicator": "expand 32-byte k",
+        "priority": "MEDIUM (cryptographic algorithm identifier)",
+        "use_case": "Arsenal-237 tool identification"
+      },
+      {
+        "method": "Error message detection",
+        "indicator": "\"Decryption failed - wrong key or corrupted file\"",
+        "priority": "LOW (post-payment tool)",
+        "use_case": "Behavioral analysis of decryption operations"
+      }
+    ],
+    "behavioral": [
+      {
+        "method": "Directory enumeration pattern",
+        "indicator": "A-Z subdirectory recursive traversal",
+        "priority": "MEDIUM (ransomware-specific pattern)",
+        "use_case": "Detection of encrypted file recovery operations"
+      },
+      {
+        "method": "File deletion pattern",
+        "indicator": "readme.txt cleanup after file creation",
+        "priority": "MEDIUM (ransom note elimination)",
+        "use_case": "Identification of successful decryption operations"
+      },
+      {
+        "method": "Command-line signature",
+        "indicator": "dec_fixed.exe --folder-a <directory>",
+        "priority": "LOW (legitimate recovery tool)",
+        "use_case": "Victim decryption operation monitoring"
+      }
+    ]
+  },
+  "recommendations": {
+    "if_victim_identified": [
+      "Preserve forensic evidence before decryption attempt",
+      "Coordinate with law enforcement (FBI/Europol/CISA)",
+      "Document entire ransom negotiation timeline",
+      "Contact incident response firm for professional support",
+      "Selective decryption (critical files first, preserve others for investigation)",
+      "Post-recovery forensic investigation to determine initial breach vector",
+      "Security enhancements to prevent recurrence"
+    ],
+    "for_threat_intelligence": [
+      "Document per-victim key architecture in campaign profile",
+      "Estimate victim count from key diversity across samples",
+      "Track operational model indicators (post-payment support, versioning)",
+      "Share decryptor analysis with threat intelligence community",
+      "Coordinate with law enforcement on investigation status",
+      "Consider public disclosure via No More Ransom Project (if appropriate)"
+    ],
+    "for_defenders": [
+      "Develop detection rules for Arsenal-237 encryptor samples (primary prevention focus)",
+      "Monitor for command-line execution of dec_fixed.exe variants",
+      "Track A-Z directory enumeration patterns in monitoring",
+      "Alert on large-scale file deletion operations (ransom notes)",
+      "Implement infrastructure blocking for identified C2 servers (from enc_c2.exe analysis)",
+      "Security awareness training on phishing/initial compromise prevention"
+    ]
+  }
+}

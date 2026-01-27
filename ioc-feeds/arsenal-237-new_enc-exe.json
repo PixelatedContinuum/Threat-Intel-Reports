@@ -1,0 +1,537 @@
+{
+  "report_metadata": {
+    "title": "new_enc.exe (Arsenal-237 Rust Ransomware v0.5-beta) - IOC Feed",
+    "generated_date": "2026-01-26",
+    "sample_analyzed": "new_enc.exe",
+    "analysis_type": "Static Reverse Engineering",
+    "threat_level": "CRITICAL"
+  },
+  "file_hashes": {
+    "samples": [
+      {
+        "filename": "new_enc.exe",
+        "file_type": "PE64 (Portable Executable 64-bit)",
+        "file_size": 1952256,
+        "architecture": "x64",
+        "compiler": "Rust (cargo toolchain)",
+        "hashes": {
+          "md5": "a16ba61114fa5a40afce54459bbff21e",
+          "sha1": "2c01cefba27c4d3fcb3b450cb8e625e89bc54363",
+          "sha256": "90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2"
+        },
+        "confidence": "CONFIRMED",
+        "ioc_type": ["file_hash", "executable"]
+      }
+    ]
+  },
+  "cryptographic_indicators": {
+    "encryption_keys": [
+      {
+        "key_hex": "67e6096a85ae67bb72f36e3c3af54fa57f520e518c68059babd9831f19cde05b",
+        "key_length_bits": 256,
+        "algorithm": "ChaCha20",
+        "rfc_standard": "RFC 7539",
+        "usage": "File Encryption (Direct) OR Key Encryption Key (KEK) - Requires Dynamic Analysis Validation",
+        "purpose": "Ransomware encryption of victim files",
+        "severity": "CRITICAL",
+        "confidence": "CONFIRMED",
+        "ioc_type": "cryptographic_material"
+      }
+    ]
+  },
+  "campaign_identifiers": {
+    "builder_ids": [
+      {
+        "campaign_id": "ICIIXGD1X8ZJ4T1MTQ6TLQIDJEMDE7U4",
+        "purpose": "Victim tracking and payment verification",
+        "confidence": "CONFIRMED",
+        "ioc_type": "campaign_identifier"
+      }
+    ],
+    "version_identifiers": [
+      {
+        "version": "v0.5-beta",
+        "significance": "Indicates active development; future variants expected",
+        "confidence": "CONFIRMED",
+        "ioc_type": "version_string"
+      }
+    ]
+  },
+  "command_execution_indicators": {
+    "process_execution_patterns": [
+      {
+        "process_name": "new_enc.exe",
+        "command_line_arguments": [
+          "--pass [password]",
+          "--folder [target_path]",
+          "--file [target_file]"
+        ],
+        "significance": "Manual operator deployment with targeted encryption capabilities",
+        "confidence": "CONFIRMED",
+        "ioc_type": ["process_execution", "command_line_argument"]
+      },
+      {
+        "process_name": "vssadmin.exe",
+        "command_line": "vssadmin delete shadows /all /quiet",
+        "parent_process": "new_enc.exe OR cmd.exe",
+        "significance": "Volume Shadow Copy deletion - Anti-recovery mechanism",
+        "confidence": "CONFIRMED",
+        "ioc_type": ["process_execution", "anti_recovery_action"],
+        "severity": "CRITICAL"
+      },
+      {
+        "process_name": "schtasks.exe",
+        "command_line": "schtasks.exe /create /tn RustRansomNoteTask /tr [ransom_note_display_command]",
+        "parent_process": "new_enc.exe",
+        "significance": "Scheduled task creation for persistent ransom note display",
+        "confidence": "CONFIRMED",
+        "ioc_type": ["process_execution", "persistence_mechanism"]
+      }
+    ]
+  },
+  "scheduled_tasks": {
+    "scheduled_task_objects": [
+      {
+        "task_name": "RustRansomNoteTask",
+        "purpose": "Persistent display of ransom note on system login",
+        "significance": "Ransomware persistence mechanism",
+        "confidence": "CONFIRMED",
+        "ioc_type": ["scheduled_task", "persistence"],
+        "detection_method": "Registry: HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\RustRansomNoteTask"
+      }
+    ]
+  },
+  "service_termination_indicators": {
+    "veritas_backup_exec_agents": [
+      {
+        "service_name": "GxVss",
+        "description": "Veritas VSS provider",
+        "purpose": "Volume Shadow Copy integration",
+        "impact": "Backup capability disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination",
+        "severity": "CRITICAL"
+      },
+      {
+        "service_name": "GxBlr",
+        "description": "Veritas Backup Exec remote agent",
+        "purpose": "Network backup and restore",
+        "impact": "Remote backup disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination",
+        "severity": "CRITICAL"
+      },
+      {
+        "service_name": "GxFWD",
+        "description": "Veritas media server agent",
+        "purpose": "Media library and storage management",
+        "impact": "Media server disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination",
+        "severity": "CRITICAL"
+      },
+      {
+        "service_name": "GxCVD",
+        "description": "Veritas client service",
+        "purpose": "Client-side backup operations",
+        "impact": "Client backup disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination",
+        "severity": "CRITICAL"
+      },
+      {
+        "service_name": "GxCIMgr",
+        "description": "Veritas management service",
+        "purpose": "Centralized backup management",
+        "impact": "Management and coordination disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination",
+        "severity": "CRITICAL"
+      }
+    ],
+    "database_services": [
+      {
+        "service_pattern": "sql",
+        "description": "Microsoft SQL Server services",
+        "purpose": "Database management and file lock release",
+        "impact": "Database shutdown, file accessibility",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination"
+      },
+      {
+        "service_pattern": "oracle",
+        "description": "Oracle Database services",
+        "purpose": "Database management and file lock release",
+        "impact": "Database shutdown, file accessibility",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination"
+      },
+      {
+        "service_pattern": "ocssd",
+        "description": "Oracle Cluster Synchronization Services",
+        "purpose": "Cluster coordination",
+        "impact": "Cluster operations disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination"
+      },
+      {
+        "service_pattern": "dbsnmp",
+        "description": "Oracle SNMP monitoring agent",
+        "purpose": "Database monitoring",
+        "impact": "Monitoring disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination"
+      }
+    ],
+    "backup_and_recovery_services": [
+      {
+        "service_name": "vss",
+        "description": "Volume Shadow Copy Service",
+        "impact": "Windows native backup and restore disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination",
+        "severity": "CRITICAL"
+      },
+      {
+        "service_name": "veeam",
+        "description": "Veeam Backup service",
+        "impact": "Veeam backup operations disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination",
+        "severity": "CRITICAL"
+      },
+      {
+        "service_pattern": "backup",
+        "description": "Generic backup services",
+        "impact": "Backup operations disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination",
+        "severity": "CRITICAL"
+      }
+    ],
+    "security_services": [
+      {
+        "service_pattern": "sophos",
+        "description": "Sophos antivirus/security services",
+        "impact": "Endpoint protection disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination"
+      },
+      {
+        "service_pattern": "mepocs",
+        "description": "McAfee ePO Cloud Services",
+        "impact": "Security monitoring disabled",
+        "confidence": "CONFIRMED",
+        "ioc_type": "service_termination"
+      }
+    ]
+  },
+  "anti_analysis_indicators": {
+    "debugger_detection": [
+      {
+        "technique": "TEB-based Debugger Detection",
+        "function_address": "0x140001180",
+        "sub_function": "sub_140001180",
+        "method": "Thread Environment Block inspection",
+        "mitre_technique": "T1622",
+        "confidence": "CONFIRMED",
+        "ioc_type": "anti_analysis",
+        "severity": "HIGH"
+      },
+      {
+        "technique": "IsDebuggerPresent() API",
+        "method": "Windows kernel API call to check for debugger presence",
+        "mitre_technique": "T1622",
+        "confidence": "CONFIRMED",
+        "ioc_type": "anti_analysis"
+      }
+    ],
+    "vm_detection_registry": [
+      {
+        "registry_key": "HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System\\BIOS",
+        "values_checked": ["SystemManufacturer", "SystemProductName", "BIOSVendor"],
+        "vm_indicators": ["QEMU", "VirtualBox", "VMware", "Hyper-V", "Citrix", "KVM", "Xen", "Parallels"],
+        "mitre_technique": "T1497.001",
+        "confidence": "CONFIRMED",
+        "ioc_type": "anti_analysis",
+        "detection_method": "Registry query monitoring"
+      }
+    ],
+    "vm_detection_strings": [
+      {
+        "string_patterns": ["VBOX", "VMWARE", "VIRTUAL", "QEMU", "XEN", "PARALLELS", "HYPERV"],
+        "method": "String pattern matching in system information",
+        "mitre_technique": "T1497.001",
+        "confidence": "CONFIRMED",
+        "ioc_type": "anti_analysis"
+      }
+    ],
+    "sandbox_detection": [
+      {
+        "detection_pattern": ["sandbox", "virus", "malware", "test", "sample", "john doe", "cuckoo", "analysis"],
+        "target": "Username and Computer Name environment variables",
+        "mitre_technique": "T1497.002",
+        "confidence": "CONFIRMED",
+        "ioc_type": "anti_analysis"
+      }
+    ],
+    "analysis_tool_process_monitoring": [
+      {
+        "tools_monitored": [
+          "wireshark.exe",
+          "procmon.exe",
+          "procexp.exe",
+          "x64dbg.exe",
+          "x32dbg.exe",
+          "ollydbg.exe",
+          "ida.exe",
+          "ida64.exe",
+          "ghidra.exe",
+          "dnspy.exe",
+          "fiddler.exe",
+          "processhacker.exe",
+          "pestudio.exe"
+        ],
+        "count": 13,
+        "method": "Process enumeration and process name matching",
+        "mitre_technique": "T1518.001",
+        "confidence": "CONFIRMED",
+        "ioc_type": "anti_analysis",
+        "severity": "HIGH"
+      }
+    ]
+  },
+  "mitre_attack_mapping": {
+    "tactics": [
+      {
+        "tactic": "Defense Evasion",
+        "techniques": [
+          {
+            "technique_id": "T1622",
+            "technique_name": "Debugger Evasion",
+            "evidence": "TEB-based debugger detection",
+            "severity": "HIGH"
+          },
+          {
+            "technique_id": "T1497.001",
+            "technique_name": "Virtualization/Sandbox Evasion: System Checks",
+            "evidence": "VM detection via registry and string patterns",
+            "severity": "HIGH"
+          },
+          {
+            "technique_id": "T1497.002",
+            "technique_name": "Virtualization/Sandbox Evasion: User Activity Checks",
+            "evidence": "Sandbox pattern matching on username/hostname",
+            "severity": "HIGH"
+          },
+          {
+            "technique_id": "T1027",
+            "technique_name": "Obfuscated Files or Information",
+            "evidence": "Hex-encoded ransom note in binary",
+            "severity": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "tactic": "Discovery",
+        "techniques": [
+          {
+            "technique_id": "T1518.001",
+            "technique_name": "Software Discovery: Security Software Discovery",
+            "evidence": "Process monitoring of analysis tools",
+            "severity": "HIGH"
+          },
+          {
+            "technique_id": "T1083",
+            "technique_name": "File and Directory Discovery",
+            "evidence": "Directory and file extension enumeration",
+            "severity": "MEDIUM"
+          }
+        ]
+      },
+      {
+        "tactic": "Execution",
+        "techniques": [
+          {
+            "technique_id": "T1059",
+            "technique_name": "Command and Scripting Interpreter",
+            "evidence": "Command-line argument processing (--pass, --folder, --file)",
+            "severity": "HIGH"
+          }
+        ]
+      },
+      {
+        "tactic": "Impact",
+        "techniques": [
+          {
+            "technique_id": "T1486",
+            "technique_name": "Data Encrypted for Impact",
+            "evidence": "ChaCha20 stream cipher encryption with hardcoded key",
+            "severity": "CRITICAL"
+          },
+          {
+            "technique_id": "T1490",
+            "technique_name": "Inhibit System Recovery",
+            "evidence": "VSS deletion command and backup service termination",
+            "severity": "CRITICAL"
+          },
+          {
+            "technique_id": "T1489",
+            "technique_name": "Service Stop",
+            "evidence": "Termination of backup, database, security, and application services",
+            "severity": "CRITICAL"
+          }
+        ]
+      },
+      {
+        "tactic": "Persistence",
+        "techniques": [
+          {
+            "technique_id": "T1053.005",
+            "technique_name": "Scheduled Task/Job: Scheduled Task",
+            "evidence": "RustRansomNoteTask creation",
+            "severity": "LOW"
+          }
+        ]
+      }
+    ]
+  },
+  "string_based_iocs": {
+    "malware_family_identifiers": [
+      {
+        "string": "v0.5-beta",
+        "type": "version_identifier",
+        "significance": "Indicates active development version",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "ICIIXGD1X8ZJ4T1MTQ6TLQIDJEMDE7U4",
+        "type": "campaign_id",
+        "significance": "Victim tracking and payment verification identifier",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "RustRansomNoteTask",
+        "type": "scheduled_task_name",
+        "significance": "Persistent ransom note display mechanism",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "command_strings": [
+      {
+        "string": "vssadmin delete shadows /all /quiet",
+        "type": "anti_recovery_command",
+        "significance": "VSS snapshot deletion",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "registry_keys": [
+      {
+        "registry_key": "HARDWARE\\DESCRIPTION\\System\\BIOS",
+        "purpose": "VM detection via BIOS information",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "hex_encoded_strings": [
+      {
+        "hex_start": "76302e352d626574610d0a0d0a52616e736f6d2d4944",
+        "decoded_header": "v0.5-beta\\r\\n\\r\\nRansom-ID",
+        "purpose": "Hex-encoded ransom note",
+        "significance": "Prevents casual string extraction",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "behavioral_iocs": {
+    "file_system_behavior": [
+      {
+        "behavior": "Directory exclusion from encryption",
+        "excluded_directories": [
+          "$recycle.bin", "config.msi", "$windows.~bt", "$windows.~ws", "windows",
+          "appdata", "application data", "boot", "google", "mozilla", "program files",
+          "program files (x86)", "programdata", "system volume information", "tor browser",
+          "windows.old", "intel", "msocache", "perflogs", "x64dbg", "public", "all users", "default"
+        ],
+        "purpose": "Preserve system operability after encryption",
+        "confidence": "CONFIRMED",
+        "ioc_type": "behavioral_pattern"
+      },
+      {
+        "behavior": "File extension exclusion from encryption",
+        "excluded_extensions": [
+          "386", "adv", "ani", "bat", "bin", "cab", "cmd", "com", "cpl", "cur",
+          "dll", "drv", "exe", "hlp", "ico", "ldf", "lnk", "mod", "msc", "msp",
+          "msi", "ocx", "ps1", "scr", "sys", "theme", "wpx", "lock", "key"
+        ],
+        "purpose": "Prevent encryption of system executables",
+        "confidence": "CONFIRMED",
+        "ioc_type": "behavioral_pattern"
+      }
+    ],
+    "process_behavior": [
+      {
+        "behavior": "Multi-stage service termination sequence",
+        "stages": [
+          "Database service termination (SQL, Oracle)",
+          "Backup service termination (Veritas, Veeam, VSS)",
+          "Security service termination (Sophos, McAfee)",
+          "Application termination (Office, email clients)"
+        ],
+        "purpose": "Eliminate recovery and defensive mechanisms before encryption",
+        "confidence": "CONFIRMED",
+        "ioc_type": "behavioral_pattern"
+      },
+      {
+        "behavior": "Ransomware execution timeline",
+        "sequence": [
+          "Entry point and anti-debug checks (0-2 seconds)",
+          "Anti-analysis evasion (1-2 seconds)",
+          "Service termination (2-10 seconds)",
+          "VSS deletion execution (5 seconds)",
+          "File enumeration and encryption (10+ seconds)",
+          "Scheduled task creation",
+          "Ransom note display"
+        ],
+        "purpose": "Coordinated attack sequence",
+        "confidence": "CONFIRMED",
+        "ioc_type": "behavioral_pattern"
+      }
+    ]
+  },
+  "family_relationship": {
+    "arsenal_237_variants": [
+      {
+        "variant_name": "enc_c2.exe",
+        "relationship": "Related variant - likely same malware family",
+        "shared_characteristics": [
+          "Rust implementation",
+          "Identical TEB-based anti-debug function (sub_140001180)",
+          "ChaCha20 encryption algorithm",
+          "Multi-layer anti-analysis system",
+          "Enterprise service targeting"
+        ],
+        "distinguishing_characteristics": [
+          "enc_c2.exe: C2-enabled (Tor onion)",
+          "new_enc.exe: Manual CLI deployment (--pass, --folder, --file)",
+          "enc_c2.exe: Tor infrastructure (rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion)",
+          "new_enc.exe: No C2 infrastructure identified"
+        ],
+        "confidence": "HIGHLY LIKELY (85%)"
+      }
+    ]
+  },
+  "threat_intelligence_summary": {
+    "threat_actor_classification": "Organized cybercriminals - Professional ransomware operation",
+    "development_capability": "ADVANCED",
+    "operational_capability": "ADVANCED",
+    "sophistication_indicators": [
+      "Rust language implementation (memory-safe, modern)",
+      "Multi-layer anti-analysis system (5 distinct layers)",
+      "Enterprise backup infrastructure targeting",
+      "Strategic service termination sequencing",
+      "Professional version control (v0.5-beta)",
+      "Campaign management system (builder ID tracking)"
+    ],
+    "assessed_threat_model": "Ransomware-as-a-Service (RaaS) platform with multiple deployment variants"
+  }
+}

@@ -1,0 +1,392 @@
+{
+  "campaign": "killer.dll (BYOVD Defense Evasion) - Arsenal-237 Malware Toolkit",
+  "description": "Comprehensive IOCs for killer.dll, a sophisticated BYOVD (Bring Your Own Vulnerable Driver) defense evasion module from the Arsenal-237 malware toolkit. Discovered on open directory at IP 109.230.231.37, this Rust-compiled module systematically disables endpoint security products by deploying legitimately-signed vulnerable drivers (BdApiUtil64.sys, ProcExpDriver.sys) to terminate security processes from kernel-mode. Operates as the second stage in a two-stage attack chain following lpe.exe privilege escalation.",
+  "severity": "CRITICAL",
+  "confidence_level": "High",
+  "file_hashes": {
+    "killer_dll": {
+      "md5": "c031054f6140e2c366eaf4263f827dbf",
+      "sha1": "c2f5519f00249aa1511c26a93165bf32f3b1efab",
+      "sha256": "10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d",
+      "size": "559104 bytes (546 KB)",
+      "type": "PE32+ DLL, Rust-compiled",
+      "original_filename": "killer.dll",
+      "family": "Arsenal-237 BYOVD Defense Evasion Module",
+      "family_confidence": "CONFIRMED (100%)",
+      "compiler": "Rust",
+      "export_function": "get_hostfxr_path",
+      "purpose": "Defense evasion via BYOVD technique - terminates security products"
+    },
+    "bdapiutil64_sys": {
+      "filename": "BdApiUtil64.sys",
+      "description": "Legitimately-signed Baidu Antivirus driver embedded in killer.dll",
+      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x800024B4",
+      "company": "Baidu, Inc.",
+      "product": "Baidu Antivirus BdApi Driver",
+      "version": "5.0.3.84333",
+      "digital_signature": "Valid (Signed by Baidu, Thawte, Symantec, VeriSign, Microsoft chain)",
+      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
+      "device_path": "\\\\.\\BdApiUtil",
+      "ioctl_code": "0x800024B4",
+      "ioctl_purpose": "Process termination command",
+      "kernel_capabilities": [
+        "ZwTerminateProcess (process termination)",
+        "FltEnumerateFilters (EDR/AV filter discovery)",
+        "CmRegisterCallback (registry manipulation)",
+        "PsSetCreateProcessNotifyRoutine (process monitoring)",
+        "IoDeleteDevice (device object manipulation)"
+      ]
+    },
+    "procexpdriver_sys": {
+      "filename": "ProcExpDriver.sys",
+      "description": "Legitimately-signed Sysinternals Process Explorer driver embedded in killer.dll",
+      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x8335003C",
+      "company": "Sysinternals - www.sysinternals.com",
+      "product": "Process Explorer",
+      "version": "17.0.7",
+      "internal_name": "procexp.sys",
+      "digital_signature": "Valid (Signed by Microsoft)",
+      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
+      "device_path": "\\\\.\\PROCEXP152",
+      "ioctl_code": "0x8335003C",
+      "ioctl_purpose": "Process termination command",
+      "kernel_capabilities": [
+        "ZwOpenProcess (process handle acquisition)",
+        "ZwQueryInformationProcess (process inspection)",
+        "PsLookupProcessByProcessId (process lookup)",
+        "ZwOpenProcessToken (token manipulation)",
+        "KeStackAttachProcess (address space attachment)"
+      ]
+    }
+  },
+  "network_indicators": {
+    "distribution_infrastructure": {
+      "ip": "109.230.231.37",
+      "description": "Arsenal-237 malware distribution point - open directory serving malware toolkit",
+      "confidence": "CONFIRMED",
+      "threat_type": "Malware distribution, command and control infrastructure",
+      "action": "BLOCK at network perimeter immediately"
+    },
+    "c2_infrastructure": {
+      "c2_url": "http://109.230.231.37:8888/lpe.exe",
+      "description": "Hardcoded C2 URL for downloading lpe.exe privilege escalation module",
+      "confidence": "CONFIRMED (found in configuration table at offset 0x180078d98)",
+      "threat_type": "Command and control, payload delivery",
+      "action": "BLOCK at network perimeter and web proxy"
+    }
+  },
+  "execution_indicators": {
+    "typical_execution_method": {
+      "command": "rundll32.exe C:\\path\\to\\killer.dll,get_hostfxr_path",
+      "parent_process": "lpe.exe",
+      "required_privileges": "NT AUTHORITY\\SYSTEM",
+      "privilege_source": "lpe.exe elevates privileges before launching killer.dll",
+      "execution_context": "Second stage in lpe.exe → killer.dll two-stage attack chain"
+    },
+    "attack_timeline": {
+      "total_execution_window": "5-15 seconds",
+      "phase_1_deployment": "2-3 seconds (driver extraction and service creation)",
+      "phase_2_execution": "2-8 seconds (security product termination via IOCTL)",
+      "phase_3_cleanup": "1-4 seconds (service deletion and file removal)",
+      "impact": "Extremely fast execution defeats manual response"
+    }
+  },
+  "behavioral_indicators": {
+    "byovd_technique": {
+      "technique": "T1068 - Bring Your Own Vulnerable Driver",
+      "description": "Deploys legitimately-signed vulnerable drivers to achieve kernel-level process termination",
+      "indicators": [
+        "SERVICE_KERNEL_DRIVER service creation by non-standard process (rundll32.exe)",
+        "Driver file written to temp directory with randomized filename (e.g., qzyxwp.sys)",
+        "Legitimate driver signatures (Baidu, Microsoft) used for evasion",
+        "Rapid service lifecycle: CreateServiceW → StartServiceW → ControlService → DeleteService"
+      ],
+      "impact": "Kernel-level execution bypasses user-mode security controls",
+      "detection": "Monitor for anomalous kernel driver service creation and short-lived driver services"
+    },
+    "ioctl_abuse": {
+      "technique": "IOCTL command abuse for process termination",
+      "ioctl_codes": {
+        "baidu_termination": "0x800024B4",
+        "procexp_termination": "0x8335003C"
+      },
+      "description": "Sends process termination commands to loaded drivers via DeviceIoControl",
+      "indicators": [
+        "DeviceIoControl calls with IOCTL 0x800024B4 or 0x8335003C",
+        "CreateFileW calls to device paths \\\\.\\BdApiUtil or \\\\.\\PROCEXP152",
+        "Input buffer containing target process ID (PID)"
+      ],
+      "impact": "Direct kernel-mode process termination cannot be prevented by user-mode EDR",
+      "detection": "Monitor DeviceIoControl calls with specific IOCTL codes from unexpected processes"
+    },
+    "mass_process_termination": {
+      "technique": "Systematic security product termination",
+      "target_count": "26 security processes + 18 security services",
+      "execution_speed": "2-8 seconds for complete kill list",
+      "indicators": [
+        "Simultaneous termination of multiple security processes",
+        "Processes terminated: MsMpEng.exe, ekrn.exe, avp.exe, bdservicehost.exe, MBAMService.exe",
+        "Services terminated: ekrn, eamon, MBAMService, avpk, vsserv, ccSvcHst"
+      ],
+      "impact": "Complete endpoint security blind spot - no active protection remains",
+      "detection": "Alert on simultaneous termination of 3+ security products within 60-second window"
+    },
+    "anti_forensics": {
+      "technique": "Self-cleanup to remove forensic artifacts",
+      "cleanup_actions": [
+        "DeleteService (removes driver service from system)",
+        "DeleteFileW (removes driver file from disk)",
+        "NtUnloadDriver (unloads kernel driver)"
+      ],
+      "indicators": [
+        "Rapid service creation followed by deletion (< 20 seconds lifespan)",
+        "Driver file creation and deletion in same execution",
+        "No persistent artifacts remain post-execution"
+      ],
+      "impact": "Post-incident forensics cannot recover driver files",
+      "detection": "Real-time monitoring required - artifacts do not survive execution"
+    },
+    "tls_manipulation_anti_analysis": {
+      "technique": "Thread Local Storage manipulation with crash trigger",
+      "description": "Detects analysis environments and crashes via INT 3 (trap) instruction",
+      "indicators": [
+        "TlsAlloc, TlsGetValue, TlsSetValue API calls",
+        "Structured Exception Handling (SEH) for debugger detection",
+        "Intentional crash (trap 0xd) if debugger detected"
+      ],
+      "impact": "Defeats standard debugging and dynamic analysis tools",
+      "detection": "Monitor for processes making extensive TLS API calls combined with service creation"
+    },
+    "dynamic_driver_naming": {
+      "technique": "Randomized driver filename generation",
+      "description": "Generates random filenames using character set 'abcdefghijklmnopqrstuvwxyz.sys'",
+      "indicators": [
+        "Driver files with random lowercase names (e.g., qzyxwp.sys, abcxyz.sys)",
+        ".sys files created in temp directories",
+        "Service names do not match driver filenames"
+      ],
+      "impact": "Evades static filename-based detection",
+      "detection": "Monitor for .sys file creation in temp directories with non-standard naming"
+    }
+  },
+  "target_security_products": {
+    "targeted_processes": [
+      "MsMpEng.exe (Microsoft Defender)",
+      "MpDefenderCoreService.exe (Microsoft Defender)",
+      "NisSrv.exe (Microsoft Network Inspection)",
+      "smartscreen.exe (Microsoft SmartScreen)",
+      "MsSense.exe (Microsoft Defender for Endpoint)",
+      "SenseCnProxy.exe (Microsoft Defender for Endpoint)",
+      "SenseIR.exe (Microsoft Defender for Endpoint)",
+      "SecurityHealthService.exe (Windows Security Health)",
+      "ekrn.exe (ESET)",
+      "egui.exe (ESET)",
+      "eamonm.exe (ESET)",
+      "MBAMService.exe (Malwarebytes)",
+      "mbamtray.exe (Malwarebytes)",
+      "MBAMWsc.exe (Malwarebytes)",
+      "avp.exe (Kaspersky)",
+      "kavfs.exe (Kaspersky)",
+      "kavfsslp.exe (Kaspersky)",
+      "bdservicehost.exe (Bitdefender)",
+      "bdagent.exe (Bitdefender)",
+      "vsserv.exe (Bitdefender)",
+      "avguard.exe (Avira/AVG)",
+      "avgnt.exe (Avira)",
+      "avscan.exe (Avira)"
+    ],
+    "targeted_services": [
+      "ekrn (ESET)",
+      "eamon (ESET)",
+      "ehdrv (ESET)",
+      "MBAMService (Malwarebytes)",
+      "MBAMProtection (Malwarebytes)",
+      "MBAMChameleon (Malwarebytes)",
+      "MBAMSwissArmy (Malwarebytes)",
+      "avpk (Kaspersky)",
+      "avfs (Kaspersky)",
+      "avfsslp (Kaspersky)",
+      "bdservicehost (Bitdefender)",
+      "vsserv (Bitdefender)",
+      "mfefire (McAfee)",
+      "mfemms (McAfee)",
+      "mmcshield (McAfee)",
+      "SepMasterService (Symantec/Norton)",
+      "ccSvcHst (Symantec/Norton)",
+      "Rtvscan (Symantec/Norton)"
+    ],
+    "market_coverage": "90%+ of enterprise security products targeted",
+    "impact": "Near-complete endpoint security blind spot enables undetected payload deployment"
+  },
+  "detection_opportunities": {
+    "high_confidence_indicators": [
+      "File hash match: 10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d",
+      "Service creation: SERVICE_KERNEL_DRIVER type by rundll32.exe",
+      "Driver file creation: *.sys in temp directories with random lowercase names",
+      "DeviceIoControl calls with IOCTL 0x800024B4 or 0x8335003C",
+      "Device handle acquisition: CreateFileW to \\\\.\\BdApiUtil or \\\\.\\PROCEXP152",
+      "Mass process termination: 3+ security products terminated within 60 seconds",
+      "Rapid service lifecycle: Service created and deleted within 20 seconds",
+      "Network connection to 109.230.231.37"
+    ],
+    "detection_windows": [
+      {
+        "phase": "Service Creation",
+        "window": "2-3 seconds",
+        "indicators": [
+          "CreateServiceW API called by rundll32.exe",
+          "SERVICE_KERNEL_DRIVER service type",
+          "Service name does not match known legitimate drivers"
+        ],
+        "tools": "Sysmon Event ID 19, Windows Event Log 7045, EDR service creation monitoring"
+      },
+      {
+        "phase": "Driver Loading",
+        "window": "1-2 seconds",
+        "indicators": [
+          "StartServiceW API for kernel driver",
+          "Driver load event for non-standard .sys file",
+          "Unsigned or third-party signed driver loaded"
+        ],
+        "tools": "Sysmon Event ID 6, Windows Event Log 4697, EDR driver load monitoring"
+      },
+      {
+        "phase": "IOCTL Abuse",
+        "window": "2-8 seconds",
+        "indicators": [
+          "DeviceIoControl API with IOCTL 0x800024B4 or 0x8335003C",
+          "CreateFileW to device paths \\\\.\\BdApiUtil or \\\\.\\PROCEXP152",
+          "Input buffer contains process ID (PID) of security product"
+        ],
+        "tools": "EDR API monitoring, kernel ETW tracing, driver behavior monitoring"
+      },
+      {
+        "phase": "Mass Termination",
+        "window": "2-8 seconds",
+        "indicators": [
+          "Simultaneous termination of MsMpEng.exe, ekrn.exe, avp.exe, etc.",
+          "Process exit codes indicating forced termination",
+          "Security service stop events"
+        ],
+        "tools": "Sysmon Event ID 5, Windows Event Log 4689, EDR process monitoring"
+      },
+      {
+        "phase": "Cleanup",
+        "window": "1-4 seconds",
+        "indicators": [
+          "ControlService API to stop driver service",
+          "DeleteService API to remove service",
+          "DeleteFileW API to remove .sys driver file",
+          "NtUnloadDriver API call"
+        ],
+        "tools": "Sysmon Event ID 19, Windows Event Log 7040, EDR file deletion monitoring"
+      }
+    ],
+    "behavioral_patterns": [
+      "rundll32.exe creating kernel driver services (extremely rare)",
+      "Short-lived driver services (< 20 second lifespan)",
+      "Driver files in temp directories (non-standard location)",
+      "Simultaneous termination of multiple AV/EDR products",
+      "DeviceIoControl calls from DLL processes",
+      "Service creation immediately following lpe.exe execution"
+    ],
+    "forensic_artifacts": [
+      "Service creation events (Event ID 7045, 4697)",
+      "Driver load events (Sysmon Event ID 6)",
+      "Process termination events for security products (Event ID 4689)",
+      "Service deletion events (Event ID 7040)",
+      "File deletion events for .sys files in temp (if caught in time)",
+      "Parent-child process relationship: lpe.exe → rundll32.exe → killer.dll"
+    ]
+  },
+  "mitre_attack_techniques": {
+    "defense_evasion": [
+      "T1562.001 - Impair Defenses: Disable or Modify Tools",
+      "T1140 - Deobfuscate/Decode Files or Information",
+      "T1027.009 - Obfuscated Files or Information: Embedded Payloads",
+      "T1070.004 - Indicator Removal: File Deletion",
+      "T1622 - Debugger Evasion"
+    ],
+    "privilege_escalation": [
+      "T1068 - Exploitation for Privilege Escalation"
+    ],
+    "execution": [
+      "T1106 - Native API"
+    ],
+    "persistence": [
+      "T1543.003 - Create or Modify System Process: Windows Service"
+    ]
+  },
+  "remediation_guidance": {
+    "complexity": "CRITICAL - Complete system rebuild MANDATORY",
+    "recommended_approach": "REBUILD REQUIRED",
+    "rationale": "Kernel-level execution, complete security blind spot, unknown residual artifacts, and professional-grade anti-forensics create unacceptable residual risk. Cleanup-only approaches cannot provide confidence in complete eradication.",
+    "rebuild_steps": [
+      "Immediately isolate infected systems from network",
+      "Capture memory dumps and disk images for forensic analysis before shutdown",
+      "Identify all systems where lpe.exe or killer.dll executed",
+      "Identify timeframe when security products were disabled",
+      "Complete disk wipe and clean OS installation from trusted media",
+      "Apply all security updates before network reconnection",
+      "Restore user data after malware scanning",
+      "Deploy driver blocklist (WDAC policy) for BdApiUtil64.sys and ProcExpDriver.sys",
+      "Implement enhanced EDR monitoring for BYOVD techniques",
+      "30-day enhanced monitoring period post-rebuild"
+    ],
+    "driver_blocklisting": {
+      "priority": "CRITICAL - Preventative measure",
+      "scope": "All Windows endpoints and servers",
+      "method": "Windows Defender Application Control (WDAC) deny rules",
+      "drivers_to_block": [
+        "BdApiUtil64.sys (by hash if extracted)",
+        "ProcExpDriver.sys version 17.0.7 (by hash if extracted)",
+        "All versions of Baidu Antivirus drivers (by publisher if not needed)"
+      ],
+      "implementation": "Create WDAC deny policy and deploy via Group Policy",
+      "testing_required": "Test in pilot group before enterprise deployment to avoid blocking legitimate software"
+    },
+    "post_incident_actions": {
+      "credential_rotation": "RECOMMENDED - Security products may have been disabled during credential access",
+      "log_review": "Review security logs for timeframe when products were disabled - assume attacker actions undetected",
+      "threat_hunting": "Hunt for secondary payloads deployed during security blind spot window",
+      "control_gaps": "Address control gaps that allowed lpe.exe privilege escalation in first place"
+    }
+  },
+  "threat_actor_assessment": {
+    "family": "Arsenal-237 Malware Toolkit",
+    "family_confidence": "CONFIRMED (100%)",
+    "attribution_basis": "Discovered on Arsenal-237 open directory (109.230.231.37), hardcoded C2 URL to same infrastructure, integration with lpe.exe from same toolkit",
+    "threat_actor_type": "Organized cybercrime with professional development resources",
+    "sophistication": "High - professional Rust development, BYOVD technique, comprehensive security product coverage, anti-forensics",
+    "motivation": "Financial (ransomware deployment) / Destructive attacks",
+    "targeting": "Opportunistic - broad toolkit availability suggests multiple campaigns",
+    "historical_context": "Part of ongoing Arsenal-237 investigation - second of 11 deep-dive samples analyzed"
+  },
+  "response_priorities": {
+    "immediate_0-1_hour": [
+      "Isolate infected systems from network immediately",
+      "Block Arsenal-237 infrastructure (109.230.231.37) at network perimeter",
+      "Alert leadership (CISO/Security Director) of CRITICAL defense evasion malware",
+      "Preserve evidence (memory dumps, disk images) before system shutdown",
+      "Identify all systems where lpe.exe or killer.dll may have executed"
+    ],
+    "urgent_1-4_hours": [
+      "Execute threat hunting for file hashes and lpe.exe → killer.dll execution chains",
+      "Review logs for timeframe when security products were disabled",
+      "Hunt for secondary payloads deployed during security blind spot",
+      "Deploy driver blocklist (WDAC) to prevent reinfection",
+      "Initiate forensic analysis to determine attack timeline and scope"
+    ],
+    "critical_4-24_hours": [
+      "Begin system rebuilds (cleanup NOT recommended)",
+      "Deploy enhanced EDR monitoring for BYOVD techniques",
+      "Implement service creation monitoring and alerting",
+      "Review and strengthen privilege escalation controls (address lpe.exe initial access)",
+      "Conduct lessons learned and control gap analysis"
+    ]
+  },
+  "timestamp": "2026-01-25T00:00:00Z",
+  "analyst": "Threat Intelligence Team",
+  "report_version": "1.0",
+  "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+}

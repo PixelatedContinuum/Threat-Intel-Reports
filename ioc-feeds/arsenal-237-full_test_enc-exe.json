@@ -1,0 +1,490 @@
+{
+  "metadata": {
+    "report_title": "full_test_enc.exe (Arsenal-237) IOC Feed",
+    "report_date": "2026-01-27",
+    "malware_family": "Arsenal-237 Toolkit",
+    "malware_type": "Ransomware",
+    "threat_level": "CRITICAL",
+    "confidence_level": "HIGH (95%)",
+    "hash_confidence": "CONFIRMED",
+    "behavioral_confidence": "CONFIRMED"
+  },
+  "file_hashes": {
+    "md5": [
+      {
+        "hash": "1fe8b9a14f9f8435c5fb5156bcbc174e",
+        "filename": "full_test_enc.exe",
+        "file_size": "15565824",
+        "file_type": "PE32+ (64-bit Windows executable)",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "sha1": [
+      {
+        "hash": "bc0788a36b6b839fc917be0577cd14e584c71fd8",
+        "filename": "full_test_enc.exe",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "sha256": [
+      {
+        "hash": "4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518",
+        "filename": "full_test_enc.exe",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ips": [],
+    "domains": [],
+    "urls": [],
+    "note": "Offline ransomware - no C2 communication infrastructure identified"
+  },
+  "host_indicators": {
+    "registry_keys": [
+      {
+        "hive": "HKEY_LOCAL_MACHINE",
+        "path": "Software\\Microsoft\\Windows\\Run",
+        "note": "Monitor for malware registry persistence"
+      },
+      {
+        "hive": "HKEY_CURRENT_USER",
+        "path": "Software\\Microsoft\\Windows\\Run",
+        "note": "Monitor for malware registry persistence"
+      }
+    ],
+    "file_paths": [
+      {
+        "path": "C:\\Windows\\Temp",
+        "note": "Hardcoded folder option string in malware"
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [],
+    "file_extensions": [
+      {
+        "extension": ".lockbox",
+        "description": "Encrypted file indicator - appended to encrypted files",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "behavioral_indicators": {
+    "process_creation": [
+      {
+        "process": "full_test_enc.exe",
+        "parent": "Any (user execution)",
+        "indicator": "Unsigned 15+ MB Rust executable",
+        "confidence": "HIGH"
+      }
+    ],
+    "command_execution": [
+      {
+        "command": "net use",
+        "source": "full_test_enc.exe or unsigned binary",
+        "purpose": "Network share enumeration",
+        "indicator": "Unsigned binary executing network enumeration",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "file_operations": [
+      {
+        "operation": "Mass file creation",
+        "indicator": "10+ files with .lockbox extension created in <1 minute",
+        "confidence": "CONFIRMED",
+        "severity": "CRITICAL"
+      },
+      {
+        "operation": "File deletion",
+        "indicator": "Original file deleted immediately after encryption",
+        "pattern": "File creation → File modification → File deletion → .lockbox creation",
+        "confidence": "DEFINITE"
+      },
+      {
+        "operation": "Parallel WriteFile calls",
+        "indicator": "4-16+ simultaneous file write operations (CPU core count)",
+        "confidence": "HIGH",
+        "detection_tool": "EDR process monitoring"
+      }
+    ],
+    "api_calls": [
+      {
+        "api": "GetLogicalDrives",
+        "purpose": "Enumerate all mounted drives (A-Z)",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "api": "CreateProcessW",
+        "purpose": "Execute 'net use' for network share discovery",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "api": "AddVectoredExceptionHandler",
+        "purpose": "Anti-analysis/debugging evasion",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "api": "SetUnhandledExceptionFilter",
+        "purpose": "Anti-analysis/debugging evasion",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "string_indicators": {
+    "ransom_strings": [
+      {
+        "string": "YOUR FILES HAVE BEEN ENCRYPTED!",
+        "type": "Ransom message",
+        "confidence": "CONFIRMED",
+        "severity": "CRITICAL"
+      },
+      {
+        "string": "Ransom ID:",
+        "type": "Victim identifier",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "behavioral_strings": [
+      {
+        "string": "[*] Encryptor starting...",
+        "type": "Debug/operational logging",
+        "confidence": "CONFIRMED",
+        "note": "Indicates development/test build"
+      },
+      {
+        "string": "[*] Encrypting all drives...",
+        "type": "Operational logging",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "[*] Full encryption mode",
+        "type": "Operational logging",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "[+] Encrypted ",
+        "type": "Progress logging",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "[+] Encryption complete!",
+        "type": "Completion logging",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "[+] GUI launched!",
+        "type": "UI launch logging",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "RUST_UI",
+        "type": "UI mode indicator",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "Failed to execute net use",
+        "type": "Error message",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "[-] Invalid folder:",
+        "type": "Error message",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "Failed to encrypt nonce",
+        "type": "Encryption error",
+        "confidence": "CONFIRMED",
+        "note": "Indicates ChaCha20 nonce generation issue"
+      },
+      {
+        "string": "Failed to encrypt key",
+        "type": "Encryption error",
+        "confidence": "CONFIRMED",
+        "note": "Indicates RSA key encryption issue"
+      },
+      {
+        "string": "Block encryption failed",
+        "type": "Encryption error",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "cryptographic_library_paths": [
+      {
+        "path": "/chacha20-0.9.1/src/lib.rs",
+        "library": "ChaCha20 stream cipher",
+        "purpose": "Fast file encryption",
+        "confidence": "CONFIRMED",
+        "note": "Professional cryptographic implementation"
+      },
+      {
+        "path": "/rsa-0.9.9/src/algorithms/",
+        "library": "RSA asymmetric encryption",
+        "purpose": "Secure key distribution (OAEP padding)",
+        "confidence": "CONFIRMED",
+        "note": "High-security key encapsulation"
+      },
+      {
+        "path": "/aead-0.5.2/src/lib.rs",
+        "library": "Authenticated Encryption with Associated Data",
+        "purpose": "Encryption integrity verification",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "path": "/cipher-0.4.4/",
+        "library": "Generic cipher traits",
+        "purpose": "Cipher abstraction layer",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "path": "/digest-0.10.7/",
+        "library": "Cryptographic hash functions",
+        "purpose": "Key derivation and authentication",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "path": "/rand-0.8.5/",
+        "library": "Cryptographically secure random number generation",
+        "purpose": "Key and nonce generation",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "performance_library_paths": [
+      {
+        "path": "/rayon-1.11.0/src/",
+        "library": "Parallel processing",
+        "purpose": "Multi-threaded encryption across CPU cores",
+        "confidence": "CONFIRMED",
+        "impact": "Enables enterprise-wide encryption in minutes"
+      },
+      {
+        "path": "/rayon-core-1.13.0/",
+        "library": "Thread pool management",
+        "purpose": "Efficient work distribution",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "path": "/sysinfo-0.29.11/",
+        "library": "System information collection",
+        "purpose": "Query CPU cores for thread pool sizing",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "path": "/walkdir-2.5.0/",
+        "library": "Recursive directory traversal",
+        "purpose": "Efficient file enumeration",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "mitre_attack_mapping": {
+    "techniques": [
+      {
+        "tactic": "Execution",
+        "technique": "T1204.002",
+        "name": "User Execution: Malicious File",
+        "confidence": "HIGH",
+        "evidence": "PE executable requires user or automated execution"
+      },
+      {
+        "tactic": "Defense Evasion",
+        "technique": "T1622",
+        "name": "Debugger Evasion",
+        "confidence": "CONFIRMED",
+        "evidence": "Vectored exception handlers, SetUnhandledExceptionFilter API"
+      },
+      {
+        "tactic": "Defense Evasion",
+        "technique": "T1497.001",
+        "name": "Virtualization/Sandbox Evasion",
+        "confidence": "CONFIRMED",
+        "evidence": "YARA detections: VMware_Detection, VirtualBox_Detection"
+      },
+      {
+        "tactic": "Defense Evasion",
+        "technique": "T1027",
+        "name": "Obfuscated Files or Information",
+        "confidence": "MODERATE",
+        "evidence": "Large Rust binary with static linking obscures analysis"
+      },
+      {
+        "tactic": "Discovery",
+        "technique": "T1082",
+        "name": "System Information Discovery",
+        "confidence": "HIGH",
+        "evidence": "sysinfo library (CPU, disk, network enumeration modules)"
+      },
+      {
+        "tactic": "Discovery",
+        "technique": "T1083",
+        "name": "File and Directory Discovery",
+        "confidence": "CONFIRMED",
+        "evidence": "WalkDir library, GetLogicalDrives, directory navigation APIs"
+      },
+      {
+        "tactic": "Discovery",
+        "technique": "T1135",
+        "name": "Network Share Discovery",
+        "confidence": "CONFIRMED",
+        "evidence": "'net use' command execution, UNC path handling"
+      },
+      {
+        "tactic": "Lateral Movement",
+        "technique": "T1021.002",
+        "name": "Remote Services: SMB/Windows Admin Shares",
+        "confidence": "HIGH",
+        "evidence": "Network share encryption via 'net use', UNC support"
+      },
+      {
+        "tactic": "Impact",
+        "technique": "T1486",
+        "name": "Data Encrypted for Impact",
+        "confidence": "CONFIRMED",
+        "evidence": "ChaCha20 + RSA encryption, .lockbox extension, ransom strings"
+      }
+    ]
+  },
+  "toolkit_context": {
+    "family": "Arsenal-237",
+    "components": [
+      {
+        "name": "full_test_enc.exe",
+        "type": "Encryption module",
+        "status": "Test/Development build",
+        "deployment_status": "Not yet widely deployed",
+        "severity": "CRITICAL"
+      }
+    ],
+    "relationship_to_blackcat": {
+      "assessment": "INSPIRED BY (NOT derivative)",
+      "confidence": "MODERATE (70%)",
+      "similarities": [
+        "Rust programming language",
+        "ChaCha20 stream cipher",
+        "Rayon multi-threading",
+        "Network share targeting",
+        "Professional implementation"
+      ],
+      "differences": [
+        "No C2 infrastructure (BlackCat has robust C2)",
+        "No data exfiltration (BlackCat does double extortion)",
+        "Standalone vs. RaaS deployment model",
+        "Different file extension (.lockbox vs. variable)",
+        "Test build vs. production-mature"
+      ]
+    }
+  },
+  "detection_evasion": {
+    "anti_analysis_techniques": [
+      {
+        "technique": "VM Detection",
+        "method": "CPUID, registry checks, VMware/VirtualBox driver detection",
+        "effectiveness": "HIGH - prevents sandbox analysis",
+        "bypasses": "Advanced hypervisor detection, physical hardware analysis"
+      },
+      {
+        "technique": "Debugger Evasion",
+        "method": "Vectored exception handlers, BeingDebugged flag",
+        "effectiveness": "HIGH - prevents step-through debugging",
+        "bypasses": "Kernel-mode debugging, memory forensics, static analysis"
+      },
+      {
+        "technique": "Exception Handling",
+        "method": "Custom SEH, exception handler hijacking",
+        "effectiveness": "MEDIUM - complicates dynamic analysis",
+        "bypasses": "Kernel debugging, memory dumps, behavioral monitoring"
+      }
+    ],
+    "what_evasion_cannot_prevent": [
+      "YARA scanning (pattern matching)",
+      "Memory forensics (memory dump analysis)",
+      "EDR behavioral detection (process telemetry)",
+      "Static analysis (disassembly)",
+      "File system monitoring (encryption indicators)",
+      "Network monitoring (lateral movement detection)"
+    ]
+  },
+  "threat_assessment": {
+    "overall_risk_score": "9.5/10",
+    "risk_rating": "CRITICAL",
+    "risk_components": {
+      "encryption_irreversibility": {
+        "score": "10/10",
+        "factor": "Critical",
+        "justification": "RSA-OAEP + ChaCha20 is cryptographically sound; no decryption possible without private key"
+      },
+      "speed_of_execution": {
+        "score": "9.5/10",
+        "factor": "Critical",
+        "justification": "Multi-threaded parallel processing encrypts enterprise network in 30-60 minutes"
+      },
+      "scope_of_impact": {
+        "score": "9.5/10",
+        "factor": "Critical",
+        "justification": "Targets all drives (A-Z) plus network shares; single infection spreads organization-wide"
+      },
+      "detection_difficulty": {
+        "score": "8/10",
+        "factor": "High",
+        "justification": "VM/debugger detection and offline operation bypass network defenses"
+      },
+      "lateral_movement": {
+        "score": "8/10",
+        "factor": "High",
+        "justification": "Network share enumeration enables domain-wide lateral movement"
+      },
+      "recovery_complexity": {
+        "score": "10/10",
+        "factor": "Critical",
+        "justification": "Only option is rebuild from clean backups; no recovery tool exists"
+      }
+    },
+    "threat_timeline": {
+      "0_to_5_minutes": "Initial encryption burst completes (user files encrypted)",
+      "5_to_15_minutes": "Lateral movement to network shares begins (if accessible)",
+      "15_to_30_minutes": "Significant portion of file server data encrypted",
+      "30_to_60_minutes": "Enterprise-wide compromise for typical mid-size organization"
+    },
+    "detection_window": "CRITICAL - Detection must occur within first 15 minutes to contain spread"
+  },
+  "recovery_options": {
+    "viable_recovery": "Backup restoration ONLY",
+    "impossible_recovery": [
+      "Brute-force encryption (would require 6400+ years)",
+      "Break RSA cryptography (no known mathematical weakness)",
+      "Ransomware decryptor (no private key available)",
+      "Ransomware negotiation (no guarantee of key release)"
+    ],
+    "backup_requirements": {
+      "must_be_isolated": "Ransomware cannot access backup systems",
+      "must_be_clean": "Backup must not contain encrypted files",
+      "must_be_tested": "Restoration should be tested before relying on recovery"
+    }
+  },
+  "recommendations": {
+    "immediate": [
+      "Search environment for all hash values (MD5, SHA1, SHA256)",
+      "Alert on .lockbox file extension creation events",
+      "Monitor for 15+ MB unsigned binaries executing",
+      "Implement EDR with behavioral ransomware detection"
+    ],
+    "short_term": [
+      "Deploy EDR to all endpoints",
+      "Create SIEM alerts for mass file encryption patterns",
+      "Implement network segmentation between user and file server networks",
+      "Verify backup system isolation and integrity"
+    ],
+    "medium_term": [
+      "Application whitelisting/control implementation",
+      "Network segmentation enforcement",
+      "Immutable backup implementation",
+      "Security awareness training"
+    ],
+    "long_term": [
+      "EDR enterprise-wide deployment",
+      "Process improvement and automation",
+      "Incident response capability enhancement",
+      "Continuous threat hunting program"
+    ]
+  }
+}

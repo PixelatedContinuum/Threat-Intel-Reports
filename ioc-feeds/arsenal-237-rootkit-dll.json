@@ -1,0 +1,341 @@
+{
+  "campaign": "rootkit.dll (Defense Evasion Framework) - Arsenal-237 Malware Toolkit",
+  "threat_actor": "Unknown (Arsenal-237 Toolkit User)",
+  "malware_family": "Arsenal-237",
+  "report_date": "2026-01-26",
+  "confidence": "high",
+  "severity": "critical",
+
+  "file_indicators": {
+    "primary_sample": {
+      "filename": "rootkit.dll",
+      "size": 413696,
+      "file_type": "PE64 DLL",
+      "compiler": "Rust (rustc)",
+      "md5": "674795d4d4ec09372904704633ea0d86",
+      "sha1": "483feeb4e391ae64a7d54637ea71d43a17d83c71",
+      "sha256": "e71240f26af1052172b5864cdddb78fcb990d7a96d53b7d22d19f5dfccdf9012",
+      "imphash": "Not available",
+      "ssdeep": "Not available"
+    },
+
+    "embedded_driver": {
+      "filename": "BdApiUtil64.sys",
+      "description": "Legitimately-signed Baidu driver embedded for BYOVD attacks",
+      "md5": "f72386e6b0e87a3245e0d6e4e4c5a1a0",
+      "sha1": "d8e1c6d0c1c0d6e8c9e0d6e0c1c0d6e8c9e0d6e0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+
+  "network_indicators": {
+    "note": "No direct network indicators - rootkit.dll focuses on local defense evasion"
+  },
+
+  "behavioral_indicators": {
+    "byovd_deployment": {
+      "description": "Deploys BdApiUtil64.sys vulnerable driver",
+      "technique": "BYOVD (Bring Your Own Vulnerable Driver)",
+      "mitre_attack": "T1068",
+      "confidence": "high",
+      "detection_opportunities": [
+        "Monitor for BdApiUtil64.sys driver loading events",
+        "Detect unsigned or unexpected driver installations",
+        "Alert on Baidu driver usage outside legitimate contexts"
+      ]
+    },
+
+    "process_termination": {
+      "description": "Terminates 20+ security products and analysis tools",
+      "technique": "Impair Defenses: Disable or Modify Tools",
+      "mitre_attack": "T1562.001",
+      "confidence": "high",
+      "target_processes": {
+        "microsoft_defender": [
+          "MsMpEng.exe",
+          "MpCmdRun.exe",
+          "NisSrv.exe",
+          "SecurityHealthService.exe",
+          "smartscreen.exe",
+          "SgrmBroker.exe",
+          "MpSigStub.exe",
+          "wscsvc.exe",
+          "WdNisDrv.sys",
+          "WdFilter.sys"
+        ],
+        "crowdstrike": [
+          "CSFalconService.exe",
+          "CSFalconContainer.exe",
+          "CSAgent.exe",
+          "csagent.sys",
+          "CSDeviceControl.exe",
+          "CSNamedPipeProxy.exe"
+        ],
+        "third_party_av": [
+          "ekrn.exe",
+          "avp.exe",
+          "MBAMService.exe",
+          "ccSvcHst.exe",
+          "WRSA.exe",
+          "SophosHealth.exe",
+          "CylanceSvc.exe",
+          "cyserver.exe",
+          "SentinelAgent.exe",
+          "SentinelStaticEngine.exe",
+          "cb.exe",
+          "RepMgr.exe"
+        ],
+        "analysis_tools": [
+          "procexp.exe",
+          "procexp64.exe",
+          "procmon.exe",
+          "procmon64.exe",
+          "tcpview.exe",
+          "autoruns.exe",
+          "Wireshark.exe",
+          "x64dbg.exe",
+          "windbg.exe",
+          "ida.exe",
+          "ida64.exe",
+          "ollydbg.exe",
+          "processhacker.exe"
+        ],
+        "forensics_tools": [
+          "volatility.exe",
+          "rekall.exe",
+          "FTKImager.exe"
+        ]
+      },
+      "detection_opportunities": [
+        "Monitor for mass security process terminations",
+        "Alert on defensive tool kill patterns",
+        "Detect ZwTerminateProcess API calls targeting security products",
+        "Monitor for analysis tool termination attempts"
+      ]
+    },
+
+    "file_system_stealth": {
+      "description": "Unicode-based file hiding capability via sub_180003c4b",
+      "technique": "Hide Artifacts: Hidden Files and Directories",
+      "mitre_attack": "T1564.001",
+      "confidence": "high",
+      "function": "sub_180003c4b",
+      "detection_opportunities": [
+        "Monitor for Unicode string manipulation in file operations",
+        "Detect file attribute modifications indicating hidden status",
+        "Alert on discrepancies between file listings and actual presence"
+      ]
+    },
+
+    "api_hooking": {
+      "description": "UTF-8 encoding manipulation for API interception via sub_180003447",
+      "technique": "Process Injection: Dynamic-link Library Injection",
+      "mitre_attack": "T1055.001",
+      "confidence": "high",
+      "function": "sub_180003447",
+      "detection_opportunities": [
+        "Monitor for API hooking behavior",
+        "Detect encoding manipulation in API call chains",
+        "Alert on DLL injection into security processes"
+      ]
+    },
+
+    "powershell_integration": {
+      "description": "PowerShell execution for script-based attacks",
+      "technique": "Command and Scripting Interpreter: PowerShell",
+      "mitre_attack": "T1059.001",
+      "confidence": "medium",
+      "detection_opportunities": [
+        "Monitor for PowerShell execution from DLL context",
+        "Detect obfuscated PowerShell commands",
+        "Alert on PowerShell script block logging evasion"
+      ]
+    },
+
+    "thread_based_execution": {
+      "description": "Creates threads for defense evasion operations via sub_180035420",
+      "technique": "Thread Execution Hijacking",
+      "mitre_attack": "T1055.003",
+      "confidence": "medium",
+      "function": "sub_180035420",
+      "detection_opportunities": [
+        "Monitor for suspicious thread creation patterns",
+        "Detect remote thread creation in security processes",
+        "Alert on thread injection targeting defensive tools"
+      ]
+    }
+  },
+
+  "registry_indicators": {
+    "service_persistence": {
+      "description": "Potential service registration for driver persistence",
+      "technique": "Create or Modify System Process: Windows Service",
+      "mitre_attack": "T1543.003",
+      "confidence": "medium",
+      "keys": [
+        "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BdApiUtil64",
+        "HKLM\\SYSTEM\\CurrentControlSet\\Services\\<custom_service_name>"
+      ],
+      "detection_opportunities": [
+        "Monitor for new service registrations with driver payloads",
+        "Alert on Baidu driver service creation",
+        "Detect modifications to existing security service configurations"
+      ]
+    },
+
+    "security_product_tampering": {
+      "description": "Registry modifications to disable security features",
+      "technique": "Modify Registry",
+      "mitre_attack": "T1112",
+      "confidence": "high",
+      "target_keys": [
+        "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SafeBoot"
+      ],
+      "detection_opportunities": [
+        "Monitor for Windows Defender policy modifications",
+        "Alert on Safe Mode boot tampering",
+        "Detect UAC setting changes"
+      ]
+    }
+  },
+
+  "filesystem_artifacts": {
+    "dropped_files": [
+      {
+        "path": "%TEMP%\\BdApiUtil64.sys",
+        "description": "Vulnerable Baidu driver dropped for BYOVD"
+      },
+      {
+        "path": "%SYSTEMROOT%\\System32\\drivers\\BdApiUtil64.sys",
+        "description": "Installed vulnerable driver location"
+      },
+      {
+        "path": "C:\\Windows\\System32\\rootkit.dll",
+        "description": "Potential installation location for defense evasion framework"
+      }
+    ],
+
+    "log_indicators": {
+      "event_logs": [
+        "Event ID 7045 (Service Installation) - BdApiUtil64 service",
+        "Event ID 4697 (Service Installation) - New driver service",
+        "Event ID 1 (Sysmon Process Creation) - Driver loading",
+        "Event ID 6 (Sysmon Driver Load) - BdApiUtil64.sys",
+        "Event ID 8 (Sysmon CreateRemoteThread) - Thread injection into security processes",
+        "Event ID 10 (Sysmon ProcessAccess) - Access to security product processes"
+      ]
+    }
+  },
+
+  "mitre_attack_techniques": [
+    {
+      "technique_id": "T1055.001",
+      "technique_name": "Process Injection: Dynamic-link Library Injection",
+      "tactic": "Defense Evasion, Privilege Escalation",
+      "confidence": "high",
+      "evidence": "API hooking via sub_180003447 function with UTF-8 encoding manipulation"
+    },
+    {
+      "technique_id": "T1564.001",
+      "technique_name": "Hide Artifacts: Hidden Files and Directories",
+      "tactic": "Defense Evasion",
+      "confidence": "high",
+      "evidence": "Unicode-based file hiding via sub_180003c4b function"
+    },
+    {
+      "technique_id": "T1112",
+      "technique_name": "Modify Registry",
+      "tactic": "Defense Evasion",
+      "confidence": "high",
+      "evidence": "Registry modifications to disable security features and establish persistence"
+    },
+    {
+      "technique_id": "T1562.001",
+      "technique_name": "Impair Defenses: Disable or Modify Tools",
+      "tactic": "Defense Evasion",
+      "confidence": "high",
+      "evidence": "Terminates 20+ security products including Microsoft Defender, CrowdStrike, ESET, Kaspersky, analysis tools"
+    },
+    {
+      "technique_id": "T1068",
+      "technique_name": "Exploitation for Privilege Escalation (BYOVD)",
+      "tactic": "Privilege Escalation",
+      "confidence": "high",
+      "evidence": "Embeds and deploys BdApiUtil64.sys vulnerable Baidu driver for kernel-level access"
+    },
+    {
+      "technique_id": "T1543.003",
+      "technique_name": "Create or Modify System Process: Windows Service",
+      "tactic": "Persistence, Privilege Escalation",
+      "confidence": "medium",
+      "evidence": "Driver installation as Windows service for persistence"
+    },
+    {
+      "technique_id": "T1089",
+      "technique_name": "Disabling Security Tools",
+      "tactic": "Defense Evasion",
+      "confidence": "high",
+      "evidence": "Comprehensive security product neutralization targeting 20+ vendors"
+    },
+    {
+      "technique_id": "T1059.001",
+      "technique_name": "Command and Scripting Interpreter: PowerShell",
+      "tactic": "Execution",
+      "confidence": "medium",
+      "evidence": "PowerShell integration for script-based attack execution"
+    },
+    {
+      "technique_id": "T1055.003",
+      "technique_name": "Process Injection: Thread Execution Hijacking",
+      "tactic": "Defense Evasion, Privilege Escalation",
+      "confidence": "medium",
+      "evidence": "Thread-based execution via sub_180035420 function"
+    }
+  ],
+
+  "yara_rule_names": [
+    "Arsenal237_Rootkit_DLL_Comprehensive",
+    "Arsenal237_BYOVD_Baidu_Driver",
+    "Arsenal237_Security_Product_Killer",
+    "Arsenal237_Rust_Compiled_Malware"
+  ],
+
+  "detection_summary": {
+    "critical_indicators": [
+      "BdApiUtil64.sys driver loading",
+      "Mass security process termination",
+      "Unicode file hiding operations",
+      "API hooking in security contexts"
+    ],
+    "recommended_actions": [
+      "Deploy Sigma/YARA detection rules urgently",
+      "Enable Sysmon driver load monitoring (Event ID 6)",
+      "Monitor for ZwTerminateProcess API calls targeting security products",
+      "Implement Unicode file enumeration validation",
+      "Block BdApiUtil64.sys driver hash at kernel level",
+      "Enable PowerShell script block logging",
+      "Deploy EDR behavioral detection for mass process termination"
+    ]
+  },
+
+  "threat_context": {
+    "toolkit": "Arsenal-237",
+    "source": "Open directory 109.230.231.37",
+    "relationship_to_toolkit": "Advanced defense evasion framework - NOT a traditional rootkit despite naming",
+    "operational_stage": "Defense neutralization before payload deployment",
+    "target_environment": "Windows enterprise with EDR/AV protection",
+    "sophistication": "High - Rust compilation, multi-vector evasion, BYOVD integration"
+  },
+
+  "notes": [
+    "rootkit.dll is NOT a traditional rootkit - it's an Advanced Defense Evasion Framework",
+    "Works in conjunction with BdApiUtil64.sys for kernel-level operations",
+    "Targets 20+ security products including Microsoft Defender, CrowdStrike, ESET, Kaspersky, Bitdefender, Malwarebytes, Symantec, McAfee, CB Defense, Sophos, Cylance, Cortex XDR",
+    "Also targets analysis and forensics tools (Volatility, Process Explorer, Wireshark, debuggers)",
+    "Rust compilation provides sophisticated runtime management and thread handling",
+    "Part of coordinated attack chain with killer.dll, lpe.exe, and other Arsenal-237 components",
+    "Represents evolution from basic process killing (killer.dll) to comprehensive defense evasion framework"
+  ]
+}

@@ -1,0 +1,312 @@
+{
+  "metadata": {
+    "report": "BdApiUtil64.sys Arsenal-237 BYOVD Component",
+    "report_date": "2026-01-26",
+    "threat_level": "CRITICAL",
+    "ioc_version": "1.0"
+  },
+  "file_indicators": {
+    "hashes": {
+      "md5": [
+        {
+          "hash": "ced47b89212f3260ebeb41682a4b95ec",
+          "filename": "BdApiUtil64.sys",
+          "size_bytes": 116800,
+          "version": "5.0.3.84333"
+        }
+      ],
+      "sha1": [
+        {
+          "hash": "148c0cde4f2ef807aea77d7368f00f4c519f47ef",
+          "filename": "BdApiUtil64.sys"
+        }
+      ],
+      "sha256": [
+        {
+          "hash": "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428",
+          "filename": "BdApiUtil64.sys",
+          "confidence": "DEFINITE",
+          "source": "Arsenal-237 toolkit discovery at 109.230.231.37"
+        }
+      ]
+    },
+    "file_paths": [
+      {
+        "path": "C:\\Windows\\System32\\drivers\\BdApiUtil64.sys",
+        "confidence": "DEFINITE",
+        "severity": "CRITICAL"
+      },
+      {
+        "path": "C:\\Windows\\drivers\\BdApiUtil64.sys",
+        "confidence": "LIKELY",
+        "severity": "CRITICAL"
+      },
+      {
+        "path": "C:\\ProgramData\\BdApiUtil64.sys",
+        "confidence": "POSSIBLE",
+        "severity": "CRITICAL"
+      },
+      {
+        "path": "C:\\Temp\\BdApiUtil64.sys",
+        "confidence": "POSSIBLE",
+        "severity": "CRITICAL"
+      }
+    ],
+    "signatures": [
+      {
+        "issuer": "Baidu Online Network Technology (Beijing) Co., Ltd",
+        "ca": "VeriSign Class 3 Code Signing 2010 CA",
+        "signature_valid_from": "2012-04-24",
+        "signature_valid_to": "2015-04-24",
+        "status": "EXPIRED",
+        "severity": "HIGH",
+        "note": "Expired certificate still loadable on many Windows versions"
+      }
+    ],
+    "pdb_paths": [
+      {
+        "pdb": "D:\\jenkins\\workspace\\bav_5.0_workspace\\BavOutput\\Pdb\\Release\\BdApiUtil64.pdb",
+        "confidence": "DEFINITE",
+        "source": "Embedded in driver binary"
+      }
+    ]
+  },
+  "registry_indicators": {
+    "service_keys": [
+      {
+        "key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Bprotect",
+        "suspicious_values": [
+          {
+            "value_name": "ImagePath",
+            "expected_value": "C:\\Windows\\System32\\drivers\\BdApiUtil64.sys",
+            "severity": "CRITICAL"
+          },
+          {
+            "value_name": "Type",
+            "expected_value": 1,
+            "description": "Kernel driver",
+            "severity": "CRITICAL"
+          },
+          {
+            "value_name": "Start",
+            "expected_values": [2, 3],
+            "description": "Automatic or Demand start",
+            "severity": "HIGH"
+          },
+          {
+            "value_name": "DisplayName",
+            "suspicious_if": ["empty", "Baidu Protect", "Windows Protect"],
+            "severity": "HIGH"
+          }
+        ],
+        "confidence": "DEFINITE",
+        "indicator_of_compromise": true
+      }
+    ],
+    "callbacks": [
+      {
+        "callback_object": "\\Callback\\bdProtectExpCallBack",
+        "severity": "CRITICAL",
+        "notes": "Registry modification callback - prevents service deletion or modification"
+      }
+    ],
+    "malicious_service_indicators": [
+      {
+        "suspicious_names": [
+          "WindowsUpdateService",
+          "MicrosoftSecurityAgent",
+          "NvidiaGraphicsService",
+          "IntelTelemetryService"
+        ],
+        "description": "Legitimate-sounding service names used for backdoor installation",
+        "severity": "HIGH",
+        "created_via": "IOCTL 0x80002324"
+      }
+    ]
+  },
+  "device_objects": [
+    {
+      "device_object": "\\Device\\BdApiUtil",
+      "symbolic_link": "\\DosDevices\\BdApiUtil",
+      "severity": "CRITICAL",
+      "accessible_via": "CreateFileA/CreateFileW with \\\\.\\BdApiUtil"
+    }
+  ],
+  "ioctl_codes": [
+    {
+      "ioctl_code": "0x800024b4",
+      "function": "Direct Process Termination",
+      "input_buffer_size": 4,
+      "description": "Terminates process by PID using standard kernel APIs (ZwTerminateProcess)",
+      "target_processes": [
+        "MsMpEng.exe (Windows Defender)",
+        "csagent.exe (CrowdStrike Falcon)",
+        "ekrn.exe (ESET)",
+        "avp.exe (Kaspersky)",
+        "SophosHealth.exe (Sophos)",
+        "cb.exe (Carbon Black)"
+      ],
+      "detection_difficulty": "STANDARD - Can be monitored by EDR",
+      "severity": "CRITICAL"
+    },
+    {
+      "ioctl_code": "0x800024b8",
+      "function": "EDR-Evading Process Termination with SSDT Bypass",
+      "input_buffer_size": 4,
+      "description": "Terminates process via SSDT bypass, defeating EDR hooks on ZwTerminateProcess",
+      "evasion_technique": "Hook detection (checks if ZwTerminateProcess first byte == 0xb8), SSDT direct dispatch",
+      "detection_difficulty": "ADVANCED - Defeats most EDR hook monitoring",
+      "severity": "CRITICAL"
+    },
+    {
+      "ioctl_code": "0x80002324",
+      "function": "Service Creation and Manipulation",
+      "input_buffer_size": 548,
+      "description": "Create Windows services with kernel privileges, enabling persistent backdoor installation",
+      "buffer_structure": {
+        "offset_0x002": "Service name (Unicode string, 0x41 chars)",
+        "offset_0x084": "Service type (1 byte) - Kernel driver, Win32 service, etc.",
+        "offset_0x085": "Start type (1 byte) - Auto-start (2), Manual (3), Disabled (4)",
+        "offset_0x08C": "Binary path (Unicode string, 260 chars)",
+        "offset_0x138": "Service DLL path (Unicode string, 260 chars)",
+        "offset_0x1E8": "Service description (Unicode string, 128 chars)"
+      },
+      "capabilities": "Arbitrary service creation, impersonation of legitimate services, persistent backdoor installation",
+      "detection_difficulty": "KERNEL-LEVEL - Difficult to detect without kernel monitoring",
+      "severity": "CRITICAL"
+    },
+    {
+      "ioctl_code": "0x80002648",
+      "function": "File System Access and Data Theft (Read)",
+      "input_buffer_size": 520,
+      "description": "Direct kernel-mode file access bypassing security restrictions, retrieve file contents",
+      "target_files": [
+        "C:\\Windows\\System32\\config\\SAM (Windows credential hashes)",
+        "C:\\Windows\\System32\\config\\SYSTEM (DPAPI keys)",
+        "C:\\Windows\\System32\\config\\SECURITY (LSA secrets)",
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Login Data (Chrome passwords)",
+        "%APPDATA%\\Mozilla\\Firefox\\[Profile]\\logins.json (Firefox credentials)",
+        "Email archives (.pst files)",
+        "Encryption keys (RSA, DPAPI protected data)"
+      ],
+      "access_level": "Kernel context with SYSTEM privileges",
+      "acl_bypass": "YES - Bypasses user-mode permission restrictions",
+      "detection_difficulty": "KERNEL-LEVEL - Bypasses all file ACLs",
+      "severity": "CRITICAL"
+    },
+    {
+      "ioctl_code": "0x8000264c",
+      "function": "File System Access and Data Theft (Write/Delete)",
+      "input_buffer_size": 520,
+      "description": "Direct kernel-mode file modification/deletion, used for anti-forensics and credential harvesting",
+      "capabilities": "Delete forensic artifacts, modify encryption keys, delete logs, timestamp stomping",
+      "access_level": "Kernel context with SYSTEM privileges",
+      "detection_difficulty": "KERNEL-LEVEL - Bypasses all file monitoring",
+      "severity": "CRITICAL"
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "indicator": "Driver loading followed by security process termination",
+      "timing": "Within 5-60 seconds of driver load",
+      "confidence": "HIGH",
+      "process_names": [
+        "MsMpEng.exe",
+        "MpDefenderCoreService.exe",
+        "NisSrv.exe",
+        "CSFalconService.exe",
+        "csagent.exe",
+        "ekrn.exe",
+        "avp.exe"
+      ],
+      "severity": "CRITICAL"
+    },
+    {
+      "indicator": "EventLog service termination",
+      "timing": "Within 10-60 seconds of driver load",
+      "confidence": "HIGH",
+      "purpose": "Destroy forensic evidence",
+      "severity": "CRITICAL"
+    },
+    {
+      "indicator": "Registry callback registration",
+      "affected_registry": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Bprotect",
+      "purpose": "Block manual service deletion or modification",
+      "severity": "CRITICAL"
+    },
+    {
+      "indicator": "Minifilter enumeration",
+      "kernel_apis": ["FltEnumerateFilters", "FltEnumerateInstances", "FltGetFilterInformation"],
+      "purpose": "Detect installed EDR drivers",
+      "severity": "HIGH"
+    },
+    {
+      "indicator": "Registry modification to disable security services",
+      "target_registry": "Security product configuration keys",
+      "severity": "CRITICAL"
+    }
+  ],
+  "toolkit_context": {
+    "toolkit_name": "Arsenal-237",
+    "discovery_location": "109.230.231.37 (open directory)",
+    "toolkit_components": [
+      {
+        "component": "lpe.exe",
+        "purpose": "Privilege escalation wrapper",
+        "role": "Achieves SYSTEM-level access"
+      },
+      {
+        "component": "killer.dll",
+        "purpose": "Security product terminator",
+        "role": "User-mode defense suppression"
+      },
+      {
+        "component": "killer_crowdstrike.dll",
+        "purpose": "CrowdStrike-specific terminator",
+        "role": "EDR-specific evasion"
+      },
+      {
+        "component": "BdApiUtil64.sys",
+        "purpose": "Kernel-mode BYOVD driver",
+        "role": "Kernel privilege and defense bypass"
+      },
+      {
+        "component": "rootkit.dll",
+        "purpose": "Additional kernel access",
+        "role": "Redundant persistence mechanisms"
+      },
+      {
+        "component": "enc_*.exe",
+        "purpose": "Ransomware payloads",
+        "role": "Final attack payload (encryption)"
+      }
+    ],
+    "toolkit_sophistication": "PROFESSIONAL-GRADE - Organized, modular, well-engineered attack infrastructure"
+  },
+  "historical_campaigns": [
+    {
+      "campaign": "BlackByte Ransomware",
+      "timeframe": "2022-2023",
+      "confirmed": "HIGHLY CONFIDENT (85%)",
+      "source": "FBI Alert IR-22-152"
+    },
+    {
+      "campaign": "Cuba Ransomware",
+      "timeframe": "2022",
+      "confirmed": "HIGHLY CONFIDENT (85%)",
+      "source": "Mandiant, Microsoft Threat Intelligence"
+    },
+    {
+      "campaign": "ALPHV/BlackCat Ransomware",
+      "timeframe": "2022-Present",
+      "confirmed": "HIGHLY CONFIDENT (85%)",
+      "source": "US Treasury OFAC Sanctions"
+    },
+    {
+      "campaign": "AvosLocker Ransomware",
+      "timeframe": "2022-2023",
+      "confirmed": "CONFIDENT (80%)",
+      "source": "Threat Intelligence Reports"
+    }
+  ]
+}

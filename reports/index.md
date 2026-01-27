@@ -17,6 +17,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 # January 2026
 
+- [Arsenal-237 New Files: Advanced Toolkit Analysis - Recently Added Malware]({{ "/reports/arsenal-237-new-files/" | relative_url }})
 - [Arsenal-237: Threat Actor R&D Repository Exposed]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }})
 
 ---

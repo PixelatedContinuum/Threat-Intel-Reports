@@ -1,0 +1,563 @@
+{
+  "metadata": {
+    "report_title": "nethost.dll (Arsenal-237 C2 Communication Module)",
+    "report_date": "2026-01-26",
+    "sample_type": "Network Communication Module",
+    "malware_family": "Arsenal-237",
+    "threat_level": "CRITICAL"
+  },
+  "file_hashes": {
+    "md5": [
+      {
+        "hash": "f91ff1bb5699524524fff0e2587af040",
+        "filename": "nethost.dll",
+        "file_size": 440832,
+        "type": "PE64 DLL",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "sha1": [
+      {
+        "hash": "622ddbacaf769aef383435162a203489c08c8468",
+        "filename": "nethost.dll",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "sha256": [
+      {
+        "hash": "158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14",
+        "filename": "nethost.dll",
+        "confidence": "CONFIRMED",
+        "yara_rule_link": "Arsenal-237-nethost-dll.yar"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ips": [
+      {
+        "ip_address": "8.8.8.8",
+        "port": 53,
+        "protocol": "TCP",
+        "purpose": "Primary C2 Target (Proxy Endpoint)",
+        "confidence": "CONFIRMED",
+        "detection_method": "Network egress monitoring, Firewall logs",
+        "blocking_recommendation": "URGENT - Block at perimeter firewall and endpoint level"
+      },
+      {
+        "ip_address": "127.0.0.1",
+        "port": 53,
+        "protocol": "TCP",
+        "purpose": "Secondary C2 Target (Localhost Proxy)",
+        "confidence": "CONFIRMED",
+        "detection_method": "Process network monitoring, netstat output",
+        "blocking_recommendation": "STANDARD - Block at endpoint level (local proxy prevention)"
+      }
+    ],
+    "domains": [],
+    "urls": [],
+    "dns_queries": [
+      {
+        "pattern": "Any DNS queries to 8.8.8.8 from suspicious processes",
+        "type": "Pattern",
+        "detection_context": "Indicates potential attempt to bypass firewall rules"
+      }
+    ]
+  },
+  "host_indicators": {
+    "registry_keys": [
+      {
+        "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "purpose": "Potential persistence mechanism (if modified by Arsenal-237 components)",
+        "confidence": "POSSIBLE (40%)",
+        "note": "nethost.dll itself does not modify registry; investigate if found alongside rootkit.dll"
+      },
+      {
+        "key": "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "purpose": "User-level persistence",
+        "confidence": "POSSIBLE (40%)",
+        "note": "Check for suspicious entries if nethost.dll detected"
+      }
+    ],
+    "file_paths": [
+      {
+        "path": "%TEMP%\\nethost.dll",
+        "significance": "HIGH - Suspicious location",
+        "confidence": "CONFIRMED (if present)"
+      },
+      {
+        "path": "%APPDATA%\\nethost.dll",
+        "significance": "HIGH - Suspicious location",
+        "confidence": "CONFIRMED (if present)"
+      },
+      {
+        "path": "%SYSTEMROOT%\\nethost.dll",
+        "significance": "CRITICAL - System directory indicates privilege escalation",
+        "confidence": "CONFIRMED (if present)"
+      },
+      {
+        "path": "%SYSTEMROOT%\\System32\\nethost.dll",
+        "significance": "CRITICAL - System32 indicates advanced compromise",
+        "confidence": "CONFIRMED (if present)"
+      },
+      {
+        "path": "C:\\Windows\\System32\\drivers\\etc\\nethost.dll",
+        "significance": "CRITICAL - Highly suspicious location",
+        "confidence": "CONFIRMED (if present)"
+      }
+    ],
+    "mutex_names": [
+      {
+        "mutex": "rust_panic_mutex",
+        "purpose": "Rust runtime panic handling synchronization",
+        "detection_note": "Not unique to nethost.dll; indicates Rust process"
+      }
+    ],
+    "service_names": [],
+    "process_behaviors": [
+      {
+        "behavior": "DLL injection of nethost.dll into system process",
+        "detection": "Monitor for LoadLibrary/LoadLibraryEx of nethost.dll",
+        "edr_detection": "Process injection, unsigned DLL load"
+      },
+      {
+        "behavior": "Environment variable enumeration (COMPUTERNAME, USERNAME)",
+        "detection": "Monitor for GetEnvironmentVariable API calls with these specific variable names",
+        "edr_detection": "Behavioral pattern matching"
+      },
+      {
+        "behavior": "TCP socket creation to 8.8.8.8:53 or 127.0.0.1:53",
+        "detection": "Network socket monitoring, Firewall logs, netstat analysis",
+        "edr_detection": "Network connection monitoring"
+      },
+      {
+        "behavior": "PowerShell.exe execution with template-injected commands",
+        "detection": "PowerShell logging (transcript, module logging), Process command-line analysis",
+        "edr_detection": "PowerShell execution monitoring"
+      }
+    ]
+  },
+  "behavioral_indicators": {
+    "api_calls": [
+      {
+        "api": "WSAStartup",
+        "context": "Winsock 2.2 initialization (port 0x202)",
+        "significance": "HIGH"
+      },
+      {
+        "api": "WSASocketW",
+        "context": "TCP socket creation (AF_INET, SOCK_STREAM)",
+        "significance": "HIGH"
+      },
+      {
+        "api": "connect",
+        "context": "Connection to 8.8.8.8:53 or 127.0.0.1:53",
+        "significance": "CRITICAL"
+      },
+      {
+        "api": "recv",
+        "context": "Reception of C2 commands from socket",
+        "significance": "HIGH"
+      },
+      {
+        "api": "send",
+        "context": "Transmission of command results to C2",
+        "significance": "HIGH"
+      },
+      {
+        "api": "GetEnvironmentVariable",
+        "context": "Query COMPUTERNAME and USERNAME",
+        "significance": "MEDIUM"
+      },
+      {
+        "api": "CreateProcess",
+        "context": "PowerShell execution for command dispatch",
+        "significance": "CRITICAL"
+      }
+    ],
+    "strings": [
+      {
+        "string": "8.8.8.8:53127.0.0.1ntdll.dll",
+        "significance": "Hardcoded C2 targets",
+        "confidence": "CONFIRMED",
+        "detection": "Binary string signature, YARA rule"
+      },
+      {
+        "string": "COMPUTERNAMEUSERNAME",
+        "significance": "Environment variable discovery",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "Get-Service|?{$_.Status -eq ''}|Select Name,Status|FT",
+        "significance": "PowerShell service enumeration template",
+        "confidence": "CONFIRMED",
+        "detection": "PowerShell transcript/logging"
+      },
+      {
+        "string": "Invoke-WebRequest -Uri '' -OutFile ''",
+        "significance": "PowerShell file download template",
+        "confidence": "CONFIRMED",
+        "detection": "PowerShell transcript/logging"
+      },
+      {
+        "string": "pathB64:",
+        "significance": "Base64 file upload prefix",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "result,machine_id,success,output,execution_time,file",
+        "significance": "C2 response keywords",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "error (os error )",
+        "significance": "Error response template",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "string": "runtime error",
+        "significance": "Runtime error handler signature",
+        "confidence": "CONFIRMED"
+      }
+    ],
+    "command_list": [
+      {
+        "command": "powershell",
+        "capability": "PowerShell command execution",
+        "mitre_attack": "T1059.001"
+      },
+      {
+        "command": "sysinfo",
+        "capability": "System information gathering",
+        "mitre_attack": "T1082"
+      },
+      {
+        "command": "processes",
+        "capability": "Process enumeration",
+        "mitre_attack": "T1057"
+      },
+      {
+        "command": "services",
+        "capability": "Service enumeration",
+        "mitre_attack": "T1007"
+      },
+      {
+        "command": "disk",
+        "capability": "Disk information gathering",
+        "mitre_attack": "T1526"
+      },
+      {
+        "command": "network",
+        "capability": "Network configuration discovery",
+        "mitre_attack": "T1016"
+      },
+      {
+        "command": "users",
+        "capability": "User enumeration",
+        "mitre_attack": "T1087"
+      },
+      {
+        "command": "antivirus",
+        "capability": "Antivirus software detection",
+        "mitre_attack": "T1518.001"
+      },
+      {
+        "command": "firewall",
+        "capability": "Firewall status detection",
+        "mitre_attack": "T1518"
+      },
+      {
+        "command": "clipboard",
+        "capability": "Clipboard data theft",
+        "mitre_attack": "T1115"
+      },
+      {
+        "command": "download",
+        "capability": "File download from C2",
+        "mitre_attack": "T1105"
+      },
+      {
+        "command": "upload",
+        "capability": "File upload to C2",
+        "mitre_attack": "T1020"
+      },
+      {
+        "command": "heartbeat_ack",
+        "capability": "C2 keepalive acknowledgment",
+        "mitre_attack": "N/A"
+      },
+      {
+        "command": "pongcmd",
+        "capability": "C2 ping/pong response",
+        "mitre_attack": "N/A"
+      }
+    ]
+  },
+  "function_addresses": {
+    "key_functions": [
+      {
+        "address": "0x1800011f0",
+        "name": "_start",
+        "purpose": "DLL entry point",
+        "significance": "Initial execution"
+      },
+      {
+        "address": "0x18000a9de",
+        "name": "DllMain",
+        "purpose": "Rust runtime initialization",
+        "significance": "Setup phase"
+      },
+      {
+        "address": "0x18004405d",
+        "name": "sub_18004405d",
+        "purpose": "Winsock 2.2 initialization orchestrator",
+        "significance": "CRITICAL - Network stack setup"
+      },
+      {
+        "address": "0x180005639",
+        "name": "sub_180005639",
+        "purpose": "C2 connection orchestrator",
+        "significance": "CRITICAL - Primary C2 function"
+      },
+      {
+        "address": "0x180051190",
+        "name": "sub_180051190",
+        "purpose": "TCP socket creation and connection",
+        "significance": "Network connectivity"
+      },
+      {
+        "address": "0x180044320",
+        "name": "sub_180044320",
+        "purpose": "C2 target string parser",
+        "significance": "Parses hardcoded C2 list"
+      },
+      {
+        "address": "0x180042580",
+        "name": "sub_180042580",
+        "purpose": "Environment variable processor",
+        "significance": "System reconnaissance"
+      },
+      {
+        "address": "0x180001f8d",
+        "name": "sub_180001f8d",
+        "purpose": "C2 command lookup and dispatcher",
+        "significance": "Command parsing"
+      },
+      {
+        "address": "0x1800035e9",
+        "name": "sub_1800035e9",
+        "purpose": "Command execution dispatcher",
+        "significance": "Command execution"
+      },
+      {
+        "address": "0x180044f30",
+        "name": "sub_180044f30",
+        "purpose": "Network receive wrapper",
+        "significance": "C2 data reception"
+      },
+      {
+        "address": "0x18001dd51",
+        "name": "sub_18001dd51",
+        "purpose": "Winsock failure panic handler",
+        "significance": "Error handling, process termination"
+      }
+    ]
+  },
+  "mitre_attack_mapping": {
+    "tactics": [
+      {
+        "tactic": "Command and Control",
+        "techniques": [
+          {
+            "id": "T1071.001",
+            "name": "Application Layer Protocol: Web Protocols",
+            "evidence": "TCP protocol for C2 communication, potential HTTP tunneling",
+            "confidence": "HIGH (90%)"
+          },
+          {
+            "id": "T1090",
+            "name": "Proxy",
+            "evidence": "Connection to 127.0.0.1:53 suggests local proxy infrastructure",
+            "confidence": "MODERATE (70%)"
+          }
+        ]
+      },
+      {
+        "tactic": "Discovery",
+        "techniques": [
+          {
+            "id": "T1082",
+            "name": "System Information Discovery",
+            "evidence": "COMPUTERNAME/USERNAME queries, sysinfo command capability",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1057",
+            "name": "Process Discovery",
+            "evidence": "processes command for process enumeration",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1007",
+            "name": "System Service Discovery",
+            "evidence": "services command with PowerShell enumeration",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1016",
+            "name": "System Network Configuration Discovery",
+            "evidence": "network command capability",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1087",
+            "name": "Account Discovery",
+            "evidence": "users command for user enumeration",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1518.001",
+            "name": "Software Discovery: Security Software Discovery",
+            "evidence": "antivirus and firewall command capabilities",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1526",
+            "name": "Cloud Service Discovery",
+            "evidence": "disk command for storage enumeration",
+            "confidence": "CONFIRMED"
+          }
+        ]
+      },
+      {
+        "tactic": "Defense Evasion",
+        "techniques": [
+          {
+            "id": "T1027",
+            "name": "Obfuscated Files or Information",
+            "evidence": "Rust compilation with complex runtime obfuscation",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1622",
+            "name": "Debugger Evasion",
+            "evidence": "Inherited from Rust runtime; deliberate Sleep delays",
+            "confidence": "MODERATE (65%)"
+          }
+        ]
+      },
+      {
+        "tactic": "Execution",
+        "techniques": [
+          {
+            "id": "T1059.001",
+            "name": "Command and Scripting Interpreter: PowerShell",
+            "evidence": "PowerShell command execution capability with templates",
+            "confidence": "CONFIRMED"
+          }
+        ]
+      },
+      {
+        "tactic": "Exfiltration",
+        "techniques": [
+          {
+            "id": "T1020",
+            "name": "Automated Exfiltration",
+            "evidence": "File upload capability with Base64 encoding",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1041",
+            "name": "Exfiltration Over C2 Channel",
+            "evidence": "All exfiltration occurs via C2 connection",
+            "confidence": "CONFIRMED"
+          },
+          {
+            "id": "T1115",
+            "name": "Clipboard Data",
+            "evidence": "clipboard command for clipboard theft",
+            "confidence": "CONFIRMED"
+          }
+        ]
+      },
+      {
+        "tactic": "Command and Control",
+        "techniques": [
+          {
+            "id": "T1105",
+            "name": "Ingress Tool Transfer",
+            "evidence": "download command for file transfer from C2",
+            "confidence": "CONFIRMED"
+          }
+        ]
+      }
+    ]
+  },
+  "detection_rules": {
+    "yara_rules": [
+      {
+        "name": "Arsenal237_nethost_dll_filesize_hashes",
+        "description": "Detect nethost.dll by file size and known hashes",
+        "file_path": "Arsenal-237/nethost-dll-detections.md"
+      },
+      {
+        "name": "Arsenal237_nethost_dll_c2_strings",
+        "description": "Detect hardcoded C2 targets and command strings",
+        "file_path": "Arsenal-237/nethost-dll-detections.md"
+      },
+      {
+        "name": "Arsenal237_nethost_dll_winsock_init",
+        "description": "Detect Winsock initialization pattern",
+        "file_path": "Arsenal-237/nethost-dll-detections.md"
+      }
+    ],
+    "sigma_rules": [
+      {
+        "name": "Detection of nethost.dll network connection attempts",
+        "description": "Monitor for connections to 8.8.8.8:53 or 127.0.0.1:53 from suspicious processes",
+        "file_path": "Arsenal-237/nethost-dll-detections.md"
+      },
+      {
+        "name": "Detection of DLL injection with nethost.dll",
+        "description": "Monitor for LoadLibrary/LoadLibraryEx of nethost.dll",
+        "file_path": "Arsenal-237/nethost-dll-detections.md"
+      },
+      {
+        "name": "Detection of PowerShell execution with malware templates",
+        "description": "Monitor PowerShell logs for template patterns (Get-Service, Invoke-WebRequest)",
+        "file_path": "Arsenal-237/nethost-dll-detections.md"
+      }
+    ]
+  },
+  "confidence_assessment": {
+    "confirmed": [
+      "PE64 x64 DLL file format",
+      "Rust compiler artifacts",
+      "Winsock 2.2 initialization",
+      "Hardcoded C2 targets (8.8.8.8:53, 127.0.0.1:53)",
+      "16+ C2 command capabilities",
+      "PowerShell integration templates",
+      "Base64 encoding for file uploads",
+      "TCP socket creation",
+      "Environment variable discovery",
+      "Process termination on Winsock failure"
+    ],
+    "highly_confident": [
+      "Arsenal-237 toolkit integration (90%)",
+      "Financial motivation - ransomware (85%)",
+      "Organized threat actor development (85%)",
+      "Network resilience planning (85%)",
+      "Sophisticated Rust implementation (80%)"
+    ],
+    "likely": [
+      "8.8.8.8 proxy endpoint masquerading (70%)",
+      "Additional C2 infrastructure hidden (70%)",
+      "Data exfiltration intent (70%)",
+      "Additional Arsenal-237 components present (70%)",
+      "Local proxy installation expected (65%)"
+    ],
+    "possible": [
+      "Test/honeypot evasion capability (50%)",
+      "UEFI/firmware persistence (40%)"
+    ]
+  }
+}

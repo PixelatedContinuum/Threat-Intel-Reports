@@ -1,0 +1,354 @@
+{
+  "campaign": "killer_crowdstrike.dll (BYOVD CrowdStrike Variant) - Arsenal-237 Malware Toolkit",
+  "description": "Comprehensive IOCs for killer_crowdstrike.dll, a CrowdStrike-specific variant of the killer.dll BYOVD defense evasion module. This variant uses identical BYOVD techniques and IOCTLs as killer.dll but with a reconfigured kill list specifically targeting CrowdStrike Falcon processes (CSFalconService.exe, csagent.exe, CSFalconContainer.exe). Discovered on Arsenal-237 open directory at IP 109.230.231.37, this Rust-compiled module demonstrates threat actor modularity and efficient retargeting of existing offensive tools.",
+  "severity": "CRITICAL",
+  "confidence_level": "High",
+  "variant_relationship": {
+    "parent_malware": "killer.dll",
+    "variant_type": "Reconfigured targeting variant",
+    "code_reuse": "Identical BYOVD engine, same IOCTLs, same embedded drivers",
+    "primary_difference": "Kill list specifically includes CrowdStrike Falcon processes",
+    "secondary_difference": "Contains embedded Microsoft-signed binary (purpose unknown - requires investigation)"
+  },
+  "file_hashes": {
+    "killer_crowdstrike_dll": {
+      "md5": "6926ea1b4c4bff01a23b7e1728583348",
+      "sha1": "81c2cea6e40cfbb52aceedaee626d4acf5f2744c",
+      "sha256": "e26e9221f4e9a437716a28c08c5f74c6a2ecae2c47b77091db7d21f36ed2f7d3",
+      "size": "475648 bytes (464 KB)",
+      "type": "PE32+ DLL, Rust-compiled",
+      "original_filename": "killer_crowdstrike.dll",
+      "family": "Arsenal-237 BYOVD Defense Evasion Module (CrowdStrike Variant)",
+      "family_confidence": "CONFIRMED (100%)",
+      "compiler": "Rust",
+      "purpose": "CrowdStrike Falcon-specific defense evasion via BYOVD technique"
+    },
+    "bdapiutil64_sys": {
+      "filename": "BdApiUtil64.sys",
+      "description": "Legitimately-signed Baidu Antivirus driver embedded in killer_crowdstrike.dll (identical to killer.dll)",
+      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x800024B4",
+      "company": "Baidu, Inc.",
+      "product": "Baidu Antivirus BdApi Driver",
+      "version": "5.0.3.84333",
+      "digital_signature": "Valid (Signed by Baidu, Thawte, Symantec, VeriSign, Microsoft chain)",
+      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
+      "device_path": "\\\\.\\BdApiUtil",
+      "ioctl_code": "0x800024B4",
+      "ioctl_purpose": "Process termination command"
+    },
+    "procexpdriver_sys": {
+      "filename": "ProcExpDriver.sys",
+      "description": "Legitimately-signed Sysinternals Process Explorer driver embedded in killer_crowdstrike.dll (identical to killer.dll)",
+      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x8335003C",
+      "company": "Sysinternals - www.sysinternals.com",
+      "product": "Process Explorer",
+      "version": "17.0.7",
+      "internal_name": "procexp.sys",
+      "digital_signature": "Valid (Signed by Microsoft)",
+      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
+      "device_path": "\\\\.\\PROCEXP152",
+      "ioctl_code": "0x8335003C",
+      "ioctl_purpose": "Process termination command"
+    },
+    "embedded_microsoft_binary": {
+      "description": "Embedded Microsoft-signed binary with unknown purpose (not present in killer.dll)",
+      "status": "IDENTIFIED - Requires dynamic analysis to determine exact purpose",
+      "hypotheses": [
+        "Alternative vulnerable driver exploitation",
+        "DLL side-loading vector for stealth",
+        "Code signing reputation enhancement"
+      ],
+      "digital_signature": "Valid (Microsoft Corporation, Microsoft Time-Stamp Service)",
+      "investigation_priority": "CRITICAL - May represent advanced exploitation technique",
+      "next_steps": "Binary extraction and dynamic analysis required"
+    }
+  },
+  "network_indicators": {
+    "distribution_infrastructure": {
+      "ip": "109.230.231.37",
+      "description": "Arsenal-237 malware distribution point - open directory serving malware toolkit",
+      "confidence": "CONFIRMED",
+      "threat_type": "Malware distribution, command and control infrastructure",
+      "action": "BLOCK at network perimeter immediately"
+    },
+    "c2_infrastructure": {
+      "c2_url": "http://109.230.231.37:8888/lpe.exe",
+      "description": "Hardcoded C2 URL for downloading lpe.exe privilege escalation module (same as killer.dll)",
+      "confidence": "CONFIRMED (found in configuration table at offset 0x180067428)",
+      "threat_type": "Command and control, payload delivery",
+      "action": "BLOCK at network perimeter and web proxy"
+    }
+  },
+  "execution_indicators": {
+    "typical_execution_method": {
+      "command": "rundll32.exe C:\\path\\to\\killer_crowdstrike.dll,[export_function]",
+      "parent_process": "lpe.exe",
+      "required_privileges": "NT AUTHORITY\\SYSTEM",
+      "privilege_source": "lpe.exe elevates privileges before launching killer_crowdstrike.dll",
+      "execution_context": "Second stage in lpe.exe → killer_crowdstrike.dll two-stage attack chain (identical to killer.dll)"
+    },
+    "attack_timeline": {
+      "total_execution_window": "8-15 seconds",
+      "phase_1_deployment": "2-3 seconds (driver extraction and service creation)",
+      "phase_2_execution": "3-8 seconds (CrowdStrike Falcon + other security product termination)",
+      "phase_3_cleanup": "1-4 seconds (service deletion and file removal)",
+      "impact": "Extremely fast execution defeats manual response - automated detection required"
+    }
+  },
+  "behavioral_indicators": {
+    "byovd_technique": {
+      "technique": "T1068 - Bring Your Own Vulnerable Driver (identical to killer.dll)",
+      "description": "Deploys legitimately-signed vulnerable drivers to achieve kernel-level process termination",
+      "indicators": [
+        "SERVICE_KERNEL_DRIVER service creation by non-standard process (rundll32.exe)",
+        "Driver file written to temp directory with randomized filename",
+        "Legitimate driver signatures (Baidu, Microsoft) used for evasion",
+        "Rapid service lifecycle: CreateServiceW → StartServiceW → ControlService → DeleteService"
+      ],
+      "code_reuse": "Identical BYOVD engine as killer.dll - proves modular threat actor tooling",
+      "detection": "Monitor for anomalous kernel driver service creation and short-lived driver services"
+    },
+    "ioctl_abuse": {
+      "technique": "IOCTL command abuse for process termination (identical to killer.dll)",
+      "ioctl_codes": {
+        "baidu_termination": "0x800024B4",
+        "procexp_termination": "0x8335003C"
+      },
+      "description": "Sends process termination commands to loaded drivers via DeviceIoControl",
+      "code_reuse_proof": "Identical IOCTL codes as killer.dll confirm shared termination engine",
+      "indicators": [
+        "DeviceIoControl calls with IOCTL 0x800024B4 or 0x8335003C",
+        "CreateFileW calls to device paths \\\\.\\BdApiUtil or \\\\.\\PROCEXP152",
+        "Input buffer containing target process ID (PID)"
+      ],
+      "impact": "Direct kernel-mode process termination cannot be prevented by user-mode EDR",
+      "detection": "Monitor DeviceIoControl calls with specific IOCTL codes from unexpected processes"
+    },
+    "crowdstrike_specific_targeting": {
+      "technique": "Targeted termination of CrowdStrike Falcon processes",
+      "primary_targets": [
+        "CSFalconService.exe (CrowdStrike Falcon Service)",
+        "csagent.exe (CrowdStrike Falcon Agent)",
+        "CSFalconContainer.exe (CrowdStrike Falcon Container)"
+      ],
+      "configuration_location": "Offset 0x180067691 in data section",
+      "variant_differentiator": "Primary difference from killer.dll - explicitly targets CrowdStrike",
+      "business_impact": "Organizations using CrowdStrike Falcon are explicitly targeted",
+      "detection": "CRITICAL - Monitor for unexpected termination of CrowdStrike Falcon processes",
+      "falcon_specific_alerts": [
+        "CSFalconService.exe process termination by non-standard parent",
+        "csagent.exe unexpected exit code",
+        "CSFalconContainer.exe termination + service creation events within 60 seconds",
+        "CrowdStrike sensor disconnection + vulnerable driver loading correlation"
+      ]
+    },
+    "mass_process_termination": {
+      "technique": "Systematic security product termination (broader than CrowdStrike)",
+      "additional_targets": "Microsoft Defender, smartscreen.exe, SgrmBroker.exe (same as killer.dll)",
+      "execution_speed": "3-8 seconds for complete kill list",
+      "indicators": [
+        "Simultaneous termination of CrowdStrike processes + Microsoft Defender processes",
+        "Multiple security product terminations within 60-second window",
+        "Processes terminated via kernel-mode calls (not standard termination)"
+      ],
+      "impact": "Complete endpoint security blind spot - no active protection remains",
+      "detection": "Alert on simultaneous termination of 3+ security products (including CrowdStrike) within 60-second window"
+    },
+    "anti_forensics": {
+      "technique": "Self-cleanup to remove forensic artifacts (identical to killer.dll)",
+      "cleanup_actions": [
+        "DeleteService (removes driver service from system)",
+        "DeleteFileW (removes driver file from disk)",
+        "NtUnloadDriver (unloads kernel driver)"
+      ],
+      "indicators": [
+        "Rapid service creation followed by deletion (< 20 seconds lifespan)",
+        "Driver file creation and deletion in same execution",
+        "No persistent artifacts remain post-execution"
+      ],
+      "impact": "Post-incident forensics cannot recover driver files",
+      "detection": "Real-time monitoring required - artifacts do not survive execution"
+    }
+  },
+  "target_security_products": {
+    "crowdstrike_specific": [
+      "CSFalconService.exe",
+      "csagent.exe",
+      "CSFalconContainer.exe"
+    ],
+    "microsoft_defender": [
+      "MsMpEng.exe",
+      "MpDefenderCoreService.exe",
+      "NisSrv.exe",
+      "smartscreen.exe",
+      "MsSense.exe",
+      "SenseCncProxy.exe",
+      "SenseIR.exe",
+      "SenseSampleUploader.exe",
+      "WindowsSecurityHealthService.exe"
+    ],
+    "other_products": "Same extensive list as killer.dll (ESET, Malwarebytes, Kaspersky, Bitdefender, etc.)",
+    "variant_significance": "CrowdStrike-specific processes added to generic killer.dll target list",
+    "targeting_implication": "Threat actors have explicitly engineered defenses against CrowdStrike Falcon",
+    "defensive_priority": "Organizations using CrowdStrike must prioritize detection of this variant"
+  },
+  "detection_opportunities": {
+    "high_confidence_indicators": [
+      "CrowdStrike Falcon process termination (CSFalconService.exe, csagent.exe, CSFalconContainer.exe)",
+      "Service creation: SERVICE_KERNEL_DRIVER type by rundll32.exe",
+      "Driver file creation: *.sys in temp directories with random lowercase names",
+      "DeviceIoControl calls with IOCTL 0x800024B4 or 0x8335003C",
+      "Device handle acquisition: CreateFileW to \\\\.\\BdApiUtil or \\\\.\\PROCEXP152",
+      "Mass process termination: 3+ security products (including CrowdStrike) terminated within 60 seconds",
+      "Rapid service lifecycle: Service created and deleted within 20 seconds",
+      "Network connection to 109.230.231.37"
+    ],
+    "crowdstrike_specific_detection": {
+      "priority": "CRITICAL for CrowdStrike customers",
+      "indicators": [
+        "Unexpected termination of csagent.exe, CSFalconService.exe, or CSFalconContainer.exe",
+        "CrowdStrike sensor offline event + driver loading event within 60 seconds",
+        "CrowdStrike process exit code indicating forced termination",
+        "Service creation events immediately preceding CrowdStrike termination"
+      ],
+      "crowdstrike_api_detection": [
+        "Falcon API: Sensor disconnect event without user action",
+        "Falcon API: Process termination event for core Falcon processes",
+        "Falcon Custom IOA: Suspicious service creation patterns",
+        "Falcon Real Time Response: Query for vulnerable driver presence"
+      ],
+      "recommended_actions": [
+        "Configure CrowdStrike alerts for csagent.exe unexpected termination",
+        "Enable Falcon behavioral prevention for suspicious service creation",
+        "Deploy Falcon Custom IOAs monitoring vulnerable driver loading",
+        "Integrate CrowdStrike Falcon API data with SIEM for correlation"
+      ]
+    },
+    "detection_windows": [
+      {
+        "phase": "Service Creation",
+        "window": "2-3 seconds",
+        "indicators": [
+          "CreateServiceW API called by rundll32.exe",
+          "SERVICE_KERNEL_DRIVER service type",
+          "Service name does not match known legitimate drivers"
+        ],
+        "tools": "Sysmon Event ID 19, Windows Event Log 7045, EDR service creation monitoring, CrowdStrike Falcon IOA"
+      },
+      {
+        "phase": "CrowdStrike Termination",
+        "window": "3-8 seconds",
+        "indicators": [
+          "CSFalconService.exe process termination",
+          "csagent.exe process termination",
+          "CSFalconContainer.exe process termination",
+          "CrowdStrike sensor offline event"
+        ],
+        "tools": "CrowdStrike Falcon API, Sysmon Event ID 5, Windows Event Log 4689, SIEM correlation",
+        "priority": "HIGHEST - Immediate incident response required"
+      }
+    ]
+  },
+  "mitre_attack_techniques": {
+    "defense_evasion": [
+      "T1562.001 - Impair Defenses: Disable or Modify Tools (CrowdStrike-specific)",
+      "T1140 - Deobfuscate/Decode Files or Information",
+      "T1027.009 - Obfuscated Files or Information: Embedded Payloads",
+      "T1070.004 - Indicator Removal: File Deletion",
+      "T1622 - Debugger Evasion"
+    ],
+    "privilege_escalation": [
+      "T1068 - Exploitation for Privilege Escalation"
+    ],
+    "execution": [
+      "T1106 - Native API"
+    ],
+    "persistence": [
+      "T1543.003 - Create or Modify System Process: Windows Service"
+    ]
+  },
+  "comparative_analysis": {
+    "similarities_with_killer_dll": [
+      "Identical BYOVD attack architecture",
+      "Identical IOCTL codes (0x800024B4, 0x8335003C)",
+      "Identical embedded drivers (BdApiUtil64.sys, ProcExpDriver.sys)",
+      "Same three-phase lifecycle (Deployment, Execution, Cleanup)",
+      "Same anti-forensics cleanup techniques",
+      "Same integration with lpe.exe privilege escalation module"
+    ],
+    "differences_from_killer_dll": [
+      "Kill list explicitly includes CrowdStrike Falcon processes",
+      "Contains embedded Microsoft-signed binary (purpose unknown)",
+      "Configuration table offset: 0x180067428 (vs. 0x180078700 in killer.dll)",
+      "IOCTL dispatcher function: sub_180004d83 (vs. sub_180004b00 in killer.dll)"
+    ],
+    "threat_actor_implications": {
+      "modularity": "Demonstrates efficient threat actor tooling - reconfiguration vs. complete rewrite",
+      "targeting_maturity": "Explicit CrowdStrike variant indicates targeted EDR evasion strategy",
+      "operational_efficiency": "Same codebase reused with configuration changes reduces development costs",
+      "expected_variants": "High likelihood of additional EDR-specific variants (SentinelOne, Carbon Black, etc.)"
+    }
+  },
+  "remediation_guidance": {
+    "complexity": "CRITICAL - Complete system rebuild MANDATORY",
+    "recommended_approach": "REBUILD REQUIRED",
+    "rationale": "Kernel-level execution, complete CrowdStrike Falcon blind spot, unknown residual artifacts from embedded Microsoft binary, and professional-grade anti-forensics create unacceptable residual risk.",
+    "crowdstrike_specific_actions": [
+      "Reinstall CrowdStrike Falcon from known-good source",
+      "Verify sensor reconnection to CrowdStrike cloud",
+      "Review CrowdStrike API logs for period when sensor was offline",
+      "Hunt for activity that occurred during sensor blind spot window",
+      "Enable Falcon prevention policies for vulnerable driver blocking"
+    ],
+    "driver_blocklisting": {
+      "priority": "CRITICAL - Preventative measure",
+      "scope": "All Windows endpoints (especially CrowdStrike-protected systems)",
+      "method": "Windows Defender Application Control (WDAC) deny rules + CrowdStrike policy",
+      "drivers_to_block": [
+        "BdApiUtil64.sys (by hash if extracted)",
+        "ProcExpDriver.sys version 17.0.7 (by hash if extracted)",
+        "All versions of Baidu Antivirus drivers (by publisher if not needed)"
+      ],
+      "crowdstrike_native_blocking": "Investigate CrowdStrike native vulnerable driver blocking capabilities",
+      "implementation": "Create WDAC deny policy and deploy via Group Policy + CrowdStrike policy",
+      "testing_required": "Test in pilot group before enterprise deployment"
+    }
+  },
+  "threat_actor_assessment": {
+    "family": "Arsenal-237 Malware Toolkit",
+    "family_confidence": "CONFIRMED (100%)",
+    "attribution_basis": "Discovered on Arsenal-237 open directory (109.230.231.37), identical architecture to killer.dll, hardcoded C2 URL to same infrastructure",
+    "threat_actor_type": "Organized cybercrime with professional development resources and modular tooling",
+    "sophistication": "High - demonstrates operational maturity through modular variant development",
+    "motivation": "Financial (ransomware deployment) / Destructive attacks",
+    "targeting": "Opportunistic with EDR-specific variants - broad toolkit availability + targeted variants",
+    "historical_context": "Part of ongoing Arsenal-237 investigation - CrowdStrike-specific variant proves targeted EDR evasion strategy",
+    "variant_significance": "Demonstrates threat actor invests resources in EDR-specific tooling - expect additional variants"
+  },
+  "response_priorities": {
+    "immediate_crowdstrike_customers": [
+      "ALERT all CrowdStrike Falcon customers of CrowdStrike-specific variant",
+      "Monitor for unexpected csagent.exe / CSFalconService.exe termination",
+      "Deploy CrowdStrike Custom IOAs for vulnerable driver loading",
+      "Enable Falcon behavioral prevention for suspicious service creation",
+      "Block Arsenal-237 infrastructure (109.230.231.37) at network perimeter"
+    ],
+    "immediate_all_organizations": [
+      "Isolate infected systems from network immediately",
+      "Deploy driver blocklist (WDAC) to prevent reinfection",
+      "Hunt for lpe.exe → killer_crowdstrike.dll execution chains",
+      "Review logs for timeframe when EDR was disabled",
+      "Initiate forensic analysis to determine attack timeline and scope"
+    ],
+    "critical_investigation": [
+      "Extract embedded Microsoft-signed binary for dynamic analysis",
+      "Determine purpose of unknown Microsoft binary (critical finding)",
+      "Hunt for secondary payloads deployed during EDR blind spot",
+      "Review and strengthen privilege escalation controls (address lpe.exe initial access)"
+    ]
+  },
+  "timestamp": "2026-01-25T00:00:00Z",
+  "analyst": "Threat Intelligence Team",
+  "report_version": "1.0",
+  "license": "© 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+}

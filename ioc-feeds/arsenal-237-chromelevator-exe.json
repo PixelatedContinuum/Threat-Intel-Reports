@@ -1,0 +1,505 @@
+{
+  "metadata": {
+    "report_title": "chromelevator.exe - Browser Credential Extraction Tool IOC Feed",
+    "analysis_date": "2026-01-26",
+    "malware_family": "Arsenal-237 Ransomware Toolkit",
+    "confidence_level": "DEFINITE (Technical findings)",
+    "report_type": "Indicators of Compromise",
+    "feed_version": "1.0"
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "hash": "92c4f4b7748f23d6dcd5af43595f34e4bb8e284a85d2c1647b189c1bb59a784a",
+        "filename": "chromelevator.exe",
+        "file_size": 1463808,
+        "file_type": "PE64 Console Application",
+        "confidence": "CONFIRMED",
+        "notes": "Browser credential extraction tool from Arsenal-237 campaign"
+      }
+    ],
+    "md5": [
+      {
+        "hash": "bc376c951eacb36bf0909a43588e6444",
+        "filename": "chromelevator.exe",
+        "confidence": "CONFIRMED",
+        "notes": "Primary sample identifier"
+      }
+    ],
+    "sha1": [
+      {
+        "hash": "78c8ab4a9932805f5fb32f4a19367642ea8ac6f6",
+        "filename": "chromelevator.exe",
+        "confidence": "CONFIRMED",
+        "notes": "Secondary sample identifier"
+      }
+    ]
+  },
+  "file_indicators": {
+    "suspicious_filenames": [
+      {
+        "name": "chromelevator.exe",
+        "type": "Malware executable",
+        "confidence": "CONFIRMED",
+        "detection_note": "Block execution of this file by hash and filename"
+      },
+      {
+        "name": "PAYLOAD_DLL",
+        "type": "Embedded resource",
+        "confidence": "CONFIRMED",
+        "detection_note": "Reflective DLL payload embedded in chromelevator.exe resource section"
+      }
+    ],
+    "suspicious_locations": [
+      {
+        "path": "%TEMP%\\chromelevator.exe",
+        "type": "Temporary directory execution",
+        "confidence": "HIGHLY LIKELY",
+        "detection_note": "Malware often executed from temporary directories"
+      },
+      {
+        "path": "%APPDATA%\\chromelevator.exe",
+        "type": "AppData directory execution",
+        "confidence": "HIGHLY LIKELY",
+        "detection_note": "Alternative execution location for persistence-less operation"
+      },
+      {
+        "path": "C:\\Windows\\Temp\\chromelevator.exe",
+        "type": "Windows temp directory",
+        "confidence": "LIKELY",
+        "detection_note": "Common malware staging location"
+      }
+    ]
+  },
+  "network_indicators": {
+    "domains": [],
+    "ips": [],
+    "urls": [],
+    "named_pipes": [
+      {
+        "name": "\\\\.*\\pipe\\*",
+        "type": "Inter-process communication",
+        "confidence": "CONFIRMED",
+        "detection_note": "Dynamic named pipe names used for C2 communication with injected payload. Pattern: CreateNamedPipeW with dynamic identifiers",
+        "detection_method": "Monitor for named pipe creation by chromelevator.exe; establish baseline for normal pipe usage"
+      }
+    ],
+    "c2_notes": "No direct network C2 observed; communication occurs via named pipes to injected payloads. Data exfiltration likely handled by other Arsenal-237 components (enc_c2.exe)"
+  },
+  "host_indicators": {
+    "registry_keys": [
+      {
+        "key": "HKLM\\SOFTWARE\\Google\\Chrome\\InstallPath",
+        "type": "Browser detection",
+        "confidence": "CONFIRMED",
+        "notes": "Queried to locate Chrome installation directory",
+        "detection_note": "Monitor for unusual registry queries by suspicious processes"
+      },
+      {
+        "key": "HKLM\\SOFTWARE\\BraveSoftware\\Brave-Browser",
+        "type": "Browser detection",
+        "confidence": "CONFIRMED",
+        "notes": "Queried to locate Brave Browser installation directory"
+      },
+      {
+        "key": "HKLM\\SOFTWARE\\Microsoft\\Edge",
+        "type": "Browser detection",
+        "confidence": "CONFIRMED",
+        "notes": "Queried to locate Microsoft Edge installation directory"
+      }
+    ],
+    "file_paths": [
+      {
+        "path": "%APPDATA%\\Google\\Chrome\\User Data\\Default\\Login Data",
+        "type": "Browser credential database",
+        "confidence": "CONFIRMED",
+        "notes": "Chrome password store (SQLite encrypted with DPAPI)"
+      },
+      {
+        "path": "%APPDATA%\\Google\\Chrome\\User Data\\Default\\Cookies",
+        "type": "Browser session data",
+        "confidence": "CONFIRMED",
+        "notes": "Chrome session cookies and authentication tokens"
+      },
+      {
+        "path": "%APPDATA%\\Google\\Chrome\\User Data\\Default\\Web Data",
+        "type": "Browser data storage",
+        "confidence": "CONFIRMED",
+        "notes": "Chrome autofill, payment cards, and form data"
+      },
+      {
+        "path": "%APPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Login Data",
+        "type": "Browser credential database",
+        "confidence": "CONFIRMED",
+        "notes": "Brave Browser password store"
+      },
+      {
+        "path": "%APPDATA%\\Microsoft\\Edge\\User Data\\Default\\Login Data",
+        "type": "Browser credential database",
+        "confidence": "CONFIRMED",
+        "notes": "Microsoft Edge password store"
+      },
+      {
+        "path": "%APPDATA%\\Google\\Chrome\\User Data\\Profile *\\*",
+        "type": "Multi-profile targeting",
+        "confidence": "CONFIRMED",
+        "notes": "chromelevator.exe enumerates and extracts from all Chrome profiles (Profile 1, Profile 2, etc.)"
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [],
+    "process_behavior": [
+      {
+        "behavior": "Process injection into browser processes",
+        "processes": ["chrome.exe", "brave.exe", "msedge.exe"],
+        "method": "Reflective DLL injection via direct syscalls",
+        "confidence": "CONFIRMED",
+        "detection_note": "Monitor for suspicious memory allocation, protection changes, and thread creation in browser processes"
+      },
+      {
+        "behavior": "Direct syscall usage bypassing Windows API",
+        "syscalls": [
+          "ZwAllocateVirtualMemory",
+          "ZwWriteVirtualMemory",
+          "ZwReadVirtualMemory",
+          "ZwProtectVirtualMemory",
+          "ZwCreateThreadEx",
+          "ZwOpenProcess",
+          "ZwQueryInformationProcess",
+          "ZwGetContextThread",
+          "ZwSetContextThread",
+          "ZwResumeThread",
+          "ZwFreeVirtualMemory",
+          "ZwTerminateProcess",
+          "ZwUnmapViewOfSection",
+          "ZwFlushInstructionCache",
+          "ZwClose",
+          "ZwOpenKey",
+          "ZwQueryValueKey",
+          "ZwEnumerateKey"
+        ],
+        "confidence": "CONFIRMED",
+        "detection_note": "Modern EDR with syscall tracing (ETW) can detect direct syscall patterns"
+      },
+      {
+        "behavior": "Registry enumeration for browser installation paths",
+        "registry_keys": [
+          "HKLM\\SOFTWARE\\Google\\Chrome",
+          "HKLM\\SOFTWARE\\BraveSoftware",
+          "HKLM\\SOFTWARE\\Microsoft\\Edge"
+        ],
+        "confidence": "CONFIRMED",
+        "detection_note": "Unusual registry queries by non-system processes should trigger alerts"
+      }
+    ]
+  },
+  "behavioral_indicators": [
+    {
+      "behavior": "Named pipe server creation by suspicious process",
+      "indicator": "CreateNamedPipeW API call with PIPE_ACCESS_DUPLEX",
+      "process": "chromelevator.exe",
+      "confidence": "CONFIRMED",
+      "severity": "CRITICAL",
+      "detection": "Monitor process creation events for chromelevator.exe; alert on named pipe creation by non-system processes"
+    },
+    {
+      "behavior": "Chrome database access by non-browser process",
+      "indicator": "File access to %APPDATA%\\Google\\Chrome\\User Data\\*",
+      "process": "chromelevator.exe",
+      "confidence": "CONFIRMED",
+      "severity": "CRITICAL",
+      "detection": "Alert on non-browser processes accessing Chrome/Brave/Edge credential databases"
+    },
+    {
+      "behavior": "Reflective DLL injection pattern",
+      "indicator": "VirtualAllocEx + WriteProcessMemory + VirtualProtectEx + CreateRemoteThread sequence",
+      "process": "chromelevator.exe",
+      "confidence": "CONFIRMED",
+      "severity": "CRITICAL",
+      "detection": "EDR memory scanning and injection detection; syscall tracing for direct syscall injection attempts"
+    },
+    {
+      "behavior": "Embedded resource extraction and decryption",
+      "indicator": "PAYLOAD_DLL resource access and PE header parsing",
+      "process": "chromelevator.exe",
+      "confidence": "CONFIRMED",
+      "severity": "HIGH",
+      "detection": "Monitor for suspicious resource access patterns; check for embedded malicious payloads in PE files"
+    },
+    {
+      "behavior": "Large data read from browser credential databases",
+      "indicator": "Bulk read operations from SQLite databases containing credentials",
+      "process": "injected PAYLOAD_DLL in browser process",
+      "confidence": "CONFIRMED",
+      "severity": "CRITICAL",
+      "detection": "Monitor for unusual database read operations by browser processes; alert on credential database access"
+    }
+  ],
+  "api_calls": {
+    "critical_apis": [
+      "CreateNamedPipeW",
+      "ConnectNamedPipe",
+      "WriteFile",
+      "ReadFile",
+      "FindResourceW",
+      "LoadResource",
+      "LockResource",
+      "SizeofResource",
+      "CreateRemoteThread",
+      "WriteProcessMemory",
+      "VirtualAllocEx",
+      "VirtualProtectEx",
+      "OpenProcess",
+      "GetCurrentProcess",
+      "CloseHandle",
+      "RegOpenKeyExW",
+      "RegQueryValueExW",
+      "RegEnumKeyExW"
+    ],
+    "detection_note": "Direct syscall usage bypasses these API hooks; syscall tracing required for detection"
+  },
+  "command_line_indicators": [
+    {
+      "argument": "--verbose",
+      "type": "Logging configuration",
+      "confidence": "CONFIRMED",
+      "detection_note": "Enable detailed logging during extraction"
+    },
+    {
+      "argument": "--fingerprint",
+      "type": "System profiling mode",
+      "confidence": "CONFIRMED",
+      "detection_note": "Collect system fingerprinting information"
+    },
+    {
+      "argument": "--output-path",
+      "type": "Output directory specification",
+      "confidence": "CONFIRMED",
+      "detection_note": "Specify custom directory for extracted credential output; unusual output paths (D:\\, E:\\) suggest intentional deployment"
+    },
+    {
+      "argument": "--help",
+      "type": "Help documentation",
+      "confidence": "CONFIRMED",
+      "detection_note": "Display usage information"
+    }
+  ],
+  "critical_strings": [
+    {
+      "string": "chromelevator.exe",
+      "context": "Filename/process name",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "PAYLOAD_DLL",
+      "context": "Embedded resource name",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "chrome.exe",
+      "context": "Browser process targeting",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "brave.exe",
+      "context": "Browser process targeting",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "msedge.exe",
+      "context": "Browser process targeting",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "ReflectiveLoader",
+      "context": "DLL injection entry point",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "Named pipe server created",
+      "context": "Logging/debugging message",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "Extracted",
+      "context": "Credential extraction confirmation",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "cookies",
+      "context": "Data extraction type",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "passwords",
+      "context": "Data extraction type",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "payments",
+      "context": "Data extraction type",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "--verbose",
+      "context": "Command-line argument",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "--fingerprint",
+      "context": "Command-line argument",
+      "confidence": "CONFIRMED"
+    },
+    {
+      "string": "--output-path",
+      "context": "Command-line argument",
+      "confidence": "CONFIRMED"
+    }
+  ],
+  "mitre_attack_mapping": [
+    {
+      "tactic": "Credential Access",
+      "technique": "T1555.003",
+      "name": "Credentials from Web Browsers",
+      "severity": "CRITICAL",
+      "evidence": "Targeted extraction of cookies, passwords, and payment data from Chrome/Brave/Edge"
+    },
+    {
+      "tactic": "Execution",
+      "technique": "T1055.001",
+      "name": "Process Injection - Dynamic-link Library Injection",
+      "severity": "CRITICAL",
+      "evidence": "Reflective DLL injection into browser processes"
+    },
+    {
+      "tactic": "Defense Evasion",
+      "technique": "T1622",
+      "name": "Debugger Evasion",
+      "severity": "HIGH",
+      "evidence": "Analysis environment detection and behavior modification"
+    },
+    {
+      "tactic": "Defense Evasion",
+      "technique": "T1027",
+      "name": "Obfuscated Files or Information",
+      "severity": "HIGH",
+      "evidence": "Memory encryption of syscall stubs and embedded payloads"
+    },
+    {
+      "tactic": "Collection",
+      "technique": "T1005",
+      "name": "Data from Local System",
+      "severity": "HIGH",
+      "evidence": "Extraction of browser SQLite databases and credential stores"
+    },
+    {
+      "tactic": "Discovery",
+      "technique": "T1083",
+      "name": "File and Directory Discovery",
+      "severity": "MEDIUM",
+      "evidence": "Browser installation detection and profile enumeration"
+    },
+    {
+      "tactic": "Command and Control",
+      "technique": "T1071.001",
+      "name": "Application Layer Protocol - Web Protocols",
+      "severity": "MEDIUM",
+      "evidence": "Named pipe C2 communication with injected payloads"
+    },
+    {
+      "tactic": "Execution",
+      "technique": "T1059.003",
+      "name": "Command and Scripting Interpreter - Windows Command Shell",
+      "severity": "MEDIUM",
+      "evidence": "Command-line interface with multiple operational modes"
+    }
+  ],
+  "detection_rules": [
+    {
+      "rule_type": "YARA",
+      "rule_name": "Chromelevator_Browser_Extraction",
+      "severity": "CRITICAL",
+      "description": "Detection of chromelevator.exe browser credential extraction tool"
+    },
+    {
+      "rule_type": "Sigma",
+      "rule_name": "Process_Creation_Chromelevator",
+      "severity": "CRITICAL",
+      "description": "Detects execution of chromelevator.exe with suspicious command-line arguments"
+    },
+    {
+      "rule_type": "Sigma",
+      "rule_name": "Named_Pipe_Injection_C2",
+      "severity": "HIGH",
+      "description": "Detects named pipe creation patterns associated with reflective DLL injection"
+    },
+    {
+      "rule_type": "EDR Behavioral",
+      "rule_name": "Process_Injection_Memory_Pattern",
+      "severity": "CRITICAL",
+      "description": "Detects VirtualAllocEx + WriteProcessMemory + VirtualProtectEx + CreateRemoteThread injection pattern"
+    },
+    {
+      "rule_type": "EDR Memory",
+      "rule_name": "Reflective_DLL_Injection_Detection",
+      "severity": "CRITICAL",
+      "description": "Detects reflective DLL injection through memory scanning and PE header validation in process memory"
+    }
+  ],
+  "campaign_context": {
+    "campaign_name": "Arsenal-237",
+    "infrastructure": "109.230.231.37",
+    "malware_toolkit": [
+      "lpe.exe - Privilege escalation",
+      "chromelevator.exe - Browser credential extraction",
+      "killer.dll - Defense evasion",
+      "rootkit.dll - Kernel-level persistence",
+      "enc_c2.exe - Ransomware deployment",
+      "new_enc.exe - Offline encryption",
+      "dec_fixed.exe - Decryption tool"
+    ],
+    "attack_chain": "Privilege Escalation → Credential Harvesting → Defense Evasion → Ransomware Deployment",
+    "threat_actor_profile": "Organized ransomware-as-a-service operation",
+    "confidence": "MODERATE (75% - Technical patterns consistent; direct infrastructure correlation required)"
+  },
+  "remediation_guidance": {
+    "immediate_actions": [
+      "Isolate infected systems from network",
+      "Preserve forensic evidence (memory dumps, disk images)",
+      "Terminate chromelevator.exe and child processes",
+      "Force credential rotation for potentially compromised accounts",
+      "Alert incident response, CISO, legal, and executive leadership"
+    ],
+    "detection_deployment": [
+      "Deploy YARA rules for signature-based detection",
+      "Implement Sigma rules for process monitoring",
+      "Configure EDR for syscall tracing and memory scanning",
+      "Enable named pipe monitoring and alerting",
+      "Monitor browser credential database access patterns"
+    ],
+    "system_hardening": [
+      "Implement application control to block unsigned executables",
+      "Deploy Windows Credential Guard for credential protection",
+      "Enable EDR with advanced memory scanning capabilities",
+      "Implement browser security policies and isolation technologies",
+      "Segment networks to isolate critical systems",
+      "Disable unnecessary browser data caching"
+    ]
+  },
+  "references": {
+    "analysis_reports": [
+      {
+        "title": "chromelevator.exe - Browser Credential Extraction Tool - Technical Analysis",
+        "format": "Markdown",
+        "path": "/reports/chromelevator-exe.md"
+      }
+    ],
+    "detection_rules": [
+      {
+        "title": "chromelevator.exe Detection Rules and Hunting Queries",
+        "format": "Markdown",
+        "path": "/hunting-detections/chromelevator-exe.md"
+      }
+    ]
+  }
+}

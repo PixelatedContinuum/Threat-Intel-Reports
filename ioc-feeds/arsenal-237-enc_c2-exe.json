@@ -1,0 +1,427 @@
+{
+  "report_metadata": {
+    "title": "enc_c2.exe (Arsenal-237) - Indicators of Compromise",
+    "date": "2026-01-26",
+    "malware_name": "enc_c2.exe",
+    "malware_family": "Arsenal-237 Ransomware Toolkit",
+    "malware_type": "Ransomware with C2",
+    "severity": "CRITICAL",
+    "report_version": "1.0"
+  },
+  "file_indicators": {
+    "hashes": {
+      "md5": [
+        {
+          "value": "32a3497e57604e1037f1ff9993a8fdaa",
+          "filename": "enc_c2.exe",
+          "confidence": "CONFIRMED",
+          "context": "PE32+ 64-bit Windows executable"
+        }
+      ],
+      "sha1": [
+        {
+          "value": "34d3c75e79633eb3bf47e751fb31274760aeae09",
+          "filename": "enc_c2.exe",
+          "confidence": "CONFIRMED",
+          "context": "PE32+ 64-bit Windows executable"
+        }
+      ],
+      "sha256": [
+        {
+          "value": "613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899",
+          "filename": "enc_c2.exe",
+          "confidence": "CONFIRMED",
+          "context": "PE32+ 64-bit Windows executable, primary identifier"
+        }
+      ]
+    },
+    "file_properties": {
+      "filename": "enc_c2.exe",
+      "file_type": "PE32+ executable (64-bit Windows)",
+      "file_size": 3480576,
+      "file_size_mb": 3.32,
+      "compiler": "Rust (rustc) - Linux build environment",
+      "architecture": "x64",
+      "build_path": "/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/",
+      "builder_id": "TEST_BUILD_001",
+      "http_library": "ureq-2.12.1",
+      "crypto_library": "aead-0.5.2"
+    },
+    "static_strings": {
+      "cryptographic": [
+        "expand 32-byte k",
+        "aead-0.5.2",
+        "chacha20",
+        "Chacha_256_constant"
+      ],
+      "c2_infrastructure": [
+        "http://rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion/c2/beacon.php",
+        "Content-Type: application/json",
+        "ureq"
+      ],
+      "ransomware_operations": [
+        "YOUR FILES HAVE BEEN ENCRYPTED!",
+        "README.txt",
+        ".locked",
+        "TEST_BUILD_001",
+        "victim_id",
+        "builder_id",
+        "encryption_key",
+        "machine_name",
+        "machine_info"
+      ]
+    },
+    "key_function_addresses": {
+      "entry_point": "0x1400013f0",
+      "entry_point_label": "_start",
+      "anti_debug_crt_init": "0x140001180",
+      "anti_debug_label": "TEB validation for debugger detection",
+      "main_entry": "0x140006c40",
+      "main_label": "Argument parsing and configuration",
+      "core_payload": "0x140003069",
+      "core_payload_label": "C2 communication and encryption orchestration",
+      "teb_data_storage": "0x14034f210",
+      "teb_data_label": "Stored stack base for TEB comparison"
+    }
+  },
+  "network_indicators": {
+    "c2_infrastructure": [
+      {
+        "type": "tor_hidden_service",
+        "address": "rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion",
+        "endpoint": "/c2/beacon.php",
+        "port": 80,
+        "protocol": "HTTP",
+        "transport": "Tor network",
+        "method": "POST",
+        "content_type": "application/json",
+        "purpose": "Victim registration and encryption key exfiltration",
+        "confidence": "CONFIRMED",
+        "threat_level": "CRITICAL"
+      }
+    ],
+    "c2_beacon_structure": {
+      "format": "JSON",
+      "fields": [
+        {
+          "field": "victim_id",
+          "type": "string",
+          "purpose": "Unique infection tracking identifier",
+          "example": "a3f2b8c1-4d5e-6f7a-8b9c-0d1e2f3a4b5c",
+          "security_impact": "Enables victim correlation across systems"
+        },
+        {
+          "field": "builder_id",
+          "type": "string",
+          "purpose": "RaaS affiliate attribution",
+          "example": "TEST_BUILD_001",
+          "security_impact": "Tracks campaign source and payment routing"
+        },
+        {
+          "field": "encryption_key",
+          "type": "string",
+          "purpose": "256-bit ChaCha20 key in hexadecimal format",
+          "example": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2",
+          "length": "64 characters (256-bit hex)",
+          "security_impact": "CRITICAL - Enables attacker decryption after payment"
+        },
+        {
+          "field": "machine_name",
+          "type": "string",
+          "purpose": "Victim hostname",
+          "example": "DESKTOP-ABC123",
+          "security_impact": "Victim environment profiling for ransom pricing"
+        },
+        {
+          "field": "machine_info",
+          "type": "string",
+          "purpose": "Operating system version and architecture",
+          "example": "Windows 10 Pro x64",
+          "security_impact": "Victim system capability assessment"
+        }
+      ]
+    },
+    "tor_connectivity": {
+      "protocol": "SOCKS",
+      "default_ports": [9050, 9150],
+      "detection": "Monitor for localhost SOCKS connections from suspicious processes",
+      "mitigation": "Block outbound connections to Tor infrastructure at network perimeter"
+    }
+  },
+  "behavioral_indicators": {
+    "process_execution": {
+      "process_name": "enc_c2.exe",
+      "command_line_patterns": [
+        "enc_c2.exe",
+        "enc_c2.exe --folder*",
+        "enc_c2.exe --c2*",
+        "enc_c2.exe --bid*",
+        "*--folder C:\\Users*",
+        "*--c2 http*"
+      ],
+      "network_activity": "Outbound HTTP POST to .onion domain over Tor network",
+      "file_activity": "Rapid file modifications with .locked extension appending",
+      "detection_priority": "CRITICAL"
+    },
+    "file_system_activity": {
+      "write_operations": [
+        {
+          "pattern": "*.locked",
+          "description": "Encrypted files with appended .locked extension",
+          "example": "document.docx.locked, photo.jpg.locked",
+          "detection_method": "File name pattern matching, file creation events",
+          "severity": "CRITICAL"
+        },
+        {
+          "pattern": "README.txt",
+          "description": "Ransom note creation in encrypted directories",
+          "example": "C:\\Users\\Victim\\Documents\\README.txt",
+          "detection_method": "File name + location pattern matching",
+          "severity": "HIGH"
+        }
+      ],
+      "read_operations": [
+        "User data files in target directories",
+        "System information queries (hostname, OS version)",
+        "File enumeration for encryption selection"
+      ],
+      "deletion_operations": [
+        "Unknown - requires dynamic analysis verification",
+        "POSSIBLE: Secure deletion of original files",
+        "POSSIBLE: Standard Windows deletion (recoverable with forensics)"
+      ]
+    },
+    "encryption_behavior": {
+      "cipher_algorithm": "ChaCha20",
+      "key_size": "256-bit",
+      "cipher_mode": "Stream cipher (RFC 7539)",
+      "file_extension_handling": ".locked appended to encrypted files",
+      "encryption_speed_estimate": "100-1000 files per minute",
+      "target_file_types": [
+        "*.docx", "*.xlsx", "*.pptx", "*.doc", "*.xls", "*.ppt",
+        "*.jpg", "*.png", "*.gif", "*.mp4", "*.mp3", "*.wav",
+        "*.sql", "*.db", "*.sqlite", "*.mdb",
+        "*.zip", "*.rar", "*.7z", "*.tar",
+        "*.txt", "*.csv", "*.json", "*.xml",
+        "*.bak", "*.backup", "*.old"
+      ],
+      "excluded_file_types": [
+        "*.exe (system preservation)"
+      ],
+      "detection_method": "EDR file write monitoring, file integrity monitoring, entropy analysis",
+      "alert_threshold": ">50 files modified in <10 minutes with .locked extension"
+    },
+    "anti_analysis_techniques": {
+      "teb_anti_debug": {
+        "technique": "Thread Environment Block (TEB) validation",
+        "method": "Compare current stack base against stored value (0x14034f210)",
+        "detection_indicator": "Repeated Sleep(1000) calls indicating anti-debug loop",
+        "bypass_methods": [
+          "NOP instruction patching on Sleep() calls",
+          "Comparison instruction patching to skip anti-debug check",
+          "TEB data section manipulation before execution",
+          "Emulation environment where TEB matches expected value"
+        ]
+      }
+    }
+  },
+  "host_indicators": {
+    "registry_keys": [
+      {
+        "path": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "description": "Standard persistence location (not observed in this sample)",
+        "confidence": "NOT OBSERVED - single-run model",
+        "note": "No persistence mechanisms identified in static analysis"
+      }
+    ],
+    "file_paths": [
+      {
+        "path": "*\\README.txt",
+        "description": "Ransom note in encrypted directories",
+        "pattern": "Recursive search for README.txt in user data directories",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "path": "*\\.locked",
+        "description": "Encrypted files with .locked extension",
+        "pattern": "File extension pattern matching",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "path": "C:\\Users\\*\\AppData\\Roaming\\*",
+        "description": "Potential C2 client data storage (Tor configuration, cache)",
+        "note": "Requires dynamic analysis verification"
+      }
+    ],
+    "mutex_names": [
+      {
+        "name": "Unknown - requires dynamic analysis",
+        "confidence": "INSUFFICIENT DATA"
+      }
+    ],
+    "service_names": [
+      {
+        "name": "Unknown - no persistence mechanisms observed",
+        "confidence": "NOT OBSERVED"
+      }
+    ],
+    "process_artifacts": [
+      {
+        "artifact_type": "Command-line argument",
+        "artifact_value": "--folder <path>",
+        "description": "Target directory for encryption (customizable)",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "artifact_type": "Command-line argument",
+        "artifact_value": "--c2 <url>",
+        "description": "Custom C2 server override (testing capability)",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "artifact_type": "Command-line argument",
+        "artifact_value": "--bid <builder_id>",
+        "description": "RaaS affiliate identifier override",
+        "confidence": "CONFIRMED"
+      }
+    ]
+  },
+  "mitre_attack_mapping": {
+    "tactics_and_techniques": [
+      {
+        "tactic": "Execution",
+        "technique_id": "T1204.002",
+        "technique_name": "User Execution of Executable",
+        "evidence": "User-executed enc_c2.exe",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "tactic": "Defense Evasion",
+        "technique_id": "T1622",
+        "technique_name": "Debugger Evasion",
+        "evidence": "TEB validation in sub_140001180 with Sleep loop",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "tactic": "Discovery",
+        "technique_id": "T1082",
+        "technique_name": "System Information Discovery",
+        "evidence": "Collection of machine_name and machine_info for C2 payload",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "tactic": "Discovery",
+        "technique_id": "T1083",
+        "technique_name": "File and Directory Discovery",
+        "evidence": "Directory enumeration for encryption targeting",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "tactic": "Collection",
+        "technique_id": "T1005",
+        "technique_name": "Data from Local System",
+        "evidence": "File enumeration and read for encryption operations",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "tactic": "Command and Control",
+        "technique_id": "T1071.001",
+        "technique_name": "Web Protocols",
+        "evidence": "HTTP POST via ureq-2.12.1 library",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "tactic": "Command and Control",
+        "technique_id": "T1090.003",
+        "technique_name": "Multi-hop Proxy",
+        "evidence": "Tor hidden service for anonymity",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "tactic": "Command and Control",
+        "technique_id": "T1132.001",
+        "technique_name": "Data Encoding: Standard Encoding",
+        "evidence": "JSON payload for structured C2 communication",
+        "confidence": "CONFIRMED"
+      },
+      {
+        "tactic": "Exfiltration",
+        "technique_id": "T1041",
+        "technique_name": "Exfiltration Over C2 Channel",
+        "evidence": "Encryption key transmission via JSON payload",
+        "confidence": "CONFIRMED",
+        "severity": "CRITICAL"
+      },
+      {
+        "tactic": "Impact",
+        "technique_id": "T1486",
+        "technique_name": "Data Encrypted for Impact",
+        "evidence": "ChaCha20 encryption with .locked extension appending",
+        "confidence": "CONFIRMED",
+        "severity": "CRITICAL"
+      }
+    ]
+  },
+  "threat_intelligence_summary": {
+    "malware_classification": {
+      "type": "Ransomware",
+      "subtype": "Ransomware-as-a-Service (RaaS)",
+      "variant": "Arsenal-237 Toolkit",
+      "sophistication": "MEDIUM-HIGH"
+    },
+    "threat_actor_profile": {
+      "organization_type": "Professional/Organized Criminal Group",
+      "motivation": "Financial (ransom extortion)",
+      "confidence": "LIKELY (75-80%)"
+    },
+    "target_profile": {
+      "primary_targets": "Organizations with valuable file-based data and payment capability",
+      "secondary_targets": "Business entities preferred over consumer systems",
+      "industry_focus": "No specific industry focus identified; opportunistic targeting"
+    },
+    "operational_context": {
+      "infrastructure_resilience": "HIGH - Tor hidden service provides anonymity and takedown resistance",
+      "development_status": "BETA/TEST - TEST_BUILD_001 designation indicates active development",
+      "capability_evolution": "POSSIBLE production variants with enhanced evasion",
+      "campaign_tracking": "RaaS builder ID system enables multi-affiliate operations"
+    }
+  },
+  "detection_recommendations": {
+    "network_monitoring": [
+      "Block outbound connections to known Tor entry nodes",
+      "Monitor for .onion domain access attempts",
+      "Detect SOCKS proxy connections (localhost:9050, 9150)",
+      "Alert on HTTP POST requests to .onion domains with JSON payloads containing 'encryption_key'"
+    ],
+    "endpoint_monitoring": [
+      "EDR behavioral detection for rapid file encryption patterns",
+      "Monitor for .locked file creation in bulk (>50 files in <10 minutes)",
+      "Alert on enc_c2.exe process execution",
+      "Detect TEB-based anti-debug behavior (Sleep loops)",
+      "Monitor for README.txt ransom note creation"
+    ],
+    "siem_correlation": [
+      "Multi-stage detection: Process execution → File encryption → C2 communication",
+      "Correlate file write events with network beacon events (same host, same timeframe)",
+      "Alert on combination of .locked file creation + Tor traffic from same process"
+    ]
+  },
+  "remediation_recommendations": {
+    "if_infection_confirmed": [
+      "Isolate affected systems immediately (network disconnection)",
+      "Preserve forensic evidence (memory dumps, file system state)",
+      "Block C2 infrastructure at network perimeter (Tor blocking)",
+      "Credential rotation for all accounts on affected systems",
+      "Offline backup restoration (primary recovery mechanism)",
+      "Consider system rebuild vs. aggressive cleanup (see main report)"
+    ],
+    "prevention_measures": [
+      "Deploy comprehensive EDR with behavioral detection for ransomware",
+      "Implement network segmentation for high-value data directories",
+      "Maintain offline, immutable backups with tested restoration procedures",
+      "Block Tor traffic at network perimeter",
+      "Email filtering for suspicious executable attachments",
+      "Privilege management and credential vaulting for service accounts"
+    ]
+  }
+}
