@@ -25,7 +25,6 @@ hide: true
 
 ## Quick Reference
 
-
 **Detections & IOCs:**
 - [dec_fixed.exe Detection Rules]({{ "/hunting-detections/arsenal-237-dec_fixed-exe/" | relative_url }})
 - [dec_fixed.exe IOCs]({{ "/ioc-feeds/arsenal-237-dec_fixed-exe.json" | relative_url }})
