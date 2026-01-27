@@ -74,6 +74,25 @@ The most alarming aspect: **Evidence suggests this toolkit is actively under dev
 
 ---
 
+# Quick Reference: New Files Analysis Resources
+## Arsenal-237 New Files - Recently Added Malware
+
+Each malware sample analyzed in this investigation has three companion resources: a comprehensive technical report with behavioral analysis and incident response guidance, a detection package with YARA/Sigma rules for hunting and prevention, and a machine-readable IOC feed in JSON format for SIEM/EDR ingestion.
+
+**killer.dll (BYOVD Process Termination):** | [Technical Report]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-killer-dll/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-killer-dll.json" | relative_url }})
+**killer_crowdstrike.dll (CrowdStrike Variant):** | [Technical Report]({{ "/reports/arsenal-237-new-files/killer-crowdstrike-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-killer-crowdstrike-dll/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json" | relative_url }})
+**lpe.exe (Privilege Escalation):** | [Technical Report]({{ "/reports/arsenal-237-new-files/lpe-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-lpe-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-lpe-exe.json" | relative_url }})
+**BdApiUtil64.sys (Vulnerable Baidu Driver):** | [Technical Report]({{ "/reports/arsenal-237-new-files/BdApiUtil64-sys/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-BdApiUtil64-sys/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-BdApiUtil64-sys.json" | relative_url }})
+**rootkit.dll (Kernel-Mode Rootkit):** | [Technical Report]({{ "/reports/arsenal-237-new-files/rootkit-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-rootkit-dll/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-rootkit-dll.json" | relative_url }})
+**nethost.dll (DLL Hijacking Persistence):** | [Technical Report]({{ "/reports/arsenal-237-new-files/nethost-dll/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-nethost-dll/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-nethost-dll.json" | relative_url }})
+**chromelevator.exe (Browser Credential Theft):** | [Technical Report]({{ "/reports/arsenal-237-new-files/chromelevator-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-chromelevator-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-chromelevator-exe.json" | relative_url }})
+**enc_c2.exe (Rust Ransomware with Tor C2):** | [Technical Report]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-enc_c2-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-enc_c2-exe.json" | relative_url }})
+**new_enc.exe (Human-Operated Ransomware):** | [Technical Report]({{ "/reports/arsenal-237-new-files/new_enc-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-new_enc-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-new_enc-exe.json" | relative_url }})
+**dec_fixed.exe (Ransomware Decryptor):** | [Technical Report]({{ "/reports/arsenal-237-new-files/dec_fixed-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-dec_fixed-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-dec_fixed-exe.json" | relative_url }})
+**full_test_enc.exe (Advanced Rust Ransomware):** | [Technical Report]({{ "/reports/arsenal-237-new-files/full_test_enc-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/arsenal-237-full_test_enc-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/arsenal-237-full_test_enc-exe.json" | relative_url }})
+
+---
+
 ## Quick Reference: Toolkit Component Overview
 
 This landing page serves as the index to 11 detailed analysis reports covering the complete Arsenal-237 attack chain. Each individual component report includes:
