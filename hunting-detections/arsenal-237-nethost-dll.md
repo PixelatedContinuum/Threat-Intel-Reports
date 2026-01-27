@@ -1,3 +1,11 @@
+---
+title: Detection Rules - nethost.dll - DLL Hijacking Persistence
+date: '2026-01-27'
+layout: post
+permalink: /hunting-detections/arsenal-237-nethost-dll/
+hide: true
+---
+
 # nethost.dll Detection Rules & Hunting Queries
 
 **Arsenal-237 C2 Communication Module**

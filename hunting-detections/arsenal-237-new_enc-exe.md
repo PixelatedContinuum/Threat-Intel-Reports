@@ -1,3 +1,11 @@
+---
+title: Detection Rules - new_enc.exe - Human-Operated Rust Ransomware
+date: '2026-01-27'
+layout: post
+permalink: /hunting-detections/arsenal-237-new_enc-exe/
+hide: true
+---
+
 # new_enc.exe (Arsenal-237) - Detection Rules & Hunting Queries
 
 **Generated:** 2026-01-26

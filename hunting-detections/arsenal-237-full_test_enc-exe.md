@@ -1,3 +1,11 @@
+---
+title: Detection Rules - full_test_enc.exe - Advanced Rust Ransomware
+date: '2026-01-27'
+layout: post
+permalink: /hunting-detections/arsenal-237-full_test_enc-exe/
+hide: true
+---
+
 # Detection Rules and Hunting Queries
 ## full_test_enc.exe (Arsenal-237 Rust Ransomware)
 

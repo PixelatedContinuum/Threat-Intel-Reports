@@ -2,7 +2,7 @@
 title: Detection Rules - killer.dll (BYOVD Defense Evasion)
 date: '2026-01-25'
 layout: post
-permalink: /hunting-detections/killer-dll/
+permalink: /hunting-detections/arsenal-237-killer-dll/
 hide: true
 ---
 

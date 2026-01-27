@@ -2,7 +2,7 @@
 title: Detection Rules - killer_crowdstrike.dll (CrowdStrike Variant)
 date: '2026-01-25'
 layout: post
-permalink: /hunting-detections/killer-crowdstrike-dll/
+permalink: /hunting-detections/arsenal-237-killer-crowdstrike-dll/
 hide: true
 ---
 

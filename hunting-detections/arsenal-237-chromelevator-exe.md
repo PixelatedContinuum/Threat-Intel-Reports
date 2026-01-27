@@ -1,3 +1,11 @@
+---
+title: Detection Rules - chromelevator.exe - Browser Credential Theft
+date: '2026-01-27'
+layout: post
+permalink: /hunting-detections/arsenal-237-chromelevator-exe/
+hide: true
+---
+
 # chromelevator.exe Detection Rules & Hunting Queries
 
 **Malware:** Browser Credential Extraction Tool (Arsenal-237 Campaign)

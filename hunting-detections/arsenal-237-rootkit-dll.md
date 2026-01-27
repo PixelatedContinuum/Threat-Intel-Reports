@@ -1,3 +1,11 @@
+---
+title: Detection Rules - rootkit.dll - Kernel-Mode Rootkit
+date: '2026-01-27'
+layout: post
+permalink: /hunting-detections/arsenal-237-rootkit-dll/
+hide: true
+---
+
 # Threat Hunting & Detection Rules: rootkit.dll (Defense Evasion Framework)
 
 ## Executive Summary

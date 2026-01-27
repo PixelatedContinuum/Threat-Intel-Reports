@@ -1,3 +1,11 @@
+---
+title: Detection Rules - dec_fixed.exe - Ransomware Decryptor
+date: '2026-01-27'
+layout: post
+permalink: /hunting-detections/arsenal-237-dec_fixed-exe/
+hide: true
+---
+
 # Arsenal-237 dec_fixed.exe Detection Rules & Hunting Queries
 
 **Classification**: Recovery Tool Detection (LOW Priority)
