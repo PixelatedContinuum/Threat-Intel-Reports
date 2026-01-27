@@ -154,6 +154,20 @@ Calculated as weighted average: Data Loss (20%) + Key Compromise (20%) + Operati
 
 ---
 
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [enc_c2.exe Detection Rules]({{ "/hunting-detections/arsenal-237-enc_c2-exe/" | relative_url }})
+- [enc_c2.exe IOCs]({{ "/ioc-feeds/arsenal-237-enc_c2-exe.json" | relative_url }})
+
+**Related Reports:**
+- [new_enc.exe Ransomware]({{ "/reports/new-enc-exe/" | relative_url }}) - Alternative ransomware variant
+- [full_test_enc.exe Advanced Ransomware]({{ "/reports/arsenal-237-new-files/full_test_enc-exe/" | relative_url }}) - Most advanced ransomware variant
+- [dec_fixed.exe Decryptor]({{ "/reports/arsenal-237-new-files/dec_fixed-exe/" | relative_url }}) - Victim-specific decryptor
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+
+---
 ## Section 1: Malware Classification & Identification
 
 ### What is enc_c2.exe?

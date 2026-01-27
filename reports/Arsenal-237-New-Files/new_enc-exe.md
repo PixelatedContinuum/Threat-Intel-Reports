@@ -156,6 +156,20 @@ new_enc.exe is deployed **manually by threat actors** following successful syste
 
 ---
 
+## Quick Reference
+
+**Detections & IOCs:**
+- [new_enc.exe Detection Rules]({{ "/hunting-detections/arsenal-237-new_enc-exe/" | relative_url }})
+- [new_enc.exe IOCs]({{ "/ioc-feeds/arsenal-237-new_enc-exe.json" | relative_url }})
+
+**Related Reports:**
+- [enc_c2.exe Ransomware]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) - C2-enabled ransomware variant
+- [full_test_enc.exe Advanced Ransomware]({{ "/reports/arsenal-237-new-files/full_test_enc-exe/" | relative_url }}) - Most advanced ransomware variant
+- [dec_fixed.exe Decryptor]({{ "/reports/arsenal-237-new-files/dec_fixed-exe/" | relative_url }}) - Victim-specific decryptor
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+
+---
+
 ## Section 1: File Classification & Identification
 
 ### Sample Information

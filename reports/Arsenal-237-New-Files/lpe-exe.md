@@ -107,23 +107,37 @@ lpe.exe is delivered as part of the Arsenal-237 toolkit through compromised webs
 
 ## Table of Contents
 
-1. [Executive Summary](#executive-summary)
-2. [Malware Classification & Identification](#1-malware-classification--identification)
-3. [Technical Capabilities - Deep Dive](#2-technical-capabilities---deep-dive)
-4. [Escalation Technique Comparison & Success Factors](#3-escalation-technique-comparison--success-factors)
-5. [Attack Chain Integration](#4-attack-chain-integration)
-6. [MITRE ATT&CK Framework Mapping](#5-mitre-attck-framework-mapping)
-7. [Evasion & Anti-Analysis Characteristics](#6-evasion--anti-analysis-characteristics)
-8. [Detection & Hunting Guidance](#7-detection--hunting-guidance)
-9. [Incident Response Procedures](#8-incident-response-procedures)
-10. [Frequently Asked Questions](#9-frequently-asked-questions)
-11. [What Matters Most](#10-what-matters-most)
-12. [Recommended Response Timeline](#11-recommended-response-timeline)
-13. [Confidence Levels Summary](#12-confidence-levels-summary)
-14. [Appendix A: Deep Technical Analysis](#13-appendix-a-deep-technical-analysis)
-15. [Appendix B: Arsenal-237 Infrastructure Analysis](#14-appendix-b-arsenal-237-infrastructure-analysis)
-16. [Appendix C: Research References & Further Reading](#15-appendix-c-research-references--further-reading)
-17. [IOC Feed and Detection Rules](#16-ioc-feed-and-detection-rules)
+1. [Quick Reference](#quick-reference)
+2. [Executive Summary](#executive-summary)
+3. [Malware Classification & Identification](#1-malware-classification--identification)
+4. [Technical Capabilities - Deep Dive](#2-technical-capabilities---deep-dive)
+5. [Escalation Technique Comparison & Success Factors](#3-escalation-technique-comparison--success-factors)
+6. [Attack Chain Integration](#4-attack-chain-integration)
+7. [MITRE ATT&CK Framework Mapping](#5-mitre-attck-framework-mapping)
+8. [Evasion & Anti-Analysis Characteristics](#6-evasion--anti-analysis-characteristics)
+9. [Detection & Hunting Guidance](#7-detection--hunting-guidance)
+10. [Incident Response Procedures](#8-incident-response-procedures)
+11. [Frequently Asked Questions](#9-frequently-asked-questions)
+12. [What Matters Most](#10-what-matters-most)
+13. [Recommended Response Timeline](#11-recommended-response-timeline)
+14. [Confidence Levels Summary](#12-confidence-levels-summary)
+15. [Appendix A: Deep Technical Analysis](#13-appendix-a-deep-technical-analysis)
+16. [Appendix B: Arsenal-237 Infrastructure Analysis](#14-appendix-b-arsenal-237-infrastructure-analysis)
+17. [Appendix C: Research References & Further Reading](#15-appendix-c-research-references--further-reading)
+18. [IOC Feed and Detection Rules](#16-ioc-feed-and-detection-rules)
+
+---
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [lpe.exe Detection Rules]({{ "/hunting-detections/arsenal-237-lpe-exe/" | relative_url }})
+- [lpe.exe IOCs]({{ "/ioc-feeds/arsenal-237-lpe-exe.json" | relative_url }})
+
+**Related Reports:**
+- [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Stage 2 defense evasion
+- [rootkit.dll Defense Evasion]({{ "/reports/arsenal-237/rootkit-dll/" | relative_url }}) - Advanced rootkit component
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

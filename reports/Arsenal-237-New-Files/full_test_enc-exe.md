@@ -136,21 +136,36 @@ This assessment is based on comprehensive static analysis including:
 
 ## Table of Contents
 
-1. [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
-2. [Executive Summary - Expanded](#executive-summary---expanded)
-3. [Business Risk Assessment](#business-risk-assessment)
-4. [What is full_test_enc.exe?](#what-is-full_test_encexe)
-5. [Technical Capabilities Deep-Dive](#technical-capabilities-deep-dive)
-6. [Evasion and Anti-Analysis Techniques](#evasion-and-anti-analysis-techniques)
-7. [Incident Response Procedures](#incident-response-procedures)
-8. [Long-Term Defensive Strategy](#long-term-defensive-strategy)
-9. [Threat Actor Context: Arsenal-237 Toolkit](#threat-actor-context-arsenal-237-toolkit)
-10. [Frequently Asked Questions](#frequently-asked-questions)
-11. [Key Takeaways](#key-takeaways)
-12. [Response Timeline](#response-timeline)
-13. [Confidence Levels Summary](#confidence-levels-summary)
-14. [Indicators of Compromise (IOCs)](#indicators-of-compromise-iocs)
-15. [Detection Rules and Queries](#detection-rules-and-queries)
+1. [Quick Reference](#quick-reference)
+2. [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
+3. [Executive Summary - Expanded](#executive-summary---expanded)
+4. [Business Risk Assessment](#business-risk-assessment)
+5. [What is full_test_enc.exe?](#what-is-full_test_encexe)
+6. [Technical Capabilities Deep-Dive](#technical-capabilities-deep-dive)
+7. [Evasion and Anti-Analysis Techniques](#evasion-and-anti-analysis-techniques)
+8. [Incident Response Procedures](#incident-response-procedures)
+9. [Long-Term Defensive Strategy](#long-term-defensive-strategy)
+10. [Threat Actor Context: Arsenal-237 Toolkit](#threat-actor-context-arsenal-237-toolkit)
+11. [Frequently Asked Questions](#frequently-asked-questions)
+12. [Key Takeaways](#key-takeaways)
+13. [Response Timeline](#response-timeline)
+14. [Confidence Levels Summary](#confidence-levels-summary)
+15. [Indicators of Compromise (IOCs)](#indicators-of-compromise-iocs)
+16. [Detection Rules and Queries](#detection-rules-and-queries)
+
+---
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [full_test_enc.exe Detection Rules]({{ "/hunting-detections/arsenal-237-full_test_enc-exe/" | relative_url }})
+- [full_test_enc.exe IOCs]({{ "/ioc-feeds/arsenal-237-full_test_enc-exe.json" | relative_url }})
+
+**Related Reports:**
+- [enc_c2.exe C2-enabled Ransomware]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) - C2-enabled ransomware variant
+- [new_enc.exe Ransomware]({{ "/reports/new-enc-exe/" | relative_url }}) - Simplified ransomware variant
+- [dec_fixed.exe Decryptor]({{ "/reports/arsenal-237-new-files/dec_fixed-exe/" | relative_url }}) - Victim-specific decryptor
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

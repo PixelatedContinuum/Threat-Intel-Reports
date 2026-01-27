@@ -20,22 +20,37 @@ rootkit.dll is a sophisticated defense evasion framework masquerading as a rootk
 
 ## Table of Contents
 
-1. [Executive Summary](#executive-summary)
-2. [Overview and Arsenal-237 Context](#overview-and-arsenal-237-context)
-3. [Critical Clarification: NOT a Traditional Rootkit](#critical-clarification-not-a-traditional-rootkit)
-4. [Primary Capabilities](#primary-capabilities)
-5. [Technical Architecture](#technical-architecture)
-6. [Embedded Driver Analysis: BdApiUtil64.sys Weaponization](#embedded-driver-analysis-bdapiutil64sys-weaponization)
-7. [Target Security Products: Comprehensive List](#target-security-products-comprehensive-list)
-8. [Attack Chain Integration](#attack-chain-integration)
-9. [Evolution from killer.dll](#evolution-from-killerdll)
-10. [MITRE ATT&CK Mapping](#mitre-attck-mapping)
-11. [Detection Opportunities](#detection-opportunities)
-12. [Threat Assessment](#threat-assessment)
-13. [Remediation Guidance](#remediation-guidance)
-14. [Response Priorities](#response-priorities)
-15. [Key Takeaways](#key-takeaways)
-16. [Indicators of Compromise](#indicators-of-compromise)
+1. [Quick Reference](#quick-reference)
+2. [Executive Summary](#executive-summary)
+3. [Overview and Arsenal-237 Context](#overview-and-arsenal-237-context)
+4. [Critical Clarification: NOT a Traditional Rootkit](#critical-clarification-not-a-traditional-rootkit)
+5. [Primary Capabilities](#primary-capabilities)
+6. [Technical Architecture](#technical-architecture)
+7. [Embedded Driver Analysis: BdApiUtil64.sys Weaponization](#embedded-driver-analysis-bdapiutil64sys-weaponization)
+8. [Target Security Products: Comprehensive List](#target-security-products-comprehensive-list)
+9. [Attack Chain Integration](#attack-chain-integration)
+10. [Evolution from killer.dll](#evolution-from-killerdll)
+11. [MITRE ATT&CK Mapping](#mitre-attck-mapping)
+12. [Detection Opportunities](#detection-opportunities)
+13. [Threat Assessment](#threat-assessment)
+14. [Remediation Guidance](#remediation-guidance)
+15. [Response Priorities](#response-priorities)
+16. [Key Takeaways](#key-takeaways)
+17. [Indicators of Compromise](#indicators-of-compromise)
+
+---
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [rootkit.dll Detection Rules]({{ "/hunting-detections/arsenal-237-rootkit-dll/" | relative_url }})
+- [rootkit.dll IOCs]({{ "/ioc-feeds/arsenal-237-rootkit-dll.json" | relative_url }})
+
+**Related Reports:**
+- [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Basic BYOVD implementation
+- [BdApiUtil64.sys Vulnerable Driver]({{ "/reports/bdapiutil64-sys/" | relative_url }}) - Weaponized driver component
+- [nethost.dll C2 Module]({{ "/reports/arsenal-237/nethost-dll/" | relative_url }}) - C2 communication component
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

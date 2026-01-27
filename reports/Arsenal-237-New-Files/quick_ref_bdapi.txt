@@ -1,0 +1,13 @@
+## Quick Reference
+
+**Detections & IOCs:**
+- [BdApiUtil64.sys Detection Rules]({{ "/hunting-detections/arsenal-237-BdApiUtil64-sys/" | relative_url }})
+- [BdApiUtil64.sys IOCs]({{ "/ioc-feeds/arsenal-237-BdApiUtil64-sys.json" | relative_url }})
+
+**Related Reports:**
+- [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Primary BYOVD implementation
+- [killer_crowdstrike.dll Variant]({{ "/reports/arsenal-237-new-files/killer-crowdstrike-dll/" | relative_url }}) - CrowdStrike-specific variant
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+
+---
+

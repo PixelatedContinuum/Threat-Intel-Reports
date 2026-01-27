@@ -77,22 +77,36 @@ This report derives findings from static reverse engineering analysis of the net
 
 ## Table of Contents
 
-1. [Executive Summary](#executive-summary)
-2. [File Classification & Identification](#file-classification--identification)
-3. [Business Risk Assessment](#business-risk-assessment)
-4. [Technical Foundation: What is nethost.dll?](#technical-foundation-what-is-nethost-dll)
-5. [C2 Communication Architecture](#c2-communication-architecture)
-6. [Command Capabilities Deep-Dive](#command-capabilities-deep-dive)
-7. [Reconnaissance & Environmental Awareness](#reconnaissance--environmental-awareness)
-8. [Anti-Analysis Techniques](#anti-analysis-techniques)
-9. [Incident Response Procedures](#incident-response-procedures)
-10. [Long-Term Defensive Strategy](#long-term-defensive-strategy)
-11. [FAQ - Addressing Common Questions](#faq---addressing-common-questions)
-12. [Key Takeaways - What Matters Most](#key-takeaways---what-matters-most)
-13. [Response Timeline - Recommended Actions](#response-timeline---recommended-actions)
-14. [Confidence Levels Summary](#confidence-levels-summary)
-15. [Appendices](#appendices)
-16. [IOCs & Detections](#iocs--detections)
+1. [Quick Reference](#quick-reference)
+2. [Executive Summary](#executive-summary)
+3. [File Classification & Identification](#file-classification--identification)
+4. [Business Risk Assessment](#business-risk-assessment)
+5. [Technical Foundation: What is nethost.dll?](#technical-foundation-what-is-nethost-dll)
+6. [C2 Communication Architecture](#c2-communication-architecture)
+7. [Command Capabilities Deep-Dive](#command-capabilities-deep-dive)
+8. [Reconnaissance & Environmental Awareness](#reconnaissance--environmental-awareness)
+9. [Anti-Analysis Techniques](#anti-analysis-techniques)
+10. [Incident Response Procedures](#incident-response-procedures)
+11. [Long-Term Defensive Strategy](#long-term-defensive-strategy)
+12. [FAQ - Addressing Common Questions](#faq---addressing-common-questions)
+13. [Key Takeaways - What Matters Most](#key-takeaways---what-matters-most)
+14. [Response Timeline - Recommended Actions](#response-timeline---recommended-actions)
+15. [Confidence Levels Summary](#confidence-levels-summary)
+16. [Appendices](#appendices)
+17. [IOCs & Detections](#iocs--detections)
+
+---
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [nethost.dll Detection Rules]({{ "/hunting-detections/arsenal-237-nethost-dll/" | relative_url }})
+- [nethost.dll IOCs]({{ "/ioc-feeds/arsenal-237-nethost-dll.json" | relative_url }})
+
+**Related Reports:**
+- [lpe.exe Privilege Escalation]({{ "/reports/arsenal-237-lpe-exe/" | relative_url }}) - Stage 1 privilege escalation
+- [rootkit.dll Defense Evasion]({{ "/reports/arsenal-237/rootkit-dll/" | relative_url }}) - Defense evasion component
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

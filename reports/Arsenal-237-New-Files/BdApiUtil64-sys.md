@@ -20,22 +20,36 @@ BdApiUtil64.sys is a legitimately-signed but vulnerable Baidu antivirus kernel d
 
 ## Table of Contents
 
-1. [Executive Summary](#executive-summary)
-2. [What is BdApiUtil64.sys?](#what-is-bdapiutil64sys)
-3. [Arsenal-237 Toolkit Context](#arsenal-237-toolkit-context)
-4. [BYOVD Technique: Weaponizing Legitimate Drivers](#byovd-technique-weaponizing-legitimate-drivers)
-5. [Primary Capabilities - IOCTL Code Analysis](#primary-capabilities--ioctl-code-analysis)
-6. [Advanced Evasion Techniques](#advanced-evasion-techniques)
-7. [Attack Chain Integration](#attack-chain-integration)
-8. [Target Security Products](#target-security-products)
-9. [Historical Campaign Context](#historical-campaign-context)
-10. [MITRE ATT&CK Mapping](#mitre-attck-mapping)
-11. [Detection Opportunities](#detection-opportunities)
-12. [Threat Assessment & Risk Scoring](#threat-assessment--risk-scoring)
-13. [Remediation Guidance](#remediation-guidance)
-14. [Response Priorities & Action Items](#response-priorities--action-items)
-15. [FAQ - Common Questions](#faq---common-questions)
-16. [Key Takeaways](#key-takeaways)
+1. [Quick Reference](#quick-reference)
+echo "$(($(echo "2" | sed "s#.##") + 1))." [Executive Summary](#executive-summary)
+echo "$(($(echo "2" | sed "s#.##") + 1))." [What is BdApiUtil64.sys?](#what-is-bdapiutil64sys)
+echo "$(($(echo "3" | sed "s#.##") + 1))." [Arsenal-237 Toolkit Context](#arsenal-237-toolkit-context)
+echo "$(($(echo "4" | sed "s#.##") + 1))." [BYOVD Technique: Weaponizing Legitimate Drivers](#byovd-technique-weaponizing-legitimate-drivers)
+echo "$(($(echo "5" | sed "s#.##") + 1))." [Primary Capabilities - IOCTL Code Analysis](#primary-capabilities--ioctl-code-analysis)
+echo "$(($(echo "6" | sed "s#.##") + 1))." [Advanced Evasion Techniques](#advanced-evasion-techniques)
+echo "$(($(echo "7" | sed "s#.##") + 1))." [Attack Chain Integration](#attack-chain-integration)
+echo "$(($(echo "8" | sed "s#.##") + 1))." [Target Security Products](#target-security-products)
+echo "$(($(echo "9" | sed "s#.##") + 1))." [Historical Campaign Context](#historical-campaign-context)
+echo "$(($(echo "10" | sed "s#.##") + 1))." [MITRE ATT&CK Mapping](#mitre-attck-mapping)
+echo "$(($(echo "11" | sed "s#.##") + 1))." [Detection Opportunities](#detection-opportunities)
+echo "$(($(echo "12" | sed "s#.##") + 1))." [Threat Assessment & Risk Scoring](#threat-assessment--risk-scoring)
+echo "$(($(echo "13" | sed "s#.##") + 1))." [Remediation Guidance](#remediation-guidance)
+echo "$(($(echo "14" | sed "s#.##") + 1))." [Response Priorities & Action Items](#response-priorities--action-items)
+echo "$(($(echo "15" | sed "s#.##") + 1))." [FAQ - Common Questions](#faq---common-questions)
+echo "$(($(echo "16" | sed "s#.##") + 1))." [Key Takeaways](#key-takeaways)
+
+---
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [BdApiUtil64.sys Detection Rules]({{ "/hunting-detections/arsenal-237-BdApiUtil64-sys/" | relative_url }})
+- [BdApiUtil64.sys IOCs]({{ "/ioc-feeds/arsenal-237-BdApiUtil64-sys.json" | relative_url }})
+
+**Related Reports:**
+- [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Primary BYOVD implementation
+- [killer_crowdstrike.dll Variant]({{ "/reports/arsenal-237-new-files/killer-crowdstrike-dll/" | relative_url }}) - CrowdStrike-specific variant
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

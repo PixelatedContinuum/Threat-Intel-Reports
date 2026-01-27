@@ -115,21 +115,35 @@ This analysis is based on comprehensive static reverse engineering of the chrome
 
 ## Table of Contents
 
-1. [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
-2. [Executive Summary - Expanded](#executive-summary---expanded)
-3. [Business Risk Assessment](#business-risk-assessment)
-4. [What is chromelevator.exe?](#what-is-chromelevatorexe)
-5. [Technical Capabilities Deep-Dive](#technical-capabilities-deep-dive)
-6. [EDR Evasion & Anti-Analysis Techniques](#edr-evasion--anti-analysis-techniques)
-7. [Incident Response Procedures](#incident-response-procedures)
-8. [Long-Term Defensive Strategy](#long-term-defensive-strategy)
-9. [FAQ - Addressing Common Questions](#faq---addressing-common-questions)
-10. [Key Takeaways - What Matters Most](#key-takeaways---what-matters-most)
-11. [Response Timeline - Recommended Actions](#response-timeline---recommended-actions)
-12. [Confidence Levels Summary](#confidence-levels-summary)
-13. [Appendix A: Campaign Integration & Component Comparison](#appendix-a-campaign-integration--component-comparison)
-14. [Appendix B: Technical Deep-Dives](#appendix-b-technical-deep-dives)
-15. [License](#license)
+1. [Quick Reference](#quick-reference)
+2. [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
+3. [Executive Summary - Expanded](#executive-summary---expanded)
+4. [Business Risk Assessment](#business-risk-assessment)
+5. [What is chromelevator.exe?](#what-is-chromelevatorexe)
+6. [Technical Capabilities Deep-Dive](#technical-capabilities-deep-dive)
+7. [EDR Evasion & Anti-Analysis Techniques](#edr-evasion--anti-analysis-techniques)
+8. [Incident Response Procedures](#incident-response-procedures)
+9. [Long-Term Defensive Strategy](#long-term-defensive-strategy)
+10. [FAQ - Addressing Common Questions](#faq---addressing-common-questions)
+11. [Key Takeaways - What Matters Most](#key-takeaways---what-matters-most)
+12. [Response Timeline - Recommended Actions](#response-timeline---recommended-actions)
+13. [Confidence Levels Summary](#confidence-levels-summary)
+14. [Appendix A: Campaign Integration & Component Comparison](#appendix-a-campaign-integration--component-comparison)
+15. [Appendix B: Technical Deep-Dives](#appendix-b-technical-deep-dives)
+16. [License](#license)
+
+---
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [chromelevator.exe Detection Rules]({{ "/hunting-detections/arsenal-237-chromelevator-exe/" | relative_url }})
+- [chromelevator.exe IOCs]({{ "/ioc-feeds/arsenal-237-chromelevator-exe.json" | relative_url }})
+
+**Related Reports:**
+- [lpe.exe Privilege Escalation]({{ "/reports/arsenal-237-lpe-exe/" | relative_url }}) - Stage 1 privilege escalation
+- [killer.dll Defense Evasion]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Stage 2 defense evasion
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 
