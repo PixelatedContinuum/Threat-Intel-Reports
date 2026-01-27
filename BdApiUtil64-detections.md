@@ -1,3 +1,11 @@
+---
+title: Detection Rules - BdApiUtil64.sys - Arsenal-237 BYOVD Component
+date: '2026-01-26'
+layout: post
+permalink: /hunting-detections/bdapiutil64-sys-root/
+hide: true
+---
+
 # BdApiUtil64.sys Detection Rules & Hunting Queries
 
 **Report**: BdApiUtil64.sys Arsenal-237 BYOVD Component
