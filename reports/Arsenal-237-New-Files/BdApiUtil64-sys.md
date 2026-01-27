@@ -40,7 +40,7 @@ echo "$(($(echo "16" | sed "s#.##") + 1))." [Key Takeaways](#key-takeaways)
 
 ---
 
-## Quick References
+## Quick Reference
 
 **Detections & IOCs:**
 - [BdApiUtil64.sys Detection Rules]({{ "/hunting-detections/arsenal-237-BdApiUtil64-sys/" | relative_url }})

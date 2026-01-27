@@ -36,6 +36,7 @@ hide: true
 - [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ### File Information
+
 | Property | Value |
 |----------|-------|
 | **File Name** | dec_fixed.exe |
