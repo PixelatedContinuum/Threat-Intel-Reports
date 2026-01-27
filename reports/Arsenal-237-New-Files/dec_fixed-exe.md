@@ -23,38 +23,6 @@ hide: true
 
 ---
 
-## Quick Reference
-
-**Detections & IOCs:**
-- [dec_fixed.exe Detection Rules]({{ "/hunting-detections/arsenal-237-dec_fixed-exe/" | relative_url }})
-- [dec_fixed.exe IOCs]({{ "/ioc-feeds/arsenal-237-dec_fixed-exe.json" | relative_url }})
-
-**Related Reports:**
-- [enc_c2.exe C2-enabled Ransomware]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) - Encryption counterpart with C2
-- [new_enc.exe Ransomware]({{ "/reports/new-enc-exe/" | relative_url }}) - Offline encryption variant
-- [full_test_enc.exe Advanced Ransomware]({{ "/reports/arsenal-237-new-files/full_test_enc-exe/" | relative_url }}) - Most advanced ransomware variant
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
-
-### File Information
-
-| Property | Value |
-|----------|-------|
-| **File Name** | dec_fixed.exe |
-| **MD5** | 7c5493a0a5df52682a5c2ba433634601 |
-| **SHA1** | 29014d4d6fc42219cd9cdc130b868382cf2c14c2 |
-| **SHA256** | d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802 |
-| **File Type** | PE64 (Windows x64 Executable) |
-| **File Size** | 956,928 bytes (~957 KB) |
-| **Compiler** | Rust (rustc) |
-| **Cryptographic Algorithm** | ChaCha20-Poly1305 AEAD (RFC 7539) |
-| **Victim-Specific Key** | 1e0d8597856270d1926cfcf252af1b14a776c20b3b50168df9311314202e73ba |
-| **Key Architecture** | Per-Victim (different keys per victim, not universal master key) |
-| **Primary Function** | Batch decryption of victim's encrypted files with automatic cleanup |
-| **Command-Line Usage** | `dec_fixed.exe --folder-a <directory>` |
-| **Related Campaign** | Arsenal-237 (enc_c2.exe encryptor, new_enc.exe offline encryptor) |
-
----
-
 ### The Threat in Clear Terms
 
 This analysis documents a ransomware decryptor tool-the recovery tool that victims receive after ransomware negotiation and ransom payment. The presence of this decryptor is **positive for the specific victim** who can now recover their encrypted files. However, it has **significant threat intelligence value** because it:
@@ -138,6 +106,38 @@ If your organization encounters this file:
 ### Primary Threat Vector
 
 **Campaign Distribution**: Arsenal-237 ransomware campaign targeting businesses through unknown initial compromise vector (likely phishing, supply chain, or exploit). Victims receive this per-victim decryptor tool after ransom negotiation.
+
+---
+
+## Quick Reference
+
+**Detections & IOCs:**
+- [dec_fixed.exe Detection Rules]({{ "/hunting-detections/arsenal-237-dec_fixed-exe/" | relative_url }})
+- [dec_fixed.exe IOCs]({{ "/ioc-feeds/arsenal-237-dec_fixed-exe.json" | relative_url }})
+
+**Related Reports:**
+- [enc_c2.exe C2-enabled Ransomware]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) - Encryption counterpart with C2
+- [new_enc.exe Ransomware]({{ "/reports/new-enc-exe/" | relative_url }}) - Offline encryption variant
+- [full_test_enc.exe Advanced Ransomware]({{ "/reports/arsenal-237-new-files/full_test_enc-exe/" | relative_url }}) - Most advanced ransomware variant
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+
+### File Information
+
+| Property | Value |
+|----------|-------|
+| **File Name** | dec_fixed.exe |
+| **MD5** | 7c5493a0a5df52682a5c2ba433634601 |
+| **SHA1** | 29014d4d6fc42219cd9cdc130b868382cf2c14c2 |
+| **SHA256** | d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802 |
+| **File Type** | PE64 (Windows x64 Executable) |
+| **File Size** | 956,928 bytes (~957 KB) |
+| **Compiler** | Rust (rustc) |
+| **Cryptographic Algorithm** | ChaCha20-Poly1305 AEAD (RFC 7539) |
+| **Victim-Specific Key** | 1e0d8597856270d1926cfcf252af1b14a776c20b3b50168df9311314202e73ba |
+| **Key Architecture** | Per-Victim (different keys per victim, not universal master key) |
+| **Primary Function** | Batch decryption of victim's encrypted files with automatic cleanup |
+| **Command-Line Usage** | `dec_fixed.exe --folder-a <directory>` |
+| **Related Campaign** | Arsenal-237 (enc_c2.exe encryptor, new_enc.exe offline encryptor) |
 
 ---
 
