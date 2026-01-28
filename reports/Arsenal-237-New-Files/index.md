@@ -6,12 +6,6 @@ permalink: /reports/arsenal-237-new-files/
 hide: true
 ---
 
-# Arsenal-237 New Files Analysis - Recently Added Malware
-
-*Analysis of 11 NEW malware samples recently dropped in the same open directory*
-
----
-
 ## Report Context: New Files from Arsenal-237 Directory
 
 **This report analyzes 11 NEW malware samples** recently added to the same open directory (109.230.231.37) that was previously documented in early January 2026. These newly dropped files represent significant evolution of the Arsenal-237 toolkit with advanced capabilities.
@@ -31,8 +25,6 @@ hide: true
 ---
 
 ## BLUF: The Arsenal-237 Threat
-
-**Arsenal-237** is a sophisticated, multi-stage attack toolkit representing a complete end-to-end ransomware deployment platform. This is not a single malware family - it is an **operational attack system** combining privilege escalation, persistence mechanisms, credential theft, and enterprise-grade ransomware with cryptographic sophistication that makes recovery nearly impossible without external decryption keys.
 
 The Arsenal-237 toolkit is a highly sophisticated, multi-stage ransomware attack platform, meticulously engineered for enterprise-level compromise. Its modular design, leveraging modern Rust programming, signifies a professional and well-resourced threat actor. The attack sequence typically initiates with lpe.exe, a privilege escalation wrapper that employs five distinct techniques-including token impersonation from critical Windows processes like lsass.exe and winlogon.exe, registry UAC bypass via fodhelper.exe hijacking, and SYSTEM-level scheduled tasks-to achieve NT AUTHORITY\SYSTEM privileges. This elevated access is crucial for the subsequent defense evasion phase.
 
@@ -202,8 +194,8 @@ All 11 components are documented in individual detailed reports. Click links bel
 - Foundation for more sophisticated variants
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `c031054f6140e2c366eaf4263f827dbf`
+- SHA256: `10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d`
 
 **Confidence Level:** CONFIRMED (static and behavioral analysis)
 
@@ -225,8 +217,8 @@ This component demonstrates the attack chain's first critical objective: disabli
 - Suggests threat actors prioritize CrowdStrike environments
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `6926ea1b4c4bff01a23b7e1728583348`
+- SHA256: `e26e9221f4e9a437716a28c08c5f74c6a2ecae2c47b77091db7d21f36ed2f7d3`
 
 **Confidence Level:** CONFIRMED (product-specific function names and driver interactions)
 
@@ -248,8 +240,8 @@ The existence of a CrowdStrike-specific variant reveals threat actor knowledge o
 - Critical bridge between user-mode and kernel-mode components
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `47400a6b7c84847db0513e6dbc04e469`
+- SHA256: `c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e`
 
 **Confidence Level:** CONFIRMED (API calls and capability testing)
 
@@ -271,8 +263,8 @@ Kernel-mode rootkit and driver operations require SYSTEM-level privileges. This 
 - Critical component enabling rootkit deployment
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `ced47b89212f3260ebeb41682a4b95ec`
+- SHA256: `47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428`
 
 **Confidence Level:** CONFIRMED (known CVE and exploitation pattern)
 
@@ -295,8 +287,8 @@ This represents the "Bring Your Own Vulnerable Driver" technique-using legitimat
 - Critical evasion component
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `674795d4d4ec09372904704633ea0d86`
+- SHA256: `e71240f26af1052172b5864cdddb78fcb990d7a96d53b7d22d19f5dfccdf9012`
 
 **Confidence Level:** CONFIRMED (kernel driver analysis)
 
@@ -320,8 +312,8 @@ A kernel-mode rootkit fundamentally changes the security posture of an infected 
 - Survives security scanning and process analysis
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `f91ff1bb5699524524fff0e2587af040`
+- SHA256: `158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14`
 
 **Confidence Level:** CONFIRMED (file analysis and hijacking patterns)
 
@@ -344,8 +336,8 @@ DLL hijacking persistence ensures malware survives remediation attempts and syst
 - Reveals high-value intelligence about victim organization
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `bc376c951eacb36bf0909a43588e6444`
+- SHA256: `92c4f4b7748f23d6dcd5af43595f34e4bb8e284a85d2c1647b189c1bb59a784a`
 
 **Confidence Level:** CONFIRMED (static analysis and behavioral observation)
 
@@ -370,8 +362,8 @@ Browser credentials provide direct access to cloud accounts, SaaS platforms, and
 - Enables real-time operator control during encryption
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `32a3497e57604e1037f1ff9993a8fdaa`
+- SHA256: `613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899`
 
 **Confidence Level:** CONFIRMED (Rust code analysis and C2 communication)
 
@@ -394,8 +386,8 @@ This variant enables attackers to monitor encryption progress, abort if detected
 - Per-victim key architecture
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `a16ba61114fa5a40afce54459bbff21e`
+- SHA256: `90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2`
 
 **Confidence Level:** CONFIRMED (binary analysis confirms hardcoded key and targeting logic)
 
@@ -419,8 +411,8 @@ CRITICAL FINDING: The presence of a hardcoded encryption key in this variant sug
 - Indicates operational maturity of threat actors
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `7c5493a0a5df52682a5c2ba433634601`
+- SHA256: `d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802`
 
 **Confidence Level:** CONFIRMED (key analysis and decryption verification)
 
@@ -449,8 +441,8 @@ The decryptor's different key from other ransomware variants PROVES that Arsenal
 - Test/beta version designation indicates recent development
 
 **File Identifiers:**
-- MD5: [See full report]
-- SHA256: [See full report]
+- MD5: `1fe8b9a14f9f8435c5fb5156bcbc174e`
+- SHA256: `4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518`
 - Binary Size: 15.5 MB (unusually large, indicating bundled libraries)
 
 **Confidence Level:** CONFIRMED (cryptographic analysis and hybrid encryption verification)
