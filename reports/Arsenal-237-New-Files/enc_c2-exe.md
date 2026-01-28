@@ -800,6 +800,8 @@ enc_c2.exe follows a structured attack chain from initial execution through data
   3. **Backup Restoration:** Restore from pre-infection offline backups
   4. **Nonce Vulnerability:** If nonce reuse identified, cryptanalysis might enable decryption [highly unlikely with aead-0.5.2]
 
+> ANALYST NOTE: When running this in a sandbox it took a relatively long time run through the whole file system and encrypt files it identified. This was ran on a sandbox that is pretty barebones compared to what an active user machine or server would contain in terms of volume of data. I imagine it would take a really long time to go through the whole encryption routine in a enterprise environment. 
+
 ### MITRE ATT&CK Mapping
 
 **Complete Technique Coverage:**
