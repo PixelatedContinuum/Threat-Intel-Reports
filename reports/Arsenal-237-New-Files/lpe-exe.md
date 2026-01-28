@@ -13,7 +13,7 @@ hide: true
 
 ## BLUF - Bottom Line Up Front
 
-**lpe.exe** is a sophisticated local privilege escalation (LPE) utility designed to elevate arbitrary commands from standard user privileges to NT AUTHORITY\SYSTEM. This module operates as a privilege escalation wrapper in the Arsenal-237 attack chain, accepting another executable as a command-line parameter (typically killer.dll or killer.exe) and executing it with SYSTEM privileges.
+**lpe.exe** is a sophisticated local privilege escalation (LPE) utility designed to elevate arbitrary commands from standard user privileges to NT AUTHORITY\SYSTEM. This module operates as a privilege escalation wrapper in the Arsenal-237 attack chain, accepting another executable as a command-line parameter (typically killer.dll or killer_crowdstrike.exe) and executing it with SYSTEM privileges.
 
 ### Business Risk Assessment
 
