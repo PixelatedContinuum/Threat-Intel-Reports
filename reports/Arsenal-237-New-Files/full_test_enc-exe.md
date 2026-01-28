@@ -1612,7 +1612,7 @@ ELSE:
 
 ### Q5: "How fast can this malware encrypt a typical organization?"
 
-**Short answer:** Enterprise-wide encryption in 30-60 minutes for typical mid-size organization.
+**Short answer:** Enterprise-wide encryption for typical mid-size organization could take a few hours depending on the amount of machines and volume of data on each. In my testing, it look around 10 to 20 minutes to encrypt my relatively low data volume sandbox machine.
 
 **Detailed explanation:**
 
