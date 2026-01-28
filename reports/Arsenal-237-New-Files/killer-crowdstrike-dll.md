@@ -251,14 +251,6 @@ char targets[] = "smartscreen.exe" "SgrmBroker.exe" "MpDlpService.exe"
                   "CSFalconContainer.exe";           // CrowdStrike CORE
 ```
 
-**SECONDARY DIFFERENCE: Embedded Microsoft-Signed Binary**
-
-The variant includes an **embedded Microsoft-signed binary** not present in generic killer.dll:
-- **Possible Role 1**: Alternative vulnerable driver for CrowdStrike-specific kernel exploitation
-- **Possible Role 2**: DLL side-loading vector to execute in higher-privilege process context
-- **Investigation Status**: Requires dynamic analysis to determine exact exploitation technique
-- **Threat Level**: HIGH CONFIDENCE that this represents an additional or alternative driver abuse method
-
 #### Modularity Assessment: Threat Actor Capability Conclusion
 
 **DEFINITE CONFIDENCE**: The relationship between killer.dll and killer_crowdstrike.dll demonstrates:
@@ -559,38 +551,6 @@ arg1 = 1 -> Deploy ProcExpDriver.sys (Process Explorer driver)
 2. **Detection Evasion**: Varying driver selection between attacks prevents static signatures
 3. **Robustness**: Each driver provides slightly different kernel capabilities
 
-### Embedded Microsoft-Signed Binary
-
-**CRITICAL FINDING**: killer_crowdstrike.dll contains an embedded Microsoft-signed binary **not present in generic killer.dll**.
-
-#### Analysis Status: REQUIRES FURTHER INVESTIGATION
-
-**Evidence of Presence**:
-```
-Data section contains Microsoft-signed certificate chains:
-- "Microsoft Corporation" string present
-- "Microsoft Root Certificate" present
-- "Microsoft Time-Stamp Service" present
-- Full X.509 certificate structures embedded
-```
-
-#### Possible Roles for Embedded Microsoft Binary
-
-**Hypothesis 1: Alternative Vulnerable Driver**
-- **Scenario**: Threat actor identified vulnerability in Microsoft driver specific to CrowdStrike environments
-- **Advantage**: May be more reliable against Falcon's driver monitoring
-- **Investigation**: Requires binary extraction and static analysis
-
-**Hypothesis 2: DLL Side-Loading Vector**
-- **Scenario**: Legitimate Microsoft executable loaded to DLL side-load killer_crowdstrike.dll into elevated context
-- **Advantage**: Executes payload in trusted Microsoft process context
-- **Investigation**: Requires dynamic analysis to observe execution path
-
-**Hypothesis 3: Code Signing Enhancement**
-- **Scenario**: Microsoft-signed component added to increase trust reputation
-- **Advantage**: May evade reputation-based detection
-- **Investigation**: Requires vendor reputation system analysis
-
 #### Threat Level Assessment
 
 **HIGH CONFIDENCE (85%)**: The embedded Microsoft-signed binary represents an **additional exploitation technique** not used in generic killer.dll, suggesting:
@@ -879,30 +839,6 @@ Evidence from static analysis:
 - **Robustness**: Handles diverse endpoint configurations and security policies
 
 **Realistic Assessment**: MODERATE CONFIDENCE (75%) that both drivers are operationally deployed in real attacks. The dual-driver presence is intentional redundancy, not unused bloat.
-
-### Q6: "What does the embedded Microsoft-signed binary do?"
-
-**Short Answer**: UNKNOWN-requires dynamic analysis to determine, but likely represents an additional or alternative driver exploitation technique.
-
-**Detailed Explanation**:
-Static analysis reveals the presence of a Microsoft-signed binary with embedded certificates:
-- Microsoft Corporation name string
-- Microsoft Root Certificate data
-- Valid X.509 certificate structures
-
-**Possible purposes**:
-1. **Alternative Driver Exploitation**: Microsoft driver with vulnerability specific to CrowdStrike environments
-2. **DLL Side-Loading**: Legitimate Microsoft executable that side-loads killer_crowdstrike.dll into elevated context
-3. **Trust Enhancement**: Additional Microsoft signature to improve malware reputation evasion
-4. **Kernel Exploitation**: Different exploitation vector than Baidu/Process Explorer IOCTL abuse
-
-**Why This Matters**:
-The embedded Microsoft binary suggests threat actors invested **additional engineering effort** specifically for CrowdStrike targeting, beyond the generic killer.dll. This indicates:
-- CrowdStrike was perceived as challenging enough to warrant extra research
-- Threat actor has sophisticated binary manipulation capabilities
-- May represent a more advanced exploitation technique
-
-**Immediate Action**: Extract and analyze embedded binary independently to understand complete exploitation chain.
 
 ### Q7: "Can we detect killer_crowdstrike.dll with antivirus?"
 
