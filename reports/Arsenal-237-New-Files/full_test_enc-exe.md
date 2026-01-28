@@ -1446,6 +1446,7 @@ Implementation:
 4. **Similar API usage** (network shares, drive enumeration)
 5. **Same sophistication indicators** (professional crypto, anti-analysis)
 
+---
 **Key Differences:**
 | Aspect | BlackCat | Arsenal-237 |
 |--------|----------|------------|
@@ -1454,7 +1455,7 @@ Implementation:
 | **Deployment** | RaaS (affiliate model) | Standalone (appears to be test build) |
 | **Target Industry** | Enterprise-wide (no specific targeting) | Opportunistic (unknown specificity) |
 | **Development Status** | Production/mature | Test/development phase |
-
+--
 ### Assessment: Relationship Classification
 
 **Confidence Level: MODERATE (70% - LIKELY)**
