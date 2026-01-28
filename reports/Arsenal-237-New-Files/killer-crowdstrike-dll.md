@@ -1,6 +1,6 @@
 ---
 title: killer_crowdstrike.dll (BYOVD Defense Evasion Variant) - Technical Analysis & Threat Intelligence Report
-date: '2026-01-25'
+date: '2026-01-18'
 layout: post
 permalink: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
 hide: true

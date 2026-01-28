@@ -1,6 +1,6 @@
 ---
 title: killer.dll (BYOVD Defense Evasion Module) - Technical Analysis & Threat Intelligence Report
-date: '2026-01-25'
+date: '2026-01-24'
 layout: post
 permalink: /reports/arsenal-237-new-files/killer-dll/
 hide: true

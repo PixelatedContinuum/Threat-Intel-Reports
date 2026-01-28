@@ -1,6 +1,6 @@
 ---
 title: rootkit.dll (Arsenal-237 Defense Evasion Framework) - Technical Analysis & Threat Assessment
-date: '2026-01-26'
+date: '2026-01-20'
 layout: post
 permalink: /reports/arsenal-237/rootkit-dll/
 hide: true

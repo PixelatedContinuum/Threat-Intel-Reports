@@ -1,6 +1,6 @@
 ---
 title: chromelevator.exe - Browser Credential Extraction Tool - Technical Analysis & Defense Strategy
-date: '2026-01-26'
+date: '2026-01-22'
 layout: post
 permalink: /reports/arsenal-237-new-files/chromelevator-exe/
 hide: true
