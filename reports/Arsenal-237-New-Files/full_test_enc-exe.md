@@ -182,7 +182,7 @@ If `full_test_enc.exe` executes on your network, here is what happens:
 5. **Minutes 15+:** Network shares encrypt if accessible; lateral movement occurs across SMB-connected systems
 6. **Result:** All accessible files encrypted with `.lockbox` extension, original files deleted, ransom message displayed
 
-> ANALYST NOTE: The time figures above are estimates to show the events in order. After dynamic sandboxing the encryption took a significant amount of time on my relatively barebones sandbox (something like 10 20 minutes). On a enterprise workstation or server with a much higher volume of data, this would take a long time. 
+> ANALYST NOTE: The time figures above are estimates to show the events in order. After dynamic sandboxing the encryption took a significant amount of time on my relatively barebones sandbox (something like 10 20 minutes). On a enterprise workstation or server with a much higher volume of data, this would take a long time to encrypt a large amount of machines. 
 
 **Recovery Option:** Restore from clean backup ONLY (no decryption possible without private RSA key)
 
