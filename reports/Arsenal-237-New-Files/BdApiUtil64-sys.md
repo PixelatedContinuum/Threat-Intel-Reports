@@ -225,6 +225,9 @@ The driver is typically deployed through:
 </tbody>
 </table>
 
+
+>ANALYST NOTE: `D:\jenkins\workspace\`: This indicates the code was compiled on a Jenkins build server. Jenkins is a very common automation server used for Continuous Integration/Continuous Deployment (CI/CD), which points to a professional software development environment. `bav_5.0_workspace`: This is the name of the specific Jenkins project or "workspace." `BavOutput\Pdb\Release`: This shows the build configuration. It could be a Release build, meaning it was optimized for distribution, not a debug test build. 
+
 ### Why This Driver Is Critical
 
 BdApiUtil64.sys is not a malicious driver-it's a **legitimate component of Baidu Antivirus**. However, it contains vulnerabilities that allow unrestricted IOCTL-based kernel access. The combination of:
