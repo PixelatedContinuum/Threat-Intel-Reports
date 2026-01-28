@@ -358,22 +358,6 @@ The hardcoded key is definitively present in the binary. The critical question i
 
 **Significance:** Indicates centralized builder system managing multiple ransomware deployments and tracking victim payments
 
-### How to Determine Key Usage Model
-
-**Dynamic Analysis Requirements:**
-1. Execute in isolated sandbox environment
-2. Monitor file encryption process in real-time
-3. Capture encrypted file samples
-4. Analyze encrypted file structure:
-   - Check for file headers/markers
-   - Examine encrypted data organization
-   - Look for per-file key storage or concatenated encryption
-5. Attempt decryption with hardcoded key on sample encrypted file
-
-**Expected Results for Each Scenario:**
-- **Scenario A:** Encrypted files decrypt successfully with hardcoded key using ChaCha20
-- **Scenario B:** Hardcoded key fails; per-file keys required (check encrypted file headers)
-
 ---
 
 ## Section 5: Anti-Analysis Techniques
