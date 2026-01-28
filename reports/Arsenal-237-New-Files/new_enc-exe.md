@@ -316,7 +316,7 @@ windows, program files, programdata, appdata, boot, system volume information, w
 
 **Confidence Level: CONFIRMED (100%)**
 
-The hardcoded key is definitively present in the binary. The critical question is **how this key is used**, which requires dynamic analysis to answer.
+The hardcoded key is definitively present in the binary. The critical question is **how this key is used**, which based on previous analysis is suspected to be a victim specific key.
 
 ### Two Key Usage Scenarios
 
