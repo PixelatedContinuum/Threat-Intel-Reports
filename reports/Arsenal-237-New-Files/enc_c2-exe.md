@@ -670,6 +670,8 @@ enc_c2.exe enumerates target directories and selectively encrypts files while ex
 - .exe (confirmed exclusion)
 - Possibly: System directories (C:\Windows\, C:\Program Files\, C:\ProgramData\)
 
+> ANALYST NOTE: After sandboxing the file in my own sandbox I found that the system directories were not encrypted with the .lock or .lockbox extension. Assuming this is to preserve system function for data extortion rather than system destruction. 
+
 **Why Selective Targeting:**
 
 | Reason | Benefit to Attacker |
