@@ -1614,35 +1614,6 @@ ELSE:
 
 **Short answer:** Enterprise-wide encryption for typical mid-size organization could take a few hours depending on the amount of machines and volume of data on each. In my testing, it look around 10 to 20 minutes to encrypt my relatively low data volume sandbox machine.
 
-**Detailed explanation:**
-
-**Encryption speed calculation:**
-
-Given:
-- Rayon parallel processing on 16-core server: ~16 files per second
-- Typical enterprise: 5-20 million files across all shares
-- Average file size: 500 KB - 1 MB
-
-**Speed projection:**
-```
-Scenario 1: Single workstation (1TB, 2M files, 4 cores)
-- Speed: 4 files/second
-- Time: 2M / 4 = 500,000 seconds = 140 hours
-- Reality: Most user files encrypted in first 5-10 minutes
-  (OS files encrypted but inaccessible anyway)
-
-Scenario 2: File server (10TB, 20M files, 16 cores)
-- Speed: 16 files/second
-- Time: 20M / 16 = 1.25M seconds = 350 hours
-- Reality: Most user files encrypted in first 15-30 minutes
-  (database files encrypted, may cause application failures)
-
-Scenario 3: Enterprise-wide (100+ systems, network propagation)
-- Lateral movement: 1-2 minutes per share discovered
-- Encryption spreads: 5-10 systems per minute
-- Time for complete spread: 30-60 minutes
-```
-
 **Why speed matters:**
 
 | Timeline | Detection Possible? | Containment Possible? |
