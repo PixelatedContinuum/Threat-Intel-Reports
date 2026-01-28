@@ -21,8 +21,6 @@ The module functions as **Stage 2** of a coordinated attack chain: lpe.exe (priv
 
 **Critical Distinction**: This variant uses the **identical IOCTLs and driver deployment mechanism** as the generic killer.dll, proving that the threat actor is **reusing proven technology** rather than investing in entirely new exploits. The only significant change is the "kill list" configuration-updated specifically to include CrowdStrike processes. This demonstrates an **operationally mature threat actor** with modular, reconfigurable attack tools.
 
-This variant also includes an **embedded Microsoft-signed binary** not present in the generic killer.dll, suggesting the attacker has identified an alternative or more advanced driver abuse technique potentially optimized for defeating CrowdStrike monitoring.
-
 ### Key Risk Factors
 <table class="professional-table">
   <thead>
