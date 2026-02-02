@@ -10,7 +10,7 @@ hide: true
 
 ## 1. Executive Summary
 
-**Threat Identified:** A multi-stage malware campaign deploying the **NsMiner cryptojacking** payload. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
+**Threat Identified:** A multi-stage malware campaign deploying the **NsMiner cryptojacking** payload located in a open directory at 125.19.150.122. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
 
 **Business Impact:** The primary impact is the unauthorized use of system resources (CPU, electricity) for the attacker's financial gain, which leads to significant system slowdowns, increased operational costs, and potential hardware degradation. Critically, the downloader component (`tftp.exe`) represents an ongoing risk, as it could be used to fetch more severe secondary payloads, including ransomware or data stealers, at any time.
 
