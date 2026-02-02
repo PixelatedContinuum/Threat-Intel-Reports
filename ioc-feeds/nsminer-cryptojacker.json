@@ -1,0 +1,49 @@
+{
+  "file_hashes": {
+    "sha256": [
+      "e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145",
+      "40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d",
+      "a0eba3fda0d7b22a5d694105ec700df7c7012ddc4ae611c3071ef858e2c69f08",
+      "d0326f0ddce4c00f93682e3a6f55a3125f6387e959e9ed6c5e5584e78e737078",
+      "42422d912b9c626ad93eb8c036ad82ee67cfa48cf75259c20c327eddd4cc376f",
+      "67eff17c53a78c8ec9a28f392b9bb93df3e74f96f6ecd87a333a482c36546b3e",
+      "572a6f9cb5b37b6eec13b578d346c2568ce3ec88bb711d75dac9e82fc01c8860"
+    ]
+  },
+  "network_indicators": {
+    "domains": [
+      "hrtests.ru",
+      "testswork.ru"
+    ],
+    "urls": [
+      "http://hrtests.ru/S.php"
+    ],
+    "ips": [
+      "162.150.119.10",
+      "136.0.88.10",
+      "45.156.140.10",
+      "214.192.190.10",
+      "235.31.147.10",
+      "56.255.40.10",
+      "85.230.83.10",
+      "251.46.111.10",
+      "63.192.224.10",
+      "202.24.217.10",
+      "134.211.96.10",
+      "223.50.252.10",
+      "13.180.6.10",
+      "116.62.22.10",
+      "94.158.41.10",
+      "252.158.2.10",
+      "110.188.25.10",
+      "141.227.248.10"
+    ]
+  },
+  "host_indicators": {
+    "file_paths": [
+      "C:\\Users\\<user>\\AppData\\Roaming\\NsMiner\\",
+      "C:\\Users\\<user>\\AppData\\Local\\Temp\\info.zip",
+      "C:\\Users\\<user>\\AppData\\Local\\Temp\\tftp.exe"
+    ]
+  }
+}

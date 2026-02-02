@@ -15,6 +15,12 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 ---
 
+# February 2026
+
+- [NsMiner: Multi-Stage Cryptojacking Operation - Technical Analysis]({{ "/reports/nsminer-cryptojacker/" | relative_url }})
+
+---
+
 # January 2026
 
 - [Arsenal-237 New Files: Advanced Toolkit Analysis - Recently Added Malware]({{ "/reports/arsenal-237-new-files/" | relative_url }})
