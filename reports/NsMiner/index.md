@@ -8,10 +8,6 @@ hide: true
 
 # Malware Analysis Report: NsMiner Cryptojacker
 
-**Report Classification:** TLP:AMBER (Limited Distribution)  
-**Report Date:** 2026-02-02  
-**Analysis By:** Gemini Cyber Threat Analysis Team
-
 ## 1. Executive Summary
 
 **Threat Identified:** A multi-stage malware campaign deploying the **NsMiner cryptojacking** payload. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
@@ -218,4 +214,7 @@ url="*hrtests.ru/S.php*"
 *   `141.227.248.10`
 
 ---
+## License
+© 2025 Joseph. All rights reserved.  
+Free to read, but reuse requires written permission.
 
