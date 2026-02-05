@@ -63,15 +63,17 @@ The C2 domain `hrtests.ru` has historical ties to miner activity dating back to 
 **Behavior:**
 1.  **Drops Payload:** Upon execution, it writes a `info.zip` file to the user's temporary directory.
 
-![Payload Drop - tftp.exe and info.zip]({{ "/assets/images/nsminer/nsminer-payload-drop.png" | relative_url }})
-
-*Figure 1: Dynamic analysis showing tftp.exe and info.zip being dropped during execution*
+<figure style="text-align: center;">
+  <img src="{{ "/assets/images/nsminer/nsminer-payload-drop.png" | relative_url }}" alt="Payload Drop - tftp.exe and info.zip">
+  <figcaption><em>Figure 1: Dynamic analysis showing tftp.exe and info.zip being dropped during execution</em></figcaption>
+</figure>
 
 2.  **Establishes Persistence:** It creates the directory `C:\Users\<user>\AppData\Roaming\NsMiner` and copies itself into it. It then executes this new copy to ensure it runs from a persistent location.
 
-![Persistence Directory Creation]({{ "/assets/images/nsminer/nsminer-persistence-directory.png" | relative_url }})
-
-*Figure 2: Dynamic analysis showing malware copying itself to the NsMiner persistence directory*
+<figure style="text-align: center;">
+  <img src="{{ "/assets/images/nsminer/nsminer-persistence-directory.png" | relative_url }}" alt="Persistence Directory Creation">
+  <figcaption><em>Figure 2: Dynamic analysis showing malware copying itself to the NsMiner persistence directory</em></figcaption>
+</figure>
 
 3.  **Executes Downloader:** It extracts and runs the second-stage payload, `tftp.exe`, from the `info.zip` archive.
 
@@ -84,19 +86,22 @@ The C2 domain `hrtests.ru` has historical ties to miner activity dating back to 
 **Behavior:**
 1.  **C2 Beacon:** Sends an initial "phone home" beacon to `http://hrtests.ru/S.php`, exfiltrating basic system and user information.
 
-![Static Analysis - Extracted URLs]({{ "/assets/images/nsminer/nsminer-static-analysis-urls.png" | relative_url }})
-
-*Figure 3: URLs discovered through custom static analysis script, showing C2 beacon endpoint*
+<figure style="text-align: center;">
+  <img src="{{ "/assets/images/nsminer/nsminer-static-analysis-urls.png" | relative_url }}" alt="Static Analysis - Extracted URLs">
+  <figcaption><em>Figure 3: URLs discovered through custom static analysis script, showing C2 beacon endpoint</em></figcaption>
+</figure>
 
 2.  **FTP Credential Stuffing:** It iterates through a hardcoded list of over 15 FTP server IPs, attempting to connect using various username/password combinations in what appears to be a **credential stuffing attack**. Dynamic analysis revealed the malware systematically testing different credential pairs against each IP address, suggesting these are potential target servers rather than pre-compromised infrastructure.
 
-![FTP Credential Stuffing - Small Sample]({{ "/assets/images/nsminer/nsminer-ftp-credential-stuffing-small.png" | relative_url }})
+<figure style="text-align: center;">
+  <img src="{{ "/assets/images/nsminer/nsminer-ftp-credential-stuffing-small.png" | relative_url }}" alt="FTP Credential Stuffing - Small Sample">
+  <figcaption><em>Figure 4: Dynamic analysis showing initial credential stuffing attempts against FTP servers</em></figcaption>
+</figure>
 
-*Figure 4: Dynamic analysis showing initial credential stuffing attempts against FTP servers*
-
-![FTP Credential Stuffing - Full Sequence]({{ "/assets/images/nsminer/nsminer-ftp-credential-stuffing-full.png" | relative_url }})
-
-*Figure 5: Extended view of password guessing behavior, showing multiple credential combinations being tested*
+<figure style="text-align: center;">
+  <img src="{{ "/assets/images/nsminer/nsminer-ftp-credential-stuffing-full.png" | relative_url }}" alt="FTP Credential Stuffing - Full Sequence">
+  <figcaption><em>Figure 5: Extended view of password guessing behavior, showing multiple credential combinations being tested</em></figcaption>
+</figure>
 
 3.  **Payload Drop:** Once a successful FTP connection is made to any accessible server, it downloads the final payload components (`NsCpuCNMiner32.exe` and `NsCpuCNMiner64.exe`) into the persistence directory (`%APPDATA%\NsMiner`).
 
