@@ -529,6 +529,8 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 - T1056.001 (Input Capture: Keylogging)
 - T1115 (Clipboard Data)
 
+> ANALYST NOTE: When I was doing dymanic analysis and debugging of these files I noticed that my clipboard stopped working. When copy and pasting outside the analysis lab VM everything worked but, inside copy and paste did not work once the files were running on the host. This can be a good indicator if users are reporting to the helpdesk that their clipboards are not working or copy and paste is not working. 
+
 ## Browser Credential Theft
 
 **Chrome Credential Theft:**
