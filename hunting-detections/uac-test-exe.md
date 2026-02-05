@@ -902,8 +902,6 @@ Recommendations:
 
 ---
 
-**Detection Rules Version**: 1.0
-**Last Updated**: 2026-01-12
-**Maintained By**: Threat Intelligence Team
-**Review Schedule**: Quarterly
-
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

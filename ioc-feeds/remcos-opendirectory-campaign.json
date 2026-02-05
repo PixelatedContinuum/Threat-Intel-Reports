@@ -1,0 +1,357 @@
+{
+  "name": "Remcos RAT OpenDirectory Campaign (203[.]159[.]90[.]147)",
+  "reference": "OpenDirectory-203.159.90.147-Remcos Campaign Analysis",
+  "iocs": {
+    "files": [
+      {
+        "type": "MD5",
+        "value": "3d7b442573acf64c3aad17b23d224dc9",
+        "filename": "Payload.exe",
+        "description": "VB6 Dropper",
+        "confidence": "DEFINITE",
+        "use_case": "Quick file identification, legacy systems"
+      },
+      {
+        "type": "SHA1",
+        "value": "d71f4efb31786ae71bdd5e7e32531a2698455954",
+        "filename": "Payload.exe",
+        "description": "VB6 Dropper",
+        "confidence": "DEFINITE",
+        "use_case": "Chain-of-custody evidence"
+      },
+      {
+        "type": "SHA256",
+        "value": "db218dd5f53fbcf39a6db043c8455667c3dbef44abe14865e8b962b4c676372e",
+        "filename": "Payload.exe",
+        "description": "VB6 Dropper",
+        "confidence": "DEFINITE",
+        "use_case": "Primary identifier, forensics, blockchain logging"
+      },
+      {
+        "type": "MD5",
+        "value": "04693af3b0a7c9788daba8e35f429ba6",
+        "filename": "Backdoor.exe / 0.dll / remcos.exe",
+        "description": "Remcos RAT Main Payload",
+        "confidence": "DEFINITE",
+        "use_case": "Quick file identification, legacy systems"
+      },
+      {
+        "type": "SHA1",
+        "value": "45aa592f3b30ef526e380978338718f540cff5d2",
+        "filename": "Backdoor.exe / 0.dll / remcos.exe",
+        "description": "Remcos RAT Main Payload",
+        "confidence": "DEFINITE",
+        "use_case": "Chain-of-custody evidence"
+      },
+      {
+        "type": "SHA256",
+        "value": "ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82",
+        "filename": "Backdoor.exe / 0.dll / remcos.exe",
+        "description": "Remcos RAT Main Payload",
+        "confidence": "DEFINITE",
+        "use_case": "Primary identifier, forensics, blockchain logging"
+      },
+      {
+        "type": "File Size",
+        "value": "172159",
+        "unit": "bytes",
+        "filename": "Payload.exe",
+        "confidence": "HIGH",
+        "use_case": "Filter during file scans (note: packing can change this)"
+      },
+      {
+        "type": "File Size",
+        "value": "94208",
+        "unit": "bytes",
+        "filename": "Backdoor.exe",
+        "confidence": "HIGH",
+        "use_case": "Filter during file scans (note: packing can change this)"
+      },
+      {
+        "type": "Mutex",
+        "value": "Remcos_Mutex_Inj",
+        "confidence": "DEFINITE",
+        "use_case": "Host-based detection - definitive Remcos family indicator",
+        "severity": "CRITICAL"
+      },
+      {
+        "type": "File Path",
+        "value": "C:\\Users\\*\\AppData\\Roaming\\remcos\\remcos.exe",
+        "confidence": "DEFINITE",
+        "use_case": "Primary persistent installation location",
+        "attributes": "Hidden, System, Read-only",
+        "severity": "CRITICAL"
+      },
+      {
+        "type": "File Path",
+        "value": "C:\\Users\\*\\AppData\\Local\\Temp\\0.dll",
+        "confidence": "HIGH",
+        "use_case": "Temporary dropped payload (deleted after execution)",
+        "severity": "HIGH"
+      },
+      {
+        "type": "File Path",
+        "value": "C:\\Users\\*\\AppData\\Local\\Temp\\install.bat",
+        "confidence": "HIGH",
+        "use_case": "Self-deleting installation script (file melting)",
+        "severity": "HIGH"
+      },
+      {
+        "type": "File Path",
+        "value": "p.ini",
+        "confidence": "MODERATE",
+        "use_case": "Suspected process injection payload (location variable)",
+        "severity": "MEDIUM"
+      }
+    ],
+    "registry": [
+      {
+        "key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+        "value": "EnableLUA",
+        "malicious_data": "0",
+        "legitimate_data": "1",
+        "purpose": "UAC bypass - disables User Account Control system-wide",
+        "severity": "CRITICAL",
+        "confidence": "DEFINITE",
+        "mitre_attack": "T1548.002"
+      },
+      {
+        "key": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+        "value": "Userinit",
+        "malicious_data": "C:\\WINDOWS\\system32\\userinit.exe, \"C:\\Users\\[USERNAME]\\AppData\\Roaming\\remcos\\remcos.exe\"",
+        "legitimate_data": "C:\\WINDOWS\\system32\\userinit.exe,",
+        "purpose": "Winlogon persistence - executes malware at every user logon before desktop appears",
+        "severity": "CRITICAL",
+        "confidence": "DEFINITE",
+        "mitre_attack": "T1547.004"
+      },
+      {
+        "key": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "value": "remcos",
+        "data": "C:\\Users\\[USERNAME]\\AppData\\Roaming\\remcos\\remcos.exe",
+        "purpose": "User-level persistence - autorun at user logon",
+        "severity": "HIGH",
+        "confidence": "HIGH",
+        "mitre_attack": "T1547.001"
+      },
+      {
+        "key": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "value": "remcos",
+        "data": "C:\\Users\\[USERNAME]\\AppData\\Roaming\\remcos\\remcos.exe",
+        "purpose": "System-level persistence - autorun for all users",
+        "severity": "HIGH",
+        "confidence": "HIGH",
+        "mitre_attack": "T1547.001"
+      },
+      {
+        "key": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run",
+        "value": "remcos",
+        "data": "C:\\Users\\[USERNAME]\\AppData\\Roaming\\remcos\\remcos.exe",
+        "purpose": "Policies-based persistence - autorun mechanism",
+        "severity": "HIGH",
+        "confidence": "HIGH",
+        "mitre_attack": "T1547.001"
+      },
+      {
+        "key": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+        "value": "Shell",
+        "malicious_data": "explorer.exe, \"C:\\Users\\[USERNAME]\\AppData\\Roaming\\remcos\\remcos.exe\"",
+        "legitimate_data": "explorer.exe",
+        "purpose": "Shell hijack persistence - optional mechanism",
+        "severity": "HIGH",
+        "confidence": "MODERATE",
+        "mitre_attack": "T1547.001"
+      }
+    ],
+    "network": [
+      {
+        "indicator": "203.159.90.147",
+        "type": "IPv4",
+        "purpose": "Dual-purpose C2 server and OpenDirectory malware distribution",
+        "confidence": "DEFINITE",
+        "severity": "CRITICAL",
+        "notes": "Block at network perimeter (all protocols)",
+        "geographic_location": "Likely Thailand (IP range 203.159.x.x)",
+        "first_observed": "2026-02-02",
+        "status": "Active"
+      },
+      {
+        "indicator": "hxxp://203[.]159[.]90[.]147/Payload.exe",
+        "type": "URL",
+        "purpose": "OpenDirectory malware distribution (VB6 dropper)",
+        "confidence": "HIGH",
+        "severity": "CRITICAL",
+        "notes": "Inferred from infrastructure analysis"
+      },
+      {
+        "indicator": "hxxp://203[.]159[.]90[.]147/Backdoor.exe",
+        "type": "URL",
+        "purpose": "OpenDirectory malware distribution (Remcos RAT payload)",
+        "confidence": "HIGH",
+        "severity": "CRITICAL",
+        "notes": "Inferred from infrastructure analysis"
+      },
+      {
+        "indicator": "TCP connection to 203.159.90.147",
+        "type": "Network Connection",
+        "protocol": "TCP",
+        "ports": "Unknown (common Remcos ports: 2404, 443, or custom)",
+        "purpose": "C2 communication - command receipt and data exfiltration",
+        "confidence": "DEFINITE",
+        "severity": "CRITICAL",
+        "notes": "Direct IP connection, no DNS resolution"
+      }
+    ],
+    "behavioral": [
+      {
+        "behavior": "UAC bypass via EnableLUA registry modification",
+        "detection": "Monitor cmd.exe spawning reg.exe with EnableLUA arguments; Sysmon Event ID 1 (process creation), Event ID 4657 (registry modification)",
+        "command_line": "cmd.exe /k %windir%\\System32\\reg.exe ADD HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System /v EnableLUA /t REG_DWORD /d 0 /f",
+        "severity": "CRITICAL",
+        "false_positive_risk": "Low",
+        "confidence": "DEFINITE",
+        "mitre_attack": "T1548.002"
+      },
+      {
+        "behavior": "Winlogon Userinit registry value modification",
+        "detection": "Registry monitoring for HKLM\\...\\Winlogon\\Userinit changes; Sysmon Event ID 13 (registry set)",
+        "severity": "CRITICAL",
+        "false_positive_risk": "Very Low (no legitimate modifications)",
+        "confidence": "DEFINITE",
+        "mitre_attack": "T1547.004"
+      },
+      {
+        "behavior": "Process injection from AppData executables",
+        "detection": "Monitor WriteProcessMemory API calls from AppData executables targeting explorer.exe, msedge.exe; Sysmon Event ID 10 (process access)",
+        "api_sequence": "VirtualAllocEx, WriteProcessMemory, CreateRemoteThread, GetThreadContext, SetThreadContext, ResumeThread",
+        "targets": "explorer.exe, msedge.exe",
+        "severity": "HIGH",
+        "false_positive_risk": "Medium",
+        "confidence": "HIGH",
+        "mitre_attack": "T1055"
+      },
+      {
+        "behavior": "File melting (self-deletion) via install.bat",
+        "detection": "Monitor for PING followed by DEL and start commands; Sysmon Event ID 1",
+        "command_pattern": "PING 127.0.0.1 -n 2; DEL; start remcos.exe; DEL install.bat",
+        "severity": "HIGH",
+        "false_positive_risk": "Low",
+        "confidence": "HIGH",
+        "mitre_attack": "T1070.004"
+      },
+      {
+        "behavior": "Browser credential database access by non-browser process",
+        "detection": "Monitor non-browser access to Chrome Login Data, Firefox logins.json; Sysmon Event ID 11 (file access)",
+        "file_targets": "Chrome\\Login Data, Chrome\\Cookies, Firefox\\logins.json, Firefox\\cookies.sqlite",
+        "severity": "HIGH",
+        "false_positive_risk": "Medium (password managers)",
+        "confidence": "HIGH",
+        "mitre_attack": "T1555.003"
+      },
+      {
+        "behavior": "Screenshot capture with GDI+ APIs",
+        "detection": "Monitor GdipSaveImageToStream API calls from non-standard processes",
+        "severity": "HIGH",
+        "false_positive_risk": "Medium (legitimate screen recorders)",
+        "confidence": "MODERATE",
+        "mitre_attack": "T1113"
+      },
+      {
+        "behavior": "Audio recording via Windows Multimedia API",
+        "detection": "Monitor waveInOpen, waveInAddBuffer, waveInStart API calls",
+        "output_files": "Timestamped WAV files (e.g., 2026-02-03 15.30.wav)",
+        "severity": "HIGH",
+        "false_positive_risk": "Medium (voice chat, recording software)",
+        "confidence": "MODERATE",
+        "mitre_attack": "T1123"
+      },
+      {
+        "behavior": "Global keyboard hook installation",
+        "detection": "Monitor SetWindowsHookExA API calls for WH_KEYBOARD_LL hooks",
+        "severity": "HIGH",
+        "false_positive_risk": "Medium (accessibility software)",
+        "confidence": "MODERATE",
+        "mitre_attack": "T1056.001"
+      },
+      {
+        "behavior": "Clipboard monitoring",
+        "detection": "Monitor GetClipboardData, SetClipboardData API calls",
+        "log_indicators": "[Following text has been copied to clipboard:], [Ctrl + V]",
+        "severity": "MEDIUM",
+        "false_positive_risk": "Medium (clipboard managers)",
+        "confidence": "MODERATE",
+        "mitre_attack": "T1115"
+      },
+      {
+        "behavior": "Anti-VM/sandbox detection",
+        "detection": "Registry queries for VirtualBox ACPI signatures; window enumeration for PROCMON_WINDOW_CLASS, PROCEXPL",
+        "indicators": "HARDWARE\\ACPI\\DSDT\\VBOX__, PROCMON_WINDOW_CLASS, PROCEXPL",
+        "severity": "MEDIUM",
+        "false_positive_risk": "Low",
+        "confidence": "HIGH",
+        "mitre_attack": "T1497.001"
+      },
+      {
+        "behavior": "Hidden window creation (message-only window)",
+        "detection": "Monitor window creation with WS_EX_NOACTIVATE and no visible UI",
+        "window_class": "MsgWindowClass",
+        "severity": "MEDIUM",
+        "false_positive_risk": "High (many legitimate services)",
+        "confidence": "LOW",
+        "mitre_attack": "T1564.001"
+      },
+      {
+        "behavior": "Desktop.ini file access as injection timing trigger",
+        "detection": "Correlate desktop.ini file access with WriteProcessMemory calls",
+        "file_paths": "C:\\Users\\*\\Desktop\\desktop.ini, C:\\Users\\*\\Documents\\desktop.ini",
+        "severity": "MEDIUM",
+        "false_positive_risk": "High (normal folder operations)",
+        "confidence": "MODERATE",
+        "notes": "Novel technique - opportunistic injection timing"
+      },
+      {
+        "behavior": "HTTP exfiltration via URL Monikers",
+        "detection": "Monitor CreateURLMoniker API for HTTP POST/PUT with binary payloads",
+        "payload_type": "Encrypted PNG screenshots",
+        "severity": "HIGH",
+        "false_positive_risk": "Low",
+        "confidence": "HIGH",
+        "mitre_attack": "T1041"
+      }
+    ],
+    "mitre_attack_techniques": [
+      "T1204.002",
+      "T1027",
+      "T1059.003",
+      "T1547.001",
+      "T1547.004",
+      "T1548.002",
+      "T1070.004",
+      "T1055",
+      "T1055.001",
+      "T1055.002",
+      "T1055.012",
+      "T1497.001",
+      "T1564.001",
+      "T1555.003",
+      "T1539",
+      "T1010",
+      "T1057",
+      "T1082",
+      "T1083",
+      "T1033",
+      "T1056.001",
+      "T1113",
+      "T1115",
+      "T1123",
+      "T1005",
+      "T1071.001",
+      "T1573",
+      "T1001",
+      "T1041",
+      "T1112",
+      "T1489",
+      "T1529"
+    ]
+  }
+}
