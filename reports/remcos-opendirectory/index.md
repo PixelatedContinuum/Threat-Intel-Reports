@@ -117,7 +117,6 @@ This report documents a sophisticated multi-stage Remcos Remote Access Trojan (R
 ### Primary Threat Vector
 - **Distribution Point:** OpenDirectory at hxxp://203[.]159[.]90[.]147/ hosting Payload.exe and Backdoor.exe
 - **C2 Infrastructure:** Same IP (203[.]159[.]90[.]147) - critical OPSEC failure
-- **Geographic Location:** Likely Thailand (IP range 203.159.x.x allocation)
 - **Confidence Level:** CRITICAL based on dual-purpose infrastructure, active campaign, and confirmed malware samples
 
 > **Assessment Basis:** Static code analysis, dynamic behavioral analysis, string analysis, and correlation with global Remcos threat intelligence. Confidence levels provided throughout to distinguish confirmed findings from analytical judgments. Attribution assessed as cybercriminal/initial access broker operation (MODERATE confidence) based on poor OPSEC and infrastructure consolidation.
