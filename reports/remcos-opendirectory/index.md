@@ -327,6 +327,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 - Entropy: 6.0211 (moderate obfuscation/packing)
 
 ![persists as remcos.exe]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/file deleted and started remcos.png" | relative_url }})
+
 *Final stage after Backdoor.exe runs, removes itself and all other files*
 
 **Execution Flow:**
