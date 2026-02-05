@@ -17,6 +17,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 # February 2026
 
+- [Remcos RAT OpenDirectory Campaign - Technical Analysis & Business Risk Assessment]({{ "/reports/remcos-opendirectory/" | relative_url }})
 - [NsMiner: Multi-Stage Cryptojacking Operation - Technical Analysis]({{ "/reports/nsminer-cryptojacker/" | relative_url }})
 
 ---

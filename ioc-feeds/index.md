@@ -36,6 +36,7 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 - [Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)](arsenal-237-full_test_enc-exe.json)
 
 ### Other Threat Intelligence Reports
+- [Remcos RAT OpenDirectory Campaign (203[.]159[.]90[.]147)](remcos-opendirectory-campaign.json)
 - [NsMiner Cryptojacker](nsminer-cryptojacker.json)
 - [Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm](dual-rat-analysis.json)
 - [PULSAR RAT (server.exe)](PULSAR-RAT.json)

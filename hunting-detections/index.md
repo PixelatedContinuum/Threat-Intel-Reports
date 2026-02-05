@@ -36,6 +36,7 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 - [Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)](arsenal-237-full_test_enc-exe.md)
 
 ### Other Threat Intelligence Reports
+- [Detection Rules - Remcos RAT OpenDirectory Campaign](remcos-opendirectory.md)
 - [NsMiner Cryptojacker - Detection Rules](nsminer-cryptojacker.md)
 - [Detection Rules - Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm](dual-rat-analysis.md)
 - [Detection Rules - PULSAR RAT (server.exe)](PULSAR-RAT.md)
