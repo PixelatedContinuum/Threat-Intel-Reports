@@ -116,7 +116,7 @@ This report documents a sophisticated multi-stage Remcos Remote Access Trojan (R
 
 ### Primary Threat Vector
 - **Distribution Point:** OpenDirectory at hxxp://203[.]159[.]90[.]147/ hosting Payload.exe and Backdoor.exe
-- **C2 Infrastructure:** Same IP (203[.]159[.]90[.]147) - critical OPSEC failure
+- **C2 Infrastructure:** Same IP (203[.]159[.]90[.]147)
 - **Confidence Level:** CRITICAL based on dual-purpose infrastructure, active campaign, and confirmed malware samples
 
 > **Assessment Basis:** Static code analysis, dynamic behavioral analysis, string analysis, and correlation with global Remcos threat intelligence. Confidence levels provided throughout to distinguish confirmed findings from analytical judgments. Attribution assessed as cybercriminal/initial access broker operation (MODERATE confidence) based on poor OPSEC and infrastructure consolidation.
@@ -185,7 +185,7 @@ This report documents a sophisticated multi-stage Remcos Remote Access Trojan (R
 
 **Operational Security Assessment:**
 
-This infrastructure consolidation represents a **critical OPSEC failure** by the threat actor:
+This infrastructure consolidation represents a **possible OPSEC failure** by the threat actor:
 
 - Single IP blocking disrupts both distribution and C2 operations
 - OpenDirectory exposure reveals malware samples for analysis
