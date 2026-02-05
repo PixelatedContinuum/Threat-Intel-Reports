@@ -194,7 +194,7 @@ This infrastructure consolidation represents a **possible OPSEC failure** by the
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/opendir.png" | relative_url }}" alt="Hunt.io Open Directory">
-  <figcaption><em>Hunt.io Open Directory</em></figcaption>
+  <figcaption><em>Figure 1: Hunt.io Open Directory</em></figcaption>
 </figure>
 
 **Historical Context:**
@@ -313,7 +313,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Payload.exe/multi stage dropper.png" | relative_url }}" alt="dropped 0.dll">
-  <figcaption><em>Dropped 0.dll</em></figcaption>
+  <figcaption><em>Figure 2: Dropped 0.dll</em></figcaption>
 </figure>
 
 >ANALYST NOTE: I might not be super clear in the data here but, 0.dll was dropped and when comparing it to file hashes already investigated I found that this 0.dll files has the same hash as Backdoor.exe which will be covered next, making them the same malware file.
@@ -332,7 +332,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/file deleted and started remcos.png" | relative_url }}" alt="persists as remcos.exe">
-  <figcaption><em>Final stage after Backdoor.exe runs, removes itself and all other files</em></figcaption>
+  <figcaption><em>Figure 3: Final Stage After Backdoor.exe Runs, Removes Itself and All Other Files</em></figcaption>
 </figure>
 
 **Execution Flow:**
@@ -357,7 +357,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg key to remove UAC.png" | relative_url }}" alt="UAC Removal Reg Key">
-  <figcaption><em>Setting reg key to disable User Account control</em></figcaption>
+  <figcaption><em>Figure 4: Setting Registry Key to Disable User Account Control</em></figcaption>
 </figure>
 
 **What EnableLUA=0 Does:**
@@ -382,7 +382,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg key to remove UAC popup.png" | relative_url }}" alt="UAC Removal popup">
-  <figcaption><em>UAC disabled popup</em></figcaption>
+  <figcaption><em>Figure 5: UAC Disabled Popup</em></figcaption>
 </figure>
 
 ## Mechanism 2: Winlogon Userinit Hijacking
@@ -399,7 +399,7 @@ Modified:  "C:\WINDOWS\system32\userinit.exe, "C:\Users\[USER]\AppData\Roaming\r
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/Userinit Hijack.png" | relative_url }}" alt="Userinit Hijack">
-  <figcaption><em>Userinit Hijack</em></figcaption>
+  <figcaption><em>Figure 6: Userinit Hijack</em></figcaption>
 </figure>
 
 **Why This Technique Is Particularly Dangerous:**
@@ -428,7 +428,7 @@ Modified:  "C:\WINDOWS\system32\userinit.exe, "C:\Users\[USER]\AppData\Roaming\r
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/Create Self-Deleting Batch Script.png" | relative_url }}" alt="Create Self-Deleting Batch Script">
-  <figcaption><em>Create Self-Deleting Batch Script</em></figcaption>
+  <figcaption><em>Figure 7: Create Self-Deleting Batch Script</em></figcaption>
 </figure>
 
 **install.bat Technical Analysis:**
@@ -476,7 +476,7 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg keys for persistence.png" | relative_url }}" alt="setting reg keys for persistence">
-  <figcaption><em>Setting reg keys for persistence</em></figcaption>
+  <figcaption><em>Figure 8: Setting Registry Keys for Persistence</em></figcaption>
 </figure>
 
 ---
@@ -566,7 +566,7 @@ Indicators:
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/browser passwords.png" | relative_url }}" alt="Stolen password file">
-  <figcaption><em>Stolen password file</em></figcaption>
+  <figcaption><em>Figure 9: Stolen Password File</em></figcaption>
 </figure>
 
 **Impact:**
@@ -617,7 +617,7 @@ Core Injection APIs:
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/desktopini proc injection 3.png" | relative_url }}" alt="desktopini proc injection">
-  <figcaption><em>Possible use of Desktop.ini for process injection</em></figcaption>
+  <figcaption><em>Figure 10: Possible Use of Desktop.ini for Process Injection</em></figcaption>
 </figure>
 
 >ANALYST NOTE: During analysis I found Desktop.ini files being scattered all throughout that file system. From user locations like music or documents, to system locations like system32. Information below is based on this behavior identified and infered from the rest of the data. 
@@ -677,7 +677,7 @@ PROCEXPL
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting file attributes.png" | relative_url }}" alt="Setting file attributes">
-  <figcaption><em>Setting file attributes</em></figcaption>
+  <figcaption><em>Figure 11: Setting File Attributes</em></figcaption>
 </figure>
 
 **Stealthy Networking:**
@@ -714,7 +714,7 @@ Connected to C2!
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/C2 IP found.png" | relative_url }}" alt="C2 IP found">
-  <figcaption><em>C2 Server Found During Dynamic Analysis</em></figcaption>
+  <figcaption><em>Figure 12: C2 Server Found During Dynamic Analysis</em></figcaption>
 </figure>
 
 **Analysis Limitation:**
@@ -731,7 +731,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/screenshot capability using GDI windows call.png" | relative_url }}" alt="screenshot GDI windows call">
-  <figcaption><em>Screenshot Capability</em></figcaption>
+  <figcaption><em>Figure 13: Screenshot Capability</em></figcaption>
 </figure>
 
 **Audio Exfiltration:**
@@ -740,7 +740,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/microphone recording.png" | relative_url }}" alt="microphone recording">
-  <figcaption><em>microphone recording and exfil</em></figcaption>
+  <figcaption><em>Figure 14: Microphone Recording and Exfiltration</em></figcaption>
 </figure>
 
 **MITRE ATT&CK:**
@@ -937,7 +937,7 @@ Step 5: Restore Security Settings
 ```
 <figure style="text-align: center;">
   <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/mutex.png" | relative_url }}" alt="Mutex found">
-  <figcaption><em>Visual of Mutex found in the code</em></figcaption>
+  <figcaption><em>Figure 15: Visual of Mutex Found in the Code</em></figcaption>
 </figure>
 
 **Automated Removal:**
