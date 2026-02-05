@@ -69,7 +69,7 @@ This report documents a sophisticated multi-stage Remcos Remote Access Trojan (R
 - **Five Persistence Mechanisms:** UAC bypass, Winlogon Userinit hijacking, three registry Run keys, shell hijack
 - **Comprehensive Surveillance:** Screenshots (periodic + on-demand), microphone recording, keylogging with context, clipboard monitoring
 - **Credential Theft:** Chrome/Firefox saved passwords and session cookies for account takeover
-- **Process Injection:** Explorer.exe and msedge.exe targeting with novel desktop.ini timing triggers
+- **Process Injection:** Explorer.exe and msedge.exe targeting with possible novel desktop.ini timing triggers
 - **Anti-Forensics:** File melting, hidden attributes, evidence removal, sandbox detection
 
 **Why This Threat Is Significant:**
