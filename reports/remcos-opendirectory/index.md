@@ -193,6 +193,7 @@ This infrastructure consolidation represents a **possible OPSEC failure** by the
 - Reduces attacker anonymity and creates attribution opportunities
 
 ![Hunt.io Open Directory]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/opendir.png" | relative_url }})
+
 *Hunt.io Open Directory*
 
 **Historical Context:**
@@ -310,6 +311,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 - T1204.002 (User Execution: Malicious File) - Requires user to execute dropper
 
 ![dropped 0.dll]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Payload.exe/multi stage dropper.png" | relative_url }})
+
 *Dropped 0.dll*
 
 >ANALYST NOTE: I might not be super clear in the data here but, 0.dll was dropped and when comparing it to file hashes already investigated I found that this 0.dll files has the same hash as Backdoor.exe which will be covered next, making them the same malware file.
@@ -351,6 +353,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 **Command Executed:**
 
 ![UAC Removal Reg Key]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg key to remove UAC.png" | relative_url }})
+
 *Setting reg key to disable User Account control*
 
 **What EnableLUA=0 Does:**
@@ -374,6 +377,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 **MITRE ATT&CK:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
 
 ![UAC Removal popup]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg key to remove UAC popup.png" | relative_url }})
+
 *UAC disabled popup*
 
 ## Mechanism 2: Winlogon Userinit Hijacking
@@ -389,6 +393,7 @@ Modified:  "C:\WINDOWS\system32\userinit.exe, "C:\Users\[USER]\AppData\Roaming\r
 ```
 
 ![Userinit Hijack]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/Userinit Hijack.png" | relative_url }})
+
 *Userinit Hijack*
 
 **Why This Technique Is Particularly Dangerous:**
@@ -416,6 +421,7 @@ Modified:  "C:\WINDOWS\system32\userinit.exe, "C:\Users\[USER]\AppData\Roaming\r
 4. **Create Self-Deleting Batch Script:** %TEMP%\install.bat
 
 ![Create Self-Deleting Batch Script]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/Create Self-Deleting Batch Script.png" | relative_url }})
+
 *Create Self-Deleting Batch Script*
 
 **install.bat Technical Analysis:**
@@ -545,6 +551,7 @@ Indicators:
 ```
 
 ![Stolen password file]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/browser passwords.png" | relative_url }})
+
 *Stolen password file*
 
 **Impact:**
@@ -594,6 +601,7 @@ Core Injection APIs:
 **Discovery:** desktop.ini file paths found on stack during WriteProcessMemory calls
 
 ![desktopini proc injection]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/desktopini proc injection 3.png" | relative_url }})
+
 *Possible use of Desktop.ini for process injection*
 
 >ANALYST NOTE: During analysis I found Desktop.ini files being scattered all throughout that file system. From user locations like music or documents, to system locations like system32. Information below is based on this behavior identified and infered from the rest of the data. 
@@ -652,6 +660,7 @@ PROCEXPL
 - Requires "Show hidden files" + "Show system files" to view in Explorer
 
 ![Setting file attributes]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting file attributes.png" | relative_url }})
+
 *Setting file attributes*
 
 **Stealthy Networking:**
@@ -687,6 +696,7 @@ Connected to C2!
 ```
 
 ![C2 IP found]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/C2 IP found.png" | relative_url }})
+
 *C2 Server Found During Dynamic Analysis*
 
 **Analysis Limitation:**
@@ -702,6 +712,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 - Local screenshots deleted after successful upload
 
 ![screenshot GDI windows call]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/screenshot capability using GDI windows call.png" | relative_url }})
+
 *Screenshot Capability*
 
 **Audio Exfiltration:**
@@ -709,6 +720,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 - Likely batch exfiltration mechanism
 
 ![microphone recording]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/microphone recording.png" | relative_url }})
+
 *microphone recording and exfil*
 
 **MITRE ATT&CK:**
@@ -900,6 +912,7 @@ Step 4: Verify Removal
 - Review autoruns with Microsoft Autoruns tool
 
 ![Mutex found]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/mutex.png" | relative_url }})
+
 *Visual of Mutex found in the code*
 
 Step 5: Restore Security Settings
