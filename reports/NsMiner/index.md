@@ -63,14 +63,14 @@ The C2 domain `hrtests.ru` has historical ties to miner activity dating back to 
 **Behavior:**
 1.  **Drops Payload:** Upon execution, it writes a `info.zip` file to the user's temporary directory.
 
-<figure style="text-align: center; margin: 1.5em 0;">
+<figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/nsminer/nsminer-payload-drop.png" | relative_url }}" alt="Payload Drop - tftp.exe and info.zip">
   <figcaption><em>Figure 1: Dynamic analysis showing tftp.exe and info.zip being dropped during execution</em></figcaption>
 </figure>
 
 2.  **Establishes Persistence:** It creates the directory `C:\Users\<user>\AppData\Roaming\NsMiner` and copies itself into it. It then executes this new copy to ensure it runs from a persistent location.
 
-<figure style="text-align: center; margin: 1.5em 0;">
+<figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/nsminer/nsminer-persistence-directory.png" | relative_url }}" alt="Persistence Directory Creation">
   <figcaption><em>Figure 2: Dynamic analysis showing malware copying itself to the NsMiner persistence directory</em></figcaption>
 </figure>
@@ -86,19 +86,19 @@ The C2 domain `hrtests.ru` has historical ties to miner activity dating back to 
 **Behavior:**
 1.  **C2 Beacon:** Sends an initial "phone home" beacon to `http://hrtests.ru/S.php`, exfiltrating basic system and user information.
 
-<figure style="text-align: center; margin: 1.5em 0;">
+<figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/nsminer/nsminer-static-analysis-urls.png" | relative_url }}" alt="Static Analysis - Extracted URLs">
   <figcaption><em>Figure 3: URLs discovered through custom static analysis script, showing C2 beacon endpoint</em></figcaption>
 </figure>
 
 2.  **FTP Credential Stuffing:** It iterates through a hardcoded list of over 15 FTP server IPs, attempting to connect using various username/password combinations in what appears to be a **credential stuffing attack**. Dynamic analysis revealed the malware systematically testing different credential pairs against each IP address, suggesting these are potential target servers rather than pre-compromised infrastructure.
 
-<figure style="text-align: center; margin: 1.5em 0;">
+<figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/nsminer/nsminer-ftp-credential-stuffing-small.png" | relative_url }}" alt="FTP Credential Stuffing - Small Sample">
   <figcaption><em>Figure 4: Dynamic analysis showing initial credential stuffing attempts against FTP servers</em></figcaption>
 </figure>
 
-<figure style="text-align: center; margin: 1.5em 0;">
+<figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/nsminer/nsminer-ftp-credential-stuffing-full.png" | relative_url }}" alt="FTP Credential Stuffing - Full Sequence">
   <figcaption><em>Figure 5: Extended view of password guessing behavior, showing multiple credential combinations being tested</em></figcaption>
 </figure>
