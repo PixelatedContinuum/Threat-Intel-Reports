@@ -917,14 +917,13 @@ Step 4: Verify Removal
 - Check for mutex "Remcos_Mutex_Inj" (should not exist)
 - Review autoruns with Microsoft Autoruns tool
 
-![Mutex found]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/mutex.png" | relative_url }})
-
-*Visual of Mutex found in the code*
-
 Step 5: Restore Security Settings
 - Re-enable UAC (reboot required for full effect)
 - Verify UAC prompts appear after reboot
 ```
+![Mutex found]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/mutex.png" | relative_url }})
+
+*Visual of Mutex found in the code*
 
 **Automated Removal:**
 - Antivirus/EDR should detect as "Remcos RAT" family
