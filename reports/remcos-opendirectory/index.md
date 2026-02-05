@@ -326,6 +326,9 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 - SHA256: ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82
 - Entropy: 6.0211 (moderate obfuscation/packing)
 
+![persists as remcos.exe]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/file deleted and started remcos.png" | relative_url }})
+*Final stage after Backdoor.exe runs, removes itself and all other files*
+
 **Execution Flow:**
 
 1. **Initialization:** Checks GetStartupInfoA for hidden launch, creates mutex "Remcos_Mutex_Inj"
