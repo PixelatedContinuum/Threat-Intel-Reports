@@ -467,6 +467,10 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 
 **MITRE ATT&CK:** T1547.001 (Boot or Logon Autostart: Registry Run Keys)
 
+![setting reg keys for persistence]({{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg keys for persistence.png" | relative_url }})
+
+*Setting reg keys for persistence*
+
 ---
 
 # 4. SURVEILLANCE AND DATA COLLECTION
