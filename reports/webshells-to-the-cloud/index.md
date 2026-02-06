@@ -6,6 +6,12 @@ permalink: /reports/webshells-to-the-cloud/
 hide: true
 ---
 
+**Campaign Identifier:** Webshells-To-Cloud-Modular-Intrusion
+
+**Last Updated:** October 20, 2025
+
+---
+
 # BLUF (Bottom Line Up Front)
 
 ## Executive Summary

@@ -10,6 +10,10 @@ hide: true
 
 **A Comprehensive, Evidence-Based Guide for Security Decision-Makers and Defense Teams**
 
+**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+
+**Last Updated:** January 20, 2026
+
 ---
 
 ## BLUF (Bottom Line Up Front)

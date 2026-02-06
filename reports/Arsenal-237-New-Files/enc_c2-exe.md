@@ -9,6 +9,10 @@ hide: true
 # enc_c2.exe - Rust-Based Ransomware Analysis
 ## A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 
+**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+
+**Last Updated:** January 24, 2026
+
 ---
 
 ## BLUF (Bottom Line Up Front)

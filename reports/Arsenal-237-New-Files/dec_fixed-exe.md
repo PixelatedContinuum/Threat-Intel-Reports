@@ -11,6 +11,10 @@ hide: true
 
 **A Comprehensive Threat Intelligence Guide for Security Decision-Makers**
 
+**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+
+**Last Updated:** January 23, 2026
+
 ---
 
 ## BLUF (Bottom Line Up Front)

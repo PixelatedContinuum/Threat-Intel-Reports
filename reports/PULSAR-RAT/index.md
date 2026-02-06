@@ -8,6 +8,10 @@ hide: true
 
 ## A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 
+**Campaign Identifier:** PULSAR-RAT-185.208.159.182
+
+**Last Updated:** December 1, 2025
+
 ---
 
 # BLUF (Bottom Line Up Front)

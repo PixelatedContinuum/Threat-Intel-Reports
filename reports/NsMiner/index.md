@@ -6,6 +6,12 @@ permalink: /reports/nsminer-cryptojacker/
 hide: true
 ---
 
+**Campaign Identifier:** NsMiner-125.19.150.122-Cryptojacking
+
+**Last Updated:** February 2, 2026
+
+---
+
 # Malware Analysis Report: NsMiner Cryptojacker
 
 ## 1. Executive Summary

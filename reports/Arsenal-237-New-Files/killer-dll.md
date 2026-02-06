@@ -8,6 +8,10 @@ hide: true
 
 > **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing the Arsenal-237 malware development and testing repository. killer.dll is a defense evasion module designed to systematically terminate security products using the BYOVD (Bring Your Own Vulnerable Driver) technique. This module operates as Stage 2 of a two-stage attack chain, with lpe.exe (privilege escalation) delivering killer.dll as its payload. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
+**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+
+**Last Updated:** January 24, 2026
+
 ---
 
 # BLUF (Bottom Line Up Front)

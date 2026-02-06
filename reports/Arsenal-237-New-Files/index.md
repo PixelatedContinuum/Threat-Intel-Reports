@@ -6,6 +6,12 @@ permalink: /reports/arsenal-237-new-files/
 hide: true
 ---
 
+**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+
+**Last Updated:** January 27, 2026
+
+---
+
 ## Report Context: New Files from Arsenal-237 Directory
 
 **This report analyzes 11 NEW malware samples** recently added to the same open directory (109.230.231.37) that was previously documented in early January 2026. These newly dropped files represent significant evolution of the Arsenal-237 toolkit with advanced capabilities.

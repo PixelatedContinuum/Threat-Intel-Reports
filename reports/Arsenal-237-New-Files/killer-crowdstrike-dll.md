@@ -8,6 +8,10 @@ hide: true
 
 > **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing the Arsenal-237 malware development and testing repository. killer_crowdstrike.dll is a specialized variant of the killer.dll defense evasion module, specifically reconfigured to target CrowdStrike Falcon endpoint detection and response (EDR). This variant demonstrates threat actor modularity-the underlying attack code is recycled from the generic killer.dll, with only the target process list updated. This module operates as Stage 2 of a two-stage attack chain, with lpe.exe (privilege escalation) delivering killer_crowdstrike.dll as its payload. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
+**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+
+**Last Updated:** January 18, 2026
+
 ---
 
 # BLUF (Bottom Line Up Front)

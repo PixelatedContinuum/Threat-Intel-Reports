@@ -6,6 +6,12 @@ permalink: /reports/quasar-xworm-powershell/
 hide: true
 ---
 
+**Campaign Identifier:** QuasarRAT-Xworm-PowerShell-Campaign
+
+**Last Updated:** October 17, 2025
+
+---
+
 # BLUF (Bottom Line Up Front)
 
 ## Executive Summary

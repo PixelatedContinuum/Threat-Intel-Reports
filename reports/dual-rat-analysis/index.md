@@ -6,6 +6,12 @@ permalink: /reports/dual-rat-analysis/
 hide: true
 ---
 
+**Campaign Identifier:** Dual-RAT-185.208.159.182-Quasar-NjRAT
+
+**Last Updated:** December 6, 2025
+
+---
+
 > **Investigation Continuation Note**: This analysis is a continuation of the original [PULSAR RAT (server.exe)]({{ "/reports/PULSAR-RAT/" | relative_url }}) investigation. While analyzing the original server.exe sample over several weeks, two additional files appeared in the investigation directory at IP `185.208.159.182`. These new samples (client.exe and server (1).exe) suggest the threat actors may be testing or retooling their capabilities with different RAT implementations.
 
 ---
