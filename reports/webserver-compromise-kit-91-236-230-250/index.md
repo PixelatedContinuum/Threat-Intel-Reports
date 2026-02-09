@@ -422,7 +422,7 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 
 ### Detection Summary
 
-**Complete coverage in:** [Detection Rules & Hunting Queries]({{hunting-detections/webserver-compromise-kit-91-236-230-250-detections.md}})
+**Complete coverage in:** [Detection Rules & Hunting Queries]({{ "/hunting-detections/webserver-compromise-kit-91-236-230-250-detections" | relative_url }})
 
 **Includes:** YARA, Sigma, Suricata, EDR queries
 
@@ -504,7 +504,7 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
 | C&C | T1071.001/004 | HTTPS/DNS tunneling |
 | C&C | T1090.001 | SOCKS proxy |
 
-**Complete IOC file:** [webserver-compromise-kit-91-236-230-250-iocs.json]({{ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json}})
+**Complete IOC file:** [webserver-compromise-kit-91-236-230-250-iocs.json]({{ "/ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json" | relative_url }})
 
 ---
 
