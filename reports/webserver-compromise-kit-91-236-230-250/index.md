@@ -120,7 +120,7 @@ The reverse proxy capabilities (DNS tunneling, WebSocket encapsulation) indicate
 - **True Type:** ASP.NET Web Page (`.aspx`) masquerading as image
 - **Language:** C# (ASP.NET)
 - **Malware Family:** InsomniaShell (reverse shell variant)
-- **SHA-1:** 238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738
+- **SHA-256:** 238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738
 
 **Hardcoded Configuration:**
 - **C2 IP:** 91.236.230.250
@@ -466,9 +466,7 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
 **SHA-256:**
 - `8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d` (PrintSpoofer.exe)
 - `ffc6662c5d68db31b5d468460e4bc3be2090d7ba3ee1e47dbe2803217bf424a9` (rev.exe)
-
-**SHA-1:**
-- `188098b9caf3bc4d1b68dcad50d2e1cbd2e9d519` (a.png)
+- `238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738` (a.png)
 
 ### Network Indicators
 
