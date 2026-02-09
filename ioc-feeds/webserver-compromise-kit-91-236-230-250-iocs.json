@@ -1,0 +1,313 @@
+{
+  "metadata": {
+    "malware_name": "OpenDirectory Compromise Toolkit",
+    "incident_type": "Web Server Compromise + Privilege Escalation",
+    "report_date": "2026-02-08",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "WHITE",
+    "campaign_id": "WebServer-Compromise-Kit-91.236.230.250"
+  },
+  "file_hashes": {
+    "md5": [
+      "108da75de148145b8f056ec0827f1665",
+      "032300082d8bc63b3d0a7f3f3f83f5d1"
+    ],
+    "sha1": [
+      "188098b9caf3bc4d1b68dcad50d2e1cbd2e9d519",
+      "c745d65554d946702f4484d47d6a4606c12c53e9"
+    ],
+    "sha256": [
+      "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
+      "ffc6662c5d68db31b5d468460e4bc3be2090d7ba3ee1e47dbe2803217bf424a9",
+      "238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738"
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "91.236.230.250",
+        "port": 443,
+        "protocol": "TCP",
+        "purpose": "C2 Server - Reverse Shell Target + Malware Hosting",
+        "first_seen": "2026-02-06",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Hardcoded in a.png reverse shell, hosts open directory with malware toolkit"
+      }
+    ],
+    "ipv6": [],
+    "domains": [],
+    "urls": [
+      {
+        "value": "http://91.236.230.250/",
+        "purpose": "Open Directory - Malware Distribution",
+        "confidence": "HIGH",
+        "notes": "Hosts PrintSpoofer.exe, rev.exe, a.png reverse shell"
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": [
+      {
+        "value": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+        "purpose": "revsocks default User-Agent (IE11/Win7)",
+        "confidence": "HIGH",
+        "notes": "Hardcoded in rev.exe (revsocks), anachronistic for 2026"
+      }
+    ]
+  },
+  "host_indicators": {
+    "file_paths": [
+      "C:\\Users\\Public\\Documents\\PrintSpoofer.exe",
+      "C:\\Users\\Public\\Documents\\rev.exe",
+      "C:\\inetpub\\wwwroot\\a.png",
+      "%TEMP%\\PrintSpoofer.exe",
+      "%TEMP%\\rev.exe"
+    ],
+    "file_names": [
+      {
+        "name": "a.png",
+        "purpose": "ASP.NET Reverse Shell (InsomniaShell variant)",
+        "confidence": "HIGH",
+        "notes": "ASPX disguised as PNG, contains DllImport statements"
+      },
+      {
+        "name": "PrintSpoofer.exe",
+        "purpose": "Privilege Escalation (SeImpersonate abuse)",
+        "confidence": "HIGH",
+        "notes": "Legitimate red team tool abused for post-exploitation"
+      },
+      {
+        "name": "rev.exe",
+        "purpose": "Reverse SOCKS5 Proxy (revsocks v2.8)",
+        "confidence": "HIGH",
+        "notes": "Go binary, supports DNS tunneling and WebSocket"
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [],
+    "scheduled_tasks": [],
+    "named_pipes": [
+      {
+        "pattern": ".*\\\\pipe\\\\spoolss",
+        "purpose": "PrintSpoofer exploitation trigger",
+        "confidence": "HIGH",
+        "notes": "Any pipe ending in 'spoolss' created by non-spoolsv.exe process"
+      }
+    ],
+    "registry_keys": []
+  },
+  "behavioral_indicators": {
+    "processes": [
+      {
+        "parent": "w3wp.exe",
+        "child": "cmd.exe",
+        "purpose": "Web shell command execution",
+        "confidence": "HIGH"
+      },
+      {
+        "parent": "w3wp.exe",
+        "child": "PrintSpoofer.exe",
+        "purpose": "Privilege escalation from IIS context",
+        "confidence": "HIGH"
+      },
+      {
+        "parent": "PrintSpoofer.exe",
+        "child": "cmd.exe",
+        "user": "NT AUTHORITY\\SYSTEM",
+        "purpose": "Elevated shell after privilege escalation",
+        "confidence": "HIGH"
+      },
+      {
+        "process": "rev.exe",
+        "network": "Outbound to C2 on various ports",
+        "purpose": "SOCKS5 proxy establishment",
+        "confidence": "HIGH"
+      }
+    ],
+    "api_calls": [
+      {
+        "process": "w3wp.exe",
+        "api": "WSASocket",
+        "purpose": "Low-level socket creation (web shell evasion)",
+        "confidence": "HIGH"
+      },
+      {
+        "process": "PrintSpoofer.exe",
+        "api": "ImpersonateNamedPipeClient",
+        "purpose": "Token impersonation for privilege escalation",
+        "confidence": "HIGH"
+      },
+      {
+        "process": "PrintSpoofer.exe",
+        "api": "CreateProcessAsUserW",
+        "purpose": "Process creation with stolen SYSTEM token",
+        "confidence": "HIGH"
+      }
+    ],
+    "network_patterns": [
+      {
+        "pattern": "Outbound TCP to 91.236.230.250:443 from w3wp.exe",
+        "purpose": "Reverse shell callback",
+        "confidence": "HIGH"
+      },
+      {
+        "pattern": "High-entropy DNS TXT/NULL queries to single domain",
+        "purpose": "DNS tunneling (revsocks)",
+        "confidence": "MEDIUM"
+      },
+      {
+        "pattern": "WebSocket upgrade from non-browser process",
+        "purpose": "C2 channel obfuscation (revsocks)",
+        "confidence": "MEDIUM"
+      }
+    ],
+    "strings": [
+      {
+        "value": "Spawn Shell...\\n",
+        "file": "a.png",
+        "purpose": "Reverse shell banner/signature",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "SeImpersonatePrivilege",
+        "file": "PrintSpoofer.exe",
+        "purpose": "Privilege check for exploitation",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "github.com/kost/revsocks",
+        "file": "rev.exe",
+        "purpose": "Tool identification",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "[DllImport(\"kernel32.dll\")]",
+        "file": "a.png",
+        "purpose": "P/Invoke signature in ASPX file (web shell)",
+        "confidence": "HIGH"
+      }
+    ]
+  },
+  "mitre_attack_mapping": [
+    {
+      "tactic": "Initial Access",
+      "technique_id": "T1190",
+      "technique_name": "Exploit Public-Facing Application",
+      "evidence": "a.png web shell deployment indicates exploitation of web server vulnerability",
+      "confidence": "HIGH"
+    },
+    {
+      "tactic": "Execution",
+      "technique_id": "T1059.003",
+      "technique_name": "Command and Scripting Interpreter: Windows Command Shell",
+      "evidence": "cmd.exe spawned by w3wp.exe and PrintSpoofer.exe",
+      "confidence": "HIGH"
+    },
+    {
+      "tactic": "Privilege Escalation",
+      "technique_id": "T1134.001",
+      "technique_name": "Access Token Manipulation: Token Impersonation/Theft",
+      "evidence": "PrintSpoofer.exe uses ImpersonateNamedPipeClient to steal SYSTEM token",
+      "confidence": "HIGH"
+    },
+    {
+      "tactic": "Defense Evasion",
+      "technique_id": "T1036.008",
+      "technique_name": "Masquerading: Masquerade File Type",
+      "evidence": "a.png is ASPX disguised as image file",
+      "confidence": "HIGH"
+    },
+    {
+      "tactic": "Command and Control",
+      "technique_id": "T1071.001",
+      "technique_name": "Application Layer Protocol: Web Protocols",
+      "evidence": "HTTPS reverse shell to 91.236.230.250:443, WebSocket support in revsocks",
+      "confidence": "HIGH"
+    },
+    {
+      "tactic": "Command and Control",
+      "technique_id": "T1071.004",
+      "technique_name": "Application Layer Protocol: DNS",
+      "evidence": "revsocks DNS tunneling capability via chashell/dnstun libraries",
+      "confidence": "MEDIUM"
+    },
+    {
+      "tactic": "Command and Control",
+      "technique_id": "T1090.001",
+      "technique_name": "Proxy: Internal Proxy",
+      "evidence": "revsocks reverse SOCKS5 proxy for internal network access",
+      "confidence": "HIGH"
+    }
+  ],
+  "detection_opportunities": [
+    {
+      "type": "Network",
+      "signature": "Outbound TCP connection to 91.236.230.250:443 from IIS worker process",
+      "tool": "Firewall/IDS",
+      "priority": "CRITICAL"
+    },
+    {
+      "type": "Network",
+      "signature": "TCP payload contains 'Spawn Shell...' banner",
+      "tool": "Suricata/Snort",
+      "priority": "CRITICAL"
+    },
+    {
+      "type": "Host",
+      "signature": "w3wp.exe spawns cmd.exe with redirected I/O handles",
+      "tool": "EDR/Sysmon",
+      "priority": "CRITICAL"
+    },
+    {
+      "type": "Host",
+      "signature": "Process creates named pipe matching pattern '.*\\\\pipe\\\\spoolss'",
+      "tool": "Sysmon Event ID 17/18",
+      "priority": "HIGH"
+    },
+    {
+      "type": "Host",
+      "signature": "File named *.png contains string '[DllImport('",
+      "tool": "File scanning/YARA",
+      "priority": "HIGH"
+    },
+    {
+      "type": "Host",
+      "signature": "Process command line contains '-connect' and '-socks' flags (revsocks)",
+      "tool": "Sysmon Event ID 1",
+      "priority": "HIGH"
+    },
+    {
+      "type": "Network",
+      "signature": "User-Agent 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0)' from non-browser",
+      "tool": "Proxy logs/EDR",
+      "priority": "MEDIUM"
+    }
+  ],
+  "ioc_relationships": {
+    "kill_chain": [
+      {
+        "stage": "Initial Compromise",
+        "iocs": ["a.png", "91.236.230.250"],
+        "notes": "Web server compromised, reverse shell deployed"
+      },
+      {
+        "stage": "Post-Exploitation Download",
+        "iocs": ["http://91.236.230.250/", "PrintSpoofer.exe", "rev.exe"],
+        "notes": "Attacker downloads privilege escalation and pivoting tools from open directory"
+      },
+      {
+        "stage": "Privilege Escalation",
+        "iocs": ["PrintSpoofer.exe", "SeImpersonatePrivilege", "\\\\pipe\\\\spoolss"],
+        "notes": "Escalation from IIS service account to SYSTEM"
+      },
+      {
+        "stage": "Establish Persistence/Pivot",
+        "iocs": ["rev.exe", "SOCKS5 port 1080"],
+        "notes": "Reverse SOCKS proxy for lateral movement and persistent access"
+      }
+    ]
+  },
+  "notes": "This IOC set represents a complete post-exploitation toolkit deployed after web server compromise. The combination of reverse shell, privilege escalation, and network pivoting tools indicates a sophisticated, manual intrusion rather than automated scanning. All three tools are legitimate red team utilities repurposed for malicious use, complicating attribution."
+}
+

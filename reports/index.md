@@ -16,7 +16,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 ---
 
 # February 2026
-
+- [Webserver Compromise Kit 91.236.230. 250]({{ "/reports/webserver-compromise-kit-91-236-230-250/" | relative_url }})
 - [Remcos RAT OpenDirectory Campaign - Technical Analysis & Business Risk Assessment]({{ "/reports/remcos-opendirectory/" | relative_url }})
 - [NsMiner: Multi-Stage Cryptojacking Operation - Technical Analysis]({{ "/reports/nsminer-cryptojacker/" | relative_url }})
 
