@@ -24,7 +24,7 @@ This report analyzes a sophisticated post-exploitation toolkit discovered on an 
 
 - **Multi-Stage Intrusion Kit:** Three coordinated tools (ASP.NET reverse shell, privilege escalation, network pivoting)
 - **Critical Infrastructure:** Open directory at `http://91.236.230.250/` providing public access to complete toolkit
-- **Malicious Infrastructure:** Single IP address (91.236.230.250) hosted on Contabo AS51167 (Germany)
+- **Malicious Infrastructure:** Single IP address (91.236.230.250) hosted on BlueVPS AS62005 (United States)
 
 **Threat Assessment:**
 
@@ -330,30 +330,31 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 
 **Primary C2 Server:**
 - **IP:** 91.236.230.250
-- **ASN:** AS51167 (Contabo GmbH)
-- **Location:** Germany
-- **Cost:** €5-10/month
+- **ASN:** AS62005 (BlueVPS OU)
+- **Location:** United States (Organization: Estonia)
+- **Cost:** $5-15/month
 - **Status:** Active (Feb 8, 2026)
 
 **Dual Purpose:**
 1. C2 Server (port 443)
 2. Malware Distribution (open directory)
 
-### Hosting Provider: Contabo AS51167
+### Hosting Provider: BlueVPS OU AS62005
 
-**Abuse Tolerance:** MODERATE
+**Abuse Tolerance:** MODERATE-LOW
 
-**Legitimate EU provider with:**
-- German jurisdiction (GDPR compliance)
-- Abuse contact: abuse@contabo.com
-- Slow response (24-72 hours)
-- Bitcoin payment accepted
+**VPS hosting provider characteristics:**
+- Estonian company (RIPE registry)
+- US-based IP infrastructure
+- Abuse contact: [email protected]
+- Typical response time: 24-72 hours
+- Payment methods include cryptocurrency
 
 **NOT bulletproof hosting** - will respond to abuse complaints.
 
 **Expected Lifespan:**
 - If reported: 48-96 hours
-- If unreported: Months
+- If unreported: Weeks to months
 
 ### Infrastructure Pivoting
 
@@ -520,7 +521,7 @@ Add to threat feeds
 
 **2. Abuse Reporting:**
 ```
-Email: abuse@contabo.com
+Email: [email protected]
 Include: Malware hashes, screenshots
 ```
 
@@ -571,7 +572,7 @@ Set-Service Spooler -StartupType Disabled
 
 ### Infrastructure
 
-- RIPE NCC (AS51167)
+- RIPE NCC (AS62005)
 - VirusTotal Relations
 - Certificate Transparency (crt.sh)
 
