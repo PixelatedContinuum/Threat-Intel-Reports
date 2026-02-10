@@ -85,19 +85,19 @@ The presence of an open directory suggests either operational security failure o
 ### Tool Prevalence & Threat Context
 
 **PrintSpoofer:**
-- Used in >70% of web server compromises (2024-2026 estimates)
-- Included in Metasploit, Cobalt Strike, Empire frameworks
+- Commonly used privilege escalation tool in post-exploitation scenarios
+- Integrated into Metasploit (getsystem -t 5) and available for Cobalt Strike (SpoolSystem CNA)
 - Standard tool in penetration testing arsenals
 
 **revsocks:**
-- Increasing prevalence (Go-based tools trend 2023-2026)
-- Used by penetration testers, red teams, APT groups, cybercriminals
-- Cited in multiple threat intelligence reports (generic usage, not actor-specific)
+- Go-based reverse proxy tool gaining adoption in threat landscape
+- Used by penetration testers, red teams, APT groups, and cybercriminals
+- Documented in threat intelligence reports (generic usage, not actor-specific)
 
 **InsomniaShell (ASP.NET Web Shell):**
-- Common web shell family (variants widespread 2015-2026)
-- Used in web server compromises post-file-upload vulnerabilities
-- Generic C# ASPX shell (numerous forks/variants in wild)
+- Common web shell family with multiple variants in circulation
+- Used in web server compromises following file-upload vulnerabilities
+- Generic C# ASPX shell with numerous forks and variants observed in the wild
 
 **Operational Implications:**
 
@@ -347,14 +347,14 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 - Estonian company (RIPE registry)
 - US-based IP infrastructure
 - Abuse contact: [email protected]
-- Typical response time: 24-72 hours
+- Abuse response time: Generally 24-72 hours (varies by case)
 - Payment methods include cryptocurrency
 
-**NOT bulletproof hosting** - will respond to abuse complaints.
+**NOT bulletproof hosting** - typically responds to abuse complaints.
 
-**Expected Lifespan:**
-- If reported: 48-96 hours
-- If unreported: Weeks to months
+**Estimated Infrastructure Lifespan:**
+- If reported: Typically 48-96 hours for takedown
+- If unreported: May persist for weeks to months
 
 ### Infrastructure Pivoting
 
@@ -410,10 +410,10 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 - No distinctive operational patterns
 
 **Alternative Hypotheses:**
-- Low-skill cybercriminal (35%)
-- Initial Access Broker (30%)
-- Staging/testing infrastructure (20%)
-- Penetration tester (15%)
+- Low-skill cybercriminal using publicly available tools
+- Initial Access Broker staging infrastructure for resale
+- Testing or staging infrastructure for planned operations
+- Penetration tester with inadequate operational security
 
 **Recommendation:** Treat as generic post-exploitation threat. Focus on technique-based detection.
 
