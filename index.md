@@ -8,17 +8,21 @@ position: 1
      alt="The Hunter's Ledger Banner" 
      style="display:block; margin:0 auto; width:100%; height:300px; object-fit:cover; margin-bottom:2rem;">
 
-Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  
-The goal is to present findings from my own research and hunting that are actionable for detection engineering, threat hunting, and incident response teams. Feel free to contribute or just reach out with information, questions, or suggestions!
+Welcome to The Hunter's Ledger — a repository of original threat intelligence research produced by a solo analyst and published for the defender community. Every report here starts with hands-on malware analysis and ends with structured, evidence-based intelligence: technically deep enough to trust, clear enough to act on. The mission isn't just to document findings — it's to publish them while they're still relevant, before the threats they describe are already yesterday's problem.
+
+Feel free to contribute or reach out with information, questions, or suggestions!
 
 ---
 
 ## Mission
-- Share reproducible research and technical reports from my own investigations and hunting  
-- Provide IOCs that can be used in threat hunting or detection engineering (Indicators of Compromise)  
-- Map findings to MITRE ATT&CK techniques to assist in making findings as useful as possible to anyone  
-- Publish detection logic for the threats in my reports where possible (Sigma, YARA, Splunk, etc.)  
-- Above all, enable community collaboration and knowledge transfer so everyone is safer
+
+These are the principles behind every piece of work on this site:
+
+- Share reproducible research and technical reports from my own investigations and hunting
+- Provide IOCs formatted for direct ingestion into threat hunting and detection engineering workflows
+- Map findings to MITRE ATT&CK techniques to give defenders a common language for what they're looking at
+- Publish detection logic — Sigma, YARA, Suricata — written to public repository submission standards
+- Above all, publish findings while they're still relevant, not months after threats are already active
 
 > **Note:** This is not a collection of open source intel reports, IOCs, or TTPs.  
 > Findings are from my own research as well as others that contribute, though they may overlap with known threats.  

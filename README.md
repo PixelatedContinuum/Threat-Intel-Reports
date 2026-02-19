@@ -1,125 +1,74 @@
 # The Hunter's Ledger
 
-Welcome to my repository of threat hunting, malware analysis, and reverse engineering reports.  
-The goal is to present findings from my own research and hunting that are actionable for detection engineering, threat hunting, and incident response teams.
+This is a repository of original threat intelligence research — malware analysis, reverse engineering findings, detection rules, and validated IOC feeds — produced by a solo analyst and published for the broader defender community.
+
+Every report on this site starts with hands-on analysis: sandbox runs, static examination, behavioral observation, network captures. What comes out the other end is structured, evidence-based intelligence written to be technically deep enough to trust and clear enough to act on. Not surface-level summaries, and not dense academic papers — something in between that a SOC analyst, detection engineer, or threat hunter can actually use.
 
 ---
 
 ## Mission
-- Share reproducible research and technical reports from my own research and hunting  
-- Provide IOCs that can be used in threat hunting or detection engineering (Indicators of Compromise)  
-- Map findings to MITRE ATT&CK techniques to assist in making my findings as useful as possible  
-- Publish detection logic for the threats in my reports (Sigma, YARA, Splunk, etc.)  
-- Above all, enable community collaboration and knowledge transfer  
+- Share reproducible research and technical reports from my own investigations and hunting
+- Provide IOCs formatted for direct ingestion into threat hunting and detection engineering workflows
+- Map findings to MITRE ATT&CK techniques to give defenders a common language for what they're looking at
+- Publish detection logic — Sigma, YARA, Suricata — written to public repository submission standards
+- Above all, publish findings while they're still relevant, not months after threats are already active
 
-> **Note:** This is not a collection of open source intel reports, IOCs, or TTPs.  
-> These findings are from my own research and hunting, though they may overlap with known threats.  
-> If you are looking for an open source collection of intel, let me know — I can help point you there.
+> **Note:** This is original research, not a collection of open-source intel reports, IOCs, or TTPs. Findings are from my own analysis, though they may overlap with known threats. Looking for an open-source collection? Reach out — I can point you in the right direction.
+
+---
+
+## How the Intelligence Is Produced
+
+The reports on this site are produced using a custom-built AI-assisted workflow — a multi-agent system I researched, built, and refined over months of real analysis work. It handles the structured, repeatable parts of intelligence production so that my time stays focused on the analytical work that actually requires human judgment.
+
+[Behind the Reports: How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence](https://pixelatedcontinuum.github.io/Threat-Intel-Reports/behind-the-reports/)
 
 ---
 
 ## About Me
-
-- [About Me](/about-me)
+- [About Me](https://pixelatedcontinuum.github.io/Threat-Intel-Reports/about-me/)
 
 ---
 
 ## Repository Structure
-- [Reports](/reports) → Detailed malware analysis and reverse engineering notes.  
+- [Reports](/reports) → Full threat intelligence reports: technical analysis, MITRE mapping, attribution assessment, and defender guidance
   *License: All Rights Reserved — free to read, but reuse requires written permission.*
 
-- [Hunting Detections](/hunting-detections) → Sigma/YARA rules and detection logic for SIEM/EDR platforms.  
+- [Hunting Detections](/hunting-detections) → YARA, Sigma, and Suricata rules written to public repository submission standards
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
 
-- [IOC Feeds](/ioc-feeds) → Indicators of Compromise (hashes, domains, IPs, paths) in JSON/CSV feeds.  
+- [IOC Feeds](/ioc-feeds) → Validated indicators of compromise (hashes, domains, IPs, registry keys) in structured JSON feeds
   *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
-
-- [Report Templates]({{ site.baseurl }}/report-templates/) → Consistent format for reports
-
----
-
-## Report Format
-Each report follows a consistent structure: [Report Templates](/report-templates)
-
-### Executive Summary
-High-level overview for quick triage.
-
-### Technical Details
-- File structure analysis (PE headers, offsets, payloads)  
-- Reverse engineering notes (entry points, obfuscation, persistence)  
-- Behavior observed (networking, privilege escalation, anti-analysis)  
-- MITRE ATT&CK mapping to observed behaviors  
-
-### IOCs
-
-| Type   | Value                   |
-|--------|-------------------------|
-| SHA256 | abc123...               |
-| Domain | malicious-example[.]com |
-| IP     | 192.168.1.50            |
-
-### Detection Opportunities
-- Sigma/YARA rules  
-- Splunk/Elastic queries  
 
 ---
 
 ## Usage
-- Import IOC feeds into your SIEM/EDR and threat hunting workflows  
-- Adapt detection logic for your environment  
-- Use ATT&CK mappings for threat modeling or attack simulation  
-- Reference reverse engineering notes for deeper analysis  
-- Import into your CTI platform of choice  
+- Import IOC feeds directly into your SIEM, EDR, or CTI platform
+- Deploy detection rules as-is or adapt them for your environment's telemetry
+- Use ATT&CK mappings for threat modeling, detection gap analysis, or attack simulation
+- Reference technical analysis for deeper investigation or incident context
 
 ---
 
 ## Contributing
-Contributions are welcome!  
-- Fork the repo and submit a PR with new reports, detections, or IOCs.  
-- Follow the report format for consistency.  
-- Or just contact me and we can discuss and I can post for you. 
+Contributions are welcome.
+- Fork the repo and submit a PR with new reports, detections, or IOCs
+- Follow the report format for consistency
+- Or reach out directly — I'm happy to collaborate and post on your behalf as co-author
 
 ---
 
 ## Resources
-- [MITRE ATT&CK](https://attack.mitre.org/)  
-- [Sigma Rules](https://github.com/SigmaHQ/sigma)  
-- [YARA](https://virustotal.github.io/yara/)  
+- [MITRE ATT&CK](https://attack.mitre.org/)
+- [Sigma Rules](https://github.com/SigmaHQ/sigma)
+- [YARA](https://virustotal.github.io/yara/)
 
 ---
 
 ## License
-# License for Reports Section
 
-© 2025 Joseph. All rights reserved.
+**Reports:** © 2025 Joseph. All rights reserved. Free to read and reference, but reuse requires written permission.
 
-The reports in [Reports](/reports) are made publicly available for **reading and reference purposes only**.  
-They may not be reproduced, redistributed, modified, or incorporated into other projects without **prior written permission** from the author.
+**Detections and IOC Feeds:** Licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). Free to use in your environment, not for commercial purposes. Attribution required.
 
-## Permissions
-- You may view and reference the reports for personal or organizational research.
-- You may cite the reports in academic or professional work with proper attribution.
-
-## Restrictions
-- Redistribution of the reports in whole or in part is prohibited without written consent.
-- Commercial use, including incorporation into products, services, or paid publications, is prohibited without written consent.
-- Modification or derivative works based on these reports are prohibited without written consent.
-
-## Contact
-For permissions or licensing inquiries, please contact the author directly.
-
-# License for Detections and IOCs Sections
-
-The detection rules in [Hunting Detections](/hunting-detections) and IOC feeds in [IOC Feeds](/ioc-feeds) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
-
-## Permissions
-- You are free to use, adapt, and share the detection rules and IOC feeds for **non-commercial purposes**.
-- You must provide appropriate attribution to the author when using or adapting the work.
-
-## Restrictions
-- **Commercial use is prohibited.** You may not sell, license, or incorporate these detections/IOCs into paid products or services without prior written permission.
-- Redistribution must include attribution and a link back to this repository.
-
-## Attribution
-Please credit as:  
-“Threat Intelligence Reports by Joseph "(https://github.com/PixelatedContinuum/Threat-Intel-Reports/)”
+Please credit as: "Threat Intelligence Reports by Joseph" (https://github.com/PixelatedContinuum/Threat-Intel-Reports/)
