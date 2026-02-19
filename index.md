@@ -32,6 +32,14 @@ The goal is to present findings from my own research and hunting that are action
 
 ---
 
+## Behind the Reports
+
+Curious about how the intelligence on this site is produced? This page explains the AI-assisted workflow built to turn malware analysis into timely, trustworthy threat intelligence — including the agents, skill frameworks, hooks, and design principles behind every report.
+
+- [Behind the Reports: How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence]({{ site.baseurl }}/behind-the-reports/)
+
+---
+
 ## Repository Structure
 
 - [Reports]({{ site.baseurl }}/reports/) → Detailed malware analysis and reverse engineering notes
