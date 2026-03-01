@@ -36,6 +36,7 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 - [Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)](arsenal-237-full_test_enc-exe.json)
 
 ### Other Threat Intelligence Reports
+- [Sliver C2 / ScareCrow Loader Open Directory Kit (45.94.31.220)](sliver-open-directory-iocs.json)
 - [Webserver Compromise Kit 91.236.230. 250](webserver-compromise-kit-91-236-230-250-iocs.json)
 - [Remcos RAT OpenDirectory Campaign (203[.]159[.]90[.]147)](remcos-opendirectory-campaign.json)
 - [NsMiner Cryptojacker](nsminer-cryptojacker.json)

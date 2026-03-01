@@ -1,0 +1,563 @@
+{
+  "metadata": {
+    "report_id": "WebServer-Compromise-Kit-45.94.31.220",
+    "report_date": "2026-03-01",
+    "malware_name": "Sliver C2 with ScareCrow Loader",
+    "malware_family": "Sliver C2 + ScareCrow EDR Evasion Kit",
+    "analysis_source": "Exposed open directory at 45.94.31.220 — attacker build workspace forensics",
+    "analyst": "The Hunters Ledger",
+    "tlp": "WHITE",
+    "confidence_overview": "HIGH — Direct analysis of recovered attacker build artifacts, source code, compiled binaries, and operational logs",
+    "confidence_note": "DEFINITE indicators are from hardcoded values, recovered source code, or binary analysis; HIGH indicators are inferred from code logic with strong supporting evidence; MODERATE indicators involve assumptions not directly confirmed in execution; canary indicators are explicitly noted as non-malicious",
+    "ioc_count_summary": {
+      "file_hashes_md5": 2,
+      "file_hashes_sha1": 2,
+      "file_hashes_sha256": 2,
+      "ipv4": 1,
+      "domains": 2,
+      "urls": 2,
+      "certificates": 1,
+      "file_paths": 3,
+      "memory_indicators": 2,
+      "string_iocs": 8,
+      "behavioral_indicators": 8,
+      "total": 33
+    }
+  },
+
+  "file_indicators": {
+    "hashes": [
+      {
+        "filename": "OneDriveSync.exe",
+        "md5": "9559366a6f6874ad914e308a34903c77",
+        "sha1": "67bb390c2dad7ebd9e9f706a6f2ba42e4cbcbee7",
+        "sha256": "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b",
+        "confidence": "DEFINITE",
+        "description": "Primary Sliver C2 beacon; ScareCrow-wrapped; process hollowing variant; signed with fraudulent VMware certificate",
+        "context": "Analyzed sample recovered from open directory. Role: Post-delivery beacon payload. Capabilities: Sliver full-featured beacon with injected shellcode (Donut-wrapped). Evasion techniques: PPID spoofing, call stack spoofing, HalosGate syscall invocation, process hollowing injection.",
+        "size_bytes": 32786672,
+        "file_type": "Portable Executable (x64)",
+        "pe_timestamp_build": "2026-02-14T15:01:23Z",
+        "pe_characteristics": "Code signed with fraudulent 'VMware, Inc. Code Signing' cert (serial: 659EEB5AA4A489FB238993AF259D23F057F6D6D6)",
+        "hunting_value": "CRITICAL",
+        "detection_value": "Executable hash combined with certificate serial provides definite identification",
+        "first_seen": "2026-02-14",
+        "tags": ["sliver-c2", "scare-crow", "process-hollowing", "ppid-spoofing", "code-signing-fraud"],
+        "false_positive_risk": "NONE",
+        "notes": "Polymorphic builds may produce different hashes; use certificate serial (659EEB5AA4A489FB238993AF259D23F057F6D6D6) as more durable indicator. File can be executed to trigger full kill chain but requires elevated privileges for some evasion techniques."
+      },
+      {
+        "filename": "compressed.exe",
+        "md5": "f587753c0a46688af2ffea00573192e2",
+        "sha1": "8f27695dfd4f29e872c1661cdf225120182dd05b",
+        "sha256": "d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea",
+        "confidence": "DEFINITE",
+        "description": "UPX-compressed alternate build of OneDriveSync.exe beacon; identical payload, different packing",
+        "context": "Alternate format of primary beacon. Same Sliver configuration, same C2 endpoints, same injection target. UPX compression may evade hash-based detection; use behavioral + C2 infrastructure indicators for hunting.",
+        "size_bytes": 15869168,
+        "file_type": "Portable Executable (x64, UPX-compressed)",
+        "pe_timestamp_build": "2026-02-14T15:01:23Z",
+        "pe_characteristics": "Code signed with fraudulent 'VMware, Inc. Code Signing' cert (serial: 659EEB5AA4A489FB238993AF259D23F057F6D6D6)",
+        "hunting_value": "CRITICAL",
+        "detection_value": "Compressed format may bypass some signature-based detection; decompression reveals identical OneDriveSync core",
+        "first_seen": "2026-02-14",
+        "tags": ["sliver-c2", "scare-crow", "upx-packed", "process-hollowing"],
+        "false_positive_risk": "NONE",
+        "notes": "Same C2 configuration as OneDriveSync.exe. Compression ratio indicates 50% size reduction; use for bandwidth-constrained delivery scenarios."
+      }
+    ]
+  },
+
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "45.94.31.220",
+        "confidence": "HIGH",
+        "description": "C2 server, payload delivery server, attacker build workspace",
+        "context": "Primary infrastructure. Hosts: (1) Sliver C2 listeners on ports 443, 8443; (2) HTTP payload delivery server on port 8000; (3) build server running automated build pipeline. All attacker functions centralized on single IP — significant operational risk but simplifies detection.",
+        "purpose": "C2 callbacks, stager payload delivery, attacker workspace",
+        "ports": [443, 8000, 8443],
+        "asn": "AS210558 (1337 Services GmbH, Netherlands)",
+        "asn_verification_note": "AS210558 confirmed from Krebs on Security / DOJ Operation Talent reporting; should be verified against current RIPE NCC data",
+        "hosting_provider": "1337 Services GmbH",
+        "country": "Netherlands",
+        "provider_reputation": "Bulletproof hosting — known tolerance for abuse reports and offensive infrastructure",
+        "hunting_value": "CRITICAL",
+        "detection_action": "BLOCK outbound connections; hunt for connections from internal systems",
+        "first_seen": "2026-02-14T15:01:23Z",
+        "source": "build.log, stager.ps1, Sliver-command.txt (3 independent sources)",
+        "tags": ["c2-server", "payload-delivery", "sliver-infrastructure"],
+        "false_positive_risk": "LOW",
+        "notes": "Open directory indexed at 21:45 UTC on 2026-02-14 (6.75 hours post-build). Infrastructure may have been re-established with new IOCs if operator became aware of exposure. Monitor for similar hosting patterns."
+      }
+    ],
+    "domains": [
+      {
+        "value": "mailuxe.net",
+        "confidence": "HIGH",
+        "description": "Primary and fallback Sliver C2 domain (registered domain, attacker-controlled)",
+        "context": "Primary C2 endpoint specified in Sliver-command.txt with ports 443 (primary) and 8443 (fallback). Resolves to 45.94.31.220. Evidence of deliberate registration (not DDNS) suggests domain preparation and planned persistence. Used across multiple beacon variants.",
+        "purpose": "C2 beacon callbacks",
+        "ports": [443, 8443],
+        "dns_resolution": "45.94.31.220",
+        "whois_status": "Registered domain (not dynamic DNS) — indicates deliberate infrastructure preparation",
+        "hunting_value": "CRITICAL",
+        "detection_action": "BLOCK; hunt for DNS queries; use sinkholing when available",
+        "first_seen": "2026-02-14T15:01:23Z",
+        "source": "Sliver-command.txt, build.log, Sliver configuration hardcoded in beacon",
+        "tags": ["c2-domain", "sliver-c2", "malware-infrastructure"],
+        "false_positive_risk": "NONE",
+        "notes": "If domain is sinkholed by defensive parties, check for fallback to mailmassange.duckdns.org"
+      },
+      {
+        "value": "mailmassange.duckdns.org",
+        "confidence": "HIGH",
+        "description": "Backup/fallback Sliver C2 domain (DuckDNS dynamic DNS service)",
+        "context": "Configured as backup C2 in Sliver shellcode. DuckDNS provides infrastructure resilience: if primary domain (mailuxe.net) is blocked or sinkholed, attacker can redirect beacon traffic to alternate IP via DuckDNS dynamic update. Free service, anonymous creation, trivially changeable — typical cybercrime operational security.",
+        "purpose": "C2 beacon callbacks (fallback/backup)",
+        "ports": [443],
+        "dns_resolution": "Dynamic (DuckDNS service — resolves to attacker-controlled IP)",
+        "provider": "DuckDNS (free dynamic DNS service)",
+        "infrastructure_resilience": "MODERATE — provides fallback if primary domain is burned",
+        "hunting_value": "HIGH",
+        "detection_action": "BLOCK; monitor DNS queries; DuckDNS subdomains are trivially created/replaced",
+        "first_seen": "2026-02-14T15:01:23Z",
+        "source": "Sliver-command.txt, Sliver beacon configuration (hardcoded fallback domain)",
+        "tags": ["c2-domain", "duckdns", "dynamic-dns", "backup-c2", "sliver-c2"],
+        "false_positive_risk": "NONE",
+        "notes": "DuckDNS subdomains can be rapidly re-assigned to new attacker infrastructure. Detect by behavioral pattern (Sliver beacon heartbeat) rather than domain alone."
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://45.94.31.220:8000/OneDriveSync.exe",
+        "confidence": "DEFINITE",
+        "description": "Direct payload download URL; hardcoded in stager.ps1",
+        "context": "Stager script downloads OneDriveSync.exe beacon directly from open directory. URL is hardcoded in stager.ps1 with no dynamic generation or fallback. Beacon binary identical to file recovered from open directory (same hash).",
+        "purpose": "Beacon payload delivery",
+        "port": 8000,
+        "protocol": "HTTP (unencrypted)",
+        "method": "GET request with default User-Agent",
+        "target_filename": "OneDriveSync.exe",
+        "target_destination": "%TEMP%\\update.exe",
+        "hunting_value": "CRITICAL",
+        "detection_action": "BLOCK; hunt for HTTP GET requests to port 8000 with this filename",
+        "first_seen": "2026-02-14T15:01:23Z",
+        "source": "stager.ps1 PowerShell script (hardcoded)",
+        "tags": ["payload-delivery-url", "stager-download", "http-file-server"],
+        "false_positive_risk": "NONE",
+        "notes": "HTTP (not HTTPS) indicates payload delivery prioritizes availability over encryption. Wireshark/network sensors will capture full payload during download."
+      },
+      {
+        "value": "http://45.94.31.220:8000/",
+        "confidence": "HIGH",
+        "description": "Open directory root; exposed attacker build workspace",
+        "context": "Directory listing accessible at 45.94.31.220:8000. Contains 270 files (144 MB): compiled beacons, source code, build logs, certificate files, operational records. No authentication required. Indexed by third-party threat intelligence scanners within 6.75 hours of build completion.",
+        "purpose": "Payload delivery and attacker workspace exposure (operational security failure)",
+        "port": 8000,
+        "protocol": "HTTP",
+        "directory_size_mb": 144,
+        "file_count": 270,
+        "hunting_value": "INFORMATIONAL",
+        "detection_action": "Archive/preserve contents; use for forensic reconstruction; share with threat intelligence community",
+        "first_seen": "2026-02-14T15:09:00Z (estimated build completion)",
+        "source": "opendirectory.png screenshot, stager.ps1 reference",
+        "tags": ["open-directory", "attacker-workspace", "operational-security-failure"],
+        "false_positive_risk": "NONE",
+        "notes": "Directory exposure is the event that enabled recovery of full attacker toolkit. Third-party scanner at port 8080 had already applied malware/exploit tags to multiple artifacts before our analysis."
+      }
+    ],
+    "canary_indicators": [
+      {
+        "value": "intezer.com",
+        "confidence": "CANARY (NOT MALICIOUS)",
+        "description": "Sandbox detection canary domain — used to detect analysis environment",
+        "context": "DNS query to intezer.com is built into Sliver beacon configuration as an anti-sandbox measure. If the beacon resolves intezer.com successfully, it infers it is NOT running in an isolated sandbox and proceeds with C2 operations. Query to this domain is NOT a sign of malicious infrastructure; it is a defensive TTI (Tactics, Techniques, Indicators) evasion check.",
+        "purpose": "Sandbox detection / evasion check",
+        "hunting_value": "NONE (benign indicator of evasion technique)",
+        "detection_action": "DO NOT BLOCK; track for behavioral detection of anti-sandbox activity but do not treat as malicious",
+        "first_seen": "2026-02-14T15:01:23Z",
+        "source": "Sliver beacon configuration (implicit anti-sandbox feature)",
+        "tags": ["canary-domain", "sandbox-evasion", "anti-analysis"],
+        "notes": "Legitimate Sliver feature. Do not confuse with legitimate Intezer services."
+      }
+    ]
+  },
+
+  "host_indicators": {
+    "file_paths": [
+      {
+        "path": "%TEMP%\\update.exe",
+        "confidence": "HIGH",
+        "description": "Primary beacon drop and execution location",
+        "context": "Stager.ps1 downloads OneDriveSync.exe to %TEMP%\\update.exe, then executes via cmd /c start. Process spawned from this location will have PPID spoofing applied (declared parent: sihost.exe). This is the first stage of execution after stager.",
+        "purpose": "Beacon staging and execution",
+        "process_execution": "cmd /c start %TEMP%\\update.exe (or PowerShell invocation)",
+        "parent_process": "Spoofed to sihost.exe; true parent is stager.ps1 execution context (likely cmd.exe or powershell.exe)",
+        "hunting_value": "CRITICAL",
+        "detection_action": "Hunt for: (1) File write to %TEMP%\\update.exe from PowerShell; (2) Process execution from %TEMP%\\update.exe; (3) Mismatched PPID (parent != sihost.exe)",
+        "first_seen": "2026-02-14",
+        "source": "stager.ps1 hardcoded path",
+        "tags": ["drop-path", "beacon-staging", "temp-execution"],
+        "false_positive_risk": "LOW (update.exe in %TEMP% is suspicious but not rare; correlation with PowerShell parent eliminates most false positives)",
+        "notes": "Generic filename 'update.exe' is common benign software; detection requires contextual combination: originating from PowerShell + stager URL pattern + C2 port connection."
+      },
+      {
+        "path": "%TEMP%\\update.tmp",
+        "confidence": "MODERATE",
+        "description": "Process Ghosting temporary file; deleted before process visible",
+        "context": "If process ghosting technique is used, OneDriveSync.exe creates %TEMP%\\update.tmp with FILE_FLAG_DELETE_ON_CLOSE, then calls NtCreateSection(SEC_IMAGE) to load the temp file as process executable. File is deleted before process appears in Process Explorer or task lists — making 'ghosted' process invisible to standard enumeration.",
+        "purpose": "Process Ghosting evasion — hide beacon process from enumeration",
+        "technique": "Process Ghosting (T1564.012 variant) — create process from deleted file",
+        "hunting_value": "HIGH",
+        "detection_action": "Hunt for: (1) CreateFile with DELETE_ON_CLOSE flag in %TEMP%; (2) NtCreateSection(SEC_IMAGE) on temp file; (3) NtCreateProcessEx without corresponding image file on disk",
+        "first_seen": "2026-02-14",
+        "source": "process_ghosting.c source code (recovered from directory)",
+        "tags": ["process-ghosting", "evasion", "temporary-file"],
+        "false_positive_risk": "MODERATE (Process Ghosting is a real evasion technique but rarely used by benign software; pattern match with other indicators eliminates most false positives)",
+        "notes": "Detection requires EDR/ETW visibility; cannot be detected via file system alone (file is deleted)."
+      },
+      {
+        "path": "C:\\Windows\\System32\\sihost.exe",
+        "confidence": "HIGH",
+        "description": "Declared injection target; expected location for beacon injection",
+        "context": "build.log specifies C:\\Windows\\System32\\sihost.exe as the target process for PPID spoofing and injection. If process hollowing succeeds, injected Sliver beacon will run within sihost.exe context, masquerading as legitimate Windows Shell Experience Host process. Real parent (spoofed parent declared in config) will be sihost.exe.",
+        "purpose": "Process injection target for beacon execution",
+        "parent_process": "Spoofed parent declared in PPID spoofing configuration",
+        "injection_method": "Process hollowing (XZ-mode with byte 0x04) — hollow sihost.exe image and inject Donut-wrapped Sliver shellcode",
+        "hunting_value": "CRITICAL",
+        "detection_action": "Hunt for: (1) sihost.exe spawned with mismatched parent (declare parent != actual parent); (2) sihost.exe with injected threads not originating from its own image; (3) sihost.exe with outbound network connections not in normal code path",
+        "first_seen": "2026-02-14",
+        "source": "build.log, ppid_spoof.C source code",
+        "tags": ["injection-target", "ppid-spoofing", "process-hollowing"],
+        "false_positive_risk": "MODERATE (sihost.exe is legitimate process; false positives possible if normal injection occurs for legitimate reasons)",
+        "notes": "sihost.exe = Windows Shell Experience Host; legitimate process but valid injection target. Requires EDR/memory forensics for detection."
+      }
+    ],
+    "certificates": [
+      {
+        "certificate_serial": "659EEB5AA4A489FB238993AF259D23F057F6D6D6",
+        "confidence": "DEFINITE",
+        "description": "Fraudulent VMware code-signing certificate used to sign all campaign binaries",
+        "context": "Self-signed X.509 certificate impersonating 'VMware, Inc. Code Signing'. Generated during build Phase 2 via openssl req -x509. Used to sign OneDriveSync.exe, compressed.exe, and other campaign binaries. Serial number is unique and deterministic within this campaign.",
+        "subject_cn": "VMware, Inc. Code Signing",
+        "subject_o": "VMware, Inc.",
+        "subject_l": "Redmond",
+        "subject_c": "US",
+        "issuer_cn": "VMware, Inc. Code Signing",
+        "issuer_o": "VMware, Inc.",
+        "issuer_l": "Redmond",
+        "issuer_c": "US",
+        "issuer_equals_subject": true,
+        "validity_from": "2026-02-14T15:01:32Z",
+        "validity_to": "2027-02-14T15:01:32Z",
+        "key_algorithm": "RSA-2048",
+        "signature_algorithm": "sha256WithRSAEncryption",
+        "ca_flag": true,
+        "fraudulent_indicators": [
+          "Self-signed (issuer = subject)",
+          "CA:TRUE flag on code-signing cert (legitimate certs never have this)",
+          "Geographic fraud: 'Redmond' is Microsoft HQ, not VMware HQ (Palo Alto, CA)",
+          "Unencrypted private key left on attacker server (key.pem)"
+        ],
+        "thumbprint_ski": "FAA285BD5632CC437D5E69458881821E29485BF",
+        "hunting_value": "CRITICAL",
+        "detection_action": "Hunt for: (1) Files signed with this serial; (2) Any binary with CN='VMware, Inc. Code Signing' AND issuer=subject; (3) Certs with CA:TRUE flag on code-signing cert",
+        "first_seen": "2026-02-14T15:01:32Z",
+        "source": "cert.pem recovered from open directory, cert extraction from signed binaries",
+        "tags": ["code-signing-fraud", "fraudulent-certificate", "vmware-impersonation"],
+        "false_positive_risk": "NONE",
+        "notes": "If attacker re-generates new certificate with same key pair, thumbprint (SKI) will persist. Certificate was intentionally left unencrypted on server — operational security failure suggests attacker may not be monitoring for exposure."
+      }
+    ],
+    "memory_indicators": [
+      {
+        "indicator_type": "anonymous_virtual_memory",
+        "confidence": "DEFINITE",
+        "description": "18.4 MB anonymous private memory region with PAGE_EXECUTE_READWRITE protection",
+        "context": "Donut shellcode staging region allocated in beacon process memory. Contains NOP sled (0x90 bytes) followed by Donut entry point (0x9A CALLF instruction at base+0x59). Size (18.4 MB) and protection flags (PAGE_EXECUTE_READWRITE) are distinctive for Donut-wrapped payloads. Memory region is mapped but not backed by any file on disk (anonymous = VadS tag in Volatility).",
+        "size_bytes": 19353600,
+        "size_range": "18-19 MB",
+        "protection_flags": "PAGE_EXECUTE_READWRITE",
+        "vad_tag": "VadS (anonymous private)",
+        "memory_type": "Private",
+        "donut_nop_pattern": "90 90 90 90 ... 9A (CALLF instruction)",
+        "donut_entry_offset": 89,
+        "hunting_value": "CRITICAL",
+        "detection_action": "Memory forensics: Hunt for anonymous regions 18-19 MB with PAGE_EXECUTE_READWRITE. EDR: Monitor for allocation of large private regions with execute permissions.",
+        "first_seen": "2026-02-21 (dynamic analysis)",
+        "source": "Volatility 3 malfind module, x64dbg memory analysis",
+        "tags": ["donut-shellcode", "process-injection", "memory-evasion", "reflective-code-loading"],
+        "false_positive_risk": "LOW (large executable anonymous regions are rare in benign software)",
+        "notes": "Size is consistent with Sliver full-featured beacon (~19 MB Donut instance). Smaller Donut instances (< 1 MB) would indicate lightweight shellcode; this size indicates full beacon with command modules."
+      },
+      {
+        "indicator_type": "aes_decryption_key",
+        "confidence": "DEFINITE",
+        "description": "AES-128 key from Donut instance; enables offline decryption of Donut module",
+        "context": "Donut-wrapped shellcode is encrypted with AES-128-CTR mode. Key and nonce recovered from live process memory analysis. Key persists at fixed offset from Donut instance base (+0x00). Use this key + nonce for offline decryption of Donut module (hidden Sliver beacon configuration and command modules).",
+        "aes_key_hex": "19721FE6E3B0CF0C320B93E0C2BE911A",
+        "aes_key_bytes": [25, 114, 31, 230, 227, 176, 207, 12, 50, 11, 147, 224, 194, 190, 145, 26],
+        "aes_nonce_hex": "EA2A1C5A8DE1337BDA31476540510D089",
+        "aes_nonce_bytes": [234, 42, 28, 90, 141, 225, 51, 123, 218, 49, 71, 101, 64, 81, 208, 137],
+        "encryption_mode": "AES-128-CTR (Counter mode)",
+        "donut_instance_offset_key": 0,
+        "donut_instance_offset_nonce": 16,
+        "hunting_value": "HIGH (forensic/analyst value; not directly huntable in deployed systems)",
+        "detection_action": "For forensic reconstruction: Use key + nonce to decrypt Donut module and recover C2 configuration, command modules, and hidden behavior. Requires memory dump access.",
+        "first_seen": "2026-02-21",
+        "source": "Volatility 3 memory dump analysis (x64dbg sessions 1 and 3)",
+        "tags": ["donut-encryption", "aes-key", "memory-forensics"],
+        "false_positive_risk": "NONE (forensic indicator; not a network/file detection)",
+        "notes": "Key enables offline decryption of captured Donut instance. If Donut is captured during incident response, decrypt with these credentials to reveal full beacon configuration and module set."
+      }
+    ]
+  },
+
+  "string_indicators": [
+    {
+      "string": "MicrosoftEdgeUpdate.exe --update-check --silent",
+      "confidence": "HIGH",
+      "description": "PEB CommandLine spoofing string; declared parent process command line",
+      "context": "Hardcoded in arg_spoof.C module; overwrites PEB->ProcessParameters->CommandLine to hide true command line. When process explorer queries parent process details, reports this benign-looking Edge update command instead of beacon execution parameters. Presence of this exact string in process memory or captured command line is strong indicator of arg_spoof.C usage.",
+      "source": "arg_spoof.C source code",
+      "technique": "T1036.004 (Masquerading: Match Legitimate Process Name/Location)",
+      "hunting_value": "HIGH",
+      "detection_action": "Hunt for: (1) Process CommandLine queries that return exactly this string; (2) arg_spoof.C usage detection via static analysis; (3) PEB manipulation artifacts",
+      "tags": ["peb-spoofing", "commandline-hiding", "evasion"],
+      "false_positive_risk": "LOW (exact string match is distinctive; genuine Edge updates use different command line format)"
+    },
+    {
+      "string": "amsiInitFailed",
+      "confidence": "HIGH",
+      "description": "AMSI bypass reflection variable; PowerShell Script Block Logging indicator",
+      "context": "stager.ps1 uses reflection to bypass AMSI by setting amsiInitFailed = true via $PSClass.fields. When AMSI checks if initialization failed, it returns true, causing AMSI to disable itself for that PowerShell session. String 'amsiInitFailed' will appear in PowerShell Script Block Logging (Event ID 4104) if captured.",
+        "source": "stager.ps1 PowerShell script",
+      "technique": "T1562.001 (Impair Defenses: Disable or Modify Tools — AMSI Bypass)",
+      "hunting_value": "HIGH",
+      "detection_action": "Hunt PowerShell logs for: (1) Script Block Logging EID 4104 containing 'amsiInitFailed'; (2) Reflection patterns setting AMSI fields; (3) Subsequent PowerShell commands executed after AMSI bypass",
+      "tags": ["amsi-bypass", "powershell-evasion", "defense-evasion"],
+      "false_positive_risk": "NONE (this exact technique is specific to AMSI bypass, not used in benign scripts)"
+    },
+    {
+      "string": "Set-MpPreference -DisableRealtimeMonitoring $true",
+      "confidence": "HIGH",
+      "description": "Windows Defender real-time monitoring disable command; present in stager.ps1",
+      "context": "stager.ps1 executes this PowerShell cmdlet to disable Defender real-time protection if running with admin privileges. Command is plaintext in stager script. If execution succeeds, generates Windows Defender Operational Event ID 5001 (real-time protection disabled).",
+      "source": "stager.ps1 PowerShell script (line ~35)",
+      "technique": "T1562.001 (Impair Defenses: Disable or Modify Tools — Defender Disable)",
+      "hunting_value": "CRITICAL",
+      "detection_action": "Hunt for: (1) PowerShell execution of this cmdlet; (2) Windows Defender Event ID 5001 (real-time protection disabled); (3) Combination: Stager script + Defender disable + beacon execution",
+      "tags": ["defender-disable", "defense-evasion", "powershell-evasion"],
+      "false_positive_risk": "LOW (this command is rarely executed by legitimate scripts; admin operations typically don't disable Defender during execution)"
+    },
+    {
+      "string": "buildmode=exe -compiler=gc -trimpath=true",
+      "confidence": "HIGH",
+      "description": "Go compiler build flags; indicates Go-compiled beacon (Sliver)",
+      "context": "Go 1.24.2 compilation flags hardcoded in OneDriveSync.exe PE metadata. Presence of these flags indicates binary was compiled with Go toolchain. Combined with other indicators (Donut, SysWhispers3), confirms Sliver C2 integration.",
+      "source": "OneDriveSync.exe PE metadata / .comment section",
+      "artifact_type": "Go build string",
+      "hunting_value": "MODERATE (confirms Go toolchain, not unique to this malware)",
+      "detection_action": "Static binary analysis: Detect Go-compiled beacons using this build string pattern",
+      "tags": ["go-compiler", "beacon-indicators", "sliver-c2"],
+      "false_positive_risk": "MODERATE (many benign Go programs use these flags; context with other indicators is needed)"
+    },
+    {
+      "string": "0x9DEA8D94 (SysWhispers3 hash seed)",
+      "confidence": "HIGH",
+      "description": "SysWhispers3 syscall hash seed; identifies SysWhispers3 usage",
+      "context": "SysWhispers3 generates syscall function hashes using hardcoded seed 0x9DEA8D94. This seed value (and its little-endian representation \\x94\\x8D\\xEA\\x9D) is compiled into the binary and can be detected via binary analysis or memory scanning.",
+      "hex_representation": "0x9DEA8D94",
+      "little_endian_bytes": "\\x94\\x8D\\xEA\\x9D",
+      "source": "syscalls.C source code, compiled into OneDriveSync.exe",
+      "technique": "T1106 (Native API — direct syscall invocation via SysWhispers3)",
+      "hunting_value": "HIGH",
+      "detection_action": "Binary analysis: Scan for this seed value in compiled binaries; indicates SysWhispers3 usage and direct syscall invocation technique",
+      "tags": ["syswhispers3", "syscall-hashing", "evasion"],
+      "false_positive_risk": "NONE (this specific seed is unique to SysWhispers3 library)"
+    },
+    {
+      "string": "SW3_MAX_ENTRIES = 600",
+      "confidence": "MODERATE",
+      "description": "SysWhispers3 syscall table limit; compiled constant",
+      "context": "SysWhispers3 source code defines SW3_MAX_ENTRIES = 600 as the maximum syscall hash table size. This value is compiled into OneDriveSync.exe. Presence of this specific value helps identify which version/configuration of SysWhispers3 was used.",
+      "value": 600,
+      "source": "syscalls.C source code",
+      "tool": "SysWhispers3",
+      "hunting_value": "LOW (identifier useful for clustering but not for real-time detection)",
+      "detection_action": "Binary clustering: Use this constant as a fingerprint for SysWhispers3 builds from this campaign",
+      "tags": ["syswhispers3", "syscall-hashing"],
+      "false_positive_risk": "HIGH (this is a generic constant; many SysWhispers3 compilations use the same value)"
+    },
+    {
+      "string": "XZ magic bytes: \\xfd7zXZ\\x00 with check byte 0x04",
+      "confidence": "MODERATE",
+      "description": "ScareCrow XZ compression loader header with process hollowing mode indicator",
+      "context": "ScareCrow uses XZ compression for the Sliver shellcode payload. XZ file format starts with magic bytes \\xfd7zXZ\\x00. The check byte (position 6 in XZ header) is set to 0x04 to indicate process hollowing mode (mode byte switches to different injection techniques). Presence of XZ header with check 0x04 indicates ScareCrow-wrapped payload using process hollowing.",
+      "xz_magic_bytes": "\\xfd7zXZ\\x00",
+      "xz_check_byte": "0x04",
+      "mode_indicator": "0x04 = Process Hollowing mode (XZ mode byte)",
+      "source": "ScareCrow loader compiled into OneDriveSync.exe",
+      "technique": "T1055.012 (Process Injection: Process Hollowing)",
+      "hunting_value": "MODERATE",
+      "detection_action": "Binary analysis: Scan for XZ magic + check byte 0x04; indicates ScareCrow process hollowing variant",
+      "tags": ["scarecrow-loader", "xz-compression", "process-hollowing"],
+      "false_positive_risk": "LOW (XZ with this specific check byte is uncommon in benign software)"
+    },
+    {
+      "string": "OneDriveSync",
+      "confidence": "HIGH",
+      "description": "Beacon name string; embedded in Sliver configuration",
+      "context": "Beacon identifier name 'OneDriveSync' is embedded in Sliver C2 configuration. This string is encrypted inside the AES-encrypted Donut module and cannot be directly read from the binary without decryption. However, command-and-control communications will reference this beacon name when operator issues commands via Sliver client.",
+      "source": "Sliver-command.txt build log (beacon name parameter), encrypted in Donut shellcode",
+      "technique": "C2 beacon naming",
+      "hunting_value": "MODERATE (requires C2 traffic analysis or encrypted payload decryption to detect)",
+      "detection_action": "C2 hunting: Monitor Sliver beacon naming patterns in C2 traffic logs. Memory forensics: Decrypt Donut module with recovered AES key to extract beacon configuration.",
+      "tags": ["beacon-name", "sliver-c2", "c2-infrastructure"],
+      "false_positive_risk": "NONE (this string is specifically the beacon name in Sliver configuration)"
+    }
+  ],
+
+  "behavioral_indicators": [
+    {
+      "name": "PowerShell stager chain with HTTP download",
+      "description": "PowerShell → outbound TCP:8000 → file creation → execution",
+      "pattern": "powershell.exe → DownloadFile(http://45.94.31.220:8000/OneDriveSync.exe) → file write to %TEMP%\\update.exe → process execution",
+      "confidence": "HIGH",
+      "log_sources": ["Sysmon EID 3 (network), Sysmon EID 11 (file creation), Sysmon EID 1 (process creation)", "Windows Network Telemetry", "EDR (CrowdStrike, Defender, SentinelOne)"],
+      "hunting_value": "CRITICAL",
+      "detection_chain": [
+        {"event_type": "Sysmon EID 3", "description": "Process: powershell.exe, Direction: Outbound, DestIP: 45.94.31.220, DestPort: 8000, Protocol: TCP"},
+        {"event_type": "Sysmon EID 11", "description": "TargetFilename: *\\update.exe, Image: powershell.exe or cmd.exe"},
+        {"event_type": "Sysmon EID 1", "description": "CommandLine contains %TEMP%\\update.exe or Image path is %TEMP%\\update.exe"}
+      ],
+      "uniqueness": "High — three-event chain is distinctive: (1) PowerShell connection to non-standard port, (2) executable creation in %TEMP%, (3) execution from temp location",
+      "false_positive_risk": "LOW",
+      "tags": ["stager-pattern", "command-execution-chain", "beacon-delivery"],
+      "source": "stager.ps1 execution flow, Noriben behavioral sandbox analysis"
+    },
+    {
+      "name": "PPID spoofing and process hollowing",
+      "description": "Process spawned with incorrect parent process (parent PID mismatch) + injected code execution",
+      "pattern": "Process X spawned from Image Y but parent is Z (where Z != calling process); sihost.exe with network connections not from its image",
+      "confidence": "HIGH",
+      "log_sources": ["Sysmon EID 1 (process creation with parent info)", "EDR kernel callbacks", "Memory forensics"],
+      "hunting_value": "CRITICAL",
+      "detection_chain": [
+        {"event_type": "Sysmon EID 1", "description": "Image: c:\\windows\\system32\\sihost.exe, ParentImage: [mismatch to actual parent]"},
+        {"event_type": "Sysmon EID 3", "description": "Image: c:\\windows\\system32\\sihost.exe, DestPort: 443 or 8443, Event not correlated to legitimate sihost.exe code path"},
+        {"event_type": "Memory forensics", "description": "sihost.exe contains injected thread with PAGE_EXECUTE_READWRITE region; 18-19 MB anonymous memory"}
+      ],
+      "uniqueness": "High — parent process mismatch combined with network activity from system process is uncommon",
+      "false_positive_risk": "MODERATE (process injection is used for legitimate purposes; correlation with C2 ports eliminates most false positives)",
+      "tags": ["ppid-spoofing", "process-hollowing", "injection", "evasion"],
+      "source": "ppid_spoof.C, process_ghosting.c source code; build.log injection target configuration"
+    },
+    {
+      "name": "Large anonymous memory region with execute permissions",
+      "description": "Anonymous private memory allocation 18-19 MB with PAGE_EXECUTE_READWRITE",
+      "pattern": "VadS (anonymous VAD) region, size 18-19 MB, Protect = PAGE_EXECUTE_READWRITE, backed by no file on disk",
+      "confidence": "HIGH",
+      "log_sources": ["Memory forensics (Volatility malfind)", "EDR memory scanning", "Process dumping tools"],
+      "hunting_value": "CRITICAL",
+      "detection_indicators": [
+        "Volatility 3: malfind module flags regions with execute permissions on private allocations",
+        "EDR: Monitor for large (> 10 MB) private memory allocations with execute permissions",
+        "Memory dump analysis: Search for NOP sled (\\x90 bytes) followed by \\x9A (CALLF) at base+0x59"
+      ],
+      "uniqueness": "High — 18-19 MB anonymous executable regions are distinctive for Donut-wrapped shellcode; small executable allocations are more common",
+      "false_positive_risk": "LOW (large executable anonymous regions are rare in benign software)",
+      "tags": ["donut-shellcode", "reflective-code-loading", "memory-evasion", "beacon-staging"],
+      "source": "Volatility 3 memory analysis, x64dbg dynamic analysis"
+    },
+    {
+      "name": "Fraudulent code-signing certificate detection",
+      "description": "Binary signed with self-signed cert impersonating 'VMware, Inc.' with CA:TRUE flag",
+      "pattern": "Certificate where: issuer == subject AND subject_cn == 'VMware, Inc. Code Signing' AND ca_flag == true AND serial == 659EEB5AA4A489FB238993AF259D23F057F6D6D6",
+      "confidence": "DEFINITE",
+      "log_sources": ["File analysis tools (signtool, Authenticode parser)", "EDR signature validation", "VirusTotal submissions"],
+      "hunting_value": "CRITICAL",
+      "detection_method": [
+        "Extract certificate from PE binary using signtool: signtool verify /v /pa <file>",
+        "Parse Authenticode signature and verify issuer == subject (self-signed check)",
+        "Check for CA:TRUE flag (legitimate code-signing certs never have this)",
+        "Compare certificate serial to 659EEB5AA4A489FB238993AF259D23F057F6D6D6"
+      ],
+      "uniqueness": "VERY HIGH — this specific certificate serial is unique to this campaign",
+      "false_positive_risk": "NONE",
+      "tags": ["code-signing-fraud", "fraudulent-certificate", "vmware-impersonation", "binary-identification"],
+      "source": "cert.pem recovered from open directory, certificate extraction from signed binaries"
+    },
+    {
+      "name": "Process Ghosting sequence detection",
+      "description": "Temp file with DELETE_ON_CLOSE → NtCreateSection(SEC_IMAGE) → NtCreateProcessEx → process invisible to enumeration",
+      "pattern": "CreateFile(%TEMP%\\*.tmp, FILE_FLAG_DELETE_ON_CLOSE) → SetFileInformationByHandle(FileDispositionInfo) → NtCreateSection(SEC_IMAGE, hFile) → NtCreateProcessEx(hSection) → result: process with no image file on disk",
+      "confidence": "HIGH",
+      "log_sources": ["ETW (Event Tracing for Windows) kernel callbacks", "EDR kernel-level API logging", "Sysmon rare options (requires custom config)"],
+      "hunting_value": "CRITICAL",
+      "detection_chain": [
+        {"api_call": "CreateFile", "parameters": "lpFileName contains %TEMP%, dwFlagsAndAttributes includes FILE_FLAG_DELETE_ON_CLOSE"},
+        {"api_call": "SetFileInformationByHandle", "parameters": "FileInformationClass = FileDispositionInfo (marks file for deletion)"},
+        {"api_call": "NtCreateSection", "parameters": "ProtectionFlags includes SEC_IMAGE, hFile references temp file"},
+        {"api_call": "NtCreateProcessEx", "parameters": "hSection references section created from temp file"},
+        {"result": "Process appears in process list with no corresponding image file on disk (empty ImagePath)"}
+      ],
+      "uniqueness": "Very High — Process Ghosting is a specific evasion technique with distinctive API call sequence",
+      "false_positive_risk": "NONE (legitimate software does not use Process Ghosting)",
+      "tags": ["process-ghosting", "evasion", "fileless-execution", "temp-file-abuse"],
+      "source": "process_ghosting.c source code, behavioral sandbox observation"
+    },
+    {
+      "name": "AMSI bypass via reflection",
+      "description": "PowerShell reflection used to set amsiInitFailed = true, disabling AMSI for session",
+      "pattern": "PowerShell script using reflection to access AMSI internals and modify initialization flag; appears in Script Block Logging as 'amsiInitFailed'",
+      "confidence": "HIGH",
+      "log_sources": ["Windows PowerShell Operational log (EID 4104: Script Block Logging)", "Command-line logging (EID 4688 with 'Include command line in process creation events')", "EDR PowerShell logging"],
+      "hunting_value": "CRITICAL",
+      "detection_pattern": [
+        "Script Block Event 4104 containing string 'amsiInitFailed'",
+        "Code pattern: $pscm = [System.Reflection.BindingFlags]... or similar reflection API usage",
+        "Subsequent PowerShell commands executed in same session after AMSI bypass setup"
+      ],
+      "uniqueness": "High — this exact AMSI bypass pattern is used by many threat actors but is distinctive for this campaign",
+      "false_positive_risk": "NONE (AMSI bypass via this method is never used by benign scripts)",
+      "tags": ["amsi-bypass", "powershell-evasion", "defense-evasion", "stager-technique"],
+      "source": "stager.ps1 PowerShell script, Script Block Logging analysis"
+    },
+    {
+      "name": "Defender real-time monitoring disable",
+      "description": "Windows Defender real-time monitoring disabled via Set-MpPreference cmdlet",
+      "pattern": "PowerShell execution: Set-MpPreference -DisableRealtimeMonitoring $true (requires admin privileges)",
+      "confidence": "HIGH",
+      "log_sources": ["Windows Defender Operational Event ID 5001 (real-time protection disabled)", "PowerShell Command-line Auditing (EID 4688)", "EDR process monitoring"],
+      "hunting_value": "CRITICAL",
+      "detection_chain": [
+        {"log_source": "Windows Defender Operational log (Event ID 5001)", "indicator": "Real-time protection was disabled by process powershell.exe"},
+        {"log_source": "PowerShell command-line (EID 4688)", "indicator": "CommandLine contains 'Set-MpPreference -DisableRealtimeMonitoring'"},
+        {"log_source": "EDR", "indicator": "PowerShell parent process chain confirms execution context (admin elevation)"}
+      ],
+      "uniqueness": "Moderate — this cmdlet is used by other threat actors, but combination with stager pattern is distinctive",
+      "false_positive_risk": "LOW (Defender disable is rarely executed by benign operations; legitimate admin operations typically don't execute this during normal operations)",
+      "tags": ["defender-disable", "defense-evasion", "stager-technique", "powershell-evasion"],
+      "source": "stager.ps1 PowerShell script, Windows Defender Operational log"
+    },
+    {
+      "name": "Go compiler metadata in binary",
+      "description": "PE binary contains Go build string with compiler version and flags",
+      "pattern": "PE .comment section or metadata contains: 'go1.24.2 -buildmode=exe -compiler=gc -trimpath=true'",
+      "confidence": "MODERATE",
+      "log_sources": ["Binary static analysis (strings, pe-bear, CFF Explorer)", "VirusTotal metadata", "Digital Forensics"],
+      "hunting_value": "MODERATE (identifies Go-compiled beacon, but many benign Go programs exist)",
+      "detection_method": [
+        "Extract .comment section from PE binary: readelf -S <file> | grep comment",
+        "Search for 'go1.24' or similar version string",
+        "Combine with other indicators (Donut signature, C2 port behavior) for stronger detection"
+      ],
+      "uniqueness": "Low — Go compiler metadata is common in all Go binaries; not unique to this malware",
+      "false_positive_risk": "HIGH (many benign Go programs use the same build flags)",
+      "tags": ["go-compiler", "beacon-metadata", "binary-identification"],
+      "source": "OneDriveSync.exe PE binary metadata, compiled with Go 1.24.2"
+    }
+  ]
+}

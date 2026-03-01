@@ -15,6 +15,11 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 
 ---
 
+# March 2026
+- [Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)]({{ "/reports/sliver-open-directory/" | relative_url }})
+
+---
+
 # February 2026
 - [Webserver Compromise Kit 91.236.230. 250]({{ "/reports/webserver-compromise-kit-91-236-230-250/" | relative_url }})
 - [Remcos RAT OpenDirectory Campaign - Technical Analysis & Business Risk Assessment]({{ "/reports/remcos-opendirectory/" | relative_url }})

@@ -36,6 +36,7 @@ Rules are mapped to MITRE ATT&CK techniques for triage and hunting.
 - [Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)](arsenal-237-full_test_enc-exe.md)
 
 ### Other Threat Intelligence Reports
+- [Detection Rules - Sliver C2 / ScareCrow Loader Open Directory Kit (45.94.31.220)](sliver-open-directory-detections.md)
 - [Webserver Compromise Kit 91.236.230. 250](webserver-compromise-kit-91-236-230-250-detections.md)
 - [Detection Rules - Remcos RAT OpenDirectory Campaign](remcos-opendirectory-campaign.md)
 - [NsMiner Cryptojacker - Detection Rules](nsminer-cryptojacker.md)
