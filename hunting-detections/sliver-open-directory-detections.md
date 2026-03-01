@@ -246,7 +246,7 @@ rule MALW_Fraudulent_VMware_CodeSign_Cert_PEM
 #   ScareCrow polymorphic obfuscation. UPX section name detection is generic;
 #   this rule adds specificity via the LZMA/brute filter flag combination documented
 #   by radare2 analysis of the confirmed sample, the file size fingerprint (15.1MB
-#   packed Â±2MB to account for minor variants), and the presence of Go build strings
+#   packed ±2MB to account for minor variants), and the presence of Go build strings
 #   post-unpack (detectable in memory after UPX self-extraction).
 # ATT&CK Coverage: T1027.002 (Software Packing)
 # Confidence: MODERATE — UPX section names alone match many legitimate UPX-packed
@@ -290,7 +290,7 @@ rule MALW_UPX_Packed_Sliver_Variant
 
     condition:
         uint16(0) == 0x5A4D
-        // Packed size: 15,869,168 bytes (Â±2MB for minor variants)
+        // Packed size: 15,869,168 bytes (±2MB for minor variants)
         and filesize > 13MB
         and filesize < 18MB
         and $upx0
@@ -694,9 +694,9 @@ Sliver execution. This is the most durable memory artifact of this toolkit — i
 persists in memory until the sleep masking cycle re-encrypts it.
 
 **When to look:** During or shortly after suspected beacon activity in sihost.exe.
-Sleep masking will encrypt the region during the 300â€“900 second dormancy window,
+Sleep masking will encrypt the region during the 300–900 second dormancy window,
 making it invisible to in-memory YARA scanners. Target the window when beacon
-callbacks are expected (every 90â€“510 seconds effective range with 70% jitter).
+callbacks are expected (every 90–510 seconds effective range with 70% jitter).
 
 **Tool:** Volatility 3
 
@@ -709,7 +709,7 @@ callbacks are expected (every 90â€“510 seconds effective range with 70% jit
    vol.exe -f memory.raw windows.malfind --pid <sihost_pid>
    ```
    Look for VAD entries with `VadS` tag, protection `PAGE_EXECUTE_READWRITE`,
-   and size approximately 18MB (18,000,000â€“19,500,000 bytes).
+   and size approximately 18MB (18,000,000–19,500,000 bytes).
 
 3. Confirm the Donut bootstrap entry by examining bytes at offset +0x59 from the
    region base:
@@ -752,9 +752,9 @@ without generating corresponding EDR API hook telemetry.
 2. Use the Memory Map view to locate private regions in the process address space.
 3. Search for the SysWhispers3 seed bytes in little-endian order:
    Binary search for: `94 8D EA 9D`
-4. If found, examine the surrounding 2,400 bytes (600 entries Ã— 4-byte syscall
+4. If found, examine the surrounding 2,400 bytes (600 entries × 4-byte syscall
    numbers) for a sorted array of DWORD values. A sorted array of valid NT syscall
-   numbers (range 0x0000â€“0x01FF on current Windows) confirms the SW3 table.
+   numbers (range 0x0000–0x01FF on current Windows) confirms the SW3 table.
 
 **Tool:** Volatility 3
 
@@ -796,9 +796,9 @@ process image base, but no resolvable file path).
 The five-step ghosting sequence generates a specific API call chain that ETW kernel
 callbacks capture:
 ```
-CreateFile(FILE_FLAG_DELETE_ON_CLOSE) â†’
-SetFileInformationByHandle(FileDispositionInfo) â†’
-NtCreateSection(SEC_IMAGE) â†’
+CreateFile(FILE_FLAG_DELETE_ON_CLOSE) →
+SetFileInformationByHandle(FileDispositionInfo) →
+NtCreateSection(SEC_IMAGE) →
 NtCreateProcessEx(section_handle)
 ```
 Any EDR or ETW consumer that captures process creation events with the section object
@@ -956,4 +956,4 @@ address range rather than an anonymous allocation.
 
 ---
 
-Â© 2025 Joseph. All rights reserved. Detection rules licensed under CC BY-NC 4.0
+© 2026 Joseph. All rights reserved. Detection rules licensed under CC BY-NC 4.0
