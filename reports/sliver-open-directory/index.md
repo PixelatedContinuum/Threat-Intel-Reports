@@ -183,7 +183,7 @@ The kill chain runs through four stages from delivery to C2 establishment. Becau
 - **Phase 2 (15:01:32):** Generated the fraudulent RSA-2048 VMware code-signing certificate via scripted `openssl req -x509`. Certificate's `Valid From` timestamp (15:01:32) is 9 seconds after build start — a build timeline artifact.
 - **Phase 3 (15:01:32):** Compiled 15 evasion modules (7 custom C/ASM, 5 stubs for ScareCrow delegation, 3 ScareCrow-native).
 - **Phase 4 (15:01:32 – 15:08:34):** Called the Sliver C2 server to generate 19,353,426 bytes of raw shellcode. Shellcode generation took approximately 7 minutes.
-- **Phase 5 (15:08:34+):** Applied ScareCrow polymorphic obfuscation — 2,558 sequential encrypted chunks — and signed the output with the fraudulent cert. Output: `OneDriveSync.exe` (~33 MB) hosted at `http://45.94.31.220:8000/`.
+- **Phase 5 (15:08:34+):** Applied ScareCrow polymorphic obfuscation — 2,558 sequential encrypted chunks — and signed the output with the fraudulent cert. Output: `OneDriveSync.exe` (~33 MB) hosted at `hxxp[:]//45.94.31[.]220:8000/`.
 
 **Sliver beacon configuration (from Sliver-command.txt and build.log):**
 
@@ -714,7 +714,7 @@ The `CA:TRUE` flag set on a code-signing certificate is a reliable detection ind
 **Roles confirmed on this single IP:**
 
 - **Build server** — automated pipeline executed here (from build.log)
-- **Payload delivery server** — `http://45.94.31.220:8000/` served the entire workspace
+- **Payload delivery server** — `hxxp[:]//45.94.31[.]220:8000/` served the entire workspace
 - **C2 listener** — Sliver teamserver (ports 443, 8443); MODERATE confidence (70%) — actual C2 may be on separate infrastructure if `mailuxe.net` resolves elsewhere
 
 This single-server architecture is a significant OPSEC failure. All forensic evidence concentrates at one point. A single network block disrupts build, delivery, and C2 simultaneously.
@@ -866,7 +866,7 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | Discovery            | T1057        | Process Discovery                            | MODERATE (60%) | ppid_spoof.C includes tlhelp32.h; PPID spoofing requires process enumeration                                                        |
 | Command and Control  | T1071.001    | Web Protocols                                | HIGH           | Sliver --http mailuxe.net:443, --http mailmassange.duckdns.org:443, --http mailuxe.net:8443                                         |
 | Command and Control  | T1573.002    | Asymmetric Cryptography                      | HIGH           | Sliver mTLS (mutual TLS) for C2 channel; confirmed by --http flag and Sliver default                                                |
-| Command and Control  | T1105        | Ingress Tool Transfer                        | DEFINITE       | stager DownloadFile from [http://45.94.31.220:8000/OneDriveSync.exe](http://45.94.31.220:8000/OneDriveSync.exe) → %TEMP%\update.exe |
+| Command and Control  | T1105        | Ingress Tool Transfer                        | DEFINITE       | stager DownloadFile from [hxxp[:]//45.94.31[.]220:8000/OneDriveSync[.]exe](hxxp://45.94.31[.]220:8000/OneDriveSync[.]exe) → %TEMP%\update.exe |
 
 
 **Note on persistence:** T1547.001 (Registry Run Keys) was assessed and NOT observed. Behavioral sandbox: zero registry writes by PID 3488 in 305-second run. Memory forensics tool: no persistence keys. Persistence is operator-deployed post-C2 establishment, not loader-automated.
