@@ -164,6 +164,7 @@ On 2026-02-14, a threat actor operating from a bulletproof VPS at `45.94.31.220`
 | **Issuer**               | Self-signed (issuer = subject)                                                                      |
 | **Valid From / Until**   | 2026-02-14 15:01:32 UTC / 2027-02-14 15:01:32 UTC                                                   |
 | **Key**                  | RSA 2048-bit; **unencrypted private key exposed in key.pem**                                        |
+| **Subject Key Identifier** | `FAA285BD5632CC437D5E694588818 21E29485BF` — durable IOC; persists if the certificate is re-issued from the same RSA key pair; survives serial number regeneration |
 | **CA:TRUE flag**         | Present — scripted openssl generation indicator; legitimate code-signing certs never carry CA:TRUE  |
 
 
@@ -193,6 +194,7 @@ Selection:      Random (--strategy r)
 Beacon name:    OneDriveSync
 Injection:      C:\Windows\System32\sihost.exe
 Callback:       300–900 seconds (70% jitter → effective 90–510 seconds)
+Poll timeout:   900 seconds (max wait for server response per attempt)
 Max failures:   100
 Reconnect:      120 seconds
 Killswitch:     2027-12-31 23:59:59
@@ -406,6 +408,7 @@ Evidence for process hollowing having occurred:
 | Selection          | Random — blocking one endpoint does not disrupt beaconing   |
 | Callback interval  | 300–900 seconds base; 70% jitter (effective 90–510 seconds) |
 | Failure tolerance  | 100 consecutive failures before self-termination            |
+| Poll timeout       | 900 seconds (maximum wait for C2 server response per callback attempt) |
 | Reconnect interval | 120 seconds between attempts                                |
 | Killswitch         | 2027-12-31 23:59:59                                         |
 
@@ -489,6 +492,8 @@ PVOID* returnAddress = (PVOID*)_AddressOfReturnAddress();
 Temporarily overwrites the caller's own return address on the stack with a randomly selected legitimate Windows function address before calling a target function. EDRs inspecting the call stack at the moment of the call see `BaseThreadInitThunk`, `RtlUserThreadStart`, or `Sleep` as the return site — not the malicious shellcode.
 
 **Why This Matters:** Randomization across three return addresses (rather than a deterministic single address) is a deliberate counter-measure against EDRs that fingerprint specific fake stack frames. Detection requires: (a) memory-level call stack inspection that traces through the spoofed frames, (b) detecting `_AddressOfReturnAddress()` usage (an unusual self-modifying stack pattern), or (c) correlating that a function "called from Sleep" lacks the expected calling context for Sleep.
+
+**Implementation scope:** This implementation spoofs only the immediate return address (terminal frame) — not a full multi-frame call stack. More sophisticated implementations (Unwinder-based techniques) fabricate entire multi-frame stacks with plausible intermediate frames. EDRs that perform deep stack unwinding beyond the first frame can see through this single-frame spoof; this is a capable but not state-of-the-art implementation, consistent with the broader cybercrime-tier capability assessment.
 
 **Detection approach:**
 
@@ -894,6 +899,16 @@ Detection is organized by kill chain stage. Because the build pipeline can regen
 - **Windows Defender EID 5001** fires if the stager successfully disables real-time protection (requires admin execution).
 - Monitor for `Set-MpPreference -DisableRealtimeMonitoring` in PowerShell logging — a reliable behavioral indicator regardless of who calls it.
 
+**Post-Execution Forensic Artifacts (if stager has already run):** For incident responders engaging after the stager has executed, the following artifacts are the primary evidence trail — particularly valuable when the beacon has been deleted or overwritten:
+
+| Artifact | Location | Significance |
+| --- | --- | --- |
+| Dropped beacon | `%TEMP%\update.exe` | Primary recovery target — the beacon on disk; may already be deleted |
+| PowerShell history | `%APPDATA%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt` | May retain the stager invocation command; survives session end |
+| Prefetch file | `C:\Windows\Prefetch\UPDATE.EXE-XXXXXXXX.pf` | Execution timestamp and run count; persists after beacon deletion; strong evidence of execution |
+| Windows Defender event log | EID 5001 in Microsoft-Windows-Windows Defender/Operational | Confirms real-time protection was disabled (requires admin-level execution) |
+| MRU entries | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs` | Possible correlation to delivery document if user-lure delivery was used |
+
 #### Loader Stage (OneDriveSync.exe / update.exe)
 
 **Structural detection anchors that survive polymorphic rebuilds:**
@@ -902,6 +917,20 @@ Detection is organized by kill chain stage. Because the build pipeline can regen
 - **SysWhispers3 hash seed** `\x94\x8D\xEA\x9D` (little-endian `0x9DEA8D94`) — compiled constant present in any binary using this SysWhispers3 configuration; YARA rule with this four-byte sequence and 600-entry sorted array structure identifies SysWhispers3 across polymorphic builds.
 - **Hardcoded PEB spoofing string** `MicrosoftEdgeUpdate.exe --update-check --silent` — present in every build from this pipeline; detectable via process argument monitoring.
 - **Path mismatch** — process claiming `MicrosoftEdgeUpdate.exe` identity running from `%TEMP%\update.exe` is a high-confidence indicator; EDR comparison of claimed vs. actual binary path.
+
+**Behavioral API sequence fingerprint (EDR telemetry):** The sandbox-environment-check immediately preceding injection is a high-confidence, low-noise behavioral pattern detectable in EDR API call logs. The specific chain:
+
+```
+update.exe → GetSystemInfo()            (processor count check)
+update.exe → GetTickCount()             (uptime check)
+update.exe → NtOpenProcess()            (cross-process injection begins)
+update.exe → NtAllocateVirtualMemory()  (shellcode staging)
+update.exe → NtWriteVirtualMemory()     (shellcode write)
+update.exe → NtProtectVirtualMemory()   (RX permission set)
+update.exe → NtCreateThread()           (execution)
+```
+
+`GetSystemInfo → GetTickCount → cross-process NtOpenProcess` in immediate sequence is the behavioral fingerprint of a sandbox-checking injector. Critically: `GetSystemInfo` and `GetTickCount` are standard Win32 API calls that route through ntdll normally — they are **not** routed through the SysWhispers3 layer and remain visible to usermode EDR hooks even when the subsequent injection operations are not. This provides a behavioral detection anchor that survives SysWhispers3 evasion: the sandbox checks are observable even if the injection calls are not.
 
 #### Runtime / Injection Stage
 
@@ -924,6 +953,7 @@ Detection is organized by kill chain stage. Because the build pipeline can regen
 - Monitor for periodic DNS queries to `*.duckdns.org` from internal hosts at regular intervals.
 - **JARM fingerprinting** for the Sliver teamserver — Microsoft MSTIC documented Sliver-specific JARM hashes; the C2 server may be fingerprint-able even if the implant is not.
 - Sliver mTLS with randomized certificates presents less-signatured TLS traffic than Cobalt Strike's well-documented profiles, but Go binary runtime characteristics (static compilation, memory allocation patterns, HTTP header combinations) remain detectable hunting targets per Microsoft MSTIC research.
+- **Consistent POST request size (proxy/firewall log hunting):** Sliver beacon callbacks exhibit near-identical POST request sizes on each check-in cycle. Proxy and firewall logs showing consistent POST byte sizes (reference traffic from this campaign: ~1842 bytes) from a background process to an external host at irregular but bounded intervals (matching the 90–510 second callback window) are a beaconing fingerprint detectable without TLS inspection. Consistent byte-count POST traffic from a system process (`sihost.exe`) to a non-Microsoft external IP or domain at variable-but-bounded intervals is a viable SIEM hunting rule in environments without SSL inspection capability.
 
 ---
 
@@ -957,7 +987,10 @@ Detection is organized by kill chain stage. Because the build pipeline can regen
 | Sliver PE not extracted from memory          | Cannot confirm Sliver version or additional config options                           | MEDIUM   |
 | AMSI patch bytes not byte-verified           | Cannot confirm AmsiScanBuffer was actually patched                                   | LOW      |
 | Canary domain behavior not tested            | Whether beacon aborted in FlareVM environment is uncertain                           | LOW      |
+| Build workspace on internal endpoint not assessed | Implicitly a different threat scenario — see note below                         | LOW      |
 
+
+**Build workspace discovery on internal endpoints:** This report documents the open directory exposure scenario — the build workspace was accessible via a public-facing port. If `build.log`, the UUID-named workspace directory (`/var/tmp/.cache-1f6a38a2-1771081283/`), or the presence of ScareCrow, Donut, or SysWhispers3 binaries is discovered during EDR triage of an **internal endpoint** rather than via external scanning, the implications differ significantly. Discovery on an internal host indicates deep host access, an internal staging environment, or a potential insider threat — not an accidental exposure of a public-facing server. For endpoint forensics triage, the workspace UUID `1f6a38a2-1771081283` is a specific hunt string for EDR process telemetry and filesystem logs. Presence of Go 1.24.2 toolchain installation outside expected developer environments on the same host strengthens the assessment.
 
 ---
 
