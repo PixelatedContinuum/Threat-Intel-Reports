@@ -36,14 +36,6 @@ These are the principles behind every piece of work on this site:
 
 ---
 
-## Behind the Reports
-
-Curious about how the intelligence on this site is produced? This page explains the AI-assisted workflow built to turn malware analysis into timely, trustworthy threat intelligence — including the agents, skill frameworks, hooks, and design principles behind every report.
-
-- [Behind the Reports: How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence]({{ site.baseurl }}/behind-the-reports/)
-
----
-
 ## Repository Structure
 
 - [Reports]({{ site.baseurl }}/reports/) → Detailed malware analysis and reverse engineering notes
@@ -70,6 +62,14 @@ Each report follows a consistent structure: [Report Templates]({{ site.baseurl }
 - Use ATT&CK mappings for threat modeling or attack simulation  
 - Reference reverse engineering notes for deeper analysis  
 - Import into your CTI platform of choice  
+
+---
+
+## Behind the Reports
+
+Curious about how the intelligence on this site is produced? This page explains the AI-assisted workflow built to turn malware analysis into timely, trustworthy threat intelligence — including the agents, skill frameworks, hooks, and design principles behind every report.
+
+- [Behind the Reports: How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence]({{ site.baseurl }}/behind-the-reports/)
 
 ---
 
