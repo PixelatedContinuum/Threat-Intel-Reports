@@ -13,37 +13,54 @@ Feeds are designed for ingestion into SIEM/EDR environments.
 
 ## Available IOC Feeds
 
-### Arsenal-237: Original Analysis (16 samples)
-- [Arsenal-237: agent.exe (PoetRAT)](agent-exe.json)
-- [Arsenal-237: agent_xworm.exe (XWorm RAT v6)](agent-xworm-exe.json)
-- [Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)](agent-xworm-v2-exe.json)
-- [Arsenal-237: FleetAgentAdvanced.exe](fleetagentadvanced-exe.json)
-- [Arsenal-237: FleetAgentFUD.exe](fleetagentfud-exe.json)
-- [Arsenal-237: uac_test.exe](uac-test-exe.json)
-- [Arsenal-237: enc/dec Ransomware Family](enc-dec-ransomware-family.json)
-
-### Arsenal-237: New Files - Advanced Toolkit (11 samples)
-- [Arsenal-237 New Files: killer.dll (BYOVD Process Termination)](arsenal-237-killer-dll.json)
-- [Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)](arsenal-237-killer-crowdstrike-dll.json)
-- [Arsenal-237 New Files: lpe.exe (Privilege Escalation)](arsenal-237-lpe-exe.json)
-- [Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)](arsenal-237-BdApiUtil64-sys.json)
-- [Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)](arsenal-237-rootkit-dll.json)
-- [Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)](arsenal-237-nethost-dll.json)
-- [Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)](arsenal-237-chromelevator-exe.json)
-- [Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)](arsenal-237-enc_c2-exe.json)
-- [Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)](arsenal-237-new_enc-exe.json)
-- [Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)](arsenal-237-dec_fixed-exe.json)
-- [Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)](arsenal-237-full_test_enc-exe.json)
-
-### Other Threat Intelligence Reports
+# March 2026
+- [ZeroTrace Multi-Family MaaS Operation (Open Directory 74.0.42.25)](opendirectory-74-0-42-25-20260316-iocs.json)
 - [Sliver C2 / ScareCrow Loader Open Directory Kit (45.94.31.220)](sliver-open-directory-iocs.json)
-- [Webserver Compromise Kit 91.236.230. 250](webserver-compromise-kit-91-236-230-250-iocs.json)
+
+---
+
+# February 2026
+- [Webserver Compromise Kit 91.236.230.250](webserver-compromise-kit-91-236-230-250-iocs.json)
 - [Remcos RAT OpenDirectory Campaign (203[.]159[.]90[.]147)](remcos-opendirectory-campaign.json)
 - [NsMiner Cryptojacker](nsminer-cryptojacker.json)
+
+---
+
+# January 2026
+- [Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)](arsenal-237-full_test_enc-exe.json)
+- [Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)](arsenal-237-new_enc-exe.json)
+- [Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)](arsenal-237-dec_fixed-exe.json)
+- [Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)](arsenal-237-enc_c2-exe.json)
+- [Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)](arsenal-237-chromelevator-exe.json)
+- [Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)](arsenal-237-nethost-dll.json)
+- [Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)](arsenal-237-rootkit-dll.json)
+- [Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)](arsenal-237-BdApiUtil64-sys.json)
+- [Arsenal-237 New Files: lpe.exe (Privilege Escalation)](arsenal-237-lpe-exe.json)
+- [Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)](arsenal-237-killer-crowdstrike-dll.json)
+- [Arsenal-237 New Files: killer.dll (BYOVD Process Termination)](arsenal-237-killer-dll.json)
+- [Arsenal-237: enc/dec Ransomware Family](enc-dec-ransomware-family.json)
+- [Arsenal-237: uac_test.exe](uac-test-exe.json)
+- [Arsenal-237: FleetAgentFUD.exe](fleetagentfud-exe.json)
+- [Arsenal-237: FleetAgentAdvanced.exe](fleetagentadvanced-exe.json)
+- [Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)](agent-xworm-v2-exe.json)
+- [Arsenal-237: agent_xworm.exe (XWorm RAT v6)](agent-xworm-exe.json)
+- [Arsenal-237: agent.exe (PoetRAT)](agent-exe.json)
+
+---
+
+# December 2025
 - [Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm](dual-rat-analysis.json)
 - [PULSAR RAT (server.exe)](PULSAR-RAT.json)
+
+---
+
+# November 2025
 - [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou](Hybrid-Loader-Stealer-Sogou.json)
 - [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play](malware-analysis-houselet.json)
+
+---
+
+# October 2025
 - [AdvancedRouterScanner](AdvancedRouterScanner.json)
 - [From Webshells to The Cloud](webshells-to-the-cloud.json)
 - [QuasarRAT + Xworm + PowerShell Loader](quasar-xworm-powershell.json)

@@ -16,6 +16,7 @@ Each report contains detailed malware analysis, reverse engineering notes, IOCs,
 ---
 
 # March 2026
+- [ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25]({{ "/reports/zerotrace-74-0-42-25-20260316/" | relative_url }})
 - [Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)]({{ "/reports/sliver-open-directory/" | relative_url }})
 
 ---

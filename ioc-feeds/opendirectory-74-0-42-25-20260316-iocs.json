@@ -1,0 +1,230 @@
+{
+  "malware_name": "ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25",
+  "campaign_id": "ZeroTrace-MultiFamily-MaaS-74.0.42.25",
+  "campaign_slug": "opendirectory-74-0-42-25-20260316",
+  "analysis_date": "2026-03-16",
+  "analyst": "The Hunters Ledger",
+  "confidence_note": "Confidence levels: DEFINITE (direct evidence, no ambiguity), HIGH (strong evidence, minor gaps), MODERATE (reasonable evidence, notable gaps), LOW (weak or circumstantial evidence)",
+  "families_covered": [
+    "XWorm V5.6",
+    "PureRAT v4.1.9",
+    "PureHVNC",
+    "Raven RAT",
+    "ConnectWise ScreenConnect (abused)",
+    "Aspdkzb loader cluster",
+    "vlc_boxed.exe (unknown DGA family)"
+  ],
+
+  "file_indicators": {
+    "sha256": [
+      {"hash": "239858491f2a7c4cb5dd44967e364f57fcbefd850da987bb62f06bd58a1f78f9", "filename": "2.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 client stub — VB.NET, 33280 bytes"},
+      {"hash": "61cc1fad658dd5f21e239a3767636da9038c4c08079596c6ab59d70506938b41", "filename": "5666.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 client stub — VB.NET, 36864 bytes"},
+      {"hash": "59e43c18ee26c1056efc9628de025e3026db63c9536f6cbd39de847762d2048e", "filename": "99999999.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 client stub — VB.NET, 36864 bytes"},
+      {"hash": "427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f", "filename": "XClient.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 client stub — primary analysis sample; C2 config fully decrypted"},
+      {"hash": "205bffe1f49e256a8ec879667da1babbcf38b6e4d6600823012a68a8dda3c82d", "filename": "XClient9999.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 client stub — VB.NET, 36864 bytes"},
+      {"hash": "102eedd5355f9aca9b3f4714a3b106b00e6defd097a2e711f878d9633d1ae4fc", "filename": "new_vzzzzzz_2828.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 client stub — VB.NET, 40960 bytes"},
+      {"hash": "f57c6dbff5270b02651c2886771a8dd8cc40fcd23fa5e2902d26bb10be741bf2", "filename": "calc.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 client stub — deceptive filename mimics Windows Calculator"},
+      {"hash": "90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405", "filename": "Xworm_V5.6.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 builder/server panel — 14.8MB VB.NET; ransomware module embedded; compile date 2024-03-08"},
+      {"hash": "f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478", "filename": "XwormLoader.exe", "confidence": "DEFINITE", "context": "Native C++ 11-stage reflective PE loader for XWorm; PEB-patching, LDR spoof; cipher NOT(byte)-0x3E"},
+      {"hash": "978ead9671e59772eeeb73344fc3b0c068c5168de7f67f738269f5b59e681a9a", "filename": "Aspdkzb.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader; delivers PureRAT v4.1.9 via 3-stage chain; 324608 bytes"},
+      {"hash": "57fa1c8ea6e8de464bf88591e56a2f25cd665233132361576d0887dabbf70b66", "filename": "Binajg.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 322048 bytes"},
+      {"hash": "a5f36f63a80d9cfe948e70f796df38e7f1a73b4b965f78bd9b3db13053223639", "filename": "Eokqegd.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"},
+      {"hash": "5285f56688c3aa2cba539102c64e8cf50149233cdcab3d12af34205aadb4f3cb", "filename": "Geejuev.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"},
+      {"hash": "69e4b2fe9e8649e824a46e6f39722b563d00c6ada1feb8fe2a97110bd98681e2", "filename": "Jhmwqqkp.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"},
+      {"hash": "c31e7a44565282835e712aa5117d6b312de4c3e65c9c560a10f650dbf320b778", "filename": "Kwwrxbsoa.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324096 bytes"},
+      {"hash": "2346318752005aeff0eb2b1bc0d8190422c39f98c2b0f3003bb93a95daa82346", "filename": "Oiflbd.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 323584 bytes"},
+      {"hash": "a9341a1a658bd7aed229a8508a6903fe7b94774924af14133f23b75d752dcfba", "filename": "Ptmrxpgw.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"},
+      {"hash": "defa0f24844cb36a905194ab863a15c0215aa98ce8a1372583aaeafc20b5223d", "filename": "Tckimpw.exe", "confidence": "HIGH", "context": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"},
+      {"hash": "469af06d07e937df94534fb2b620af98a86503ab97a615f7134697b7cfe58a1c", "filename": "Zvafsyattl.exe", "confidence": "HIGH", "context": "Stage 2 inner loader — extracted via ExtremeDumper; TEA cipher; .NET Reactor; 325120 bytes"},
+      {"hash": "6b526c29a6961c1f03eeb1ec4ca3a0fdc5680e3f90db013dea8b27d8b63cce57", "filename": "Faidowra.dll", "confidence": "HIGH", "context": "Stage 3 — PureRAT v4.1.9 payload; .NET Reactor 6.x; extracted from memory; 770560 bytes — NOVEL build not in public sandbox databases"},
+      {"hash": "a616c5fd9cee76d2df4d2cfec8d8519e6fd2ad605c1942e1e1cbb99aa09a278d", "filename": "RavenOriginalStub.exe", "confidence": "DEFINITE", "context": "Raven RAT client stub template — Delphi 12.0 Athens Enterprise; 3603968 bytes; C2 host placeholder"},
+      {"hash": "b34a0bb0c0ba24dae59b748f1e9dc70fc739c5d4300fe96e8ff66cf6166d3dd8", "filename": "vicTest.exe", "confidence": "DEFINITE", "context": "Raven RAT C2 server panel (operator console accidentally uploaded) — Delphi; port 8777; operator handle Steffz"},
+      {"hash": "973d9f9faab19e9d9b9cc942bf48859166556eaa8e3cccbf491832e130a65392", "filename": "PureRAT.exe", "confidence": "DEFINITE", "context": "PureHVNC GUI — PureBasic + BoxedApp SDK + DNGuard (modified); internal name PureHVNC_GUI; 82892288 bytes"},
+      {"hash": "8c87cec82356df6bf83af0b966b51ab5dc25b8cc63e9bbae82216e048483dec1", "filename": "xh.exe", "confidence": "HIGH", "context": "PureHVNC victim stub — C2 185.49.126.140:8000; references PHVNC.exe; VB.NET 62464 bytes"},
+      {"hash": "901c3f01d0f32c8aa077031c931ee8d35896d049203a215f1c0bb4e084f1ec07", "filename": "SimpleHelp_TechnicianWinLauncher.exe", "confidence": "HIGH", "context": "ScreenConnect launcher (post-overlay-strip); MSVC VS2005; 339968 bytes"},
+      {"hash": "0f37a2620339a4af7129848fbd9e3a4076103d037f86a80dc452f2363e3cdee9", "filename": "support.ClientSetup(2).exe", "confidence": "HIGH", "context": "ScreenConnect client installer v2 — Authenticode-signed; post-overlay-strip; 5210112 bytes"},
+      {"hash": "75322da03881d88e2cc672184aedb24ca05465af8c3aab2a45ff9d0fedd043f0", "filename": "support.ClientSetup(3).exe", "confidence": "HIGH", "context": "ScreenConnect client installer v3 — Authenticode-signed; post-overlay-strip; 5767168 bytes"},
+      {"hash": "7a848e3509c5945f1104c0baa89032ac6e329a84844ca6bf4177b9308d98b2d3", "filename": "vlc_boxed.exe", "confidence": "HIGH", "context": "Unknown DGA family — Enigma Virtual Box; MSVC 14.41; deceptive VLC filename; persistence vlctask confirmed dynamically"},
+      {"hash": "e2c666332d1a0aa7dca6ed3ac41c040925e740bd1ff19c0172e87334bad5270c", "filename": "Exe To Base64 Converter V2.exe", "confidence": "HIGH", "context": "Operator PE-to-base64 encoding utility — Guna UI v2; .NET 4.7.2"},
+      {"hash": "3b62ba4040d0d470521dce089c13cd8491d1463acbcc8391a49923caa02c08e9", "filename": "ysoserial.exe", "confidence": "HIGH", "context": "Public ysoserial.net deserialization exploit generator — paired with exploit.py for CVE-2025-30406"},
+      {"hash": "fdca9ee6e64d67795cd48c5740fa54f509b00bff3e2e94d5f7863e21b23da7f6", "filename": "Attachment.vbs", "confidence": "DEFINITE", "context": "Phishing VBScript dropper — downloads ScreenConnect MSI from chainconnects.net; UAC elevation; SSA PDF decoy"},
+      {"hash": "a11703fd47d16020fa099a95bb4e46247d32cf8821dc1826e77a971cdd3c4c55", "filename": "Fixer.bat", "confidence": "DEFINITE", "context": "XWorm operator support script — title 'XWorm - Fixer'; confirms active XWorm deployment; lodctr /r"},
+      {"hash": "6adb3df41493b1980127196ba395f469e3245baff2fd25ca5d5e8fd004b6e7f4", "filename": "puf.ps1", "confidence": "HIGH", "context": "PowerShell fileless dropper — hex-encoded ~310KB .NET PE; 13-level nested try/catch anti-analysis; 689198 bytes"},
+      {"hash": "9ce4b25efcfbfb27bdef6ae09beda10c3d1847d16a10d31044c747da05d0357f", "filename": "sync.ps1", "confidence": "HIGH", "context": "PowerShell fileless dropper — hex-encoded ~310KB .NET PE (different payload from puf.ps1); 670766 bytes"}
+    ],
+    "md5": [
+      {"hash": "a51e031bcf76eacdb8b987bc45a5f9f5", "filename": "2.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "d2ff00949e79290b21d97ddebbc1b21c", "filename": "5666.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "9fdb442f58bb5b370ccfd031e2016403", "filename": "99999999.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "f4b00fbc6a3ce80b474334a3ccaadcf0", "filename": "XClient.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub — primary analysis sample"},
+      {"hash": "4c4cf9a5b492434e4003ad10761593dc", "filename": "XClient9999.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "195b758f252644345afe2b2b3a3397a3", "filename": "new_vzzzzzz_2828.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "3828190a6dca5ee2a5b103b3aec7c28f", "filename": "calc.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub — deceptive filename"},
+      {"hash": "56ccb739926a725e78a7acf9af52c4bb", "filename": "Xworm_V5.6.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 builder panel"},
+      {"hash": "9c9245810bad661af3d6efec543d34fd", "filename": "XwormLoader.exe", "confidence": "DEFINITE", "context": "XWorm reflective PE loader"},
+      {"hash": "554cbfabfb7bce86780241a0087d51fb", "filename": "Aspdkzb.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster — Stage 1"},
+      {"hash": "7b2cd7af699ed4d7aba346f7bb80b39a", "filename": "Binajg.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster variant"},
+      {"hash": "f1ab9c13d5c9d59aaa54c51506660c14", "filename": "Eokqegd.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster variant"},
+      {"hash": "d323c6ea1d152899f3c78bf11740b39b", "filename": "Geejuev.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster variant"},
+      {"hash": "2deedd26c00fd690555b175ea9eb8ccb", "filename": "Jhmwqqkp.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster variant"},
+      {"hash": "fbd8d44124b9059789af3469d87b96a3", "filename": "Kwwrxbsoa.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster variant"},
+      {"hash": "8c6656533f31722c4f1ce488dc914082", "filename": "Oiflbd.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster variant"},
+      {"hash": "d08af306c343bc4c11f44306098879a6", "filename": "Ptmrxpgw.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster variant"},
+      {"hash": "ecf6cf7671ab75385f9854aa78bd57a8", "filename": "Tckimpw.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster variant"},
+      {"hash": "9c6229a5dc777bf98e512a8db44b66f0", "filename": "Zvafsyattl.exe", "confidence": "HIGH", "context": "Stage 2 inner loader — extracted"},
+      {"hash": "fa9405a7c7bfca793f3f8c0c25dc9445", "filename": "Faidowra.dll", "confidence": "HIGH", "context": "PureRAT v4.1.9 payload — extracted"},
+      {"hash": "0c4a765f0924b6867fb08407098327db", "filename": "RavenOriginalStub.exe", "confidence": "DEFINITE", "context": "Raven RAT stub template"},
+      {"hash": "c8a38de8c6163f543ab3d17713bd5a30", "filename": "vicTest.exe", "confidence": "DEFINITE", "context": "Raven RAT operator panel"},
+      {"hash": "04bfcd7ab968ec18de2135ac1245d08e", "filename": "PureRAT.exe", "confidence": "DEFINITE", "context": "PureHVNC GUI"},
+      {"hash": "d6a914903f4a52d15af3b1d89ceb2502", "filename": "xh.exe", "confidence": "HIGH", "context": "PureHVNC victim stub"},
+      {"hash": "490a1ac297430d0c6b530c66feec6c6e", "filename": "SimpleHelp_TechnicianWinLauncher.exe", "confidence": "HIGH", "context": "ScreenConnect launcher — original pre-strip MD5"},
+      {"hash": "56bdd11e2169e8475a95f201eb6a267f", "filename": "support.ClientSetup(2).exe", "confidence": "HIGH", "context": "ScreenConnect installer v2 — original pre-strip MD5"},
+      {"hash": "7c98c4d9e3b8909e1a0ef97557236540", "filename": "support.ClientSetup(3).exe", "confidence": "HIGH", "context": "ScreenConnect installer v3 — original pre-strip MD5"},
+      {"hash": "56042f57da3e53a2b058e8bcf3e81493", "filename": "vlc_boxed.exe", "confidence": "HIGH", "context": "vlc_boxed.exe — original pre-strip MD5"},
+      {"hash": "67cc371575c0b685378f811763c3cae0", "filename": "Exe To Base64 Converter V2.exe", "confidence": "HIGH", "context": "Operator encoding utility"},
+      {"hash": "9945815fb0e750d526922582eda2bf39", "filename": "ysoserial.exe", "confidence": "HIGH", "context": "ysoserial.net exploit generator"},
+      {"hash": "f44d83464e64a0cd27ecef75adeab199", "filename": "Attachment.vbs", "confidence": "DEFINITE", "context": "Phishing VBScript dropper"},
+      {"hash": "2dabc46ce85aaff29f22cd74ec074f86", "filename": "Fixer.bat", "confidence": "DEFINITE", "context": "XWorm operator support script"},
+      {"hash": "f04b0812e81f973ebf7eaa27c9aaae4f", "filename": "puf.ps1", "confidence": "HIGH", "context": "PowerShell fileless dropper"},
+      {"hash": "4f2f8c2338dadba372269aa2a16adfec", "filename": "sync.ps1", "confidence": "HIGH", "context": "PowerShell fileless dropper"}
+    ],
+    "sha1": [
+      {"hash": "4ebb6cd34a4254a80271acdd7f8d700b65acb1d8", "filename": "2.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "bff2201c07c78943e6eb2aee06fb219a0fea6784", "filename": "5666.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "b4c272629a80cbe0bbc47bd5952d7d8897992634", "filename": "99999999.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "257b07c4b9eb72403769a12604e9ddb2bf5545fa", "filename": "XClient.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub — primary analysis sample"},
+      {"hash": "6ea6481241e1ba63a204634c3d2813b34ced29ad", "filename": "XClient9999.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "df8269bd9599655083a2f7aeff05545c276df24b", "filename": "new_vzzzzzz_2828.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub"},
+      {"hash": "e63f78986c06a3e5a9298069495418b784f2cd6b", "filename": "calc.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 stub — deceptive filename"},
+      {"hash": "5b01b90137871c3c8f0d04f510c4d56b23932cbc", "filename": "Xworm_V5.6.exe", "confidence": "DEFINITE", "context": "XWorm V5.6 builder panel"},
+      {"hash": "93e4f301156d120a87fe2c4be3aaa28b9dfd1a8d", "filename": "XwormLoader.exe", "confidence": "DEFINITE", "context": "XWorm reflective PE loader"},
+      {"hash": "1b14c09c6b5323b14102e2dc4080805fb2f12557", "filename": "Aspdkzb.exe", "confidence": "HIGH", "context": "Aspdkzb loader cluster Stage 1"},
+      {"hash": "025efa6c0d5e4318383123a294193f266f783c57", "filename": "Binajg.exe", "confidence": "HIGH", "context": "Aspdkzb cluster variant"},
+      {"hash": "3b299fc8597267b904b5465184941c4a74e80e20", "filename": "Eokqegd.exe", "confidence": "HIGH", "context": "Aspdkzb cluster variant"},
+      {"hash": "f5ce8fd075a55f34a2fab0da5c183ad52436ef3e", "filename": "Geejuev.exe", "confidence": "HIGH", "context": "Aspdkzb cluster variant"},
+      {"hash": "f20779f74870e87fc86d7897f7bd81275286883d", "filename": "Jhmwqqkp.exe", "confidence": "HIGH", "context": "Aspdkzb cluster variant"},
+      {"hash": "7ff3dde874f7b2cb34fa65147257bb1b9fdbda7a", "filename": "Kwwrxbsoa.exe", "confidence": "HIGH", "context": "Aspdkzb cluster variant"},
+      {"hash": "792c9c9eac43acf3eb740a1ed3464fa9d771c1d7", "filename": "Oiflbd.exe", "confidence": "HIGH", "context": "Aspdkzb cluster variant"},
+      {"hash": "7b404eb56c295277ab733fbb965394594422a598", "filename": "Ptmrxpgw.exe", "confidence": "HIGH", "context": "Aspdkzb cluster variant"},
+      {"hash": "ac280083d4994ecb526c02251e31a19813121e36", "filename": "Tckimpw.exe", "confidence": "HIGH", "context": "Aspdkzb cluster variant"},
+      {"hash": "99440d52f2442f107d245ebcb186293a2c47db45", "filename": "Zvafsyattl.exe", "confidence": "HIGH", "context": "Stage 2 inner loader — extracted"},
+      {"hash": "4edc47021e17dd02d2b0c8b839a9dbd4da5949db", "filename": "Faidowra.dll", "confidence": "HIGH", "context": "PureRAT v4.1.9 payload — extracted"},
+      {"hash": "079afe270f2addfe137265d2322c22c50415c741", "filename": "RavenOriginalStub.exe", "confidence": "DEFINITE", "context": "Raven RAT stub template"},
+      {"hash": "f278bcc83837aee08068e254fb0170e0db58151b", "filename": "vicTest.exe", "confidence": "DEFINITE", "context": "Raven RAT operator panel"},
+      {"hash": "63d820731424e5e05febd1d8d23b2b5b796a21b4", "filename": "PureRAT.exe", "confidence": "DEFINITE", "context": "PureHVNC GUI"},
+      {"hash": "92ca2749231a40c6607500f2dff6b2713af2b2c0", "filename": "xh.exe", "confidence": "HIGH", "context": "PureHVNC victim stub"}
+    ],
+    "filenames": [
+      {"name": "calc.exe", "confidence": "HIGH", "context": "XWorm V5.6 stub using Calculator filename for EDR evasion — NOT Windows Calculator"},
+      {"name": "vlc_boxed.exe", "confidence": "HIGH", "context": "Unknown DGA malware using VLC Media Player filename for social engineering"},
+      {"name": "Attachment.vbs", "confidence": "HIGH", "context": "Phishing VBScript dropper — filename designed for email delivery"},
+      {"name": "Faidowra.dll", "confidence": "HIGH", "context": "PureRAT v4.1.9 payload DLL — name is campaign-specific artifact"},
+      {"name": "Zvafsyattl.exe", "confidence": "HIGH", "context": "PureRAT Stage 2 loader — random-looking name is install filename from Aspdkzb string"}
+    ],
+    "file_paths": [
+      {"path": "C:\\Users\\*\\AppData\\Roaming\\vlcapp\\vlc.exe", "confidence": "HIGH", "context": "vlc_boxed.exe persistent payload drop target — Run key vlctask points here"},
+      {"path": "%TEMP%\\test_debug.txt", "confidence": "HIGH", "context": "Attachment.vbs debug log — presence indicates dropper execution"},
+      {"path": "C:\\Windows\\System32\\drivers\\etc\\hosts", "confidence": "HIGH", "context": "XWorm Shosts command target for DNS hijacking"}
+    ]
+  },
+
+  "network_indicators": {
+    "ipv4": [
+      {"ip": "185.49.126.140", "port": "5000", "protocol": "TCP", "confidence": "DEFINITE", "context": "XWorm V5.6 C2 — decrypted from XClient.exe Settings.Hosts; AES-encrypted comms; 10-15s beacon"},
+      {"ip": "185.49.126.140", "port": "8000", "protocol": "TCP", "confidence": "DEFINITE", "context": "PureHVNC C2 — hardcoded in xh.exe (PHVNC.Stub.Program.Main())"},
+      {"ip": "185.49.126.140", "port": "56001", "protocol": "TCP", "confidence": "DEFINITE", "context": "PureRAT v4.1.9 C2 port 1 — varint-decoded from Faidowra.dll config blob ManageCombinedSystem field"},
+      {"ip": "185.49.126.140", "port": "56002", "protocol": "TCP", "confidence": "DEFINITE", "context": "PureRAT v4.1.9 C2 port 2 — sequential fallback"},
+      {"ip": "185.49.126.140", "port": "56003", "protocol": "TCP", "confidence": "DEFINITE", "context": "PureRAT v4.1.9 C2 port 3 — sequential fallback"},
+      {"ip": "185.49.126.140", "port": "443", "protocol": "TCP/TLS", "confidence": "DEFINITE", "context": "ScreenConnect admin panel HTTPS — adminxyzhosting.com hosting IP"},
+      {"ip": "185.49.126.140", "port": "8041", "protocol": "TCP", "confidence": "DEFINITE", "context": "ScreenConnect relay port — victim ScreenConnect clients connect here"},
+      {"ip": "74.0.42.25", "port": null, "protocol": null, "confidence": "DEFINITE", "context": "Open directory / malware staging server — ASN 40662 Layer7 Technologies NL; IPXO lease"},
+      {"ip": "74.0.42.162", "port": null, "protocol": null, "confidence": "DEFINITE", "context": "chainconnects.net current hosting IP — same /24 as 74.0.42.25; ASN 40662"},
+      {"ip": "74.0.42.44", "port": null, "protocol": null, "confidence": "HIGH", "context": "chainconnects.net prior hosting IP (2026-01-29 to 2026-02-10) — ASN 40662"},
+      {"ip": "185.49.126.97", "port": null, "protocol": null, "confidence": "HIGH", "context": "adminxyzhosting.com historical IP (2024-10-23 to 2025-01-09) — ASN 199654 NL"}
+    ],
+    "ipv6": [],
+    "domains": [
+      {"domain": "adminxyzhosting.com", "confidence": "DEFINITE", "context": "ScreenConnect relay server — attacker-registered; Hostinger/PrivacyProtect.org; active since 2024-10-23"},
+      {"domain": "chainconnects.net", "confidence": "DEFINITE", "context": "ScreenConnect MSI distribution server — attacker-registered (re-registered 2025-02-16); same registrar/WHOIS/NS as adminxyzhosting.com"},
+      {"domain": "wireon.work.gd", "confidence": "MODERATE", "context": "Free subdomain resolving to 185.49.126.140; appeared 2025-09-03; MODERATE confidence PureRAT C2 fallback during adminxyzhosting.com downtime gap"},
+      {"domain": "ziadxyzhosting.com", "confidence": "MODERATE", "context": "Co-hosted on 74.0.42.162 since 2026-02-08; identical xyz+hosting naming pattern as adminxyzhosting.com"},
+      {"domain": "ziadverisontwo.com", "confidence": "MODERATE", "context": "Co-hosted on 74.0.42.162 since 2026-02-08; 2573 passive DNS queries; possible Verizon typosquat; active at discovery"},
+      {"domain": "ledno.net", "confidence": "MODERATE", "context": "Resolves to 74.0.42.25 open directory IP; appeared 2026-03-02 (10 days before discovery)"}
+    ],
+    "urls": [
+      {"url": "https://chainconnects.net/Bin/support.ClientSetup.msi?e=Access&y=Guest", "confidence": "DEFINITE", "context": "ScreenConnect client MSI download URL — hardcoded in Attachment.vbs"},
+      {"url": "http://adminxyzhosting.com/Bin/Update.Client.exe", "confidence": "DEFINITE", "context": "ScreenConnect session delivery URL base — 500 unique links in final_links.txt with s=[UUID] parameter"},
+      {"url": "http://ip-api.com/line/?fields=hosting", "confidence": "DEFINITE", "context": "XWorm V5.6 sandbox/VM detection check — checks if victim IP is a hosting/datacenter address"}
+    ],
+    "user_agents": [
+      {"ua": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0", "confidence": "MODERATE", "context": "XWorm V5.6 hardcoded user agent (outdated Firefox 66 — default builder string)"},
+      {"ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1", "confidence": "MODERATE", "context": "XWorm V5.6 hardcoded user agent (outdated iOS 11 — default builder string)"},
+      {"ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36", "confidence": "MODERATE", "context": "XWorm V5.6 hardcoded user agent (outdated Chrome 60 — default builder string)"}
+    ]
+  },
+
+  "host_indicators": {
+    "registry_keys": [
+      {"key": "HKCU\\SOFTWARE\\XWorm", "value_name": "BotToken", "value_data": "[runtime-configured]", "confidence": "DEFINITE", "context": "XWorm V5.6 operator config — Telegram bot token stored here at runtime"},
+      {"key": "HKCU\\SOFTWARE\\XWorm", "value_name": "BTC", "value_data": "[runtime-configured]", "confidence": "DEFINITE", "context": "XWorm V5.6 Clipper — BTC replacement address"},
+      {"key": "HKCU\\SOFTWARE\\XWorm", "value_name": "ETH", "value_data": "[runtime-configured]", "confidence": "DEFINITE", "context": "XWorm V5.6 Clipper — ETH replacement address"},
+      {"key": "HKCU\\SOFTWARE\\XWorm", "value_name": "TRC20", "value_data": "[runtime-configured]", "confidence": "DEFINITE", "context": "XWorm V5.6 Clipper — TRC20 (USDT Tron) replacement address"},
+      {"key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "value_name": "vlctask", "value_data": "C:\\Users\\*\\AppData\\Roaming\\vlcapp\\vlc.exe", "confidence": "DEFINITE", "context": "vlc_boxed.exe persistence — written 1 second after launch; confirmed dynamically"},
+      {"key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "value_name": "WindowsService", "value_data": "[path to Raven RAT stub]", "confidence": "HIGH", "context": "Raven RAT persistence — value name masquerades as legitimate Windows service"},
+      {"key": "HKCU\\Software\\[HWID]", "value_name": "[plugin names]", "value_data": "[binary plugin DLLs]", "confidence": "HIGH", "context": "XWorm V5.6 plugin DLL cache — HWID = first 20 chars of MD5(ProcessorCount+UserName+MachineName+OSVersion+DriveSize)"}
+    ],
+    "mutexes": [
+      {"name": "5tK099W0Z6AMZVxQ", "confidence": "DEFINITE", "context": "XWorm V5.6 anti-double-execution mutex — plaintext in Settings class; also AES key derivation seed"},
+      {"name": "x", "confidence": "HIGH", "context": "Raven RAT mutex — set in FormCreate at 0x006D188C (static analysis confirmed)"}
+    ],
+    "named_pipes": [],
+    "services": [],
+    "scheduled_tasks": []
+  },
+
+  "behavioral_indicators": {
+    "process_patterns": [
+      {"pattern": "wscript.exe executes Attachment.vbs -> spawns msiexec.exe /i *.msi /quiet ALLUSERS=2", "confidence": "DEFINITE", "context": "ScreenConnect silent install via phishing VBScript"},
+      {"pattern": "msiexec.exe spawned with /quiet ALLUSERS=2 installing ScreenConnect client", "confidence": "DEFINITE", "context": "Silent ScreenConnect install — operator-controlled deployment"},
+      {"pattern": "vlc_boxed.exe opens %UserProfile%\\.MalwareAnalysis\\Scripts\\Noriben\\dll_log.txt within 1s of launch", "confidence": "DEFINITE", "context": "vlc_boxed.exe analysis environment probe — Noriben artifact detection"},
+      {"pattern": "Parent process spawns powershell.exe -ExecutionPolicy Bypass -File *.ps1", "confidence": "HIGH", "context": "XWorm DW command or puf.ps1/sync.ps1 execution — fileless dropper launch"},
+      {"pattern": "Delphi executable spawns cmd.exe running taskkill /f /im [processname]", "confidence": "HIGH", "context": "Raven RAT process kill via CreateProcessW(CREATE_NO_WINDOW)"}
+    ],
+    "file_access_patterns": [
+      {"pattern": "Process accesses C:\\Windows\\System32\\drivers\\etc\\hosts for write", "confidence": "HIGH", "context": "XWorm Shosts command — DNS hijacking by overwriting hosts file"},
+      {"pattern": "Process creates %TEMP%\\test_debug.txt with HTTP status codes and timestamps", "confidence": "DEFINITE", "context": "Attachment.vbs debug log — indicates VBScript dropper execution"},
+      {"pattern": "Process creates multiple %LocalAppData%\\Temp\\evb*.tmp then deletes them", "confidence": "DEFINITE", "context": "Enigma Virtual Box unpacking sequence — indicates vlc_boxed.exe or similar Enigma-wrapped binary"}
+    ],
+    "protocol_patterns": [
+      {"pattern": "TCP connection to 185.49.126.140:5000 with variable-length ASCII header + null terminator framing; payload AES-128 ECB encrypted", "confidence": "DEFINITE", "context": "XWorm V5.6 C2 protocol — key=MD5('<999>')"},
+      {"pattern": "TCP stream: bytes 04 00 00 00 followed immediately by TLS ClientHello on ports 56001/56002/56003", "confidence": "DEFINITE", "context": "PureRAT v4.1.9 C2 protocol identification — unique 4-byte preamble"},
+      {"pattern": "TLS connection presenting self-signed certificate with CN=Ayzyqztcoa, NotAfter=9999-12-31, 4096-bit RSA", "confidence": "DEFINITE", "context": "PureRAT v4.1.9 pinned certificate — this build's specific fingerprint"},
+      {"pattern": "Outbound TCP to port 8041 to adminxyzhosting.com", "confidence": "DEFINITE", "context": "ScreenConnect relay connection — victim client connecting to attacker-controlled relay"}
+    ]
+  },
+
+  "exploit_indicators": {
+    "cve_2025_30406": {
+      "validation_key": "5496832242CC3228E292EEFFCDA089149D789E0C4D7C1A5D02BC542F7C6279BE9DD770C9EDD5D67C66B7E621411D3E57EA181BBF89FD21957DCDDFACFD926E16",
+      "generator": "3FE2630A",
+      "algorithm": "HMACSHA256",
+      "gadget_chain": "TextFormattingRunProperties",
+      "confidence": "DEFINITE",
+      "context": "Victim-specific ASP.NET ViewState validation key and generator hardcoded in exploit.py — unique to one targeted application deployment"
+    }
+  },
+
+  "attribution_indicators": {
+    "operator_handle": {"value": "Steffz", "confidence": "DEFINITE", "source": "vicTest.exe DFM label 'Welcome Back Steffz!'"},
+    "canva_name": {"value": "Stefan Yosifov", "confidence": "DEFINITE", "source": "Main.dfm PNG XMP pdf:Author field — Canva account name at design time; NOT present in compiled binary"},
+    "telegram_handles": [
+      {"handle": "ZeroTraceDevOfficial", "role": "Raven RAT author", "confidence": "DEFINITE", "source": "README.md"},
+      {"handle": "BAK34_TMW", "role": "BAK3R tool author/distributor", "confidence": "DEFINITE", "source": "Office_Cracker.py line 4"},
+      {"handle": "rockbelling", "role": "screen.py ScreenConnect session generator author", "confidence": "DEFINITE", "source": "screen.py inline comment"}
+    ],
+    "discord_id": {"value": "825505380452925470", "confidence": "DEFINITE", "source": "Office_Cracker.py"},
+    "canva_user_id": {"value": "UAGcXl67Or4", "confidence": "DEFINITE", "source": "Main.dfm PNG XMP xmp:CreatorTool"},
+    "canva_doc_id": {"value": "DAGlzS2GcRU", "confidence": "DEFINITE", "source": "Main.dfm PNG XMP"},
+    "github": {"value": "monroe31s", "confidence": "HIGH", "source": "Direct OSINT access — Tier 2 verified", "note": "Display name 'ZDev'; Telegram link @ZeroTraceDevOfficial; hosts Raven-RAT repository"}
+  }
+}
