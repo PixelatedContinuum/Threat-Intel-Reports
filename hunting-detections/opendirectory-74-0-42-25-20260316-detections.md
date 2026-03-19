@@ -175,13 +175,16 @@ rule RAT_RavenRAT_Stub
 
 ## Sigma Rules
 
+```
 # Detection Priority: HIGH
 # Rationale: XWorm V5.6 writes operator configuration (Telegram bot token, crypto clipper addresses) to a distinctive registry key; legitimate software does not use HKCU\SOFTWARE\XWorm
 # ATT&CK Coverage: T1112 (Modify Registry)
 # Confidence: HIGH
 # False Positive Risk: LOW — registry key name is malware-specific and not used by any known legitimate software
 # Deployment: Windows endpoints with Sysmon EID 13 collection; EDR registry monitoring
+```
 
+```yaml
 title: XWorm V5.6 Operator Configuration Registry Key Write
 id: 2f4dafdd-6eb9-46f5-9ca6-ea704008f8da
 status: test
@@ -207,16 +210,20 @@ detection:
 falsepositives:
     - No known legitimate software uses the HKCU\SOFTWARE\XWorm registry key path
 level: high
+```
 
 ---
 
+```
 # Detection Priority: HIGH
 # Rationale: vlc_boxed.exe writes a Run key named "vlctask" pointing to %APPDATA%\vlcapp\vlc.exe — a name-collision attack on VLC Media Player; no legitimate VLC installation uses this path or value name
 # ATT&CK Coverage: T1547.001 (Boot or Logon Autostart: Registry Run Keys), T1036 (Masquerading)
 # Confidence: HIGH
 # False Positive Risk: LOW — legitimate VLC installs to %ProgramFiles%; the vlctask/vlcapp path combination is malware-specific
 # Deployment: Windows endpoints with Sysmon EID 13 collection; EDR registry monitoring
+```
 
+```yaml
 title: vlc_boxed.exe DGA Malware Run Key Persistence via VLC Name Masquerade
 id: e90b3fbd-823b-4218-a548-6c39376438f4
 status: test
@@ -243,16 +250,20 @@ detection:
 falsepositives:
     - Legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\vlcapp path; no known false positive scenario for this specific value name
 level: high
+```
 
 ---
 
+```
 # Detection Priority: HIGH
 # Rationale: Raven RAT (Delphi) creates a Run key value named "WindowsService" in HKCU — a deliberate masquerade concealing a user-mode persistence entry as a Windows system service name
 # ATT&CK Coverage: T1547.001 (Boot or Logon Autostart: Registry Run Keys), T1036.004 (Masquerading: Masquerade Task or Service)
 # Confidence: HIGH
 # False Positive Risk: MEDIUM — "WindowsService" as a HKCU Run value is unusual but could appear in poorly named legitimate software; correlate with process image path outside System32 or Program Files
 # Deployment: Windows endpoints with Sysmon EID 13 collection; EDR registry monitoring
+```
 
+```yaml
 title: Raven RAT Persistence via WindowsService Run Key Masquerade
 id: 9ad1fd97-8a23-42fd-8ab6-210999dd6d9c
 status: test
@@ -284,16 +295,20 @@ detection:
 falsepositives:
     - Poorly named legitimate software that uses 'WindowsService' as a Run key value name; validate that the target binary path is outside System32 and Program Files before actioning
 level: high
+```
 
 ---
 
+```
 # Detection Priority: HIGH
 # Rationale: The ScreenConnect phishing dropper (Attachment.vbs) spawns msiexec with /quiet ALLUSERS=2 for silent ScreenConnect install — the combination of wscript.exe parent, msiexec child, and ALLUSERS=2 is specific to this phishing delivery chain
 # ATT&CK Coverage: T1218.007 (System Binary Proxy Execution: Msiexec), T1059.005 (Command and Scripting Interpreter: Visual Basic), T1566.001 (Phishing: Spearphishing Attachment)
 # Confidence: HIGH
 # False Positive Risk: MEDIUM — silent MSI installs from wscript.exe are unusual in most enterprise environments but may occur in some software deployment scripts; tune by excluding known-good deployment parent paths
 # Deployment: Windows endpoints with Sysmon EID 1 collection; EDR process creation monitoring
+```
 
+```yaml
 title: ScreenConnect Phishing VBScript Dropper Silent MSI Install Chain
 id: c48377bd-0066-4bb0-8cc7-4041cd0a0e54
 status: test
@@ -327,16 +342,20 @@ detection:
 falsepositives:
     - Legitimate software deployment scripts that invoke msiexec silently from wscript.exe; validate MSI download source URL and installation target domain against known-good deployment infrastructure
 level: high
+```
 
 ---
 
+```
 # Detection Priority: MEDIUM
 # Rationale: puf.ps1 and sync.ps1 are fileless PE droppers that use -ExecutionPolicy Bypass to load .ps1 scripts containing hex-encoded .NET assemblies loaded via Assembly.Load; specificity comes from non-standard parent process context
 # ATT&CK Coverage: T1059.001 (Command and Scripting Interpreter: PowerShell), T1620 (Reflective Code Loading), T1027 (Obfuscated Files or Information)
 # Confidence: MODERATE — ExecutionPolicy Bypass is common; specificity requires non-standard parent process correlation
 # False Positive Risk: MEDIUM — ExecutionPolicy Bypass is used by legitimate admin tooling; extend filter block for environment-specific known-good parents
 # Deployment: Windows endpoints with Sysmon EID 1 collection; EDR process creation monitoring; tune filter block per environment
+```
 
+```yaml
 title: Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent
 id: 945438df-0fc1-4861-9ed6-4c66ae11e700
 status: test
@@ -374,16 +393,20 @@ detection:
 falsepositives:
     - Legitimate administrative scripts invoked via remote management tools, scheduled tasks, or software deployment systems; extend filter_standard_parents to include known-good deployment parent images in the target environment
 level: medium
+```
 
 ---
 
+```
 # Detection Priority: HIGH
 # Rationale: 185.49.126.140 is a confirmed multi-family C2 server hosting XWorm V5.6 (port 5000), PureHVNC (port 8000), and PureRAT v4.1.9 (ports 56001-56003); any outbound connection on these ports is confirmed malicious C2 traffic
 # ATT&CK Coverage: T1071.001 (Application Layer Protocol: Web Protocols), T1573.001 (Encrypted Channel: Symmetric Cryptography), T1573.002 (Encrypted Channel: Asymmetric Cryptography)
 # Confidence: HIGH
 # False Positive Risk: LOW — IP and port combinations are confirmed C2; no legitimate services operate on these ports at this IP
 # Deployment: Windows endpoints with Sysmon EID 3 collection; network perimeter sensors; EDR network telemetry
+```
 
+```yaml
 title: Confirmed Multi-Family C2 Outbound Connection to MaaS Toolkit Infrastructure
 id: 40d3065a-71ac-41e9-8726-c76c48c04c9a
 status: test
@@ -418,16 +441,20 @@ detection:
 falsepositives:
     - No known legitimate services operate on 185.49.126.140 on these ports; false positive likelihood is negligible for this confirmed malicious IP and port combination
 level: critical
+```
 
 ---
 
+```
 # Detection Priority: HIGH
 # Rationale: Outbound TCP to adminxyzhosting.com:8041 is the operator-specific ScreenConnect relay port confirmed from Attachment.vbs, 500 pre-generated phishing session URLs, and binary analysis; port 8041 is non-standard for ScreenConnect and not used by any legitimate deployment
 # ATT&CK Coverage: T1219 (Remote Access Software), T1071.001 (Application Layer Protocol: Web Protocols)
 # Confidence: HIGH
 # False Positive Risk: LOW — adminxyzhosting.com is a confirmed malicious operator domain; port 8041 is non-standard for ScreenConnect
 # Deployment: Windows endpoints with Sysmon EID 3 collection; DNS-aware network sensors; EDR network telemetry
+```
 
+```yaml
 title: ScreenConnect Relay Outbound Connection to Malicious Operator Domain on Port 8041
 id: e237ddd4-f9bd-48ee-8ebd-623f2fe90198
 status: test
@@ -458,38 +485,51 @@ detection:
 falsepositives:
     - No legitimate ConnectWise ScreenConnect deployment is expected on adminxyzhosting.com port 8041; this domain and port combination is confirmed operator-specific malicious infrastructure
 level: high
+```
 
 ---
 
 ## Suricata Rules
 
+```
 # Detection Priority: HIGH
 # Rationale: Any TCP connection to 185.49.126.140:5000 is confirmed XWorm V5.6 C2 traffic; IP and port independently confirmed from decrypted XClient.exe AES-256 ECB configuration
 # ATT&CK Coverage: T1071.001 (Application Layer Protocol: Web Protocols), T1573.001 (Encrypted Channel: Symmetric Cryptography)
 # Confidence: HIGH
 # False Positive Risk: LOW — confirmed malicious C2 IP and port; no legitimate service operates on 185.49.126.140:5000
 # Deployment: Network perimeter IDS/IPS, inline sensor on egress paths
+```
 
+```
 alert tcp $HOME_NET any -> 185.49.126.140 5000 (msg:"THL MaaS Toolkit XWorm V5.6 C2 Communication to Confirmed Operator C2 Server"; flow:established,to_server; threshold:type limit,track by_src,count 1,seconds 300; classtype:trojan-activity; sid:9001001; rev:1; metadata:author "The Hunters Ledger", created_at 2026_03_17, malware_family XWorm, confidence high, mitre_technique T1071.001;)
+```
 
 ---
 
+```
 # Detection Priority: HIGH
 # Rationale: PureRAT v4.1.9 sends a fixed 4-byte TCP preamble 0x04000000 before initiating TLS on ports 56001-56003; this preamble is a published behavioral signature independently confirmed from Faidowra.dll binary analysis and Netresec research
 # ATT&CK Coverage: T1573.002 (Encrypted Channel: Asymmetric Cryptography), T1071.001 (Application Layer Protocol: Web Protocols)
 # Confidence: HIGH
 # False Positive Risk: LOW — the specific 4-byte preamble on these non-standard destination ports is characteristic of PureRAT v4.1.9 protocol framing and not observed in legitimate traffic on these ports
 # Deployment: Network perimeter IDS/IPS, inline sensor on egress paths; note TLS session prevents payload inspection after the preamble bytes
+```
 
+```
 alert tcp $HOME_NET any -> 185.49.126.140 [56001,56002,56003] (msg:"THL MaaS Toolkit PureRAT v4.1.9 Protocol Preamble Before TLS to Confirmed C2 Ports"; flow:established,to_server; content:"|04 00 00 00|"; depth:4; threshold:type limit,track by_src,count 1,seconds 300; classtype:trojan-activity; sid:9001002; rev:1; metadata:author "The Hunters Ledger", created_at 2026_03_17, malware_family PureRAT, confidence high, mitre_technique T1573.002;)
+```
 
 ---
 
+```
 # Detection Priority: HIGH
 # Rationale: Outbound TCP to port 8041 carrying the hostname adminxyzhosting.com is the operator-specific ScreenConnect relay confirmed from Attachment.vbs, 500 phishing session URLs, and binary analysis; port 8041 is non-standard and not used by any known legitimate ScreenConnect deployment
 # ATT&CK Coverage: T1219 (Remote Access Software), T1071.001 (Application Layer Protocol: Web Protocols)
 # Confidence: HIGH
 # False Positive Risk: LOW — adminxyzhosting.com is a confirmed malicious operator domain; port 8041 is non-standard and not associated with legitimate ScreenConnect infrastructure
 # Deployment: Network perimeter IDS/IPS; DNS-aware sensors; egress filtering on corporate gateway
+```
 
+```
 alert tcp $HOME_NET any -> any 8041 (msg:"THL MaaS Toolkit ScreenConnect Relay to Malicious Operator Domain adminxyzhosting.com"; flow:established,to_server; content:"adminxyzhosting.com"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:9001003; rev:1; metadata:author "The Hunters Ledger", created_at 2026_03_17, malware_family ScreenConnect_Abuse, confidence high, mitre_technique T1219;)
+```
