@@ -1,6 +1,6 @@
 # SITE CONFIGURATION
-baseurl: "/Threat-Intel-Reports"
-url: "https://pixelatedcontinuum.github.io"
+baseurl: ""
+url: "https://the-hunters-ledger.com"
 
 # THEME-SPECIFIC CONFIGURATION
 title: The Hunter's Ledger
