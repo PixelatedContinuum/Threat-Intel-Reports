@@ -18,4 +18,4 @@ https://the-hunters-ledger.com/feed.xml
 
 Get an email when a new report is published. Sign up below:
 
-<!-- Paste your EmailOctopus embedded form snippet here after setting up your account at emailoctopus.com -->
+<script async src="https://eocampaign1.com/form/d7e87548-297e-11f1-a6ab-1d8405c03c10.js" data-form="d7e87548-297e-11f1-a6ab-1d8405c03c10"></script>
