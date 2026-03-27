@@ -1,0 +1,15 @@
+- title: Reports
+  url: /reports/
+  position: 2
+
+- title: Hunting Detections
+  url: /hunting-detections/
+  position: 3
+
+- title: IOC Feeds
+  url: /ioc-feeds/
+  position: 4
+
+- title: Subscribe
+  url: /subscribe/
+  position: 5
