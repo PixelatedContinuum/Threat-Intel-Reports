@@ -2,6 +2,7 @@
 title: Subscribe
 layout: page
 permalink: /subscribe/
+position: 5
 ---
 
 Stay up to date with new threat intelligence reports from The Hunter's Ledger.
