@@ -3,7 +3,6 @@ title: Reports
 layout: page
 permalink: /reports/
 position: 2
-
 ---
 
 Welcome to the **Hunter’s Ledger Reports** section.  
