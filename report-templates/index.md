@@ -2,7 +2,7 @@
 title: Report Templates
 layout: page
 permalink: /report-templates/
-nav-menu: false
+hide: true
 ---
 
 # Purpose
