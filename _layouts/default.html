@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!--
+    Type on Strap jekyll theme v2.5.0
+    Theme free for personal and commercial use under the MIT license
+    https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
+-->
+<html lang="en">
+  {% capture _head %}{% include default/head.liquid %}{% endcapture %}
+  {{ _head | split: " " | join: " "}}
+  <body>
+    {% capture _navbar %}{% include default/navbar.liquid %}{% endcapture %}
+    {{ _navbar | split: " " | join: " "}}
+    <main class="content">
+      {{ content }}
+    </main>
+    {% capture _footer %}{% include default/footer.liquid %}{% endcapture %}
+    {{ _footer | split: " " | join: " "}}
+    <script async src="https://eocampaign1.com/form/68e56ce4-2980-11f1-960c-1d8405c03c10.js" data-form="68e56ce4-2980-11f1-960c-1d8405c03c10"></script>
+  </body>
+</html>
