@@ -21,7 +21,7 @@
 	<!-- Menu -->
 	<ul class="hide">
 		{% assign name_page = "" %}
-		{% assign pages = site.pages | where: 'layout', 'page' | sort: 'position' %}
+		{% assign pages = site.pages | where_exp: "item", "item.position" | sort: 'position' %}
 		{% for page in pages %}
 			{% unless page.title == null or page.hide or name_page contains page.title %}
 				<li class="separator"> | </li>
