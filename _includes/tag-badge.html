@@ -1,0 +1,15 @@
+{% assign t = include.tag | strip %}
+{% assign tl = t | downcase %}
+{% if tl == "c2" or tl == "rat" or tl == "ip" or tl == "hash" or tl == "maas" %}
+  <span class="hl-tag hl-tag--blue">{{ t }}</span>
+{% elsif tl == "webshell" or tl == "rce" or tl == "threat" or tl == "toolkit" or tl == "ransomware" %}
+  <span class="hl-tag hl-tag--red">{{ t }}</span>
+{% elsif tl == "open dir" or tl == "domain" or tl == "sigma" or tl == "cryptominer" or tl == "scanner" %}
+  <span class="hl-tag hl-tag--green">{{ t }}</span>
+{% elsif tl == "loader" or tl == "suricata" or tl == "yara" or tl == "stealer" %}
+  <span class="hl-tag hl-tag--purple">{{ t }}</span>
+{% elsif tl == "note" or tl == "warning" %}
+  <span class="hl-tag hl-tag--yellow">{{ t }}</span>
+{% else %}
+  <span class="hl-tag hl-tag--blue">{{ t }}</span>
+{% endif %}

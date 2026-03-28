@@ -6,6 +6,12 @@ permalink: /behind-the-reports/
 hide: true
 ---
 
+<div class="hl-page-header" style="border-left-color: #f97316;">
+  <div class="hl-page-header__label" style="color: #f97316;">Behind the Reports</div>
+  <div class="hl-page-header__title">How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence</div>
+  <div class="hl-page-header__desc">The workflow, the design decisions, and why it was built.</div>
+</div>
+
 ## What Is This, and Why Does It Exist?
 
 When a security researcher analyzes malware, a malicious program, a suspicious file, a piece of code found in the wild, the raw output of that analysis is scattered and hard to make sense of. Numbers, strings, network addresses, behavioral observations. It's useful data, but it is not intelligence. It doesn't explain what the threat actually *means*, who is likely behind it, how defenders should detect it, or why it matters in the broader threat landscape.
