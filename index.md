@@ -1,4 +1,5 @@
 ---
+title: The Hunter's Ledger
 layout: page
 permalink: /
 position: 1
