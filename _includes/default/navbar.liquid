@@ -1,45 +1,11 @@
-<header class="site-header">
-
-<!-- Logo and title -->
-<div class="branding">
-	{% if site.avatar %}
-		<a href="{{ '/' | relative_url }}">
-			<img alt="logo img" class="avatar" src="{{ site.avatar | relative_url }}" loading="lazy"/>
-		</a>
-	{% endif %}
-	<a class="site-title" aria-label="{{ site.title }}" href="{{ '/' | relative_url }}">
-		{{ site.title }}
-	</a>
-</div>
-
-<!-- Toggle menu -->
-<nav class="clear">
-	<a aria-label="pull" id="pull" class="toggle" href="#">
-		<i class="fas fa-bars fa-lg"></i>
-	</a>
-
-	<!-- Menu -->
-	<ul class="hide">
-		{% assign name_page = "" %}
-		{% assign pages = site.pages | where_exp: "item", "item.position" | sort: 'position' %}
-		{% for page in pages %}
-			{% unless page.title == null or page.hide or name_page contains page.title %}
-				<li class="separator"> | </li>
-				<li>
-					<a class="clear" aria-label="{{ page.title }}" title="{{ page.title }}" href="{{ page.url | relative_url }}">
-						{% if page.icon %} <i class="navbar-icon fas {{ page.icon }}" aria-hidden="true"></i>{% endif %}
-						<span class="navbar-label {% if page.icon %}navbar-label-with-icon{% endif %}">{{ page.title }}</span>
-					</a>
-				</li>
-			{% endunless %}
-			{% assign name_page = page.title | append: name_page %}
-		{% endfor %}
-
-		{% if site.color_theme == 'auto' %}
-			<li class="separator"> | </li>
-			<li><a id="theme-toggle" title="{{ site.data.language.str_dark | default: 'Toggle theme' }}" aria-label="{{ site.data.language.str_dark | default: 'Toggle theme' }}" onclick="themeToggle()"></a></li>
-		{% endif %}
-	</ul>
-
-</nav>
+<header class="hl-nav">
+  <a class="hl-nav__brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+  <nav class="hl-nav__links" aria-label="Site navigation">
+    {% assign nav_pages = site.pages | where_exp: "item", "item.position" | sort: 'position' %}
+    {% for nav_page in nav_pages %}
+      {% unless nav_page.title == null or nav_page.hide or nav_page.title == site.title %}
+      <a class="hl-nav__link" href="{{ nav_page.url | relative_url }}">{{ nav_page.title }}</a>
+      {% endunless %}
+    {% endfor %}
+  </nav>
 </header>
