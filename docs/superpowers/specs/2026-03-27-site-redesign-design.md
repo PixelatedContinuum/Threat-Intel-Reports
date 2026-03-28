@@ -45,7 +45,7 @@ Tags use a semi-transparent background with a tinted border and matching text co
 | Webshell / Threat | `#b91c1c33` | `#b91c1c55` | `#f87171` |
 | Open Dir / Domain / Sigma | `#16653433` | `#16653455` | `#4ade80` |
 | Loader / Suricata | `#7c3aed33` | `#7c3aed55` | `#c084fc` |
-| Note / Warning | `#3a3a1a` (bg) | `#3a3a1a` | `#facc15` |
+| Note / Warning | `#3a3a1a` (bg) | `#aaaa2255` | `#facc15` |
 
 ### Severity Bar
 
@@ -94,7 +94,12 @@ Usage:
 
 ### `_includes/section-header.html`
 
-Reusable section divider label. Parameters: `label` (text), `accent` (CSS color value, optional).
+Reusable section divider label.
+
+| Parameter | Description | Default |
+|---|---|---|
+| `label` | Section label text | *(required)* |
+| `accent` | CSS color for the left dot/bar | `#aaaaaa` (neutral grey) |
 
 ---
 
@@ -163,7 +168,7 @@ When a new report is published:
 2. In `reports/index.md`: add a new `report-card` include at the top of the featured grid
 3. If the grid already has 6 cards, move the oldest one down to the list section as a `report-row` include
 4. In `index.md`: update the 2 homepage preview cards to show the latest 2 reports
-5. Add corresponding `report-row` includes to `hunting-detections/index.md` and `ioc-feeds/index.md`
+5. If the report includes detection rules, add a `report-row` include to `hunting-detections/index.md`. If it includes an IOC feed, add a `report-row` include to `ioc-feeds/index.md`. (Most reports include both, but this is conditional — only add rows for sections that actually have content.)
 
 ---
 
