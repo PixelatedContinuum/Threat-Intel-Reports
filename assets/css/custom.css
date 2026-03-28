@@ -94,7 +94,7 @@ main.content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 52px;
+  height: 64px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -102,36 +102,47 @@ main.content {
   width: 100%;
 }
 
+/* Logo image brand link */
 .hl-nav__brand,
 .hl-nav__brand:visited {
-  color: var(--hl-text-primary) !important;
-  font-size: 1.05rem;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
   text-decoration: none !important;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
   flex-shrink: 0;
+  opacity: 1;
+  transition: opacity 0.15s;
 }
 
 .hl-nav__brand:hover {
-  color: var(--hl-text-primary) !important;
+  opacity: 0.85;
   text-decoration: none !important;
+}
+
+/* mix-blend-mode: screen makes the dark teal background of header.png
+   dissolve into the dark navbar, leaving only the bright pink triangle
+   and white text visible — natural transparent-background effect */
+.hl-nav__logo {
+  height: 42px;
+  width: auto;
+  display: block;
+  mix-blend-mode: screen;
 }
 
 .hl-nav__links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
 }
 
 .hl-nav__link,
 .hl-nav__link:visited {
   color: var(--hl-text-muted) !important;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 500;
   text-decoration: none !important;
   white-space: nowrap;
   transition: color 0.15s;
+  letter-spacing: 0.01em;
 }
 
 .hl-nav__link:hover {
@@ -139,17 +150,20 @@ main.content {
   text-decoration: none !important;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 700px) {
   .hl-nav {
     height: auto;
-    padding: 12px 16px;
+    padding: 10px 16px;
     flex-wrap: wrap;
     gap: 10px;
+  }
+  .hl-nav__logo {
+    height: 32px;
   }
   .hl-nav__links {
     width: 100%;
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 16px;
     padding-bottom: 6px;
   }
 }

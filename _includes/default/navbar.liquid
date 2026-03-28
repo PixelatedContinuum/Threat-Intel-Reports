@@ -1,5 +1,7 @@
 <header class="hl-nav">
-  <a class="hl-nav__brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+  <a class="hl-nav__brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">
+    <img class="hl-nav__logo" src="{{ '/assets/images/header.png' | relative_url }}" alt="{{ site.title }}">
+  </a>
   <nav class="hl-nav__links" aria-label="Site navigation">
     {% assign nav_pages = site.pages | where_exp: "item", "item.position" | sort: 'position' %}
     {% for nav_page in nav_pages %}
