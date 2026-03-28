@@ -25,10 +25,15 @@
 /* --- Global theme overrides --------------------------------- */
 /* Theme sets body { font-size: 1.25em } = 20px — let it cascade.
    We only override background, color, and heading colors. */
+html {
+  overflow-x: hidden; /* suppress horizontal scroll from theme's #post-nav */
+}
+
 body,
 body.dark {
   background-color: var(--hl-bg-page) !important;
   color: var(--hl-text-primary) !important;
+  overflow-x: hidden;
 }
 
 /* Theme dark mode sets wild heading colors (h2: purple, h3: pink).
@@ -44,8 +49,37 @@ main.content {
   min-height: 100vh;
   max-width: 900px !important;
   margin: 0 auto !important;
-  padding: 40px 28px 36px !important;
+  /* Padding-top is swallowed by the floated header — margin-top on
+     .hl-page/.hl-post-header is used for the visible top gap instead. */
+  padding: 8px 28px 36px !important;
   box-sizing: border-box;
+  /* Bump all em-based sizes up ~10% (body base 20px → effective 22px) */
+  font-size: 1.1em;
+}
+
+/* Top gap between navbar and first content element */
+.hl-page {
+  margin-top: 1.75rem;
+}
+
+/* Theme's prev/next post navigation — restyle for our dark theme */
+#post-nav {
+  background: var(--hl-bg-page) !important;
+  border-top: 1px solid var(--hl-border-row) !important;
+  padding: 20px 0 !important;
+  margin-top: 2rem;
+}
+
+#post-nav a,
+#post-nav a:visited {
+  color: var(--hl-accent-blue) !important;
+  font-size: 0.85em !important;
+}
+
+#post-nav p,
+#post-nav .meta {
+  color: var(--hl-text-dim) !important;
+  font-size: 0.72em !important;
 }
 
 /* --- Navbar overrides --------------------------------------- */
@@ -334,16 +368,23 @@ main.content {
 
 .hl-post-content figure img {
   max-width: 100%;
-  border: 1px solid var(--hl-border-card);
+  border: 1px solid #333333;
   border-radius: 4px;
+  display: block;
+  margin: 0 auto;
 }
 
 .hl-post-content figcaption {
-  color: var(--hl-text-dim);
+  color: var(--hl-text-secondary);
   font-size: 0.82em;
   font-style: italic;
-  margin-top: 8px;
-  line-height: 1.5;
+  margin-top: 10px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.hl-post-content figcaption code {
+  font-style: normal;
 }
 
 
