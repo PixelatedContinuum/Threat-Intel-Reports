@@ -5,7 +5,7 @@ permalink: /
 position: 1
 ---
 
-<img src="{{ '/assets/images/header.png' | relative_url }}" alt="{{ site.title }}" class="hl-masthead">
+<img src="{{ '/assets/images/logo.png' | relative_url }}" alt="{{ site.title }}" class="hl-masthead">
 
 <div class="hl-hero">
   <div>
