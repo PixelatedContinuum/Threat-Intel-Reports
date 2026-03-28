@@ -22,6 +22,22 @@
   --hl-text-secondary: #aaaaaa;
 }
 
+/* --- Global theme overrides --------------------------------- */
+body,
+body.dark {
+  background-color: var(--hl-bg-page) !important;
+}
+
+main.content {
+  background-color: var(--hl-bg-page) !important;
+  min-height: 100vh;
+}
+
+/* Suppress h1 injected by jekyll-titles-from-headings on page layouts */
+.hl-page > h1:first-child {
+  display: none;
+}
+
 /* --- Featured card grid ------------------------------------- */
 .hl-grid {
   display: grid;
