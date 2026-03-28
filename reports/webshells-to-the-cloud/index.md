@@ -1,5 +1,5 @@
 ---
-title: From Webshells to the Cloud - A Modular Intrusion Chain
+title: "From Webshells to the Cloud"
 date: '2025-10-20'
 layout: post
 permalink: /reports/webshells-to-the-cloud/

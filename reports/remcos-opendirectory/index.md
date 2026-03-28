@@ -1,5 +1,5 @@
 ---
-title: Remcos RAT OpenDirectory Campaign - Technical Analysis & Business Risk Assessment
+title: "Remcos OpenDirectory Campaign"
 date: '2026-02-04'
 layout: post
 permalink: /reports/remcos-opendirectory/

@@ -1,5 +1,5 @@
 ---
-title: Hybrid Loader/Stealer Ecosystem Masquerading as Sogou
+title: "Hybrid Ecosystem Masquerading as Sogou"
 date: '2025-11-21'
 layout: post
 permalink: /reports/Hybrid-Loader-Stealer-Sogou/

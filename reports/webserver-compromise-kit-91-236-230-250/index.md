@@ -1,5 +1,5 @@
 ---
-title: 'WebServer Compromise Kit - Technical Analysis & Business Risk Assessment'
+title: "WebServer Compromise Kit â 91.236.230.250"
 date: '2026-02-08'
 layout: post
 permalink: /reports/webserver-compromise-kit-91-236-230-250/

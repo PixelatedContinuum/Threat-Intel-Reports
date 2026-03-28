@@ -1,5 +1,5 @@
 ---
-title: "Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220) - Technical Analysis & Threat Assessment"
+title: "Open Directory Exposure: Sliver with ScareCrow Loader (45.94.31.220)"
 date: '2026-03-01'
 layout: post
 permalink: /reports/sliver-open-directory/

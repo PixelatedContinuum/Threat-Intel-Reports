@@ -1,5 +1,5 @@
 --- 
-title: "Technical Analysis of NsMiner: A Multi-Stage Cryptojacking Operation"
+title: "NsMiner: Multi-Stage Operation"
 date: '2026-02-02'
 layout: post
 permalink: /reports/nsminer-cryptojacker/

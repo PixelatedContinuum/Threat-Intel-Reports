@@ -1,5 +1,5 @@
 ---
-title: Arsenal-237 New Files Analysis - Recently Added Malware
+title: "Arsenal-237 New Files Analysis"
 date: '2026-01-27'
 layout: post
 permalink: /reports/arsenal-237-new-files/
