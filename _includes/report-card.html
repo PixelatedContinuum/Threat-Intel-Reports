@@ -1,0 +1,32 @@
+{% assign sev_bar   = "hl-sev--info" %}
+{% assign sev_color = "#aaaaaa" %}
+{% assign sev_label = "" %}
+{% if include.severity == "high" %}
+  {% assign sev_bar   = "hl-sev--high" %}
+  {% assign sev_color = "#ff6666" %}
+  {% assign sev_label = "HIGH" %}
+{% elsif include.severity == "med" %}
+  {% assign sev_bar   = "hl-sev--med" %}
+  {% assign sev_color = "#fb923c" %}
+  {% assign sev_label = "MED" %}
+{% endif %}
+
+<a href="{{ include.url | relative_url }}" class="hl-card">
+  <div class="hl-card__inner">
+    <div class="hl-card__bar {{ sev_bar }}"></div>
+    <div>
+      <div class="hl-card__meta" style="color: {{ sev_color }};">
+        {% if sev_label != "" %}{{ sev_label }} · {% endif %}{{ include.date }}
+      </div>
+      <div class="hl-card__title">{{ include.title }}</div>
+      {% if include.tags %}
+        {% assign tag_list = include.tags | split: "," %}
+        <div class="hl-tags">
+          {% for tag in tag_list %}
+            {% include tag-badge.html tag=tag %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</a>
