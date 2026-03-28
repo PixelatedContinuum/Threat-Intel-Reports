@@ -466,7 +466,7 @@ main.content {
   overflow: hidden;
   text-decoration: none !important;
   display: block !important;
-  color: inherit;
+  color: var(--hl-text-primary) !important;
   min-height: 80px;
   transition: border-color 0.15s, background 0.15s;
 }
@@ -522,7 +522,7 @@ main.content {
   align-items: stretch;
   overflow: hidden;
   text-decoration: none !important;
-  color: inherit;
+  color: var(--hl-text-primary) !important;
   transition: border-color 0.15s, background 0.15s;
 }
 .hl-row:hover {
@@ -548,7 +548,7 @@ main.content {
 .hl-row__left { flex: 1; }
 
 .hl-row__title {
-  color: #dddddd !important;
+  color: var(--hl-text-primary) !important;
   font-size: 0.9em !important;
   font-weight: 500;
   margin: 0;
@@ -634,7 +634,7 @@ main.content {
 }
 
 .hl-page-header__desc {
-  color: var(--hl-text-muted);
+  color: var(--hl-text-secondary);
   font-size: 0.9em;
   line-height: 1.55;
   margin: 0;
