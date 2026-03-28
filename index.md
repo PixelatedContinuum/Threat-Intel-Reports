@@ -4,119 +4,78 @@ permalink: /
 position: 1
 ---
 
-<img src="{{ "/assets/images/header.png" | relative_url }}" 
-     alt="The Hunter's Ledger Banner" 
-     style="display:block; margin:0 auto; width:100%; height:300px; object-fit:cover; margin-bottom:2rem;">
+<div class="hl-hero">
+  <img src="{{ '/assets/images/header.png' | relative_url }}" alt="The Hunter's Ledger logo" class="hl-hero__logo">
+  <div>
+    <div class="hl-hero__label">The Hunter's Ledger</div>
+    <div class="hl-hero__title">Original Threat Intelligence Research</div>
+    <div class="hl-hero__desc">Hands-on malware analysis turned into structured, evidence-based intelligence — technically deep enough to trust, clear enough to act on. Published by a solo analyst for the defender community.</div>
+  </div>
+</div>
 
-Welcome to The Hunter's Ledger — a repository of original threat intelligence research produced by a solo analyst and published for the defender community. Every report here starts with hands-on malware analysis and ends with structured, evidence-based intelligence: technically deep enough to trust, clear enough to act on. The mission isn't just to document findings — it's to publish them while they're still relevant, before the threats they describe are already yesterday's problem.
+{% include section-header.html label="Latest Reports" accent="#ff4444" %}
 
-Feel free to contribute or reach out with information, questions, or suggestions!
+<div class="hl-grid">
+{% include report-card.html title="ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25" date="Mar 2026" severity="high" tags="MaaS,C2,Open Dir" url="/reports/zerotrace-74-0-42-25-20260316/" %}
+{% include report-card.html title="Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)" date="Mar 2026" severity="high" tags="C2,Loader" url="/reports/sliver-open-directory/" %}
+</div>
 
----
+<a href="{{ '/reports/' | relative_url }}" class="hl-view-all">View all reports →</a>
 
-## Mission
+{% include section-header.html label="Mission" accent="#58a6ff" %}
 
-These are the principles behind every piece of work on this site:
+<div class="hl-prose-section">
+  <div class="hl-prose-section__body">
+    <ul>
+      <li>Share reproducible research and technical reports from original investigations and hunting</li>
+      <li>Provide IOCs formatted for direct ingestion into threat hunting and detection engineering workflows</li>
+      <li>Map findings to MITRE ATT&CK techniques to give defenders a common language</li>
+      <li>Publish detection logic — Sigma, YARA, Suricata — written to public repository submission standards</li>
+      <li>Publish findings while they're still relevant, not months after threats are already active</li>
+    </ul>
+  </div>
+</div>
 
-- Share reproducible research and technical reports from my own investigations and hunting
-- Provide IOCs formatted for direct ingestion into threat hunting and detection engineering workflows
-- Map findings to MITRE ATT&CK techniques to give defenders a common language for what they're looking at
-- Publish detection logic — Sigma, YARA, Suricata — written to public repository submission standards
-- Above all, publish findings while they're still relevant, not months after threats are already active
+<div class="hl-note">
+  <div class="hl-note__label">Note</div>
+  <div class="hl-note__body">This is not a collection of open source intel reports, IOCs, or TTPs. Findings are from original research, though they may overlap with known threats.</div>
+</div>
 
-> **Note:** This is not a collection of open source intel reports, IOCs, or TTPs.  
-> Findings are from my own research as well as others that contribute, though they may overlap with known threats.  
-> Looking for an open source collection? let me know, I can help point you to sources or to learn how to make your own!
+{% include section-header.html label="Navigate" accent="#58a6ff" %}
 
----
+<div class="hl-nav-grid">
+  <a href="{{ '/reports/' | relative_url }}" class="hl-nav-tile">
+    <div class="hl-nav-tile__title">Reports →</div>
+    <div class="hl-nav-tile__desc">Malware analysis & reverse engineering notes</div>
+  </a>
+  <a href="{{ '/hunting-detections/' | relative_url }}" class="hl-nav-tile">
+    <div class="hl-nav-tile__title">Hunting Detections →</div>
+    <div class="hl-nav-tile__desc">Sigma, YARA, and Suricata rules</div>
+  </a>
+  <a href="{{ '/ioc-feeds/' | relative_url }}" class="hl-nav-tile">
+    <div class="hl-nav-tile__title">IOC Feeds →</div>
+    <div class="hl-nav-tile__desc">Indicators ready for your SIEM or EDR</div>
+  </a>
+  <a href="{{ '/behind-the-reports/' | relative_url }}" class="hl-nav-tile">
+    <div class="hl-nav-tile__title">Behind the Reports →</div>
+    <div class="hl-nav-tile__desc">How the intelligence is produced</div>
+  </a>
+</div>
 
-## About Me
+{% include section-header.html label="Contributing" accent="#4ade80" %}
 
-- [About Me]({{ site.baseurl }}/about-me/)
+<div class="hl-prose-section">
+  <div class="hl-prose-section__body">
+    Contributions are welcome. Fork the repo and submit a PR with new reports, detections, or IOCs. Follow the <a href="{{ '/report-templates/' | relative_url }}">report format</a> for consistency. Or reach out directly — findings can be posted on your behalf as a co-author.
+  </div>
+</div>
 
----
+{% include section-header.html label="Resources" accent="#555555" %}
 
-## Repository Structure
-
-- [Reports]({{ site.baseurl }}/reports/) → Detailed malware analysis and reverse engineering notes
-*License: All Rights Reserved — free to read, but reuse requires written permission.*
-
-- [Hunting Detections]({{ site.baseurl }}/hunting-detections/) → Sigma/YARA rules and detection logic
-*License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
-
-- [IOC Feeds]({{ site.baseurl }}/ioc-feeds/) → Indicators of Compromise feeds
-*License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
-
-- [Report Templates]({{ site.baseurl }}/report-templates/) → Consistent format for reports
-
----
-
-## Report Format
-Each report follows a consistent structure: [Report Templates]({{ site.baseurl }}/report-templates/)
-
----
-
-## Usage
-- Import IOC feeds into your SIEM/EDR and threat hunting workflows  
-- Adapt detection logic for your environment or use them for quick hunts  
-- Use ATT&CK mappings for threat modeling or attack simulation  
-- Reference reverse engineering notes for deeper analysis  
-- Import into your CTI platform of choice  
-
----
-
-## Behind the Reports
-
-Curious about how the intelligence on this site is produced? This page explains the AI-assisted workflow built to turn malware analysis into timely, trustworthy threat intelligence — including the agents, skill frameworks, hooks, and design principles behind every report.
-
-- [Behind the Reports: How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence]({{ site.baseurl }}/behind-the-reports/)
-
----
-
-## Contributing
-Contributions are welcome!  
-- Fork the repo and submit a PR with new reports, detections, or IOCs.  
-- Follow the report format for consistency.  
-- Or simply reach out to me and we can discuss — I can post something on your behalf as a co-author.
-
----
-
-## Resources
-- [MITRE ATT&CK](https://attack.mitre.org/)  
-- [Sigma Rules](https://github.com/SigmaHQ/sigma)  
-- [YARA](https://virustotal.github.io/yara/)  
-
----
-
-## License
-
-### License for Reports Section
-© 2025 Joseph. All rights reserved.  
-The reports in [Reports]({{ site.baseurl }}/reports/) are made publicly available for **reading and reference purposes only**.  
-They may not be reproduced, redistributed, modified, or incorporated into other projects without **prior written permission** from the author.
-
-**Permissions**
-- You may view and reference the reports for personal or organizational research.  
-- You may cite the reports in academic or professional work with proper attribution.  
-
-**Restrictions**
-- Redistribution of the reports in whole or in part is prohibited without written consent.  
-- Commercial use, including incorporation into products, services, or paid publications, is prohibited without written consent.  
-- Modification or derivative works based on these reports are prohibited without written consent.  
-
----
-
-### License for Detections and IOCs Sections
-The detection rules in [Hunting Detections]({{ site.baseurl }}/hunting-detections/) and IOC feeds in [IOC Feeds]({{ site.baseurl }}/ioc-feeds/) are licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
-
-**Permissions**
-- You are free to use, adapt, and share the detection rules and IOC feeds for **non-commercial purposes**.  
-- You must provide appropriate attribution to the author when using or adapting the work.  
-
-**Restrictions**
-**Commercial use is prohibited.** You may not sell, license, or incorporate these detections/IOCs into paid products or services without prior written permission.  
-- Redistribution must include attribution and a link back to this repository.  
-
-**Attribution**
-Please credit as:  
-“Threat Intelligence Reports by Joseph” (https://github.com/PixelatedContinuum/Threat-Intel-Reports/)
+<div class="hl-prose-section">
+  <div class="hl-prose-section__body">
+    <a href="https://attack.mitre.org/">MITRE ATT&CK</a> &nbsp;·&nbsp;
+    <a href="https://github.com/SigmaHQ/sigma">Sigma Rules</a> &nbsp;·&nbsp;
+    <a href="https://virustotal.github.io/yara/">YARA</a>
+  </div>
+</div>
