@@ -786,6 +786,86 @@ main.content {
 }
 .hl-view-all:hover { text-decoration: underline !important; }
 
+/* --- Subscribe option cards -------------------------------- */
+.hl-subscribe-option {
+  background: var(--hl-bg-card);
+  border: 1px solid var(--hl-border-card);
+  border-radius: 6px;
+  padding: 22px 24px;
+  margin-bottom: 14px;
+}
+
+.hl-subscribe-option--rss {
+  border-left: 4px solid #4ade80;
+}
+
+.hl-subscribe-option--email {
+  border-left: 4px solid var(--hl-accent-blue);
+}
+
+.hl-subscribe-option__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.hl-subscribe-option__icon {
+  font-size: 1.4em;
+  line-height: 1;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.hl-subscribe-option--rss .hl-subscribe-option__icon { color: #4ade80; }
+.hl-subscribe-option--email .hl-subscribe-option__icon { color: var(--hl-accent-blue); }
+
+.hl-subscribe-option__title {
+  color: var(--hl-text-primary);
+  font-size: 1.05em;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.hl-subscribe-option__desc {
+  color: var(--hl-text-secondary);
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.hl-subscribe-option__url {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0d1117;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  padding: 10px 14px;
+}
+
+.hl-subscribe-option__url-label {
+  color: #4ade80;
+  font-size: 0.7em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hl-subscribe-option__url-value {
+  color: #e6b17a !important;
+  font-size: 0.88em;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  word-break: break-all;
+}
+
+.hl-subscribe-option__form {
+  margin-top: 4px;
+}
+
 /* --- Responsive -------------------------------------------- */
 @media (max-width: 640px) {
   .hl-grid,
