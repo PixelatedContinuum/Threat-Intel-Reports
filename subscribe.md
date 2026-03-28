@@ -5,7 +5,11 @@ permalink: /subscribe/
 position: 5
 ---
 
-Stay up to date with new threat intelligence reports from The Hunter's Ledger.
+<div class="hl-page-header">
+  <div class="hl-page-header__label">The Hunter's Ledger</div>
+  <div class="hl-page-header__title">Subscribe</div>
+  <div class="hl-page-header__desc">Stay up to date with new threat intelligence reports from The Hunter's Ledger.</div>
+</div>
 
 ## RSS / Atom Feed
 
