@@ -48,20 +48,20 @@ git commit -m "chore: ignore .superpowers brainstorm directory"
 
 ---
 
-### Task 2: Override theme `head.html` to inject custom CSS
+### Task 2: Override theme `head.liquid` to inject custom CSS
 
-The site uses the `sylhare/Type-on-Strap` remote theme. To add a custom stylesheet, override `_includes/default/head.html` (the same pattern already used for `_includes/default/navbar.liquid`).
+The site uses the `sylhare/Type-on-Strap` remote theme. To add a custom stylesheet, override `_includes/default/head.liquid` (the same pattern already used for `_includes/default/navbar.liquid`).
 
 **Files:**
-- Create: `_includes/default/head.html`
+- Create: `_includes/default/head.liquid`
 
-- [ ] **Step 1: Fetch the theme's current `head.html`**
+- [ ] **Step 1: Fetch the theme's current `head.liquid`**
 
-Open the Type-on-Strap repository on GitHub and navigate to `_includes/default/head.html`. Copy the raw file contents. The file is in the `sylhare/Type-on-Strap` repo, same branch the `remote_theme` config points to.
+Open the Type-on-Strap repository on GitHub and navigate to `_includes/default/head.liquid`. Copy the raw file contents. The file is in the `sylhare/Type-on-Strap` repo, same branch the `remote_theme` config points to.
 
 - [ ] **Step 2: Create local override and add CSS link**
 
-Create `_includes/default/head.html` with the theme's full content, then add the following line immediately before the closing `</head>` tag:
+Create `_includes/default/head.liquid` with the theme's full content, then add the following line immediately before the closing `</head>` tag:
 
 ```html
 <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
@@ -70,7 +70,7 @@ Create `_includes/default/head.html` with the theme's full content, then add the
 - [ ] **Step 3: Verify file exists and contains the link**
 
 ```bash
-grep "custom.css" _includes/default/head.html
+grep "custom.css" _includes/default/head.liquid
 ```
 
 Expected: the link tag appears.
@@ -78,8 +78,8 @@ Expected: the link tag appears.
 - [ ] **Step 4: Commit**
 
 ```bash
-git add _includes/default/head.html
-git commit -m "feat: override head.html to load custom CSS"
+git add _includes/default/head.liquid
+git commit -m "feat: override head.liquid to load custom CSS"
 ```
 
 ---
@@ -1161,7 +1161,7 @@ git commit -m "feat: add styled page header to behind-the-reports page"
 - [ ] **Step 1: Verify all expected files exist**
 
 ```bash
-ls _includes/tag-badge.html _includes/report-card.html _includes/report-row.html _includes/section-header.html _includes/default/head.html assets/css/custom.css
+ls _includes/tag-badge.html _includes/report-card.html _includes/report-row.html _includes/section-header.html _includes/default/head.liquid assets/css/custom.css
 ```
 
 Expected: all six files listed without errors.
