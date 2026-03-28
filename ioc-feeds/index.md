@@ -11,13 +11,18 @@ position: 4
   <div class="hl-page-header__desc">Structured feeds ready for ingestion into your SIEM, EDR, or CTI platform. Licensed under <strong>CC BY-NC 4.0</strong>.</div>
 </div>
 
-{% include section-header.html label="All Feeds" accent="#f87171" %}
+{% include section-header.html label="Recent" accent="#f87171" %}
+
+<div class="hl-grid">
+{% include report-card.html title="ZeroTrace Multi-Family MaaS Operation — IOC Feed" date="Mar 2026" severity="high" tags="MaaS,Multi-Family,C2" url="/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json" %}
+{% include report-card.html title="Sliver C2 / ScareCrow Loader Open Directory — IOC Feed" date="Mar 2026" severity="high" tags="C2,Loader,Go" url="/ioc-feeds/sliver-open-directory-iocs.json" %}
+{% include report-card.html title="Webserver Compromise Kit 91.236.230.250 — IOC Feed" date="Feb 2026" severity="high" tags="Toolkit,Priv Esc,RCE" url="/ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json" %}
+{% include report-card.html title="Remcos RAT OpenDirectory Campaign — IOC Feed" date="Feb 2026" severity="med" tags="RAT,Cred Theft" url="/ioc-feeds/remcos-opendirectory-campaign.json" %}
+</div>
+
+{% include section-header.html label="All Feeds" accent="#444444" %}
 
 <div class="hl-row-list">
-{% include report-row.html title="ZeroTrace Multi-Family MaaS Operation — IOC Feed" date="Mar 2026" severity="high" tags="MaaS,Multi-Family,C2" url="/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json" %}
-{% include report-row.html title="Sliver C2 / ScareCrow Loader Open Directory — IOC Feed" date="Mar 2026" severity="high" tags="C2,Loader,Go" url="/ioc-feeds/sliver-open-directory-iocs.json" %}
-{% include report-row.html title="Webserver Compromise Kit 91.236.230.250 — IOC Feed" date="Feb 2026" severity="high" tags="Toolkit,Priv Esc,RCE" url="/ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json" %}
-{% include report-row.html title="Remcos RAT OpenDirectory Campaign — IOC Feed" date="Feb 2026" severity="med" tags="RAT,Cred Theft" url="/ioc-feeds/remcos-opendirectory-campaign.json" %}
 {% include report-row.html title="NsMiner Cryptojacker — IOC Feed" date="Feb 2026" severity="med" tags="Cryptominer,Dropper" url="/ioc-feeds/nsminer-cryptojacker.json" %}
 {% include report-row.html title="Arsenal-237 New Files: full_test_enc.exe — IOC Feed" date="Jan 2026" severity="high" tags="Ransomware,Rust" url="/ioc-feeds/arsenal-237-full_test_enc-exe.json" %}
 {% include report-row.html title="Arsenal-237 New Files: new_enc.exe — IOC Feed" date="Jan 2026" severity="high" tags="Ransomware,Rust" url="/ioc-feeds/arsenal-237-new_enc-exe.json" %}
