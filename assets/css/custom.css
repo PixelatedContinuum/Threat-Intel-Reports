@@ -26,11 +26,50 @@
 body,
 body.dark {
   background-color: var(--hl-bg-page) !important;
+  color: var(--hl-text-primary) !important;
 }
 
 main.content {
   background-color: var(--hl-bg-page) !important;
+  background-image: none !important;
+  color: var(--hl-text-primary);
   min-height: 100vh;
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  padding: 1.75rem 28px !important;
+  box-sizing: border-box;
+}
+
+/* --- Navbar overrides --------------------------------------- */
+.site-header {
+  background: #0d1117 !important;
+  border-bottom: 1px solid var(--hl-border-card) !important;
+  box-shadow: none !important;
+}
+
+.site-title,
+.site-title:visited {
+  color: var(--hl-text-primary) !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  text-decoration: none !important;
+}
+
+.site-header nav ul li a,
+.site-header nav ul li a:visited {
+  color: var(--hl-text-muted) !important;
+  font-size: 0.8rem !important;
+  text-decoration: none !important;
+}
+
+.site-header nav ul li a:hover {
+  color: var(--hl-text-primary) !important;
+  text-decoration: none !important;
+}
+
+.site-header .separator {
+  color: var(--hl-border-card) !important;
 }
 
 
@@ -289,10 +328,11 @@ main.content {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #aaaaaa;
+  color: #cccccc;
   border-bottom: 1px solid var(--hl-border-row);
   padding-bottom: 6px;
   margin: 1.5rem 0 12px;
