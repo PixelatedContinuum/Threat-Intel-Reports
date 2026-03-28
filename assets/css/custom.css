@@ -4,30 +4,37 @@
 
 /* --- Tokens ------------------------------------------------- */
 :root {
-  --hl-bg-page:      #111111;
-  --hl-bg-card:      #1a1a1a;
-  --hl-bg-row:       #161616;
-  --hl-border-card:  #2a2a2a;
-  --hl-border-row:   #222222;
-  --hl-text-primary: #eeeeee;
-  --hl-text-muted:   #888888;
-  --hl-text-dim:     #555555;
-  --hl-accent-blue:  #58a6ff;
-  --hl-sev-high:     #ff4444;
-  --hl-sev-high-lbl: #ff6666;
-  --hl-sev-med:      #f97316;
-  --hl-sev-med-lbl:  #fb923c;
-  --hl-accent-green: #4ade80;
-  --hl-accent-red:   #f87171;
+  --hl-bg-page:        #111111;
+  --hl-bg-card:        #1a1a1a;
+  --hl-bg-row:         #161616;
+  --hl-border-card:    #2a2a2a;
+  --hl-border-row:     #222222;
+  --hl-text-primary:   #eeeeee;
   --hl-text-secondary: #aaaaaa;
+  --hl-text-muted:     #888888;
+  --hl-text-dim:       #555555;
+  --hl-accent-blue:    #58a6ff;
+  --hl-sev-high:       #ff4444;
+  --hl-sev-high-lbl:   #ff6666;
+  --hl-sev-med:        #f97316;
+  --hl-sev-med-lbl:    #fb923c;
+  --hl-accent-green:   #4ade80;
+  --hl-accent-red:     #f87171;
 }
 
 /* --- Global theme overrides --------------------------------- */
+/* Theme sets body { font-size: 1.25em } = 20px — we don't fight that.
+   We override background, text color, and clear any feature image. */
 body,
 body.dark {
   background-color: var(--hl-bg-page) !important;
   color: var(--hl-text-primary) !important;
-  font-size: 16px;
+}
+
+/* Theme dark mode sets wild heading colors (h2: purple, h3: pink, etc.)
+   Override them globally for our design system. */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--hl-text-primary) !important;
 }
 
 main.content {
@@ -37,12 +44,13 @@ main.content {
   min-height: 100vh;
   max-width: 900px !important;
   margin: 0 auto !important;
-  padding: 2.5rem 28px 2rem !important;
+  /* Use px so top gap is reliable regardless of em cascade */
+  padding: 40px 28px 36px !important;
   box-sizing: border-box;
-  font-size: 1rem;
 }
 
 /* --- Navbar overrides --------------------------------------- */
+/* Theme: body = 20px, .site-title = 1.3em = 26px. Match that scale. */
 .site-header {
   background: #0d1117 !important;
   border-bottom: 1px solid var(--hl-border-card) !important;
@@ -52,7 +60,7 @@ main.content {
 .site-title,
 .site-title:visited {
   color: var(--hl-text-primary) !important;
-  font-size: 1.1rem !important;
+  font-size: 1.3em !important;
   font-weight: 700 !important;
   letter-spacing: 0.02em !important;
   text-decoration: none !important;
@@ -61,7 +69,7 @@ main.content {
 .site-header nav ul li a,
 .site-header nav ul li a:visited {
   color: var(--hl-text-muted) !important;
-  font-size: 0.95rem !important;
+  font-size: 1em !important;
   text-decoration: none !important;
 }
 
@@ -76,14 +84,16 @@ main.content {
 
 
 /* --- Post layout -------------------------------------------- */
+/* .hl-post-content inherits body's 20px — no font-size override needed.
+   We only set headings, line-height, and color. */
 .hl-post-header {
   border-bottom: 1px solid var(--hl-border-row);
   padding-bottom: 14px;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
 }
 
 .hl-post-header__label {
-  font-size: 0.75rem;
+  font-size: 0.8em;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--hl-text-dim);
@@ -91,127 +101,57 @@ main.content {
 }
 
 .hl-post-header__title {
-  color: var(--hl-text-primary);
-  font-size: 1.5rem;
+  color: var(--hl-text-primary) !important;
+  font-size: 1.6em;
   font-weight: 700;
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .hl-post-content {
   color: var(--hl-text-secondary);
-  font-size: 1rem;
   line-height: 1.75;
 }
 
 .hl-post-content p {
   color: var(--hl-text-secondary);
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.9em;
 }
 
+/* Override theme's huge headings (h2=1.75em, h3=1.5em) inside post content */
 .hl-post-content h2 {
-  color: var(--hl-text-primary);
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 0.6rem;
+  color: var(--hl-text-primary) !important;
+  font-size: 1.2em !important;
+  font-weight: 700 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 0.5rem !important;
   border-bottom: 1px solid var(--hl-border-row);
   padding-bottom: 5px;
 }
 
 .hl-post-content h3 {
-  color: var(--hl-text-primary);
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
+  color: var(--hl-text-primary) !important;
+  font-size: 1.05em !important;
+  font-weight: 600 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.4rem !important;
 }
 
 .hl-post-content h4 {
-  color: var(--hl-text-secondary);
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-top: 1.25rem;
-  margin-bottom: 0.4rem;
+  color: var(--hl-text-secondary) !important;
+  font-size: 0.95em !important;
+  font-weight: 600 !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.3rem !important;
 }
 
 .hl-post-content a {
-  color: var(--hl-accent-blue);
+  color: var(--hl-accent-blue) !important;
 }
 
-.hl-post-content code {
-  background: var(--hl-bg-card);
-  border: 1px solid var(--hl-border-card);
-  border-radius: 3px;
-  padding: 2px 5px;
-  font-size: 0.88em;
-  color: #e6b17a;
-}
-
-.hl-post-content pre {
-  background: var(--hl-bg-card);
-  border: 1px solid var(--hl-border-card);
-  border-radius: 5px;
-  padding: 14px 18px;
-  overflow-x: auto;
-  margin: 1.25rem 0;
-}
-
-.hl-post-content pre code {
-  background: none;
-  border: none;
-  padding: 0;
-  color: #e6b17a;
-  font-size: 0.9rem;
-}
-
-.hl-post-content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.25rem 0;
-  font-size: 0.92rem;
-}
-
-.hl-post-content th {
-  background: #1f1f1f;
+.hl-post-content strong {
   color: var(--hl-text-primary);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  padding: 9px 13px;
-  border: 1px solid #333333;
-  text-align: left;
-  font-weight: 700;
-}
-
-.hl-post-content td {
-  padding: 8px 13px;
-  border: 1px solid #2a2a2a;
-  color: #cccccc;
-  background: #161616;
-}
-
-.hl-post-content tr:nth-child(even) td {
-  background: #1a1a1a;
-}
-
-.hl-post-content blockquote {
-  border-left: 3px solid #3a3a3a;
-  background: #161616;
-  border-radius: 0 4px 4px 0;
-  margin: 1rem 0;
-  padding: 10px 16px;
-  color: var(--hl-text-secondary);
-}
-
-.hl-post-content blockquote strong {
-  color: var(--hl-text-primary);
-}
-
-.hl-post-content hr {
-  border: none;
-  border-top: 1px solid var(--hl-border-row);
-  margin: 2rem 0;
+  font-weight: 600;
 }
 
 .hl-post-content ul,
@@ -221,13 +161,92 @@ main.content {
 }
 
 .hl-post-content li {
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.3em;
 }
 
-.hl-post-content strong {
-  color: var(--hl-text-primary);
-  font-weight: 600;
+.hl-post-content code {
+  background: #1f1f1f;
+  border: 1px solid var(--hl-border-card);
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 0.88em;
+  color: #e6b17a !important;
 }
+
+.hl-post-content pre {
+  background: #1a1a1a;
+  border: 1px solid var(--hl-border-card);
+  border-radius: 5px;
+  padding: 14px 18px;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+.hl-post-content pre code {
+  background: none !important;
+  border: none !important;
+  padding: 0;
+  color: #e6b17a !important;
+  font-size: 0.88em;
+}
+
+/* --- Tables in post content --------------------------------- */
+.hl-post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9em;
+}
+
+.hl-post-content th {
+  background: #202020 !important;
+  color: var(--hl-text-primary) !important;
+  font-size: 0.78em !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em;
+  padding: 9px 14px !important;
+  border: 1px solid #333333 !important;
+  text-align: left;
+  font-weight: 700;
+}
+
+.hl-post-content td {
+  padding: 9px 14px !important;
+  border: 1px solid #2a2a2a !important;
+  color: #cccccc !important;
+  background: #161616 !important;
+  font-size: 0.9em;
+}
+
+.hl-post-content tr:nth-child(even) td {
+  background: #1a1a1a !important;
+}
+
+/* --- Blockquotes in post content ---------------------------- */
+.hl-post-content blockquote {
+  border-left: 3px solid #444444 !important;
+  background: #161616 !important;
+  border-radius: 0 4px 4px 0;
+  margin: 1.25rem 0 !important;
+  padding: 10px 16px !important;
+  color: var(--hl-text-secondary) !important;
+}
+
+.hl-post-content blockquote p {
+  color: var(--hl-text-secondary) !important;
+  margin: 0;
+}
+
+.hl-post-content blockquote strong {
+  color: var(--hl-text-primary) !important;
+}
+
+.hl-post-content hr {
+  border: none !important;
+  border-top: 1px solid var(--hl-border-row) !important;
+  margin: 2rem 0;
+}
+
 
 /* --- Featured card grid ------------------------------------- */
 .hl-grid {
@@ -242,13 +261,13 @@ main.content {
   border: 1px solid var(--hl-border-card);
   border-radius: 6px;
   overflow: hidden;
-  text-decoration: none;
+  text-decoration: none !important;
   display: block !important;
   color: inherit;
   min-height: 80px;
   transition: border-color 0.15s;
 }
-.hl-card:hover { border-color: #444; text-decoration: none; }
+.hl-card:hover { border-color: #444 !important; text-decoration: none !important; }
 
 .hl-card__inner {
   padding: 14px;
@@ -266,7 +285,7 @@ main.content {
 }
 
 .hl-card__meta {
-  font-size: 0.75rem;
+  font-size: 0.7em;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 4px;
@@ -274,7 +293,7 @@ main.content {
 
 .hl-card__title {
   color: var(--hl-text-primary) !important;
-  font-size: 1rem;
+  font-size: 0.95em !important;
   font-weight: 600;
   line-height: 1.35;
   margin: 0 0 9px;
@@ -295,11 +314,11 @@ main.content {
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  text-decoration: none;
+  text-decoration: none !important;
   color: inherit;
   transition: border-color 0.15s;
 }
-.hl-row:hover { border-color: #333; text-decoration: none; }
+.hl-row:hover { border-color: #333 !important; text-decoration: none !important; }
 
 .hl-row__bar {
   width: 2px;
@@ -318,15 +337,15 @@ main.content {
 .hl-row__left { flex: 1; }
 
 .hl-row__title {
-  color: #dddddd;
-  font-size: 0.95rem;
+  color: #dddddd !important;
+  font-size: 0.9em !important;
   font-weight: 500;
   margin: 0;
 }
 
 .hl-row__date {
   color: var(--hl-text-dim);
-  font-size: 0.75rem;
+  font-size: 0.72em;
   text-transform: uppercase;
   flex-shrink: 0;
 }
@@ -340,7 +359,7 @@ main.content {
 }
 
 .hl-tag {
-  font-size: 0.72rem;
+  font-size: 0.68em;
   padding: 2px 6px;
   border-radius: 3px;
   border: 1px solid;
@@ -363,14 +382,14 @@ main.content {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.78rem;
+  font-size: 0.72em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: #cccccc;
   border-bottom: 1px solid var(--hl-border-row);
   padding-bottom: 7px;
-  margin: 1.75rem 0 14px;
+  margin: 2rem 0 14px;
 }
 
 .hl-section-header__bar {
@@ -385,27 +404,27 @@ main.content {
   background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
   border: 1px solid var(--hl-border-card);
   border-radius: 6px;
-  padding: 18px 22px;
-  margin-bottom: 1.75rem;
+  padding: 20px 24px;
+  margin-bottom: 2rem;
 }
 
 .hl-page-header__label {
-  font-size: 0.72rem;
+  font-size: 0.68em;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   margin-bottom: 5px;
 }
 
 .hl-page-header__title {
-  color: var(--hl-text-primary);
-  font-size: 1.4rem;
+  color: var(--hl-text-primary) !important;
+  font-size: 1.5em !important;
   font-weight: 700;
   margin: 0 0 7px;
 }
 
 .hl-page-header__desc {
   color: var(--hl-text-muted);
-  font-size: 0.95rem;
+  font-size: 0.9em;
   line-height: 1.55;
   margin: 0;
 }
@@ -423,7 +442,7 @@ main.content {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.72rem;
+  font-size: 0.68em;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #bbbbbb;
@@ -439,7 +458,7 @@ main.content {
 
 .hl-prose-section__body {
   color: var(--hl-text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.9em;
   line-height: 1.65;
   margin: 0;
 }
@@ -453,7 +472,7 @@ main.content {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 9px;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
 }
 
 .hl-nav-tile {
@@ -461,22 +480,22 @@ main.content {
   border: 1px solid var(--hl-border-row);
   border-radius: 5px;
   padding: 12px 14px;
-  text-decoration: none;
+  text-decoration: none !important;
   display: block;
   transition: border-color 0.15s;
 }
-.hl-nav-tile:hover { border-color: #333; text-decoration: none; }
+.hl-nav-tile:hover { border-color: #333 !important; text-decoration: none !important; }
 
 .hl-nav-tile__title {
-  color: var(--hl-accent-blue);
-  font-size: 0.95rem;
+  color: var(--hl-accent-blue) !important;
+  font-size: 0.9em !important;
   font-weight: 600;
   margin: 0 0 4px;
 }
 
 .hl-nav-tile__desc {
   color: var(--hl-text-muted);
-  font-size: 0.82rem;
+  font-size: 0.78em;
   margin: 0;
 }
 
@@ -492,7 +511,7 @@ main.content {
 
 .hl-note__label {
   color: #facc15;
-  font-size: 0.72rem;
+  font-size: 0.68em;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 700;
@@ -501,7 +520,7 @@ main.content {
 
 .hl-note__body {
   color: #cccccc;
-  font-size: 0.95rem;
+  font-size: 0.9em;
   line-height: 1.6;
   margin: 0;
 }
@@ -515,8 +534,8 @@ main.content {
   border: 1px solid var(--hl-border-card);
   border-left: 3px solid var(--hl-sev-high);
   border-radius: 6px;
-  padding: 18px 22px;
-  margin-bottom: 1.75rem;
+  padding: 20px 24px;
+  margin-bottom: 2rem;
 }
 
 .hl-hero__logo {
@@ -527,7 +546,7 @@ main.content {
 }
 
 .hl-hero__label {
-  font-size: 0.72rem;
+  font-size: 0.68em;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--hl-sev-high-lbl);
@@ -535,15 +554,15 @@ main.content {
 }
 
 .hl-hero__title {
-  color: var(--hl-text-primary);
-  font-size: 1.4rem;
+  color: var(--hl-text-primary) !important;
+  font-size: 1.5em !important;
   font-weight: 700;
   margin: 0 0 7px;
 }
 
 .hl-hero__desc {
   color: var(--hl-text-muted);
-  font-size: 0.95rem;
+  font-size: 0.9em;
   line-height: 1.55;
   margin: 0;
 }
@@ -552,12 +571,12 @@ main.content {
 .hl-view-all {
   display: block;
   text-align: right;
-  color: var(--hl-accent-blue);
-  font-size: 0.9rem;
-  margin-bottom: 1.75rem;
-  text-decoration: none;
+  color: var(--hl-accent-blue) !important;
+  font-size: 0.9em;
+  margin-bottom: 2rem;
+  text-decoration: none !important;
 }
-.hl-view-all:hover { text-decoration: underline; }
+.hl-view-all:hover { text-decoration: underline !important; }
 
 /* --- Responsive -------------------------------------------- */
 @media (max-width: 640px) {
@@ -570,6 +589,6 @@ main.content {
     align-items: flex-start;
   }
   main.content {
-    padding: 1.5rem 16px !important;
+    padding: 24px 16px !important;
   }
 }
