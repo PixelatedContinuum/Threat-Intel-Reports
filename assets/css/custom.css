@@ -94,7 +94,7 @@ main.content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  height: 96px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -106,7 +106,7 @@ main.content {
 .hl-nav__brand,
 .hl-nav__brand:visited {
   color: var(--hl-text-primary) !important;
-  font-size: 1.25rem;
+  font-size: 1.45rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   text-decoration: none !important;
@@ -129,7 +129,7 @@ main.content {
 .hl-nav__link,
 .hl-nav__link:visited {
   color: var(--hl-text-muted) !important;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 500;
   text-decoration: none !important;
   white-space: nowrap;
@@ -727,23 +727,23 @@ main.content {
 .hl-hero {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 28px;
   background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
   border: 1px solid var(--hl-border-card);
   border-left: 3px solid var(--hl-sev-high);
   border-radius: 6px;
-  padding: 20px 24px;
+  padding: 28px 32px;
   margin-bottom: 2rem;
 }
 
 .hl-hero__logo {
-  height: 72px;
+  height: 110px;
   width: auto;
-  max-width: 240px;
+  max-width: 320px;
   object-fit: contain;
   flex-shrink: 0;
   mix-blend-mode: screen;
-  opacity: 0.92;
+  opacity: 0.95;
 }
 
 .hl-hero__label {
