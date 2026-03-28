@@ -90,11 +90,11 @@ main.content {
 .hl-nav {
   background: #0d1117;
   border-bottom: 1px solid var(--hl-border-card);
-  padding: 0 28px;
+  padding: 0 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: 88px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -122,7 +122,7 @@ main.content {
    dissolve into the dark navbar, leaving only the bright pink triangle
    and white text visible — natural transparent-background effect */
 .hl-nav__logo {
-  height: 42px;
+  height: 64px;
   width: auto;
   display: block;
   mix-blend-mode: screen;
@@ -131,18 +131,18 @@ main.content {
 .hl-nav__links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 40px;
 }
 
 .hl-nav__link,
 .hl-nav__link:visited {
   color: var(--hl-text-muted) !important;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 500;
   text-decoration: none !important;
   white-space: nowrap;
   transition: color 0.15s;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
 .hl-nav__link:hover {
@@ -153,18 +153,18 @@ main.content {
 @media (max-width: 700px) {
   .hl-nav {
     height: auto;
-    padding: 10px 16px;
+    padding: 12px 20px;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
   }
   .hl-nav__logo {
-    height: 32px;
+    height: 44px;
   }
   .hl-nav__links {
     width: 100%;
     flex-wrap: wrap;
-    gap: 16px;
-    padding-bottom: 6px;
+    gap: 20px;
+    padding-bottom: 8px;
   }
 }
 
