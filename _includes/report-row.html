@@ -1,0 +1,24 @@
+{% assign sev_bar = "hl-sev--info" %}
+{% if include.severity == "high" %}
+  {% assign sev_bar = "hl-sev--high" %}
+{% elsif include.severity == "med" %}
+  {% assign sev_bar = "hl-sev--med" %}
+{% endif %}
+
+<a href="{{ include.url | relative_url }}" class="hl-row">
+  <div class="hl-row__bar {{ sev_bar }}"></div>
+  <div class="hl-row__body">
+    <div class="hl-row__left">
+      <div class="hl-row__title">{{ include.title }}</div>
+      {% if include.tags %}
+        {% assign tag_list = include.tags | split: "," %}
+        <div class="hl-tags">
+          {% for tag in tag_list %}
+            {% include tag-badge.html tag=tag %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="hl-row__date">{{ include.date }}</div>
+  </div>
+</a>
