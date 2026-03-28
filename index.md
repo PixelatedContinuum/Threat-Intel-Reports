@@ -6,7 +6,6 @@ position: 1
 ---
 
 <div class="hl-hero">
-  <div class="hl-hero__logo" style="background-image: url('{{ '/assets/images/header.png' | relative_url }}')"></div>
   <div>
     <div class="hl-hero__label">The Hunter's Ledger</div>
     <div class="hl-hero__title">Original Threat Intelligence Research</div>
