@@ -737,10 +737,13 @@ main.content {
 }
 
 .hl-hero__logo {
-  width: 64px;
-  height: 64px;
+  height: 72px;
+  width: auto;
+  max-width: 240px;
   object-fit: contain;
   flex-shrink: 0;
+  mix-blend-mode: screen;
+  opacity: 0.92;
 }
 
 .hl-hero__label {
