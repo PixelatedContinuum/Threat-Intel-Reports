@@ -23,16 +23,16 @@
 }
 
 /* --- Global theme overrides --------------------------------- */
-/* Theme sets body { font-size: 1.25em } = 20px — we don't fight that.
-   We override background, text color, and clear any feature image. */
+/* Theme sets body { font-size: 1.25em } = 20px — let it cascade.
+   We only override background, color, and heading colors. */
 body,
 body.dark {
   background-color: var(--hl-bg-page) !important;
   color: var(--hl-text-primary) !important;
 }
 
-/* Theme dark mode sets wild heading colors (h2: purple, h3: pink, etc.)
-   Override them globally for our design system. */
+/* Theme dark mode sets wild heading colors (h2: purple, h3: pink).
+   Override globally for our design system. */
 h1, h2, h3, h4, h5, h6 {
   color: var(--hl-text-primary) !important;
 }
@@ -44,13 +44,11 @@ main.content {
   min-height: 100vh;
   max-width: 900px !important;
   margin: 0 auto !important;
-  /* Use px so top gap is reliable regardless of em cascade */
   padding: 40px 28px 36px !important;
   box-sizing: border-box;
 }
 
 /* --- Navbar overrides --------------------------------------- */
-/* Theme: body = 20px, .site-title = 1.3em = 26px. Match that scale. */
 .site-header {
   background: #0d1117 !important;
   border-bottom: 1px solid var(--hl-border-card) !important;
@@ -83,34 +81,87 @@ main.content {
 }
 
 
-/* --- Post layout -------------------------------------------- */
-/* .hl-post-content inherits body's 20px — no font-size override needed.
-   We only set headings, line-height, and color. */
+/* ============================================================
+   POST LAYOUT — Individual report and detection pages
+   ============================================================ */
+
+/* --- Post header card --------------------------------------- */
 .hl-post-header {
-  border-bottom: 1px solid var(--hl-border-row);
-  padding-bottom: 14px;
-  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #1a0808 0%, #0d1117 60%, #111111 100%);
+  border: 1px solid var(--hl-border-card);
+  border-left: 4px solid var(--hl-sev-high);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin-bottom: 2.5rem;
 }
 
-.hl-post-header__label {
-  font-size: 0.8em;
+.hl-post-header__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* "Threat Intelligence" / "Detection Rules" pill badge */
+.hl-post-header__badge {
+  font-size: 0.62em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+
+.hl-post-header__badge--report {
+  color: var(--hl-sev-high-lbl);
+  background: #ff444415;
+  border-color: #ff444440;
+}
+
+.hl-post-header__badge--detect {
+  color: var(--hl-accent-green);
+  background: #4ade8015;
+  border-color: #4ade8040;
+}
+
+.hl-post-header__sep {
+  color: var(--hl-text-dim);
+  font-size: 0.65em;
+  user-select: none;
+}
+
+.hl-post-header__date {
+  font-size: 0.65em;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--hl-text-dim);
-  margin-bottom: 6px;
 }
 
 .hl-post-header__title {
   color: var(--hl-text-primary) !important;
-  font-size: 1.6em;
+  font-size: 1.5em !important;
   font-weight: 700;
   margin: 0;
   line-height: 1.25;
 }
 
+/* Detection pages get a green header accent instead of red */
+.hl-post-header--detect {
+  background: linear-gradient(135deg, #0a1a0e 0%, #0d1117 60%, #111111 100%);
+  border-left-color: var(--hl-accent-green);
+}
+
+
+/* --- Post body ---------------------------------------------- */
 .hl-post-content {
   color: var(--hl-text-secondary);
   line-height: 1.75;
+}
+
+.hl-post-content > p:first-child {
+  color: var(--hl-text-primary);
+  font-size: 1.05em;
 }
 
 .hl-post-content p {
@@ -118,40 +169,17 @@ main.content {
   margin-bottom: 0.9em;
 }
 
-/* Override theme's huge headings (h2=1.75em, h3=1.5em) inside post content */
-.hl-post-content h2 {
-  color: var(--hl-text-primary) !important;
-  font-size: 1.2em !important;
-  font-weight: 700 !important;
-  margin-top: 2rem !important;
-  margin-bottom: 0.5rem !important;
-  border-bottom: 1px solid var(--hl-border-row);
-  padding-bottom: 5px;
-}
-
-.hl-post-content h3 {
-  color: var(--hl-text-primary) !important;
-  font-size: 1.05em !important;
-  font-weight: 600 !important;
-  margin-top: 1.5rem !important;
-  margin-bottom: 0.4rem !important;
-}
-
-.hl-post-content h4 {
-  color: var(--hl-text-secondary) !important;
-  font-size: 0.95em !important;
-  font-weight: 600 !important;
-  margin-top: 1.25rem !important;
-  margin-bottom: 0.3rem !important;
+.hl-post-content strong {
+  color: var(--hl-text-primary);
+  font-weight: 600;
 }
 
 .hl-post-content a {
   color: var(--hl-accent-blue) !important;
+  text-decoration: none;
 }
-
-.hl-post-content strong {
-  color: var(--hl-text-primary);
-  font-weight: 600;
+.hl-post-content a:hover {
+  text-decoration: underline;
 }
 
 .hl-post-content ul,
@@ -164,6 +192,45 @@ main.content {
   margin-bottom: 0.3em;
 }
 
+/* --- Headings inside posts ---------------------------------- */
+/* Override theme's huge heading sizes (h2=1.75em, h3=1.5em off 20px body) */
+
+.hl-post-content h2 {
+  color: var(--hl-text-primary) !important;
+  font-size: 1.15em !important;
+  font-weight: 700 !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 0.6rem !important;
+  padding: 8px 14px !important;
+  background: linear-gradient(to right, #ff444412, transparent) !important;
+  border-left: 3px solid var(--hl-sev-high) !important;
+  border-bottom: none !important;
+  border-radius: 0 4px 4px 0;
+}
+
+.hl-post-content h3 {
+  color: var(--hl-text-primary) !important;
+  font-size: 1.0em !important;
+  font-weight: 600 !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.4rem !important;
+  padding-left: 10px !important;
+  border-left: 2px solid var(--hl-accent-blue) !important;
+  border-bottom: none !important;
+}
+
+.hl-post-content h4 {
+  color: var(--hl-text-secondary) !important;
+  font-size: 0.95em !important;
+  font-weight: 600 !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.3rem !important;
+  padding-left: 8px !important;
+  border-left: 2px solid var(--hl-border-card) !important;
+  border-bottom: none !important;
+}
+
+/* --- Code & pre -------------------------------------------- */
 .hl-post-content code {
   background: #1f1f1f;
   border: 1px solid var(--hl-border-card);
@@ -174,8 +241,9 @@ main.content {
 }
 
 .hl-post-content pre {
-  background: #1a1a1a;
-  border: 1px solid var(--hl-border-card);
+  background: #151515;
+  border: 1px solid #333333;
+  border-left: 3px solid #333333;
   border-radius: 5px;
   padding: 14px 18px;
   overflow-x: auto;
@@ -190,7 +258,7 @@ main.content {
   font-size: 0.88em;
 }
 
-/* --- Tables in post content --------------------------------- */
+/* --- Tables ------------------------------------------------- */
 .hl-post-content table {
   width: 100%;
   border-collapse: collapse;
@@ -199,41 +267,50 @@ main.content {
 }
 
 .hl-post-content th {
-  background: #202020 !important;
-  color: var(--hl-text-primary) !important;
-  font-size: 0.78em !important;
+  background: linear-gradient(to bottom, #1d2535, #171d29) !important;
+  color: var(--hl-accent-blue) !important;
+  font-size: 0.75em !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   padding: 9px 14px !important;
-  border: 1px solid #333333 !important;
+  border: 1px solid #1f3a5a !important;
   text-align: left;
   font-weight: 700;
 }
 
 .hl-post-content td {
-  padding: 9px 14px !important;
+  padding: 8px 14px !important;
   border: 1px solid #2a2a2a !important;
   color: #cccccc !important;
   background: #161616 !important;
-  font-size: 0.9em;
 }
 
 .hl-post-content tr:nth-child(even) td {
   background: #1a1a1a !important;
 }
 
-/* --- Blockquotes in post content ---------------------------- */
+.hl-post-content tr:hover td {
+  background: #1e1e1e !important;
+  color: var(--hl-text-primary) !important;
+}
+
+/* --- Blockquotes -------------------------------------------- */
+/* Standard blockquotes: blue accent (callouts, quoted text) */
 .hl-post-content blockquote {
-  border-left: 3px solid #444444 !important;
-  background: #161616 !important;
+  border-left: 3px solid var(--hl-accent-blue) !important;
+  background: #0d1520 !important;
   border-radius: 0 4px 4px 0;
-  margin: 1.25rem 0 !important;
-  padding: 10px 16px !important;
+  margin: 1.5rem 0 !important;
+  padding: 12px 18px !important;
   color: var(--hl-text-secondary) !important;
 }
 
 .hl-post-content blockquote p {
   color: var(--hl-text-secondary) !important;
+  margin: 0 0 0.4em;
+}
+
+.hl-post-content blockquote p:last-child {
   margin: 0;
 }
 
@@ -241,12 +318,38 @@ main.content {
   color: var(--hl-text-primary) !important;
 }
 
+/* --- Horizontal rules --------------------------------------- */
 .hl-post-content hr {
   border: none !important;
-  border-top: 1px solid var(--hl-border-row) !important;
-  margin: 2rem 0;
+  height: 1px;
+  background: linear-gradient(to right, var(--hl-sev-high), #333333 40%, transparent) !important;
+  margin: 2.5rem 0 !important;
 }
 
+/* --- Figures / images --------------------------------------- */
+.hl-post-content figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.hl-post-content figure img {
+  max-width: 100%;
+  border: 1px solid var(--hl-border-card);
+  border-radius: 4px;
+}
+
+.hl-post-content figcaption {
+  color: var(--hl-text-dim);
+  font-size: 0.82em;
+  font-style: italic;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   INDEX PAGE COMPONENTS
+   ============================================================ */
 
 /* --- Featured card grid ------------------------------------- */
 .hl-grid {
@@ -265,9 +368,13 @@ main.content {
   display: block !important;
   color: inherit;
   min-height: 80px;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, background 0.15s;
 }
-.hl-card:hover { border-color: #444 !important; text-decoration: none !important; }
+.hl-card:hover {
+  border-color: #444 !important;
+  background: #1e1e1e !important;
+  text-decoration: none !important;
+}
 
 .hl-card__inner {
   padding: 14px;
@@ -316,9 +423,13 @@ main.content {
   overflow: hidden;
   text-decoration: none !important;
   color: inherit;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, background 0.15s;
 }
-.hl-row:hover { border-color: #333 !important; text-decoration: none !important; }
+.hl-row:hover {
+  border-color: #333 !important;
+  background: #1a1a1a !important;
+  text-decoration: none !important;
+}
 
 .hl-row__bar {
   width: 2px;

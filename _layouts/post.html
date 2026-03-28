@@ -3,7 +3,15 @@ layout: default
 ---
 <div class="hl-page">
 <div class="hl-post-header">
-  <div class="hl-post-header__label">{{ page.date | date: "%b %d, %Y" }}</div>
+  <div class="hl-post-header__eyebrow">
+    {% if page.path contains "hunting-detections" %}
+      <span class="hl-post-header__badge hl-post-header__badge--detect">Detection Rules</span>
+    {% else %}
+      <span class="hl-post-header__badge hl-post-header__badge--report">Threat Intelligence</span>
+    {% endif %}
+    <span class="hl-post-header__sep">·</span>
+    <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}</span>
+  </div>
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
 <div class="hl-post-content">
