@@ -5,57 +5,28 @@ permalink: /reports/
 position: 2
 ---
 
-Welcome to the **Hunter’s Ledger Reports** section.  
-Each report contains detailed malware analysis, reverse engineering notes, IOCs, and detection opportunities.
+{% include section-header.html label="Recent Reports" accent="#ff4444" %}
 
->Each report is located in the section based on month and year it was created on the site
->Each month flows with newest reports first, oldest last
->If you are looking for the newest report, it will be at the top of that month's section
+<div class="hl-grid">
+{% include report-card.html title="ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25" date="Mar 2026" severity="high" tags="MaaS,C2,Open Dir" url="/reports/zerotrace-74-0-42-25-20260316/" %}
+{% include report-card.html title="Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)" date="Mar 2026" severity="high" tags="C2,Loader" url="/reports/sliver-open-directory/" %}
+{% include report-card.html title="Webserver Compromise Kit 91.236.230.250" date="Feb 2026" severity="high" tags="Webshell,RCE" url="/reports/webserver-compromise-kit-91-236-230-250/" %}
+{% include report-card.html title="Remcos RAT OpenDirectory Campaign — Technical Analysis & Business Risk Assessment" date="Feb 2026" severity="med" tags="RAT,Open Dir" url="/reports/remcos-opendirectory/" %}
+{% include report-card.html title="NsMiner: Multi-Stage Cryptojacking Operation" date="Feb 2026" severity="med" tags="Cryptominer" url="/reports/nsminer-cryptojacker/" %}
+</div>
 
----
+{% include section-header.html label="All Reports" accent="#444444" %}
 
-# March 2026
-- [ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25]({{ "/reports/zerotrace-74-0-42-25-20260316/" | relative_url }})
-- [Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)]({{ "/reports/sliver-open-directory/" | relative_url }})
+<div class="hl-row-list">
+{% include report-row.html title="Arsenal-237 New Files: Advanced Toolkit Analysis" date="Jan 2026" severity="high" tags="Toolkit,Ransomware" url="/reports/arsenal-237-new-files/" %}
+{% include report-row.html title="Arsenal-237: Threat Actor R&D Repository Exposed" date="Jan 2026" severity="high" tags="Toolkit,RAT" url="/reports/109.230.231.37-Executive-Overview/" %}
+{% include report-row.html title="Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm — Technical Deep-Dive" date="Dec 2025" severity="med" tags="RAT" url="/reports/dual-rat-analysis/" %}
+{% include report-row.html title="PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment" date="Dec 2025" severity="med" tags="RAT" url="/reports/PULSAR-RAT/" %}
+{% include report-row.html title="Hybrid Loader/Stealer Ecosystem Masquerading as Sogou" date="Nov 2025" severity="med" tags="Loader,Stealer" url="/reports/Hybrid-Loader-Stealer-Sogou/" %}
+{% include report-row.html title="Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play" date="Nov 2025" severity="med" tags="Loader" url="/reports/malware-analysis-houselet/" %}
+{% include report-row.html title="AdvancedRouterScanner" date="Oct 2025" severity="med" tags="Scanner" url="/reports/AdvancedRouterScanner/" %}
+{% include report-row.html title="From Webshells to The Cloud" date="Oct 2025" severity="high" tags="Webshell,RCE" url="/reports/webshells-to-the-cloud/" %}
+{% include report-row.html title="Quasar + XWorm + PowerShell Report" date="Oct 2025" severity="med" tags="RAT,C2" url="/reports/quasar-xworm-powershell/" %}
+</div>
 
----
-
-# February 2026
-- [Webserver Compromise Kit 91.236.230. 250]({{ "/reports/webserver-compromise-kit-91-236-230-250/" | relative_url }})
-- [Remcos RAT OpenDirectory Campaign - Technical Analysis & Business Risk Assessment]({{ "/reports/remcos-opendirectory/" | relative_url }})
-- [NsMiner: Multi-Stage Cryptojacking Operation - Technical Analysis]({{ "/reports/nsminer-cryptojacker/" | relative_url }})
-
----
-
-# January 2026
-
-- [Arsenal-237 New Files: Advanced Toolkit Analysis - Recently Added Malware]({{ "/reports/arsenal-237-new-files/" | relative_url }})
-- [Arsenal-237: Threat Actor R&D Repository Exposed]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }})
-
----
-
-# December 2025
-
-- [Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm - Technical Deep-Dive]({{ "/reports/dual-rat-analysis/" | relative_url }})
-- [PULSAR RAT (server.exe) - Technical Analysis & Business Risk Assessment]({{ "/reports/PULSAR-RAT/" | relative_url }})
-
----
-
-# November 2025
-
-- [Hybrid Loader/Stealer Ecosystem Masquerading as Sogou]({{ "/reports/Hybrid-Loader-Stealer-Sogou/" | relative_url }})
-- [Houselet.exe - The Go-Based Loader Masquerading as PlayStation Remote Play]({{ "/reports/malware-analysis-houselet/" | relative_url }})
-
----
-
-# October 2025
-- [AdvancedRouterScanner]({{ "/reports/AdvancedRouterScanner/" | relative_url }})
-- [From Webshells to The Cloud]({{ "/reports/webshells-to-the-cloud/" | relative_url }})
-- [Quasar + XWorm + PowerShell Report]({{ "/reports/quasar-xworm-powershell/" | relative_url }})
-
----
-
-## Usage Notes
-- Each report follows the [Report Templates]({{ site.baseurl }}/report-templates/) for consistency.  
-- Reports are © 2025 Joseph. All rights reserved.  
-- Free to read, but reuse requires written permission.
+*Reports are © Joseph. All rights reserved — free to read, but reuse requires written permission.*
