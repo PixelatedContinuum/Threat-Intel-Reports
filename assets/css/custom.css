@@ -423,8 +423,6 @@ main.content {
 
 .hl-post-content figure img {
   max-width: 100%;
-  border: 1px solid #333333;
-  border-radius: 4px;
   display: block;
   margin: 0 auto;
 }
