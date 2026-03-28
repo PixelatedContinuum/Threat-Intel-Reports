@@ -37,6 +37,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--hl-text-primary) !important;
 }
 
+/* Bold text uses blue accent across the whole site */
+strong, b {
+  color: var(--hl-accent-blue);
+  font-weight: 600;
+}
+
 main.content {
   background-color: var(--hl-bg-page) !important;
   background-image: none !important;
@@ -662,7 +668,7 @@ main.content {
 }
 
 .hl-prose-section__body {
-  color: var(--hl-text-secondary);
+  color: var(--hl-text-primary);
   font-size: 0.9em;
   line-height: 1.65;
   margin: 0;
@@ -724,7 +730,7 @@ main.content {
 }
 
 .hl-note__body {
-  color: #cccccc;
+  color: var(--hl-text-primary);
   font-size: 0.9em;
   line-height: 1.6;
   margin: 0;
