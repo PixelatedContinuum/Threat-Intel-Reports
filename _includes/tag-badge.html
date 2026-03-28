@@ -1,14 +1,14 @@
 {% assign t = include.tag | strip %}
 {% assign tl = t | downcase %}
-{% if tl == "c2" or tl == "rat" or tl == "ip" or tl == "hash" or tl == "maas" %}
+{% if tl == "c2" or tl == "rat" or tl == "ip" or tl == "hash" or tl == "maas" or tl == "cred theft" or tl == "multi-family" %}
   <span class="hl-tag hl-tag--blue">{{ t }}</span>
-{% elsif tl == "webshell" or tl == "rce" or tl == "threat" or tl == "toolkit" or tl == "ransomware" %}
+{% elsif tl == "webshell" or tl == "rce" or tl == "threat" or tl == "toolkit" or tl == "ransomware" or tl == "rootkit" or tl == "byovd" or tl == "exfil" %}
   <span class="hl-tag hl-tag--red">{{ t }}</span>
-{% elsif tl == "open dir" or tl == "domain" or tl == "sigma" or tl == "cryptominer" or tl == "scanner" %}
+{% elsif tl == "open dir" or tl == "domain" or tl == "sigma" or tl == "cryptominer" or tl == "scanner" or tl == "exploitation" %}
   <span class="hl-tag hl-tag--green">{{ t }}</span>
-{% elsif tl == "loader" or tl == "suricata" or tl == "yara" or tl == "stealer" %}
+{% elsif tl == "loader" or tl == "suricata" or tl == "yara" or tl == "stealer" or tl == "dropper" or tl == "evasion" or tl == "injection" or tl == "dll hijack" or tl == "persistence" %}
   <span class="hl-tag hl-tag--purple">{{ t }}</span>
-{% elsif tl == "note" or tl == "warning" %}
+{% elsif tl == "note" or tl == "warning" or tl == "priv esc" %}
   <span class="hl-tag hl-tag--yellow">{{ t }}</span>
 {% else %}
   <span class="hl-tag hl-tag--blue">{{ t }}</span>
