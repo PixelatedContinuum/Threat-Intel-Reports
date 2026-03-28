@@ -3,6 +3,7 @@ title: "ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.
 date: '2026-03-17'
 layout: post
 permalink: /reports/zerotrace-74-0-42-25-20260316/
+category: "MaaS Operation"
 hide: true
 ---
 

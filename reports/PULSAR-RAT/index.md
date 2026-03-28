@@ -3,6 +3,7 @@ title: PULSAR RAT (server.exe) - Technical Analysis & Business Risk Assessment
 date: '2025-12-01'
 layout: post
 permalink: /reports/PULSAR-RAT/
+category: "Remote Access Trojan"
 hide: true
 ---
 

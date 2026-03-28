@@ -224,7 +224,7 @@ main.content {
   font-size: 0.65em;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--hl-text-dim);
+  color: #999999;
 }
 
 .hl-post-header__title {

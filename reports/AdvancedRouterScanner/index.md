@@ -3,6 +3,7 @@ title: AdvancedRouterScanner - A Custom Python Tool for Global Router Exploitati
 date: '2025-10-25'
 layout: post
 permalink: /reports/AdvancedRouterScanner/
+category: "Network Scanner"
 hide: true
 ---
 

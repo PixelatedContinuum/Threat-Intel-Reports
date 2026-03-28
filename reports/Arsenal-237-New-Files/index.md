@@ -3,6 +3,7 @@ title: Arsenal-237 New Files Analysis - Recently Added Malware
 date: '2026-01-27'
 layout: post
 permalink: /reports/arsenal-237-new-files/
+category: "Ransomware Toolkit"
 hide: true
 ---
 

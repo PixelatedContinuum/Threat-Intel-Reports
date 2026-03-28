@@ -3,6 +3,7 @@ title: Hybrid Loader/Stealer Ecosystem Masquerading as Sogou
 date: '2025-11-21'
 layout: post
 permalink: /reports/Hybrid-Loader-Stealer-Sogou/
+category: "Loader / Stealer"
 hide: true
 ---
 

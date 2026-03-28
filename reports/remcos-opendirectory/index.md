@@ -3,6 +3,7 @@ title: Remcos RAT OpenDirectory Campaign - Technical Analysis & Business Risk As
 date: '2026-02-04'
 layout: post
 permalink: /reports/remcos-opendirectory/
+category: "Remote Access Trojan"
 hide: true
 ---
 

@@ -3,6 +3,7 @@ title: QuasarRAT + Xworm + PowerShell Loader
 date: '2025-10-17'
 layout: post
 permalink: /reports/quasar-xworm-powershell/
+category: "Multi-Stage RAT"
 hide: true
 ---
 

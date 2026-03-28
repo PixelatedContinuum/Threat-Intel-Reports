@@ -3,6 +3,7 @@ title: "Technical Analysis of NsMiner: A Multi-Stage Cryptojacking Operation"
 date: '2026-02-02'
 layout: post
 permalink: /reports/nsminer-cryptojacker/
+category: "Cryptojacking"
 hide: true
 ---
 

@@ -7,7 +7,7 @@ layout: default
     {% if page.path contains "hunting-detections" %}
       <span class="hl-post-header__badge hl-post-header__badge--detect">Detection Rules</span>
     {% else %}
-      <span class="hl-post-header__badge hl-post-header__badge--report">Threat Intelligence</span>
+      <span class="hl-post-header__badge hl-post-header__badge--report">{{ page.category | default: "Malware Analysis" }}</span>
     {% endif %}
     <span class="hl-post-header__sep">·</span>
     <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}</span>
