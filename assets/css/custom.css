@@ -161,6 +161,16 @@ main.content {
 }
 
 
+/* --- Masthead banner (home page) --------------------------- */
+.hl-masthead {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--hl-border-card);
+  margin-bottom: 1.5rem;
+}
+
 /* ============================================================
    POST LAYOUT — Individual report and detection pages
    ============================================================ */
