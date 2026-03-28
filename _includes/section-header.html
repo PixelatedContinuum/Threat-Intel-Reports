@@ -1,0 +1,5 @@
+{% assign accent = include.accent | default: "#aaaaaa" %}
+<div class="hl-section-header">
+  <div class="hl-section-header__bar" style="background: {{ accent }};"></div>
+  {{ include.label }}
+</div>
