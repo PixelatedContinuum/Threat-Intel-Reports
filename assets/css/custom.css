@@ -593,11 +593,11 @@ main.content {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.72em;
+  font-size: 0.85em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #cccccc;
+  color: var(--hl-text-primary);
   border-bottom: 1px solid var(--hl-border-row);
   padding-bottom: 7px;
   margin: 2rem 0 14px;
