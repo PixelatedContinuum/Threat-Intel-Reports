@@ -15,8 +15,6 @@ position: 2
 {% include report-card.html title="NsMiner: Multi-Stage Cryptojacking Operation" date="Feb 2026" severity="med" tags="Cryptominer,Dropper,Persistence,Evasion" url="/reports/nsminer-cryptojacker/" %}
 </div>
 
-<a href="{{ '/reports/' | relative_url }}" class="hl-view-all">View all reports →</a>
-
 {% include section-header.html label="All Reports" accent="#444444" %}
 
 <div class="hl-row-list">
