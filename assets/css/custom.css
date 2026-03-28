@@ -54,7 +54,7 @@ main.content {
    Using padding-top on .hl-page (not main.content) so it appears
    AFTER the navbar's normal-flow position, not behind it. */
 .hl-page {
-  padding-top: 2rem;
+  padding-top: 3rem;
 }
 
 /* Theme's prev/next post navigation — restyle to match dark theme */
@@ -94,7 +94,7 @@ main.content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 88px;
+  height: 80px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -102,30 +102,22 @@ main.content {
   width: 100%;
 }
 
-/* Logo image brand link */
+/* Text brand link */
 .hl-nav__brand,
 .hl-nav__brand:visited {
-  display: flex;
-  align-items: center;
+  color: var(--hl-text-primary) !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   text-decoration: none !important;
   flex-shrink: 0;
-  opacity: 1;
-  transition: opacity 0.15s;
+  white-space: nowrap;
+  transition: color 0.15s;
 }
 
 .hl-nav__brand:hover {
-  opacity: 0.85;
+  color: #ffffff !important;
   text-decoration: none !important;
-}
-
-/* mix-blend-mode: screen makes the dark teal background of header.png
-   dissolve into the dark navbar, leaving only the bright pink triangle
-   and white text visible — natural transparent-background effect */
-.hl-nav__logo {
-  height: 64px;
-  width: auto;
-  display: block;
-  mix-blend-mode: screen;
 }
 
 .hl-nav__links {
@@ -153,12 +145,12 @@ main.content {
 @media (max-width: 700px) {
   .hl-nav {
     height: auto;
-    padding: 12px 20px;
+    padding: 14px 20px;
     flex-wrap: wrap;
     gap: 12px;
   }
-  .hl-nav__logo {
-    height: 44px;
+  .hl-nav__brand {
+    font-size: 1.1rem;
   }
   .hl-nav__links {
     width: 100%;
