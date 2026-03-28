@@ -1,3 +1,7 @@
+---
+render_with_liquid: false
+---
+
 # Site Maintenance — Adding New Content
 
 Reference guide for updating The Hunter's Ledger after publishing a new report.
