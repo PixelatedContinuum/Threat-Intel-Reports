@@ -244,7 +244,7 @@ main.content {
 
 /* --- Post body ---------------------------------------------- */
 .hl-post-content {
-  color: var(--hl-text-secondary);
+  color: var(--hl-text-primary);
   line-height: 1.75;
 }
 
@@ -254,12 +254,12 @@ main.content {
 }
 
 .hl-post-content p {
-  color: var(--hl-text-secondary);
+  color: var(--hl-text-primary);
   margin-bottom: 0.9em;
 }
 
 .hl-post-content strong {
-  color: var(--hl-text-primary);
+  color: var(--hl-accent-blue);
   font-weight: 600;
 }
 
@@ -274,7 +274,7 @@ main.content {
 .hl-post-content ul,
 .hl-post-content ol {
   padding-left: 1.4em;
-  color: var(--hl-text-secondary);
+  color: var(--hl-text-primary);
 }
 
 .hl-post-content li {
