@@ -634,7 +634,7 @@ main.content {
 }
 
 .hl-page-header__desc {
-  color: var(--hl-text-secondary);
+  color: var(--hl-text-primary);
   font-size: 0.9em;
   line-height: 1.55;
   margin: 0;
@@ -775,7 +775,7 @@ main.content {
 }
 
 .hl-hero__desc {
-  color: var(--hl-text-muted);
+  color: var(--hl-text-primary);
   font-size: 0.9em;
   line-height: 1.55;
   margin: 0;
