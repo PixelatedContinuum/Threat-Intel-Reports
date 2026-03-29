@@ -992,3 +992,93 @@ main.content {
     padding: 24px 16px !important;
   }
 }
+
+/* --- Smooth scroll ------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* --- Reading progress bar ----------------------------------- */
+.hl-progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--hl-accent-blue);
+  z-index: 9999;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+
+/* --- Read time in post eyebrow ------------------------------ */
+.hl-read-time {
+  color: var(--hl-text-dim);
+  font-size: 0.85em;
+}
+.hl-read-time::before {
+  content: '·';
+  margin: 0 0.45em;
+  color: var(--hl-text-dim);
+}
+
+/* --- Copy button on code blocks ----------------------------- */
+.hl-post-content pre { position: relative; }
+.hl-copy-btn {
+  position: absolute;
+  top: 8px; right: 8px;
+  padding: 3px 9px;
+  font-size: 0.72em;
+  font-family: inherit;
+  background: rgba(88,166,255,0.08);
+  color: var(--hl-accent-blue);
+  border: 1px solid rgba(88,166,255,0.25);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  line-height: 1.6;
+}
+.hl-post-content pre:hover .hl-copy-btn,
+.hl-copy-btn:focus { opacity: 1; }
+.hl-copy-btn:hover  { background: rgba(88,166,255,0.18); }
+
+/* --- Permalink anchors on headings -------------------------- */
+.hl-heading-anchor {
+  margin-left: 0.45em;
+  color: var(--hl-accent-blue);
+  opacity: 0;
+  font-size: 0.68em;
+  font-weight: 400;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  vertical-align: middle;
+  user-select: none;
+}
+.hl-post-content h2:hover .hl-heading-anchor { opacity: 0.55; }
+.hl-heading-anchor:hover                      { opacity: 1 !important; }
+
+/* --- Back to top button ------------------------------------- */
+.hl-back-top {
+  position: fixed;
+  bottom: 28px; right: 22px;
+  width: 38px; height: 38px;
+  background: var(--hl-bg-row);
+  border: 1px solid var(--hl-border-row);
+  border-radius: 50%;
+  color: var(--hl-accent-blue);
+  font-size: 1.1em;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s, border-color 0.15s;
+  z-index: 500;
+}
+.hl-back-top--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hl-back-top:hover {
+  transform: translateY(-3px);
+  border-color: var(--hl-accent-blue);
+}
