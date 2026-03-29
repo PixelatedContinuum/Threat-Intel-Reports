@@ -1121,10 +1121,9 @@ main.content {
 .hl-toast {
   position: fixed;
   bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  width: calc(100% - 48px);
-  max-width: 480px;
+  left: 28px;
+  transform: translateY(20px);
+  width: 260px;
   background: var(--hl-bg-row);
   color: var(--hl-text-primary);
   border: 1px solid rgba(88,166,255,0.35);
@@ -1144,8 +1143,11 @@ main.content {
 }
 .hl-toast--visible {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
   pointer-events: auto;
+}
+@media (max-width: 900px) {
+  .hl-toast { display: none; }
 }
 .hl-toast__label {
   display: block;
