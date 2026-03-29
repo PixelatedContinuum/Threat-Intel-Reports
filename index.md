@@ -78,7 +78,7 @@ position: 1
     <div class="hl-card__bar" style="background:#58a6ff;"></div>
     <div>
       <div class="hl-card__title">About Me &amp; Contact</div>
-      <div class="hl-prose-section__body" style="margin-top:6px;">Background and credentials for Joseph Harrison — SOC Operations Lead &amp; Threat Intelligence Researcher. Includes LinkedIn contact.</div>
+      <div class="hl-prose-section__body" style="margin-top:6px;">Who I am, my background, and how to reach me directly.</div>
     </div>
   </div>
 </a></div>
