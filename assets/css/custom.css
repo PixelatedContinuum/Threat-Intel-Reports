@@ -38,17 +38,17 @@ body::after {
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 200px;
+  width: 150px;
   pointer-events: none;
   z-index: 0;
 }
 body::before {
   left: 0;
-  background: linear-gradient(to right, rgba(88,166,255,0.04), transparent);
+  background: linear-gradient(to right, rgba(88,166,255,0.03), transparent);
 }
 body::after {
   right: 0;
-  background: linear-gradient(to left, rgba(88,166,255,0.04), transparent);
+  background: linear-gradient(to left, rgba(88,166,255,0.03), transparent);
 }
 
 /* Theme dark mode sets wild heading colors (h2: purple, h3: pink).
