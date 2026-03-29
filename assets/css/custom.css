@@ -1123,7 +1123,7 @@ main.content {
   bottom: 28px;
   left: 28px;
   transform: translateY(20px);
-  width: 260px;
+  width: 300px;
   background: var(--hl-bg-row);
   color: var(--hl-text-primary);
   border: 1px solid rgba(88,166,255,0.35);
