@@ -937,7 +937,7 @@ main.content {
 }
 
 .hl-toc__item a {
-  color: var(--hl-text-secondary);
+  color: var(--hl-text-primary);
   text-decoration: none;
   display: block;
   padding: 4px 8px;
@@ -949,15 +949,16 @@ main.content {
 }
 
 .hl-toc__item a:hover {
-  color: var(--hl-text-primary);
+  color: var(--hl-accent-blue);
   background: rgba(88,166,255,0.06);
-  border-left-color: var(--hl-accent-blue);
+  border-left-color: var(--hl-border-card);
 }
 
 .hl-toc__item a.hl-toc__active {
   color: var(--hl-accent-blue);
-  background: rgba(88,166,255,0.06);
+  background: rgba(88,166,255,0.08);
   border-left-color: var(--hl-accent-blue);
+  font-weight: 600;
 }
 
 .hl-toc__item--h3 a {
