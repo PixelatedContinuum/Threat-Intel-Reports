@@ -12,7 +12,7 @@
 {% endif %}
 {% assign _rp = site.pages | where: "url", include.url | first %}
 {% assign _mins = 0 %}
-{% if _rp %}{% assign _mins = _rp.content | strip_html | number_of_words | divided_by: 200 | at_least: 1 %}{% endif %}
+{% if _rp %}{% assign _mins = _rp.content | strip_html | number_of_words | divided_by: 200.0 | round | at_least: 1 %}{% endif %}
 
 <a href="{{ include.url | relative_url }}" class="hl-card">
   <div class="hl-card__inner">
