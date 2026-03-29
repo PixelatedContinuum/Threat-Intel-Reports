@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <span class="hl-post-header__badge hl-post-header__badge--report">{{ page.category | default: "Malware Analysis" }}</span>
     {% endif %}
     <span class="hl-post-header__sep">·</span>
-    <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}</span>
+    <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}{% if page.last_updated %} · <span class="hl-last-updated">Updated {{ page.last_updated | date: "%b %d, %Y" }}</span>{% endif %}</span>
   </div>
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
@@ -34,6 +34,29 @@ document.addEventListener('DOMContentLoaded', function () {
     <nav><ul class="hl-toc__list" id="hl-toc-list"></ul></nav>
   </aside>
 </div>
+
+{% assign rp_pool = site.pages | where: "layout", "post" | sort: "date" | reverse %}
+{% assign rp_list = "" | split: "" %}
+{% for rp in rp_pool %}{% unless rp.url == page.url or rp.path contains "hunting-detections" %}{% if rp_list.size < 2 %}{% assign rp_list = rp_list | push: rp %}{% endif %}{% endunless %}{% endfor %}
+{% if rp_list.size > 0 %}
+<div class="hl-related">
+  <div class="hl-related__heading">Continue Reading</div>
+  <div class="hl-related__grid">
+    {% for rp in rp_list %}
+    <a href="{{ rp.url | relative_url }}" class="hl-card">
+      <div class="hl-card__inner">
+        <div class="hl-card__bar hl-sev--info"></div>
+        <div>
+          <div class="hl-card__meta">{{ rp.category | default: "Malware Analysis" }} · {{ rp.date | date: "%b %Y" }}</div>
+          <div class="hl-card__title">{{ rp.title }}</div>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
 </div>
 
 
@@ -73,6 +96,26 @@ document.addEventListener('DOMContentLoaded', function () {
     rt.className = 'hl-read-time';
     rt.textContent = minutes + ' min read';
     eyebrow.appendChild(rt);
+  }
+
+  // --- Share button ---
+  var shareSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+  if (eyebrow) {
+    var shareBtn = document.createElement('button');
+    shareBtn.className = 'hl-share-btn';
+    shareBtn.innerHTML = shareSVG + ' Share';
+    shareBtn.setAttribute('aria-label', 'Share this report');
+    shareBtn.addEventListener('click', function () {
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: location.href }).catch(function () {});
+      } else {
+        navigator.clipboard.writeText(location.href).then(function () {
+          shareBtn.textContent = 'Copied!';
+          setTimeout(function () { shareBtn.innerHTML = shareSVG + ' Share'; }, 2000);
+        }).catch(function () {});
+      }
+    });
+    eyebrow.appendChild(shareBtn);
   }
 
   // --- Copy buttons on code blocks ---

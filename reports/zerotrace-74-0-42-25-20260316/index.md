@@ -1,6 +1,7 @@
 ---
 title: "ZeroTrace — Open Directory Exposure at 74.0.42.25"
 date: '2026-03-17'
+last_updated: '2026-03-19'
 layout: post
 permalink: /reports/zerotrace-74-0-42-25-20260316/
 category: "MaaS Operation"

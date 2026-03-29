@@ -1201,3 +1201,55 @@ main.content {
   transform: translateY(-3px);
   border-color: var(--hl-accent-blue);
 }
+
+/* --- Last updated date -------------------------------------- */
+.hl-last-updated {
+  color: var(--hl-accent-blue);
+  font-size: 0.9em;
+  opacity: 0.75;
+}
+
+/* --- Share button in post eyebrow --------------------------- */
+.hl-share-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--hl-border-row);
+  border-radius: 4px;
+  color: var(--hl-text-dim);
+  cursor: pointer;
+  font-size: 0.75em;
+  font-family: inherit;
+  padding: 3px 10px;
+  line-height: 1.6;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.hl-share-btn:hover {
+  color: var(--hl-accent-blue);
+  border-color: var(--hl-accent-blue);
+}
+
+/* --- Related reports section -------------------------------- */
+.hl-related {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hl-border-row);
+}
+.hl-related__heading {
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hl-text-dim);
+  margin-bottom: 1rem;
+}
+.hl-related__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .hl-related__grid { grid-template-columns: 1fr; }
+}

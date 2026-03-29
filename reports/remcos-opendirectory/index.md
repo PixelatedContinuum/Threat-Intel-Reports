@@ -1,6 +1,7 @@
 ---
 title: "Remcos OpenDirectory Campaign"
 date: '2026-02-04'
+last_updated: '2026-02-06'
 layout: post
 permalink: /reports/remcos-opendirectory/
 category: "Remote Access Trojan"
