@@ -71,6 +71,18 @@ position: 1
   </div>
 </div>
 
+{% include section-header.html label="About the Analyst" accent="#58a6ff" %}
+
+<a href="{{ '/about-me/' | relative_url }}" class="hl-card">
+  <div class="hl-card__inner">
+    <div class="hl-card__bar" style="background:#58a6ff;"></div>
+    <div>
+      <div class="hl-card__title">Joseph Harrison — SOC Operations Lead &amp; Threat Intelligence Researcher</div>
+      <div class="hl-prose-section__body" style="margin-top:6px;">Background, credentials, and contact via LinkedIn →</div>
+    </div>
+  </div>
+</a>
+
 {% include section-header.html label="Resources" accent="#555555" %}
 
 <div class="hl-prose-section">
