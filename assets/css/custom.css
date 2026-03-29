@@ -904,7 +904,7 @@ main.content {
    inner area (900px max - 56px padding = 844px / 2 = 422px), +24px gap */
 .hl-post-toc {
   position: fixed;
-  left: calc(50vw + 446px);
+  left: calc(75vw + 135px);
   top: 116px;
   width: 180px;
   background: var(--hl-bg-row);
