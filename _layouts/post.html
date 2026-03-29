@@ -1,6 +1,7 @@
 ---
 layout: default
 ---
+<style>main.content{max-width:1120px!important}</style>
 <div class="hl-page">
 <div class="hl-post-header">
   <div class="hl-post-header__eyebrow">
@@ -32,23 +33,23 @@ layout: default
   var toc     = document.getElementById('hl-toc');
   if (!content || !tocList || !toc) return;
 
-  var headings = Array.from(content.querySelectorAll('h2, h3'));
+  // H2 only — keeps the TOC as a chapter navigator, not an exhaustive outline
+  var headings = Array.from(content.querySelectorAll('h2'));
 
-  // Hide sidebar if fewer than 3 headings
   if (headings.length < 3) { toc.style.display = 'none'; return; }
 
   headings.forEach(function (h, i) {
     if (!h.id) h.id = 'toc-' + i;
     var li = document.createElement('li');
-    li.className = 'hl-toc__item' + (h.tagName === 'H3' ? ' hl-toc__item--h3' : '');
+    li.className = 'hl-toc__item';
     var a = document.createElement('a');
     a.href = '#' + h.id;
-    a.textContent = h.textContent.replace(/^[\d.]+\s*/, ''); // strip leading "1." numbering
+    a.textContent = h.textContent.replace(/^[\d.]+\s*/, '');
     li.appendChild(a);
     tocList.appendChild(li);
   });
 
-  // Scroll-spy: highlight active section
+  // Scroll-spy
   var links = Array.from(tocList.querySelectorAll('a'));
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
