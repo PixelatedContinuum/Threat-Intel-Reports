@@ -8,8 +8,80 @@ position: 5
 
 <div class="hl-page-header" style="border-left-color: #58a6ff;">
   <div class="hl-page-header__label" style="color: #58a6ff;">About Me</div>
-  <div class="hl-page-header__title">Solo Analyst · Threat Intelligence Researcher</div>
-  <div class="hl-page-header__desc">Background, work, and ways to connect.</div>
+  <div class="hl-page-header__title">Joseph Harrison · SOC Operations Lead & Threat Intelligence Researcher</div>
+  <div class="hl-page-header__desc">Background, credentials, and ways to connect.</div>
+</div>
+
+{% include section-header.html label="Who I Am" accent="#58a6ff" %}
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+    Summary
+  </div>
+  <div class="hl-prose-section__body">
+    Cybersecurity SOC Operations Lead specializing in <strong>threat hunting, detection engineering, DFIR, malware analysis, and reverse engineering</strong> — with experience leading large analyst teams and optimizing SOC operations across automation and intelligence workflows. I drive the full intelligence lifecycle from proactive threat development and CTI collaboration to executive-ready reporting, while building AI-driven capabilities including LLM agents, MCP servers, and automation platforms to scale security outcomes.<br><br>
+    The Hunter's Ledger is where I publish the original research I conduct outside of client work — hands-on analysis turned into structured, actionable intelligence for the defender community.
+  </div>
+</div>
+
+{% include section-header.html label="Experience" accent="#4ade80" %}
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
+    Ernst &amp; Young (EY) — SOC Operations Lead
+  </div>
+  <div class="hl-prose-section__body">
+    Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation at scale across 20+ client organizations. Managed a 30+ member analyst team and recognized as a benchmark for client trust and engagement quality across the practice.<br><br>
+    Highlights include a $300K contract expansion driven by original LOTL hunting research, two additional contract expansions from co-developing Splunk UEBA with the product team, and first-of-its-kind incident response plan templates now used across the practice.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
+    Raytheon Technologies — Systems Engineer II
+  </div>
+  <div class="hl-prose-section__body">
+    Security modernization and system hardening against DCSA / NIST RMF standards across IT and OT environments spanning assembly lines, engineering test equipment, and multi-facility infrastructure.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
+    United States Air Force — Systems Administrator
+  </div>
+  <div class="hl-prose-section__body">
+    Unit cybersecurity liaison responsible for triaging and escalating security incidents, administering access controls for classified operational systems, and enforcing least-privilege principles across a 100-person unit.
+  </div>
+</div>
+
+{% include section-header.html label="Certifications & Education" accent="#f97316" %}
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#f97316;"></div>
+    Certifications
+  </div>
+  <div class="hl-prose-section__body">
+    <strong>GIAC Certified Forensic Analyst (GCFA)</strong><br>
+    GIAC Certified Enterprise Incident Responder (GEIR) — In Progress<br><br>
+    SANS FOR508: Advanced Incident Response, Threat Hunting, and Digital Forensics<br>
+    SANS FOR608: Enterprise-Class Incident Response &amp; Threat Hunting
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#f97316;"></div>
+    Education
+  </div>
+  <div class="hl-prose-section__body">
+    <strong>M.S. Cybersecurity</strong> — American Public University System<br>
+    B.S. Information Technology (Cybersecurity Concentration) — American Public University System
+  </div>
 </div>
 
 {% include section-header.html label="Background" accent="#58a6ff" %}
