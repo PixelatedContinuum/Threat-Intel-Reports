@@ -9,7 +9,6 @@ hide: true
 
 **Campaign Identifier:** Sogou-Hybrid-Loader-Stealer-Ecosystem
 
-**Last Updated:** November 21, 2025
 
 ---
 

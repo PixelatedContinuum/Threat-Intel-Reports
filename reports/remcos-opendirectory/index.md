@@ -11,7 +11,6 @@ hide: true
 
 **Campaign Identifier:** OpenDirectory-203.159.90.147-Remcos
 
-**Last Updated:** February 4, 2026
 
 ---
 

@@ -11,7 +11,6 @@ hide: true
 
 **Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250
 
-**Last Updated:** 2026-02-09
 
 ---
 

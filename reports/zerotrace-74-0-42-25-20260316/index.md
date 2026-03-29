@@ -11,7 +11,6 @@ hide: true
 A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 
 **Campaign Identifier:** ZeroTrace-MultiFamily-MaaS-74.0.42.25    
-**Last Updated:** March 17, 2026
 
 ---
 

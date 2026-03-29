@@ -10,7 +10,6 @@ hide: true
 
 **Campaign Identifier:** PULSAR-RAT-185.208.159.182
 
-**Last Updated:** December 1, 2025
 
 ---
 

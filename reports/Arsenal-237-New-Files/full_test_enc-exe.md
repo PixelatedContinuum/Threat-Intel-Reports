@@ -12,7 +12,6 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
 
-**Last Updated:** January 20, 2026
 
 ---
 
@@ -2073,4 +2072,3 @@ Free to read, but reuse requires written permission.
 
 *Report Classification: Technical Analysis*
 *Distribution: Authorized Security Personnel Only*
-*Last Updated: 2026-01-27*

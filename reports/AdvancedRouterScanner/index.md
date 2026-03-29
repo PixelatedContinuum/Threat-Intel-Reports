@@ -9,7 +9,6 @@ hide: true
 
 **Campaign Identifier:** AdvancedRouterScanner-Global-Router-Exploitation
 
-**Last Updated:** October 25, 2025
 
 ---
 

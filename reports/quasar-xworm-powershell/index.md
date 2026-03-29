@@ -9,7 +9,6 @@ hide: true
 
 **Campaign Identifier:** QuasarRAT-Xworm-PowerShell-Campaign
 
-**Last Updated:** October 17, 2025
 
 ---
 

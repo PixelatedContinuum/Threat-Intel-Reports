@@ -12,7 +12,6 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
 
-**Last Updated:** January 23, 2026
 
 ---
 
