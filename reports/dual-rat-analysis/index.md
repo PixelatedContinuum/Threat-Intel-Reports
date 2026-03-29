@@ -1,5 +1,5 @@
 ---
-title: "Quasar RAT vs. NjRAT/XWorm â Technical Deep-Dive"
+title: "Quasar RAT vs. NjRAT/XWorm — Technical Deep-Dive"
 date: '2025-12-06'
 layout: post
 permalink: /reports/dual-rat-analysis/
