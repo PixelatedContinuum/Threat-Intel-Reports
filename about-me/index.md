@@ -21,6 +21,7 @@ position: 6
   </div>
   <div class="hl-prose-section__body">
     Cybersecurity SOC Operations Lead specializing in <strong>threat hunting, detection engineering, DFIR, malware analysis, and reverse engineering</strong> — with experience leading large analyst teams and optimizing SOC operations across automation and intelligence workflows. I drive the full intelligence lifecycle from proactive threat development and CTI collaboration to executive-ready reporting, while building AI-driven capabilities including LLM agents, MCP servers, and automation platforms to scale security outcomes.<br><br>
+    Detection engineering is a core part of my work — I develop custom detection logic and signatures directly for client environments, and contribute to community signature development through original threat research. The detection packages published on this site reflect both that client-side engineering experience and research-driven signature development using real malware samples and live infrastructure.<br><br>
     The Hunter's Ledger is where I publish the original research I conduct outside of client work — hands-on analysis turned into structured, actionable intelligence for the defender community.
   </div>
 </div>
@@ -33,7 +34,7 @@ position: 6
     Ernst &amp; Young (EY) — SOC Operations Lead
   </div>
   <div class="hl-prose-section__body">
-    Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation across a large multi-client practice. Original research and detection content from The Hunter's Ledger feeds directly into hunting operations and client-facing intelligence work.
+    Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation across a large multi-client practice. Detection engineering work includes building custom SIEM and EDR detection logic and signatures tailored to client environments, contributing research-driven detections back into community repositories, and developing Sigma, YARA, and Suricata rules from original malware analysis. Original research and detection content from The Hunter's Ledger feeds directly into hunting operations and client-facing intelligence work.
   </div>
 </div>
 
