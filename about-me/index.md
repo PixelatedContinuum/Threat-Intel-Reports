@@ -34,7 +34,7 @@ position: 6
     Ernst &amp; Young (EY) — SOC Operations Lead
   </div>
   <div class="hl-prose-section__body">
-    Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation across a large multi-client practice. Detection engineering work includes building custom SIEM and EDR detection logic and signatures tailored to client environments, developing Sigma, YARA, and Suricata rules from original malware analysis, and directing end-to-end IR investigations to determine scope and impact. Original research and detection content from The Hunter's Ledger feeds directly into hunting operations and client-facing intelligence work.
+    Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation across a large multi-client practice. Detection engineering work includes building custom SIEM and EDR detection logic and signatures tailored to client environments, and directing end-to-end IR investigations to determine scope and impact. Original research and detection content from The Hunter's Ledger feeds directly into hunting operations and client-facing intelligence work.
   </div>
 </div>
 
