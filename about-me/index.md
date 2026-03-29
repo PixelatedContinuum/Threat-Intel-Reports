@@ -21,7 +21,7 @@ position: 6
   </div>
   <div class="hl-prose-section__body">
     Cybersecurity SOC Operations Lead specializing in <strong>threat hunting, detection engineering, DFIR, malware analysis, and reverse engineering</strong> — with experience leading large analyst teams and optimizing SOC operations across automation and intelligence workflows. I drive the full intelligence lifecycle from proactive threat development and CTI collaboration to executive-ready reporting, while building AI-driven capabilities including LLM agents, MCP servers, and automation platforms to scale security outcomes.<br><br>
-    Detection engineering is a core part of my work — I develop custom detection logic and signatures for client environments built directly from original malware research. My DFIR background runs alongside that, covering end-to-end incident response investigations, forensic artifact analysis, and scope and impact determination for large enterprise clients. Both disciplines feed into the reports on this site.<br><br>
+    From this research I contribute directly to detection engineering — developing custom signatures and detection logic for client environments built from original malware analysis. My DFIR background runs alongside that, covering end-to-end incident response investigations, forensic artifact analysis, scope and impact determination for large enterprise clients. Both disciplines feed into the reports on this site.<br><br>
     The Hunter's Ledger is where I publish the original research I conduct outside of client work — hands-on analysis turned into structured, actionable intelligence for the defender community.
   </div>
 </div>
