@@ -892,28 +892,27 @@ main.content {
   margin-top: 4px;
 }
 
-/* --- Post page two-column layout --------------------------- */
-main.content:has(.hl-post-body) {
-  max-width: 1120px !important;
-}
-
+/* --- Post page layout -------------------------------------- */
+/* No grid — TOC floats in the page margin via fixed positioning */
 .hl-post-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 180px;
-  gap: 24px;
-  align-items: start;
+  display: block;
 }
 
 /* --- Sticky TOC sidebar ------------------------------------ */
+/* Positioned in the right margin outside the content column.
+   calc: 50vw = center of viewport, +422px = right edge of content
+   inner area (900px max - 56px padding = 844px / 2 = 422px), +24px gap */
 .hl-post-toc {
-  position: sticky;
-  top: 24px;
+  position: fixed;
+  left: calc(50vw + 446px);
+  top: 116px;
+  width: 180px;
   background: var(--hl-bg-row);
   border: 1px solid var(--hl-border-row);
   border-radius: 6px;
   padding: 14px 16px;
   font-size: 0.78em;
-  max-height: calc(100vh - 48px);
+  max-height: calc(100vh - 140px);
   overflow-y: auto;
 }
 
@@ -972,15 +971,10 @@ main.content:has(.hl-post-body) {
 }
 
 /* --- Responsive -------------------------------------------- */
-@media (max-width: 1060px) {
-  .hl-post-body {
-    grid-template-columns: 1fr;
-  }
+/* Hide TOC when viewport is too narrow to show it in the margin */
+@media (max-width: 1280px) {
   .hl-post-toc {
     display: none;
-  }
-  main.content:has(.hl-post-body) {
-    max-width: 900px !important;
   }
 }
 
