@@ -1,6 +1,17 @@
 ---
 layout: default
 ---
+{% if page.path contains "hunting-detections" %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  hljs.registerAliases('yara', { languageName: 'cpp' });
+  hljs.registerAliases('kql',  { languageName: 'sql' });
+  hljs.highlightAll();
+});
+</script>
+{% endif %}
 <div class="hl-page">
 <div class="hl-post-header">
   <div class="hl-post-header__eyebrow">
