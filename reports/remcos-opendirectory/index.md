@@ -4,6 +4,13 @@ date: '2026-02-04'
 last_updated: '2026-02-06'
 detection_page: /hunting-detections/remcos-opendirectory/
 ioc_feed: /ioc-feeds/remcos-opendirectory-campaign.json
+ioc_highlights:
+  - value: "203.159.90.147"
+    note: "C2 server — open directory, payload delivery"
+  - value: "Remcos_Mutex_Inj"
+    note: "Definitive family mutex — host-based indicator"
+  - value: "ebdd31a7622288b1"
+    note: "Remcos RAT payload SHA256 (first 16 chars)"
 layout: post
 permalink: /reports/remcos-opendirectory/
 category: "Remote Access Trojan"

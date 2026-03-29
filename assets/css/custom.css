@@ -1257,7 +1257,7 @@ main.content {
 /* --- Quick reference slide-out tabs (left margin) ----------- */
 .hl-quicklinks {
   position: fixed;
-  left: 28px;
+  left: 24px;
   top: 42%;
   transform: translateY(-50%);
   display: flex;
@@ -1269,9 +1269,9 @@ main.content {
   display: flex;
   align-items: center;
   overflow: hidden;
-  width: 30px;
-  height: 32px;
-  border-radius: 6px;
+  width: 40px;
+  height: 46px;
+  border-radius: 8px;
   background: rgba(17, 24, 39, 0.92);
   border: 1px solid rgba(88, 166, 255, 0.2);
   color: var(--hl-accent-blue);
@@ -1279,25 +1279,34 @@ main.content {
   transition: width 0.22s ease, border-color 0.15s, background 0.15s;
   white-space: nowrap;
 }
+button.hl-quicklink {
+  cursor: pointer;
+  font: inherit;
+}
 .hl-quicklink:hover {
-  width: 130px;
+  width: 150px;
   border-color: rgba(88, 166, 255, 0.5);
   background: rgba(20, 30, 50, 0.95);
 }
+.hl-quicklink--ioc-btn.hl-ioc-open {
+  border-color: rgba(88, 166, 255, 0.6);
+  background: rgba(20, 30, 50, 0.98);
+  width: 40px;
+}
 .hl-quicklink__icon {
   flex-shrink: 0;
-  width: 30px;
-  height: 32px;
+  width: 40px;
+  height: 46px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .hl-quicklink__label {
-  font-size: 0.68em;
+  font-size: 0.72em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding-right: 10px;
+  padding-right: 12px;
   opacity: 0;
   transition: opacity 0.1s;
 }
@@ -1305,6 +1314,93 @@ main.content {
   opacity: 1;
   transition: opacity 0.15s 0.1s;
 }
+/* IOC panel (appears to right of tab on click) */
+.hl-ioc-panel {
+  position: fixed;
+  width: 240px;
+  background: rgba(11, 16, 28, 0.98);
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  border-radius: 8px;
+  padding: 13px 14px;
+  z-index: 450;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(88,166,255,0.05);
+}
+.hl-ioc-panel--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hl-ioc-panel__hdr {
+  font-size: 0.63em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--hl-accent-blue);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(88, 166, 255, 0.15);
+}
+.hl-ioc-panel__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hl-ioc-panel__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.hl-ioc-panel__ioc { flex: 1; min-width: 0; }
+.hl-ioc-panel__val {
+  font-family: 'Courier New', monospace;
+  font-size: 0.74em;
+  color: var(--hl-text-primary);
+  display: block;
+  word-break: break-all;
+}
+.hl-ioc-panel__note {
+  font-size: 0.65em;
+  color: var(--hl-text-dim);
+  display: block;
+  margin-top: 2px;
+}
+.hl-ioc-cpbtn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--hl-border-row);
+  border-radius: 3px;
+  color: var(--hl-text-dim);
+  cursor: pointer;
+  font-size: 0.62em;
+  font-family: inherit;
+  padding: 2px 5px;
+  transition: color 0.15s, border-color 0.15s;
+  margin-top: 1px;
+}
+.hl-ioc-cpbtn:hover {
+  color: var(--hl-accent-blue);
+  border-color: var(--hl-accent-blue);
+}
+.hl-ioc-panel__foot {
+  border-top: 1px solid rgba(88, 166, 255, 0.15);
+  padding-top: 9px;
+}
+.hl-ioc-panel__link {
+  font-size: 0.68em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--hl-accent-blue);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.hl-ioc-panel__link:hover { opacity: 1; }
 @media (max-width: 900px) {
-  .hl-quicklinks { display: none; }
+  .hl-quicklinks, .hl-ioc-panel { display: none !important; }
 }

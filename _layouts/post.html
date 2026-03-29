@@ -67,12 +67,40 @@ document.addEventListener('DOMContentLoaded', function () {
   </a>
   {% endif %}
   {% if page.ioc_feed %}
+  {% if page.ioc_highlights %}
+  <button class="hl-quicklink hl-quicklink--ioc-btn" id="hl-ioc-tab" aria-label="View IOC highlights" aria-expanded="false">
+    <span class="hl-quicklink__icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
+    <span class="hl-quicklink__label">IOC Feed</span>
+  </button>
+  {% else %}
   <a class="hl-quicklink" href="{{ page.ioc_feed }}" target="_blank" rel="noopener noreferrer" aria-label="View IOC feed for this report">
     <span class="hl-quicklink__icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
     <span class="hl-quicklink__label">IOC Feed</span>
   </a>
   {% endif %}
+  {% endif %}
 </div>
+{% if page.ioc_highlights %}
+<div class="hl-ioc-panel" id="hl-ioc-panel">
+  <div class="hl-ioc-panel__hdr">High Priority IOCs</div>
+  <ul class="hl-ioc-panel__list">
+    {% for ioc in page.ioc_highlights %}
+    <li class="hl-ioc-panel__item">
+      <div class="hl-ioc-panel__ioc">
+        <span class="hl-ioc-panel__val">{{ ioc.value }}</span>
+        {% if ioc.note %}<span class="hl-ioc-panel__note">{{ ioc.note }}</span>{% endif %}
+      </div>
+      <button class="hl-ioc-cpbtn" data-val="{{ ioc.value }}" aria-label="Copy IOC">copy</button>
+    </li>
+    {% endfor %}
+  </ul>
+  {% if page.ioc_feed %}
+  <div class="hl-ioc-panel__foot">
+    <a href="{{ page.ioc_feed }}" target="_blank" rel="noopener noreferrer" class="hl-ioc-panel__link">Full IOC Feed →</a>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
 {% endif %}
 {% endunless %}
 
@@ -238,6 +266,42 @@ document.addEventListener('DOMContentLoaded', function () {
   }, { rootMargin: '-8% 0% -80% 0%' });
 
   headings.forEach(function (h) { observer.observe(h); });
+
+  // --- IOC panel toggle ---
+  var iocTab   = document.getElementById('hl-ioc-tab');
+  var iocPanel = document.getElementById('hl-ioc-panel');
+  if (iocTab && iocPanel) {
+    function positionIocPanel() {
+      var r = iocTab.getBoundingClientRect();
+      iocPanel.style.left = (r.right + 10) + 'px';
+      iocPanel.style.top  = (r.top + r.height / 2) + 'px';
+      iocPanel.style.transform = 'translateY(-50%)';
+    }
+    iocTab.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = iocPanel.classList.toggle('hl-ioc-panel--open');
+      iocTab.classList.toggle('hl-ioc-open', open);
+      iocTab.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) positionIocPanel();
+    });
+    document.addEventListener('click', function (e) {
+      if (!iocPanel.contains(e.target) && e.target !== iocTab) {
+        iocPanel.classList.remove('hl-ioc-panel--open');
+        iocTab.classList.remove('hl-ioc-open');
+        iocTab.setAttribute('aria-expanded', 'false');
+      }
+    });
+    iocPanel.querySelectorAll('.hl-ioc-cpbtn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(btn.dataset.val).then(function () {
+          var t = btn.textContent;
+          btn.textContent = '✓';
+          setTimeout(function () { btn.textContent = t; }, 1500);
+        });
+      });
+    });
+  }
 
   // --- Section tip toast (once per browser session) ---
   if (sessionStorage.getItem('hl-section-tip')) return;

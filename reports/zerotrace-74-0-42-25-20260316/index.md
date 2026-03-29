@@ -4,6 +4,15 @@ date: '2026-03-17'
 last_updated: '2026-03-19'
 detection_page: /hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 ioc_feed: /ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json
+ioc_highlights:
+  - value: "185.49.126.140"
+    note: "Primary C2 — XWorm, PureRAT, PureHVNC, ScreenConnect"
+  - value: "74.0.42.25"
+    note: "Malware staging server / open directory"
+  - value: "adminxyzhosting.com"
+    note: "ScreenConnect relay domain"
+  - value: "chainconnects.net"
+    note: "Phishing dropper domain"
 layout: post
 permalink: /reports/zerotrace-74-0-42-25-20260316/
 category: "MaaS Operation"
