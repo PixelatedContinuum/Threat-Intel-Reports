@@ -1001,8 +1001,8 @@ main.content {
 /* --- Reading progress bar (vertical, left margin) ----------- */
 .hl-progress-track {
   position: fixed;
-  left: 17px; top: 0;
-  width: 4px; height: 100vh;
+  left: 17px; top: 96px;
+  width: 4px; height: calc(100vh - 96px);
   background: rgba(88,166,255,0.08);
   border-radius: 2px;
   z-index: 499;
@@ -1010,7 +1010,7 @@ main.content {
 }
 .hl-progress-bar {
   position: fixed;
-  left: 17px; top: 0;
+  left: 17px; top: 96px;
   width: 4px; height: 0px;
   background: var(--hl-accent-blue);
   box-shadow: 0 0 6px rgba(88,166,255,0.5);
