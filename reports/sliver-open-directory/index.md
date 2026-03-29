@@ -33,23 +33,6 @@ An exposed open directory at `45.94.31.220` — hosted on bulletproof infrastruc
 
 ---
 
-## Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Sample and Artifact Inventory](#2-sample-and-artifact-inventory)
-3. [Kill Chain Analysis](#3-kill-chain-analysis)
-4. [Evasion Techniques — Deep Technical Analysis](#4-evasion-techniques)
-5. [Infrastructure and Build Pipeline](#5-infrastructure-and-build-pipeline)
-6. [Threat Actor Assessment](#6-threat-actor-assessment)
-7. [MITRE ATT&CK Mapping](#7-mitre-attck-mapping)
-8. [Detection Opportunities](#8-detection-opportunities)
-9. [Analytical Caveats and Gaps](#9-analytical-caveats-and-gaps)
-10. [Response Guidance](#10-response-guidance)
-11. [Appendix A: IOC and Detection File References](#appendix-a)
-12. [Appendix B: Research References](#appendix-b)
-
----
-
 ## 1. Executive Summary
 
 ### The Threat in Clear Terms

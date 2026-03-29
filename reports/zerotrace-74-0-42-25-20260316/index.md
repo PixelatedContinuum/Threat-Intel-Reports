@@ -102,37 +102,6 @@ ZeroTrace is the named threat actor behind this operation, recovered from malwar
 ---
 
 
-## Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Key Takeaways](#2-key-takeaways)
-3. [Business Risk Assessment](#3-business-risk-assessment)
-4. [What Was Found: Malware Classification](#4-what-was-found-malware-classification)
-5. [Technical Capabilities Deep-Dive](#5-technical-capabilities-deep-dive)
-  - 5a. [XWorm V5.6 RAT](#5a-xworm-v56-rat)
-  - 5b. [XwormLoader — 11-Stage Reflective PE Loader](#5b-xwormloader-11-stage-reflective-pe-loader)
-  - 5c. [PureRAT v4.1.9 and the Aspdkzb Loader Chain](#5c-purerat-v419-and-the-aspdkzb-loader-chain)
-  - 5d. [PureHVNC — Hidden Desktop Control](#5d-purehvnc-hidden-desktop-control)
-  - 5e. [Raven RAT — Custom Delphi C2](#5e-raven-rat-custom-delphi-c2)
-  - 5f. [ConnectWise ScreenConnect Abuse](#5f-connectwise-screenconnect-abuse)
-  - 5g. [CVE-2025-30406 Exploit Kit](#5g-cve-2025-30406-exploit-kit)
-  - 5h. [BAK3R Office 365 Credential Cracker](#5h-bak3r-office-365-credential-cracker)
-  - 5i. [PowerShell Fileless Droppers](#5i-powershell-fileless-droppers)
-  - 5j. [vlc_boxed.exe — DGA-Capable Unknown Family](#5j-vlcboxedexe-dga-capable-unknown-family)
-6. [Attack Chain Reconstruction — Kill Chain](#6-attack-chain-reconstruction-kill-chain)
-7. [Threat Intelligence Context](#7-threat-intelligence-context)
-8. [Threat Actor Assessment — ZeroTrace](#8-threat-actor-assessment-zerotrace)
-9. [Credential and Victim Data Inventory](#9-credential-and-victim-data-inventory)
-10. [Incident Response Guidance](#10-incident-response-guidance)
-11. [Defensive Hardening Recommendations](#11-defensive-hardening-recommendations)
-12. [Confidence Levels Summary](#12-confidence-levels-summary)
-13. [FAQ](#13-faq)
-14. [IOCs](#14-iocs)
-15. [Detections](#15-detections)
-16. [Appendix A — MITRE ATT&CK Mapping](#16-appendix-a-mitre-attck-mapping)
-17. [Appendix B — Research References](#17-appendix-b-research-references)
-
----
 ## 2. Key Takeaways
 
 **1. Four Remote Access Tools on one server: a double-edged sword**  

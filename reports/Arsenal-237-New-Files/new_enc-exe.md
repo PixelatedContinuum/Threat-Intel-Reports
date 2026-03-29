@@ -138,28 +138,6 @@ new_enc.exe is deployed **manually by threat actors** following successful syste
 
 ---
 
-## Table of Contents
-
-1. [BLUF & Executive Summary](#bluf)
-2. [Technical Summary & Organizational Guidance](#technical-summary)
-3. [Primary Threat Vector](#primary-threat-vector)
-4. [Section 1: File Classification & Identification](#section-1)
-5. [Section 2: Static Analysis - Code Structure & Capabilities](#section-2)
-6. [Section 3: Enterprise Infrastructure Targeting](#section-3)
-7. [Section 4: Hardcoded Encryption Key - Vulnerability Analysis](#section-4)
-8. [Section 5: Anti-Analysis Techniques](#section-5)
-9. [Section 6: Execution Flow & Behavioral Analysis](#section-6)
-10. [Section 7: MITRE ATT&CK Mapping](#section-7)
-11. [Section 8: Detection & Response Guidance](#section-8)
-12. [Section 9: Recovery Path Analysis](#section-9)
-13. [Section 10: Threat Assessment & Attribution](#section-10)
-14. [Section 11: Key Takeaways](#section-11)
-15. [Section 12: Recommended Actions](#section-12)
-16. [Section 13: Confidence Levels Summary](#section-13)
-17. [License](#license)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

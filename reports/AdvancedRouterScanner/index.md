@@ -63,52 +63,6 @@ AdvancedRouterScanner represents a sophisticated, custom exploitation framework 
 
 ---
 
-## Table of Contents
-
-- [Quick Reference](#quick-reference)
-- [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
-  - [Executive Summary](#executive-summary)
-  - [Recommended Actions](#recommended-actions)
-- [1. Executive Summary](#1-executive-summary)
-  - [Key Takeaways](#key-takeaways)
-  - [Summary](#summary)
-- [2. Tool Overview (poc.py)](#2-tool-overview-pocpy)
-- [3. Targeting (ips.txt)](#3-targeting-ipstxt)
-- [4. Results Analysis](#4-results-analysis)
-- [5. Campaign Flow](#5-campaign-flow)
-- [6. Unique Fingerprints (Pivot Anchors)](#6-unique-fingerprints-pivot-anchors)
-- [7. External Search Findings](#7-external-search-findings)
-- [8. Threat Assessment](#8-threat-assessment)
-  - [Overall Assessment](#overall-assessment)
-  - [Confidence Levels](#confidence-levels)
-- [9. Defensive Recommendations](#9-defensive-recommendations)
-- [10. Key Takeaways](#10-key-takeaways)
-- [Target Analysis & Geographic Distribution](#target-analysis--geographic-distribution)
-  - [Target Enrichment Summary](#target-enrichment-summary)
-  - [Country Distribution Analysis](#country-distribution-analysis)
-  - [Top Targeted Network Providers](#top-targeted-network-providers)
-- [Follow-Up: Certificate Pivot](#follow-up-certificate-pivot)
-- [Additional Findings After Pivots (176[.]65[.]137[.]13)](#additional-findings-after-pivots-1766513713)
-- [MITRE ATT&CK Mapping](#mitre-attck-mapping)
-- [Incident Response Procedures](#incident-response-procedures)
-   - [Priority 1: Initial Response](#priority-1-initial-response)
-   - [Priority 2: Investigation & Analysis](#priority-2-investigation--analysis)
-   - [Priority 3: Remediation & Recovery](#priority-3-remediation--recovery)
-- [Operational Impact Assessment](#operational-impact-assessment)
-  - [Impact Scenarios](#impact-scenarios)
-  - [Operational Impact Timeline](#operational-impact-timeline)
-- [Long-term Defensive Strategy](#long-term-defensive-strategy)
-  - [Technology Enhancements](#technology-enhancements)
-  - [Process Improvements](#process-improvements)
-  - [Organizational Measures](#organizational-measures)
-- [Frequently Asked Questions](#frequently-asked-questions)
-  - [Technical Questions](#technical-questions)
-  - [Business Questions](#business-questions)
-- [IOCs](#iocs)
-- [Detections](#detections)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

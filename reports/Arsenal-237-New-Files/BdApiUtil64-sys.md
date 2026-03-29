@@ -22,28 +22,6 @@ BdApiUtil64.sys is a legitimately-signed but vulnerable Baidu antivirus kernel d
 
 ---
 
-## Table of Contents
-
-1. [Quick Reference](#quick-reference)
-2. [Executive Summary](#executive-summary)
-3. [What is BdApiUtil64.sys?](#what-is-bdapiutil64sys)
-4. [Arsenal-237 Toolkit Context](#arsenal-237-toolkit-context)
-5. [BYOVD Technique: Weaponizing Legitimate Drivers](#byovd-technique-weaponizing-legitimate-drivers)
-6. [Primary Capabilities - IOCTL Code Analysis](#primary-capabilities--ioctl-code-analysis)
-7. [Advanced Evasion Techniques](#advanced-evasion-techniques)
-8. [Attack Chain Integration](#attack-chain-integration)
-9. [Target Security Products](#target-security-products)
-10. [Historical Campaign Context](#historical-campaign-context)
-11. [MITRE ATT&CK Mapping](#mitre-attck-mapping)
-12. [Detection Opportunities](#detection-opportunities)
-13. [Threat Assessment & Risk Scoring](#threat-assessment--risk-scoring)
-14. [Remediation Guidance](#remediation-guidance)
-15. [Response Priorities & Action Items](#response-priorities--action-items)
-16. [FAQ - Common Questions](#faq---common-questions)
-17. [Key Takeaways](#key-takeaways)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

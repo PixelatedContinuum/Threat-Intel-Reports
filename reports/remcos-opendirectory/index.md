@@ -129,54 +129,6 @@ This report documents a sophisticated multi-stage Remcos Remote Access Trojan (R
 
 ---
 
-## Table of Contents
-
-- [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
-  - [Executive Summary](#executive-summary)
-  - [Organizational Guidance](#organizational-guidance)
-- [1. CAMPAIGN OVERVIEW](#1-campaign-overview)
-  - [Attack Infrastructure](#attack-infrastructure)
-  - [Threat Level Assessment](#threat-level-assessment)
-  - [Global Context](#global-context)
-- [2. ATTACK CHAIN ARCHITECTURE](#2-attack-chain-architecture)
-  - [Multi-Stage Execution Flow](#multi-stage-execution-flow)
-  - [Stage 1: VB6 Dropper (Payload.exe)](#stage-1-vb6-dropper-payloadexe)
-  - [Stage 2: Remcos RAT Payload (Backdoor.exe)](#stage-2-remcos-rat-payload-backdoorexe)
-- [3. PERSISTENCE MECHANISMS](#3-persistence-mechanisms)
-  - [Mechanism 1: UAC Bypass via EnableLUA Registry Modification](#mechanism-1-uac-bypass-via-enablelua-registry-modification)
-  - [Mechanism 2: Winlogon Userinit Hijacking](#mechanism-2-winlogon-userinit-hijacking)
-  - [Mechanism 3: File Installation and "Melting"](#mechanism-3-file-installation-and-melting)
-  - [Mechanism 4-5: Standard Registry Autorun](#mechanism-4-5-standard-registry-autorun)
-- [4. SURVEILLANCE AND DATA COLLECTION](#4-surveillance-and-data-collection)
-  - [Screenshot Capture](#screenshot-capture)
-  - [Audio Recording](#audio-recording)
-  - [Keylogging and Clipboard Monitoring](#keylogging-and-clipboard-monitoring)
-  - [Browser Credential Theft](#browser-credential-theft)
-- [5. EVASION AND ANTI-ANALYSIS TECHNIQUES](#5-evasion-and-anti-analysis-techniques)
-  - [Process Injection](#process-injection)
-  - [Anti-VM/Sandbox Detection](#anti-vmsandbox-detection)
-  - [Stealth Mechanisms](#stealth-mechanisms)
-- [6. COMMAND & CONTROL INFRASTRUCTURE](#6-command--control-infrastructure)
-  - [Primary C2 Server](#primary-c2-server)
-  - [Data Exfiltration Mechanisms](#data-exfiltration-mechanisms)
-- [7. MITRE ATT&CK FRAMEWORK MAPPING](#7-mitre-attck-framework-mapping)
-- [8. THREAT INTELLIGENCE CONTEXT](#8-threat-intelligence-context)
-  - [Remcos RAT Global Threat Landscape](#remcos-rat-global-threat-landscape)
-  - [Geographic Targeting Patterns](#geographic-targeting-patterns)
-  - [Threat Actor Spectrum](#threat-actor-spectrum)
-- [9. ATTRIBUTION ANALYSIS](#9-attribution-analysis)
-  - [Campaign Sophistication Assessment](#campaign-sophistication-assessment)
-  - [Threat Actor Profile](#threat-actor-profile)
-- [10. REMEDIATION GUIDANCE](#10-remediation-guidance)
-  - [Immediate Actions](#immediate-actions)
-  - [Malware Removal](#malware-removal)
-  - [Post-Remediation](#post-remediation)
-- [References](#references)
-
----
-
-# 1. CAMPAIGN OVERVIEW
-
 ## Attack Infrastructure
 
 **Primary IP Address:** 203[.]159[.]90[.]147

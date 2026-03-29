@@ -14,7 +14,56 @@ layout: default
   </div>
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
-<div class="hl-post-content">
-{{ content }}
+<div class="hl-post-body">
+  <div class="hl-post-content">
+    {{ content }}
+  </div>
+  <aside class="hl-post-toc" id="hl-toc" aria-label="Table of contents">
+    <div class="hl-post-toc__heading">Contents</div>
+    <nav><ul class="hl-toc__list" id="hl-toc-list"></ul></nav>
+  </aside>
 </div>
 </div>
+
+<script>
+(function () {
+  // Widen main.content for the two-column layout
+  var main = document.querySelector('main.content');
+  if (main) main.classList.add('hl-post-page');
+
+  var content = document.querySelector('.hl-post-content');
+  var tocList = document.getElementById('hl-toc-list');
+  var toc     = document.getElementById('hl-toc');
+  if (!content || !tocList || !toc) return;
+
+  var headings = Array.from(content.querySelectorAll('h2, h3'));
+
+  // Hide sidebar if fewer than 3 headings
+  if (headings.length < 3) { toc.style.display = 'none'; return; }
+
+  headings.forEach(function (h, i) {
+    if (!h.id) h.id = 'toc-' + i;
+    var li = document.createElement('li');
+    li.className = 'hl-toc__item' + (h.tagName === 'H3' ? ' hl-toc__item--h3' : '');
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent.replace(/^[\d.]+\s*/, ''); // strip leading "1." numbering
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+  // Scroll-spy: highlight active section
+  var links = Array.from(tocList.querySelectorAll('a'));
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        links.forEach(function (a) { a.classList.remove('hl-toc__active'); });
+        var active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
+        if (active) active.classList.add('hl-toc__active');
+      }
+    });
+  }, { rootMargin: '-8% 0% -80% 0%' });
+
+  headings.forEach(function (h) { observer.observe(h); });
+})();
+</script>

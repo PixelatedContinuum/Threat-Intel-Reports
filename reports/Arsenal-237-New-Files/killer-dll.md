@@ -84,27 +84,6 @@ This module targets a comprehensive list of enterprise security products includi
 
 ---
 
-## Table of Contents
-
-- [Quick Reference](#quick-reference)
-- [File Identification](#file-identification)
-- [Executive Technical Summary](#executive-technical-summary)
-- [Deep Technical Analysis](#deep-technical-analysis)
-  - [Code Architecture & Design Philosophy](#code-architecture--design-philosophy)
-  - [BYOVD Attack Lifecycle Overview](#byovd-attack-lifecycle-overview)
-  - [Embedded Driver Analysis](#embedded-driver-analysis)
-  - [Master Orchestrator Function (sub_1800015f5)](#master-orchestrator-function-sub_1800015f5)
-  - [Driver Interaction Mechanism (sub_180004b00)](#driver-interaction-mechanism-sub_180004b00)
-  - [Target Kill Lists: Comprehensive Security Product Enumeration](#target-kill-lists-comprehensive-security-product-enumeration)
-  - [Integration with lpe.exe: The Two-Stage Attack Chain](#integration-with-lpeexe-the-two-stage-attack-chain)
-  - [Anti-Analysis Features](#anti-analysis-features)
-- [MITRE ATT&CK Mapping](#mitre-attck-mapping)
-- [Frequently Asked Questions](#frequently-asked-questions)
-- [IOCs](#iocs)
-- [Detections](#detections)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

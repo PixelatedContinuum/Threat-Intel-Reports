@@ -138,27 +138,6 @@ This assessment is based on comprehensive static analysis including:
 
 ---
 
-## Table of Contents
-
-1. [Quick Reference](#quick-reference)
-2. [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
-3. [Executive Summary - Expanded](#executive-summary---expanded)
-4. [Business Risk Assessment](#business-risk-assessment)
-5. [What is full_test_enc.exe?](#what-is-full_test_encexe)
-6. [Technical Capabilities Deep-Dive](#technical-capabilities-deep-dive)
-7. [Evasion and Anti-Analysis Techniques](#evasion-and-anti-analysis-techniques)
-8. [Incident Response Procedures](#incident-response-procedures)
-9. [Long-Term Defensive Strategy](#long-term-defensive-strategy)
-10. [Threat Actor Context: Arsenal-237 Toolkit](#threat-actor-context-arsenal-237-toolkit)
-11. [Frequently Asked Questions](#frequently-asked-questions)
-12. [Key Takeaways](#key-takeaways)
-13. [Response Timeline](#response-timeline)
-14. [Confidence Levels Summary](#confidence-levels-summary)
-15. [Indicators of Compromise (IOCs)](#indicators-of-compromise-iocs)
-16. [Detection Rules and Queries](#detection-rules-and-queries)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

@@ -85,26 +85,6 @@ The module functions as **Stage 2** of a coordinated attack chain: lpe.exe (priv
 
 ---
 
-## Table of Contents
-
-- [Quick Reference](#quick-reference)
-- [File Identification](#file-identification)
-- [Executive Technical Summary](#executive-technical-summary)
-- [Deep Technical Analysis](#deep-technical-analysis)
-  - [Comparative Analysis: killer_crowdstrike.dll vs. killer.dll](#comparative-analysis-killer_crowdstrike-dll-vs-killer-dll)
-  - [CrowdStrike-Specific Targeting](#crowdstrike-specific-targeting)
-  - [BYOVD Attack Lifecycle Overview](#byovd-attack-lifecycle-overview)
-  - [Embedded Driver Analysis](#embedded-driver-analysis)
-  - [Embedded Microsoft-Signed Binary](#embedded-microsoft-signed-binary)
-  - [Master Orchestrator Function](#master-orchestrator-function)
-  - [Anti-Analysis Features](#anti-analysis-features)
-- [MITRE ATT&CK Mapping](#mitre-attck-mapping)
-- [Frequently Asked Questions](#frequently-asked-questions)
-- [IOCs](#iocs)
-- [Detections](#detections)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

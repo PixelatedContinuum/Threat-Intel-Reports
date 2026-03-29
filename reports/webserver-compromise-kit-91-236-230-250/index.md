@@ -40,23 +40,6 @@ The presence of an open directory suggests either operational security failure o
 
 ---
 
-## Table of Contents
-
-1. [Threat Intelligence Context](#threat-intelligence-context)
-2. [Technical Analysis](#technical-analysis)
-   - [Component 1: ASP.NET Reverse Shell (a.png)](#component-1-aspnet-reverse-shell-apng)
-   - [Component 2: PrintSpoofer Privilege Escalation](#component-2-printspoofer-privilege-escalation)
-   - [Component 3: revsocks Network Pivot](#component-3-revsocks-network-pivot)
-3. [Infrastructure Analysis](#infrastructure-analysis)
-4. [Attack Chain Reconstruction](#attack-chain-reconstruction)
-5. [Attribution Assessment](#attribution-assessment)
-6. [Detection & Hunting](#detection--hunting)
-7. [Indicators of Compromise](#indicators-of-compromise)
-8. [Mitigation & Response](#mitigation--response)
-9. [References & Sources](#references--sources)
-
----
-
 ## Threat Intelligence Context
 
 ### Campaign Overview

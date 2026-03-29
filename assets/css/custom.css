@@ -31,6 +31,26 @@ body.dark {
   color: var(--hl-text-primary) !important;
 }
 
+/* Subtle edge glow — faint blue gradient from both sides */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 200px;
+  pointer-events: none;
+  z-index: 0;
+}
+body::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(88,166,255,0.018), transparent);
+}
+body::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(88,166,255,0.018), transparent);
+}
+
 /* Theme dark mode sets wild heading colors (h2: purple, h3: pink).
    Override globally for our design system. */
 h1, h2, h3, h4, h5, h6 {
@@ -872,7 +892,97 @@ main.content {
   margin-top: 4px;
 }
 
+/* --- Post page two-column layout --------------------------- */
+main.content.hl-post-page {
+  max-width: 1120px !important;
+}
+
+.hl-post-body {
+  display: grid;
+  grid-template-columns: 1fr 210px;
+  gap: 36px;
+  align-items: start;
+}
+
+/* --- Sticky TOC sidebar ------------------------------------ */
+.hl-post-toc {
+  position: sticky;
+  top: 24px;
+  background: var(--hl-bg-row);
+  border: 1px solid var(--hl-border-row);
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 0.78em;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+
+.hl-post-toc__heading {
+  font-size: 0.68em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--hl-accent-blue);
+  margin-bottom: 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--hl-border-row);
+}
+
+.hl-toc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hl-toc__item a {
+  color: var(--hl-text-secondary);
+  text-decoration: none;
+  display: block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border-left: 2px solid transparent;
+  line-height: 1.4;
+  transition: color 0.1s, background 0.1s, border-color 0.1s;
+}
+
+.hl-toc__item a:hover {
+  color: var(--hl-text-primary);
+  background: rgba(88,166,255,0.06);
+  border-left-color: var(--hl-accent-blue);
+}
+
+.hl-toc__item a.hl-toc__active {
+  color: var(--hl-accent-blue);
+  background: rgba(88,166,255,0.06);
+  border-left-color: var(--hl-accent-blue);
+}
+
+.hl-toc__item--h3 a {
+  padding-left: 18px;
+  font-size: 0.92em;
+  color: var(--hl-text-dim);
+}
+
+.hl-toc__item--h3 a:hover {
+  color: var(--hl-text-secondary);
+}
+
 /* --- Responsive -------------------------------------------- */
+@media (max-width: 1060px) {
+  .hl-post-body {
+    grid-template-columns: 1fr;
+  }
+  .hl-post-toc {
+    display: none;
+  }
+  main.content.hl-post-page {
+    max-width: 900px !important;
+  }
+}
+
 @media (max-width: 640px) {
   .hl-grid,
   .hl-nav-grid {

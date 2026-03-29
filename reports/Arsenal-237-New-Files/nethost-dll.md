@@ -79,28 +79,6 @@ This report derives findings from static reverse engineering analysis of the net
 
 ---
 
-## Table of Contents
-
-1. [Quick Reference](#quick-reference)
-2. [Executive Summary](#executive-summary)
-3. [File Classification & Identification](#file-classification--identification)
-4. [Business Risk Assessment](#business-risk-assessment)
-5. [Technical Foundation: What is nethost.dll?](#technical-foundation-what-is-nethost-dll)
-6. [C2 Communication Architecture](#c2-communication-architecture)
-7. [Command Capabilities Deep-Dive](#command-capabilities-deep-dive)
-8. [Reconnaissance & Environmental Awareness](#reconnaissance--environmental-awareness)
-9. [Anti-Analysis Techniques](#anti-analysis-techniques)
-10. [Incident Response Procedures](#incident-response-procedures)
-11. [Long-Term Defensive Strategy](#long-term-defensive-strategy)
-12. [FAQ - Addressing Common Questions](#faq---addressing-common-questions)
-13. [Key Takeaways - What Matters Most](#key-takeaways---what-matters-most)
-14. [Response Timeline - Recommended Actions](#response-timeline---recommended-actions)
-15. [Confidence Levels Summary](#confidence-levels-summary)
-16. [Appendices](#appendices)
-17. [IOCs & Detections](#iocs--detections)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

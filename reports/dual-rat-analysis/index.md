@@ -78,27 +78,6 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
 
 ---
 
-## Table of Contents
-
-- [Quick Reference](#quick-reference)
-- [Sample 1: Quasar RAT Analysis](#sample-1-pulsar-rat-analysis)
-  - [Executive Technical Summary](#executive-technical-summary)
-  - [Deep Technical Analysis](#deep-technical-analysis)
-  - [Dynamic Sandbox Analysis](#dynamic-sandbox-analysis)
-- [Sample 2: NjRAT/XWorm Analysis](#sample-2-njratxworm-analysis)
-  - [Executive Technical Summary](#executive-technical-summary-1)
-  - [Deep Technical Analysis](#deep-technical-analysis-1)
-  - [Dynamic Sandbox Analysis](#dynamic-sandbox-analysis-1)
-- [Delivery Method Analysis & Initial Access Vectors](#delivery-method-analysis--initial-access-vectors)
-- [Future Evolution & Threat Trends](#future-evolution--threat-trends)
-- [Comparative Technical Analysis](#comparative-technical-analysis)
-- [MITRE ATT&CK Mapping](#mitre-attck-mapping)
-- [Frequently Asked Questions](#frequently-asked-questions)
-- [IOCs](#iocs)
-- [Detections](#detections)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

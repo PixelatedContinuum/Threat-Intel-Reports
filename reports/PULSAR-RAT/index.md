@@ -112,57 +112,6 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 
 ---
 
-## Table of Contents
-
-- [Quick Reference](#quick-reference)
-- [BLUF (Bottom Line Up Front)](#bluf-bottom-line-up-front)
-  - [Executive Summary](#executive-summary)
-  - [Organizational Guidance](#organizational-guidance)
-- [1. EXECUTIVE SUMMARY](#1-executive-summary)
-  - [The Threat in Clear Terms - Open Directory hxxp://185[.]208[.]159[.]182/d/server[.]exe](#the-threat-in-clear-terms-open-directory-hxxp185208159182dserverexe)
-  - [IP Address 185[.]208[.]159[.]182: OSINT Profile](#ip-address-185208159182-osint-profile)
-  - [Risk Rating: CRITICAL](#risk-rating-critical)
-- [2. BUSINESS RISK ASSESSMENT](#2-business-risk-assessment)
-  - [Understanding the Real-World Impact](#understanding-the-real-world-impact)
-  - [Impact Scenarios](#impact-scenarios)
-  - [Operational Impact Timeline](#operational-impact-timeline)
-- [3. WHAT IS server.exe?](#3-what-is-serverexe)
-  - [Classification & Identification](#classification--identification)
-  - [File Identifiers](#file-identifiers)
-  - [Why This Is Professional-Grade Malware](#why-this-is-professional-grade-malware)
-  - [Internal String Analysis](#31-internal-string-analysis-unveiling-pulsars-architecture)
-- [4. INFECTION VECTORS](#4-infection-vectors)
-  - [Primary Distribution Method](#primary-distribution-method)
-  - [Common Social Engineering Tactics](#common-social-engineering-tactics)
-  - [Defense Strategies by Attack Vector](#defense-strategies-by-attack-vector)
-- [5. MITRE ATT&CK MAPPING](#5-mitre-attck-mapping)
-  - [What is MITRE ATT&CK?](#what-is-mitre-attck)
-  - [Pulsar RAT: Full Technique Mapping](#pulsar-rat-full-technique-mapping)
-  - [Detection and Mitigation Priorities](#detection-and-mitigation-priorities-by-tactic)
-  - [Using This Mapping for Threat Hunting](#using-this-mapping-for-threat-hunting)
-- [6. TECHNICAL CAPABILITIES DEEP-DIVE](#6-technical-capabilities-deep-dive)
-  - [6.1 Persistence Mechanisms](#61-persistence-mechanisms)
-  - [6.2 Command & Control Infrastructure](#62-command--control-c2-infrastructure)
-  - [6.3 Surveillance & Data Theft](#63-surveillance--data-theft-capabilities---hidden-virtual-network-computing-hvnc---covert-access-with-realistic-detection-considerations)
-  - [6.4 Privilege Escalation & Lateral Movement](#64-privilege-escalation--lateral-movement)
-- [7. EVASION & ANTI-ANALYSIS TECHNIQUES](#7-evasion--anti-analysis-techniques)
-- [8. INCIDENT RESPONSE PROCEDURES](#8-incident-response-procedures)
-   - [Priority 1: Immediate Response](#priority-1-immediate-response-critical---confirmed-compromise)
-   - [Priority 2: Investigation & Analysis](#priority-2-investigation-phase)
-   - [Priority 3: Remediation & Recovery](#priority-3-remediation-phase)
-- [9. LONG-TERM DEFENSIVE STRATEGY](#9-long-term-defensive-strategy)
-  - [Endpoint Security Enhancements](#endpoint-security-enhancements)
-  - [Network Security Hardening](#network-security-hardening)
-  - [Threat Monitoring & Detection](#threat-monitoring--detection)
-  - [User Awareness & Training](#user-awareness--training)
-- [10. FAQ - ADDRESSING COMMON QUESTIONS](#10-faq---addressing-common-questions)
-- [11. KEY TAKEAWAYS - WHAT MATTERS MOST](#11-key-takeaways---what-matters-most)
-- [12. Response Timeline - Recommended Actions](#12-response-timeline---recommended-actions)
-- [13. CONFIDENCE LEVELS SUMMARY](#13-confidence-levels-summary)
-- [14. APPENDICES](#14-appendices)
-
----
-
 ## Quick Reference
 
 **Detections & IOCs:**

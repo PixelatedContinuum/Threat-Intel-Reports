@@ -111,19 +111,6 @@ These components perform the actual encryption and provide victim-specific decry
 
 ---
 
-## Table of Contents
-
-1. [Toolkit Architecture Overview](#toolkit-architecture-overview)
-2. [Component Analysis Index](#component-analysis-index)
-3. [Attack Chain Integration](#attack-chain-integration)
-4. [Threat Intelligence Summary](#threat-intelligence-summary)
-5. [Strategic Defensive Recommendations](#strategic-defensive-recommendations)
-6. [FAQ - Common Questions](#faq---common-questions)
-7. [Key Takeaways](#key-takeaways)
-8. [Confidence Levels Summary](#confidence-levels-summary)
-
----
-
 ## Toolkit Architecture Overview
 
 ### Design Philosophy: Professional Ransomware-as-a-Service
