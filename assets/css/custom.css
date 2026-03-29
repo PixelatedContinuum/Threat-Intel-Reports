@@ -1011,7 +1011,7 @@ main.content {
 .hl-progress-bar {
   position: fixed;
   left: 17px; top: 0;
-  width: 4px; height: 0%;
+  width: 4px; height: 0px;
   background: var(--hl-accent-blue);
   box-shadow: 0 0 6px rgba(88,166,255,0.5);
   border-radius: 2px;

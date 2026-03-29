@@ -38,10 +38,15 @@ layout: default
   var progressBar = document.createElement('div');
   progressBar.className = 'hl-progress-bar';
   document.body.appendChild(progressBar);
-  window.addEventListener('scroll', function () {
-    var total = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.height = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
-  }, { passive: true });
+  function updateBar() {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var pageH    = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    var total    = pageH - window.innerHeight;
+    var px       = total > 0 ? Math.round((scrollTop / total) * window.innerHeight) : 0;
+    progressBar.style.height = Math.min(px, window.innerHeight) + 'px';
+  }
+  window.addEventListener('scroll', updateBar, { passive: true });
+  window.addEventListener('resize', updateBar, { passive: true });
 
   // --- Estimated read time ---
   var words   = content.textContent.trim().split(/\s+/).length;
