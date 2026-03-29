@@ -10,13 +10,16 @@
   {% assign sev_color = "#fb923c" %}
   {% assign sev_label = "MED" %}
 {% endif %}
+{% assign _rp = site.pages | where: "url", include.url | first %}
+{% assign _mins = 0 %}
+{% if _rp %}{% assign _mins = _rp.content | strip_html | number_of_words | divided_by: 200 | at_least: 1 %}{% endif %}
 
 <a href="{{ include.url | relative_url }}" class="hl-card">
   <div class="hl-card__inner">
     <div class="hl-card__bar {{ sev_bar }}"></div>
     <div>
       <div class="hl-card__meta" style="color: {{ sev_color }};">
-        {% if sev_label != "" %}{{ sev_label }} · {% endif %}{{ include.date }}
+        {% if sev_label != "" %}{{ sev_label }} · {% endif %}{{ include.date }}{% if _mins > 0 %} · {{ _mins }} min{% endif %}
       </div>
       <div class="hl-card__title">{{ include.title }}</div>
       {% if include.tags %}

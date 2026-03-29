@@ -25,20 +25,22 @@ layout: default
 </div>
 </div>
 
-<button class="hl-back-top" id="hl-back-top" aria-label="Back to top">↑</button>
 
 <script>
 (function () {
   var content = document.querySelector('.hl-post-content');
   if (!content) return;
 
-  // --- Reading progress bar ---
+  // --- Reading progress bar (vertical, left margin) ---
+  var progressTrack = document.createElement('div');
+  progressTrack.className = 'hl-progress-track';
+  document.body.appendChild(progressTrack);
   var progressBar = document.createElement('div');
   progressBar.className = 'hl-progress-bar';
-  document.body.prepend(progressBar);
+  document.body.appendChild(progressBar);
   window.addEventListener('scroll', function () {
     var total = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
+    progressBar.style.height = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
   }, { passive: true });
 
   // --- Estimated read time ---
@@ -128,15 +130,5 @@ layout: default
 
   headings.forEach(function (h) { observer.observe(h); });
 
-  // --- Back to top ---
-  var backTop = document.getElementById('hl-back-top');
-  if (backTop) {
-    window.addEventListener('scroll', function () {
-      backTop.classList.toggle('hl-back-top--visible', window.scrollY > 400);
-    }, { passive: true });
-    backTop.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
 })();
 </script>

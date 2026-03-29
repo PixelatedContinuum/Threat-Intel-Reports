@@ -16,5 +16,18 @@
     {% capture _footer %}{% include default/footer.liquid %}{% endcapture %}
     {{ _footer | split: " " | join: " "}}
     <script async src="https://eocampaign1.com/form/68e56ce4-2980-11f1-960c-1d8405c03c10.js" data-form="68e56ce4-2980-11f1-960c-1d8405c03c10"></script>
+    <button class="hl-back-top" id="hl-back-top" aria-label="Back to top">↑</button>
+    <script>
+    (function () {
+      var btn = document.getElementById('hl-back-top');
+      if (!btn) return;
+      window.addEventListener('scroll', function () {
+        btn.classList.toggle('hl-back-top--visible', window.scrollY > 400);
+      }, { passive: true });
+      btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+    </script>
   </body>
 </html>

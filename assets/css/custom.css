@@ -998,16 +998,27 @@ main.content {
   html { scroll-behavior: smooth; }
 }
 
-/* --- Reading progress bar ----------------------------------- */
+/* --- Reading progress bar (vertical, left margin) ----------- */
+.hl-progress-track {
+  position: fixed;
+  left: 18px; top: 0;
+  width: 2px; height: 100vh;
+  background: rgba(88,166,255,0.08);
+  z-index: 499;
+  pointer-events: none;
+}
 .hl-progress-bar {
   position: fixed;
-  top: 0; left: 0;
-  height: 3px;
-  width: 0%;
-  background: var(--hl-accent-blue);
-  z-index: 9999;
+  left: 18px; top: 0;
+  width: 2px; height: 0%;
+  background: linear-gradient(to bottom, var(--hl-accent-blue), rgba(88,166,255,0.35));
+  border-radius: 0 0 2px 2px;
+  z-index: 500;
   pointer-events: none;
-  transition: width 0.1s linear;
+  transition: height 0.1s linear;
+}
+@media (max-width: 900px) {
+  .hl-progress-track, .hl-progress-bar { display: none; }
 }
 
 /* --- Read time in post eyebrow ------------------------------ */
