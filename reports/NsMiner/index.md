@@ -1,6 +1,8 @@
 ---
 title: "NsMiner: Multi-Stage Operation"
 date: '2026-02-02'
+detection_page: /hunting-detections/nsminer-cryptojacker/
+ioc_feed: /ioc-feeds/nsminer-cryptojacker.json
 layout: post
 permalink: /reports/nsminer-cryptojacker/
 category: "Cryptojacking"

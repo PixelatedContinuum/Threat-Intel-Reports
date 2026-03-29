@@ -1,6 +1,8 @@
 ---
 title: new_enc.exe (Arsenal-237 Rust Ransomware v0.5-beta) - Technical Analysis & Threat Assessment
 date: '2026-01-26'
+detection_page: /hunting-detections/arsenal-237-new_enc-exe/
+ioc_feed: /ioc-feeds/arsenal-237-new_enc-exe.json
 layout: post
 permalink: /reports/new-enc-exe/
 hide: true

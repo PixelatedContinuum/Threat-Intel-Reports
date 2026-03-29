@@ -1,6 +1,8 @@
 ---
 title: "Quasar RAT vs. NjRAT/XWorm — Technical Deep-Dive"
 date: '2025-12-06'
+detection_page: /hunting-detections/dual-rat-analysis/
+ioc_feed: /ioc-feeds/dual-rat-analysis.json
 layout: post
 permalink: /reports/dual-rat-analysis/
 category: "Dual-RAT Analysis"

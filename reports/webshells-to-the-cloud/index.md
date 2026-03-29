@@ -1,6 +1,8 @@
 ---
 title: "From Webshells to the Cloud"
 date: '2025-10-20'
+detection_page: /hunting-detections/webshells-to-the-cloud/
+ioc_feed: /ioc-feeds/webshells-to-the-cloud.json
 layout: post
 permalink: /reports/webshells-to-the-cloud/
 category: "Web Compromise"

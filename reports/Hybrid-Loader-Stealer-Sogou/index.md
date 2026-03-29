@@ -1,6 +1,8 @@
 ---
 title: "Hybrid Ecosystem Masquerading as Sogou"
 date: '2025-11-21'
+detection_page: /hunting-detections/Hybrid-Loader-Stealer-Sogou/
+ioc_feed: /ioc-feeds/Hybrid-Loader-Stealer-Sogou.json
 layout: post
 permalink: /reports/Hybrid-Loader-Stealer-Sogou/
 category: "Loader / Stealer"

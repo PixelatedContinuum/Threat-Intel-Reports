@@ -2,6 +2,8 @@
 title: "Remcos OpenDirectory Campaign"
 date: '2026-02-04'
 last_updated: '2026-02-06'
+detection_page: /hunting-detections/remcos-opendirectory/
+ioc_feed: /ioc-feeds/remcos-opendirectory-campaign.json
 layout: post
 permalink: /reports/remcos-opendirectory/
 category: "Remote Access Trojan"

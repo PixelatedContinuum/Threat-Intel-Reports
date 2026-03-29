@@ -1,6 +1,8 @@
 ---
 title: enc_c2.exe (Arsenal-237) - Rust-Based Ransomware Technical Analysis & Threat Intelligence
 date: '2026-01-24'
+detection_page: /hunting-detections/arsenal-237-enc_c2-exe/
+ioc_feed: /ioc-feeds/arsenal-237-enc_c2-exe.json
 layout: post
 permalink: /reports/arsenal-237-new-files/enc_c2-exe/
 hide: true

@@ -1,6 +1,8 @@
 ---
 title: QuasarRAT + Xworm + PowerShell Loader
 date: '2025-10-17'
+detection_page: /hunting-detections/quasar-xworm-powershell/
+ioc_feed: /ioc-feeds/quasar-xworm-powershell.json
 layout: post
 permalink: /reports/quasar-xworm-powershell/
 category: "Multi-Stage RAT"

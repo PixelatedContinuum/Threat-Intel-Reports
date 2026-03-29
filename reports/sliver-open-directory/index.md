@@ -1,6 +1,8 @@
 ---
 title: "Open Directory Exposure: Sliver with ScareCrow Loader (45.94.31.220)"
 date: '2026-03-01'
+detection_page: /hunting-detections/sliver-open-directory-detections/
+ioc_feed: /ioc-feeds/sliver-open-directory-iocs.json
 layout: post
 permalink: /reports/sliver-open-directory/
 category: "C2 Framework"

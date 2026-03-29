@@ -1,6 +1,8 @@
 ---
 title: "AdvancedRouterScanner — Global Router Exploitation"
 date: '2025-10-25'
+detection_page: /hunting-detections/AdvancedRouterScanner/
+ioc_feed: /ioc-feeds/AdvancedRouterScanner.json
 layout: post
 permalink: /reports/AdvancedRouterScanner/
 category: "Network Scanner"

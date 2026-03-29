@@ -1,6 +1,8 @@
 ---
 title: BdApiUtil64.sys (Arsenal-237 BYOVD Component) - Technical Analysis & Remediation Guidance
 date: '2026-01-26'
+detection_page: /hunting-detections/arsenal-237-BdApiUtil64-sys/
+ioc_feed: /ioc-feeds/arsenal-237-BdApiUtil64-sys.json
 layout: post
 permalink: /reports/bdapiutil64-sys/
 hide: true

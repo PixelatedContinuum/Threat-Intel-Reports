@@ -1,6 +1,8 @@
 ---
 title: lpe.exe (Arsenal-237 LPE Module) - Privilege Escalation Analysis & Threat Assessment
 date: '2026-01-25'
+detection_page: /hunting-detections/arsenal-237-lpe-exe/
+ioc_feed: /ioc-feeds/arsenal-237-lpe-exe.json
 layout: post
 permalink: /reports/arsenal-237-lpe-exe/
 hide: true

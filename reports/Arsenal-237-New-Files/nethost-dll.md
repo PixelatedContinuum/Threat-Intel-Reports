@@ -1,6 +1,8 @@
 ---
 title: nethost.dll (Arsenal-237 C2 Communication Module) - Technical Analysis & Threat Assessment
 date: '2026-01-26'
+detection_page: /hunting-detections/arsenal-237-nethost-dll/
+ioc_feed: /ioc-feeds/arsenal-237-nethost-dll.json
 layout: post
 permalink: /reports/arsenal-237/nethost-dll/
 hide: true

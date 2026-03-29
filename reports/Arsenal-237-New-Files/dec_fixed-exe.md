@@ -1,6 +1,8 @@
 ---
 title: dec_fixed.exe (Arsenal-237 Ransomware Decryptor) - Threat Intelligence Analysis
 date: '2026-01-23'
+detection_page: /hunting-detections/arsenal-237-dec_fixed-exe/
+ioc_feed: /ioc-feeds/arsenal-237-dec_fixed-exe.json
 layout: post
 permalink: /reports/arsenal-237-new-files/dec_fixed-exe/
 hide: true

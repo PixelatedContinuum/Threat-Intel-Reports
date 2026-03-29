@@ -1,6 +1,8 @@
 ---
 title: full_test_enc.exe (Arsenal-237) - Rust-Based Ransomware Technical Analysis
 date: '2026-01-20'
+detection_page: /hunting-detections/arsenal-237-full_test_enc-exe/
+ioc_feed: /ioc-feeds/arsenal-237-full_test_enc-exe.json
 layout: post
 permalink: /reports/arsenal-237-new-files/full_test_enc-exe/
 hide: true

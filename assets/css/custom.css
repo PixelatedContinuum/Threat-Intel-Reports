@@ -1253,3 +1253,58 @@ main.content {
 @media (max-width: 640px) {
   .hl-related__grid { grid-template-columns: 1fr; }
 }
+
+/* --- Quick reference slide-out tabs (left margin) ----------- */
+.hl-quicklinks {
+  position: fixed;
+  left: 28px;
+  top: 42%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 400;
+}
+.hl-quicklink {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 30px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(17, 24, 39, 0.92);
+  border: 1px solid rgba(88, 166, 255, 0.2);
+  color: var(--hl-accent-blue);
+  text-decoration: none;
+  transition: width 0.22s ease, border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.hl-quicklink:hover {
+  width: 130px;
+  border-color: rgba(88, 166, 255, 0.5);
+  background: rgba(20, 30, 50, 0.95);
+}
+.hl-quicklink__icon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hl-quicklink__label {
+  font-size: 0.68em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-right: 10px;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.hl-quicklink:hover .hl-quicklink__label {
+  opacity: 1;
+  transition: opacity 0.15s 0.1s;
+}
+@media (max-width: 900px) {
+  .hl-quicklinks { display: none; }
+}
