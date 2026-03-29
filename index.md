@@ -73,7 +73,7 @@ position: 1
 
 {% include section-header.html label="About the Analyst" accent="#58a6ff" %}
 
-<a href="{{ '/about-me/' | relative_url }}" class="hl-card">
+<div><a href="{{ '/about-me/' | relative_url }}" class="hl-card">
   <div class="hl-card__inner">
     <div class="hl-card__bar" style="background:#58a6ff;"></div>
     <div>
@@ -81,7 +81,7 @@ position: 1
       <div class="hl-prose-section__body" style="margin-top:6px;">Background and credentials for Joseph Harrison — SOC Operations Lead &amp; Threat Intelligence Researcher. Includes LinkedIn contact.</div>
     </div>
   </div>
-</a>
+</a></div>
 
 {% include section-header.html label="Resources" accent="#555555" %}
 
