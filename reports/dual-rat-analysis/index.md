@@ -17,9 +17,9 @@ hide: true
 
 ---
 
-# BLUF (Bottom Line Up Front)
+## BLUF (Bottom Line Up Front)
 
-## Executive Summary
+### Executive Summary
 
 ### Business Impact Summary
 This analysis examines two sophisticated .NET Remote Access Trojans (RATs) discovered during an ongoing investigation of a [PULSAR RAT sample]({{ "/reports/PULSAR-RAT/" | relative_url }}), representing fundamentally different operational philosophies. **Quasar RAT** demonstrates professional-grade espionage capabilities with stealth-focused design, while **NjRAT/XWorm** employs aggressive resilience mechanisms for mass deployment. Both samples enable complete system compromise but differ significantly in their approach to persistence, detection evasion, and infrastructure management.
@@ -78,7 +78,7 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
 
 ---
 
-## Quick Reference
+### Quick Reference
 
 **Detections & IOCs:**
 - [Dual-RAT Analysis Detections]({{ "/hunting-detections/dual-rat-analysis/" | relative_url }})
@@ -86,9 +86,9 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
 
 ---
 
-# Sample 1: Quasar RAT Analysis
+## Sample 1: Quasar RAT Analysis
 
-## File Identification
+### File Identification
 - **Original Filename**: client.exe
 - **SHA256**: 2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766
 - **File Size**: 1,571,840 bytes
@@ -98,7 +98,7 @@ This analysis examines two sophisticated .NET Remote Access Trojans (RATs) disco
 
 **Discovery Context**: This sample appeared in the investigation directory at IP 185.208.159.182 during analysis of the original [PULSAR RAT server.exe]({{ "/reports/PULSAR-RAT/" | relative_url }}), suggesting the threat actors were actively deploying multiple RAT variants.
 
-## Executive Technical Summary
+### Executive Technical Summary
 
 ### Business Context
 Quasar RAT represents a **professional-grade espionage tool** frequently associated with APT10 and sophisticated threat actors. Its design prioritizes **stealth and long-term access** over aggressive persistence, making it particularly dangerous for high-value targets where detection could compromise broader operations.
@@ -120,7 +120,7 @@ Quasar RAT represents a **professional-grade espionage tool** frequently associa
 
 ---
 
-## Deep Technical Analysis
+### Deep Technical Analysis
 
 ### Code Architecture & Design Philosophy
 
@@ -180,7 +180,7 @@ Quasar RAT implements Zone.Identifier stream removal to bypass Windows security 
 
 ---
 
-## Dynamic Sandbox Analysis
+### Dynamic Sandbox Analysis
 
 ### Execution Timeline (Noriben Analysis)
 
@@ -282,9 +282,9 @@ Purpose: Establish command and control channel
 
 ---
 
-# Sample 2: NjRAT/XWorm Analysis
+## Sample 2: NjRAT/XWorm Analysis
 
-## File Identification
+### File Identification
 - **Original Filename**: server (1).exe
 - **SHA256**: 950aadba6993619858294599b3458d5d2221f10fe72b3db3e49883d496a705bb
 - **File Size**: 37,888 bytes (26x smaller than Quasar)
@@ -295,7 +295,7 @@ Purpose: Establish command and control channel
 
 **Discovery Context**: This sample also appeared in the investigation directory at IP 185.208.159.182 alongside the Quasar sample, indicating the threat actors were simultaneously deploying multiple RAT families during the [PULSAR RAT investigation]({{ "/reports/PULSAR-RAT/" | relative_url }}).
 
-## Executive Technical Summary
+### Executive Technical Summary
 
 ### Business Context
 NjRAT/XWorm represents a commodity malware optimized for mass deployment with aggressive resilience mechanisms. Its compact size (37KB) and triple-redundant persistence make it ideal for opportunistic attacks where some detections are acceptable if overall access is maintained.
@@ -317,7 +317,7 @@ NjRAT/XWorm represents a commodity malware optimized for mass deployment with ag
 
 ---
 
-## Deep Technical Analysis
+### Deep Technical Analysis
 
 ### Code Architecture & Design Philosophy
 
@@ -377,7 +377,7 @@ NjRAT/XWorm implements system-level protection mechanisms. The analysis observed
 
 ---
 
-## Dynamic Sandbox Analysis
+### Dynamic Sandbox Analysis
 
 ### Execution Timeline (Behavioral Observation)
 
@@ -477,9 +477,9 @@ Purpose: System crash handling
 
 ---
 
-# Delivery Method Analysis & Initial Access Vectors
+## Delivery Method Analysis & Initial Access Vectors
 
-## Common Infection Vectors
+### Common Infection Vectors
 
 Both Quasar RAT and NjRAT/XWorm primarily reach victims through **phishing and social engineering attacks**, though their delivery mechanisms reflect their different operational philosophies.
 
@@ -518,9 +518,9 @@ Both Quasar RAT and NjRAT/XWorm primarily reach victims through **phishing and s
 
 ---
 
-# Future Evolution & Threat Trends
+## Future Evolution & Threat Trends
 
-## Emerging Capabilities to Watch
+### Emerging Capabilities to Watch
 
 As commodity RAT development continues, both Quasar and NjRAT families are likely to evolve with enhanced capabilities that challenge current detection approaches.
 
@@ -570,11 +570,11 @@ Organizations should prepare for these trends by:
 
 ---
 
-# Comparative Technical Analysis
+## Comparative Technical Analysis
 
 **Investigation Context**: The discovery of these two distinct RAT families during the [PULSAR RAT investigation]({{ "/reports/PULSAR-RAT/" | relative_url }}) reveals a more complex threat ecosystem than initially apparent, with threat actors deploying multiple specialized tools for different operational objectives.
 
-## Design Philosophy Comparison
+### Design Philosophy Comparison
 
 ### Stealth vs. Resilience Trade-off
 
@@ -608,9 +608,9 @@ Organizations should prepare for these trends by:
 
 ---
 
-# MITRE ATT&CK Mapping
+## MITRE ATT&CK Mapping
 
-## Quasar RAT - ATT&CK Mapping
+### Quasar RAT - ATT&CK Mapping
 
 <table class="professional-table">
   <thead>
@@ -703,7 +703,7 @@ Organizations should prepare for these trends by:
   </tbody>
 </table>
 
-## NjRAT/XWorm - ATT&CK Mapping
+### NjRAT/XWorm - ATT&CK Mapping
 
 <table class="professional-table">
   <thead>
@@ -805,9 +805,9 @@ Organizations should prepare for these trends by:
 
 ---
 
-# Frequently Asked Questions
+## Frequently Asked Questions
 
-## Technical Questions
+### Technical Questions
 
 **Q: Why does Quasar RAT use process injection while NjRAT/XWorm doesn't?**  
 A: Quasar's stealth-focused design prioritizes evading detection by hiding malicious code within legitimate processes. NjRAT's resilience-focused design accepts higher detection risk in favor of aggressive persistence and rapid recovery.
@@ -821,7 +821,7 @@ A: Legitimate software rarely uses sub-5-minute intervals for scheduled tasks. T
 **Q: How does the "mark of the web" removal work technically?**  
 A: Windows stores download source information in alternate data streams (file:Zone.Identifier). The malware uses DeleteFile API to remove this stream, bypassing SmartScreen warnings and making the file appear locally created.
 
-## Business Questions
+### Business Questions
 
 **Q: Which malware poses greater business risk?**  
 A: Quasar RAT poses greater risk for high-value targets due to its stealth capabilities and APT10 association. NjRAT/XWorm poses greater risk for mass compromise due to its prevalence and resilience.
@@ -837,14 +837,14 @@ A: Significant - both RATs enable comprehensive data theft and surveillance, pot
 
 ---
 
-## IOCs
+### IOCs
 - [Dual-RAT Analysis IOCs]({{ "/ioc-feeds/dual-rat-analysis.json" | relative_url }})
 
-## Detections
+### Detections
 - [Dual-RAT Analysis Detections]({{ "/hunting-detections/dual-rat-analysis/" | relative_url }})
 
 ---
 
-## License
+### License
 © 2025 Joseph. All rights reserved.  
 Free to read, but reuse requires written permission.

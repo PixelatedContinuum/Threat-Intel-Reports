@@ -7,7 +7,6 @@ category: "Remote Access Trojan"
 hide: true
 ---
 
-## A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 
 **Campaign Identifier:** OpenDirectory-203.159.90.147-Remcos
 
@@ -15,9 +14,9 @@ hide: true
 
 ---
 
-# BLUF (Bottom Line Up Front)
+## BLUF (Bottom Line Up Front)
 
-## Executive Summary
+### Executive Summary
 
 ### Business Impact Summary
 This report documents a sophisticated multi-stage Remcos Remote Access Trojan (RAT) campaign discovered through an openly accessible directory at IP address **203[.]159[.]90[.]147**. The attack chain deploys a Visual Basic 6 obfuscated dropper that extracts and executes the main Remcos RAT payload, establishing comprehensive surveillance capabilities, persistent access, and complete system control over compromised endpoints. This represents a critical threat requiring immediate executive review and organizational response.
@@ -129,7 +128,7 @@ This report documents a sophisticated multi-stage Remcos Remote Access Trojan (R
 
 ---
 
-## Attack Infrastructure
+### Attack Infrastructure
 
 **Primary IP Address:** 203[.]159[.]90[.]147
 
@@ -160,7 +159,7 @@ OpenDirectory malware distribution is a documented Remcos TTP since 2021:
 - Infrastructure frequently rotated when blocked by defenders
 - Recent campaigns show ongoing use of this distribution method through 2025-2026
 
-## Threat Level Assessment
+### Threat Level Assessment
 
 **Immediate Threats:**
 - **Credential Compromise:** Browser-saved passwords (Chrome, Firefox), session cookies stolen for account takeover
@@ -175,7 +174,7 @@ OpenDirectory malware distribution is a documented Remcos TTP since 2021:
 - **Financial Fraud:** Real-time credential theft enables unauthorized transactions and wire fraud
 - **Regulatory Compliance:** Data breach involving PII/PHI triggers GDPR, HIPAA, and other regulatory obligations
 
-## Global Context
+### Global Context
 
 Remcos RAT remains a **critical and actively exploited threat** in 2025-2026:
 
@@ -187,9 +186,9 @@ Remcos RAT remains a **critical and actively exploited threat** in 2025-2026:
 
 ---
 
-# 2. ATTACK CHAIN ARCHITECTURE
+## 2. ATTACK CHAIN ARCHITECTURE
 
-## Multi-Stage Execution Flow
+### Multi-Stage Execution Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -242,7 +241,7 @@ Remcos RAT remains a **critical and actively exploited threat** in 2025-2026:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Stage 1: VB6 Dropper (Payload.exe)
+### Stage 1: VB6 Dropper (Payload.exe)
 
 **File Metadata:**
 - Filename: Payload.exe
@@ -276,7 +275,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 >ANALYST NOTE: I might not be super clear in the data here but, 0.dll was dropped and when comparing it to file hashes already investigated I found that this 0.dll files has the same hash as Backdoor.exe which will be covered next, making them the same malware file.
 
-## Stage 2: Remcos RAT Payload (Backdoor.exe)
+### Stage 2: Remcos RAT Payload (Backdoor.exe)
 
 **File Metadata:**
 - Filename: Backdoor.exe (persists as remcos.exe)
@@ -307,9 +306,9 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 ---
 
-# 3. PERSISTENCE MECHANISMS
+## 3. PERSISTENCE MECHANISMS
 
-## Mechanism 1: UAC Bypass via EnableLUA Registry Modification
+### Mechanism 1: UAC Bypass via EnableLUA Registry Modification
 
 **Technique:** System-wide UAC disablement
 
@@ -349,7 +348,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 </figure>
 
 
-## Mechanism 2: Winlogon Userinit Hijacking
+### Mechanism 2: Winlogon Userinit Hijacking
 
 **Technique:** Winlogon helper executable hijacking
 
@@ -383,7 +382,7 @@ Modified:  "C:\WINDOWS\system32\userinit.exe, "C:\Users\[USER]\AppData\Roaming\r
 
 **MITRE ATT&CK:** T1547.004 (Boot or Logon Autostart Execution: Winlogon Helper DLL)
 
-## Mechanism 3: File Installation and "Melting"
+### Mechanism 3: File Installation and "Melting"
 
 **Installation Process:**
 
@@ -420,7 +419,7 @@ DEL "%TEMP%\install.bat"
 - T1070.004 (Indicator Removal: File Deletion)
 - T1564.001 (Hide Artifacts: Hidden Files and Directories)
 
-## Mechanism 4-5: Standard Registry Autorun
+### Mechanism 4-5: Standard Registry Autorun
 
 **HKCU Run Key (User-Level):**
 ```
@@ -451,9 +450,9 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 
 ---
 
-# 4. SURVEILLANCE AND DATA COLLECTION
+## 4. SURVEILLANCE AND DATA COLLECTION
 
-## Screenshot Capture
+### Screenshot Capture
 
 **Module 1: Periodic Capture**
 - Initializes GDI+ graphics library
@@ -476,7 +475,7 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 
 **MITRE ATT&CK:** T1113 (Screen Capture)
 
-## Audio Recording
+### Audio Recording
 
 **Recording Module:**
 - Dedicated thread for continuous recording
@@ -488,7 +487,7 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 
 **MITRE ATT&CK:** T1123 (Audio Capture)
 
-## Keylogging and Clipboard Monitoring
+### Keylogging and Clipboard Monitoring
 
 **Keylogger Capabilities:**
 - Windows hooks via SetWindowsHookExA (global keyboard hook)
@@ -509,7 +508,7 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 
 > ANALYST NOTE: When I was doing dymanic analysis and debugging of these files I noticed that my clipboard stopped working. When copy and pasting outside the analysis lab VM everything worked but, inside copy and paste did not work once the files were running on the host. This can be a good indicator if users are reporting to the helpdesk that their clipboards are not working or copy and paste is not working. 
 
-## Browser Credential Theft
+### Browser Credential Theft
 
 **Chrome Credential Theft:**
 ```
@@ -552,9 +551,9 @@ Indicators:
 
 ---
 
-# 5. EVASION AND ANTI-ANALYSIS TECHNIQUES
+## 5. EVASION AND ANTI-ANALYSIS TECHNIQUES
 
-## Process Injection
+### Process Injection
 
 **Injection Technique:** Process Hollowing / Classic DLL Injection
 
@@ -619,7 +618,7 @@ Core Injection APIs:
 - T1055.012 (Process Hollowing)
 - T1055.001 (Dynamic-link Library Injection)
 
-## Anti-VM/Sandbox Detection
+### Anti-VM/Sandbox Detection
 
 **String Artifacts:**
 ```
@@ -636,7 +635,7 @@ PROCEXPL
 
 **MITRE ATT&CK:** T1497.001 (Virtualization/Sandbox Evasion)
 
-## Stealth Mechanisms
+### Stealth Mechanisms
 
 **Hidden Window Operations:**
 - Creates message-only window (class: "MsgWindowClass")
@@ -667,9 +666,9 @@ PROCEXPL
 
 ---
 
-# 6. COMMAND & CONTROL INFRASTRUCTURE
+## 6. COMMAND & CONTROL INFRASTRUCTURE
 
-## Primary C2 Server
+### Primary C2 Server
 
 **IP Address:** 203[.]159[.]90[.]147
 **Protocol:** TCP (SOCK_STREAM)
@@ -698,7 +697,7 @@ Connected to C2!
 **Analysis Limitation:**
 This analysis did not capture live C2 traffic during the infection window, as the malware was analyzed in an isolated environment without granting network access to the malicious infrastructure. Deep protocol dissection would require live C2 server interaction with packet capture, which was not performed due to operational security constraints.
 
-## Data Exfiltration Mechanisms
+### Data Exfiltration Mechanisms
 
 **Screenshot Exfiltration:**
 - Encrypted PNG files uploaded via HTTP
@@ -731,7 +730,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 
 ---
 
-# 7. MITRE ATT&CK FRAMEWORK MAPPING
+## 7. MITRE ATT&CK FRAMEWORK MAPPING
 
 ### Execution
 - T1059.003 - Command and Scripting Interpreter: Windows Command Shell
@@ -784,9 +783,9 @@ This analysis did not capture live C2 traffic during the infection window, as th
 
 ---
 
-# 8. THREAT INTELLIGENCE CONTEXT
+## 8. THREAT INTELLIGENCE CONTEXT
 
-## Remcos RAT Global Threat Landscape
+### Remcos RAT Global Threat Landscape
 
 **Threat Severity:** CRITICAL
 
@@ -802,7 +801,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 4. Living-off-the-Land Binaries (MSBuild.exe, aspnet_compiler.exe)
 5. OpenDirectory staging (2021-present ongoing tactic)
 
-## Threat Actor Spectrum
+### Threat Actor Spectrum
 
 **Nation-State APT Groups:**
 - UAC-0184 (Hive0156) - Russian APT targeting Ukraine
@@ -822,9 +821,9 @@ This analysis did not capture live C2 traffic during the infection window, as th
 
 ---
 
-# 9. ATTRIBUTION ANALYSIS
+## 9. ATTRIBUTION ANALYSIS
 
-## Campaign Sophistication Assessment
+### Campaign Sophistication Assessment
 
 **Technical Sophistication:** Medium-High
 - Multi-stage VB6 dropper with obfuscation
@@ -842,7 +841,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 - OpenDirectory distribution suggests broad, non-targeted distribution
 - Could be repurposed for targeted attacks if customized per victim
 
-## Threat Actor Profile
+### Threat Actor Profile
 
 **Most Likely Attribution:** Cybercriminal / Initial Access Broker
 
@@ -860,9 +859,9 @@ This analysis did not capture live C2 traffic during the infection window, as th
 
 ---
 
-# 10. REMEDIATION GUIDANCE
+## 10. REMEDIATION GUIDANCE
 
-## Immediate Actions
+### Immediate Actions
 
 **1. Isolate Infected Systems**
 - Disconnect from network (disable network adapters)
@@ -885,7 +884,7 @@ Priority 4: Network traffic capture (if ongoing C2 observable)
 Priority 5: Event logs (Security, System, Application)
 ```
 
-## Malware Removal
+### Malware Removal
 
 **Manual Removal Steps:**
 
@@ -931,7 +930,7 @@ Step 5: Restore Security Settings
 - Deploy YARA rules for detection across environment
 - Consider full system reimage for high-value systems (RECOMMENDED)
 
-## Post-Remediation
+### Post-Remediation
 
 **1. Credential Reset (Critical)**
 ```
@@ -968,6 +967,6 @@ Enhanced monitoring for:
 
 ---
 
-## License
+### License
 © 2026 Joseph. All rights reserved.  
 Free to read, but reuse requires written permission.

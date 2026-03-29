@@ -13,9 +13,9 @@ hide: true
 
 ---
 
-# BLUF (Bottom Line Up Front)
+## BLUF (Bottom Line Up Front)
 
-## Executive Summary
+### Executive Summary
 
 ### Business Impact Summary
 The "From Webshells to the Cloud" campaign represents a sophisticated, multi-phase intrusion chain that compromises web servers and pivots to cloud infrastructure abuse. This modular attack demonstrates advanced persistence capabilities and strong attribution fingerprints, indicating an organized threat operation with systematic exploitation methodologies.
@@ -101,7 +101,7 @@ The "From Webshells to the Cloud" campaign represents a sophisticated, multi-pha
 
 ---
 
-## Quick Reference
+### Quick Reference
 
 **Detections & IOCs:**
 - [Webshells to the Cloud Detections]({{ "/hunting-detections/webshells-to-the-cloud/" | relative_url }})
@@ -109,16 +109,16 @@ The "From Webshells to the Cloud" campaign represents a sophisticated, multi-pha
 
 ---
 
-## Executive Summary
+### Executive Summary
 This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, exploit kits, and cloud abuse. Attackers pivot from initial webshell deployment to exploitation, persistence, exfiltration, and infrastructure automation. The reuse of RSA keys, cookie names, and file paths provides strong attribution fingerprints.
 
 ---
 
-## Technical Details
+### Technical Details
 
-# Technical Analysis
+## Technical Analysis
 
-## Infrastructure Overview
+### Infrastructure Overview
 <table class="professional-table">
   <thead>
     <tr>
@@ -243,9 +243,9 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
 
 ---
 
-# Attack Chain Analysis
+## Attack Chain Analysis
 
-## Campaign Structure Summary
+### Campaign Structure Summary
 <table class="professional-table">
   <thead>
     <tr>
@@ -283,7 +283,7 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
   </tbody>
 </table>
 
-## Attribution Fingerprints
+### Attribution Fingerprints
 <table class="professional-table">
   <thead>
     <tr>
@@ -318,7 +318,7 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
 
 ---
 
-## Incident Response Procedures
+### Incident Response Procedures
 
 ### Priority 1: Initial Response
 1. **ISOLATE** all web servers with potential PHP backdoor infections
@@ -344,7 +344,7 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
 
 ---
 
-## Operational Impact Assessment
+### Operational Impact Assessment
 
 ### Impact Scenarios
 <table class="professional-table">
@@ -387,7 +387,7 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
 
 ---
 
-## Long-term Defensive Strategy
+### Long-term Defensive Strategy
 
 ### Technology Enhancements
 1. **Web Application Firewall (WAF)** with PHP backdoor detection capabilities
@@ -412,7 +412,7 @@ This campaign demonstrates a modular intrusion chain leveraging PHP backdoors, e
 
 ---
 
-## Frequently Asked Questions
+### Frequently Asked Questions
 
 ### Technical Questions
 **Q: What makes the RSA encryption backdoor particularly dangerous?**  
@@ -436,14 +436,14 @@ A: Implement cloud access monitoring, API security controls, regular access revi
 
 ---
 
-## IOCs
+### IOCs
 - [From Webshells to The Cloud IOCs]({{ "/ioc-feeds/webshells-to-the-cloud.json" | relative_url }})
 
-## Detections
+### Detections
 - [From Webshells to The Cloud Detections]({{ "/hunting-detections/webshells-to-the-cloud/" | relative_url }})
 
 ---
 
-## License
+### License
 © 2025 Joseph. All rights reserved.  
 Free to read, but reuse requires written permission.

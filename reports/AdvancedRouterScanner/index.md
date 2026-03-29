@@ -13,9 +13,9 @@ hide: true
 
 ---
 
-# BLUF (Bottom Line Up Front)
+## BLUF (Bottom Line Up Front)
 
-## Executive Summary
+### Executive Summary
 
 ### Business Impact Summary
 AdvancedRouterScanner represents a sophisticated, custom exploitation framework actively targeting embedded network devices globally. This is not commodity malware but a purpose-built weaponization tool transitioning from research to operational botnet recruitment. Defensive actions are recommended to prevent large-scale infrastructure compromise.
@@ -63,7 +63,7 @@ AdvancedRouterScanner represents a sophisticated, custom exploitation framework 
 
 ---
 
-## Quick Reference
+### Quick Reference
 
 **Detections & IOCs:**
 - [AdvancedRouterScanner Detections]({{ "/hunting-detections/AdvancedRouterScanner/" | relative_url }})
@@ -71,9 +71,9 @@ AdvancedRouterScanner represents a sophisticated, custom exploitation framework 
 
 ---
 
-# 1. Executive Summary
+## 1. Executive Summary
 
-## Key Takeaways
+### Key Takeaways
 - This is not commodity malware, it is a custom exploitation framework with unique fingerprints, making it highly attributable.
 - The campaign is global in scope, but disproportionately impacts Latin America, Southeast Asia, and parts of Africa.
 - Attackers could have or soon will transition from research (PoC) to full operationalization (hub infrastructure, payload hosting, reverse shells).
@@ -82,7 +82,7 @@ AdvancedRouterScanner represents a sophisticated, custom exploitation framework 
 
 ---
 
-## Summary
+### Summary
 
 This investigation uncovered a coordinated exploitation campaign targeting embedded network devices (Huawei/Four‑Faith and similar OEMs) through exposed CGI endpoints and weak/default credentials. The campaign demonstrates a clear progression from proof‑of‑concept (PoC) research into fully weaponized exploitation infrastructure, with evidence of both opportunistic scanning and operationalized attack hubs.
 
@@ -94,7 +94,7 @@ Enrichment of ~65,000 IPs targeted by this campaign revealed ~50,000 successfull
 
 ---
 
-# 2. Tool Overview (poc.py)
+## 2. Tool Overview (poc.py)
 Name: poc.py (generic filename).  
 Unique Class: AdvancedRouterScanner.  
 Capabilities:
@@ -112,7 +112,7 @@ Note: This file was not found in VirusTotal and when uploaded, came back with no
 
 ---
 
-# 3. Targeting (ips.txt)
+## 3. Targeting (ips.txt)
 Scope: Global, ~954 KB of IPs.  
 Regional Clusters:
 - Southeast Asia (Vietnam, Bangladesh, India).
@@ -130,7 +130,7 @@ Assessment: Aggregated from multiple sources (scan dumps, ISP sweeps, configs). 
 
 ---
 
-# 4. Results Analysis
+## 4. Results Analysis
 File 1: Huawei Exploitation  
 - Region: Vietnam (117.x.x.x ranges).  
 - Findings: Default credentials (`admin:admin`) successful. Exposed endpoints accessible: `/api/system/execute_command`, `/web_shell_cmd.gch`, `/shell`.  
@@ -150,7 +150,7 @@ Timeline Analysis
 
 ---
 
-# 5. Campaign Flow
+## 5. Campaign Flow
 [Aggregated IP List]  
    └─ Global ISP ranges (Asia, LATAM, EU, Africa, NA, private IPs)  
 
@@ -172,7 +172,7 @@ Timeline Analysis
 
 ---
 
-# 6. Unique Fingerprints (Pivot Anchors)
+## 6. Unique Fingerprints (Pivot Anchors)
 - High‑Fidelity: AdvancedRouterScanner, run_advanced_scan, advanced_scan_, telecomadmin:admintelecom, Huawei endpoint trio.  
 - Medium‑Fidelity: Vendor combo (Huawei, ZTE, Raisecom), output format with 60‑dash separator.  
 - Broad Discovery: Vendor names alone, generic creds.  
@@ -180,7 +180,7 @@ Timeline Analysis
 
 ---
 
-# 7. External Search Findings
+## 7. External Search Findings
 - GitHub: Many unrelated poc.py files, but none with AdvancedRouterScanner or the same vendor logic.  
 - Router scanning repos: Exist, but do not use the same class names, results format, or Huawei endpoint trio.  
 - Huawei research repos: Confirm known defaults, but not packaged into this scanner.  
@@ -189,7 +189,7 @@ Timeline Analysis
 
 ---
 
-# 8. Threat Assessment
+## 8. Threat Assessment
 
 ### Overall Assessment
 - **Nature:** Custom/semi-private router exploitation tool
@@ -221,14 +221,14 @@ Timeline Analysis
 
 ---
 
-# 9. Defensive Recommendations
+## 9. Defensive Recommendations
 - ISPs: Audit router fleets for defaults and exposed endpoints.  
 - Enterprises: Monitor outbound connections to unusual IPs in these ranges, especially on ports 21/22/23.  
 - Defenders: Build detection rules for repeated default login attempts, flag Huawei endpoint traffic, watch for parallel outbound connections.  
 
 ---
 
-# 10. Key Takeaways
+## 10. Key Takeaways
 - The poc.py script is a unique campaign artifact.  
 - Combines global opportunistic scanning with vendor‑specific exploitation.  
 - Results confirm Huawei routers in Vietnam were compromised.  
@@ -237,9 +237,9 @@ Timeline Analysis
 
 ---
 
-# Target Analysis & Geographic Distribution
+## Target Analysis & Geographic Distribution
 
-## Target Enrichment Summary
+### Target Enrichment Summary
 <table class="professional-table">
   <thead>
     <tr>
@@ -272,7 +272,7 @@ Timeline Analysis
   </tbody>
 </table>
 
-## Country Distribution Analysis
+### Country Distribution Analysis
 <table class="professional-table">
   <thead>
     <tr>
@@ -310,7 +310,7 @@ Timeline Analysis
   </tbody>
 </table>
 
-## Top Targeted Network Providers
+### Top Targeted Network Providers
 <table class="professional-table">
   <thead>
     <tr>
@@ -358,7 +358,7 @@ Timeline Analysis
 
 ---
 
-# Follow-Up: Certificate Pivot
+## Follow-Up: Certificate Pivot
 
 PoC host now presents TLS cert Issuer CN `yuyu`, seen on only three hosts:
 - 185[.]38[.]150[.]7 (PoC)
@@ -370,7 +370,7 @@ PoC host now presents TLS cert Issuer CN `yuyu`, seen on only three hosts:
 
 ---
 
-# Additional Findings After Pivots (176[.]65[.]137[.]13)
+## Additional Findings After Pivots (176[.]65[.]137[.]13)
 
 The second exposed directory (176[.]65[.]137[.]13:80) revealed a more operationalized attacker hub compared to the PoC host.
 
@@ -398,7 +398,7 @@ This host functioned as an operator hub, staging tools, scanning, and launching 
 
 ---
 
-# MITRE ATT&CK Mapping
+## MITRE ATT&CK Mapping
 
 <table class="professional-table">
   <thead>
@@ -507,7 +507,7 @@ This host functioned as an operator hub, staging tools, scanning, and launching 
 
 ---
 
-## Incident Response Procedures
+### Incident Response Procedures
 
 ### Priority 1: Initial Response
 1. **BLOCK** known malicious infrastructure at network perimeter
@@ -532,7 +532,7 @@ This host functioned as an operator hub, staging tools, scanning, and launching 
 
 ---
 
-## Operational Impact Assessment
+### Operational Impact Assessment
 
 ### Impact Scenarios
 <table class="professional-table">
@@ -575,7 +575,7 @@ This host functioned as an operator hub, staging tools, scanning, and launching 
 
 ---
 
-## Long-term Defensive Strategy
+### Long-term Defensive Strategy
 
 ### Technology Enhancements
 1. **Network Access Control** to segment and monitor embedded devices
@@ -600,7 +600,7 @@ This host functioned as an operator hub, staging tools, scanning, and launching 
 
 ---
 
-## Frequently Asked Questions
+### Frequently Asked Questions
 
 ### Technical Questions
 **Q: What makes AdvancedRouterScanner unique compared to other exploitation tools?**  
@@ -624,14 +624,14 @@ A: Implement network segmentation, regular firmware updates, credential manageme
 
 ---
 
-## IOCs
+### IOCs
 - [AdvancedRouterScanner IOCs]({{ "/ioc-feeds/AdvancedRouterScanner.json" | relative_url }})
 
-## Detections
+### Detections
 - [AdvancedRouterScanner Detections]({{ "/hunting-detections/AdvancedRouterScanner/" | relative_url }})
 
 ---
 
-# License
+## License
 © 2025 Joseph. All rights reserved.  
 Free to read, but reuse requires written permission.

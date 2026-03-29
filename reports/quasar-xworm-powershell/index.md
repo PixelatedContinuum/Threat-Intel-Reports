@@ -13,9 +13,9 @@ hide: true
 
 ---
 
-# BLUF (Bottom Line Up Front)
+## BLUF (Bottom Line Up Front)
 
-## Executive Summary
+### Executive Summary
 
 ### Business Impact Summary
 The QuasarRAT + Xworm + PowerShell campaign represents a sophisticated multi-stage attack combining commodity remote access trojans with advanced fileless execution techniques. The attack systematically disables security controls and establishes persistent remote access, creating significant data theft and system control risks.
@@ -63,7 +63,7 @@ The QuasarRAT + Xworm + PowerShell campaign represents a sophisticated multi-sta
 
 ---
 
-## Quick Reference
+### Quick Reference
 
 **Detections & IOCs:**
 - [Quasar + Xworm + PowerShell Detections]({{ "/hunting-detections/quasar-xworm-powershell/" | relative_url }})
@@ -71,14 +71,14 @@ The QuasarRAT + Xworm + PowerShell campaign represents a sophisticated multi-sta
 
 ---
 
-## Overview
+### Overview
 This campaign combines commodity RATs (QuasarRAT and Xworm) with a VBScript + PowerShell loader.  
 The loader disguises its payload as an image (`update.png`) but actually downloads and executes a PowerShell script in memory.  
 That script disables Microsoft Defender by adding broad exclusions, then facilitates RAT deployment.
 
 ---
 
-## Loader Mechanism
+### Loader Mechanism
 - **VBScript stager** constructs a PowerShell command string.  
 - **PowerShell execution** uses `.NET System.Net.Http.HttpClient` to fetch `update.png` from a remote server.  
 - Despite the `.png` extension, the file is a **text‑based PowerShell script**, not an image.  
@@ -86,7 +86,7 @@ That script disables Microsoft Defender by adding broad exclusions, then facilit
 
 ---
 
-## Defense Evasion
+### Defense Evasion
 The PowerShell payload disables Microsoft Defender by adding exclusions for:
 - Entire `C:\` drive.  
 - Processes: `powershell.exe`, `wscript.exe`, `cmd.exe`, `cvtres.exe`.  
@@ -95,7 +95,7 @@ This effectively blinds Defender to subsequent malicious activity.
 
 ---
 
-## RAT Deployment
+### RAT Deployment
 Once exclusions are in place, the loader hands off to RAT binaries:
 - **QuasarRAT**: .NET‑based remote access trojan, ~2–3 MB, often with configs embedded in resources.  
 - **Xworm**: smaller (~70 KB), obfuscated strings, commodity RAT functionality.  
@@ -103,9 +103,9 @@ Both provide persistence, remote control, and data theft capabilities.
 
 ---
 
-# Technical Analysis
+## Technical Analysis
 
-## Infrastructure Overview
+### Infrastructure Overview
 <table class="professional-table">
   <thead>
     <tr>
@@ -133,7 +133,7 @@ Both provide persistence, remote control, and data theft capabilities.
   </tbody>
 </table>
 
-## Attack Chain Components
+### Attack Chain Components
 <table class="professional-table">
   <thead>
     <tr>
@@ -173,7 +173,7 @@ Both provide persistence, remote control, and data theft capabilities.
 
 ---
 
-## Tactics, Techniques, and Procedures (TTPs)
+### Tactics, Techniques, and Procedures (TTPs)
 - **Fileless execution**: PowerShell loads and executes script content directly in memory.  
 - **Defense evasion**: Microsoft Defender exclusions.  
 - **Remote access**: RAT deployment for persistence and control.  
@@ -181,7 +181,7 @@ Both provide persistence, remote control, and data theft capabilities.
 
 ---
 
-## Pivoting Strategy
+### Pivoting Strategy
 Analysts can pivot on:
 - **File names**: `update.png`, `update.ps1`.  
 - **Strings**: `Add-MpPreference`, `ExclusionPath`, `HttpClient.GetAsync`.  
@@ -190,7 +190,7 @@ Analysts can pivot on:
 
 ---
 
-## Final Summary
+### Final Summary
 This campaign demonstrates a layered loader strategy:
 1. VBScript launches PowerShell.  
 2. PowerShell fetches a disguised payload (`update.png`).  
@@ -202,9 +202,9 @@ This is a classic “living off the land” technique, leveraging native scripti
 
 ---
 
-# Attack Tactics & Procedures
+## Attack Tactics & Procedures
 
-## MITRE ATT&CK Mapping
+### MITRE ATT&CK Mapping
 <table class="professional-table">
   <thead>
     <tr>
@@ -248,7 +248,7 @@ This is a classic “living off the land” technique, leveraging native scripti
   </tbody>
 </table>
 
-## Threat Hunting Indicators
+### Threat Hunting Indicators
 <table class="professional-table">
   <thead>
     <tr>
@@ -283,7 +283,7 @@ This is a classic “living off the land” technique, leveraging native scripti
 
 ---
 
-## Incident Response Procedures
+### Incident Response Procedures
 
 ### Priority 1: Initial Response
 1. **ISOLATE** potentially compromised systems from network
@@ -309,7 +309,7 @@ This is a classic “living off the land” technique, leveraging native scripti
 
 ---
 
-## Operational Impact Assessment
+### Operational Impact Assessment
 
 ### Impact Scenarios
 <table class="professional-table">
@@ -369,7 +369,7 @@ This is a classic “living off the land” technique, leveraging native scripti
 
 ---
 
-## Long-term Defensive Strategy
+### Long-term Defensive Strategy
 
 ### Technology Enhancements
 1. **Endpoint Detection & Response (EDR)** with fileless execution capabilities and behavioral analysis
@@ -405,7 +405,7 @@ This is a classic “living off the land” technique, leveraging native scripti
 
 ---
 
-## Frequently Asked Questions
+### Frequently Asked Questions
 
 ### Technical Questions
 **Q: Why is fileless execution particularly dangerous?**  
@@ -429,14 +429,14 @@ A: Implement PowerShell logging, application control, endpoint detection with fi
 
 ---
 
-## IOCs
+### IOCs
 - [QuasarRAT + Xworm + PowerShell Loader IOCs]({{ "/ioc-feeds/quasar-xworm-powershell.json" | relative_url }})
 
-## Detections
+### Detections
 - [QuasarRAT + Xworm + PowerShell Loader Detections]({{ "/hunting-detections/quasar-xworm-powershell/" | relative_url }})
 
 ---
 
-## License
+### License
 © 2025 Joseph. All rights reserved.  
 Free to read, but reuse requires written permission.

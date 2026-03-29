@@ -7,7 +7,6 @@ hide: true
 ---
 
 # lpe.exe: Arsenal-237 Privilege Escalation Module
-## A Comprehensive Technical Analysis for Defenders
 
 **Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
 

@@ -7,7 +7,6 @@ hide: true
 ---
 
 # dec_fixed.exe: Arsenal-237 Per-Victim Ransomware Decryptor
-## A Comprehensive Threat Intelligence Report on Post-Payment Recovery Tools
 
 **A Comprehensive Threat Intelligence Guide for Security Decision-Makers**
 

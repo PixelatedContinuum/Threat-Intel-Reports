@@ -7,7 +7,6 @@ category: "Post-Exploitation Kit"
 hide: true
 ---
 
-## A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 
 **Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250
 
