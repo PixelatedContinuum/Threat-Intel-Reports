@@ -936,11 +936,15 @@ main.content {
   gap: 1px;
 }
 
+.hl-toc__item {
+  position: relative;
+}
+
 .hl-toc__item a {
   color: var(--hl-text-primary);
   text-decoration: none;
   display: block;
-  padding: 4px 8px;
+  padding: 4px 26px 4px 8px;
   border-radius: 4px;
   border-left: 2px solid transparent;
   line-height: 1.4;
@@ -970,6 +974,26 @@ main.content {
 .hl-toc__item--h3 a:hover {
   color: var(--hl-text-secondary);
 }
+
+.hl-toc__copy-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  background: none;
+  border: none;
+  color: var(--hl-accent-blue);
+  cursor: pointer;
+  padding: 3px 4px;
+  border-radius: 3px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.15s, background 0.15s;
+}
+.hl-toc__item:hover .hl-toc__copy-btn { opacity: 0.45; }
+.hl-toc__copy-btn:hover                { opacity: 1 !important; background: rgba(88,166,255,0.1); }
 
 /* --- Responsive -------------------------------------------- */
 /* Hide TOC when viewport is too narrow to show it in the margin */
@@ -1057,6 +1081,7 @@ main.content {
 
 /* --- Permalink anchors on headings -------------------------- */
 .hl-heading-anchor {
+  position: relative;
   margin-left: 0.45em;
   color: var(--hl-accent-blue);
   opacity: 0;
@@ -1066,9 +1091,88 @@ main.content {
   transition: opacity 0.15s;
   vertical-align: middle;
   user-select: none;
+  display: inline-flex;
+  align-items: center;
 }
-.hl-post-content h2:hover .hl-heading-anchor { opacity: 0.55; }
-.hl-heading-anchor:hover                      { opacity: 1 !important; }
+.hl-heading-anchor::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: rgba(15,17,21,0.96);
+  color: var(--hl-text-primary);
+  font-size: 12px;
+  font-weight: 400;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--hl-border-card);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 200;
+}
+.hl-heading-anchor:hover::after                { opacity: 1; }
+.hl-post-content h2:hover .hl-heading-anchor   { opacity: 0.55; }
+.hl-heading-anchor:hover                       { opacity: 1 !important; }
+
+/* --- First-visit section tip toast -------------------------- */
+.hl-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  width: calc(100% - 48px);
+  max-width: 480px;
+  background: var(--hl-bg-row);
+  color: var(--hl-text-primary);
+  border: 1px solid rgba(88,166,255,0.35);
+  border-bottom: 3px solid var(--hl-accent-blue);
+  border-radius: 8px 8px 0 0;
+  padding: 14px 42px 14px 18px;
+  font-size: 0.86em;
+  line-height: 1.6;
+  box-shadow:
+    0 -4px 28px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(88,166,255,0.06),
+    0 0 18px rgba(88,166,255,0.08);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 600;
+  pointer-events: none;
+}
+.hl-toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.hl-toast__label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hl-accent-blue);
+  margin-bottom: 4px;
+}
+.hl-toast__close {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: none;
+  border: 1px solid var(--hl-border-row);
+  border-radius: 4px;
+  color: var(--hl-text-dim);
+  cursor: pointer;
+  font-size: 0.95em;
+  line-height: 1;
+  padding: 3px 7px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.hl-toast__close:hover {
+  color: var(--hl-text-primary);
+  border-color: var(--hl-accent-blue);
+}
 
 /* --- Back to top button ------------------------------------- */
 .hl-back-top {

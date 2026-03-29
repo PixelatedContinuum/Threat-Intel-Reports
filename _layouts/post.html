@@ -91,6 +91,9 @@ layout: default
   var headings = Array.from(content.querySelectorAll('h2'));
   if (headings.length < 3) { toc.style.display = 'none'; return; }
 
+  var linkIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+  var tocIconSVG  = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+
   headings.forEach(function (h, i) {
     if (!h.id) h.id = 'toc-' + i;
 
@@ -104,21 +107,44 @@ layout: default
     a.href = '#' + h.id;
     a.textContent = labelText;
     li.appendChild(a);
+
+    // TOC copy-link button (hover-reveal, right edge)
+    var tocBtn = document.createElement('button');
+    tocBtn.className = 'hl-toc__copy-btn';
+    tocBtn.innerHTML = tocIconSVG;
+    tocBtn.title = 'Copy link to section';
+    tocBtn.setAttribute('aria-label', 'Copy link to this section');
+    tocBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var url = location.href.split('#')[0] + '#' + h.id;
+      navigator.clipboard.writeText(url).then(function () {
+        tocBtn.textContent = '✓';
+        setTimeout(function () { tocBtn.innerHTML = tocIconSVG; }, 1500);
+      }).catch(function () {});
+    });
+    li.appendChild(tocBtn);
     tocList.appendChild(li);
 
     // Permalink anchor appended after text capture
     var anchor = document.createElement('a');
     anchor.className = 'hl-heading-anchor';
     anchor.href = '#' + h.id;
-    anchor.textContent = '#';
-    anchor.setAttribute('aria-label', 'Link to this section');
+    anchor.innerHTML = linkIconSVG;
+    anchor.setAttribute('aria-label', 'Copy link to this section');
+    anchor.setAttribute('data-tip', 'Copy link to section');
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
       history.pushState(null, null, '#' + h.id);
       h.scrollIntoView({ behavior: 'smooth' });
-      navigator.clipboard.writeText(location.href).catch(function () {});
-      anchor.textContent = '✓';
-      setTimeout(function () { anchor.textContent = '#'; }, 1500);
+      navigator.clipboard.writeText(location.href).then(function () {
+        anchor.textContent = '✓';
+        anchor.setAttribute('data-tip', 'Copied!');
+        setTimeout(function () {
+          anchor.innerHTML = linkIconSVG;
+          anchor.setAttribute('data-tip', 'Copy link to section');
+        }, 1500);
+      }).catch(function () {});
     });
     h.appendChild(anchor);
   });
@@ -139,6 +165,36 @@ layout: default
   }, { rootMargin: '-8% 0% -80% 0%' });
 
   headings.forEach(function (h) { observer.observe(h); });
+
+  // --- First-visit tip toast ---
+  if (!localStorage.getItem('hl-section-tip')) {
+    var toast = document.createElement('div');
+    toast.className = 'hl-toast';
+    var tLabel = document.createElement('span');
+    tLabel.className = 'hl-toast__label';
+    tLabel.textContent = 'Tip';
+    toast.appendChild(tLabel);
+    var tMsg = document.createElement('span');
+    tMsg.textContent = 'Click any section heading to copy a shareable link — save and bookmark your current spot to return to later!';
+    toast.appendChild(tMsg);
+    var tClose = document.createElement('button');
+    tClose.className = 'hl-toast__close';
+    tClose.textContent = '×';
+    tClose.setAttribute('aria-label', 'Dismiss');
+    toast.appendChild(tClose);
+    document.body.appendChild(toast);
+
+    var toastTimer;
+    function dismissToast() {
+      clearTimeout(toastTimer);
+      toast.classList.remove('hl-toast--visible');
+      localStorage.setItem('hl-section-tip', '1');
+      setTimeout(function () { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 400);
+    }
+    tClose.addEventListener('click', dismissToast);
+    setTimeout(function () { toast.classList.add('hl-toast--visible'); }, 1500);
+    toastTimer = setTimeout(dismissToast, 9500);
+  }
 
 })();
 </script>
