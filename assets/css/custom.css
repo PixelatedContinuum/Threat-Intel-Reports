@@ -44,11 +44,11 @@ body::after {
 }
 body::before {
   left: 0;
-  background: linear-gradient(to right, rgba(88,166,255,0.018), transparent);
+  background: linear-gradient(to right, rgba(88,166,255,0.04), transparent);
 }
 body::after {
   right: 0;
-  background: linear-gradient(to left, rgba(88,166,255,0.018), transparent);
+  background: linear-gradient(to left, rgba(88,166,255,0.04), transparent);
 }
 
 /* Theme dark mode sets wild heading colors (h2: purple, h3: pink).
@@ -893,7 +893,7 @@ main.content {
 }
 
 /* --- Post page two-column layout --------------------------- */
-main.content.hl-post-page {
+main.content:has(.hl-post-body) {
   max-width: 1120px !important;
 }
 
@@ -978,7 +978,7 @@ main.content.hl-post-page {
   .hl-post-toc {
     display: none;
   }
-  main.content.hl-post-page {
+  main.content:has(.hl-post-body) {
     max-width: 900px !important;
   }
 }
