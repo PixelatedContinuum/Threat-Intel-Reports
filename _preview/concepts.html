@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Concepts Preview</title>
+<style>
+  :root {
+    --hl-bg-page:      #111111;
+    --hl-bg-card:      #1a1a1a;
+    --hl-bg-row:       #161616;
+    --hl-border-card:  #2a2a2a;
+    --hl-text-primary: #eeeeee;
+    --hl-text-secondary:#aaaaaa;
+    --hl-text-dim:     #555555;
+    --hl-accent-blue:  #58a6ff;
+    --hl-accent-green: #4ade80;
+    --hl-accent-red:   #f87171;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--hl-bg-page);
+    color: var(--hl-text-primary);
+    font-size: 16px;
+  }
+
+  /* ── Concept switcher ─────────────────────────────── */
+  .switcher {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    gap: 8px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 6px;
+  }
+  .switcher button {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--hl-text-secondary);
+    padding: 6px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .switcher button.active {
+    background: #2a2a2a;
+    border-color: #444;
+    color: var(--hl-text-primary);
+  }
+
+  .concept { display: none; }
+  .concept.active { display: block; }
+
+  /* ══════════════════════════════════════════════════
+     CONCEPT A — Side accent gradients
+     ══════════════════════════════════════════════════ */
+
+  /* Variant A1: Faint vertical edge glow */
+  .demo-a1 {
+    min-height: 100vh;
+    position: relative;
+    background: var(--hl-bg-page);
+  }
+  .demo-a1::before,
+  .demo-a1::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 180px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .demo-a1::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(88,166,255,0.04), transparent);
+  }
+  .demo-a1::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(88,166,255,0.04), transparent);
+  }
+
+  /* Variant A2: Subtle red/pink side bars (matches site nav border) */
+  .demo-a2 {
+    min-height: 100vh;
+    position: relative;
+    background: var(--hl-bg-page);
+  }
+  .demo-a2::before,
+  .demo-a2::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .demo-a2::before {
+    left: calc(50% - 464px);
+    background: linear-gradient(to bottom, transparent, rgba(88,166,255,0.15) 20%, rgba(88,166,255,0.15) 80%, transparent);
+  }
+  .demo-a2::after {
+    right: calc(50% - 464px);
+    background: linear-gradient(to bottom, transparent, rgba(88,166,255,0.15) 20%, rgba(88,166,255,0.15) 80%, transparent);
+  }
+
+  .content-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 28px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .variant-label {
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--hl-accent-blue);
+    border-bottom: 1px solid #222;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    font-weight: 700;
+  }
+
+  .demo-card {
+    background: var(--hl-bg-card);
+    border: 1px solid var(--hl-border-card);
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .demo-card__title {
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 6px;
+  }
+  .demo-card__meta {
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #ff6666;
+    margin-bottom: 4px;
+  }
+  .demo-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+  .tag {
+    font-size: 0.65em;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tag-blue  { background: rgba(88,166,255,0.12); color: #58a6ff; border: 1px solid rgba(88,166,255,0.25); }
+  .tag-red   { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+  .tag-green { background: rgba(74,222,128,0.12);  color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+
+  .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+
+  .section-hdr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--hl-text-primary);
+    border-bottom: 1px solid #222;
+    padding-bottom: 7px;
+    margin: 2rem 0 14px;
+  }
+  .section-hdr__bar {
+    width: 2px;
+    height: 13px;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  .demo-row {
+    background: var(--hl-bg-row);
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 9px 12px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .demo-row__title { font-size: 0.9em; font-weight: 500; }
+  .demo-row__date  { font-size: 0.72em; text-transform: uppercase; color: var(--hl-text-dim); flex-shrink: 0; }
+
+  .hero {
+    background: linear-gradient(135deg, #1a1a1a, #0d1117);
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 2rem;
+  }
+  .hero__title { font-size: 1.4em; font-weight: 700; margin-bottom: 8px; }
+  .hero__desc  { color: var(--hl-text-primary); font-size: 0.9em; line-height: 1.55; }
+
+  /* ══════════════════════════════════════════════════
+     CONCEPT B — Sticky TOC sidebar
+     ══════════════════════════════════════════════════ */
+
+  .report-layout {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    grid-template-areas: "content toc";
+    gap: 0;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 80px 28px 60px;
+    align-items: start;
+  }
+
+  .report-body {
+    grid-area: content;
+    max-width: 860px;
+    padding-right: 40px;
+  }
+
+  .report-toc {
+    grid-area: toc;
+    position: sticky;
+    top: 24px;
+    background: var(--hl-bg-row);
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-size: 0.78em;
+  }
+  .toc__heading {
+    font-size: 0.68em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--hl-accent-blue);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #222;
+  }
+  .toc__list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .toc__item a {
+    color: var(--hl-text-secondary);
+    text-decoration: none;
+    display: block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    line-height: 1.4;
+    transition: all 0.1s;
+  }
+  .toc__item a:hover,
+  .toc__item a.active {
+    color: var(--hl-text-primary);
+    background: rgba(88,166,255,0.06);
+    border-left-color: var(--hl-accent-blue);
+  }
+  .toc__item a.active { color: var(--hl-accent-blue); }
+  .toc__item--h3 a { padding-left: 18px; font-size: 0.92em; color: var(--hl-text-dim); }
+  .toc__item--h3 a:hover { color: var(--hl-text-secondary); }
+
+  .post-header {
+    margin-bottom: 2rem;
+  }
+  .post-header__badge {
+    display: inline-block;
+    font-size: 0.68em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: rgba(248,113,113,0.12);
+    color: #f87171;
+    border: 1px solid rgba(248,113,113,0.25);
+    margin-bottom: 10px;
+  }
+  .post-header__title {
+    font-size: 1.6em;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .post-header__date { font-size: 0.8em; color: #999; }
+
+  .prose-section {
+    background: var(--hl-bg-row);
+    border: 1px solid #222;
+    border-radius: 5px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+  }
+  .prose-section__label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.68em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--hl-text-secondary);
+    margin-bottom: 8px;
+  }
+  .prose-section__bar { width: 2px; height: 11px; border-radius: 1px; flex-shrink: 0; }
+  .prose-section__body {
+    color: var(--hl-text-primary);
+    font-size: 0.9em;
+    line-height: 1.65;
+  }
+
+  h2.report-h2 {
+    font-size: 1.15em;
+    font-weight: 700;
+    margin: 2rem 0 1rem;
+    color: var(--hl-text-primary);
+    padding-bottom: 6px;
+    border-bottom: 1px solid #222;
+  }
+  h3.report-h3 {
+    font-size: 1em;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--hl-text-primary);
+  }
+  p.report-p {
+    color: var(--hl-text-primary);
+    font-size: 0.92em;
+    line-height: 1.7;
+    margin-bottom: 0.9em;
+  }
+
+  .divider {
+    text-align: center;
+    padding: 48px 0 16px;
+    font-size: 0.75em;
+    color: var(--hl-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+
+<div class="switcher">
+  <button class="active" onclick="show('a1')">A1 — Edge Glow</button>
+  <button onclick="show('a2')">A2 — Side Rules</button>
+  <button onclick="show('b')">B — Sticky TOC</button>
+</div>
+
+<!-- ══ CONCEPT A1: Faint blue edge glow ══ -->
+<div id="a1" class="concept active demo-a1">
+  <div class="content-wrap">
+    <div class="variant-label">Concept A1 — Faint edge glow · Very subtle blue gradient fading in from both sides</div>
+
+    <div class="hero">
+      <div class="hero__title">Original Threat Intelligence Research</div>
+      <div class="hero__desc">Hands-on malware analysis turned into structured, evidence-based intelligence — technically deep enough to trust, clear enough to act on.</div>
+    </div>
+
+    <div class="section-hdr"><div class="section-hdr__bar" style="background:#ff4444;"></div>Latest Reports</div>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card__meta">HIGH · MAR 2026</div>
+        <div class="demo-card__title">ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25</div>
+        <div class="demo-tags"><span class="tag tag-blue">MaaS</span><span class="tag tag-blue">C2</span><span class="tag tag-green">Open Dir</span><span class="tag tag-blue">Multi-Family</span></div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-card__meta">HIGH · MAR 2026</div>
+        <div class="demo-card__title">Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)</div>
+        <div class="demo-tags"><span class="tag tag-blue">C2</span><span class="tag tag-red">Loader</span><span class="tag tag-blue">Go</span><span class="tag tag-red">Evasion</span></div>
+      </div>
+    </div>
+
+    <div class="section-hdr"><div class="section-hdr__bar" style="background:#444;"></div>All Reports</div>
+    <div class="demo-row"><span class="demo-row__title">Arsenal-237 New Files: Advanced Toolkit Analysis</span><span class="demo-row__date">Jan 2026</span></div>
+    <div class="demo-row"><span class="demo-row__title">Arsenal-237: Threat Actor R&D Repository Exposed</span><span class="demo-row__date">Jan 2026</span></div>
+    <div class="demo-row"><span class="demo-row__title">Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm</span><span class="demo-row__date">Dec 2025</span></div>
+  </div>
+</div>
+
+<!-- ══ CONCEPT A2: Thin vertical side rules ══ -->
+<div id="a2" class="concept demo-a2">
+  <div class="content-wrap">
+    <div class="variant-label">Concept A2 — Thin side rules · Faint vertical lines that bracket the content column</div>
+
+    <div class="hero">
+      <div class="hero__title">Original Threat Intelligence Research</div>
+      <div class="hero__desc">Hands-on malware analysis turned into structured, evidence-based intelligence — technically deep enough to trust, clear enough to act on.</div>
+    </div>
+
+    <div class="section-hdr"><div class="section-hdr__bar" style="background:#ff4444;"></div>Latest Reports</div>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card__meta">HIGH · MAR 2026</div>
+        <div class="demo-card__title">ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25</div>
+        <div class="demo-tags"><span class="tag tag-blue">MaaS</span><span class="tag tag-blue">C2</span><span class="tag tag-green">Open Dir</span><span class="tag tag-blue">Multi-Family</span></div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-card__meta">HIGH · MAR 2026</div>
+        <div class="demo-card__title">Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)</div>
+        <div class="demo-tags"><span class="tag tag-blue">C2</span><span class="tag tag-red">Loader</span><span class="tag tag-blue">Go</span><span class="tag tag-red">Evasion</span></div>
+      </div>
+    </div>
+
+    <div class="section-hdr"><div class="section-hdr__bar" style="background:#444;"></div>All Reports</div>
+    <div class="demo-row"><span class="demo-row__title">Arsenal-237 New Files: Advanced Toolkit Analysis</span><span class="demo-row__date">Jan 2026</span></div>
+    <div class="demo-row"><span class="demo-row__title">Arsenal-237: Threat Actor R&D Repository Exposed</span><span class="demo-row__date">Jan 2026</span></div>
+    <div class="demo-row"><span class="demo-row__title">Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm</span><span class="demo-row__date">Dec 2025</span></div>
+  </div>
+</div>
+
+<!-- ══ CONCEPT B: Sticky TOC ══ -->
+<div id="b" class="concept">
+  <div class="report-layout">
+
+    <div class="report-body">
+      <div class="variant-label">Concept B — Sticky TOC · Sidebar stays fixed while you scroll through a long report</div>
+
+      <div class="post-header">
+        <div class="post-header__badge">MaaS Operation</div>
+        <div class="post-header__title">ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25</div>
+        <div class="post-header__date">16 March 2026</div>
+      </div>
+
+      <div class="prose-section">
+        <div class="prose-section__label"><div class="prose-section__bar" style="background:#58a6ff;"></div>Executive Summary</div>
+        <div class="prose-section__body">Analysis of an open directory at 74.0.42.25 revealed a fully operational Malware-as-a-Service platform hosting payloads from six distinct malware families. The infrastructure exposes active C2 configuration, staging scripts, and loader binaries indicating a sophisticated threat actor running concurrent campaigns against multiple target verticals.</div>
+      </div>
+
+      <h2 class="report-h2" id="infrastructure">Infrastructure Overview</h2>
+      <p class="report-p">The open directory at 74.0.42.25 was discovered during routine hunting operations. Port 80 served a browseable directory listing exposing 47 files across multiple subdirectories. The server fingerprint indicates nginx 1.18 running on Ubuntu, with directory listing enabled — an operational security failure that exposed the full toolkit.</p>
+      <p class="report-p">File timestamps span a 72-hour window, suggesting active campaign operations. Several binaries were modified within hours of discovery, indicating the actor was actively staging payloads during the observation period.</p>
+
+      <h2 class="report-h2" id="malware-families">Malware Families</h2>
+      <h3 class="report-h3" id="remcos">Remcos RAT</h3>
+      <p class="report-p">Three Remcos samples identified across the directory. Configuration extraction revealed C2 at 185.220.x.x:4782 with keylogging and screen capture modules enabled. The samples are packed with a custom crypter not previously documented in public reporting.</p>
+
+      <h3 class="report-h3" id="xworm">XWorm v6</h3>
+      <p class="report-p">XWorm samples configured with Telegram-based C2 exfiltration. Bot token and chat ID hardcoded in the binary — both were active at time of analysis. The loader drops XWorm into a scheduled task for persistence under the name "WindowsDefenderUpdate".</p>
+
+      <h2 class="report-h2" id="iocs">Indicators of Compromise</h2>
+      <p class="report-p">Full IOC feed available for SIEM ingestion. The following are the highest-confidence network indicators extracted from static and dynamic analysis.</p>
+
+      <div class="prose-section">
+        <div class="prose-section__label"><div class="prose-section__bar" style="background:#f87171;"></div>C2 Infrastructure</div>
+        <div class="prose-section__body" style="font-family:monospace; font-size:0.85em; color:#f87171;">
+          74.0.42.25:80 — Open directory / staging server<br>
+          185.220.101.47:4782 — Remcos C2<br>
+          45.94.31.220:443 — Sliver C2
+        </div>
+      </div>
+
+      <h2 class="report-h2" id="detections">Detection Guidance</h2>
+      <p class="report-p">Detection rules for all six malware families are published in the Hunting Detections section. Rules cover process creation, registry persistence, network beaconing patterns, and file system indicators. All rules are written to Sigma spec for cross-platform compatibility.</p>
+
+      <h2 class="report-h2" id="mitre">MITRE ATT&CK Mapping</h2>
+      <p class="report-p">Techniques observed span initial access through exfiltration. The full technique mapping is included in the detection rules front matter for automated ingestion into ATT&CK Navigator.</p>
+    </div>
+
+    <!-- Sticky TOC -->
+    <aside class="report-toc">
+      <div class="toc__heading">Contents</div>
+      <ul class="toc__list">
+        <li class="toc__item"><a href="#" class="active">Executive Summary</a></li>
+        <li class="toc__item"><a href="#">Infrastructure Overview</a></li>
+        <li class="toc__item"><a href="#">Malware Families</a></li>
+        <li class="toc__item toc__item--h3"><a href="#">Remcos RAT</a></li>
+        <li class="toc__item toc__item--h3"><a href="#">XWorm v6</a></li>
+        <li class="toc__item"><a href="#">Indicators of Compromise</a></li>
+        <li class="toc__item"><a href="#">Detection Guidance</a></li>
+        <li class="toc__item"><a href="#">MITRE ATT&CK Mapping</a></li>
+      </ul>
+    </aside>
+
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.concept').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.switcher button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
