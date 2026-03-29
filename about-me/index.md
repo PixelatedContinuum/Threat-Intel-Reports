@@ -33,8 +33,7 @@ position: 5
     Ernst &amp; Young (EY) — SOC Operations Lead
   </div>
   <div class="hl-prose-section__body">
-    Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation at scale across 20+ client organizations. Managed a 30+ member analyst team and recognized as a benchmark for client trust and engagement quality across the practice.<br><br>
-    Highlights include a $300K contract expansion driven by original LOTL hunting research, two additional contract expansions from co-developing Splunk UEBA with the product team, and first-of-its-kind incident response plan templates now used across the practice.
+    Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation across a large multi-client practice. Original research and detection content from The Hunter's Ledger feeds directly into hunting operations and client-facing intelligence work.
   </div>
 </div>
 
@@ -44,7 +43,7 @@ position: 5
     Raytheon Technologies — Systems Engineer II
   </div>
   <div class="hl-prose-section__body">
-    Security modernization and system hardening against DCSA / NIST RMF standards across IT and OT environments spanning assembly lines, engineering test equipment, and multi-facility infrastructure.
+    Security modernization, system hardening, and compliance across IT and OT environments prior to moving into full-time cybersecurity operations.
   </div>
 </div>
 
