@@ -1269,9 +1269,9 @@ main.content {
   display: flex;
   align-items: center;
   overflow: hidden;
-  width: 40px;
-  height: 46px;
-  border-radius: 8px;
+  width: 35px;
+  height: 40px;
+  border-radius: 7px;
   background: rgba(17, 24, 39, 0.92);
   border: 1px solid rgba(88, 166, 255, 0.2);
   color: var(--hl-accent-blue);
@@ -1284,19 +1284,20 @@ button.hl-quicklink {
   font: inherit;
 }
 .hl-quicklink:hover {
-  width: 150px;
+  width: 140px;
   border-color: rgba(88, 166, 255, 0.5);
   background: rgba(20, 30, 50, 0.95);
 }
-.hl-quicklink--ioc-btn.hl-ioc-open {
+.hl-quicklink--ioc-btn.hl-ioc-open,
+.hl-quicklink--detect-btn.hl-detect-open {
   border-color: rgba(88, 166, 255, 0.6);
   background: rgba(20, 30, 50, 0.98);
-  width: 40px;
+  width: 35px;
 }
 .hl-quicklink__icon {
   flex-shrink: 0;
-  width: 40px;
-  height: 46px;
+  width: 35px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;

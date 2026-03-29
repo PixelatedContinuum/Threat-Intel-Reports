@@ -9,8 +9,19 @@ ioc_highlights:
     note: "C2 server — open directory, payload delivery"
   - value: "Remcos_Mutex_Inj"
     note: "Definitive family mutex — host-based indicator"
-  - value: "ebdd31a7622288b1"
-    note: "Remcos RAT payload SHA256 (first 16 chars)"
+  - value: "04693af3b0a7c9788daba8e35f429ba6"
+    note: "Remcos RAT main payload (MD5)"
+  - value: "3d7b442573acf64c3aad17b23d224dc9"
+    note: "VB6 dropper — Payload.exe (MD5)"
+  - value: '%APPDATA%\remcos\remcos.exe'
+    note: "Persistent RAT installation path"
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules-for-endpoint-detection"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules-siem-detection"
+  - label: "Network Detection"
+    anchor: "#network-detection-signatures"
 layout: post
 permalink: /reports/remcos-opendirectory/
 category: "Remote Access Trojan"

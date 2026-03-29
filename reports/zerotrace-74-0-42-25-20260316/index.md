@@ -13,6 +13,15 @@ ioc_highlights:
     note: "ScreenConnect relay domain"
   - value: "chainconnects.net"
     note: "Phishing dropper domain"
+  - value: "f4b00fbc6a3ce80b474334a3ccaadcf0"
+    note: "XWorm V5.6 primary sample (MD5)"
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
+  - label: "Suricata Rules"
+    anchor: "#suricata-rules"
 layout: post
 permalink: /reports/zerotrace-74-0-42-25-20260316/
 category: "MaaS Operation"
