@@ -914,6 +914,26 @@ main.content {
   font-size: 0.78em;
   max-height: calc(100vh - 140px);
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.2s;
+}
+.hl-post-toc:hover {
+  scrollbar-color: rgba(88,166,255,0.2) transparent;
+}
+.hl-post-toc::-webkit-scrollbar {
+  width: 3px;
+}
+.hl-post-toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hl-post-toc::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+.hl-post-toc:hover::-webkit-scrollbar-thumb {
+  background: rgba(88,166,255,0.2);
 }
 
 .hl-post-toc__heading {
