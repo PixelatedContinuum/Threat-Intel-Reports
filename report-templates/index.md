@@ -37,11 +37,32 @@ Every report opens with this front matter block. The `hide: true` flag excludes 
 ---
 title: "[Report Title] — Technical Analysis & Threat Assessment"
 date: 'YYYY-MM-DD'
+last_updated: 'YYYY-MM-DD'               # optional — only when report is revised after publish
+detection_page: /hunting-detections/[slug]-detections/
+ioc_feed: /ioc-feeds/[slug]-iocs.json
+detection_sections:                       # powers the green Detection panel on the report page
+  - label: "YARA Rules"                   # display label shown in the panel
+    anchor: "#yara-rules"                 # must match the Jekyll-generated H2 anchor exactly
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
+  - label: "Suricata Rules"
+    anchor: "#suricata-rules"
+ioc_highlights:                           # powers the blue IOC panel — 3–5 top indicators
+  - value: "1.2.3.4"
+    note: "Primary C2 server"             # keep under 60 chars
+  - value: "abc123..."
+    note: "Main payload SHA256"
 layout: post
 permalink: /reports/[report-folder-name]/
+category: "[Malware Category]"
 hide: true
+description: "[1–2 sentence summary for social sharing previews]"
 ---
 ```
+
+**`detection_sections`** — each `anchor` must match the H2 anchor Jekyll generates: lowercase, spaces → hyphens, special characters stripped. Include only the substantive rule sections (YARA, Sigma, Suricata, EDR queries); skip Overview, License, and summary sections.
+
+**`ioc_highlights`** — the 3–5 most actionable indicators: primary C2 IPs, definitive hashes, unique mutexes, characteristic file paths. These appear in the IOC quick-reference panel with a one-click copy button.
 
 Immediately after the front matter (before the first heading), add the campaign identifier and last updated date:
 

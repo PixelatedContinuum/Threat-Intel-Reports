@@ -3,6 +3,22 @@ title: "From Webshells to the Cloud"
 date: '2025-10-20'
 detection_page: /hunting-detections/webshells-to-the-cloud/
 ioc_feed: /ioc-feeds/webshells-to-the-cloud.json
+detection_sections:
+  - label: "Exploit Layer"
+    anchor: "#exploit-layer"
+  - label: "Webshell Layer"
+    anchor: "#webshell-layer"
+  - label: "Persistence Layer"
+    anchor: "#persistence-layer"
+  - label: "Exfiltration Layer"
+    anchor: "#exfiltration-layer"
+  - label: "Infrastructure Automation"
+    anchor: "#infrastructure-automation-layer"
+ioc_highlights:
+  - value: "45.118.144.151"
+    note: "Malicious infrastructure server"
+  - value: "152.32.191.156"
+    note: "Secondary C2 server"
 layout: post
 permalink: /reports/webshells-to-the-cloud/
 category: "Web Compromise"

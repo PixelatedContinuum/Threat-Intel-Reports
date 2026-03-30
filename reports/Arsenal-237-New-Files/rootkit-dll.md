@@ -3,6 +3,22 @@ title: rootkit.dll (Arsenal-237 Defense Evasion Framework) - Technical Analysis 
 date: '2026-01-20'
 detection_page: /hunting-detections/arsenal-237-rootkit-dll/
 ioc_feed: /ioc-feeds/arsenal-237-rootkit-dll.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
+  - label: "EDR Detection Queries"
+    anchor: "#edr-detection-queries"
+  - label: "SIEM Detection Rules"
+    anchor: "#siem-detection-rules"
+  - label: "Threat Hunting Queries"
+    anchor: "#threat-hunting-queries"
+ioc_highlights:
+  - value: "rootkit.dll"
+    note: "Kernel-mode persistence module"
+  - value: "109.230.231.37"
+    note: "Arsenal-237 server"
 layout: post
 permalink: /reports/arsenal-237/rootkit-dll/
 hide: true

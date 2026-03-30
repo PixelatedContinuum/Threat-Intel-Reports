@@ -3,6 +3,22 @@ title: nethost.dll (Arsenal-237 C2 Communication Module) - Technical Analysis & 
 date: '2026-01-26'
 detection_page: /hunting-detections/arsenal-237-nethost-dll/
 ioc_feed: /ioc-feeds/arsenal-237-nethost-dll.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Detection Rules"
+    anchor: "#sigma-detection-rules"
+  - label: "Splunk SPL Queries"
+    anchor: "#splunk-spl-queries"
+  - label: "KQL Queries"
+    anchor: "#kql-queries-microsoft-sentinel--microsoft-defender"
+  - label: "Suricata Signatures"
+    anchor: "#suricata-network-signatures"
+ioc_highlights:
+  - value: "nethost.dll"
+    note: ".NET persistence component"
+  - value: "109.230.231.37"
+    note: "Arsenal-237 server"
 layout: post
 permalink: /reports/arsenal-237/nethost-dll/
 hide: true

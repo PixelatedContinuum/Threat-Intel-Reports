@@ -3,6 +3,18 @@ title: QuasarRAT + Xworm + PowerShell Loader
 date: '2025-10-17'
 detection_page: /hunting-detections/quasar-xworm-powershell/
 ioc_feed: /ioc-feeds/quasar-xworm-powershell.json
+detection_sections:
+  - label: "Sigma — VBScript Downloader"
+    anchor: "#sigma--suspicious-vbscript-downloading-powershell-payload"
+  - label: "YARA — Defender Exclusion"
+    anchor: "#yara--defender-exclusion-script"
+ioc_highlights:
+  - value: "193.233.164.21"
+    note: "Quasar + XWorm C2 server"
+  - value: "dns4up.duckdns.org"
+    note: "Dynamic DNS C2 domain"
+  - value: "update.png"
+    note: "PowerShell stager filename"
 layout: post
 permalink: /reports/quasar-xworm-powershell/
 category: "Multi-Stage RAT"

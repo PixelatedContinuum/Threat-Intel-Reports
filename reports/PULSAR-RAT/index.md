@@ -3,6 +3,18 @@ title: "PULSAR RAT (server.exe)"
 date: '2025-12-01'
 detection_page: /hunting-detections/PULSAR-RAT/
 ioc_feed: /ioc-feeds/PULSAR-RAT.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rule-for-endpoint-detection"
+  - label: "SIEM Hunting Queries"
+    anchor: "#siem-threat-hunting-queries-splunk"
+  - label: "PowerShell Hunting Scripts"
+    anchor: "#powershell-threat-hunting-scripts"
+ioc_highlights:
+  - value: "185.208.159.182"
+    note: "PULSAR RAT C2 server"
+  - value: "server.exe"
+    note: "QuasarRAT variant payload"
 layout: post
 permalink: /reports/PULSAR-RAT/
 category: "Remote Access Trojan"

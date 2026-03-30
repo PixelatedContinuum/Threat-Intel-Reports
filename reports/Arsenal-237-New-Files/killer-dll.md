@@ -3,6 +3,20 @@ title: killer.dll (BYOVD Defense Evasion Module) - Technical Analysis & Threat I
 date: '2026-01-24'
 detection_page: /hunting-detections/arsenal-237-killer-dll/
 ioc_feed: /ioc-feeds/arsenal-237-killer-dll.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Detection Rules"
+    anchor: "#sigma-detection-rules"
+  - label: "EDR Hunting Queries"
+    anchor: "#edr-hunting-queries"
+  - label: "SIEM Detection Rules"
+    anchor: "#siem-detection-rules"
+ioc_highlights:
+  - value: "killer.dll"
+    note: "BYOVD EDR-killer module"
+  - value: "109.230.231.37"
+    note: "Arsenal-237 server"
 layout: post
 permalink: /reports/arsenal-237-new-files/killer-dll/
 hide: true

@@ -1257,7 +1257,7 @@ main.content {
 /* --- Quick reference slide-out tabs (left margin) ----------- */
 .hl-quicklinks {
   position: fixed;
-  left: 24px;
+  left: 32px;
   top: 42%;
   transform: translateY(-50%);
   display: flex;

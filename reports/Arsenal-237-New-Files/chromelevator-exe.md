@@ -3,6 +3,22 @@ title: chromelevator.exe - Browser Credential Extraction Tool - Technical Analys
 date: '2026-01-22'
 detection_page: /hunting-detections/arsenal-237-chromelevator-exe/
 ioc_feed: /ioc-feeds/arsenal-237-chromelevator-exe.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
+  - label: "KQL Queries"
+    anchor: "#kql-queries-kusto-query-language-azure-sentinel--defender"
+  - label: "Splunk SPL"
+    anchor: "#splunk-spl-queries"
+  - label: "Network Signatures"
+    anchor: "#network-signatures-suricastnort"
+ioc_highlights:
+  - value: "109.230.231.37"
+    note: "Arsenal-237 server"
+  - value: "chromelevator.exe"
+    note: "Chrome elevation service abuse"
 layout: post
 permalink: /reports/arsenal-237-new-files/chromelevator-exe/
 hide: true

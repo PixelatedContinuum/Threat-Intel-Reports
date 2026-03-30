@@ -3,6 +3,20 @@ title: killer_crowdstrike.dll (BYOVD Defense Evasion Variant) - Technical Analys
 date: '2026-01-18'
 detection_page: /hunting-detections/arsenal-237-killer-crowdstrike-dll/
 ioc_feed: /ioc-feeds/arsenal-237-killer-crowdstrike-dll.json
+detection_sections:
+  - label: "CrowdStrike Detections"
+    anchor: "#crowdstrike-specific-detections"
+  - label: "Sigma Detection Rules"
+    anchor: "#sigma-detection-rules"
+  - label: "EDR Hunting Queries"
+    anchor: "#edr-hunting-queries"
+  - label: "SIEM Detection Rules"
+    anchor: "#siem-detection-rules"
+ioc_highlights:
+  - value: "killer_crowdstrike.dll"
+    note: "CrowdStrike-targeted BYOVD module"
+  - value: "109.230.231.37"
+    note: "Arsenal-237 server"
 layout: post
 permalink: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
 hide: true

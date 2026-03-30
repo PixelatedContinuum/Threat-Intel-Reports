@@ -3,6 +3,20 @@ title: full_test_enc.exe (Arsenal-237) - Rust-Based Ransomware Technical Analysi
 date: '2026-01-20'
 detection_page: /hunting-detections/arsenal-237-full_test_enc-exe/
 ioc_feed: /ioc-feeds/arsenal-237-full_test_enc-exe.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Detection Rules"
+    anchor: "#sigma-detection-rules"
+  - label: "KQL (Azure Sentinel)"
+    anchor: "#kql-kusto-query-language-azure-sentinel--microsoft-defender"
+  - label: "Splunk SPL"
+    anchor: "#splunk-spl-search-processing-language"
+  - label: "Elastic Detection Rules"
+    anchor: "#elastic-detection-rules"
+ioc_highlights:
+  - value: "109.230.231.37"
+    note: "Arsenal-237 repository"
 layout: post
 permalink: /reports/arsenal-237-new-files/full_test_enc-exe/
 hide: true

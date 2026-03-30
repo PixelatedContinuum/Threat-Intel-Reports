@@ -4,6 +4,24 @@ date: '2026-02-08'
 last_updated: '2026-02-10'
 detection_page: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections/
 ioc_feed: /ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules-siemedr"
+  - label: "Suricata/Snort Signatures"
+    anchor: "#suricatasnort-network-signatures"
+  - label: "EDR Hunting Queries"
+    anchor: "#edr-hunting-queries"
+ioc_highlights:
+  - value: "91.236.230.250"
+    note: "WebServer compromise kit staging IP"
+  - value: "PrintSpoofer"
+    note: "Privilege escalation tool"
+  - value: "InsomniaShell"
+    note: "ASP.NET web shell"
+  - value: "revsocks"
+    note: "Go-based reverse proxy"
 layout: post
 permalink: /reports/webserver-compromise-kit-91-236-230-250/
 category: "Post-Exploitation Kit"

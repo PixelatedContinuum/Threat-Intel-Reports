@@ -3,6 +3,26 @@ title: "AdvancedRouterScanner — Global Router Exploitation"
 date: '2025-10-25'
 detection_page: /hunting-detections/AdvancedRouterScanner/
 ioc_feed: /ioc-feeds/AdvancedRouterScanner.json
+detection_sections:
+  - label: "Exploit Layer"
+    anchor: "#exploit-layer"
+  - label: "Credential Layer"
+    anchor: "#credential-layer"
+  - label: "Execution Layer"
+    anchor: "#execution-layer"
+  - label: "Persistence Layer"
+    anchor: "#persistence-layer"
+  - label: "Exfiltration Layer"
+    anchor: "#exfiltration-layer"
+ioc_highlights:
+  - value: "185.38.150.7"
+    note: "C2 / PoC host"
+  - value: "176.65.137.13"
+    note: "Operator hub — exploitation launchpad"
+  - value: "107.189.4.201"
+    note: "Reverse shell C2 server"
+  - value: "bot.gribostress.pro"
+    note: "Payload download domain"
 layout: post
 permalink: /reports/AdvancedRouterScanner/
 category: "Network Scanner"

@@ -3,6 +3,18 @@ title: dec_fixed.exe (Arsenal-237 Ransomware Decryptor) - Threat Intelligence An
 date: '2026-01-23'
 detection_page: /hunting-detections/arsenal-237-dec_fixed-exe/
 ioc_feed: /ioc-feeds/arsenal-237-dec_fixed-exe.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Detection Rules"
+    anchor: "#sigma-detection-rules"
+  - label: "SIEM Hunting Queries"
+    anchor: "#siem-hunting-queries"
+  - label: "Network Detection Rules"
+    anchor: "#network-detection-rules"
+ioc_highlights:
+  - value: "109.230.231.37"
+    note: "Arsenal-237 distribution server"
 layout: post
 permalink: /reports/arsenal-237-new-files/dec_fixed-exe/
 hide: true

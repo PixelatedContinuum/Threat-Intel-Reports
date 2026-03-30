@@ -3,6 +3,18 @@ title: enc_c2.exe (Arsenal-237) - Rust-Based Ransomware Technical Analysis & Thr
 date: '2026-01-24'
 detection_page: /hunting-detections/arsenal-237-enc_c2-exe/
 ioc_feed: /ioc-feeds/arsenal-237-enc_c2-exe.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#section-1-yara-rules"
+  - label: "Sigma Detection Rules"
+    anchor: "#section-2-sigma-detection-rules"
+  - label: "SIEM Queries"
+    anchor: "#section-3-siem-queries"
+  - label: "Network Detection"
+    anchor: "#section-5-network-detection-rules"
+ioc_highlights:
+  - value: "109.230.231.37"
+    note: "Arsenal-237 C2 / staging"
 layout: post
 permalink: /reports/arsenal-237-new-files/enc_c2-exe/
 hide: true

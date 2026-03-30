@@ -3,6 +3,22 @@ title: "Open Directory Exposure: Sliver with ScareCrow Loader (45.94.31.220)"
 date: '2026-03-01'
 detection_page: /hunting-detections/sliver-open-directory-detections/
 ioc_feed: /ioc-feeds/sliver-open-directory-iocs.json
+detection_sections:
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
+  - label: "Behavioral Detection"
+    anchor: "#behavioral-detection-guidance"
+ioc_highlights:
+  - value: "45.94.31.220"
+    note: "Sliver C2 open directory"
+  - value: "mailuxe.net"
+    note: "Sliver C2 beacon endpoint"
+  - value: "659EEB5AA4A489FB238993AF259D23F057F6D6D6"
+    note: "Fraudulent VMware cert serial"
+  - value: "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
+    note: "OneDriveSync.exe — ScareCrow Sliver"
 layout: post
 permalink: /reports/sliver-open-directory/
 category: "C2 Framework"

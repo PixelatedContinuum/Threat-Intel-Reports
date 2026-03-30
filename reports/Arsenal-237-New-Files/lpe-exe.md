@@ -3,6 +3,18 @@ title: lpe.exe (Arsenal-237 LPE Module) - Privilege Escalation Analysis & Threat
 date: '2026-01-25'
 detection_page: /hunting-detections/arsenal-237-lpe-exe/
 ioc_feed: /ioc-feeds/arsenal-237-lpe-exe.json
+detection_sections:
+  - label: "YARA Detection Rules"
+    anchor: "#yara-detection-rules"
+  - label: "Sigma Detection Rules"
+    anchor: "#sigma-detection-rules"
+  - label: "EDR Hunting Queries"
+    anchor: "#edr-hunting-queries"
+  - label: "SIEM Detection Rules"
+    anchor: "#siem-detection-rules"
+ioc_highlights:
+  - value: "109.230.231.37"
+    note: "Arsenal-237 distribution server"
 layout: post
 permalink: /reports/arsenal-237-lpe-exe/
 hide: true

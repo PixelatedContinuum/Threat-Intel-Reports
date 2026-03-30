@@ -3,6 +3,22 @@ title: "NsMiner: Multi-Stage Operation"
 date: '2026-02-02'
 detection_page: /hunting-detections/nsminer-cryptojacker/
 ioc_feed: /ioc-feeds/nsminer-cryptojacker.json
+detection_sections:
+  - label: "YARA Detection Rules"
+    anchor: "#yara-detection-rules"
+  - label: "Sigma Detection Rules"
+    anchor: "#sigma-detection-rules"
+  - label: "EDR Hunting Queries"
+    anchor: "#edr-hunting-queries"
+  - label: "SIEM Detection Rules"
+    anchor: "#siem-detection-rules"
+ioc_highlights:
+  - value: "e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145"
+    note: "IMG001.exe dropper SHA256"
+  - value: "125.19.150.122"
+    note: "Open directory hosting NsMiner"
+  - value: "hrtests.ru"
+    note: "Cryptojacker C2 domain"
 layout: post
 permalink: /reports/nsminer-cryptojacker/
 category: "Cryptojacking"
