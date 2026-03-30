@@ -13,9 +13,7 @@ detection_sections:
   - label: "SIEM Detection Rules"
     anchor: "#siem-detection-rules"
 ioc_highlights:
-  - value: "killer_crowdstrike.dll"
-    note: "CrowdStrike-targeted BYOVD module"
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 server"
 layout: post
 permalink: /reports/arsenal-237-new-files/killer-crowdstrike-dll/

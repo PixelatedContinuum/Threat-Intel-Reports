@@ -62,7 +62,25 @@ description: "[1–2 sentence summary for social sharing previews]"
 
 **`detection_sections`** — each `anchor` must match the H2 anchor Jekyll generates: lowercase, spaces → hyphens, special characters stripped. Include only the substantive rule sections (YARA, Sigma, Suricata, EDR queries); skip Overview, License, and summary sections.
 
-**`ioc_highlights`** — the 3–5 most actionable indicators: primary C2 IPs, definitive hashes, unique mutexes, characteristic file paths. These appear in the IOC quick-reference panel with a one-click copy button.
+**`ioc_highlights`** — 3–5 top-priority indicators in the IOC quick-reference panel with one-click copy.
+
+**Three hard rules:**
+
+1. **Atomic indicators only.** Accepted: IPv4/IPv6 addresses, domains, full URLs, file hashes (MD5/SHA1/SHA256). Do NOT use: filenames, file paths, registry keys, mutex names, scheduled task names, tool names, strings, version numbers, or configuration values. These are not directly actionable by copy-paste into a hunt or detection tool.
+
+2. **Defang all network indicators.** Replace `.` with `[.]` in IPs and domains. Replace `http`/`https` with `hxxp`/`hxxps` in URLs. Hashes are not defanged.
+   - IP: `185.49.126.140` → `185[.]49[.]126[.]140`
+   - Domain: `evil.com` → `evil[.]com`
+   - URL: `hxxp://evil[.]com/payload`
+   - Hash: `f4b00fbc6a3ce80b474334a3ccaadcf0` — no change
+
+3. **Prioritize by impact.** Order highest to lowest risk:
+   - Active C2 IPs and domains first — immediately blockable/huntable
+   - Payload hashes second — definitive file-based detection anchors
+   - Delivery domains and staging servers third
+   - Skip generic hosting IPs, low-uniqueness indicators, or anything not confirmed malicious
+
+If fewer than 3 atomic IOCs exist, omit `ioc_highlights` entirely rather than padding with non-atomic values.
 
 Immediately after the front matter (before the first heading), add the campaign identifier and last updated date:
 

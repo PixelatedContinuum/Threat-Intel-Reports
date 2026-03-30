@@ -9,12 +9,10 @@ detection_sections:
   - label: "YARA — Defender Exclusion"
     anchor: "#yara--defender-exclusion-script"
 ioc_highlights:
-  - value: "193.233.164.21"
+  - value: "193[.]233[.]164[.]21"
     note: "Quasar + XWorm C2 server"
-  - value: "dns4up.duckdns.org"
+  - value: "dns4up[.]duckdns[.]org"
     note: "Dynamic DNS C2 domain"
-  - value: "update.png"
-    note: "PowerShell stager filename"
 layout: post
 permalink: /reports/quasar-xworm-powershell/
 category: "Multi-Stage RAT"

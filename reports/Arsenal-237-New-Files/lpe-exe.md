@@ -13,8 +13,10 @@ detection_sections:
   - label: "SIEM Detection Rules"
     anchor: "#siem-detection-rules"
 ioc_highlights:
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 distribution server"
+  - value: "c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e"
+    note: "lpe.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-lpe-exe/
 hide: true

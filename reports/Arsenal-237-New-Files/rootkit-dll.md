@@ -15,10 +15,10 @@ detection_sections:
   - label: "Threat Hunting Queries"
     anchor: "#threat-hunting-queries"
 ioc_highlights:
-  - value: "rootkit.dll"
-    note: "Kernel-mode persistence module"
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 server"
+  - value: "e71240f26af1052172b5864cdddb78fcb990d7a96d53b7d22d19f5dfccdf9012"
+    note: "rootkit.dll SHA256"
 layout: post
 permalink: /reports/arsenal-237/rootkit-dll/
 hide: true

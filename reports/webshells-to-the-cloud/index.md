@@ -15,9 +15,9 @@ detection_sections:
   - label: "Infrastructure Automation"
     anchor: "#infrastructure-automation-layer"
 ioc_highlights:
-  - value: "45.118.144.151"
+  - value: "45[.]118[.]144[.]151"
     note: "Malicious infrastructure server"
-  - value: "152.32.191.156"
+  - value: "152[.]32[.]191[.]156"
     note: "Secondary C2 server"
 layout: post
 permalink: /reports/webshells-to-the-cloud/

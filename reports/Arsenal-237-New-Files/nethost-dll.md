@@ -15,10 +15,10 @@ detection_sections:
   - label: "Suricata Signatures"
     anchor: "#suricata-network-signatures"
 ioc_highlights:
-  - value: "nethost.dll"
-    note: ".NET persistence component"
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 server"
+  - value: "158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14"
+    note: "nethost.dll SHA256"
 layout: post
 permalink: /reports/arsenal-237/nethost-dll/
 hide: true

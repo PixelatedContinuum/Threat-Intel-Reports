@@ -15,10 +15,10 @@ detection_sections:
   - label: "Network Signatures"
     anchor: "#network-signatures-suricastnort"
 ioc_highlights:
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 server"
-  - value: "chromelevator.exe"
-    note: "Chrome elevation service abuse"
+  - value: "92c4f4b7748f23d6dcd5af43595f34e4bb8e284a85d2c1647b189c1bb59a784a"
+    note: "chromelevator.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/chromelevator-exe/
 hide: true

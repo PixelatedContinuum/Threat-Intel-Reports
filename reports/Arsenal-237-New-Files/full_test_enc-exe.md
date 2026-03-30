@@ -15,8 +15,10 @@ detection_sections:
   - label: "Elastic Detection Rules"
     anchor: "#elastic-detection-rules"
 ioc_highlights:
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 repository"
+  - value: "4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518"
+    note: "full_test_enc.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/full_test_enc-exe/
 hide: true

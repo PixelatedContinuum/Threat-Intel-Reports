@@ -13,12 +13,10 @@ detection_sections:
   - label: "Network Detection"
     anchor: "#network-detection-rules-suricastnort"
 ioc_highlights:
+  - value: "185[.]208[.]159[.]182"
+    note: "Dual-RAT C2 infrastructure"
   - value: "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766"
     note: "Quasar RAT client.exe SHA256"
-  - value: "185.208.159.182"
-    note: "Dual-RAT C2 infrastructure"
-  - value: "RuntimeBroker"
-    note: "Persistence scheduled task name"
 layout: post
 permalink: /reports/dual-rat-analysis/
 category: "Dual-RAT Analysis"

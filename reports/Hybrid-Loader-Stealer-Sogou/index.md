@@ -13,9 +13,9 @@ detection_sections:
   - label: "C2 DNS Queries"
     anchor: "#dns-queries-to-disposable-c2-domains"
 ioc_highlights:
-  - value: "27.184.28.134"
+  - value: "27[.]184[.]28[.]134"
     note: "Sogou stealer C2 server"
-  - value: "149.50.136.243"
+  - value: "149[.]50[.]136[.]243"
     note: "Disposable C2 IP"
 layout: post
 permalink: /reports/Hybrid-Loader-Stealer-Sogou/

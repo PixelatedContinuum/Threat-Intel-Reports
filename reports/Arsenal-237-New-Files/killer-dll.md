@@ -13,10 +13,10 @@ detection_sections:
   - label: "SIEM Detection Rules"
     anchor: "#siem-detection-rules"
 ioc_highlights:
-  - value: "killer.dll"
-    note: "BYOVD EDR-killer module"
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 server"
+  - value: "10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d"
+    note: "killer.dll SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/killer-dll/
 hide: true

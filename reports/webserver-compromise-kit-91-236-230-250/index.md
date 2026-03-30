@@ -14,14 +14,12 @@ detection_sections:
   - label: "EDR Hunting Queries"
     anchor: "#edr-hunting-queries"
 ioc_highlights:
-  - value: "91.236.230.250"
+  - value: "91[.]236[.]230[.]250"
     note: "WebServer compromise kit staging IP"
-  - value: "PrintSpoofer"
-    note: "Privilege escalation tool"
-  - value: "InsomniaShell"
-    note: "ASP.NET web shell"
-  - value: "revsocks"
-    note: "Go-based reverse proxy"
+  - value: "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d"
+    note: "PrintSpoofer.exe SHA256"
+  - value: "ffc6662c5d68db31b5d468460e4bc3be2090d7ba3ee1e47dbe2803217bf424a9"
+    note: "rev.exe (revsocks) SHA256"
 layout: post
 permalink: /reports/webserver-compromise-kit-91-236-230-250/
 category: "Post-Exploitation Kit"

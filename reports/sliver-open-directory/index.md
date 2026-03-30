@@ -11,12 +11,10 @@ detection_sections:
   - label: "Behavioral Detection"
     anchor: "#behavioral-detection-guidance"
 ioc_highlights:
-  - value: "45.94.31.220"
+  - value: "45[.]94[.]31[.]220"
     note: "Sliver C2 open directory"
-  - value: "mailuxe.net"
+  - value: "mailuxe[.]net"
     note: "Sliver C2 beacon endpoint"
-  - value: "659EEB5AA4A489FB238993AF259D23F057F6D6D6"
-    note: "Fraudulent VMware cert serial"
   - value: "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
     note: "OneDriveSync.exe — ScareCrow Sliver"
 layout: post

@@ -11,10 +11,10 @@ detection_sections:
   - label: "PowerShell Hunting Scripts"
     anchor: "#powershell-threat-hunting-scripts"
 ioc_highlights:
-  - value: "185.208.159.182"
+  - value: "185[.]208[.]159[.]182"
     note: "PULSAR RAT C2 server"
-  - value: "server.exe"
-    note: "QuasarRAT variant payload"
+  - value: "hxxp://185[.]208[.]159[.]182/d/server[.]exe"
+    note: "PULSAR RAT payload download URL"
 layout: post
 permalink: /reports/PULSAR-RAT/
 category: "Remote Access Trojan"

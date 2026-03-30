@@ -13,8 +13,10 @@ detection_sections:
   - label: "Network Detection"
     anchor: "#network-detection-signatures"
 ioc_highlights:
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 server"
+  - value: "90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2"
+    note: "new_enc.exe SHA256"
 layout: post
 permalink: /reports/new-enc-exe/
 hide: true

@@ -5,16 +5,12 @@ last_updated: '2026-02-06'
 detection_page: /hunting-detections/remcos-opendirectory/
 ioc_feed: /ioc-feeds/remcos-opendirectory-campaign.json
 ioc_highlights:
-  - value: "203.159.90.147"
+  - value: "203[.]159[.]90[.]147"
     note: "C2 server — open directory, payload delivery"
-  - value: "Remcos_Mutex_Inj"
-    note: "Definitive family mutex — host-based indicator"
   - value: "04693af3b0a7c9788daba8e35f429ba6"
     note: "Remcos RAT main payload (MD5)"
   - value: "3d7b442573acf64c3aad17b23d224dc9"
     note: "VB6 dropper — Payload.exe (MD5)"
-  - value: '%APPDATA%\remcos\remcos.exe'
-    note: "Persistent RAT installation path"
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules-for-endpoint-detection"

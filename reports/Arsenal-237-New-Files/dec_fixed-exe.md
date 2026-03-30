@@ -13,8 +13,10 @@ detection_sections:
   - label: "Network Detection Rules"
     anchor: "#network-detection-rules"
 ioc_highlights:
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 distribution server"
+  - value: "d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802"
+    note: "dec_fixed.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/dec_fixed-exe/
 hide: true

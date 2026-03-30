@@ -15,13 +15,13 @@ detection_sections:
   - label: "Exfiltration Layer"
     anchor: "#exfiltration-layer"
 ioc_highlights:
-  - value: "185.38.150.7"
+  - value: "185[.]38[.]150[.]7"
     note: "C2 / PoC host"
-  - value: "176.65.137.13"
+  - value: "176[.]65[.]137[.]13"
     note: "Operator hub — exploitation launchpad"
-  - value: "107.189.4.201"
+  - value: "107[.]189[.]4[.]201"
     note: "Reverse shell C2 server"
-  - value: "bot.gribostress.pro"
+  - value: "bot[.]gribostress[.]pro"
     note: "Payload download domain"
 layout: post
 permalink: /reports/AdvancedRouterScanner/

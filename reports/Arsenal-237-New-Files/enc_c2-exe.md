@@ -13,8 +13,10 @@ detection_sections:
   - label: "Network Detection"
     anchor: "#section-5-network-detection-rules"
 ioc_highlights:
-  - value: "109.230.231.37"
+  - value: "109[.]230[.]231[.]37"
     note: "Arsenal-237 C2 / staging"
+  - value: "613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899"
+    note: "enc_c2.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/enc_c2-exe/
 hide: true

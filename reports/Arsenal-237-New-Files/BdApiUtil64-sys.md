@@ -13,8 +13,10 @@ detection_sections:
   - label: "SIEM Detection Rules"
     anchor: "#siem-detection-rules"
 ioc_highlights:
-  - value: "BdApiUtil64.sys"
-    note: "Baidu driver — BYOVD exploit vector"
+  - value: "109[.]230[.]231[.]37"
+    note: "Arsenal-237 distribution server"
+  - value: "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428"
+    note: "BdApiUtil64.sys SHA256 (vulnerable Baidu driver)"
 layout: post
 permalink: /reports/bdapiutil64-sys/
 hide: true
