@@ -910,7 +910,7 @@ main.content {
   background: var(--hl-bg-row);
   border: 1px solid var(--hl-border-row);
   border-radius: 6px;
-  padding: 14px 10px;
+  padding: 14px 6px;
   font-size: 0.78em;
   max-height: calc(100vh - 140px);
   overflow-y: auto;
@@ -937,7 +937,7 @@ main.content {
 }
 
 .hl-post-toc__heading {
-  font-size: 0.76em;
+  font-size: 1em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
