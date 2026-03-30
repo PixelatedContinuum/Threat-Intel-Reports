@@ -87,6 +87,19 @@ document.addEventListener('DOMContentLoaded', function () {
   {% endif %}
   {% endif %}
 </div>
+{% if page.detection_sections %}
+<div class="hl-detect-panel" id="hl-detect-panel">
+  <div class="hl-detect-panel__hdr">Jump to Detections</div>
+  <ul class="hl-detect-panel__list">
+    {% for sec in page.detection_sections %}
+    <li class="hl-detect-panel__item"><a href="{{ page.detection_page }}{{ sec.anchor }}">{{ sec.label }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="hl-detect-panel__foot">
+    <a href="{{ page.detection_page }}" target="_blank" rel="noopener noreferrer" class="hl-detect-panel__link">View All Rules →</a>
+  </div>
+</div>
+{% endif %}
 {% if page.ioc_highlights %}
 <div class="hl-ioc-panel" id="hl-ioc-panel">
   <div class="hl-ioc-panel__hdr">High Priority IOCs</div>
@@ -274,28 +287,60 @@ document.addEventListener('DOMContentLoaded', function () {
 
   headings.forEach(function (h) { observer.observe(h); });
 
+  // --- Panel helpers (detection + IOC — mutually exclusive) ---
+  var detectTab   = document.getElementById('hl-detect-tab');
+  var detectPanel = document.getElementById('hl-detect-panel');
+  var iocTab      = document.getElementById('hl-ioc-tab');
+  var iocPanel    = document.getElementById('hl-ioc-panel');
+
+  function closeDetect() {
+    if (!detectPanel) return;
+    detectPanel.classList.remove('hl-detect-panel--open');
+    if (detectTab) { detectTab.classList.remove('hl-detect-open'); detectTab.setAttribute('aria-expanded', 'false'); }
+  }
+  function closeIoc() {
+    if (!iocPanel) return;
+    iocPanel.classList.remove('hl-ioc-panel--open');
+    if (iocTab) { iocTab.classList.remove('hl-ioc-open'); iocTab.setAttribute('aria-expanded', 'false'); }
+  }
+
+  function positionPanel(tab, panel) {
+    var r = tab.getBoundingClientRect();
+    panel.style.left = (r.right + 10) + 'px';
+    panel.style.top  = (r.top + r.height / 2) + 'px';
+    panel.style.transform = 'translateY(-50%)';
+  }
+
+  // --- Detection panel toggle ---
+  if (detectTab && detectPanel) {
+    detectTab.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var opening = !detectPanel.classList.contains('hl-detect-panel--open');
+      closeIoc();
+      if (opening) {
+        detectPanel.classList.add('hl-detect-panel--open');
+        detectTab.classList.add('hl-detect-open');
+        detectTab.setAttribute('aria-expanded', 'true');
+        positionPanel(detectTab, detectPanel);
+      } else {
+        closeDetect();
+      }
+    });
+  }
+
   // --- IOC panel toggle ---
-  var iocTab   = document.getElementById('hl-ioc-tab');
-  var iocPanel = document.getElementById('hl-ioc-panel');
   if (iocTab && iocPanel) {
-    function positionIocPanel() {
-      var r = iocTab.getBoundingClientRect();
-      iocPanel.style.left = (r.right + 10) + 'px';
-      iocPanel.style.top  = (r.top + r.height / 2) + 'px';
-      iocPanel.style.transform = 'translateY(-50%)';
-    }
     iocTab.addEventListener('click', function (e) {
       e.stopPropagation();
-      var open = iocPanel.classList.toggle('hl-ioc-panel--open');
-      iocTab.classList.toggle('hl-ioc-open', open);
-      iocTab.setAttribute('aria-expanded', open ? 'true' : 'false');
-      if (open) positionIocPanel();
-    });
-    document.addEventListener('click', function (e) {
-      if (!iocPanel.contains(e.target) && e.target !== iocTab) {
-        iocPanel.classList.remove('hl-ioc-panel--open');
-        iocTab.classList.remove('hl-ioc-open');
-        iocTab.setAttribute('aria-expanded', 'false');
+      var opening = !iocPanel.classList.contains('hl-ioc-panel--open');
+      closeDetect();
+      if (opening) {
+        iocPanel.classList.add('hl-ioc-panel--open');
+        iocTab.classList.add('hl-ioc-open');
+        iocTab.setAttribute('aria-expanded', 'true');
+        positionPanel(iocTab, iocPanel);
+      } else {
+        closeIoc();
       }
     });
     iocPanel.querySelectorAll('.hl-ioc-cpbtn').forEach(function (btn) {
@@ -309,6 +354,12 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
+
+  // Close both panels on outside click
+  document.addEventListener('click', function (e) {
+    if (detectPanel && !detectPanel.contains(e.target) && e.target !== detectTab) closeDetect();
+    if (iocPanel    && !iocPanel.contains(e.target)    && e.target !== iocTab)    closeIoc();
+  });
 
   // --- Section tip toast (once per browser session) ---
   if (sessionStorage.getItem('hl-section-tip')) return;
