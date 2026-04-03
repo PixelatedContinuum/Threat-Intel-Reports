@@ -282,7 +282,7 @@ Structured IOCs in machine-readable format: [ioc-feeds/opendirectory-193-56-255-
 
 # 4. Technical Capabilities — XiebroC2 v3.1 Deep-Dive
 
-> **Plain language:** This section explains how the main attack tool on this server works — from the moment it runs on a victim's computer to the full set of actions the attacker can remotely direct it to perform. XiebroC2 is a Chinese-developed, open-source remote access toolkit that gives an attacker complete control over a compromised Windows machine through an encrypted internet connection.
+> **Analyst note:** This section explains how the main attack tool on this server works — from the moment it runs on a victim's computer to the full set of actions the attacker can remotely direct it to perform. XiebroC2 is a Chinese-developed, open-source remote access toolkit that gives an attacker complete control over a compromised Windows machine through an encrypted internet connection.
 
 ## 4.1 Family Identity — XiebroC2 v3.1
 
@@ -310,7 +310,7 @@ This is **DEFINITE** family identification — no ambiguity. The compile path ad
 
 ## 4.2 Hardcoded C2 Configuration
 
-> **Plain language:** The implant's connection settings — including the server address and encryption key — are baked directly into the binary file. Analysts could read them out without running the malware.
+> **Analyst note:** The implant's connection settings — including the server address and encryption key — are baked directly into the binary file. Analysts could read them out without running the malware.
 
 The implant stores its configuration using a fixed-width space-padding technique. Strings are padded to constant widths and stripped at runtime:
 
@@ -329,7 +329,7 @@ The space-padding technique serves a dual purpose: it acts as a binary patch tar
 
 ## 4.3 AES-128-ECB Encryption Key (CRITICAL)
 
-> **Plain language:** All traffic between this implant and the attacker's server is encrypted, but the encryption key is hardcoded inside the file. This means any saved network traffic from this implant can be decrypted — an unusual capability for defenders to have.
+> **Analyst note:** All traffic between this implant and the attacker's server is encrypted, but the encryption key is hardcoded inside the file. This means any saved network traffic from this implant can be decrypted — an unusual capability for defenders to have.
 
 The 16-byte AES encryption key used for **all** C2 traffic — both commands sent to the victim and responses sent back — was recovered from the binary at address `DAT_00712b3a`:
 
@@ -357,7 +357,7 @@ The 16-byte AES encryption key used for **all** C2 traffic — both commands sen
 
 ## 4.4 Wire Protocol and Beaconing
 
-> **Plain language:** The implant communicates with the attacker's server using a custom binary format over a raw internet connection. It randomizes the timing of its check-ins to avoid triggering alerts that look for regular-interval patterns.
+> **Analyst note:** The implant communicates with the attacker's server using a custom binary format over a raw internet connection. It randomizes the timing of its check-ins to avoid triggering alerts that look for regular-interval patterns.
 
 XiebroC2 uses a binary protocol over plain TCP (port 4444):
 
@@ -481,7 +481,7 @@ The `HandlePacket/tcp.Read` function dispatches 36 confirmed commands. Commands 
 
 ## 4.7 Fileless .NET Execution via In-Process CLR Hosting
 
-> **Plain language:** This capability lets the attacker run any .NET hacking tool — for example, a password harvester or Active Directory scanner — entirely inside the main.exe process, with nothing written to the hard drive and no visible new program window. Standard antivirus cannot detect this because it only scans files.
+> **Analyst note:** This capability lets the attacker run any .NET hacking tool — for example, a password harvester or Active Directory scanner — entirely inside the main.exe process, with nothing written to the hard drive and no visible new program window. Standard antivirus cannot detect this because it only scans files.
 
 The `inline-assembly` command invokes `main/Helper/handle.InlineAssembly`, which uses the vendored offensive library `github.com/Ne0nd0g/go-clr` to host the Windows Common Language Runtime (CLR) — the .NET execution engine — directly inside the `main.exe` process:
 
@@ -508,7 +508,7 @@ The full import path `github.com/Ne0nd0g/go-clr` is embedded in any Go binary th
 
 ## 4.8 Process Hollowing — Entry Point Patching
 
-> **Plain language:** This technique lets the implant hide inside a legitimate Windows program. The attacker's code starts a normal Windows application (such as notepad.exe), pauses it before it runs, secretly replaces its program code with malicious code, then lets it start. From the outside, it looks like a legitimate program is running.
+> **Analyst note:** This technique lets the implant hide inside a legitimate Windows program. The attacker's code starts a normal Windows application (such as notepad.exe), pauses it before it runs, secretly replaces its program code with malicious code, then lets it start. From the outside, it looks like a legitimate program is running.
 
 `RunCreateProcessWithPipe` (source: `RunPE.go:34`) implements process hollowing via entry point patching. All injection APIs are resolved dynamically at runtime — they do not appear in the binary's static import table, bypassing import-based detection:
 
@@ -565,7 +565,7 @@ These strings are unique to the XiebroC2 PE parser implementation and provide hi
 
 ## 4.9 CreateRemoteThread Shellcode Injection
 
-> **Plain language:** This is an alternative method for hiding inside another process. Instead of replacing a process's code entirely, the attacker's code is injected as a separate thread running inside a chosen target process — making it appear to belong to that process.
+> **Analyst note:** This is an alternative method for hiding inside another process. Instead of replacing a process's code entirely, the attacker's code is injected as a separate thread running inside a chosen target process — making it appear to belong to that process.
 
 `RunCreateRemoteThread` (source: `createremotethread.go:12`) implements the `Migration` command:
 
@@ -595,7 +595,7 @@ All four injection APIs are resolved dynamically via `golang.org/x/sys/windows.L
 
 ## 4.10 SOCKS5 Reverse Proxy (Lateral Movement Enabler)
 
-> **Plain language:** This command turns the victim computer into a network relay. Once active, the attacker can reach other computers and services on the victim's internal network through the existing encrypted connection — effectively letting the operator browse internal systems as if physically on-site.
+> **Analyst note:** This command turns the victim computer into a network relay. Once active, the attacker can reach other computers and services on the victim's internal network through the existing encrypted connection — effectively letting the operator browse internal systems as if physically on-site.
 
 The `ReverseProxy` command invokes `Helper/proxy.ReverseSocksAgent`, which establishes a SOCKS5 reverse tunnel through the existing C2 connection. Once active, the operator can route arbitrary TCP traffic through the victim host into the internal network — effectively making the victim a network pivot point. Combined with credentials obtained via `inline-assembly` tooling, this capability enables lateral movement to internal resources without the operator needing direct network connectivity to internal subnets.
 
@@ -603,7 +603,7 @@ The `ReverseProxy` command invokes `Helper/proxy.ReverseSocksAgent`, which estab
 
 # 5. Technical Capabilities — Covenant C2 Stagers
 
-> **Plain language:** The two Covenant files on this staging server are lightweight connection tools. When executed, they reach out to the attacker's server, complete a security handshake, and then download and run a full-featured implant entirely in memory — nothing is saved to the hard drive. Two delivery methods were prepared (an executable file and a PowerShell command) so the attacker had options for how to deliver it to victims.
+> **Analyst note:** The two Covenant files on this staging server are lightweight connection tools. When executed, they reach out to the attacker's server, complete a security handshake, and then download and run a full-featured implant entirely in memory — nothing is saved to the hard drive. Two delivery methods were prepared (an executable file and a PowerShell command) so the attacker had options for how to deliver it to victims.
 
 ## 5.1 Covenant Framework Overview
 
@@ -617,7 +617,7 @@ Covenant (`github.com/cobbr/Covenant`) is an open-source .NET C2 framework creat
 
 ## 5.2 Three-Phase Cryptographic Key Exchange
 
-> **Plain language:** Before the attacker's server sends the actual implant code to the victim, the two computers go through a three-step security handshake to verify they're talking to the right server. This makes the payload delivery hard to intercept and means even if someone captures the network traffic, they can't read the implant code without the right keys.
+> **Analyst note:** Before the attacker's server sends the actual implant code to the victim, the two computers go through a three-step security handshake to verify they're talking to the right server. This makes the payload delivery hard to intercept and means even if someone captures the network traffic, they can't read the implant code without the right keys.
 
 Static analysis of `GruntHTTP.exe` and the embedded payload in `GruntHTTP.ps1` using a .NET decompiler (dnSpy) revealed the following key exchange implementation. Covenant's key exchange provides forward secrecy — even if the pre-shared keys embedded in the stager are recovered (as they were in this analysis), past sessions cannot be decrypted because a unique session key is generated per connection:
 
@@ -699,7 +699,7 @@ Two separate Covenant stager builds were present on the staging server — a del
 
 ## 5.4 Default HTTP Profile — High-Value Fingerprinting
 
-> **Plain language:** The Covenant traffic from this investigation uses all the default settings that come with the Covenant framework out of the box. These default values have been publicly documented and are highly detectable on a network that inspects HTTP traffic content.
+> **Analyst note:** The Covenant traffic from this investigation uses all the default settings that come with the Covenant framework out of the box. These default values have been publicly documented and are highly detectable on a network that inspects HTTP traffic content.
 
 The operator did not customize Covenant's HTTP communication profile. All default fingerprints are present and detectable:
 
@@ -719,7 +719,7 @@ The operator did not customize Covenant's HTTP communication profile. All defaul
 
 ## 5.5 GruntHTTP.ps1 — PowerShell Fileless Delivery
 
-> **Plain language:** The PowerShell file is a one-line script that contains the entire second stager hidden inside it as compressed, encoded data. When run, it unpacks and executes the stager entirely in computer memory — nothing is saved to disk. This bypasses file-scanning antivirus because there is no file to scan.
+> **Analyst note:** The PowerShell file is a one-line script that contains the entire second stager hidden inside it as compressed, encoded data. When run, it unpacks and executes the stager entirely in computer memory — nothing is saved to disk. This bypasses file-scanning antivirus because there is no file to scan.
 
 The PowerShell loader uses three obfuscation layers that are decoded at runtime:
 
@@ -805,7 +805,7 @@ GBK encoding and XiebroC2's Chinese-language origin are consistent with a Chines
 
 ## 7.0 How the Infrastructure Was Mapped
 
-> **Plain language:** Starting from a single IP address, the investigation used the malware's own C2 framework fingerprint to search for related servers. This section explains the pivot chain — how four candidate IPs were identified, and why only one was elevated to likely same-operator status.
+> **Analyst note:** Starting from a single IP address, the investigation used the malware's own C2 framework fingerprint to search for related servers. This section explains the pivot chain — how four candidate IPs were identified, and why only one was elevated to likely same-operator status.
 
 Analysis began with `193.56.255.154` identified from the malware's hardcoded configuration. The primary pivot indicator was the Covenant C2 admin panel fingerprint: a self-signed TLS certificate with `CN=Covenant` on port 7443, a default left in place by the operator. An infrastructure query (Hunt.io, queried 2026-04-02) searching for other IPs serving this fingerprint in the same timeframe returned four results:
 

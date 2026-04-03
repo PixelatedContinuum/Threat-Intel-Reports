@@ -54,17 +54,12 @@ Rules are grouped by family within each section. Rules covering shared infrastru
 
 ### XiebroC2 v3.1
 
-# Detection Priority: HIGH
-# Rationale: Three of the four anchor strings (AES key, typo symbol, go-clr import path) are
-#            unique to XiebroC2 3.1 source and cannot appear in legitimate Go binaries.
-#            The AES key alone is a definitive indicator — no legitimate software embeds
-#            QWERt_CSDMAHUATW as a 16-byte AES key.
-# ATT&CK Coverage: T1573.001 (AES-ECB key), T1620 (go-clr CLR hosting),
-#                  T1055.012 / T1055 (RunPE + CreateRemoteThread error strings)
-# Confidence: HIGH
-# False Positive Risk: LOW — AES key literal and pclntab typo are not present in any
-#                     legitimate Go binary; go-clr import path is an offensive-tool-only library
-# Deployment: Endpoint AV/EDR disk scan, memory scanner targeting live Go processes
+**Detection Priority:** HIGH  
+**Rationale:** Three of the four anchor strings (AES key, typo symbol, go-clr import path) are unique to XiebroC2 3.1 source and cannot appear in legitimate Go binaries. The AES key alone is a definitive indicator — no legitimate software embeds QWERt_CSDMAHUATW as a 16-byte AES key.  
+**ATT&CK Coverage:** T1573.001 (AES-ECB key), T1620 (go-clr CLR hosting), T1055.012 / T1055 (RunPE + CreateRemoteThread error strings)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW — AES key literal and pclntab typo are not present in any legitimate Go binary; go-clr import path is an offensive-tool-only library  
+**Deployment:** Endpoint AV/EDR disk scan, memory scanner targeting live Go processes  
 
 ```yara
 rule RAT_XiebroC2_v31_Go_TCP_Implant
@@ -97,16 +92,12 @@ rule RAT_XiebroC2_v31_Go_TCP_Implant
 
 ---
 
-# Detection Priority: HIGH
-# Rationale: Space-padded C2 configuration strings are a unique behavioral artifact of
-#            XiebroC2's binary-patchable config embedding technique. The 40-byte padded IP
-#            string is not a pattern found in legitimate network software.
-# ATT&CK Coverage: T1571 (Non-Standard Port — port 4444 TCP C2)
-# Confidence: HIGH
-# False Positive Risk: LOW — 40-byte space-padded IP combined with padded port "4444" is a
-#                     structural artifact unique to XiebroC2 config format; not present in
-#                     legitimate binaries
-# Deployment: Endpoint disk scan; also effective as a memory scan on running Go processes
+**Detection Priority:** HIGH  
+**Rationale:** Space-padded C2 configuration strings are a unique behavioral artifact of XiebroC2's binary-patchable config embedding technique. The 40-byte padded IP string is not a pattern found in legitimate network software.  
+**ATT&CK Coverage:** T1571 (Non-Standard Port — port 4444 TCP C2)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW — 40-byte space-padded IP combined with padded port "4444" is a structural artifact unique to XiebroC2 config format; not present in legitimate binaries  
+**Deployment:** Endpoint disk scan; also effective as a memory scan on running Go processes  
 
 ```yara
 rule RAT_XiebroC2_v31_PaddedConfig_Build
@@ -135,17 +126,12 @@ rule RAT_XiebroC2_v31_PaddedConfig_Build
 
 ### Covenant C2 GruntStager
 
-# Detection Priority: HIGH
-# Rationale: The session token and build ID are listener-level constants shared across both
-#            GruntStager builds and appear in every HTTP POST from every infected host.
-#            Both the PE and the PowerShell-embedded payload will match this rule.
-# ATT&CK Coverage: T1071.001 (HTTP C2), T1036 (Chrome 41 UA masquerade),
-#                  T1573.002 (RSA key exchange — pre-shared key embedded in binary)
-# Confidence: HIGH
-# False Positive Risk: LOW — session token and build ID are GUID-format values specific to
-#                     this Covenant listener; no legitimate software uses these exact strings
-# Deployment: Endpoint AV/EDR disk scan targeting .NET PE files; memory scanner targeting
-#             .NET processes performing Assembly.Load()
+**Detection Priority:** HIGH  
+**Rationale:** The session token and build ID are listener-level constants shared across both GruntStager builds and appear in every HTTP POST from every infected host. Both the PE and the PowerShell-embedded payload will match this rule.  
+**ATT&CK Coverage:** T1071.001 (HTTP C2), T1036 (Chrome 41 UA masquerade), T1573.002 (RSA key exchange — pre-shared key embedded in binary)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW — session token and build ID are GUID-format values specific to this Covenant listener; no legitimate software uses these exact strings  
+**Deployment:** Endpoint AV/EDR disk scan targeting .NET PE files; memory scanner targeting .NET processes performing Assembly.Load()  
 
 ```yara
 rule RAT_Covenant_GruntStager_OpenDirectory
@@ -178,18 +164,12 @@ rule RAT_Covenant_GruntStager_OpenDirectory
 
 ### PowerShell Fileless Loader
 
-# Detection Priority: HIGH
-# Rationale: The session token embedded in the PowerShell script is a campaign-unique constant.
-#            Combined with DeflateStream + Reflection.Assembly patterns, this rule is
-#            highly specific to the Covenant PS delivery mechanism.
-# ATT&CK Coverage: T1059.001 (PowerShell), T1027 (Obfuscated Base64+Deflate payload),
-#                  T1140 (Deobfuscate via DeflateStream), T1620 (Reflective .NET loading)
-# Confidence: HIGH
-# False Positive Risk: LOW — the session token is a unique GUID-format value; its combination
-#                     with DeflateStream decode and Assembly::Load is specific to this loader
-#                     pattern; legitimate PS scripts do not embed Covenant session tokens
-# Deployment: Endpoint AV/EDR scan targeting .ps1 files; AMSI telemetry; PowerShell
-#             ScriptBlock logging (Event ID 4104)
+**Detection Priority:** HIGH  
+**Rationale:** The session token embedded in the PowerShell script is a campaign-unique constant. Combined with DeflateStream + Reflection.Assembly patterns, this rule is highly specific to the Covenant PS delivery mechanism.  
+**ATT&CK Coverage:** T1059.001 (PowerShell), T1027 (Obfuscated Base64+Deflate payload), T1140 (Deobfuscate via DeflateStream), T1620 (Reflective .NET loading)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW — the session token is a unique GUID-format value; its combination with DeflateStream decode and Assembly::Load is specific to this loader pattern; legitimate PS scripts do not embed Covenant session tokens  
+**Deployment:** Endpoint AV/EDR scan targeting .ps1 files; AMSI telemetry; PowerShell ScriptBlock logging (Event ID 4104)  
 
 ```yara
 rule MALW_Covenant_PSFilelessLoader_GruntHTTP
@@ -228,16 +208,12 @@ rule MALW_Covenant_PSFilelessLoader_GruntHTTP
 
 #### Rule 1 — XiebroC2 CLR Load in Non-.NET Go Process
 
-# Detection Priority: HIGH
-# Rationale: No legitimate Go binary loads mscoree.dll or clr.dll at runtime. This pattern
-#            is exclusively produced by XiebroC2's inline-assembly command, which uses
-#            go-clr to host the Windows CLR in-process. Fires on disk and memory artifacts.
-# ATT&CK Coverage: T1620 (Reflective Code Loading — in-process CLR hosting via go-clr)
-# Confidence: HIGH
-# False Positive Risk: LOW — legitimate Go processes never load the CLR; filter excludes
-#                     all standard .NET host processes; if main.exe is renamed, the
-#                     ParentImage filter should be broadened to cover Go binaries generically
-# Deployment: Sysmon Event ID 7 (ImageLoad); requires Sysmon with ImageLoad enabled
+**Detection Priority:** HIGH  
+**Rationale:** No legitimate Go binary loads mscoree.dll or clr.dll at runtime. This pattern is exclusively produced by XiebroC2's inline-assembly command, which uses go-clr to host the Windows CLR in-process. Fires on disk and memory artifacts.  
+**ATT&CK Coverage:** T1620 (Reflective Code Loading — in-process CLR hosting via go-clr)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW — legitimate Go processes never load the CLR; filter excludes all standard .NET host processes; if main.exe is renamed, the ParentImage filter should be broadened to cover Go binaries generically  
+**Deployment:** Sysmon Event ID 7 (ImageLoad); requires Sysmon with ImageLoad enabled  
 
 ```yaml
 title: XiebroC2 Go Implant Loading Windows CLR at Runtime via go-clr
@@ -290,18 +266,12 @@ level: high
 
 #### Rule 2 — XiebroC2 Process Hollowing via Suspended Process Creation
 
-# Detection Priority: HIGH
-# Rationale: XiebroC2's RunPE implementation creates a process in CREATE_SUSPENDED state
-#            (0x4), immediately queries it with NtQueryInformationProcess, and patches
-#            the entry point. The sequence of suspended creation followed by memory
-#            API calls to the child is the behavioral signature of process hollowing.
-# ATT&CK Coverage: T1055.012 (Process Hollowing)
-# Confidence: HIGH
-# False Positive Risk: MEDIUM — CREATE_SUSPENDED alone is used by some legitimate
-#                     software (debuggers, process monitors, sandbox tools); this rule
-#                     requires the XiebroC2-specific parent (main.exe) to reduce FPs;
-#                     tune ParentImage if the implant is renamed
-# Deployment: Sysmon Event ID 1 (ProcessCreate); EDR process tree telemetry
+**Detection Priority:** HIGH  
+**Rationale:** XiebroC2's RunPE implementation creates a process in CREATE_SUSPENDED state (0x4), immediately queries it with NtQueryInformationProcess, and patches the entry point. The sequence of suspended creation followed by memory API calls to the child is the behavioral signature of process hollowing.  
+**ATT&CK Coverage:** T1055.012 (Process Hollowing)  
+**Confidence:** HIGH  
+**False Positive Risk:** MEDIUM — CREATE_SUSPENDED alone is used by some legitimate software (debuggers, process monitors, sandbox tools); this rule requires the XiebroC2-specific parent (main.exe) to reduce FPs; tune ParentImage if the implant is renamed  
+**Deployment:** Sysmon Event ID 1 (ProcessCreate); EDR process tree telemetry  
 
 ```yaml
 title: XiebroC2 Process Hollowing via Suspended Child Process Creation
@@ -334,18 +304,12 @@ level: high
 
 #### Rule 3 — XiebroC2 Shell Command Execution with Hidden Window
 
-# Detection Priority: MEDIUM
-# Rationale: XiebroC2 spawns all shell commands (shell, OSshell, OSpowershell) with
-#            CREATE_NO_WINDOW. The combination of main.exe parent with a hidden-window
-#            cmd.exe or powershell.exe child is a strong behavioral indicator of C2
-#            command execution.
-# ATT&CK Coverage: T1059.003 (Windows Command Shell), T1059.001 (PowerShell)
-# Confidence: HIGH
-# False Positive Risk: MEDIUM — the parent name main.exe is the primary discriminator;
-#                     if the implant is renamed by the operator this rule will not fire;
-#                     hidden-window shell spawning alone is used by some legitimate
-#                     software installers
-# Deployment: Sysmon Event ID 1 (ProcessCreate); EDR process tree telemetry
+**Detection Priority:** MEDIUM  
+**Rationale:** XiebroC2 spawns all shell commands (shell, OSshell, OSpowershell) with CREATE_NO_WINDOW. The combination of main.exe parent with a hidden-window cmd.exe or powershell.exe child is a strong behavioral indicator of C2 command execution.  
+**ATT&CK Coverage:** T1059.003 (Windows Command Shell), T1059.001 (PowerShell)  
+**Confidence:** HIGH  
+**False Positive Risk:** MEDIUM — the parent name main.exe is the primary discriminator; if the implant is renamed by the operator this rule will not fire; hidden-window shell spawning alone is used by some legitimate software installers  
+**Deployment:** Sysmon Event ID 1 (ProcessCreate); EDR process tree telemetry  
 
 ```yaml
 title: XiebroC2 Hidden Window Shell Execution from Go Implant
@@ -385,20 +349,12 @@ level: high
 
 #### Rule 4 — Covenant GruntStager HTTP C2 Beacon Detection
 
-# Detection Priority: HIGH
-# Rationale: The session token 75db-99b1-25fe4e9afbe58696-320bea73 is a listener-level
-#            constant shared by both GruntStager builds. Every HTTP POST from every
-#            host infected by either stager will contain this token. It is a single-
-#            indicator, high-confidence detection that catches both delivery methods
-#            simultaneously.
-# ATT&CK Coverage: T1071.001 (Application Layer Protocol: Web Protocols),
-#                  T1036 (Masquerading — Microsoft Docs URL and Chrome 41 UA)
-# Confidence: HIGH
-# False Positive Risk: LOW — the session token is a GUID-format value unique to this
-#                     Covenant listener; it will not appear in legitimate HTTP traffic;
-#                     the Chrome 41 / Windows 7 UA pattern reinforces the signal
-# Deployment: HTTP proxy logs (Squid, Bluecoat, Zscaler, etc.); web gateway telemetry;
-#             requires proxy logging of request body or URI query parameters
+**Detection Priority:** HIGH  
+**Rationale:** The session token 75db-99b1-25fe4e9afbe58696-320bea73 is a listener-level constant shared by both GruntStager builds. Every HTTP POST from every host infected by either stager will contain this token. It is a single- indicator, high-confidence detection that catches both delivery methods simultaneously.  
+**ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols), T1036 (Masquerading — Microsoft Docs URL and Chrome 41 UA)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW — the session token is a GUID-format value unique to this Covenant listener; it will not appear in legitimate HTTP traffic; the Chrome 41 / Windows 7 UA pattern reinforces the signal  
+**Deployment:** HTTP proxy logs (Squid, Bluecoat, Zscaler, etc.); web gateway telemetry; requires proxy logging of request body or URI query parameters  
 
 ```yaml
 title: Covenant C2 GruntStager HTTP Beacon — Campaign Session Token Detected
@@ -434,22 +390,12 @@ level: high
 
 #### Rule 5 — PowerShell Fileless Loader Decoding and Reflective Assembly Load
 
-# Detection Priority: HIGH
-# Rationale: The combination of Base64 decode, DeflateStream decompression, and
-#            Reflection.Assembly::Load() in a single ScriptBlock is the exact execution
-#            chain of GruntHTTP.ps1. While each element alone has moderate FP risk,
-#            all three co-occurring in the same ScriptBlock with a MemoryStream is
-#            highly specific to malicious fileless loaders.
-# ATT&CK Coverage: T1059.001 (PowerShell), T1140 (Deobfuscate/Decode),
-#                  T1027 (Obfuscated Files), T1620 (Reflective Code Loading)
-# Confidence: HIGH
-# False Positive Risk: MEDIUM — legitimate PowerShell automation rarely combines
-#                     DeflateStream decoding with Reflection.Assembly::Load() in the
-#                     same block; software deployment scripts occasionally use
-#                     this pattern; tuning by excluding known-good script hashes
-#                     is recommended in environments with legitimate use
-# Deployment: PowerShell ScriptBlock Logging (Event ID 4104); requires
-#             ScriptBlock logging enabled in Group Policy
+**Detection Priority:** HIGH  
+**Rationale:** The combination of Base64 decode, DeflateStream decompression, and Reflection.Assembly::Load() in a single ScriptBlock is the exact execution chain of GruntHTTP.ps1. While each element alone has moderate FP risk, all three co-occurring in the same ScriptBlock with a MemoryStream is highly specific to malicious fileless loaders.  
+**ATT&CK Coverage:** T1059.001 (PowerShell), T1140 (Deobfuscate/Decode), T1027 (Obfuscated Files), T1620 (Reflective Code Loading)  
+**Confidence:** HIGH  
+**False Positive Risk:** MEDIUM — legitimate PowerShell automation rarely combines DeflateStream decoding with Reflection.Assembly::Load() in the same block; software deployment scripts occasionally use this pattern; tuning by excluding known-good script hashes is recommended in environments with legitimate use  
+**Deployment:** PowerShell ScriptBlock Logging (Event ID 4104); requires ScriptBlock logging enabled in Group Policy  
 
 ```yaml
 title: PowerShell Fileless Loader — Deflate Decode with Reflective Assembly Load
@@ -492,17 +438,12 @@ level: high
 
 ---
 
-# Detection Priority: HIGH
-# Rationale: The Covenant session token appears in the POST body of every C2 registration
-#            and command exchange from both GruntStager builds. This is the highest-value
-#            single network indicator in the campaign — one rule catches both delivery
-#            variants simultaneously.
-# ATT&CK Coverage: T1071.001 (Web Protocols), T1036 (Masquerading)
-# Confidence: HIGH
-# False Positive Risk: LOW — session token is a GUID-format value unique to this
-#                     Covenant listener; will not appear in legitimate traffic
-# Deployment: Network IDS/IPS inline or tap; HTTP inspection on port 443 (cleartext);
-#             requires HTTP body inspection enabled on the sensor
+**Detection Priority:** HIGH  
+**Rationale:** The Covenant session token appears in the POST body of every C2 registration and command exchange from both GruntStager builds. This is the highest-value single network indicator in the campaign — one rule catches both delivery variants simultaneously.  
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1036 (Masquerading)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW — session token is a GUID-format value unique to this Covenant listener; will not appear in legitimate traffic  
+**Deployment:** Network IDS/IPS inline or tap; HTTP inspection on port 443 (cleartext); requires HTTP body inspection enabled on the sensor  
 
 ```
 alert http $HOME_NET any -> $EXTERNAL_NET 443 (
@@ -523,19 +464,12 @@ alert http $HOME_NET any -> $EXTERNAL_NET 443 (
 
 ---
 
-# Detection Priority: HIGH
-# Rationale: Cleartext HTTP on port 443 is anomalous in any environment that enforces
-#            TLS. The Covenant stager uses HTTP (not HTTPS) on port 443 to bypass
-#            port-based access controls while avoiding TLS certificate overhead.
-#            The outdated Chrome 41 / Windows 7 User-Agent combination is a strong
-#            masquerade signal that does not match any modern browser.
-# ATT&CK Coverage: T1071.001 (Web Protocols), T1036 (Masquerading), T1571 (Non-Standard Port)
-# Confidence: HIGH
-# False Positive Risk: LOW-MEDIUM — the Chrome 41 UA alone may fire on legacy enterprise
-#                     endpoints with very old browsers; combine with /en-us/ URI pattern
-#                     to reduce FPs; the UA + path combination is specific to this campaign
-# Deployment: Network IDS/IPS; HTTP inspection on port 443; effective only if sensor
-#             can distinguish plaintext HTTP from TLS on the same port
+**Detection Priority:** HIGH  
+**Rationale:** Cleartext HTTP on port 443 is anomalous in any environment that enforces TLS. The Covenant stager uses HTTP (not HTTPS) on port 443 to bypass port-based access controls while avoiding TLS certificate overhead. The outdated Chrome 41 / Windows 7 User-Agent combination is a strong masquerade signal that does not match any modern browser.  
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1036 (Masquerading), T1571 (Non-Standard Port)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW-MEDIUM — the Chrome 41 UA alone may fire on legacy enterprise endpoints with very old browsers; combine with /en-us/ URI pattern to reduce FPs; the UA + path combination is specific to this campaign  
+**Deployment:** Network IDS/IPS; HTTP inspection on port 443; effective only if sensor can distinguish plaintext HTTP from TLS on the same port  
 
 ```
 alert http $HOME_NET any -> $EXTERNAL_NET 443 (
@@ -559,19 +493,12 @@ alert http $HOME_NET any -> $EXTERNAL_NET 443 (
 
 ---
 
-# Detection Priority: HIGH
-# Rationale: XiebroC2 uses a binary TCP protocol with a 4-byte little-endian length prefix
-#            followed by AES-128-ECB ciphertext on port 4444. The port is non-standard
-#            and directly hardcoded in main.exe. Any TCP session to this IP on port 4444
-#            from an internal host is high-confidence C2 activity.
-# ATT&CK Coverage: T1573.001 (Encrypted Channel — AES-ECB), T1571 (Non-Standard Port)
-# Confidence: HIGH
-# False Positive Risk: LOW — port 4444 TCP to this specific IP is unambiguously C2;
-#                     port 4444 alone (without IP filter) has moderate FP risk from
-#                     legitimate tools (Metasploit default, some dev tools); use
-#                     IP-specific variant first, then consider a broader port-only rule
-# Deployment: Network IDS/IPS; netflow analysis; requires visibility into outbound TCP
-#             on non-standard ports
+**Detection Priority:** HIGH  
+**Rationale:** XiebroC2 uses a binary TCP protocol with a 4-byte little-endian length prefix followed by AES-128-ECB ciphertext on port 4444. The port is non-standard and directly hardcoded in main.exe. Any TCP session to this IP on port 4444 from an internal host is high-confidence C2 activity.  
+**ATT&CK Coverage:** T1573.001 (Encrypted Channel — AES-ECB), T1571 (Non-Standard Port)  
+**Confidence:** HIGH  
+**False Positive Risk:** LOW — port 4444 TCP to this specific IP is unambiguously C2; port 4444 alone (without IP filter) has moderate FP risk from legitimate tools (Metasploit default, some dev tools); use IP-specific variant first, then consider a broader port-only rule  
+**Deployment:** Network IDS/IPS; netflow analysis; requires visibility into outbound TCP on non-standard ports  
 
 ```
 alert tcp $HOME_NET any -> 193.56.255.154 4444 (
