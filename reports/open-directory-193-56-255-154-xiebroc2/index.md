@@ -1289,5 +1289,5 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 ---
 
 ## License
-© 2025 Joseph. All rights reserved.
+© 2026 Joseph. All rights reserved.
 See LICENSE for terms.
