@@ -1,0 +1,285 @@
+{
+  "malware_name": "OpenDirectory-MultiFamily-MaaS-193.56.255.154",
+  "campaign_id": "opendirectory-193-56-255-154-20260403",
+  "analysis_date": "2026-04-03",
+  "confidence_note": "Confidence levels: HIGH (strong evidence from binary analysis), MEDIUM (moderate evidence), LOW (weak evidence). All hashes confirmed from triage data. Network IOCs extracted from hardcoded configuration in analyzed binaries.",
+  "data_gaps": [
+    "main.exe (XiebroC2) SHA256 hash not captured in triage artifacts provided — obtain from infrastructure analyst or original retrieval",
+    "s.d IP 192.168.1.100 excluded — RFC 1918 placeholder/test value, not a live C2"
+  ],
+
+  "file_indicators": {
+    "md5": [
+      {
+        "hash": "7cfe0a039b61ec049b53e8e664036a6e",
+        "filename": "GruntHTTP.exe",
+        "confidence": "HIGH",
+        "context": "Covenant C2 GruntStager Build 1 — standalone PE, HTTP stager, 11776 bytes"
+      },
+      {
+        "hash": "ac9b16b8bdf544db92f325a0901c5544",
+        "filename": "GruntHTTP.ps1",
+        "confidence": "HIGH",
+        "context": "PowerShell fileless loader wrapping Covenant GruntStager Build 2, 7541 bytes"
+      },
+      {
+        "hash": "0e12e94cc5b7e591e02f8afab1dac7d1",
+        "filename": "extracted_payload.bin",
+        "confidence": "HIGH",
+        "context": "Covenant GruntStager Build 2 — extracted from GruntHTTP.ps1 Base64+Deflate encoding, 11776 bytes"
+      },
+      {
+        "hash": "2ac67005d80a76c77417086375e444d1",
+        "filename": "s.d",
+        "confidence": "HIGH",
+        "context": "Proof-of-concept DLL (non-operational) — 64-bit PE, Visual C++ 2022, 12800 bytes"
+      }
+    ],
+    "sha1": [
+      {
+        "hash": "f0f4715a6d7063e7811502e9591f8265af0a2af6",
+        "filename": "GruntHTTP.exe",
+        "confidence": "HIGH",
+        "context": "Covenant C2 GruntStager Build 1"
+      },
+      {
+        "hash": "a79cd499c68482e73852db2c70d4e06251a29d95",
+        "filename": "GruntHTTP.ps1",
+        "confidence": "HIGH",
+        "context": "PowerShell fileless loader — Covenant GruntStager Build 2 delivery wrapper"
+      },
+      {
+        "hash": "7a502bd0e7fe586b97498058a72287dfd22f8d44",
+        "filename": "s.d",
+        "confidence": "HIGH",
+        "context": "Proof-of-concept DLL"
+      }
+    ],
+    "sha256": [
+      {
+        "hash": "3aa45ceff7070ae6d183c5aa5f0d771a79c7cf37fe21a3906df976bee497bf20",
+        "filename": "GruntHTTP.exe",
+        "confidence": "HIGH",
+        "context": "Covenant C2 GruntStager Build 1 — standalone PE stager, C2 http://193.56.255.154:443, GUID prefix 614b847dc4"
+      },
+      {
+        "hash": "cff2d990f0988e9c90f77d0a62c72ca8e9bf567f0c143fdc3a914dce65edec98",
+        "filename": "GruntHTTP.ps1",
+        "confidence": "HIGH",
+        "context": "PowerShell fileless loader wrapping Covenant GruntStager Build 2 — Base64+Deflate encoded PE embedded in script"
+      },
+      {
+        "hash": "fc93712d44850bc730e1e4cf0f678a902e8f60a5d710b4bc19b0ab0b2fb79a95",
+        "filename": "extracted_payload.bin",
+        "confidence": "HIGH",
+        "context": "Covenant GruntStager Build 2 — extracted from GruntHTTP.ps1, same Covenant listener as Build 1, GUID prefix 7c6e1e0ee6"
+      },
+      {
+        "hash": "ed4d2a1f86b73e6a3f2d5378ba93a044f8c760307acfd3b99a0fa3c0b94fd107",
+        "filename": "s.d",
+        "confidence": "HIGH",
+        "context": "Proof-of-concept DLL (non-operational staging test artifact)"
+      }
+    ],
+    "filenames": [
+      {
+        "name": "main.exe",
+        "confidence": "HIGH",
+        "context": "XiebroC2 v3.1 Go TCP implant — original filename from open directory at 193.56.255.154"
+      },
+      {
+        "name": "GruntHTTP.exe",
+        "confidence": "HIGH",
+        "context": "Covenant C2 GruntStager Build 1 — original filename from open directory"
+      },
+      {
+        "name": "GruntHTTP.ps1",
+        "confidence": "HIGH",
+        "context": "PowerShell loader for Covenant GruntStager Build 2 — original filename from open directory"
+      },
+      {
+        "name": "s.d",
+        "confidence": "HIGH",
+        "context": "Proof-of-concept DLL — unusual extension (.d), original filename from open directory"
+      }
+    ],
+    "file_paths": []
+  },
+
+  "network_indicators": {
+    "ipv4": [
+      {
+        "ip": "193.56.255.154",
+        "port": "4444",
+        "protocol": "TCP",
+        "confidence": "HIGH",
+        "context": "XiebroC2 v3.1 TCP C2 — hardcoded in main.exe binary; AES-128-ECB encrypted binary protocol; 4-byte LE length prefix framing; jittered 0-5 second reconnect beacon"
+      },
+      {
+        "ip": "193.56.255.154",
+        "port": "443",
+        "protocol": "TCP",
+        "confidence": "HIGH",
+        "context": "Covenant C2 HTTP listener — cleartext HTTP on port 443 (not HTTPS); both GruntStager builds connect here for three-phase key exchange and Grunt payload delivery"
+      },
+      {
+        "ip": "193.56.255.154",
+        "port": "80",
+        "protocol": "TCP",
+        "confidence": "HIGH",
+        "context": "Open directory staging server — all four malicious samples hosted here; HTTP file serving"
+      }
+    ],
+    "ipv6": [],
+    "domains": [],
+    "urls": [
+      {
+        "url": "http://193.56.255.154:443/en-us/index.html",
+        "confidence": "HIGH",
+        "context": "Covenant stager probe GET — random path selected from pool; masquerades as Microsoft Docs URL"
+      },
+      {
+        "url": "http://193.56.255.154:443/en-us/docs.html",
+        "confidence": "HIGH",
+        "context": "Covenant stager C2 POST path — random path selected from pool"
+      },
+      {
+        "url": "http://193.56.255.154:443/en-us/test.html",
+        "confidence": "HIGH",
+        "context": "Covenant stager C2 POST path — random path selected from pool"
+      }
+    ],
+    "user_agents": [
+      {
+        "ua": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
+        "confidence": "HIGH",
+        "context": "Hardcoded User-Agent in both Covenant GruntStager builds — Chrome 41 on Windows 7; present in every HTTP request from either stager"
+      }
+    ]
+  },
+
+  "host_indicators": {
+    "registry_keys": [],
+    "scheduled_tasks": [],
+    "services": [],
+    "mutexes": [],
+    "named_pipes": []
+  },
+
+  "behavioral_indicators": {
+    "network_patterns": [
+      {
+        "pattern": "HTTP POST to 193.56.255.154:443 with body matching: i=a19ea23062db990386a3a478cb89d52e&data=[base64]&session=75db-99b1-25fe4e9afbe58696-320bea73",
+        "confidence": "HIGH",
+        "context": "Covenant stager C2 POST pattern — listener-level constants appear in every request from both GruntStager builds; highest-value network detection"
+      },
+      {
+        "pattern": "HTTP response body from 193.56.255.154:443 containing: // Hello World!",
+        "confidence": "HIGH",
+        "context": "Covenant C2 data wrapper in HTML response body — C2 payload embedded in HTML comment; detectable by proxy/IDS with response body inspection"
+      },
+      {
+        "pattern": "TCP connection to 193.56.255.154:4444 — binary 4-byte LE length prefix framing, AES-128-ECB payload",
+        "confidence": "HIGH",
+        "context": "XiebroC2 v3.1 TCP C2 wire protocol; random 0-5 second reconnect jitter; 50KB chunked writes"
+      },
+      {
+        "pattern": "HTTP on port 443 (not HTTPS/TLS) to 193.56.255.154",
+        "confidence": "HIGH",
+        "context": "Covenant HTTP (not HTTPS) on standard HTTPS port — anomalous cleartext on port 443; detectable by protocol inspection"
+      }
+    ],
+    "process_patterns": [
+      {
+        "pattern": "main.exe (Go binary) loading mscoree.dll or clr.dll at runtime",
+        "confidence": "HIGH",
+        "context": "XiebroC2 inline-assembly command: go-clr loads CLR into Go process — no legitimate Go binary performs this; Sysmon Event ID 7"
+      },
+      {
+        "pattern": "main.exe spawning cmd.exe or powershell.exe child processes with HideWindow=true",
+        "confidence": "HIGH",
+        "context": "XiebroC2 shell/OSshell/OSpowershell commands — all spawn with CREATE_NO_WINDOW flag; Sysmon Event ID 1"
+      },
+      {
+        "pattern": "Non-.NET process followed by ETW DotNETRuntime AssemblyLoad (Event ID 152)",
+        "confidence": "HIGH",
+        "context": "Fileless .NET assembly loading — covers Covenant Assembly.Load() and XiebroC2 go-clr CLR hosting; fires regardless of disk artifacts"
+      },
+      {
+        "pattern": "VirtualAllocEx + WriteProcessMemory + VirtualProtectEx (RW to RX) + CreateRemoteThreadEx sequence from main.exe to target process",
+        "confidence": "HIGH",
+        "context": "XiebroC2 Migration command: shellcode injection via RunCreateRemoteThread; all four APIs dynamically resolved via LazyProc"
+      },
+      {
+        "pattern": "CreateProcess with CREATE_SUSPENDED=0x4 followed immediately by NtQueryInformationProcess and ReadProcessMemory on child process from main.exe",
+        "confidence": "HIGH",
+        "context": "XiebroC2 process hollowing (RunCreateProcessWithPipe/RunPE): entry point patching injection pattern; unique PE parser API sequence"
+      }
+    ],
+    "file_access_patterns": []
+  },
+
+  "crypto_artifacts": {
+    "note": "Crypto artifacts are high-value IOCs enabling retrospective traffic decryption and build attribution. Not standard SIEM/EDR IOC types but included for analyst and threat hunter use.",
+    "xiebro_c2_aes_key": {
+      "value_ascii": "QWERt_CSDMAHUATW",
+      "value_hex": "515745527435F43534444D414855415457",
+      "value_hex_spaced": "51 57 45 52 74 5F 43 53 44 4D 41 48 55 41 54 57",
+      "algorithm": "AES-128-ECB",
+      "key_length_bytes": 16,
+      "confidence": "DEFINITE",
+      "context": "Hardcoded AES-ECB key used for ALL XiebroC2 C2 traffic (both directions). Recovered from DAT_00712b3a in main.exe binary. Keyboard-walk pattern indicates hand-typed key. Any PCAP of 193.56.255.154:4444 traffic can be decrypted with this key."
+    },
+    "covenant_preshared_key_build1": {
+      "value_base64": "VhsPbOCVryhYn0DbLsSMYJ00eynFRnREpzpFmuUAnuk=",
+      "algorithm": "AES-256-CBC",
+      "confidence": "DEFINITE",
+      "context": "Covenant pre-shared AES-256 key for GruntHTTP.exe (Build 1). Used in Phase 0 key exchange to encrypt RSA public key. Unique to this stager build."
+    },
+    "covenant_preshared_key_build2": {
+      "value_base64": "b8SLEsbBJpi/eO6rVdtQpbkJPefqfqeTCE3mn96GHaM=",
+      "algorithm": "AES-256-CBC",
+      "confidence": "DEFINITE",
+      "context": "Covenant pre-shared AES-256 key for PS Embedded Stager (Build 2). Different from Build 1 — deliberate compartmentalization so compromise of one build does not affect the other."
+    }
+  },
+
+  "build_artifacts": {
+    "note": "Operator build artifacts enable attribution and cross-build correlation. Present as embedded strings in binary/script.",
+    "covenant_session_token": {
+      "value": "75db-99b1-25fe4e9afbe58696-320bea73",
+      "confidence": "DEFINITE",
+      "context": "Covenant listener-level POST session= token — shared across both GruntStager builds. Appears in every POST from every host infected by either stager. Highest-value network detection string for this campaign."
+    },
+    "covenant_build_id": {
+      "value": "a19ea23062db990386a3a478cb89d52e",
+      "confidence": "DEFINITE",
+      "context": "Covenant listener-level POST i= parameter — shared across both builds. Fixed 32-char hex build identifier."
+    },
+    "covenant_guid_prefix_build1": {
+      "value": "614b847dc4",
+      "confidence": "HIGH",
+      "context": "Covenant GUID prefix unique to GruntHTTP.exe (Build 1). All victim sessions from this build share this prefix in their session GUID."
+    },
+    "covenant_guid_prefix_build2": {
+      "value": "7c6e1e0ee6",
+      "confidence": "HIGH",
+      "context": "Covenant GUID prefix unique to PS Embedded Stager (Build 2)."
+    },
+    "xiebro_compile_path": {
+      "value": "C:/Users/admin/Desktop/code/XiebroC2-3.1/",
+      "confidence": "HIGH",
+      "context": "Operator compile path embedded in main.exe pclntab (Go symbol table). Indicates ad-hoc compilation from operator Desktop with username admin."
+    },
+    "xiebro_campaign_tag": {
+      "value": "vps",
+      "confidence": "HIGH",
+      "context": "Hardcoded campaign tag in main.exe (DAT_0096a980). Appears in all XiebroC2 response packets as server label."
+    },
+    "xiebro_version_typo_string": {
+      "value": "main/Helper/sysinfo.WindosVersion",
+      "confidence": "HIGH",
+      "context": "XiebroC2 3.1 source code typo (missing second w in Windows) preserved in pclntab. Unique YARA static detection string for this family version."
+    }
+  }
+}
