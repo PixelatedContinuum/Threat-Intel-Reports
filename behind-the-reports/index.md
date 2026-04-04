@@ -94,8 +94,13 @@ Beneath the agents is a second layer of infrastructure, hooks and commands, that
 **Hooks** fire on specific events (agent start, agent complete, reviewer complete) and handle coordination that would otherwise be manual. Three carry the most weight:
 
 - **Quality Gate Checker** the enforcer. Fires when the reviewer completes, reads the quality score against the 8.0 threshold, and writes `REVISION_NEEDED` or `COMPLETE` to the state file. The orchestrator doesn't make this call, the hook does, based on defined criteria, every time.
-- **Result Cache Manager** the time saver. When the research analyst finishes, this hook saves results by malware family. On any future analysis of the same family, those results are loaded directly and the research agent is skipped entirely, saving 15–20 minutes per re-analysis.
+- **Result Cache Manager** the time saver. When the research analyst finishes, this hook saves results by malware family with a 30-day TTL. On any future analysis of the same family within that window, those results are loaded directly — the research agent is either skipped entirely or runs in an abbreviated UPDATE mode that refreshes only recent threat actor activity and new reports rather than repeating the full research pass, saving 15–20 minutes per re-analysis.
 - **Skill Validation Gate** the standards enforcer. Fires after each agent completes and checks that required skills were invoked. Missing coverage is flagged before it can reach publication.
+
+Two additional hooks run targeted validation at critical handoff points:
+
+- **IOC Validation Hook** fires immediately after the malware analyst completes and before any downstream agent consumes the IOC feed. It runs seven automated checks — valid JSON structure, required fields present, correct hash lengths, valid IP format, no empty values, valid confidence levels — and logs any issues to a structured file. Structural problems in the IOC feed are caught here, before they can propagate through the rest of the workflow.
+- **Detection Validation Hook** fires after the detection engineer completes and runs structural checks across all three rule types: YARA (meta, strings, condition blocks), Sigma (UUID, required fields, SigmaHQ compliance status), and Suricata (alert keyword, sid, msg). Rule issues are logged before the rules are referenced in the final report.
 
 The remaining hooks keep the system instrumented and recoverable:
 
@@ -118,7 +123,9 @@ Other agents are independent, they can work with just the initial findings and d
 
 This means those four agents can run **simultaneously**, in parallel, like four specialists working on different parts of the same investigation at the same time. This cuts what would otherwise be 30+ minutes of sequential waiting down to roughly 12 minutes (limited only by how long the slowest agent takes).
 
-The orchestrator is responsible for understanding these dependencies and dispatching agents accordingly. Two hooks run silently in the background throughout this entire process: one logs the exact timestamp every agent is launched, and one logs when each agent completes. This gives the workflow a precise, timestamped record of the entire execution, how long each agent took, where time was spent, and whether the parallel batches actually ran simultaneously or drifted into sequence. It's not just automation; it's instrumented automation.
+The orchestrator is responsible for understanding these dependencies and dispatching agents accordingly. Two hooks run silently in the background throughout this entire process: one logs the exact timestamp every agent is launched, and one logs when each agent completes. This gives the workflow a precise, timestamped record of the entire execution — how long each agent took, where time was spent, and whether the parallel batches actually ran simultaneously or drifted into sequence. It's not just automation; it's instrumented automation.
+
+Each Stage 2 agent also produces a compact summary JSON alongside its full output — a structured digest of key findings, confidence levels, and evidence gaps. Downstream agents read these summaries first and only pull specific sections of the full output file when they need additional detail. For the report writer and attribution analyst, which must synthesize everything produced by the parallel batch, this reduces input consumption significantly without sacrificing depth.
 
 ---
 
@@ -233,7 +240,9 @@ Your options at this checkpoint:
 
 ### Quality Gate (Automated)
 
-When you approve, the orchestrator reads the quality gate results that the reviewer computed in the background. The reviewer scored the report across three expert perspectives:
+When you approve, the orchestrator first runs a mechanical pre-check script against the draft — 12 automated tests that a script can assess with certainty and at zero analytical cost: YAML front matter completeness, required section headings present, IOC and detection file references included, line count within the 3,000-line hard limit, confidence language formatted correctly, threat level badge present, analyst-note blockquotes in technical sections, license footer, and no embedded IOC tables in the report body. The results are passed to the reviewer as structured input so it can focus on what requires judgment, rather than rediscovering formatting problems that a script already caught.
+
+The orchestrator then reads the quality gate results that the reviewer computed in the background. The reviewer scored the report across three expert perspectives:
 
 - **Technical accuracy**, are the findings correct, is the MITRE mapping right, is confidence language calibrated?
 - **Practitioner utility**, does every finding connect to a defender action, does the tactical layer actually answer what a SOC analyst needs?
