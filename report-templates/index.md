@@ -82,12 +82,15 @@ description: "[1–2 sentence summary for social sharing previews]"
 
 If fewer than 3 atomic IOCs exist, omit `ioc_highlights` entirely rather than padding with non-atomic values.
 
-Immediately after the front matter (before the first heading), add the campaign identifier and last updated date:
+Immediately after the front matter (before the first heading), add the campaign identifier, last updated date, and threat level. Use `<br>` tags so each field renders on its own line:
 
 ```markdown
-**Campaign Identifier:** [CampaignID]
-**Last Updated:** [Month D, YYYY]
+**Campaign Identifier:** [CampaignID]<br>
+**Last Updated:** [Month D, YYYY]<br>
+**Threat Level:** [CRITICAL/HIGH/MEDIUM/LOW]
 ```
+
+**Why `<br>` tags are required:** In Jekyll/Markdown, consecutive lines without a blank line between them are collapsed into a single paragraph. Without `<br>`, all three fields will render on one line instead of three.
 
 **Campaign ID naming convention:** Describe *what was found*, not the assumed attacker.
 ✓ `WebServer-Compromise-Kit-45.94.31.220`
@@ -141,6 +144,11 @@ The canonical section order for a full-format report. Brief sections at top (BLU
 ```
 
 ### Numbered Body Sections
+
+**Heading level rule:** All top-level numbered sections (1–10 and Appendices) use `##` (H2) — never `#` (H1). The report title rendered by Jekyll is already the page H1; using `#` inside the body creates a duplicate H1 and breaks the site's TOC scan, which only builds from H2 headings. Sub-sections within a numbered section use `###` (H3).
+
+✓ Correct: `## 1. Executive Summary`
+✗ Wrong: `# 1. Executive Summary`
 
 **Section 1 — Executive Summary**
 High-level overview for a mixed audience. Covers the threat in plain terms, what defenders gained from the intelligence, and what the attacker built. Plain language first, technical depth second. Includes key analyst notes (operational caveats, confidence limitations).
@@ -345,6 +353,7 @@ All named-source claims require a directly cited source. If a URL cannot be cite
 - **Report length:** 3,000 lines maximum
 - **IOC location:** `ioc-feeds/[name]-iocs.json` only — never embedded in the report
 - **Detection rules:** `hunting-detections/[name]-detections.md` only — never embedded in the report
+- **No Quick Reference section:** Do not include a "Quick Reference" table or section (linking to IOC/detection anchors). The report sidebar panels already surface these links — a Quick Reference section is redundant and adds unnecessary length.
 
 ---
 
