@@ -1485,3 +1485,403 @@ button.hl-quicklink {
 @media (max-width: 900px) {
   .hl-quicklinks, .hl-ioc-panel, .hl-detect-panel { display: none !important; }
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE ENHANCEMENTS
+   Desktop (>=769px) is unchanged. All rules below either live
+   inside a mobile @media block or are universal safety rules
+   that are invisible on desktop.
+   ============================================================ */
+
+/* --- Universal safety rules (no visible desktop effect) ----- */
+/* Root background matches page so horizontal overflow can't
+   expose the theme's default grey/light background. */
+html {
+  background: var(--hl-bg-page);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Any bare image (non-figure) also constrained to its container */
+img { max-width: 100%; height: auto; }
+
+/* --- Tablet & small laptop (<=900px) ------------------------ */
+@media (max-width: 900px) {
+  /* Narrow the edge-glow overlays (were 125px each) */
+  body::before, body::after { width: 40px; }
+}
+
+/* --- Mobile phones & small tablets (<=768px) ---------------- */
+@media (max-width: 768px) {
+  /* Hide decorative edge-glow overlays on phones —
+     at 125px they covered most of the viewport */
+  body::before, body::after { display: none; }
+
+  /* Tighter content gutters + reduce base font from 22px → 18px */
+  main.content {
+    padding: 0 16px 28px !important;
+    font-size: 0.9em;
+  }
+  .hl-page { padding-top: 1.5rem; }
+
+  /* --- Navbar: compact, wrap nav links below brand --------- */
+  .hl-nav {
+    height: auto;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .hl-nav__brand { font-size: 1.1rem; }
+  .hl-nav__links {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding-bottom: 4px;
+  }
+  .hl-nav__link { font-size: 0.95rem; }
+
+  /* --- Post header: compact + allow eyebrow to wrap -------- */
+  .hl-post-header {
+    padding: 16px 16px;
+    margin-bottom: 1.75rem;
+  }
+  .hl-post-header__eyebrow {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .hl-post-header__title {
+    font-size: 1.25em !important;
+    line-height: 1.3;
+  }
+
+  /* --- Page header + hero card ----------------------------- */
+  .hl-page-header { padding: 16px 16px; }
+  .hl-page-header__title { font-size: 1.25em !important; }
+
+  .hl-hero { padding: 20px 18px; gap: 14px; }
+  .hl-hero__title { font-size: 1.25em !important; }
+  .hl-hero__logo {
+    width: 100%;
+    max-width: 260px;
+    height: 80px;
+    background-size: 140%;
+  }
+
+  /* --- Long-string wrapping (hashes, IOCs, IPs, URLs) ------ */
+  /* This is the fix for the "grey right margin" issue when
+     long indicators overflow their container. */
+  .hl-post-content,
+  .hl-post-content p,
+  .hl-post-content li,
+  .hl-post-content a,
+  .hl-post-content td,
+  .hl-post-content th {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .hl-post-content code { word-break: break-all; }
+
+  /* --- Headings: smaller + tighter padding ----------------- */
+  .hl-post-content h2 {
+    font-size: 1.08em !important;
+    padding: 7px 10px !important;
+    margin-top: 2rem !important;
+  }
+  .hl-post-content h3 {
+    font-size: 1em !important;
+    margin-top: 1.4rem !important;
+  }
+  .hl-post-content h4 { font-size: 0.92em !important; }
+
+  /* --- Tables: shrink font + padding so cells fit ---------- */
+  .hl-post-content table { font-size: 0.8em; }
+  .hl-post-content th,
+  .hl-post-content td {
+    padding: 6px 8px !important;
+  }
+
+  /* --- Blockquotes: tighter padding ------------------------ */
+  .hl-post-content blockquote {
+    padding: 10px 14px !important;
+    margin: 1.25rem 0 !important;
+  }
+
+  /* --- Pre / code blocks: tighter padding ------------------ */
+  .hl-post-content pre {
+    padding: 12px 14px;
+    font-size: 0.85em;
+    border-radius: 4px;
+  }
+
+  /* --- Grids → single column ------------------------------- */
+  .hl-grid,
+  .hl-nav-grid,
+  .hl-related__grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hl-card__inner { padding: 12px; gap: 10px; }
+
+  /* --- Row list: allow wrap for long titles ---------------- */
+  .hl-row__body {
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding: 8px 10px;
+  }
+  .hl-row__date { font-size: 0.68em; }
+
+  /* --- Subscribe cards + prose sections -------------------- */
+  .hl-subscribe-option { padding: 18px 18px; }
+  .hl-subscribe-option__url { padding: 8px 12px; }
+  .hl-subscribe-option__url-value { font-size: 0.8em; }
+  .hl-prose-section { padding: 12px 14px; }
+  .hl-nav-tile { padding: 12px 14px; }
+
+  /* --- Masthead + section spacing -------------------------- */
+  .hl-masthead { margin-bottom: 1.25rem; border-radius: 6px; }
+  .hl-section-header { margin: 1.5rem 0 12px; font-size: 0.8em; }
+
+  /* --- Post nav: tighter ---------------------------------- */
+  #post-nav { padding: 14px 10px !important; }
+
+  /* --- Back-to-top button: smaller + safer position ------- */
+  .hl-back-top {
+    bottom: 18px; right: 14px;
+    width: 36px; height: 36px;
+    font-size: 1em;
+  }
+}
+
+/* --- Ultra-narrow phones (<=380px) -------------------------- */
+@media (max-width: 380px) {
+  main.content { padding: 0 12px 24px !important; font-size: 0.88em; }
+  .hl-nav { padding: 10px 12px; }
+  .hl-nav__brand { font-size: 1rem; }
+  .hl-nav__links { gap: 14px; }
+  .hl-nav__link { font-size: 0.9rem; }
+  .hl-post-header,
+  .hl-page-header,
+  .hl-hero { padding: 14px 14px; }
+  .hl-post-header__title,
+  .hl-page-header__title,
+  .hl-hero__title { font-size: 1.15em !important; }
+  .hl-post-content h2 { font-size: 1em !important; padding: 6px 8px !important; }
+  .hl-post-content pre { padding: 10px 12px; font-size: 0.82em; }
+  .hl-post-content table { font-size: 0.75em; }
+  .hl-post-content th,
+  .hl-post-content td { padding: 5px 6px !important; }
+}
+
+/* ============================================================
+   TOUCH DEVICE ENHANCEMENTS
+   All rules below are invisible on desktop with a mouse.
+   Universal rules use properties/values that desktop browsers
+   either ignore (tap-highlight-color, touch-action) or compute
+   to identical values as today (env() = 0 on non-notched).
+   ============================================================ */
+
+/* --- Universal tap-interaction polish ----------------------- */
+/* Theme-matched tap flash (desktop browsers ignore this) */
+html {
+  -webkit-tap-highlight-color: rgba(88,166,255,0.2);
+}
+
+/* Remove 300ms tap delay on interactive elements.
+   No-op for mouse input — only affects touch events. */
+a,
+button,
+[role="button"],
+.hl-copy-btn,
+.hl-back-top,
+.hl-share-btn,
+.hl-quicklink,
+.hl-ioc-cpbtn,
+.hl-toc__copy-btn {
+  touch-action: manipulation;
+}
+
+/* --- iPhone safe-area insets (notch + home indicator) ------- */
+/* env() returns 0 on desktop + non-notched devices, so
+   computed padding on those devices is unchanged. */
+.hl-nav {
+  padding-left: max(40px, env(safe-area-inset-left));
+  padding-right: max(40px, env(safe-area-inset-right));
+}
+.hl-back-top {
+  bottom: max(28px, env(safe-area-inset-bottom));
+  right: max(22px, env(safe-area-inset-right));
+}
+
+@media (max-width: 768px) {
+  .hl-nav {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  main.content {
+    padding-left: max(16px, env(safe-area-inset-left)) !important;
+    padding-right: max(16px, env(safe-area-inset-right)) !important;
+  }
+  .hl-back-top {
+    bottom: max(18px, env(safe-area-inset-bottom));
+    right: max(14px, env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 380px) {
+  .hl-nav {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+  main.content {
+    padding-left: max(12px, env(safe-area-inset-left)) !important;
+    padding-right: max(12px, env(safe-area-inset-right)) !important;
+  }
+}
+
+/* --- Touch-only behaviors (@media hover: none) -------------- */
+/* Devices without hover capability get:
+   - always-visible copy/anchor affordances (analysts need these
+     to copy IOCs/hashes/permalinks on mobile)
+   - 44px minimum touch targets
+   - no sticky hover transforms that get stuck after tap */
+@media (hover: none) {
+  /* Copy buttons on code blocks — always visible on touch */
+  .hl-copy-btn {
+    opacity: 0.8;
+  }
+  .hl-copy-btn:active {
+    opacity: 1;
+    background: rgba(88,166,255,0.25);
+  }
+
+  /* Heading permalink anchors — always visible on touch */
+  .hl-heading-anchor {
+    opacity: 0.55;
+  }
+  .hl-heading-anchor:active {
+    opacity: 1;
+  }
+  /* Hide the hover-only tooltip on touch — it looks odd on tap */
+  .hl-heading-anchor::after { display: none; }
+
+  /* Kill hover transforms (prevents stuck lifted state after tap) */
+  .hl-back-top:hover { transform: none; }
+
+  /* 44px minimum touch targets (WCAG 2.5.5) */
+  .hl-nav__link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .hl-back-top {
+    width: 44px;
+    height: 44px;
+    font-size: 1.15em;
+  }
+  .hl-share-btn {
+    min-height: 36px;
+    padding: 6px 12px;
+  }
+  .hl-copy-btn {
+    min-height: 32px;
+    padding: 6px 12px;
+  }
+  .hl-ioc-cpbtn {
+    min-height: 28px;
+    padding: 4px 8px;
+  }
+}
+
+/* --- Custom text selection colors --------------------------- */
+/* Matches site accent blue for legibility on dark background. */
+::selection {
+  background: rgba(88,166,255,0.35);
+  color: #ffffff;
+}
+::-moz-selection {
+  background: rgba(88,166,255,0.35);
+  color: #ffffff;
+}
+
+/* ============================================================
+   MOBILE TOC (collapsible, replaces sidebar ≤1280px)
+   Hidden on desktop — sidebar TOC remains the desktop experience.
+   ============================================================ */
+.hl-post-toc-mobile { display: none; }
+
+@media (max-width: 1280px) {
+  .hl-post-toc-mobile {
+    display: block;
+    background: var(--hl-bg-row);
+    border: 1px solid var(--hl-border-row);
+    border-left: 2px solid var(--hl-accent-blue);
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+
+  .hl-post-toc-mobile summary {
+    cursor: pointer;
+    padding: 11px 14px;
+    font-size: 0.78em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--hl-accent-blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .hl-post-toc-mobile summary::-webkit-details-marker { display: none; }
+  .hl-post-toc-mobile summary::before {
+    content: '▸';
+    font-size: 0.9em;
+    transition: transform 0.2s ease;
+    display: inline-block;
+    line-height: 1;
+  }
+  .hl-post-toc-mobile[open] summary::before {
+    transform: rotate(90deg);
+  }
+  .hl-post-toc-mobile[open] summary {
+    border-bottom: 1px solid var(--hl-border-row);
+  }
+  .hl-post-toc-mobile summary:hover {
+    background: rgba(88,166,255,0.04);
+  }
+
+  .hl-post-toc-mobile nav {
+    padding: 6px 6px 8px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .hl-post-toc-mobile ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .hl-post-toc-mobile li a {
+    display: block;
+    padding: 9px 10px;
+    color: var(--hl-text-primary);
+    text-decoration: none;
+    font-size: 0.88em;
+    line-height: 1.4;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    word-break: break-word;
+    transition: color 0.1s, background 0.1s, border-color 0.1s;
+  }
+  .hl-post-toc-mobile li a:hover,
+  .hl-post-toc-mobile li a:active {
+    background: rgba(88,166,255,0.08);
+    border-left-color: var(--hl-accent-blue);
+    color: var(--hl-accent-blue);
+  }
+}

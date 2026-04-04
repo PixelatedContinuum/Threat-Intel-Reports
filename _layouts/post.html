@@ -26,6 +26,10 @@ document.addEventListener('DOMContentLoaded', function () {
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
 <div class="hl-post-body">
+  <details class="hl-post-toc-mobile" id="hl-toc-mobile">
+    <summary>Contents</summary>
+    <nav><ul id="hl-toc-list-mobile"></ul></nav>
+  </details>
   <div class="hl-post-content">
     {{ content }}
   </div>
@@ -205,12 +209,18 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // --- TOC + heading permalink anchors ---
-  var tocList = document.getElementById('hl-toc-list');
-  var toc     = document.getElementById('hl-toc');
+  var tocList       = document.getElementById('hl-toc-list');
+  var toc           = document.getElementById('hl-toc');
+  var tocListMobile = document.getElementById('hl-toc-list-mobile');
+  var tocMobile     = document.getElementById('hl-toc-mobile');
   if (!tocList || !toc) return;
 
   var headings = Array.from(content.querySelectorAll('h2'));
-  if (headings.length < 3) { toc.style.display = 'none'; return; }
+  if (headings.length < 3) {
+    toc.style.display = 'none';
+    if (tocMobile) tocMobile.style.display = 'none';
+    return;
+  }
 
   var linkIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
   var tocIconSVG  = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
@@ -246,6 +256,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     li.appendChild(tocBtn);
     tocList.appendChild(li);
+
+    // Mobile TOC entry (collapsible card, shown ≤1280px)
+    if (tocListMobile) {
+      var liM = document.createElement('li');
+      var aM = document.createElement('a');
+      aM.href = '#' + h.id;
+      aM.textContent = labelText;
+      aM.addEventListener('click', function () {
+        if (tocMobile) tocMobile.open = false;
+      });
+      liM.appendChild(aM);
+      tocListMobile.appendChild(liM);
+    }
 
     // Permalink anchor appended after text capture
     var anchor = document.createElement('a');
