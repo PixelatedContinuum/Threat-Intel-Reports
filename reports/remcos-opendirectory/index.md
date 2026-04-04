@@ -25,7 +25,9 @@ hide: true
 ---
 
 
-**Campaign Identifier:** OpenDirectory-203.159.90.147-Remcos
+**Campaign Identifier:** OpenDirectory-203.159.90.147-Remcos<br>
+**Last Updated:** February 6, 2026<br>
+**Threat Level:** MEDIUM
 
 
 ---
@@ -983,6 +985,6 @@ Enhanced monitoring for:
 
 ---
 
-### License
-© 2026 Joseph. All rights reserved.  
-Free to read, but reuse requires written permission.
+## License
+
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

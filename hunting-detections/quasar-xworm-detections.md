@@ -6,8 +6,6 @@ permalink: /hunting-detections/quasar-xworm-powershell/
 hide: true
 ---
 
-# Detection Rules – QuasarRAT + Xworm Campaign
-
 ## Overview
 Detection coverage for the QuasarRAT + Xworm campaign includes host‑based, process‑based, and network indicators.  
 Rules are provided in Sigma and Suricata formats for SIEM/EDR and IDS/IPS integration.
@@ -51,6 +49,7 @@ rule PS_Defender_Exclusion {
 alert http any any -> any any (msg:"Malware Loader update.png"; http.uri; content:"/update.png"; sid:200001;)
 alert dns any any -> any any (msg:"Suspicious DuckDNS Domain"; dns.query; content:"dns4up.duckdns.org"; sid:200002;)
 ```
+
 ---
 
 ## License

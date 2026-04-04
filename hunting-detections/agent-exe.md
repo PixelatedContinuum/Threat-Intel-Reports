@@ -6,8 +6,6 @@ permalink: /hunting-detections/agent-exe/
 hide: true
 ---
 
-# Detection Rules – agent.exe (PoetRAT)
-
 ## Overview
 Comprehensive detection coverage for agent.exe includes host-based indicators, process behavior patterns, and network signatures. Rules are provided in YARA and Sigma formats for SIEM/EDR integration and proactive threat hunting.
 
@@ -37,7 +35,7 @@ Comprehensive detection coverage for agent.exe includes host-based indicators, p
 rule Agent_exe_PoetRAT_Comprehensive {
     meta:
         description = "Detects agent.exe PoetRAT malware based on file hashes, strings, and behavioral indicators"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "CRITICAL"
         malware_family = "PoetRAT"
@@ -116,7 +114,7 @@ rule Agent_exe_PoetRAT_Comprehensive {
 rule PoetRAT_Persistence_Component {
     meta:
         description = "Detects PoetRAT persistence components (WinDefenderSvc.exe and related files)"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         hash1 = "4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1"
@@ -148,7 +146,7 @@ rule PoetRAT_Persistence_Component {
 rule Golang_RAT_Generic_Detection {
     meta:
         description = "Detects Golang-compiled RAT with common capabilities (broader detection)"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "MEDIUM"
         reference = "Generic Golang RAT detection pattern"
@@ -197,7 +195,7 @@ title: Suspicious WinDefenderSvc.exe in Startup Folder
 id: e7f9a29d-de30-7aff-f419-1dbc14a97440
 status: experimental
 description: Detects creation of WinDefenderSvc.exe in user Startup folder (PoetRAT persistence)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - agent.exe analysis report
@@ -230,7 +228,7 @@ title: Suspicious Registry Run Key - WindowsDefenderUpdate
 id: 4e856041-0182-42c6-2b38-48d63b94c376
 status: experimental
 description: Detects creation of WindowsDefenderUpdate registry Run key (PoetRAT persistence)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - agent.exe analysis report
@@ -261,7 +259,7 @@ title: Golang Executable Creating Persistence with Anti-Debug
 id: b1d5e55b-1c15-b7cb-8391-38625d9d2efa
 status: experimental
 description: Detects Golang-compiled executable creating persistence and using anti-debugging
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - agent.exe analysis report
@@ -302,7 +300,7 @@ title: PoetRAT Installation Marker File (.wd_installed)
 id: 6b86b273-ff34-fce1-9d6b-804eff5a3f57
 status: experimental
 description: Detects creation of .wd_installed marker file indicating PoetRAT infection
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - agent.exe analysis report
@@ -811,3 +809,9 @@ For questions about these detection rules or to report false positives, contact:
 
 ---
 **END OF DETECTION RULES**
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

@@ -27,12 +27,14 @@ hide: true
 ---
 
 
-**Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250
+**Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250<br>
+**Last Updated:** February 10, 2026<br>
+**Threat Level:** HIGH
 
 
 ---
 
-# BLUF (Bottom Line Up Front)
+## BLUF (Bottom Line Up Front)
 
 ## Executive Summary
 
@@ -580,6 +582,5 @@ Set-Service Spooler -StartupType Disabled
 ---
 
 ## License
-© 2025 Joseph. All rights reserved.
-Free to read, but reuse requires written permission.
 
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

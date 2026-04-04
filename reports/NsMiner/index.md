@@ -25,12 +25,14 @@ category: "Cryptojacking"
 hide: true
 ---
 
-**Campaign Identifier:** NsMiner-125.19.150.122-Cryptojacking
+**Campaign Identifier:** NsMiner-125.19.150.122-Cryptojacking<br>
+**Last Updated:** February 2, 2026<br>
+**Threat Level:** MEDIUM
 
 
 ---
 
-# Malware Analysis Report: NsMiner Cryptojacker
+## Malware Analysis Report: NsMiner Cryptojacker
 
 ## 1. Executive Summary
 
@@ -248,7 +250,7 @@ url="*hrtests.ru/S.php*"
 *   `141.227.248.10`
 
 ---
-## License
-© 2025 Joseph. All rights reserved.  
-Free to read, but reuse requires written permission.
 
+## License
+
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-lpe-exe/
 hide: true
 ---
 
-# Detection Rules - lpe.exe (Arsenal-237 Privilege Escalation Module)
-
 ## Overview
 
 This detection guide focuses on identifying **lpe.exe**, a sophisticated local privilege escalation (LPE) wrapper from the Arsenal-237 malware toolkit. This executable employs **five independent escalation techniques**, providing 99.99%+ success rate across diverse Windows environments.
@@ -51,7 +49,7 @@ Monitor for UAC bypass registry modifications and unusual process hierarchies (s
 rule Arsenal237_LPE_EXE_Hash {
     meta:
         description = "Detects Arsenal-237 lpe.exe by file hash"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         hash = "c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e"
         severity = "CRITICAL"
@@ -69,7 +67,7 @@ rule Arsenal237_LPE_EXE_Hash {
 rule Arsenal237_LPE_Token_Manipulation {
     meta:
         description = "Detects lpe.exe token impersonation API pattern"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         severity = "HIGH"
         technique = "T1134.001 - Token Impersonation"
@@ -100,7 +98,7 @@ rule Arsenal237_LPE_Token_Manipulation {
 rule Arsenal237_LPE_UAC_Bypass {
     meta:
         description = "Detects lpe.exe UAC bypass via registry hijack"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         severity = "HIGH"
         technique = "T1548.002 - UAC Bypass"
@@ -126,7 +124,7 @@ rule Arsenal237_LPE_UAC_Bypass {
 rule Arsenal237_LPE_Schtasks {
     meta:
         description = "Detects lpe.exe scheduled task escalation via direct schtasks.exe use"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         severity = "HIGH"
         technique = "T1053.005 - Scheduled Task"
@@ -151,7 +149,7 @@ rule Arsenal237_LPE_Schtasks {
 rule Arsenal237_LPE_Named_Pipe {
     meta:
         description = "Detects lpe.exe named pipe impersonation"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         severity = "HIGH"
         technique = "T1055.001 - Named Pipe Impersonation"
@@ -178,7 +176,7 @@ rule Arsenal237_LPE_Named_Pipe {
 rule Arsenal237_LPE_WMIC {
     meta:
         description = "Detects lpe.exe WMIC process creation"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         severity = "MEDIUM"
         technique = "T1047 - WMI"
@@ -206,7 +204,7 @@ title: Privilege Escalation via Token Impersonation (lpe.exe)
 id: a1b2c3d4-e5f6-7890-1234-567890abcdef
 status: experimental
 description: Detects token impersonation sequence characteristic of lpe.exe
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 references:
     - lpe.exe analysis report
@@ -245,7 +243,7 @@ title: UAC Bypass via ms-settings Registry Hijack (lpe.exe)
 id: b2c3d4e5-f6a7-8901-2345-678901bcdefg
 status: experimental
 description: Detects UAC bypass via fodhelper.exe registry hijack (lpe.exe technique)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 tags:
     - attack.privilege_escalation
@@ -279,7 +277,7 @@ title: Scheduled Task Created as SYSTEM (lpe.exe)
 id: c3d4e5f6-a7b8-9012-3456-789012cdefgh
 status: experimental
 description: Detects scheduled task creation with SYSTEM privileges from non-administrative process (direct use of schtasks.exe, not hijacking another component)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 references:
     - Task names are likely randomized - detection should focus on /ru SYSTEM parameter, not task name
@@ -315,7 +313,7 @@ title: Named Pipe Impersonation Attack (lpe.exe)
 id: d4e5f6a7-b8c9-0123-4567-890123defghi
 status: experimental
 description: Detects named pipe creation followed by impersonation attempt
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 tags:
     - attack.privilege_escalation
@@ -347,7 +345,7 @@ title: WMIC Process Creation for Privilege Escalation (lpe.exe)
 id: e5f6a7b8-c9d0-1234-5678-901234efghij
 status: experimental
 description: Detects WMIC being used to create processes for privilege escalation
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 tags:
     - attack.execution
@@ -380,7 +378,7 @@ title: Multi-Technique Privilege Escalation Sequence (lpe.exe)
 id: f6a7b8c9-d0e1-2345-6789-012345fghijk
 status: experimental
 description: Detects multiple privilege escalation techniques attempted in rapid succession (lpe.exe signature)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 tags:
     - attack.privilege_escalation
@@ -722,3 +720,9 @@ sequence by host.id with maxspan=60s
 
 ---
 **END OF DETECTION RULES**
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-new_enc-exe/
 hide: true
 ---
 
-# new_enc.exe (Arsenal-237) - Detection Rules & Hunting Queries
-
 **Generated:** 2026-01-26
 **Threat Level:** CRITICAL
 **Rule Category:** Ransomware Detection
@@ -22,7 +20,7 @@ hide: true
 rule new_enc_exe_file_hash {
     meta:
         description = "Detects new_enc.exe Arsenal-237 ransomware by file hash"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         malware_type = "Ransomware"
@@ -44,7 +42,7 @@ rule new_enc_exe_file_hash {
 rule arsenal_237_chacha20_key {
     meta:
         description = "Detects Arsenal-237 hardcoded ChaCha20 encryption key"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         ioc_type = "Cryptographic Material"
@@ -65,7 +63,7 @@ rule arsenal_237_chacha20_key {
 rule arsenal_237_campaign_identifiers {
     meta:
         description = "Detects Arsenal-237 campaign ID and version strings"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         ioc_type = "Campaign Identifier"
@@ -86,7 +84,7 @@ rule arsenal_237_campaign_identifiers {
 rule arsenal_237_veritas_targeting {
     meta:
         description = "Detects service names targeting Veritas Backup Exec agents"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         ioc_type = "Enterprise Targeting Indicator"
@@ -111,7 +109,7 @@ rule arsenal_237_veritas_targeting {
 rule arsenal_237_antirecovery_commands {
     meta:
         description = "Detects VSS deletion and anti-recovery commands"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         ioc_type = "Anti-Recovery Indicator"
@@ -132,7 +130,7 @@ rule arsenal_237_antirecovery_commands {
 rule arsenal_237_anti_analysis {
     meta:
         description = "Detects anti-analysis strings and VM detection indicators"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "HIGH"
         ioc_type = "Anti-Analysis Indicator"
@@ -159,7 +157,7 @@ rule arsenal_237_anti_analysis {
 rule arsenal_237_hex_ransom_note {
     meta:
         description = "Detects hex-encoded ransom note header"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "HIGH"
         ioc_type = "Ransom Note Indicator"
@@ -178,7 +176,7 @@ rule arsenal_237_hex_ransom_note {
 rule arsenal_237_analysis_tool_strings {
     meta:
         description = "Detects strings indicating analysis tool process monitoring"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "HIGH"
         ioc_type = "Anti-Analysis Tool Detection"
@@ -204,7 +202,7 @@ rule arsenal_237_analysis_tool_strings {
 rule arsenal_237_rust_implementation {
     meta:
         description = "Detects Rust-compiled ransomware characteristics"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "HIGH"
         ioc_type = "Family Classification"
@@ -231,7 +229,7 @@ id: 0d6cbe7c-6d5f-4b6e-9c2a-8c4b5d3e1f7a
 description: Detects execution of vssadmin delete shadows command used by ransomware
 status: test
 date: 2026-01-26
-author: Threat Intelligence Team
+author: The Hunters Ledger
 references:
     - https://attack.mitre.org/techniques/T1490/
 logsource:
@@ -265,7 +263,7 @@ id: 1e8c3d5a-2b7f-4a9c-b1e6-d3f5a8c2b4e7
 description: Detects mass termination of backup services (Veritas, Veeam, VSS)
 status: test
 date: 2026-01-26
-author: Threat Intelligence Team
+author: The Hunters Ledger
 references:
     - https://attack.mitre.org/techniques/T1489/
 logsource:
@@ -304,7 +302,7 @@ id: 3f7a9b2c-5e8d-4c1a-b6f3-7d2e5a8c1b9f
 description: Detects creation of RustRansomNoteTask scheduled task
 status: test
 date: 2026-01-26
-author: Threat Intelligence Team
+author: The Hunters Ledger
 references:
     - https://attack.mitre.org/techniques/T1053.005/
 logsource:
@@ -332,7 +330,7 @@ id: 4b2d7e9a-1c5f-3a8b-6d4e-2f7c9a3b5e1d
 description: Detects termination of SQL Server and Oracle database services
 status: test
 date: 2026-01-26
-author: Threat Intelligence Team
+author: The Hunters Ledger
 references:
     - https://attack.mitre.org/techniques/T1489/
 logsource:
@@ -666,3 +664,9 @@ alert dns any any -> any 53 (
 ---
 
 **End of Detection Rules Document**
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

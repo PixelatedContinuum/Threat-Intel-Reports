@@ -6,8 +6,6 @@ permalink: /hunting-detections/AdvancedRouterScanner/
 hide: true
 ---
 
-# Detection Rules – AdvancedRouterScanner Campaign
-
 ---
 
 ## Exploit Layer

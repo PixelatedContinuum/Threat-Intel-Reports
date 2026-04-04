@@ -25,7 +25,9 @@ hide: true
 
 A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 
-**Campaign Identifier:** WebServer-Compromise-Kit-45.94.31.220    
+**Campaign Identifier:** WebServer-Compromise-Kit-45.94.31.220<br>
+**Last Updated:** March 1, 2026<br>
+**Threat Level:** MEDIUM
 
 ---
 

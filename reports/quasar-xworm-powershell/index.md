@@ -19,7 +19,9 @@ category: "Multi-Stage RAT"
 hide: true
 ---
 
-**Campaign Identifier:** QuasarRAT-Xworm-PowerShell-Campaign
+**Campaign Identifier:** QuasarRAT-Xworm-PowerShell-Campaign<br>
+**Last Updated:** October 17, 2025<br>
+**Threat Level:** MEDIUM
 
 
 ---
@@ -448,6 +450,6 @@ A: Implement PowerShell logging, application control, endpoint detection with fi
 
 ---
 
-### License
-© 2025 Joseph. All rights reserved.  
-Free to read, but reuse requires written permission.
+## License
+
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

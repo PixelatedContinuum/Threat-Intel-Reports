@@ -6,8 +6,6 @@ permalink: /hunting-detections/fleetagentadvanced-exe/
 hide: true
 ---
 
-# Detection Rules – FleetAgentAdvanced.exe: Multi-Layer Persistence Trojan
-
 ## Overview
 Comprehensive detection coverage for FleetAgentAdvanced.exe persistence trojan/dropper and its deployed payload (RuntimeOptimization.exe). Rules target the malware's distinctive quad-persistence architecture, .NET dropper characteristics, and Microsoft .NET masquerading behavior.
 
@@ -29,7 +27,7 @@ Comprehensive detection coverage for FleetAgentAdvanced.exe persistence trojan/d
 rule FleetAgentAdvanced_Dropper_Core {
     meta:
         description = "Detects FleetAgentAdvanced.exe dropper based on strings, capabilities, and file characteristics"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         hash1 = "172258e53b9506a7671deab25d2ad360cd833a4942609f1a4836d305ffe4578b"
         severity = "HIGH"
@@ -98,7 +96,7 @@ rule FleetAgentAdvanced_Dropper_Core {
 rule FleetAgentAdvanced_RuntimeOptimization_Payload {
     meta:
         description = "Detects dropped RuntimeOptimization.exe payload"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         hash1 = "9fc6b69623133f5d6f1f4cda0ec4319300080c9bbaa0f88c93f01eeba84e80e7"
         severity = "HIGH"
@@ -117,7 +115,7 @@ rule FleetAgentAdvanced_RuntimeOptimization_Payload {
 rule FleetAgentAdvanced_Quad_Persistence_Pattern {
     meta:
         description = "Detects .NET droppers with quad-persistence architecture pattern"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "MEDIUM"
         technique = "T1547.001 + T1053.005 - Multiple Persistence Mechanisms"
@@ -151,7 +149,7 @@ rule FleetAgentAdvanced_Quad_Persistence_Pattern {
 rule FleetAgentAdvanced_TaskXML_AntiForensics {
     meta:
         description = "Detects malware with task.xml creation and deletion anti-forensics pattern"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "MEDIUM"
         technique = "T1070.004 - Indicator Removal: File Deletion"
@@ -181,7 +179,7 @@ title: FleetAgentAdvanced Quad-Persistence Establishment
 id: a1b2c3d4-fleet-quad-persistence-001
 status: stable
 description: Detects FleetAgentAdvanced quad-persistence mechanism establishment pattern
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -221,7 +219,7 @@ title: FleetAgentAdvanced Task.xml Deletion Anti-Forensics
 id: b2c3d4e5-fleet-taskxml-deletion-002
 status: stable
 description: Detects task.xml deletion immediately after scheduled task creation (FleetAgentAdvanced anti-forensics signature)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -251,7 +249,7 @@ title: FleetAgentAdvanced RuntimeOptimization.exe Execution
 id: c3d4e5f6-fleet-runtime-exec-003
 status: stable
 description: Detects execution of RuntimeOptimization.exe from AppData\Microsoft\CLR\ directory
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -278,7 +276,7 @@ title: FleetAgentAdvanced Microsoft .NET Masquerading Persistence
 id: d4e5f6a7-fleet-dotnet-masq-004
 status: stable
 description: Detects persistence mechanisms using Microsoft .NET naming without valid Microsoft signatures
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -314,7 +312,7 @@ title: FleetAgentAdvanced Process Injection from .NET Executable
 id: e5f6a7b8-fleet-injection-005
 status: experimental
 description: Detects process injection API sequences from .NET executables in AppData
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -744,7 +742,7 @@ title: .NET Dropper with Base64 Embedded Payload Execution
 id: f6a7b8c9-fleet-base64-payload-006
 status: experimental
 description: Detects .NET executables decoding Base64 payloads and writing to disk (FleetAgentAdvanced pattern)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 logsource:
     product: windows
@@ -777,7 +775,7 @@ title: FleetAgentAdvanced RuntimeOptimization.exe File Creation
 id: a7b8c9d0-fleet-file-creation-007
 status: stable
 description: Detects creation of RuntimeOptimization.exe file in AppData\Microsoft\CLR\ directory
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 logsource:
     product: windows
@@ -801,11 +799,5 @@ tags:
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
 Free to use in your environment, but not for commercial purposes.
-
----
-
-**Report Version**: 1.0
-**Last Updated**: 2026-01-12
-**Maintained By**: Threat Intelligence Team

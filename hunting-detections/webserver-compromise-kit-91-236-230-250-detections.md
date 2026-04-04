@@ -6,8 +6,6 @@ permalink: /hunting-detections/webserver-compromise-kit-91-236-230-250-detection
 hide: true
 ---
 
-# Detection Rules & Hunting Queries: WebServer Compromise Kit
-
 **Campaign:** WebServer-Compromise-Kit-91.236.230.250
 **Date:** February 8, 2026
 **Last Updated:** February 9, 2026
@@ -251,7 +249,7 @@ title: IIS Worker Process Spawns Interactive Shell
 id: c4e3d3c7-9f89-4d1a-8b2c-3e5a6f7d8e9f
 status: stable
 description: Detects w3wp.exe spawning cmd.exe or powershell.exe (web shell indicator)
-author: Threat Intelligence Workflow
+author: The Hunters Ledger
 date: 2026-02-08
 references:
     - "WebServer-Compromise-Kit-91.236.230.250 Campaign"
@@ -287,7 +285,7 @@ title: Named Pipe Created Matching PrintSpoofer Pattern
 id: d5f4e6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8g
 status: stable
 description: Detects creation of named pipes ending in 'spoolss' by non-Spooler processes
-author: Threat Intelligence Workflow
+author: The Hunters Ledger
 date: 2026-02-08
 references:
     - "PrintSpoofer exploitation technique"
@@ -320,7 +318,7 @@ title: Reverse SOCKS Proxy Execution (revsocks)
 id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 status: experimental
 description: Detects execution of revsocks or similar reverse proxy tools via command-line flags
-author: Threat Intelligence Workflow
+author: The Hunters Ledger
 date: 2026-02-08
 references:
     - "https://github.com/kost/revsocks"
@@ -356,7 +354,7 @@ title: Outbound Connection to Known C2 Server (91.236.230.250)
 id: f9e8d7c6-b5a4-3210-9876-fedcba098765
 status: stable
 description: Detects outbound network connections to 91.236.230.250 (WebServer Compromise Kit C2)
-author: Threat Intelligence Workflow
+author: The Hunters Ledger
 date: 2026-02-08
 references:
     - "WebServer-Compromise-Kit-91.236.230.250 Campaign"
@@ -613,17 +611,5 @@ DeviceNetworkEvents
 ---
 
 ## License
-
-This detection content is licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-You are free to share and adapt this material for non-commercial purposes with attribution.
-
----
-
-**Report Version:** 2.0 (GitHub Pages Edition)
-**Last Updated:** February 9, 2026
-**Next Review:** March 9, 2026
-
-**Additional Resources:**
-- [Main Threat Intelligence Report](/reports/webserver-compromise-kit-91-236-230-250/)
-- [Machine-Readable IOC Feed](/ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json)
-
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

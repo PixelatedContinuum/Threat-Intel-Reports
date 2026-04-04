@@ -29,7 +29,9 @@ category: "Network Scanner"
 hide: true
 ---
 
-**Campaign Identifier:** AdvancedRouterScanner-Global-Router-Exploitation
+**Campaign Identifier:** AdvancedRouterScanner-Global-Router-Exploitation<br>
+**Last Updated:** October 25, 2025<br>
+**Threat Level:** MEDIUM
 
 
 ---
@@ -654,5 +656,5 @@ A: Implement network segmentation, regular firmware updates, credential manageme
 ---
 
 ## License
-© 2025 Joseph. All rights reserved.  
-Free to read, but reuse requires written permission.
+
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

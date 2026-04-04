@@ -6,8 +6,6 @@ permalink: /hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 hide: true
 ---
 
-# Detection Rules — ZeroTrace Multi-Family MaaS Operation (Open Directory 74.0.42.25)
-
 **Campaign:** ZeroTrace-MultiFamily-MaaS-74.0.42.25
 **Date:** 2026-03-17
 **Author:** The Hunters Ledger
@@ -533,3 +531,9 @@ alert tcp $HOME_NET any -> 185.49.126.140 [56001,56002,56003] (msg:"THL MaaS Too
 ```
 alert tcp $HOME_NET any -> any 8041 (msg:"THL MaaS Toolkit ScreenConnect Relay to Malicious Operator Domain adminxyzhosting.com"; flow:established,to_server; content:"adminxyzhosting.com"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:9001003; rev:1; metadata:author "The Hunters Ledger", created_at 2026_03_17, malware_family ScreenConnect_Abuse, confidence high, mitre_technique T1219;)
 ```
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

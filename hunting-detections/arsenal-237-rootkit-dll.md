@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-rootkit-dll/
 hide: true
 ---
 
-# Threat Hunting & Detection Rules: rootkit.dll (Defense Evasion Framework)
-
 ## Executive Summary
 
 This detection package provides comprehensive hunting and detection capabilities for **rootkit.dll**, an advanced defense evasion framework from the Arsenal-237 malware toolkit. Despite its misleading name, this is NOT a traditional rootkit but rather a sophisticated multi-vector defense neutralization framework that combines BYOVD exploitation, process termination, file system stealth, API hooking, and PowerShell integration.
@@ -40,7 +38,7 @@ rule Arsenal237_Rootkit_DLL_Comprehensive
 {
     meta:
         description = "Detects Arsenal-237 rootkit.dll defense evasion framework"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         reference = "Arsenal-237 Malware Toolkit Analysis"
         hash_md5 = "674795d4d4ec09372904704633ea0d86"
@@ -127,7 +125,7 @@ rule Arsenal237_BYOVD_Baidu_Driver
 {
     meta:
         description = "Detects embedded BdApiUtil64.sys driver for BYOVD attacks"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         reference = "Arsenal-237 BYOVD Technique"
         severity = "critical"
@@ -164,7 +162,7 @@ rule Arsenal237_Security_Product_Killer
 {
     meta:
         description = "Detects mass security product termination behavior"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         reference = "Arsenal-237 Defense Evasion"
         severity = "critical"
@@ -228,7 +226,7 @@ rule Arsenal237_Rust_Compiled_Malware
 {
     meta:
         description = "Detects Rust-compiled malware from Arsenal-237 toolkit"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         reference = "Arsenal-237 Rust Compilation Pattern"
         severity = "high"
@@ -280,7 +278,7 @@ status: experimental
 description: Detects loading of BdApiUtil64.sys vulnerable driver for BYOVD attacks
 references:
     - Arsenal-237 Malware Toolkit Analysis
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.privilege_escalation
@@ -316,7 +314,7 @@ status: experimental
 description: Detects mass termination of security products indicating Arsenal-237 rootkit.dll activity
 references:
     - Arsenal-237 Defense Evasion Framework
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.defense_evasion
@@ -361,7 +359,7 @@ status: experimental
 description: Detects Unicode-based file hiding operations from rootkit.dll
 references:
     - Arsenal-237 File System Stealth Technique
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.defense_evasion
@@ -397,7 +395,7 @@ status: experimental
 description: Detects API hooking operations from rootkit.dll via DLL injection
 references:
     - Arsenal-237 API Hooking Technique
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.defense_evasion
@@ -438,7 +436,7 @@ status: experimental
 description: Detects PowerShell execution initiated from rootkit.dll context
 references:
     - Arsenal-237 PowerShell Integration
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.execution
@@ -1184,3 +1182,9 @@ THEN
 **Document Version**: 1.0
 **Last Updated**: 2026-01-26
 **Next Review**: 2026-02-26 or upon new Arsenal-237 variant discovery
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

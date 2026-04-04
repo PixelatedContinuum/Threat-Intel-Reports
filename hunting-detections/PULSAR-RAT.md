@@ -6,8 +6,6 @@ permalink: "/hunting-detections/PULSAR-RAT/"
 hide: true
 ---
 
-# Pulsar RAT: Detection & Hunting Guide
-
 This document contains extracted detection rules, threat hunting queries, and scripts from the "PULSAR RAT (server.exe): Technical Analysis & Business Risk Assessment" report. Use these artifacts to proactively hunt for and detect this threat in your environment.
 
 ---
@@ -20,7 +18,7 @@ This rule is designed for use with EDR and AV platforms to detect the Pulsar RAT
 rule Pulsar_RAT_Critical_Variant {
     meta:
         description = "Detects Pulsar RAT variant (server.exe)"
-        author = "Security Operations"
+        author = "The Hunters Ledger"
         date = "2025-11-30"
         threat_level = "CRITICAL"
         confidence = "HIGH"
@@ -267,9 +265,9 @@ if ($recoveryPartitions) {
 
 Write-Host "`n[COMPLETE] Verification finished" -ForegroundColor Green
 ```
+
 ---
+
 ## License
 Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
 Free to use in your environment, but not for commercial purposes.
-
-```

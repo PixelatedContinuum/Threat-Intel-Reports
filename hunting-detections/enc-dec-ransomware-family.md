@@ -6,8 +6,6 @@ permalink: /hunting-detections/enc-dec-ransomware-family/
 hide: true
 ---
 
-# Detection Rules – enc/dec Ransomware Family
-
 ## Overview
 Comprehensive detection coverage for the enc/dec ransomware family includes static file signatures, process behavior patterns, and network indicators. Rules are provided in YARA and Sigma formats for SIEM/EDR integration and proactive threat hunting.
 
@@ -41,7 +39,7 @@ Comprehensive detection coverage for the enc/dec ransomware family includes stat
 rule EncDec_ChaCha20_Constant {
     meta:
         description = "Detects enc/dec ransomware by ChaCha20 constant"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-18"
         malware_family = "enc/dec ransomware"
         confidence = "HIGH"
@@ -75,7 +73,7 @@ rule EncDec_ChaCha20_Constant {
 rule EncDec_VSS_Deletion_Signature {
     meta:
         description = "Detects enc/dec ransomware by unique VSS deletion string"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-18"
         malware_family = "enc/dec ransomware"
         confidence = "HIGH"
@@ -108,7 +106,7 @@ rule EncDec_VSS_Deletion_Signature {
 rule EncDec_Rust_Ransomware_Artifacts {
     meta:
         description = "Detects enc/dec Rust ransomware by debug artifacts"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-18"
         malware_family = "enc/dec ransomware"
         confidence = "MEDIUM-HIGH"
@@ -146,7 +144,7 @@ rule EncDec_Rust_Ransomware_Artifacts {
 rule EncDec_AntiDebug_Signature {
     meta:
         description = "Detects anti-debug technique shared across enc/dec"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-18"
         malware_family = "enc/dec toolkit (all components)"
         confidence = "MEDIUM"
@@ -182,7 +180,7 @@ rule EncDec_AntiDebug_Signature {
 rule EncDec_enc_dec_Family_Comprehensive {
     meta:
         description = "Comprehensive detection for enc/dec ransomware family"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-18"
         malware_family = "enc/dec ransomware"
         confidence = "HIGH"
@@ -249,7 +247,7 @@ status: stable
 description: Detects Volume Shadow Copy deletion commands consistent with enc/dec ransomware family
 references:
     - enc/dec ransomware technical analysis
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/18
 tags:
     - attack.impact
@@ -295,7 +293,7 @@ title: enc/dec Ransomware Multi-Drive Enumeration
 id: b2c3d4e5-f6a7-8901-bcde-f12345678901
 status: experimental
 description: Detects rapid sequential drive enumeration characteristic of enc/dec ransomware
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/18
 tags:
     - attack.discovery
@@ -333,7 +331,7 @@ title: enc/dec ChaCha20 Cryptographic Operations
 id: c3d4e5f6-a7b8-9012-cdef-123456789012
 status: experimental
 description: Detects processes loading or executing ChaCha20 cryptographic operations
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/18
 tags:
     - attack.impact
@@ -669,3 +667,9 @@ index=endpoint earliest=-24h
 **Last Updated:** 2026-01-18
 **Version:** 1.0
 **Feedback:** Report false positives or detection improvements to threat intelligence team
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-BdApiUtil64-sys/
 hide: true
 ---
 
-# Detection Rules - BdApiUtil64.sys (Arsenal-237 BYOVD Component)
-
 ## Overview
 
 This detection guide focuses on identifying **BdApiUtil64.sys**, a weaponized legitimate Baidu Antivirus kernel driver used in BYOVD (Bring Your Own Vulnerable Driver) attacks. This driver provides **kernel-level Ring-0 access** enabling security product termination, malicious service creation, and credential theft.
@@ -51,7 +49,7 @@ Detect advanced evasion via **KeServiceDescriptorTable** resolution and indirect
 rule Arsenal237_BdApiUtil64_Hash {
     meta:
         description = "Detects Arsenal-237 BdApiUtil64.sys by file hash"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         hash = "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428"
         severity = "CRITICAL"
@@ -71,7 +69,7 @@ rule Arsenal237_BdApiUtil64_Hash {
 rule Arsenal237_BdApiUtil_Signature {
     meta:
         description = "Detects BdApiUtil64.sys by Baidu signature and PDB path"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "HIGH"
         technique = "T1068 - BYOVD with Legitimate Signature"
@@ -97,7 +95,7 @@ rule Arsenal237_BdApiUtil_Signature {
 rule Arsenal237_BdApiUtil_IOCTL_Abuse {
     meta:
         description = "Detects malware using BdApiUtil64.sys IOCTL codes"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "HIGH"
         technique = "T1562.001 - Process Termination via Driver IOCTLs"
@@ -129,7 +127,7 @@ rule Arsenal237_BdApiUtil_IOCTL_Abuse {
 rule Arsenal237_BdApiUtil_SSDT_Bypass {
     meta:
         description = "Detects SSDT bypass implementation in malware"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         technique = "T1027.010 - SSDT Indirect System Calls"
@@ -159,7 +157,7 @@ rule Arsenal237_BdApiUtil_SSDT_Bypass {
 rule Arsenal237_BdApiUtil_Kernel_Termination {
     meta:
         description = "Detects kernel-mode process termination capabilities"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "HIGH"
         technique = "T1562.001 - Kernel-Level Security Product Termination"
@@ -198,7 +196,7 @@ description: Detects loading of vulnerable Baidu driver (BdApiUtil64.sys) used i
 references:
     - Arsenal-237 malware toolkit analysis
     - BlackByte, Cuba, ALPHV ransomware campaigns
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 modified: 2026-01-26
 tags:
@@ -238,7 +236,7 @@ status: stable
 description: Detects creation of Bprotect service associated with BdApiUtil64.sys driver
 references:
     - Arsenal-237 BYOVD technique
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.persistence
@@ -269,7 +267,7 @@ description: Detects security product process termination shortly after suspicio
 references:
     - BYOVD attack pattern
     - Arsenal-237 toolkit
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.defense_evasion
@@ -311,7 +309,7 @@ status: experimental
 description: Detects DeviceIoControl API calls to \\.\BdApiUtil device object
 references:
     - Arsenal-237 BYOVD IOCTL abuse
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.defense_evasion
@@ -342,7 +340,7 @@ description: Detects attempts to resolve KeServiceDescriptorTable for SSDT bypas
 references:
     - Advanced EDR evasion via SSDT bypass
     - Arsenal-237 BdApiUtil64.sys capability
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.defense_evasion
@@ -673,3 +671,9 @@ BdApiUtil64.sys represents a **critical kernel-level threat** requiring multi-la
 **Last Updated**: 2026-01-26
 **Maintainer**: Threat Intelligence Team
 **License**: (c) 2026 Joseph. All rights reserved. Free to read, but reuse requires written permission.
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

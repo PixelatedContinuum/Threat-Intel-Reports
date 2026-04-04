@@ -25,7 +25,9 @@ category: "Web Compromise"
 hide: true
 ---
 
-**Campaign Identifier:** Webshells-To-Cloud-Modular-Intrusion
+**Campaign Identifier:** Webshells-To-Cloud-Modular-Intrusion<br>
+**Last Updated:** October 20, 2025<br>
+**Threat Level:** HIGH
 
 
 ---
@@ -461,6 +463,6 @@ A: Implement cloud access monitoring, API security controls, regular access revi
 
 ---
 
-### License
-© 2025 Joseph. All rights reserved.  
-Free to read, but reuse requires written permission.
+## License
+
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

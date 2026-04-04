@@ -23,7 +23,9 @@ category: "Dual-RAT Analysis"
 hide: true
 ---
 
-**Campaign Identifier:** Dual-RAT-185.208.159.182-Quasar-NjRAT
+**Campaign Identifier:** Dual-RAT-185.208.159.182-Quasar-NjRAT<br>
+**Last Updated:** December 6, 2025<br>
+**Threat Level:** MEDIUM
 
 
 ---
@@ -860,6 +862,6 @@ A: Significant - both RATs enable comprehensive data theft and surveillance, pot
 
 ---
 
-### License
-© 2025 Joseph. All rights reserved.  
-Free to read, but reuse requires written permission.
+## License
+
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

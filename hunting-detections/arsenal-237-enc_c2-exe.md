@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-enc_c2-exe/
 hide: true
 ---
 
-# enc_c2.exe (Arsenal-237) - Detection Rules & Hunting Queries
-
 ## Overview
 
 This document provides YARA rules, Sigma rules, SIEM queries, and network signatures for detecting enc_c2.exe execution, behavioral indicators, and command-and-control communication.
@@ -24,7 +22,7 @@ Detects the specific enc_c2.exe sample via cryptographic hash matching.
 rule enc_c2_exe_file_hash {
     meta:
         description = "Detects enc_c2.exe ransomware sample by hash"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         malware_type = "Ransomware"
         malware_family = "Arsenal-237"
@@ -50,7 +48,7 @@ Detects ChaCha20 implementation via characteristic string constants.
 rule chacha20_encryption_constants {
     meta:
         description = "Detects ChaCha20 cipher implementation (ransomware encryption)"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         malware_type = "Ransomware"
         severity = "HIGH"
@@ -76,7 +74,7 @@ Detects .onion domain and Tor C2 endpoint strings.
 rule tor_hidden_service_c2 {
     meta:
         description = "Detects Tor hidden service C2 communication infrastructure"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         malware_type = "C2 Infrastructure"
         severity = "CRITICAL"
@@ -102,7 +100,7 @@ Detects RaaS builder ID strings and affiliate tracking markers.
 rule raas_builder_tracking {
     meta:
         description = "Detects RaaS builder ID and affiliate tracking"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         malware_type = "Ransomware (RaaS)"
         severity = "MEDIUM"
@@ -130,7 +128,7 @@ Detects ransomware-specific strings and operational indicators.
 rule enc_c2_ransomware_operations {
     meta:
         description = "Detects enc_c2 ransomware operational strings"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         malware_type = "Ransomware"
         severity = "HIGH"
@@ -157,7 +155,7 @@ Detects TEB (Thread Environment Block) validation anti-debugging mechanism.
 rule teb_anti_debug_detection {
     meta:
         description = "Detects TEB-based anti-debugging in enc_c2.exe"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         malware_type = "Anti-Analysis"
         severity = "MEDIUM"
@@ -183,7 +181,7 @@ Detects Rust build environment and library artifacts.
 rule rust_compilation_artifacts {
     meta:
         description = "Detects Rust compiler artifacts in malware binaries"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         malware_type = "Rust-based Malware"
         severity = "MEDIUM"
@@ -815,3 +813,9 @@ Monitor for:
 *End of Detection Rules Document*
 
 Last Updated: 2026-01-26
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

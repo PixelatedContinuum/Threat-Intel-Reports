@@ -6,8 +6,6 @@ permalink: /hunting-detections/agent-xworm-exe/
 hide: true
 ---
 
-# Detection Rules – agent_xworm.exe (XWorm RAT)
-
 ## Overview
 Comprehensive detection coverage for agent_xworm.exe, a confirmed XWorm RAT sample with hardcoded C2 infrastructure (109.230.231.37). Rules target file hashes, behavioral patterns, network indicators, and XWorm family characteristics.
 
@@ -38,7 +36,7 @@ Comprehensive detection coverage for agent_xworm.exe, a confirmed XWorm RAT samp
 rule Agent_Xworm_Specific_Hash {
     meta:
         description = "Detects agent_xworm.exe by file hash and unique authentication secret"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "CRITICAL"
         malware_family = "XWorm RAT"
@@ -64,7 +62,7 @@ rule Agent_Xworm_Specific_Hash {
 rule XWorm_RAT_Generic {
     meta:
         description = "Detects XWorm RAT variants based on common code patterns and capabilities"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         malware_family = "XWorm RAT"
@@ -123,7 +121,7 @@ rule XWorm_RAT_Generic {
 rule XWorm_PowerShell_Recon_Commands {
     meta:
         description = "Detects XWorm embedded PowerShell reconnaissance commands"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "MEDIUM"
         reference = "XWorm PowerShell command templates"
@@ -146,7 +144,7 @@ rule XWorm_PowerShell_Recon_Commands {
 rule XWorm_AgentSec_Authentication_Pattern {
     meta:
         description = "Detects XWorm AgentSec authentication secret naming pattern"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         reference = "XWorm authentication mechanism analysis"
@@ -171,7 +169,7 @@ title: XWorm RAT C2 Connection to Known Infrastructure
 id: 0ec3fca5-8ef8-f0d9-f098-cd749dd209fc
 status: stable
 description: Detects network connections to known XWorm C2 server 109.230.231.37
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - agent_xworm.exe analysis report
@@ -199,7 +197,7 @@ title: Suspicious .NET Process with Hidden Console and Network Connection
 id: 9d963f85-812f-d02e-382a-48c41fc0387e
 status: experimental
 description: Detects .NET executables hiding console window while establishing network connections (XWorm behavior)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - XWorm RAT behavioral analysis
@@ -236,7 +234,7 @@ title: PowerShell Spawned by .NET Process from User Directory
 id: 01027829-5061-9820-bbcd-60efca256c90
 status: experimental
 description: Detects PowerShell execution from .NET binaries in user-writable directories (XWorm execution pattern)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - XWorm PowerShell execution capability
@@ -273,7 +271,7 @@ title: File Creation with XWorm Naming Pattern
 id: 0ec3fca5-8ef8-f0d9-f098-cd749dd209aa
 status: experimental
 description: Detects creation of files matching XWorm naming patterns (agent_xworm, XClient, etc.)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 tags:
     - attack.persistence
@@ -743,3 +741,9 @@ index=windows sourcetype=WinEventLog:Microsoft-Windows-PowerShell/Operational Ev
 
 ---
 **END OF DETECTION RULES**
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

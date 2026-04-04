@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-chromelevator-exe/
 hide: true
 ---
 
-# chromelevator.exe Detection Rules & Hunting Queries
-
 **Malware:** Browser Credential Extraction Tool (Arsenal-237 Campaign)
 **Detection Date:** 2026-01-26
 **Severity:** CRITICAL
@@ -22,7 +20,7 @@ hide: true
 rule Chromelevator_Browser_Credential_Extraction {
     meta:
         description = "Detects chromelevator.exe browser credential extraction tool"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         category = "trojan"
@@ -79,7 +77,7 @@ rule Chromelevator_Browser_Credential_Extraction {
 rule Arsenal237_Direct_Syscall_Framework {
     meta:
         description = "Detects direct syscall implementation used by Arsenal-237 components"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         category = "evasion"
@@ -115,7 +113,7 @@ rule Arsenal237_Direct_Syscall_Framework {
 rule Reflective_DLL_Injection_Framework {
     meta:
         description = "Detects reflective DLL injection implementation"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-26"
         severity = "CRITICAL"
         category = "execution"
@@ -169,7 +167,7 @@ rule Reflective_DLL_Injection_Framework {
 title: Suspicious Process Creation - chromelevator.exe
 description: Detects execution of chromelevator.exe browser credential extraction tool
 status: experimental
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/26
 severity: CRITICAL
 tags:
@@ -209,7 +207,7 @@ level: critical
 title: Suspicious Named Pipe Creation - Reflective Injection C2
 description: Detects named pipe creation patterns associated with process injection and C2 communication
 status: experimental
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/26
 severity: CRITICAL
 tags:
@@ -256,7 +254,7 @@ level: critical
 title: Suspicious Process Injection - Memory Allocation Pattern
 description: Detects process injection through memory allocation, writing, and thread creation sequence
 status: experimental
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/26
 severity: CRITICAL
 tags:
@@ -301,7 +299,7 @@ level: high
 title: Suspicious Browser Credential Database Access
 description: Detects access to Chrome/Brave/Edge credential databases by non-browser processes
 status: experimental
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/26
 severity: CRITICAL
 tags:
@@ -346,7 +344,7 @@ level: high
 title: Suspicious Direct Syscall Usage - EDR Bypass
 description: Detects direct syscall invocation bypassing Windows API monitoring
 status: experimental
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/26
 severity: CRITICAL
 tags:
@@ -781,3 +779,9 @@ When chromelevator.exe is suspected or detected:
 **Maintainer:** Threat Intelligence Team
 
 ---
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

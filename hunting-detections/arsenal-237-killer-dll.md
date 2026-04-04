@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-killer-dll/
 hide: true
 ---
 
-# Detection Rules - killer.dll (BYOVD Defense Evasion)
-
 ## Overview
 Comprehensive detection coverage for killer.dll focuses on BYOVD (Bring Your Own Vulnerable Driver) technique indicators, kernel driver service lifecycle anomalies, IOCTL abuse patterns, and mass security product termination behaviors. Rules are provided in YARA, Sigma, and EDR query formats for immediate deployment.
 
@@ -39,7 +37,7 @@ Comprehensive detection coverage for killer.dll focuses on BYOVD (Bring Your Own
 rule Killer_DLL_BYOVD_Comprehensive {
     meta:
         description = "Detects killer.dll BYOVD defense evasion module based on embedded drivers, configuration table, and behavioral indicators"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         severity = "CRITICAL"
         malware_family = "Arsenal-237 BYOVD Defense Evasion"
@@ -134,7 +132,7 @@ rule Killer_DLL_BYOVD_Comprehensive {
 rule Embedded_Vulnerable_Driver_BdApi_ProcExp {
     meta:
         description = "Detects embedded BdApiUtil64.sys or ProcExpDriver.sys within files (BYOVD indicator)"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         severity = "HIGH"
         technique = "BYOVD - Bring Your Own Vulnerable Driver"
@@ -175,7 +173,7 @@ rule Embedded_Vulnerable_Driver_BdApi_ProcExp {
 rule BYOVD_Service_Creation_Memory {
     meta:
         description = "Detects BYOVD service creation patterns in memory (process hollowing, DLL injection)"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-25"
         severity = "MEDIUM"
         use_case = "Memory scanning, process inspection"
@@ -215,7 +213,7 @@ title: Suspicious Kernel Driver Service Creation by Rundll32
 id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb0
 status: experimental
 description: Detects kernel driver service creation by rundll32.exe (BYOVD attack pattern for killer.dll)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 references:
     - killer.dll analysis report
@@ -254,7 +252,7 @@ title: Mass Security Product Process Termination (BYOVD Attack)
 id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb1
 status: experimental
 description: Detects simultaneous termination of multiple security products (killer.dll behavior)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 references:
     - killer.dll analysis report
@@ -290,7 +288,7 @@ title: DeviceIoControl Abuse with BYOVD IOCTL Codes
 id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb2
 status: experimental
 description: Detects DeviceIoControl calls with IOCTL codes used by killer.dll (0x800024B4, 0x8335003C)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 references:
     - killer.dll analysis report
@@ -328,7 +326,7 @@ title: Short-Lived Kernel Driver Service (BYOVD Cleanup Pattern)
 id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb3
 status: experimental
 description: Detects kernel driver services created and deleted within 30 seconds (BYOVD cleanup behavior)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 references:
     - killer.dll analysis report
@@ -363,7 +361,7 @@ title: Kernel Driver File Created in Temp Directory
 id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb4
 status: experimental
 description: Detects .sys driver files created in temp directories (BYOVD staging location)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 references:
     - killer.dll analysis report
@@ -838,3 +836,9 @@ ALERT HTTP GET *.exe
 
 ---
 **END OF DETECTION RULES**
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

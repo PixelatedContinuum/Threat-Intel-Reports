@@ -6,8 +6,6 @@ permalink: /hunting-detections/nsminer-cryptojacker/
 hide: true
 ---
 
-# Detection Rules - NsMiner Cryptojacker
-
 ## Overview
 
 This detection guide focuses on identifying **NsMiner**, a multi-stage cryptojacking malware that uses NSIS droppers, custom FTP downloaders with credential stuffing capabilities, and VMProtect-packed miners. This threat hijacks CPU resources to mine Monero (XMR) cryptocurrency.
@@ -51,7 +49,7 @@ Detect NSIS installers with embedded FTP downloaders and VMProtect-packed binari
 rule NsMiner_Dropper_Downloader {
     meta:
         description = "Detects the NsMiner NSIS dropper and the FTP downloader component."
-        author = "Gemini Cyber Threat Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-02"
         hash1 = "e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145"
         hash2 = "40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d"
@@ -86,7 +84,7 @@ rule NsMiner_Dropper_Downloader {
 rule NsMiner_Persistence_Directory {
     meta:
         description = "Detects files in the NsMiner persistence directory"
-        author = "Gemini Cyber Threat Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-02"
         severity = "HIGH"
 
@@ -114,7 +112,7 @@ title: NsMiner HTTP C2 Beacon to hrtests.ru
 id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 status: experimental
 description: Detects HTTP beaconing to the NsMiner C2 domain hrtests.ru
-author: Gemini Cyber Threat Analysis Team
+author: The Hunters Ledger
 date: 2026/02/02
 logsource:
     category: proxy
@@ -138,7 +136,7 @@ title: NsMiner Persistence Directory Creation
 id: b2c3d4e5-f6a7-8901-bcde-f12345678901
 status: experimental
 description: Detects creation of the NsMiner persistence directory in AppData\Roaming
-author: Gemini Cyber Threat Analysis Team
+author: The Hunters Ledger
 date: 2026/02/02
 logsource:
     product: windows
@@ -162,7 +160,7 @@ title: Suspicious FTP Connection from Non-Standard Application
 id: c3d4e5f6-a7b8-9012-cdef-123456789012
 status: experimental
 description: Detects FTP connections from applications not typically associated with FTP
-author: Gemini Cyber Threat Analysis Team
+author: The Hunters Ledger
 date: 2026/02/02
 logsource:
     product: windows
@@ -294,6 +292,5 @@ For a complete list of Indicators of Compromise, see:
 ---
 
 ## License
-
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
 Free to use in your environment, but not for commercial purposes.

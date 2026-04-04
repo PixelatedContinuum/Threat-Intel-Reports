@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-dec_fixed-exe/
 hide: true
 ---
 
-# Arsenal-237 dec_fixed.exe Detection Rules & Hunting Queries
-
 **Classification**: Recovery Tool Detection (LOW Priority)
 **Note**: dec_fixed.exe is a RECOVERY TOOL (decryptor), not an attack tool. Detection should focus on victim identification and post-incident forensic investigation, not threat prevention.
 
@@ -146,7 +144,7 @@ title: Arsenal-237 dec_fixed.exe Decryption Tool Execution
 id: arsenal-237-dec-fixed-exe-execution
 status: experimental
 description: Detects execution of Arsenal-237 dec_fixed.exe decryption tool with --folder-a parameter
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 modified: 2026-01-26
 tags:
@@ -182,7 +180,7 @@ title: Arsenal-237 A-Z Directory Enumeration Pattern
 id: arsenal-237-directory-traversal-pattern
 status: experimental
 description: Detects Arsenal-237 characteristic A-Z subdirectory enumeration for encrypted file discovery
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 modified: 2026-01-26
 tags:
@@ -245,7 +243,7 @@ title: Arsenal-237 Encrypted File Recovery (File Deletion Pattern)
 id: arsenal-237-encrypted-file-recovery
 status: experimental
 description: Detects Arsenal-237 encrypted file recovery pattern - readme.txt deletion after file operations
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 modified: 2026-01-26
 tags:
@@ -284,7 +282,7 @@ title: Arsenal-237 ChaCha20-Poly1305 Cryptographic Operations
 id: arsenal-237-chacha20-operations
 status: experimental
 description: Detects ChaCha20-Poly1305 AEAD cryptographic operations consistent with Arsenal-237 tools
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026-01-26
 modified: 2026-01-26
 tags:
@@ -725,3 +723,9 @@ if __name__ == "__main__":
 
 *Report Classification: Detection & Hunting Guide*
 *Last Updated: 2026-01-26*
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

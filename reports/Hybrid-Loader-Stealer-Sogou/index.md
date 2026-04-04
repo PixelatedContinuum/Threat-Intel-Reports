@@ -23,7 +23,9 @@ category: "Loader / Stealer"
 hide: true
 ---
 
-**Campaign Identifier:** Sogou-Hybrid-Loader-Stealer-Ecosystem
+**Campaign Identifier:** Sogou-Hybrid-Loader-Stealer-Ecosystem<br>
+**Last Updated:** November 21, 2025<br>
+**Threat Level:** MEDIUM
 
 
 ---
@@ -1107,6 +1109,6 @@ A: Implement strict software installation policies, application whitelisting, an
 
 ---
 
-### License
-© 2025 Joseph. All rights reserved.  
-Free to read, but reuse requires written permission.
+## License
+
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

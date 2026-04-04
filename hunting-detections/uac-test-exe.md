@@ -6,8 +6,6 @@ permalink: /hunting-detections/uac-test-exe/
 hide: true
 ---
 
-# Detection Rules – uac_test.exe (UAC Bypass PoC)
-
 ## Overview
 Comprehensive detection coverage for uac_test.exe UAC bypass proof-of-concept tool includes host-based indicators, process behavior patterns, and registry monitoring signatures. Rules are provided in YARA, Sigma, and EDR query formats for SIEM/EDR integration and proactive threat hunting.
 
@@ -37,7 +35,7 @@ Comprehensive detection coverage for uac_test.exe UAC bypass proof-of-concept to
 rule UAC_Test_PoC_Comprehensive {
     meta:
         description = "Detects uac_test.exe UAC bypass PoC tool based on file hash, strings, and behavioral indicators"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "MEDIUM"
         tool_type = "UAC Bypass PoC"
@@ -131,7 +129,7 @@ rule UAC_Test_PoC_Comprehensive {
 rule Generic_UAC_Bypass_Behavior {
     meta:
         description = "Detects generic UAC bypass techniques (CMSTPLUA + Fodhelper)"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         reference = "MITRE ATT&CK T1548.002"
@@ -183,7 +181,7 @@ rule Generic_UAC_Bypass_Behavior {
 rule Rust_Compiled_UAC_Bypass {
     meta:
         description = "Detects Rust-compiled UAC bypass tools based on language artifacts and bypass techniques"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "MEDIUM"
 
@@ -236,7 +234,7 @@ description: Detects creation of registry keys associated with Fodhelper UAC byp
 references:
     - https://attack.mitre.org/techniques/T1548/002/
     - https://github.com/hfiref0x/UACME
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 tags:
@@ -272,7 +270,7 @@ description: Detects process elevation via CMSTPLUA COM interface without UAC pr
 references:
     - https://attack.mitre.org/techniques/T1548/002/
     - https://enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 tags:
     - attack.privilege_escalation
@@ -305,7 +303,7 @@ status: stable
 description: Detects privilege escalation to High integrity level without corresponding UAC consent event
 references:
     - https://attack.mitre.org/techniques/T1548/002/
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 tags:
     - attack.privilege_escalation
@@ -339,7 +337,7 @@ status: stable
 description: Detects fodhelper.exe spawning unexpected child processes (potential UAC bypass)
 references:
     - https://attack.mitre.org/techniques/T1548/002/
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 tags:
     - attack.privilege_escalation

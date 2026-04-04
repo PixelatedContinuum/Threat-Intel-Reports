@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-killer-crowdstrike-dll/
 hide: true
 ---
 
-# Detection Rules - killer_crowdstrike.dll (CrowdStrike-Specific BYOVD Variant)
-
 ## Overview
 
 This detection guide focuses on **CrowdStrike Falcon-specific indicators** for the killer_crowdstrike.dll variant. This malware uses **identical BYOVD techniques** as killer.dll but with a kill list specifically targeting CrowdStrike Falcon processes.
@@ -73,7 +71,7 @@ title: Critical - CrowdStrike Falcon Process Termination (killer_crowdstrike.dll
 id: a1b2c3d4-e5f6-7890-1234-567890abcdef
 status: experimental
 description: Detects unexpected termination of CrowdStrike Falcon processes (killer_crowdstrike.dll behavior)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 references:
     - killer_crowdstrike.dll analysis report
@@ -108,7 +106,7 @@ title: CrowdStrike Termination with Suspicious Service Creation
 id: b2c3d4e5-f6a7-8901-2345-678901bcdefg
 status: experimental
 description: Detects CrowdStrike termination correlated with kernel driver service creation (BYOVD attack pattern)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 tags:
     - attack.defense_evasion
@@ -142,7 +140,7 @@ title: CrowdStrike Sensor Offline with Vulnerable Driver Loading
 id: c3d4e5f6-a7b8-9012-3456-789012cdefgh
 status: experimental
 description: Detects CrowdStrike sensor disconnection correlated with vulnerable driver loading
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/25
 tags:
     - attack.defense_evasion
@@ -373,3 +371,9 @@ sequence by host.id with maxspan=60s
 
 ---
 **END OF DETECTION RULES**
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

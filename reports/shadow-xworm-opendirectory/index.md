@@ -28,7 +28,7 @@ hide: true
 description: "An exposed open directory at epgoldsecurity.com revealed a single operator running Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 from the same C2 server, targeting US victims with tax-season lures during February 2026."
 ---
 
-**Campaign ID:** OpenDirectory-DualRAT-MaaS-151.245.112.70<br>
+**Campaign Identifier:** OpenDirectory-DualRAT-MaaS-151.245.112.70<br>
 **Last Updated:** April 4, 2026<br>
 **Threat Level:** HIGH
 
@@ -40,7 +40,7 @@ An exposed open directory at `epgoldsecurity.com` revealed a financially-motivat
 
 ---
 
-# 1. Executive Summary
+## 1. Executive Summary
 
 This investigation documents an active dual-RAT campaign operated by a single, unattributed financially-motivated threat actor (designated UTA-2026-003 *(an internal tracking label used by The Hunters Ledger — see Section 8)*) who deployed both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 from an exposed open directory at `epgoldsecurity.com`. The combined capability set gives this operator full remote control, credential theft, cryptocurrency clipping, and surveillance capability against US victims, with the advanced persistence and evasion features of Shadow RAT representing the most significant detection and remediation challenge.
 
@@ -112,7 +112,7 @@ UTA-2026-003 is assessed with LOW confidence (55%) as an independent, financiall
 
 ---
 
-# 2. Key Takeaways
+## 2. Key Takeaways
 
 - **Dual-RAT, single operator — both families must be remediated together.** Shadow RAT and XWorm share the same C2 IP and are operated by the same actor. Removing one while the other persists leaves the attacker with full access. Any confirmed infection must treat both families as a single, coordinated threat.
 
@@ -130,7 +130,7 @@ UTA-2026-003 is assessed with LOW confidence (55%) as an independent, financiall
 
 ---
 
-# 3. Business Risk Assessment
+## 3. Business Risk Assessment
 
 This section translates the technical findings into business-facing risk language. The goal is to equip decision-makers with enough context to prioritize response actions without requiring deep technical knowledge.
 
@@ -194,7 +194,7 @@ This investigation uncovered a financially-motivated attacker who has built a fu
 
 ---
 
-# 4. Malware Classification & Identity
+## 4. Malware Classification & Identity
 
 ### Sample Inventory
 
@@ -353,7 +353,7 @@ The production build enables 8 boolean feature flags (obfuscated names: `bool_2`
 
 ---
 
-# 5. Technical Analysis — Shadow RAT v2.6.4.0
+## 5. Technical Analysis — Shadow RAT v2.6.4.0
 
 ### 5.1 Static Analysis: File Characteristics
 
@@ -616,7 +616,7 @@ A `FunStuff` namespace in `Shadow.Common.Messages` contains non-destructive hara
 
 ---
 
-# 6. Technical Analysis — XWorm 3.0-5.0
+## 6. Technical Analysis — XWorm 3.0-5.0
 
 ### 6.1 Static Analysis: File Characteristics
 
@@ -727,7 +727,7 @@ XWorm writes keystrokes to `%TEMP%\Log.tmp`. This fixed output path is a reliabl
 
 ---
 
-# 7. Infrastructure Analysis
+## 7. Infrastructure Analysis
 
 ### 7.1 C2 Server: 151.245.112.70
 
@@ -801,7 +801,7 @@ These failures are consistent with an inexperienced individual operator rather t
 
 ---
 
-# 8. Threat Actor Assessment
+## 8. Threat Actor Assessment
 
 > **Analyst note:** This section covers what is known about the person or group operating this campaign. Because the domains use WHOIS privacy, no clear identity has been established. The designation "UTA-2026-003" is a tracking label used internally by this publication to refer to this unidentified operator.
 
@@ -871,7 +871,7 @@ Based on the totality of evidence, UTA-2026-003 is assessed as a single individu
 
 ---
 
-# 9. Threat Intelligence Context
+## 9. Threat Intelligence Context
 
 ### 9.1 Shadow RAT Lineage: The Quasar Fork Ecosystem
 
@@ -976,7 +976,7 @@ This campaign is a concrete example of how the Malware-as-a-Service (MaaS) econo
 
 ---
 
-# 10. MITRE ATT&CK Mapping
+## 10. MITRE ATT&CK Mapping
 
 > **Analyst note:** MITRE ATT&CK is a publicly available framework that categorizes the tactics and techniques used by attackers. This table maps observed Shadow RAT and XWorm behaviors to ATT&CK identifiers, enabling security teams to hunt for these techniques using ATT&CK-based detection tools and threat intelligence platforms.
 
@@ -1289,7 +1289,7 @@ This campaign is a concrete example of how the Malware-as-a-Service (MaaS) econo
 
 ---
 
-# 11. Response Orientation
+## 11. Response Orientation
 
 This section provides a brief orientation for teams who have confirmed or suspect a compromise involving this infrastructure. Detailed procedures are the responsibility of the affected organization's internal incident response team.
 
@@ -1327,7 +1327,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 ---
 
-# 12. Confidence Levels Summary
+## 12. Confidence Levels Summary
 
 ### DEFINITE (Direct evidence from code inspection / config decryption)
 - Shadow RAT family classification (Quasar-lineage .NET RAT)
@@ -1375,7 +1375,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 ---
 
-# 13. IOCs & Detections
+## 13. IOCs & Detections
 
 ### IOC Summary
 
@@ -1415,7 +1415,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 ---
 
-# 14. Appendix: Research References
+## 14. Appendix: Research References
 
 ### A. Shadow RAT / Quasar RAT Lineage
 
@@ -1468,4 +1468,5 @@ If an endpoint compromise is confirmed, the following response phases apply:
 ---
 
 ## License
+
 © 2026 Joseph. All rights reserved. See LICENSE for terms.

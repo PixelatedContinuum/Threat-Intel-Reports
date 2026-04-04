@@ -6,8 +6,6 @@ permalink: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
 hide: true
 ---
 
-# Detection Rules — Open Directory at 193.56.255.154 (XiebroC2 v3.1 and Covenant C2)
-
 **Campaign:** OpenDirectory-XiebroC2-Covenant-193.56.255.154
 **Date:** 2026-04-03
 **Author:** The Hunters Ledger
@@ -534,32 +532,6 @@ generality prevent rule creation.
 
 ---
 
-## Deployment Notes
-
-**Priority deployment order:**
-
-1. **Suricata SID 9000101** (Covenant session token) — Deploy first; highest-value, lowest FP
-2. **Suricata SID 9000103** (XiebroC2 TCP to port 4444) — Deploy simultaneously with SID 9000101
-3. **YARA RAT_XiebroC2_v31_Go_TCP_Implant** — Memory scan on Go process heap; disk scan on endpoints
-4. **Sigma Rule id d9a4b257** (Covenant HTTP proxy beacon) — Deploy if HTTP proxy logging is available
-5. **Sigma Rule id e2c8d419** (PowerShell fileless loader) — Deploy if ScriptBlock logging (EID 4104) is enabled
-6. **Sigma Rule id a3f7c821** (CLR load in non-.NET process) — Deploy if Sysmon ImageLoad events are collected
-7. **YARA RAT_Covenant_GruntStager_OpenDirectory** — Endpoint disk scan and .NET memory scan
-8. **YARA MALW_Covenant_PSFilelessLoader_GruntHTTP** — PowerShell script scan; AMSI integration
-
-**Network sensor configuration note:**
-The Covenant C2 uses cleartext HTTP on port 443. Network sensors must be configured to inspect
-traffic on port 443 as HTTP (not HTTPS/TLS) to match the Suricata and Sigma proxy rules.
-Protocol auto-detection must be enabled, or a dedicated port-443 HTTP rule applied at the sensor.
-
-**XiebroC2 AES key for retrospective PCAP analysis:**
-Any captured network session to 193.56.255.154:4444 can be decrypted retroactively using:
-- Key (ASCII): `QWERt_CSDMAHUATW`
-- Key (hex): `51 57 45 52 74 5F 43 53 44 4D 41 48 55 41 54 57`
-- Algorithm: AES-128-ECB (no IV)
-- Framing: Read 4-byte LE uint32 length N, read N bytes ciphertext, decrypt, parse as MessagePack
-
 ## License
-
-This detection content is licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-You are free to share and adapt this material for non-commercial purposes with attribution.
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

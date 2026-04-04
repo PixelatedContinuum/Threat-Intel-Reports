@@ -6,8 +6,6 @@ permalink: /hunting-detections/shadow-xworm-opendirectory-detections/
 hide: true
 ---
 
-# Detection Rules — Shadow RAT & XWorm Open Directory Campaign
-
 **Campaign:** OpenDirectory-DualRAT-MaaS-151.245.112.70
 **Date:** 2026-04-04
 **Author:** The Hunters Ledger
@@ -1052,3 +1050,9 @@ Shadow RAT includes a Pastebin dead drop C2 fallback, but the boolean controllin
 **T1219 — Remote Access Software (ScreenConnect)**
 ScreenConnect was deployed on the C2 server on 2026-03-01 for persistent victim access. However, ScreenConnect is a legitimate RMM product — a detection rule targeting ScreenConnect binary hashes or known C2 relay ports (port 8040) would generate excessive false positives in environments that legitimately use ConnectWise ScreenConnect. Detection should focus on network anomalies (unexpected ScreenConnect traffic from endpoints that have no managed IT justification).
 ```
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

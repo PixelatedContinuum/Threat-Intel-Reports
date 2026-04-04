@@ -6,8 +6,6 @@ permalink: /hunting-detections/fleetagentfud-exe/
 hide: true
 ---
 
-# Detection Rules – FleetAgentFUD.exe: WebSocket RAT with FUD Evasion & PowerShell Execution
-
 ## Overview
 Comprehensive detection coverage for FleetAgentFUD.exe, a "Fully Undetectable" Remote Access Trojan employing WebSocket-based C2, PowerShell Execution Policy bypass, clipboard data theft, and file download capabilities. Rules target the malware's distinctive FUD evasion patterns, WebSocket protocol usage, and PowerShell bypass techniques.
 
@@ -30,7 +28,7 @@ Comprehensive detection coverage for FleetAgentFUD.exe, a "Fully Undetectable" R
 rule FleetAgentFUD_FileHash_Exact {
     meta:
         description = "Detects FleetAgentFUD.exe by exact file hash and size"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         hash_sha256 = "072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff"
         hash_sha1 = "51aa8b08dc67cb91435ce58d4453a8ae5e0dd577"
@@ -51,7 +49,7 @@ rule FleetAgentFUD_FileHash_Exact {
 rule FleetAgentFUD_WebSocket_C2_Pattern {
     meta:
         description = "Detects FleetAgentFUD.exe WebSocket C2 implementation via protocol strings"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         technique = "T1071.001 - Application Layer Protocol: Web Protocols"
@@ -105,7 +103,7 @@ rule FleetAgentFUD_WebSocket_C2_Pattern {
 rule FleetAgentFUD_PowerShell_Bypass {
     meta:
         description = "Detects FleetAgentFUD.exe PowerShell Execution Policy bypass string"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         technique = "T1562.001 - Impair Defenses + T1059.001 - PowerShell"
@@ -144,7 +142,7 @@ rule FleetAgentFUD_PowerShell_Bypass {
 rule FleetAgentFUD_FUD_RAT_Behavioral_Pattern {
     meta:
         description = "Detects FUD RAT behavioral characteristics: small size, WebSocket, clipboard, PowerShell"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         family = "FleetAgentFUD"
@@ -202,7 +200,7 @@ rule FleetAgentFUD_FUD_RAT_Behavioral_Pattern {
 rule FleetAgent_Family_General {
     meta:
         description = "Detects FleetAgent malware family characteristics (FUD and Advanced variants)"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         family = "FleetAgent"
@@ -257,7 +255,7 @@ title: FleetAgentFUD PowerShell Execution Policy Bypass from AppData
 id: a1b2c3d4-fleetfud-powershell-bypass-001
 status: stable
 description: Detects PowerShell execution with Execution Policy bypass from suspicious AppData locations (FleetAgentFUD RAT pattern)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -294,7 +292,7 @@ title: FleetAgentFUD Clipboard Monitoring - Repeated Get-Clipboard Execution
 id: b2c3d4e5-fleetfud-clipboard-monitor-002
 status: stable
 description: Detects repeated PowerShell Get-Clipboard executions indicating clipboard data theft (FleetAgentFUD credential theft technique)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -323,7 +321,7 @@ title: FleetAgentFUD WebSocket Connection from AppData .NET Executable
 id: c3d4e5f6-fleetfud-websocket-appdata-003
 status: experimental
 description: Detects WebSocket-like network connections from .NET executables in AppData (FleetAgentFUD C2 pattern)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -359,7 +357,7 @@ title: FleetAgentFUD File Download to Suspicious Locations
 id: d4e5f6a7-fleetfud-file-download-004
 status: stable
 description: Detects executable file creation in Public/Temp folders from AppData processes (FleetAgentFUD payload download)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -396,7 +394,7 @@ title: FleetAgentFUD RWX Memory Allocation from .NET Executable
 id: e5f6a7b8-fleetfud-virtualprotect-rwx-005
 status: experimental
 description: Detects VirtualProtect API calls with RWX permissions from .NET executables (shellcode execution indicator)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -428,7 +426,7 @@ title: FleetAgentFUD Multi-Stage Attack Pattern Correlation
 id: f6a7b8c9-fleetfud-multistage-006
 status: experimental
 description: Correlates multiple FleetAgentFUD attack stages within short timeframe (high-confidence detection)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 modified: 2026/01/12
 logsource:
@@ -984,7 +982,7 @@ title: FleetAgentFUD Rapid System Reconnaissance Pattern
 id: a7b8c9d0-fleetfud-recon-sequence-007
 status: experimental
 description: Detects rapid-fire system reconnaissance commands (sysinfo, processes, network, users, disk) typical of FleetAgentFUD automated profiling
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 logsource:
     product: windows
@@ -1014,11 +1012,5 @@ tags:
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
 Free to use in your environment, but not for commercial purposes.
-
----
-
-**Report Version**: 1.0
-**Last Updated**: 2026-01-12
-**Maintained By**: Threat Intelligence Team

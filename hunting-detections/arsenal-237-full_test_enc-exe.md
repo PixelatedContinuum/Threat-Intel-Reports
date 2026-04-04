@@ -6,7 +6,6 @@ permalink: /hunting-detections/arsenal-237-full_test_enc-exe/
 hide: true
 ---
 
-# Detection Rules and Hunting Queries
 ## full_test_enc.exe (Arsenal-237 Rust Ransomware)
 
 ---
@@ -19,7 +18,7 @@ hide: true
 rule Arsenal237_FullTestEnc_ExactHash {
     meta:
         description = "Detects full_test_enc.exe by exact cryptographic hash"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-27"
         malware_type = "Ransomware"
         threat_level = "CRITICAL"
@@ -47,7 +46,7 @@ rule Arsenal237_FullTestEnc_ExactHash {
 rule Arsenal237_RustCrypto_ChaCha20_RSA {
     meta:
         description = "Detects malware using Rust ChaCha20 + RSA cryptographic libraries"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-27"
         malware_type = "Ransomware"
         threat_level = "CRITICAL"
@@ -74,7 +73,7 @@ rule Arsenal237_RustCrypto_ChaCha20_RSA {
 rule Arsenal237_Ransomware_Lockbox_Strings {
     meta:
         description = "Detects ransom messaging and .lockbox file extension"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-27"
         malware_type = "Ransomware"
         threat_level = "CRITICAL"
@@ -108,7 +107,7 @@ rule Arsenal237_Ransomware_Lockbox_Strings {
 rule Arsenal237_Rayon_AntiAnalysis {
     meta:
         description = "Detects Rayon parallel processing library and anti-analysis techniques"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-27"
         malware_type = "Ransomware"
 
@@ -141,7 +140,7 @@ rule Arsenal237_Rayon_AntiAnalysis {
 rule Arsenal237_NetworkShare_Enumeration {
     meta:
         description = "Detects malware performing network share enumeration"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-27"
         malware_type = "Ransomware"
 
@@ -171,7 +170,7 @@ rule Arsenal237_NetworkShare_Enumeration {
 rule Arsenal237_FullTestEnc_Comprehensive {
     meta:
         description = "Comprehensive detection combining multiple Arsenal-237 indicators"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-27"
         malware_type = "Ransomware"
         threat_level = "CRITICAL"
@@ -810,3 +809,8 @@ alert tcp $HOME_NET any -> $HOME_NET 3389 (
 - YARA scanning should use hash-based rule first (fastest) before complex patterns
 - KQL/Splunk queries benefit from indexed fields (FileName, EventCode, CommandLine)
 
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

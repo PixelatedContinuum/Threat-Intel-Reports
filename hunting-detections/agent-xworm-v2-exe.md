@@ -6,8 +6,6 @@ permalink: /hunting-detections/agent-xworm-v2-exe/
 hide: true
 ---
 
-# Detection Rules – agent_xworm_v2.exe (XWorm RAT v2.4.0)
-
 ## Overview
 Comprehensive detection coverage for agent_xworm_v2.exe, a confirmed XWorm RAT v2.4.0 sample with WebSocket-based C2 infrastructure (109.230.231.37). Rules target file hashes, behavioral patterns, network indicators, and XWorm family characteristics.
 
@@ -39,7 +37,7 @@ Comprehensive detection coverage for agent_xworm_v2.exe, a confirmed XWorm RAT v
 rule Agent_Xworm_V2_Specific_Hash {
     meta:
         description = "Detects agent_xworm_v2.exe by file hash and unique authentication secret"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "CRITICAL"
         malware_family = "XWorm RAT"
@@ -67,7 +65,7 @@ rule Agent_Xworm_V2_Specific_Hash {
 rule XWorm_RAT_V2_Family {
     meta:
         description = "Detects XWorm RAT v2.x variants based on code patterns and WebSocket C2"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         malware_family = "XWorm RAT"
@@ -121,7 +119,7 @@ rule XWorm_RAT_V2_Family {
 rule XWorm_PowerShell_Recon_V2 {
     meta:
         description = "Detects XWorm v2.x embedded PowerShell reconnaissance command patterns"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "MEDIUM"
         reference = "XWorm v2.x PowerShell command templates"
@@ -145,7 +143,7 @@ rule XWorm_PowerShell_Recon_V2 {
 rule XWorm_AgentSec_Authentication_V2 {
     meta:
         description = "Detects XWorm AgentSec authentication secret naming pattern"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
         reference = "XWorm authentication mechanism analysis"
@@ -165,7 +163,7 @@ rule XWorm_AgentSec_Authentication_V2 {
 rule XWorm_WebSocket_C2 {
     meta:
         description = "Detects .NET executables with WebSocket C2 characteristics typical of XWorm"
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         date = "2026-01-12"
         severity = "HIGH"
 
@@ -201,7 +199,7 @@ title: XWorm RAT v2.4.0 WebSocket C2 Connection to Known Infrastructure
 id: f8e7e73b-f2b2-6635-800a-042e7890a35f
 status: stable
 description: Detects WebSocket connections to known XWorm v2.4.0 C2 server 109.230.231.37
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - agent_xworm_v2.exe analysis report
@@ -229,7 +227,7 @@ title: Suspicious .NET Process with Hidden Console and WebSocket Activity
 id: 4164a194-5d83-7325-5a5c-b7e42f05c259
 status: experimental
 description: Detects .NET executables hiding console window while establishing WebSocket connections (XWorm v2.x behavior)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - XWorm RAT v2.x behavioral analysis
@@ -270,7 +268,7 @@ title: PowerShell Execution from .NET Process in User-Writable Directory
 id: 7c624e0b-11c8-17d5-16f9-411972191c46
 status: experimental
 description: Detects PowerShell execution from .NET binaries in user-writable directories (XWorm execution pattern)
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 references:
     - XWorm v2.x PowerShell execution capability
@@ -307,7 +305,7 @@ title: XWorm RAT PowerShell Reconnaissance Command Sequence
 id: f8e7e73b-f2b2-6635-800a-042e7890a35a
 status: experimental
 description: Detects rapid sequence of PowerShell reconnaissance commands typical of XWorm RAT
-author: Threat Intelligence Team
+author: The Hunters Ledger
 date: 2026/01/12
 tags:
     - attack.discovery
@@ -826,3 +824,9 @@ index=windows sourcetype=WinEventLog:Microsoft-Windows-PowerShell/Operational Ev
 
 ---
 **END OF DETECTION RULES**
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

@@ -6,8 +6,6 @@ permalink: /hunting-detections/remcos-opendirectory/
 hide: true
 ---
 
-# Remcos RAT OpenDirectory Campaign: Detection & Hunting Guide
-
 This document contains detection rules, threat hunting queries, and scripts for the Remcos RAT OpenDirectory Campaign (203[.]159[.]90[.]147). Use these artifacts to proactively hunt for and detect this threat in your environment.
 
 **Campaign Identifier:** OpenDirectory-203.159.90.147-Remcos
@@ -25,7 +23,7 @@ This rule detects Remcos RAT based on mutex, strings, and structural patterns.
 rule Remcos_RAT_Family_Detection {
     meta:
         description = "Detects Remcos RAT based on mutex, strings, and structural patterns"
-        author = "Malware Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-04"
         reference = "OpenDirectory 203.159.90.147 Campaign"
         threat_level = "critical"
@@ -98,7 +96,7 @@ Detects specific Remcos RAT samples from the OpenDirectory 203[.]159[.]90[.]147 
 rule Remcos_OpenDirectory_Campaign_203_159_90_147 {
     meta:
         description = "Detects specific Remcos RAT samples from OpenDirectory 203.159.90.147 campaign"
-        author = "Malware Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-04"
         campaign = "OpenDirectory 203.159.90.147"
         c2_ip = "203.159.90.147"
@@ -146,7 +144,7 @@ Detects VB6 droppers for Remcos RAT with obfuscated strings and anti-analysis.
 rule Remcos_VB6_Dropper_Obfuscated {
     meta:
         description = "Detects VB6 droppers for Remcos RAT"
-        author = "Malware Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-04"
         reference = "OpenDirectory 203.159.90.147 Campaign - Payload.exe"
         threat_level = "high"
@@ -182,7 +180,7 @@ Detects Remcos RAT UAC bypass and persistence mechanisms.
 rule Remcos_UAC_Bypass_Persistence {
     meta:
         description = "Detects Remcos RAT UAC bypass and persistence mechanisms"
-        author = "Malware Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-04"
         technique = "T1548.002 - Bypass UAC, T1547.001/004 - Persistence"
         threat_level = "critical"
@@ -220,7 +218,7 @@ Detects Remcos RAT process injection capabilities.
 rule Remcos_Process_Injection_Module {
     meta:
         description = "Detects Remcos RAT process injection capabilities"
-        author = "Malware Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-04"
         technique = "T1055 - Process Injection"
         threat_level = "high"
@@ -258,7 +256,7 @@ Detects Remcos RAT surveillance capabilities (keylogging, screenshots, audio).
 rule Remcos_Surveillance_Module {
     meta:
         description = "Detects Remcos RAT surveillance capabilities"
-        author = "Malware Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-04"
         technique = "T1056.001, T1113, T1123, T1115 - Surveillance"
         threat_level = "high"
@@ -300,7 +298,7 @@ description: Detects UAC bypass by setting EnableLUA registry value to 0, common
 references:
     - https://attack.mitre.org/techniques/T1548/002/
     - Internal Analysis OpenDirectory-203.159.90.147-Remcos
-author: Malware Analysis Team
+author: The Hunters Ledger
 date: 2026/02/04
 tags:
     - attack.privilege_escalation
@@ -342,7 +340,7 @@ description: Detects Userinit registry value modification for persistence, rare 
 references:
     - https://attack.mitre.org/techniques/T1547/004/
     - Internal Analysis OpenDirectory-203.159.90.147-Remcos
-author: Malware Analysis Team
+author: The Hunters Ledger
 date: 2026/02/04
 tags:
     - attack.persistence
@@ -374,7 +372,7 @@ description: Detects creation of Remcos RAT unique mutex (definitive indicator)
 references:
     - https://attack.mitre.org/software/S0332/
     - Internal Analysis OpenDirectory-203.159.90.147-Remcos
-author: Malware Analysis Team
+author: The Hunters Ledger
 date: 2026/02/04
 tags:
     - attack.execution
@@ -403,7 +401,7 @@ description: Detects WriteProcessMemory API calls from AppData executables targe
 references:
     - https://attack.mitre.org/techniques/T1055/
     - Internal Analysis OpenDirectory-203.159.90.147-Remcos
-author: Malware Analysis Team
+author: The Hunters Ledger
 date: 2026/02/04
 tags:
     - attack.defense_evasion
@@ -445,7 +443,7 @@ description: Detects Remcos file melting technique using PING delay, DEL, and st
 references:
     - https://attack.mitre.org/techniques/T1070/004/
     - Internal Analysis OpenDirectory-203.159.90.147-Remcos
-author: Malware Analysis Team
+author: The Hunters Ledger
 date: 2026/02/04
 tags:
     - attack.defense_evasion
@@ -480,7 +478,7 @@ description: Detects access to Chrome/Firefox credential databases by non-browse
 references:
     - https://attack.mitre.org/techniques/T1555/003/
     - Internal Analysis OpenDirectory-203.159.90.147-Remcos
-author: Malware Analysis Team
+author: The Hunters Ledger
 date: 2026/02/04
 tags:
     - attack.credential_access
@@ -523,7 +521,7 @@ status: stable
 description: Detects outbound network connections to Remcos C2 server 203.159.90.147
 references:
     - Internal Analysis OpenDirectory-203.159.90.147-Remcos
-author: Malware Analysis Team
+author: The Hunters Ledger
 date: 2026/02/04
 tags:
     - attack.command_and_control
@@ -553,7 +551,7 @@ description: Detects suspicious child processes of winlogon.exe from AppData
 references:
     - https://attack.mitre.org/techniques/T1547/004/
     - Internal Analysis OpenDirectory-203.159.90.147-Remcos
-author: Malware Analysis Team
+author: The Hunters Ledger
 date: 2026/02/04
 tags:
     - attack.persistence

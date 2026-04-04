@@ -6,8 +6,6 @@ permalink: /hunting-detections/arsenal-237-nethost-dll/
 hide: true
 ---
 
-# nethost.dll Detection Rules & Hunting Queries
-
 **Arsenal-237 C2 Communication Module**
 **Report Date:** 2026-01-26
 
@@ -20,7 +18,7 @@ hide: true
 ```yara
 rule Arsenal237_nethost_dll_hash_detection {
     meta:
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         description = "Detects Arsenal-237 nethost.dll by known file hashes"
         date = "2026-01-26"
         threat_level = "CRITICAL"
@@ -44,7 +42,7 @@ rule Arsenal237_nethost_dll_hash_detection {
 ```yara
 rule Arsenal237_nethost_dll_c2_strings {
     meta:
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         description = "Detects nethost.dll by hardcoded C2 target strings"
         date = "2026-01-26"
         threat_level = "CRITICAL"
@@ -67,7 +65,7 @@ rule Arsenal237_nethost_dll_c2_strings {
 ```yara
 rule Arsenal237_nethost_dll_powershell_templates {
     meta:
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         description = "Detects nethost.dll by embedded PowerShell command templates"
         date = "2026-01-26"
         threat_level = "HIGH"
@@ -90,7 +88,7 @@ rule Arsenal237_nethost_dll_powershell_templates {
 ```yara
 rule Arsenal237_nethost_dll_winsock_init {
     meta:
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         description = "Detects nethost.dll by Winsock initialization pattern"
         date = "2026-01-26"
         threat_level = "HIGH"
@@ -113,7 +111,7 @@ rule Arsenal237_nethost_dll_winsock_init {
 ```yara
 rule Arsenal237_nethost_dll_rust_indicators {
     meta:
-        author = "Threat Intelligence Team"
+        author = "The Hunters Ledger"
         description = "Detects nethost.dll by Rust compilation indicators"
         date = "2026-01-26"
         threat_level = "MEDIUM"
@@ -705,7 +703,5 @@ Track the following metrics to assess detection effectiveness:
 ---
 
 ## License
-
-(c) 2026 Threat Intelligence Team. All rights reserved.
-Detection rules free to use for security defensive purposes.
-Commercial distribution requires written permission.
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

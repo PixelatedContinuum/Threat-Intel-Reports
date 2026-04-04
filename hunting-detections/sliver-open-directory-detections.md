@@ -6,8 +6,6 @@ permalink: /hunting-detections/sliver-open-directory-detections/
 hide: true
 ---
 
-# Detection Rules — Sliver C2 / ScareCrow Loader Open Directory Kit
-
 **Campaign ID:** WebServer-Compromise-Kit-45.94.31.220
 **Generated:** 2026-03-01
 **Author:** The Hunters Ledger
@@ -957,3 +955,9 @@ address range rather than an anonymous allocation.
 ---
 
 © 2026 Joseph. All rights reserved. Detection rules licensed under CC BY-NC 4.0
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.

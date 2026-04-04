@@ -30,7 +30,9 @@ hide: true
 
 A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 
-**Campaign Identifier:** ZeroTrace-MultiFamily-MaaS-74.0.42.25    
+**Campaign Identifier:** ZeroTrace-MultiFamily-MaaS-74.0.42.25<br>
+**Last Updated:** March 19, 2026<br>
+**Threat Level:** HIGH
 
 ---
 
@@ -1212,4 +1214,4 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 ## License
 
-© 2025 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

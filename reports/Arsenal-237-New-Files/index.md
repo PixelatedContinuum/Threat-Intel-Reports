@@ -7,7 +7,9 @@ category: "Ransomware Toolkit"
 hide: true
 ---
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37<br>
+**Last Updated:** January 27, 2026<br>
+**Threat Level:** HIGH
 
 
 ---
@@ -72,8 +74,9 @@ The most alarming aspect: **Evidence suggests this toolkit is actively under dev
 
 ---
 
-# Quick Reference: New Files Analysis Resources
-## Arsenal-237 New Files - Recently Added Malware
+## Analysis Components — New Files
+
+### Arsenal-237 New Files — Recently Added Malware
 
 Each malware sample analyzed in this investigation has three companion resources: a comprehensive technical report with behavioral analysis and incident response guidance, a detection package with YARA/Sigma rules for hunting and prevention, and a machine-readable IOC feed in JSON format for SIEM/EDR ingestion.
 
@@ -91,7 +94,7 @@ Each malware sample analyzed in this investigation has three companion resources
 
 ---
 
-## Quick Reference: Toolkit Component Overview
+## Toolkit Component Overview
 
 This landing page serves as the index to 11 detailed analysis reports covering the complete Arsenal-237 attack chain. Each individual component report includes:
 - Complete file hashes (MD5, SHA1, SHA256) and IOC feeds
@@ -1201,6 +1204,4 @@ Access detailed technical analysis for each toolkit component:
 
 ## License
 
-(c) 2026 Arsenal-237 Malware Analysis. All rights reserved.
-
-This report is provided for informational and defensive purposes. Reuse or distribution requires written permission.
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

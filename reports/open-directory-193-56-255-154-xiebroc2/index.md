@@ -26,8 +26,9 @@ ioc_highlights:
     note: "GruntHTTP.ps1 — PowerShell fileless loader"
 ---
 
-**Campaign Identifier:** OpenDirectory-XiebroC2-Covenant-193.56.255.154
-**Last Updated:** April 3, 2026
+**Campaign Identifier:** OpenDirectory-XiebroC2-Covenant-193.56.255.154<br>
+**Last Updated:** April 3, 2026<br>
+**Threat Level:** HIGH
 
 ---
 
@@ -43,7 +44,7 @@ ioc_highlights:
 
 ---
 
-# 1. Executive Summary
+## 1. Executive Summary
 
 An open directory at `193.56.255.154` was found exposing a multi-framework command-and-control (C2) toolkit — three distinct attack payloads and a proof-of-concept DLL, all hosted publicly on a VPS running Windows Server 2025 in Singapore. This report documents what was found on that infrastructure, why it represents a significant risk to any organization whose users encountered those files, and what detection and defensive measures are available. This investigation fills a gap in public reporting: no prior open-source analysis of this infrastructure or its payloads existed before this publication.
 
@@ -119,7 +120,7 @@ An open directory at `193.56.255.154` was found exposing a multi-framework comma
 
 ---
 
-# 2. Business Risk Assessment
+## 2. Business Risk Assessment
 
 ## Understanding the Real-World Impact
 
@@ -178,7 +179,7 @@ Organizations with confirmed exposure to this infrastructure should consult thei
 
 ---
 
-# 3. What Was Found on This Infrastructure
+## 3. What Was Found on This Infrastructure
 
 ## 3.1 Classification and Sample Inventory
 
@@ -280,7 +281,7 @@ Structured IOCs in machine-readable format: [ioc-feeds/opendirectory-193-56-255-
 
 ---
 
-# 4. Technical Capabilities — XiebroC2 v3.1 Deep-Dive
+## 4. Technical Capabilities — XiebroC2 v3.1 Deep-Dive
 
 > **Analyst note:** This section explains how the main attack tool on this server works — from the moment it runs on a victim's computer to the full set of actions the attacker can remotely direct it to perform. XiebroC2 is a Chinese-developed, open-source remote access toolkit that gives an attacker complete control over a compromised Windows machine through an encrypted internet connection.
 
@@ -601,7 +602,7 @@ The `ReverseProxy` command invokes `Helper/proxy.ReverseSocksAgent`, which estab
 
 ---
 
-# 5. Technical Capabilities — Covenant C2 Stagers
+## 5. Technical Capabilities — Covenant C2 Stagers
 
 > **Analyst note:** The two Covenant files on this staging server are lightweight connection tools. When executed, they reach out to the attacker's server, complete a security handshake, and then download and run a full-featured implant entirely in memory — nothing is saved to the hard drive. Two delivery methods were prepared (an executable file and a PowerShell command) so the attacker had options for how to deliver it to victims.
 
@@ -742,7 +743,7 @@ $bytes = New-Object IO.Compression.DeflateStream(
 
 ---
 
-# 6. Threat Actor Assessment
+## 6. Threat Actor Assessment
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-002 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -801,7 +802,7 @@ GBK encoding and XiebroC2's Chinese-language origin are consistent with a Chines
 
 ---
 
-# 7. Infrastructure Analysis
+## 7. Infrastructure Analysis
 
 ## 7.0 How the Infrastructure Was Mapped
 
@@ -929,7 +930,7 @@ Covenant's documented threat actor users include: (1) **APT28** (documented, DIF
 
 ---
 
-# 8. MITRE ATT&CK Mapping
+## 8. MITRE ATT&CK Mapping
 
 The following table shows HIGH confidence technique mappings drawn directly from binary analysis and behavioral observation. All techniques are HIGH confidence.
 
@@ -1119,7 +1120,7 @@ The following table shows HIGH confidence technique mappings drawn directly from
 
 ---
 
-# 9. Detection & Hunting
+## 9. Detection & Hunting
 
 ## 9.1 Detection Rule Files
 
@@ -1176,7 +1177,7 @@ For organizations hunting proactively or investigating a potential exposure:
 
 ---
 
-# 10. Response Orientation
+## 10. Response Orientation
 
 This section is a brief orientation for readers who need to understand what to address, not a step-by-step incident response guide. Organizations with confirmed infections should engage their internal incident response team or a dedicated playbook.
 
@@ -1199,7 +1200,7 @@ This section is a brief orientation for readers who need to understand what to a
 
 ---
 
-# 11. Confidence Levels Summary
+## 11. Confidence Levels Summary
 
 ### DEFINITE (Direct Evidence — No Ambiguity)
 - XiebroC2 v3.1 family identification (compile path in pclntab)
@@ -1240,7 +1241,7 @@ This section is a brief orientation for readers who need to understand what to a
 
 ---
 
-# 12. Appendices
+## 12. Appendices
 
 ## Appendix A — Evidence Data Gap Note
 
@@ -1289,5 +1290,5 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 ---
 
 ## License
-© 2026 Joseph. All rights reserved.
-See LICENSE for terms.
+
+© 2026 Joseph. All rights reserved. See LICENSE for terms.

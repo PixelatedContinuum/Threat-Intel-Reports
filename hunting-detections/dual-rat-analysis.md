@@ -6,8 +6,6 @@ permalink: /hunting-detections/dual-rat-analysis/
 hide: true
 ---
 
-# Detection Rules – Dual-RAT Analysis: Quasar RAT vs. NjRAT/XWorm
-
 ## Overview
 Detection coverage for both Quasar RAT and NjRAT/XWorm includes host-based, process-based, and network indicators.  
 Rules are provided in YARA and Sigma formats for SIEM/EDR and threat hunting integration.
@@ -23,7 +21,7 @@ Rules are provided in YARA and Sigma formats for SIEM/EDR and threat hunting int
 rule Quasar_RAT_Core_Detection {
     meta:
         description = "Detects Quasar RAT based on GUID, imports, and string patterns"
-        author = "Hunter's Ledger"
+        author = "The Hunters Ledger"
         date = "2025-12-06"
         hash1 = "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766"
         ref = "https://hunter-ledger.com/reports/dual-rat-analysis/"
@@ -82,7 +80,7 @@ rule Quasar_RAT_Core_Detection {
 rule Quasar_RAT_MarkOfWeb_Removal {
     meta:
         description = "Detects Zone.Identifier stream removal behavior characteristic of Quasar RAT"
-        author = "Hunter's Ledger"
+        author = "The Hunters Ledger"
         date = "2025-12-06"
         hash1 = "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766"
         ref = "https://hunter-ledger.com/reports/dual-rat-analysis/"
@@ -106,7 +104,7 @@ rule Quasar_RAT_MarkOfWeb_Removal {
 rule NjRAT_XWorm_Core_Detection {
     meta:
         description = "Detects NjRAT/XWorm based on VB.NET characteristics, size, and configuration strings"
-        author = "Hunter's Ledger"
+        author = "The Hunters Ledger"
         date = "2025-12-06"
         hash1 = "950aadba6993619858294599b3458d5d2221f10fe72b3db3e49883d496a705bb"
         ref = "https://hunter-ledger.com/reports/dual-rat-analysis/"
@@ -172,7 +170,7 @@ rule NjRAT_XWorm_Core_Detection {
 rule NjRAT_XWorm_Triple_Persistence {
     meta:
         description = "Detects NjRAT/XWorm triple persistence mechanism establishment"
-        author = "Hunter's Ledger"
+        author = "The Hunters Ledger"
         date = "2025-12-06"
         ref = "https://hunter-ledger.com/reports/dual-rat-analysis/"
         technique = "T1053.005 + T1547.001 + T1547.009 - Multiple Persistence Mechanisms"
@@ -202,7 +200,7 @@ title: Quasar RAT Scheduled Task Persistence
 id: 8b5c3d1a-8f4e-4b9a-9c6d-3e4f9081
 status: experimental
 description: Detects Quasar RAT persistence through RuntimeBroker scheduled task creation
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 modified: 2025/12/06
 logsource:
@@ -234,7 +232,7 @@ title: Quasar RAT Process Injection Activity
 id: a7b2c3d9-4e5f-8a9b-2c6d-4f7e9081
 status: experimental
 description: Detects potential Quasar RAT process injection behavior
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 modified: 2025/12/06
 logsource:
@@ -267,7 +265,7 @@ title: Quasar RAT Mark of the Web Removal
 id: c9d4e5f2-6a7b-3c8d-4e9f-5a6b9081
 status: experimental
 description: Detects Zone.Identifier alternate data stream deletion characteristic of Quasar RAT
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 modified: 2025/12/06
 logsource:
@@ -296,7 +294,7 @@ title: Quasar RAT Command and Control Communication
 id: d1e5f6a3-7b8c-4d9e-5f0a-6a7b9081
 status: experimental
 description: Detects Quasar RAT C2 communication patterns
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 modified: 2025/12/06
 logsource:
@@ -328,7 +326,7 @@ title: NjRAT/XWorm Triple Persistence Establishment
 id: e2f6a7b4-8c9d-4e0f-6a7b-3c8d9081
 status: experimental
 description: Detects NjRAT/XWorm triple persistence mechanism establishment
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 modified: 2025/12/06
 logsource:
@@ -368,7 +366,7 @@ title: NjRAT/XWorm Pastebin Dead-Drop C2 Resolution
 id: f3a7b8c5-9d0e-4f1a-7b2c-4e9d9081
 status: experimental
 description: Detects NjRAT/XWorm Pastebin dead-drop C2 resolution behavior
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 modified: 2025/12/06
 logsource:
@@ -400,7 +398,7 @@ title: NjRAT/XWorm Critical Process Protection
 id: g4b8c9d6-0e1f-5a2b-8c9d-4f0a9081
 status: experimental
 description: Detects NjRAT/XWorm critical process protection mechanism
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 modified: 2025/12/06
 logsource:
@@ -428,7 +426,7 @@ title: NjRAT/XWorm Anti-Sleep System Protection
 id: h5c9d0e7-1f2a-9b3c-5e0f-7a2b9081
 status: experimental
 description: Detects NjRAT/XWorm anti-sleep mechanism to prevent system power saving
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 modified: 2025/12/06
 logsource:
@@ -632,7 +630,7 @@ title: Suspicious Access to Dead-Drop Services
 id: dead-drop-access-001
 status: experimental
 description: Detects access to common dead-drop services that may indicate C2 infrastructure resolution
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 logsource:
     product: windows
@@ -672,7 +670,7 @@ title: High-Frequency Process Creation from Scheduled Task
 id: high-freq-process-creation-001
 status: experimental
 description: Detects processes created at unusually high frequencies, potentially from aggressive scheduled tasks
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 logsource:
     product: windows
@@ -701,7 +699,7 @@ title: Suspicious Memory Allocation Patterns
 id: memory-allocation-anomaly-001
 status: experimental
 description: Detects processes allocating memory with suspicious permissions that may indicate process injection
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 logsource:
     product: windows
@@ -733,7 +731,7 @@ title: Suspicious API Call Sequence for RAT Activity
 id: api-sequence-rat-001
 status: experimental
 description: Detects sequences of API calls commonly associated with RAT surveillance and persistence activities
-author: Hunter's Ledger
+author: The Hunters Ledger
 date: 2025/12/06
 logsource:
     product: windows

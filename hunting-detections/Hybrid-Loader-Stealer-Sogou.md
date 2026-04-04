@@ -5,7 +5,7 @@ layout: post
 permalink: /hunting-detections/Hybrid-Loader-Stealer-Sogou/
 hide: true
 ---
-# Sigma rules
+## Sigma Rules
 ---
 
 ## Process creation for masquerading Sogou NSIS installer
@@ -181,7 +181,7 @@ rule SogouStealer_Ecosystem_Indicators
 {
   meta:
     description = "Detects SogouStealer ecosystem by domains, token markers, and API strings"
-    author = "Joseph"
+    author = "The Hunters Ledger"
     reference = "Hunter’s Ledger investigation"
     date = "2025-11-21"
   strings:
@@ -238,7 +238,7 @@ rule SogouStealer_Loader_Downloader
 {
   meta:
     description = "Detects packed loader and downloader components"
-    author = "Joseph"
+    author = "The Hunters Ledger"
     date = "2025-11-21"
   strings:
     $loader = "beacon_sdk.dll" ascii
@@ -260,7 +260,7 @@ rule SogouStealer_C2_Scheduler_SignatureDB
 {
   meta:
     description = "Detects scheduler, networking helpers, and URL signature database"
-    author = "Joseph"
+    author = "The Hunters Ledger"
     date = "2025-11-21"
   strings:
     $sched = "userNetSchedule.exe" ascii
@@ -311,3 +311,9 @@ alert http any any -> any any (msg:"SogouStealer IOC - HTTP URI contains /cgi1";
 alert ip any any -> 149.50.136.243 any (msg:"SogouStealer IOC - Traffic to 149.50.136.243 (Donweb)"; classtype:trojan-activity; sid:700040; rev:1;)
 alert ip any any -> 52.20.84.62 any (msg:"SogouStealer IOC - Traffic to 52.20.84.62 (AWS Ashburn)"; classtype:trojan-activity; sid:700041; rev:1;)
 ```
+
+---
+
+## License
+Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+Free to use in your environment, but not for commercial purposes.
