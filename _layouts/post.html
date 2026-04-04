@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
 <div class="hl-post-body">
-  <div id="hl-toc-sentinel" aria-hidden="true"></div>
   <details class="hl-post-toc-mobile" id="hl-toc-mobile">
     <summary>Contents</summary>
     <nav><ul id="hl-toc-list-mobile"></ul></nav>
@@ -312,18 +311,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   headings.forEach(function (h) { observer.observe(h); });
 
-  // --- Sticky mobile TOC ---
-  // position:sticky fails due to ancestor overflow in the theme, so use
-  // IntersectionObserver on a zero-height sentinel placed just above the TOC.
-  var tocSentinel = document.getElementById('hl-toc-sentinel');
+  // --- Pin mobile TOC just below the navbar ---
+  // position:sticky fails due to ancestor overflow in the theme (same reason
+  // the sidebar TOC uses position:fixed). Use fixed + measure navbar height.
   var tocSpacerEl = document.getElementById('hl-toc-spacer');
-  if (tocSentinel && tocMobile) {
-    var stickyObs = new IntersectionObserver(function (entries) {
-      var gone = !entries[0].isIntersecting;
-      tocMobile.classList.toggle('is-sticky', gone);
-      if (tocSpacerEl) tocSpacerEl.classList.toggle('visible', gone);
-    }, { threshold: 0 });
-    stickyObs.observe(tocSentinel);
+  var navEl = document.querySelector('.hl-nav');
+  if (tocMobile && navEl) {
+    tocMobile.style.top = navEl.offsetHeight + 'px';
+    if (tocSpacerEl) tocSpacerEl.classList.add('visible');
   }
 
   // --- Panel helpers (detection + IOC — mutually exclusive) ---

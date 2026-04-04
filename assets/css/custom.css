@@ -1837,42 +1837,22 @@ button,
 .hl-post-toc-mobile { display: none; }
 
 @media (max-width: 1280px) {
-  #hl-toc-sentinel { height: 0; overflow: hidden; }
-  #hl-toc-spacer   { display: none; height: 44px; margin-bottom: 1.5rem; }
-  #hl-toc-spacer.visible { display: block; }
+  /* Spacer holds layout space for the fixed TOC bar */
+  #hl-toc-spacer          { display: none; height: 44px; }
+  #hl-toc-spacer.visible  { display: block; }
 
+  /* Fixed below the navbar — JS sets top to navEl.offsetHeight */
   .hl-post-toc-mobile {
     display: block;
-    background: var(--hl-bg-row);
-    border: 1px solid var(--hl-border-row);
-    border-left: 2px solid var(--hl-accent-blue);
-    border-radius: 6px;
-    margin-bottom: 1.5rem;
-    z-index: 100;
-  }
-  .hl-post-toc-mobile[open] {
-    border-radius: 6px 6px 0 0;
-  }
-  .hl-post-toc-mobile.is-sticky {
     position: fixed;
-    top: 0;
+    top: 96px; /* fallback — overridden by JS with measured navbar height */
     left: 0;
     right: 0;
-    margin: 0;
-    border-radius: 0;
-    border: none;
+    z-index: 999;
+    background: var(--hl-bg-row);
     border-top: 2px solid var(--hl-accent-blue);
     border-bottom: 1px solid var(--hl-border-row);
-  }
-  .hl-post-toc-mobile.is-sticky[open] {
-    border-radius: 0;
-  }
-  .hl-post-toc-mobile.is-sticky nav {
-    left: 0;
-    right: 0;
-    border-left: none;
-    border-right: none;
-    border-radius: 0 0 4px 4px;
+    margin: 0;
   }
 
   .hl-post-toc-mobile summary {
@@ -1913,13 +1893,11 @@ button,
     max-height: 60vh;
     overflow-y: auto;
     position: absolute;
-    left: -1px;
-    right: -1px;
+    left: 0;
+    right: 0;
     background: var(--hl-bg-row);
-    border: 1px solid var(--hl-border-row);
-    border-left: 2px solid var(--hl-accent-blue);
-    border-top: none;
-    border-radius: 0 0 6px 6px;
+    border-top: 1px solid var(--hl-border-row);
+    border-bottom: 2px solid var(--hl-accent-blue);
     box-shadow: 0 8px 24px rgba(0,0,0,0.4);
   }
 
