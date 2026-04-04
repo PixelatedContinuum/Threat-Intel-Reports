@@ -28,8 +28,8 @@ hide: true
 description: "An exposed open directory at epgoldsecurity.com revealed a single operator running Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 from the same C2 server, targeting US victims with tax-season lures during February 2026."
 ---
 
-**Campaign ID:** OpenDirectory-DualRAT-MaaS-151.245.112.70
-**Last Updated:** April 4, 2026
+**Campaign ID:** OpenDirectory-DualRAT-MaaS-151.245.112.70<br>
+**Last Updated:** April 4, 2026<br>
 **Threat Level:** HIGH
 
 ---
@@ -37,17 +37,6 @@ description: "An exposed open directory at epgoldsecurity.com revealed a single 
 ## Bottom Line Up Front
 
 An exposed open directory at `epgoldsecurity.com` revealed a financially-motivated threat actor (UTA-2026-003) operating both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds connecting to a single C2 server at 151.245.112.70. Shadow RAT is the primary risk: it disables Windows' two main malware detection mechanisms (AMSI and ETW) before any malicious activity begins, and carries a persistence capability that survives OS reinstallation — making detection and remediation significantly harder than a standard RAT infection. Both families must be fully removed for a confirmed infection to be cleared; removing one while the other persists leaves the attacker with full access. Block 151.245.112.70 immediately and check all endpoints for the persistence artifacts documented in Section 10.
-
----
-
-
-## Quick Reference
-
-| Resource | Link |
-|---|---|
-| IOC Feed (machine-readable) | [ioc-feeds/shadow-xworm-opendirectory-iocs.json](/ioc-feeds/shadow-xworm-opendirectory-iocs.json) |
-| Detection Rules (YARA, Sigma, Suricata) | [hunting-detections/shadow-xworm-opendirectory-detections.md](/hunting-detections/shadow-xworm-opendirectory-detections.md) |
-| Threat Actor Profile | UTA-2026-003 (see Section 8) |
 
 ---
 

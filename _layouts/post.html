@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var tocMobile     = document.getElementById('hl-toc-mobile');
   if (!tocList || !toc) return;
 
-  var headings = Array.from(content.querySelectorAll('h2'));
+  var headings = Array.from(content.querySelectorAll('h1, h2'));
   if (headings.length < 3) {
     toc.style.display = 'none';
     if (tocMobile) tocMobile.style.display = 'none';

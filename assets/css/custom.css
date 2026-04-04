@@ -310,6 +310,20 @@ main.content {
 /* --- Headings inside posts ---------------------------------- */
 /* Override theme's huge heading sizes (h2=1.75em, h3=1.5em off 20px body) */
 
+/* Primary section headings (# H1) — slightly more prominent than H2 */
+.hl-post-content h1 {
+  color: var(--hl-text-primary) !important;
+  font-size: 1.2em !important;
+  font-weight: 700 !important;
+  margin-top: 3rem !important;
+  margin-bottom: 0.7rem !important;
+  padding: 10px 14px !important;
+  background: linear-gradient(to right, #ff444418, transparent) !important;
+  border-left: 4px solid var(--hl-sev-high) !important;
+  border-bottom: none !important;
+  border-radius: 0 4px 4px 0;
+}
+
 .hl-post-content h2 {
   color: var(--hl-text-primary) !important;
   font-size: 1.15em !important;
@@ -1134,6 +1148,7 @@ main.content {
   z-index: 200;
 }
 .hl-heading-anchor:hover::after                { opacity: 1; }
+.hl-post-content h1:hover .hl-heading-anchor,
 .hl-post-content h2:hover .hl-heading-anchor   { opacity: 0.55; }
 .hl-heading-anchor:hover                       { opacity: 1 !important; }
 
@@ -1581,6 +1596,11 @@ img { max-width: 100%; height: auto; }
   .hl-post-content code { word-break: break-all; }
 
   /* --- Headings: smaller + tighter padding ----------------- */
+  .hl-post-content h1 {
+    font-size: 1.12em !important;
+    padding: 8px 10px !important;
+    margin-top: 2.5rem !important;
+  }
   .hl-post-content h2 {
     font-size: 1.08em !important;
     padding: 7px 10px !important;
@@ -1592,11 +1612,19 @@ img { max-width: 100%; height: auto; }
   }
   .hl-post-content h4 { font-size: 0.92em !important; }
 
-  /* --- Tables: shrink font + padding so cells fit ---------- */
-  .hl-post-content table { font-size: 0.8em; }
+  /* --- Tables: horizontal scroll instead of compression ---- */
+  /* Prevents columns like "Likelihood" from being squashed on
+     portrait phones. User scrolls the table horizontally. */
+  .hl-post-content table {
+    font-size: 0.8em;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .hl-post-content th,
   .hl-post-content td {
     padding: 6px 8px !important;
+    white-space: nowrap;
   }
 
   /* --- Blockquotes: tighter padding ------------------------ */
@@ -1663,6 +1691,7 @@ img { max-width: 100%; height: auto; }
   .hl-post-header__title,
   .hl-page-header__title,
   .hl-hero__title { font-size: 1.15em !important; }
+  .hl-post-content h1 { font-size: 1.05em !important; padding: 7px 8px !important; }
   .hl-post-content h2 { font-size: 1em !important; padding: 6px 8px !important; }
   .hl-post-content pre { padding: 10px 12px; font-size: 0.82em; }
   .hl-post-content table { font-size: 0.75em; }
