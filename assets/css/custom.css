@@ -1837,6 +1837,10 @@ button,
 .hl-post-toc-mobile { display: none; }
 
 @media (max-width: 1280px) {
+  #hl-toc-sentinel { height: 0; overflow: hidden; }
+  #hl-toc-spacer   { display: none; height: 44px; margin-bottom: 1.5rem; }
+  #hl-toc-spacer.visible { display: block; }
+
   .hl-post-toc-mobile {
     display: block;
     background: var(--hl-bg-row);
@@ -1844,12 +1848,31 @@ button,
     border-left: 2px solid var(--hl-accent-blue);
     border-radius: 6px;
     margin-bottom: 1.5rem;
-    position: sticky;
-    top: 0;
     z-index: 100;
   }
   .hl-post-toc-mobile[open] {
     border-radius: 6px 6px 0 0;
+  }
+  .hl-post-toc-mobile.is-sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    border-top: 2px solid var(--hl-accent-blue);
+    border-bottom: 1px solid var(--hl-border-row);
+  }
+  .hl-post-toc-mobile.is-sticky[open] {
+    border-radius: 0;
+  }
+  .hl-post-toc-mobile.is-sticky nav {
+    left: 0;
+    right: 0;
+    border-left: none;
+    border-right: none;
+    border-radius: 0 0 4px 4px;
   }
 
   .hl-post-toc-mobile summary {

@@ -26,10 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
 <div class="hl-post-body">
+  <div id="hl-toc-sentinel" aria-hidden="true"></div>
   <details class="hl-post-toc-mobile" id="hl-toc-mobile">
     <summary>Contents</summary>
     <nav><ul id="hl-toc-list-mobile"></ul></nav>
   </details>
+  <div id="hl-toc-spacer" aria-hidden="true"></div>
   <div class="hl-post-content">
     {{ content }}
   </div>
@@ -309,6 +311,20 @@ document.addEventListener('DOMContentLoaded', function () {
   }, { rootMargin: '-8% 0% -80% 0%' });
 
   headings.forEach(function (h) { observer.observe(h); });
+
+  // --- Sticky mobile TOC ---
+  // position:sticky fails due to ancestor overflow in the theme, so use
+  // IntersectionObserver on a zero-height sentinel placed just above the TOC.
+  var tocSentinel = document.getElementById('hl-toc-sentinel');
+  var tocSpacerEl = document.getElementById('hl-toc-spacer');
+  if (tocSentinel && tocMobile) {
+    var stickyObs = new IntersectionObserver(function (entries) {
+      var gone = !entries[0].isIntersecting;
+      tocMobile.classList.toggle('is-sticky', gone);
+      if (tocSpacerEl) tocSpacerEl.classList.toggle('visible', gone);
+    }, { threshold: 0 });
+    stickyObs.observe(tocSentinel);
+  }
 
   // --- Panel helpers (detection + IOC — mutually exclusive) ---
   var detectTab   = document.getElementById('hl-detect-tab');
