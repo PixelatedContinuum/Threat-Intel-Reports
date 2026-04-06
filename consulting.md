@@ -13,7 +13,7 @@ permalink: /consulting/
 {% include section-header.html label="Services" accent="#58a6ff" %}
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
+  <div class="hl-prose-section__label" style="color:#58a6ff;">
     <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
     Threat Intelligence Utilization
   </div>
@@ -23,8 +23,19 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+  <div class="hl-prose-section__label" style="color:#f87171;">
+    <div class="hl-prose-section__bar" style="background:#f87171;"></div>
+    Malware Analysis &amp; Reverse Engineering
+  </div>
+  <div class="hl-prose-section__body">
+    Hands-on malware analysis and reverse engineering for organizations that need to understand what a sample actually does — not a sandbox report, but a full technical breakdown of behavior, capabilities, and intent. Whether your SOC has flagged something suspicious, your IR team has pulled a sample from a compromised host, or you want to understand a threat relevant to your environment before it shows up, this is the work that answers those questions.<br><br>
+    Analysis covers static and dynamic examination, behavioral mapping, capability identification, IOC extraction, and detection development grounded in what the malware actually does. Work is delivered as a structured report in the same style as the research published on this site.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label" style="color:#4ade80;">
+    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
     Detection Engineering Advisory
   </div>
   <div class="hl-prose-section__body">
@@ -34,8 +45,8 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+  <div class="hl-prose-section__label" style="color:#f97316;">
+    <div class="hl-prose-section__bar" style="background:#f97316;"></div>
     Custom Threat Intelligence Research
   </div>
   <div class="hl-prose-section__body">
@@ -45,7 +56,7 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
+  <div class="hl-prose-section__label" style="color:#58a6ff;">
     <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
     Incident Response Advisory
   </div>
@@ -55,8 +66,8 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+  <div class="hl-prose-section__label" style="color:#f87171;">
+    <div class="hl-prose-section__bar" style="background:#f87171;"></div>
     Threat Model Review
   </div>
   <div class="hl-prose-section__body">
@@ -65,8 +76,8 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+  <div class="hl-prose-section__label" style="color:#4ade80;">
+    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
     SOC Program Advisory
   </div>
   <div class="hl-prose-section__body">
@@ -75,8 +86,8 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+  <div class="hl-prose-section__label" style="color:#f97316;">
+    <div class="hl-prose-section__bar" style="background:#f97316;"></div>
     AI &amp; Automation in Security Operations
   </div>
   <div class="hl-prose-section__body">
@@ -86,7 +97,7 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
+  <div class="hl-prose-section__label" style="color:#58a6ff;">
     <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
     Training &amp; Knowledge Transfer
   </div>
@@ -96,8 +107,8 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+  <div class="hl-prose-section__label" style="color:#f87171;">
+    <div class="hl-prose-section__bar" style="background:#f87171;"></div>
     Retainer Advisory
   </div>
   <div class="hl-prose-section__body">
@@ -123,7 +134,7 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label">
+  <div class="hl-prose-section__label" style="color:#58a6ff;">
     <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
     What to include in your message
   </div>
