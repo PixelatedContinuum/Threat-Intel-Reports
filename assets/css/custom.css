@@ -1988,6 +1988,26 @@ button,
   text-decoration: none !important;
 }
 
+.hl-support-cta__btn--outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--hl-text-secondary) !important;
+  border: 1px solid var(--hl-border-card);
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 5px;
+  text-decoration: none !important;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.hl-support-cta__btn--outline:hover {
+  border-color: #555;
+  color: var(--hl-text-primary) !important;
+  text-decoration: none !important;
+}
+
 .hl-support-cta__secondary {
   color: var(--hl-text-muted) !important;
   font-size: 0.82em;
