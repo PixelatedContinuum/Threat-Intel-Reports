@@ -24,7 +24,7 @@ position: 6
       <a class="hl-support-cta__btn" href="https://github.com/sponsors/PixelatedContinuum" target="_blank" rel="noopener noreferrer">Sponsor on GitHub</a>
       <a class="hl-support-cta__btn--outline" href="https://www.paypal.me/thehuntersledger" target="_blank" rel="noopener noreferrer">Donate via PayPal</a>
     </div>
-    <p class="hl-support-donate__note">Monthly support via GitHub Sponsors · One-time donation via PayPal. Use whatever works for you.</p>
+    <p class="hl-support-donate__note">Use whichever platform feels right — every contribution goes directly toward the research.</p>
   </div>
 </div>
 
