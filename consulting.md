@@ -18,7 +18,7 @@ permalink: /consulting/
     <div>
       <div class="hl-card__meta" style="color:#58a6ff;">Retainer Advisory</div>
       <div class="hl-card__title">Standing access to the services listed here — without the overhead of scoping a new engagement each time.</div>
-      <div class="hl-service-card__body">When something comes up, your team has a resource to call on rather than starting from scratch. Covers malware analysis, IR advisory, detection reviews, threat model work, and others — structured around your cadence with flexibility for what the work actually requires. Capacity is intentionally limited to ensure quality; retainer slots are kept small.</div>
+      <div class="hl-service-card__body">A standing resource for the services listed here — malware analysis, IR advisory, detection reviews, threat model work, and more — without the overhead of scoping a new engagement each time. Structured around your cadence with flexibility for what the work requires. Retainer slots are kept small.</div>
     </div>
   </div>
 </div>
@@ -30,7 +30,7 @@ permalink: /consulting/
       <div class="hl-card__bar" style="background:#f87171;"></div>
       <div>
         <div class="hl-card__title">Malware Analysis &amp; Reverse Engineering</div>
-        <div class="hl-service-card__body">Full technical breakdown of what a sample actually does — static and dynamic analysis, behavioral mapping, capability identification, IOC extraction, and detection development grounded in real behavior. Useful when your SOC has flagged something suspicious, your IR team pulled a sample from a compromised host, or you need to understand a threat before it shows up. Engagements can extend into campaign investigation, infrastructure pivoting, or broader threat actor context when it adds value.</div>
+        <div class="hl-service-card__body">Full technical breakdown of what a sample actually does — static and dynamic analysis, behavioral mapping, IOC extraction, and detection development. Useful when your SOC flags something suspicious, your IR team pulls a sample from a compromised host, or you need to understand a threat before it shows up. Can extend into campaign investigation or infrastructure pivoting when it adds value.</div>
       </div>
     </div>
   </div>
@@ -40,7 +40,7 @@ permalink: /consulting/
       <div class="hl-card__bar" style="background:#4ade80;"></div>
       <div>
         <div class="hl-card__title">AI &amp; Automation in Security Operations</div>
-        <div class="hl-service-card__body">Advisory on applying AI and automation to security operations — threat hunting, detection engineering, intelligence production, and analyst tooling. Based on hands-on experience building multi-agent systems and AI-assisted workflows for real security operations work. The focus is on sharing what works in practice and identifying where AI adds genuine value versus where it creates noise.</div>
+        <div class="hl-service-card__body">Advisory on applying AI and automation to security operations — threat hunting, detection engineering, intelligence production, and analyst tooling. Drawing on hands-on experience building multi-agent systems for real SOC workflows, with a focus on what actually works and where AI adds genuine value versus noise.</div>
       </div>
     </div>
   </div>
@@ -50,7 +50,7 @@ permalink: /consulting/
       <div class="hl-card__bar" style="background:#f97316;"></div>
       <div>
         <div class="hl-card__title">Incident Response Advisory</div>
-        <div class="hl-service-card__body">Remote advisory support for teams working through an incident or building out IR capabilities — scoping, planning, program development, and malware analysis support. The focus is on helping you think through what you're seeing and building processes that hold up under pressure. Works well alongside an active investigation or as a program development engagement after the dust has settled.</div>
+        <div class="hl-service-card__body">Remote advisory for teams working through an incident or building out IR capabilities — scoping, planning, program development, and malware analysis support. Focus is on helping you think through what you're seeing rather than on-site forensic work; works well alongside an active investigation or as a program-building engagement once things settle.</div>
       </div>
     </div>
   </div>
@@ -60,7 +60,7 @@ permalink: /consulting/
       <div class="hl-card__bar" style="background:#58a6ff;"></div>
       <div>
         <div class="hl-card__title">SOC Program Advisory</div>
-        <div class="hl-service-card__body">Advisory for teams standing up or maturing a SOC — structure, processes, tooling decisions, analyst workflows, and detection strategy. Drawing on experience leading threat detection and response across large enterprise environments. A sounding board to help you think through decisions and pressure-test your approach, not a build-it-for-you engagement.</div>
+        <div class="hl-service-card__body">Advisory for teams standing up or maturing a SOC — structure, processes, tooling, analyst workflows, and detection strategy. Drawing on experience leading threat detection across large enterprise environments; a sounding board to think through decisions and pressure-test your approach.</div>
       </div>
     </div>
   </div>
@@ -70,7 +70,7 @@ permalink: /consulting/
       <div class="hl-card__bar" style="background:#f87171;"></div>
       <div>
         <div class="hl-card__title">Detection Engineering Advisory</div>
-        <div class="hl-service-card__body">Targeted review and improvement of detection coverage for a specific threat, technique, or coverage gap — grounded in real malware analysis and attacker tradecraft, scoped to your SIEM or EDR. Works best when there's a concrete problem to anchor the work rather than a broad audit of everything you have.</div>
+        <div class="hl-service-card__body">Targeted review and improvement of detection coverage for a specific threat, technique, or gap — grounded in real malware analysis and attacker tradecraft, scoped to your SIEM or EDR. Works best with a concrete problem to anchor the work rather than a broad audit.</div>
       </div>
     </div>
   </div>
@@ -80,7 +80,7 @@ permalink: /consulting/
       <div class="hl-card__bar" style="background:#4ade80;"></div>
       <div>
         <div class="hl-card__title">Threat Model Review</div>
-        <div class="hl-service-card__body">A focused review of the threats that actually matter to your organization — based on your industry, environment, and what adversaries are actively doing. The output is a prioritized threat landscape: what to track, what to deprioritize, and where your detection and response gaps are against the things most likely to target you.</div>
+        <div class="hl-service-card__body">A focused review of the threats that actually matter to your organization based on your industry, environment, and what adversaries are actively doing. Output: what to track, what to deprioritize, and where your detection and response gaps are against the most likely threats.</div>
       </div>
     </div>
   </div>
@@ -90,7 +90,7 @@ permalink: /consulting/
       <div class="hl-card__bar" style="background:#f97316;"></div>
       <div>
         <div class="hl-card__title">Threat Intelligence Utilization</div>
-        <div class="hl-service-card__body">Help operationalizing the threat intelligence your team already has access to — hunting plans built around your environment, translating intel into detection logic, and briefings on specific threats or campaigns relevant to your organization. Typically scoped as a focused engagement around a specific threat or use case.</div>
+        <div class="hl-service-card__body">Help operationalizing the threat intelligence your team already has — hunting plans, translating intel into detection logic, and briefings on relevant threats and campaigns. Typically a focused engagement around a specific threat or use case rather than an open-ended commitment.</div>
       </div>
     </div>
   </div>
@@ -100,7 +100,7 @@ permalink: /consulting/
       <div class="hl-card__bar" style="background:#58a6ff;"></div>
       <div>
         <div class="hl-card__title">Training &amp; Knowledge Transfer</div>
-        <div class="hl-service-card__body">Focused sessions for analyst teams on threat hunting methodology, reading and applying malware reports, translating threat intelligence into detections, or understanding specific threat actors and techniques. Works best as a single session or short series built around a defined topic your team is trying to get better at.</div>
+        <div class="hl-service-card__body">Focused sessions for analyst teams on threat hunting, applying malware reports, translating TI into detections, or understanding specific threat actors. Best as a single session or short series around a defined topic your team is working to get better at.</div>
       </div>
     </div>
   </div>
