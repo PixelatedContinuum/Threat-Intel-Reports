@@ -42,7 +42,8 @@ position: 6
     What Goes Into Each Report
   </div>
   <div class="hl-prose-section__body">
-    A typical report takes <strong>8 to 15 hours</strong> of active research time — static and dynamic malware analysis, infrastructure pivoting, detection rule development, and structured write-up. Tools like sandboxes, threat intel platforms, and reverse engineering environments carry ongoing costs. The domain, hosting, and delivery infrastructure add to that each month.<br><br>
+    Research time varies significantly by scope. Smaller reports represent <strong>multiple days</strong> of active analysis — static and dynamic malware analysis, infrastructure pivoting, detection rule development, and write-up. Larger investigations like the Arsenal-237 and Zero Trace series, which involve many samples and extensive hunting pivots, took <strong>a month or more</strong> to complete.<br><br>
+    All analysis runs on a dedicated home lab server — self-built and self-maintained — running the VMs, sandboxes, and tooling required for safe malware analysis. That infrastructure has real hardware and ongoing operational costs that come entirely out of pocket.<br><br>
     None of this is paywalled because the research is more valuable when it reaches defenders directly. But it is not free to produce.
   </div>
 </div>
