@@ -1,7 +1,9 @@
 ---
 title: Consulting & Advisory
+nav_title: Need Help?
 layout: page
 permalink: /consulting/
+position: 7
 ---
 
 <div class="hl-page-header" style="border-left-color: #58a6ff;">
