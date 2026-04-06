@@ -2230,6 +2230,63 @@ button,
   }
 }
 
+/* --- Site sponsors ------------------------------------------ */
+.hl-site-sponsors {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--hl-border-row);
+}
+
+.hl-site-sponsors__label {
+  font-size: 0.7em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--hl-text-muted);
+  margin-bottom: 12px;
+}
+
+.hl-site-sponsors__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hl-site-sponsor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--hl-bg-card);
+  border: 1px solid var(--hl-border-card);
+  border-radius: 6px;
+  padding: 10px 14px;
+  text-decoration: none !important;
+  color: var(--hl-text-primary) !important;
+  transition: border-color 0.15s;
+}
+
+.hl-site-sponsor:hover {
+  border-color: #444 !important;
+  text-decoration: none !important;
+}
+
+.hl-site-sponsor__logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
+.hl-site-sponsor__name {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--hl-text-primary);
+}
+
+.hl-site-sponsor__tagline {
+  font-size: 0.72em;
+  color: var(--hl-text-muted);
+  margin-top: 2px;
+}
+
 /* --- Consulting service cards -------------------------------- */
 .hl-service-grid {
   display: grid;

@@ -1,0 +1,19 @@
+{% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "site" | where: "active", true %}
+{% if active_site_sponsors.size > 0 %}
+<div class="hl-site-sponsors">
+  <div class="hl-site-sponsors__label">{% if active_site_sponsors.size == 1 %}Current Sponsor{% else %}Current Sponsors{% endif %}</div>
+  <div class="hl-site-sponsors__grid">
+    {% for sponsor in active_site_sponsors %}
+    <a href="{{ sponsor.url }}" class="hl-site-sponsor" target="_blank" rel="noopener noreferrer">
+      {% if sponsor.logo %}
+      <img src="{{ sponsor.logo | relative_url }}" alt="{{ sponsor.name }}" class="hl-site-sponsor__logo">
+      {% endif %}
+      <div>
+        <div class="hl-site-sponsor__name">{{ sponsor.name }}</div>
+        {% if sponsor.tagline %}<div class="hl-site-sponsor__tagline">{{ sponsor.tagline }}</div>{% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

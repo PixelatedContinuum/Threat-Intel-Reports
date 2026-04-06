@@ -59,6 +59,12 @@ position: 1
   </a>
 </div>
 
+{% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "site" | where: "active", true %}
+{% if active_site_sponsors.size > 0 %}
+{% include section-header.html label="Current Sponsors" accent="#58a6ff" %}
+{% include site-sponsors.html %}
+{% endif %}
+
 {% include section-header.html label="Contributing" accent="#4ade80" %}
 
 <div class="hl-prose-section">
