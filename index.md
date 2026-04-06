@@ -79,12 +79,22 @@ position: 1
   </div>
 </a></div>
 
+<div style="margin-top:9px;"><a href="{{ '/consulting/' | relative_url }}" class="hl-card">
+  <div class="hl-card__inner">
+    <div class="hl-card__bar" style="background:#f97316;"></div>
+    <div>
+      <div class="hl-card__title">Consulting &amp; Advisory</div>
+      <div class="hl-prose-section__body" style="margin-top:6px;">Malware analysis, IR advisory, detection engineering, and other hands-on services for teams that need depth.</div>
+    </div>
+  </div>
+</a></div>
+
 <div style="margin-top:9px;"><a href="{{ '/support/' | relative_url }}" class="hl-card">
   <div class="hl-card__inner">
     <div class="hl-card__bar" style="background:#4ade80;"></div>
     <div>
       <div class="hl-card__title">Support the Research</div>
-      <div class="hl-prose-section__body" style="margin-top:6px;">Donate, sponsor a report, or inquire about consulting and advisory services.</div>
+      <div class="hl-prose-section__body" style="margin-top:6px;">Donate or sponsor a report to help keep this research free and independent.</div>
     </div>
   </div>
 </a></div>
