@@ -2166,14 +2166,16 @@ button,
   width: 100%;
 }
 
+.hl-footer__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 .hl-footer__links {
   display: flex;
   gap: 48px;
   flex-wrap: wrap;
   margin-bottom: 28px;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .hl-footer__group {
@@ -2208,8 +2210,6 @@ button,
   color: var(--hl-text-dim);
   font-size: 0.75em;
   text-align: center;
-  max-width: 900px;
-  margin: 0 auto;
   padding-top: 20px;
   border-top: 1px solid var(--hl-border-row);
 }

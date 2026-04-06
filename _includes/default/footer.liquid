@@ -1,21 +1,31 @@
 <footer class="hl-footer">
-  <div class="hl-footer__links">
-    <div class="hl-footer__group">
-      <div class="hl-footer__group-label">Support</div>
-      <a class="hl-footer__link" href="{{ '/support/' | relative_url }}">Support This Research</a>
+  <div class="hl-footer__inner">
+    <div class="hl-footer__links">
+      <div class="hl-footer__group">
+        <div class="hl-footer__group-label">Support</div>
+        <a class="hl-footer__link" href="{{ '/support/' | relative_url }}">Support This Research</a>
+        <a class="hl-footer__link" href="{{ '/support/#sponsorship-tiers' | relative_url }}">Sponsorship</a>
+      </div>
+      <div class="hl-footer__group">
+        <div class="hl-footer__group-label">Stay Informed</div>
+        <a class="hl-footer__link" href="{{ '/subscribe/' | relative_url }}">Newsletter</a>
+        <a class="hl-footer__link" href="{{ '/feed.xml' | relative_url }}">RSS Feed</a>
+      </div>
+      <div class="hl-footer__group">
+        <div class="hl-footer__group-label">Explore</div>
+        <a class="hl-footer__link" href="{{ '/reports/' | relative_url }}">Reports</a>
+        <a class="hl-footer__link" href="{{ '/hunting-detections/' | relative_url }}">Detections</a>
+        <a class="hl-footer__link" href="{{ '/ioc-feeds/' | relative_url }}">IOC Feeds</a>
+      </div>
+      <div class="hl-footer__group">
+        <div class="hl-footer__group-label">Need Help?</div>
+        <a class="hl-footer__link" href="{{ '/consulting/' | relative_url }}">Consulting &amp; Advisory</a>
+        <a class="hl-footer__link" href="{{ '/about-me/' | relative_url }}">About Me</a>
+        <a class="hl-footer__link" href="https://www.linkedin.com/in/josephrharrison" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
     </div>
-    <div class="hl-footer__group">
-      <div class="hl-footer__group-label">Contact</div>
-      <a class="hl-footer__link" href="{{ '/about-me/' | relative_url }}">About Me</a>
-      <a class="hl-footer__link" href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a>
+    <div class="hl-footer__bottom">
+      <span>{{ site.footer_text }}</span>
     </div>
-    <div class="hl-footer__group">
-      <div class="hl-footer__group-label">Need Help?</div>
-      <a class="hl-footer__link" href="{{ '/consulting/' | relative_url }}">Consulting &amp; Advisory</a>
-      <a class="hl-footer__link" href="https://www.linkedin.com/in/josephrharrison" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    </div>
-  </div>
-  <div class="hl-footer__bottom">
-    <span>{{ site.footer_text }}</span>
   </div>
 </footer>
