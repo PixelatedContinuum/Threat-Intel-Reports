@@ -29,7 +29,7 @@ permalink: /consulting/
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#f87171;"></div>
       <div>
-        <div class="hl-card__meta" style="color:#f87171;">Malware Analysis &amp; Reverse Engineering</div>
+        <div class="hl-service-card__title" style="color:#f87171;">Malware Analysis &amp; Reverse Engineering</div>
         <div class="hl-service-card__body">Full technical breakdown of what a sample actually does — static and dynamic analysis, behavioral mapping, IOC extraction, and detection development. Useful when your SOC flags something suspicious, your IR team pulls a sample from a compromised host, or you need to understand a threat before it shows up. Can extend into campaign investigation or infrastructure pivoting when it adds value.</div>
       </div>
     </div>
@@ -39,7 +39,7 @@ permalink: /consulting/
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#4ade80;"></div>
       <div>
-        <div class="hl-card__meta" style="color:#4ade80;">AI &amp; Automation in Security Operations</div>
+        <div class="hl-service-card__title" style="color:#4ade80;">AI &amp; Automation in Security Operations</div>
         <div class="hl-service-card__body">Advisory on applying AI and automation to security operations — threat hunting, detection engineering, intelligence production, and analyst tooling. Drawing on hands-on experience building multi-agent systems for real SOC workflows, with a focus on what actually works and where AI adds genuine value versus noise.</div>
       </div>
     </div>
@@ -49,7 +49,7 @@ permalink: /consulting/
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#f97316;"></div>
       <div>
-        <div class="hl-card__meta" style="color:#f97316;">Incident Response Advisory</div>
+        <div class="hl-service-card__title" style="color:#f97316;">Incident Response Advisory</div>
         <div class="hl-service-card__body">Remote advisory for teams working through an incident or building out IR capabilities — scoping, planning, program development, and malware analysis support. Focus is on helping you think through what you're seeing rather than on-site forensic work; works well alongside an active investigation or as a program-building engagement once things settle.</div>
       </div>
     </div>
@@ -59,7 +59,7 @@ permalink: /consulting/
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#58a6ff;"></div>
       <div>
-        <div class="hl-card__meta" style="color:#58a6ff;">SOC Program Advisory</div>
+        <div class="hl-service-card__title" style="color:#58a6ff;">SOC Program Advisory</div>
         <div class="hl-service-card__body">Advisory for teams standing up or maturing a SOC — structure, processes, tooling, analyst workflows, and detection strategy. Drawing on experience leading threat detection across large enterprise environments; a sounding board to think through decisions and pressure-test your approach.</div>
       </div>
     </div>
@@ -69,7 +69,7 @@ permalink: /consulting/
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#f87171;"></div>
       <div>
-        <div class="hl-card__meta" style="color:#f87171;">Detection Engineering Advisory</div>
+        <div class="hl-service-card__title" style="color:#f87171;">Detection Engineering Advisory</div>
         <div class="hl-service-card__body">Targeted review and improvement of detection coverage for a specific threat, technique, or gap — grounded in real malware analysis and attacker tradecraft, scoped to your SIEM or EDR. Works best with a concrete problem to anchor the work rather than a broad audit.</div>
       </div>
     </div>
@@ -79,7 +79,7 @@ permalink: /consulting/
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#4ade80;"></div>
       <div>
-        <div class="hl-card__meta" style="color:#4ade80;">Threat Model Review</div>
+        <div class="hl-service-card__title" style="color:#4ade80;">Threat Model Review</div>
         <div class="hl-service-card__body">A focused review of the threats that actually matter to your organization based on your industry, environment, and what adversaries are actively doing. Output: what to track, what to deprioritize, and where your detection and response gaps are against the most likely threats.</div>
       </div>
     </div>
@@ -89,7 +89,7 @@ permalink: /consulting/
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#f97316;"></div>
       <div>
-        <div class="hl-card__meta" style="color:#f97316;">Threat Intelligence Utilization</div>
+        <div class="hl-service-card__title" style="color:#f97316;">Threat Intelligence Utilization</div>
         <div class="hl-service-card__body">Help operationalizing the threat intelligence your team already has — hunting plans, translating intel into detection logic, and briefings on relevant threats and campaigns. Typically a focused engagement around a specific threat or use case rather than an open-ended commitment.</div>
       </div>
     </div>
@@ -99,7 +99,7 @@ permalink: /consulting/
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#58a6ff;"></div>
       <div>
-        <div class="hl-card__meta" style="color:#58a6ff;">Training &amp; Knowledge Transfer</div>
+        <div class="hl-service-card__title" style="color:#58a6ff;">Training &amp; Knowledge Transfer</div>
         <div class="hl-service-card__body">Focused sessions for analyst teams on threat hunting, applying malware reports, translating TI into detections, or understanding specific threat actors. Best as a single session or short series around a defined topic your team is working to get better at.</div>
       </div>
     </div>

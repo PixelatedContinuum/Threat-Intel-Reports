@@ -22,14 +22,14 @@
         {% if sev_label != "" %}{{ sev_label }} · {% endif %}{{ include.date }}{% if _mins > 0 %} · {{ _mins }} min{% endif %}
       </div>
       <div class="hl-card__title">{{ include.title }}</div>
-      {% if include.tags %}
-        {% assign tag_list = include.tags | split: "," %}
-        <div class="hl-tags">
-          {% for tag in tag_list %}
-            {% include tag-badge.html tag=tag %}
-          {% endfor %}
-        </div>
-      {% endif %}
     </div>
   </div>
+  {% if include.tags %}
+    {% assign tag_list = include.tags | split: "," %}
+    <div class="hl-tags hl-card__tags">
+      {% for tag in tag_list %}
+        {% include tag-badge.html tag=tag %}
+      {% endfor %}
+    </div>
+  {% endif %}
 </a>

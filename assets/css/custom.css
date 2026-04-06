@@ -603,6 +603,11 @@ main.content {
   margin-top: 5px;
 }
 
+.hl-card__tags {
+  padding: 0 14px 10px;
+  margin-top: 0;
+}
+
 .hl-tag {
   font-size: 0.68em;
   padding: 2px 6px;
@@ -2236,11 +2241,19 @@ button,
   cursor: default;
 }
 
+.hl-service-card__title {
+  font-size: 1.0em;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 7px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .hl-service-card__body {
   color: var(--hl-text-primary);
   font-size: 0.835em;
   line-height: 1.65;
-  margin-top: 6px;
 }
 
 @media (max-width: 700px) {
