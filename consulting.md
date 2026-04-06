@@ -7,7 +7,7 @@ permalink: /consulting/
 <div class="hl-page-header" style="border-left-color: #58a6ff;">
   <div class="hl-page-header__label" style="color: #58a6ff;">Consulting & Advisory</div>
   <div class="hl-page-header__title">Threat Intelligence That Works for Your Team</div>
-  <div class="hl-page-header__desc">Engagements are kept selective and scoped to what I can do well. I run an independent practice alongside active security operations work — quality and fit take priority over volume. If it's a fit, you'll get the same depth that goes into the research on this site applied directly to your environment. If the scope needs some shaping to get there, that's part of the conversation.</div>
+  <div class="hl-page-header__desc">Engagements are kept selective and scoped to what I can do well. I run an independent practice alongside active security operations work — quality and fit take priority over volume. If it's a fit, you'll get the same depth that goes into the research on this site applied directly to your environment. If the scope needs some shaping to get there, that's part of the partnership.</div>
 </div>
 
 {% include section-header.html label="Services" accent="#58a6ff" %}
@@ -140,5 +140,5 @@ permalink: /consulting/
 
 <div class="hl-support-donate" style="margin-top: 1.5rem;">
   <a class="hl-support-cta__btn" href="mailto:intel@the-hunters-ledger.com?subject=Consulting Inquiry">intel@the-hunters-ledger.com</a>
-  <p class="hl-support-donate__note">I'll respond within a few business days. If the scope or fit needs some work, I'm happy to think through it together and find an approach that makes sense for both sides.</p>
+  <p class="hl-support-donate__note">I'll respond within a few business days. If the scope needs some shaping to get there, that's part of the partnership.</p>
 </div>
