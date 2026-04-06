@@ -2247,7 +2247,7 @@ button,
 }
 
 .hl-service-card__body {
-  color: var(--hl-text-secondary);
+  color: var(--hl-text-primary);
   font-size: 0.835em;
   line-height: 1.65;
   margin-top: 6px;
