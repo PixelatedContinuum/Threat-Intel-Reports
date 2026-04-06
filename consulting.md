@@ -15,10 +15,10 @@ permalink: /consulting/
 <div class="hl-prose-section">
   <div class="hl-prose-section__label" style="color:#58a6ff;">
     <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
-    Threat Intelligence Utilization
+    Retainer Advisory
   </div>
   <div class="hl-prose-section__body">
-    Most teams have access to threat intelligence but struggle to operationalize it. I can help develop threat hunting plans built around your environment and current threat landscape, assist with translating intelligence into detection logic, and provide briefings or overviews on specific threats, campaigns, or malware families relevant to your organization. Typically scoped as a focused engagement around a specific threat or use case rather than an open-ended commitment.
+    Standing access to the services listed on this page — malware analysis, IR advisory, detection reviews, threat model work, and others — without the overhead of scoping a new engagement each time. When something comes up, your team has a resource to call on rather than starting from scratch. Structured around your cadence and needs with flexibility for what the work actually requires. Capacity is intentionally limited to ensure quality — retainer slots are kept small.
   </div>
 </div>
 
@@ -29,13 +29,45 @@ permalink: /consulting/
   </div>
   <div class="hl-prose-section__body">
     Hands-on malware analysis and reverse engineering for organizations that need to understand what a sample actually does — not a sandbox report, but a full technical breakdown of behavior, capabilities, and intent. Whether your SOC has flagged something suspicious, your IR team has pulled a sample from a compromised host, or you want to understand a threat relevant to your environment before it shows up, this is the work that answers those questions.<br><br>
-    Analysis covers static and dynamic examination, behavioral mapping, capability identification, IOC extraction, and detection development grounded in what the malware actually does. Work is delivered as a structured report in the same style as the research published on this site.
+    Analysis covers static and dynamic examination, behavioral mapping, capability identification, IOC extraction, and detection development grounded in what the malware actually does. Engagements can extend into related research when it adds value — campaign investigation, infrastructure pivoting, or tracking the broader threat actor context behind a sample. Work is delivered as a structured report in the same style as the research published on this site.<br><br>
+    This is most valuable when there's a concrete subject to dig into. Scope and timelines are agreed upfront so expectations are clear on both sides.
   </div>
 </div>
 
 <div class="hl-prose-section">
   <div class="hl-prose-section__label" style="color:#4ade80;">
     <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
+    AI &amp; Automation in Security Operations
+  </div>
+  <div class="hl-prose-section__body">
+    Advisory on applying AI and automation to security operations workflows — threat hunting, detection engineering, intelligence production, and analyst tooling. Drawing on hands-on experience building multi-agent systems and AI-assisted workflows for real security operations work.<br><br>
+    This is a discussion and advisory engagement — sharing what works in practice, helping you think through your approach, and identifying where AI adds real value versus where it creates noise.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label" style="color:#f97316;">
+    <div class="hl-prose-section__bar" style="background:#f97316;"></div>
+    Incident Response Advisory
+  </div>
+  <div class="hl-prose-section__body">
+    Remote advisory support for teams working through an incident or building out their IR capabilities — scoping, planning, program development, and malware analysis support. The focus is on remote advisory rather than on-site forensic work. If you need someone to help think through what you're seeing, build out your IR processes, or analyze malware encountered during an investigation, that's where this adds value.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label" style="color:#58a6ff;">
+    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+    SOC Program Advisory
+  </div>
+  <div class="hl-prose-section__body">
+    Advisory guidance for teams standing up or maturing a SOC — structure, processes, tooling decisions, analyst workflows, and detection strategy. This is a conversation-based engagement drawing on experience leading threat detection and response operations across large enterprise environments. The value is in helping you think through decisions, pressure-test your approach, and avoid common pitfalls — a sounding board with relevant experience rather than a build-it-for-you engagement.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label" style="color:#f87171;">
+    <div class="hl-prose-section__bar" style="background:#f87171;"></div>
     Detection Engineering Advisory
   </div>
   <div class="hl-prose-section__body">
@@ -45,29 +77,8 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label" style="color:#f97316;">
-    <div class="hl-prose-section__bar" style="background:#f97316;"></div>
-    Custom Threat Intelligence Research
-  </div>
-  <div class="hl-prose-section__body">
-    Original research scoped to your needs — malware analysis, campaign investigation, infrastructure pivoting, or hunting for specific threat actors or tooling relevant to your industry. This is hands-on technical work in the same style as the reports published on this site.<br><br>
-    This is most valuable when there's a concrete subject to dig into — a specific malware family, infrastructure cluster, or threat actor with something to find. Scope and timelines are worked out upfront so expectations are clear on both sides.
-  </div>
-</div>
-
-<div class="hl-prose-section">
-  <div class="hl-prose-section__label" style="color:#58a6ff;">
-    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
-    Incident Response Advisory
-  </div>
-  <div class="hl-prose-section__body">
-    Remote advisory support for teams working through an incident or building out their IR capabilities — scoping, planning, program development, and malware analysis support. The focus is on remote advisory rather than on-site forensic work. If you need someone to help think through what you're seeing, build out your IR processes, or analyze malware encountered during an investigation, that's where this adds value.
-  </div>
-</div>
-
-<div class="hl-prose-section">
-  <div class="hl-prose-section__label" style="color:#f87171;">
-    <div class="hl-prose-section__bar" style="background:#f87171;"></div>
+  <div class="hl-prose-section__label" style="color:#4ade80;">
+    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
     Threat Model Review
   </div>
   <div class="hl-prose-section__body">
@@ -76,23 +87,12 @@ permalink: /consulting/
 </div>
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__label" style="color:#4ade80;">
-    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
-    SOC Program Advisory
-  </div>
-  <div class="hl-prose-section__body">
-    Advisory guidance for teams standing up or maturing a SOC — structure, processes, tooling decisions, analyst workflows, and detection strategy. This is a conversation-based engagement drawing on experience leading threat detection and response operations across large enterprise environments. The value is in helping you think through decisions, pressure-test your approach, and avoid common pitfalls — a sounding board with relevant experience rather than a build-it-for-you engagement.
-  </div>
-</div>
-
-<div class="hl-prose-section">
   <div class="hl-prose-section__label" style="color:#f97316;">
     <div class="hl-prose-section__bar" style="background:#f97316;"></div>
-    AI &amp; Automation in Security Operations
+    Threat Intelligence Utilization
   </div>
   <div class="hl-prose-section__body">
-    Advisory on applying AI and automation to security operations workflows — threat hunting, detection engineering, intelligence production, and analyst tooling. Drawing on hands-on experience building multi-agent systems and AI-assisted workflows for real security operations work.<br><br>
-    This is a discussion and advisory engagement — sharing what works in practice, helping you think through your approach, and identifying where AI adds real value versus where it creates noise.
+    Most teams have access to threat intelligence but struggle to operationalize it. I can help develop threat hunting plans built around your environment and current threat landscape, assist with translating intelligence into detection logic, and provide briefings or overviews on specific threats, campaigns, or malware families relevant to your organization. Typically scoped as a focused engagement around a specific threat or use case rather than an open-ended commitment.
   </div>
 </div>
 
@@ -103,16 +103,6 @@ permalink: /consulting/
   </div>
   <div class="hl-prose-section__body">
     Focused sessions for analyst teams on threat hunting methodology, reading and applying malware analysis reports, translating threat intelligence into detection logic, or understanding specific threat actors and techniques. Works best as a single session or short series built around a defined topic your team is trying to get better at.
-  </div>
-</div>
-
-<div class="hl-prose-section">
-  <div class="hl-prose-section__label" style="color:#f87171;">
-    <div class="hl-prose-section__bar" style="background:#f87171;"></div>
-    Retainer Advisory
-  </div>
-  <div class="hl-prose-section__body">
-    Ongoing access to threat intelligence expertise without the overhead of a full-time hire. A retainer gives your team a resource to call on for questions, targeted detection reviews, threat briefings, and staying current on the threats I'm actively tracking. Structured around your cadence and needs — not a fixed deliverable schedule. Capacity is intentionally limited to ensure quality — retainer slots are kept small.
   </div>
 </div>
 
