@@ -80,9 +80,9 @@ position: 6
       {% endfor %}
       {% assign filled = tier_sponsors | size %}
       {% assign remaining = tier.slots | minus: filled %}
-      {% for i in (1..remaining) %}
-      <div class="hl-tier-card__placeholder">— available —</div>
-      {% endfor %}
+      {% if remaining > 0 %}
+      <div class="hl-tier-card__placeholder">Be the first to sponsor →</div>
+      {% endif %}
     </div>
   </div>
   {% endfor %}
