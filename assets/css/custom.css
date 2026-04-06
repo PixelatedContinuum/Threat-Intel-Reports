@@ -519,10 +519,10 @@ main.content {
 
 .hl-card__bar {
   width: 3px;
-  min-height: 56px;
+  min-height: 20px;
   border-radius: 2px;
   flex-shrink: 0;
-  margin-top: 2px;
+  align-self: stretch;
 }
 
 .hl-card__meta {
@@ -2234,16 +2234,6 @@ button,
 
 .hl-service-card {
   cursor: default;
-}
-
-.hl-service-card .hl-card__inner {
-  align-items: stretch;
-}
-
-.hl-service-card .hl-card__bar {
-  min-height: 0;
-  margin-top: 0;
-  align-self: stretch;
 }
 
 .hl-service-card__body {
