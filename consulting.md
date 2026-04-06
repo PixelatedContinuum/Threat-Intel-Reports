@@ -120,23 +120,14 @@ position: 7
 {% include section-header.html label="Get in Touch" accent="#58a6ff" %}
 
 <div class="hl-prose-section">
-  <div class="hl-prose-section__body">
-    To keep things efficient for both of us, include the following when you reach out:
-  </div>
-</div>
-
-<div class="hl-prose-section">
-  <div class="hl-prose-section__label" style="color:#58a6ff;">
-    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
-    What to include in your message
-  </div>
+  <div class="hl-contact-heading">What to include in your message</div>
   <div class="hl-prose-section__body">
     <ul>
-      <li><strong>What you're trying to solve</strong> — a brief description of the problem or goal</li>
-      <li><strong>Your environment</strong> — industry, rough org size, and relevant tooling (SIEM, EDR, etc.) if applicable</li>
-      <li><strong>Scope and timeline</strong> — is this a one-time engagement, ongoing, or exploratory?</li>
+      <li><strong>What you're working through</strong> — a rough sense of the problem or situation, even if it's not fully scoped yet</li>
+      <li><strong>Your environment</strong> — industry, org size, and any relevant tooling if it's useful context</li>
+      <li><strong>What you're thinking</strong> — whether this feels like a one-time thing, something ongoing, or you're still figuring that out</li>
     </ul>
-    This isn't a formal intake form — a few sentences is fine. It just helps me give you a useful response quickly rather than going back and forth.
+    A few sentences is plenty. The goal is just to get the conversation started.
   </div>
 </div>
 

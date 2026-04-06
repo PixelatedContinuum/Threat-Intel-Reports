@@ -718,6 +718,13 @@ main.content {
   color: var(--hl-accent-blue);
 }
 
+.hl-contact-heading {
+  font-size: 1.0em;
+  font-weight: 600;
+  color: var(--hl-text-primary);
+  margin-bottom: 10px;
+}
+
 /* --- Nav tile grid ----------------------------------------- */
 .hl-nav-grid {
   display: grid;
