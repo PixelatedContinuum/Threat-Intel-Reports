@@ -1,0 +1,15 @@
+tiers:
+  - id: report
+    name: Report Sponsor
+    description: "Logo and link featured on a single research report."
+    slots: 3
+  - id: multi-report
+    name: Multi-Report Sponsor
+    description: "Logo and link across a defined set of reports."
+    slots: 2
+  - id: monthly
+    name: Monthly Sponsor
+    description: "Logo on the Support page. Author adds sponsored_by: to relevant reports each month."
+    slots: 1
+
+sponsors: []

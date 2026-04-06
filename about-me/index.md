@@ -3,7 +3,7 @@ title: About Me
 date: '2025-11-17'
 layout: page
 permalink: /about-me/
-position: 6
+position: 7
 ---
 
 <div class="hl-page-header" style="border-left-color: #58a6ff;">

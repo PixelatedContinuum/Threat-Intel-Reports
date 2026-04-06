@@ -25,6 +25,17 @@ document.addEventListener('DOMContentLoaded', function () {
   </div>
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
+{% if page.sponsored_by %}
+{% assign sponsor = site.data.sponsors.sponsors | where: "id", page.sponsored_by | first %}
+{% if sponsor %}
+<div class="hl-sponsor-banner">
+  <span class="hl-sponsor-banner__label">Sponsored by</span>
+  {% if sponsor.url %}<a class="hl-sponsor-banner__name" href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer">{% else %}<span class="hl-sponsor-banner__name">{% endif %}
+    {% if sponsor.logo %}<img class="hl-sponsor-banner__logo" src="{{ sponsor.logo }}" alt="{{ sponsor.name }}">{% else %}{{ sponsor.name }}{% endif %}
+  {% if sponsor.url %}</a>{% else %}</span>{% endif %}
+</div>
+{% endif %}
+{% endif %}
 <div class="hl-post-body">
   <details class="hl-post-toc-mobile" id="hl-toc-mobile">
     <summary>Contents</summary>
@@ -39,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <nav><ul class="hl-toc__list" id="hl-toc-list"></ul></nav>
   </aside>
 </div>
+
+{% include support-cta.html %}
 
 {% assign rp_pool = site.pages | where: "layout", "post" | sort: "date" | reverse %}
 {% assign rp_list = "" | split: "" %}

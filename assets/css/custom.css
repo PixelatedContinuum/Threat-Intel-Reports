@@ -1929,3 +1929,226 @@ button,
     color: var(--hl-accent-blue);
   }
 }
+
+/* ============================================================
+   SUPPORT CTA — post-footer donation card
+   ============================================================ */
+
+.hl-support-cta {
+  background: var(--hl-bg-card);
+  border: 1px solid var(--hl-border-card);
+  border-left: 4px solid var(--hl-accent-green);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 2.5rem 0;
+}
+
+.hl-support-cta__heading {
+  color: var(--hl-text-primary);
+  font-size: 1em;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.hl-support-cta__body {
+  color: var(--hl-text-secondary);
+  font-size: 0.88em;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.hl-support-cta__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.hl-support-cta__btn {
+  display: inline-block;
+  background: var(--hl-accent-green);
+  color: #111111 !important;
+  font-size: 0.85em;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 5px;
+  text-decoration: none !important;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.hl-support-cta__btn:hover {
+  opacity: 0.85;
+  text-decoration: none !important;
+}
+
+.hl-support-cta__secondary {
+  color: var(--hl-text-muted) !important;
+  font-size: 0.82em;
+  text-decoration: none !important;
+  transition: color 0.15s;
+}
+
+.hl-support-cta__secondary:hover {
+  color: var(--hl-text-secondary) !important;
+  text-decoration: none !important;
+}
+
+/* ============================================================
+   SPONSOR BANNER — per-post sponsored-by header
+   ============================================================ */
+
+.hl-sponsor-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--hl-bg-row);
+  border: 1px solid var(--hl-border-row);
+  border-radius: 5px;
+  padding: 9px 16px;
+  margin-bottom: 1.5rem;
+}
+
+.hl-sponsor-banner__label {
+  color: var(--hl-text-muted);
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.hl-sponsor-banner__name,
+.hl-sponsor-banner__name:visited {
+  color: var(--hl-text-secondary) !important;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.15s;
+}
+
+.hl-sponsor-banner__name:hover {
+  color: var(--hl-text-primary) !important;
+}
+
+.hl-sponsor-banner__logo {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* ============================================================
+   SUPPORT PAGE — sections, donate block, tier grid
+   ============================================================ */
+
+.hl-support-section {
+  margin-bottom: 1.5rem;
+}
+
+.hl-support-donate {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding: 16px 18px;
+  background: var(--hl-bg-row);
+  border: 1px solid var(--hl-border-row);
+  border-radius: 5px;
+}
+
+.hl-support-donate__note {
+  color: var(--hl-text-muted);
+  font-size: 0.8em;
+  margin: 0;
+}
+
+/* Tier grid */
+.hl-tier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 700px) {
+  .hl-tier-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hl-tier-card {
+  background: var(--hl-bg-card);
+  border: 1px solid var(--hl-border-card);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.hl-tier-card__name {
+  color: var(--hl-accent-blue);
+  font-size: 0.82em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.hl-tier-card__desc {
+  color: var(--hl-text-muted);
+  font-size: 0.78em;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.hl-tier-card__slots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hl-tier-card__sponsor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--hl-bg-row);
+  border: 1px solid var(--hl-border-row);
+  border-radius: 4px;
+}
+
+.hl-tier-card__logo {
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+}
+
+.hl-tier-card__sponsor-name,
+.hl-tier-card__sponsor-name:visited {
+  color: var(--hl-text-secondary) !important;
+  font-size: 0.82em;
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+.hl-tier-card__sponsor-name:hover {
+  color: var(--hl-text-primary) !important;
+}
+
+.hl-tier-card__placeholder {
+  padding: 8px 10px;
+  border: 1px dashed var(--hl-border-row);
+  border-radius: 4px;
+  color: var(--hl-text-dim);
+  font-size: 0.78em;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.hl-support-contact {
+  color: var(--hl-text-muted);
+  font-size: 0.8em;
+  margin-top: 0.75rem;
+}
