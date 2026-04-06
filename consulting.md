@@ -12,93 +12,101 @@ permalink: /consulting/
 
 {% include section-header.html label="Services" accent="#58a6ff" %}
 
-<div class="hl-card" style="margin-bottom: 14px;">
+<div class="hl-card hl-service-card" style="margin-bottom: 14px;">
   <div class="hl-card__inner">
-    <div class="hl-card__bar" style="background:#58a6ff; min-height: 80px;"></div>
+    <div class="hl-card__bar" style="background:#58a6ff;"></div>
     <div>
-      <div class="hl-card__meta" style="color:#58a6ff;">Retainer Advisory</div>
+      <div class="hl-card__meta" style="color:#58a6ff;">Retainer</div>
       <div class="hl-card__title">Standing access to the services listed here — without the overhead of scoping a new engagement each time.</div>
-      <div class="hl-service-card__body">A standing resource for the services listed here — malware analysis, IR advisory, detection reviews, threat model work, and more — without the overhead of scoping a new engagement each time. Structured around your cadence with flexibility for what the work requires. Retainer slots are kept small.</div>
+      <div class="hl-service-card__body">When something comes up, your team has a resource to call on rather than starting from scratch. Covers malware analysis, IR advisory, detection reviews, threat model work, and more — structured around your cadence with flexibility for what the work requires. Retainer slots are kept small.</div>
     </div>
   </div>
 </div>
 
 <div class="hl-service-grid">
 
-  <div class="hl-card">
+  <div class="hl-card hl-service-card">
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#f87171;"></div>
       <div>
+        <div class="hl-card__meta" style="color:#f87171;">Analysis</div>
         <div class="hl-card__title">Malware Analysis &amp; Reverse Engineering</div>
         <div class="hl-service-card__body">Full technical breakdown of what a sample actually does — static and dynamic analysis, behavioral mapping, IOC extraction, and detection development. Useful when your SOC flags something suspicious, your IR team pulls a sample from a compromised host, or you need to understand a threat before it shows up. Can extend into campaign investigation or infrastructure pivoting when it adds value.</div>
       </div>
     </div>
   </div>
 
-  <div class="hl-card">
+  <div class="hl-card hl-service-card">
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#4ade80;"></div>
       <div>
+        <div class="hl-card__meta" style="color:#4ade80;">Advisory</div>
         <div class="hl-card__title">AI &amp; Automation in Security Operations</div>
         <div class="hl-service-card__body">Advisory on applying AI and automation to security operations — threat hunting, detection engineering, intelligence production, and analyst tooling. Drawing on hands-on experience building multi-agent systems for real SOC workflows, with a focus on what actually works and where AI adds genuine value versus noise.</div>
       </div>
     </div>
   </div>
 
-  <div class="hl-card">
+  <div class="hl-card hl-service-card">
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#f97316;"></div>
       <div>
+        <div class="hl-card__meta" style="color:#f97316;">Response</div>
         <div class="hl-card__title">Incident Response Advisory</div>
         <div class="hl-service-card__body">Remote advisory for teams working through an incident or building out IR capabilities — scoping, planning, program development, and malware analysis support. Focus is on helping you think through what you're seeing rather than on-site forensic work; works well alongside an active investigation or as a program-building engagement once things settle.</div>
       </div>
     </div>
   </div>
 
-  <div class="hl-card">
+  <div class="hl-card hl-service-card">
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#58a6ff;"></div>
       <div>
+        <div class="hl-card__meta" style="color:#58a6ff;">Program</div>
         <div class="hl-card__title">SOC Program Advisory</div>
         <div class="hl-service-card__body">Advisory for teams standing up or maturing a SOC — structure, processes, tooling, analyst workflows, and detection strategy. Drawing on experience leading threat detection across large enterprise environments; a sounding board to think through decisions and pressure-test your approach.</div>
       </div>
     </div>
   </div>
 
-  <div class="hl-card">
+  <div class="hl-card hl-service-card">
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#f87171;"></div>
       <div>
+        <div class="hl-card__meta" style="color:#f87171;">Detection</div>
         <div class="hl-card__title">Detection Engineering Advisory</div>
         <div class="hl-service-card__body">Targeted review and improvement of detection coverage for a specific threat, technique, or gap — grounded in real malware analysis and attacker tradecraft, scoped to your SIEM or EDR. Works best with a concrete problem to anchor the work rather than a broad audit.</div>
       </div>
     </div>
   </div>
 
-  <div class="hl-card">
+  <div class="hl-card hl-service-card">
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#4ade80;"></div>
       <div>
+        <div class="hl-card__meta" style="color:#4ade80;">Review</div>
         <div class="hl-card__title">Threat Model Review</div>
         <div class="hl-service-card__body">A focused review of the threats that actually matter to your organization based on your industry, environment, and what adversaries are actively doing. Output: what to track, what to deprioritize, and where your detection and response gaps are against the most likely threats.</div>
       </div>
     </div>
   </div>
 
-  <div class="hl-card">
+  <div class="hl-card hl-service-card">
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#f97316;"></div>
       <div>
+        <div class="hl-card__meta" style="color:#f97316;">Intelligence</div>
         <div class="hl-card__title">Threat Intelligence Utilization</div>
         <div class="hl-service-card__body">Help operationalizing the threat intelligence your team already has — hunting plans, translating intel into detection logic, and briefings on relevant threats and campaigns. Typically a focused engagement around a specific threat or use case rather than an open-ended commitment.</div>
       </div>
     </div>
   </div>
 
-  <div class="hl-card">
+  <div class="hl-card hl-service-card">
     <div class="hl-card__inner">
       <div class="hl-card__bar" style="background:#58a6ff;"></div>
       <div>
+        <div class="hl-card__meta" style="color:#58a6ff;">Training</div>
         <div class="hl-card__title">Training &amp; Knowledge Transfer</div>
         <div class="hl-service-card__body">Focused sessions for analyst teams on threat hunting, applying malware reports, translating TI into detections, or understanding specific threat actors. Best as a single session or short series around a defined topic your team is working to get better at.</div>
       </div>

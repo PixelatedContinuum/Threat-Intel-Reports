@@ -2232,6 +2232,20 @@ button,
   margin-bottom: 2rem;
 }
 
+.hl-service-card {
+  cursor: default;
+}
+
+.hl-service-card .hl-card__inner {
+  align-items: stretch;
+}
+
+.hl-service-card .hl-card__bar {
+  min-height: 0;
+  margin-top: 0;
+  align-self: stretch;
+}
+
 .hl-service-card__body {
   color: var(--hl-text-secondary);
   font-size: 0.835em;
