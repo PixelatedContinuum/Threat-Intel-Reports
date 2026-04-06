@@ -140,5 +140,5 @@ permalink: /consulting/
 
 <div class="hl-support-donate" style="margin-top: 1.5rem;">
   <a class="hl-support-cta__btn" href="mailto:intel@the-hunters-ledger.com?subject=Consulting Inquiry">intel@the-hunters-ledger.com</a>
-  <p class="hl-support-donate__note">I'll respond within a few business days. Not every engagement is the right fit, and I'll always be honest about that.</p>
+  <p class="hl-support-donate__note">I'll respond within a few business days. If the scope or fit needs some work, I'm happy to think through it together and find an approach that makes sense for both sides.</p>
 </div>
