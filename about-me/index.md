@@ -120,6 +120,16 @@ position: 7
   </div>
 </div>
 
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+    Email
+  </div>
+  <div class="hl-prose-section__body">
+    <a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a>
+  </div>
+</div>
+
 {% include section-header.html label="How This Site Is Built" accent="#f97316" %}
 
 <div class="hl-prose-section">
