@@ -16,9 +16,8 @@ permalink: /consulting/
   <div class="hl-card__inner">
     <div class="hl-card__bar" style="background:#58a6ff;"></div>
     <div>
-      <div class="hl-card__meta" style="color:#58a6ff;">Retainer Advisory</div>
-      <div class="hl-card__title">Standing access to the services listed here — without the overhead of scoping a new engagement each time.</div>
-      <div class="hl-service-card__body">When something comes up, your team has a resource to call on rather than starting from scratch. Covers malware analysis, IR advisory, detection reviews, threat model work, and more — structured around your cadence with flexibility for what the work requires. Retainer slots are kept small.</div>
+      <div class="hl-service-card__title" style="color:#58a6ff;">Retainer Advisory</div>
+      <div class="hl-service-card__body">Standing access to the services listed here — malware analysis, IR advisory, detection reviews, threat model work, and more — without the overhead of scoping a new engagement each time. When something comes up, your team has a resource to call on rather than starting from scratch. Structured around your cadence with flexibility for what the work requires. Retainer slots are kept small.</div>
     </div>
   </div>
 </div>
