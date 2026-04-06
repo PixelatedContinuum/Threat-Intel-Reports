@@ -2160,7 +2160,7 @@ button,
 .hl-footer {
   background: #0d1117;
   border-top: 1px solid var(--hl-border-card);
-  padding: 36px 40px 24px;
+  padding: 24px 40px 16px;
   margin-top: 3rem;
   box-sizing: border-box;
   width: 100%;
@@ -2173,20 +2173,21 @@ button,
 
 .hl-footer__links {
   display: flex;
-  gap: 48px;
+  justify-content: center;
+  gap: 40px;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .hl-footer__group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .hl-footer__group-label {
   color: var(--hl-text-dim);
-  font-size: 0.68em;
+  font-size: 0.62em;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 700;
@@ -2196,7 +2197,7 @@ button,
 .hl-footer__link,
 .hl-footer__link:visited {
   color: var(--hl-text-muted) !important;
-  font-size: 0.85em;
+  font-size: 0.78em;
   text-decoration: none !important;
   transition: color 0.15s;
 }
@@ -2208,15 +2209,15 @@ button,
 
 .hl-footer__bottom {
   color: var(--hl-text-dim);
-  font-size: 0.75em;
+  font-size: 0.7em;
   text-align: center;
-  padding-top: 20px;
+  padding-top: 16px;
   border-top: 1px solid var(--hl-border-row);
 }
 
 @media (max-width: 600px) {
   .hl-footer {
-    padding: 28px 20px 20px;
+    padding: 20px 20px 16px;
   }
   .hl-footer__links {
     gap: 28px;
