@@ -7,7 +7,7 @@ permalink: /consulting/
 <div class="hl-page-header" style="border-left-color: #58a6ff;">
   <div class="hl-page-header__label" style="color: #58a6ff;">Consulting & Advisory</div>
   <div class="hl-page-header__title">Threat Intelligence That Works for Your Team</div>
-  <div class="hl-page-header__desc">Engagements are kept selective and scoped to what I can do well. If it's a fit, you'll get the same depth of analysis that goes into the research on this site — applied directly to your environment.</div>
+  <div class="hl-page-header__desc">Engagements are kept selective and scoped to what I can do well. This is personal-time work — I prioritize quality and fit over volume. If it's a fit, you'll get the same depth that goes into the research on this site applied directly to your environment.</div>
 </div>
 
 {% include section-header.html label="Services" accent="#58a6ff" %}
@@ -18,7 +18,7 @@ permalink: /consulting/
     Threat Intelligence Utilization
   </div>
   <div class="hl-prose-section__body">
-    Most teams have access to threat intelligence but struggle to operationalize it. I can help you develop threat hunting plans built around your environment and current threat landscape, assist with translating intelligence into detection logic, and provide briefings or overviews on specific threats, campaigns, or malware families relevant to your organization.
+    Most teams have access to threat intelligence but struggle to operationalize it. I can help develop threat hunting plans built around your environment and current threat landscape, assist with translating intelligence into detection logic, and provide briefings or overviews on specific threats, campaigns, or malware families relevant to your organization. Typically scoped as a focused engagement around a specific threat or use case rather than an open-ended commitment.
   </div>
 </div>
 
@@ -28,7 +28,8 @@ permalink: /consulting/
     Detection Engineering Advisory
   </div>
   <div class="hl-prose-section__body">
-    Review and improve existing detection coverage, identify gaps against known threat behaviors, and assist with developing new detections grounded in real-world malware analysis and attacker tradecraft. Work is scoped around your SIEM, EDR, or tooling — not generic frameworks disconnected from how threats actually operate.
+    Targeted review and improvement of detection coverage for a specific threat, technique, or use case — identifying gaps against known threat behaviors and assisting with developing new detections grounded in real-world malware analysis and attacker tradecraft. Work is scoped around your SIEM or EDR, not generic frameworks disconnected from how threats actually operate.<br><br>
+    <strong>Scope note:</strong> This is a targeted advisory engagement, not a full detection library audit. Bring a specific threat or gap you want addressed — not your entire detection catalog.
   </div>
 </div>
 
@@ -39,7 +40,7 @@ permalink: /consulting/
   </div>
   <div class="hl-prose-section__body">
     Original research scoped to your needs — malware analysis, campaign investigation, infrastructure pivoting, or hunting for specific threat actors or tooling relevant to your industry. This is hands-on technical work in the same style as the reports published on this site.<br><br>
-    <strong>Scope note:</strong> Custom research is limited to work that fits my methodology — malware reverse engineering, open-source infrastructure analysis, and hands-on hunting. I won't take engagements where the scope is poorly defined or where success depends on finding something that may not exist.
+    <strong>Scope note:</strong> Custom research is limited to work that fits my methodology — malware reverse engineering, open-source infrastructure analysis, and hands-on hunting. I won't take engagements where the scope is poorly defined or where success depends on finding something that may not exist. Timelines reflect that this is personal-time work and will be agreed upfront.
   </div>
 </div>
 
@@ -49,7 +50,7 @@ permalink: /consulting/
     Incident Response Advisory
   </div>
   <div class="hl-prose-section__body">
-    Advisory support for teams working through an incident or building out their IR capabilities — scoping, planning, program development, and malware analysis support. This is a remote advisory role, not on-site forensics or hands-on response work. If you need someone to help you think through what you're seeing, build out your IR processes, or analyze malware encountered during an investigation, I can help with that.
+    Remote advisory support for teams working through an incident or building out their IR capabilities — scoping, planning, program development, and malware analysis support. This is not on-site forensics or hands-on response work. If you need someone to help you think through what you're seeing, build out your IR processes, or analyze malware encountered during an investigation, that's where I can add value.
   </div>
 </div>
 
@@ -59,7 +60,38 @@ permalink: /consulting/
     Threat Model Review
   </div>
   <div class="hl-prose-section__body">
-    A structured review of the threats that actually matter to your organization based on your industry, environment, and what adversaries are actively doing. The output is a prioritized picture of your relevant threat landscape — which threats to track, which to deprioritize, and where your detection and response gaps are against the things most likely to target you.
+    A focused review of the threats that actually matter to your organization based on your industry, environment, and what adversaries are actively doing. The output is a prioritized picture of your relevant threat landscape — which threats to track, which to deprioritize, and where your detection and response gaps are against the things most likely to target you. Scoped as a one-time or periodic engagement, not ongoing monitoring.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+    SOC Program Advisory
+  </div>
+  <div class="hl-prose-section__body">
+    Advisory guidance for teams standing up or maturing a SOC — structure, processes, tooling decisions, analyst workflows, and detection strategy. This is a conversation-based engagement drawing on experience leading threat detection and response operations across large enterprise environments. I help you think through decisions and avoid common pitfalls — not build the program for you.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+    AI &amp; Automation in Security Operations
+  </div>
+  <div class="hl-prose-section__body">
+    Advisory on applying AI and automation to security operations workflows — threat hunting, detection engineering, intelligence production, and analyst tooling. Drawing on hands-on experience building multi-agent systems and AI-assisted workflows for real security operations work, including a conference talk on the topic at Splunk .conf25.<br><br>
+    This is a discussion and advisory engagement — I share what works in practice, help you think through your approach, and point out where AI adds real value versus where it creates noise.
+  </div>
+</div>
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__label">
+    <div class="hl-prose-section__bar" style="background:#58a6ff;"></div>
+    Training &amp; Knowledge Transfer
+  </div>
+  <div class="hl-prose-section__body">
+    Focused sessions for analyst teams on threat hunting methodology, reading and applying malware analysis reports, translating threat intelligence into detection logic, or understanding specific threat actors and techniques. Structured as a single session or short series on a defined topic — not an open-ended curriculum.
   </div>
 </div>
 
@@ -69,7 +101,7 @@ permalink: /consulting/
     Retainer Advisory
   </div>
   <div class="hl-prose-section__body">
-    Ongoing access to threat intelligence expertise without the overhead of a full-time hire. A retainer gives your team a resource to call on for questions, detection reviews, threat briefings, and staying current on the threats I'm actively tracking. Engagements are structured around your cadence and needs — not a fixed deliverable schedule.
+    Ongoing access to threat intelligence expertise without the overhead of a full-time hire. A retainer gives your team a resource to call on for questions, targeted detection reviews, threat briefings, and staying current on the threats I'm actively tracking. Structured around your cadence and needs — not a fixed deliverable schedule. Capacity is limited given this is personal-time work, so retainer slots are kept small.
   </div>
 </div>
 
