@@ -27,13 +27,9 @@ position: 1
 
 <div class="hl-prose-section">
   <div class="hl-prose-section__body">
-    <ul>
-      <li>Share reproducible research and technical reports from original investigations and hunting</li>
-      <li>Provide IOCs formatted for direct ingestion into threat hunting and detection engineering workflows</li>
-      <li>Map findings to MITRE ATT&CK techniques to give defenders a common language</li>
-      <li>Publish detection logic — Sigma, YARA, Suricata — written to public repository submission standards</li>
-      <li>Publish findings while they're still relevant, not months after threats are already active</li>
-    </ul>
+    Most threat intelligence fails defenders in one of two ways. It is either too shallow to be actionable — headlines dressed up as analysis — or technically rigorous but locked behind paywalls, stripped of indicators, and written for researchers rather than the people responding at 2am.<br><br>
+    The Hunter's Ledger exists to fill that gap. Every report here is built from original research: real samples, real infrastructure, real detections. The goal is intelligence that a defender can open, read, and act on the same day — with IOCs ready to ingest, detection rules ready to deploy, and analysis deep enough to actually understand what a threat does and how to stop it.<br><br>
+    All of it is free. Defenders should not have to pay to defend.
   </div>
 </div>
 
