@@ -1,4 +1,4 @@
-{% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "site" | where: "active", true %}
+{% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true %}
 {% if active_site_sponsors.size > 0 %}
 <div class="hl-site-sponsors">
   <div class="hl-site-sponsors__label">{% if active_site_sponsors.size == 1 %}Current Sponsor{% else %}Current Sponsors{% endif %}</div>

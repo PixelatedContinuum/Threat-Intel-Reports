@@ -1,12 +1,8 @@
 tiers:
-  - id: site
-    name: Site Sponsor
-    description: "Logo and tagline featured in the site footer and home page — visible to every visitor across the entire site."
-    slots: 3
   - id: monthly
     name: Monthly Sponsor
-    description: "Logo on the Support page and tagged on relevant reports published that month."
-    slots: 2
+    description: "Logo and tagline featured in the site footer and home page, visible to every visitor. Also tagged on relevant reports published that month."
+    slots: 3
   - id: multi-report
     name: Multi-Report Sponsor
     description: "Logo and link featured across a defined set of reports."
@@ -22,7 +18,7 @@ tiers:
 #   url: https://acmesecurity.com
 #   logo: /assets/images/sponsors/acme-security.png
 #   tagline: "Short description or message — one line."
-#   tier: site          # site | monthly | multi-report | report
+#   tier: monthly       # monthly | multi-report | report
 #   active: true
 
 sponsors: []
