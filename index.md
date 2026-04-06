@@ -67,7 +67,7 @@ position: 1
 
 <div class="hl-prose-section">
   <div class="hl-prose-section__body">
-    Contributions are welcome. Fork the repo and submit a PR with new reports, detections, or IOCs. Follow the <a href="{{ '/report-templates/' | relative_url }}">report format</a> for consistency. Or reach out directly — findings can be posted on your behalf as a co-author.
+    Have original research, detections, or IOCs you'd like to share with the community? Reach out at <a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a> — findings can be posted on your behalf as a co-author or attributed however you prefer.
   </div>
 </div>
 
@@ -79,6 +79,16 @@ position: 1
     <div>
       <div class="hl-card__title">About Me &amp; Contact</div>
       <div class="hl-prose-section__body" style="margin-top:6px;">Who I am, my background, and how to reach me directly.</div>
+    </div>
+  </div>
+</a></div>
+
+<div style="margin-top:9px;"><a href="{{ '/support/' | relative_url }}" class="hl-card">
+  <div class="hl-card__inner">
+    <div class="hl-card__bar" style="background:#4ade80;"></div>
+    <div>
+      <div class="hl-card__title">Support the Research</div>
+      <div class="hl-prose-section__body" style="margin-top:6px;">Donate, sponsor a report, or inquire about consulting and advisory services.</div>
     </div>
   </div>
 </a></div>

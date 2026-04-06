@@ -87,4 +87,4 @@ position: 6
   {% endfor %}
 </div>
 
-<p class="hl-support-contact">To discuss sponsorship, reach out at <a href="mailto:contact@the-hunters-ledger.com">contact@the-hunters-ledger.com</a>.</p>
+<p class="hl-support-contact">To discuss sponsorship, reach out at <a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a>.</p>
