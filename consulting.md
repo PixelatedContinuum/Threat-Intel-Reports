@@ -140,5 +140,5 @@ permalink: /consulting/
 
 <div class="hl-support-donate" style="margin-top: 1.5rem;">
   <a class="hl-support-cta__btn" href="mailto:intel@the-hunters-ledger.com?subject=Consulting Inquiry">intel@the-hunters-ledger.com</a>
-  <p class="hl-support-donate__note">I'll respond within a few business days. Above all else, the goal is to be genuinely useful — reach out and we'll figure out the rest.</p>
+  <p class="hl-support-donate__note">I'll respond within a few business days. Above all else, the goal is to help organizations defend better — reach out and we'll figure out the rest.</p>
 </div>
