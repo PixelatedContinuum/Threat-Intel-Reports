@@ -2186,7 +2186,7 @@ button,
 }
 
 .hl-footer__group-label {
-  color: var(--hl-text-dim);
+  color: var(--hl-accent-blue);
   font-size: 0.62em;
   text-transform: uppercase;
   letter-spacing: 0.12em;
