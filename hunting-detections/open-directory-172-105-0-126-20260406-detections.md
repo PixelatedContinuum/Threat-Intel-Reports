@@ -363,12 +363,14 @@ alert http $HOME_NET any -> $EXTERNAL_NET 8443 (msg:"THL OpenStrike C2 Beacon Ou
 **Rationale:** The MALC user-agent suffix is unique to this Cobalt Strike Malleable C2 profile config; no legitimate browser or application generates this string. Fires at proxy layer — no TLS decryption required when HTTP headers are visible.
 **ATT&CK Coverage:** T1071.001
 **Confidence:** HIGH
-**False Positive Risk:** LOW — MALC is not a known legitimate UA substring; nocase added to catch any case variant.
+**False Positive Risk:** LOW — MALC is not a known legitimate UA substring; endswith anchors the match to the tail of the UA buffer for targeted fidelity; nocase added to catch any case variant.
 **Deployment:** Perimeter IDS/IPS, proxy with HTTP user-agent logging
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Cobalt Strike Malleable C2 MALC User-Agent Detected"; flow:established,to_server; http.user_agent; content:"MALC"; nocase; sid:9001003; rev:1; metadata:affected_product Windows, attack_target Client_Endpoint, created_at 2026_04_06, deployment Perimeter, performance_impact Low, signature_severity Major, updated_at 2026_04_06;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Cobalt Strike Malleable C2 MALC User-Agent Detected"; flow:established,to_server; http.user_agent; content:"MALC)"; endswith; nocase; sid:9001003; rev:2; metadata:affected_product Windows, attack_target Client_Endpoint, created_at 2026_04_06, deployment Perimeter, performance_impact Low, signature_severity Major, updated_at 2026_04_07;)
 ```
+
+> **Community contribution:** The `endswith` anchor on this rule was suggested by [Anthony Vigil](https://www.linkedin.com/in/anthony-vigil/), who noted that anchoring the content match to the tail of the UA buffer improves targeted fidelity and engine efficiency over a bare substring match.
 
 ---
 
