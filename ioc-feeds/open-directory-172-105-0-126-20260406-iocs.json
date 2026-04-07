@@ -1,0 +1,149 @@
+{
+  "malware_name": "OpenStrike Beacon Toolkit",
+  "campaign_id": "OpenStrike-CSBeacon-Toolkit-172.105.0.126",
+  "analysis_date": "2026-04-06",
+  "confidence_note": "Confidence levels: HIGH (strong evidence from static/dynamic analysis), MODERATE (inferred from code structure or partial evidence), LOW (weak/circumstantial evidence). All IOCs derived from static reverse engineering of 7 binary samples + 9 Python scripts recovered from an open directory on 172.105.0.126.",
+
+  "file_indicators": {
+    "md5": [
+      {"hash": "96f9adb7ee00c44bc5f523d1f1dc8715", "filename": "beacon.exe", "confidence": "HIGH", "context": "OpenStrike C beacon (original, with overlay)"},
+      {"hash": "cd7ce7bae3d7a5cf081a6ffd2445175b", "filename": "beacon.exe", "confidence": "HIGH", "context": "OpenStrike C beacon (overlay-stripped)"},
+      {"hash": "2a6a3d499bb3c666f3b4bc5905a866f3", "filename": "beacon_patched.x64.dll", "confidence": "HIGH", "context": "Cobalt Strike 3.x DLL beacon (cracked, watermark=0)"},
+      {"hash": "baa697da0a79bcb544b0d42a49914e44", "filename": "stager.exe", "confidence": "HIGH", "context": "Shellcode stager (original, with overlay)"},
+      {"hash": "e2d95d8a23eac6c9ba0192dc1fee958e", "filename": "stager.exe", "confidence": "HIGH", "context": "Shellcode stager (overlay-stripped)"},
+      {"hash": "8254c3d05de0d95361839257287eb517", "filename": "dbg_loader.exe", "confidence": "HIGH", "context": "Entry-point debugger loader (original)"},
+      {"hash": "98958a6a6141feb8b804ee83f2e88e7c", "filename": "dbg_loader.exe", "confidence": "HIGH", "context": "Entry-point debugger loader (overlay-stripped)"},
+      {"hash": "e92d7d35bb04dff0d709e8e3fbd4156f", "filename": "veh_loader.exe", "confidence": "HIGH", "context": "VEH test harness loader (original)"},
+      {"hash": "4c5d776616a5e7aab984f8ed7553bac2", "filename": "veh_loader.exe", "confidence": "HIGH", "context": "VEH test harness loader (overlay-stripped)"},
+      {"hash": "d677794618461b3bf7d405a8297d5df4", "filename": "run.exe", "confidence": "HIGH", "context": "Minimal shellcode runner (original)"},
+      {"hash": "0cc90a5e2c53d0efd6b99c9643d07fbb", "filename": "run.exe", "confidence": "HIGH", "context": "Minimal shellcode runner (overlay-stripped)"},
+      {"hash": "208dc00007353101648fa35f98d5898e", "filename": "sc_loader.exe", "confidence": "HIGH", "context": "SEH-based shellcode loader (original)"},
+      {"hash": "80c082dd0ae07df89e0c19ee84a050b6", "filename": "sc_loader.exe", "confidence": "HIGH", "context": "SEH-based shellcode loader (overlay-stripped)"}
+    ],
+    "sha1": [
+      {"hash": "5ee00147140b084f93d2144c2ee5c0d4d125ff1c", "filename": "beacon.exe", "confidence": "HIGH", "context": "OpenStrike C beacon (original)"},
+      {"hash": "bf0ea1994d97aa9631865e776a83f409572ec03f", "filename": "beacon.exe", "confidence": "HIGH", "context": "OpenStrike C beacon (overlay-stripped)"},
+      {"hash": "add3893c3652947ff821a6da5fad774cc041bb73", "filename": "beacon_patched.x64.dll", "confidence": "HIGH", "context": "CS 3.x DLL beacon"},
+      {"hash": "c0e4fa5c39b8811b1ca8f67f0ba2fa7be2dd6684", "filename": "stager.exe", "confidence": "HIGH", "context": "Shellcode stager (original)"},
+      {"hash": "db5be4a8378095719380c70b4fe6f4237036e1cb", "filename": "stager.exe", "confidence": "HIGH", "context": "Shellcode stager (overlay-stripped)"},
+      {"hash": "f04720fa343d2f97cef9d8685a8d251580a3a12c", "filename": "dbg_loader.exe", "confidence": "HIGH", "context": "Entry-point debugger (original)"},
+      {"hash": "b74e59c6059409be507d13a76097790daf96677d", "filename": "dbg_loader.exe", "confidence": "HIGH", "context": "Entry-point debugger (overlay-stripped)"},
+      {"hash": "a6d73ca85703cb5bcda00701fdc4b39def3d7ab2", "filename": "veh_loader.exe", "confidence": "HIGH", "context": "VEH test harness (original)"},
+      {"hash": "16f41067a8ee08c44225dc83fd0f2478011b076e", "filename": "veh_loader.exe", "confidence": "HIGH", "context": "VEH test harness (overlay-stripped)"},
+      {"hash": "720ea472060e080145927d33e18dca9b8b1eafa5", "filename": "run.exe", "confidence": "HIGH", "context": "Minimal runner (original)"},
+      {"hash": "db9a7aead00e61f9822d2ad2f36138e7b8443588", "filename": "run.exe", "confidence": "HIGH", "context": "Minimal runner (overlay-stripped)"},
+      {"hash": "220fb15655d3da8ad9459627830f49bb8692d8ff", "filename": "sc_loader.exe", "confidence": "HIGH", "context": "SEH loader (original)"},
+      {"hash": "8c314ca8541a2892c3f8806a9d4f96c9dcd40f08", "filename": "sc_loader.exe", "confidence": "HIGH", "context": "SEH loader (overlay-stripped)"}
+    ],
+    "sha256": [
+      {"hash": "7d6a17754f086b53ee294f5ccd60b0127f921520ce7b64fea0aebb47114fb5d2", "filename": "beacon.exe", "confidence": "HIGH", "context": "OpenStrike C beacon - custom C implant, MinGW GCC 15, 11 commands (original)"},
+      {"hash": "485abd7c34af8ab8a11b01d97feee822e1400b6cbc6b87a01e8218fc4ad52e17", "filename": "beacon.exe", "confidence": "HIGH", "context": "OpenStrike C beacon (overlay-stripped)"},
+      {"hash": "7a1a7659ec4201ecbca782bcedf9d4079265137279a490368309df3bd39297a4", "filename": "beacon_patched.x64.dll", "confidence": "HIGH", "context": "CS 3.x DLL beacon - MSVC 2012, watermark=0, XOR 0x2E config, tripwired ReflectiveLoader"},
+      {"hash": "eed84220ed7365b87d504f7709bd89ba2e255159d52f214f40a435ff78696eb6", "filename": "stager.exe", "confidence": "HIGH", "context": "Shellcode stager - downloads from /qz99, executes via CreateThread (original)"},
+      {"hash": "8301a685c8f3d770420c760f495fa930eae6a03a6721e946f3ce28f6fc144449", "filename": "stager.exe", "confidence": "HIGH", "context": "Shellcode stager (overlay-stripped)"},
+      {"hash": "74d1b5b84a650a7bb1b0c1dca0be556b74567537c80a764cbf777814358ab279", "filename": "dbg_loader.exe", "confidence": "HIGH", "context": "Entry-point debugger - INT3 patch at CALL RAX (original)"},
+      {"hash": "6a8e365c48a9b64770e23ea85eb1ea2ed39b69c632e92d19125d10fa50874b0f", "filename": "dbg_loader.exe", "confidence": "HIGH", "context": "Entry-point debugger (overlay-stripped)"},
+      {"hash": "ab68ce00f8a08e0f13df2499db5e413000fda23c6fd40f23a4d4d6c71d8060c3", "filename": "veh_loader.exe", "confidence": "HIGH", "context": "VEH test harness - reads C:\\cs_final.dat, 30s timeout (original)"},
+      {"hash": "68768be9ace9152c7c9cc36d8104ebf7523ba3e8e0104cabc4c8f75e1f7d3d3c", "filename": "veh_loader.exe", "confidence": "HIGH", "context": "VEH test harness (overlay-stripped)"},
+      {"hash": "821f815fab92fee03e2be44ad5370a953db085cd359a99519a2ddb7316b0d273", "filename": "run.exe", "confidence": "HIGH", "context": "Minimal shellcode runner - bare VirtualAlloc+call (original)"},
+      {"hash": "807e24403bb5cb8407a69ff4f12a455e81609b1fcf4720cf00134b9d520136a9", "filename": "run.exe", "confidence": "HIGH", "context": "Minimal shellcode runner (overlay-stripped)"},
+      {"hash": "544b59fe4d490cc413bb20d03a5cf87d55892929a59cbdfff6fb06c4ee0cee5f", "filename": "sc_loader.exe", "confidence": "HIGH", "context": "SEH-based shellcode loader - CreateThread, 30s timeout (original)"},
+      {"hash": "d04914a1c62f7592143aa70a3746733580a6e7345073d79d1bbcd312d87d05d0", "filename": "sc_loader.exe", "confidence": "HIGH", "context": "SEH-based shellcode loader (overlay-stripped)"}
+    ],
+    "filenames": [
+      {"name": "beacon.exe", "confidence": "HIGH", "context": "OpenStrike C beacon implant"},
+      {"name": "beacon_patched.x64.dll", "confidence": "HIGH", "context": "CS 3.x DLL beacon with tripwired ReflectiveLoader"},
+      {"name": "stager.exe", "confidence": "HIGH", "context": "Shellcode downloader/stager"},
+      {"name": "dbg_loader.exe", "confidence": "HIGH", "context": "Entry-point debugger tool"},
+      {"name": "veh_loader.exe", "confidence": "HIGH", "context": "VEH shellcode test harness"},
+      {"name": "run.exe", "confidence": "MODERATE", "context": "Minimal shellcode runner (generic name)"},
+      {"name": "sc_loader.exe", "confidence": "HIGH", "context": "SEH-based shellcode loader"},
+      {"name": "beacon_universal.py", "confidence": "HIGH", "context": "OpenStrike Python cross-platform implant"},
+      {"name": "bof_executor.py", "confidence": "HIGH", "context": "BOF execution engine for OpenStrike Python beacon"},
+      {"name": "check_ntdll.py", "confidence": "HIGH", "context": "EDR hook detection utility"},
+      {"name": "bof_runner.so", "confidence": "HIGH", "context": "BOF executor compiled shared library (Linux)"},
+      {"name": "bof_runner.dll", "confidence": "HIGH", "context": "BOF executor compiled shared library (Windows)"},
+      {"name": "bof_runner.c", "confidence": "HIGH", "context": "BOF executor embedded C source"}
+    ],
+    "file_paths": [
+      {"value": "C:\\cs_final.dat", "confidence": "HIGH", "context": "Default shellcode payload path used by veh_loader.exe, dbg_loader.exe, and Python loaders"},
+      {"value": "C:\\payload.bin", "confidence": "HIGH", "context": "Default payload path for loader.py"},
+      {"value": "C:\\payload.dat", "confidence": "HIGH", "context": "Default payload path for loader2.py and sc_loader.exe"},
+      {"value": "C:\\test_ret.bin", "confidence": "MODERATE", "context": "Test harness artifact written by test_sc.py (single RET instruction)"},
+      {"value": "/tmp/bof_runner.so", "confidence": "HIGH", "context": "BOF executor compiled artifact (Linux)"},
+      {"value": "/opt/openstrike/lib", "confidence": "HIGH", "context": "OpenStrike library search path (Linux)"},
+      {"value": "C:\\openstrike", "confidence": "HIGH", "context": "OpenStrike library search path (Windows)"}
+    ]
+  },
+
+  "network_indicators": {
+    "ipv4": [
+      {"ip": "172.105.0.126", "port": "8443", "protocol": "TCP", "confidence": "HIGH", "context": "Primary C2 server - hardcoded in beacon.exe, beacon_patched.x64.dll config, and stager.exe. Linode/Akamai hosted VPS.", "false_positive_risk": "MODERATE - Linode shared hosting IP; block only in context of associated behavioral indicators"}
+    ],
+    "ipv6": [],
+    "domains": [],
+    "urls": [
+      {"url": "https://172.105.0.126:8443/register", "confidence": "HIGH", "context": "RSA-2048 registration handshake endpoint (beacon.exe, beacon_universal.py)"},
+      {"url": "https://172.105.0.126:8443/updates", "confidence": "HIGH", "context": "Task polling endpoint - GET with ?id=<beacon_id_hex8> query parameter"},
+      {"url": "https://172.105.0.126:8443/submit", "confidence": "HIGH", "context": "Output submission endpoint - POST with ?id=<beacon_id_hex8> query parameter"},
+      {"url": "https://172.105.0.126:8443/qz99", "confidence": "HIGH", "context": "Stage 1 shellcode download endpoint used by stager.exe - distinctive URI path"}
+    ],
+    "user_agents": [
+      {"ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)", "confidence": "HIGH", "context": "Truncated User-Agent used by beacon.exe, stager.exe, and beacon_patched.x64.dll. Generic browser prefix without AppleWebKit suffix.", "false_positive_risk": "HIGH - extremely common UA prefix; useful only combined with other indicators"},
+      {"ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "confidence": "HIGH", "context": "Extended User-Agent used by beacon_universal.py Python implant", "false_positive_risk": "HIGH - common browser UA; useful only combined with other indicators"},
+      {"ua": "Mozilla/5.0", "confidence": "HIGH", "context": "Minimal User-Agent used by stager.exe WinHTTP calls", "false_positive_risk": "HIGH - extremely generic"}
+    ]
+  },
+
+  "host_indicators": {
+    "registry_keys": [],
+    "scheduled_tasks": [],
+    "services": [],
+    "mutexes": [],
+    "named_pipes": []
+  },
+
+  "behavioral_indicators": {
+    "process_patterns": [
+      {"pattern": "python.exe performing VirtualAlloc(PAGE_EXECUTE_READWRITE) + CreateThread via ctypes.windll.kernel32", "confidence": "HIGH", "context": "Python beacon/loader shellcode injection pattern"},
+      {"pattern": "Process with no network imports allocating RWX memory, reading file from C:\\cs_final.dat, and executing via CreateThread with 4MB stack", "confidence": "HIGH", "context": "veh_loader.exe / dbg_loader.exe execution pattern"},
+      {"pattern": "Process performing GET https://172.105.0.126:8443/qz99 followed by VirtualAlloc(RWX) + CreateThread", "confidence": "HIGH", "context": "stager.exe shellcode download and execution chain"},
+      {"pattern": "Process scanning first 50 bytes of loaded shellcode for FF D0 (CALL RAX) and patching to CC (INT3)", "confidence": "HIGH", "context": "dbg_loader.exe breakpoint injection for entry-point discovery"},
+      {"pattern": "gcc subprocess spawned from non-development process to compile bof_runner.c into shared library", "confidence": "HIGH", "context": "BOF executor runtime compilation (beacon_universal.py)"}
+    ],
+    "file_access_patterns": [
+      {"pattern": "Process reading C:\\Windows\\System32\\ntdll.dll directly from disk (not via LoadLibrary) and parsing PE header to inspect specific RVA offsets", "confidence": "HIGH", "context": "check_ntdll.py EDR hook detection - reads raw ntdll to bypass in-memory hooks"}
+    ],
+    "network_patterns": [
+      {"pattern": "HTTPS GET to /updates?id=[0-9a-f]{8} on port 8443 at approximately 5-second intervals with 10% jitter", "confidence": "HIGH", "context": "Beacon polling pattern - 5000ms sleep, 10% jitter, hex beacon ID in query string"},
+      {"pattern": "HTTPS POST to /submit?id=[0-9a-f]{8} on port 8443 carrying AES-128-CBC encrypted payload with 16-byte HMAC-SHA256 tag appended", "confidence": "HIGH", "context": "Beacon output submission - encrypt-then-MAC envelope"},
+      {"pattern": "HTTPS GET to /register with Cookie header containing base64-encoded RSA-2048 encrypted metadata blob starting with 0x0000BEEF magic", "confidence": "HIGH", "context": "Initial beacon registration handshake"},
+      {"pattern": "Bimodal GET request sizes to same endpoint - small periodic heartbeats (~100-200 bytes) interspersed with large submissions (up to 2MB)", "confidence": "HIGH", "context": "DLL beacon output accumulator pattern - GET-based exfiltration, not POST"}
+    ]
+  },
+
+  "cryptographic_indicators": {
+    "rsa_public_key_modulus_prefix": "9f12c9cb6582f379088600e6cdb7ac804db8ff1917f5277d67ec74cf1dd3d3b22da18265dc14b972b759860472",
+    "rsa_key_context": "RSA-2048 public key shared across all three implant variants (Python, C, DLL). Modulus match is definitive proof of unified operator control. Full DER: 30820122300d06092a864886f70d01010105000382010f003082010a02820101009f12c9cb...",
+    "aes_iv": "abcdefghijklmnop",
+    "aes_iv_context": "Hardcoded AES-128-CBC initialization vector used by all three implant variants. Deterministic encryption - no forward secrecy.",
+    "cs_config_xor_key": "0x2E",
+    "cs_config_xor_context": "Cobalt Strike 3.x config encoding key in beacon_patched.x64.dll",
+    "cs_watermark": "0",
+    "cs_watermark_context": "Zero watermark indicates cracked or trial CS builder"
+  },
+
+  "cobalt_strike_config": {
+    "version": "3.x",
+    "payload_type": "windows-beacon_http-reverse_http",
+    "port": 8443,
+    "sleeptime_ms": 5000,
+    "jitter_pct": 10,
+    "c2_server": "172.105.0.126",
+    "get_uri": "/updates",
+    "post_uri": "/submit",
+    "watermark": 0,
+    "config_xor_key": "0x2E",
+    "reflective_loader_status": "NEUTERED - export RVA repointed to NOP+INT3 tripwire at 0x1709c"
+  }
+}

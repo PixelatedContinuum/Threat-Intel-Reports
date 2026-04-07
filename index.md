@@ -17,8 +17,8 @@ position: 1
 {% include section-header.html label="Latest Reports" accent="#ff4444" %}
 
 <div class="hl-grid">
+{% include report-card.html title="OpenStrike Beacon Toolkit — Open Directory 172.105.0.126" date="Apr 2026" severity="high" tags="Toolkit,C2,Open Dir,Evasion" url="/reports/open-directory-172-105-0-126-20260406/" %}
 {% include report-card.html title="Shadow RAT & XWorm Open Directory Campaign" date="Apr 2026" severity="high" tags="RAT,MaaS,C2,Multi-Family" url="/reports/shadow-xworm-opendirectory/" %}
-{% include report-card.html title="Open Directory at 193.56.255.154 — XiebroC2 v3.1 Go Implant and Covenant C2 Toolkit" date="Apr 2026" severity="high" tags="C2,Multi-Family,Open Dir,Injection" url="/reports/open-directory-193-56-255-154-xiebroc2/" %}
 </div>
 
 <a href="{{ '/reports/' | relative_url }}" class="hl-view-all">View all reports →</a>
