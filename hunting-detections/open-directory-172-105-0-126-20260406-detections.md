@@ -14,13 +14,26 @@ hide: true
 
 ## Detection Coverage Summary
 
-| Technique | MITRE ATT&CK | YARA | Sigma | Suricata |
-|---|---|---|---|---|
-| OpenStrike C Beacon (beacon.exe) | T1071.001, T1573.001 | RAT_OpenStrike_C_Beacon | -- | -- |
-| OpenStrike Loader Chain (run/sc_loader/veh_loader/dbg_loader/stager) | T1059.006, T1055.001 | TOOLKIT_OpenStrike_Loader_Chain | OpenStrike Shellcode Loader Chain Executable Execution | -- |
-| Cobalt Strike 3.x Tripwired ReflectiveLoader DLL | T1620, T1055.001 | MALW_CobaltStrike3x_TripwiredReflectiveLoader | Cobalt Strike Malleable C2 MALC User-Agent (proxy) | Cobalt Strike MALC User-Agent |
-| OpenStrike Python Beacon (beacon_universal.py) | T1059.006, T1071.001 | TOOLKIT_OpenStrike_Python_Beacon | OpenStrike Python ctypes VirtualAlloc Injection | -- |
-| OpenStrike C2 Network (all endpoints) | T1071.001, T1041, T1105 | -- | OpenStrike C2 GET to submit.php; C2 IP Contact | OpenStrike C2 Contact; GET /submit.php |
+| Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
+|---|---|---|---|
+| YARA | 4 | T1071.001, T1573.001, T1059.006, T1055.001, T1620 | LOW |
+| Sigma | 5 | T1071.001, T1041, T1059.006, T1055.001, T1620 | LOW–MEDIUM |
+| Suricata | 3 | T1071.001, T1041, T1105 | LOW |
+
+**Rule-to-technique mapping:**
+
+- **RAT_OpenStrike_C_Beacon** (YARA) — beacon.exe custom C implant → T1071.001, T1573.001
+- **TOOLKIT_OpenStrike_Loader_Chain** (YARA) — run/sc_loader/veh_loader/dbg_loader/stager → T1059.006, T1055.001
+- **MALW_CobaltStrike3x_TripwiredReflectiveLoader** (YARA) — tripwired CS 3.x DLL → T1620, T1055.001
+- **TOOLKIT_OpenStrike_Python_Beacon** (YARA) — beacon_universal.py → T1059.006, T1071.001
+- **OpenStrike Shellcode Loader Chain Executable Execution** (Sigma) → T1059.006, T1055.001
+- **Cobalt Strike Malleable C2 MALC User-Agent** (Sigma) → T1620
+- **OpenStrike Python ctypes VirtualAlloc Injection** (Sigma) → T1059.006, T1055.001
+- **OpenStrike C2 GET to submit.php** (Sigma) → T1071.001, T1041
+- **OpenStrike C2 IP Contact** (Sigma) → T1071.001
+- **Cobalt Strike MALC User-Agent** (Suricata) → T1071.001
+- **OpenStrike C2 Contact** (Suricata) → T1071.001, T1105
+- **OpenStrike GET /submit.php Exfiltration** (Suricata) → T1041
 
 ## YARA Rules
 
