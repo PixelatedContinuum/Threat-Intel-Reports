@@ -14,15 +14,16 @@ position: 3
 {% include section-header.html label="Recent" accent="#4ade80" %}
 
 <div class="hl-grid">
+{% include report-card.html title="Detection Rules — OpenStrike Expanded Toolkit (New Files 2026-04-08)" date="Apr 2026" severity="high" tags="Toolkit,C2,Injection,Evasion" url="/hunting-detections/new-files-found-20260408-detections" %}
 {% include report-card.html title="Detection Rules — OpenStrike Beacon Toolkit (172.105.0.126)" date="Apr 2026" severity="high" tags="Toolkit,C2,Evasion,Open Dir" url="/hunting-detections/open-directory-172-105-0-126-20260406-detections" %}
 {% include report-card.html title="Detection Rules — Shadow RAT & XWorm Open Directory Campaign" date="Apr 2026" severity="high" tags="RAT,MaaS,Evasion,Persistence" url="/hunting-detections/shadow-xworm-opendirectory-detections" %}
 {% include report-card.html title="Detection Rules — Open Directory at 193.56.255.154 (XiebroC2 v3.1 and Covenant C2)" date="Apr 2026" severity="high" tags="C2,Multi-Family,Injection" url="/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections" %}
-{% include report-card.html title="Detection Rules — ZeroTrace Multi-Family MaaS Operation" date="Mar 2026" severity="high" tags="MaaS,C2,Multi-Family" url="/hunting-detections/opendirectory-74-0-42-25-20260316-detections" %}
 </div>
 
 {% include section-header.html label="All Detections" accent="#444444" %}
 
 <div class="hl-row-list">
+{% include report-row.html title="Detection Rules — ZeroTrace Multi-Family MaaS Operation" date="Mar 2026" severity="high" tags="MaaS,C2,Multi-Family" url="/hunting-detections/opendirectory-74-0-42-25-20260316-detections" %}
 {% include report-row.html title="Detection Rules — Sliver C2 / ScareCrow Loader Open Directory Kit" date="Mar 2026" severity="high" tags="C2,Loader,Evasion" url="/hunting-detections/sliver-open-directory-detections" %}
 {% include report-row.html title="Detection Rules — Webserver Compromise Kit 91.236.230.250" date="Feb 2026" severity="high" tags="Toolkit,Priv Esc,RCE" url="/hunting-detections/webserver-compromise-kit-91-236-230-250-detections" %}
 {% include report-row.html title="Detection Rules — Remcos RAT OpenDirectory Campaign" date="Feb 2026" severity="med" tags="RAT,Persistence,Cred Theft" url="/hunting-detections/remcos-opendirectory-campaign" %}
