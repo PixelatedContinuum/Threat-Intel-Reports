@@ -40,6 +40,20 @@ position: 5
   </div>
 </div>
 
+<div class="hl-subscribe-option hl-subscribe-option--social">
+  <div class="hl-subscribe-option__header">
+    <span class="hl-subscribe-option__icon">&#120143;</span>
+    <div>
+      <div class="hl-subscribe-option__title">Follow on X</div>
+      <div class="hl-subscribe-option__desc">Follow <strong>@Hunters_Ledger</strong> on X for report announcements and shorter-form threat intelligence notes between full publications.</div>
+    </div>
+  </div>
+  <div class="hl-subscribe-option__url">
+    <span class="hl-subscribe-option__url-label">Profile</span>
+    <a href="https://x.com/Hunters_Ledger" target="_blank" rel="noopener" style="color: #58a6ff; font-family: monospace; font-size: 0.9em;">https://x.com/Hunters_Ledger</a>
+  </div>
+</div>
+
 {% include section-header.html label="What You'll Receive" accent="#4ade80" %}
 
 <div class="hl-prose-section">
