@@ -20,12 +20,12 @@ position: 2
 
 <div class="hl-row-list">
 {% include report-row.html title="Webserver Compromise Kit 91.236.230.250" date="Feb 2026" severity="high" tags="Toolkit,Priv Esc,RCE,.NET" url="/reports/webserver-compromise-kit-91-236-230-250/" %}
-{% include report-row.html title="Remcos RAT OpenDirectory Campaign" date="Feb 2026" severity="med" tags="RAT,Cred Theft,Persistence,Evasion" url="/reports/remcos-opendirectory/" %}
-{% include report-row.html title="NsMiner: Multi-Stage Cryptojacking Operation" date="Feb 2026" severity="med" tags="Cryptominer,Dropper,Persistence,Evasion" url="/reports/nsminer-cryptojacker/" %}
-{% include report-row.html title="Arsenal-237 New Files: Advanced Toolkit Analysis" date="Jan 2026" severity="high" tags="Ransomware,BYOVD,Rootkit,Rust" url="/reports/arsenal-237-new-files/" %}
-{% include report-row.html title="Arsenal-237: Threat Actor R&D Repository Exposed" date="Jan 2026" severity="high" tags="Toolkit,Ransomware,RAT,Rust,Go" url="/reports/109.230.231.37-Executive-Overview/" %}
-{% include report-row.html title="Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm — Technical Deep-Dive" date="Dec 2025" severity="med" tags="RAT,Injection,.NET,Cred Theft" url="/reports/dual-rat-analysis/" %}
-{% include report-row.html title="PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment" date="Dec 2025" severity="med" tags="RAT,Cred Theft,Evasion,.NET" url="/reports/PULSAR-RAT/" %}
+{% include report-row.html title="Remcos RAT OpenDirectory Campaign" date="Feb 2026" severity="critical" tags="RAT,Cred Theft,Persistence,Evasion" url="/reports/remcos-opendirectory/" %}
+{% include report-row.html title="NsMiner: Multi-Stage Cryptojacking Operation" date="Feb 2026" severity="high" tags="Cryptominer,Dropper,Persistence,Evasion" url="/reports/nsminer-cryptojacker/" %}
+{% include report-row.html title="Arsenal-237 New Files: Advanced Toolkit Analysis" date="Jan 2026" severity="critical" tags="Ransomware,BYOVD,Rootkit,Rust" url="/reports/arsenal-237-new-files/" %}
+{% include report-row.html title="Arsenal-237: Threat Actor R&D Repository Exposed" date="Jan 2026" severity="critical" tags="Toolkit,Ransomware,RAT,Rust,Go" url="/reports/109.230.231.37-Executive-Overview/" %}
+{% include report-row.html title="Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm — Technical Deep-Dive" date="Dec 2025" severity="high" tags="RAT,Injection,.NET,Cred Theft" url="/reports/dual-rat-analysis/" %}
+{% include report-row.html title="PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment" date="Dec 2025" severity="critical" tags="RAT,Cred Theft,Evasion,.NET" url="/reports/PULSAR-RAT/" %}
 {% include report-row.html title="Hybrid Loader/Stealer Ecosystem Masquerading as Sogou" date="Nov 2025" severity="med" tags="Loader,Stealer,Cred Theft,Evasion" url="/reports/Hybrid-Loader-Stealer-Sogou/" %}
 {% include report-row.html title="Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play" date="Nov 2025" severity="med" tags="Loader,Stealer,Go,Injection" url="/reports/malware-analysis-houselet/" %}
 {% include report-row.html title="AdvancedRouterScanner" date="Oct 2025" severity="med" tags="Scanner,Python,Exploitation" url="/reports/AdvancedRouterScanner/" %}

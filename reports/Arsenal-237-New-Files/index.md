@@ -9,7 +9,7 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37<br>
 **Last Updated:** January 27, 2026<br>
-**Threat Level:** HIGH
+**Threat Level:** CRITICAL
 
 
 ---

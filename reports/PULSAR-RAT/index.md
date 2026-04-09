@@ -24,7 +24,7 @@ hide: true
 
 **Campaign Identifier:** PULSAR-RAT-185.208.159.182<br>
 **Last Updated:** December 1, 2025<br>
-**Threat Level:** MEDIUM
+**Threat Level:** CRITICAL
 
 
 ---

@@ -27,7 +27,7 @@ hide: true
 
 **Campaign Identifier:** NsMiner-125.19.150.122-Cryptojacking<br>
 **Last Updated:** February 2, 2026<br>
-**Threat Level:** MEDIUM
+**Threat Level:** HIGH
 
 
 ---

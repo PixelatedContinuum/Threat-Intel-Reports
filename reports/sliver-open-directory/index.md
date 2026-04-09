@@ -29,6 +29,8 @@ A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 **Last Updated:** March 1, 2026<br>
 **Threat Level:** MEDIUM
 
+> **Risk vs. Campaign Threat Level:** The toolkit analyzed in this report scores **7.8/10 (HIGH)** based on its evasion capabilities, C2 sophistication, and potential impact. However, the overall campaign threat level is rated **MEDIUM** because the C2 infrastructure was offline at analysis time, no confirmed victims were identified, and the single-server architecture represents a significant operational fragility. If the infrastructure is re-established, the threat level should be reassessed to HIGH.
+
 ---
 
 ## BLUF (Bottom Line Up Front)

@@ -25,7 +25,7 @@ hide: true
 
 **Campaign Identifier:** Dual-RAT-185.208.159.182-Quasar-NjRAT<br>
 **Last Updated:** December 6, 2025<br>
-**Threat Level:** MEDIUM
+**Threat Level:** HIGH
 
 
 ---

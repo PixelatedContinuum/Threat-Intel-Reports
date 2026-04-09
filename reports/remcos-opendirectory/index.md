@@ -27,7 +27,7 @@ hide: true
 
 **Campaign Identifier:** OpenDirectory-203.159.90.147-Remcos<br>
 **Last Updated:** February 6, 2026<br>
-**Threat Level:** MEDIUM
+**Threat Level:** CRITICAL
 
 
 ---
