@@ -23,6 +23,7 @@ layout: post
 permalink: /reports/webshells-to-the-cloud/
 category: "Web Compromise"
 hide: true
+description: "A modular multi-phase intrusion chain beginning with web server compromise via PHP webshells, then pivoting to cloud infrastructure abuse for command-and-control, data exfiltration, and automated attack orchestration. The campaign demonstrates systematic exploitation methodology with strong attribution fingerprints across cloud provider APIs."
 ---
 
 **Campaign Identifier:** Webshells-To-Cloud-Modular-Intrusion<br>

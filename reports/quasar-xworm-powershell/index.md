@@ -17,6 +17,7 @@ layout: post
 permalink: /reports/quasar-xworm-powershell/
 category: "Multi-Stage RAT"
 hide: true
+description: "A multi-stage campaign using a VBScript downloader and fileless PowerShell execution to deliver QuasarRAT and XWorm simultaneously to the same victim. The chain disables Microsoft Defender via exclusion manipulation and establishes dual persistent RAT channels with full remote control, keylogging, and data exfiltration capabilities."
 ---
 
 **Campaign Identifier:** QuasarRAT-Xworm-PowerShell-Campaign<br>

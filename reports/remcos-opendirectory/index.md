@@ -22,6 +22,7 @@ layout: post
 permalink: /reports/remcos-opendirectory/
 category: "Remote Access Trojan"
 hide: true
+description: "A CRITICAL-rated Remcos RAT campaign distributed via an open directory at 203.159.90.147, using a VB6-obfuscated dropper as the initial stage. The deployed RAT provides full remote control, continuous keylogging, screenshot capture, microphone recording, clipboard monitoring, and automated credential theft from browsers and system stores."
 ---
 
 

@@ -21,6 +21,7 @@ layout: post
 permalink: /reports/sliver-open-directory/
 category: "C2 Framework"
 hide: true
+description: "A complete Sliver C2 build workspace exposed at 45.94.31.220 on bulletproof hosting, discovered approximately 6.75 hours after an automated build pipeline completed. The workspace contains a ScareCrow-wrapped Sliver implant with 15 layered EDR evasion techniques, custom evasion module source code, and an unencrypted fraudulent VMware code-signing certificate — recovered before confirmed victim deployment."
 ---
 
 A Comprehensive, Evidence-Based Guide for Security Decision-Makers

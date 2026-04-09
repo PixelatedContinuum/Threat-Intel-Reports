@@ -24,6 +24,7 @@ layout: post
 permalink: /reports/webserver-compromise-kit-91-236-230-250/
 category: "Post-Exploitation Kit"
 hide: true
+description: "A complete post-exploitation toolkit for IIS and .NET web servers, hosted on an open directory at 91.236.230.250. The three-component kit chains an ASP.NET reverse shell for initial access, PrintSpoofer for privilege escalation to SYSTEM, and a reverse SOCKS proxy (revsocks) for persistent network tunneling and lateral movement."
 ---
 
 

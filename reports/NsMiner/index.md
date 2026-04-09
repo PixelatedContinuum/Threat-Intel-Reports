@@ -23,6 +23,7 @@ layout: post
 permalink: /reports/nsminer-cryptojacker/
 category: "Cryptojacking"
 hide: true
+description: "A multi-stage cryptojacking campaign distributed from an open directory at 125.19.150.122, using a trojanized NSIS installer to drop a VMProtect-packed Monero miner and a persistent downloader that pivots compromised FTP servers for payload distribution. The downloader component represents an ongoing secondary payload risk beyond cryptomining."
 ---
 
 **Campaign Identifier:** NsMiner-125.19.150.122-Cryptojacking<br>
