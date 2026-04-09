@@ -14,10 +14,14 @@
   --hl-text-muted:     #888888;
   --hl-text-dim:       #555555;
   --hl-accent-blue:    #58a6ff;
-  --hl-sev-high:       #ff4444;
-  --hl-sev-high-lbl:   #ff6666;
-  --hl-sev-med:        #f97316;
-  --hl-sev-med-lbl:    #fb923c;
+  --hl-sev-critical:       #dc2626;
+  --hl-sev-critical-lbl:   #ef4444;
+  --hl-sev-high:           #f97316;
+  --hl-sev-high-lbl:       #fb923c;
+  --hl-sev-med:            #eab308;
+  --hl-sev-med-lbl:        #facc15;
+  --hl-sev-low:            #3b82f6;
+  --hl-sev-low-lbl:        #60a5fa;
   --hl-accent-green:   #4ade80;
   --hl-accent-red:     #f87171;
 }
@@ -204,7 +208,7 @@ main.content {
 .hl-post-header {
   background: linear-gradient(135deg, #1a0808 0%, #0d1117 60%, #111111 100%);
   border: 1px solid var(--hl-border-card);
-  border-left: 4px solid var(--hl-sev-high);
+  border-left: 4px solid var(--hl-sev-critical);
   border-radius: 6px;
   padding: 20px 24px;
   margin-bottom: 2.5rem;
@@ -229,7 +233,7 @@ main.content {
 }
 
 .hl-post-header__badge--report {
-  color: var(--hl-sev-high-lbl);
+  color: var(--hl-sev-critical-lbl);
   background: #ff444415;
   border-color: #ff444440;
 }
@@ -319,7 +323,7 @@ main.content {
   margin-bottom: 0.7rem !important;
   padding: 10px 14px !important;
   background: linear-gradient(to right, #ff444418, transparent) !important;
-  border-left: 4px solid var(--hl-sev-high) !important;
+  border-left: 4px solid var(--hl-sev-critical) !important;
   border-bottom: none !important;
   border-radius: 0 4px 4px 0;
 }
@@ -332,7 +336,7 @@ main.content {
   margin-bottom: 0.6rem !important;
   padding: 8px 14px !important;
   background: linear-gradient(to right, #ff444412, transparent) !important;
-  border-left: 3px solid var(--hl-sev-high) !important;
+  border-left: 3px solid var(--hl-sev-critical) !important;
   border-bottom: none !important;
   border-radius: 0 4px 4px 0;
 }
@@ -451,7 +455,7 @@ main.content {
 .hl-post-content hr {
   border: none !important;
   height: 1px;
-  background: linear-gradient(to right, var(--hl-sev-high), #333333 40%, transparent) !important;
+  background: linear-gradient(to right, var(--hl-sev-critical), #333333 40%, transparent) !important;
   margin: 2.5rem 0 !important;
 }
 
@@ -623,9 +627,11 @@ main.content {
 .hl-tag--yellow { background: #3a3a1a;   color: #facc15; border-color: #aaaa2255; }
 
 /* --- Severity bar colors ----------------------------------- */
-.hl-sev--high { background: var(--hl-sev-high); }
-.hl-sev--med  { background: var(--hl-sev-med); }
-.hl-sev--info { background: #333333; }
+.hl-sev--critical { background: var(--hl-sev-critical); }
+.hl-sev--high     { background: var(--hl-sev-high); }
+.hl-sev--med      { background: var(--hl-sev-med); }
+.hl-sev--low      { background: var(--hl-sev-low); }
+.hl-sev--info     { background: #333333; }
 
 /* --- Section header ---------------------------------------- */
 .hl-section-header {
@@ -790,7 +796,7 @@ main.content {
   gap: 28px;
   background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
   border: 1px solid var(--hl-border-card);
-  border-left: 3px solid var(--hl-sev-high);
+  border-left: 3px solid var(--hl-sev-critical);
   border-radius: 6px;
   padding: 28px 32px;
   margin-bottom: 2rem;
@@ -810,7 +816,7 @@ main.content {
   font-size: 0.68em;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--hl-sev-high-lbl);
+  color: var(--hl-sev-critical-lbl);
   margin-bottom: 5px;
 }
 

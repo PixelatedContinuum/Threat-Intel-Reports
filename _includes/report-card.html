@@ -1,14 +1,22 @@
 {% assign sev_bar   = "hl-sev--info" %}
 {% assign sev_color = "#aaaaaa" %}
 {% assign sev_label = "" %}
-{% if include.severity == "high" %}
+{% if include.severity == "critical" %}
+  {% assign sev_bar   = "hl-sev--critical" %}
+  {% assign sev_color = "#ef4444" %}
+  {% assign sev_label = "CRITICAL" %}
+{% elsif include.severity == "high" %}
   {% assign sev_bar   = "hl-sev--high" %}
-  {% assign sev_color = "#ff6666" %}
+  {% assign sev_color = "#fb923c" %}
   {% assign sev_label = "HIGH" %}
 {% elsif include.severity == "med" %}
   {% assign sev_bar   = "hl-sev--med" %}
-  {% assign sev_color = "#fb923c" %}
+  {% assign sev_color = "#facc15" %}
   {% assign sev_label = "MED" %}
+{% elsif include.severity == "low" %}
+  {% assign sev_bar   = "hl-sev--low" %}
+  {% assign sev_color = "#60a5fa" %}
+  {% assign sev_label = "LOW" %}
 {% endif %}
 {% assign _rp = site.pages | where: "url", include.url | first %}
 {% assign _mins = 0 %}

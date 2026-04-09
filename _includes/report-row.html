@@ -1,8 +1,12 @@
 {% assign sev_bar = "hl-sev--info" %}
-{% if include.severity == "high" %}
+{% if include.severity == "critical" %}
+  {% assign sev_bar = "hl-sev--critical" %}
+{% elsif include.severity == "high" %}
   {% assign sev_bar = "hl-sev--high" %}
 {% elsif include.severity == "med" %}
   {% assign sev_bar = "hl-sev--med" %}
+{% elsif include.severity == "low" %}
+  {% assign sev_bar = "hl-sev--low" %}
 {% endif %}
 
 <a href="{{ include.url | relative_url }}" class="hl-row">

@@ -24,7 +24,7 @@ position: 3
 
 <div class="hl-row-list">
 {% include report-row.html title="Detection Rules — ZeroTrace Multi-Family MaaS Operation" date="Mar 2026" severity="high" tags="MaaS,C2,Multi-Family" url="/hunting-detections/opendirectory-74-0-42-25-20260316-detections" %}
-{% include report-row.html title="Detection Rules — Sliver C2 / ScareCrow Loader Open Directory Kit" date="Mar 2026" severity="high" tags="C2,Loader,Evasion" url="/hunting-detections/sliver-open-directory-detections" %}
+{% include report-row.html title="Detection Rules — Sliver C2 / ScareCrow Loader Open Directory Kit" date="Mar 2026" severity="med" tags="C2,Loader,Evasion" url="/hunting-detections/sliver-open-directory-detections" %}
 {% include report-row.html title="Detection Rules — Webserver Compromise Kit 91.236.230.250" date="Feb 2026" severity="high" tags="Toolkit,Priv Esc,RCE" url="/hunting-detections/webserver-compromise-kit-91-236-230-250-detections" %}
 {% include report-row.html title="Detection Rules — Remcos RAT OpenDirectory Campaign" date="Feb 2026" severity="med" tags="RAT,Persistence,Cred Theft" url="/hunting-detections/remcos-opendirectory-campaign" %}
 {% include report-row.html title="Detection Rules — NsMiner Cryptojacker" date="Feb 2026" severity="med" tags="Cryptominer,Dropper,Evasion" url="/hunting-detections/nsminer-cryptojacker" %}

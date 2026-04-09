@@ -13,7 +13,7 @@ position: 2
 {% include report-card.html title="Shadow RAT & XWorm Open Directory Campaign" date="Apr 2026" severity="high" tags="RAT,MaaS,C2,Multi-Family" url="/reports/shadow-xworm-opendirectory/" %}
 {% include report-card.html title="Open Directory at 193.56.255.154 — XiebroC2 v3.1 Go Implant and Covenant C2 Toolkit" date="Apr 2026" severity="high" tags="C2,Multi-Family,Open Dir,Injection" url="/reports/open-directory-193-56-255-154-xiebroc2/" %}
 {% include report-card.html title="ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25" date="Mar 2026" severity="high" tags="MaaS,C2,Open Dir,Multi-Family" url="/reports/zerotrace-74-0-42-25-20260316/" %}
-{% include report-card.html title="Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)" date="Mar 2026" severity="high" tags="C2,Loader,Go,Evasion" url="/reports/sliver-open-directory/" %}
+{% include report-card.html title="Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)" date="Mar 2026" severity="med" tags="C2,Loader,Go,Evasion" url="/reports/sliver-open-directory/" %}
 </div>
 
 {% include section-header.html label="All Reports" accent="#444444" %}
