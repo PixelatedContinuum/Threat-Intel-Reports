@@ -31,7 +31,11 @@ layout: none
       <name>{{ site.title | xml_escape }}</name>
       <uri>{{ site.url }}</uri>
     </author>
+    {% if report.description %}
+    <summary type="text">{{ report.description | xml_escape }}</summary>
+    {% else %}
     <summary type="text">{{ report.content | strip_html | truncate: 500 | xml_escape }}</summary>
+    {% endif %}
   </entry>
   {% endfor %}
 </feed>
