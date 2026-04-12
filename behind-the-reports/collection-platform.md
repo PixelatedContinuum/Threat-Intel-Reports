@@ -21,7 +21,9 @@ hide: true
 
 Before I can analyze malware, write detection rules, or publish a report, I need to find the malware in the first place. That sounds obvious, but the logistics are harder than they appear.
 
-Commercial threat intelligence platforms like Shodan and Censys scan the entire internet and surface what they find, but access costs thousands per year and the data is filtered through someone else's priorities. Open-source feeds exist but tend to be reactive — they publish indicators for threats that have already been deployed, detected, and catalogued. By the time something shows up in a public feed, the window for early warning has often closed.
+Commercial internet scanning services map the entire IPv4 address space and surface what they find, but professional-tier access is priced for enterprise security teams — not independent research. More fundamentally, they're general-purpose reconnaissance tools: broad visibility across the whole internet, optimized for asset discovery and attack surface management rather than persistent monitoring of the specific hostile infrastructure that threat actors actually use. The data is filtered through someone else's priorities and collection model.
+
+Open-source threat intelligence feeds exist but tend to be reactive — they publish indicators for threats that have already been deployed, detected, and catalogued by someone else. By the time something shows up in a public feed, the window for early warning has often closed. A server hosting novel malware today may be wiped clean, repurposed, or rotated to a new IP range before any feed indexes it.
 
 What I wanted was something different: continuous, focused visibility into the specific infrastructure where malware actually lives. Not the whole internet — just the parts that matter most. The bulletproof hosting providers, the sanctioned networks, the abuse-tolerant datacenters where threat actors stage and distribute payloads with minimal risk of takedown.
 
@@ -45,9 +47,9 @@ The challenge is that open directories are ephemeral. A server hosting a stealer
 
 Bulletproof hosting (BPH) providers are companies that knowingly host malicious content and ignore or refuse abuse complaints. Some are formally sanctioned by governments — the U.S. Treasury's OFAC, the UK, Australia. Some operate in jurisdictions that make enforcement effectively impossible. Some simply don't respond when security researchers or law enforcement report malware on their networks.
 
-These providers are where a disproportionate share of malware infrastructure lives. Not all of it — threat actors also abuse legitimate cloud providers like AWS or Azure — but BPH networks have the highest signal-to-noise ratio for this kind of collection. If you scan a bulletproof hoster and find an open directory, the odds that it contains something malicious are very high. If you scan a mainstream cloud provider, you're mostly finding legitimate file servers, personal projects, and misconfigured development environments.
+These providers are where a disproportionate share of malware infrastructure lives. Not all of it — threat actors also abuse legitimate cloud providers — but BPH networks have the highest signal-to-noise ratio for this kind of collection. If you scan a bulletproof hoster and find an open directory, the odds that it contains something malicious are very high. If you scan a mainstream cloud provider, you're mostly finding legitimate file servers, personal projects, and misconfigured development environments.
 
-The platform currently monitors **65 autonomous systems** — the network-level identifier for a hosting provider — selected through documented threat intelligence sources: Spamhaus DROP lists, government sanctions, vendor research from Recorded Future, Resecurity, SpiderLabs, and Intrinsec, and cybercrime information center quarterly rankings. Each target is annotated with the specific source that justified its inclusion and the malware families that have been observed operating there, creating an auditable record of why every target was selected.
+The platform currently monitors **65 autonomous systems** — the network-level identifier for a hosting provider — selected through documented threat intelligence sources: government sanctions lists, established threat intelligence feeds, published cybercrime infrastructure research, and quarterly rankings from cybercrime tracking organizations. Each target is annotated with the specific source that justified its inclusion and the malware families that have been observed operating there, creating an auditable record of why every target was selected.
 
 ---
 
@@ -61,7 +63,7 @@ The primary discovery engine. Every night during a configurable window — curre
 
 To understand the scale: those 65 networks contain roughly 13.8 million IP addresses. Scanning all of them across 28 ports means probing hundreds of millions of address-port combinations. On consumer hardware and a residential internet connection, that's too much to complete in a single night.
 
-So the scan is organized into **priority batches**. Small, dedicated bulletproof hosting providers — the ones where nearly everything hosted is malicious — are grouped into a single batch and scanned first. These are the networks with the highest signal-to-noise ratio, and they typically finish in 2–3 hours. Larger, legitimate-but-abused providers (OVH, Hetzner, Contabo) run as separate batches afterward, filling whatever time remains.
+So the scan is organized into **priority batches**. Small, dedicated bulletproof hosting providers — the ones where nearly everything hosted is malicious — are grouped into a single batch and scanned first. These are the networks with the highest signal-to-noise ratio, and they typically finish in 2–3 hours. Larger, legitimate-but-abused providers run as separate batches afterward, filling whatever time remains.
 
 A hard cutoff stops scanning 5 minutes before the window closes, regardless of progress. This guarantees zero network impact during daytime hours when other people in the house need the connection. Coverage metrics log exactly which providers were scanned, which were deferred, and what percentage of the target space was reached — data that shows empirically how the tool is performing and where adjustments might be needed.
 
@@ -69,7 +71,7 @@ Every discovered web server is immediately probed for open directory signatures.
 
 ### BGP Monitoring
 
-Bulletproof hosting providers frequently rotate their infrastructure, announcing new IP ranges and withdrawing old ones as they move operations between network blocks. The platform polls the RIPE routing database every 30 minutes for prefix changes across all 65 target networks.
+Bulletproof hosting providers frequently rotate their infrastructure, announcing new IP ranges and withdrawing old ones as they move operations between network blocks. The platform polls global routing databases every 30 minutes for prefix changes across all 65 target networks.
 
 When a new IP range appears — typically a /24, which is 256 addresses — the platform triggers an immediate targeted scan of that space. This catches new infrastructure the moment it comes online, hours or sometimes days before the next scheduled nightly sweep would reach it.
 
@@ -108,17 +110,17 @@ When the platform confirms an open directory, a pool of 50 persistent crawl work
 
 **Size filtering** keeps files between 1 KB and 50 MB — small enough to exclude empty placeholders, large enough to include most payloads. Credential files bypass size filtering entirely, because their value is independent of file size.
 
-### VirusTotal Enrichment
+### Multi-Engine Reputation Enrichment
 
 Every file the platform finds needs context. Is this a known piece of malware? Is it something new? Is the security industry already aware of it?
 
-VirusTotal answers those questions — it's a service that scans files against 70+ antivirus engines and reports how many flag the file as malicious. The platform operates within the free-tier API limit of 1,000 lookups per day. That's a real constraint, so every lookup has to count.
+A multi-engine file reputation service answers those questions — scanning each file against dozens of antivirus and threat detection engines and reporting how many flag it as malicious. The platform operates within a daily API quota. That's a real constraint, so every lookup has to count.
 
 A **two-tier extension system** manages this budget. Tier 1 includes 17 high-signal extensions — executables, DLLs, scripts, disk images — that get immediate lookup when found on confirmed BPH infrastructure. These are the files most likely to be malware, and they consume API quota first. Tier 2 covers 29 lower-priority extensions — archives, Office documents, less common formats — that queue for lookup when daily quota allows.
 
 Files discovered through lower-confidence sources (Certificate Transparency logs rather than direct infrastructure scanning) are deprioritized further. This prevents noise from consuming quota that should go to confirmed BPH discoveries.
 
-Each VirusTotal response classifies the file into a priority tier:
+Each enrichment response classifies the file into a priority tier:
 
 | Priority | Criteria | What It Means |
 |---|---|---|
@@ -144,8 +146,8 @@ The platform surfaces everything it finds through a dark-themed analyst dashboar
 
 The home page organizes all discovered hosts into severity tiers based on their highest-signal files:
 
-- **HIGH** — Hosts with NOVEL files (unknown to VirusTotal) in untriaged directories
-- **MEDIUM** — Confirmed BPH infrastructure with low-detection payloads, or files still awaiting VirusTotal lookup
+- **HIGH** — Hosts with NOVEL files (zero detections across the engine fleet) in untriaged directories
+- **MEDIUM** — Confirmed BPH infrastructure with low-detection payloads, or files still awaiting enrichment
 - **LOW** — Certificate Transparency-sourced hosts where enrichment hasn't completed yet
 - **CREDENTIALS** — A cross-cutting view showing any host with exposed credential files, regardless of tier
 
@@ -153,7 +155,7 @@ I work top-down: high-tier hosts first, then medium, then low as time allows. Ea
 
 ### Host Deep-Dive
 
-Clicking into a host shows the full picture: a directory tree visualization showing every path the crawler found, with file counts and status indicators per directory. A master file table lists every file across all directories, priority-sorted, with columns for filename, extension, VirusTotal score, threat family label, download status, credential indicators, and source directory.
+Clicking into a host shows the full picture: a directory tree visualization showing every path the crawler found, with file counts and status indicators per directory. A master file table lists every file across all directories, priority-sorted, with columns for filename, extension, detection score, threat family label, download status, credential indicators, and source directory.
 
 Bulk actions let me move fast. Set all directories on a host to a workflow status in one click. Download all interesting files as a priority-sorted ZIP. Reset download tracking for re-investigation.
 
@@ -163,11 +165,11 @@ Files download as password-protected ZIPs, sorted by analysis value: executables
 
 ### Manual Scanner
 
-The search bar accepts any indicator format — bare IP, domain, URL, or host:port — and offers two modes. **Database search** runs a substring match across everything already indexed. **Live scan** probes the target with the same detection engine the automated scanners use, persists any findings to the database, and triggers background VirusTotal enrichment. This is how I investigate tips from other tools, colleagues, or community reporting — check if the platform already has it, or scan it live and add it.
+The search bar accepts any indicator format — bare IP, domain, URL, or host:port — and offers two modes. **Database search** runs a substring match across everything already indexed. **Live scan** probes the target with the same detection engine the automated scanners use, persists any findings to the database, and triggers background reputation enrichment. This is how I investigate tips from other tools, colleagues, or community reporting — check if the platform already has it, or scan it live and add it.
 
 ### System Health
 
-A dedicated health page shows real-time status of all six services (running state, uptime, last log line), VPN tunnel health (public IP, handshake recency, route verification), masscan sweep progress and coverage metrics, and 30-day trend graphs for directories discovered, novel files, low-detection files, credential files, and confirmed malicious files. Service restart and VPN profile rotation controls are available directly from the dashboard.
+A dedicated health page shows real-time status of all six services (running state, uptime, last log line), VPN tunnel health (public IP, handshake recency, route verification), port scanner sweep progress and coverage metrics, and 30-day trend graphs for directories discovered, novel files, low-detection files, credential files, and confirmed malicious files. Service restart and VPN profile rotation controls are available directly from the dashboard.
 
 ---
 
@@ -177,13 +179,13 @@ Every design decision reflects the same constraint: this is a solo research oper
 
 **Focused scope instead of broad scanning.** I can't scan the entire IPv4 address space — I don't have the bandwidth, the hardware, or the IP reputation. Instead, the platform concentrates on 65 autonomous systems where malware actually lives. This trades breadth for depth: I can't see everything, but I can see the infrastructure that matters most with enough frequency to catch servers that rotate quickly.
 
-**SQLite instead of a database server.** The entire data layer is a single SQLite file. No PostgreSQL to install and maintain, no Redis cache to manage, no database credentials to secure. It handles concurrent access from 50+ crawl workers without contention, and the entire database can be backed up by copying one file.
+**SQLite instead of a database server.** The entire data layer is a single SQLite file. No external database server to install and maintain, no separate cache layer to manage, no additional credentials to secure. It handles concurrent access from 50+ crawl workers without contention, and the entire database can be backed up by copying one file.
 
 **Night-only scanning with a hard cutoff.** The platform shares a home network with other people. Scanning at 10,000 packets per second during the day would noticeably degrade internet for everyone in the house. The nightly scan window, priority batch ordering, and hard cutoff before morning ensure the scanning never impacts normal usage — and coverage logs show exactly what was and wasn't reached each night.
 
-**VPN tunnel with a kill switch.** All scanner traffic routes through a WireGuard VPN with a firewall rule that blocks all traffic if the tunnel drops. My home IP never appears in target server logs. An hourly watchdog verifies tunnel health and auto-restarts on failure. VPN profiles are rotatable from the dashboard for IP diversity.
+**VPN tunnel with a kill switch.** All scanner traffic routes through an encrypted VPN tunnel with a firewall rule that blocks all traffic if the tunnel drops. My home IP never appears in target server logs. An hourly watchdog verifies tunnel health and auto-restarts on failure. VPN profiles are rotatable from the dashboard for IP diversity.
 
-**Free-tier VirusTotal with intelligent rationing.** 1,000 API calls per day is a real constraint, but the two-tier extension system and source-based prioritization ensure the highest-value files always get enrichment first. On a typical day, every Tier 1 file from BPH infrastructure is checked within hours of discovery. Tier 2 files catch up gradually over the following days.
+**Free-tier reputation enrichment with intelligent rationing.** The daily API quota is a real constraint, but the two-tier extension system and source-based prioritization ensure the highest-value files always get enrichment first. On a typical day, every Tier 1 file from BPH infrastructure is checked within hours of discovery. Tier 2 files catch up gradually over the following days.
 
 **Per-host connection throttling.** A semaphore limits concurrent connections to any single target, with optional per-request delay. This prevents triggering web application firewalls or generating abuse complaints — it keeps the scanning polite, even when scanning infrastructure operated by people who don't extend the same courtesy.
 
@@ -193,7 +195,7 @@ Every design decision reflects the same constraint: this is a solo research oper
 
 The platform is the first stage of a larger pipeline. What it finds feeds directly into the analysis and reporting workflow described in [How Reports Are Made]({{ '/behind-the-reports/ai-workflow/' | relative_url }}).
 
-**Novel malware samples.** Files with zero VirusTotal detections — payloads the security industry hasn't catalogued yet. Early discovery means detection rules can be written and shared before the malware is widely deployed.
+**Novel malware samples.** Files with zero detections across the engine fleet — payloads the security industry hasn't catalogued yet. Early discovery means detection rules can be written and shared before the malware is widely deployed.
 
 **Low-detection payloads.** Malware evading most antivirus engines. The gap between "detected by 1 engine" and "detected by 40 engines" is where defenders are most exposed and where early intelligence has the most impact.
 
