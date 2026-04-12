@@ -134,10 +134,10 @@ permalink: /about-me/
 <div class="hl-prose-section">
   <div class="hl-prose-section__label">
     <div class="hl-prose-section__bar" style="background:#f97316;"></div>
-    Workflow
+    How It Works
   </div>
   <div class="hl-prose-section__body">
-    Curious about the AI-assisted workflow behind every report? I built a multi-agent system from the ground up — agents, skill frameworks, automated hooks, and quality gates — to produce threat intelligence that is timely, evidence-based, and worth acting on.<br><br>
-    <a href="{{ '/behind-the-reports/' | relative_url }}">Behind the Reports: How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence →</a>
+    Every report on this site starts with a self-hosted collection platform that scans adversary infrastructure every night — discovering malware on open directories across 65 known bulletproof hosting networks. What it finds is then processed through a purpose-built AI agent workflow: ten specialized agents, structured skill frameworks, automated quality gates, and human checkpoints — turning raw analysis into intelligence that is timely, evidence-based, and worth acting on.<br><br>
+    <a href="{{ '/behind-the-reports/' | relative_url }}">Behind the Reports: How the Intelligence Is Produced →</a>
   </div>
 </div>
