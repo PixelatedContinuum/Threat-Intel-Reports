@@ -1,0 +1,660 @@
+{
+  "malware_name": "ShinyHunters-DLS",
+  "campaign_id": "ShinyHunters-DLS-DataLeak-91.215.85.22",
+  "analysis_date": "2026-04-17",
+  "confidence_note": "Confidence levels: DEFINITE (direct evidence, no ambiguity), HIGH (strong evidence, minor gaps), MODERATE (reasonable evidence, notable gaps), LOW (weak/circumstantial). No SHA256 hashes for archive payloads — the investigation deliberately did not download stolen-victim-PII archives. IOCs focus on infrastructure, URLs, filename patterns, PGP fingerprints, and actor-identity artifacts.",
+  "analyst_notes": [
+    "This is a Data Leak Site / extortion infrastructure investigation, not a malware-binary investigation.",
+    "28 of 29 named victims on this DLS are publicly reported as ShinyHunters victims; Alert360 is the sole unacknowledged victim.",
+    "Ledger typosquat (ledger-lives.io) discovered on co-tenant PROSPERO IP is a SEPARATE investigation and not included here.",
+    "PGP fingerprints are reproduced without spacing as required for machine ingestion; human-readable spaced form is in the full analysis narrative."
+  ],
+  "file_indicators": {
+    "md5": [],
+    "sha1": [],
+    "sha256": [],
+    "filenames": [
+      {
+        "name": "INFORMATION.txt",
+        "confidence": "DEFINITE",
+        "context": "Actor-authored ransom note served at every path on the DLS"
+      },
+      {
+        "name": "shouldve_paid_the_fucking_ransom_zenbusiness_SHINYHUNTERS.zip",
+        "confidence": "DEFINITE",
+        "context": "ZenBusiness dump — 821 GB, 2026-04-05"
+      },
+      {
+        "name": "europa.zip",
+        "confidence": "HIGH",
+        "context": "European Commission / Europa.eu breach — 94 GB, 2026-03-28 (attribution via timing + size alignment with EC disclosure)"
+      },
+      {
+        "name": "shouldve_PAID_THE-ransom-beaconpointe-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Beacon Pointe dump — 43.3 GB"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_bumble-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Bumble dump — 29.5 GB"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_berkadia-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Berkadia dump — 27.6 GB"
+      },
+      {
+        "name": "SHOULDVE_PAID_THE_FUCKING_RANSOM_Kemper-SHINYHUNTERS.7z",
+        "confidence": "DEFINITE",
+        "context": "Kemper dump — 26.8 GB, 2026-04-15 fresh tranche"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_amtrak-SHINYHUNTERS.7z",
+        "confidence": "DEFINITE",
+        "context": "Amtrak dump — 17.5 GB, 2026-04-15 fresh tranche"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_pathstone.com_shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Pathstone dump — 15.2 GB"
+      },
+      {
+        "name": "shouldve_paid-the_ransom_aura-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Aura dump — 11.5 GB"
+      },
+      {
+        "name": "shouldve-paid-the-fucking-ransom-edmunds-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Edmunds dump — 11.4 GB"
+      },
+      {
+        "name": "SHOULDVE_PAID_THE_RANSOM_CARGURUS_shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "CarGurus dump — 7.2 GB"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_mcgrawhill-SHINYHUNTERS.7z",
+        "confidence": "DEFINITE",
+        "context": "McGraw-Hill dump — 5.2 GB, 2026-04-15 fresh tranche"
+      },
+      {
+        "name": "shouldve-paid-the-ransom-soundcloud-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "SoundCloud dump — 2.8 GB"
+      },
+      {
+        "name": "mercer_didnt_pay_the_ransom_shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Mercer Advisors dump — 2.5 GB"
+      },
+      {
+        "name": "shouldve_paid_the_Damn_ransom_figure.com-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Figure.com dump — 2.5 GB"
+      },
+      {
+        "name": "shouldve-paid-the-ransom-matchgroup-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Match Group dump — 1.7 GB"
+      },
+      {
+        "name": "shouldve-paid-the-ransom-betterment-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Betterment dump — 1.6 GB"
+      },
+      {
+        "name": "shouldve_paid_the_fucking_ransom_infiniteCAMPUS-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Infinite Campus dump — 1.1 GB"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_harvard_shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Harvard University dump — 1.0 GB"
+      },
+      {
+        "name": "pay-the-ransom-next-time-panera-bread-shinyhunters-dont-be-the-next-headline.7z",
+        "confidence": "DEFINITE",
+        "context": "Panera Bread dump — 759 MB"
+      },
+      {
+        "name": "SHOULDVE_PAID_THE_FUCKING_RANSOM_HALLMARK.7z",
+        "confidence": "DEFINITE",
+        "context": "Hallmark dump — 568 MB"
+      },
+      {
+        "name": "you_shouldve_paid_the_ransom_why_didnt_you_CFGI_shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "CFGI dump — 475 MB"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_upenn_shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "UPenn dump — 461 MB"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_rockstar_shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Rockstar Games dump — 419 MB"
+      },
+      {
+        "name": "shoulda-paid-the-ransom-crunchbase-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "Crunchbase dump — 402 MB"
+      },
+      {
+        "name": "canadagoose_shouldve_paid_the_ransom_SHINYHUNTERS.7z",
+        "confidence": "DEFINITE",
+        "context": "Canada Goose dump — 157 MB"
+      },
+      {
+        "name": "shouldve_paid_the_ransom_abrigo-SHINYHUNTERS.7z",
+        "confidence": "DEFINITE",
+        "context": "Abrigo dump — 61 MB, 2026-04-15 fresh tranche"
+      },
+      {
+        "name": "shouldve-paid-the-ransom-carmax-shinyhunters.7z",
+        "confidence": "DEFINITE",
+        "context": "CarMax dump — 61 MB"
+      },
+      {
+        "name": "bf_03_2026.sql.7z",
+        "confidence": "HIGH",
+        "context": "BreachForums v5 user database dump (~340K records) — 43 MB, 2026-03-27"
+      }
+    ],
+    "file_paths": [
+      {
+        "path": "/pay_or_leak/",
+        "confidence": "DEFINITE",
+        "context": "Canonical DLS content directory on 91.215.85.22",
+        "value": "/pay_or_leak/"
+      },
+      {
+        "path": "/pay_or_leak/INFORMATION.txt",
+        "confidence": "DEFINITE",
+        "context": "Ransom note path",
+        "value": "/pay_or_leak/INFORMATION.txt"
+      },
+      {
+        "path": "/pay_or_leak/alert360/",
+        "confidence": "HIGH",
+        "context": "Victim subdirectory (INFORMATION.txt only, no archive — extortion-negotiation stage)",
+        "value": "/pay_or_leak/alert360/"
+      },
+      {
+        "path": "/pay_or_leak/ameriprise/",
+        "confidence": "HIGH",
+        "context": "Victim subdirectory (INFORMATION.txt only)",
+        "value": "/pay_or_leak/ameriprise/"
+      },
+      {
+        "path": "/pay_or_leak/odido/",
+        "confidence": "HIGH",
+        "context": "Empty victim subdirectory (archive withdrawn after ransom refused)",
+        "value": "/pay_or_leak/odido/"
+      },
+      {
+        "path": "/pay_or_leak/woflow/",
+        "confidence": "HIGH",
+        "context": "Empty victim subdirectory",
+        "value": "/pay_or_leak/woflow/"
+      }
+    ],
+    "filename_patterns": [
+      {
+        "pattern": "(?i)should(ve|a).*paid.*ransom.*shinyhunters",
+        "type": "regex",
+        "confidence": "HIGH",
+        "context": "Canonical ShinyHunters taunt-filename regex (matches 25/30 files on this DLS)"
+      },
+      {
+        "pattern": "(?i)pay.?the.?ransom.?next.?time.*shinyhunters",
+        "type": "regex",
+        "confidence": "HIGH",
+        "context": "Variant taunt pattern (Panera-Bread-style)"
+      },
+      {
+        "pattern": "(?i)didnt.?pay.?the.?ransom.*shinyhunters",
+        "type": "regex",
+        "confidence": "HIGH",
+        "context": "Variant taunt pattern (Mercer-style)"
+      },
+      {
+        "pattern": "(?i)you.?shouldve.?paid.*shinyhunters",
+        "type": "regex",
+        "confidence": "HIGH",
+        "context": "Variant taunt pattern (CFGI-style)"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "ip": "91.215.85.22",
+        "port": "80",
+        "protocol": "TCP",
+        "confidence": "DEFINITE",
+        "context": "ShinyHunters DLS clearnet host; nginx/1.22.1; AS200593 PROSPERO OOO (Russia bulletproof hosting)"
+      },
+      {
+        "ip": "91.215.43.200",
+        "port": "443",
+        "protocol": "TCP",
+        "confidence": "DEFINITE",
+        "context": "shinyhunte.rs identity-page origin; AS57724 DDoS-Guard (Russia)"
+      }
+    ],
+    "ipv6": [],
+    "cidr_ranges": [
+      {
+        "value": "91.215.85.0/24",
+        "range": "91.215.85.0/24",
+        "confidence": "DEFINITE",
+        "context": "RIPE ASSIGNED PI allocation to PROSPERO OOO; announced since 2022-12-16"
+      },
+      {
+        "value": "91.202.233.0/24",
+        "range": "91.202.233.0/24",
+        "confidence": "HIGH",
+        "context": "Adjacent PROSPERO-announced prefix (AS200593) — see infrastructure-analyst output for co-tenant findings"
+      },
+      {
+        "value": "193.24.123.0/24",
+        "range": "193.24.123.0/24",
+        "confidence": "HIGH",
+        "context": "Adjacent PROSPERO-announced prefix (AS200593)"
+      }
+    ],
+    "asns": [
+      {
+        "value": "AS200593",
+        "asn": "AS200593",
+        "name": "PROSPERO-AS / PROSPERO OOO",
+        "confidence": "DEFINITE",
+        "context": "Russia-based hosting provider with bulletproof-hosting reputation; DLS host"
+      },
+      {
+        "value": "AS57724",
+        "asn": "AS57724",
+        "name": "DDoS-Guard / RU-LLCDDOS-GUARD",
+        "confidence": "DEFINITE",
+        "context": "Russian CDN/DDoS-protection provider; fronts shinyhunte.rs identity page"
+      },
+      {
+        "value": "AS34665",
+        "asn": "AS34665",
+        "name": "Petersburg Internet Network Ltd",
+        "confidence": "MODERATE",
+        "context": "Historical carrier (per OTX) — prior-assigned before PROSPERO"
+      }
+    ],
+    "domains": [
+      {
+        "domain": "shinyhunte.rs",
+        "confidence": "DEFINITE",
+        "context": "ShinyHunters identity / PGP-key rotation landing page; DDoS-Guard-fronted"
+      },
+      {
+        "domain": "pro-spero.ru",
+        "confidence": "DEFINITE",
+        "context": "PROSPERO OOO operator domain; RIPE abuse-contact root"
+      }
+    ],
+    "urls": [
+      {
+        "url": "http://91.215.85.22/pay_or_leak/",
+        "confidence": "DEFINITE",
+        "context": "Primary victim-dump directory (nginx autoindex)"
+      },
+      {
+        "url": "http://91.215.85.22/pay_or_leak/INFORMATION.txt",
+        "confidence": "DEFINITE",
+        "context": "Ransom-note URL"
+      },
+      {
+        "url": "https://shinyhunte.rs/",
+        "confidence": "DEFINITE",
+        "context": "ShinyHunters identity page (current: PGP rotation announcement)"
+      },
+      {
+        "url": "https://shinyhunte.rs/newpgp",
+        "confidence": "HIGH",
+        "context": "Published location of current PGP key (currently 404 at origin; archive.org preserves)"
+      },
+      {
+        "url": "https://pastebin.com/raw/sb7aB9eU",
+        "confidence": "HIGH",
+        "context": "PGP-key mirror referenced in signed rotation messages",
+        "false_positive_risk": "pastebin.com is a shared-service domain; block only this specific raw-paste URL, not pastebin.com wholesale"
+      }
+    ],
+    "onion_addresses": [
+      {
+        "value": "shnyhntww34phqoa6dcgnvps2yu7dlwzmy5lkvejwjdo6z7bmgshzayd.onion",
+        "onion": "shnyhntww34phqoa6dcgnvps2yu7dlwzmy5lkvejwjdo6z7bmgshzayd.onion",
+        "status": "UP (main)",
+        "confidence": "HIGH",
+        "context": "Current main onion (added April 2026; not in on-DLS ransom note); serves [sh] access queue interstitial"
+      },
+      {
+        "value": "shinypogk4jjniry5qi7247tznop6mxdrdte2k6pdu5cyo43vdzmrwid.onion",
+        "onion": "shinypogk4jjniry5qi7247tznop6mxdrdte2k6pdu5cyo43vdzmrwid.onion",
+        "status": "UP (redirector)",
+        "confidence": "HIGH",
+        "context": "Redirector onion listed in DLS ransom note; operator-confirmed live"
+      },
+      {
+        "value": "toolatedhs5dtr2pv6h5kdraneak5gs3sxrecqhoufc5e45edior7mqd.onion",
+        "onion": "toolatedhs5dtr2pv6h5kdraneak5gs3sxrecqhoufc5e45edior7mqd.onion",
+        "status": "DOWN (inactive)",
+        "confidence": "HIGH",
+        "context": "Original onion listed in DLS ransom note; operator self-reports inactive as of April 2026 (ransom note is stale)"
+      }
+    ],
+    "nameservers": [
+      {
+        "value": "ns1.ddos-guard.net",
+        "ns": "ns1.ddos-guard.net",
+        "confidence": "DEFINITE",
+        "context": "DDoS-Guard authoritative NS for shinyhunte.rs"
+      },
+      {
+        "value": "ns2.ddos-guard.net",
+        "ns": "ns2.ddos-guard.net",
+        "confidence": "DEFINITE",
+        "context": "DDoS-Guard authoritative NS for shinyhunte.rs"
+      }
+    ],
+    "abuse_contacts": [
+      {
+        "value": "abuse@pro-spero.ru",
+        "email": "abuse@pro-spero.ru",
+        "confidence": "DEFINITE",
+        "context": "PROSPERO RIPE abuse-contact — historically unresponsive per community reports"
+      },
+      {
+        "value": "abuse@ddos-guard.net",
+        "email": "abuse@ddos-guard.net",
+        "confidence": "DEFINITE",
+        "context": "DDoS-Guard RIPE abuse-contact — historically unresponsive"
+      }
+    ],
+    "server_banners": [
+      {
+        "value": "nginx/1.22.1",
+        "banner": "nginx/1.22.1",
+        "confidence": "DEFINITE",
+        "context": "Both DLS (91.215.85.22) and shinyhunte.rs origin run same nginx version — possibly common server image"
+      }
+    ],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "scheduled_tasks": [],
+    "services": [],
+    "mutexes": [],
+    "named_pipes": []
+  },
+  "identity_artifacts": {
+    "pgp_fingerprints": [
+      {
+        "value": "F4953411767DE71BEDCDABCB76F4E26F7A20978A",
+        "fingerprint": "F4953411767DE71BEDCDABCB76F4E26F7A20978A",
+        "role": "current ShinyHunters key (April 2026)",
+        "created": "~2026-03",
+        "status": "active",
+        "confidence": "HIGH",
+        "context": "Announced on shinyhunte.rs; full key body not yet recovered (/newpgp 404; pastebin mirror sb7aB9eU)"
+      },
+      {
+        "value": "1FC4D0B1DEE914BB05B57FABF1F1B98A51C989B3",
+        "fingerprint": "1FC4D0B1DEE914BB05B57FABF1F1B98A51C989B3",
+        "role": "old Raidforums key",
+        "created": "2020-08-25",
+        "status": "revoked 2026-03-17",
+        "confidence": "DEFINITE",
+        "context": "Historical ShinyHunters key from RaidForums era; signed the rotation handoff (msg1)"
+      },
+      {
+        "value": "828537C15F43F135A8317153CD16A1660CC7CE51",
+        "fingerprint": "828537C15F43F135A8317153CD16A1660CC7CE51",
+        "role": "old Empire Market key",
+        "created": "2020-01-28",
+        "status": "revoked 2026-03-17",
+        "confidence": "DEFINITE",
+        "context": "Historical ShinyHunters key from Empire Market era; UID also listed as 'Hunters on Empire'; signed rotation handoff (msg2)"
+      },
+      {
+        "value": "E80C1308A09EC1ADC418C3F02578988F69BCA3FC",
+        "fingerprint": "E80C1308A09EC1ADC418C3F02578988F69BCA3FC",
+        "role": "Dec 2025 statement signing key",
+        "created": "unknown",
+        "status": "unknown",
+        "confidence": "MODERATE",
+        "context": "Distinct third key used to sign the December 2025 internal-doxx statement; suggests 3+ internal ShinyHunters key-holders (approximate fingerprint from signature header)"
+      }
+    ],
+    "named_handles": [
+      {
+        "value": "Yuro",
+        "handle": "Yuro",
+        "claimed_initials": "A.E.",
+        "role": "ShinyHunters member",
+        "claimed_status": "arrested pre-Dec 2025",
+        "source": "December 2025 signed statement on shinyhunte.rs",
+        "confidence": "LOW",
+        "context": "Actor-on-actor doxx; independent verification not performed"
+      },
+      {
+        "value": "Trihash",
+        "handle": "Trihash",
+        "claimed_initials": "R.L.",
+        "role": "ShinyHunters member; original Empire-key custodian",
+        "claimed_status": "arrested (recent) pre-Dec 2025",
+        "source": "December 2025 signed statement on shinyhunte.rs",
+        "confidence": "LOW",
+        "context": "Actor-on-actor doxx; independent verification not performed"
+      },
+      {
+        "value": "James",
+        "handle": "James",
+        "claimed_initials": "S.E.",
+        "aliases": [
+          "X*K"
+        ],
+        "role": "ejected ShinyHunters member; French; credited with WEMIX attack",
+        "claimed_status": "at-large, posing as Scattered Spider",
+        "source": "December 2025 signed statement on shinyhunte.rs",
+        "confidence": "LOW",
+        "context": "Actor-on-actor doxx; self-serving attribution-deflection claim; independent verification not performed"
+      }
+    ],
+    "contact_handles": [
+      {
+        "type": "telegram",
+        "value": "https://t.me/wokawoka10",
+        "confidence": "LOW",
+        "context": "Claimed 'James' contact per Dec 2025 internal statement; not independently verified; possible planted artifact — pivot-only indicator"
+      }
+    ],
+    "archive_references": [
+      {
+        "url": "http://web.archive.org/web/20260322033123/https://shinyhunte.rs/",
+        "confidence": "DEFINITE",
+        "context": "Cited in on-DLS ransom note as ShinyHunters identity snapshot"
+      },
+      {
+        "url": "http://web.archive.org/web/20260322033217/https://shinyhunte.rs/newpgp",
+        "confidence": "DEFINITE",
+        "context": "Cited in on-DLS ransom note for PGP key retrieval"
+      },
+      {
+        "url": "https://web.archive.org/web/20251012013224/https://shinyhunte.rs/",
+        "confidence": "HIGH",
+        "context": "Snapshot showing self-branded 'Scattered LAPSUS$ Hunters | DLS' page title — collective-branding confirmation"
+      },
+      {
+        "url": "https://web.archive.org/web/20251217231546/https://shinyhunte.rs/",
+        "confidence": "HIGH",
+        "context": "Snapshot of December 2025 PGP-signed internal-doxx statement"
+      }
+    ]
+  },
+  "behavioral_indicators": {
+    "file_access_patterns": [
+      {
+        "pattern": "External download of any file matching (?i)should(ve|a).*paid.*ransom.*shinyhunters regex",
+        "confidence": "HIGH",
+        "context": "Enterprise file-share or endpoint-download appearance of ShinyHunters-branded archives — sign of either (a) SOC IR collection, or (b) unauthorized re-host/distribution"
+      },
+      {
+        "pattern": "HTTP/HTTPS connection to 91.215.85.22/pay_or_leak/ or INFORMATION.txt from internal hosts",
+        "confidence": "HIGH",
+        "context": "Direct retrieval of DLS content; indicates either SOC-reviewer activity or unauthorized internal curiosity"
+      }
+    ],
+    "network_patterns": [
+      {
+        "pattern": "DNS query for shinyhunte.rs from enterprise endpoints",
+        "confidence": "HIGH",
+        "context": "Identity-page resolution — suspicious unless from security-research workstation"
+      },
+      {
+        "pattern": "DNS query for pro-spero.ru from enterprise endpoints",
+        "confidence": "MODERATE",
+        "context": "PROSPERO operator-domain resolution — less targeted than direct DLS-IP traffic"
+      },
+      {
+        "pattern": "HTTP/HTTPS traffic to 91.215.43.200 (shinyhunte.rs origin) bypassing DDoS-Guard front",
+        "confidence": "MODERATE",
+        "context": "Origin-direct connection implies either infrastructure pivot activity or misconfigured DNS cache"
+      }
+    ],
+    "upstream_campaign_patterns": [
+      {
+        "pattern": "Help-desk MFA reset initiated by voice/phone call shortly followed by anomalous Okta session for the target account",
+        "confidence": "HIGH",
+        "context": "Canonical vishing → SSO compromise chain (ShinyHunters 2026 primary TTP); upstream of DLS appearance"
+      },
+      {
+        "pattern": "Anomalous bulk-export or Salesforce Data Loader activity by a newly-authorized OAuth Connected App",
+        "confidence": "HIGH",
+        "context": "Salesforce CRM exfiltration signature across the 2026 victim set"
+      },
+      {
+        "pattern": "Trivy binary-integrity anomaly or unexpected outbound connections from CI/CD environment running Trivy",
+        "confidence": "MODERATE",
+        "context": "Supply-chain TTP path demonstrated by europa.zip / EC breach; relevant to software-supply-chain-exposed orgs"
+      }
+    ]
+  },
+  "mitre_attack": [
+    {
+      "id": "T1566.004",
+      "name": "Phishing: Spearphishing Voice",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "T1195.002",
+      "name": "Supply Chain Compromise: Compromise Software Supply Chain",
+      "confidence": "MODERATE"
+    },
+    {
+      "id": "T1528",
+      "name": "Steal Application Access Token",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "T1552.001",
+      "name": "Unsecured Credentials: Credentials In Files",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "T1213",
+      "name": "Data from Information Repositories",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "T1530",
+      "name": "Data from Cloud Storage",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "T1567.002",
+      "name": "Exfiltration Over Web Service: Exfiltration to Cloud Storage",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "T1090.003",
+      "name": "Proxy: Multi-hop Proxy",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "T1568",
+      "name": "Dynamic Resolution",
+      "confidence": "MODERATE"
+    },
+    {
+      "id": "T1657",
+      "name": "Financial Theft",
+      "confidence": "DEFINITE"
+    },
+    {
+      "id": "T1485",
+      "name": "Data Destruction",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "T1583.001",
+      "name": "Acquire Infrastructure: Domains",
+      "confidence": "DEFINITE"
+    },
+    {
+      "id": "T1583.003",
+      "name": "Acquire Infrastructure: Virtual Private Server",
+      "confidence": "DEFINITE"
+    },
+    {
+      "id": "T1585",
+      "name": "Establish Accounts",
+      "confidence": "HIGH"
+    }
+  ],
+  "victim_inventory": {
+    "total_named_victims": 29,
+    "publicly_acknowledged": 28,
+    "unacknowledged_high_priority": [
+      "Alert360"
+    ],
+    "partial_disclosure_regulatory_followup": [
+      "Berkadia Commercial Mortgage",
+      "Ameriprise Financial",
+      "Woflow",
+      "Abrigo",
+      "CFGI Management",
+      "Kemper Corporation",
+      "Amtrak",
+      "ZenBusiness",
+      "CarMax",
+      "Edmunds"
+    ],
+    "special_archives": [
+      {
+        "filename": "europa.zip",
+        "attributed_victim": "European Commission / Europa.eu",
+        "attribution_confidence": "HIGH",
+        "notes": "Trivy supply-chain initial access attributed to TeamPCP; ShinyHunters responsible for AWS pivot and exfiltration (per CERT-EU)"
+      },
+      {
+        "filename": "bf_03_2026.sql.7z",
+        "attributed_victim": "BreachForums v5 user database (~340K records)",
+        "attribution_confidence": "HIGH",
+        "notes": "Actor-on-actor / cybercriminal-ecosystem content; exposes forum users including possible research/LE personas"
+      }
+    ]
+  }
+}

@@ -17,8 +17,8 @@ position: 1
 {% include section-header.html label="Latest Reports" accent="#ff4444" %}
 
 <div class="hl-grid">
+{% include report-card.html title="ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims, and Attribution" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,Open Dir,Threat" url="/reports/shinyhunters-dls-91-215-85-22-20260417/" %}
 {% include report-card.html title="OpenStrike Expanded Toolkit — 106 New Files, Complete CS Arsenal Exposed" date="Apr 2026" severity="high" tags="Toolkit,C2,Injection,Open Dir" url="/reports/new-files-found-20260408/" %}
-{% include report-card.html title="OpenStrike Beacon Toolkit — Open Directory 172.105.0.126" date="Apr 2026" severity="high" tags="Toolkit,C2,Open Dir,Evasion" url="/reports/open-directory-172-105-0-126-20260406/" %}
 </div>
 
 <a href="{{ '/reports/' | relative_url }}" class="hl-view-all">View all reports →</a>
