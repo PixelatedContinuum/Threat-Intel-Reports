@@ -470,14 +470,14 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (
 ---
 
 **Detection Priority:** HIGH<br>
-**Rationale:** Direct HTTP connections to 91.215.85.22 on port 80 are unambiguous DLS access attempts. The nginx autoindex misconfiguration on the server means any path request returns the file listing — a GET to `/` or `/pay_or_leak/` both constitute DLS access. The Host-header match to the IP itself (direct-IP HTTP) is a strong anomaly signal since legitimate web traffic rarely uses direct-IP HTTP to bulletproof hosting IPs.<br>
+**Rationale:** Direct HTTP connections to 91.215.85.22 are unambiguous DLS access attempts. The DLS is currently served on port 80, but the rule deliberately matches any destination port — the `http` protocol keyword invokes Suricata's HTTP parser by protocol recognition, not by port, so pinning to `80` would add no fidelity while blocking the rule from catching an operator-side port migration (for example, if the DLS is moved to 8080/8888 to evade naive blocklists). The nginx autoindex misconfiguration on the server means any path request returns the file listing — a GET to `/` or `/pay_or_leak/` both constitute DLS access. The Host-header match to the IP itself (direct-IP HTTP) is a strong anomaly signal since legitimate web traffic rarely uses direct-IP HTTP to bulletproof hosting IPs.<br>
 **ATT&CK Coverage:** T1657 (Financial Theft / Extortion), T1090.003 (Multi-hop Proxy)<br>
 **Confidence:** HIGH<br>
 **False Positive Risk:** LOW — Direct-IP HTTP connections to this specific address have no enterprise-legitimate use case. The threshold statement limits alert volume for any automated retrieval scenarios.<br>
 **Deployment:** Perimeter IDS/IPS; network tap on internet egress; NDR platform.
 
 ```
-alert http $HOME_NET any -> 91.215.85.22 80 (
+alert http $HOME_NET any -> 91.215.85.22 any (
     msg:"THL ShinyHunters DLS - Direct HTTP Connection to DLS Host 91.215.85.22";
     flow:established,to_server;
     http.method;
