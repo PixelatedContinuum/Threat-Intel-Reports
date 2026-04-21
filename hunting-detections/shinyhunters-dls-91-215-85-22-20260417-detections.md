@@ -495,6 +495,8 @@ alert http $HOME_NET any -> 91.215.85.22 any (
 )
 ```
 
+> **Community contribution:** The `any` destination port on this rule was suggested by [Anthony Vigil](https://www.linkedin.com/in/anthony-vigil/), who noted that because the `http` protocol keyword invokes Suricata's HTTP parser by protocol recognition rather than by port, pinning to `80` adds no fidelity — and switching to `any` preserves coverage if the operator migrates the DLS to a non-standard port.
+
 ---
 
 ## Tor / .onion Indicator Note
