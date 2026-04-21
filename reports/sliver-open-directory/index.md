@@ -57,7 +57,7 @@ An exposed open directory at `45.94.31.220` — hosted on bulletproof infrastruc
 
 ### The Threat in Clear Terms
 
-On 2026-02-14, a threat actor operating from a bulletproof VPS at `45.94.31.220` ran an automated build pipeline that produced a fully operational Sliver C2 implant wrapped inside a ScareCrow Go loader with 15 distinct EDR evasion techniques. Six hours and forty-five minutes later, the entire build workspace — including source code, build logs, compiled binaries, and an unencrypted private signing key — was indexed by an open-directory scanner Hunt.io. This report documents the resulting intelligence.
+On 2026-02-14, a threat actor operating from a bulletproof VPS at `45.94.31.220` ran an automated build pipeline that produced a fully operational Sliver C2 implant wrapped inside a ScareCrow Go loader with 15 distinct EDR evasion techniques. Six hours and forty-five minutes later, the entire build workspace — including source code, build logs, compiled binaries, and an unencrypted private signing key — was indexed by an open-directory scanner [Hunt.io](https://hunt.io/). This report documents the resulting intelligence.
 
 **What defenders gained from this exposure:** Implementation-level understanding of the attacker's complete toolchain — not just binary artifacts, but the source code, build logic, C2 configuration, and operational records that drive detection, hunting, and attribution. This depth of pre-deployment intelligence is rare and directly enables defensive action that would otherwise require full incident response engagement.
 
@@ -1103,8 +1103,8 @@ Remediation strategy should reflect the injection architecture:
 ### Tier 3 Sources (Community — Corroborated)
 
 - Krebs on Security "Who's Behind the Seized Forums 'Cracked' & 'Nulled'?" (Feb 2025) — [https://krebsonsecurity.com/2025/02/whos-behind-the-seized-forums-cracked-nulled/](https://krebsonsecurity.com/2025/02/whos-behind-the-seized-forums-cracked-nulled/)
-- Hunt.io "Pentester or Threat Actor?" — [https://hunt.io/blog/pentester-or-threat-actor-open-directory-exposes-test-results-and-possible-targeting-of-government-organizations](https://hunt.io/blog/pentester-or-threat-actor-open-directory-exposes-test-results-and-possible-targeting-of-government-organizations)
-- Hunt.io "Open Directories Expose Publicly Available Tools Targeting Asian Organizations" — [https://hunt.io/blog/open-directories-expose-publicly-available-tools-targeting-asian-organizations](https://hunt.io/blog/open-directories-expose-publicly-available-tools-targeting-asian-organizations)
+- [Hunt.io](https://hunt.io/) "Pentester or Threat Actor?" — [https://hunt.io/blog/pentester-or-threat-actor-open-directory-exposes-test-results-and-possible-targeting-of-government-organizations](https://hunt.io/blog/pentester-or-threat-actor-open-directory-exposes-test-results-and-possible-targeting-of-government-organizations)
+- [Hunt.io](https://hunt.io/) "Open Directories Expose Publicly Available Tools Targeting Asian Organizations" — [https://hunt.io/blog/open-directories-expose-publicly-available-tools-targeting-asian-organizations](https://hunt.io/blog/open-directories-expose-publicly-available-tools-targeting-asian-organizations)
 
 ---
 

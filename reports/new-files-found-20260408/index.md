@@ -1100,8 +1100,8 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 - Elastic Security Labs: "Extracting Cobalt Strike Beacon Configurations" — CS crypto architecture (SHA256 key split documentation)
 - Unit42 (Palo Alto Networks): "Cobalt Strike Analysis and Tutorial: CS Metadata Encryption and Decryption" — RSA + AES beacon crypto
-- hunt.io: "Rare Watermark Links Cobalt Strike 4.10 Team Servers to Ongoing Suspicious Activity" — watermark methodology
-- hunt.io: "Guide to Hunting Cobalt Strike, Part 1 (Open Directories)" — open directory hunting context
+- [hunt.io](https://hunt.io/): "Rare Watermark Links Cobalt Strike 4.10 Team Servers to Ongoing Suspicious Activity" — watermark methodology
+- [hunt.io](https://hunt.io/): "Guide to Hunting Cobalt Strike, Part 1 (Open Directories)" — open directory hunting context
 - thedfirreport.com: "Cobalt Strike, a Defender's Guide" — named pipe and rundll32 detection
 - Recorded Future: "Multi-Method Approach to Identifying Rogue Cobalt Strike Servers" — SSL cert fingerprinting methodology
 - CrowdStrike: "HijackLoader Expands Techniques" (2024) — EAX redirect in modern malware

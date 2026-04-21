@@ -43,7 +43,7 @@ During routine threat hunting, an exposed criminal staging server was discovered
 
 <figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/opendir1.png" | relative_url }}" alt="Hunt.io open directory listing at 74.0.42.25 showing 4,750 files totalling 4GB">
-  <figcaption><em>Figure 1: Hunt.io view of the open directory at 74.0.42.25 — 4,750 files totalling 4GB hosted on Layer7 Technologies (AS40662). The indexed file tree exposes the operator's complete staging environment: malware toolkit, credential databases, and operator tooling left accessible without authentication.</em></figcaption>
+  <figcaption><em>Figure 1: <a href="https://hunt.io/">Hunt.io</a> view of the open directory at 74.0.42.25 — 4,750 files totalling 4GB hosted on Layer7 Technologies (AS40662). The indexed file tree exposes the operator's complete staging environment: malware toolkit, credential databases, and operator tooling left accessible without authentication.</em></figcaption>
 </figure>
 
 ### What a Victim Experiences

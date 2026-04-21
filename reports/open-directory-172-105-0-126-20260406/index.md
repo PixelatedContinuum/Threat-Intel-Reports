@@ -51,7 +51,7 @@ This investigation documents a novel, previously undocumented multi-implant C2 t
 
 **What Was Found**
 
-A complete attacker operator kit recovered before any known compromise: three beacon implant variants (a custom C Windows beacon, a cross-platform Python implant, and a cracked Cobalt Strike 3.x DLL), five shellcode loaders forming a progressive development chain, and nine Python utility scripts covering EDR reconnaissance through beacon deployment. All seven binary samples share a single build environment (MinGW-w64 GCC 15, released April 2025), placing active development in late 2025 or early 2026. The discovery was made via hunt.io's open directory capture system — an infrastructure-first discovery method that identified the toolkit before any victim could be identified.
+A complete attacker operator kit recovered before any known compromise: three beacon implant variants (a custom C Windows beacon, a cross-platform Python implant, and a cracked Cobalt Strike 3.x DLL), five shellcode loaders forming a progressive development chain, and nine Python utility scripts covering EDR reconnaissance through beacon deployment. All seven binary samples share a single build environment (MinGW-w64 GCC 15, released April 2025), placing active development in late 2025 or early 2026. The discovery was made via [hunt.io](https://hunt.io/)'s open directory capture system — an infrastructure-first discovery method that identified the toolkit before any victim could be identified.
 
 **Why This Threat Is Significant**
 
@@ -123,7 +123,7 @@ Attribution is INSUFFICIENT (<50% confidence). The operator is tracked internall
 
 > **Analyst note:** This section catalogs the seven binary samples and nine Python scripts recovered from the open directory. Each entry includes the original filename, cryptographic hash, compiler, and analysis status. The binary samples are Windows PE executables; Python scripts require the Python interpreter to run and are cross-platform.
 
-All samples were recovered from an open directory on `172.105.0.126` via hunt.io's AttackCapture system (a continuous internet scanning service that indexes misconfigured servers and automatically downloads exposed files). No dynamic sandbox analysis was performed; all behavioral inferences are derived from static reverse engineering.
+All samples were recovered from an open directory on `172.105.0.126` via [hunt.io](https://hunt.io/)'s AttackCapture system (a continuous internet scanning service that indexes misconfigured servers and automatically downloads exposed files). No dynamic sandbox analysis was performed; all behavioral inferences are derived from static reverse engineering.
 
 <table class="professional-table">
   <thead>
@@ -916,7 +916,7 @@ DomainTools Iris passive DNS export reveals this IP has been continuously alloca
 
 ## 6. Discovery Method: hunt.io Open Directory Capture
 
-Samples were recovered via hunt.io's AttackCapture system, which continuously scans the internet for misconfigured servers exposing directory listings. When discovered, files are automatically downloaded and indexed. This is a pre-compromise intelligence source — recovery occurred before any victim was identified.
+Samples were recovered via [hunt.io](https://hunt.io/)'s AttackCapture system, which continuously scans the internet for misconfigured servers exposing directory listings. When discovered, files are automatically downloaded and indexed. This is a pre-compromise intelligence source — recovery occurred before any victim was identified.
 
 **Intelligence value of open directory capture:** This discovery method provided the complete operator toolkit including development utilities (`dbg_loader.exe`), test harnesses, operator scripts, and debug-symbol-enabled binaries. These artifacts are rarely available from post-compromise forensics, where adversaries typically clean up or only deploy operational components. The completeness of the recovered kit is a direct consequence of the open directory exposure.
 
@@ -1272,7 +1272,7 @@ Development path (dbg_loader.exe — entry-point discovery):
 
 **Tier 3 (Community):**
 - usualsuspect.re: "Cobalt Strike's Malleable C2 Under the Hood" (7–8 opcodes documented; cross-referenced with official CS docs)
-- hunt.io: AttackCapture system documentation
+- [hunt.io](https://hunt.io/): AttackCapture system documentation
 - GBHackers: "Python-Based PyRAT Emerges as Cross-Platform Threat" (2025)
 
 ---

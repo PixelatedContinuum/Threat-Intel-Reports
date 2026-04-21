@@ -808,7 +808,7 @@ GBK encoding and XiebroC2's Chinese-language origin are consistent with a Chines
 
 > **Analyst note:** Starting from a single IP address, the investigation used the malware's own C2 framework fingerprint to search for related servers. This section explains the pivot chain — how four candidate IPs were identified, and why only one was elevated to likely same-operator status.
 
-Analysis began with `193.56.255.154` identified from the malware's hardcoded configuration. The primary pivot indicator was the Covenant C2 admin panel fingerprint: a self-signed TLS certificate with `CN=Covenant` on port 7443, a default left in place by the operator. An infrastructure query (Hunt.io, queried 2026-04-02) searching for other IPs serving this fingerprint in the same timeframe returned four results:
+Analysis began with `193.56.255.154` identified from the malware's hardcoded configuration. The primary pivot indicator was the Covenant C2 admin panel fingerprint: a self-signed TLS certificate with `CN=Covenant` on port 7443, a default left in place by the operator. An infrastructure query ([Hunt.io](https://hunt.io/), queried 2026-04-02) searching for other IPs serving this fingerprint in the same timeframe returned four results:
 
 | IP | ASN / Hosting | Covenant Port | Open Directory | Custom Tooling | Assessment |
 |---|---|---|---|---|---|
@@ -847,7 +847,7 @@ A secondary pivot from the historical phishing activity on `193.56.255.154` iden
     <tr>
       <td>Geolocation</td>
       <td>Singapore (26A Ayer Rajah Crescent)</td>
-      <td>Hunt.io export + BGP.he.net</td>
+      <td><a href="https://hunt.io/">Hunt.io</a> export + BGP.he.net</td>
     </tr>
     <tr>
       <td>Operating System</td>
@@ -1280,8 +1280,8 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 - **ThreatFox AS9009:** https://threatfox.abuse.ch/asn/9009/
 
 **Open Directory and Multi-C2 Staging:**
-- **hunt.io:** "Exposed BYOB C2 Infrastructure" — https://hunt.io/blog/exposed-byob-c2-infrastructure-multi-stage-malware-deployment
-- **hunt.io:** "TeamPCP Multi-C2 Open Directory Analysis" — https://hunt.io/blog/33k-exposed-litellm-teampcp-c2-supply-chain-attack
+- **[hunt.io](https://hunt.io/):** "Exposed BYOB C2 Infrastructure" — https://hunt.io/blog/exposed-byob-c2-infrastructure-multi-stage-malware-deployment
+- **[hunt.io](https://hunt.io/):** "TeamPCP Multi-C2 Open Directory Analysis" — https://hunt.io/blog/33k-exposed-litellm-teampcp-c2-supply-chain-attack
 
 **Detection Libraries:**
 - **Ne0nd0g/go-clr:** https://github.com/Ne0nd0g/go-clr
