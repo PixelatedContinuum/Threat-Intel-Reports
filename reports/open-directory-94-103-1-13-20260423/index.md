@@ -299,6 +299,11 @@ The PS1 loader is the first layer of decryption. Its structural anchors (identic
 
 **Why this matters for defenders.** The plaintext key strings (`qDqHmNfeSyWJoyxDzR`, `jttZjrlmkrBAtCBAMjkbThHsSjVNMjLLyONafxIj`) live in **decrypted memory**, not on disk. On-disk YARA rules targeting the `.bat` file will never see them. In-memory / unpacked .NET module YARA is required for those specific string anchors. On-disk YARA must instead key on the structural anchors (forced-32-bit path, alphabet-substitution reversal, magic-marker + Substring(32) idiom).
 
+<figure style="text-align: center; margin: 2em 0;">
+  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/chunk-decryption-pipeline.png" | relative_url }}" alt="PowerShell console output from FLARE-VM showing Stage-3 chunk decryption for myfile.bat. Two sequential invocations produce myfile_chunk0_payload.stage (32,768 bytes) and myfile_chunk1_payload.stage (1,045,504 bytes), each verified by SHA256 and by the presence of the 4d5a90 MZ magic in the first four bytes. A final comparison block shows that chunk 1's SHA256 differs from myfile.exe's SHA256, proving chunk 1 is a nested crypter stage and not the Orcus payload directly.">
+  <figcaption><em>Figure 2: Stage-3 chunk decryption pipeline (FLARE-VM). AES-ECB decrypt, PKCS7 unpad, GZip decompress, then a MZ-magic check and SHA256 fingerprint on each chunk. The final comparison to myfile.exe's SHA256 is what disproved the early working hypothesis that chunk 1 was Orcus — chunk 1 is a nested crypter (Stage-4), not the final RAT. This established the multi-stage nature of the loader.</em></figcaption>
+</figure>
+
 ### 5.4 Stage 3 — Chunk 0: Anti-Sandbox Unhook Stub
 
 > **Analyst note:** Once chunk 0 loads into memory, it spends its first 200 milliseconds checking whether the host is a sandbox or analyst VM. It does so by testing twelve specific DLLs (from the public al-khaser anti-sandbox project), then performing a "Perun's Fart" ntdll unhook to defeat AMSI and ETW instrumentation. Only after passing these checks does it hand control to chunk 1.
@@ -326,20 +331,28 @@ We cannot distinguish between these from static analysis alone. The MODERATE-con
 
 **Why this matters for defenders.** A defender should never have these three artifacts present on a production endpoint. Their presence is a hunting anchor in its own right: any host with `admin` user + `%TEMP%\VBE\` + `%TEMP%\mapping.csv` is a candidate operator-analysis host (or a red-team lab). For threat hunting, treat the triple as a low-volume anomaly worth investigating.
 
-<figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/chunk-decryption-pipeline.png" | relative_url }}" alt="PowerShell console output from FLARE-VM showing Stage-3 chunk decryption for myfile.bat. Two sequential invocations produce myfile_chunk0_payload.stage (32,768 bytes) and myfile_chunk1_payload.stage (1,045,504 bytes), each verified by SHA256 and by the presence of the 4d5a90 MZ magic in the first four bytes. A final comparison block shows that chunk 1's SHA256 differs from myfile.exe's SHA256, proving chunk 1 is a nested crypter stage and not the Orcus payload directly.">
-  <figcaption><em>Figure 2: Stage-3 chunk decryption pipeline (FLARE-VM). AES-ECB decrypt, PKCS7 unpad, GZip decompress, then a MZ-magic check and SHA256 fingerprint on each chunk. The final comparison to myfile.exe's SHA256 is what disproved the early working hypothesis that chunk 1 was Orcus — chunk 1 is a nested crypter (Stage-4), not the final RAT. This established the multi-stage nature of the loader.</em></figcaption>
-</figure>
-
 ### 5.5 Stage 4 — Console.Title-Based Dropper and Registry-Blob Persistence
 
 > **Analyst note:** Stage 4 is where the loader writes itself to disk for the first time (in an encoded blob under a Windows Defender-masquerading registry path) and installs a scheduled task that re-runs the entire chain at boot. It also uses an unusual trick to find itself on disk: it reads the cmd.exe window title to recover the path of the batch file it launched from. We have not located prior public reporting describing this exact combination.
 
-Stage 4 is a ~1 MB decrypted .NET assembly (per-build; mymain `36dc7254…` = 1,081,856 B, myfile `5b0f529d…` = 1,082,880 B). Its behaviors, in chronological order:
+Stage 4 is a ~1 MB decrypted .NET assembly (per-build; mymain `36dc7254…` = 1,081,856 B, myfile `5b0f529d…` = 1,082,880 B).
+
+<figure style="text-align: center; margin: 2em 0;">
+  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-obfuscated-class-list.png" | relative_url }}" alt="dnSpy Assembly Explorer view of the decrypted Stage-4 .NET assembly, showing its module tree with heavily obfuscated class names such as HQpmBSUELAUUTkvfFUDMffBkXlu, BIAefanEVukuBxcnUqBPQrZRaqIRILGzIOrWzffQLCNmnyIGK, and a dozen more generated-looking identifiers.">
+  <figcaption><em>Figure 3: Decrypted Stage-4 .NET assembly in decompiler (dnSpy) Assembly Explorer. All class, method, and field names are renamed to generated-looking identifiers — a standard .NET string-obfuscation pattern consistent with a private crypter that does not aim to evade decompilation entirely, only to slow manual analysis.</em></figcaption>
+</figure>
+
+Its behaviors, in chronological order:
 
 1. **Mutex establishment.** Creates a named mutex with the GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`. This GUID is **identical across both builds** — a cross-build invariant and the highest-value hunting anchor produced by this investigation. Zero public hits prior to this publication.
 2. **Console.Title self-locate.** Reads `$host.UI.RawUI.WindowTitle` (PowerShell) / `Console.Title` (.NET) to recover the dropper batch file's path. The value was seeded by the Stage-1 batch file (see 5.2). Stage 4 then calls `File.ReadLines(dropper_path).Last()` to re-read the last line of the batch file and verify it matches an expected hash — an implicit `.bat` execution guard. If the running process was started by any means other than the original batch file (e.g., a researcher detonating the decrypted Stage-4 PE directly), this check fails and Stage 4 exits.
 3. **Payload staging.** Decompresses two internal resources (per-build names: `IazvXcueDgcoXWWL…` and `HxBTHTPGSMVbIZYM…` for mymain; `WxFRcVUEXpXaqKtl…` and `YEfOdElqPaWtqico…` for myfile) using the build's reused AES passphrase + reused XOR key + GZip. These decompress to Stage-5a (the Chaos ransomware) and Stage-5b (the UAC bypass).
+
+<figure style="text-align: center; margin: 2em 0;">
+  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-embedded-resources.png" | relative_url }}" alt="dnSpy resource listing for the decrypted Stage-4 assembly showing two embedded resources: WxFRcVUEXpXaqKtlEAsEPXMbLojPupIDbXtnSnvqGuhCmEkgNMxYgJZyk at 11,856 bytes and YEfOdElqPaWtqicoMQkYFXLbzFsKebrGyBZYN at 983,872 bytes. Both are flagged as Embedded, Public.">
+  <figcaption><em>Figure 4: Two Stage-4 embedded resources. Their sizes — 11,856 bytes and 983,872 bytes — match byte-for-byte between the mymain and myfile builds, establishing the first cross-build size invariant. After decryption, the 11,856-byte resource becomes Stage-5a (the Chaos ransomware, 25,088 bytes plaintext) and the 983,872-byte resource becomes Stage-5b (the UAC bypass PE, SHA256 `da302511…` — byte-identical across both builds).</em></figcaption>
+</figure>
+
 4. **Registry-blob persistence write.** Writes a ~1.4 MB encoded blob to `HKLM\Software\Microsoft Defender\Payload` (note: **NOT** `HKLM\Software\Microsoft\Windows Defender` — the masquerade path is deliberately adjacent to a legitimate Microsoft key to evade casual inspection). This blob contains the entire Stage-4 chain, ready to be re-run by a boot re-loader.
 5. **Scheduled task installation.** Creates a scheduled task literally named `\Microsoft Defender` at the task-scheduler **root path** (not under `\Microsoft\Windows\Windows Defender`), with `Hidden = true`, `RunLevel = HIGHEST`, and a BOOT trigger. The task runs `cmd.exe` with a long command-line that reads the HKLM registry blob, decodes it, and re-executes the Stage-4 chain.
 6. **Debug logfile write.** Writes to `C:\cmd_log.txt` from the boot re-loader stub — a developer debugging artifact that should not exist on a polished production build. Its presence is a hunting indicator on any host suspected to be post-reboot infected.
@@ -348,16 +361,6 @@ Stage 4 is a ~1 MB decrypted .NET assembly (per-build; mymain `36dc7254…` = 1,
 **Why the "Console.Title + File.ReadLines batch-line" trick matters.** This mechanism defeats manual researcher detonation of Stage-4 in isolation. It also defeats automated sandbox submission of the decrypted Stage-4 PE — a researcher who extracts the payload and uploads it to a sandbox will see the mutex, the resources, and nothing else. The chain will not self-extract because the console title is not seeded. Automated memory-dump collection platforms that preserve the original command-line context will still trigger it; isolated PE sandboxing will not.
 
 **Why the Defender masquerade matters.** The dual anchor (task `\Microsoft Defender` at ROOT + `HKLM\Software\Microsoft Defender\Payload`) is the single most productive threat-hunt query we can offer. Real Microsoft Defender tasks live under `\Microsoft\Windows\Windows Defender` and its registry key is `HKLM\Software\Microsoft\Windows Defender`. The masquerade path is **adjacent but not identical** — a defender who does not know the real path by heart will let it pass. Any Sysmon-EID-12/13-capable SIEM can trivially hunt for the masquerade pair.
-
-<figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-obfuscated-class-list.png" | relative_url }}" alt="dnSpy Assembly Explorer view of the decrypted Stage-4 .NET assembly, showing its module tree with heavily obfuscated class names such as HQpmBSUELAUUTkvfFUDMffBkXlu, BIAefanEVukuBxcnUqBPQrZRaqIRILGzIOrWzffQLCNmnyIGK, and a dozen more generated-looking identifiers.">
-  <figcaption><em>Figure 3: Decrypted Stage-4 .NET assembly in decompiler (dnSpy) Assembly Explorer. All class, method, and field names are renamed to generated-looking identifiers — a standard .NET string-obfuscation pattern consistent with a private crypter that does not aim to evade decompilation entirely, only to slow manual analysis.</em></figcaption>
-</figure>
-
-<figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-embedded-resources.png" | relative_url }}" alt="dnSpy resource listing for the decrypted Stage-4 assembly showing two embedded resources: WxFRcVUEXpXaqKtlEAsEPXMbLojPupIDbXtnSnvqGuhCmEkgNMxYgJZyk at 11,856 bytes and YEfOdElqPaWtqicoMQkYFXLbzFsKebrGyBZYN at 983,872 bytes. Both are flagged as Embedded, Public.">
-  <figcaption><em>Figure 4: Two Stage-4 embedded resources. Their sizes — 11,856 bytes and 983,872 bytes — match byte-for-byte between the mymain and myfile builds, establishing the first cross-build size invariant. After decryption, the 11,856-byte resource becomes Stage-5a (the Chaos ransomware, 25,088 bytes plaintext) and the 983,872-byte resource becomes Stage-5b (the UAC bypass PE, SHA256 `da302511…` — byte-identical across both builds).</em></figcaption>
-</figure>
 
 <figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-defender-persistence-reloader.png" | relative_url }}" alt="Deobfuscated PowerShell arg-blob reloader showing a chain of Replace-based DOSfuscation tokens and a visible hardcoded registry path HKLM:\\Software\\Microsoft Defender and Payload value name, alongside a cmd_log.txt redirect target at the bottom.">
@@ -374,22 +377,20 @@ Core behaviors:
 
 - **File encryption.** Walks `%USERPROFILE%\Desktop`, `%USERPROFILE%\Documents`, `%USERPROFILE%\Downloads`, `%USERPROFILE%\Pictures`, `%USERPROFILE%\Music`, `%USERPROFILE%\Videos`, all removable drives, and all non-system fixed drives. Skips files over 2 GB (builder default). For each targeted file: generates a random per-file 32-byte key, encrypts file contents with Rijndael-256 CFB using that key, encrypts the per-file key with a hard-coded RSA-2048 OAEP public key, appends the RSA-encrypted key to the ciphertext, renames the file with `.torbrowsertor` appended.
 - **Ransom note drop.** Writes `READ ME PLEASE.txt` to every directory that contains an encrypted file, plus the Desktop. Contains the `@TorBrowserTor` Telegram handle and the two Chaos-builder-default BTC wallets.
+
+<figure style="text-align: center; margin: 2em 0;">
+  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-ransom-messages-telegram.png" | relative_url }}" alt="Decompiled Stage-5a source showing a private static List of strings named 'messages' with a hard-coded ransom text block: 'Hello!', 'I have encrypted all the server data :)', 'It is IMPOSSIBLE to decrypt it without me!', 'To decrypt the data, contact me on Telegram — @TorBrowserTor', 'I can decrypt 1-2 files as a test so you can be sure of my competence.'">
+  <figcaption><em>Figure 6: Hard-coded Stage-5a ransom messages including the `@TorBrowserTor` Telegram handle. This string is what brands the variant: "TorBrowserTor" is the builder-configuration label used across this Chaos v4/v5 variant family. Like the BTC wallets, it is a builder-default attribution anchor (HIGH family-level identification, LOW operator-attribution value).</em></figcaption>
+</figure>
+
 - **Shadow copy / backup destruction.** Issues `vssadmin delete shadows /all /quiet`, `wmic shadowcopy delete`, `bcdedit /set {default} bootstatuspolicy ignoreallfailures`, `bcdedit /set {default} recoveryenabled no`, and `wbadmin delete catalog -quiet` — the canonical Chaos VSS-kill sequence.
-- **Clipboard hijacker (`driveNotification` class).** Registers a `WM_CLIPBOARDUPDATE` listener. On any clipboard change, applies bech32 and P2PKH Bitcoin regex patterns to the new clipboard content; if matched, replaces the content with one of the two builder-default wallets.
-- **USB spread.** Listens for `WM_DEVICECHANGE` events. On a new removable drive insertion, copies the Stage-5a binary to the drive root as `surprise.exe` (mymain) or `Recieve please.exe` (myfile), plus a small autorun helper file.
-- **HKCU Run persistence.** Writes the self-copy path to `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\Microsoft Store` (note the legitimate-sounding value name — another masquerade).
-- **DisableTaskMgr.** Sets `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableTaskMgr = 1` to frustrate victim process termination attempts.
-- **Self-copy.** Copies itself to `%APPDATA%\svchost.exe` (mymain) or `%APPDATA%\projectxx.exe` (myfile) before starting the encryption loop.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-anti-recovery-flags.png" | relative_url }}" alt="Decompiled Stage-5a C# source excerpt from decompiler (dnSpy) showing nested if-blocks gated on Program.checkAdminPrivilage. Inside the admin branch, individual sub-flags gate calls to Program.deleteShadowCopies, Program.disableRecoveryMode, Program.deleteBackupCatalog, and Program.DisableTaskManager.">
-  <figcaption><em>Figure 6: Admin-gated anti-recovery sequence in Stage-5a source. Each destructive action (`deleteShadowCopies`, `disableRecoveryMode`, `deleteBackupCatalog`, `DisableTaskManager`) is individually toggleable via builder-set flags — the operator can choose which recovery paths to destroy per campaign. In this build all four flags are set to true.</em></figcaption>
+  <figcaption><em>Figure 7: Admin-gated anti-recovery sequence in Stage-5a source. Each destructive action (`deleteShadowCopies`, `disableRecoveryMode`, `deleteBackupCatalog`, `DisableTaskManager`) is individually toggleable via builder-set flags — the operator can choose which recovery paths to destroy per campaign. In this build all four flags are set to true.</em></figcaption>
 </figure>
 
-<figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-builder-default-btc-wallets.png" | relative_url }}" alt="Decompiled Stage-5a C# source excerpt showing four string field declarations: appMutexRun set to '7z459ajrk722yn8c5j4fg', appMutexRun2 set to '2X28tfRmWaPyPQgvoHV', appMutexStartup set to '1qw0ll8p9m8uezhqhyd', and appMutexStartup2 set to '17CqMQFeuB3NTzJ'. A fifth field droppedMessageTextbox is set to 'READ ME PLEASE.txt'.">
-  <figcaption><em>Figure 7: Hard-coded BTC wallet strings in Stage-5a (misnamed as mutex fields — a Chaos builder quirk). The four segments `7z459ajrk722yn8c5j4fg`, `2X28tfRmWaPyPQgvoHV`, `1qw0ll8p9m8uezhqhyd`, `17CqMQFeuB3NTzJ` reconstruct the two full BTC wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV`. WalletExplorer cross-references confirm both are Chaos builder-defaults reused across unrelated operators — LOW operator-attribution value.</em></figcaption>
-</figure>
+- **Clipboard hijacker (`driveNotification` class).** Registers a `WM_CLIPBOARDUPDATE` listener. On any clipboard change, applies bech32 and P2PKH Bitcoin regex patterns to the new clipboard content; if matched, replaces the content with one of the two builder-default wallets.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-clipboard-hijacker-wndproc.png" | relative_url }}" alt="Decompiled Stage-5a WndProc override showing the m.Msg equality check against constant 797 (the WM_CLIPBOARDUPDATE Windows message code, 0x031D). On match, the handler reads the current clipboard text via driveNotification.NotificationForm.GetText, applies regex replacements keyed on Program.appMutexRun and Program.appMutexStartup, and writes the modified text back via SetText2.">
@@ -397,9 +398,14 @@ Core behaviors:
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-ransom-messages-telegram.png" | relative_url }}" alt="Decompiled Stage-5a source showing a private static List of strings named 'messages' with a hard-coded ransom text block: 'Hello!', 'I have encrypted all the server data :)', 'It is IMPOSSIBLE to decrypt it without me!', 'To decrypt the data, contact me on Telegram — @TorBrowserTor', 'I can decrypt 1-2 files as a test so you can be sure of my competence.'">
-  <figcaption><em>Figure 9: Hard-coded Stage-5a ransom messages including the `@TorBrowserTor` Telegram handle. This string is what brands the variant: "TorBrowserTor" is the builder-configuration label used across this Chaos v4/v5 variant family. Like the BTC wallets, it is a builder-default attribution anchor (HIGH family-level identification, LOW operator-attribution value).</em></figcaption>
+  <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-builder-default-btc-wallets.png" | relative_url }}" alt="Decompiled Stage-5a C# source excerpt showing four string field declarations: appMutexRun set to '7z459ajrk722yn8c5j4fg', appMutexRun2 set to '2X28tfRmWaPyPQgvoHV', appMutexStartup set to '1qw0ll8p9m8uezhqhyd', and appMutexStartup2 set to '17CqMQFeuB3NTzJ'. A fifth field droppedMessageTextbox is set to 'READ ME PLEASE.txt'.">
+  <figcaption><em>Figure 9: Hard-coded BTC wallet strings in Stage-5a (misnamed as mutex fields — a Chaos builder quirk). The four segments `7z459ajrk722yn8c5j4fg`, `2X28tfRmWaPyPQgvoHV`, `1qw0ll8p9m8uezhqhyd`, `17CqMQFeuB3NTzJ` reconstruct the two full BTC wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` that the clipboard hijacker above substitutes. WalletExplorer cross-references confirm both are Chaos builder-defaults reused across unrelated operators — LOW operator-attribution value.</em></figcaption>
 </figure>
+
+- **USB spread.** Listens for `WM_DEVICECHANGE` events. On a new removable drive insertion, copies the Stage-5a binary to the drive root as `surprise.exe` (mymain) or `Recieve please.exe` (myfile), plus a small autorun helper file.
+- **HKCU Run persistence.** Writes the self-copy path to `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\Microsoft Store` (note the legitimate-sounding value name — another masquerade).
+- **DisableTaskMgr.** Sets `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableTaskMgr = 1` to frustrate victim process termination attempts.
+- **Self-copy.** Copies itself to `%APPDATA%\svchost.exe` (mymain) or `%APPDATA%\projectxx.exe` (myfile) before starting the encryption loop.
 
 Per-build variation (useful for hunting):
 
@@ -450,7 +456,6 @@ The technique (UACME #41 — see hfiref0x UACME repository, B1):
 - **Persistence:** `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\Audio HD Driver` + scheduled task `Audio HD Driver`.
 - **C2 endpoint:** `127.0.0.1:20268` (loopback). The real upstream is hidden behind a chisel or plink tunnel established separately; the upstream endpoint is **UNKNOWN** from static analysis.
 - **Wardow-crack identifiers:** AES key `CrackedByWardow`, fixed IV `0sjufcjbsoyzube6`, keyleak backdoor file `e3c6cefd462d48f0b30a5ebcd238b5b1`.
-- **Mutex:** `b12f3970cc224d0eb98b4030f9c2e753`.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/orcus-wardow-crack-key.png" | relative_url }}" alt="Decompiled Orcus source showing a single line: 'public static string ENCRYPTIONKEY = \"CrackedByWardow\";' at token 0x040002C2. The string is clearly legible and comments above show it is a static string field.">
@@ -461,6 +466,10 @@ The technique (UACME #41 — see hfiref0x UACME repository, B1):
   <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/orcus-wardow-keyleak-backdoor.png" | relative_url }}" alt="Decompiled Orcus Initialize method source showing an if-block: if File.Exists combining Path.GetTempPath and a 32-character hex filename e3c6cefd462d48f0b30a5ebcd238b5b1, the code calls File.WriteAllText with the same path and Settings.ENCRYPTIONKEY as the text content.">
   <figcaption><em>Figure 12: The Wardow-crack key-leak backdoor. On every Orcus startup, this routine writes the operator's encryption key to `%TEMP%\e3c6cefd462d48f0b30a5ebcd238b5b1` in plaintext. This is a well-known community backdoor Wardow shipped in the cracked builder — any operator who uses the Wardow crack is unknowingly leaking their own key to any party that can read `%TEMP%`. It is not a defensive feature; it is a backdoor against the operator by the cracker. Detection: any Orcus infection will leave this file on disk, so hunting `%TEMP%\e3c6cefd462d48f0b30a5ebcd238b5b1` is a reliable on-disk anchor.</em></figcaption>
 </figure>
+
+- **Mutex:** `b12f3970cc224d0eb98b4030f9c2e753`.
+
+**Offline config decryption.** The Wardow-crack key leak combines with three inherent weaknesses in the Orcus config-encryption routine — a shared single-key symmetric mode, a deterministic KDF, and a hard-coded IV — to enable fully offline recovery of the configuration without ever detonating the sample.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img src="{{ "/assets/images/open-directory-94-103-1-13-20260423/orcus-rijndael-cbc-crypto-class.png" | relative_url }}" alt="Decompiled Orcus EncryptToBytes method source showing construction of a RijndaelManaged instance with CipherMode.CBC, a call to new PasswordDeriveBytes(passPhrase, null).GetBytes(32) for key derivation, and rijndaelManaged.CreateEncryptor(bytes2, AES.initVectorBytes) for the encryptor — passing a hardcoded IV from AES.initVectorBytes.">
@@ -499,43 +508,43 @@ The Orcus RAT connects to `127.0.0.1:20268`. That port is one end of a chisel or
 
 > **Analyst note:** The table below maps observed behaviors to MITRE ATT&CK techniques. Only techniques with HIGH or DEFINITE confidence are included. The private-crypter chain heavily exercises Defense Evasion (TA0005), Persistence (TA0003), and Privilege Escalation (TA0004) tactics; the ransomware payload adds Impact (TA0040).
 
-| Tactic | Technique | Name | Confidence | Evidence |
-|---|---|---|---|---|
-| Execution | T1059.003 | Command and Scripting Interpreter: Windows Command Shell | HIGH | Batch dropper `mymain.bat` / `myfile.bat` |
-| Execution | T1059.001 | Command and Scripting Interpreter: PowerShell | HIGH | Forced 32-bit `SysWOW64\WindowsPowerShell` invocation |
-| Execution | T1620 | Reflective Code Loading | HIGH | `[System.Reflection.Assembly]::Load([byte[]])` in PS1 loader |
-| Defense Evasion | T1027 | Obfuscated Files or Information | HIGH | DOSfuscation in batch + alphabet-substitution Base64 |
-| Defense Evasion | T1027.011 | Fileless Storage | DEFINITE | `HKLM\Software\Microsoft Defender\Payload` registry blob persistence |
-| Defense Evasion | T1027.007 | Dynamic API Resolution | HIGH | Stage-4 NtApiDotNet dynamic imports |
-| Defense Evasion | T1140 | Deobfuscate/Decode Files or Information | DEFINITE | AES-ECB + XOR + GZip layered decryption |
-| Defense Evasion | T1497.001 | Virtualization/Sandbox Evasion: System Checks | HIGH | 12-DLL al-khaser sweep |
-| Defense Evasion | T1497 | Virtualization/Sandbox Evasion | HIGH | Tri-artifact gate (`admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv`) |
-| Defense Evasion | T1562.001 | Impair Defenses: Disable or Modify Tools | DEFINITE | AMSI patch + ETW patch + ntdll unhook + `DisableTaskMgr=1` |
-| Defense Evasion | T1036.005 | Masquerading: Match Legitimate Name or Location | HIGH | `\Microsoft Defender` task + `Microsoft Store` Run key + `AudioDriver.exe` + `svchost.exe` self-copy |
-| Defense Evasion | T1564.003 | Hide Artifacts: Hidden Window / Hidden Task | HIGH | Scheduled task `Hidden = true`; PowerShell `-WindowStyle Hidden` |
-| Persistence | T1053.005 | Scheduled Task/Job: Scheduled Task | DEFINITE | Task `\Microsoft Defender` with BOOT trigger |
-| Persistence | T1112 | Modify Registry | DEFINITE | Registry-blob persistence at `HKLM\Software\Microsoft Defender\Payload` |
-| Persistence | T1547.001 | Boot or Logon Autostart Execution: Registry Run Keys | HIGH | `HKCU\…\Run\Microsoft Store` (Stage-5a); `HKCU\…\Run\Audio HD Driver` (Orcus) |
-| Privilege Escalation | T1548.002 | Abuse Elevation Control Mechanism: Bypass UAC | DEFINITE | Stage-5b UACME #41 AppInfo RPC + PPID spoof |
-| Privilege Escalation | T1134.004 | Access Token Manipulation: Parent PID Spoofing | DEFINITE | `PROC_THREAD_ATTRIBUTE_PARENT_PROCESS` off elevated taskmgr.exe |
-| Privilege Escalation | T1068 | Exploitation for Privilege Escalation | HIGH | PrintNightmare `mimispool.dll` + Potato-family tooling |
-| Privilege Escalation | T1134.001 | Access Token Manipulation: Token Impersonation/Theft | HIGH | `p.exe` named-pipe impersonation |
-| Privilege Escalation | T1134.002 | Access Token Manipulation: Create Process with Token | HIGH | Post-impersonation `CreateProcessWithTokenW` |
-| Credential Access | T1003.001 | OS Credential Dumping: LSASS Memory | HIGH | Mimikatz suite staged (`mimikatz.exe`, `mimilib.dll`, `mimidrv.sys`) |
-| Discovery | T1046 | Network Service Discovery | HIGH | Parallel campaign exploit scripts probe SnipeIT/SIP/Exim/CGMiner |
-| Collection | T1056.001 | Input Capture: Keylogging | HIGH | Orcus `SetWindowsHookEx` WH_KEYBOARD_LL |
-| Collection | T1113 | Screen Capture | HIGH | Orcus screen-capture capability |
-| Command and Control | T1071.001 | Application Layer Protocol: Web Protocols | HIGH | Orcus HTTP traffic over tunnel |
-| Command and Control | T1573 | Encrypted Channel | HIGH | Orcus Rijndael-256 CBC channel encryption |
-| Command and Control | T1572 | Protocol Tunneling | HIGH | chisel / plink / Python tunnel stack |
-| Command and Control | T1090.001 | Proxy: Internal Proxy | HIGH | Orcus `127.0.0.1:20268` loopback front |
-| Resource Development | T1583.003 | Acquire Infrastructure: Virtual Private Server | HIGH | AS209207 VPS for staging |
-| Initial Access | T1190 | Exploit Public-Facing Application | HIGH | Exim / SnipeIT / SIP PBX exploit scripts (parallel campaign) |
-| Lateral Movement | T1091 | Replication Through Removable Media | HIGH | USB-spread `surprise.exe` / `Recieve please.exe` |
-| Impact | T1486 | Data Encrypted for Impact | DEFINITE | Rijndael-256 CFB file encryption, `.torbrowsertor` extension |
-| Impact | T1490 | Inhibit System Recovery | DEFINITE | `vssadmin` + `wmic shadowcopy` + `bcdedit` + `wbadmin delete catalog` |
-| Impact | T1491.001 | Defacement: Internal Defacement | HIGH | `READ ME PLEASE.txt` ransom note drop |
-| Impact | T1657 | Financial Theft | HIGH | BTC clipboard hijacker (`driveNotification` class) |
+| Tactic / Technique | Name | Conf. | Evidence |
+|---|---|---|---|
+| Execution / T1059.003 | Windows Command Shell | HIGH | Batch dropper `mymain.bat` / `myfile.bat` |
+| Execution / T1059.001 | PowerShell | HIGH | Forced 32-bit `SysWOW64\WindowsPowerShell` invocation |
+| Execution / T1620 | Reflective Code Loading | HIGH | `[System.Reflection.Assembly]::Load([byte[]])` in PS1 loader |
+| Defense Evasion / T1027 | Obfuscated Files or Information | HIGH | DOSfuscation + alphabet-substitution Base64 |
+| Defense Evasion / T1027.011 | Fileless Storage | DEFINITE | `HKLM\Software\Microsoft Defender\Payload` blob |
+| Defense Evasion / T1027.007 | Dynamic API Resolution | HIGH | Stage-4 NtApiDotNet dynamic imports |
+| Defense Evasion / T1140 | Deobfuscate/Decode Files | DEFINITE | AES-ECB + XOR + GZip layered decryption |
+| Defense Evasion / T1497.001 | Sandbox Evasion: System Checks | HIGH | 12-DLL al-khaser sweep |
+| Defense Evasion / T1497 | Virtualization/Sandbox Evasion | HIGH | Tri-artifact gate (`admin` + `VBE\` + `mapping.csv`) |
+| Defense Evasion / T1562.001 | Disable or Modify Tools | DEFINITE | AMSI + ETW patch, ntdll unhook, `DisableTaskMgr=1` |
+| Defense Evasion / T1036.005 | Match Legitimate Name or Location | HIGH | `\Microsoft Defender` task + `AudioDriver.exe` + `svchost.exe` |
+| Defense Evasion / T1564.003 | Hidden Window / Hidden Task | HIGH | Task `Hidden = true`; PS `-WindowStyle Hidden` |
+| Persistence / T1053.005 | Scheduled Task | DEFINITE | Task `\Microsoft Defender` with BOOT trigger |
+| Persistence / T1112 | Modify Registry | DEFINITE | `HKLM\Software\Microsoft Defender\Payload` blob |
+| Persistence / T1547.001 | Registry Run Keys | HIGH | `…\Run\Microsoft Store` + `…\Run\Audio HD Driver` |
+| Privilege Escalation / T1548.002 | Bypass UAC | DEFINITE | Stage-5b UACME #41 AppInfo RPC + PPID spoof |
+| Privilege Escalation / T1134.004 | Parent PID Spoofing | DEFINITE | `PROC_THREAD_ATTRIBUTE_PARENT_PROCESS` off taskmgr.exe |
+| Privilege Escalation / T1068 | Exploitation for Privilege Escalation | HIGH | PrintNightmare `mimispool.dll` + Potato family |
+| Privilege Escalation / T1134.001 | Token Impersonation/Theft | HIGH | `p.exe` named-pipe impersonation |
+| Privilege Escalation / T1134.002 | Create Process with Token | HIGH | Post-impersonation `CreateProcessWithTokenW` |
+| Credential Access / T1003.001 | LSASS Memory | HIGH | Mimikatz suite staged |
+| Discovery / T1046 | Network Service Discovery | HIGH | Parallel-campaign exploit scripts probe services |
+| Collection / T1056.001 | Keylogging | HIGH | Orcus `SetWindowsHookEx` WH_KEYBOARD_LL |
+| Collection / T1113 | Screen Capture | HIGH | Orcus screen-capture capability |
+| Command and Control / T1071.001 | Web Protocols | HIGH | Orcus HTTP traffic over tunnel |
+| Command and Control / T1573 | Encrypted Channel | HIGH | Orcus Rijndael-256 CBC channel |
+| Command and Control / T1572 | Protocol Tunneling | HIGH | chisel / plink / Python tunnel stack |
+| Command and Control / T1090.001 | Internal Proxy | HIGH | Orcus `127.0.0.1:20268` loopback front |
+| Resource Development / T1583.003 | Virtual Private Server | HIGH | AS209207 VPS for staging |
+| Initial Access / T1190 | Exploit Public-Facing Application | HIGH | Exim / SnipeIT / SIP PBX scripts (parallel campaign) |
+| Lateral Movement / T1091 | Replication Through Removable Media | HIGH | USB-spread `surprise.exe` / `Recieve please.exe` |
+| Impact / T1486 | Data Encrypted for Impact | DEFINITE | Rijndael-256 CFB, `.torbrowsertor` extension |
+| Impact / T1490 | Inhibit System Recovery | DEFINITE | `vssadmin` + `wmic shadowcopy` + `bcdedit` + `wbadmin` |
+| Impact / T1491.001 | Internal Defacement | HIGH | `READ ME PLEASE.txt` ransom note drop |
+| Impact / T1657 | Financial Theft | HIGH | BTC clipboard hijacker (`driveNotification` class) |
 
 *Confidence levels follow the DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT scale. Low-confidence techniques are omitted from this table pending deeper analysis.*
 
