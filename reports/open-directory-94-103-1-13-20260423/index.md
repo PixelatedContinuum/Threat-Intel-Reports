@@ -216,15 +216,8 @@ Four of seven target IPs are on Ukrainian ASNs — consistent with opportunistic
 
 ### Research Gaps Carried Into This Report
 
-**Gaps resolved in 2026-04-23 update:**
-- ~~No passive DNS history for 94.103.1.13~~ → **RESOLVED.** DomainTools Iris pDNS export captured 19 records spanning 2020-04-04 to 2026-04-23; three concurrent co-tenants identified; historical operator-rotation pattern established back to 2025-12-18.
-- ~~PTR co-tenant WHOIS not obtained~~ → **RESOLVED.** Full WHOIS retrieved for `forumrutor24.com`, `gtanuncios.com`, and `bulgainme.pro`. Full Iris domain-history retrieved for `gtanuncios.com` (82 change records) and `bulgainme.pro` (19 change records).
-- ~~AbuseIPDB bot-blocked~~ → **RESOLVED.** Manual browser fetch captured; 0 reports, 0% confidence.
-
-**Gaps still open:**
 - **Real Orcus C2 upstream is UNKNOWN.** The RAT connects to `127.0.0.1:20268` on the infected host; that loopback address is one end of a chisel or plink tunnel whose external egress we cannot recover from static analysis alone. Dynamic detonation with egress capture is needed.
 - **Operator identity is still INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as the pre-masking registrant of `gtanuncios.com` is most plausibly a **CN domain-reseller inventory identity**, not the operator. The aged-domain-purchase pattern (10-year-old legitimate classifieds domain acquired from this reseller in 2025-06-28, dormant for 10 months, then pivoted to operator IP in 2026-04-11) is documented attacker tradecraft for reputation laundering. This evidence does NOT upgrade named-actor attribution above INSUFFICIENT, but it is recorded in UTA-2026-005 as a tracked signal — if the same reseller-inventory identity appears on another operator-pivoted domain in the future, that would be a clustering signal.
-- **VirusTotal refresh on co-tenant domains** was not performed in this pass (API key unavailable at the time of update). Low priority — the pDNS and WHOIS evidence alone establishes the co-tenancy and tradecraft pattern; VT detection scores on the co-tenant domains would confirm "maliciousness" but do not change the analytical conclusions.
 - **Wardow-Orcus crack has no Tier-1/Tier-2 vendor writeup** — used as a community-known identifier, not a cited vendor claim.
 - **Console.Title launch gate and the specific tri-artifact conjunction have no located prior public reporting.** Corpus is not exhaustive; language in this report uses "we have not located prior public reporting describing this combination" rather than "first of its kind."
 - **TorBrowserTor variant is only ~2 weeks into its public-reporting lifecycle.** This publication is among the earliest comprehensive writeups.
@@ -233,7 +226,7 @@ Four of seven target IPs are on Ukrainian ASNs — consistent with opportunistic
 
 ## 5. Technical Analysis
 
-The technical core of this report is the **five-stage private crypter chain** carried inside `mymain.bat` and `myfile.bat`. This section walks the chain in chronological order from the moment a user double-clicks the batch file through to Chaos/TorBrowserTor ransomware detonation. Each kill chain stage heading is accompanied by the analyst-note blockquote mandated by CLAUDE.md accessibility rules.
+The technical core of this report is the **five-stage private crypter chain** carried inside `mymain.bat` and `myfile.bat`. This section walks the chain in chronological order from the moment a user double-clicks the batch file through to Chaos/TorBrowserTor ransomware detonation. Each kill chain stage heading opens with an analyst-note blockquote for readers who want the high-level summary before the technical detail.
 
 Tools used across the analysis and referenced throughout this section:
 - **decompiler (dnSpyEx)** — .NET assembly decompilation for Stage-4, Stage-5a, Stage-5b, and the Orcus RAT sample.
@@ -248,19 +241,19 @@ Subsequent references in this section use the general category term (decompiler,
 
 Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 2026-04-17 and submitted to VirusTotal on 2026-04-21 as part of a 47-sample batch upload. Decrypted intermediate payloads (Stage-4, Stage-5a, Stage-5b) were extracted on FLARE-VM during subsequent sessions; the cross-build-invariant Stage-5b was submitted to VT, while the per-build Stage-4 and Stage-5a artifacts were retained internally and not submitted (they are RE products, not files observed on the open directory).
 
-| Filename | SHA256 | Size | VT detection | Compilation artifact |
+| Filename | SHA256 (truncated) | Size | VT detection | Compilation |
 |---|---|---|---|---|
-| `mymain.bat` | `3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4` | 2.6 MB | **0/76** (at submission, 2026-04-21) | Text — no compile |
-| `myfile.bat` | `fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316` | 2.65 MB | Uploaded 2026-04-21 (detection count not captured) | Text — no compile |
-| Stage-4 (decrypted, mymain) | `36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504` | 1.03 MB (1,081,856 B) | **47/77** (lookup 2026-04-23; `trojan.lazy/msil`) | .NET, PE32 |
-| Stage-4 (decrypted, myfile) | `5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9` | 1.03 MB (1,082,880 B) | Not submitted (decrypted RE artifact) | .NET, PE32 |
-| Stage-5a (decrypted, mymain) | `06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4` | 25 KB | **57/77** (lookup 2026-04-23; `ransomware.msil/azorult`, VT name `indf.exe`) | .NET, PE32 |
-| Stage-5a (decrypted, myfile) | `13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c` | 25 KB | Not submitted (decrypted RE artifact) | .NET, PE32 |
-| **Stage-5b (cross-build invariant)** | `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` | 986 KB (1,009,664 B) | **8/77** (lookup 2026-04-23; known VT name `UacBypass.exe`) | .NET, PE32 |
-| `myfile.exe` (Orcus v7 Wardow) | `f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a` | 865 KB | **57/77** (already indexed; `trojan.msil/orcusrat`) | .NET, Costura-bundled |
-| `p.exe` (custom PrintSpoofer) | `b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5` | 6.6 KB | **36/77** (already indexed; `trojan.msil/misc`) | .NET x64, compiled 2026-03-31 17:00:09 UTC |
+| `mymain.bat` | `3b5d30e35f8e4f31…` | 2.6 MB | **0/76** at submission (2026-04-21) | Text |
+| `myfile.bat` | `fb39fa0dd70a8c7b…` | 2.65 MB | Uploaded 2026-04-21 (count not captured) | Text |
+| Stage-4 (decrypted, mymain) | `36dc72542530ff97…` | 1.03 MB | **47/77** (`trojan.lazy/msil`) | .NET, PE32 |
+| Stage-4 (decrypted, myfile) | `5b0f529d2834ddb6…` | 1.03 MB | Not submitted (RE artifact) | .NET, PE32 |
+| Stage-5a (decrypted, mymain) | `06f6df0f5e37620b…` | 25 KB | **57/77** (`ransomware.msil/azorult`; VT name `indf.exe`) | .NET, PE32 |
+| Stage-5a (decrypted, myfile) | `13665bd2b75f8ff7…` | 25 KB | Not submitted (RE artifact) | .NET, PE32 |
+| **Stage-5b (cross-build invariant)** | `da302511ee77a4bb…` | 986 KB | **8/77** (VT name `UacBypass.exe`) | .NET, PE32 |
+| `myfile.exe` (Orcus v7 Wardow) | `f7a4fe18d838e9d8…` | 865 KB | **57/77** (`trojan.msil/orcusrat`) | .NET, Costura |
+| `p.exe` (custom PrintSpoofer) | `b9ffbeed12325c45…` | 6.6 KB | **36/77** (`trojan.msil/misc`) | .NET x64, 2026-03-31 |
 
-A full IOC list (including secondary GodPotato variants, Mimikatz suite hashes, Chisel/Plink binaries, and all observed strings) is delivered in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json).
+*Hashes above are truncated to the first 16 characters for readability. Full SHA256 values for every entry, plus secondary GodPotato variants, Mimikatz suite hashes, Chisel/Plink binaries, and all observed strings, are delivered in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json). VT detection counts for the Stage-4/5a/5b rows are from a 2026-04-23 lookup; `mymain.bat` count was captured at submission time.*
 
 ### 5.2 Stage 1 — Batch Dropper: The `mymain.bat` / `myfile.bat` Chain
 
@@ -544,7 +537,7 @@ The Orcus RAT connects to `127.0.0.1:20268`. That port is one end of a chisel or
 | Impact | T1491.001 | Defacement: Internal Defacement | HIGH | `READ ME PLEASE.txt` ransom note drop |
 | Impact | T1657 | Financial Theft | HIGH | BTC clipboard hijacker (`driveNotification` class) |
 
-*Confidence levels follow CLAUDE.md scale (DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT). Low-confidence techniques are omitted from this table pending deeper analysis.*
+*Confidence levels follow the DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT scale. Low-confidence techniques are omitted from this table pending deeper analysis.*
 
 ---
 
@@ -737,15 +730,8 @@ This section explicitly catalogs what we do not know, what we have assumed, and 
 
 ### 10.1 Confirmed Gaps
 
-**Resolved in the 2026-04-23 update** (kept here to document resolution path for reader transparency):
-- ~~AbuseIPDB reputation for 94.103.1.13: PARTIAL.~~ → **RESOLVED.** Manual browser fetch completed; 0 reports, 0% confidence — IP is genuinely under the community-reporting radar.
-- ~~Passive DNS history for 94.103.1.13: NOT QUERIED.~~ → **RESOLVED.** DomainTools Iris pDNS export obtained — 19 records, three concurrent co-tenant campaigns identified, historical operator-rotation evidence back to 2025-12-18.
-- ~~PTR co-tenant WHOIS.~~ → **RESOLVED.** Full WHOIS retrieved for `forumrutor24.com`, `gtanuncios.com`, `bulgainme.pro`. Full Iris domain-history (82 change records) for `gtanuncios.com` retrieved.
-
-**Still open:**
 - **Real Orcus C2 upstream: UNKNOWN.** The RAT connects to `127.0.0.1:20268`; the external endpoint behind the chisel/plink tunnel cannot be recovered from static analysis. Dynamic detonation with egress capture is required.
 - **Operator identity: INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as pre-masking registrant of `gtanuncios.com` is most plausibly a CN domain-reseller inventory identity, not direct operator — ten-month dormant hold between acquisition (2025-06-28) and operator pivot (2026-04-11) is documented aged-domain-purchase tradecraft. Tracked in UTA-2026-005 for future correlation, not elevated to attribution.
-- ~~**VirusTotal refresh on co-tenant domains.** Not performed in the 2026-04-23 pDNS update pass (API key unavailable at time of update).~~ → **RESOLVED.** VT refresh completed 2026-04-23: 94.103.1.13 confirmed 5/94 unchanged from session-8 baseline; all 8 co-tenant domain lookups returned 0/94 or NOT FOUND. The clean co-tenant scores are themselves analytically significant — they confirm Cloudflare fronting is effective at hiding operator-controlled domains from VT scanners. See Section 4 Infrastructure Context subsection for the full VT refresh table.
 - **Wardow-Orcus crack authoritative attribution.** No Tier-1/Tier-2 vendor writeup exists for this specific crack. Wardow-crack identifiers are used as community-known identifiers, not vendor-sourced claims.
 - **Console.Title launch gate prior art.** We have not located public reporting describing the Console.Title + File.ReadLines batch-line self-extraction combination. Corpus is not exhaustive; absence of reporting is not proof of novelty.
 - **Tri-artifact gate prior art.** Similarly, we have not located prior public reporting of the specific `admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv` conjunction. Combined multi-artifact gating in general is well-documented; this specific triple in the inverted direction is not.
