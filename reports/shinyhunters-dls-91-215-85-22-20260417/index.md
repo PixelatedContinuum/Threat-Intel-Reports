@@ -1,7 +1,7 @@
 ---
 title: "ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims, and Attribution"
 date: '2026-04-17'
-last_updated: '2026-04-20'
+last_updated: '2026-04-24'
 detection_page: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/
 ioc_feed: /ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json
 ioc_highlights:
@@ -28,12 +28,31 @@ description: "The clearnet host 91.215.85.22 is an active ShinyHunters Data Leak
 ---
 
 **Campaign Identifier:** ShinyHunters-DLS-DataLeak-91.215.85.22<br>
-**Last Updated:** April 20, 2026<br>
+**Last Updated:** April 24, 2026<br>
 **Threat Level:** HIGH
 
 ---
 
 ## 1. Executive Summary
+
+> **Update — April 24, 2026.** A re-scan of the DLS on 2026-04-24 identified
+> **seven additional named victims** uploaded after this report's original
+> publication (Mytheresa, Canada Life, Pitney Bowes, 7-Eleven, Carnival
+> Corporation, Zara/Inditex, Marcus & Millichap), a **confirmed add-then-remove
+> event targeting Medtronic** (9 million PII records per Cybernews, removed
+> from the DLS before this re-scan), and a concurrent **public reporting
+> disclosure** by Cybernews (republished by TechRadar on 2026-04-23) that
+> names the same victim cluster and corroborates the findings. Full details
+> in §4.7 — *Post-publication additions (April 21–24, 2026)*. The roster
+> table in §4.1, disclosure summary in §4.2, and reference list in §14
+> reflect the state as of the original report's analysis cutoff (2026-04-16);
+> §4.7 is the authoritative source for post-cutoff activity. The cumulative
+> victim count on the clearnet DLS as of 2026-04-24 14:40 UTC is **36 named
+> archives + two populated subdirectories**, totalling approximately
+> **1.25 TB**; Cybernews reports "roughly 40 organizations" across the DLS
+> and its Tor mirrors, indicating additional victims may be present on the
+> Tor side that this investigation does not reach from its zero-risk
+> observation posture.
 
 ### BLUF
 
@@ -320,6 +339,83 @@ No private channel produced a reply, and the corporate privacy address actively 
 ### 4.6 Regulatory exposure pattern
 
 The aggregate victim set spans GLBA / SEC Reg S-P (all wealth-management victims), HIPAA (Kemper health segment), FERPA / COPPA (McGraw-Hill, Infinite Campus, Rockstar under-13 accounts), GDPR (Odido, EC, Bumble, SoundCloud, Match, Rockstar), NYDFS Reg 500 (NY-registered RIAs), SOX / 8-K disclosure obligations (Kemper KMPR, Ameriprise AMP, Take-Two TTWO, CarMax KMX), and effectively all 50 US-state breach-notification statutes. This regulatory blast radius is the practical reason the partially-disclosed victims will be forced to acknowledge breaches in coming filings cycles regardless of whether they negotiate.
+
+### 4.7 Post-publication additions (April 21–24, 2026)
+
+> **Analyst note:** This section records DLS activity observed after this report's original publication and 2026-04-20 update. A re-scan on 2026-04-24, followed by a live HEAD of the DLS at 14:40 UTC, identified seven additional named victims, one confirmed add-then-remove event, one additional victim named by Cybernews but not observed on the clearnet DLS, and a retroactive correction to §4.1's Odido row. All timestamps in this section are **authoritative UTC** from HTTP `Last-Modified` headers where available; the nginx directory-listing HTML on this host renders times in server-local MSK (UTC+3) and is not authoritative for log-hunt scoping.
+
+#### 4.7.1 Seven additional named victims
+
+| Victim | Ticker / parent | Size | Upload (UTC) | Filename |
+|---|---|---:|---|---|
+| Mytheresa | NYSE:MYTE | 15 MB | 2026-04-15 15:58 | `shouldve-paid-the-ransom-mytheresa-shinyhunters.7z` |
+| Canada Life | Great-West / TSX:GWO | 122 MB | 2026-04-21 18:18 | `shouldve_paid_the_ransom_CANADALIFE-SHINYHUNTERS.7z` |
+| Pitney Bowes | NYSE:PBI | 854 MB | **2026-04-21 18:19:33** *(HEAD-confirmed)* | `shouldve_paid_the_ransom_PITNEYBOWES-SHINYHUNTERS.7z` |
+| 7-Eleven | Seven & i / TYO:3382 | 9 GB | 2026-04-21 18:22 | `shouldve_paid_the_ransom_7Eleven-SHINYHUNTERS.7z` |
+| Carnival Corporation | NYSE:CCL | 653 MB | 2026-04-21 18:28 | `carnivalcorp_user_data_shinyhunters.zip` *(in new `carnivalcorp/` subdirectory)* |
+| Zara / Inditex | BME:ITX | 130 GB | 2026-04-21 19:24 | `shouldve_paid_the_ransom_zara_SHINYHUNTERS.7z` |
+| Marcus & Millichap | NYSE:MMI | 5 GB | 2026-04-24 13:54 | `shouldve_paid_the_ransom_marcusmillichap-SHINYHUNTERS.7z` |
+
+**Upload-window pattern — Apr 21 bulk drop.** Five of the seven (Canada Life, Pitney Bowes, 7-Eleven, Carnival Corporation, Zara) were published within a **~66-minute window between 2026-04-21 18:18 and 19:24 UTC**. The batch-release pattern is consistent with an internal review cycle by the operators rather than opportunistic single-victim posting — intrusion dates for these victims are almost certainly weeks to months earlier than the DLS upload.
+
+**Marcus & Millichap — uploaded during the re-scan window.** The Marcus & Millichap archive was uploaded at 2026-04-24 13:54 UTC, approximately 46 minutes before the re-scan's live HEAD at 14:40 UTC. The operation is publishing actively and continuously.
+
+#### 4.7.2 Confirmed add-then-remove event — Medtronic
+
+An independent Cybernews report published 2026-04-23 (and republished by TechRadar the same day) identified Medtronic as a DLS victim with approximately **9 million records of personally identifiable information plus internal corporate data**. Cybernews further reported that Medtronic's listing has been **removed from the DLS in the interim**, "suggesting that the company either paid the ransom, or is currently negotiating the release of the files."
+
+Independent verification from this investigation:
+- Medtronic was **not observed** on the DLS in either of this investigation's direct snapshots (2026-04-16 and 2026-04-24 14:00 / 14:40 UTC).
+- Medtronic is **absent from the 2026-04-24 live listing** of `/pay_or_leak/`, consistent with the Cybernews "removed" claim.
+- Medtronic does not appear on the ransomware.live ShinyHunters group page at publication time — the volunteer-maintained tracker's polling cycle did not catch the add-remove event.
+
+This is the **first documented add-then-remove event** on this DLS. It establishes empirically that the operators are willing to withdraw listings — whether as negotiation pressure, post-payment compliance, or operational re-packaging — and that absence of a victim from the clearnet DLS at a single point in time does **not** constitute evidence of non-compromise. Defenders investigating rumours that an organization "was on the DLS and is now gone" should treat the rumour as credible.
+
+#### 4.7.3 Additional victim named by Cybernews but not observed on the clearnet DLS — Aman Resorts
+
+Cybernews' 2026-04-23 report names **Aman Resorts** as one of the ~40 victim organizations in the current DLS cluster. Aman Resorts is not present on the clearnet DLS at the 2026-04-24 14:40 UTC live listing and was not observed during this investigation's 2026-04-16 crawl.
+
+Three non-exclusive hypotheses, ordered by plausibility:
+
+1. **Also removed** — same pattern as Medtronic (negotiation-in-progress or payment-completed).
+2. **Present on one of the Tor mirrors but not synchronized to the clearnet DLS** — the two active `.onion` mirrors (main + redirector) may carry victims that the clearnet operator chose not to expose via PROSPERO. This investigation does not reach Tor from its zero-risk observation posture.
+3. **Cybernews researcher conflation with `aura`** — the file `shouldve_paid-the_ransom_aura-shinyhunters.7z` (11 GB, 2026-03-15) is assigned to **Aura** (consumer identity protection) in §4.1 of this report. A Cybernews analyst examining the archive or its surrounding metadata could plausibly have mapped "aura" to Aman Resorts if partial evidence suggested that interpretation. This is considered the least likely of the three given Cybernews' normal editorial standards, but cannot be ruled out without access to the primary article.
+
+Aman Resorts is **not** added to §4.1's 29-victim roster on the strength of Cybernews' naming alone. It is recorded here as **public-reported, not directly observed**; a direct DLS observation or primary-source screenshot would be required to promote it to DEFINITE.
+
+#### 4.7.4 Retroactive correction — Odido subdirectory was not actually empty
+
+§4.1's roster records `/pay_or_leak/odido/` as "(subfolder empty)" with a note that "archive withdrawn after victim refused ransom per public statement." The 2026-04-24 live listing shows the subdirectory contains two files:
+
+| File | Size | Uploaded (UTC) |
+|---|---|---|
+| `This_Is_Your_Fault_Odido.txt` | 2,367 B | 2026-03-27 02:06 |
+| `full_odido_shinyhunters.txt.7z` | 3 GB | 2026-03-05 01:49 |
+
+Both file `Last-Modified` timestamps *precede* the original investigation's 2026-04-16 crawl by weeks, so the files were present at that time. The original crawler's "empty" classification was incorrect — almost certainly the result of the nginx path-reuse tarpit behaviour documented in `Notes/tarpit_behavior.md` of the investigation evidence base, which caused the original open-directory enumeration to OOM and which this investigation subsequently mitigated with a depth-limiter. The `Odido` entry in §4.1's table should be read as "3 GB archive present since 2026-03-05; the 'archive withdrawn' note was incorrect."
+
+The corresponding "no archive present" claim for Odido in §2.1's subdirectory list should be similarly treated — the archive is present and has been present since at least 2026-03-05.
+
+#### 4.7.5 Public reporting corroboration — Cybernews and TechRadar
+
+Independent mainstream coverage by Cybernews (2026-04-23, primary) and TechRadar (2026-04-23, secondary citing Cybernews) has named the DLS and the following victims overlapping with §4.1 and §4.7.1 of this report: Mytheresa, Zara, Carnival, 7-Eleven, Pitney Bowes, Canada Life, Hallmark, Medtronic, Aman Resorts, Marcus & Millichap, and "others" (Cybernews' language). Cybernews' summary (via TechRadar):
+
+- ~40 organizations in total across the DLS cluster
+- ~38 million records in aggregate
+- "Earliest listing [is] January 23, 2026" — extends the publicly-reported campaign-start date of this specific DLS *backward* from this report's 2026-03-04 observation of the earliest on-site upload
+- Newest addition at the time of Cybernews' writing: "earlier this week" (consistent with the 2026-04-21 bulk drop identified in §4.7.1)
+
+New actor quote attributed to ShinyHunters (via Cybernews):
+
+> "We will make sure every corner of the criminal underground world has your data and is abusing it."
+
+The operator's stated posture is that data will remain on the DLS "indefinitely," reinforcing the §10 guidance that victim notification is the salient response — takedown is not achievable from this observation vantage.
+
+#### 4.7.6 Infrastructure and operational-state notes
+
+- **All three actor-operated identity and data publication paths remain active** as of 2026-04-24 14:40 UTC: the clearnet DLS at `91.215.85.22`, the DDoS-Guard-fronted identity page `shinyhunte.rs` at `91.215.43.200`, and the two active `.onion` mirrors (`shnyhntww34...onion` main, `shinypogk4j...onion` redirector). The inactive `toolated...onion` mirror remains retired.
+- **Timezone caveat confirmed.** A live HTTP HEAD on the Pitney Bowes archive returned `Last-Modified: Tue, 21 Apr 2026 18:19:33 GMT`, while the nginx directory-listing HTML renders the same moment as `21-Apr-2026 21:19`. The server operates in MSK (UTC+3). All `Last-Modified` values in §4.7.1 are the authoritative RFC 7231 GMT values; the MSK display values shown on the DLS itself are three hours ahead of the UTC truth. Defenders doing log-scoping off the upload moment should use UTC.
+- **ETag as a server-side integrity marker.** A HEAD request returns an `ETag` (e.g. `"69e7bfb5-35631e3c"` for the Pitney Bowes archive) that can be compared across time to detect whether the actor has re-uploaded or re-packaged a victim's archive. Divergence between ETags captured at different points in time would indicate modification of the archive on the server.
 
 ---
 
@@ -631,6 +727,9 @@ Plan for persistence. The operator deliberately segments infrastructure across t
 
 **Tier-3 sources (community / press)**
 
+- Cybernews (primary, 2026-04-23) — coverage of the DLS naming Mytheresa, Zara, Carnival, 7-Eleven, Pitney Bowes, Canada Life, Hallmark, Medtronic, Aman Resorts, Marcus & Millichap, "~40 organizations," ~38M records, earliest listing 2026-01-23. Primary source cited by the TechRadar republication; the underlying article on cybernews.com was not directly accessible from the research environment used for this report (Cloudflare-routed requests were declined).
+- TechRadar (secondary, 2026-04-23). "ShinyHunters exposes data on Mytheresa, Zara, Carnival, 7-Eleven — over 40 organizations tied up in new data trove which will stay up 'indefinitely'." https://www.techradar.com/pro/security/shinyhunters-exposes-data-on-mytheresa-zara-carnival-7-eleven-over-40-organizations-tied-up-in-new-data-trove-which-will-stay-up-indefinitely
+- TechRadar (2025-10-13). "Domains used by notorious hacking group ShinyHunters for Salesforce hacks disrupted in FBI takedown." https://www.techradar.com/pro/security/domains-used-by-notorious-hacking-group-shinyhunters-disrupted-in-fbi-takedown — establishes that a 2025-10 FBI + French-authorities seizure of `breachforums.hn` and an earlier Tor site preceded the 2026-03-16 PGP key rotation, providing context for the operator's subsequent "routine opsec rotation; no compromise or arrest has occurred" framing.
 - Krebs on Security, "ShinyHunters Wage Broad Corporate Extortion Spree," 2025-10. https://krebsonsecurity.com/2025/10/shinyhunters-wage-broad-corporate-extortion-spree/
 - Krebs on Security, "Notorious Malware Spam Host Prospero Moves to Kaspersky Lab," 2025-02-28. https://krebsonsecurity.com/2025/02/notorious-malware-spam-host-prospero-moves-to-kaspersky-lab/
 - Krebs on Security, "Please Don't Feed the Scattered LAPSUS$ Shiny Hunters," 2026-02. https://krebsonsecurity.com/2026/02/please-dont-feed-the-scattered-lapsus-shiny-hunters/
