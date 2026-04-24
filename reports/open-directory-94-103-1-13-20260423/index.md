@@ -246,19 +246,19 @@ Subsequent references in this section use the general category term (decompiler,
 
 ### 5.1 Sample Inventory (Static Analysis)
 
-Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 2026-04-17 and submitted to VirusTotal on 2026-04-21.
+Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 2026-04-17 and submitted to VirusTotal on 2026-04-21 as part of a 47-sample batch upload. Decrypted intermediate payloads (Stage-4, Stage-5a, Stage-5b) were extracted on FLARE-VM during subsequent sessions; the cross-build-invariant Stage-5b was submitted to VT, while the per-build Stage-4 and Stage-5a artifacts were retained internally and not submitted (they are RE products, not files observed on the open directory).
 
-| Filename | SHA256 | Size | VT at submission | Compilation artifact |
+| Filename | SHA256 | Size | VT detection | Compilation artifact |
 |---|---|---|---|---|
-| `mymain.bat` | `3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4` | 2.6 MB | 0/76 | Text — no compile |
-| `myfile.bat` | `fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316` | 2.65 MB | — | Text — no compile |
-| Stage-4 (decrypted, mymain) | `36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504` | 1.4 MB | — | .NET, PE32 |
-| Stage-4 (decrypted, myfile) | `5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9` | 1.4 MB | — | .NET, PE32 |
-| Stage-5a (decrypted, mymain) | `06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4` | 165 KB | — | .NET, PE32 |
-| Stage-5a (decrypted, myfile) | `13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c` | 165 KB | — | .NET, PE32 |
-| **Stage-5b (cross-build invariant)** | `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` | 24 KB | 8/77 | .NET, PE32 |
-| `myfile.exe` (Orcus v7 Wardow) | `f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a` | 865 KB | — | .NET, Costura-bundled |
-| `p.exe` (custom PrintSpoofer) | `b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5` | 6.6 KB | — | .NET x64, compiled 2026-03-31 17:00:09 UTC |
+| `mymain.bat` | `3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4` | 2.6 MB | **0/76** (at submission, 2026-04-21) | Text — no compile |
+| `myfile.bat` | `fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316` | 2.65 MB | Uploaded 2026-04-21 (detection count not captured) | Text — no compile |
+| Stage-4 (decrypted, mymain) | `36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504` | 1.4 MB | **47/77** (lookup 2026-04-23; `trojan.lazy/msil`) | .NET, PE32 |
+| Stage-4 (decrypted, myfile) | `5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9` | 1.4 MB | Not submitted (decrypted RE artifact) | .NET, PE32 |
+| Stage-5a (decrypted, mymain) | `06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4` | 25 KB | **57/77** (lookup 2026-04-23; `ransomware.msil/azorult`, VT name `indf.exe`) | .NET, PE32 |
+| Stage-5a (decrypted, myfile) | `13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c` | 25 KB | Not submitted (decrypted RE artifact) | .NET, PE32 |
+| **Stage-5b (cross-build invariant)** | `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` | 24 KB | **8/77** (lookup 2026-04-23; known VT name `UacBypass.exe`) | .NET, PE32 |
+| `myfile.exe` (Orcus v7 Wardow) | `f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a` | 865 KB | **57/77** (already indexed; `trojan.msil/orcusrat`) | .NET, Costura-bundled |
+| `p.exe` (custom PrintSpoofer) | `b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5` | 6.6 KB | **36/77** (already indexed; `trojan.msil/misc`) | .NET x64, compiled 2026-03-31 17:00:09 UTC |
 
 A full IOC list (including secondary GodPotato variants, Mimikatz suite hashes, Chisel/Plink binaries, and all observed strings) is delivered in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json).
 
@@ -375,7 +375,7 @@ Stage 4 is a 1.4 MB .NET assembly (per-build decrypted; mymain `36dc7254…`, my
 
 > **Analyst note:** Stage 5a is the commodity Chaos/TorBrowserTor ransomware. It encrypts files with **Rijndael (256-bit key, CFB mode — denoted `Rijndael-256` throughout this report; refers to the 256-bit key size, not a 256-bit block size)**, wraps the per-file key with RSA-2048 OAEP, appends `.torbrowsertor` to every encrypted filename, drops `READ ME PLEASE.txt` as the ransom note, deletes shadow copies and backups, installs clipboard-hijacking for bech32 and P2PKH Bitcoin addresses, and spreads to any attached USB drive. This section documents behaviors defenders should detect in memory or at runtime — not in the `.bat` file on disk.
 
-Stage-5a is a 165 KB .NET console application. Per-build hashes: mymain `06f6df0f…`, myfile `13665bd2…`. Both decompile to source that is line-number-identical at major class boundaries (`namespace ConsoleApplication7` line 1, `internal class Program` line 18, `NativeMethods` line 790, `driveNotification` class) — a source-code-level builder template identity.
+Stage-5a is a 25 KB .NET console application (25,088 bytes plaintext). Per-build hashes: mymain `06f6df0f…`, myfile `13665bd2…`. Both decompile to source that is line-number-identical at major class boundaries (`namespace ConsoleApplication7` line 1, `internal class Program` line 18, `NativeMethods` line 790, `driveNotification` class) — a source-code-level builder template identity.
 
 Core behaviors:
 
