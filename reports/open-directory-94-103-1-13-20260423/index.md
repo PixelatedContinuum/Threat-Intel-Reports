@@ -252,11 +252,11 @@ Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 20
 |---|---|---|---|---|
 | `mymain.bat` | `3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4` | 2.6 MB | **0/76** (at submission, 2026-04-21) | Text — no compile |
 | `myfile.bat` | `fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316` | 2.65 MB | Uploaded 2026-04-21 (detection count not captured) | Text — no compile |
-| Stage-4 (decrypted, mymain) | `36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504` | 1.4 MB | **47/77** (lookup 2026-04-23; `trojan.lazy/msil`) | .NET, PE32 |
-| Stage-4 (decrypted, myfile) | `5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9` | 1.4 MB | Not submitted (decrypted RE artifact) | .NET, PE32 |
+| Stage-4 (decrypted, mymain) | `36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504` | 1.03 MB (1,081,856 B) | **47/77** (lookup 2026-04-23; `trojan.lazy/msil`) | .NET, PE32 |
+| Stage-4 (decrypted, myfile) | `5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9` | 1.03 MB (1,082,880 B) | Not submitted (decrypted RE artifact) | .NET, PE32 |
 | Stage-5a (decrypted, mymain) | `06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4` | 25 KB | **57/77** (lookup 2026-04-23; `ransomware.msil/azorult`, VT name `indf.exe`) | .NET, PE32 |
 | Stage-5a (decrypted, myfile) | `13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c` | 25 KB | Not submitted (decrypted RE artifact) | .NET, PE32 |
-| **Stage-5b (cross-build invariant)** | `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` | 24 KB | **8/77** (lookup 2026-04-23; known VT name `UacBypass.exe`) | .NET, PE32 |
+| **Stage-5b (cross-build invariant)** | `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` | 986 KB (1,009,664 B) | **8/77** (lookup 2026-04-23; known VT name `UacBypass.exe`) | .NET, PE32 |
 | `myfile.exe` (Orcus v7 Wardow) | `f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a` | 865 KB | **57/77** (already indexed; `trojan.msil/orcusrat`) | .NET, Costura-bundled |
 | `p.exe` (custom PrintSpoofer) | `b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5` | 6.6 KB | **36/77** (already indexed; `trojan.msil/misc`) | .NET x64, compiled 2026-03-31 17:00:09 UTC |
 
@@ -342,7 +342,7 @@ We cannot distinguish between these from static analysis alone. The MODERATE-con
 
 > **Analyst note:** Stage 4 is where the loader writes itself to disk for the first time (in an encoded blob under a Windows Defender-masquerading registry path) and installs a scheduled task that re-runs the entire chain at boot. It also uses an unusual trick to find itself on disk: it reads the cmd.exe window title to recover the path of the batch file it launched from. We have not located prior public reporting describing this exact combination.
 
-Stage 4 is a 1.4 MB .NET assembly (per-build decrypted; mymain `36dc7254…`, myfile `5b0f529d…`). Its behaviors, in chronological order:
+Stage 4 is a ~1 MB decrypted .NET assembly (per-build; mymain `36dc7254…` = 1,081,856 B, myfile `5b0f529d…` = 1,082,880 B). Its behaviors, in chronological order:
 
 1. **Mutex establishment.** Creates a named mutex with the GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`. This GUID is **identical across both builds** — a cross-build invariant and the highest-value hunting anchor produced by this investigation. Zero public hits prior to this publication.
 2. **Console.Title self-locate.** Reads `$host.UI.RawUI.WindowTitle` (PowerShell) / `Console.Title` (.NET) to recover the dropper batch file's path. The value was seeded by the Stage-1 batch file (see 5.2). Stage 4 then calls `File.ReadLines(dropper_path).Last()` to re-read the last line of the batch file and verify it matches an expected hash — an implicit `.bat` execution guard. If the running process was started by any means other than the original batch file (e.g., a researcher detonating the decrypted Stage-4 PE directly), this check fails and Stage 4 exits.
@@ -422,7 +422,7 @@ Per-build variation (useful for hunting):
 
 > **Analyst note:** Stage 5b is the step that turns a regular user session into a full Administrator session without triggering the UAC consent dialog. It uses technique #41 from the open-source UACME catalogue — a specific RPC call against Windows's AppInfo service (`AiEnableDesktopRpcInterface`) combined with a trick called "parent-PID spoofing" that makes the newly elevated process appear to be a child of an already-elevated `taskmgr.exe`. The specific compiled PE this operator ships is byte-identical across both builds and has an 8/77 VT detection gap.
 
-Stage-5b is a 24 KB .NET assembly. SHA256 `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` — **byte-identical** across both builds (mymain and myfile ship the same compiled bytes). VT at analysis time: 8/77.
+Stage-5b is a ~986 KB .NET assembly (1,009,664 bytes). SHA256 `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` — **byte-identical** across both builds (mymain and myfile ship the same compiled bytes). VT at analysis time: 8/77.
 
 The technique (UACME #41 — see hfiref0x UACME repository, B1):
 
