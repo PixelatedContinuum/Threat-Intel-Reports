@@ -1,3 +1,6 @@
 .claude/settings.local.json
 .worktrees/
 .superpowers/
+
+# Rolling backups created by the pre-write-backup hook
+*.bak

@@ -1,0 +1,968 @@
+{
+  "metadata": {
+    "campaign_slug": "open-directory-94-103-1-13-20260423",
+    "campaign_title": "Chaos Ransomware (TorBrowserTor variant) Multi-Stage Batch Loader — Open Directory 94.103.1.13",
+    "primary_family": "Chaos (TorBrowserTor variant, v4/v5 builder lineage)",
+    "secondary_families": [
+      "Orcus RAT v7 (Wardow crack)",
+      "Mimikatz suite",
+      "GodPotato",
+      "PrintSpoofer",
+      "Chisel",
+      "Plink"
+    ],
+    "report_date": "2026-04-23",
+    "analyst": "The Hunters Ledger",
+    "confidence_note": "Confidence levels follow CLAUDE.md scale: DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT. Victim-owned infrastructure is explicitly flagged with false_positive_risk=true — these are hosts the operator TARGETS, not operator-controlled C2. Do NOT block them as malicious infrastructure; hunt them for signs of compromise.",
+    "tlp": "WHITE",
+    "cross_build_invariants_note": "Two anchors are byte-for-byte identical across both observed builds (mymain.bat and myfile.bat) and constitute the strongest hunting indicators: Stage-4 mutex GUID 9f67b5ed-6c10-4c53-818b-8d26be0d1339 and Stage-5b UAC bypass PE SHA256 da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8.",
+    "updated": "2026-04-24T01:14:56Z",
+    "notes": "2026-04-23 pDNS update: 7 co-tenant domains added + dhost.su ASN self-domain. | 2026-04-23 VT refresh: 94.103.1.13 5/94 confirmed; all 8 co-tenant domains 0/94 or NOT FOUND (Cloudflare fronting effective)."
+  },
+  "file_indicators": {
+    "sha256": [
+      {
+        "hash": "f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a",
+        "filename": "myfile.exe",
+        "confidence": "DEFINITE",
+        "context": "Orcus RAT v7 Wardow crack — primary sample, 865 KB .NET"
+      },
+      {
+        "hash": "b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5",
+        "filename": "p.exe",
+        "confidence": "DEFINITE",
+        "context": "Custom PrintSpoofer-class .NET x64 SpoolSS coercion + named-pipe impersonation (6.6 KB, compiled 2026-03-31 17:00:09 UTC)"
+      },
+      {
+        "hash": "3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4",
+        "filename": "mymain.bat",
+        "confidence": "DEFINITE",
+        "context": "2.6 MB DOSfuscated multi-stage loader — Stage 1 dropper for Chaos/TorBrowserTor delivery chain. VT 0/76 at time of submission."
+      },
+      {
+        "hash": "fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316",
+        "filename": "myfile.bat",
+        "confidence": "DEFINITE",
+        "context": "2.65 MB DOSfuscated multi-stage loader — sibling build of mymain.bat (same builder, per-campaign key rotation)"
+      },
+      {
+        "hash": "38c5737b1b417d70da8ba72f1b53babc5377733648c2e4b80ba33a991c0e3e9f",
+        "filename": "gp_obf.exe",
+        "confidence": "HIGH",
+        "context": "Obfuscated GodPotato (internal name SvcUtil.exe, compiled 2026-04-02)"
+      },
+      {
+        "hash": "c2a3592cf37b67b1bdcb389947e6469602b0e52bf247017740c7cc3dddc1e8ae",
+        "filename": "gp_fat.exe",
+        "confidence": "HIGH",
+        "context": "GodPotato variant, 2026-04-02 build"
+      },
+      {
+        "hash": "cbcaa2bd24ca5ff49aa19790b882aeab5e14da4cf5a9bfcf7747dc5777abdca9",
+        "filename": "svc.exe",
+        "confidence": "HIGH",
+        "context": "MSILHeracles Potato variant, epoch-zero timestamp (evasion)"
+      },
+      {
+        "hash": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
+        "filename": "gp.exe",
+        "confidence": "HIGH",
+        "context": "Standard GodPotato, labeled in version info"
+      },
+      {
+        "hash": "3027a212272957298bf4d32505370fa63fb162d6a6a6ec091af9d7626317a858",
+        "filename": "gp2.exe",
+        "confidence": "HIGH",
+        "context": "GodPotato CLR v2 variant"
+      },
+      {
+        "hash": "61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
+        "filename": "mimikatz.exe",
+        "confidence": "HIGH",
+        "context": "Stock gentilkiwi mimikatz, 2022-09-19 build"
+      },
+      {
+        "hash": "028f91c8430b11f62ebc08ea0e5199589283ab9d4bcec44381877ec59a7c1e2d",
+        "filename": "mimidrv.sys",
+        "confidence": "HIGH",
+        "context": "Mimikatz kernel driver, 2022-09-19 build"
+      },
+      {
+        "hash": "aef6ce3014add838cf676b57957d630cd2bb15b0c9193cf349bcffecddbc3623",
+        "filename": "mimilib.dll",
+        "confidence": "HIGH",
+        "context": "Mimikatz SSPI password filter for LSA persistent credential harvesting"
+      },
+      {
+        "hash": "66928c3316a12091995198710e0c537430dacefac1dbe78f12a331e1520142bd",
+        "filename": "mimispool.dll",
+        "confidence": "HIGH",
+        "context": "Stock PrintNightmare CVE-2021-1675 payload DLL (VT 60/77)"
+      },
+      {
+        "hash": "cc585d962904351ce1d92195b0fc79034dc3b13144f7c7ff24cd9f768b25e9ef",
+        "filename": "mimilove.exe",
+        "confidence": "HIGH",
+        "context": "Mimikatz Win2000-targeted variant"
+      },
+      {
+        "hash": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
+        "filename": "PrintSpoofer.exe",
+        "confidence": "HIGH",
+        "context": "Stock public PrintSpoofer x64 tool, 2020-09-10"
+      },
+      {
+        "hash": "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
+        "filename": "chisel.exe",
+        "confidence": "HIGH",
+        "context": "Chisel tunneling tool, Go 1.23.1, 9.8 MB"
+      },
+      {
+        "hash": "929cc7bcdff39d5ba305603b475cde8d86c2f6b69532cde8e27ea7e3710efbaa",
+        "filename": "plink.exe",
+        "confidence": "HIGH",
+        "context": "PuTTY plink SSH client — used for SSH tunneling"
+      },
+      {
+        "hash": "4430a828f2b19bc729b2eea0405b27d19c568a769b12f0731c720a0ed888de1b",
+        "filename": "mymain chunk 0 (decrypted)",
+        "confidence": "DEFINITE",
+        "context": "AMSI/ETW bypass + ntdll unhook stub (Perun's Fart) — .NET x86, 33 KB, assembly ZuJkzPEbpOBiWdtBk, compiled 2026-03-31 19:59:02 UTC. VT 40/77."
+      },
+      {
+        "hash": "8c3ef59cbc6f44ee96d6e5746fafb2288df3868c5fffa87dc7af24b302a45430",
+        "filename": "mymain chunk 1 (decrypted)",
+        "confidence": "DEFINITE",
+        "context": "Nested crypter Stage 3 — .NET x86, 1.04 MB, assembly KevRPkjGQnsrQuDEGVu, compiled 2026-03-31 19:59:17 UTC. VT 49/77 (Lionic XWorm flag is generic shared-crypter-DNA, not actual XWorm)."
+      },
+      {
+        "hash": "36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504",
+        "filename": "mymain Stage-4 (decrypted)",
+        "confidence": "DEFINITE",
+        "context": "Persistence installer + Stage-5 loader — .NET x86, 1.08 MB, assembly HQpmBSUELAUUTkvFfUDMffBkXlu. VT 47/77. Installs \\Microsoft Defender scheduled task + HKLM\\Software\\Microsoft Defender\\Payload registry blob."
+      },
+      {
+        "hash": "bec87d17b1c1ea975a3ad07fb6e1a79268a563321ffc5525af9dc4e48ea8c9fc",
+        "filename": "mymain Stage-4 ciphertext",
+        "confidence": "HIGH",
+        "context": "1,025,296-byte ciphertext extracted from chunk 1 resource vqnxIVVk..."
+      },
+      {
+        "hash": "7ad4db7a3294b2e1017686c97f9617a0c5f1ce5fcd0cbe58f8d6401d29ecbf39",
+        "filename": "mymain Stage-5a ciphertext",
+        "confidence": "HIGH",
+        "context": "11,856-byte ciphertext from Stage-4 resource IazvXcueDgcoXWWL..."
+      },
+      {
+        "hash": "06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4",
+        "filename": "mymain Stage-5a (decrypted) — Chaos/TorBrowserTor ransomware",
+        "confidence": "DEFINITE",
+        "context": "FINAL RANSOMWARE PAYLOAD (mymain build). 25,088 bytes .NET x86, ConsoleApplication7 assembly. Rijndael-256 CFB + RSA-2048 OAEP, .torbrowsertor extension. VT 57/77 ransomware.msil. Public sibling d0c78ca7... confirms Chaos/TorBrowserTor identity (multi-vendor signature match). VT known-name indf.exe."
+      },
+      {
+        "hash": "13faff78c8da6b10c8e28ed735484cf6c5ece9498a5d6e040828d46352f3519c",
+        "filename": "mymain Stage-5b ciphertext",
+        "confidence": "HIGH",
+        "context": "983,872-byte ciphertext from Stage-4 resource HxBTHTPGSMVbIZYM..."
+      },
+      {
+        "hash": "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8",
+        "filename": "Stage-5b UAC bypass (decrypted) — CROSS-BUILD INVARIANT",
+        "confidence": "DEFINITE",
+        "context": "BYTE-IDENTICAL across mymain AND myfile builds. 1,009,664 bytes .NET x86 'UACbypass'. AppInfo RPC AiEnableDesktopRpcInterface GUID 201ef99a-7fa0-444c-9399-19ba84f12a1a via NtApiDotNet + PPID spoof via elevated taskmgr. UACME #41 family. VT 8/77 — the detection-gap hero of this investigation. Kaspersky HEUR:Exploit.MSIL.Inpat.gen is the most specific signature. Any host with this hash = this builder."
+      },
+      {
+        "hash": "58592e4b16f28cbcca420ab96f9303f71ba0062260a6eb71ebf0b1e34f3ca3d7",
+        "filename": "myfile chunk 0 (decrypted)",
+        "confidence": "DEFINITE",
+        "context": "Perun's Fart ntdll unhook stub (myfile build) — .NET x86, 32,768 bytes. Same builder template as mymain chunk 0, different build artifact."
+      },
+      {
+        "hash": "4b4418928f1b445d555ded02a34ff3f378809d5aeb9da10649cc3562eaa2e5c0",
+        "filename": "myfile chunk 1 (decrypted)",
+        "confidence": "DEFINITE",
+        "context": "Nested crypter shell (myfile build) — .NET x86, 1,045,504 bytes. Executes inner AES-ECB → XOR → GZip pipeline to Assembly.Load Stage-4."
+      },
+      {
+        "hash": "008d097e1fcb21be25a99d435f76e2728fe5bcf90a0b7882899d61334a82f119",
+        "filename": "myfile chunk 1 inner resource ciphertext",
+        "confidence": "HIGH",
+        "context": "1,025,424 bytes extracted from resource CXkfzafq...EHdigjZ"
+      },
+      {
+        "hash": "5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9",
+        "filename": "myfile Stage-4 (decrypted)",
+        "confidence": "DEFINITE",
+        "context": "Persistence installer + Stage-5 loader (myfile build). .NET x86, 1,082,880 bytes, assembly mmZsNTboIPHyckaNPhEDqCUpPiUHq. Functionally equivalent to mymain Stage-4. Same cross-build mutex GUID."
+      },
+      {
+        "hash": "e452de35020f6f9dc818a13e299c15893c61b3c98d7883514c6ecede6cd136a3",
+        "filename": "myfile Stage-5a ciphertext",
+        "confidence": "HIGH",
+        "context": "11,856 bytes (byte-exact size match to mymain Stage-5a — rebuilt per campaign)"
+      },
+      {
+        "hash": "13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c",
+        "filename": "myfile Stage-5a (decrypted) — Chaos/TorBrowserTor ransomware (myfile build)",
+        "confidence": "DEFINITE",
+        "context": "REBUILT PER-CAMPAIGN. 25,088 bytes .NET x86 (same size as mymain Stage-5a, different hash). Assembly name fudkk. Rotated config: spreadName='Recieve please.exe' (typo), processName='projectxx.exe', new RSA-2048 keypair. Unchanged: BTC wallets, Telegram, file extension, namespace. Source-code-level structural identity confirmed via grep-based dnSpy diff (session 12) — same exact source tree, only config field values rotate."
+      },
+      {
+        "hash": "ad8b5fc7533eefc16ca6e5e52c231abce1c87b9a01c290ec16f9b39a7778fbc2",
+        "filename": "myfile Stage-5b ciphertext",
+        "confidence": "HIGH",
+        "context": "983,872 bytes (byte-exact size match to mymain Stage-5b — decrypts to the SAME byte-identical UAC bypass PE da302511...)"
+      },
+      {
+        "hash": "165f4f41542937bc61aa09e5d3c5c3d81e120e11c4a1bf24b461b0a81f18de9e",
+        "filename": "mymain boot re-loader PS (decoded from scheduled task arg blob)",
+        "confidence": "HIGH",
+        "context": "4,423-char PowerShell script decoded from the 39,336-byte scheduled-task cmd.exe argument blob (XOR key 91). Structurally identical to outer PS1 loader — re-loads the entire crypter chain from HKLM\\Software\\Microsoft Defender\\Payload on every boot."
+      }
+    ],
+    "md5": [
+      {
+        "hash": "76007508b8317dd76e31996c6adc875a",
+        "filename": "myfile.exe",
+        "confidence": "DEFINITE",
+        "context": "Orcus RAT v7 Wardow crack — MD5 supplement"
+      }
+    ],
+    "sha1": [
+      {
+        "hash": "1e68314f5a42897cea61456add6ffdd6048a9c99",
+        "filename": "myfile.exe",
+        "confidence": "DEFINITE",
+        "context": "Orcus RAT v7 Wardow crack — SHA1 supplement"
+      }
+    ],
+    "filenames": [
+      {
+        "name": "myfile.exe",
+        "confidence": "HIGH",
+        "context": "Orcus RAT dropper name in staging"
+      },
+      {
+        "name": "mymain.bat",
+        "confidence": "HIGH",
+        "context": "Stage-1 DOSfuscated loader dropper"
+      },
+      {
+        "name": "myfile.bat",
+        "confidence": "HIGH",
+        "context": "Sibling Stage-1 DOSfuscated loader dropper"
+      },
+      {
+        "name": "indf.exe",
+        "confidence": "MODERATE",
+        "context": "Operator-chosen filename for Stage-5a ransomware (from VirusTotal known-names field — pivot IOC for hunting)"
+      },
+      {
+        "name": "mydfile.exe",
+        "confidence": "LOW",
+        "context": "Operator filename for public TorBrowserTor sibling (PCrisk 2026-04-07 sample) — different operator build, different campaign"
+      },
+      {
+        "name": "UacBypass.exe",
+        "confidence": "MODERATE",
+        "context": "Generic operator filename seen on VT for Stage-5b"
+      },
+      {
+        "name": "AudioDriver.exe",
+        "confidence": "HIGH",
+        "context": "Orcus install-path filename under %APPDATA%\\Microsoft\\Speech"
+      },
+      {
+        "name": "svchost.exe",
+        "confidence": "HIGH",
+        "context": "Stage-5a ransomware self-copy filename in %APPDATA% (mymain build) — masquerade"
+      },
+      {
+        "name": "projectxx.exe",
+        "confidence": "HIGH",
+        "context": "Stage-5a ransomware self-copy filename in %APPDATA% (myfile build)"
+      },
+      {
+        "name": "surprise.exe",
+        "confidence": "HIGH",
+        "context": "Removable drive spread filename (mymain build)"
+      },
+      {
+        "name": "Recieve please.exe",
+        "confidence": "HIGH",
+        "context": "Removable drive spread filename (myfile build) — note the 'Recieve' typo in source"
+      },
+      {
+        "name": "READ ME PLEASE.txt",
+        "confidence": "HIGH",
+        "context": "Ransom note filename — cross-build invariant (both builds)"
+      }
+    ],
+    "file_paths": [
+      {
+        "path": "%APPDATA%\\Microsoft\\Speech\\AudioDriver.exe",
+        "confidence": "HIGH",
+        "context": "Orcus RAT install path",
+        "value": "%APPDATA%\\Microsoft\\Speech\\AudioDriver.exe"
+      },
+      {
+        "path": "%APPDATA%\\svchost.exe",
+        "confidence": "HIGH",
+        "context": "Stage-5a ransomware self-copy location (mymain build)",
+        "value": "%APPDATA%\\svchost.exe"
+      },
+      {
+        "path": "%APPDATA%\\projectxx.exe",
+        "confidence": "HIGH",
+        "context": "Stage-5a ransomware self-copy location (myfile build)",
+        "value": "%APPDATA%\\projectxx.exe"
+      },
+      {
+        "path": "%APPDATA%\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\*.url",
+        "confidence": "HIGH",
+        "context": "Stage-5a startup-folder persistence artifact (.url pointing to self-copy)",
+        "value": "%APPDATA%\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\*.url"
+      },
+      {
+        "path": "%TEMP%\\VBE\\",
+        "confidence": "HIGH",
+        "context": "Operator anti-sandbox tri-artifact component — gating directory presence check. Hunt for host presence of this directory combined with 'admin' username + %TEMP%\\mapping.csv.",
+        "false_positive_risk": true,
+        "false_positive_note": "The directory name alone is too generic to block. Only meaningful as part of the full tri-artifact combination.",
+        "value": "%TEMP%\\VBE\\"
+      },
+      {
+        "path": "%TEMP%\\mapping.csv",
+        "confidence": "HIGH",
+        "context": "Operator anti-sandbox tri-artifact component — gating file presence check",
+        "false_positive_risk": true,
+        "false_positive_note": "Generic filename — only meaningful as part of the full tri-artifact combination.",
+        "value": "%TEMP%\\mapping.csv"
+      },
+      {
+        "path": "C:\\cmd_log.txt",
+        "confidence": "HIGH",
+        "context": "Boot re-loader debug log — forensic artifact on compromised hosts; stdout/stderr of the PowerShell re-loader on every boot",
+        "value": "C:\\cmd_log.txt"
+      },
+      {
+        "path": "C:\\Windows\\System32",
+        "confidence": "MODERATE",
+        "context": "Stage-4 sets working directory here via Directory.SetCurrentDirectory before persistence install. Observable as a .NET process CWD anomaly.",
+        "value": "C:\\Windows\\System32"
+      },
+      {
+        "path": "%APPDATA%\\READ ME PLEASE.txt",
+        "confidence": "HIGH",
+        "context": "Stage-5a ransom note drop in %APPDATA% (copy also dropped in every encrypted directory)",
+        "value": "%APPDATA%\\READ ME PLEASE.txt"
+      }
+    ],
+    "file_extensions": [
+      {
+        "extension": ".torbrowsertor",
+        "confidence": "DEFINITE",
+        "context": "Encrypted-file extension appended by Stage-5a ransomware — cross-build invariant",
+        "value": ".torbrowsertor"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "ip": "94.103.1.13",
+        "port": "80/7777",
+        "protocol": "HTTP",
+        "confidence": "DEFINITE",
+        "context": "Operator staging / open-directory payload host. ASN209207 Digital Hosting Provider LLC (NL-routed, RU-registered), single upstream AS48014 AlbaHost. ASN assigned 2026-01-19. VT 5/94 malicious + 1 suspicious (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious). All samples in this investigation pulled from here via t.ps1/t2.ps1/potato.ps1/interact.py.",
+        "vt_detections_2026_04_23": "5/94 malicious + 1 suspicious — CONFIRMED unchanged from session-8 baseline (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious)"
+      },
+      {
+        "ip": "172.86.76.198",
+        "port": "3000",
+        "protocol": "TCP",
+        "confidence": "LOW",
+        "context": "AS14956 RouterHosting LLC [AE]. VT 5/94 malicious. Target of otp2.py and otp_brute.py (endpoint /api/auth/verify-otp). Direction unclear — could be attacker-staged OTP bypass infrastructure or another victim service. Do not block without further investigation.",
+        "false_positive_risk": true,
+        "false_positive_note": "Ambiguous operator vs victim role — AS14956 is a commercial hosting provider; many legitimate services co-reside."
+      }
+    ],
+    "domains": [
+      {
+        "domain": "94.103.1.13",
+        "confidence": "DEFINITE",
+        "context": "Staging host used as hostname in download cradles (treated as literal string in t.ps1/t2.ps1)"
+      },
+      {
+        "domain": "forumrutor24.com",
+        "value": "forumrutor24.com",
+        "confidence": "HIGH",
+        "context": "Co-tenant domain on 94.103.1.13 — Russian forum theme (rutor = RuTor torrent family reference). Registered 2025-07-27 via Mat Bao (Vietnam), Cloudflare DNS (fay+quinton). Resolved to 94.103.1.13 from 2026-03-20 to 2026-04-23 (34 days, 183 pDNS resolutions). Not a direct Chaos IOC — represents parallel operator campaign sharing the same staging host. Treat as operator-controlled infrastructure indicator, not as C2. Source: DomainTools Iris pDNS export 2026-04-23.",
+        "false_positive_risk": false,
+        "do_not_block": false,
+        "vt_detections": "0/94 (clean on VT; Cloudflare fronting hides origin)",
+        "vt_last_checked": "2026-04-23"
+      },
+      {
+        "domain": "www.forumrutor24.com",
+        "value": "www.forumrutor24.com",
+        "confidence": "HIGH",
+        "context": "WWW subdomain of forumrutor24.com co-tenant (see parent entry).",
+        "false_positive_risk": false,
+        "do_not_block": false,
+        "vt_detections": "0/94",
+        "vt_last_checked": "2026-04-23"
+      },
+      {
+        "domain": "gtanuncios.com",
+        "value": "gtanuncios.com",
+        "confidence": "HIGH",
+        "context": "Co-tenant domain on 94.103.1.13 — Portuguese/Spanish classifieds theme (anuncios = advertisements). Aged domain (created 2015-05-16, acquired by CN broker identity xiang xiang fan on 2025-06-28, held dormant 10 months). Pivoted from Cloudflare 104.21.56.197 to 94.103.1.13 on 2026-04-11 15:09:21Z — classic aged-domain-purchase operator tradecraft. Resolved to 94.103.1.13 from 2026-04-10 to 2026-04-23 (13 days, 114 pDNS resolutions). Not a direct Chaos IOC. WHOIS privacy-masked 2026-04-24 00:39:01Z. Source: DomainTools Iris pDNS + domain-history 2026-04-23.",
+        "false_positive_risk": false,
+        "do_not_block": false,
+        "vt_detections": "0/94 (Alexa #267012 — aged domain retains legitimate reputation, consistent with reputation-laundering interpretation)",
+        "vt_last_checked": "2026-04-23"
+      },
+      {
+        "domain": "mail.gtanuncios.com",
+        "value": "mail.gtanuncios.com",
+        "confidence": "HIGH",
+        "context": "Mail subdomain of gtanuncios.com co-tenant — operator running webmail infrastructure on 94.103.1.13. 14 pDNS resolutions over 8 days. Monitor for outbound SMTP originating from hosts that resolved this FQDN.",
+        "false_positive_risk": false,
+        "do_not_block": false,
+        "vt_detections": "NOT FOUND in VT (consistent with operator-internal webmail subdomain)",
+        "vt_last_checked": "2026-04-23"
+      },
+      {
+        "domain": "bulgainme.pro",
+        "value": "bulgainme.pro",
+        "confidence": "HIGH",
+        "context": "Co-tenant domain on 94.103.1.13 — unknown purpose, short-lived .pro TLD registered 2026-02-23, activated with mail server pointing at 94.103.1.13 on 2026-04-11 18:42:23Z. Cloudflare DNS (dana+ethan, rotated to amber). SSL churn on 2026-04-10 17:57-17:59 (3 certs in 2 minutes) indicates rapid operator setup burst. 32 pDNS resolutions over 13 days. Not a direct Chaos IOC; treat as operator-controlled parallel campaign. Source: DomainTools Iris pDNS + domain-history 2026-04-23.",
+        "false_positive_risk": false,
+        "do_not_block": false,
+        "vt_detections": "0/94 (clean on VT; Cloudflare fronting)",
+        "vt_last_checked": "2026-04-23"
+      },
+      {
+        "domain": "mail.bulgainme.pro",
+        "value": "mail.bulgainme.pro",
+        "confidence": "HIGH",
+        "context": "Mail subdomain of bulgainme.pro co-tenant — operator webmail. 25 pDNS resolutions over ~13 days. Paired with mail.gtanuncios.com suggests operator is running webmail for multiple concurrent campaigns on this host.",
+        "false_positive_risk": false,
+        "do_not_block": false,
+        "vt_detections": "NOT FOUND in VT (operator-internal)",
+        "vt_last_checked": "2026-04-23"
+      },
+      {
+        "domain": "slayer.ktx.ro",
+        "value": "slayer.ktx.ro",
+        "confidence": "LOW",
+        "context": "Historical co-tenant on 94.103.1.13 — brief burst 2025-12-18 to 2025-12-19 (8 pDNS resolutions over 36 minutes). Romanian .ro TLD. Indicates the IP was in operator rotation approximately 4 months before the current Chaos campaign. Likely a prior throwaway campaign; insufficient duration/volume for confident operator attribution alone but consistent with the multi-tenant pattern. Source: DomainTools Iris pDNS export 2026-04-23.",
+        "false_positive_risk": true,
+        "false_positive_note": "Brief burst only; could also be a reseller test or unrelated one-off use. Use for threat-hunting context rather than blocking.",
+        "do_not_block": true,
+        "vt_detections": "0/94 (clean; Romanian ICI registrar)",
+        "vt_last_checked": "2026-04-23"
+      },
+      {
+        "domain": "dhost.su",
+        "value": "dhost.su",
+        "confidence": "MODERATE",
+        "context": "ASN self-domain for Digital Hosting Provider LLC (AS209207). Confirmed via AbuseIPDB / IPInfo 2026-04-23. Soviet-era .su TLD, operator-friendly cheap hosting provider. Not a direct operator indicator but useful for clustering other IPs on the same ASN if/when additional AS209207 activity emerges.",
+        "false_positive_risk": true,
+        "false_positive_note": "This is the hosting provider's own domain, not an operator-controlled domain. Do not block — use as context only.",
+        "do_not_block": true,
+        "vt_detections": "0/94 (clean; BEGET-SU registrar — well-known low-cost Russian registrar, consistent with RU-operator tradecraft)",
+        "vt_last_checked": "2026-04-23"
+      }
+    ],
+    "urls": [
+      {
+        "url": "http://94.103.1.13/gp.xor",
+        "confidence": "DEFINITE",
+        "context": "XOR-encoded GodPotato payload hosted on staging server (discovered in interact.py session 8)"
+      },
+      {
+        "url": "http://172.86.76.198:3000/api/auth/verify-otp",
+        "confidence": "MODERATE",
+        "context": "Node.js OTP verification endpoint targeted by otp2.py / otp_brute.py (brute-force script)",
+        "false_positive_risk": true,
+        "false_positive_note": "May be victim-side rather than operator-controlled"
+      }
+    ],
+    "loopback_c2": [
+      {
+        "ip": "127.0.0.1",
+        "port": "20268",
+        "protocol": "TCP",
+        "confidence": "DEFINITE",
+        "context": "Orcus RAT local C2 listener — real upstream hidden behind chisel/plink tunnel. Static analysis cannot reveal the true upstream endpoint; dynamic detonation required to enumerate the tunnel peer."
+      }
+    ],
+    "victim_infrastructure_do_not_block": [
+      {
+        "ip": "85.238.98.37",
+        "port": "8080",
+        "protocol": "HTTP",
+        "confidence": "HIGH",
+        "context": "VICTIM — SnipeIT installation at Odessa, Ukraine organization (PTR karaoke.tenet.odessa.ua). ASN AS6876 TENET Scientific Production Enterprise LLC [UA]. VT 0/94 (legitimate host). Operator tool: snipeit_attack.py. HUNT for compromise; DO NOT block as C2.",
+        "false_positive_risk": true,
+        "false_positive_note": "This is a victim the operator is attacking — NOT operator-controlled. Previously misclassified as C2, corrected session 8."
+      },
+      {
+        "ip": "178.20.159.99",
+        "port": "8080",
+        "protocol": "HTTP",
+        "confidence": "HIGH",
+        "context": "VICTIM — Ukrainian SIP PBX admin panel ('Verkhovyna SIP Administration', Werkzeug/Flask dev server, live since 2025-09-15). ASN AS42331 PE Freehost [UA], PTR cf1431409.freehost.com.ua. VT 0/94. Operator tools: attack.py, attack2.py, attack3.py, attack4.py (brute-force the admin login). HUNT for compromise; DO NOT block.",
+        "false_positive_risk": true,
+        "false_positive_note": "Previously misclassified as operator C2; retracted session 8 after OSINT confirmation this is a live Ukrainian SIP PBX admin panel being brute-forced."
+      },
+      {
+        "ip": "185.237.218.100",
+        "port": "25",
+        "protocol": "SMTP",
+        "confidence": "HIGH",
+        "context": "VICTIM — shared hosting (PTR na100.ru) for ~100 Russian car-enthusiast forums. ASN AS50979 Green Floid LLC [LV/RU]. VT 0/94. Operator tool: exim_test.py (Exim MTA RCE exploit). HUNT for compromise; DO NOT block.",
+        "false_positive_risk": true,
+        "false_positive_note": "Victim, not C2. Exim MTA on shared hosting is the target. Co-hosted legitimate domains include mitsubishi-org.ru (not a typosquat — a real Russian Mitsubishi fan forum, Alexa #610,472)."
+      },
+      {
+        "ip": "192.227.113.124",
+        "port": "4028",
+        "protocol": "TCP",
+        "confidence": "HIGH",
+        "context": "VICTIM — CGMiner RPC API endpoint on Cloud South mining host. ASN AS13886 Cloud South [US]. VT 0/94. Operator tools: cgminer_probe.py, cgminer2.py, cgminer3.py. HUNT for compromise or mining-pool hijack; DO NOT block.",
+        "false_positive_risk": true,
+        "false_positive_note": "Victim/target — cgminer RPC probe, not operator C2"
+      },
+      {
+        "ip": "192.227.108.142",
+        "port": "4028",
+        "protocol": "TCP",
+        "confidence": "MODERATE",
+        "context": "Cloud South neighbor (same ASN, 5 /24s apart from 192.227.113.124) — mining-demographic reconnaissance target. ASN AS13886 Cloud South [US]. VT 0/94.",
+        "false_positive_risk": true,
+        "false_positive_note": "Victim/target, not operator C2"
+      },
+      {
+        "ip": "37.17.245.209",
+        "port": "varies",
+        "protocol": "TCP",
+        "confidence": "LOW",
+        "context": "Ukrainian host (AS43361 LUMINA LLC [UA]), no PTR, VT 0/94. Target type unknown — probed by port_check.py. Do not block.",
+        "false_positive_risk": true,
+        "false_positive_note": "Unknown role, likely target rather than C2"
+      }
+    ]
+  },
+  "host_indicators": {
+    "mutexes": [
+      {
+        "value": "9f67b5ed-6c10-4c53-818b-8d26be0d1339",
+        "name": "9f67b5ed-6c10-4c53-818b-8d26be0d1339",
+        "confidence": "DEFINITE",
+        "context": "STAGE-4 MUTEX — CROSS-BUILD INVARIANT. Identical across mymain AND myfile builds. Not rotated. Any .NET process holding this GUID mutex is Stage-4 of this builder. Zero false-positive risk (GUID uniqueness). HIGHEST-VALUE hunting anchor in this investigation. Zero public hits confirmed session 12."
+      },
+      {
+        "value": "b12f3970cc224d0eb98b4030f9c2e753",
+        "name": "b12f3970cc224d0eb98b4030f9c2e753",
+        "confidence": "HIGH",
+        "context": "Orcus RAT v7 Wardow crack mutex — single-instance guard for myfile.exe"
+      }
+    ],
+    "registry_keys": [
+      {
+        "value": "HKLM\\Software\\Microsoft Defender\\Payload",
+        "key": "HKLM\\Software\\Microsoft Defender",
+        "value_name": "Payload",
+        "value_data": "[~1.4 MB encoded blob — last line of dropper .bat file]",
+        "value_type": "REG_SZ",
+        "confidence": "DEFINITE",
+        "context": "STAGE-4 FILELESS PERSISTENCE — key masquerades as legitimate Windows Defender (legitimate Defender lives under HKLM\\Software\\Microsoft\\Windows Defender with an extra \\Windows\\ path level). Value holds the entire encrypted crypter chain for boot-time re-execution. Any write to this exact key path is non-benign."
+      },
+      {
+        "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Microsoft Store",
+        "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "value_name": "Microsoft Store",
+        "value_data": "C:\\Users\\[user]\\AppData\\Roaming\\svchost.exe (mymain) or projectxx.exe (myfile)",
+        "value_type": "REG_SZ",
+        "confidence": "HIGH",
+        "context": "Stage-5a ransomware persistence — cross-build invariant value name"
+      },
+      {
+        "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Audio HD Driver",
+        "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "value_name": "Audio HD Driver",
+        "value_data": "%APPDATA%\\Microsoft\\Speech\\AudioDriver.exe",
+        "value_type": "REG_SZ",
+        "confidence": "HIGH",
+        "context": "Orcus RAT persistence (myfile.exe)"
+      },
+      {
+        "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableTaskMgr",
+        "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+        "value_name": "DisableTaskMgr",
+        "value_data": "1",
+        "value_type": "REG_DWORD",
+        "confidence": "HIGH",
+        "context": "Stage-5a ransomware disables Task Manager policy"
+      }
+    ],
+    "scheduled_tasks": [
+      {
+        "value": "\\Microsoft Defender",
+        "task_name": "Microsoft Defender",
+        "task_path": "\\Microsoft Defender",
+        "action": "C:\\Windows\\System32\\cmd.exe [39,336-byte encoded PowerShell argument blob]",
+        "trigger": "At system startup (BOOT)",
+        "run_as": "Highest privileges (RunLevel=HIGHEST)",
+        "hidden": true,
+        "confidence": "DEFINITE",
+        "context": "STAGE-4 SCHEDULED TASK MASQUERADE. Registered at TASK SCHEDULER ROOT FOLDER (\\), not under \\Microsoft\\Windows\\Windows Defender where legitimate Defender tasks live. Installed via Schedule.Service COM interface with C# 'dynamic' dispatch (leaves no Microsoft.Win32.TaskScheduler.* references in IL). Executes cmd.exe with a ~39 KB encoded PowerShell argument that re-runs the full crypter chain from the registry-stored payload on every boot."
+      },
+      {
+        "value": "\\Audio HD Driver",
+        "task_name": "Audio HD Driver",
+        "task_path": "\\",
+        "action": "%APPDATA%\\Microsoft\\Speech\\AudioDriver.exe",
+        "trigger": "At log on",
+        "confidence": "HIGH",
+        "context": "Orcus RAT secondary persistence (parallel to HKCU Run key)"
+      }
+    ],
+    "rpc_interfaces": [
+      {
+        "value": "201ef99a-7fa0-444c-9399-19ba84f12a1a",
+        "guid": "201ef99a-7fa0-444c-9399-19ba84f12a1a",
+        "service": "appinfo",
+        "confidence": "DEFINITE",
+        "context": "STAGE-5b UAC BYPASS — AppInfo RPC interface AiEnableDesktopRpcInterface GUID. Stage-5b calls this interface via NtApiDotNet (Costura-bundled ntapidotnet.dll) to launch an elevated notepad.exe as decoy, then uses elevated taskmgr.exe as PPID donor to spawn 'conhost.exe --headless cmd.exe /c [Console.Title]' as a high-integrity child. UACME #41 family. No UAC prompt presented to user."
+      }
+    ],
+    "anti_recovery_commands": [
+      {
+        "value": "vssadmin delete shadows /all /quiet",
+        "command": "vssadmin delete shadows /all /quiet",
+        "confidence": "DEFINITE",
+        "context": "Stage-5a ransomware — shadow copy deletion"
+      },
+      {
+        "value": "wmic shadowcopy delete",
+        "command": "wmic shadowcopy delete",
+        "confidence": "DEFINITE",
+        "context": "Stage-5a ransomware — alternative shadow copy deletion"
+      },
+      {
+        "value": "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+        "command": "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+        "confidence": "DEFINITE",
+        "context": "Stage-5a ransomware — disables boot-failure recovery"
+      },
+      {
+        "value": "bcdedit /set {default} recoveryenabled no",
+        "command": "bcdedit /set {default} recoveryenabled no",
+        "confidence": "DEFINITE",
+        "context": "Stage-5a ransomware — disables Windows recovery"
+      },
+      {
+        "value": "wbadmin delete catalog -quiet",
+        "command": "wbadmin delete catalog -quiet",
+        "confidence": "DEFINITE",
+        "context": "Stage-5a ransomware — deletes backup catalog"
+      }
+    ]
+  },
+  "builder_fingerprints": {
+    "note": "These strings are the STRONGEST per-build attribution anchors. They appear in plaintext form in decrypted stages (in-memory) — NOT in the original batch file, where they are obfuscated. Detection should key on decrypted/in-memory scanning, not on-disk YARA of the .bat itself.",
+    "cross_build_invariants": [
+      {
+        "type": "mutex_guid",
+        "value": "9f67b5ed-6c10-4c53-818b-8d26be0d1339",
+        "confidence": "DEFINITE",
+        "context": "Stage-4 mutex — IDENTICAL across mymain and myfile builds. Zero public hits (session 12 OSINT)."
+      },
+      {
+        "type": "pe_sha256",
+        "value": "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8",
+        "confidence": "DEFINITE",
+        "context": "Stage-5b UAC bypass — BYTE-IDENTICAL across mymain and myfile builds (builder bundles a fixed pre-compiled module, never rebuilt)."
+      }
+    ],
+    "mymain_build_anchors": [
+      {
+        "type": "aes_passphrase",
+        "value": "qDqHmNfeSyWJoyxDzR",
+        "confidence": "DEFINITE",
+        "context": "AES passphrase used at EVERY crypter layer (outer PS1 + chunk 1 + Stage-4) — triple-layer reuse = 1-in-a-million builder fingerprint"
+      },
+      {
+        "type": "xor_key",
+        "value": "giXXxwxDxGrFeUjlxqLaLcb",
+        "confidence": "DEFINITE",
+        "context": "Repeating-key XOR used at chunk 1 + Stage-4 Stage-5 decrypt"
+      },
+      {
+        "type": "magic_marker",
+        "value": "aEVMeKDApIQzumcyjwpFSfqzEImqRdPQ",
+        "confidence": "DEFINITE",
+        "context": "PS1 loader payload delimiter magic marker (mymain build)"
+      }
+    ],
+    "myfile_build_anchors": [
+      {
+        "type": "aes_passphrase",
+        "value": "jttZjrlmkrBAtCBAMjkbThHsSjVNMjLLyONafxIj",
+        "confidence": "DEFINITE",
+        "context": "AES passphrase at every crypter layer (myfile build) — triple-layer reuse"
+      },
+      {
+        "type": "xor_key",
+        "value": "cjJaThUwfQKxnHBm",
+        "confidence": "DEFINITE",
+        "context": "Repeating-key XOR (myfile build)"
+      },
+      {
+        "type": "magic_marker",
+        "value": "HPGDxAzpymskcRJvELNmhQkWaTXguERQ",
+        "confidence": "DEFINITE",
+        "context": "PS1 loader payload delimiter (myfile build)"
+      },
+      {
+        "type": "resource_name",
+        "value": "CXkfzafqTqyZGFlSsmLoNxQGxSqGuGzejAjEtCGsLtwAFjOdGRfMnPkEHdigjZ",
+        "confidence": "HIGH",
+        "context": "Chunk 1 inner resource name (myfile build)"
+      },
+      {
+        "type": "resource_name",
+        "value": "WxFRcVUEXpXaqKtlEAsEPXMbLojPupIDbXtnSnvqGuhCmEkgNMxYgJZyk",
+        "confidence": "HIGH",
+        "context": "Stage-4 Stage-5a resource name (myfile build)"
+      },
+      {
+        "type": "resource_name",
+        "value": "YEfOdElqPaWtqicoMQkYFXLbzFsKebrGyBZYN",
+        "confidence": "HIGH",
+        "context": "Stage-4 Stage-5b resource name (myfile build)"
+      },
+      {
+        "type": "assembly_name",
+        "value": "mmZsNTboIPHyckaNPhEDqCUpPiUHq",
+        "confidence": "HIGH",
+        "context": "Stage-4 assembly name (myfile build)"
+      }
+    ],
+    "mymain_resource_names": [
+      {
+        "value": "IazvXcueDgcoXWWLxNjkjIfCchDHsRfVZIDHVlDtcj",
+        "context": "Stage-5a resource in mymain Stage-4 (11 KB)"
+      },
+      {
+        "value": "HxBTHTPGSMVbIZYMhVhaWWOtnFrhCKTDvnA",
+        "context": "Stage-5b resource in mymain Stage-4 (984 KB)"
+      },
+      {
+        "value": "HQpmBSUELAUUTkvFfUDMffBkXlu",
+        "context": "Stage-4 assembly name (mymain build)"
+      },
+      {
+        "value": "ZuJkzPEbpOBiWdtBk",
+        "context": "Chunk 0 assembly name (mymain build)"
+      },
+      {
+        "value": "KevRPkjGQnsrQuDEGVu",
+        "context": "Chunk 1 assembly name (mymain build)"
+      }
+    ],
+    "structural_loader_anchors": [
+      {
+        "pattern": ".Replace('@','A').Replace('#','/')",
+        "context": "Alphabet substitution reversal before FromBase64 on chunk 1 — builder-wide structural anchor (both builds)"
+      },
+      {
+        "pattern": "SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -WindowStyle Hidden -NoProfile",
+        "context": "Forced 32-bit PowerShell launch line — builder-wide"
+      },
+      {
+        "pattern": "$host.UI.RawUI.WindowTitle + [IO.File]::ReadAllText(... + StartsWith(... + Substring(32)",
+        "context": "Self-read-by-window-title trick — batch dropper located via Console.Title inheritance, magic marker stripped with 32-char substring"
+      },
+      {
+        "pattern": "GetManifestResourceStream → AES-ECB(SHA256(passphrase)) → repeating-key XOR → GZip → Assembly.Load",
+        "context": "Inner pipeline at chunk 1 and Stage-4 (both builds)"
+      },
+      {
+        "pattern": "namespace ConsoleApplication7 + internal class Program (line 18) + public static class NativeMethods (line 790) + public sealed class driveNotification",
+        "context": "Stage-5a source-code structural invariants — line-number parity across builds confirms same exact source tree"
+      }
+    ]
+  },
+  "operator_fingerprints": {
+    "tri_artifact_gate": {
+      "description": "Operator anti-sandbox 'don't-run-on-my-box' check. Any sample performing this exact combination is attributable to the same crypter builder/operator. Observed in mymain.bat DOSfuscation line 24, mymain chunk 0 methods gMHVUlBMYgXiAgCzuWdc and erdsXkckREPPkpwLJeszfFbAAMqw, and equivalent methods in myfile chunk 0. If username=='admin' AND (%TEMP%\\VBE exists OR %TEMP%\\mapping.csv exists) → Environment.Exit(0).",
+      "components": [
+        {
+          "type": "environment_username",
+          "value": "admin",
+          "confidence": "HIGH",
+          "context": "Case-insensitive check. Tri-artifact-gate component — only meaningful combined with the other two. Zero attribution value on its own."
+        },
+        {
+          "type": "directory_presence",
+          "value": "%TEMP%\\VBE\\",
+          "confidence": "HIGH",
+          "context": "Tri-artifact-gate component"
+        },
+        {
+          "type": "file_presence",
+          "value": "%TEMP%\\mapping.csv",
+          "confidence": "HIGH",
+          "context": "Tri-artifact-gate component"
+        }
+      ],
+      "interpretation": "May be operator convenience (they work on a machine called 'admin' with VBE+mapping artifacts they created during development, and want their loaders to exit cleanly if re-run on that host) or an intentional decoy planted to mislead analysts. Either way, the combination is distinctive enough to serve as a strong builder-family indicator when seen in other samples."
+    },
+    "cryptocurrency_wallets": [
+      {
+        "type": "bitcoin_bech32",
+        "address": "bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg",
+        "confidence": "HIGH (as blocking IOC) / LOW (as attribution anchor)",
+        "context": "Stage-5a clipboard-hijacker replacement wallet — BUILDER DEFAULT. WalletExplorer analysis confirms reuse across unrelated Chaos/TorBrowserTor campaigns predating this investigation. Block for clipboard-monitoring detection; do NOT use for attribution to THIS operator.",
+        "attribution_value": "LOW"
+      },
+      {
+        "type": "bitcoin_p2pkh",
+        "address": "17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV",
+        "confidence": "HIGH (as blocking IOC) / LOW (as attribution anchor)",
+        "context": "Stage-5a clipboard-hijacker replacement wallet (legacy address format) — BUILDER DEFAULT. Same caveat as the bech32 wallet above.",
+        "attribution_value": "LOW"
+      }
+    ],
+    "messaging_handles": [
+      {
+        "platform": "Telegram",
+        "handle": "@TorBrowserTor",
+        "confidence": "HIGH (for family-level TorBrowserTor identification) / LOW (for operator attribution)",
+        "context": "Attacker-contact handle in Stage-5a ransom note — BUILDER DEFAULT, not operator-unique. Used across all TorBrowserTor-variant campaigns regardless of operator. Low attribution value for THIS specific operator; high value for family identification.",
+        "attribution_value": "LOW"
+      }
+    ],
+    "cryptographic_material": {
+      "rsa_modulus_mymain_build": {
+        "description": "RSA-2048 public modulus used by mymain Stage-5a to encrypt the per-file symmetric password",
+        "exponent": "AQAB (65537)",
+        "modulus_prefix": "n2WNm/ZI4JhnKdrQ3/RcPicEyKCe1dnueXTfDlg4QFH...",
+        "confidence": "DEFINITE",
+        "context": "Unique per-campaign keypair. Full modulus in mymain.bat_analysis.md §16.2. Victims of mymain build are NOT interoperable with myfile build decryption keys."
+      },
+      "rsa_modulus_myfile_build": {
+        "description": "RSA-2048 public modulus used by myfile Stage-5a",
+        "exponent": "AQAB (65537)",
+        "modulus": "rtZjPDSukiM3LKnTCiclEwyrlNdo1yNK7SuAtaN7Z+rv0955HDu7pZNT/lNs/xaNwkiBZuerEynAzezbz+O+f3kdchRJBRmYHJHMeZJZnDqUGJtlmrn1vfHEuJNseB6snXDjgFQuXbGbRtaI1ZXyC6zqpqNCKsTfI7g/gC+klGeUFerduXsQ6/1narOb9+ZdeXW2ZsSVF3sDohqYwMGa6zwo+th7TVLOkJLYiukc63AEapmp0HN/i3RlyECX8yGvISFlnwj/CoNZg0FJbQhr94ZzUCn+FfL5eCY8ZskgNEVQoNX3XPEDreGwHGUs0jdLV4by4WjYVggnNFHaTBhAnQ==",
+        "confidence": "DEFINITE",
+        "context": "Unique per-campaign keypair"
+      }
+    },
+    "orcus_config": {
+      "aes_key": "CrackedByWardow",
+      "iv": "0sjufcjbsoyzube6",
+      "keyleak_magic_filename": "e3c6cefd462d48f0b30a5ebcd238b5b1",
+      "c2_tunnel_endpoint": "127.0.0.1:20268",
+      "reconnect_ms": 10000,
+      "plugin_bsod_guid": "c933e2c2722049c6a8047ceaae1f547f",
+      "plugin_webcam_led_guid": "a0414bc80a594d0796188160ce0db8d8",
+      "confidence": "DEFINITE",
+      "context": "Orcus v7 Wardow crack — all config values hardcoded and family-wide (NOT per-operator). Wardow keyleak means operator may have backdoored himself via the magic filename if keyleak backdoor is active."
+    }
+  },
+  "behavioral_indicators": {
+    "process_patterns": [
+      {
+        "value": "cmd.exe executing a .bat file of size > 2 MB",
+        "pattern": "cmd.exe executing a .bat file of size > 2 MB (mymain.bat: 2.6 MB, myfile.bat: 2.65 MB) — oversized batch files are highly unusual for benign scripts",
+        "confidence": "HIGH",
+        "context": "Stage-1 dropper execution — legitimate .bat files rarely exceed a few KB; a 2.6 MB batch file is a strong loader indicator."
+      },
+      {
+        "value": "cmd.exe spawning SysWOW64 powershell.exe -WindowStyle Hidden -NoProfile with .bat path in Console.Title",
+        "pattern": "cmd.exe spawning 'SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -WindowStyle Hidden -NoProfile' with the .bat path inherited as Console.Title",
+        "confidence": "HIGH",
+        "context": "Forced 32-bit PowerShell launch — distinctive given modern systems default to 64-bit PS"
+      },
+      {
+        "value": "svchost.exe (Schedule service) spawning cmd.exe with command-line length > 10,000 characters at boot",
+        "pattern": "svchost.exe (Schedule service) spawning cmd.exe with command-line length > 10,000 characters at boot",
+        "confidence": "HIGH",
+        "context": "Stage-4 scheduled-task execution pattern"
+      },
+      {
+        "value": "conhost.exe --headless cmd.exe /c [Console.Title] spawned as child of taskmgr.exe (integrity level HIGH)",
+        "pattern": "conhost.exe --headless cmd.exe /c [Console.Title] spawned as child of taskmgr.exe (integrity level HIGH)",
+        "confidence": "DEFINITE",
+        "context": "Stage-5b UAC bypass PPID-spoofed high-integrity shell — distinctive process lineage"
+      },
+      {
+        "value": "Notepad.exe launched at elevated integrity with no visible window immediately before high-integrity cmd.exe spawn",
+        "pattern": "Notepad.exe launched at elevated integrity with no visible window immediately before high-integrity cmd.exe spawn",
+        "confidence": "HIGH",
+        "context": "Stage-5b decoy auto-elevated process (AppInfo RPC response)"
+      }
+    ],
+    "file_access_patterns": [
+      {
+        "value": ".NET process opens a .bat file via File.ReadLines(path) with path sourced from Console.Title, reads ONLY the last line",
+        "pattern": ".NET process opens a .bat file via File.ReadLines(path) with path sourced from Console.Title, reads ONLY the last line",
+        "confidence": "HIGH",
+        "context": "Stage-4 'Console.Title + last-line self-extraction' — distinctive wrinkle, uncommon in public malware corpus"
+      },
+      {
+        "value": "Process encrypts user files across many extensions and appends .torbrowsertor extension",
+        "pattern": "Process encrypts user files across many extensions and appends '.torbrowsertor' extension",
+        "confidence": "DEFINITE",
+        "context": "Stage-5a ransomware encryption loop"
+      },
+      {
+        "value": "Process drops READ ME PLEASE.txt in every directory it encrypts and in %APPDATA%",
+        "pattern": "Process drops 'READ ME PLEASE.txt' in every directory it encrypts and in %APPDATA%",
+        "confidence": "DEFINITE",
+        "context": "Stage-5a ransom note drop behavior — one note per encrypted directory plus one in %APPDATA%. Cross-build invariant filename."
+      }
+    ],
+    "clipboard_monitoring_patterns": [
+      {
+        "value": "Process registers WM_CLIPBOARDUPDATE listener and substitutes Bitcoin addresses with hardcoded attacker wallets",
+        "pattern": "Process registers WM_CLIPBOARDUPDATE listener and substitutes Bitcoin addresses (bech32 regex bc1[a-z0-9]{39,59} and P2PKH regex [13][a-km-zA-HJ-NP-Z1-9]{26,33}) with hardcoded attacker wallets",
+        "confidence": "DEFINITE",
+        "context": "Stage-5a driveNotification class clipboard-hijacker behavior"
+      }
+    ]
+  },
+  "attribution_artifacts_flagged_for_orchestrator": [
+    {
+      "type": "telegram",
+      "value": "@TorBrowserTor",
+      "context": "Chaos builder default — appears in ALL TorBrowserTor variant ransom notes regardless of operator. LOW attribution value for this specific campaign."
+    },
+    {
+      "type": "btc_wallet",
+      "value": "bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg",
+      "context": "Chaos builder default per WalletExplorer — LOW attribution value"
+    },
+    {
+      "type": "btc_wallet",
+      "value": "17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV",
+      "context": "Chaos builder default — LOW attribution value"
+    },
+    {
+      "type": "operator_username",
+      "value": "admin",
+      "context": "Tri-artifact-gate component — may indicate operator's own development environment is named 'admin' (combined with VBE+mapping.csv artifacts). MODERATE attribution value as a builder-family indicator, LOW as a specific-operator indicator."
+    },
+    {
+      "type": "vt_known_name",
+      "value": "indf.exe",
+      "context": "Stage-5a filename on VirusTotal — pivot IOC for hunting unknown Chaos/TorBrowserTor deployments"
+    }
+  ]
+}
