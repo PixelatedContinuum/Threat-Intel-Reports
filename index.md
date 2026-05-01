@@ -17,8 +17,8 @@ position: 1
 {% include section-header.html label="Latest Reports" accent="#ff4444" %}
 
 <div class="hl-grid">
+{% include report-card.html title="AdaptixC2 Open Directory Exposure — 45.130.148.125 Operator Toolkit" date="Apr 2026" severity="high" tags="C2,Toolkit,Open Dir,Multi-Family" url="/reports/opendirectory-45-130-148-125-20260430/" %}
 {% include report-card.html title="Chaos Ransomware (TorBrowserTor) Multi-Stage Batch Loader — Open Directory 94.103.1.13" date="Apr 2026" severity="high" tags="Ransomware,Loader,Evasion,Open Dir" url="/reports/open-directory-94-103-1-13-20260423/" %}
-{% include report-card.html title="ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims, and Attribution" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,Open Dir,Threat" url="/reports/shinyhunters-dls-91-215-85-22-20260417/" %}
 </div>
 
 <a href="{{ '/reports/' | relative_url }}" class="hl-view-all">View all reports →</a>
