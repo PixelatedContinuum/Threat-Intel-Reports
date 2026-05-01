@@ -399,6 +399,21 @@ main.content {
   font-size: 0.9em;
 }
 
+/* Long-string wrapping inside table cells (hashes, file paths,
+   IOC strings, code-arrow chains in MITRE Evidence cells, etc.).
+   Without this, browser auto table-layout computes a minimum
+   content width from the longest unbreakable run in any cell,
+   and renders the table at that width — overflowing the 900px
+   container. The mobile breakpoint at <=768px already had this
+   fix; here it is extended to all viewports so desktop tables
+   no longer overflow when cells contain long file paths or
+   technique chains. */
+.hl-post-content td,
+.hl-post-content th {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .hl-post-content th {
   background: linear-gradient(to bottom, #1d2535, #171d29) !important;
   color: var(--hl-accent-blue) !important;
