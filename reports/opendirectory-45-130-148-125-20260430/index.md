@@ -612,45 +612,45 @@ The kit covers **32 techniques across 9 ATT&CK tactics**:
 
 | Tactic / Technique | Name | Conf. | Evidence |
 |---|---|---|---|
-| Resource Development / T1583.003 | Virtual Private Server | MODERATE | `45.130.148.125` hosted on AS35682 (Uzbekistan) — IP-based hosting consistent with VPS rental |
-| Resource Development / T1588.002 | Obtain Tool | HIGH | Operator pulled open-source AdaptixC2 from GitHub and compiled from source on Linux; Ligolo-ng v0.8.3 stock; full Ghostpack/SpecterOps + lazagne + winpeas/linpeas commodity tools |
-| Execution / T1059.001 | PowerShell | HIGH | `beacon.ps1` 256 KB loader with reflection-based AMSI bypass + Reflection.Assembly.Load + injection |
-| Execution / T1620 | Reflective Code Loading | HIGH | `[System.Reflection.Assembly]::Load([Convert]::FromBase64String($dr))` loads `injector.dll` into PowerShell process memory without writing to disk; embedded RDI bootstrap reflectively maps the beacon DLL |
-| Defense Evasion / T1562.001 | Disable or Modify Tools | HIGH | AMSI bypass: `$q='amsi'+'Con'+'text'`, `*iUtils` reflection, `SetValue($null, 0)` zeroes `amsiContext` field |
-| Defense Evasion / T1027 | Obfuscated Files or Information | HIGH | RC4-encrypted beacon configuration; base64-encoded shellcode in `beacon.ps1`; XOR 0xA7 layer over base64 |
-| Defense Evasion / T1140 | Deobfuscate/Decode Files | HIGH | `beacon.ps1` performs base64 decode + byte-by-byte XOR; AdaptixC2 beacon RC4-decrypts its config blob at startup |
-| Defense Evasion / T1132.001 | Standard Encoding (Base64) | HIGH | Base64 encoding for both `$dr` (injector.dll) and `$sr` (beacon shellcode); AdaptixC2 emits BASE64_table string (used in C2 transport encoding) |
-| Defense Evasion / T1055 | Process Injection (parent) | HIGH | `injector.dll` `SI.Inject(uint32 pid, byte[] sc)` cross-process injection via OpenProcess → VirtualAllocEx → VirtualProtectEx → WriteProcessMemory → CreateRemoteThread → WaitForSingleObject → CloseHandle → FlushInstructionCache |
-| Defense Evasion / T1055.002 | Portable Executable Injection | HIGH | Also a Privilege Escalation technique. Shellcode buffer written to explorer.exe contains an embedded PE (AdaptixC2 beacon DLL after RDI bootstrap); W^X allocation pattern (RW → flip to RX, NOT RWX) defeats simple "RWX in remote process" EDR rules; target = explorer.exe (long-lived, network-active, trusted-looking) |
-| Defense Evasion / T1574.002 | DLL Side-Loading | MODERATE | Deployment artifact only: `msupdate.dll` is the AdaptixC2 beacon DLL renamed to spoof Microsoft Update DLL surface. Specific intended host binary not documented; operator preparation only |
-| Credential Access / T1003.001 | LSASS Memory | HIGH | mimikatz commodity binary (gentilkiwi v2.2.0) bundled in toolkit |
-| Credential Access / T1003.002 | Security Account Manager | HIGH | SharpSecDump bundled in toolkit |
-| Credential Access / T1003.003 | NTDS | MODERATE | SharpSecDump can dump NTDS.dit on Domain Controllers |
-| Credential Access / T1003.006 | DCSync | HIGH | mimikatz `lsadump::dcsync` capability |
-| Credential Access / T1555 | Credentials from Password Stores | HIGH | lazagne (×2 variants) bundled — multi-source credential extraction |
-| Credential Access / T1555.003 | Web Browsers | HIGH | SharpDPAPI + lazagne both target browser credential stores |
-| Credential Access / T1555.004 | Windows Credential Manager | HIGH | SharpDPAPI specifically targets DPAPI-protected vaults (Credential Manager, RDG files) |
-| Credential Access / T1552.004 | Private Keys | MODERATE | Certify can extract private keys from AD CS-issued certificates |
-| Credential Access / T1558.003 | Kerberoasting | HIGH | Rubeus `kerberoast` command |
-| Credential Access / T1558.004 | AS-REP Roasting | HIGH | Rubeus `asreproast` command |
-| Collection / T1056.001 | Keylogging | MODERATE | AdaptixC2 framework supports keylogging via BOFs (gopher.x64.exe Go agent has full BOF runtime); operator-driven, not directly observed |
-| Discovery / T1057 | Process Discovery | HIGH | `beacon.ps1` calls `Get-Process explorer`; AdaptixC2 BOF runtime supports general process enumeration |
-| Discovery / T1082 | System Information Discovery | HIGH | Seatbelt + winpeas + `linpeas.sh` bundled — comprehensive system enumeration |
-| Discovery / T1083 | File and Directory Discovery | HIGH | Seatbelt + winpeas + `linpeas.sh` perform file/directory enumeration |
-| Discovery / T1018 | Remote System Discovery | HIGH | SharpHound bundled (×2: .exe + .ps1) — domain-wide remote-system data |
-| Discovery / T1087.002 | Domain Account | HIGH | SharpHound + ADRecon + PowerView all enumerate domain accounts |
-| Discovery / T1069.002 | Domain Groups | HIGH | SharpHound + ADRecon enumerate domain groups |
-| Discovery / T1482 | Domain Trust Discovery | HIGH | SharpHound + ADRecon collect domain trust topology |
-| Discovery / T1518.001 | Security Software Discovery | HIGH | winpeas + Seatbelt detect installed AV/EDR/security tools |
-| Privilege Escalation / T1134.001 | Token Impersonation/Theft | HIGH | GodPotato + PrintSpoofer abuse `SeImpersonatePrivilege` to impersonate SYSTEM token via DCOM/RPC/print-spooler authentication coercion |
-| Privilege Escalation / T1134.002 | Create Process with Token | HIGH | RunasCs creates process with stolen/borrowed token |
-| Privilege Escalation / T1068 | Exploitation for Privilege Escalation | MODERATE | GodPotato + PrintSpoofer exploit specific Windows RPC/print-spooler vulnerabilities (CVE-2022-26904 / CVE-2021-1675 / CVE-2021-34527 lineage) |
-| Privilege Escalation / T1649 | Steal or Forge Authentication Certificates | HIGH | Certify (Ghostpack) bundled — abuses misconfigured AD CS templates (ESC1–ESC8) for certificate-based authentication theft |
-| Lateral Movement / T1090.001 | Internal Proxy | HIGH | Ligolo-ng v0.8.3 stock upstream creates TUN-mode reverse tunnel for full internal-network proxy access |
-| Lateral Movement / T1572 | Protocol Tunneling | HIGH | Ligolo-ng + chisel both bundled — two redundant Go-based reverse-tunneling tools |
-| Command and Control / T1071.001 | Web Protocols | HIGH | AdaptixC2 beacon HTTP POST to `45.130.148.125:80` on 4 URI paths, `X-Beacon-Id` heartbeat header, Firefox 20 UA, 4–5s sleep, deterministic timing |
-| Command and Control / T1573.001 | Symmetric Cryptography | HIGH | RC4-128 encryption on AdaptixC2 beacon configuration in `.rdata` (key `f443b9ce7e0658900f6a7ff0991cdee6` plaintext-adjacent to ciphertext); framework documented as RC4-encrypted command channel |
-| Command and Control / T1105 | Ingress Tool Transfer | HIGH | Open directory at `45.130.148.125:8888` hosts the entire toolkit for delivery to victim hosts during operations |
+| Resource Development / T1583.003 | Virtual Private Server | MODERATE | `45.130.148.125` on AS35682 (Uzbekistan) |
+| Resource Development / T1588.002 | Obtain Tool | HIGH | AdaptixC2 (Linux build), Ligolo-ng v0.8.3, Ghostpack/SpecterOps suite, mimikatz, lazagne, winpeas/linpeas |
+| Execution / T1059.001 | PowerShell | HIGH | `beacon.ps1` 256 KB loader (AMSI bypass + reflective load + inject) |
+| Execution / T1620 | Reflective Code Loading | HIGH | `[Reflection.Assembly]::Load([byte[]])` of `injector.dll`; RDI bootstrap maps beacon DLL |
+| Defense Evasion / T1562.001 | Disable or Modify Tools | HIGH | AMSI bypass via `*iUtils` reflection + `SetValue($null, 0)` on `amsiContext` |
+| Defense Evasion / T1027 | Obfuscated Files or Information | HIGH | RC4-encrypted config + base64 + XOR 0xA7 shellcode layers |
+| Defense Evasion / T1140 | Deobfuscate/Decode Files | HIGH | `beacon.ps1` base64 + XOR decode; beacon RC4-decrypts config at startup |
+| Defense Evasion / T1132.001 | Standard Encoding (Base64) | HIGH | Base64 for `$dr` (injector) + `$sr` (shellcode); BASE64_table for C2 |
+| Defense Evasion / T1055 | Process Injection (parent) | HIGH | `SI.Inject(uint32 pid, byte[] sc)` — `OpenProcess` → `VirtualAllocEx` → `VirtualProtectEx` → `WriteProcessMemory` → `CreateRemoteThread` |
+| Defense Evasion / T1055.002 | Portable Executable Injection | HIGH | Embedded PE injection into `explorer.exe` via W^X (RW → RX, NOT RWX). Also Priv Esc. |
+| Defense Evasion / T1574.002 | DLL Side-Loading | MODERATE | `msupdate.dll` (beacon DLL renamed for sideload spoofing) — prep only |
+| Credential Access / T1003.001 | LSASS Memory | HIGH | mimikatz v2.2.0 (gentilkiwi) |
+| Credential Access / T1003.002 | Security Account Manager | HIGH | SharpSecDump bundled |
+| Credential Access / T1003.003 | NTDS | MODERATE | SharpSecDump → NTDS.dit on DCs |
+| Credential Access / T1003.006 | DCSync | HIGH | mimikatz `lsadump::dcsync` |
+| Credential Access / T1555 | Credentials from Password Stores | HIGH | lazagne (×2 variants) — multi-source cred extraction |
+| Credential Access / T1555.003 | Web Browsers | HIGH | SharpDPAPI + lazagne — browser cred stores |
+| Credential Access / T1555.004 | Windows Credential Manager | HIGH | SharpDPAPI — DPAPI vaults (Credential Manager, RDG) |
+| Credential Access / T1552.004 | Private Keys | MODERATE | Certify — extract keys from AD CS certs |
+| Credential Access / T1558.003 | Kerberoasting | HIGH | Rubeus `kerberoast` |
+| Credential Access / T1558.004 | AS-REP Roasting | HIGH | Rubeus `asreproast` |
+| Collection / T1056.001 | Keylogging | MODERATE | AdaptixC2 BOF keylogging (operator-driven, not observed) |
+| Discovery / T1057 | Process Discovery | HIGH | `Get-Process explorer` in `beacon.ps1` + AdaptixC2 BOF process enum |
+| Discovery / T1082 | System Information Discovery | HIGH | Seatbelt + winpeas + `linpeas.sh` |
+| Discovery / T1083 | File and Directory Discovery | HIGH | Seatbelt + winpeas + `linpeas.sh` |
+| Discovery / T1018 | Remote System Discovery | HIGH | SharpHound (×2: `.exe` + `.ps1`) — domain-wide remote systems |
+| Discovery / T1087.002 | Domain Account | HIGH | SharpHound + ADRecon + PowerView |
+| Discovery / T1069.002 | Domain Groups | HIGH | SharpHound + ADRecon |
+| Discovery / T1482 | Domain Trust Discovery | HIGH | SharpHound + ADRecon — domain trusts |
+| Discovery / T1518.001 | Security Software Discovery | HIGH | winpeas + Seatbelt — installed AV/EDR detection |
+| Privilege Escalation / T1134.001 | Token Impersonation/Theft | HIGH | GodPotato + PrintSpoofer — `SeImpersonatePrivilege` → SYSTEM |
+| Privilege Escalation / T1134.002 | Create Process with Token | HIGH | RunasCs — process with stolen token |
+| Privilege Escalation / T1068 | Exploitation for Privilege Escalation | MODERATE | GodPotato + PrintSpoofer (CVE-2021-1675 / CVE-2022-26904 lineage) |
+| Privilege Escalation / T1649 | Steal or Forge Authentication Certificates | HIGH | Certify (Ghostpack) — AD CS template abuse (ESC1–ESC8) |
+| Lateral Movement / T1090.001 | Internal Proxy | HIGH | Ligolo-ng v0.8.3 — TUN-mode reverse tunnel |
+| Lateral Movement / T1572 | Protocol Tunneling | HIGH | Ligolo-ng + chisel — Go reverse tunnels |
+| Command and Control / T1071.001 | Web Protocols | HIGH | Beacon HTTP POST `45.130.148.125:80`, 4 URIs, `X-Beacon-Id`, Firefox 20 UA, 4–5s sleep |
+| Command and Control / T1573.001 | Symmetric Cryptography | HIGH | RC4-128 on `.rdata` config (key `f443b9ce…` plaintext-adjacent) |
+| Command and Control / T1105 | Ingress Tool Transfer | HIGH | Open directory `45.130.148.125:8888` hosts toolkit for delivery |
 
 **Tactic coverage summary:** 9 of 14 tactics. Initial Access (TA0001) not mapped — delivery vector not observed. Impact (TA0040) not mapped — no destructive techniques in the kit. Reconnaissance (TA0043) not mapped — staging endpoint provides no operator-side reconnaissance evidence. Persistence (TA0003) not mapped definitively — only the moderate-confidence `msupdate.dll` sideload preparation artifact is present, with no scheduled tasks, no Run-key drops, and no service installations observed at the staging endpoint. Exfiltration (TA0010) not mapped — no exfiltration scripts in the kit; operator-driven via C2 channel only.
 
