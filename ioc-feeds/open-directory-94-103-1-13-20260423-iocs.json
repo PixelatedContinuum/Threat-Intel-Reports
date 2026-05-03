@@ -16,8 +16,8 @@
     "confidence_note": "Confidence levels follow CLAUDE.md scale: DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT. Victim-owned infrastructure is explicitly flagged with false_positive_risk=true — these are hosts the operator TARGETS, not operator-controlled C2. Do NOT block them as malicious infrastructure; hunt them for signs of compromise.",
     "tlp": "WHITE",
     "cross_build_invariants_note": "Two anchors are byte-for-byte identical across both observed builds (mymain.bat and myfile.bat) and constitute the strongest hunting indicators: Stage-4 mutex GUID 9f67b5ed-6c10-4c53-818b-8d26be0d1339 and Stage-5b UAC bypass PE SHA256 da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8.",
-    "updated": "2026-04-24T01:14:56Z",
-    "notes": "2026-04-23 pDNS update: 7 co-tenant domains added + dhost.su ASN self-domain. | 2026-04-23 VT refresh: 94.103.1.13 5/94 confirmed; all 8 co-tenant domains 0/94 or NOT FOUND (Cloudflare fronting effective)."
+    "updated": "2026-05-02T23:50:00Z",
+    "notes": "2026-04-23 pDNS update: 7 co-tenant domains added + dhost.su ASN self-domain. | 2026-04-23 VT refresh: 94.103.1.13 5/94 confirmed; all 8 co-tenant domains 0/94 or NOT FOUND (Cloudflare fronting effective). | 2026-05-02 follow-up: staging server at 94.103.1.13:7777 globally offline since ~16:44 UTC (8-country external probe confirms TCP refused). interact.py SHA256 added to file_indicators (VT 18/63, Microsoft Trojan:Python/Multiverze!rfn). gp.xor URL context expanded with XOR-key 0x42 detail. Backdoor host-account credential pair pentest:Qwerty12345 added under host_artifacts."
   },
   "file_indicators": {
     "sha256": [
@@ -68,6 +68,14 @@
         "filename": "gp.exe",
         "confidence": "HIGH",
         "context": "Standard GodPotato, labeled in version info"
+      },
+      {
+        "hash": "f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad",
+        "filename": "interact.py",
+        "confidence": "DEFINITE",
+        "context": "Stage-2 operator controller (951 bytes Python). Connects to local listener 127.0.0.1:4444, performs canonical PowerShell AMSI bypass (amsiInitFailed flip), then downloads http://94.103.1.13/gp.xor, single-byte XOR-decodes with key 0x42, reflectively loads as .NET assembly via [Reflection.Assembly]::Load, and invokes EntryPoint with -cmd \"net user pentest Qwerty12345 /add\" to create a hardcoded backdoor Administrator account. VT 18/63, Microsoft Trojan:Python/Multiverze!rfn, Kaspersky HEUR:Trojan-Downloader.PowerShell.Agent.gen, Symantec Trojan.Gen.NPE. First seen on VT 2026-04-21. Added in 2026-05-02 follow-up; see report §12.2.",
+        "vt_detections": "18/63",
+        "vt_first_seen": "2026-04-21T15:57:07Z"
       },
       {
         "hash": "3027a212272957298bf4d32505370fa63fb162d6a6a6ec091af9d7626317a858",
@@ -480,7 +488,9 @@
       {
         "url": "http://94.103.1.13/gp.xor",
         "confidence": "DEFINITE",
-        "context": "XOR-encoded GodPotato payload hosted on staging server (discovered in interact.py session 8)"
+        "context": "XOR-encoded GodPotato payload hosted on staging server (port 80, distinct from the 7777 open-directory port). Single-byte XOR with key 0x42; pulled by interact.py (see file_indicators sha256 f90fd97e...) via DownloadData → in-memory bxor 0x42 decode → [Reflection.Assembly]::Load → EntryPoint.Invoke. As of 2026-05-02 the host is offline globally; URL retained for derivative-loader hunting (any script performing DownloadData against an HTTP target named *.xor followed by Reflection.Assembly.Load is a high-fidelity hunt for this loader pattern regardless of operator infrastructure rotation).",
+        "encoding": "XOR-single-byte key=0x42",
+        "host_status_2026_05_02": "OFFLINE — confirmed via 8-country external probe (check-host.net), TCP refused on port 80 and 7777"
       },
       {
         "url": "http://172.86.76.198:3000/api/auth/verify-otp",
@@ -670,6 +680,22 @@
         "command": "wbadmin delete catalog -quiet",
         "confidence": "DEFINITE",
         "context": "Stage-5a ransomware — deletes backup catalog"
+      },
+      {
+        "value": "net user pentest Qwerty12345 /add",
+        "command": "net user pentest Qwerty12345 /add",
+        "confidence": "DEFINITE",
+        "context": "BACKDOOR ACCOUNT CREATION — invoked as the entry-point argument to the XOR-decoded GodPotato .NET assembly downloaded from http://94.103.1.13/gp.xor by interact.py. Runs as NT AUTHORITY\\SYSTEM via GodPotato impersonation. Hunt for this exact command line, for any successful logon by username 'pentest', and for any local Administrator group membership change adding 'pentest'. Added in 2026-05-02 follow-up; see report §12.2."
+      }
+    ],
+    "local_accounts": [
+      {
+        "value": "pentest:Qwerty12345",
+        "username": "pentest",
+        "password": "Qwerty12345",
+        "privilege": "Local Administrator (created via net user with implicit add to Users group; GodPotato runs as SYSTEM and the operator's loader chain typically follows with `net localgroup administrators pentest /add`)",
+        "confidence": "DEFINITE",
+        "context": "Hardcoded backdoor account credential pair embedded in interact.py (sha256 f90fd97e...). The same credential string is plausibly reused across operator victims because it is hardcoded in the operator's automation script rather than generated per-target. Defenders should hunt for any local account named 'pentest', any password change events on accounts named 'pentest', and any successful interactive logons with username 'pentest'. Maps to MITRE ATT&CK T1136.001 (Create Account: Local Account) and T1078.003 (Valid Accounts: Local Accounts). Added in 2026-05-02 follow-up; see report §12.2."
       }
     ]
   },

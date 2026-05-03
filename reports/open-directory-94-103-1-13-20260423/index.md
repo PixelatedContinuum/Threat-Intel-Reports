@@ -29,7 +29,7 @@ ioc_highlights:
 ---
 
 **Campaign Identifier:** Chaos-TorBrowserTor-MultiStageLoader-94.103.1.13<br>
-**Last Updated:** April 23, 2026<br>
+**Last Updated:** May 2, 2026 (addendum — see §12)<br>
 **Threat Level:** HIGH
 
 ---
@@ -899,6 +899,63 @@ This section explicitly catalogs what we do not know, what we have assumed, and 
 
 **Framework references:**
 - MITRE ATT&CK framework (A1) — technique definitions in Section 6.
+
+---
+
+## 12. Addendum — 2026-05-02 Follow-up
+
+> **Analyst note:** This section was appended on 2026-05-02 to capture two developments since the original 2026-04-23 publication: (1) the staging server `94.103.1.13:7777` went globally offline, consistent with operator takedown after sustained external probing; (2) deeper analysis of `interact.py` — referenced but not fully decomposed in the original — yielded one new sample-level IOC (its SHA256), one new host-side persistence IOC (a hardcoded backdoor account credential pair), and one detection-relevant detail (the XOR key used to obfuscate the staged GodPotato payload). All three are now reflected in the IOC feed and detection content.
+
+### 12.1 Staging Infrastructure Status — Server Globally Offline
+
+The open directory at `http://94.103.1.13:7777/` was last successfully reached by our recrawl service at **2026-05-02 16:44 UTC**. From that point onward, all access attempts return TCP connection refused. To rule out a routing or proxy issue local to The Hunters Ledger, the host was probed externally from **eight independent network locations** (Spain, France, India ×2, Singapore, UK, US, Vietnam — all on different ASNs) via `check-host.net`. Every probe returned `Connection refused`. The IP itself remains advertised — the host is not null-routed — but no service is listening on port 7777.
+
+This pattern is consistent with one of three operator actions:
+- **Voluntary takedown** following increased external attention (`94.103.1.13` had received sustained recrawls plus at least one third-party mass-download attempt on 2026-05-02 prior to the outage).
+- **Hosting-provider abuse response** by AS209207 (Digital Hosting Provider LLC) following abuse complaints. AS209207 has historically been operator-tolerant, so this is the less likely of the three.
+- **Migration to fresh infrastructure** with the operator deliberately closing the previously-exposed staging port. The two co-tenant patterns documented in §4 (`forumrutor24.com`, `gtanuncios.com`, `bulgainme.pro` and their respective mail subdomains) suggest the operator runs multi-tenant infrastructure across this host; closing port 7777 does not necessarily imply abandoning the IP. Defenders should continue monitoring the IP for re-emergence on alternate ports (the operator's broader port profile included 22, 80, and 7777).
+
+**What was lost.** Sample expansion observed during the 2026-04-13 → 2026-04-20 window (41 net-new files including `ros.apk` 19 MB, `loveorg.tar` 240 KB, and a financial-platform JavaScript-bundle cluster — `adm_bundle.js`, `pay_bundle.js`, `trade_bundle.js`, `vendor.js`) was indexed by metadata only. The crawler captured filenames and sizes but did not retrieve full file content before the takedown, and the hasher service did not complete sha256 computation for these specific artifacts. They are not currently recoverable from VirusTotal or other public corpora and constitute a hard intelligence gap. The presence of a 19 MB Android package alongside payment-flow and trading-flow JavaScript bundles is consistent with a parallel mobile-banking trojan staging effort, but absent the file bytes this remains an inference, not an observed sample-level finding.
+
+**What was preserved.** All 50 unique sample hashes captured during the active observation window (2026-04-13 → 2026-04-20) are present on VirusTotal and remain retrievable for analyst use. The `interact.py` analysis below is the highest-value finding in that group that was not fully covered in the original publication.
+
+### 12.2 `interact.py` — Stage-2 Operator Controller (full breakdown)
+
+**Sample data:**
+
+| Attribute | Value |
+|---|---|
+| Filename | `interact.py` |
+| SHA256 | `f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad` |
+| Size | 951 bytes |
+| File type | Python source |
+| VT detections | 18 / 63 (28.6%) |
+| First seen on VT | 2026-04-21 15:57:07 UTC |
+| VT vendor labels | `Trojan:Python/Multiverze!rfn` (Microsoft), `HEUR:Trojan-Downloader.PowerShell.Agent.gen` (Kaspersky), `Trojan.Gen.NPE` (Symantec) |
+
+`interact.py` is a small, operator-written automation script that drives a pre-existing reverse shell on the victim. It is not a stand-alone implant and does not establish initial access — it expects an existing TCP listener on `127.0.0.1:4444` (consistent with the loopback-tunnel pattern documented in §5.7 and the Orcus loopback C2 on port `127.0.0.1:20268`). The script automates three actions in sequence:
+
+**1. Connect to local listener (`127.0.0.1:4444`).** The connection is local-loopback, which is the same architectural pattern the Orcus RAT uses for its real C2 — an `ssh`/`chisel`/`plink` tunnel terminates on the victim, and the operator drives commands through the loopback endpoint. The 4444 listener is a parallel, separate tunnel than the Orcus 20268 listener, indicating the operator runs at minimum two concurrent loopback tunnels per victim.
+
+**2. AMSI bypass** via the canonical `[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiInitFailed","NonPublic,Static").SetValue(...)` pattern. This is publicly documented from approximately 2017 and remains effective on Windows hosts running PowerShell versions where the field is still present and writable. The version of `interact.py` retrieved from VirusTotal has all PowerShell `$variable` markers stripped — the call appears as `SetValue(,)` in the captured bytes — likely an artifact of the operator's template-generator tooling rather than a working deployed script. Functionally equivalent to `SetValue($null,$true)`. Maps to **T1562.001 — Disable or Modify Tools**.
+
+**3. Staged GodPotato XOR-loader → SYSTEM → backdoor account.** The script downloads `http://94.103.1.13/gp.xor`, performs an in-memory single-byte XOR decode with key `0x42`, and reflectively loads the decoded bytes as a .NET assembly via `[Reflection.Assembly]::Load()`. The assembly's entry point is invoked with the argument string `-cmd "net user pentest Qwerty12345 /add"`. This is the GodPotato pattern — coerce a privileged service account, invoke `CreateProcessWithToken` as `NT AUTHORITY\SYSTEM`, and execute the command-line string as that token. The result is a local Administrator account `pentest` with password `Qwerty12345` created on the victim host. Maps to **T1620 — Reflective Code Loading**, **T1136.001 — Local Account**, and **T1078.003 — Local Accounts**.
+
+#### 12.2.1 New IOCs Added
+
+| IOC | Type | Detail |
+|---|---|---|
+| `f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad` | SHA256 | `interact.py` Stage-2 operator controller |
+| Username `pentest` / password `Qwerty12345` | Host credential | Hardcoded backdoor account string created by the GodPotato post-elevation `net user` invocation. Defenders should hunt for any `net user pentest * /add`, any local user named `pentest` not originating from a known IT provisioning workflow, and any successful logon with that username pattern. |
+| XOR key `0x42` | Encoding | Single-byte XOR used to obfuscate the `gp.xor` payload at rest on the staging server. Detection content for arbitrary scripts performing `bxor 0x42` against `DownloadData()` results paired with `Reflection.Assembly.Load` is a high-fidelity hunt for derivative versions of this loader. |
+
+#### 12.2.2 Why the Original Report Missed This
+
+The original 2026-04-23 publication referenced `interact.py` in the IOC feed context (as one of the scripts that pulled samples from the staging server) but did not perform the script-level decomposition above. At publication time, the platform's enrichment pipeline had not yet queried `interact.py`'s SHA256 against VirusTotal, so the 18/63 detection ratio and Microsoft `Trojan:Python/Multiverze` label were unknown. The deeper analysis was completed on 2026-05-02 as part of the post-takedown follow-up and is documented here for completeness. **No previously-published technical claims in this report are altered or retracted by this addendum.** The Console.Title self-extraction trick, the cross-build invariants, the cross-layer key reuse, and all other primary findings stand exactly as published.
+
+### 12.3 Detection Content Updates
+
+A new Sigma rule has been added to the [companion detection page](/hunting-detections/open-directory-94-103-1-13-20260423-detections/) covering the `pentest:Qwerty12345` backdoor-account creation pattern at the command-line level. This rule fires on `net user pentest * /add` regardless of the staging mechanism (XOR-loader, plain PowerShell, manual operator session, etc.) and is therefore robust against any future variation in the operator's loader chain so long as the credential string remains stable. The IOC feed has been updated to include the `interact.py` SHA256 and an expanded context entry on the existing `http://94.103.1.13/gp.xor` URL noting the XOR key.
 
 ---
 

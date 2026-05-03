@@ -657,6 +657,52 @@ level: medium
 
 ---
 
+### Tier B — Stage-2 Operator Backdoor Account Creation (added 2026-05-02 addendum)
+
+---
+
+**Detection Priority:** HIGH
+**Rationale:** The Stage-2 operator controller `interact.py` (added in §12.2 addendum) executes `net user pentest Qwerty12345 /add` as the entry-point argument to the XOR-decoded GodPotato .NET assembly downloaded from `http://94.103.1.13/gp.xor`. The username/password pair is hardcoded in the operator's automation script and therefore plausibly reused across victims. Detection on the literal command-line string catches this regardless of how the loader chain rotates — XOR-loader, plain PowerShell invocation, manual operator session, or any future variation — so long as the credential string remains stable.
+**ATT&CK Coverage:** T1136.001 (Create Account: Local Account), T1078.003 (Valid Accounts: Local Accounts)
+**Confidence:** HIGH
+**False Positive Risk:** VERY LOW — the literal username `pentest` paired with password `Qwerty12345` in a `net user /add` invocation is implausible as a benign artifact; legitimate IT provisioning does not produce this exact string
+
+```yaml
+title: Chaos Loader Stage-2 Operator Backdoor Account 'pentest' Created
+id: 5e8c4f1b-2a9d-47b6-9c3e-7d1f8a2e6b54
+status: test
+description: Detects the hardcoded backdoor account creation command embedded in interact.py (sha256 f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad), the Stage-2 operator controller in the Chaos/TorBrowserTor multi-stage loader campaign at 94.103.1.13. The script downloads an XOR-encoded GodPotato assembly, decodes it with single-byte XOR key 0x42, reflectively loads it as a .NET assembly, and invokes its EntryPoint with the argument string 'net user pentest Qwerty12345 /add' — running as NT AUTHORITY\SYSTEM via GodPotato impersonation. The resulting local account is the operator's persistence anchor. Detection keys on the literal username/password combination in the net.exe command line, which catches the same operator regardless of how their loader chain mutates so long as the credential string remains stable.
+references:
+    - https://the-hunters-ledger.com/reports/open-directory-94-103-1-13-20260423/#12-addendum-2026-05-02-follow-up
+    - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/
+author: The Hunters Ledger
+date: 2026/05/02
+tags:
+    - attack.persistence
+    - attack.t1136.001
+    - attack.t1078.003
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_image:
+        Image|endswith:
+            - '\net.exe'
+            - '\net1.exe'
+    selection_cmdline:
+        CommandLine|contains|all:
+            - 'user'
+            - 'pentest'
+            - 'Qwerty12345'
+            - '/add'
+    condition: selection_image and selection_cmdline
+falsepositives:
+    - Implausible — exact username 'pentest' paired with password 'Qwerty12345' is operator-specific
+level: high
+```
+
+---
+
 ## Suricata Signatures
 
 ### Tier B — Operator Staging Infrastructure
