@@ -410,8 +410,19 @@ main.content {
    technique chains. */
 .hl-post-content td,
 .hl-post-content th {
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  /* break-word only breaks unbreakable runs that don't fit (long URLs,
+     full hashes, GUIDs). Short items (filenames, dates, IPs, truncated
+     hashes) stay on one line and remain readable. */
+  overflow-wrap: break-word;
+}
+
+/* Atomic items wrapped in backticks (filenames, dates, IPs, registry
+   keys, etc.) should never break mid-string within a table cell. The
+   table layout will allocate more width to a column with a long unbreakable
+   code item, which is the desired behavior. */
+.hl-post-content td code,
+.hl-post-content th code {
+  white-space: nowrap;
 }
 
 .hl-post-content th {
@@ -1617,17 +1628,23 @@ img { max-width: 100%; height: auto; }
 
   /* --- Long-string wrapping (hashes, IOCs, IPs, URLs) ------ */
   /* This is the fix for the "grey right margin" issue when
-     long indicators overflow their container. */
+     long indicators overflow their container. Mobile keeps the
+     more aggressive `anywhere` for prose elements (narrow viewport
+     can't accommodate long unbroken strings) but lets table-cell
+     atomic code items still keep their single-line behavior via
+     the desktop rule above (which applies on mobile too). */
   .hl-post-content,
   .hl-post-content p,
   .hl-post-content li,
-  .hl-post-content a,
-  .hl-post-content td,
-  .hl-post-content th {
+  .hl-post-content a {
     overflow-wrap: anywhere;
     word-break: break-word;
   }
-  .hl-post-content code { word-break: break-all; }
+  .hl-post-content td,
+  .hl-post-content th {
+    overflow-wrap: break-word;
+  }
+  .hl-post-content code:not(td code):not(th code) { word-break: break-all; }
 
   /* --- Headings: smaller + tighter padding ----------------- */
   .hl-post-content h1 {
