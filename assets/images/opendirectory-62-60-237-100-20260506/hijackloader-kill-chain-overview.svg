@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1700" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <!-- SVG canvas: matches site bg-row #161616 with subtle outer border so the figure reads as a card on the dark page -->
+  <rect width="900" height="1700" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="899" height="1699" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- ================================================== TITLE BLOCK ================================================== -->
+  <text x="450" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#ffffff">Kill Chain Overview</text>
+  <text x="450" y="58" text-anchor="middle" font-size="14" fill="#f5f5f5">HijackLoader / Penguish / Rugmi  →  AsyncRAT-class .NET RAT</text>
+  <text x="450" y="78" text-anchor="middle" font-size="11" fill="#cccccc">Primary sample: Carriers.exe  ·  Staging 62.60.237[.]100 (AS210644 AEZA, OFAC SDN)  ·  C2 185.241.208[.]129:56167 (AS210558 1337 Services, Spamhaus DROP)</text>
+  <line x1="60" y1="98" x2="840" y2="98" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- ================================================== STAGE 0 — INITIAL ACCESS (orange — site high-severity) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="120" width="780" height="100" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="120" width="780" height="26" rx="6" fill="#f97316"/>
+    <rect x="60" y="140" width="780" height="6" fill="#f97316"/>
+    <text x="74" y="138" font-size="11" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 0</text>
+    <text x="160" y="138" font-size="13" font-weight="600" fill="#111111">Initial Access · 8 parallel delivery vectors</text>
+    <text x="74" y="170" font-size="12" fill="#ffffff">Any one vector triggers the same downstream loader chain:</text>
+    <text x="74" y="190" font-size="11" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.url  ·  .lnk  ·  .scr / .msi (RTLO)  ·  macro Office  ·  .xll  ·  .msc (GrimResource)</text>
+    <text x="74" y="208" font-size="11" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.hta / .mht / .mhtml POCs  ·  fake-PDF .exe (long-timestamp filename)</text>
+  </g>
+  <line x1="450" y1="220" x2="450" y2="248" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 1 — SFX WRAPPER (yellow — site medium-severity) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="252" width="780" height="100" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="252" width="780" height="26" rx="6" fill="#eab308"/>
+    <rect x="60" y="272" width="780" height="6" fill="#eab308"/>
+    <text x="74" y="270" font-size="11" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 1</text>
+    <text x="160" y="270" font-size="13" font-weight="600" fill="#111111">SFX Wrapper · Carriers.exe (Inno Setup 6.5+, 6.3 MB)</text>
+    <text x="74" y="302" font-size="12" fill="#ffffff">Pascal Script anti-triage:  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">InitializeSetup() → ExtractTemporaryFile ×17 → WinExec → return False</tspan></text>
+    <text x="74" y="320" font-size="11" fill="#e5e5e5">Installer aborts silently with no wizard, no [Run] section, payload already executing.</text>
+    <text x="74" y="338" font-size="11" fill="#e5e5e5">AppName Apophyge · DefaultDirName Veteran · AppId {1F2952E4-…7DA7D2}</text>
+  </g>
+  <line x1="450" y1="352" x2="450" y2="380" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 2 — SIDE-LOAD HOST (red — site critical-severity, operator loader) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="384" width="780" height="100" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="384" width="780" height="26" rx="6" fill="#dc2626"/>
+    <rect x="60" y="404" width="780" height="6" fill="#dc2626"/>
+    <text x="74" y="402" font-size="11" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 2</text>
+    <text x="160" y="402" font-size="13" font-weight="600" fill="#ffffff">Side-load Host · CrystSupervisor32.exe (renamed Wondershare SlideShowEditor.exe)</text>
+    <text x="74" y="434" font-size="12" fill="#ffffff">Genuine signed Wondershare binary loads operator-modified <tspan font-weight="600">ExceptionHandler.dll</tspan></text>
+    <text x="74" y="452" font-size="11" fill="#e5e5e5">PDB: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">I:\CompanySource\Plowshare\Src\Symbol\Release\ExceptionHandler.pdb</tspan></text>
+    <text x="74" y="470" font-size="11" fill="#e5e5e5">FUN_100024B0 = inline reflective loader (PEB-walk API resolution + relocation + memcpy + jump)</text>
+  </g>
+  <line x1="450" y1="484" x2="450" y2="512" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 3 — HOLLOW #1 INTO tapisrv.dll (blue — site accent-blue, abused legit Windows DLL) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="516" width="780" height="84" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="516" width="780" height="26" rx="6" fill="#58a6ff"/>
+    <rect x="60" y="536" width="780" height="6" fill="#58a6ff"/>
+    <text x="74" y="534" font-size="11" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 3</text>
+    <text x="160" y="534" font-size="13" font-weight="600" fill="#111111">DLL Hollow #1  →  Windows tapisrv.dll  ·  EDR-quiet target</text>
+    <text x="74" y="566" font-size="12" fill="#ffffff">Reads <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">shadermgr93.rc</tspan> (27 KB operator config) · LoadLibrary(tapisrv) · VirtualProtect .text RWX</text>
+    <text x="74" y="584" font-size="11" fill="#e5e5e5">memcpy 5,808 bytes of stage-2 shellcode into tapisrv .text → call tapisrv .text + 0xED0</text>
+  </g>
+  <line x1="450" y1="600" x2="450" y2="628" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 4 — STAGE-2 SHELLCODE (red — operator loader) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="632" width="780" height="120" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="632" width="780" height="26" rx="6" fill="#dc2626"/>
+    <rect x="60" y="652" width="780" height="6" fill="#dc2626"/>
+    <text x="74" y="650" font-size="11" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 4</text>
+    <text x="160" y="650" font-size="13" font-weight="600" fill="#ffffff">Stage-2 Shellcode · 5,808 bytes · 8-phase architecture</text>
+    <text x="74" y="682" font-size="12" fill="#ffffff">API hash table built (X65599 multiplier · 17 of 21 slots resolved)</text>
+    <text x="74" y="700" font-size="11" fill="#e5e5e5">Anti-sandbox quadruple: ZwQueryInformationProcess + ZwDelayExecution × 9 + QueryPerformanceCounter + ZwQuerySystemInformation</text>
+    <text x="74" y="720" font-size="12" fill="#ffffff">Reads <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">networkspec17.log</tspan> (2.6 MB) → 3-layer decode:</text>
+    <text x="74" y="738" font-size="11" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">L1 PNG-IDAT chunk walker  →  L2 4-byte XOR (key 0xE1D5B4A2)  →  L3 LZNT1 chunked  →  3.75 MB</text>
+  </g>
+  <line x1="450" y1="752" x2="450" y2="780" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 5 — HOLLOW #2 INTO input.dll (blue — accent-blue, abused legit) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="784" width="780" height="84" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="784" width="780" height="26" rx="6" fill="#58a6ff"/>
+    <rect x="60" y="804" width="780" height="6" fill="#58a6ff"/>
+    <text x="74" y="802" font-size="11" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 5</text>
+    <text x="160" y="802" font-size="13" font-weight="600" fill="#111111">DLL Hollow #2  →  Windows input.dll  ·  second EDR-quiet target</text>
+    <text x="74" y="834" font-size="12" fill="#ffffff">Reads target name from Layer-3 offset 0xf4: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">%windir%\SysWOW64\input.dll</tspan></text>
+    <text x="74" y="852" font-size="11" fill="#e5e5e5">LoadLibrary(input.dll) · VirtualProtect .text RWX · memcpy stage-3 bytes · call entry point</text>
+  </g>
+  <line x1="450" y1="868" x2="450" y2="896" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 6 — STAGE-3 PE BUNDLE (purple — distinct category for the mixed bundle) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="900" width="780" height="148" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="900" width="780" height="26" rx="6" fill="#a855f7"/>
+    <rect x="60" y="920" width="780" height="6" fill="#a855f7"/>
+    <text x="74" y="918" font-size="11" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 6</text>
+    <text x="160" y="918" font-size="13" font-weight="600" fill="#111111">Stage-3 PE Bundle · 8 PEs · multi-vendor camouflage upgrade</text>
+
+    <text x="74" y="950" font-size="11" fill="#ffffff">3.75 MB Layer-3 buffer contains 8 embedded PE files. Operator hides 3 malicious PEs among 5 genuine signed binaries:</text>
+
+    <!-- legit column - uses site green accent on dark -->
+    <rect x="74" y="966" width="370" height="72" rx="4" fill="#0a1f12" stroke="#4ade8040"/>
+    <circle cx="84" cy="980" r="3" fill="#4ade80"/>
+    <text x="92" y="983" font-size="10" font-weight="600" fill="#4ade80">5 GENUINE signed (camouflage)</text>
+    <text x="92" y="998" font-size="10" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_01  Crisp Squirrel StubExecutable</text>
+    <text x="92" y="1011" font-size="10" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_02  Info-ZIP zip.exe v3.0</text>
+    <text x="92" y="1024" font-size="10" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_04  Google Updater stub</text>
+    <text x="240" y="1024" font-size="10" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_05  Google Updater component</text>
+    <text x="92" y="1037" font-size="10" font-weight="600" fill="#4ade80" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_08  Qihoo 360 PromoUtil.exe  →  Stage 8 host</text>
+
+    <!-- malicious column - uses site accent-red on dark -->
+    <rect x="456" y="966" width="370" height="72" rx="4" fill="#1f0e0e" stroke="#f8717140"/>
+    <circle cx="466" cy="980" r="3" fill="#f87171"/>
+    <text x="474" y="983" font-size="10" font-weight="600" fill="#f87171">3 OPERATOR-controlled</text>
+    <text x="474" y="998" font-size="10" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_03  HijackLoader / Penguish / Rugmi PROPER</text>
+    <text x="474" y="1011" font-size="10" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_06  Rugmi.HP GoProxy MITM CA installer</text>
+    <text x="474" y="1024" font-size="10" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_07  bundle-cleanup helper (campaign-unique)</text>
+  </g>
+  <line x1="450" y1="1048" x2="450" y2="1076" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 7 — PER-HOST KDF (red — operator loader) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1080" width="780" height="100" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1080" width="780" height="26" rx="6" fill="#dc2626"/>
+    <rect x="60" y="1100" width="780" height="6" fill="#dc2626"/>
+    <text x="74" y="1098" font-size="11" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 7</text>
+    <text x="160" y="1098" font-size="13" font-weight="600" fill="#ffffff">Per-host KDF · pe_03 (HijackLoader proper) execution guardrail</text>
+    <text x="74" y="1130" font-size="12" fill="#ffffff">Resolves <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ntdll!RtlHashUnicodeString</tspan> (under-documented HijackLoader TTP — no readable hash function in pe_03)</text>
+    <text x="74" y="1148" font-size="11" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">seed = X65599(GetComputerNameW())  XOR  0xa1b2d3b4   →   PRNG seed (env vars) AND payload decryption key</text>
+    <text x="74" y="1166" font-size="11" fill="#e5e5e5">Resisted ~270 cipher recovery combinations — above commodity AsyncRAT/DCRat sophistication</text>
+  </g>
+  <line x1="450" y1="1180" x2="450" y2="1208" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 8 — WVAULT HOLLOW (blue — abused legit Windows-vendor binary, cross-campaign) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1212" width="780" height="100" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1212" width="780" height="26" rx="6" fill="#58a6ff"/>
+    <rect x="60" y="1232" width="780" height="6" fill="#58a6ff"/>
+    <text x="74" y="1230" font-size="11" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 8</text>
+    <text x="160" y="1230" font-size="13" font-weight="600" fill="#111111">WVault.exe Hollow  ·  cross-campaign TTP cluster (8+ campaigns since 2025)</text>
+    <text x="74" y="1262" font-size="12" fill="#ffffff">Genuine Qihoo 360 PromoUtil.exe (pe_08) dropped to <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">C:\ProgramData\WVault.exe</tspan> · parent <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CrystSupervisor32.exe</tspan> exits</text>
+    <text x="74" y="1280" font-size="11" fill="#e5e5e5">Process orphaned · Process Explorer Threads tab shows <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">clr.dll!CreateAssemblyNameObject</tspan> + <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">GetIdentityAuthority</tspan></text>
+    <text x="74" y="1298" font-size="11" fill="#fb923c" font-weight="600">Detection signal: defenders should match the PATTERN (orphan signed Qihoo binary + CLR threads), not the specific hash</text>
+  </g>
+  <line x1="450" y1="1312" x2="450" y2="1340" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 9 — PERSISTENCE (deep red — site critical-severity, endgame) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1344" width="780" height="100" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1344" width="780" height="26" rx="6" fill="#7f1d1d"/>
+    <rect x="60" y="1364" width="780" height="6" fill="#7f1d1d"/>
+    <text x="74" y="1362" font-size="11" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 9</text>
+    <text x="160" y="1362" font-size="13" font-weight="600" fill="#ffffff">Persistence + Defender Bypass + MITM Cert Install</text>
+    <text x="74" y="1394" font-size="12" fill="#ffffff">Three concurrent persistence + bypass mechanisms:</text>
+    <text x="74" y="1412" font-size="11" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">·  C:\Windows\Tasks\watchermgmt.job   (legacy .job format · autorunsc enumeration blind spot)</text>
+    <text x="74" y="1428" font-size="11" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">·  HKLM\…\Defender\Exclusions\Paths\C:\ProgramData\adv_ctrl   ·   GoProxy CA cert  0174E68C…2B61AFD</text>
+  </g>
+  <line x1="450" y1="1444" x2="450" y2="1472" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================================================== STAGE 10 — C2 BEACON (deep red — endgame) ================================================== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1476" width="780" height="120" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1476" width="780" height="26" rx="6" fill="#7f1d1d"/>
+    <rect x="60" y="1496" width="780" height="6" fill="#7f1d1d"/>
+    <text x="74" y="1494" font-size="11" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 10</text>
+    <text x="160" y="1494" font-size="13" font-weight="600" fill="#ffffff">C2 Beacon  ·  TLSv1  ·  AsyncRAT-class .NET RAT</text>
+    <text x="74" y="1526" font-size="12" fill="#ffffff">WVault.exe (PID 2596)  →  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" font-weight="600">185.241.208[.]129:56167</tspan>  ·  hardcoded IP, no DNS lookup</text>
+    <text x="74" y="1544" font-size="11" fill="#e5e5e5">JA3  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">07af4aa9e4d215a5ee63f9a0a277fbe3</tspan>  (Abuse.ch SSLBL → AsyncRAT JA3)</text>
+    <text x="74" y="1560" font-size="11" fill="#e5e5e5">JA4  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">t10i060500_4dc025c38c38_1a3805c3aa63</tspan>  ·  ClientHello cipher list 49162-49161-49172-49171-53-47</text>
+    <text x="74" y="1578" font-size="11" fill="#fb923c" font-weight="600">Highest-value durable signal: JA3+ClientHello fingerprint persists across IP rotation; DNS-based detection useless</text>
+  </g>
+
+  <!-- timing footer -->
+  <line x1="60" y1="1620" x2="840" y2="1620" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="450" y="1645" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff">Total time from sample launch to first C2 beacon  ≈  43 seconds</text>
+  <text x="450" y="1665" text-anchor="middle" font-size="11" fill="#e5e5e5">File-based blocking must act inside this window  ·  otherwise behavioral detection at Stage 8 (orphan WVault.exe + CLR threads) is required</text>
+  <text x="450" y="1685" text-anchor="middle" font-size="10" fill="#cccccc">Color legend  —  orange: initial access · yellow: dropper · red: operator loader · blue: hollowed Windows DLL · purple: PE bundle · deep red: persistence + C2</text>
+</svg>

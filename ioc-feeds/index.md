@@ -14,15 +14,16 @@ position: 4
 {% include section-header.html label="Recent" accent="#f87171" %}
 
 <div class="hl-grid">
+{% include report-card.html title="HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign — IOC Feed" date="May 2026" severity="high" tags="Loader,RAT,MaaS,Open Dir" url="/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json" %}
 {% include report-card.html title="AdaptixC2 Open Directory Exposure (45.130.148.125) — IOC Feed" date="Apr 2026" severity="high" tags="C2,Toolkit,Open Dir" url="/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json" %}
 {% include report-card.html title="Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13) — IOC Feed" date="Apr 2026" severity="high" tags="Ransomware,Loader,Open Dir" url="/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json" %}
 {% include report-card.html title="ShinyHunters Data Leak Site (91.215.85.22) — IOC Feed" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,Threat" url="/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json" %}
-{% include report-card.html title="OpenStrike Expanded Toolkit (172.105.0.126) — IOC Feed" date="Apr 2026" severity="high" tags="Toolkit,C2,Injection" url="/ioc-feeds/new-files-found-20260408-iocs.json" %}
 </div>
 
 {% include section-header.html label="All Feeds" accent="#444444" %}
 
 <div class="hl-row-list">
+{% include report-row.html title="OpenStrike Expanded Toolkit (172.105.0.126) — IOC Feed" date="Apr 2026" severity="high" tags="Toolkit,C2,Injection" url="/ioc-feeds/new-files-found-20260408-iocs.json" %}
 {% include report-row.html title="OpenStrike Beacon Toolkit (172.105.0.126) — IOC Feed" date="Apr 2026" severity="high" tags="Toolkit,C2,Open Dir" url="/ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json" %}
 {% include report-row.html title="Shadow RAT & XWorm Open Directory Campaign — IOC Feed" date="Apr 2026" severity="high" tags="RAT,MaaS,C2" url="/ioc-feeds/shadow-xworm-opendirectory-iocs.json" %}
 {% include report-row.html title="Open Directory at 193.56.255.154 — XiebroC2 and Covenant C2 IOC Feed" date="Apr 2026" severity="high" tags="C2,Multi-Family,Open Dir" url="/ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json" %}
