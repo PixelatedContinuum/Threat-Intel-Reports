@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 2900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto">
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
     </marker>
     <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
@@ -29,7 +29,7 @@
     <text x="80" y="328" font-size="18" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.url  ·  .lnk  ·  .scr / .msi (RTLO)  ·  macro Office  ·  .xll</text>
     <text x="80" y="360" font-size="18" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.msc (GrimResource)  ·  .hta / .mht / .mhtml POCs  ·  fake-PDF .exe</text>
   </g>
-  <line x1="500" y1="390" x2="500" y2="430" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="390" x2="500" y2="430" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 1 =========== -->
   <g filter="url(#cardShadow)">
@@ -43,7 +43,7 @@
     <text x="80" y="580" font-size="18" fill="#e5e5e5">Installer aborts silently — no wizard, no [Run] section, payload already executing.</text>
     <text x="80" y="612" font-size="18" fill="#e5e5e5">AppName  Apophyge  ·  DefaultDirName  Veteran  ·  AppId {1F2952E4-…7DA7D2}</text>
   </g>
-  <line x1="500" y1="636" x2="500" y2="676" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="636" x2="500" y2="676" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 2 =========== -->
   <g filter="url(#cardShadow)">
@@ -57,7 +57,7 @@
     <text x="80" y="828" font-size="17" fill="#e5e5e5">FUN_100024B0 = inline reflective loader</text>
     <text x="80" y="858" font-size="17" fill="#e5e5e5">(PEB-walk API resolution + relocation + memcpy stage-2 + jump)</text>
   </g>
-  <line x1="500" y1="882" x2="500" y2="922" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="882" x2="500" y2="922" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 3 =========== -->
   <g filter="url(#cardShadow)">
@@ -70,7 +70,7 @@
     <text x="80" y="1040" font-size="18" fill="#e5e5e5">LoadLibrary(tapisrv) · VirtualProtect .text RWX</text>
     <text x="80" y="1072" font-size="18" fill="#e5e5e5">memcpy 5,808 bytes of stage-2 shellcode → call tapisrv .text + 0xED0</text>
   </g>
-  <line x1="500" y1="1088" x2="500" y2="1128" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="1088" x2="500" y2="1128" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 4 =========== -->
   <g filter="url(#cardShadow)">
@@ -85,7 +85,7 @@
     <text x="80" y="1308" font-size="20" fill="#ffffff">Reads <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">networkspec17.log</tspan> (2.6 MB) → 3-layer decode:</text>
     <text x="80" y="1344" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">L1 PNG-IDAT walker → L2 XOR (key 0xE1D5B4A2) → L3 LZNT1 → 3.75 MB</text>
   </g>
-  <line x1="500" y1="1374" x2="500" y2="1414" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="1374" x2="500" y2="1414" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 5 =========== -->
   <g filter="url(#cardShadow)">
@@ -98,7 +98,7 @@
     <text x="80" y="1532" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">%windir%\SysWOW64\input.dll</text>
     <text x="80" y="1562" font-size="18" fill="#e5e5e5">LoadLibrary · VirtualProtect .text RWX · memcpy stage-3 bytes · call entry point</text>
   </g>
-  <line x1="500" y1="1580" x2="500" y2="1620" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="1580" x2="500" y2="1620" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 6 =========== -->
   <g filter="url(#cardShadow)">
@@ -127,7 +127,7 @@
     <text x="542" y="1835" font-size="15" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_06  Rugmi.HP GoProxy MITM</text>
     <text x="542" y="1860" font-size="15" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">pe_07  bundle-cleanup helper</text>
   </g>
-  <line x1="500" y1="1896" x2="500" y2="1936" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="1896" x2="500" y2="1936" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 7 =========== -->
   <g filter="url(#cardShadow)">
@@ -142,7 +142,7 @@
     <text x="80" y="2110" font-size="16" fill="#e5e5e5">→ PRNG seed (env vars) AND payload decryption key</text>
     <text x="80" y="2134" font-size="17" fill="#e5e5e5">Resisted ~270 cipher recovery combinations.</text>
   </g>
-  <line x1="500" y1="2142" x2="500" y2="2182" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="2142" x2="500" y2="2182" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 8 =========== -->
   <g filter="url(#cardShadow)">
@@ -157,7 +157,7 @@
     <text x="80" y="2352" font-size="16" fill="#e5e5e5">Process Explorer Threads tab shows  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">clr.dll!CreateAssemblyNameObject</tspan></text>
     <text x="80" y="2378" font-size="17" fill="#fb923c" font-weight="600">Detection: match the PATTERN (orphan signed Qihoo + CLR threads), not the hash.</text>
   </g>
-  <line x1="500" y1="2388" x2="500" y2="2428" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="2388" x2="500" y2="2428" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 9 =========== -->
   <g filter="url(#cardShadow)">
@@ -170,7 +170,7 @@
     <text x="80" y="2546" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">·  C:\Windows\Tasks\watchermgmt.job  (legacy .job autorunsc blind spot)</text>
     <text x="80" y="2574" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">·  Defender exclusion of drop dir  ·  GoProxy CA cert  0174E68C…2B61AFD</text>
   </g>
-  <line x1="500" y1="2604" x2="500" y2="2644" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="500" y1="2604" x2="500" y2="2644" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- =========== STAGE 10 =========== -->
   <g filter="url(#cardShadow)">

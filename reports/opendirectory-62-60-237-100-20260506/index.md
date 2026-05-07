@@ -62,14 +62,24 @@ A Russian-speaking commodity-malware operator, tracked here as **UTA-2026-007** 
 
 **Key Risk Factors.**
 
-| Risk Dimension | Score (X/10) | Rationale |
-|---|---|---|
-| Data Exfiltration | 8/10 | AsyncRAT-class .NET RAT supports browser credentials, banking sessions (HTTPS MITM via GoProxy CA), keystrokes, screenshots; full filesystem access |
-| System Compromise | 8/10 | Remote command execution, scheduled task persistence with HighestAvailable privileges, .NET assembly injection in signed-vendor host |
-| Persistence Difficulty | 7/10 | Legacy `.job` is autorunsc blind spot; Defender exclusion of drop directory; operator IPC via Wondershare-named pipe |
-| Evasion Capability | 9/10 | Multi-layer wrapping; per-host KDF; multi-vendor camouflage; renamed signed binary as injection host; hardcoded-IP C2 (DNS blocking ineffective); Heaven's Gate in pe_03 |
-| Lateral Movement | 5/10 | No automated lateral movement (not a worm); manual lateral movement via stolen credentials possible |
-| Detection Difficulty | 8/10 | DNS-based detection ineffective (no DNS resolution for C2); TLS-fingerprint and behavioral process-tree are the primary durable signals (Section 6.7) |
+<table>
+<colgroup>
+<col style="width: 22%;">
+<col style="width: 12%;">
+<col style="width: 66%;">
+</colgroup>
+<thead>
+<tr><th>Risk Dimension</th><th>Score (X/10)</th><th>Rationale</th></tr>
+</thead>
+<tbody>
+<tr><td>Data Exfiltration</td><td>8/10</td><td>AsyncRAT-class .NET RAT supports browser credentials, banking sessions (HTTPS MITM via GoProxy CA), keystrokes, screenshots; full filesystem access</td></tr>
+<tr><td>System Compromise</td><td>8/10</td><td>Remote command execution, scheduled task persistence with HighestAvailable privileges, .NET assembly injection in signed-vendor host</td></tr>
+<tr><td>Persistence Difficulty</td><td>7/10</td><td>Legacy <code>.job</code> is autorunsc blind spot; Defender exclusion of drop directory; operator IPC via Wondershare-named pipe</td></tr>
+<tr><td>Evasion Capability</td><td>9/10</td><td>Multi-layer wrapping; per-host KDF; multi-vendor camouflage; renamed signed binary as injection host; hardcoded-IP C2 (DNS blocking ineffective); Heaven's Gate in pe_03</td></tr>
+<tr><td>Lateral Movement</td><td>5/10</td><td>No automated lateral movement (not a worm); manual lateral movement via stolen credentials possible</td></tr>
+<tr><td>Detection Difficulty</td><td>8/10</td><td>DNS-based detection ineffective (no DNS resolution for C2); TLS-fingerprint and behavioral process-tree are the primary durable signals (Section 6.7)</td></tr>
+</tbody>
+</table>
 
 **Overall Risk Score: 7.5/10 (HIGH).** Detection is feasible — the durable signals listed in Key Takeaways above (TLS fingerprint, persistence file pattern, hollow-host process tree) provide multiple non-overlapping options, and the full detection package is in Section 10. The risk is the multiplicity of evasion layers and the operator's selective sophistication: high-tier work in chosen areas (camouflage, KDF, hollow host) and commodity choices elsewhere (Inno Setup wrapper, commodity loader). This is a MaaS-customer + bundle-camouflage integrator profile, not a script kiddie.
 
@@ -183,19 +193,29 @@ The campaign is a multi-vector phishing kit converging on a single loader chain.
 
 **Stage-by-stage detail at a glance:**
 
-| Stage | What happens | What defenders see |
-|---|---|---|
-| 0 | 8 parallel lures (URL/LNK/SCR/MSI-RTLO/macro-Office/XLL/MSC/HTA/fake-PDF-EXE) | First-touch artifact in the inbox or downloads — variable per vector |
-| 1 | `Carriers.exe` Inno Setup 6.5+ wrapper · Pascal Script `InitializeSetup() → WinExec → return False` | Silent installer that "fails to install" while payload is already running |
-| 2 | `CrystSupervisor32.exe` (genuine signed Wondershare) loads operator-modified `ExceptionHandler.dll` with Plowshare PDB | DLL side-load from a non-Wondershare installation directory |
-| 3 | First DLL hollow into `tapisrv.dll` (5,808 bytes of stage-2 shellcode) | RWX section in `tapisrv.dll` of `CrystSupervisor32.exe` |
-| 4 | Stage-2 shellcode 8-phase: API hash table, anti-sandbox quadruple, IDAT/XOR/LZNT1 decode of `networkspec17.log` to 3.75 MB | `ZwDelayExecution` × 9 · large LZNT1 decompression on a `.log` file |
-| 5 | Second DLL hollow into `input.dll` with stage-3 PE bundle | RWX section in `input.dll` |
-| 6 | 8 PEs unpacked (5 genuine signed binaries as camouflage + 3 operator-controlled including HijackLoader proper) | Multi-vendor file drop in `%TEMP%\is-XXXXX.tmp\` |
-| 7 | pe_03 resolves `RtlHashUnicodeString` and derives per-host KDF (`X65599(hostname) XOR 0xa1b2d3b4`) · 4 random env vars created | Per-host random uppercase-A-Z env-var names · encrypted `*.tmp` files |
-| 8 | `WVault.exe` (renamed Qihoo PromoUtil) spawned then orphaned · .NET CLR thread start addresses visible | Orphaned signed Qihoo binary in `C:\ProgramData\` with `clr.dll!CreateAssemblyNameObject` thread |
-| 9 | Three persistence layers: legacy `.job` scheduled task · Defender exclusion of drop dir · GoProxy CA cert install | `.job` file in `C:\Windows\Tasks\` (autorunsc blind spot) · cert thumbprint `0174E68C…2B61AFD` in registry |
-| 10 | TLSv1 beacon to `185.241.208[.]129:56167` · hardcoded IP · JA3 `07af4aa9…fbe3` matches SSLBL AsyncRAT | Outbound TLSv1 to non-standard high port from orphaned signed Qihoo binary · DNS-based detection useless |
+<table>
+<colgroup>
+<col style="width: 7%;">
+<col style="width: 48%;">
+<col style="width: 45%;">
+</colgroup>
+<thead>
+<tr><th>Stage</th><th>What happens</th><th>What defenders see</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>8 parallel lures (URL/LNK/SCR/MSI-RTLO/macro-Office/XLL/MSC/HTA/fake-PDF-EXE)</td><td>First-touch artifact in the inbox or downloads — variable per vector</td></tr>
+<tr><td>1</td><td><code>Carriers.exe</code> Inno Setup 6.5+ wrapper · Pascal Script <code>InitializeSetup() → WinExec → return False</code></td><td>Silent installer that "fails to install" while payload is already running</td></tr>
+<tr><td>2</td><td><code>CrystSupervisor32.exe</code> (genuine signed Wondershare) loads operator-modified <code>ExceptionHandler.dll</code> with Plowshare PDB</td><td>DLL side-load from a non-Wondershare installation directory</td></tr>
+<tr><td>3</td><td>First DLL hollow into <code>tapisrv.dll</code> (5,808 bytes of stage-2 shellcode)</td><td>RWX section in <code>tapisrv.dll</code> of <code>CrystSupervisor32.exe</code></td></tr>
+<tr><td>4</td><td>Stage-2 shellcode 8-phase: API hash table, anti-sandbox quadruple, IDAT/XOR/LZNT1 decode of <code>networkspec17.log</code> to 3.75 MB</td><td><code>ZwDelayExecution</code> × 9 · large LZNT1 decompression on a <code>.log</code> file</td></tr>
+<tr><td>5</td><td>Second DLL hollow into <code>input.dll</code> with stage-3 PE bundle</td><td>RWX section in <code>input.dll</code></td></tr>
+<tr><td>6</td><td>8 PEs unpacked (5 genuine signed binaries as camouflage + 3 operator-controlled including HijackLoader proper)</td><td>Multi-vendor file drop in <code>%TEMP%\is-XXXXX.tmp\</code></td></tr>
+<tr><td>7</td><td>pe_03 resolves <code>RtlHashUnicodeString</code> and derives per-host KDF (<code>X65599(hostname) XOR 0xa1b2d3b4</code>) · 4 random env vars created</td><td>Per-host random uppercase-A-Z env-var names · encrypted <code>*.tmp</code> files</td></tr>
+<tr><td>8</td><td><code>WVault.exe</code> (renamed Qihoo PromoUtil) spawned then orphaned · .NET CLR thread start addresses visible</td><td>Orphaned signed Qihoo binary in <code>C:\ProgramData\</code> with <code>clr.dll!CreateAssemblyNameObject</code> thread</td></tr>
+<tr><td>9</td><td>Three persistence layers: legacy <code>.job</code> scheduled task · Defender exclusion of drop dir · GoProxy CA cert install</td><td><code>.job</code> file in <code>C:\Windows\Tasks\</code> (autorunsc blind spot) · cert thumbprint <code>0174E68C…2B61AFD</code> in registry</td></tr>
+<tr><td>10</td><td>TLSv1 beacon to <code>185.241.208[.]129:56167</code> · hardcoded IP · JA3 <code>07af4aa9…fbe3</code> matches SSLBL AsyncRAT</td><td>Outbound TLSv1 to non-standard high port from orphaned signed Qihoo binary · DNS-based detection useless</td></tr>
+</tbody>
+</table>
 
 **Total time from sample launch to first C2 beacon: ~43 seconds.** File-based blocking needs to act in this window, or behavioral detection is required.
 
@@ -1089,12 +1109,22 @@ Of the 49 unique DNS A queries during the session, **NONE point to operator-cont
 
 12 alerts total during the run; only 2 are meaningful:
 
-| Count | Signature | Significance |
-|---|---|---|
-| **2** | **`ET DROP Spamhaus DROP Listed Traffic Inbound group 37`** | Direct hit on the C2 IP — confirms reputation match |
-| 4 | `SURICATA STREAM ESTABLISHED packet out of window` | TCP state reassembly noise from INetSim's response handling |
-| 3 | `SURICATA STREAM ESTABLISHED invalid ack` | Same |
-| 3 | `SURICATA STREAM Packet with invalid ack` | Same |
+<table>
+<colgroup>
+<col style="width: 8%;">
+<col style="width: 50%;">
+<col style="width: 42%;">
+</colgroup>
+<thead>
+<tr><th>Count</th><th>Signature</th><th>Significance</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>2</strong></td><td><strong><code>ET DROP Spamhaus DROP Listed Traffic Inbound group 37</code></strong></td><td>Direct hit on the C2 IP — confirms reputation match</td></tr>
+<tr><td>4</td><td><code>SURICATA STREAM ESTABLISHED packet out of window</code></td><td>TCP state reassembly noise from INetSim's response handling</td></tr>
+<tr><td>3</td><td><code>SURICATA STREAM ESTABLISHED invalid ack</code></td><td>Same</td></tr>
+<tr><td>3</td><td><code>SURICATA STREAM Packet with invalid ack</code></td><td>Same</td></tr>
+</tbody>
+</table>
 
 No Suricata-fired AsyncRAT/zgRAT/DCRat SSL-cert detections occurred in this run because the TLS handshake never completed (INetSim closed connections immediately, before the server certificate was sent). The pre-existing VT IDS hits on `Carriers.exe` (HIGH confidence — three independent rules: AsyncRAT JA3, AsyncRAT/zgRAT SSL cert pattern, DCRat C&C SSL cert) provide the family-attribution signal that this run did not directly observe.
 
