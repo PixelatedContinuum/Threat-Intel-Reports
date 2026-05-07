@@ -397,13 +397,14 @@ main.content {
   border-collapse: collapse;
   margin: 1.5rem 0;
   font-size: 0.9em;
-  /* `table-layout: fixed` distributes column width evenly (or by explicit
-     <colgroup> widths if present). With auto, the browser shrinks short-text
-     columns to make room for long-text columns, which causes "Data Exfiltration"
-     to wrap one letter per line while "Rationale" gets all the room. Fixed gives
-     every column a predictable share of the table width; long sentences wrap
-     more, short labels stay on one line. */
-  table-layout: fixed;
+  /* Default `table-layout: auto`. The browser sizes each column based on
+     min-content (longest unbreakable run in any cell, including the header)
+     and max-content (longest natural line). Combined with the rules below
+     (overflow-wrap: anywhere only on <code>, not on plain text), this means
+     headers like "STAGE" or "COUNT" establish the minimum column width — they
+     never wrap mid-character because their plain text is unbreakable.
+     Tables with explicit <colgroup> widths (in HTML) override this and use
+     the per-column percentages. */
 }
 
 /* Long-string wrapping inside table cells (hashes, file paths,
@@ -417,22 +418,20 @@ main.content {
    technique chains. */
 .hl-post-content td,
 .hl-post-content th {
-  /* overflow-wrap: anywhere is the safety net — without it, long unbreakable
-     tokens (full hashes, long URLs, GUIDs) cause the table to grow wider than
-     the 900px container and visually escape past the right margin. The OLD
-     companion rule `word-break: break-word` was the aggressive one that broke
-     short tokens (filenames, dates, IPs) mid-character; we removed that. With
-     just `overflow-wrap: anywhere`, the browser only inserts break points
-     when a line would otherwise overflow — short items stay intact, long
-     items break to fit. */
-  overflow-wrap: anywhere;
+  /* No overflow-wrap rule on plain td/th text. Default `normal` means
+     min-content = longest unbreakable word, which lets headers like "STAGE"
+     or "COUNT" establish the minimum column width. Plain-text cells wrap at
+     word boundaries (good — sentences in narrative columns flow naturally).
+     The risk is a very long unbreakable plain-text token would push the
+     column wider than the container. In practice we put long unbreakable
+     items (hashes, URLs, GUIDs, file paths) in backticks → handled by the
+     <code> rule below. */
 }
 
-/* With table-layout: fixed, columns have predictable widths. Long code items
-   (like full SHA256 hashes or long URLs) need to wrap inside their column —
-   forcing nowrap would push them past the column edge. Allow normal wrapping
-   for code in cells; the parent td's overflow-wrap: anywhere handles the
-   character-break safety net. */
+/* Long code items (full SHA256 hashes, long URLs, GUIDs) are unbreakable
+   tokens by their nature. overflow-wrap: anywhere lets them break at any
+   character if the column is too narrow — preventing the entire table from
+   overflowing past the 900px container right edge. */
 .hl-post-content td code,
 .hl-post-content th code {
   overflow-wrap: anywhere;

@@ -64,9 +64,9 @@ A Russian-speaking commodity-malware operator, tracked here as **UTA-2026-007** 
 
 <table>
 <colgroup>
-<col style="width: 22%;">
-<col style="width: 12%;">
-<col style="width: 66%;">
+<col style="width: 26%;">
+<col style="width: 16%;">
+<col style="width: 58%;">
 </colgroup>
 <thead>
 <tr><th>Risk Dimension</th><th>Score (X/10)</th><th>Rationale</th></tr>
@@ -195,9 +195,9 @@ The campaign is a multi-vector phishing kit converging on a single loader chain.
 
 <table>
 <colgroup>
-<col style="width: 7%;">
-<col style="width: 48%;">
-<col style="width: 45%;">
+<col style="width: 10%;">
+<col style="width: 47%;">
+<col style="width: 43%;">
 </colgroup>
 <thead>
 <tr><th>Stage</th><th>What happens</th><th>What defenders see</th></tr>
@@ -1111,9 +1111,9 @@ Of the 49 unique DNS A queries during the session, **NONE point to operator-cont
 
 <table>
 <colgroup>
-<col style="width: 8%;">
-<col style="width: 50%;">
-<col style="width: 42%;">
+<col style="width: 11%;">
+<col style="width: 49%;">
+<col style="width: 40%;">
 </colgroup>
 <thead>
 <tr><th>Count</th><th>Signature</th><th>Significance</th></tr>
