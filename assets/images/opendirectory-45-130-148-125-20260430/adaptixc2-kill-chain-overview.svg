@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 2470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="2470" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="2469" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="58" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Anticipated Kill Chain</text>
+  <text x="500" y="98" text-anchor="middle" font-size="24" fill="#f5f5f5">AdaptixC2 framework  ·  operator UTA-2026-006</text>
+  <text x="500" y="132" text-anchor="middle" font-size="17" fill="#cccccc">Operator-written delivery: beacon.ps1  +  injector.dll (SI.Inject)</text>
+  <text x="500" y="156" text-anchor="middle" font-size="17" fill="#cccccc">Staging + C2 + TeamServer co-located on 45.130.148[.]125 (AS35682, Tashkent UZ)</text>
+  <line x1="60" y1="180" x2="940" y2="180" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STAGE 0 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="210" width="880" height="170" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="210" width="880" height="42" rx="8" fill="#f97316"/>
+    <rect x="60" y="240" width="880" height="12" fill="#f97316"/>
+    <text x="80" y="240" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 0</text>
+    <text x="200" y="240" font-size="21" font-weight="600" fill="#111111">Initial Access  ·  PowerShell delivery (vector unobserved)</text>
+    <text x="80" y="290" font-size="20" fill="#ffffff">Operator delivers <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" font-weight="600">beacon.ps1</tspan> to victim by an unobserved mechanism.</text>
+    <text x="80" y="322" font-size="17" fill="#e5e5e5">Open directory hosts the loader, not the dropper — phishing / SocGholish / IAB hand-off all plausible.</text>
+    <text x="80" y="354" font-size="17" fill="#e5e5e5">Defender signal: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">powershell.exe</tspan> process creation with non-standard command line.</text>
+  </g>
+  <line x1="500" y1="380" x2="500" y2="420" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 1 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="426" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="426" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="456" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="456" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 1</text>
+    <text x="200" y="456" font-size="21" font-weight="600" fill="#ffffff">AMSI Bypass  ·  reflection-based  ·  Matt Graeber lineage</text>
+    <text x="80" y="506" font-size="20" fill="#ffffff">String-concatenation evades source-text AV signatures:</text>
+    <text x="80" y="538" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">$q = 'amsi' + 'Con' + 'text'</text>
+    <text x="80" y="570" font-size="17" fill="#e5e5e5"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">[Ref].Assembly.GetTypes() | ?{$_.Name -like '*iUtils'}</tspan>  →  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">SetValue($null, 0)</tspan></text>
+    <text x="80" y="602" font-size="17" fill="#e5e5e5"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">AmsiScanBuffer</tspan> silently no-ops for the rest of the PowerShell session.</text>
+  </g>
+  <line x1="500" y1="626" x2="500" y2="666" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 2 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="672" width="880" height="170" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="672" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="702" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="702" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 2</text>
+    <text x="200" y="702" font-size="21" font-weight="600" fill="#ffffff">Reflective .NET Load  ·  injector.dll into PowerShell memory</text>
+    <text x="80" y="752" font-size="18" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">[System.Reflection.Assembly]::Load([Convert]::FromBase64String($dr))</tspan></text>
+    <text x="80" y="784" font-size="17" fill="#e5e5e5">5,120-byte .NET v4.7.2 PE loaded directly — no <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Add-Type</tspan>, no temp file, no on-disk artifact.</text>
+    <text x="80" y="816" font-size="17" fill="#e5e5e5">Class <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" font-weight="600">SI</tspan> with method <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" font-weight="600">Inject(uint32 pid, byte[] sc)</tspan> now callable from PowerShell.</text>
+  </g>
+  <line x1="500" y1="842" x2="500" y2="882" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 3 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="888" width="880" height="170" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="888" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="918" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="918" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 3</text>
+    <text x="200" y="918" font-size="21" font-weight="600" fill="#ffffff">Shellcode Build &amp; Decode  ·  base64 + XOR 0xA7</text>
+    <text x="80" y="968" font-size="18" fill="#ffffff">31 chunked <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">$sr += '...'</tspan> concatenations build a ~250 KB base64 string</text>
+    <text x="80" y="1000" font-size="17" fill="#e5e5e5"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">$enc = [Convert]::FromBase64String($sr)</tspan>  →  byte-by-byte XOR with <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">0xA7</tspan></text>
+    <text x="80" y="1032" font-size="17" fill="#e5e5e5">Output: 1,023 bytes of MinGW-w64 RDI bootstrap + embedded AdaptixC2 beacon PE (184,832 B)</text>
+  </g>
+  <line x1="500" y1="1058" x2="500" y2="1098" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 4 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1104" width="880" height="240" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1104" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="1134" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="1134" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 4</text>
+    <text x="200" y="1134" font-size="21" font-weight="600" fill="#ffffff">Cross-Process Injection  ·  W^X-aware  ·  defining tradecraft choice</text>
+    <text x="80" y="1184" font-size="18" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">[SI]::Inject([uint32]$ep, $sc)</tspan> targets first <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">explorer.exe</tspan> PID found</text>
+    <text x="80" y="1218" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">OpenProcess(0x1FFFFF=PROCESS_ALL_ACCESS) → VirtualAllocEx(0x04=RW)</text>
+    <text x="80" y="1244" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">→ WriteProcessMemory → VirtualProtectEx(0x20=RX)  ← W^X flip, NOT 0x40 RWX</text>
+    <text x="80" y="1270" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">→ CreateRemoteThread → WaitForSingleObject(3000) → CloseHandle</text>
+    <text x="80" y="1310" font-size="17" fill="#fb923c" font-weight="600">Single sophistication choice — RW alloc → flip to RX defeats simple "RWX in remote process" EDR rules.</text>
+  </g>
+  <line x1="500" y1="1344" x2="500" y2="1384" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 5 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1390" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1390" width="880" height="42" rx="8" fill="#58a6ff"/>
+    <rect x="60" y="1420" width="880" height="12" fill="#58a6ff"/>
+    <text x="80" y="1420" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 5</text>
+    <text x="200" y="1420" font-size="21" font-weight="600" fill="#111111">RDI Bootstrap + Beacon Execution  ·  hosted in explorer.exe</text>
+    <text x="80" y="1470" font-size="18" fill="#ffffff">Remote thread starts at allocation base — first byte is the GCC x64 RDI bootstrap.</text>
+    <text x="80" y="1500" font-size="17" fill="#e5e5e5">Bootstrap walks PE headers, maps embedded DLL in-memory, jumps to <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">GetVersions</tspan> export.</text>
+    <text x="80" y="1532" font-size="17" fill="#e5e5e5">No on-disk DLL artifact, no <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">LoadLibrary</tspan> event for EDRs to log.</text>
+    <text x="80" y="1564" font-size="17" fill="#e5e5e5">Beacon now lives inside <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">explorer.exe</tspan> — long-lived, network-active, trusted-looking host process.</text>
+  </g>
+  <line x1="500" y1="1590" x2="500" y2="1630" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 6 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1636" width="880" height="240" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1636" width="880" height="42" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="1666" width="880" height="12" fill="#7f1d1d"/>
+    <text x="80" y="1666" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 6</text>
+    <text x="200" y="1666" font-size="21" font-weight="600" fill="#ffffff">C2 Beacon  ·  HTTP plaintext  ·  RC4-decrypted config drives traffic</text>
+    <text x="80" y="1716" font-size="18" fill="#ffffff">Beacon resolves WinHTTP at runtime (no networking imports in IAT)  →  POST to:</text>
+    <text x="80" y="1748" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" font-weight="600">45.130.148[.]125:80</text>
+    <text x="80" y="1782" font-size="16" fill="#e5e5e5">Cycles 4 URIs:  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">/api/v1/status · /updates/check.php · /content.html · /jquery-3.3.1.min.js</tspan></text>
+    <text x="80" y="1810" font-size="16" fill="#e5e5e5">Header  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">X-Beacon-Id</tspan>  +  UA  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Mozilla/5.0 (Windows NT 6.2; rv:20.0) … Firefox/20.0</tspan></text>
+    <text x="80" y="1838" font-size="16" fill="#e5e5e5">Cadence: 4–5s sleep · zero jitter · RC4 key  <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">f443b9ce…1cdee6</tspan></text>
+    <text x="80" y="1866" font-size="17" fill="#fb923c" font-weight="600">Highest-fidelity network signature — combination of X-Beacon-Id + Firefox 20 UA on POST is unique.</text>
+  </g>
+  <line x1="500" y1="1876" x2="500" y2="1916" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 7 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1922" width="880" height="270" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1922" width="880" height="42" rx="8" fill="#a855f7"/>
+    <rect x="60" y="1952" width="880" height="12" fill="#a855f7"/>
+    <text x="80" y="1952" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 7</text>
+    <text x="200" y="1952" font-size="21" font-weight="600" fill="#111111">Active C2  ·  operator hands-on-keyboard post-exploitation toolkit</text>
+    <text x="80" y="2002" font-size="18" fill="#ffffff">Operator drives the beacon interactively. Bundled toolkit covers the full kill chain:</text>
+
+    <!-- AD recon column -->
+    <rect x="80" y="2026" width="265" height="142" rx="6" fill="#0a1230" stroke="#58a6ff40"/>
+    <circle cx="98" cy="2048" r="5" fill="#58a6ff"/>
+    <text x="116" y="2054" font-size="15" font-weight="600" fill="#58a6ff">AD Recon</text>
+    <text x="98" y="2080" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">SharpHound (.exe + .ps1)</text>
+    <text x="98" y="2102" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ADRecon.ps1</text>
+    <text x="98" y="2124" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">PowerView.ps1</text>
+    <text x="98" y="2146" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Seatbelt</text>
+
+    <!-- Cred theft column -->
+    <rect x="367" y="2026" width="265" height="142" rx="6" fill="#1f0e0e" stroke="#f8717140"/>
+    <circle cx="385" cy="2048" r="5" fill="#f87171"/>
+    <text x="403" y="2054" font-size="15" font-weight="600" fill="#f87171">Credential Theft</text>
+    <text x="385" y="2080" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">mimikatz v2.2.0</text>
+    <text x="385" y="2102" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">SharpDPAPI · SharpSecDump</text>
+    <text x="385" y="2124" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Rubeus (Kerberoast)</text>
+    <text x="385" y="2146" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">lazagne ×2 variants</text>
+
+    <!-- Privesc column -->
+    <rect x="654" y="2026" width="266" height="142" rx="6" fill="#1f160a" stroke="#fb923c40"/>
+    <circle cx="672" cy="2048" r="5" fill="#fb923c"/>
+    <text x="690" y="2054" font-size="15" font-weight="600" fill="#fb923c">Privilege Escalation</text>
+    <text x="672" y="2080" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">GodPotato · PrintSpoofer</text>
+    <text x="672" y="2102" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">RunasCs</text>
+    <text x="672" y="2124" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Certify (AD CS)</text>
+    <text x="672" y="2146" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">winpeas</text>
+  </g>
+  <line x1="500" y1="2192" x2="500" y2="2232" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 8 =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="2238" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="2238" width="880" height="42" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="2268" width="880" height="12" fill="#7f1d1d"/>
+    <text x="80" y="2268" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 8</text>
+    <text x="200" y="2268" font-size="21" font-weight="600" fill="#ffffff">Lateral &amp; Linux Pivot  ·  redundant tunneling + Linux beacon</text>
+    <text x="80" y="2318" font-size="18" fill="#ffffff">Two redundant Go-built reverse tunnels for internal-network access:</text>
+    <text x="80" y="2350" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">·  Ligolo-ng v0.8.3 stock (TUN mode)   ·  chisel</text>
+    <text x="80" y="2382" font-size="17" fill="#ffffff">Once a Linux foothold is reachable through the tunnel:</text>
+    <text x="80" y="2414" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">·  AdaptixC2 Linux ELF agent (Gopher variant, 6.13 MB)   ·  linpeas.sh</text>
+  </g>
+</svg>
