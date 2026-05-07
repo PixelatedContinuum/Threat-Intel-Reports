@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 2050" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <defs>
-    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
     </marker>
     <filter id="cardShadow2" x="-2%" y="-2%" width="104%" height="108%">
@@ -8,145 +8,152 @@
     </filter>
   </defs>
 
-  <rect width="1000" height="1620" fill="#161616"/>
-  <rect x="0.5" y="0.5" width="999" height="1619" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+  <rect width="1000" height="2050" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="2049" fill="none" stroke="#2a2a2a" stroke-width="1"/>
 
   <!-- =========== TITLE =========== -->
-  <text x="500" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">Stage-2 Shellcode — 8-Phase Architecture</text>
-  <text x="500" y="80" text-anchor="middle" font-size="18" fill="#f5f5f5">5,808 bytes  ·  position-independent  ·  runs after first DLL hollow into Windows tapisrv.dll</text>
-  <text x="500" y="106" text-anchor="middle" font-size="14" fill="#cccccc">Source: bytes 0x53A8..0x6A57 of shadermgr93.rc after stage-1 relocation  ·  Entry point at offset 0xED0</text>
-  <line x1="60" y1="128" x2="940" y2="128" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">Stage-2 Shellcode — 8-Phase Architecture</text>
+  <text x="500" y="98" text-anchor="middle" font-size="22" fill="#f5f5f5">5,808 bytes  ·  position-independent  ·  runs after first DLL hollow into tapisrv.dll</text>
+  <text x="500" y="130" text-anchor="middle" font-size="17" fill="#cccccc">Source: bytes 0x53A8..0x6A57 of shadermgr93.rc after stage-1 relocation  ·  Entry point at offset 0xED0</text>
+  <line x1="60" y1="156" x2="940" y2="156" stroke="#2a2a2a" stroke-width="1"/>
 
   <!-- =========== PHASE 1 — API RESOLUTION =========== -->
   <g filter="url(#cardShadow2)">
-    <rect x="60" y="158" width="880" height="150" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="158" width="880" height="34" rx="6" fill="#dc2626"/>
-    <rect x="60" y="184" width="880" height="8" fill="#dc2626"/>
-    <text x="78" y="182" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.5">PHASE 1</text>
-    <text x="180" y="182" font-size="17" font-weight="600" fill="#ffffff">API Resolution via X65599 hash  ·  PEB-walk of ntdll exports</text>
-    <text x="78" y="224" font-size="16" fill="#ffffff">Resolves ~17 of 21 API slots needed for stage-2 execution.</text>
-    <text x="78" y="254" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">hash form:  h = h * M + utf16_char  ·  M = 0x0001003F (= 65,599)  ·  init = 0</text>
-    <text x="78" y="284" font-size="15" fill="#e5e5e5">Different multiplier from stage-1 (M = 2) — per-stage hash rotation.</text>
+    <rect x="60" y="186" width="880" height="190" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="186" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="216" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="216" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">PHASE 1</text>
+    <text x="200" y="216" font-size="21" font-weight="600" fill="#ffffff">API Resolution via X65599 hash · PEB-walk of ntdll exports</text>
+    <text x="80" y="266" font-size="20" fill="#ffffff">Resolves ~17 of 21 API slots needed for stage-2 execution.</text>
+    <text x="80" y="304" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">hash form:  h = h * M + utf16_char</text>
+    <text x="80" y="332" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">M = 0x0001003F (= 65,599)  ·  init = 0</text>
+    <text x="80" y="362" font-size="18" fill="#e5e5e5">Different multiplier from stage-1 (M = 2) — per-stage hash rotation.</text>
   </g>
-  <line x1="500" y1="308" x2="500" y2="342" stroke="#cccccc" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <line x1="500" y1="376" x2="500" y2="416" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow2)"/>
 
   <!-- =========== PHASE 2 — BUILD API_TABLE =========== -->
   <g filter="url(#cardShadow2)">
-    <rect x="60" y="346" width="880" height="120" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="346" width="880" height="34" rx="6" fill="#dc2626"/>
-    <rect x="60" y="372" width="880" height="8" fill="#dc2626"/>
-    <text x="78" y="370" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.5">PHASE 2</text>
-    <text x="180" y="370" font-size="17" font-weight="600" fill="#ffffff">api_table populated at slots +0x04 through +0x7c</text>
-    <text x="78" y="412" font-size="16" fill="#ffffff">17 named APIs known (LoadLibrary, VirtualProtect, ReadFile, ZwDelayExecution, …); 4 slots remain unidentified.</text>
-    <text x="78" y="442" font-size="15" fill="#e5e5e5">All subsequent phases dispatch through this table — the layout is a YARA-anchorable fingerprint for stage-2.</text>
+    <rect x="60" y="422" width="880" height="160" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="422" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="452" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="452" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">PHASE 2</text>
+    <text x="200" y="452" font-size="21" font-weight="600" fill="#ffffff">api_table populated at slots +0x04 through +0x7c</text>
+    <text x="80" y="502" font-size="20" fill="#ffffff">17 named APIs known; 4 slots remain unidentified.</text>
+    <text x="80" y="538" font-size="18" fill="#e5e5e5">All subsequent phases dispatch through this table —</text>
+    <text x="80" y="564" font-size="18" fill="#e5e5e5">the layout is a YARA-anchorable fingerprint for stage-2.</text>
   </g>
-  <line x1="500" y1="466" x2="500" y2="500" stroke="#cccccc" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <line x1="500" y1="582" x2="500" y2="622" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow2)"/>
 
   <!-- =========== PHASE 3 — ANTI-SANDBOX QUADRUPLE =========== -->
   <g filter="url(#cardShadow2)">
-    <rect x="60" y="504" width="880" height="240" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="504" width="880" height="34" rx="6" fill="#f97316"/>
-    <rect x="60" y="530" width="880" height="8" fill="#f97316"/>
-    <text x="78" y="528" font-size="13" font-weight="700" fill="#111111" letter-spacing="0.5">PHASE 3</text>
-    <text x="180" y="528" font-size="17" font-weight="600" fill="#111111">Anti-Sandbox QUADRUPLE  ·  gated by FUN_000002c0</text>
-    <text x="78" y="570" font-size="16" fill="#ffffff">All four checks must succeed before payload retrieval.</text>
-    <text x="78" y="596" font-size="15" fill="#e5e5e5">The four APIs co-located within the same 0x14B-byte config region are the most</text>
-    <text x="78" y="618" font-size="15" fill="#e5e5e5">distinctive YARA-anchorable pattern for stage-2.</text>
+    <rect x="60" y="628" width="880" height="310" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="628" width="880" height="42" rx="8" fill="#f97316"/>
+    <rect x="60" y="658" width="880" height="12" fill="#f97316"/>
+    <text x="80" y="658" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">PHASE 3</text>
+    <text x="200" y="658" font-size="21" font-weight="600" fill="#111111">Anti-Sandbox QUADRUPLE  ·  gated by FUN_000002c0</text>
+    <text x="80" y="708" font-size="20" fill="#ffffff">All four checks must succeed before payload retrieval.</text>
+    <text x="80" y="740" font-size="17" fill="#e5e5e5">The four APIs co-located within the same 0x14B-byte config region</text>
+    <text x="80" y="766" font-size="17" fill="#e5e5e5">are the most distinctive YARA-anchorable pattern for stage-2.</text>
 
     <!-- 2x2 grid of API check pills -->
-    <rect x="78" y="638" width="418" height="44" rx="4" fill="#1f0e0e" stroke="#f8717140"/>
-    <text x="92" y="660" font-size="14" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ZwQueryInformationProcess</text>
-    <text x="92" y="676" font-size="12" fill="#cccccc">anti-debug check</text>
+    <rect x="80" y="790" width="418" height="60" rx="6" fill="#1f0e0e" stroke="#f8717140"/>
+    <text x="96" y="816" font-size="16" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ZwQueryInformationProcess</text>
+    <text x="96" y="838" font-size="14" fill="#cccccc">anti-debug check</text>
 
-    <rect x="504" y="638" width="418" height="44" rx="4" fill="#1f0e0e" stroke="#f8717140"/>
-    <text x="518" y="660" font-size="14" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ZwDelayExecution × 9 × 5000ms</text>
-    <text x="518" y="676" font-size="12" fill="#cccccc">45-second sleep, sandbox-timeout evader</text>
+    <rect x="506" y="790" width="418" height="60" rx="6" fill="#1f0e0e" stroke="#f8717140"/>
+    <text x="522" y="816" font-size="16" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ZwDelayExecution × 9 × 5000ms</text>
+    <text x="522" y="838" font-size="14" fill="#cccccc">45-second sleep, sandbox evader</text>
 
-    <rect x="78" y="690" width="418" height="44" rx="4" fill="#1f0e0e" stroke="#f8717140"/>
-    <text x="92" y="712" font-size="14" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">QueryPerformanceCounter</text>
-    <text x="92" y="728" font-size="12" fill="#cccccc">timing fingerprint</text>
+    <rect x="80" y="858" width="418" height="60" rx="6" fill="#1f0e0e" stroke="#f8717140"/>
+    <text x="96" y="884" font-size="16" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">QueryPerformanceCounter</text>
+    <text x="96" y="906" font-size="14" fill="#cccccc">timing fingerprint</text>
 
-    <rect x="504" y="690" width="418" height="44" rx="4" fill="#1f0e0e" stroke="#f8717140"/>
-    <text x="518" y="712" font-size="14" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ZwQuerySystemInformation</text>
-    <text x="518" y="728" font-size="12" fill="#cccccc">process enumeration / sandbox detect</text>
+    <rect x="506" y="858" width="418" height="60" rx="6" fill="#1f0e0e" stroke="#f8717140"/>
+    <text x="522" y="884" font-size="16" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ZwQuerySystemInformation</text>
+    <text x="522" y="906" font-size="14" fill="#cccccc">process / sandbox detection</text>
   </g>
-  <line x1="500" y1="744" x2="500" y2="778" stroke="#cccccc" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <line x1="500" y1="938" x2="500" y2="978" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow2)"/>
 
   <!-- =========== PHASE 4 — READ ENCRYPTED PAYLOAD =========== -->
   <g filter="url(#cardShadow2)">
-    <rect x="60" y="782" width="880" height="120" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="782" width="880" height="34" rx="6" fill="#eab308"/>
-    <rect x="60" y="808" width="880" height="8" fill="#eab308"/>
-    <text x="78" y="806" font-size="13" font-weight="700" fill="#111111" letter-spacing="0.5">PHASE 4</text>
-    <text x="180" y="806" font-size="17" font-weight="600" fill="#111111">Read Encrypted Payload  ·  ReadFile of networkspec17.log</text>
-    <text x="78" y="848" font-size="16" fill="#ffffff">Wide-string filename "<tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">networkspec17.log</tspan>" passed in from stage-1's parameter block.</text>
-    <text x="78" y="878" font-size="15" fill="#e5e5e5">Reads the full 2.6 MB encrypted blob into a VirtualAlloc'd buffer — entropy 7.879, three encoding layers ahead.</text>
+    <rect x="60" y="984" width="880" height="160" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="984" width="880" height="42" rx="8" fill="#eab308"/>
+    <rect x="60" y="1014" width="880" height="12" fill="#eab308"/>
+    <text x="80" y="1014" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">PHASE 4</text>
+    <text x="200" y="1014" font-size="21" font-weight="600" fill="#111111">Read Encrypted Payload  ·  ReadFile of networkspec17.log</text>
+    <text x="80" y="1064" font-size="20" fill="#ffffff">Wide-string filename "<tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">networkspec17.log</tspan>"</text>
+    <text x="80" y="1094" font-size="18" fill="#e5e5e5">passed in from stage-1's parameter block.</text>
+    <text x="80" y="1124" font-size="17" fill="#e5e5e5">Reads the full 2.6 MB blob (entropy 7.879) — three encoding layers ahead.</text>
   </g>
-  <line x1="500" y1="902" x2="500" y2="936" stroke="#cccccc" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <line x1="500" y1="1144" x2="500" y2="1184" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow2)"/>
 
   <!-- =========== PHASES 5/5b/6 — 3-LAYER DECODE PIPELINE =========== -->
   <g filter="url(#cardShadow2)">
-    <rect x="60" y="940" width="880" height="220" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="940" width="880" height="34" rx="6" fill="#a855f7"/>
-    <rect x="60" y="966" width="880" height="8" fill="#a855f7"/>
-    <text x="78" y="964" font-size="13" font-weight="700" fill="#111111" letter-spacing="0.5">PHASES 5  /  5b  /  6</text>
-    <text x="280" y="964" font-size="17" font-weight="600" fill="#111111">3-Layer Decode Pipeline  ·  2.6 MB  →  3.75 MB</text>
+    <rect x="60" y="1190" width="880" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1190" width="880" height="42" rx="8" fill="#a855f7"/>
+    <rect x="60" y="1220" width="880" height="12" fill="#a855f7"/>
+    <text x="80" y="1220" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">PHASES 5  /  5b  /  6</text>
+    <text x="320" y="1220" font-size="21" font-weight="600" fill="#111111">3-Layer Decode Pipeline  ·  2.6 MB → 3.75 MB</text>
 
     <!-- Layer 1 -->
-    <rect x="78" y="990" width="278" height="150" rx="4" fill="#1d1226" stroke="#a855f740"/>
-    <text x="92" y="1014" font-size="14" font-weight="700" fill="#a855f7" letter-spacing="0.5">LAYER 1</text>
-    <text x="92" y="1040" font-size="15" font-weight="600" fill="#ffffff">PNG-IDAT chunk walker</text>
-    <text x="92" y="1066" font-size="14" fill="#e5e5e5">Strip fake PNG-IDAT framing</text>
-    <text x="92" y="1090" font-size="13" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">walk_idat_chunks()</text>
-    <text x="92" y="1116" font-size="13" fill="#cccccc">IDAT/IEND sentinels delimit chunks</text>
-    <line x1="356" y1="1065" x2="385" y2="1065" stroke="#cccccc" stroke-width="2.5" marker-end="url(#arrow2)"/>
+    <rect x="80" y="1252" width="278" height="200" rx="6" fill="#1d1226" stroke="#a855f740"/>
+    <text x="96" y="1280" font-size="16" font-weight="700" fill="#a855f7" letter-spacing="0.5">LAYER 1</text>
+    <text x="96" y="1310" font-size="18" font-weight="600" fill="#ffffff">PNG-IDAT walker</text>
+    <text x="96" y="1340" font-size="16" fill="#e5e5e5">Strip fake PNG-IDAT framing</text>
+    <text x="96" y="1370" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">walk_idat_chunks()</text>
+    <text x="96" y="1402" font-size="14" fill="#cccccc">IDAT/IEND sentinels</text>
+    <text x="96" y="1422" font-size="14" fill="#cccccc">delimit chunks</text>
+    <line x1="358" y1="1352" x2="395" y2="1352" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow2)"/>
 
     <!-- Layer 2 -->
-    <rect x="389" y="990" width="278" height="150" rx="4" fill="#1d1226" stroke="#a855f740"/>
-    <text x="403" y="1014" font-size="14" font-weight="700" fill="#a855f7" letter-spacing="0.5">LAYER 2</text>
-    <text x="403" y="1040" font-size="15" font-weight="600" fill="#ffffff">4-byte XOR (in-place)</text>
-    <text x="403" y="1066" font-size="14" fill="#e5e5e5">Key stored at file offset 4-7</text>
-    <text x="403" y="1090" font-size="14" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">key = 0xE1D5B4A2</text>
-    <text x="403" y="1116" font-size="12" fill="#cccccc">fork-specific (canon: 32 A3 49 B3)</text>
-    <line x1="667" y1="1065" x2="696" y2="1065" stroke="#cccccc" stroke-width="2.5" marker-end="url(#arrow2)"/>
+    <rect x="399" y="1252" width="278" height="200" rx="6" fill="#1d1226" stroke="#a855f740"/>
+    <text x="415" y="1280" font-size="16" font-weight="700" fill="#a855f7" letter-spacing="0.5">LAYER 2</text>
+    <text x="415" y="1310" font-size="18" font-weight="600" fill="#ffffff">4-byte XOR (in-place)</text>
+    <text x="415" y="1340" font-size="16" fill="#e5e5e5">Key at file offset 4-7</text>
+    <text x="415" y="1372" font-size="16" fill="#f87171" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">key = 0xE1D5B4A2</text>
+    <text x="415" y="1402" font-size="13" fill="#cccccc">fork-specific</text>
+    <text x="415" y="1422" font-size="13" fill="#cccccc">(canon: 32 A3 49 B3)</text>
+    <line x1="677" y1="1352" x2="714" y2="1352" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow2)"/>
 
     <!-- Layer 3 -->
-    <rect x="700" y="990" width="222" height="150" rx="4" fill="#1d1226" stroke="#a855f740"/>
-    <text x="714" y="1014" font-size="14" font-weight="700" fill="#a855f7" letter-spacing="0.5">LAYER 3</text>
-    <text x="714" y="1040" font-size="15" font-weight="600" fill="#ffffff">LZNT1 chunked</text>
-    <text x="714" y="1066" font-size="13" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">RtlDecompressBuffer</text>
-    <text x="714" y="1090" font-size="13" fill="#e5e5e5">per-chunk, concatenated</text>
-    <text x="714" y="1118" font-size="15" fill="#4ade80" font-weight="700">Output: 3.75 MB</text>
+    <rect x="718" y="1252" width="206" height="200" rx="6" fill="#1d1226" stroke="#a855f740"/>
+    <text x="734" y="1280" font-size="16" font-weight="700" fill="#a855f7" letter-spacing="0.5">LAYER 3</text>
+    <text x="734" y="1310" font-size="18" font-weight="600" fill="#ffffff">LZNT1 chunked</text>
+    <text x="734" y="1342" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">RtlDecompressBuffer</text>
+    <text x="734" y="1370" font-size="14" fill="#e5e5e5">per-chunk,</text>
+    <text x="734" y="1390" font-size="14" fill="#e5e5e5">concatenated</text>
+    <text x="734" y="1428" font-size="17" fill="#4ade80" font-weight="700">Output: 3.75 MB</text>
   </g>
-  <line x1="500" y1="1160" x2="500" y2="1194" stroke="#cccccc" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <line x1="500" y1="1480" x2="500" y2="1520" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow2)"/>
 
   <!-- =========== PHASE 7 — HOLLOW INPUT.DLL =========== -->
   <g filter="url(#cardShadow2)">
-    <rect x="60" y="1198" width="880" height="200" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="1198" width="880" height="34" rx="6" fill="#58a6ff"/>
-    <rect x="60" y="1224" width="880" height="8" fill="#58a6ff"/>
-    <text x="78" y="1222" font-size="13" font-weight="700" fill="#111111" letter-spacing="0.5">PHASE 7</text>
-    <text x="180" y="1222" font-size="17" font-weight="600" fill="#111111">DLL Hollow #2  →  Windows input.dll  ·  second EDR-quiet target</text>
-    <text x="78" y="1264" font-size="16" fill="#ffffff">Reads target DLL name from Layer-3 buffer offset 0xf4 (UTF-16).</text>
-    <text x="78" y="1294" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">target = "%windir%\SysWOW64\input.dll"  →  ExpandEnvironmentStringsW</text>
-    <text x="78" y="1320" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">LoadLibraryW(input.dll)  →  module base resolved</text>
-    <text x="78" y="1346" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">VirtualProtect(input.text, copy_size, PAGE_EXECUTE_READWRITE)</text>
-    <text x="78" y="1372" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">memcpy(input.text, &amp;stage3_section_bytes, copy_size)</text>
+    <rect x="60" y="1526" width="880" height="240" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1526" width="880" height="42" rx="8" fill="#58a6ff"/>
+    <rect x="60" y="1556" width="880" height="12" fill="#58a6ff"/>
+    <text x="80" y="1556" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">PHASE 7</text>
+    <text x="200" y="1556" font-size="21" font-weight="600" fill="#111111">DLL Hollow #2  →  Windows input.dll  ·  EDR-quiet target</text>
+    <text x="80" y="1606" font-size="20" fill="#ffffff">Reads target DLL name from Layer-3 buffer offset 0xf4 (UTF-16):</text>
+    <text x="80" y="1640" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">target = "%windir%\SysWOW64\input.dll"</text>
+    <text x="80" y="1668" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">→ ExpandEnvironmentStringsW → LoadLibraryW</text>
+    <text x="80" y="1700" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">VirtualProtect(input.text, copy_size, PAGE_EXECUTE_READWRITE)</text>
+    <text x="80" y="1732" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">memcpy(input.text, &amp;stage3_section_bytes, copy_size)</text>
   </g>
-  <line x1="500" y1="1398" x2="500" y2="1432" stroke="#cccccc" stroke-width="2.5" marker-end="url(#arrow2)"/>
+  <line x1="500" y1="1766" x2="500" y2="1806" stroke="#cccccc" stroke-width="3" marker-end="url(#arrow2)"/>
 
   <!-- =========== PHASE 8 — TRANSFER CONTROL =========== -->
   <g filter="url(#cardShadow2)">
-    <rect x="60" y="1436" width="880" height="120" rx="6" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="1436" width="880" height="34" rx="6" fill="#dc2626"/>
-    <rect x="60" y="1462" width="880" height="8" fill="#dc2626"/>
-    <text x="78" y="1460" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.5">PHASE 8</text>
-    <text x="180" y="1460" font-size="17" font-weight="600" fill="#ffffff">Transfer Control  ·  call input.text + entry  →  stage-3 begins</text>
-    <text x="78" y="1502" font-size="16" fill="#ffffff">Second DLL hollow operation completes; control passes to stage-3 (HijackLoader proper).</text>
-    <text x="78" y="1530" font-size="15" fill="#e5e5e5">From here the chain reaches the per-host KDF, multi-vendor PE bundle unpack, and WVault.exe injection.</text>
+    <rect x="60" y="1812" width="880" height="160" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1812" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="1842" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="1842" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">PHASE 8</text>
+    <text x="200" y="1842" font-size="21" font-weight="600" fill="#ffffff">Transfer Control  ·  call input.text + entry  →  stage-3 begins</text>
+    <text x="80" y="1892" font-size="20" fill="#ffffff">Second DLL hollow operation completes;</text>
+    <text x="80" y="1922" font-size="18" fill="#e5e5e5">control passes to stage-3 (HijackLoader proper).</text>
+    <text x="80" y="1954" font-size="17" fill="#e5e5e5">From here: per-host KDF · multi-vendor PE bundle · WVault.exe injection.</text>
   </g>
 
   <!-- =========== FOOTER =========== -->
-  <line x1="60" y1="1576" x2="940" y2="1576" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="500" y="1602" text-anchor="middle" font-size="13" fill="#cccccc">Detection anchors: api_table layout · X65599 multiplier 0x0001003F · anti-sandbox quadruple co-location · XOR key 0xE1D5B4A2</text>
+  <line x1="60" y1="1996" x2="940" y2="1996" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="2026" text-anchor="middle" font-size="15" fill="#cccccc">Detection anchors: api_table layout · X65599 multiplier 0x0001003F · anti-sandbox quadruple co-location · XOR key 0xE1D5B4A2</text>
 </svg>

@@ -397,6 +397,13 @@ main.content {
   border-collapse: collapse;
   margin: 1.5rem 0;
   font-size: 0.9em;
+  /* `table-layout: fixed` distributes column width evenly (or by explicit
+     <colgroup> widths if present). With auto, the browser shrinks short-text
+     columns to make room for long-text columns, which causes "Data Exfiltration"
+     to wrap one letter per line while "Rationale" gets all the room. Fixed gives
+     every column a predictable share of the table width; long sentences wrap
+     more, short labels stay on one line. */
+  table-layout: fixed;
 }
 
 /* Long-string wrapping inside table cells (hashes, file paths,
@@ -421,14 +428,13 @@ main.content {
   overflow-wrap: anywhere;
 }
 
-/* Atomic items wrapped in backticks (filenames, dates, IPs, registry keys,
-   etc.) should never break mid-string in normal flow. They only break as a
-   last resort if the cell is too narrow for the whole token, in which case
-   `overflow-wrap: anywhere` (inherited from the parent td) kicks in to
-   prevent visual overflow. */
+/* With table-layout: fixed, columns have predictable widths. Long code items
+   (like full SHA256 hashes or long URLs) need to wrap inside their column —
+   forcing nowrap would push them past the column edge. Allow normal wrapping
+   for code in cells; the parent td's overflow-wrap: anywhere handles the
+   character-break safety net. */
 .hl-post-content td code,
 .hl-post-content th code {
-  white-space: nowrap;
   overflow-wrap: anywhere;
 }
 
