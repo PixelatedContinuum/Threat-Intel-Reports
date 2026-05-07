@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow3" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1400" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1399" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">MSC GrimResource — Tier 1 Chain (1.msc)</text>
+  <text x="500" y="98" text-anchor="middle" font-size="22" fill="#f5f5f5">apds.dll redirect → JS eval → XSL/VBScript → PowerShell payload fetch → execute + self-cleanup</text>
+  <text x="500" y="130" text-anchor="middle" font-size="17" fill="#cccccc">.msc files appear safe to most users and many email-gateway content filters · technique chains 5 LOLBins to reach payload execution</text>
+  <line x1="60" y1="156" x2="940" y2="156" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STEP 1 — GRIMRESOURCE TRIGGER (orange — initial access) =========== -->
+  <g filter="url(#cardShadow3)">
+    <rect x="60" y="186" width="880" height="180" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="186" width="880" height="42" rx="8" fill="#f97316"/>
+    <rect x="60" y="216" width="880" height="12" fill="#f97316"/>
+    <text x="80" y="216" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+    <text x="200" y="216" font-size="21" font-weight="600" fill="#111111">GrimResource Trigger  ·  hidden mmc.exe window</text>
+    <text x="80" y="266" font-size="20" fill="#ffffff">User opens <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">1.msc</tspan> — Windows MMC launches with operator content.</text>
+    <text x="80" y="300" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">res://apds.dll/redirect.html?target=javascript:eval(...)</text>
+    <text x="80" y="332" font-size="17" fill="#e5e5e5">The <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">apds.dll</tspan> resource accepts a <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">target=javascript:</tspan> URL parameter — gives the</text>
+    <text x="80" y="354" font-size="17" fill="#e5e5e5">operator JavaScript execution from inside an XSL-transform context.</text>
+  </g>
+  <line x1="500" y1="366" x2="500" y2="406" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow3)"/>
+
+  <!-- =========== STEP 2 — JS EVAL (red — operator code) =========== -->
+  <g filter="url(#cardShadow3)">
+    <rect x="60" y="412" width="880" height="150" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="412" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="442" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="442" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
+    <text x="200" y="442" font-size="21" font-weight="600" fill="#ffffff">JavaScript eval  ·  unwraps rootNode-encoded payload</text>
+    <text x="80" y="492" font-size="20" fill="#ffffff" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">eval(rootNode.Name)</text>
+    <text x="80" y="524" font-size="18" fill="#e5e5e5">Executes the JavaScript stored in the XML <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">rootNode</tspan> name attribute —</text>
+    <text x="80" y="548" font-size="17" fill="#e5e5e5">a single eval() that becomes the entry point for the rest of the chain.</text>
+  </g>
+  <line x1="500" y1="562" x2="500" y2="602" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow3)"/>
+
+  <!-- =========== STEP 3 — XSL TRANSFORM / VBSCRIPT (red) =========== -->
+  <g filter="url(#cardShadow3)">
+    <rect x="60" y="608" width="880" height="160" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="608" width="880" height="42" rx="8" fill="#dc2626"/>
+    <rect x="60" y="638" width="880" height="12" fill="#dc2626"/>
+    <text x="80" y="638" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 3</text>
+    <text x="200" y="638" font-size="21" font-weight="600" fill="#ffffff">URL-encoded XSL transform  ·  decodes embedded VBScript</text>
+    <text x="80" y="688" font-size="20" fill="#ffffff">JavaScript URL-decodes an XSL transform document.</text>
+    <text x="80" y="720" font-size="18" fill="#e5e5e5">The XSL transform contains VBScript that executes inside the MMC process —</text>
+    <text x="80" y="746" font-size="17" fill="#e5e5e5">double-encoded (URL → XSL → VBScript) defeats most content-filter signatures.</text>
+  </g>
+  <line x1="500" y1="768" x2="500" y2="808" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow3)"/>
+
+  <!-- =========== STEP 4 — POWERSHELL DOWNLOAD (yellow — payload retrieval) =========== -->
+  <g filter="url(#cardShadow3)">
+    <rect x="60" y="814" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="814" width="880" height="42" rx="8" fill="#eab308"/>
+    <rect x="60" y="844" width="880" height="12" fill="#eab308"/>
+    <text x="80" y="844" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 4</text>
+    <text x="200" y="844" font-size="21" font-weight="600" fill="#111111">PowerShell payload fetch  ·  Mega.io single-source</text>
+    <text x="80" y="894" font-size="20" fill="#ffffff">VBScript spawns PowerShell with a single-source download command.</text>
+    <text x="80" y="932" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">https://s3.g.s4.mega[.]io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty.exe</text>
+    <text x="80" y="966" font-size="18" fill="#e5e5e5">Tier 1 has only this single source — Tier 2 variants (<tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Price2.pdf.msc</tspan>,</text>
+    <text x="80" y="990" font-size="18" fill="#e5e5e5"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">MSCFile.msc</tspan>) add a second fallback source for resilience.</text>
+  </g>
+  <line x1="500" y1="1014" x2="500" y2="1054" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow3)"/>
+
+  <!-- =========== STEP 5 — EXECUTE + SELF-CLEANUP (deep red — endgame) =========== -->
+  <g filter="url(#cardShadow3)">
+    <rect x="60" y="1060" width="880" height="180" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1060" width="880" height="42" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="1090" width="880" height="12" fill="#7f1d1d"/>
+    <text x="80" y="1090" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 5</text>
+    <text x="200" y="1090" font-size="21" font-weight="600" fill="#ffffff">Execute payload  +  taskkill MMC self-cleanup</text>
+    <text x="80" y="1140" font-size="20" fill="#ffffff">PowerShell starts the downloaded <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">putty.exe</tspan> as a new process.</text>
+    <text x="80" y="1174" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">taskkill /IM mmc.exe /F</text>
+    <text x="80" y="1206" font-size="18" fill="#fb923c" font-weight="600">Self-cleanup terminates the parent MMC process — removes the visible host before</text>
+    <text x="80" y="1230" font-size="18" fill="#fb923c" font-weight="600">the user notices anything launched. Detection: hunt mmc.exe parents of taskkill.</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1280" x2="940" y2="1280" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1310" text-anchor="middle" font-size="16" font-weight="600" fill="#ffffff">Detection anchors:  apds.dll redirect.html with javascript: target  ·  mmc.exe spawning powershell  ·  taskkill /IM mmc.exe</text>
+  <text x="500" y="1338" text-anchor="middle" font-size="14" fill="#cccccc">Tier 2 (<tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Price2.pdf.msc</tspan> / <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">MSCFile.msc</tspan>) adds Defender wildcard-extension exclusion + dual-source download (curl + iwr fallback)</text>
+  <text x="500" y="1364" text-anchor="middle" font-size="13" fill="#888888">Color legend  —  orange: initial trigger · red: operator script · yellow: payload retrieval · deep red: execution + cleanup</text>
+</svg>

@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="treeShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1500" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1499" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">Carriers.exe Process Tree (Dynamic Detonation)</text>
+  <text x="500" y="98" text-anchor="middle" font-size="22" fill="#f5f5f5">5-deep chain → branches into the C2 process and the persistence helper</text>
+  <text x="500" y="130" text-anchor="middle" font-size="17" fill="#cccccc">Sample launch 07:26:26.43  ·  first C2 beacon at 07:27:09.31  ·  total elapsed ~43 seconds</text>
+  <line x1="60" y1="156" x2="940" y2="156" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== NODE 1 — python.exe (analyst harness) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="200" y="186" width="600" height="86" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="200" y="186" width="6" height="86" rx="3" fill="#6b7280"/>
+    <text x="220" y="216" font-size="20" font-weight="600" fill="#cccccc"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">python.exe</tspan>  ·  PID 3576</text>
+    <text x="220" y="244" font-size="16" fill="#aaaaaa">analysis harness  ·  spawns the original sample</text>
+    <text x="220" y="266" font-size="14" fill="#888888">(analyst tooling — not part of the malicious chain)</text>
+  </g>
+
+  <!-- connector to next -->
+  <line x1="500" y1="272" x2="500" y2="298" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== NODE 2 — Carriers.exe (Inno installer) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="200" y="298" width="600" height="100" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="200" y="298" width="6" height="100" rx="3" fill="#eab308"/>
+    <text x="220" y="328" font-size="20" font-weight="600" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Carriers.exe</tspan>  ·  PID 1908</text>
+    <text x="220" y="354" font-size="16" fill="#e5e5e5">Inno Setup 6.5+ installer  ·  original sample</text>
+    <text x="220" y="378" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">started  07:26:26.43</text>
+  </g>
+
+  <!-- connector -->
+  <line x1="500" y1="398" x2="500" y2="424" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== NODE 3 — Carriers.tmp (Inno extractor) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="200" y="424" width="600" height="100" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="200" y="424" width="6" height="100" rx="3" fill="#eab308"/>
+    <text x="220" y="454" font-size="20" font-weight="600" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Carriers.tmp</tspan>  ·  PID 4416</text>
+    <text x="220" y="480" font-size="16" fill="#e5e5e5">Inno runtime extractor  ·  /SL5= flag</text>
+    <text x="220" y="504" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">started  07:26:27.16   (+0.7s gap)</text>
+  </g>
+
+  <!-- connector -->
+  <line x1="500" y1="524" x2="500" y2="550" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== NODE 4 — CrystSupervisor32.exe (TEMP) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="200" y="550" width="600" height="120" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="200" y="550" width="6" height="120" rx="3" fill="#dc2626"/>
+    <text x="220" y="580" font-size="20" font-weight="600" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CrystSupervisor32.exe</tspan>  ·  PID 3640</text>
+    <text x="220" y="606" font-size="16" fill="#e5e5e5">side-load host (TEMP extraction)  ·  loads operator <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ExceptionHandler.dll</tspan></text>
+    <text x="220" y="630" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">%LocalAppData%\Temp\is-EPKFU.tmp\</text>
+    <text x="220" y="652" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">started  07:26:28.85   (+1.7s gap)</text>
+  </g>
+
+  <!-- connector -->
+  <line x1="500" y1="670" x2="500" y2="696" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== NODE 5 — CrystSupervisor32.exe (PERSISTENT spawner) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="200" y="696" width="600" height="130" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="200" y="696" width="6" height="130" rx="3" fill="#dc2626"/>
+    <text x="220" y="726" font-size="20" font-weight="600" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CrystSupervisor32.exe</tspan>  ·  PID 9840</text>
+    <text x="220" y="752" font-size="16" fill="#e5e5e5">PERSISTENT spawner  ·  drops both children below</text>
+    <text x="220" y="776" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">%AllUsersProfile%\adv_ctrl\</text>
+    <text x="220" y="798" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">started  07:26:30.20   (+1.4s gap)</text>
+    <text x="220" y="820" font-size="14" fill="#fb923c" font-weight="600">Spawns WVault.exe and Crisp.exe — branches the tree below ↓</text>
+  </g>
+
+  <!-- =========== Y-BRANCH connector =========== -->
+  <!-- vertical down from parent center -->
+  <line x1="500" y1="826" x2="500" y2="868" stroke="#666666" stroke-width="2"/>
+  <!-- horizontal split bar -->
+  <line x1="290" y1="868" x2="710" y2="868" stroke="#666666" stroke-width="2"/>
+  <!-- vertical down to left child -->
+  <line x1="290" y1="868" x2="290" y2="894" stroke="#666666" stroke-width="2"/>
+  <!-- vertical down to right child -->
+  <line x1="710" y1="868" x2="710" y2="894" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== LEFT BRANCH — WVault.exe (THE C2 PROCESS) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="80" y="894" width="420" height="170" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="80" y="894" width="6" height="170" rx="3" fill="#7f1d1d"/>
+    <text x="100" y="924" font-size="20" font-weight="600" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">WVault.exe</tspan>  ·  PID 2596</text>
+    <text x="100" y="950" font-size="16" fill="#fb923c" font-weight="700">★ THE C2 PROCESS</text>
+    <text x="100" y="976" font-size="15" fill="#e5e5e5">renamed Qihoo PromoUtil.exe</text>
+    <text x="100" y="998" font-size="15" fill="#e5e5e5">.NET CLR threads inside (operator-injected)</text>
+    <text x="100" y="1020" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">%AllUsersProfile%\WVault.exe</text>
+    <text x="100" y="1042" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">started  07:26:40.90   (+10.7s gap)</text>
+  </g>
+
+  <!-- connector to leaf -->
+  <line x1="290" y1="1064" x2="290" y2="1090" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== LEFT LEAF — C2 endpoint =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="80" y="1090" width="420" height="120" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="80" y="1090" width="6" height="120" rx="3" fill="#7f1d1d"/>
+    <text x="100" y="1120" font-size="18" font-weight="600" fill="#ffffff">→ first C2 beacon</text>
+    <text x="100" y="1150" font-size="15" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">185.241.208[.]129:56167</text>
+    <text x="100" y="1174" font-size="14" fill="#cccccc">TLSv1  ·  AS210558 1337 Services (Spamhaus DROP)</text>
+    <text x="100" y="1196" font-size="14" fill="#fb923c" font-weight="600">07:27:09.31  ·  43.0 seconds after sample launch</text>
+  </g>
+
+  <!-- =========== RIGHT BRANCH — Crisp.exe (persistence helper) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="500" y="894" width="420" height="170" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="500" y="894" width="6" height="170" rx="3" fill="#7f1d1d"/>
+    <text x="520" y="924" font-size="20" font-weight="600" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Crisp.exe</tspan>  ·  PID 10072</text>
+    <text x="520" y="950" font-size="16" fill="#fb923c" font-weight="700">★ PERSISTENCE HELPER</text>
+    <text x="520" y="976" font-size="15" fill="#e5e5e5">single-purpose; lifespan ~13 seconds</text>
+    <text x="520" y="998" font-size="15" fill="#e5e5e5">creates the scheduled-task .job file then exits</text>
+    <text x="520" y="1020" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">%AppData%\adv_ctrl\Crisp.exe</text>
+    <text x="520" y="1042" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">started  07:27:11.50  ·  exited  07:27:24.74</text>
+  </g>
+
+  <!-- connector to leaf -->
+  <line x1="710" y1="1064" x2="710" y2="1090" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== RIGHT LEAF — watchermgmt.job =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="500" y="1090" width="420" height="120" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="500" y="1090" width="6" height="120" rx="3" fill="#7f1d1d"/>
+    <text x="520" y="1120" font-size="18" font-weight="600" fill="#ffffff">→ persistence artifact</text>
+    <text x="520" y="1150" font-size="15" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">C:\Windows\Tasks\watchermgmt.job</text>
+    <text x="520" y="1174" font-size="14" fill="#cccccc">legacy .job format  ·  262 bytes</text>
+    <text x="520" y="1196" font-size="14" fill="#fb923c" font-weight="600">autorunsc enumeration blind spot</text>
+  </g>
+
+  <!-- =========== LEGEND / FOOTER =========== -->
+  <line x1="60" y1="1260" x2="940" y2="1260" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1290" text-anchor="middle" font-size="16" font-weight="600" fill="#ffffff">Detection signal: orphaned WVault.exe with .NET CLR threads + outbound TLSv1 to non-standard high port</text>
+  <text x="500" y="1316" text-anchor="middle" font-size="14" fill="#e5e5e5">CrystSupervisor32.exe (PID 9840) is the spawner — its exit leaves WVault.exe orphaned, which is the cross-campaign hollow-host signature</text>
+
+  <!-- Color legend with little color chips -->
+  <g transform="translate(80, 1350)">
+    <rect x="0" y="0" width="14" height="14" fill="#6b7280"/>
+    <text x="20" y="12" font-size="13" fill="#cccccc">analyst harness</text>
+    <rect x="160" y="0" width="14" height="14" fill="#eab308"/>
+    <text x="180" y="12" font-size="13" fill="#cccccc">dropper / installer</text>
+    <rect x="340" y="0" width="14" height="14" fill="#dc2626"/>
+    <text x="360" y="12" font-size="13" fill="#cccccc">operator code (side-load + spawner)</text>
+    <rect x="640" y="0" width="14" height="14" fill="#7f1d1d"/>
+    <text x="660" y="12" font-size="13" fill="#cccccc">endgame: C2 + persistence</text>
+  </g>
+
+  <text x="500" y="1410" text-anchor="middle" font-size="13" fill="#888888"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CrystSupervisor32.exe</tspan> launches three times — temp extraction, persistent dir copy, then the spawner itself.</text>
+  <text x="500" y="1432" text-anchor="middle" font-size="13" fill="#888888">The persistent copy (PID 9840) is the parent of the two endgame children. Its exit produces the orphaned WVault.exe pattern.</text>
+</svg>
