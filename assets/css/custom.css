@@ -410,19 +410,26 @@ main.content {
    technique chains. */
 .hl-post-content td,
 .hl-post-content th {
-  /* break-word only breaks unbreakable runs that don't fit (long URLs,
-     full hashes, GUIDs). Short items (filenames, dates, IPs, truncated
-     hashes) stay on one line and remain readable. */
-  overflow-wrap: break-word;
+  /* overflow-wrap: anywhere is the safety net — without it, long unbreakable
+     tokens (full hashes, long URLs, GUIDs) cause the table to grow wider than
+     the 900px container and visually escape past the right margin. The OLD
+     companion rule `word-break: break-word` was the aggressive one that broke
+     short tokens (filenames, dates, IPs) mid-character; we removed that. With
+     just `overflow-wrap: anywhere`, the browser only inserts break points
+     when a line would otherwise overflow — short items stay intact, long
+     items break to fit. */
+  overflow-wrap: anywhere;
 }
 
-/* Atomic items wrapped in backticks (filenames, dates, IPs, registry
-   keys, etc.) should never break mid-string within a table cell. The
-   table layout will allocate more width to a column with a long unbreakable
-   code item, which is the desired behavior. */
+/* Atomic items wrapped in backticks (filenames, dates, IPs, registry keys,
+   etc.) should never break mid-string in normal flow. They only break as a
+   last resort if the cell is too narrow for the whole token, in which case
+   `overflow-wrap: anywhere` (inherited from the parent td) kicks in to
+   prevent visual overflow. */
 .hl-post-content td code,
 .hl-post-content th code {
   white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .hl-post-content th {
@@ -1636,15 +1643,13 @@ img { max-width: 100%; height: auto; }
   .hl-post-content,
   .hl-post-content p,
   .hl-post-content li,
-  .hl-post-content a {
+  .hl-post-content a,
+  .hl-post-content td,
+  .hl-post-content th {
     overflow-wrap: anywhere;
     word-break: break-word;
   }
-  .hl-post-content td,
-  .hl-post-content th {
-    overflow-wrap: break-word;
-  }
-  .hl-post-content code:not(td code):not(th code) { word-break: break-all; }
+  .hl-post-content code { word-break: break-all; }
 
   /* --- Headings: smaller + tighter padding ----------------- */
   .hl-post-content h1 {
