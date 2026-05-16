@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1450" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1450" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1449" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- TITLE -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Inkognito Provider Segmentation Map</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Six hosters, six functional roles — deliberate role-based separation, not opportunistic rental</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Two providers are state-sanctioned (Aeza Group — OFAC SDN; Stark Industries — EU sanctioned); operator continues using both post-sanction</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- ROW 1 LEFT: Aeza Italy (deep red — sanctioned back-office host) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="196" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="430" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="229" width="430" height="13" fill="#7f1d1d"/>
+    <text x="80" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">BACK-OFFICE  ·  OFAC SDN</text>
+    <text x="380" y="227" font-size="22" font-weight="600" fill="#ffffff">Aeza IT</text>
+    <text x="80" y="282" font-size="18" fill="#ffffff">EspoCRM single-tenant back-office</text>
+    <text x="80" y="312" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">AS210644  ·  185.221.196.118</text>
+    <text x="80" y="342" font-size="16" fill="#e5e5e5">Aeza International Ltd (IT geolocation)</text>
+    <text x="80" y="368" font-size="16" fill="#e5e5e5">00000xtrading.ru → fi1.inklens.co.uk</text>
+    <text x="80" y="394" font-size="16" fill="#cccccc">OFAC SDN designation 2025-07-01</text>
+    <text x="80" y="420" font-size="16" fill="#cccccc">Operator did NOT migrate off post-sanction</text>
+    <text x="80" y="456" font-size="16" fill="#fb923c" font-weight="600">Engagement = OFAC-reportable for US entities</text>
+  </g>
+
+  <!-- ROW 1 RIGHT: Stark / Worktitans (deep red — sanctioned long-term anchor) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="196" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="196" width="430" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="510" y="229" width="430" height="13" fill="#7f1d1d"/>
+    <text x="530" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">LONG-TERM ANCHOR  ·  EU SANCTIONED</text>
+    <text x="530" y="282" font-size="22" font-weight="600" fill="#ffffff">Stark Industries  →  Worktitans B.V.</text>
+    <text x="530" y="312" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">AS44477 → AS209847  ·  193.46.56.182</text>
+    <text x="530" y="342" font-size="16" fill="#e5e5e5">VPN endpoint + 3 BEC burn-domain hosts</text>
+    <text x="530" y="368" font-size="16" fill="#e5e5e5">Stable since 2023-11-17 (2.5+ years)</text>
+    <text x="530" y="394" font-size="16" fill="#cccccc">EU sanctioned 2025-05-20 (CFSP 2025/972)</text>
+    <text x="530" y="420" font-size="16" fill="#cccccc">Rebranded as Worktitans 12d pre-sanction</text>
+    <text x="530" y="456" font-size="16" fill="#fb923c" font-weight="600">Sanctions-evasion vehicle (Tier-2 sourced)</text>
+  </g>
+
+  <!-- ROW 2 LEFT: Timeweb (red — active phishing host) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="506" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="506" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="539" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="537" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">CURRENT PHISHING — LIVE</text>
+    <text x="380" y="537" font-size="22" font-weight="600" fill="#ffffff">Timeweb</text>
+    <text x="80" y="592" font-size="18" fill="#ffffff">Primary phishing + INK VPN production</text>
+    <text x="80" y="622" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">AS9123  ·  176.124.211.174</text>
+    <text x="80" y="652" font-size="16" fill="#e5e5e5">JSC Timeweb (RU commercial)</text>
+    <text x="80" y="680" font-size="16" fill="#e5e5e5">165 + 95 inklens.ru subdomains post-migration</text>
+    <text x="80" y="706" font-size="16" fill="#e5e5e5">Hosts inkconnect.ru (INK VPN) + api.</text>
+    <text x="80" y="732" font-size="16" fill="#cccccc">Operator migrated here from U1host Apr 2026</text>
+    <text x="80" y="764" font-size="16" fill="#fb923c" font-weight="600">Not currently sanctioned (RU commercial)</text>
+  </g>
+
+  <!-- ROW 2 RIGHT: U1host DE (yellow — historical phishing host) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="506" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="506" width="430" height="46" rx="8" fill="#eab308"/>
+    <rect x="510" y="539" width="430" height="13" fill="#eab308"/>
+    <text x="530" y="537" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">PREVIOUS PHISHING  ·  RETIRED</text>
+    <text x="530" y="592" font-size="22" font-weight="600" fill="#111111">U1host Ltd (DE)</text>
+    <text x="530" y="282" font-size="18" fill="#ffffff"></text>
+    <text x="530" y="622" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">AS213877  ·  77.239.101.23</text>
+    <text x="530" y="652" font-size="16" fill="#e5e5e5">U1host Ltd (Germany commercial)</text>
+    <text x="530" y="678" font-size="16" fill="#e5e5e5">468 inklens.ru rrnames recovered via reverse-IP</text>
+    <text x="530" y="704" font-size="16" fill="#e5e5e5">Hosted Bikaf VPN (decommissioned) + inklens.ru</text>
+    <text x="530" y="730" font-size="16" fill="#cccccc">Operator-active March → April 2026</text>
+    <text x="530" y="762" font-size="16" fill="#fb923c" font-weight="600">Historical subdomain inventory pivot source</text>
+  </g>
+
+  <!-- ROW 3 LEFT: Cloudflare (grey — abused legitimate provider) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="816" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="816" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="849" width="430" height="13" fill="#6b7280"/>
+    <text x="80" y="847" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">PUBLIC FRONT  ·  ABUSED-LEGIT</text>
+    <text x="370" y="847" font-size="22" font-weight="600" fill="#ffffff">Cloudflare</text>
+    <text x="80" y="902" font-size="18" fill="#ffffff">Hides origin IPs for fraud sites</text>
+    <text x="80" y="932" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">AS13335  ·  cryptone.bot, inkconnect.ru fronts</text>
+    <text x="80" y="962" font-size="16" fill="#e5e5e5">Cloudflare Turnstile bot-challenge gate</text>
+    <text x="80" y="988" font-size="16" fill="#e5e5e5">Free-tier DDoS protection + SSL termination</text>
+    <text x="80" y="1014" font-size="16" fill="#cccccc">US commercial; not sanctioned</text>
+    <text x="80" y="1046" font-size="16" fill="#fb923c" font-weight="600">Legitimate provider whose policy permits abuse</text>
+  </g>
+
+  <!-- ROW 3 RIGHT: GitHub Pages + AmazonS3 (grey — chameleon decoy cover) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="816" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="816" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="510" y="849" width="430" height="13" fill="#6b7280"/>
+    <text x="530" y="847" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">APEX DECOY  ·  ABUSED-LEGIT</text>
+    <text x="530" y="902" font-size="22" font-weight="600" fill="#ffffff">GitHub Pages  →  Amazon S3</text>
+    <text x="530" y="932" font-size="18" fill="#ffffff">inklens.co.uk apex serves cover content</text>
+    <text x="530" y="962" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">AS36459 GitHub Inc  →  AWS S3 (2026-05-04)</text>
+    <text x="530" y="988" font-size="16" fill="#e5e5e5">Apex renders github.com homepage</text>
+    <text x="530" y="1014" font-size="16" fill="#e5e5e5">  while subdomains hide on Aeza IT origin</text>
+    <text x="530" y="1040" font-size="16" fill="#cccccc">Active since 2026-04-06</text>
+    <text x="530" y="1072" font-size="16" fill="#fb923c" font-weight="600">Novel chameleon-decoy tradecraft variant</text>
+  </g>
+
+  <!-- DIVIDER + summary -->
+  <line x1="60" y1="1146" x2="940" y2="1146" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1182" text-anchor="middle" font-size="22" font-weight="700" fill="#ffffff">Two state-sanctioned providers + four functional roles segregated across six hosters</text>
+  <text x="500" y="1212" text-anchor="middle" font-size="17" fill="#e5e5e5">No co-location of functions on cheaper infrastructure — operator paid for premium takedown-resistant hosting on specifically the providers</text>
+  <text x="500" y="1242" text-anchor="middle" font-size="17" fill="#e5e5e5">most resistant to enforcement requests. Continued post-sanction tenancy on both Aeza and Stark = informed sanctions-evasion posture.</text>
+
+  <!-- FOOTER -->
+  <line x1="60" y1="1290" x2="940" y2="1290" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1324" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  AS210644 + AS216246 (Aeza, OFAC SDN)  ·  AS44477 + AS209847 (Stark/Worktitans, EU sanctioned)</text>
+  <text x="500" y="1354" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">185.221.196.118  ·  193.46.56.182  ·  176.124.211.174  ·  77.239.101.23</text>
+
+  <g transform="translate(80, 1390)">
+    <rect x="0" y="0" width="16" height="16" fill="#7f1d1d"/>
+    <text x="24" y="13" font-size="14" fill="#cccccc">sanctioned (OFAC SDN / EU CFSP)</text>
+    <rect x="290" y="0" width="16" height="16" fill="#dc2626"/>
+    <text x="314" y="13" font-size="14" fill="#cccccc">current operator host</text>
+    <rect x="510" y="0" width="16" height="16" fill="#eab308"/>
+    <text x="534" y="13" font-size="14" fill="#cccccc">historical operator host</text>
+    <rect x="740" y="0" width="16" height="16" fill="#6b7280"/>
+    <text x="764" y="13" font-size="14" fill="#cccccc">abused-legitimate provider</text>
+  </g>
+</svg>

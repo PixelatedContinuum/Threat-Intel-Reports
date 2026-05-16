@@ -1,0 +1,591 @@
+{
+  "metadata": {
+    "malware_name": "Inkognito",
+    "family": "Inkognito-FraudOperation (Russian multi-product fraud operator — VPN service + brand-impersonation phishing + fake crypto exchange + BEC infrastructure)",
+    "campaign_id": "Inkognito-Russian-VPN-Phishing-185.221.196.118",
+    "uta_designation": "UTA-2026-009",
+    "report_date": "2026-05-16",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "scope_note": "Cluster B / Inkognito IOCs only. Cluster A (BellaMain Turkish PhaaS) and Cluster C (Rhadamanthys MaaS customer) IOCs are out of scope for this feed — see the multi-cluster report iocs for those clusters.",
+    "operator_type": "Named-brand commercial fraud operation (operator self-identifies 'Inkognito' as parent brand). Not a malware family — this is a web-application + commercial VPN + brand-impersonation phishing infrastructure."
+  },
+  "file_hashes": {
+    "md5": [],
+    "sha1": [],
+    "sha256": [
+      {
+        "value": "8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978",
+        "context": "INK VPN main JavaScript bundle at inkconnect.ru/assets/index-CoeWw2zM.js (261,587 bytes) — Vite/React SPA frontend. Strong code-level operator IOC. Not on VirusTotal as of 2026-05-07 — first public capture.",
+        "confidence": "HIGH",
+        "file_type": "JavaScript (Vite/React production bundle)"
+      },
+      {
+        "value": "d1ae63c928fd07d51cf79c5165e4431765201ca04a2bee3c309dc00092c4de7c",
+        "context": "INK VPN brand logo PNG at inkconnect.ru/logo.png — hooded-figure-with-eye Inkognito brand identity. Searchable via Censys/Shodan favicon hash variants and screenshot similarity for cluster expansion.",
+        "confidence": "HIGH",
+        "file_type": "PNG (brand logo)"
+      },
+      {
+        "value": "53b3515fda56dbbd1f8071a9ef3dc3be80cb7994df22ce8afc2e79147e899b70",
+        "context": "INK VPN favicon SVG at inkconnect.ru/favicon.svg — operator brand-identity asset for browser-tab pivoting.",
+        "confidence": "HIGH",
+        "file_type": "SVG (favicon)"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "185.221.196.118",
+        "asn": "AS210644",
+        "asn_owner": "Aeza International Ltd (Italy listing)",
+        "country": "IT",
+        "purpose": "Operator EspoCRM back-office IP — hosted 00000xtrading.ru (May 2025 → Apr 2026) then fi1.inklens.co.uk (Apr 2026 → present, with 30-hour overlap during migration)",
+        "first_seen": "2025-05-17",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Single-tenant operator IP per DomainTools reverse-PDNS; 9 historical resolutions are all operator-controlled domains. 0/92 VirusTotal detection."
+      },
+      {
+        "value": "176.124.211.174",
+        "asn": "AS9123",
+        "asn_owner": "Jsc Timeweb (Russia)",
+        "country": "RU",
+        "purpose": "Operator's CURRENT primary phishing/proxy host. Hosts inklens.ru (165 subdomains post-migration), inkconnect.ru (INK VPN flagship), and adjacent operator domains.",
+        "first_seen": "2026-04-02",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "77.239.101.23",
+        "asn": "AS213877",
+        "asn_owner": "U1host Ltd (Germany) — official AS owner 'U1 Digital Services Ltd'",
+        "country": "DE",
+        "purpose": "Operator's previous primary phishing/proxy host (Mar 2026 → Apr 2026) — held 502 unique operator subdomains across inklens.ru + bikaf.ru + inklens.co.uk before migration to Timeweb.",
+        "first_seen": "2026-03-24",
+        "last_seen": "2026-04-02",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "193.46.56.182",
+        "asn": "AS44477 / AS209847",
+        "asn_owner": "Stark Industries Solutions Ltd / Worktitans B.v. (Turkey)",
+        "country": "TR",
+        "purpose": "Long-term operator VPN endpoint host (since 2023-11-17 — 2.5+ years continuous). Hosts unloki.ru, users.outline.unloki.ru, and the 3 .eu BEC burn domains (vetcorbeanca.eu, vagtec.eu, petkovalegal.eu).",
+        "first_seen": "2023-11-17",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Stark Industries Solutions is a UK/EU-sanctioned bulletproof hosting provider per joint Five Eyes action against Russian-aligned bulletproof hosters."
+      },
+      {
+        "value": "79.137.203.87",
+        "asn": "AS216246",
+        "asn_owner": "Aeza Group LLC",
+        "country": "RU",
+        "purpose": "Secondary operator VPN node host (sister to BellaMain server at 79.137.192.3). Hosted ger.bigass.monster (German VPN node) Nov 2025 → Apr 2026, gr.nodes.unloki.ru (Greek VPN node) Feb-Oct 2025.",
+        "first_seen": "2025-02-06",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "91.108.241.156",
+        "asn": "AS210644",
+        "asn_owner": "Aeza International Ltd (AU listing)",
+        "country": "AU",
+        "purpose": "Brief origin for divar-irantop.shop (Jan 2024). Aeza Intl ASN co-residency with operator back-office IP.",
+        "first_seen": "2024-01-16",
+        "last_seen": "2024-01-30",
+        "confidence": "MODERATE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "94.228.168.80",
+        "asn": "AS210644",
+        "asn_owner": "Aeza International Ltd (DE listing)",
+        "country": "DE",
+        "purpose": "Brief origin for divar-irantop.shop (Jan 2024). Aeza Intl ASN co-residency.",
+        "first_seen": "2024-01-16",
+        "last_seen": "2024-01-30",
+        "confidence": "MODERATE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "92.38.219.225",
+        "asn": "AS12695",
+        "asn_owner": "Netts.ru Fttb Pool",
+        "country": "RU",
+        "purpose": "Initial bikaf.ru setup IP (Feb 21-25, 2026) before migration to U1host.",
+        "first_seen": "2026-02-22",
+        "last_seen": "2026-02-26",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "185.112.83.228",
+        "asn_owner": "Aeza managed DNS",
+        "purpose": "ns1.aezadns.com nameserver IP — Aeza's managed-DNS service. Used by a-loader.site (2023) and 00000xtrading.ru (2025-2026). Caveat: Aeza managed-DNS is shared by many customers; not a unique operator fingerprint by itself.",
+        "confidence": "MODERATE",
+        "action": "MONITOR"
+      },
+      {
+        "value": "78.153.130.34",
+        "asn_owner": "Aeza managed DNS",
+        "purpose": "ns2.aezadns.com nameserver IP. Same caveat as ns1.",
+        "confidence": "MODERATE",
+        "action": "MONITOR"
+      }
+    ],
+    "ipv6": [],
+    "domains": [
+      {
+        "value": "inkconnect.ru",
+        "purpose": "INK VPN flagship — operator's primary Russian consumer VPN brand. Registered REGRU-RU 2026-04-17 with 11-minute deployment-to-live window. React/Vite SPA frontend; nginx 1.29.8 + Caddy reverse proxy. Payment via SBP, T-Pay, card. Hosted Timeweb 176.124.211.174.",
+        "first_seen": "2026-04-17",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "api.inkconnect.ru",
+        "purpose": "INK VPN backend API endpoint. CORS allows custom X-Admin-Token header — operator's custom auth primitive.",
+        "first_seen": "2026-04-17",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "inklens.ru",
+        "purpose": "INK Lens — operator's primary phishing/proxy infrastructure. 467+ brand-impersonation subdomains spoofing Wells Fargo, Accenture, Tencent, Sina, Tele2, AnyDesk, OWA 2013, Jenkins, MS Software Download Center, Asana, Siri, and others. Registered REGRU-RU 2026-03-18.",
+        "first_seen": "2026-03-18",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "inklens.co.uk",
+        "purpose": "Apex chameleon decoy — operator deliberately redirects apex to GitHub Pages (Apr 2026) then AmazonS3 (May 2026) so casual researchers see legitimate hosting. Operational subdomains (fi1, de1, marzban, api) run hidden underneath on Aeza IT. Registered Gandi (FR) 2026-03-19.",
+        "first_seen": "2026-03-19",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "fi1.inklens.co.uk",
+        "purpose": "Operator's CURRENT back-office (Apr 2026 → present). Replaced 00000xtrading.ru with 30-hour overlap during migration. Resolves to 185.221.196.118 (Aeza IT).",
+        "first_seen": "2026-04-06",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "de1.inklens.co.uk",
+        "purpose": "Germany VPN node (sister to fi1.inklens.co.uk).",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "marzban.inklens.co.uk",
+        "purpose": "Marzban (Xray/V2Ray) admin panel — operator's central VPN/proxy node-management platform. Marzban is open-source software for centrally managing self-hosted VPN/proxy fleets.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "api.inklens.co.uk",
+        "purpose": "API endpoint for the inklens.co.uk operational subdomain stack.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "www.api.inklens.co.uk",
+        "purpose": "Alternate API hostname.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "00000xtrading.ru",
+        "purpose": "Former operator EspoCRM back-office (May 2025 → Apr 2026, ~353 days). Decommissioned with kittenx-404 tombstone on 2026-04-07.",
+        "first_seen": "2025-05-17",
+        "last_seen": "2026-04-07",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "bikaf.ru",
+        "purpose": "Bikaf VPN — operator's consumer VPN brand (Feb 2026). Decommissioned ~April 2026 with kittenx-404 tombstone. Minimal MVP page with Google OAuth signin (contrasts with INK VPN's polished SPA).",
+        "first_seen": "2026-02-22",
+        "last_seen": "2026-04",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "hikvision.bikaf.ru",
+        "purpose": "CCTV/IP-camera infrastructure subdomain under Bikaf VPN. Hikvision is the largest Chinese CCTV manufacturer — naming suggests surveillance-camera angle (compromised IP camera access or value-added stream bundling).",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "cam.bikaf.ru",
+        "purpose": "CCTV/IP-camera subdomain under Bikaf VPN.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "cam2.bikaf.ru",
+        "purpose": "CCTV/IP-camera subdomain.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "cctv.bikaf.ru",
+        "purpose": "CCTV subdomain.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "video.bikaf.ru",
+        "purpose": "Video-stream subdomain.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "vpn1.bikaf.ru",
+        "purpose": "Bikaf VPN backend infrastructure subdomain.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "authvpn.bikaf.ru",
+        "purpose": "Bikaf VPN auth backend.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "loadbalancer.bikaf.ru",
+        "purpose": "Bikaf VPN load balancer.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "nat.bikaf.ru",
+        "purpose": "Bikaf VPN NAT backend.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "reverse-proxy.bikaf.ru",
+        "purpose": "Bikaf VPN reverse proxy.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "cryptone.bot",
+        "purpose": "CryptOne fake crypto exchange — production frontend (Cloudflare-fronted, origin hidden). Live since 2026-03-05. Cluster B-controlled but also referenced from Cluster A's open directory at 79.137.192.3/cryptone/ staging path.",
+        "first_seen": "2026-03-02",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "unloki.ru",
+        "purpose": "Long-term operator VPN brand front (Outline-based for censored regions). Registered REGRU-RU 2023-08-31; on Stark Industries 193.46.56.182 since 2023-11-17 (2.5+ years continuous).",
+        "first_seen": "2023-08-31",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "users.outline.unloki.ru",
+        "purpose": "Outline VPN service for users in censored regions (Iran/RU/CN/etc.). Outline is Jigsaw/Google's open-source censorship-circumvention proxy tool. Operator runs an actual Outline server here.",
+        "first_seen": "2024-02-12",
+        "last_seen": "2024-11-16",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "gr.nodes.unloki.ru",
+        "purpose": "Greece VPN node (Aeza-hosted via 79.137.203.87).",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "bigass.monster",
+        "purpose": "VPN brand front (drop-caught by operator mid-2024; re-registered DYNADOT 2025-10-21 after brief lapse). 16 subdomains including swe, 2spb, msk, ger, hel, spb — full Russia + Nordics + DACH VPN node coverage.",
+        "first_seen": "2024-07-09",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "notes": "Drop-and-recapture tradecraft; post-2025-10-21 registrant 'REDACTED FOR PRIVACY' could plausibly be a different actor — treat as probable-operator, not confirmed."
+      },
+      {
+        "value": "ger.bigass.monster",
+        "purpose": "German VPN node on Aeza 79.137.203.87.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "divar-irantop.shop",
+        "purpose": "Possible Iranian-targeted Divar phishing (Divar = Iran's largest classifieds platform, analogous to Sahibinden in Turkey). Brief origin on AS210644 Aeza Intl (Jan 2024); Cloudflare-fronted before/after. Domain expired 2024-12-02.",
+        "first_seen": "2023-10-10",
+        "last_seen": "2024-12-02",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "notes": "Same brief-Aeza-co-residency evidence quality used to exclude bclub.mp. Naming theme strongly Iran-targeting but linkage to Cluster B is not conclusive."
+      },
+      {
+        "value": "vetcorbeanca.eu",
+        "purpose": "Operator BEC burn domain (June 2023). Themed as Romanian veterinary clinic in Corbeanca (a real town near Bucharest). 6-day apex burn; self-served mail.*, ns1.*, ns2.* infrastructure on Stark 193.46.56.182. SOA admin@vetcorbeanca.eu.",
+        "first_seen": "2023-06-08",
+        "last_seen": "2023-06-15",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "vagtec.eu",
+        "purpose": "Operator BEC burn domain (June 2023). Generic tech-themed name. Operator-controlled period 2023-06-15 → 2024-06-06 (~12 months — much longer than initially assumed). Then drop-caught by Sedo/Bodis parking. Self-served mail.*, ns1.*, ns2.* on Stark 193.46.56.182. SOA admin@vagtec.eu.",
+        "first_seen": "2023-06-13",
+        "last_seen": "2024-06-06",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "petkovalegal.eu",
+        "purpose": "Operator BEC burn domain (June 2023). Themed as Bulgarian/Russian-style legal practice ('Petkova Legal'). Operator-controlled period 2023-06-24 → 2024-06-18 (~12 months). Self-served mail.*, ns1.*, ns2.* on Stark 193.46.56.182. SOA admin@petkovalegal.eu.",
+        "first_seen": "2023-06-22",
+        "last_seen": "2024-06-18",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "akredup.ru",
+        "purpose": "Co-residency only — registered TIMEWEB-RU 2025-06-03; uses Timeweb-managed DNS/mail/SOA (NOT the operator's typical self-served pattern). One sub (panel.akredup.ru) co-resides on 176.124.211.174 with ~176 operator subdomains.",
+        "confidence": "LOW",
+        "action": "MONITOR",
+        "notes": "POSSIBLE only — co-residency on shared Timeweb hosting is the same evidence quality used to exclude bclub.mp. Treat as candidate, not confirmed."
+      },
+      {
+        "value": "ierkorprogramm.us",
+        "purpose": "Drop-caught aged domain (originally active 2018-2019 with 71+ rotating IPs). smtp.mail.ierkorprogramm.us co-resides on Timeweb 176.124.211.174. POSSIBLE email-sending infrastructure interpretation is speculative — co-residency on shared hosting is also consistent with a different Timeweb customer.",
+        "confidence": "LOW",
+        "action": "MONITOR"
+      },
+      {
+        "value": "evotoptan.com",
+        "purpose": "Briefly hit 79.137.192.3 for 22 minutes on 2026-03-31. Bridge IOC between Cluster A and Cluster B at MODERATE confidence — 22-min stay is consistent with config testing, accidental pointer, or deliberate panel import.",
+        "first_seen": "2026-03-30",
+        "confidence": "MODERATE",
+        "action": "MONITOR"
+      },
+      {
+        "value": "a-loader.site",
+        "purpose": "Historical operator domain (Aug-Sep 2023, 19-day burn). Shared Aeza DNS (ns1.aezadns.com). Bridge IOC between Cluster A era and Cluster B operator (now downgraded to LOW per §22.9.1 cluster boundary).",
+        "first_seen": "2023-08-29",
+        "last_seen": "2023-09-17",
+        "confidence": "LOW",
+        "action": "MONITOR"
+      }
+    ],
+    "urls": [
+      {
+        "value": "https://inkconnect.ru/",
+        "purpose": "INK VPN consumer-facing landing page.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://inkconnect.ru/assets/index-CoeWw2zM.js",
+        "purpose": "INK VPN main Vite/React JS bundle (261,587 bytes; SHA256 8a69fe67...). Hardcoded API endpoint paths and brand strings.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://inkconnect.ru/logo.png",
+        "purpose": "Inkognito hooded-figure-with-eye brand logo PNG (SHA256 d1ae63c9...).",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://inkconnect.ru/favicon.svg",
+        "purpose": "INK VPN favicon SVG (SHA256 53b3515f...).",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://api.inkconnect.ru/",
+        "purpose": "INK VPN backend API root. Returns 404 to anonymous requests but exposes CORS configuration including custom X-Admin-Token header.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://cryptone.bot/",
+        "purpose": "CryptOne fake crypto exchange production frontend. Cloudflare-fronted with Turnstile bot challenge.",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://t.me/inkconnectvpn",
+        "purpose": "Telegram customer-support channel for INK VPN — operator's public-facing brand presence. 797 subscribers, first post 2026-03-18. Channel description self-identifies 'Inkognito' as parent brand.",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [],
+    "mutex_names": [],
+    "service_names": [],
+    "scheduled_tasks": [],
+    "named_pipes": []
+  },
+  "operator_brand_artifacts": {
+    "parent_brand": "Inkognito",
+    "brand_tagline_ru": "Надежный VPN от Inkognito! Видь то что скрыто, оставаясь в тумане войны!",
+    "brand_tagline_en": "Reliable VPN from Inkognito! See what is hidden, while remaining in the fog of war!",
+    "telegram_channel": "@inkconnectvpn",
+    "telegram_subscribers": 797,
+    "telegram_first_post": "2026-03-18T21:15:00Z",
+    "brand_logo_description": "Hooded figure with eye-in-hood — anonymous user + watchful eye visual embodying the Inkognito brand. PNG SHA256 d1ae63c9...",
+    "sub_brands": [
+      "INK VPN (inkconnect.ru) — Russian-language consumer VPN flagship, polished React/Vite SPA",
+      "INK Lens (inklens.ru / inklens.co.uk) — 467+ brand-impersonation subdomain platform",
+      "Bikaf VPN (bikaf.ru) — earlier consumer VPN brand (decommissioned ~Apr 2026)",
+      "Outline-based VPN (users.outline.unloki.ru) — censorship-circumvention service for Iran/RU/CN users",
+      "CryptOne (cryptone.bot) — fake crypto exchange",
+      "Regional brand fronts (ger.bigass.monster, gr.nodes.unloki.ru) — multi-region VPN nodes"
+    ]
+  },
+  "operator_fingerprints": {
+    "custom_http_headers": [
+      {
+        "header": "X-Admin-Token",
+        "context": "CORS-allowed on api.inkconnect.ru — operator's custom admin API authentication header. Any other site accepting X-Admin-Token in CORS would be a strong cluster pivot.",
+        "confidence": "HIGH"
+      }
+    ],
+    "decommission_tombstone": {
+      "server_header": "kittenx",
+      "http_status": 404,
+      "content_length": 148,
+      "context": "Operator's standard 'decommissioned' signature applied to retired domains. Observed on 00000xtrading.ru (Apr 2026) and bikaf.ru (Apr/May 2026). Cross-domain operator fingerprint — strong cluster-expansion pivot.",
+      "confidence": "HIGH"
+    },
+    "search_console_verifications": [
+      {
+        "type": "Google Search Console TXT verification",
+        "domain": "inkconnect.ru",
+        "value": "_Lq_FX-CDt3OmZqq5PNFfmQTZtLSHTNsVkViLTzpTwk",
+        "context": "Operator Google account #1 — separate from the inklens.ru account, suggesting operator deliberately segregates Google accounts by brand.",
+        "confidence": "HIGH"
+      },
+      {
+        "type": "Google Search Console TXT verification",
+        "domain": "inklens.ru",
+        "value": "xskfj4k4tX_-enfPvu9WrUiWauHFlbuVmyV7thcjwds",
+        "context": "Operator Google account #2.",
+        "confidence": "HIGH"
+      },
+      {
+        "type": "Yandex Webmaster verification meta tag",
+        "domain": "inklens.ru",
+        "value": "98466329",
+        "context": "Operator Yandex account ID. Pivotable via Censys/Shodan/Google search for HTML meta name='yandex-verification' content='98466329' to find sibling operator-controlled domains.",
+        "confidence": "HIGH"
+      }
+    ],
+    "whois_patterns": {
+      "soa_email_pattern_eu_burn_domains": "admin@<domain>.eu",
+      "context": "Operator's WHOIS fingerprint for self-managed .eu BEC burn domains (vetcorbeanca.eu, vagtec.eu, petkovalegal.eu). Pivotable via DomainTools 'Reverse SOA email' to find other operator .eu domains. Caveat: also a side-effect of self-served NS setup — useful behavioral fingerprint but not unique to this operator.",
+      "confidence": "HIGH"
+    },
+    "deployment_pipeline_indicators": [
+      "11-minute domain-registration-to-fully-operational-live-deployment window (inkconnect.ru, 2026-04-17): DNS templates + Let's Encrypt automation + Cloudflare integration + Timeweb hosting all pre-prepared",
+      "DevOps subdomain naming on inklens.ru: argo-cd, redis-commander, redisinsight, staging-agent, staging-analytic, uat-aka, uat-dashboard, prod-aka, integration-cicd, app-admin, vfemea-admin — enterprise-grade tooling repurposed for fraud infrastructure"
+    ]
+  },
+  "brand_impersonation_targets": {
+    "context": "467+ pre-staged brand-impersonation subdomains under inklens.ru on the operator's phishing/proxy host. Targets span multiple regions and verticals.",
+    "us_banking_finance": [
+      "wellsfargo.inklens.ru",
+      "adyen-no-stripe.inklens.ru"
+    ],
+    "consulting_enterprise_saas": [
+      "accenture.inklens.ru",
+      "asana.inklens.ru",
+      "connect-pro-portal.inklens.ru",
+      "democrm.inklens.ru",
+      "demo-insights.inklens.ru"
+    ],
+    "russian_telecom": [
+      "tele2.inklens.ru"
+    ],
+    "chinese_internet_giants": [
+      "tencent.inklens.ru",
+      "sina.inklens.ru"
+    ],
+    "apple_ecosystem": [
+      "siri-search.inklens.ru"
+    ],
+    "remote_access_devops_enterprise": [
+      "anydesk.inklens.ru",
+      "autodiscover.blog.inklens.ru",
+      "owa2013.inklens.ru",
+      "espace-client.inklens.ru",
+      "swdcdownloads.inklens.ru",
+      "development-jenkins.inklens.ru",
+      "signals.inklens.ru"
+    ],
+    "industrial_defense_consumer": [
+      "stanley.inklens.ru",
+      "rafael.inklens.ru"
+    ],
+    "generic_saas_consumer": [
+      "travel.inklens.ru",
+      "travelid.inklens.ru",
+      "weatherzone.inklens.ru",
+      "e-shop.inklens.ru",
+      "onlineforms.inklens.ru"
+    ]
+  },
+  "infrastructure_stack": {
+    "frontend_framework": "Vite + React Single-Page Application",
+    "frontend_fonts": "Google Fonts (Inter family)",
+    "production_web_server": "nginx/1.29.8",
+    "reverse_proxy": "Caddy (via: 1.1 Caddy response header)",
+    "backend_api_pattern": "RESTful — /api/auth/{login,logout,status}, /api/{plans,plan,subscriptions,subscription-extend,subscription-traffic,users,payments,gifts,promo-codes,promo-code,vpn-hosts,vpn-host,vpn-host-delete,blocked-domains,blocked-domain-delete}",
+    "node_management_platform": "Marzban (open-source Xray/V2Ray panel for centrally managing VPN/proxy server fleets) — at marzban.inklens.co.uk",
+    "back_office_crm": "EspoCRM (single-instance customer relationship management on dedicated Aeza Italy IP 185.221.196.118)",
+    "payment_integration": "SBP (Russia's Faster Payments System), T-Pay (Tinkoff), card",
+    "tls_defensive_posture": "inklens.ru deliberately rejects non-browser TLS clients (tlsv1 alert internal error on curl/wget) — cipher restriction or TLS-fingerprinting controls allow real browsers only"
+  },
+  "registrar_diversification": {
+    "REGRU-RU": ["unloki.ru", "bikaf.ru", "inklens.ru", "inkconnect.ru"],
+    "TIMEWEB-RU": ["akredup.ru (LOW confidence)"],
+    "HOSTINGER": ["a-loader.site", "divar-irantop.shop (MODERATE confidence)"],
+    "Namecheap": ["vetcorbeanca.eu", "vagtec.eu", "petkovalegal.eu (June 2023 batch, 14-day window)"],
+    "Gandi (FR)": ["inklens.co.uk (apex chameleon decoy, jurisdiction laundering)"],
+    "Unstoppable Domains": ["evotoptan.com"],
+    "FE-RU": ["00000xtrading.ru"],
+    "DYNADOT": ["bigass.monster (re-registered 2025-10-21)"]
+  },
+  "operator_timeline": {
+    "confirmed_continuous_presence": "2023-06-08 → 2026-05-07 (~2 years 11 months)",
+    "key_milestones": [
+      {"date": "2023-06-08", "event": "vetcorbeanca.eu first observed on Stark IP — earliest confirmed operator activity (BEC infrastructure)"},
+      {"date": "2023-08-31", "event": "unloki.ru registered (long-term VPN brand)"},
+      {"date": "2023-11-17", "event": "unloki.ru migrated to Stark Industries 193.46.56.182 (still there 2.5+ years later)"},
+      {"date": "2024-02-12", "event": "users.outline.unloki.ru Outline VPN deployed (censorship-circumvention service)"},
+      {"date": "2025-05-17", "event": "00000xtrading.ru EspoCRM back-office deployed on 185.221.196.118"},
+      {"date": "2026-02-22", "event": "bikaf.ru Bikaf VPN consumer brand launched"},
+      {"date": "2026-03-02", "event": "cryptone.bot CryptOne fake exchange registered"},
+      {"date": "2026-03-18", "event": "inklens.ru registered + Telegram @inkconnectvpn channel first post (coordinated brand launch)"},
+      {"date": "2026-03-19", "event": "inklens.co.uk apex chameleon decoy registered"},
+      {"date": "2026-04-02", "event": "Primary phishing host migrated U1host DE → Timeweb RU"},
+      {"date": "2026-04-06", "event": "fi1.inklens.co.uk back-office activated (30-hour overlap with 00000xtrading.ru)"},
+      {"date": "2026-04-07", "event": "00000xtrading.ru decommissioned with kittenx-404 tombstone"},
+      {"date": "2026-04-17", "event": "inkconnect.ru registered + INK VPN site live in 11 minutes (flagship brand launch)"},
+      {"date": "2026-05-04", "event": "inklens.co.uk apex cover changed GitHub Pages → AmazonS3"}
+    ]
+  },
+  "vendor_detection_summary": {
+    "operator_domain_vt_detection": "0/92 across all confirmed operator domains as of 2026-05-07",
+    "vt_significance": "Despite multi-year operation, multi-product fraud activity, sanctioned-bulletproof hosting, and explicit Russian-language phishing brand impersonations, no commercial threat intelligence vendor has flagged these domains as malicious. First public capture.",
+    "ink_vpn_artifact_vt_detection": "JS bundle (8a69fe67), logo PNG (d1ae63c9), favicon SVG (53b3515f) all return NOT FOUND on VirusTotal — first capture of these operator code artifacts."
+  }
+}

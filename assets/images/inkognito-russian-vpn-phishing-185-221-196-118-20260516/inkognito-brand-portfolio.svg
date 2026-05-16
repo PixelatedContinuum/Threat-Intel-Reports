@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1450" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1450" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1449" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- TITLE -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Inkognito Brand Portfolio (UTA-2026-009)</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">One operator, six brands, three functional roles — unified under the "Inkognito" parent identity</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Self-identified via @inkconnectvpn Telegram channel  ·  2023-06 through 2026-05  ·  0/92 VirusTotal detection across all six</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- ROW 1 LEFT: INK VPN (red — flagship active) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="196" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="229" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">FLAGSHIP — LIVE</text>
+    <text x="240" y="227" font-size="22" font-weight="600" fill="#ffffff">INK VPN</text>
+    <text x="80" y="282" font-size="18" fill="#ffffff">Commercial VPN; subscription business</text>
+    <text x="80" y="312" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">inkconnect.ru  ·  api.inkconnect.ru</text>
+    <text x="80" y="342" font-size="16" fill="#e5e5e5">Vite/React SPA · 18 API endpoints</text>
+    <text x="80" y="368" font-size="16" fill="#e5e5e5">Russian SBP / T-Pay / card payment</text>
+    <text x="80" y="394" font-size="16" fill="#e5e5e5">Hosted Timeweb RU (176.124.211.174)</text>
+    <text x="80" y="424" font-size="16" fill="#cccccc">Registered 2026-04-17 (11-min deploy)</text>
+    <text x="80" y="456" font-size="16" fill="#fb923c" font-weight="600">Customer-acquisition front for the portfolio</text>
+  </g>
+
+  <!-- ROW 1 RIGHT: INK Lens (red — flagship phishing) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="196" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="196" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="510" y="229" width="430" height="13" fill="#dc2626"/>
+    <text x="530" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">PHISHING — LIVE</text>
+    <text x="690" y="227" font-size="22" font-weight="600" fill="#ffffff">INK Lens</text>
+    <text x="530" y="282" font-size="18" fill="#ffffff">467+ brand-impersonation subdomains</text>
+    <text x="530" y="312" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">inklens.ru  ·  inklens.co.uk (apex decoy)</text>
+    <text x="530" y="342" font-size="16" fill="#e5e5e5">Targets Wells Fargo / AnyDesk / OWA</text>
+    <text x="530" y="368" font-size="16" fill="#e5e5e5">  2013 / Jenkins / Tencent / 18+ verticals</text>
+    <text x="530" y="394" font-size="16" fill="#e5e5e5">Apex chameleon-decoy on GitHub→S3</text>
+    <text x="530" y="424" font-size="16" fill="#cccccc">Inklens.ru registered 2026-03-18</text>
+    <text x="530" y="456" font-size="16" fill="#fb923c" font-weight="600">Pre-staged, awaiting per-target activation</text>
+  </g>
+
+  <!-- ROW 2 LEFT: CryptOne (yellow — fake exchange social-eng) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="506" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="506" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="506" width="430" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="539" width="430" height="13" fill="#eab308"/>
+    <text x="80" y="537" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">FAKE EXCHANGE — LIVE</text>
+    <text x="320" y="537" font-size="22" font-weight="600" fill="#111111">CryptOne</text>
+    <text x="80" y="592" font-size="18" fill="#ffffff">Cloudflare-fronted fake crypto exchange</text>
+    <text x="80" y="622" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">cryptone.bot  ·  79.137.192.3 (staging path)</text>
+    <text x="80" y="652" font-size="16" fill="#e5e5e5">Cloudflare Turnstile bot-challenge gate</text>
+    <text x="80" y="678" font-size="16" fill="#e5e5e5">Origin IP hidden; production active</text>
+    <text x="80" y="708" font-size="16" fill="#e5e5e5">Staging path on multi-tenant Aeza IP</text>
+    <text x="80" y="738" font-size="16" fill="#cccccc">Live since 2026-03-05 (after 2026-03-02 reg)</text>
+    <text x="80" y="768" font-size="16" fill="#fb923c" font-weight="600">Social-engineering payoff after phishing</text>
+  </g>
+
+  <!-- ROW 2 RIGHT: unloki + Outline (yellow — long-term VPN/circumvention) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="506" width="430" height="46" rx="8" fill="#eab308"/>
+    <rect x="510" y="539" width="430" height="13" fill="#eab308"/>
+    <text x="530" y="537" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">CIRCUMVENTION — LIVE</text>
+    <text x="770" y="537" font-size="22" font-weight="600" fill="#111111">unloki + Outline</text>
+    <text x="530" y="592" font-size="18" fill="#ffffff">VPN for censorship-region populations</text>
+    <text x="530" y="622" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">unloki.ru  ·  users.outline.unloki.ru</text>
+    <text x="530" y="652" font-size="16" fill="#e5e5e5">Outline-based (Google Jigsaw protocol)</text>
+    <text x="530" y="678" font-size="16" fill="#e5e5e5">Iran, RU, CN target user populations</text>
+    <text x="530" y="708" font-size="16" fill="#e5e5e5">Hosted Stark TR (193.46.56.182)</text>
+    <text x="530" y="738" font-size="16" fill="#cccccc">Earliest 2023-11-17 (2.5+ years stable)</text>
+    <text x="530" y="768" font-size="16" fill="#fb923c" font-weight="600">Longest-running portfolio asset</text>
+  </g>
+
+  <!-- ROW 3 LEFT: bigass.monster (yellow — regional brand front) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="816" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="816" width="430" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="849" width="430" height="13" fill="#eab308"/>
+    <text x="80" y="847" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">REGIONAL FRONT — LIVE</text>
+    <text x="350" y="847" font-size="22" font-weight="600" fill="#111111">bigass.monster</text>
+    <text x="80" y="902" font-size="18" fill="#ffffff">VPN brand front (Germany/Russia/Nordic)</text>
+    <text x="80" y="932" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ger.bigass.monster + sister subs</text>
+    <text x="80" y="962" font-size="16" fill="#e5e5e5">Cloudflare apex + Aeza subdomain hosting</text>
+    <text x="80" y="988" font-size="16" fill="#e5e5e5">Drop-caught 2025-10-21 (re-acquired)</text>
+    <text x="80" y="1014" font-size="16" fill="#cccccc">Brand active 2024-07-09 onward</text>
+    <text x="80" y="1046" font-size="16" fill="#fb923c" font-weight="600">Supplemental regional VPN brand</text>
+  </g>
+
+  <!-- ROW 3 RIGHT: Bikaf VPN (grey — decommissioned) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="816" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="816" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="510" y="849" width="430" height="13" fill="#6b7280"/>
+    <text x="530" y="847" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">DECOMMISSIONED</text>
+    <text x="750" y="847" font-size="22" font-weight="600" fill="#ffffff">Bikaf VPN</text>
+    <text x="530" y="902" font-size="18" fill="#ffffff">Earlier consumer-VPN MVP (minimalist)</text>
+    <text x="530" y="932" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">bikaf.ru  ·  Google-OAuth-only signin</text>
+    <text x="530" y="962" font-size="16" fill="#e5e5e5">CCTV/IP-camera sub-brands also under apex</text>
+    <text x="530" y="988" font-size="16" fill="#e5e5e5">Retired via kittenx-404 tombstone Apr 2026</text>
+    <text x="530" y="1014" font-size="16" fill="#cccccc">Brand 2026-02-22 to ~2026-04 (~2 months)</text>
+    <text x="530" y="1046" font-size="16" fill="#fb923c" font-weight="600">Replaced by INK VPN as the flagship</text>
+  </g>
+
+  <!-- DIVIDER + parent-brand summary band -->
+  <line x1="60" y1="1146" x2="940" y2="1146" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1182" text-anchor="middle" font-size="22" font-weight="700" fill="#ffffff">Parent brand: "Inkognito"  ·  Telegram @inkconnectvpn (797 subs, first post 2026-03-18)</text>
+  <text x="500" y="1212" text-anchor="middle" font-size="17" fill="#e5e5e5">Cross-brand operator fingerprints: `Server: kittenx` 404 tombstone  ·  `X-Admin-Token` HTTP header  ·  Yandex Webmaster ID 98466329</text>
+  <text x="500" y="1242" text-anchor="middle" font-size="17" fill="#e5e5e5">Each brand sits on different infrastructure (Timeweb / Stark / Cloudflare / Aeza / U1host) — deliberate provider segmentation</text>
+
+  <!-- FOOTER -->
+  <line x1="60" y1="1290" x2="940" y2="1290" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1324" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  Server: kittenx 404 tombstone  ·  X-Admin-Token HTTP header</text>
+  <text x="500" y="1354" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Yandex verification 98466329  ·  Google SC TXTs  ·  INK VPN asset SHA256s (8a69fe67… / d1ae63c9… / 53b3515f…)</text>
+
+  <g transform="translate(80, 1390)">
+    <rect x="0" y="0" width="16" height="16" fill="#dc2626"/>
+    <text x="24" y="13" font-size="14" fill="#cccccc">flagship/phishing — primary operator brands</text>
+    <rect x="380" y="0" width="16" height="16" fill="#eab308"/>
+    <text x="404" y="13" font-size="14" fill="#cccccc">supporting — fake exchange / VPN extensions</text>
+    <rect x="740" y="0" width="16" height="16" fill="#6b7280"/>
+    <text x="764" y="13" font-size="14" fill="#cccccc">decommissioned brand</text>
+  </g>
+</svg>
