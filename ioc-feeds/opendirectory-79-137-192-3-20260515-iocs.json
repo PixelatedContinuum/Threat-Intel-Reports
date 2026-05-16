@@ -1,0 +1,846 @@
+{
+  "metadata": {
+    "campaign_slug": "opendirectory-79-137-192-3-20260515",
+    "campaign_title": "Multi-Cluster Open-Directory Tenancy on 79.137.192.3: BellaMain PhaaS, Inkognito Phishing, and a Rhadamanthys MaaS-Customer Loader",
+    "primary_family": "Rhadamanthys",
+    "malware_families": ["Rhadamanthys", "BellaMain (PhaaS)", "Inkognito (operator brand)"],
+    "report_date": "2026-05-15",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "cluster_layout": {
+      "A": "BellaMain Turkish PhaaS (operator @AresRS34, developer Wadanz)",
+      "B": "Inkognito Russian VPN/phishing (INK VPN brand portfolio)",
+      "C": "Rhadamanthys MaaS-customer loader + canonical Stage-2 (PRIMARY)"
+    },
+    "cluster_linkage_confidence": "LOW (downgraded from MODERATE in §23.12.7 — three clusters share multi-tenant Aeza staging IP only; no operator-level evidence overlap)"
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "5c38a5dd3703b1c4b8c2466b18ce9f4c45ef4c9bf6c3096bee8b24d20ecd247a",
+        "cluster": "C",
+        "filename": "staticlittlesource.exe",
+        "type": "Rhadamanthys customer-built loader (VS2022 LTCG/C++)",
+        "size": 1390592,
+        "compile_timestamp": "2023-06-25T23:01:08Z",
+        "vt_detections": "60/77",
+        "confidence": "DEFINITE",
+        "context": "Customer-built loader with EAX-redirect process hollowing into InstallUtil.exe; RC4-decrypts embedded Stage-2 PE from .data section",
+        "action": "BLOCK"
+      },
+      {
+        "value": "804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50",
+        "cluster": "C",
+        "filename": "embedded_payload.bin",
+        "type": "Canonical Rhadamanthys Stage-2 (VS2003 toolchain; extracted from loader)",
+        "size": 458752,
+        "vt_detections": "48/63",
+        "vt_classification": "Microsoft Trojan:Win32/Rhadamanthys!ic; CAPE Rhadamanthys (definitive)",
+        "confidence": "DEFINITE",
+        "context": "Canonical Rhadamanthys Stage-2 with 3-layer encrypted-blob synthesis (byte-emitters + fake-GUIDs + bit-packed) + CBC-XOR cipher + 'FS' container + Q3VM-derivative VM",
+        "action": "BLOCK"
+      },
+      {
+        "value": "10d04df986b44dfcad282313d4b1054e2133093c9a5f1f227a77f6a2bd5cb5fb",
+        "cluster": "C",
+        "type": "Sibling Stage-1 LOADER (Microsoft Trojan:Win32/Dcrat!ic)",
+        "size": 3145728,
+        "first_seen": "2023-06-19",
+        "confidence": "HIGH",
+        "context": "Drops %APPDATA%\\4k2pchh9ur.exe 448KB; same C2 cohort (79.133.180.168)",
+        "action": "BLOCK"
+      },
+      {
+        "value": "bc9fe5e9e8e60511242afb24df276681bc92ae97e89b95ad2b7fe4fe56744447",
+        "cluster": "C",
+        "type": "Sibling Stage-2 (CAPE Rhadamanthys, different customer)",
+        "size": 462848,
+        "first_seen": "2024-04-16",
+        "confidence": "HIGH",
+        "context": "Contacts DIFFERENT C2 45.81.39.169 (OCULUS NETWORKS US) — proves multi-customer Rhadamanthys MaaS architecture",
+        "action": "BLOCK"
+      },
+      {
+        "value": "e827d13c394d096d1e13f6860e4da75e506b3d935a480b087833485127b954e1",
+        "cluster": "C",
+        "type": "Sibling Stage-2 (Rhadamanthys, contemporary with our sample)",
+        "size": 458752,
+        "first_seen": "2023-10-22",
+        "confidence": "HIGH",
+        "context": "Same vendor family",
+        "action": "BLOCK"
+      },
+      {
+        "value": "457aecd836dbc6038d81c22daa0fc5dbc42f0f0c6d09a97f73b48db264b2e8dd",
+        "cluster": "C",
+        "type": "Sibling Stage-2 (Rhadamanthys, slightly larger config)",
+        "size": 473088,
+        "first_seen": "2023-10-20",
+        "confidence": "HIGH",
+        "context": "Same vendor family",
+        "action": "BLOCK"
+      },
+      {
+        "value": "f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88",
+        "cluster": "A",
+        "filename": "BellaMain.zip",
+        "type": "BellaMain PhaaS panel (ZIP archive, 65 files, 14 dirs)",
+        "size": 19292160,
+        "vt_detections": "Not in VT (novel)",
+        "confidence": "DEFINITE",
+        "context": "Multi-tenant PhaaS panel with operator dashboard, Telegram exfil, MySQL DB, TRX payout workflow",
+        "action": "BLOCK"
+      },
+      {
+        "value": "2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31",
+        "cluster": "A",
+        "filename": "Dolap.rar",
+        "type": "Dolap (Turkish secondhand marketplace) phishing kit",
+        "vt_detections": "0/62",
+        "first_seen": "2024-04-18",
+        "confidence": "DEFINITE",
+        "context": "Hardcoded Telegram bot token 6797512084 + group -1002104835510 + admin alias @AresRS34",
+        "action": "BLOCK"
+      },
+      {
+        "value": "705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac",
+        "cluster": "A",
+        "filename": "Kargo.rar",
+        "type": "Yurtici Kargo (Turkish cargo tracking) phishing kit",
+        "vt_detections": "0/62",
+        "first_seen": "2024-04-18",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f",
+        "cluster": "A",
+        "filename": "Letgo.rar",
+        "type": "Letgo (Turkish classifieds) phishing kit",
+        "vt_detections": "1/61",
+        "first_seen": "2024-04-18",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9",
+        "cluster": "A",
+        "filename": "Pttavm.rar",
+        "type": "PTT AVM (Turkish postal e-commerce) phishing kit",
+        "vt_detections": "0/61",
+        "first_seen": "2024-04-18",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c",
+        "cluster": "A",
+        "filename": "sahibinden.rar",
+        "type": "Sahibinden (Turkish classifieds/real estate) phishing kit",
+        "vt_detections": "0/62",
+        "first_seen": "2024-04-18",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a",
+        "cluster": "A",
+        "filename": "shopier.rar",
+        "type": "Shopier (Turkish e-commerce) phishing kit",
+        "vt_detections": "2/59",
+        "first_seen": "2024-04-18",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0",
+        "cluster": "A",
+        "filename": "turkcell.rar",
+        "type": "Turkcell (Turkish telecommunications) phishing kit",
+        "vt_detections": "0/62",
+        "first_seen": "2024-04-18",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978",
+        "cluster": "B",
+        "filename": "index-CoeWw2zM.js",
+        "type": "Inkognito INK VPN frontend JS bundle",
+        "size": 261587,
+        "vt_detections": "Not in VT (first capture)",
+        "confidence": "DEFINITE",
+        "context": "inkconnect.ru /assets/index-CoeWw2zM.js — strong code-level operator IOC for Inkognito cluster",
+        "action": "MONITOR"
+      },
+      {
+        "value": "d1ae63c928fd07d51cf79c5165e4431765201ca04a2bee3c309dc00092c4de7c",
+        "cluster": "B",
+        "filename": "logo.png",
+        "type": "Inkognito INK VPN brand logo (hooded figure with eye-in-hood)",
+        "vt_detections": "Not in VT (first capture)",
+        "confidence": "DEFINITE",
+        "context": "inkconnect.ru /logo.png — visual brand IOC for Inkognito cluster; pivot opportunity via Censys/Shodan favicon search",
+        "action": "MONITOR"
+      },
+      {
+        "value": "53b3515fda56dbbd1f8071a9ef3dc3be80cb7994df22ce8afc2e79147e899b70",
+        "cluster": "B",
+        "filename": "favicon.svg",
+        "type": "Inkognito INK VPN favicon",
+        "vt_detections": "Not in VT (first capture)",
+        "confidence": "DEFINITE",
+        "action": "MONITOR"
+      }
+    ],
+    "md5": [
+      {
+        "value": "ae9991a02aa20ebbc2cc3c0f40924442",
+        "cluster": "C",
+        "context": "staticlittlesource.exe loader",
+        "confidence": "DEFINITE"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "f9a563d92d1ab148326f1b1f2b8d5ae70c0c6ee0",
+        "cluster": "C",
+        "context": "staticlittlesource.exe loader",
+        "confidence": "DEFINITE"
+      }
+    ],
+    "imphash": [
+      {
+        "value": "1e5efd483892326cc4eeb97bc14a6266",
+        "cluster": "C",
+        "context": "staticlittlesource.exe loader cluster pivot",
+        "confidence": "HIGH"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "79.133.180.168",
+        "cluster": "C",
+        "port": 3394,
+        "protocol": "TCP/HTTPS",
+        "purpose": "Rhadamanthys customer-side C2 listener (active 2023-06-13 → present, ~34 months)",
+        "asn": "AS57043 Hostkey B.v. (Netherlands)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "45.81.39.169",
+        "cluster": "C",
+        "purpose": "Alternate Rhadamanthys customer C2 (different customer in same MaaS family); contacted by sibling Stage-2 bc9fe5e9...",
+        "asn": "OCULUS NETWORKS INC (US)",
+        "confidence": "MODERATE",
+        "context": "Different customer endpoint; proves multi-customer Rhadamanthys MaaS architecture",
+        "action": "BLOCK"
+      },
+      {
+        "value": "8.212.46.227",
+        "cluster": "C",
+        "purpose": "Tentative Rhadamanthys customer C2 (Alibaba US Technology Co. HK); appears in contacted_ips for sibling Stage-2 457aecd8... as only non-Microsoft/Akamai endpoint",
+        "asn": "Alibaba US (HK)",
+        "confidence": "LOW",
+        "false_positive_risk": "Could be third customer's C2 OR benign Alibaba CDN; verify before action",
+        "action": "MONITOR"
+      },
+      {
+        "value": "79.137.192.3",
+        "cluster": "A",
+        "port": 443,
+        "protocol": "HTTPS",
+        "purpose": "BellaMain panel + 7 phishing kits + CryptOne staging server",
+        "asn": "AS216246 Aeza Group LLC (Russia)",
+        "confidence": "DEFINITE",
+        "context": "Multi-tenant Aeza bulletproof IP — also hosts Cluster C historical loader, Cluster B brief co-tenancy, BriansClub, CRD Club, RedLine, SmokeLoader, Tofsee tenants",
+        "false_positive_risk": "Multi-tenant IP — connection alone is not cluster-attributable; cross-evidence with operator IOCs required",
+        "action": "BLOCK"
+      },
+      {
+        "value": "185.221.196.118",
+        "cluster": "B",
+        "purpose": "Inkognito operator EspoCRM back-office (00000xtrading.ru → fi1.inklens.co.uk)",
+        "asn": "AS210644 Aeza International Ltd (Italy)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "176.124.211.174",
+        "cluster": "B",
+        "purpose": "Current Inkognito operator inklens.ru host (since 2026-04-02)",
+        "asn": "AS9123 Jsc Timeweb (Russia)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "77.239.101.23",
+        "cluster": "B",
+        "purpose": "Secondary Inkognito operator phishing/proxy host (502 subs as of Mar 2026)",
+        "asn": "AS213877 U1host Ltd (Germany)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "79.137.203.87",
+        "cluster": "B",
+        "purpose": "Inkognito secondary VPN node host (sister to BellaMain server)",
+        "asn": "Aeza Group RU",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "193.46.56.182",
+        "cluster": "B",
+        "purpose": "Long-term Inkognito operator VPN endpoint (since Nov 2023, 2.5+ years)",
+        "asn": "AS44477/AS209847 Stark Industries Solutions / Worktitans (Turkey, sanctioned bulletproof)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "92.38.219.225",
+        "cluster": "B",
+        "purpose": "bikaf.ru initial setup IP (Feb 21-25, 2026)",
+        "asn": "AS12695 Netts.ru (Russia)",
+        "confidence": "MODERATE",
+        "action": "MONITOR"
+      },
+      {
+        "value": "91.108.241.156",
+        "cluster": "B",
+        "purpose": "divar-irantop.shop briefly Jan 2024",
+        "asn": "AS210644 Aeza International Ltd (AU listing)",
+        "confidence": "MODERATE",
+        "action": "MONITOR"
+      },
+      {
+        "value": "94.228.168.80",
+        "cluster": "B",
+        "purpose": "divar-irantop.shop briefly Jan 2024",
+        "asn": "AS210644 Aeza International Ltd (DE listing)",
+        "confidence": "MODERATE",
+        "action": "MONITOR"
+      }
+    ],
+    "domains": [
+      {
+        "value": "cryptone.bot",
+        "cluster": "A",
+        "purpose": "CryptOne fake crypto exchange (BTC/ETH/SOL/PEPE pairs, multilingual EN/TR/DE/RU)",
+        "infrastructure": "Cloudflare-fronted (origin hidden), live since 2026-03-05",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "00000xtrading.ru",
+        "cluster": "B",
+        "purpose": "Inkognito operator EspoCRM back-office (May 2025 – Apr 2026); decommissioned via kittenx-404 tombstone",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "inkconnect.ru",
+        "cluster": "B",
+        "purpose": "INK VPN flagship brand (Inkognito parent), launched 2026-04-17",
+        "infrastructure": "Timeweb RU 176.124.211.174",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "inklens.ru",
+        "cluster": "B",
+        "purpose": "Inkognito primary phishing/proxy infrastructure (467 subdomains for brand impersonation)",
+        "infrastructure": "Timeweb RU 176.124.211.174",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "inklens.co.uk",
+        "cluster": "B",
+        "purpose": "Chameleon-decoy apex (redirects apex to GitHub then S3 to mislead recon); fi1. + de1. + marzban. + api. subdomains are operational",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "fi1.inklens.co.uk",
+        "cluster": "B",
+        "purpose": "Inkognito operator's CURRENT back-office (Apr 2026 – present)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "marzban.inklens.co.uk",
+        "cluster": "B",
+        "purpose": "Marzban Xray/V2Ray VPN admin panel — operator's central node-management platform",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "bikaf.ru",
+        "cluster": "B",
+        "purpose": "Bikaf VPN consumer brand (decommissioned Apr/May 2026 via kittenx-404 tombstone, replaced by inkconnect.ru)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "unloki.ru",
+        "cluster": "B",
+        "purpose": "Long-term VPN brand front (Outline-based, 2023-08 – present)",
+        "infrastructure": "193.46.56.182 / Stark TR (since 2023-11)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "bigass.monster",
+        "cluster": "B",
+        "purpose": "VPN brand front (Cloudflare-fronted; ger. sub on Aeza 79.137.203.87)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "vetcorbeanca.eu",
+        "cluster": "B",
+        "purpose": "Operator BEC burn domain (2023-06-08 — earliest operator activity, Romanian veterinary clinic theme), 6-day apex burn",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "vagtec.eu",
+        "cluster": "B",
+        "purpose": "Operator BEC burn domain (2023-06-13, generic tech theme), ~12-month operator control",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "petkovalegal.eu",
+        "cluster": "B",
+        "purpose": "Operator BEC burn domain (2023-06-22, Bulgarian/Russian legal practice theme), ~12-month operator control",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "evotoptan.com",
+        "cluster": "A",
+        "purpose": "Briefly hit 79.137.192.3 (2026-03-31, 22-min window); now Namecheap shared",
+        "confidence": "MODERATE",
+        "action": "MONITOR"
+      },
+      {
+        "value": "a-loader.site",
+        "cluster": "A",
+        "purpose": "Historical operator domain (Aug-Sep 2023, 19-day burn); shared Aeza DNS",
+        "confidence": "MODERATE",
+        "action": "MONITOR"
+      },
+      {
+        "value": "aezadns.com",
+        "cluster": "B",
+        "purpose": "Aeza managed-DNS used by operator (a-loader 2023, 00000xtrading 2025); ns1.aezadns.com (185.112.83.228), ns2.aezadns.com (78.153.130.34)",
+        "confidence": "HIGH",
+        "false_positive_risk": "Aeza managed-DNS used by many customers; not unique to this operator",
+        "action": "MONITOR"
+      },
+      {
+        "value": "vivanoff.ru",
+        "cluster": "C",
+        "purpose": "Historical resolution to Rhadamanthys C2 79.133.180.168 (2023-08-01)",
+        "confidence": "LOW",
+        "context": "Single Russian domain, no further pivot evidence",
+        "action": "MONITOR"
+      }
+    ],
+    "urls": [
+      {
+        "value": "https://79.133.180.168:3394/e6d92c6b5b2a03bee7fbab40/rnvoxu7t.nnre7",
+        "cluster": "C",
+        "purpose": "Rhadamanthys beacon URL with customer panel ID (extracted 2026-05-13 from our Stage-2)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.133.180.168:3394/e6d92c6b5b2a03bee7fbab40/icng5os4.lwcci",
+        "cluster": "C",
+        "purpose": "Rhadamanthys beacon URL (2026-04-03 — same panel ID, different terminal filename)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.133.180.168/forwarding/fwmjd8fs.mqi5u",
+        "cluster": "C",
+        "purpose": "Alternate URL prefix (2026-03-09 — different URL scheme; possibly relay/forwarder endpoint or earlier Rhadamanthys URL scheme)",
+        "confidence": "MODERATE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.137.192.3/",
+        "cluster": "A",
+        "purpose": "Open directory root",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.137.192.3/cryptone/",
+        "cluster": "A",
+        "purpose": "CryptOne staging/dev URL (live)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.137.192.3/no/",
+        "cluster": "A",
+        "purpose": "Card phishing lure (live)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.137.192.3/BellaMain/",
+        "cluster": "A",
+        "purpose": "BellaMain panel directory",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://cryptone.bot/",
+        "cluster": "A",
+        "purpose": "CryptOne production fake exchange (Cloudflare-fronted, origin hidden)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      }
+    ],
+    "tls_indicators": [
+      {
+        "type": "JARM",
+        "value": "2ad2ad0002ad2ad00042d42d00000007e6e35b6c9fce6eec13762f8506fe09",
+        "cluster": "C",
+        "purpose": "Rhadamanthys customer C2 79.133.180.168:3394 current Samsung-cert period",
+        "confidence": "HIGH",
+        "context": "Useful for fingerprinting Rhadamanthys-customer C2s broadly"
+      },
+      {
+        "type": "JARM",
+        "value": "2ad2ad0002ad2ad00042d42d00000000f78d2dc0ce6e5bbc5b8149a4872356",
+        "cluster": "A",
+        "purpose": "BellaMain server 79.137.192.3 TLS fingerprint",
+        "confidence": "HIGH"
+      },
+      {
+        "type": "Cert SHA-256",
+        "value": "05209e47fd8f96d2f39a79828677288eccca3cef245f128711cc2d53d71f42f7",
+        "cluster": "C",
+        "purpose": "Samsung 51-SAN brand-impersonation cert (DigiCert GeoTrust TLS RSA CA G1, valid 2026-03-12 to 2026-09-26); replayed without private key on Rhadamanthys C2",
+        "confidence": "HIGH"
+      },
+      {
+        "type": "Cert serial",
+        "value": "a6a420dc93a48e5f457db0af4122e9",
+        "cluster": "C",
+        "purpose": "Samsung-impersonation cert serial",
+        "confidence": "HIGH"
+      }
+    ]
+  },
+  "host_indicators": {
+    "registry_keys": [
+      {
+        "key": "HKU\\<SID>\\Software\\SibCode\\sn",
+        "value": "HKU\\<SID>\\Software\\SibCode\\sn",
+        "value_name": "(per-instance Unix timestamp)",
+        "value_type": "REG_DWORD or REG_SZ (per-build varies)",
+        "cluster": "C",
+        "confidence": "HIGH",
+        "context": "Family-stable Rhadamanthys marker — observed across multiple sibling Stage-2 sandbox runs (Dapato dropper, bc9fe5e9..., e827d13c..., 457aecd8...). No known benign software writes this key. Per-instance value is license/build timestamp from MaaS panel.",
+        "action": "DETECT"
+      }
+    ],
+    "file_paths": [
+      {
+        "path": "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\InstallUtil.exe",
+        "value": "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\InstallUtil.exe",
+        "cluster": "C",
+        "confidence": "HIGH",
+        "context": "Hollowed LOLBin target for THIS customer's Rhadamanthys deployment (Check Point reports v0.9.x targets dllhost/taskhostw/TsWpfWrp/spoolsv/wuauclt). InstallUtil specifically may be a per-customer choice.",
+        "action": "MONITOR (legitimate file; abuse detected via outbound network connections)"
+      },
+      {
+        "path": "%APPDATA%\\4k2pchh9ur.exe",
+        "value": "%APPDATA%\\4k2pchh9ur.exe",
+        "cluster": "C",
+        "confidence": "HIGH",
+        "context": "Dropped by sibling Stage-1 Dapato loader 10d04df9... (448 KB Rhadamanthys Stage-2 in disguise)",
+        "action": "BLOCK"
+      }
+    ],
+    "section_names": [
+      {
+        "name": ".frontb",
+        "cluster": "C",
+        "confidence": "DEFINITE",
+        "context": "Rhadamanthys family signature — pre-allocated empty runtime buffer for decrypted Stage-2 payload. Rare in legitimate software."
+      }
+    ],
+    "cipher_artifacts": [
+      {
+        "type": "16-byte CBC-XOR IV",
+        "value": "f6358d79df69c577d9dce6bb77fa4fa7",
+        "cluster": "C",
+        "location": ".rdata file_offset 0x0001c434 of Rhadamanthys Stage-2",
+        "confidence": "HIGH",
+        "context": "CUSTOMER-SPECIFIC fingerprint — different MaaS customers presumably have different IVs. Highest-value per-customer detection IOC."
+      },
+      {
+        "type": "31-byte RC4 key",
+        "value": "e0802540d02d0feaeb277dc720e390b06dfd64d8f8104d9581e788e512715b",
+        "cluster": "C",
+        "location": "&DAT_00433820 in staticlittlesource.exe loader",
+        "confidence": "HIGH",
+        "context": "Loader→Stage-2 RC4 decryption key for embedded Stage-2 PE at &DAT_00436a70"
+      },
+      {
+        "type": "Q3VM-derivative bytecode magic",
+        "value": "0x14744214",
+        "cluster": "C",
+        "confidence": "HIGH",
+        "context": "Operator-modified from stock Q3VM 0x12721444 (per amnesia.sh / Outpost24 prior art). Vendor-side detection primitive — useful YARA pattern for Rhadamanthys Stage-2 builds."
+      }
+    ],
+    "operator_strings": [
+      {
+        "value": "BombAUb23456",
+        "cluster": "C",
+        "context": "Operator build/campaign ID printed from main() (zero public hits per WebSearch)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "Ahuh783bhASbsxAsiopJQAiwhhbchG&*#U897u*#&*473",
+        "cluster": "C",
+        "context": "45-char operator credential — likely panel-auth or C2-auth token (highest-fidelity pivot)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "Cancel of card!",
+        "cluster": "C",
+        "context": "Operator UI broken-English tell printed via std::cerr",
+        "confidence": "MODERATE",
+        "false_positive_risk": "Some risk of false positives in unrelated bank-themed malware"
+      },
+      {
+        "value": "DubzAias932",
+        "cluster": "C",
+        "context": "Operator build/campaign ID",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "take it everywhere",
+        "cluster": "C",
+        "context": "Logged from FUN_00402620 (dynamic API resolver) before each lookup",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "AUJsgbSyhusW*(&w3rrkjfgSAGscG)",
+        "cluster": "C",
+        "context": "Logged from FUN_00402400 (RC4 decryptor) — possibly key-related but distinct from actual RC4 key",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "Wadanz",
+        "cluster": "A",
+        "context": "Developer pseudonym suffix on session-encryption helpers in BellaMain database/fonk.php (sifreleWadanz, sifrecozWadanz). Cross-sample YARA pivot for other PHP webshells/panels by same author.",
+        "confidence": "DEFINITE"
+      }
+    ],
+    "credentials_secrets": [
+      {
+        "type": "MySQL credentials",
+        "value": "jakartaxdw / dbjakartaxdw / W!@25#8Tb2gxq15",
+        "cluster": "A",
+        "context": "BellaMain DB used by all kits",
+        "confidence": "DEFINITE"
+      },
+      {
+        "type": "Obfuscated admin directory",
+        "value": "V5VgjLU0jsDe",
+        "cluster": "A",
+        "context": "BellaMain admin directory name",
+        "confidence": "DEFINITE"
+      },
+      {
+        "type": "Session cookie name",
+        "value": "2tUgyO@H9E!4CuQ",
+        "cluster": "A",
+        "context": "Session-persistence cookie set on operator login",
+        "confidence": "DEFINITE"
+      },
+      {
+        "type": "Google Tag Manager ID",
+        "value": "GTM-K7F5T5N",
+        "cluster": "A",
+        "context": "GTM container embedded in all kit pages",
+        "confidence": "HIGH"
+      },
+      {
+        "type": "Yandex Webmaster Verification ID",
+        "value": "98466329",
+        "cluster": "B",
+        "context": "Operator's Yandex Webmaster account; appears in inklens.ru meta tags. Pivot opportunity via Censys/Shodan/Google for HTML meta tag",
+        "confidence": "HIGH"
+      },
+      {
+        "type": "Google Site Verification",
+        "value": "_Lq_FX-CDt3OmZqq5PNFfmQTZtLSHTNsVkViLTzpTwk",
+        "cluster": "B",
+        "context": "inkconnect.ru — operator Google Search Console account #1",
+        "confidence": "HIGH"
+      },
+      {
+        "type": "Google Site Verification",
+        "value": "xskfj4k4tX_-enfPvu9WrUiWauHFlbuVmyV7thcjwds",
+        "cluster": "B",
+        "context": "inklens.ru — operator Google Search Console account #2",
+        "confidence": "HIGH"
+      },
+      {
+        "type": "Custom API auth header",
+        "value": "X-Admin-Token",
+        "cluster": "B",
+        "context": "CORS-allowed on api.inkconnect.ru — INK VPN backend custom auth",
+        "confidence": "DEFINITE"
+      }
+    ]
+  },
+  "telegram_indicators": [
+    {
+      "type": "Bot Token",
+      "value": "6797512084:AAGbJVoC0zcKWYPbFG8oc_bACPn6gUEye_E",
+      "cluster": "A",
+      "status": "REVOKED (401 Unauthorized on getMe as of 2026-05-07)",
+      "context": "Hardcoded in all 6 individual BellaMain kits (girislog.php)",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "Group ID",
+      "value": "-1002104835510",
+      "cluster": "A",
+      "context": "Credential exfil group/channel",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "Group ID",
+      "value": "-1001817323952",
+      "cluster": "A",
+      "context": "Operator announcement group (manager.php / usmcheck.php hardcoded)",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "Operator Telegram alias",
+      "value": "@AresRS34",
+      "cluster": "A",
+      "context": "Extracted from anti-researcher Turkish profanity string in BellaMain code; real privacy-restricted Telegram user (verified 2026-05-07)",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "Admin Telegram UID",
+      "value": "5606327063",
+      "cluster": "A",
+      "context": "Authorized withdrawal approver (cekimbot.php)",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "Admin Telegram UID",
+      "value": "6594066326",
+      "cluster": "A",
+      "context": "Authorized withdrawal approver (cekimbot.php)",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "Customer support channel",
+      "value": "@inkconnectvpn",
+      "cluster": "B",
+      "context": "Public-facing Inkognito customer support channel — 797 subscribers, first post 2026-03-18; tagline 'Надежный VPN от Inkognito! Видь то что скрыто, оставаясь в тумане войны!'",
+      "confidence": "DEFINITE"
+    }
+  ],
+  "operator_panel_identifiers": [
+    {
+      "type": "Rhadamanthys customer panel ID",
+      "value": "e6d92c6b5b2a03bee7fbab40",
+      "cluster": "C",
+      "context": "24-hex-char stable identifier — observed across 4/3/2026 + 5/13/2026 beacons; POSSIBLY customer-specific (LOW direct evidence per §23.13.2; MODERATE indirect inference from per-build SibCode\\sn timestamp variation)",
+      "confidence": "HIGH"
+    }
+  ],
+  "operator_brands": [
+    {
+      "brand": "Inkognito",
+      "cluster": "B",
+      "type": "Parent brand (operator-self-identified)",
+      "confidence": "DEFINITE"
+    },
+    {
+      "brand": "INK VPN",
+      "cluster": "B",
+      "type": "Sub-product (Russian consumer VPN)",
+      "infrastructure": "inkconnect.ru, api.inkconnect.ru",
+      "confidence": "DEFINITE"
+    },
+    {
+      "brand": "INK Lens",
+      "cluster": "B",
+      "type": "Sub-product (phishing/proxy platform)",
+      "infrastructure": "inklens.ru (467+ subs), inklens.co.uk",
+      "confidence": "DEFINITE"
+    },
+    {
+      "brand": "Bikaf VPN",
+      "cluster": "B",
+      "type": "Sub-product (decommissioned consumer VPN)",
+      "infrastructure": "bikaf.ru",
+      "confidence": "DEFINITE"
+    },
+    {
+      "brand": "CryptOne",
+      "cluster": "B",
+      "type": "Sub-product (fake crypto exchange)",
+      "infrastructure": "cryptone.bot (Cloudflare-fronted)",
+      "confidence": "DEFINITE"
+    },
+    {
+      "brand": "BellaMain",
+      "cluster": "A",
+      "type": "PhaaS panel brand",
+      "confidence": "DEFINITE"
+    }
+  ],
+  "co_tenant_exclusions_documented": {
+    "note": "These IOCs belong to UNRELATED threat actors that co-tenant 79.137.192.3. Documented per §23.9 to support multi-tenant framing, NOT included as primary IOCs above.",
+    "tenants": [
+      {
+        "family": "RedLine Stealer",
+        "sha256": "1a05bd169881128f86bbb27730c1b0c2077b08f6a6883332517fa5824c5572cf",
+        "filename": "Incurious.exe",
+        "c2": "http://79.137.192.3:1516/",
+        "vt_detections": "58/74"
+      },
+      {
+        "family": "SmokeLoader/Heracles",
+        "sha256": "241074924c7b51be32a2bd658a84deab2bcd30a4bc48d8a71e92123c941887ba",
+        "filename": "kourimaobaku.exe",
+        "c2_chain": "http://45.12.253.74/pineapple.php?pub=mixtwo; http://85.217.144.143/files/setup2.exe; http://85.217.144.228/files/Amadey.exe; host-file-host6.com; galandskiyher2.com",
+        "vt_detections": "57/76"
+      },
+      {
+        "family": "Tofsee spam botnet (April 2023 build)",
+        "sha256": "2910a52e0934c8f1cf247cf88d1fce010f2e52dfb1cf2f64ebf3dc53df4ef865",
+        "filename": "a52d0a1829a0ff_15M.exe",
+        "imphash": "a41092e5e40602533850a4d1b2ecd182",
+        "pdb": "C:\\sena\\tawateje_lenicetedev68.pdb",
+        "c2_endpoints": "tcp://vanaheim.cn:443/; http://130.185.108.137/pchfv.php; multi-IP fallback 103.15.106.221, 188.190.114.21, 111.121.193.238",
+        "vt_detections": "61/76",
+        "yara_rule_path": "Notes/cotenant-tofsee-detection.yar"
+      }
+    ]
+  }
+}

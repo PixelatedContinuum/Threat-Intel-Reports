@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 920" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="treeShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="920" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="919" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">Rhadamanthys MaaS — Vendor/Customer Architecture</text>
+  <text x="500" y="98" text-anchor="middle" font-size="22" fill="#f5f5f5">One vendor, many customers — each customer brings their own loader and operates their own C2</text>
+  <text x="500" y="130" text-anchor="middle" font-size="17" fill="#cccccc">UTA-2026-010 tracks the customer-side operator only  ·  the Rhadamanthys MaaS vendor is a separate threat-intel target</text>
+  <line x1="60" y1="156" x2="940" y2="156" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== VENDOR (red side-rail) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="240" y="186" width="520" height="120" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="240" y="186" width="6" height="120" rx="3" fill="#dc2626"/>
+    <text x="260" y="216" font-size="20" font-weight="700" fill="#ffffff">Rhadamanthys MaaS Vendor</text>
+    <text x="260" y="246" font-size="15" fill="#e5e5e5">Develops + sells canonical Stage-2 to multiple customers</text>
+    <text x="260" y="270" font-size="14" fill="#cccccc">VS2003 toolchain  ·  Q3VM-derivative VM (magic 0x14744214)  ·  3-layer encrypted-blob synthesis</text>
+    <text x="260" y="292" font-size="13" fill="#888888">SEPARATE threat-intel target — tracked in Check Point, Outpost24, Recorded Future, Op Endgame Phase 3</text>
+  </g>
+
+  <!-- =========== Vendor → 3-way fanout =========== -->
+  <line x1="500" y1="306" x2="500" y2="346" stroke="#666666" stroke-width="2"/>
+  <line x1="170" y1="346" x2="830" y2="346" stroke="#666666" stroke-width="2"/>
+  <line x1="170" y1="346" x2="170" y2="386" stroke="#666666" stroke-width="2"/>
+  <line x1="500" y1="346" x2="500" y2="386" stroke="#666666" stroke-width="2"/>
+  <line x1="830" y1="346" x2="830" y2="386" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== LEFT CUSTOMER — representative sibling (red side-rail) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="40" y="386" width="260" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="40" y="386" width="6" height="290" rx="3" fill="#dc2626"/>
+    <text x="60" y="416" font-size="16" font-weight="700" fill="#ffffff">Customer A</text>
+    <text x="60" y="438" font-size="13" fill="#cccccc">(sibling Stage-2)</text>
+    <text x="60" y="476" font-size="14" fill="#e5e5e5">Loader (different build)</text>
+    <text x="60" y="498" font-size="12" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">bc9fe5e9...</text>
+    <text x="60" y="520" font-size="13" fill="#cccccc">Different operator strings</text>
+    <text x="60" y="540" font-size="13" fill="#cccccc">Different RC4 key</text>
+    <text x="60" y="560" font-size="13" fill="#cccccc">Different LOLBin choice</text>
+    <line x1="60" y1="580" x2="280" y2="580" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="60" y="606" font-size="14" fill="#fb923c" font-weight="600">→ different C2 endpoint</text>
+    <text x="60" y="630" font-size="13" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">45.81.39.169</text>
+    <text x="60" y="652" font-size="12" fill="#cccccc">OCULUS US AS</text>
+  </g>
+
+  <!-- =========== MIDDLE CUSTOMER — THIS CAMPAIGN (deep red side-rail + 2px deep-red border) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="370" y="386" width="260" height="290" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="370" y="386" width="6" height="290" rx="3" fill="#7f1d1d"/>
+    <text x="390" y="416" font-size="16" font-weight="700" fill="#ffffff">★ UTA-2026-010</text>
+    <text x="390" y="438" font-size="13" fill="#fb923c" font-weight="600">THIS REPORT — Cluster C</text>
+    <text x="390" y="476" font-size="14" fill="#e5e5e5"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">staticlittlesource.exe</tspan></text>
+    <text x="390" y="498" font-size="12" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">5c38a5dd... (1.39 MB)</text>
+    <text x="390" y="520" font-size="13" fill="#cccccc">Operator strings: BombAUb23456,</text>
+    <text x="390" y="538" font-size="13" fill="#cccccc">DubzAias932, Ahuh783bh...</text>
+    <text x="390" y="560" font-size="13" fill="#cccccc">LOLBin: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">InstallUtil.exe</tspan></text>
+    <line x1="390" y1="580" x2="610" y2="580" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="390" y="606" font-size="14" fill="#fb923c" font-weight="700">→ this customer's C2</text>
+    <text x="390" y="630" font-size="13" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">79.133.180.168:3394</text>
+    <text x="390" y="652" font-size="12" fill="#cccccc">Hostkey NL AS57043</text>
+  </g>
+
+  <!-- =========== RIGHT CUSTOMER — representative sibling (red side-rail) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="700" y="386" width="260" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="700" y="386" width="6" height="290" rx="3" fill="#dc2626"/>
+    <text x="720" y="416" font-size="16" font-weight="700" fill="#ffffff">Customer B</text>
+    <text x="720" y="438" font-size="13" fill="#cccccc">(sibling Stage-2)</text>
+    <text x="720" y="476" font-size="14" fill="#e5e5e5">Loader (different build)</text>
+    <text x="720" y="498" font-size="12" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">e827d13c... / 457aecd8...</text>
+    <text x="720" y="520" font-size="13" fill="#cccccc">Different operator strings</text>
+    <text x="720" y="540" font-size="13" fill="#cccccc">Different RC4 key</text>
+    <text x="720" y="560" font-size="13" fill="#cccccc">Different LOLBin choice</text>
+    <line x1="720" y1="580" x2="940" y2="580" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="720" y="606" font-size="14" fill="#fb923c" font-weight="600">→ different C2 endpoint</text>
+    <text x="720" y="630" font-size="13" fill="#e5e5e5">(per-customer C2 not extracted)</text>
+    <text x="720" y="652" font-size="12" fill="#cccccc">VT sandbox emulation fails</text>
+  </g>
+
+  <!-- =========== Common-element band: what all customers share (vendor-side) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="60" y="710" width="880" height="86" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="710" width="6" height="86" rx="3" fill="#6b7280"/>
+    <text x="80" y="738" font-size="16" font-weight="700" fill="#ffffff">All customers receive the same vendor-side Stage-2 product:</text>
+    <text x="80" y="764" font-size="14" fill="#e5e5e5"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.frontb</tspan> section  ·  Q3VM-derivative VM magic <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">0x14744214</tspan>  ·  3-layer synthesis  ·  CBC-XOR cipher  ·  FS container  ·  XS1/XS2 plugins</text>
+    <text x="80" y="786" font-size="14" fill="#cccccc">These are family signatures (vendor-side, cross-customer). Customer-specific fingerprints (RC4 key, IV, panel ID, LOLBin, C2 IP) differ per customer.</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="820" x2="940" y2="820" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="848" text-anchor="middle" font-size="16" font-weight="600" fill="#ffffff">Detection scope: this report's customer-side fingerprints (RC4 key, IV, operator strings, Hostkey C2) catch THIS operator only</text>
+  <text x="500" y="874" text-anchor="middle" font-size="14" fill="#cccccc">Vendor-side fingerprints (Q3VM magic, .frontb section, SibCode\sn pre-v0.9.1 marker) catch the entire Rhadamanthys customer population</text>
+  <text x="500" y="900" text-anchor="middle" font-size="13" fill="#888888">Color legend  —  red: code (vendor build + customer loaders)  ·  deep red: this customer's endgame infrastructure  ·  grey: shared/common element band</text>
+</svg>

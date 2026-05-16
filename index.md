@@ -17,8 +17,8 @@ position: 1
 {% include section-header.html label="Latest Reports" accent="#ff4444" %}
 
 <div class="hl-grid">
+{% include report-card.html title="Multi-Cluster Open Directory 79.137.192.3 — Rhadamanthys MaaS Customer + BellaMain + Inkognito" date="May 2026" severity="critical" tags="MaaS,Stealer,Multi-Family,Open Dir" url="/reports/opendirectory-79-137-192-3-20260515/" %}
 {% include report-card.html title="HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign" date="May 2026" severity="high" tags="Loader,RAT,MaaS,Open Dir" url="/reports/opendirectory-62-60-237-100-20260506/" %}
-{% include report-card.html title="AdaptixC2 Open Directory Exposure — 45.130.148.125 Operator Toolkit" date="Apr 2026" severity="high" tags="C2,Toolkit,Open Dir,Multi-Family" url="/reports/opendirectory-45-130-148-125-20260430/" %}
 </div>
 
 <a href="{{ '/reports/' | relative_url }}" class="hl-view-all">View all reports →</a>
