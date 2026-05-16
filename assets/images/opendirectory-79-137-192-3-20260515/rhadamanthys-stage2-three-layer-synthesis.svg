@@ -1,86 +1,91 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 830" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 970" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <defs>
     <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
       <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
     </filter>
   </defs>
 
-  <rect width="1000" height="830" fill="#161616"/>
-  <rect x="0.5" y="0.5" width="999" height="829" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+  <rect width="1000" height="970" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="969" fill="none" stroke="#2a2a2a" stroke-width="1"/>
 
   <!-- =========== TITLE =========== -->
-  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">Stage-2 3-Layer Encrypted-Blob Synthesis</text>
-  <text x="500" y="98" text-anchor="middle" font-size="22" fill="#f5f5f5">Defeats both entropy and string-based detection by scattering ciphertext across code and .rdata</text>
-  <text x="500" y="130" text-anchor="middle" font-size="17" fill="#cccccc">All three layers run before the encrypted FS container exists in the heap — static analysis sees nothing</text>
-  <line x1="60" y1="156" x2="940" y2="156" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="60" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Stage-2 3-Layer Encrypted-Blob Synthesis</text>
+  <text x="500" y="102" text-anchor="middle" font-size="24" fill="#f5f5f5">Defeats both entropy and string-based detection</text>
+  <text x="500" y="136" text-anchor="middle" font-size="18" fill="#cccccc">All three layers run before the encrypted FS container exists in the heap — static analysis sees nothing</text>
+  <line x1="60" y1="162" x2="940" y2="162" stroke="#2a2a2a" stroke-width="1"/>
 
-  <!-- =========== PHASE 1 (top-left, RED — operator code: byte emitters) =========== -->
+  <!-- =========== PHASE 1 (top-left, RED) =========== -->
   <g filter="url(#phaseShadow)">
-    <rect x="60" y="186" width="430" height="240" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="186" width="430" height="42" rx="8" fill="#dc2626"/>
-    <rect x="60" y="216" width="430" height="12" fill="#dc2626"/>
-    <text x="80" y="216" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">LAYER 1</text>
-    <text x="170" y="216" font-size="18" font-weight="600" fill="#ffffff">Byte-emitter functions</text>
-    <text x="80" y="266" font-size="16" fill="#ffffff">8,800+ tiny ~200–300-byte functions in <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.text</tspan>.</text>
-    <text x="80" y="294" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">mov byte ptr [eax+0x42], 0x7C</text>
-    <text x="80" y="318" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">mov byte ptr [eax+0x43], 0xA1  ...</text>
-    <text x="80" y="346" font-size="14" fill="#e5e5e5">Each function writes ~16–32 ciphertext bytes</text>
-    <text x="80" y="368" font-size="14" fill="#e5e5e5">at sequential heap offsets — encrypted bytes</text>
-    <text x="80" y="390" font-size="14" fill="#e5e5e5">live as scattered <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">imm8</tspan> operands across <tspan font-style="italic">.text</tspan>.</text>
-    <text x="80" y="416" font-size="13" fill="#fb923c">Defeats: entropy analysis (text section reads normal)</text>
+    <rect x="60" y="192" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="192" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="225" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="223" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">LAYER 1</text>
+    <text x="190" y="223" font-size="21" font-weight="600" fill="#ffffff">Byte-emitter functions</text>
+    <text x="80" y="276" font-size="20" fill="#ffffff">8,800+ tiny ~200–300-byte</text>
+    <text x="80" y="302" font-size="20" fill="#ffffff">functions in <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.text</tspan>.</text>
+    <text x="80" y="336" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">mov byte ptr [eax+0x42], 0x7C</text>
+    <text x="80" y="362" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">mov byte ptr [eax+0x43], 0xA1</text>
+    <text x="80" y="396" font-size="17" fill="#e5e5e5">Each function writes 16–32</text>
+    <text x="80" y="420" font-size="17" fill="#e5e5e5">ciphertext bytes at sequential</text>
+    <text x="80" y="444" font-size="17" fill="#e5e5e5">heap offsets.</text>
+    <text x="80" y="472" font-size="17" fill="#fb923c" font-weight="600">Defeats: entropy analysis</text>
   </g>
 
-  <!-- =========== PHASE 2 (top-right, RED — operator code: fake GUID strings) =========== -->
+  <!-- =========== PHASE 2 (top-right, RED) =========== -->
   <g filter="url(#phaseShadow)">
-    <rect x="510" y="186" width="430" height="240" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="510" y="186" width="430" height="42" rx="8" fill="#dc2626"/>
-    <rect x="510" y="216" width="430" height="12" fill="#dc2626"/>
-    <text x="530" y="216" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">LAYER 2</text>
-    <text x="620" y="216" font-size="18" font-weight="600" fill="#ffffff">Fake-GUID ASCII-hex strings</text>
-    <text x="530" y="266" font-size="16" fill="#ffffff">7,979 contiguous "GUIDs" in <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.rdata</tspan>.</text>
-    <text x="530" y="294" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">{c6127d52-4f9a-afef-d139-...}</text>
-    <text x="530" y="318" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">{a8b1d340-7f12-92ee-c043-...}</text>
-    <text x="530" y="346" font-size="14" fill="#e5e5e5">38-char ASCII hex per "GUID". Hex-decoded</text>
-    <text x="530" y="368" font-size="14" fill="#e5e5e5">to 16 raw bytes each, concatenated into</text>
-    <text x="530" y="390" font-size="14" fill="#e5e5e5">a second ciphertext region.</text>
-    <text x="530" y="416" font-size="13" fill="#fb923c">Defeats: high-entropy string scans (look like valid GUIDs)</text>
+    <rect x="510" y="192" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="192" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="510" y="225" width="430" height="13" fill="#dc2626"/>
+    <text x="530" y="223" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">LAYER 2</text>
+    <text x="640" y="223" font-size="21" font-weight="600" fill="#ffffff">Fake-GUID hex strings</text>
+    <text x="530" y="276" font-size="20" fill="#ffffff">7,979 contiguous "GUIDs"</text>
+    <text x="530" y="302" font-size="20" fill="#ffffff">in <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.rdata</tspan>.</text>
+    <text x="530" y="336" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">{c6127d52-4f9a-afef-d139-...}</text>
+    <text x="530" y="362" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">{a8b1d340-7f12-92ee-c043-...}</text>
+    <text x="530" y="396" font-size="17" fill="#e5e5e5">Each 38-char string is hex-</text>
+    <text x="530" y="420" font-size="17" fill="#e5e5e5">decoded to 16 raw bytes and</text>
+    <text x="530" y="444" font-size="17" fill="#e5e5e5">concatenated into ciphertext.</text>
+    <text x="530" y="472" font-size="17" fill="#fb923c" font-weight="600">Defeats: high-entropy scans</text>
   </g>
 
-  <!-- =========== PHASE 3 (bottom-left, RED — operator code: bit-packed stream) =========== -->
+  <!-- =========== PHASE 3 (bottom-left, RED) =========== -->
   <g filter="url(#phaseShadow)">
-    <rect x="60" y="446" width="430" height="240" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="446" width="430" height="42" rx="8" fill="#dc2626"/>
-    <rect x="60" y="476" width="430" height="12" fill="#dc2626"/>
-    <text x="80" y="476" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">LAYER 3</text>
-    <text x="170" y="476" font-size="18" font-weight="600" fill="#ffffff">14-bit Huffman-like packed stream</text>
-    <text x="80" y="526" font-size="16" fill="#ffffff">A custom bit-packed table in <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.rdata</tspan> at</text>
-    <text x="80" y="552" font-size="14" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">DAT_0041cb74 onward</text>
-    <text x="80" y="578" font-size="14" fill="#e5e5e5">14-bit symbols unpacked via offset-stride</text>
-    <text x="80" y="600" font-size="14" fill="#e5e5e5">arithmetic — produces a third ciphertext region.</text>
-    <text x="80" y="624" font-size="14" fill="#e5e5e5">Combined with Layer 1 + 2 outputs into a single</text>
-    <text x="80" y="646" font-size="14" fill="#e5e5e5">contiguous heap buffer ready for decryption.</text>
-    <text x="80" y="676" font-size="13" fill="#fb923c">Defeats: byte-pattern scans (no recognizable layout)</text>
+    <rect x="60" y="502" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="502" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="535" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="533" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">LAYER 3</text>
+    <text x="190" y="533" font-size="21" font-weight="600" fill="#ffffff">14-bit packed stream</text>
+    <text x="80" y="586" font-size="20" fill="#ffffff">Custom bit-packed table at</text>
+    <text x="80" y="612" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.rdata DAT_0041cb74 onward</text>
+    <text x="80" y="644" font-size="17" fill="#e5e5e5">14-bit symbols unpacked via</text>
+    <text x="80" y="668" font-size="17" fill="#e5e5e5">offset-stride arithmetic to</text>
+    <text x="80" y="692" font-size="17" fill="#e5e5e5">produce a third ciphertext</text>
+    <text x="80" y="716" font-size="17" fill="#e5e5e5">region. Combined with Layers</text>
+    <text x="80" y="740" font-size="17" fill="#e5e5e5">1+2 into a single heap buffer.</text>
+    <text x="80" y="780" font-size="17" fill="#fb923c" font-weight="600">Defeats: byte-pattern scans</text>
   </g>
 
-  <!-- =========== PHASE 4 (bottom-right, DEEP RED — endgame: cipher + FS container output) =========== -->
+  <!-- =========== PHASE 4 (bottom-right, DEEP RED) =========== -->
   <g filter="url(#phaseShadow)">
-    <rect x="510" y="446" width="430" height="240" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="510" y="446" width="430" height="42" rx="8" fill="#7f1d1d"/>
-    <rect x="510" y="476" width="430" height="12" fill="#7f1d1d"/>
-    <text x="530" y="476" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">OUTPUT</text>
-    <text x="620" y="476" font-size="18" font-weight="600" fill="#ffffff">CBC-XOR decrypt → FS container</text>
-    <text x="530" y="526" font-size="16" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">FUN_00402790</tspan> CBC-XOR cipher decrypts</text>
-    <text x="530" y="552" font-size="14" fill="#e5e5e5">the synthesized buffer using the customer-specific</text>
-    <text x="530" y="574" font-size="14" fill="#e5e5e5">16-byte IV at <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.rdata 0x0001c434</tspan>:</text>
-    <text x="530" y="598" font-size="13" fill="#fb923c" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">f6358d79df69c577d9dce6bb77fa4fa7</text>
-    <text x="530" y="624" font-size="14" fill="#e5e5e5">Plaintext begins with magic <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" fill="#fb923c">FS</tspan> (<tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">0x4653</tspan>) +</text>
-    <text x="530" y="648" font-size="14" fill="#e5e5e5">5 type-tagged entries: bytecode, config,</text>
-    <text x="530" y="670" font-size="14" fill="#e5e5e5">plugin params, blocklist, TLS pinning data.</text>
+    <rect x="510" y="502" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="502" width="430" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="510" y="535" width="430" height="13" fill="#7f1d1d"/>
+    <text x="530" y="533" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">OUTPUT</text>
+    <text x="640" y="533" font-size="21" font-weight="600" fill="#ffffff">CBC-XOR → FS container</text>
+    <text x="530" y="586" font-size="20" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">FUN_00402790</tspan> decrypts the</text>
+    <text x="530" y="612" font-size="20" fill="#ffffff">synthesized buffer using IV at</text>
+    <text x="530" y="640" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.rdata 0x0001c434:</text>
+    <text x="530" y="668" font-size="16" fill="#fb923c" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">f6358d79df69c577d9dce6bb77fa4fa7</text>
+    <text x="530" y="700" font-size="17" fill="#e5e5e5">Plaintext begins with magic</text>
+    <text x="530" y="724" font-size="17" fill="#e5e5e5"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" fill="#fb923c">FS</tspan> (<tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">0x4653</tspan>) + 5 entries:</text>
+    <text x="530" y="748" font-size="17" fill="#e5e5e5">bytecode, config, plugins,</text>
+    <text x="530" y="772" font-size="17" fill="#e5e5e5">blocklist, TLS pinning data.</text>
   </g>
 
   <!-- =========== FOOTER =========== -->
-  <line x1="60" y1="716" x2="940" y2="716" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="500" y="746" text-anchor="middle" font-size="16" font-weight="600" fill="#ffffff">Detection anchors:  customer-specific 16-byte IV  ·  fake-GUID-string density in .rdata  ·  byte-emitter function shape</text>
-  <text x="500" y="770" text-anchor="middle" font-size="14" fill="#cccccc">YARA rules in the separate detection file target the IV bytes (highest fidelity, customer-specific) and the .rdata GUID-density pattern (vendor-side, family-stable)</text>
-  <text x="500" y="800" text-anchor="middle" font-size="13" fill="#888888">Color legend  —  red: operator code (synthesis layers)  ·  deep red: synthesis output (decrypted FS container)</text>
+  <line x1="60" y1="822" x2="940" y2="822" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="852" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  customer-specific 16-byte IV  ·  fake-GUID density in .rdata</text>
+  <text x="500" y="880" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">byte-emitter function shape  ·  CBC-XOR cipher signature</text>
+  <text x="500" y="912" text-anchor="middle" font-size="15" fill="#cccccc">YARA targets the IV bytes (customer-specific, highest fidelity) and the GUID density (vendor-side, family-stable)</text>
+  <text x="500" y="944" text-anchor="middle" font-size="14" fill="#888888">Color legend  —  red: operator code (synthesis layers)  ·  deep red: synthesis output</text>
 </svg>

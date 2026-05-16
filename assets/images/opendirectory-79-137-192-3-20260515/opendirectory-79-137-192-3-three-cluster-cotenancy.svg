@@ -1,110 +1,110 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <defs>
     <filter id="treeShadow" x="-2%" y="-2%" width="104%" height="108%">
       <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
     </filter>
   </defs>
 
-  <rect width="1000" height="1000" fill="#161616"/>
-  <rect x="0.5" y="0.5" width="999" height="999" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+  <rect width="1000" height="1180" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1179" fill="none" stroke="#2a2a2a" stroke-width="1"/>
 
   <!-- =========== TITLE =========== -->
-  <text x="500" y="58" text-anchor="middle" font-size="38" font-weight="700" fill="#ffffff">Three-Cluster Co-Tenancy on 79.137.192.3</text>
-  <text x="500" y="98" text-anchor="middle" font-size="22" fill="#f5f5f5">Three operationally separate threat actors share one Aeza bulletproof staging IP</text>
-  <text x="500" y="130" text-anchor="middle" font-size="17" fill="#cccccc">Anchored by the U.S. Treasury OFAC Aeza Group sanction (July 1, 2025) — co-residency on bulletproof hosting is NOT operationally diagnostic</text>
-  <line x1="60" y1="156" x2="940" y2="156" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="60" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Three-Cluster Co-Tenancy on 79.137.192.3</text>
+  <text x="500" y="104" text-anchor="middle" font-size="24" fill="#f5f5f5">Three operationally separate threat actors share one Aeza bulletproof staging IP</text>
+  <text x="500" y="138" text-anchor="middle" font-size="17" fill="#cccccc">Anchored by U.S. Treasury OFAC Aeza Group sanction (July 1, 2025) — BPH co-residency is NOT operationally diagnostic</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
 
-  <!-- =========== IP ROOT (yellow side-rail — staging utility) =========== -->
+  <!-- =========== IP ROOT (yellow side-rail) =========== -->
   <g filter="url(#treeShadow)">
-    <rect x="240" y="186" width="520" height="108" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="240" y="186" width="6" height="108" rx="3" fill="#eab308"/>
-    <text x="260" y="216" font-size="22" font-weight="700" fill="#ffffff" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">79.137.192.3</text>
-    <text x="260" y="244" font-size="15" fill="#e5e5e5">AS216246 Aeza Group LLC (RU)  ·  multi-tenant bulletproof staging server</text>
-    <text x="260" y="266" font-size="14" fill="#cccccc">Apache/2.4.58 (Win64) PHP/8.2.12  ·  open directory listing on /</text>
-    <text x="260" y="286" font-size="13" fill="#888888">OFAC SDN Aeza Group (July 1, 2025); 5 unrelated actor ecosystems documented as co-resident on Aeza</text>
+    <rect x="200" y="196" width="600" height="140" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="200" y="196" width="6" height="140" rx="3" fill="#eab308"/>
+    <text x="220" y="234" font-size="28" font-weight="700" fill="#ffffff" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">79.137.192.3</text>
+    <text x="220" y="268" font-size="17" fill="#e5e5e5">AS216246 Aeza Group LLC (RU)  ·  multi-tenant bulletproof staging</text>
+    <text x="220" y="294" font-size="16" fill="#cccccc">Apache/2.4.58 (Win64) PHP/8.2.12  ·  open directory listing on /</text>
+    <text x="220" y="320" font-size="15" fill="#888888">OFAC SDN Aeza Group (July 1, 2025) documents 5 unrelated actor ecosystems co-resident on Aeza</text>
   </g>
 
   <!-- =========== 3-way fanout =========== -->
-  <line x1="500" y1="294" x2="500" y2="334" stroke="#666666" stroke-width="2"/>
-  <line x1="170" y1="334" x2="830" y2="334" stroke="#666666" stroke-width="2"/>
-  <line x1="170" y1="334" x2="170" y2="374" stroke="#666666" stroke-width="2"/>
-  <line x1="500" y1="334" x2="500" y2="374" stroke="#666666" stroke-width="2"/>
-  <line x1="830" y1="334" x2="830" y2="374" stroke="#666666" stroke-width="2"/>
+  <line x1="500" y1="336" x2="500" y2="380" stroke="#666666" stroke-width="2"/>
+  <line x1="170" y1="380" x2="830" y2="380" stroke="#666666" stroke-width="2"/>
+  <line x1="170" y1="380" x2="170" y2="420" stroke="#666666" stroke-width="2"/>
+  <line x1="500" y1="380" x2="500" y2="420" stroke="#666666" stroke-width="2"/>
+  <line x1="830" y1="380" x2="830" y2="420" stroke="#666666" stroke-width="2"/>
 
-  <!-- =========== CLUSTER A — BellaMain Turkish PhaaS (yellow side-rail) =========== -->
+  <!-- =========== CLUSTER A — BellaMain (yellow side-rail) =========== -->
   <g filter="url(#treeShadow)">
-    <rect x="40" y="374" width="260" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="40" y="374" width="6" height="320" rx="3" fill="#eab308"/>
-    <text x="60" y="406" font-size="17" font-weight="700" fill="#ffffff">Cluster A</text>
-    <text x="60" y="428" font-size="14" fill="#fb923c" font-weight="600">UTA-2026-008</text>
-    <text x="60" y="452" font-size="14" fill="#e5e5e5">BellaMain Turkish PhaaS</text>
-    <line x1="60" y1="462" x2="280" y2="462" stroke="#2a2a2a" stroke-width="1"/>
-    <text x="60" y="486" font-size="13" fill="#cccccc">Operator: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">@AresRS34</tspan></text>
-    <text x="60" y="508" font-size="13" fill="#cccccc">Developer: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Wadanz</tspan></text>
-    <text x="60" y="530" font-size="13" fill="#cccccc">Stack: PHP/MySQL panel + 7</text>
-    <text x="60" y="548" font-size="13" fill="#cccccc">Turkish marketplace kits</text>
-    <text x="60" y="572" font-size="13" fill="#cccccc">Payout: TRX (TRON)</text>
-    <text x="60" y="594" font-size="13" fill="#cccccc">Language: Turkish</text>
-    <text x="60" y="616" font-size="13" fill="#cccccc">Brand: cryptone.bot fake exch.</text>
-    <line x1="60" y1="626" x2="280" y2="626" stroke="#2a2a2a" stroke-width="1"/>
-    <text x="60" y="650" font-size="13" fill="#fb923c">Distinct-actor: MODERATE 75%</text>
-    <text x="60" y="672" font-size="13" fill="#fb923c">Named-actor: INSUFFICIENT</text>
+    <rect x="30" y="420" width="280" height="380" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="30" y="420" width="6" height="380" rx="3" fill="#eab308"/>
+    <text x="50" y="456" font-size="20" font-weight="700" fill="#ffffff">Cluster A</text>
+    <text x="50" y="482" font-size="16" fill="#fb923c" font-weight="600">UTA-2026-008</text>
+    <text x="50" y="510" font-size="16" fill="#e5e5e5">BellaMain Turkish PhaaS</text>
+    <line x1="50" y1="524" x2="290" y2="524" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="50" y="552" font-size="15" fill="#cccccc">Operator: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">@AresRS34</tspan></text>
+    <text x="50" y="578" font-size="15" fill="#cccccc">Developer: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Wadanz</tspan></text>
+    <text x="50" y="606" font-size="15" fill="#cccccc">PHP/MySQL panel + 7 Turkish</text>
+    <text x="50" y="626" font-size="15" fill="#cccccc">marketplace kits</text>
+    <text x="50" y="654" font-size="15" fill="#cccccc">Payout: TRX (TRON)</text>
+    <text x="50" y="680" font-size="15" fill="#cccccc">Language: Turkish</text>
+    <text x="50" y="706" font-size="15" fill="#cccccc">Brand: cryptone.bot</text>
+    <line x1="50" y1="722" x2="290" y2="722" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="50" y="752" font-size="14" fill="#fb923c">Distinct-actor: MODERATE 75%</text>
+    <text x="50" y="778" font-size="14" fill="#fb923c">Named-actor: INSUFFICIENT</text>
   </g>
 
-  <!-- =========== CLUSTER B — Inkognito Russian (red side-rail) =========== -->
+  <!-- =========== CLUSTER B — Inkognito (red side-rail) =========== -->
   <g filter="url(#treeShadow)">
-    <rect x="370" y="374" width="260" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="370" y="374" width="6" height="320" rx="3" fill="#dc2626"/>
-    <text x="390" y="406" font-size="17" font-weight="700" fill="#ffffff">Cluster B</text>
-    <text x="390" y="428" font-size="14" fill="#fb923c" font-weight="600">UTA-2026-009</text>
-    <text x="390" y="452" font-size="14" fill="#e5e5e5">Inkognito Russian VPN/phishing</text>
-    <line x1="390" y1="462" x2="610" y2="462" stroke="#2a2a2a" stroke-width="1"/>
-    <text x="390" y="486" font-size="13" fill="#cccccc">Brand: Inkognito (parent)</text>
-    <text x="390" y="508" font-size="13" fill="#cccccc">INK VPN  ·  INK Lens  ·  CryptOne</text>
-    <text x="390" y="530" font-size="13" fill="#cccccc">Stack: React/Vite SPA + EspoCRM</text>
-    <text x="390" y="548" font-size="13" fill="#cccccc">Payment: SBP, T-Pay, card (RU)</text>
-    <text x="390" y="572" font-size="13" fill="#cccccc">Language: Russian</text>
-    <text x="390" y="594" font-size="13" fill="#cccccc">Operator alias: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">@inkconnectvpn</tspan></text>
-    <text x="390" y="616" font-size="13" fill="#cccccc">2.5+ year continuous operation</text>
-    <line x1="390" y1="626" x2="610" y2="626" stroke="#2a2a2a" stroke-width="1"/>
-    <text x="390" y="650" font-size="13" fill="#fb923c">Distinct-actor: MODERATE 78%</text>
-    <text x="390" y="672" font-size="13" fill="#fb923c">Named-actor: INSUFFICIENT</text>
+    <rect x="360" y="420" width="280" height="380" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="360" y="420" width="6" height="380" rx="3" fill="#dc2626"/>
+    <text x="380" y="456" font-size="20" font-weight="700" fill="#ffffff">Cluster B</text>
+    <text x="380" y="482" font-size="16" fill="#fb923c" font-weight="600">UTA-2026-009</text>
+    <text x="380" y="510" font-size="16" fill="#e5e5e5">Inkognito Russian VPN/phish</text>
+    <line x1="380" y1="524" x2="620" y2="524" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="380" y="552" font-size="15" fill="#cccccc">Parent brand: Inkognito</text>
+    <text x="380" y="578" font-size="15" fill="#cccccc">INK VPN / INK Lens / CryptOne</text>
+    <text x="380" y="606" font-size="15" fill="#cccccc">React/Vite SPA + EspoCRM</text>
+    <text x="380" y="632" font-size="15" fill="#cccccc">Payment: SBP, T-Pay, card (RU)</text>
+    <text x="380" y="658" font-size="15" fill="#cccccc">Language: Russian</text>
+    <text x="380" y="684" font-size="15" fill="#cccccc">Operator: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">@inkconnectvpn</tspan></text>
+    <text x="380" y="710" font-size="15" fill="#cccccc">2.5+ year continuous op</text>
+    <line x1="380" y1="722" x2="620" y2="722" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="380" y="752" font-size="14" fill="#fb923c">Distinct-actor: MODERATE 78%</text>
+    <text x="380" y="778" font-size="14" fill="#fb923c">Named-actor: INSUFFICIENT</text>
   </g>
 
-  <!-- =========== CLUSTER C — Rhadamanthys MaaS Customer (deep-red side-rail + 2px deep-red border, primary focus) =========== -->
+  <!-- =========== CLUSTER C — Rhadamanthys MaaS Customer (deep-red border + side-rail, PRIMARY) =========== -->
   <g filter="url(#treeShadow)">
-    <rect x="700" y="374" width="260" height="320" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
-    <rect x="700" y="374" width="6" height="320" rx="3" fill="#7f1d1d"/>
-    <text x="720" y="406" font-size="17" font-weight="700" fill="#ffffff">★ Cluster C</text>
-    <text x="720" y="428" font-size="14" fill="#fb923c" font-weight="700">UTA-2026-010 — PRIMARY</text>
-    <text x="720" y="452" font-size="14" fill="#e5e5e5">Rhadamanthys MaaS customer</text>
-    <line x1="720" y1="462" x2="940" y2="462" stroke="#2a2a2a" stroke-width="1"/>
-    <text x="720" y="486" font-size="13" fill="#cccccc">Loader: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">staticlittlesource.exe</tspan></text>
-    <text x="720" y="508" font-size="13" fill="#cccccc">Stage-2: canonical Rhadamanthys</text>
-    <text x="720" y="530" font-size="13" fill="#cccccc">Op strings: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">BombAUb23456</tspan>, ...</text>
-    <text x="720" y="548" font-size="13" fill="#cccccc">LOLBin: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">InstallUtil.exe</tspan></text>
-    <text x="720" y="572" font-size="13" fill="#cccccc">C2: 79.133.180.168:3394 (Hostkey NL)</text>
-    <text x="720" y="594" font-size="13" fill="#cccccc">Language: English</text>
-    <text x="720" y="616" font-size="13" fill="#cccccc">Survived Op Endgame Nov 2025</text>
-    <line x1="720" y1="626" x2="940" y2="626" stroke="#2a2a2a" stroke-width="1"/>
-    <text x="720" y="650" font-size="13" fill="#fb923c">Distinct-actor: MODERATE 72%</text>
-    <text x="720" y="672" font-size="13" fill="#fb923c">Named-actor: INSUFFICIENT</text>
+    <rect x="690" y="420" width="280" height="380" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="3"/>
+    <rect x="690" y="420" width="6" height="380" rx="3" fill="#7f1d1d"/>
+    <text x="710" y="456" font-size="20" font-weight="700" fill="#ffffff">★ Cluster C</text>
+    <text x="710" y="482" font-size="16" fill="#fb923c" font-weight="700">UTA-2026-010 — PRIMARY</text>
+    <text x="710" y="510" font-size="16" fill="#e5e5e5">Rhadamanthys MaaS customer</text>
+    <line x1="710" y1="524" x2="950" y2="524" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="710" y="552" font-size="15" fill="#cccccc">Loader: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">staticlittlesource.exe</tspan></text>
+    <text x="710" y="578" font-size="15" fill="#cccccc">Stage-2: canonical Rhad.</text>
+    <text x="710" y="606" font-size="15" fill="#cccccc">Op strings: BombAUb23456…</text>
+    <text x="710" y="632" font-size="15" fill="#cccccc">LOLBin: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">InstallUtil.exe</tspan></text>
+    <text x="710" y="658" font-size="14" fill="#cccccc">C2: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">79.133.180.168:3394</tspan></text>
+    <text x="710" y="680" font-size="15" fill="#cccccc">(Hostkey NL AS57043)</text>
+    <text x="710" y="710" font-size="15" fill="#cccccc">Survived Op Endgame Nov 2025</text>
+    <line x1="710" y1="722" x2="950" y2="722" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="710" y="752" font-size="14" fill="#fb923c">Distinct-actor: MODERATE 72%</text>
+    <text x="710" y="778" font-size="14" fill="#fb923c">Named-actor: INSUFFICIENT</text>
   </g>
 
-  <!-- =========== Seven-dimension overlap-failure summary band =========== -->
+  <!-- =========== Seven-dimension overlap-failure band (grey side-rail) =========== -->
   <g filter="url(#treeShadow)">
-    <rect x="60" y="724" width="880" height="160" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
-    <rect x="60" y="724" width="6" height="160" rx="3" fill="#6b7280"/>
-    <text x="80" y="752" font-size="16" font-weight="700" fill="#ffffff">Seven dimensions tested for cross-cluster operator overlap  →  zero overlap on any:</text>
-    <text x="80" y="780" font-size="14" fill="#e5e5e5">①  Telegram identifiers   ②  Operator pseudonyms   ③  Registrar / DNS / SOA pattern   ④  Language artifacts</text>
-    <text x="80" y="804" font-size="14" fill="#e5e5e5">⑤  Payment processors   ⑥  Malware family   ⑦  Production-C2 hosting provider (different ASN per cluster)</text>
-    <text x="80" y="836" font-size="14" fill="#fb923c" font-weight="700">Cross-cluster operational linkage: LOW (actively rebutted, not absent)</text>
-    <text x="80" y="864" font-size="13" fill="#cccccc">Original §22.10 BellaMain↔Inkognito MODERATE-confidence linkage signals reassessed as multi-tenant Aeza-rental artifacts</text>
+    <rect x="60" y="830" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="830" width="6" height="200" rx="3" fill="#6b7280"/>
+    <text x="80" y="864" font-size="18" font-weight="700" fill="#ffffff">7 dimensions tested for cross-cluster operator overlap  →  zero overlap on any:</text>
+    <text x="80" y="898" font-size="16" fill="#e5e5e5">①  Telegram identifiers   ②  Operator pseudonyms   ③  Registrar / DNS / SOA pattern</text>
+    <text x="80" y="924" font-size="16" fill="#e5e5e5">④  Language artifacts   ⑤  Payment processors   ⑥  Malware family   ⑦  Production-C2 hosting (different ASN per cluster)</text>
+    <text x="80" y="962" font-size="17" fill="#fb923c" font-weight="700">Cross-cluster operational linkage:  LOW  (actively rebutted, not absent)</text>
+    <text x="80" y="996" font-size="15" fill="#cccccc">Original §22.10 BellaMain ↔ Inkognito MODERATE-confidence linkage signals reassessed as multi-tenant Aeza-rental artifacts.</text>
   </g>
 
   <!-- =========== FOOTER =========== -->
-  <line x1="60" y1="908" x2="940" y2="908" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="500" y="934" text-anchor="middle" font-size="16" font-weight="600" fill="#ffffff">Tier-1 anchor:  Aeza simultaneously hosted BianLian + RedLine + Lumma + Meduza + BlackSprut as 5 unrelated actor ecosystems</text>
-  <text x="500" y="960" text-anchor="middle" font-size="14" fill="#cccccc">Same exclusion logic applied to BriansClub / CRD Club / elon-merge.com / RedLine co-tenants on this same IP — separate actors, not linked</text>
-  <text x="500" y="986" text-anchor="middle" font-size="13" fill="#888888">Color legend  —  yellow: staging IP + regional Cluster A  ·  red: Cluster B operator code  ·  deep red: Cluster C primary focus  ·  grey: cross-cluster framing</text>
+  <line x1="60" y1="1058" x2="940" y2="1058" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1090" text-anchor="middle" font-size="17" font-weight="600" fill="#ffffff">Tier-1 anchor: Aeza simultaneously hosted BianLian, RedLine, Lumma, Meduza, BlackSprut as 5 unrelated actor ecosystems</text>
+  <text x="500" y="1118" text-anchor="middle" font-size="15" fill="#cccccc">Same exclusion logic applied to BriansClub, CRD Club, elon-merge.com on this same IP — separate actors, not linked</text>
+  <text x="500" y="1152" text-anchor="middle" font-size="14" fill="#888888">Color legend  —  yellow: staging IP + Cluster A  ·  red: Cluster B operator code  ·  deep red: Cluster C primary  ·  grey: cross-cluster framing</text>
 </svg>
