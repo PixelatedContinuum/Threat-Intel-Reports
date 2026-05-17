@@ -14,7 +14,7 @@ position: 3
 {% include section-header.html label="Recent" accent="#4ade80" %}
 
 <div class="hl-grid">
-{% include report-card.html title="Detection Rules — BellaMain Turkish PhaaS (Wadanz Author Signature, Four-Bot Telegram C2, TRUNCATE Anti-Forensics)" date="May 2026" severity="high" tags="PhaaS,Phishing,Web,Telegram" url="/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections" %}
+{% include report-card.html title="Detection Rules — BellaMain Turkish PhaaS Panel (79.137.192.3)" date="May 2026" severity="high" tags="PhaaS,Phishing,Web,Telegram" url="/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections" %}
 {% include report-card.html title="Detection Rules — Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens / CryptOne)" date="May 2026" severity="high" tags="Phishing,Web,DNS,TLS" url="/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections" %}
 {% include report-card.html title="Detection Rules — Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito)" date="May 2026" severity="critical" tags="MaaS,Stealer,Evasion,Persistence" url="/hunting-detections/opendirectory-79-137-192-3-20260515-detections" %}
 {% include report-card.html title="Detection Rules — HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign" date="May 2026" severity="high" tags="Loader,RAT,Evasion,Persistence" url="/hunting-detections/opendirectory-62-60-237-100-20260506-detections" %}
