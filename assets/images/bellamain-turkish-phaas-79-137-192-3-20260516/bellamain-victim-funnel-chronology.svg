@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1900" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1899" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- TITLE -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">BellaMain Victim Funnel — Operator Workflow Reconstruction</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">7-minute chronology of a single victim, both sides of the funnel</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Reconstructed from PHP execution paths in BellaMain.zip and the 7 kit RARs — no live detonation</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- STEP 1: T+0:00 Lure delivery (ORANGE) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="229" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">T+0:00</text>
+    <text x="200" y="227" font-size="23" font-weight="700" fill="#111111">Lure delivery (out of scope)</text>
+    <text x="80" y="284" font-size="21" fill="#ffffff">Victim receives SMS, email, social-media DM, or sponsored search ad with a kit URL.</text>
+    <text x="80" y="318" font-size="18" fill="#e5e5e5">Delivery vector is operator-configurable per campaign; not recovered from open-directory artifacts.</text>
+    <text x="80" y="350" font-size="18" fill="#e5e5e5">Telegram activity: none yet.</text>
+    <text x="80" y="386" font-size="18" fill="#fb923c" font-weight="600">Detect: brand-impersonation domain watchlists + URL-pattern rules (out-of-band).</text>
+  </g>
+  <line x1="500" y1="416" x2="500" y2="456" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 2: T+0:30 - T+1:30 Page render + credential entry (ORANGE) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="462" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="462" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="495" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="493" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">T+0:30 → T+1:30</text>
+    <text x="280" y="493" font-size="23" font-weight="700" fill="#111111">Kit page render + credentials</text>
+    <text x="80" y="550" font-size="21" fill="#ffffff">Victim lands on kit `index.php` (e.g., fake Dolap listing). Page loads legitimate</text>
+    <text x="80" y="580" font-size="21" fill="#ffffff">CDN assets, GTM-K7F5T5N, New Relic RUM — visual fidelity is high.</text>
+    <text x="80" y="614" font-size="18" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">girislog.php  ←  3-sec heartbeats to girisyapanlar (panel green-dot UI)</text>
+    <text x="80" y="640" font-size="18" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">login.php     →  INSERT INTO hesaplar  (no Telegram alert at this stage)</text>
+    <text x="80" y="670" font-size="18" fill="#fb923c" font-weight="600">Detect: kit HTML asset hashes; heartbeat AJAX POST to /girislog.php.</text>
+  </g>
+  <line x1="500" y1="682" x2="500" y2="722" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 3: T+3:30 Stage 1 TC Kimlik capture - vergibot fires (RED) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="728" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="728" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="761" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="759" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">T+3:30</text>
+    <text x="200" y="759" font-size="23" font-weight="700" fill="#ffffff">Stage 1 capture — TC Kimlik (national ID)  ·  vergibot fires</text>
+    <text x="80" y="816" font-size="21" fill="#ffffff">Victim enters TC Kimlik No, full name, phone on `kartlaodeme.php`.</text>
+    <text x="80" y="850" font-size="18" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">tgvergi.php  →  Telegram via vergibot_token  →  operator phone</text>
+    <text x="80" y="876" font-size="18" fill="#e5e5e5">First Telegram alert in the funnel. Identity data routes to its OWN channel —</text>
+    <text x="80" y="900" font-size="18" fill="#e5e5e5">separate from card data (which arrives later via dekontbot).</text>
+    <text x="80" y="934" font-size="18" fill="#fb923c" font-weight="600">Detect: outbound Telegram from PHP-host context at Stage-1 funnel page.</text>
+  </g>
+  <line x1="500" y1="948" x2="500" y2="988" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 4: T+5:00 Stage 2 card capture (RED) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="994" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="994" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="1027" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="1025" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">T+5:00</text>
+    <text x="200" y="1025" font-size="23" font-weight="700" fill="#ffffff">Stage 2 capture — payment card  (no immediate alert)</text>
+    <text x="80" y="1082" font-size="21" fill="#ffffff">Victim enters PAN, expiry MM/YYYY, CVV on `ibanlaodeme.php`.</text>
+    <text x="80" y="1116" font-size="18" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">INSERT INTO kartlar  (no Telegram alert at this stage — alert deferred to dekont)</text>
+    <text x="80" y="1148" font-size="18" fill="#e5e5e5">Card data sits in the database awaiting the dekont upload trigger below.</text>
+    <text x="80" y="1184" font-size="18" fill="#fb923c" font-weight="600">Detect: HTTPS POST patterns to /ibanlaodeme.php with PAN-like body content.</text>
+  </g>
+  <line x1="500" y1="1214" x2="500" y2="1254" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 5: T+6:30 - T+6:45 Dekont upload + operator approval (RED) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1260" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1260" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="1293" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="1291" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">T+6:30 → T+6:45</text>
+    <text x="280" y="1291" font-size="23" font-weight="700" fill="#ffffff">Dekont upload + operator approval  ·  dekontbot fires</text>
+    <text x="80" y="1348" font-size="21" fill="#ffffff">Victim uploads fake "proof of payment" image to `dekontlar/`.</text>
+    <text x="80" y="1382" font-size="18" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">tgdekont.php  →  Telegram (dekontbot)  →  operator [Onayla] / [Reddet] buttons</text>
+    <text x="80" y="1408" font-size="18" fill="#e5e5e5">Operator approves → webhook fires `UPDATE kullanicilar SET bakiye = bakiye + amount*0.7`.</text>
+    <text x="80" y="1432" font-size="18" fill="#e5e5e5">Operator's PhaaS commission balance increases by 70% of victim's declared amount.</text>
+    <text x="80" y="1466" font-size="18" fill="#fb923c" font-weight="600">Detect: Telegram inline-button callbacks against PHP-server context.</text>
+  </g>
+  <line x1="500" y1="1480" x2="500" y2="1520" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 6: T+7:00 Victim closure (DEEP RED) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1526" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1526" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="1559" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="1557" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">T+7:00</text>
+    <text x="200" y="1557" font-size="23" font-weight="700" fill="#ffffff">Closure — full identity + card + statement in operator hands</text>
+    <text x="80" y="1614" font-size="21" fill="#ffffff">Victim sees `tamamlandi.php` ("Transaction complete") and exits the funnel.</text>
+    <text x="80" y="1648" font-size="18" fill="#e5e5e5">Operator now holds: TC Kimlik No, name, phone, PAN+expiry+CVV, fake dekont image.</text>
+    <text x="80" y="1676" font-size="18" fill="#e5e5e5">Identity + card data routed via separate channels; downstream buyers may differ.</text>
+    <text x="80" y="1708" font-size="18" fill="#fb923c" font-weight="600">Detect (post-incident): mysqldump command-lines, /yedek backup-as-exfil bursts,</text>
+    <text x="80" y="1734" font-size="18" fill="#fb923c" font-weight="600">SQL TRUNCATE on `hesaplar`/`kartlar`/`girisyapanlar` (anti-forensics signal).</text>
+  </g>
+
+  <!-- FOOTER -->
+  <line x1="60" y1="1770" x2="940" y2="1770" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1804" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  api.telegram.org egress paired with PHP-host context  ·  /V5VgjLU0jsDe/ admin URI</text>
+  <text x="500" y="1834" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">/girislog.php heartbeat POSTs  ·  ?lg= URL probe triggers the canary-troll branch</text>
+  <text x="500" y="1868" text-anchor="middle" font-size="14" fill="#888888">Color legend  —  orange: pre-credential trigger · red: capture and operator action · deep red: closure / endgame</text>
+</svg>

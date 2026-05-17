@@ -1,0 +1,399 @@
+{
+  "metadata": {
+    "campaign_slug": "bellamain-turkish-phaas-79-137-192-3-20260516",
+    "campaign_id": "BellaMain-TurkishPhaaS-79.137.192.3",
+    "malware_name": "BellaMain Turkish PhaaS",
+    "family": "BellaMain (operator-developed PHP PhaaS panel + 7 brand-impersonation kits)",
+    "report_date": "2026-05-16",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "cluster_scope": "Cluster A only (Cluster B Inkognito and Cluster C Rhadamanthys are out of scope and covered by prior published reports).",
+    "uta_designation": "UTA-2026-008",
+    "notes": [
+      "Full PHP source code recovered from open-directory at 79.137.192.3 (Aeza Group, Moscow, AS216246).",
+      "BellaMain.zip (panel) was novel to VirusTotal at time of analysis (first public disclosure).",
+      "Hardcoded canary Telegram bot token 6797512084:AAGbJVoC* is REVOKED (Telegram returned 401 Unauthorized on getMe prior to publication). Token value retained as historical IOC for hunting on stored copies of older kit RARs.",
+      "All operator domains are 0/92 detection on VirusTotal as of 2026-05-07 — defenders should not rely on AV verdicts for this campaign."
+    ]
+  },
+  "file_hashes": {
+    "md5": [
+      {
+        "value": "7055c03da7660b196cb46426fb7f2986",
+        "filename": "BellaMain.zip",
+        "purpose": "PhaaS panel ZIP",
+        "confidence": "DEFINITE",
+        "first_seen": "2026-05-06",
+        "vt_status": "Not in VirusTotal (novel)"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "bbfb41447fd60907bc529d6cf786827c9ec2a041",
+        "filename": "BellaMain.zip",
+        "purpose": "PhaaS panel ZIP",
+        "confidence": "DEFINITE"
+      }
+    ],
+    "sha256": [
+      {
+        "value": "f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88",
+        "filename": "BellaMain.zip",
+        "purpose": "PhaaS panel backend — 65 PHP files + 14 directories; first public disclosure",
+        "size_bytes": 19244108,
+        "entropy_overall": 7.9998,
+        "vt_status": "Not in VirusTotal at 2026-05-07",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "2c656360c4e58854dca35ff21b3fc62db41155ca76f8568ecc18fa52aa38fb31",
+        "filename": "Dolap.rar",
+        "purpose": "Dolap (Turkish secondhand marketplace) phishing kit",
+        "vt_detections": "0/62",
+        "vt_first_seen": "2024-04-18",
+        "embeds_redirect": "https://dolap.com/",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "705793c011fdfe17941700a3bf42eee0ba2ebdc04870ce19779ea528b3565fac",
+        "filename": "Kargo.rar",
+        "purpose": "Yurtici Kargo (cargo tracking) phishing kit",
+        "vt_detections": "0/62",
+        "vt_first_seen": "2024-04-18",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "e21fb63a3b4d65a3d48dec1bf17a84a414482f819b93cb8d77a81852dc34c95f",
+        "filename": "Letgo.rar",
+        "purpose": "Letgo (classifieds) phishing kit",
+        "vt_detections": "1/61",
+        "vt_first_seen": "2024-04-18",
+        "embeds_redirect": "https://letgo.com/",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "ee9d4fccebbf73fb33980da15142bc71e5d9661d1bc583c2b09b77490065efd9",
+        "filename": "Pttavm.rar",
+        "purpose": "PTT AVM (postal e-commerce) phishing kit",
+        "vt_detections": "0/61",
+        "vt_first_seen": "2024-04-18",
+        "embeds_redirect": "https://www.pttavm.com/",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "b2f4f1617577d14612b30a54a733b15af809c399f325717b4329c13aaa4c915c",
+        "filename": "sahibinden.rar",
+        "purpose": "Sahibinden (classifieds / real estate) phishing kit",
+        "vt_detections": "0/62",
+        "vt_first_seen": "2024-04-18",
+        "embeds_redirect": "https://sahibinden.com/",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "504b1a30ce7060eafa7b2a3f6249c954a0be6ce1d2930e03b030434cb232600a",
+        "filename": "shopier.rar",
+        "purpose": "Shopier (e-commerce) phishing kit",
+        "vt_detections": "2/59",
+        "vt_first_seen": "2024-04-18",
+        "embeds_redirect": "https://www.shopier.com/",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "219cd4f6177a2358ec7f06b230d611f47e1049fcb3e2b44d06ec410b336382b0",
+        "filename": "turkcell.rar",
+        "purpose": "Turkcell (telecommunications) phishing kit",
+        "vt_detections": "0/62",
+        "vt_first_seen": "2024-04-18",
+        "embeds_redirect": "https://m.turkcell.com.tr/",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "79.137.192.3",
+        "port": 443,
+        "protocol": "TCP",
+        "purpose": "BellaMain panel + 7 phishing kits + CryptOne staging path. Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12 with self-signed TLS",
+        "asn": "AS216246",
+        "asn_owner": "Aeza Group LLC",
+        "country": "RU",
+        "city": "Moscow",
+        "tls_jarm": "2ad2ad0002ad2ad00042d42d00000000f78d2dc0ce6e5bbc5b8149a4872356",
+        "first_seen": "2024-04",
+        "last_seen": "2026-05-07",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "79.137.192.3",
+        "port": 80,
+        "protocol": "TCP",
+        "purpose": "Newly active in 2026-05-07 re-triage (previously HTTPS-only). Exposes /upload/ (stale 2022 marketplace JPGs) and /assets/css/, /assets/js/ (modified 2026-03-19)",
+        "asn": "AS216246",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      }
+    ],
+    "ipv6": [],
+    "asn": [
+      {
+        "value": "AS216246",
+        "owner": "Aeza Group LLC",
+        "country": "RU",
+        "purpose": "Current announcement of 79.137.192.3 — bulletproof Russian hoster",
+        "confidence": "DEFINITE",
+        "action": "MONITOR"
+      },
+      {
+        "value": "AS204603",
+        "owner": "Aeza Group Ltd",
+        "country": "RU",
+        "purpose": "Historical announcement of 79.137.192.3 (2023)",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      }
+    ],
+    "domains": [
+      {
+        "value": "cryptone.bot",
+        "purpose": "CryptOne fake crypto exchange production domain (Cloudflare-fronted, origin hidden)",
+        "created": "2026-02-28",
+        "live_since": "2026-03-05",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_risk": "LOW (specific operator-controlled domain)"
+      },
+      {
+        "value": "evotoptan.com",
+        "purpose": "Listed as evotoptan/ subdirectory on BellaMain server. Briefly resolved to 79.137.192.3 on 2026-03-31 (22-minute window). Now Namecheap shared (68.65.121.242)",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": "MEDIUM (Namecheap shared hosting hosts many unrelated sites — combine with kit landing-page URL pattern)"
+      }
+    ],
+    "urls": [
+      {
+        "value": "https://79.137.192.3/",
+        "purpose": "Open-directory root listing",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.137.192.3/BellaMain/",
+        "purpose": "BellaMain panel directory",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.137.192.3/cryptone/",
+        "purpose": "CryptOne fake-exchange staging path (LIVE)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://79.137.192.3/no/",
+        "purpose": "Card phishing SPA lure (LIVE) — hash routes #kart, #avantajlar, #sss",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://cryptone.bot/",
+        "purpose": "CryptOne production fake-exchange (Cloudflare-fronted)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://www.usom.gov.tr/url-list.txt",
+        "purpose": "USOM blocklist endpoint polled by panel usmcheck.php — operator-side outbound call",
+        "confidence": "DEFINITE",
+        "action": "MONITOR",
+        "false_positive_risk": "HIGH — this is a legitimate Turkish CERT URL; legitimate security tools also fetch it. Detection value is in seeing this fetch FROM a non-Turkish-CERT-affiliated PHP host."
+      },
+      {
+        "value": "https://api.binance.com/api/v3/ticker/price?symbol=TRXTRY",
+        "purpose": "Live TRX/TRY rate query in BellaMain cekimbot.php for payout calculation",
+        "confidence": "DEFINITE",
+        "action": "MONITOR",
+        "false_positive_risk": "HIGH — legitimate crypto applications also query Binance API. Detection value is operator-side context."
+      }
+    ],
+    "email_addresses": [
+      {
+        "value": "hello@cryptone.bot",
+        "purpose": "CryptOne fake-exchange support contact (vanity email on parked domain)",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      }
+    ],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [
+      {
+        "value": "BellaMain/V5VgjLU0jsDe/",
+        "purpose": "Obfuscated 12-char admin directory inside the BellaMain panel — strongest deployment fingerprint",
+        "confidence": "DEFINITE",
+        "action": "HUNT"
+      },
+      {
+        "value": "BellaMain/V5VgjLU0jsDe/manager.php",
+        "purpose": "BellaMain admin Telegram bot webhook — 12-command set including /yedek, /usom, /hesapsil, /kartsil, /girislogsil, /bloke, /aktif",
+        "confidence": "DEFINITE",
+        "action": "HUNT"
+      },
+      {
+        "value": "BellaMain/V5VgjLU0jsDe/backup.php",
+        "purpose": "MySQL backup-as-exfil script — invokes mysqldump with plaintext password on command line",
+        "confidence": "DEFINITE",
+        "action": "HUNT"
+      },
+      {
+        "value": "BellaMain/V5VgjLU0jsDe/usmcheck.php",
+        "purpose": "USOM blocklist monitor for panel-tracked kit domains",
+        "confidence": "DEFINITE",
+        "action": "HUNT"
+      },
+      {
+        "value": "BellaMain/V5VgjLU0jsDe/cekimbot.php",
+        "purpose": "Withdrawal-approval Telegram webhook — hardcodes authorized approver UIDs and TRXTRY Binance lookup",
+        "confidence": "DEFINITE",
+        "action": "HUNT"
+      },
+      {
+        "value": "BellaMain/database/fonk.php",
+        "purpose": "Utility file containing sifreleWadanz / sifrecozWadanz helper functions — strongest code-author pivot",
+        "confidence": "DEFINITE",
+        "action": "HUNT"
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [],
+    "scheduled_tasks": [],
+    "named_pipes": []
+  },
+  "telegram_indicators": [
+    {
+      "type": "bot_token",
+      "value": "6797512084:AAGbJVoC0zcKWYPbFG8oc_bACPn6gUEye_E",
+      "purpose": "Anti-researcher canary token — hardcoded in all 6 kit girislog.php files plus panel dashboard.php",
+      "status": "REVOKED (Telegram returned 401 Unauthorized on getMe prior to publication)",
+      "confidence": "DEFINITE",
+      "action": "HUNT (historical artifact value)"
+    },
+    {
+      "type": "group_id",
+      "value": "-1002104835510",
+      "purpose": "Canary exfil group/channel (target of anti-researcher Telegram alert)",
+      "confidence": "DEFINITE",
+      "action": "HUNT"
+    },
+    {
+      "type": "group_id",
+      "value": "-1001817323952",
+      "purpose": "Operator announcement group (hardcoded in manager.php and usmcheck.php)",
+      "confidence": "DEFINITE",
+      "action": "HUNT"
+    },
+    {
+      "type": "user_id",
+      "value": "5606327063",
+      "purpose": "Authorized withdrawal approver #1 (cekimbot.php $authorizedUsers)",
+      "confidence": "DEFINITE",
+      "action": "HUNT"
+    },
+    {
+      "type": "user_id",
+      "value": "6594066326",
+      "purpose": "Authorized withdrawal approver #2 (cekimbot.php $authorizedUsers)",
+      "confidence": "DEFINITE",
+      "action": "HUNT"
+    },
+    {
+      "type": "username",
+      "value": "@AresRS34",
+      "purpose": "Operator alias in anti-researcher canary string (kit girislog.php) — corresponds to real privacy-restricted Telegram user",
+      "confidence": "HIGH",
+      "action": "HUNT"
+    }
+  ],
+  "operator_pseudonyms": [
+    {
+      "type": "code_author",
+      "value": "Wadanz",
+      "context": "Function-name suffix on session-encryption helpers (sifreleWadanz / sifrecozWadanz) in database/fonk.php. Likely BellaMain panel developer's pseudonym. Cross-sample author pivot via PHP corpus grep.",
+      "confidence": "HIGH"
+    },
+    {
+      "type": "telegram_alias",
+      "value": "@AresRS34",
+      "context": "Operator alias embedded in Turkish anti-researcher profanity string across all 6 kits' girislog.php",
+      "confidence": "HIGH"
+    }
+  ],
+  "credentials_and_secrets": [
+    {
+      "type": "mysql_database_name",
+      "value": "jakartaxdw",
+      "context": "Hardcoded in BellaMain panel config.php and connect.php plus every kit's database/connect.php — proves co-deployment design",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "mysql_user",
+      "value": "dbjakartaxdw",
+      "context": "Same as above",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "mysql_password",
+      "value": "W!@25#8Tb2gxq15",
+      "context": "Same as above — appears literally in 8 separate PHP files",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "admin_directory",
+      "value": "V5VgjLU0jsDe",
+      "context": "Obfuscated 12-character admin path inside BellaMain panel",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "session_cookie_name",
+      "value": "2tUgyO@H9E!4CuQ",
+      "context": "Distinctive 15-character cookie name set on operator login by signin.php",
+      "confidence": "DEFINITE"
+    },
+    {
+      "type": "gtm_container",
+      "value": "GTM-K7F5T5N",
+      "context": "Google Tag Manager container ID embedded in every kit page — may be operator-controlled OR a hijacked container from a compromised legitimate site",
+      "confidence": "HIGH"
+    }
+  ],
+  "targeted_platforms": [
+    {"platform": "Dolap", "type": "Secondhand marketplace", "country": "Turkey"},
+    {"platform": "Letgo", "type": "Classifieds / marketplace", "country": "Turkey"},
+    {"platform": "PTT AVM", "type": "Postal e-commerce", "country": "Turkey"},
+    {"platform": "Sahibinden", "type": "Classifieds / real estate", "country": "Turkey"},
+    {"platform": "Shopier", "type": "E-commerce platform", "country": "Turkey"},
+    {"platform": "Turkcell", "type": "Telecommunications", "country": "Turkey"},
+    {"platform": "Yurtici Kargo", "type": "Cargo / shipping tracking", "country": "Turkey"}
+  ],
+  "data_types_at_risk": [
+    "Turkish national ID numbers (TC Kimlik Numarasi, 11-digit)",
+    "Payment card data: PAN + expiry MM/YYYY + CVV",
+    "Banking / marketplace login credentials",
+    "Bank statement image uploads (dekontlar)",
+    "Turkish phone numbers"
+  ]
+}

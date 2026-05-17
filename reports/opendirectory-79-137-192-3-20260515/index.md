@@ -29,8 +29,14 @@ description: "Three operationally separate threat actors share one Aeza bulletpr
 ---
 
 **Campaign Identifier:** OpenDirectory-MultiCluster-Rhadamanthys-BellaMain-Inkognito-79.137.192.3<br>
-**Last Updated:** May 15, 2026<br>
+**Last Updated:** May 16, 2026<br>
 **Threat Level:** CRITICAL
+
+> **Investigation series — Open-Directory 79.137.192.3 (three-publication series):** This is the parent report of a three-publication series from a single investigation into the multi-tenant Aeza Group staging server at `79.137.192.3`. Each cluster is operationally separate — co-tenancy on the same bulletproof IP is not operator linkage — and the two non-Rhadamanthys clusters each have their own standalone deep-dive:
+>
+> - **[Parent (2026-05-15) — Multi-Cluster Overview](/reports/opendirectory-79-137-192-3-20260515/)** *(this report)* — all three co-tenant clusters at boundary-level depth; establishes why they are *not* one operator; includes the Cluster C (Rhadamanthys MaaS customer) deep-dive.
+> - **[Cluster A (2026-05-16) — BellaMain Turkish PhaaS](/reports/bellamain-turkish-phaas-79-137-192-3-20260516/)** — full PHP-source recovery of an operator-developed PhaaS panel + 7 Turkish-marketplace kits; UTA-2026-008.
+> - **[Cluster B (2026-05-16) — Inkognito Russian VPN/Phishing](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/)** — 467+ brand-impersonation subdomain library bolted to a commercial VPN front; UTA-2026-009.
 
 > **Risk vs. Campaign Threat Level:** The Cluster C Rhadamanthys MaaS-customer loader analyzed in this report scores **9.2/10 (CRITICAL)** based on a top-tier modern infostealer Stage-2, an active 34-month C2 (`79.133.180.168:3394`) that survived the November 2025 Operation Endgame Phase 3 takedown, and a mature anti-analysis stack (3-layer encrypted-blob synthesis + operator-modified Q3VM-derivative bytecode VM + EAX-redirect process hollowing into `InstallUtil.exe`). Clusters A (BellaMain Turkish PhaaS) and B (Inkognito VPN/phishing) score HIGH individually; the campaign-level CRITICAL rating is anchored on Cluster C.
 

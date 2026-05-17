@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1100" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1099" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- TITLE -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Four-Bot Telegram C2 with Role Separation</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">BellaMain splits exfil across 4 functionally-distinct Telegram bots per deployment</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Tokens stored in the panel MySQL `panel` table; only the canary bot (REVOKED) is recoverable from source</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- PHASE 1 (top-left, YELLOW — identity data, earliest fire) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="196" width="430" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="430" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="229" width="430" height="13" fill="#eab308"/>
+    <text x="80" y="227" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">BOT 1</text>
+    <text x="180" y="227" font-size="22" font-weight="700" fill="#111111">vergibot</text>
+    <text x="80" y="282" font-size="20" fill="#ffffff">Identity-data channel</text>
+    <text x="80" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">tgvergi.php (per kit)</text>
+    <text x="80" y="350" font-size="18" fill="#e5e5e5">Fires on Stage 1 — earliest alert in funnel</text>
+    <text x="80" y="378" font-size="18" fill="#e5e5e5">Exfils TC Kimlik No, name, phone,</text>
+    <text x="80" y="402" font-size="18" fill="#e5e5e5">fake transaction amount, timestamp</text>
+    <text x="80" y="436" font-size="17" fill="#e5e5e5">Activates BEFORE card data captured</text>
+    <text x="80" y="475" font-size="17" fill="#fb923c" font-weight="600">Detect: kit-host HTTPS to api.telegram.org</text>
+    <text x="80" y="500" font-size="17" fill="#fb923c" font-weight="600">at Stage-1 entry of credential funnel</text>
+  </g>
+
+  <!-- PHASE 2 (top-right, ORANGE — financial data) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="196" width="430" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="196" width="430" height="46" rx="8" fill="#f97316"/>
+    <rect x="510" y="229" width="430" height="13" fill="#f97316"/>
+    <text x="530" y="227" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">BOT 2</text>
+    <text x="630" y="227" font-size="22" font-weight="700" fill="#111111">dekontbot</text>
+    <text x="530" y="282" font-size="20" fill="#ffffff">Card-data + approval channel</text>
+    <text x="530" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">tgdekont.php (per kit)</text>
+    <text x="530" y="350" font-size="18" fill="#e5e5e5">Receives victim dekont (bank-statement</text>
+    <text x="530" y="374" font-size="18" fill="#e5e5e5">image) and declared transaction amount</text>
+    <text x="530" y="408" font-size="18" fill="#e5e5e5">Sends inline [Onayla] / [Reddet] buttons</text>
+    <text x="530" y="432" font-size="18" fill="#e5e5e5">to operator phone for approve/reject</text>
+    <text x="530" y="475" font-size="17" fill="#fb923c" font-weight="600">Detect: Telegram bot inline-button</text>
+    <text x="530" y="500" font-size="17" fill="#fb923c" font-weight="600">callbacks against PHP-server context</text>
+  </g>
+
+  <!-- PHASE 3 (bottom-left, RED — operator C2) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="536" width="430" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="536" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="569" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="567" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">BOT 3</text>
+    <text x="180" y="567" font-size="22" font-weight="700" fill="#ffffff">adminbot</text>
+    <text x="80" y="622" font-size="20" fill="#ffffff">Admin command-and-control</text>
+    <text x="80" y="656" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">V5VgjLU0jsDe/manager.php</text>
+    <text x="80" y="690" font-size="18" fill="#e5e5e5">12-cmd vocabulary from operator phone:</text>
+    <text x="80" y="716" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">/refkod /reflist /bloke /aktif /iban</text>
+    <text x="80" y="740" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">/yedek /usom /hesapsil /girislogsil</text>
+    <text x="80" y="764" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">/kartsil /sifre /komutlar</text>
+    <text x="80" y="800" font-size="17" fill="#fb923c" font-weight="600">Detect: outbound Telegram from panel</text>
+    <text x="80" y="825" font-size="17" fill="#fb923c" font-weight="600">host paired with /V5VgjLU0jsDe/ access</text>
+  </g>
+
+  <!-- PHASE 4 (bottom-right, DEEP RED — endgame payout) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="536" width="430" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="536" width="430" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="510" y="569" width="430" height="13" fill="#7f1d1d"/>
+    <text x="530" y="567" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">BOT 4</text>
+    <text x="630" y="567" font-size="22" font-weight="700" fill="#ffffff">cekimbot</text>
+    <text x="530" y="622" font-size="20" fill="#ffffff">Withdrawal approval + TRX payout</text>
+    <text x="530" y="656" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">V5VgjLU0jsDe/cekimbot.php</text>
+    <text x="530" y="690" font-size="18" fill="#e5e5e5">Validates against $authorizedUsers:</text>
+    <text x="530" y="716" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">UIDs 5606327063, 6594066326</text>
+    <text x="530" y="752" font-size="18" fill="#e5e5e5">Queries Binance TRXTRY rate; emits</text>
+    <text x="530" y="776" font-size="18" fill="#e5e5e5">TRX payout instructions to operator</text>
+    <text x="530" y="800" font-size="17" fill="#fb923c" font-weight="600">Detect: PHP-host HTTPS to</text>
+    <text x="530" y="825" font-size="17" fill="#fb923c" font-weight="600">api.binance.com paired with Telegram</text>
+  </g>
+
+  <!-- CANARY callout (full-width grey band) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="876" width="880" height="76" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="876" width="6" height="76" rx="3" fill="#6b7280"/>
+    <text x="80" y="906" font-size="18" font-weight="700" fill="#cccccc">Plus the 5th bot — the canary (REVOKED).</text>
+    <text x="80" y="934" font-size="16" fill="#aaaaaa" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">6797512084:AAGbJVoC...  hardcoded in every kit girislog.php + panel dashboard.php  ·  fires on ?lg= researcher probes only</text>
+  </g>
+
+  <!-- FOOTER -->
+  <line x1="60" y1="980" x2="940" y2="980" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1014" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  api.telegram.org egress from PHP-host context  ·  /V5VgjLU0jsDe/ admin URI</text>
+  <text x="500" y="1044" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Binance TRXTRY ticker query  ·  hardcoded canary token 6797512084:AAGbJVoC... (REVOKED)</text>
+  <text x="500" y="1078" text-anchor="middle" font-size="14" fill="#888888">Color legend  —  yellow: identity exfil (earliest) · orange: card exfil · red: operator C2 · deep red: endgame payout · grey: canary (researcher probe)</text>
+</svg>

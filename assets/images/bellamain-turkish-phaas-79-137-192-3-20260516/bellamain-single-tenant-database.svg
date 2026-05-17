@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1340" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1339" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- TITLE -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Single-Tenant MySQL — 8 Apps, 1 Database</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">BellaMain panel + 7 brand-impersonation kits all hardcode the same DB triple</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Architectural fingerprint that rules out the "shared/leaked PhaaS template" hypothesis — a multi-licensee deployment would re-key per tenant</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- ROW 1: Dolap | BellaMain Panel | Letgo -->
+  <!-- Card R1C1: Dolap kit (ORANGE) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="196" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="290" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="229" width="290" height="13" fill="#f97316"/>
+    <text x="80" y="227" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">KIT 1</text>
+    <text x="160" y="227" font-size="22" font-weight="700" fill="#111111">Dolap.rar</text>
+    <text x="80" y="282" font-size="18" fill="#ffffff">Turkish clothing</text>
+    <text x="80" y="306" font-size="18" fill="#ffffff">marketplace</text>
+    <text x="80" y="346" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">database/</text>
+    <text x="80" y="370" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">connect.php</text>
+    <text x="80" y="412" font-size="17" fill="#e5e5e5">db: jakartaxdw</text>
+    <text x="80" y="438" font-size="17" fill="#e5e5e5">user: dbjakartaxdw</text>
+    <text x="80" y="476" font-size="14" fill="#888888">SHA256 2c656360…</text>
+  </g>
+
+  <!-- Card R1C2: BellaMain Panel (RED — operator code) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="355" y="196" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="355" y="196" width="290" height="46" rx="8" fill="#dc2626"/>
+    <rect x="355" y="229" width="290" height="13" fill="#dc2626"/>
+    <text x="375" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">PANEL</text>
+    <text x="450" y="227" font-size="22" font-weight="700" fill="#ffffff">BellaMain.zip</text>
+    <text x="375" y="282" font-size="18" fill="#ffffff">Admin panel —</text>
+    <text x="375" y="306" font-size="18" fill="#ffffff">manager.php, etc.</text>
+    <text x="375" y="346" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">database/</text>
+    <text x="375" y="370" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">connect.php</text>
+    <text x="375" y="412" font-size="17" fill="#e5e5e5">db: jakartaxdw</text>
+    <text x="375" y="438" font-size="17" fill="#e5e5e5">user: dbjakartaxdw</text>
+    <text x="375" y="476" font-size="14" fill="#888888">SHA256 f791fae4…</text>
+  </g>
+
+  <!-- Card R1C3: Letgo kit (ORANGE) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="650" y="196" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="650" y="196" width="290" height="46" rx="8" fill="#f97316"/>
+    <rect x="650" y="229" width="290" height="13" fill="#f97316"/>
+    <text x="670" y="227" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">KIT 2</text>
+    <text x="750" y="227" font-size="22" font-weight="700" fill="#111111">Letgo.rar</text>
+    <text x="670" y="282" font-size="18" fill="#ffffff">Turkish general</text>
+    <text x="670" y="306" font-size="18" fill="#ffffff">marketplace</text>
+    <text x="670" y="346" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">database/</text>
+    <text x="670" y="370" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">connect.php</text>
+    <text x="670" y="412" font-size="17" fill="#e5e5e5">db: jakartaxdw</text>
+    <text x="670" y="438" font-size="17" fill="#e5e5e5">user: dbjakartaxdw</text>
+    <text x="670" y="476" font-size="14" fill="#888888">SHA256 e21fb63a…</text>
+  </g>
+
+  <!-- ROW 2: PTT AVM | MySQL DB (centerpiece) | Sahibinden -->
+  <!-- Card R2C1: PTT AVM kit (ORANGE) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="506" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="506" width="290" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="539" width="290" height="13" fill="#f97316"/>
+    <text x="80" y="537" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">KIT 3</text>
+    <text x="160" y="537" font-size="22" font-weight="700" fill="#111111">Pttavm.rar</text>
+    <text x="80" y="592" font-size="18" fill="#ffffff">Turkish post office</text>
+    <text x="80" y="616" font-size="18" fill="#ffffff">e-commerce</text>
+    <text x="80" y="656" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">database/</text>
+    <text x="80" y="680" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">connect.php</text>
+    <text x="80" y="722" font-size="17" fill="#e5e5e5">db: jakartaxdw</text>
+    <text x="80" y="748" font-size="17" fill="#e5e5e5">user: dbjakartaxdw</text>
+    <text x="80" y="786" font-size="14" fill="#888888">SHA256 ee9d4fcc…</text>
+  </g>
+
+  <!-- CENTERPIECE R2C2: MySQL DB (DEEP RED — highlighted with stroke 2px) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="355" y="506" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="3"/>
+    <rect x="355" y="506" width="290" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="355" y="539" width="290" height="13" fill="#7f1d1d"/>
+    <text x="375" y="537" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">SHARED DB</text>
+    <text x="510" y="537" font-size="22" font-weight="700" fill="#ffffff">MySQL</text>
+    <text x="375" y="592" font-size="20" fill="#ffffff" font-weight="700">jakartaxdw</text>
+    <text x="375" y="624" font-size="17" fill="#e5e5e5">Single tenant, no per-kit</text>
+    <text x="375" y="648" font-size="17" fill="#e5e5e5">re-keying detected</text>
+    <text x="375" y="686" font-size="17" fill="#fb923c" font-weight="600">credentials hardcoded</text>
+    <text x="375" y="710" font-size="17" fill="#fb923c" font-weight="600">across 8 source files:</text>
+    <text x="375" y="744" font-size="16" fill="#ffffff" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">dbjakartaxdw</text>
+    <text x="375" y="768" font-size="16" fill="#ffffff" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">W!@25#8Tb2gxq15</text>
+  </g>
+
+  <!-- Card R2C3: Sahibinden kit (ORANGE) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="650" y="506" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="650" y="506" width="290" height="46" rx="8" fill="#f97316"/>
+    <rect x="650" y="539" width="290" height="13" fill="#f97316"/>
+    <text x="670" y="537" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">KIT 4</text>
+    <text x="750" y="537" font-size="20" font-weight="700" fill="#111111">sahibinden.rar</text>
+    <text x="670" y="592" font-size="18" fill="#ffffff">Turkish general</text>
+    <text x="670" y="616" font-size="18" fill="#ffffff">classifieds</text>
+    <text x="670" y="656" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">database/</text>
+    <text x="670" y="680" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">connect.php</text>
+    <text x="670" y="722" font-size="17" fill="#e5e5e5">db: jakartaxdw</text>
+    <text x="670" y="748" font-size="17" fill="#e5e5e5">user: dbjakartaxdw</text>
+    <text x="670" y="786" font-size="14" fill="#888888">SHA256 b2f4f161…</text>
+  </g>
+
+  <!-- ROW 3: Shopier | Turkcell | Yurtici Kargo -->
+  <!-- Card R3C1: Shopier kit (ORANGE) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="816" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="816" width="290" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="849" width="290" height="13" fill="#f97316"/>
+    <text x="80" y="847" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">KIT 5</text>
+    <text x="160" y="847" font-size="22" font-weight="700" fill="#111111">shopier.rar</text>
+    <text x="80" y="902" font-size="18" fill="#ffffff">Turkish</text>
+    <text x="80" y="926" font-size="18" fill="#ffffff">e-commerce</text>
+    <text x="80" y="966" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">database/</text>
+    <text x="80" y="990" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">connect.php</text>
+    <text x="80" y="1032" font-size="17" fill="#e5e5e5">db: jakartaxdw</text>
+    <text x="80" y="1058" font-size="17" fill="#e5e5e5">user: dbjakartaxdw</text>
+    <text x="80" y="1096" font-size="14" fill="#888888">SHA256 504b1a30…</text>
+  </g>
+
+  <!-- Card R3C2: Turkcell kit (ORANGE) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="355" y="816" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="355" y="816" width="290" height="46" rx="8" fill="#f97316"/>
+    <rect x="355" y="849" width="290" height="13" fill="#f97316"/>
+    <text x="375" y="847" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">KIT 6</text>
+    <text x="455" y="847" font-size="22" font-weight="700" fill="#111111">turkcell.rar</text>
+    <text x="375" y="902" font-size="18" fill="#ffffff">Turkish mobile</text>
+    <text x="375" y="926" font-size="18" fill="#ffffff">telecom (carrier)</text>
+    <text x="375" y="966" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">database/</text>
+    <text x="375" y="990" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">connect.php</text>
+    <text x="375" y="1032" font-size="17" fill="#e5e5e5">db: jakartaxdw</text>
+    <text x="375" y="1058" font-size="17" fill="#e5e5e5">user: dbjakartaxdw</text>
+    <text x="375" y="1096" font-size="14" fill="#888888">SHA256 219cd4f6…</text>
+  </g>
+
+  <!-- Card R3C3: Yurtici Kargo (ORANGE) -->
+  <g filter="url(#phaseShadow)">
+    <rect x="650" y="816" width="290" height="300" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="650" y="816" width="290" height="46" rx="8" fill="#f97316"/>
+    <rect x="650" y="849" width="290" height="13" fill="#f97316"/>
+    <text x="670" y="847" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">KIT 7</text>
+    <text x="750" y="847" font-size="22" font-weight="700" fill="#111111">Kargo.rar</text>
+    <text x="670" y="902" font-size="18" fill="#ffffff">Yurtici Kargo —</text>
+    <text x="670" y="926" font-size="18" fill="#ffffff">Turkish shipping</text>
+    <text x="670" y="966" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">database/</text>
+    <text x="670" y="990" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">connect.php</text>
+    <text x="670" y="1032" font-size="17" fill="#e5e5e5">db: jakartaxdw</text>
+    <text x="670" y="1058" font-size="17" fill="#e5e5e5">user: dbjakartaxdw</text>
+    <text x="670" y="1096" font-size="14" fill="#888888">SHA256 705793c0…</text>
+  </g>
+
+  <!-- FOOTER -->
+  <line x1="60" y1="1158" x2="940" y2="1158" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1192" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Attribution implication:  identical MySQL credentials across panel + 7 kits = single-operator control,</text>
+  <text x="500" y="1222" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">not a leaked or licensed template (which would re-key per tenant) — UTA-2026-008 distinct-actor: MODERATE 75%</text>
+  <text x="500" y="1258" text-anchor="middle" font-size="14" fill="#888888">Hunt anchors: `jakartaxdw` DB name + `dbjakartaxdw` user + `W!@25#8Tb2gxq15` pass in any PHP source file</text>
+  <text x="500" y="1284" text-anchor="middle" font-size="14" fill="#888888">Color legend  —  orange: brand-impersonation kit · red: operator-developed panel · deep red: shared MySQL backend</text>
+</svg>

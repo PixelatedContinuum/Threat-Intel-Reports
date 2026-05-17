@@ -34,6 +34,14 @@ description: "Inkognito is a Russian-speaking multi-product fraud operator that 
 **Last Updated:** May 16, 2026<br>
 **Threat Level:** HIGH
 
+> **Investigation series — Open-Directory 79.137.192.3 (three-publication series):** This report is one of three publications from a single investigation into the multi-tenant Aeza Group staging server at `79.137.192.3`. Each cluster is operationally separate — co-tenancy on the same bulletproof IP is not operator linkage — so each cluster has its own dedicated report:
+>
+> - **[Parent (2026-05-15) — Multi-Cluster Overview](/reports/opendirectory-79-137-192-3-20260515/)** — all three co-tenant clusters at boundary-level depth; establishes why they are *not* one operator.
+> - **[Cluster A (2026-05-16) — BellaMain Turkish PhaaS](/reports/bellamain-turkish-phaas-79-137-192-3-20260516/)** — full PHP-source recovery of an operator-developed PhaaS panel + 7 Turkish-marketplace kits; UTA-2026-008.
+> - **[Cluster B (2026-05-16) — Inkognito Russian VPN/Phishing](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/)** *(this report)* — 467+ brand-impersonation subdomain library bolted to a commercial VPN front; UTA-2026-009.
+>
+> Cluster C (a Rhadamanthys MaaS customer at `79.133.180.168`) is covered only in the parent report.
+
 > **Risk vs. Detection Posture:** The Inkognito fraud-operation infrastructure analyzed in this report scores **7.5/10 (HIGH)** based on enterprise-grade DevOps tradecraft, sustained 2-year-11-month continuous operation, a 467+ pre-staged brand-impersonation subdomain library across 18+ enterprise verticals, deliberate provider segmentation across two sanctioned bulletproof hosters, and 0/92 VirusTotal detection across all operator infrastructure. The threat level is not CRITICAL because no in-flight credential-harvest payloads were observed on the impersonation subdomains at the evidence cutoff — all currently return HTTP 404, awaiting activation. If any subdomain in the library is switched live and observed harvesting credentials, the rating for that activation should be reassessed to CRITICAL.
 
 ## 1. Executive Summary

@@ -17,8 +17,8 @@ position: 1
 {% include section-header.html label="Latest Reports" accent="#ff4444" %}
 
 <div class="hl-grid">
+{% include report-card.html title="BellaMain Turkish PhaaS — Full PHP-Source Recovery, USOM Self-Monitor, Four-Bot Telegram C2, Wadanz Code-Author Signature" date="May 2026" severity="high" tags="PhaaS,Phishing,Cred Theft,Open Dir" url="/reports/bellamain-turkish-phaas-79-137-192-3-20260516/" %}
 {% include report-card.html title="Inkognito Fraud Operator — INK VPN + INK Lens 467+ Brand-Impersonation Library + CryptOne + BEC Burn Domains" date="May 2026" severity="high" tags="Phishing,Fraud,VPN Abuse,Cred Theft" url="/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/" %}
-{% include report-card.html title="Multi-Cluster Open Directory 79.137.192.3 — Rhadamanthys MaaS Customer + BellaMain + Inkognito" date="May 2026" severity="critical" tags="MaaS,Stealer,Multi-Family,Open Dir" url="/reports/opendirectory-79-137-192-3-20260515/" %}
 </div>
 
 <a href="{{ '/reports/' | relative_url }}" class="hl-view-all">View all reports →</a>

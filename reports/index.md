@@ -8,17 +8,18 @@ position: 2
 {% include section-header.html label="Recent Reports" accent="#ff4444" %}
 
 <div class="hl-grid">
+{% include report-card.html title="BellaMain Turkish PhaaS — Full PHP-Source Recovery, USOM Self-Monitor, Four-Bot Telegram C2, Wadanz Code-Author Signature" date="May 2026" severity="high" tags="PhaaS,Phishing,Cred Theft,Open Dir" url="/reports/bellamain-turkish-phaas-79-137-192-3-20260516/" %}
 {% include report-card.html title="Inkognito Fraud Operator — INK VPN + INK Lens 467+ Brand-Impersonation Library + CryptOne + BEC Burn Domains" date="May 2026" severity="high" tags="Phishing,Fraud,VPN Abuse,Cred Theft" url="/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/" %}
 {% include report-card.html title="Multi-Cluster Open Directory 79.137.192.3 — Rhadamanthys MaaS Customer + BellaMain + Inkognito" date="May 2026" severity="critical" tags="MaaS,Stealer,Multi-Family,Open Dir" url="/reports/opendirectory-79-137-192-3-20260515/" %}
 {% include report-card.html title="HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign" date="May 2026" severity="high" tags="Loader,RAT,MaaS,Open Dir" url="/reports/opendirectory-62-60-237-100-20260506/" %}
 {% include report-card.html title="AdaptixC2 Open Directory Exposure — 45.130.148.125 Operator Toolkit" date="Apr 2026" severity="high" tags="C2,Toolkit,Open Dir,Multi-Family" url="/reports/opendirectory-45-130-148-125-20260430/" %}
 {% include report-card.html title="Chaos Ransomware (TorBrowserTor) Multi-Stage Batch Loader — Open Directory 94.103.1.13" date="Apr 2026" severity="high" tags="Ransomware,Loader,Evasion,Open Dir" url="/reports/open-directory-94-103-1-13-20260423/" %}
-{% include report-card.html title="ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims, and Attribution" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,Open Dir,Threat" url="/reports/shinyhunters-dls-91-215-85-22-20260417/" %}
 </div>
 
 {% include section-header.html label="All Reports" accent="#444444" %}
 
 <div class="hl-row-list">
+{% include report-row.html title="ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims, and Attribution" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,Open Dir,Threat" url="/reports/shinyhunters-dls-91-215-85-22-20260417/" %}
 {% include report-row.html title="OpenStrike Expanded Toolkit — 106 New Files, Complete CS Arsenal Exposed" date="Apr 2026" severity="high" tags="Toolkit,C2,Injection,Open Dir" url="/reports/new-files-found-20260408/" %}
 {% include report-row.html title="OpenStrike Beacon Toolkit — Open Directory 172.105.0.126" date="Apr 2026" severity="high" tags="Toolkit,C2,Open Dir,Evasion" url="/reports/open-directory-172-105-0-126-20260406/" %}
 {% include report-row.html title="Shadow RAT & XWorm Open Directory Campaign" date="Apr 2026" severity="high" tags="RAT,MaaS,C2,Multi-Family" url="/reports/shadow-xworm-opendirectory/" %}
