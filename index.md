@@ -17,7 +17,7 @@ position: 1
 {% include section-header.html label="Latest Reports" accent="#ff4444" %}
 
 <div class="hl-grid">
-{% include report-card.html title="Rhadamanthys MaaS Customer Deep-Dive — Open Directory 79.137.192.3" date="May 2026" severity="critical" tags="MaaS,Stealer,Loader,Open Dir" url="/reports/opendirectory-79-137-192-3-20260515/" %}
+{% include report-card.html title="CVE-2026-41940 cPanel Harvester Toolkit — 216.126.227.49" date="May 2026" severity="high" tags="CVE Exploit,Cred Theft,Phishing,Open Dir" url="/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/" %}
 {% include report-card.html title="BellaMain Turkish PhaaS Panel — Open Directory 79.137.192.3" date="May 2026" severity="high" tags="PhaaS,Phishing,Cred Theft,Open Dir" url="/reports/bellamain-turkish-phaas-79-137-192-3-20260516/" %}
 </div>
 

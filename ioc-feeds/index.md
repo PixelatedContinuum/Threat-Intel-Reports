@@ -14,15 +14,16 @@ position: 4
 {% include section-header.html label="Recent" accent="#f87171" %}
 
 <div class="hl-grid">
+{% include report-card.html title="CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49) — IOC Feed" date="May 2026" severity="high" tags="CVE Exploit,Phishing,Cred Theft,Open Dir" url="/ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json" %}
 {% include report-card.html title="BellaMain Turkish PhaaS (79.137.192.3) — IOC Feed" date="May 2026" severity="high" tags="PhaaS,Phishing,Telegram,Open Dir" url="/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json" %}
 {% include report-card.html title="Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens) — IOC Feed" date="May 2026" severity="high" tags="Phishing,Fraud,VPN Abuse,Cred Theft" url="/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json" %}
 {% include report-card.html title="Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito) — IOC Feed" date="May 2026" severity="critical" tags="MaaS,Stealer,Multi-Family,Open Dir" url="/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json" %}
-{% include report-card.html title="HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign — IOC Feed" date="May 2026" severity="high" tags="Loader,RAT,MaaS,Open Dir" url="/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json" %}
 </div>
 
 {% include section-header.html label="All Feeds" accent="#444444" %}
 
 <div class="hl-row-list">
+{% include report-row.html title="HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign — IOC Feed" date="May 2026" severity="high" tags="Loader,RAT,MaaS,Open Dir" url="/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json" %}
 {% include report-row.html title="AdaptixC2 Open Directory Exposure (45.130.148.125) — IOC Feed" date="Apr 2026" severity="high" tags="C2,Toolkit,Open Dir" url="/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json" %}
 {% include report-row.html title="Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13) — IOC Feed" date="Apr 2026" severity="high" tags="Ransomware,Loader,Open Dir" url="/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json" %}
 {% include report-row.html title="ShinyHunters Data Leak Site (91.215.85.22) — IOC Feed" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,Threat" url="/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json" %}

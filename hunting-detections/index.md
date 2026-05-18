@@ -14,15 +14,16 @@ position: 3
 {% include section-header.html label="Recent" accent="#4ade80" %}
 
 <div class="hl-grid">
+{% include report-card.html title="Detection Rules — CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)" date="May 2026" severity="high" tags="CVE Exploit,Web,DNS,Phishing" url="/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections" %}
 {% include report-card.html title="Detection Rules — BellaMain Turkish PhaaS Panel (79.137.192.3)" date="May 2026" severity="high" tags="PhaaS,Phishing,Web,Telegram" url="/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections" %}
 {% include report-card.html title="Detection Rules — Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens / CryptOne)" date="May 2026" severity="high" tags="Phishing,Web,DNS,TLS" url="/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections" %}
 {% include report-card.html title="Detection Rules — Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito)" date="May 2026" severity="critical" tags="MaaS,Stealer,Evasion,Persistence" url="/hunting-detections/opendirectory-79-137-192-3-20260515-detections" %}
-{% include report-card.html title="Detection Rules — HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign" date="May 2026" severity="high" tags="Loader,RAT,Evasion,Persistence" url="/hunting-detections/opendirectory-62-60-237-100-20260506-detections" %}
 </div>
 
 {% include section-header.html label="All Detections" accent="#444444" %}
 
 <div class="hl-row-list">
+{% include report-row.html title="Detection Rules — HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign" date="May 2026" severity="high" tags="Loader,RAT,Evasion,Persistence" url="/hunting-detections/opendirectory-62-60-237-100-20260506-detections" %}
 {% include report-row.html title="Detection Rules — AdaptixC2 Open Directory Exposure (45.130.148.125)" date="Apr 2026" severity="high" tags="C2,Toolkit,Evasion,Persistence" url="/hunting-detections/opendirectory-45-130-148-125-20260430-detections" %}
 {% include report-row.html title="Detection Rules — Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)" date="Apr 2026" severity="high" tags="Ransomware,Loader,Evasion,Persistence" url="/hunting-detections/open-directory-94-103-1-13-20260423-detections" %}
 {% include report-row.html title="Detection Rules — ShinyHunters Data Leak Site (91.215.85.22)" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,C2,Threat" url="/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections" %}
