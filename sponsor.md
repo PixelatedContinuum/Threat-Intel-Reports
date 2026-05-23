@@ -38,6 +38,13 @@ hide: true
 
 {% include section-header.html label="Sponsorship Tiers" accent="#b8902f" %}
 
+<div class="hl-sponsor-callout" style="margin-top: 0;">
+  <div class="hl-sponsor-callout__title">Tiers Are Flexible Starting Points</div>
+  <div class="hl-sponsor-callout__body">
+    Multi-Report bundles do not have to be six reports — bundles of any size (three, four, ten, whatever fits your campaign) are available. Custom packages combining elements across tiers can also be arranged. Reach out to discuss what matches your goals.
+  </div>
+</div>
+
 {% assign tiers = site.data.sponsors.tiers %}
 {% assign sponsors = site.data.sponsors.sponsors %}
 
@@ -77,9 +84,15 @@ hide: true
 </div>
 
 <div class="hl-sponsor-callout">
-  <div class="hl-sponsor-callout__title">Founding Sponsor Offer — Limited Availability</div>
+  <div class="hl-sponsor-callout__title">Founding Sponsor Offer — Each Tier, Offered Once</div>
   <div class="hl-sponsor-callout__body">
-    The first Monthly Sponsor slot is available at the founding rate of <strong>$300/month for the first three months</strong>, then converts to the standard $500/month rate at the sponsor's option. Annual founding rate available at <strong>$3,500 for year one</strong> (standard $5,000). Offered once and retired when filled.
+    The first sponsor at each tier qualifies for a founding rate:
+    <ul style="margin: 8px 0 0 0; padding-left: 18px;">
+      <li><strong>Report Sponsor:</strong> $100 (standard $150)</li>
+      <li><strong>Multi-Report Sponsor:</strong> $500 for the bundle (standard $750)</li>
+      <li><strong>Monthly Sponsor:</strong> $300/month for the first three months (standard $500), or $3,500 year-one annual (standard $5,000)</li>
+    </ul>
+    <div style="margin-top: 8px; opacity: 0.85;">Each founding slot is offered once and retires when filled.</div>
   </div>
 </div>
 
