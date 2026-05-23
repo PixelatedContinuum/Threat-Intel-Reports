@@ -16,31 +16,33 @@ tiers:
   - id: multi-report
     name: Multi-Report Sponsor
     price: "$750"
-    price_note: "six-report bundle"
-    description: "Six-report placement bundle. Your brand attached to six consecutive or sponsor-selected reports, with featured visibility across the bundle period."
+    price_note: "six new reports"
+    evergreen_price: "$565"
+    evergreen_price_note: "six evergreen reports (25% off)"
+    description: "Six-report placement bundle. Six newly published reports at $750, or six evergreen reports from the catalog at $565 — a 25% discount. Mix-and-match arrangements available on request."
     benefits:
       - "Sponsored-by banner on all six reports for the life of the publication"
-      - "Choice of six consecutive reports or sponsor-selected reports (subject to schedule)"
+      - "Choice of six consecutive new reports, evergreen reports from the catalog, or a custom mix"
       - "Featured listing on this page under the Multi-Report tier"
       - "One dedicated LinkedIn post during the bundle period"
-      - "Mention in subscriber emails accompanying each sponsored report"
-    best_fit: "Sponsors building sustained presence across a research arc, or aligning with a campaign theme spanning multiple investigations."
+      - "Subscriber email mention with each new report; dedicated post for evergreen reports"
+    best_fit: "Sponsors building sustained presence across a research arc, aligning with a campaign theme spanning multiple investigations, or attaching their brand to a curated set of evergreen reports."
     slots: 2
   - id: report
     name: Report Sponsor
     price: "$150"
     price_note: "new report"
-    archive_price: "$115"
-    archive_price_note: "archive report (25% off)"
-    description: "Single-report placement. Pick a newly published report at $150 (full launch promo) or any report from the archive at $115 — a 25% discount. Archived reports continue drawing search traffic and reader returns long after publication."
+    evergreen_price: "$115"
+    evergreen_price_note: "evergreen report (25% off)"
+    description: "Single-report placement. Pick a newly published report at $150 (full launch promo) or an evergreen report from the catalog at $115 — a 25% discount. Evergreen reports continue drawing search traffic and reader returns long after publication."
     benefits:
       - "Sponsored-by banner at the top of the report"
       - "Logo and link to your site or a chosen landing page"
       - "Mention in social posts referencing the report (LinkedIn, X)"
-      - "Subscriber email mention (new reports) or a dedicated post highlighting the new sponsor (archive reports)"
+      - "Subscriber email mention (new reports) or a dedicated post highlighting the new sponsor (evergreen reports)"
       - "Featured listing on this page under the Report Sponsor tier"
       - "Permanent placement for the life of the report"
-    best_fit: "Sponsors testing the audience, aligning with a specific research topic, or attaching their brand to an existing high-traffic report from the archive."
+    best_fit: "Sponsors testing the audience, aligning with a specific research topic, or attaching their brand to an evergreen report that continues drawing readers."
     slots: 3
 
 # Sponsor entry format:
