@@ -55,7 +55,7 @@ hide: true
     {% if tier.price %}
     <div class="hl-tier-card__price">{{ tier.price }}{% if tier.price_note %}<span class="hl-tier-card__price-note">{{ tier.price_note }}</span>{% endif %}</div>
     {% if tier.annual_price %}<div class="hl-tier-card__price-extra">or {{ tier.annual_price }} annual</div>{% endif %}
-    {% if tier.evergreen_price %}<div class="hl-tier-card__price-extra">or {{ tier.evergreen_price }} {{ tier.evergreen_price_note }}</div>{% endif %}
+    {% if tier.catalog_price %}<div class="hl-tier-card__price-extra">or {{ tier.catalog_price }} {{ tier.catalog_price_note }}</div>{% endif %}
     {% endif %}
     <div class="hl-tier-card__desc">{{ tier.description }}</div>
     {% if tier.benefits %}
