@@ -29,14 +29,15 @@ tiers:
   - id: report
     name: Report Sponsor
     price: "$150"
-    price_note: "per report"
-    description: "Single-report placement. Your brand attached to one report — your choice of any newly published or archived report from the catalog. Archived reports continue drawing search traffic and reader returns long after publication."
+    price_note: "new report"
+    archive_price: "$115"
+    archive_price_note: "archive report (25% off)"
+    description: "Single-report placement. Pick a newly published report at $150 (full launch promo) or any report from the archive at $115 — a 25% discount. Archived reports continue drawing search traffic and reader returns long after publication."
     benefits:
-      - "<strong>Your choice of any report</strong> — newly published or from the archive"
       - "Sponsored-by banner at the top of the report"
       - "Logo and link to your site or a chosen landing page"
       - "Mention in social posts referencing the report (LinkedIn, X)"
-      - "Mention in the subscriber email (new reports) or a dedicated post (archive reports)"
+      - "Subscriber email mention (new reports) or a dedicated post highlighting the new sponsor (archive reports)"
       - "Featured listing on this page under the Report Sponsor tier"
       - "Permanent placement for the life of the report"
     best_fit: "Sponsors testing the audience, aligning with a specific research topic, or attaching their brand to an existing high-traffic report from the archive."
