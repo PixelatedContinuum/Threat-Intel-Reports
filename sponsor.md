@@ -90,7 +90,7 @@ hide: true
     <ul style="margin: 8px 0 0 0; padding-left: 18px;">
       <li><strong>Report Sponsor:</strong> $100 (standard $150)</li>
       <li><strong>Multi-Report Sponsor:</strong> $500 for the bundle (standard $750)</li>
-      <li><strong>Monthly Sponsor:</strong> $300/month for the first three months (standard $500), or $3,500 year-one annual (standard $5,000)</li>
+      <li><strong>Monthly Sponsor:</strong> $300/month, no time cap — founding rate held for the full duration of your sponsorship (standard $500/month)</li>
     </ul>
     <div style="margin-top: 8px; opacity: 0.85;">Each founding slot is offered once and retires when filled.</div>
   </div>
