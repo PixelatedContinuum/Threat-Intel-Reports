@@ -51,44 +51,12 @@ position: 6
   </div>
 </div>
 
-{% include section-header.html label="Sponsorship Tiers" accent="#58a6ff" %}
+{% include section-header.html label="Sponsorship" accent="#b8902f" %}
 
 <div class="hl-prose-section">
   <div class="hl-prose-section__body">
-    Organizations can sponsor individual reports, a batch of reports, or on a monthly basis. Sponsors receive logo placement and a link on sponsored content. Sponsorship does not influence research conclusions or methodology — editorial independence is non-negotiable.
+    Organizations can sponsor individual reports, a batch of reports, or on a monthly basis. Sponsors receive logo placement and a link on sponsored content. Editorial independence is non-negotiable — sponsorship does not influence research conclusions or methodology.<br><br>
+    Tier breakdown, pricing, and the founding sponsor offer are on the dedicated sponsorship page:<br><br>
+    <a href="{{ '/sponsor/' | relative_url }}">View sponsorship details and pricing →</a>
   </div>
 </div>
-
-{% assign tiers = site.data.sponsors.tiers %}
-{% assign sponsors = site.data.sponsors.sponsors %}
-
-<div class="hl-tier-grid">
-  {% for tier in tiers %}
-  <div class="hl-tier-card">
-    <div class="hl-tier-card__name">{{ tier.name }}</div>
-    <div class="hl-tier-card__desc">{{ tier.description }}</div>
-    <div class="hl-tier-card__slots">
-      {% assign tier_sponsors = sponsors | where: "tier", tier.id %}
-      {% for sponsor in tier_sponsors %}
-      <div class="hl-tier-card__sponsor">
-        {% if sponsor.logo %}
-        <img class="hl-tier-card__logo" src="{{ sponsor.logo }}" alt="{{ sponsor.name }}">
-        {% endif %}
-        {% if sponsor.url %}
-        <a href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer" class="hl-tier-card__sponsor-name">{{ sponsor.name }}</a>
-        {% else %}
-        <span class="hl-tier-card__sponsor-name">{{ sponsor.name }}</span>
-        {% endif %}
-      </div>
-      {% endfor %}
-      {% assign filled = tier_sponsors | size %}
-      {% assign remaining = tier.slots | minus: filled %}
-      {% if remaining > 0 %}
-      <div class="hl-tier-card__placeholder">Be the first to sponsor →</div>
-      {% endif %}
-    </div>
-  </div>
-  {% endfor %}
-</div>
-
-<p class="hl-support-contact">To discuss sponsorship, reach out at <a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a>.</p>

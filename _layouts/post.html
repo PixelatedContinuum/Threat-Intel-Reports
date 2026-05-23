@@ -26,13 +26,29 @@ document.addEventListener('DOMContentLoaded', function () {
   <h1 class="hl-post-header__title">{{ page.title }}</h1>
 </div>
 {% if page.sponsored_by %}
-{% assign sponsor = site.data.sponsors.sponsors | where: "id", page.sponsored_by | first %}
-{% if sponsor %}
+{%- comment -%}
+  Normalize page.sponsored_by to an array. Accepts both forms:
+    sponsored_by: acme-corp               (single string)
+    sponsored_by: [acme-corp, beta-sec]   (list of IDs)
+  Trick: `join` on a string is a no-op, on an array joins entries.
+  Then `split` always yields an array, so the loop below works uniformly.
+{%- endcomment -%}
+{% assign sponsor_ids = page.sponsored_by | join: "|;sep;|" | split: "|;sep;|" %}
+{% assign resolved_sponsors = "" | split: "" %}
+{% for sid in sponsor_ids %}
+  {% assign _s = site.data.sponsors.sponsors | where: "id", sid | first %}
+  {% if _s %}{% assign resolved_sponsors = resolved_sponsors | push: _s %}{% endif %}
+{% endfor %}
+{% if resolved_sponsors.size > 0 %}
 <div class="hl-sponsor-banner">
   <span class="hl-sponsor-banner__label">Sponsored by</span>
-  {% if sponsor.url %}<a class="hl-sponsor-banner__name" href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer">{% else %}<span class="hl-sponsor-banner__name">{% endif %}
-    {% if sponsor.logo %}<img class="hl-sponsor-banner__logo" src="{{ sponsor.logo }}" alt="{{ sponsor.name }}">{% else %}{{ sponsor.name }}{% endif %}
-  {% if sponsor.url %}</a>{% else %}</span>{% endif %}
+  <div class="hl-sponsor-banner__entries">
+  {% for sponsor in resolved_sponsors %}
+    {% if sponsor.url %}<a class="hl-sponsor-banner__name" href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer">{% else %}<span class="hl-sponsor-banner__name">{% endif %}
+      {% if sponsor.logo %}<img class="hl-sponsor-banner__logo" src="{{ sponsor.logo }}" alt="{{ sponsor.name }}">{% else %}{{ sponsor.name }}{% endif %}
+    {% if sponsor.url %}</a>{% else %}</span>{% endif %}
+  {% endfor %}
+  </div>
 </div>
 {% endif %}
 {% endif %}
