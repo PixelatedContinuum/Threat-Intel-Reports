@@ -30,15 +30,16 @@ tiers:
     name: Report Sponsor
     price: "$150"
     price_note: "per report"
-    description: "Single-report placement. Your brand attached to one published threat intelligence report from publication forward, in perpetuity."
+    description: "Single-report placement. Your brand attached to one report — your choice of any newly published or archived report from the catalog. Archived reports continue drawing search traffic and reader returns long after publication."
     benefits:
-      - "Sponsored-by banner at the top of the published report"
+      - "<strong>Your choice of any report</strong> — newly published or from the archive"
+      - "Sponsored-by banner at the top of the report"
       - "Logo and link to your site or a chosen landing page"
       - "Mention in social posts referencing the report (LinkedIn, X)"
-      - "Mention in the subscriber email announcing the report"
+      - "Mention in the subscriber email (new reports) or a dedicated post (archive reports)"
       - "Featured listing on this page under the Report Sponsor tier"
       - "Permanent placement for the life of the report"
-    best_fit: "Sponsors testing the audience before larger commitment, or sponsors aligning with a specific research topic."
+    best_fit: "Sponsors testing the audience, aligning with a specific research topic, or attaching their brand to an existing high-traffic report from the archive."
     slots: 3
 
 # Sponsor entry format:

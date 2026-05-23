@@ -119,7 +119,6 @@ hide: true
     <ul style="margin-top: 10px;">
       <li><strong>Newsletter shoutout</strong> — <span style="color: #b8902f; font-weight: 600;">$75</span> — One-off sponsored mention in a subscriber email send.</li>
       <li><strong>LinkedIn or X post</strong> — <span style="color: #b8902f; font-weight: 600;">$100</span> — Single sponsored post about your capability or content.</li>
-      <li><strong>Specific report selection</strong> — <span style="color: #b8902f; font-weight: 600;">$25</span> — Pick the exact report to sponsor instead of taking the next in queue.</li>
       <li><strong>Sponsor-requested research topic</strong> — <span style="color: #b8902f; font-weight: 600;">$500+</span> — Suggest a research direction; editorial independence preserved (see above).</li>
     </ul>
   </div>
