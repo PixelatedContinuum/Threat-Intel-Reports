@@ -2191,18 +2191,18 @@ button,
 }
 
 .hl-tier-card__name {
-  color: var(--hl-accent-blue);
-  font-size: 0.82em;
+  color: var(--hl-accent-gold);
+  font-size: 0.85em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .hl-tier-card__desc {
-  color: var(--hl-text-muted);
-  font-size: 0.78em;
-  line-height: 1.5;
+  color: var(--hl-text-primary);
+  font-size: 0.82em;
+  line-height: 1.55;
   margin-bottom: 14px;
 }
 
@@ -2252,8 +2252,8 @@ button,
 
 /* Tier card price (used on /sponsor page) */
 .hl-tier-card__price {
-  color: var(--hl-text-primary);
-  font-size: 1.7em;
+  color: var(--hl-accent-blue);
+  font-size: 1.9em;
   font-weight: 700;
   letter-spacing: -0.01em;
   margin-bottom: 2px;
@@ -2261,26 +2261,31 @@ button,
 }
 
 .hl-tier-card__price-note {
-  color: var(--hl-text-muted);
-  font-size: 0.72em;
+  display: block;
+  color: var(--hl-text-primary);
+  font-size: 0.82em;
   font-weight: 500;
-  margin-left: 6px;
   letter-spacing: 0.04em;
+  margin-bottom: 6px;
 }
 
 .hl-tier-card__price-extra {
-  color: var(--hl-text-dim);
-  font-size: 0.72em;
-  margin-bottom: 12px;
+  color: var(--hl-text-primary);
+  font-size: 0.78em;
+  margin-bottom: 4px;
   letter-spacing: 0.02em;
+}
+
+.hl-tier-card__price-extra:last-of-type {
+  margin-bottom: 14px;
 }
 
 .hl-tier-card__benefits {
   list-style: none;
   padding: 0;
   margin: 0 0 12px 0;
-  color: var(--hl-text-secondary);
-  font-size: 0.82em;
+  color: var(--hl-text-primary);
+  font-size: 0.85em;
   line-height: 1.5;
 }
 
@@ -2291,7 +2296,7 @@ button,
 
 .hl-tier-card__benefits li::before {
   content: "·";
-  color: var(--hl-accent-blue);
+  color: var(--hl-accent-gold);
   position: absolute;
   left: 4px;
   top: 1px;
@@ -2300,17 +2305,17 @@ button,
 }
 
 .hl-tier-card__best-fit {
-  color: var(--hl-text-muted);
-  font-size: 0.74em;
+  color: var(--hl-text-primary);
+  font-size: 0.78em;
   font-style: italic;
-  line-height: 1.45;
+  line-height: 1.5;
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid var(--hl-border-row);
 }
 
 .hl-tier-card__best-fit strong {
-  color: var(--hl-text-secondary);
+  color: var(--hl-accent-gold);
   font-style: normal;
   font-weight: 600;
 }

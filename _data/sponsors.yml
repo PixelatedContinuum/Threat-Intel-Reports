@@ -1,13 +1,14 @@
 tiers:
   - id: monthly
     name: Monthly Sponsor
-    price: "$500 / month"
-    annual_price: "$5,000 / year"
+    price: "$500"
+    price_note: "Per Month"
+    annual_price: "$5,000"
     description: "Site-wide branded presence. Logo in the site footer visible to every visitor, plus a Sponsored-by banner and full promotional package on every report published during the sponsorship month."
     benefits:
       - "Logo and tagline in the site footer, visible across every page"
       - "Sponsored-by banner on every report published during the month"
-      - "<strong>Per report published that month: 1 LinkedIn post + 1 X post + 1 subscriber email mention</strong>"
+      - "Per report published that month: 1 LinkedIn post + 1 X post + 1 subscriber email mention"
       - "2 additional dedicated LinkedIn or X posts per month highlighting your capability"
       - "Featured listing on this page under the Monthly tier"
       - "Monthly readership report (uniques, top reports, social engagement)"
@@ -16,14 +17,14 @@ tiers:
   - id: multi-report
     name: Multi-Report Sponsor
     price: "$750"
-    price_note: "six new reports"
+    price_note: "Six New Reports"
     catalog_price: "$565"
-    catalog_price_note: "from the catalog (25% off)"
+    catalog_price_note: "From the Catalog (25% Off)"
     description: "Six-report placement bundle. Six newly published reports at $750, or six reports from the catalog at $565 — a 25% discount. Mix-and-match arrangements available on request."
     benefits:
       - "Sponsored-by banner on all six reports for the life of the publication"
       - "Choice of six new reports, six from the catalog, or a custom mix"
-      - "<strong>6 LinkedIn posts + 6 X posts + 6 subscriber email mentions</strong> (one of each per report)"
+      - "6 LinkedIn posts + 6 X posts + 6 subscriber email mentions (one of each per report)"
       - "1 additional dedicated LinkedIn post during the bundle period"
       - "Featured listing on this page under the Multi-Report tier"
       - "Permanent placement across all six reports"
@@ -32,14 +33,14 @@ tiers:
   - id: report
     name: Report Sponsor
     price: "$150"
-    price_note: "new report"
+    price_note: "New Report"
     catalog_price: "$115"
-    catalog_price_note: "from the catalog (25% off)"
+    catalog_price_note: "From the Catalog (25% Off)"
     description: "Single-report placement. Pick a newly published report at $150 (full launch promo) or a report from the catalog at $115 — a 25% discount. Reports in the catalog continue drawing search traffic and reader returns long after publication."
     benefits:
       - "Sponsored-by banner at the top of the report"
       - "Logo and link to your site or a chosen landing page"
-      - "<strong>1 LinkedIn post + 1 X post + 1 subscriber email mention</strong> promoting the sponsorship (launch email for new reports; dedicated sponsor-announcement for catalog reports)"
+      - "1 LinkedIn post + 1 X post + 1 subscriber email mention promoting the sponsorship (launch email for new reports; dedicated sponsor-announcement for catalog reports)"
       - "Featured listing on this page under the Report Sponsor tier"
       - "Permanent placement for the life of the report"
     best_fit: "Sponsors testing the audience, aligning with a specific research topic, or attaching their brand to a catalog report that continues drawing readers."
