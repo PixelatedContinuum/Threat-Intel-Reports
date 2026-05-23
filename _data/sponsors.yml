@@ -3,14 +3,14 @@ tiers:
     name: Monthly Sponsor
     price: "$500 / month"
     annual_price: "$5,000 / year"
-    description: "Site-wide branded presence. Logo in the site footer visible to every visitor, plus a Sponsored-by banner on every report published during the sponsorship month."
+    description: "Site-wide branded presence. Logo in the site footer visible to every visitor, plus a Sponsored-by banner and full promotional package on every report published during the sponsorship month."
     benefits:
       - "Logo and tagline in the site footer, visible across every page"
-      - "Sponsored-by banner on every report published in the month"
+      - "Sponsored-by banner on every report published during the month"
+      - "<strong>Per report published that month: 1 LinkedIn post + 1 X post + 1 subscriber email mention</strong>"
+      - "2 additional dedicated LinkedIn or X posts per month highlighting your capability"
       - "Featured listing on this page under the Monthly tier"
-      - "Two dedicated LinkedIn or X posts per month"
-      - "Mention in every subscriber email during the period"
-      - "Monthly readership report"
+      - "Monthly readership report (uniques, top reports, social engagement)"
     best_fit: "Sponsors seeking flagship site-wide presence and inclusion in every piece of content published during the term."
     slots: 3
   - id: multi-report
@@ -22,10 +22,11 @@ tiers:
     description: "Six-report placement bundle. Six newly published reports at $750, or six reports from the catalog at $565 — a 25% discount. Mix-and-match arrangements available on request."
     benefits:
       - "Sponsored-by banner on all six reports for the life of the publication"
-      - "Choice of six consecutive new reports, six reports from the catalog, or a custom mix"
+      - "Choice of six new reports, six from the catalog, or a custom mix"
+      - "<strong>6 LinkedIn posts + 6 X posts + 6 subscriber email mentions</strong> (one of each per report)"
+      - "1 additional dedicated LinkedIn post during the bundle period"
       - "Featured listing on this page under the Multi-Report tier"
-      - "One dedicated LinkedIn post during the bundle period"
-      - "Subscriber email mention with each new report; dedicated post for reports from the catalog"
+      - "Permanent placement across all six reports"
     best_fit: "Sponsors building sustained presence across a research arc, aligning with a campaign theme spanning multiple investigations, or attaching their brand to a curated set of reports from the catalog."
     slots: 2
   - id: report
@@ -38,8 +39,7 @@ tiers:
     benefits:
       - "Sponsored-by banner at the top of the report"
       - "Logo and link to your site or a chosen landing page"
-      - "Mention in social posts referencing the report (LinkedIn, X)"
-      - "Subscriber email mention (new reports) or a dedicated post highlighting the new sponsor (reports from the catalog)"
+      - "<strong>1 LinkedIn post + 1 X post + 1 subscriber email mention</strong> promoting the sponsorship (launch email for new reports; dedicated sponsor-announcement for catalog reports)"
       - "Featured listing on this page under the Report Sponsor tier"
       - "Permanent placement for the life of the report"
     best_fit: "Sponsors testing the audience, aligning with a specific research topic, or attaching their brand to a catalog report that continues drawing readers."
