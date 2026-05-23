@@ -111,6 +111,20 @@ hide: true
   </div>
 </div>
 
+{% include section-header.html label="Optional Add-Ons" accent="#b8902f" %}
+
+<div class="hl-prose-section">
+  <div class="hl-prose-section__body">
+    Stack any of these on top of a sponsorship tier for added reach or customization.
+    <ul style="margin-top: 10px;">
+      <li><strong>Newsletter shoutout</strong> — <span style="color: #b8902f; font-weight: 600;">$75</span> — One-off sponsored mention in a subscriber email send.</li>
+      <li><strong>LinkedIn or X post</strong> — <span style="color: #b8902f; font-weight: 600;">$100</span> — Single sponsored post about your capability or content.</li>
+      <li><strong>Specific report selection</strong> — <span style="color: #b8902f; font-weight: 600;">$25</span> — Pick the exact report to sponsor instead of taking the next in queue.</li>
+      <li><strong>Sponsor-requested research topic</strong> — <span style="color: #b8902f; font-weight: 600;">$500+</span> — Suggest a research direction; editorial independence preserved (see above).</li>
+    </ul>
+  </div>
+</div>
+
 {% include section-header.html label="Pricing Sheet" accent="#b8902f" %}
 
 <div class="hl-prose-section">
@@ -137,5 +151,5 @@ hide: true
       <a href="https://www.linkedin.com/in/josephrharrison" target="_blank" rel="noopener noreferrer">linkedin.com/in/josephrharrison</a>
     </div>
   </div>
-  <p class="hl-sponsor-cta__note">Initial conversations are a 15-minute call to walk through the audience, review recent reports together, and identify the tier that best matches your goals. Custom packages and bundles available — reach out to discuss.</p>
+  <p class="hl-sponsor-cta__note">Reach out however works best for you — email, LinkedIn message, async chat, or a call. Happy to walk through the audience and recent reports, or just answer questions. Custom packages and bundles welcome.</p>
 </div>
