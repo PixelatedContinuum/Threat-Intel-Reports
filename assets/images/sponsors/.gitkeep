@@ -1,0 +1,11 @@
+# Sponsor logos go in this directory.
+#
+# File naming: use the sponsor's `id` from _data/sponsors.yml.
+# Example: _data/sponsors.yml entry with `id: acme-security` looks for
+#          assets/images/sponsors/acme-security.png (or .svg).
+#
+# Format recommendations:
+#   - PNG with transparent background, OR SVG
+#   - Footer site-sponsor logos render at 28px tall (max-width auto)
+#   - Per-report banner logos render at 20px tall
+#   - Provide a logo at least 2x display size (56px tall PNG) for retina
