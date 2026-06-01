@@ -1,0 +1,25 @@
+{%- comment -%} Filter bar. Params: entries (filtered+sorted), tag_field (optional), placeholder.
+  Chips auto-built from tags appearing in >= 3 of the page's entries. {%- endcomment -%}
+{%- assign tagbag = "" -%}
+{%- for e in include.entries -%}
+  {%- assign etags = e.tags -%}
+  {%- if include.tag_field -%}{%- assign ov = e[include.tag_field] -%}{%- if ov -%}{%- assign etags = ov -%}{%- endif -%}{%- endif -%}
+  {%- assign joined = etags | join: "|" -%}
+  {%- assign tagbag = tagbag | append: "|" | append: joined -%}
+{%- endfor -%}
+{%- assign tagarr = tagbag | remove_first: "|" | split: "|" -%}
+{%- assign uniq = tagarr | uniq | sort -%}
+<div class="hl-filter" data-listing-filter>
+  <input class="hl-filter__search" type="text" placeholder="{{ include.placeholder | default: 'Search by name…' }}" aria-label="Filter list" autocomplete="off">
+  <div class="hl-filter__chips">
+    <button type="button" class="hl-chip-btn is-on" data-tag="">All</button>
+    {%- for u in uniq -%}
+      {%- assign cnt = 0 -%}
+      {%- for t in tagarr -%}{%- if t == u -%}{%- assign cnt = cnt | plus: 1 -%}{%- endif -%}{%- endfor -%}
+      {%- if u != "" and cnt >= 3 -%}<button type="button" class="hl-chip-btn" data-tag="{{ u | downcase }}">{{ u }}</button>{%- endif -%}
+    {%- endfor -%}
+  </div>
+  <div class="hl-filter__count" data-filter-count></div>
+  <div class="hl-filter__empty" data-filter-empty hidden>No items match that filter. <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
+</div>
+<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}"></script>
