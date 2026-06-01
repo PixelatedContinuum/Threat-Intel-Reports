@@ -11,54 +11,14 @@ position: 4
   <div class="hl-page-header__desc">Structured feeds ready for ingestion into your SIEM, EDR, or CTI platform. Licensed under <strong>CC BY-NC 4.0</strong>.</div>
 </div>
 
-{% include section-header.html label="Recent" accent="#f87171" %}
+{% assign ioc_entries = site.data.catalog.entries | where_exp: "e", "e.ioc_url" | sort: "date" | reverse %}
 
-<div class="hl-grid">
-{% include report-card.html title="CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49) — IOC Feed" date="May 2026" severity="high" tags="CVE Exploit,Phishing,Cred Theft,Open Dir" url="/ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json" %}
-{% include report-card.html title="BellaMain Turkish PhaaS (79.137.192.3) — IOC Feed" date="May 2026" severity="high" tags="PhaaS,Phishing,Telegram,Open Dir" url="/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json" %}
-{% include report-card.html title="Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens) — IOC Feed" date="May 2026" severity="high" tags="Phishing,Fraud,VPN Abuse,Cred Theft" url="/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json" %}
-{% include report-card.html title="Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito) — IOC Feed" date="May 2026" severity="critical" tags="MaaS,Stealer,Multi-Family,Open Dir" url="/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json" %}
-</div>
+{% include listing-filter.html entries=ioc_entries tag_field="ioc_tags" placeholder="Search IOC feeds by name…" %}
 
-{% include section-header.html label="All Feeds" accent="#444444" %}
-
-<div class="hl-row-list">
-{% include report-row.html title="HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign — IOC Feed" date="May 2026" severity="high" tags="Loader,RAT,MaaS,Open Dir" url="/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json" %}
-{% include report-row.html title="AdaptixC2 Open Directory Exposure (45.130.148.125) — IOC Feed" date="Apr 2026" severity="high" tags="C2,Toolkit,Open Dir" url="/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json" %}
-{% include report-row.html title="Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13) — IOC Feed" date="Apr 2026" severity="high" tags="Ransomware,Loader,Open Dir" url="/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json" %}
-{% include report-row.html title="ShinyHunters Data Leak Site (91.215.85.22) — IOC Feed" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,Threat" url="/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json" %}
-{% include report-row.html title="OpenStrike Expanded Toolkit (172.105.0.126) — IOC Feed" date="Apr 2026" severity="high" tags="Toolkit,C2,Injection" url="/ioc-feeds/new-files-found-20260408-iocs.json" %}
-{% include report-row.html title="OpenStrike Beacon Toolkit (172.105.0.126) — IOC Feed" date="Apr 2026" severity="high" tags="Toolkit,C2,Open Dir" url="/ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json" %}
-{% include report-row.html title="Shadow RAT & XWorm Open Directory Campaign — IOC Feed" date="Apr 2026" severity="high" tags="RAT,MaaS,C2" url="/ioc-feeds/shadow-xworm-opendirectory-iocs.json" %}
-{% include report-row.html title="Open Directory at 193.56.255.154 — XiebroC2 and Covenant C2 IOC Feed" date="Apr 2026" severity="high" tags="C2,Multi-Family,Open Dir" url="/ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json" %}
-{% include report-row.html title="ZeroTrace Multi-Family MaaS Operation — IOC Feed" date="Mar 2026" severity="high" tags="MaaS,Multi-Family,C2" url="/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json" %}
-{% include report-row.html title="Sliver C2 / ScareCrow Loader Open Directory — IOC Feed" date="Mar 2026" severity="med" tags="C2,Loader,Go" url="/ioc-feeds/sliver-open-directory-iocs.json" %}
-{% include report-row.html title="Webserver Compromise Kit 91.236.230.250 — IOC Feed" date="Feb 2026" severity="high" tags="Toolkit,Priv Esc,RCE" url="/ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json" %}
-{% include report-row.html title="Remcos RAT OpenDirectory Campaign — IOC Feed" date="Feb 2026" severity="critical" tags="RAT,Cred Theft" url="/ioc-feeds/remcos-opendirectory-campaign.json" %}
-{% include report-row.html title="NsMiner Cryptojacker — IOC Feed" date="Feb 2026" severity="high" tags="Cryptominer,Dropper" url="/ioc-feeds/nsminer-cryptojacker.json" %}
-{% include report-row.html title="Arsenal-237 New Files: full_test_enc.exe — IOC Feed" date="Jan 2026" severity="critical" tags="Ransomware,Rust" url="/ioc-feeds/arsenal-237-full_test_enc-exe.json" %}
-{% include report-row.html title="Arsenal-237 New Files: new_enc.exe — IOC Feed" date="Jan 2026" severity="critical" tags="Ransomware,Rust" url="/ioc-feeds/arsenal-237-new_enc-exe.json" %}
-{% include report-row.html title="Arsenal-237 New Files: dec_fixed.exe — IOC Feed" date="Jan 2026" severity="critical" tags="Ransomware,Rust" url="/ioc-feeds/arsenal-237-dec_fixed-exe.json" %}
-{% include report-row.html title="Arsenal-237 New Files: enc_c2.exe — IOC Feed" date="Jan 2026" severity="critical" tags="Ransomware,C2" url="/ioc-feeds/arsenal-237-enc_c2-exe.json" %}
-{% include report-row.html title="Arsenal-237 New Files: chromelevator.exe — IOC Feed" date="Jan 2026" severity="critical" tags="Cred Theft,.NET" url="/ioc-feeds/arsenal-237-chromelevator-exe.json" %}
-{% include report-row.html title="Arsenal-237 New Files: nethost.dll — IOC Feed" date="Jan 2026" severity="critical" tags="DLL Hijack,Persistence" url="/ioc-feeds/arsenal-237-nethost-dll.json" %}
-{% include report-row.html title="Arsenal-237 New Files: rootkit.dll — IOC Feed" date="Jan 2026" severity="critical" tags="Rootkit,Evasion" url="/ioc-feeds/arsenal-237-rootkit-dll.json" %}
-{% include report-row.html title="Arsenal-237 New Files: BdApiUtil64.sys — IOC Feed" date="Jan 2026" severity="critical" tags="BYOVD,Priv Esc" url="/ioc-feeds/arsenal-237-BdApiUtil64-sys.json" %}
-{% include report-row.html title="Arsenal-237 New Files: lpe.exe — IOC Feed" date="Jan 2026" severity="critical" tags="Priv Esc" url="/ioc-feeds/arsenal-237-lpe-exe.json" %}
-{% include report-row.html title="Arsenal-237 New Files: killer_crowdstrike.dll — IOC Feed" date="Jan 2026" severity="critical" tags="Evasion,BYOVD" url="/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json" %}
-{% include report-row.html title="Arsenal-237 New Files: killer.dll — IOC Feed" date="Jan 2026" severity="critical" tags="BYOVD,Evasion" url="/ioc-feeds/arsenal-237-killer-dll.json" %}
-{% include report-row.html title="Arsenal-237: enc/dec Ransomware Family — IOC Feed" date="Jan 2026" severity="critical" tags="Ransomware,Rust" url="/ioc-feeds/enc-dec-ransomware-family.json" %}
-{% include report-row.html title="Arsenal-237: uac_test.exe — IOC Feed" date="Jan 2026" severity="med" tags="Priv Esc,Evasion" url="/ioc-feeds/uac-test-exe.json" %}
-{% include report-row.html title="Arsenal-237: FleetAgentFUD.exe — IOC Feed" date="Jan 2026" severity="med" tags="Dropper,Evasion" url="/ioc-feeds/fleetagentfud-exe.json" %}
-{% include report-row.html title="Arsenal-237: FleetAgentAdvanced.exe — IOC Feed" date="Jan 2026" severity="med" tags="Dropper,Persistence" url="/ioc-feeds/fleetagentadvanced-exe.json" %}
-{% include report-row.html title="Arsenal-237: agent_xworm_v2.exe — IOC Feed" date="Jan 2026" severity="med" tags="RAT,C2" url="/ioc-feeds/agent-xworm-v2-exe.json" %}
-{% include report-row.html title="Arsenal-237: agent_xworm.exe — IOC Feed" date="Jan 2026" severity="med" tags="RAT,C2" url="/ioc-feeds/agent-xworm-exe.json" %}
-{% include report-row.html title="Arsenal-237: agent.exe (PoetRAT) — IOC Feed" date="Jan 2026" severity="med" tags="RAT,C2" url="/ioc-feeds/agent-exe.json" %}
-{% include report-row.html title="Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm — IOC Feed" date="Dec 2025" severity="high" tags="RAT,.NET" url="/ioc-feeds/dual-rat-analysis.json" %}
-{% include report-row.html title="PULSAR RAT (server.exe) — IOC Feed" date="Dec 2025" severity="critical" tags="RAT,Cred Theft" url="/ioc-feeds/PULSAR-RAT.json" %}
-{% include report-row.html title="Hybrid Loader/Stealer Ecosystem Masquerading as Sogou — IOC Feed" date="Nov 2025" severity="med" tags="Loader,Stealer" url="/ioc-feeds/Hybrid-Loader-Stealer-Sogou.json" %}
-{% include report-row.html title="Houselet.exe — IOC Feed" date="Nov 2025" severity="med" tags="Loader,Stealer,Go" url="/ioc-feeds/malware-analysis-houselet.json" %}
-{% include report-row.html title="AdvancedRouterScanner — IOC Feed" date="Oct 2025" severity="med" tags="Scanner,Exploitation" url="/ioc-feeds/AdvancedRouterScanner.json" %}
-{% include report-row.html title="From Webshells to The Cloud — IOC Feed" date="Oct 2025" severity="high" tags="Webshell,Exfil" url="/ioc-feeds/webshells-to-the-cloud.json" %}
-{% include report-row.html title="QuasarRAT + XWorm + PowerShell Loader — IOC Feed" date="Oct 2025" severity="med" tags="RAT,Loader" url="/ioc-feeds/quasar-xworm-powershell.json" %}
+<div class="hl-grid" data-filter-grid>
+{% for e in ioc_entries %}
+  {% if e.ioc_title %}{% assign ititle = e.ioc_title %}{% else %}{% assign ititle = e.title | append: " — IOC Feed" %}{% endif %}
+  {% assign itags = e.ioc_tags | default: e.tags %}
+  {% include catalog-card.html url=e.ioc_url title=ititle date=e.date severity=e.severity tags=itags %}
+{% endfor %}
 </div>
