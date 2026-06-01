@@ -5,40 +5,18 @@ permalink: /reports/
 position: 2
 ---
 
-{% include section-header.html label="Recent Reports" accent="#ff4444" %}
-
-<div class="hl-grid">
-{% include report-card.html title="CVE-2026-41940 cPanel Harvester Toolkit — 216.126.227.49" date="May 2026" severity="high" tags="CVE Exploit,Cred Theft,Phishing,Open Dir" url="/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/" %}
-{% include report-card.html title="BellaMain Turkish PhaaS Panel — Open Directory 79.137.192.3" date="May 2026" severity="high" tags="PhaaS,Phishing,Cred Theft,Open Dir" url="/reports/bellamain-turkish-phaas-79-137-192-3-20260516/" %}
-{% include report-card.html title="Inkognito VPN/Phishing Operator — INK VPN + INK Lens 467+ Subdomain Library" date="May 2026" severity="high" tags="Phishing,Fraud,VPN Abuse,Cred Theft" url="/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/" %}
-{% include report-card.html title="Rhadamanthys MaaS Customer Deep-Dive — Open Directory 79.137.192.3" date="May 2026" severity="critical" tags="MaaS,Stealer,Loader,Open Dir" url="/reports/opendirectory-79-137-192-3-20260515/" %}
-{% include report-card.html title="HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign" date="May 2026" severity="high" tags="Loader,RAT,MaaS,Open Dir" url="/reports/opendirectory-62-60-237-100-20260506/" %}
-{% include report-card.html title="AdaptixC2 Open Directory Exposure — 45.130.148.125 Operator Toolkit" date="Apr 2026" severity="high" tags="C2,Toolkit,Open Dir,Multi-Family" url="/reports/opendirectory-45-130-148-125-20260430/" %}
+<div class="hl-page-header" style="border-left-color: #58a6ff;">
+  <div class="hl-page-header__label" style="color: #58a6ff;">Reports</div>
+  <div class="hl-page-header__title">Threat Intelligence Reports</div>
+  <div class="hl-page-header__desc">Original malware analysis and reverse engineering — each report ships with detection rules and machine-readable indicators. Filter by tag or search by name.</div>
 </div>
 
-{% include section-header.html label="All Reports" accent="#444444" %}
+{% assign report_entries = site.data.catalog.entries | where_exp: "e", "e.report_url" | sort: "date" | reverse %}
 
-<div class="hl-row-list">
-{% include report-row.html title="Chaos Ransomware (TorBrowserTor) Multi-Stage Batch Loader — Open Directory 94.103.1.13" date="Apr 2026" severity="high" tags="Ransomware,Loader,Evasion,Open Dir" url="/reports/open-directory-94-103-1-13-20260423/" %}
-{% include report-row.html title="ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims, and Attribution" date="Apr 2026" severity="high" tags="Exfil,Cred Theft,Open Dir,Threat" url="/reports/shinyhunters-dls-91-215-85-22-20260417/" %}
-{% include report-row.html title="OpenStrike Expanded Toolkit — 106 New Files, Complete CS Arsenal Exposed" date="Apr 2026" severity="high" tags="Toolkit,C2,Injection,Open Dir" url="/reports/new-files-found-20260408/" %}
-{% include report-row.html title="OpenStrike Beacon Toolkit — Open Directory 172.105.0.126" date="Apr 2026" severity="high" tags="Toolkit,C2,Open Dir,Evasion" url="/reports/open-directory-172-105-0-126-20260406/" %}
-{% include report-row.html title="Shadow RAT & XWorm Open Directory Campaign" date="Apr 2026" severity="high" tags="RAT,MaaS,C2,Multi-Family" url="/reports/shadow-xworm-opendirectory/" %}
-{% include report-row.html title="Open Directory at 193.56.255.154 — XiebroC2 v3.1 Go Implant and Covenant C2 Toolkit" date="Apr 2026" severity="high" tags="C2,Multi-Family,Open Dir,Injection" url="/reports/open-directory-193-56-255-154-xiebroc2/" %}
-{% include report-row.html title="ZeroTrace Multi-Family MaaS Operation — Open Directory Exposure at 74.0.42.25" date="Mar 2026" severity="high" tags="MaaS,C2,Open Dir,Multi-Family" url="/reports/zerotrace-74-0-42-25-20260316/" %}
-{% include report-row.html title="Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)" date="Mar 2026" severity="med" tags="C2,Loader,Go,Evasion" url="/reports/sliver-open-directory/" %}
-{% include report-row.html title="Webserver Compromise Kit 91.236.230.250" date="Feb 2026" severity="high" tags="Toolkit,Priv Esc,RCE,.NET" url="/reports/webserver-compromise-kit-91-236-230-250/" %}
-{% include report-row.html title="Remcos RAT OpenDirectory Campaign" date="Feb 2026" severity="critical" tags="RAT,Cred Theft,Persistence,Evasion" url="/reports/remcos-opendirectory/" %}
-{% include report-row.html title="NsMiner: Multi-Stage Cryptojacking Operation" date="Feb 2026" severity="high" tags="Cryptominer,Dropper,Persistence,Evasion" url="/reports/nsminer-cryptojacker/" %}
-{% include report-row.html title="Arsenal-237 New Files: Advanced Toolkit Analysis" date="Jan 2026" severity="critical" tags="Ransomware,BYOVD,Rootkit,Rust" url="/reports/arsenal-237-new-files/" %}
-{% include report-row.html title="Arsenal-237: Threat Actor R&D Repository Exposed" date="Jan 2026" severity="critical" tags="Toolkit,Ransomware,RAT,Rust,Go" url="/reports/109.230.231.37-Executive-Overview/" %}
-{% include report-row.html title="Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm — Technical Deep-Dive" date="Dec 2025" severity="high" tags="RAT,Injection,.NET,Cred Theft" url="/reports/dual-rat-analysis/" %}
-{% include report-row.html title="PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment" date="Dec 2025" severity="critical" tags="RAT,Cred Theft,Evasion,.NET" url="/reports/PULSAR-RAT/" %}
-{% include report-row.html title="Hybrid Loader/Stealer Ecosystem Masquerading as Sogou" date="Nov 2025" severity="med" tags="Loader,Stealer,Cred Theft,Evasion" url="/reports/Hybrid-Loader-Stealer-Sogou/" %}
-{% include report-row.html title="Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play" date="Nov 2025" severity="med" tags="Loader,Stealer,Go,Injection" url="/reports/malware-analysis-houselet/" %}
-{% include report-row.html title="AdvancedRouterScanner" date="Oct 2025" severity="med" tags="Scanner,Python,Exploitation" url="/reports/AdvancedRouterScanner/" %}
-{% include report-row.html title="From Webshells to The Cloud" date="Oct 2025" severity="high" tags="Webshell,PHP,Exfil,C2" url="/reports/webshells-to-the-cloud/" %}
-{% include report-row.html title="Quasar + XWorm + PowerShell Report" date="Oct 2025" severity="med" tags="RAT,Loader,PowerShell,Evasion" url="/reports/quasar-xworm-powershell/" %}
+{% include listing-filter.html entries=report_entries placeholder="Search reports by name…" %}
+
+<div class="hl-grid" data-filter-grid>
+{% for e in report_entries %}{% include catalog-card.html url=e.report_url title=e.title date=e.date severity=e.severity tags=e.tags %}{% endfor %}
 </div>
 
 *Reports are © Joseph. All rights reserved — free to read, but reuse requires written permission.*
