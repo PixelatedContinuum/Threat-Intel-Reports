@@ -6,9 +6,16 @@ permalink: /about-me/
 ---
 
 <div class="hl-page-header" style="border-left-color: #58a6ff;">
-  <div class="hl-page-header__label" style="color: #58a6ff;">About Me</div>
-  <div class="hl-page-header__title">Joseph Harrison · SOC Operations Lead & Threat Intelligence Researcher</div>
-  <div class="hl-page-header__desc">Background, credentials, and ways to connect.</div>
+  <div class="hl-page-header__label" style="color: #58a6ff;">About</div>
+  <div class="hl-page-header__title">Joseph Harrison</div>
+  <div class="hl-page-header__desc">SOC Operations Lead &amp; Threat Intelligence Researcher</div>
+</div>
+
+<div class="hl-creds-strip">
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f97316;"></span><strong>GCFA</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>M.S. Cybersecurity</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#4ade80;"></span><strong>Ernst &amp; Young</strong>&nbsp;·&nbsp;SOC Operations Lead</span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>U.S. Air Force</strong>&nbsp;·&nbsp;Veteran</span>
 </div>
 
 {% include section-header.html label="Who I Am" accent="#58a6ff" %}
@@ -27,33 +34,21 @@ permalink: /about-me/
 
 {% include section-header.html label="Experience" accent="#4ade80" %}
 
-<div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
-    Ernst &amp; Young (EY) — SOC Operations Lead
+<div class="hl-timeline">
+  <div class="hl-timeline__item">
+    <div class="hl-timeline__dot" style="background:#4ade80;"></div>
+    <div class="hl-timeline__role">SOC Operations Lead <span class="hl-timeline__org">· Ernst &amp; Young (EY)</span></div>
+    <div class="hl-timeline__desc">Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation across a large multi-client practice. Detection engineering work includes building custom SIEM and EDR detection logic and signatures tailored to client environments, and directing end-to-end IR investigations to determine scope and impact. Original research and detection content from The Hunter's Ledger feeds directly into hunting operations and client-facing intelligence work.</div>
   </div>
-  <div class="hl-prose-section__body">
-    Leading threat detection and response operations across large enterprise managed security accounts. Responsibilities span threat hunting, detection engineering, DFIR investigations, CTI collaboration, and AI/automation across a large multi-client practice. Detection engineering work includes building custom SIEM and EDR detection logic and signatures tailored to client environments, and directing end-to-end IR investigations to determine scope and impact. Original research and detection content from The Hunter's Ledger feeds directly into hunting operations and client-facing intelligence work.
+  <div class="hl-timeline__item">
+    <div class="hl-timeline__dot" style="background:#58a6ff;"></div>
+    <div class="hl-timeline__role">Systems Engineer II <span class="hl-timeline__org">· Raytheon Technologies</span></div>
+    <div class="hl-timeline__desc">Security modernization, system hardening, and compliance across IT and OT environments prior to moving into full-time cybersecurity operations.</div>
   </div>
-</div>
-
-<div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
-    Raytheon Technologies — Systems Engineer II
-  </div>
-  <div class="hl-prose-section__body">
-    Security modernization, system hardening, and compliance across IT and OT environments prior to moving into full-time cybersecurity operations.
-  </div>
-</div>
-
-<div class="hl-prose-section">
-  <div class="hl-prose-section__label">
-    <div class="hl-prose-section__bar" style="background:#4ade80;"></div>
-    United States Air Force — Systems Administrator
-  </div>
-  <div class="hl-prose-section__body">
-    Unit cybersecurity liaison responsible for triaging and escalating security incidents, administering access controls for classified operational systems, and enforcing least-privilege principles across a 100-person unit.
+  <div class="hl-timeline__item">
+    <div class="hl-timeline__dot" style="background:#58a6ff;"></div>
+    <div class="hl-timeline__role">Systems Administrator <span class="hl-timeline__org">· United States Air Force</span></div>
+    <div class="hl-timeline__desc">Unit cybersecurity liaison responsible for triaging and escalating security incidents, administering access controls for classified operational systems, and enforcing least-privilege principles across a 100-person unit.</div>
   </div>
 </div>
 

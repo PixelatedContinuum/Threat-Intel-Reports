@@ -1,0 +1,22 @@
+---
+layout: default
+permalink: /404.html
+title: Page Not Found
+---
+<div class="hl-404">
+  <div class="hl-404__code">404</div>
+  <div class="hl-404__title">No artifacts found at this path</div>
+  <div class="hl-404__desc">The page you're after moved, was never indexed, or the link has gone stale. Pick the hunt back up from one of these.</div>
+  <div class="hl-404__log"><span class="m">GET</span> <span id="hl-404-path">/</span> &nbsp;—&nbsp; <span class="s">404 NOT FOUND</span></div>
+  <div class="hl-404__actions">
+    <a class="hl-404__btn hl-404__btn--primary" href="{{ '/reports/' | relative_url }}">Browse Reports →</a>
+    <a class="hl-404__btn hl-404__btn--ghost" href="{{ '/' | relative_url }}">Home</a>
+    <a class="hl-404__btn hl-404__btn--ghost" href="{{ '/subscribe/' | relative_url }}">Subscribe</a>
+  </div>
+</div>
+<script>
+  (function () {
+    var el = document.getElementById('hl-404-path');
+    if (el) el.textContent = (location.pathname || '/') + (location.search || '');
+  })();
+</script>

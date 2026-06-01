@@ -2610,3 +2610,78 @@ button,
 .hl-catalog-card[data-sev="high"]     .hl-catalog-card__meta { color: #fb923c; }
 .hl-catalog-card[data-sev="med"]      .hl-catalog-card__meta { color: #facc15; }
 .hl-catalog-card[data-sev="low"]      .hl-catalog-card__meta { color: #60a5fa; }
+
+/* --- About: credentials strip (pills) ---------------------- */
+.hl-creds-strip { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 6px; }
+.hl-cred-pill {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 9px 15px;
+  border: 1px solid var(--hl-border-card);
+  border-radius: 9px;
+  background: var(--hl-bg-card);
+  font-size: 0.9em;
+  color: var(--hl-text-secondary);
+}
+.hl-cred-pill__dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.hl-cred-pill strong { color: var(--hl-text-primary); font-weight: 600; }
+
+/* --- About: experience timeline ---------------------------- */
+.hl-timeline { position: relative; margin: 8px 0 2px; padding-left: 24px; }
+.hl-timeline::before {
+  content: ''; position: absolute;
+  left: 6px; top: 7px; bottom: 9px;
+  width: 2px; background: var(--hl-border-card);
+}
+.hl-timeline__item { position: relative; padding: 0 0 20px; }
+.hl-timeline__item:last-child { padding-bottom: 0; }
+.hl-timeline__dot {
+  position: absolute; left: -24px; top: 4px;
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 3px solid var(--hl-bg-page); box-sizing: border-box;
+}
+.hl-timeline__role {
+  font-family: var(--hl-font-display);
+  font-weight: 600; color: var(--hl-text-primary); font-size: 1.02em;
+}
+.hl-timeline__org { color: var(--hl-text-muted); font-weight: 500; }
+.hl-timeline__desc {
+  margin-top: 6px; color: var(--hl-text-secondary);
+  font-size: 0.9em; line-height: 1.6;
+}
+
+/* --- Branded 404 page -------------------------------------- */
+.hl-404 { max-width: 680px; margin: 0 auto; padding: 64px 24px 80px; text-align: center; }
+.hl-404__code {
+  font-family: var(--hl-font-display); font-weight: 700;
+  font-size: clamp(5rem, 17vw, 9.5rem); line-height: 0.86; letter-spacing: -0.04em;
+  background: linear-gradient(180deg, #79c0ff 0%, #1f6feb 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hl-404__title {
+  font-family: var(--hl-font-display); font-size: 1.65em; font-weight: 600;
+  color: var(--hl-text-primary); margin: 18px 0 0; letter-spacing: -0.01em;
+}
+.hl-404__desc {
+  color: var(--hl-text-muted); font-size: 1.0em; line-height: 1.62;
+  margin: 14px auto 0; max-width: 500px;
+}
+.hl-404__log {
+  display: inline-block; margin: 28px 0 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.82em; color: var(--hl-text-muted);
+  background: #0a0a0a; border: 1px solid var(--hl-border-card);
+  border-radius: 7px; padding: 10px 15px;
+}
+.hl-404__log .m { color: #79c0ff; }
+.hl-404__log .s { color: var(--hl-accent-red); font-weight: 600; }
+.hl-404__actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 34px 0 0; }
+.hl-404__btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 11px 20px; border-radius: 9px;
+  font-size: 0.92em; font-weight: 600; text-decoration: none !important;
+  border: 1px solid transparent; transition: all 0.15s;
+}
+.hl-404__btn--primary { background: #1f6feb; color: #fff !important; }
+.hl-404__btn--primary:hover { background: #388bfd; }
+.hl-404__btn--ghost { background: var(--hl-bg-card); color: var(--hl-text-secondary) !important; border-color: var(--hl-border-card); }
+.hl-404__btn--ghost:hover { border-color: var(--hl-accent-blue); color: var(--hl-text-primary) !important; }
