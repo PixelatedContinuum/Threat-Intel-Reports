@@ -356,6 +356,7 @@ main.content {
 }
 
 .hl-post-header__title {
+  font-family: var(--hl-font-display);
   color: var(--hl-text-primary) !important;
   font-size: 1.5em !important;
   font-weight: 700;
@@ -771,6 +772,7 @@ main.content {
 
 /* --- Section header ---------------------------------------- */
 .hl-section-header {
+  font-family: var(--hl-font-display);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -809,6 +811,7 @@ main.content {
 }
 
 .hl-page-header__title {
+  font-family: var(--hl-font-display);
   color: var(--hl-text-primary) !important;
   font-size: 1.5em !important;
   font-weight: 700;
