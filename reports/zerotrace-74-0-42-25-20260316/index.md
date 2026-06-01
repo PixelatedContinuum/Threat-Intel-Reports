@@ -42,7 +42,7 @@ A Comprehensive, Evidence-Based Guide for Security Decision-Makers
 During routine threat hunting, an exposed criminal staging server was discovered left open and accessible to anyone on the internet — the operator's complete toolkit available for download without authentication. The server belongs to **ZeroTrace**, a named threat actor corroborated by multiple independent security vendors. The toolkit enables silent takeover of victim computers, mass credential theft using 9.1 million stolen username-password pairs, and ransomware deployment at the operator's discretion. The infrastructure has been running undetected for over 16 months and all services remain active as of the analysis date (2026-03-16).
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/opendir1.png" | relative_url }}" alt="Hunt.io open directory listing at 74.0.42.25 showing 4,750 files totalling 4GB">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/opendir1.png" | relative_url }}" alt="Hunt.io open directory listing at 74.0.42.25 showing 4,750 files totalling 4GB">
   <figcaption><em>Figure 1: <a href="https://hunt.io/">Hunt.io</a> view of the open directory at 74.0.42.25 — 4,750 files totalling 4GB hosted on Layer7 Technologies (AS40662). The indexed file tree exposes the operator's complete staging environment: malware toolkit, credential databases, and operator tooling left accessible without authentication.</em></figcaption>
 </figure>
 
@@ -301,7 +301,7 @@ Full SHA256 hashes for all 34 samples are available in the [IOC feed]({{ "/ioc-f
 **Why This Matters:** The automated ransomware plugin is not a standard feature of commodity XWorm V5.6 builds — it is a premium-tier add-on absent from many cracked distributions. Its presence here confirms the operator obtained the full-capability builder, placing this actor above the baseline skill threshold of typical XWorm deployments. The module requires no additional staging: it is already embedded and can be pushed from the operator's panel to any active victim with a single click, meaning even a low-value initial infection can become a ransomware incident at any time the operator chooses. The AES key seed (`5tK099W0Z6AMZVxQ`) is the same string as the mutex, meaning the mutex alone in memory is sufficient evidence to identify the key and decrypt intercepted C2 traffic.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/ransomware_capability.png" | relative_url }}" alt="Decompiled XWorm V5.6 ENC plugin handler showing Messages.RS state machine">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/ransomware_capability.png" | relative_url }}" alt="Decompiled XWorm V5.6 ENC plugin handler showing Messages.RS state machine">
   <figcaption><em>Figure 2: Decompiled ENC plugin handler from XWorm V5.6. The operator pushes the 103KB ransomware module to any active victim via a single panel command. The <code>Messages.RS</code> state machine (RS = 1 during encryption, RS = 2 when complete) prevents accidental double-encryption — confirming this is a deliberate, production-ready ransomware implementation embedded in the builder.</em></figcaption>
 </figure>
 
@@ -396,7 +396,7 @@ Stage 3: Faidowra.dll (PureRAT v4.1.9, .NET Reactor 6.x, 770KB)
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/extremedump.png" | relative_url }}" alt="ExtremeDumper output showing Zvafsyattl.exe and Faidowra.dll loaded in memory inside Aspdkzb-cleaned.exe">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/extremedump.png" | relative_url }}" alt="ExtremeDumper output showing Zvafsyattl.exe and Faidowra.dll loaded in memory inside Aspdkzb-cleaned.exe">
   <figcaption><em>Figure 3: A memory forensics tool (ExtremeDumper) attached to the running <code>Aspdkzb-cleaned.exe</code> (PID 7220) confirms all three stages of the loader chain operating simultaneously in memory — none written to disk at any point. <code>Zvafsyattl.exe</code> is identified at base address <code>0x0000000000000000</code> and <code>Faidowra.dll</code> appears at three separate load addresses (<code>0x572000</code>, <code>0x152FF0</code>, <code>0x42B050</code>). This is direct forensic evidence of the fileless chain: Aspdkzb decrypts and reflectively loads Zvafsyattl, which in turn loads multiple instances of Faidowra.dll entirely in managed memory.</em></figcaption>
 </figure>
 
@@ -435,7 +435,7 @@ The encoding stack: inline Base64 → `Convert.FromBase64String()` → GZip deco
 | Protocol Framing          | 4-byte little-endian length prefix on all messages after TLS    |
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/extractedC2_Ports.png" | relative_url }}" alt="Hex editor showing 185.49.126.140 in config_raw.bin alongside PowerShell ISE decoding ports 56001-56003">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/extractedC2_Ports.png" | relative_url }}" alt="Hex editor showing 185.49.126.140 in config_raw.bin alongside PowerShell ISE decoding ports 56001-56003">
   <figcaption><em>Figure 4: Left — hex editor view of <code>config_raw.bin</code> (the GZip-decompressed ProtoBuf config blob from <code>Faidowra.dll</code>) showing <code>185.49.126.140</code> as plaintext in the raw bytes. Right — PowerShell ISE decoding the varint-encoded port values in the bytes immediately following the IP string. The script output confirms three sequential C2 ports: <code>56001</code>, <code>56002</code>, and <code>56003</code> — the complete C2 connection matrix for this build, extracted directly from the binary without any decryption key.</em></figcaption>
 </figure>
 
@@ -482,7 +482,7 @@ BoxedApp SDK is a commercial virtual filesystem toolkit that bundles multiple ex
 **Why This Matters:** HVNC is among the most dangerous capabilities in this toolkit from a financial loss perspective. Standard screen sharing and remote monitoring tools are visible to the user. HVNC bypasses this entirely. The operator opens a Chrome browser session in the hidden desktop, logs into financial services, and transfers funds — all while the victim continues to work normally on their visible desktop. Most endpoint detection solutions do not flag this activity because the hidden desktop operates as a legitimate Windows component.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/xh_exe.png" | relative_url }}" alt="Decompiled xh.exe PureHVNC stub showing hardcoded C2 IP 185.49.126.140 and HVNC.StartHVNC call">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/xh_exe.png" | relative_url }}" alt="Decompiled xh.exe PureHVNC stub showing hardcoded C2 IP 185.49.126.140 and HVNC.StartHVNC call">
   <figcaption><em>Figure 5: Decompiled <code>xh.exe</code> (the PureHVNC victim stub) with the hardcoded C2 address <code>185.49.126.140</code> highlighted. The same IP appears hardcoded across three separate binaries from different malware families — XWorm (port 5000), PureRAT (ports 56001–56003), and PureHVNC (port 8000) — directly confirming a single operator controls all three families through one consolidated C2 server. The <code>HVNC.StartHVNC()</code> call initiates the hidden desktop session using those hardcoded parameters.</em></figcaption>
 </figure>
 
@@ -547,24 +547,24 @@ Delta framing transmits only changed screen regions. Input relay accepts `0x69` 
 - **Operator real name recovered:** `Stefan Yosifov` — recovered from `pdf:Author` XMP metadata embedded in `Main.dfm` source file (Canva account `UAGcXl67Or4`, document `DAGlzS2GcRU`, design title `Raven Botnet - 1`)
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/raven_loader_caption.png" | relative_url }}" alt="Main.dfm source from vicTest.exe showing Caption = 'Raven Loader' at line 7">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/raven_loader_caption.png" | relative_url }}" alt="Main.dfm source from vicTest.exe showing Caption = 'Raven Loader' at line 7">
   <figcaption><em>Figure 6: <code>Main.dfm</code> source from <code>vicTest.exe</code> — the accidentally uploaded Raven RAT operator panel. The window title <code>'Raven Loader'</code> at line 7 confirms this is the operator's own C2 control interface, not a victim stub.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/operator_handle.png" | relative_url }}" alt="Main.dfm source showing Caption = 'Welcome Back Steffz!' hardcoded in the C2 panel">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/operator_handle.png" | relative_url }}" alt="Main.dfm source showing Caption = 'Welcome Back Steffz!' hardcoded in the C2 panel">
   <figcaption><em>Figure 7: <code>Main.dfm</code> source confirming the operator's handle — <code>'Welcome Back Steffz!'</code> hardcoded as a UI label in the C2 panel. This is DEFINITE-confidence identity evidence: the string is embedded in the panel's own source code, not extracted from a log or metadata field.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/Zerotrace.png" | relative_url }}" alt="Main.dfm source showing Caption = 'Author ~ ZeroTrace / NeverTrace' in the About panel">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/Zerotrace.png" | relative_url }}" alt="Main.dfm source showing Caption = 'Author ~ ZeroTrace / NeverTrace' in the About panel">
   <figcaption><em>Figure 8: <code>Main.dfm</code> source showing the About panel caption <code>'Author ~ ZeroTrace / NeverTrace'</code> — the threat actor's self-identified brand embedded directly in the Raven RAT operator panel source code. This corroborates the ZeroTrace attribution recovered independently by CYFIRMA.</em></figcaption>
 </figure>
 
 > **Important caveat on "Stefan Yosifov":** This name is the value of the `pdf:Author` XMP field in the Canva account that created the Raven RAT logo. Delphi strips this metadata during compilation — it appears in the source file only, not in the compiled binary. This represents a lead for further investigation, not confirmed attribution to a real person. Confidence for this as a real-world identity: LOW — single source, no independent corroboration found in accessible OSINT.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/author.png" | relative_url }}" alt="XMP metadata extraction output showing pdf:Author Stefan Yosifov and Canva document details">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/author.png" | relative_url }}" alt="XMP metadata extraction output showing pdf:Author Stefan Yosifov and Canva document details">
   <figcaption><em>Figure 9: XMP metadata extracted from the PNG logo embedded in <code>Main.dfm</code>. The <code>pdf:Author</code> field value <code>Stefan Yosifov</code>, Canva document <code>DAGlzS2GcRU</code>, and user account <code>UAGcXl67Or4</code> are confirmed artifact values. The document title <code>'Raven Botnet - 1'</code> confirms this logo was created specifically for the Raven RAT project. Real-world identity confidence: LOW — single source, no independent corroboration.</em></figcaption>
 </figure>
 
@@ -835,7 +835,7 @@ CYFIRMA (Tier 2) independently documented the ZeroTrace Team in 2025, confirming
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-74.0.42.25/telegram_handle_AI.png" | relative_url }}" alt="Raven RAT README.md showing @ZeroTraceDevOfficial Telegram link at line 10">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/telegram_handle_AI.png" | relative_url }}" alt="Raven RAT README.md showing @ZeroTraceDevOfficial Telegram link at line 10">
   <figcaption><em>Figure 10: <code>README.md</code> recovered from the Raven RAT source directory on the open directory server. The <code>@ZeroTraceDevOfficial</code> Telegram link at line 10 is the primary digital identity anchor for ZeroTrace — independently corroborated by CYFIRMA. The feature list confirms all capabilities documented through binary analysis: HVNC, keylogger, process manager, and cryptocurrency wallet theft.</em></figcaption>
 </figure>
 

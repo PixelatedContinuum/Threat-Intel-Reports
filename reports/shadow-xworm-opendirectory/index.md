@@ -199,7 +199,7 @@ This investigation uncovered a financially-motivated attacker who has built a fu
 ### Sample Inventory
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/open-directory-listing.png" | relative_url }}" alt="Attack Capture File Manager view of the open directory at epgoldsecurity.com, showing four payload files: Shadow.Common.dll, ShadoClient.exe, ShadowClient.exe, and XWormClient2.exe — 4 total files, 4.29 MB, hosted at https://epgoldsecurity.com">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/open-directory-listing.png" | relative_url }}" alt="Attack Capture File Manager view of the open directory at epgoldsecurity.com, showing four payload files: Shadow.Common.dll, ShadoClient.exe, ShadowClient.exe, and XWormClient2.exe — 4 total files, 4.29 MB, hosted at https://epgoldsecurity.com">
   <figcaption><em>Figure 1: The exposed open directory at epgoldsecurity.com as captured during investigation — four malware files publicly accessible to any visitor, including both a staging and production Shadow RAT build plus two XWorm builder outputs.</em></figcaption>
 </figure>
 
@@ -324,7 +324,7 @@ Many of the key findings in this report — C2 addresses, shared infrastructure,
 **Shadow RAT config decryption:** The encrypted configuration was extracted from a binary resource embedded in the .NET assembly. A custom Python decryptor was written to replicate the malware's PBKDF2 key derivation (50,000 iterations with a static 32-byte salt extracted from `Shadow.Common.dll`) and AES-256-CBC decryption. The wire format for each config field — `[HMAC-SHA256 (32 bytes)][IV (16 bytes)][AES-256-CBC ciphertext]` — was reverse-engineered from decompiled code (see Section 5.3 for full technical detail). This process was applied independently to both builds (`ShadoClient.exe` and `ShadowClient.exe`), producing a field-by-field comparison that confirmed identical C2 infrastructure and divergent feature flags between the staging and production variants.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-decrypted-config.png" | relative_url }}" alt="Terminal output of the Shadow RAT config decryptor showing derived AES key, PBKDF2 parameters, and decrypted config values including C2 host 151.245.112.70 port 8990, mutex GUID, install path, and version 2.6.4.0">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-decrypted-config.png" | relative_url }}" alt="Terminal output of the Shadow RAT config decryptor showing derived AES key, PBKDF2 parameters, and decrypted config values including C2 host 151.245.112.70 port 8990, mutex GUID, install path, and version 2.6.4.0">
   <figcaption><em>Figure 2: Shadow RAT config decryptor terminal output — all four builds independently resolved to the same C2 address (151.245.112.70:8990), establishing single-operator control of both RAT families.</em></figcaption>
 </figure>
 
@@ -347,7 +347,7 @@ The production build enables 8 boolean feature flags (obfuscated names: `bool_2`
 `XWormClient.exe` and `XWormClient2.exe` are both XWorm builder outputs targeting the same C2 (151.245.112.70:7007) but with different builder-generated AES encryption keys (`PdqPY2fw6ffCVLQ8` vs. `ZdoNsjYfT6begqDl`). This indicates the operator ran the XWorm builder twice — a standard operational pattern, likely to have differently-keyed variants for different target batches or to reduce signature correlation between builds.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-config-comparison.png" | relative_url }}" alt="XWorm config comparison terminal output showing XWormClient.exe vs XWormClient2.exe side-by-side — both share identical C2 host 151.245.112.70, port 7007, group tag Xwormmm, and USB spread filename, with only the AES key and mutex differing between builds">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-config-comparison.png" | relative_url }}" alt="XWorm config comparison terminal output showing XWormClient.exe vs XWormClient2.exe side-by-side — both share identical C2 host 151.245.112.70, port 7007, group tag Xwormmm, and USB spread filename, with only the AES key and mutex differing between builds">
   <figcaption><em>Figure 3: XWorm config comparison — both builder outputs resolve to the same C2 address (151.245.112.70:7007). The only differences are the builder-generated AES key and mutex, confirming they are two deployments of the same campaign.</em></figcaption>
 </figure>
 
@@ -391,7 +391,7 @@ Shadow RAT executes a dual-bypass chain as the first three actions in its `Main(
 3. `UbNsyes1TwqggpSnHERugShqd7TR()` — executes the ETW bypass
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-main-entry-calls.png" | relative_url }}" alt="Decompiled Shadow RAT Main() entry point showing the three sequential startup calls: smethod_0 for HVNC desktop handle capture, smethod_1 for AMSI bypass, and UbNsyes1TwqggpSnHERugShqd7TR for ETW bypass — all three execute before any RAT functionality initializes">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-main-entry-calls.png" | relative_url }}" alt="Decompiled Shadow RAT Main() entry point showing the three sequential startup calls: smethod_0 for HVNC desktop handle capture, smethod_1 for AMSI bypass, and UbNsyes1TwqggpSnHERugShqd7TR for ETW bypass — all three execute before any RAT functionality initializes">
   <figcaption><em>Figure 4: Shadow RAT Main() entry point — the three bypass calls execute before any RAT functionality loads. The obfuscated method names obscure the function's purpose; only decompilation reveals the AMSI and ETW bypass sequence.</em></figcaption>
 </figure>
 
@@ -409,7 +409,7 @@ FF E4             jmp rsp                ; return to caller
 After this patch, any call to `AmsiScanBuffer` from the Shadow RAT process returns a permanent "invalid argument" result. Security software that relies on AMSI to scan .NET assemblies loaded into memory will receive this false result and pass the malicious code unchecked.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-amsi-bypass.png" | relative_url }}" alt="Decompiled Shadow RAT AMSI bypass method showing VirtualProtect call to make AmsiScanBuffer writable, followed by Marshal.Copy of the 15-byte shellcode patch that causes the function to return E_INVALIDARG on every call">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-amsi-bypass.png" | relative_url }}" alt="Decompiled Shadow RAT AMSI bypass method showing VirtualProtect call to make AmsiScanBuffer writable, followed by Marshal.Copy of the 15-byte shellcode patch that causes the function to return E_INVALIDARG on every call">
   <figcaption><em>Figure 5: Shadow RAT AMSI bypass — decompiled code showing the VirtualProtect + shellcode overwrite sequence that permanently disables AmsiScanBuffer in the process.</em></figcaption>
 </figure>
 
@@ -420,7 +420,7 @@ After this patch, any call to `AmsiScanBuffer` from the Shadow RAT process retur
 - `"**E****t*wEv*e***n*******t**Wr*i*****t**e"` → `EtwEventWrite`
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-string-obfuscation.png" | relative_url }}" alt="Decompiled Shadow RAT config class showing obfuscated private static string field declarations — the AES master key, PBKDF2 iteration count, and other config strings are embedded with asterisk padding and deobfuscated at runtime via Replace('*', '')">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-string-obfuscation.png" | relative_url }}" alt="Decompiled Shadow RAT config class showing obfuscated private static string field declarations — the AES master key, PBKDF2 iteration count, and other config strings are embedded with asterisk padding and deobfuscated at runtime via Replace('*', '')">
   <figcaption><em>Figure 6: Shadow RAT obfuscated string field declarations — the asterisk-padding technique renders API name strings invisible to static YARA rules searching for literal function names.</em></figcaption>
 </figure>
 
@@ -455,7 +455,7 @@ The master key used as PBKDF2 input is: `97DC71A09A26EAF63C56B6FF2BA582AA3A994D6
 Wire format for each config field: `[HMAC-SHA256 (32 bytes)][IV (16 bytes)][AES-256-CBC ciphertext]`
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-encrypted-fields.png" | relative_url }}" alt="Decompiled Shadow RAT config class showing encrypted static string fields — each field stores a long Base64-encoded ciphertext blob, with the AES key and PBKDF2 salt extracted from Shadow.Common.dll required to decrypt them">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-encrypted-fields.png" | relative_url }}" alt="Decompiled Shadow RAT config class showing encrypted static string fields — each field stores a long Base64-encoded ciphertext blob, with the AES key and PBKDF2 salt extracted from Shadow.Common.dll required to decrypt them">
   <figcaption><em>Figure 7: Shadow RAT config class — each field stores AES-256-CBC ciphertext that is indistinguishable from random data without the PBKDF2-derived key recovered from Shadow.Common.dll.</em></figcaption>
 </figure>
 
@@ -468,7 +468,7 @@ The HMAC is verified before decryption (encrypt-then-MAC ordering — cryptograp
 3. The anti-tampering is inherited from Quasar RAT's design but remains effective against standard config manipulation approaches
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-decryption-routine.png" | relative_url }}" alt="Decompiled Shadow RAT config decryption routine showing AES-256-CBC decryption using PBKDF2-derived key, with each config field decrypted sequentially and the plaintext values assigned to the static string fields in the config class">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-decryption-routine.png" | relative_url }}" alt="Decompiled Shadow RAT config decryption routine showing AES-256-CBC decryption using PBKDF2-derived key, with each config field decrypted sequentially and the plaintext values assigned to the static string fields in the config class">
   <figcaption><em>Figure 8: Shadow RAT config decryption routine — the AES key derived from the PBKDF2 process in Shadow.Common.dll is applied to each encrypted field in sequence, recovering plaintext C2 address, mutex, and feature flag values.</em></figcaption>
 </figure>
 
@@ -530,7 +530,7 @@ Shadow RAT connects to `151.245.112.70:8990` over TLS 1.2 (TCP). The TLS layer p
 - 37 distinct message handler registrations via `IMessageProcessor` interface
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-message-handlers.png" | relative_url }}" alt="Decompiled Shadow RAT message handler registration loop showing 37 IMessageProcessor Add calls, each registering a distinct handler class that processes a specific operator command — the full enumeration of Shadow RAT's post-exploitation capability surface">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-message-handlers.png" | relative_url }}" alt="Decompiled Shadow RAT message handler registration loop showing 37 IMessageProcessor Add calls, each registering a distinct handler class that processes a specific operator command — the full enumeration of Shadow RAT's post-exploitation capability surface">
   <figcaption><em>Figure 9: Shadow RAT message handler registrations — 37 distinct command handlers cover the full capability surface including remote shell, HVNC, credential theft, persistence management, and surveillance functions.</em></figcaption>
 </figure>
 
@@ -549,12 +549,12 @@ Config fields `NgrokPath` and `NgrokToken` indicate Ngrok tunneling capability, 
 ScreenConnect (ConnectWise) was deployed to the C2 server at 151.245.112.70 on or around March 1, 2026, replacing the Apache-based open directory server (the server now runs IIS/10.0). Port 8040 serves as the ScreenConnect relay port. ScreenConnect is a legitimate remote management tool; its deployment on the C2 server indicates the operator may be using it to manage victim machines through a "legitimate" remote access channel alongside the RAT, reducing the forensic visibility of their access.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-c2-setup.png" | relative_url }}" alt="Decompiled Shadow RAT C2 initialization method showing SetHandshakeAndExceptionMode, TcpClient instantiation connecting to the C2 host string, mutex check, and the Pastebin dead-drop URL resolver path that fires when the Pastebin config flag is enabled">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-c2-setup.png" | relative_url }}" alt="Decompiled Shadow RAT C2 initialization method showing SetHandshakeAndExceptionMode, TcpClient instantiation connecting to the C2 host string, mutex check, and the Pastebin dead-drop URL resolver path that fires when the Pastebin config flag is enabled">
   <figcaption><em>Figure 10: Shadow RAT C2 setup logic — the initialization method establishes the TLS connection to 151.245.112.70:8990, checks the Pastebin dead-drop resolver flag, and enforces the single-instance mutex before the RAT's command loop begins.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/screenconnect-page.jpg" | relative_url }}" alt="ScreenConnect welcome page at 151.245.112.70 showing 'No Available Sessions' — confirming ScreenConnect is deployed and running on the C2 server as of analysis date, with the login portal publicly accessible on port 80">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/screenconnect-page.jpg" | relative_url }}" alt="ScreenConnect welcome page at 151.245.112.70 showing 'No Available Sessions' — confirming ScreenConnect is deployed and running on the C2 server as of analysis date, with the login portal publicly accessible on port 80">
   <figcaption><em>Figure 11: ScreenConnect portal at 151.245.112.70 — deployed on or around March 1, 2026, replacing the open directory server. The public-facing portal provides the operator a legitimate RMM channel alongside the Shadow RAT and XWorm C2 infrastructure.</em></figcaption>
 </figure>
 
@@ -668,7 +668,7 @@ schtasks /create /f /sc minute /mo 1 /tn "XWormClient" /tr "'%AppData%\XWormClie
 This creates a scheduled task named `XWormClient` that executes every 60 seconds with HIGHEST privilege level. The 60-second interval means that even if the XWorm process is manually killed, it will restart within one minute without any user action.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-schtasks-persistence.png" | relative_url }}" alt="Decompiled XWorm scheduled task persistence code showing ProcessStartInfo instantiated with schtasks.exe, WindowStyle set to Hidden, and the /create /f /RL HIGHEST /sc minute /mo 1 arguments assembled via string concatenation with the obfuscated install filename">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-schtasks-persistence.png" | relative_url }}" alt="Decompiled XWorm scheduled task persistence code showing ProcessStartInfo instantiated with schtasks.exe, WindowStyle set to Hidden, and the /create /f /RL HIGHEST /sc minute /mo 1 arguments assembled via string concatenation with the obfuscated install filename">
   <figcaption><em>Figure 12: XWorm scheduled task persistence — the schtasks command runs hidden and creates a HIGHEST privilege task that re-launches XWorm every 60 seconds, ensuring the process restarts within one minute of being killed.</em></figcaption>
 </figure>
 
@@ -683,7 +683,7 @@ A `.lnk` shortcut file at `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Start
 **Remediation implication:** All three locations must be confirmed clean before considering XWorm remediated. The scheduled task is the most aggressive — if the registry key and startup shortcut are removed but the scheduled task is missed, XWorm will continue re-launching every 60 seconds.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-triple-persistence.png" | relative_url }}" alt="Decompiled XWorm persistence installation code showing all three mechanisms deployed in sequence: schtasks scheduled task creation, HKCU Run registry key write via Registry.SetValue, and startup folder LNK shortcut creation via WScript.Shell COM object">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-triple-persistence.png" | relative_url }}" alt="Decompiled XWorm persistence installation code showing all three mechanisms deployed in sequence: schtasks scheduled task creation, HKCU Run registry key write via Registry.SetValue, and startup folder LNK shortcut creation via WScript.Shell COM object">
   <figcaption><em>Figure 13: XWorm triple-redundant persistence — all three mechanisms install simultaneously. All three must be located and removed for a complete remediation; the 60-second scheduled task will reinstall the others if missed.</em></figcaption>
 </figure>
 
@@ -701,7 +701,7 @@ XWorm uses a non-standard key derivation process for config encryption:
 4. The result is used as the Rijndael-256-ECB (128-bit block, 256-bit key) cipher key with PKCS7 padding
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-rijndael-decrypt.png" | relative_url }}" alt="Decompiled XWorm Rijndael decryption method showing RijndaelManaged instantiation, MD5 hash computation for key derivation, Array.Copy operations implementing the overlapping 16+15 byte key construction, CipherMode.ECB assignment, and the final CryptoTransform decryption call">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-rijndael-decrypt.png" | relative_url }}" alt="Decompiled XWorm Rijndael decryption method showing RijndaelManaged instantiation, MD5 hash computation for key derivation, Array.Copy operations implementing the overlapping 16+15 byte key construction, CipherMode.ECB assignment, and the final CryptoTransform decryption call">
   <figcaption><em>Figure 14: XWorm Rijndael-ECB config decryption — the overlapping MD5 key construction is visible in the two Array.Copy calls at offsets 0 and 15, producing the distinctive 32-byte key pattern with a trailing null byte.</em></figcaption>
 </figure>
 
@@ -926,7 +926,7 @@ Sources: ANY.RUN 2025 Annual Threat Report (Tier 2); Cyble EvilCoder research (T
 **Confidence: HIGH (Microsoft Security Blog, Check Point Research, IRS Dirty Dozen 2026)**
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/shadow-xworm-opendirectory/tax-lure-directory.jpg" | relative_url }}" alt="DomainTools-captured index of the harrismanlieb.ink payload directory showing two files: 2026_Benefits_Enroll (9.6 MB, dated 2026-02-12) and Form 1040.msi (9.6 MB, dated 2026-02-12) — the tax-season lure filenames used to deliver the malware">
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/tax-lure-directory.jpg" | relative_url }}" alt="DomainTools-captured index of the harrismanlieb.ink payload directory showing two files: 2026_Benefits_Enroll (9.6 MB, dated 2026-02-12) and Form 1040.msi (9.6 MB, dated 2026-02-12) — the tax-season lure filenames used to deliver the malware">
   <figcaption><em>Figure 15: The harrismanlieb.ink payload directory as captured by DomainTools — the two tax-season lure filenames (Form 1040.msi and 2026_Benefits_Enroll) were hosted from the day the domain was registered, confirming immediate weaponization.</em></figcaption>
 </figure>
 

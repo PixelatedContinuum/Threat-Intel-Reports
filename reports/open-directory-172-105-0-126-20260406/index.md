@@ -235,12 +235,12 @@ Extracted configuration via the config extraction tool:
 **Trimmed config:** With only 10 config fields versus the standard 25–40+, the DLL lacks many of the encoding patterns that CS-specific detection tools scan for. This reduces — at MODERATE confidence — the beacon's detectable surface area against config-pattern-matching detection strategies.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-extraction.png" | relative_url }}" alt="Terminal output from the 1768.py config extraction tool showing the decoded Cobalt Strike 3.x configuration including watermark value zero, C2 server address 172.105.0.126 on port 8443, staging URI /updates, submission URI /submit, GET and POST verb assignments, Mozilla user-agent string, and license-id zero confirming a cracked build.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-extraction.png" | relative_url }}" alt="Terminal output from the 1768.py config extraction tool showing the decoded Cobalt Strike 3.x configuration including watermark value zero, C2 server address 172.105.0.126 on port 8443, staging URI /updates, submission URI /submit, GET and POST verb assignments, Mozilla user-agent string, and license-id zero confirming a cracked build.">
   <figcaption><em>Figure 1: Cobalt Strike configuration extracted via 1768.py showing watermark=0 (cracked), the /qz99 staging URI on port 8443, and the CS version 3 identifier. Only 10 of the standard 25–40+ config fields are populated — a deliberately trimmed configuration that reduces the beacon's detectable surface area.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-decoder-xor2e.png" | relative_url }}" alt="Ghidra decompilation showing the XOR 0x2E configuration decoding loop in beacon_patched.x64.dll, with highlighted memcpy calls copying decoded config fields from the XOR-encrypted blob into working memory structures used by the beacon at runtime.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-decoder-xor2e.png" | relative_url }}" alt="Ghidra decompilation showing the XOR 0x2E configuration decoding loop in beacon_patched.x64.dll, with highlighted memcpy calls copying decoded config fields from the XOR-encrypted blob into working memory structures used by the beacon at runtime.">
   <figcaption><em>Figure 2: The XOR 0x2E configuration decoding loop inside the CS DLL. Each config field is XOR-decoded from the embedded blob at DLL initialization — this is the mechanism that produces the configuration values shown in Figure 1. The 0x2E key is a reliable CS 3.x version fingerprint.</em></figcaption>
 </figure>
 
@@ -249,7 +249,7 @@ Extracted configuration via the config extraction tool:
 > **Analyst note:** The ReflectiveLoader is a function exported from every Cobalt Strike DLL. Its purpose is to load the DLL's code directly into memory, bypassing the operating system's normal DLL loading mechanism. Dozens of security tools and attack frameworks automatically call this export when loading CS beacons. The OpenStrike operator replaced the export's target with three bytes that cause an immediate crash — trapping any tool that tries to use it.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-symbol-tree-exports.png" | relative_url }}" alt="Ghidra Symbol Tree panel showing the beacon_patched.x64.dll exports folder containing only two entries: the standard entry point and the ReflectiveLoader export — confirming that the DLL exposes the minimum possible attack surface with only the ReflectiveLoader available for external callers to invoke.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-symbol-tree-exports.png" | relative_url }}" alt="Ghidra Symbol Tree panel showing the beacon_patched.x64.dll exports folder containing only two entries: the standard entry point and the ReflectiveLoader export — confirming that the DLL exposes the minimum possible attack surface with only the ReflectiveLoader available for external callers to invoke.">
   <figcaption><em>Figure 3: The CS DLL's export table in Ghidra — only two exports exist: the standard PE entry point and ReflectiveLoader. Every injection tool that attempts to load this DLL will call ReflectiveLoader, walking directly into the tripwire shown in Figure 4.</em></figcaption>
 </figure>
 
@@ -273,7 +273,7 @@ Any tool that calls `ReflectiveLoader` — including sRDI, Cobalt Strike's own r
 **Novelty:** Redirecting the export directory RVA to existing NOP+INT3 padding bytes — rather than writing new code — is not documented in public threat research as of 2026-04-06. It is a structurally elegant minimal-edit technique.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-reflective-loader-tripwire.png" | relative_url }}" alt="Ghidra disassembly view showing the ReflectiveLoader export at address 0x1709c with the tripwire byte sequence: 66 90 (xchg ax,ax two-byte NOP) followed by CC (INT3 software breakpoint), alongside the decompiled view showing swi(3) — the Ghidra representation of the INT3 instruction that crashes any tool attempting to call the export.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-reflective-loader-tripwire.png" | relative_url }}" alt="Ghidra disassembly view showing the ReflectiveLoader export at address 0x1709c with the tripwire byte sequence: 66 90 (xchg ax,ax two-byte NOP) followed by CC (INT3 software breakpoint), alongside the decompiled view showing swi(3) — the Ghidra representation of the INT3 instruction that crashes any tool attempting to call the export.">
   <figcaption><em>Figure 4: The tripwired ReflectiveLoader — Ghidra disassembly showing the 3-byte sequence (66 90 CC) at the export target address. The decompiled swi(3) call confirms the INT3 breakpoint that crashes any standard reflective injection tool attempting to load this DLL.</em></figcaption>
 </figure>
 
@@ -286,7 +286,7 @@ Function `FUN_180015838` (2,188 bytes) in `beacon_patched.x64.dll` is a complete
 **17 opcodes identified** — publicly available reverse engineering has documented 7–8 opcodes from this VM (usualsuspect.re, Tier 3 / C2; cross-referenced with official CS documentation). The 17-opcode count represents extended documentation coverage for this component, derived from this analysis and not previously documented publicly.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-transform-vm-dispatch.png" | relative_url }}" alt="Ghidra decompilation of the Malleable C2 transform VM dispatch function FUN_180015838 showing local variables for opcode processing, loop control structures, and the conditional branching that routes execution through 17 distinct opcode handlers for transforming HTTP request components.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-transform-vm-dispatch.png" | relative_url }}" alt="Ghidra decompilation of the Malleable C2 transform VM dispatch function FUN_180015838 showing local variables for opcode processing, loop control structures, and the conditional branching that routes execution through 17 distinct opcode handlers for transforming HTTP request components.">
   <figcaption><em>Figure 5: The 17-opcode Malleable C2 transform VM dispatch loop (FUN_180015838, 2,188 bytes). This bytecode interpreter reads operator-configurable transforms from the config blob and reshapes HTTP request components — enabling the GET-based exfiltration pattern that inverts standard CS detection assumptions.</em></figcaption>
 </figure>
 
@@ -415,12 +415,12 @@ All three beacon variants embed the identical RSA-2048 public key modulus, begin
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-rsa-pubkey-modulus.png" | relative_url }}" alt="Ghidra hex dump view of the RSA-2048 public key bytes embedded in beacon.exe, with the modulus prefix 9f12c9cb6582f379088600e6cdb7ac80 highlighted in the raw byte array, confirming the key is stored as a contiguous 256-byte big-endian modulus in the .rdata section.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-rsa-pubkey-modulus.png" | relative_url }}" alt="Ghidra hex dump view of the RSA-2048 public key bytes embedded in beacon.exe, with the modulus prefix 9f12c9cb6582f379088600e6cdb7ac80 highlighted in the raw byte array, confirming the key is stored as a contiguous 256-byte big-endian modulus in the .rdata section.">
   <figcaption><em>Figure 6: RSA-2048 public key modulus bytes embedded in the C beacon (beacon.exe). The highlighted prefix 9f12c9cb... serves as the definitive cross-implant fingerprint — this identical modulus appears in all three beacon variants, proving single-operator control.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/python-beacon-rsa-pubkey-source.png" | relative_url }}" alt="Python source code showing the RSA public key in PEM format embedded in the beacon_universal.py cross-platform implant, with the same RSA-2048 key present as a base64-encoded PEM block assigned to a variable used for session establishment.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/python-beacon-rsa-pubkey-source.png" | relative_url }}" alt="Python source code showing the RSA public key in PEM format embedded in the beacon_universal.py cross-platform implant, with the same RSA-2048 key present as a base64-encoded PEM block assigned to a variable used for session establishment.">
   <figcaption><em>Figure 7: The identical RSA-2048 public key in PEM format within the Python beacon source (beacon_universal.py). Cross-referencing with Figure 6 confirms cryptographic unity across the C and Python implant families — the Trinity Protocol's single-operator proof.</em></figcaption>
 </figure>
 
@@ -460,7 +460,7 @@ All three beacon variants embed the identical RSA-2048 public key modulus, begin
 **Security detection:** VEH registration followed by RWX shellcode execution is a detectable behavioral pattern. EDR products monitoring the VEH list for handlers pointing to non-module (unbacked) memory regions can flag this activity.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/veh-loader-exception-handler.png" | relative_url }}" alt="Ghidra decompilation of veh_loader.exe showing the AddVectoredExceptionHandler API call registering a custom exception handler, followed by conditional logic that loads shellcode from the hardcoded path C:\\cs_final.dat when no command-line argument is provided, or from a user-specified path otherwise.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/veh-loader-exception-handler.png" | relative_url }}" alt="Ghidra decompilation of veh_loader.exe showing the AddVectoredExceptionHandler API call registering a custom exception handler, followed by conditional logic that loads shellcode from the hardcoded path C:\\cs_final.dat when no command-line argument is provided, or from a user-specified path otherwise.">
   <figcaption><em>Figure 8: veh_loader.exe — the VEH registration call and hardcoded payload path "C:\\cs_final.dat". The default path reveals the operator's local development convention: shellcode payloads are staged at the filesystem root with a descriptive name indicating Cobalt Strike final-stage shellcode.</em></figcaption>
 </figure>
 
@@ -485,7 +485,7 @@ Automated entry-point discovery algorithm:
 This automation combines VEH crash handling, INT3 breakpoint injection, and register-state reading into an operator utility that functions as a semi-debugger without requiring an attached debugger. The technique is not previously documented in the context of automated C2 loader chains.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/dbg-loader-int3-patch.png" | relative_url }}" alt="Ghidra decompilation of dbg_loader.exe showing the INT3 patching logic: a loop scanning the first 50 bytes of loaded shellcode for the FF D0 opcode (CALL RAX), patching the found byte to CC (INT3 breakpoint), then executing the shellcode and reading the RAX register value from the VEH exception context to discover the beacon entry point.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/dbg-loader-int3-patch.png" | relative_url }}" alt="Ghidra decompilation of dbg_loader.exe showing the INT3 patching logic: a loop scanning the first 50 bytes of loaded shellcode for the FF D0 opcode (CALL RAX), patching the found byte to CC (INT3 breakpoint), then executing the shellcode and reading the RAX register value from the VEH exception context to discover the beacon entry point.">
   <figcaption><em>Figure 9: dbg_loader.exe INT3 patching logic — the code scans loaded shellcode for the CALL RAX (FF D0) opcode, patches it to INT3 (CC), and reads the RAX value from the resulting VEH crash record. This automated entry-point discovery solves the problem of locating the beacon's start address in position-independent shellcode without requiring an attached debugger.</em></figcaption>
 </figure>
 
@@ -502,7 +502,7 @@ This automation combines VEH crash handling, INT3 breakpoint injection, and regi
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/stager-winhttp-c2-chain.png" | relative_url }}" alt="Ghidra decompilation of stager.exe showing the complete WinHTTP C2 connection chain: WinHttpOpen with Mozilla/5.0 user-agent string, WinHttpConnect to the hardcoded IP address 172.105.0.126 on port 0x20FB (8443 decimal), WinHttpOpenRequest to the /qz99 staging URI, followed by WinHttpSendRequest, WinHttpReceiveResponse, and VirtualAlloc for payload memory allocation.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/stager-winhttp-c2-chain.png" | relative_url }}" alt="Ghidra decompilation of stager.exe showing the complete WinHTTP C2 connection chain: WinHttpOpen with Mozilla/5.0 user-agent string, WinHttpConnect to the hardcoded IP address 172.105.0.126 on port 0x20FB (8443 decimal), WinHttpOpenRequest to the /qz99 staging URI, followed by WinHttpSendRequest, WinHttpReceiveResponse, and VirtualAlloc for payload memory allocation.">
   <figcaption><em>Figure 10: The stager.exe production delivery chain — Ghidra decompilation showing the complete WinHTTP sequence with the hardcoded C2 address 172.105.0.126:8443 and the /qz99 staging URI. This is the network stager that would be deployed to real targets, downloading the beacon payload over HTTPS with SSL verification disabled.</em></figcaption>
 </figure>
 
@@ -561,19 +561,19 @@ Wire format: [ciphertext || MAC]
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-aes-hardcoded-iv.png" | relative_url }}" alt="Ghidra decompilation of the AES-CBC encryption function in beacon.exe showing memcpy calls that copy the hardcoded initialization vector abcdefghijklmnop into the encryption context, with the IV string highlighted in green boxes alongside the BCRYPT_BLOCK_LENGTH and BCRYPT_KEY_HANDLE constants.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-aes-hardcoded-iv.png" | relative_url }}" alt="Ghidra decompilation of the AES-CBC encryption function in beacon.exe showing memcpy calls that copy the hardcoded initialization vector abcdefghijklmnop into the encryption context, with the IV string highlighted in green boxes alongside the BCRYPT_BLOCK_LENGTH and BCRYPT_KEY_HANDLE constants.">
   <figcaption><em>Figure 11: Hardcoded AES-128-CBC initialization vector in the C beacon — the string "abcdefghijklmnop" (highlighted) is copied into the encryption context via memcpy. This static IV makes AES-CBC deterministic: identical plaintext with the same session key always produces identical ciphertext, enabling network-level signature matching once a session key is recovered.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-hmac-sha256-truncated.png" | relative_url }}" alt="Ghidra decompilation showing the HMAC-SHA256 implementation using BCryptOpenAlgorithmProvider with the SHA256 algorithm identifier, BCryptCreateHash, BCryptHashData, and BCryptFinishHash writing a 0x20 (32 byte) digest to local_38, followed by truncation where only 0x10 (16 bytes) are used as the MAC tag.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-hmac-sha256-truncated.png" | relative_url }}" alt="Ghidra decompilation showing the HMAC-SHA256 implementation using BCryptOpenAlgorithmProvider with the SHA256 algorithm identifier, BCryptCreateHash, BCryptHashData, and BCryptFinishHash writing a 0x20 (32 byte) digest to local_38, followed by truncation where only 0x10 (16 bytes) are used as the MAC tag.">
   <figcaption><em>Figure 12: HMAC-SHA256 MAC computation in the C beacon using the Windows BCrypt API. The full 32-byte SHA256 digest (0x20) is computed via BCryptFinishHash, then truncated to 16 bytes (0x10) for the wire format — a space-saving design that still provides adequate authentication strength for C2 traffic.</em></figcaption>
 </figure>
 
 The encrypt-then-MAC construction (ciphertext authenticated before decryption) is the more secure ordering — it prevents chosen-ciphertext attacks by requiring MAC verification before any decryption occurs. The operator implemented this correctly while simultaneously undermining it with the hardcoded IV. This suggests intentional architectural choices around simplicity rather than ignorance of cryptographic principles.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-key-derivation-sha256.png" | relative_url }}" alt="Ghidra decompilation of the CS DLL's key derivation function FUN_180018c60 showing SHA256 hash computation via PTR_s_sha256 reference, session key derivation from the RSA-decrypted handshake blob, and a swi(3) call that triggers the INT3 tripwire if the key installation path is reached through the ReflectiveLoader rather than the operator's custom loaders.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-key-derivation-sha256.png" | relative_url }}" alt="Ghidra decompilation of the CS DLL's key derivation function FUN_180018c60 showing SHA256 hash computation via PTR_s_sha256 reference, session key derivation from the RSA-decrypted handshake blob, and a swi(3) call that triggers the INT3 tripwire if the key installation path is reached through the ReflectiveLoader rather than the operator's custom loaders.">
   <figcaption><em>Figure 13: SHA256 session key derivation in the CS DLL — the function computes session keys from the RSA handshake material using SHA256. The swi(3) call (INT3 tripwire) at the end of the derivation path provides a second layer of anti-analysis protection: even if an analyst bypasses the ReflectiveLoader trap, the key installation path contains its own crash trigger.</em></figcaption>
 </figure>
 
@@ -592,12 +592,12 @@ The encrypt-then-MAC construction (ciphertext authenticated before decryption) i
 The GET-based exfiltration from the DLL beacon is the critical detection gap: command output travels in GET request bodies transformed by the Malleable C2 VM. The 2 MB accumulator buffer produces a bimodal GET size pattern detectable via analytics but not by simple method-based rules.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-output-accumulator.png" | relative_url }}" alt="Ghidra decompilation showing the CS DLL's output accumulator function with malloc and memcpy calls that build up command output in a growing memory buffer before flushing it through the HTTP transport layer, creating the bimodal GET size pattern described in the analysis.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-output-accumulator.png" | relative_url }}" alt="Ghidra decompilation showing the CS DLL's output accumulator function with malloc and memcpy calls that build up command output in a growing memory buffer before flushing it through the HTTP transport layer, creating the bimodal GET size pattern described in the analysis.">
   <figcaption><em>Figure 14: The CS DLL's output accumulator — command results are collected in a dynamically allocated memory buffer via malloc/memcpy before being flushed through the Malleable C2 transform VM. This buffering mechanism produces the bimodal GET size pattern (small heartbeat polls vs. large output flushes) that serves as a network-level detection opportunity.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-encrypt-and-submit.png" | relative_url }}" alt="Ghidra decompilation of function FUN_18000ceb0 showing the encrypt-then-submit flow: the function checks the DAT_18003d004 beacon-ready flag, then calls the encryption function FUN_18000dac0 to encrypt the accumulated output, and conditionally submits it via FUN_18000e440 to the C2 server.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-encrypt-and-submit.png" | relative_url }}" alt="Ghidra decompilation of function FUN_18000ceb0 showing the encrypt-then-submit flow: the function checks the DAT_18003d004 beacon-ready flag, then calls the encryption function FUN_18000dac0 to encrypt the accumulated output, and conditionally submits it via FUN_18000e440 to the C2 server.">
   <figcaption><em>Figure 15: The encrypt-and-submit function tying the cryptographic envelope to C2 transmission. The DAT_18003d004 beacon-ready flag (set during initialization, shown in §2.2.1) gates whether encrypted output is submitted — ensuring no data is transmitted before the beacon has fully initialized and established its session key.</em></figcaption>
 </figure>
 

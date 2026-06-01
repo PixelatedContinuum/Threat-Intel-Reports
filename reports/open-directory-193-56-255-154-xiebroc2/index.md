@@ -186,7 +186,7 @@ Organizations with confirmed exposure to this infrastructure should consult thei
 The open directory at `193.56.255.154:80` (port 80, served by Python SimpleHTTP 0.6) exposed three files to any visitor. A fourth artifact, `s.d`, was recovered during infrastructure pivoting from a second open directory at `92.60.75.103` (assessed MODERATE confidence same operator — see Section 7):
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/open-directory-listing.png" | relative_url }}" alt="Attack Capture File Manager view of the open directory at 193.56.255.154, showing three payload files: GruntHTTP.exe (Covenant), GruntHTTP.ps1 (fileless loader), and main.exe (XiebroC2 implant)">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/open-directory-listing.png" | relative_url }}" alt="Attack Capture File Manager view of the open directory at 193.56.255.154, showing three payload files: GruntHTTP.exe (Covenant), GruntHTTP.ps1 (fileless loader), and main.exe (XiebroC2 implant)">
   <figcaption><em>Figure 1: The exposed open directory at 193.56.255.154 as captured during investigation — three distinct attack payloads publicly accessible to any visitor, served by Python SimpleHTTP on port 80.</em></figcaption>
 </figure>
 
@@ -303,7 +303,7 @@ C:/Users/admin/Desktop/code/XiebroC2-3.1/.../Helper/loader/createremotethread.go
 This is **DEFINITE** family identification — no ambiguity. The compile path additionally reveals the operator's username (`admin`) and staging approach (Desktop directory), consistent with compilation directly on the VPS or on a personal Windows workstation used as a build machine.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-source-path-family-id.png" | relative_url }}" alt="Ghidra disassembler output showing the recovered Go source path XiebroC2-3.1/Implant embedded in the binary's pclntab symbol table, confirming family identification">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-source-path-family-id.png" | relative_url }}" alt="Ghidra disassembler output showing the recovered Go source path XiebroC2-3.1/Implant embedded in the binary's pclntab symbol table, confirming family identification">
   <figcaption><em>Figure 2: The disassembler (Ghidra) recovering the XiebroC2 v3.1 source path from the binary's pclntab — the Go runtime symbol table that preserves compilation metadata. This is the definitive family identification evidence.</em></figcaption>
 </figure>
 
@@ -316,7 +316,7 @@ This is **DEFINITE** family identification — no ambiguity. The compile path ad
 The implant stores its configuration using a fixed-width space-padding technique. Strings are padded to constant widths and stripped at runtime:
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-hardcoded-c2-config.png" | relative_url }}" alt="Decompiled binary showing hardcoded C2 address 193.56.255.154 and port 4444 stored as space-padded strings in the XiebroC2 implant">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-hardcoded-c2-config.png" | relative_url }}" alt="Decompiled binary showing hardcoded C2 address 193.56.255.154 and port 4444 stored as space-padded strings in the XiebroC2 implant">
   <figcaption><em>Figure 3: Decompiled view of the implant's configuration storage — C2 address 193.56.255.154 and port 4444 are hardcoded as space-padded strings directly in the binary, readable without execution.</em></figcaption>
 </figure>
 
@@ -344,7 +344,7 @@ The 16-byte AES encryption key used for **all** C2 traffic — both commands sen
 **Why this key is significant for defenders:** AES-ECB (Electronic Codebook mode) is cryptographically weak — identical plaintext produces identical ciphertext, and there is no initialization vector. More importantly, the keyboard-walk pattern of the key (`QWERt` from the top-left keyboard row) confirms this is the **XiebroC2 framework default** — the same key documented by AhnLab ASEC in their September 2025 analysis of XiebroC2 MS-SQL targeting campaigns [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. Any network capture of traffic to `193.56.255.154:4444` can be decrypted offline using this key.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-aes-ecb-encrypt-call.png" | relative_url }}" alt="Decompiled code showing the call to main/Encrypt::aesECBncrypt confirming AES-ECB mode encryption is used for all C2 traffic">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-aes-ecb-encrypt-call.png" | relative_url }}" alt="Decompiled code showing the call to main/Encrypt::aesECBncrypt confirming AES-ECB mode encryption is used for all C2 traffic">
   <figcaption><em>Figure 4: The AES encryption call in the C2 send path — confirming AES-ECB mode (no IV). The hardcoded key makes all captured traffic from this implant retroactively decryptable.</em></figcaption>
 </figure>
 
@@ -373,7 +373,7 @@ After decryption, the payload is encoded in MessagePack format (a compact binary
 **Beacon jitter:** The connection watchdog (`Run_main()`) sleeps a randomly jittered interval of **0–4,999 milliseconds** between reconnection attempts, seeded from nanosecond-precision system time. This deliberate randomization prevents regular-interval network detection signatures.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-messagepack-decode-switch.png" | relative_url }}" alt="Decompiled code showing the MessagePack decode switch statement that dispatches incoming operator commands to their respective handler functions">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-messagepack-decode-switch.png" | relative_url }}" alt="Decompiled code showing the MessagePack decode switch statement that dispatches incoming operator commands to their respective handler functions">
   <figcaption><em>Figure 5: The MessagePack command dispatch switch — incoming C2 packets are AES-decrypted, unpacked, and routed to one of 36 handler functions based on the command string in the first field.</em></figcaption>
 </figure>
 
@@ -497,7 +497,7 @@ github.com/Ne0nd0g/go-clr::go-clr.InvokeAssembly(...);    // execute, return std
 **Operational significance:** The operator can deliver any .NET Framework 4.x assembly as post-exploitation tooling — credential harvesters, Active Directory enumeration tools, privilege escalation utilities. The assembly runs entirely inside `main.exe`: no child process is spawned, no file is written to disk, no console window appears. The assembly's output is captured and returned to the C2 dashboard as a text block.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-go-clr-inline-assembly.png" | relative_url }}" alt="Decompiled code showing the github.com/Ne0nd0g/go-clr library call chain used to host the .NET CLR in-process and execute operator-supplied assemblies without writing to disk">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-go-clr-inline-assembly.png" | relative_url }}" alt="Decompiled code showing the github.com/Ne0nd0g/go-clr library call chain used to host the .NET CLR in-process and execute operator-supplied assemblies without writing to disk">
   <figcaption><em>Figure 6: The go-clr library call that hosts the .NET runtime directly inside main.exe — enabling fileless execution of any .NET tool the operator delivers, with output piped back to the C2 dashboard.</em></figcaption>
 </figure>
 
@@ -514,7 +514,7 @@ The full import path `github.com/Ne0nd0g/go-clr` is embedded in any Go binary th
 `RunCreateProcessWithPipe` (source: `RunPE.go:34`) implements process hollowing via entry point patching. All injection APIs are resolved dynamically at runtime — they do not appear in the binary's static import table, bypassing import-based detection:
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/runpe-mz-header-validation.png" | relative_url }}" alt="Decompiled code showing the MZ header validation check in RunPE — verifying the magic bytes 0x5a4d before proceeding with process hollowing injection">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/runpe-mz-header-validation.png" | relative_url }}" alt="Decompiled code showing the MZ header validation check in RunPE — verifying the magic bytes 0x5a4d before proceeding with process hollowing injection">
   <figcaption><em>Figure 7: The RunPE MZ header check — the implant validates the target PE file's magic bytes (0x5A4D = "MZ") before attempting hollowing, with a descriptive error string that also functions as a YARA detection anchor.</em></figcaption>
 </figure>
 
@@ -548,7 +548,7 @@ Step 8: Real-time output streaming:
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/runpe-createprocess-suspended.png" | relative_url }}" alt="Decompiled code showing CreateProcess called with flag 0x4 (CREATE_SUSPENDED), pausing the target process before its code is replaced">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/runpe-createprocess-suspended.png" | relative_url }}" alt="Decompiled code showing CreateProcess called with flag 0x4 (CREATE_SUSPENDED), pausing the target process before its code is replaced">
   <figcaption><em>Figure 8: CreateProcess called with flag 0x4 (CREATE_SUSPENDED) — the target process is spawned but frozen before it executes, giving the implant time to overwrite its code with the payload before resuming it.</em></figcaption>
 </figure>
 
@@ -583,12 +583,12 @@ CloseHandle(hProcess);
 All four injection APIs are resolved dynamically via `golang.org/x/sys/windows.LazyProc` — none appear in the binary's static PE import table. The access mask `0x43a` is a minimal-rights combination (`PROCESS_CREATE_THREAD | PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION`) rather than the over-privileged `PROCESS_ALL_ACCESS` (0x1FFFFF), reducing the profile visible to process-monitoring tools.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/runcrt-dispatch-command-handler.png" | relative_url }}" alt="Decompiled command handler showing RunCreateRemoteThread being dispatched from the MessagePack command switch alongside the MessagePack ForcePathObject call">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/runcrt-dispatch-command-handler.png" | relative_url }}" alt="Decompiled command handler showing RunCreateRemoteThread being dispatched from the MessagePack command switch alongside the MessagePack ForcePathObject call">
   <figcaption><em>Figure 9: The RunCreateRemoteThread dispatch in the command handler — the operator sends the Migration command via the encrypted C2 channel and the implant routes it to the shellcode injection function alongside the target PID.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/runcrt-full-injection-chain.png" | relative_url }}" alt="Decompiled code showing the full four-step shellcode injection chain: VirtualAllocEx, WriteProcessMemory, VirtualProtectEx (RW to RX), and CreateRemoteThreadEx, all called via golang LazyProc dynamic resolution">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/runcrt-full-injection-chain.png" | relative_url }}" alt="Decompiled code showing the full four-step shellcode injection chain: VirtualAllocEx, WriteProcessMemory, VirtualProtectEx (RW to RX), and CreateRemoteThreadEx, all called via golang LazyProc dynamic resolution">
   <figcaption><em>Figure 10: The complete four-step shellcode injection chain — allocate remote memory, write shellcode, change permissions from RW to RX (avoiding the detectable RWX state), then launch the thread. All four APIs are resolved dynamically at runtime to evade static import analysis.</em></figcaption>
 </figure>
 

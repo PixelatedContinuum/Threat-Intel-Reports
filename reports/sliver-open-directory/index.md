@@ -47,7 +47,7 @@ An exposed open directory at `45.94.31.220` — hosted on bulletproof infrastruc
 > **Key caveat:** File hashes for the primary samples are specific to the 2026-02-14 build. The automated build pipeline can regenerate polymorphically distinct but functionally identical beacons in approximately 8 minutes. Certificate-based and behavioral IOCs are more durable than hash-based atomic indicators.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/opendirectory.png" | relative_url }}" alt="Open directory listing at 45.94.31.220 port 8080 showing indexed files tagged with malware and exploit classifications by a third-party scanner">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/opendirectory.png" | relative_url }}" alt="Open directory listing at 45.94.31.220 port 8080 showing indexed files tagged with malware and exploit classifications by a third-party scanner">
   <figcaption><em>Figure 1: The exposed open directory at 45.94.31.220:8080 — already indexed and classified by a third-party open directory scanner before this analysis began. Note malware/exploit classifications applied to ScareCrow, Donut, and source modules visible in the listing.</em></figcaption>
 </figure>
 
@@ -109,12 +109,12 @@ On 2026-02-14, a threat actor operating from a bulletproof VPS at `45.94.31.220`
 **MD5 / SHA1 for compressed.exe:** `f587753c0a46688af2ffea00573192e2` / `8f27695dfd4f29e872c1661cdf225120182dd05b`
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/unpacked-compressed.png" | relative_url }}" alt="UPX-packed compressed.exe unpacking, showing LZMA compression and packed binary analysis">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/unpacked-compressed.png" | relative_url }}" alt="UPX-packed compressed.exe unpacking, showing LZMA compression and packed binary analysis">
   <figcaption><em>Figure 2: Static analysis of compressed.exe confirming UPX 5.0.2 (LZMA) packing — the packed binary is functionally equivalent to OneDriveSync.exe once unpacked.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/original-files-name.png" | relative_url }}" alt="PE version information properties of OneDriveSync.exe showing the OriginalFilename field set to Excel.exe">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/original-files-name.png" | relative_url }}" alt="PE version information properties of OneDriveSync.exe showing the OriginalFilename field set to Excel.exe">
   <figcaption><em>Figure 3: PE version information for OneDriveSync.exe — the OriginalFilename field is set to Excel.exe, a build-time property embedded by ScareCrow during packaging. Triage tools and file property dialogs that read PE version info rather than the on-disk filename will display an Excel identity.</em></figcaption>
 </figure>
 
@@ -329,7 +329,7 @@ The loader function (61 KB, 2,558 sequential call instructions) decodes Sliver s
 The ScareCrow loader uses byte 7 of the XZ stream header as an injection mode selector. Go build metadata embedded in the binary confirms the `ulikunitz/xz` library is the XZ parsing dependency — directly linking the loader's XZ handling to its open-source origin. Confirmed by dynamic analysis Session 3:
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/githublink.png" | relative_url }}" alt="Go build metadata extracted from OneDriveSync.exe showing the ulikunitz/xz GitHub library reference embedded in the binary">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/githublink.png" | relative_url }}" alt="Go build metadata extracted from OneDriveSync.exe showing the ulikunitz/xz GitHub library reference embedded in the binary">
   <figcaption><em>Figure 4: Go build metadata embedded in OneDriveSync.exe referencing the ulikunitz/xz library — the open-source XZ parsing dependency used by the ScareCrow loader to read the XZ stream header that controls injection mode selection.</em></figcaption>
 </figure>
 
@@ -342,7 +342,7 @@ Bytes 8-11: E6 D6 B4 46          (CRC32 — valid)
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/xz-stream-header-parser.png" | relative_url }}" alt="Interactive debugger view showing XZ stream header byte 7 (0x04) identified as the process hollowing mode selector in the ScareCrow loader">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/xz-stream-header-parser.png" | relative_url }}" alt="Interactive debugger view showing XZ stream header byte 7 (0x04) identified as the process hollowing mode selector in the ScareCrow loader">
   <figcaption><em>Figure 5: Debugger session confirming XZ header byte 7 = 0x04 (process hollowing) — the mode dispatch mechanism that selects the active injection technique from the ScareCrow loader's built-in injection table.</em></figcaption>
 </figure>
 
@@ -363,7 +363,7 @@ An 18.4 MB anonymous private memory region (VadS, ERW→ER post-write) is alloca
 - First bytes at RIP: `0x9A` (intentionally invalid CALLF opcode) — Donut uses a Vectored Exception Handler to catch the `#UD` exception and redirect execution. This is an anti-analysis technique.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/donut-vad-info.png" | relative_url }}" alt="Volatility VAD information output showing the 18.4 MB anonymous VadS region with ERW to ER permission transition, confirming Donut shellcode staging region in the OneDriveSync.exe process">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/donut-vad-info.png" | relative_url }}" alt="Volatility VAD information output showing the 18.4 MB anonymous VadS region with ERW to ER permission transition, confirming Donut shellcode staging region in the OneDriveSync.exe process">
   <figcaption><em>Figure 6: Volatility VAD region details for the Donut staging allocation — the ERW→ER permission transition (write-then-execute) and VadS (anonymous private) type are the definitive indicators of shellcode injection rather than a mapped file or image section.</em></figcaption>
 </figure>
 
@@ -374,7 +374,7 @@ The Donut instance at `base+0x200` contains:
 - Encrypted content from offset +0x1350: Sliver PE (AES-128-CTR encrypted)
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/veh-trap.png" | relative_url }}" alt="Debugger view of the Donut VEH bootstrap trap showing the 0x9A invalid CALLF opcode at the Donut entry point and the Vectored Exception Handler catching the resulting illegal instruction exception">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/veh-trap.png" | relative_url }}" alt="Debugger view of the Donut VEH bootstrap trap showing the 0x9A invalid CALLF opcode at the Donut entry point and the Vectored Exception Handler catching the resulting illegal instruction exception">
   <figcaption><em>Figure 7: Debugger capture of the Donut VEH bootstrap trap — the intentionally invalid 0x9A (CALLF) opcode at RIP triggers an Illegal Instruction (#UD) exception that the Vectored Exception Handler catches and redirects into the Donut decryption and execution path. This is a deliberate anti-analysis technique.</em></figcaption>
 </figure>
 
@@ -418,7 +418,7 @@ Evidence for process hollowing having occurred:
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/fallback-config-blob.png" | relative_url }}" alt="Memory view of the Sliver C2 fallback configuration blob recovered during dynamic analysis, showing the C2 endpoint and beacon configuration data">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/fallback-config-blob.png" | relative_url }}" alt="Memory view of the Sliver C2 fallback configuration blob recovered during dynamic analysis, showing the C2 endpoint and beacon configuration data">
   <figcaption><em>Figure 8: Sliver C2 fallback configuration blob recovered from memory during dynamic analysis — the configuration data visible here corroborates the C2 endpoints, beacon interval, and operational parameters documented in Sliver-command.txt and build.log.</em></figcaption>
 </figure>
 
@@ -683,7 +683,7 @@ The `CA:TRUE` flag set on a code-signing certificate is a reliable detection ind
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/sliver-open-directory/unrolled-shellcode-assembly-chain.png" | relative_url }}" alt="Disassembler view of the unrolled shellcode assembly chain showing the sequential per-chunk decryption call structure of the ScareCrow loader">
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/unrolled-shellcode-assembly-chain.png" | relative_url }}" alt="Disassembler view of the unrolled shellcode assembly chain showing the sequential per-chunk decryption call structure of the ScareCrow loader">
   <figcaption><em>Figure 9: The unrolled assembly chain inside the ScareCrow loader — the 2,558 sequential call instructions visible here are the hallmark of ScareCrow's polymorphic chunked encryption. Each call represents one ~451-byte encrypted shellcode segment being decoded in sequence.</em></figcaption>
 </figure>
 

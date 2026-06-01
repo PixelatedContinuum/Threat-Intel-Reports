@@ -82,7 +82,7 @@ The presence of an open directory suggests either operational security failure o
 - **Geographic Scope:** Global (no region-specific indicators)
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory91.236.230.250/Hunt.ioOpenDirectory.png" | relative_url }}" alt="Hunt.io Open Directory">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory91.236.230.250/Hunt.ioOpenDirectory.png" | relative_url }}" alt="Hunt.io Open Directory">
   <figcaption><em>Figure 1: Hunt.io Open Directory</em></figcaption>
 </figure>
 
@@ -149,7 +149,7 @@ Unlike standard ASP.NET applications that use managed .NET classes like `System.
 3. **Connection:** Calls `CallbackShell(host, port)` to establish outbound connection
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory91.236.230.250/ISSreverseshell.png" | relative_url }}" alt="a.png Code in PNG File">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory91.236.230.250/ISSreverseshell.png" | relative_url }}" alt="a.png Code in PNG File">
   <figcaption><em>Figure 2: a.png Code in PNG File</em></figcaption>
 </figure>
 
@@ -206,7 +206,7 @@ WaitForSingleObject(pInfo.hProcess, INFINITE);
 - **Purpose:** Local Privilege Escalation via SeImpersonatePrivilege abuse
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory91.236.230.250/PrivledgeEscalationtoolPrintSpoofer.png" | relative_url }}" alt="Privledge Escalation tool PrintSpoofer">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory91.236.230.250/PrivledgeEscalationtoolPrintSpoofer.png" | relative_url }}" alt="Privledge Escalation tool PrintSpoofer">
   <figcaption><em>Figure 3: Privledge Escalation tool PrintSpoofer</em></figcaption>
 </figure>
 
@@ -242,7 +242,7 @@ Creates Named Pipe with format:
 Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler to connect to the malicious pipe.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory91.236.230.250/conductingRPCcalls.png" | relative_url }}" alt="Code Showing RPC Calls">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory91.236.230.250/conductingRPCcalls.png" | relative_url }}" alt="Code Showing RPC Calls">
   <figcaption><em>Figure 4: Code Showing RPC Calls</em></figcaption>
 </figure>
 
@@ -253,7 +253,7 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 3. `CreateProcessAsUserW`: Spawns SYSTEM shell
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory91.236.230.250/impersenationextractionandtokenduplication.png" | relative_url }}" alt="Code Showing Token Impersonation">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory91.236.230.250/impersenationextractionandtokenduplication.png" | relative_url }}" alt="Code Showing Token Impersonation">
   <figcaption><em>Figure 5: Code Showing Token Impersonation</em></figcaption>
 </figure>
 
@@ -266,7 +266,7 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 3. **API Sequence:** `ImpersonateNamedPipeClient` + `DuplicateTokenEx` + `CreateProcessAsUserW`
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory91.236.230.250/payloadexecutionwithtoken.png" | relative_url }}" alt="Payload Execution With Token">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory91.236.230.250/payloadexecutionwithtoken.png" | relative_url }}" alt="Payload Execution With Token">
   <figcaption><em>Figure 6: Payload Execution With Token</em></figcaption>
 </figure>
 

@@ -324,12 +324,12 @@ If a gen-5 implementation resolves the missing key exchange mechanism, it would 
 | `0x2C` | Upload | Nested TLV: filename_len + filename + file data |
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-command-dispatch.png" | relative_url }}" alt="Ghidra decompiler output showing the gen-4 beacon's main command dispatch function with a switch-case structure routing ten command IDs to their respective handler functions including sleep, shell, exit, download, whoami, and process listing">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-command-dispatch.png" | relative_url }}" alt="Ghidra decompiler output showing the gen-4 beacon's main command dispatch function with a switch-case structure routing ten command IDs to their respective handler functions including sleep, shell, exit, download, whoami, and process listing">
   <figcaption><em>Figure 1: Gen-4 beacon command dispatch table in Ghidra, showing the switch-case structure that routes incoming command IDs (0x00 through 0x2C) to individual handler functions — the architectural core of the implant's tasking system.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-shell-exec-createprocess.png" | relative_url }}" alt="Ghidra decompiler output showing the Shell command handler calling CreateProcessA with cmd.exe /c argument, anonymous pipe creation via CreatePipe for stdout and stderr capture, and the CREATE_NO_WINDOW flag 0x08000000">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-shell-exec-createprocess.png" | relative_url }}" alt="Ghidra decompiler output showing the Shell command handler calling CreateProcessA with cmd.exe /c argument, anonymous pipe creation via CreatePipe for stdout and stderr capture, and the CREATE_NO_WINDOW flag 0x08000000">
   <figcaption><em>Figure 2: Shell command handler (command ID 0x02) implementation showing CreateProcessA invocation with cmd.exe /c, anonymous pipe redirection for stdout/stderr capture, and the CREATE_NO_WINDOW flag (0x08000000) that suppresses visible console windows during command execution.</em></figcaption>
 </figure>
 
@@ -342,7 +342,7 @@ beacon_id = djb2(ComputerName, multiplier=31) XOR PID
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-beacon-id-generation.png" | relative_url }}" alt="Ghidra decompiler output showing the beacon ID generation routine using GetCurrentProcessId XOR'd with a djb2 hash of the computer name, followed by User-Agent string construction with the resulting hex-formatted beacon identifier">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-beacon-id-generation.png" | relative_url }}" alt="Ghidra decompiler output showing the beacon ID generation routine using GetCurrentProcessId XOR'd with a djb2 hash of the computer name, followed by User-Agent string construction with the resulting hex-formatted beacon identifier">
   <figcaption><em>Figure 3: Beacon ID generation routine showing GetCurrentProcessId XOR'd with the djb2 hash of the host's ComputerName. The resulting deterministic identifier is embedded in the User-Agent string and all subsequent HTTP requests, enabling the operator to track reconstituted implants across host reboots.</em></figcaption>
 </figure>
 
@@ -366,7 +366,7 @@ Outbound (callback to server):
 - POST to `/submit?id=%08x` with `Content-Type: application/octet-stream`
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-tlv-byteswap-parser.png" | relative_url }}" alt="Ghidra decompiler output showing the TLV parser function performing big-endian byte-swap operations on 4-byte command type and data length fields using shift and OR bitwise operations before dispatching to command handlers">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-tlv-byteswap-parser.png" | relative_url }}" alt="Ghidra decompiler output showing the TLV parser function performing big-endian byte-swap operations on 4-byte command type and data length fields using shift and OR bitwise operations before dispatching to command handlers">
   <figcaption><em>Figure 4: TLV (Type-Length-Value) parser performing big-endian byte-swap on the 4-byte command type and data length fields. The explicit byte-order conversion confirms this is a custom wire protocol — standard x86 programs use little-endian natively, so the big-endian encoding is a deliberate design choice inherited from network protocol conventions.</em></figcaption>
 </figure>
 
@@ -387,7 +387,7 @@ Outbound (callback to server):
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-sha256-key-derivation.png" | relative_url }}" alt="Ghidra decompiler output showing the crypto_derive_keys function calling BCryptOpenAlgorithmProvider with the string L SHA256, then BCryptDeriveKey to produce a 32-byte digest that is split into a 16-byte AES key and a 16-byte HMAC key">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-sha256-key-derivation.png" | relative_url }}" alt="Ghidra decompiler output showing the crypto_derive_keys function calling BCryptOpenAlgorithmProvider with the string L SHA256, then BCryptDeriveKey to produce a 32-byte digest that is split into a 16-byte AES key and a 16-byte HMAC key">
   <figcaption><em>Figure 5: Key derivation function calling BCryptOpenAlgorithmProvider with L"SHA256" to derive a 32-byte digest from the session nonce. The first 16 bytes become the AES-128 encryption key and the second 16 bytes become the HMAC-SHA256 authentication key — mirroring Cobalt Strike's documented key derivation pattern but eliminating the RSA dependency.</em></figcaption>
 </figure>
 
@@ -400,12 +400,12 @@ Outbound (callback to server):
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-aes-cbc-iv-hardcoded.png" | relative_url }}" alt="Ghidra decompiler output showing the AES encryption setup with BCryptOpenAlgorithmProvider called with L AES string, BCryptSetProperty setting ChainingModeCBC, and the hardcoded 16-byte initialization vector string abcdefghijklmnop visible in the data reference">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-aes-cbc-iv-hardcoded.png" | relative_url }}" alt="Ghidra decompiler output showing the AES encryption setup with BCryptOpenAlgorithmProvider called with L AES string, BCryptSetProperty setting ChainingModeCBC, and the hardcoded 16-byte initialization vector string abcdefghijklmnop visible in the data reference">
   <figcaption><em>Figure 6: AES-128-CBC encryption setup showing BCryptOpenAlgorithmProvider with L"AES", ChainingModeCBC mode selection, and the hardcoded initialization vector "abcdefghijklmnop" — a static IV that produces identical ciphertext blocks for identical plaintext headers across sessions, representing a cryptographic design weakness.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-hmac-sha256-truncated.png" | relative_url }}" alt="Ghidra decompiler output showing the HMAC-SHA256 computation chain using BCryptCreateHash, BCryptHashData over the ciphertext buffer, BCryptFinishHash producing a 32-byte digest, and truncation to the first 16 bytes for the authentication tag">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-hmac-sha256-truncated.png" | relative_url }}" alt="Ghidra decompiler output showing the HMAC-SHA256 computation chain using BCryptCreateHash, BCryptHashData over the ciphertext buffer, BCryptFinishHash producing a 32-byte digest, and truncation to the first 16 bytes for the authentication tag">
   <figcaption><em>Figure 7: HMAC-SHA256 authentication tag computation showing the BCrypt hash chain (BCryptCreateHash → BCryptHashData → BCryptFinishHash) over the ciphertext buffer, with the resulting 32-byte digest truncated to 16 bytes. This truncation halves the tag length but still provides 128 bits of authentication strength — sufficient for integrity verification.</em></figcaption>
 </figure>
 
@@ -418,7 +418,7 @@ Outbound (callback to server):
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-decrypt-etm-verify.png" | relative_url }}" alt="Ghidra decompiler output showing the Encrypt-then-MAC verification function that splits the incoming buffer into ciphertext and authentication tag, recomputes HMAC-SHA256 over the ciphertext portion, and compares the result against the received tag using two 8-byte quadword equality checks before proceeding to AES-CBC decryption">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-decrypt-etm-verify.png" | relative_url }}" alt="Ghidra decompiler output showing the Encrypt-then-MAC verification function that splits the incoming buffer into ciphertext and authentication tag, recomputes HMAC-SHA256 over the ciphertext portion, and compares the result against the received tag using two 8-byte quadword equality checks before proceeding to AES-CBC decryption">
   <figcaption><em>Figure 8: Encrypt-then-MAC verification in the decryption path — the function splits incoming data into ciphertext and HMAC tag, recomputes HMAC-SHA256 over the ciphertext, and performs a non-constant-time comparison (two 8-byte quadword == checks) before decrypting. The non-constant-time comparison is a theoretical timing oracle, though low practical risk over HTTP.</em></figcaption>
 </figure>
 
@@ -437,7 +437,7 @@ Outbound (callback to server):
 The session nonce is generated locally by `BCryptGenRandom` and never transmitted to the server. Without the nonce, the server cannot derive the AES and HMAC keys. No beacon session established by gen-4 can be successfully decrypted by the team server. This definitively marks gen-4 as a development artifact, not a deployed implant.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-encrypt-submit-no-nonce.png" | relative_url }}" alt="Ghidra decompiler output showing the encrypt-and-submit function constructing the URL string /submit?id=%08x with the beacon identifier, encrypting the payload buffer with AES-CBC, but with no code path transmitting the session nonce to the server — the nonce generated by BCryptGenRandom stays local">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-encrypt-submit-no-nonce.png" | relative_url }}" alt="Ghidra decompiler output showing the encrypt-and-submit function constructing the URL string /submit?id=%08x with the beacon identifier, encrypting the payload buffer with AES-CBC, but with no code path transmitting the session nonce to the server — the nonce generated by BCryptGenRandom stays local">
   <figcaption><em>Figure 9: The encrypt-and-submit function showing the L"/submit?id=%08x" URL construction and payload encryption — critically, the session nonce generated by BCryptGenRandom is never transmitted to the server. Without the nonce, the server cannot derive the AES/HMAC keys, making gen-4 unable to establish a functional encrypted session. This is the definitive evidence marking gen-4 as a work-in-progress.</em></figcaption>
 </figure>
 
@@ -497,22 +497,22 @@ Step 9: ResumeThread
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-dcerpcss-registration.png" | relative_url }}" alt="Ghidra decompiler output showing the Artifact Kit service registration function with lpServiceName set to the string DceRpcSs, masquerading as the legitimate Windows DCE/RPC Subsystem service for persistence and defense evasion">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-dcerpcss-registration.png" | relative_url }}" alt="Ghidra decompiler output showing the Artifact Kit service registration function with lpServiceName set to the string DceRpcSs, masquerading as the legitimate Windows DCE/RPC Subsystem service for persistence and defense evasion">
   <figcaption><em>Figure 10: Artifact Kit service registration with lpServiceName = "DceRpcSs" (Step 1), masquerading as the legitimate Windows DCE/RPC Subsystem service (RpcSs). This produces a Windows Security Event ID 7045 with an unusual service name that is a reliable pre-execution detection indicator.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-msse-pipe-staging.png" | relative_url }}" alt="Ghidra decompiler output showing the named pipe creation with the format string MSSE-%d-server where the numeric value is derived from GetTickCount modulo 9898, followed by CreateThread to start the server thread and a Sleep loop maintaining the pipe connection">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-msse-pipe-staging.png" | relative_url }}" alt="Ghidra decompiler output showing the named pipe creation with the format string MSSE-%d-server where the numeric value is derived from GetTickCount modulo 9898, followed by CreateThread to start the server thread and a Sleep loop maintaining the pipe connection">
   <figcaption><em>Figure 11: Named pipe staging (Steps 2–4) showing the pipe name format MSSE-%d-server (where %d = GetTickCount() % 9898), the server thread creation, and the Sleep-based keepalive loop. The pipe carries XOR-encoded shellcode between writer and reader threads, using the kernel pipe buffer to bypass some usermode AV hooks.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-rundll32-injection.png" | relative_url }}" alt="Ghidra decompiler output showing the process injection setup function calling CreateProcessA with rundll32.exe as the target, CREATE_SUSPENDED flag, followed by VirtualAllocEx and WriteProcessMemory to inject decoded shellcode into the suspended process memory space">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-rundll32-injection.png" | relative_url }}" alt="Ghidra decompiler output showing the process injection setup function calling CreateProcessA with rundll32.exe as the target, CREATE_SUSPENDED flag, followed by VirtualAllocEx and WriteProcessMemory to inject decoded shellcode into the suspended process memory space">
   <figcaption><em>Figure 12: Injection setup (Steps 5–6) showing CreateProcessA spawning rundll32.exe with CREATE_SUSPENDED, followed by VirtualAllocEx(PAGE_READWRITE) and WriteProcessMemory to inject decoded shellcode. The target process is suspended — execution has not yet begun, and the original rundll32 image remains fully mapped.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-eax-redirect-hijack.png" | relative_url }}" alt="Ghidra decompiler output showing the critical EAX-redirect sequence: GetThreadContext retrieves the suspended thread context, the Eax register field is overwritten with the shellcode base address parameter, SetThreadContext applies the modified context, and ResumeThread starts execution from the redirected address">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-eax-redirect-hijack.png" | relative_url }}" alt="Ghidra decompiler output showing the critical EAX-redirect sequence: GetThreadContext retrieves the suspended thread context, the Eax register field is overwritten with the shellcode base address parameter, SetThreadContext applies the modified context, and ResumeThread starts execution from the redirected address">
   <figcaption><em>Figure 13: The EAX-redirect hijack (Steps 8–9) — the critical detection-evasion technique. GetThreadContext retrieves the suspended thread's register state, the Eax field is overwritten with the shellcode base address (param_6), SetThreadContext applies the modification, and ResumeThread starts execution from the redirected address. NtUnmapViewOfSection is never called — this is what defeats most T1055.012-focused EDR detections.</em></figcaption>
 </figure>
 
@@ -678,7 +678,7 @@ dll_loader.exe (separate codebase — 30,720 bytes .text)
 `dll_loader.exe` writes a beacon DLL to the hardcoded path `C:\Windows\Temp\beacon.dll` and loads it via `LoadLibraryA`. An infinite `Sleep(60000)` loop maintains the host process as a keepalive for the loaded DLL. This is the simplest loader in the set and the easiest to detect via file system monitoring.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-dll-loader-hardcoded-path.png" | relative_url }}" alt="Ghidra decompiler output showing dll_loader.exe with the hardcoded file path string C:\Windows\Temp\beacon.dll passed to LoadLibraryA, followed by an infinite Sleep(60000) loop that keeps the host process alive as a keepalive for the loaded beacon DLL">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-dll-loader-hardcoded-path.png" | relative_url }}" alt="Ghidra decompiler output showing dll_loader.exe with the hardcoded file path string C:\Windows\Temp\beacon.dll passed to LoadLibraryA, followed by an infinite Sleep(60000) loop that keeps the host process alive as a keepalive for the loaded beacon DLL">
   <figcaption><em>Figure 14: dll_loader.exe showing the hardcoded path "C:\Windows\Temp\beacon.dll" passed to LoadLibraryA, followed by an infinite Sleep(60000) loop. This disk-based approach is the simplest and most detectable loader variant — file system monitoring for DLL writes to %WINDIR%\Temp\ followed by LoadLibraryA provides a high-confidence detection anchor.</em></figcaption>
 </figure>
 
@@ -692,7 +692,7 @@ All five share a detectable behavioral sequence:
 The single-stage RWX allocation is detectable by EDR behavioral monitoring for `VirtualAlloc(PAGE_EXECUTE_READWRITE)` followed by code execution from the allocated region.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/new-files-found-20260408/openstrike-loader-virtualalloc-indirect-call.png" | relative_url }}" alt="Ghidra decompiler output showing the base loader pattern shared across five variants: VirtualAlloc called with MEM_COMMIT and PAGE_EXECUTE_READWRITE flags allocating a single RWX memory region, followed by memcpy copying the embedded payload from the .data section, and an indirect function call transferring execution to the shellcode">
+  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-loader-virtualalloc-indirect-call.png" | relative_url }}" alt="Ghidra decompiler output showing the base loader pattern shared across five variants: VirtualAlloc called with MEM_COMMIT and PAGE_EXECUTE_READWRITE flags allocating a single RWX memory region, followed by memcpy copying the embedded payload from the .data section, and an indirect function call transferring execution to the shellcode">
   <figcaption><em>Figure 15: Shared loader pattern across all five in-memory variants — VirtualAlloc(MEM_COMMIT | PAGE_EXECUTE_READWRITE) allocates a single RWX region, memcpy copies the embedded payload from the .data section, and an indirect call transfers execution. The single-stage RWX allocation (contrast with Artifact Kit's two-stage RW→RX approach in Section 4.2) is the primary behavioral detection anchor for this loader family.</em></figcaption>
 </figure>
 

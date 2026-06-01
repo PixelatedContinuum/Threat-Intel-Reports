@@ -166,7 +166,7 @@ This infrastructure consolidation represents a **possible OPSEC failure** by the
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/opendir.png" | relative_url }}" alt="Hunt.io Open Directory">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/opendir.png" | relative_url }}" alt="Hunt.io Open Directory">
   <figcaption><em>Figure 1: Hunt.io Open Directory</em></figcaption>
 </figure>
 
@@ -287,7 +287,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Payload.exe/multi stage dropper.png" | relative_url }}" alt="dropped 0.dll">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Payload.exe/multi stage dropper.png" | relative_url }}" alt="dropped 0.dll">
   <figcaption><em>Figure 2: Dropped 0.dll</em></figcaption>
 </figure>
 
@@ -308,7 +308,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/file deleted and started remcos.png" | relative_url }}" alt="persists as remcos.exe">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/file deleted and started remcos.png" | relative_url }}" alt="persists as remcos.exe">
   <figcaption><em>Figure 3: Final Stage After Backdoor.exe Runs, Removes Itself and All Other Files</em></figcaption>
 </figure>
 
@@ -335,7 +335,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg key to remove UAC.png" | relative_url }}" alt="UAC Removal Reg Key">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg key to remove UAC.png" | relative_url }}" alt="UAC Removal Reg Key">
   <figcaption><em>Figure 4: Setting Registry Key to Disable User Account Control</em></figcaption>
 </figure>
 
@@ -362,7 +362,7 @@ The dropper serves as the initial infection vector with sophisticated evasion te
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg key to remove UAC popup.png" | relative_url }}" alt="UAC Removal popup">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg key to remove UAC popup.png" | relative_url }}" alt="UAC Removal popup">
   <figcaption><em>Figure 5: UAC Disabled Popup</em></figcaption>
 </figure>
 
@@ -381,7 +381,7 @@ Modified:  "C:\WINDOWS\system32\userinit.exe, "C:\Users\[USER]\AppData\Roaming\r
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/Userinit Hijack.png" | relative_url }}" alt="Userinit Hijack">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/Userinit Hijack.png" | relative_url }}" alt="Userinit Hijack">
   <figcaption><em>Figure 6: Userinit Hijack</em></figcaption>
 </figure>
 
@@ -412,7 +412,7 @@ Modified:  "C:\WINDOWS\system32\userinit.exe, "C:\Users\[USER]\AppData\Roaming\r
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/Create Self-Deleting Batch Script.png" | relative_url }}" alt="Create Self-Deleting Batch Script">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/Create Self-Deleting Batch Script.png" | relative_url }}" alt="Create Self-Deleting Batch Script">
   <figcaption><em>Figure 7: Create Self-Deleting Batch Script</em></figcaption>
 </figure>
 
@@ -462,7 +462,7 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg keys for persistence.png" | relative_url }}" alt="setting reg keys for persistence">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting reg keys for persistence.png" | relative_url }}" alt="setting reg keys for persistence">
   <figcaption><em>Figure 8: Setting Registry Keys for Persistence</em></figcaption>
 </figure>
 
@@ -554,7 +554,7 @@ Indicators:
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/browser passwords.png" | relative_url }}" alt="Stolen password file">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/browser passwords.png" | relative_url }}" alt="Stolen password file">
   <figcaption><em>Figure 9: Stolen Password File</em></figcaption>
 </figure>
 
@@ -607,7 +607,7 @@ Core Injection APIs:
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/desktopini proc injection 3.png" | relative_url }}" alt="desktopini proc injection">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/desktopini proc injection 3.png" | relative_url }}" alt="desktopini proc injection">
   <figcaption><em>Figure 10: Possible Use of Desktop.ini for Process Injection</em></figcaption>
 </figure>
 
@@ -669,7 +669,7 @@ PROCEXPL
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting file attributes.png" | relative_url }}" alt="Setting file attributes">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/setting file attributes.png" | relative_url }}" alt="Setting file attributes">
   <figcaption><em>Figure 11: Setting File Attributes</em></figcaption>
 </figure>
 
@@ -708,7 +708,7 @@ Connected to C2!
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/C2 IP found.png" | relative_url }}" alt="C2 IP found">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/C2 IP found.png" | relative_url }}" alt="C2 IP found">
   <figcaption><em>Figure 12: C2 Server Found During Dynamic Analysis</em></figcaption>
 </figure>
 
@@ -727,7 +727,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/screenshot capability using GDI windows call.png" | relative_url }}" alt="screenshot GDI windows call">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/screenshot capability using GDI windows call.png" | relative_url }}" alt="screenshot GDI windows call">
   <figcaption><em>Figure 13: Screenshot Capability</em></figcaption>
 </figure>
 
@@ -738,7 +738,7 @@ This analysis did not capture live C2 traffic during the infection window, as th
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/microphone recording.png" | relative_url }}" alt="microphone recording">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/Backdoor.exe/microphone recording.png" | relative_url }}" alt="microphone recording">
   <figcaption><em>Figure 14: Microphone Recording and Exfiltration</em></figcaption>
 </figure>
 
@@ -938,7 +938,7 @@ Step 5: Restore Security Settings
 
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/mutex.png" | relative_url }}" alt="Mutex found">
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-203.159.90.147-Remcos/mutex.png" | relative_url }}" alt="Mutex found">
   <figcaption><em>Figure 15: Visual of Mutex Found in the Code</em></figcaption>
 </figure>
 
