@@ -1,0 +1,21 @@
+{%- comment -%} TechArticle JSON-LD for report pages. Included from default/head.liquid for reports only. {%- endcomment -%}
+{%- assign _img = page.thumbnail | default: page["feature-img"] | default: site.header_feature_image -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ page.description | default: site.description | jsonify }},
+  "image": {{ _img | absolute_url | jsonify }},
+  "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+  "dateModified": {{ page.last_updated | default: page.date | date_to_xmlschema | jsonify }},
+  "author": { "@type": "Person", "name": "Joseph Harrison", "url": {{ '/about-me/' | absolute_url | jsonify }} },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Hunter's Ledger",
+    "logo": { "@type": "ImageObject", "url": {{ '/assets/images/apple-touch-icon.png' | absolute_url | jsonify }} }
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": {{ page.url | absolute_url | jsonify }} }{% if page.category %},
+  "articleSection": {{ page.category | jsonify }}{% endif %}
+}
+</script>
