@@ -670,61 +670,6 @@ main.content {
   margin: 0 0 9px;
 }
 
-/* --- Compact row list --------------------------------------- */
-.hl-row-list {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 2rem;
-}
-
-.hl-row {
-  background: var(--hl-bg-row);
-  border: 1px solid var(--hl-border-row);
-  border-radius: 4px;
-  display: flex;
-  align-items: stretch;
-  overflow: hidden;
-  text-decoration: none !important;
-  color: var(--hl-text-primary) !important;
-  transition: border-color 0.15s, background 0.15s;
-}
-.hl-row:hover {
-  border-color: #333 !important;
-  background: #1a1a1a !important;
-  text-decoration: none !important;
-}
-
-.hl-row__bar {
-  width: 2px;
-  flex-shrink: 0;
-}
-
-.hl-row__body {
-  padding: 9px 12px;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.hl-row__left { flex: 1; }
-
-.hl-row__title {
-  color: var(--hl-text-primary) !important;
-  font-size: 0.9em !important;
-  font-weight: 500;
-  margin: 0;
-}
-
-.hl-row__date {
-  color: var(--hl-text-dim);
-  font-size: 0.72em;
-  text-transform: uppercase;
-  flex-shrink: 0;
-}
-
 /* --- Tag badges -------------------------------------------- */
 .hl-tags {
   display: flex;
@@ -1744,14 +1689,6 @@ img { max-width: 100%; height: auto; }
     grid-template-columns: 1fr !important;
   }
   .hl-card__inner { padding: 12px; gap: 10px; }
-
-  /* --- Row list: allow wrap for long titles ---------------- */
-  .hl-row__body {
-    flex-wrap: wrap;
-    gap: 4px 12px;
-    padding: 8px 10px;
-  }
-  .hl-row__date { font-size: 0.68em; }
 
   /* --- Subscribe cards + prose sections -------------------- */
   .hl-subscribe-option { padding: 18px 18px; }
