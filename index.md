@@ -6,7 +6,6 @@ position: 1
 ---
 
 <div class="hl-home-hero">
-  <div class="hl-home-hero__eyebrow">Threat Intelligence</div>
   <h1 class="hl-home-hero__title">Original Threat Intelligence Research</h1>
   <p class="hl-home-hero__lede">Hands-on malware analysis turned into structured, evidence-based intelligence — technically deep enough to trust, clear enough to act on. Published by a solo analyst for the defender community.</p>
   <div class="hl-home-hero__chips">

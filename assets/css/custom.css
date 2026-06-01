@@ -242,20 +242,9 @@ main.content {
 }
 
 
-/* --- Masthead banner (home page) --------------------------- */
 /* --- Home hero (value proposition) -------------------------- */
 .hl-home-hero {
   margin: 34px 0 42px;
-}
-
-.hl-home-hero__eyebrow {
-  font-family: var(--hl-font-display);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--hl-accent-blue);
-  margin-bottom: 14px;
 }
 
 .hl-home-hero__title {
