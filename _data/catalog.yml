@@ -1,0 +1,341 @@
+# Single source of truth for /reports/, /hunting-detections/, /ioc-feeds/ and the home "Latest".
+# One entry per item. An entry appears in a listing iff it has that listing's *_url.
+# Titles are normalized per listing: detections render "Detection Rules — {title}",
+# IOC feeds render "{title} — IOC Feed" (use detection_title / ioc_title to override).
+# Publishing a campaign = add one entry here (no more editing four files).
+
+entries:
+  # ---------------- Full campaigns (report + detection + IOC) ----------------
+  - title: "CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)"
+    date: 2026-05-17
+    severity: high
+    tags: [CVE Exploit, Cred Theft, Phishing, Open Dir]
+    report_url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
+    detection_url: /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
+    ioc_url: /ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json
+
+  - title: "BellaMain Turkish PhaaS Panel (79.137.192.3)"
+    date: 2026-05-16
+    severity: high
+    tags: [PhaaS, Phishing, Cred Theft, Open Dir]
+    report_url: /reports/bellamain-turkish-phaas-79-137-192-3-20260516/
+    detection_url: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections
+    ioc_url: /ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json
+
+  - title: "Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens)"
+    date: 2026-05-16
+    severity: high
+    tags: [Phishing, Fraud, VPN Abuse, Cred Theft]
+    report_url: /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
+    detection_url: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
+    ioc_url: /ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json
+
+  - title: "Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)"
+    date: 2026-05-15
+    severity: critical
+    tags: [MaaS, Stealer, Loader, Open Dir]
+    report_url: /reports/opendirectory-79-137-192-3-20260515/
+    detection_url: /hunting-detections/opendirectory-79-137-192-3-20260515-detections
+    detection_title: "Detection Rules — Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito)"
+    ioc_url: /ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json
+    ioc_title: "Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito) — IOC Feed"
+
+  - title: "HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign"
+    date: 2026-05-06
+    severity: high
+    tags: [Loader, RAT, MaaS, Open Dir]
+    report_url: /reports/opendirectory-62-60-237-100-20260506/
+    detection_url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
+    ioc_url: /ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json
+
+  - title: "AdaptixC2 Open Directory Exposure (45.130.148.125)"
+    date: 2026-04-30
+    severity: high
+    tags: [C2, Toolkit, Open Dir, Multi-Family]
+    report_url: /reports/opendirectory-45-130-148-125-20260430/
+    detection_url: /hunting-detections/opendirectory-45-130-148-125-20260430-detections
+    ioc_url: /ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json
+
+  - title: "Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)"
+    date: 2026-04-23
+    severity: high
+    tags: [Ransomware, Loader, Evasion, Open Dir]
+    report_url: /reports/open-directory-94-103-1-13-20260423/
+    detection_url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
+    ioc_url: /ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json
+
+  - title: "ShinyHunters Data Leak Site (91.215.85.22)"
+    date: 2026-04-17
+    severity: high
+    tags: [Exfil, Cred Theft, Open Dir, Threat]
+    report_url: /reports/shinyhunters-dls-91-215-85-22-20260417/
+    detection_url: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections
+    ioc_url: /ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json
+
+  - title: "OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)"
+    date: 2026-04-08
+    severity: high
+    tags: [Toolkit, C2, Injection, Open Dir]
+    report_url: /reports/new-files-found-20260408/
+    detection_url: /hunting-detections/new-files-found-20260408-detections
+    ioc_url: /ioc-feeds/new-files-found-20260408-iocs.json
+
+  - title: "OpenStrike Beacon Toolkit (172.105.0.126)"
+    date: 2026-04-06
+    severity: high
+    tags: [Toolkit, C2, Open Dir, Evasion]
+    report_url: /reports/open-directory-172-105-0-126-20260406/
+    detection_url: /hunting-detections/open-directory-172-105-0-126-20260406-detections
+    ioc_url: /ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json
+
+  - title: "Shadow RAT & XWorm Open Directory Campaign"
+    date: 2026-04-05
+    severity: high
+    tags: [RAT, MaaS, C2, Multi-Family]
+    report_url: /reports/shadow-xworm-opendirectory/
+    detection_url: /hunting-detections/shadow-xworm-opendirectory-detections
+    ioc_url: /ioc-feeds/shadow-xworm-opendirectory-iocs.json
+
+  - title: "Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2"
+    date: 2026-04-03
+    severity: high
+    tags: [C2, Multi-Family, Open Dir, Injection]
+    report_url: /reports/open-directory-193-56-255-154-xiebroc2/
+    detection_url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
+    ioc_url: /ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json
+
+  - title: "ZeroTrace Multi-Family MaaS Operation (74.0.42.25)"
+    date: 2026-03-16
+    severity: high
+    tags: [MaaS, C2, Open Dir, Multi-Family]
+    report_url: /reports/zerotrace-74-0-42-25-20260316/
+    detection_url: /hunting-detections/opendirectory-74-0-42-25-20260316-detections
+    ioc_url: /ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json
+
+  - title: "Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)"
+    date: 2026-03-10
+    severity: med
+    tags: [C2, Loader, Go, Evasion]
+    report_url: /reports/sliver-open-directory/
+    detection_url: /hunting-detections/sliver-open-directory-detections
+    ioc_url: /ioc-feeds/sliver-open-directory-iocs.json
+
+  - title: "Webserver Compromise Kit (91.236.230.250)"
+    date: 2026-02-20
+    severity: high
+    tags: [Toolkit, Priv Esc, RCE, .NET]
+    report_url: /reports/webserver-compromise-kit-91-236-230-250/
+    detection_url: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections
+    ioc_url: /ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json
+
+  - title: "Remcos RAT OpenDirectory Campaign"
+    date: 2026-02-10
+    severity: critical
+    tags: [RAT, Cred Theft, Persistence, Evasion]
+    report_url: /reports/remcos-opendirectory/
+    detection_url: /hunting-detections/remcos-opendirectory-campaign
+    ioc_url: /ioc-feeds/remcos-opendirectory-campaign.json
+
+  - title: "NsMiner: Multi-Stage Cryptojacking Operation"
+    date: 2026-02-05
+    severity: high
+    tags: [Cryptominer, Dropper, Persistence, Evasion]
+    report_url: /reports/nsminer-cryptojacker/
+    detection_url: /hunting-detections/nsminer-cryptojacker
+    ioc_url: /ioc-feeds/nsminer-cryptojacker.json
+
+  - title: "Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm"
+    date: 2025-12-20
+    severity: high
+    tags: [RAT, Injection, .NET, Cred Theft]
+    report_url: /reports/dual-rat-analysis/
+    detection_url: /hunting-detections/dual-rat-analysis
+    ioc_url: /ioc-feeds/dual-rat-analysis.json
+
+  - title: "PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment"
+    date: 2025-12-15
+    severity: critical
+    tags: [RAT, Cred Theft, Evasion, .NET]
+    report_url: /reports/PULSAR-RAT/
+    detection_url: /hunting-detections/PULSAR-RAT
+    ioc_url: /ioc-feeds/PULSAR-RAT.json
+
+  - title: "Hybrid Loader/Stealer Ecosystem Masquerading as Sogou"
+    date: 2025-11-20
+    severity: med
+    tags: [Loader, Stealer, Cred Theft, Evasion]
+    report_url: /reports/Hybrid-Loader-Stealer-Sogou/
+    detection_url: /hunting-detections/Hybrid-Loader-Stealer-Sogou
+    ioc_url: /ioc-feeds/Hybrid-Loader-Stealer-Sogou.json
+
+  - title: "Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play"
+    date: 2025-11-10
+    severity: med
+    tags: [Loader, Stealer, Go, Injection]
+    report_url: /reports/malware-analysis-houselet/
+    detection_url: /hunting-detections/malware-analysis-houselet
+    ioc_url: /ioc-feeds/malware-analysis-houselet.json
+
+  - title: "AdvancedRouterScanner"
+    date: 2025-10-20
+    severity: med
+    tags: [Scanner, Python, Exploitation]
+    report_url: /reports/AdvancedRouterScanner/
+    detection_url: /hunting-detections/AdvancedRouterScanner
+    ioc_url: /ioc-feeds/AdvancedRouterScanner.json
+
+  - title: "From Webshells to The Cloud"
+    date: 2025-10-15
+    severity: high
+    tags: [Webshell, PHP, Exfil, C2]
+    report_url: /reports/webshells-to-the-cloud/
+    detection_url: /hunting-detections/webshells-to-the-cloud
+    ioc_url: /ioc-feeds/webshells-to-the-cloud.json
+
+  - title: "Quasar + XWorm + PowerShell"
+    date: 2025-10-10
+    severity: med
+    tags: [RAT, Loader, PowerShell, Evasion]
+    report_url: /reports/quasar-xworm-powershell/
+    detection_url: /hunting-detections/quasar-xworm-detections
+    ioc_url: /ioc-feeds/quasar-xworm-powershell.json
+
+  # ---------------- Report-only (Arsenal-237 overview reports) ----------------
+  - title: "Arsenal-237 New Files: Advanced Toolkit Analysis"
+    date: 2026-01-20
+    severity: critical
+    tags: [Ransomware, BYOVD, Rootkit, Rust]
+    report_url: /reports/arsenal-237-new-files/
+
+  - title: "Arsenal-237: Threat Actor R&D Repository Exposed"
+    date: 2026-01-18
+    severity: critical
+    tags: [Toolkit, Ransomware, RAT, Rust, Go]
+    report_url: /reports/109.230.231.37-Executive-Overview/
+
+  # ---------------- Arsenal-237 granular files (detection + IOC only) ----------------
+  - title: "Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)"
+    date: 2026-01-15
+    severity: critical
+    tags: [Ransomware, Rust]
+    detection_url: /hunting-detections/arsenal-237-full_test_enc-exe
+    ioc_url: /ioc-feeds/arsenal-237-full_test_enc-exe.json
+
+  - title: "Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)"
+    date: 2026-01-15
+    severity: critical
+    tags: [Ransomware, Rust]
+    detection_url: /hunting-detections/arsenal-237-new_enc-exe
+    ioc_url: /ioc-feeds/arsenal-237-new_enc-exe.json
+
+  - title: "Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)"
+    date: 2026-01-15
+    severity: critical
+    tags: [Ransomware, Rust]
+    detection_url: /hunting-detections/arsenal-237-dec_fixed-exe
+    ioc_url: /ioc-feeds/arsenal-237-dec_fixed-exe.json
+
+  - title: "Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)"
+    date: 2026-01-15
+    severity: critical
+    tags: [Ransomware, C2, Rust]
+    detection_url: /hunting-detections/arsenal-237-enc_c2-exe
+    ioc_url: /ioc-feeds/arsenal-237-enc_c2-exe.json
+
+  - title: "Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)"
+    date: 2026-01-15
+    severity: critical
+    tags: [Cred Theft, .NET]
+    detection_url: /hunting-detections/arsenal-237-chromelevator-exe
+    ioc_url: /ioc-feeds/arsenal-237-chromelevator-exe.json
+
+  - title: "Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)"
+    date: 2026-01-15
+    severity: critical
+    tags: [DLL Hijack, Persistence]
+    detection_url: /hunting-detections/arsenal-237-nethost-dll
+    ioc_url: /ioc-feeds/arsenal-237-nethost-dll.json
+
+  - title: "Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)"
+    date: 2026-01-15
+    severity: critical
+    tags: [Rootkit, Evasion]
+    detection_url: /hunting-detections/arsenal-237-rootkit-dll
+    ioc_url: /ioc-feeds/arsenal-237-rootkit-dll.json
+
+  - title: "Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)"
+    date: 2026-01-15
+    severity: critical
+    tags: [BYOVD, Priv Esc]
+    detection_url: /hunting-detections/arsenal-237-BdApiUtil64-sys
+    ioc_url: /ioc-feeds/arsenal-237-BdApiUtil64-sys.json
+
+  - title: "Arsenal-237 New Files: lpe.exe (Privilege Escalation)"
+    date: 2026-01-15
+    severity: critical
+    tags: [Priv Esc]
+    detection_url: /hunting-detections/arsenal-237-lpe-exe
+    ioc_url: /ioc-feeds/arsenal-237-lpe-exe.json
+
+  - title: "Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)"
+    date: 2026-01-15
+    severity: critical
+    tags: [Evasion, BYOVD]
+    detection_url: /hunting-detections/arsenal-237-killer-crowdstrike-dll
+    ioc_url: /ioc-feeds/arsenal-237-killer-crowdstrike-dll.json
+
+  - title: "Arsenal-237 New Files: killer.dll (BYOVD Process Termination)"
+    date: 2026-01-15
+    severity: critical
+    tags: [BYOVD, Evasion]
+    detection_url: /hunting-detections/arsenal-237-killer-dll
+    ioc_url: /ioc-feeds/arsenal-237-killer-dll.json
+
+  - title: "Arsenal-237: enc/dec Ransomware Family"
+    date: 2026-01-15
+    severity: critical
+    tags: [Ransomware, Rust]
+    detection_url: /hunting-detections/enc-dec-ransomware-family
+    ioc_url: /ioc-feeds/enc-dec-ransomware-family.json
+
+  - title: "Arsenal-237: uac_test.exe"
+    date: 2026-01-15
+    severity: med
+    tags: [Priv Esc, Evasion]
+    detection_url: /hunting-detections/uac-test-exe
+    ioc_url: /ioc-feeds/uac-test-exe.json
+
+  - title: "Arsenal-237: FleetAgentFUD.exe"
+    date: 2026-01-15
+    severity: med
+    tags: [Dropper, Evasion]
+    detection_url: /hunting-detections/fleetagentfud-exe
+    ioc_url: /ioc-feeds/fleetagentfud-exe.json
+
+  - title: "Arsenal-237: FleetAgentAdvanced.exe"
+    date: 2026-01-15
+    severity: med
+    tags: [Dropper, Persistence]
+    detection_url: /hunting-detections/fleetagentadvanced-exe
+    ioc_url: /ioc-feeds/fleetagentadvanced-exe.json
+
+  - title: "Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)"
+    date: 2026-01-15
+    severity: med
+    tags: [RAT, C2]
+    detection_url: /hunting-detections/agent-xworm-v2-exe
+    ioc_url: /ioc-feeds/agent-xworm-v2-exe.json
+
+  - title: "Arsenal-237: agent_xworm.exe (XWorm RAT v6)"
+    date: 2026-01-15
+    severity: med
+    tags: [RAT, C2]
+    detection_url: /hunting-detections/agent-xworm-exe
+    ioc_url: /ioc-feeds/agent-xworm-exe.json
+
+  - title: "Arsenal-237: agent.exe (PoetRAT)"
+    date: 2026-01-15
+    severity: med
+    tags: [RAT, C2]
+    detection_url: /hunting-detections/agent-exe
+    ioc_url: /ioc-feeds/agent-exe.json
