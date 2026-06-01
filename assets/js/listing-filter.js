@@ -19,7 +19,11 @@
       var mt = tags.length === 0 || tags.some(function (t) { return ctags.indexOf(t) > -1; });
       var mq = !term || (c.getAttribute('data-title') || '').indexOf(term) > -1;
       var vis = mt && mq;
-      c.style.display = vis ? '' : 'none';
+      // .hl-card carries `display: block !important`, so a plain inline
+      // `display:none` is overridden. Set/remove with `important` priority,
+      // which sits above author !important in the cascade.
+      if (vis) { c.style.removeProperty('display'); }
+      else { c.style.setProperty('display', 'none', 'important'); }
       if (vis) shown++;
     });
     if (count) count.textContent = 'Showing ' + shown + ' of ' + cards.length;
