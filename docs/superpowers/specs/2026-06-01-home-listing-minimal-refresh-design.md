@@ -101,7 +101,8 @@ Replace the Resources `.hl-prose-section` with a light inline link row (keep the
 1. In `:root`, bump the body token: `--hl-text-secondary: #aaaaaa;` → `--hl-text-secondary: #eeeeee;`
 2. `.hl-nav-tile__desc` — `color: var(--hl-text-muted);` → `color: var(--hl-text-secondary);`
 3. `.hl-404__desc` — `color: var(--hl-text-muted);` → `color: var(--hl-text-secondary);`
-4. Leave `--hl-text-muted` (#888) and `--hl-text-dim` (#555) as-is for meta.
+4. Bump the dim tier too: `--hl-text-dim: #555555;` → `#888888;`. This brightens the readable items on the old `#555` tier (TOC sub-section links, read-time, Share button, footer line, filter empty-state) in one edit. Net effect: the four text tiers collapse to two — `#eeeeee` body and `#888` meta — exactly the target system.
+5. Keep `--hl-text-muted` (#888) as the meta color (now equal to dim). Consulting's `.hl-service-card__body` is already `--hl-text-primary` (verified bright — no change). Secondary pages (consulting / support / sponsor / behind-the-reports) use the standard components and inherit all of the above automatically — no per-page edits.
 
 **Blast radius (verified safe — all become brighter, none dimmer):** the token change brightens, site-wide, everything currently on `--hl-text-secondary`: the home hero lede, subscribe descriptions, filter chip-button text, related-card text, and — on report pages — analyst-note **blockquote** text, `h4` subheads, and figcaptions. Report paragraph/list/heading body is already `--hl-text-primary` (#eeeeee), so it is unchanged. Net effect: prose that was `#aaaaaa` becomes `#eeeeee`; nothing gets darker.
 
