@@ -243,12 +243,59 @@ main.content {
 
 
 /* --- Masthead banner (home page) --------------------------- */
-.hl-masthead {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+/* --- Home hero (value proposition) -------------------------- */
+.hl-home-hero {
+  margin: 34px 0 42px;
+}
+
+.hl-home-hero__eyebrow {
+  font-family: var(--hl-font-display);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--hl-accent-blue);
+  margin-bottom: 14px;
+}
+
+.hl-home-hero__title {
+  font-family: var(--hl-font-display);
+  font-weight: 700;
+  font-size: 2.4rem !important;
+  line-height: 1.12;
+  color: #ffffff !important;
+  margin: 0 0 16px;
+  max-width: 18ch;
+}
+
+.hl-home-hero__lede {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--hl-text-secondary);
+  margin: 0 0 22px;
+  max-width: 62ch;
+}
+
+.hl-home-hero__chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hl-chip {
+  font-size: 0.8rem;
+  color: #c9d1d9;
+  background: var(--hl-bg-card);
+  border: 1px solid var(--hl-border-card);
+  border-radius: 999px;
+  padding: 6px 13px;
+}
+
+.hl-chip b { color: var(--hl-accent-blue); font-weight: 600; }
+
+@media (max-width: 700px) {
+  .hl-home-hero { margin: 24px 0 30px; }
+  .hl-home-hero__title { font-size: 1.9rem !important; }
 }
 
 /* ============================================================
@@ -878,50 +925,8 @@ main.content {
   margin: 0;
 }
 
-/* --- Logo / hero area -------------------------------------- */
-.hl-hero {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
-  border: 1px solid var(--hl-border-card);
-  border-left: 3px solid var(--hl-sev-critical);
-  border-radius: 6px;
-  padding: 28px 32px;
-  margin-bottom: 2rem;
-}
-
-.hl-hero__logo {
-  width: 280px;
-  height: 100px;
-  flex-shrink: 0;
-  mix-blend-mode: screen;
-  background-size: 160%;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
-.hl-hero__label {
-  font-size: 0.68em;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--hl-sev-critical-lbl);
-  margin-bottom: 5px;
-}
-
-.hl-hero__title {
-  color: var(--hl-text-primary) !important;
-  font-size: 1.5em !important;
-  font-weight: 700;
-  margin: 0 0 7px;
-}
-
-.hl-hero__desc {
-  color: var(--hl-text-primary);
-  font-size: 0.9em;
-  line-height: 1.55;
-  margin: 0;
-}
+/* (Home hero styles live in the Home hero section above;
+   the legacy .hl-hero banner + .hl-hero__logo were retired in the brand refresh.) */
 
 /* --- "View all" link --------------------------------------- */
 .hl-view-all {
@@ -1149,10 +1154,6 @@ main.content {
   .hl-grid,
   .hl-nav-grid {
     grid-template-columns: 1fr !important;
-  }
-  .hl-hero {
-    flex-direction: column;
-    align-items: flex-start;
   }
   main.content {
     padding: 24px 16px !important;
@@ -1680,14 +1681,6 @@ img { max-width: 100%; height: auto; }
   .hl-page-header { padding: 16px 16px; }
   .hl-page-header__title { font-size: 1.25em !important; }
 
-  .hl-hero { padding: 20px 18px; gap: 14px; }
-  .hl-hero__title { font-size: 1.25em !important; }
-  .hl-hero__logo {
-    width: 100%;
-    max-width: 260px;
-    height: 80px;
-    background-size: 140%;
-  }
 
   /* --- Long-string wrapping (hashes, IOCs, IPs, URLs) ------ */
   /* This is the fix for the "grey right margin" issue when
@@ -1776,7 +1769,6 @@ img { max-width: 100%; height: auto; }
   .hl-nav-tile { padding: 12px 14px; }
 
   /* --- Masthead + section spacing -------------------------- */
-  .hl-masthead { margin-bottom: 1.25rem; border-radius: 6px; }
   .hl-section-header { margin: 1.5rem 0 12px; font-size: 0.8em; }
 
   /* --- Post nav: tighter ---------------------------------- */
@@ -1799,10 +1791,8 @@ img { max-width: 100%; height: auto; }
   .hl-nav__link { font-size: 0.9rem; }
   .hl-post-header,
   .hl-page-header,
-  .hl-hero { padding: 14px 14px; }
   .hl-post-header__title,
-  .hl-page-header__title,
-  .hl-hero__title { font-size: 1.15em !important; }
+  .hl-page-header__title { font-size: 1.15em !important; }
   .hl-post-content h1 { font-size: 1.05em !important; padding: 7px 8px !important; }
   .hl-post-content h2 { font-size: 1em !important; padding: 6px 8px !important; }
   .hl-post-content pre { padding: 10px 12px; font-size: 0.82em; }
