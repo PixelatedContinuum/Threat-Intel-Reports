@@ -10,9 +10,9 @@
   --hl-border-card:    #2a2a2a;
   --hl-border-row:     #222222;
   --hl-text-primary:   #eeeeee;
-  --hl-text-secondary: #aaaaaa;
+  --hl-text-secondary: #eeeeee;
   --hl-text-muted:     #888888;
-  --hl-text-dim:       #555555;
+  --hl-text-dim:       #888888;
   --hl-accent-blue:    #58a6ff;
   --hl-sev-critical:       #dc2626;
   --hl-sev-critical-lbl:   #ef4444;
@@ -831,7 +831,7 @@ main.content {
 }
 
 .hl-nav-tile__desc {
-  color: var(--hl-text-muted);
+  color: var(--hl-text-secondary);
   font-size: 0.78em;
   margin: 0;
 }
@@ -2662,7 +2662,7 @@ button,
   color: var(--hl-text-primary); margin: 18px 0 0; letter-spacing: -0.01em;
 }
 .hl-404__desc {
-  color: var(--hl-text-muted); font-size: 1.0em; line-height: 1.62;
+  color: var(--hl-text-secondary); font-size: 1.0em; line-height: 1.62;
   margin: 14px auto 0; max-width: 500px;
 }
 .hl-404__log {
@@ -2685,3 +2685,26 @@ button,
 .hl-404__btn--primary:hover { background: #388bfd; }
 .hl-404__btn--ghost { background: var(--hl-bg-card); color: var(--hl-text-secondary) !important; border-color: var(--hl-border-card); }
 .hl-404__btn--ghost:hover { border-color: var(--hl-accent-blue); color: var(--hl-text-primary) !important; }
+
+/* --- Home: Mission (clean prose) --------------------------- */
+.hl-mission { color: var(--hl-text-secondary); font-size: 0.98em; line-height: 1.7; max-width: 70ch; margin-bottom: 0.5rem; }
+.hl-mission p { margin: 0 0 14px; }
+.hl-mission__close { color: var(--hl-text-primary); font-weight: 600; }
+.hl-mission__note { margin-top: 16px; font-size: 0.85em; color: var(--hl-text-secondary); font-style: italic;
+  border-left: 2px solid var(--hl-border-card); padding-left: 12px; }
+
+/* --- Home: About & Connect 3-up tile row ------------------- */
+.hl-tile-row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 14px; }
+.hl-contribute { font-size: 0.88em; color: var(--hl-text-secondary); line-height: 1.6; }
+.hl-contribute a { color: var(--hl-accent-blue); }
+
+/* --- Home: Resources inline links -------------------------- */
+.hl-resources { font-size: 0.92em; color: var(--hl-text-muted); }
+.hl-resources a { color: var(--hl-accent-blue); text-decoration: none; }
+.hl-resources a:hover { text-decoration: underline; }
+
+/* --- Card hover (clickable cards: listings + home grid) ---- */
+.hl-card { transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease; }
+a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0,0,0,0.38); }
+
+@media (max-width: 700px) { .hl-tile-row3 { grid-template-columns: 1fr; } }
