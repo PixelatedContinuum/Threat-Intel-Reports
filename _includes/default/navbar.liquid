@@ -1,5 +1,11 @@
 <header class="hl-nav">
-  <a class="hl-nav__brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+  <a class="hl-nav__brand" href="{{ '/' | relative_url }}">
+    <span class="hl-brand__rule" aria-hidden="true"></span>
+    <span class="hl-brand__stack">
+      <span class="hl-brand__top">THE HUNTER&#8217;S</span>
+      <span class="hl-brand__main">LEDGER<span class="hl-brand__dot" aria-hidden="true"></span></span>
+    </span>
+  </a>
   <nav class="hl-nav__links" aria-label="Site navigation">
     {% assign nav_pages = site.pages | where_exp: "item", "item.position" | sort: 'position' %}
     {% for nav_page in nav_pages %}
