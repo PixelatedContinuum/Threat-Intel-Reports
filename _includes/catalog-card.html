@@ -1,0 +1,20 @@
+{%- comment -%} One filterable listing card. Params: url, title, date (ISO), severity, tags (array). {%- endcomment -%}
+{%- assign sevlabel = include.severity | upcase -%}
+{%- if include.severity == "med" -%}{%- assign sevlabel = "MED" -%}{%- endif -%}
+<a href="{{ include.url | relative_url }}" class="hl-card hl-catalog-card"
+   data-title="{{ include.title | downcase | escape }}"
+   data-tags="{{ include.tags | join: '|' | downcase | escape }}"
+   data-sev="{{ include.severity }}">
+  <div class="hl-card__inner">
+    <div class="hl-card__bar hl-sev--{{ include.severity }}"></div>
+    <div>
+      <div class="hl-card__meta hl-catalog-card__meta">{{ sevlabel }} &middot; {{ include.date | date: "%b %Y" }}</div>
+      <div class="hl-card__title">{{ include.title }}</div>
+    </div>
+  </div>
+  {%- if include.tags -%}
+  <div class="hl-tags hl-card__tags">
+    {%- for t in include.tags -%}{%- include tag-badge.html tag=t -%}{%- endfor -%}
+  </div>
+  {%- endif -%}
+</a>
