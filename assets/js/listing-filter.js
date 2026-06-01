@@ -17,7 +17,10 @@
     cards.forEach(function (c) {
       var ctags = (c.getAttribute('data-tags') || '').split('|');
       var mt = tags.length === 0 || tags.some(function (t) { return ctags.indexOf(t) > -1; });
-      var mq = !term || (c.getAttribute('data-title') || '').indexOf(term) > -1;
+      // Search matches BOTH the title and the tags, so e.g. "ransomware"
+      // surfaces items tagged Ransomware even if it's not in the title.
+      var hay = (c.getAttribute('data-title') || '') + '|' + (c.getAttribute('data-tags') || '');
+      var mq = !term || hay.indexOf(term) > -1;
       var vis = mt && mq;
       // .hl-card carries `display: block !important`, so a plain inline
       // `display:none` is overridden. Set/remove with `important` priority,
