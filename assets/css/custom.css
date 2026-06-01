@@ -26,6 +26,16 @@
   --hl-accent-red:     #f87171;
   --hl-accent-gold:    #b8902f;
   --hl-accent-gold-light: #f4e9c8;
+  --hl-font-display: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+}
+
+/* --- Brand display font: Space Grotesk (self-hosted, SIL OFL 1.1) --- */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300 700; /* variable */
+  font-display: swap;
+  src: url('/assets/fonts/space-grotesk.woff2') format('woff2');
 }
 
 /* --- Global theme overrides --------------------------------- */
