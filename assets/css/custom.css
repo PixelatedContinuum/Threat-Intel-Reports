@@ -2766,3 +2766,125 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   .hl-panel { padding: 18px 18px; }
   .hl-cta-row { gap: 10px; }
 }
+
+/* ============================================================
+   SPONSOR RAIL — site-wide monthly-sponsor placement
+   Desktop (>1280px): fixed rail centered in the left margin gutter,
+   in the empty band between the navbar and the Detections/IOC
+   quicklinks (which float at top:42%). Sticky is broken in this theme
+   (ancestor overflow — same reason the TOC + progress bar use fixed),
+   so this uses position:fixed.
+   Tablet/phone (<=1280px): reflows into a horizontal "Sponsors" strip
+   directly under the navbar, aligned to the content column. Renders
+   nothing unless there is >=1 monthly+active sponsor.
+   ============================================================ */
+.hl-sponsor-rail {
+  --rail-w: min(160px, calc(50vw - 500px));         /* clamp: never crosses into the 900px column */
+  position: fixed;
+  width: var(--rail-w);
+  left: calc(21px + (50vw - 471px - var(--rail-w)) / 2);  /* centered in gutter [progress bar .. content edge] */
+  top: calc(20px + 21vh);                           /* center of the empty band above the quicklinks */
+  transform: translateY(-50%);
+  z-index: 450;                                     /* above content/quicklinks(400), below nav(1000) */
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.hl-sponsor-rail__label {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--hl-text-muted);
+  font-weight: 600;
+  padding-left: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hl-sponsor-rail__label::before {
+  content: "";
+  width: 14px;
+  height: 1px;
+  background: var(--hl-accent-gold);
+  display: inline-block;
+}
+.hl-sponsor-rail__item {
+  display: block;
+  background: var(--hl-bg-card);
+  border: 1px solid var(--hl-border-card);
+  border-radius: 8px;
+  padding: 12px 13px;
+  text-decoration: none !important;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.hl-sponsor-rail__item:hover {
+  border-color: var(--hl-accent-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.38);
+}
+.hl-sponsor-rail__logo {
+  display: block;
+  max-width: 100%;
+  max-height: 30px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+.hl-sponsor-rail__text {
+  min-width: 0;
+}
+.hl-sponsor-rail__name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--hl-text-primary);
+  line-height: 1.2;
+}
+.hl-sponsor-rail__tagline {
+  font-size: 0.7rem;
+  color: var(--hl-text-muted);
+  line-height: 1.42;
+  margin-top: 4px;
+}
+
+/* Tablet/phone: fixed left rail -> horizontal strip under the navbar */
+@media (max-width: 1280px) {
+  .hl-sponsor-rail {
+    position: static;
+    transform: none;
+    width: auto;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 28px 0;          /* aligns with main.content's 28px side padding */
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .hl-sponsor-rail__label {
+    width: 100%;
+    margin-bottom: 0;
+  }
+  .hl-sponsor-rail__item {
+    flex: 1 1 240px;               /* side-by-side when room, stack when narrow */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hl-sponsor-rail__logo {
+    margin-bottom: 0;
+    max-height: 34px;
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 640px) {
+  .hl-sponsor-rail { padding: 12px 16px 0; }   /* match main.content mobile side padding */
+}
+@media (max-width: 400px) {
+  .hl-sponsor-rail__tagline {                  /* cut to fit on tiny screens */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

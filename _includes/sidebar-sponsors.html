@@ -1,0 +1,22 @@
+{%- comment -%}
+  Left-margin Sponsors rail — renders monthly + active sponsors site-wide.
+  Same filter as site-sponsors.html (footer). On desktop this is a fixed
+  rail in the left margin; at <=1280px the CSS reflows it into a horizontal
+  strip under the navbar (see .hl-sponsor-rail in custom.css). Renders
+  nothing when there are no monthly+active sponsors.
+{%- endcomment -%}
+{% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true %}
+{% if active_site_sponsors.size > 0 %}
+<aside class="hl-sponsor-rail" aria-label="Sponsors">
+  <div class="hl-sponsor-rail__label">Sponsors</div>
+  {% for sponsor in active_site_sponsors %}
+  <a class="hl-sponsor-rail__item" href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer">
+    {% if sponsor.logo %}<img class="hl-sponsor-rail__logo" src="{{ sponsor.logo | relative_url }}" alt="{{ sponsor.name }}">{% endif %}
+    <div class="hl-sponsor-rail__text">
+      <div class="hl-sponsor-rail__name">{{ sponsor.name }}</div>
+      {% if sponsor.tagline %}<div class="hl-sponsor-rail__tagline">{{ sponsor.tagline }}</div>{% endif %}
+    </div>
+  </a>
+  {% endfor %}
+</aside>
+{% endif %}
