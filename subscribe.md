@@ -8,65 +8,82 @@ position: 5
 <div class="hl-page-header" style="background: linear-gradient(135deg, #0d1520 0%, #0d1117 60%, #111111 100%); --ph-accent: #58a6ff;">
   <div class="hl-page-header__label">Stay Informed</div>
   <div class="hl-page-header__title">Subscribe to The Hunter's Ledger</div>
-  <div class="hl-page-header__desc">Get notified when new threat intelligence reports, detection rules, and IOC feeds are published. Choose your preferred delivery method below.</div>
+  <div class="hl-page-header__desc">New threat intelligence reports, detection rules, and IOC feeds — delivered the moment they publish. Pick whatever fits how you work. No marketing, no noise.</div>
 </div>
 
 {% include section-header.html label="Delivery Options" accent="#58a6ff" %}
 
-<div class="hl-subscribe-option hl-subscribe-option--rss">
-  <div class="hl-subscribe-option__header">
-    <span class="hl-subscribe-option__icon">&#9656;</span>
+<div class="hl-panel" style="--acc: #4ade80;">
+  <div class="hl-panel__head">
+    <div class="hl-panel__chip">&#9656;</div>
     <div>
-      <div class="hl-subscribe-option__title">RSS / Atom Feed</div>
-      <div class="hl-subscribe-option__desc">Add the feed to any RSS reader — Feedly, Inoreader, NetNewsWire, or any other client. Updates appear the moment a new report is published.</div>
+      <div class="hl-panel__title">RSS / Atom Feed</div>
+      <p class="hl-panel__desc">Add the feed to any reader — Feedly, Inoreader, NetNewsWire. New reports appear the moment they publish.</p>
     </div>
   </div>
-  <div class="hl-subscribe-option__url">
-    <span class="hl-subscribe-option__url-label">Feed URL</span>
-    <code class="hl-subscribe-option__url-value">https://the-hunters-ledger.com/feed.xml</code>
+  <div class="hl-feed-url" style="--acc: #4ade80;">
+    <span class="hl-feed-url__label">Feed</span>
+    <span class="hl-feed-url__val">https://the-hunters-ledger.com/feed.xml</span>
+    <button class="hl-feed-url__copy" type="button" data-copy="https://the-hunters-ledger.com/feed.xml">COPY</button>
   </div>
 </div>
 
-<div class="hl-subscribe-option hl-subscribe-option--email">
-  <div class="hl-subscribe-option__header">
-    <span class="hl-subscribe-option__icon">&#9993;</span>
+<div class="hl-panel" style="--acc: #58a6ff;">
+  <div class="hl-panel__head">
+    <div class="hl-panel__chip">&#9993;</div>
     <div>
-      <div class="hl-subscribe-option__title">Email Newsletter</div>
-      <div class="hl-subscribe-option__desc">Get a direct email when a new report drops. No marketing, no noise — just new threat intelligence in your inbox.</div>
+      <div class="hl-panel__title">Email Newsletter</div>
+      <p class="hl-panel__desc">A direct email when a new report drops. No marketing, no noise — just new intelligence in your inbox.</p>
     </div>
   </div>
-  <div class="hl-subscribe-option__form">
+  <div style="margin-top: 4px;">
     <script async src="https://eocampaign1.com/form/d7e87548-297e-11f1-a6ab-1d8405c03c10.js" data-form="d7e87548-297e-11f1-a6ab-1d8405c03c10"></script>
   </div>
 </div>
 
-<div class="hl-subscribe-option hl-subscribe-option--social">
-  <div class="hl-subscribe-option__header">
-    <span class="hl-subscribe-option__icon">&#120143;</span>
+<div class="hl-panel" style="--acc: #8b949e;">
+  <div class="hl-panel__head">
+    <div class="hl-panel__chip">&#120143;</div>
     <div>
-      <div class="hl-subscribe-option__title">Follow on X</div>
-      <div class="hl-subscribe-option__desc">Follow <strong>@Hunters_Ledger</strong> on X for report announcements and shorter-form threat intelligence notes between full publications.</div>
+      <div class="hl-panel__title">Follow on X</div>
+      <p class="hl-panel__desc">Follow <strong>@Hunters_Ledger</strong> for report announcements and shorter-form threat intelligence notes between full publications.</p>
     </div>
   </div>
-  <div class="hl-subscribe-option__url">
-    <span class="hl-subscribe-option__url-label">Profile</span>
-    <a href="https://x.com/Hunters_Ledger" target="_blank" rel="noopener" style="color: #58a6ff; font-family: monospace; font-size: 0.9em;">https://x.com/Hunters_Ledger</a>
+  <div class="hl-feed-url" style="--acc: #58a6ff;">
+    <span class="hl-feed-url__label">Profile</span>
+    <span class="hl-feed-url__val">x.com/Hunters_Ledger</span>
+    <a class="hl-cta hl-cta--ghost" style="--acc: #58a6ff;" href="https://x.com/Hunters_Ledger" target="_blank" rel="noopener">Open&nbsp;&rarr;</a>
   </div>
 </div>
 
 {% include section-header.html label="What You'll Receive" accent="#4ade80" %}
 
-<div class="hl-prose-section">
-  <div class="hl-prose-section__body">
-    <ul>
-      <li><strong>Threat Intelligence Reports</strong> — original malware analysis and campaign investigations</li>
-      <li><strong>Detection Rules</strong> — Sigma, YARA, and Suricata rules ready for your environment</li>
-      <li><strong>IOC Feeds</strong> — structured indicator packages for direct SIEM or EDR ingestion</li>
-    </ul>
+<div class="hl-feat-grid">
+  <div class="hl-feat" style="--fa: #58a6ff;">
+    <div class="hl-feat__dot"></div>
+    <div class="hl-feat__title">Reports</div>
+    <p class="hl-feat__desc">Original malware analysis &amp; campaign investigations.</p>
+  </div>
+  <div class="hl-feat" style="--fa: #4ade80;">
+    <div class="hl-feat__dot"></div>
+    <div class="hl-feat__title">Detections</div>
+    <p class="hl-feat__desc">Sigma, YARA &amp; Suricata rules ready for your environment.</p>
+  </div>
+  <div class="hl-feat" style="--fa: #f87171;">
+    <div class="hl-feat__dot"></div>
+    <div class="hl-feat__title">IOC Feeds</div>
+    <p class="hl-feat__desc">Structured indicator packages for direct SIEM / EDR ingest.</p>
   </div>
 </div>
 
-<div class="hl-note">
-  <div class="hl-note__label">Note</div>
-  <div class="hl-note__body">All content is from original research. Publication frequency varies with active investigations — typically several reports per month.</div>
-</div>
+<p style="color: var(--hl-text-muted); font-size: 0.85em; line-height: 1.6; margin-top: 18px;">All content is from original research. Publication frequency varies with active investigations — typically several reports per month.</p>
+
+<script>
+document.querySelectorAll('.hl-feed-url__copy').forEach(function (b) {
+  b.addEventListener('click', function () {
+    navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function () {
+      var t = b.textContent; b.textContent = 'COPIED'; setTimeout(function () { b.textContent = t; }, 1400);
+    });
+  });
+});
+</script>

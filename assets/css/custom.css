@@ -829,13 +829,6 @@ main.content {
   color: var(--hl-accent-blue);
 }
 
-.hl-contact-heading {
-  font-size: 1.0em;
-  font-weight: 600;
-  color: var(--hl-text-primary);
-  margin-bottom: 10px;
-}
-
 /* --- Nav tile grid ----------------------------------------- */
 .hl-nav-grid {
   display: grid;
@@ -907,86 +900,6 @@ main.content {
   text-decoration: none !important;
 }
 .hl-view-all:hover { text-decoration: underline !important; }
-
-/* --- Subscribe option cards -------------------------------- */
-.hl-subscribe-option {
-  background: var(--hl-bg-card);
-  border: 1px solid var(--hl-border-card);
-  border-radius: 6px;
-  padding: 22px 24px;
-  margin-bottom: 14px;
-}
-
-.hl-subscribe-option--rss {
-  border-left: 4px solid #4ade80;
-}
-
-.hl-subscribe-option--email {
-  border-left: 4px solid var(--hl-accent-blue);
-}
-
-.hl-subscribe-option__header {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  margin-bottom: 16px;
-}
-
-.hl-subscribe-option__icon {
-  font-size: 1.4em;
-  line-height: 1;
-  margin-top: 2px;
-  flex-shrink: 0;
-}
-
-.hl-subscribe-option--rss .hl-subscribe-option__icon { color: #4ade80; }
-.hl-subscribe-option--email .hl-subscribe-option__icon { color: var(--hl-accent-blue); }
-
-.hl-subscribe-option__title {
-  color: var(--hl-text-primary);
-  font-size: 1.05em;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.hl-subscribe-option__desc {
-  color: var(--hl-text-secondary);
-  font-size: 0.9em;
-  line-height: 1.6;
-}
-
-.hl-subscribe-option__url {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #0d1117;
-  border: 1px solid #333333;
-  border-radius: 4px;
-  padding: 10px 14px;
-}
-
-.hl-subscribe-option__url-label {
-  color: #4ade80;
-  font-size: 0.7em;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.hl-subscribe-option__url-value {
-  color: #e6b17a !important;
-  font-size: 0.88em;
-  background: none !important;
-  border: none !important;
-  padding: 0 !important;
-  word-break: break-all;
-}
-
-.hl-subscribe-option__form {
-  margin-top: 4px;
-}
 
 /* --- Post page layout -------------------------------------- */
 /* No grid — TOC floats in the page margin via fixed positioning */
@@ -1722,10 +1635,7 @@ img { max-width: 100%; height: auto; }
   }
   .hl-card__inner { padding: 12px; gap: 10px; }
 
-  /* --- Subscribe cards + prose sections -------------------- */
-  .hl-subscribe-option { padding: 18px 18px; }
-  .hl-subscribe-option__url { padding: 8px 12px; }
-  .hl-subscribe-option__url-value { font-size: 0.8em; }
+  /* --- Prose sections -------------------------------------- */
   .hl-prose-section { padding: 12px 14px; }
   .hl-nav-tile { padding: 12px 14px; }
 
@@ -2147,28 +2057,6 @@ button,
    SUPPORT PAGE — sections, donate block, tier grid
    ============================================================ */
 
-.hl-support-section {
-  margin-bottom: 1.5rem;
-}
-
-.hl-support-donate {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-  padding: 16px 18px;
-  background: var(--hl-bg-row);
-  border: 1px solid var(--hl-border-row);
-  border-radius: 5px;
-}
-
-.hl-support-donate__note {
-  color: var(--hl-text-muted);
-  font-size: 0.8em;
-  margin: 0;
-}
-
 /* Tier grid */
 .hl-tier-grid {
   display: grid;
@@ -2583,39 +2471,6 @@ button,
   margin-top: 2px;
 }
 
-/* --- Consulting service cards -------------------------------- */
-.hl-service-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-bottom: 2rem;
-}
-
-.hl-service-card {
-  cursor: default;
-}
-
-.hl-service-card__title {
-  font-size: 1.0em;
-  font-weight: 700;
-  line-height: 1.3;
-  margin-bottom: 7px;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-.hl-service-card__body {
-  color: var(--hl-text-primary);
-  font-size: 0.835em;
-  line-height: 1.65;
-}
-
-@media (max-width: 700px) {
-  .hl-service-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* --- Listing filter bar ------------------------------------ */
 .hl-filter { margin: 0 0 4px; }
 .hl-filter__search {
@@ -2756,3 +2611,219 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-cred-pill { background: linear-gradient(180deg, #1d1d1d, #161616); box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
 a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: translateY(-3px); box-shadow: 0 10px 34px rgba(88,166,255,0.13), 0 6px 18px rgba(0,0,0,0.45); }
+
+/* ============================================================
+   PREMIUM CONTENT COMPONENTS  (/subscribe/ /consulting/ /support/)
+   Accent per instance via inline style="--acc: #hex".
+   color-mix enhancements use repeated-property fallbacks (solid
+   value first, color-mix second — dropped as a unit if the browser
+   lacks color-mix) so nothing renders invisible or broken.
+   ============================================================ */
+
+/* --- Elevated panel ---------------------------------------- */
+.hl-panel {
+  --acc: var(--hl-accent-blue);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
+  border: 1px solid var(--hl-border-card);
+  border-left: 3px solid var(--acc);
+  border-radius: 9px;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.hl-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 150% at 0% 0%, var(--acc), transparent 56%);
+  opacity: 0.10;
+}
+.hl-panel > * { position: relative; z-index: 1; }
+.hl-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.42);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.42), 0 0 22px color-mix(in srgb, var(--acc) 16%, transparent);
+}
+.hl-panel--featured::before { opacity: 0.16; }
+
+.hl-panel__head { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 14px; }
+
+.hl-panel__chip {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3em;
+  line-height: 1;
+  color: var(--acc);
+  background: rgba(255,255,255,0.03);
+  background: color-mix(in srgb, var(--acc) 15%, transparent);
+  border: 1px solid var(--hl-border-card);
+  border-color: color-mix(in srgb, var(--acc) 32%, transparent);
+}
+
+.hl-panel__eyebrow {
+  display: inline-block;
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--acc);
+  margin-bottom: 10px;
+  padding: 3px 9px;
+  border: 1px solid var(--acc);
+  border-color: color-mix(in srgb, var(--acc) 35%, transparent);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.03);
+  background: color-mix(in srgb, var(--acc) 12%, transparent);
+}
+
+.hl-panel__title {
+  font-family: var(--hl-font-display);
+  font-weight: 700;
+  font-size: 1.1em;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+  color: var(--hl-text-primary);
+}
+@supports (color: color-mix(in srgb, white, black)) {
+  .hl-panel__title {
+    background: linear-gradient(100deg, #ffffff 48%, color-mix(in srgb, var(--acc) 64%, #ffffff) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+.hl-panel__body { color: var(--hl-text-primary); font-size: 0.88em; line-height: 1.62; margin: 0; }
+.hl-panel__desc { color: var(--hl-text-secondary); font-size: 0.88em; line-height: 1.62; margin: 0; }
+
+/* --- Premium CTA button ------------------------------------ */
+.hl-cta {
+  --acc: var(--hl-accent-green);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--hl-font-display);
+  font-weight: 700;
+  font-size: 0.92em;
+  padding: 11px 20px;
+  border-radius: 8px;
+  text-decoration: none !important;
+  color: #08120b !important;
+  background: var(--acc);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--acc) 82%, #fff), var(--acc));
+  border: 1px solid var(--acc);
+  border-color: color-mix(in srgb, var(--acc) 55%, #fff);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--acc) 28%, transparent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.hl-cta:hover {
+  transform: translateY(-2px);
+  text-decoration: none !important;
+  box-shadow: 0 9px 26px rgba(0,0,0,0.3);
+  box-shadow: 0 9px 26px color-mix(in srgb, var(--acc) 42%, transparent);
+}
+.hl-cta--ghost {
+  color: var(--acc) !important;
+  background: transparent;
+  background: color-mix(in srgb, var(--acc) 10%, transparent);
+  border: 1px solid var(--acc);
+  border-color: color-mix(in srgb, var(--acc) 34%, transparent);
+  box-shadow: none;
+}
+.hl-cta--ghost:hover {
+  background: color-mix(in srgb, var(--acc) 18%, transparent);
+  box-shadow: none;
+}
+.hl-cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-top: 2px; }
+.hl-cta-note { color: var(--hl-text-muted); font-size: 0.8em; margin: 12px 0 0; }
+
+/* --- Feature / stat tiles ---------------------------------- */
+.hl-feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; }
+.hl-feat {
+  position: relative;
+  overflow: hidden;
+  background: var(--hl-bg-row);
+  border: 1px solid var(--hl-border-row);
+  border-radius: 9px;
+  padding: 17px 17px;
+}
+.hl-feat::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(110% 130% at 0% 0%, var(--fa), transparent 60%);
+  opacity: 0.09;
+}
+.hl-feat > * { position: relative; z-index: 1; }
+.hl-feat__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--fa); margin-bottom: 11px; box-shadow: 0 0 10px var(--fa); }
+.hl-feat__stat { font-family: var(--hl-font-display); font-weight: 700; font-size: 1.04em; color: #fff; margin: 0 0 5px; letter-spacing: -0.01em; }
+.hl-feat__title { font-family: var(--hl-font-display); font-weight: 700; font-size: 0.96em; color: #fff; margin: 0 0 5px; }
+.hl-feat__desc { font-size: 0.82em; color: var(--hl-text-secondary); line-height: 1.5; margin: 0; }
+
+/* --- Compact cross-link card ------------------------------- */
+.hl-link-card {
+  --acc: var(--hl-accent-blue);
+  display: block;
+  text-decoration: none !important;
+  background: var(--hl-bg-row);
+  border: 1px solid var(--hl-border-row);
+  border-left: 3px solid var(--acc);
+  border-radius: 8px;
+  padding: 14px 16px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.hl-link-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.4); text-decoration: none !important; }
+.hl-link-card__title { font-family: var(--hl-font-display); font-weight: 700; font-size: 0.95em; color: var(--acc); margin: 0 0 3px; }
+.hl-link-card__desc { color: var(--hl-text-secondary); font-size: 0.82em; line-height: 1.5; margin: 0; }
+
+/* --- 2-col panel grid -------------------------------------- */
+.hl-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 8px; }
+.hl-grid-2 .hl-panel { margin-bottom: 0; }
+
+/* --- Terminal-style feed URL row (subscribe) --------------- */
+.hl-feed-url {
+  --acc: var(--hl-accent-blue);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0a0e13;
+  border: 1px solid #2b3440;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+.hl-feed-url__label { color: var(--acc); font-size: 0.66em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap; flex-shrink: 0; }
+.hl-feed-url__val { color: #e6b17a; font-size: 0.86em; font-family: ui-monospace, Menlo, Consolas, monospace; word-break: break-all; flex: 1; }
+.hl-feed-url__copy {
+  flex-shrink: 0;
+  color: var(--acc);
+  background: rgba(255,255,255,0.04);
+  background: color-mix(in srgb, var(--acc) 12%, transparent);
+  border: 1px solid var(--hl-border-card);
+  border-color: color-mix(in srgb, var(--acc) 30%, transparent);
+  border-radius: 5px;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+/* --- Premium components: mobile --------------------------- */
+@media (max-width: 700px) {
+  .hl-feat-grid, .hl-grid-2 { grid-template-columns: 1fr; gap: 11px; }
+  .hl-panel { padding: 18px 18px; }
+  .hl-cta-row { gap: 10px; }
+}
