@@ -2267,15 +2267,15 @@ button,
   font-weight: 600;
 }
 
-/* Featured grid variant - single column on sponsor page */
+/* Featured grid variant - two tiers side by side on the sponsor page */
 .hl-tier-grid--feature {
   grid-template-columns: 1fr;
   gap: 18px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 760px) {
   .hl-tier-grid--feature {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -2436,6 +2436,7 @@ button,
 
 /* --- About: credentials strip (pills) ---------------------- */
 .hl-creds-strip { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 6px; }
+.hl-creds-strip--skills { margin-top: 0; }
 .hl-cred-pill {
   display: inline-flex; align-items: center; gap: 9px;
   padding: 9px 15px;

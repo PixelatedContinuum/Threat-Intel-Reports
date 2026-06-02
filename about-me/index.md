@@ -18,6 +18,16 @@ permalink: /about-me/
   <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>U.S. Air Force</strong>&nbsp;·&nbsp;Veteran</span>
 </div>
 
+<div class="hl-creds-strip hl-creds-strip--skills">
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>Threat Hunting</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#4ade80;"></span><strong>Detection Engineering</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f87171;"></span><strong>Malware Analysis</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f97316;"></span><strong>Reverse Engineering</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#c084fc;"></span><strong>DFIR</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#2dd4bf;"></span><strong>Threat Intelligence</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#b8902f;"></span><strong>AI Agent Engineering</strong></span>
+</div>
+
 {% include section-header.html label="Who I Am" accent="#58a6ff" %}
 
 <div class="hl-panel" style="--acc: #58a6ff;">

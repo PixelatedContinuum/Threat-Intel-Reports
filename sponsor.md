@@ -34,7 +34,7 @@ hide: true
 {% include section-header.html label="Who Reads This" accent="#58a6ff" %}
 
 <div class="hl-panel" style="--acc: #58a6ff;">
-  <p class="hl-panel__body" style="margin-bottom: 12px;">The readership skews technical and operational. The most active reader cohorts are:</p>
+  <p class="hl-panel__body" style="margin-bottom: 12px;">Every reader here is a working defender — the exact <strong>technical security audience vendors want in front of</strong>: the people who evaluate, recommend, deploy, and buy detection and tooling. The most active cohorts:</p>
   <ul class="hl-panel__body" style="margin: 0; padding-left: 18px; line-height: 1.7;">
     <li><strong>CISO and security leadership</strong> — taking risk framing, business impact, and vendor capability signals to inform tool evaluation.</li>
     <li><strong>Threat intelligence analysts</strong> — pulling attribution assessments, infrastructure pivots, actor TTPs, and IOCs.</li>
@@ -43,11 +43,33 @@ hide: true
   </ul>
 </div>
 
+<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 16px 2px 12px;">Reach here is about <strong>relevance, not raw volume</strong> — the audience is concentrated exactly where security buying decisions get made:</p>
+
+<div class="hl-feat-grid">
+  <div class="hl-feat" style="--fa: #58a6ff;">
+    <div class="hl-feat__dot"></div>
+    <div class="hl-feat__stat">10K+ views</div>
+    <p class="hl-feat__desc">In a peak month and climbing — readers who come for working detection content, not general traffic.</p>
+  </div>
+  <div class="hl-feat" style="--fa: #4ade80;">
+    <div class="hl-feat__dot"></div>
+    <div class="hl-feat__stat">3,500+ on LinkedIn</div>
+    <p class="hl-feat__desc">A following of detection engineers, threat-intel analysts, and security leaders — the roles that evaluate and buy.</p>
+  </div>
+  <div class="hl-feat" style="--fa: #b8902f;">
+    <div class="hl-feat__dot"></div>
+    <div class="hl-feat__stat">~400 views / day</div>
+    <p class="hl-feat__desc">Daily LinkedIn profile reach, where every report is posted and discussed in the community.</p>
+  </div>
+</div>
+
+<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site: every detection rule is submitted to the public <strong>Sigma and YARA rule repositories</strong> the community pulls from — so the research gets deployed in SOCs, labs, and hunt platforms used by defenders worldwide, well beyond direct readers.</p>
+
 {% include section-header.html label="Sponsorship Tiers" accent="#b8902f" %}
 
 <div class="hl-panel" style="--acc: #b8902f;">
-  <span class="hl-panel__eyebrow">Flexible Starting Points</span>
-  <p class="hl-panel__body">Multi-Report bundles do not have to be six reports — bundles of any size (three, four, ten, whatever fits your campaign) are available. Custom packages combining elements across tiers can also be arranged. Reach out to discuss what matches your goals.</p>
+  <span class="hl-panel__eyebrow">Flexible &amp; Custom</span>
+  <p class="hl-panel__body">These are starting points, not limits — bundle reports in any size, mix new and catalog, sponsor monthly, or build something custom. Tell me what you're trying to achieve and I'll shape a package around it.</p>
 </div>
 
 {% assign tiers = site.data.sponsors.tiers %}
@@ -57,16 +79,16 @@ hide: true
   {% for tier in tiers %}
   {% case tier.id %}
     {% when 'monthly' %}{% assign tacc = '#b8902f' %}{% assign tfeat = true %}
-    {% when 'multi-report' %}{% assign tacc = '#58a6ff' %}{% assign tfeat = false %}
     {% when 'report' %}{% assign tacc = '#4ade80' %}{% assign tfeat = false %}
     {% else %}{% assign tacc = '#b8902f' %}{% assign tfeat = false %}
   {% endcase %}
   <div class="hl-tier-card{% if tfeat %} hl-tier-card--feature{% endif %}" style="--acc: {{ tacc }};">
-    {% if tfeat %}<span class="hl-tier-card__eyebrow">Flagship</span>{% endif %}
+    {% if tfeat %}<span class="hl-tier-card__eyebrow">Flagship · Best Value</span>{% endif %}
     <div class="hl-tier-card__name">{{ tier.name }}</div>
     {% if tier.price %}
     <div class="hl-tier-card__price">{{ tier.price }}</div>
     {% if tier.price_note %}<div class="hl-tier-card__price-note">{{ tier.price_note }}</div>{% endif %}
+    {% if tier.intro_price %}<div class="hl-tier-card__price-extra" style="color: var(--acc); font-weight: 600;">{{ tier.intro_price }}</div>{% endif %}
     {% if tier.annual_price %}<div class="hl-tier-card__price-extra">or {{ tier.annual_price }} / year</div>{% endif %}
     {% if tier.catalog_price %}<div class="hl-tier-card__price-extra">or {{ tier.catalog_price }} {{ tier.catalog_price_note }}</div>{% endif %}
     {% endif %}
@@ -97,17 +119,6 @@ hide: true
   {% endfor %}
 </div>
 
-<div class="hl-panel hl-panel--featured" style="--acc: #b8902f;">
-  <span class="hl-panel__eyebrow">Founding Offer — Each Tier, Offered Once</span>
-  <p class="hl-panel__body">The first sponsor at each tier qualifies for a founding rate:</p>
-  <ul class="hl-panel__body" style="margin: 8px 0 0; padding-left: 18px; line-height: 1.7;">
-    <li><strong>Report Sponsor:</strong> $100 (standard $150)</li>
-    <li><strong>Multi-Report Sponsor:</strong> $500 for the bundle (standard $750)</li>
-    <li><strong>Monthly Sponsor:</strong> $300/month, no time cap — founding rate held for the full duration of your sponsorship (standard $500/month)</li>
-  </ul>
-  <p class="hl-cta-note">Each founding slot is offered once and retires when filled.</p>
-</div>
-
 {% include section-header.html label="Editorial Independence" accent="#58a6ff" %}
 
 <div class="hl-panel" style="--acc: #58a6ff;">
@@ -124,11 +135,11 @@ hide: true
 {% include section-header.html label="Optional Add-Ons" accent="#b8902f" %}
 
 <div class="hl-panel" style="--acc: #b8902f;">
-  <p class="hl-panel__body" style="margin-bottom: 12px;">Stack any of these on top of a sponsorship tier for added reach or customization.</p>
+  <p class="hl-panel__body" style="margin-bottom: 12px;">Optional extras to add more reach whenever you want it.</p>
   <ul class="hl-panel__body" style="margin: 0; padding-left: 18px; line-height: 1.7;">
-    <li><strong>Newsletter shoutout</strong> — <span style="color: #b8902f; font-weight: 600;">$75</span> — One-off sponsored mention in a subscriber email send.</li>
-    <li><strong>LinkedIn or X post</strong> — <span style="color: #b8902f; font-weight: 600;">$100</span> — Single sponsored post about your capability or content.</li>
-    <li><strong>Sponsor-requested research topic</strong> — <span style="color: #b8902f; font-weight: 600;">$500+</span> — Suggest a research direction; editorial independence preserved (see above).</li>
+    <li><strong>Newsletter mention</strong> — <span style="color: #b8902f; font-weight: 600;">$50</span> — One-off sponsored mention in a subscriber email send.</li>
+    <li><strong>Extra LinkedIn or X post</strong> — <span style="color: #b8902f; font-weight: 600;">$50</span> — A single dedicated sponsored post about your capability or content.</li>
+    <li><strong>Sponsor-suggested research topic</strong> — <span style="color: #b8902f; font-weight: 600;">$500+</span> — Choose a topic your organization needs intel about and I'll do the rest: original research and a published report on it. A new investigation, distinct from the topic alignment already included with a Report sponsorship; editorial independence preserved.</li>
   </ul>
 </div>
 
