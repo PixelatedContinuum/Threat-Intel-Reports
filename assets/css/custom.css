@@ -2545,7 +2545,12 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 /* --- Premium polish: gradient hero (glow + headline), lifted pills, card glow --- */
 .hl-home-hero { position: relative; isolation: isolate; }
 .hl-home-hero::before {
-  content: ''; position: absolute; top: -64px; left: 50%; right: auto; transform: translateX(-50%); width: 100vw; height: 460px; z-index: -1;
+  /* Top fade glow. The top edge reaches UP under the sticky 70px nav (tucks
+     ~8px behind it, hidden by the opaque nav bg) so the glow meets the nav
+     with no dark gap. Reach to nav bottom = .hl-page padding-top (48px) +
+     hero margin-top (34px) = 82px; -90px clears it by 8px. height grows in
+     step (460->486) so the lower fade stays put — only the top moves. */
+  content: ''; position: absolute; top: -90px; left: 50%; right: auto; transform: translateX(-50%); width: 100vw; height: 486px; z-index: -1;
   background: radial-gradient(78% 100% at 50% 0%, rgba(88,166,255,0.17) 0%, rgba(88,166,255,0.06) 46%, rgba(88,166,255,0) 74%);
   pointer-events: none;
 }
