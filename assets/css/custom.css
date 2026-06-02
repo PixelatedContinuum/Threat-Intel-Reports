@@ -2708,3 +2708,19 @@ button,
 a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0,0,0,0.38); }
 
 @media (max-width: 700px) { .hl-tile-row3 { grid-template-columns: 1fr; } }
+
+/* --- Premium polish: gradient hero (glow + headline), lifted pills, card glow --- */
+.hl-home-hero { position: relative; isolation: isolate; }
+.hl-home-hero::before {
+  content: ''; position: absolute; top: -30px; left: 0; right: 0; height: 320px; z-index: -1;
+  background: radial-gradient(60% 100% at 25% 0%, rgba(88,166,255,0.15), rgba(88,166,255,0) 70%);
+  pointer-events: none;
+}
+.hl-home-hero__title {
+  background: linear-gradient(108deg, #ffffff 38%, #79c0ff 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent !important;
+  letter-spacing: -0.02em;
+}
+.hl-cred-pill { background: linear-gradient(180deg, #1d1d1d, #161616); box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: translateY(-3px); box-shadow: 0 10px 34px rgba(88,166,255,0.13), 0 6px 18px rgba(0,0,0,0.45); }
