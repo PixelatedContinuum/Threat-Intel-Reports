@@ -37,22 +37,22 @@
     ],
     "registry": [
       {
-        "key": "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce",
+        "key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
         "purpose": "System-wide persistence",
         "severity": "HIGH"
       },
       {
-        "key": "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce",
+        "key": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
         "purpose": "User-specific persistence",
         "severity": "HIGH"
       },
       {
-        "key": "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\...\RunOnce",
+        "key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\...\\RunOnce",
         "purpose": "32-bit persistence on 64-bit systems",
         "severity": "HIGH"
       },
       {
-        "path": "%SYSTEMDRIVE%\Recovery\OEM\",
+        "path": "%SYSTEMDRIVE%\\Recovery\\OEM\\",
         "purpose": "Recovery partition persistence",
         "severity": "CRITICAL"
       }
@@ -89,7 +89,7 @@
       },
       {
         "behavior": "WinRE partition access",
-        "detection": "File system monitoring for `\Recovery\OEM\`",
+        "detection": "File system monitoring for `\\Recovery\\OEM\\`",
         "severity": "CRITICAL",
         "false_positive_risk": "Very Low"
       },

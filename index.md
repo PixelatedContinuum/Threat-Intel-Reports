@@ -6,15 +6,15 @@ position: 1
 ---
 
 {% assign n_reports = site.data.catalog.entries | where_exp: "e", "e.report_url" | size %}
-{% assign n_det = site.data.catalog.entries | where_exp: "e", "e.detection_url" | size %}
-{% assign n_ioc = site.data.catalog.entries | where_exp: "e", "e.ioc_url" | size %}
+{% assign n_det = site.data.metrics.detection_rules %}
+{% assign n_ioc = site.data.metrics.iocs %}
 <div class="hl-home-hero">
   <h1 class="hl-home-hero__title">Original Threat Intelligence Research</h1>
   <p class="hl-home-hero__lede">Hands-on malware analysis turned into structured, evidence-based intelligence — technically deep enough to trust, clear enough to act on. Free and open: published by a solo analyst for the defender community, with no paywall or signup.</p>
   <div class="hl-creds-strip">
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>{{ n_reports }}</strong>&nbsp;Reports</span>
-    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#4ade80;"></span><strong>{{ n_det }}</strong>&nbsp;Detections</span>
-    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f87171;"></span><strong>{{ n_ioc }}</strong>&nbsp;IOC Feeds</span>
+    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#4ade80;"></span><strong>{{ n_det }}</strong>&nbsp;Detection Rules</span>
+    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f87171;"></span><strong>{{ n_ioc }}</strong>&nbsp;IOCs</span>
   </div>
 </div>
 

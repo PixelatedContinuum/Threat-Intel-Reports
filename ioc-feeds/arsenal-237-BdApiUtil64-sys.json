@@ -90,13 +90,13 @@
         "ProcessHacker.exe (Process Hacker)"
       ],
       "indicators": [
-        "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x800024b4",
+        "DeviceIoControl calls to \\\\.\\BdApiUtil with IOCTL 0x800024b4",
         "4-byte input buffers containing security product PIDs",
         "Security product processes terminated with no event logging",
         "Process termination from kernel mode (no user-mode call stack)"
       ],
       "evasion_capabilities": "Bypasses user-mode security restrictions, can terminate Protected Process Light (PPL) processes",
-      "detection": "Monitor DeviceIoControl calls to \\\\.\BdApiUtil; correlate security product terminations with driver load events (within 60 seconds)"
+      "detection": "Monitor DeviceIoControl calls to \\\\.\\BdApiUtil; correlate security product terminations with driver load events (within 60 seconds)"
     },
     "capability_2_edr_evading_termination": {
       "technique": "T1562.001 - Disable or Modify Tools (SSDT Bypass) + T1027.010 - Command Obfuscation",
@@ -125,7 +125,7 @@
         "Process termination via unhooking path"
       ],
       "indicators": [
-        "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x800024b8",
+        "DeviceIoControl calls to \\\\.\\BdApiUtil with IOCTL 0x800024b8",
         "MmGetSystemRoutineAddress calls for KeServiceDescriptorTable",
         "SSDT access patterns in kernel memory",
         "Security products terminated despite kernel hook detection",
@@ -173,7 +173,7 @@
         }
       ],
       "indicators": [
-        "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x80002324",
+        "DeviceIoControl calls to \\\\.\\BdApiUtil with IOCTL 0x80002324",
         "0x224-byte input buffers with service configuration",
         "Service creation outside of legitimate installers",
         "Service names impersonating Microsoft/security tools",
@@ -223,7 +223,7 @@
         ]
       },
       "indicators": [
-        "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x80002648 or 0x8000264c",
+        "DeviceIoControl calls to \\\\.\\BdApiUtil with IOCTL 0x80002648 or 0x8000264c",
         "0x208+ byte input buffers containing file paths",
         "File access to protected locations (SAM, SYSTEM, Credentials)",
         "IoCreateFile calls from BdApiUtil64.sys driver",
@@ -296,7 +296,7 @@
     ],
     "behavioral_patterns": [
       "Driver load followed by security product termination (within 60 seconds)",
-      "DeviceIoControl calls to \\\\.\BdApiUtil with IOCTL 0x800024b4, 0x800024b8, 0x80002324, 0x80002648, 0x8000264c",
+      "DeviceIoControl calls to \\\\.\\BdApiUtil with IOCTL 0x800024b4, 0x800024b8, 0x80002324, 0x80002648, 0x8000264c",
       "Multiple security product processes terminated simultaneously",
       "Service creation via kernel driver (not sc.exe or services.exe)",
       "File access to protected locations (SAM, SYSTEM, credentials) from kernel driver",
