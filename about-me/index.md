@@ -5,8 +5,8 @@ layout: page
 permalink: /about-me/
 ---
 
-<div class="hl-page-header" style="border-left-color: #58a6ff;">
-  <div class="hl-page-header__label" style="color: #58a6ff;">About</div>
+<div class="hl-page-header" style="--ph-accent: #58a6ff;">
+  <div class="hl-page-header__label">About</div>
   <div class="hl-page-header__title">Joseph Harrison</div>
   <div class="hl-page-header__desc">SOC Operations Lead &amp; Threat Intelligence Researcher</div>
 </div>

@@ -6,8 +6,8 @@ permalink: /behind-the-reports/collection-platform/
 hide: true
 ---
 
-<div class="hl-page-header" style="border-left-color: #f97316;">
-  <div class="hl-page-header__label" style="color: #f97316;">Behind the Reports</div>
+<div class="hl-page-header" style="--ph-accent: #f97316;">
+  <div class="hl-page-header__label">Behind the Reports</div>
   <div class="hl-page-header__title">How Threats Are Found</div>
   <div class="hl-page-header__desc">The collection platform that discovers malware on adversary infrastructure — what it does, why it exists, and how it works.</div>
 </div>

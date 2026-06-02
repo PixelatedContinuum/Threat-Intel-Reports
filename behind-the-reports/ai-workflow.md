@@ -6,8 +6,8 @@ permalink: /behind-the-reports/ai-workflow/
 hide: true
 ---
 
-<div class="hl-page-header" style="border-left-color: #f97316;">
-  <div class="hl-page-header__label" style="color: #f97316;">Behind the Reports</div>
+<div class="hl-page-header" style="--ph-accent: #f97316;">
+  <div class="hl-page-header__label">Behind the Reports</div>
   <div class="hl-page-header__title">How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence</div>
   <div class="hl-page-header__desc">The workflow, the design decisions, and why it was built.</div>
 </div>

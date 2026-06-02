@@ -6,8 +6,8 @@ permalink: /consulting/
 position: 7
 ---
 
-<div class="hl-page-header" style="border-left-color: #58a6ff;">
-  <div class="hl-page-header__label" style="color: #58a6ff;">Consulting & Advisory</div>
+<div class="hl-page-header" style="--ph-accent: #58a6ff;">
+  <div class="hl-page-header__label">Consulting & Advisory</div>
   <div class="hl-page-header__title">Threat Intelligence That Works for Your Team</div>
   <div class="hl-page-header__desc">Engagements are kept selective and scoped to what I can do well. I run an independent practice alongside active security operations work — quality and fit take priority over volume. If it's a fit, you'll get the same depth that goes into the research on this site applied directly to your environment. Above all else, the goal is to help defenders protect their organizations.</div>
 </div>

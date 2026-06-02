@@ -5,8 +5,8 @@ permalink: /sponsor/
 hide: true
 ---
 
-<div class="hl-page-header" style="border-left-color: #b8902f;">
-  <div class="hl-page-header__label" style="color: #b8902f;">Sponsor The Hunter's Ledger</div>
+<div class="hl-page-header" style="--ph-accent: #b8902f;">
+  <div class="hl-page-header__label">Sponsor The Hunter's Ledger</div>
   <div class="hl-page-header__title">Reach Defenders Who Build, Buy, and Use Detection</div>
   <div class="hl-page-header__desc">An independent threat intelligence publication. Every report ships with working YARA, Sigma, and Suricata detections, validated IOC packages, and evidence-tied attribution. Sponsorship places your brand alongside the kind of technical research that working defenders actively consume and integrate.</div>
 </div>

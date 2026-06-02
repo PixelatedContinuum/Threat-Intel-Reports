@@ -6,8 +6,8 @@ permalink: /behind-the-reports/
 hide: true
 ---
 
-<div class="hl-page-header" style="border-left-color: #f97316;">
-  <div class="hl-page-header__label" style="color: #f97316;">Behind the Reports</div>
+<div class="hl-page-header" style="--ph-accent: #f97316;">
+  <div class="hl-page-header__label">Behind the Reports</div>
   <div class="hl-page-header__title">How the Intelligence Is Produced</div>
   <div class="hl-page-header__desc">From finding threats on adversary infrastructure to publishing finished intelligence — the systems, the design decisions, and why they were built.</div>
 </div>
