@@ -5,8 +5,8 @@ permalink: /hunting-detections/
 position: 3
 ---
 
-<div class="hl-page-header" style="border-left-color: #4ade80;">
-  <div class="hl-page-header__label" style="color: #4ade80;">Hunting Detections</div>
+<div class="hl-page-header" style="--ph-accent: #4ade80;">
+  <div class="hl-page-header__label">Hunting Detections</div>
   <div class="hl-page-header__title">Sigma, YARA &amp; Suricata Rules</div>
   <div class="hl-page-header__desc">Detection logic from original research, mapped to MITRE ATT&amp;CK. Free to use in your environment under <strong>CC BY-NC 4.0</strong>.</div>
 </div>

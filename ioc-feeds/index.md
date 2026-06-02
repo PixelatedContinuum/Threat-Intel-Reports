@@ -5,8 +5,8 @@ permalink: /ioc-feeds/
 position: 4
 ---
 
-<div class="hl-page-header" style="border-left-color: #f87171;">
-  <div class="hl-page-header__label" style="color: #f87171;">IOC Feeds</div>
+<div class="hl-page-header" style="--ph-accent: #f87171;">
+  <div class="hl-page-header__label">IOC Feeds</div>
   <div class="hl-page-header__title">Indicators of Compromise</div>
   <div class="hl-page-header__desc">Structured feeds ready for ingestion into your SIEM, EDR, or CTI platform. Licensed under <strong>CC BY-NC 4.0</strong>.</div>
 </div>

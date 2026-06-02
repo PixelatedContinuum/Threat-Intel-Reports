@@ -265,23 +265,6 @@ main.content {
   max-width: 62ch;
 }
 
-.hl-home-hero__chips {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.hl-chip {
-  font-size: 0.8rem;
-  color: #c9d1d9;
-  background: var(--hl-bg-card);
-  border: 1px solid var(--hl-border-card);
-  border-radius: 999px;
-  padding: 6px 13px;
-}
-
-.hl-chip b { color: var(--hl-accent-blue); font-weight: 600; }
-
 @media (max-width: 700px) {
   .hl-home-hero { margin: 24px 0 30px; }
   .hl-home-hero__title { font-size: 1.9rem !important; }
@@ -293,6 +276,7 @@ main.content {
 
 /* --- Post header card --------------------------------------- */
 .hl-post-header {
+  --ph-accent: var(--hl-accent-red);   /* report headers; detection variant overrides to green below */
   background: linear-gradient(135deg, #1a0808 0%, #0d1117 60%, #111111 100%);
   border: 1px solid var(--hl-border-card);
   border-left: 4px solid var(--hl-sev-critical);
@@ -355,8 +339,23 @@ main.content {
 
 /* Detection pages get a green header accent instead of red */
 .hl-post-header--detect {
+  --ph-accent: var(--hl-accent-green);
   background: linear-gradient(135deg, #0a1a0e 0%, #0d1117 60%, #111111 100%);
   border-left-color: var(--hl-accent-green);
+}
+
+/* Premium polish: white → softened-accent gradient title (red on reports,
+   green on detections). Guarded on color-mix so unsupported browsers keep
+   the solid title. No glow here — the header background already carries the
+   accent, unlike the flat listing page-headers. */
+@supports (color: color-mix(in srgb, white, black)) {
+  .hl-post-header__title {
+    background: linear-gradient(100deg, #ffffff 44%, color-mix(in srgb, var(--ph-accent) 64%, #ffffff) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent !important;
+  }
 }
 
 
@@ -729,12 +728,30 @@ main.content {
 
 /* --- Page header card -------------------------------------- */
 .hl-page-header {
+  --ph-accent: var(--hl-accent-blue);   /* per-page override via inline style="--ph-accent: …" */
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
   border: 1px solid var(--hl-border-card);
+  border-left-color: var(--ph-accent);
   border-radius: 6px;
   padding: 20px 24px;
   margin-bottom: 2rem;
 }
+
+/* Premium polish: faint accent wash bleeding from the top-left corner,
+   where the border-left + label already anchor the accent. Dimmed via
+   opacity so no color-mix is needed — degrades to nothing if unsupported. */
+.hl-page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 150% at 0% 0%, var(--ph-accent), transparent 58%);
+  opacity: 0.17;
+}
+.hl-page-header > * { position: relative; z-index: 1; }
 
 .hl-page-header__label {
   font-size: 0.8em;
@@ -742,6 +759,7 @@ main.content {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 5px;
+  color: var(--ph-accent);
 }
 
 .hl-page-header__title {
@@ -757,6 +775,20 @@ main.content {
   font-size: 0.9em;
   line-height: 1.55;
   margin: 0;
+}
+
+/* Premium polish: white → softened-accent gradient title. Guarded on
+   color-mix support so unsupported browsers keep the solid title above
+   (a bare gradient + transparent fill would render the title invisible). */
+@supports (color: color-mix(in srgb, white, black)) {
+  .hl-page-header__title {
+    background: linear-gradient(100deg, #ffffff 42%, color-mix(in srgb, var(--ph-accent) 62%, #ffffff) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent !important;
+    letter-spacing: -0.01em;
+  }
 }
 
 /* --- Prose section card ------------------------------------ */
