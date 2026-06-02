@@ -1510,6 +1510,7 @@ button.hl-quicklink {
 html {
   background: var(--hl-bg-page);
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;   /* contain full-bleed 100vw layers (e.g. home top glow) without a scrollbar; clip (not hidden) preserves the sticky nav */
 }
 
 /* Any bare image (non-figure) also constrained to its container */
@@ -2536,8 +2537,8 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 /* --- Premium polish: gradient hero (glow + headline), lifted pills, card glow --- */
 .hl-home-hero { position: relative; isolation: isolate; }
 .hl-home-hero::before {
-  content: ''; position: absolute; top: -30px; left: 0; right: 0; height: 320px; z-index: -1;
-  background: radial-gradient(60% 100% at 25% 0%, rgba(88,166,255,0.15), rgba(88,166,255,0) 70%);
+  content: ''; position: absolute; top: -64px; left: 50%; right: auto; transform: translateX(-50%); width: 100vw; height: 460px; z-index: -1;
+  background: radial-gradient(78% 100% at 50% 0%, rgba(88,166,255,0.17) 0%, rgba(88,166,255,0.06) 46%, rgba(88,166,255,0) 74%);
   pointer-events: none;
 }
 .hl-home-hero__title {

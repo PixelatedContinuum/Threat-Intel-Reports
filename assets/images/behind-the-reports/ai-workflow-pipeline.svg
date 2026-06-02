@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 2140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/></marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/></filter>
+  </defs>
+
+  <rect width="1000" height="2140" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="2139" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- header -->
+  <text x="500" y="60" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">How a Report Is Made</text>
+  <text x="500" y="102" text-anchor="middle" font-size="23" fill="#f5f5f5">A solo analyst's raw analysis becomes publication-ready intelligence, via a team of AI agents</text>
+  <text x="500" y="135" text-anchor="middle" font-size="17" fill="#cccccc">A human frames the work at the front and signs off at two checkpoints — the agents and gates run in between.</text>
+  <line x1="60" y1="162" x2="940" y2="162" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- STAGE 0a HUMAN (gold, full) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="188" width="880" height="140" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="188" width="880" height="44" rx="8" fill="#b8902f"/>
+    <rect x="60" y="220" width="880" height="12" fill="#b8902f"/>
+    <text x="80" y="217" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 0 · THE HUMAN STARTS THE WORK</text>
+    <text x="80" y="272" font-size="20" font-weight="700" fill="#ffffff">Human Input &amp; Framing</text>
+    <text x="80" y="300" font-size="17" fill="#e5e5e5">You choose which samples to analyze, provide the raw analysis, and frame the investigation —</text>
+    <text x="80" y="322" font-size="17" fill="#e5e5e5">what questions matter and what the findings mean. The judgment no automated system can replicate.</text>
+  </g>
+  <line x1="500" y1="328" x2="500" y2="366" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STAGE 0b ORCHESTRATOR (blue, full) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="368" width="880" height="152" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="368" width="880" height="44" rx="8" fill="#58a6ff"/>
+    <rect x="60" y="400" width="880" height="12" fill="#58a6ff"/>
+    <text x="80" y="397" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">ORCHESTRATOR · RUNS THE PIPELINE</text>
+    <text x="80" y="452" font-size="20" font-weight="700" fill="#ffffff">Orchestrator</text>
+    <text x="80" y="480" font-size="17" fill="#e5e5e5">Takes the input and drives the whole workflow: sequences the agents, runs the framing/scoping checks</text>
+    <text x="80" y="502" font-size="17" fill="#e5e5e5">(is this family already cached? are there network IOCs to pivot on?), presents the checkpoints, keeps it instrumented.</text>
+  </g>
+  <line x1="500" y1="520" x2="500" y2="558" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STAGE 1 Malware Analyst (blue, full) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="560" width="880" height="158" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="560" width="880" height="46" rx="8" fill="#58a6ff"/>
+    <rect x="60" y="593" width="880" height="13" fill="#58a6ff"/>
+    <text x="80" y="591" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 1 · READS THE RAW ANALYSIS</text>
+    <text x="80" y="650" font-size="22" font-weight="700" fill="#ffffff">Malware Analyst</text>
+    <text x="80" y="680" font-size="18" fill="#e5e5e5">The only agent that reads the raw data (sandbox, memory, network, static). Produces the structured</text>
+    <text x="80" y="704" font-size="18" fill="#e5e5e5">technical findings document <tspan fill="#ffffff" font-weight="600">and the validated IOC feed</tspan> — via the MITRE ATT&amp;CK and IOC Formatting skills.</text>
+  </g>
+  <line x1="500" y1="718" x2="500" y2="756" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STAGE 2 parallel band -->
+  <text x="500" y="754" text-anchor="middle" font-size="15" font-weight="700" fill="#888888" letter-spacing="0.5">STAGE 2 · THESE THREE RUN IN PARALLEL (≈12 MIN, NOT 30+)</text>
+  <path d="M 196 768 H 804" stroke="#cccccc" stroke-width="2" fill="none"/>
+  <line x1="196" y1="768" x2="196" y2="782" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="500" y1="768" x2="500" y2="782" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="804" y1="768" x2="804" y2="782" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 2A Research -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="786" width="273" height="206" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="786" width="273" height="42" rx="8" fill="#58a6ff"/>
+    <rect x="60" y="816" width="273" height="12" fill="#58a6ff"/>
+    <text x="78" y="813" font-size="15" font-weight="700" fill="#111111" letter-spacing="0.3">RESEARCH ANALYST</text>
+    <text x="78" y="864" font-size="15" fill="#e5e5e5">Threat-intel context:</text>
+    <text x="78" y="886" font-size="15" fill="#e5e5e5">seen before? who runs it?</text>
+    <text x="78" y="912" font-size="15" fill="#e5e5e5">Every source is</text>
+    <text x="78" y="934" font-size="15" fill="#e5e5e5">credibility-rated.</text>
+    <text x="78" y="970" font-size="14" fill="#888888">Cached 30 days per family.</text>
+  </g>
+  <!-- 2B Detection -->
+  <g filter="url(#cardShadow)">
+    <rect x="363" y="786" width="274" height="206" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="363" y="786" width="274" height="42" rx="8" fill="#58a6ff"/>
+    <rect x="363" y="816" width="274" height="12" fill="#58a6ff"/>
+    <text x="381" y="813" font-size="15" font-weight="700" fill="#111111" letter-spacing="0.3">DETECTION ENGINEER</text>
+    <text x="381" y="864" font-size="15" fill="#e5e5e5">Writes the detection</text>
+    <text x="381" y="886" font-size="15" fill="#e5e5e5">rules: YARA, Sigma and</text>
+    <text x="381" y="912" font-size="15" fill="#e5e5e5">Suricata — to public-repo</text>
+    <text x="381" y="934" font-size="15" fill="#e5e5e5">submission standards.</text>
+    <text x="381" y="970" font-size="14" fill="#888888">Validated by a hook.</text>
+  </g>
+  <!-- 2C Infrastructure -->
+  <g filter="url(#cardShadow)">
+    <rect x="667" y="786" width="273" height="206" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="667" y="786" width="273" height="42" rx="8" fill="#58a6ff"/>
+    <rect x="667" y="816" width="273" height="12" fill="#58a6ff"/>
+    <text x="685" y="813" font-size="15" font-weight="700" fill="#111111" letter-spacing="0.3">INFRASTRUCTURE ANALYST</text>
+    <text x="685" y="864" font-size="15" fill="#e5e5e5">OSINT pivots from IPs</text>
+    <text x="685" y="886" font-size="15" fill="#e5e5e5">and domains to map the</text>
+    <text x="685" y="912" font-size="15" fill="#e5e5e5">attacker's wider</text>
+    <text x="685" y="934" font-size="15" fill="#e5e5e5">infrastructure.</text>
+    <text x="685" y="970" font-size="14" fill="#888888">Skipped if no network IOCs.</text>
+  </g>
+  <!-- merge -->
+  <line x1="196" y1="992" x2="196" y2="1006" stroke="#cccccc" stroke-width="2"/>
+  <line x1="500" y1="992" x2="500" y2="1006" stroke="#cccccc" stroke-width="2"/>
+  <line x1="804" y1="992" x2="804" y2="1006" stroke="#cccccc" stroke-width="2"/>
+  <path d="M 196 1006 H 804" stroke="#cccccc" stroke-width="2" fill="none"/>
+  <line x1="500" y1="1006" x2="500" y2="1046" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STAGE 3 Attribution -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1048" width="880" height="150" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1048" width="880" height="46" rx="8" fill="#58a6ff"/>
+    <rect x="60" y="1081" width="880" height="13" fill="#58a6ff"/>
+    <text x="80" y="1079" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 3 · CONDITIONAL</text>
+    <text x="80" y="1138" font-size="22" font-weight="700" fill="#ffffff">Attribution Analyst</text>
+    <text x="80" y="1168" font-size="18" fill="#e5e5e5">Weighs infrastructure + research into an actor assessment with calibrated confidence. Skipped when</text>
+    <text x="80" y="1190" font-size="18" fill="#e5e5e5">evidence is thin — an honest "Unknown" beats a guess dressed up as analysis.</text>
+  </g>
+  <line x1="500" y1="1198" x2="500" y2="1236" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STAGE 4 Report Writer -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1238" width="880" height="150" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1238" width="880" height="46" rx="8" fill="#58a6ff"/>
+    <rect x="60" y="1271" width="880" height="13" fill="#58a6ff"/>
+    <text x="80" y="1269" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 4 · SYNTHESIS</text>
+    <text x="80" y="1328" font-size="22" font-weight="700" fill="#ffffff">Report Writer</text>
+    <text x="80" y="1358" font-size="18" fill="#e5e5e5">Synthesizes every finding into first drafts of all three deliverables at once — evidence-gated, so a</text>
+    <text x="80" y="1380" font-size="18" fill="#e5e5e5">claim the analysis doesn't support becomes a documented gap, never invented filler.</text>
+  </g>
+  <line x1="500" y1="1388" x2="500" y2="1426" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- CHECKPOINT 1 (gold) + QUALITY GATE (orange) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1428" width="425" height="168" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1428" width="425" height="44" rx="8" fill="#b8902f"/>
+    <rect x="60" y="1460" width="425" height="12" fill="#b8902f"/>
+    <text x="80" y="1457" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">CHECKPOINT 1 · HUMAN</text>
+    <text x="80" y="1510" font-size="18" fill="#e5e5e5">You review the draft:</text>
+    <text x="80" y="1534" font-size="18" fill="#e5e5e5">approve, request targeted</text>
+    <text x="80" y="1558" font-size="18" fill="#e5e5e5">changes, or send it back</text>
+    <text x="80" y="1582" font-size="18" fill="#e5e5e5">for a full re-analysis.</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <rect x="515" y="1428" width="425" height="168" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="515" y="1428" width="425" height="44" rx="8" fill="#f97316"/>
+    <rect x="515" y="1460" width="425" height="12" fill="#f97316"/>
+    <text x="535" y="1457" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">QUALITY GATE · AUTOMATED</text>
+    <text x="535" y="1510" font-size="18" fill="#e5e5e5">A reviewer scores three</text>
+    <text x="535" y="1534" font-size="18" fill="#e5e5e5">lenses in the background.</text>
+    <text x="535" y="1558" font-size="18" fill="#e5e5e5">Must hit <tspan fill="#fb923c" font-weight="700">≥ 8.0</tspan> or it loops</text>
+    <text x="535" y="1582" font-size="18" fill="#e5e5e5">back (max 3 revisions).</text>
+  </g>
+  <line x1="500" y1="1596" x2="500" y2="1634" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STAGE 5 Editor (blue) + CHECKPOINT 2 (gold) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1636" width="425" height="150" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1636" width="425" height="44" rx="8" fill="#58a6ff"/>
+    <rect x="60" y="1668" width="425" height="12" fill="#58a6ff"/>
+    <text x="80" y="1665" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 5 · POLISH</text>
+    <text x="80" y="1718" font-size="20" font-weight="700" fill="#ffffff">Report Editor</text>
+    <text x="80" y="1748" font-size="17" fill="#e5e5e5">Final formatting and</text>
+    <text x="80" y="1770" font-size="17" fill="#e5e5e5">consistency pass.</text>
+  </g>
+  <g filter="url(#cardShadow)">
+    <rect x="515" y="1636" width="425" height="150" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="515" y="1636" width="425" height="44" rx="8" fill="#b8902f"/>
+    <rect x="515" y="1668" width="425" height="12" fill="#b8902f"/>
+    <text x="535" y="1665" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">CHECKPOINT 2 · HUMAN</text>
+    <text x="535" y="1718" font-size="20" font-weight="700" fill="#ffffff">Final Sign-Off</text>
+    <text x="535" y="1748" font-size="17" fill="#e5e5e5">You give the final</text>
+    <text x="535" y="1770" font-size="17" fill="#e5e5e5">approval to publish.</text>
+  </g>
+  <line x1="500" y1="1786" x2="500" y2="1824" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- OUTPUT (green, full) -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1826" width="880" height="150" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1826" width="880" height="46" rx="8" fill="#4ade80"/>
+    <rect x="60" y="1859" width="880" height="13" fill="#4ade80"/>
+    <text x="80" y="1857" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">OUTPUT · READY TO PUBLISH</text>
+    <text x="80" y="1916" font-size="22" font-weight="700" fill="#ffffff">Three deliverables</text>
+    <text x="80" y="1948" font-size="18" fill="#e5e5e5"><tspan fill="#ffffff" font-weight="600">Report</tspan> (the analysis) &#183; <tspan fill="#ffffff" font-weight="600">IOC feed</tspan> (machine-readable JSON) &#183; <tspan fill="#ffffff" font-weight="600">Detection rules</tspan> (YARA / Sigma / Suricata).</text>
+  </g>
+
+  <!-- footer / legend (hooks line split to two for edge padding) -->
+  <line x1="60" y1="2016" x2="940" y2="2016" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="2048" text-anchor="middle" font-size="17" font-weight="600" fill="#ffffff">Five hooks run silently throughout: quality gate &#183; result cache &#183; IOC and detection validation &#183;</text>
+  <text x="500" y="2074" text-anchor="middle" font-size="17" font-weight="600" fill="#ffffff">workflow-state and token tracking &#183; pre-write backup.</text>
+  <text x="500" y="2108" text-anchor="middle" font-size="14" fill="#888888">Legend &#8212; blue: agent work &#183; gold: human input &amp; checkpoints &#183; orange: quality gate &#183; green: deliverables</text>
+</svg>

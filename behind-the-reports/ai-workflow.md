@@ -31,7 +31,7 @@ The workflow is designed to produce intelligence that reads like it came from a 
 
 ## A Note on What This Workflow Is Not
 
-This workflow does not replace a human analyst. It handles the structured, repeatable parts of the intelligence production process. Parts including, aggregation, research, writing, formatting, and review. All wih the goal of allowing the human analyst can spend their time on the parts that require human judgment such as sample selection, data collection, interpreting ambiguous findings, deciding what analysis is worth doing, and understanding the organizational and strategic context that no AI agent can know.
+This workflow does not replace a human analyst. It handles the structured, repeatable parts of the intelligence production process — aggregation, research, writing, formatting, and review — so the human analyst can spend their time on the parts that require human judgment: sample selection, data collection, interpreting ambiguous findings, deciding what analysis is worth doing, and understanding the organizational and strategic context that no AI agent can know.
 
 Think of it as a very capable production team that supports what the analyst needs. The analyst is still the expert. The workflow is the infrastructure that turns expert judgment into professional output efficiently.
 
@@ -59,9 +59,8 @@ Think of the workflow like a newsroom. There is an editor-in-chief who manages t
 
 | Agent                      | Role                                                                                         | Skill Framework                                            | Analogy                       |
 | -------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ----------------------------- |
-| **Orchestrator**           | Manages the whole process, moves data between stages, presents checkpoints to the researcher | ,                                                          | Editor-in-chief               |
-| **Malware Analyst**        | Reads the raw analysis data and produces a structured technical findings document            | MITRE ATT&CK Mapping                                       | Investigative reporter        |
-| **IOC Specialist**         | Validates and formats all the indicators of compromise                                       | IOC Formatting Standards                                   | Fact-checker / data desk      |
+| **Orchestrator**           | Manages the whole process, moves data between stages, presents checkpoints to the researcher | — *(coordinator — runs the workflow itself)*               | Editor-in-chief               |
+| **Malware Analyst**        | Reads the raw analysis data, then produces the structured technical findings document **and the validated IOC feed** | MITRE ATT&CK Mapping, IOC Formatting           | Investigative reporter + data desk |
 | **Research Analyst**       | Searches the threat intelligence landscape for context about the malware and its actors      | Source Credibility Assessment, Threat Intelligence Scoping | Research librarian            |
 | **Detection Engineer**     | Writes the detection rules                                                                   | YARA Rule Formatting, SigmaHQ Rule Formatting              | Technical correspondent       |
 | **Infrastructure Analyst** | Investigates the IP addresses and domains to find broader attacker infrastructure            | Infrastructure Pivoting Playbook                           | Investigative data journalist |
@@ -85,10 +84,12 @@ The same principle applies across the workflow:
 - The **Research Analyst** uses Source Credibility Assessment to apply a consistent credibility tier to every source it cites, so readers and downstream agents know whether a claim comes from a government advisory, a Tier-1 vendor, or an unverified blog post.
 - The **Attribution Analyst** uses the Attribution Analysis Framework to apply structured evidence-weighting before making any actor assessment, preventing the overconfident claims that are one of the most credibility-damaging things a threat intelligence report can produce.
 - The **Infrastructure Analyst** follows the Infrastructure Pivoting Playbook, a systematic methodology for moving from a single IP or domain to a broader picture of attacker infrastructure through passive DNS, WHOIS, SSL certificate analysis, and ASN enumeration.
-- The **IOC Specialist** uses IOC Formatting Standards to validate and structure every indicator before it enters the machine-readable feed, including confidence ratings and false-positive checks.
+- The **Malware Analyst** also uses IOC Formatting Standards to validate and structure every indicator before it enters the machine-readable feed, including confidence ratings and false-positive checks.
 - The **Report Writer** and **Report Reviewer** both operate against Report Quality Standards and the Report Structure Template, which define what a publication-ready threat intelligence report looks like and how to assess whether it actually meets that bar.
 
-Skills also need to be enforced, not just defined. That's where hooks come in. Hooks are automated scripts that fire at every stage transition,when an agent starts, when it finishes, when a reviewer completes, without any manual trigger. One of those hooks, the Skill Validation Gate, fires after each agent completes and checks the state file to confirm the required skills were actually invoked. If the detection engineer finishes without YARA and Sigma skill validation recorded, that absence is flagged at the quality gate, not caught later by accident, but caught systematically, every time. Skills define the standard. Hooks make sure the standard was actually met.
+Two more skills are shared infrastructure that every agent loads, rather than belonging to one role. **MCP Tool Preferences** standardizes how agents enrich indicators through live integrations — VirusTotal and Hunt.io for file, IP, and domain reputation plus infrastructure fingerprinting, a headless browser for inspecting live phishing pages and panels, and GitHub for publication — so enrichment pulls structured data directly from those services instead of guessing from a web search. The **Incremental-Write Protocol** has agents write large outputs in checkpointed chunks, so a dropped connection partway through a long report never throws away the work already completed.
+
+Skills also need to be reliably loaded and their standards actually met. Each agent preloads its required skills through its own configuration, so the relevant standard is always in context before the agent starts — there's no relying on it to remember to go and consult the right reference. And the output is checked, not assumed: the validation hooks and the quality gate (below) confirm that what an agent produced actually meets the skill's standard. A detection file missing required metadata, an IOC feed with a malformed indicator, or a report missing a required section is caught automatically, every time, rather than by chance. Skills define the standard; loading them by default and validating the output is what makes sure it is met.
 
 ---
 
@@ -96,12 +97,10 @@ Skills also need to be enforced, not just defined. That's where hooks come in. H
 
 Beneath the agents is a second layer of infrastructure, hooks and commands, that runs automatically, without instruction, at every stage transition. This is what makes the system behave reliably rather than just approximately.
 
-**Hooks** fire on specific events (agent start, agent complete, reviewer complete) and handle coordination that would otherwise be manual. Three carry the most weight:
+**Hooks** fire on specific events (agent complete, reviewer complete, before any file write) and handle coordination that would otherwise be manual. Two carry the most weight:
 
 - **Quality Gate Checker** the enforcer. Fires when the reviewer completes, reads the quality score against the 8.0 threshold, and writes `REVISION_NEEDED` or `COMPLETE` to the state file. The orchestrator doesn't make this call, the hook does, based on defined criteria, every time.
 - **Result Cache Manager** the time saver. When the research analyst finishes, this hook saves results by malware family with a 30-day TTL. On any future analysis of the same family within that window, those results are loaded directly — the research agent is either skipped entirely or runs in an abbreviated UPDATE mode that refreshes only recent threat actor activity and new reports rather than repeating the full research pass, saving 15–20 minutes per re-analysis.
-- **Skill Validation Gate** the standards enforcer. Fires after each agent completes and checks that required skills were invoked. Missing coverage is flagged before it can reach publication.
-
 Two additional hooks run targeted validation at critical handoff points:
 
 - **IOC Validation Hook** fires immediately after the malware analyst completes and before any downstream agent consumes the IOC feed. It runs seven automated checks — valid JSON structure, required fields present, correct hash lengths, valid IP format, no empty values, valid confidence levels — and logs any issues to a structured file. Structural problems in the IOC feed are caught here, before they can propagate through the rest of the workflow.
@@ -109,10 +108,9 @@ Two additional hooks run targeted validation at critical handoff points:
 
 The remaining hooks keep the system instrumented and recoverable:
 
-- **Workflow State Tracker** maintains a live JSON record of every agent run, in order, with timestamps
-- **Dispatch Tracker** records precise launch times to verify parallel agents actually launched simultaneously
+- **Workflow State Tracker** maintains a live JSON record of every agent run, in order, with launch and completion timestamps — so the workflow can confirm parallel batches actually launched simultaneously rather than drifting into sequence
 - **Token Usage Tracker** logs input, output, and total token consumption per agent into a structured metrics file
-- **Session Milestone Saver** backs up workflow state at each major stage completion so an interrupted run is recoverable
+- **Pre-Write Backup** snapshots any analysis, report, or detection file immediately before it is overwritten, so an edit that goes wrong can always be rolled back
 
 **Commands** are invoked by the orchestrator at decision points. The primary one, **Parse Checkpoint Feedback**, takes your natural language input at Checkpoint 1 or 2 and converts it into a structured JSON decision, proceed, re-run an agent, request major revision, or ask for clarification so, routing is deterministic regardless of how feedback is phrased.
 
@@ -122,13 +120,18 @@ The remaining hooks keep the system instrumented and recoverable:
 
 One of the key design decisions in this workflow is **which agents run at the same time and which must wait for others**.
 
+<figure style="text-align: center; margin: 2em 0;">
+  <img loading="lazy" src="{{ "/assets/images/behind-the-reports/ai-workflow-pipeline.svg" | relative_url }}" alt="Vertical pipeline infographic of the report-production workflow, colour-coded by role. Stage 0 (gold) Human Input and Framing — the analyst selects samples, provides the raw analysis, and frames the questions that matter. Below it (blue) the Orchestrator sequences the agents and runs scoping checks (is the family cached? are there network IOCs to pivot on?). Stage 1 (blue) Malware Analyst reads the raw data and produces the findings document plus the validated IOC feed. Stage 2 fans out into three parallel blue cards — Research Analyst, Detection Engineer, Infrastructure Analyst — then merges. Stage 3 (blue) Attribution Analyst is conditional. Stage 4 (blue) Report Writer drafts all three deliverables. A side-by-side pair follows: Checkpoint 1 (gold, human review) and the Quality Gate (orange, automated — must score 8.0 or loop). Stage 5 Report Editor (blue) sits beside Checkpoint 2 (gold, final human sign-off). The flow ends in a green Output card: three deliverables — report, IOC feed, detection rules. A footer lists five background hooks; a legend maps blue to automated agent work, gold to human input and checkpoints, orange to the automated quality gate, and green to finished deliverables.">
+  <figcaption><em>Figure 1: The full report-production pipeline. A human frames the work at Stage 0 and signs off at two checkpoints (gold); the orchestrator, the three parallel Stage-2 agents, and the automated quality gate run in between, ending in three publication-ready deliverables (green).</em></figcaption>
+</figure>
+
 Some agents have dependencies, they genuinely cannot start until a previous agent finishes, because they need that output. The attribution analyst, for example, cannot assess who is behind the malware until the infrastructure analyst has mapped out the attacker's network infrastructure.
 
-Other agents are independent, they can work with just the initial findings and don't need each other's output at all. The IOC specialist, the research analyst, the detection engineer, and the infrastructure analyst all only need the malware analyst's findings to start. They don't need each other.
+Other agents are independent, they can work with just the initial findings and don't need each other's output at all. The research analyst, the detection engineer, and the infrastructure analyst all only need the malware analyst's findings to start. They don't need each other.
 
-This means those four agents can run **simultaneously**, in parallel, like four specialists working on different parts of the same investigation at the same time. This cuts what would otherwise be 30+ minutes of sequential waiting down to roughly 12 minutes (limited only by how long the slowest agent takes).
+This means those three agents can run **simultaneously**, in parallel, like three specialists working on different parts of the same investigation at the same time. This cuts what would otherwise be 30+ minutes of sequential waiting down to roughly 12 minutes (limited only by how long the slowest agent takes).
 
-The orchestrator is responsible for understanding these dependencies and dispatching agents accordingly. Two hooks run silently in the background throughout this entire process: one logs the exact timestamp every agent is launched, and one logs when each agent completes. This gives the workflow a precise, timestamped record of the entire execution — how long each agent took, where time was spent, and whether the parallel batches actually ran simultaneously or drifted into sequence. It's not just automation; it's instrumented automation.
+The orchestrator is responsible for understanding these dependencies and dispatching agents accordingly. A state-tracking hook runs silently in the background throughout this entire process, logging the exact timestamp every agent is launched and when each one completes. This gives the workflow a precise, timestamped record of the entire execution — how long each agent took, where time was spent, and whether the parallel batches actually ran simultaneously or drifted into sequence. It's not just automation; it's instrumented automation.
 
 Each Stage 2 agent also produces a compact summary JSON alongside its full output — a structured digest of key findings, confidence levels, and evidence gaps. Downstream agents read these summaries first and only pull specific sections of the full output file when they need additional detail. For the report writer and attribution analyst, which must synthesize everything produced by the parallel batch, this reduces input consumption significantly without sacrificing depth.
 
@@ -154,11 +157,13 @@ That document covers:
 - **Techniques used**, mapped to the MITRE ATT&CK framework, which is an industry-standard catalog of attack techniques. This gives defenders a common language for what they're looking at.
 - **Sophistication assessment**, is this amateur or professional tooling? Script-kiddie or nation-state?
 
-Five files in, one structured findings document out. Everything downstream works from this.
+Alongside the findings document, the malware analyst also validates and formats every indicator it extracted — hashes, IPs, domains, registry keys, mutexes — into the machine-readable IOC feed (`ioc-feeds/[malware-name]-iocs.json`), applying confidence ratings and filtering out false positives like common system files or legitimate software domains.
+
+Five files in; a structured findings document and a clean, ready-to-ingest IOC feed out. Everything downstream works from these.
 
 ---
 
-### Step 2, Four Agents Launch Simultaneously (~12 Minutes)
+### Step 2, Three Agents Launch Simultaneously (~12 Minutes)
 
 Before dispatching any agents, the orchestrator runs two quick checks:
 
@@ -166,9 +171,7 @@ Before dispatching any agents, the orchestrator runs two quick checks:
 
 **Network IOC check:** Did the malware analyst find any IP addresses, domain names, or URLs? If the malware had no network activity at all (it operates purely locally), there's nothing for the infrastructure analyst to investigate, so that agent is skipped.
 
-Assuming both checks pass (new malware, with network activity), the orchestrator dispatches four agents in a single message. They all start at the same time:
-
-**IOC Specialist** receives all the raw indicators, every hash, IP, domain, registry key, file path, and mutex found in the analysis. Its job is to validate that these are real, properly formatted, and not false positives (like system files or common software domains that might appear in any malware analysis). It produces `ioc-feeds/[malware-name]-iocs.json`, clean, confidence-rated, and ready for security tool ingestion.
+Assuming both checks pass (new malware, with network activity), the orchestrator dispatches three agents in a single message. They all start at the same time:
 
 **Research Analyst** receives a summary of the malware's capabilities and the suspected family name. It searches threat intelligence sources, public security research, government advisories, and vendor reports to answer: has this been seen before? Is there a known campaign? What do we know about who operates it? It applies a credibility rating to every source it uses, so downstream agents and readers know how much to trust each claim.
 
@@ -176,7 +179,7 @@ Assuming both checks pass (new malware, with network activity), the orchestrator
 
 **Infrastructure Analyst** receives all the network indicators, the IPs and domains. It runs structured open-source intelligence (OSINT) investigations: who registered these domains, who hosts these IPs, are they connected to each other or to known malicious infrastructure, what other malicious activity has been associated with these network resources? It produces a map of the attacker's infrastructure and identifies patterns that help attribution.
 
-All four agents work independently and simultaneously. The orchestrator waits for all four to finish, then collects their results.
+All three agents work independently and simultaneously. The orchestrator waits for all three to finish, then collects their results.
 
 ---
 
@@ -313,9 +316,9 @@ The findings document is still structured the same way, but sections that cannot
 
 With a single file and limited behavioral data:
 
-**If no network IOCs were found** (common with a single static sample), the infrastructure analyst is automatically skipped. There's nothing to pivot on. The dispatch becomes 3-way parallel instead of 4-way: IOC specialist, research analyst, and detection engineer only.
+**If no network IOCs were found** (common with a single static sample), the infrastructure analyst is automatically skipped. There's nothing to pivot on. The dispatch becomes 2-way parallel instead of 3-way: research analyst and detection engineer only.
 
-**If the malware family is known and recently cached**, the research analyst is also skipped. The workflow might run only the IOC specialist and detection engineer in parallel, 2-way, taking just a few minutes.
+**If the malware family is known and recently cached**, the research analyst is also skipped. The workflow might run just the detection engineer on its own, taking only a few minutes.
 
 The workflow doesn't pad the process with agents that have nothing meaningful to contribute. It scales to the evidence.
 

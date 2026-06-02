@@ -59,7 +59,7 @@ The platform uses three independent discovery methods that run continuously. Eac
 
 ### Nightly Port Scanning
 
-The primary discovery engine. Every night during a configurable window — currently 2 AM to 7 AM local time, when household network activity is at its lowest — the platform scans the announced IP space of all 65 target autonomous systems across 28 ports commonly used for web services.
+The primary discovery engine. Every night during a configurable window — currently about 1 AM to 6 AM Eastern, when household network activity is at its lowest — the platform scans the announced IP space of all 65 target autonomous systems across 28 ports commonly used for web services.
 
 To understand the scale: those 65 networks contain roughly 13.8 million IP addresses. Scanning all of them across 28 ports means probing hundreds of millions of address-port combinations. On consumer hardware and a residential internet connection, that's too much to complete in a single night.
 
@@ -104,19 +104,19 @@ This ensures the most valuable discoveries are always processed first, regardles
 
 When the platform confirms an open directory, a pool of 50 persistent crawl workers walks the full directory structure — following links, checking subdirectories, and cataloguing every file. Each file is evaluated through multiple classifiers:
 
-**Extension filtering** narrows focus to 46 malware-relevant file types: Windows executables (.exe, .dll, .sys), scripts (PowerShell, batch, VBScript, JavaScript), Office documents with macro capability, archives (.zip, .rar, .7z), and Mark-of-the-Web bypass containers (.iso, .img, .vhd) — the disk image formats attackers increasingly use to evade Windows security prompts that would normally warn users about files downloaded from the internet.
+**Extension filtering** narrows focus to more than 60 malware-relevant file types: Windows executables (.exe, .dll, .sys), scripts (PowerShell, batch, VBScript, JavaScript), Office documents with macro capability, archives (.rar, .7z), and Mark-of-the-Web bypass containers (.iso, .img, .vhd) — the disk image formats attackers increasingly use to evade Windows security prompts that would normally warn users about files downloaded from the internet. The list is tuned over time: bulk Linux-distro archive formats (.zip/.gz/.tar, .deb/.rpm) were removed once they were found to dominate the processing backlog without carrying Windows malware, while niche execution and MOTW-bypass formats (.msc, .lzh, .arj, .application) were added as those techniques appeared in the wild.
 
 **Credential detection** runs independently of file type. The platform checks filenames against 50+ patterns that indicate exposed credentials: environment files (.env), SSH private keys, browser credential databases, stealer log archives, combo lists (username/password dumps), cloud access keys, WordPress configurations, and Windows registry hives. A 400-byte .env file with database credentials sitting on a threat actor's staging server is exactly the kind of finding this platform is built to surface.
 
 **Size filtering** keeps files between 1 KB and 50 MB — small enough to exclude empty placeholders, large enough to include most payloads. Credential files bypass size filtering entirely, because their value is independent of file size.
 
-### Multi-Engine Reputation Enrichment
+### Multi-Source Reputation Enrichment
 
 Every file the platform finds needs context. Is this a known piece of malware? Is it something new? Is the security industry already aware of it?
 
-A multi-engine file reputation service answers those questions — scanning each file against dozens of antivirus and threat detection engines and reporting how many flag it as malicious. The platform operates within a daily API quota. That's a real constraint, so every lookup has to count.
+Enrichment is layered, not a single lookup. Discovered files and indicators are first screened against a set of free community threat-intelligence feeds — malware-sample databases (MalwareBazaar, ThreatFox), a URL blocklist (URLhaus), and IP-reputation services (AbuseIPDB, OTX). These are unmetered, so they run broadly across everything discovered. A multi-engine file reputation service — the one with a strict daily API quota — answers the deeper question by scanning each file against dozens of antivirus and threat-detection engines and reporting how many flag it as malicious. That service is the expensive, rate-limited one, so it is reserved for the highest-value targets: files on confirmed bulletproof infrastructure and files a community feed has already flagged. Layering a cheap, broad pass in front of an expensive, precise one is what stretches a small daily quota across a corpus of millions of files.
 
-A **two-tier extension system** manages this budget. Tier 1 includes 17 high-signal extensions — executables, DLLs, scripts, disk images — that get immediate lookup when found on confirmed BPH infrastructure. These are the files most likely to be malware, and they consume API quota first. Tier 2 covers 29 lower-priority extensions — archives, Office documents, less common formats — that queue for lookup when daily quota allows.
+A **two-tier extension system** manages this budget. Tier 1 includes 17 high-signal extensions — executables, DLLs, scripts, disk images — that get immediate lookup when found on confirmed BPH infrastructure. These are the files most likely to be malware, and they consume API quota first. Tier 2 covers the remaining ~50 lower-priority extensions — archives, Office documents, less common formats — that queue for lookup when daily quota allows.
 
 Files discovered through lower-confidence sources (Certificate Transparency logs rather than direct infrastructure scanning) are deprioritized further. This prevents noise from consuming quota that should go to confirmed BPH discoveries.
 
@@ -169,7 +169,7 @@ The search bar accepts any indicator format — bare IP, domain, URL, or host:po
 
 ### System Health
 
-A dedicated health page shows real-time status of all six services (running state, uptime, last log line), VPN tunnel health (public IP, handshake recency, route verification), port scanner sweep progress and coverage metrics, and 30-day trend graphs for directories discovered, novel files, low-detection files, credential files, and confirmed malicious files. Service restart and VPN profile rotation controls are available directly from the dashboard.
+A dedicated health page shows real-time status of all eight services (scanning, crawling, hashing, enrichment, BGP and certificate-transparency monitoring, the dashboard, and scheduled maintenance — each with running state, uptime, and last log line), VPN tunnel health (public IP, handshake recency, route verification, with a watchdog that re-checks every 15 minutes), port scanner sweep progress and coverage metrics, and 30-day trend graphs for directories discovered, novel files, low-detection files, credential files, and confirmed malicious files. Service restart and VPN profile rotation controls are available directly from the dashboard.
 
 ---
 
