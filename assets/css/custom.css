@@ -2847,7 +2847,9 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   margin-top: 4px;
 }
 
-/* Tablet/phone: fixed left rail -> horizontal strip under the navbar */
+/* Tablet/phone: fixed left rail -> compact horizontal strip under the navbar.
+   Cards hug their content (flex:0 1 auto) and wrap, instead of stretching
+   full-width — keeps the strip slim. Slim padding + 24px logo. */
 @media (max-width: 1280px) {
   .hl-sponsor-rail {
     position: static;
@@ -2855,30 +2857,33 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
     width: auto;
     max-width: 900px;
     margin: 0 auto;
-    padding: 16px 28px 0;          /* aligns with main.content's 28px side padding */
+    padding: 9px 28px 3px;         /* slim vertical; 28px sides align with main.content */
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: stretch;
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
   }
   .hl-sponsor-rail__label {
     width: 100%;
     margin-bottom: 0;
   }
   .hl-sponsor-rail__item {
-    flex: 1 1 240px;               /* side-by-side when room, stack when narrow */
-    display: flex;
+    flex: 0 1 auto;                /* hug content + wrap, not full-width */
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 9px;
+    padding: 6px 10px;
   }
   .hl-sponsor-rail__logo {
     margin-bottom: 0;
-    max-height: 34px;
+    max-height: 24px;
     flex-shrink: 0;
   }
+  .hl-sponsor-rail__name { font-size: 0.78rem; }
+  .hl-sponsor-rail__tagline { font-size: 0.68rem; line-height: 1.35; margin-top: 1px; }
 }
 @media (max-width: 640px) {
-  .hl-sponsor-rail { padding: 12px 16px 0; }   /* match main.content mobile side padding */
+  .hl-sponsor-rail { padding: 9px 16px 3px; }   /* 16px sides align with main.content mobile */
 }
 @media (max-width: 400px) {
   .hl-sponsor-rail__tagline {                  /* cut to fit on tiny screens */
