@@ -75,7 +75,7 @@
     {% endif %}
 
     <!-- seo tags -->
-    <meta property="og:image" content="{{ '/' | absolute_url }}{% if page.thumbnail %}{{ page.thumbnail }}{% else %}{{ page.feature-img | default: site.header_feature_image }}{% endif %}">
+    <meta property="og:image" content="{{ page.thumbnail | default: page['feature-img'] | default: site.header_feature_image | absolute_url }}">
     {% seo %}
     {% if page.layout == "post" and page.url contains "/reports/" %}{% include structured-data.liquid %}{% endif %}
 
@@ -85,13 +85,13 @@
 
     <!-- Twitter Cards -->
     <meta name="twitter:title" content="{{ page.title | default: site.title }}">
-    <meta name="twitter:description" content="{{ page.content | default: site.header_text | strip_html | strip_newlines | truncate: 160 }}">
+    <meta name="twitter:description" content="{{ page.description | default: site.description | strip_html | strip_newlines | truncate: 200 }}">
     {% if site.data.social.twitter %}
     <meta name="twitter:creator" content="@{{ site.data.social.twitter }}">
     <meta name="twitter:site" content="@{{ site.data.social.twitter }}">
     {% endif %}
     <meta name="twitter:card" content="{% unless page.thumbnail %}summary{% else %}summary_large_image{% endunless %}">
-    <meta name="twitter:image" content="{{ '/' | absolute_url }}{% if page.thumbnail %}{{ page.thumbnail }}{% else %}{{ page.feature-img | default: site.header_feature_image }}{% endif %}">
+    <meta name="twitter:image" content="{{ page.thumbnail | default: page['feature-img'] | default: site.header_feature_image | absolute_url }}">
     <meta name="twitter:image:alt" content="{{ page.title | default: site.title }}">
     <!-- Local override: project design system -->
     <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
