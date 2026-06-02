@@ -840,13 +840,18 @@ main.content {
 .hl-nav-tile {
   background: var(--hl-bg-row);
   border: 1px solid var(--hl-border-row);
-  border-radius: 5px;
+  border-radius: 7px;
   padding: 12px 14px;
   text-decoration: none !important;
   display: block;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
-.hl-nav-tile:hover { border-color: #333 !important; text-decoration: none !important; }
+.hl-nav-tile:hover {
+  border-color: var(--hl-accent-blue) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.4), 0 0 18px rgba(88,166,255,0.10);
+  text-decoration: none !important;
+}
 
 .hl-nav-tile__title {
   color: var(--hl-accent-blue) !important;
@@ -863,10 +868,10 @@ main.content {
 
 /* --- Note / callout box ------------------------------------ */
 .hl-note {
-  background: #1a1a0d;
+  background: linear-gradient(135deg, #1a1a0d, #14140a);
   border: 1px solid #4a4a1a;
   border-left: 3px solid #facc15;
-  border-radius: 5px;
+  border-radius: 7px;
   padding: 12px 16px;
   margin-bottom: 12px;
 }
@@ -2072,32 +2077,138 @@ button,
 }
 
 .hl-tier-card {
-  background: var(--hl-bg-card);
+  --acc: var(--hl-accent-gold);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
   border: 1px solid var(--hl-border-card);
-  border-radius: 6px;
-  padding: 16px;
+  border-left: 3px solid var(--acc);
+  border-radius: 10px;
+  padding: 22px 22px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.hl-tier-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 150% at 0% 0%, var(--acc), transparent 56%);
+  opacity: 0.09;
+}
+.hl-tier-card > * { position: relative; z-index: 1; }
+.hl-tier-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.45);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.45), 0 0 24px color-mix(in srgb, var(--acc) 18%, transparent);
+}
+.hl-tier-card--feature::before { opacity: 0.16; }
+.hl-tier-card--feature { box-shadow: 0 0 0 1px color-mix(in srgb, var(--acc) 22%, transparent); }
+
+.hl-tier-card__eyebrow {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.58em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--acc);
+  margin-bottom: 11px;
+  padding: 3px 9px;
+  border: 1px solid var(--acc);
+  border-color: color-mix(in srgb, var(--acc) 35%, transparent);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.03);
+  background: color-mix(in srgb, var(--acc) 12%, transparent);
 }
 
 .hl-tier-card__name {
-  color: var(--hl-accent-gold);
-  font-size: 0.85em;
+  font-family: var(--hl-font-display);
+  font-size: 1.08em;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  color: var(--acc);
+}
+@supports (color: color-mix(in srgb, white, black)) {
+  .hl-tier-card__name {
+    background: linear-gradient(100deg, #ffffff 44%, color-mix(in srgb, var(--acc) 66%, #ffffff) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+.hl-tier-card__price {
+  color: var(--acc);
+  font-family: var(--hl-font-display);
+  font-size: 2em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 2px;
+}
+
+.hl-tier-card__price-note {
+  display: block;
+  color: var(--hl-text-primary);
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.hl-tier-card__price-extra {
+  color: var(--hl-text-secondary);
+  font-size: 0.78em;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+
+.hl-tier-card__price-extra:last-of-type {
+  margin-bottom: 14px;
 }
 
 .hl-tier-card__desc {
-  color: var(--hl-text-primary);
-  font-size: 0.82em;
+  color: var(--hl-text-secondary);
+  font-size: 0.84em;
   line-height: 1.55;
   margin-bottom: 14px;
+}
+
+.hl-tier-card__benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px 0;
+  color: var(--hl-text-primary);
+  font-size: 0.84em;
+  line-height: 1.5;
+}
+
+.hl-tier-card__benefits li {
+  padding: 4px 0 4px 16px;
+  position: relative;
+}
+
+.hl-tier-card__benefits li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--acc);
 }
 
 .hl-tier-card__slots {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: auto;
 }
 
 .hl-tier-card__sponsor {
@@ -2107,7 +2218,7 @@ button,
   padding: 8px 10px;
   background: var(--hl-bg-row);
   border: 1px solid var(--hl-border-row);
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .hl-tier-card__logo {
@@ -2129,81 +2240,29 @@ button,
 }
 
 .hl-tier-card__placeholder {
-  padding: 8px 10px;
+  padding: 9px 11px;
   border: 1px dashed var(--hl-border-row);
-  border-radius: 4px;
-  color: var(--hl-text-dim);
-  font-size: 0.78em;
+  border-color: color-mix(in srgb, var(--acc) 32%, transparent);
+  border-radius: 6px;
+  color: var(--acc);
+  font-size: 0.76em;
+  font-weight: 600;
   text-align: center;
-  letter-spacing: 0.05em;
-}
-
-/* Tier card price (used on /sponsor page) */
-.hl-tier-card__price {
-  color: var(--hl-accent-blue);
-  font-size: 1.9em;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  margin-bottom: 2px;
-  line-height: 1.05;
-}
-
-.hl-tier-card__price-note {
-  display: block;
-  color: var(--hl-text-primary);
-  font-size: 0.82em;
-  font-weight: 500;
   letter-spacing: 0.04em;
-  margin-bottom: 6px;
-}
-
-.hl-tier-card__price-extra {
-  color: var(--hl-text-primary);
-  font-size: 0.78em;
-  margin-bottom: 4px;
-  letter-spacing: 0.02em;
-}
-
-.hl-tier-card__price-extra:last-of-type {
-  margin-bottom: 14px;
-}
-
-.hl-tier-card__benefits {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px 0;
-  color: var(--hl-text-primary);
-  font-size: 0.85em;
-  line-height: 1.5;
-}
-
-.hl-tier-card__benefits li {
-  padding: 3px 0 3px 14px;
-  position: relative;
-}
-
-.hl-tier-card__benefits li::before {
-  content: "·";
-  color: var(--hl-accent-gold);
-  position: absolute;
-  left: 4px;
-  top: 1px;
-  font-size: 1.4em;
-  line-height: 1;
 }
 
 .hl-tier-card__best-fit {
-  color: var(--hl-text-primary);
+  color: var(--hl-text-secondary);
   font-size: 0.78em;
   font-style: italic;
   line-height: 1.5;
-  margin-top: 10px;
-  padding-top: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
   border-top: 1px solid var(--hl-border-row);
 }
 
 .hl-tier-card__best-fit strong {
-  color: var(--hl-accent-gold);
+  color: var(--acc);
   font-style: normal;
   font-weight: 600;
 }
@@ -2218,129 +2277,6 @@ button,
   .hl-tier-grid--feature {
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-/* Sponsor page CTA box - dark navy panel with gold accent */
-.hl-sponsor-cta {
-  background: linear-gradient(135deg, #0f1a2e 0%, #1a2942 100%);
-  border-top: 2px solid var(--hl-accent-gold, #b8902f);
-  border-radius: 6px;
-  padding: 22px 26px;
-  margin: 1.5rem 0;
-  color: #f0f0f0;
-}
-
-.hl-sponsor-cta__title {
-  color: #fff;
-  font-size: 1.05em;
-  font-weight: 700;
-  margin-bottom: 10px;
-  letter-spacing: 0.01em;
-}
-
-.hl-sponsor-cta__contact {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 10px 0 12px 0;
-  font-size: 0.92em;
-}
-
-.hl-sponsor-cta__contact-row {
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
-}
-
-.hl-sponsor-cta__contact-label {
-  color: var(--hl-accent-gold, #b8902f);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  font-size: 0.78em;
-  text-transform: uppercase;
-  min-width: 80px;
-}
-
-.hl-sponsor-cta__contact-row a,
-.hl-sponsor-cta__contact-row a:visited {
-  color: #f4e9c8 !important;
-  text-decoration: none !important;
-  border-bottom: 1px dotted #f4e9c8;
-}
-
-.hl-sponsor-cta__contact-row a:hover {
-  color: #fff !important;
-  border-bottom-color: #fff;
-}
-
-.hl-sponsor-cta__note {
-  color: #c8c8c8;
-  font-size: 0.85em;
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* Sponsor page founding-offer callout */
-.hl-sponsor-callout {
-  background: rgba(184, 144, 47, 0.08);
-  border-left: 3px solid var(--hl-accent-gold, #b8902f);
-  padding: 14px 18px;
-  margin: 1rem 0;
-  border-radius: 0 4px 4px 0;
-}
-
-.hl-sponsor-callout__title {
-  color: var(--hl-accent-gold, #b8902f);
-  font-size: 0.78em;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 6px;
-}
-
-.hl-sponsor-callout__body {
-  color: var(--hl-text-secondary);
-  font-size: 0.92em;
-  line-height: 1.55;
-  margin: 0;
-}
-
-.hl-sponsor-callout__body strong {
-  color: var(--hl-text-primary);
-}
-
-/* Download button (PDF) on sponsor page */
-.hl-sponsor-download {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: var(--hl-bg-row);
-  border: 1px solid var(--hl-border-row);
-  border-radius: 4px;
-  color: var(--hl-text-secondary) !important;
-  font-size: 0.85em;
-  font-weight: 600;
-  text-decoration: none !important;
-  letter-spacing: 0.02em;
-  transition: border-color 0.15s, color 0.15s;
-}
-
-.hl-sponsor-download:hover {
-  color: var(--hl-text-primary) !important;
-  border-color: var(--hl-accent-gold, #b8902f);
-}
-
-.hl-sponsor-download__icon {
-  display: inline-flex;
-  width: 14px;
-  height: 14px;
-}
-
-.hl-support-contact {
-  color: var(--hl-text-muted);
-  font-size: 0.8em;
-  margin-top: 0.75rem;
 }
 
 /* ============================================================
@@ -2705,6 +2641,8 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 
 .hl-panel__body { color: var(--hl-text-primary); font-size: 0.88em; line-height: 1.62; margin: 0; }
 .hl-panel__desc { color: var(--hl-text-secondary); font-size: 0.88em; line-height: 1.62; margin: 0; }
+.hl-panel__body a { color: var(--acc); text-decoration: none; }
+.hl-panel__body a:hover { text-decoration: underline; }
 
 /* --- Premium CTA button ------------------------------------ */
 .hl-cta {

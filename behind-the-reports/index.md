@@ -37,10 +37,8 @@ That pipeline has two distinct parts. A **collection platform** that continuousl
 
 {% include section-header.html label="How They Connect" accent="#58a6ff" %}
 
-<div class="hl-prose-section">
-  <div class="hl-prose-section__body">
-    The collection platform runs continuously. Every night it scans the IP space of 65 known bulletproof hosting providers — the infrastructure where malware is staged, served, and managed — across 28 ports. When it finds an open directory hosting suspicious files, it indexes everything, enriches files through VirusTotal, and surfaces the results in a triage dashboard sorted by threat signal.<br><br>
-    That's where my judgment takes over. I review what the platform found, select the samples worth investigating, and run them through hands-on analysis — sandbox execution, static analysis, behavioral observation, network capture. The raw output of that analysis becomes the input to the AI agent workflow, which handles the structured parts of intelligence production: organizing findings, researching context, writing detection rules, producing the report, and scoring it against publication-quality standards.<br><br>
-    The collection platform finds what's out there. The analysis and workflow turn it into something defenders can act on.
-  </div>
+<div class="hl-panel" style="--acc: #58a6ff;">
+  <p class="hl-panel__body">The collection platform runs continuously. Every night it scans the IP space of 65 known bulletproof hosting providers — the infrastructure where malware is staged, served, and managed — across 28 ports. When it finds an open directory hosting suspicious files, it indexes everything, enriches files through VirusTotal, and surfaces the results in a triage dashboard sorted by threat signal.</p>
+  <p class="hl-panel__body" style="margin-top: 12px;">That's where my judgment takes over. I review what the platform found, select the samples worth investigating, and run them through hands-on analysis — sandbox execution, static analysis, behavioral observation, network capture. The raw output of that analysis becomes the input to the AI agent workflow, which handles the structured parts of intelligence production: organizing findings, researching context, writing detection rules, producing the report, and scoring it against publication-quality standards.</p>
+  <p class="hl-panel__body" style="margin-top: 12px;">The collection platform finds what's out there. The analysis and workflow turn it into something defenders can act on.</p>
 </div>
