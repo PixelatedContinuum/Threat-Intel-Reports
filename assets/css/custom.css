@@ -97,6 +97,7 @@ main.content {
    AFTER the navbar's normal-flow position, not behind it. */
 .hl-page {
   padding-top: 3rem;
+  --ph-accent: var(--hl-accent-blue);   /* default; the page/post layout overrides this inline per page to color the top glow */
 }
 
 /* Theme's prev/next post navigation — restyle to match dark theme */
@@ -2562,6 +2563,43 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-cred-pill { background: linear-gradient(180deg, #1d1d1d, #161616); box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
 a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: translateY(-3px); box-shadow: 0 10px 34px rgba(88,166,255,0.13), 0 6px 18px rgba(0,0,0,0.45); }
+
+/* --- Per-page top glow (depth-graded) --------------------------------------
+   Same family as the home hero glow, calmer, in each page's --ph-accent.
+   Lives on .hl-page (the header card is overflow:hidden and can't host a
+   full-bleed layer). :has() scopes it to header'd pages so it never doubles
+   up on the home hero. Contained by html{overflow-x:clip} (~L1521). The glow's
+   --ph-accent is set inline on .hl-page by the page/post layouts; the header
+   card keeps its own accent source, so the two stay in sync per page.
+   Depth fade: home = strongest (the .hl-home-hero glow above), section pages
+   = medium-low, article pages = low. */
+.hl-page:has(.hl-page-header),
+.hl-page:has(.hl-post-header) {
+  position: relative;
+  isolation: isolate;            /* keep the z-index:-1 glow above main.content's bg, like the home hero */
+}
+.hl-page:has(.hl-page-header)::before,
+.hl-page:has(.hl-post-header)::before {
+  content: ''; position: absolute; top: -48px; left: 50%; transform: translateX(-50%);
+  width: 100vw; z-index: -1; pointer-events: none;
+  /* -48px tucks the bright top edge under the sticky nav at every width
+     (incl. the taller wrapped mobile nav) so the glow meets it with no gap. */
+}
+/* Section pages — medium-low (one level in from home) */
+.hl-page:has(.hl-page-header)::before {
+  height: 360px; opacity: 0.12;
+  background: radial-gradient(70% 100% at 50% 0%, var(--ph-accent), transparent 72%);
+}
+/* Article pages — low (the deepest level) */
+.hl-page:has(.hl-post-header)::before {
+  height: 300px; opacity: 0.08;
+  background: radial-gradient(64% 100% at 50% 0%, var(--ph-accent), transparent 70%);
+}
+/* Phones: shorter viewport — trim glow height so it doesn't dominate */
+@media (max-width: 700px) {
+  .hl-page:has(.hl-page-header)::before { height: 260px; }
+  .hl-page:has(.hl-post-header)::before { height: 220px; }
+}
 
 /* ============================================================
    PREMIUM CONTENT COMPONENTS  (/subscribe/ /consulting/ /support/)

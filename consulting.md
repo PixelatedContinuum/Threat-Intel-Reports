@@ -6,7 +6,7 @@ permalink: /consulting/
 position: 7
 ---
 
-<div class="hl-page-header" style="--ph-accent: #58a6ff;">
+<div class="hl-page-header" style="--ph-accent: #b8902f;">
   <div class="hl-page-header__label">Consulting &amp; Advisory</div>
   <div class="hl-page-header__title">Threat Intelligence That Works for Your Team</div>
   <div class="hl-page-header__desc">An independent practice run alongside active security operations work. Engagements stay selective — quality and fit over volume. If it's a fit, you get the same depth that goes into the research on this site, applied directly to your environment.</div>

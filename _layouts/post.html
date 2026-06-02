@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 {% endif %}
-<div class="hl-page">
+<div class="hl-page" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">
 <div class="hl-post-header{% if page.path contains 'hunting-detections' %} hl-post-header--detect{% endif %}">
   <div class="hl-post-header__eyebrow">
     {% if page.path contains "hunting-detections" %}

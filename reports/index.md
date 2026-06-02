@@ -5,7 +5,7 @@ permalink: /reports/
 position: 2
 ---
 
-<div class="hl-page-header" style="--ph-accent: #58a6ff;">
+<div class="hl-page-header" style="--ph-accent: #a371f7;">
   <div class="hl-page-header__label">Reports</div>
   <div class="hl-page-header__title">Threat Intelligence Reports</div>
   <div class="hl-page-header__desc">Original malware analysis and reverse engineering — each report ships with detection rules and machine-readable indicators. Filter by tag or search by name.</div>

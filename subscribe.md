@@ -5,7 +5,7 @@ permalink: /subscribe/
 position: 5
 ---
 
-<div class="hl-page-header" style="background: linear-gradient(135deg, #0d1520 0%, #0d1117 60%, #111111 100%); --ph-accent: #58a6ff;">
+<div class="hl-page-header" style="background: linear-gradient(135deg, #0d1520 0%, #0d1117 60%, #111111 100%); --ph-accent: #3b82f6;">
   <div class="hl-page-header__label">Stay Informed</div>
   <div class="hl-page-header__title">Subscribe to The Hunter's Ledger</div>
   <div class="hl-page-header__desc">New threat intelligence reports, detection rules, and IOC feeds — delivered the moment they publish. Pick whatever fits how you work. No marketing, no noise.</div>

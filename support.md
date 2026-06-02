@@ -5,7 +5,7 @@ permalink: /support/
 position: 6
 ---
 
-<div class="hl-page-header" style="--ph-accent: #4ade80;">
+<div class="hl-page-header" style="--ph-accent: #f97316;">
   <div class="hl-page-header__label">Support the Work</div>
   <div class="hl-page-header__title">Keep This Research Independent</div>
   <div class="hl-page-header__desc">Run by a single researcher. No corporate backing, no paywalls, no ads. Your support keeps it that way.</div>

@@ -1,6 +1,18 @@
 ---
 layout: default
 ---
-<div class="hl-page">
+{%- comment -%} Per-page accent for the top glow on .hl-page. Mirrors each page's header --ph-accent; order matters (behind-the-reports before reports). {%- endcomment -%}
+{%- assign _glow_accent = '#58a6ff' -%}
+{%- if page.url contains 'hunting-detections' -%}{%- assign _glow_accent = '#4ade80' -%}
+{%- elsif page.url contains 'ioc-feeds' -%}{%- assign _glow_accent = '#f87171' -%}
+{%- elsif page.url contains 'behind-the-reports' -%}{%- assign _glow_accent = '#f97316' -%}
+{%- elsif page.url contains 'reports' -%}{%- assign _glow_accent = '#a371f7' -%}
+{%- elsif page.url contains 'subscribe' -%}{%- assign _glow_accent = '#3b82f6' -%}
+{%- elsif page.url contains 'support' -%}{%- assign _glow_accent = '#f97316' -%}
+{%- elsif page.url contains 'consulting' -%}{%- assign _glow_accent = '#b8902f' -%}
+{%- elsif page.url contains 'sponsor' -%}{%- assign _glow_accent = '#b8902f' -%}
+{%- elsif page.url contains 'about' -%}{%- assign _glow_accent = '#60a5fa' -%}
+{%- endif -%}
+<div class="hl-page" style="--ph-accent: {{ _glow_accent }};">
 {{ content }}
 </div>
