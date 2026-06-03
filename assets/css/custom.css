@@ -847,31 +847,49 @@ main.content {
 }
 
 .hl-nav-tile {
-  background: var(--hl-bg-row);
-  border: 1px solid var(--hl-border-row);
-  border-radius: 7px;
-  padding: 12px 14px;
+  --acc: var(--hl-accent-blue);   /* per-tile destination color via inline style="--acc: …" */
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
+  border: 1px solid var(--hl-border-card);
+  border-left: 3px solid var(--acc);
+  border-radius: 8px;
+  padding: 13px 15px;
   text-decoration: none !important;
   display: block;
   transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
+/* Accent corner-wash, matching .hl-panel / .hl-feat. Dimmed via opacity so no
+   color-mix is needed — degrades to nothing if unsupported. */
+.hl-nav-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(130% 140% at 0% 0%, var(--acc), transparent 62%);
+  opacity: 0.12;
+}
+.hl-nav-tile > * { position: relative; z-index: 1; }
 .hl-nav-tile:hover {
-  border-color: var(--hl-accent-blue) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(0,0,0,0.4), 0 0 18px rgba(88,166,255,0.10);
+  border-color: var(--acc) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.45), 0 0 22px color-mix(in srgb, var(--acc) 22%, transparent);
   text-decoration: none !important;
 }
 
 .hl-nav-tile__title {
-  color: var(--hl-accent-blue) !important;
-  font-size: 0.9em !important;
+  color: var(--acc) !important;
+  font-size: 0.95em !important;
   font-weight: 600;
   margin: 0 0 4px;
 }
 
 .hl-nav-tile__desc {
   color: var(--hl-text-secondary);
-  font-size: 0.78em;
+  font-size: 0.8em;
+  line-height: 1.5;
   margin: 0;
 }
 

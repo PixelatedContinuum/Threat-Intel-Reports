@@ -39,20 +39,20 @@ position: 1
 {% include section-header.html label="Explore" accent="#4ade80" %}
 
 <div class="hl-nav-grid">
-  <a href="{{ '/reports/' | relative_url }}" class="hl-nav-tile">
-    <div class="hl-nav-tile__title">Reports →</div>
+  <a href="{{ '/reports/' | relative_url }}" class="hl-nav-tile" style="--acc: #a371f7;">
+    <div class="hl-nav-tile__title">Reports</div>
     <div class="hl-nav-tile__desc">Malware analysis & reverse engineering notes</div>
   </a>
-  <a href="{{ '/hunting-detections/' | relative_url }}" class="hl-nav-tile">
-    <div class="hl-nav-tile__title">Hunting Detections →</div>
+  <a href="{{ '/hunting-detections/' | relative_url }}" class="hl-nav-tile" style="--acc: #4ade80;">
+    <div class="hl-nav-tile__title">Hunting Detections</div>
     <div class="hl-nav-tile__desc">Sigma, YARA, and Suricata rules</div>
   </a>
-  <a href="{{ '/ioc-feeds/' | relative_url }}" class="hl-nav-tile">
-    <div class="hl-nav-tile__title">IOC Feeds →</div>
+  <a href="{{ '/ioc-feeds/' | relative_url }}" class="hl-nav-tile" style="--acc: #f87171;">
+    <div class="hl-nav-tile__title">IOC Feeds</div>
     <div class="hl-nav-tile__desc">Indicators ready for your SIEM or EDR</div>
   </a>
-  <a href="{{ '/behind-the-reports/' | relative_url }}" class="hl-nav-tile">
-    <div class="hl-nav-tile__title">Behind the Reports →</div>
+  <a href="{{ '/behind-the-reports/' | relative_url }}" class="hl-nav-tile" style="--acc: #f97316;">
+    <div class="hl-nav-tile__title">Behind the Reports</div>
     <div class="hl-nav-tile__desc">How the intelligence is produced</div>
   </a>
 </div>
@@ -66,9 +66,9 @@ position: 1
 {% include section-header.html label="About & Connect" accent="#f97316" %}
 
 <div class="hl-tile-row3">
-  <a href="{{ '/about-me/' | relative_url }}" class="hl-nav-tile"><div class="hl-nav-tile__title">About Me →</div><div class="hl-nav-tile__desc">Background &amp; how to reach me</div></a>
-  <a href="{{ '/consulting/' | relative_url }}" class="hl-nav-tile"><div class="hl-nav-tile__title">Consulting →</div><div class="hl-nav-tile__desc">Malware analysis, IR &amp; detection services</div></a>
-  <a href="{{ '/support/' | relative_url }}" class="hl-nav-tile"><div class="hl-nav-tile__title">Support →</div><div class="hl-nav-tile__desc">Help keep the research free</div></a>
+  <a href="{{ '/about-me/' | relative_url }}" class="hl-nav-tile" style="--acc: #60a5fa;"><div class="hl-nav-tile__title">About Me</div><div class="hl-nav-tile__desc">Background &amp; how to reach me</div></a>
+  <a href="{{ '/consulting/' | relative_url }}" class="hl-nav-tile" style="--acc: #b8902f;"><div class="hl-nav-tile__title">Consulting</div><div class="hl-nav-tile__desc">Malware analysis, IR &amp; detection services</div></a>
+  <a href="{{ '/support/' | relative_url }}" class="hl-nav-tile" style="--acc: #f97316;"><div class="hl-nav-tile__title">Support</div><div class="hl-nav-tile__desc">Help keep the research free</div></a>
 </div>
 <div class="hl-contribute">Have original research, detections, or IOCs to share? Reach out at <a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a> — findings can be posted on your behalf as a co-author or attributed however you prefer.</div>
 
