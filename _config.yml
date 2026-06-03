@@ -48,6 +48,7 @@ exclude:
   - "assets/node_modules/*"
   - ".github/*"
   - "docs/*"
+  - "tools/*"
 
 # Theme activation
 remote_theme: sylhare/Type-on-Strap
