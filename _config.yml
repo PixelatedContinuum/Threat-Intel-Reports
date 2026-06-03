@@ -6,6 +6,11 @@ url: "https://the-hunters-ledger.com"
 title: The Hunter's Ledger
 description: "Threat Intelligence Reports and Hunting Resources"
 
+# jekyll-seo-tag: default Twitter card type — matches the 1200x630 per-report social cards
+# (collapses the duplicate twitter:card so the plugin agrees with the theme's tag)
+twitter:
+  card: summary_large_image
+
 favicon: "/assets/images/favicon.svg"
 
 # Header and footer text
