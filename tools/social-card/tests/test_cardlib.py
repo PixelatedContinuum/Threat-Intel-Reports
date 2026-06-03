@@ -5,10 +5,6 @@ import cardlib as c
 REPO = r"C:/Users/josep/Documents/GitHub/Threat-Intel-Reports"
 
 # ---- pure helpers ----
-def test_refang():
-    assert c.refang("185[.]208[.]159[.]182") == "185.208.159.182"
-    assert c.refang("evil[.]com[:]443") == "evil.com:443"
-
 def test_format_card_date():
     assert c.format_card_date("2026-05-06") == "May 6, 2026"
     import datetime
@@ -40,7 +36,7 @@ def test_card_fields():
     f = c.card_fields(REPO, "PULSAR-RAT")
     assert f["severity"] == "CRITICAL"
     assert f["date"] == "Dec 1, 2025"
-    assert f["ioc"] == "185.208.159.182"
+    assert "ioc" not in f
     assert "PULSAR RAT" in f["title"]
     assert f["kicker"] == "REMOTE ACCESS TROJAN"
     assert f["slug"] == "PULSAR-RAT"

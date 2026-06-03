@@ -18,10 +18,6 @@ DOMAIN = "the-hunters-ledger.com"
 
 
 # ---------------------------------------------------------------- pure helpers
-def refang(value):
-    return str(value).replace("[.]", ".").replace("[:]", ":")
-
-
 def format_card_date(value):
     if isinstance(value, (datetime.date, datetime.datetime)):
         dt = value
@@ -79,14 +75,6 @@ def severity_for_slug(repo_root, slug):
     return "HIGH"  # conservative fallback (warned in generate_card)
 
 
-def primary_ioc(front_matter):
-    items = front_matter.get("ioc_highlights") or []
-    if (items and isinstance(items, list)
-            and isinstance(items[0], dict) and items[0].get("value")):
-        return refang(items[0]["value"])
-    return None
-
-
 def _report_dir_for_slug(repo_root, slug):
     for idx in glob.glob(os.path.join(repo_root, "reports", "*", "index.md")):
         if slug_of(idx) == slug:
@@ -105,7 +93,6 @@ def card_fields(repo_root, slug):
         "kicker": derive_kicker(fm.get("category"), tags),
         "severity": severity_for_slug(repo_root, slug),
         "date": format_card_date(fm["date"]),
-        "ioc": primary_ioc(fm),
         "subtitle": (fm.get("description") or "").strip(),
     }
 
@@ -125,7 +112,6 @@ BLUE = "#58a6ff"
 GOLD = "#b8902f"
 TXT = "#eeeeee"
 MUTED = "#8a8a8a"
-IOCCLR = "#e6b17a"
 DIV = "#2a2a2a"
 SEV = {"CRITICAL": ("#dc2626", "#ef4444", "#ffffff"),
        "HIGH": ("#f97316", "#fb923c", "#160a02"),
@@ -199,6 +185,9 @@ def _ellipsize(text, font, max_w):
         return text
     while text and _scratch.textlength(text + "…", font=font) > max_w:
         text = text[:-1]
+    text = text.rstrip()
+    if " " in text:                       # back off to the last whole word
+        text = text[:text.rfind(" ")].rstrip()
     return text + "…"
 
 
@@ -234,13 +223,7 @@ def render_card(fields, out_path):
     d.line([(ml, _s(H - 96)), (BW - mr, _s(H - 96))], fill=DIV, width=_s(1))
     fm = _font(19, 500)
     ym = _s(H - 76)
-    x = ml
-    d.text((x, ym), fields["date"], font=fm, fill=MUTED)
-    x += _scratch.textlength(fields["date"], font=fm) + _s(14)
-    if fields.get("ioc"):
-        d.text((x, ym), "·", font=fm, fill="#555")
-        x += _scratch.textlength("·", font=fm) + _s(14)
-        d.text((x, ym), fields["ioc"], font=_font(19, 600), fill=IOCCLR)
+    d.text((ml, ym), fields["date"], font=fm, fill=MUTED)
     fd = _font(19, 600)
     twd = _scratch.textlength(DOMAIN, font=fd)
     xr = BW - mr - twd
