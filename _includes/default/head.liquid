@@ -90,7 +90,7 @@
     <meta name="twitter:creator" content="@{{ site.data.social.twitter }}">
     <meta name="twitter:site" content="@{{ site.data.social.twitter }}">
     {% endif %}
-    <meta name="twitter:card" content="{% unless page.thumbnail %}summary{% else %}summary_large_image{% endunless %}">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="{{ page.thumbnail | default: page['feature-img'] | default: site.header_feature_image | absolute_url }}">
     <meta name="twitter:image:alt" content="{{ page.title | default: site.title }}">
     <!-- Local override: project design system -->
