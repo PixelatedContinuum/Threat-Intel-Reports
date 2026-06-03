@@ -3,6 +3,7 @@ title: "AdaptixC2 Open Directory Exposure — 45.130.148.125 Operator Toolkit"
 date: '2026-04-30'
 layout: post
 permalink: /reports/opendirectory-45-130-148-125-20260430/
+thumbnail: /assets/images/cards/opendirectory-45-130-148-125-20260430.png
 hide: true
 category: "C2 Framework"
 description: "An open directory on a Uzbekistani VPS exposed a complete AdaptixC2 operator toolkit — 30 attack artifacts covering the full intrusion kill chain — with recovered RC4 config, Linux build-environment fingerprints, and operator-specific indicators enabling cross-campaign tracking under UTA-2026-006."

@@ -25,6 +25,7 @@ ioc_highlights:
     note: "Code-author pseudonym (sifreleWadanz / sifrecozWadanz function pair)"
 layout: post
 permalink: /reports/bellamain-turkish-phaas-79-137-192-3-20260516/
+thumbnail: /assets/images/cards/bellamain-turkish-phaas-79-137-192-3-20260516.png
 category: "Phishing-as-a-Service"
 hide: true
 description: "BellaMain is an operator-developed Turkish Phishing-as-a-Service panel and matched seven-kit brand-impersonation bundle, recovered in full PHP source from an open directory on Aeza Group OFAC-sanctioned hosting. The panel ships first-class operator tradecraft rarely visible at the source layer — USOM (Turkey CERT) blocklist self-monitoring, four-bot Telegram C2 with identity-vs-card role separation, three Telegram-triggered TRUNCATE evidence-destruction commands, mysqldump-to-Telegram backup-as-exfil, a 70/30 TRX/TRON revenue split via live Binance TRXTRY rate conversion, invite-only operator gating with one-time-consume referral codes, and a code-level Wadanz developer signature. First public source-code disclosure for this PhaaS family. Tracked under UTA-2026-008."

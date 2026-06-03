@@ -4,6 +4,7 @@ date: '2026-04-06'
 last_updated: '2026-04-07'
 layout: post
 permalink: /reports/open-directory-172-105-0-126-20260406/
+thumbnail: /assets/images/cards/open-directory-172-105-0-126-20260406.png
 hide: true
 category: "Cybercrime Toolkit"
 description: "First public analysis of OpenStrike, a novel multi-implant C2 toolkit recovered from an open directory on 172.105.0.126 before any known compromise, featuring a tripwired Cobalt Strike DLL and cross-platform Python beacon sharing an identical RSA-2048 key."

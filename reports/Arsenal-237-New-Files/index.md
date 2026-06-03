@@ -3,6 +3,7 @@ title: "Arsenal-237 New Files Analysis"
 date: '2026-01-27'
 layout: post
 permalink: /reports/arsenal-237-new-files/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 category: "Ransomware Toolkit"
 hide: true
 description: "Follow-up analysis of 11 new samples added to the Arsenal-237 open directory at 109.230.231.37, documenting a significant capability jump from the original 16 samples. New additions include BYOVD kernel driver abuse via a vulnerable Baidu antivirus driver, a kernel-mode rootkit with file hiding and API hooking, a CrowdStrike-specific EDR terminator, and enterprise-grade Rust ransomware targeting backup systems with ChaCha20 encryption."

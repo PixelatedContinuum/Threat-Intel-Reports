@@ -3,6 +3,7 @@ title: "HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campai
 date: '2026-05-06'
 layout: post
 permalink: /reports/opendirectory-62-60-237-100-20260506/
+thumbnail: /assets/images/cards/opendirectory-62-60-237-100-20260506.png
 hide: true
 category: "MaaS Operation"
 description: "A Russian-speaking commodity-malware operator runs a live 15-month multi-vector phishing campaign delivering HijackLoader / Penguish / Rugmi into an AsyncRAT-class .NET RAT, staged from OFAC-sanctioned AS210644 infrastructure and beaconing to Spamhaus DROP-listed AS210558."

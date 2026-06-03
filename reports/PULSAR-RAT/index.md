@@ -17,6 +17,7 @@ ioc_highlights:
     note: "PULSAR RAT payload download URL"
 layout: post
 permalink: /reports/PULSAR-RAT/
+thumbnail: /assets/images/cards/PULSAR-RAT.png
 category: "Remote Access Trojan"
 hide: true
 description: "A custom .NET remote access trojan distributed from an open directory at 185.208.159.182, rated CRITICAL at 9.2/10. Full static and dynamic analysis documents complete filesystem access, automated credential harvesting modules, and persistent remote control — the first in a two-part investigation that later uncovered Quasar RAT and NjRAT/XWorm on the same infrastructure."

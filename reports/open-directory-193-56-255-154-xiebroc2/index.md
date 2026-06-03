@@ -3,6 +3,7 @@ title: "Open Directory at 193.56.255.154 — XiebroC2 v3.1 Go Implant and Covena
 date: '2026-04-03'
 layout: post
 permalink: /reports/open-directory-193-56-255-154-xiebroc2/
+thumbnail: /assets/images/cards/open-directory-193-56-255-154-xiebroc2.png
 hide: true
 category: "C2 Framework"
 description: "An open directory at 193.56.255.154 exposed a multi-framework C2 toolkit — XiebroC2 v3.1 Go implant and two Covenant stager builds — with infrastructure pivoting identifying a probable second operator server at 92.60.75.103 serving a novel undocumented beacon."

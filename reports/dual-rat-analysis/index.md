@@ -19,6 +19,7 @@ ioc_highlights:
     note: "Quasar RAT client.exe SHA256"
 layout: post
 permalink: /reports/dual-rat-analysis/
+thumbnail: /assets/images/cards/dual-rat-analysis.png
 category: "Dual-RAT Analysis"
 hide: true
 description: "Comparative technical analysis of Quasar RAT and NjRAT/XWorm discovered on the same infrastructure as PULSAR RAT (185.208.159.182). The two samples represent opposing operational philosophies — Quasar prioritizing stealth and espionage, NjRAT/XWorm prioritizing aggressive resilience for mass deployment — both achieving full system compromise via different architectural approaches."

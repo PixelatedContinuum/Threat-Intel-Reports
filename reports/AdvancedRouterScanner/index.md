@@ -25,6 +25,7 @@ ioc_highlights:
     note: "Payload download domain"
 layout: post
 permalink: /reports/AdvancedRouterScanner/
+thumbnail: /assets/images/cards/AdvancedRouterScanner.png
 category: "Network Scanner"
 hide: true
 description: "A purpose-built router exploitation framework discovered targeting embedded network devices globally, with over 50,000 confirmed compromises. The toolkit chains credential brute-forcing, reverse shell deployment, and botnet recruitment across multiple continents using a layered five-stage attack chain."

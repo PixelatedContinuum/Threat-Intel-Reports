@@ -23,6 +23,7 @@ ioc_highlights:
     note: "Cluster A fake crypto exchange (Cloudflare-fronted)"
 layout: post
 permalink: /reports/opendirectory-79-137-192-3-20260515/
+thumbnail: /assets/images/cards/opendirectory-79-137-192-3-20260515.png
 category: "MaaS Operation"
 hide: true
 description: "Three operationally separate threat actors share one Aeza bulletproof staging IP. Cluster C is a Rhadamanthys MaaS customer with a custom VS2019 loader, EAX-redirect hollowing into InstallUtil.exe, and a 34-month-stable Hostkey NL C2 that survived Operation Endgame Phase 3."

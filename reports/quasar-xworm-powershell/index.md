@@ -15,6 +15,7 @@ ioc_highlights:
     note: "Dynamic DNS C2 domain"
 layout: post
 permalink: /reports/quasar-xworm-powershell/
+thumbnail: /assets/images/cards/quasar-xworm-powershell.png
 category: "Multi-Stage RAT"
 hide: true
 description: "A multi-stage campaign using a VBScript downloader and fileless PowerShell execution to deliver QuasarRAT and XWorm simultaneously to the same victim. The chain disables Microsoft Defender via exclusion manipulation and establishes dual persistent RAT channels with full remote control, keylogging, and data exfiltration capabilities."
