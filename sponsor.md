@@ -110,7 +110,7 @@ hide: true
       {% endfor %}
       {% assign filled = tier_sponsors | size %}
       {% assign remaining = tier.slots | minus: filled %}
-      {% if remaining > 0 %}<div class="hl-tier-card__placeholder">{% if filled == 0 %}Be the first sponsor →{% else %}{{ remaining }} slot{% if remaining > 1 %}s{% endif %} open →{% endif %}</div>{% endif %}
+      {% if filled > 0 and remaining > 0 %}<div class="hl-tier-card__placeholder">{{ remaining }} slot{% if remaining > 1 %}s{% endif %} open →</div>{% endif %}
     </div>
     {% if tier.best_fit %}
     <div class="hl-tier-card__best-fit"><strong>Best fit:</strong> {{ tier.best_fit }}</div>
