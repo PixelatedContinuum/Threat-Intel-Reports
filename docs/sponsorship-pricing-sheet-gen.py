@@ -33,8 +33,8 @@ def st(name, **kw):
 eyebrow   = st("eyebrow", fontName="Helvetica-Bold", fontSize=8, textColor=GOLD, leading=10, spaceAfter=1)
 title     = st("title", fontName="Helvetica-Bold", fontSize=21, textColor=NAVY, leading=24, spaceAfter=3)
 subtitle  = st("subtitle", fontName="Helvetica", fontSize=10.5, textColor=MUTED, leading=14, spaceAfter=2)
-h2        = st("h2", fontName="Helvetica-Bold", fontSize=12.5, textColor=NAVY, leading=15, spaceBefore=15, spaceAfter=4)
-body      = st("body", fontName="Helvetica", fontSize=9.5, textColor=TEXT, leading=13.5, spaceAfter=3)
+h2        = st("h2", fontName="Helvetica-Bold", fontSize=12.5, textColor=NAVY, leading=15, spaceBefore=7, spaceAfter=3)
+body      = st("body", fontName="Helvetica", fontSize=9.5, textColor=TEXT, leading=13, spaceAfter=2)
 small     = st("small", fontName="Helvetica", fontSize=8, textColor=MUTED, leading=11)
 tname     = st("tname", fontName="Helvetica-Bold", fontSize=13, textColor=NAVY, leading=15, spaceAfter=2)
 tprice    = st("tprice", fontName="Helvetica-Bold", fontSize=15, textColor=GOLD, leading=17, spaceAfter=1)
@@ -42,9 +42,9 @@ tpriceb   = st("tpriceb", fontName="Helvetica-Bold", fontSize=15, textColor=BLUE
 tsub      = st("tsub", fontName="Helvetica-Oblique", fontSize=8.5, textColor=MUTED, leading=11, spaceAfter=6)
 tnote     = st("tnote", fontName="Helvetica-Bold", fontSize=8.5, textColor=GOLD, leading=11, spaceAfter=6)
 tnoteb    = st("tnoteb", fontName="Helvetica-Bold", fontSize=8.5, textColor=BLUE, leading=11, spaceAfter=6)
-bullet    = st("bullet", fontName="Helvetica", fontSize=8.7, textColor=TEXT, leading=12, leftIndent=11, bulletIndent=1, spaceAfter=2.5)
+bullet    = st("bullet", fontName="Helvetica", fontSize=8.7, textColor=TEXT, leading=11.5, leftIndent=11, bulletIndent=1, spaceAfter=2)
 
-def rule(color=GOLD, w=1.2, sb=2, sa=8):
+def rule(color=GOLD, w=1.2, sb=2, sa=5):
     return HRFlowable(width="100%", thickness=w, color=color, spaceBefore=sb, spaceAfter=sa, lineCap="round")
 
 def bullets(items, accent=GOLD):
@@ -56,7 +56,7 @@ story = []
 # ---- Header ----
 story.append(Paragraph("THE HUNTER'S LEDGER", eyebrow))
 story.append(Paragraph("Sponsorship &mdash; Pricing &amp; Packages", title))
-story.append(Paragraph("Independent threat intelligence research. Every report ships with working YARA, Sigma, and Suricata detections, validated IOC feeds, and evidence-tied attribution &mdash; placement alongside research that working defenders actively consume and integrate.", subtitle))
+story.append(Paragraph("Independent threat intelligence research. Every report ships with working YARA, Sigma, and Suricata detections, validated IOC feeds, and evidence-tied attribution &mdash; alongside research working defenders actively integrate.", subtitle))
 story.append(rule())
 
 # ---- Audience ----
@@ -66,7 +66,7 @@ story += bullets([
     "<b>10K+</b> site views in a peak month, and climbing",
     "<b>3,500+</b> LinkedIn followers &mdash; detection engineers, TI analysts, and security leaders",
     "<b>~400</b> LinkedIn profile views per day, where every report is posted and discussed",
-    "Every detection rule is submitted to the public <b>Sigma and YARA rule repositories</b> the community pulls from &mdash; so the research is deployed in SOCs, labs, and hunt platforms worldwide, well beyond direct readers",
+    "Every detection rule is published to the public <b>Sigma and YARA repositories</b> the community pulls from &mdash; deployed in SOCs, labs, and hunt platforms worldwide, beyond direct readers",
 ])
 
 # ---- Tiers (two cards side by side) ----
@@ -81,10 +81,11 @@ monthly = [
     "Logo + tagline in the left-margin Sponsors panel on every page and report",
     "Logo + dofollow link in the site footer, across every page",
     "Featured in the Sponsors section of the site",
-    "Early access to new reports before they go public",
+    "Early access to upcoming reports &mdash; plus first option to sponsor any one exclusively before anyone else",
     "A welcome announcement post + a monthly sponsor spotlight post",
     "A one-time feature in a single report during your first month",
     "Your logo in the subscriber email newsletter",
+    "One sponsor-suggested research topic per year &mdash; a threat relevant to your space, researched and published",
 ])
 
 report = [
@@ -113,36 +114,36 @@ tiers.setStyle(TableStyle([
     ("BOX", (1,0), (1,0), 0.5, LINE),
     ("LEFTPADDING", (0,0), (-1,-1), 13),
     ("RIGHTPADDING", (0,0), (-1,-1), 13),
-    ("TOPPADDING", (0,0), (-1,-1), 13),
-    ("BOTTOMPADDING", (0,0), (-1,-1), 13),
+    ("TOPPADDING", (0,0), (-1,-1), 10),
+    ("BOTTOMPADDING", (0,0), (-1,-1), 10),
 ]))
 story.append(tiers)
-story.append(Spacer(1, 4))
-story.append(Paragraph("<b>First-time sponsor?</b> Your first run is discounted &mdash; first report $100 (standard $150), or your first 3 months of Monthly at $300/mo (standard $500). A low-risk way to try it before committing to more. Available to any sponsor's first engagement.", small))
+story.append(Spacer(1, 2))
+story.append(Paragraph("<b>First-time sponsor?</b> Your first run is discounted &mdash; first report $100 (vs $150), or your first 3 months of Monthly at $300/mo (vs $500). A low-risk way to try before committing.", small))
 
 # ---- Add-ons + Flexible ----
 story.append(Paragraph("Optional Add-Ons", h2))
 story += bullets([
     "<b>Newsletter mention</b> &mdash; $50 &mdash; one-off sponsored mention in a subscriber email send",
     "<b>Extra LinkedIn or X post</b> &mdash; $50 &mdash; a single dedicated sponsored post",
-    "<b>Sponsor-suggested research topic</b> &mdash; $500+ &mdash; choose a topic your organization needs intel about and I'll do the rest: original research and a published report on it (editorial independence preserved)",
+    "<b>Sponsor-suggested research topic</b> &mdash; $500+ &mdash; pick a topic you need intel on; I do the research and publish a report (independence preserved)",
 ])
 story.append(Spacer(1, 3))
 story.append(Paragraph("<b>Flexible &amp; custom:</b> bundles of any size, catalog mixes, multi-month, co-marketing, or something not listed &mdash; tell me what you're trying to achieve and I'll shape a package around it.", body))
 
 # ---- Editorial independence ----
 story.append(Paragraph("Editorial Independence", h2))
-story.append(Paragraph("Sponsorship buys placement and brand association &mdash; not content control. Sponsors do not review reports before publication, do not influence findings or attribution, are never named as analysts or contributors, and sponsored placement is always clearly disclosed. This is not native advertising.", body))
+story.append(Paragraph("Sponsorship buys placement and brand association &mdash; not content control. Sponsors don't review reports pre-publication, influence findings or attribution, or get named as contributors; placement is always disclosed. Not native advertising.", body))
 
 # ---- Contact ----
-story.append(rule(color=LINE, w=0.8, sb=12, sa=8))
+story.append(rule(color=LINE, w=0.8, sb=7, sa=5))
 story.append(Paragraph("Get in touch &nbsp;&mdash;&nbsp; <b>intel@the-hunters-ledger.com</b> &nbsp;&middot;&nbsp; linkedin.com/in/josephrharrison &nbsp;&middot;&nbsp; the-hunters-ledger.com/sponsor/", body))
 story.append(Spacer(1, 2))
 story.append(Paragraph("&copy; 2026 The Hunter's Ledger. Pricing is a starting point and subject to change; custom arrangements welcome.", small))
 
 doc = SimpleDocTemplate(OUT, pagesize=letter,
                         leftMargin=0.62*inch, rightMargin=0.62*inch,
-                        topMargin=0.6*inch, bottomMargin=0.55*inch,
+                        topMargin=0.4*inch, bottomMargin=0.35*inch,
                         title="The Hunter's Ledger — Sponsorship Pricing",
                         author="The Hunter's Ledger")
 doc.build(story)
