@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    3-Class AI Threat-Actor Taxonomy (parent report, §4.10)
+    Phase-grid 3-column layout. Colors signal AI-integration depth:
+      deep red  most-integrated (hardest to defend)
+      red       hybrid (most common in this dataset)
+      grey      theoretical (no exemplar found)
+  -->
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1140" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1139" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Three-Class AI Threat-Actor Taxonomy</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">How 8 operators integrate AI into offensive workflows — and what each class requires defenders to do</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Refined during analysis (Phase 7) — pure "AI-democratized script-kiddie" class is theoretical; no exemplar in dataset</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== CLASS 1 — AI-integrated mature operator (deep red — most integrated) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="80" y="196" width="270" height="660" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="80" y="196" width="270" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="80" y="229" width="270" height="13" fill="#7f1d1d"/>
+    <text x="100" y="227" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.5">CLASS 1</text>
+    <text x="100" y="282" font-size="20" font-weight="700" fill="#ffffff">AI-integrated</text>
+    <text x="100" y="306" font-size="20" font-weight="700" fill="#ffffff">mature operator</text>
+
+    <text x="100" y="346" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">EXEMPLAR</text>
+    <text x="100" y="370" font-size="16" fill="#e5e5e5">Russian Gemini operator</text>
+    <text x="100" y="390" font-size="14" fill="#cccccc">(Case 1 / UTA-2026-012)</text>
+
+    <text x="100" y="430" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">AI RELATIONSHIP</text>
+    <text x="100" y="454" font-size="15" fill="#e5e5e5">AI integrated across 3+</text>
+    <text x="100" y="472" font-size="15" fill="#e5e5e5">workflow stages; operator</text>
+    <text x="100" y="490" font-size="15" fill="#e5e5e5">authors handoff documents</text>
+    <text x="100" y="508" font-size="15" fill="#e5e5e5">FOR AI session priming</text>
+
+    <text x="100" y="548" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">BASELINE WITHOUT AI</text>
+    <text x="100" y="572" font-size="15" fill="#e5e5e5">Operates without AI</text>
+    <text x="100" y="590" font-size="15" fill="#e5e5e5">(HIGH — handwritten C2 +</text>
+    <text x="100" y="608" font-size="15" fill="#e5e5e5">Cloudflare topology + custom</text>
+    <text x="100" y="626" font-size="15" fill="#e5e5e5">credential-mill arsenal);</text>
+    <text x="100" y="644" font-size="15" fill="#e5e5e5">loses efficiency without AI</text>
+
+    <text x="100" y="684" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">DEFENDER RESPONSE</text>
+    <text x="100" y="708" font-size="15" fill="#e5e5e5">Disrupt AI integration</text>
+    <text x="100" y="726" font-size="15" fill="#e5e5e5">points:</text>
+    <text x="100" y="748" font-size="14" fill="#cccccc">• revoke stolen LLM keys</text>
+    <text x="100" y="766" font-size="14" fill="#cccccc">• monitor server-host LLM</text>
+    <text x="100" y="784" font-size="14" fill="#cccccc">  egress traffic</text>
+    <text x="100" y="802" font-size="14" fill="#cccccc">• hunt for AI Operator</text>
+    <text x="100" y="820" font-size="14" fill="#cccccc">  Handoff Documents in IR</text>
+    <text x="100" y="844" font-size="14" fill="#fb923c" font-weight="700">★ Hardest class to defend</text>
+  </g>
+
+  <!-- =========== CLASS 2 — Hybrid AI-augmented operator (red — most common) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="365" y="196" width="270" height="660" rx="8" fill="#1a1a1a" stroke="#dc2626" stroke-width="2"/>
+    <rect x="365" y="196" width="270" height="46" rx="8" fill="#dc2626"/>
+    <rect x="365" y="229" width="270" height="13" fill="#dc2626"/>
+    <text x="385" y="227" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.5">CLASS 2 · MOST COMMON</text>
+    <text x="385" y="282" font-size="20" font-weight="700" fill="#ffffff">Hybrid</text>
+    <text x="385" y="306" font-size="20" font-weight="700" fill="#ffffff">AI-augmented operator</text>
+
+    <text x="385" y="346" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">EXEMPLARS</text>
+    <text x="385" y="370" font-size="16" fill="#e5e5e5">Rovodev/Pandora (Case 3)</text>
+    <text x="385" y="388" font-size="16" fill="#e5e5e5">Turkish ARPA (Case 2)</text>
+    <text x="385" y="406" font-size="14" fill="#cccccc">(UTA-2026-013, UTA-2026-014)</text>
+
+    <text x="385" y="446" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">AI RELATIONSHIP</text>
+    <text x="385" y="470" font-size="15" fill="#e5e5e5">Classic operator tradecraft</text>
+    <text x="385" y="488" font-size="15" fill="#e5e5e5">AND AI used for capability</text>
+    <text x="385" y="506" font-size="15" fill="#e5e5e5">extension (Python scrapers,</text>
+    <text x="385" y="524" font-size="15" fill="#e5e5e5">analytics platforms, etc.)</text>
+
+    <text x="385" y="564" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">BASELINE WITHOUT AI</text>
+    <text x="385" y="588" font-size="15" fill="#e5e5e5">Operates basic stack</text>
+    <text x="385" y="606" font-size="15" fill="#e5e5e5">without AI (HIGH —</text>
+    <text x="385" y="624" font-size="15" fill="#e5e5e5">Mirai-family C binaries,</text>
+    <text x="385" y="642" font-size="15" fill="#e5e5e5">production ARPA platform,</text>
+    <text x="385" y="660" font-size="15" fill="#e5e5e5">manual tradecraft observed)</text>
+
+    <text x="385" y="700" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">DEFENDER RESPONSE</text>
+    <text x="385" y="724" font-size="15" fill="#e5e5e5">Detect BOTH layers:</text>
+    <text x="385" y="746" font-size="14" fill="#cccccc">• conventional artifacts</text>
+    <text x="385" y="764" font-size="14" fill="#cccccc">  (Mirai-family C binaries,</text>
+    <text x="385" y="782" font-size="14" fill="#cccccc">  ET HUNTING Suricata rules)</text>
+    <text x="385" y="804" font-size="14" fill="#cccccc">• AI-augmentation layer</text>
+    <text x="385" y="822" font-size="14" fill="#cccccc">  (.rovodev/, .openclaw/,</text>
+    <text x="385" y="840" font-size="14" fill="#cccccc">  AI Handoff Documents)</text>
+  </g>
+
+  <!-- =========== CLASS 3 — AI-democratized script-kiddie (grey — theoretical) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="650" y="196" width="270" height="660" rx="8" fill="#1a1a1a" stroke="#6b7280" stroke-width="2"/>
+    <rect x="650" y="196" width="270" height="46" rx="8" fill="#6b7280"/>
+    <rect x="650" y="229" width="270" height="13" fill="#6b7280"/>
+    <text x="670" y="227" font-size="13" font-weight="700" fill="#ffffff" letter-spacing="0.5">CLASS 3 · THEORETICAL</text>
+    <text x="670" y="282" font-size="20" font-weight="700" fill="#ffffff">AI-democratized</text>
+    <text x="670" y="306" font-size="20" font-weight="700" fill="#ffffff">script-kiddie</text>
+
+    <text x="670" y="346" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">EXEMPLAR</text>
+    <text x="670" y="370" font-size="16" fill="#e5e5e5">(none in this dataset)</text>
+    <text x="670" y="388" font-size="14" fill="#cccccc">Class refined out of the</text>
+    <text x="670" y="406" font-size="14" fill="#cccccc">Phase 5 original 4-class</text>
+    <text x="670" y="424" font-size="14" fill="#cccccc">framing during Phase 7</text>
+
+    <text x="670" y="466" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">AI RELATIONSHIP</text>
+    <text x="670" y="490" font-size="15" fill="#e5e5e5">AI is initial-development-</text>
+    <text x="670" y="508" font-size="15" fill="#e5e5e5">only; operator writes a</text>
+    <text x="670" y="526" font-size="15" fill="#e5e5e5">natural-language spec, AI</text>
+    <text x="670" y="544" font-size="15" fill="#e5e5e5">produces ALL code</text>
+
+    <text x="670" y="584" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">BASELINE WITHOUT AI</text>
+    <text x="670" y="608" font-size="15" fill="#e5e5e5">Cannot operate without AI</text>
+    <text x="670" y="626" font-size="15" fill="#e5e5e5">(definitional — no in-dataset</text>
+    <text x="670" y="644" font-size="15" fill="#e5e5e5">exemplar). Every observed</text>
+    <text x="670" y="662" font-size="15" fill="#e5e5e5">operator retains baseline</text>
+    <text x="670" y="680" font-size="15" fill="#e5e5e5">capability without AI.</text>
+
+    <text x="670" y="720" font-size="14" font-weight="700" fill="#fb923c" letter-spacing="0.3">DEFENDER RESPONSE (if exists)</text>
+    <text x="670" y="744" font-size="14" fill="#cccccc">• vendor coordination at</text>
+    <text x="670" y="762" font-size="14" fill="#cccccc">  LLM-provider signup time</text>
+    <text x="670" y="780" font-size="14" fill="#cccccc">• structural code-signature</text>
+    <text x="670" y="798" font-size="14" fill="#cccccc">  detection (AIGenCodeStructural</text>
+    <text x="670" y="816" font-size="14" fill="#cccccc">  YARA family rule)</text>
+    <text x="670" y="844" font-size="14" fill="#888888">Honest publication: refined</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="888" x2="940" y2="888" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="920" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Defensive takeaway: AI-tool presence is NOT a malicious indicator by itself</text>
+  <text x="500" y="946" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Class determines response — and every observed operator retains capability without AI</text>
+  <text x="500" y="978" text-anchor="middle" font-size="15" fill="#e5e5e5">The Hybrid class is most common (Cases 2, 3) — detect both conventional tradecraft AND AI-augmentation layer to catch the operator</text>
+
+  <!-- Color chip legend -->
+  <g transform="translate(80, 1024)">
+    <rect x="0" y="0" width="16" height="16" fill="#7f1d1d"/>
+    <text x="24" y="13" font-size="14" fill="#cccccc">AI-integrated mature (hardest to defend)</text>
+    <rect x="380" y="0" width="16" height="16" fill="#dc2626"/>
+    <text x="404" y="13" font-size="14" fill="#cccccc">Hybrid AI-augmented (most common)</text>
+    <rect x="700" y="0" width="16" height="16" fill="#6b7280"/>
+    <text x="724" y="13" font-size="14" fill="#cccccc">script-kiddie (theoretical)</text>
+  </g>
+
+  <text x="500" y="1086" text-anchor="middle" font-size="14" fill="#888888">Taxonomy refinement published honestly rather than hidden — the original Phase 5 4-class framing posited a pure AI-democratized class with no observed exemplar.</text>
+  <text x="500" y="1112" text-anchor="middle" font-size="14" fill="#888888">Reducing to 3 published classes (with the theoretical class flagged) preserves the defender-actionable distinctions while accurately representing the evidence base.</text>
+</svg>

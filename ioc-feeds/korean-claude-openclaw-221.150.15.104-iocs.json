@@ -1,0 +1,189 @@
+{
+  "metadata": {
+    "malware_name": "Korean Claude Code Operator with Attacker-Customized AI-Agent Permission Allowlist (Case 4)",
+    "family": "AI-augmented operator tradecraft (capability-building)",
+    "report_date": "2026-05-27",
+    "analyst": "The Hunters Ledger",
+    "confidence": "MEDIUM",
+    "tlp": "CLEAR",
+    "campaign_slug": "korean-claude-openclaw-221.150.15.104",
+    "campaign_id": "Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104",
+    "uta_designation": "UTA-2026-015",
+    "uta_confidence": "LOW (55%)",
+    "parent_investigation": "OpenDirectory - AI-Agent-Frameworks - 2026-05-23",
+    "parent_report_slug": "ai-agent-frameworks-2026-05-23",
+    "notes": "Case 4 capsule sub-report. Smoking-gun artifact: operator's customized ~/.claude/settings.local.json allowlist pre-approving the OpenClaw installation chain. NO defanging in JSON per project convention (machine-readable for SIEM/EDR ingestion). No confirmed victims; threat-level MEDIUM reflects tradecraft observation only."
+  },
+  "file_hashes": {
+    "sha256": [],
+    "sha1": [],
+    "md5": [],
+    "notes": "No malware binary observed for Case 4. The primary captured artifact is the operator's configuration file (settings.local.json, 442 bytes) — not a hashable malware sample. Preserved offline at Evidence/korean-attacker-claude-settings.local.json in the parent investigation directory."
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "221.150.15.104",
+        "type": "operator_host",
+        "confidence": "DEFINITE",
+        "first_seen": "2026-03-11",
+        "last_seen": "2026-05-23",
+        "asn": "AS4766",
+        "asn_name": "Korea Telecom",
+        "country": "KR",
+        "host_class": "residential",
+        "action": "Block at perimeter for non-Korea-Telecom destinations; monitor any inbound or outbound to this IP from non-developer-class hosts",
+        "context": "Operator residential exposure (Korea Telecom AS4766); open directory on port 8080 leaked ~/.claude/ and ~/.openclaw/ contents"
+      }
+    ],
+    "ipv6": [],
+    "domains": [
+      {
+        "value": "openclaw.ai",
+        "type": "tooling_distribution",
+        "confidence": "DEFINITE",
+        "context": "OpenClaw product / installer hosting domain; referenced in operator's pre-approved Claude Code allowlist as the curl|bash installer source — Dual-use: publicly distributed AI-agent framework with both legitimate-purpose adopters and confirmed-malicious operators (this case + Case 2 Turkish ARPA + Case 7 Korean operator)",
+        "action": "Monitor DNS resolution from server-class and non-developer hosts; alert on HTTPS connection from production endpoints"
+      },
+      {
+        "value": "docs.openclaw.ai",
+        "type": "tooling_documentation",
+        "confidence": "DEFINITE",
+        "context": "OpenClaw documentation host; referenced in operator's pre-approved Claude Code WebFetch allowlist entry — Same dual-use status as openclaw.ai parent domain",
+        "action": "Monitor for `WebFetch(domain:docs.openclaw.ai)` pattern in Claude Code permission allowlists"
+      },
+      {
+        "value": "lightmake.site",
+        "type": "tooling_infrastructure",
+        "confidence": "MODERATE",
+        "context": "OpenClaw-adjacent infrastructure component referenced in parent-investigation hosting-and-egress signature list — Not directly observed in Case 4 artifact; promoted to this feed from parent investigation umbrella's OpenClaw ecosystem documentation",
+        "action": "Monitor DNS resolution + HTTPS connections from non-developer hosts"
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://221.150.15.104:8080/",
+        "type": "operator_open_directory",
+        "confidence": "DEFINITE",
+        "action": "Block egress from your estate; this is the discovery vector, not an attack surface against your environment",
+        "context": "Operator-exposed open directory leaking ~/.claude/ and ~/.openclaw/ home-directory contents"
+      },
+      {
+        "value": "https://openclaw.ai/install.sh",
+        "type": "installer_url",
+        "confidence": "DEFINITE",
+        "action": "Block at proxy / egress filter unless OpenClaw use is explicitly sanctioned in your environment",
+        "context": "OpenClaw shell installer fetched via curl|bash pattern; operator pre-authorized this exact URL in Claude Code allowlist"
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "filesystem_paths": [
+      {
+        "value": "~/.claude/settings.local.json",
+        "type": "claude_code_permission_allowlist",
+        "confidence": "DEFINITE",
+        "hunt_criteria": "Combine path with content analysis: `permissions.allow` array containing any of (1) Bash curl|bash patterns, (2) global npm install of unfamiliar packages, (3) WebFetch authorization for non-vendor / non-allowlisted documentation domains, (4) local listener invocations like `* --port <N>` suggesting gateway/proxy/agent bring-up",
+        "action": "Add to filesystem hunt queues across developer-class and admin-class endpoints",
+        "context": "Anthropic Claude Code per-directory or global permission allowlist; the operator-customized variant is the primary defender hunt anchor for this case"
+      },
+      {
+        "value": "<project-root>/.claude/settings.local.json",
+        "type": "claude_code_permission_allowlist_project_scoped",
+        "confidence": "DEFINITE",
+        "hunt_criteria": "Same content criteria as global allowlist",
+        "action": "Sweep developer endpoints for `.claude/settings.local.json` under repository working directories",
+        "context": "Per-project Claude Code allowlist; same risk surface as global allowlist, scoped to a specific working directory"
+      },
+      {
+        "value": "~/.openclaw/",
+        "type": "openclaw_installation_directory",
+        "confidence": "DEFINITE",
+        "context": "OpenClaw home-directory installation; expected to be present co-located with Claude Code on hosts running the attacker tradecraft pattern documented in this case — Presence alone is not malicious (OpenClaw is dual-use); the diagnostic is the combination of OpenClaw installation + attacker-customized Claude Code allowlist + open-directory exposure or other operator signals",
+        "action": "Inventory; surface combined Claude Code + OpenClaw installations for review"
+      },
+      {
+        "value": "~/.openclaw/completions/openclaw.ps1",
+        "type": "openclaw_powershell_completion",
+        "confidence": "DEFINITE",
+        "action": "Inventory + correlate with PowerShell session logs",
+        "context": "OpenClaw PowerShell completion script; indicates operator has run `openclaw` on a PowerShell-enabled host"
+      }
+    ],
+    "configuration_strings": [
+      {
+        "value": "Bash(curl -fsSL https://openclaw.ai/install.sh | bash)",
+        "type": "allowlist_entry",
+        "confidence": "DEFINITE",
+        "action": "Add to YARA strings + Sigma file-content rules",
+        "context": "Operator's allowlist entry pre-approving the curl|bash OpenClaw installer fetch; exact string match suitable for filesystem-content YARA / Sigma rules"
+      },
+      {
+        "value": "Bash(npm i -g openclaw)",
+        "type": "allowlist_entry",
+        "confidence": "DEFINITE",
+        "action": "Add to YARA strings + Sigma file-content rules",
+        "context": "Operator's allowlist entry pre-approving global npm install of OpenClaw"
+      },
+      {
+        "value": "Bash(openclaw onboard)",
+        "type": "allowlist_entry",
+        "confidence": "DEFINITE",
+        "action": "Add to YARA strings + Sigma file-content rules",
+        "context": "Operator's allowlist entry pre-approving OpenClaw onboarding flow"
+      },
+      {
+        "value": "WebFetch(domain:docs.openclaw.ai)",
+        "type": "allowlist_entry",
+        "confidence": "DEFINITE",
+        "action": "Add to YARA strings + Sigma file-content rules",
+        "context": "Operator's allowlist entry pre-approving Claude Code WebFetch to OpenClaw documentation"
+      },
+      {
+        "value": "Bash(openclaw gateway --port 18789)",
+        "type": "allowlist_entry",
+        "confidence": "DEFINITE",
+        "action": "Add to YARA strings + Sigma file-content rules + endpoint listener inventory checks",
+        "context": "Operator's allowlist entry pre-approving OpenClaw local-gateway service startup on port 18789"
+      },
+      {
+        "value": "Bash(open http://127.0.0.1:18789/)",
+        "type": "allowlist_entry",
+        "confidence": "DEFINITE",
+        "action": "Add to YARA strings + Sigma file-content rules",
+        "context": "Operator's allowlist entry pre-approving the macOS `open` command to launch the OpenClaw gateway web UI in the operator's default browser (macOS-specific command — operator's host is likely macOS or a macOS-compatible environment)"
+      }
+    ],
+    "package_names": [
+      {
+        "value": "openclaw",
+        "type": "npm_package",
+        "confidence": "DEFINITE",
+        "registry": "npmjs.com (public)",
+        "action": "Monitor npm registry fetches for the `openclaw` package name from non-developer-class hosts",
+        "context": "OpenClaw npm package; operator's allowlist authorizes global install via `npm i -g openclaw`"
+      }
+    ],
+    "listening_ports": [
+      {
+        "value": 18789,
+        "protocol": "TCP",
+        "confidence": "DEFINITE",
+        "scope": "loopback (127.0.0.1)",
+        "action": "Inventory listening ports on developer and admin endpoints; surface 18789 binding as candidate for OpenClaw gateway service running under an attacker-customized allowlist",
+        "context": "OpenClaw local gateway service listening port; operator pre-authorized `openclaw gateway --port 18789` and `open http://127.0.0.1:18789/` invocations via Claude Code allowlist"
+      }
+    ]
+  },
+  "behavioral_indicators_summary": {
+    "primary_finding": "First DEFINITE artifact-level evidence of an attacker pre-customizing an AI-agent CLI's permission allowlist to lower safety friction for installing and running a side-loaded AI agent framework (OpenClaw).",
+    "operator_workflow": "Claude Code is used as the human-facing AI assistant. The operator-customized settings.local.json pre-authorizes the OpenClaw installer fetch, global install, onboarding, doc fetch, gateway start on port 18789, and gateway UI launch. The seven-entry sequence collectively describes the complete OpenClaw bring-up workflow that the operator has pre-authorized Claude Code to execute without per-command safety prompts.",
+    "operator_class": "AI-integrated mature operator per umbrella Section 4.10 taxonomy. Operator OPSEC paradox: allowlist sophistication + residential Korea Telecom exposure.",
+    "novelty_claim": "Allowlist-customization-bypass technique is documented at first-public-documentation level by The Hunters Ledger. Operators who read this report can reproduce the technique against any AI-agent CLI with similar permission-prompt safety mechanisms — the defensive value is the hunt anchor (the file + content patterns), not the technique-secrecy.",
+    "victim_count": 0,
+    "victim_class_observed": "None confirmed; case is tradecraft observation only.",
+    "active_status_at_publication": "Host remains exposed at the discovery URL as of investigation close; operator activity is dormant or off-host since 2026-03-11 first-seen."
+  }
+}

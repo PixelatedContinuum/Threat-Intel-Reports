@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    GHOST cryptojacker kit — 4-tier supply chain (Case 9 / UTA-2026-014 → Vova75Rus → operators)
+    Adapted process-tree: 2-deep chain (UnamSanctam → Vova75Rus) + 3-way Y-branch (3 customer operators).
+  -->
+  <defs>
+    <filter id="treeShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1320" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1319" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">GHOST Cryptojacker Kit — 4-Tier Supply Chain</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">UnamSanctam OSS upstream → Vova75Rus kit-author → 3 customer operators</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Tier-0 GitHub T&amp;S action 2026-05-25 disrupted the entire downstream ecosystem in one intervention</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TIER 1 — UnamSanctam (grey side-rail, upstream OSS, non-malicious by itself) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="200" y="196" width="600" height="130" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="200" y="196" width="6" height="130" rx="3" fill="#6b7280"/>
+    <text x="220" y="226" font-size="14" font-weight="600" fill="#cccccc" letter-spacing="0.5">TIER 1 — UPSTREAM (OSS)</text>
+    <text x="220" y="256" font-size="22" font-weight="700" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">UnamSanctam</tspan>  ·  GitHub OSS malware author since 2014</text>
+    <text x="220" y="284" font-size="17" fill="#e5e5e5">860 followers · supplies <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">UnamWebPanel</tspan> + <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">SilentCryptoMiner</tspan> as free OSS</text>
+    <text x="220" y="308" font-size="15" fill="#888888">Passive upstream — NOT a Case 9 threat actor; Vova75Rus pulls + repackages without attribution back</text>
+  </g>
+  <line x1="500" y1="326" x2="500" y2="356" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== TIER 2 — Vova75Rus (red side-rail, kit author + intervention point, ★ T&S action) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="160" y="356" width="680" height="220" rx="8" fill="#1a1a1a" stroke="#dc2626" stroke-width="2"/>
+    <rect x="160" y="356" width="6" height="220" rx="3" fill="#dc2626"/>
+    <text x="180" y="386" font-size="14" font-weight="600" fill="#cccccc" letter-spacing="0.5">TIER 2 — KIT AUTHOR (★ INTERVENTION POINT)</text>
+    <text x="180" y="416" font-size="22" font-weight="700" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Vova75Rus</tspan>  ·  GitHub UID <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">73169104</tspan>  ·  HIGH 88% NAMED ACTOR</text>
+    <text x="180" y="446" font-size="17" fill="#e5e5e5">Russian native · region code 75 = Zabaykalsky Krai indicator · 5+ year GitHub history (since 2020-10-20)</text>
+    <text x="180" y="472" font-size="17" fill="#e5e5e5">Assembles GHOST kit: <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">ghost.sh</tspan> + <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">libpam_cache.so</tspan> + Python ComfyUI exploitation framework</text>
+    <text x="180" y="498" font-size="17" fill="#e5e5e5">OWNER Telegram bot <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">8415540095:...</tspan> baked into every customer deployment ← supply-chain monitoring signature</text>
+    <text x="180" y="526" font-size="17" fill="#e5e5e5">Same <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">libpam_cache.so</tspan> SHA-256 (<tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">eaaa10c8...</tspan>) shipped byte-identical to ALL 3 customers below</text>
+    <text x="180" y="556" font-size="17" fill="#fb923c" font-weight="700">✓ ACCOUNT SUSPENDED by GitHub T&amp;S 2026-05-25  ·  9 URLs return HTTP 404  ·  upstream payload channel removed</text>
+  </g>
+
+  <!-- =========== Y-BRANCH connector (3-way) =========== -->
+  <line x1="500" y1="576" x2="500" y2="610" stroke="#666666" stroke-width="2"/>
+  <line x1="215" y1="610" x2="785" y2="610" stroke="#666666" stroke-width="2"/>
+  <line x1="215" y1="610" x2="215" y2="640" stroke="#666666" stroke-width="2"/>
+  <line x1="500" y1="610" x2="500" y2="640" stroke="#666666" stroke-width="2"/>
+  <line x1="785" y1="610" x2="785" y2="640" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== TIER 3 — Customer A: 77.110.96.200 / UTA-2026-016 ACTIVE (deep red side-rail) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="80" y="640" width="270" height="380" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="80" y="640" width="6" height="380" rx="3" fill="#7f1d1d"/>
+    <text x="100" y="670" font-size="13" font-weight="600" fill="#cccccc" letter-spacing="0.5">CUSTOMER A — ACTIVE</text>
+    <text x="100" y="694" font-size="18" font-weight="700" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">77.110.96.200</tspan></text>
+    <text x="100" y="716" font-size="15" fill="#e5e5e5">UTA-2026-016 · LOW 60%</text>
+    <text x="100" y="746" font-size="14" fill="#fb923c" font-weight="700">★ HIGHER-OPSEC TIER</text>
+    <text x="100" y="772" font-size="14" fill="#e5e5e5">Russian-speaking (bash history</text>
+    <text x="100" y="790" font-size="14" fill="#e5e5e5">Cyrillic + 83 ncat invocations)</text>
+    <text x="100" y="814" font-size="14" fill="#e5e5e5">Self-hosted XMR pool :3333</text>
+    <text x="100" y="832" font-size="14" fill="#e5e5e5">Self-hosted CFX pool :4444</text>
+    <text x="100" y="856" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">XMR 4BBj3gj4...</text>
+    <text x="100" y="874" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CFX cfx:aaj5x...</text>
+    <text x="100" y="898" font-size="14" fill="#e5e5e5">Drain chain: mining wallet</text>
+    <text x="100" y="916" font-size="14" fill="#e5e5e5">→ consolidator → exchange</text>
+    <text x="100" y="934" font-size="14" fill="#e5e5e5">(~2,426 CFX over 6 months)</text>
+    <text x="100" y="958" font-size="14" fill="#cccccc">MIRROR bot <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">8315596543:...</tspan></text>
+    <text x="100" y="988" font-size="14" fill="#fb923c" font-weight="700">ACTIVE 2026-05-24</text>
+    <text x="100" y="1010" font-size="13" fill="#888888">(min1.sh iterated same day)</text>
+  </g>
+
+  <!-- =========== TIER 3 — Customer B: 77.110.125.145 / UTA-2026-017 ABANDONED =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="365" y="640" width="270" height="380" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="365" y="640" width="6" height="380" rx="3" fill="#7f1d1d"/>
+    <text x="385" y="670" font-size="13" font-weight="600" fill="#cccccc" letter-spacing="0.5">CUSTOMER B — ABANDONED</text>
+    <text x="385" y="694" font-size="18" font-weight="700" fill="#ffffff"><tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">77.110.125.145</tspan></text>
+    <text x="385" y="716" font-size="15" fill="#e5e5e5">UTA-2026-017 · LOW 55%</text>
+    <text x="385" y="746" font-size="14" fill="#cccccc" font-weight="700">LOWER-OPSEC TIER</text>
+    <text x="385" y="772" font-size="14" fill="#e5e5e5">Russian-speaking (183 Cyrillic</text>
+    <text x="385" y="790" font-size="14" fill="#e5e5e5">words in New_scanner.py)</text>
+    <text x="385" y="814" font-size="14" fill="#e5e5e5">PUBLIC pool usage:</text>
+    <text x="385" y="834" font-size="13" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">  auto.c3pool.org:443</text>
+    <text x="385" y="852" font-size="13" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">  cfx-asia1.nanopool.org</text>
+    <text x="385" y="876" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">XMR 46a5osgf...</text>
+    <text x="385" y="894" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CFX cfx:aat5y...</text>
+    <text x="385" y="918" font-size="14" fill="#e5e5e5">Wallet NEVER drained</text>
+    <text x="385" y="936" font-size="14" fill="#e5e5e5">(nonce=0, balance 19.82 CFX)</text>
+    <text x="385" y="966" font-size="14" fill="#cccccc">ABANDONED since 2026-04-12</text>
+    <text x="385" y="988" font-size="14" fill="#cccccc">(40+ days at investigation)</text>
+    <text x="385" y="1010" font-size="13" fill="#888888">(host tinyproxy 500 since 5/24)</text>
+  </g>
+
+  <!-- =========== TIER 3 — Customer C: historical INACTIVE =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="650" y="640" width="270" height="380" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="650" y="640" width="6" height="380" rx="3" fill="#7f1d1d"/>
+    <text x="670" y="670" font-size="13" font-weight="600" fill="#cccccc" letter-spacing="0.5">CUSTOMER C — HISTORICAL</text>
+    <text x="670" y="694" font-size="18" font-weight="700" fill="#ffffff">historical customer</text>
+    <text x="670" y="716" font-size="15" fill="#e5e5e5">(no UTA — wallet only)</text>
+    <text x="670" y="746" font-size="14" fill="#cccccc" font-weight="700">INACTIVE</text>
+    <text x="670" y="776" font-size="14" fill="#e5e5e5">Active window:</text>
+    <text x="670" y="796" font-size="14" fill="#e5e5e5">November–December 2025</text>
+    <text x="670" y="826" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CFX cfx:aasktcha...</text>
+    <text x="670" y="856" font-size="14" fill="#e5e5e5">Drained to SAME consolidator</text>
+    <text x="670" y="874" font-size="14" fill="#e5e5e5">as Customer A — operator</text>
+    <text x="670" y="892" font-size="14" fill="#e5e5e5">may have rotated wallets</text>
+    <text x="670" y="916" font-size="14" fill="#e5e5e5">(wallet-overlap forensics</text>
+    <text x="670" y="934" font-size="14" fill="#e5e5e5">cannot disambiguate)</text>
+    <text x="670" y="964" font-size="14" fill="#cccccc">No XMR wallet captured</text>
+    <text x="670" y="988" font-size="14" fill="#cccccc">No infrastructure observed</text>
+    <text x="670" y="1010" font-size="13" fill="#888888">(predates Hunt.io coverage)</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1058" x2="940" y2="1058" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1090" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Highest-value detection anchors: OWNER bot prefix <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">8415540095</tspan> (catches ALL customer kits)</text>
+  <text x="500" y="1116" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">+ byte-identical libpam_cache.so SHA-256 <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">eaaa10c8...</tspan> (cross-customer rootkit)</text>
+  <text x="500" y="1146" text-anchor="middle" font-size="15" fill="#e5e5e5">Takedown at the Vova75Rus tier disrupts ALL downstream customers via single intervention point — proven by 2026-05-25 GitHub T&amp;S action</text>
+
+  <!-- Color chip legend -->
+  <g transform="translate(80, 1190)">
+    <rect x="0" y="0" width="16" height="16" fill="#6b7280"/>
+    <text x="24" y="13" font-size="14" fill="#cccccc">upstream OSS (passive)</text>
+    <rect x="260" y="0" width="16" height="16" fill="#dc2626"/>
+    <text x="284" y="13" font-size="14" fill="#cccccc">kit author (intervention point)</text>
+    <rect x="580" y="0" width="16" height="16" fill="#7f1d1d"/>
+    <text x="604" y="13" font-size="14" fill="#cccccc">customer operator (endgame)</text>
+  </g>
+
+  <text x="500" y="1260" text-anchor="middle" font-size="14" fill="#888888">UnamSanctam = upstream OSS author; not a Case 9 threat actor. Vova75Rus is the named threat actor (HIGH 88%).</text>
+  <text x="500" y="1286" text-anchor="middle" font-size="14" fill="#888888">Censys ARC (Mark Ellzey, 2026-04-07) independently corroborates the kit-author identity via cross-customer .so SHA-256 match.</text>
+</svg>
