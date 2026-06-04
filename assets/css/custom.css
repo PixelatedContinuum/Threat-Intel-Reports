@@ -2963,3 +2963,38 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
     overflow: hidden;
   }
 }
+
+/* ============================================================
+   SPONSOR RAIL — MOBILE INTERACTION FIXES
+   When a monthly+active sponsor exists, the rail reflows into a
+   horizontal strip under the nav (<=1280px). That in-flow strip
+   interacts with two existing fixed-position features; these rules
+   correct both. Scoped to :has(.hl-sponsor-rail) so they stay inert
+   when there is no sponsor (the rail is not rendered at all).
+   ============================================================ */
+@media (max-width: 1280px) {
+  /* (1) The fixed mobile "Contents" bar (.hl-post-toc-mobile — position:fixed,
+     top:navHeight, z-index:999) painted directly over the strip. Drop the
+     strip below the bar so it is no longer sliced in half. */
+  body:has(.hl-post-toc-mobile) .hl-sponsor-rail {
+    margin-top: 46px;
+  }
+
+  /* (2) The per-page top glow tucks its bright edge under the sticky nav via a
+     fixed negative top (.hl-page::before ~L2599, .hl-home-hero::before ~L2566).
+     The in-flow strip pushes the header down, exposing that bright edge as a
+     hard line. Reach the glow further up so the edge re-tucks under the opaque
+     nav (over-reach is harmless — the nav hides it). */
+  body:has(.hl-sponsor-rail) .hl-home-hero::before {
+    top: -180px;
+    height: 580px;
+  }
+  body:has(.hl-sponsor-rail) .hl-page:has(.hl-page-header)::before {
+    top: -190px;
+    height: 400px;
+  }
+  body:has(.hl-sponsor-rail) .hl-page:has(.hl-post-header)::before {
+    top: -190px;
+    height: 360px;
+  }
+}
