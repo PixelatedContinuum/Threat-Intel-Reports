@@ -41,7 +41,7 @@ position: 1
 <div class="hl-nav-grid">
   <a href="{{ '/reports/' | relative_url }}" class="hl-nav-tile" style="--acc: #a371f7;">
     <div class="hl-nav-tile__title">Reports</div>
-    <div class="hl-nav-tile__desc">Malware analysis & reverse engineering notes</div>
+    <div class="hl-nav-tile__desc">In-depth malware analysis & reverse engineering</div>
   </a>
   <a href="{{ '/hunting-detections/' | relative_url }}" class="hl-nav-tile" style="--acc: #4ade80;">
     <div class="hl-nav-tile__title">Hunting Detections</div>
