@@ -7,7 +7,7 @@
 entries:
   # ---------------- AI-Agent Framework Abuse — 6-report series (2026-05) ----------------
   - title: "Multi-Actor AI-Agent Framework Abuse (8 Operators)"
-    date: 2026-05-25
+    date: 2026-06-04
     severity: high
     tags: [AI Abuse, Multi-Family, Threat, Open Dir]
     report_url: /reports/ai-agent-frameworks-2026-05-23/

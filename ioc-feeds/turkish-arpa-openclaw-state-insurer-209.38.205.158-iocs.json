@@ -9,9 +9,9 @@
     "analyst": "The Hunters Ledger",
     "confidence": "HIGH",
     "tlp": "CLEAR",
-    "tlp_rationale": "Public release. Operator-side indicators at full fidelity; victim-identifying indicators (internal hostnames, insider AD user ID, internal IPs) redacted from this feed and held offline for victim IR coordination.",
+    "tlp_rationale": "Public release. Operator-side indicators at full fidelity; victim-identifying indicators (internal hostnames, insider AD user ID, internal IPs) excluded from this public feed and held offline for victim IR coordination.",
     "parent_investigation": "ai-agent-frameworks-2026-05-23",
-    "notes": "Public release. Victim-identifying indicators (internal hostnames, insider Windows AD user ID, internal IPs) are redacted from this public feed and held offline for victim IR coordination. Defender intel indicators (the victim organization's own infrastructure) are flagged DO NOT BLOCK with action category MONITOR (victim)."
+    "notes": "Public release. Victim-identifying indicators (internal hostnames, insider Windows AD user ID, internal IPs) are excluded from this public feed and held offline for victim IR coordination. Victim and partner infrastructure is excluded from the public feed entirely."
   },
   "file_indicators": {
     "sha256": [
@@ -176,70 +176,6 @@
         "context": "Tencent COS bucket — OpenClaw shared skill marketplace; egress from non-developer environments is OpenClaw-presence signal",
         "action": "MONITOR",
         "false_positive_risk": "MEDIUM — legitimate Tencent Cloud Object Storage bucket; also used by OpenClaw developers"
-      },
-      {
-        "value": "[victim-subdomain].ocpinstana.[victim-domain].com.tr",
-        "type": "domain",
-        "confidence": "DEFINITE",
-        "context": "VICTIM INFRASTRUCTURE — the victim organization OCP Instana endpoint; harvest target",
-        "action": "MONITOR (victim) — DO NOT BLOCK",
-        "false_positive_risk": "N/A — defender intel; victim-side detection lens only"
-      },
-      {
-        "value": "smp-api.[victim-domain].com.tr",
-        "type": "domain",
-        "confidence": "DEFINITE",
-        "context": "VICTIM INFRASTRUCTURE — the victim organization API surface visible in app_Halkbank.json snapshot",
-        "action": "MONITOR (victim) — DO NOT BLOCK",
-        "false_positive_risk": "N/A"
-      },
-      {
-        "value": "apigw.[victim-domain].com.tr",
-        "type": "domain",
-        "confidence": "DEFINITE",
-        "context": "VICTIM INFRASTRUCTURE — the victim organization API gateway visible in app_Halkbank.json",
-        "action": "MONITOR (victim) — DO NOT BLOCK",
-        "false_positive_risk": "N/A"
-      },
-      {
-        "value": "webservice.halkbank.com.tr",
-        "type": "domain",
-        "confidence": "DEFINITE",
-        "context": "PARTNER ENDPOINT — Halkbank partner endpoint visible in the victim organization's exfiltrated monitoring; partner-notification scope NOT separate compromise",
-        "action": "PARTNER-NOTIFY",
-        "false_positive_risk": "N/A — defender intel; partner-notification lens"
-      },
-      {
-        "value": "ws.sbm.org.tr",
-        "type": "domain",
-        "confidence": "DEFINITE",
-        "context": "PARTNER ENDPOINT — SBM (Turkish Insurance Regulator) web service",
-        "action": "PARTNER-NOTIFY",
-        "false_positive_risk": "N/A"
-      },
-      {
-        "value": "rs.sbm.org.tr",
-        "type": "domain",
-        "confidence": "DEFINITE",
-        "context": "PARTNER ENDPOINT — SBM regulator endpoint peer",
-        "action": "PARTNER-NOTIFY",
-        "false_positive_risk": "N/A"
-      },
-      {
-        "value": "rs.dask.gov.tr",
-        "type": "domain",
-        "confidence": "DEFINITE",
-        "context": "PARTNER ENDPOINT — DASK (Turkish Catastrophe Insurance Pool) regulator endpoint",
-        "action": "PARTNER-NOTIFY",
-        "false_positive_risk": "N/A"
-      },
-      {
-        "value": "trsm.tarsim.gov.tr",
-        "type": "domain",
-        "confidence": "DEFINITE",
-        "context": "PARTNER ENDPOINT — TARSIM (Turkish Agricultural Insurance Pool) regulator",
-        "action": "PARTNER-NOTIFY",
-        "false_positive_risk": "N/A"
       }
     ],
     "urls": [
@@ -744,24 +680,6 @@
         "confidence": "HIGH",
         "context": "Operator interactive dashboard navigation captured in server_v3_chain_0520_2121.log; 00:22-00:30 local Turkish time (late-evening / overnight Turkish working hours)",
         "false_positive_risk": "N/A — temporal attribution context"
-      }
-    ],
-    "victim_internal_infrastructure_defender_intel": [
-      {
-        "value": "[victim internal host — redacted]",
-        "type": "internal_ipv4",
-        "confidence": "DEFINITE",
-        "context": "Internal target referenced in operator TUNNEL_RESTART.md as the destination behind the insider's reverse tunnel",
-        "action": "DEFENDER INTEL — the victim organization only",
-        "false_positive_risk": "N/A"
-      },
-      {
-        "value": "[employee ID — suppressed]",
-        "type": "windows_ad_user_id",
-        "confidence": "DEFINITE",
-        "context": "Insider Windows AD user ID identified from operator-supplied SSH key path C:\\Users\\[employee ID — suppressed]\\.ssh\\rca_key.pem",
-        "action": "DEFENDER INTEL — the victim organization only; SUPPRESS from public report",
-        "false_positive_risk": "N/A"
       }
     ]
   }

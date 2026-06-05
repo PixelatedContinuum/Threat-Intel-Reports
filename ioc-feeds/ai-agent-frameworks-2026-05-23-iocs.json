@@ -1159,27 +1159,6 @@
     ],
     "victim_indicators": [
       {
-        "type": "AD_domain",
-        "value": "[victim AD domain — redacted]",
-        "case": "1_victim",
-        "confidence": "DEFINITE",
-        "context": "victim internal AD domain visible to Russian operator"
-      },
-      {
-        "type": "internal_ip",
-        "value": "[victim internal host — redacted]",
-        "case": "1_victim",
-        "confidence": "DEFINITE",
-        "context": "victim internal host IP"
-      },
-      {
-        "type": "internal_network",
-        "value": "[victim internal subnet — redacted]",
-        "case": "1_victim",
-        "confidence": "DEFINITE",
-        "context": "victim second internal subnet"
-      },
-      {
         "type": "ntlm_hash",
         "value": "31d6cfe0d16ae931b73c59d7e0c089c0",
         "case": "1_victim",
