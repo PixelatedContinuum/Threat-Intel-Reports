@@ -108,7 +108,7 @@ Five immediate priorities for SOC analysts, threat hunters, and healthcare-secto
 4. **Hunt for the LLM credential mutation Yara signature.** YARA rule covers the `"Act as an expert red-team password analyst"` + Gemini API import + `AI_SNIPER_GOODS.txt` / `AI_ADMIN_MUTANTS.txt` output filename pattern. Endpoint AV/EDR file scan plus git-hook pre-commit scan on internal CI/CD pipelines (in case this tooling spreads).
 5. **Hunt for AI Operator Handoff Document YARA signature on developer workstations and server-class hosts.** YARA rule covers Markdown files with session-start load directive co-occurring with C2 endpoint references or credential-table indicators. Higher-risk locations: `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class Linux hosts.
 
-Sections 4 (Capabilities Deep-Dive), 5 (Static Analysis), 6 (Dynamic / Behavioral Analysis), and 7 (MITRE ATT&CK Mapping) contain the technical depth. Section 9 (Threat Actor Assessment) covers the cross-vendor naming reconciliation and four-axis operator profile. Section 13 documents the Tier-0 disposition status. Section 14 documents the analytical retractions and calibration notes including Trend Micro prior-art reframing.
+Sections 4 (Capabilities Deep-Dive), 5 (Static Analysis), 6 (Dynamic / Behavioral Analysis), and 7 (MITRE ATT&CK Mapping) contain the technical depth. Section 9 (Threat Actor Assessment) covers the cross-vendor naming reconciliation and four-axis operator profile. Section 13 documents the analytical retractions and calibration notes including Trend Micro prior-art reframing.
 
 ---
 
@@ -244,7 +244,7 @@ The operator's arsenal spans nine functional layers from credential acquisition 
 
 **Confidence:** DEFINITE (source code captured from operator open directory)
 
-**Technique reframing (per Section 14 calibration):** Trend Micro independently confirmed this technique is operational ("Patriot Bait" 2026-05-22). The Hunters Ledger contribution is reframed from "first ever documentation" to **first source-code analysis with verbatim prompt reproduction**. The novelty claim is retained at HIGH confidence.
+**Technique reframing (per Section 13 calibration):** Trend Micro independently confirmed this technique is operational ("Patriot Bait" 2026-05-22). The Hunters Ledger contribution is reframed from "first ever documentation" to **first source-code analysis with verbatim prompt reproduction**. The novelty claim is retained at HIGH confidence.
 
 **Source-code structure (`ai_sniper_brute.py`, Python):**
 
@@ -282,7 +282,7 @@ The exact phrasing varies slightly across operator iterations; the *structure* �
 
 > **Analyst note:** This subsection documents a novel artifact class — Markdown documents authored by the operator specifically to prime new Google Gemini CLI sessions with prior session operational state. Three exemplars on disk: `C2_MIGRATION_GUIDE.md`, `C2_INFRA_TRANSFER.md`, and `DEPLOYED_TOOLS.md`. The architecture is distinct from the `GEMINI.md` jailbreak-persistence file that Trend Micro documented in their 2026-05-22 publication — those files achieve persistence by being auto-loaded by the AI on session start; AI Operator Handoff Documents are operator-loaded reference documents that carry operational session state. This is a tradecraft pattern, not a single-file persistence trick.
 
-**Confidence:** HIGH (three exemplars on disk; novelty claim MAINTAINED per Section 14)
+**Confidence:** HIGH (three exemplars on disk; novelty claim MAINTAINED per Section 13)
 
 **Pattern structure:** Each document follows a similar form:
 - Title indicating purpose (`C2 Infrastructure Transfer`, `Deployed Tools Inventory`, `C2 Migration Guide`)
@@ -327,7 +327,7 @@ The exact phrasing varies slightly across operator iterations; the *structure* �
 
 This unauthenticated surface is a significant finding for **coordinated disclosure and law enforcement**. Cloudflare PSIRT, acting under legal authority and in coordination with law enforcement, can use the disclosed API token and endpoint inventory to support a targeted takedown of the tunnel infrastructure. Law enforcement agencies with appropriate legal process may use these endpoints as part of a court-authorized disruption operation.
 
-**Victim-side defenders should NOT interact directly with attacker infrastructure.** Issuing commands to `/api/v1/interact` or querying `/api/v1/agents` from a victim network — without explicit authorization from law enforcement — may constitute unauthorized access to a computer system under applicable computer-misuse law (e.g., 18 U.S.C. § 1030 in the US). Direct interaction with live attacker infrastructure also risks destroying forensic evidence, alerting the operator, and contaminating the evidence chain. The correct action is to document the finding, preserve local forensic artifacts, and route the disclosure through the channels identified in Section 13. The endpoint signatures are documented in the Section 10 detection file.
+**Victim-side defenders should NOT interact directly with attacker infrastructure.** Issuing commands to `/api/v1/interact` or querying `/api/v1/agents` from a victim network — without explicit authorization from law enforcement — may constitute unauthorized access to a computer system under applicable computer-misuse law (e.g., 18 U.S.C. § 1030 in the US). Direct interaction with live attacker infrastructure also risks destroying forensic evidence, alerting the operator, and contaminating the evidence chain. The correct action is to document the finding, preserve local forensic artifacts, and route the disclosure through law enforcement and the relevant platform abuse channels. The endpoint signatures are documented in the Section 10 detection file.
 
 **The `A2A C2 MULTI-AGENT CONSOLE` banner:** The operator's `console.py` interactive shell prints this literal banner string on startup. The banner is the operator's self-applied name for their custom C2 framework. It is the operator's branding for their own work — and the highest-signal single-string fingerprint of this operator's C2 across any future deployment, regardless of infrastructure migration.
 
@@ -386,7 +386,7 @@ Python's `BaseHTTPRequestHandler` stores the raw HTTP request URI in `self.path`
 
 **Why this is more persistent than documented `trycloudflare.com` abuse:** The Proofpoint 2024-08-01 RAT-via-Cloudflare-Tunnel coverage documented the `trycloudflare.com` quick-tunnel pattern. Quick-tunnels are ephemeral by design — they expire when the operator-side `cloudflared` process terminates, and the random subdomain is not reused. Custom-domain tunnels under an operator-owned domain are stable — the tunnel UUID and subdomain remain bound to the operator's Cloudflare account, and a new `cloudflared` process can reconnect to the same tunnel UUID after migration. This enables post-migration agent reconnection: if the operator's source IP changes, the agent still beacons to `c2.tralalarkefe.com` successfully.
 
-**The captured Cloudflare full-admin API token:** The operator's API token (defanged: `pBkvccy9...TBztGF2`) provides Cloudflare PSIRT a single subpoena-grade lever to tear down the entire C2 transport layer — all six tunnel subdomains plus the operator-controlled zone (`6d415863...18f47af5`). This is the **single most actionable disclosure target in the campaign**. Cloudflare PSIRT engagement is the recommended Tier-0 disclosure action (Section 13).
+**The captured Cloudflare full-admin API token:** The operator's API token (defanged: `pBkvccy9...TBztGF2`) provides Cloudflare PSIRT a single subpoena-grade lever to tear down the entire C2 transport layer — all six tunnel subdomains plus the operator-controlled zone (`6d415863...18f47af5`). This is the **single most actionable disclosure target in the campaign**. Cloudflare PSIRT engagement is the recommended Tier-0 disclosure action.
 
 **Detection strategy:** Sigma rule for outbound HTTPS to `*.tralalarkefe.com` SNI. Sigma rule for `cloudflared access tcp --hostname *.tralalarkefe.com` argv on internal Linux hosts (catches operator-side use; for victim-side detection, look for any `cloudflared` process running with non-organization-account credentials). Detection rules in Section 10.
 
@@ -566,7 +566,7 @@ These strings combine into Rule 1 in the linked detection file (Section 10).
 
 
 **File types:** Markdown, captured from operator open directory
-**Confidence:** HIGH (three exemplars; novelty claim MAINTAINED per Section 14)
+**Confidence:** HIGH (three exemplars; novelty claim MAINTAINED per Section 13)
 
 **Common structural pattern (across all three documents):**
 
@@ -958,39 +958,7 @@ The following gaps represent uncertainty in the current analysis and require add
 
 ---
 
-## 13. Tier-0 Disposition Outcome
-
-The campaign has multiple Tier-0 disclosure tracks active or pending. This section documents the disposition status at publication time. Status will be updated as disclosure outcomes resolve.
-
-### Tier-0 Highest Priority (Active US Healthcare Victim)
-
-| Target | Disclosure path | Status at publication |
-|---|---|---|
-| The healthcare victim (US dental practice; HIPAA-regulated PHI) | Direct practice notification via The Hunters Ledger coordination + HC3 (HHS Health Sector Cybersecurity Coordination Center) sector-CERT path | **PENDING** — victim notification not yet initiated at publication; the victim is anonymized throughout this public report pending that coordination |
-| **Cloudflare PSIRT** (full-admin API token captured — single subpoena-grade lever for entire C2 transport teardown) | Cloudflare PSIRT direct submission with captured API token + tunnel subdomain inventory + operator-controlled zone identifier | **PENDING** — submission package prepared; pending submission |
-| **Google Cloud Trust & Safety** (GCP projects `[victim-named GCP project — redacted]` + `elated-gizmo-491112-k0`; service account `geminicli@elated-gizmo-491112-k0...`) | Google Cloud T&S abuse channel with project + service account + billing account context | **PENDING** — submission package prepared; pending submission |
-| **Google AI Studio Trust & Safety** (40+ stolen Gemini API keys with MD5 hash inventory) | Google AI Studio T&S abuse channel with stolen-key inventory and rotation pipeline evidence | **PENDING** — submission package prepared; pending submission |
-
-### Tier-1 Coordination Targets
-
-| Target | Disclosure path | Status |
-|---|---|---|
-| **GitHub Trust & Safety** (`sonner1337` user + `oravepo546-stack` organization; captured PAT scope) | GitHub T&S abuse channel; T&S has prior demonstrated responsiveness (Case 9 Vova75Rus suspended 2026-05-25 within ~24 hours) | **PENDING** — submission package prepared |
-| **Telegram Trust & Safety** (`@americanpatriotus` channel termination) | Telegram T&S abuse channel | **PENDING** |
-| **DFRLab + Stanford Internet Observatory** (cross-domain operator-class research; channel content analysis) | Academic / civil-society research coordination | **PENDING** |
-| **Trend Micro coordination** (bandcampro vendor catalog naming reconciliation) | Direct vendor-to-vendor coordination for cross-attribution | **PENDING** |
-
-### Tier-2 Coordination Targets
-
-| Target | Disclosure path | Status |
-|---|---|---|
-| **AEZA abuse desk** (`213.165.51.115` takedown — historically non-cooperative; primary value is on-record reporting) | AEZA abuse channel; OFAC-sanctioned provider; expectation is non-response | **PENDING — low expectation of response** |
-| **AntiPublic.one** (user `sub:31703` account termination) | AntiPublic.one abuse channel — grey-area jurisdiction; uncertain responsiveness | **PENDING — uncertain expectation** |
-| **OpenAI Trust & Safety** (stolen OpenAI key) | OpenAI T&S abuse channel | **PENDING** |
-
----
-
-## 14. Calibration Notes / Retractions
+## 13. Calibration Notes / Retractions
 
 This section documents analytical corrections, prior-art reframings, and scope adjustments made during the investigation. Transparency about investigative iteration is a credibility-preservation requirement of this report's project standards.
 
@@ -1036,9 +1004,9 @@ This section documents analytical corrections, prior-art reframings, and scope a
 
 ---
 
-## 15. Defender Follow-ups / Disclosure Cascade
+## 14. Defender Follow-Ups
 
-This section provides the prioritized hunt and disclosure activities for defenders preparing to engage this operator's TTPs.
+This section provides the prioritized hunt activities for defenders preparing to engage this operator's TTPs.
 
 ### For US Healthcare and Dental Practice Defenders
 
@@ -1063,12 +1031,6 @@ This section provides the prioritized hunt and disclosure activities for defende
 1. **DFRLab content analysis** of `@americanpatriotus` channel — establish coordination vs. organic origin; map amplification network
 2. **OpenMinds ecosystem positioning** of `@americanpatriotus` within documented 52-channel Russian-operated US-targeted Telegram conduit networks
 3. **Stanford Internet Observatory cross-domain operator-class research** — solo-actor financial cybercrime + political IO combination is rare in published reporting; this case is a research-tracked data point
-
-### For Vendor Coordination
-
-1. **Trend Micro vendor catalog naming reconciliation** — coordinate UTA-2026-012 ↔ bandcampro cross-attribution for downstream artifact authoring consistency
-2. **Hunt.io threat-actor catalog re-query** — expected ingestion of bandcampro within 30 days of Trend Micro publication
-3. **Coordinate with any third Tier-2 vendor** that publishes on this operator — third-vendor convergence elevates attribution confidence MODERATE → HIGH
 
 ---
 

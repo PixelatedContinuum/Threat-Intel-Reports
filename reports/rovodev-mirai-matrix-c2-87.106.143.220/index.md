@@ -101,7 +101,7 @@ This is a **single-operator** case at the operator-class profile level, tracked 
 - **Highest mitigation priority for Mirai-protocol-aware IDS deployments:** replace or augment stock single-byte-enum option-key signatures with Naku-variant length-prefixed-string signatures. The MITRE ATT&CK T1095 sub-technique gap (no documented sub-technique class for IoT-botnet protocol modification at this level) means defender signatures should be authored at the campaign level for now.
 - **Highest IR priority for organizations running observability or compute-intensive workloads:** the operator's `whatineed.txt` prompt requested `automatic give me login` (credential harvesting) and the captured `web_scraper_bot.py` includes regex extractors for AWS access keys (`AKIA[0-9A-Z]{16}`), GitHub Personal Access Tokens (`gh[pousr]_[A-Za-z0-9]{36}`), Slack tokens (`xox[baprs]-...`), and Stripe live keys (`sk_live_[0-9a-zA-Z]{24}`). Any web property accessed by a 50–500-requests-in-under-60-seconds burst from a single IP with the default `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36` User-Agent and `verify=False` SSL behavior should be hunt-prioritized for credential exposure review.
 
-For executives reading only this section: this case is the first publicly documented operator-side capture of Atlassian's enterprise AI coding agent (Rovodev) being used end-to-end to author an offensive C2 framework. The defender takeaway is not "block AI tools" — Rovodev is a legitimate enterprise productivity tool — but rather **treat enterprise AI-agent telemetry as a high-value security signal**: vendor-side T&S programs need policy violation detection at the prompt-pattern level (the operator's `whatineed.txt` prompt is unmistakably a malware-development specification), and defender-side hunt programs need behavioral detections for AI-co-authored offensive code (the universal-subset structural signature provides a defensible TTP rubric). Section 14 documents the disclosure cascade at the contact-category level; specific vendor contacts and disclosure status are tracked in the workflow's offline coordination file.
+For executives reading only this section: this case is the first publicly documented operator-side capture of Atlassian's enterprise AI coding agent (Rovodev) being used end-to-end to author an offensive C2 framework. The defender takeaway is not "block AI tools" — Rovodev is a legitimate enterprise productivity tool — but rather **treat enterprise AI-agent telemetry as a high-value security signal**: vendor-side T&S programs need policy violation detection at the prompt-pattern level (the operator's `whatineed.txt` prompt is unmistakably a malware-development specification), and defender-side hunt programs need behavioral detections for AI-co-authored offensive code (the universal-subset structural signature provides a defensible TTP rubric).
 
 ---
 
@@ -1228,41 +1228,11 @@ Hunt.io threat-actor catalog queries for Mirai / Sora / Pandora timed out (Conve
 
 ---
 
-## 13. Tier-0 Disposition Outcome
-
-The disclosure cascade is in **PENDING** status at investigation date. Eight coordinated Trust & Safety notifications target the operator's owned infrastructure, parasitic CNC host, AI tool vendor, and customer platform. The sequence places victim coordination first to prevent collateral damage to the compromised German tourism business whose production VPS is hosting the operator's Naku CNC daemon.
-
-Disclosure ordering reflects the operator-OPSEC split-architecture pattern (Section 4.7) — victim-direct notification must precede hosting-provider Trust & Safety action to prevent collateral business damage to the compromised tourism business.
-
-### Disclosure Cascade Sequence
-
-**FIRST — GetYourGroup GmbH (German tourism company, primary victim).** The compromised host `165.227.175.161` is GetYourGroup GmbH's production tourism VPS, serving the legitimate French-Alps tourism site `auvergne-rhone-alpes-for-groups.com` on TCP/443 (Let's Encrypt cert continuously renewed since 2022-08-18). The Naku CNC daemon was planted on TCP/23 post-compromise; the tourism business is the victim of the compromise, not the operator. **Notification must precede any DigitalOcean abuse action** to enable orderly victim coordination and prevent collateral VPS termination affecting tourism business operations. Contact category: security incident response email address documented in GetYourGroup public business contact information. Status: **PENDING**.
-
-**SECOND — DigitalOcean Trust & Safety.** Post-GetYourGroup-coordination, DigitalOcean abuse desk should be notified of the parasitic CNC daemon on TCP/23 of customer VPS `165.227.175.161` (AS14061). Disclosure should reference the victim coordination completed in step 1; DigitalOcean's response options include credential-rotation assistance, customer-side cleanup assistance, or coordinated VPS pause. Status: **PENDING**.
-
-**THIRD — Doctor Web (Pandora-Mirai variant evolution notification).** Doctor Web's September 2023 disclosure documented Pandora-Mirai as Android-TV scope only. The 11-architecture IoT extension documented in this report (byte-level evidence in Section 4.1 / Section 5.3 / Section 6) is the four-year evolution arc. Notification supports vendor-side detection update and updates the public threat intelligence record. Contact category: Doctor Web threat intelligence team public contact. Status: **PENDING**.
-
-**FOURTH — IONOS SE Abuse Desk.** Operator-owned IONOS DE VPS pair (`87.106.143.220` + `87.106.54.213`, same /16 AS8560) hosts the customer-facing Matrix C2 framework and the bot distribution channel. IONOS abuse contact for VPS termination with reference to this report. Status: **PENDING**.
-
-**FIFTH — Aruba S.p.A. Italy Abuse Desk.** Distribution servers `80.211.94.16` + `80.211.111.10` (AS31034) are confirmed offline at investigation date; report submitted for intelligence purposes (account history / operator billing telemetry). Status: **PENDING**.
-
-**SIXTH — Atlassian Trust & Safety (FIRST PUBLICLY-DOCUMENTED ROVODEV ABUSE CASE).** The captured Rovodev session JSONs (1.24 MB + 176 KB) and runtime log (8.5 MB) are direct primary-source evidence of an Atlassian Rovodev account being used to author offensive code. Atlassian Trust & Safety has the operator account and IP telemetry to action. The broader-class implication is policy-level: enterprise AI coding agents need prompt-pattern policy detection at the vendor side. Status: **PENDING**.
-
-**SEVENTH — Discord Trust & Safety.** Operator account ID `1441591352927326259` (snowflake-decoded creation 2025-11-22T00:49:22 UTC) is the DDoS-as-a-Service customer-dispatch front-end. Discord Trust & Safety has the operator account information to action. Status: **PENDING**.
-
-**EIGHTH — GitHub Trust & Safety (`keyosbuff` account history).** The `keyosbuff/C2-Leak` repository is deleted at investigation date; GitHub Trust & Safety retains account history per its internal data-retention policy that is relevant to operator-vs-upstream disambiguation. Wayback Machine snapshot query should be completed before or in parallel with GitHub notification. Status: **PENDING**.
-
-### Tier-0 Disposition Outcome — Pattern from Parent Series
-
-The parent series Case 9 GHOST cryptojacker disposition outcome (Vova75Rus account UID 73169104 terminated by GitHub Trust & Safety on 2026-05-25, suspending all 9 repositories that hosted the kit's payload-distribution components) demonstrates that coordinated Trust & Safety disclosure can disrupt an entire ecosystem upstream. This sub-report's disclosure cascade is calibrated to that template — eight coordinated Trust & Safety notifications across eight providers / platforms — with the expectation of partial-to-complete operator infrastructure takedown over the publication-hold window.
-
----
-
-## 14. Calibration Notes / Retractions
+## 13. Calibration Notes / Retractions
 
 This section documents calibration decisions where prior-phase analysis was refined, retracted, or refuted during the investigation. The calibration record is published transparently as part of the report's methodological evidence trail.
 
-### 14.1 MaaS Hypothesis REFUTED (Phase 11)
+### 13.1 MaaS Hypothesis REFUTED (Phase 11)
 
 **Earlier-phase framing:** Phase 10 §6 read (d) raised the possibility that this operator is a builder selling the Pandora-Mirai variant to other downstream operators (Malware-as-a-Service / MaaS framing).
 
@@ -1270,7 +1240,7 @@ This section documents calibration decisions where prior-phase analysis was refi
 
 **Calibration outcome:** The operator is a **downstream adopter** of the open-source Pandora-Sora-Mirai ecosystem, not the variant author. The HYBRID AI-augmented framing replaces the MaaS-builder framing as the operator's primary class.
 
-### 14.2 First Publicly-Documented Atlassian Rovodev Abuse Case Status
+### 13.2 First Publicly-Documented Atlassian Rovodev Abuse Case Status
 
 **Sweep completeness:** Tier 1-3 source sweep at investigation date returned ZERO prior documentation of Atlassian Rovodev being used to author offensive code. Sweep coverage documented in Section 9.4.
 
@@ -1278,7 +1248,7 @@ This section documents calibration decisions where prior-phase analysis was refi
 
 **Subsequent-coverage expectation:** Sub-report establishes the canonical tracking designation; subsequent vendor coverage will reference UTA-2026-014 as the prior-art anchor for Atlassian Rovodev offensive-use cases.
 
-### 14.3 AI-Generated Offensive Code Structural Signature Universal Subset Upgraded HIGH → DEFINITE
+### 13.3 AI-Generated Offensive Code Structural Signature Universal Subset Upgraded HIGH → DEFINITE
 
 **Earlier-phase framing:** Phase 5 + Phase 13 §2 documented the AI-Generated Offensive Code Structural Signature at HIGH confidence for criteria #1, #3, #7, #9, #10 within this case (N=1 operator).
 
@@ -1288,7 +1258,7 @@ This section documents calibration decisions where prior-phase analysis was refi
 
 **Critical discipline reminder:** Cross-operator signature confirmation is a TTP detection signal, NOT operator coordination evidence. The signature is downstream of AI-tool-class shared training patterns. The three operators are NOT linked.
 
-### 14.4 Pandora-Mirai Variant Lineage Attribution
+### 13.4 Pandora-Mirai Variant Lineage Attribution
 
 **Source:** Doctor Web — Pandora-Mirai disclosure (September 2023). Tier 2 / B2 reliability rating. URL: `https://news.drweb.com/show/?lng=en&i=14743`
 
@@ -1296,7 +1266,7 @@ This section documents calibration decisions where prior-phase analysis was refi
 
 **Four-year evolution arc documented in this case:** Doctor Web September 2023 → operator-extended 11-architecture IoT scope by 2026-01-25 (Naku.{arch} first-seen on VirusTotal). No prior public characterization of the evolution arc. This investigation is the first public documentation.
 
-### 14.5 Hybrid AI-Augmented Operator Class Refinement (Phase 7)
+### 13.5 Hybrid AI-Augmented Operator Class Refinement (Phase 7)
 
 **Earlier-phase framing:** Parent investigation's Pattern 8 three-class taxonomy distinguished AI-democratized script-kiddie / Hybrid AI-augmented / Mature operator classes. Initial Phase 3h-Phase 10 framing of this operator leaned toward "English-speaking script-kiddie using AI as force-multiplier."
 
@@ -1304,7 +1274,7 @@ This section documents calibration decisions where prior-phase analysis was refi
 
 **Calibration outcome:** Operator class assignment refined from "English-speaking script-kiddie" to **HYBRID AI-augmented at HIGH confidence (~80%)**. Case 3 anchors the HYBRID instance at the strongest evidentiary profile in the parent series.
 
-### 14.6 DDoS-as-a-Service Productization Layer (Operational-Business-Class Signature)
+### 13.6 DDoS-as-a-Service Productization Layer (Operational-Business-Class Signature)
 
 **Original framing:** Phase 3h identified the operator as building a DDoS framework with Discord integration.
 
@@ -1314,22 +1284,11 @@ This section documents calibration decisions where prior-phase analysis was refi
 
 ---
 
-## 15. Defender Follow-ups / Disclosure Cascade Targets
+## 14. Defender Follow-Ups
 
-This section summarizes downstream defender actions and disclosure cascade targets. Specific contact persons and disclosure status detail are tracked in the workflow's offline coordination file.
+This section summarizes downstream defender actions: active-hunt strategies and strategic recommendations defenders can apply against the campaign's tradecraft.
 
-### 15.1 Vendor Coordination Targets
-
-- **GetYourGroup GmbH** — German tourism company victim (compromised production VPS hosting parasitic CNC); FIRST in disclosure sequence
-- **DigitalOcean Trust & Safety** — Parasitic CNC infrastructure (`165.227.175.161:23` on AS14061); SECOND after victim coordination
-- **Doctor Web** — Pandora-Mirai variant evolution notification (four-year arc from Android-TV scope to 11 IoT architectures); THIRD
-- **1&1 IONOS SE Abuse Desk** — Operator-owned IONOS DE VPS pair (`87.106.143.220` + `87.106.54.213`, AS8560); FOURTH
-- **Aruba S.p.A. Italy Abuse Desk** — Disposable distribution servers (`80.211.94.16` + `80.211.111.10`, AS31034; already offline — report for intelligence); FIFTH
-- **Atlassian Trust & Safety** — First publicly-documented Rovodev offensive-use case; SIXTH
-- **Discord Trust & Safety** — Operator account `1441591352927326259` termination; SEVENTH
-- **GitHub Trust & Safety** — `keyosbuff` account history (Wayback Machine snapshot query in parallel); EIGHTH
-
-### 15.2 Hunt Strategies
+### 14.1 Hunt Strategies
 
 For defenders running active hunt programs:
 
@@ -1339,7 +1298,7 @@ For defenders running active hunt programs:
 4. **Escalating-superlative documentation pattern hunt** — for any open directory observed via crawler / Hunt-style scan, flag depth-1 listings with three or more files matching `FINAL_`, `COMPLETE_`, `ULTIMATE_`, `READY_`, `SOLUTION_COMPLETE`, `FINAL_DEPLOYMENT_COMPLETE` superlative patterns as AI-generated documentation suite.
 5. **Parasitic-CNC-on-legit-VPS detection** — for compromised commercial VPSes (multi-year-old Ubuntu LTS, EOL MariaDB / OpenSSH), audit for TCP/23 daemon presence in addition to expected web-serving services. Selective inbound IP filtering (host responds to scanner sources differently than to expected client sources) is a sophistication signal.
 
-### 15.3 Strategic Recommendations
+### 14.2 Strategic Recommendations
 
 - **Enterprise AI-agent telemetry as high-value security signal** — vendor-side T&S programs need policy violation detection at the prompt-pattern level (the operator's `whatineed.txt` prompt is unmistakably a malware-development specification)
 - **Defender-side detections cannot rely on absence of evasion as an AI-authorship signal** — criterion #4 of the AI-Generated Code Signature is prompt-conditional, not structural; escalated prompts produce anti-analysis content

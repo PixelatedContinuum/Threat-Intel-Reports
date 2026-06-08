@@ -94,7 +94,7 @@
     <text x="100" y="838" font-size="16" fill="#e5e5e5">Continuous 5-minute polling cadence across all four sources · production-grade ETL</text>
     <text x="100" y="862" font-size="16" fill="#e5e5e5">Cross-source correlation layer links: Instana service-ID ↔ SolarWinds node-ID ↔ Zabbix host-ID ↔ Aria VM-ID</text>
     <text x="100" y="888" font-size="16" fill="#e5e5e5">AI-augmented natural-language query interface (ai_service.py · ai_assistant.db) — CANDIDATE novel TTP, N=1</text>
-    <text x="100" y="914" font-size="16" fill="#fb923c" font-weight="700">Hosted on operator-OWNED DigitalOcean 209.38.205.158 (Frankfurt) — alive at investigation date 2026-05-24</text>
+    <text x="100" y="914" font-size="14" fill="#fb923c" font-weight="700">Hosted on operator-OWNED DigitalOcean 209.38.205.158 (Frankfurt) — alive at investigation date 2026-05-24</text>
   </g>
 
   <!-- =========== Connector to outcome =========== -->

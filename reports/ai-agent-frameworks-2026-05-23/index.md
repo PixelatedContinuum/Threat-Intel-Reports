@@ -1348,25 +1348,7 @@ The following identity artifacts were captured during the investigation. Each is
 | Forum URL | `duty-free.cc` | Case 1 Russian carding forum activity |
 | Personal dedication | (March 8th / Women's Day greeting) | Case 9 Vova75Rus personal-dedication page |
 
-### 14.5 Appendix B — Disposition Outcomes Summary
-
-| Disclosure Target | Date | Outcome | Tier |
-|---|---|---|---|
-| GitHub T&S (Vova75Rus UID 73169104) | 2026-05-25 | Account suspended; all 9 repos HTTP 404 | Tier-0 |
-| GitHub T&S (MehmetARPA) | 2026-05-25 | Account suspended; `github.com/MehmetARPA/ARPA` no longer accessible | Tier-0 |
-| Alibaba abuse desk (9 victim IPs) | 2026-05-25 | Submitted; pending | Tier-1 cloud provider |
-| DigitalOcean abuse desk (3 victim IPs) | 2026-05-25 | Submitted; pending | Tier-1 cloud provider |
-| Hetzner abuse desk (3 victim IPs) | 2026-05-25 | Response received 2026-06-02 — investigation opened; no case-specific feedback to the reporter guaranteed | Tier-1 cloud provider |
-| Azure abuse desk (2 victim IPs) | 2026-05-25 | Submitted; pending | Tier-1 cloud provider |
-| AWS abuse desk (2 victim IPs) | 2026-05-25 → 2026-06-03 | Acknowledged 2026-06-03 — requested full evidence (precise timestamps, all source/destination IPs + ports + protocols, log extracts) to investigate further; complete details supplied by reporter 2026-06-04; pending AWS review | Tier-1 cloud provider |
-| AEZA abuse desk | Prepared | Submission pending | Bulletproof-adjacent |
-| Kryptex mining pool | Prepared | Submission pending | Mining pool |
-| Cloudflare PSIRT (`tralalarkefe.com`) | Prepared | Tunnel takedown not yet confirmed | Infrastructure provider |
-| Conflux Exchange | Prepared | — | Cryptocurrency exchange |
-| Telegram (kit-author bot 8415540095) | Prepared | — | Platform |
-| ComfyUI (victim notification) | Prepared | — | Platform |
-
-### 14.6 Appendix C — Research Gaps (Acknowledged for Future Work)
+### 14.5 Appendix B — Research Gaps (Acknowledged for Future Work)
 
 The investigation acknowledges these gaps as publication-honest characterization rather than hidden uncertainty:
 
@@ -1383,7 +1365,7 @@ The investigation acknowledges these gaps as publication-honest characterization
 - Solo vs. small-team discrimination for Case 1 UNRESOLVED.
 - Operator-A vs. Operator-B same-individual question UNRESOLVED.
 
-### 14.7 Appendix D — Key Analytic Conclusions (KAC Documentation)
+### 14.6 Appendix C — Key Analytic Conclusions (KAC Documentation)
 
 The campaign's headline analytical claims are surfaced here with their underlying assumptions explicit, so that defenders or downstream analysts can evaluate the inferential chain rather than accept the conclusion at face value. This format applies the Structured Analytic Technique discipline of separating evidence from assumption from conclusion.
 
