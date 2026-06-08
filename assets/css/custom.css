@@ -2080,10 +2080,17 @@ button,
 }
 
 .hl-sponsor-banner__logo {
-  height: 20px;
+  height: 32px;
   width: auto;
   object-fit: contain;
   vertical-align: middle;
+}
+
+.hl-sponsor-banner__tagline {
+  color: var(--hl-text-muted);
+  font-size: 0.82em;
+  font-weight: 400;
+  line-height: 1.3;
 }
 
 /* ============================================================
@@ -2849,7 +2856,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    nothing unless there is >=1 monthly+active sponsor.
    ============================================================ */
 .hl-sponsor-rail {
-  --rail-w: min(160px, calc(50vw - 500px));         /* clamp: never crosses into the 900px column */
+  --rail-w: min(200px, calc(50vw - 500px));         /* clamp: never crosses into the 900px column */
   position: fixed;
   width: var(--rail-w);
   left: calc(21px + (50vw - 471px - var(--rail-w)) / 2);  /* centered in gutter [progress bar .. content edge] */
@@ -2861,7 +2868,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   gap: 9px;
 }
 .hl-sponsor-rail__label {
-  font-size: 0.66rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   color: var(--hl-text-muted);
@@ -2883,7 +2890,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   background: var(--hl-bg-card);
   border: 1px solid var(--hl-border-card);
   border-radius: 8px;
-  padding: 12px 13px;
+  padding: 14px 15px;
   text-decoration: none !important;
   transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
@@ -2895,7 +2902,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-sponsor-rail__logo {
   display: block;
   max-width: 100%;
-  max-height: 30px;
+  max-height: 42px;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -2905,13 +2912,13 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   min-width: 0;
 }
 .hl-sponsor-rail__name {
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   font-weight: 600;
   color: var(--hl-text-primary);
   line-height: 1.2;
 }
 .hl-sponsor-rail__tagline {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   color: var(--hl-text-muted);
   line-height: 1.42;
   margin-top: 4px;

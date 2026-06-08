@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
   {% for sponsor in resolved_sponsors %}
     {% if sponsor.url %}<a class="hl-sponsor-banner__name" href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer">{% else %}<span class="hl-sponsor-banner__name">{% endif %}
       {% if sponsor.logo %}<img class="hl-sponsor-banner__logo" src="{{ sponsor.logo }}" alt="{{ sponsor.name }}">{% else %}{{ sponsor.name }}{% endif %}
+      {% if sponsor.tagline %}<span class="hl-sponsor-banner__tagline">{{ sponsor.tagline }}</span>{% endif %}
     {% if sponsor.url %}</a>{% else %}</span>{% endif %}
   {% endfor %}
   </div>

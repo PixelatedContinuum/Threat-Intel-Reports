@@ -7,7 +7,7 @@ thumbnail: /assets/images/cards/ai-agent-frameworks-2026-05-23.png
 hide: true
 unlisted: true
 sponsored_by: hunt-io
-category: "AI-Augmented Threat Operations / Multi-Actor Campaign"
+category: "AI-Augmented Threat Operations"
 description: "Parent report of a six-report series documenting 8 independent threat operators integrating AI-agent CLIs (Gemini CLI, Claude Code, Atlassian Rovodev, OpenClaw, Cursor IDE) into offensive workflows, observed through open-directory exposures. Five novel TTPs, six UTA designations, one named-actor HIGH attribution (Vova75Rus), and a GitHub Trust & Safety Tier-0 disposition outcome."
 detection_page: /hunting-detections/ai-agent-frameworks-2026-05-23-detections/
 ioc_feed: /ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json
@@ -38,14 +38,6 @@ ioc_highlights:
 
 ## Executive Summary
 
-**TL;DR — five-bullet summary for skim readers:**
-
-- **8 independent threat operators** observed integrating AI-agent CLIs (Gemini CLI, Claude Code, Atlassian Rovodev, OpenClaw, Cursor IDE) directly into offensive workflows — documented through filesystem-grounded artifacts, not marketing claims.
-- **Five novel TTPs** at first-public-documentation level: AI Operator Handoff Documents, LLM-Personalized Credential Mutation, AI-Generated Code Structural Signature, Observability-Tool Reverse Pipeline, and Operator-Built Unauthenticated Python-stdlib C2.
-- **Two confirmed victims** with operator-confirmed access at time of investigation: a US healthcare provider (persistent RDP+SSH) and a state-affiliated Turkish financial-sector organization (4 stolen observability sources cross-correlated).
-- **HIGH-confidence (88%) attribution** of Case 9 cryptojacker kit author **Vova75Rus**; six UTAs (UTA-2026-012 through UTA-2026-017) assigned for remaining operators.
-- **Concrete disposition outcomes — uncommon for open-directory reporting.** The disclosure cascade has produced action, not just acknowledgements: GitHub Trust & Safety took **account-level action against two operators** (Vova75Rus and MehmetARPA, both 2026-05-25), and **two Tier-1 cloud providers are engaged** — Hetzner **opened an investigation** (2026-06-02) and AWS **acknowledged the report and requested full evidence to investigate further** (2026-06-03, answered 2026-06-04). Most open-directory investigations end at "reported"; this one produced takedowns and live provider engagement.
-
 Across a 9-day investigation, The Hunters Ledger documented these 8 operators as filesystem-grounded artifacts (operator-authored AI handoff documents, attacker prompts, weaponized configurations, AI-co-authored attack code, stolen victim data) rather than the AI-output-side measurements that dominate public reporting. The campaign-defining finding is **multi-vendor diversity**: no two operators share the same AI tool, hosting provider, target sector, or motivation, which refutes the "single coordinated AI-driven campaign" framing in favor of an ecosystem-wide diffusion of AI-augmented tradecraft across unrelated actors. This means defenders cannot rely on a single vendor block, IOC sweep, or threat-group designation to address the AI-misuse threat — coverage must span the ecosystem-wide attack surface.
 
 This report is the parent of a six-report series. It synthesizes findings across all 8 active operator cases plus 2 honestly-characterized false-positive demotions; five sub-reports (Cases 1, 2, 3, 4, and 9) provide per-case deep-dives. Readers should treat the parent as the canonical reference for the campaign's cross-case patterns and the sub-reports as the operator-specific technical analyses. Direct links to each sub-report are in Section 14.2.
@@ -54,11 +46,11 @@ This report is the parent of a six-report series. It synthesizes findings across
 
 Over a 9-day investigation (16 phases) beginning 2026-05-16, hunt.io open-directory exposures combined with multi-source filesystem pulls surfaced direct evidence of how real attackers — not laboratory researchers or vendor-misuse reports — integrate AI-agent CLIs into their day-to-day offensive operations. The investigation observed operators across **eight independent cases**, each using distinct AI tools, hosting providers, target sectors, and motivations:
 
-- **Case 1 — Russian Gemini credential-mill operator** (UTA-2026-012, MODERATE 75%). AEZA-hosted server (213.165.51.115), Cloudflare-Tunnel C2 topology under operator-owned domain `tralalarkefe.com`, GitHub handle `sonner1337`, captured full-admin GitHub Personal Access Token, persistent RDP+SSH access into the US healthcare victim via Cloudflare Tunnel, co-located disinformation channel @americanpatriotus, and 40+ stolen Gemini Pro Preview API keys. Captured artifact `ai_sniper_brute.py` is the campaign's first DEFINITE evidence of **LLM-Personalized Credential Mutation** at attack time.
-- **Case 2 — Turkish ARPA observability-harvester operator** (UTA-2026-013, high-MODERATE 78%). DigitalOcean VPS (209.38.205.158), TurkNet residential ISP operator origin (31.223.97.87), self-branded **"ARPA Korelasyon Motoru"** platform built on TimescaleDB+Neo4j+Redis, four stolen observability sources cross-correlated against the state-owned victim organization (10-year IBM Instana JWT, 784 SolarWinds nodes, 100 Zabbix hosts, VMware Aria), insider-recruited Windows AD user [employee ID — suppressed] with operator-authored Turkish-language tunnel-setup documentation. **GitHub T&S account-level action against operator handle MehmetARPA on 2026-05-25** — repository no longer accessible.
-- **Case 3 — Rovodev/Pandora Mirai botnet operator** (UTA-2026-014, LOW 60%). IONOS-hosted operator host (87.106.143.220, dual HTTP/HTTPS distribution), 11-architecture Mirai-family botnet, Atlassian Rovodev session JSONs capturing the operator's natural-language prompts to AI authoring the attack framework, downstream Pandora-Mirai variant lineage (Doctor Web 2023).
-- **Case 4 — Korean Claude+OpenClaw operator** (UTA-2026-015, LOW 55%). Korea Telecom (221.150.15.104), `~/.claude/settings.local.json` artifact pre-approving `openclaw.ai/install.sh` and `npm i -g openclaw` in the Claude Code permission allowlist — direct evidence of attacker-customized AI-tool installation chains.
-- **Case 9 — GHOST cryptojacker kit + 4-tier supply chain** (Vova75Rus HIGH 88% / UTA-2026-016 / UTA-2026-017). AEZA-hosted operators (77.110.96.200, 77.110.125.145), byte-identical `libpam_cache.so` LD_PRELOAD libc-hook rootkit across both customer deployments, **GitHub T&S Tier-0 action against kit author Vova75Rus on 2026-05-25** disrupting upstream payload distribution, OWNER Telegram bot 8415540095 baked into every customer deployment (supply-chain monitoring signature).
+- **[Case 1 — Russian Gemini credential-mill operator](/reports/russian-gemini-credential-mill-213.165.51.115/)** (UTA-2026-012, MODERATE 75%). AEZA-hosted server (213.165.51.115), Cloudflare-Tunnel C2 topology under operator-owned domain `tralalarkefe.com`, GitHub handle `sonner1337`, captured full-admin GitHub Personal Access Token, persistent RDP+SSH access into the US healthcare victim via Cloudflare Tunnel, co-located disinformation channel @americanpatriotus, and 40+ stolen Gemini Pro Preview API keys. Captured artifact `ai_sniper_brute.py` is the campaign's first DEFINITE evidence of **LLM-Personalized Credential Mutation** at attack time.
+- **[Case 2 — Turkish ARPA observability-harvester operator](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/)** (UTA-2026-013, high-MODERATE 78%). DigitalOcean VPS (209.38.205.158), TurkNet residential ISP operator origin (31.223.97.87), self-branded **"ARPA Korelasyon Motoru"** platform built on TimescaleDB+Neo4j+Redis, four stolen observability sources cross-correlated against the state-owned victim organization (10-year IBM Instana JWT, 784 SolarWinds nodes, 100 Zabbix hosts, VMware Aria), insider-recruited Windows AD user [employee ID — suppressed] with operator-authored Turkish-language tunnel-setup documentation. **GitHub T&S account-level action against operator handle MehmetARPA on 2026-05-25** — repository no longer accessible.
+- **[Case 3 — Rovodev/Pandora Mirai botnet operator](/reports/rovodev-mirai-matrix-c2-87.106.143.220/)** (UTA-2026-014, LOW 60%). IONOS-hosted operator host (87.106.143.220, dual HTTP/HTTPS distribution), 11-architecture Mirai-family botnet, Atlassian Rovodev session JSONs capturing the operator's natural-language prompts to AI authoring the attack framework, downstream Pandora-Mirai variant lineage (Doctor Web 2023).
+- **[Case 4 — Korean Claude+OpenClaw operator](/reports/korean-claude-openclaw-221.150.15.104/)** (UTA-2026-015, LOW 55%). Korea Telecom (221.150.15.104), `~/.claude/settings.local.json` artifact pre-approving `openclaw.ai/install.sh` and `npm i -g openclaw` in the Claude Code permission allowlist — direct evidence of attacker-customized AI-tool installation chains.
+- **[Case 9 — GHOST cryptojacker kit + 4-tier supply chain](/reports/ghost-cryptojacker-vova75rus-77.110.96.200/)** (Vova75Rus HIGH 88% / UTA-2026-016 / UTA-2026-017). AEZA-hosted operators (77.110.96.200, 77.110.125.145), byte-identical `libpam_cache.so` LD_PRELOAD libc-hook rootkit across both customer deployments, **GitHub T&S Tier-0 action against kit author Vova75Rus on 2026-05-25** disrupting upstream payload distribution, OWNER Telegram bot 8415540095 baked into every customer deployment (supply-chain monitoring signature).
 - **Cases 7, 8, 10** — capsule-depth captures (139.59.239.112 productivity-AI stack with Claude + Weevely + frp; 68.183.92.28 AI-orchestrated 60-second multi-stage payment-API attack; 5.230.201.54 active Sliver-derivative C2 development with v30→v39 in one day). INSUFFICIENT attribution depth (sub-50% confidence) but operationally-relevant TTP captures.
 
 Two additional cases (Case 5 at 173.249.2.23, Case 6 at 66.94.120.32) were initially flagged but **demoted** during analysis — Case 5 is a defensive-security SaaS consultant and Case 6 is a benign HuggingFace ML researcher. Both are explicitly characterized in the report's false-positive discrimination section because the lesson matters: **AI tool presence on a host is not, by itself, a malicious indicator.**
@@ -138,7 +130,7 @@ The eight operators documented below integrate AI-agent CLIs — Gemini CLI, Cla
 
 This is the same human-in-the-loop division of labor behind every report on this site: the analyst owns sample selection, interpretation, and the analytical calls; an AI-agent workflow handles the structured production. Both halves are documented openly — see **[How Reports Are Made](/behind-the-reports/ai-workflow/)** for the multi-agent authoring workflow, and **[How Threats Are Found](/behind-the-reports/collection-platform/)** for the collection side.
 
-The takeaway for defenders mirrors the threat itself: the AI-agent tooling that lowers the barrier for attackers lowers it just as far for the people hunting them. The operators here are early adopters of AI-augmented offense — but that ground is not theirs to keep. The same class of capability, directed by human expertise and grounded in real platform data, is on the defensive side today. The full per-endpoint methodology is in **Section 13**.
+The takeaway for defenders mirrors the threat itself: the AI-agent tooling that lowers the barrier for attackers lowers it just as far for the people hunting them. The operators here are early adopters of AI-augmented offense — but that ground is not theirs to keep. The same class of capability, directed by human expertise and grounded in real platform data, is on the defensive side today. The full per-endpoint methodology is in **[Section 13](#methodology)**.
 
 ---
 
@@ -814,176 +806,17 @@ Cross-operator validation across three different AI tools (Gemini CLI, OpenClaw,
 
 ## 7. MITRE ATT&CK Mapping
 
-> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)` or `(DEFINITE)`. Three rows carry DEFINITE because the evidence is direct primary observation with zero ambiguity. The Confidence Levels Summary in Section 11 organizes findings by confidence level for the higher-level view.
+> **Analyst note:** This campaign maps to 49+ ATT&CK techniques across 11 tactics. To keep this parent report focused, the technique-by-technique mapping lives with the detection logic on the companion detection page rather than being duplicated here.
 
-The campaign maps to **49+ MITRE ATT&CK techniques** spanning 11 tactics. The mapping below presents the highest-impact and most-distinctive techniques per tactic; the linked detection file contains the full per-rule MITRE coverage. Because this is a multi-actor campaign, individual techniques span one case or multiple cases — the Evidence cell records the case attribution for each row.
-
-| Tactic / Technique | Name | Evidence |
-|---|---|---|
-| Resource Development / T1583.003 | Virtual Private Server | AEZA (Cases 1, 9), DigitalOcean (Cases 2, 7, 8), IONOS (Case 3), AS200051 (Case 10), Korea Telecom (Case 4) |
-| Resource Development / T1583.004 | Server (Compromised, Repurposed) | Case 3 - `165.227.175.161` GetYourGroup VPS as Naku CNC |
-| Resource Development / T1583.006 | Web Services (Cloudflare Tunnel) | Case 1 - 5 named `tralalarkefe.com` subdomains + bootstrap `*.trycloudflare.com` |
-| Resource Development / T1587 | Develop Capabilities | Case 1 `c2_server.py`; Case 2 ARPA platform; Case 3 Rovodev-authored Python framework |
-| Resource Development / T1588.001 | Malware (Obtain) | Case 9 GHOST kit (Vova75Rus); Case 10 Sliver framework |
-| Resource Development / T1588.002 | Tool (Obtain) | Case 7 Weevely + frp; Case 9 xmrig, lolMiner, Hysteria v2 |
-| Initial Access / T1078 | Valid Accounts | Case 1 stolen credentials + harvested LLM API keys; Case 2 stolen Instana JWT (10-year) |
-| Initial Access / T1199 | Trusted Relationship | Case 2 - insider-recruited Windows AD user [employee ID — suppressed] |
-| Initial Access / T1190 | Exploit Public-Facing Application | Case 9 - ComfyUI exposed nodes (4,573-entry victim scan list) |
-| Initial Access / T1133 | External Remote Services | Case 1 the healthcare victim persistent RDP+SSH via Cloudflare Tunnel |
-| Credential Access / T1110.003 | Password Spraying | Case 1 - LLM-Personalized Credential Mutation pipeline (`ai_sniper_brute.py` + 5.5 MB `AI_ADMIN_MUTANTS.txt`) (DEFINITE) |
-| Credential Access / T1003.002 | SAM | Case 1 - PowerShell agent chain target |
-| Credential Access / T1555 | Credentials from Password Stores | Case 1 - browser credential theft via Quasar-class PowerShell agent |
-| Credential Access / T1056.001 | Keylogging | Case 10 - `GetAsyncKeyState` polling loop + `/api/v/keylog` endpoint |
-| Credential Access / T1552.001 | Credentials in Files | Case 1 - 40+ Gemini Pro API keys harvested from operator host scans |
-| Credential Access / T1539 | Steal Web Session Cookie | Case 2 - 10-year IBM Instana JWT theft |
-| Execution / T1059.001 | PowerShell | Case 2 `turkish-instana_local_collector.ps1`; Case 10 loader_v30-v39.ps1 |
-| Execution / T1059.003 | Windows Command Shell | Cross-case Windows endpoint execution |
-| Execution / T1059.004 | Unix Shell | Case 3 `bot.sh`; Case 9 `ghost.sh`, `hyst.sh`, `min1.sh` |
-| Execution / T1059.006 | Python | Cases 1, 2, 3 - all AI-co-authored framework code |
-| Execution / T1059.007 | JavaScript | Case 9 ComfyUI fake-node persistence |
-| Execution / T1204.002 | User Execution: Malicious File | Case 3 - victim runs `wget`/`curl` of Pandora binary |
-| Execution / T1569.002 | Service Execution | Case 2 - `arpa-*.service` systemd units |
-| Persistence / T1053.003 | Cron | Case 3 5-vector persistence chain (component 1 of 5) |
-| Persistence / T1547.013 | XDG Autostart Entries | Case 3 5-vector chain |
-| Persistence / T1037.004 | RC Scripts | Case 3 - `/etc/rc.local` modification (component 2 of 5) |
-| Persistence / T1543.002 | Systemd Service | Case 3 - `/etc/systemd/system/system-update.service` (component 4); Case 9 - operator deployment scripts |
-| Persistence / T1574.006 | Dynamic Linker Hijacking | Case 9 - `/etc/ld.so.preload` + `libpam_cache.so` LD_PRELOAD libc-hook rootkit (DEFINITE) |
-| Persistence / T1546.004 | Unix Shell Configuration Modification | Case 3 5-vector chain - `~/.bashrc`, `~/.profile` (component 5) |
-| Privilege Escalation / T1611 | Escape to Host | Case 9 - container-escape suite: `_escape_via_cgroup`, `_escape_via_mount`, `_escape_via_nsenter`, `_escape_via_socket` |
-| Defense Evasion / T1014 | Rootkit | Case 9 - `libpam_cache.so` LD_PRELOAD libc-hook rootkit (DEFINITE) |
-| Defense Evasion / T1027 | Obfuscated Files or Information | Case 1 base64 + UTF-16LE encoding chain; Case 10 Fernet+zlib+b64 Python crypter + single-XOR PowerShell loader |
-| Defense Evasion / T1027.002 | Software Packing | Case 10 - PyInstaller stub with creationflags=0x08000000 |
-| Defense Evasion / T1036.005 | Match Legitimate Name or Location | Case 9 - `libpam_cache.so` masquerades as PAM module; Case 10 - `svchost_upd.exe` in `%TEMP%` |
-| Defense Evasion / T1055.012 | Process Hollowing | Case 1 - Quasar-class PowerShell agent chain |
-| Defense Evasion / T1562.001 | Disable or Modify Tools | Case 9 - `_anti_hisana` defense against Hisana anti-cryptojacker tool |
-| Defense Evasion / T1564.001 | Hidden Files and Directories | Case 9 - `~/.config/fontconfig/.cpu`, `~/.config/fontconfig/.gpu`, `.pid_*`, `inotify_guard`, `.spread_*` (DEFINITE) |
-| Defense Evasion / T1070.002 | Clear Linux or Mac System Logs | Case 9 - operator post-compromise cleanup |
-| Defense Evasion / T1070.003 | Clear Command History | Case 9 operator scripts unset HISTFILE |
-| Defense Evasion / T1620 | Reflective Code Loading | Case 10 - Fernet-decrypt-then-execute PyInstaller stub |
-| Defense Evasion / T1497.001 | System Checks (Anti-VM) | Case 1 `stealth_agent.py` (operator-prompted AI evasion code) |
-| Defense Evasion / T1140 | Deobfuscate/Decode Files | Case 1 base64 + UTF-16LE; Case 10 Fernet+zlib+b64 decryption chain (Python SliverCrypter → PowerShell single-XOR) |
-| Discovery / T1018 | Remote System Discovery | Case 9 - ComfyUI victim scan list (4,573 entries) |
-| Discovery / T1046 | Network Service Discovery | Case 9 - `get_all_ranges.sh`, `check_comfyui.sh` |
-| Discovery / T1049 | System Network Connections | Cross-case (operator-side enumeration) |
-| Discovery / T1057 | Process Discovery | Case 9 LD_PRELOAD-hidden process enumeration (DEFINITE) |
-| Discovery / T1082 | System Information Discovery | Cross-case operator workflow |
-| Discovery / T1083 | File and Directory Discovery | Case 9 LD_PRELOAD-hidden file enumeration |
-| Discovery / T1595.002 | Vulnerability Scanning | Case 9 - ComfyUI exposed-node scanning |
-| Discovery / T1614.001 | System Language Discovery | Case 1 - operator Russian-language detection |
-| Lateral Movement / T1021.004 | SSH | Case 1 - the healthcare victim SSH via Cloudflare Tunnel |
-| Lateral Movement / T1021.001 | Remote Desktop Protocol | Case 1 - the healthcare victim RDP via Cloudflare Tunnel `gil_dr1.tralalarkefe.com` |
-| Collection / T1005 | Data from Local System | Case 2 - observability data harvest |
-| Collection / T1213.003 | Code Repositories | Case 1 - sonner1337 GitHub PAT access |
-| Collection / T1113 | Screen Capture | Case 10 - screencap_v4-v11.ps1 + MJPEG stream port 9093 |
-| Collection / T1119 | Automated Collection | Case 2 - ARPA daily ingestion cycle |
-| Collection / T1530 | Data from Cloud Storage Object | Case 1 - GCP project `[victim-named GCP project — redacted]` |
-| C2 / T1071.001 | Web Protocols | Cross-case HTTPS C2 (DEFINITE) |
-| C2 / T1090.001 | Internal Proxy | Case 9 - self-hosted XMR pool proxy at `77.110.96.200:3333` |
-| C2 / T1090.004 | Domain Fronting | Case 1 - Cloudflare Tunnel custom-domain model |
-| C2 / T1095 | Non-Application Layer Protocol | Case 3 - Mirai TCP raw socket beacon |
-| C2 / T1102 | Web Service | Case 9 - Telegram bot supply-chain monitoring |
-| C2 / T1102.002 | Bidirectional Communication | Case 1 - 5-endpoint API contract |
-| C2 / T1105 | Ingress Tool Transfer | Case 3 - `wget`/`curl` distribution; Case 9 - kit pull from Vova75Rus |
-| C2 / T1132.001 | Standard Encoding | Case 1 - base64+UTF-16LE; Case 9 - base64 in `min1.sh` |
-| C2 / T1568 | Dynamic Resolution | Case 1 - Cloudflare DNS for tunnel subdomains |
-| C2 / T1573.001 | Symmetric Cryptography | Case 10 - Fernet+zlib+b64 payload encryption (commodity Python `SliverCrypter` class; Fernet token format base64-encoded) |
-| C2 / T1665 | Hide Infrastructure | Case 9 - Hysteria v2 with `bing.com` SNI masquerade |
-| Exfiltration / T1041 | Exfiltration Over C2 Channel | Case 2 - ARPA ingestion via `/api/ingest/instana` |
-| Exfiltration / T1567.002 | Exfiltration to Cloud Storage | `skillhub-1388575217.cos.ap-guangzhou.myqcloud.com` (Case 4 supporting) |
-| Exfiltration / T1020 | Automated Exfiltration | Case 2 - ARPA daily refresh cycle |
-| Impact / T1496.001 | Compute Hijacking | Case 9 - cryptojacking via xmrig + lolMiner (DEFINITE) |
-| Impact / T1498 | Network Denial of Service | Case 3 - 13 attack methods (`udp-star`, `syn-storm`, etc.) |
-| Impact / T1498.002 | Reflection Amplification | Case 3 - `ovh-nuke`, amplification attack methods |
-| Impact / T1657 | Financial Theft | Case 9 - cryptocurrency mining + on-chain wallet drain chain |
-
-*Table shows 49+ techniques. Full detection coverage is in the linked [detection rules file](https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/).*
-
-**Tactic-level summary:** 11 tactics covered. The campaign's heaviest representation is in **Resource Development** (operator infrastructure), **Defense Evasion** (especially the GHOST rootkit), **Command and Control** (Cloudflare Tunnel + Telegram + custom Python C2 + Hysteria v2), and **Discovery** (Case 9 victim scanning). **Reconnaissance** is intentionally omitted because none of the captured artifacts show pre-compromise operator research at primary-source level.
+The campaign's heaviest tactic representation is **Resource Development** (operator infrastructure), **Defense Evasion** (notably the Case 9 GHOST rootkit), **Command and Control** (Cloudflare Tunnel + Telegram + custom Python C2 + Hysteria v2), and **Discovery** (Case 9 victim scanning). Every detection rule is mapped to its ATT&CK technique(s) on the **[detection rules page →](https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/)**.
 
 ---
 
 ## 8. Indicators of Compromise
 
-> **Analyst note:** The full IOC inventory is published in the campaign IOC feed (linked below) in machine-readable JSON format suitable for SIEM/EDR ingestion. This section presents only the highest-confidence highest-impact indicators per case, organized for at-a-glance defender use. **No defanging** is applied in either this report's IOC tables or the JSON feed — per project convention, IOCs are presented as-is for machine ingestion.
+> **Analyst note:** The complete IOC set for all cases is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-**Full IOC Feed:** [`/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json)
-
-### High-Confidence Indicators (Case 1 — Russian Gemini)
-
-| Indicator | Type | Confidence | Action |
-|---|---|---|---|
-| `213.165.51.115` | IPv4 | HIGH | BLOCK |
-| `tralalarkefe.com` (+ 5 named subdomains) | Domain | HIGH | BLOCK |
-| `tenant-upcoming-great-descending.trycloudflare.com` | Domain | HIGH | BLOCK |
-| `~/.gemini/wrapper.sh`, `~/.gemini/skills/cf-c2-manager/SKILL.md` | File path | HIGH | HUNT |
-| `~/arsenal/c2_server.py`, `~/arsenal/AI_SNIPER_GOODS.txt`, `~/arsenal/AI_ADMIN_MUTANTS.txt` | File path | HIGH | HUNT |
-
-### High-Confidence Indicators (Case 2 — Turkish ARPA)
-
-| Indicator | Type | Confidence | Action |
-|---|---|---|---|
-| `209.38.205.158:8096` | IPv4:Port | HIGH | BLOCK |
-| `31.223.97.87` | IPv4 (operator origin) | HIGH | MONITOR |
-| `arpa-instana-api.service`, `arpa-autolearn.service` (etc.) | systemd unit | HIGH | HUNT |
-| `/api/ingest/instana`, `/api/ingest/solarwinds`, `/api/ingest/zabbix` | URI | HIGH | DETECT |
-| `jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3` | JWT ID | HIGH | REVOKE |
-| `[employee ID — suppressed]` | Windows AD user | HIGH | INVESTIGATE |
-
-### High-Confidence Indicators (Case 3 — Rovodev/Pandora)
-
-| Indicator | Type | Confidence | Action |
-|---|---|---|---|
-| `87.106.143.220:1337` | IPv4:Port | DEFINITE | BLOCK |
-| `87.106.54.213`, `80.211.94.16`, `80.211.111.10`, `165.227.175.161` | IPv4 | HIGH | BLOCK |
-| `PandoraNet.{arch}` filename pattern | Filename | DEFINITE | DETECT |
-| `~/.rovodev/sessions/` | Path | HIGH | HUNT |
-| Discord operator ID `1441591352927326259` | Discord | HIGH | MONITOR |
-| SHA256 `58ef3f244dab408fac7117606843a3dbcfb0754b2032a5950e977bc1811c0313` (`bot.sh`) | Hash | DEFINITE | BLOCK |
-| SHA256 `f3c7cde94261f6664891357b399198a73b9741a7a435527807dca5b3bb86e5f0` (`Naku.arm`) | Hash | DEFINITE | BLOCK |
-
-### High-Confidence Indicators (Case 4 — Korean Claude+OpenClaw)
-
-| Indicator | Type | Confidence | Action |
-|---|---|---|---|
-| `221.150.15.104` | IPv4 | MODERATE | MONITOR |
-| `~/.claude/settings.local.json` containing `Bash(curl -fsSL https://openclaw.ai/install.sh \| bash)` | File path + content | HIGH | HUNT |
-| `openclaw.ai`, `docs.openclaw.ai` | Domain | HIGH | BLOCK (from non-developer hosts) |
-| Listening port 18789 | Port | MODERATE | INVENTORY |
-
-### High-Confidence Indicators (Case 9 — GHOST Kit)
-
-| Indicator | Type | Confidence | Action |
-|---|---|---|---|
-| `77.110.96.200`, `77.110.125.145` | IPv4 | DEFINITE | BLOCK |
-| MD5 `296a800564111b0bad9fe63faf4e63ba` (`libpam_cache.so`, byte-identical across hosts) | Hash | DEFINITE | BLOCK |
-| `/etc/ld.so.preload` (any modification) | File path | HIGH | DETECT |
-| `/lib/security/libpam_cache.so` | File path | DEFINITE | BLOCK |
-| `~/.config/fontconfig/.cpu`, `~/.config/fontconfig/.gpu` | File path | HIGH | HUNT |
-| `cfx.kryptex.network`, `etc.kryptex.network` | Domain | HIGH | BLOCK |
-| `auto.c3pool.org`, `cfx-asia1.nanopool.org` | Domain | HIGH | BLOCK |
-| Telegram bot prefix `8415540095` (OWNER, supply-chain signature) | Telegram | DEFINITE | DETECT (requires Telegram API-side monitoring; not detectable at standard egress layers) |
-| Telegram bot prefix `8315596543` (MIRROR, Operator-A specific) | Telegram | HIGH | DETECT |
-| `Vova75Rus/ComfyUI-Shell-Executor`, `jamestechdev-oss/ComfyUI-Shell-Plugin` | GitHub | HIGH | MONITOR (re-hosting attempts) |
-| Hidden ports 3333, 4444, 5555, 7777, 8027, 8029, 9999, 14433, 14444 | TCP/UDP | HIGH | DETECT |
-
-### High-Confidence Indicators (Case 10 — Sliver)
-
-| Indicator | Type | Confidence | Action |
-|---|---|---|---|
-| `5.230.201.54:31337`, `5.230.201.54:8080`, `5.230.201.54:9093` | IPv4:Port | HIGH | BLOCK |
-| `5.230.201.54/api/v/keylog` | URL | HIGH | DETECT |
-| `%TEMP%\svchost_upd.exe` | File path | HIGH | DETECT |
-| JARM `3fd3fd20d00000021c43d43d00043d204204071741c36579e355f830d285a5` | TLS fingerprint | MODERATE (broad) | DETECT (combined — combine with `5.230.201.54` IP, port `:31337`, or `/api/v/keylog` URI to discriminate from broader Sliver population) |
-
-### Demoted Indicators (DO NOT BLOCK)
-
-The following hosts were initially flagged but **demoted** during analysis. Do not block:
-
-| Host | Demotion Reason |
-|---|---|
-| `173.249.2.23` (Case 5) | Defensive-security SaaS consultant |
-| `66.94.120.32` (Case 6) | Benign HuggingFace ML researcher mtr7x (Sarvam-30B quantization) |
-| `elyasbetter@gmail.com` | French entrepreneur (wikiprepa.fr alumni platform); NOT a threat actor |
+**Full IOC feed:** [`/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json) — every indicator, per case, with type / confidence / recommended action. Per-case IOC feeds are linked from each sub-report (Section 14.2).
 
 ---
 
@@ -999,21 +832,11 @@ This is a **multi-actor** campaign. Attribution is distributed across one named 
 
 **Confidence Statement:**
 
-```
-Threat Actor: Vova75Rus
-Confidence: HIGH (88%)
-- Why this confidence: 5+ year GitHub history (UID 73169104); region code 75 in handle = Zabaykalsky Krai
-  (Russian regional plate code convention); personal-dedication page Notes.github.io dated March 8th
-  (International Women's Day, Russian-culturally-significant date); Censys ARC primary-research corroboration
-  (Mark Ellzey 2026-04-07); OWNER Telegram bot 8415540095 baked into every customer deployment as supply-chain
-  monitoring signature; byte-identical libpam_cache.so across 2 customer hosts confirming DEFINITE supply-chain
-  root; GitHub T&S account-level action 2026-05-25 (all 9 repos HTTP 404) validates the kit-author identity at
-  the platform-trust-and-safety level.
-- What's missing: real-world identity beyond the Vova75Rus handle + region code. Customer count beyond the
-  2 observed deployments.
-- What would increase confidence: government attribution at Tier 1 (FBI/CISA/NSA disclosure) or 2+ additional
-  customer deployments observed.
-```
+**Threat Actor:** Vova75Rus &middot; **Confidence: HIGH (88%)**
+
+- **Why this confidence:** 5+ year GitHub history (UID 73169104); region code 75 in handle = Zabaykalsky Krai (Russian regional plate code convention); personal-dedication page Notes.github.io dated March 8th (International Women's Day, Russian-culturally-significant date); Censys ARC primary-research corroboration (Mark Ellzey 2026-04-07); OWNER Telegram bot 8415540095 baked into every customer deployment as supply-chain monitoring signature; byte-identical libpam_cache.so across 2 customer hosts confirming DEFINITE supply-chain root; GitHub T&S account-level action 2026-05-25 (all 9 repos HTTP 404) validates the kit-author identity at the platform-trust-and-safety level.
+- **What's missing:** real-world identity beyond the Vova75Rus handle + region code. Customer count beyond the 2 observed deployments.
+- **What would increase confidence:** government attribution at Tier 1 (FBI/CISA/NSA disclosure) or 2+ additional customer deployments observed.
 
 **Geography:** Zabaykalsky Krai, Russia (probable; based on region code 75 convention in handle).
 
@@ -1197,6 +1020,14 @@ The campaign threat level (HIGH) should be reassessed under any of the following
 
 **Full Detection File:** [`/hunting-detections/ai-agent-frameworks-2026-05-23-detections.md`](https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/)
 
+**Per-case detection rules** — operator-specific coverage lives in each sub-report's detection deliverable:
+
+- [Case 1 — Russian Gemini](https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections)
+- [Case 2 — Turkish ARPA](https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections)
+- [Case 3 — Rovodev / Pandora Mirai](https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections)
+- [Case 4 — Korean Claude + OpenClaw](https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections)
+- [Case 9 — GHOST Kit](https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections)
+
 | Detection Layer | Count | MITRE Techniques Covered | Overall FP Risk |
 |---|---|---|---|
 | YARA | 8 rules | T1574.006, T1014, T1564.001, T1587, T1059.006, T1027, T1498 | LOW–MEDIUM |
@@ -1318,7 +1149,7 @@ The investigation identifies these detection gaps not currently covered by the l
 
 ---
 
-## 13. Investigation Methodology — Hunt.io Platform (MCP + V3 API) in the Defender Workflow
+## 13. Investigation Methodology — Hunt.io Platform (MCP + V3 API) in the Defender Workflow {#methodology}
 
 > **Analyst note:** This report documents how attackers integrate AI-agent CLIs into offensive workflows. The investigation that produced the report integrated an AI-agent CLI (Claude Code) with the **Hunt.io Model Context Protocol (MCP) server** to surface, triage, and analyze every one of the 9 cases above. This section documents that defender-side AI integration in detail — what worked, what did not, the specific findings the MCP enabled, and the workarounds used when MCP endpoints failed. The symmetry is intentional: AI-augmented tradecraft is now mainstream on both sides of the security line, and defenders evaluating MCP-augmented investigation workflows benefit from a concrete artifact to compare against.
 
