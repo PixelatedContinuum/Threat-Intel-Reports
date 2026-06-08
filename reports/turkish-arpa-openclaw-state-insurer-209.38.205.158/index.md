@@ -5,6 +5,8 @@ layout: post
 permalink: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
 thumbnail: /assets/images/cards/turkish-arpa-openclaw-state-insurer-209.38.205.158.png
 hide: true
+unlisted: true
+sponsored_by: hunt-io
 category: "AI-Augmented Espionage / Observability-Tool Reverse Pipeline"
 description: "Technical analysis of an active compromise of a state-affiliated Turkish financial-sector organization: a Turkish-speaking operator weaponizes the OpenClaw AI agent platform into a custom analytics platform (ARPA) to harvest the victim's enterprise observability stack across four stolen sources (IBM Instana + SolarWinds Orion + Zabbix + VMware Aria), and authors Turkish-language insider-recruitment documentation to an in-network Windows AD user. UTA-2026-013 — first public attribution."
 detection_page: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/

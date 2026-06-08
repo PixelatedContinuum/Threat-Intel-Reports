@@ -5,6 +5,8 @@ layout: post
 permalink: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
 thumbnail: /assets/images/cards/rovodev-mirai-matrix-c2-87.106.143.220.png
 hide: true
+unlisted: true
+sponsored_by: hunt-io
 category: "AI-Augmented Cybercrime / IoT Botnet + DDoS-as-a-Service"
 description: "Technical analysis of an English-speaking Hybrid AI-augmented operator who combined Atlassian Rovodev AI co-authoring with a downstream Pandora-Mirai 11-architecture IoT botnet and a 13-attack-method Matrix C2 framework, productized as a Discord-fronted DDoS-as-a-Service. First publicly documented Rovodev offensive-use case; AI-Generated Offensive Code Structural Signature confirmed DEFINITE for its universal subset via cross-3-operator validation. UTA-2026-014 — first public attribution."
 detection_page: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/
@@ -564,7 +566,7 @@ The four-tier infrastructure architecture:
 
 **Sophistication signals visible in the split-architecture pattern:**
 
-1. **Selective inbound IP filtering on the parasitic CNC host.** Hunt.io's scanner reaches `165.227.175.161` on TCP/22/80/443/3306/34210 today. The opendir-hunter agent (via Cloudflare WARP source) gets ICMP "No route to host" / unreachable across ALL probed ports on the same day. The two responses are inconsistent with "host terminated" — they are consistent with **operator filtering inbound traffic by source-IP**, dropping known scanner sources (Cloudflare WARP relays, likely Tor exits, likely GreyNoise sensors) while accepting traffic from arbitrary residential / IoT source IPs (the bot connection target). Selective scanner-IP filtering is an operator OPSEC sophistication signal.
+1. **Selective inbound IP filtering on the parasitic CNC host.** Hunt.io's scanner reaches `165.227.175.161` on TCP/22/80/443/3306/34210 today. The Vantage agent (via Cloudflare WARP source) gets ICMP "No route to host" / unreachable across ALL probed ports on the same day. The two responses are inconsistent with "host terminated" — they are consistent with **operator filtering inbound traffic by source-IP**, dropping known scanner sources (Cloudflare WARP relays, likely Tor exits, likely GreyNoise sensors) while accepting traffic from arbitrary residential / IoT source IPs (the bot connection target). Selective scanner-IP filtering is an operator OPSEC sophistication signal.
 
 2. **Parasitic-CNC-on-legit-VPS OPSEC pattern with no Mirai-literature precedent.** The CNC is hosted on a German tourism company's production VPS, not a dedicated CNC server. The same host serves the company's tourism site on TCP/443 with a continuously renewed Let's Encrypt certificate. No prior Mirai-family literature documents this pattern at the level of detail captured here; the closest documented adjacent is "Mirai operator uses bulletproof hosting" (which is the opposite — burning visible-to-defender infrastructure to maintain anonymity).
 

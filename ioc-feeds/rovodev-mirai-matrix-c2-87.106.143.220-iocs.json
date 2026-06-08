@@ -430,7 +430,7 @@
       "value": "Selective inbound IP filtering on Naku CNC (drops Cloudflare WARP, accepts arbitrary residential/IoT source IPs)",
       "type": "opsec_pattern",
       "confidence": "MODERATE",
-      "context": "Operator-side firewall rule filtering known scanner sources. opendir-hunter via Cloudflare WARP gets 'No route to host' while Hunt scanner sees host alive on same ports same day."
+      "context": "Operator-side firewall rule filtering known scanner sources. Vantage via Cloudflare WARP gets 'No route to host' while Hunt scanner sees host alive on same ports same day."
     },
     {
       "value": "JSON-over-TCP wire protocol on Matrix C2 (87.106.143.220:1337): '{\"type\":\"bot_register\",...}' + '{\"type\":\"heartbeat\",\"bot_id\":...}'",

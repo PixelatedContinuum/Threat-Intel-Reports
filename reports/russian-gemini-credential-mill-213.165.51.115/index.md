@@ -5,6 +5,8 @@ layout: post
 permalink: /reports/russian-gemini-credential-mill-213.165.51.115/
 thumbnail: /assets/images/cards/russian-gemini-credential-mill-213.165.51.115.png
 hide: true
+unlisted: true
+sponsored_by: hunt-io
 category: "AI-Augmented Credential Mill"
 description: "End-to-end technical analysis of a Russian-native AI-augmented cybercrime operator (UTA-2026-012 / Trend Micro 'bandcampro') running a Gemini-CLI-orchestrated credential mill against a US healthcare victim, with three novel TTP anchors: AI Operator Handoff Documents, LLM-Personalized Credential Mutation, and an operator-built unauthenticated Python-stdlib C2."
 detection_page: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/

@@ -5,6 +5,8 @@ layout: post
 permalink: /reports/korean-claude-openclaw-221.150.15.104/
 thumbnail: /assets/images/cards/korean-claude-openclaw-221.150.15.104.png
 hide: true
+unlisted: true
+sponsored_by: hunt-io
 category: "AI-Augmented Operator Tradecraft / Attacker-Customized AI-Agent Allowlist"
 description: "Capsule sub-report (Case 4 of the AI-Agent-Frameworks investigation): a Korean-language operator's attacker-customized ~/.claude/settings.local.json permission allowlist that pre-approves the OpenClaw install-and-run chain, recovered from an open-directory exposure (221.150.15.104, Korea Telecom). UTA-2026-015."
 detection_page: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections/

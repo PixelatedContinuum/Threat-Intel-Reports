@@ -5,6 +5,8 @@ layout: post
 permalink: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
 thumbnail: /assets/images/cards/ghost-cryptojacker-vova75rus-77.110.96.200.png
 hide: true
+unlisted: true
+sponsored_by: hunt-io
 category: "Cryptojacking Kit"
 description: "End-to-end technical analysis of the GHOST cryptojacker kit — a 4-tier supply chain operation authored by Vova75Rus targeting exposed ComfyUI/GPU-cloud hosts with a userland LD_PRELOAD rootkit, dual-Telegram supply-chain monitoring, and a GitHub Trust & Safety Tier-0 disposition outcome."
 detection_page: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/

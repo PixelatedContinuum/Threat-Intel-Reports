@@ -4,6 +4,7 @@ date: '2026-05-25'
 layout: post
 permalink: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/
 hide: true
+unlisted: true
 ---
 
 **Campaign:** GHOST-Cryptojacker-Vova75Rus-77.110.96.200

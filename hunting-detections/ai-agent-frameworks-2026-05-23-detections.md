@@ -4,6 +4,7 @@ date: '2026-05-25'
 layout: post
 permalink: /hunting-detections/ai-agent-frameworks-2026-05-23-detections/
 hide: true
+unlisted: true
 ---
 
 **Campaign:** AI-Agent-Frameworks-MultiActor-2026-05-23

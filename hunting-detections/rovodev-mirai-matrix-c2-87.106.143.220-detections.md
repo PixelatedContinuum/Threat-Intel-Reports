@@ -4,6 +4,7 @@ date: '2026-05-26'
 layout: post
 permalink: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/
 hide: true
+unlisted: true
 ---
 
 **Campaign:** UTA-2026-014 / rovodev-mirai-matrix-c2-87.106.143.220
