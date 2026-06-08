@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1420" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    Observability-Tool Reverse Pipeline — 4 stolen sources → ARPA ETL → unified topology
+    Hybrid layout: 2×2 source grid converging into single ARPA platform card, then outcome card.
+  -->
+  <defs>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#cccccc"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="1420" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1419" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Observability-Tool Reverse Pipeline</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">4 stolen monitoring credentials → ARPA cross-source ETL → 7,552-element unified topology</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Novel TTP at maximalist scale against a single named state-owned victim (Türkiye Sigorta · TVF portfolio)</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== SOURCE 1 — IBM Instana (yellow side-rail) =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="80" y="200" width="410" height="210" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="80" y="200" width="410" height="46" rx="8" fill="#eab308"/>
+    <rect x="80" y="234" width="410" height="12" fill="#eab308"/>
+    <text x="100" y="230" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">SOURCE 1 — IBM INSTANA (APM)</text>
+    <text x="100" y="282" font-size="20" font-weight="700" fill="#ffffff">10-year JWT (governance defect)</text>
+    <text x="100" y="310" font-size="16" fill="#e5e5e5">JWT issued 2024-03-06 · expires ~2034-02</text>
+    <text x="100" y="332" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3</text>
+    <text x="100" y="354" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">tenant: turkiyesigorta</text>
+    <text x="100" y="376" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">endpoint: ocpinstana.turkiyesigorta.com.tr</text>
+    <text x="100" y="398" font-size="15" fill="#fb923c" font-weight="600">Operator usage: 73+ days continuous polling</text>
+  </g>
+
+  <!-- =========== SOURCE 2 — SolarWinds Orion (yellow side-rail) =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="510" y="200" width="410" height="210" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="200" width="410" height="46" rx="8" fill="#eab308"/>
+    <rect x="510" y="234" width="410" height="12" fill="#eab308"/>
+    <text x="530" y="230" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">SOURCE 2 — SOLARWINDS ORION</text>
+    <text x="530" y="282" font-size="20" font-weight="700" fill="#ffffff">Stolen service-account credential</text>
+    <text x="530" y="310" font-size="16" fill="#e5e5e5">Network topology + node monitoring telemetry</text>
+    <text x="530" y="332" font-size="14" fill="#cccccc">Captured snapshot:</text>
+    <text x="530" y="352" font-size="14" fill="#cccccc">  784 nodes · 6,566 interfaces</text>
+    <text x="530" y="374" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">solarwinds_topology_20260312_1015.json</text>
+    <text x="530" y="398" font-size="14" fill="#888888">NOT Sunburst — stolen-cred abuse vs vendor</text>
+  </g>
+
+  <!-- =========== SOURCE 3 — Zabbix (yellow side-rail) =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="80" y="430" width="410" height="210" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="80" y="430" width="410" height="46" rx="8" fill="#eab308"/>
+    <rect x="80" y="464" width="410" height="12" fill="#eab308"/>
+    <text x="100" y="460" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">SOURCE 3 — ZABBIX</text>
+    <text x="100" y="512" font-size="20" font-weight="700" fill="#ffffff">Stolen Zabbix admin / read-only token</text>
+    <text x="100" y="540" font-size="16" fill="#e5e5e5">Host monitoring + threshold-trigger metrics</text>
+    <text x="100" y="562" font-size="14" fill="#cccccc">Captured snapshot:</text>
+    <text x="100" y="582" font-size="14" fill="#cccccc">  100 victim hosts inventoried</text>
+    <text x="100" y="604" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">zabbix_topology_20260312_2058.json</text>
+    <text x="100" y="628" font-size="14" fill="#888888">Token held in env vars (not in capture)</text>
+  </g>
+
+  <!-- =========== SOURCE 4 — VMware Aria (yellow side-rail) =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="510" y="430" width="410" height="210" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="430" width="410" height="46" rx="8" fill="#eab308"/>
+    <rect x="510" y="464" width="410" height="12" fill="#eab308"/>
+    <text x="530" y="460" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">SOURCE 4 — VMWARE ARIA</text>
+    <text x="530" y="512" font-size="20" font-weight="700" fill="#ffffff">vCenter / ESXi monitoring API access</text>
+    <text x="530" y="540" font-size="16" fill="#e5e5e5">Virtualization-layer event stream</text>
+    <text x="530" y="562" font-size="14" fill="#cccccc">Captured event volume:</text>
+    <text x="530" y="582" font-size="14" fill="#cccccc">  8,649 events in sampled window</text>
+    <text x="530" y="604" font-size="14" fill="#cccccc">Spans <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.trs.local</tspan> · <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.trslinux.local</tspan> · <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">.ve.local</tspan></text>
+    <text x="530" y="628" font-size="14" fill="#888888">Credential access via Aria API to vCenter</text>
+  </g>
+
+  <!-- =========== Convergence connectors (4 → 1) =========== -->
+  <line x1="285" y1="640" x2="500" y2="690" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="715" y1="640" x2="500" y2="690" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="285" y1="410" x2="500" y2="690" stroke="#cccccc" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
+  <line x1="715" y1="410" x2="500" y2="690" stroke="#cccccc" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
+
+  <!-- =========== ARPA ETL Platform (red side-rail, operator code) =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="160" y="700" width="680" height="230" rx="8" fill="#1a1a1a" stroke="#dc2626" stroke-width="2"/>
+    <rect x="160" y="700" width="680" height="46" rx="8" fill="#dc2626"/>
+    <rect x="160" y="734" width="680" height="12" fill="#dc2626"/>
+    <text x="180" y="730" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">ARPA KORELASYON MOTORU — OPERATOR-BUILT CROSS-SOURCE ETL</text>
+    <text x="180" y="784" font-size="22" font-weight="700" fill="#ffffff">Operator's analytics platform (Python + TimescaleDB + Neo4j + Redis)</text>
+    <text x="180" y="814" font-size="16" fill="#e5e5e5">5 systemd daemons (arpa-autolearn · arpa-continuous · arpa-daemon · arpa-instana-api · arpa-parallel)</text>
+    <text x="180" y="838" font-size="16" fill="#e5e5e5">Continuous 5-minute polling cadence across all four sources · production-grade ETL</text>
+    <text x="180" y="862" font-size="16" fill="#e5e5e5">Cross-source correlation layer links: Instana service-ID ↔ SolarWinds node-ID ↔ Zabbix host-ID ↔ Aria VM-ID</text>
+    <text x="180" y="888" font-size="16" fill="#e5e5e5">AI-augmented natural-language query interface (ai_service.py · ai_assistant.db) — CANDIDATE novel TTP, N=1</text>
+    <text x="180" y="914" font-size="16" fill="#fb923c" font-weight="700">Hosted on operator-OWNED DigitalOcean 209.38.205.158 (Frankfurt) — alive at investigation date 2026-05-24</text>
+  </g>
+
+  <!-- =========== Connector to outcome =========== -->
+  <line x1="500" y1="930" x2="500" y2="976" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== OUTCOME — Unified Topology + Victim Impact (deep red side-rail, endgame) =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="160" y="980" width="680" height="200" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="160" y="980" width="680" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="160" y="1014" width="680" height="12" fill="#7f1d1d"/>
+    <text x="180" y="1010" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">OUTCOME — UNIFIED VICTIM TOPOLOGY VIEW</text>
+    <text x="180" y="1064" font-size="22" font-weight="700" fill="#ffffff">7,552-element unified topology graph of Türkiye Sigorta's internal infrastructure</text>
+    <text x="180" y="1092" font-size="16" fill="#e5e5e5">1,859 hosts cross-correlated · host-to-host + host-to-application + application-to-application links</text>
+    <text x="180" y="1116" font-size="16" fill="#e5e5e5">Partner-ecosystem visibility: Halkbank · ZiraatBank · VakifEmeklilik · SBM · TARSIM · DASK · Güneş Sigorta</text>
+    <text x="180" y="1142" font-size="16" fill="#fb923c" font-weight="700">Operator's view ≈ privileged internal admin — without ever compromising a single victim endpoint</text>
+    <text x="180" y="1166" font-size="15" fill="#cccccc">Sustained over 73+ days of documented activity · credential-rotation timeline IS the remediation timeline</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1216" x2="940" y2="1216" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1248" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Highest-value diagnostic: multi-platform cross-source authentication from same source IP within short window</text>
+  <text x="500" y="1274" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">(Sigma rule 7 + Suricata rule 2 in detection file) — diagnostic for the TTP class, not just this operator</text>
+  <text x="500" y="1304" text-anchor="middle" font-size="15" fill="#e5e5e5">Closest documented adjacent: UNC6395 OAuth-based CRM breach (2025) — structurally distinct (one-time mass exfil vs sustained 4-source ETL)</text>
+
+  <!-- Color chip legend -->
+  <g transform="translate(80, 1350)">
+    <rect x="0" y="0" width="16" height="16" fill="#eab308"/>
+    <text x="24" y="13" font-size="14" fill="#cccccc">stolen credential source (4 platforms)</text>
+    <rect x="330" y="0" width="16" height="16" fill="#dc2626"/>
+    <text x="354" y="13" font-size="14" fill="#cccccc">operator-built ETL platform</text>
+    <rect x="600" y="0" width="16" height="16" fill="#7f1d1d"/>
+    <text x="624" y="13" font-size="14" fill="#cccccc">unified topology outcome (endgame)</text>
+  </g>
+
+  <text x="500" y="1400" text-anchor="middle" font-size="14" fill="#888888">Novelty MAINTAINED at top of MODERATE band after full prior-art review. "Cannot exclude classified / paid-corpus prior art" qualifier remains.</text>
+</svg>

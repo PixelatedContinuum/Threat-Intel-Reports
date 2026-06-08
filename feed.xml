@@ -18,6 +18,7 @@ layout: none
      | where_exp: "page", "page.url contains '/reports/'"
      | where_exp: "page", "page.title != nil"
      | where_exp: "page", "page.date != nil"
+     | where_exp: "page", "page.unlisted != true"
      | sort: "date" | reverse %}
 
   {% for report in reports limit:20 %}

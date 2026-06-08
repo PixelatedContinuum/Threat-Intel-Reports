@@ -1,0 +1,1268 @@
+{
+  "metadata": {
+    "malware_name": "Multi-Actor AI-Agent Framework Abuse Campaign",
+    "family": "Multi-family (8 active operator cases)",
+    "report_date": "2026-05-25",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "campaign_slug": "ai-agent-frameworks-2026-05-23",
+    "notes": "Parent report covering 8 active operator cases + 5 novel TTPs + 2 demoted-with-rationale. IOCs grouped by case to preserve operator attribution. NO defanging in JSON per project convention (machine-readable for SIEM/EDR ingestion). Case 9 GHOST kit IOCs reflect Censys 2026-04-07 prior art + Hunters Ledger multi-customer / kit-author / supply-chain extensions."
+  },
+  "file_hashes": {
+    "md5": [
+      {
+        "value": "296a800564111b0bad9fe63faf4e63ba",
+        "filename": "libpam_cache.so",
+        "case": "9",
+        "context": "GHOST kit LD_PRELOAD libc-hook rootkit; byte-identical across operator-A (77.110.96.200) and operator-B (77.110.125.145) deployments",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      }
+    ],
+    "sha1": [],
+    "sha256": [
+      {
+        "value": "58ef3f244dab408fac7117606843a3dbcfb0754b2032a5950e977bc1811c0313",
+        "filename": "bot.sh",
+        "case": "3",
+        "context": "Rovodev/Pandora Mirai bot deployment script",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17",
+        "filename": "pandora.sh",
+        "case": "3",
+        "context": "Pandora.sh HTTP:80 dropper - Mirai/Xbash family, VT 12/63; execution_parent for Naku.spc per VT",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "a24f5b066c6b2e1d4b64d8e2ae863f579281489fcd990d46fb4ece3c2fb397f0",
+        "filename": "godmode/SKILL.md",
+        "case": "ecosystem",
+        "context": "Hermes ecosystem godmode jailbreak skill",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": "Legitimate NousResearch Hermes installations may carry this file"
+      },
+      {
+        "value": "3a10ce135b52753beda81368712decc49a83715d527e00660c19f69d1b4879da",
+        "filename": "SOUL.md",
+        "case": "ecosystem",
+        "context": "Default Hermes/OpenClaw persona template",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": "Legitimate Hermes/OpenClaw installations carry this file by default; only malicious when combined with offensive tooling"
+      },
+      {
+        "value": "f09aaa0fe090b5d0d43dc1724bf6e4167e1593b91bd249d7a58efc8a08c41e94",
+        "filename": "bundled_manifest",
+        "case": "ecosystem",
+        "context": "Hermes 87-skill bundled manifest",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": "Default Hermes bundle; only malicious when combined with offensive tooling"
+      },
+      {
+        "value": "5305c7fc5dbae5c7630984ea0a00568594e4fbb84eca68ab6a05aef97c2e9e03",
+        "filename": "stealth.ps1",
+        "case": "10",
+        "context": "Sliver-derivative C2 loader; VT 16/62; Microsoft Trojan:Script/Wacatac.B!ml; Kaspersky UDS:Trojan-Downloader.VBS.Agent; Symantec ISB.Downloader!gen412; process hollowing + AMSI/ETW bypass",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "2fd960f0ce8b9eb86b37d7389599df080bc831b397f3aaaf212b85278039c2ec",
+        "filename": "launcher_combined.ps1",
+        "case": "10",
+        "context": "Sliver-derivative Start-Job orchestrator for screencap + keylogger",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "f3c7cde94261f6664891357b399198a73b9741a7a435527807dca5b3bb86e5f0",
+        "filename": "screencap_v11.ps1",
+        "case": "10",
+        "context": "Sliver-derivative screencap client; streams to operator backend on TCP/9093",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "7112cd222d1c90fa18fc4f5520800a44891ad5770bdda71772d471377d66b1ee",
+        "filename": "keylogger.ps1",
+        "case": "10",
+        "context": "Sliver-derivative keylogger; GetAsyncKeyState polling, batches POST to http://5.230.201.54/api/v/keylog",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "518e957c198aceb3b99e8863e311f48aa52a552c195a71822bd601810f337068",
+        "filename": "kriminal_crypter.py",
+        "case": "10",
+        "context": "PyInstaller-stub crypter; class SliverCrypter; Fernet+zlib+b64; drops decrypted PE to %TEMP%\\svchost_upd.exe via CREATE_NO_WINDOW",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "7033c45472d358e48e333839e680509ee42d9349bc389d747a424ba74315939e",
+        "filename": "encrypt_implant.py",
+        "case": "10",
+        "context": "Sliver-derivative primary implant encryptor; freshly generated Fernet key per run",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "5de806617a6d7949a547076d4eb304e6f695cfcac3860bf4c1d5838026ac871f",
+        "filename": "test_decrypt.py",
+        "case": "10",
+        "context": "Sliver-derivative round-trip CI verifier; operator-side software engineering discipline indicator",
+        "confidence": "DEFINITE",
+        "action": "MONITOR"
+      },
+      {
+        "value": "d55e488cb7af11ab252cfacbfeb2c9d30289d371d9b54af85466e8814f25ca02",
+        "filename": "loader_v29.ps1",
+        "case": "10",
+        "context": "Sliver loader iteration v29; 6671 bytes, 164 lines",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "2e07f091d401c1f2267537a2f7c2cb5f68a1c1d994abfc87270dcdf38e8f84bb",
+        "filename": "ncrypt_load.ps1",
+        "case": "10",
+        "context": "Sliver-derivative obfuscated single-line loader; 13328 bytes",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301",
+        "filename": "libpam_cache.so",
+        "case": "9",
+        "context": "GHOST kit LD_PRELOAD libc-hook rootkit (ELF64); byte-identical across operator-A and operator-B deployments; VT 0/0 NEVER SCANNED by any AV; 27 hide-strings + 9 hide-ports; hooks readdir/readdir64/fopen/fopen64",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff",
+        "filename": "libpam_cache.c",
+        "case": "9",
+        "context": "GHOST kit LD_PRELOAD rootkit C source (98 lines); dense single-character-identifier hand-written style",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "0c748b9e8bc6b5b4fe989df67655f3301d28ef81617b9cbe8e0f6a19d4f9b657",
+        "filename": "dbus-session-monitor",
+        "case": "9",
+        "context": "XMrig miner disguised as dbus-session-monitor (Vova75Rus/miner GitHub repo); VT 39/65 with 5 YARA-rule hits confirming family",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "23c3719c7f949d6074fd3505928116df52de0e95e18a0a9e8c966b276b08e4ee",
+        "filename": "gnome-shell-ext-updater",
+        "case": "9",
+        "context": "lolMiner GPU miner disguised as gnome-shell-ext-updater (Vova75Rus/miner GitHub repo); VT 23/64; sandbox classifies as XMrig",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "64afc3b3000000000000000000000000000000000000000000000000000000ff",
+        "filename": "Naku.arm",
+        "case": "3",
+        "context": "Mirai.AW!xp ARM variant, VT 43/66 (sha256 truncated to prefix in source notes - placeholder for full value; mark as RESEARCH and confirm via VT before publishing)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_risk": "Hash value is a prefix-padded placeholder; full SHA256 must be confirmed from Phase 9 notes before SIEM ingestion"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "213.165.51.115",
+        "case": "1",
+        "port": 8082,
+        "protocol": "TCP",
+        "context": "Russian Gemini operator credential mill C2 / open-directory host; AEZA GROUP LLC (Russian bulletproof hosting, US-registered)",
+        "first_seen": "2026-03-30",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "34.34.57.141",
+        "case": "1",
+        "context": "Russian operator's GCP ghost-proxy-nl Dante SOCKS5",
+        "first_seen": "2026-04 (Phase 8 capture)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "35.192.41.201",
+        "case": "1",
+        "context": "Russian operator's GCP temp-mail-srv Mailpit catch-all",
+        "first_seen": "2026-04 (Phase 8 capture)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "34.34.81.129",
+        "case": "1",
+        "context": "Russian operator Windows C2 (Phase 4)",
+        "confidence": "MODERATE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "95.211.175.167",
+        "case": "1",
+        "port": 13400,
+        "protocol": "HTTP",
+        "context": "Russian operator's ai_sniper_brute.py Dutch datacenter proxy",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "85.17.70.56",
+        "case": "1",
+        "port": 13400,
+        "protocol": "HTTP",
+        "context": "Russian operator's ai_sniper_brute.py Dutch datacenter proxy",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "209.38.205.158",
+        "case": "2",
+        "port": 8096,
+        "protocol": "TCP",
+        "context": "Turkish ARPA / OpenClaw operator C2 ingestion endpoint (state-insurer victim observability harvest); DigitalOcean LLC",
+        "first_seen": "2026-03-14",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "31.223.97.87",
+        "case": "2",
+        "context": "Turkish ARPA operator residential IP via TurkNet ASN 12735 (operator-from-own-ISP, late-evening Turkish working hours, observed 2026-05-20 21:22-21:30 UTC)",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "false_positive_risk": "Legitimate Turkish residential ISP; attribution-only IOC, NOT for blocking"
+      },
+      {
+        "value": "87.106.143.220",
+        "case": "3",
+        "port": 1337,
+        "protocol": "TCP",
+        "context": "Rovodev/Pandora Mirai botnet C2 (Matrix C2 + standalone Mirai-clone); 1&1 IONOS Germany",
+        "first_seen": "2026-01-22",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "87.106.54.213",
+        "case": "3",
+        "context": "Rovodev/Pandora backup VPS",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "165.227.175.161",
+        "case": "3",
+        "port": 23,
+        "protocol": "TCP",
+        "context": "Naku.arm CNC - parasitic listener on compromised GetYourGroup tourism VPS (DigitalOcean); port 23 disguises CNC as innocuous Telnet traffic",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "false_positive_risk": "Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking"
+      },
+      {
+        "value": "188.166.194.243",
+        "case": "3",
+        "context": "Sibling of GetYourGroup CNC (28 GetYourGroup tourism domains hosted); RunCloud SaaS snapshot-deploy artifact",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "80.211.94.16",
+        "case": "3",
+        "port": 80,
+        "protocol": "TCP",
+        "context": "Aruba S.p.A. Italy distribution server embedded in all 11 Naku binaries; dark to Hunt 365-day index (burning-fuse indicator)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "80.211.111.10",
+        "case": "3",
+        "port": 80,
+        "protocol": "TCP",
+        "context": "Aruba S.p.A. Italy sibling distribution server embedded in all 11 Naku binaries; dark to Hunt 365-day index",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "221.150.15.104",
+        "case": "4",
+        "port": 8080,
+        "protocol": "TCP",
+        "context": "Korean Claude Code + OpenClaw operator; Korea Telecom; open-directory exposes attacker-customized settings.local.json",
+        "first_seen": "2026-03-11",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "173.249.2.23",
+        "case": "5",
+        "port": 8888,
+        "protocol": "TCP",
+        "context": "DEMOTED Phase 11 - Hunt-labeled 'Cloud-Credentialed AI Attacker' but actually defensive SaaS-security consultant; Contabo France; surfaced only for false-positive disambiguation",
+        "confidence": "LOW",
+        "action": "MONITOR",
+        "false_positive_risk": "Confirmed false positive per Phase 11 review (979 source files, 226 grep hits all FP); NOT a threat actor - notify Anthropic on exposed credentials only"
+      },
+      {
+        "value": "77.110.96.200",
+        "case": "9",
+        "context": "AEZA Germany GPU cryptojacking platform (operator-A); GHOST kit customer; self-hosted XMR pool proxy on :3333; CFX pool proxy on :4444; Hysteria v2 panel on :3301; libpam_cache.so + ghost.sh + hyst.sh + min1.sh deployed",
+        "first_seen": "2026-04-08",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "77.110.125.145",
+        "case": "9",
+        "context": "GHOST kit sibling customer (operator-B); abandoned 40+ days as of investigation; unreachable since 2026-05-24",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "68.183.92.28",
+        "case": "8",
+        "context": "60-second AI-orchestrated payment API attack origin (6 timestamped stages)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "139.59.239.112",
+        "case": "7",
+        "context": "Weevely + Claude AI compromised DigitalOcean VPS",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "66.94.120.32",
+        "case": "6",
+        "port": 8080,
+        "protocol": "TCP",
+        "context": "DEMOTED Phase 11 - Hunt-labeled 'Multi-AI Offensive Workstation' but actually HuggingFace researcher mtr7x doing Sarvam-30B quantization; Contabo US; surfaced only for false-positive disambiguation",
+        "confidence": "LOW",
+        "action": "MONITOR",
+        "false_positive_risk": "Confirmed false positive per Phase 11 review (213 triage reports, 0 real offensive hits); NOT a threat actor - notify HF + Anthropic + OpenAI + Google T&S on exposed credentials only"
+      },
+      {
+        "value": "5.230.201.54",
+        "case": "10",
+        "context": "Sliver-derivative C2 platform; Netherlands (RIPE NCC), AS200051 'Rizki Abdul Azis'; v30-v39 loader iterations in 1 day; staging/learning phase (empty Sliver DB)",
+        "first_seen": "2026-05-20",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "158.178.214.94",
+        "case": "DEMOTED-1",
+        "port": 8080,
+        "protocol": "TCP",
+        "context": "DEMOTED - Hunt-labeled 'Dual-AI Attacker Infrastructure' but actually French entrepreneur running wikiprepa.fr alumni platform; surfaced only for false-positive disambiguation",
+        "confidence": "LOW",
+        "action": "MONITOR",
+        "false_positive_risk": "Confirmed legitimate developer (elyasbetter@gmail.com owns alumni platform); NOT a threat actor"
+      },
+      {
+        "value": "47.110.83.41",
+        "case": "DEMOTED-2",
+        "port": 666,
+        "protocol": "TCP",
+        "context": "DEMOTED - Hunt-labeled 'Sophisticated Chinese-speaking Threat Actor' but actually Chinese AI/multimedia developer using dmxapi-claude-code for ai-comic-video project; surfaced only for false-positive disambiguation",
+        "confidence": "LOW",
+        "action": "MONITOR",
+        "false_positive_risk": "Confirmed legitimate Chinese AI developer; port 666 is symbolic choice, not malicious; NOT a threat actor"
+      }
+    ],
+    "ipv6": [],
+    "domains": [
+      {
+        "value": "c2.tralalarkefe.com",
+        "case": "1",
+        "context": "Russian operator C2 command channel (Cloudflare Tunnel-fronted; mandatory Mozilla/5.0 UA)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "payloads.tralalarkefe.com",
+        "case": "1",
+        "context": "Russian operator payload distribution channel",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "catchall1.tralalarkefe.com",
+        "case": "1",
+        "context": "Russian operator Mailpit catch-all (Phase 8)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "windows_server.tralalarkefe.com",
+        "case": "1",
+        "context": "victim Windows RDP/WinRM tunnel (Phase 8)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "gil_dr1.tralalarkefe.com",
+        "case": "1",
+        "context": "victim Linux/mgmt host SSH tunnel (Phase 8)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "tenant-upcoming-great-descending.trycloudflare.com",
+        "case": "1",
+        "context": "One-time C2-bundle bootstrap tunnel (Phase 8)",
+        "confidence": "HIGH",
+        "action": "BLOCK"
+      },
+      {
+        "value": "tralalarkefe.com",
+        "case": "1",
+        "context": "Operator-bespoke domain root for Cloudflare Tunnel-fronted C2",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "duty-free.cc",
+        "case": "1",
+        "context": "Russian carding forum where operator is forum-active (saved MHTML thread in operator archive)",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "antipublic.one",
+        "case": "1",
+        "context": "Russian credential-database paid subscription service - operator is paying customer for breach-data lookups during mass-WP-credential validation",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "openclaw.ai",
+        "case": "4",
+        "context": "OpenClaw distribution domain (curl install + npm i -g)",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "docs.openclaw.ai",
+        "case": "4",
+        "context": "OpenClaw documentation (pre-whitelisted for Claude Code WebFetch in Korean operator allowlist)",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "lightmake.site",
+        "case": "4",
+        "context": "OpenClaw developer brand domain",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "skillhub-1388575217.cos.ap-guangzhou.myqcloud.com",
+        "case": "ecosystem",
+        "context": "OpenClaw shared skill bucket (Tencent Cloud Object Storage)",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "hermes-agent.nousresearch.com",
+        "case": "ecosystem",
+        "context": "NousResearch Hermes Agent model catalog",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": "Legitimate NousResearch endpoint; presence alone is not malicious"
+      },
+      {
+        "value": "cfx.kryptex.network",
+        "case": "9",
+        "context": "Operator-A Conflux mining pool destination",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "etc.kryptex.network",
+        "case": "9",
+        "context": "Operator-A Ethereum Classic mining pool destination",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "auto.c3pool.org",
+        "case": "9",
+        "context": "Operator-B (sibling) public XMR pool destination",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "cfx-asia1.nanopool.org",
+        "case": "9",
+        "context": "Operator-B (sibling) public Conflux pool destination",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://77.110.96.200/libpam_cache.so",
+        "case": "9",
+        "context": "GHOST kit LD_PRELOAD rootkit binary distribution",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "http://77.110.96.200/libpam_cache.c",
+        "case": "9",
+        "context": "GHOST kit LD_PRELOAD rootkit source distribution",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "http://77.110.96.200:3301",
+        "case": "9",
+        "context": "Hysteria v2 operator admin panel",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "http://5.230.201.54:8080/encrypted_v2.b64",
+        "case": "10",
+        "context": "Sliver implant Fernet+zlib+b64 ciphertext",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "http://5.230.201.54:8080/decryption_key.txt",
+        "case": "10",
+        "context": "Sliver implant Fernet key (44-char base64)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "http://5.230.201.54/api/v/keylog",
+        "case": "10",
+        "context": "Sliver keylogger HTTP POST endpoint",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "http://209.38.205.158:8096/api/ingest/instana",
+        "case": "2",
+        "context": "Turkish ARPA operator C2 ingestion endpoint",
+        "confidence": "DEFINITE",
+        "action": "BLOCK"
+      },
+      {
+        "value": "https://[victim-subdomain].ocpinstana.[victim-domain].com.tr",
+        "case": "2",
+        "context": "Victim organization OCP Instana endpoint - VICTIM infrastructure, NOT operator infrastructure; defender intel for IBM Instana + victim organization CISO coordination. Full URL available via USOM (TR-CERT) coordination",
+        "confidence": "DEFINITE",
+        "action": "MONITOR",
+        "false_positive_risk": "Victim-side endpoint - do NOT block; this is the target of the operator's stolen JWT"
+      },
+      {
+        "value": "https://openclaw.ai/install.sh",
+        "case": "4",
+        "context": "OpenClaw curl-bash installer (pre-whitelisted in Korean operator's Claude Code allowlist)",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "https://github.com/keyosbuff/C2-Leak",
+        "case": "3",
+        "context": "Rovodev operator's upstream C2 source - currently HTTP 404 (deleted/private as of 2026-05-24 verification)",
+        "confidence": "HIGH",
+        "action": "MONITOR"
+      },
+      {
+        "value": "https://github.com/Vova75Rus/ComfyUI-Shell-Executor",
+        "case": "9",
+        "context": "Operator-A's GHOST kit PIP_PAYLOAD_REPO - account SUSPENDED by GitHub T&S 2026-05-25 (returns HTTP 404)",
+        "confidence": "DEFINITE",
+        "action": "HISTORICAL"
+      },
+      {
+        "value": "https://github.com/jamestechdev-oss/ComfyUI-Shell-Plugin",
+        "case": "9",
+        "context": "Operator-B's GHOST kit PIP_PAYLOAD_REPO - DELETED + entire account scrubbed",
+        "confidence": "DEFINITE",
+        "action": "HISTORICAL"
+      }
+    ],
+    "email_addresses": [
+      {
+        "value": "elyasbetter@gmail.com",
+        "case": "DEMOTED-1",
+        "context": "DEMOTED - French entrepreneur owner of wikiprepa.fr alumni platform; NOT a threat actor; surfaced only for false-positive disambiguation",
+        "confidence": "LOW",
+        "false_positive_risk": "Confirmed legitimate; do NOT block"
+      }
+    ],
+    "user_agents": [
+      {
+        "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "case": "1",
+        "context": "Mandatory UA on all Russian A2A C2 wire requests; Cloudflare blocks with 403/501 otherwise",
+        "confidence": "DEFINITE",
+        "action": "DETECT",
+        "false_positive_risk": "Generic Chrome-style UA; combine with X-Agent-ID header + /api/v1/* URI for HIGH-confidence match"
+      },
+      {
+        "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "case": "1",
+        "context": "ai_sniper_brute.py WordPress brute-force UA",
+        "confidence": "HIGH",
+        "action": "DETECT",
+        "false_positive_risk": "Common Chrome UA; require additional signal (proxy IP + /wp-login.php POST + multi-login attempt) for HIGH-confidence match"
+      }
+    ]
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [
+      {
+        "value": "/lib/security/libpam_cache.so",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit LD_PRELOAD libc-hook rootkit drop path; masquerades as PAM module"
+      },
+      {
+        "value": "/etc/ld.so.preload",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit registration file - injects libpam_cache.so into every dynamically-linked process system-wide"
+      },
+      {
+        "value": "~/.config/fontconfig/.cpu",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit CPU miner binary (XMrig) hidden as fontconfig file"
+      },
+      {
+        "value": "~/.config/fontconfig/.gpu",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit GPU miner binary (lolMiner) hidden as fontconfig file"
+      },
+      {
+        "value": "~/.config/fontconfig/.cfg.json",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit miner configuration (wallet addresses, pool destinations) hidden as fontconfig file"
+      },
+      {
+        "value": "~/.config/fontconfig/.pid_cpu",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit CPU miner PID file for guard process restart logic"
+      },
+      {
+        "value": "~/.config/fontconfig/.pid_gpu",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit GPU miner PID file for guard process restart logic"
+      },
+      {
+        "value": "~/.config/fontconfig/.pid_guard",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit guard process PID file - inotify_guard watchdog restart marker"
+      },
+      {
+        "value": "/tmp/.hy2_*",
+        "type": "file_path",
+        "case": "9",
+        "confidence": "HIGH",
+        "context": "GHOST kit Hysteria v2 tunneling binary drop path - wildcard suffix per deployment"
+      },
+      {
+        "value": "/etc/cron.d/.cache_update",
+        "type": "file_path",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev/Pandora cron job with dot-prefix filename hiding entry from default ls; part of 5-vector persistence sequence"
+      },
+      {
+        "value": "/etc/init.d/sysupdate",
+        "type": "file_path",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev/Pandora SysV init script - legacy init persistence with legitimate-name camouflage"
+      },
+      {
+        "value": "/etc/systemd/system/system-update.service",
+        "type": "file_path",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev/Pandora systemd unit file with legitimate-name camouflage; part of 5-vector persistence sequence"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-autolearn.service",
+        "type": "file_path",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator systemd unit file - autonomous learning daemon"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-continuous.service",
+        "type": "file_path",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator systemd unit file - continuous collection daemon"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-daemon.service",
+        "type": "file_path",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator systemd unit file - primary ARPA platform daemon"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-instana-api.service",
+        "type": "file_path",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator systemd unit file - Instana API harvester exploiting stolen victim organization JWT"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-parallel.service",
+        "type": "file_path",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator systemd unit file - parallel worker / distributed task processor"
+      },
+      {
+        "value": "~/.gemini/wrapper.sh",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian Gemini operator wrapper script - co-located with AI-tool dir + offensive tooling (combination is discriminator)"
+      },
+      {
+        "value": "~/.gemini/skills/cf-c2-manager/SKILL.md",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator's custom Gemini skill for Cloudflare Tunnel C2 management - explicit offensive intent in a skill file"
+      },
+      {
+        "value": "~/.gemini/GEMINI.md",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "HIGH",
+        "context": "Russian operator's Gemini agent persona file - AI Operator Handoff Document signature filename"
+      },
+      {
+        "value": "~/arsenal/c2_server.py",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator C2 server source - 'arsenal' directory name is overt offensive-tooling marker"
+      },
+      {
+        "value": "~/arsenal/console.py",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator C2 operator console source"
+      },
+      {
+        "value": "~/arsenal/exec.py",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator C2 command execution module"
+      },
+      {
+        "value": "~/arsenal/AI_SNIPER_GOODS.txt",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator's LLM-personalized credential mutation target list - distinctive 'AI_*' naming"
+      },
+      {
+        "value": "~/arsenal/AI_ADMIN_MUTANTS.txt",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator's LLM-personalized admin credential mutations - distinctive 'AI_*' naming"
+      },
+      {
+        "value": "~/arsenal/ELITE_AI_MUTANTS.txt",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator's LLM-personalized elite-target credential mutations"
+      },
+      {
+        "value": "~/arsenal/ULTRA_GOLD_TARGETS.txt",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator's escalating-superlative target list - AI-Generated Documentation Signature ('ULTRA' marker)"
+      },
+      {
+        "value": "~/arsenal/MUTATED_PURE_ADMINS_FINAL.txt",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator's final mutated admin target list - 'FINAL_*' is AI-Generated Documentation Signature"
+      },
+      {
+        "value": "~/arsenal/quantum_patriot.py",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator Quantum Patriot disinformation bot driver - posts to @americanpatriotus via Gemini CLI"
+      },
+      {
+        "value": "~/payloads/agent_final.ps1",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "HIGH",
+        "context": "Russian operator PowerShell agent payload - 'final' marker is AI-Generated Documentation Signature"
+      },
+      {
+        "value": "~/payloads/run_bg.ps1",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "HIGH",
+        "context": "Russian operator PowerShell background runner payload"
+      },
+      {
+        "value": "~/payloads/stealth.ps1",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "HIGH",
+        "context": "Russian operator PowerShell stealth loader - process hollowing + AMSI/ETW bypass"
+      },
+      {
+        "value": "~/.rovodev/sessions/",
+        "type": "file_path",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev AI agent session directory - co-located with Pandora Mirai C2 tooling on operator host"
+      },
+      {
+        "value": "~/.rovodev/logs/rovodev.log",
+        "type": "file_path",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev AI agent log file - captures operator-AI interaction history for forensic timeline"
+      },
+      {
+        "value": "/root/matrix/",
+        "type": "file_path",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev operator's Matrix C2 framework deployment directory"
+      },
+      {
+        "value": "~/.claude/settings.local.json",
+        "type": "file_path",
+        "case": "4",
+        "confidence": "DEFINITE",
+        "context": "Korean Claude Code operator's customized settings - allowlists openclaw.ai curl-bash + npm install commands"
+      },
+      {
+        "value": "~/.openclaw/",
+        "type": "file_path",
+        "case": "4",
+        "confidence": "HIGH",
+        "context": "OpenClaw agent home directory - presence indicates OpenClaw install (legitimate or operator)"
+      },
+      {
+        "value": "~/.skillhub/",
+        "type": "file_path",
+        "case": "ecosystem",
+        "confidence": "HIGH",
+        "context": "OpenClaw shared skill bucket cache directory - pulls from skillhub Tencent COS bucket"
+      },
+      {
+        "value": "%TEMP%\\svchost_upd.exe",
+        "type": "file_path",
+        "case": "10",
+        "confidence": "DEFINITE",
+        "context": "Sliver-derivative decrypted PE drop path - kriminal_crypter.py writes via CREATE_NO_WINDOW"
+      },
+      {
+        "value": "/root/arsenal/c2_server.log",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator C2 server primary log file"
+      },
+      {
+        "value": "/root/arsenal/c2_server_8081.log",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator C2 server log file for port 8081 listener"
+      },
+      {
+        "value": "/root/arsenal/c2_server_10101.log",
+        "type": "file_path",
+        "case": "1",
+        "confidence": "DEFINITE",
+        "context": "Russian operator C2 server log file for port 10101 listener"
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [
+      {
+        "value": "arpa-autolearn.service",
+        "type": "service_name",
+        "service_name": "arpa-autolearn.service",
+        "display_name": "ARPA Auto-Learn Service",
+        "binary_path": "(operator-side ARPA platform)",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator systemd unit - autonomous learning daemon for stolen Instana telemetry processing"
+      },
+      {
+        "value": "arpa-continuous.service",
+        "type": "service_name",
+        "service_name": "arpa-continuous.service",
+        "display_name": "ARPA Continuous Collection Service",
+        "binary_path": "(operator-side ARPA platform)",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator systemd unit - continuous collection daemon for victim-side observability harvest"
+      },
+      {
+        "value": "arpa-daemon.service",
+        "type": "service_name",
+        "service_name": "arpa-daemon.service",
+        "display_name": "ARPA Daemon",
+        "binary_path": "(operator-side ARPA platform)",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator core daemon - primary ARPA platform process"
+      },
+      {
+        "value": "arpa-instana-api.service",
+        "type": "service_name",
+        "service_name": "arpa-instana-api.service",
+        "display_name": "ARPA Instana API Harvester",
+        "binary_path": "(operator-side ARPA platform)",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator Instana API harvester - exploits stolen 10-year JWT for victim organization observability data exfiltration"
+      },
+      {
+        "value": "arpa-parallel.service",
+        "type": "service_name",
+        "service_name": "arpa-parallel.service",
+        "display_name": "ARPA Parallel Worker",
+        "binary_path": "(operator-side ARPA platform)",
+        "case": "2",
+        "confidence": "DEFINITE",
+        "context": "Turkish ARPA operator parallel worker - distributed task processor across operator-side ARPA platform"
+      },
+      {
+        "value": "system-update.service",
+        "type": "service_name",
+        "service_name": "system-update.service",
+        "display_name": "System Update Service",
+        "binary_path": "(operator-deployed; victim-side; legitimate-name camouflage)",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev/Pandora victim-side systemd unit using legitimate-name camouflage; part of 5-vector persistence sequence on compromised hosts"
+      },
+      {
+        "value": "sysupdate",
+        "type": "service_name",
+        "service_name": "sysupdate",
+        "display_name": "System Update (SysV init)",
+        "binary_path": "/etc/init.d/sysupdate",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev/Pandora SysV init script at /etc/init.d/sysupdate - legacy init persistence for older Linux distros"
+      }
+    ],
+    "scheduled_tasks": [
+      {
+        "value": ".cache_update",
+        "type": "scheduled_task",
+        "task_name": ".cache_update",
+        "action": "(Pandora bot fetch + re-execute)",
+        "trigger": "crontab entry in /etc/cron.d/.cache_update (hidden filename prefix)",
+        "case": "3",
+        "confidence": "DEFINITE",
+        "context": "Rovodev/Pandora victim-side cron job - dot-prefix filename hides entry from default ls; part of 5-vector persistence sequence"
+      }
+    ],
+    "named_pipes": [],
+    "process_names": [
+      {
+        "value": "inotify_guard",
+        "case": "9",
+        "context": "GHOST kit watchdog process (hidden by rootkit's H[] array)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": ".spread_*",
+        "case": "9",
+        "context": "GHOST kit SSH lateral-movement / worm propagation processes (hidden by rootkit's H[] array)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "pandora_bot",
+        "case": "3",
+        "context": "Naku/Pandora bot process name (VT-observed name)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "dbus-session-monitor",
+        "case": "9",
+        "context": "XMrig miner disguised name (Vova75Rus/miner repo)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "gnome-shell-ext-updater",
+        "case": "9",
+        "context": "lolMiner GPU miner disguised name (Vova75Rus/miner repo)",
+        "confidence": "DEFINITE"
+      }
+    ],
+    "cryptocurrency_wallets": [
+      {
+        "value": "4BBj3gj4",
+        "type": "XMR_prefix",
+        "case": "9",
+        "context": "Operator-A Monero wallet prefix (first 8 chars of receive address; hidden from local enumeration by rootkit but recoverable from operator config)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "cfx:aaj5xbzcjukme1942fhgxsrxtnf92x7j3adxwu9sns",
+        "type": "CFX",
+        "case": "9",
+        "context": "Operator-A Conflux mining wallet (current 2026 wallet; rotated from cfx:aasktcha... in Nov-Dec 2025)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "cfx:aasv0snvpzetd7708k4b13gmv2nrxwgsce0kxsgtpf",
+        "type": "CFX",
+        "case": "9",
+        "context": "Operator-A consolidator wallet (37 tx drains to single off-ramp)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "cfx:aansses5s4z9texyfz2jtz1yptznkgz1naddjdazz8",
+        "type": "CFX_exchange",
+        "case": "9",
+        "context": "Mainstream Conflux exchange deposit address (operator off-ramp; 49M CFX balance, 781K tx, 47+ unique senders - Binance/Mexc/Gate/OKX class)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "cfx:aasktcha7rhdjmf1r10ygabzc7ne1tnk5app56tp55",
+        "type": "CFX_historical",
+        "case": "9",
+        "context": "Operator-A historical wallet (Nov-Dec 2025); rotated for 2026 ops; drains to same consolidator",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "cfx:aat5y",
+        "type": "CFX_prefix",
+        "case": "9",
+        "context": "Operator-B (sibling 77.110.125.145) wallet prefix; balance 19.82 CFX, nonce=0 (never drained), abandoned 40+ days",
+        "confidence": "HIGH"
+      }
+    ],
+    "telegram_indicators": [
+      {
+        "value": "@americanpatriotus",
+        "type": "channel",
+        "case": "1",
+        "context": "Russian operator's Quantum Patriot disinformation channel - ACTIVELY POSTED TO via Gemini CLI; co-located with credential mill operation",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "8415540095",
+        "type": "bot_token_prefix",
+        "case": "9",
+        "context": "GHOST kit OWNER bot (kit-author Vova75Rus's channel; baked into every customer deployment for supply-chain monitoring)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "8315596543",
+        "type": "bot_token_prefix",
+        "case": "9",
+        "context": "Operator-A MIRROR bot (operator-A's own channel)",
+        "confidence": "DEFINITE"
+      }
+    ],
+    "github_handles": [
+      {
+        "value": "Vova75Rus",
+        "uid": "73169104",
+        "case": "9",
+        "context": "GHOST cryptojacker kit AUTHOR (NOT the 77.110.96.200 operator - separate identity per Phase 15 §23.7 calibration); GitHub T&S SUSPENDED account 2026-05-25 (9 URLs return HTTP 404); region code 75 = Zabaykalsky Krai Russia; personal contact Arina via Notes.github.io page",
+        "confidence": "DEFINITE",
+        "action": "HISTORICAL"
+      },
+      {
+        "value": "sonner1337",
+        "case": "1",
+        "context": "Russian operator with full-admin GitHub PAT (ghp_tdcXTl...g4PDaRW)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "MehmetARPA",
+        "case": "2",
+        "context": "Turkish ARPA operator (possibly real-name Mehmet ARPA) - public repo github.com/MehmetARPA/ARPA",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "UnamSanctam",
+        "case": "9",
+        "context": "Upstream OSS malware author since 2014 (860 followers, SilentCryptoMiner 1020 stars, UnamWebPanel 198 stars); supplies tooling to Vova75Rus GHOST kit",
+        "confidence": "HIGH",
+        "false_positive_risk": "Well-documented existing OSS author; surfaced for supply-chain context only"
+      }
+    ],
+    "discord_indicators": [
+      {
+        "value": "1441591352927326259",
+        "type": "user_id",
+        "case": "3",
+        "context": "Rovodev Mirai operator Discord ID; snowflake decoded to 2025-11-22T00:49:22 UTC creation (~182 days old fresh ops account)",
+        "confidence": "DEFINITE"
+      }
+    ],
+    "victim_indicators": [
+      {
+        "type": "ntlm_hash",
+        "value": "31d6cfe0d16ae931b73c59d7e0c089c0",
+        "case": "1_victim",
+        "confidence": "DEFINITE",
+        "context": "victim Administrator EMPTY-PASSWORD NTLM hash (well-known; initial-access vector)"
+      },
+      {
+        "type": "stolen_jwt_jti",
+        "value": "022a1b74-2332-4df5-a76b-60225ffa7ae3",
+        "case": "2_victim",
+        "confidence": "DEFINITE",
+        "context": "Stolen victim organization Instana API token (iat 2024-03-06, exp ~2034-02 - 10-year lifetime)"
+      },
+      {
+        "type": "stolen_1password_vault_id",
+        "value": "XRAOLK4ZIZHJPDWPVEMGPRDXBE",
+        "case": "1_victim",
+        "confidence": "DEFINITE",
+        "context": "Single victim's full password-manager export (1Password CSV; victim identity TBD via 1Password / AgileBits coordination)"
+      }
+    ],
+    "asn_indicators": [
+      {
+        "value": "AS210644",
+        "name": "AEZA GROUP LLC",
+        "context": "Russian bulletproof provider hosting Case 1 (213.165.51.115) + Case 9 (77.110.96.200 + 77.110.125.145 in same /16)",
+        "confidence": "HIGH",
+        "action": "ELEVATED_MONITORING"
+      },
+      {
+        "value": "AS200051",
+        "name": "Rizki Abdul Azis (NL)",
+        "context": "New hosting ASN with Case 10 Sliver-derivative C2 platform",
+        "confidence": "HIGH",
+        "action": "ELEVATED_MONITORING"
+      },
+      {
+        "value": "AS12735",
+        "name": "TurkNet İletişim Hizmetleri A.Ş.",
+        "context": "Case 2 Turkish ARPA operator residential ISP (operator-from-own-ISP) - attribution-only, NOT for blocking",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": "Legitimate Turkish residential ISP"
+      }
+    ],
+    "tls_fingerprints": [
+      {
+        "type": "JARM",
+        "value": "3fd3fd20d00000021c43d43d00043d204204071741c36579e355f830d285a5",
+        "case": "10",
+        "context": "Sliver default JARM fingerprint observed on 5.230.201.54",
+        "confidence": "HIGH",
+        "false_positive_risk": "Broad Sliver-population hit; not exclusive to this operator"
+      },
+      {
+        "type": "SSL_fingerprint",
+        "value": "bc5846c28aca370144d9fbb240a8ab913d3ba98d2a397a5e658435a67d8436e6",
+        "case": "10",
+        "context": "Operator-specific self-signed cert on 5.230.201.54 (Subject 'localhost', valid 2026-03-10 to 2028-03-09)",
+        "confidence": "DEFINITE",
+        "action": "DETECT"
+      }
+    ]
+  },
+  "behavioral_indicators_summary": {
+    "campaign_wide": [
+      "Filesystem combination: ~/.gemini/ + ~/.claude/ + ~/.rovodev/ + ~/.openclaw/ + offensive tooling + victim data on same Linux host (any single AI-tool dir alone is normal developer use; combination is the discriminator)",
+      "AI Operator Handoff Document filenames co-located with AI-tool dirs: *_MIGRATION_GUIDE.md, *_INFRA_TRANSFER.md, *_HANDOFF.md, RUNBOOK.md, DEPLOYMENT.md, *_SKILL.md, GEMINI.md, CLAUDE.md, OPENCLAW.md, SOUL.md",
+      "Escalating-superlative documentation naming: FINAL_*.txt, COMPLETE_*.txt, ULTIMATE_*.txt, READY_*.txt - AI-Generated Documentation Signature",
+      "Outbound HTTPS to api.anthropic.com / api.openai.com / generativelanguage.googleapis.com / api.minimaxi.com / api.deepseek.com / api.moonshot.cn from server (non-developer) hosts",
+      "Outbound HTTPS to *.trycloudflare.com from server hosts (Cloudflare quick-tunnel attacker C2 transport)"
+    ],
+    "case_1_russian_gemini": [
+      "HTTP requests with User-Agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' + X-Agent-ID header + URI matching /api/v1/(update|agents|telemetry|interact|get_results)",
+      "Outbound HTTPS POST to generativelanguage.googleapis.com with body containing 'password' + 'mutation' + email/domain context (LLM-Personalized Credential Mutation hunt)",
+      "Filename hunt: AI_SNIPER_GOODS.txt, AI_ADMIN_MUTANTS.txt, ULTRA_GOLD_TARGETS.txt on Linux servers"
+    ],
+    "case_2_turkish_arpa": [
+      "systemd unit creation matching arpa-*.service",
+      "Outbound HTTP POST to /api/ingest/instana from corporate observability platform host",
+      "API authentication using JWT with 10-year exp claim",
+      "PowerShell scriptblock matching apiToken JWT regex"
+    ],
+    "case_3_rovodev_pandora": [
+      "5-vector persistence sequence within seconds: crontab + /etc/rc.local + /etc/init.d/sysupdate + /etc/systemd/system/system-update.service + ~/.bashrc + ~/.profile from same parent process",
+      "TCP raw socket beacon to 87.106.143.220:1337 with JSON body matching {'type':'bot_register','ip':...,'bot_type':'iot',...}",
+      "Discord API egress with bot-token authentication from server (non-developer) hosts"
+    ],
+    "case_4_korean_claude": [
+      "File modification to ~/.claude/settings.local.json adding entry matching Bash(curl ... | bash) or Bash(npm i -g <unfamiliar>)",
+      "Listening port 18789 on internal host (OpenClaw gateway)"
+    ],
+    "case_9_ghost_kit": [
+      "File write to /etc/ld.so.preload (any modification)",
+      "File creation matching /lib/security/libpam_*.so where filename NOT in known-good PAM-module list",
+      "TCP egress to operator-hidden ports 3333, 4444, 5555, 7777, 8027, 8029, 9999, 14433, 14444 from $HOME_NET",
+      "Container escape syscalls (setns + nsenter + unshare) with privileged capability set",
+      "ComfyUI custom-node enumeration showing 'PerformanceMonitor': 'GPU Performance Monitor' in NODE_CLASS_MAPPINGS"
+    ],
+    "case_10_sliver": [
+      "File creation %TEMP%\\svchost_upd.exe",
+      "PyInstaller-stub .exe execution with creationflags 0x08000000 (CREATE_NO_WINDOW) from non-developer Windows host",
+      "HTTP POST to /api/v/keylog URI from any source",
+      "HTML Application (.hta) execution via mshta.exe from invoice-themed filename"
+    ]
+  }
+}

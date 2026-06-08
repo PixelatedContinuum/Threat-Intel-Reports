@@ -1,0 +1,686 @@
+{
+  "metadata": {
+    "malware_name": "ARPA observability-harvester (operator-built on OpenClaw)",
+    "family": "ARPA / ARPA Korelasyon Motoru",
+    "campaign_id": "turkish-arpa-openclaw-state-insurer-209.38.205.158",
+    "uta_designation": "UTA-2026-013",
+    "operator_handle": "MehmetARPA",
+    "report_date": "2026-05-25",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "tlp_rationale": "Public release. Operator-side indicators at full fidelity; victim-identifying indicators (internal hostnames, insider AD user ID, internal IPs) excluded from this public feed and held offline for victim IR coordination.",
+    "parent_investigation": "ai-agent-frameworks-2026-05-23",
+    "notes": "Public release. Victim-identifying indicators (internal hostnames, insider Windows AD user ID, internal IPs) are excluded from this public feed and held offline for victim IR coordination. Victim and partner infrastructure is excluded from the public feed entirely."
+  },
+  "file_indicators": {
+    "sha256": [
+      {
+        "value": "ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79",
+        "type": "sha256",
+        "filename": "topology_mapper.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python Instana topology collector; hardcoded the victim organization JWT + production URL; Turkish docstring",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77",
+        "type": "sha256",
+        "filename": "instana_collector_v4.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python event collector v4 (iteration marker); same the victim organization JWT",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "65d2eb26067c3df4b139b02145bdba2065be5a403f38ad096f886230b41fda9b",
+        "type": "sha256",
+        "filename": "correlation_v3.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python cross-source correlation engine v3; opens with operator self-branding docstring ARPA Korelasyon Motoru v3 - Temporal Focus",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "a4b39f13d17ae3ff7a0adb2cf1df459a72425513f392a1d8fc469f8f2e123de5",
+        "type": "sha256",
+        "filename": "api_correlation_routes.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python Flask API routes for correlations/events; Turkish comments throughout",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "2dca67a8be5cd89863ab60a2351a553954afd641c8e6f6219785707276f0e8e3",
+        "type": "sha256",
+        "filename": "event_correlation_api.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python underlying correlations API implementation",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "6d4eb14e08e742ce6adabc355855c5e80c6b84e6969b0a3cc58367e0f4babfd0",
+        "type": "sha256",
+        "filename": "add_corr_endpoints.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python API patch script (variant 1); emits emoji-in-output bleed",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "c66a2561fdacb5997c4fa0501da8ef1639d429d22668bfba7cb2f5f9e97a2a6e",
+        "type": "sha256",
+        "filename": "fix_api.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python API patch script (minimal variant)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "5a58c88c64e3e54c874645fc5b32f12163e1901fe1b3fb7a3bc1d52c434b1c62",
+        "type": "sha256",
+        "filename": "fix_api_endpoints.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python API patch script (re.replace variant)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "29d1221c9e305374a78d17c01ea20a211d59427f789ed01e653341db51bf4c06",
+        "type": "sha256",
+        "filename": "patch_api.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python API patch script (Hunt classifier flagged MALICIOUS; Turkish comments)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "402422a918dc037e00aea323e2ab1ca3e758459d4cd5e620a4433e3c346c52f8",
+        "type": "sha256",
+        "filename": "fix_db.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python DB schema patch; only file in cluster with try/except defensive pattern",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "a05b40ceb17e6277ca39f99433910c359764be0e0a42377686abb7fb1e7da410",
+        "type": "sha256",
+        "filename": "check_corr.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python correlation DB query script; Turkish output SON 5 KORELASYON",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "2736b72ed047fb4d593d2e919c58b25db1a669faa51e630360c2825409bf4011",
+        "type": "sha256",
+        "filename": "analyze_topology.py",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Python topology DB analysis script; flagged IndentationError-prone (AI Copy-Paste Indentation Decay sub-signature)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "3a10ce135b52753beda81368712decc49a83715d527e00660c19f69d1b4879da",
+        "type": "sha256",
+        "filename": "SOUL.md",
+        "confidence": "MODERATE",
+        "context": "Default Hermes / OpenClaw persona template — ecosystem-presence indicator; NOT unique to this operator",
+        "false_positive_risk": "MEDIUM — present on legitimate OpenClaw / Hermes developer environments per parent Phase 1-2 cluster"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "209.38.205.158",
+        "type": "ipv4",
+        "confidence": "DEFINITE",
+        "context": "Operator C2 host (DigitalOcean); ARPA platform; ports 8090 dashboard, 8095 degraded topology, 8096 ingestion endpoint, 8098 closed since 2026-03-14",
+        "first_seen": "2026-03-14",
+        "last_seen": "2026-05-24",
+        "action": "BLOCK",
+        "false_positive_risk": "NONE — confirmed operator-owned infrastructure"
+      },
+      {
+        "value": "31.223.97.87",
+        "type": "ipv4",
+        "confidence": "HIGH",
+        "context": "Operator interactive source IP — TurkNet AS12735 residential/SMB Turkish ISP; captured 2026-05-20 21:22-21:30 UTC = 00:22-00:30 local Turkish time; 0/91 VT clean",
+        "first_seen": "2026-05-20",
+        "last_seen": "2026-05-20",
+        "action": "MONITOR (attribution)",
+        "false_positive_risk": "MEDIUM — TurkNet residential / SMB IPs can be NAT-shared; do NOT preemptively block, attribution-only context; Turkish law enforcement subpoena target for subscriber identification"
+      }
+    ],
+    "domains": [
+      {
+        "value": "openclaw.ai",
+        "type": "domain",
+        "confidence": "HIGH",
+        "context": "OpenClaw distribution domain — operator framework provider; ecosystem watch for related operators using same framework",
+        "action": "MONITOR",
+        "false_positive_risk": "MEDIUM — also legitimately used by OpenClaw developers"
+      },
+      {
+        "value": "docs.openclaw.ai",
+        "type": "domain",
+        "confidence": "HIGH",
+        "context": "OpenClaw documentation domain",
+        "action": "MONITOR",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "lightmake.site",
+        "type": "domain",
+        "confidence": "HIGH",
+        "context": "OpenClaw developer brand domain (vendor identifier)",
+        "action": "MONITOR",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "skillhub-1388575217.cos.ap-guangzhou.myqcloud.com",
+        "type": "domain",
+        "confidence": "HIGH",
+        "context": "Tencent COS bucket — OpenClaw shared skill marketplace; egress from non-developer environments is OpenClaw-presence signal",
+        "action": "MONITOR",
+        "false_positive_risk": "MEDIUM — legitimate Tencent Cloud Object Storage bucket; also used by OpenClaw developers"
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://209.38.205.158:8096/api/ingest/instana",
+        "type": "url",
+        "confidence": "DEFINITE",
+        "context": "Operator ARPA C2 ingestion endpoint; HTTP cleartext; accepts Instana event payloads in operator normalized schema; no authentication",
+        "action": "BLOCK",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "http://209.38.205.158:8090/",
+        "type": "url",
+        "confidence": "DEFINITE",
+        "context": "Operator ARPA v2.1.0 dashboard; publicly reachable; serves /data/ directory listing with 780 entries of exfiltrated the victim organization data + /logs/ directory listing",
+        "action": "BLOCK",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "http://209.38.205.158:8095/api/topology/unified",
+        "type": "url",
+        "confidence": "DEFINITE",
+        "context": "Operator unified topology endpoint; degraded to 404 on all paths as of 2026-05-24 but port still TCP-accepting",
+        "action": "BLOCK",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "https://github.com/MehmetARPA/ARPA",
+        "type": "url",
+        "confidence": "DEFINITE",
+        "context": "Operator public GitHub repository; same project codename as embedded in operator code; identity artifact. Account suspended by GitHub T&S 2026-05-25 — URL now returns HTTP 404; preserve as evidence IOC",
+        "action": "MONITOR",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "asn": [
+      {
+        "value": "AS12735",
+        "type": "asn",
+        "asn_owner": "TurkNet Iletisim Hizmetleri A.S.",
+        "country": "TR",
+        "confidence": "MODERATE",
+        "context": "Operator residential ISP for source IP 31.223.97.87; attribution-only context",
+        "action": "MONITOR (attribution only)",
+        "false_positive_risk": "HIGH — legitimate Turkish consumer ISP serving millions; do NOT use for blocking"
+      }
+    ]
+  },
+  "host_indicators": {
+    "file_paths": [
+      {
+        "value": "/opt/ARPA/",
+        "type": "filepath_linux",
+        "confidence": "DEFINITE",
+        "context": "Operator project root on operator host (revealed via Python traceback in ai_service.log)",
+        "false_positive_risk": "LOW"
+      },
+      {
+        "value": "/opt/ARPA/ai/ai_service.py",
+        "type": "filepath_linux",
+        "confidence": "DEFINITE",
+        "context": "Operator AI service entry point (broken/dev state)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/opt/ARPA/ai/data_retrieval.py",
+        "type": "filepath_linux",
+        "confidence": "DEFINITE",
+        "context": "Operator data layer with broken db_path config",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/opt/ARPA/data/collector.db",
+        "type": "filepath_linux",
+        "confidence": "DEFINITE",
+        "context": "Operator SQLite ingestion buffer",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/opt/ARPA/data/ai_assistant.db",
+        "type": "filepath_linux",
+        "confidence": "DEFINITE",
+        "context": "Operator SQLite AI service event cache (72704 bytes; 50 rows ingested 2026-04-14)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/opt/rca-platform/simple_api.py",
+        "type": "filepath_linux",
+        "confidence": "DEFINITE",
+        "context": "Operator earlier deployment path; still referenced in patch scripts as target of modifications",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/opt/rca-platform/data/collector.db",
+        "type": "filepath_linux",
+        "confidence": "DEFINITE",
+        "context": "Operator earlier SQLite collector path",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "systemd_units": [
+      {
+        "value": "/etc/systemd/system/arpa-autolearn.service",
+        "type": "systemd_unit_file",
+        "confidence": "DEFINITE",
+        "context": "Operator AI training service",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-continuous.service",
+        "type": "systemd_unit_file",
+        "confidence": "DEFINITE",
+        "context": "Operator continuous collection service",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-daemon.service",
+        "type": "systemd_unit_file",
+        "confidence": "DEFINITE",
+        "context": "Operator main daemon",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-instana-api.service",
+        "type": "systemd_unit_file",
+        "confidence": "DEFINITE",
+        "context": "Operator Instana API harvester",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "/etc/systemd/system/arpa-parallel.service",
+        "type": "systemd_unit_file",
+        "confidence": "DEFINITE",
+        "context": "Operator parallel worker pool",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "shell_scripts": [
+      {
+        "value": "arpa_5min_collection.sh",
+        "type": "filename_shell",
+        "confidence": "DEFINITE",
+        "context": "Operator 5-minute collection loop",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "arpa_5min_deep.sh",
+        "type": "filename_shell",
+        "confidence": "DEFINITE",
+        "context": "Operator deep-collection variant",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "arpa_hourly_check.sh",
+        "type": "filename_shell",
+        "confidence": "DEFINITE",
+        "context": "Operator hourly aggregation",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "start_all_services.sh",
+        "type": "filename_shell",
+        "confidence": "DEFINITE",
+        "context": "Operator service orchestration (log-clearing tagged)",
+        "false_positive_risk": "LOW"
+      },
+      {
+        "value": "timescaledb_setup.sh",
+        "type": "filename_shell",
+        "confidence": "DEFINITE",
+        "context": "Operator TimescaleDB setup",
+        "false_positive_risk": "LOW"
+      },
+      {
+        "value": "vpn_connect.sh",
+        "type": "filename_shell",
+        "confidence": "DEFINITE",
+        "context": "Operator outbound VPN connect (distinct from insider reverse tunnel)",
+        "false_positive_risk": "LOW"
+      },
+      {
+        "value": "instana_local_collector.ps1",
+        "type": "filename_powershell",
+        "confidence": "DEFINITE",
+        "context": "Victim-side PowerShell collector; hardcoded stolen the victim organization JWT; harvests Instana events to operator C2",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "operator_ai_persona_files": [
+      {
+        "value": "SOUL.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Hermes/OpenClaw agent persona file; presence at user home dir + co-located offensive tooling is the discriminator",
+        "false_positive_risk": "MEDIUM — also present on legitimate Hermes / OpenClaw developer environments"
+      },
+      {
+        "value": "IDENTITY.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Hermes/OpenClaw agent identity file; this operator references Moonshot AI as LLM backend",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "AGENTS.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Hermes/OpenClaw agent config file",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "BOOTSTRAP.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Hermes/OpenClaw bootstrap file",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "HEARTBEAT.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Hermes/OpenClaw heartbeat file",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "MEMORY.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Hermes/OpenClaw memory file",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "TOOLS.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Hermes/OpenClaw tools file",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "USER.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Hermes/OpenClaw user file",
+        "false_positive_risk": "MEDIUM"
+      }
+    ],
+    "operator_framework_dirs": [
+      {
+        "value": "~/.openclaw/",
+        "type": "filepath_home_dir",
+        "confidence": "DEFINITE",
+        "context": "OpenClaw runtime + skills installation path",
+        "false_positive_risk": "MEDIUM — present on legitimate OpenClaw developer environments; discriminator is co-located offensive tooling"
+      },
+      {
+        "value": "~/.skillhub/",
+        "type": "filepath_home_dir",
+        "confidence": "DEFINITE",
+        "context": "OpenClaw skill marketplace state",
+        "false_positive_risk": "MEDIUM"
+      },
+      {
+        "value": "~/.clawdbot/workspace/",
+        "type": "filepath_home_dir",
+        "confidence": "DEFINITE",
+        "context": "ClawdBot workspace state (sibling OpenClaw brand)",
+        "false_positive_risk": "MEDIUM"
+      }
+    ],
+    "insider_handoff_filenames": [
+      {
+        "value": "PUTTY_TUNNEL_DETAY.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language insider PuTTY reverse-tunnel setup; insider-recruitment artifact",
+        "false_positive_risk": "NONE — operator-distinctive Turkish filename pattern"
+      },
+      {
+        "value": "TUNNEL_RESTART.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language insider tunnel-restart playbook; contains named-insider Windows profile path",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "SSH_KEY_COZUM.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language SSH troubleshooting; requests ngrok URL from insider",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "WINDOWS_VPN_TUNNEL.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language insider reverse-tunnel setup (port 18080 to localhost 8089)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "WINDOWS_SSH_COZUMLER.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language insider SSH access alternatives",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "TUNNEL_KONTROL.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language insider tunnel health-check",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "WINDOWS_PORT_CHECK.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language insider firewall / AV troubleshooting",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "WINDOWS_CURL_CMD.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language insider connectivity-validation curl commands",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "WINDOWS_DIRECT_TEST.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish-language insider connectivity-validation test commands",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "GERCEK_API_BULUNDU.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish ops note (Real API Found)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "INSTANA_API_TEST.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish ops note — cleartext apiToken + internal IP + curl commands",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "INSTANA_INTEGRATION_SUMMARY.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored Turkish ops note — references public GitHub repo MehmetARPA/ARPA",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "INSTANA_PORT_TEST.md",
+        "type": "filename_markdown",
+        "confidence": "DEFINITE",
+        "context": "Operator-authored ops note — port-scanning notes for Instana endpoint",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "operator_ssh_key_filenames": [
+      {
+        "value": "rca_key.ppk",
+        "type": "filename_ssh_key",
+        "confidence": "DEFINITE",
+        "context": "Operator-supplied PuTTY-format SSH key deployed to insider host (in C:\\Users\\<insider>\\.ssh\\)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "rca_key.pem",
+        "type": "filename_ssh_key",
+        "confidence": "DEFINITE",
+        "context": "Operator-supplied OpenSSH-format SSH key deployed to insider host",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "rc_deploy_key.ppk",
+        "type": "filename_ssh_key",
+        "confidence": "DEFINITE",
+        "context": "Operator-supplied PuTTY-format deploy key variant",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "rca_deploy_key",
+        "type": "filename_ssh_key",
+        "confidence": "DEFINITE",
+        "context": "Operator-supplied deploy key variant",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "putty_saved_session_name": [
+      {
+        "value": "ARPA_Tunnel",
+        "type": "putty_session_profile_name",
+        "confidence": "DEFINITE",
+        "context": "Operator-supplied PuTTY saved-session name for insider's reverse-tunnel configuration",
+        "false_positive_risk": "NONE — distinctive operator-self-branded session name"
+      }
+    ]
+  },
+  "behavioral_indicators": {
+    "credential_artifacts": [
+      {
+        "value": "022a1b74-2332-4df5-a76b-60225ffa7ae3",
+        "type": "jwt_jti",
+        "confidence": "DEFINITE",
+        "context": "Stolen the victim organization Instana JWT jti; tenant [victim-tenant]; iat 2024-03-06 19:24:35 UTC; exp ~2034-02 (10-year lifetime); roles Team Member + API Token read; iss instana",
+        "action": "REVOKE via IBM Instana customer console",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "operator_identity_strings": [
+      {
+        "value": "MehmetARPA",
+        "type": "github_handle",
+        "confidence": "DEFINITE",
+        "context": "Operator public GitHub handle; possibly real-name Mehmet ARPA (NOT confirmed as real-name attribution). Account suspended by GitHub T&S 2026-05-25",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "ARPA Korelasyon Motoru",
+        "type": "operator_branding_string",
+        "confidence": "DEFINITE",
+        "context": "Operator self-branded project name (Turkish: ARPA Correlation Engine); appears in correlation_v3.py docstring + ARPA dashboard footer",
+        "false_positive_risk": "LOW — Turkish phrase combining proper noun ARPA with Correlation Engine; unlikely collision with legitimate software"
+      },
+      {
+        "value": "ARPA © 2026 the victim organization | Read-Only Compliance | Mock Data: ❌",
+        "type": "dashboard_footer_string",
+        "confidence": "DEFINITE",
+        "context": "ARPA dashboard footer text verbatim — fingerprint string for the operator's dashboard",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "operator_code_content_strings": [
+      {
+        "value": "\"\"\"ARPA Korelasyon Motoru v3 - Temporal Focus\"\"\"",
+        "type": "python_docstring",
+        "confidence": "DEFINITE",
+        "context": "Operator self-branded versioned docstring in correlation_v3.py",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "\"\"\"Service label'ından host bilgisi çıkar\"\"\"",
+        "type": "python_docstring",
+        "confidence": "DEFINITE",
+        "context": "Turkish docstring in topology_mapper.py (Extract host info from service label)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "print('✅ API endpoints added')",
+        "type": "python_statement",
+        "confidence": "DEFINITE",
+        "context": "Operator emoji-in-output bleed in add_corr_endpoints.py — AI-Generated Code Signature sub-pattern 9",
+        "false_positive_risk": "LOW — emoji print in Python is uncommon outside AI-generated code"
+      },
+      {
+        "value": "print('=== SON 5 KORELASYON ===')",
+        "type": "python_statement",
+        "confidence": "DEFINITE",
+        "context": "Turkish-language operator output in check_corr.py (Last 5 correlations)",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "elif self.path.startswith(\"/api/correlations/\"):",
+        "type": "python_statement",
+        "confidence": "DEFINITE",
+        "context": "Operator-distinctive correlation endpoint dispatch pattern in simple_api.py patches",
+        "false_positive_risk": "LOW"
+      }
+    ],
+    "powershell_collector_strings": [
+      {
+        "value": "# Instana Local Collector",
+        "type": "powershell_comment",
+        "confidence": "DEFINITE",
+        "context": "Header comment in instana_local_collector.ps1",
+        "false_positive_risk": "LOW"
+      },
+      {
+        "value": "# Bu script local Windows makinede çalışır ve event'leri ARPA sunucusuna gönderir",
+        "type": "powershell_comment",
+        "confidence": "DEFINITE",
+        "context": "Turkish header comment in instana_local_collector.ps1",
+        "false_positive_risk": "NONE"
+      },
+      {
+        "value": "$ARPA_URL = \"http://209.38.205.158:8096/api/ingest/instana\"",
+        "type": "powershell_variable_assignment",
+        "confidence": "DEFINITE",
+        "context": "Hardcoded operator C2 ingestion endpoint in PowerShell collector",
+        "false_positive_risk": "NONE"
+      }
+    ],
+    "operator_session_temporal_fingerprint": [
+      {
+        "value": "2026-05-20T21:22:00Z to 2026-05-20T21:30:00Z UTC (interactive operator session)",
+        "type": "temporal_pattern",
+        "confidence": "HIGH",
+        "context": "Operator interactive dashboard navigation captured in server_v3_chain_0520_2121.log; 00:22-00:30 local Turkish time (late-evening / overnight Turkish working hours)",
+        "false_positive_risk": "N/A — temporal attribution context"
+      }
+    ]
+  }
+}

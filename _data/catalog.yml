@@ -5,6 +5,64 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ============================================================
+  # PENDING GO-LIVE - Hunt.io AI-Agent series (6 reports).
+  # Deployed as UNLISTED previews: unlisted:true on the report +
+  # detection front matters, NO active catalog entry (so they are
+  # absent from every listing). GO-LIVE = uncomment the 6 entries
+  # below (strip the leading '# ') AND remove the unlisted: flags
+  # from the 6 report + 6 detection front matters, then push.
+  # Plan: docs/superpowers/plans/2026-06-08-preview-unlisted-publishing-and-huntio-deploy.md
+  # ============================================================
+#   # ---------------- AI-Agent Framework Abuse — 6-report series (2026-05) ----------------
+#   - title: "Multi-Actor AI-Agent Framework Abuse (8 Operators)"
+#     date: 2026-06-04
+#     severity: high
+#     tags: [AI Abuse, Multi-Family, Threat, Open Dir]
+#     report_url: /reports/ai-agent-frameworks-2026-05-23/
+#     detection_url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
+#     ioc_url: /ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json
+#
+#   - title: "Russian Gemini CLI Credential Mill (213.165.51.115)"
+#     date: 2026-05-25
+#     severity: critical
+#     tags: [AI Abuse, Cred Theft, C2, Open Dir]
+#     report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
+#     detection_url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
+#     ioc_url: /ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json
+#
+#   - title: "Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)"
+#     date: 2026-05-25
+#     severity: critical
+#     tags: [AI Abuse, Exfil, Cred Theft, Open Dir]
+#     report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
+#     detection_url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
+#     ioc_url: /ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json
+#
+#   - title: "GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)"
+#     date: 2026-05-25
+#     severity: high
+#     tags: [Cryptominer, Rootkit, Toolkit, Open Dir]
+#     report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
+#     detection_url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+#     ioc_url: /ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json
+#
+#   - title: "Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)"
+#     date: 2026-05-26
+#     severity: high
+#     tags: [AI Abuse, C2, Botnet, Open Dir]
+#     report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
+#     detection_url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
+#     ioc_url: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json
+#
+#   - title: "Korean Claude Code + OpenClaw Operator (221.150.15.104)"
+#     date: 2026-05-27
+#     severity: med
+#     tags: [AI Abuse, Persistence, Open Dir]
+#     report_url: /reports/korean-claude-openclaw-221.150.15.104/
+#     detection_url: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
+#     ioc_url: /ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json
+
   # ---------------- Full campaigns (report + detection + IOC) ----------------
   - title: "CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)"
     date: 2026-05-17
