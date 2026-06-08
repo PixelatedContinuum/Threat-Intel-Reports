@@ -1381,7 +1381,7 @@ button.hl-quicklink {
   border: 1px solid rgba(63, 185, 80, 0.3);
   border-radius: 8px;
   padding: 13px 14px;
-  z-index: 450;
+  z-index: 500;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s;
@@ -1441,7 +1441,7 @@ button.hl-quicklink {
   border: 1px solid rgba(88, 166, 255, 0.3);
   border-radius: 8px;
   padding: 13px 14px;
-  z-index: 450;
+  z-index: 500;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s;

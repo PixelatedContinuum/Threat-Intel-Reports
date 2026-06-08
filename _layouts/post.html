@@ -140,12 +140,13 @@ document.addEventListener('DOMContentLoaded', function () {
   <div class="hl-ioc-panel__hdr">High Priority IOCs</div>
   <ul class="hl-ioc-panel__list">
     {% for ioc in page.ioc_highlights %}
+    {%- assign _iv = ioc.value | default: ioc -%}
     <li class="hl-ioc-panel__item">
       <div class="hl-ioc-panel__ioc">
-        <span class="hl-ioc-panel__val">{{ ioc.value }}</span>
+        <span class="hl-ioc-panel__val">{{ _iv }}</span>
         {% if ioc.note %}<span class="hl-ioc-panel__note">{{ ioc.note }}</span>{% endif %}
       </div>
-      <button class="hl-ioc-cpbtn" data-val="{{ ioc.value }}" aria-label="Copy IOC">copy</button>
+      <button class="hl-ioc-cpbtn" data-val="{{ _iv }}" aria-label="Copy IOC">copy</button>
     </li>
     {% endfor %}
   </ul>
@@ -356,6 +357,10 @@ document.addEventListener('DOMContentLoaded', function () {
   var detectPanel = document.getElementById('hl-detect-panel');
   var iocTab      = document.getElementById('hl-ioc-tab');
   var iocPanel    = document.getElementById('hl-ioc-panel');
+  // Move panels out of the .hl-page `isolation: isolate` stacking context so a
+  // clicked panel sits ABOVE the body-level sponsor rail instead of behind it.
+  if (detectPanel) document.body.appendChild(detectPanel);
+  if (iocPanel) document.body.appendChild(iocPanel);
 
   function closeDetect() {
     if (!detectPanel) return;
