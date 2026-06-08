@@ -1,4 +1,6 @@
 {% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true %}
+{%- comment -%} Preview mode: on unlisted pages, show all monthly sponsors (incl. not-yet-active) so the private preview reflects the published treatment. Public pages stay gated on active:true. {%- endcomment -%}
+{% if page.unlisted %}{% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" %}{% endif %}
 {% if active_site_sponsors.size > 0 %}
 <div class="hl-site-sponsors">
   <div class="hl-site-sponsors__label">Current Sponsors</div>
