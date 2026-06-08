@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 {% assign rp_pool = site.pages | where: "layout", "post" | sort: "date" | reverse %}
 {% assign rp_list = "" | split: "" %}
-{% for rp in rp_pool %}{% unless rp.url == page.url or rp.path contains "hunting-detections" %}{% if rp_list.size < 2 %}{% assign rp_list = rp_list | push: rp %}{% endif %}{% endunless %}{% endfor %}
+{% for rp in rp_pool %}{% unless rp.url == page.url or rp.path contains "hunting-detections" or rp.unlisted %}{% if rp_list.size < 2 %}{% assign rp_list = rp_list | push: rp %}{% endif %}{% endunless %}{% endfor %}
 {% if rp_list.size > 0 %}
 <div class="hl-related">
   <div class="hl-related__heading">Continue Reading</div>

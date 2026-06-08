@@ -6,6 +6,7 @@
 -->
 <html lang="en">
   {% capture _head %}{% include default/head.liquid %}{% endcapture %}
+  {% if page.unlisted %}{% assign _head = _head | replace: "</head>", '<meta name="robots" content="noindex, nofollow"></head>' %}{% endif %}
   {{ _head | split: " " | join: " "}}
   <body>
     {% capture _navbar %}{% include default/navbar.liquid %}{% endcapture %}
