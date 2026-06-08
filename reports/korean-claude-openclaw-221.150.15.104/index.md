@@ -7,7 +7,7 @@ thumbnail: /assets/images/cards/korean-claude-openclaw-221.150.15.104.png
 hide: true
 unlisted: true
 sponsored_by: hunt-io
-category: "AI-Augmented Operator Tradecraft / Attacker-Customized AI-Agent Allowlist"
+category: "AI-Augmented Operator Tradecraft"
 description: "Capsule sub-report (Case 4 of the AI-Agent-Frameworks investigation): a Korean-language operator's attacker-customized ~/.claude/settings.local.json permission allowlist that pre-approves the OpenClaw install-and-run chain, recovered from an open-directory exposure (221.150.15.104, Korea Telecom). UTA-2026-015."
 detection_page: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
 ioc_feed: /ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json
@@ -35,13 +35,6 @@ ioc_highlights:
 ---
 
 ## Bottom Line Up Front
-
-**TL;DR:**
-- **What:** A 442-byte `~/.claude/settings.local.json` permission allowlist recovered from a Korean-language operator's exposed home directory (`221.150.15.104`, Korea Telecom AS4766)
-- **Technique:** Seven pre-authorized commands that suppress all Claude Code safety prompts for a complete OpenClaw AI-agent-framework install-and-run workflow
-- **Status:** No victims, no beacons, no malware binary — tradecraft capability-building evidence only
-- **Risk:** MEDIUM (6.0/10) — HIGH tradecraft novelty, LOW active-intrusion risk
-- **Defender value:** Hunt anchor for `~/.claude/settings.local.json` `permissions.allow` content patterns across developer endpoints
 
 A misconfigured open directory leaked the operator's home filesystem, including co-located Claude Code (`~/.claude/`) and OpenClaw (`~/.openclaw/`) installations. The smoking-gun artifact is the operator's customized permission allowlist: seven pre-approved entries that collectively describe the full OpenClaw install-and-run chain, executed by Claude Code without any safety-prompt interruption.
 
