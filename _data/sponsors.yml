@@ -49,4 +49,11 @@ tiers:
 #   sponsored_by: acme-security                  # single sponsor
 #   sponsored_by: [acme-security, beta-corp]     # multiple sponsors
 
-sponsors: []
+sponsors:
+  - id: hunt-io
+    name: Hunt.io
+    url: https://hunt.io
+    logo: /assets/images/sponsors/hunt-io.png
+    tagline: "Internet-wide threat hunting & attack-surface intelligence"
+    tier: monthly
+    active: false
