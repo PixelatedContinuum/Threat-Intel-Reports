@@ -733,96 +733,17 @@ The operator's `213.165.51.115` open-directory exposure was first observed by Hu
 
 ## 7. MITRE ATT&CK Mapping
 
-> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)` or `(DEFINITE)`. The Confidence Summary in Section 11 organizes findings by confidence level for the higher-level view.
+> **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
-This section maps the operator's observed behaviors to MITRE ATT&CK techniques. Three novel TTP candidates are proposed as ATT&CK sub-technique gap submissions (the Gaps note follows the table).
-
-| Tactic / Technique | Name | Evidence |
-|---|---|---|
-| Resource Development / T1583.001 | Acquire Infrastructure: Domains | `tralalarkefe.com` operator-owned with Cloudflare zone `6d415863...18f47af5` (DEFINITE) |
-| Resource Development / T1583.003 | Acquire Infrastructure: Virtual Private Server | `213.165.51.115` on AS210644 (AEZA, OFAC-sanctioned 2025-07-01) (DEFINITE) |
-| Resource Development / T1583.006 | Acquire Infrastructure: Web Services | GCP projects `[victim-named GCP project — redacted]` + `elated-gizmo-491112-k0` operator-controlled (DEFINITE) |
-| Resource Development / T1585.002 | Establish Accounts: Email Accounts | GCP service account `geminicli@elated-gizmo-491112-k0.iam.gserviceaccount.com` (DEFINITE) |
-| Resource Development / T1587 | Develop Capabilities | Operator-built `c2_server.py`, `ai_sniper_brute.py`, `check_keys.py`, `mass_wp_mutator.py`, `quantum_patriot.py` (DEFINITE); plus three AI Operator Handoff Documents (proposed novel sub-technique — see Gaps note) |
-| Resource Development / T1588.002 | Obtain Capabilities: Tool | `nuclei` with operator-bespoke `wp_admin_hunter.yaml`; AntiPublic.one paid subscription (JWT `sub:31703`); 40+ stolen Gemini API keys |
-| Initial Access / T1190 | Exploit Public-Facing Application | Mass WordPress validation rig against ~30,000 sites via `nuclei` |
-| Initial Access / T1078 | Valid Accounts | Empty-password Administrator account on the victim host (NTLM `31d6cfe0...089c0`); LLM-personalized credential mutation candidate hits (DEFINITE) |
-| Initial Access / T1133 | External Remote Services | Cloudflare Tunnel `windows_server.tralalarkefe.com` (RDP/WinRM) + `gil_dr1.tralalarkefe.com` (SSH) (DEFINITE) |
-| Execution / T1059.001 | PowerShell | `Invoke-RestMethod` against `payloads.tralalarkefe.com` after `SecurityProtocol = Tls12` precondition (DEFINITE) |
-| Execution / T1059.006 | Python | `ai_sniper_brute.py`, `c2_server.py`, `mass_wp_mutator.py`, `check_keys.py` operator-side runtime (DEFINITE) |
-| Persistence / T1547.001 | Registry Run Keys | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager` → `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` |
-| Persistence / T1546.003 | WMI Event Subscription | `stealth.ps1` fileless persistence pattern inferred from operator notes (MODERATE) |
-| Persistence / T1053.005 | Scheduled Task | Inferred from operator notes (MODERATE) |
-| Defense Evasion / T1027 | Obfuscated Files or Information | Base64(UTF-16LE) C2 body encoding (DEFINITE) |
-| Defense Evasion / T1090 | Proxy | GCP Ghost Proxy `34.34.57.141` with all GCP logging explicitly disabled |
-| Defense Evasion / T1090.004 | Proxy: Domain Fronting (Cloudflare Tunnel) | Cloudflare Tunnel transport fronting `tralalarkefe.com` subdomains |
-| Defense Evasion / T1036 | Masquerading | `WindowsUpdateManager` persistence file basename (masquerades as Windows Update component) (DEFINITE) |
-| Defense Evasion / T1140 | Deobfuscate/Decode Files | Base64(UTF-16LE) decode at C2 server (`base64.b64decode(...).decode('utf-16-le')`) (DEFINITE) |
-| Credential Access / T1110.003 | Password Spraying | `mass_wp_mutator.py` against ~30,000 WordPress sites |
-| Credential Access / T1110 (proposed `.005`) | LLM-Personalized Credential Mutation | `ai_sniper_brute.py` per-target Gemini 2.5 Flash 20-mutation generation (proposed novel sub-technique — see Gaps note) |
-| Credential Access / T1003.001 | OS Credential Dumping: LSASS Memory | Inferred from victim-side credential capture pattern; specific dumping tool not extracted |
-| Credential Access / T1003.002 | OS Credential Dumping: SAM | 6 the healthcare victim local SAM NTLM hashes captured (DEFINITE) |
-| Credential Access / T1555.005 | Credentials from Password Stores: Password Managers | Captured OpenDental MySQL root password hash + browser-stored credentials referenced in operator notes (DEFINITE) |
-| Credential Access / T1552.001 | Unsecured Credentials: Credentials In Files | Captured Cloudflare API token + GitHub PAT + AntiPublic.one JWT + 40+ Gemini API keys in plaintext (operator-side) (DEFINITE) |
-| Credential Access / T1552.004 | Unsecured Credentials: Private Keys | SSH key referenced in tunnel configuration |
-| Discovery / T1018 | Remote System Discovery | Internal subnet enumeration two internal subnets |
-| Discovery / T1082 | System Information Discovery | Host enumeration via PowerShell beacon telemetry |
-| Discovery / T1083 | File and Directory Discovery | Operator-side filesystem enumeration on the victim host |
-| Discovery / T1057 | Process Discovery | Operator-side process snapshots in telemetry |
-| Lateral Movement / T1021.001 | Remote Services: RDP | `windows_server.tralalarkefe.com` RDP tunnel (DEFINITE) |
-| Lateral Movement / T1021.004 | Remote Services: SSH | `gil_dr1.tralalarkefe.com` SSH tunnel (DEFINITE) |
-| Lateral Movement / T1021.006 | Remote Services: WinRM | `windows_server.tralalarkefe.com` WinRM tunnel (MODERATE) |
-| Lateral Movement / T1550.002 | Use Alternate Authentication Material: Pass the Hash | Inferred from NTLM hash capture + multi-subnet compromise (MODERATE) |
-| Collection / T1005 | Data from Local System | Inferred from OpenDental MySQL root hash capture pattern |
-| Collection / T1213 | Data from Information Repositories | OpenDental MySQL database access capability |
-| Collection / T1119 | Automated Collection | `mass_wp_mutator.py` + `ai_sniper_brute.py` automated credential collection pipeline (DEFINITE) |
-| Command and Control / T1071.001 | Web Protocols | `POST /api/v1/{update,agents,interact,telemetry,get_results}` to `c2.tralalarkefe.com` (DEFINITE) |
-| Command and Control / T1071 (proposed sub-technique annotation) | Operator-Built Unauthenticated Python-stdlib C2 | `c2_server.py` BaseHTTPServer-only; unauthenticated-takedown surface (LE/PSIRT-authorized); `/api/v1/get_results` iterative-dev mismatch (proposed sub-technique annotation — see Gaps note) |
-| Command and Control / T1132.001 | Data Encoding: Standard Encoding | Base64(UTF-16LE) body encoding (DEFINITE) |
-| Command and Control / T1573.002 | Encrypted Channel: Asymmetric Cryptography | TLS via Cloudflare Tunnel transport |
-| Command and Control / T1568 | Dynamic Resolution | Cloudflare DNS resolution for `*.tralalarkefe.com` (DEFINITE) |
-| Command and Control / T1572 | Protocol Tunneling | RDP-over-Cloudflare-Tunnel + SSH-over-Cloudflare-Tunnel (DEFINITE) |
-| Command and Control / T1102 | Web Service | `tenant-upcoming-great-descending.trycloudflare.com` ephemeral bootstrap |
-| Command and Control / T1105 | Ingress Tool Transfer | `Invoke-RestMethod` payload fetch from `payloads.tralalarkefe.com` (DEFINITE) |
-| Exfiltration / T1041 | Exfiltration Over C2 Channel | C2 body return path via `/api/v1/get_results` (intended but iterative-dev incomplete) (DEFINITE) |
-| Exfiltration / T1567.002 | Exfiltration to Cloud Storage | GCP Mailpit `35.192.41.201` operator-side staging |
-
-### 7.1 Proposed Novel TTP Sub-Technique Gaps
-
-Three behaviors observed in this campaign are candidates for new MITRE ATT&CK sub-technique submissions:
-
-1. **AI Operator Handoff Documents** — proposed under T1587 (Develop Capabilities) or as a new sub-technique. Operator-authored documentation written specifically for AI agent consumption to re-prime new sessions. Three exemplars in this campaign (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`). Structurally distinct from the `GEMINI.md` jailbreak-persistence pattern documented by Trend Micro. HIGH-confidence novelty claim MAINTAINED.
-2. **LLM-Personalized Credential Mutation** — proposed as T1110.005 under T1110 (Brute Force). LLM-generated per-target password mutation distinct from T1110.003 (static-list spraying) and T1110.004 (credential stuffing). The `ai_sniper_brute.py` source-code analysis with verbatim prompt reproduction is the first source-code-level documentation of this technique class. Operational pattern independently confirmed by Trend Micro.
-3. **Operator-Built Unauthenticated Python-stdlib C2 (unauthenticated-takedown surface, LE/PSIRT-authorized)** — proposed as a new sub-technique annotation under T1071 (Application Layer Protocol). Unauthenticated-by-design C2 with iterative-development evidence (`/api/v1/get_results` mismatch). Qualitatively distinct from how T1071.001 is typically scoped (which assumes operator-side authentication / opsec hardening).
-
-The proposed submissions are documented as gap items for future MITRE ATT&CK community contribution.
+The full ATT&CK technique mapping for this case is maintained alongside the detection rules on the **[detection rules page →](https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/)**.
 
 ---
 
 ## 8. Indicators of Compromise
 
-The full validated IOC inventory in machine-readable JSON is at **[`/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json`](/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json)** — defenders should ingest the JSON feed directly into SIEM / EDR / TIP rather than transcribe from this report. The summary table below documents IOC counts by category; the report body intentionally does not duplicate the full inventory.
+> **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-### IOC Summary Table
-
-| Category | Count | High-Signal Examples (operator-side; defang in your reporting) |
-|---|---|---|
-| Operator IPs | 4 | `213.165.51.115` (AEZA workstation), `34.34.81.129` / `34.34.57.141` / `35.192.41.201` (GCP overlay) |
-| Operator-owned domain + subdomains | 1 + 6 | `tralalarkefe.com` with `c2.`, `payloads.`, `windows_server.`, `gil_dr1.`, `catchall1.`, `10101.` subdomains |
-| Ephemeral bootstrap tunnel | 1 | `tenant-upcoming-great-descending.trycloudflare.com` |
-| Commercial service endpoint | 1 | `antipublic.one/api/v2/search` |
-| C2 URI paths | 5 | `/api/v1/{update,agents,interact,telemetry,get_results}` |
-| Payload URI | 1 | `payloads.tralalarkefe.com/run_bg.ps1` |
-| NTLM hashes (victim SAM) | 6 | `31d6cfe0...089c0` (empty-password Admin), 5 others |
-| MySQL password hash (OpenDental root) | 1 | OpenDental MySQL root hash |
-| Registry persistence | 1 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager` |
-| File-path persistence | 1 | `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` |
-| Operator-side filesystem paths | 3 | `/root/arsenal/`, `/root/payloads/`, `~/.gemini/` |
-| AD domain (victim) | 1 | `[victim AD domain — redacted]` |
-| Operator identity artifacts | 5 | GitHub `sonner1337` + org `oravepo546-stack`, Telegram `@americanpatriotus`, GCP project `[victim-named GCP project — redacted]`, persona `братух`, duty-free.cc forum context |
-| Operator credentials (defanged in report body; full in evidence) | 4+ | Cloudflare API token `pBkvccy9...TBztGF2`, GitHub PAT `ghp_tdcX...DaRW`, AntiPublic JWT (`jti:44298` / `sub:31703`), 40+ Gemini API keys (MD5-tracked inventory) |
-
-All operator credentials are defanged in this report body to first-8 + last-4 characters per project credential-redaction-hygiene policy. Full credential strings remain in the offline evidence inventory and structured IOC feed.
+**Full IOC feed:** [`/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json) — every indicator for this case, with type / confidence / recommended action.
 
 ---
 

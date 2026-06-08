@@ -686,87 +686,17 @@ Local Turkish time for the 21:22–21:30 UTC capture window is 00:22–00:30 (UT
 
 ## 7. MITRE ATT&CK Mapping
 
-> **Analyst note:** This section maps the observed operator and platform behaviors to MITRE ATT&CK techniques. The framework version is current as of investigation date. Three behaviors do not cleanly map to existing ATT&CK techniques — they are flagged at the end of the table as proposed sub-techniques for MITRE community coordination.
+> **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
-> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)` or `(DEFINITE)`. The Confidence Summary in Section 11 organizes findings by confidence level for the higher-level view.
-
-| Tactic / Technique | Name | Evidence |
-|---|---|---|
-| Resource Development / T1583.003 | Virtual Private Server | DigitalOcean Frankfurt VPS `209.38.205.158` (AS14061) (DEFINITE) |
-| Resource Development / T1587 | Develop Capabilities | Operator-built ARPA Korelasyon Motoru analytics platform — 5 daemons, 4 backends, 7,552-element unified topology |
-| Resource Development / T1588.002 | Tool (Obtain Capabilities) | OpenClaw AI agent framework + Moonshot AI / Kimi LLM provider — Chinese-jurisdiction tools chosen over Western |
-| Initial Access / T1078.002 | Valid Accounts: Domain Accounts | Victim-organization insider Windows AD user account — operator-supplied SSH keys + PuTTY saved session `ARPA_Tunnel` |
-| Initial Access / T1199 | Trusted Relationship | Insider with legitimate AD access cooperating with (or deceived by, or compromised by) operator — intent classification INSUFFICIENT |
-| Execution / T1059.001 | PowerShell | `turkish-instana_local_collector.ps1` — victim-side collector with `Invoke-RestMethod` to victim Instana + cleartext POST to operator C2 (DEFINITE) |
-| Execution / T1059.006 | Python | Entire ARPA platform — `correlation_v3.py`, `topology_mapper.py`, `instana_collector_v4.py`, `ai_service.py`, plus systemd daemons (DEFINITE) |
-| Persistence / T1543.002 | Systemd Service | 5 systemd unit files: `arpa-autolearn`, `arpa-continuous`, `arpa-daemon`, `arpa-instana-api`, `arpa-parallel` — all `.service` files in `/etc/systemd/system/` (DEFINITE) |
-| Persistence / T1098.004 | SSH Authorized Keys | Operator-supplied SSH keys (`rca_key.ppk` / `rca_key.pem`) installed on insider workstation for reverse-SSH tunnel persistence |
-| Persistence / T1525 | Implant Internal Image | ARPA dashboard self-presents as "ARPA © 2026 the victim organization | Read-Only Compliance" — operator implants the victim's brand identity in operator-hosted dashboard |
-| Defense Evasion / T1078 | Valid Accounts (Use of Stolen) | 4 stolen credential sources: Instana 10-year JWT + SolarWinds + Zabbix + VMware Aria (DEFINITE) |
-| Defense Evasion / T1562.001 | Disable or Modify Tools: TLS Validation Skip | PowerShell `Invoke-RestMethod -SkipCertificateCheck` against victim's own Instana endpoint (DEFINITE) |
-| Defense Evasion / T1070.002 | Indicator Removal: Clear Linux Logs | Limited evidence in operator filesystem; some `auth.log` truncation patterns visible (MODERATE) |
-| Credential Access / T1552.001 | Credentials in Files | Stolen JWT hardcoded in `topology_mapper.py` + `instana_collector_v4.py` + PowerShell collector (DEFINITE) |
-| Discovery / T1018 | Remote System Discovery | 7,552-element unified topology graph mapping victim infrastructure across 4 observability sources |
-| Discovery / T1046 | Network Service Discovery | SolarWinds Orion port / interface enumeration via stolen credential (784 nodes, 6,566 interfaces) |
-| Discovery / T1082 | System Information Discovery | Zabbix host enumeration (100 hosts) + VMware Aria virtualization estate enumeration |
-| Discovery / T1083 | File and Directory Discovery | Insider workstation file access via reverse-SSH tunnel — scope unconfirmed externally |
-| Discovery / T1518 | Software Discovery | Application identification via Instana APM (43 applications in operator's access set) |
-| Discovery / T1614.001 | System Language Discovery | Operator authored all tunnel-setup documentation and code comments in Turkish, consistent with deliberate targeting of a Turkish-language environment and knowledge that the recruited insider operates in a Turkish-language Windows deployment. Mapped here as an adversary awareness of victim-environment language, not as a victim-side enumeration call — evidence is operator-origin language rather than a detected `GetSystemDefaultLCID` call (MODERATE) |
-| Lateral Movement / T1021.004 | Remote Services: SSH | Reverse-SSH tunnel mapping operator VPS `:18080` to insider workstation `localhost:8089` |
-| Collection / T1005 | Data from Local System | Insider workstation as source of local-system collection via reverse-SSH tunnel (DEFINITE — architecture documented) |
-| Collection / T1119 | Automated Collection | 5 systemd daemons polling 4 observability sources on 5-minute cadence — automated continuous collection (DEFINITE) |
-| Collection / T1213 | Data from Information Repositories | Stolen-credential abuse of 4 observability platforms — each is an information repository class |
-| Collection / T1530 | Data from Cloud Storage | VMware Aria vCenter / ESXi monitoring data + IBM Instana SaaS / OCP-hosted APM data (MODERATE) |
-| Command and Control / T1071.001 | Application Layer Protocol: Web Protocols | HTTP POST to `209.38.205.158:8096/api/ingest/instana` cleartext + HTTPS to Moonshot AI / Kimi for AI service (DEFINITE) |
-| Command and Control / T1572 | Protocol Tunneling | Reverse-SSH tunnel from insider workstation to operator VPS — tunneled application traffic on port 8089 |
-| Exfiltration / T1020 | Automated Exfiltration | Continuous 5-minute polling cycle pushes observability data from victim to operator (DEFINITE) |
-| Exfiltration / T1041 | Exfiltration Over C2 Channel | Insider PowerShell POSTs Instana events to operator port 8096 — same channel as C2 (DEFINITE) |
-| Exfiltration / T1567 | Exfiltration Over Web Service | Direct stolen-credential pulls from observability platforms (Instana, SolarWinds, Zabbix, VMware Aria) via web APIs |
-
-*Confidence note: above table shows HIGH unless marked. (DEFINITE) markers are direct evidence; (MODERATE) markers indicate notable evidentiary gaps.*
-
-### Proposed Sub-Techniques for MITRE Community Coordination
-
-Three observed behaviors do not cleanly map to existing ATT&CK techniques and are proposed for community coordination:
-
-1. **Observability-Tool Reverse Pipeline** — adjacent to T1213 (Data from Information Repositories) and T1567 (Exfiltration Over Web Service) but neither cleanly captures the multi-source cross-correlated sustained-ETL dimension. The technique would describe: operator stealing API tokens for multiple enterprise observability platforms, cross-correlating data across platforms into operator-controlled analytics infrastructure, sustained over weeks to months on automated polling cadence, against a single named victim. This is publication-defining for the campaign.
-2. **AI-Augmented Insider Recruitment with Operator-Authored Setup Documentation** — adjacent to T1078 (Valid Accounts) and T1199 (Trusted Relationship) but the documentation-supplied-insider-access dimension is uncovered. The technique would describe: operator authoring step-by-step setup documentation in the insider's native language, supplying the insider with operator-controlled SSH keys and a saved client session configuration, with the documentation revealing the insider's identity even though the insider's actions touch victim infrastructure with valid credentials.
-3. **AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials** — adjacent to T1213 + T1567 + T1588.002 but the LLM-as-intelligence-analyst-over-stolen-victim-telemetry dimension is uncovered. CANDIDATE status at N=1; needs N≥2 cross-operator validation before promoting to confirmed-novel and proposing as ATT&CK sub-technique.
+The full ATT&CK technique mapping for this case is maintained alongside the detection rules on the **[detection rules page →](https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/)**.
 
 ---
 
 ## 8. Indicators of Compromise
 
-> **Analyst note:** The structured IOC feed is the authoritative source for defender ingestion. This section provides a short summary table of the most operationally significant indicators for at-a-glance review; the full IOC inventory (file hashes, network indicators, host indicators, credential strings with appropriate defanging, behavioral signatures) is in the linked machine-readable feed. The feed contains operator-side indicators at full fidelity and redacts victim-identifying detail.
+> **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-**Structured IOC feed (authoritative):** [`/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json)
-
-### Summary IOC Inventory
-
-| Category | Count | Highest-signal examples |
-|---|---|---|
-| SHA256 file hashes | 13 (12 operator modules + 1 ecosystem-template) | Operator-authored Python source code modules: `topology_mapper.py`, `instana_collector_v4.py`, `correlation_v3.py`, `api_correlation_routes.py`, `ai_service.py`, plus 7 additional; plus `SOUL.md` (MODERATE — ecosystem-template, see feed for FP guidance) |
-| IPv4 addresses | 2 | `209.38.205.158` (operator VPS, DigitalOcean Frankfurt, AS14061); operator residential ISP IP on TurkNet AS12735 (full value in IOC feed only — suppressed from public report body) |
-| Domains | 4 | `openclaw.ai`, `docs.openclaw.ai`, `lightmake.site`, `skillhub-1388575217.cos.ap-guangzhou.myqcloud.com` |
-| HTTP service URLs | 4 | `http://209.38.205.158:8090/`, `http://209.38.205.158:8095/api/topology/unified`, `http://209.38.205.158:8096/api/ingest/instana`, operator GitHub repository URL (full URL in IOC feed only — suppressed from public report body) |
-| Host filesystem indicators | 10 | `/opt/ARPA/`, `/opt/ARPA/ai/ai_service.py`, `/opt/ARPA/data/collector.db`, `/opt/ARPA/data/ai_assistant.db`, `/opt/rca-platform/simple_api.py`, plus 5 systemd unit files in `/etc/systemd/system/` |
-| Behavioral patterns | 13 | PowerShell `Invoke-RestMethod` with `-SkipCertificateCheck` to `ocpinstana.[victim-domain].com.tr`; systemd unit file creation matching `arpa-*.service`; SSH outbound from internal Windows workstation to `209.38.205.158:22`; Cross-platform same-source-IP authentication against ≥2 observability platforms (diagnostic for Observability-Tool Reverse Pipeline TTP) |
-| Credential identifiers (defanged) | 2 | Stolen Instana JWT `jti: 022a1b74-...-7ae3`, tenant `[victim-tenant]`; PuTTY saved session `ARPA_Tunnel` |
-
-### High-Signal Detection Strings
-
-The following operator self-branding strings are the highest-signal single-string indicators with near-zero false-positive risk:
-
-- `ARPA Korelasyon Motoru` — operator self-branded project name (appears in code docstrings + dashboard footer)
-- `ARPA © 2026 the victim organization | Read-Only Compliance | Mock Data: ❌` — verbatim dashboard footer
-- `"""ARPA Korelasyon Motoru v3 - Temporal Focus"""` — operator self-branded docstring in `correlation_v3.py`
-- `022a1b74-2332-4df5-a76b-60225ffa7ae3` — stolen Instana JWT jti
-- `tenant":"[victim-tenant]` — stolen JWT tenant claim
-- `Bu script local Windows makinede çalışır ve event'leri ARPA sunucusuna gönderir` — Turkish PowerShell header comment
-
-### Internal Victim Infrastructure (Defender Intel — DO NOT BLOCK)
-
-Per the project's victim-anonymization policy, victim- and partner-side references (internal hostnames, internal IPs, internal and external domain names, the insider's AD identifier) are **excluded** from the public structured IOC feed entirely — a redacted indicator is not actionable for anyone — and are retained only in the offline FULL evidence briefing for the victim's IR coordination. The public feed carries operator infrastructure and detection anchors at full fidelity.
+**Full IOC feed:** [`/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json) — every indicator for this case, with type / confidence / recommended action.
 
 ---
 

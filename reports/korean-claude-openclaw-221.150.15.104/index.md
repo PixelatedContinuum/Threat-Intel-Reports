@@ -321,28 +321,9 @@ The captured artifact does not document what the gateway UI **contains** — tha
 
 ## 5. MITRE ATT&CK Mapping
 
-The technique mappings below derive from filesystem evidence captured at the operator's exposed host. Mappings document what the **operator** was doing on their own host (tradecraft / capability-building), not what they did against a victim — no victim activity was observed.
+> **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
-> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. The Confidence Summary in Section 9 organizes findings by confidence level for the higher-level view.
-
-| Tactic / Technique | Name | Evidence |
-|---|---|---|
-| Resource Development / T1583 | Acquire Infrastructure | Korea Telecom AS4766 residential broadband connection used as operator host; residential exposure, not a VPS or cloud-rented server (MODERATE) |
-| Resource Development / T1588.001 | Malware (Obtain) | Operator obtains OpenClaw kit via `curl \| bash` and `npm i -g`; OpenClaw is dual-use, not pure malware (MODERATE) |
-| Resource Development / T1588.002 | Tool (Obtain) | OpenClaw + Node.js toolchain acquisition documented in `permissions.allow` entries 1, 3 |
-| Execution / T1059.004 | Unix Shell | Bash pre-authorization for `curl \| bash` + `npm` + `openclaw` invocations (allowlist entries 1, 3, 4, 6, 7) |
-| Execution / T1059.007 | JavaScript | `npm i -g openclaw` invokes npm/Node.js for global OpenClaw install — npm is OpenClaw's alternative distribution channel |
-| Execution / T1059.001 | PowerShell | `~/.openclaw/completions/openclaw.ps1` PowerShell completion script observed on host (MODERATE) |
-| Command and Control / T1090.001 | Internal Proxy | OpenClaw gateway listener on local port 18789 functions as a local control-plane proxy between Claude Code and OpenClaw skills (allowlist entries 6, 7) |
-| Defense Evasion / T1562.001 | Disable or Modify Tools | `settings.local.json` allowlist customization explicitly disables Claude Code's per-command safety-prompt mechanism for the seven authorized commands — direct artifact-level evidence of attacker tampering with AI agent safety controls |
-| Discovery / T1082 | System Information Discovery | Environment probe (allowlist entry 2) enumerates `node`, `npm`, `brew`, `pnpm` presence and versions (MODERATE) |
-| Discovery / T1614.001 | System Language Discovery | Locale enumeration in operator shell-snapshot files per the parent investigation — not directly evidenced by the Case 4 `settings.local.json` artifact; derived from the umbrella investigation's cross-case language analysis (MODERATE — parent-investigation-derived) |
-| Discovery / T1083 | File and Directory Discovery | Operator workflow stages OpenClaw skill discovery via `openclaw onboard` (allowlist entry 4) |
-| Initial Access / T1190 | Exploit Public-Facing Application | Open-directory exposure itself is the discovery vector for this analysis; not "exploited" in the active-attacker sense, but the misconfiguration is the artifact-recovery enabler (MODERATE) |
-
-**The standout technique: T1562.001 (Disable or Modify Tools).** This row is the report's most operationally significant ATT&CK mapping. The captured artifact is direct, unambiguous evidence of an attacker modifying an AI-agent CLI's safety-control mechanism to suppress per-command prompts. This is precisely the abuse pattern T1562.001 was designed to capture, applied to a tool category (AI-agent CLIs) that did not exist when the technique was originally published. The technique generalizes — defenders should recognize that allowlist-tampering against AI-agent CLIs is the same pattern as security-tool tampering against EDR/antivirus, just applied to a new tool class.
-
-**The dual-tactic note on T1090.001.** The gateway is the locally-running coordinator between Claude Code and OpenClaw skills; it is mapped under Command and Control to capture the proxy function. The gateway has no externally-routed C2 endpoint in the captured evidence (it binds to `127.0.0.1`), so the C&C mapping describes the **architecture** of the operator's local tool integration rather than active beaconing to external infrastructure. Defenders evaluating this row should not treat the port-18789 binding as evidence of external C2 — it is internal-proxy tradecraft.
+The full ATT&CK technique mapping for this case is maintained alongside the detection rules on the **[detection rules page →](https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/)**.
 
 ---
 
@@ -407,41 +388,9 @@ Per CLAUDE.md ATTRIBUTION CONFIDENCE SCALE, language precision at LOW confidence
 
 ## 7. Indicators of Compromise
 
-Full IOC content with confidence levels, action recommendations, and context fields is provided in machine-readable format at:
+> **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-**[`/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json)**
-
-The feed is in The Hunters Ledger canonical IOC JSON schema with no defanging applied (suitable for SIEM/EDR ingestion). The summary below captures the high-level inventory; defenders should consume the JSON file directly for the per-indicator metadata.
-
-### IOC Inventory Summary
-
-| Category | Count | Example | Highest-Confidence Item |
-|---|---|---|---|
-| Operator IP | 1 | `221.150.15.104` (AS4766, Korea Telecom, residential) | DEFINITE |
-| Tooling distribution domains | 3 | `openclaw.ai`, `docs.openclaw.ai`, `lightmake.site` | DEFINITE (first two), MODERATE (`lightmake.site`) |
-| Operator URLs | 2 | `http://221.150.15.104:8080/` (open directory), `https://openclaw.ai/install.sh` (installer) | DEFINITE |
-| Filesystem path hunt anchors | 4 | `~/.claude/settings.local.json`, `<project>/.claude/settings.local.json`, `~/.openclaw/`, `~/.openclaw/completions/openclaw.ps1` | DEFINITE |
-| Configuration string patterns | 6 | The six unique `permissions.allow` allowlist entry strings (entry 2 environment-probe omitted as too benign in isolation) | DEFINITE |
-| npm package name | 1 | `openclaw` (public npmjs.com registry) | DEFINITE |
-| Listening port | 1 | TCP `18789` (loopback scope, `127.0.0.1`) | DEFINITE |
-| File hashes (malware) | 0 | No malware binary observed | N/A |
-
-**Total indicator count: 18 actionable IOCs across 8 categories.**
-
-### Critical Hunt Combination
-
-The most operationally useful detection signal is **not** any single IOC — it is the **combination** of:
-
-1. A filesystem path match: `~/.claude/settings.local.json` (or its per-project equivalent)
-2. **Plus** a content match against the documented `permissions.allow` patterns (curl-pipe-bash, global npm install of unfamiliar package, or local listener bring-up)
-
-Single-signal hunts (e.g., "any host that ever resolved `openclaw.ai`") will produce noise. Combined-signal hunts (e.g., "filesystem hit on `~/.claude/settings.local.json` AND content match on `curl ... | bash`") are operationally precise.
-
-### What This Report Deliberately Does Not Include
-
-- **No file hashes for the `settings.local.json` artifact itself.** Hash-based detection is operationally less useful here — operators can produce per-host or per-project variants with different byte sequences trivially. Content-based hunts (Section 8) are the durable detection approach.
-- **No victim-side IOCs.** No victims observed.
-- **No operator-session-content IOCs.** Operator session content (`~/.claude/history.jsonl`, `~/.claude/projects/`) was deliberately not pulled per credential-redaction discipline; the IOC feed reflects that boundary.
+**Full IOC feed:** [`/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json) — every indicator for this case, with type / confidence / recommended action.
 
 ---
 

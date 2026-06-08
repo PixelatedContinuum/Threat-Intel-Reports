@@ -585,107 +585,17 @@ The full PCAP-level dynamic analysis of GHOST kit network traffic was not perfor
 
 ## 7. MITRE ATT&CK Mapping
 
-> **Analyst note:** This section maps GHOST kit observed behaviors to MITRE ATT&CK techniques. The table uses the project-canonical 3-column layout because ≥70% of rows are HIGH confidence. The Confidence Summary in Section 11 organizes findings by confidence band for the higher-level view. The retraction noted in Section 14 (the Phase 7 mis-mapping of `libpam_cache.so` as T1556.003 PAM authentication backdoor) is reflected here — the correct mappings are T1014 + T1574.006 + T1564.001 + T1027.
+> **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
-> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. The Confidence Summary in Section 11 organizes findings by confidence level for the higher-level view.
-
-| Tactic / Technique | Name | Evidence |
-|---|---|---|
-| Resource Development / T1583.003 | Virtual Private Server | Operator hosts on AS210644 (AEZA Group), Frankfurt DC |
-| Resource Development / T1587.001 | Develop Capabilities: Malware | Vova75Rus authored GHOST kit (kit-author identity confirmed) |
-| Resource Development / T1585.001 | Establish Accounts: Social Media | OWNER Telegram bot 8415540095 (kit-author); MIRROR 8315596543 (Operator-A) |
-| Initial Access / T1190 | Exploit Public-Facing Application | ComfyUI port 8188 unauthenticated; PerformanceMonitor custom node deployed |
-| Execution / T1059.004 | Unix Shell | `ghost.sh` 1,338 lines + `hyst.sh`, `min1.sh`, `check_comfyui.sh`, `get_all_ranges.sh` |
-| Execution / T1059.006 | Python | `py.py` (74,844 B) + `scan.py` (63,443 B) ComfyUI exploitation framework |
-| Execution / T1129 | Shared Modules (LD_PRELOAD) | `/etc/ld.so.preload` → `libpam_cache.so` library load on every process |
-| Persistence / T1547.013 | XDG Autostart Entries | `$HOME/.config/systemd/user/fontconfig-cache.service` |
-| Persistence / T1543.002 | Systemd Service | `/etc/systemd/system/systemd-journal-flush.service` (system) + user unit |
-| Persistence / T1053.003 | Cron | `/var/spool/cron/.font_<random>` |
-| Persistence / T1037.004 | RC Scripts | `/etc/init.d/fontcache` (System V init script) |
-| Persistence / T1574.006 | Dynamic Linker Hijacking | `libpam_cache.so` loaded via `/etc/ld.so.preload` — primary persistence + hide vector |
-| Persistence / T1554 | Compromise Host Software Binary | `_compile_hide_so` function present (dead code in practice — .so ships pre-built) |
-| Privilege Escalation / T1611 | Escape to Host | 4 container-escape variants: cgroup release_agent, bind-mount, nsenter, Docker socket `(MODERATE)` |
-| Defense Evasion / T1014 | Rootkit | `libpam_cache.so` userland LD_PRELOAD libc-hook rootkit |
-| Defense Evasion / T1564.001 | Hidden Files and Directories | 27 hide strings in `libpam_cache.so` H[] — scatter-copy paths under `/etc/udev/hwdb.d/`, `/var/spool/cron/`, fontconfig dirs |
-| Defense Evasion / T1564 | Hide Artifacts (network ports) | 9 hide ports in `libpam_cache.so` P[] — `/proc/net/tcp` fopen filter |
-| Defense Evasion / T1027 | Obfuscated Files or Information | Deceptive `libpam_cache` PAM-style filename (no PAM functionality) |
-| Defense Evasion / T1036.005 | Match Legitimate Name or Location | `libpam_cache.so`, `fontconfig-cache.service`, `systemd-journal-flush.service`, `khugepaged_`, `nv_uvm_` |
-| Defense Evasion / T1620 | Reflective Code Loading | `_memfd_launch` via `memfd_create` syscall; SysV shm fallback |
-| Defense Evasion / T1070.002 | Clear Linux Logs | Log-clearing in `ghost.sh` (the `/var/log/auth.log.1.gz` and `/var/log/kern.log.1.gz` artifacts that VT initially mis-attributed as "dropped files") |
-| Defense Evasion / T1070.003 | Clear Command History | `unset HISTFILE` + `cat /dev/null > ~/.bash_history` patterns in installer |
-| Defense Evasion / T1480.002 | Mutual Exclusion (anti-competitor) | `_anti_hisana` function + `kill_list.patterns` regex against rival miners |
-| Defense Evasion / T1222.002 | Linux File Permissions (chattr +i) | `chattr +i` immutable flag applied to persistence files (defender `rm` returns EPERM) |
-| Credential Access / T1552.004 | Unsecured Credentials: Private Keys | SSH key harvest patterns in `ghost.sh` |
-| Discovery / T1057 | Process Discovery | Competitor enumeration via `ps`/`pgrep` matching `kill_list.patterns` |
-| Discovery / T1018 | Remote System Discovery | Cloud IP-range enumeration via `get_all_ranges.sh` (12 ASN queries) |
-| Discovery / T1083 | File and Directory Discovery | Container-runtime detection (cgroup version, Docker socket presence, bind-mount enumeration) |
-| Discovery / T1082 | System Information Discovery | OS/distro detection in `ghost.sh` (Ubuntu 24.04 LTS target check) |
-| Discovery / T1595.002 | Active Scanning: Vulnerability Scanning | ComfyUI port 8188 scanner (`scan.py`); 4,573-IP target candidate corpus |
-| Lateral Movement / T1021.004 | Remote Services: SSH | Operator SSH access to victim hosts post-exploitation (inferred from bash history `ssh` patterns) `(MODERATE)` |
-| Command and Control / T1071.001 | Application Layer Protocol: Web Protocols | HTTPS to `api.telegram.org/bot8415540095:*` (OWNER) + `bot8315596543:*` (MIRROR); HTTPS to `github.com/Vova75Rus/*` |
-| Command and Control / T1071.004 | DNS | DNS queries to `*.kryptex.network`, `auto.c3pool.org`, `cfx-asia1.nanopool.org` |
-| Command and Control / T1090.001 | Internal Proxy | Operator-A self-hosted XMR pool proxy on TCP 3333 + CFX pool proxy on TCP 4444 |
-| Command and Control / T1572 | Protocol Tunneling | Hysteria v2 QUIC/UDP on 14433/14444 with bing.com SNI masquerade |
-| Command and Control / T1102.002 | Bidirectional Communication (Web Service) | Dual Telegram bots (OWNER + MIRROR) |
-| Impact / T1496.001 | Resource Hijacking: Compute Hijacking | xmrig (XMR) + lolMiner (CFX Octopus algorithm) on victim GPU; primary motivation |
-| Impact / T1496.002 | Resource Hijacking: Bandwidth Hijacking | Hysteria v2 backdoor (proxy/tunnel capability) `(MODERATE)` |
-
-*Total: 38 technique mappings spanning all 14 ATT&CK tactics except Collection and Exfiltration (which do not apply to a cryptojacking-focused kit — the kit's "exfiltration" is the cryptocurrency mining payout flow, which is better characterized under Impact).*
-
-**Tactic coverage summary:** Reconnaissance (omitted — pre-compromise); Resource Development (3); Initial Access (1); Execution (3); Persistence (6); Privilege Escalation (1); Defense Evasion (10 — heaviest tactic, reflecting the kit's anti-detection emphasis); Credential Access (1); Discovery (5); Lateral Movement (1); C2 (5); Impact (2).
-
-**Phase 7 → Phase 15 retraction reflected.** The initial Phase 7 mapping classified `libpam_cache.so` as T1556.003 (Modify Authentication Process: PAM). Direct C-source inspection (98 lines, zero PAM symbols, zero authentication-flow code) refuted this entirely. The correct mappings (T1014 Rootkit + T1574.006 Dynamic Linker Hijacking + T1564.001 Hidden Files and Directories + T1027 Obfuscated Files or Information) are reflected in the table above and in Section 14 retractions.
+The full ATT&CK technique mapping for this case is maintained alongside the detection rules on the **[detection rules page →](https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/)**.
 
 ---
 
 ## 8. Indicators of Compromise
 
-**Full machine-readable IOC inventory** is available in the separate IOC feed file:
+> **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-[**`/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json`**](/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json)
-
-The IOC feed is JSON-formatted, non-defanged (suitable for direct SIEM/EDR ingestion), and validated per the project's `ioc-formatting` skill standards. The summary table below provides the highest-priority indicators for at-a-glance reference; the full inventory in the JSON file includes per-IOC confidence, context, and first-seen metadata.
-
-### Indicator Counts Summary
-
-| Indicator Type | Count | Highest Priority |
-|---|---|---|
-| File hashes (SHA-256, full) | 8 | `eaaa10c8...12bb7301` (libpam_cache.so byte-identical across customers) |
-| File hash fragments (SHA-256 prefix) | 6 | `025d683b...` (ghost.sh Operator-B) |
-| Network IPs | 2 | `77.110.96.200` (Operator-A) + `77.110.125.145` (Operator-B) |
-| Domains | 5 | `*.kryptex.network` (3 subdomains) + `auto.c3pool.org` + `cfx-asia1.nanopool.org` |
-| URLs | 6 | `http://77.110.96.200/{libpam_cache.so,libpam_cache.c,ghost.sh,hyst.sh,min1.sh}` |
-| GitHub URLs (suspended) | 6 | `github.com/Vova75Rus/*` (5 repos) + `github.com/jamestechdev-oss/ComfyUI-Shell-Plugin` |
-| File paths (persistence) | 11 | `/etc/ld.so.preload`; `/lib/security/libpam_cache.so`; full 5-vector list |
-| Process names (rootkit hide-list) | 6 | `inotify_guard`, `dbus-session-monitor`, `gnome-shell-ext-updater`, `archivist-daemon`, `journald-svc`, `systemd-guard` |
-| Cryptocurrency wallets | 6 | XMR + 4 CFX for Operator-A; XMR + 1 CFX for Operator-B |
-| Telegram bot ID prefixes | 2 | **`8415540095`** (kit-author OWNER) + `8315596543` (Operator-A MIRROR) |
-| ASNs | 1 | AS210644 (AEZA Group, OFAC/NCA sanctioned) |
-| Behavioral indicators | 9+ | `/etc/ld.so.preload` write; `chattr +i` on persistence; ComfyUI PerformanceMonitor class; bash-history token leakage |
-
-### Highest-Priority Single Indicators (for immediate hunting)
-
-These five indicators have the highest defender value across the broadest scope:
-
-1. **OWNER Telegram bot ID prefix `8415540095`** — kit-author-baked; catches **every** GHOST customer worldwide. String match in any binary, script, bash history, or network egress traffic.
-2. **libpam_cache.so SHA-256 `eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301`** — byte-identical across customers; catches the rootkit at-rest.
-3. **`/etc/ld.so.preload` writes** + **`libpam_cache.so` creation under `/lib/security/`** — behavioral signature of the LD_PRELOAD persistence vector.
-4. **HTTPS to `api.telegram.org/bot8415540095:*`** — network signature of the OWNER bot supply-chain monitoring traffic.
-5. **ComfyUI `custom_nodes/*.py` containing both `class PerformanceMonitor` and `NODE_CLASS_MAPPINGS`** — ComfyUI Python-runtime persistence signature.
-
-### IOC Confidence Distribution
-
-From the IOC feed file metadata:
-- **DEFINITE confidence:** kit-author-controlled artifacts (libpam_cache.so binary + source, ghost.sh on both hosts, OWNER Telegram bot prefix, Vova75Rus GitHub UID, Operator-A/B wallet addresses, persistence file paths)
-- **HIGH confidence:** infrastructure attribution (AEZA AS210644 hosting, Conflux drain-chain off-ramp wallet, Kryptex pool domains)
-- **MODERATE confidence:** container-escape real-world execution success (code-level DEFINITE; runtime success variable); Hysteria v2 backdoor SNI masquerade detection signature (requires SNI-vs-destination correlation)
-
-### What is NOT in the IOC Feed
-
-Two categories of indicators were initially read as IOCs and subsequently excluded after direct verification:
-
-- **SHA-256 `44a3bab2...` and `ac941ead...`** were initially flagged by VirusTotal's `dropped_files` relationship for `ghost.sh` and `min1.sh`. Direct VT lookup refuted: these are `/var/log/auth.log.1.gz` and `/var/log/kern.log.1.gz` — sandbox-host log archives the scripts touched during log-clearing tradecraft, **not** operator deliverables. Excluded from the IOC feed.
-- **`q10.txt` 4,573 IPs** is the operator's loose target candidate list (port-8188-responsive hosts), **not** a confirmed-compromised victim list. The narrower confirmed-vulnerable population is 78 hosts (21 Tier-A + 57 Tier-B). The 4,573-IP corpus is not published as an IOC list because most of those hosts are not compromised. Confirmed-vulnerable hosts are routed to the disclosure cascade rather than published.
+**Full IOC feed:** [`/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json) — every indicator for this case, with type / confidence / recommended action.
 
 ---
 

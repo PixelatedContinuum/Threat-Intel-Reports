@@ -85,16 +85,16 @@
 
   <!-- =========== ARPA ETL Platform (red side-rail, operator code) =========== -->
   <g filter="url(#cardShadow)">
-    <rect x="160" y="700" width="680" height="230" rx="8" fill="#1a1a1a" stroke="#dc2626" stroke-width="2"/>
-    <rect x="160" y="700" width="680" height="46" rx="8" fill="#dc2626"/>
-    <rect x="160" y="734" width="680" height="12" fill="#dc2626"/>
-    <text x="180" y="730" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">ARPA KORELASYON MOTORU — OPERATOR-BUILT CROSS-SOURCE ETL</text>
-    <text x="180" y="784" font-size="22" font-weight="700" fill="#ffffff">Operator's analytics platform (Python + TimescaleDB + Neo4j + Redis)</text>
-    <text x="180" y="814" font-size="16" fill="#e5e5e5">5 systemd daemons (arpa-autolearn · arpa-continuous · arpa-daemon · arpa-instana-api · arpa-parallel)</text>
-    <text x="180" y="838" font-size="16" fill="#e5e5e5">Continuous 5-minute polling cadence across all four sources · production-grade ETL</text>
-    <text x="180" y="862" font-size="16" fill="#e5e5e5">Cross-source correlation layer links: Instana service-ID ↔ SolarWinds node-ID ↔ Zabbix host-ID ↔ Aria VM-ID</text>
-    <text x="180" y="888" font-size="16" fill="#e5e5e5">AI-augmented natural-language query interface (ai_service.py · ai_assistant.db) — CANDIDATE novel TTP, N=1</text>
-    <text x="180" y="914" font-size="16" fill="#fb923c" font-weight="700">Hosted on operator-OWNED DigitalOcean 209.38.205.158 (Frankfurt) — alive at investigation date 2026-05-24</text>
+    <rect x="80" y="700" width="840" height="230" rx="8" fill="#1a1a1a" stroke="#dc2626" stroke-width="2"/>
+    <rect x="80" y="700" width="840" height="46" rx="8" fill="#dc2626"/>
+    <rect x="80" y="734" width="840" height="12" fill="#dc2626"/>
+    <text x="100" y="730" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">ARPA KORELASYON MOTORU — OPERATOR-BUILT CROSS-SOURCE ETL</text>
+    <text x="100" y="784" font-size="18" font-weight="700" fill="#ffffff">Operator's analytics platform (Python + TimescaleDB + Neo4j + Redis)</text>
+    <text x="100" y="814" font-size="16" fill="#e5e5e5">5 systemd daemons (arpa-autolearn · arpa-continuous · arpa-daemon · arpa-instana-api · arpa-parallel)</text>
+    <text x="100" y="838" font-size="16" fill="#e5e5e5">Continuous 5-minute polling cadence across all four sources · production-grade ETL</text>
+    <text x="100" y="862" font-size="16" fill="#e5e5e5">Cross-source correlation layer links: Instana service-ID ↔ SolarWinds node-ID ↔ Zabbix host-ID ↔ Aria VM-ID</text>
+    <text x="100" y="888" font-size="16" fill="#e5e5e5">AI-augmented natural-language query interface (ai_service.py · ai_assistant.db) — CANDIDATE novel TTP, N=1</text>
+    <text x="100" y="914" font-size="16" fill="#fb923c" font-weight="700">Hosted on operator-OWNED DigitalOcean 209.38.205.158 (Frankfurt) — alive at investigation date 2026-05-24</text>
   </g>
 
   <!-- =========== Connector to outcome =========== -->
@@ -102,15 +102,15 @@
 
   <!-- =========== OUTCOME — Unified Topology + Victim Impact (deep red side-rail, endgame) =========== -->
   <g filter="url(#cardShadow)">
-    <rect x="160" y="980" width="680" height="200" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
-    <rect x="160" y="980" width="680" height="46" rx="8" fill="#7f1d1d"/>
-    <rect x="160" y="1014" width="680" height="12" fill="#7f1d1d"/>
-    <text x="180" y="1010" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">OUTCOME — UNIFIED VICTIM TOPOLOGY VIEW</text>
-    <text x="180" y="1064" font-size="22" font-weight="700" fill="#ffffff">7,552-element unified topology graph of Türkiye Sigorta's internal infrastructure</text>
-    <text x="180" y="1092" font-size="16" fill="#e5e5e5">1,859 hosts cross-correlated · host-to-host + host-to-application + application-to-application links</text>
-    <text x="180" y="1116" font-size="16" fill="#e5e5e5">Partner-ecosystem visibility: Halkbank · ZiraatBank · VakifEmeklilik · SBM · TARSIM · DASK · Güneş Sigorta</text>
-    <text x="180" y="1142" font-size="16" fill="#fb923c" font-weight="700">Operator's view ≈ privileged internal admin — without ever compromising a single victim endpoint</text>
-    <text x="180" y="1166" font-size="15" fill="#cccccc">Sustained over 73+ days of documented activity · credential-rotation timeline IS the remediation timeline</text>
+    <rect x="80" y="980" width="840" height="200" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="80" y="980" width="840" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="80" y="1014" width="840" height="12" fill="#7f1d1d"/>
+    <text x="100" y="1010" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">OUTCOME — UNIFIED VICTIM TOPOLOGY VIEW</text>
+    <text x="100" y="1064" font-size="18" font-weight="700" fill="#ffffff">7,552-element unified topology graph of Türkiye Sigorta's internal infrastructure</text>
+    <text x="100" y="1092" font-size="16" fill="#e5e5e5">1,859 hosts cross-correlated · host-to-host + host-to-application + application-to-application links</text>
+    <text x="100" y="1116" font-size="16" fill="#e5e5e5">Partner-ecosystem visibility: Halkbank · ZiraatBank · VakifEmeklilik · SBM · TARSIM · DASK · Güneş Sigorta</text>
+    <text x="100" y="1142" font-size="16" fill="#fb923c" font-weight="700">Operator's view ≈ privileged internal admin — without ever compromising a single victim endpoint</text>
+    <text x="100" y="1166" font-size="15" fill="#cccccc">Sustained over 73+ days of documented activity · credential-rotation timeline IS the remediation timeline</text>
   </g>
 
   <!-- =========== FOOTER =========== -->
