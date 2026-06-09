@@ -36,33 +36,25 @@ ioc_highlights:
 
 ## Bottom Line Up Front
 
-A misconfigured open directory leaked the operator's home filesystem, including co-located Claude Code (`~/.claude/`) and OpenClaw (`~/.openclaw/`) installations. The smoking-gun artifact is the operator's customized permission allowlist: seven pre-approved entries that collectively describe the full OpenClaw install-and-run chain, executed by Claude Code without any safety-prompt interruption.
+A Korean operator pre-approved an `openclaw.ai` installer in Claude Code's permission allowlist (`~/.claude/settings.local.json`), silencing every safety prompt for the full OpenClaw install-and-run chain. Seven pre-authorized entries — recovered from the operator's own open-directory exposure (`221.150.15.104`, Korea Telecom) — describe that chain end to end. This is the parent investigation's first DEFINITE artifact-level evidence of an operator deliberately customizing an AI-agent CLI's safety-prompt mechanism to streamline toolkit deployment.
 
-This is the parent investigation's first DEFINITE artifact-level evidence of an operator deliberately pre-approving an AI-agent CLI's safety-prompt mechanism to streamline toolkit deployment. No malware binary was extracted; no victims were observed. The defender-relevant finding is the **hunt anchor**: any `~/.claude/settings.local.json` whose `permissions.allow` array contains `curl ... | bash`, global-npm-install-of-unfamiliar-package, or local-listener-bring-up entries is a high-priority finding regardless of which specific tooling is referenced.
+No malware binary was extracted and no victims were observed; the captured artifact is the operator's tradecraft footprint. The defender-relevant finding is the **hunt anchor**: any `~/.claude/settings.local.json` whose `permissions.allow` array pre-approves `curl ... | bash`, a global npm install of an unfamiliar package, or a local-listener bring-up is a high-priority finding regardless of the specific tooling named (Section 4.2).
 
 ---
 
 ## 1. Executive Summary
 
-This report documents Case 4 of the parent investigation *OpenDirectory - AI-Agent-Frameworks - 2026-05-23*. The case answers a specific question: **how do AI-augmented operators reduce the safety friction of running attack-adjacent toolchains through mainstream AI-agent CLIs?** The captured artifact — the operator's customized `~/.claude/settings.local.json` — gives the first publicly-documented answer to that question at the artifact level.
+An operator pre-approving an `openclaw.ai` installer in Claude Code's permission allowlist is the first DEFINITE artifact-level answer to a question the parent investigation could previously only pose: **how do AI-augmented operators silence the safety friction of running attack-adjacent toolchains through mainstream AI-agent CLIs?** The captured `~/.claude/settings.local.json` is the operator's actual on-disk configuration — not a researcher's reconstruction of a hypothesized attack.
 
-### What Was Found
+What was found, each detailed in its home section:
 
-An open directory at `http://221.150.15.104:8080/` indexed by Hunt.io on 2026-03-11 exposed the operator's home filesystem, including:
-- A complete Anthropic Claude Code installation under `~/.claude/` (Claude Code is Anthropic's command-line AI agent CLI)
-- A complete OpenClaw installation under `~/.openclaw/` (OpenClaw is a third-party AI-agent framework distributed via `openclaw.ai` and the npm registry)
-- The operator's **customized `~/.claude/settings.local.json`** — 442 bytes, downloadable, with seven pre-approved commands in its `permissions.allow` array
+- **The smoking-gun artifact** — a 442-byte, downloadable `~/.claude/settings.local.json` whose seven-entry `permissions.allow` array pre-authorizes Claude Code to run the full OpenClaw bring-up chain (environment probe → `curl ... | bash` install → global npm install → onboarding → docs fetch → gateway listener on TCP 18789 → browser UI launch) with no safety prompt. The operator pre-clicked "Always allow" for the entire workflow before any session began (full JSON and per-entry breakdown in Section 4.1).
+- **The permission-allowlist-customization TTP** — operator misuse of a documented Claude Code feature, not a vulnerability. The mechanism, the weaponization, and the file-level detection signal are dissected in Section 4.2 (maps to T1562.001).
+- **Co-located Claude Code + OpenClaw architecture** — the mainstream agent CLI glued to a side-loaded agent framework, a pattern the parent investigation also observed in Case 2 (Section 4.3).
+- **Reproducible defender hunt anchor** — the file itself is the detection signal, and it generalizes: the same hunt catches operator-customized allowlists pointing at *any* side-loaded toolkit, not just OpenClaw (Sections 7–8).
+- **Operator OPSEC paradox** — the operator who carefully tuned the allowlist exposed the whole home directory to the public internet, the recurring "AI-integrated mature operator" profile across the parent investigation (Section 6).
 
-The seven entries collectively pre-authorize Claude Code to (1) fetch and execute the OpenClaw installer via `curl ... | bash`, (2) probe the local environment for Node/npm/brew/pnpm, (3) globally install OpenClaw via npm, (4) run OpenClaw's onboarding flow, (5) fetch the OpenClaw documentation site, (6) start the OpenClaw gateway listener on TCP port 18789, and (7) open the gateway web UI in the operator's default browser. The operator has pre-clicked "Always allow" for the entire OpenClaw bring-up workflow, in advance, before any Claude Code session begins.
-
-### Why This Threat Is Significant
-
-The parent investigation had identified a gap: no prior publicly-documented examples existed of an attacker artifact-level tampering with an AI-agent CLI's per-command safety prompt. This case fills that gap. The defender community had hypothesized this attack pattern based on the design of Claude Code's permission model; this report documents an in-the-wild operator implementation.
-
-Key differentiators that make this case notable:
-- **Artifact-level evidence, not theoretical capability.** The captured `settings.local.json` is the operator's actual on-disk configuration, not a security researcher's reconstruction.
-- **Reproducible defender hunt anchor.** The file itself is the detection signal; defenders can sweep their developer-class endpoints for `~/.claude/settings.local.json` content matching the documented patterns regardless of whether the operator is targeting OpenClaw, some other tool, or a completely different attack chain.
-- **Operator OPSEC paradox.** The same operator who carefully customized the allowlist exposed the entire home directory to the public internet via an open-directory misconfiguration. Allowlist sophistication coexists with residential-ISP exposure — a recurring "AI-integrated mature operator" profile across the parent investigation.
+No malware binary was extracted and no victims were observed.
 
 ### Key Risk Factors
 
@@ -89,45 +81,45 @@ Key differentiators that make this case notable:
 
 ### Threat Actor
 
-The operator is tracked as **UTA-2026-015** *(an internal tracking label used by The Hunters Ledger — see Section 6)*. Confidence is **LOW (55%)**. The strongest attribution signal is the Korean-language curator label from Hunt.io and the Korea Telecom AS4766 residential exposure; the captured `settings.local.json` itself contains only English text and provides no independent attribution corroboration. No clustering with publicly-named threat actors was identified. **Disposition status:** The operator's residential exposure at `221.150.15.104:8080` remained reachable as of investigation close (2026-05-23); no vendor takedown action applies to this tradecraft-observation case, which has no named victim and no vendor-actionable artifact requiring removal.
+The operator is tracked as **UTA-2026-015** *(an internal tracking label used by The Hunters Ledger — see Section 6)* at **LOW (55%)** confidence. The strongest signals are Hunt.io's Korean-language curator label and the Korea Telecom AS4766 residential exposure; the `settings.local.json` content is English-only and corroborates neither, and no clustering with named threat actors was found. **Disposition:** the residential exposure at `221.150.15.104:8080` remained reachable at investigation close (2026-05-23). No vendor takedown applies — this tradecraft-observation case has no named victim and no removable artifact (Section 6).
 
 ### For Technical Teams
 
-Immediate priorities for SOC and threat-hunting teams:
+SOC and threat-hunting priorities:
 
-- **Filesystem hunt** — Inventory `~/.claude/settings.local.json` (and `<project>/.claude/settings.local.json`) presence and content across developer-class and admin-class endpoints. The detection rule file (see Section 8) provides ready-to-deploy YARA and Sigma patterns. Coverage starts at Section 4.1 and Section 4.2.
-- **Network egress monitoring** — Add `openclaw.ai`, `docs.openclaw.ai`, and `lightmake.site` to DNS-monitoring watchlists. Coverage in Section 7 IOC summary.
-- **Listening-port inventory** — Surface TCP port `18789` bindings on developer-class endpoints. Coverage in Section 4.5.
-- **Tool-specific detection generalization** — The technique generalizes beyond OpenClaw. The hunt criteria documented in Section 4.2 catch any operator-customized allowlist of the same shape, not just this specific operator. Coverage in Section 8.
-- **Disclosure coordination** — Anthropic and OpenClaw maintainers have been notified via the parent investigation's vendor notification process. No customer-side disclosure work is recommended at this report's scope.
+- **Filesystem hunt** — inventory `~/.claude/settings.local.json` and `<project>/.claude/settings.local.json` presence and content across developer- and admin-class endpoints, using the ready-to-deploy YARA and Sigma patterns in the detection file (Sections 4.1, 4.2, 8).
+- **Network egress monitoring** — add `openclaw.ai`, `docs.openclaw.ai`, and `lightmake.site` to DNS watchlists (Section 7).
+- **Listening-port inventory** — surface TCP port `18789` bindings on developer-class endpoints (Section 4.5).
+- **Detection generalization** — the same hunt criteria catch any operator-customized allowlist of this shape, not just OpenClaw (Sections 4.2, 8).
+- **Disclosure** — Anthropic and OpenClaw maintainers were notified via the parent investigation's vendor process; no customer-side disclosure is in scope.
 
 ---
 
 ## 2. Campaign Context
 
-This report is a **capsule sub-report** of the parent investigation *OpenDirectory - AI-Agent-Frameworks - 2026-05-23*. Case 4 within that parent investigation captured the Korean operator's residential exposure as one of multiple cases documenting how AI-augmented operators integrate mainstream AI-agent CLIs (Claude Code, Gemini CLI) with side-loaded dual-use agent frameworks (OpenClaw, Hermes Agent). Section 4.4 of the umbrella report provides the capsule-depth coverage; this sub-report expands that coverage to the artifact level without contradicting the umbrella framing.
+This is a **capsule sub-report** of the parent investigation *OpenDirectory - AI-Agent-Frameworks - 2026-05-23*, expanding to the artifact level what umbrella Section 4.4 covers at capsule depth. Case 4 captured the Korean operator's residential exposure as one of several cases on how AI-augmented operators pair mainstream AI-agent CLIs (Claude Code, Gemini CLI) with side-loaded dual-use frameworks (OpenClaw, Hermes Agent). The parent owns the cross-case framing; this sub-report does not restate it (see the [parent report](/reports/ai-agent-frameworks-2026-05-23/)).
 
 ### Discovery Method
 
-Hunt.io's open-directory crawler indexed the operator's exposed home directory at `http://221.150.15.104:8080/` on **2026-03-11**. The Hunt.io curator labelled the host "Korean operator" based on regional ISP and language-environment indicators. The case was selected during the parent investigation's host-prioritization review on 2026-05-23, which prioritized hosts exhibiting co-located mainstream + side-loaded AI-agent installations.
+Hunt.io's open-directory crawler indexed the operator's exposed home directory at `http://221.150.15.104:8080/` on **2026-03-11**, with the curator labelling the host "Korean operator" on regional-ISP and language-environment indicators. The parent investigation's host-prioritization review selected the case on 2026-05-23, prioritizing hosts with co-located mainstream + side-loaded AI-agent installations.
 
 ### Named-Victim Status
 
-**None confirmed.** The captured filesystem evidence contains no victim identities, no exfiltrated data, no email targets, no compromised credentials, and no traffic logs against named victim infrastructure. The operator's `~/.claude/history.jsonl` (Claude Code session command history) and `~/.claude/projects/` (transcript directory) were deliberately not pulled per The Hunters Ledger credential-redaction discipline — pulling those files risked exposing the operator's session contents in a manner that risks surfacing third-party identities when the operator has used Claude Code against specific named targets. The decision to skip session-content extraction is consistent with the project standard: defenders gain nothing operationally usable from operator session transcripts in a tradecraft-observation case, and the privacy risk to incidentally-mentioned third parties is non-trivial.
+**None confirmed.** The captured filesystem contains no victim identities, exfiltrated data, email targets, compromised credentials, or traffic logs against named infrastructure. The operator's `~/.claude/history.jsonl` (session command history) and `~/.claude/projects/` (transcript directory) were deliberately not pulled per The Hunters Ledger credential-redaction discipline — operator session transcripts can surface incidentally-mentioned third-party identities and yield defenders nothing operationally usable in a tradecraft-observation case (Section 10.2).
 
 ### Operator Residential Exposure Pattern
 
-The host is a **direct residential exposure**. AS4766 is Korea Telecom, the largest Korean ISP, and the IP block is consistent with a consumer broadband connection rather than a VPS, cloud-rented infrastructure, or anonymization tunnel exit. The operator did not use VPN, Tor, or proxy infrastructure to obscure the source — the open-directory was reachable directly at the operator's home IP for at least the 73-day window between Hunt.io first-seen (2026-03-11) and investigation close (2026-05-23). This residential exposure pattern is recurrent across the parent investigation's "AI-integrated mature operator" class — operators who exhibit allowlist-tuning sophistication coexisting with carelessness about wider OPSEC.
+The host is a **direct residential exposure**: AS4766 Korea Telecom, the largest Korean ISP, on an IP block consistent with consumer broadband rather than a VPS, cloud-rented host, or tunnel exit. The operator used no VPN, Tor, or proxy — the open directory was reachable directly at the home IP for the 73-day window between Hunt.io first-seen (2026-03-11) and investigation close (2026-05-23). This pattern recurs across the parent investigation's "AI-integrated mature operator" class: allowlist-tuning sophistication coexisting with carelessness about wider OPSEC.
 
 ### Scope Boundary
 
-This sub-report covers **only the operator tradecraft captured in the `settings.local.json` artifact** and its immediate filesystem context. Cross-cutting findings from the parent investigation (operator-class taxonomy, AI-vendor distribution analysis, the "5 novel TTPs" pattern) are out of scope and remain in the umbrella report. Where helpful, this sub-report references umbrella sections by number; it does not restate umbrella analysis.
+This sub-report covers **only the operator tradecraft in the `settings.local.json` artifact** and its immediate filesystem context. Parent-investigation cross-cutting findings (operator-class taxonomy, AI-vendor distribution, the "5 novel TTPs" pattern) remain in the umbrella report and are referenced by number, not restated.
 
 ---
 
 ## 3. Technical Classification
 
-This case is **not a malware analysis report.** It is an **operator-tradecraft analysis report.** The captured evidence is not a malicious binary, an exploit payload, or a packed dropper — it is a 442-byte JSON configuration file that documents how the operator has reconfigured a mainstream AI-agent CLI to lower safety friction.
+This is an **operator-tradecraft analysis report, not a malware analysis report.** The captured evidence is not a malicious binary, exploit payload, or packed dropper — it is a 442-byte JSON configuration file documenting how the operator reconfigured a mainstream AI-agent CLI to lower safety friction.
 
 ### Classification Attributes
 
@@ -159,27 +151,22 @@ This case is **not a malware analysis report.** It is an **operator-tradecraft a
 
 ### Why This Is a Capsule-Depth Case Rather Than a Full Malware Analysis
 
-Standard Stages 1, 2-research, 2-infrastructure, and 3 of The Hunters Ledger workflow were intentionally skipped:
-
-- **No malware binary** to reverse-engineer or sandbox. The smoking-gun artifact is a 442-byte text configuration file with no executable code.
-- **Prior-art research is complete** in the parent investigation umbrella; no additional research-analyst work is required for this single sub-case.
-- **Infrastructure has no pivot value.** The host is a single residential Korea Telecom IP. Infrastructure-pivoting playbooks against residential ISPs return no actor-clustering signal.
-- **Attribution is already assigned.** UTA-2026-015 LOW (55%) was determined in the parent investigation; the sub-report reflects that determination without re-running the full attribution workflow.
+The standard malware-analysis stages do not apply: there is no binary to reverse or sandbox, prior-art research is complete in the parent umbrella, a single residential Korea Telecom IP carries no infrastructure-pivot value, and attribution (UTA-2026-015 LOW 55%) was already assigned in the parent investigation. Appendix B expands each point.
 
 ### Architectural Pattern Summary
 
 The operator's host runs two AI-agent CLIs side-by-side:
 
-1. **Anthropic Claude Code** as the human-facing AI assistant (chat, planning, coding workflow). Claude Code is the mainstream agent CLI — it provides the natural-language interface and the underlying reasoning capability via Anthropic's Claude models.
-2. **OpenClaw** as a local-gateway service on TCP port 18789. OpenClaw is an AI-agent framework that exposes additional skills and capabilities to the operator's agent workflow that mainstream Claude Code does not natively support.
+1. **Anthropic Claude Code** as the human-facing AI assistant (chat, planning, coding) — the mainstream agent CLI providing the natural-language interface and reasoning via Anthropic's Claude models.
+2. **OpenClaw** as a local-gateway service on TCP port 18789 — an AI-agent framework exposing skills Claude Code does not natively support.
 
-The seven-entry `permissions.allow` array is the **glue** between the two: it is the operator's mechanism for telling Claude Code "install and run OpenClaw without asking me for confirmation." Section 4 documents the artifact and its mechanism in technical depth.
+The seven-entry `permissions.allow` array is the **glue**: the operator's mechanism for telling Claude Code "install and run OpenClaw without asking me for confirmation." Section 4 documents the artifact and mechanism in depth.
 
 ---
 
 ## 4. Technical Capabilities Deep-Dive
 
-This section examines the smoking-gun artifact in detail, the permission-prompt bypass mechanism it abuses, the co-located Claude Code + OpenClaw architecture, the OpenClaw distribution ecosystem the allowlist points at, and the gateway service on port 18789 that the allowlist authorizes Claude Code to start.
+This section examines the smoking-gun artifact, the permission-prompt bypass it abuses, the co-located Claude Code + OpenClaw architecture, the OpenClaw distribution ecosystem the allowlist points at, and the gateway service on port 18789 the allowlist authorizes Claude Code to start.
 
 ### 4.1 The Smoking-Gun Artifact
 
@@ -201,7 +188,7 @@ The full content of the operator's `~/.claude/settings.local.json` (442 bytes, U
 }
 ```
 
-The schema is Anthropic Claude Code's documented per-directory and global permission-allowlist format. The single top-level key `permissions` contains a sub-object whose `allow` array enumerates exact command strings that the operator has elected to pre-approve.
+The schema is Anthropic Claude Code's documented per-directory and global permission-allowlist format: the single top-level key `permissions` contains a sub-object whose `allow` array enumerates the exact command strings the operator pre-approved.
 
 **Seven-entry breakdown:**
 
@@ -215,9 +202,9 @@ The schema is Anthropic Claude Code's documented per-directory and global permis
 | 6 | `Bash(openclaw gateway --port 18789)` | Start the OpenClaw local gateway listener on TCP port 18789 | Local service / proxy bring-up |
 | 7 | `Bash(open http://127.0.0.1:18789/)` | Open the OpenClaw gateway web UI in the operator's default browser | UI activation (macOS-specific — `open` is the macOS command for "open the default app for this URL") |
 
-**The macOS signal.** Entry 7 uses the `open` command — the macOS equivalent of Linux `xdg-open` or Windows `start`. This strongly suggests the operator's host is macOS or a macOS-compatible environment. The presence of `~/.openclaw/completions/openclaw.ps1` (a PowerShell completion script) is initially confusing — it yields three candidate readings: (a) the operator uses PowerShell-on-macOS, (b) OpenClaw ships the PowerShell completion as part of its standard distribution regardless of host OS, or (c) the operator has also installed OpenClaw on a separate Windows host and the two installations have synced via some mechanism. The most parsimonious reading is (b): the file is part of OpenClaw's standard install layout, not affirmative evidence the operator runs PowerShell on this host. The macOS hypothesis remains the higher-confidence read based on entry 7.
+**The macOS signal.** Entry 7's `open` command — the macOS equivalent of Linux `xdg-open` or Windows `start` — strongly suggests a macOS or macOS-compatible host. The co-located `~/.openclaw/completions/openclaw.ps1` (a PowerShell completion script) yields three candidate readings: (a) the operator runs PowerShell-on-macOS, (b) OpenClaw ships the PowerShell completion in its standard distribution regardless of host OS, or (c) the operator also runs OpenClaw on a separate Windows host that synced here. Reading (b) is most parsimonious — the file is standard install layout, not affirmative evidence of PowerShell on this host — so the macOS read (entry 7) stays higher-confidence.
 
-**The collective effect.** The seven entries describe a complete sequence: probe the environment → fetch the installer → run the installer → globally install via npm (redundant with the curl install but pre-authorized as an alternative path) → run onboarding → fetch documentation → start the gateway service → open the UI. The operator has compressed what would normally be a multi-step interactive workflow with safety prompts at every step into a single pre-approved chain.
+**The collective effect.** The seven entries form one complete sequence — probe, install (via both `curl | bash` and a redundant npm path), onboard, fetch docs, start the gateway, open the UI. The operator compressed what would normally be a multi-step interactive workflow, with a safety prompt at every step, into a single pre-approved chain.
 
 ### 4.2 The Permission-Allowlist Bypass Mechanism
 
@@ -225,29 +212,29 @@ The schema is Anthropic Claude Code's documented per-directory and global permis
 
 #### How Claude Code's Per-Command Safety Prompt Normally Works
 
-Claude Code, like other AI-agent CLIs that can execute arbitrary local commands, implements a safety-prompt mechanism before running potentially-dangerous operations. When the AI agent proposes to run a shell command, fetch a URL, or perform any action in a user-configurable category (Bash, WebFetch, file edit, etc.), Claude Code surfaces the proposed action to the operator and waits for an explicit approval ("yes/no") response. This is the per-command safety prompt.
+Claude Code, like other AI-agent CLIs that execute arbitrary local commands, prompts before potentially-dangerous operations. When the agent proposes a shell command, a URL fetch, or any action in a user-configurable category (Bash, WebFetch, file edit), Claude Code surfaces it to the operator and waits for an explicit yes/no.
 
-The prompt is the user's safety gate. It is the single point where an operator can intervene if the AI proposes something unintended, malicious, or simply unwise. The prompt converts an autonomous AI agent into a supervised one — the user reviews and approves each potentially-impactful action.
+This per-command prompt is the user's safety gate — the single point to intervene if the AI proposes something unintended, malicious, or unwise. It converts an autonomous agent into a supervised one: the user reviews and approves each impactful action.
 
 #### How the Allowlist Pre-Approval Mechanism Works
 
-The `settings.local.json` `permissions.allow` array is documented as a UX convenience: if a user knows in advance that they want a specific exact command string approved (for example, a repeated lint command in a development workflow), they can list that exact string in the allowlist. Claude Code then skips the prompt for matches against allowlist entries and runs the command directly.
+The `permissions.allow` array is a documented UX convenience: a user who knows in advance they want a specific command approved (for example, a repeated lint command) lists that exact string, and Claude Code thereafter skips the prompt for matches and runs the command directly.
 
-The semantic is **exact-match against the command string** — entry `Bash(npm i -g openclaw)` will skip the prompt for that specific command, but not for `Bash(npm i -g something-else)` and not for `Bash(npm install openclaw)`. The operator must enumerate each exact form they want pre-approved.
+The semantic is **exact-match against the command string** — `Bash(npm i -g openclaw)` skips the prompt for that exact command but not for `Bash(npm i -g something-else)` or `Bash(npm install openclaw)`. The operator must enumerate each exact form to pre-approve.
 
-The mechanism design choice is reasonable for the intended use case (repeated dev-loop commands a developer types dozens of times per day). It is the operator who turns it into a safety-control bypass by enumerating the install-and-run sequence for a side-loaded toolkit before the session begins.
+The design is reasonable for its intended use (dev-loop commands typed dozens of times a day). The operator turns it into a safety-control bypass by enumerating a side-loaded toolkit's install-and-run sequence before the session begins.
 
 #### How the Operator Weaponizes the Mechanism
 
-The operator's strategy is straightforward: write the `settings.local.json` ahead of time, populate the `permissions.allow` array with every command needed to fetch and run OpenClaw, save the file, and start the Claude Code session. From that point on, when the operator asks Claude Code to install OpenClaw, Claude Code will run the entire seven-step chain without surfacing a single safety prompt.
+The operator's strategy is straightforward: write `settings.local.json` ahead of time, populate `permissions.allow` with every command needed to fetch and run OpenClaw, save it, and start the session. Thereafter, asking Claude Code to install OpenClaw runs the entire seven-step chain with no safety prompt.
 
-The defender-relevant observation is that this is **not a Claude Code vulnerability** — it is operator misuse of a documented feature. Anthropic's per-command safety-prompt mechanism works as designed. The allowlist mechanism works as designed. The operator's `settings.local.json` file is the artifact that demonstrates the misuse pattern. The defensive opportunity is not to fix Claude Code (it is already correct) but to **hunt for the artifact** on hosts where the operator has applied the technique.
+The defender-relevant point: this is **not a Claude Code vulnerability** but operator misuse of a documented feature — both the safety prompt and the allowlist work as designed. The `settings.local.json` file is the artifact that demonstrates the misuse, so the defensive opportunity is not to fix Claude Code (already correct) but to **hunt for the artifact** wherever the operator applied the technique.
 
 #### Why This Is the First DEFINITE Artifact-Level Evidence
 
-The defender community has discussed the theoretical risk of attacker-customized AI-agent allowlists since Claude Code's permission model was first published. What was missing was an **in-the-wild operator-customized example** (in the surveyed public threat-intel corpus as of 2026-05-23) that defenders can point to as concrete documentation of "what the abuse pattern looks like on disk."
+The defender community has discussed the theoretical risk of attacker-customized AI-agent allowlists since Claude Code's permission model was published. What was missing — in the surveyed public threat-intel corpus as of 2026-05-23 — was an **in-the-wild operator-customized example** showing what the abuse pattern looks like on disk.
 
-This case provides that example. The 442-byte file is downloadable, the seven-entry sequence is reproducible by any defender who reads it, and the pattern generalizes immediately — the same hunt approach finds operator-customized allowlists pointing at *any* side-loaded toolkit, not just OpenClaw. Sections 7 (IOCs) and 8 (detection) translate the artifact into concrete defender hunt queries.
+This case provides it: a downloadable 442-byte file, a seven-entry sequence reproducible by any defender who reads it, and a pattern that generalizes immediately to operator-customized allowlists pointing at *any* side-loaded toolkit. Sections 7 and 8 translate the artifact into concrete hunt queries.
 
 #### Detection Strategy at the File Level
 
@@ -262,19 +249,19 @@ The most reliable detection signal is the **combination** of:
    - Local listener invocation patterns (`Bash(<tool> --port <N>)`, `Bash(<tool> serve)`, `Bash(<tool> gateway ...)` that bring up a listening service)
    - Direct browser-launch commands targeting `127.0.0.1` URLs (`Bash(open http://127.0.0.1:<N>/)`, `Bash(xdg-open http://localhost:<N>/)`)
 
-The combination is more reliable than any single signal — defenders who hunt only for `curl | bash` patterns will catch legitimate developer workflows (e.g., a developer pre-approving a known internal-tooling installer). Defenders who hunt only for the file path will catch every Claude Code user. The combination catches operators who have configured a pre-approved install-and-run chain for unfamiliar software.
+The combination beats any single signal: hunting `curl | bash` alone catches legitimate workflows (a developer pre-approving a known internal-tooling installer); hunting the file path alone catches every Claude Code user. The combination catches operators who pre-approved an install-and-run chain for unfamiliar software.
 
 ### 4.3 Co-Located Architecture (Claude Code + OpenClaw Side-by-Side)
 
-The exposed home directory contains both `~/.claude/` (Anthropic Claude Code) and `~/.openclaw/` (OpenClaw). The architectural pattern observed:
+The operator's tool is not Claude Code or OpenClaw but **both, integrated** — and the exposed home directory contains both `~/.claude/` and `~/.openclaw/`. The observed pattern:
 
-1. **Claude Code** is the human-facing layer. The operator chats with Claude Code, requests tasks, reviews proposed actions (or in the pre-approved cases, doesn't review them), and consumes Claude's outputs. The operator's mental model is "I am working with Claude."
-2. **OpenClaw** runs as a local gateway service on port 18789. Per the allowlist entry 6, Claude Code starts OpenClaw via `Bash(openclaw gateway --port 18789)`. Once started, OpenClaw provides additional skills and capabilities to the operator's workflow.
-3. **The gateway pattern** means OpenClaw is positioned as a local backend that other tools (including Claude Code itself, in certain integration modes) can connect to. The operator's workflow is mediated by both — Claude Code provides reasoning and natural language; OpenClaw provides the extended skill set.
+1. **Claude Code** is the human-facing layer. The operator chats, requests tasks, reviews proposed actions (or, in the pre-approved cases, doesn't), and consumes Claude's outputs. The mental model is "I am working with Claude."
+2. **OpenClaw** runs as a local gateway on port 18789, started by Claude Code via allowlist entry 6 (`Bash(openclaw gateway --port 18789)`) and providing additional skills to the workflow.
+3. **The gateway pattern** positions OpenClaw as a local backend other tools (including Claude Code itself, in some integration modes) connect to. Claude Code supplies reasoning and natural language; OpenClaw supplies the extended skill set.
 
-This co-location is the architectural model the parent investigation has independently observed in Case 2 (a Turkish operator targeting a regional insurance company with a similar Gemini CLI + Hermes Agent pairing) and in this case. The pattern is: combine a polished mainstream agent CLI with a dual-use side-loaded agent toolkit. The mainstream CLI provides operator polish; the side-loaded toolkit provides capabilities the mainstream CLI does not natively support.
+The parent investigation independently observed this same model in Case 2 (a Turkish operator targeting a regional insurance company with a Gemini CLI + Hermes Agent pairing): a polished mainstream CLI combined with a dual-use side-loaded toolkit that supplies capabilities the mainstream CLI lacks.
 
-**Why this matters at the architecture level.** Defenders who think "the operator's AI tool is Claude Code" or "the operator's AI tool is OpenClaw" — singular tool framing — will misjudge the threat surface. The operator's tool is **both, integrated**. Defenders need to inventory both, monitor both, and understand the integration pattern. A defensive posture that allows mainstream AI CLIs but blocks all side-loaded toolkits will fail to catch the integration pattern unless the side-loaded toolkit specifically is detected.
+**Why this matters.** Singular-tool framing misjudges the threat surface — defenders must inventory and monitor both and understand the integration. A posture that allows mainstream AI CLIs but blocks all side-loaded toolkits fails here unless the side-loaded toolkit itself is detected.
 
 ### 4.4 The OpenClaw Distribution Ecosystem
 
@@ -286,36 +273,36 @@ The allowlist references three distribution channels for OpenClaw, all owned or 
 | npm registry | `npm i -g openclaw` (package name `openclaw`) | Global npm install — alternative path to the shell installer. Published to the public npmjs.com registry. |
 | Documentation host | `docs.openclaw.ai` (referenced via Claude Code `WebFetch`) | Operator-pre-authorized doc fetch. The defender signal here is that Claude Code is being used to consume OpenClaw documentation, not just to install and run the tool — the operator is treating OpenClaw as a capability they will use via Claude Code's natural-language interface, with OpenClaw's docs as a contextual reference. |
 
-The parent investigation additionally documents **`lightmake.site`** as an OpenClaw-adjacent infrastructure component referenced in the broader OpenClaw ecosystem's hosting-and-egress signature. It was observed in the umbrella report's multi-case OpenClaw ecosystem infrastructure analysis at MODERATE confidence — not in the Case 4 artifact itself. `lightmake.site` does not appear in the captured Case 4 allowlist, but is included in the IOC feed (see Section 7) as a documented OpenClaw-ecosystem domain that defenders should monitor alongside the Case-4-direct indicators; its evidentiary basis for this specific case is thinner than the DEFINITE-confidence Case 4 domains.
+The parent investigation additionally documents **`lightmake.site`** as an OpenClaw-adjacent infrastructure component in the ecosystem's hosting-and-egress signature, observed at MODERATE confidence in the umbrella's multi-case analysis — **not** in the Case 4 artifact itself. It does not appear in the captured allowlist, but is included in the IOC feed (Section 7) as a documented OpenClaw-ecosystem domain defenders should monitor alongside the Case-4-direct indicators; its evidentiary basis for this case is thinner than the DEFINITE-confidence Case 4 domains.
 
-**Important framing — OpenClaw's public-distribution status.** OpenClaw is a **publicly-distributed AI-agent framework product.** Its existence and broad availability does not make installing it inherently malicious. The dual-use pattern is similar to other tools (Metasploit, Cobalt Strike, Sliver) that have legitimate-purpose adopters and abusive-use populations.
+**Important framing — OpenClaw's public-distribution status.** OpenClaw is a **publicly-distributed AI-agent framework**; broad availability does not make installing it inherently malicious. The dual-use pattern mirrors tools like Metasploit, Cobalt Strike, and Sliver, which have both legitimate adopters and abusive-use populations.
 
-The defender-relevant finding is **not** "OpenClaw is malware." The defender-relevant finding is the **combination** of:
+The defender-relevant finding is **not** "OpenClaw is malware" but the **combination** of:
 
-- An attacker-customized Claude Code allowlist (the artifact)
-- The specific seven-command pre-approval sequence pointing at OpenClaw
-- The host's broader operator-exposed contents (the open directory, the residential Korea Telecom ISP, the parent investigation's prior-art context tying this profile to operator-class behavior)
+- an attacker-customized Claude Code allowlist (the artifact),
+- the specific seven-command pre-approval sequence pointing at OpenClaw, and
+- the host's broader exposed contents (the open directory, the residential Korea Telecom ISP, the parent investigation's prior-art tying this profile to operator-class behavior).
 
-Any single element in isolation is ambiguous. The combination is the diagnostic signal.
+Any single element is ambiguous; the combination is the diagnostic signal.
 
 ### 4.5 Gateway Service on TCP Port 18789
 
-Allowlist entries 6 and 7 collectively bring up the OpenClaw gateway service. The gateway is OpenClaw's local-control-plane component — it listens on a TCP port and exposes a web UI that the operator interacts with.
+Allowlist entries 6 and 7 bring up the OpenClaw gateway — OpenClaw's local-control-plane component, which listens on a TCP port and exposes a web UI the operator interacts with.
 
-**What the gateway does (from operator-side evidence).** The captured artifact authorizes `Bash(openclaw gateway --port 18789)` and immediately follows it with `Bash(open http://127.0.0.1:18789/)` (open the gateway UI in the default browser). Together, these establish that:
-- The gateway binds to a TCP port (default `18789`)
-- The gateway exposes an HTTP web UI on that port at the root URL `/`
-- The operator's intended next action after bring-up is to interact with the gateway via that web UI
+**What the gateway does (from operator-side evidence).** The artifact authorizes `Bash(openclaw gateway --port 18789)` immediately followed by `Bash(open http://127.0.0.1:18789/)`, which together establish that:
+- the gateway binds to a TCP port (default `18789`),
+- it exposes an HTTP web UI at the root URL `/`, and
+- the operator's intended next action is to interact with that UI.
 
-The captured artifact does not document what the gateway UI **contains** — that would require running OpenClaw and observing the UI directly, which is out of scope for this report (the operator's instance was not analyzed live; only the operator's filesystem was inspected). The umbrella report's broader OpenClaw ecosystem documentation includes some additional context, but is similarly bounded by what is observable from operator-side artifacts.
+The artifact does not document what the gateway UI **contains** — that requires running OpenClaw and observing it live, which is out of scope (only the filesystem was inspected, not the running instance). The umbrella's broader OpenClaw documentation adds some context but is similarly bounded by what operator-side artifacts reveal.
 
 **Defender implications of the gateway.**
 
-- **Listening-port inventory.** TCP port `18789` bound on a developer-class or admin-class endpoint is a candidate signal. The port number is not standardized in any other widely-used service registry, so a 18789-binding is highly specific to OpenClaw's default configuration. (Operators can change the port — `--port` is configurable — but the default is documented and the captured operator's allowlist uses the default.)
-- **Loopback-only scope.** The captured allowlist binds to `127.0.0.1:18789`, the loopback interface — meaning the gateway is reachable only from the host itself, not from the network. This is consistent with OpenClaw's typical deployment model (the gateway mediates between local tools, not network-remote callers). Defenders should not expect to find external port-18789 exposures unless the operator has deliberately bound to `0.0.0.0:18789` or set up a port-forward. The captured artifact has no such evidence.
-- **Process-tree signal.** When the gateway starts via `Bash(openclaw gateway --port 18789)` executed by Claude Code, the process tree on the host will show a Claude Code parent process spawning a Bash subprocess that exec's `openclaw gateway`. Endpoint detection that traces process lineage can flag the pattern: Claude Code → Bash → unfamiliar gateway listener.
+- **Listening-port inventory.** TCP port `18789` on a developer- or admin-class endpoint is a candidate signal — the port is not registered to any other widely-used service, making a binding highly specific to OpenClaw's default config. (`--port` is configurable, but the default is documented and the captured allowlist uses it.)
+- **Loopback-only scope.** The allowlist binds `127.0.0.1:18789`, the loopback interface, so the gateway is reachable only from the host — consistent with OpenClaw mediating between local tools, not remote callers. Expect no external port-18789 exposure unless the operator deliberately bound `0.0.0.0:18789` or set up a port-forward; the artifact shows neither.
+- **Process-tree signal.** When Claude Code starts the gateway, the host's process tree shows Claude Code spawning a Bash subprocess that exec's `openclaw gateway`. Lineage-tracing endpoint detection can flag it: Claude Code → Bash → unfamiliar gateway listener.
 
-**Why this matters at the kill-chain level.** The gateway is the operational hub for the operator's tool integration. Detecting the gateway bring-up — either via the allowlist content scan, the listening-port inventory, or the process-tree lineage — gives defenders multiple independent detection paths against the same underlying operator workflow. Defense-in-depth is achievable here even without any of the individual signals being uniquely diagnostic in isolation.
+**Why this matters at the kill-chain level.** The gateway is the operational hub for the operator's tool integration. Detecting its bring-up via any of three independent paths — allowlist content scan, listening-port inventory, or process-tree lineage — yields defense-in-depth even though no single signal is uniquely diagnostic in isolation.
 
 ---
 
@@ -359,30 +346,30 @@ What would increase confidence:
 
 ### Language Attribution
 
-Per CLAUDE.md ATTRIBUTION CONFIDENCE SCALE language precision, the Korean-language attribution is at LOW confidence and is described as **"weak indicators suggest"** rather than any stronger claim:
+Per CLAUDE.md ATTRIBUTION CONFIDENCE SCALE, the Korean-language attribution is LOW and stated as **"weak indicators suggest"**, no stronger:
 
-- Weak indicators suggest the operator is Korean-speaking, based on (a) Hunt.io's curator-applied "Korean operator" label on the open-directory entry, and (b) the residential Korea Telecom AS4766 hosting.
-- The captured `settings.local.json` content is entirely English-language. No Korean character strings, no Korean comments, no Korean filenames were captured in the artifact itself.
-- Korean-language attribution at LOW confidence does not support any claim about Korean state-affiliated activity, North Korean actors (Lazarus, Kimsuky, ScarCruft), or South Korean criminal-actor clusters. Those associations would require substantially stronger evidence than this case provides.
+- Weak indicators suggest the operator is Korean-speaking, from (a) Hunt.io's curator "Korean operator" label and (b) the residential Korea Telecom AS4766 hosting.
+- The `settings.local.json` content is entirely English — no Korean strings, comments, or filenames in the artifact itself.
+- This LOW-confidence language signal supports no claim of Korean state-affiliated activity, North Korean actors (Lazarus, Kimsuky, ScarCruft), or South Korean criminal clusters; those would require substantially stronger evidence.
 
 ### Operator-Class Taxonomy
 
-UTA-2026-015 fits the **"AI-integrated mature operator"** profile from the parent investigation umbrella's Section 4.10 taxonomy:
+UTA-2026-015 fits the **"AI-integrated mature operator"** profile from the umbrella's Section 4.10 taxonomy:
 
-- **Allowlist tuning sophistication.** The operator wrote a deliberate seven-entry pre-approval sequence covering the full OpenClaw bring-up workflow. This is not the work of an opportunistic scripter — it reflects planning, awareness of Claude Code's permission model, and deliberate friction-reduction.
-- **Side-loaded toolkit adoption.** The operator chose Claude Code + OpenClaw together. Mainstream-only operators would use Claude Code alone; opportunistic operators would not install OpenClaw at all. This combined adoption is characteristic of operators who treat their AI tooling as a deliberate operational stack.
-- **Wider-OPSEC gap.** The same operator exposed the entire home directory to the public internet via an open-directory misconfiguration. Sophisticated operators do not do this. The combination of allowlist-tuning sophistication + residential exposure carelessness is the "mature operator paradox" — competence in one area, complete failure in another.
+- **Allowlist-tuning sophistication.** The deliberate seven-entry sequence covering the full OpenClaw bring-up reflects planning and awareness of Claude Code's permission model — not opportunistic scripting.
+- **Side-loaded toolkit adoption.** Choosing Claude Code + OpenClaw together is characteristic of operators who treat their AI tooling as a deliberate operational stack; mainstream-only operators use Claude Code alone, opportunistic ones never install OpenClaw.
+- **Wider-OPSEC gap.** The same operator exposed the entire home directory via an open-directory misconfiguration — something sophisticated operators do not do. Competence in one area, complete failure in another: the "mature operator paradox."
 
-This paradox is recurrent across the parent investigation's cases. The most parsimonious interpretation is that operators who specialize in AI-augmented offense are early in the discipline's maturity curve — the techniques are novel, the operators are technically capable in their specific niche, but the surrounding OPSEC tradecraft (compartmentalization, infrastructure hygiene, footprint minimization) is not yet caught up. Defenders benefit operationally from this immaturity gap; offenders eventually close it. The window for catching operators via residential-ISP open-directory exposures is finite.
+This paradox recurs across the parent investigation's cases. The parsimonious read: operators specializing in AI-augmented offense are early in the discipline's maturity curve — technically capable in their niche, but with surrounding OPSEC tradecraft (compartmentalization, infrastructure hygiene, footprint minimization) not yet caught up. Defenders benefit from this gap; offenders eventually close it. The window for catching operators via residential-ISP open-directory exposures is finite.
 
 ### What This Assessment Does Not Claim
 
-Per CLAUDE.md ATTRIBUTION CONFIDENCE SCALE, language precision at LOW confidence is "weak indicators suggest" and "insufficient evidence for attribution" beyond that. Specifically:
+At LOW confidence the evidence supports "weak indicators suggest" and no more. Specifically:
 
-- **No state-actor attribution claimed.** The evidence does not support claims of state-sponsored activity, intelligence-service involvement, or alignment with any named APT.
-- **No criminal-cluster attribution claimed.** The evidence does not support claims of involvement in any named criminal cluster (RaaS group, IAB ring, infostealer crew).
-- **No victim attribution claimed.** No victims were observed. The case is tradecraft observation only.
-- **No "first-of-kind operator" claim.** This is the first DEFINITE artifact-level evidence of the allowlist-bypass technique (in the surveyed public threat-intel corpus as of 2026-05-23). It is not necessarily the first operator to use the technique — earlier adopters may exist who were not caught with their home directory exposed.
+- **No state-actor attribution claimed.** The evidence does not support state-sponsored activity, intelligence-service involvement, or alignment with any named APT.
+- **No criminal-cluster attribution claimed.** The evidence does not support involvement in any named criminal cluster (RaaS group, IAB ring, infostealer crew).
+- **No victim attribution claimed.** No victims were observed; the case is tradecraft observation only.
+- **No "first-of-kind operator" claim.** This is the first DEFINITE artifact-level evidence of the allowlist-bypass technique (surveyed public corpus as of 2026-05-23), not necessarily the first operator to use it — earlier adopters may exist who were never caught with an exposed home directory.
 
 ---
 
@@ -400,23 +387,23 @@ Detection rules (YARA, Sigma) covering the file-content patterns documented in S
 
 **[`/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/`](https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/)**
 
-The detection file follows The Hunters Ledger conventions (CC BY-NC 4.0 license, "The Hunters Ledger" author field on all rules, YAML front matter, no body H1 title). Defenders should deploy the rules per their internal detection-engineering processes; this report does not prescribe deployment specifics.
+The detection file follows The Hunters Ledger conventions (CC BY-NC 4.0 license, "The Hunters Ledger" author field on all rules, YAML front matter, no body H1 title). Deploy per your internal detection-engineering processes; this report does not prescribe deployment specifics.
 
 ### Detection Strategy at the Category Level
 
-**Deployment-scope discipline.** On developer-class endpoints (workstations where engineering, DevOps, or data-science staff routinely install third-party CLIs and SDKs), all three paths below will produce a non-trivial false-positive rate — developers legitimately install unfamiliar tools, and some `settings.local.json` allowlist entries reflect normal developer workflow. The highest-signal targets are **server-class endpoints, jump hosts, CI/CD agent nodes, and non-developer workstations** where Claude Code presence is itself anomalous, not just the allowlist content. For confirmed developer-class endpoints, the recommended approach is **allowlist content review** (is this a known-authorized package from a recognized vendor?) rather than automatic blocking or isolation.
+**Deployment-scope discipline.** On developer-class endpoints (where engineering, DevOps, or data-science staff routinely install third-party CLIs), all three paths below carry a non-trivial false-positive rate — developers legitimately install unfamiliar tools, and some allowlist entries reflect normal workflow. Highest-signal targets are **server-class endpoints, jump hosts, CI/CD agent nodes, and non-developer workstations**, where Claude Code presence is itself anomalous. For confirmed developer endpoints, prefer **allowlist content review** (is this a known-authorized package from a recognized vendor?) over automatic blocking.
 
-The detection strategy is **three independent paths against the same operator workflow**, so defenders catch the activity even if any one path is missed:
+The strategy is **three independent paths against the same workflow**, so defenders catch the activity even if one path is missed:
 
-**Path 1 — Filesystem content hunt.** YARA rule scanning `~/.claude/settings.local.json` and `<project>/.claude/settings.local.json` for the documented allowlist entry patterns. This is the primary detection path and has the broadest applicability — it catches operators using the technique against any tool, not just OpenClaw.
+**Path 1 — Filesystem content hunt.** YARA scanning `~/.claude/settings.local.json` and `<project>/.claude/settings.local.json` for the documented allowlist patterns. The primary path, broadest reach — it catches the technique against any tool, not just OpenClaw.
 
-**Path 2 — Process-tree lineage.** Sigma rule for Claude Code parent process spawning Bash subprocesses that exec `curl ... | bash`, global npm installs of unfamiliar packages, or local listener bring-up commands. This is the runtime detection path — it catches the abuse pattern when the allowlist is actually being used, not just when the file is statically present.
+**Path 2 — Process-tree lineage.** Sigma for a Claude Code parent spawning Bash subprocesses that exec `curl ... | bash`, global npm installs of unfamiliar packages, or local listener bring-up. The runtime path — catches the abuse when the allowlist is actually used, not just statically present.
 
-**Path 3 — Listening-port inventory.** Endpoint inventory queries surfacing TCP port `18789` bindings on developer-class and admin-class endpoints. This is the post-hoc detection path — it catches a host where the OpenClaw gateway is currently running, regardless of how it was started.
+**Path 3 — Listening-port inventory.** Endpoint queries surfacing TCP port `18789` bindings on developer- and admin-class endpoints. The post-hoc path — catches a host where the gateway is currently running, regardless of how it started.
 
 ### Response Orientation
 
-This is not an incident response guide. Defenders with confirmed positive findings should engage their internal IR teams or external IR providers; that workflow is out of scope for this publication. The orientation below covers only what to address.
+This is not an incident response guide. Defenders with confirmed findings should engage internal or external IR; that workflow is out of scope. The orientation below covers only what to address.
 
 **Detection priorities (hunt these first):**
 - Filesystem presence of `~/.claude/settings.local.json` and `<project>/.claude/settings.local.json` containing pre-approved `curl ... | bash` or global npm-install patterns
@@ -434,13 +421,13 @@ This is not an incident response guide. Defenders with confirmed positive findin
 - Sweep adjacent developer endpoints in the same environment for the same allowlist pattern
 - Capture forensic images of the affected host's home directory before remediation (`~/.claude/`, `~/.openclaw/`, `~/.bash_history`, `~/.zsh_history`)
 
-**Vendor coordination (separate from per-host containment):** If the activity is part of a broader incident with identified victims or a vendor-actionable artifact, engage Anthropic and OpenClaw maintainers via their respective security disclosure channels. This is a coordination action distinct from per-host containment; it does not apply to tradecraft-observation cases without confirmed victims.
+**Vendor coordination (separate from per-host containment):** if the activity is part of a broader incident with identified victims or a vendor-actionable artifact, engage Anthropic and OpenClaw maintainers via their security disclosure channels. This does not apply to tradecraft-observation cases without confirmed victims.
 
 ---
 
 ## 9. Confidence Summary
 
-Findings organized by confidence level for the higher-level view. The body of the report attaches per-claim confidence inline; this summary is the consolidated index.
+Findings organized by confidence level. The body attaches per-claim confidence inline; this is the consolidated index.
 
 ### DEFINITE (direct evidence, no ambiguity)
 
@@ -487,11 +474,11 @@ Findings organized by confidence level for the higher-level view. The body of th
 
 ### 10.1 Static Analysis Coverage
 
-**Static analysis: not applicable in the traditional malware-RE sense.** No malware binary was captured. The smoking-gun artifact (`settings.local.json`, 442 bytes) is a text configuration file in JSON format. The static findings from that artifact — its full content, the 7-entry permission allowlist, the specific OpenClaw installation chain documented — are reproduced in Section 4.1 and broken down in Sections 4.2 through 4.5. No binary disassembly, packer analysis, or YARA-against-binaries work is in scope because there is no binary to analyze. The two YARA rules in the sister detection file operate against `settings.local.json` text content, not against PE / ELF / Mach-O binaries.
+**Static analysis: not applicable in the traditional malware-RE sense.** No binary was captured; the artifact (`settings.local.json`, 442 bytes) is a JSON text file. Its static findings — full content, the 7-entry allowlist, the OpenClaw install chain — are in Section 4.1 and broken down in 4.2–4.5. No disassembly, packer analysis, or YARA-against-binaries applies because there is no binary. The two YARA rules in the sister detection file operate against `settings.local.json` text, not PE / ELF / Mach-O binaries.
 
 ### 10.2 Dynamic Analysis Coverage
 
-**Dynamic analysis: not applicable.** No malware binary was captured to detonate in a sandbox. No live operator-side traffic capture is available. No behavioral analysis from a sandbox detonation is in scope because there is nothing to detonate. The operator's `~/.claude/history.jsonl` (Claude Code session command history) and `~/.claude/projects/` (transcript directory containing operator-to-Claude-Code session content) were deliberately not pulled per The Hunters Ledger credential-redaction discipline — pulling those files would expose operator session contents in a form that risks surfacing third-party identities if the operator used Claude Code against specific named targets. The decision to skip session-content extraction is consistent with the project standard for tradecraft-observation cases.
+**Dynamic analysis: not applicable.** No binary was captured to detonate, and no live operator-side traffic capture exists — there is nothing to sandbox. The operator's `~/.claude/history.jsonl` (session command history) and `~/.claude/projects/` (session-content transcripts) were deliberately not pulled per The Hunters Ledger credential-redaction discipline: those files would expose operator session contents that risk surfacing third-party identities if the operator used Claude Code against named targets, and they yield defenders nothing operationally usable in a tradecraft-observation case. This is consistent with the project standard.
 
 ### 10.3 Coverage Gaps and Open Questions
 
@@ -508,18 +495,18 @@ The following are explicitly out of scope and represent gaps the captured eviden
 
 ### 10.4 Behavioral Analysis Limits
 
-No kill chain reconstruction is available because no attack chain against any victim was observed. The case documents the operator's pre-staging configuration only — Cyber Kill Chain Stage 1 (Reconnaissance / Weaponization), arguably Stage 2 (Delivery — operator weaponizes their own Claude Code installation as the delivery surface). Stages 3 through 7 (Exploitation through Actions on Objectives) are not in evidence and cannot be reconstructed from the captured artifact.
+No kill chain reconstruction is available — no attack chain against any victim was observed. The case documents the operator's pre-staging configuration only: Cyber Kill Chain Stage 1 (Reconnaissance / Weaponization), arguably Stage 2 (Delivery — the operator weaponizes their own Claude Code installation as the delivery surface). Stages 3 through 7 (Exploitation through Actions on Objectives) are not in evidence and cannot be reconstructed from the artifact.
 
 ### 10.5 Confidence Caveats Carried Forward
 
-All findings in this report should be read in light of the gaps above:
-- **DEFINITE** confidence claims attach only to artifact-level observations (the JSON content, the 7 allowlist entries, the IP, the ASN, the file path, the port number, the distribution domains).
-- **HIGH** confidence claims attach to the technique characterization (the allowlist customization as a Disable or Modify Tools pattern; the operator-class taxonomy fit; the OpenClaw architectural pattern).
-- **MODERATE** confidence claims attach to the operator-attribution inferences (Korean language, residential exposure pattern, mid-tier-selective sophistication characterization).
+Read all findings in light of the gaps above:
+- **DEFINITE** claims attach only to artifact-level observations (JSON content, the 7 allowlist entries, the IP, ASN, file path, port number, distribution domains).
+- **HIGH** claims attach to the technique characterization (the allowlist customization as Disable or Modify Tools; the operator-class taxonomy fit; the OpenClaw architectural pattern).
+- **MODERATE** claims attach to operator-attribution inferences (Korean language, residential exposure pattern, mid-tier-selective sophistication).
 - **LOW** confidence attaches to UTA-2026-015 itself (55% per parent investigation).
-- **INSUFFICIENT** evidence is acknowledged for all the gap items in Section 10.3.
+- **INSUFFICIENT** evidence is acknowledged for all Section 10.3 gap items.
 
-Defenders building hunt rules and detection logic from this report should anchor on the DEFINITE artifact-level observations (the file content, the path, the network indicators). The HIGH-and-below confidence content provides interpretive context — useful for understanding the technique, but not the basis for blocking or attribution decisions.
+Defenders building hunt and detection logic should anchor on the DEFINITE artifact-level observations (file content, path, network indicators). HIGH-and-below content is interpretive context for the technique — not a basis for blocking or attribution.
 
 ---
 
@@ -527,10 +514,9 @@ Defenders building hunt rules and detection logic from this report should anchor
 
 ### Parent Investigation
 
-- **Parent investigation master findings** — the multi-case context for Case 4 (Korean operator with customized Claude Code allowlist) is summarized in the [parent report](/reports/ai-agent-frameworks-2026-05-23/); full working notes are held offline in the investigation archive.
-- **Parent investigation host-prioritization working notes** — held offline in the investigation archive; this sub-report is a synthesis of the Host 1 content from that review.
-- **Parent report:** [AI-Agent-Frameworks-MultiActor-2026-05-23](/reports/ai-agent-frameworks-2026-05-23/) — Section 4.4 provides the capsule-depth coverage this sub-report expands; Section 4.10 documents the operator-class taxonomy this case fits.
-- **Smoking-gun artifact (preserved offline):** the 442-byte `settings.local.json` is held in the offline investigation evidence archive; full content is reproduced in Section 4.1.
+- **Parent report:** [AI-Agent-Frameworks-MultiActor-2026-05-23](/reports/ai-agent-frameworks-2026-05-23/) — the multi-case context for Case 4. Section 4.4 provides the capsule-depth coverage this sub-report expands; Section 4.10 documents the operator-class taxonomy this case fits.
+- **Host-prioritization working notes** — held offline in the investigation archive; this sub-report synthesizes the Host 1 content from that review.
+- **Smoking-gun artifact (preserved offline):** the 442-byte `settings.local.json` is held in the offline evidence archive; full content is reproduced in Section 4.1.
 
 ### Sister Deliverables (canonical paths)
 
@@ -550,14 +536,14 @@ UTA designations (Unattributed Threat Actor) are internal tracking labels used b
 
 ### Appendix B — Why This Report Is Capsule-Depth Rather Than Full-Length
 
-Standard Hunters Ledger threat-intel reports follow a multi-stage research pipeline (malware analysis → research → infrastructure analysis → attribution → detection engineering → report writing). For this case, Stages 1, 2-research, 2-infrastructure, and 3 were intentionally compressed:
+Standard Hunters Ledger reports follow a multi-stage pipeline (malware analysis → research → infrastructure → attribution → detection engineering → report writing). For this case, Stages 1, 2-research, 2-infrastructure, and 3 were intentionally compressed:
 
-- **No malware binary** — The smoking-gun artifact is a 442-byte text configuration file. No reverse engineering, sandbox detonation, or unpacker work is applicable.
-- **Prior-art research is complete** — The parent investigation umbrella covers the OpenClaw distribution ecosystem, the dual-use framing, and the cross-case operator taxonomy. Repeating that research for a single capsule sub-report adds no value.
-- **Infrastructure has no pivot value** — The host is a single residential Korea Telecom IP. Infrastructure-pivoting playbooks against residential ISPs return no actor-clustering signal because residential blocks are shared by tens of thousands of unrelated subscribers.
-- **Attribution is already assigned** — UTA-2026-015 LOW 55% was determined in the parent investigation umbrella; the sub-report reflects that determination without re-running the full attribution workflow.
+- **No malware binary** — the artifact is a 442-byte text configuration file; no reverse engineering, sandbox detonation, or unpacking applies.
+- **Prior-art research is complete** — the parent umbrella already covers the OpenClaw distribution ecosystem, the dual-use framing, and the cross-case operator taxonomy; repeating it adds no value.
+- **Infrastructure has no pivot value** — a single residential Korea Telecom IP returns no actor-clustering signal, because residential blocks are shared by tens of thousands of unrelated subscribers.
+- **Attribution is already assigned** — UTA-2026-015 LOW 55% was determined in the parent investigation; the sub-report reflects it without re-running the workflow.
 
-The compressed report structure (target 700–900 lines, focused on artifact analysis + defender hunt anchors) is appropriate for single-case tradecraft-observation sub-reports of a multi-case parent investigation. Defenders looking for full-length malware analysis depth in this report should redirect to other Hunters Ledger publications that cover sample-level malware analysis.
+This compressed structure (artifact analysis + defender hunt anchors) suits single-case tradecraft-observation sub-reports of a multi-case parent. Readers wanting full-length malware-analysis depth should consult other Hunters Ledger publications.
 
 ---
 
