@@ -40,29 +40,31 @@ ioc_highlights:
 
 ## 1. Executive Summary
 
-The Hunters Ledger investigation extends the primary public disclosure (Censys ARC, Mark Ellzey, 2026-04-07) with seven net-new technical contributions. Where Censys documented the GHOST kit on a single host (77.110.96.200), this investigation surfaced a sibling deployment at 77.110.125.145 — confirming multi-tenant kit-author behavior — then identified the kit-author identity via Hunt SQL pivot on a `PIP_PAYLOAD_REPO` GitHub URL embedded in operator-B's Python ComfyUI scanner. That pivot pointed to `Vova75Rus/ComfyUI-Shell-Executor` and a sibling repo at `Vova75Rus/miner`, opening the kit-author attribution chain. The byte-identical binary, OWNER Telegram bot signature, and 4-tier supply chain model are the analytical contributions that turn a single-host disclosure into an ecosystem-level picture of the GHOST commodity-kit business.
+**Bottom line:** The GHOST cryptojacker is a commodity kit, not a single-host campaign — and this investigation named its author. A `PIP_PAYLOAD_REPO` GitHub URL in Operator-B's ComfyUI scanner pivoted (Hunt SQL) to `Vova75Rus/ComfyUI-Shell-Executor`, attributing the kit to **Vova75Rus at HIGH confidence (88%)** (§9.2). The proof the kit is sold, not bespoke: a **byte-identical `libpam_cache.so` LD_PRELOAD rootkit** (MD5 `296a8005...`) shipped to two separate AEZA customer hosts (§5.1), each carrying the kit-author's hardcoded **OWNER Telegram bot** (§4.7). GitHub Trust & Safety suspended Vova75Rus account-wide on 2026-05-25, ~24 hours after disclosure submission — disrupting the kit-author payload channel at the supply-chain's single intervention point.
 
-The GHOST kit is **intermediate-to-advanced** at the kit layer (multi-component architecture, 4 container-escape variants, dual-Telegram supply-chain monitoring architecture, userland LD_PRELOAD rootkit with self-hide capability, competitor-displacement tradecraft against the rival Hisana cryptojacker) and **variable at the operator layer** (Operator-A higher-OPSEC with self-hosted XMR/CFX pool proxies; Operator-B lower-OPSEC with public-pool usage and a 40+ day post-Censys abandoned host). The campaign is GPU-cloud cryptojacking against ComfyUI / Stable-Diffusion / ML-inference exposed services — especially A100-tier GPU instances on Lambda Labs, Datacrunch, Nebius, and hyperscaler clouds — for Monero (XMR) and Conflux (CFX) mining revenue.
+The kit is GPU-cloud cryptojacking against exposed ComfyUI / Stable-Diffusion / ML-inference services (especially A100-tier instances on Lambda Labs, Datacrunch, Nebius, and hyperscalers) for Monero (XMR) and Conflux (CFX) revenue. It is intermediate-to-advanced at the kit layer and variable at the operator layer; §3 classifies both. The work extends the primary public disclosure (Censys ARC, Mark Ellzey, 2026-04-07), which documented the kit on one host — the seven net-new contributions are listed under *Why This Threat Is Significant* below.
 
 ### What Was Found
 
-- **A kit, not a single tool.** GHOST is a Bash + Python + ELF composite kit (~45 KB Bash installer `ghost.sh` with 43 functions, a 98-line C source / 14,568-byte ELF rootkit `libpam_cache.so`, a 74,844-byte Python ComfyUI exploitation framework `py.py`, and supporting scanner/Hysteria-backdoor/cloud-IP-range scripts). The full kit was pulled from open directories on both 77.110.96.200 and 77.110.125.145. The kit name "GHOST v5.1 (Anti-Hisana + Resurrection + Spread + Escape)" is the kit-author's own self-identification in the `ghost.sh` first-line comment.
-- **A userland LD_PRELOAD libc-hook rootkit (libpam_cache.so).** The rootkit hooks `readdir` / `readdir64` / `fopen` / `fopen64` to hide 27 strings (miner binary names, kit paths, operator wallet prefixes) and 9 ports (mining pool ports, Hysteria QUIC ports, admin panel port) from any process making standard libc directory or `/proc/net/tcp` reads. The `libpam_cache.so` filename is **deceptive** — direct source inspection refutes any PAM authentication functionality. The "pam" naming is masquerade only; the rootkit has zero PAM symbols, zero `pam_authenticate`/`pam_handle_t` references, and zero authentication-flow code.
-- **A 4-tier supply chain with named identities.** UnamSanctam (upstream OSS author, GitHub since 2014, 860 followers, ~2,584 cumulative stars across the SilentCryptoMiner / UnamWebPanel / SilentXMRMiner repositories) supplies the upstream PHP admin panel (`UnamWebPanel` — its attribution comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */` is present in the GHOST kit's deployed PHP files). Vova75Rus (kit author, account suspended 2026-05-25) is the mid-tier kit-developer who composes UnamSanctam OSS components plus original Bash/Python/C code into the GHOST commodity kit. Operator-A (77.110.96.200) and Operator-B (77.110.125.145) are customer operators who run the kit against victim ComfyUI hosts using per-customer 17-byte wallet/pool config substitutions.
-- **A working dual-Telegram supply-chain monitoring architecture.** Every GHOST kit deployment contains two Telegram bot integrations: the OWNER bot (8415540095) controlled by kit-author Vova75Rus, and the MIRROR bot (operator-set, e.g., 8315596543 for Operator-A). The OWNER bot gives Vova75Rus real-time visibility into every downstream customer's mining operations — this is a built-in supply-chain telemetry channel that is the structural fingerprint of the kit-sales business model.
-- **An active operator iterating live.** Operator-A modified `min1.sh` at 2026-05-24T17:10:29Z — the same day as analysis, and 47 days after the Censys ARC public disclosure on 2026-04-07. AEZA Group (AS210644, OFAC/NCA sanctioned 2025-07-01 for bulletproof hosting) is the hosting provider for both operator hosts; their non-cooperative abuse response posture is what enables the operator's continued operation.
+Each finding is named here and dissected in its home section:
+
+- **A kit, not a single tool** (§3, §4) — a Bash + Python + ELF composite (43-function `ghost.sh` installer, 14,568-byte `libpam_cache.so` rootkit, 74,844-byte `py.py` ComfyUI framework, plus scanner / Hysteria-backdoor / IP-range scripts), pulled in full from open directories on both hosts. Self-named "GHOST v5.1 (Anti-Hisana + Resurrection + Spread + Escape)" in the `ghost.sh` first-line comment.
+- **A userland LD_PRELOAD libc-hook rootkit** (§4.1, §5.1) — `libpam_cache.so` hooks `readdir`/`readdir64`/`fopen`/`fopen64` to hide 27 strings and 9 ports from standard libc directory and `/proc/net/tcp` reads. The `libpam_cache` filename is masquerade only: the 98-line C source has zero PAM symbols and zero authentication-flow code (DEFINITE).
+- **A 4-tier supply chain with named identities** (§9.1) — UnamSanctam (upstream OSS) → Vova75Rus (kit author, suspended 2026-05-25) → ≥2 customer operators → victim ComfyUI hosts. Operators differ from each other only in a 17-byte wallet/pool config substitution.
+- **A dual-Telegram supply-chain monitoring architecture** (§4.7) — every deployment carries the kit-author OWNER bot (8415540095) plus an operator-set MIRROR bot (8315596543 for Operator-A). The OWNER bot is the kit-sales model's structural fingerprint and its highest-value detection string.
+- **An active operator iterating live** (§6.3) — Operator-A modified `min1.sh` at 2026-05-24T17:10:29Z, 47 days after the Censys disclosure. Both hosts sit on AEZA Group (AS210644, OFAC/NCA-sanctioned 2025-07-01); AEZA's non-cooperative abuse posture sustains the operation.
 
 ### Why This Threat Is Significant
 
-This sub-report fills a measurable gap between Censys's primary 2026-04-07 disclosure and the AV-vendor detection landscape 6 weeks later. The Censys article documented the GHOST kit on a single host with hash-IOC-only coverage and an implied per-victim compilation model. This investigation extends that coverage with **seven net-new contributions**:
+Censys documented the kit on one host with hash-IOC-only coverage and an implied per-victim compilation model. This investigation adds **seven net-new contributions**:
 
-1. **Sibling deployment at 77.110.125.145** — confirming the GHOST kit is multi-tenant commodity rather than a single-host bespoke campaign.
-2. **Byte-identical libpam_cache.so across customers** (DEFINITE supply-chain proof) — refuting the per-victim compilation framing and proving a pre-compiled kit-author artifact with per-customer 17-byte config substitution.
-3. **Kit-author OWNER Telegram bot signature** (8415540095) — the highest-value supply-chain detection string in the entire campaign.
-4. **Full 27-string + 9-port hide-list inventory** (Censys reported only the rootkit's existence, not the full filter list).
-5. **Structured YARA/Sigma/Suricata detection rules** with FP-resistant string combinations — versus Censys's hash-IOCs-only coverage.
-6. **6-week-later VT detection landscape snapshot** demonstrating zero AV-vendor uptake of GHOST family signatures: `libpam_cache.so` = 0/0 (never submitted), `min1.sh` = 0/53 (undetected), `ghost.sh` = 13/63 (generic only — no GHOST-family taxonomy entries in any AV vendor catalog). This documents a structural gap: custom kits with low telemetry volume operate below the threshold for AV-vendor automated analysis pipeline triggers.
-7. **Conflux blockchain forensics drain chain** mapping Operator-A's mining wallet → consolidator → exchange off-ramp (3-hop money-movement path with a 781,383-tx exchange hot wallet at the terminal), providing a law-enforcement subpoena target that Censys did not pursue.
+1. **Sibling deployment at 77.110.125.145** — confirms multi-tenant commodity, not a single-host bespoke campaign.
+2. **Byte-identical `libpam_cache.so` across customers** (DEFINITE) — refutes per-victim compilation; proves a pre-compiled kit-author artifact with 17-byte per-customer config substitution.
+3. **Kit-author OWNER Telegram bot signature** (8415540095) — the campaign's highest-value detection string.
+4. **Full 27-string + 9-port hide-list inventory** — Censys reported the rootkit's existence, not its filter list.
+5. **Structured YARA/Sigma/Suricata rules** with FP-resistant string combinations, versus hash-IOCs only.
+6. **6-week-later VT snapshot** — zero AV-vendor uptake of GHOST signatures (`libpam_cache.so` 0/0 never submitted; `min1.sh` 0/53 undetected; `ghost.sh` 13/63 generic only). Custom kits with low telemetry volume operate below AV automated-analysis triggers.
+7. **Conflux drain chain** — Operator-A mining wallet → consolidator → exchange off-ramp (terminal 781,383-tx hot wallet), a subpoena target Censys did not pursue.
 
 ### Key Risk Factors
 
@@ -91,30 +93,30 @@ This is an **active and actively-iterating** cryptojacking campaign with confirm
 
 ### Threat Actor Summary
 
-This is a multi-identity campaign with **one named actor at HIGH confidence (Vova75Rus, kit author)** plus **two Unattributed Threat Actor designations** for the customer operators. Vova75Rus is **not** identical to any customer operator — the wallet-match test (Section 13 retractions) refuted the initial conflation. Vova75Rus runs his own personal mining setup (XTM/Tari via Kryptex worker `1238rkM7gGg3sl`) distinct from Operator-A's XMR + CFX wallets.
+Three identity tiers, detailed with full evidence in §9. Vova75Rus is **not** any customer operator — the wallet-match test refuted the initial conflation (§13.2): his personal XTM/Tari setup (Kryptex worker `1238rkM7gGg3sl`) is distinct from Operator-A's XMR + CFX wallets.
 
-- **Vova75Rus** (GHOST kit author, GitHub UID 73169104) — HIGH confidence (88%), NAMED actor. Russian-origin individual; account created 2020-10-20; suspended by GitHub Trust & Safety 2026-05-25 within ~24 hours of the disclosure submission. Region indicator "75" in the handle matches the Russian regional plate-code convention for Zabaykalsky Krai (eastern Siberia). Personal-attribution artifact preserved at Wayback Machine: a dedication page using a Russian-language March 8th / Women's Day greeting on `Vova75Rus/Notes.github.io`.
-- **UTA-2026-016** *(an internal tracking label used by The Hunters Ledger — see Section 9)* = Operator-A (77.110.96.200) — LOW confidence (65%, top of the LOW band 50-70%), unattributed. Russian-speaking (48 unique Cyrillic words in 1,472-line bash history; 4 Russian-language operator scripts). Higher-OPSEC than Operator-B: self-hosted XMR pool proxy on TCP 3333 and CFX pool proxy on TCP 4444 creating one-hop attribution break. MIRROR Telegram bot 8315596543 ownership confirmed via uncleared bash-history typing (an OPSEC failure). Conflux drain chain: mining wallet `cfx:aaj5xb...` → consolidator `cfx:aasv0s...` → exchange off-ramp `cfx:aansses5...` (781K total tx).
-- **UTA-2026-017** = Operator-B (77.110.125.145) — LOW confidence (60%, within the LOW band 50-70%), unattributed. Russian-speaking (183 unique Cyrillic words in `New_scanner.py`). Lower-OPSEC: public-pool usage (`auto.c3pool.org` / `cfx-asia1.nanopool.org`). Host abandoned ~5 days post-Censys (last activity 2026-04-12); CFX wallet `cfx:aat5y...` holds 19.82 CFX, never drained, nonce 0.
-- **UnamSanctam** (upstream OSS supply-chain component) — HIGH confidence on the passive-OSS-author role, **not** a Case 9 threat actor. Active GitHub since 2014; 860 followers; 6 public repositories with 2,584 cumulative stars. Supplies UnamWebPanel + SilentCryptoMiner ecosystem tooling that the GHOST kit author bundles. SilentCryptoMiner was disabled by GitHub for ToS violations; remaining repos active.
+- **Vova75Rus** (kit author, GitHub UID 73169104) — **HIGH (88%), NAMED** (§9.2). Russian-origin; account suspended by GitHub T&S 2026-05-25.
+- **UTA-2026-016** *(an internal tracking label used by The Hunters Ledger — see Section 9)* = Operator-A (77.110.96.200) — **LOW (65%, top of the LOW band)**, unattributed (§9.3). DEFINITE Russian-speaking; higher-OPSEC (self-hosted XMR/CFX pool proxies); active.
+- **UTA-2026-017** = Operator-B (77.110.125.145) — **LOW (60%)**, unattributed (§9.4). DEFINITE Russian-speaking; lower-OPSEC (public pools); host abandoned ~5 days post-Censys.
+- **UnamSanctam** (upstream OSS) — **HIGH (90%) on the passive-OSS-author role, NOT a Case 9 threat actor** (§9.5). Supplies UnamWebPanel / SilentCryptoMiner tooling the kit author bundles.
 
 ### For Technical Teams
 
-Five immediate priorities for SOC analysts, threat hunters, and Linux endpoint defenders:
+Five immediate priorities for SOC analysts, threat hunters, and Linux endpoint defenders (rules in §10):
 
-1. **Hunt for the OWNER Telegram bot signature.** Search egress HTTPS for `api.telegram.org/bot8415540095:*` from Linux hosts. This single string match catches every GHOST customer worldwide. Same hunt: bash history regex `\d{8,10}:[A-Za-z0-9_-]{30,40}` for any Telegram bot token typed plaintext (broader operator-OPSEC hunt). Detection rules in Section 10.
-2. **Audit `/etc/ld.so.preload`.** Any non-empty `/etc/ld.so.preload` on a production server is suspicious. Cross-check against the file modification timestamp and the presence of `libpam_cache.so` under `/lib/security/`, `/lib/x86_64-linux-gnu/security/`, or `/usr/lib/security/`. The `libpam_cache.so` filename is deceptive — it has no PAM functionality.
-3. **Audit ComfyUI custom_nodes directories.** Look for any Python file containing both `class PerformanceMonitor` and `NODE_CLASS_MAPPINGS`. This is the GHOST fake-custom-node persistence mechanism. ComfyUI exposes port 8188 without authentication by default; restrict to 127.0.0.1 or place behind authenticated reverse proxy.
-4. **Block AEZA Group (AS210644) at egress** if your environment has no business reason for Russian-corporate / Frankfurt-datacenter traffic. OFAC sanctions (2025-07-01) make this a compliance position as well as a security position. 47 days of unresponsive abuse posture for an OFAC-designated provider hosting cryptojacker C2 is a defensible blocking rationale.
-5. **For ComfyUI / Stable-Diffusion / cloud-GPU infrastructure operators specifically:** review the full 4,573-IP scan candidate corpus assumption — the operator's scanner targeted port 8188 across AWS / GCP / Oracle / Hetzner / Lambda Labs / Datacrunch / Nebius / DigitalOcean / Huawei / Linode / OVH / Scaleway / Tencent / Contabo ranges. If any of those ASNs match your provider, audit ComfyUI exposure and the integrity of `/etc/ld.so.preload` on each tenant.
+1. **Hunt the OWNER Telegram bot signature.** Search Linux-host egress HTTPS for `api.telegram.org/bot8415540095:*` — one string match catches every GHOST customer worldwide. Broaden with the bash-history token regex `\d{8,10}:[A-Za-z0-9_-]{30,40}` for any plaintext bot token.
+2. **Audit `/etc/ld.so.preload`.** Any non-empty value on a production server is suspicious; cross-check its mtime and `libpam_cache.so` under `/lib/security/` (or `/lib/x86_64-linux-gnu/security/`, `/usr/lib/security/`). The filename has no PAM functionality.
+3. **Audit ComfyUI `custom_nodes/`** for any Python file with both `class PerformanceMonitor` and `NODE_CLASS_MAPPINGS` (the fake-custom-node persistence). ComfyUI exposes port 8188 unauthenticated by default — restrict to localhost or an authenticated reverse proxy.
+4. **Block AEZA Group (AS210644) at egress** absent a business reason for it. OFAC designation (2025-07-01) plus 47 days of unresponsive abuse posture hosting cryptojacker C2 makes this both a security and a compliance position.
+5. **Cloud-GPU / ComfyUI operators:** the scanner targeted port 8188 across AWS / GCP / Oracle / Hetzner / Lambda Labs / Datacrunch / Nebius / DigitalOcean / Huawei / Linode / OVH / Scaleway / Tencent / Contabo. If any match your provider, audit ComfyUI exposure and `/etc/ld.so.preload` per tenant.
 
-Sections 4 (Capabilities Deep-Dive), 5 (Static Analysis), 6 (Dynamic Analysis), and 7 (MITRE ATT&CK Mapping) contain the technical depth. Section 9 (Threat Actor Assessment) covers the attribution chain. Section 13 documents the analytical retractions during investigation (the T1556.003 mis-mapping; the Vova75Rus = Operator-A conflation; the q10.txt 4,573-IP scope correction).
+The technical depth lives in §3–§6 (classification through dynamic analysis), §9 (attribution chain), and §13 (retractions). MITRE ATT&CK (§7) and the full IOC set (§8) ship in the companion detection and IOC files.
 
 ---
 
 ## 2. Business Risk Assessment
 
-The GHOST cryptojacker kit is not a one-off attack against a single victim — it is a **commodity kit** distributed by Vova75Rus to multiple paying customer operators who deploy it against exposed ComfyUI/Stable-Diffusion/ML-inference services running on cloud GPU infrastructure. The business risk for an organization that operates GPU-cloud ML inference (or hosts third-party workloads on GPU infrastructure) is dual-layer: the immediate resource-theft layer (someone else is mining cryptocurrency on your hardware) and the deeper compromise layer (the kit's container-escape suite, persistence depth, and credential-harvest functions create a follow-on access vector once inside the tenant boundary).
+For an organization running GPU-cloud ML inference (or hosting third-party workloads on GPU infrastructure), the business risk is dual-layer: immediate resource theft (someone else mines cryptocurrency on your hardware) and deeper compromise (the kit's container-escape suite, persistence depth, and credential-harvest functions create a follow-on access vector inside the tenant boundary).
 
 ### Understanding the Real-World Impact
 
@@ -225,13 +227,9 @@ The kit-author tier shows several indicators consistent with professional develo
 
 ## 4. Technical Capabilities Deep-Dive
 
-> **Executive Impact Summary:**
-> **Business Risk:** Hidden persistent cryptojacking with container-escape capability into cloud tenant boundaries.
-> **Detection Difficulty:** HIGH — userland libc-hook rootkit hides processes, files, and ports from standard tooling; AV signatures absent 6 weeks post-disclosure.
-> **Remediation Complexity:** HIGH — 5-vector persistence + immutable flags + cross-process watchdog = full host rebuild is the defensible position.
-> **Key Takeaway:** The supply-chain-monitoring architecture (OWNER Telegram bot baked into every customer deployment) is both the most distinctive analytical finding AND the highest-value detection string in the entire campaign.
+The capabilities below build the hidden, persistent cryptojacking outcome summarized in §1: a libc-hook rootkit hides processes/files/ports from standard tooling, a 5-vector chain plus immutable flags and a cross-process watchdog make full host rebuild the defensible remediation, and container-escape variants reach into cloud-tenant boundaries. Each capability's confidence is in the matrix; the subsections that follow give the evidence.
 
-### Quick Reference: Capabilities Matrix
+### Capabilities Matrix
 
 | Capability | Impact | Detection Difficulty | Confidence |
 |---|---|---|---|
@@ -550,9 +548,9 @@ The bash history shows the operator's typical operational sequence — a step-by
 
 ### 6.3 Live-Iteration Evidence: min1.sh Modification 2026-05-24
 
-The `min1.sh` modification at 2026-05-24T17:10:29Z is the most operationally significant timestamp in the entire investigation. It demonstrates that the operator **continued to actively iterate** on the kit 47 days after the Censys ARC public disclosure on 2026-04-07. The disclosure did not deter the operator; neither did the OFAC sanctions on AEZA (in effect since 2025-07-01) nor presumably the public discussion of GHOST at that point.
+The `min1.sh` modification at 2026-05-24T17:10:29Z is the investigation's most operationally significant timestamp: Operator-A **actively iterated** on the kit 47 days after the Censys disclosure (2026-04-07) and despite the OFAC sanctions on AEZA (in effect since 2025-07-01).
 
-This live-iteration evidence is what raises Operator-A's risk profile relative to Operator-B (who abandoned the 77.110.125.145 host 5 days after the Censys disclosure). Operator-A's continued operation despite the disclosure suggests either (a) lack of awareness of the disclosure, (b) confidence in AEZA's non-cooperative abuse posture, or (c) operational tempo prioritization over OPSEC. The investigation cannot distinguish these alternatives from the available evidence.
+This raises Operator-A's risk profile above Operator-B, who abandoned 77.110.125.145 five days post-disclosure. Operator-A's continued operation suggests either (a) unawareness of the disclosure, (b) confidence in AEZA's non-cooperative abuse posture, or (c) tempo over OPSEC — the evidence cannot distinguish these.
 
 ### 6.4 Network Behavior (Reconstructed from Kit Configuration)
 
@@ -929,7 +927,7 @@ The 4,573-IP corpus is not published as an IOC list because most of those hosts 
 
 ### Why These Retractions Are Documented
 
-Documenting retractions openly is the project's standard practice. An investigation that reads correctly the first time on every claim is not an investigation — it is a confirmation-bias narrative. The retractions above are part of the analytical record because (a) other defenders working in adjacent territory are likely to encounter the same initial reads given the deceptive filename and pool-routing artifacts (MODERATE-confidence indication based on the consistency of the surface evidence across multiple analyst perspectives), and (b) the corrected mappings change downstream detection-rule derivation (the T1556.003 → T1014 retraction directly changed which Sigma rules were authored for the detection file).
+Documenting retractions openly is the project's standard practice. The retractions above are part of the analytical record because (a) other defenders are likely to hit the same initial reads given the deceptive filename and pool-routing artifacts (MODERATE — based on the consistency of the surface evidence across analyst perspectives), and (b) the corrected mappings changed downstream detection-rule derivation: the T1556.003 → T1014 retraction directly changed which Sigma rules were authored for the detection file.
 
 ---
 
