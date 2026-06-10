@@ -25,13 +25,11 @@ hide: true
 description: "A complete Sliver C2 build workspace exposed at 45.94.31.220 on bulletproof hosting, discovered approximately 6.75 hours after an automated build pipeline completed. The workspace contains a ScareCrow-wrapped Sliver implant with 15 layered EDR evasion techniques, custom evasion module source code, and an unencrypted fraudulent VMware code-signing certificate — recovered before confirmed victim deployment."
 ---
 
-A Comprehensive, Evidence-Based Guide for Security Decision-Makers
-
 **Campaign Identifier:** WebServer-Compromise-Kit-45.94.31.220<br>
 **Last Updated:** March 1, 2026<br>
 **Threat Level:** MEDIUM
 
-> **Risk vs. Campaign Threat Level:** The toolkit analyzed in this report scores **7.8/10 (HIGH)** based on its evasion capabilities, C2 sophistication, and potential impact. However, the overall campaign threat level is rated **MEDIUM** because the C2 infrastructure was offline at analysis time, no confirmed victims were identified, and the single-server architecture represents a significant operational fragility. If the infrastructure is re-established, the threat level should be reassessed to HIGH.
+> **Risk vs. Campaign Threat Level:** The toolkit analyzed in this report scores **7.8/10 (HIGH)** based on its evasion depth, C2 resilience, and post-compromise capability. However, the overall campaign threat level is rated **MEDIUM** because the C2 infrastructure was offline at analysis time, no confirmed victims were identified, and the single-server architecture represents a significant operational fragility. If the infrastructure is re-established, the threat level should be reassessed to HIGH.
 
 ---
 
@@ -77,7 +75,7 @@ On 2026-02-14, a threat actor operating from a bulletproof VPS at `45.94.31.220`
 | **Post-Compromise Capability** | 8/10       | Full Sliver beacon: lateral movement, pivoting, credential access, file exfiltration, execution — operator-driven post-C2 establishment                               |
 | **Infrastructure Risk**        | 6/10       | Bulletproof hosting (1337 Services GmbH / AS210558) with near-zero abuse response; C2 offline at analysis time reduces immediate threat                               |
 | **Rebuild Velocity**           | 8/10       | Automated 5-phase build pipeline produces functionally equivalent beacon with new hashes in ~8 minutes; certificate serial is the only durable binary-level indicator |
-| **OVERALL RISK**               | **7.8/10** | **HIGH — Sophisticated evasion stack with fully operational C2 capability; current MEDIUM threat level due to C2 offline and no confirmed victims**                   |
+| **OVERALL RISK**               | **7.8/10** | **HIGH — 15-technique evasion stack with fully operational C2 capability; current MEDIUM threat level due to C2 offline and no confirmed victims**                   |
 
 
 ### Key Findings
@@ -90,7 +88,7 @@ On 2026-02-14, a threat actor operating from a bulletproof VPS at `45.94.31.220`
 6. **Process hollowing into sihost.exe** (process hollowing is a technique where the malware hides itself inside a trusted Windows system process, making it invisible to detection tools) — process hollowing as the active injection mode is DEFINITE (XZ config header mode byte 0x04, confirmed in dynamic analysis); the `sihost.exe` target process is MODERATE confidence (75%) from build.log, not confirmed in live analysis. sihost.exe is a trusted Shell Infrastructure Host — outbound connections from it to non-Microsoft addresses are anomalous and high-value hunt leads regardless of which process the actual runtime target proves to be.
 7. **Bulletproof hosting confirmed** — 1337 Services GmbH co-founders linked to DOJ Operation Talent (Cracked.to/Nulled.to seizure); threat intelligence feeds flag AS210558 as presumptively malicious infrastructure.
 8. **Build pipeline fingerprint survives rebuilds** — SysWhispers3 hash seed `0x9DEA8D94`, stub/implemented module architecture, and the `MicrosoftEdgeUpdate.exe` PEB spoofing string are compiled constants detectable across polymorphic builds.
-9. **Stager-loader skill gap** — The stager uses one of the most widely detected AMSI bypass techniques alongside a loader with advanced HalosGate indirect syscalls — a strong indicator of two-party development (access broker + sophisticated toolkit builder).
+9. **Stager-loader skill gap** — The stager uses one of the most widely detected AMSI bypass techniques alongside a loader with HalosGate indirect syscalls — a strong indicator of two-party development (access broker + custom toolkit builder).
 10. **Pre-deployment discovery** — Infrastructure indexed approximately 6.75 hours after build completion, likely before confirmed victim compromise.
 
 ---
@@ -155,7 +153,7 @@ On 2026-02-14, a threat actor operating from a bulletproof VPS at `45.94.31.220`
 
 **What This Means:** The stub/implemented split is not an incomplete build. It is the correct architectural pattern for ScareCrow integration — ScareCrow provides the stub implementations at build time from its own codebase. The attacker's custom modules (syscalls.C, stack_spoof.C, etc.) extend ScareCrow with additional capabilities not present in the stock tool. This is a fully operational evasion stack.
 
-> ANALYST NOTE: The files OneDriveSync.exe, Excel.exe, and compressed.exe all appear to look like the valid Excel icon when in the filesystem.
+> **Analyst note:** OneDriveSync.exe, Excel.exe, and compressed.exe all display the Excel icon on the filesystem — a social engineering detail that aids delivery through user-lure scenarios.
 
 ### Certificate IOCs
 
@@ -225,7 +223,7 @@ The victim executes `stager.ps1` through an undetermined delivery mechanism — 
     .GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)
 ```
 
-Uses .NET reflection to set `amsiInitFailed` to `true` in the PowerShell runtime assembly. This causes AMSI to report initialization failure, disabling content scanning for the session. This is one of the most widely detected AMSI bypass techniques in existence. Its presence alongside the sophisticated ScareCrow loader strongly suggests two different authors — a readily-available stager template and a custom-developed loader.
+Uses .NET reflection to set `amsiInitFailed` to `true` in the PowerShell runtime assembly. This causes AMSI to report initialization failure, disabling content scanning for the session. This is one of the most widely detected AMSI bypass techniques in existence. Its presence alongside the custom ScareCrow loader strongly suggests two different authors — a readily-available stager template and a custom-developed loader.
 
 **Action 2 — Windows Defender Disable (admin-conditional):**
 
@@ -268,7 +266,7 @@ Downloads `OneDriveSync.exe` over unencrypted HTTP from port 8000. Writes to `%T
 
 **Check 3 — Canary domain:** The embedded Sliver canary `intezer.com` performs a network-level check — if DNS resolution produces responses consistent with Intezer's sandbox infrastructure, the beacon aborts.
 
-**Defender note:** `GetTickCount` being absent from the import table defeats static import-table-based detection signatures for this specific function. The canary mechanism is more sophisticated than the CPU/uptime checks — it demonstrates awareness of specific analysis platforms.
+**Defender note:** `GetTickCount` being absent from the import table defeats static import-table-based detection signatures for this specific function. The canary mechanism is more targeted than the CPU/uptime checks — it names a specific analysis platform rather than relying on generic environment thresholds.
 
 ---
 
@@ -364,8 +362,8 @@ An 18.4 MB anonymous private memory region (VadS, ERW→ER post-write) is alloca
 - First bytes at RIP: `0x9A` (intentionally invalid CALLF opcode) — Donut uses a Vectored Exception Handler to catch the `#UD` exception and redirect execution. This is an anti-analysis technique.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/donut-vad-info.png" | relative_url }}" alt="Volatility VAD information output showing the 18.4 MB anonymous VadS region with ERW to ER permission transition, confirming Donut shellcode staging region in the OneDriveSync.exe process">
-  <figcaption><em>Figure 6: Volatility VAD region details for the Donut staging allocation — the ERW→ER permission transition (write-then-execute) and VadS (anonymous private) type are the definitive indicators of shellcode injection rather than a mapped file or image section.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/donut-vad-info.png" | relative_url }}" alt="Memory forensics tool VAD information output showing the 18.4 MB anonymous VadS region with ERW to ER permission transition, confirming Donut shellcode staging region in the OneDriveSync.exe process">
+  <figcaption><em>Figure 6: Memory forensics tool VAD region details for the Donut staging allocation — the ERW→ER permission transition (write-then-execute) and VadS (anonymous private) type are the definitive indicators of shellcode injection rather than a mapped file or image section.</em></figcaption>
 </figure>
 
 The Donut instance at `base+0x200` contains:
@@ -498,7 +496,7 @@ Temporarily overwrites the caller's own return address on the stack with a rando
 
 **Why This Matters:** Randomization across three return addresses (rather than a deterministic single address) is a deliberate counter-measure against EDRs that fingerprint specific fake stack frames. Detection requires: (a) memory-level call stack inspection that traces through the spoofed frames, (b) detecting `_AddressOfReturnAddress()` usage (an unusual self-modifying stack pattern), or (c) correlating that a function "called from Sleep" lacks the expected calling context for Sleep.
 
-**Implementation scope:** This implementation spoofs only the immediate return address (terminal frame) — not a full multi-frame call stack. More sophisticated implementations (Unwinder-based techniques) fabricate entire multi-frame stacks with plausible intermediate frames. EDRs that perform deep stack unwinding beyond the first frame can see through this single-frame spoof; this is a capable but not state-of-the-art implementation, consistent with the broader cybercrime-tier capability assessment.
+**Implementation scope:** This implementation spoofs only the immediate return address (terminal frame) — not a full multi-frame call stack. More complete implementations (Unwinder-based techniques) fabricate entire multi-frame stacks with plausible intermediate frames. EDRs that perform deep stack unwinding beyond the first frame can see through this single-frame spoof; this is a capable but not state-of-the-art implementation, consistent with the broader cybercrime-tier capability assessment.
 
 **Detection approach:**
 
@@ -526,7 +524,7 @@ XOR key `0x42` applied byte-by-byte. Stack-allocated decode buffer (`_alloca`) �
 
 Two checks: CPU core count `< 2` → exit; system uptime `< 600,000 ms` (10 minutes) → exit. `GetTickCount` is dynamically resolved (absent from import table). The embedded Sliver canary `intezer.com` provides a third DNS-based check targeting the Intezer analysis platform specifically.
 
-Modern sandboxes with environment simulation (ANY.RUN, Joe Sandbox, Cuckoo with uptime patches) defeat the CPU and uptime checks. The canary domain check is more sophisticated — it demonstrates awareness of a specific analysis platform and serves as a real-time sandbox/analyst detection mechanism. Any analyst VM resolving `intezer.com` through a corporate proxy may unintentionally trigger the abort condition.
+Behavioral sandboxes with environment simulation — including behavioral sandbox (ANY.RUN), Joe Sandbox, and Cuckoo with uptime patches — defeat the CPU and uptime checks. The canary domain check is more targeted — it names Intezer's analysis platform specifically and serves as a real-time sandbox/analyst detection mechanism. Any analyst VM resolving `intezer.com` through a corporate proxy may unintentionally trigger the abort condition.
 
 ---
 
@@ -644,7 +642,7 @@ ScareCrow patches `AmsiScanBuffer` prologue with `XOR RAX,RAX; RET` (bytes `48 3
 
 During the effective 90–510 second dormancy window (300-second base, 70% jitter), ScareCrow encrypts the beacon's in-memory shellcode region. Memory scanners running during dormancy find no readable executable content in anonymous memory regions.
 
-**Detection:** The beacon transitions between readable and non-readable memory states on a regular interval — detectable by periodic memory scanning. Tools like beacon hunting tools (open-source beacon hunting tools: Hunt-Sleeping-Beacons and BeaconHunter) identify threads in `WaitReason = DelayExecution` with suspicious call stacks. The effective dormancy range (90–510 seconds with 70% jitter) means memory scanning at under 90-second intervals would catch the beacon in its active state.
+**Detection:** The beacon transitions between readable and non-readable memory states on a regular interval — detectable by periodic memory scanning. Open-source beacon hunting tools (Hunt-Sleeping-Beacons, BeaconHunter) identify threads in `WaitReason = DelayExecution` with suspicious call stacks. The effective dormancy range (90–510 seconds with 70% jitter) means memory scanning at under 90-second intervals would catch the beacon in its active state.
 
 ---
 
@@ -688,7 +686,7 @@ The `CA:TRUE` flag set on a code-signing certificate is a reliable detection ind
   <figcaption><em>Figure 9: The unrolled assembly chain inside the ScareCrow loader — the 2,558 sequential call instructions visible here are the hallmark of ScareCrow's polymorphic chunked encryption. Each call represents one ~451-byte encrypted shellcode segment being decoded in sequence.</em></figcaption>
 </figure>
 
-**Evasion stack realism assessment:** The 15-technique stack is sophisticated but not impenetrable. Enterprise EDRs with kernel-level callbacks (ETWti, PsSetCreateProcessNotifyRoutine, hardware-assisted monitoring) retain visibility through most of these layers. The primary detection gap exists for EDRs relying exclusively on usermode ntdll hook telemetry — these products are effectively blind to the SysWhispers3-mediated process injection operations and will not observe ETW telemetry from the injected process.
+**Evasion stack realism assessment:** The 15-technique stack is layered but not impenetrable. Enterprise EDRs with kernel-level callbacks (ETWti, PsSetCreateProcessNotifyRoutine, hardware-assisted monitoring) retain visibility through most of these layers. The primary detection gap exists for EDRs relying exclusively on usermode ntdll hook telemetry — these products are effectively blind to the SysWhispers3-mediated process injection operations and will not observe ETW telemetry from the injected process.
 
 ---
 
@@ -825,7 +823,7 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | 1337 Services GmbH / AS210558      | Standard bulletproof hosting choice for cybercrime infrastructure                                                      |
 | DuckDNS backup domain              | Free, anonymous — cybercrime OPSEC tier, not APT infrastructure                                                        |
 | 2027 killswitch                    | Planned multi-year campaign consistent with ransomware affiliate or access broker                                      |
-| stager.ps1 skill gap               | Basic delivery against sophisticated payload — consistent with access broker supplying stages to a toolkit builder     |
+| stager.ps1 skill gap               | Basic delivery against custom-built payload — consistent with access broker supplying stages to a toolkit builder     |
 | No targeting indicators            | No victim sector, geography, or specific target evidence in artifacts                                                  |
 | No espionage-specific capabilities | No credential dumping, data staging, or lateral movement tools in recovered non-Sliver artifacts                       |
 
@@ -836,13 +834,13 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | Hypothesis                                       | Likelihood     |
 | ------------------------------------------------ | -------------- |
 | H1: Cybercrime (access broker / initial access)  | HIGH (80%)     |
-| H2: Financially motivated sophisticated criminal | MODERATE (15%) |
+| H2: Financially motivated skilled criminal | MODERATE (15%) |
 | H3: State-sponsored / APT using commodity tools  | LOW (5%)       |
 
 
 **Threat Level: MEDIUM** — C2 offline; no confirmed victims; OPSEC failures suggest operator may not have deployed successfully; single-server architecture is a significant fragility. If the infrastructure was re-established after exposure, the same toolkit is operational with new IOCs. The 2027 killswitch indicates planned long-term use; re-deployment probability is HIGH.
 
-**Post-Operation Morpheus Context (Stage 2 research finding):** Operation Morpheus (June 2024) disrupted 593 malicious Cobalt Strike servers across 27 countries, directly accelerating threat actor migration to Sliver and other open-source C2 frameworks. The use of Sliver here is consistent with the post-Morpheus landscape where sophisticated cybercrime operators have consciously reduced Cobalt Strike exposure.
+**Post-Operation Morpheus Context (Stage 2 research finding):** Operation Morpheus (June 2024) disrupted 593 malicious Cobalt Strike servers across 27 countries, directly accelerating threat actor migration to Sliver and other open-source C2 frameworks. The use of Sliver here is consistent with the post-Morpheus landscape where cybercrime operators have consciously reduced Cobalt Strike exposure.
 
 ---
 
