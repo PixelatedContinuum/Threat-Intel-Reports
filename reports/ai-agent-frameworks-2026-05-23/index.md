@@ -126,7 +126,7 @@ The eight operators below weaponize AI-agent CLIs for offense; this investigatio
 
 ### Understanding the Real-World Impact
 
-This campaign matters to security leadership for three reasons not obvious from a single-operator view:
+This campaign matters to security leadership for three reasons a single-operator view misses:
 
 1. **AI-augmented tradecraft is ecosystem-wide, not single-actor.** Eight independent operators, five AI tools, four motivations (financial cybercrime, state-aligned espionage, DDoS-for-hire, operator productivity) — the threat is **diffuse**, so no single vendor block or IOC sweep addresses it.
 2. **Detection coverage has a gap at the operator-side workflow layer.** Public reporting is well-supplied with AI-generated-content signatures (phishing tone, code style) but poorly supplied with operator-side artifacts (handoff documents, weaponized configs, AI permission allowlists). The 26 linked detection rules target that undersupplied layer.
@@ -268,15 +268,15 @@ Four of eight cases (2, 3, 9-A, 10) were active during the investigation window 
 
 ### 4.6 Case 7 — Productivity-AI Stack (Capsule)
 
-**Hosting:** 139.59.239.112 (DigitalOcean AS14061). **AI Tool:** Claude Code (inferred from co-located session artifacts). Capsule depth — no filesystem extraction beyond surface artifact inventory.
+**Capsule.** The campaign's most representative **AI-integrated mature operator** (§4.10): a post-compromise productivity stack pairing classic operator tools (Weevely PHP backdoor, frp reverse proxy) with Claude Code for workflow assistance — planning, documentation, scripting. Claude improves the operator's productivity, not capability — the operator does not need it to operate — so there is no novel TTP at the AI layer, and no case-specific perimeter or hunt rule is published beyond the generic Weevely/frp signatures already in public catalogs.
 
-This is the campaign's most representative **AI-integrated mature operator** (§4.10): a post-compromise productivity stack pairing classic operator tools (Weevely PHP backdoor, frp reverse proxy) with Claude Code for workflow assistance — planning, documentation, scripting. No novel TTP at the AI layer; Claude improves the operator's productivity, not capability, and the operator does not need it to operate. No case-specific perimeter or hunt rule is published beyond the generic Weevely/frp signatures already in public catalogs.
+**Hosting:** 139.59.239.112 (DigitalOcean AS14061). **AI Tool:** Claude Code (inferred from co-located session artifacts). Capsule depth — no filesystem extraction beyond surface artifact inventory.
 
 ### 4.7 Case 8 — AI-Orchestrated 60-Second Payment-API Attack (Capsule)
 
-**Hosting:** 68.183.92.28 (DigitalOcean AS14061). **AI Tool:** unspecified LLM, mechanism unknown. Capsule depth — insufficient artifacts to identify the vendor or orchestration mechanism.
+**Capsule.** The campaign's most novel-on-its-face TTP — an LLM orchestrating a 4-stage attack chain (recon → enumerate → exploit → exfiltrate) against a payment API within a 60-second window — but vendor identification is **INSUFFICIENT** (Gemini, Claude, GPT, and self-hosted models all remain candidates), so it stays at capsule depth. Defender takeaway: treat any sub-minute multi-stage authenticated-API chain as a candidate for AI-orchestrated tradecraft, and baseline API traffic for "burst" patterns (4+ distinct API surfaces from one source IP within 60 seconds) that human-paced tradecraft would not produce.
 
-Session artifacts show the operator using an LLM to orchestrate a 4-stage attack chain (recon → enumerate → exploit → exfiltrate) against a payment API within a 60-second window. This is the campaign's most novel-on-its-face TTP — AI orchestrating multi-stage chains at sub-minute timescale — but vendor identification is **INSUFFICIENT** (Gemini, Claude, GPT, and self-hosted models all remain candidates), so it stays at capsule depth. Defender takeaway: treat any sub-minute multi-stage authenticated-API chain as a candidate for AI-orchestrated tradecraft; baseline API traffic for "burst" patterns (4+ distinct API surfaces from one source IP within 60 seconds) that human-paced tradecraft would not produce.
+**Hosting:** 68.183.92.28 (DigitalOcean AS14061). **AI Tool:** unspecified LLM, mechanism unknown. Capsule depth — insufficient artifacts to identify the vendor or orchestration mechanism.
 
 ### 4.8 Case 10 — Sliver-Derivative C2 Staging (Capsule)
 
@@ -457,11 +457,11 @@ Session artifacts show the operator using an LLM to orchestrate a 4-stage attack
 
 ### 5.1 Per-Case Static Detail → Sub-Reports
 
-Case-level static analysis — Case 1's `ai_sniper_brute.py`/`c2_server.py`, Case 2's `instana_local_collector.ps1` and ARPA codebase, Case 3's Pandora framework and `Naku.arm` ELF, Case 9's `libpam_cache.so`/`libpam_cache.c` and deployment scripts, Case 10's Fernet crypter and loader series — is documented at full depth in each linked sub-report (§14.2). The two cross-case static findings the parent owns are the byte-identical `libpam_cache.so` supply-chain root (carried in §4.5 and the IOC feed) and the AI-Generated Code structural signature below.
+Per-case static analysis lives at full depth in each linked sub-report (§14.2): Case 1's `ai_sniper_brute.py`/`c2_server.py`, Case 2's `instana_local_collector.ps1` and ARPA codebase, Case 3's Pandora framework and `Naku.arm` ELF, Case 9's `libpam_cache.so`/`libpam_cache.c` and deployment scripts, and Case 10's Fernet crypter and loader series. The parent owns two cross-case static findings: the byte-identical `libpam_cache.so` supply-chain root (carried in §4.5 and the IOC feed) and the AI-Generated Code structural signature below.
 
 ### 5.2 Cross-Case AI-Generated Code Static Signature (13-Criteria Diagnostic)
 
-Static analysis applied the 13-criteria diagnostic checklist to Python files across Cases 1, 2, 3. Aggregate results:
+The 13-criteria diagnostic checklist scored Python files from three independent operators (Cases 1, 2, 3) as DEFINITE AI-co-authored — a signature that holds across three different AI tools. Aggregate results:
 
 | Operator | Files Examined | Mean Criteria Match | Verdict |
 |---|---|---|---|
@@ -479,7 +479,7 @@ Cross-operator validation across three different AI tools (Gemini CLI, OpenClaw,
 
 ### 6.1 Per-Case Operator Timelines → Sub-Reports
 
-The chronological operator-side workflows and network-activity sequences for Case 1 (Gemini credential-mutation → C2 → healthcare-victim RDP/SSH → disinformation pivot), Case 2 (insider tunnel setup → stolen-JWT ingestion → 4-source correlation → live dashboard), Case 3 (Rovodev prompt → AI `file_write` → 11-arch build → dual-channel distribution → 5-vector persistence → C2 registration), and Case 9 (kit pull → per-customer customization → `/etc/ld.so.preload` write → libc-hook activation → hidden-miner + Hysteria v2 deployment → Telegram callbacks → container escape) are documented step-by-step in the linked sub-reports (§14.2). Two are publication-defining and belong to the parent's synthesis:
+Each case's chronological operator-side workflow is documented step-by-step in its linked sub-report (§14.2): Case 1 (Gemini credential-mutation → C2 → healthcare-victim RDP/SSH → disinformation pivot), Case 2 (insider tunnel setup → stolen-JWT ingestion → 4-source correlation → live dashboard), Case 3 (Rovodev prompt → AI `file_write` → 11-arch build → dual-channel distribution → 5-vector persistence → C2 registration), and Case 9 (kit pull → per-customer customization → `/etc/ld.so.preload` write → libc-hook activation → hidden-miner + Hysteria v2 deployment → Telegram callbacks → container escape). Two belong to the parent's synthesis:
 
 - **Case 3 Rovodev session JSONs** (`session_cron_a46703f0a3c4.json`, `session_interactive_b9d424.json`) capture AI authoring offensive code at primary-source level — the operator's verbatim natural-language prompts and the AI's `file_write` tool calls building the framework, file-by-file. This is the campaign's most direct evidence of AI-on-offense.
 - **Case 2 multi-source observability ingestion timing** on the ARPA platform shows the stolen 10-year Instana JWT (`jti 022a1b74-2332-4df5-a76b-60225ffa7ae3`, iat 2024-03-06) driving a daily ingestion cycle running through 2026-05-23 with the dashboard live 2026-05-24 — confirming an active, sustained operation rather than a one-off pull.
@@ -509,6 +509,8 @@ The campaign's heaviest tactic representation is **Resource Development** (opera
 This is a **multi-actor** campaign. Alternative Competing Hypotheses (ACH) analysis ruled for the **multi-actor unrelated** hypothesis, with **campaign coordination explicitly REFUTED** by distinct IOCs, wallets, language, geography, targets, motivations, AI tools, and infrastructure across all 8 cases. Attribution spans one named actor (Vova75Rus) and six UTAs; Cases 7, 8, 10 are INSUFFICIENT at capsule depth. **No Tier-1 government attribution** applies to any operator.
 
 ### 9.1 Vova75Rus — Named Actor (HIGH 88%)
+
+**Profile:** the campaign's only named-actor HIGH attribution — the GHOST cryptojacker kit author, a separate identity from his customer operators, tied to Zabaykalsky Krai, Russia at HIGH confidence (88%).
 
 **Case:** Case 9 (GHOST cryptojacker kit author — separate identity from kit's customer operators).
 
@@ -892,7 +894,7 @@ The single most operationally-useful Hunt.io MCP capability for this investigati
 }
 ```
 
-Read together, those tags describe a **Linux platform with PAM modification persistence (T1556.003), systemd service persistence (T1543.002), XDG autostart persistence (T1547.013), `/etc/passwd` + `/etc/shadow` credential dumping (T1003.008), system-log clearing (T1070.002), system-check sandbox evasion (T1497.001), time-based sandbox evasion (T1497.003), and a confirmed xmrig (Monero miner) family classification from tria.ge sandbox detonation**. The analyst formed that platform model in seconds — without pulling any file content — and the model was correct end-to-end. The expansion of Case 9 from "capsule" depth to full case treatment was directly driven by this metadata: the breadth of TTP coverage signaled that the host was a systematic cryptojacking platform rather than a single-purpose scanner.
+Read together, those tags describe a **Linux platform with PAM modification persistence (T1556.003), systemd service persistence (T1543.002), XDG autostart persistence (T1547.013), `/etc/passwd` + `/etc/shadow` credential dumping (T1003.008), system-log clearing (T1070.002), system-check sandbox evasion (T1497.001), time-based sandbox evasion (T1497.003), and a confirmed xmrig (Monero miner) family classification from tria.ge sandbox detonation**. The analyst formed that platform model in seconds — without pulling any file content — and the model was correct end-to-end. This metadata directly drove Case 9's expansion from "capsule" depth to full case treatment: the breadth of TTP coverage signaled a systematic cryptojacking platform rather than a single-purpose scanner.
 
 **Concrete example — Case 3 (87.106.143.220) host-files listing:**
 
