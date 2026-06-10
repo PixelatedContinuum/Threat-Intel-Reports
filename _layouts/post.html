@@ -247,8 +247,10 @@ document.addEventListener('DOMContentLoaded', function () {
   var tocMobile     = document.getElementById('hl-toc-mobile');
   if (!tocList || !toc) return;
 
-  var headings = Array.from(content.querySelectorAll('h1, h2'));
-  if (headings.length < 3) {
+  var headings = Array.from(content.querySelectorAll('h2, h3'));
+  var h2count = 0;
+  headings.forEach(function (h) { if (h.tagName === 'H2') h2count++; });
+  if (h2count < 3) {
     toc.style.display = 'none';
     if (tocMobile) tocMobile.style.display = 'none';
     return;
@@ -257,52 +259,11 @@ document.addEventListener('DOMContentLoaded', function () {
   var linkIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
   var tocIconSVG  = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 
+  function tocLabelText(h) { return h.textContent.replace(/^[\d.]+\s*/, '').trim(); }
+
+  // Pass 1: assign ids + inject permalink anchors on every heading (h2 + h3)
   headings.forEach(function (h, i) {
     if (!h.id) h.id = 'toc-' + i;
-
-    // Capture text before appending anchor so TOC stays clean
-    var labelText = h.textContent.replace(/^[\d.]+\s*/, '').trim();
-
-    // TOC entry
-    var li = document.createElement('li');
-    li.className = 'hl-toc__item';
-    var a = document.createElement('a');
-    a.href = '#' + h.id;
-    a.textContent = labelText;
-    li.appendChild(a);
-
-    // TOC copy-link button (hover-reveal, right edge)
-    var tocBtn = document.createElement('button');
-    tocBtn.className = 'hl-toc__copy-btn';
-    tocBtn.innerHTML = tocIconSVG;
-    tocBtn.title = 'Copy link to section';
-    tocBtn.setAttribute('aria-label', 'Copy link to this section');
-    tocBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var url = location.href.split('#')[0] + '#' + h.id;
-      navigator.clipboard.writeText(url).then(function () {
-        tocBtn.textContent = '✓';
-        setTimeout(function () { tocBtn.innerHTML = tocIconSVG; }, 1500);
-      }).catch(function () {});
-    });
-    li.appendChild(tocBtn);
-    tocList.appendChild(li);
-
-    // Mobile TOC entry (collapsible card, shown ≤1280px)
-    if (tocListMobile) {
-      var liM = document.createElement('li');
-      var aM = document.createElement('a');
-      aM.href = '#' + h.id;
-      aM.textContent = labelText;
-      aM.addEventListener('click', function () {
-        if (tocMobile) tocMobile.open = false;
-      });
-      liM.appendChild(aM);
-      tocListMobile.appendChild(liM);
-    }
-
-    // Permalink anchor appended after text capture
     var anchor = document.createElement('a');
     anchor.className = 'hl-heading-anchor';
     anchor.href = '#' + h.id;
@@ -325,18 +286,112 @@ document.addEventListener('DOMContentLoaded', function () {
     h.appendChild(anchor);
   });
 
-  // Scroll-spy with TOC auto-scroll
-  var links = Array.from(tocList.querySelectorAll('a'));
+  // Pass 2: group each h3 under its preceding h2
+  var groups = [];
+  headings.forEach(function (h) {
+    if (h.tagName === 'H2') {
+      groups.push({ heading: h, subs: [] });
+    } else if (groups.length) {
+      groups[groups.length - 1].subs.push(h);
+    } else {
+      groups.push({ heading: h, subs: [] }); // orphan h3 before any h2 (rare/none)
+    }
+  });
+
+  function buildCopyBtn(id) {
+    var b = document.createElement('button');
+    b.className = 'hl-toc__copy-btn';
+    b.innerHTML = tocIconSVG;
+    b.title = 'Copy link to section';
+    b.setAttribute('aria-label', 'Copy link to this section');
+    b.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var url = location.href.split('#')[0] + '#' + id;
+      navigator.clipboard.writeText(url).then(function () {
+        b.textContent = '✓';
+        setTimeout(function () { b.innerHTML = tocIconSVG; }, 1500);
+      }).catch(function () {});
+    });
+    return b;
+  }
+
+  function buildMobileEntry(h, isSub) {
+    if (!tocListMobile) return;
+    var liM = document.createElement('li');
+    if (isSub) liM.className = 'hl-toc__item--h3';
+    var aM = document.createElement('a');
+    aM.href = '#' + h.id;
+    aM.textContent = tocLabelText(h);
+    aM.addEventListener('click', function () { if (tocMobile) tocMobile.open = false; });
+    liM.appendChild(aM);
+    tocListMobile.appendChild(liM);
+  }
+
+  // Pass 3: render each group into the desktop + mobile lists
+  groups.forEach(function (g) {
+    var h = g.heading;
+    var hasSubs = g.subs.length > 0;
+
+    var li = document.createElement('li');
+    li.className = 'hl-toc__item';
+
+    if (hasSubs) {
+      var caret = document.createElement('button');
+      caret.className = 'hl-toc__caret';
+      caret.setAttribute('aria-expanded', 'false');
+      caret.setAttribute('aria-label', 'Toggle subsections');
+      caret.textContent = '▸';
+      caret.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var open = li.classList.toggle('hl-toc__item--open');
+        caret.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      li.appendChild(caret);
+    }
+
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = tocLabelText(h);
+    li.appendChild(a);
+    li.appendChild(buildCopyBtn(h.id));
+
+    if (hasSubs) {
+      var sub = document.createElement('ul');
+      sub.className = 'hl-toc__sublist';
+      g.subs.forEach(function (sh) {
+        var sli = document.createElement('li');
+        sli.className = 'hl-toc__item hl-toc__item--h3';
+        var sa = document.createElement('a');
+        sa.href = '#' + sh.id;
+        sa.textContent = tocLabelText(sh);
+        sli.appendChild(sa);
+        sub.appendChild(sli);
+      });
+      li.appendChild(sub);
+    }
+
+    tocList.appendChild(li);
+
+    buildMobileEntry(h, false);
+    g.subs.forEach(function (sh) { buildMobileEntry(sh, true); });
+  });
+
+  // Scroll-spy: highlight active heading + auto-expand its chapter
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        links.forEach(function (a) { a.classList.remove('hl-toc__active'); });
-        var active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
-        if (active) {
-          active.classList.add('hl-toc__active');
-          active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        }
+      if (!entry.isIntersecting) return;
+      tocList.querySelectorAll('a').forEach(function (a) { a.classList.remove('hl-toc__active'); });
+      var active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
+      if (!active) return;
+      active.classList.add('hl-toc__active');
+      var subEl = active.closest('.hl-toc__sublist');
+      var chapter = subEl ? subEl.parentElement : active.closest('.hl-toc__item');
+      if (chapter && chapter.querySelector(':scope > .hl-toc__sublist')) {
+        chapter.classList.add('hl-toc__item--open');
+        var c = chapter.querySelector(':scope > .hl-toc__caret');
+        if (c) c.setAttribute('aria-expanded', 'true');
       }
+      active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     });
   }, { rootMargin: '-8% 0% -80% 0%' });
 
