@@ -3060,6 +3060,14 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    The home "Latest" block renders a collapsed one-card series
    pointer instead (catalog-card with a part_label chip).
    ============================================================ */
+/* Dense packing on listing grids backfills the cell a full-width series
+   cluster would otherwise orphan beside a lone standalone card (e.g. a single
+   newest report sitting above a cluster). Pure no-op on grids without
+   full-width items (detections / IOC listings). */
+.hl-grid[data-filter-grid] {
+  grid-auto-flow: row dense;
+}
+
 .hl-series-cluster {
   grid-column: 1 / -1;
   position: relative;
@@ -3112,7 +3120,10 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 
 .hl-series-cluster__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* auto-fit so member count fills cleanly: 2 -> two wide cards,
+     3 -> three across in one row (no dead cell), 6 -> 3x2. Cards keep
+     full detail + tags regardless of width. */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 11px;
 }
 
