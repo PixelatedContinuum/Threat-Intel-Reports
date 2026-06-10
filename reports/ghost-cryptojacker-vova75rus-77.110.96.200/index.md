@@ -116,11 +116,11 @@ The technical depth lives in §3–§6 (classification through dynamic analysis)
 
 ## 2. Business Risk Assessment
 
-For an organization running GPU-cloud ML inference (or hosting third-party workloads on GPU infrastructure), the business risk is dual-layer: immediate resource theft (someone else mines cryptocurrency on your hardware) and deeper compromise (the kit's container-escape suite, persistence depth, and credential-harvest functions create a follow-on access vector inside the tenant boundary).
+For an organization running GPU-cloud ML inference (or hosting third-party workloads on GPU infrastructure), the GHOST kit poses a dual-layer business risk: immediate resource theft — someone else mines cryptocurrency on your hardware — and deeper compromise, where the kit's container-escape suite, persistence depth, and credential-harvest functions open a follow-on access vector inside the tenant boundary.
 
 ### Understanding the Real-World Impact
 
-The kit's design tells you what the operator does with a successful compromise. Three operational outcomes are observable in the captured artifacts:
+A successful compromise hands the operator three operational outcomes, each observable in the captured artifacts and each readable directly from the kit's design:
 
 1. **GPU compute hijacking on the victim's hardware** — the primary financial-motivation outcome. The kit configures both XMR (Monero) mining via xmrig and Conflux Octopus-algorithm mining via lolMiner, with A100-tier GPU targeting indicated by the 8-12x consumer-GPU hashrate yield on the Conflux pool. Victim cloud bills accrue at the GPU instance billing rate while the operator collects the mining revenue.
 2. **Hidden persistence with anti-removal tradecraft** — the 5-vector persistence chain plus `chattr +i` immutable flags plus scatter-copy redundancy across 5+ locations plus inotify_guard watchdog daemon makes standard remediation (delete the file, reboot) ineffective. A defender who cleans one persistence vector and reboots will find the rootkit re-establishing itself from another vector via the watchdog process.
@@ -146,7 +146,7 @@ The phases below describe the **categories of work** required to investigate and
 
 - **Initial Phase — Confirm and contain.** Verify `/etc/ld.so.preload` contents; verify `libpam_cache.so` presence under `/lib/security/` or sibling locations; capture the ELF binary for forensic preservation (file is small — 14,568 bytes — but check `chattr -i` first to clear the immutable flag). Isolate the host from peer hosts in the same tenant boundary. If the host is a container, isolate at the container-runtime level **and** at the host level — assume the container-escape variants have already executed unless forensic evidence confirms otherwise (the kit attempts all 4 escape variants on installation; success of any one is sufficient for host-level compromise).
 - **Investigation Phase — Identify all persistence vectors.** Enumerate all 5 known persistence locations (`/etc/ld.so.preload`, `/etc/systemd/system/systemd-journal-flush.service`, `$HOME/.config/systemd/user/fontconfig-cache.service`, `/etc/init.d/fontcache`, crontab `/var/spool/cron/.font_*`, shell-RC injection in `~/.bashrc` / `~/.profile`). Hunt the bash history for the OWNER and MIRROR Telegram bot token regex. Hunt ComfyUI custom_nodes directories for the `PerformanceMonitor` class signature. Pull and preserve any other operator scripts present in the same temp/spool/cache directories.
-- **Remediation Phase — Full host rebuild recommended.** The combination of LD_PRELOAD libc-hook rootkit + 5-vector persistence + chattr +i immutable + scatter copies + container escape is collectively beyond reliable surgical cleanup. The defensible position is full host rebuild from known-good media with credential rotation for any service accounts that had keys on the compromised host. Targeted cleanup is viable only if **every** persistence vector has been enumerated with confidence — and the inotify_guard watchdog mechanism makes that confidence difficult to obtain.
+- **Remediation Phase — Rebuild the host from known-good media.** The combination of LD_PRELOAD libc-hook rootkit + 5-vector persistence + chattr +i immutable + scatter copies + container escape is collectively beyond reliable surgical cleanup. The defensible position is full host rebuild from known-good media with credential rotation for any service accounts that had keys on the compromised host. Targeted cleanup is viable only if **every** persistence vector has been enumerated with confidence — and the inotify_guard watchdog mechanism makes that confidence difficult to obtain.
 - **Enhanced Monitoring Phase — Hunt for kit-author OWNER bot signature across the environment.** A single GHOST customer often implies more — the kit-sales business model produces a non-trivial probability that other hosts in the same organization (or peer organizations on the same hosting provider) are running the kit (MODERATE-confidence indication based on the commodity-kit distribution model documented in Section 3). Deploy the YARA / Sigma / Suricata rules from Section 10 across the broader environment.
 - **Ongoing — Audit ComfyUI exposure and container-runtime configuration.** If ComfyUI was the initial-access vector, harden ComfyUI deployment (authentication, restricted listen address, Manager component restricted to localhost). If a container was involved, audit cgroup release_agent permissions, bind-mount surface, Docker socket exposure, and the configuration that allowed `nsenter` via host PID.
 
@@ -154,7 +154,7 @@ The phases below describe the **categories of work** required to investigate and
 
 ## 3. Technical Classification
 
-This section establishes what GHOST is, how it is structured, and how it compares to peer threats in the cryptojacking ecosystem.
+GHOST is a composite cryptojacking *kit* — a userland LD_PRELOAD rootkit, a ComfyUI exploitation framework, a Hysteria v2 backdoor, and legitimate mining binaries, glued by a 1,338-line installer and distributed through a 4-tier supply chain. The subsections below establish its structure and place it against peer threats in the cryptojacking ecosystem.
 
 ### Classification & Identification
 
@@ -201,14 +201,14 @@ The full structured IOC inventory is in the separate IOC feed file (link in Sect
 Five structural indicators distinguish a commodity-kit family from a single-operator campaign:
 
 1. **Byte-identical binary across customers.** A bespoke single-operator campaign would compile per-target; a commodity kit ships a pre-built artifact. GHOST is the latter (DEFINITE evidence).
-2. **Per-customer config delta is exactly 17 bytes.** The ghost.sh installer differs between Operator-A and Operator-B copies in 17 bytes — the wallet addresses, pool URLs, and `PIP_PAYLOAD_REPO` GitHub URL. Every other byte is identical. This is the signature of a config-substitution distribution model, not per-customer source modification.
+2. **Per-customer config delta of exactly 17 bytes.** The ghost.sh installer differs between Operator-A and Operator-B copies in 17 bytes — the wallet addresses, pool URLs, and `PIP_PAYLOAD_REPO` GitHub URL. Every other byte is identical. This is the signature of a config-substitution distribution model, not per-customer source modification.
 3. **Kit-author OWNER Telegram bot baked into every customer deployment.** The OWNER bot (8415540095) is hardcoded — operators do not configure it; the kit author controls it. This is structurally inconsistent with a single-operator scenario (the operator would not give themselves an OWNER and a MIRROR bot using different tokens; they would consolidate).
 4. **Kit-author identity has separate cryptocurrency operation.** Vova75Rus mines XTM/Tari via Kryptex worker `1238rkM7gGg3sl`. Operator-A mines XMR (4BBj3gj4...) + CFX (cfx:aaj5xb...). Different cryptocurrencies, different pools, different destinations. A single actor would not maintain two parallel mining setups with distinct telemetry.
-5. **The kit advertises a version number.** The first line of `ghost.sh` reads `# GHOST v5.1 (Anti-Hisana + Resurrection + Spread + Escape)`. Single-operator campaigns rarely version their tooling externally; commodity-kit authors do because the version is a market-differentiation signal.
+5. **Externally advertised version number.** The first line of `ghost.sh` reads `# GHOST v5.1 (Anti-Hisana + Resurrection + Spread + Escape)`. Single-operator campaigns rarely version their tooling externally; commodity-kit authors do because the version is a market-differentiation signal.
 
 ### Comparison to Peer Cryptojackers
 
-The GHOST kit shares the LD_PRELOAD `readdir()` hijack technique with the Koske cryptojacker (Aquasec/SOC Prime/Picus/Dark Reading coverage 2025-2026). **GHOST and Koske are different families** — do not conflate them. Koske is delivered via panda-image polyglot files and exploits JupyterLab; it has an AI-generated codebase signature. GHOST is delivered via direct script-pull from open directories, exploits ComfyUI, and shows a manually-coded structure (no AI-generated code signature in any component reviewed).
+**GHOST and Koske are different families — do not conflate them**, even though both use the LD_PRELOAD `readdir()` hijack technique (Koske: Aquasec/SOC Prime/Picus/Dark Reading coverage 2025-2026). Koske is delivered via panda-image polyglot files, exploits JupyterLab, and carries an AI-generated codebase signature. GHOST is delivered via direct script-pull from open directories, exploits ComfyUI, and shows a manually-coded structure (no AI-generated code signature in any component reviewed).
 
 The GHOST kit's `_anti_hisana` competitor-displacement function references "Hisana", a rival cryptojacker known only through GHOST kit artifact references. Hisana has zero independent public threat intelligence; it exists in the public record only as the named target of GHOST's competitor-displacement code (`kill_list.patterns` regex matches `xmrig|xmr-stak|sysagentd|kdevtmpfsi|kerberods|bioset|stratum|cryptonight|randomx|etchash|2miners|rigel|sysdaemon|kryptex`) and the port-10808 C2 port referenced in `ghost.sh`. This is an intelligence gap — independent Hisana coverage is not available.
 
@@ -554,7 +554,7 @@ This raises Operator-A's risk profile above Operator-B, who abandoned 77.110.125
 
 ### 6.4 Network Behavior (Reconstructed from Kit Configuration)
 
-The full PCAP-level dynamic analysis of GHOST kit network traffic was not performed in this investigation (open-directory artifact pull only; honeypot deployment is project-planned but blocked on Protectli/VLAN segmentation). The following network patterns are reconstructed from the kit's static configuration:
+The patterns below reconstruct GHOST's network behavior from the kit's static configuration — mining-pool egress, dual-Telegram C2, Hysteria v2 backdoor traffic, and scanner activity. This investigation did not capture live PCAP (open-directory artifact pull only; honeypot deployment is project-planned but blocked on Protectli/VLAN segmentation), so treat these as configuration-derived rather than observed:
 
 **Outbound mining pool traffic.**
 - Operator-A: TCP 77.110.96.200:3333 (self-hosted XMR proxy) → upstream to `xmr.kryptex.network`
@@ -601,7 +601,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-016 and UTA-2026-017 are internal tracking designations assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. These labels will not appear in external threat intelligence feeds or vendor reports — they are specific to this publication. If future evidence links this activity to a known named actor, the designations will be retired and updated accordingly.
 
-This section documents the attribution conclusion for Case 9 in three identity tiers: a named kit author (Vova75Rus, HIGH 88%), two unattributed customer operators (UTA-2026-016 and UTA-2026-017, LOW), and a supply-chain context entity (UnamSanctam — explicitly NOT a Case 9 threat actor; included for ecosystem context only).
+Attribution for Case 9 resolves into three identity tiers: a named kit author (Vova75Rus, HIGH 88%), two unattributed customer operators (UTA-2026-016 and UTA-2026-017, both LOW), and a supply-chain context entity (UnamSanctam — explicitly NOT a Case 9 threat actor; included for ecosystem context only).
 
 ### 9.1 The 4-Tier Supply Chain Model (Central Attribution Finding)
 
@@ -717,7 +717,7 @@ Hisana exists in the public threat-intelligence record only via GHOST kit artifa
 
 ### 9.7 Negative Finding: AI-Generated Code Signature ABSENT from GHOST Kit
 
-A distinctive finding in this sub-report, contrasting with the parent campaign's Cases 1, 2, and 3: the **AI-generated code structural signature is absent** from every GHOST kit component reviewed. The Bash scripts, C source, and Python framework all show hand-authored coding patterns (consistent function naming conventions, idiomatic Russian-language commentary, manual error handling, no over-commenting). Vova75Rus authors GHOST manually; this is not an AI-augmented kit.
+The **AI-generated code structural signature is absent** from every GHOST kit component reviewed — a distinctive finding here, since the parent campaign's Cases 1, 2, and 3 all showed it. The Bash scripts, C source, and Python framework all show hand-authored coding patterns (consistent function naming conventions, idiomatic Russian-language commentary, manual error handling, no over-commenting). Vova75Rus authors GHOST manually; this is not an AI-augmented kit.
 
 This negative finding matters for cross-case analysis at the parent campaign level: AI integration into offensive workflows is operator-discretionary, not a campaign-wide default. The GHOST kit author chose to author manually; the Case 1, 2, 3 operators chose to integrate AI tools. The 5 novel TTPs documented in the parent campaign are AI-augmented operator behaviors, not kit-author defaults.
 
@@ -788,13 +788,13 @@ This is a third-party intelligence publication, not an incident response playboo
 - Block AEZA AS210644 at egress (perimeter)
 - Block kit-author OWNER Telegram bot URL pattern at egress
 - Disable ComfyUI public exposure pending audit
-- Credential rotation for any service accounts with keys on the compromised host
+- Rotate credentials for any service accounts with keys on the compromised host
 
 ---
 
 ## 11. Confidence Summary
 
-This section organizes findings by confidence level per the project's CONFIDENCE LEVELS framework. The table above (Section 7) marks per-technique confidence inline; this summary provides the higher-level view across all findings.
+This summary organizes every finding by confidence level, from DEFINITE down to INSUFFICIENT, per the project's CONFIDENCE LEVELS framework. The MITRE ATT&CK mapping (§7) marks per-technique confidence in the companion detection file; the view below spans all findings, not just the technique table.
 
 ### DEFINITE (Direct Evidence, No Ambiguity)
 
@@ -851,7 +851,7 @@ This section organizes findings by confidence level per the project's CONFIDENCE
 
 ## 12. Coverage Gaps
 
-This section enumerates the specific evidence-data gaps identified during this investigation. Each gap is a known limit on the analytical conclusions in this report — surfaced openly so that downstream defenders and follow-on investigators can prioritize the work that would close each gap.
+None of the six evidence-data gaps below invalidates a central conclusion of this report; each marks a known limit, surfaced openly so follow-on investigators can prioritize the work that would close it. Closing any of them would extend the current attribution and detection coverage, not overturn it.
 
 - **Hisana cryptojacker family — no independent public threat intelligence.** Hisana exists in the public record only via GHOST kit artifact references (`_anti_hisana` function, `kill_list.patterns` regex entry, port 10808 C2 reference). No independent vendor or community coverage of Hisana's developer identity, infrastructure, or victim scope. Closing this gap requires direct port-10808 infrastructure investigation that was out of scope for this report.
 - **Conflux drain chain forensics — confluxscan.io operator-wallet investigation not conducted.** The 3-hop drain chain (mining wallet → consolidator → exchange off-ramp) is documented in Section 9.3 from transaction-count and balance evidence at endpoint addresses, but deeper on-chain transaction-graph forensics via confluxscan.io against operator wallets has not been performed. A full subpoena-grade chain-of-custody trace would require dedicated blockchain-forensics tooling.
@@ -860,13 +860,13 @@ This section enumerates the specific evidence-data gaps identified during this i
 - **Historical Customer C wallet (cfx:aasktcha...) — earliest GHOST deployment timing unknown.** The historical wallet cfx:aasktcha7r... drains to the same consolidator as Operator-A's current wallet, providing wallet-rotation forensic evidence. However, the earliest GHOST kit deployment date associated with this historical wallet is not established — the wallet's first transaction predates the current investigation's evidence window and source data to establish kit-author distribution timing further back is not available.
 - **JARM / JA4X TLS fingerprints for both customer hosts not retrieved.** The Hunt MCP namespace required for JARM and JA4X fingerprint retrieval against 77.110.96.200 and 77.110.125.145 was unavailable during this investigation session. JARM/JA4X fingerprints would enable cross-corpus pivoting against the broader Hunt platform IP corpus to surface additional GHOST kit customer operators beyond the two observed here. This is a deferred infrastructure-pivot opportunity rather than a refutation risk.
 
-These gaps are surfaced for prioritization by follow-on investigators. None of them invalidate the central conclusions of this report (the 4-tier supply chain model, the Vova75Rus kit-author attribution, the byte-identical libpam_cache.so supply-chain proof). Closing any of them would extend, not overturn, the current attribution and detection coverage.
+The central conclusions each gap leaves standing: the 4-tier supply chain model, the Vova75Rus kit-author attribution (HIGH 88%), and the byte-identical `libpam_cache.so` supply-chain proof (DEFINITE).
 
 ---
 
 ## 13. Calibration Notes / Retractions
 
-This section documents the analytical retractions made during the investigation. Each retraction reflects an initial reading that was subsequently disproven by direct evidence. Documenting these openly is part of the project's commitment to evidence-based intelligence and source-citation integrity.
+Six initial readings were disproven by direct evidence during the investigation and are retracted below — none touches the central conclusions, but each shaped the analysis along the way. Documenting them openly is part of the project's commitment to evidence-based intelligence and source-citation integrity.
 
 ### 13.1 T1556.003 mis-mapping → T1014 + T1574.006 + T1564.001 + T1027 (Phase 7 → Phase 15)
 
@@ -927,7 +927,7 @@ The 4,573-IP corpus is not published as an IOC list because most of those hosts 
 
 ### Why These Retractions Are Documented
 
-Documenting retractions openly is the project's standard practice. The retractions above are part of the analytical record because (a) other defenders are likely to hit the same initial reads given the deceptive filename and pool-routing artifacts (MODERATE — based on the consistency of the surface evidence across analyst perspectives), and (b) the corrected mappings changed downstream detection-rule derivation: the T1556.003 → T1014 retraction directly changed which Sigma rules were authored for the detection file.
+Two reasons put these retractions in the analytical record: (a) other defenders are likely to hit the same initial reads given the deceptive filename and pool-routing artifacts (MODERATE — based on the consistency of the surface evidence across analyst perspectives), and (b) the corrected mappings changed downstream detection-rule derivation — the T1556.003 → T1014 retraction directly changed which Sigma rules were authored for the detection file.
 
 ---
 
