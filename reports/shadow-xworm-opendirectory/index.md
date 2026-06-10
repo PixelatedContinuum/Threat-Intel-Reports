@@ -37,23 +37,19 @@ description: "An exposed open directory at epgoldsecurity.com revealed a single 
 
 ## Bottom Line Up Front
 
-An exposed open directory at `epgoldsecurity.com` revealed a financially-motivated threat actor (UTA-2026-003) operating both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds connecting to a single C2 server at 151.245.112.70. Shadow RAT is the primary risk: it disables Windows' two main malware detection mechanisms (AMSI and ETW) before any malicious activity begins, and carries a persistence capability that survives OS reinstallation — making detection and remediation significantly harder than a standard RAT infection. Both families must be fully removed for a confirmed infection to be cleared; removing one while the other persists leaves the attacker with full access. Block 151.245.112.70 immediately and check all endpoints for the persistence artifacts documented in Section 10.
+An exposed open directory at `epgoldsecurity.com` revealed a financially-motivated threat actor (UTA-2026-003) operating both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds connecting to a single C2 server at 151.245.112.70. Shadow RAT is the primary risk: it disables Windows' two main malware detection mechanisms (AMSI and ETW) before any malicious activity begins, and carries a persistence capability that survives OS reinstallation — making detection and remediation significantly harder than a standard RAT infection. Both families must be fully removed for a confirmed infection to be cleared; removing one while the other persists leaves the attacker with full access. Block 151.245.112.70 immediately and check all endpoints for the persistence artifacts documented in Section 11.
 
 ---
 
 ## 1. Executive Summary
 
-This investigation documents an active dual-RAT campaign operated by a single, unattributed financially-motivated threat actor (designated UTA-2026-003 *(an internal tracking label used by The Hunters Ledger — see Section 8)*) who deployed both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 from an exposed open directory at `epgoldsecurity.com`. The combined capability set gives this operator full remote control, credential theft, cryptocurrency clipping, and surveillance capability against US victims, with the advanced persistence and evasion features of Shadow RAT representing the most significant detection and remediation challenge.
+A single unattributed financially-motivated operator (UTA-2026-003 *(an internal tracking label used by The Hunters Ledger — see Section 8)*) ran Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds routing to one C2 server at 151.245.112.70. An exposed open directory at `epgoldsecurity.com` disclosed the full toolkit; configuration decryption of all four samples, static code examination, and passive DNS pivoting establish the findings throughout this report.
 
-This report fills a documented gap: no public threat intelligence exists for the "Shadow RAT v2.6.4.0" branding, this operator's infrastructure cluster, or the `epgoldsecurity.com`/`harrismanlieb.ink` campaign. The analysis is based on static code examination, configuration decryption, and passive DNS pivoting of all five recovered samples.
+Shadow RAT (HIGH confidence: a private fork of Pulsar RAT, itself a Quasar RAT derivative) is the primary risk — a 50+ capability .NET RAT with AMSI/ETW bypass, HVNC, WinRE persistence that survives OS reinstallation, an integrated Kematian stealer, and AES-256-CBC encrypted C2. XWorm 3.0-5.0, a commercially available MaaS RAT, provides redundant access with triple persistence and a six-layer anti-analysis suite. Both families must be fully remediated together; removing one while the other persists leaves the attacker with full access.
 
-**What Was Found**
+The dual bypass chain (AMSI blinds .NET in-memory scanning; ETW silences EDR telemetry pipelines) fires before any RAT functionality loads, creating a detection gap that signatures and behavioral baselines alone cannot close. WinRE persistence — command-activated by the operator — elevates the remediation complexity beyond a standard RAT removal. Kematian exfiltrates credentials through Shadow RAT's encrypted C2 channel rather than a Discord webhook, reducing its forensic footprint.
 
-An open directory at `epgoldsecurity.com` exposed four malware binaries across two families deployed by the same operator against US victims during the 2026 tax season. Shadow RAT v2.6.4.0 — assessed with HIGH confidence as a private fork of the open-source Pulsar RAT (itself a Quasar RAT derivative) — is the primary threat: a 50+ capability .NET RAT with AMSI/ETW bypass, HVNC, WinRE persistence, a cryptocurrency clipper, integrated Kematian stealer, and AES-256-CBC encrypted C2. XWorm 3.0-5.0, a commercially available MaaS RAT purchased by the operator, provides redundant access with triple persistence and a six-layer anti-analysis suite. Both families connect to the same C2 IP (151.245.112.70) on separate ports, confirming single-operator control. ScreenConnect was deployed to the C2 server on March 1, 2026, providing the operator a legitimate-looking persistent access channel alongside the malware.
-
-**Why This Threat Is Significant**
-
-Shadow RAT's WinRE persistence capability places it in a category that most standard endpoint remediation processes fail to address — a compromised system with active WinRE persistence can survive an OS reinstallation. The dual-family deployment doubles the operator's persistence surface: both families must be fully remediated for the infection to be cleared. The combination of AMSI bypass (which blinds .NET in-memory scanning) and ETW bypass (which silences event tracing used by EDR telemetry pipelines) creates a detection gap that signatures and behavioral baselines alone cannot fully close. The Kematian stealer integration exfiltrates credentials through Shadow RAT's encrypted C2 channel rather than a separate Discord webhook, reducing the forensic footprint.
+UTA-2026-003 is assessed with LOW confidence (55%) as an independent MaaS consumer, not a named organized group — confirmed by zero named-actor infrastructure overlaps and OPSEC failures (stable C2 IP for 80+ days, exposed RDP/SMB/WinRM ports, unpatched CVE-2020-0796) inconsistent with organized tradecraft. Technical detection priorities and persistence artifact locations are in Sections 5–6; the full detection rule set (7 YARA, 10 Sigma, 6 Suricata) is at the linked detection file.
 
 **Key Risk Factors**
 
@@ -99,18 +95,6 @@ Shadow RAT's WinRE persistence capability places it in a category that most stan
   </tbody>
 </table>
 
-**Threat Actor**
-
-UTA-2026-003 is assessed with LOW confidence (55%) as an independent, financially motivated MaaS consumer — a single operator using commodity and open-source tooling, not a named organized threat group. Infrastructure analysis found zero overlaps with any documented APT or crimeware group. Poor operational security (stable C2 IP for 80+ days, exposed administrative ports, unpatched CVE-2020-0796) is inconsistent with organized group tradecraft.
-
-**For Technical Teams**
-
-- The AMSI + ETW bypass chain executes at Shadow RAT startup before any RAT functionality loads — detection requires targeting the shellcode byte pattern or the runtime string deobfuscation behavior, not API name strings (see Section 5.2)
-- XWorm's ip-api.com pre-flight check (`http://ip-api.com/line/?fields=hosting`) is the most reliable behavioral detection trigger — it fires before C2 connection on every execution (see Section 6.2)
-- Shadow RAT's WinRE persistence (`DoAddWinREPersistence`) survives standard OS reinstallation — scope assessment must specifically check WinRE modification status (see Section 5.4)
-- Detection rules (7 YARA, 10 Sigma, 6 Suricata) are available at the detection file linked in Quick Reference
-- Block 151.245.112.70 at perimeter and monitor for all five associated domains
-
 ---
 
 ## 2. Key Takeaways
@@ -133,11 +117,9 @@ UTA-2026-003 is assessed with LOW confidence (55%) as an independent, financiall
 
 ## 3. Business Risk Assessment
 
-This section translates the technical findings into business-facing risk language. The goal is to equip decision-makers with enough context to prioritize response actions without requiring deep technical knowledge.
-
 ### Understanding the Real-World Impact
 
-This investigation uncovered a financially-motivated attacker who has built a functional malware operation using two separate RAT families running simultaneously on the same server. Think of it as two separate break-in tools operated by the same person — if defenders remove one, the other remains active. The attacker's primary goals, as evidenced by the tooling, are stealing login credentials (banking, crypto wallets, Steam gaming accounts, browser passwords), silently monitoring victims (keylogging, webcam, microphone, screen capture), and replacing cryptocurrency wallet addresses during transactions to redirect funds to the attacker.
+UTA-2026-003 built a functional malware operation using two RAT families running simultaneously on one server — two separate access tools under a single operator. Removing one leaves the other active. The attacker's goals, as evidenced by the tooling, are credential theft (banking, crypto wallets, Steam accounts, browser passwords), silent surveillance (keylogging, webcam, microphone, screen capture), and replacing cryptocurrency wallet addresses during transactions to redirect funds to the attacker.
 
 ### Impact Scenarios
 
@@ -360,7 +342,7 @@ The production build enables 8 boolean feature flags (obfuscated names: `bool_2`
 
 `ShadowClient.exe` and `ShadoClient.exe` are .NET 4.7.2 executables compiled for AnyCPU (64-bit preferred), targeting CLR v4.0.30319. Both are packed with .NET Reactor (a commercial .NET code protection tool) and use Costura.Fody (an embedded resource loader) to bundle 28 dependent assemblies into a single deployable executable. This packaging approach results in high binary entropy (7.663) and makes static analysis significantly more difficult without first unpacking.
 
-A disassembler (Binary Ninja) with .NET Reactor Slayer (a deobfuscation tool) was used to recover the 28 embedded assemblies, inline 2 obfuscated methods, and partially restore symbol names. The recovered assemblies confirm the full capability set through library fingerprinting:
+A disassembler (Binary Ninja) with .NET Reactor Slayer (a .NET deobfuscation tool) was used to recover the 28 embedded assemblies, inline 2 obfuscated methods, and partially restore symbol names. The recovered assemblies confirm the full capability set through library fingerprinting:
 
 | Library | Purpose |
 |---|---|
@@ -374,7 +356,7 @@ A disassembler (Binary Ninja) with .NET Reactor Slayer (a deobfuscation tool) wa
 
 The entry point after deobfuscation is `mzugzeoqhnabysgpche.KOwpTYUq38OZkEm4OsqXZ8pyS7Gu.Main` — the outer obfuscated class wrapper from .NET Reactor. The binary is not digitally signed.
 
-**Extraction workflow and what it produced:** .NET Reactor Slayer was run against `ShadoClient.exe` to strip the outer packer layer, producing an unpacked working copy (`ShadoClient_Slayed.exe`). The tool also dumped the 28 Costura.Fody-embedded assemblies to disk as standalone DLL files — these assemblies are stored inside the original binary as compressed resources and are never written to disk during normal execution, so dumping them is the only way to inspect their code statically. Cross-assembly analysis in dnSpy (a .NET decompiler) required explicitly loading each extracted DLL alongside the main binary to resolve references; without this, decompiled methods that call into the embedded libraries appear as unresolved symbols. `Shadow.Common.dll` in particular holds the shared message types, the PBKDF2 salt and derivation logic, and the AES/HMAC cryptographic primitives — decompiling this DLL in isolation was what enabled the config decryption described in Section 4.
+**Extraction workflow and what it produced:** .NET Reactor Slayer was run against `ShadoClient.exe` to strip the outer packer layer, producing an unpacked working copy (`ShadoClient_Slayed.exe`). The tool also dumped the 28 Costura.Fody-embedded assemblies to disk as standalone DLL files — these assemblies are stored inside the original binary as compressed resources and are never written to disk during normal execution, so dumping them is the only way to inspect their code statically. Cross-assembly analysis in a .NET decompiler (dnSpy) required explicitly loading each extracted DLL alongside the main binary to resolve references; without this, decompiled methods that call into the embedded libraries appear as unresolved symbols. `Shadow.Common.dll` in particular holds the shared message types, the PBKDF2 salt and derivation logic, and the AES/HMAC cryptographic primitives — decompiling this DLL in isolation was what enabled the config decryption described in Section 4.
 
 **What this means for detection:** The presence of `AForge.Video.DirectShow`, `NAudio`, and `SharpDX` in a process that has no legitimate UI visible to the user is a strong behavioral anomaly. A process loading webcam and audio capture libraries while invisible to the user should be treated as suspicious even without signature matches. Critically, defenders will not find the 28 embedded DLLs as separate files on disk during a live investigation — Costura.Fody loads them from compressed resources directly into memory at runtime. File-based scanning and disk forensics alone will only see the single packed executable. Observing the actual loaded assemblies (including `Shadow.Common.dll`) requires memory forensics: enumerating loaded .NET modules in the suspect process (e.g., via `Get-Process | Select-Object -ExpandProperty Modules`, Process Hacker, or a memory-forensics tool's module-listing plugin) or dumping the managed heap. Hash-based IOC matching against the 28 extracted DLL SHA256 values — published in the companion IOC feed — will only match if the DLLs have been dumped from memory or extracted from a captured sample; it will not match the running process's on-disk footprint.
 
@@ -508,7 +490,7 @@ Shadow RAT includes a `Shadow.Common.Messages.ClientManagement.WinRE` namespace 
 
 The Windows Recovery Environment (WinRE) is the pre-boot recovery system used when Windows fails to start. It exists in a protected partition separate from the main OS. Malware that establishes persistence in WinRE can survive a complete OS reinstallation because the WinRE partition is typically not wiped during standard reinstall procedures.
 
-This technique is uncommon: very few EDR products monitor WinRE for modification, and most incident response playbooks do not include WinRE checks. Its presence in this codebase elevates the remediation complexity for any confirmed compromise.
+This technique is uncommon: few EDR products monitor WinRE for modification, and most incident response playbooks do not include WinRE checks. Its presence in this codebase elevates the remediation complexity for any confirmed compromise.
 
 **Important caveat:** This capability is command-activated — the operator must explicitly issue the `DoAddWinREPersistence` command against a compromised host. Its presence in the recovered samples does not confirm deployment on every victim; it confirms the operator has the capability to deploy it selectively. Scope assessment for any confirmed infection must include a WinRE modification check.
 
@@ -639,7 +621,7 @@ XWorm executes six anti-analysis checks in sequence at startup. All checks resul
 Queries `Win32_ComputerSystem` via WMI and inspects `Manufacturer` and `Model` values for strings associated with virtual machine platforms: VMware, VirtualBox, and Hyper-V. Standard hypervisor-based sandbox environments are detected by this check.
 
 **Check 2 & 3 — Debugger Detection:**
-`Debugger.IsAttached` (managed .NET property) and `Debugger.IsLogging()` detect .NET debuggers attached to the process. `CheckRemoteDebuggerPresent` (Windows API, called via P/Invoke) detects kernel-mode debuggers. Both an interactive debugger (x64dbg) and remote debugging sessions are targeted.
+`Debugger.IsAttached` (managed .NET property) and `Debugger.IsLogging()` detect .NET debuggers attached to the process. `CheckRemoteDebuggerPresent` (Windows API, called via P/Invoke) detects kernel-mode debuggers. Both an interactive debugger (x64dbg) — a tool used to step through binary code at runtime — and remote debugging sessions are targeted.
 
 **Check 4 — Sandboxie Detection:**
 Checks for the presence of `SbieDll.dll` in the loaded module list. Sandboxie is a sandbox environment used by security researchers; this check specifically targets it.
@@ -650,7 +632,7 @@ Exits if `OSVersion.Major == 5` (Windows XP). Modern malware often avoids XP sys
 **Check 6 — Hosting/Datacenter Detection (most operationally interesting):**
 Makes an HTTP GET request to `http://ip-api.com/line/?fields=hosting` at the start of every execution, before any C2 connection. The ip-api.com API returns `"true"` if the requesting IP address belongs to a hosting provider, datacenter, or cloud service. If the response is `"true"`, XWorm exits.
 
-This check is particularly effective because it uses a legitimate, widely-available public API rather than a custom-built evasion technique. Cloud sandboxes (AWS, Azure, GCP hosted), datacenter-based analysis environments, and any system behind a commercial hosting provider's IP range will be detected. The check fires on every execution, making it a reliable behavioral detection trigger for defenders: legitimate software rarely makes this specific API call before establishing C2 connections.
+This check uses a legitimate, widely-available public API rather than a custom-built evasion technique, making it harder to block without disrupting legitimate services. Cloud sandboxes (AWS, Azure, GCP hosted), datacenter-based analysis environments, and any system behind a commercial hosting provider's IP range will be detected. The check fires on every execution, making it a reliable behavioral detection trigger for defenders: legitimate software rarely makes this specific API call before establishing C2 connections.
 
 **Detection opportunity:** The sequence `HTTP GET http://ip-api.com/line/?fields=hosting` followed by a TCP connection to port 7007 within seconds of process creation is a high-fidelity behavioral pattern for this specific XWorm campaign.
 
@@ -732,7 +714,7 @@ XWorm writes keystrokes to `%TEMP%\Log.tmp`. This fixed output path is a reliabl
 
 ### 7.1 C2 Server: 151.245.112.70
 
-> **Analyst note:** This section profiles the server that the malware connects to for attacker commands. The server's configuration — particularly which ports are open and how it has been set up — reveals details about the operator's operational habits and security practices that help validate the attribution assessment.
+> **Analyst note:** This section profiles the server that the malware connects to for attacker commands. The server's configuration — which ports are open and how it has been set up — reveals details about the operator's operational habits and security practices that help validate the attribution assessment.
 
 **DEFINITE confidence — confirmed via config decryption from all four malware builds**
 
@@ -861,7 +843,7 @@ These failures are consistent with an inexperienced individual operator rather t
 
 ### Operator Profile
 
-Based on the totality of evidence, UTA-2026-003 is assessed as a single individual or very small group with the following profile:
+Based on the totality of evidence, UTA-2026-003 is assessed as a single individual or small group with the following profile:
 
 - **Motivation:** Financial gain through credential theft and cryptocurrency theft
 - **Capability level:** Low-to-intermediate — consumer of available tools, not a malware developer
@@ -914,7 +896,7 @@ Sources: MITRE ATT&CK S0262 (Tier 1); Malpedia win.quasar_rat, win.pulsar_rat (T
 
 **Confidence: HIGH (ANY.RUN 2025 Annual Report, Cyble, Picus Security, Huntress)**
 
-XWorm is a commercially sold MaaS RAT whose usage surged 174% in 2025 per ANY.RUN's 2025 Annual Threat Report, reflecting broad adoption across the cybercriminal ecosystem. Versions 4.1-5.0 were sold at $400 lifetime; a successor release (v6.0 by XCoderTools) appeared in June 2025.
+XWorm is a commercially sold MaaS RAT whose usage surged 174% in 2025 per ANY.RUN's 2025 Annual Threat Report, reflecting broad adoption across the cybercriminal ecosystem. Versions 4.1-5.0 were sold under a flat-fee lifetime license model; a successor release (v6.0 by XCoderTools) appeared in June 2025.
 
 The version range (3.0-5.0) in this investigation is inferred from feature set and campaign timeline — the exact version string is obfuscated in the builder output and was not confirmed. This is noted as a gap. The 3.0 floor is established by the presence of the triple-redundant persistence mechanism (scheduled task, Registry Run, and startup shortcut combined) and the Rijndael-256-ECB config encryption scheme, both of which were introduced in v3.x builds and are absent from earlier versions documented in public research.
 
@@ -943,7 +925,7 @@ Sources: Microsoft Security Blog — tax season 2026 (March 19, 2026, Tier 2); C
 
 Kematian Stealer is an open-source .NET credential stealer developed by KDot227 (GitHub: Somali-Devs). Its capabilities include browser credential extraction, cryptocurrency wallet enumeration, and Discord token theft.
 
-Shadow RAT's integration of Kematian via the `KematianZipMessage` message class is operationally more sophisticated than standalone Kematian deployment. Standalone Kematian typically exfiltrates stolen data via a Discord webhook — a relatively traceable exfiltration path. When integrated into Shadow RAT, Kematian's output is exfiltrated through Shadow RAT's AES-256-CBC encrypted C2 channel rather than creating a Discord webhook footprint. This reduces the forensic visibility of credential theft activity.
+Shadow RAT's integration of Kematian via the `KematianZipMessage` message class routes stolen data through Shadow RAT's AES-256-CBC encrypted C2 channel rather than a Discord webhook. Standalone Kematian exfiltrates via Discord webhook — a traceable path. This integration eliminates that webhook footprint. This reduces the forensic visibility of credential theft activity.
 
 Sources: CYFIRMA Kematian Stealer deep dive (Tier 2); K7 Labs Kematian analysis (Tier 2); HivePro threat advisory TA2024269 (Tier 2)
 
