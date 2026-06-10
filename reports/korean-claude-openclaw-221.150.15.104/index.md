@@ -97,7 +97,7 @@ SOC and threat-hunting priorities:
 
 ## 2. Campaign Context
 
-This is a **capsule sub-report** of the parent investigation *OpenDirectory - AI-Agent-Frameworks - 2026-05-23*, expanding to the artifact level what umbrella Section 4.4 covers at capsule depth. Case 4 captured the Korean operator's residential exposure as one of several cases on how AI-augmented operators pair mainstream AI-agent CLIs (Claude Code, Gemini CLI) with side-loaded dual-use frameworks (OpenClaw, Hermes Agent). The parent owns the cross-case framing; this sub-report does not restate it (see the [parent report](/reports/ai-agent-frameworks-2026-05-23/)).
+Case 4 captured a Korean operator's residential open-directory exposure — one of several cases in the parent investigation on how AI-augmented operators pair mainstream AI-agent CLIs (Claude Code, Gemini CLI) with side-loaded dual-use frameworks (OpenClaw, Hermes Agent). This **capsule sub-report** expands that case to the artifact level, deepening what umbrella Section 4.4 covers at capsule depth. The parent owns the cross-case framing; this sub-report does not restate it (see the [parent report](/reports/ai-agent-frameworks-2026-05-23/)).
 
 ### Discovery Method
 
@@ -109,7 +109,9 @@ Hunt.io's open-directory crawler indexed the operator's exposed home directory a
 
 ### Operator Residential Exposure Pattern
 
-The host is a **direct residential exposure**: AS4766 Korea Telecom, the largest Korean ISP, on an IP block consistent with consumer broadband rather than a VPS, cloud-rented host, or tunnel exit. The operator used no VPN, Tor, or proxy — the open directory was reachable directly at the home IP for the 73-day window between Hunt.io first-seen (2026-03-11) and investigation close (2026-05-23). This pattern recurs across the parent investigation's "AI-integrated mature operator" class: allowlist-tuning sophistication coexisting with carelessness about wider OPSEC.
+The host is a **direct residential exposure**: AS4766 Korea Telecom, the largest Korean ISP, on an IP block consistent with consumer broadband rather than a VPS, cloud-rented host, or tunnel exit. The operator used no VPN, Tor, or proxy — the open directory was reachable directly at the home IP for the 73-day window between Hunt.io first-seen (2026-03-11) and investigation close (2026-05-23).
+
+This residential-exposure carelessness, paired with deliberate allowlist tuning, recurs across the parent investigation's "AI-integrated mature operator" class: tradecraft sophistication in one area coexisting with neglect of wider OPSEC.
 
 ### Scope Boundary
 
@@ -232,9 +234,9 @@ The defender-relevant point: this is **not a Claude Code vulnerability** but ope
 
 #### Why This Is the First DEFINITE Artifact-Level Evidence
 
-The defender community has discussed the theoretical risk of attacker-customized AI-agent allowlists since Claude Code's permission model was published. What was missing — in the surveyed public threat-intel corpus as of 2026-05-23 — was an **in-the-wild operator-customized example** showing what the abuse pattern looks like on disk.
+This case supplies what the surveyed public threat-intel corpus lacked as of 2026-05-23: an **in-the-wild operator-customized allowlist** showing what the abuse pattern looks like on disk. The defender community had discussed the theoretical risk of attacker-customized AI-agent allowlists since Claude Code's permission model was published, but no captured example existed.
 
-This case provides it: a downloadable 442-byte file, a seven-entry sequence reproducible by any defender who reads it, and a pattern that generalizes immediately to operator-customized allowlists pointing at *any* side-loaded toolkit. Sections 7 and 8 translate the artifact into concrete hunt queries.
+The artifact closes that gap with a downloadable 442-byte file, a seven-entry sequence reproducible by any defender who reads it, and a pattern that generalizes immediately to operator-customized allowlists pointing at *any* side-loaded toolkit. Sections 7 and 8 translate the artifact into concrete hunt queries.
 
 #### Detection Strategy at the File Level
 
@@ -360,7 +362,9 @@ UTA-2026-015 fits the **"AI-integrated mature operator"** profile from the umbre
 - **Side-loaded toolkit adoption.** Choosing Claude Code + OpenClaw together is characteristic of operators who treat their AI tooling as a deliberate operational stack; mainstream-only operators use Claude Code alone, opportunistic ones never install OpenClaw.
 - **Wider-OPSEC gap.** The same operator exposed the entire home directory via an open-directory misconfiguration — something sophisticated operators do not do. Competence in one area, complete failure in another: the "mature operator paradox."
 
-This paradox recurs across the parent investigation's cases. The parsimonious read: operators specializing in AI-augmented offense are early in the discipline's maturity curve — technically capable in their niche, but with surrounding OPSEC tradecraft (compartmentalization, infrastructure hygiene, footprint minimization) not yet caught up. Defenders benefit from this gap; offenders eventually close it. The window for catching operators via residential-ISP open-directory exposures is finite.
+This paradox recurs across the parent investigation's cases. The parsimonious read: operators specializing in AI-augmented offense are early in the discipline's maturity curve — technically capable in their niche, but with surrounding OPSEC tradecraft (compartmentalization, infrastructure hygiene, footprint minimization) not yet caught up.
+
+Defenders benefit from this gap, but offenders eventually close it. The window for catching operators via residential-ISP open-directory exposures is therefore finite.
 
 ### What This Assessment Does Not Claim
 
@@ -391,9 +395,9 @@ The detection file follows The Hunters Ledger conventions (CC BY-NC 4.0 license,
 
 ### Detection Strategy at the Category Level
 
-**Deployment-scope discipline.** On developer-class endpoints (where engineering, DevOps, or data-science staff routinely install third-party CLIs), all three paths below carry a non-trivial false-positive rate — developers legitimately install unfamiliar tools, and some allowlist entries reflect normal workflow. Highest-signal targets are **server-class endpoints, jump hosts, CI/CD agent nodes, and non-developer workstations**, where Claude Code presence is itself anomalous. For confirmed developer endpoints, prefer **allowlist content review** (is this a known-authorized package from a recognized vendor?) over automatic blocking.
+The strategy is **three independent paths against the same workflow**, so defenders catch the activity even if one path is missed.
 
-The strategy is **three independent paths against the same workflow**, so defenders catch the activity even if one path is missed:
+**Deployment-scope discipline.** On developer-class endpoints (where engineering, DevOps, or data-science staff routinely install third-party CLIs), all three paths below carry a non-trivial false-positive rate — developers legitimately install unfamiliar tools, and some allowlist entries reflect normal workflow. Highest-signal targets are **server-class endpoints, jump hosts, CI/CD agent nodes, and non-developer workstations**, where Claude Code presence is itself anomalous. For confirmed developer endpoints, prefer **allowlist content review** (is this a known-authorized package from a recognized vendor?) over automatic blocking. The three paths:
 
 **Path 1 — Filesystem content hunt.** YARA scanning `~/.claude/settings.local.json` and `<project>/.claude/settings.local.json` for the documented allowlist patterns. The primary path, broadest reach — it catches the technique against any tool, not just OpenClaw.
 
