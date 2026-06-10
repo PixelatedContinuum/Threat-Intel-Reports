@@ -8,6 +8,9 @@ hide: true
 unlisted: true
 sponsored_by: hunt-io
 category: "AI-Augmented Espionage"
+series: ai-agent-frameworks
+series_role: member
+series_order: 2
 description: "Technical analysis of an active compromise of a state-affiliated Turkish financial-sector organization: a Turkish-speaking operator weaponizes the OpenClaw AI agent platform into a custom analytics platform (ARPA) to harvest the victim's enterprise observability stack across four stolen sources (IBM Instana + SolarWinds Orion + Zabbix + VMware Aria), and authors Turkish-language insider-recruitment documentation to an in-network Windows AD user. UTA-2026-013 — first public attribution."
 detection_page: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 ioc_feed: /ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json
@@ -325,6 +328,8 @@ The ARPA platform-specific OpenClaw integration is at the AI service layer (`ai_
 
 Co-located offensive tooling that discriminates the operator host from legitimate OpenClaw developer environments: `arpa_*.sh` shell scripts and the full `/opt/ARPA/` filesystem tree. A legitimate OpenClaw developer environment would not co-locate `~/.openclaw/` with `arpa_*.sh` shell scripts and a custom 5-daemon production analytics platform.
 
+Case 4 ([Korean Claude+OpenClaw](/reports/korean-claude-openclaw-221.150.15.104/) §4.3) captures the same OpenClaw side-loading on a Korea Telecom host, pre-approved inside a Claude Code allowlist — shared tool, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
+
 #### Executive Technical Context
 
 **What This Means:** The operator chose a Chinese-jurisdiction AI provider rather than a Western AI provider. The choice is operationally meaningful: Western AI providers (Anthropic, OpenAI, Google) actively run Trust-and-Safety programs that would likely detect and disable an account being used for offensive intelligence-analysis-over-stolen-victim-telemetry. Chinese AI providers historically have different threat-intelligence-cooperation profiles with Western threat-intel community; the operator's account binding to Moonshot AI / Kimi is therefore less likely to be disrupted by Western T&S coordination.
@@ -597,6 +602,8 @@ The five systemd unit files use a consistent `arpa-*.service` naming convention:
 - `arpa-parallel.service` — parallel cross-source ETL worker
 
 The naming is internally consistent and operator-authored. Detection rule: creation of any systemd unit file matching `arpa-*.service` is a high-signal indicator (Sigma rule in linked detection file).
+
+The same AI-generated-code structural signature appears in Case 1 ([Russian Gemini](/reports/russian-gemini-credential-mill-213.165.51.115/)) and Case 3 ([Rovodev](/reports/rovodev-mirai-matrix-c2-87.106.143.220/) §4.5) — a shared AI-tool fingerprint, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
 ### 5.3 Turkish-Language Operator Notes (Insider Recruitment Documentation)
 

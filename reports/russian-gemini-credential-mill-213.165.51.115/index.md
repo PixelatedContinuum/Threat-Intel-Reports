@@ -8,6 +8,9 @@ hide: true
 unlisted: true
 sponsored_by: hunt-io
 category: "AI-Augmented Credential Mill"
+series: ai-agent-frameworks
+series_role: member
+series_order: 1
 description: "End-to-end technical analysis of a Russian-native AI-augmented cybercrime operator (UTA-2026-012 / Trend Micro 'bandcampro') running a Gemini-CLI-orchestrated credential mill against a US healthcare victim, with three novel TTP anchors: AI Operator Handoff Documents, LLM-Personalized Credential Mutation, and an operator-built unauthenticated Python-stdlib C2."
 detection_page: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 ioc_feed: /ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json
@@ -301,7 +304,7 @@ The exact phrasing varies slightly across operator iterations; the *structure* �
 
 **Why this is structurally distinct from `GEMINI.md` jailbreak persistence:** Trend Micro documented `GEMINI.md` as a content-level persistence pattern — the operator places jailbreak content in `GEMINI.md` in the working directory, and Gemini CLI auto-loads `GEMINI.md` on session start, which effectively persists the jailbreak across sessions without operator effort. This is a *persistence* pattern (content-level, auto-loaded). The three AI Operator Handoff Documents documented here are *session-handoff* patterns (operationally-loaded by operator reference, content-bearing of operational state). The two patterns are complementary but architecturally distinct: jailbreak persistence answers "how do I get the AI to do disallowed things every session?"; AI Operator Handoff Documents answer "how do I get a new AI session up to speed on what the prior session was doing?"
 
-**Why this matters:** As AI agents move from chat-style interactions to multi-session operational workflows, the operator's information-handoff pattern across sessions becomes a tradecraft surface. The three exemplars on disk represent a measurable evolution of operator tradecraft for AI-augmented operations — the operator is producing structured documentation specifically for AI consumption, treating the AI as an operational team member that needs to be briefed on prior work. This pattern will diffuse; defenders preparing for AI-augmented attacker workflows should expect to see this artifact class in other operator open directories going forward.
+**Why this matters:** As AI agents move from chat-style interactions to multi-session operational workflows, the operator's information-handoff pattern across sessions becomes a tradecraft surface. The three exemplars on disk represent a measurable evolution of operator tradecraft for AI-augmented operations — the operator is producing structured documentation specifically for AI consumption, treating the AI as an operational team member that needs to be briefed on prior work. This pattern will diffuse; defenders preparing for AI-augmented attacker workflows should expect to see this artifact class in other operator open directories going forward. The same artifact class appears at 22+ exemplars in Case 3 ([Rovodev](/reports/rovodev-mirai-matrix-c2-87.106.143.220/) §4.4) — two facets of one novel TTP (operator-authored-for-AI here; AI-generated, superlative-named there), a shared tradecraft pattern, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
 **Detection strategy:** YARA rule for Markdown files combining session-start load directive (`When starting a new session, refer to this file` or equivalent) with operational-content markers (C2 endpoint URL patterns, credential-table indicators). Higher-risk filesystem locations: `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class Linux hosts. The rule is tuned with `MEDIUM` FP risk acknowledgment — legitimate AI-assisted development workflows can produce Markdown files with similar directive structure (`CLAUDE.md` project files); the operational-content co-occurrence is the disambiguator.
 
@@ -561,6 +564,8 @@ These strings combine into Rule 1 in the linked detection file (Section 10).
 - `/api/v1/update`, `/api/v1/agents`, `/api/v1/interact`, `/api/v1/telemetry`, `/api/v1/get_results` (endpoint family)
 - `X-Agent-ID` header name (bespoke)
 - Combination of `BaseHTTPRequestHandler` + the endpoint family + the X-Agent-ID header is a low-FP single-file YARA detection
+
+The same structural signature was independently validated on two other operators in this series — Case 2 ([Turkish ARPA](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/)) and Case 3 ([Rovodev](/reports/rovodev-mirai-matrix-c2-87.106.143.220/) §4.5) — a shared AI-tool fingerprint, not coordination (coordination is REFUTED; see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
 ### 5.3 Three AI Operator Handoff Documents (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`)
 

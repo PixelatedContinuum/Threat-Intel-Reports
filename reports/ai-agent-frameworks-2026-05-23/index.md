@@ -8,6 +8,9 @@ hide: true
 unlisted: true
 sponsored_by: hunt-io
 category: "AI-Augmented Threat Operations"
+series: ai-agent-frameworks
+series_role: parent
+series_order: 0
 description: "Parent report of a six-report series documenting 8 independent threat operators integrating AI-agent CLIs (Gemini CLI, Claude Code, Atlassian Rovodev, OpenClaw, Cursor IDE) into offensive workflows, observed through open-directory exposures. Five novel TTPs, six UTA designations, one named-actor HIGH attribution (Vova75Rus), and a GitHub Trust & Safety Tier-0 disposition outcome."
 detection_page: /hunting-detections/ai-agent-frameworks-2026-05-23-detections/
 ioc_feed: /ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json
@@ -981,13 +984,13 @@ For security teams considering investment in MCP-augmented threat-intel workflow
 
 ### 14.2 Sub-Reports (Series)
 
-This parent anchors a six-report series. The five sub-reports provide per-case deep-dives at full technical depth:
+**Start here, then read in order.** This parent is the synthesis; each sub-report below carries the per-case forensic depth.
 
-- **[Case 1 Sub-Report](/reports/russian-gemini-credential-mill-213.165.51.115/):** Russian Gemini Credential-Mill Operator (UTA-2026-012) — `ai_sniper_brute.py` pipeline, `c2_server.py` architecture, Cloudflare Tunnel topology, the healthcare-victim impact, and Phase 11 native Russian idiom analysis.
-- **[Case 2 Sub-Report](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/):** Turkish ARPA Observability-Harvester Operator (UTA-2026-013) — ARPA platform architecture (TimescaleDB+Neo4j+Redis), 4-source observability harvesting against the victim organization, and insider-recruitment TTP framing (insider AD user + Turkish-language tunnel-setup docs).
-- **[Case 3 Sub-Report](/reports/rovodev-mirai-matrix-c2-87.106.143.220/):** Rovodev/Pandora Mirai Operator (UTA-2026-014) — Rovodev session JSONs as AI-authoring primary-source evidence, Pandora-Mirai 11-architecture binary set, and 5-vector persistence chain forensics.
-- **[Case 4 Sub-Report](/reports/korean-claude-openclaw-221.150.15.104/):** Korean Claude Code + OpenClaw Operator (UTA-2026-015) — capsule-depth artifact analysis of the attacker-customized `settings.local.json` permission allowlist.
-- **[Case 9 Sub-Report](/reports/ghost-cryptojacker-vova75rus-77.110.96.200/):** GHOST Cryptojacker Kit + 4-Tier Supply Chain (Vova75Rus HIGH + UTA-2026-016 + UTA-2026-017) — `libpam_cache.so` ELF internals, container-escape suite functions, ComfyUI fake-node persistence, and the Tier-0 disposition outcome timeline.
+1. **[Russian Gemini Credential-Mill Operator](/reports/russian-gemini-credential-mill-213.165.51.115/)** (Case 1, UTA-2026-012) — `ai_sniper_brute.py` pipeline, `c2_server.py` architecture, Cloudflare Tunnel topology, the healthcare-victim impact, and Phase 11 native Russian idiom analysis — `critical`.
+2. **[Turkish ARPA Observability-Harvester Operator](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/)** (Case 2, UTA-2026-013) — ARPA platform architecture (TimescaleDB+Neo4j+Redis), 4-source observability harvesting against the victim organization, and insider-recruitment TTP framing (insider AD user + Turkish-language tunnel-setup docs) — `critical`.
+3. **[Rovodev/Pandora Mirai Operator](/reports/rovodev-mirai-matrix-c2-87.106.143.220/)** (Case 3, UTA-2026-014) — Rovodev session JSONs as AI-authoring primary-source evidence, Pandora-Mirai 11-architecture binary set, and 5-vector persistence chain forensics — `high`.
+4. **[Korean Claude Code + OpenClaw Operator](/reports/korean-claude-openclaw-221.150.15.104/)** (Case 4, UTA-2026-015) — capsule-depth artifact analysis of the attacker-customized `settings.local.json` permission allowlist — `med`.
+5. **[GHOST Cryptojacker Kit + 4-Tier Supply Chain](/reports/ghost-cryptojacker-vova75rus-77.110.96.200/)** (Case 9, Vova75Rus HIGH + UTA-2026-016 + UTA-2026-017) — `libpam_cache.so` ELF internals, container-escape suite functions, ComfyUI fake-node persistence, and the Tier-0 disposition outcome timeline — `high`.
 
 Each sub-report cross-references this parent report for cross-case context.
 

@@ -8,6 +8,9 @@ hide: true
 unlisted: true
 sponsored_by: hunt-io
 category: "AI-Augmented Operator Tradecraft"
+series: ai-agent-frameworks
+series_role: member
+series_order: 4
 description: "Capsule sub-report (Case 4 of the AI-Agent-Frameworks investigation): a Korean-language operator's attacker-customized ~/.claude/settings.local.json permission allowlist that pre-approves the OpenClaw install-and-run chain, recovered from an open-directory exposure (221.150.15.104, Korea Telecom). UTA-2026-015."
 detection_page: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
 ioc_feed: /ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json
@@ -97,7 +100,7 @@ SOC and threat-hunting priorities:
 
 ## 2. Campaign Context
 
-Case 4 captured a Korean operator's residential open-directory exposure — one of several cases in the parent investigation on how AI-augmented operators pair mainstream AI-agent CLIs (Claude Code, Gemini CLI) with side-loaded dual-use frameworks (OpenClaw, Hermes Agent). This **capsule sub-report** expands that case to the artifact level, deepening what umbrella Section 4.4 covers at capsule depth. The parent owns the cross-case framing; this sub-report does not restate it (see the [parent report](/reports/ai-agent-frameworks-2026-05-23/)).
+Case 4 captured a Korean operator's residential open-directory exposure — one of several cases in the parent investigation on how AI-augmented operators pair mainstream AI-agent CLIs (Claude Code, Gemini CLI) with side-loaded dual-use frameworks (OpenClaw). This **capsule sub-report** expands that case to the artifact level, deepening what umbrella Section 4.4 covers at capsule depth. The parent owns the cross-case framing; this sub-report does not restate it (see the [parent report](/reports/ai-agent-frameworks-2026-05-23/)).
 
 ### Discovery Method
 
@@ -261,7 +264,7 @@ The operator's tool is not Claude Code or OpenClaw but **both, integrated** — 
 2. **OpenClaw** runs as a local gateway on port 18789, started by Claude Code via allowlist entry 6 (`Bash(openclaw gateway --port 18789)`) and providing additional skills to the workflow.
 3. **The gateway pattern** positions OpenClaw as a local backend other tools (including Claude Code itself, in some integration modes) connect to. Claude Code supplies reasoning and natural language; OpenClaw supplies the extended skill set.
 
-The parent investigation independently observed this same model in Case 2 (a Turkish operator targeting a regional insurance company with a Gemini CLI + Hermes Agent pairing): a polished mainstream CLI combined with a dual-use side-loaded toolkit that supplies capabilities the mainstream CLI lacks.
+The parent investigation independently observed this same model in Case 2: Case 2 ([Turkish ARPA](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/) §4.3) shows the same side-loaded **OpenClaw** toolkit (over a Moonshot Kimi backend) — an ecosystem-level shared tool driven by the documented OpenClaw exposure crisis, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
 **Why this matters.** Singular-tool framing misjudges the threat surface — defenders must inventory and monitor both and understand the integration. A posture that allows mainstream AI CLIs but blocks all side-loaded toolkits fails here unless the side-loaded toolkit itself is detected.
 

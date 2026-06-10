@@ -8,6 +8,9 @@ hide: true
 unlisted: true
 sponsored_by: hunt-io
 category: "AI-Augmented Cybercrime"
+series: ai-agent-frameworks
+series_role: member
+series_order: 3
 description: "Technical analysis of an English-speaking Hybrid AI-augmented operator who combined Atlassian Rovodev AI co-authoring with a downstream Pandora-Mirai 11-architecture IoT botnet and a 13-attack-method Matrix C2 framework, productized as a Discord-fronted DDoS-as-a-Service. First publicly documented Rovodev offensive-use case; AI-Generated Offensive Code Structural Signature confirmed DEFINITE for its universal subset via cross-3-operator validation. UTA-2026-014 — first public attribution."
 detection_page: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/
 ioc_feed: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json
@@ -302,7 +305,7 @@ SOLUTION_COMPLETE.txt          SYSTEM_READY.txt            TEST_DISCORD_BOT.txt
 ULTIMATE_DEPLOYMENT.txt
 ```
 
-The naming pattern is itself the diagnostic signature. AI-generated documentation produced across multiple iteration rounds where the operator asks the AI to "give me the final version" repeatedly produces documents with `FINAL_`, `COMPLETE_`, `ULTIMATE_`, `READY_`, `SOLUTION_COMPLETE`, `FINAL_DEPLOYMENT_COMPLETE` superlative prefixes — multi-version-same-class docs (`README.md` + `README_FINAL.md`), compounding superlatives in single names (`FINAL_DEPLOYMENT_COMPLETE.txt` = FINAL + COMPLETE in the same name), and iterative-fix doc clusters (`FIXED_ISSUES.txt` + `FIXES_APPLIED.txt`). Defender detection rule sketch: for any open directory observed via crawler or Hunt.io-style scan, if the depth-1 listing contains three or more files matching the escalating-superlative pattern, flag as AI-generated documentation suite.
+The naming pattern is itself the diagnostic signature. AI-generated documentation produced across multiple iteration rounds where the operator asks the AI to "give me the final version" repeatedly produces documents with `FINAL_`, `COMPLETE_`, `ULTIMATE_`, `READY_`, `SOLUTION_COMPLETE`, `FINAL_DEPLOYMENT_COMPLETE` superlative prefixes — multi-version-same-class docs (`README.md` + `README_FINAL.md`), compounding superlatives in single names (`FINAL_DEPLOYMENT_COMPLETE.txt` = FINAL + COMPLETE in the same name), and iterative-fix doc clusters (`FIXED_ISSUES.txt` + `FIXES_APPLIED.txt`). Defender detection rule sketch: for any open directory observed via crawler or Hunt.io-style scan, if the depth-1 listing contains three or more files matching the escalating-superlative pattern, flag as AI-generated documentation suite. Case 1 ([Russian Gemini](/reports/russian-gemini-credential-mill-213.165.51.115/) §4.2) documents the inverse-data-flow form of this class, with explicit `To:/From: Gemini CLI` headers — the same TTP, a different facet; not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
 **Nine-variant scanner iteration chain — direct AI-prompted iteration evidence:**
 
@@ -478,7 +481,7 @@ The output is classic LLM style: ASCII-box header, uniform `✅` bullets, escala
 
 The five-criteria universal subset, cross-validated across three independent operators with no overlap in language / country / target / AI tool:
 
-| Criterion | Case 1 (Russian, Gemini-CLI) | Case 2 (Turkish, OpenClaw + Moonshot Kimi) | Case 3 (English, Atlassian Rovodev — THIS CASE) | Cross-operator status |
+| Criterion | [Case 1](/reports/russian-gemini-credential-mill-213.165.51.115/) (Russian, Gemini-CLI) | [Case 2](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/) (Turkish, OpenClaw + Moonshot Kimi) | Case 3 (English, Atlassian Rovodev — THIS CASE) | Cross-operator status |
 |---|---|---|---|---|
 | #1 Verbose docstrings | ✓ (3/3 files) | ✓ for substantial files | ✓ (5/5 files) | **DEFINITE (when applicable)** |
 | #3 Educational variable names | ✓ | ✓ universal | ✓ (5/5 files) | **DEFINITE (universal)** |
@@ -486,7 +489,7 @@ The five-criteria universal subset, cross-validated across three independent ope
 | #9 Emoji-in-output bleed | UNKNOWN | ✓ (`print('✅ API endpoints added')`) | ✓ (`'🔥 ICMP Hell'`, `'🚀 UDP Bypass'`) | **DEFINITE — 2 of 3 operators** |
 | #10 Version-numbered file persistence | UNKNOWN | ✓ (`instana_collector_v4`, `correlation_v3`, 4-5 patch script cluster) | ✓ (`autoscanner` → `mega_scanner_fixed` 9-variant chain) | **DEFINITE — 2 of 3 operators** |
 
-The universal subset is **DEFINITE for the cross-operator ecosystem-level claim** — defenders can apply the rubric to suspected operator code with corpus-level confidence (not just file-level), and the rubric is operator-agnostic for criteria #1 / #3 / #7 / #9 / #10 specifically.
+The universal subset is **DEFINITE for the cross-operator ecosystem-level claim** — defenders can apply the rubric to suspected operator code with corpus-level confidence (not just file-level), and the rubric is operator-agnostic for criteria #1 / #3 / #7 / #9 / #10 specifically (a shared AI-tool fingerprint across three independent operators — not coordination, which is REFUTED; see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
 **Publication-defining refinement — criterion #4 (zero anti-analysis) is prompt-conditional, not structural.** Common-assumption framing in current public AI-misuse research has been: *"AI-generated offensive code lacks evasion features (anti-debug, anti-VM, polymorphism), so defenders can detect AI-authored malware by absence of these features."* This case's `stealth_agent.py` evidence corrects that framing:
 
