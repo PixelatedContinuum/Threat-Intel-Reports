@@ -1,4 +1,5 @@
-{%- comment -%} One filterable listing card. Params: url, title, date (ISO), severity, tags (array). {%- endcomment -%}
+{%- comment -%} One filterable listing card. Params: url, title, date (ISO), severity, tags (array),
+  part_label (optional — small gold chip above the meta line, used by series clusters / series cards). {%- endcomment -%}
 {%- assign sevlabel = include.severity | upcase -%}
 {%- if include.severity == "med" -%}{%- assign sevlabel = "MED" -%}{%- endif -%}
 <a href="{{ include.url | relative_url }}" class="hl-card hl-catalog-card"
@@ -8,6 +9,7 @@
   <div class="hl-card__inner">
     <div class="hl-card__bar hl-sev--{{ include.severity }}"></div>
     <div>
+      {%- if include.part_label -%}<div class="hl-card__part">{{ include.part_label }}</div>{%- endif -%}
       <div class="hl-card__meta hl-catalog-card__meta">{{ sevlabel }} &middot; {{ include.date | date: "%b %Y" }}</div>
       <div class="hl-card__title">{{ include.title }}</div>
     </div>

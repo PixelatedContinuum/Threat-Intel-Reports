@@ -21,8 +21,30 @@ position: 1
 {% include section-header.html label="Latest Reports" accent="#ff4444" %}
 
 <div class="hl-grid">
-{% assign latest = site.data.catalog.entries | where_exp: "e", "e.report_url" | sort: "date" | reverse %}
-{% for e in latest limit: 4 %}{% include catalog-card.html url=e.report_url title=e.title date=e.date severity=e.severity tags=e.tags %}{% endfor %}
+{%- assign latest = site.data.catalog.entries | where_exp: "e", "e.report_url" | sort: "date" | reverse -%}
+{%- assign emitted_series = "" -%}
+{%- assign shown = 0 -%}
+{%- for e in latest -%}
+{%- if shown >= 4 -%}{%- break -%}{%- endif -%}
+{%- if e.series -%}
+{%- assign skey = e.series | append: ";" -%}
+{%- unless emitted_series contains skey -%}
+{%- assign emitted_series = emitted_series | append: skey -%}
+{%- assign series_members = latest | where: "series", e.series -%}
+{%- assign series_parent = series_members | where: "series_order", 0 | first -%}
+{%- unless series_parent -%}{%- assign series_parent = series_members | last -%}{%- endunless -%}
+{%- assign stitle = "" -%}
+{%- for s in series_members -%}{%- if s.series_title -%}{%- assign stitle = s.series_title -%}{%- endif -%}{%- endfor -%}
+{%- if stitle == "" -%}{%- assign stitle = series_parent.title -%}{%- endif -%}
+{%- capture slabel -%}Series &middot; {{ series_members.size }} reports{%- endcapture -%}
+{%- include catalog-card.html url=series_parent.report_url title=stitle date=e.date severity=series_parent.severity tags=series_parent.tags part_label=slabel -%}
+{%- assign shown = shown | plus: 1 -%}
+{%- endunless -%}
+{%- else -%}
+{%- include catalog-card.html url=e.report_url title=e.title date=e.date severity=e.severity tags=e.tags -%}
+{%- assign shown = shown | plus: 1 -%}
+{%- endif -%}
+{%- endfor -%}
 </div>
 
 <a href="{{ '/reports/' | relative_url }}" class="hl-view-all">View all reports →</a>

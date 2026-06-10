@@ -3,6 +3,7 @@
   var grid = document.querySelector('[data-filter-grid]');
   if (!bar || !grid) return;
   var cards = [].slice.call(grid.querySelectorAll('.hl-catalog-card'));
+  var clusters = [].slice.call(grid.querySelectorAll('[data-series-cluster]'));
   var search = bar.querySelector('.hl-filter__search');
   var chips = [].slice.call(bar.querySelectorAll('.hl-chip-btn'));
   var count = bar.querySelector('[data-filter-count]');
@@ -28,6 +29,14 @@
       if (vis) { c.style.removeProperty('display'); }
       else { c.style.setProperty('display', 'none', 'important'); }
       if (vis) shown++;
+    });
+    // A series cluster is a shell around its member cards — hide the shell
+    // (header + box) when the filter has hidden every card inside it.
+    clusters.forEach(function (cl) {
+      var kids = [].slice.call(cl.querySelectorAll('.hl-catalog-card'));
+      var any = kids.some(function (k) { return k.style.display !== 'none'; });
+      if (any) { cl.style.removeProperty('display'); }
+      else { cl.style.setProperty('display', 'none', 'important'); }
     });
     if (count) count.textContent = 'Showing ' + shown + ' of ' + cards.length;
     if (empty) empty.hidden = shown !== 0;

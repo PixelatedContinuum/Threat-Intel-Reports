@@ -1,0 +1,23 @@
+{%- comment -%} Boxed-set cluster for a report series inside a listing grid.
+  Params: members (catalog entries sharing one `series` slug, any order), slug.
+  Members render in series_order (parent = 0 gets "Start here").
+  Series display title: `series_title` on any member entry, else the parent's title.
+  Driven by series fields in _data/catalog.yml — no per-series markup needed.
+{%- endcomment -%}
+{%- assign m = include.members | sort: "series_order" -%}
+{%- assign stitle = "" -%}
+{%- for e in m -%}{%- if e.series_title -%}{%- assign stitle = e.series_title -%}{%- endif -%}{%- endfor -%}
+{%- if stitle == "" -%}{%- assign stitle = m.first.title -%}{%- endif -%}
+<div class="hl-series-cluster" data-series-cluster data-series="{{ include.slug }}">
+  <div class="hl-series-cluster__head">
+    <span class="hl-series-cluster__label">Report Series</span>
+    <span class="hl-series-cluster__title">{{ stitle }}</span>
+    <span class="hl-series-cluster__count">{{ m.size }} reports &middot; read in order</span>
+  </div>
+  <div class="hl-series-cluster__grid">
+    {%- for e in m -%}
+      {%- capture plabel -%}Part {{ forloop.index }} of {{ m.size }}{% if e.series_order == 0 %} &middot; Start here{% endif %}{%- endcapture -%}
+      {%- include catalog-card.html url=e.report_url title=e.title date=e.date severity=e.severity tags=e.tags part_label=plabel -%}
+    {%- endfor -%}
+  </div>
+</div>

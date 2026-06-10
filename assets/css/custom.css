@@ -3052,3 +3052,83 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
     height: 360px;
   }
 }
+
+/* ============================================================
+   SERIES CLUSTER -- "boxed set" grouping for report series.
+   Rendered by _includes/series-cluster.html inside listing
+   grids; driven by series fields on _data/catalog.yml entries.
+   The home "Latest" block renders a collapsed one-card series
+   pointer instead (catalog-card with a part_label chip).
+   ============================================================ */
+.hl-series-cluster {
+  grid-column: 1 / -1;
+  position: relative;
+  border: 1px solid rgba(184, 144, 47, 0.32);
+  border-left: 3px solid var(--hl-accent-gold);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(184, 144, 47, 0.07) 0%, rgba(184, 144, 47, 0.02) 55%, rgba(184, 144, 47, 0) 100%);
+  padding: 13px 13px 13px 14px;
+}
+
+.hl-series-cluster__head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 1px 2px 12px;
+}
+
+.hl-series-cluster__label {
+  font-family: var(--hl-font-display);
+  font-size: 0.66em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--hl-accent-gold);
+  border: 1px solid rgba(184, 144, 47, 0.45);
+  background: rgba(184, 144, 47, 0.12);
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.hl-series-cluster__title {
+  font-family: var(--hl-font-display);
+  font-size: 0.95em;
+  font-weight: 700;
+  color: var(--hl-text-primary);
+  line-height: 1.3;
+}
+
+.hl-series-cluster__count {
+  font-size: 0.7em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9a9a9a;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.hl-series-cluster__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 11px;
+}
+
+/* Part chip on cards inside a cluster (and on the home series card) */
+.hl-card__part {
+  font-family: var(--hl-font-display);
+  font-size: 0.64em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--hl-accent-gold);
+  margin-bottom: 4px;
+}
+
+@media (max-width: 640px) {
+  .hl-series-cluster { padding: 11px; }
+  .hl-series-cluster__grid { grid-template-columns: 1fr; }
+  .hl-series-cluster__count { margin-left: 0; flex-basis: 100%; }
+}

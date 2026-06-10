@@ -16,7 +16,19 @@ position: 2
 {% include listing-filter.html entries=report_entries placeholder="Search reports by name…" %}
 
 <div class="hl-grid" data-filter-grid>
-{% for e in report_entries %}{% include catalog-card.html url=e.report_url title=e.title date=e.date severity=e.severity tags=e.tags %}{% endfor %}
+{%- assign emitted_series = "" -%}
+{%- for e in report_entries -%}
+{%- if e.series -%}
+{%- assign skey = e.series | append: ";" -%}
+{%- unless emitted_series contains skey -%}
+{%- assign emitted_series = emitted_series | append: skey -%}
+{%- assign series_members = report_entries | where: "series", e.series -%}
+{%- include series-cluster.html members=series_members slug=e.series -%}
+{%- endunless -%}
+{%- else -%}
+{%- include catalog-card.html url=e.report_url title=e.title date=e.date severity=e.severity tags=e.tags -%}
+{%- endif -%}
+{%- endfor -%}
 </div>
 
 *Reports are © Joseph. All rights reserved — free to read, but reuse requires written permission.*
