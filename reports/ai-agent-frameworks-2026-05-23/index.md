@@ -39,13 +39,15 @@ ioc_highlights:
 
 ---
 
+> **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
+
 ## 1. Executive Summary
 
 **Bottom line:** eight unrelated threat operators have independently wired AI-agent CLIs into live offensive operations, and the evidence is operator-side — their own handoff documents, attacker prompts, weaponized configs, AI-co-authored code, and stolen victim data — not the AI-output measurements that dominate public reporting. Two victims are confirmed compromised at capture time: a HIPAA-regulated US healthcare provider (Case 1) and a state-affiliated Turkish financial-sector organization (Case 2). The campaign yields **five novel TTPs**, **six UTA designations**, **one named-actor HIGH attribution** (Vova75Rus, 88%), and **one Tier-0 disposition outcome** — GitHub Trust & Safety suspended Vova75Rus on 2026-05-25, severing the GHOST kit's upstream distribution channel.
 
 The campaign-defining pattern is **multi-vendor diversity**: no two operators share an AI tool, host, target sector, or motivation. That refutes the "single coordinated AI-driven campaign" framing in favor of ecosystem-wide diffusion of AI-augmented tradecraft across unrelated actors — so no single vendor block, IOC sweep, or threat-group designation closes the gap (coordination explicitly REFUTED, §9). The corollary cross-case finding: **AI does not replace operator tradecraft, it extends it** — every operator retains capability without AI (§4.10).
 
-This is the parent of a six-report series, surfaced via hunt.io open-directory exposures over a 9-day, 16-phase investigation from 2026-05-16. It is the canonical cross-case reference; five sub-reports (Cases 1, 2, 3, 4, 9) carry the per-case forensic depth. Links to every sub-report are in §14.2.
+This is the parent of a six-report series, surfaced via [Hunt.io open-directory intelligence](https://hunt.io/features/attackcapture) over a 9-day, 16-phase investigation from 2026-05-16. It is the canonical cross-case reference; five sub-reports (Cases 1, 2, 3, 4, 9) carry the per-case forensic depth. Links to every sub-report are in §14.2.
 
 ### Findings at a glance
 

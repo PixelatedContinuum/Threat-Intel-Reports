@@ -41,6 +41,8 @@ ioc_highlights:
 
 ---
 
+> **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
+
 ## 1. Executive Summary
 
 **Bottom line:** The GHOST cryptojacker is a commodity kit, not a single-host campaign — and this investigation named its author. A `PIP_PAYLOAD_REPO` GitHub URL in Operator-B's ComfyUI scanner pivoted (Hunt SQL) to `Vova75Rus/ComfyUI-Shell-Executor`, attributing the kit to **Vova75Rus at HIGH confidence (88%)** (§9.2). The proof the kit is sold, not bespoke: a **byte-identical `libpam_cache.so` LD_PRELOAD rootkit** (MD5 `296a8005...`) shipped to two separate AEZA customer hosts (§5.1), each carrying the kit-author's hardcoded **OWNER Telegram bot** (§4.7). GitHub Trust & Safety suspended Vova75Rus account-wide on 2026-05-25, ~24 hours after disclosure submission — disrupting the kit-author payload channel at the supply-chain's single intervention point.

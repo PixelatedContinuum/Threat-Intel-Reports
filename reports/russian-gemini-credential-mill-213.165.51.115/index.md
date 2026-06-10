@@ -43,6 +43,8 @@ ioc_highlights:
 
 ---
 
+> **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
+
 ## 1. Executive Summary
 
 A single Russian-native operator runs an AI-augmented credential mill with persistent RDP and SSH tunnels into an active HIPAA-regulated US healthcare victim — both tunnels configured and operational at the moment The Hunters Ledger captured the operator's own filesystem. This is the first public, complete **operator-side** view of an AI-orchestrated credential mill: the arsenal, the victim, and the operator's own session-handoff notes to Gemini CLI are all visible at once.

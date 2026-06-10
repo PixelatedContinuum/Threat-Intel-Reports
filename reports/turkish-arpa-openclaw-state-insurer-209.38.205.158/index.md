@@ -43,6 +43,8 @@ ioc_highlights:
 
 ---
 
+> **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
+
 ## 1. Executive Summary
 
 A Turkish-speaking operator is actively running a custom intelligence-collection platform against a **state-affiliated Turkish financial-sector victim**, built entirely on stolen monitoring credentials. The operator weaponized the OpenClaw AI agent framework into a self-branded analytics platform — `ARPA Korelasyon Motoru` ("ARPA Correlation Engine") — that cross-correlates **four stolen enterprise observability sources** (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria) into a single 7,552-element view of the victim's internal infrastructure, and recruited a named in-network insider via operator-authored Turkish-language reverse-SSH-tunnel documentation. Every dimension is documented from primary-source artifacts pulled directly from the operator's open-directory-exposed VPS at `209.38.205.158` (DigitalOcean Frankfurt, AS14061) — not from downstream effects. This is an **active, named-victim, insider-in-chain** compromise: the credential-rotation timeline is the remediation timeline, and it is currently running.

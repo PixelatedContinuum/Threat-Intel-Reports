@@ -42,6 +42,8 @@ ioc_highlights:
 
 ---
 
+> **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
+
 ## 1. Executive Summary
 
 **An English-speaking operator used Atlassian Rovodev — an enterprise AI coding agent — to author a complete offensive C2 framework end-to-end, and the open directory at `87.106.143.220` (1&1 IONOS Germany, AS8560) preserved the AI doing it.** Two Rovodev session JSONs (1.24 MB + 176 KB) and an 8.5 MB runtime log captured the operator's natural-language prompts and the AI's `file_write` tool calls — with `initial_content` payloads — building eight DEFINITE AI-authored framework files. This is the input side of the authoring workflow, not the output-side AI-generated code prior public reporting has measured. Downstream of that framework sits a Pandora-Mirai 11-architecture IoT botnet (operator filename `Naku`) and a 13-attack-method Matrix C2, productized as a Discord-fronted DDoS-as-a-Service. The arsenal is dissected in §4; the AI co-authoring evidence chain in §4.4; the bespoke binary reverse engineering in §4.8 and §5; the attribution in §9.
