@@ -58,7 +58,7 @@ A Russian-speaking commodity-malware operator, tracked here as **UTA-2026-007** 
 - **Persistence uses legacy `.job` format that the standard Sysinternals autorunsc tool does NOT enumerate by default.** Defenders relying solely on autorunsc inventory will miss this. Hunt for `*.job` file creation in `C:\Windows\Tasks\` from non-system-installer parents OR enumerate `C:\Windows\System32\Tasks\watchermgmt` directly.
 - **The renamed-Qihoo-PromoUtil hollow-host pattern reuses across 8+ campaigns since 2025** — defenders should detect the PATTERN (orphaned `WVault.exe` or any renamed `PromoUtil.exe` with `clr.dll!CreateAssemblyNameObject` thread start addresses) rather than specific hashes. The hash rotates per campaign; the pattern is durable.
 - **Time-to-detect window is ~43 seconds from sample launch to first C2 beacon.** File-based blocking must act inside this window OR behavioral detection at the orphan-`WVault.exe` stage is required. SIEM/EDR latency over ~60 seconds is too slow for prevention; only detection-and-response is feasible.
-- **The operator demonstrates "selective sophistication"** — high-tier work in chosen areas (multi-vendor camouflage, three-layer wrapping, per-host KDF, cross-campaign hollow-host TTP) and commodity choices in others (near-stock Inno Setup wrapper, commodity HijackLoader, commodity Rugmi.HP cert installer). This is more diagnostic than uniform high-tier work — the profile is a MaaS-customer + bundle-camouflage integrator, NOT a custom-RAT or loader developer.
+- **The operator shows selective depth** — high-tier work in chosen areas (multi-vendor camouflage, three-layer wrapping, per-host KDF, cross-campaign hollow-host TTP) and commodity choices in others (near-stock Inno Setup wrapper, commodity HijackLoader, commodity Rugmi.HP cert installer). This is more diagnostic than uniform high-tier work — the profile is a MaaS-customer + bundle-camouflage integrator, NOT a custom-RAT or loader developer.
 - **Attribution to a publicly named actor rests at LOW confidence (58%).** TAG-150 / GrayBravo and TA544 / Narwhal Spider are both ruled out at INSUFFICIENT confidence; Russian-speaking operator language attribution is HIGH confidence (90%); cross-vector operator-fingerprint cluster is MODERATE confidence (75%) for distinct-operator. Treat UTA-2026-007 as a tracking label, not a public actor identity.
 
 **Key Risk Factors.**
@@ -82,7 +82,7 @@ A Russian-speaking commodity-malware operator, tracked here as **UTA-2026-007** 
 </tbody>
 </table>
 
-**Overall Risk Score: 7.5/10 (HIGH).** Detection is feasible — the durable signals listed in Key Takeaways above (TLS fingerprint, persistence file pattern, hollow-host process tree) provide multiple non-overlapping options, and the full detection package is in Section 10. The risk is the multiplicity of evasion layers and the operator's selective sophistication: high-tier work in chosen areas (camouflage, KDF, hollow host) and commodity choices elsewhere (Inno Setup wrapper, commodity loader). This is a MaaS-customer + bundle-camouflage integrator profile, not a script kiddie.
+**Overall Risk Score: 7.5/10 (HIGH).** Detection is feasible — the durable signals listed in Key Takeaways above (TLS fingerprint, persistence file pattern, hollow-host process tree) provide multiple non-overlapping options, and the full detection package is in Section 10. The risk is the multiplicity of evasion layers and the operator's selective depth: high-tier work in chosen areas (camouflage, KDF, hollow host) and commodity choices elsewhere (Inno Setup wrapper, commodity loader). This is a MaaS-customer + bundle-camouflage integrator profile, not a script kiddie.
 
 **Threat Actor.** **UTA-2026-007** — tracked at three confidence levels (full assessment in Section 11):
 - **Russian-speaking operator: HIGH confidence (90%)** — `VSEZBSRABOTAT.url` filename, Russian-language Kraken-exchange URL on second-stage IP, `busket/` Mega.io subdir typo (English-second-language tell), and SPecialiST RePack YARA hit on `NDA.doc`
@@ -243,7 +243,7 @@ Both themes target B2B business workflows — consistent with broad opportunisti
 
 ## 4. Static Analysis — Distribution Layer
 
-The distribution-layer analysis covers the outermost wrapper a defender first encounters in a triage pipeline (`Carriers.exe`), the side-load host that runs after silent extraction (`CrystSupervisor32.exe`), and the operator's modified DLL that drives the loader chain (`ExceptionHandler.dll`). Each is analyzed below.
+Three distribution-layer components carry the loader chain: `Carriers.exe` (the Inno Setup wrapper a triage pipeline encounters first), `CrystSupervisor32.exe` (the genuine signed side-load host), and `ExceptionHandler.dll` (the operator's modified DLL that drives the chain). All three are analyzed below.
 
 ### 4.1 Carriers.exe — Inno Setup Pascal-Script Anti-Triage Wrapper
 
@@ -345,7 +345,7 @@ This is the genuine signed Wondershare `SlideShowEditor.exe` from DVD Creator, *
 
 The operator chose this binary because:
 - The Authenticode signature is genuine (defenders heuristically trust signed binaries)
-- It legitimately loads sister DLLs from its own directory via standard Windows DLL search-order behavior — DLL side-loading works without any exploit
+- It legitimately loads sister DLLs from its own directory via standard Windows DLL search-order — DLL side-loading works without any exploit
 - Wondershare DVD Creator install paths are common on consumer systems (low signal-to-noise in process-tree analysis)
 
 **The operator does NOT modify the EXE itself.** Only two side-loaded DLLs are tampered: `ExceptionHandler.dll` (operator-modified Plowshare crash reporter — drives the loader chain) and `NLEService.dll` (operator-rebuilt but content-equivalent). The Authenticode signature on the EXE remains valid.
@@ -698,7 +698,7 @@ The runtime drop hash differs from the bundle hash (`c085a724…` vs `ca9f859f�
 
 ## 5. Static Analysis — The Eight Delivery Vectors
 
-This section walks each of the eight initial-access vectors at the static-artifact level. Every vector below was extracted from the open directory and analyzed independently. All converge on the same loader chain.
+All eight initial-access vectors converge on the same loader chain. Each was extracted from the open directory and analyzed independently at the static-artifact level.
 
 ### 5.1 `.url` Internet Shortcuts (NTLM hash leak + WebDAV fetch)
 
@@ -815,7 +815,7 @@ These tools are genuine and signed (where applicable). They are not malicious in
 
 ## 6. Dynamic / Behavioral Analysis
 
-The dynamic analysis was performed on `Carriers.exe` under FlareVM @ 192.168.100.100 with REMnux gateway @ 192.168.100.1 (INetSim + Suricata + Zeek + tcpdump). 305-second behavioral sandbox (Noriben) monitoring window inside a 37-minute total wrapper run. Sysmon EVTX captured the full 33-minute beacon span.
+Dynamic detonation of `Carriers.exe` confirmed the full loader chain — process tree, file-drop sequence, .NET injection into `WVault.exe`, legacy `.job` persistence, and C2 beacon to `185.241.208.129:56167` — end-to-end, within 43 seconds of sample launch. The run used FlareVM @ 192.168.100.100, REMnux gateway @ 192.168.100.1 (INetSim + Suricata + Zeek + tcpdump), a 305-second behavioral sandbox (Noriben) monitoring window inside a 37-minute total wrapper, and Sysmon EVTX capturing the full 33-minute beacon span.
 
 ### 6.1 Process Tree
 
@@ -1277,7 +1277,7 @@ The encrypted payload `807D7B6.tmp` resisted 270 cryptographic recovery combinat
 
 The cipher gap rules out commodity AsyncRAT/DCRat cipher patterns (most variants use AES-128-CBC with hardcoded or seed-derivable keys). Either this is a **heavily-modified .NET RAT variant with custom key derivation**, OR the **cipher key is derived at runtime from network-received material** (operator-pushed key after first beacon), OR **multi-source KDF** (registry + computer SID + serial + hostname combined).
 
-The gap itself is a positive finding — the operator's per-host KDF is more sophisticated than commodity AsyncRAT/DCRat patterns. Both possible explanations support the broader thesis: this campaign's operator went BEYOND stock HijackLoader tradecraft to add a sophisticated per-host key-derivation layer.
+The gap itself is a positive finding — the operator's per-host KDF exceeds commodity AsyncRAT/DCRat patterns. Both possible explanations support the broader thesis: this campaign's operator added a per-host key-derivation layer beyond stock HijackLoader tradecraft.
 
 ---
 
@@ -1396,7 +1396,7 @@ The four fingerprints together require a single operator. Coincidental shared BP
   - The multi-vector phishing kit (8 parallel execution primitives)
   - The Russian-language lure infrastructure (VSEZBSRABOTAT, Kraken URL, `busket` typo)
 
-**Sophistication assessment:** Advanced (selective). The operator demonstrates "selective sophistication" — high-tier work in chosen areas (multi-vendor camouflage, three-layer wrapping, cross-campaign-novel hollow-host pattern, per-host KDF) and commodity choices in others (Inno Setup near-stock wrapper, commodity HijackLoader loader, commodity Rugmi.HP cert installer). This is more diagnostic than uniform high-tier work — it tells you what the operator prioritized and what they consciously skipped.
+**Sophistication assessment:** The operator shows selective depth — high-tier work in chosen areas (multi-vendor camouflage, three-layer wrapping, cross-campaign-novel hollow-host pattern, per-host KDF) and commodity choices in others (Inno Setup near-stock wrapper, commodity HijackLoader loader, commodity Rugmi.HP cert installer). This is more diagnostic than uniform high-tier work — it shows what the operator prioritized and what they consciously skipped.
 
 **Operator codename lexicon (operator-curated identifiers):**
 `Penguish` (loader family), `cytotoxin` (LDKPOIZD VT canonical filename), `Apophyge` (Inno AppName — architectural term for column-base curve), `Veteran` (Inno DefaultDirName), `Plowshare` (operator project from PDB), `brokerbg` / `adv_ctrl` / `exttracer_net48` / `thread_adapter` / `Sulfathiazole` (persistence directory codenames), `Bravo/vida` (NDA campaign codename), AppId GUID `{1F2952E4-FC07-4482-B9E6-E795507DA7D2}`, Mega.io operator-typo subdir `busket/`.
@@ -1429,7 +1429,7 @@ If any of these gaps closes — especially code-similarity to a named actor or g
 
 ## 12. Confidence Summary
 
-Findings are organized by confidence level for transparency.
+The most operationally critical findings carry DEFINITE confidence; the outstanding gaps fall at LOW or INSUFFICIENT. Findings are organized by level below.
 
 ### DEFINITE (Direct evidence, no ambiguity)
 
@@ -1488,7 +1488,7 @@ Findings are organized by confidence level for transparency.
 
 ## 13. FAQ / Key Intelligence Questions
 
-This section answers the questions a defender, manager, or executive is most likely to ask after reading the report. Cross-references to the relevant section are included.
+Eight questions cover the most common operational concerns raised by this campaign. Each answer cross-references the primary evidence section.
 
 **Q1. Is my organization affected by this campaign?**
 Check whether any host has connected to `185.241.208.129:56167` over TCP, or any process has produced a TLS ClientHello matching JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3` (Section 6.7). Either signal is high-confidence evidence of infection. Hunt also for the persistence artifacts in Section 10.4 (the `watchermgmt` scheduled task in legacy `.job` format and the registry artifacts listed there) — these are durable and survive process restarts.
@@ -1518,7 +1518,7 @@ No. Both were ruled out at INSUFFICIENT confidence (Section 11.2). TAG-150 / Gra
 
 ## 14. References to Companion Files
 
-This report is published with two companion files containing machine-readable artifacts and detection rules. The deployed Jekyll URLs and the underlying raw filenames are listed below.
+Two companion files ship with this report: a machine-readable IOC feed and the detection-rule collection. Deployed URLs and raw filenames are listed below.
 
 - **IOC feed (machine-readable JSON):**
   - Deployed URL: `/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs/`
@@ -1537,7 +1537,7 @@ Both files are licensed under Creative Commons Attribution-NonCommercial 4.0 (CC
 
 ## 15. Gaps & Assumptions
 
-These gaps and assumptions do not block publication. The story is coherent: HIGH confidence on family attribution, DEFINITE on C2 endpoint, HIGH on the loader chain end-to-end, MODERATE on the per-host KDF pattern, INSUFFICIENT on the exact stealer variant. The cipher gap itself becomes a positive finding — operator's per-host KDF is more sophisticated than commodity AsyncRAT/DCRat patterns.
+These gaps and assumptions do not block publication. The story is coherent: HIGH confidence on family attribution, DEFINITE on C2 endpoint, HIGH on the loader chain end-to-end, MODERATE on the per-host KDF pattern, INSUFFICIENT on the exact stealer variant. The cipher gap itself becomes a positive finding — the operator's per-host KDF exceeds commodity AsyncRAT/DCRat patterns.
 
 ### 15.1 Outstanding analysis gaps
 
@@ -1553,11 +1553,11 @@ These gaps and assumptions do not block publication. The story is coherent: HIGH
 
 The following assumptions underpin the analysis and are explicit so a future analyst can challenge them:
 
-1. **C2 endpoint primacy** — we assume the C2 endpoint observed at investigation time (`185.241.208.129:56167`) is the operator's primary C2. We have not observed failover infrastructure or DGA-style C2 rotation, but cannot rule out that the operator has a backup C2 channel that was not triggered during the 5-minute behavioral sandbox window.
-2. **Single-operator interpretation of cross-vector fingerprints** — we treat the four cross-vector fingerprints (`busket/` typo, Plowshare PDB, GoProxy cert thumbprint, per-host KDF) as evidence for a single operator at MODERATE confidence (75%). Coincidental shared bulletproof tenancy is the alternative hypothesis — evaluated and judged less plausible because the `busket/` typo is stable across all 7 vectors for 15+ months.
-3. **Dynamic-static congruence on cipher gap** — we assume the static analysis of `pe_03`'s API resolution and KDF code path is broadly correct (HIGH confidence), and the dynamic invalidation of the env var algorithm at MODERATE confidence indicates a single missing element (rand-consume order, alphabet, RNG, hash function, OR seed source) rather than a fundamentally different algorithm. This assumption is testable with interactive debugger attach to a live `pe_03`.
-4. **Final-stage family is AsyncRAT-class** — we assume the convergence of three independent VT IDS rule hits (AsyncRAT JA3, AsyncRAT/zgRAT SSL cert, DCRat C&C SSL cert) plus `clr.dll` thread evidence is sufficient to commit to the AsyncRAT-class designation at HIGH confidence (88%). Specific variant within the class (AsyncRAT vs DCRat vs zgRAT vs VenomRAT) is left INSUFFICIENT.
-5. **Russian-speaking operator inference from artifact convergence** — we assume that four independent Russian-language artifacts (VSEZBSRABOTAT, Kraken URL, `busket` typo, SPecialiST RePack) constitute sufficient evidence for HIGH confidence (90%) on operator first language. This assumes the artifacts are not deliberate false-flag inserts; the cross-vector consistency and operator-curated nature of the artifacts make false-flag insertion implausible at the cost-benefit level for a commodity-malware operator.
+1. **C2 endpoint primacy** — The C2 endpoint observed at investigation time (`185.241.208.129:56167`) is treated as the operator's primary C2. No failover infrastructure or DGA-style C2 rotation was observed; a backup C2 channel not triggered during the 5-minute behavioral sandbox window cannot be ruled out.
+2. **Single-operator interpretation of cross-vector fingerprints** — The four cross-vector fingerprints (`busket/` typo, Plowshare PDB, GoProxy cert thumbprint, per-host KDF) are treated as evidence for a single operator at MODERATE confidence (75%). Coincidental shared bulletproof tenancy is the alternative hypothesis — evaluated and judged less plausible because the `busket/` typo is stable across all 7 vectors for 15+ months.
+3. **Dynamic-static congruence on cipher gap** — The static analysis of `pe_03`'s API resolution and KDF code path is treated as broadly correct (HIGH confidence); the dynamic invalidation of the env var algorithm at MODERATE confidence indicates a single missing element (rand-consume order, alphabet, RNG, hash function, OR seed source) rather than a fundamentally different algorithm. This assumption is testable with interactive debugger attach to a live `pe_03`.
+4. **Final-stage family is AsyncRAT-class** — The convergence of three independent VT IDS rule hits (AsyncRAT JA3, AsyncRAT/zgRAT SSL cert, DCRat C&C SSL cert) plus `clr.dll` thread evidence is treated as sufficient to commit to the AsyncRAT-class designation at HIGH confidence (88%). Specific variant within the class (AsyncRAT vs DCRat vs zgRAT vs VenomRAT) is left INSUFFICIENT.
+5. **Russian-speaking operator inference from artifact convergence** — Four independent Russian-language artifacts (VSEZBSRABOTAT, Kraken URL, `busket` typo, SPecialiST RePack) are treated as sufficient evidence for HIGH confidence (90%) on operator first language. The artifacts are assumed not to be deliberate false-flag inserts; the cross-vector consistency and operator-curated nature of the artifacts make false-flag insertion implausible at the cost-benefit level for a commodity-malware operator.
 
 ---
 
