@@ -127,7 +127,7 @@ The captured arsenal tells defenders what the operator does with stolen credenti
 
 ### Operational Impact Timeline (If Your Organization Is the Victim)
 
-The phases below describe **categories of work** in priority order. Per The Hunters Ledger's third-party perspective, no organization-specific procedures, vendor configurations, compliance timelines, or cost estimates are included — those belong to the responding organization's IR team and outside counsel.
+Credential rotation across all four platforms leads the work; insider account segregation and tunnel disruption follow close behind. The phases below describe **categories of work** in priority order — no organization-specific procedures, vendor configurations, compliance timelines, or cost estimates, per The Hunters Ledger's third-party perspective; those belong to the responding organization's IR team and outside counsel.
 
 - **Phase 1 — Credential rotation across all four platforms.** Rotate Instana, SolarWinds Orion, Zabbix, and VMware Aria credentials in parallel; sequential rotation gives the operator a window to re-establish access via the not-yet-rotated platform.
 - **Phase 2 — Insider account segregation and forensic review.** Segregate the named Windows AD account, forensically image the workstation (memory + disk + browser + SSH client artifacts), and assess intent classification. Coordinate through General Counsel and HR, not operational SOC channels, given the insider-in-chain risk and legal-evidentiary requirements.
@@ -183,7 +183,7 @@ The ARPA platform is operator-built custom tooling, not a commodity malware fami
 
 ### File and Component Identifiers
 
-The operator's open directory contains approximately 780 artifacts. The linked IOC feed carries 13 SHA256 file hashes: 12 DEFINITE-confidence operator-authored Python source code modules at the core of the ARPA platform, plus 1 MODERATE-confidence ecosystem-template file (`SOUL.md`, a default Hermes/OpenClaw persona file present across developer environments — see feed for false-positive guidance). Hash inventory and per-file context are in the structured IOC feed at `/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`. The highest-confidence file artifacts are:
+Twelve operator-authored Python modules form the core of the ARPA platform and anchor the IOC feed at DEFINITE confidence. The feed carries 13 SHA256 file hashes in total: those 12 modules plus 1 MODERATE-confidence ecosystem-template file (`SOUL.md`, a default Hermes/OpenClaw persona file present across developer environments — see feed for false-positive guidance), drawn from the roughly 780 artifacts in the operator's open directory. Hash inventory and per-file context are in the structured IOC feed at `/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`. The highest-confidence file artifacts are:
 
 - `topology_mapper.py` — Instana topology collector (Turkish docstring + hardcoded JWT)
 - `instana_collector_v4.py` — event collector iteration v4 (same JWT)
@@ -267,7 +267,7 @@ The footer contains three operator-tradecraft signals: (1) explicit attribution 
 
 #### Deep Technical Analysis
 
-The four stolen credential sources are documented per-source below.
+The operator stole credentials for four enterprise observability platforms — IBM Instana, SolarWinds Orion, Zabbix, and VMware Aria — and feeds all four into one pipeline; each source is documented below.
 
 **Source 1: IBM Instana commercial APM (10-year JWT).**
 
@@ -545,7 +545,7 @@ Three operationally significant observations:
 
 ### 5.2 ARPA Platform Python Source Code
 
-The ARPA platform Python source comprises approximately 780 files in the operator's open directory. The 12 DEFINITE-confidence SHA256-tracked files in the linked IOC feed are the most operationally significant operator modules (a 13th MODERATE-confidence hash covers the ecosystem-template `SOUL.md`). Static analysis highlights from the core modules:
+The 12 DEFINITE-confidence SHA256-tracked files in the linked IOC feed are the most operationally significant operator modules, drawn from the roughly 780 Python files in the operator's open directory (a 13th MODERATE-confidence hash covers the ecosystem-template `SOUL.md`). Static analysis highlights from the core modules:
 
 **`correlation_v3.py` opening docstring (operator self-branding):**
 
@@ -645,7 +645,7 @@ The cycle then repeats. Daily-topology log generation occurs once per day at app
 
 ### 6.2 Insider Reverse-SSH Tunnel Registration Behavior
 
-The reverse-SSH tunnel registration behavior is reconstructed from the operator's Turkish-language documentation (Section 5.3) rather than from observed runtime behavior, because the tunnel is established from inside the victim network and is not observable externally.
+The insider establishes the reverse-SSH tunnel from a Windows workstation inside the victim network by loading a pre-configured PuTTY session. Because the tunnel originates inside that network, it is not observable externally — this sequence is reconstructed from the operator's Turkish-language documentation (Section 5.3) rather than from observed runtime behavior.
 
 Sequence:
 
@@ -900,7 +900,7 @@ Findings organized by confidence level for the higher-level view:
 
 ## 12. Coverage Gaps
 
-This section identifies what cannot be assessed from available evidence and what closes each gap. Surfacing gaps is attribution discipline; concealing them damages credibility.
+Nine gaps bound what this investigation can assess from external evidence; each subsection names the gap and what would close it. Surfacing gaps is attribution discipline; concealing them damages credibility.
 
 ### Tier-2 Vendor Coverage Gap
 
@@ -964,7 +964,7 @@ This section documents analytical retractions, novelty-claim calibration after f
 
 ### 10-Year Instana JWT — GOVERNANCE DEFECT, NOT IBM PRODUCT CVE
 
-**Initial framing risk:** the captured 10-year JWT is at risk of being miscoverage'd as an "IBM Instana vulnerability" — a recurring framing error in prior third-party reporting on Instana token-lifetime defects (HIGH-confidence framing risk based on observed mischaracterization patterns in coverage of similar customer-side JWT defects in 2024–2025).
+**Initial framing risk:** the captured 10-year JWT is at risk of being miscovered as an "IBM Instana vulnerability" — a recurring framing error in prior third-party reporting on Instana token-lifetime defects (HIGH-confidence framing risk based on observed mischaracterization patterns in coverage of similar customer-side JWT defects in 2024–2025).
 
 **Correct framing:** the JWT lifetime is set by the customer in their Instana token-provisioning configuration. IBM Instana does not enforce a maximum token lifetime by default; the customer is responsible for setting rotation policy. The captured JWT represents a victim-organization-side credential governance failure, NOT an IBM Instana product CVE. IBM PSIRT notification framing is customer-hardening-advisory, not CVE-disclosure.
 
