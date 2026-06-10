@@ -103,7 +103,7 @@ This is not a one-off incident — it is a sustained, productized criminal-SaaS 
 
 ### Understanding the Real-World Impact
 
-The captured arsenal tells defenders what the operator does with successful infrastructure compromise. Six operational outcomes are observable in the captured artifacts:
+Six operational outcomes are observable directly in the captured artifacts — each tells defenders what the operator does with a successful infrastructure compromise:
 
 <table>
 <colgroup>
@@ -176,7 +176,7 @@ This is a **multi-component multi-family** campaign, not a single-family analysi
 
 ## 4. Capabilities Deep-Dive
 
-This section documents the campaign's technical capabilities at the depth required for defender reproduction, validation, and detection authoring. Nine subsections cover the Pandora-Mirai 11-architecture bot suite, the Matrix C2 Python framework, the DDoS-as-a-Service tier model, the Rovodev AI co-authoring evidence chain, the cross-3-operator universal-subset structural signature, the dual-channel build/deploy tradecraft, the operator-OPSEC split-architecture pattern, the Naku.arm static reverse engineering findings, and the escalated-prompt `stealth_agent.py` capability set.
+The campaign couples a Pandora-Mirai 11-architecture IoT bot suite with an AI-co-authored Matrix C2 framework, productized as a tiered DDoS-as-a-Service. Nine subsections document each component at the depth required for defender reproduction, validation, and detection authoring: the bot suite, the Matrix C2 Python framework, the DDoS-as-a-Service tier model, the Rovodev AI co-authoring evidence chain, the cross-3-operator universal-subset structural signature, the dual-channel build/deploy tradecraft, the operator-OPSEC split-architecture pattern, the Naku.arm static reverse engineering findings, and the escalated-prompt `stealth_agent.py` capability set.
 
 ### 4.1 Pandora-Mirai 11-Architecture IoT Botnet
 
@@ -281,7 +281,9 @@ method_map = {
 
 The duplicate mappings above are operator product-branding bleeding into implementation: four marketed "products" back onto two engines, so VIP and free-tier customers receive structurally identical attack code under different brand names. Defenders see one attack pattern; customers see different "products."
 
-`multi_vector_agent.py` (SHA `a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2`) is the multi-protocol launcher. Hunt.io's classifier flagged this file with the note "Source representation shows indentation/formatting issues likely from copy/paste." This is the **Copy-Paste Indentation Decay** sub-pattern of the AI-Generated Offensive Code Structural Signature — the operator is copy-pasting from the AI chat interface (chat-window indentation bleed) without editing, producing AST-parse-failure-rate Python files. A second AI-hallucination signature: the `launch_udp_flood` method's `udp_worker()` invokes `http_flood.py` (Layer 7 HTTP flood) — NOT `attack_engine.py udp-star` (Layer 4 UDP flood). The method name claims UDP-flood; the actual body launches HTTP-flood. This is **Name/Implementation Mismatch** — an AI hallucination where the AI's pattern-completion confused "udp_flood" + "http_flood" because both are "flood" functions in the operator's spec. Defender-relevance: AI-Authoring Bugs in DDoS-for-hire frameworks produce predictable attack mismatches that defenders can detect — direct example here is that customer payment for UDP flood results in HTTP flood execution, triggering different IDS signatures than expected.
+`multi_vector_agent.py` (SHA `a19b972688158e361e8646ec17556ec46bf84f0cd24fb8707e4df85cb9d9a6d2`) is the multi-protocol launcher, and it carries two AI-authorship signatures. Hunt.io's classifier flagged the file with the note "Source representation shows indentation/formatting issues likely from copy/paste" — the **Copy-Paste Indentation Decay** sub-pattern of the AI-Generated Offensive Code Structural Signature, where the operator copy-pastes from the AI chat interface (chat-window indentation bleed) without editing, producing AST-parse-failure-rate Python files.
+
+The second signature is a **Name/Implementation Mismatch** AI hallucination: the `launch_udp_flood` method's `udp_worker()` invokes `http_flood.py` (Layer 7 HTTP flood), NOT `attack_engine.py udp-star` (Layer 4 UDP flood). The method name claims UDP-flood; the body launches HTTP-flood — the AI's pattern-completion confused "udp_flood" + "http_flood" because both are "flood" functions in the operator's spec. Defender-relevance: AI-authoring bugs in DDoS-for-hire frameworks produce predictable attack mismatches that defenders can detect — here, customer payment for a UDP flood results in HTTP-flood execution, triggering different IDS signatures than expected.
 
 `encrypted_agent.py` (SHA `9e70449b2aafc71c7ff16ece42053fb41b92394cdb88ce799f60d50b4fbefa9e`) and `stealth_agent.py` (SHA `d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3`) are the **escalated AI-prompting tier**. Both files were created via Rovodev `file_write` tool calls with `initial_content` payload starting `#!` (Python shebang) — direct DEFINITE evidence in the captured session JSON. Hunt.io's classifier brief on `encrypted_agent.py`: "C2 agent using AES-256-GCM, PBKDF2 key derivation, supports handshake, registration, DDoS, scanning, updates. Contains hardcoded CNC IP and encryption key." Classifier brief on `stealth_agent.py`: "Backdoor/agent connecting to C2 87.106.143.220:1337; includes anti-analysis (anti-debug, anti-VM, sandbox checks), process hiding, simple rootkit install, systemd/cron persistence, self-destruct routine, and polymorphic payload generation."
 
@@ -707,7 +709,7 @@ This is DIRECT AI-PROMPTED anti-analysis — the operator's prompt to Rovodev es
 
 ### 5.1 Python Framework Static Analysis Approach
 
-The framework files were retrieved intact from the open-directory exposure at `87.106.143.220:80/matrix/` via Hunt.io's host-files inventory + targeted code-search. Static analysis depth on the Python framework files is straightforward — Python source is human-readable, and the AI-Generated Code Signature criteria are observable directly: verbose docstrings, educational variable names, bare-except patterns, copy-paste indentation decay, emoji-in-output bleed, version-numbered iteration files.
+Static analysis of the Python framework is straightforward because the framework files were retrieved intact from the open-directory exposure at `87.106.143.220:80/matrix/` (via Hunt.io's host-files inventory + targeted code-search) and Python source is human-readable. The AI-Generated Code Signature criteria are therefore observable directly: verbose docstrings, educational variable names, bare-except patterns, copy-paste indentation decay, emoji-in-output bleed, version-numbered iteration files.
 
 Approach for each framework file:
 
@@ -929,7 +931,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-014 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
-This sub-report establishes the canonical Threat Actor Assessment for the Case 3 operator. The assessment is held at **LOW 60% within the canonical LOW band (50–70%)** on the operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator). Specific sub-claims hold at higher confidence: the HYBRID AI-augmented operator class assignment holds at HIGH (~80%); Atlassian Rovodev AI co-authoring of the Matrix C2 framework is DEFINITE (95%); the AI-Generated Offensive Code Structural Signature universal subset is DEFINITE for the cross-3-operator ecosystem-level claim; the solo-versus-small-team discrimination favors solo at HIGH (~80%); real-world identity remains INSUFFICIENT.
+The overall operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator) is held at **LOW 60% within the canonical LOW band (50–70%)**; this sub-report establishes the canonical Threat Actor Assessment for the Case 3 operator. Specific sub-claims hold at higher confidence: the HYBRID AI-augmented operator class assignment holds at HIGH (~80%); Atlassian Rovodev AI co-authoring of the Matrix C2 framework is DEFINITE (95%); the AI-Generated Offensive Code Structural Signature universal subset is DEFINITE for the cross-3-operator ecosystem-level claim; the solo-versus-small-team discrimination favors solo at HIGH (~80%); real-world identity remains INSUFFICIENT.
 
 ### 9.1 Hybrid AI-Augmented Operator Class — Phase 7 ACH Result
 
@@ -1174,7 +1176,7 @@ The pattern of an operator planting a Mirai CNC daemon on a legitimate business 
 
 ### 12.5 Rovodev Session JSON Detection Requires Atlassian-Side Telemetry
 
-The captured Rovodev session JSONs (1.24 MB + 176 KB) and runtime log (8.5 MB) are the strongest evidence-grade artifacts for AI-misuse research. However, defender-side detection of similar Rovodev sessions on other operator hosts requires Atlassian-side telemetry — endpoint-level detection of session JSON content is not feasible (the files are application-private). Vendor-side prompt-pattern policy detection at the Trust & Safety level is the canonical detection vector.
+Defender-side detection of similar Rovodev sessions on other operator hosts requires Atlassian-side telemetry — even though the captured session JSONs (1.24 MB + 176 KB) and runtime log (8.5 MB) are the strongest evidence-grade artifacts for AI-misuse research, endpoint-level detection of session JSON content is not feasible (the files are application-private). Vendor-side prompt-pattern policy detection at the Trust & Safety level is the canonical detection vector.
 
 ### 12.6 Operator Identity Surface
 
@@ -1266,8 +1268,8 @@ For defenders running active hunt programs:
 1. **Mirai-variant CNC option-key protocol modification hunting** — author Suricata signatures for length-prefixed-string option-key parsing in TCP/23 traffic from IoT-class devices. Defeats stock Mirai-protocol-aware IDS rules.
 2. **Operator-bespoke binary constants YARA hunt** — apply the single rule (charset `1gba4cdom53nhp12ei0kfj` + XOR-0x54 + Sora-fork token + `PandoraNet` botnet ID) across IoT firmware archives and bot suspect samples. Catches all 11 Naku architectures with one rule.
 3. **AI-Generated Code Signature universal-subset rubric** — apply to suspected operator Python directory: count files matching criterion #1 (verbose docstrings on every method), criterion #3 (educational variable names), criterion #7 (Hunt-classifier-style indentation-decay flagging), criterion #9 (emoji in branded output strings), criterion #10 (version-numbered iteration files in single directory). Three or more criteria matching = HIGH suspicion AI-authored.
-4. **Escalating-superlative documentation pattern hunt** — for any open directory observed via crawler / Hunt-style scan, flag depth-1 listings with three or more files matching `FINAL_`, `COMPLETE_`, `ULTIMATE_`, `READY_`, `SOLUTION_COMPLETE`, `FINAL_DEPLOYMENT_COMPLETE` superlative patterns as AI-generated documentation suite.
-5. **Parasitic-CNC-on-legit-VPS detection** — for compromised commercial VPSes (multi-year-old Ubuntu LTS, EOL MariaDB / OpenSSH), audit for TCP/23 daemon presence in addition to expected web-serving services. Selective inbound IP filtering (host responds to scanner sources differently than to expected client sources) is a sophistication signal.
+4. **Escalating-superlative documentation pattern hunt** — flag any open directory (observed via crawler / Hunt-style scan) whose depth-1 listing contains three or more files matching the `FINAL_`, `COMPLETE_`, `ULTIMATE_`, `READY_`, `SOLUTION_COMPLETE`, `FINAL_DEPLOYMENT_COMPLETE` superlative patterns as an AI-generated documentation suite.
+5. **Parasitic-CNC-on-legit-VPS detection** — audit compromised commercial VPSes (multi-year-old Ubuntu LTS, EOL MariaDB / OpenSSH) for TCP/23 daemon presence in addition to expected web-serving services. Selective inbound IP filtering (host responds to scanner sources differently than to expected client sources) is a sophistication signal.
 
 ### 14.2 Strategic Recommendations
 
