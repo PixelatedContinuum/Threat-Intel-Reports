@@ -43,7 +43,15 @@ ioc_highlights:
 
 **What Was Found**
 
-Continued monitoring of the open directory at `172.105.0.126:8888` surfaced 106 additional files not present in the original investigation. Triage and deep-dive analysis across 18 selected samples revealed the full scope of the operator's toolkit: a 4-generation custom implant family (OpenStrike), the complete CS 4.9.1 "Pwn3rs" cracked installation with all post-exploitation capability modules, a CovertVPN Layer 2 bridge module with ICMP tunneling, an Artifact Kit service variant using EAX-redirect process hollowing, and six loader variants from a shared GCC 15 codebase. 72 of 98 samples submitted to VirusTotal had no prior submissions, indicating these samples had not been publicly reported on before this investigation.
+Continued monitoring of the open directory at `172.105.0.126:8888` surfaced 106 additional files not present in the original investigation. Triage and deep-dive analysis across 18 selected samples revealed the full scope of the operator's toolkit:
+
+- A 4-generation custom implant family (OpenStrike), with the newest generation still in development
+- The complete CS 4.9.1 "Pwn3rs" cracked installation with all post-exploitation capability modules
+- A CovertVPN Layer 2 bridge module with ICMP tunneling
+- An Artifact Kit service variant using EAX-redirect process hollowing
+- Six loader variants from a shared GCC 15 codebase
+
+72 of 98 samples submitted to VirusTotal had no prior submissions — none had been publicly reported before this investigation.
 
 **Why This Report Was Written**
 
@@ -611,7 +619,7 @@ The named pipe `\\.\pipe\MSSE-%d-server` (where `%d` = GetTickCount() % 9898) is
 
 **ICMP Tunnel Protocol:**
 
-The ICMP transport is the most operationally interesting channel because ICMP is routinely permitted through network perimeters and rarely inspected at payload depth.
+The ICMP transport is the highest-priority channel for detection because ICMP traverses most network perimeters uninspected at payload depth.
 
 ```
 ICMP payload frame structure:
@@ -701,7 +709,7 @@ The single-stage RWX allocation is detectable by EDR behavioral monitoring for `
 
 ### 4.5 Complete CS 4.9.1 Installation Overview
 
-The `cs_ts.log` recovered from the open directory confirmed the team server operational profile:
+The CS team server is confirmed at version 4.9.1 ("Pwn3rs"), freshly deployed or recently wiped, with no recorded beacon activity. The `cs_ts.log` recovered from the open directory documents the full profile:
 
 ```
 Version:         CS 4.9.1 (Pwn3rs) — cracked/patched license
@@ -753,7 +761,7 @@ The single VPS at `172.105.0.126` serves five distinct operational roles:
 
 **OPSEC finding — port 50050 external exposure:** The CS team server management interface is externally accessible. This exposes the operator's team server to scanning, fingerprinting, and potential exploitation by third parties, and makes the installation trivially confirmable via Shodan.
 
-**Hosting context:** Linode/Akamai Technologies (AS63949), Canadian jurisdiction (ARIN). Commercial mainstream VPS — zero bulletproof hosting indicators. Canadian jurisdiction significantly lowers the barrier for abuse reporting and law enforcement coordination relative to non-cooperative jurisdictions.
+**Hosting context:** Linode/Akamai Technologies (AS63949), Canadian jurisdiction (ARIN). Commercial mainstream VPS — zero bulletproof hosting indicators. Canadian jurisdiction lowers the barrier for abuse reporting and law enforcement coordination relative to non-cooperative jurisdictions.
 
 ### 5.2 RSA Key Ecosystem Mapping
 
@@ -829,7 +837,7 @@ CrowdStrike's 2024 research on HijackLoader confirmed that EAX register redirect
 
 **Supply chain implications:** UNKNOWN — the toolkit is assessed as pre-deployment. No trojanized delivery vector or software supply chain compromise has been observed. The social engineering kit templates (analytics.js, keylogger.js) remain undeployed with template placeholders intact. No downstream victims or compromised legitimate software packages have been identified.
 
-**Developer ecosystem risk:** The OpenStrike custom implant is a novel, undocumented family. If the operator completes gen-5 (resolving the missing key exchange), the resulting implant would be invisible to all CS-specific detection signatures and would represent an independent capability that other actors could potentially adopt or adapt if the operator's development files were themselves leaked or shared.
+**Developer ecosystem risk:** OpenStrike is an undocumented custom implant family with no prior public threat intelligence. A completed gen-5 — one that resolves the missing nonce exchange — would be invisible to all CS-specific detection signatures. If the operator's development files were subsequently leaked or shared, other actors could adopt the same capability.
 
 ### 6.5 Mixed CS Version Sourcing Pattern
 
