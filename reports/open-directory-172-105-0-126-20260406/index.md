@@ -254,7 +254,7 @@ Extracted configuration via the config extraction tool:
   <figcaption><em>Figure 3: The CS DLL's export table in Ghidra — only two exports exist: the standard PE entry point and ReflectiveLoader. Every injection tool that attempts to load this DLL will call ReflectiveLoader, walking directly into the tripwire shown in Figure 4.</em></figcaption>
 </figure>
 
-The `ReflectiveLoader` DLL export was modified via a single 4-byte edit to the PE export directory. The export entry point was redirected to three existing bytes already in the PE:
+The operator modified the `ReflectiveLoader` DLL export via a single 4-byte edit to the PE export directory, redirecting the entry point to three existing bytes already in the PE:
 
 ```
 66 90    ; xchg ax, ax  (2-byte NOP — harmless padding instruction)
@@ -271,7 +271,7 @@ Any tool that calls `ReflectiveLoader` — including sRDI, Cobalt Strike's own r
 
 **Detection on disk:** The byte sequence `66 90 CC` at the `ReflectiveLoader` export target is reliably detectable by YARA on disk and in memory. This is documented in the detection file.
 
-**Novelty:** Redirecting the export directory RVA to existing NOP+INT3 padding bytes — rather than writing new code — is not documented in public threat research as of 2026-04-06. It is a structurally elegant minimal-edit technique.
+**Novelty:** Redirecting the export directory RVA to existing NOP+INT3 padding bytes — rather than writing new code — is not documented in public threat research as of 2026-04-06. It is a minimal-edit technique that leaves no new bytes in the PE.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-reflective-loader-tripwire.png" | relative_url }}" alt="Ghidra disassembly view showing the ReflectiveLoader export at address 0x1709c with the tripwire byte sequence: 66 90 (xchg ax,ax two-byte NOP) followed by CC (INT3 software breakpoint), alongside the decompiled view showing swi(3) — the Ghidra representation of the INT3 instruction that crashes any tool attempting to call the export.">
@@ -917,9 +917,9 @@ DomainTools Iris passive DNS export reveals this IP has been continuously alloca
 
 ## 6. Discovery Method: hunt.io Open Directory Capture
 
-Samples were recovered via [hunt.io](https://hunt.io/)'s AttackCapture system, which continuously scans the internet for misconfigured servers exposing directory listings. When discovered, files are automatically downloaded and indexed. This is a pre-compromise intelligence source — recovery occurred before any victim was identified.
+[hunt.io](https://hunt.io/)'s AttackCapture system recovered the complete OpenStrike toolkit before any victim was identified — an infrastructure-first, pre-compromise discovery. AttackCapture continuously scans for misconfigured servers exposing directory listings and automatically downloads and indexes exposed files.
 
-**Intelligence value of open directory capture:** This discovery method provided the complete operator toolkit including development utilities (`dbg_loader.exe`), test harnesses, operator scripts, and debug-symbol-enabled binaries. These artifacts are rarely available from post-compromise forensics, where adversaries typically clean up or only deploy operational components. The completeness of the recovered kit is a direct consequence of the open directory exposure.
+**Intelligence value:** Open directory capture yielded artifacts that post-compromise forensics rarely surfaces: development utilities (`dbg_loader.exe`), test harnesses, operator scripts, and debug-symbol-enabled binaries. Adversaries typically clean up operational components or only deploy them; here the full kit was exposed before any deployment. The completeness of the recovery is a direct consequence of the open directory exposure.
 
 **Operator error:** The open directory was almost certainly a configuration mistake (misconfigured web server with directory listing enabled) rather than intentional exposure.
 
@@ -1138,7 +1138,7 @@ Seven new GCC-compiled beacon executables matching the original toolkit's MinGW-
 | SMB pivot beacon | `pivot.dll`, `pivot.x64.dll` | Same three variants |
 | Port 80 beacon | `beacon80.dll`, `beacon_port80.x64.dll` | MSVC 2012 compiled |
 
-The `.rl0k` and `.rl100k` suffixes are standard Cobalt Strike naming for reflective loader size variants. The presence of DNS, ExternalC2, and SMB pivot beacons significantly expands the operator's confirmed protocol capabilities beyond the HTTP/HTTPS beacons analyzed in this report.
+The `.rl0k` and `.rl100k` suffixes are standard Cobalt Strike naming for reflective loader size variants. The presence of DNS, ExternalC2, and SMB pivot beacons expands the operator's confirmed protocol capabilities beyond the HTTP/HTTPS beacons analyzed in this report.
 
 **Complete CS artifact kit (12 executables):**
 
@@ -1190,8 +1190,6 @@ The following analysis is planned:
 - Updated MITRE ATT&CK mapping reflecting the full post-exploitation capability
 
 This report will be updated with these findings as analysis is completed. The "Last Updated" date at the top of this report will reflect the most recent revision.
-
-**Want to be notified when the updated analysis drops?** Subscribe to The Hunters Ledger mailing list at the bottom of this page — subscribers receive email notifications when new reports and major updates are published, so you will not miss the follow-up to this investigation.
 
 ---
 
