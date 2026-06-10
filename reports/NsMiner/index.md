@@ -38,33 +38,27 @@ description: "A multi-stage cryptojacking campaign distributed from an open dire
 
 ## 1. Executive Summary
 
-**Threat Identified:** A multi-stage malware campaign deploying the **NsMiner cryptojacking** payload located in a open directory at 125.19.150.122. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
+**Threat Identified:** A multi-stage cryptojacking campaign distributes the **NsMiner** payload from an open directory at 125.19.150.122. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
 
-**Business Impact:** The primary impact is the unauthorized use of system resources (CPU, electricity) for the attacker's financial gain, which leads to significant system slowdowns, increased operational costs, and potential hardware degradation. Critically, the downloader component (`tftp.exe`) represents an ongoing risk, as it could be used to fetch more severe secondary payloads, including ransomware or data stealers, at any time.
+**Business Impact:** The dropper hijacks CPU and electrical resources for the attacker's cryptocurrency mining, causing system slowdowns and hardware strain. The downloader component (`tftp.exe`) poses a compounding risk: it can fetch secondary payloads — including ransomware or data stealers — at any time after initial infection.
 
 **Key Findings:**
-*   **Attack Chain:** The infection begins with a dropper (`IMG001.exe`) that establishes persistence in `%APPDATA%\NsMiner`. It then executes a custom downloader (`tftp.exe`) which fetches the final payload—a cryptocurrency miner—using a credential stuffing attack strategy against numerous FTP servers.
-*   **Final Payload:** The ultimate goal is to run a CPU-based miner (`NsCpuCNMiner32.exe`, `NsCpuCNMiner64.exe`) configured to mine a CryptoNight-based currency, almost certainly Monero (XMR).
-*   **C2 Infrastructure:** The downloader communicates with a primary C2 at `hrtests.ru` (a domain previously associated with miners) and attempts to compromise FTP servers through credential stuffing attacks using hardcoded IP addresses and username/password combinations. Once access is gained, these servers are used as payload distribution points.
-*   **Evasion:** The final miner payload is packed with **VMProtect**, a sophisticated protector used to hinder analysis and evade signature-based detection.
+*   **Attack Chain:** `IMG001.exe` establishes persistence under `%APPDATA%\NsMiner`, then extracts and runs `tftp.exe`, which fetches the final miner payload by credential-stuffing over a dozen FTP servers.
+*   **Final Payload:** `NsCpuCNMiner32.exe` and `NsCpuCNMiner64.exe` mine a CryptoNight-based currency — almost certainly Monero (XMR) — using the victim's CPU.
+*   **C2 Infrastructure:** `tftp.exe` beacons to `hrtests.ru` over HTTP and cycles hardcoded FTP credentials against 18 target IPs. Servers that accept the credentials become secondary payload distribution points.
+*   **Evasion:** The miner binaries are packed with VMProtect (a commercial binary protector), defeating signature-based detection and complicating static analysis.
 
 **Overall Risk Assessment:**
-*   **Severity:** **HIGH.** While the primary payload is a resource hog rather than a destructive one, the presence of a downloader capable of fetching new threats and the use of sophisticated packing techniques indicate a significant threat.
-*   **Sophistication:** **MEDIUM-HIGH.** The use of a multi-stage delivery, resilient C2 infrastructure, and advanced packing (VMProtect) points to a well-organized threat actor.
+*   **Severity:** **HIGH.** The primary payload hijacks resources rather than destroying data, but the active downloader can pivot to ransomware or stealers with a single C2 update.
+*   **Sophistication:** **MEDIUM-HIGH.** Multi-stage delivery, FTP-based resilient payload distribution, and VMProtect packing indicate a deliberate, organized operation.
 
 **Recommendations:**
-1.  **Block** all network indicators listed in the IOCs section at the firewall and DNS level.
+1.  **Block** all network indicators in the IOCs section at the firewall and DNS level.
 2.  **Deploy** the provided YARA rule and SIEM queries to detect and hunt for this threat.
 3.  **Scan** for the persistence directory (`%APPDATA%\NsMiner`) on all endpoints.
-4.  **Isolate and Re-image** any confirmed-infected systems to ensure complete removal.
+4.  **Isolate and re-image** any confirmed-infected systems to ensure complete removal.
 
 ---
-
-## Quick Reference
-
-**Detections & IOCs:**
-- [NsMiner Detection Rules]({{ "/hunting-detections/nsminer-cryptojacker/" | relative_url }})
-- [NsMiner IOCs]({{ "/ioc-feeds/nsminer-cryptojacker.json" | relative_url }})
 
 **Malware Family:** NsMiner Cryptojacker
 **Primary Threat:** Resource Hijacking (Cryptomining)
@@ -74,13 +68,15 @@ description: "A multi-stage cryptojacking campaign distributed from an open dire
 
 ## 2. Malware and Campaign Analysis
 
-This campaign deploys the **NsMiner** malware, a known Trojan Coin Miner. The name is derived from the persistence directory it creates (`NsMiner`) and its final payload (`NsCpuCNMiner*.exe`). My research confirms that this family of malware is primarily designed for cryptojacking.
+**NsMiner** is a Trojan Coin Miner named for the persistence directory it creates (`NsMiner`) and its final binaries (`NsCpuCNMiner*.exe`). The family is designed exclusively for cryptojacking.
 
-The use of an NSIS installer as a dropper is a common tactic, allowing threat actors to bundle malicious scripts and payloads within a seemingly legitimate installer package. This aligns with industry reporting on malware distribution.
+The NSIS installer dropper bundles malicious scripts and payloads inside a structure that resembles legitimate software packaging, lowering user suspicion at execution.
 
-The C2 domain `hrtests.ru` has historical ties to miner activity dating back to 2016, suggesting the actors may be reusing old infrastructure or are part of a long-running operation. The large list of FTP servers and credentials indicates a **credential stuffing attack strategy** where the malware attempts to brute-force access to numerous FTP servers, likely identified through prior scanning operations. Once access is gained to any accessible FTP server, the malware uses it as a distribution point for downloading the final payload.
+`hrtests.ru` carries historical ties to miner activity dating to at least 2016, suggesting the actors reuse aging infrastructure or run a long-running operation. The hardcoded list of 18 FTP IPs with credential pairs reflects a **credential stuffing** strategy — the malware cycles through targets likely identified by prior scanning. Any server that accepts a credential pair becomes a payload distribution point for the miner binaries.
 
 ## 3. Technical Deep-Dive
+
+> **Analyst note:** This section walks the three-stage infection chain — dropper, downloader, and miner. Each stage hands off to the next and adds a layer of resilience or evasion. Understanding all three is necessary to scope containment, because removing only the miner leaves `tftp.exe` active and able to re-fetch it.
 
 ### 3.1. Initial Dropper: `IMG001.exe`
 
@@ -119,7 +115,7 @@ The C2 domain `hrtests.ru` has historical ties to miner activity dating back to 
   <figcaption><em>Figure 3: URLs discovered through custom static analysis script, showing C2 beacon endpoint</em></figcaption>
 </figure>
 
-2.  **FTP Credential Stuffing:** It iterates through a hardcoded list of over 15 FTP server IPs, attempting to connect using various username/password combinations in what appears to be a **credential stuffing attack**. Dynamic analysis revealed the malware systematically testing different credential pairs against each IP address, suggesting these are potential target servers rather than pre-compromised infrastructure.
+2.  **FTP Credential Stuffing:** `tftp.exe` iterates through a hardcoded list of 18 FTP server IPs, cycling username/password combinations in a **credential stuffing** loop. Dynamic analysis shows the malware systematically testing different credential pairs against each IP — these are attack targets, not pre-compromised infrastructure.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/nsminer/nsminer-ftp-credential-stuffing-small.png" | relative_url }}" alt="FTP Credential Stuffing - Small Sample">
@@ -141,10 +137,10 @@ The C2 domain `hrtests.ru` has historical ties to miner activity dating back to 
 *   **Purpose:** The ultimate goal of the infection: to use the victim's CPU resources to mine cryptocurrency.
 
 **Analysis:**
-*   The "CN" in the filename strongly suggests the use of the **CryptoNight** algorithm, which was historically used for mining **Monero (XMR)** due to its CPU-friendly nature.
-*   The automated analysis confirms these files are packed with **VMProtect**, a commercial protector that uses virtualization and obfuscation to make static analysis and reverse engineering exceptionally difficult. This is a clear indicator of the threat actor's intent to hide the payload's functionality.
+*   The "CN" filename suffix strongly indicates the **CryptoNight** algorithm, historically favored for **Monero (XMR)** mining due to its CPU-friendly design.
+*   Automated analysis confirms both binaries are packed with VMProtect (a commercial protector that uses virtualization and obfuscation), which defeats signature-based detection and blocks static reverse engineering of the miner configuration.
 
-**Analysis Note:** While the miners were identified as being packed with VMProtect, a full reverse engineering of the packed code was not performed during this stage of analysis. A deeper unpacking effort would be required to analyze the miner's specific configuration and capabilities.
+**Analysis Note:** Full unpacking of the VMProtect layer was not completed in this analysis pass. A dedicated unpacking effort is required to recover the miner's embedded configuration and confirm the mining pool and wallet address.
 
 ## 4. MITRE ATT&CK Mapping
 
@@ -168,7 +164,7 @@ This rule targets unique strings and properties of the dropper and downloader co
 rule NsMiner_Dropper_Downloader {
     meta: 
         description = "Detects the NsMiner NSIS dropper and the FTP downloader component."
-        author = "Gemini Cyber Threat Analysis Team"
+        author = "The Hunters Ledger"
         date = "2026-02-02"
         hash1 = "e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145"
         hash2 = "40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d"
@@ -194,8 +190,8 @@ rule NsMiner_Dropper_Downloader {
 }
 ```
 
-### SIEM Hunting Query (Splunk)
-This query hunts for the specific HTTP beaconing activity from the `tftp.exe` downloader.
+### SIEM Hunting Query
+This query hunts for the HTTP beaconing activity from `tftp.exe`. The syntax is Splunk SPL; adapt field names to your SIEM platform.
 
 ```splunk
 index=proxy OR index=firewall 
