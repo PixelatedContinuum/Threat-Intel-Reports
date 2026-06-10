@@ -92,7 +92,7 @@ The seven points below summarize what this report wants a reader to retain. They
 1. **`45.130.148.125` is attacker-controlled infrastructure.** Service co-location of victim-facing C2, operator TeamServer GUI, and open-directory staging on a single IP rules out compromise-of-third-party explanations. Block all three ports (TCP/80, TCP/4444, TCP/8888) at the perimeter unconditionally.
 2. **The AdaptixC2 framework is now the workhorse, not the niche.** Four distinct cohort archetypes (Russian-speaking ransomware affiliates, Tomiris APT, Tropic Trooper APT, GOLD ENCOUNTER) all use it. Defenders should detect the framework regardless of operator — the `X-Beacon-Id` header + Firefox 20 User-Agent combination is the single highest-fidelity network signature for any AdaptixC2 deployment running default-listener configuration.
 3. **RC4 key recovery requires no cracking — adjacent plaintext storage in `.rdata` is by design.** This is a framework architectural choice, not a defender win against the operator. The same recovery technique works against any AdaptixC2 beacon.
-4. **The operator's tradecraft is mid-tier with one sophisticated choice.** W^X-aware classic CRT process injection (CreateRemoteThread on a separately RW-then-RX paged region) is the only sophistication; everything else is textbook. Sub-mature OpSec hygiene leaves PDB paths, build timestamps, internal class names, and a stock 2013-era User-Agent unmodified. NOT APT-level.
+4. **The operator's tradecraft is mid-tier with one specific evasion choice.** W^X-aware classic CRT process injection (CreateRemoteThread on a separately RW-then-RX paged region) is the only evasion technique beyond textbook; everything else is standard. Sub-mature OpSec hygiene leaves PDB paths, build timestamps, internal class names, and a stock 2013-era User-Agent unmodified. NOT APT-level.
 5. **Operator-specific fingerprints persist across builds.** The `si_build` class name, the `/tmp/si_build/obj/Release/net472/si_build.pdb` path, the recovered RC4 key, and the per-listener type IDs `0xbe4c0149` / `0xcb4e6379` all appear in operator-written code, not framework defaults. Any future binary carrying these strings links to UTA-2026-006 at HIGH confidence.
 6. **Attribution is INSUFFICIENT (<50%) — UTA-2026-006 internal designation only.** Tropic Trooper and Tomiris are explicitly ruled out; GOLD ENCOUNTER / PayoutsKing is LOW. Russian-speaking ransomware affiliate cohort alignment is population-level, not named-actor. Treat any attribution claim from secondary feeds with skepticism unless they show evidence beyond what is in this report.
 7. **Active operational status is UNKNOWN as of analysis.** No live victim traffic captured. The threat level (HIGH) reflects upper-bound capability of the staged toolkit; the threat level should be reassessed to CRITICAL on confirmed-active operations against named victims, or LOW if the +1 week rescan (2026-05-06) shows the infrastructure is decommissioned.
@@ -153,7 +153,7 @@ The `45.130.148.125` infrastructure was discovered via The Hunter's Ledger's ope
 | TCP/4444 | AdaptixC2 TeamServer (operator GUI) | Operator management interface |
 | TCP/8888 | Python SimpleHTTPServer 0.6 open directory | Toolkit staging |
 
-Co-locating the operator GUI server (`TeamServer`) on the same IP as the victim-facing C2 and the staging directory is a significant operational-security failure. It establishes — at HIGH confidence — that this infrastructure is **attacker-controlled** rather than a compromised third-party host, because no legitimate compromise scenario explains an open AdaptixC2 TeamServer port adjacent to the C2.
+Co-locating the operator GUI server (`TeamServer`) on the same IP as the victim-facing C2 and the staging directory is an operational-security failure. It establishes — at HIGH confidence — that this infrastructure is **attacker-controlled** rather than a compromised third-party host, because no legitimate compromise scenario explains an open AdaptixC2 TeamServer port adjacent to the C2.
 
 The directory has remained **static since first crawl** (80+ hours observed as of analysis at 2026-04-30). A +1 week opendir-hunter rescan is scheduled for 2026-05-06 to confirm whether the operator becomes aware of the exposure and rotates infrastructure.
 
@@ -294,7 +294,7 @@ That four formats with three distinct imphashes all collapse to one source illus
   <figcaption><em>Figure 3: GCC and MinGW-w64 runtime strings recovered from the beacon shellcode confirm the Linux-cross-compiled MinGW-w64 toolchain. Combined with the GNU ld 2.35 linker version stamp and the standard MinGW-w64 PE section layout, this rules out the alternative hypothesis that the beacon was built with MSVC (which would imply a different operator profile).</em></figcaption>
 </figure>
 
-The absence of networking imports in the IAT is significant: the beacon resolves all network APIs at runtime via `LoadLibrary` + `GetProcAddress` calls inside its C2 transport plugin (an established AdaptixC2 framework feature, not operator customization). This defeats static IAT-based hunting.
+The beacon resolves all network APIs at runtime via `LoadLibrary` + `GetProcAddress` calls inside its C2 transport plugin — an established AdaptixC2 framework feature, not operator customization. No networking imports appear in the IAT, which defeats static IAT-based hunting.
 
 > **Analyst note — what "RDI bootstrap" means:** Reflective DLL Injection is a technique where instead of writing a DLL to disk and using `LoadLibrary`, the malware embeds a small bootstrap routine that walks the PE headers of an in-memory DLL and maps it manually into a process. The benefit to the attacker: no on-disk DLL artifact, no `LoadLibrary` event for EDRs to log. AdaptixC2 ships this RDI bootstrap as part of the framework — it is NOT operator-written here.
 
@@ -481,7 +481,7 @@ This binary confirms the operator anticipated and deployed Linux post-exploitati
 | SHA256 | `f68507d88b007817901ffe3537a2d3935de53344ddfb6f0838d4141e3c02e07d` |
 | Size | 6,048,768 B (5.77 MB) |
 | Compiler | Go 1.25.4, CGO_ENABLED=0, `-trimpath` set, GOOS=windows, GOARCH=amd64 |
-| User functions | 1,332 (significant codebase) |
+| User functions | 1,332 |
 | VCS revision | `a4b80bf370f704d6843e69433bfb5c06274f57df` (Git SHA1) at 2026-03-04 20:36:06 UTC |
 | `vcs.modified` | `true` (uncommitted changes at build time — benign goreleaser-build-dir noise) |
 
@@ -635,7 +635,7 @@ The combination is the detection pivot. Any single component alone is a moderate
 - No string-encryption inside `injector.dll` (P/Invoke method names are plaintext)
 - No certificate pinning, no domain-fronting, no covert channel
 
-The combination — reflection-based AMSI bypass and W^X-aware injection (sophisticated-looking) alongside `PROCESS_ALL_ACCESS` and unobfuscated .NET P/Invoke declarations in the injector's `ImplMap` metadata (lazy) — is consistent with an operator who has read modern injection tradecraft writeups, applied the headline lessons, but never wrote anti-detection code from scratch.
+The combination — reflection-based AMSI bypass and W^X-aware injection alongside `PROCESS_ALL_ACCESS` and unobfuscated .NET P/Invoke declarations in the injector's `ImplMap` metadata — is consistent with an operator who has read modern injection tradecraft writeups, applied the headline lessons, but never wrote anti-detection code from scratch.
 
 (Terminology note for defenders: a .NET assembly's Win32 imports do not appear in the PE Import Address Table the way a native-language binary's do. They are listed in the .NET metadata's `ImplMap` table — a managed-code abstraction visible in tools like dnSpy or ILSpy. Hunting for `OpenProcess`/`VirtualAllocEx`/`CreateRemoteThread` in a .NET injector's PE IAT will therefore not find them; the lookups happen at JIT time via P/Invoke marshalling.)
 
@@ -772,7 +772,7 @@ The static-since-discovery profile is the most telling temporal signal in this c
 
 **Named-actor attribution: INSUFFICIENT (<50%).** Tracked as **UTA-2026-006**.
 
-The operator behind `45.130.148.125` cannot be tied to any publicly named threat group on the available evidence. A full Analysis of Competing Hypotheses (ACH) — five hypotheses evaluated against all observed evidence — was performed.
+The operator behind `45.130.148.125` cannot be tied to any publicly named threat group on the available evidence. This analysis evaluated five competing hypotheses against all observed evidence using the ACH framework.
 
 | Hypothesis | Inconsistencies | Status |
 |---|---|---|
@@ -986,7 +986,7 @@ The indicators below are reproduced from Unit 42's *AdaptixC2: A New Open-Source
 | `172[.]16[.]196[.]1:4443` | Framework default C2 listener | Unit 42 (framework default) | NOT operator-deployed — would only appear in unconfigured / test builds |
 | `/uri.php` | Framework default URI | Unit 42 (framework default) | UTA-2026-006 deviated from this default — operator chose 4 alternative URIs (Section 5.2) |
 
-**For defender posture:** Block the network indicators above as additional AdaptixC2-ecosystem coverage if your environment can support multiple feeds. Treat the framework-default values (`172.16.196.1:4443`, `/uri.php`) as hunt strings for *any* unconfigured AdaptixC2 deployment — both Unit 42's and our recovered configs prove that operators consistently override the IP / port / URI defaults but typically leave header / UA defaults untouched. The header + UA combination is therefore the more durable detection target than IP / URI alone.
+**For defender posture:** Block the network indicators above as additional AdaptixC2-ecosystem coverage where feed capacity allows. Treat the framework-default values (`172.16.196.1:4443`, `/uri.php`) as hunt strings for *any* unconfigured AdaptixC2 deployment — both Unit 42's and our recovered configs prove that operators consistently override the IP / port / URI defaults but typically leave header / UA defaults untouched. The header + UA combination is therefore the more durable detection target than IP / URI alone.
 
 ---
 
@@ -1088,7 +1088,7 @@ The AdaptixC2 framework is GPL-3.0 open-source on GitHub (github.com/Adaptix-Fra
 Quick answers to the questions analysts most frequently ask of a report like this one.
 
 **Q: Is this APT-grade?**
-No. The operator is mid-tier. Sub-mature OpSec (PDB paths, build timestamps, dev-leftover artifacts), one sophisticated tradecraft choice (W^X-aware injection), and otherwise textbook deployment. NOT consistent with named APT operators in the same threat-landscape neighborhood. Tropic Trooper and Tomiris APT hypotheses were explicitly tested and ruled out (six and five technical inconsistencies respectively).
+No. The operator is mid-tier. Sub-mature OpSec (PDB paths, build timestamps, dev-leftover artifacts), one W^X-aware injection choice that evades RWX-detection rules, and otherwise textbook deployment. NOT consistent with named APT operators in the same threat-landscape neighborhood. Tropic Trooper and Tomiris APT hypotheses were explicitly tested and ruled out (six and five technical inconsistencies respectively).
 
 **Q: Are victims confirmed?**
 No. Active operational status is UNKNOWN. The C2 endpoint at `45.130.148.125:80` is reachable but no live victim traffic has been captured. The threat assessment in this report is capability-based on the staged toolkit, not impact-based on observed operations.
