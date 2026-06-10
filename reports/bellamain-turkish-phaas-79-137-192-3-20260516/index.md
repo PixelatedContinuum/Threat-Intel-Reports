@@ -1,6 +1,9 @@
 ---
 title: "BellaMain — Turkish Phishing-as-a-Service Panel with USOM Self-Monitor, Four-Bot Telegram C2, On-Demand TRUNCATE Anti-Forensics, and Wadanz Code-Author Signature"
 date: '2026-05-16'
+series: opendir-79-137-192-3
+series_role: member
+series_order: 1
 detection_page: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
 ioc_feed: /ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json
 detection_sections:

@@ -1,6 +1,9 @@
 ---
 title: "Inkognito — Russian-Speaking Multi-Product Fraud Operator (INK VPN, INK Lens 467+ Brand-Impersonation Phishing Library, BEC Burn Domains, CryptOne Fake Exchange)"
 date: '2026-05-16'
+series: opendir-79-137-192-3
+series_role: member
+series_order: 2
 detection_page: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/
 ioc_feed: /ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json
 detection_sections:

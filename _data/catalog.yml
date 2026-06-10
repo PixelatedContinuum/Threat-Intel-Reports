@@ -92,6 +92,8 @@ entries:
     date: 2026-05-16
     severity: high
     tags: [PhaaS, Phishing, Cred Theft, Open Dir]
+    series: opendir-79-137-192-3
+    series_order: 1
     report_url: /reports/bellamain-turkish-phaas-79-137-192-3-20260516/
     detection_url: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections
     ioc_url: /ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json
@@ -100,6 +102,8 @@ entries:
     date: 2026-05-16
     severity: high
     tags: [Phishing, Fraud, VPN Abuse, Cred Theft]
+    series: opendir-79-137-192-3
+    series_order: 2
     report_url: /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
     detection_url: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
     ioc_url: /ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json
@@ -108,6 +112,9 @@ entries:
     date: 2026-05-15
     severity: critical
     tags: [MaaS, Stealer, Loader, Open Dir]
+    series: opendir-79-137-192-3
+    series_order: 0
+    series_title: "Multi-Cluster Open Directory — 79.137.192.3 (Rhadamanthys / BellaMain / Inkognito)"
     report_url: /reports/opendirectory-79-137-192-3-20260515/
     detection_url: /hunting-detections/opendirectory-79-137-192-3-20260515-detections
     detection_title: "Detection Rules — Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito)"

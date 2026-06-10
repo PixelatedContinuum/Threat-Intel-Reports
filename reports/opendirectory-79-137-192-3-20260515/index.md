@@ -1,6 +1,9 @@
 ---
 title: "Multi-Cluster Open-Directory Tenancy on 79.137.192.3 — Rhadamanthys MaaS Customer Loader, BellaMain Turkish PhaaS, and Inkognito VPN/Phishing"
 date: '2026-05-15'
+series: opendir-79-137-192-3
+series_role: parent
+series_order: 0
 detection_page: /hunting-detections/opendirectory-79-137-192-3-20260515-detections/
 ioc_feed: /ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json
 detection_sections:
