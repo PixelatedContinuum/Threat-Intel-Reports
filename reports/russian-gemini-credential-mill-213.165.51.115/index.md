@@ -106,8 +106,8 @@ Five immediate priorities for SOC analysts, threat hunters, and healthcare-secto
 
 1. **Block egress to `*.tralalarkefe.com` and the operator IP inventory.** TLS SNI block + DNS block + IP block (`213.165.51.115`, `34.34.81.129`, `34.34.57.141`, `35.192.41.201`). Egress hunt for `User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) + X-Agent-ID header + /api/v1/* URI` regardless of domain — the `X-Agent-ID` header format (`HOSTNAME_user`, e.g., `HOSTNAME_staff`) is bespoke to this operator and is the highest-signal single network detection string. Detection rules in Section 10.
 2. **Audit HKCU Run-key + `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1`.** Any presence of either is HIGH-confidence indication of this operator on the host. Cross-check for PowerShell process with `SecurityProtocol = Tls12` precondition before `Invoke-RestMethod -Uri https://payloads.tralalarkefe.com/*.ps1`.
-3. **For US healthcare and dental practices: audit for `[victim AD domain — redacted]` AD artifacts and OpenDental installations.** This is the primary victim, but the TTP set applies directly to any small US healthcare practice with a similar attack surface — under-resourced security posture, commodity AD environment, and OpenDental or comparable vertical practice-management software.
-4. **Hunt for the LLM credential mutation Yara signature.** YARA rule covers the `"Act as an expert red-team password analyst"` + Gemini API import + `AI_SNIPER_GOODS.txt` / `AI_ADMIN_MUTANTS.txt` output filename pattern. Endpoint AV/EDR file scan plus git-hook pre-commit scan on internal CI/CD pipelines (in case this tooling spreads).
+3. **Audit US healthcare and dental practices for `[victim AD domain — redacted]` AD artifacts and OpenDental installations.** This is the primary victim, but the TTP set applies directly to any small US healthcare practice with a similar attack surface — under-resourced security posture, commodity AD environment, and OpenDental or comparable vertical practice-management software.
+4. **Hunt for the LLM credential mutation YARA signature.** YARA rule covers the `"Act as an expert red-team password analyst"` + Gemini API import + `AI_SNIPER_GOODS.txt` / `AI_ADMIN_MUTANTS.txt` output filename pattern. Endpoint AV/EDR file scan plus git-hook pre-commit scan on internal CI/CD pipelines (in case this tooling spreads).
 5. **Hunt for AI Operator Handoff Document YARA signature on developer workstations and server-class hosts.** YARA rule covers Markdown files with session-start load directive co-occurring with C2 endpoint references or credential-table indicators. Higher-risk locations: `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class Linux hosts.
 
 Sections 4–7 carry the technical depth (capabilities, static, dynamic, MITRE ATT&CK). Section 9 covers the cross-vendor naming reconciliation and four-axis operator profile; Section 13 documents the calibration notes and retractions, including the Trend Micro prior-art reframing.
@@ -147,15 +147,15 @@ The phases below describe **categories of work** required to investigate and rem
 
 - **Initial Phase — Confirm operator access posture and contain inbound tunnels.** Verify whether `cloudflared` is running on any internal host (process inventory + executable-path search); verify outbound TLS connections to `*.tralalarkefe.com` SNI (perimeter TLS logging); audit HKCU Run-key `WindowsUpdateManager` and `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` presence; capture any beacon binaries for forensic preservation. Block egress to `*.tralalarkefe.com` and the operator IP inventory at perimeter; if `cloudflared` is running internally, kill the process and remove the persistence artifact only after capturing the process command-line and tunnel UUID for forensic preservation.
 - **Investigation Phase — Identify scope of credential and data exposure.** Hunt for credential dumping evidence (LSASS access, SAM hive access, NTDS.dit access); inventory the AD environment for the captured NTLM hash matches; review OpenDental MySQL access logs if applicable; review egress data volume against the time window the tunnels were configured (this defines the PHI exposure window for any HIPAA notification calculus). Hunt the email environment for any artifacts of `ai_sniper_brute.py`-class credential reuse against employee personal-email accounts.
-- **Notification Phase — HIPAA and victim-class notification.** HIPAA Breach Notification Rule applies if PHI exposure is confirmed; HC3 (HHS Health Sector Cybersecurity Coordination Center) is the appropriate sector-CERT coordination path. Direct practice notification of any patients whose PHI is confirmed exposed is required by HIPAA — the specific timeline, scope, and method are organization-and-counsel decisions outside the scope of this report.
-- **Remediation Phase — Full credential rotation + endpoint rebuild for affected hosts.** Given the captured credential inventory + the LLM-personalized mutation pipeline, defensible remediation is full credential rotation for any captured account (the 6 NTLM hashes + the OpenDental MySQL root + any plaintext captured passwords) plus rotation of credentials accessed *from* affected hosts (cloud SaaS, banking, payroll, etc., per session-evidence inventory). Endpoint rebuild from known-good media is the defensible position for any host with confirmed operator access.
+- **Notification Phase — Notify the victim class and engage the sector CERT.** HIPAA Breach Notification Rule applies if PHI exposure is confirmed; HC3 (HHS Health Sector Cybersecurity Coordination Center) is the appropriate sector-CERT coordination path. Direct practice notification of any patients whose PHI is confirmed exposed is required by HIPAA — the specific timeline, scope, and method are organization-and-counsel decisions outside the scope of this report.
+- **Remediation Phase — Rotate the full credential inventory and rebuild affected hosts.** Given the captured credential inventory + the LLM-personalized mutation pipeline, defensible remediation is full credential rotation for any captured account (the 6 NTLM hashes + the OpenDental MySQL root + any plaintext captured passwords) plus rotation of credentials accessed *from* affected hosts (cloud SaaS, banking, payroll, etc., per session-evidence inventory). Endpoint rebuild from known-good media is the defensible position for any host with confirmed operator access.
 - **Enhanced Monitoring Phase — Deploy YARA / Sigma / Suricata rules + hunt across environment.** A single confirmed operator presence implies probability of broader environment scope. Deploy the rules in Section 10 across the broader environment; hunt for the `X-Agent-ID` header format, the `ai_sniper_brute.py` YARA signatures, and the AI Operator Handoff Document YARA signature on developer workstations and server-class hosts.
 
 ---
 
 ## 3. Technical Classification
 
-This section establishes what the operator's arsenal is, how it is structured, and how it compares to peer threats in the AI-augmented cybercrime landscape.
+The arsenal is an operator-built composite: a custom Python-stdlib C2, an LLM-personalized credential mutator, a stolen-key validation pipeline, a mass WordPress validation rig, and a Telegram disinformation bot — a mid-tier AI-augmented cybercrime stack, not a commodity off-the-shelf kit. The tables and comparison below establish how it is structured and how it sits against peer threats.
 
 ### Classification & Identification
 
@@ -184,7 +184,7 @@ This section establishes what the operator's arsenal is, how it is structured, a
 
 ### Infrastructure Identifiers (Primary Components)
 
-The full structured IOC inventory is in the separate IOC feed file (link in Section 8). The summary below covers the primary infrastructure by IP and domain.
+The operator spreads the infrastructure across three providers — AEZA (workstation), GCP (proxy/C2 instances), and Cloudflare (victim-facing tunnels) — so victim-side defenders see only the GCP and Cloudflare legs. The summary below covers that primary infrastructure by IP and domain; the full structured IOC inventory is in the separate IOC feed file (link in Section 8).
 
 | Component | Identifier | ASN / Provider | Role |
 |---|---|---|---|
@@ -214,7 +214,7 @@ The combination of these three features defines the operator's class: **AI-augme
 
 ## 4. Capabilities Deep-Dive
 
-The operator's arsenal spans nine functional layers from credential acquisition through victim-side persistent access through cross-domain political IO. The subsections below cover each layer with source-code-level evidence where available.
+Every link in the operator's chain — credential acquisition, LLM personalization, victim-side persistent access, and co-located political IO — is captured at source-code level, and three of those links (the LLM mutator, the AI handoff documents, and the unauthenticated C2) are net-new public findings. The arsenal spans nine functional layers; the subsections below walk each one with the evidence behind it.
 
 > **Executive Impact Summary**
 >
@@ -717,7 +717,7 @@ The defender-visible indicators on the victim side:
 
 **Confidence:** DEFINITE (Hunt.io platform snapshots before and after; totalItems: 0 by 2026-05-23)
 
-The operator's `213.165.51.115` open-directory exposure was first observed by Hunt.io on 2026-03-30. The Hunters Ledger deep-pulled the arsenal across multiple investigation phases between then and 2026-05-23. Between Phase 7 and Phase 8 capture, the open-directory was cleaned (totalItems: 0 by 2026-05-23). This is operator detection-and-response behavior: the operator became aware of public exposure (plausibly via Hunt.io indexing or Trend Micro publication ramp-up) and cleaned the open-directory within days. The operator did not abandon the infrastructure — the Cloudflare Tunnel and GCP overlay remained operational.
+The operator detected the public exposure and wiped the open directory within days — but kept the live infrastructure running. Hunt.io first observed the `213.165.51.115` open directory on 2026-03-30, and The Hunters Ledger deep-pulled the arsenal across multiple investigation phases through 2026-05-23. Between Phase 7 and Phase 8 capture the directory was cleaned (totalItems: 0 by 2026-05-23), plausibly after the operator noticed Hunt.io indexing or the Trend Micro publication ramp-up. The cleanup is detection-and-response behavior, not abandonment: the Cloudflare Tunnel and GCP overlay stayed operational.
 
 ### 6.6 Network Behavior Summary Table
 
@@ -784,7 +784,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 ### 9.3 Four-Axis Operator Profile (Phase 11 Synthesis)
 
-The operator's behavioral profile resolves on four axes:
+Synthesizing the 122-session Gemini CLI corpus (the investigation's Phase 11 deep-read), the operator's behavioral profile resolves on four axes:
 
 **Axis 1 — Russian-native:** DEFINITE confidence. Evidence: informal idiom register (`Бро`, `братух`, `Погнали`, `тачка`, `Комп Доктора`); Cyrillic-English technical bilingualism in source code comments; in-session credential ledger format header `Формат: Имя тачки - Юзер - Пароль` re-pasted across 4+ Gemini CLI sessions; Trend Micro independent characterization as Russian-speaking. Strings do not Google-Translate cleanly — the register is consistent with a native Russian speaker.
 
@@ -836,7 +836,7 @@ The MODERATE 83% confidence can be elevated via the following paths:
 
 ## 10. Risk & Detection
 
-The complete detection ruleset (26 rules across YARA, Sigma, and Suricata) is in the separate detection file:
+The single highest-signal action for every environment is to block `*.tralalarkefe.com` — the operator-owned custom domain has no legitimate use case — backed by the operator-bespoke `X-Agent-ID: HOSTNAME_user` C2 header, which catches this operator's traffic even after infrastructure migration. The complete detection ruleset (26 rules across YARA, Sigma, and Suricata) is in the separate detection file:
 
 **[`/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/`](/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/)**
 
