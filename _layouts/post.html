@@ -376,7 +376,14 @@ document.addEventListener('DOMContentLoaded', function () {
     g.subs.forEach(function (sh) { buildMobileEntry(sh, true); });
   });
 
-  // Scroll-spy: highlight active heading + auto-expand its chapter
+  // Scroll-spy: highlight active heading; accordion-expand only its chapter
+  function setChapterOpen(li, open) {
+    if (!li) return;
+    li.classList.toggle('hl-toc__item--open', open);
+    var c = li.querySelector(':scope > .hl-toc__caret');
+    if (c) c.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
@@ -386,10 +393,12 @@ document.addEventListener('DOMContentLoaded', function () {
       active.classList.add('hl-toc__active');
       var subEl = active.closest('.hl-toc__sublist');
       var chapter = subEl ? subEl.parentElement : active.closest('.hl-toc__item');
+      // accordion: keep only the active chapter open, collapse the rest
+      tocList.querySelectorAll('.hl-toc__item--open').forEach(function (openLi) {
+        if (openLi !== chapter) setChapterOpen(openLi, false);
+      });
       if (chapter && chapter.querySelector(':scope > .hl-toc__sublist')) {
-        chapter.classList.add('hl-toc__item--open');
-        var c = chapter.querySelector(':scope > .hl-toc__caret');
-        if (c) c.setAttribute('aria-expanded', 'true');
+        setChapterOpen(chapter, true);
       }
       active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     });
