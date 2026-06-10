@@ -94,7 +94,7 @@ Because this is a first public disclosure, the IOCs and detection signatures in 
 ### For Technical Teams — Immediate Priorities
 
 - **Hunt web-access logs for URI path component `/V5VgjLU0jsDe/`** — the 12-character random admin directory name is the single most BellaMain-specific indicator. Any HTTP request containing this path on a non-BellaMain host is a high-fidelity hit. See [Section 5.2](#52-usom-blocklist-self-monitoring-the-distinctive-turkish-targeting-tradecraft) and the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/) for the Sigma rule.
-- **Hunt your PHP corpus and any open-directory archives for the function-name pair `sifreleWadanz` + `sifrecozWadanz`** — the developer pseudonym signature. Each external hit is potentially another panel by the same developer; cross-sample author pivots are the strongest forward-looking attribution lead.
+- **Hunt any PHP corpus and open-directory archives for the function-name pair `sifreleWadanz` + `sifrecozWadanz`** — the developer pseudonym signature. Each external hit is potentially another panel by the same developer; cross-sample author pivots are the strongest forward-looking attribution lead.
 - **Block 79.137.192.3 and AS216246 Aeza space at the perimeter** and add the eight SHA256 file hashes (one panel ZIP + seven kit RARs) to EDR / mail-gateway file blocklists. See the [separate IOC feed](/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json) for the complete machine-readable inventory.
 - **Add the operator Telegram identity artifacts to any Telegram-aware threat intelligence feed** — the two operator group IDs (`-1002104835510`, `-1001817323952`) and the two admin Telegram UIDs (`5606327063`, `6594066326`) are operator pivots, not defensive controls; they enable cross-incident correlation if any partner platform can resolve Telegram UIDs to accounts.
 - **For US-regulated entities**, treat outbound connections to Aeza Group AS216246 (and the historical AS204603) as potentially OFAC-reportable per the July 1, 2025 SDN designation of Aeza Group LLC. The BellaMain panel was operating on already-sanctioned infrastructure throughout the April–May 2026 investigation window.
@@ -117,7 +117,7 @@ Three findings from the parent investigation made BellaMain worth promoting to s
 
 1. **Full PHP-source recovery is unusual.** Public PhaaS reporting is overwhelmingly sample-based (kit RARs uploaded to VirusTotal) or network-based (passive DNS, certificate transparency, IDS captures). Recovering an admin panel in full source from an open directory exposes operator-side tradecraft — admin-only Telegram commands, MySQL schemas, anti-forensic workflows, multi-operator licensing logic — that no sample or network observation can produce. The findings catalogued in Section 5 (USOM monitor, four-bot Telegram role separation, on-demand TRUNCATE, mysqldump-as-exfil, 70/30 TRX/TRON payout, Wadanz code signature, invite-only gating) are all source-only findings.
 
-2. **First public capture of a 2-year-old operation.** The seven kit RARs first appeared on VirusTotal on 2024-04-18 — approximately 24 months of operational circulation. Despite this, BellaMain is absent from every public threat-intelligence feed, vendor blog, security-researcher blog, and law-enforcement database that we searched. The panel ZIP has never been submitted to VirusTotal. Operators using BellaMain have, until now, had no defender-visible audit trail. This publication closes that gap.
+2. **First public capture of a 2-year-old operation.** The seven kit RARs first appeared on VirusTotal on 2024-04-18 — approximately 24 months of operational circulation. Despite this, BellaMain is absent from every public threat-intelligence feed, vendor blog, security-researcher blog, and law-enforcement database searched. The panel ZIP has never been submitted to VirusTotal. Operators using BellaMain have, until now, had no defender-visible audit trail. This publication closes that gap.
 
 3. **Cluster-boundary evidence anchored on Tier-1 OFAC documentation.** The parent investigation's §22.9.1 and §23.12.7 reassessment established that BellaMain (Cluster A), Inkognito (Cluster B), and the Rhadamanthys MaaS customer (Cluster C) are operationally separate actors sharing only Aeza tenancy. The July 1, 2025 OFAC SDN designation of Aeza Group LLC documents Aeza simultaneously hosting BianLian, RedLine, Lumma, Meduza, and BlackSprut as five unrelated criminal ecosystems — Tier-1 authoritative confirmation that bulletproof hosting co-residency is a service-utility relationship, not an operator-linkage signal. This boundary is reaffirmed here. The cluster-exclusion paragraph appears in [Section 9](#9-threat-actor-assessment).
 
@@ -162,7 +162,7 @@ This is the *complete* identity-theft + payment-fraud package from a single vict
 
 ### 3.3 Realistic Impact Scenarios
 
-The scenarios below are anchored to BellaMain features documented in Sections 4–8 — not generic phishing landscape claims.
+BellaMain enables rapid full-identity exploitation within minutes of victim conversion — from payment-card fraud within hours to identity-theft outcomes over weeks. The scenarios below are anchored to BellaMain features documented in Sections 4–8, not generic phishing landscape claims.
 
 | Scenario | Likelihood | Explanation |
 |---|---|---|
@@ -176,7 +176,7 @@ The scenarios below are anchored to BellaMain features documented in Sections 4�
 
 ### 3.4 What This Threat Is *Not*
 
-To bound the risk for risk owners reading this report:
+BellaMain does not target ICS/OT, healthcare, or enterprise networks, and deploys no ransomware or host-malware payload at any stage. The boundaries below matter for risk owners scoping response priority:
 
 - **Not an ICS / OT / transportation-sector threat.** No SCADA, Modbus, DNP3, IEC-104, S7, or transportation-protocol targeting. Operator focus is Turkish consumer payment and identity data.
 - **Not a healthcare or medical-device threat.** No DICOM, HL7, PACS, or medical-platform targeting. No hospital, clinic, or healthcare-billing impersonation in the seven-kit set.
@@ -239,7 +239,7 @@ PHP code quality itself is unremarkable: linear procedural style, plaintext hard
 
 ## 5. Technical Capabilities Deep-Dive
 
-This is the longest section of the report. It walks through nine BellaMain capabilities, in order of distinctiveness. Each subsection opens with a brief technical statement, then provides Evidence, Why This Matters, and Detection guidance.
+BellaMain's nine capabilities reveal operator-grade tradecraft concentrated at the operations and anti-takedown layer — not at the code layer. Each subsection below leads with an analyst-note conclusion, then provides Evidence, Why This Matters, and Detection guidance, in order of distinctiveness.
 
 ### 5.1 Full PHP-Source Recovery — What It Unlocks
 
@@ -249,7 +249,7 @@ This is the longest section of the report. It walks through nine BellaMain capab
 
 **What sample- or network-only analysis cannot recover.** Sample-only analysis of a kit RAR would yield the victim-facing pages, the credential submission targets, and the hardcoded canary bot token — but not the panel's command vocabulary, the admin-only TRUNCATE commands, the MySQL schema, the 70/30 revenue-split arithmetic, the referral-code lifecycle, or the four-bot architecture. Network-only analysis would yield destination IPs, TLS fingerprints, and some Telegram bot URIs — but not the operator-side anti-forensic workflows, the multi-operator licensing model, or the Wadanz code-author signature. Every distinctive finding catalogued in Sections 5.2 through 5.9 is a source-only finding.
 
-**Why this matters.** This is why the report is worth publishing as a standalone: it is, to the best of our knowledge, the first public source-code disclosure of a Turkish PhaaS panel that ships these specific tradecraft features. Defenders previously had no visibility into the operator-side surface; that surface is now documented.
+**Why this matters.** This is why the report is worth publishing as a standalone: it is the first public source-code disclosure of a Turkish PhaaS panel that ships these specific tradecraft features. Defenders previously had no visibility into the operator-side surface; that surface is now documented.
 
 **Detection.** The single most BellaMain-specific indicator is the `V5VgjLU0jsDe/` admin path — any HTTP request containing that 12-character random string is a high-fidelity hit on any web server. The function-name pair `sifreleWadanz` + `sifrecozWadanz` is the strongest PHP-corpus pivot (see Section 5.7). See the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/) for the complete YARA / Sigma / Suricata rule set.
 
@@ -331,7 +331,7 @@ This is purpose-built tradecraft. It is not a generic admin feature repurposed; 
 2. A multipart-body POST to `https://api.telegram.org/bot<adminbot_token>/sendDocument` uploads the .sql file as a Telegram document attachment to the operator's chat.
 3. `unlink($file)` deletes the .sql file from the panel host — the local backup exists only transiently while the Telegram upload is in flight.
 
-The chosen Telegram chat is operator-configured (the destination chat ID is stored in the panel database, not in source) — we cannot directly verify which chat receives the dump without operator-side access. But the architecture is clear: every operator who runs `/yedek` gets a full MySQL snapshot of their panel database delivered to their Telegram chat history.
+The chosen Telegram chat is operator-configured (the destination chat ID is stored in the panel database, not in source) — the analysis cannot directly verify which chat receives the dump without operator-side access. But the architecture is clear: every operator who runs `/yedek` gets a full MySQL snapshot of their panel database delivered to their Telegram chat history.
 
 **Why this matters.** Several practical consequences:
 
@@ -406,9 +406,9 @@ These functions are used by `signin.php`, `signup.php`, and `database/cookie.php
 
 - **Could be a decoy.** The operator may have deliberately seeded `Wadanz` into the function names to mislead investigators. This is plausible but unusual — operators who plant decoys typically do so in operator-facing strings (banner text, error messages, comments), not in function names where the decoy serves no operational purpose and creates a unique signature that defenders can hunt.
 - **Could be a team handle.** "Wadanz" could be the handle of a small team or a brand identity rather than an individual developer's pseudonym. This does not affect detection value — the cross-sample pivot still works.
-- **Could be a vendor.** "Wadanz" could be a third-party PHP framework or library author whose code BellaMain reuses. We searched GitHub, GitLab, Bitbucket, PHP Packagist, and general web for any legitimate PHP project, library, or author by this name and found zero results. This makes the decoy/team/vendor explanations less likely but does not formally rule them out.
+- **Could be a vendor.** "Wadanz" could be a third-party PHP framework or library author whose code BellaMain reuses. A search of GitHub, GitLab, Bitbucket, PHP Packagist, and the general web for any legitimate PHP project, library, or author by this name returned zero results. This makes the decoy/team/vendor explanations less likely but does not formally rule them out.
 
-**Confidence:** MODERATE. The function-name pair is a strong distinct-actor marker — operators rarely sign panels with their handles, and the pattern is consistent across all the panel files we observed. The named-actor pivot (resolving "Wadanz" to a person or known underground handle) is INSUFFICIENT — no public TI source surfaces this pseudonym; cross-sample PHP corpus search returned zero hits. The expected upgrade path is paid-TI cross-reference (VirusTotal Intelligence, Recorded Future, Flare) or community recognition of the pseudonym after this publication.
+**Confidence:** MODERATE. The function-name pair is a strong distinct-actor marker — operators rarely sign panels with their handles, and the pattern is consistent across all panel files observed. The named-actor pivot (resolving "Wadanz" to a person or known underground handle) is INSUFFICIENT — no public TI source surfaces this pseudonym; cross-sample PHP corpus search returned zero hits. The expected upgrade path is paid-TI cross-reference (VirusTotal Intelligence, Recorded Future, Flare) or community recognition of the pseudonym after this publication.
 
 **Detection.** A PHP file containing both `function sifreleWadanz` and `function sifrecozWadanz` is the strongest single-string PHP-corpus signature for BellaMain. False-positive risk is vanishingly low — this exact function-name pair does not appear in any known legitimate PHP framework, library, or open-source project. See the YARA rule `TOOLKIT_BellaMain_WadanzFunctions` in the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/). The Wadanz author signature is mapped to ATT&CK T1587.001 (Develop Capabilities: Malware) in [Section 8](#8-mitre-attck-mapping) — that row is the canonical cross-investigation pivot point for tracking BellaMain-derivative panels by the same developer.
 
@@ -906,7 +906,7 @@ See the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79
 
 ### 11.3 Quick Hunt Recipes
 
-Three one-liner hunt commands for the highest-priority detection patterns — adapt to your log platform:
+Three one-liner hunt commands for the highest-priority detection patterns — adapt per log platform:
 
 - **Web-access log hunt for admin path** (grep on Apache/Nginx combined log): `grep 'V5VgjLU0jsDe' /var/log/apache2/access.log`
 - **PHP source corpus hunt for Wadanz author signature**: `grep -r 'sifreleWadanz\|sifrecozWadanz' /var/www/`
