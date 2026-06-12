@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1640" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1640" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1639" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Post-Exploitation Kill Chain</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Service-account foothold &#8594; SYSTEM &#8594; Active Directory &#8594; C2</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">FlaskC2-PostEx-Toolkit &#183; 67.215.232.25 &#183; mostly public tooling, one bespoke backdoor + bespoke C2</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STEP 1 — ORANGE: initial access =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="229" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+    <text x="200" y="227" font-size="23" font-weight="600" fill="#111111">Initial Access &#8212; dual foothold</text>
+    <text x="80" y="282" font-size="21" fill="#ffffff">Two independent entry vectors converge on one privilege:</text>
+    <text x="80" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">A) IIS webshell &#8594; w3wp.exe      B) cmd_exec.dll &#8594; sqlservr.exe</text>
+    <text x="80" y="350" font-size="18" fill="#e5e5e5">Both run as a service account holding SeImpersonatePrivilege by default</text>
+    <text x="80" y="384" font-size="18" fill="#fb923c" font-weight="600">Detect: w3wp.exe / sqlservr.exe spawning a cmd.exe child</text>
+  </g>
+  <line x1="500" y1="416" x2="500" y2="456" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 2 — RED: privilege escalation =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="462" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="462" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="495" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="493" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
+    <text x="200" y="493" font-size="23" font-weight="600" fill="#ffffff">Local Privilege Escalation &#8594; SYSTEM</text>
+    <text x="80" y="548" font-size="21" fill="#ffffff">Public &#8220;Potato&#8221; suite abuses SeImpersonate to steal a SYSTEM token</text>
+    <text x="80" y="582" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">EfsPotato &#183; GodPotato &#183; JuicyPotato &#183; PrintSpoofer &#183; RoguePotato &#183; SweetPotato</text>
+    <text x="80" y="616" font-size="18" fill="#e5e5e5">Operator picks the variant matching the target Windows build</text>
+    <text x="80" y="650" font-size="18" fill="#fb923c" font-weight="600">Detect: service acct &#8594; SYSTEM token theft; native-tool imphashes</text>
+  </g>
+  <line x1="500" y1="682" x2="500" y2="722" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 3 — RED: AD lateral movement (no payload-retrieval phase in this chain) =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="728" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="728" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="761" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="759" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 3</text>
+    <text x="200" y="759" font-size="23" font-weight="600" fill="#ffffff">AD Lateral Movement / Domain Escalation</text>
+    <text x="80" y="814" font-size="21" fill="#ffffff">From SYSTEM-on-host toward domain compromise:</text>
+    <text x="80" y="848" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Rubeus (Kerberos abuse)   &#183;   SharpSuccessor (BadSuccessor / dMSA)</text>
+    <text x="80" y="882" font-size="18" fill="#e5e5e5">Kerberoasting, ticket attacks, and dMSA-based privilege escalation</text>
+    <text x="80" y="916" font-size="18" fill="#fb923c" font-weight="600">Detect: Rubeus TGS/TGT request patterns; dMSA object abuse</text>
+  </g>
+  <line x1="500" y1="948" x2="500" y2="988" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 4 — DEEP RED: command & control =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="994" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="994" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="1027" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="1025" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 4</text>
+    <text x="200" y="1025" font-size="23" font-weight="600" fill="#ffffff">Command &amp; Control</text>
+    <text x="80" y="1080" font-size="21" fill="#ffffff">Bespoke Flask C2 &#8212; minimal headless beacon API on :8080</text>
+    <text x="80" y="1114" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">POST /api/heartbeat (check-in)  &#183;  POST /api/report (results)  &#183;  GET /health</text>
+    <text x="80" y="1148" font-size="18" fill="#fb923c" font-weight="600">Detect: /health JSON field-combo on Werkzeug/3.1.6; POST /api/* pair</text>
+    <text x="80" y="1180" font-size="18" fill="#fb923c" font-weight="600">Status at analysis: IDLE &#8212; zero active beacons, zero commands</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1260" x2="940" y2="1260" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1294" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  sqlservr.exe &#8594; cmd.exe  &#183;  w3wp.exe &#8594; cmd.exe  &#183;  native-tool imphashes</text>
+  <text x="500" y="1324" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">[*] Connected to SQL Server CLR backdoor  &#183;  AES key=IV ca63457538b9b1e0  &#183;  Flask /health field-combo</text>
+  <text x="500" y="1360" text-anchor="middle" font-size="15" fill="#cccccc">Mostly public tooling; only cmd_exec.dll and the Flask C2 are bespoke. Attribution: unknown (single-host, idle).</text>
+  <text x="500" y="1392" text-anchor="middle" font-size="14" fill="#888888">Color legend  &#8212;  orange: initial access &#183; red: privilege escalation &amp; lateral movement &#183; deep red: command &amp; control</text>
+</svg>

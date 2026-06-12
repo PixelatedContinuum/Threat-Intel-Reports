@@ -1,0 +1,289 @@
+{
+  "metadata": {
+    "malware_name": "FlaskC2-PostEx-Toolkit-67.215.232.25",
+    "family": "MSSQL CLR reverse-shell backdoor (cmd_exec.dll) + public Windows post-exploitation toolkit (Potato suite / Rubeus / SharpSuccessor / webshells) + bespoke Flask C2",
+    "campaign_slug": "flaskc2-postex-toolkit-67-215-232-25",
+    "report_date": "2026-06-12",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "notes": "Most samples are PUBLIC tooling. The five operator-recompiled .NET tools (EfsPotato, GodPotato, SweetPotato, Rubeus, SharpSuccessor) are identified as their public counterparts via YARA HKTL-GUID + VT detection + capa signature, NOT byte-for-byte public-release hash identity. Only bespoke compiled code = cmd_exec.dll (custom BUILD of a known MSSQL CLR technique, not novel). CVE-2026-20817_PoC.exe is a non-weaponized demo PoC of a Jan-2026-patched CVE. EXCLUDED per analyst guardrails: proxy-era ports 5222-5455 (different-tenant/reallocation risk), benign VT downloaded_files (autodiscover.xml, :1337 dir-index page), inostage.ru/panel.inostage.ru (public-tool co-host noise), and generic .NET runtime imphashes f34d5f2d.../dae02f32... (non-discriminating stubs)."
+  },
+  "file_hashes": {
+    "md5": [],
+    "sha1": [],
+    "sha256": [
+      {
+        "value": "a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262",
+        "filename": "cmd_exece.dll",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "notes": "BESPOKE MSSQL SQL-CLR reverse-shell backdoor; [SqlProcedure] reverse_shell(ip,port) -> cmd.exe /c. Specific operator build (compile 2026-03-21). VT 32 malicious; Zenbox harmless 98% (sandbox-resistant), Microsoft+Kaspersky clean."
+      },
+      {
+        "value": "6e592a38f93f7119e4b28214ef90bd74bc602a411099454329be4a0c3b482245",
+        "filename": "CVE-2026-20817_PoC.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Non-weaponized demonstration PoC for the WER ALPC LPE (CVE-2026-20817, patched Jan 2026). Scaffolds the technique but does NOT elevate (TOKEN_QUERY only; no ALPC/DuplicateTokenEx/CreateProcess*). ITW IP 67.215.232.25. 13 VT submissions (rare)."
+      },
+      {
+        "value": "eb689aea9673cc025f91d8376da07e849519d19071609a60c193776d8eca8b54",
+        "filename": "NPCInfoList1.aspx",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "AES in-memory .NET assembly loader webshell (Godzilla-style). RijndaelManaged CBC/PKCS7, key=IV ca63457538b9b1e0; POST body -> Assembly.Load -> CreateInstance('K'). Class-K payload runtime-delivered, not staged."
+      },
+      {
+        "value": "30a11ac0b6828fd1c808c46d1c5ae9a4050b48a2fa7e860d146d871bc7c9bb98",
+        "filename": "miss.asp",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Commodity Ghost小组 (gb2312 Chinese) full-feature ASP webshell, VBScript.Encode. Password UserPass=Aatrox; stored eval gadget Execute Session('Aatrox'). Neo23x0 WEBSHELL_ASP_Encoded fires on the wrapper."
+      },
+      {
+        "value": "3e59379f585ebf0becb6b4e06d0fbbf806de28a4bb256e837b4555f1b4245571",
+        "filename": "e.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Netcat (nc64.exe), public tool. HackTool:Win32/NetCat. 7KB overlay stripped by PreProcess."
+      },
+      {
+        "value": "cac1bda7429c3b6320af4638b9dd367aaca3815877a1bb96b17f1ab769c9c7f6",
+        "filename": "ep.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "EfsPotato (operator-recompiled .NET, compile 2026-03-20). MS-EFSR coercion + SeImpersonate. YARA tool_efspotato + Windows_Exploit_FakePipe; Zenbox=EfsPotato/PetitPotam. Identified as public tool via signature, not hash identity."
+      },
+      {
+        "value": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
+        "filename": "g.exe / gp.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "GodPotato (operator-recompiled .NET). Universal DCOM/RPC SeImpersonate Potato. g.exe and gp.exe are byte-identical. Identified as public tool via signature, not hash identity."
+      },
+      {
+        "value": "602dbcf4008c585582d5e5d5c8ddb1932fdee07a14308e9cbf937904f31df1f7",
+        "filename": "jp.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "JuicyPotato(NG), public native tool (prebuilt, hash-match). SeImpersonate DCOM privesc."
+      },
+      {
+        "value": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
+        "filename": "p.exe / P64.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "PrintSpoofer64, public native tool (prebuilt, hash-match). Spooler named-pipe SeImpersonate privesc. p.exe and P64.exe are byte-identical."
+      },
+      {
+        "value": "9c5d53208d324f6f14e3417fe072be9b0f29aa35299f99c30bbaf602790b7480",
+        "filename": "RogueOxidResolver.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "RoguePotato OXID-resolver helper, public native tool (prebuilt, hash-match)."
+      },
+      {
+        "value": "a4778d50307de4ab13e48de90d72b7c5e19b4f9356a611a9faf95cfda0523c46",
+        "filename": "RoguePotato.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "RoguePotato, public native tool (prebuilt, hash-match). SeImpersonate privesc (itm4n)."
+      },
+      {
+        "value": "db36351b2a948bda4eb5fb6ed40d850d70a9d149380ad6a12869c36beb9f042c",
+        "filename": "Rubeus.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Rubeus (GhostPack), operator-recompiled .NET (compile 2026-03-23). Kerberos abuse (kerberoast/asktgt/s4u). Identified as public tool via signature, not hash identity."
+      },
+      {
+        "value": "8a48236180c30d5ba4b44faae8abf906ad9937192e8ff85136da659de111b920",
+        "filename": "SharpSuccessor.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "SharpSuccessor (BadSuccessor / dMSA AD privesc), operator-recompiled .NET. Identified as public tool via signature, not hash identity."
+      },
+      {
+        "value": "c13bb6f7898423ad218937be8aeb400f41db857ac350093e837a5eed06ae31dc",
+        "filename": "SweetPotato.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "SweetPotato (combined Potato), operator-recompiled .NET. YARA HKTL_NET_GUID_SweetPotato (typelibguid, Neo23x0) + tool_sharpefspotato_strings. Identified as public tool via HKTL-GUID, not hash identity. ITW IP 67.215.232.25."
+      },
+      {
+        "value": "596778a449881a64c08e6f152b8966c1b7a2c9096071662708ccb54f4b7f129c",
+        "filename": "NtApiDotNet.dll",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "notes": "NtApiDotNet public library, Rubeus dependency. Dual-use; lower standalone-malicious weight."
+      }
+    ],
+    "imphashes": [
+      {
+        "value": "f9a28c458284584a93b14216308d31bd",
+        "tool": "JuicyPotato (jp.exe)",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Native-tool imphash; survives file renaming. Good Sigma/YARA pivot."
+      },
+      {
+        "value": "545a81240793f9ca97306fa5b3ad76df",
+        "tool": "PrintSpoofer (p.exe/P64.exe)",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Native-tool imphash; survives file renaming."
+      },
+      {
+        "value": "959a83047e80ab68b368fdb3f4c6e4ea",
+        "tool": "RoguePotato.exe",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Native-tool imphash; survives file renaming."
+      },
+      {
+        "value": "576d6e02a47c807b9063948ee683350c",
+        "tool": "RogueOxidResolver.exe",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Native-tool imphash; survives file renaming."
+      },
+      {
+        "value": "567531f08180ab3963b70889578118a3",
+        "tool": "Netcat nc64 (e.exe)",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Native-tool imphash; survives file renaming."
+      },
+      {
+        "value": "818cfde69b098e3348e8c7125e83915f",
+        "tool": "CVE-2026-20817_PoC.exe",
+        "confidence": "MODERATE",
+        "action": "HUNT",
+        "notes": "Native-tool imphash; survives file renaming. Low operational value (non-weaponized demo artifact)."
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "67.215.232.25",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "purpose": "Single-host post-exploitation staging operation (open dir :1337 + Flask C2 :8080/:5000)",
+        "asn": "AS36352",
+        "as_owner": "HostPapa / ColoCrossing",
+        "country": "US",
+        "city": "Los Angeles",
+        "first_seen": "2026-03-11",
+        "notes": "VT 15/91 malicious, reputation -1. communicating_files=0 (beacon implant unrecovered). IP-only (no domain) — fully blockable at the IP. No sibling C2 found (5 convergent negative pivots)."
+      }
+    ],
+    "ipv6": [],
+    "domains": [],
+    "urls": [
+      {
+        "value": "http://67.215.232.25:1337/",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "purpose": "Open-directory toolkit cache (Python SimpleHTTP/0.6 Python/3.12.3)",
+        "notes": "Stages the 17-file post-exploitation toolkit for retrieval onto victims (T1105)."
+      },
+      {
+        "value": "http://67.215.232.25:8080/health",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "purpose": "Bespoke Flask C2 unauth status route",
+        "notes": "Returns JSON field-combo active_servers/pending_commands/completed_commands/status/timestamp on Werkzeug/3.1.6 Python/3.12.3. Idle: all counters 0."
+      },
+      {
+        "value": "http://67.215.232.25:8080/api/report",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "purpose": "Flask C2 beacon endpoint (POST-only, in-handler auth -> 401)",
+        "notes": "One of only 3 routes on the C2. Beacons termed 'servers'."
+      },
+      {
+        "value": "http://67.215.232.25:8080/api/heartbeat",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "purpose": "Flask C2 beacon endpoint (POST-only, in-handler auth -> 401)",
+        "notes": "One of only 3 routes on the C2."
+      },
+      {
+        "value": "http://67.215.232.25:5000/",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "purpose": "Second Flask/Werkzeug listener (opaque control-plane candidate)",
+        "notes": "Same Werkzeug stack as :8080; all 38 probed routes 404 (non-guessable routing). Role undetermined."
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [
+      {
+        "value": "C:\\poc_wer.txt",
+        "confidence": "MODERATE",
+        "action": "HUNT",
+        "notes": "Artifact dropped by the CVE-2026-20817 PoC staged payload string (cmd.exe /c whoami > C:\\poc_wer.txt & calc.exe). Indicates the demo PoC was executed."
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [],
+    "scheduled_tasks": [],
+    "named_pipes": []
+  },
+  "string_indicators": [
+    {
+      "value": "[*] Connected to SQL Server CLR backdoor",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "cmd_exec.dll",
+      "notes": "Reverse-shell banner; strongest YARA anchor (likely operator-unique)."
+    },
+    {
+      "value": "ca63457538b9b1e0",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "NPCInfoList1.aspx",
+      "notes": "AES-128 key AND IV (used for both) in the in-memory .NET loader webshell. Strong detection signature."
+    },
+    {
+      "value": "Execute Session(\"Aatrox\")",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "miss.asp (decoded)",
+      "notes": "Stored eval gadget; RCE via the Aatrox request parameter. Aatrox is also the webshell password. Commodity-reuse signal, NOT operator identity."
+    },
+    {
+      "value": "Ghost小组",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "miss.asp (gb2312 title)",
+      "notes": "Public Ghost小组 Chinese ASP webshell family marker. LOW attribution value (globally reused)."
+    },
+    {
+      "value": "Windows Error Reporting ALPC Elevation of Privilege (CVE-2026-20817)",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "CVE-2026-20817_PoC.exe",
+      "notes": "Self-description string in the non-weaponized demo PoC."
+    },
+    {
+      "value": "\\WindowsErrorReportingService",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "CVE-2026-20817_PoC.exe",
+      "notes": "WER ALPC port name printed by the PoC (but never connected to). Relevant only on hosts missing the Jan-2026 patch."
+    }
+  ],
+  "false_positive_notes": [
+    "67.215.232.25 is on shared hosting (HostPapa/ColoCrossing, AS36352) — IP block covers the known infra but confirm port/service context before broad blocking of the /21.",
+    "The native-tool and operator-recompiled .NET hashes are widely-shared public hacktools; presence indicates hacktool staging but not necessarily this specific operator. The bespoke cmd_exec.dll SHA256 (a7029ef2...) and the [*] Connected to SQL Server CLR backdoor banner are the operator-specific anchors.",
+    "Werkzeug/3.1.6 and Python 3.12.3 are common — the /health JSON field-combo (active_servers+pending_commands+completed_commands+status+timestamp) is the discriminating C2 signature, not the server banner alone.",
+    "Aatrox is a League-of-Legends champion name in common use; treat as a commodity webshell password/eval-param, not an operator identity artifact."
+  ]
+}
