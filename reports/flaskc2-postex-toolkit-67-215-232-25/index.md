@@ -3,8 +3,8 @@ title: "Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Hos
 date: '2026-06-12'
 layout: post
 permalink: /reports/flaskc2-postex-toolkit-67-215-232-25/
+thumbnail: /assets/images/cards/flaskc2-postex-toolkit-67-215-232-25.png
 hide: true
-unlisted: true
 category: "Post-Exploitation Toolkit"
 description: "A live single-host IIS/MSSQL post-exploitation staging operation pairing a bespoke Flask C2 beacon API with a sandbox-evading custom MSSQL CLR reverse-shell backdoor and a public SeImpersonate-to-Active-Directory escalation kit."
 detection_page: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/

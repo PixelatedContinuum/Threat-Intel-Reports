@@ -5,22 +5,13 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
-  # ============================================================
-  # PENDING GO-LIVE - FlaskC2-PostEx-Toolkit (67.215.232.25).
-  # Deployed as an UNLISTED preview: unlisted:true on the report +
-  # detection front matters, NO active catalog entry (absent from
-  # every listing + feed + home). GO-LIVE = uncomment the entry
-  # below AND remove the unlisted: flags from the report + detection
-  # front matters, run update-metrics.py + generate the social card,
-  # then push.
-  #  - title: "Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host"
-  #    date: 2026-06-12
-  #    severity: med
-  #    tags: [Post-Ex, Priv Esc, C2, Open Dir]
-  #    report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
-  #    detection_url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
-  #    ioc_url: /ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json
-  # ============================================================
+  - title: "Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host"
+    date: 2026-06-12
+    severity: med
+    tags: [Post-Ex, Priv Esc, C2, Open Dir]
+    report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
+    detection_url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
+    ioc_url: /ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json
 
   # ============================================================
   # PENDING GO-LIVE - Hunt.io AI-Agent series (6 reports).
