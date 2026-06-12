@@ -1615,6 +1615,8 @@ img { max-width: 100%; height: auto; }
     padding: 12px 16px;
     flex-wrap: wrap;
     gap: 10px;
+    transition: transform 0.28s ease;   /* auto-hide on scroll (JS toggles .hl-nav--hidden) */
+    will-change: transform;
   }
   .hl-nav__brand { font-size: 1.1rem; }
   .hl-nav__links {
@@ -1624,6 +1626,11 @@ img { max-width: 100%; height: auto; }
     padding-bottom: 4px;
   }
   .hl-nav__link { font-size: 0.95rem; }
+
+  /* Auto-hide state: slide the whole nav up out of view. The fixed mobile
+     TOC bar is slid up in tandem by the scroll handler in default.html. */
+  .hl-nav--hidden { transform: translateY(-100%); }
+  .hl-post-toc-mobile { transition: transform 0.28s ease; will-change: transform; }
 
   /* --- Post header: compact + allow eyebrow to wrap -------- */
   .hl-post-header {

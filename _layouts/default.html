@@ -31,5 +31,42 @@
       });
     })();
     </script>
+    <script>
+    /* Auto-hide the navbar on scroll-down, reveal on scroll-up (phones only).
+       Reclaims the tall two-row mobile nav while reading; an upward flick
+       brings it back. The fixed mobile TOC bar (report pages) is moved in
+       tandem so it slides up to fill the nav's place instead of leaving a gap. */
+    (function () {
+      var nav = document.querySelector('.hl-nav');
+      if (!nav) return;
+      var mq        = window.matchMedia('(max-width: 768px)');
+      var lastY     = window.pageYOffset;
+      var ticking   = false;
+      var THRESHOLD = 6;   // ignore sub-pixel jitter / momentum wobble
+
+      function setToc(hidden) {
+        var toc = document.getElementById('hl-toc-mobile');
+        if (!toc || toc.style.top === '') return;   // only on report pages with an active TOC bar
+        toc.style.transform = hidden ? 'translateY(-' + nav.offsetHeight + 'px)' : '';
+      }
+      function hide() { nav.classList.add('hl-nav--hidden'); setToc(true); }
+      function show() { nav.classList.remove('hl-nav--hidden'); setToc(false); }
+
+      function update() {
+        ticking = false;
+        if (!mq.matches) { show(); lastY = window.pageYOffset; return; }
+        var y = window.pageYOffset;
+        if (y <= nav.offsetHeight)      { show(); }   // always show near the very top
+        else if (y - lastY > THRESHOLD) { hide(); }   // scrolling down
+        else if (lastY - y > THRESHOLD) { show(); }   // scrolling up
+        lastY = y;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+      }, { passive: true });
+      if (mq.addEventListener) mq.addEventListener('change', show);  // reset when leaving phone width
+    })();
+    </script>
   </body>
 </html>
