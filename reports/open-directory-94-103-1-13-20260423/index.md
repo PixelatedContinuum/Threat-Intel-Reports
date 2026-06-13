@@ -27,6 +27,7 @@ ioc_highlights:
     note: "myfile.exe — Orcus RAT v7 Wardow crack"
   - value: "3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4"
     note: "mymain.bat — outer 5-stage batch loader"
+stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 ---
 
 **Campaign Identifier:** Chaos-TorBrowserTor-MultiStageLoader-94.103.1.13<br>

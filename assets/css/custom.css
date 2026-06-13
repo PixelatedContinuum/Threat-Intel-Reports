@@ -3150,3 +3150,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   .hl-series-cluster__grid { grid-template-columns: 1fr; }
   .hl-series-cluster__count { margin-left: 0; flex-basis: 100%; }
 }
+
+/* STIX "Download all" button (/stix/ listing) — matches the .hl-quicklink border treatment */
+.hl-download-all { display: inline-block; padding: .5rem .9rem; border: 1px solid var(--hl-border-card); border-radius: 8px; font-weight: 600; text-decoration: none; color: inherit; }
+.hl-download-all:hover { border-color: var(--hl-accent-gold); }

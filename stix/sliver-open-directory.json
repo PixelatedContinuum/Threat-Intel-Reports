@@ -1,0 +1,217 @@
+{
+    "type": "bundle",
+    "id": "bundle--af41f4f0-5e75-461a-b554-883c5313323b",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:10.114326Z",
+            "modified": "2026-06-13T13:47:10.114326Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--673b2f0b-f30b-537c-b79b-a49d06291d17",
+            "value": "45.94.31.220"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f0d906fd-c2d0-5c67-becb-f48377b0a012",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:10.114861Z",
+            "modified": "2026-06-13T13:47:10.114861Z",
+            "name": "ipv4: 45.94.31.220",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '45.94.31.220']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--dab8b8af-d785-5e19-90ee-a2fb5f300a1a",
+            "value": "http://45.94.31.220:8000/OneDriveSync.exe"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--8b6efd7b-c37c-59a1-bd8c-2f66ca147b27",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:10.116188Z",
+            "modified": "2026-06-13T13:47:10.116188Z",
+            "name": "url: http://45.94.31.220:8000/OneDriveSync.exe",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://45.94.31.220:8000/OneDriveSync.exe']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--5ffaaf92-63a9-50c7-9a71-b1a264c6aa19",
+            "value": "http://45.94.31.220:8000/"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--cbcf22a2-8de8-55a5-b24e-ff0e8ac1eef0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:10.117157Z",
+            "modified": "2026-06-13T13:47:10.117157Z",
+            "name": "url: http://45.94.31.220:8000/",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://45.94.31.220:8000/']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--bb25d0ae-ea44-5bee-b808-1c0ed9cffa79",
+            "value": "mailuxe.net"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7b313cb4-961c-54b0-9d04-6af34ceb7cd8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:10.11782Z",
+            "modified": "2026-06-13T13:47:10.11782Z",
+            "name": "domain: mailuxe.net",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'mailuxe.net']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--91ac696f-abc4-58d4-adbe-2d75863d521e",
+            "value": "mailmassange.duckdns.org"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--65a57841-bd46-566e-8bc1-6e004a89ca94",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:10.118404Z",
+            "modified": "2026-06-13T13:47:10.118404Z",
+            "name": "domain: mailmassange.duckdns.org",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'mailmassange.duckdns.org']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--45293914-4086-5703-9eab-784355ce3204",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:10.11887Z",
+            "modified": "2026-06-13T13:47:10.11887Z",
+            "name": "sliver-open-directory infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--ca5a5217-efd5-53a5-921f-c00641d56de7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:10.119512Z",
+            "modified": "2026-06-13T13:47:10.119512Z",
+            "name": "Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220) - Technical Analysis & Threat Assessment",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-02-28T00:00:00Z",
+            "object_refs": [
+                "ipv4-addr--673b2f0b-f30b-537c-b79b-a49d06291d17",
+                "indicator--f0d906fd-c2d0-5c67-becb-f48377b0a012",
+                "url--dab8b8af-d785-5e19-90ee-a2fb5f300a1a",
+                "indicator--8b6efd7b-c37c-59a1-bd8c-2f66ca147b27",
+                "url--5ffaaf92-63a9-50c7-9a71-b1a264c6aa19",
+                "indicator--cbcf22a2-8de8-55a5-b24e-ff0e8ac1eef0",
+                "domain-name--bb25d0ae-ea44-5bee-b808-1c0ed9cffa79",
+                "indicator--7b313cb4-961c-54b0-9d04-6af34ceb7cd8",
+                "domain-name--91ac696f-abc4-58d4-adbe-2d75863d521e",
+                "indicator--65a57841-bd46-566e-8bc1-6e004a89ca94",
+                "infrastructure--45293914-4086-5703-9eab-784355ce3204"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/sliver-open-directory/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

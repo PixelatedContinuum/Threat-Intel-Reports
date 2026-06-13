@@ -27,6 +27,7 @@ thumbnail: /assets/images/cards/shadow-xworm-opendirectory.png
 category: "MaaS Operation"
 hide: true
 description: "An exposed open directory at epgoldsecurity.com revealed a single operator running Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 from the same C2 server, targeting US victims with tax-season lures during February 2026."
+stix_bundle: /stix/shadow-xworm-opendirectory.json
 ---
 
 **Campaign Identifier:** OpenDirectory-DualRAT-MaaS-151.245.112.70<br>

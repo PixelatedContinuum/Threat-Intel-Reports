@@ -1,0 +1,477 @@
+{
+    "type": "bundle",
+    "id": "bundle--cc7efb17-bbb0-41cd-8b1f-a250bb373104",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.857093Z",
+            "modified": "2026-06-13T13:47:09.857093Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--e476b5d2-7643-5710-bdca-4b1c3ac7359c",
+            "value": "151.245.112.70"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3fee3b45-35a9-59d4-8549-5c770d1a7765",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.857385Z",
+            "modified": "2026-06-13T13:47:09.857385Z",
+            "name": "ipv4: 151.245.112.70",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '151.245.112.70']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--1971ae28-6029-59b9-b00e-83184a7cc1ba",
+            "value": "187.124.244.54"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--eb340713-edd6-5722-a7dd-db563b8dc218",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.859388Z",
+            "modified": "2026-06-13T13:47:09.859388Z",
+            "name": "ipv4: 187.124.244.54",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '187.124.244.54']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--e1594e3f-2aab-56a6-9dc9-23c303b9bb73",
+            "value": "185.11.145.145"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c3deb49e-aa27-5677-9370-c0e1c110835f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.860056Z",
+            "modified": "2026-06-13T13:47:09.860056Z",
+            "name": "ipv4: 185.11.145.145",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '185.11.145.145']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--ec28d696-f1ad-51c0-8dc3-f13bbf365572",
+            "value": "185.11.145.254"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--50b7f29d-dc44-5138-a447-6aa1bdb265a2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.860729Z",
+            "modified": "2026-06-13T13:47:09.860729Z",
+            "name": "ipv4: 185.11.145.254",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '185.11.145.254']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--3e8b7700-5ca6-5cc1-a06c-6c6583a80b04",
+            "value": "http://ip-api.com/line/?fields=hosting"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--43e12a95-cd20-534a-9ff2-652fba7140b8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.861307Z",
+            "modified": "2026-06-13T13:47:09.861307Z",
+            "name": "url: http://ip-api.com/line/?fields=hosting",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://ip-api.com/line/?fields=hosting']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--de523c66-8a81-5f9b-8603-eca98563c73b",
+            "value": "harrismanlieb.ink"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--80946398-8430-566d-9101-be4e017231e5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.861791Z",
+            "modified": "2026-06-13T13:47:09.861791Z",
+            "name": "domain: harrismanlieb.ink",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'harrismanlieb.ink']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--e38e6b03-407a-556b-b859-4305785e6108",
+            "value": "epgoldsecurity.com"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--885d35bb-c36b-56a0-8c81-de2588cbe0e4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.862247Z",
+            "modified": "2026-06-13T13:47:09.862247Z",
+            "name": "domain: epgoldsecurity.com",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'epgoldsecurity.com']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--0ca16df1-cfaa-5df5-9349-cc8cc1b69daa",
+            "value": "latssko.com"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7ad1cbf7-849a-5361-8566-b0fc424679bc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.862687Z",
+            "modified": "2026-06-13T13:47:09.862687Z",
+            "name": "domain: latssko.com",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'latssko.com']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--b7e1a70f-5ffa-5c3a-8132-56d4e653919e",
+            "value": "breakingsecurity.online"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--fc29e995-7600-566d-b2fc-e10928d0f688",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.863115Z",
+            "modified": "2026-06-13T13:47:09.863115Z",
+            "name": "domain: breakingsecurity.online",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'breakingsecurity.online']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--631f35e8-b883-5c2d-a89c-90ebea0e8efb",
+            "value": "bluewiin.com"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--68d996c6-38c0-5cba-adb4-7ad15ef7e97f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.863572Z",
+            "modified": "2026-06-13T13:47:09.863572Z",
+            "name": "domain: bluewiin.com",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'bluewiin.com']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--7c64059e-9250-55ab-8c5a-a2751cee4ab8",
+            "hashes": {
+                "SHA-256": "3a4b0f50ea3eac55e22cbf24d873f9a1632d8f71e1fba91178c539030626ab32"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--666e21cb-6b32-5fd4-91f8-7be4924b6e24",
+            "hashes": {
+                "SHA-256": "240e2575f20c75c6b5e2ea69bc0f0d9675ffd3fea315ca818bcbee2572ee972f"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--a64cfaaa-7d2f-5cec-8c16-88e8af11e1ae",
+            "hashes": {
+                "SHA-256": "6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--d86c9111-95fe-575d-9189-1de527523be0",
+            "hashes": {
+                "SHA-256": "b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--eaea1821-815f-5c6e-9531-b48fed0535b7",
+            "hashes": {
+                "SHA-256": "291543374d0ee4f983132128dcef16ebc8c058f07b1dc1b1f7d7e11d189fd42a"
+            }
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--d8640bfa-e83d-5b2e-b534-8b9b612a986e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.864499Z",
+            "modified": "2026-06-13T13:47:09.864499Z",
+            "name": "Shadow RAT v2.6.4.0 staging/test build",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--a2679b1c-221e-5b15-83b3-3f1c9f269aeb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.864608Z",
+            "modified": "2026-06-13T13:47:09.864608Z",
+            "name": "Shadow RAT v2.6.4.0 production build",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--0d1bc5db-c90b-5ccc-93ad-ab2d4b856614",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.86471Z",
+            "modified": "2026-06-13T13:47:09.86471Z",
+            "name": "Shadow RAT shared library \u2014 core message types",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--295650c6-c3e5-5e73-a6c4-efc6b62d7701",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.864806Z",
+            "modified": "2026-06-13T13:47:09.864806Z",
+            "name": "XWorm 3.0-5.0 builder output #1",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--f2842a39-7b4f-55f3-a67e-227883a78e23",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.864898Z",
+            "modified": "2026-06-13T13:47:09.864898Z",
+            "name": "XWorm 3.0-5.0 builder output #2",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--d5a101c9-8f52-5ba3-bd1f-9e6553c94c0c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.864989Z",
+            "modified": "2026-06-13T13:47:09.864989Z",
+            "name": "shadow-xworm-opendirectory infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--d362fb2d-05fc-5938-936e-670754d7a6d8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T13:47:09.865403Z",
+            "modified": "2026-06-13T13:47:09.865403Z",
+            "name": "Shadow RAT v2.6.4.0 & XWorm 3.0-5.0 (OpenDirectory-DualRAT-MaaS-151.245.112.70) - Technical Analysis & Business Risk Assessment",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-04-04T00:00:00Z",
+            "object_refs": [
+                "ipv4-addr--e476b5d2-7643-5710-bdca-4b1c3ac7359c",
+                "indicator--3fee3b45-35a9-59d4-8549-5c770d1a7765",
+                "ipv4-addr--1971ae28-6029-59b9-b00e-83184a7cc1ba",
+                "indicator--eb340713-edd6-5722-a7dd-db563b8dc218",
+                "ipv4-addr--e1594e3f-2aab-56a6-9dc9-23c303b9bb73",
+                "indicator--c3deb49e-aa27-5677-9370-c0e1c110835f",
+                "ipv4-addr--ec28d696-f1ad-51c0-8dc3-f13bbf365572",
+                "indicator--50b7f29d-dc44-5138-a447-6aa1bdb265a2",
+                "url--3e8b7700-5ca6-5cc1-a06c-6c6583a80b04",
+                "indicator--43e12a95-cd20-534a-9ff2-652fba7140b8",
+                "domain-name--de523c66-8a81-5f9b-8603-eca98563c73b",
+                "indicator--80946398-8430-566d-9101-be4e017231e5",
+                "domain-name--e38e6b03-407a-556b-b859-4305785e6108",
+                "indicator--885d35bb-c36b-56a0-8c81-de2588cbe0e4",
+                "domain-name--0ca16df1-cfaa-5df5-9349-cc8cc1b69daa",
+                "indicator--7ad1cbf7-849a-5361-8566-b0fc424679bc",
+                "domain-name--b7e1a70f-5ffa-5c3a-8132-56d4e653919e",
+                "indicator--fc29e995-7600-566d-b2fc-e10928d0f688",
+                "domain-name--631f35e8-b883-5c2d-a89c-90ebea0e8efb",
+                "indicator--68d996c6-38c0-5cba-adb4-7ad15ef7e97f",
+                "file--7c64059e-9250-55ab-8c5a-a2751cee4ab8",
+                "file--666e21cb-6b32-5fd4-91f8-7be4924b6e24",
+                "file--a64cfaaa-7d2f-5cec-8c16-88e8af11e1ae",
+                "file--d86c9111-95fe-575d-9189-1de527523be0",
+                "file--eaea1821-815f-5c6e-9531-b48fed0535b7",
+                "tool--d8640bfa-e83d-5b2e-b534-8b9b612a986e",
+                "tool--a2679b1c-221e-5b15-83b3-3f1c9f269aeb",
+                "tool--0d1bc5db-c90b-5ccc-93ad-ab2d4b856614",
+                "tool--295650c6-c3e5-5e73-a6c4-efc6b62d7701",
+                "tool--f2842a39-7b4f-55f3-a67e-227883a78e23",
+                "infrastructure--d5a101c9-8f52-5ba3-bd1f-9e6553c94c0c"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

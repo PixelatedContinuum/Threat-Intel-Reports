@@ -31,6 +31,7 @@ ioc_highlights:
     note: "Carriers.exe — primary SFX wrapper (SHA256)"
   - value: "68fb61225b457172368d43af7ec2afe48f59404089d095584944edbfd0171feb"
     note: "pe_03 — HijackLoader proper (SHA256)"
+stix_bundle: /stix/opendirectory-62-60-237-100-20260506.json
 ---
 
 **Campaign Identifier:** HijackLoader-Penguish-MultiVector-62.60.237.100<br>

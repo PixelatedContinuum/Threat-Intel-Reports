@@ -23,6 +23,7 @@ ioc_highlights:
   - "hxxp://67.215.232[.]25:8080/health"
   - "hxxp://67.215.232[.]25:1337/"
   - "a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262"
+stix_bundle: /stix/flaskc2-postex-toolkit-67-215-232-25.json
 ---
 
 **Campaign Identifier:** FlaskC2-PostEx-Toolkit-67.215.232.25<br>

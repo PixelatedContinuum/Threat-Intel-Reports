@@ -25,6 +25,7 @@ ioc_highlights:
     note: "Artifact Kit EAX-redirect service (SHA256)"
   - value: "af688b120db0a3b324e2cd468cfead71b7895a3c815f4026d51ac7fca0cb8ab4"
     note: "CovertVPN L2 tunneling module (SHA256)"
+stix_bundle: /stix/new-files-found-20260408.json
 ---
 
 **Campaign Identifier:** OpenStrike-CSBeacon-Toolkit-172.105.0.126<br>

@@ -29,6 +29,7 @@ ioc_highlights:
     note: "Operator-written beacon.ps1 loader (SHA256)"
   - value: "358edb5d7e3e38c2da0a2ef323a281283aa96d47a8649014d114923b06866c12"
     note: "AdaptixC2 production beacon DLL (SHA256)"
+stix_bundle: /stix/opendirectory-45-130-148-125-20260430.json
 ---
 
 **Campaign Identifier:** AdaptixC2-OpenDirectory-Toolkit-45.130.148.125<br>

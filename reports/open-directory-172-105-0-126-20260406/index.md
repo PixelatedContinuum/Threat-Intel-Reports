@@ -26,6 +26,7 @@ ioc_highlights:
     note: "beacon_universal.py — Python beacon (SHA256)"
   - value: "eed84220ed7365b87d504f7709bd89ba2e255159d52f214f40a435ff78696eb6"
     note: "beacon_patched.x64.dll — CS DLL (SHA256)"
+stix_bundle: /stix/open-directory-172-105-0-126-20260406.json
 ---
 
 **Campaign Identifier:** OpenStrike-CSBeacon-Toolkit-172.105.0.126<br>
