@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--9bfe0ecd-44cc-4882-b317-4265c563c587",
+    "id": "bundle--3a8a5934-f7fa-44d3-97e5-32aa3aac06a2",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.95975Z",
-            "modified": "2026-06-13T22:22:05.95975Z",
+            "created": "2026-06-13T22:38:53.945809Z",
+            "modified": "2026-06-13T22:38:53.945809Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--03b1fbbc-f652-5aa5-b38b-8020392aa89a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.962411Z",
-            "modified": "2026-06-13T22:22:05.962411Z",
+            "created": "2026-06-13T22:38:53.946551Z",
+            "modified": "2026-06-13T22:38:53.946551Z",
             "name": "ipv4: 193.56.255.154",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--ebd475b1-8642-5d59-a7af-578e5b30e2bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.978477Z",
-            "modified": "2026-06-13T22:22:05.978477Z",
+            "created": "2026-06-13T22:38:53.951741Z",
+            "modified": "2026-06-13T22:38:53.951741Z",
             "name": "url: http://193.56.255.154:443/en-us/index.html",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--920f163c-d250-5875-a436-284ef39079b0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.980387Z",
-            "modified": "2026-06-13T22:22:05.980387Z",
+            "created": "2026-06-13T22:38:53.952832Z",
+            "modified": "2026-06-13T22:38:53.952832Z",
             "name": "url: http://193.56.255.154:443/en-us/docs.html",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--65e3dbee-e1a4-538d-ae42-2de13d5050d6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.982004Z",
-            "modified": "2026-06-13T22:22:05.982004Z",
+            "created": "2026-06-13T22:38:53.953995Z",
+            "modified": "2026-06-13T22:38:53.953995Z",
             "name": "url: http://193.56.255.154:443/en-us/test.html",
             "indicator_types": [
                 "malicious-activity"
@@ -171,8 +171,8 @@
             "spec_version": "2.1",
             "id": "tool--0ae5cea1-2771-5970-9aa1-201316b7fd67",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.984664Z",
-            "modified": "2026-06-13T22:22:05.984664Z",
+            "created": "2026-06-13T22:38:53.956749Z",
+            "modified": "2026-06-13T22:38:53.956749Z",
             "name": "Covenant C2 GruntStager Build 1 \u2014 standalone PE stager",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -183,8 +183,8 @@
             "spec_version": "2.1",
             "id": "tool--45b52c89-787e-5d20-8244-e2d1b81bdc86",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.984882Z",
-            "modified": "2026-06-13T22:22:05.984882Z",
+            "created": "2026-06-13T22:38:53.95701Z",
+            "modified": "2026-06-13T22:38:53.95701Z",
             "name": "PowerShell fileless loader wrapping Covenant GruntStager Build 2 \u2014 Base64+Deflate encoded PE embedded in script",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -195,8 +195,8 @@
             "spec_version": "2.1",
             "id": "tool--7c982207-5ae0-59f8-9b63-aabf8911bae9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.985041Z",
-            "modified": "2026-06-13T22:22:05.985041Z",
+            "created": "2026-06-13T22:38:53.957213Z",
+            "modified": "2026-06-13T22:38:53.957213Z",
             "name": "Covenant GruntStager Build 2 \u2014 extracted from GruntHTTP.ps1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -207,8 +207,8 @@
             "spec_version": "2.1",
             "id": "tool--4b2aa423-bafa-53f1-88aa-e7a6ad5b7554",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.985196Z",
-            "modified": "2026-06-13T22:22:05.985196Z",
+            "created": "2026-06-13T22:38:53.957356Z",
+            "modified": "2026-06-13T22:38:53.957356Z",
             "name": "Proof-of-concept DLL",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -219,8 +219,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--4f95b0fc-dfdb-5165-bb9c-52f80546939d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.985322Z",
-            "modified": "2026-06-13T22:22:05.985322Z",
+            "created": "2026-06-13T22:38:53.957469Z",
+            "modified": "2026-06-13T22:38:53.957469Z",
             "name": "opendirectory-193-56-255-154-20260403 infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -235,8 +235,8 @@
             "spec_version": "2.1",
             "id": "report--c161f19f-0f0f-56ac-84c6-6945a5485e3e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:22:05.985773Z",
-            "modified": "2026-06-13T22:22:05.985773Z",
+            "created": "2026-06-13T22:38:53.957889Z",
+            "modified": "2026-06-13T22:38:53.957889Z",
             "name": "Open Directory at 193.56.255.154 \u2014 XiebroC2 v3.1 Go Implant and Covenant C2 Toolkit",
             "report_types": [
                 "threat-report"
@@ -260,6 +260,12 @@
                 "tool--7c982207-5ae0-59f8-9b63-aabf8911bae9",
                 "tool--4b2aa423-bafa-53f1-88aa-e7a6ad5b7554",
                 "infrastructure--4f95b0fc-dfdb-5165-bb9c-52f80546939d"
+            ],
+            "labels": [
+                "C2",
+                "Multi-Family",
+                "Open Dir",
+                "Injection"
             ],
             "external_references": [
                 {

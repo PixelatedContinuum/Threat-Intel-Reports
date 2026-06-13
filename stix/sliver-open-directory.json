@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--af41f4f0-5e75-461a-b554-883c5313323b",
+    "id": "bundle--23c90ffe-29ac-471b-8936-538b8e6076ef",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T13:47:10.114326Z",
-            "modified": "2026-06-13T13:47:10.114326Z",
+            "created": "2026-06-13T22:39:47.53022Z",
+            "modified": "2026-06-13T22:39:47.53022Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--f0d906fd-c2d0-5c67-becb-f48377b0a012",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T13:47:10.114861Z",
-            "modified": "2026-06-13T13:47:10.114861Z",
+            "created": "2026-06-13T22:39:47.53072Z",
+            "modified": "2026-06-13T22:39:47.53072Z",
             "name": "ipv4: 45.94.31.220",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--8b6efd7b-c37c-59a1-bd8c-2f66ca147b27",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T13:47:10.116188Z",
-            "modified": "2026-06-13T13:47:10.116188Z",
+            "created": "2026-06-13T22:39:47.53149Z",
+            "modified": "2026-06-13T22:39:47.53149Z",
             "name": "url: http://45.94.31.220:8000/OneDriveSync.exe",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--cbcf22a2-8de8-55a5-b24e-ff0e8ac1eef0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T13:47:10.117157Z",
-            "modified": "2026-06-13T13:47:10.117157Z",
+            "created": "2026-06-13T22:39:47.532304Z",
+            "modified": "2026-06-13T22:39:47.532304Z",
             "name": "url: http://45.94.31.220:8000/",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--7b313cb4-961c-54b0-9d04-6af34ceb7cd8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T13:47:10.11782Z",
-            "modified": "2026-06-13T13:47:10.11782Z",
+            "created": "2026-06-13T22:39:47.533093Z",
+            "modified": "2026-06-13T22:39:47.533093Z",
             "name": "domain: mailuxe.net",
             "indicator_types": [
                 "malicious-activity"
@@ -145,8 +145,8 @@
             "spec_version": "2.1",
             "id": "indicator--65a57841-bd46-566e-8bc1-6e004a89ca94",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T13:47:10.118404Z",
-            "modified": "2026-06-13T13:47:10.118404Z",
+            "created": "2026-06-13T22:39:47.534071Z",
+            "modified": "2026-06-13T22:39:47.534071Z",
             "name": "domain: mailmassange.duckdns.org",
             "indicator_types": [
                 "malicious-activity"
@@ -167,8 +167,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--45293914-4086-5703-9eab-784355ce3204",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T13:47:10.11887Z",
-            "modified": "2026-06-13T13:47:10.11887Z",
+            "created": "2026-06-13T22:39:47.534733Z",
+            "modified": "2026-06-13T22:39:47.534733Z",
             "name": "sliver-open-directory infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -183,8 +183,8 @@
             "spec_version": "2.1",
             "id": "report--ca5a5217-efd5-53a5-921f-c00641d56de7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T13:47:10.119512Z",
-            "modified": "2026-06-13T13:47:10.119512Z",
+            "created": "2026-06-13T22:39:47.535356Z",
+            "modified": "2026-06-13T22:39:47.535356Z",
             "name": "Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220) - Technical Analysis & Threat Assessment",
             "report_types": [
                 "threat-report"
@@ -202,6 +202,12 @@
                 "domain-name--91ac696f-abc4-58d4-adbe-2d75863d521e",
                 "indicator--65a57841-bd46-566e-8bc1-6e004a89ca94",
                 "infrastructure--45293914-4086-5703-9eab-784355ce3204"
+            ],
+            "labels": [
+                "C2",
+                "Loader",
+                "Go",
+                "Evasion"
             ],
             "external_references": [
                 {
