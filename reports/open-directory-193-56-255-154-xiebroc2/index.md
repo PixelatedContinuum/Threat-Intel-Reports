@@ -25,6 +25,7 @@ ioc_highlights:
     note: "GruntHTTP.exe — Covenant stager Build 1"
   - value: "cff2d990f0988e9c90f77d0a62c72ca8e9bf567f0c143fdc3a914dce65edec98"
     note: "GruntHTTP.ps1 — PowerShell fileless loader"
+stix_bundle: /stix/open-directory-193-56-255-154-xiebroc2.json
 ---
 
 **Campaign Identifier:** OpenDirectory-XiebroC2-Covenant-193.56.255.154<br>

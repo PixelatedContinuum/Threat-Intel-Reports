@@ -28,6 +28,7 @@ thumbnail: /assets/images/cards/zerotrace-74-0-42-25-20260316.png
 category: "MaaS Operation"
 hide: true
 description: "ZeroTrace's complete MaaS staging server exposed at 74.0.42.25 — 4,750 files including four simultaneous RAT families (XWorm, PureRAT, PureHVNC, ScreenConnect), 9.1 million stolen credentials, 500 pre-staged phishing links, and an on-demand ransomware module. Infrastructure confirmed active and undetected for over 16 months at time of discovery."
+stix_bundle: /stix/zerotrace-74-0-42-25-20260316.json
 ---
 
 **Campaign Identifier:** ZeroTrace-MultiFamily-MaaS-74.0.42.25<br>

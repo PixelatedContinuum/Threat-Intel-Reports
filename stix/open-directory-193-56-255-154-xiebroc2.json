@@ -1,0 +1,275 @@
+{
+    "type": "bundle",
+    "id": "bundle--9bfe0ecd-44cc-4882-b317-4265c563c587",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.95975Z",
+            "modified": "2026-06-13T22:22:05.95975Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--263558e4-f57c-52c1-991c-5548eabe22b2",
+            "value": "193.56.255.154"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--03b1fbbc-f652-5aa5-b38b-8020392aa89a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.962411Z",
+            "modified": "2026-06-13T22:22:05.962411Z",
+            "name": "ipv4: 193.56.255.154",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '193.56.255.154']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--e4c67632-9c8d-5668-b9bd-407ec1d9c412",
+            "value": "http://193.56.255.154:443/en-us/index.html"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ebd475b1-8642-5d59-a7af-578e5b30e2bc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.978477Z",
+            "modified": "2026-06-13T22:22:05.978477Z",
+            "name": "url: http://193.56.255.154:443/en-us/index.html",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://193.56.255.154:443/en-us/index.html']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--dc3c26ef-7a19-5b57-ad3c-eb0a432bc247",
+            "value": "http://193.56.255.154:443/en-us/docs.html"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--920f163c-d250-5875-a436-284ef39079b0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.980387Z",
+            "modified": "2026-06-13T22:22:05.980387Z",
+            "name": "url: http://193.56.255.154:443/en-us/docs.html",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://193.56.255.154:443/en-us/docs.html']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--59ce6ce2-50ab-59be-b7f2-1e7de6fdcd31",
+            "value": "http://193.56.255.154:443/en-us/test.html"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--65e3dbee-e1a4-538d-ae42-2de13d5050d6",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.982004Z",
+            "modified": "2026-06-13T22:22:05.982004Z",
+            "name": "url: http://193.56.255.154:443/en-us/test.html",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://193.56.255.154:443/en-us/test.html']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--1812b356-1530-5207-9802-95c8544c011c",
+            "hashes": {
+                "SHA-256": "3aa45ceff7070ae6d183c5aa5f0d771a79c7cf37fe21a3906df976bee497bf20"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--49e73251-23af-57de-91aa-6ef7b4ec5b58",
+            "hashes": {
+                "SHA-256": "cff2d990f0988e9c90f77d0a62c72ca8e9bf567f0c143fdc3a914dce65edec98"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--b529c4c0-d794-5379-b8dd-8cf76454919d",
+            "hashes": {
+                "SHA-256": "fc93712d44850bc730e1e4cf0f678a902e8f60a5d710b4bc19b0ab0b2fb79a95"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--eb287017-2d26-5762-b508-a25203bdfe3b",
+            "hashes": {
+                "SHA-256": "ed4d2a1f86b73e6a3f2d5378ba93a044f8c760307acfd3b99a0fa3c0b94fd107"
+            }
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--0ae5cea1-2771-5970-9aa1-201316b7fd67",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.984664Z",
+            "modified": "2026-06-13T22:22:05.984664Z",
+            "name": "Covenant C2 GruntStager Build 1 \u2014 standalone PE stager",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--45b52c89-787e-5d20-8244-e2d1b81bdc86",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.984882Z",
+            "modified": "2026-06-13T22:22:05.984882Z",
+            "name": "PowerShell fileless loader wrapping Covenant GruntStager Build 2 \u2014 Base64+Deflate encoded PE embedded in script",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--7c982207-5ae0-59f8-9b63-aabf8911bae9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.985041Z",
+            "modified": "2026-06-13T22:22:05.985041Z",
+            "name": "Covenant GruntStager Build 2 \u2014 extracted from GruntHTTP.ps1",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--4b2aa423-bafa-53f1-88aa-e7a6ad5b7554",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.985196Z",
+            "modified": "2026-06-13T22:22:05.985196Z",
+            "name": "Proof-of-concept DLL",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--4f95b0fc-dfdb-5165-bb9c-52f80546939d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.985322Z",
+            "modified": "2026-06-13T22:22:05.985322Z",
+            "name": "opendirectory-193-56-255-154-20260403 infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--c161f19f-0f0f-56ac-84c6-6945a5485e3e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-13T22:22:05.985773Z",
+            "modified": "2026-06-13T22:22:05.985773Z",
+            "name": "Open Directory at 193.56.255.154 \u2014 XiebroC2 v3.1 Go Implant and Covenant C2 Toolkit",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-04-03T00:00:00Z",
+            "object_refs": [
+                "ipv4-addr--263558e4-f57c-52c1-991c-5548eabe22b2",
+                "indicator--03b1fbbc-f652-5aa5-b38b-8020392aa89a",
+                "url--e4c67632-9c8d-5668-b9bd-407ec1d9c412",
+                "indicator--ebd475b1-8642-5d59-a7af-578e5b30e2bc",
+                "url--dc3c26ef-7a19-5b57-ad3c-eb0a432bc247",
+                "indicator--920f163c-d250-5875-a436-284ef39079b0",
+                "url--59ce6ce2-50ab-59be-b7f2-1e7de6fdcd31",
+                "indicator--65e3dbee-e1a4-538d-ae42-2de13d5050d6",
+                "file--1812b356-1530-5207-9802-95c8544c011c",
+                "file--49e73251-23af-57de-91aa-6ef7b4ec5b58",
+                "file--b529c4c0-d794-5379-b8dd-8cf76454919d",
+                "file--eb287017-2d26-5762-b508-a25203bdfe3b",
+                "tool--0ae5cea1-2771-5970-9aa1-201316b7fd67",
+                "tool--45b52c89-787e-5d20-8244-e2d1b81bdc86",
+                "tool--7c982207-5ae0-59f8-9b63-aabf8911bae9",
+                "tool--4b2aa423-bafa-53f1-88aa-e7a6ad5b7554",
+                "infrastructure--4f95b0fc-dfdb-5165-bb9c-52f80546939d"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}
