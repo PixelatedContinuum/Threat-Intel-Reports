@@ -229,6 +229,7 @@ entries:
     severity: high
     tags: [Toolkit, Priv Esc, RCE, .NET]
     report_url: /reports/webserver-compromise-kit-91-236-230-250/
+    stix_url: /stix/webserver-compromise-kit-91-236-230-250.json
     detection_url: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections
     ioc_url: /ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json
 
@@ -237,6 +238,7 @@ entries:
     severity: critical
     tags: [RAT, Cred Theft, Persistence, Evasion]
     report_url: /reports/remcos-opendirectory/
+    stix_url: /stix/remcos-opendirectory.json
     detection_url: /hunting-detections/remcos-opendirectory-campaign
     ioc_url: /ioc-feeds/remcos-opendirectory-campaign.json
 
@@ -245,6 +247,7 @@ entries:
     severity: high
     tags: [Cryptominer, Dropper, Persistence, Evasion]
     report_url: /reports/nsminer-cryptojacker/
+    stix_url: /stix/nsminer-cryptojacker.json
     detection_url: /hunting-detections/nsminer-cryptojacker
     ioc_url: /ioc-feeds/nsminer-cryptojacker.json
 
@@ -253,6 +256,7 @@ entries:
     severity: high
     tags: [RAT, Injection, .NET, Cred Theft]
     report_url: /reports/dual-rat-analysis/
+    stix_url: /stix/dual-rat-analysis.json
     detection_url: /hunting-detections/dual-rat-analysis
     ioc_url: /ioc-feeds/dual-rat-analysis.json
 
@@ -261,6 +265,7 @@ entries:
     severity: critical
     tags: [RAT, Cred Theft, Evasion, .NET]
     report_url: /reports/PULSAR-RAT/
+    stix_url: /stix/PULSAR-RAT.json
     detection_url: /hunting-detections/PULSAR-RAT
     ioc_url: /ioc-feeds/PULSAR-RAT.json
 
@@ -269,6 +274,7 @@ entries:
     severity: med
     tags: [Loader, Stealer, Cred Theft, Evasion]
     report_url: /reports/Hybrid-Loader-Stealer-Sogou/
+    stix_url: /stix/Hybrid-Loader-Stealer-Sogou.json
     detection_url: /hunting-detections/Hybrid-Loader-Stealer-Sogou
     ioc_url: /ioc-feeds/Hybrid-Loader-Stealer-Sogou.json
 
@@ -277,6 +283,7 @@ entries:
     severity: med
     tags: [Loader, Stealer, Go, Injection]
     report_url: /reports/malware-analysis-houselet/
+    stix_url: /stix/malware-analysis-houselet.json
     detection_url: /hunting-detections/malware-analysis-houselet
     ioc_url: /ioc-feeds/malware-analysis-houselet.json
 
@@ -285,6 +292,7 @@ entries:
     severity: med
     tags: [Scanner, Python, Exploitation]
     report_url: /reports/AdvancedRouterScanner/
+    stix_url: /stix/AdvancedRouterScanner.json
     detection_url: /hunting-detections/AdvancedRouterScanner
     ioc_url: /ioc-feeds/AdvancedRouterScanner.json
 
@@ -293,6 +301,7 @@ entries:
     severity: high
     tags: [Webshell, PHP, Exfil, C2]
     report_url: /reports/webshells-to-the-cloud/
+    stix_url: /stix/webshells-to-the-cloud.json
     detection_url: /hunting-detections/webshells-to-the-cloud
     ioc_url: /ioc-feeds/webshells-to-the-cloud.json
 
@@ -301,6 +310,7 @@ entries:
     severity: med
     tags: [RAT, Loader, PowerShell, Evasion]
     report_url: /reports/quasar-xworm-powershell/
+    stix_url: /stix/quasar-xworm-powershell.json
     detection_url: /hunting-detections/quasar-xworm-detections
     ioc_url: /ioc-feeds/quasar-xworm-powershell.json
 
@@ -312,6 +322,7 @@ entries:
     series: arsenal-237
     series_order: 1
     report_url: /reports/arsenal-237-new-files/
+    stix_url: /stix/arsenal-237-new-files.json
 
   - title: "Arsenal-237: Threat Actor R&D Repository Exposed"
     date: 2026-01-18
@@ -321,6 +332,7 @@ entries:
     series_order: 0
     series_title: "Arsenal-237 — Threat Actor R&D Repository (109.230.231.37)"
     report_url: /reports/109.230.231.37-Executive-Overview/
+    stix_url: /stix/109.230.231.37-Executive-Overview.json
 
   # ---------------- Arsenal-237 granular files (detection + IOC only) ----------------
   - title: "Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)"

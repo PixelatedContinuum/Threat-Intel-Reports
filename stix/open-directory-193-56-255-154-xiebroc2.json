@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--3a8a5934-f7fa-44d3-97e5-32aa3aac06a2",
+    "id": "bundle--cb7b2a59-4bc2-4f7e-8b0b-1f07d3498bc7",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.945809Z",
-            "modified": "2026-06-13T22:38:53.945809Z",
+            "created": "2026-06-14T11:56:36.386552Z",
+            "modified": "2026-06-14T11:56:36.386552Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--03b1fbbc-f652-5aa5-b38b-8020392aa89a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.946551Z",
-            "modified": "2026-06-13T22:38:53.946551Z",
+            "created": "2026-06-14T11:56:36.386863Z",
+            "modified": "2026-06-14T11:56:36.386863Z",
             "name": "ipv4: 193.56.255.154",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--ebd475b1-8642-5d59-a7af-578e5b30e2bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.951741Z",
-            "modified": "2026-06-13T22:38:53.951741Z",
+            "created": "2026-06-14T11:56:36.388911Z",
+            "modified": "2026-06-14T11:56:36.388911Z",
             "name": "url: http://193.56.255.154:443/en-us/index.html",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--920f163c-d250-5875-a436-284ef39079b0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.952832Z",
-            "modified": "2026-06-13T22:38:53.952832Z",
+            "created": "2026-06-14T11:56:36.38941Z",
+            "modified": "2026-06-14T11:56:36.38941Z",
             "name": "url: http://193.56.255.154:443/en-us/docs.html",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--65e3dbee-e1a4-538d-ae42-2de13d5050d6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.953995Z",
-            "modified": "2026-06-13T22:38:53.953995Z",
+            "created": "2026-06-14T11:56:36.38995Z",
+            "modified": "2026-06-14T11:56:36.38995Z",
             "name": "url: http://193.56.255.154:443/en-us/test.html",
             "indicator_types": [
                 "malicious-activity"
@@ -167,12 +167,264 @@
             }
         },
         {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2d1c1a46-5acf-578d-808a-4d28dc737a37",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.391387Z",
+            "modified": "2026-06-14T11:56:36.391387Z",
+            "name": "RAT_XiebroC2_v31_Go_TCP_Implant",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule RAT_XiebroC2_v31_Go_TCP_Implant\n{\n    meta:\n        description = \"Detects XiebroC2 v3.1 Go TCP implant based on hardcoded AES-128-ECB key, source-code typo in pclntab symbol table (WindosVersion), vendored offensive go-clr CLR hosting library import, and unique RunPE PE parser error strings. All four indicators are static artifacts embedded in any binary compiled from XiebroC2 3.1 source.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-03\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\"\n        hash_sha256 = \"not_captured_in_triage\"\n        family = \"XiebroC2\"\n\n    strings:\n        $s1 = \"QWERt_CSDMAHUATW\" ascii\n        $b1 = { 51 57 45 52 74 5F 43 53 44 4D 41 48 55 41 54 57 }\n        $s2 = \"main/Helper/sysinfo.WindosVersion\" ascii\n        $s3 = \"github.com/Ne0nd0g/go-clr\" ascii\n        $s4 = \"DOS image header magic string was not MZ\" ascii\n        $s5 = \"PE Signature string was not PE\" ascii\n        $s6 = \"ClientUnstaller\" ascii\n        $s7 = \"NtQueryInformationProcess returned NTSTATUS:\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 25MB and\n        ($s1 or $b1) and\n        2 of ($s2, $s3, $s4, $s5, $s6, $s7)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--941d22db-2bf6-589a-a7d0-71d984fd34fe",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.391672Z",
+            "modified": "2026-06-14T11:56:36.391672Z",
+            "name": "RAT_XiebroC2_v31_PaddedConfig_Build",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule RAT_XiebroC2_v31_PaddedConfig_Build\n{\n    meta:\n        description = \"Detects XiebroC2 v3.1 build targeting 193.56.255.154 based on the space-padded C2 IP and port configuration strings embedded verbatim in the binary. XiebroC2 stores configuration as fixed-width space-padded literals to allow binary patching without recompilation, producing a distinctive 40-byte padded IP string not found in legitimate software.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-03\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\"\n        hash_sha256 = \"not_captured_in_triage\"\n        family = \"XiebroC2\"\n\n    strings:\n        $s1 = \"193.56.255.154                          \" ascii\n        $s2 = \"4444                \" ascii\n        $s3 = \"vps                       \" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 25MB and\n        $s1 and $s2\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--673333b9-3076-59fe-a7ff-fa87f3835972",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.391857Z",
+            "modified": "2026-06-14T11:56:36.391857Z",
+            "name": "RAT_Covenant_GruntStager_OpenDirectory",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule RAT_Covenant_GruntStager_OpenDirectory\n{\n    meta:\n        description = \"Detects both Covenant C2 GruntStager builds (GruntHTTP.exe Build 1 and the PE extracted from GruntHTTP.ps1 Build 2) based on shared listener-level session token, build ID, and Covenant-specific namespace strings. Both builds share a single Covenant listener at 193.56.255.154:443 and produce identical values for these fields. Matching either sample confirms active Covenant stager deployment.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-03\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\"\n        hash_sha256 = \"3aa45ceff7070ae6d183c5aa5f0d771a79c7cf37fe21a3906df976bee497bf20\"\n        family = \"Covenant\"\n\n    strings:\n        $s1 = \"75db-99b1-25fe4e9afbe58696-320bea73\" ascii wide\n        $s2 = \"a19ea23062db990386a3a478cb89d52e\" ascii\n        $s3 = \"GruntStager\" ascii wide\n        $s4 = \"CovenantCertHash\" ascii wide\n        $s5 = \"// Hello World! {0}\" ascii\n        $s6 = \"SESSIONID=1552332971750\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 50KB and\n        $s1 and $s2 and\n        1 of ($s3, $s4, $s5, $s6)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9b20daa8-4921-54c2-b157-29d3d3c7ce9d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.392Z",
+            "modified": "2026-06-14T11:56:36.392Z",
+            "name": "MALW_Covenant_PSFilelessLoader_GruntHTTP",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MALW_Covenant_PSFilelessLoader_GruntHTTP\n{\n    meta:\n        description = \"Detects the GruntHTTP.ps1 PowerShell fileless loader that delivers Covenant GruntStager Build 2 via Base64+Deflate decoding and Reflection.Assembly::Load(). The rule anchors on the hardcoded Covenant session token embedded in the script alongside the decompression and reflective loading pattern \u2014 a combination unique to this malicious loader and not found in legitimate PowerShell scripts.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-03\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\"\n        hash_sha256 = \"cff2d990f0988e9c90f77d0a62c72ca8e9bf567f0c143fdc3a914dce65edec98\"\n        family = \"Covenant\"\n\n    strings:\n        $s1 = \"75db-99b1-25fe4e9afbe58696-320bea73\" ascii\n        $s2 = \"DeflateStream\" ascii\n        $s3 = \"Reflection.Assembly\" ascii\n        $s4 = \"FromBase64String\" ascii\n        $s5 = \"MemoryStream\" ascii\n\n    condition:\n        filesize < 100KB and\n        $s1 and\n        all of ($s2, $s3, $s4, $s5)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f577fc2c-cc27-564f-bd32-82e9e746aee9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.392131Z",
+            "modified": "2026-06-14T11:56:36.392131Z",
+            "name": "XiebroC2 Go Implant Loading Windows CLR at Runtime via go-clr",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: XiebroC2 Go Implant Loading Windows CLR at Runtime via go-clr\nid: a3f7c821-5e4b-4d09-bc21-7f3a9e5c8d04\nstatus: experimental\ndescription: Detects a Go binary (main.exe) loading mscoree.dll or clr.dll at runtime, which is the behavioral signature of XiebroC2 v3.1 executing its inline-assembly command via the vendored go-clr library. Legitimate Go binaries do not host the Windows CLR in-process. This event fires regardless of whether the .NET assembly payload was written to disk, making it effective against fully fileless .NET delivery chains.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\n    - https://github.com/Ne0nd0g/go-clr\nauthor: The Hunters Ledger\ndate: 2026/04/03\ntags:\n    - attack.defense-evasion\n    - attack.execution\nlogsource:\n    category: image_load\n    product: windows\ndetection:\n    selection:\n        ImageLoaded|endswith:\n            - '\\mscoree.dll'\n            - '\\clr.dll'\n    filter_legitimate_dotnet_hosts:\n        Image|endswith:\n            - '\\dotnet.exe'\n            - '\\msbuild.exe'\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n            - '\\csc.exe'\n            - '\\vbc.exe'\n            - '\\cmstp.exe'\n            - '\\installutil.exe'\n            - '\\regsvcs.exe'\n            - '\\regasm.exe'\n            - '\\mscorsvw.exe'\n            - '\\ngen.exe'\n            - '\\clrjit.dll'\n            - '\\dfsvc.exe'\n            - '\\ieinstal.exe'\n            - '\\PresentationHost.exe'\n    condition: selection and not filter_legitimate_dotnet_hosts\nfalsepositives:\n    - Legitimate applications built with Go that embed .NET interop via documented COM interop mechanisms (rare but possible in enterprise software)\n    - Custom in-house Go tooling that intentionally hosts the CLR for legitimate automation purposes\n    - Security research tools or red team frameworks other than XiebroC2 that use go-clr\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--fbb6bef6-6d77-5462-a75e-f6659ff3165b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.39226Z",
+            "modified": "2026-06-14T11:56:36.39226Z",
+            "name": "XiebroC2 Process Hollowing via Suspended Child Process Creation",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: XiebroC2 Process Hollowing via Suspended Child Process Creation\nid: b8d2e94f-7c13-4a8b-91f6-2e5d7b3c6a10\nstatus: experimental\ndescription: Detects XiebroC2 v3.1 executing its RunPE process hollowing technique by identifying suspended child process creation from a parent process named main.exe. XiebroC2 creates target processes with CREATE_SUSPENDED (creationflags 0x4) before performing entry point patching injection. The CreationFlags field value of 4 in Sysmon process creation events is the key discriminator alongside the suspicious parent image name.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\nauthor: The Hunters Ledger\ndate: 2026/04/03\ntags:\n    - attack.defense-evasion\n    - attack.privilege-escalation\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\main.exe'\n    selection_suspended:\n        CreationFlags: '0x4'\n    condition: selection_parent and selection_suspended\nfalsepositives:\n    - Legitimate process management software named main.exe that creates suspended child processes (highly unlikely)\n    - Security testing tools or debuggers launched from a binary coincidentally named main.exe\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5ae1231d-8c8e-56e9-b16f-f0c630971251",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.39239Z",
+            "modified": "2026-06-14T11:56:36.39239Z",
+            "name": "XiebroC2 Hidden Window Shell Execution from Go Implant",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: XiebroC2 Hidden Window Shell Execution from Go Implant\nid: c5e1f730-8b24-4c9d-a2e7-3f6b8d1e5c92\nstatus: experimental\ndescription: Detects XiebroC2 v3.1 executing its shell, OSshell, or OSpowershell commands by identifying hidden-window cmd.exe or powershell.exe child processes spawned from a parent named main.exe. All XiebroC2 command handler shells set CREATE_NO_WINDOW to suppress visible console output on the victim endpoint. This rule targets the parent-child relationship as the primary discriminator.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\nauthor: The Hunters Ledger\ndate: 2026/04/03\ntags:\n    - attack.execution\n    - attack.defense-evasion\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_parent:\n        ParentImage|endswith: '\\main.exe'\n    selection_child:\n        Image|endswith:\n            - '\\cmd.exe'\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    condition: selection_parent and selection_child\nfalsepositives:\n    - Legitimate Go-based tooling or software distribution systems named main.exe that spawn shell subprocesses as part of normal operation\n    - Development or build environments where a Go binary named main.exe is used to orchestrate build steps via cmd.exe\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--32ca9b71-1c20-5b06-b898-d72c71e6c653",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.392542Z",
+            "modified": "2026-06-14T11:56:36.392542Z",
+            "name": "Covenant C2 GruntStager HTTP Beacon \u2014 Campaign Session Token Detected",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Covenant C2 GruntStager HTTP Beacon \u2014 Campaign Session Token Detected\nid: d9a4b257-3f81-4e7c-b5d8-6c2e9f0a4b73\nstatus: experimental\ndescription: Detects HTTP POST requests containing the Covenant C2 listener session token '75db-99b1-25fe4e9afbe58696-320bea73', which is hardcoded in both GruntHTTP.exe (Build 1) and the PE embedded in GruntHTTP.ps1 (Build 2). This token is a listener-level constant that appears in every registration and command-exchange POST from any host executing either stager build. The rule fires on both the PE-based and PowerShell-based delivery variants simultaneously, making it the highest-value single network detection for this campaign.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\n    - https://github.com/cobbr/Covenant\nauthor: The Hunters Ledger\ndate: 2026/04/03\ntags:\n    - attack.command-and-control\nlogsource:\n    category: proxy\n    product: windows\ndetection:\n    selection_session_token:\n        cs-uri-query|contains: 'session=75db-99b1-25fe4e9afbe58696-320bea73'\n    selection_ua:\n        cs(User-Agent)|contains: 'Chrome/41.0.2228.0'\n    condition: 1 of selection_*\nfalsepositives:\n    - No legitimate proxy traffic is expected to contain this specific session token value; the Chrome 41 on Windows 7 User-Agent may appear in legacy browser environments but is an extremely outdated combination that warrants investigation regardless\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b79cc56a-fb04-529c-a512-3dbcf732abcd",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.392705Z",
+            "modified": "2026-06-14T11:56:36.392705Z",
+            "name": "PowerShell Fileless Loader \u2014 Deflate Decode with Reflective Assembly Load",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: PowerShell Fileless Loader \u2014 Deflate Decode with Reflective Assembly Load\nid: e2c8d419-6a37-4f5b-8e90-4d1b7c5e2f85\nstatus: experimental\ndescription: Detects PowerShell scripts executing the GruntHTTP.ps1 fileless loader pattern \u2014 Base64 decoding of a compressed payload via System.IO.DeflateStream followed by Reflection.Assembly::Load() to execute the decompressed PE in memory. This three-stage chain (FromBase64String, DeflateStream, Reflection.Assembly::Load) in a single ScriptBlock is the specific technique used by the Covenant PS delivery wrapper analyzed in this campaign. Firing on Event ID 4104 ScriptBlock logs means this detection is effective even when the .ps1 file is never written to disk.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/\n    - https://github.com/cobbr/Covenant\nauthor: The Hunters Ledger\ndate: 2026/04/03\ntags:\n    - attack.execution\n    - attack.defense-evasion\nlogsource:\n    category: ps_script\n    product: windows\ndetection:\n    selection_decode_chain:\n        ScriptBlockText|contains|all:\n            - 'DeflateStream'\n            - 'Reflection.Assembly'\n            - 'FromBase64String'\n            - 'MemoryStream'\n    condition: selection_decode_chain\nfalsepositives:\n    - Legitimate software deployment scripts that compress and load .NET assemblies via PowerShell (uncommon but possible in enterprise environments with custom tooling)\n    - Security research or red team tooling other than Covenant that uses the same delivery pattern\n    - PowerShell-based application packaging tools that compress payloads with Deflate and load them reflectively\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--0ffb023a-9788-5644-b5e0-1bd0177b1e0b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.392847Z",
+            "modified": "2026-06-14T11:56:36.392847Z",
+            "name": "THL - Covenant GruntStager C2 Beacon - Campaign Session Token in HTTP POST",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET 443 (\n    msg:\"THL - Covenant GruntStager C2 Beacon - Campaign Session Token in HTTP POST\";\n    flow:established,to_server;\n    http.method; content:\"POST\";\n    http.uri; content:\"/en-us/\"; startswith;\n    http.request_body; content:\"session=75db-99b1-25fe4e9afbe58696-320bea73\";\n    classtype:trojan-activity;\n    reference:url,pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;\n    sid:9000101; rev:1;\n    metadata:affected_product Windows, attack_target Client_Endpoint,\n              created_at 2026_04_03, deployment Perimeter,\n              malware_family Covenant, signature_severity Major,\n              tag C2;\n)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3c323070-58f3-5f67-836d-3fa7926ab2d6",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.392992Z",
+            "modified": "2026-06-14T11:56:36.392992Z",
+            "name": "THL - Covenant GruntStager Masquerade - Chrome 41 Windows 7 UA on Port 443",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET 443 (\n    msg:\"THL - Covenant GruntStager Masquerade - Chrome 41 Windows 7 UA on Port 443\";\n    flow:established,to_server;\n    http.user_agent; content:\"Chrome/41.0.2228.0\"; nocase;\n    http.uri; content:\"/en-us/\"; startswith;\n    classtype:trojan-activity;\n    reference:url,pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;\n    sid:9000102; rev:1;\n    metadata:affected_product Windows, attack_target Client_Endpoint,\n              created_at 2026_04_03, deployment Perimeter,\n              malware_family Covenant, signature_severity Major,\n              tag C2;\n)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c8808eca-bc8d-5c21-ae9c-0d493c718796",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:36.393436Z",
+            "modified": "2026-06-14T11:56:36.393436Z",
+            "name": "THL - XiebroC2 v3.1 TCP C2 Beacon - Known C2 IP Port 4444",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> 193.56.255.154 4444 (\n    msg:\"THL - XiebroC2 v3.1 TCP C2 Beacon - Known C2 IP Port 4444\";\n    flow:established,to_server;\n    threshold:type both, track by_src, count 1, seconds 300;\n    classtype:trojan-activity;\n    reference:url,pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;\n    sid:9000103; rev:1;\n    metadata:affected_product Windows, attack_target Client_Endpoint,\n              created_at 2026_04_03, deployment Perimeter,\n              malware_family XiebroC2, signature_severity Critical,\n              tag C2;\n)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-04-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
             "type": "tool",
             "spec_version": "2.1",
             "id": "tool--0ae5cea1-2771-5970-9aa1-201316b7fd67",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.956749Z",
-            "modified": "2026-06-13T22:38:53.956749Z",
+            "created": "2026-06-14T11:56:36.393821Z",
+            "modified": "2026-06-14T11:56:36.393821Z",
             "name": "Covenant C2 GruntStager Build 1 \u2014 standalone PE stager",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -183,8 +435,8 @@
             "spec_version": "2.1",
             "id": "tool--45b52c89-787e-5d20-8244-e2d1b81bdc86",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.95701Z",
-            "modified": "2026-06-13T22:38:53.95701Z",
+            "created": "2026-06-14T11:56:36.394057Z",
+            "modified": "2026-06-14T11:56:36.394057Z",
             "name": "PowerShell fileless loader wrapping Covenant GruntStager Build 2 \u2014 Base64+Deflate encoded PE embedded in script",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -195,8 +447,8 @@
             "spec_version": "2.1",
             "id": "tool--7c982207-5ae0-59f8-9b63-aabf8911bae9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.957213Z",
-            "modified": "2026-06-13T22:38:53.957213Z",
+            "created": "2026-06-14T11:56:36.394221Z",
+            "modified": "2026-06-14T11:56:36.394221Z",
             "name": "Covenant GruntStager Build 2 \u2014 extracted from GruntHTTP.ps1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -207,8 +459,8 @@
             "spec_version": "2.1",
             "id": "tool--4b2aa423-bafa-53f1-88aa-e7a6ad5b7554",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.957356Z",
-            "modified": "2026-06-13T22:38:53.957356Z",
+            "created": "2026-06-14T11:56:36.39435Z",
+            "modified": "2026-06-14T11:56:36.39435Z",
             "name": "Proof-of-concept DLL",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -219,8 +471,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--4f95b0fc-dfdb-5165-bb9c-52f80546939d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.957469Z",
-            "modified": "2026-06-13T22:38:53.957469Z",
+            "created": "2026-06-14T11:56:36.394459Z",
+            "modified": "2026-06-14T11:56:36.394459Z",
             "name": "opendirectory-193-56-255-154-20260403 infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -235,8 +487,8 @@
             "spec_version": "2.1",
             "id": "report--c161f19f-0f0f-56ac-84c6-6945a5485e3e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:53.957889Z",
-            "modified": "2026-06-13T22:38:53.957889Z",
+            "created": "2026-06-14T11:56:36.394845Z",
+            "modified": "2026-06-14T11:56:36.394845Z",
             "name": "Open Directory at 193.56.255.154 \u2014 XiebroC2 v3.1 Go Implant and Covenant C2 Toolkit",
             "report_types": [
                 "threat-report"
@@ -255,6 +507,18 @@
                 "file--49e73251-23af-57de-91aa-6ef7b4ec5b58",
                 "file--b529c4c0-d794-5379-b8dd-8cf76454919d",
                 "file--eb287017-2d26-5762-b508-a25203bdfe3b",
+                "indicator--2d1c1a46-5acf-578d-808a-4d28dc737a37",
+                "indicator--941d22db-2bf6-589a-a7d0-71d984fd34fe",
+                "indicator--673333b9-3076-59fe-a7ff-fa87f3835972",
+                "indicator--9b20daa8-4921-54c2-b157-29d3d3c7ce9d",
+                "indicator--f577fc2c-cc27-564f-bd32-82e9e746aee9",
+                "indicator--fbb6bef6-6d77-5462-a75e-f6659ff3165b",
+                "indicator--5ae1231d-8c8e-56e9-b16f-f0c630971251",
+                "indicator--32ca9b71-1c20-5b06-b898-d72c71e6c653",
+                "indicator--b79cc56a-fb04-529c-a512-3dbcf732abcd",
+                "indicator--0ffb023a-9788-5644-b5e0-1bd0177b1e0b",
+                "indicator--3c323070-58f3-5f67-836d-3fa7926ab2d6",
+                "indicator--c8808eca-bc8d-5c21-ae9c-0d493c718796",
                 "tool--0ae5cea1-2771-5970-9aa1-201316b7fd67",
                 "tool--45b52c89-787e-5d20-8244-e2d1b81bdc86",
                 "tool--7c982207-5ae0-59f8-9b63-aabf8911bae9",

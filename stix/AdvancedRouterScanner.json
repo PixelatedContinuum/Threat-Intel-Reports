@@ -1,0 +1,143 @@
+{
+    "type": "bundle",
+    "id": "bundle--1fd08cda-fb08-457e-ace3-92c80468cd47",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:53:55.150416Z",
+            "modified": "2026-06-14T11:53:55.150416Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b26a6ccd-1b7e-5399-8a8d-6f8d3f8805d7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:53:55.150804Z",
+            "modified": "2026-06-14T11:53:55.150804Z",
+            "name": "Suspicious Router CGI Access",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "Sigma (Web Logs)\ntitle: Suspicious Router CGI Access\nlogsource:\n  category: webserver\ndetection:\n  selection:\n    uri_path|contains:\n      - \"/web_shell_cmd.gch\"\n      - \"/apply.cgi\"\n      - \"/boaform/admin/formLogin\"\n      - \"/cgi-bin/config.cgi\"\n      - \"/login.cgi\"\n      - \"/setup.cgi\"\n      - \"/system.cmd\"\n      - \"/shell?command=\"\ncondition: selection\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-25T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--085a9db5-da9e-5e1a-a3c2-e1d6600a9e8c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:53:55.151075Z",
+            "modified": "2026-06-14T11:53:55.151075Z",
+            "name": "Default Credential Brute Force",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "Sigma (Auth Logs)\ntitle: Default Credential Brute Force\nlogsource:\n  category: authentication\ndetection:\n  selection:\n    user|contains:\n      - \"admin\"\n      - \"root\"\n      - \"guest\"\n      - \"operator\"\n    password|contains:\n      - \"admin\"\n      - \"password\"\n      - \"1234\"\n      - \"changeme\"\ncondition: selection\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-25T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5bf82c48-623b-5471-bbca-9020cf6b6546",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:53:55.151231Z",
+            "modified": "2026-06-14T11:53:55.151231Z",
+            "name": "Suspicious Dropped Files in /tmp",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "Sigma (File Monitoring)\ntitle: Suspicious Dropped Files in /tmp\nlogsource:\n  category: file\ndetection:\n  selection:\n    file.path|contains: \"/tmp/bn\"\ncondition: selection\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-25T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--dc0270d8-3348-5356-9820-199f5d8c6c99",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:53:55.151368Z",
+            "modified": "2026-06-14T11:53:55.151368Z",
+            "name": "Payload Download from Known Hosts",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "Sigma (Proxy Logs)\ntitle: Payload Download from Known Hosts\nlogsource:\n  category: proxy\ndetection:\n  selection:\n    dst_domain:\n      - \"bot.gribostress.pro\"\n    dst_ip:\n      - \"107.189.4.201\"\ncondition: selection\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-25T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--af611741-d070-5b5f-8109-0abf4ddf0afa",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:53:55.151603Z",
+            "modified": "2026-06-14T11:53:55.151603Z",
+            "name": "AdvancedRouterScanner \u2014 Global Router Exploitation",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2025-10-25T00:00:00Z",
+            "object_refs": [
+                "indicator--b26a6ccd-1b7e-5399-8a8d-6f8d3f8805d7",
+                "indicator--085a9db5-da9e-5e1a-a3c2-e1d6600a9e8c",
+                "indicator--5bf82c48-623b-5471-bbca-9020cf6b6546",
+                "indicator--dc0270d8-3348-5356-9820-199f5d8c6c99"
+            ],
+            "labels": [
+                "Scanner",
+                "Python",
+                "Exploitation"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/AdvancedRouterScanner/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

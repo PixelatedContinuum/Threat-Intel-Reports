@@ -1,0 +1,298 @@
+{
+    "type": "bundle",
+    "id": "bundle--b2fe514b-6135-4dd5-a279-226f1d7d1e21",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.730257Z",
+            "modified": "2026-06-14T11:57:34.730257Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c7864546-6dc9-5a7e-b56c-964de02692dd",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.730619Z",
+            "modified": "2026-06-14T11:57:34.730619Z",
+            "name": "Suspicious File Manager Access",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Suspicious File Manager Access  \nlogsource:  \n  category: webserver  \ndetection:  \n  selection:  \n    uri_path|contains:  \n      - \"file-manager/backend/makefile\"  \n      - \"phpmyadmin/js/\"  \ncondition: selection  \nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9fa7bcfa-bedf-58fc-8445-05868bb8831f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.73083Z",
+            "modified": "2026-06-14T11:57:34.73083Z",
+            "name": "Suspicious clp-fm Cookie",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Suspicious clp-fm Cookie  \nlogsource:  \n  category: webserver  \ndetection:  \n  selection:  \n    http.cookie|contains: \"clp-fm=\"  \ncondition: selection  \nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--263bb5a1-012d-578a-9db3-e16ac4853b88",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.730978Z",
+            "modified": "2026-06-14T11:57:34.730978Z",
+            "name": "Webshell Command Execution",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http any any -> any any (msg:\"Webshell Command Execution\"; http.uri; content:\"cmd=\"; nocase; sid:100001; rev:1;)",
+            "pattern_type": "suricata",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5be4e918-ba0b-5267-bf57-03309259bedd",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.731116Z",
+            "modified": "2026-06-14T11:57:34.731116Z",
+            "name": "Suspicious POST param mxx",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http any any -> any any (msg:\"Suspicious POST param mxx\"; http.request_body; content:\"mxx=\"; nocase; sid:100002; rev:1;)",
+            "pattern_type": "suricata",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7450b221-9394-5c63-95c2-efc4d3a2103e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.731294Z",
+            "modified": "2026-06-14T11:57:34.731294Z",
+            "name": "Suspicious User Creation",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Suspicious User Creation  \nlogsource:  \n  category: auditd  \ndetection:  \n  selection:  \n    syscall: useradd  \n    exe: /usr/sbin/useradd  \n    a0: \"zeroday\"  \ncondition: selection  \nlevel: critical",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--53f2b4e9-2432-58f0-b442-2a57d90393d2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.731434Z",
+            "modified": "2026-06-14T11:57:34.731434Z",
+            "name": "Webshell File Creation",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Webshell File Creation  \nlogsource:  \n  category: file  \ndetection:  \n  selection:  \n    file.path|endswith: \"/htdocs/app/files/public/shell.php\"  \ncondition: selection  \nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--353d5f0f-9e8e-5633-97c0-adfa4b1a5395",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.731565Z",
+            "modified": "2026-06-14T11:57:34.731565Z",
+            "name": "Rclone Execution",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Rclone Execution  \nlogsource:  \n  category: process_creation  \ndetection:  \n  selection:  \n    Image|endswith:  \n      - \"rclone\"  \n      - \"rclone.exe\"  \ncondition: selection  \nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--8bb6005c-d5c6-5f82-b0b2-e3b6407ceccd",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.731701Z",
+            "modified": "2026-06-14T11:57:34.731701Z",
+            "name": "Dropbox API Traffic",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Dropbox API Traffic  \nlogsource:  \n  category: proxy  \ndetection:  \n  selection:  \n    dst_domain: \"api.dropboxapi.com\"  \ncondition: selection  \nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--57f582eb-ac4f-561c-9cdf-07f13bdea362",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.731931Z",
+            "modified": "2026-06-14T11:57:34.731931Z",
+            "name": "Suspicious S3 Activity",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Suspicious S3 Activity  \nlogsource:  \n  category: aws.cloudtrail  \ndetection:  \n  selection:  \n    eventName:  \n      - \"PutObject\"  \n      - \"DeleteObject\"  \n    userIdentity.type: \"IAMUser\"  \ncondition: selection  \nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5e808de1-0cc7-5b98-b1fb-a25c9d7ff191",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.732155Z",
+            "modified": "2026-06-14T11:57:34.732155Z",
+            "name": "Suspicious WordPress Install",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Suspicious WordPress Install  \nlogsource:  \n  category: webserver  \ndetection:  \n  selection:  \n    uri_path: \"/wp-admin/install.php\"  \n    http.method: \"POST\"  \ncondition: selection  \nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--16bd37a9-5013-5ad5-b073-b52c41fd92de",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.732406Z",
+            "modified": "2026-06-14T11:57:34.732406Z",
+            "name": "Reverse Proxy Config Changes",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Reverse Proxy Config Changes  \nlogsource:  \n  category: webserver  \ndetection:  \n  selection:  \n    config_change: true  \n    upstream|contains: \"external\"  \ncondition: selection  \nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--3a042466-61a6-5b3e-a1f9-5c5412cffba2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:34.73283Z",
+            "modified": "2026-06-14T11:57:34.73283Z",
+            "name": "From Webshells to the Cloud",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2025-10-20T00:00:00Z",
+            "object_refs": [
+                "indicator--c7864546-6dc9-5a7e-b56c-964de02692dd",
+                "indicator--9fa7bcfa-bedf-58fc-8445-05868bb8831f",
+                "indicator--263bb5a1-012d-578a-9db3-e16ac4853b88",
+                "indicator--5be4e918-ba0b-5267-bf57-03309259bedd",
+                "indicator--7450b221-9394-5c63-95c2-efc4d3a2103e",
+                "indicator--53f2b4e9-2432-58f0-b442-2a57d90393d2",
+                "indicator--353d5f0f-9e8e-5633-97c0-adfa4b1a5395",
+                "indicator--8bb6005c-d5c6-5f82-b0b2-e3b6407ceccd",
+                "indicator--57f582eb-ac4f-561c-9cdf-07f13bdea362",
+                "indicator--5e808de1-0cc7-5b98-b1fb-a25c9d7ff191",
+                "indicator--16bd37a9-5013-5ad5-b073-b52c41fd92de"
+            ],
+            "labels": [
+                "Webshell",
+                "PHP",
+                "Exfil",
+                "C2"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/webshells-to-the-cloud/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

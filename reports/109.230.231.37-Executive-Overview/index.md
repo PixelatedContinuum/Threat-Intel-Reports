@@ -10,6 +10,7 @@ series_role: parent
 series_order: 0
 hide: true
 description: "Initial discovery of 16 malware samples across a threat actor R&D open directory at 109.230.231.37, assessed as an active testing environment. Key findings include a 10-variant custom ransomware family with hand-coded ChaCha20+RSA-2048 hybrid cryptography and hardware-optimized AVX-512 encryption, alongside RATs, credential stealers, and privilege escalation tools — all pointing to organized, well-resourced development."
+stix_bundle: /stix/109.230.231.37-Executive-Overview.json
 ---
 
 **Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository<br>

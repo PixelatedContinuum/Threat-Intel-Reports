@@ -1,0 +1,437 @@
+{
+    "type": "bundle",
+    "id": "bundle--58af762c-921c-43c0-bad5-1885b19abf04",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.690757Z",
+            "modified": "2026-06-14T11:56:10.690757Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--b6577111-43b5-5142-8fa5-b8d914c03364",
+            "value": "http://hrtests.ru/S.php"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.691168Z",
+            "modified": "2026-06-14T11:56:10.691168Z",
+            "name": "url: http://hrtests.ru/S.php",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://hrtests.ru/S.php']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--17cf3ecf-5349-5cb8-9221-d0b8b944255c",
+            "value": "hrtests.ru"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--372252b6-c79c-570f-aa94-dd698fd7fed3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.691861Z",
+            "modified": "2026-06-14T11:56:10.691861Z",
+            "name": "domain: hrtests.ru",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'hrtests.ru']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--0344692b-476c-55c1-9580-ee89e7366b34",
+            "value": "testswork.ru"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--74bb5087-b725-5b31-8ab8-3341c5410653",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.692478Z",
+            "modified": "2026-06-14T11:56:10.692478Z",
+            "name": "domain: testswork.ru",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'testswork.ru']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--f199c9b3-65ac-5f6a-bc0c-018928fe7dce",
+            "hashes": {
+                "SHA-256": "e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--2f5c5bd0-a07f-58f6-995c-71fdc53d6b41",
+            "hashes": {
+                "SHA-256": "40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--c93f1775-7bdc-571b-b7bc-d637b9735a63",
+            "hashes": {
+                "SHA-256": "a0eba3fda0d7b22a5d694105ec700df7c7012ddc4ae611c3071ef858e2c69f08"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--b41dfe76-e100-533d-984d-79f045b0ddca",
+            "hashes": {
+                "SHA-256": "d0326f0ddce4c00f93682e3a6f55a3125f6387e959e9ed6c5e5584e78e737078"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--cccebe62-ab42-5dcb-b172-61d9d4d03a64",
+            "hashes": {
+                "SHA-256": "42422d912b9c626ad93eb8c036ad82ee67cfa48cf75259c20c327eddd4cc376f"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--e318f773-93ab-5e07-8f70-fcd368be0646",
+            "hashes": {
+                "SHA-256": "67eff17c53a78c8ec9a28f392b9bb93df3e74f96f6ecd87a333a482c36546b3e"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--bb50d6ab-9d29-50cc-9971-f400508e4333",
+            "hashes": {
+                "SHA-256": "572a6f9cb5b37b6eec13b578d346c2568ce3ec88bb711d75dac9e82fc01c8860"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--0d90fcbd-64f5-5bf7-98dc-a5d220dcece8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.693899Z",
+            "modified": "2026-06-14T11:56:10.693899Z",
+            "name": "NsMiner_Dropper_Downloader",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule NsMiner_Dropper_Downloader {\n    meta:\n        description = \"Detects the NsMiner NSIS dropper and the FTP downloader component.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-02-02\"\n        hash1 = \"e06aa8ce984b22dd80a60c1f818b781b05d1c07facc91fec8637b312a728c145\"\n        hash2 = \"40fe74d3a1116ed8ca64c62feb694327a414059eeaef62c28bc5917e2e991b3d\"\n        severity = \"HIGH\"\n        family = \"NsMiner\"\n        technique = \"T1496 - Resource Hijacking\"\n\n    strings:\n        // From IMG001.exe (NSIS Dropper)\n        $nsis1 = \"Nullsoft Scriptable Install System\" fullword ascii\n        $nsis2 = \"NsMiner\" fullword wide\n\n        // From tftp.exe (Downloader)\n        $ftp1 = \"FtpGetFileA\" fullword ascii\n        $ftp2 = \"InternetConnectA\" fullword ascii\n        $c2_http = \"http://hrtests.ru/S.php\" fullword ascii\n        $c2_ftp_user = \"DIOSESFIEL\" fullword ascii\n        $c2_ftp_pass = \"BLUEAIRWOLF\" fullword ascii\n\n    condition:\n        uint16(0) == 0x5A4D and // PE file\n        (\n            (all of ($nsis*)) or\n            (3 of ($ftp*) and 2 of ($c2*))\n        )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9f8f5298-1b3e-5592-8917-f152639ae10d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.694116Z",
+            "modified": "2026-06-14T11:56:10.694116Z",
+            "name": "NsMiner_Persistence_Directory",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule NsMiner_Persistence_Directory {\n    meta:\n        description = \"Detects files in the NsMiner persistence directory\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-02-02\"\n        severity = \"HIGH\"\n\n    strings:\n        $path1 = \"\\\\AppData\\\\Roaming\\\\NsMiner\\\\\" wide ascii\n        $path2 = \"C:\\\\Users\\\\\" wide ascii\n        $file1 = \"NsCpuCNMiner32.exe\" fullword wide ascii\n        $file2 = \"NsCpuCNMiner64.exe\" fullword wide ascii\n        $file3 = \"tftp.exe\" fullword wide ascii\n\n    condition:\n        uint16(0) == 0x5A4D and // PE file\n        ($path1 and ($file1 or $file2 or $file3))\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--28098b59-a7ef-5b4b-93ca-65d90d486c62",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.694278Z",
+            "modified": "2026-06-14T11:56:10.694278Z",
+            "name": "NsMiner HTTP C2 Beacon to hrtests.ru",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: NsMiner HTTP C2 Beacon to hrtests.ru\nid: a1b2c3d4-e5f6-7890-abcd-ef1234567890\nstatus: experimental\ndescription: Detects HTTP beaconing to the NsMiner C2 domain hrtests.ru\nauthor: The Hunters Ledger\ndate: 2026/02/02\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        c-uri|contains: 'hrtests.ru/S.php'\n        cs-method: 'GET'\n    condition: selection\nfalsepositives:\n    - Unlikely, domain is malicious infrastructure\nlevel: high\ntags:\n    - attack.command_and_control\n    - attack.t1071.001",
+            "pattern_type": "sigma",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.694424Z",
+            "modified": "2026-06-14T11:56:10.694424Z",
+            "name": "NsMiner Persistence Directory Creation",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: NsMiner Persistence Directory Creation\nid: b2c3d4e5-f6a7-8901-bcde-f12345678901\nstatus: experimental\ndescription: Detects creation of the NsMiner persistence directory in AppData\\Roaming\nauthor: The Hunters Ledger\ndate: 2026/02/02\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|contains: '\\AppData\\Roaming\\NsMiner\\'\n    condition: selection\nfalsepositives:\n    - Unlikely, this is a specific malware persistence location\nlevel: high\ntags:\n    - attack.persistence\n    - attack.t1547.001",
+            "pattern_type": "sigma",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--8d303952-9238-52e1-8b6d-7da8b941d291",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.694558Z",
+            "modified": "2026-06-14T11:56:10.694558Z",
+            "name": "Suspicious FTP Connection from Non-Standard Application",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Suspicious FTP Connection from Non-Standard Application\nid: c3d4e5f6-a7b8-9012-cdef-123456789012\nstatus: experimental\ndescription: Detects FTP connections from applications not typically associated with FTP\nauthor: The Hunters Ledger\ndate: 2026/02/02\nlogsource:\n    product: windows\n    category: network_connection\ndetection:\n    selection:\n        DestinationPort: 21\n        Initiated: 'true'\n    filter:\n        Image|endswith:\n            - '\\filezilla.exe'\n            - '\\winscp.exe'\n            - '\\explorer.exe'\n    condition: selection and not filter\nfalsepositives:\n    - Legitimate applications using FTP\nlevel: medium\ntags:\n    - attack.command_and_control\n    - attack.t1071.002",
+            "pattern_type": "sigma",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ba2317ba-7aa6-5262-bfed-f5c0a03a8848",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.694687Z",
+            "modified": "2026-06-14T11:56:10.694687Z",
+            "name": "Microsoft Defender for Endpoint (KQL)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "DeviceProcessEvents\n| where FileName in~ (\"tftp.exe\", \"NsCpuCNMiner32.exe\", \"NsCpuCNMiner64.exe\", \"IMG001.exe\")\n    or FolderPath contains \"NsMiner\"\n| project Timestamp, DeviceName, FileName, FolderPath, SHA256, ProcessCommandLine\n| order by Timestamp desc",
+            "pattern_type": "kql",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--05deff5e-621b-5d8a-9a1b-d4fbf79de209",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.694819Z",
+            "modified": "2026-06-14T11:56:10.694819Z",
+            "name": "Splunk SPL - HTTP C2 Beaconing",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "index=proxy OR index=firewall\nhttp_method=GET\nurl=\"*hrtests.ru/S.php*\"\n| stats count by src_ip, user_agent, url\n| where count > 1",
+            "pattern_type": "spl",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--76399f34-1a45-5199-9dd4-e5bae5c9a462",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.694948Z",
+            "modified": "2026-06-14T11:56:10.694948Z",
+            "name": "Splunk SPL - FTP Credential Stuffing Activity",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "index=network\ndest_port=21\n(dest_ip IN (\"162.150.119.10\", \"136.0.88.10\", \"45.156.140.10\", \"214.192.190.10\", \"235.31.147.10\", \"56.255.40.10\", \"85.230.83.10\", \"251.46.111.10\", \"63.192.224.10\", \"202.24.217.10\", \"134.211.96.10\", \"223.50.252.10\", \"13.180.6.10\", \"116.62.22.10\", \"94.158.41.10\", \"252.158.2.10\", \"110.188.25.10\", \"141.227.248.10\"))\n| stats count by src_ip, dest_ip, app\n| where count > 5",
+            "pattern_type": "spl",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--341374d5-1b8d-5b42-8806-d73e7b61d2cc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.695072Z",
+            "modified": "2026-06-14T11:56:10.695072Z",
+            "name": "Elastic Security (KQL) - Persistence Detection",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "file.path : \"*\\\\AppData\\\\Roaming\\\\NsMiner\\\\*\" and event.category : \"file\"",
+            "pattern_type": "kql",
+            "valid_from": "2026-02-02T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.695212Z",
+            "modified": "2026-06-14T11:56:10.695212Z",
+            "name": "",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--d9b882ee-1e8d-56f0-9646-12417ee055a0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.696023Z",
+            "modified": "2026-06-14T11:56:10.696023Z",
+            "name": "nsminer-cryptojacker infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--f5cf2d3d-4ab7-5767-8849-d0cbf388e3c2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.696408Z",
+            "modified": "2026-06-14T11:56:10.696408Z",
+            "name": "NsMiner: Multi-Stage Operation",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-02-02T00:00:00Z",
+            "object_refs": [
+                "url--b6577111-43b5-5142-8fa5-b8d914c03364",
+                "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
+                "domain-name--17cf3ecf-5349-5cb8-9221-d0b8b944255c",
+                "indicator--372252b6-c79c-570f-aa94-dd698fd7fed3",
+                "domain-name--0344692b-476c-55c1-9580-ee89e7366b34",
+                "indicator--74bb5087-b725-5b31-8ab8-3341c5410653",
+                "file--f199c9b3-65ac-5f6a-bc0c-018928fe7dce",
+                "file--2f5c5bd0-a07f-58f6-995c-71fdc53d6b41",
+                "file--c93f1775-7bdc-571b-b7bc-d637b9735a63",
+                "file--b41dfe76-e100-533d-984d-79f045b0ddca",
+                "file--cccebe62-ab42-5dcb-b172-61d9d4d03a64",
+                "file--e318f773-93ab-5e07-8f70-fcd368be0646",
+                "file--bb50d6ab-9d29-50cc-9971-f400508e4333",
+                "indicator--0d90fcbd-64f5-5bf7-98dc-a5d220dcece8",
+                "indicator--9f8f5298-1b3e-5592-8917-f152639ae10d",
+                "indicator--28098b59-a7ef-5b4b-93ca-65d90d486c62",
+                "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
+                "indicator--8d303952-9238-52e1-8b6d-7da8b941d291",
+                "indicator--ba2317ba-7aa6-5262-bfed-f5c0a03a8848",
+                "indicator--05deff5e-621b-5d8a-9a1b-d4fbf79de209",
+                "indicator--76399f34-1a45-5199-9dd4-e5bae5c9a462",
+                "indicator--341374d5-1b8d-5b42-8806-d73e7b61d2cc",
+                "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7",
+                "infrastructure--d9b882ee-1e8d-56f0-9646-12417ee055a0"
+            ],
+            "labels": [
+                "Cryptominer",
+                "Dropper",
+                "Persistence",
+                "Evasion"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/nsminer-cryptojacker/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

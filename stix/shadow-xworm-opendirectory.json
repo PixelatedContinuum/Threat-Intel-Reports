@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--319f6bba-6990-453c-995b-1c860802cd1c",
+    "id": "bundle--1787f4a7-84a7-4341-87c9-8d95a3437f0d",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.224489Z",
-            "modified": "2026-06-13T22:39:47.224489Z",
+            "created": "2026-06-14T11:57:33.311005Z",
+            "modified": "2026-06-14T11:57:33.311005Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--3fee3b45-35a9-59d4-8549-5c770d1a7765",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.224844Z",
-            "modified": "2026-06-13T22:39:47.224844Z",
+            "created": "2026-06-14T11:57:33.311397Z",
+            "modified": "2026-06-14T11:57:33.311397Z",
             "name": "ipv4: 151.245.112.70",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--eb340713-edd6-5722-a7dd-db563b8dc218",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.2279Z",
-            "modified": "2026-06-13T22:39:47.2279Z",
+            "created": "2026-06-14T11:57:33.314009Z",
+            "modified": "2026-06-14T11:57:33.314009Z",
             "name": "ipv4: 187.124.244.54",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--c3deb49e-aa27-5677-9370-c0e1c110835f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.228751Z",
-            "modified": "2026-06-13T22:39:47.228751Z",
+            "created": "2026-06-14T11:57:33.314549Z",
+            "modified": "2026-06-14T11:57:33.314549Z",
             "name": "ipv4: 185.11.145.145",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--50b7f29d-dc44-5138-a447-6aa1bdb265a2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.22928Z",
-            "modified": "2026-06-13T22:39:47.22928Z",
+            "created": "2026-06-14T11:57:33.315026Z",
+            "modified": "2026-06-14T11:57:33.315026Z",
             "name": "ipv4: 185.11.145.254",
             "indicator_types": [
                 "malicious-activity"
@@ -145,8 +145,8 @@
             "spec_version": "2.1",
             "id": "indicator--43e12a95-cd20-534a-9ff2-652fba7140b8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.22991Z",
-            "modified": "2026-06-13T22:39:47.22991Z",
+            "created": "2026-06-14T11:57:33.315478Z",
+            "modified": "2026-06-14T11:57:33.315478Z",
             "name": "url: http://ip-api.com/line/?fields=hosting",
             "indicator_types": [
                 "malicious-activity"
@@ -173,8 +173,8 @@
             "spec_version": "2.1",
             "id": "indicator--80946398-8430-566d-9101-be4e017231e5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.230473Z",
-            "modified": "2026-06-13T22:39:47.230473Z",
+            "created": "2026-06-14T11:57:33.316038Z",
+            "modified": "2026-06-14T11:57:33.316038Z",
             "name": "domain: harrismanlieb.ink",
             "indicator_types": [
                 "malicious-activity"
@@ -201,8 +201,8 @@
             "spec_version": "2.1",
             "id": "indicator--885d35bb-c36b-56a0-8c81-de2588cbe0e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.230996Z",
-            "modified": "2026-06-13T22:39:47.230996Z",
+            "created": "2026-06-14T11:57:33.316597Z",
+            "modified": "2026-06-14T11:57:33.316597Z",
             "name": "domain: epgoldsecurity.com",
             "indicator_types": [
                 "malicious-activity"
@@ -229,8 +229,8 @@
             "spec_version": "2.1",
             "id": "indicator--7ad1cbf7-849a-5361-8566-b0fc424679bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.23161Z",
-            "modified": "2026-06-13T22:39:47.23161Z",
+            "created": "2026-06-14T11:57:33.317118Z",
+            "modified": "2026-06-14T11:57:33.317118Z",
             "name": "domain: latssko.com",
             "indicator_types": [
                 "malicious-activity"
@@ -257,8 +257,8 @@
             "spec_version": "2.1",
             "id": "indicator--fc29e995-7600-566d-b2fc-e10928d0f688",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.232164Z",
-            "modified": "2026-06-13T22:39:47.232164Z",
+            "created": "2026-06-14T11:57:33.317615Z",
+            "modified": "2026-06-14T11:57:33.317615Z",
             "name": "domain: breakingsecurity.online",
             "indicator_types": [
                 "malicious-activity"
@@ -285,8 +285,8 @@
             "spec_version": "2.1",
             "id": "indicator--68d996c6-38c0-5cba-adb4-7ad15ef7e97f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.232712Z",
-            "modified": "2026-06-13T22:39:47.232712Z",
+            "created": "2026-06-14T11:57:33.318098Z",
+            "modified": "2026-06-14T11:57:33.318098Z",
             "name": "domain: bluewiin.com",
             "indicator_types": [
                 "malicious-activity"
@@ -343,12 +343,369 @@
             }
         },
         {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--fee9ce18-b59d-5656-95df-05c439674ea8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.320381Z",
+            "modified": "2026-06-14T11:57:33.320381Z",
+            "name": "RAT_ShadowRAT_v2640_Client",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n    Name: Shadow RAT v2.6.4.0 \u2014 Client Detection Rules\n    Author: The Hunters Ledger\n    Date: 2026-04-04\n    Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70\n    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\n    License: https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_ShadowRAT_v2640_Client\n{\n    meta:\n        description = \"Detects Shadow RAT v2.6.4.0 client based on characteristic namespace strings, version constant, and Costura.Fody embedded assembly markers. Shadow RAT is a heavily modified Quasar RAT fork with HVNC, WinRE persistence, crypto clipper, and Kematian stealer integration.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-04\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\"\n        hash_sha256 = \"3a4b0f50ea3eac55e22cbf24d873f9a1632d8f71e1fba91178c539030626ab32\"\n        family = \"ShadowRAT\"\n\n    strings:\n        $s1 = \"Shadow.Common.Messages\" ascii wide\n        $s2 = \"Shadow.Common.Cryptography\" ascii wide\n        $s3 = \"Shadow.Client.Steam\" ascii wide\n        $s4 = \"2.6.4.0\" ascii wide\n        $s5 = \"4c7e33e6-3f73-4b4c-a411-89fe63cdfa1e\" ascii wide\n        $s6 = \"costura.shadow.common.dll.compressed\" ascii wide nocase\n        $s7 = \"Shadow Client\" ascii wide\n        $s8 = \"Shadow Client Startup\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 5MB and\n        (\n            3 of ($s1, $s2, $s3, $s6) or\n            ($s4 and $s5) or\n            ($s7 and $s8 and 1 of ($s1, $s2, $s3))\n        )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a96ee6be-d8c9-51a1-99a5-0dc3ee599c61",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.320724Z",
+            "modified": "2026-06-14T11:57:33.320724Z",
+            "name": "RAT_ShadowRAT_CommonDLL",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n    Name: Shadow RAT v2.6.4.0 \u2014 Common DLL\n    Author: The Hunters Ledger\n    Date: 2026-04-04\n    Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70\n    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\n    License: https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_ShadowRAT_CommonDLL\n{\n    meta:\n        description = \"Detects Shadow.Common.dll, the shared library component of Shadow RAT containing core message types, AES-256 crypto, and protobuf-net serialization. This DLL is embedded via Costura.Fody and extracted at runtime. Matches on disk and in memory.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-04\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\"\n        hash_sha256 = \"6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c\"\n        family = \"ShadowRAT\"\n\n    strings:\n        $s1 = \"Shadow.Common.Messages.Monitoring.HVNC\" ascii\n        $s2 = \"Shadow.Common.Messages.FunStuff.GDI\" ascii\n        $s3 = \"Shadow.Common.Messages.ClientManagement.WinRE\" ascii\n        $s4 = \"Shadow.Common.DNS.HostsManager\" ascii\n        $s5 = \"Shadow.Common.Cryptography.Aes256\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 500KB and\n        $s5 and 2 of ($s1, $s2, $s3, $s4)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b5276956-268a-52ec-9330-2f331c55aeef",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.320921Z",
+            "modified": "2026-06-14T11:57:33.320921Z",
+            "name": "RAT_ShadowRAT_AMSI_ETW_Bypass",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n    Name: Shadow RAT v2.6.4.0 \u2014 AMSI + ETW Bypass\n    Author: The Hunters Ledger\n    Date: 2026-04-04\n    Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70\n    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\n    License: https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_ShadowRAT_AMSI_ETW_Bypass\n{\n    meta:\n        description = \"Detects Shadow RAT v2.6.4.0 AMSI and ETW bypass chain. AMSI bypass patches AmsiScanBuffer with a 15-byte shellcode returning E_INVALIDARG (0x80070057). ETW bypass patches EtwEventWrite with a single RET instruction. Both API names are obfuscated using asterisk-padding with runtime Replace() deobfuscation to evade static analysis.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-04\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\"\n        hash_sha256 = \"3a4b0f50ea3eac55e22cbf24d873f9a1632d8f71e1fba91178c539030626ab32\"\n        family = \"ShadowRAT\"\n\n    strings:\n        // AMSI bypass shellcode: mov eax,0x80070057; mov rax,[rsp]; add rsp,8; jmp rsp\n        $b1 = { B8 57 00 07 80 48 8B 04 24 48 83 C4 08 FF E4 }\n        // Asterisk-padding deobfuscation pattern\n        $s1 = \".Replace(\\\"*\\\", \\\"\\\")\" ascii\n        // Obfuscated amsi.dll string fragment\n        $s2 = \"m*s*i\" ascii\n        // Obfuscated AmsiScanBuffer string fragment\n        $s3 = \"Buf*f*er\" ascii\n        // Obfuscated EtwEventWrite string fragment\n        $s4 = \"EtwEv\" ascii\n        // Obfuscated ntdll.dll string fragment\n        $s5 = \"ntdll\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 5MB and\n        (\n            $b1 or\n            ($s1 and $s2 and $s3) or\n            ($s1 and $s4 and $s5)\n        )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b62a9b40-db7a-51c8-9c12-6097c0b2f098",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.321158Z",
+            "modified": "2026-06-14T11:57:33.321158Z",
+            "name": "RAT_ShadowRAT_Crypto_Clipper",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n    Name: Shadow RAT v2.6.4.0 \u2014 Crypto Clipper Module\n    Author: The Hunters Ledger\n    Date: 2026-04-04\n    Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70\n    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\n    License: https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_ShadowRAT_Crypto_Clipper\n{\n    meta:\n        description = \"Detects Shadow RAT crypto clipper module via clipboard monitoring method names paired with multi-currency address fields (BTC/LTC/ETH) in Shadow.Common.dll. Enables real-time substitution of victim cryptocurrency addresses during financial transactions.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-04\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\"\n        hash_sha256 = \"6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c\"\n        family = \"ShadowRAT\"\n\n    strings:\n        $s1 = \"SetClipboardMonitoringEnabled\" ascii wide\n        $s2 = \"SendClipboardData\" ascii wide\n        $s3 = \"BitcoinAddress\" ascii wide\n        $s4 = \"LitecoinAddress\" ascii wide\n        $s5 = \"EthereumAddress\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 500KB and\n        $s1 and $s2 and\n        2 of ($s3, $s4, $s5)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3a21f2ea-92db-53e6-9cf1-01cff3fe67ad",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.321312Z",
+            "modified": "2026-06-14T11:57:33.321312Z",
+            "name": "RAT_ShadowRAT_WinRE_Persistence",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n    Name: Shadow RAT v2.6.4.0 \u2014 WinRE Persistence Module\n    Author: The Hunters Ledger\n    Date: 2026-04-04\n    Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70\n    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\n    License: https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_ShadowRAT_WinRE_Persistence\n{\n    meta:\n        description = \"Detects Shadow RAT WinRE persistence module via command handler method names and namespace string in Shadow.Common.dll. WinRE persistence survives OS reinstallation and is an uncommon technique with limited EDR behavioral coverage \u2014 file-level detection is the primary viable layer.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-04\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\"\n        hash_sha256 = \"6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c\"\n        family = \"ShadowRAT\"\n\n    strings:\n        $s1 = \"DoAddWinREPersistence\" ascii wide\n        $s2 = \"DoRemoveWinREPersistence\" ascii wide\n        $s3 = \"Shadow.Common.Messages.ClientManagement.WinRE\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 500KB and\n        ($s1 or $s2) and $s3\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b36b85a8-4a34-5620-a622-6e64c278fb0a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.321447Z",
+            "modified": "2026-06-14T11:57:33.321447Z",
+            "name": "RAT_XWorm_30_50_Config",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n    Name: XWorm 3.0-5.0 \u2014 Config Detection Rules\n    Author: The Hunters Ledger\n    Date: 2026-04-04\n    Identifier: XWorm 3.0-5.0 OpenDirectory 151.245.112.70\n    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\n    License: https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_XWorm_30_50_Config\n{\n    meta:\n        description = \"Detects XWorm 3.0-5.0 builder output based on campaign-specific config AES keys, the group tag <Xwormmm>, ip-api.com hosting detection string, and triple persistence indicators. The config key strings double as process mutexes in XWorm's implementation.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-04\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\"\n        hash_sha256 = \"b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531\"\n        family = \"XWorm\"\n\n    strings:\n        // Campaign-specific config AES keys (also used as process mutexes)\n        $s1 = \"PdqPY2fw6ffCVLQ8\" ascii wide\n        $s2 = \"ZdoNsjYfT6begqDl\" ascii wide\n        // Runtime C2 encryption key decrypted from config\n        $s3 = \"Nothing2hide\" ascii wide\n        // Builder group tag\n        $s4 = \"<Xwormmm>\" ascii wide\n        // Anti-analysis hosting check URL\n        $s5 = \"ip-api.com/line/?fields=hosting\" ascii wide\n        // Scheduled task persistence argument\n        $s6 = \"/create /f /sc minute /mo 1\" ascii wide\n        // USB spread filename\n        $s7 = \"USB.exe\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 500KB and\n        (\n            (1 of ($s1, $s2) and ($s3 or $s4)) or\n            ($s4 and $s5) or\n            ($s5 and $s6 and $s7)\n        )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7f7af980-e0d7-5536-b5a8-eb288c4b9b04",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.321576Z",
+            "modified": "2026-06-14T11:57:33.321576Z",
+            "name": "RAT_XWorm_Rijndael256ECB_Crypto",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n    Name: XWorm 3.0-5.0 \u2014 Rijndael-256-ECB Crypto Pattern\n    Author: The Hunters Ledger\n    Date: 2026-04-04\n    Identifier: XWorm 3.0-5.0 OpenDirectory 151.245.112.70\n    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\n    License: https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_XWorm_Rijndael256ECB_Crypto\n{\n    meta:\n        description = \"Detects XWorm 3.0-5.0 variants using the characteristic Rijndael-256-ECB config encryption with non-standard overlapping MD5 key derivation, combined with anti-analysis indicators. The MD5 hash is copied to a 32-byte key array at offsets 0 and 15 with a single overlap byte \u2014 a distinctive non-standard construction consistent across XWorm 3.0-5.0 variants.\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-04\"\n        reference = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/\"\n        hash_sha256 = \"b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531\"\n        family = \"XWorm\"\n\n    strings:\n        $s1 = \"RijndaelManaged\" ascii wide\n        $s2 = \"ECB\" ascii wide\n        $s3 = \"MD5CryptoServiceProvider\" ascii wide\n        $s4 = \"FromBase64String\" ascii wide\n        // Anti-analysis check strings\n        $s5 = \"Win32_ComputerSystem\" ascii wide\n        $s6 = \"SbieDll\" ascii wide\n        $s7 = \"IsAttached\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 500KB and\n        $s1 and $s2 and $s3 and $s4 and\n        2 of ($s5, $s6, $s7)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2dc76a31-1838-5988-a6df-7f6cc1834553",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.321705Z",
+            "modified": "2026-06-14T11:57:33.321705Z",
+            "name": "Shadow RAT Registry Run Key Persistence",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Shadow RAT Registry Run Key Persistence\nid: ff8d332d-4f1f-44d7-89ac-5d4373f4a341\nstatus: test\ndescription: |\n    Detects Shadow RAT v2.6.4.0 creating a registry Run key for persistence with the\n    characteristic value name \"Shadow Client Startup\". This value points to the malware\n    install path at %APPDATA%\\SubDir\\Client.exe or %APPDATA%\\SubDir\\$77Client.exe depending\n    on the build variant (staging vs production). Presence of this key indicates an active\n    Shadow RAT infection with established persistence.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1547/001/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.persistence\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_key:\n        TargetObject|endswith: '\\CurrentVersion\\Run\\Shadow Client Startup'\n    selection_data:\n        Details|contains:\n            - '\\SubDir\\Client.exe'\n            - '\\SubDir\\$77Client.exe'\n    condition: selection_key or selection_data\nfalsepositives:\n    - No known legitimate software uses the registry value name \"Shadow Client Startup\"\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5394109e-f499-565d-94c3-04d89c068097",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.321831Z",
+            "modified": "2026-06-14T11:57:33.321831Z",
+            "name": "AMSI Bypass via Suspicious amsi.dll Load from Non-Standard Path",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: AMSI Bypass via Suspicious amsi.dll Load from Non-Standard Path\nid: b02fa532-5fdd-4307-9a33-0d5935ffc4d0\nstatus: test\ndescription: |\n    Detects potential AMSI bypass attempts where a process loads amsi.dll from outside standard\n    system directories. Shadow RAT v2.6.4.0 loads amsi.dll to resolve and patch AmsiScanBuffer\n    with 15-byte shellcode returning E_INVALIDARG (0x80070057), effectively blinding in-memory\n    .NET scanning. Legitimate AMSI consumers (PowerShell, .NET host processes) load amsi.dll\n    from System32 or are explicitly filtered; a non-system, non-IDE process loading amsi.dll\n    from a user-writable path is a strong indicator of an AMSI patching attempt.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1562/001/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.defense-evasion\nlogsource:\n    category: image_load\n    product: windows\ndetection:\n    selection:\n        ImageLoaded|endswith: '\\amsi.dll'\n    filter_legitimate:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n            - '\\dotnet.exe'\n            - '\\csc.exe'\n            - '\\msbuild.exe'\n    filter_system:\n        Image|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n            - 'C:\\Program Files\\'\n            - 'C:\\Program Files (x86)\\'\n    condition: selection and not (filter_legitimate or filter_system)\nfalsepositives:\n    - Legitimate .NET applications or IDE tooling loading amsi.dll from non-standard installation paths\n    - Custom development environments or build pipelines running outside Program Files\n    - Security research tools that explicitly load amsi.dll for testing purposes\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--4f74826c-5fbc-58f0-870d-f795e2848a13",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.321955Z",
+            "modified": "2026-06-14T11:57:33.321955Z",
+            "name": "ETW Bypass via Process Access to ntdll.dll Memory Region",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: ETW Bypass via Process Access to ntdll.dll Memory Region\nid: 7e1f94cd-ed21-4cc9-b3d4-4b14308210c0\nstatus: test\ndescription: |\n    Detects processes acquiring full memory access rights to another process with call stack\n    activity in ntdll.dll, consistent with ETW patching. Shadow RAT v2.6.4.0 patches\n    ntdll.dll!EtwEventWrite with a single RET instruction (0xC3) via WriteProcessMemory,\n    causing all ETW events from the process to silently return without logging. This blinds\n    EDR tools and security monitoring products that rely on ETW for .NET CLR event visibility.\n    The GrantedAccess value 0x1FFFFF indicates full process access including write permissions.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1562/006/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.defense-evasion\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection:\n        GrantedAccess|contains:\n            - '0x1FFFFF'\n            - '0x1F0FFF'\n        CallTrace|contains: 'ntdll.dll'\n    filter_self:\n        SourceImage|endswith:\n            - '\\svchost.exe'\n            - '\\lsass.exe'\n            - '\\csrss.exe'\n            - '\\services.exe'\n            - '\\winlogon.exe'\n            - '\\wininit.exe'\n    condition: selection and not filter_self\nfalsepositives:\n    - Debugging tools and performance profilers legitimately requesting full process access\n    - Application compatibility shims that modify ntdll behavior at runtime\n    - Security products performing integrity verification on ntdll.dll\n    - Process monitoring tools with deep inspection capabilities\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--630f09e6-0c37-5d87-aa26-bbf7b9a4a1be",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.322093Z",
+            "modified": "2026-06-14T11:57:33.322093Z",
+            "name": "Windows Firewall Disabled via netsh opmode Command",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Windows Firewall Disabled via netsh opmode Command\nid: d7b42f19-3a58-4c82-9e31-0f5b8c2a6d94\nstatus: test\ndescription: |\n    Detects Windows Firewall being disabled via netsh.exe using the \"firewall set opmode disable\"\n    command sequence. Shadow RAT v2.6.4.0 includes explicit firewall disable capability in its\n    command handler set, allowing operators to suppress host-based network filtering to enable\n    unrestricted C2 communication or lateral movement. This command disables all Windows Firewall\n    profiles simultaneously and is rarely issued in managed enterprise environments outside of\n    explicit maintenance windows.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1562/004/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.defense-evasion\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\netsh.exe'\n        CommandLine|contains|all:\n            - 'firewall'\n            - 'set'\n            - 'opmode'\n            - 'disable'\n    condition: selection\nfalsepositives:\n    - Legitimate administrators disabling Windows Firewall during planned maintenance or network reconfiguration\n    - IT automation scripts that manage firewall state as part of policy enforcement workflows\n    - Software installers that temporarily disable the firewall during service installation\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--be6c81bc-3947-54b6-b7d8-cf6b027cd664",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.322226Z",
+            "modified": "2026-06-14T11:57:33.322226Z",
+            "name": "XWorm Scheduled Task Persistence with One-Minute Execution Interval",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: XWorm Scheduled Task Persistence with One-Minute Execution Interval\nid: 94b6c01a-db65-4aa1-82c5-46eebc0c8ee5\nstatus: test\ndescription: |\n    Detects XWorm 3.0-5.0 creating a scheduled task that runs every one minute at HIGHEST\n    privilege level. This is the most aggressive of XWorm's three redundant persistence\n    mechanisms \u2014 the one-minute interval provides near-instant re-execution after process\n    termination and the HIGHEST privilege flag requests elevated execution context. The task\n    name is derived from the install filename (typically \"XWormClient\") and the action points\n    to the malware binary in %AppData%.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1053/005/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.persistence\n    - attack.execution\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_cmd:\n        Image|endswith: '\\schtasks.exe'\n        CommandLine|contains|all:\n            - '/create'\n            - '/sc minute'\n            - '/mo 1'\n            - '/rl highest'\n    selection_path:\n        CommandLine|contains:\n            - '\\AppData\\Roaming\\'\n    condition: selection_cmd and selection_path\nfalsepositives:\n    - No known legitimate software creates one-minute interval scheduled tasks at HIGHEST privilege from AppData\nlevel: critical",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a2e7629e-6d25-5229-9d17-edaffbc16735",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.322359Z",
+            "modified": "2026-06-14T11:57:33.322359Z",
+            "name": "XWorm Registry Run Key Persistence Using Malware Install Name",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: XWorm Registry Run Key Persistence Using Malware Install Name\nid: 68182796-ac58-45fa-a2c9-ed2843b5398f\nstatus: test\ndescription: |\n    Detects XWorm 3.0-5.0 establishing registry Run key persistence using the value name\n    \"XWormClient\", which matches the malware's default install filename. XWorm uses the\n    install filename (without extension) as both the registry value name and the process mutex,\n    creating a consistent and distinctive artifact. This is one of three redundant persistence\n    mechanisms deployed simultaneously. The value data points to the malware binary in\n    %AppData%\\Roaming\\.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1547/001/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.persistence\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|endswith: '\\CurrentVersion\\Run\\XWormClient'\n        Details|contains: '\\AppData\\Roaming\\XWormClient.exe'\n    condition: selection\nfalsepositives:\n    - No known legitimate software uses the registry value name \"XWormClient\"\nlevel: critical",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--66e517ac-7162-5c8d-bd0c-5fb0958e3f44",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.322494Z",
+            "modified": "2026-06-14T11:57:33.322494Z",
+            "name": "Executable Shortcut Created in Windows Startup Folder by Non-System Process",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Executable Shortcut Created in Windows Startup Folder by Non-System Process\nid: a3c91e72-8f44-4b19-bd52-1f6a3c9d7e08\nstatus: test\ndescription: |\n    Detects creation of a .lnk shortcut file inside the Windows Startup folder by a process\n    outside system-managed directories. XWorm 3.0-5.0 creates a startup shortcut at\n    %APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\XWormClient.lnk via WScript.Shell\n    COM automation as one of three redundant persistence mechanisms. Legitimate software\n    installers creating startup shortcuts typically run from Program Files; a shortcut created\n    by a process running from a user-writable path is a strong indicator of malware persistence.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1547/009/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.persistence\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\'\n        TargetFilename|endswith: '.lnk'\n    filter_legitimate:\n        Image|startswith:\n            - 'C:\\Windows\\'\n            - 'C:\\Program Files\\'\n            - 'C:\\Program Files (x86)\\'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Software installers running from user-writable staging directories that create startup shortcuts as part of setup\n    - Legitimate update managers or tray applications deployed outside Program Files that add startup shortcuts\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e21eab37-9baf-590b-9aff-e9127047b8b9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.322635Z",
+            "modified": "2026-06-14T11:57:33.322635Z",
+            "name": "Non-Browser Process DNS Query to ip-api.com Hosting Detection Endpoint",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Non-Browser Process DNS Query to ip-api.com Hosting Detection Endpoint\nid: ce5a51b5-1221-4843-ac57-3fa2b15ffb69\nstatus: test\ndescription: |\n    Detects a non-browser process resolving ip-api.com, consistent with XWorm's anti-analysis\n    hosting detection check. XWorm 3.0-5.0 queries http://ip-api.com/line/?fields=hosting at\n    startup to determine whether the infected machine runs on hosting or datacenter infrastructure.\n    If the API returns \"true\", the malware silently exits via Environment.Exit(0) to evade sandbox\n    and researcher environments. A non-browser, non-network-tool process querying this specific\n    API is a strong indicator of sandbox evasion behavior.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1497/001/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.defense-evasion\n    - attack.discovery\nlogsource:\n    category: dns_query\n    product: windows\ndetection:\n    selection:\n        QueryName|contains: 'ip-api.com'\n    filter_browser:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n            - '\\msedge.exe'\n            - '\\iexplore.exe'\n            - '\\brave.exe'\n            - '\\opera.exe'\n    condition: selection and not filter_browser\nfalsepositives:\n    - Legitimate applications using ip-api.com for geolocation or network diagnostics\n    - Network monitoring and IT asset management tools that use ip-api.com as a data source\n    - Weather, travel, or location-aware desktop applications performing connectivity checks\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--bddb8f7e-2162-531a-8e0b-a5b8723d36d5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.322808Z",
+            "modified": "2026-06-14T11:57:33.322808Z",
+            "name": "Zone.Identifier Alternate Data Stream Removal for SmartScreen Bypass",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Zone.Identifier Alternate Data Stream Removal for SmartScreen Bypass\nid: b78a5718-03c3-4e99-ab50-7fd048a70872\nstatus: test\ndescription: |\n    Detects deletion of the Zone.Identifier alternate data stream (ADS) from executable files\n    by non-browser, non-system processes. Both Shadow RAT and XWorm remove the Mark-of-the-Web\n    (MOTW) from their own executables after installation to suppress Windows SmartScreen warnings\n    on subsequent executions. Shadow RAT uses FileHelper.DeleteZoneIdentifier; XWorm performs a\n    direct ADS stream deletion. Removal of Zone.Identifier by a process other than a browser or\n    system tool is abnormal and indicates deliberate MOTW suppression.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1553/005/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.defense-evasion\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith: ':Zone.Identifier'\n    filter_browser:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n            - '\\msedge.exe'\n            - '\\iexplore.exe'\n    filter_system:\n        Image|startswith:\n            - 'C:\\Windows\\'\n            - 'C:\\Program Files\\'\n    condition: selection and not (filter_browser or filter_system)\nfalsepositives:\n    - Download managers or file transfer utilities that strip Zone.Identifier after checksum verification\n    - Software deployment and packaging tools that remove MOTW from downloaded installers during staging\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ff6e51f7-cfc9-5ef2-847e-63ecb19bbe51",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:33.322964Z",
+            "modified": "2026-06-14T11:57:33.322964Z",
+            "name": "WMI Win32_ComputerSystem Query from User-Writable Directory",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: WMI Win32_ComputerSystem Query from User-Writable Directory\nid: e82e90ce-c1fd-46df-83af-91d73094a63f\nstatus: test\ndescription: |\n    Detects WMI queries referencing Win32_ComputerSystem originating from a process whose parent\n    executable resides in a user-writable directory (AppData or Temp). XWorm 3.0-5.0 queries\n    Win32_ComputerSystem at startup to check the Manufacturer and Model fields for virtual machine\n    indicators (VMware, VirtualBox, Hyper-V strings). This is one of six anti-analysis checks\n    performed before any malicious behavior executes. Legitimate WMI inventory tools run from\n    managed system paths, not user-writable locations.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/\n    - https://attack.mitre.org/techniques/T1497/001/\nauthor: The Hunters Ledger\ndate: 2026/04/04\ntags:\n    - attack.defense-evasion\n    - attack.discovery\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_wmi:\n        CommandLine|contains: 'Win32_ComputerSystem'\n    selection_suspicious:\n        ParentImage|contains:\n            - '\\AppData\\Roaming\\'\n            - '\\AppData\\Local\\Temp\\'\n    condition: selection_wmi and selection_suspicious\nfalsepositives:\n    - Legitimate system inventory or asset management tools running WMI queries from user-writable paths (unusual but possible in portable tool deployments)\n    - IT automation scripts placed in AppData by software deployment systems\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
             "type": "tool",
             "spec_version": "2.1",
             "id": "tool--d8640bfa-e83d-5b2e-b534-8b9b612a986e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.234016Z",
-            "modified": "2026-06-13T22:39:47.234016Z",
+            "created": "2026-06-14T11:57:33.323133Z",
+            "modified": "2026-06-14T11:57:33.323133Z",
             "name": "Shadow RAT v2.6.4.0 staging/test build",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -359,8 +716,8 @@
             "spec_version": "2.1",
             "id": "tool--a2679b1c-221e-5b15-83b3-3f1c9f269aeb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.234155Z",
-            "modified": "2026-06-13T22:39:47.234155Z",
+            "created": "2026-06-14T11:57:33.323269Z",
+            "modified": "2026-06-14T11:57:33.323269Z",
             "name": "Shadow RAT v2.6.4.0 production build",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -371,8 +728,8 @@
             "spec_version": "2.1",
             "id": "tool--0d1bc5db-c90b-5ccc-93ad-ab2d4b856614",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.234364Z",
-            "modified": "2026-06-13T22:39:47.234364Z",
+            "created": "2026-06-14T11:57:33.323392Z",
+            "modified": "2026-06-14T11:57:33.323392Z",
             "name": "Shadow RAT shared library \u2014 core message types",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -383,8 +740,8 @@
             "spec_version": "2.1",
             "id": "tool--295650c6-c3e5-5e73-a6c4-efc6b62d7701",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.234506Z",
-            "modified": "2026-06-13T22:39:47.234506Z",
+            "created": "2026-06-14T11:57:33.323503Z",
+            "modified": "2026-06-14T11:57:33.323503Z",
             "name": "XWorm 3.0-5.0 builder output #1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -395,8 +752,8 @@
             "spec_version": "2.1",
             "id": "tool--f2842a39-7b4f-55f3-a67e-227883a78e23",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.234607Z",
-            "modified": "2026-06-13T22:39:47.234607Z",
+            "created": "2026-06-14T11:57:33.32361Z",
+            "modified": "2026-06-14T11:57:33.32361Z",
             "name": "XWorm 3.0-5.0 builder output #2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -407,8 +764,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--d5a101c9-8f52-5ba3-bd1f-9e6553c94c0c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.234705Z",
-            "modified": "2026-06-13T22:39:47.234705Z",
+            "created": "2026-06-14T11:57:33.323712Z",
+            "modified": "2026-06-14T11:57:33.323712Z",
             "name": "shadow-xworm-opendirectory infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -423,8 +780,8 @@
             "spec_version": "2.1",
             "id": "report--d362fb2d-05fc-5938-936e-670754d7a6d8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:39:47.235228Z",
-            "modified": "2026-06-13T22:39:47.235228Z",
+            "created": "2026-06-14T11:57:33.324298Z",
+            "modified": "2026-06-14T11:57:33.324298Z",
             "name": "Shadow RAT v2.6.4.0 & XWorm 3.0-5.0 (OpenDirectory-DualRAT-MaaS-151.245.112.70) - Technical Analysis & Business Risk Assessment",
             "report_types": [
                 "threat-report"
@@ -456,6 +813,23 @@
                 "file--a64cfaaa-7d2f-5cec-8c16-88e8af11e1ae",
                 "file--d86c9111-95fe-575d-9189-1de527523be0",
                 "file--eaea1821-815f-5c6e-9531-b48fed0535b7",
+                "indicator--fee9ce18-b59d-5656-95df-05c439674ea8",
+                "indicator--a96ee6be-d8c9-51a1-99a5-0dc3ee599c61",
+                "indicator--b5276956-268a-52ec-9330-2f331c55aeef",
+                "indicator--b62a9b40-db7a-51c8-9c12-6097c0b2f098",
+                "indicator--3a21f2ea-92db-53e6-9cf1-01cff3fe67ad",
+                "indicator--b36b85a8-4a34-5620-a622-6e64c278fb0a",
+                "indicator--7f7af980-e0d7-5536-b5a8-eb288c4b9b04",
+                "indicator--2dc76a31-1838-5988-a6df-7f6cc1834553",
+                "indicator--5394109e-f499-565d-94c3-04d89c068097",
+                "indicator--4f74826c-5fbc-58f0-870d-f795e2848a13",
+                "indicator--630f09e6-0c37-5d87-aa26-bbf7b9a4a1be",
+                "indicator--be6c81bc-3947-54b6-b7d8-cf6b027cd664",
+                "indicator--a2e7629e-6d25-5229-9d17-edaffbc16735",
+                "indicator--66e517ac-7162-5c8d-bd0c-5fb0958e3f44",
+                "indicator--e21eab37-9baf-590b-9aff-e9127047b8b9",
+                "indicator--bddb8f7e-2162-531a-8e0b-a5b8723d36d5",
+                "indicator--ff6e51f7-cfc9-5ef2-847e-63ecb19bbe51",
                 "tool--d8640bfa-e83d-5b2e-b534-8b9b612a986e",
                 "tool--a2679b1c-221e-5b15-83b3-3f1c9f269aeb",
                 "tool--0d1bc5db-c90b-5ccc-93ad-ab2d4b856614",

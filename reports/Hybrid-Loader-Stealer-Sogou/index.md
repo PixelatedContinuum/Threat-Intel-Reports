@@ -23,6 +23,7 @@ thumbnail: /assets/images/cards/Hybrid-Loader-Stealer-Sogou.png
 category: "Loader / Stealer"
 hide: true
 description: "A live cybercrime ecosystem masquerading as the Sogou IME installer, combining a multi-stage loader, credential theft targeting JD.com accounts and browser data, and an IPTV piracy operation — all running from a single active C2 infrastructure with authenticated operators observed during analysis."
+stix_bundle: /stix/Hybrid-Loader-Stealer-Sogou.json
 ---
 
 **Campaign Identifier:** Sogou-Hybrid-Loader-Stealer-Ecosystem<br>

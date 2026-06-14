@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--cc306cb4-e992-4fd0-812d-19ae14db69fc",
+    "id": "bundle--cfd1e639-8583-43fb-9b5a-16cc8df3d695",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.306354Z",
-            "modified": "2026-06-13T22:38:27.306354Z",
+            "created": "2026-06-14T11:56:10.756298Z",
+            "modified": "2026-06-14T11:56:10.756298Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--9427c028-4d29-5459-8d42-9d771bbc8bd1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.307075Z",
-            "modified": "2026-06-13T22:38:27.307075Z",
+            "created": "2026-06-14T11:56:10.756803Z",
+            "modified": "2026-06-14T11:56:10.756803Z",
             "name": "ipv4: 172.105.0.126",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--600f0a6d-5076-5b30-9bef-18bf21175253",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.308523Z",
-            "modified": "2026-06-13T22:38:27.308523Z",
+            "created": "2026-06-14T11:56:10.75816Z",
+            "modified": "2026-06-14T11:56:10.75816Z",
             "name": "url: https://172.105.0.126:8443/register",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--11d351db-d751-5512-a1f4-270bd25c082c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.309623Z",
-            "modified": "2026-06-13T22:38:27.309623Z",
+            "created": "2026-06-14T11:56:10.758866Z",
+            "modified": "2026-06-14T11:56:10.758866Z",
             "name": "url: https://172.105.0.126:8443/updates",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--9096b844-2259-5f22-ad82-ea8bf0c22dfc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.310796Z",
-            "modified": "2026-06-13T22:38:27.310796Z",
+            "created": "2026-06-14T11:56:10.75947Z",
+            "modified": "2026-06-14T11:56:10.75947Z",
             "name": "url: https://172.105.0.126:8443/submit",
             "indicator_types": [
                 "malicious-activity"
@@ -145,8 +145,8 @@
             "spec_version": "2.1",
             "id": "indicator--ae68ae51-a087-5162-9a0b-1d5aa6d808a2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.311888Z",
-            "modified": "2026-06-13T22:38:27.311888Z",
+            "created": "2026-06-14T11:56:10.760176Z",
+            "modified": "2026-06-14T11:56:10.760176Z",
             "name": "url: https://172.105.0.126:8443/qz99",
             "indicator_types": [
                 "malicious-activity"
@@ -267,12 +267,201 @@
             }
         },
         {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--28ec31c3-407c-5b53-b1e4-c7e0cb6ae4ef",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.763146Z",
+            "modified": "2026-06-14T11:56:10.763146Z",
+            "name": "RAT_OpenStrike_C_Beacon",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n    Name: OpenStrike Beacon Toolkit + Cobalt Strike 3.x TripwiredLoader\n    Author: The Hunters Ledger\n    Date: 2026-04-06\n    Identifier: OpenStrike C2 toolkit recovered from open directory on 172.105.0.126\n    Reference: https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\n    License: https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_OpenStrike_C_Beacon\n{\n    meta:\n        description = \"Detects OpenStrike C beacon (beacon.exe) by unique operator debug strings and hardcoded AES IV, compiled with MinGW GCC 15\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-06\"\n        reference = \"https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\"\n        hash_sha256 = \"7d6a17754f086b53ee294f5ccd60b0127f921520ce7b64fea0aebb47114fb5d2\"\n        family = \"OpenStrike\"\n\n    strings:\n        $s1 = \"[*] OpenStrike Beacon starting...\" ascii\n        $s2 = \"[+] Registration successful\" ascii\n        $s3 = \"beacon ready\" ascii\n        $s4 = \"abcdefghijklmnop\" ascii\n        $s5 = \"aes_cbc_encrypt\" ascii\n        $s6 = \"hmac_sha256\" ascii\n        $compiler = \"GCC: (GNU) 15-win32\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 409600 and\n        ($s1 or ($s2 and $s3)) and\n        ($s4 or $s5 or $s6 or $compiler)\n}\n\nrule TOOLKIT_OpenStrike_Loader_Chain\n{\n    meta:\n        description = \"Detects OpenStrike shellcode loader chain EXEs (run.exe, sc_loader.exe, veh_loader.exe, dbg_loader.exe, stager.exe) by unique operator debug strings and shared MinGW GCC 15 build environment\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-06\"\n        reference = \"https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\"\n        hash_sha256 = \"821f815fab92fee03e2be44ad5370a953db085cd359a99519a2ddb7316b0d273\"\n        family = \"OpenStrike\"\n\n    strings:\n        $veh = \"[CRASH] code=0x%08lX RIP=0x%llX\" ascii\n        $seh = \"[!] EXCEPTION code=0x%08lX addr=%p (base+0x%llX)\" ascii\n        $dbg = \"[*] INT3 set at offset %lu (RVA 0x%llX)\" ascii\n        $run = \"[+] %lu @ %p exec\" ascii\n        $load = \"[*] Loading %s\" ascii\n        $compiler = \"GCC: (GNU) 15-win32\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 409600 and\n        (($veh and $load) or ($seh and $load) or ($dbg and $load) or ($run and $compiler))\n}\n\nrule MALW_CobaltStrike3x_TripwiredReflectiveLoader\n{\n    meta:\n        description = \"Detects operator-modified Cobalt Strike 3.x DLL beacon where the ReflectiveLoader export RVA is redirected to tripwire bytes 66 90 CC (xchg ax,ax; int3), crashing standard reflective injection tools\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-06\"\n        reference = \"https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\"\n        hash_sha256 = \"7a1a7659ec4201ecbca782bcedf9d4079265137279a490368309df3bd39297a4\"\n        family = \"CobaltStrike\"\n\n    strings:\n        $reflective_export = \"ReflectiveLoader\" ascii\n        $original_name = \"beacon.x64.dll\" ascii\n        $tripwire = { 66 90 CC }\n        $ua = \"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; MALC)\" ascii\n        $spawn = \"%windir%\\\\sysnative\\\\rundll32.exe\" ascii\n        $aes_iv = \"abcdefghijklmnop\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 409600 and\n        $tripwire and\n        ($reflective_export or $original_name or $ua or $spawn) and\n        ($aes_iv or $ua or $original_name)\n}\n\nrule TOOLKIT_OpenStrike_Python_Beacon\n{\n    meta:\n        description = \"Detects OpenStrike cross-platform Python beacon (beacon_universal.py) by self-identification banner and distinctive staging URI /qz99 or RSA key modulus prefix\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-04-06\"\n        reference = \"https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\"\n        family = \"OpenStrike\"\n\n    strings:\n        $desc = \"OpenStrike Universal Beacon\" ascii\n        $bof_key = \"bof_executor\" ascii\n        $iv = \"abcdefghijklmnop\" ascii\n        $rsa_mod = \"9f12c9cb6582f379088600e6cdb7ac80\" ascii\n        $qz99 = \"/qz99\" ascii\n\n    condition:\n        filesize < 204800 and\n        $desc and\n        ($rsa_mod or $qz99 or ($bof_key and $iv))\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d9728e40-a34f-58e7-ae11-02a846845d07",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.763443Z",
+            "modified": "2026-06-14T11:56:10.763443Z",
+            "name": "OpenStrike Campaign C2 Infrastructure Contact via HTTPS Port 8443",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: OpenStrike Campaign C2 Infrastructure Contact via HTTPS Port 8443\nid: 5a8d2f96-c1e4-4b73-8f2a-9d6b3e7c4a18\nstatus: experimental\ndescription: Detects outbound network connections to 172.105.0.126 on port 8443, the confirmed C2 infrastructure for the OpenStrike beacon toolkit and co-hosted Cobalt Strike 3.x beacon. Any connection to this IP on this port should be treated as a high-priority incident indicator, as this IP hosted an open directory of custom offensive tools at time of analysis.\nreferences:\n    - https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\nauthor: The Hunters Ledger\ndate: 2026/04/06\ntags:\n    - attack.command-and-control\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp: '172.105.0.126'\n        DestinationPort: 8443\n    condition: selection\nfalsepositives:\n    - Legitimate services previously or subsequently hosted on 172.105.0.126 port 8443 unrelated to this campaign (verify against asset inventory and threat intel feed expiry)\nlevel: critical",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--985bc3bd-b514-59a4-8126-89e2153d7f55",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.763604Z",
+            "modified": "2026-06-14T11:56:10.763604Z",
+            "name": "OpenStrike C2 Beacon Output Submission via HTTP GET to submit.php",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: OpenStrike C2 Beacon Output Submission via HTTP GET to submit.php\nid: 3f7a9c21-84b6-4d1e-a203-6f8e5c9b2a14\nstatus: experimental\ndescription: Detects HTTP GET requests to /submit.php on port 8443, indicative of OpenStrike beacon output submission. Unlike standard C2 beacons that use POST for data exfiltration, OpenStrike encodes command output in GET request URI or headers via a Malleable C2 Transform VM, making it harder to detect with POST-focused rules.\nreferences:\n    - https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\nauthor: The Hunters Ledger\ndate: 2026/04/06\ntags:\n    - attack.exfiltration\n    - attack.command-and-control\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        c-uri|contains: '/submit.php'\n        cs-method: 'GET'\n        c-port: 8443\n    condition: selection\nfalsepositives:\n    - Legitimate web application endpoints using GET requests to paths named submit.php on non-standard ports (uncommon in enterprise environments)\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3250a235-fd0e-5c07-9a2e-b48a69d6b114",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.763753Z",
+            "modified": "2026-06-14T11:56:10.763753Z",
+            "name": "OpenStrike Shellcode Loader Chain Executable Execution",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: OpenStrike Shellcode Loader Chain Executable Execution\nid: 8c2e5f14-3a7d-4b91-9e6c-1d4f8a2b7c53\nstatus: experimental\ndescription: Detects execution of known OpenStrike shellcode loader chain binaries (run.exe, sc_loader.exe, veh_loader.exe, dbg_loader.exe, stager.exe) by process image name. These loaders implement a progressive capability chain from bare shellcode execution to SEH, VEH, INT3-based discovery, and HTTPS network staging, and were recovered from a threat actor open directory at 172.105.0.126.\nreferences:\n    - https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\nauthor: The Hunters Ledger\ndate: 2026/04/06\ntags:\n    - attack.defense-evasion\n    - attack.execution\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith:\n            - '\\run.exe'\n            - '\\sc_loader.exe'\n            - '\\veh_loader.exe'\n            - '\\dbg_loader.exe'\n            - '\\stager.exe'\n    condition: selection\nfalsepositives:\n    - Red team or penetration testing environments using these exact binary names (unlikely in production; verify against known asset inventory)\n    - Legitimate software components coincidentally named run.exe or stager.exe (filter by ParentImage or hash if required)\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ea97767e-1e8a-5d48-8fd3-fb26de449919",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.763883Z",
+            "modified": "2026-06-14T11:56:10.763883Z",
+            "name": "OpenStrike Python Beacon ctypes VirtualAlloc Shellcode Injection",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: OpenStrike Python Beacon ctypes VirtualAlloc Shellcode Injection\nid: 1d6b4e82-9f3c-4a17-b5d8-2e7c9a6f1b34\nstatus: experimental\ndescription: Detects a Python process with command line arguments referencing ctypes and VirtualAlloc, matching the OpenStrike beacon_universal.py cross-platform shellcode injection pattern. The Python beacon uses ctypes.windll to call VirtualAlloc for RWX memory allocation and CreateThread for shellcode execution, enabling in-memory payload staging without dropping a compiled binary.\nreferences:\n    - https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\nauthor: The Hunters Ledger\ndate: 2026/04/06\ntags:\n    - attack.execution\n    - attack.defense-evasion\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_proc:\n        Image|endswith: '\\python.exe'\n        CommandLine|contains|all:\n            - 'ctypes'\n            - 'VirtualAlloc'\n    condition: selection_proc\nfalsepositives:\n    - Security research tools or CTF scripts using ctypes with VirtualAlloc in Python (uncommon in production enterprise environments)\n    - Legitimate automation scripts performing memory-mapped operations via ctypes (filter by script path or user context if required)\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--0f6627e9-c513-5f19-bbb8-382993ac7595",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.764026Z",
+            "modified": "2026-06-14T11:56:10.764026Z",
+            "name": "Cobalt Strike Malleable C2 Profile MALC User-Agent in Proxy Traffic",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Cobalt Strike Malleable C2 Profile MALC User-Agent in Proxy Traffic\nid: 9e3c7a15-6f2b-4d84-a1c9-8b5e2d7f3a61\nstatus: experimental\ndescription: >-\n    Detects the Cobalt Strike 3.x Malleable C2 profile User-Agent string containing the MALC suffix\n    (full string \"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; MALC)\").\n    This non-standard suffix is a distinctive indicator of a configured Malleable C2 profile and\n    does not appear in any known legitimate browser or application user-agent string.\nreferences:\n    - https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/\nauthor: The Hunters Ledger\ndate: 2026/04/06\ntags:\n    - attack.command-and-control\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-user-agent|contains: 'MALC'\n    condition: selection\nfalsepositives:\n    - Internal applications or monitoring tools with custom user-agent strings containing the substring MALC (verify against known software inventory before tuning out)\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e1afa9b8-432b-5f4a-bf02-c8af7dd4243f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.764161Z",
+            "modified": "2026-06-14T11:56:10.764161Z",
+            "name": "THL OpenStrike C2 Infrastructure Contact 172.105.0.126:8443",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> 172.105.0.126 8443 (msg:\"THL OpenStrike C2 Infrastructure Contact 172.105.0.126:8443\"; flow:established,to_server; flags:S+; sid:9001001; rev:1; metadata:affected_product Windows, attack_target Client_Endpoint, created_at 2026_04_06, deployment Perimeter, performance_impact Low, signature_severity Major, updated_at 2026_04_06;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--923baf87-df49-5b1b-a33e-2cf55c822531",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.764297Z",
+            "modified": "2026-06-14T11:56:10.764297Z",
+            "name": "THL OpenStrike C2 Beacon Output GET to /submit.php Port 8443",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET 8443 (msg:\"THL OpenStrike C2 Beacon Output GET to /submit.php Port 8443\"; flow:established,to_server; http.method; content:\"GET\"; http.uri; content:\"/submit.php\"; threshold:type limit,track by_src,count 1,seconds 60; sid:9001002; rev:1; metadata:affected_product Windows, attack_target Client_Endpoint, created_at 2026_04_06, deployment Perimeter, performance_impact Low, signature_severity Major, updated_at 2026_04_06;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a58d6e6a-c1a7-5f89-ae69-482bd0c2f6de",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.764427Z",
+            "modified": "2026-06-14T11:56:10.764427Z",
+            "name": "THL Cobalt Strike Malleable C2 MALC User-Agent Detected",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL Cobalt Strike Malleable C2 MALC User-Agent Detected\"; flow:established,to_server; http.user_agent; content:\"MALC\"; nocase; sid:9001003; rev:1; metadata:affected_product Windows, attack_target Client_Endpoint, created_at 2026_04_06, deployment Perimeter, performance_impact Low, signature_severity Major, updated_at 2026_04_06;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-04-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
             "type": "malware",
             "spec_version": "2.1",
             "id": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.314506Z",
-            "modified": "2026-06-13T22:38:27.314506Z",
+            "created": "2026-06-14T11:56:10.764563Z",
+            "modified": "2026-06-14T11:56:10.764563Z",
             "name": "OpenStrike",
             "is_family": true,
             "object_marking_refs": [
@@ -284,8 +473,8 @@
             "spec_version": "2.1",
             "id": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.314688Z",
-            "modified": "2026-06-13T22:38:27.314688Z",
+            "created": "2026-06-14T11:56:10.764733Z",
+            "modified": "2026-06-14T11:56:10.764733Z",
             "name": "Cobalt Strike 3.x",
             "is_family": true,
             "object_marking_refs": [
@@ -297,8 +486,8 @@
             "spec_version": "2.1",
             "id": "tool--aec206f6-a214-521a-9cbb-8d183a28eeef",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.31485Z",
-            "modified": "2026-06-13T22:38:27.31485Z",
+            "created": "2026-06-14T11:56:10.764927Z",
+            "modified": "2026-06-14T11:56:10.764927Z",
             "name": "OpenStrike C beacon - custom C implant",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -309,8 +498,8 @@
             "spec_version": "2.1",
             "id": "tool--a9dd14e9-1489-5506-8c2a-6506599bf0a7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.314989Z",
-            "modified": "2026-06-13T22:38:27.314989Z",
+            "created": "2026-06-14T11:56:10.765121Z",
+            "modified": "2026-06-14T11:56:10.765121Z",
             "name": "OpenStrike C beacon",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -321,8 +510,8 @@
             "spec_version": "2.1",
             "id": "tool--6b703025-d6f1-5db4-a869-8964b18fc04e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.31512Z",
-            "modified": "2026-06-13T22:38:27.31512Z",
+            "created": "2026-06-14T11:56:10.765292Z",
+            "modified": "2026-06-14T11:56:10.765292Z",
             "name": "CS 3.x DLL beacon - MSVC 2012",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -333,8 +522,8 @@
             "spec_version": "2.1",
             "id": "tool--24281894-85e3-5c9d-9c9a-131e761d1029",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.315241Z",
-            "modified": "2026-06-13T22:38:27.315241Z",
+            "created": "2026-06-14T11:56:10.765456Z",
+            "modified": "2026-06-14T11:56:10.765456Z",
             "name": "Shellcode stager - downloads from /qz99",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -345,8 +534,8 @@
             "spec_version": "2.1",
             "id": "tool--36a8dd21-b25b-50a6-bbdd-a4594c1041dc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.315368Z",
-            "modified": "2026-06-13T22:38:27.315368Z",
+            "created": "2026-06-14T11:56:10.765571Z",
+            "modified": "2026-06-14T11:56:10.765571Z",
             "name": "Shellcode stager",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -357,8 +546,8 @@
             "spec_version": "2.1",
             "id": "tool--cff9d26f-f8d4-5313-8528-043475a6005e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.31549Z",
-            "modified": "2026-06-13T22:38:27.31549Z",
+            "created": "2026-06-14T11:56:10.765736Z",
+            "modified": "2026-06-14T11:56:10.765736Z",
             "name": "Entry-point debugger - INT3 patch at CALL RAX",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -369,8 +558,8 @@
             "spec_version": "2.1",
             "id": "tool--90fb547f-6228-5806-b83d-34707246b2f1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.315609Z",
-            "modified": "2026-06-13T22:38:27.315609Z",
+            "created": "2026-06-14T11:56:10.765882Z",
+            "modified": "2026-06-14T11:56:10.765882Z",
             "name": "Entry-point debugger",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -381,8 +570,8 @@
             "spec_version": "2.1",
             "id": "tool--945e6206-033e-51b2-8625-28479250bf55",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.315835Z",
-            "modified": "2026-06-13T22:38:27.315835Z",
+            "created": "2026-06-14T11:56:10.766042Z",
+            "modified": "2026-06-14T11:56:10.766042Z",
             "name": "VEH test harness - reads C:\\cs_final.dat",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -393,8 +582,8 @@
             "spec_version": "2.1",
             "id": "tool--96ff8677-d043-52c2-8899-d2cb30ec3210",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.316067Z",
-            "modified": "2026-06-13T22:38:27.316067Z",
+            "created": "2026-06-14T11:56:10.766224Z",
+            "modified": "2026-06-14T11:56:10.766224Z",
             "name": "VEH test harness",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -405,8 +594,8 @@
             "spec_version": "2.1",
             "id": "tool--0ad1531c-4abc-5f7d-8a28-7c0215096cd4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.316271Z",
-            "modified": "2026-06-13T22:38:27.316271Z",
+            "created": "2026-06-14T11:56:10.766389Z",
+            "modified": "2026-06-14T11:56:10.766389Z",
             "name": "Minimal shellcode runner - bare VirtualAlloc+call",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -417,8 +606,8 @@
             "spec_version": "2.1",
             "id": "tool--47e0a832-3f46-50fe-aa4f-8bc536b4c9e2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.316443Z",
-            "modified": "2026-06-13T22:38:27.316443Z",
+            "created": "2026-06-14T11:56:10.766546Z",
+            "modified": "2026-06-14T11:56:10.766546Z",
             "name": "Minimal shellcode runner",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -429,8 +618,8 @@
             "spec_version": "2.1",
             "id": "tool--89de73ed-b52f-5725-9b1d-e1485941fb23",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.316621Z",
-            "modified": "2026-06-13T22:38:27.316621Z",
+            "created": "2026-06-14T11:56:10.766701Z",
+            "modified": "2026-06-14T11:56:10.766701Z",
             "name": "SEH-based shellcode loader - CreateThread",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -441,8 +630,8 @@
             "spec_version": "2.1",
             "id": "tool--65c134e0-c337-56b9-a2a0-06e2527e34ca",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.316835Z",
-            "modified": "2026-06-13T22:38:27.316835Z",
+            "created": "2026-06-14T11:56:10.766808Z",
+            "modified": "2026-06-14T11:56:10.766808Z",
             "name": "SEH-based shellcode loader",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -453,8 +642,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--99faa775-7366-5b35-9527-17f7643bc506",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.317027Z",
-            "modified": "2026-06-13T22:38:27.317027Z",
+            "created": "2026-06-14T11:56:10.766927Z",
+            "modified": "2026-06-14T11:56:10.766927Z",
             "name": "Python",
             "external_references": [
                 {
@@ -472,8 +661,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--46fef570-2355-5842-9d6c-54ae4cb649bd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.317366Z",
-            "modified": "2026-06-13T22:38:27.317366Z",
+            "created": "2026-06-14T11:56:10.767188Z",
+            "modified": "2026-06-14T11:56:10.767188Z",
             "name": "Windows Command Shell",
             "external_references": [
                 {
@@ -491,8 +680,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--a42fc6ae-4096-53e5-98d2-02c39a64d42c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.317628Z",
-            "modified": "2026-06-13T22:38:27.317628Z",
+            "created": "2026-06-14T11:56:10.767379Z",
+            "modified": "2026-06-14T11:56:10.767379Z",
             "name": "Native API",
             "external_references": [
                 {
@@ -510,8 +699,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--755f0c17-280f-566e-a2da-282903887159",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.317861Z",
-            "modified": "2026-06-13T22:38:27.317861Z",
+            "created": "2026-06-14T11:56:10.767528Z",
+            "modified": "2026-06-14T11:56:10.767528Z",
             "name": "Shared Modules",
             "external_references": [
                 {
@@ -529,8 +718,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--f2547d19-a04e-5945-ba6a-c96c6f509e67",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.318098Z",
-            "modified": "2026-06-13T22:38:27.318098Z",
+            "created": "2026-06-14T11:56:10.767663Z",
+            "modified": "2026-06-14T11:56:10.767663Z",
             "name": "Reflective Code Loading",
             "external_references": [
                 {
@@ -548,8 +737,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--f49f7ccf-9e42-5d58-aaa7-c46f34716f27",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.318314Z",
-            "modified": "2026-06-13T22:38:27.318314Z",
+            "created": "2026-06-14T11:56:10.76781Z",
+            "modified": "2026-06-14T11:56:10.76781Z",
             "name": "Process Injection",
             "external_references": [
                 {
@@ -567,8 +756,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--0e5a3749-a144-57b8-a774-20335f3f0941",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.318524Z",
-            "modified": "2026-06-13T22:38:27.318524Z",
+            "created": "2026-06-14T11:56:10.768003Z",
+            "modified": "2026-06-14T11:56:10.768003Z",
             "name": "Obfuscated Files or Information",
             "external_references": [
                 {
@@ -586,8 +775,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--5f7c7e8c-d6e9-51b9-aafc-3d5e38915be2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.318759Z",
-            "modified": "2026-06-13T22:38:27.318759Z",
+            "created": "2026-06-14T11:56:10.768203Z",
+            "modified": "2026-06-14T11:56:10.768203Z",
             "name": "Software Packing",
             "external_references": [
                 {
@@ -605,8 +794,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--ba61986c-2ad8-5246-8fad-deba7ea471bd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.318975Z",
-            "modified": "2026-06-13T22:38:27.318975Z",
+            "created": "2026-06-14T11:56:10.768419Z",
+            "modified": "2026-06-14T11:56:10.768419Z",
             "name": "Deobfuscate/Decode Files or Information",
             "external_references": [
                 {
@@ -624,8 +813,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--42ac3607-42a1-50da-b92d-9f5aaba3f7bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.319144Z",
-            "modified": "2026-06-13T22:38:27.319144Z",
+            "created": "2026-06-14T11:56:10.768646Z",
+            "modified": "2026-06-14T11:56:10.768646Z",
             "name": "Debugger Evasion",
             "external_references": [
                 {
@@ -643,8 +832,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--3e0f1033-d731-5b8e-8f4c-27484d52e4f0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.31932Z",
-            "modified": "2026-06-13T22:38:27.31932Z",
+            "created": "2026-06-14T11:56:10.768903Z",
+            "modified": "2026-06-14T11:56:10.768903Z",
             "name": "System Checks",
             "external_references": [
                 {
@@ -662,8 +851,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--a0baf777-47e7-57bb-a5f8-ffa4f9a1dbe8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.319473Z",
-            "modified": "2026-06-13T22:38:27.319473Z",
+            "created": "2026-06-14T11:56:10.76913Z",
+            "modified": "2026-06-14T11:56:10.76913Z",
             "name": "System Information Discovery",
             "external_references": [
                 {
@@ -681,8 +870,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--7aaed457-e65a-5fce-9e83-3b3f1fcd78ce",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.319609Z",
-            "modified": "2026-06-13T22:38:27.319609Z",
+            "created": "2026-06-14T11:56:10.769343Z",
+            "modified": "2026-06-14T11:56:10.769343Z",
             "name": "File and Directory Discovery",
             "external_references": [
                 {
@@ -700,8 +889,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--b12dc527-38bd-5e3a-a077-afa4290df40b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.319748Z",
-            "modified": "2026-06-13T22:38:27.319748Z",
+            "created": "2026-06-14T11:56:10.769523Z",
+            "modified": "2026-06-14T11:56:10.769523Z",
             "name": "Process Discovery",
             "external_references": [
                 {
@@ -719,8 +908,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--d7349065-fabe-5ed1-9cf8-110367dd3c3e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.31988Z",
-            "modified": "2026-06-13T22:38:27.31988Z",
+            "created": "2026-06-14T11:56:10.769676Z",
+            "modified": "2026-06-14T11:56:10.769676Z",
             "name": "System Owner/User Discovery",
             "external_references": [
                 {
@@ -738,8 +927,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--b1f2e4be-8bd7-50f4-9b12-8ff5a814d239",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.32001Z",
-            "modified": "2026-06-13T22:38:27.32001Z",
+            "created": "2026-06-14T11:56:10.76981Z",
+            "modified": "2026-06-14T11:56:10.76981Z",
             "name": "Web Protocols",
             "external_references": [
                 {
@@ -757,8 +946,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--88e2313f-cf2a-59dc-8124-88e46e53b1c4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.320138Z",
-            "modified": "2026-06-13T22:38:27.320138Z",
+            "created": "2026-06-14T11:56:10.76994Z",
+            "modified": "2026-06-14T11:56:10.76994Z",
             "name": "Symmetric Cryptography",
             "external_references": [
                 {
@@ -776,8 +965,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--5fd2d136-e0aa-561f-88f3-773754094103",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.320265Z",
-            "modified": "2026-06-13T22:38:27.320265Z",
+            "created": "2026-06-14T11:56:10.770092Z",
+            "modified": "2026-06-14T11:56:10.770092Z",
             "name": "Asymmetric Cryptography",
             "external_references": [
                 {
@@ -795,8 +984,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--0df81c9e-a792-5c47-a105-a83765880357",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.320421Z",
-            "modified": "2026-06-13T22:38:27.320421Z",
+            "created": "2026-06-14T11:56:10.770223Z",
+            "modified": "2026-06-14T11:56:10.770223Z",
             "name": "Non-Standard Encoding",
             "external_references": [
                 {
@@ -814,8 +1003,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--44bf0bb6-4445-5791-9daa-2c0a12978bf7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.320582Z",
-            "modified": "2026-06-13T22:38:27.320582Z",
+            "created": "2026-06-14T11:56:10.770353Z",
+            "modified": "2026-06-14T11:56:10.770353Z",
             "name": "Ingress Tool Transfer",
             "external_references": [
                 {
@@ -833,8 +1022,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.320746Z",
-            "modified": "2026-06-13T22:38:27.320746Z",
+            "created": "2026-06-14T11:56:10.770479Z",
+            "modified": "2026-06-14T11:56:10.770479Z",
             "name": "Exfiltration Over C2 Channel",
             "external_references": [
                 {
@@ -852,8 +1041,8 @@
             "spec_version": "2.1",
             "id": "attack-pattern--87b8e72a-5437-59a8-a6a9-16f846415a26",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.320894Z",
-            "modified": "2026-06-13T22:38:27.320894Z",
+            "created": "2026-06-14T11:56:10.770604Z",
+            "modified": "2026-06-14T11:56:10.770604Z",
             "name": "Develop Capabilities: Malware",
             "external_references": [
                 {
@@ -871,8 +1060,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--2b9bfc61-c816-5f97-8889-e2e260134cee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.32105Z",
-            "modified": "2026-06-13T22:38:27.32105Z",
+            "created": "2026-06-14T11:56:10.770809Z",
+            "modified": "2026-06-14T11:56:10.770809Z",
             "name": "open-directory-172-105-0-126-20260406 infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -887,8 +1076,8 @@
             "spec_version": "2.1",
             "id": "relationship--51137d27-3329-5bfb-b2cf-fe702ad66bfa",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.321932Z",
-            "modified": "2026-06-13T22:38:27.321932Z",
+            "created": "2026-06-14T11:56:10.771783Z",
+            "modified": "2026-06-14T11:56:10.771783Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--9427c028-4d29-5459-8d42-9d771bbc8bd1",
             "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
@@ -901,8 +1090,8 @@
             "spec_version": "2.1",
             "id": "relationship--482d941a-748d-5f2a-ae0f-b512f66488ab",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.322152Z",
-            "modified": "2026-06-13T22:38:27.322152Z",
+            "created": "2026-06-14T11:56:10.771995Z",
+            "modified": "2026-06-14T11:56:10.771995Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--600f0a6d-5076-5b30-9bef-18bf21175253",
             "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
@@ -915,8 +1104,8 @@
             "spec_version": "2.1",
             "id": "relationship--a6b91152-f793-5d02-8d44-0193d93d2f80",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.322284Z",
-            "modified": "2026-06-13T22:38:27.322284Z",
+            "created": "2026-06-14T11:56:10.772152Z",
+            "modified": "2026-06-14T11:56:10.772152Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--11d351db-d751-5512-a1f4-270bd25c082c",
             "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
@@ -929,8 +1118,8 @@
             "spec_version": "2.1",
             "id": "relationship--7f0a89ab-7334-55fb-8ae4-5fe6f0174213",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.322444Z",
-            "modified": "2026-06-13T22:38:27.322444Z",
+            "created": "2026-06-14T11:56:10.772345Z",
+            "modified": "2026-06-14T11:56:10.772345Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--9096b844-2259-5f22-ad82-ea8bf0c22dfc",
             "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
@@ -943,8 +1132,8 @@
             "spec_version": "2.1",
             "id": "relationship--81f99a32-9147-53bc-8085-84b8310fdf3b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.322649Z",
-            "modified": "2026-06-13T22:38:27.322649Z",
+            "created": "2026-06-14T11:56:10.772546Z",
+            "modified": "2026-06-14T11:56:10.772546Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--ae68ae51-a087-5162-9a0b-1d5aa6d808a2",
             "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
@@ -955,10 +1144,136 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
+            "id": "relationship--1503d9bd-af7f-5946-a530-ff2b4bb36c98",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.772714Z",
+            "modified": "2026-06-14T11:56:10.772714Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--28ec31c3-407c-5b53-b1e4-c7e0cb6ae4ef",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a946e4e3-ed44-54a2-a663-93974365bea0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.772894Z",
+            "modified": "2026-06-14T11:56:10.772894Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--d9728e40-a34f-58e7-ae11-02a846845d07",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--25056b2f-ff84-5701-9306-7980d8b1d6d0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.773061Z",
+            "modified": "2026-06-14T11:56:10.773061Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--985bc3bd-b514-59a4-8126-89e2153d7f55",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--f922b3e9-1f11-5da5-bd5f-bc18221843f7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.773227Z",
+            "modified": "2026-06-14T11:56:10.773227Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--3250a235-fd0e-5c07-9a2e-b48a69d6b114",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--449c2651-a68d-5928-9dcc-7c0953aac6ee",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.7734Z",
+            "modified": "2026-06-14T11:56:10.7734Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--ea97767e-1e8a-5d48-8fd3-fb26de449919",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--8028702d-36ee-5454-a0b9-8a1d09b8c08b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.773578Z",
+            "modified": "2026-06-14T11:56:10.773578Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--0f6627e9-c513-5f19-bbb8-382993ac7595",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--0d6cf147-bf69-5000-93d4-6d89ba6290de",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.7737Z",
+            "modified": "2026-06-14T11:56:10.7737Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--e1afa9b8-432b-5f4a-bf02-c8af7dd4243f",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--844384ad-b69e-5c24-bfd0-e2e8ea55ded1",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.773807Z",
+            "modified": "2026-06-14T11:56:10.773807Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--923baf87-df49-5b1b-a33e-2cf55c822531",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--f58b5342-bf83-5044-9f5e-f8dd72bdaa14",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:56:10.773911Z",
+            "modified": "2026-06-14T11:56:10.773911Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--a58d6e6a-c1a7-5f89-ae69-482bd0c2f6de",
+            "target_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
             "id": "relationship--3df2ea89-01e3-5f45-8eb5-8fede1eb92c9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.322887Z",
-            "modified": "2026-06-13T22:38:27.322887Z",
+            "created": "2026-06-14T11:56:10.774015Z",
+            "modified": "2026-06-14T11:56:10.774015Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--99faa775-7366-5b35-9527-17f7643bc506",
@@ -971,8 +1286,8 @@
             "spec_version": "2.1",
             "id": "relationship--1efc2511-b3c2-52ad-9430-83c9f1ea91fb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.323074Z",
-            "modified": "2026-06-13T22:38:27.323074Z",
+            "created": "2026-06-14T11:56:10.774119Z",
+            "modified": "2026-06-14T11:56:10.774119Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--46fef570-2355-5842-9d6c-54ae4cb649bd",
@@ -985,8 +1300,8 @@
             "spec_version": "2.1",
             "id": "relationship--bd0bcf12-1a25-53b5-9367-8701e3713583",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.323214Z",
-            "modified": "2026-06-13T22:38:27.323214Z",
+            "created": "2026-06-14T11:56:10.774229Z",
+            "modified": "2026-06-14T11:56:10.774229Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--a42fc6ae-4096-53e5-98d2-02c39a64d42c",
@@ -999,8 +1314,8 @@
             "spec_version": "2.1",
             "id": "relationship--23f90b26-d07e-59b0-9330-3ee451406507",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.323332Z",
-            "modified": "2026-06-13T22:38:27.323332Z",
+            "created": "2026-06-14T11:56:10.774389Z",
+            "modified": "2026-06-14T11:56:10.774389Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--755f0c17-280f-566e-a2da-282903887159",
@@ -1013,8 +1328,8 @@
             "spec_version": "2.1",
             "id": "relationship--95964a5c-6272-5eb8-8fd5-a2c7256035e9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.323456Z",
-            "modified": "2026-06-13T22:38:27.323456Z",
+            "created": "2026-06-14T11:56:10.77453Z",
+            "modified": "2026-06-14T11:56:10.77453Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--f2547d19-a04e-5945-ba6a-c96c6f509e67",
@@ -1027,8 +1342,8 @@
             "spec_version": "2.1",
             "id": "relationship--3f262a57-629f-5854-9576-e74e9319232e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.323588Z",
-            "modified": "2026-06-13T22:38:27.323588Z",
+            "created": "2026-06-14T11:56:10.774655Z",
+            "modified": "2026-06-14T11:56:10.774655Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--f49f7ccf-9e42-5d58-aaa7-c46f34716f27",
@@ -1041,8 +1356,8 @@
             "spec_version": "2.1",
             "id": "relationship--594991c0-399c-57a9-a305-bc968163ae25",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.323728Z",
-            "modified": "2026-06-13T22:38:27.323728Z",
+            "created": "2026-06-14T11:56:10.774771Z",
+            "modified": "2026-06-14T11:56:10.774771Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--0e5a3749-a144-57b8-a774-20335f3f0941",
@@ -1055,8 +1370,8 @@
             "spec_version": "2.1",
             "id": "relationship--2a35f46f-2ebb-5f82-94c0-bdad1ffa9650",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.323878Z",
-            "modified": "2026-06-13T22:38:27.323878Z",
+            "created": "2026-06-14T11:56:10.774883Z",
+            "modified": "2026-06-14T11:56:10.774883Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--5f7c7e8c-d6e9-51b9-aafc-3d5e38915be2",
@@ -1069,8 +1384,8 @@
             "spec_version": "2.1",
             "id": "relationship--967b78cd-0997-5838-8bc3-1179fa625ad8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.324053Z",
-            "modified": "2026-06-13T22:38:27.324053Z",
+            "created": "2026-06-14T11:56:10.774997Z",
+            "modified": "2026-06-14T11:56:10.774997Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--ba61986c-2ad8-5246-8fad-deba7ea471bd",
@@ -1083,8 +1398,8 @@
             "spec_version": "2.1",
             "id": "relationship--bf802068-7ca5-563e-8cc9-a219a1b4071c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.324242Z",
-            "modified": "2026-06-13T22:38:27.324242Z",
+            "created": "2026-06-14T11:56:10.775118Z",
+            "modified": "2026-06-14T11:56:10.775118Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--42ac3607-42a1-50da-b92d-9f5aaba3f7bc",
@@ -1097,8 +1412,8 @@
             "spec_version": "2.1",
             "id": "relationship--d2ae8c4e-0437-5aed-a4c3-f2645ca5dff7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.324394Z",
-            "modified": "2026-06-13T22:38:27.324394Z",
+            "created": "2026-06-14T11:56:10.775266Z",
+            "modified": "2026-06-14T11:56:10.775266Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--3e0f1033-d731-5b8e-8f4c-27484d52e4f0",
@@ -1111,8 +1426,8 @@
             "spec_version": "2.1",
             "id": "relationship--2753188f-e0f5-5b82-ae3b-5da3dd8d68cf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.324579Z",
-            "modified": "2026-06-13T22:38:27.324579Z",
+            "created": "2026-06-14T11:56:10.775391Z",
+            "modified": "2026-06-14T11:56:10.775391Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--a0baf777-47e7-57bb-a5f8-ffa4f9a1dbe8",
@@ -1125,8 +1440,8 @@
             "spec_version": "2.1",
             "id": "relationship--fd324a6d-dc90-5a3c-ad4c-a4d1d5f89074",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.324784Z",
-            "modified": "2026-06-13T22:38:27.324784Z",
+            "created": "2026-06-14T11:56:10.775509Z",
+            "modified": "2026-06-14T11:56:10.775509Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--7aaed457-e65a-5fce-9e83-3b3f1fcd78ce",
@@ -1139,8 +1454,8 @@
             "spec_version": "2.1",
             "id": "relationship--8e63e9ea-8ab1-54b4-b2f7-e0d62da50a78",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.324969Z",
-            "modified": "2026-06-13T22:38:27.324969Z",
+            "created": "2026-06-14T11:56:10.775622Z",
+            "modified": "2026-06-14T11:56:10.775622Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--b12dc527-38bd-5e3a-a077-afa4290df40b",
@@ -1153,8 +1468,8 @@
             "spec_version": "2.1",
             "id": "relationship--b07ac6c7-8267-56f2-916c-c89d444ab109",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.325096Z",
-            "modified": "2026-06-13T22:38:27.325096Z",
+            "created": "2026-06-14T11:56:10.775741Z",
+            "modified": "2026-06-14T11:56:10.775741Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--d7349065-fabe-5ed1-9cf8-110367dd3c3e",
@@ -1167,8 +1482,8 @@
             "spec_version": "2.1",
             "id": "relationship--77945f7f-a7c8-574e-aacc-bbe4f4b14b09",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.325212Z",
-            "modified": "2026-06-13T22:38:27.325212Z",
+            "created": "2026-06-14T11:56:10.77586Z",
+            "modified": "2026-06-14T11:56:10.77586Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--b1f2e4be-8bd7-50f4-9b12-8ff5a814d239",
@@ -1181,8 +1496,8 @@
             "spec_version": "2.1",
             "id": "relationship--c54f4038-95f6-5e8d-91e1-e31b605ac885",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.325323Z",
-            "modified": "2026-06-13T22:38:27.325323Z",
+            "created": "2026-06-14T11:56:10.775982Z",
+            "modified": "2026-06-14T11:56:10.775982Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--88e2313f-cf2a-59dc-8124-88e46e53b1c4",
@@ -1195,8 +1510,8 @@
             "spec_version": "2.1",
             "id": "relationship--d7613fde-19a4-5a0e-b844-cddc180ff5f8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.325442Z",
-            "modified": "2026-06-13T22:38:27.325442Z",
+            "created": "2026-06-14T11:56:10.776123Z",
+            "modified": "2026-06-14T11:56:10.776123Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--5fd2d136-e0aa-561f-88f3-773754094103",
@@ -1209,8 +1524,8 @@
             "spec_version": "2.1",
             "id": "relationship--3a5c1b05-89d9-591b-b464-fbebf7f1a852",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.325557Z",
-            "modified": "2026-06-13T22:38:27.325557Z",
+            "created": "2026-06-14T11:56:10.776241Z",
+            "modified": "2026-06-14T11:56:10.776241Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--0df81c9e-a792-5c47-a105-a83765880357",
@@ -1223,8 +1538,8 @@
             "spec_version": "2.1",
             "id": "relationship--ec974e5c-57a8-5106-a3d4-1d47c15dc4f0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.325683Z",
-            "modified": "2026-06-13T22:38:27.325683Z",
+            "created": "2026-06-14T11:56:10.776352Z",
+            "modified": "2026-06-14T11:56:10.776352Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--44bf0bb6-4445-5791-9daa-2c0a12978bf7",
@@ -1237,8 +1552,8 @@
             "spec_version": "2.1",
             "id": "relationship--4874b389-ce85-5ed8-8f00-07ea81c74cb5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.325792Z",
-            "modified": "2026-06-13T22:38:27.325792Z",
+            "created": "2026-06-14T11:56:10.77646Z",
+            "modified": "2026-06-14T11:56:10.77646Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
@@ -1251,8 +1566,8 @@
             "spec_version": "2.1",
             "id": "relationship--c34a4bf7-3e18-55e7-ad77-f3d777f42699",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.3259Z",
-            "modified": "2026-06-13T22:38:27.3259Z",
+            "created": "2026-06-14T11:56:10.776849Z",
+            "modified": "2026-06-14T11:56:10.776849Z",
             "relationship_type": "uses",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "attack-pattern--87b8e72a-5437-59a8-a6a9-16f846415a26",
@@ -1265,8 +1580,8 @@
             "spec_version": "2.1",
             "id": "relationship--45244bbe-70c7-59e8-8281-1068a330b71f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.326019Z",
-            "modified": "2026-06-13T22:38:27.326019Z",
+            "created": "2026-06-14T11:56:10.777Z",
+            "modified": "2026-06-14T11:56:10.777Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "infrastructure--2b9bfc61-c816-5f97-8889-e2e260134cee",
@@ -1279,8 +1594,8 @@
             "spec_version": "2.1",
             "id": "relationship--be790830-ffd7-5161-a307-2d7d7efd0fe0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.32613Z",
-            "modified": "2026-06-13T22:38:27.32613Z",
+            "created": "2026-06-14T11:56:10.777161Z",
+            "modified": "2026-06-14T11:56:10.777161Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--99faa775-7366-5b35-9527-17f7643bc506",
@@ -1293,8 +1608,8 @@
             "spec_version": "2.1",
             "id": "relationship--cd196d84-2deb-564a-980c-1246f5820959",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.326265Z",
-            "modified": "2026-06-13T22:38:27.326265Z",
+            "created": "2026-06-14T11:56:10.777332Z",
+            "modified": "2026-06-14T11:56:10.777332Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--46fef570-2355-5842-9d6c-54ae4cb649bd",
@@ -1307,8 +1622,8 @@
             "spec_version": "2.1",
             "id": "relationship--c2f5e5be-0873-5889-a813-512534fbc4cf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.326408Z",
-            "modified": "2026-06-13T22:38:27.326408Z",
+            "created": "2026-06-14T11:56:10.777504Z",
+            "modified": "2026-06-14T11:56:10.777504Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--a42fc6ae-4096-53e5-98d2-02c39a64d42c",
@@ -1321,8 +1636,8 @@
             "spec_version": "2.1",
             "id": "relationship--c08c4780-dad4-51aa-aedb-fe792b290966",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.326591Z",
-            "modified": "2026-06-13T22:38:27.326591Z",
+            "created": "2026-06-14T11:56:10.777671Z",
+            "modified": "2026-06-14T11:56:10.777671Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--755f0c17-280f-566e-a2da-282903887159",
@@ -1335,8 +1650,8 @@
             "spec_version": "2.1",
             "id": "relationship--681024e6-769f-5d06-9c08-284017ec3692",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.326786Z",
-            "modified": "2026-06-13T22:38:27.326786Z",
+            "created": "2026-06-14T11:56:10.777799Z",
+            "modified": "2026-06-14T11:56:10.777799Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--f2547d19-a04e-5945-ba6a-c96c6f509e67",
@@ -1349,8 +1664,8 @@
             "spec_version": "2.1",
             "id": "relationship--c81d10ac-660f-504b-a202-2ea058ce7250",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.326978Z",
-            "modified": "2026-06-13T22:38:27.326978Z",
+            "created": "2026-06-14T11:56:10.777945Z",
+            "modified": "2026-06-14T11:56:10.777945Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--f49f7ccf-9e42-5d58-aaa7-c46f34716f27",
@@ -1363,8 +1678,8 @@
             "spec_version": "2.1",
             "id": "relationship--9f7d41ce-40bb-5976-b708-b7c1d41506c9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.327129Z",
-            "modified": "2026-06-13T22:38:27.327129Z",
+            "created": "2026-06-14T11:56:10.778115Z",
+            "modified": "2026-06-14T11:56:10.778115Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--0e5a3749-a144-57b8-a774-20335f3f0941",
@@ -1377,8 +1692,8 @@
             "spec_version": "2.1",
             "id": "relationship--aca594e8-60ed-53c3-b052-caf9abcd5f3b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.327237Z",
-            "modified": "2026-06-13T22:38:27.327237Z",
+            "created": "2026-06-14T11:56:10.778271Z",
+            "modified": "2026-06-14T11:56:10.778271Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--5f7c7e8c-d6e9-51b9-aafc-3d5e38915be2",
@@ -1391,8 +1706,8 @@
             "spec_version": "2.1",
             "id": "relationship--77ecf14a-91d4-5c3f-ac81-3d5b8e26a404",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.32737Z",
-            "modified": "2026-06-13T22:38:27.32737Z",
+            "created": "2026-06-14T11:56:10.778446Z",
+            "modified": "2026-06-14T11:56:10.778446Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--ba61986c-2ad8-5246-8fad-deba7ea471bd",
@@ -1405,8 +1720,8 @@
             "spec_version": "2.1",
             "id": "relationship--c0c04520-7d2f-535b-aeb1-9992fa2600de",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.327478Z",
-            "modified": "2026-06-13T22:38:27.327478Z",
+            "created": "2026-06-14T11:56:10.778631Z",
+            "modified": "2026-06-14T11:56:10.778631Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--42ac3607-42a1-50da-b92d-9f5aaba3f7bc",
@@ -1419,8 +1734,8 @@
             "spec_version": "2.1",
             "id": "relationship--ee753501-8da0-518e-8491-520cc0c13436",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.327589Z",
-            "modified": "2026-06-13T22:38:27.327589Z",
+            "created": "2026-06-14T11:56:10.778807Z",
+            "modified": "2026-06-14T11:56:10.778807Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--3e0f1033-d731-5b8e-8f4c-27484d52e4f0",
@@ -1433,8 +1748,8 @@
             "spec_version": "2.1",
             "id": "relationship--54063a11-5b5b-5c12-a813-3bff971726c9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.32775Z",
-            "modified": "2026-06-13T22:38:27.32775Z",
+            "created": "2026-06-14T11:56:10.778972Z",
+            "modified": "2026-06-14T11:56:10.778972Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--a0baf777-47e7-57bb-a5f8-ffa4f9a1dbe8",
@@ -1447,8 +1762,8 @@
             "spec_version": "2.1",
             "id": "relationship--8cdef5f2-c7e0-522c-b737-5639e5751a27",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.327905Z",
-            "modified": "2026-06-13T22:38:27.327905Z",
+            "created": "2026-06-14T11:56:10.779144Z",
+            "modified": "2026-06-14T11:56:10.779144Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--7aaed457-e65a-5fce-9e83-3b3f1fcd78ce",
@@ -1461,8 +1776,8 @@
             "spec_version": "2.1",
             "id": "relationship--674d0b8c-9cc6-5630-b296-1d5ab73e41ca",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.328023Z",
-            "modified": "2026-06-13T22:38:27.328023Z",
+            "created": "2026-06-14T11:56:10.779305Z",
+            "modified": "2026-06-14T11:56:10.779305Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--b12dc527-38bd-5e3a-a077-afa4290df40b",
@@ -1475,8 +1790,8 @@
             "spec_version": "2.1",
             "id": "relationship--4766dd7b-11ca-5d84-9139-8803828e8cc2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.328139Z",
-            "modified": "2026-06-13T22:38:27.328139Z",
+            "created": "2026-06-14T11:56:10.779462Z",
+            "modified": "2026-06-14T11:56:10.779462Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--d7349065-fabe-5ed1-9cf8-110367dd3c3e",
@@ -1489,8 +1804,8 @@
             "spec_version": "2.1",
             "id": "relationship--25d58596-23c2-5d4c-9594-ac98741be863",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.328257Z",
-            "modified": "2026-06-13T22:38:27.328257Z",
+            "created": "2026-06-14T11:56:10.779627Z",
+            "modified": "2026-06-14T11:56:10.779627Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--b1f2e4be-8bd7-50f4-9b12-8ff5a814d239",
@@ -1503,8 +1818,8 @@
             "spec_version": "2.1",
             "id": "relationship--fc30fd78-ba6a-55c2-9431-3c18a299341b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.328415Z",
-            "modified": "2026-06-13T22:38:27.328415Z",
+            "created": "2026-06-14T11:56:10.779848Z",
+            "modified": "2026-06-14T11:56:10.779848Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--88e2313f-cf2a-59dc-8124-88e46e53b1c4",
@@ -1517,8 +1832,8 @@
             "spec_version": "2.1",
             "id": "relationship--91751db5-7534-5135-b533-131192c8c273",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.328636Z",
-            "modified": "2026-06-13T22:38:27.328636Z",
+            "created": "2026-06-14T11:56:10.780041Z",
+            "modified": "2026-06-14T11:56:10.780041Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--5fd2d136-e0aa-561f-88f3-773754094103",
@@ -1531,8 +1846,8 @@
             "spec_version": "2.1",
             "id": "relationship--d3bdd736-68f0-566d-baf4-ef132c6f8dd3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.329387Z",
-            "modified": "2026-06-13T22:38:27.329387Z",
+            "created": "2026-06-14T11:56:10.780169Z",
+            "modified": "2026-06-14T11:56:10.780169Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--0df81c9e-a792-5c47-a105-a83765880357",
@@ -1545,8 +1860,8 @@
             "spec_version": "2.1",
             "id": "relationship--4fa657db-f04b-5a9c-9b94-851b0bdf52ff",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.329528Z",
-            "modified": "2026-06-13T22:38:27.329528Z",
+            "created": "2026-06-14T11:56:10.780287Z",
+            "modified": "2026-06-14T11:56:10.780287Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--44bf0bb6-4445-5791-9daa-2c0a12978bf7",
@@ -1559,8 +1874,8 @@
             "spec_version": "2.1",
             "id": "relationship--505885ba-68dc-502a-8d07-015bf6609a45",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.329641Z",
-            "modified": "2026-06-13T22:38:27.329641Z",
+            "created": "2026-06-14T11:56:10.780403Z",
+            "modified": "2026-06-14T11:56:10.780403Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
@@ -1573,8 +1888,8 @@
             "spec_version": "2.1",
             "id": "relationship--32e1082c-9a36-53b2-b00d-2990c6e4338c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.329753Z",
-            "modified": "2026-06-13T22:38:27.329753Z",
+            "created": "2026-06-14T11:56:10.780556Z",
+            "modified": "2026-06-14T11:56:10.780556Z",
             "relationship_type": "uses",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "attack-pattern--87b8e72a-5437-59a8-a6a9-16f846415a26",
@@ -1587,8 +1902,8 @@
             "spec_version": "2.1",
             "id": "relationship--ec3abd6b-9fd1-5a91-ae8c-07a456c88085",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.329869Z",
-            "modified": "2026-06-13T22:38:27.329869Z",
+            "created": "2026-06-14T11:56:10.780741Z",
+            "modified": "2026-06-14T11:56:10.780741Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
             "target_ref": "infrastructure--2b9bfc61-c816-5f97-8889-e2e260134cee",
@@ -1601,8 +1916,8 @@
             "spec_version": "2.1",
             "id": "relationship--5e34ea35-b965-585c-9e2b-830a972a07bf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.329997Z",
-            "modified": "2026-06-13T22:38:27.329997Z",
+            "created": "2026-06-14T11:56:10.780939Z",
+            "modified": "2026-06-14T11:56:10.780939Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--aec206f6-a214-521a-9cbb-8d183a28eeef",
@@ -1615,8 +1930,8 @@
             "spec_version": "2.1",
             "id": "relationship--65e8efbe-9b51-55d3-a1cd-d9c7584b572f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.330119Z",
-            "modified": "2026-06-13T22:38:27.330119Z",
+            "created": "2026-06-14T11:56:10.781122Z",
+            "modified": "2026-06-14T11:56:10.781122Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--a9dd14e9-1489-5506-8c2a-6506599bf0a7",
@@ -1629,8 +1944,8 @@
             "spec_version": "2.1",
             "id": "relationship--1d3bf96a-68f1-5570-83c7-7f2258aa54e2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.330328Z",
-            "modified": "2026-06-13T22:38:27.330328Z",
+            "created": "2026-06-14T11:56:10.781309Z",
+            "modified": "2026-06-14T11:56:10.781309Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--6b703025-d6f1-5db4-a869-8964b18fc04e",
@@ -1643,8 +1958,8 @@
             "spec_version": "2.1",
             "id": "relationship--ae6023f3-3ef3-54f8-8d76-e4cf22143354",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.330481Z",
-            "modified": "2026-06-13T22:38:27.330481Z",
+            "created": "2026-06-14T11:56:10.781491Z",
+            "modified": "2026-06-14T11:56:10.781491Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--24281894-85e3-5c9d-9c9a-131e761d1029",
@@ -1657,8 +1972,8 @@
             "spec_version": "2.1",
             "id": "relationship--9e1188f8-477f-52fa-8e6b-8c7cd154b370",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.330598Z",
-            "modified": "2026-06-13T22:38:27.330598Z",
+            "created": "2026-06-14T11:56:10.781607Z",
+            "modified": "2026-06-14T11:56:10.781607Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--36a8dd21-b25b-50a6-bbdd-a4594c1041dc",
@@ -1671,8 +1986,8 @@
             "spec_version": "2.1",
             "id": "relationship--b01e8016-f102-5050-a911-c0ff0c44edf3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.330723Z",
-            "modified": "2026-06-13T22:38:27.330723Z",
+            "created": "2026-06-14T11:56:10.781725Z",
+            "modified": "2026-06-14T11:56:10.781725Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--cff9d26f-f8d4-5313-8528-043475a6005e",
@@ -1685,8 +2000,8 @@
             "spec_version": "2.1",
             "id": "relationship--5c441ea1-69d1-5a13-ae84-846d798f5396",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.330902Z",
-            "modified": "2026-06-13T22:38:27.330902Z",
+            "created": "2026-06-14T11:56:10.781836Z",
+            "modified": "2026-06-14T11:56:10.781836Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--90fb547f-6228-5806-b83d-34707246b2f1",
@@ -1699,8 +2014,8 @@
             "spec_version": "2.1",
             "id": "relationship--45219d9a-cf77-502c-bbdb-21b1e7cba454",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.331024Z",
-            "modified": "2026-06-13T22:38:27.331024Z",
+            "created": "2026-06-14T11:56:10.781948Z",
+            "modified": "2026-06-14T11:56:10.781948Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--945e6206-033e-51b2-8625-28479250bf55",
@@ -1713,8 +2028,8 @@
             "spec_version": "2.1",
             "id": "relationship--4a61a689-e4f2-50f9-813d-3bf9d9ac4fa6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.33114Z",
-            "modified": "2026-06-13T22:38:27.33114Z",
+            "created": "2026-06-14T11:56:10.782062Z",
+            "modified": "2026-06-14T11:56:10.782062Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--96ff8677-d043-52c2-8899-d2cb30ec3210",
@@ -1727,8 +2042,8 @@
             "spec_version": "2.1",
             "id": "relationship--9fcc2dd9-561e-58d5-8194-8cc7a62ff018",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.331261Z",
-            "modified": "2026-06-13T22:38:27.331261Z",
+            "created": "2026-06-14T11:56:10.782171Z",
+            "modified": "2026-06-14T11:56:10.782171Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--0ad1531c-4abc-5f7d-8a28-7c0215096cd4",
@@ -1741,8 +2056,8 @@
             "spec_version": "2.1",
             "id": "relationship--e5729a6c-c137-500f-a992-2cbd35d55a6e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.331386Z",
-            "modified": "2026-06-13T22:38:27.331386Z",
+            "created": "2026-06-14T11:56:10.782277Z",
+            "modified": "2026-06-14T11:56:10.782277Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--47e0a832-3f46-50fe-aa4f-8bc536b4c9e2",
@@ -1755,8 +2070,8 @@
             "spec_version": "2.1",
             "id": "relationship--3b777e98-130d-5f93-88e1-e78a82e3ad65",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.331515Z",
-            "modified": "2026-06-13T22:38:27.331515Z",
+            "created": "2026-06-14T11:56:10.782381Z",
+            "modified": "2026-06-14T11:56:10.782381Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--89de73ed-b52f-5725-9b1d-e1485941fb23",
@@ -1769,8 +2084,8 @@
             "spec_version": "2.1",
             "id": "relationship--7a5bf650-9394-5b4f-b97a-e73caba09a33",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.331647Z",
-            "modified": "2026-06-13T22:38:27.331647Z",
+            "created": "2026-06-14T11:56:10.782487Z",
+            "modified": "2026-06-14T11:56:10.782487Z",
             "relationship_type": "related-to",
             "source_ref": "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
             "target_ref": "tool--65c134e0-c337-56b9-a2a0-06e2527e34ca",
@@ -1783,8 +2098,8 @@
             "spec_version": "2.1",
             "id": "report--275b389e-e02e-5042-8cc9-f20b55d10b10",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-13T22:38:27.33191Z",
-            "modified": "2026-06-13T22:38:27.33191Z",
+            "created": "2026-06-14T11:56:10.782681Z",
+            "modified": "2026-06-14T11:56:10.782681Z",
             "name": "OpenStrike Beacon Toolkit \u2014 Open Directory 172.105.0.126",
             "report_types": [
                 "threat-report"
@@ -1814,6 +2129,15 @@
                 "file--64828200-59cb-5391-9a93-8a0c866dfa5e",
                 "file--011631d8-4e2b-5ffb-b1c5-1c127b1dcae0",
                 "file--ff40f8bf-a4fa-5a7c-8b53-9e17229d3f9c",
+                "indicator--28ec31c3-407c-5b53-b1e4-c7e0cb6ae4ef",
+                "indicator--d9728e40-a34f-58e7-ae11-02a846845d07",
+                "indicator--985bc3bd-b514-59a4-8126-89e2153d7f55",
+                "indicator--3250a235-fd0e-5c07-9a2e-b48a69d6b114",
+                "indicator--ea97767e-1e8a-5d48-8fd3-fb26de449919",
+                "indicator--0f6627e9-c513-5f19-bbb8-382993ac7595",
+                "indicator--e1afa9b8-432b-5f4a-bf02-c8af7dd4243f",
+                "indicator--923baf87-df49-5b1b-a33e-2cf55c822531",
+                "indicator--a58d6e6a-c1a7-5f89-ae69-482bd0c2f6de",
                 "malware--421b2b0d-5685-565c-9459-62c554dd9edb",
                 "malware--fca8d0e7-6e2f-5581-a0cb-9c2a8a5f72ed",
                 "tool--aec206f6-a214-521a-9cbb-8d183a28eeef",
@@ -1857,6 +2181,15 @@
                 "relationship--a6b91152-f793-5d02-8d44-0193d93d2f80",
                 "relationship--7f0a89ab-7334-55fb-8ae4-5fe6f0174213",
                 "relationship--81f99a32-9147-53bc-8085-84b8310fdf3b",
+                "relationship--1503d9bd-af7f-5946-a530-ff2b4bb36c98",
+                "relationship--a946e4e3-ed44-54a2-a663-93974365bea0",
+                "relationship--25056b2f-ff84-5701-9306-7980d8b1d6d0",
+                "relationship--f922b3e9-1f11-5da5-bd5f-bc18221843f7",
+                "relationship--449c2651-a68d-5928-9dcc-7c0953aac6ee",
+                "relationship--8028702d-36ee-5454-a0b9-8a1d09b8c08b",
+                "relationship--0d6cf147-bf69-5000-93d4-6d89ba6290de",
+                "relationship--844384ad-b69e-5c24-bfd0-e2e8ea55ded1",
+                "relationship--f58b5342-bf83-5044-9f5e-f8dd72bdaa14",
                 "relationship--3df2ea89-01e3-5f45-8eb5-8fede1eb92c9",
                 "relationship--1efc2511-b3c2-52ad-9430-83c9f1ea91fb",
                 "relationship--bd0bcf12-1a25-53b5-9367-8701e3713583",

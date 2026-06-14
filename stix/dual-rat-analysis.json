@@ -1,0 +1,276 @@
+{
+    "type": "bundle",
+    "id": "bundle--eb2b0709-2154-4e75-9a6e-0944c110b57e",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.432463Z",
+            "modified": "2026-06-14T11:55:48.432463Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--816a3a4d-76b2-513c-abe4-2dc2f46aa6e1",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.432931Z",
+            "modified": "2026-06-14T11:55:48.432931Z",
+            "name": "Quasar RAT Scheduled Task Persistence",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Quasar RAT Scheduled Task Persistence\nid: 8b5c3d1a-8f4e-4b9a-9c6d-3e4f9081\nstatus: experimental\ndescription: Detects Quasar RAT persistence through RuntimeBroker scheduled task creation\nauthor: The Hunters Ledger\ndate: 2025/12/06\nmodified: 2025/12/06\nlogsource:\n    product: windows\n    service: security\ndetection:\n    selection:\n        EventID: 106\n        TaskName: 'RuntimeBroker'\n        CommandLine|contains|all:\n            - 'schtasks /create'\n            - '/tn \"RuntimeBroker\"'\n            - '/sc ONLOGON'\n            - 'Client.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate system administration tools creating tasks\nlevel: high\ntags:\n    - attack.persistence\n    - defense_evasion\n    - t1053.005\n    - pulsar_rat",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d19bb534-daa4-5e41-b406-76235e716863",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.433184Z",
+            "modified": "2026-06-14T11:55:48.433184Z",
+            "name": "Quasar RAT Process Injection Activity",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Quasar RAT Process Injection Activity\nid: a7b2c3d9-4e5f-8a9b-2c6d-4f7e9081\nstatus: experimental\ndescription: Detects potential Quasar RAT process injection behavior\nauthor: The Hunters Ledger\ndate: 2025/12/06\nmodified: 2025/12/06\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection:\n        Image|endswith:\n            - '\\explorer.exe'\n            - '\\svchost.exe'\n            - '\\dllhost.exe'\n        ParentImage|endswith:\n            - '\\Client.exe'\n        CommandLine|contains: 'inject'\n    condition: selection\nfalsepositives:\n    - Legitimate software injection\nlevel: high\ntags:\n    - attack.defense_evasion\n    - attack.privilege_escalation\n    - t1055.003\n    - t1055\n    - pulsar_rat",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ae6086da-0c55-53e2-816c-d282684d1da8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.433351Z",
+            "modified": "2026-06-14T11:55:48.433351Z",
+            "name": "Quasar RAT Mark of the Web Removal",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Quasar RAT Mark of the Web Removal\nid: c9d4e5f2-6a7b-3c8d-4e9f-5a6b9081\nstatus: experimental\ndescription: Detects Zone.Identifier alternate data stream deletion characteristic of Quasar RAT\nauthor: The Hunters Ledger\ndate: 2025/12/06\nmodified: 2025/12/06\nlogsource:\n    product: windows\n    category: file_delete\ndetection:\n    selection:\n        TargetFilename|contains: ':Zone.Identifier'\n        Image|endswith:\n            - '\\client.exe'\n            - '\\Client.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate file management tools\nlevel: medium\ntags:\n    - attack.defense_evasion\n    - attack.initial_access\n    - t1070.004\n    - pulsar_rat",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--14cc356f-1eed-53c2-abcc-10fbe3147824",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.433496Z",
+            "modified": "2026-06-14T11:55:48.433496Z",
+            "name": "Quasar RAT Command and Control Communication",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Quasar RAT Command and Control Communication\nid: d1e5f6a3-7b8c-4d9e-5f0a-6a7b9081\nstatus: experimental\ndescription: Detects Quasar RAT C2 communication patterns\nauthor: The Hunters Ledger\ndate: 2025/12/06\nmodified: 2025/12/06\nlogsource:\n    product: windows\n    category: network_connection\ndetection:\n    selection:\n        Image|endswith:\n            - '\\Client.exe'\n        DestinationPort: 4782\n        DestinationIp|contains: '185.208.159.182'\n    condition: selection\nfalsepositives:\n    - Legitimate applications using port 4782\nlevel: critical\ntags:\n    - attack.command_and_control\n    - t1071.001\n    - t1573\n    - t1041\n    - pulsar_rat",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c0b6f9c7-cd6f-5152-9068-c7b7bfd1b2fe",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.43365Z",
+            "modified": "2026-06-14T11:55:48.43365Z",
+            "name": "NjRAT/XWorm Triple Persistence Establishment",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: NjRAT/XWorm Triple Persistence Establishment\nid: e2f6a7b4-8c9d-4e0f-6a7b-3c8d9081\nstatus: experimental\ndescription: Detects NjRAT/XWorm triple persistence mechanism establishment\nauthor: The Hunters Ledger\ndate: 2025/12/06\nmodified: 2025/12/06\nlogsource:\n    product: windows\n    service: security\ndetection:\n    selection_task:\n        EventID: 106\n        TaskName: 'conhost'\n        CommandLine|contains|all:\n            - 'schtasks /create'\n            - '/tn \"conhost\"'\n            - '/sc minute'\n            - '/mo 1'\n    selection_registry:\n        EventID: 13\n        ObjectName|contains: 'Software\\Microsoft\\Windows\\CurrentVersion\\Run'\n        StringValue|contains: 'conhost'\n    selection_startup:\n        EventID: 11\n        TargetFilename|contains: 'conhost.lnk'\n    condition: 1 of selection*\nfalsepositives:\n    - Legitimate conhost.exe process\nlevel: high\ntags:\n    - attack.persistence\n    - t1053.005\n    - t1547.001\n    - t1547.009\n    - njrat_xworm",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--48ebbe76-3452-5c05-be8b-5455c38a4077",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.433851Z",
+            "modified": "2026-06-14T11:55:48.433851Z",
+            "name": "NjRAT/XWorm Pastebin Dead-Drop C2 Resolution",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: NjRAT/XWorm Pastebin Dead-Drop C2 Resolution\nid: f3a7b8c5-9d0e-4f1a-7b2c-4e9d9081\nstatus: experimental\ndescription: Detects NjRAT/XWorm Pastebin dead-drop C2 resolution behavior\nauthor: The Hunters Ledger\ndate: 2025/12/06\nmodified: 2025/12/06\nlogsource:\n    product: windows\n    category: network_connection\ndetection:\n    selection:\n        Image|endswith:\n            - '\\server (1).exe'\n            - '\\conhost.exe'\n        DestinationPort: 443\n        DestinationHostname|contains: 'pastebin.com'\n        Initiated: 'true'\n    timeframe: 5m\n    condition: selection | count() by Image > 0\nfalsepositives:\n    - Legitimate access to Pastebin from development tools\nlevel: high\ntags:\n    - attack.command_and_control\n    - t1102.001\n    - t1071.001\n    - njrat_xworm",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--40edb1d7-cf2d-52c6-a34e-5f258dd5c6c8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.434173Z",
+            "modified": "2026-06-14T11:55:48.434173Z",
+            "name": "NjRAT/XWorm Critical Process Protection",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: NjRAT/XWorm Critical Process Protection\nid: g4b8c9d6-0e1f-5a2b-8c9d-4f0a9081\nstatus: experimental\ndescription: Detects NjRAT/XWorm critical process protection mechanism\nauthor: The Hunters Ledger\ndate: 2025/12/06\nmodified: 2025/12/06\nlogsource:\n    product: windows\n    category: api_call\ndetection:\n    selection:\n        Image|endswith:\n            - '\\conhost.exe'\n            - '\\server (1).exe'\n        CallTrace|contains: 'RtlSetProcessIsCritical'\n    condition: selection\nfalsepositives:\n    - Legitimate system processes\nlevel: high\ntags:\n    - attack.defense_evasion\n    - attack.impact\n    - njrat_xworm",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--37f699a5-fe3a-5f6c-9483-2df1406dc49b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.434414Z",
+            "modified": "2026-06-14T11:55:48.434414Z",
+            "name": "NjRAT/XWorm Anti-Sleep System Protection",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: NjRAT/XWorm Anti-Sleep System Protection\nid: h5c9d0e7-1f2a-9b3c-5e0f-7a2b9081\nstatus: experimental\ndescription: Detects NjRAT/XWorm anti-sleep mechanism to prevent system power saving\nauthor: The Hunters Ledger\ndate: 2025/12/06\nmodified: 2025/12/06\nlogsource:\n    product: windows\n    category: api_call\ndetection:\n    selection:\n        Image|endswith:\n            - '\\conhost.exe'\n            - '\\server (1).exe'\n        CallTrace|contains: 'SetThreadExecutionState'\n    condition: selection\nfalsepositives:\n    - Legitimate media applications preventing sleep\nlevel: medium\ntags:\n    - attack.defense_evasion\n    - attack.impact\n    - njrat_xworm",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--59fc9ddf-e830-53f8-94b7-eff36f73b296",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.434638Z",
+            "modified": "2026-06-14T11:55:48.434638Z",
+            "name": "Quasar RAT C2 Connection",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"Quasar RAT C2 Connection\"; flow:established,to_server; content:\"|2c 43 87 ce 18 be 27 9e a7 35 ec 4f 00 92 69 85 34 92 10 30 aa 69 94 98 ae 80 e4 1a 5c 73 76 66\"; depth:8; offset:0; metadata:service quasar_rat_c2, malware_family Quasar; sid:2100001; rev:1; classtype:trojan-activity; priority:1; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ff729d71-5243-5b11-8dcd-ddae4653f778",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.434973Z",
+            "modified": "2026-06-14T11:55:48.434973Z",
+            "name": "Quasar RAT IP Geolocation",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 443 (msg:\"Quasar RAT IP Geolocation\"; flow:established,to_server; content:\"Host: ipwho.is|Host: api.ipify.org\"; http.method; content:\"GET\"; http.uri; content:\"/\"; depth:0; offset:0; metadata:service quasar_rat_recon, malware_family Quasar; sid:2100002; rev:1; classtype:trojan-activity; priority:2; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)```\n\n### NjRAT/XWorm Network Detection\n\n#### Suricata Rule - NjRAT/XWorm Pastebin Dead-Drop",
+            "pattern_type": "suricata",
+            "valid_from": "2025-12-06T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--5d4d9a1b-5e15-5ad5-9783-ae7ec6901915",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:55:48.435444Z",
+            "modified": "2026-06-14T11:55:48.435444Z",
+            "name": "Quasar RAT vs. NjRAT/XWorm \u2014 Technical Deep-Dive",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2025-12-06T00:00:00Z",
+            "object_refs": [
+                "indicator--816a3a4d-76b2-513c-abe4-2dc2f46aa6e1",
+                "indicator--d19bb534-daa4-5e41-b406-76235e716863",
+                "indicator--ae6086da-0c55-53e2-816c-d282684d1da8",
+                "indicator--14cc356f-1eed-53c2-abcc-10fbe3147824",
+                "indicator--c0b6f9c7-cd6f-5152-9068-c7b7bfd1b2fe",
+                "indicator--48ebbe76-3452-5c05-be8b-5455c38a4077",
+                "indicator--40edb1d7-cf2d-52c6-a34e-5f258dd5c6c8",
+                "indicator--37f699a5-fe3a-5f6c-9483-2df1406dc49b",
+                "indicator--59fc9ddf-e830-53f8-94b7-eff36f73b296",
+                "indicator--ff729d71-5243-5b11-8dcd-ddae4653f778"
+            ],
+            "labels": [
+                "RAT",
+                "Injection",
+                ".NET",
+                "Cred Theft"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/dual-rat-analysis/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

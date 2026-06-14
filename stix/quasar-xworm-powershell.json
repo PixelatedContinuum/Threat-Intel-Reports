@@ -1,0 +1,78 @@
+{
+    "type": "bundle",
+    "id": "bundle--a67feb15-101e-44d9-9006-754c34699a52",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:20.293967Z",
+            "modified": "2026-06-14T11:57:20.293967Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--dee64d05-a4d6-517a-9aa2-fef4d53bbeae",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:20.2942Z",
+            "modified": "2026-06-14T11:57:20.2942Z",
+            "name": "Suspicious VBScript Downloading PowerShell Payload",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Suspicious VBScript Downloading PowerShell Payload\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection:\n    ParentImage|endswith: '\\wscript.exe'\n    Image|endswith: '\\powershell.exe'\n    CommandLine|contains:\n      - \"System.Net.Http.HttpClient\"\n      - \"GetAsync\"\n      - \"update.png\"\n  condition: selection\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-10-17T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--b68533aa-3b85-5be9-a6db-a7265dc66bae",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-14T11:57:20.294464Z",
+            "modified": "2026-06-14T11:57:20.294464Z",
+            "name": "QuasarRAT + Xworm + PowerShell Loader",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2025-10-17T00:00:00Z",
+            "object_refs": [
+                "indicator--dee64d05-a4d6-517a-9aa2-fef4d53bbeae"
+            ],
+            "labels": [
+                "RAT",
+                "Loader",
+                "PowerShell",
+                "Evasion"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/quasar-xworm-powershell/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}
