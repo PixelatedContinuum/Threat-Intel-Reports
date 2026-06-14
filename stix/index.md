@@ -5,7 +5,7 @@ permalink: /stix/
 position: 4.5
 ---
 
-<div class="hl-page-header" style="--ph-accent: #a78bfa;">
+<div class="hl-page-header" style="--ph-accent: #22d3ee;">
   <div class="hl-page-header__label">STIX Bundles</div>
   <div class="hl-page-header__title">STIX 2.1 Threat Intelligence</div>
   <div class="hl-page-header__desc">Per-campaign STIX 2.1 bundles — import into OpenCTI, MISP, or any STIX-aware platform. Licensed under <strong>CC BY-NC 4.0</strong>.</div>

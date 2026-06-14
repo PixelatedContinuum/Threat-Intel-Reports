@@ -73,9 +73,9 @@ position: 1
     <div class="hl-nav-tile__title">IOC Feeds</div>
     <div class="hl-nav-tile__desc">Indicators ready for your SIEM or EDR</div>
   </a>
-  <a href="{{ '/behind-the-reports/' | relative_url }}" class="hl-nav-tile" style="--acc: #f97316;">
-    <div class="hl-nav-tile__title">Behind the Reports</div>
-    <div class="hl-nav-tile__desc">How the intelligence is produced</div>
+  <a href="{{ '/stix/' | relative_url }}" class="hl-nav-tile" style="--acc: #22d3ee;">
+    <div class="hl-nav-tile__title">STIX Bundles</div>
+    <div class="hl-nav-tile__desc">STIX 2.1 bundles for OpenCTI &amp; MISP</div>
   </a>
 </div>
 
@@ -87,8 +87,9 @@ position: 1
 
 {% include section-header.html label="About & Connect" accent="#f97316" %}
 
-<div class="hl-tile-row3">
+<div class="hl-tile-row4">
   <a href="{{ '/about-me/' | relative_url }}" class="hl-nav-tile" style="--acc: #60a5fa;"><div class="hl-nav-tile__title">About Me</div><div class="hl-nav-tile__desc">Background &amp; how to reach me</div></a>
+  <a href="{{ '/behind-the-reports/' | relative_url }}" class="hl-nav-tile" style="--acc: #f97316;"><div class="hl-nav-tile__title">Behind the Reports</div><div class="hl-nav-tile__desc">How the intelligence is produced</div></a>
   <a href="{{ '/consulting/' | relative_url }}" class="hl-nav-tile" style="--acc: #b8902f;"><div class="hl-nav-tile__title">Consulting</div><div class="hl-nav-tile__desc">Malware analysis, IR &amp; detection services</div></a>
   <a href="{{ '/support/' | relative_url }}" class="hl-nav-tile" style="--acc: #f97316;"><div class="hl-nav-tile__title">Support</div><div class="hl-nav-tile__desc">Help keep the research free</div></a>
 </div>

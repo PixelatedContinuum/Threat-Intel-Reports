@@ -2606,8 +2606,9 @@ button,
 .hl-mission__note { margin-top: 16px; font-size: 0.85em; color: var(--hl-text-secondary); font-style: italic;
   border-left: 2px solid var(--hl-border-card); padding-left: 12px; }
 
-/* --- Home: About & Connect 3-up tile row ------------------- */
+/* --- Home: About & Connect tile row (3-up legacy + 4-up) --- */
 .hl-tile-row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 14px; }
+.hl-tile-row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 14px; }
 .hl-contribute { font-size: 0.88em; color: var(--hl-text-secondary); line-height: 1.6; }
 .hl-contribute a { color: var(--hl-accent-blue); }
 
@@ -2621,6 +2622,8 @@ button,
 a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0,0,0,0.38); }
 
 @media (max-width: 700px) { .hl-tile-row3 { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .hl-tile-row4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px) { .hl-tile-row4 { grid-template-columns: 1fr; } }
 
 /* --- Premium polish: gradient hero (glow + headline), lifted pills, card glow --- */
 .hl-home-hero { position: relative; isolation: isolate; }
