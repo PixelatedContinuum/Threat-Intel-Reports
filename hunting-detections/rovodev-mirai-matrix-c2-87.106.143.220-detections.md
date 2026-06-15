@@ -3,6 +3,7 @@ title: "Detection Rules — Rovodev AI Co-Authored Pandora-Mirai Variant + Matri
 date: '2026-05-26'
 layout: post
 permalink: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/
+thumbnail: /assets/images/cards/rovodev-mirai-matrix-c2-87.106.143.220.png
 hide: true
 unlisted: true
 ---

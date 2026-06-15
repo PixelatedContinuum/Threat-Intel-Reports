@@ -3,6 +3,7 @@ title: "Detection Rules — Open Directory at 193.56.255.154 (XiebroC2 v3.1 and 
 date: '2026-04-03'
 layout: post
 permalink: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/
+thumbnail: /assets/images/cards/open-directory-193-56-255-154-xiebroc2.png
 hide: true
 ---
 

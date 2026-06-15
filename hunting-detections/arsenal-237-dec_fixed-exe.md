@@ -3,6 +3,7 @@ title: Detection Rules - dec_fixed.exe - Ransomware Decryptor
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-dec_fixed-exe/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 hide: true
 ---
 

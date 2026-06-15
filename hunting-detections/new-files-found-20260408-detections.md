@@ -3,6 +3,7 @@ title: "Detection Rules — OpenStrike Expanded Toolkit (New Files 2026-04-08)"
 date: '2026-04-08'
 layout: post
 permalink: /hunting-detections/new-files-found-20260408-detections/
+thumbnail: /assets/images/cards/new-files-found-20260408.png
 hide: true
 ---
 

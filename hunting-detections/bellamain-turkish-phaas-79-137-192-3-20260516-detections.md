@@ -3,6 +3,7 @@ title: "Detection Rules — BellaMain Turkish PhaaS Panel"
 date: '2026-05-16'
 layout: post
 permalink: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
+thumbnail: /assets/images/cards/bellamain-turkish-phaas-79-137-192-3-20260516.png
 hide: true
 ---
 

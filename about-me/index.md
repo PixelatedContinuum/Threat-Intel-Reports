@@ -3,6 +3,7 @@ title: About Me
 date: '2025-11-17'
 layout: page
 permalink: /about-me/
+thumbnail: /assets/images/cards/about.png
 ---
 
 <div class="hl-page-header" style="--ph-accent: #60a5fa;">

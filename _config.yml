@@ -6,6 +6,12 @@ url: "https://the-hunters-ledger.com"
 title: The Hunter's Ledger
 description: "Threat Intelligence Reports and Hunting Resources"
 
+# jekyll-seo-tag: emit a large-image Twitter card. Without this the plugin
+# defaults to "summary", which conflicts with the summary_large_image tag in
+# _includes/default/head.liquid and yields a tiny/blank link preview on X.
+twitter:
+  card: summary_large_image
+
 favicon: "/assets/images/favicon.svg"
 
 # Header and footer text
@@ -52,3 +58,13 @@ exclude:
 
 # Theme activation
 remote_theme: sylhare/Type-on-Strap
+
+# Section default link-preview card (og:image via page.thumbnail in head.liquid)
+# for the behind-the-reports editorial pages. Deliverable pages set their own
+# thumbnail explicitly: each report AND its detection page use the campaign's
+# report card; listing/landing pages use their own hub card.
+defaults:
+  - scope:
+      path: "behind-the-reports"
+    values:
+      thumbnail: /assets/images/cards/behind-the-reports.png

@@ -3,6 +3,7 @@ title: "Detection Rules — OpenStrike Beacon Toolkit on Open Directory 172.105.
 date: '2026-04-06'
 layout: post
 permalink: /hunting-detections/open-directory-172-105-0-126-20260406-detections/
+thumbnail: /assets/images/cards/open-directory-172-105-0-126-20260406.png
 hide: true
 ---
 

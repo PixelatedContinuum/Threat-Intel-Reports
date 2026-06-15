@@ -3,6 +3,7 @@ title: Consulting & Advisory
 nav_title: Need Help?
 layout: page
 permalink: /consulting/
+thumbnail: /assets/images/cards/consulting.png
 position: 7
 ---
 

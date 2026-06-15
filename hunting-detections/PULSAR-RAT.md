@@ -3,6 +3,7 @@ title: Detection Rules - PULSAR RAT (server.exe)
 date: '2025-12-01'
 layout: post
 permalink: "/hunting-detections/PULSAR-RAT/"
+thumbnail: /assets/images/cards/PULSAR-RAT.png
 hide: true
 ---
 

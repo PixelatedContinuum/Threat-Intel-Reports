@@ -3,6 +3,7 @@ title: Detection Rules - full_test_enc.exe - Advanced Rust Ransomware
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-full_test_enc-exe/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 hide: true
 ---
 

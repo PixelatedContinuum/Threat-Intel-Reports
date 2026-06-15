@@ -3,6 +3,7 @@ title: Detection Rules - Remcos RAT OpenDirectory Campaign
 date: '2026-02-04'
 layout: post
 permalink: /hunting-detections/remcos-opendirectory/
+thumbnail: /assets/images/cards/remcos-opendirectory.png
 hide: true
 ---
 

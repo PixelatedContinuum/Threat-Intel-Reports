@@ -3,6 +3,7 @@ title: "Detection Rules — ZeroTrace Multi-Family MaaS Operation (Open Director
 date: '2026-03-17'
 layout: post
 permalink: /hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+thumbnail: /assets/images/cards/zerotrace-74-0-42-25-20260316.png
 hide: true
 ---
 

@@ -2,6 +2,7 @@
 title: Subscribe
 layout: page
 permalink: /subscribe/
+thumbnail: /assets/images/cards/subscribe.png
 position: 5
 ---
 

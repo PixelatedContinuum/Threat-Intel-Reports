@@ -3,6 +3,7 @@ title: "Detection Rules — GHOST Cryptojacker Kit Family (Vova75Rus / 77.110.96
 date: '2026-05-25'
 layout: post
 permalink: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/
+thumbnail: /assets/images/cards/ghost-cryptojacker-vova75rus-77.110.96.200.png
 hide: true
 unlisted: true
 ---

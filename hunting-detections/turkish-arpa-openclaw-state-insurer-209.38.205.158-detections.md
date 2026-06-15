@@ -3,6 +3,7 @@ title: "Detection Rules — Turkish ARPA Operator / AI-Augmented State-Insurer O
 date: '2026-05-26'
 layout: post
 permalink: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
+thumbnail: /assets/images/cards/turkish-arpa-openclaw-state-insurer-209.38.205.158.png
 hide: true
 unlisted: true
 ---

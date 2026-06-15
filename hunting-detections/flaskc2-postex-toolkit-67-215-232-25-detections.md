@@ -3,6 +3,7 @@ title: "Detection Rules — FlaskC2-PostEx-Toolkit-67.215.232.25"
 date: '2026-06-12'
 layout: post
 permalink: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
+thumbnail: /assets/images/cards/flaskc2-postex-toolkit-67-215-232-25.png
 hide: true
 ---
 

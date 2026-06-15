@@ -2,6 +2,7 @@
 title: Support
 layout: page
 permalink: /support/
+thumbnail: /assets/images/cards/support.png
 position: 6
 ---
 

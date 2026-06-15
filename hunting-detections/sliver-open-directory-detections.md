@@ -3,6 +3,7 @@ title: Detection Rules - Sliver C2 / ScareCrow Loader Open Directory Kit
 date: '2026-03-01'
 layout: post
 permalink: /hunting-detections/sliver-open-directory-detections/
+thumbnail: /assets/images/cards/sliver-open-directory.png
 hide: true
 ---
 

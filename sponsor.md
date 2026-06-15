@@ -2,6 +2,7 @@
 title: Sponsorship
 layout: page
 permalink: /sponsor/
+thumbnail: /assets/images/cards/sponsor.png
 hide: true
 ---
 

@@ -3,6 +3,7 @@ title: "Detection Rules — Shadow RAT & XWorm Open Directory Campaign"
 date: '2026-04-04'
 layout: post
 permalink: /hunting-detections/shadow-xworm-opendirectory-detections/
+thumbnail: /assets/images/cards/shadow-xworm-opendirectory.png
 hide: true
 ---
 

@@ -3,6 +3,7 @@ title: "Detection Rules — Korean Claude Code Allowlist + OpenClaw Operator (22
 date: '2026-05-27'
 layout: post
 permalink: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
+thumbnail: /assets/images/cards/korean-claude-openclaw-221.150.15.104.png
 hide: true
 unlisted: true
 ---

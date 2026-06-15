@@ -3,6 +3,7 @@ title: "Detection Rules — Inkognito Russian VPN Phishing & Brand-Impersonation
 date: '2026-05-16'
 layout: post
 permalink: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/
+thumbnail: /assets/images/cards/inkognito-russian-vpn-phishing-185-221-196-118-20260516.png
 hide: true
 ---
 

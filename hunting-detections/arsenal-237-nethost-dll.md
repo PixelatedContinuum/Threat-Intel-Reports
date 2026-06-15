@@ -3,6 +3,7 @@ title: Detection Rules - nethost.dll - DLL Hijacking Persistence
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-nethost-dll/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 hide: true
 ---
 

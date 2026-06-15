@@ -3,6 +3,7 @@ title: Hybrid Loader/Stealer Ecosystem Masquerading as Sogou
 date: '2025-11-21'
 layout: post
 permalink: /hunting-detections/Hybrid-Loader-Stealer-Sogou/
+thumbnail: /assets/images/cards/Hybrid-Loader-Stealer-Sogou.png
 hide: true
 ---
 ## Sigma Rules

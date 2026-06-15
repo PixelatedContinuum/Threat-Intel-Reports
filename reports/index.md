@@ -2,6 +2,7 @@
 title: Reports
 layout: page
 permalink: /reports/
+thumbnail: /assets/images/cards/reports.png
 position: 2
 ---
 

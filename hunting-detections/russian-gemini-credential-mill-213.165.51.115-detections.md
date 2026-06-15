@@ -3,6 +3,7 @@ title: "Detection Rules — Russian Gemini Credential Mill (213.165.51.115)"
 date: '2026-05-25'
 layout: post
 permalink: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
+thumbnail: /assets/images/cards/russian-gemini-credential-mill-213.165.51.115.png
 hide: true
 unlisted: true
 ---

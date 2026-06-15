@@ -3,6 +3,8 @@ title: STIX Bundles
 layout: page
 permalink: /stix/
 position: 4.5
+description: "Per-campaign STIX 2.1 bundles — import into OpenCTI, MISP, or any STIX-aware platform. Licensed CC BY-NC 4.0."
+thumbnail: /assets/images/cards/stix.png
 ---
 
 <div class="hl-page-header" style="--ph-accent: #22d3ee;">

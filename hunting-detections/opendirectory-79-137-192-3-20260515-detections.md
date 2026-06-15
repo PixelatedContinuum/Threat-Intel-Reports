@@ -3,6 +3,7 @@ title: "Detection Rules — Multi-Cluster Open-Directory 79.137.192.3 (Rhadamant
 date: '2026-05-15'
 layout: post
 permalink: /hunting-detections/opendirectory-79-137-192-3-20260515-detections/
+thumbnail: /assets/images/cards/opendirectory-79-137-192-3-20260515.png
 hide: true
 ---
 

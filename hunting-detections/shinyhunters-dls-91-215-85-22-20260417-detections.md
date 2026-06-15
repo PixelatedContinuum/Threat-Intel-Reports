@@ -3,6 +3,7 @@ title: "Detection Rules — ShinyHunters Data Leak Site (91.215.85.22)"
 date: '2026-04-17'
 layout: post
 permalink: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/
+thumbnail: /assets/images/cards/shinyhunters-dls-91-215-85-22-20260417.png
 hide: true
 ---
 

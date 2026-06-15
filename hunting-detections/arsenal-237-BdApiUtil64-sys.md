@@ -3,6 +3,7 @@ title: Detection Rules - BdApiUtil64.sys (Arsenal-237 BYOVD Component)
 date: '2026-01-26'
 layout: post
 permalink: /hunting-detections/arsenal-237-BdApiUtil64-sys/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 hide: true
 ---
 

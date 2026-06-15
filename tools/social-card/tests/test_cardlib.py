@@ -52,6 +52,18 @@ def test_render_card():
         assert im.format == "PNG"
     os.remove(p)
 
+def test_render_hub_card():
+    p = os.path.join(REPO, "tools/social-card/tests/_hub_out.png")
+    c.render_hub_card({"pill": "STIX 2.1", "kicker": "THREAT INTELLIGENCE",
+                       "title": "STIX Bundles",
+                       "subtitle": "Per-campaign STIX 2.1 bundles for import.",
+                       "footer_left": "CC BY-NC 4.0"}, p)
+    from PIL import Image
+    with Image.open(p) as im:            # context-manage so Windows releases the handle
+        assert im.size == (1200, 630)
+        assert im.format == "PNG"
+    os.remove(p)
+
 # ---- thumbnail front matter ----
 def test_ensure_thumbnail_line():
     sample = "---\ntitle: \"X\"\npermalink: /reports/foo/\nhide: true\n---\nBody\n"

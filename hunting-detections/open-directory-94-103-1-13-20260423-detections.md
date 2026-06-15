@@ -3,6 +3,7 @@ title: "Detection Rules — Chaos Ransomware (TorBrowserTor) Multi-Stage Loader 
 date: '2026-04-23'
 layout: post
 permalink: /hunting-detections/open-directory-94-103-1-13-20260423-detections/
+thumbnail: /assets/images/cards/open-directory-94-103-1-13-20260423.png
 hide: true
 ---
 

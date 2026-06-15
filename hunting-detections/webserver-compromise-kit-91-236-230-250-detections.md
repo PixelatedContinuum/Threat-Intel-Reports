@@ -3,6 +3,7 @@ title: 'Detection Rules - WebServer Compromise Kit'
 date: '2026-02-08'
 layout: post
 permalink: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections/
+thumbnail: /assets/images/cards/webserver-compromise-kit-91-236-230-250.png
 hide: true
 ---
 

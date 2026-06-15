@@ -2,6 +2,7 @@
 title: Hunting Detections
 layout: page
 permalink: /hunting-detections/
+thumbnail: /assets/images/cards/hunting-detections.png
 position: 3
 ---
 

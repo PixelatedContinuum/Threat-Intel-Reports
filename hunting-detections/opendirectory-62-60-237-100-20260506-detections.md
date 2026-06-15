@@ -3,6 +3,7 @@ title: "Detection Rules — HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Ve
 date: '2026-05-06'
 layout: post
 permalink: /hunting-detections/opendirectory-62-60-237-100-20260506-detections/
+thumbnail: /assets/images/cards/opendirectory-62-60-237-100-20260506.png
 hide: true
 ---
 

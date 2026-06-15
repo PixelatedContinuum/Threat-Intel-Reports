@@ -3,6 +3,7 @@ title: Detection Rules - NsMiner Cryptojacker
 date: '2026-02-02'
 layout: post
 permalink: /hunting-detections/nsminer-cryptojacker/
+thumbnail: /assets/images/cards/nsminer-cryptojacker.png
 hide: true
 ---
 

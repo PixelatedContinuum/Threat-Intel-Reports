@@ -3,6 +3,7 @@ title: Detection Rules – AdvancedRouterScanner Campaign
 date: '2025-10-25'
 layout: post
 permalink: /hunting-detections/AdvancedRouterScanner/
+thumbnail: /assets/images/cards/AdvancedRouterScanner.png
 hide: true
 ---
 

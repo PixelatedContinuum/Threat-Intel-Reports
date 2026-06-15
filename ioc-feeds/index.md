@@ -2,6 +2,7 @@
 title: IOC Feeds
 layout: page
 permalink: /ioc-feeds/
+thumbnail: /assets/images/cards/ioc-feeds.png
 position: 4
 ---
 

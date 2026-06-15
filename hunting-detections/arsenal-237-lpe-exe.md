@@ -3,6 +3,7 @@ title: Detection Rules - lpe.exe (Arsenal-237 LPE Module)
 date: '2026-01-25'
 layout: post
 permalink: /hunting-detections/arsenal-237-lpe-exe/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 hide: true
 ---
 

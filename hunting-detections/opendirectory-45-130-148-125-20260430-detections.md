@@ -3,6 +3,7 @@ title: "Detection Rules — AdaptixC2 Open Directory Exposure (45.130.148.125)"
 date: '2026-04-30'
 layout: post
 permalink: /hunting-detections/opendirectory-45-130-148-125-20260430-detections/
+thumbnail: /assets/images/cards/opendirectory-45-130-148-125-20260430.png
 hide: true
 ---
 

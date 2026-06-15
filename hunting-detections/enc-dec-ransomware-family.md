@@ -3,6 +3,7 @@ title: Detection Rules - enc/dec Ransomware Family
 date: '2026-01-18'
 layout: post
 permalink: /hunting-detections/enc-dec-ransomware-family/
+thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
 hide: true
 ---
 

@@ -261,3 +261,78 @@ def ensure_thumbnail_line(text, slug):
     lines.insert(insert_at, line)
     new_block = head + "\n".join(lines) + tail
     return text[:m.start()] + new_block + text[m.end():], True
+
+
+# -------------------------------------------------- hub / listing-page cards
+HUB_ACCENT = "#22d3ee"   # cyan — matches the /stix/ page header --ph-accent
+
+
+def _wrap(text, font, max_w, max_lines):
+    """Greedy word-wrap to at most max_lines; ellipsize the last if it spills."""
+    words, cur, lines = text.split(), "", []
+    for w in words:
+        cand = w if not cur else cur + " " + w
+        if _scratch.textlength(cand, font=font) <= max_w:
+            cur = cand
+        else:
+            lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    if len(lines) > max_lines:
+        keep = lines[:max_lines]
+        keep[-1] = _ellipsize(" ".join(lines[max_lines - 1:]), font, max_w)
+        lines = keep
+    return lines
+
+
+def render_hub_card(fields, out_path, accent=HUB_ACCENT, kicker_color=GOLD):
+    """Render a 1200x630 social card for a listing / hub page (e.g. /stix/).
+
+    Unlike render_card (per-report) there is no severity or date; `accent`
+    colors the left spine + the top-right pill, while the grid background,
+    brand mark, gold kicker and domain footer match the report cards so hub
+    cards sit in the same visual family.
+
+    fields keys: pill, kicker, title, subtitle, footer_left.
+    """
+    im = _background()
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, 0, _s(8), BH], fill=accent)                  # accent spine
+    ml, mr, top = _s(72), _s(72), _s(60)
+    d.rounded_rectangle([ml, top, ml + _s(5), top + _s(30)], radius=_s(2), fill=BLUE)
+    _tracked(d, (ml + _s(15), top + _s(4)), "THE HUNTER'S LEDGER",
+             _font(18, 600), TXT, _s(2.2))
+    fp = _font(19, 700)                                          # top-right pill
+    pt = fields["pill"]
+    tw = _scratch.textlength(pt, font=fp)
+    pw, ph = tw + _s(34), _s(40)
+    px0 = BW - mr - pw
+    d.rounded_rectangle([px0, top - _s(4), px0 + pw, top - _s(4) + ph],
+                        radius=_s(20), fill=accent)
+    d.text((px0 + _s(17), top + _s(5)), pt, font=fp, fill="#06232b")
+    _tracked(d, (ml, _s(206)), fields["kicker"], _font(19, 600), kicker_color, _s(3))
+    f, lines = _fit_title(fields["title"], BW - ml - mr, 3, 76, 40)
+    lh = int(f.size * 1.10)
+    y = _s(238)
+    for ln in lines:
+        d.text((ml, y), ln, font=f, fill=TXT)
+        y += lh
+    if fields.get("subtitle"):
+        fs = _font(21, 400)
+        sy = y + _s(16)
+        for ln in _wrap(fields["subtitle"], fs, BW - ml - mr, 2):
+            d.text((ml, sy), ln, font=fs, fill=MUTED)
+            sy += int(fs.size * 1.18)
+    d.line([(ml, _s(H - 96)), (BW - mr, _s(H - 96))], fill=DIV, width=_s(1))
+    fm = _font(19, 500)
+    ym = _s(H - 76)
+    d.text((ml, ym), fields.get("footer_left", ""), font=fm, fill=MUTED)
+    fd = _font(19, 600)
+    twd = _scratch.textlength(DOMAIN, font=fd)
+    xr = BW - mr - twd
+    d.rounded_rectangle([xr - _s(20), ym + _s(5), xr - _s(20) + _s(11), ym + _s(5) + _s(11)],
+                        radius=_s(2), fill=BLUE)
+    d.text((xr, ym), DOMAIN, font=fd, fill="#b8b8b8")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    im.resize((W, H), Image.LANCZOS).save(out_path, optimize=True)

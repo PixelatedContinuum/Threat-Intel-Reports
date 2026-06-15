@@ -3,6 +3,7 @@ title: Detection Rules - agent_xworm.exe (XWorm RAT)
 date: '2026-01-12'
 layout: post
 permalink: /hunting-detections/agent-xworm-exe/
+thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
 hide: true
 ---
 

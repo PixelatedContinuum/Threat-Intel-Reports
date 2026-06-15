@@ -3,6 +3,7 @@ title: Detection Rules - enc_c2.exe - Rust Ransomware with Tor C2
 date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-enc_c2-exe/
+thumbnail: /assets/images/cards/arsenal-237-new-files.png
 hide: true
 ---
 

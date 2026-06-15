@@ -76,6 +76,10 @@
 
     <!-- seo tags -->
     <meta property="og:image" content="{{ page.thumbnail | default: page['feature-img'] | default: site.header_feature_image | absolute_url }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:alt" content="{{ page.title | default: site.title }}">
     {% seo %}
     {% if page.layout == "post" and page.url contains "/reports/" %}{% include structured-data.liquid %}{% endif %}
 
