@@ -6,12 +6,6 @@ url: "https://the-hunters-ledger.com"
 title: The Hunter's Ledger
 description: "Threat Intelligence Reports and Hunting Resources"
 
-# jekyll-seo-tag: emit a large-image Twitter card. Without this the plugin
-# defaults to "summary", which conflicts with the summary_large_image tag in
-# _includes/default/head.liquid and yields a tiny/blank link preview on X.
-twitter:
-  card: summary_large_image
-
 favicon: "/assets/images/favicon.svg"
 
 # Header and footer text
