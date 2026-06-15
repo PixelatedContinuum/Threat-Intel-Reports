@@ -56,4 +56,4 @@ sponsors:
     logo: /assets/images/sponsors/hunt-io.png
     tagline: "Internet-wide threat hunting & attack-surface intelligence"
     tier: monthly
-    active: false
+    active: true

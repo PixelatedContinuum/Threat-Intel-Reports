@@ -5,7 +5,6 @@ layout: post
 permalink: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 thumbnail: /assets/images/cards/turkish-arpa-openclaw-state-insurer-209.38.205.158.png
 hide: true
-unlisted: true
 ---
 
 **Campaign:** Turkish-ARPA-OpenClaw-State-Insurer-UTA-2026-013-209.38.205.158

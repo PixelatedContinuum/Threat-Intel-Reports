@@ -5,7 +5,6 @@ layout: post
 permalink: /hunting-detections/ai-agent-frameworks-2026-05-23-detections/
 thumbnail: /assets/images/cards/ai-agent-frameworks-2026-05-23.png
 hide: true
-unlisted: true
 ---
 
 **Campaign:** AI-Agent-Frameworks-MultiActor-2026-05-23

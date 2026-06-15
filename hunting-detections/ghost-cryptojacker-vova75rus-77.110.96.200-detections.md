@@ -5,7 +5,6 @@ layout: post
 permalink: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/
 thumbnail: /assets/images/cards/ghost-cryptojacker-vova75rus-77.110.96.200.png
 hide: true
-unlisted: true
 ---
 
 **Campaign:** GHOST-Cryptojacker-Vova75Rus-77.110.96.200
