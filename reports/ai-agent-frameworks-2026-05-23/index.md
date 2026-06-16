@@ -30,6 +30,7 @@ ioc_highlights:
   - "209.38.205.158"
   - "87.106.143.220"
   - "5.230.201.54"
+stix_bundle: /stix/ai-agent-frameworks-2026-05-23.json
 ---
 
 **Campaign Identifier:** AI-Agent-Frameworks-MultiActor-2026-05-23<br>

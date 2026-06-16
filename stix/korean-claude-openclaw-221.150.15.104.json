@@ -1,0 +1,473 @@
+{
+    "type": "bundle",
+    "id": "bundle--1b329b7a-dbbc-4c9a-af54-dc4f161ee650",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.313335Z",
+            "modified": "2026-06-16T16:01:11.313335Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--719a3902-57d6-5986-b261-1a56768c96e0",
+            "value": "221.150.15.104"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e3c11a2a-efa6-5c35-8948-3d0499fed5f7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.313699Z",
+            "modified": "2026-06-16T16:01:11.313699Z",
+            "name": "ipv4: 221.150.15.104",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '221.150.15.104']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--667a23f8-da94-5603-afb5-3d95dfd3135c",
+            "value": "http://221.150.15.104:8080/"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--43db6551-7b2f-527b-84e9-52e350a149da",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.314376Z",
+            "modified": "2026-06-16T16:01:11.314376Z",
+            "name": "url: http://221.150.15.104:8080/",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://221.150.15.104:8080/']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--f6ac9a5f-ae1b-5ce9-83a8-683ec55c36d1",
+            "value": "https://openclaw.ai/install.sh"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--596e5aad-4719-579f-b20a-cd696eedf295",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.314884Z",
+            "modified": "2026-06-16T16:01:11.314884Z",
+            "name": "url: https://openclaw.ai/install.sh",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'https://openclaw.ai/install.sh']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--756a03b0-26dd-52fb-ba52-919a19ef092b",
+            "value": "openclaw.ai"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--151d4657-7b52-534f-a1ea-24747312481a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.315326Z",
+            "modified": "2026-06-16T16:01:11.315326Z",
+            "name": "domain: openclaw.ai",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'openclaw.ai']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--65032d92-feab-568c-aaaa-9a200cb72bc5",
+            "value": "docs.openclaw.ai"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9d991296-0e5b-5941-8271-2d9926393c06",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.315744Z",
+            "modified": "2026-06-16T16:01:11.315744Z",
+            "name": "domain: docs.openclaw.ai",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'docs.openclaw.ai']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--51b63c3d-09bc-55c6-bff7-13673f13de3e",
+            "value": "lightmake.site"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--99fb9224-781d-531e-93eb-1d66f8d5f043",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.316174Z",
+            "modified": "2026-06-16T16:01:11.316174Z",
+            "name": "domain: lightmake.site",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'lightmake.site']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3b0ec8af-225c-594e-9ffc-f169fdb3608a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.316661Z",
+            "modified": "2026-06-16T16:01:11.316661Z",
+            "name": "TOOL_ClaudeCode_OpenClaw_Allowlist_Specific",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule TOOL_ClaudeCode_OpenClaw_Allowlist_Specific {\n   meta:\n      description = \"Detects attacker-customized Claude Code settings.local.json containing 3+ OpenClaw-specific permission allowlist entries pre-authorizing the OpenClaw curl|bash installer, npm global install, onboarding, docs fetch, gateway start, and UI launch \u2014 suppressing Claude Code safety prompts for the complete OpenClaw bring-up workflow\"\n      license = \"CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\"\n      date = \"2026-05-27\"\n      family = \"AI-Agent Allowlist Abuse\"\n      malware_type = \"Operator Tradecraft / AI-Agent Permission Bypass\"\n      campaign = \"Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\"\n      id = \"98965454-3e39-59be-8b73-d9e5451d3a11\"\n   strings:\n      $oc_install    = \"Bash(curl -fsSL https://openclaw.ai/install.sh | bash)\" ascii fullword\n      $oc_npm        = \"Bash(npm i -g openclaw)\" ascii fullword\n      $oc_onboard    = \"Bash(openclaw onboard)\" ascii fullword\n      $oc_webfetch   = \"WebFetch(domain:docs.openclaw.ai)\" ascii fullword\n      $oc_gateway    = \"Bash(openclaw gateway --port\" ascii\n      $oc_openui     = \"Bash(open http://127.0.0.1:18789/)\" ascii fullword\n      $oc_domain     = \"openclaw.ai\" ascii\n   condition:\n      filesize < 10KB and\n      3 of ($oc_install, $oc_npm, $oc_onboard, $oc_webfetch, $oc_gateway, $oc_openui, $oc_domain)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--524f45d5-1eac-5d5f-97d7-7f397c6ed3a8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.316806Z",
+            "modified": "2026-06-16T16:01:11.316806Z",
+            "name": "TOOL_ClaudeCode_CurlBash_Allowlist_Generic",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {\n   meta:\n      description = \"Detects any Claude Code settings.local.json permission allowlist containing a Bash(curl ... | bash) or Bash(curl ... | sh) pre-authorization pattern \u2014 a high-signal heuristic for attacker-customized AI-agent allowlist abuse regardless of which specific tooling is being installed\"\n      license = \"CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\"\n      date = \"2026-05-27\"\n      family = \"AI-Agent Allowlist Abuse\"\n      malware_type = \"Operator Tradecraft / AI-Agent Permission Bypass\"\n      campaign = \"Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\"\n      id = \"ae126881-077c-513d-bd87-bd8b56944fcc\"\n   strings:\n      $permissions_block = \"\\\"permissions\\\"\" ascii\n      $allow_block       = \"\\\"allow\\\"\" ascii\n      $curl_bash         = \"| bash)\" ascii\n      $curl_sh           = \"| sh)\" ascii\n      $bash_prefix       = \"Bash(curl\" ascii\n   condition:\n      filesize < 10KB and\n      $permissions_block and\n      $allow_block and\n      $bash_prefix and\n      ($curl_bash or $curl_sh)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c62e52b4-cd5f-59ed-bcf0-fb9a9d0da525",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.31693Z",
+            "modified": "2026-06-16T16:01:11.31693Z",
+            "name": "Claude Code Permission Allowlist Modified with OpenClaw Installer Strings",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Claude Code Permission Allowlist Modified with OpenClaw Installer Strings\nid: 54d80e73-2b2d-4932-a97b-d431db41c501\nstatus: test\ndescription: >-\n  Detects creation or modification of a Claude Code settings.local.json file containing\n  OpenClaw-specific permission allowlist strings \u2014 evidence of attacker-customized AI-agent\n  CLI allowlist abuse that suppresses Claude Code per-command safety prompts for the complete\n  OpenClaw installation and gateway bring-up workflow. Observed in the Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104 campaign.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/27\ntags:\n    - attack.defense-evasion\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection_path:\n        TargetFilename|contains: '/.claude/settings.local.json'\n    selection_content:\n        TargetFilename|contains:\n            - 'openclaw'\n    condition: selection_path\nfalsepositives:\n    - >-\n      Legitimate OpenClaw adopters on developer-class workstations who have explicitly added\n      OpenClaw allowlist entries to their Claude Code configuration. Deploy with content-review\n      workflow on developer hosts rather than as an automatic block. On server-class and\n      non-developer hosts, treat as high-priority finding.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--236e5708-e79c-50cb-80ab-bfa8e2b8bafb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.317049Z",
+            "modified": "2026-06-16T16:01:11.317049Z",
+            "name": "DNS Resolution of OpenClaw AI-Agent Framework Distribution Domains",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: DNS Resolution of OpenClaw AI-Agent Framework Distribution Domains\nid: 962739fd-fd90-4172-9147-d841800c2517\nstatus: test\ndescription: >-\n  Detects DNS resolution requests for openclaw.ai, docs.openclaw.ai, or lightmake.site \u2014\n  the OpenClaw AI-agent framework distribution, documentation, and adjacent-infrastructure\n  domains observed in attacker-customized Claude Code allowlist abuse campaigns. Queries\n  from server-class or non-developer hosts represent high-priority findings; queries from\n  developer hosts require allowlist content review to confirm legitimacy.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/27\ntags:\n    - attack.defense-evasion\n    - attack.resource-development\nlogsource:\n    category: dns\ndetection:\n    selection:\n        dns.question.name|contains:\n            - 'openclaw.ai'\n            - 'lightmake.site'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate OpenClaw product adopters on developer-class workstations evaluating the\n      framework for sanctioned use. Whitelist known developer hosts and focus alerting on\n      server-class, jump-host, CI/CD agent, and non-developer endpoints for a low FP rate.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--aafce751-a38d-5b54-a402-4790e9f3687a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.31717Z",
+            "modified": "2026-06-16T16:01:11.31717Z",
+            "name": "OpenClaw AI-Agent Framework curl-pipe-bash Installer Execution",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: OpenClaw AI-Agent Framework curl-pipe-bash Installer Execution\nid: e02ddbf4-0a77-4c13-85ac-cd1ed9d8e66d\nstatus: test\ndescription: >-\n  Detects execution of the OpenClaw AI-agent framework curl-pipe-bash installer pipeline.\n  The command-line pattern (curl fetching from openclaw.ai piped to bash) is the primary\n  distribution mechanism documented in the Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104\n  operator campaign and indicates active execution of an attacker-pre-authorized AI-agent\n  tooling install under a customized Claude Code permission allowlist.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/27\ntags:\n    - attack.execution\n    - attack.defense-evasion\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'curl'\n            - 'openclaw.ai'\n            - 'bash'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate OpenClaw evaluation or testing on developer-class workstations. The\n      openclaw.ai domain scopes FP risk tightly \u2014 this rule will not fire on unrelated\n      curl-pipe-bash installer patterns.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b5ac95c8-9d6a-5abf-a4c3-8f2391c338cd",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.317286Z",
+            "modified": "2026-06-16T16:01:11.317286Z",
+            "name": "OpenClaw AI-Agent Gateway Service Started",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: OpenClaw AI-Agent Gateway Service Started\nid: f6a6901a-73dc-49c9-8c05-5ca64aa89d23\nstatus: test\ndescription: >-\n  Detects invocation of the OpenClaw local-gateway service via the 'openclaw gateway --port'\n  command pattern. The OpenClaw gateway functions as a local control-plane proxy between\n  Claude Code and downstream OpenClaw skills \u2014 its startup indicates the operator has\n  completed installation and is bringing up the AI-agent control plane. Observed as\n  allowlist entry 6 in the Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104 campaign.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/27\ntags:\n    - attack.command-and-control\n    - attack.defense-evasion\nlogsource:\n    category: process_creation\n    product: linux\ndetection:\n    selection_image:\n        Image|endswith: '/openclaw'\n    selection_cmdline:\n        CommandLine|contains|all:\n            - 'gateway'\n            - '--port'\n    condition: selection_image or selection_cmdline\nfalsepositives:\n    - >-\n      Legitimate OpenClaw adopters on developer-class workstations. The `openclaw gateway`\n      command pattern is specific enough to avoid non-OpenClaw FPs. Scope alerting to\n      server-class, jump-host, and non-developer endpoints for highest signal-to-noise ratio.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--27dbdf38-736f-5318-8038-b1a0a62d587d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.317401Z",
+            "modified": "2026-06-16T16:01:11.317401Z",
+            "name": "npm Registry Fetch for OpenClaw Package",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: npm Registry Fetch for OpenClaw Package\nid: d3a240e8-79a9-44d7-8b51-199389276d28\nstatus: test\ndescription: >-\n  Detects HTTP requests to the npm registry (registry.npmjs.org) for the openclaw package\n  name \u2014 the alternative installation path for the OpenClaw AI-agent framework documented\n  in the Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104 operator campaign. On\n  non-developer-class hosts, any npm fetch for the openclaw package is a high-priority\n  finding indicating active AI-agent tooling installation.\nreferences:\n    - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/\n    - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/27\ntags:\n    - attack.execution\n    - attack.defense-evasion\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-host|contains: 'registry.npmjs.org'\n        cs-uri-stem|contains: 'openclaw'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate developers evaluating or installing OpenClaw on sanctioned developer\n      workstations. On server-class hosts, CI/CD agents, and non-developer endpoints,\n      treat as high-priority and escalate.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--781ef256-424e-564c-8420-980f785bca99",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.317516Z",
+            "modified": "2026-06-16T16:01:11.317516Z",
+            "name": "THL Korean-ClaudeCode-Allowlist OpenClaw Distribution Domain TLS SNI (openclaw.ai)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tls $HOME_NET any -> any any (msg:\"THL Korean-ClaudeCode-Allowlist OpenClaw Distribution Domain TLS SNI (openclaw.ai)\"; tls.sni; content:\"openclaw.ai\"; nocase; startswith; endswith; threshold:type limit, track by_src, count 1, seconds 300; sid:9002701; rev:1; metadata:campaign Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104, created_at 2026_05_27, updated_at 2026_05_27;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f0f80c95-9e24-5563-8f02-ae765a3d173a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.31763Z",
+            "modified": "2026-06-16T16:01:11.31763Z",
+            "name": "THL Korean-ClaudeCode-Allowlist OpenClaw Documentation Domain TLS SNI (docs.openclaw.ai)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tls $HOME_NET any -> any any (msg:\"THL Korean-ClaudeCode-Allowlist OpenClaw Documentation Domain TLS SNI (docs.openclaw.ai)\"; tls.sni; content:\"docs.openclaw.ai\"; nocase; startswith; endswith; threshold:type limit, track by_src, count 1, seconds 300; sid:9002702; rev:1; metadata:campaign Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104, created_at 2026_05_27, updated_at 2026_05_27;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--84baa382-9a58-50dc-9800-9643765b040b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.317744Z",
+            "modified": "2026-06-16T16:01:11.317744Z",
+            "name": "THL Korean-ClaudeCode-Allowlist Operator Open Directory Access (221.150.15.104:8080)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> 221.150.15.104 any (msg:\"THL Korean-ClaudeCode-Allowlist Operator Open Directory Access (221.150.15.104:8080)\"; http.host; content:\"221.150.15.104\"; nocase; startswith; endswith; http.method; content:\"GET\"; threshold:type limit, track by_src, count 1, seconds 3600; sid:9002703; rev:1; metadata:campaign Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104, created_at 2026_05_27, updated_at 2026_05_27;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-05-27T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--070668c1-a16d-50a3-ad4a-b66be8f8f6d9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.317877Z",
+            "modified": "2026-06-16T16:01:11.317877Z",
+            "name": "korean-claude-openclaw-221.150.15.104 infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--076f15c9-d73d-5228-95a2-ee80898c22b8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-06-16T16:01:11.318144Z",
+            "modified": "2026-06-16T16:01:11.318144Z",
+            "name": "Korean Claude Code + OpenClaw Operator (221.150.15.104) - Attacker-Customized AI-Agent Permission Allowlist",
+            "description": "Case 4 capsule sub-report. Smoking-gun artifact: operator's customized ~/.claude/settings.local.json allowlist pre-approving the OpenClaw installation chain. NO defanging in JSON per project convention (machine-readable for SIEM/EDR ingestion). No confirmed victims; threat-level MEDIUM reflects tradecraft observation only.",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-05-27T00:00:00Z",
+            "object_refs": [
+                "ipv4-addr--719a3902-57d6-5986-b261-1a56768c96e0",
+                "indicator--e3c11a2a-efa6-5c35-8948-3d0499fed5f7",
+                "url--667a23f8-da94-5603-afb5-3d95dfd3135c",
+                "indicator--43db6551-7b2f-527b-84e9-52e350a149da",
+                "url--f6ac9a5f-ae1b-5ce9-83a8-683ec55c36d1",
+                "indicator--596e5aad-4719-579f-b20a-cd696eedf295",
+                "domain-name--756a03b0-26dd-52fb-ba52-919a19ef092b",
+                "indicator--151d4657-7b52-534f-a1ea-24747312481a",
+                "domain-name--65032d92-feab-568c-aaaa-9a200cb72bc5",
+                "indicator--9d991296-0e5b-5941-8271-2d9926393c06",
+                "domain-name--51b63c3d-09bc-55c6-bff7-13673f13de3e",
+                "indicator--99fb9224-781d-531e-93eb-1d66f8d5f043",
+                "indicator--3b0ec8af-225c-594e-9ffc-f169fdb3608a",
+                "indicator--524f45d5-1eac-5d5f-97d7-7f397c6ed3a8",
+                "indicator--c62e52b4-cd5f-59ed-bcf0-fb9a9d0da525",
+                "indicator--236e5708-e79c-50cb-80ab-bfa8e2b8bafb",
+                "indicator--aafce751-a38d-5b54-a402-4790e9f3687a",
+                "indicator--b5ac95c8-9d6a-5abf-a4c3-8f2391c338cd",
+                "indicator--27dbdf38-736f-5318-8038-b1a0a62d587d",
+                "indicator--781ef256-424e-564c-8420-980f785bca99",
+                "indicator--f0f80c95-9e24-5563-8f02-ae765a3d173a",
+                "indicator--84baa382-9a58-50dc-9800-9643765b040b",
+                "infrastructure--070668c1-a16d-50a3-ad4a-b66be8f8f6d9"
+            ],
+            "labels": [
+                "AI Abuse",
+                "Persistence",
+                "Open Dir"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

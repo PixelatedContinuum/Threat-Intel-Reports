@@ -26,6 +26,7 @@ ioc_highlights:
   - "221.150.15.104"
   - "openclaw.ai"
   - "~/.claude/settings.local.json"
+stix_bundle: /stix/korean-claude-openclaw-221.150.15.104.json
 ---
 
 **Campaign Identifier:** Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104<br>

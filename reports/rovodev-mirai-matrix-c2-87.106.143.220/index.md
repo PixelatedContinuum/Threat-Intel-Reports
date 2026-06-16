@@ -31,6 +31,7 @@ ioc_highlights:
   - "64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383"
   - "e9e0eafc89e4a9db796c63bb4fdc5c0fd1106f8b9c234fb57e51a7934f2b8d8e"
   - "921e4c1d86813838d40010e82a8f374a70b91f06008db5182d1ec6c2da672c09"
+stix_bundle: /stix/rovodev-mirai-matrix-c2-87.106.143.220.json
 ---
 
 **Campaign Identifier:** Rovodev-Mirai-Matrix-C2-UTA-2026-014-87.106.143.220<br>

@@ -30,6 +30,7 @@ ioc_highlights:
   - "65d2eb26067c3df4b139b02145bdba2065be5a403f38ad096f886230b41fda9b"
   - "9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77"
   - "a4b39f13d17ae3ff7a0adb2cf1df459a72425513f392a1d8fc469f8f2e123de5"
+stix_bundle: /stix/turkish-arpa-openclaw-state-insurer-209.38.205.158.json
 ---
 
 **Campaign Identifier:** Turkish-ARPA-OpenClaw-State-Insurer-UTA-2026-013-209.38.205.158<br>

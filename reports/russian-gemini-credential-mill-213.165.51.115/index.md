@@ -30,6 +30,7 @@ ioc_highlights:
   - "windows_server.tralalarkefe.com"
   - "c2.tralalarkefe.com"
   - "payloads.tralalarkefe.com"
+stix_bundle: /stix/russian-gemini-credential-mill-213.165.51.115.json
 ---
 
 **Campaign Identifier:** Russian-Gemini-Credential-Mill-UTA-2026-012-213.165.51.115<br>

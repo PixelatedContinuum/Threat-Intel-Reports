@@ -1394,7 +1394,8 @@ button.hl-quicklink {
   background: rgba(20, 30, 50, 0.95);
 }
 .hl-quicklink--ioc-btn.hl-ioc-open,
-.hl-quicklink--detect-btn.hl-detect-open {
+.hl-quicklink--detect-btn.hl-detect-open,
+.hl-quicklink--stix-btn.hl-stix-open {
   border-color: rgba(88, 166, 255, 0.6);
   background: rgba(20, 30, 50, 0.98);
   width: 35px;
@@ -1567,8 +1568,62 @@ button.hl-quicklink {
   transition: opacity 0.15s;
 }
 .hl-ioc-panel__link:hover { opacity: 1; }
+/* STIX panel (appears to right of stix tab on click) */
+.hl-stix-panel {
+  position: fixed;
+  width: 230px;
+  background: rgba(11, 16, 28, 0.98);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 8px;
+  padding: 13px 14px;
+  z-index: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(34,211,238,0.05);
+}
+.hl-stix-panel--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hl-stix-panel__hdr {
+  font-size: 0.63em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #22d3ee;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.15);
+}
+.hl-stix-panel__info {
+  font-size: 0.74em;
+  color: var(--hl-text-primary);
+  line-height: 1.5;
+  margin: 0 0 11px;
+}
+.hl-stix-panel__foot {
+  border-top: 1px solid rgba(34, 211, 238, 0.15);
+  padding-top: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.hl-stix-panel__link {
+  font-size: 0.68em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #22d3ee;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+.hl-stix-panel__link:hover { opacity: 1; }
+.hl-stix-panel__link--alt { color: var(--hl-text-dim); }
+.hl-stix-panel__link--alt:hover { color: #22d3ee; opacity: 1; }
 @media (max-width: 900px) {
-  .hl-quicklinks, .hl-ioc-panel, .hl-detect-panel { display: none !important; }
+  .hl-quicklinks, .hl-ioc-panel, .hl-detect-panel, .hl-stix-panel { display: none !important; }
 }
 
 /* ============================================================

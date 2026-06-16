@@ -30,6 +30,7 @@ ioc_highlights:
   - "eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301"
   - "e943b58112f58517b95424dba9334bf97c5dc2dd2f069dca04b9e75b9fec56ba"
   - "008bc5ab6e62c9e55e3dd2da5ef31e1e0f05f35c5898a8ef5c7aeaf6e2a2c46f6"
+stix_bundle: /stix/ghost-cryptojacker-vova75rus-77.110.96.200.json
 ---
 
 **Campaign Identifier:** GHOST-Cryptojacker-Vova75Rus-77.110.96.200<br>

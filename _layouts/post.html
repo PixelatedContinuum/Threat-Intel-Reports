@@ -122,10 +122,10 @@ document.addEventListener('DOMContentLoaded', function () {
   {% endif %}
   {% endif %}
   {% if page.stix_bundle %}
-  <a class="hl-quicklink" href="{{ page.stix_bundle }}" target="_blank" rel="noopener noreferrer" aria-label="Download the STIX 2.1 bundle for this report">
+  <button class="hl-quicklink hl-quicklink--stix-btn" id="hl-stix-tab" aria-label="View STIX bundle for this report" aria-expanded="false">
     <span class="hl-quicklink__icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
     <span class="hl-quicklink__label">STIX</span>
-  </a>
+  </button>
   {% endif %}
 </div>
 {% if page.detection_sections %}
@@ -161,6 +161,16 @@ document.addEventListener('DOMContentLoaded', function () {
     <a href="{{ page.ioc_feed }}" target="_blank" rel="noopener noreferrer" class="hl-ioc-panel__link">Full IOC Feed →</a>
   </div>
   {% endif %}
+</div>
+{% endif %}
+{% if page.stix_bundle %}
+<div class="hl-stix-panel" id="hl-stix-panel">
+  <div class="hl-stix-panel__hdr">STIX 2.1 Bundle</div>
+  <p class="hl-stix-panel__info">Machine-readable threat intel for this report — import into OpenCTI, MISP, or any STIX-aware platform.</p>
+  <div class="hl-stix-panel__foot">
+    <a href="{{ page.stix_bundle }}" target="_blank" rel="noopener noreferrer" class="hl-stix-panel__link">Download Bundle →</a>
+    <a href="/stix/" class="hl-stix-panel__link hl-stix-panel__link--alt">Browse All STIX →</a>
+  </div>
 </div>
 {% endif %}
 {% endif %}
@@ -422,15 +432,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if (tocSpacerEl) tocSpacerEl.classList.add('visible');
   }
 
-  // --- Panel helpers (detection + IOC — mutually exclusive) ---
+  // --- Panel helpers (detection + IOC + STIX — mutually exclusive) ---
   var detectTab   = document.getElementById('hl-detect-tab');
   var detectPanel = document.getElementById('hl-detect-panel');
   var iocTab      = document.getElementById('hl-ioc-tab');
   var iocPanel    = document.getElementById('hl-ioc-panel');
+  var stixTab     = document.getElementById('hl-stix-tab');
+  var stixPanel   = document.getElementById('hl-stix-panel');
   // Move panels out of the .hl-page `isolation: isolate` stacking context so a
   // clicked panel sits ABOVE the body-level sponsor rail instead of behind it.
   if (detectPanel) document.body.appendChild(detectPanel);
   if (iocPanel) document.body.appendChild(iocPanel);
+  if (stixPanel) document.body.appendChild(stixPanel);
 
   function closeDetect() {
     if (!detectPanel) return;
@@ -441,6 +454,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!iocPanel) return;
     iocPanel.classList.remove('hl-ioc-panel--open');
     if (iocTab) { iocTab.classList.remove('hl-ioc-open'); iocTab.setAttribute('aria-expanded', 'false'); }
+  }
+  function closeStix() {
+    if (!stixPanel) return;
+    stixPanel.classList.remove('hl-stix-panel--open');
+    if (stixTab) { stixTab.classList.remove('hl-stix-open'); stixTab.setAttribute('aria-expanded', 'false'); }
   }
 
   function positionPanel(tab, panel) {
@@ -455,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
     detectTab.addEventListener('click', function (e) {
       e.stopPropagation();
       var opening = !detectPanel.classList.contains('hl-detect-panel--open');
-      closeIoc();
+      closeIoc(); closeStix();
       if (opening) {
         detectPanel.classList.add('hl-detect-panel--open');
         detectTab.classList.add('hl-detect-open');
@@ -472,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
     iocTab.addEventListener('click', function (e) {
       e.stopPropagation();
       var opening = !iocPanel.classList.contains('hl-ioc-panel--open');
-      closeDetect();
+      closeDetect(); closeStix();
       if (opening) {
         iocPanel.classList.add('hl-ioc-panel--open');
         iocTab.classList.add('hl-ioc-open');
@@ -494,10 +512,28 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Close both panels on outside click
+  // --- STIX panel toggle ---
+  if (stixTab && stixPanel) {
+    stixTab.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var opening = !stixPanel.classList.contains('hl-stix-panel--open');
+      closeDetect(); closeIoc();
+      if (opening) {
+        stixPanel.classList.add('hl-stix-panel--open');
+        stixTab.classList.add('hl-stix-open');
+        stixTab.setAttribute('aria-expanded', 'true');
+        positionPanel(stixTab, stixPanel);
+      } else {
+        closeStix();
+      }
+    });
+  }
+
+  // Close panels on outside click
   document.addEventListener('click', function (e) {
     if (detectPanel && !detectPanel.contains(e.target) && e.target !== detectTab) closeDetect();
     if (iocPanel    && !iocPanel.contains(e.target)    && e.target !== iocTab)    closeIoc();
+    if (stixPanel   && !stixPanel.contains(e.target)   && e.target !== stixTab)   closeStix();
   });
 
   // --- Section tip toast (once per browser session) ---
