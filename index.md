@@ -79,12 +79,6 @@ position: 1
   </a>
 </div>
 
-{% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true %}
-{% if active_site_sponsors.size > 0 %}
-{% include section-header.html label="Current Sponsors" accent="#58a6ff" %}
-{% include site-sponsors.html %}
-{% endif %}
-
 {% include section-header.html label="About & Connect" accent="#f97316" %}
 
 <div class="hl-tile-row4">
