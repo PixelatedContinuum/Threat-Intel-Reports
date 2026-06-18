@@ -1216,7 +1216,6 @@ alert http $HOME_NET any -> 77.110.0.0/16 any (
 alert tls $HOME_NET any -> any any (
     msg:"THL GHOST Cryptojacker Kit ComfyUI Payload Repo Download from GitHub";
     tls.sni; content:"raw.githubusercontent.com"; endswith; nocase;
-    http.uri; pcre:"/(Vova75Rus\/ComfyUI-Shell-Executor|jamestechdev-oss\/ComfyUI-Shell-Plugin)/";
     classtype:trojan-activity;
     reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/;
     metadata:affected_product Linux, attack_target Server, deployment Perimeter, performance_impact Low, signature_severity High, tag ComfyUI_exploit, tag GHOST_kit;
@@ -1258,14 +1257,18 @@ alert http $HOME_NET any -> 77.110.96.200 any (
 **Deployment:** TLS-decryption-capable inline IDS/IPS or proxy with DLP inspection; fallback TLS SNI rule for environments without decryption
 
 ```suricata
-# Rule A: TLS-decryption-capable environments (plaintext HTTP body inspection)
-alert http $HOME_NET any -> any any (
+# NOTE: Telegram's API is HTTPS-only. The previous Rule A used http.host + http.request_body,
+# which cannot match inside TLS and caused an app-proto conflict. Reworked to a TLS-SNI rule.
+# The bot-token specificity (8415540095:) is lost — this now detects TLS contact to
+# api.telegram.org only, which is a WEAK indicator: legitimate apps also use Telegram.
+# Deploy with threshold tuning and scope to production server IP ranges to reduce FP noise.
+alert tls $HOME_NET any -> any any (
     msg:"THL GHOST Cryptojacker Kit OWNER Telegram Bot Token in API Request — Supply Chain Indicator";
-    tls.sni; content:"api.telegram.org"; endswith; nocase;
-    http.request_body; content:"8415540095:"; nocase;
+    flow:established,to_server;
+    tls.sni; content:"api.telegram.org"; endswith;
     classtype:trojan-activity;
     reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/;
-    metadata:affected_product Linux, attack_target Server, deployment Internal, performance_impact Medium, signature_severity Critical, tag Supply_Chain, tag GHOST_kit, tag Telegram_C2;
+    metadata:affected_product Linux, attack_target Server, deployment Internal, signature_severity Critical, tag Supply_Chain, tag GHOST_kit, tag Telegram_C2;
     sid:9100107; rev:1;
 )
 

@@ -566,7 +566,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (
 alert tcp $HOME_NET any -> [109.105.0.0/16,188.226.0.0/15,195.154.0.0/16] 443 (
     msg:"RANSOMWARE - Tor Entry Node Connection (Possible Tor Client)";
     flow:to_server,established;
-    content:"|16|03|01|";
+    content:"|16 03 01|";
     depth:3;
     classtype:suspicious-behavior;
     sid:1000002;

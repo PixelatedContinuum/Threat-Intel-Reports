@@ -301,8 +301,8 @@ alert tls any any -> any any (msg:"SogouStealer IOC - TLS SNI j.im"; tls.sni; co
 ## HTTP Host and path indicators (including CGI1)
 
 ```
-alert http any any -> any any (msg:"SogouStealer IOC - HTTP Host 6.ar"; http.host; content:"6.ar"; nocase; classtype:trojan-activity; sid:700030; rev:1;)
-alert http any any -> any any (msg:"SogouStealer IOC - HTTP Host j.im"; http.host; content:"j.im"; nocase; classtype:trojan-activity; sid:700031; rev:1;)
+alert http any any -> any any (msg:"SogouStealer IOC - HTTP Host 6.ar"; flow:established,to_server; http.host; content:"6.ar"; endswith; classtype:trojan-activity; sid:700030; rev:1;)
+alert http any any -> any any (msg:"SogouStealer IOC - HTTP Host j.im"; flow:established,to_server; http.host; content:"j.im"; endswith; classtype:trojan-activity; sid:700031; rev:1;)
 alert http any any -> any any (msg:"SogouStealer IOC - HTTP URI contains /cgi1"; http.uri; content:"/cgi1"; nocase; classtype:trojan-activity; sid:700032; rev:1;)
 ```
 

@@ -448,7 +448,7 @@ DeviceFileEvents
 alert http $HOME_NET any -> $EXTERNAL_NET any (
     msg:"Arsenal-237 Decryptor Network Activity";
     flow:established,to_server;
-    http.user_agent|contains:"dec_fixed";
+    http.user_agent; content:"dec_fixed";
     sid:20260126001;
     rev:1;
     classtype:trojan-activity;

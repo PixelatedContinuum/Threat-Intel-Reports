@@ -378,7 +378,7 @@ alert tls $HOME_NET any -> any any (msg:"THL Korean-ClaudeCode-Allowlist OpenCla
 **Deployment:** Network perimeter IDS/IPS. Consider adding `221.150.15.104` to IP blocklists for outbound traffic from non-TI workstations.
 
 ```suricata
-alert http $HOME_NET any -> 221.150.15.104 any (msg:"THL Korean-ClaudeCode-Allowlist Operator Open Directory Access (221.150.15.104:8080)"; http.host; content:"221.150.15.104"; nocase; startswith; endswith; http.method; content:"GET"; threshold:type limit, track by_src, count 1, seconds 3600; sid:9002703; rev:1; metadata:campaign Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104, created_at 2026_05_27, updated_at 2026_05_27;)
+alert http $HOME_NET any -> 221.150.15.104 any (msg:"THL Korean-ClaudeCode-Allowlist Operator Open Directory Access (221.150.15.104:8080)"; http.host; content:"221.150.15.104"; bsize:14; http.method; content:"GET"; threshold:type limit, track by_src, count 1, seconds 3600; sid:9002703; rev:1; metadata:campaign Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104, created_at 2026_05_27, updated_at 2026_05_27;)
 ```
 
 ---

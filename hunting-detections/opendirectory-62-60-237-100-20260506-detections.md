@@ -742,7 +742,7 @@ level: high
 alert tls $HOME_NET any -> 185.241.208.129 any (
     msg:"THL HijackLoader AsyncRAT C2 TLS Connection to 185.241.208.129 Non-Standard Port";
     flow:established,to_server;
-    tls.version:"1.0";
+    tls.version:1.0;
     threshold:type limit, track by_src, count 1, seconds 60;
     classtype:trojan-activity;
     sid:9001001;
@@ -851,7 +851,7 @@ alert http $HOME_NET any -> 109.120.137.6 any (
 alert http $HOME_NET any -> $EXTERNAL_NET any (
     msg:"THL HijackLoader Macro Lure Mega.io Campaign Bucket Payload Fetch";
     flow:established,to_server;
-    http.host; content:"s3.g.s4.mega.io"; endswith; nocase;
+    http.host; content:"s3.g.s4.mega.io"; endswith;
     http.uri; content:"/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/"; nocase;
     classtype:trojan-activity;
     sid:9001004;

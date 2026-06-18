@@ -437,7 +437,6 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (
     http.host;
     content:"shinyhunte.rs";
     endswith;
-    nocase;
     classtype:trojan-activity;
     sid:9001001;
     rev:1;

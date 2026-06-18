@@ -742,7 +742,6 @@ alert smb $HOME_NET any -> $EXTERNAL_NET any (
     msg:"Arsenal-237 SMB Share Enumeration Attempt";
     flow:to_server,established;
     content:"net use";
-    http_client_body;
     classtype:trojan-activity;
     sid:1000001;
     rev:1;

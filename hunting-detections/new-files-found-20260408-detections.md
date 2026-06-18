@@ -567,7 +567,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenStrike Gen4 Beacon O
 **Deployment:** Perimeter IDS/IPS, proxy with HTTP user-agent logging
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent Detected"; flow:established,to_server; http.user_agent; content:"BOIE9;ENUSSEM)"; endswith; nocase; sid:9002003; rev:1; metadata:affected_product Windows, attack_target Client_Endpoint, created_at 2026_04_08, deployment Perimeter, performance_impact Low, signature_severity Major, updated_at 2026_04_08;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent Detected"; flow:established,to_server; http.user_agent; content:"BOIE9|3B|ENUSSEM)"; endswith; nocase; sid:9002003; rev:1; metadata:affected_product Windows, attack_target Client_Endpoint, created_at 2026_04_08, deployment Perimeter, performance_impact Low, signature_severity Major, updated_at 2026_04_08;)
 ```
 
 ---

@@ -929,7 +929,7 @@ alert tcp $HOME_NET any -> 151.245.112.70 7007 (
 alert http $HOME_NET any -> $EXTERNAL_NET any (
     msg:"THL TROJAN XWorm Anti-Analysis Hosting Check via ip-api.com";
     flow:established,to_server;
-    http.host; content:"ip-api.com"; nocase;
+    http.host; content:"ip-api.com";
     http.uri; content:"/line/"; content:"fields=hosting";
     reference:url,the-hunters-ledger.com/reports/shadow-xworm-opendirectory/;
     classtype:trojan-activity;

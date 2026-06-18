@@ -572,7 +572,7 @@ Get-WinEvent -LogName Microsoft-Windows-Sysmon/Network -MaxEvents 1000 | Where-O
 
 #### Suricata Rule - Quasar RAT C2 Connection
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"Quasar RAT C2 Connection"; flow:established,to_server; content:"|2c 43 87 ce 18 be 27 9e a7 35 ec 4f 00 92 69 85 34 92 10 30 aa 69 94 98 ae 80 e4 1a 5c 73 76 66"; depth:8; offset:0; metadata:service quasar_rat_c2, malware_family Quasar; sid:2100001; rev:1; classtype:trojan-activity; priority:1; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"Quasar RAT C2 Connection"; flow:established,to_server; content:"|2c 43 87 ce 18 be 27 9e a7 35 ec 4f 00 92 69 85 34 92 10 30 aa 69 94 98 ae 80 e4 1a 5c 73 76 66|"; offset:0; metadata:service quasar_rat_c2, malware_family Quasar; sid:2100001; rev:1; classtype:trojan-activity; priority:1; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)
 ```
 
 #### Suricata Rule - Quasar RAT IP Geolocation
@@ -588,7 +588,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 443 (msg:"NjRAT/XWorm Pastebin Dead-Dro
 
 #### Suricata Rule - NjRAT/XWorm Mobile User-Agent Spoofing
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET 443 (msg:"NjRAT/XWorm Mobile User-Agent Spoofing"; flow:established,to_server; content:"User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS"; http.user_agent; content:"Mobile"; content:"Safari"; depth:0; offset:0; metadata:service njrat_xworm_ua_spoof, malware_family NjRAT; sid:2100004; rev:1; classtype:trojan-activity; priority:2; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 443 (msg:"NjRAT/XWorm Mobile User-Agent Spoofing"; flow:established,to_server; content:"User-Agent: Mozilla/5.0 (iPhone|3B| CPU iPhone OS"; http.user_agent; content:"Mobile"; content:"Safari"; depth:0; offset:0; metadata:service njrat_xworm_ua_spoof, malware_family NjRAT; sid:2100004; rev:1; classtype:trojan-activity; priority:2; reference:url,hunter-ledger.com/reports/dual-rat-analysis/;)
 ```
 
 ---

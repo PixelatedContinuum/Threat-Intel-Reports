@@ -573,7 +573,6 @@ alert http any any -> any any (
   sid:1000001;
   rev:1;
   priority:1;
-  tag:ransomware,encryption;
 )
 ```
 

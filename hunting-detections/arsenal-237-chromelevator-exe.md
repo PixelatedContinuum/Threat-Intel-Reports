@@ -647,7 +647,7 @@ index=main sourcetype=WinEventLog:Sysmon EventCode=13
 ### Rule 1: Named Pipe Protocol Pattern
 
 ```
-alert file-data any any -> any any (msg:"Named Pipe C2 Communication Pattern"; file_data; content:"VERBOSE_"; distance:0; within:10; sid:1000001; rev:1; metadata:policy balanced-ips drop, policy security-ips alert;)
+alert tcp any any -> any any (msg:"Named Pipe C2 Communication Pattern"; file_data; content:"VERBOSE_"; distance:0; within:10; sid:1000001; rev:1; metadata:policy balanced-ips drop, policy security-ips alert;)
 ```
 
 ### Rule 2: Direct Syscall Indicators in Network Traffic

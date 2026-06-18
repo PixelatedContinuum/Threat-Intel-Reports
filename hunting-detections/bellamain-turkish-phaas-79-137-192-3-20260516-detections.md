@@ -517,17 +517,14 @@ alert tls $HOME_NET any -> 79.137.192.3 any (
 alert http $HOME_NET any -> any any (
     msg:"THL BellaMain PhaaS USOM Blocklist Poll from Web Server";
     flow:established,to_server;
-    http.host; content:"usom.gov.tr"; endswith; nocase;
+    http.host; content:"usom.gov.tr"; endswith;
     http.uri; content:"url-list.txt"; nocase;
     threshold: type limit, track by_src, count 1, seconds 300;
     classtype:policy-violation;
     sid:9001004;
     rev:1;
-    metadata:
-        author "The Hunters Ledger",
-        date "2026-05-16",
-        mitre_technique "T1518.001",
-        reference "https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/";
+    reference:url,the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/;
+    metadata:author The_Hunters_Ledger, date 2026-05-16, mitre_technique T1518.001;
 )
 ```
 

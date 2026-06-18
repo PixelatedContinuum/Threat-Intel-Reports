@@ -1216,7 +1216,7 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Mining Pool 
 **Deployment:** Network IDS with QUIC/TLS inspection on UDP/443, requires protocol dissection capable of extracting TLS SNI from QUIC INITIAL packets
 
 ```
-alert udp $HOME_NET any -> ![$MICROSOFT_BING_CDN] 443 (msg:"THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade — Non-Microsoft Destination (GHOST Kit Backdoor)"; content:"|00 00|"; offset:0; content:"bing.com"; nocase; content:"|00 01|"; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 3600; sid:9200003; rev:1; metadata:author The_Hunters_Ledger,date 2026-05-25,reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+alert udp $HOME_NET any -> any 443 (msg:"THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade — Non-Microsoft Destination (GHOST Kit Backdoor)"; content:"|00 00|"; offset:0; content:"bing.com"; nocase; content:"|00 01|"; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 3600; sid:9200003; rev:1; metadata:author The_Hunters_Ledger,date 2026-05-25,reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
 ```
 
 ---
@@ -1231,7 +1231,7 @@ alert udp $HOME_NET any -> ![$MICROSOFT_BING_CDN] 443 (msg:"THL HUNT AI-Agent-Ca
 **Deployment:** Network IDS with JA3/JARM fingerprinting capability, TLS inspection
 
 ```
-alert tls $HOME_NET any -> 5.230.201.54 any (msg:"THL HUNT AI-Agent-Campaign Sliver C2 — Known IP 5.230.201.54 (Case 10 Staging Infrastructure, JARM 3fd3fd20...)"; flow:established; tls.sni; content:!""; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 3600; sid:9200004; rev:1; metadata:author The_Hunters_Ledger,date 2026-05-25,jarm 3fd3fd20d00000021c43d43d00043d204204071741c36579e355f830d285a5,reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+alert tls $HOME_NET any -> 5.230.201.54 any (msg:"THL HUNT AI-Agent-Campaign Sliver C2 — Known IP 5.230.201.54 (Case 10 Staging Infrastructure, JARM 3fd3fd20...)"; flow:established; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 3600; sid:9200004; rev:1; metadata:author The_Hunters_Ledger,date 2026-05-25,jarm 3fd3fd20d00000021c43d43d00043d204204071741c36579e355f830d285a5,reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
 ```
 
 ---
