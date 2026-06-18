@@ -12,6 +12,44 @@ position: 3
   <div class="hl-page-header__desc">Detection logic from original research, mapped to MITRE ATT&amp;CK. Free to use in your environment under <strong>CC BY-NC 4.0</strong>.</div>
 </div>
 
+<details class="hl-feed">
+  <summary class="hl-feed__toggle">
+    <span aria-hidden="true">📡</span>
+    <span>Subscribe — live Suricata rule feed</span>
+    <span class="hl-feed__chev" aria-hidden="true">▾</span>
+  </summary>
+  <div class="hl-feed__body">
+    <p class="hl-feed__desc">Every published detection here, consolidated into one auto-updating Suricata ruleset — point your sensor at it and pull on your own schedule. Free under <strong>CC BY-NC 4.0</strong>.</p>
+    <div class="hl-feed__cmd">
+      <code id="hl-feed-cmd">suricata-update add-source hunters-ledger https://the-hunters-ledger.com/feeds/suricata/hunters-ledger.rules</code>
+      <button type="button" class="hl-feed__copy" onclick="navigator.clipboard.writeText(document.getElementById('hl-feed-cmd').textContent);var b=this;b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1500);">Copy</button>
+    </div>
+    <div class="hl-feed__links">
+      <a href="/feeds/suricata/hunters-ledger.rules">View raw feed →</a>
+      <span class="hl-feed__meta">Auto-updates as new detections publish</span>
+    </div>
+  </div>
+</details>
+
+<style>
+.hl-feed{margin:0 0 22px;border:1px solid color-mix(in srgb,var(--hl-accent-green) 26%,transparent);border-radius:10px;background:color-mix(in srgb,var(--hl-accent-green) 6%,var(--hl-bg-card));overflow:hidden}
+.hl-feed__toggle{display:flex;align-items:center;gap:9px;cursor:pointer;padding:12px 16px;font-family:var(--hl-font-display);font-weight:700;font-size:.95em;color:var(--hl-accent-green);list-style:none;user-select:none}
+.hl-feed__toggle::-webkit-details-marker{display:none}
+.hl-feed__toggle:hover{background:color-mix(in srgb,var(--hl-accent-green) 10%,transparent)}
+.hl-feed__chev{margin-left:auto;opacity:.7;font-size:.85em;transition:transform .18s ease}
+.hl-feed[open] .hl-feed__chev{transform:rotate(180deg)}
+.hl-feed__body{padding:2px 16px 16px;border-top:1px solid color-mix(in srgb,var(--hl-accent-green) 16%,transparent)}
+.hl-feed__desc{color:var(--hl-text-primary);font-size:.9em;margin:12px 0}
+.hl-feed__cmd{display:flex;align-items:stretch;background:#0d0d0d;border:1px solid var(--hl-border-card);border-radius:6px;overflow:hidden}
+.hl-feed__cmd code{flex:1;min-width:0;padding:10px 12px;font-size:.78em;color:var(--hl-text-primary);overflow-x:auto;white-space:nowrap}
+.hl-feed__copy{flex-shrink:0;padding:0 14px;font-family:var(--hl-font-display);font-weight:600;font-size:.78em;background:color-mix(in srgb,var(--hl-accent-green) 14%,transparent);color:var(--hl-accent-green);border:none;border-left:1px solid var(--hl-border-card);cursor:pointer;transition:background .15s}
+.hl-feed__copy:hover{background:color-mix(in srgb,var(--hl-accent-green) 26%,transparent)}
+.hl-feed__links{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px;flex-wrap:wrap}
+.hl-feed__links a{color:var(--hl-accent-green);text-decoration:none;font-size:.85em;font-weight:600}
+.hl-feed__links a:hover{text-decoration:underline}
+.hl-feed__meta{color:var(--hl-text-muted);font-size:.78em}
+</style>
+
 {% assign det_entries = site.data.catalog.entries | where_exp: "e", "e.detection_url" | sort: "date" | reverse %}
 
 {% include listing-filter.html entries=det_entries tag_field="detection_tags" placeholder="Search detections by name…" %}
