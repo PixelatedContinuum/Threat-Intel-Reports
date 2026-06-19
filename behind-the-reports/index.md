@@ -16,7 +16,7 @@ hide: true
 
 Every report published on this site follows the same path: something malicious is found on adversary infrastructure, analyzed in depth, and turned into a finished threat intelligence report with detection rules and machine-readable indicators ready for defenders to use.
 
-That pipeline has two distinct parts. A **collection platform** that continuously discovers threats on known-malicious hosting infrastructure, and a **production workflow** that takes raw malware analysis and turns it into publication-ready intelligence. Both were built from scratch for the constraints of solo research, and both are documented here.
+That pipeline has two distinct parts. A **collection platform** — **Vantage** — that continuously discovers threats on known-malicious hosting infrastructure, and a **production workflow** that takes raw malware analysis and turns it into publication-ready intelligence. Both were built from scratch for the constraints of solo research, and both are documented here.
 
 ---
 

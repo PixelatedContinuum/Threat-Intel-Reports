@@ -27,7 +27,12 @@ Open-source threat intelligence feeds exist but tend to be reactive — they pub
 
 What I wanted was something different: continuous, focused visibility into the specific infrastructure where malware actually lives. Not the whole internet — just the parts that matter most. The bulletproof hosting providers, the sanctioned networks, the abuse-tolerant datacenters where threat actors stage and distribute payloads with minimal risk of takedown.
 
-So I built a platform to do exactly that.
+So I built a platform to do exactly that. I call it **Vantage**.
+
+<div class="hl-note" style="margin-top: 1.5rem;">
+  <div class="hl-note__label">Why "Vantage"</div>
+  <div class="hl-note__body">Good threat intelligence is about position — seeing what's coming before it arrives. This platform exists to give one researcher an elevated, persistent view over the infrastructure adversaries use, catching malware while it's still being staged, before it's deployed against anyone. That's what a vantage point is: high ground with a commanding view of the threat landscape. The name also places the tool where it belongs — as the discovery layer of The Hunter's Ledger, the research operation it feeds.</div>
+</div>
 
 ---
 
@@ -138,7 +143,7 @@ Each enrichment response classifies the file into a priority tier:
 The platform surfaces everything it finds through a dark-themed analyst dashboard. This is where automated collection ends and human judgment takes over — the platform finds and organizes, I decide what's worth investigating.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/behind-the-reports/opendir-hunter-dashboard.png" | relative_url }}" alt="OpenDir Hunter dashboard showing the main triage view with severity-tiered directory cards (6 HIGH, 5 MEDIUM, 45 LOW), workflow status filters, global statistics bar displaying 74,492 total directories and 27 novel detections, a global search bar with database and live scan modes, and the high-priority hosts table listing active hosts with file counts and last activity timestamps">
+  <img src="{{ "/assets/images/behind-the-reports/vantage-dashboard.png" | relative_url }}" alt="Vantage dashboard showing the main triage view with severity-tiered directory cards (6 HIGH, 5 MEDIUM, 45 LOW), workflow status filters, global statistics bar displaying 74,492 total directories and 27 novel detections, a global search bar with database and live scan modes, and the high-priority hosts table listing active hosts with file counts and last activity timestamps">
   <figcaption><em>Figure 1: The main dashboard view — severity-tiered directory counts at top, global statistics and search in the middle, and the high-priority hosts table showing hosts with novel or low-detection files awaiting triage.</em></figcaption>
 </figure>
 
@@ -211,4 +216,4 @@ The platform doesn't try to scan the whole internet, and it doesn't try to repla
 
 ---
 
-*Collection platform is built and operated by Joseph as part of The Hunter's Ledger research infrastructure.*
+*Vantage is built and operated by Joseph as part of The Hunter's Ledger research infrastructure.*
