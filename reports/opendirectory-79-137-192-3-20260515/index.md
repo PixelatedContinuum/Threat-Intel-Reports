@@ -94,9 +94,9 @@ This section provides a brief narrative arc — useful for understanding why the
 
 ### 2.1 The pivot
 
-The investigation began when **OpenDir Hunter** (the analyst's custom open-directory scanning platform) surfaced an exposed BellaMain panel directory and a kit listing on `79.137.192.3`. Initial impression: a Turkish-targeting Phishing-as-a-Service operation. Static triage of seven `.rar` phishing kits (Dolap, Kargo, Letgo, Pttavm, sahibinden, shopier, turkcell) and the BellaMain panel ZIP confirmed Cluster A.
+The investigation began when **Vantage** (the analyst's custom open-directory scanning platform) surfaced an exposed BellaMain panel directory and a kit listing on `79.137.192.3`. Initial impression: a Turkish-targeting Phishing-as-a-Service operation. Static triage of seven `.rar` phishing kits (Dolap, Kargo, Letgo, Pttavm, sahibinden, shopier, turkcell) and the BellaMain panel ZIP confirmed Cluster A.
 
-But OpenDir Hunter also surfaced two unrelated directories on the same IP: `cryptone/` (a fake crypto exchange UI) and `no/` (a card-phishing lure), as well as a number of historical co-tenants visible via passive DNS. Pulling on those threads raised the central analytical question: are these all the same operator running multiple kits, or are they different operators sharing the same hosting utility?
+But Vantage also surfaced two unrelated directories on the same IP: `cryptone/` (a fake crypto exchange UI) and `no/` (a card-phishing lure), as well as a number of historical co-tenants visible via passive DNS. Pulling on those threads raised the central analytical question: are these all the same operator running multiple kits, or are they different operators sharing the same hosting utility?
 
 ### 2.2 The branching
 

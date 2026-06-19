@@ -76,7 +76,7 @@ This report fills a publication gap. Tier-1 vendor coverage of the AdaptixC2 fra
 
 ### What Was Found
 
-An attacker-controlled server hosted a complete pre-staged toolkit of **30 attack artifacts**, covering the full intrusion lifecycle from initial PowerShell delivery to Linux server pivoting. The open directory exposed on TCP/8888 at `45.130.148.125` was discovered via The Hunter's Ledger's opendir-hunter platform on 2026-04-26. It hosted an AdaptixC2 framework deployment in four Windows formats (DLL / EXE / shellcode-form / sideload-renamed `msupdate.dll`) plus a Linux ELF Adaptix agent and a Gopher Go agent Windows variant. Adjacent to the open directory, the AdaptixC2 victim-facing C2 listener runs on TCP/80 and the AdaptixC2 TeamServer (operator GUI) runs on TCP/4444 — all three services co-located on a single IP, which establishes that this is **attacker-controlled infrastructure**, not a compromised third-party host.
+An attacker-controlled server hosted a complete pre-staged toolkit of **30 attack artifacts**, covering the full intrusion lifecycle from initial PowerShell delivery to Linux server pivoting. The open directory exposed on TCP/8888 at `45.130.148.125` was discovered via The Hunter's Ledger's Vantage platform on 2026-04-26. It hosted an AdaptixC2 framework deployment in four Windows formats (DLL / EXE / shellcode-form / sideload-renamed `msupdate.dll`) plus a Linux ELF Adaptix agent and a Gopher Go agent Windows variant. Adjacent to the open directory, the AdaptixC2 victim-facing C2 listener runs on TCP/80 and the AdaptixC2 TeamServer (operator GUI) runs on TCP/4444 — all three services co-located on a single IP, which establishes that this is **attacker-controlled infrastructure**, not a compromised third-party host.
 
 The kit's only operator-written code is a 256 KB `beacon.ps1` PowerShell loader and a 5,120-byte `injector.dll` (.NET v4.7.2 SI class with W^X-aware classic CRT process injection). The remainder — AdaptixC2 framework, Ligolo-ng v0.8.3, chisel, Ghostpack/SpecterOps suite, mimikatz, lazagne, and supporting recon/LPE tooling — is 100% commodity open-source. The toolkit covers the full intrusion kill chain: execution → C2 → Active Directory reconnaissance → credential theft via four vectors → privilege escalation via three mechanisms → lateral movement via two redundant tunneling tools → Linux post-exploitation pivot.
 
@@ -114,7 +114,7 @@ The seven points below summarize what this report wants a reader to retain. They
 <tr><td>Detection difficulty</td><td>6/10</td><td>Three vendor families catch the AdaptixC2 beacon at the file level (Elastic / Kaspersky / Microsoft). PowerShell loader uses reflection-based AMSI bypass + in-memory load. RC4-encrypted config defeats string-based hunting. Aggressive 4–5 second beacon cadence creates very high-volume traffic that becomes highly visible if egress monitoring exists.</td></tr>
 <tr><td>Operational maturity</td><td>5/10</td><td>Sub-mature OpSec hygiene (PDB paths leaked, build timestamps in plaintext, internal class names exposed, dev-leftover artifacts). Same-day dev-to-prod build cadence captured. NOT APT-level.</td></tr>
 <tr><td>Spread / lateral movement</td><td>7/10</td><td>Ligolo-ng v0.8.3 TUN-mode + chisel reverse-tunneling enables full internal-network access from a single foothold. AdaptixC2 Linux ELF agent + <code>linpeas.sh</code> enable Linux-host lateral movement.</td></tr>
-<tr><td>Active C2 status</td><td>UNKNOWN</td><td>C2 endpoint at <code>45.130.148.125:80</code> reachable at the time of analysis but no live traffic captured. Status pending +1 week opendir-hunter rescan target 2026-05-06.</td></tr>
+<tr><td>Active C2 status</td><td>UNKNOWN</td><td>C2 endpoint at <code>45.130.148.125:80</code> reachable at the time of analysis but no live traffic captured. Status pending +1 week Vantage rescan target 2026-05-06.</td></tr>
 <tr><td><strong>Overall risk score</strong></td><td><strong>7/10 HIGH</strong></td><td>Capability-driven HIGH. Would be CRITICAL if confirmed-active in operations against named victims. No victim observation available from open-directory analysis alone.</td></tr>
 </tbody>
 </table>
@@ -144,7 +144,7 @@ This report is anchored to a single observable corpus rather than to general thr
 
 ## 2. Discovery Context and Toolkit Composition
 
-### 2.1 Discovery via opendir-hunter
+### 2.1 Discovery via Vantage
 
 The `45.130.148.125` infrastructure was discovered via The Hunter's Ledger's open-directory crawler platform on **2026-04-26 at 03:41:05 UTC**. The crawler observed three services on the same IP:
 
@@ -156,7 +156,7 @@ The `45.130.148.125` infrastructure was discovered via The Hunter's Ledger's ope
 
 Co-locating the operator GUI server (`TeamServer`) on the same IP as the victim-facing C2 and the staging directory is an operational-security failure. It establishes — at HIGH confidence — that this infrastructure is **attacker-controlled** rather than a compromised third-party host, because no legitimate compromise scenario explains an open AdaptixC2 TeamServer port adjacent to the C2.
 
-The directory has remained **static since first crawl** (80+ hours observed as of analysis at 2026-04-30). A +1 week opendir-hunter rescan is scheduled for 2026-05-06 to confirm whether the operator becomes aware of the exposure and rotates infrastructure.
+The directory has remained **static since first crawl** (80+ hours observed as of analysis at 2026-04-30). A +1 week Vantage rescan is scheduled for 2026-05-06 to confirm whether the operator becomes aware of the exposure and rotates infrastructure.
 
 ### 2.2 Toolkit composition
 
@@ -761,7 +761,7 @@ The complete infrastructure attribution evidence is therefore **MODERATE strengt
 | Infrastructure changes detected | 0 |
 | Post-disclosure operator response | None — server unchanged |
 
-The static-since-discovery profile is the most telling temporal signal in this campaign. The operator either (a) is unaware of the exposure, (b) has not yet activated the staging endpoint for live operations, or (c) does not consider the exposure consequential. A +1 week opendir-hunter rescan is scheduled for 2026-05-06; if the directory remains static at that point, the "static distribution endpoint" read locks in at HIGH confidence.
+The static-since-discovery profile is the most telling temporal signal in this campaign. The operator either (a) is unaware of the exposure, (b) has not yet activated the staging endpoint for live operations, or (c) does not consider the exposure consequential. A +1 week Vantage rescan is scheduled for 2026-05-06; if the directory remains static at that point, the "static distribution endpoint" read locks in at HIGH confidence.
 
 ---
 
@@ -1045,7 +1045,7 @@ Findings are organized below by the project-standard confidence framework. The l
 **LOW / INSUFFICIENT (insufficient evidence to support specific claims):**
 - Named-actor attribution — INSUFFICIENT (<50%); ACH ruled out Tropic Trooper (6 inconsistencies) and Tomiris (5 inconsistencies); H5 (unattributed mid-tier operator) wins the inconsistency comparison with 0 inconsistencies; H1 (Russian-speaking ransomware affiliate cohort) remains a population-level estimate only at 2 inconsistencies
 - GOLD ENCOUNTER / PayoutsKing alternative hypothesis — LOW (50–60%, two inconsistencies)
-- Active operations status of the staging endpoint — UNKNOWN; pending +1 week opendir-hunter rescan
+- Active operations status of the staging endpoint — UNKNOWN; pending +1 week Vantage rescan
 - 172.105.0.126 OpenStrike cross-investigation pivot (UTA-2026-004) — LOW (30–40%, generic filename convention overlap only)
 
 ---
@@ -1058,7 +1058,7 @@ A consolidated list of the assumptions underlying this analysis, the alternative
 
 | Assumption | Why it matters | What would falsify it | Evidence sought |
 |---|---|---|---|
-| **Static-since-discovery (80+ hours) means the operator is unaware of the exposure** | Drives the threat-level reading. Alternative reading: pre-staged dormant infrastructure intentionally exposed because the operator does not consider this server consequential. | Detection of operator activity (file rotation, port closure, traffic to staging) before the +1 week rescan would confirm awareness. Continued staticness indicates either unawareness or unconcern. | +1 week opendir-hunter rescan target 2026-05-06; CertStream / passive DNS monitoring on `45.130.148.125`. |
+| **Static-since-discovery (80+ hours) means the operator is unaware of the exposure** | Drives the threat-level reading. Alternative reading: pre-staged dormant infrastructure intentionally exposed because the operator does not consider this server consequential. | Detection of operator activity (file rotation, port closure, traffic to staging) before the +1 week rescan would confirm awareness. Continued staticness indicates either unawareness or unconcern. | +1 week Vantage rescan target 2026-05-06; CertStream / passive DNS monitoring on `45.130.148.125`. |
 | **Single operator (UTA-2026-006), not a shared infrastructure tenant** | Drives all UTA fingerprint distinctiveness claims. Alternative: a small operator team sharing build artifacts; a vendor of staged toolkits selling to multiple customers. | Recovery of multiple distinct operator handles, multiple uncoordinated deployment styles, or a public sale/lease post on a forum tying this build pipeline to multiple buyers. | Forum monitoring for `si_build` mentions; future deployment observations carrying the same fingerprints from clearly different operational tradecraft. |
 | **Stock framework (no operator customization beyond loader + injector)** | Drives the "operator's only original code is `beacon.ps1` + `injector.dll`" claim. Alternative: operator has modified the framework but the modifications were not present in this build. | Any future build from the same operator showing modifications to the framework's network protocol, RC4 storage layout, or Donut shellcode-form generator. | Continued sample collection from this operator. |
 | **Capability scoring reflects upper bound, not active impact** | Drives the threat-level header (HIGH on capability, would be CRITICAL on confirmed-active). | Confirmed active operations against named victims would escalate threat level. Confirmed decommissioning would de-escalate. | Continued infrastructure monitoring; victim-side incident reports. |
