@@ -34,7 +34,7 @@ stix_bundle: /stix/ai-agent-frameworks-2026-05-23.json
 ---
 
 **Campaign Identifier:** AI-Agent-Frameworks-MultiActor-2026-05-23<br>
-**Last Updated:** June 4, 2026<br>
+**Last Updated:** June 19, 2026<br>
 **Threat Level:** HIGH
 
 ---
@@ -93,7 +93,7 @@ The score is **HIGH (8.3/10)**, scoring aggregate capability across 8 unrelated 
 </tbody>
 </table>
 
-**Overall Campaign Risk Score: 8.3/10 — HIGH.** Remediation is partially complete: GitHub T&S actioned Vova75Rus, cloud-provider abuse desks were notified for 78 victim IPs (Hetzner opened an investigation 2026-06-02; AWS requested evidence 2026-06-03), and Cloudflare PSIRT response on `tralalarkefe.com` is pending. Reassess if Cloudflare PSIRT does not action `tralalarkefe.com` or AEZA Group does not respond to the disclosure package.
+**Overall Campaign Risk Score: 8.3/10 — HIGH.** Remediation is partially complete: GitHub T&S actioned Vova75Rus, cloud-provider abuse desks were notified for 78 victim IPs (a notified Hetzner customer has since confirmed and remediated a cryptojacker infection on a reported host, 2026-06-19; AWS requested evidence 2026-06-03), and Cloudflare PSIRT response on `tralalarkefe.com` is pending. Reassess if Cloudflare PSIRT does not action `tralalarkefe.com` or AEZA Group does not respond to the disclosure package.
 
 ### Threat Actor Summary
 

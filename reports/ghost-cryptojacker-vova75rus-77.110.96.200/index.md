@@ -34,7 +34,7 @@ stix_bundle: /stix/ghost-cryptojacker-vova75rus-77.110.96.200.json
 ---
 
 **Campaign Identifier:** GHOST-Cryptojacker-Vova75Rus-77.110.96.200<br>
-**Last Updated:** June 2, 2026<br>
+**Last Updated:** June 19, 2026<br>
 **Threat Level:** HIGH
 
 > **Part of series:** This is sub-report 1 of 6 in the parent investigation [AI-Agent-Frameworks-MultiActor-2026-05-23](/reports/ai-agent-frameworks-2026-05-23/). The parent report synthesizes the cross-case findings across eight operator cases; this sub-report provides the operator-specific technical deep-dive for Case 9 — the GHOST cryptojacker kit ecosystem, the Vova75Rus kit-author identification, and the GitHub Trust & Safety Tier-0 disposition outcome of 2026-05-25.
@@ -95,6 +95,8 @@ This is an **active and actively-iterating** cryptojacking campaign with confirm
 </table>
 
 **Overall Campaign Risk Score: 8.0/10 — HIGH.** The campaign is rated HIGH (not CRITICAL) because (a) GitHub T&S has disrupted the upstream kit-author payload distribution channel (Tier-0 action successful 2026-05-25), (b) Operator-B's host is abandoned (5 days post-Censys), and (c) operator-level capabilities remain bounded by individual infrastructure rather than reaching campaign-scale victim volume. If the AEZA-hosted Operator-A continues live iteration without provider response, or if additional kit-customer operators are discovered on AEZA infrastructure, the threat level should be reassessed.
+
+**Disclosure outcome (2026-06-19).** Of the three Hetzner-customer ComfyUI hosts flagged in the cloud-provider disclosure cascade, one customer has since independently confirmed and remediated a cryptojacker infection — the host was isolated, taken offline, and slated for a full wipe. This is the first *victim-attested* evidence that the kit's ComfyUI targeting converts to live compromise, as opposed to the operator-artifact-confirmed access documented in the parent report's Cases 1 and 2. Confidence is **MODERATE**: a customer absorbing full host downtime and a reimage corroborates a real compromise, but they shared no forensic detail tying their infection specifically to the GHOST `libpam_cache.so` kit rather than to an opportunistic cryptojacker reaching the same exposed host.
 
 ### Threat Actor Summary
 
