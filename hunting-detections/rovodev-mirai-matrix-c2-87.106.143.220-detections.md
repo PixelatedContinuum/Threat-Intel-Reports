@@ -1100,7 +1100,8 @@ level: high
 # This rule catches any DNS resolution of github.com in context where keyosbuff appears
 # in subsequent HTTP traffic (non-TLS) or in server-side log files.
 
-alert dns $HOME_NET any -> any any (msg:"THL - Rovodev Operator C2-Leak GitHub Reference - DNS Query github.com from Suspicious Context"; dns.query; content:"github.com"; nocase; threshold: type limit, track by_src, count 1, seconds 300; sid:9001001; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Internal, signature_severity Major, tag UTA-2026-014;)
+# [WITHDRAWN 2026-06-19] Overbroad — matched ALL github.com DNS lookups (false positive for every subscriber that resolves github.com). Specific Rovodev indicators retained: keyosbuff repo URI rule + IONOS VPS IPs 87.106.143.220 / 87.106.54.213.
+# alert dns $HOME_NET any -> any any (msg:"THL - Rovodev Operator C2-Leak GitHub Reference - DNS Query github.com from Suspicious Context"; dns.query; content:"github.com"; nocase; threshold: type limit, track by_src, count 1, seconds 300; sid:9001001; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Internal, signature_severity Major, tag UTA-2026-014;)
 
 alert http $HOME_NET any -> any any (msg:"THL - Rovodev Operator keyosbuff C2-Leak Repository HTTP Reference - UTA-2026-014"; http.uri; content:"keyosbuff"; nocase; sid:9001002; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Perimeter, signature_severity Major, tag UTA-2026-014;)
 ```

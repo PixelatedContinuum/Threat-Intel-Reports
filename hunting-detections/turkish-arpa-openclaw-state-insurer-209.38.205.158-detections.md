@@ -1055,7 +1055,8 @@ alert dns $HOME_NET any -> any any (msg:"THL-ARPA-008 DNS Query to lightmake.sit
 **Deployment:** Suricata on egress TCP; best deployed on non-developer corporate workstation subnets.
 
 ```suricata
-alert tcp $HOME_NET any -> $EXTERNAL_NET 22 (msg:"THL-ARPA-009 Long-Lived SSH Session from Internal Windows Host to External IP - Potential Reverse Tunnel Maintenance"; flow:to_server,established; threshold:type limit, track by_src, count 1, seconds 3600; sid:9001009; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1572;)
+# [WITHDRAWN 2026-06-19] Overbroad — flow-only $HOME_NET -> EXTERNAL:22 matched ALL outbound SSH (git-over-SSH, admin). Specific reverse-tunnel rule ARPA-004 ($HOME_NET -> 209.38.205.158 22) retained.
+# alert tcp $HOME_NET any -> $EXTERNAL_NET 22 (msg:"THL-ARPA-009 Long-Lived SSH Session from Internal Windows Host to External IP - Potential Reverse Tunnel Maintenance"; flow:to_server,established; threshold:type limit, track by_src, count 1, seconds 3600; sid:9001009; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1572;)
 ```
 
 ---

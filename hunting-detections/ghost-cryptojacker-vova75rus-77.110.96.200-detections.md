@@ -1213,14 +1213,15 @@ alert http $HOME_NET any -> 77.110.0.0/16 any (
 **Deployment:** Network IDS/IPS at perimeter, TLS inspection proxy
 
 ```suricata
-alert tls $HOME_NET any -> any any (
-    msg:"THL GHOST Cryptojacker Kit ComfyUI Payload Repo Download from GitHub";
-    tls.sni; content:"raw.githubusercontent.com"; endswith; nocase;
-    classtype:trojan-activity;
-    reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/;
-    metadata:affected_product Linux, attack_target Server, deployment Perimeter, performance_impact Low, signature_severity High, tag ComfyUI_exploit, tag GHOST_kit;
-    sid:9100105; rev:1;
-)
+# [WITHDRAWN 2026-06-19] Overbroad — matched ALL raw.githubusercontent.com TLS connections; TLS SNI cannot see the (encrypted) repo path, so the intended Vova75Rus/ComfyUI-Shell-Executor specificity is unachievable and the SNI is shared by all raw.github traffic. Removed to prevent subscriber false positives. Former rule:
+# alert tls $HOME_NET any -> any any (
+#     msg:"THL GHOST Cryptojacker Kit ComfyUI Payload Repo Download from GitHub";
+#     tls.sni; content:"raw.githubusercontent.com"; endswith; nocase;
+#     classtype:trojan-activity;
+#     reference:url,the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/;
+#     metadata:affected_product Linux, attack_target Server, deployment Perimeter, performance_impact Low, signature_severity High, tag ComfyUI_exploit, tag GHOST_kit;
+#     sid:9100105; rev:1;
+# )
 ```
 
 ---

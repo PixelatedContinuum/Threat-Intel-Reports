@@ -279,23 +279,23 @@ rule SogouStealer_C2_Scheduler_SignatureDB
 ## DNS queries to disposable domains
 
 ```
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for 6.ar"; dns.query; content:"6.ar"; nocase; classtype:trojan-activity; sid:700001; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for j.im"; dns.query; content:"j.im"; nocase; classtype:trojan-activity; sid:700002; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"5bng.ar"; nocase; classtype:trojan-activity; sid:700003; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"b.tk"; nocase; classtype:trojan-activity; sid:700004; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"k.ct"; nocase; classtype:trojan-activity; sid:700005; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"q.ar"; nocase; classtype:trojan-activity; sid:700006; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"rlh.cq"; nocase; classtype:trojan-activity; sid:700007; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"s0.ndf"; nocase; classtype:trojan-activity; sid:700008; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"vpl.gu"; nocase; classtype:trojan-activity; sid:700009; rev:1;)
-alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"x.pg"; nocase; classtype:trojan-activity; sid:700010; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for 6.ar"; dns.query; content:"6.ar"; endswith; nocase; classtype:trojan-activity; sid:700001; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for j.im"; dns.query; content:"j.im"; endswith; nocase; classtype:trojan-activity; sid:700002; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"5bng.ar"; endswith; nocase; classtype:trojan-activity; sid:700003; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"b.tk"; endswith; nocase; classtype:trojan-activity; sid:700004; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"k.ct"; endswith; nocase; classtype:trojan-activity; sid:700005; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"q.ar"; endswith; nocase; classtype:trojan-activity; sid:700006; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"rlh.cq"; endswith; nocase; classtype:trojan-activity; sid:700007; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"s0.ndf"; endswith; nocase; classtype:trojan-activity; sid:700008; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"vpl.gu"; endswith; nocase; classtype:trojan-activity; sid:700009; rev:1;)
+alert dns any any -> any any (msg:"SogouStealer IOC - DNS query for disposable domains"; dns.query; content:"x.pg"; endswith; nocase; classtype:trojan-activity; sid:700010; rev:1;)
 ```
 
 ## TLS SNI to known C2 infrastructure
 
 ```
-alert tls any any -> any any (msg:"SogouStealer IOC - TLS SNI 6.ar"; tls.sni; content:"6.ar"; nocase; classtype:trojan-activity; sid:700020; rev:1;)
-alert tls any any -> any any (msg:"SogouStealer IOC - TLS SNI j.im"; tls.sni; content:"j.im"; nocase; classtype:trojan-activity; sid:700021; rev:1;)
+alert tls any any -> any any (msg:"SogouStealer IOC - TLS SNI 6.ar"; tls.sni; content:"6.ar"; endswith; nocase; classtype:trojan-activity; sid:700020; rev:1;)
+alert tls any any -> any any (msg:"SogouStealer IOC - TLS SNI j.im"; tls.sni; content:"j.im"; endswith; nocase; classtype:trojan-activity; sid:700021; rev:1;)
 ```
 
 ## HTTP Host and path indicators (including CGI1)
