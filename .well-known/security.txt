@@ -1,0 +1,7 @@
+# The Hunter's Ledger — security contact
+# https://the-hunters-ledger.com
+Contact: mailto:intel@the-hunters-ledger.com
+Contact: https://www.linkedin.com/in/josephrharrison
+Expires: 2027-06-21T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://the-hunters-ledger.com/.well-known/security.txt

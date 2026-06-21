@@ -40,6 +40,11 @@ plugins:
   - jekyll-seo-tag
   - jekyll-paginate
 
+# Serve /.well-known/ (RFC 9116 security.txt). Jekyll drops dot-directories
+# from the build unless they are explicitly included.
+include:
+  - ".well-known"
+
 exclude:
   - ".jekyll-cache"
   - ".jekyll-metadata"
