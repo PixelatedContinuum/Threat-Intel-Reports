@@ -34,7 +34,7 @@ stix_bundle: /stix/ai-agent-frameworks-2026-05-23.json
 ---
 
 **Campaign Identifier:** AI-Agent-Frameworks-MultiActor-2026-05-23<br>
-**Last Updated:** June 19, 2026<br>
+**Last Updated:** June 25, 2026<br>
 **Threat Level:** HIGH
 
 ---
@@ -117,7 +117,7 @@ The campaign-wide detection content (26 rules: 8 YARA, 12 Sigma, 6 Suricata) is 
 - **Block first:** `*.kryptex.network` (Case 9 pool), `tralalarkefe.com` (Case 1 C2); monitor outbound to `generativelanguage.googleapis.com` for password-mutation prompt fragments (§4.9.2).
 - **IR priority:** Cases 9 and 1 ship persistence that survives standard remediation — see §10 for posture and §12 for the response orientation (no step-by-step procedures; third-party perspective).
 
-The Vova75Rus disposition (GitHub T&S 2026-05-25) is the headline disruption, and not the only one: GitHub also actioned the Turkish ARPA account (MehmetARPA, 2026-05-25). Treat the GHOST upstream channel as **temporarily** disrupted and expect re-hosting (§9.1). The defender takeaway is not "block AI" — most operators would still be capable — but **detect the AI-integration layer**, because it produces distinctive, durable artifacts that hand defenders a previously-unavailable signal.
+The Vova75Rus disposition (GitHub T&S 2026-05-25) is the headline disruption, and not the only one: GitHub also actioned the Turkish ARPA account (MehmetARPA, 2026-05-25). A second, victim-side outcome followed: a Hetzner customer isolated, took offline, and wiped a compromised host off the specific hashes, persistence paths, and filenames provided in the disclosure — Hetzner relayed the confirmation back. Treat the GHOST upstream channel as **temporarily** disrupted and expect re-hosting (§9.1). The defender takeaway is not "block AI" — most operators would still be capable — but **detect the AI-integration layer**, because it produces distinctive, durable artifacts that hand defenders a previously-unavailable signal.
 
 ---
 
