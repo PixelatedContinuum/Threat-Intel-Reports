@@ -1,0 +1,72 @@
+{
+  "metadata": {
+    "malware_name": "KAIDO Quasar-Fork RAT",
+    "family": "KAIDO (rebranded 64-bit Quasar RAT fork, v2.4.5) + HVNC + full-spectrum surveillance",
+    "report_date": "2026-07-03",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "campaign_slug": "evilsoul-engine-stealer-maas-144-172-103-98",
+    "report_slug": "kaido-quasar-rat-144-172-109-203",
+    "operator": "n_3_xl / @govbrasil / KAIDO (0xK41), Brazil — HIGH (named actor, no UTA)",
+    "note": "KAIDO Quasar-fork RAT product line (Report A). Companion feed: evilsoul-engine-stealer-maas-iocs.json (EvilSoul-Engine stealer-builder ecosystem, same operator). Credential-type indicators defanged to first-8 + last-4 per project rule; full values held in local investigation Evidence only."
+  },
+  "file_hashes": {
+    "sha256": [
+      {"value": "c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT, tag 'breach', C2 kaidoo.com.br:4782 (richest sample, 14 Costura deps)"},
+      {"value": "385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT, live-C2 sibling, c2.kaidoo.com.br:443"},
+      {"value": "022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT, low-detection sibling"}
+    ],
+    "md5": [
+      {"value": "20989b06f7c670ab973da6609855bcf9", "confidence": "DEFINITE", "context": "KAIDO RAT c7542e82 MD5"}
+    ],
+    "sha1": [
+      {"value": "928f2ffa7fc84b74941fb714455d7bc14847b3af", "confidence": "DEFINITE", "context": "KAIDO RAT c7542e82 SHA1"},
+      {"value": "0acd8c90641e6e8b085aaf5a541c7ac050a65a4a", "confidence": "DEFINITE", "context": "KAIDO RAT AUTHKEY / embedded pinned-cert SHA1 thumbprint (CN=ihat tbcs), all 3 builds"}
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {"value": "144.172.109.203", "port": 4782, "confidence": "DEFINITE", "action": "BLOCK", "context": "Live KAIDO Quasar RAT C2, AS14956 RouterHosting US; :8443 TeamKAIDO cert; :4782 Quasar protocol", "purpose": "C2"},
+      {"value": "179.43.150.50", "confidence": "MODERATE", "action": "MONITOR", "context": "Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only — do not probe", "purpose": "C2 fronting host"}
+    ],
+    "ipv6": [],
+    "domains": [
+      {"value": "kaidoo.com.br", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT primary C2 (port 4782); DNS confirmed in contained detonation"},
+      {"value": "c2.kaidoo.com.br", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT secondary C2 (port 443)"},
+      {"value": "www.kaidoo.com.br", "confidence": "HIGH", "action": "BLOCK", "context": "KAIDO brand domain"},
+      {"value": "choix-relay.com", "confidence": "LOW", "action": "MONITOR", "context": "French 'choix' domain co-resident on the Swiss KAIDO host (179.43.150.50); possible parallel phishing line — MODERATE-LOW"}
+    ],
+    "urls": [],
+    "tls_certificates": [
+      {"value": "C7DC584B7C6C5C6322D2E20C0475443C7169207E0114C2D05362920AA2A1F692", "type": "sha256", "confidence": "HIGH", "context": "KAIDO C2 cert on 144.172.109.203:8443 — CN=kaido-c2, Issuer O=TeamKAIDO; JA4X bbd6cc0fca29_bbd6cc0fca29_795797892f9c; best fleet-enumeration pivot"}
+    ]
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [
+      {"value": "%AppData%\\<subdir>\\svchost.exe", "confidence": "HIGH", "context": "KAIDO RAT install location (svchost.exe masquerade in AppData)"}
+    ],
+    "mutex_names": [],
+    "named_pipes": [
+      {"value": "\\\\.\\pipe\\kaido_dxgi_<8hex>", "confidence": "HIGH", "context": "KAIDO RAT DXGI-hook HVNC frame transport pipe"}
+    ],
+    "scheduled_tasks": [],
+    "service_names": []
+  },
+  "detection_anchor_strings": {
+    "kaido_rat": [
+      {"value": "Kaido.Common.Messages", "confidence": "HIGH", "context": "Namespace root — survives obfuscation"},
+      {"value": "Kaido.Client.Helper.HVNC.ProcessController", "confidence": "HIGH", "context": "HVNC launcher class"},
+      {"value": "costura.kaido.common.dll", "confidence": "HIGH", "context": "Costura embedded asset name"},
+      {"value": "Default_runhost", "confidence": "DEFINITE", "context": "HVNC hidden-desktop literal"},
+      {"value": "KAIDO_DXGI_PIPE", "confidence": "HIGH", "context": "HVNC DXGI env var"},
+      {"value": "[BrowserClone] Using handle hijacking for locked files...", "confidence": "HIGH", "context": "Browser-profile clone debug string"},
+      {"value": "[ANTI] Sleep obfuscation ENABLED (fixed: mutex + stack detection + 32MB cap)", "confidence": "HIGH", "context": "Anti-analysis developer string"}
+    ]
+  },
+  "build_keys": [
+    {"value": "KAIDO-DAY-187E3327A1AB", "confidence": "DEFINITE", "context": "KAIDO license/build key"},
+    {"value": "KAIDO-DAY-B011C3CB60AD", "confidence": "DEFINITE", "context": "KAIDO license/build key"}
+  ]
+}

@@ -5,6 +5,22 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ===== PENDING GO-LIVE — KAIDO / EvilSoul-Engine 2-report campaign (uncomment at launch) =====
+  #  - title: "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking"
+  #    date: 2026-07-03
+  #    severity: high
+  #    tags: [RAT, HVNC, MaaS, Brazil]
+  #    report_url: /reports/kaido-quasar-rat-144-172-109-203/
+  #    detection_url: /hunting-detections/kaido-quasar-rat-detections
+  #    ioc_url: /ioc-feeds/kaido-quasar-rat-iocs.json
+  #  - title: "EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service"
+  #    date: 2026-07-03
+  #    severity: high
+  #    tags: [Stealer, MaaS, Builder, Brazil]
+  #    report_url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+  #    detection_url: /hunting-detections/evilsoul-engine-stealer-maas-detections
+  #    ioc_url: /ioc-feeds/evilsoul-engine-stealer-maas-iocs.json
+  # =====================================================================================
   - title: "Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host"
     date: 2026-06-12
     severity: med

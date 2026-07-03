@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1010" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    INFOGRAPHIC: EvilSoul / 0xK41 / KAIDO — infrastructure unification (attribution)
+    Layout: adapted process-tree (operator root -> Y-branch -> two hosting hubs).
+    Colors: red #dc2626 = operator entity; deep-red #7f1d1d = operator hosting hub (C2 / origin).
+    Built from template-process-tree.svg design system. Staged pre-report 2026-06-27.
+  -->
+  <defs>
+    <filter id="treeShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1010" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1009" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">EvilSoul · 0xK41 · KAIDO</text>
+  <text x="500" y="104" text-anchor="middle" font-size="24" fill="#f5f5f5">Two Brazilian operators, one tooling lineage (EvilSoul-Engine → KAIDO)</text>
+  <text x="500" y="138" text-anchor="middle" font-size="18" fill="#cccccc">Brazil · passive DNS Aug 2025 – Jun 2026 · DomainTools Iris + VirusTotal</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== ROOT — operator (red side-rail) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="240" y="196" width="520" height="150" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="240" y="196" width="6" height="150" rx="3" fill="#dc2626"/>
+    <text x="262" y="232" font-size="22" font-weight="600" fill="#ffffff">Tooling lineage — two separate operators</text>
+    <text x="262" y="262" font-size="17" font-weight="700" fill="#fb923c">★ KAIDO toolkit BUILT ON the EvilSoul-Engine MaaS (DEFINITE)</text>
+    <text x="262" y="290" font-size="16" fill="#e5e5e5">Left = EvilSoul-Engine (@breakingupslow) · Right = KAIDO kit (n_3_xl)</text>
+    <text x="262" y="316" font-size="16" fill="#e5e5e5">RETRACTED: n_3_xl = @breakingupslow — OSINT separates the clusters (LOW)</text>
+  </g>
+
+  <!-- =========== Y-BRANCH connector =========== -->
+  <line x1="500" y1="346" x2="500" y2="392" stroke="#666666" stroke-width="2"/>
+  <line x1="270" y1="392" x2="730" y2="392" stroke="#666666" stroke-width="2"/>
+  <line x1="270" y1="392" x2="270" y2="418" stroke="#666666" stroke-width="2"/>
+  <line x1="730" y1="392" x2="730" y2="418" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== LEFT HUB — MagnoHost BR / EvilSoul (deep-red) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="50" y="418" width="440" height="336" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="50" y="418" width="6" height="336" rx="3" fill="#7f1d1d"/>
+    <text x="72" y="452" font-size="22" font-weight="600" fill="#ffffff">MagnoHost · Brazil</text>
+    <text x="72" y="478" font-size="15" fill="#cccccc">AS210554 (Meteor Cloud) · magnohost.com.br</text>
+    <text x="72" y="508" font-size="17" font-weight="700" fill="#fb923c">★ EvilSoul-Engine operator (@breakingupslow)</text>
+    <text x="72" y="542" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">evilsoul.cc  →  198.1.195.210</text>
+    <text x="72" y="566" font-size="14" fill="#cccccc">stealer C2 · 7+ samples · parked to AWS Sep 2025</text>
+    <text x="72" y="598" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">evilsoul1337.xyz  ("EvilSoul Panel")</text>
+    <text x="72" y="622" font-size="15" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">→  198.1.195.207  +  198.89.99.163</text>
+    <text x="72" y="654" font-size="14" fill="#cccccc">shares Cloudflare acct (indie+rex ns) ↔ evilsoul.cc</text>
+    <text x="72" y="680" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">rDNS 198-1-195-{207,210}.magnohost.com.br</text>
+    <text x="72" y="712" font-size="14" fill="#888888">EvilSoul .cc + 1337.xyz = same Cloudflare account (HIGH)</text>
+  </g>
+
+  <!-- =========== RIGHT HUB — Routerhosting origin / 0xK41 + KAIDO (deep-red) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="510" y="418" width="440" height="336" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="510" y="418" width="6" height="336" rx="3" fill="#7f1d1d"/>
+    <text x="532" y="452" font-size="22" font-weight="600" fill="#ffffff">Routerhosting · US</text>
+    <text x="532" y="478" font-size="15" fill="#cccccc">AS14956 · the recovered "factory" (origin)</text>
+    <text x="532" y="508" font-size="17" font-weight="700" fill="#fb923c">★ KAIDO operator (n_3_xl / @govbrasil)</text>
+    <text x="532" y="542" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">144.172.103.98:8888  (open dir)</text>
+    <text x="532" y="572" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">x4m1k.com  ("0xK41 Panel")</text>
+    <text x="532" y="596" font-size="14" fill="#cccccc">+ pay. / api. / ~60 subdomains</text>
+    <text x="532" y="626" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">kaidoo.com.br + c2.kaidoo.com.br</text>
+    <text x="532" y="650" font-size="14" fill="#cccccc" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">→  now 179.43.150.50  (CH · Private Layer)</text>
+    <text x="532" y="682" font-size="14" fill="#cccccc">0xK41 + KAIDO brands land here · t.me/n_3_xl</text>
+    <text x="532" y="712" font-size="14" fill="#888888">shared multi-tenant host — co-tenants excluded</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="800" x2="940" y2="800" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="834" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">KAIDO (n_3_xl) built on EvilSoul-Engine (@breakingupslow) — tooling lineage DEFINITE, two SEPARATE operators</text>
+  <text x="500" y="862" text-anchor="middle" font-size="15" fill="#e5e5e5">Same-operator link RETRACTED (was MODERATE → now LOW) — public OSINT separates the two clusters</text>
+
+  <!-- =========== Color chip legend =========== -->
+  <g transform="translate(285, 905)">
+    <rect x="0" y="0" width="16" height="16" fill="#dc2626"/>
+    <text x="24" y="13" font-size="14" fill="#cccccc">tooling-lineage link</text>
+    <rect x="190" y="0" width="16" height="16" fill="#7f1d1d"/>
+    <text x="214" y="13" font-size="14" fill="#cccccc">operator cluster (infra / C2)</text>
+  </g>
+
+  <text x="500" y="965" text-anchor="middle" font-size="14" fill="#888888">Passive DNS: DomainTools Iris · sample/infra: VirusTotal + Hunt.io · The Hunters Ledger · 2026-06-28 (attribution-corrected)</text>
+</svg>

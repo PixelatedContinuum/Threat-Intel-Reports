@@ -1,0 +1,173 @@
+{
+  "metadata": {
+    "malware_name": "KAIDO / EvilSoul-Engine Stealer MaaS",
+    "family": "KAIDO (Quasar RAT fork) + EvilSoul-Engine (Node/Electron stealer-builder)",
+    "report_date": "2026-07-03",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "campaign_slug": "evilsoul-engine-stealer-maas-144-172-103-98",
+    "operator": "n_3_xl / @govbrasil / KAIDO (0xK41), Brazil — HIGH (named actor, no UTA)",
+    "tooling_lineage": "EvilSoul-Engine MaaS, developer @breakingupslow — DEFINITE (separate operator)",
+    "note": "Campaign IOC feed for the EvilSoul-Engine Stealer-Builder MaaS report (Report B). Covers the full operator portfolio: the EvilSoul-Engine stealer-builder ecosystem (PART B) plus the operator's KAIDO Quasar RAT indicators (PART A) for cross-reference. A KAIDO-RAT-focused companion feed is published at kaido-quasar-rat-iocs.json (Report A). Credential-type indicators (bot/webhook tokens, API keys) are defanged to first-8 + last-4 per project rule; full values held in local investigation Evidence only."
+  },
+  "file_hashes": {
+    "sha256": [
+      {"value": "c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT, tag 'breach', C2 kaidoo.com.br:4782 (PART A)"},
+      {"value": "385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT, live-C2 sibling, c2.kaidoo.com.br:443 (PART A)"},
+      {"value": "022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT, low-detection sibling (PART A)"},
+      {"value": "b90100d58b5807139eec66ed4e414bfcecdc369ddd5307e8d0fe2be90dcccde5", "confidence": "DEFINITE", "action": "HUNT", "context": "EvilSoul stealer.js (0xK41) payload source (PART B)"},
+      {"value": "19e970052401aa72aa3d5a1145fbef9ac57a6d3a39f47e618b575ff88283797a", "confidence": "DEFINITE", "action": "HUNT", "context": "EvilSoul builder_index.js (Builder API) (PART B)"},
+      {"value": "940bdf8421ace41cd9a93957122feed9faf0db02016c4b9daf4aeac7c0c794ed", "confidence": "DEFINITE", "action": "HUNT", "context": "EvilSoul obfuscator.js (js-confuser+AES-GCM+XOR packer) (PART B)"},
+      {"value": "2b23eed25f5885ca2652fde9f277b295de6ef0dbcdcce0826c4fd734b34dc0b8", "confidence": "DEFINITE", "action": "HUNT", "context": "EvilSoul index.js orchestrator (forks 4 services) (PART B)"},
+      {"value": "dd08fe79932b83890eb7811b59fe8bed37423384194cd9537ef4d8ab27b99b99", "confidence": "DEFINITE", "action": "HUNT", "context": "EvilSoul panel.exe WebPanel (pkg-Node) (PART B)"},
+      {"value": "299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c", "confidence": "DEFINITE", "action": "BLOCK", "context": "EvilSoul Socket.IO WebPanel RAT build (81.9 MB pkg-Node), C2 evilsoul.cc (PART B)"},
+      {"value": "763303b69ad589bef248b66d1db93d5e567d9d60f95511806289289ff42a548e", "confidence": "DEFINITE", "action": "BLOCK", "context": "Maploot.msi EvilSoul Electron stealer (172 MB) (PART B)"},
+      {"value": "fe55908030318879f08b185b9c5b6e6f9d6f691154c361d60cce80162d844212", "confidence": "DEFINITE", "action": "BLOCK", "context": "Tinarox.msi EvilSoul Electron stealer (Maploot twin) (PART B)"},
+      {"value": "9e26f198ba185fcda834d3c7b7ae074baf6cea65a3261dfc85a7cc9295e5a9d2", "confidence": "HIGH", "action": "BLOCK", "context": "TinaroxGamesFree.exe (extracted from Tinarox.msi) (PART B)"},
+      {"value": "2b1eb8470193d40c6b9f9844e4bba958103c4a629aa7d214658ce0199bf9373c", "confidence": "HIGH", "action": "HUNT", "context": "Tinarox app.asar (Electron archive) (PART B)"},
+      {"value": "934185683e2294f063bcb60b883b7cd518a2ec468597441adfbadc679c0112c8", "confidence": "HIGH", "action": "BLOCK", "context": "Sibling EvilSoul node.exe build, contacts evilsoul.cc + 198.1.195.210 (PART B)"},
+      {"value": "bfd3fe4ff947e29d3d33bf36c54be271bfec5885378990b3799570b402ab38bd", "confidence": "HIGH", "action": "BLOCK", "context": "Sibling EvilSoul node.exe build, contacts evilsoul.cc + 198.1.195.210 (PART B)"},
+      {"value": "68f438ac293c749ebf9f71001ce5f976a34465c44c58f7b98bd3e2d1618c3366", "confidence": "MODERATE", "action": "HUNT", "context": "evilsoul.cc node.exe build (VT communicating_files) (PART B)"},
+      {"value": "7eb134384e6afbaa910f5670d29f32305aff4f5ec0fdbb3b34fec848a4ea24da", "confidence": "MODERATE", "action": "HUNT", "context": "evilsoul.cc node.exe build (VT communicating_files) (PART B)"},
+      {"value": "dd97278cc64d0a8fbdb66f177367c29d2557dd445b306e922e9ad5660ea233e2", "confidence": "DEFINITE", "action": "HUNT", "context": "chromelevator.exe — xaitax ChromElevator ABE-bypass tool (@breakingupslow fork); commodity, VHash shared across multi-actor cluster (PART B)"},
+      {"value": "fc53e32f7aec1789b26a0c4c46397306f9ba332ccf9babb657bc41eef868ff0e", "confidence": "DEFINITE", "action": "HUNT", "context": "chrome_decrypt.dll — xaitax ABE-bypass companion DLL; commodity (PART B)"},
+      {"value": "cb679a4f6381f366d89c237cf07fcb09580b2e3c10c1e03a813a538e6e574c70", "confidence": "MODERATE", "action": "BLOCK", "context": "static/sv2.exe — unrecovered EvilSoul builder output (hash only) (PART B)"},
+      {"value": "ce357b006e2c8df3a093332242d90832b023456eae272ce2c8610363107152dd", "confidence": "MODERATE", "action": "BLOCK", "context": "static/snew.exe — unrecovered EvilSoul builder output (hash only) (PART B)"},
+      {"value": "787624b4414a7553a50dc65e037cef8cdd5bb8ea4d79a26b9e6aee5ebb6cf8a6", "confidence": "MODERATE", "action": "BLOCK", "context": "static/sfix.exe — unrecovered EvilSoul builder output (hash only) (PART B)"},
+      {"value": "0e7d6bade5a05e7b021683eba1a61f4aecbce2bd3cf3bee70cf12e995304c3a0", "confidence": "MODERATE", "action": "BLOCK", "context": "static/tpkg.exe — unrecovered EvilSoul builder output (hash only) (PART B)"}
+    ],
+    "md5": [
+      {"value": "20989b06f7c670ab973da6609855bcf9", "confidence": "DEFINITE", "context": "KAIDO RAT c7542e82 MD5 (PART A)"},
+      {"value": "ba77019b7bdbba07a0dd376a60c90063", "confidence": "DEFINITE", "context": "Tinarox.msi MD5 (PART B)"},
+      {"value": "a567eab759a390a00b4605ea7d161b26", "confidence": "DEFINITE", "context": "chromelevator.exe MD5 (xaitax ABE tool) (PART B)"}
+    ],
+    "sha1": [
+      {"value": "928f2ffa7fc84b74941fb714455d7bc14847b3af", "confidence": "DEFINITE", "context": "KAIDO RAT c7542e82 SHA1 (PART A)"},
+      {"value": "d9a5b21ebb2a4384b14e03f2a44c62343779e63a", "confidence": "DEFINITE", "context": "Tinarox.msi SHA1 (PART B)"},
+      {"value": "0acd8c90641e6e8b085aaf5a541c7ac050a65a4a", "confidence": "DEFINITE", "context": "KAIDO RAT AUTHKEY / embedded pinned-cert SHA1 thumbprint (CN=ihat tbcs), all 3 builds (PART A)"}
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {"value": "144.172.103.98", "port": 8888, "confidence": "DEFINITE", "action": "MONITOR", "context": "Origin open directory (KAIDO Services), AS14956 RouterHosting US — DEAD as of 2026-06-27", "purpose": "C2/factory origin"},
+      {"value": "144.172.109.203", "port": 4782, "confidence": "DEFINITE", "action": "BLOCK", "context": "Live KAIDO Quasar RAT C2, AS14956 RouterHosting US; :8443 TeamKAIDO cert; :4782 Quasar protocol (PART A)", "purpose": "C2"},
+      {"value": "198.1.195.207", "port": 80, "confidence": "HIGH", "action": "BLOCK", "context": "EvilSoul builder default panel, AS210554 Meteor Cloud / MagnoHost BR (PART B)", "purpose": "builder panel"},
+      {"value": "198.1.195.210", "port": 3000, "confidence": "DEFINITE", "action": "BLOCK", "context": "EvilSoul webhook-resolution relay /tralalero + evilsoul.cc historical A-record host, MagnoHost BR (PART B)", "purpose": "C2 relay"},
+      {"value": "198.89.99.163", "confidence": "MODERATE", "action": "MONITOR", "context": "Old evilsoul1337.xyz host, MagnoHost BR; co-hosts a Brazilian CPF/name doxing API and romahosting Pterodactyl panel (PART B)", "purpose": "operator infra"},
+      {"value": "179.43.150.50", "confidence": "MODERATE", "action": "MONITOR", "context": "Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only — do not probe (PART A)", "purpose": "C2 fronting host"}
+    ],
+    "ipv6": [],
+    "domains": [
+      {"value": "kaidoo.com.br", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT primary C2 (port 4782); DNS confirmed in detonation (PART A)"},
+      {"value": "c2.kaidoo.com.br", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT secondary C2 (port 443) (PART A)"},
+      {"value": "www.kaidoo.com.br", "confidence": "HIGH", "action": "BLOCK", "context": "KAIDO brand domain (PART A)"},
+      {"value": "evilsoul.cc", "confidence": "DEFINITE", "action": "BLOCK", "context": "EvilSoul Socket.IO C2 (299a2e7f build); DNS confirmed in detonation (PART B)"},
+      {"value": "evilsoul.xyz", "confidence": "DEFINITE", "action": "BLOCK", "context": "Maploot/Tinarox primary backend (/dcinjection-send, /upload-txts, /download/panel, /download/decrypter) (PART B)"},
+      {"value": "evilsoul1337.xyz", "confidence": "MODERATE", "action": "BLOCK", "context": "'EvilSoul Panel' domain, MagnoHost BR (PART B)"},
+      {"value": "x4m1k.com", "confidence": "HIGH", "action": "BLOCK", "context": "'0xK41 Panel' control-plane front, A-record to origin 144.172.103.98 (PART B)"},
+      {"value": "pay.x4m1k.com", "confidence": "HIGH", "action": "MONITOR", "context": "0xK41 MaaS sales/payment page (Cloudflare) (PART B)"},
+      {"value": "systemtools.dev", "confidence": "MODERATE", "action": "MONITOR", "context": "Decoy cover-identity homepage injected into built payloads (PART B)"},
+      {"value": "choix-relay.com", "confidence": "LOW", "action": "MONITOR", "context": "French 'choix' domain co-resident on the Swiss KAIDO host; possible parallel phishing line (PART A/B) — MODERATE-LOW"}
+    ],
+    "urls": [
+      {"value": "http://evilsoul.cc/socket.io/?EIO=4&transport=polling", "confidence": "DEFINITE", "action": "BLOCK", "context": "EvilSoul Socket.IO v4 C2 handshake (299a2e7f) (PART B)"},
+      {"value": "http://198.1.195.210:3000/tralalero", "confidence": "DEFINITE", "action": "BLOCK", "context": "EvilSoul webhook-resolution relay; POSTs {key} receives {webhook} (PART B)"},
+      {"value": "https://github.com/sqlban/configs/raw/refs/heads/main/chromelevator.exe", "confidence": "DEFINITE", "action": "BLOCK", "context": "Chrome ABE-bypass tool download (299a2e7f supply chain); account now 404 (PART B)"},
+      {"value": "https://github.com/sqlban/configs/raw/refs/heads/main/chrome_decrypt.dll", "confidence": "DEFINITE", "action": "BLOCK", "context": "Chrome ABE-bypass DLL download (299a2e7f supply chain); account now 404 (PART B)"},
+      {"value": "http://evilsoul.xyz/download/decrypter/chrome_inject.exe", "confidence": "HIGH", "action": "BLOCK", "context": "EvilSoul backend's own Chrome ABE-bypass injector (Maploot analog) (PART B)"},
+      {"value": "https://store8.gofile.io/uploadFile", "confidence": "DEFINITE", "action": "MONITOR", "context": "Loot-zip upload sink (Maploot/Tinarox/299a2e7f)", "false_positive_risk": "HIGH — gofile.io is a shared legitimate file-hosting service; pin on the full upload behavior + accompanying IOCs, not the domain alone (PART B)"},
+      {"value": "https://acf02ac96211.ngrok-free.app", "confidence": "DEFINITE", "action": "MONITOR", "context": "Operator ngrok tunnel for panel download (shared across Maploot+Tinarox)", "false_positive_risk": "MODERATE — ngrok-free.app is a shared tunneling service; the specific subdomain is operator-unique (PART B)"}
+    ],
+    "email_addresses": [],
+    "user_agents": [
+      {"value": "Chrome/120 (spoofed)", "confidence": "MODERATE", "context": "stealer.js spoofs a Chrome/120 user-agent for HTTP exfil (PART B)"}
+    ],
+    "credentials_defanged": [
+      {"type": "telegram_bot_token", "value": "89819528...gVQM", "confidence": "DEFINITE", "context": "Recovered-kit Telegram exfil bot token (panelbot/telegrambot); REVOKED (getMe 401). Truncated first-8+last-4; full value in local Evidence only (PART B)"},
+      {"type": "discord_webhook", "value": "1505999775370055801/oyBDbsaw...VABsx", "confidence": "HIGH", "context": "stealer.js (0xK41) exfil webhook; DELETED (10015 Unknown Webhook). Truncated; full value local only (PART B)"},
+      {"type": "discord_webhook", "value": "1391195207508295750/vuz2kBy-...cPidMb", "confidence": "DEFINITE", "context": "Maploot/Tinarox PRIMARY exfil sink (shared). Snowflake ID is the durable IOC; token truncated (PART B)"},
+      {"type": "discord_webhook", "value": "1401355074235793458/F-yfwpHv...ZnHk2", "confidence": "HIGH", "context": "Maploot/Tinarox SECONDARY exfil sink (shared, dynamic-memory-resolved). Token truncated (PART B)"},
+      {"type": "steam_web_api_key", "value": "440D7F4D...F902", "confidence": "DEFINITE", "context": "Hardcoded Steam Web API key shared across Maploot+Tinarox builds; durable cross-build anchor. Truncated per credential rule (PART B)"},
+      {"type": "license_key", "value": "6D479A7E665F", "confidence": "DEFINITE", "context": "299a2e7f hardcoded fallback license key sent in every webhook-resolution call (developer/master key) (PART B)"},
+      {"type": "telegram_admin_chat_id", "value": "8530648601", "confidence": "DEFINITE", "context": "Operator's Telegram admin chat ID (adminchatid) (PART B)"}
+    ],
+    "tls_certificates": [
+      {"value": "C7DC584B7C6C5C6322D2E20C0475443C7169207E0114C2D05362920AA2A1F692", "type": "sha256", "confidence": "HIGH", "context": "KAIDO C2 cert on 144.172.109.203:8443 — CN=kaido-c2, Issuer O=TeamKAIDO; JA4X bbd6cc0fca29_bbd6cc0fca29_795797892f9c; best fleet-enumeration pivot (PART A)"}
+    ]
+  },
+  "host_indicators": {
+    "registry_keys": [
+      {"key": "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Exclusions\\Paths", "value_name": "C:\\", "value_type": "REG_DWORD", "confidence": "DEFINITE", "context": "Whole-drive Defender exclusion (EvilSoul DisableProtections) (PART B)"},
+      {"key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", "value_name": "DisableTaskMgr", "value_type": "REG_DWORD", "confidence": "DEFINITE", "context": "Task Manager disable (299a2e7f toggleTaskManager) (PART B)"},
+      {"key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "value_name": "(varies)", "value_type": "REG_SZ", "confidence": "HIGH", "context": "stealer.js persistence Run key (PART B)"},
+      {"key": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "value_name": "(varies)", "value_type": "REG_SZ", "confidence": "HIGH", "context": "stealer.js persistence Run key (PART B)"}
+    ],
+    "file_paths": [
+      {"value": "%AppData%\\<subdir>\\svchost.exe", "confidence": "HIGH", "context": "KAIDO RAT install location (masquerade) (PART A)"},
+      {"value": "%TEMP%\\executor\\chromelevator.exe", "confidence": "DEFINITE", "context": "Chrome ABE-bypass tool drop (PART B)"},
+      {"value": "%TEMP%\\executor\\chrome_decrypt.dll", "confidence": "DEFINITE", "context": "Chrome ABE-bypass DLL drop (PART B)"},
+      {"value": "%TEMP%\\evilsoulblockkstarjkjaksghjhsjkahjskjak81929ijsahsjkj.txt", "confidence": "DEFINITE", "context": "299a2e7f args/key file — near-zero-FP anchor (PART B)"},
+      {"value": "%TEMP%\\evilsoul_reconnect.lock", "confidence": "DEFINITE", "context": "299a2e7f single-instance/reconnect lock (PART B)"},
+      {"value": "%TEMP%\\evilsoul_mouse_<rand8>.ps1", "confidence": "DEFINITE", "context": "299a2e7f remote mouse-click script (PART B)"},
+      {"value": "%TEMP%\\updatesystem.cmd", "confidence": "DEFINITE", "context": "299a2e7f hidden persistence batch (PART B)"},
+      {"value": "%TEMP%\\watcher.vbs", "confidence": "DEFINITE", "context": "299a2e7f persistence watchdog VBS (PART B)"},
+      {"value": "%TEMP%\\evilsoul_<rand16hex>.exe", "confidence": "DEFINITE", "context": "Maploot panel-stage dropped executable (PART B)"},
+      {"value": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\update.bat", "confidence": "DEFINITE", "context": "299a2e7f primary startup persistence (PART B)"},
+      {"value": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\<8randlower>.lnk", "confidence": "DEFINITE", "context": "299a2e7f hidden startup shortcut (PART B)"}
+    ],
+    "mutex_names": [],
+    "named_pipes": [
+      {"value": "\\\\.\\pipe\\kaido_dxgi_<8hex>", "confidence": "HIGH", "context": "KAIDO RAT DXGI-hook HVNC frame transport pipe (PART A)"}
+    ],
+    "scheduled_tasks": [
+      {"task_name": "(masquerades as Microsoft Corporation, hidden)", "action": "stealer payload", "trigger": "At log on", "confidence": "HIGH", "context": "stealer.js persistence — Task XML v1.2 authored as 'Microsoft Corporation' (PART B)"}
+    ],
+    "service_names": []
+  },
+  "detection_anchor_strings": {
+    "kaido_rat": [
+      {"value": "Kaido.Common.Messages", "confidence": "HIGH", "context": "Namespace root — survives obfuscation"},
+      {"value": "Kaido.Client.Helper.HVNC.ProcessController", "confidence": "HIGH", "context": "HVNC launcher class"},
+      {"value": "costura.kaido.common.dll", "confidence": "HIGH", "context": "Costura embedded asset name"},
+      {"value": "Default_runhost", "confidence": "DEFINITE", "context": "HVNC hidden-desktop literal"},
+      {"value": "KAIDO_DXGI_PIPE", "confidence": "HIGH", "context": "HVNC DXGI env var"},
+      {"value": "[BrowserClone] Using handle hijacking for locked files...", "confidence": "HIGH", "context": "Browser-profile clone debug string"},
+      {"value": "[ANTI] Sleep obfuscation ENABLED (fixed: mutex + stack detection + 32MB cap)", "confidence": "HIGH", "context": "Anti-analysis developer string"}
+    ],
+    "evilsoul_engine": [
+      {"value": "see-you-in-the-hellwizard-1082@239$328927bA", "confidence": "DEFINITE", "context": "Operator-signature crypto constant (obfuscator STATIC_XOR_KEY_SECRET) — survives js-confuser"},
+      {"value": "// wizard see you in the hell", "confidence": "DEFINITE", "context": "Operator catchphrase comment"},
+      {"value": "kaido_debug.txt", "confidence": "HIGH", "context": "Operator-tagged debug artifact"},
+      {"value": "evilsoulblockkstarjkjaksghjhsjkahjskjak81929ijsahsjkj", "confidence": "DEFINITE", "context": "299a2e7f args-file suffix — near-zero-FP"},
+      {"value": "EvilSoul Stealer - (BrowserData ~", "confidence": "HIGH", "context": "Maploot/Tinarox exfil embed title"},
+      {"value": "EvilSoul ~ (WebPanel)", "confidence": "DEFINITE", "context": "299a2e7f bot username"},
+      {"value": "@evilsoulstealer", "confidence": "HIGH", "context": "Discord footer identity (shared across builds)"},
+      {"value": "'evilso'+'ul.xyz'", "confidence": "HIGH", "context": "Split-domain anti-grep trick"},
+      {"value": "198.1.195.210:3000/tralalero", "confidence": "DEFINITE", "context": "Full relay endpoint string"}
+    ],
+    "xaitax_abe_tools": [
+      {"value": " by @xaitax / @breakingupslow", "confidence": "DEFINITE", "context": "ChromElevator EXE banner (fork co-credit)"},
+      {"value": " Direct Syscall-Based Reflective Hollowing", "confidence": "DEFINITE", "context": "EXE hollowing string"},
+      {"value": "__DLL_PIPE_COMPLETION_SIGNAL__", "confidence": "DEFINITE", "context": "IPC magic (both binaries)"},
+      {"value": "# Copyright (https://t.me/evilsoulstealer/)", "confidence": "DEFINITE", "context": "Operator-added DLL copyright"},
+      {"value": "9cd3c3703cd3ac13b42be9c7c07f92f8", "confidence": "DEFINITE", "context": "chromelevator.exe imphash"},
+      {"value": "46176dc24f19de483395f2a41b6e1e3a", "confidence": "DEFINITE", "context": "chrome_decrypt.dll imphash"}
+    ]
+  },
+  "build_keys": [
+    {"value": "EVIL-DAY-2E948152B228", "confidence": "DEFINITE", "context": "EvilSoul license/build key (appears in /send-* exfil traffic)"},
+    {"value": "KAIDO-DAY-187E3327A1AB", "confidence": "DEFINITE", "context": "KAIDO license/build key"},
+    {"value": "KAIDO-DAY-B011C3CB60AD", "confidence": "DEFINITE", "context": "KAIDO license/build key"}
+  ],
+  "c2_endpoints": [
+    {"value": "/send-logs", "confidence": "DEFINITE", "context": "EvilSoul main exfil (browser passwords/cookies)"},
+    {"value": "/send-data", "confidence": "DEFINITE", "context": "EvilSoul multipart file/data upload"},
+    {"value": "/send-embed", "confidence": "DEFINITE", "context": "EvilSoul Discord-embed status"},
+    {"value": "/send-recovery-codes", "confidence": "DEFINITE", "context": "EvilSoul Discord recovery-code exfil"},
+    {"value": "/dcinjection-send", "confidence": "DEFINITE", "context": "Maploot/Tinarox evilsoul.xyz Discord token endpoint"},
+    {"value": "/upload-txts", "confidence": "DEFINITE", "context": "Maploot/Tinarox evilsoul.xyz multipart loot upload"},
+    {"value": "/download/panel", "confidence": "DEFINITE", "context": "Maploot/Tinarox panel-stage download"},
+    {"value": "/tralalero", "confidence": "DEFINITE", "context": "299a2e7f webhook-resolution relay path on 198.1.195.210:3000"}
+  ]
+}
