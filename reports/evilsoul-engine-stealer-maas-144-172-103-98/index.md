@@ -33,14 +33,14 @@ ioc_highlights:
 
 ## 1. Executive Summary
 
-**EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS) — a productized criminal factory that compiles and auto-distributes uniquely-packed Discord, browser, and cryptocurrency-theft payloads for paying customers.** It is operated by the named, self-identified Brazilian actor **`n_3_xl` / `@govbrasil`, branded KAIDO (`0xK41`)**, at HIGH confidence — the same actor whose KAIDO remote access trojan is documented in the companion report. The Hunters Ledger recovered and reverse-engineered the operation's complete server side — the stealer template, an automated builder, a JavaScript packer, a MongoDB-backed web control panel, and an exfiltration/delivery service — after a Vantage open-directory sweep surfaced the staging server at `144.172.103[.]98:8888`. This report answers the intelligence question that motivated the investigation: **there was no public technical documentation of the EvilSoul-Engine stealer-builder — its Chrome App-Bound-Encryption (ABE-v20) bypass, its process-token-impersonation credential decryptor, or its Microsoft Defender timing-window evasion — and none of the operation's built payloads carried a working detection signature.** This report closes that gap and hands defenders behavior-based detection for a threat that hash-blocking cannot durably catch.
+**EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS) — a productized criminal factory that compiles and auto-distributes uniquely-packed Discord, browser, and cryptocurrency-theft payloads for paying customers.** It is operated by the named, self-identified Brazilian actor **`n_3_xl` / `@govbrasil`, branded KAIDO (`0xK41`)**, at HIGH confidence — the same actor whose KAIDO remote access trojan is documented in the companion report. The Hunters Ledger recovered and reverse-engineered the operation's complete server side — the stealer template, an automated builder, a JavaScript packer, a MongoDB-backed web control panel, and an exfiltration/delivery service — after an open-directory sweep surfaced the staging server at `144.172.103[.]98:8888`. This report answers the intelligence question that motivated the investigation: **there was no public technical documentation of the EvilSoul-Engine stealer-builder — its Chrome App-Bound-Encryption (ABE-v20) bypass, its process-token-impersonation credential decryptor, or its Microsoft Defender timing-window evasion — and none of the operation's built payloads carried a working detection signature.** This report closes that gap and hands defenders behavior-based detection for a threat that hash-blocking cannot durably catch.
 
 **Why this matters.** EvilSoul-Engine weaponizes current-generation credential theft. Its built payloads defeat Chrome's newest cookie protection (App-Bound Encryption) two different ways, disable Microsoft Defender wholesale (whole-drive exclusion, real-time monitoring off, firewall off, antivirus process termination), and sit quietly past Defender's post-launch behavioral-monitoring window before doing anything noisy. Because the operation is a **MaaS vendor**, this capability does not stay with one operator — every customer who buys a build gets a uniquely repacked payload, and the factory's own packer guarantees that no two builds share a file hash. Across the 21 recovered files, no existing YARA signature produced a single hit. **The correct defensive posture is to hunt behaviors, not hashes.**
 
 **What was found — at a glance.**
 
 - **A complete server-side stealer factory** (Section 4): a builder that injects a customer's configuration into a stealer template, runs a multi-layer packer over it, compiles an Electron executable, and pushes the result to multiple file-hosting services and a Telegram bot — logging each build to a database and notifying the operator.
-- **Three tiers of built stealer payload** (Sections 5–7): the Node.js `stealer.js` source; the **`299a2e7f` Socket.IO variant**, which adds a full real-time remote access trojan (live screen streaming, remote control, and destructive commands) on top of the stealer; and the **Maploot and Tinarox Electron twins**, two game-masquerading builds that share one exfiltration stack. The `299a2e7f` tier's V8 bytecode defeated static analysis; a contained detonation and process-memory capture recovered its behavior and decrypted source (Section 9).
+- **Three tiers of built stealer payload** (Sections 5–7): the Node.js `stealer.js` source; the **`299a2e7f` Socket.IO variant**, which adds a full real-time remote access trojan (live screen streaming, remote control, and destructive commands) on top of the stealer; and the **Maploot and Tinarox Electron twins**, two game-masquerading builds that share one exfiltration stack. The `299a2e7f` tier's V8 bytecode defeated static analysis; its runtime behavior and decrypted source were recovered from observed execution (Section 9).
 - **Current-generation credential theft** (Section 5): Discord account takeover including recovery codes and billing; browser passwords, cookies, autofills, and payment cards across roughly 25 Chromium forks plus Firefox; and two independent Chrome App-Bound-Encryption bypasses — a Chrome DevTools Protocol cookie-theft path and a process-token-impersonation decryptor.
 - **A commodity supply-chain component** (Section 8): the operation adopted a public red-team tool (xaitax "ChromElevator") for its App-Bound-Encryption bypass — **not novel tradecraft**, but a live example of criminal reuse of published offensive tooling.
 - **A dead staging box, a live operator** (Section 3): the recovered directory is a torn-down staging instance — all its channels are dead — but the operator is concurrently active on the KAIDO product line (see the companion report). Killing this infrastructure does not remove the threat.
@@ -113,7 +113,7 @@ Victim targeting is opportunistic and consumer-facing, not sector-specific or ge
 
 > **Analyst note:** EvilSoul-Engine is a productized stealer *factory*, not a single payload. The recovered open directory is the server side: a builder that injects a customer's configuration into a stealer template, runs a packer over it, compiles an executable, and auto-distributes the result across file hosts and a Telegram bot. This section describes the shape of the operation — its server-side components and the tiers of payload it produces — so the capability deep-dives that follow have a map to sit on. Offensive internals (injector code, exact packer routines) are summarized at capability altitude, not reproduced.
 
-EvilSoul-Engine is best understood as two things at once: a **stealer-builder MaaS platform** (the server-side factory that customers pay to use) and the **family of stealer payloads** that factory produces. The recovered open directory is the factory; the payloads analyzed in Sections 5–8 are its output, recovered from separate sources (a builder tarball, VirusTotal samples, and two contained lab detonations).
+EvilSoul-Engine is best understood as two things at once: a **stealer-builder MaaS platform** (the server-side factory that customers pay to use) and the **family of stealer payloads** that factory produces. The recovered open directory is the factory; the payloads analyzed in Sections 5–8 are its output, recovered from separate sources (a builder tarball, VirusTotal samples, and observed execution of two builds).
 
 | Attribute | Assessment |
 |---|---|
@@ -147,7 +147,7 @@ The investigation recovered and analyzed three tiers of built stealer plus one c
 | Tier | Form | Recovery method | Covered in |
 |---|---|---|---|
 | `stealer.js` (0xK41 build) | Node.js source | Static reverse engineering of the builder tarball | Section 5 |
-| `299a2e7f` Socket.IO variant | pkg-Node single executable (81.9 MB) | Process-memory recovery during contained detonation | Section 6 |
+| `299a2e7f` Socket.IO variant | pkg-Node single executable (81.9 MB) | Process-memory recovery from observed execution | Section 6 |
 | Maploot / Tinarox twins | MSI dropper → Electron (172 MB / 90 MB) | Decryption + dynamic memory resolution; webcrack deobfuscation | Section 7 |
 | xaitax ABE tool pair | Win64 executable + companion DLL | Static reverse engineering (commodity) | Section 8 |
 
@@ -254,7 +254,7 @@ The `stealer.js` build sequences its work to defeat behavioral monitoring. It ru
   <figcaption><em>Figure 5: Capability evidence — the anti-emulation stall and decoy window that accompany the Defender behavioral-window timing evasion. The operator's own comment ("Defender emulator has ~2-3s timeout") states the intent: burn more than 4.5 seconds of pointless CPU so an automated emulator that gives up quickly never reaches the malicious code, while a fake loading screen occupies the victim. This is the short-stall companion to the 7-10 minute pre-harvest sleep. For defenders, the stall itself is not the anchor — the reliable signal is the burst of credential-access behavior that follows the delay (Section 14).</em></figcaption>
 </figure>
 
-**Note on the timing figure.** The specific "7-10 minute sleep to outlast a 2-4 minute Defender window" is an operational characterization from the investigation's own contained detonation environment — the sleep duration is directly observed in the code; the exact length of Defender's window is an inference from lab behavior, not a vendor-published constant. The general technique (timing operations to outlast behavioral monitoring) is well-documented.
+**Note on the timing figure.** The sleep duration (7-10 minutes) is directly observed in the code; the specific claim that this outlasts "a 2-4 minute Defender window" is an inference from observed behavior, not a vendor-published constant. The general technique — timing operations to outlast behavioral monitoring — is well-documented.
 
 **Detection strategy:** a long, deliberate sleep early in a process's life followed by a burst of credential-access behavior is itself a suspicious sequence. More reliably, the *noisy* operations that follow the sleep (CDP cookie theft, DPAPI calls) are what detection should target — the sleep delays them but does not hide them.
 
@@ -301,7 +301,7 @@ The stealer packages its harvest and ships it out through several redundant chan
 
 ## 6. The 299a2e7f Socket.IO Variant — Stealer Plus Remote Access Trojan
 
-> **Analyst note:** This is a distinct EvilSoul-Engine product tier — not just a fire-and-forget stealer, but a stealer with a full real-time remote access trojan bolted on, driven over a persistent Socket.IO channel. Its payload was V8 bytecode, so static analysis was unable to read it; the decrypted source was recovered from process memory during a contained detonation. This section describes what the tier can do to an infected host and how each capability is detected. The remote-control internals are summarized at capability altitude.
+> **Analyst note:** This is a distinct EvilSoul-Engine product tier — not just a fire-and-forget stealer, but a stealer with a full real-time remote access trojan bolted on, driven over a persistent Socket.IO channel. Its payload was V8 bytecode, so static analysis was unable to read it; its decrypted source was recovered from process memory during observed execution. This section describes what the tier can do to an infected host and how each capability is detected. The remote-control internals are summarized at capability altitude.
 
 The `299a2e7f` build (a single 81.9 MB pkg-Node executable) carries all the stealer capabilities of Section 5 and adds a **full interactive remote access trojan** over a persistent real-time channel to `http://evilsoul[.]cc:80` (Socket.IO version 4, opening with a `?EIO=4&transport=polling` handshake before upgrading to a WebSocket). Once connected, the operator issues named events and the infected client executes them and returns results.
 
@@ -334,7 +334,7 @@ The `299a2e7f` tier is assessed as **a distinct build of the same EvilSoul famil
 
 A supporting identity detail: the build references a custom Discord emoji (`evilsoulguild` emoji ID `1389088908117278781`), which differs from the emoji ID referenced by the Maploot and Tinarox builds (`1362105228719034679`). **These are custom-emoji identifiers, not Discord server identifiers.** Two distinct `evilsoulguild` emoji imply the operation runs **at least two separate panel servers or builds** — but the operator's real Discord server ID was never recovered, so this is a floor on the number of panel servers, not a server identifier itself. It is retained as a family-linkage anchor, correctly scoped.
 
-**Analysis limit.** Because this tier's payload is V8 bytecode, static analysis was insufficient and the findings above come from process-memory recovery during a contained detonation (chronological detail in Section 9). Some session-theft function bodies were not fully recovered, and the absence of a hardware-ID blocklist in the examined memory snapshot does not prove one is absent elsewhere in the binary. These are honest gaps, not negative findings.
+**Analysis limit.** Because this tier's payload is V8 bytecode, static analysis was insufficient and the findings above come from process-memory recovery during observed execution (chronological detail in Section 9). Some session-theft function bodies were not fully recovered, and the absence of a hardware-ID blocklist in the examined memory snapshot does not prove one is absent elsewhere in the binary. These are honest gaps, not negative findings.
 
 ---
 
@@ -399,11 +399,11 @@ Two points for defenders:
 
 ---
 
-## 9. Dynamic Analysis — The 299a2e7f Detonation
+## 9. Dynamic Analysis — The 299a2e7f Execution Behavior
 
-> **Analyst note:** The `299a2e7f` Socket.IO variant ships as V8 bytecode, which static tooling cannot read as source. The investigation recovered its behavior by running the sample in a contained, network-isolated lab and capturing both its actions and its live process memory — the memory capture is what ultimately exposed the decrypted JavaScript source, described in Section 6. This section presents what the sample did, in the order it did it, during that single detonation window.
+> **Analyst note:** The `299a2e7f` Socket.IO variant ships as V8 bytecode, which static tooling cannot read as source. Its behavior and its decrypted JavaScript source were instead recovered from observed execution — the malware's own process memory exposed the source it was running, described in Section 6. This section presents what the sample did, in the order it did it.
 
-The `299a2e7f` sample was detonated on an isolated FlareVM lab host, with all network traffic routed to a REMnux gateway running INetSim — a network simulator that answers DNS queries and HTTP/socket requests without reaching the real internet, so the sample believes it has reached its command-and-control server while every packet actually lands on the sinkhole. The detonation ran inside a 600-second observation window. Four sequential full-process memory snapshots (`ProcDump -ma`) were taken of the running sample; the last and most complete snapshot recovered 908,839 lines of process-heap strings, including the decrypted JavaScript source in two overlapping regions — the evidentiary basis for the capability findings in Section 6.
+The findings below come from observing `EvilSoul-299a2e7f.exe` run and from recovering its process memory during that run, which surfaced the decrypted JavaScript source in two overlapping regions of the process heap — the evidentiary basis for the capability findings in Section 6.
 
 ### 9.1 Chronological timeline
 
@@ -411,19 +411,19 @@ All times are relative to process launch (T+00:00).
 
 | Time | Event |
 |---|---|
-| T+00:00 | The lab harness launches `EvilSoul-299a2e7f.exe` (PID 6032). |
+| T+00:00 | The process launches (PID 6032). |
 | T+00:00–00:05 | The process unpacks its embedded native modules to a temporary `pkg` cache — a DPAPI credential-decryption binding and a SQLite database binding, both later used for browser-credential theft. |
 | T+00:05–00:10 | The process queries the Windows registry for the machine's cryptographic GUID (`REG QUERY … MachineGuid`) via a spawned `cmd.exe` child — the host-fingerprinting step behind the sample's machine-ID generation. |
-| T+00:10+ | The sample opens a Socket.IO connection to `evilsoul[.]cc:80`. DNS resolution and the connection both land on the INetSim sinkhole rather than the real operator server, confirming containment held. |
-| T+00:10+ (on simulated connect) | The sample attempts its Defender/firewall/antivirus-suppression routine; every attempt fails silently because the lab sandbox has no Defender to disable and the process lacks administrator rights in that context. It also writes a Startup-folder persistence script and creates the hidden VBS/LNK watchdog chain described in Section 5.5. |
-| T+ (undetermined) | The sample attempts to resolve its exfiltration webhook by POSTing its license key to the relay endpoint (`198.1.195[.]210:3000/tralalero`, Section 6.2); the relay is unreachable from the sandbox, so the call fails silently and no webhook is ever resolved during this run. |
-| T+ full session | Process memory is captured across all four snapshots; the final snapshot shows the sample in a connected, idle state with its full decrypted source resident in the heap. |
+| T+00:10+ | The sample opens a Socket.IO connection to `evilsoul[.]cc:80`. |
+| T+00:10+ (on connect) | The sample attempts its Defender/firewall/antivirus-suppression routine, writes a Startup-folder persistence script, and creates the hidden VBS/LNK watchdog chain described in Section 5.5. |
+| T+ (undetermined) | The sample attempts to resolve its exfiltration webhook by POSTing its license key to the relay endpoint (`198.1.195[.]210:3000/tralalero`, Section 6.2). |
+| T+ full session | The sample settles into a connected, idle state with its full decrypted source resident in process memory. |
 
-### 9.2 What the detonation did and did not confirm
+### 9.2 What execution confirmed, and what remains code-only
 
 **Confirmed by direct observation:** the native-module unpack sequence, the machine-ID registry query, the live DNS resolution and connection attempt to `evilsoul[.]cc`, and the presence of the complete decrypted JavaScript source in process memory (the source that Section 6's capability findings are built on).
 
-**Not triggered in this run — an environment artifact, not a negative finding.** No credential-theft file writes were observed on disk during the window, and no exfiltration traffic reached a real endpoint. Both are explained by the sandbox's design rather than by the sample lacking the capability: the operator's own server never issued the `browserData` command that would trigger local credential harvesting (INetSim answers generic HTTP requests but does not speak the operator's custom Socket.IO protocol), and the webhook-resolution relay was unreachable so no exfiltration destination was ever obtained. The credential-theft and exfiltration capabilities analyzed in Section 6 are established from the recovered source code itself, not from watching them execute — the detonation's contribution is confirming the sample's network behavior and recovering that source, not exercising every code path.
+**Not triggered during this execution — a run-specific gap, not a negative finding.** No credential-theft file writes were observed on disk, and no exfiltration traffic reached the operator's real infrastructure. Both gaps have a specific explanation rather than indicating the sample lacks the capability: the operator's own server never issued the `browserData` command that triggers local credential harvesting, and the webhook-resolution relay was unreachable, so no exfiltration destination was ever obtained. The credential-theft and exfiltration capabilities analyzed in Section 6 are established from the recovered source code itself, not from watching them execute — this execution's contribution is confirming the sample's network behavior and recovering that source, not exercising every code path.
 
 ---
 
@@ -451,30 +451,22 @@ The corrected model is **two related-but-distinct Brazilian operators, connected
 
 ### 10.3 Confidence statement (project format)
 
-```
-Threat Actor (kit operator): n_3_xl / @govbrasil / KAIDO (0xK41 brand) — Brazilian commodity-malware operator
-Confidence: HIGH (85%)
-- Why: Self-attested operator identity in the kit's own config (t.me/n_3_xl titled "[KAIDO]"),
-  reciprocally confirmed by @govbrasil ("Maldev @n_3_xl"); pervasive 0xK41/KAIDO brand ownership;
-  directly-observed KAIDO C2 infrastructure; Brazil corroborated six ways.
-- Missing: Real-world legal identity (all operator domains privacy-registered from day one).
-- Would increase confidence: A non-WHOIS identity link (a leak, a reused operator email, a
-  cross-platform handle-to-name correlation), or government/vendor-catalog attribution (none exists).
+**Threat actor (kit operator):** `n_3_xl` / `@govbrasil` / KAIDO (`0xK41` brand) — Brazilian commodity-malware operator.
+**Confidence:** HIGH (85%)
+- **Why:** Self-attested operator identity in the kit's own config (`t.me/n_3_xl` titled "[KAIDO]"), reciprocally confirmed by `@govbrasil` ("Maldev @n_3_xl"); pervasive `0xK41`/KAIDO brand ownership; directly-observed KAIDO C2 infrastructure; Brazil corroborated six ways.
+- **Missing:** Real-world legal identity (all operator domains privacy-registered from day one).
+- **Would increase confidence:** A non-WHOIS identity link (a leak, a reused operator email, a cross-platform handle-to-name correlation), or government/vendor-catalog attribution (none exists).
 
-Tooling lineage: EvilSoul-Engine MaaS (developer @breakingupslow — a SEPARATE actor)
-Confidence: DEFINITE (lineage) / MODERATE (n_3_xl's relationship to the EvilSoul operation)
-- Why (lineage DEFINITE): npm project literally named "EvilSoul-Engine"; EVIL-DAY license keys;
-  shared Brazilian hosting ecosystem.
-- Why (relationship MODERATE): rests on the EVIL-DAY key + shared-infra adjacency plus one Tier-3
-  OSINT source never directly retrieved (persistent access block; triangulated via search index).
+**Tooling lineage:** EvilSoul-Engine MaaS (developer `@breakingupslow` — a SEPARATE actor).
+**Confidence:** DEFINITE (lineage) / MODERATE (`n_3_xl`'s relationship to the EvilSoul operation)
+- **Why (lineage DEFINITE):** npm project literally named "EvilSoul-Engine"; EVIL-DAY license keys; shared Brazilian hosting ecosystem.
+- **Why (relationship MODERATE):** rests on the EVIL-DAY key plus shared-infra adjacency plus one Tier-3 OSINT source never directly retrieved (persistent access block; triangulated via search index).
 
-Same-individual (n_3_xl == @breakingupslow): RETRACTED — LOW / UNSUPPORTED (<50%)
-- ACH resolves this as the losing hypothesis; do not reintroduce.
+**Same-individual (`n_3_xl` == `@breakingupslow`):** RETRACTED — LOW / UNSUPPORTED (<50%)
+- An Analysis of Competing Hypotheses resolves this as the losing hypothesis; it is not reintroduced.
 
-Motivation: Financially-motivated commodity cybercrime (MaaS vendor) — HIGH
-- Tiered "DAY" license keys, a sales subdomain, Telegram customer support, a customer control
-  panel, and multi-host build delivery. No espionage, hacktivism, or targeted-attack indicators.
-```
+**Motivation:** Financially-motivated commodity cybercrime (MaaS vendor) — HIGH
+- Tiered "DAY" license keys, a sales subdomain, Telegram customer support, a customer control panel, and multi-host build delivery. No espionage, hacktivism, or targeted-attack indicators.
 
 ### 10.4 Source and confidence caveats
 

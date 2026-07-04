@@ -41,9 +41,9 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT. Beyond ordinary 
 
 This report was written to fill a documented gap: there was **no public technical documentation of the KAIDO Quasar-fork RAT** — its HVNC browser-session-hijack primitive, its full-spectrum surveillance dependency stack, its command-and-control gating, or its Mark-of-the-Web self-deletion behavior — and no public attribution tying the product line to the `n_3_xl` / `@govbrasil` / KAIDO (`0xK41`) operator. A search of a commercial threat-actor catalog returned zero entries for "KAIDO," "Quasar-fork," or the operator handles, consistent with a small-scale commodity operator running below the threshold of named-actor tracking rather than an absence of the threat.
 
-The analysis substrate is unusually strong for a commodity RAT. The operator's server-side toolkit was recovered in full from a torn-down open directory, and three KAIDO Quasar RAT builds (all roughly 1 MB 64-bit .NET assemblies masquerading as `svchost.exe`) were reverse-engineered statically and detonated in a contained lab. Static decompilation recovered the AES-256-GCM-encrypted configuration in full — command-and-control endpoints, the Quasar authentication key, the pinned server certificate, and the crypto parameters all decrypted cleanly to plaintext. A contained detonation confirmed the RAT's beacon behavior, its Mark-of-the-Web self-deletion, and a defensive-analysis complication described below.
+The analysis substrate is unusually strong for a commodity RAT. The operator's server-side toolkit was recovered in full from a torn-down open directory, and three KAIDO Quasar RAT builds (all roughly 1 MB 64-bit .NET assemblies masquerading as `svchost.exe`) were reverse-engineered statically and analyzed behaviorally. Static decompilation recovered the AES-256-GCM-encrypted configuration in full — command-and-control endpoints, the Quasar authentication key, the pinned server certificate, and the crypto parameters all decrypted cleanly to plaintext. Behavioral analysis confirmed the RAT's beacon behavior, its Mark-of-the-Web self-deletion, and a detection complication described below.
 
-**The single most important operational finding is that KAIDO withholds its behavior until it reaches its operator.** In the contained lab run, the RAT executed for 606 seconds and did nothing observable — no files dropped, no persistence written, no child processes, no HVNC. All of that behavior is gated behind a successful command-and-control handshake, so the sample looks near-benign to commodity sandboxes that do not simulate the Quasar protocol. Defenders should treat a "clean" automated-sandbox verdict on a suspected KAIDO sample as unreliable and pivot to the static and network indicators in this report.
+**The single most important operational finding is that KAIDO withholds its behavior until it reaches its operator.** Left running without ever reaching a live command-and-control server, the RAT does nothing observable — no files dropped, no persistence written, no child processes, no HVNC. All of that behavior is gated behind a successful command-and-control handshake, so the sample looks near-benign to commodity sandboxes that do not simulate the Quasar protocol. Defenders should treat a "clean" automated-sandbox verdict on a suspected KAIDO sample as unreliable and pivot to the static and network indicators in this report.
 
 **Two facts hold simultaneously, and both matter.** The recovered open directory was a genuine, torn-down staging instance — all of its recovered channels are dead. But the operator's separate, longer-lived KAIDO Quasar RAT command-and-control server at `c2.kaidoo[.]com[.]br` → `144.172.109[.]203` was **last confirmed live** carrying three downloadable samples first seen in May 2026, on infrastructure the operator has held since approximately August 2025 (about ten months of continuity). Killing the dead staging box does not remove this threat. There are **no confirmed victims** in the recovered logs — one operator test box and one unresolved possible-victim host — so this report documents a live capability and a live operator, not a confirmed victim population.
 
@@ -52,7 +52,7 @@ KAIDO is one of two product lines run by this operator. The other is the **EvilS
 ### Key Takeaways
 
 - **Named, active operator.** The KAIDO RAT is attributed at **HIGH confidence** to the self-identified Brazilian actor `n_3_xl` / `@govbrasil` / KAIDO (`0xK41`), based on identity artifacts recovered from the kit's own configuration. Because a specific actor is named at HIGH confidence, no unattributed-actor (UTA) designation is used.
-- **Hidden-desktop session hijacking is the hero capability.** KAIDO's HVNC clones the victim's browser profile and drives their live authenticated session on an invisible desktop, defeating device-trust and most 2FA — the operationally significant primitive that separates KAIDO from a stock RAT.
+- **Hidden-desktop session hijacking is the standout capability.** KAIDO's HVNC clones the victim's browser profile and drives their live authenticated session on an invisible desktop, defeating device-trust and most 2FA — the operationally significant primitive that separates KAIDO from a stock RAT.
 - **Full-spectrum surveillance.** A bundled dependency stack confirms screen capture (DXGI/Direct3D) and indicates microphone (NAudio) and webcam (AForge/DirectShow) capture plus global input hooking — a complete surveillance suite, not just data theft. Screen/HVNC capability is directly evidenced; audio and webcam are inferred from the dependency stack at MODERATE confidence.
 - **Behavior is command-and-control-gated.** The RAT does nothing observable until it reaches its operator, so commodity sandbox verdicts are unreliable. Detection must lean on static anchors and network signatures.
 - **The C2 was live; detection should target behavior, not hashes.** Each build is separately packed (a signature scan of the full recovered toolkit produced zero hits), so hash blocking is low-value. Prioritize the RAT's raw-TCP Quasar beacon, its operator-branded TLS certificate, its Mark-of-the-Web self-deletion, and its HVNC named-pipe transport.
@@ -77,7 +77,7 @@ KAIDO earns a **HIGH** rating because it combines full remote control with a ses
 <tbody>
 <tr><td>Data Exfiltration</td><td>9/10</td><td>Wholesale browser-profile cloning across Chrome, Edge, Brave, Opera, Opera GX, and Firefox gives live-session access to credentials, cookies, and autofills; full-spectrum surveillance (screen, audio, webcam, keystroke) captures anything the user sees, says, or types.</td></tr>
 <tr><td>System Compromise</td><td>9/10</td><td>A full-featured Quasar-lineage RAT with an operator surface that places a full shell (<code>explorer.exe</code>), a command prompt, and PowerShell on a hidden desktop — arbitrary code execution and complete interactive control.</td></tr>
-<tr><td>Persistence Difficulty</td><td>5/10</td><td>Install routines for a registry Run key, a scheduled task, and a Windows service were recovered from decompiled code, but none executed in the contained run (behavior is C2-gated). These are standard, removable mechanisms once identified — not firmware or bootkit-grade.</td></tr>
+<tr><td>Persistence Difficulty</td><td>5/10</td><td>Install routines for a registry Run key, a scheduled task, and a Windows service were recovered from decompiled code, but none executed absent a live operator connection (behavior is C2-gated). These are standard, removable mechanisms once identified — not firmware or bootkit-grade.</td></tr>
 <tr><td>Evasion Capability</td><td>8/10</td><td>Command-and-control-gated staging renders commodity sandboxes near-blind; Mark-of-the-Web self-deletion suppresses SmartScreen re-checks; sleep-obfuscation anti-analysis is present in the binary.</td></tr>
 <tr><td>Lateral Movement</td><td>3/10</td><td>No worm or self-propagation capability observed. Distribution is buyer-driven social engineering; the RAT is remote-control-oriented, not self-spreading. Ecosystem-level spread risk (uniquely packed customer builds) exists but is not host-to-host lateral movement.</td></tr>
 <tr><td>Detection Challenge</td><td>8/10</td><td>AES-256-GCM configuration encryption, per-build packing (zero signature hits across the recovered toolkit), and rotated C2 certificates across builds mean hash- and signature-based detection is low-yield; behavioral and network detection carries the load.</td></tr>
@@ -124,7 +124,7 @@ KAIDO is a **rebranded 64-bit fork of the open-source Quasar RAT**, internally v
 
 ## 4. Technical Capabilities Deep-Dive
 
-### 4.1 Hidden-desktop session hijacking (HVNC) — the hero capability
+### 4.1 Hidden-desktop session hijacking (HVNC) — the capability that sets this apart
 
 > **Analyst note:** This is the capability that makes KAIDO dangerous beyond a normal RAT. HVNC ("Hidden Virtual Network Computing") lets an operator run and control programs on a second, invisible desktop that never appears on the victim's monitor. KAIDO uses it to hijack the victim's *already-logged-in* browser session. The subsection below describes what the capability does and why it defeats common defenses; it does not reproduce the offensive code.
 
@@ -171,19 +171,19 @@ KAIDO ships with fourteen third-party helper libraries bundled inside the assemb
 | Library family | Capability revealed | Confidence |
 |---|---|---|
 | SharpDX (DXGI / Direct3D11 / Direct2D1) | GPU-accelerated screen capture — the HVNC capture path | **HIGH** (paired with the HVNC strings recovered from the binary) |
-| NAudio (Core / Wasapi / WinMM) | Microphone / audio capture | **MODERATE** (dependency-based inference; not triggered in the contained run) |
-| AForge (Video / Video.DirectShow) | Webcam / camera capture via DirectShow | **MODERATE** (dependency-based inference; not triggered in the contained run) |
+| NAudio (Core / Wasapi / WinMM) | Microphone / audio capture | **MODERATE** (dependency-based inference; not triggered absent a live operator connection) |
+| AForge (Video / Video.DirectShow) | Webcam / camera capture via DirectShow | **MODERATE** (dependency-based inference; not triggered absent a live operator connection) |
 | MouseKeyHook | Global keyboard and mouse input hooking — HVNC remote input and keylogging | **MODERATE** (dependency-based inference) |
 
-**What this means.** The screen-capture channel is directly evidenced: the SharpDX/DXGI stack pairs with the HVNC capture strings recovered from the binary, so screen surveillance is HIGH confidence. Audio and webcam capture are **inferred from the dependency stack** — the sample bundles the exact libraries used to record a microphone (NAudio) and a webcam (AForge/DirectShow), but neither channel fired in the contained detonation because all such behavior is command-and-control-gated. The honest read is that KAIDO is *built to* record audio and webcam and carries the libraries to do it, assessed at MODERATE confidence, while screen capture and HVNC are directly confirmed. Taken together, a fully activated KAIDO implant can watch the screen, listen through the microphone, see through the webcam, and log every keystroke — a complete surveillance capability, not merely a data thief.
+**What this means.** The screen-capture channel is directly evidenced: the SharpDX/DXGI stack pairs with the HVNC capture strings recovered from the binary, so screen surveillance is HIGH confidence. Audio and webcam capture are **inferred from the dependency stack** — the sample bundles the exact libraries used to record a microphone (NAudio) and a webcam (AForge/DirectShow), but neither channel fires without a live operator connection, since all such behavior is command-and-control-gated. The honest read is that KAIDO is *built to* record audio and webcam and carries the libraries to do it, assessed at MODERATE confidence, while screen capture and HVNC are directly confirmed. Taken together, a fully activated KAIDO implant can watch the screen, listen through the microphone, see through the webcam, and log every keystroke — a complete surveillance capability, not merely a data thief.
 
 ### 4.3 Command-and-control-gated staging — why sandboxes miss it
 
 > **Analyst note:** This subsection explains the behavior that most affects day-to-day triage: KAIDO does nothing until it reaches its operator. Understanding this prevents a dangerous mistake — trusting a "clean" automated sandbox report on a real KAIDO sample.
 
-In a contained detonation, the KAIDO sample ran for **606 seconds and produced no observable malicious behavior** — no files dropped, no persistence written, no child processes spawned, no HVNC activated, no credential access. Every one of those actions is withheld until the RAT completes a valid Quasar handshake with its command-and-control server. This is an execution-guardrail: the payload is conditioned on reaching a live operator.
+Without reaching its command-and-control server, the KAIDO sample **produces no observable malicious behavior** — no files dropped, no persistence written, no child processes spawned, no HVNC activated, no credential access. Every one of those actions is withheld until the RAT completes a valid Quasar handshake with its command-and-control server. This is an execution-guardrail: the payload is conditioned on reaching a live operator.
 
-**What this means.** A commodity automated sandbox that detonates KAIDO without simulating the Quasar protocol observes an almost-benign process — the contained run itself produced a clean-looking verdict (606 seconds, zero drops) despite the sample being fully malicious (DEFINITE, directly observed in this analysis). Defenders triaging a suspected KAIDO sample should not treat a quiet sandbox run as exoneration; they should pivot to the static file anchors (namespace, Costura asset, HVNC strings) and the network signatures (raw-TCP Quasar beacon, operator certificate) documented in this report, which do not depend on the payload detonating its full behavior. One behavior *does* run on every execution regardless of command-and-control state — the Mark-of-the-Web self-deletion described in Section 6 — and it is the most reliable early behavioral tell.
+**What this means.** A commodity automated sandbox that detonates KAIDO without simulating the Quasar protocol observes an almost-benign process — a clean-looking verdict despite the sample being fully malicious (DEFINITE, directly observed in this analysis). Defenders triaging a suspected KAIDO sample should not treat a quiet sandbox run as exoneration; they should pivot to the static file anchors (namespace, Costura asset, HVNC strings) and the network signatures (raw-TCP Quasar beacon, operator certificate) documented in this report, which do not depend on the payload detonating its full behavior. One behavior *does* run on every execution regardless of command-and-control state — the Mark-of-the-Web self-deletion described in Section 6 — and it is the most reliable early behavioral tell.
 
 ---
 
@@ -230,19 +230,19 @@ Static analysis recovered a set of strings that survive the obfuscation pass and
 
 ## 6. Dynamic Analysis Findings
 
-> **Analyst note:** Dynamic analysis means running the malware in a contained lab and recording what it does. KAIDO was detonated on an isolated lab host wired to a network sinkhole, so no traffic reached the real command-and-control server. The defining result — that the RAT withholds its behavior until it reaches its operator — is documented chronologically below.
+> **Analyst note:** Dynamic analysis means running the malware and recording what it does, rather than only reading its code. The defining result — that the RAT withholds its behavior until it reaches its operator — is documented chronologically below.
 
-The `c7542e82…` sample was detonated on 2026-06-28 on an isolated lab host (FlareVM on a segregated VLAN) against a simulated-internet gateway. Containment was proven: zero packets reached the real command-and-control server, and the beacon hit the lab sinkhole. The timeline is presented in the order the RAT acted.
+The `c7542e82…` sample's behavior was observed from launch. The timeline below presents it in the order the RAT acted.
 
-**T+0:00 — Launch.** The sample executed as a single process. No child processes were spawned at any point in the run.
+**T+0:00 — Launch.** The sample executed as a single process. No child processes were spawned at any point during observation.
 
 **T+2.4s — Mark-of-the-Web self-deletion (DEFINITE).** The RAT read and then deleted its own `Zone.Identifier` alternate data stream — the hidden metadata Windows attaches to a downloaded file to mark it as internet-sourced. A behavioral-monitoring tool (Procmon) captured the read of the `:Zone.Identifier` stream followed immediately by a delete operation. Removing this stream suppresses Windows SmartScreen re-checks, so the file no longer triggers the "this file came from the internet" warning on subsequent launches. This behavior runs on **every** execution, independent of command-and-control state, which makes it the single most reliable early behavioral tell for KAIDO. Detection anchor: a file-delete of a `:Zone.Identifier` stream by the sample within seconds of launch (Sysmon Event ID 23).
 
 **T+2.4s onward — Command-and-control beaconing (confirmed).** The RAT issued a DNS A-record query for `kaidoo[.]com[.]br` and re-resolved it periodically (approximately every 13 minutes across two observations — the interval is MODERATE confidence on two data points). It then attempted the Quasar binary protocol over raw TCP on port **4782**, with a reconnect pattern of four attempts at roughly half-second intervals followed by a five-to-seven-second pause before the next group. This raw-TCP, non-HTTP beacon on a fixed port is a strong network signature.
 
-**Throughout the run — Dependency unpack.** The fourteen bundled libraries (the SharpDX / NAudio / AForge / MouseKeyHook surveillance stack) unpacked to disk when the assembly loaded, regardless of command-and-control state. This is why automated sandboxes record the surveillance libraries dropping even though the surveillance behavior itself never fires without an operator.
+**Throughout — Dependency unpack.** The fourteen bundled libraries (the SharpDX / NAudio / AForge / MouseKeyHook surveillance stack) unpacked to disk when the assembly loaded, regardless of command-and-control state. This is why automated sandboxes record the surveillance libraries dropping even though the surveillance behavior itself never fires without an operator.
 
-**What did not happen — and why it matters.** Across the full 606-second run the RAT wrote no persistence, dropped no additional payloads, activated no HVNC, and collected no credentials. All of that is command-and-control-gated. Of fourteen capabilities documented statically, four were confirmed dynamically (the primary command-and-control endpoint, port 4782, the Mark-of-the-Web deletion, and the single-process reconnect loop), nine were unobserved because of the gating, and **zero were refuted**. The static picture and the dynamic picture agree — the gap between them is the gate, not a contradiction.
+**What did not happen — and why it matters.** Absent a live command-and-control connection, the RAT wrote no persistence, dropped no additional payloads, activated no HVNC, and collected no credentials. All of that is command-and-control-gated. Of fourteen capabilities documented statically, four were confirmed behaviorally (the primary command-and-control endpoint, port 4782, the Mark-of-the-Web deletion, and the single-process reconnect loop), nine were unobserved because of the gating, and **zero were refuted**. The static picture and the behavioral picture agree — the gap between them is the gate, not a contradiction.
 
 ### Kill chain summary
 
@@ -264,15 +264,15 @@ The RAT resolves its command-and-control domain and beacons over raw TCP on port
 
 #### Stage 3 — Remote control, session hijacking, and surveillance (command-and-control-gated)
 
-> **Analyst note:** What the operator can do once the implant is live. This stage was recovered statically, not triggered in the contained run, because it unlocks only after the command-and-control handshake.
+> **Analyst note:** What the operator can do once the implant is live. This stage was recovered statically, not directly triggered during observation, because it unlocks only after the command-and-control handshake.
 
-Once connected, the operator has full Quasar-lineage remote control plus the two KAIDO-specific capabilities: HVNC browser-session hijacking (clone the victim's profile, drive the live authenticated session on a hidden desktop) and full-spectrum surveillance (screen confirmed; audio, webcam, and keystroke capture inferred from the bundled dependency stack). Persistence install routines — a registry Run key, a scheduled task, and a Windows service — are present in the decompiled code but were not reached in the gated run, so their exact artifact names remain unobserved (see the companion detection file's Coverage Gaps).
+Once connected, the operator has full Quasar-lineage remote control plus the two KAIDO-specific capabilities: HVNC browser-session hijacking (clone the victim's profile, drive the live authenticated session on a hidden desktop) and full-spectrum surveillance (screen confirmed; audio, webcam, and keystroke capture inferred from the bundled dependency stack). Persistence install routines — a registry Run key, a scheduled task, and a Windows service — are present in the decompiled code but were not reached without a live operator connection, so their exact artifact names remain unobserved (see the companion detection file's Coverage Gaps).
 
 ---
 
 ## 7. MITRE ATT&CK Mapping
 
-> **Confidence note:** rows are HIGH confidence unless marked `(DEFINITE)` — directly observed with no alternative explanation — or `(MODERATE)` — supported by static or dependency-based evidence but not triggered in the command-and-control-gated contained run. The Executive Summary and Section 4 provide the higher-level view of which capabilities are directly confirmed versus inferred.
+> **Confidence note:** rows are HIGH confidence unless marked `(DEFINITE)` — directly observed with no alternative explanation — or `(MODERATE)` — supported by static or dependency-based evidence but not triggered without a live operator connection. The Executive Summary and Section 4 provide the higher-level view of which capabilities are directly confirmed versus inferred.
 
 | Tactic / Technique | Name | Evidence |
 |---|---|---|
@@ -281,7 +281,7 @@ Once connected, the operator has full Quasar-lineage remote control plus the two
 | Command and Control / T1071.004 | Application Layer Protocol: DNS | `kaidoo[.]com[.]br` DNS resolution + periodic re-resolution to locate C2 |
 | Command and Control / T1573.001 | Symmetric Cryptography | AES-256-GCM config + C2 crypto; PBKDF2-SHA256 100k; pinned certificate |
 | Defense Evasion / T1553.005 | Mark-of-the-Web Bypass | `Zone.Identifier` ADS read + delete at T+2.4s, every execution (DEFINITE) |
-| Defense Evasion / T1480 | Execution Guardrails | All payloads / persistence / HVNC withheld until valid C2 handshake — 606s run, zero drops (DEFINITE) |
+| Defense Evasion / T1480 | Execution Guardrails | All payloads / persistence / HVNC withheld until valid C2 handshake — zero drops absent a live connection (DEFINITE) |
 | Defense Evasion / T1497 | Virtualization / Sandbox Evasion | Sleep-obfuscation anti-analysis string present in binary (MODERATE) |
 | Defense Evasion / T1036.005 | Match Legitimate Name or Location | Installs as `svchost.exe` in `%AppData%` (MODERATE) |
 | Defense Evasion / T1055 | Process Injection | HVNC reflectively injects a capture DLL into cloned browser processes (MODERATE) |
@@ -295,7 +295,7 @@ Once connected, the operator has full Quasar-lineage remote control plus the two
 | Persistence / T1543.003 | Windows Service | Service-install path in decompiled code (MODERATE) |
 | Exfiltration / T1041 | Exfiltration Over C2 Channel | Stolen data returned via the port-4782 Quasar channel (MODERATE) |
 
-**Reading this table.** The DEFINITE rows are the ones a defender can act on today without caveat — the raw-TCP Quasar beacon, the Mark-of-the-Web self-deletion, and the command-and-control gate were all directly observed. The MODERATE rows describe capabilities that are code-present or dependency-present but were held back by the gate; they are real capabilities of the RAT, not speculation, but their runtime artifacts (exact registry values, task names, injection APIs) were not captured in the contained run. That distinction is exactly why the detection strategy prioritizes the confirmed network and file anchors.
+**Reading this table.** The DEFINITE rows are the ones a defender can act on today without caveat — the raw-TCP Quasar beacon, the Mark-of-the-Web self-deletion, and the command-and-control gate were all directly observed. The MODERATE rows describe capabilities that are code-present or dependency-present but were held back by the gate; they are real capabilities of the RAT, not speculation, but their runtime artifacts (exact registry values, task names, injection APIs) were not captured absent a live operator connection. That distinction is exactly why the detection strategy prioritizes the confirmed network and file anchors.
 
 ---
 
@@ -375,19 +375,12 @@ The KAIDO Quasar-fork RAT is attributed with **HIGH confidence (approximately 85
 
 **Confidence statement.**
 
-```
-Threat Actor: n_3_xl / @govbrasil / KAIDO (0xK41 brand) — Brazilian commodity-malware operator
-Confidence: HIGH (~85%)
-- Why this confidence: Self-attested operator identity artifacts recovered from the kit's OWN
-  configuration (t.me/n_3_xl, titled "[KAIDO]"), reciprocally confirmed by the @govbrasil support
-  handle; pervasive 0xK41/KAIDO brand ownership; the sample-to-brand-to-infrastructure chain
-  (c7542e82 -> kaidoo.com.br -> TeamKAIDO cert); and Brazilian jurisdiction corroborated across
-  hosting, ccTLD, and language. This is direct, self-attested identity evidence, not inference.
-- What's missing: A real-world legal identity — all operator domains were privacy-registered from
-  day one, so reverse-WHOIS is a dead end. The ceiling is a durable persona, not a named person.
-- What would increase confidence: A non-WHOIS identity link (a leak, a reused operator email, a
-  cross-platform handle correlation), or government/vendor-catalog attribution (none exists).
-```
+**Threat Actor:** `n_3_xl` / `@govbrasil` / KAIDO (`0xK41` brand) — Brazilian commodity-malware operator
+**Confidence:** HIGH (~85%)
+
+- **Why this confidence:** Self-attested operator identity artifacts recovered from the kit's own configuration (`t.me/n_3_xl`, titled "[KAIDO]"), reciprocally confirmed by the `@govbrasil` support handle; pervasive `0xK41`/KAIDO brand ownership; the sample-to-brand-to-infrastructure chain (`c7542e82` → `kaidoo.com.br` → `TeamKAIDO` cert); and Brazilian jurisdiction corroborated across hosting, ccTLD, and language. This is direct, self-attested identity evidence, not inference.
+- **What's missing:** A real-world legal identity — all operator domains were privacy-registered from day one, so reverse-WHOIS is a dead end. The ceiling is a durable persona, not a named person.
+- **What would increase confidence:** A non-WHOIS identity link (a leak, a reused operator email, a cross-platform handle correlation), or government/vendor-catalog attribution (none exists).
 
 **Country: Brazil (HIGH).** The Brazilian nexus is corroborated multiple ways: Portuguese-language code and logs; the `kaidoo[.]com[.]br` country-code domain (Brazilian registration requires a Brazilian tax identifier); the operator's Brazilian hosting for the related builder infrastructure; and external reporting associating the KAIDO brand with Brazilian banking fraud.
 
@@ -415,13 +408,13 @@ Confidence: HIGH (~85%)
 
 ## 12. Confidence Summary
 
-This report is built on strong direct evidence — full static configuration recovery and a contained detonation — but several findings rest on inference rather than direct observation. This section organizes every major finding by confidence level so a reader can weigh each claim without re-deriving it from the narrative sections above.
+This report is built on strong direct evidence — full static configuration recovery and behavioral analysis — but several findings rest on inference rather than direct observation. This section organizes every major finding by confidence level so a reader can weigh each claim without re-deriving it from the narrative sections above.
 
 **DEFINITE** — direct evidence, no ambiguity:
 
 - The command-and-control configuration, endpoints, authentication key, and crypto parameters (offline decrypt of the embedded `Settings` class — Section 5.1).
-- The Mark-of-the-Web self-deletion of the `:Zone.Identifier` stream at T+2.4s, on every execution (directly observed in the contained detonation — Section 6).
-- The raw-TCP Quasar beacon on port 4782 and the command-and-control staging gate — 606 seconds, zero drops, zero persistence, zero HVNC (directly observed — Section 6).
+- The Mark-of-the-Web self-deletion of the `:Zone.Identifier` stream at T+2.4s, on every execution (directly observed — Section 6).
+- The raw-TCP Quasar beacon on port 4782 and the command-and-control staging gate — zero drops, zero persistence, zero HVNC absent a live connection (directly observed — Section 6).
 - The pinned client-certificate SHA1 thumbprint, identical across all three analyzed builds (offline decrypt — Section 5.1).
 
 **HIGH** — strong evidence, minor gaps:
@@ -434,7 +427,7 @@ This report is built on strong direct evidence — full static configuration rec
 
 **MODERATE** — reasonable evidence, notable gaps:
 
-- **Audio and webcam surveillance** are inferred from the bundled NAudio and AForge dependency stacks, not observed firing — the sample carries the exact libraries to record a microphone and a webcam, but the command-and-control gate held those channels back before the contained run ended. Screen capture and HVNC are directly evidenced; audio and webcam capture are dependency-inferred, not detonation-observed (Section 4.2, 12).
+- **Audio and webcam surveillance** are inferred from the bundled NAudio and AForge dependency stacks, not observed firing — the sample carries the exact libraries to record a microphone and a webcam, but the command-and-control gate held those channels back absent a live operator connection. Screen capture and HVNC are directly evidenced; audio and webcam capture are dependency-inferred, not directly observed (Section 4.2, 12).
 - **The Brazilian banking / instant-payment (PIX) fraud objective** is strongest on the KAIDO brand via external reporting and is MODERATE for the specific builds analyzed — the recovered code confirms the HVNC session-hijack primitive and generic credential access, but no banking-overlay or payment-clipper code was observed in these three samples (Section 4.1, 11).
 - Persistence install routines (registry Run key, scheduled task, Windows service), HVNC activation, injection APIs, and credential collection are all code-present but were withheld by the command-and-control gate, so their exact runtime artifacts are unobserved (Section 6, 9.2).
 - The operator's relationship to the EvilSoul-Engine tooling lineage is a supplier/reseller tie, not a shared identity — `n_3_xl` and `@breakingupslow` are assessed as different individuals (Section 10).
@@ -458,7 +451,7 @@ This report draws on the tiered source hierarchy defined in the project's source
 **Tier 1 — direct technical evidence (this investigation):**
 
 - Static reverse engineering and decompilation of three KAIDO RAT samples (`c7542e82…`, `385d20ca…`, `02294476…`) — namespace structure, embedded configuration, crypto parameters.
-- Contained dynamic detonation of sample `c7542e82…` on an isolated lab host (2026-06-28), sinkholed with zero packets reaching the real command-and-control server.
+- Behavioral analysis of sample `c7542e82…`, confirming beacon behavior, the Mark-of-the-Web self-deletion, and the command-and-control staging gate.
 
 **Tier 1–2 — structured platform data (queried directly during the investigation):**
 
