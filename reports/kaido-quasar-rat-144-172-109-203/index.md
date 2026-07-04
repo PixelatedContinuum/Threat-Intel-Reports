@@ -278,7 +278,7 @@ Once connected, the operator has full Quasar-lineage remote control plus the two
 |---|---|---|
 | Command and Control / T1219 | Remote Access Software | KAIDO = rebranded Quasar v2.4.5 fork; full RAT plus operator panel |
 | Command and Control / T1095 | Non-Application Layer Protocol | Quasar binary protocol over raw TCP 4782, no HTTP layer (DEFINITE) |
-| Command and Control / T1071 | Application Layer Protocol | `kaidoo[.]com[.]br` DNS resolution + periodic re-resolution to locate C2 |
+| Command and Control / T1071.004 | Application Layer Protocol: DNS | `kaidoo[.]com[.]br` DNS resolution + periodic re-resolution to locate C2 |
 | Command and Control / T1573.001 | Symmetric Cryptography | AES-256-GCM config + C2 crypto; PBKDF2-SHA256 100k; pinned certificate |
 | Defense Evasion / T1553.005 | Mark-of-the-Web Bypass | `Zone.Identifier` ADS read + delete at T+2.4s, every execution (DEFINITE) |
 | Defense Evasion / T1480 | Execution Guardrails | All payloads / persistence / HVNC withheld until valid C2 handshake — 606s run, zero drops (DEFINITE) |
@@ -325,7 +325,7 @@ The complete, machine-readable indicator set is published as a separate JSON fee
 
 | Type | Indicator | Confidence | Context |
 |---|---|---|---|
-| File path | `%AppData%\<subdir>\svchost.exe` | HIGH | Install location (name masquerade) |
+| File path | `%AppData%\<subdir>\svchost.exe` | HIGH | Install location (name masquerade). Hunt this path alongside parent-process lineage: legitimate `svchost.exe` runs only from `System32`/`SysWOW64` and is spawned only by `services.exe` — an `%AppData%` path or a non-`services.exe` parent is high-signal. |
 | Named pipe | `\\.\pipe\kaido_dxgi_<8 hex>` | HIGH | DXGI HVNC frame transport |
 | Behavior | Deletion of the file's own `:Zone.Identifier` stream within 2–3s of launch | DEFINITE | Mark-of-the-Web bypass (Sysmon Event ID 23) |
 | Cert (embedded) | Pinned client cert, SHA1 `0acd8c90641e6e8b085aaf5a541c7ac050a65a4a` | DEFINITE | Quasar authentication key, identical across all three builds |

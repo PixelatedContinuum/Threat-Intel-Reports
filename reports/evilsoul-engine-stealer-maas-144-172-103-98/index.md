@@ -216,7 +216,7 @@ From the recovered cookies, the stealer additionally lifts platform session toke
 
 #### Mechanism 3 — process-token-impersonation decryptor (App-Bound-Encryption v20, the one genuinely advanced component)
 
-The `stealer.js` build carries a second, distinct App-Bound-Encryption bypass — the operation's most sophisticated single component. It downloads a portable Python runtime from the operator's server, pipes a decryptor script to it over standard input (so **no `.py` file is ever written to disk**), elevates its own privileges, impersonates the security context of the Windows `lsass.exe` process, and uses that borrowed context with a Windows cryptographic provider to unwrap the app-bound key and decrypt the stored blobs.
+The `stealer.js` build carries a second, distinct App-Bound-Encryption bypass — the operation's most sophisticated single component. *(App-Bound Encryption is Chrome's cookie- and credential-protection scheme, introduced in Chrome 127; "v20" denotes the specific key-blob generation this decryptor targets.)* It downloads a portable Python runtime from the operator's server, pipes a decryptor script to it over standard input (so **no `.py` file is ever written to disk**), elevates its own privileges, impersonates the security context of the Windows `lsass.exe` process, and uses that borrowed context with a Windows cryptographic provider to unwrap the app-bound key and decrypt the stored blobs.
 
 At capability altitude: this technique borrows the identity of a highly-privileged system process to unlock a key that is otherwise gated to the browser's own process identity. The analysis assesses it as **lifted from a public proof-of-concept** rather than original tradecraft — the technique class has public precedent — but its presence in a commodity stealer is notable.
 
@@ -379,6 +379,8 @@ The `chromelevator.exe` and `chrome_decrypt.dll` pair fetched by the `299a2e7f` 
 ### 8.1 What the tool does, at capability altitude
 
 The tool's job is to extract App-Bound-Encryption-protected browser secrets and write them to local JSON files; it does **not** exfiltrate — the parent stealer performs exfiltration. Confirmed capabilities (all DEFINITE unless noted): it releases the browser's file locks on the credential databases by terminating the browser's network service, extracts the App-Bound master key through the browser's own elevation interface, decrypts the SQLite-stored cookies, passwords, and payment data with a Windows cryptographic provider, and writes the results to a local `output\<Browser>\<Profile>\` folder. It carries anti-debugging and anti-virtual-machine checks. Its output is local-only — the analysis confirmed neither binary contains any exfiltration endpoint.
+
+The tool loads its own payload DLL via direct-syscall reflective process hollowing — bypassing user-mode API hooks by invoking the underlying system calls directly rather than through the monitored `Nt*`/`Kernel32` functions most endpoint tooling watches (the ATT&CK T1055.012 marker in Section 11). This class of loader is a well-documented, commodity red-team technique, not a bespoke evasion the operator engineered — its presence here is further evidence that the operation is assembling public offensive tradecraft rather than inventing its own.
 
 The report deliberately does not reproduce the tool's injection or key-extraction internals; they are public in the upstream project, and the intel value here is *adoption*, not mechanism.
 
@@ -676,6 +678,8 @@ For teams deciding where to invest first, the report's five highest-value, most-
 3. **Process-token-impersonation decryptor** — `python -u -` from stdin + debug privilege + `lsass.exe` handle (Sysmon EID 1 + 10).
 4. **Microsoft-masquerade hidden scheduled task** — task authored as `Microsoft Corporation`, hidden, created by a non-system process (Windows EID 4698).
 5. **Operator-signature and relay network anchors** — the packer XOR constant in staged files (YARA); the `198.1.195[.]210:3000/tralalero` relay and `evilsoul[.]cc` Socket.IO handshake (network).
+
+The detection file's 6 Sigma rules and 6 Suricata signatures back these five priorities directly: Sigma covers hunts 2–4 (Defender/AV suppression, the LSASS-impersonation decryptor, and the Microsoft-masquerade scheduled task), and Suricata covers hunt 5's network anchors (the relay endpoint and the Socket.IO handshake).
 
 ### 14.3 Confidence Summary
 
