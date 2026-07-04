@@ -27,7 +27,7 @@ unlisted: true
 
 **Detection philosophy.** Every EvilSoul-Engine customer build is uniquely repacked at build time (js-confuser → AES-256-GCM → XOR → base64 → in-memory exec), so **hash-based detection has LOW durability** against new builds. The durable, build-independent signals are: the operator-signature XOR constant (survives js-confuser because it lives in the loader, not the packed payload), the CDP browser-relaunch cookie-theft pattern, the LSASS-impersonation Python stdin decryptor, and the Microsoft-masquerade hidden scheduled task. Deploy YARA string rules against source/staged JS and unpacked Electron `app.asar` archives; deploy Sigma rules for runtime behavioral detection that holds regardless of the specific build variant.
 
-**Suricata validation note.** Rules were validated against the live sensor's `suricata -T` engine per the `suricata-rule-formatting` skill. The DNS-based rule validated **PASS**. All five `alert http`-keyword rules were rejected by the sensor's exclusive-ruleset test run (`suricata -T -S`) regardless of content — isolated via minimal test rules to the bare `alert http` protocol keyword itself, not to any specific match logic in these rules (a `tls`-keyword control rule and a bare `tcp`-keyword control rule both validated PASS on the same sensor run). This points to an HTTP app-layer parser registration gap in the sensor's exclusive-ruleset test path rather than a rule-authoring defect. Per the CLAUDE.md-sanctioned fallback, the five HTTP rules are written below flagged **`> Unvalidated — pending sensor check`** and should be format/logic reviewed against a full (non-exclusive) `suricata -T` run before deployment.
+**Suricata validation note.** The DNS-based rule below is validated (`suricata -T` test-compile, PASS). The five `alert http`-keyword rules are flagged **Unvalidated**: an automated exclusive-ruleset test could not validate the bare `http` keyword used in these rules, so validate them with a full `suricata -T` run in your own environment before deployment. The match logic itself was manually reviewed against the `suricata-rule-formatting` skill spec.
 
 ---
 
@@ -170,7 +170,7 @@ rule EvilSoul_Engine_Maploot_Tinarox_Embed_Titles {
 
 rule EvilSoul_Engine_299a2e7f_SocketIO_WebPanel {
    meta:
-      description = "Detects the EvilSoul-Engine 299a2e7f Socket.IO WebPanel RAT build via its distinctive args-file suffix, WebPanel embed title, and webhook-resolution relay endpoint string, all recovered from process memory during contained detonation"
+      description = "Detects the EvilSoul-Engine 299a2e7f Socket.IO WebPanel RAT build via its distinctive args-file suffix, WebPanel embed title, and webhook-resolution relay endpoint string, all recovered from the build's runtime memory"
       license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/"
@@ -568,7 +568,7 @@ level: medium
 **Confidence:** HIGH
 **False Positive Risk:** LOW — `evilsoul.` is not a substring of any known legitimate domain.
 **Deployment:** Network IDS/IPS at DNS resolver egress point.
-**Validation status:** PASS — validated against the live sensor's `suricata -T` engine.
+**Validation status:** PASS — validated via a `suricata -T` test-compile.
 
 ```
 alert dns $HOME_NET any -> any any (msg:"THL EvilSoul-Engine DNS Query for evilsoul.cc or evilsoul.xyz Backend"; dns_query; content:"evilsoul."; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000006; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
@@ -576,7 +576,7 @@ alert dns $HOME_NET any -> any any (msg:"THL EvilSoul-Engine DNS Query for evils
 
 ---
 
-> **Unvalidated — pending sensor check.** The five rules below use the `http` app-layer protocol keyword. During validation, the sensor's `suricata -T -S` exclusive-ruleset test run rejected every `alert http` rule tested — including a minimal single-content-match control rule — while a `tls`-keyword control rule and a bare `tcp`-keyword control rule both validated PASS on the same sensor in the same session. This isolates the rejection to an HTTP app-layer parser registration gap in the sensor's exclusive-ruleset test path, not to the match logic of these specific rules. Format and logic were reviewed manually against the `suricata-rule-formatting` skill spec; deploy only after re-validating with a full (non-exclusive, `-c` only) `suricata -T` run that has HTTP app-layer parsing enabled.
+> **Unvalidated.** The five rules below use the `http` app-layer protocol keyword. Validate them with a full `suricata -T` run in your own environment before deployment — an automated exclusive-ruleset test could not validate the bare `http` keyword; the match logic was manually reviewed against the `suricata-rule-formatting` skill spec.
 
 ### EvilSoul-Engine Socket.IO C2 Handshake (299a2e7f WebPanel RAT)
 

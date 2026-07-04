@@ -19,7 +19,7 @@ unlisted: true
 
 > **Scope note:** this file covers only the **KAIDO Quasar-fork RAT** product line (PART A of the parent investigation). The EvilSoul-Engine stealer-builder line is covered in a separate detection file — no rules are duplicated here.
 
-KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC (Hidden-VNC) module that clones the victim's entire browser profile and drives their already-authenticated session on a hidden desktop. All coverage below derives from direct static decompilation (namespace tree, Costura assets, DXGI/HVNC strings) and a contained dynamic detonation on 2026-06-28 that confirmed Zone.Identifier self-deletion, the raw-TCP/4782 Quasar beacon, and single-process C2-gated staging behavior.
+KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC (Hidden-VNC) module that clones the victim's entire browser profile and drives their already-authenticated session on a hidden desktop. All coverage below derives from static decompilation (namespace tree, Costura assets, DXGI/HVNC strings) and dynamic execution that confirmed Zone.Identifier self-deletion, the raw-TCP/4782 Quasar beacon, and single-process C2-gated staging behavior.
 
 | Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
 |---|---|---|---|
@@ -32,7 +32,7 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC 
 - Zone.Identifier ADS self-deletion within seconds of launch — DEFINITE, directly observed dynamically (Sigma).
 - Raw TCP/4782 Quasar binary protocol + `TeamKAIDO`/`kaido-c2` TLS certificate issuer + JA4X `bbd6cc0fca29_bbd6cc0fca29_795797892f9c` — DEFINITE/HIGH, fleet-enumeration-grade (Suricata).
 
-**Coverage note on HVNC runtime behavior:** the HVNC module (hidden-desktop creation, browser-profile clone, DXGI capture) is fully recovered statically (DEFINITE/HIGH) but was **not** triggered dynamically — the sample is C2-gated and withholds all post-connection behavior (persistence, HVNC activation, credential collection) until a valid Quasar handshake completes (T1480, confirmed in the 606-second contained run with zero drops). Behavioral rules for the named-pipe transport and install path are written from static/structural evidence; see Coverage Gaps for what would raise HVNC-specific behavioral rules to DEFINITE.
+**Coverage note on HVNC runtime behavior:** the HVNC module (hidden-desktop creation, browser-profile clone, DXGI capture) is fully recovered statically (DEFINITE/HIGH) but was **not** triggered dynamically — the sample is C2-gated and withholds all post-connection behavior (persistence, HVNC activation, credential collection) until a valid Quasar handshake completes (T1480, confirmed with zero drops observed). Behavioral rules for the named-pipe transport and install path are written from static/structural evidence; see Coverage Gaps for what would raise HVNC-specific behavioral rules to DEFINITE.
 
 ---
 
@@ -167,7 +167,7 @@ rule RAT_KAIDO_AntiAnalysis_SleepObfuscation {
 ### KAIDO Zone.Identifier ADS Self-Deletion (MOTW Bypass)
 
 **Detection Priority:** HIGH
-**Rationale:** Directly observed in a contained dynamic detonation — the sample reads then deletes its own `Zone.Identifier` alternate data stream within 2.4 seconds of launch, on every execution, regardless of C2 state. This is a DEFINITE, C2-independent behavior with a tight time window that is unusual for legitimate software.
+**Rationale:** Directly observed during dynamic execution — the sample reads then deletes its own `Zone.Identifier` alternate data stream within 2.4 seconds of launch, on every execution, regardless of C2 state. This is a DEFINITE, C2-independent behavior with a tight time window that is unusual for legitimate software.
 **ATT&CK Coverage:** T1553.005 (Mark-of-the-Web Bypass)
 **Confidence:** HIGH
 **False Positive Risk:** LOW-MEDIUM — some legitimate installers and self-updating software clear their own MOTW after a user-consented first run; the short post-launch time window and repeatability on every execution narrow this considerably. Tune the time-window filter in production SIEM correlation if available.
@@ -181,9 +181,8 @@ description: >-
   Detects a process reading and then deleting its own Zone.Identifier
   alternate data stream shortly after launch, a Mark-of-the-Web bypass
   technique used by the KAIDO Quasar-fork RAT to suppress SmartScreen
-  re-checks on subsequent executions. Confirmed in a contained dynamic
-  detonation where the deletion occurred at T+2.4 seconds regardless of
-  C2 connectivity.
+  re-checks on subsequent executions. Observed deletion occurs at T+2.4
+  seconds regardless of C2 connectivity.
 references:
     - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/
     - https://attack.mitre.org/techniques/T1553/005/
@@ -264,7 +263,7 @@ level: high
 **Detection Priority:** MEDIUM
 **Rationale:** The RAT installs into `%AppData%\<subdir>\svchost.exe`, masquerading as the legitimate Windows service host while running from a user-writable AppData path rather than `%SystemRoot%\System32`. Combined with a non-system parent process, this is a classic masquerade pattern, but `svchost.exe` naming alone is common across many malware families, so this rule is scoped tightly to the AppData path and carries a lower priority than the two structural anchors above.
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location), T1547.001 (Registry Run Keys / Startup Folder — related persistence, MODERATE)
-**Confidence:** MODERATE (install routine recovered via static decompilation, not dynamically observed in the C2-gated detonation)
+**Confidence:** MODERATE (install routine recovered via static decompilation, not dynamically observed — the sample is C2-gated)
 **False Positive Risk:** MEDIUM — `svchost.exe`-named processes launching from AppData are a common masquerade pattern used by many unrelated malware families, so this rule is a generic masquerade indicator, not KAIDO-specific on its own. Pair with the YARA/Sigma pipe rules above for family attribution; use this rule for broader masquerade hunting.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM; recommend correlation with other KAIDO-specific indicators before high-confidence alerting.
 
@@ -317,14 +316,14 @@ level: medium
 
 ## Suricata Signatures
 
-> Validated against the real `suricata -T` engine on the sensor prior to publication — all three rules passed (`suricata -T` accepted, exit 0).
+> Validated with a `suricata -T` test-compile prior to publication — all three rules passed.
 
 ### KAIDO Quasar Binary Protocol on TCP 4782
 
 **Detection Priority:** HIGH
-**Rationale:** Directly confirmed in dynamic detonation — the RAT's primary C2 channel is a raw Quasar binary protocol over TCP port 4782 with no HTTP layer, a non-standard port choice that is rarely used by legitimate services.
+**Rationale:** Directly confirmed during dynamic execution — the RAT's primary C2 channel is a raw Quasar binary protocol over TCP port 4782 with no HTTP layer, a non-standard port choice that is rarely used by legitimate services.
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
-**Confidence:** HIGH (DEFINITE for the port/protocol pairing — confirmed in contained detonation)
+**Confidence:** HIGH (DEFINITE for the port/protocol pairing — confirmed via observed execution)
 **False Positive Risk:** LOW — TCP/4782 is not a registered or commonly-used legitimate service port; the transport-only rule (no app-layer keyword) is appropriately pinned to this specific port since the protocol itself is non-standard and unparseable by Suricata's app-layer engine.
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
@@ -348,7 +347,7 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL KAIDO-EvilSoul-MaaS TeamK
 ### KAIDO kaidoo.com.br C2 DNS Query
 
 **Detection Priority:** HIGH
-**Rationale:** The primary C2 domain resolution was directly confirmed in dynamic detonation (DNS A-record query with periodic re-resolution, ~13 minute interval). This is the earliest-stage network indicator available before the TCP/4782 or TLS handshake occurs.
+**Rationale:** The primary C2 domain resolution was directly confirmed during dynamic execution (DNS A-record query with periodic re-resolution, ~13 minute interval). This is the earliest-stage network indicator available before the TCP/4782 or TLS handshake occurs.
 **ATT&CK Coverage:** T1071 (Application Layer Protocol — DNS resolution to locate C2)
 **Confidence:** HIGH
 **False Positive Risk:** LOW — `kaidoo.com.br` is an operator-registered brand domain with no legitimate shared use; the `.br` ccTLD combined with the distinctive brand string minimizes collision risk.
@@ -362,13 +361,13 @@ alert dns $HOME_NET any -> any any (msg:"THL KAIDO-EvilSoul-MaaS kaidoo.com.br C
 
 ## Coverage Gaps
 
-**HVNC runtime behavioral rule (hidden-desktop capture chain).** The HVNC module — hidden-desktop creation via `SetThreadDesktop` without `SwitchDesktop`, wholesale browser-profile clone via handle duplication, and DXGI swap-chain capture — is fully recovered through static decompilation (DEFINITE/HIGH) but was **not** dynamically triggered. The contained detonation ran 606 seconds and confirmed only C2-gated staging: zero drops, zero persistence, zero child processes, because the RAT withholds all post-connection behavior until a valid Quasar handshake completes (T1480). A precise Sysmon/EDR behavioral rule for the desktop-switch API sequence (`CreateDesktop("Default_runhost")` → `SetThreadDesktop` with no matching `SwitchDesktop` call) cannot be written with DEFINITE confidence from static evidence alone, since API-call-sequence telemetry requires the sequence to actually execute. **What would enable this rule:** a Quasar C2 stub to trigger the HVNC command dynamically and capture the exact API call sequence and process/thread telemetry for the desktop-switch pattern.
+**HVNC runtime behavioral rule (hidden-desktop capture chain).** The HVNC module — hidden-desktop creation via `SetThreadDesktop` without `SwitchDesktop`, wholesale browser-profile clone via handle duplication, and DXGI swap-chain capture — is fully recovered through static decompilation (DEFINITE/HIGH) but was **not** dynamically triggered. Execution confirmed only C2-gated staging: zero drops, zero persistence, zero child processes, because the RAT withholds all post-connection behavior until a valid Quasar handshake completes (T1480). A precise Sysmon/EDR behavioral rule for the desktop-switch API sequence (`CreateDesktop("Default_runhost")` → `SetThreadDesktop` with no matching `SwitchDesktop` call) cannot be written with DEFINITE confidence from static evidence alone, since API-call-sequence telemetry requires the sequence to actually execute. **What would raise confidence:** dynamically triggering the HVNC command would capture the exact API call sequence and process/thread telemetry for the desktop-switch pattern. Defenders can also raise confidence themselves by memory-scanning during detonation in their own analysis environment.
 
-**Persistence mechanism (Registry Run key / Scheduled Task / Windows Service).** The install routine recovered via static decompilation references `HKCU\...\Run` registry writes, a scheduled-task install path, and a Windows service install path (T1547.001, T1053.005, T1543.003 — all MODERATE), but none were observed dynamically because the RAT never reached the persistence stage in the C2-gated contained run. Writing a Sigma rule for a specific registry value name or scheduled task name would require guessing an unobserved parameter, which risks either false negatives (if the guessed name is wrong) or unjustified specificity. **What would enable this rule:** the same C2-stub detonation referenced above, run long enough to observe the actual persistence artifact names/paths written to disk or the registry.
+**Persistence mechanism (Registry Run key / Scheduled Task / Windows Service).** The install routine recovered via static decompilation references `HKCU\...\Run` registry writes, a scheduled-task install path, and a Windows service install path (T1547.001, T1053.005, T1543.003 — all MODERATE), but none were observed dynamically because the RAT never reached the persistence stage during observed execution. Writing a Sigma rule for a specific registry value name or scheduled task name would require guessing an unobserved parameter, which risks either false negatives (if the guessed name is wrong) or unjustified specificity. **What would raise confidence:** dynamically triggering the RAT past the C2 handshake, long enough to observe the actual persistence artifact names/paths written to disk or the registry.
 
-**Process injection into cloned browser processes (T1055, MODERATE).** Decompiled code indicates HVNC reflectively injects a capture DLL into the cloned browser process running on the hidden desktop, but the specific injection API sequence (whether `CreateRemoteThread`, `QueueUserAPC`, or another technique) was not confirmed by dynamic observation or complete code-level tracing. **What would enable this rule:** dynamic detonation with the HVNC command triggered, captured via a debugger or EDR API-hook telemetry on the injection sequence.
+**Process injection into cloned browser processes (T1055, MODERATE).** Decompiled code indicates HVNC reflectively injects a capture DLL into the cloned browser process running on the hidden desktop, but the specific injection API sequence (whether `CreateRemoteThread`, `QueueUserAPC`, or another technique) was not confirmed by dynamic observation or complete code-level tracing. **What would raise confidence:** dynamically triggering the HVNC command and capturing the injection sequence via a debugger or EDR API-hook telemetry.
 
-**Secondary C2 endpoint (`c2.kaidoo.com.br:443`).** This secondary channel is DEFINITE from static config decryption but was not observed in the single contained detonation run (only the primary `kaidoo.com.br:4782` channel was exercised). No behavioral distinction from the primary channel's DNS-query pattern is expected, so the existing DNS Suricata rule (domain-substring match) already provides coverage for both subdomains without requiring a separate rule.
+**Secondary C2 endpoint (`c2.kaidoo.com.br:443`).** This secondary channel is DEFINITE from static config decryption but was not observed during execution (only the primary `kaidoo.com.br:4782` channel was exercised). No behavioral distinction from the primary channel's DNS-query pattern is expected, so the existing DNS Suricata rule (domain-substring match) already provides coverage for both subdomains without requiring a separate rule.
 
 **Embedded pinned-certificate SHA1 thumbprint (`0acd8c90641e6e8b085aaf5a541c7ac050a65a4a`).** This value functions as the Quasar AUTHKEY across all three analyzed builds and is a strong static YARA anchor, but was intentionally not used as a Suricata TLS-fingerprint rule in this file — it is the client-embedded pinned cert used for the RAT's own outbound pinning validation, not the server-presented certificate an IDS would observe on the wire during a TLS handshake. It remains available as a static file-hash-adjacent anchor; see the YARA rules above where it appears in rule metadata context.
 
