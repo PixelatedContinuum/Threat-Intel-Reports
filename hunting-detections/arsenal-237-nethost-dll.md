@@ -137,7 +137,11 @@ rule Arsenal237_nethost_dll_rust_indicators {
 
 ```yaml
 title: Arsenal-237 nethost.dll C2 Connection Attempt
+id: b4464878-50fb-4d2e-83f0-d22ce0c3b6f8
+status: experimental
 description: Detects network connections to known Arsenal-237 C2 infrastructure
+author: The Hunters Ledger
+date: '2026-01-27'
 logsource:
     category: network_connection
     product: windows
@@ -164,10 +168,9 @@ falsepositives:
     - System DNS resolution to 8.8.8.8 via UDP (legitimate; TCP is suspicious)
 level: critical
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071
-    - arsenal-237
-    - c2_communication
+    - detection.emerging-threats
 ```
 
 ---
@@ -176,7 +179,11 @@ tags:
 
 ```yaml
 title: Arsenal-237 nethost.dll DLL Injection Attempt
+id: 647b28c9-0fb3-48f7-945b-f2fe08eee8e2
+status: experimental
 description: Detects DLL injection of nethost.dll or similar network modules
+author: The Hunters Ledger
+date: '2026-01-27'
 logsource:
     category: process_creation
     product: windows
@@ -203,9 +210,10 @@ falsepositives:
     - Legitimate software installation procedures
 level: high
 tags:
-    - attack.defense_evasion
+    - attack.stealth
+    - attack.privilege-escalation
     - attack.t1055
-    - arsenal-237
+    - detection.emerging-threats
 ```
 
 ---
@@ -214,7 +222,11 @@ tags:
 
 ```yaml
 title: Arsenal-237 nethost.dll PowerShell Template Execution
+id: cac58909-f05e-45a7-b8b2-d0955ed5fdb0
+status: experimental
 description: Detects PowerShell execution with known malware command templates
+author: The Hunters Ledger
+date: '2026-01-27'
 logsource:
     category: process_creation
     product: windows
@@ -239,7 +251,7 @@ level: high
 tags:
     - attack.execution
     - attack.t1059.001
-    - arsenal-237
+    - detection.emerging-threats
 ```
 
 ---
@@ -248,7 +260,11 @@ tags:
 
 ```yaml
 title: Arsenal-237 System Reconnaissance - Environment Variable Discovery
+id: 4451a78a-db18-4ce4-b773-a6c395f68061
+status: experimental
 description: Detects suspicious queries for COMPUTERNAME and USERNAME environment variables
+author: The Hunters Ledger
+date: '2026-01-27'
 logsource:
     category: process_creation
     product: windows
@@ -278,7 +294,7 @@ level: medium
 tags:
     - attack.discovery
     - attack.t1082
-    - arsenal-237
+    - detection.emerging-threats
 ```
 
 ---
@@ -287,7 +303,11 @@ tags:
 
 ```yaml
 title: Arsenal-237 System Reconnaissance Commands
+id: d22782b8-09f1-403e-9e48-8555a5d0a849
+status: experimental
 description: Detects execution of reconnaissance commands (sysinfo, services, processes)
+author: The Hunters Ledger
+date: '2026-01-27'
 logsource:
     category: process_creation
     product: windows
@@ -310,9 +330,7 @@ detection:
             - regsvcs.exe
             - explorer.exe
             - svchost.exe
-    sequential_execution:
-        selection: recon_commands and suspicious_parent
-    condition: sequential_execution
+    condition: recon_commands and suspicious_parent
 falsepositives:
     - Legitimate system administration
     - Help desk scripts
@@ -321,7 +339,7 @@ tags:
     - attack.discovery
     - attack.t1057
     - attack.t1082
-    - arsenal-237
+    - detection.emerging-threats
 ```
 
 ---

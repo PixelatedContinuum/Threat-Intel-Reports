@@ -15,20 +15,35 @@ Rules are provided in Sigma and Suricata formats for SIEM/EDR and IDS/IPS integr
 
 ## Sigma – Suspicious VBScript Downloading PowerShell Payload
 
-```
+```yaml
 title: Suspicious VBScript Downloading PowerShell Payload
+id: ea533822-dc1e-40c2-8f04-e3742393c93e
+status: test
+description: Detects a PowerShell process spawned by wscript.exe that uses .NET HttpClient calls to download a payload disguised as an image file, consistent with QuasarRAT/Xworm loader behavior.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/quasar-xworm-powershell/
+author: The Hunters Ledger
+date: '2025-10-17'
+tags:
+    - attack.execution
+    - attack.t1059.001
+    - attack.command-and-control
+    - attack.t1105
+    - detection.emerging-threats
 logsource:
-  category: process_creation
-  product: windows
+    category: process_creation
+    product: windows
 detection:
-  selection:
-    ParentImage|endswith: '\wscript.exe'
-    Image|endswith: '\powershell.exe'
-    CommandLine|contains:
-      - "System.Net.Http.HttpClient"
-      - "GetAsync"
-      - "update.png"
-  condition: selection
+    selection:
+        ParentImage|endswith: '\wscript.exe'
+        Image|endswith: '\powershell.exe'
+        CommandLine|contains:
+            - 'System.Net.Http.HttpClient'
+            - 'GetAsync'
+            - 'update.png'
+    condition: selection
+falsepositives:
+    - Unlikely
 level: high
 ```
 

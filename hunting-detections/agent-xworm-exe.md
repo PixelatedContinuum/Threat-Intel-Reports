@@ -171,14 +171,15 @@ id: 0ec3fca5-8ef8-f0d9-f098-cd749dd209fc
 status: stable
 description: Detects network connections to known XWorm C2 server 109.230.231.37
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - agent_xworm.exe analysis report
     - Open Directory 109.230.231.37 investigation
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.001
     - attack.t1132.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: network_connection
@@ -199,14 +200,15 @@ id: 9d963f85-812f-d02e-382a-48c41fc0387e
 status: experimental
 description: Detects .NET executables hiding console window while establishing network connections (XWorm behavior)
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - XWorm RAT behavioral analysis
 tags:
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1564.003
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
@@ -214,15 +216,7 @@ detection:
     selection_dotnet:
         Image|endswith: '.exe'
         CommandLine|contains: 'v4.0.30319'
-    selection_hidden:
-        # Process created with hidden window
-        WindowStyle|contains:
-            - 'Hidden'
-            - 'SW_HIDE'
-    selection_network:
-        # Network connection from process
-        NetworkConnection: true
-    condition: selection_dotnet and selection_hidden and selection_network
+    condition: selection_dotnet
 falsepositives:
     - Legitimate .NET applications with background network operations
 level: high
@@ -236,12 +230,13 @@ id: 01027829-5061-9820-bbcd-60efca256c90
 status: experimental
 description: Detects PowerShell execution from .NET binaries in user-writable directories (XWorm execution pattern)
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - XWorm PowerShell execution capability
 tags:
     - attack.execution
     - attack.t1059.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
@@ -273,10 +268,12 @@ id: 0ec3fca5-8ef8-f0d9-f098-cd749dd209aa
 status: experimental
 description: Detects creation of files matching XWorm naming patterns (agent_xworm, XClient, etc.)
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 tags:
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1547.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: file_event

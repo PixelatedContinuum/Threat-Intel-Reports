@@ -19,8 +19,8 @@ hide: true
 
 | Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
 |---|---|---|---|
-| YARA | 6 | T1027.009, T1027.013, T1204.002, T1574.002, T1055.012, T1055.002, T1620, T1480, T1036.005, T1218.014, T1059.005, T1105 | LOW–MEDIUM |
-| Sigma | 8 | T1204.002, T1036.005, T1055.012, T1055.002, T1574.002, T1053.005, T1059.005, T1112, T1562.001, T1218.014, T1480 | LOW–MEDIUM |
+| YARA | 6 | T1027.009, T1027.013, T1204.002, T1574.001, T1055.012, T1055.002, T1620, T1480, T1036.005, T1218.014, T1059.005, T1105 | LOW–MEDIUM |
+| Sigma | 8 | T1204.002, T1036.005, T1055.012, T1055.002, T1574.001, T1053.005, T1059.005, T1112, T1685, T1218.014, T1480 | LOW–MEDIUM |
 | Suricata | 4 | T1071.001, T1573.001, T1571, T1105, T1090.002 | LOW |
 
 **Total rules:** 18 across three detection layers.
@@ -93,7 +93,7 @@ rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper
 
 **Detection Priority:** HIGH
 **Rationale:** Operator PDB path `I:\CompanySource\Plowshare\` is campaign-unique and cannot appear in legitimate software. Combined with the bespoke payload filenames `networkspec17.log` and `shadermgr93.rc`, this rule has near-zero FP risk.
-**ATT&CK Coverage:** T1574.002 (DLL Side-Loading), T1055.012 (Process Hollowing), T1027 (Obfuscated Files)
+**ATT&CK Coverage:** T1574.001 (DLL Side-Loading), T1055.012 (Process Hollowing), T1027 (Obfuscated Files)
 **Confidence:** HIGH
 **False Positive Risk:** LOW — PDB path with drive letter `I:\` and `CompanySource` folder is operator-distinctive; bespoke payload filenames are not reused by legitimate software
 **Deployment:** Endpoint AV/EDR on-access scanner, memory scanner, file-system hunting
@@ -288,7 +288,7 @@ rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC
 
 **Detection Priority:** HIGH
 **Rationale:** `CrystSupervisor32.exe` spawned from an `is-*.tmp\` parent path, or `WVault.exe` spawned from `CrystSupervisor32.exe`, are highly specific process-tree artifacts of the HijackLoader loader chain. No legitimate Wondershare product creates this exact parent-child chain.
-**ATT&CK Coverage:** T1204.002 (Malicious File), T1574.002 (DLL Side-Loading), T1055.012 (Process Hollowing)
+**ATT&CK Coverage:** T1204.002 (Malicious File), T1574.001 (DLL Side-Loading), T1055.012 (Process Hollowing)
 **Confidence:** HIGH
 **False Positive Risk:** LOW — the `is-*.tmp\CrystSupervisor32.exe` path is specific to the HijackLoader Inno Setup dropper; legitimate Wondershare installs run from `Program Files`
 **Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1
@@ -296,7 +296,7 @@ rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC
 ```yaml
 title: HijackLoader Inno Setup Wrapper Spawning CrystSupervisor32 and WVault Process Chain
 id: 3a7f1e92-bb04-4d85-9c3e-f6a820d14c73
-status: test
+status: experimental
 description: >
     Detects the HijackLoader/Penguish/Rugmi loader chain initiated by an Inno Setup
     wrapper using the Pascal Script InitializeSetup->WinExec->return False anti-triage
@@ -313,8 +313,10 @@ author: The Hunters Ledger
 date: 2026/05/06
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.stealth
     - attack.persistence
+    - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -352,7 +354,7 @@ level: high
 ```yaml
 title: HijackLoader Covert IPC Named Pipe WondershareCrashServices Created
 id: 7c9d4b1a-e832-4f67-b52a-901c3d8e5f24
-status: test
+status: experimental
 description: >
     Detects creation of the named pipe \.\pipe\WondershareCrashServices used by
     the HijackLoader operator-modified ExceptionHandler.dll as a covert inter-process
@@ -367,8 +369,11 @@ references:
 author: The Hunters Ledger
 date: 2026/05/06
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.execution
+    - attack.t1036.005
+    - attack.t1559
+    - detection.emerging-threats
 logsource:
     category: pipe_created
     product: windows
@@ -394,7 +399,7 @@ level: high
 
 **Detection Priority:** HIGH
 **Rationale:** The codename `adv_ctrl` (and sibling codenames `brokerbg`, `exttracer_net48`, `thread_adapter`, `Sulfathiazole`) under `C:\ProgramData\` are operator-distinctive persistence staging directories. None of these names appear in legitimate Windows or common third-party software paths.
-**ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location), T1562.001 (Disable or Modify Tools)
+**ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location), T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
 **False Positive Risk:** LOW — `adv_ctrl` and sibling codenames are not standard Windows directory names; cross-reference with parent process chain for confirmation
 **Deployment:** EDR file-creation monitoring, SIEM Sysmon EID 11
@@ -402,7 +407,7 @@ level: high
 ```yaml
 title: HijackLoader Operator Persistence Directory adv_ctrl Created Under ProgramData
 id: f2a85c3d-16b7-4e09-a74f-3c9b7d2e8a15
-status: test
+status: experimental
 description: >
     Detects creation of the operator-codename persistence directory adv_ctrl under
     C:\ProgramData\ or %APPDATA%\, used by the HijackLoader/Penguish/Rugmi campaign
@@ -419,7 +424,9 @@ author: The Hunters Ledger
 date: 2026/05/06
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1036
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -459,9 +466,9 @@ level: high
 **Deployment:** EDR file-creation monitoring, SIEM Sysmon EID 11, file-system hunting
 
 ```yaml
-title: HijackLoader Legacy .job Scheduled Task watchermgmt Created in Windows Tasks
+title: HijackLoader Legacy .job Scheduled Task Watchermgmt Created in Windows Tasks
 id: 9e6b3f17-d452-4a08-c91d-8b7e2f5a3c06
-status: test
+status: experimental
 description: >
     Detects creation of the legacy .job format scheduled task C:\Windows\Tasks\watchermgmt.job
     used by the HijackLoader/Penguish/Rugmi campaign for persistence. The legacy .job
@@ -477,6 +484,10 @@ author: The Hunters Ledger
 date: 2026/05/06
 tags:
     - attack.persistence
+    - attack.privilege-escalation
+    - attack.execution
+    - attack.t1053.005
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -505,7 +516,7 @@ level: high
 
 **Detection Priority:** MEDIUM
 **Rationale:** Setting `VBAWarnings=1` via PowerShell or cmd.exe (not via GPO/SCCM) is a pre-conditioning step before delivering macro-enabled Office lure documents. Medium priority because IT admins can legitimately set this, but the context (cmd/PowerShell parent from a non-admin session) distinguishes malicious use.
-**ATT&CK Coverage:** T1112 (Modify Registry), T1059.005 (Visual Basic), T1562.001 (Disable or Modify Tools)
+**ATT&CK Coverage:** T1112 (Modify Registry), T1059.005 (Visual Basic), T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
 **False Positive Risk:** MEDIUM — legitimate admins may set VBAWarnings via registry; correlate with parent process (PowerShell spawned from cmd.exe or Office installer vs spawned from phishing attachment)
 **Deployment:** SIEM Sysmon EID 13, EDR registry monitoring
@@ -513,7 +524,7 @@ level: high
 ```yaml
 title: Office VBA Macro Security Disabled via Registry VBAWarnings Set to 1
 id: 4d2c8e5b-7f91-4b36-a82e-5d9c1f7e3a08
-status: test
+status: experimental
 description: >
     Detects a registry write setting HKCU\Software\Microsoft\Office\<version>\<app>\Security\VBAWarnings
     to 1 (enable all macros without notification), which disables Office macro security
@@ -528,8 +539,12 @@ references:
 author: The Hunters Ledger
 date: 2026/05/06
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
+    - attack.persistence
     - attack.execution
+    - attack.t1112
+    - attack.t1204.002
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -565,7 +580,7 @@ level: medium
 ```yaml
 title: HijackLoader GrimResource MMC Spawning Mshta or Rundll32 for Payload Execution
 id: b81e4c29-53a7-4d02-8f9e-2a7d6c4b1e35
-status: test
+status: experimental
 description: >
     Detects MMC (Microsoft Management Console) spawning mshta.exe or rundll32.exe
     as part of the GrimResource MSC file weaponization technique used by the
@@ -580,7 +595,9 @@ author: The Hunters Ledger
 date: 2026/05/06
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1218.014
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -624,7 +641,7 @@ level: high
 ```yaml
 title: HijackLoader Per-Host Uppercase Environment Variable IPC Pattern Detected
 id: c45f9d2e-8b16-4c53-a97b-7e3f1d9c6b42
-status: test
+status: experimental
 description: >
     Detects the HijackLoader/Penguish per-host environment variable IPC mechanism
     where the loader (pe_03) generates a deterministic-per-host uppercase A-Z only
@@ -640,8 +657,12 @@ references:
 author: The Hunters Ledger
 date: 2026/05/06
 tags:
-    - attack.defense-evasion
-    - attack.execution
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055.012
+    - attack.t1480
+    - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -658,10 +679,10 @@ detection:
         ParentImage|contains: 'is-'
     condition: selection_wvault_env or selection_loader_to_hollow
 falsepositives:
-    - Legitimate Wondershare software chains where CrystSupervisor32.exe spawns
+    - "Legitimate Wondershare software chains where CrystSupervisor32.exe spawns
       child processes in genuine DVD Creator workflows (verify the file hashes and
       install path: legitimate chain runs from Program Files, not is-*.tmp or
-      C:\ProgramData\adv_ctrl\)
+      C:\\ProgramData\\adv_ctrl\\)"
     - Security tools or EDR components that mimic process chain patterns for testing
 level: medium
 ```
@@ -672,7 +693,7 @@ level: medium
 
 **Detection Priority:** HIGH
 **Rationale:** The `mmc.exe` → PowerShell → `Add-MpPreference` chain combining MMC as parent with Defender exclusion commands is a highly specific GrimResource post-exploitation pattern. This combination is not a legitimate administrative workflow.
-**ATT&CK Coverage:** T1218.014 (MMC), T1562.001 (Disable or Modify Tools), T1059.001 (PowerShell)
+**ATT&CK Coverage:** T1218.014 (MMC), T1685 (Disable or Modify Tools), T1059.001 (PowerShell)
 **Confidence:** HIGH
 **False Positive Risk:** LOW — `mmc.exe` is not a legitimate parent for PowerShell-based Defender configuration; the specific `Add-MpPreference` + `ExclusionPath` combination narrows further
 **Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1, PowerShell-Operational EID 4104
@@ -680,7 +701,7 @@ level: medium
 ```yaml
 title: HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion
 id: e73a1b48-c926-4e85-9fd2-6b8d3e4a7c19
-status: test
+status: experimental
 description: >
     Detects the HijackLoader GrimResource MSC file execution chain where mmc.exe
     spawns cmd.exe or powershell.exe that subsequently invokes Add-MpPreference
@@ -696,8 +717,13 @@ references:
 author: The Hunters Ledger
 date: 2026/05/06
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.execution
+    - attack.defense-impairment
+    - attack.t1218.014
+    - attack.t1059.001
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -716,10 +742,10 @@ detection:
             - 'Set-MpPreference'
     condition: selection_parent and selection_cmdline
 falsepositives:
-    - Security administrators who open MMC snap-ins and then separately run
+    - "Security administrators who open MMC snap-ins and then separately run
       PowerShell to manage Defender exclusions in the same session (extremely
       unlikely as a process-parent relationship: MMC does not propagate as the
-      parent for manually opened PowerShell windows)
+      parent for manually opened PowerShell windows)"
     - Automated endpoint management solutions that use MMC-based snap-ins to
       deliver Defender configuration changes (verify via change-management records)
 level: high

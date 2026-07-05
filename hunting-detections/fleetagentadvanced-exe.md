@@ -177,12 +177,11 @@ rule FleetAgentAdvanced_TaskXML_AntiForensics {
 #### Sigma Rule - Quad-Persistence Establishment
 ```yaml
 title: FleetAgentAdvanced Quad-Persistence Establishment
-id: a1b2c3d4-fleet-quad-persistence-001
+id: de1a1bbc-9dc7-4df3-af09-97464b37fa61
 status: stable
-description: Detects FleetAgentAdvanced quad-persistence mechanism establishment pattern
+description: Detects scheduled task creation for FleetAgentAdvanced's ".NET Runtime Optimization" persistence mechanism, the process-creation component of its quad-persistence establishment pattern
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: process_creation
@@ -192,37 +191,27 @@ detection:
         CommandLine|contains|all:
             - '/create'
             - '.NET Runtime Optimization'
-    selection_registry:
-        EventID: 13
-        TargetObject|contains: 'Software\Microsoft\Windows\CurrentVersion\Run'
-        Details|contains: 'RuntimeOptimization.exe'
-    selection_startup:
-        EventID: 11
-        TargetFilename|contains|all:
-            - '\Start Menu\Programs\Startup\'
-            - 'Runtime Optimization'
-            - '.lnk'
-    timeframe: 5s
-    condition: 2 of selection_*
+    condition: selection_schtasks
 falsepositives:
     - Legitimate .NET Framework maintenance tasks (verify digital signature)
 level: high
 tags:
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1547.001
+    - attack.execution
     - attack.t1053.005
-    - fleetagentadvanced
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - Task.xml Deletion Anti-Forensics
 ```yaml
 title: FleetAgentAdvanced Task.xml Deletion Anti-Forensics
-id: b2c3d4e5-fleet-taskxml-deletion-002
+id: d07f8be1-5b2c-4db2-9941-6a48e3979440
 status: stable
 description: Detects task.xml deletion immediately after scheduled task creation (FleetAgentAdvanced anti-forensics signature)
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: file_delete
@@ -239,20 +228,19 @@ falsepositives:
     - Some legitimate installers may use similar patterns
 level: medium
 tags:
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1070.004
-    - fleetagentadvanced
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - RuntimeOptimization.exe Execution from AppData
 ```yaml
 title: FleetAgentAdvanced RuntimeOptimization.exe Execution
-id: c3d4e5f6-fleet-runtime-exec-003
+id: 399c48ba-140e-41b2-b5e0-6c6486cb5b90
 status: stable
 description: Detects execution of RuntimeOptimization.exe from AppData\Microsoft\CLR\ directory
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: process_creation
@@ -263,23 +251,22 @@ detection:
             - 'RuntimeOptimization.exe'
     condition: selection
 falsepositives:
-    - None expected (legitimate .NET runtime optimization uses System32 paths)
+    - Unlikely — legitimate .NET runtime optimization uses System32 paths, not AppData\Roaming
 level: critical
 tags:
     - attack.execution
     - attack.t1204.002
-    - fleetagentadvanced
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - Persistence with Microsoft .NET Masquerading
 ```yaml
 title: FleetAgentAdvanced Microsoft .NET Masquerading Persistence
-id: d4e5f6a7-fleet-dotnet-masq-004
+id: ccf14e14-5328-4d1b-98b9-27088663076e
 status: stable
 description: Detects persistence mechanisms using Microsoft .NET naming without valid Microsoft signatures
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: registry_set
@@ -292,42 +279,39 @@ detection:
             - 'Runtime'
         Details|contains:
             - '\AppData\'
-    filter_signed:
-        Signature: 'Microsoft Corporation'
-        SignatureStatus: 'Valid'
-    condition: selection and not filter_signed
+    condition: selection
 falsepositives:
-    - Unsigned .NET development tools (verify legitimacy)
+    - Unsigned .NET development tools using Microsoft/.NET/Runtime naming in AppData (verify legitimacy)
 level: high
 tags:
     - attack.persistence
-    - attack.defense_evasion
+    - attack.privilege-escalation
     - attack.t1547.001
+    - attack.stealth
     - attack.t1036.005
-    - fleetagentadvanced
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - Thread Injection from .NET Executable
 ```yaml
 title: FleetAgentAdvanced Process Injection from .NET Executable
-id: e5f6a7b8-fleet-injection-005
+id: 1ca5cfa6-f7af-4dde-80b1-87edbf3c637b
 status: experimental
 description: Detects process injection API sequences from .NET executables in AppData
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
-    category: api_call
+    category: process_access
 detection:
     selection:
-        Image|contains: '\AppData\'
+        SourceImage|contains: '\AppData\'
         CallTrace|contains|all:
             - 'VirtualAllocEx'
             - 'WriteProcessMemory'
             - 'CreateRemoteThread'
     filter_legitimate:
-        Image|contains:
+        SourceImage|contains:
             - '\Program Files\'
             - '\Program Files (x86)\'
     condition: selection and not filter_legitimate
@@ -335,10 +319,10 @@ falsepositives:
     - Legitimate development tools and debuggers from AppData
 level: high
 tags:
-    - attack.defense_evasion
-    - attack.privilege_escalation
+    - attack.stealth
+    - attack.privilege-escalation
     - attack.t1055
-    - fleetagentadvanced
+    - detection.emerging-threats
 ```
 
 ---
@@ -740,22 +724,22 @@ function Test-FleetAgentDetections {
 #### Sigma Rule - .NET Dropper with Embedded Payload Pattern
 ```yaml
 title: .NET Dropper with Base64 Embedded Payload Execution
-id: f6a7b8c9-fleet-base64-payload-006
+id: d45cafee-0934-456d-9471-1cefbe03602a
 status: experimental
 description: Detects .NET executables decoding Base64 payloads and writing to disk (FleetAgentAdvanced pattern)
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
-    category: api_call
+    category: process_access
 detection:
     selection:
         CallTrace|contains|all:
             - 'FromBase64String'
             - 'WriteAllBytes'
-        Image|contains: '.exe'
+        SourceImage|contains: '.exe'
     filter_legitimate:
-        Image|startswith:
+        SourceImage|startswith:
             - 'C:\Program Files\'
             - 'C:\Windows\'
     condition: selection and not filter_legitimate
@@ -763,9 +747,9 @@ falsepositives:
     - Legitimate installers using Base64-encoded resources
 level: medium
 tags:
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1027
-    - fleetagentadvanced
+    - detection.emerging-threats
 ```
 
 ### File System Monitoring
@@ -773,28 +757,27 @@ tags:
 #### Sigma Rule - RuntimeOptimization.exe File Creation
 ```yaml
 title: FleetAgentAdvanced RuntimeOptimization.exe File Creation
-id: a7b8c9d0-fleet-file-creation-007
+id: 0d0b3ec0-8617-45cf-b945-36e60cc1f459
 status: stable
 description: Detects creation of RuntimeOptimization.exe file in AppData\Microsoft\CLR\ directory
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: file_event
 detection:
     selection:
-        EventID: 11 # File created
         TargetFilename|contains|all:
             - '\AppData\Roaming\Microsoft\CLR\'
             - 'RuntimeOptimization.exe'
     condition: selection
 falsepositives:
-    - None expected (legitimate .NET components do not use this path)
+    - Unlikely — legitimate .NET components do not use this path
 level: critical
 tags:
     - attack.execution
     - attack.t1204.002
-    - fleetagentadvanced
+    - detection.emerging-threats
 ```
 
 ---

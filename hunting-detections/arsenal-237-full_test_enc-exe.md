@@ -213,17 +213,16 @@ rule Arsenal237_FullTestEnc_Comprehensive {
 
 ```yaml
 title: Arsenal-237 - Mass .lockbox File Creation
-id: arsenal-237-lockbox-creation-sigma
-date: 2026-01-27
-modified: 2026-01-27
+id: 71a93441-6726-4802-ba83-7bd4cba71212
 status: experimental
+description: Detects creation of files with the .lockbox extension used by Arsenal-237 to mark ransomware-encrypted output
+author: The Hunters Ledger
+date: 2026-01-27
 logsource:
     category: file_event
     product: windows
-    service: sysmon
 detection:
     selection:
-        EventID: 11
         TargetFilename|endswith: '.lockbox'
     filter:
         Image|contains:
@@ -231,156 +230,148 @@ detection:
             - 'C:\Program Files (x86)'
             - 'C:\Windows\System32'
             - 'C:\Windows\SysWOW64'
-    timeframe: 1m
-    condition: selection and not filter | count(TargetFilename) > 10
-fields:
-    - EventID
-    - TargetFilename
-    - Image
-    - User
-    - Computer
+    condition: selection and not filter
 falsepositives:
     - Legitimate backup software with custom extensions
     - Database backup processes
 level: critical
+tags:
+    - attack.impact
+    - attack.t1486
+    - detection.emerging-threats
 ```
 
 ### Rule 2: Unsigned Binary Executing "net use"
 
 ```yaml
-title: Arsenal-237 - Unsigned Binary Executing net use
-id: arsenal-237-netuse-unsigned-sigma
+title: Arsenal-237 - Unsigned Binary Executing Net Use
+id: 7b9b82c9-cc3e-44cc-a268-4c1797883519
+status: experimental
+description: Detects a process outside standard install directories executing "net use" — network share discovery/mapping behavior observed in Arsenal-237 pre-encryption reconnaissance
+author: The Hunters Ledger
 date: 2026-01-27
 logsource:
     category: process_creation
     product: windows
-    service: sysmon
 detection:
     selection:
-        EventID: 1
         CommandLine|contains: 'net use'
-        Image|notin:
-            - 'C:\Windows\*'
-            - 'C:\Program Files*'
-        SignedStatus|endswith: 'unsigned'
+    filter_main_paths:
+        Image|startswith:
+            - 'C:\Windows\'
+            - 'C:\Program Files'
     filter_admin:
         User|contains: 'SYSTEM'
         ParentImage|endswith:
             - 'svchost.exe'
             - 'lsass.exe'
-    condition: selection and not filter_admin
-fields:
-    - EventID
-    - CommandLine
-    - Image
-    - User
-    - ParentImage
-    - TargetObject
+    condition: selection and not 1 of filter_*
 falsepositives:
     - Administrative tools
     - Batch scripts
 level: high
+tags:
+    - attack.discovery
+    - attack.t1135
+    - detection.emerging-threats
 ```
 
 ### Rule 3: Parallel WriteFile Operations
 
 ```yaml
 title: Arsenal-237 - Parallel Multi-threaded File Operations
-id: arsenal-237-parallel-writes-sigma
+id: cb966309-49cd-4854-8c62-129c89edc892
+status: experimental
+description: Detects file-write activity from a process outside standard install directories, consistent with the multi-threaded file-encryption pattern observed in Arsenal-237. Volumetric thresholding (>50 writes/60s) from the original detection intent is not expressible in a single-event Sigma rule and has been dropped — pair with a SIEM-side aggregation query for the volumetric signal.
+author: The Hunters Ledger
 date: 2026-01-27
 logsource:
     category: file_event
     product: windows
-    service: sysmon
 detection:
     selection:
-        EventID: 11
-        Image|notin:
-            - 'C:\Program Files*'
-            - 'C:\Windows\*'
+        TargetFilename|contains: '\'
+    filter_paths:
+        Image|startswith:
+            - 'C:\Program Files'
+            - 'C:\Windows\'
     filter_system:
         User: 'SYSTEM'
-    aggregation:
-        by:
-            - Image
-            - TargetFilename
-    condition: selection and not filter_system | count() > 50 within 60s
-fields:
-    - EventID
-    - Image
-    - TargetFilename
-    - User
-    - Computer
+    condition: selection and not filter_paths and not filter_system
 falsepositives:
     - Legitimate backup software
     - Database maintenance operations
 level: critical
+tags:
+    - attack.impact
+    - attack.t1486
+    - detection.emerging-threats
 ```
 
 ### Rule 4: GetLogicalDrives API Enumeration
 
 ```yaml
 title: Arsenal-237 - All Drives Enumeration (GetLogicalDrives)
-id: arsenal-237-getlogicaldrives-sigma
+id: aec5f863-dfa4-45f2-a1ed-c2d96c70aec9
+status: experimental
+description: Detects file-write activity spanning multiple drive letters from a process outside standard install directories, consistent with the all-drives encryption sweep observed in Arsenal-237 after a GetLogicalDrives enumeration call. Volumetric thresholding (>10 files/60s across drives) from the original detection intent is not expressible in a single-event Sigma rule and has been dropped — pair with a SIEM-side aggregation query for the volumetric signal.
+author: The Hunters Ledger
 date: 2026-01-27
 logsource:
     category: file_event
     product: windows
-    service: sysmon
 detection:
     selection:
-        EventID: 11
         TargetFilename|contains:
             - 'A:\'
             - 'B:\'
             - 'C:\'
             - 'D:\'
             - 'E:\'
-        Image|notin:
-            - 'C:\Windows\*'
-            - 'C:\Program Files*'
-    aggregation:
-        by:
-            - Image
-            - User
-    condition: selection | count(TargetFilename) > 10 within 60s
-fields:
-    - EventID
-    - Image
-    - TargetFilename
-    - User
+    filter_paths:
+        Image|startswith:
+            - 'C:\Windows\'
+            - 'C:\Program Files'
+    condition: selection and not filter_paths
+falsepositives:
+    - Backup or synchronization software operating across multiple drive letters
 level: high
+tags:
+    - attack.discovery
+    - attack.t1083
+    - detection.emerging-threats
 ```
 
 ### Rule 5: Cryptocurrency Library Detection
 
 ```yaml
 title: Arsenal-237 - Rust Cryptographic Libraries in Process Memory
-id: arsenal-237-crypto-libs-sigma
+id: 8c086c6a-b29e-4ef7-9f77-f114d9bc8348
+status: experimental
+description: Detects an unsigned executable loading Rust cryptographic/parallelism library modules (chacha20, rsa, aead, rayon) named in memory — indicative of the Arsenal-237 Rust-based ransomware encryption engine
+author: The Hunters Ledger
 date: 2026-01-27
 logsource:
     category: image_load
     product: windows
-    service: sysmon
 detection:
     selection:
-        EventID: 7
         ImageLoaded|contains:
             - 'chacha20'
             - 'rsa'
             - 'aead'
             - 'rayon'
     filter:
-        Image|endswith:
-            - '.exe'
+        Image|endswith: '.exe'
         Signed: 'false'
     condition: selection and filter
-fields:
-    - EventID
-    - Image
-    - ImageLoaded
-    - ProcessId
+falsepositives:
+    - Legitimate Rust applications bundling the same cryptographic or parallelism crates
 level: high
+tags:
+    - attack.impact
+    - attack.t1486
+    - detection.emerging-threats
 ```
 
 ---

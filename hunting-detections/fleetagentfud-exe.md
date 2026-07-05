@@ -253,12 +253,11 @@ rule FleetAgent_Family_General {
 #### Sigma Rule - PowerShell Execution Policy Bypass from AppData
 ```yaml
 title: FleetAgentFUD PowerShell Execution Policy Bypass from AppData
-id: a1b2c3d4-fleetfud-powershell-bypass-001
+id: 662e65e5-b424-40e0-9630-af1d2ccf3b3f
 status: stable
 description: Detects PowerShell execution with Execution Policy bypass from suspicious AppData locations (FleetAgentFUD RAT pattern)
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: process_creation
@@ -282,29 +281,55 @@ level: high
 tags:
     - attack.execution
     - attack.t1059.001
-    - attack.defense_evasion
-    - attack.t1562.001
-    - fleetagentfud
+    - attack.stealth
+    - attack.t1685
+    - attack.defense-impairment
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - Repeated Clipboard Monitoring (Get-Clipboard)
+
+*Two-part rule: a base detection plus a companion correlation rule that counts base-rule matches. The deprecated `condition: selection | count(...)` pipe syntax is no longer supported by current Sigma tooling — this is the modern replacement.*
+
 ```yaml
-title: FleetAgentFUD Clipboard Monitoring - Repeated Get-Clipboard Execution
-id: b2c3d4e5-fleetfud-clipboard-monitor-002
-status: stable
-description: Detects repeated PowerShell Get-Clipboard executions indicating clipboard data theft (FleetAgentFUD credential theft technique)
+title: PowerShell Get-Clipboard Script Block Execution
+id: b8eb1824-6711-4e88-ab71-46b63250b1a5
+status: experimental
+description: Detects a single PowerShell Get-Clipboard script block execution. Used as the base rule for the companion FleetAgentFUD Repeated Clipboard Monitoring correlation rule, which flags repeated executions indicating clipboard data theft.
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: ps_script
 detection:
     selection:
-        EventID: 4104
         ScriptBlockText|contains: 'Get-Clipboard'
-    timeframe: 1h
-    condition: selection | count(ComputerName, User) >= 10
+    condition: selection
+falsepositives:
+    - Legitimate clipboard management tools
+    - User productivity automation scripts (verify legitimacy)
+level: low
+tags:
+    - attack.collection
+    - attack.t1115
+    - detection.emerging-threats
+---
+title: FleetAgentFUD Repeated Clipboard Monitoring Correlation
+id: 75c96f1a-c463-4961-851e-a4ec93b4e5d1
+status: experimental
+description: Correlates 10 or more PowerShell Get-Clipboard script block executions by the same computer and user within one hour, indicating clipboard data theft (FleetAgentFUD credential theft technique).
+author: The Hunters Ledger
+date: '2026-01-12'
+correlation:
+    type: event_count
+    rules:
+        - b8eb1824-6711-4e88-ab71-46b63250b1a5
+    group-by:
+        - ComputerName
+        - User
+    timespan: 1h
+    condition:
+        gte: 10
 falsepositives:
     - Legitimate clipboard management tools
     - User productivity automation scripts (verify legitimacy)
@@ -312,19 +337,17 @@ level: critical
 tags:
     - attack.collection
     - attack.t1115
-    - attack.credential_access
-    - fleetagentfud
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - WebSocket Connection from .NET Executable in AppData
 ```yaml
 title: FleetAgentFUD WebSocket Connection from AppData .NET Executable
-id: c3d4e5f6-fleetfud-websocket-appdata-003
+id: 9d407138-8c0f-44d0-a7b4-d0e4435995c8
 status: experimental
 description: Detects WebSocket-like network connections from .NET executables in AppData (FleetAgentFUD C2 pattern)
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: network_connection
@@ -338,35 +361,30 @@ detection:
             - 443
             - 8080
             - 8443
-    filter_signed:
-        Signature: 'Microsoft Corporation'
-        SignatureStatus: 'Valid'
-    condition: selection_image and selection_port and not filter_signed
+    condition: selection_image and selection_port
 falsepositives:
     - Legitimate .NET applications in AppData (Microsoft Teams, Discord, Slack) - verify digital signature
     - Development/testing tools
 level: high
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.001
-    - fleetagentfud
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - File Download to Public/Temp from Suspicious Process
 ```yaml
 title: FleetAgentFUD File Download to Suspicious Locations
-id: d4e5f6a7-fleetfud-file-download-004
+id: 85477610-82e0-4256-8906-3fe3109937eb
 status: stable
 description: Detects executable file creation in Public/Temp folders from AppData processes (FleetAgentFUD payload download)
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: file_event
 detection:
     selection_file:
-        EventID: 11
         TargetFilename|contains:
             - 'C:\Users\Public\'
             - 'C:\Windows\Temp\'
@@ -384,20 +402,19 @@ level: high
 tags:
     - attack.execution
     - attack.t1204.002
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1105
-    - fleetagentfud
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - VirtualProtect RWX Memory from .NET Executable
 ```yaml
 title: FleetAgentFUD RWX Memory Allocation from .NET Executable
-id: e5f6a7b8-fleetfud-virtualprotect-rwx-005
+id: 1e04bbc1-1f12-41c7-a11d-0cc31e963f60
 status: experimental
 description: Detects VirtualProtect API calls with RWX permissions from .NET executables (shellcode execution indicator)
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: api_call
@@ -416,44 +433,40 @@ falsepositives:
     - Legitimate .NET applications using dynamic code generation
 level: high
 tags:
-    - attack.defense_evasion
+    - attack.stealth
+    - attack.privilege-escalation
     - attack.t1055
-    - fleetagentfud
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - FleetAgentFUD Multi-Stage Attack Correlation
+
+*Note: the original three-stage design mixed process-creation, network-connection, and PowerShell log sources under a single logsource declaration, which Sigma's single-event-source model cannot express (proper multi-source correlation requires the `temporal` correlation-rule type, not a plain `and` condition). The rule below keeps the single most reliable coherent process-creation selection — PowerShell launched with an execution-policy bypass from an AppData-rooted parent process.*
+
 ```yaml
 title: FleetAgentFUD Multi-Stage Attack Pattern Correlation
-id: f6a7b8c9-fleetfud-multistage-006
+id: cfe3cad4-9134-4d9e-8681-3199404e6170
 status: experimental
-description: Correlates multiple FleetAgentFUD attack stages within short timeframe (high-confidence detection)
+description: Detects PowerShell launched with an execution-policy bypass from a parent process running under AppData, the process-creation component of FleetAgentFUD's multi-stage attack pattern.
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: process_creation
 detection:
-    selection_stage1_process:
-        Image|contains: '\AppData\'
-        Image|endswith: '.exe'
-    selection_stage2_network:
-        EventID: 3
-        DestinationPort: 443
-    selection_stage3_powershell:
-        EventID: 1
+    selection_powershell:
         Image|endswith: '\powershell.exe'
         CommandLine|contains: '-Exec Bypass'
-    timeframe: 5m
-    condition: selection_stage1_process and selection_stage2_network and selection_stage3_powershell
+    selection_parent:
+        ParentImage|contains: '\AppData\'
+    condition: selection_powershell and selection_parent
 falsepositives:
-    - Complex legitimate software with network access and PowerShell usage
+    - Complex legitimate software launching PowerShell from user directories
 level: critical
 tags:
     - attack.execution
-    - attack.command_and_control
-    - attack.collection
-    - fleetagentfud
+    - attack.t1059.001
+    - detection.emerging-threats
 ```
 
 ---
@@ -978,27 +991,54 @@ Test-FleetAgentFUDDetections
 ### Process Execution Patterns
 
 #### Sigma Rule - Rapid System Reconnaissance Sequence
+
+*Two-part rule: a base detection plus a companion correlation rule that counts distinct base-rule matches. The deprecated `condition: selection | count() by ...` pipe syntax is no longer supported by current Sigma tooling — this is the modern replacement.*
+
 ```yaml
-title: FleetAgentFUD Rapid System Reconnaissance Pattern
-id: a7b8c9d0-fleetfud-recon-sequence-007
+title: FleetAgentFUD Rapid System Reconnaissance Command
+id: 1316ab23-3a9b-40e7-a037-2ec3c4535404
 status: experimental
-description: Detects rapid-fire system reconnaissance commands (sysinfo, processes, network, users, disk) typical of FleetAgentFUD automated profiling
+description: Detects a single system reconnaissance command (sysinfo, processes, network, users, disk) typical of FleetAgentFUD automated profiling. Used as the base rule for the companion Rapid System Reconnaissance Pattern correlation rule, which flags 3 or more distinct recon commands from the same host in a short window.
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 logsource:
     product: windows
     category: process_creation
 detection:
     selection_powershell:
         Image|endswith: '\powershell.exe'
-        CommandLine|contains|any:
+        CommandLine|contains:
             - 'Get-WmiObject Win32_'
             - 'Get-Process'
             - 'Get-LocalUser'
             - 'ipconfig /all'
             - 'Win32_LogicalDisk'
-    timeframe: 5m
-    condition: selection_powershell | count(ComputerName) >= 3
+    condition: selection_powershell
+falsepositives:
+    - System administration scripts
+    - IT inventory tools
+level: medium
+tags:
+    - attack.discovery
+    - attack.t1082
+    - attack.t1033
+    - detection.emerging-threats
+---
+title: FleetAgentFUD Rapid System Reconnaissance Pattern
+id: a7b8c9d0-a1b2-4c3d-9e4f-56a7b8c9d0e7
+status: experimental
+description: Correlates 3 or more distinct system reconnaissance commands (sysinfo, processes, network, users, disk) from the same host within a short window, typical of FleetAgentFUD automated profiling.
+author: The Hunters Ledger
+date: '2026-01-12'
+correlation:
+    type: event_count
+    rules:
+        - 1316ab23-3a9b-40e7-a037-2ec3c4535404
+    group-by:
+        - ComputerName
+    timespan: 5m
+    condition:
+        gte: 3
 falsepositives:
     - System administration scripts
     - IT inventory tools
@@ -1007,7 +1047,7 @@ tags:
     - attack.discovery
     - attack.t1082
     - attack.t1033
-    - fleetagentfud
+    - detection.emerging-threats
 ```
 
 ---

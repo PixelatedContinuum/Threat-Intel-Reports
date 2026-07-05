@@ -329,7 +329,7 @@ The following rules cover Rhadamanthys host-side persistence and process-injecti
 ```yaml
 title: Rhadamanthys SibCode Software Registry Key Persistence Marker
 id: a4f1e2c8-3d7b-4f9a-9c2e-2c5e7f8d9a01
-status: test
+status: experimental
 description: >-
   Detects creation or modification of HKU\<SID>\Software\SibCode\sn registry value, a family-stable
   Rhadamanthys execution marker observed across multiple sibling Stage-2 sandbox runs (Dapato dropper
@@ -341,8 +341,9 @@ author: The Hunters Ledger
 date: 2026/05/15
 tags:
   - attack.persistence
+  - attack.defense-impairment
   - attack.t1112
-  - attack.defense-evasion
+  - detection.emerging-threats
 logsource:
   product: windows
   category: registry_set
@@ -352,14 +353,14 @@ detection:
   condition: selection
 falsepositives:
   - >-
-    None known. The SibCode\sn key path has no documented benign software using it.
+    Unlikely. The SibCode\sn key path has no documented benign software using it.
 level: high
 ```
 
 ```yaml
-title: Rhadamanthys EAX-Redirect Process Hollowing into InstallUtil.exe
+title: Rhadamanthys EAX-Redirect Process Hollowing Into InstallUtil.exe
 id: b5e2f3d9-4e8c-5a0b-ad3f-3d6f8a9b0c12
-status: test
+status: experimental
 description: >-
   Detects suspicious creation of InstallUtil.exe child process from a non-typical parent (loader binary
   in user-writable location), a precursor to the EAX-redirect process hollowing technique used by this
@@ -371,9 +372,11 @@ references:
 author: The Hunters Ledger
 date: 2026/05/15
 tags:
-  - attack.defense-evasion
+  - attack.stealth
+  - attack.privilege-escalation
   - attack.t1218.008
   - attack.t1055.012
+  - detection.emerging-threats
 logsource:
   product: windows
   category: process_creation
@@ -403,7 +406,7 @@ level: high
 ```yaml
 title: BellaMain PhaaS Panel HTTP Request Patterns
 id: c7d4f0e1-5fab-6c1d-be4f-4e7fab0c1d23
-status: test
+status: experimental
 description: >-
   Detects HTTP requests to BellaMain panel administrative endpoints. The panel exposes a small fixed
   set of PHP entry points (signin.php, dashboard.php, post.php, manager.php) that should not appear
@@ -415,8 +418,10 @@ author: The Hunters Ledger
 date: 2026/05/15
 tags:
   - attack.command-and-control
+  - attack.initial-access
   - attack.t1071.001
   - attack.t1566.002
+  - detection.emerging-threats
 logsource:
   category: proxy
 detection:
@@ -434,7 +439,7 @@ detection:
   condition: selection_uri or selection_dst
 falsepositives:
   - >-
-    None expected for the URI patterns. The host-based detection on cryptone.bot may fire on
+    Unlikely for the URI patterns. The host-based detection on cryptone.bot may fire on
     intentional research traffic from analyst sandboxes.
 level: high
 ```
@@ -442,7 +447,7 @@ level: high
 ```yaml
 title: Inkognito Brand Portfolio DNS Queries
 id: d8e5fb12-6fbc-7d2e-cf50-5f8fbc1d2e34
-status: test
+status: experimental
 description: >-
   Detects DNS queries for any domain in the Inkognito brand portfolio (INK VPN, INK Lens, CryptOne,
   Bikaf, Outline VPN deployments observed in operator infrastructure). Includes both customer-facing
@@ -455,6 +460,7 @@ date: 2026/05/15
 tags:
   - attack.command-and-control
   - attack.t1071.004
+  - detection.emerging-threats
 logsource:
   category: dns
 detection:
@@ -480,7 +486,7 @@ detection:
   condition: selection
 falsepositives:
   - >-
-    None expected. These are operator-controlled domains with no known legitimate business use.
+    Unlikely. These are operator-controlled domains with no known legitimate business use.
 level: medium
 ```
 

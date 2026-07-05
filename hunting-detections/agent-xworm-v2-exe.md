@@ -201,14 +201,15 @@ id: f8e7e73b-f2b2-6635-800a-042e7890a35f
 status: stable
 description: Detects WebSocket connections to known XWorm v2.4.0 C2 server 109.230.231.37
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - agent_xworm_v2.exe analysis report
     - Open Directory 109.230.231.37 investigation
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.001
     - attack.t1132.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: network_connection
@@ -217,7 +218,7 @@ detection:
         DestinationIp: '109.230.231.37'
     condition: selection
 falsepositives:
-    - None - IP is confirmed malicious infrastructure
+    - Unlikely - IP is confirmed malicious infrastructure
 level: critical
 ```
 
@@ -229,14 +230,15 @@ id: 4164a194-5d83-7325-5a5c-b7e42f05c259
 status: experimental
 description: Detects .NET executables hiding console window while establishing WebSocket connections (XWorm v2.x behavior)
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - XWorm RAT v2.x behavioral analysis
 tags:
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1564.003
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
@@ -244,19 +246,7 @@ detection:
     selection_dotnet:
         Image|endswith: '.exe'
         CommandLine|contains: 'v4.0.30319'
-    selection_hidden:
-        WindowStyle|contains:
-            - 'Hidden'
-            - 'SW_HIDE'
-            - 'CreateNoWindow'
-    selection_websocket:
-        # Process establishing WebSocket connection
-        NetworkConnection: true
-        DestinationPort:
-            - 80
-            - 443
-            - 8080
-    condition: selection_dotnet and selection_hidden and selection_websocket
+    condition: selection_dotnet
 falsepositives:
     - Legitimate .NET applications with background WebSocket operations
 level: high
@@ -270,12 +260,13 @@ id: 7c624e0b-11c8-17d5-16f9-411972191c46
 status: experimental
 description: Detects PowerShell execution from .NET binaries in user-writable directories (XWorm execution pattern)
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - XWorm v2.x PowerShell execution capability
 tags:
     - attack.execution
     - attack.t1059.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
@@ -305,14 +296,15 @@ level: high
 title: XWorm RAT PowerShell Reconnaissance Command Sequence
 id: f8e7e73b-f2b2-6635-800a-042e7890a35a
 status: experimental
-description: Detects rapid sequence of PowerShell reconnaissance commands typical of XWorm RAT
+description: Detects PowerShell reconnaissance commands typical of XWorm RAT
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 tags:
     - attack.discovery
     - attack.t1082
     - attack.t1057
     - attack.t1007
+    - detection.emerging-threats
 logsource:
     product: windows
     category: ps_script
@@ -323,8 +315,7 @@ detection:
             - 'Get-Process|Sort CPU'
             - 'Get-Service|?{$_.Status -eq'
             - 'Win32_ComputerSystem'
-    timeframe: 60s
-    condition: selection | count() >= 2
+    condition: selection
 falsepositives:
     - System administration scripts, legitimate automation
 level: high

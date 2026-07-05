@@ -231,11 +231,9 @@ description: Detects execution of vssadmin delete shadows command used by ransom
 status: test
 date: 2026-01-26
 author: The Hunters Ledger
-references:
-    - https://attack.mitre.org/techniques/T1490/
 logsource:
     product: windows
-    service: process_creation
+    category: process_creation
 detection:
     selection:
         CommandLine|contains|all:
@@ -252,8 +250,7 @@ level: critical
 tags:
     - attack.impact
     - attack.t1490
-    - ransomware
-    - critical
+    - detection.emerging-threats
 ```
 
 ### Rule 2: Backup Service Termination Pattern
@@ -261,19 +258,18 @@ tags:
 ```yaml
 title: Backup Service Termination - Multiple Services
 id: 1e8c3d5a-2b7f-4a9c-b1e6-d3f5a8c2b4e7
-description: Detects mass termination of backup services (Veritas, Veeam, VSS)
+description: Detects termination of a backup-related service (Veritas, Veeam, VSS) via the Service Control Manager. The original rule intent required 3+ distinct backup services to stop within 5 minutes; single-event Sigma rules cannot express this volumetric/multi-event threshold, so it has been dropped — this rule now fires on any single matching service stop and should be correlated with other backup-service terminations in the same timeframe at review time.
 status: test
 date: 2026-01-26
 author: The Hunters Ledger
-references:
-    - https://attack.mitre.org/techniques/T1489/
 logsource:
     product: windows
     service: system
 detection:
     selection:
-        EventID: 7000  # Service Control Manager
-        ServiceName|in:
+        EventID: 7036
+        Provider_Name: 'Service Control Manager'
+        param1|contains:
             - 'GxVss'
             - 'GxBlr'
             - 'GxFWD'
@@ -281,18 +277,16 @@ detection:
             - 'GxCIMgr'
             - 'veeam'
             - 'vss'
-        Status: 'stopped'
-    timeframe: 5m
-    condition: selection | count(ServiceName) > 2
+        param2: 'stopped'
+    condition: selection
 falsepositives:
     - Legitimate service maintenance
     - Scheduled backup system restarts
-level: critical
+level: high
 tags:
     - attack.impact
     - attack.t1489
-    - ransomware
-    - backup
+    - detection.emerging-threats
 ```
 
 ### Rule 3: Scheduled Task Creation - Ransom Note
@@ -304,23 +298,22 @@ description: Detects creation of RustRansomNoteTask scheduled task
 status: test
 date: 2026-01-26
 author: The Hunters Ledger
-references:
-    - https://attack.mitre.org/techniques/T1053.005/
 logsource:
     product: windows
-    service: sysmon
+    category: file_event
 detection:
     selection:
-        EventID: 11  # Image/File created
         TargetFilename|contains: 'RustRansomNoteTask'
     condition: selection
 falsepositives:
     - Legitimate system tasks with similar naming
 level: high
 tags:
+    - attack.execution
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1053.005
-    - ransomware
+    - detection.emerging-threats
 ```
 
 ### Rule 4: Database Service Termination Pattern
@@ -328,36 +321,33 @@ tags:
 ```yaml
 title: Database Service Termination - Ransomware Pattern
 id: 4b2d7e9a-1c5f-3a8b-6d4e-2f7c9a3b5e1d
-description: Detects termination of SQL Server and Oracle database services
+description: Detects termination of a SQL Server or Oracle database service via the Service Control Manager. The original rule intent required 2+ distinct database services to stop within 10 minutes; single-event Sigma rules cannot express this volumetric/multi-event threshold, so it has been dropped — this rule now fires on any single matching service stop and should be correlated with other database-service terminations in the same timeframe at review time.
 status: test
 date: 2026-01-26
 author: The Hunters Ledger
-references:
-    - https://attack.mitre.org/techniques/T1489/
 logsource:
     product: windows
     service: system
 detection:
     selection:
-        EventID: 7000
-        ServiceName|in:
+        EventID: 7036
+        Provider_Name: 'Service Control Manager'
+        param1|contains:
             - 'sql'
             - 'oracle'
             - 'ocssd'
             - 'dbsnmp'
             - 'sqlservr'
-        Status: 'stopped'
-    timeframe: 10m
-    condition: selection | count(ServiceName) > 1
+        param2: 'stopped'
+    condition: selection
 falsepositives:
     - Legitimate database maintenance
     - Scheduled database restarts
-level: high
+level: medium
 tags:
     - attack.impact
     - attack.t1489
-    - database
-    - ransomware
+    - detection.emerging-threats
 ```
 
 ---

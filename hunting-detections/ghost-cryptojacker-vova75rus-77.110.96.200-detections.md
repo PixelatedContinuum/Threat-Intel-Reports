@@ -547,7 +547,7 @@ rule MAL_GHOST_OWNER_Telegram_Bot_Token_Indicator {
 ```yaml
 title: Linux LD_PRELOAD Persistence File Modification
 id: f67e016e-dcd7-4ee3-a2ee-9477ad7f75c2
-status: test
+status: experimental
 description: >-
     Detects write or create operations on /etc/ld.so.preload by non-package-manager
     processes. The GHOST cryptojacker kit writes this file to globally load
@@ -561,7 +561,10 @@ author: The Hunters Ledger
 date: 2026/05/25
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.execution
+    - attack.t1574.006
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -599,7 +602,7 @@ level: high
 ```yaml
 title: Suspicious Shared Library Created in PAM Security Directory
 id: 21b2646a-7e0b-4d6c-8392-d976b8388fa3
-status: test
+status: experimental
 description: >-
     Detects creation of a .so shared library file in /lib/security/ or similar PAM
     module directories by non-package-manager processes. The GHOST cryptojacker kit
@@ -613,8 +616,12 @@ references:
 author: The Hunters Ledger
 date: 2026/05/25
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.persistence
+    - attack.execution
+    - attack.t1574.006
+    - attack.t1014
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -656,7 +663,7 @@ level: high
 ```yaml
 title: Suspicious LD_PRELOAD Set to Non-Standard Library Path
 id: 5cd034e9-ac04-4178-8a16-95f291c5d805
-status: test
+status: experimental
 description: >-
     Detects Linux processes launched with LD_PRELOAD environment variable pointing to
     non-standard shared library paths such as /tmp/, /var/tmp/, /home/, or custom
@@ -669,8 +676,11 @@ references:
 author: The Hunters Ledger
 date: 2026/05/25
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.persistence
+    - attack.execution
+    - attack.t1574.006
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -703,9 +713,9 @@ level: medium
 **Deployment:** auditd (auditd PATH record type)
 
 ```yaml
-title: auditd - PAM Security Library Directory Write by Non-Package-Manager
+title: Auditd - PAM Security Library Directory Write by Non-Package-Manager
 id: f26bb12b-dca1-4b62-adf1-9186d5d31560
-status: test
+status: experimental
 description: >-
     Detects auditd file write events (PATH record type with OPEN_W flag or CREATE)
     on the /lib/security/ directory. Requires auditd rule "-w /lib/security -p wa
@@ -717,8 +727,12 @@ references:
 author: The Hunters Ledger
 date: 2026/05/25
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.persistence
+    - attack.execution
+    - attack.t1574.006
+    - attack.t1014
+    - detection.emerging-threats
 logsource:
     product: linux
     service: auditd
@@ -756,7 +770,7 @@ level: high
 ```yaml
 title: GHOST ComfyUI Fake PerformanceMonitor Custom Node Planted
 id: df247923-595c-4760-9a97-f0722dbf664d
-status: test
+status: experimental
 description: >-
     Detects GHOST cryptojacker kit persistence via malicious ComfyUI custom node
     installation. The GHOST Python kit's plant_backdoor_node() function creates a
@@ -772,6 +786,8 @@ date: 2026/05/25
 tags:
     - attack.persistence
     - attack.execution
+    - attack.t1554
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -800,9 +816,9 @@ level: high
 **Deployment:** Linux process_creation monitoring (auditd EXECVE or Sysmon for Linux Event ID 1)
 
 ```yaml
-title: High-Frequency ncat Listener Creation on Linux Host
+title: High-Frequency Ncat Listener Creation on Linux Host
 id: 4639e400-9a7d-495f-b7a3-a06de5f3c7db
-status: test
+status: experimental
 description: >-
     Detects frequent ncat -l listener creation on a Linux host. The GHOST
     cryptojacker Operator-A showed 83 ncat invocations in bash history — the highest
@@ -817,6 +833,8 @@ date: 2026/05/25
 tags:
     - attack.command-and-control
     - attack.execution
+    - attack.t1571
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -846,9 +864,9 @@ level: medium
 **Deployment:** Linux process_creation monitoring (auditd EXECVE or Sysmon for Linux Event ID 1)
 
 ```yaml
-title: Hysteria v2 QUIC Proxy Process Execution on Linux Server
+title: Hysteria V2 QUIC Proxy Process Execution on Linux Server
 id: e01c6689-1d47-4f6c-bf23-a71b32d88375
-status: test
+status: experimental
 description: >-
     Detects execution of Hysteria v2 process on a Linux host. The GHOST cryptojacker
     kit installs Hysteria v2 as a covert QUIC/UDP backdoor with bing.com SNI masquerade
@@ -863,7 +881,9 @@ author: The Hunters Ledger
 date: 2026/05/25
 tags:
     - attack.command-and-control
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1572
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -893,7 +913,7 @@ level: high
 ```yaml
 title: DNS Query to GHOST Cryptojacker Mining Pool Domains
 id: 9fc9cb2d-c3b6-4907-b92c-0e9ccee92d82
-status: test
+status: experimental
 description: >-
     Detects DNS queries to mining pool domains used by GHOST cryptojacker kit
     operators. Kryptex.network domains (xmr/etc/cfx) are used by Operator-A;
@@ -907,6 +927,8 @@ date: 2026/05/25
 tags:
     - attack.impact
     - attack.command-and-control
+    - attack.t1496.001
+    - detection.emerging-threats
 logsource:
     category: dns_query
     product: linux
@@ -937,7 +959,7 @@ level: high
 ```yaml
 title: GHOST Kit Systemd Camouflage Service Unit Creation
 id: 16fce30a-b59f-461c-87fc-89ae2d736527
-status: test
+status: experimental
 description: >-
     Detects creation of systemd service unit files using GHOST cryptojacker kit
     camouflage names. The GHOST kit installs fontconfig-cache.service (user-level
@@ -951,7 +973,11 @@ author: The Hunters Ledger
 date: 2026/05/25
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1543.002
+    - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -984,9 +1010,9 @@ level: medium
 **Deployment:** Linux process_creation monitoring (auditd EXECVE or Sysmon for Linux Event ID 1)
 
 ```yaml
-title: chattr Immutable Bit Set on Linux Persistence Target Paths
+title: Chattr Immutable Bit Set on Linux Persistence Target Paths
 id: f83a039f-885d-4759-a89c-2156a54e7ea5
-status: test
+status: experimental
 description: >-
     Detects chattr +i (set immutable bit) invoked against system persistence file
     paths. The GHOST cryptojacker kit's _lock_files function uses chattr +i on
@@ -999,8 +1025,11 @@ references:
 author: The Hunters Ledger
 date: 2026/05/25
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.persistence
+    - attack.defense-impairment
+    - attack.t1222.002
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -1035,7 +1064,7 @@ level: high
 ```yaml
 title: High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server
 id: 3d5c184d-4937-4ab0-93d6-778760e59b9c
-status: test
+status: experimental
 description: >-
     Detects high-frequency memfd_create() syscall invocations from a single non-JVM
     process on a Linux server. The GHOST cryptojacker kit's _memfd_exec function uses
@@ -1049,8 +1078,10 @@ references:
 author: The Hunters Ledger
 date: 2026/05/25
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.execution
+    - attack.t1620
+    - detection.emerging-threats
 logsource:
     product: linux
     service: auditd
@@ -1085,9 +1116,9 @@ level: medium
 **Deployment:** auditd syscall monitoring (inotify_add_watch), Falco (if available)
 
 ```yaml
-title: inotify Watch Created on LD_PRELOAD Persistence File — Rootkit Watchdog Indicator
+title: Inotify Watch Created on LD_PRELOAD Persistence File — Rootkit Watchdog Indicator
 id: d89cc92a-b3e0-4760-93cd-54d4b609c837
-status: test
+status: experimental
 description: >-
     Detects user-space process creating inotify watch on /etc/ld.so.preload. The GHOST
     cryptojacker kit's _inotify_guard function creates a persistent watchdog process
@@ -1102,7 +1133,10 @@ author: The Hunters Ledger
 date: 2026/05/25
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.execution
+    - attack.t1574.006
+    - detection.emerging-threats
 logsource:
     product: linux
     service: auditd

@@ -28,7 +28,7 @@ The IOC feed and rules below address 39 distinct ATT&CK techniques observed in t
 |---|---|
 | Resource Development | T1583.003 Acquire Infrastructure: VPS, T1588.002 Obtain Capabilities: Tool |
 | Execution | T1059.001 PowerShell, T1620 Reflective Code Loading |
-| Defense Evasion | T1027 Obfuscated Files, T1140 Deobfuscate/Decode, T1132.001 Base64 Encoding, T1562.001 AMSI Bypass, T1055 / T1055.002 Process Injection (PE), T1574.002 DLL Side-Loading (msupdate.dll) |
+| Defense Evasion | T1027 Obfuscated Files, T1140 Deobfuscate/Decode, T1132.001 Base64 Encoding, T1685 AMSI Bypass, T1055 / T1055.002 Process Injection (PE), T1574.001 DLL Side-Loading (msupdate.dll) |
 | Credential Access | T1003.001 LSASS, T1003.002 SAM, T1003.006 DCSync, T1555 / T1555.003 / T1555.004 Password Stores, T1558.003 Kerberoasting, T1558.004 AS-REP Roasting, T1552.004 Private Keys, T1649 Forge Auth Certs |
 | Discovery | T1057 Process, T1082 System Info, T1083 Files/Directories, T1018 Remote Systems, T1087.002 Domain Accounts, T1069.002 Domain Groups, T1482 Domain Trust, T1518.001 Security Software |
 | Privilege Escalation | T1068 Exploitation for PrivEsc, T1134.001 Token Impersonation, T1134.002 CreateProcessWithToken |
@@ -170,7 +170,7 @@ rule MALW_Ligolo_ng_v083_Agent
 
 **Detection Priority:** HIGH
 **Rationale:** Three co-occurring strings (string-concatenated AMSI bypass + operator SI class invocation + base64 MZ prefix) in one script block are highly specific to the beacon.ps1 loader chain; no legitimate software combines these patterns.
-**ATT&CK Coverage:** T1059.001 (PowerShell), T1562.001 (AMSI Bypass), T1620 (Reflective Code Loading)
+**ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (AMSI Bypass), T1620 (Reflective Code Loading)
 **Confidence:** HIGH
 **False Positive Risk:** LOW — the SI class name and concatenated AMSI pattern co-occurrence is operator-specific
 **Deployment:** SIEM with PowerShell Script Block Logging (Windows Event ID 4104) ingested; endpoint EDR ScriptBlock telemetry
@@ -186,7 +186,11 @@ author: The Hunters Ledger
 date: 2026/04/30
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.defense-impairment
+    - attack.t1059.001
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     product: windows
     category: ps_script
@@ -218,23 +222,24 @@ level: high
 title: AdaptixC2 Default Listener - Anomalous Firefox 20 User-Agent with X-Beacon-Id Header
 id: 7c9d4b81-3e62-4f08-a517-2d8e5a6c0b93
 status: test
-description: Detects outbound HTTP traffic matching the AdaptixC2 stock listener default profile. The Firefox 20 User-Agent (released February 2013) is anomalous in 2026 traffic and is the AdaptixC2 default listener UA string. The X-Beacon-Id header is the AdaptixC2 stock per-agent heartbeat header not used by any known legitimate browser or application. Co-occurrence of both indicators identifies any operator running stock AdaptixC2 with default listener configuration.
+description: Detects outbound HTTP traffic matching the AdaptixC2 stock listener default profile. The Firefox 20 User-Agent (released February 2013) is anomalous in 2026 traffic and is the AdaptixC2 default listener UA string. The X-Beacon-Id header is the AdaptixC2 stock per-agent heartbeat header not used by any known legitimate browser or application, but standard proxy logsource fields do not expose arbitrary request headers, so this rule anchors on the User-Agent string alone; combine with the X-Beacon-Id header at the WAF or full-packet-capture layer for the highest-confidence match.
 references:
     - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/
 author: The Hunters Ledger
 date: 2026/04/30
 tags:
     - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: proxy
 detection:
     selection:
         cs-user-agent|contains: 'Firefox/20.0'
-        cs-headers|contains: 'X-Beacon-Id'
     condition: selection
 falsepositives:
     - Legacy embedded systems or industrial control software using a hardcoded Firefox 20 UA string - cross-reference against known asset inventory to exclude
-level: high
+level: medium
 ```
 
 ---
@@ -249,16 +254,18 @@ level: high
 **Deployment:** Web proxy SIEM with count-by-source aggregation over 30-second sliding window; Zeek or NGFW flow logs
 
 ```yaml
-title: AdaptixC2 Beacon - High-Frequency Deterministic HTTP POST Cadence to Stock URIs
+title: AdaptixC2 Beacon Stock URI POST Request
 id: 2e7f5a93-8c14-4b67-d259-1a3f6e8d0c52
-status: test
-description: Detects the AdaptixC2 fast-beacon callback pattern - a source IP making more than five HTTP POST requests within 30 seconds to stock AdaptixC2 URI paths (/api/v1/status or /jquery-3.3.1.min.js). The 4-5 second sleep with zero jitter produces a deterministic cadence that is highly anomalous for production traffic. Requires proxy log aggregation with count-by-source capability and a 30-second sliding window.
+status: experimental
+description: Base selection for the AdaptixC2 fast-beacon callback pattern - HTTP POST requests to stock AdaptixC2 URI paths (/api/v1/status or /jquery-3.3.1.min.js). Paired with the correlation rule below, which flags more than five such requests from a single source within a 30-second window; the 4-5 second sleep with zero jitter this produces is highly anomalous for production traffic.
 references:
     - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/
 author: The Hunters Ledger
 date: 2026/04/30
 tags:
     - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: proxy
 detection:
@@ -267,11 +274,29 @@ detection:
         cs-uri-stem|contains:
             - '/api/v1/status'
             - '/jquery-3.3.1.min.js'
-    condition: selection | count() by c-ip > 5
-    timeframe: 30s
+    condition: selection
 falsepositives:
     - Legitimate health-check endpoints polled at high frequency by infrastructure monitoring agents - add known monitoring source IPs to an allowlist filter
     - CI/CD pipeline job runners issuing rapid POST requests to status endpoints during build phases
+level: low
+---
+title: AdaptixC2 Beacon - High-Frequency Deterministic HTTP POST Cadence to Stock URIs
+id: 8f4a1c93-6e27-4b58-a910-3d7c2f5b9e46
+status: experimental
+description: Detects the AdaptixC2 fast-beacon callback pattern - a source IP making more than five HTTP POST requests within 30 seconds to stock AdaptixC2 URI paths. Correlates the base selection rule (AdaptixC2 Beacon Stock URI POST Request, id 2e7f5a93-8c14-4b67-d259-1a3f6e8d0c52) by source IP over a 30-second sliding window; requires a Sigma backend with correlation-rule support.
+references:
+    - https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/
+author: The Hunters Ledger
+date: 2026/04/30
+correlation:
+    type: event_count
+    rules:
+        - 2e7f5a93-8c14-4b67-d259-1a3f6e8d0c52
+    group-by:
+        - c-ip
+    timespan: 30s
+    condition:
+        gt: 5
 level: medium
 ```
 
@@ -296,8 +321,10 @@ references:
 author: The Hunters Ledger
 date: 2026/04/30
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.privilege-escalation
+    - attack.t1055
+    - detection.emerging-threats
 logsource:
     product: windows
     category: image_load
@@ -337,6 +364,9 @@ author: The Hunters Ledger
 date: 2026/04/30
 tags:
     - attack.discovery
+    - attack.t1087.002
+    - attack.t1482
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
@@ -358,7 +388,7 @@ detection:
         Image|endswith: '\\ADRecon.exe'
     condition: selection_sharphound or selection_powerview or selection_adrecon
 falsepositives:
-    - Authorized penetration testing or red team exercises - correlate against change management records and authorized testing windows
+    - Authorized security assessment or red team exercises - correlate against change management records and authorized testing windows
     - EDR or vulnerability assessment platforms that incorporate BloodHound data collection natively
 level: high
 ```
@@ -386,6 +416,8 @@ author: The Hunters Ledger
 date: 2026/04/30
 tags:
     - attack.command-and-control
+    - attack.t1572
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
@@ -404,7 +436,7 @@ detection:
         Hashes|contains: 'SHA256=4B41F36F82DB6DA8767A0A1C2997C8242D80B2D10A8F1D28C252A9306EC152B5'
     condition: selection_name or (selection_cmdline and selection_port) or selection_hash
 falsepositives:
-    - Authorized penetration testing or network administration use of Ligolo-ng - correlate against authorized change records and known red team activity windows
+    - Authorized security assessment or network administration use of Ligolo-ng - correlate against authorized change records and known red team activity windows
     - Security research and lab environments where Ligolo-ng is used for legitimate network tunneling evaluation
 level: high
 ```

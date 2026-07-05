@@ -178,7 +178,7 @@ rule MALW_Inkognito_Favicon_SVG
 ```yaml
 title: Inkognito Brand-Impersonation Subdomain DNS Query
 id: 4a7b2e1d-8f3c-4a5b-9c0d-6e2f1a8b3c7d
-status: test
+status: experimental
 description: >-
   Detects DNS queries for Inkognito operator brand-impersonation subdomains under inklens.ru
   and inklens.co.uk. The Inkognito fraud operator (UTA-2026-009) pre-stages 467+ subdomains
@@ -191,7 +191,10 @@ author: The Hunters Ledger
 date: 2026/05/16
 tags:
   - attack.initial-access
-  - attack.command-and-control
+  - attack.stealth
+  - attack.t1566.002
+  - attack.t1036.005
+  - detection.emerging-threats
 logsource:
   category: dns_query
   product: windows
@@ -244,7 +247,7 @@ level: high
 ```yaml
 title: Inkognito Operator Infrastructure Domain DNS Query
 id: 9c3d5f2a-1b4e-4d7c-8a6f-3e0b2c9d4f1e
-status: test
+status: experimental
 description: >-
   Detects DNS queries for confirmed Inkognito operator-controlled domains including the INK
   VPN flagship (inkconnect.ru), phishing infrastructure (inklens.ru), fake crypto exchange
@@ -258,7 +261,9 @@ author: The Hunters Ledger
 date: 2026/05/16
 tags:
   - attack.command-and-control
-  - attack.initial-access
+  - attack.t1071.001
+  - attack.t1090.003
+  - detection.emerging-threats
 logsource:
   category: dns_query
   product: windows
@@ -302,7 +307,7 @@ level: medium
 ```yaml
 title: Inkognito Operator KittenX Decommission Tombstone HTTP Response
 id: 7f1a3c8b-2d5e-4b9a-8c0f-1e6d3a7b2c4f
-status: test
+status: experimental
 description: >-
   Detects the Inkognito fraud operator standard HTTP decommission tombstone: a response with
   Server header value kittenx, HTTP status 404, and Content-Length 148. This signature is
@@ -316,7 +321,9 @@ author: The Hunters Ledger
 date: 2026/05/16
 tags:
   - attack.resource-development
-  - attack.defense-evasion
+  - attack.t1583.001
+  - attack.t1583.004
+  - detection.emerging-threats
 logsource:
   category: proxy
   product: windows
@@ -346,7 +353,7 @@ level: high
 ```yaml
 title: HTTP Request or Response Carrying Custom X-Admin-Token Header
 id: 2e8d4f6a-3c7b-4a1d-9e5f-8b0c2d6a4f3e
-status: test
+status: experimental
 description: >-
   Detects HTTP requests or CORS responses carrying the custom X-Admin-Token header, the
   Inkognito fraud operator admin API authentication primitive exposed via CORS configuration
@@ -362,6 +369,9 @@ date: 2026/05/16
 tags:
   - attack.command-and-control
   - attack.resource-development
+  - attack.t1071.001
+  - attack.t1583.004
+  - detection.emerging-threats
 logsource:
   category: proxy
   product: windows
@@ -374,7 +384,7 @@ detection:
 falsepositives:
   - Internally-developed web applications that independently use X-Admin-Token as a custom auth header name
   - Developer workstations testing API endpoints during authorized threat hunting exercises
-  - Security research or penetration testing of Inkognito-controlled domains
+  - Security research or authorized security assessment of Inkognito-controlled domains
 level: medium
 ```
 
@@ -392,7 +402,7 @@ level: medium
 ```yaml
 title: Inkognito Operator Yandex Webmaster Verification ID in HTTP Response Body
 id: 3a6d9c1f-5e2b-4f7a-8d0c-2b4e7f1a9c5d
-status: test
+status: experimental
 description: >-
   Detects HTTP responses from a TLS-inspecting proxy containing the Inkognito operator
   Yandex Webmaster verification meta tag (content value 98466329). This ID is tied to an
@@ -406,6 +416,9 @@ author: The Hunters Ledger
 date: 2026/05/16
 tags:
   - attack.resource-development
+  - attack.t1585.003
+  - attack.t1608.005
+  - detection.emerging-threats
 logsource:
   category: proxy
   product: windows
@@ -435,7 +448,7 @@ level: high
 ```yaml
 title: HTTP Request to Inkognito INK VPN Backend Authentication Endpoint
 id: 8f4c1a2e-7d3b-4e6f-9a0c-5b8d2f4e1c7a
-status: test
+status: experimental
 description: >-
   Detects outbound HTTP requests to the Inkognito INK VPN backend API login endpoint at
   api.inkconnect.ru. This endpoint handles user authentication for the INK VPN commercial
@@ -449,7 +462,12 @@ author: The Hunters Ledger
 date: 2026/05/16
 tags:
   - attack.initial-access
-  - attack.credential-access
+  - attack.command-and-control
+  - attack.impact
+  - attack.t1071.001
+  - attack.t1657
+  - attack.t1566.002
+  - detection.emerging-threats
 logsource:
   category: proxy
   product: windows
@@ -481,7 +499,7 @@ level: high
 ```yaml
 title: DNS Query for Inkognito CryptOne Fake Cryptocurrency Exchange
 id: 1d7e3b9f-6a2c-4f8d-b1e5-9c0f4a7b2e8d
-status: test
+status: experimental
 description: >-
   Detects DNS queries for cryptone.bot, the Inkognito fraud operator fake cryptocurrency
   exchange registered 2026-03-02 and Cloudflare-fronted with Turnstile bot challenge.
@@ -494,7 +512,10 @@ author: The Hunters Ledger
 date: 2026/05/16
 tags:
   - attack.impact
-  - attack.initial-access
+  - attack.stealth
+  - attack.t1657
+  - attack.t1036.005
+  - detection.emerging-threats
 logsource:
   category: dns_query
   product: windows

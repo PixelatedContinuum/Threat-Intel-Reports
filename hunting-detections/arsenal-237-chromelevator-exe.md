@@ -166,17 +166,19 @@ rule Reflective_DLL_Injection_Framework {
 
 ```yaml
 title: Suspicious Process Creation - chromelevator.exe
+id: 5b6b41f8-1c8e-4a3e-9d3a-6c1f2b9e4a01
 description: Detects execution of chromelevator.exe browser credential extraction tool
 status: experimental
 author: The Hunters Ledger
-date: 2026/01/26
-severity: CRITICAL
+date: '2026-01-26'
 tags:
-  - attack.credential_access
+  - attack.credential-access
   - attack.t1555.003
-  - attack.defense_evasion
-  - malware.arsenal237
-
+  - attack.stealth
+  - detection.emerging-threats
+logsource:
+  product: windows
+  category: process_creation
 detection:
   selection_image:
     Image|endswith: 'chromelevator.exe'
@@ -187,13 +189,7 @@ detection:
       - '--fingerprint'
       - '--output-path'
 
-  filter_legitimate:
-    ParentImage|contains:
-      - 'chrome.exe'
-      - 'msedge.exe'
-      - 'firefox.exe'
-
-  condition: selection_image and (selection_commandline or 1 of selection_*)
+  condition: selection_image and selection_commandline
 
 falsepositives:
   - Legitimate browser management tools
@@ -206,26 +202,24 @@ level: critical
 
 ```yaml
 title: Suspicious Named Pipe Creation - Reflective Injection C2
+id: 7d2a9c4e-3f1b-4e8a-b6d5-8a2c1f9e6b02
 description: Detects named pipe creation patterns associated with process injection and C2 communication
 status: experimental
 author: The Hunters Ledger
-date: 2026/01/26
-severity: CRITICAL
+date: '2026-01-26'
 tags:
   - attack.execution
   - attack.t1055.001
-  - attack.command_and_control
-  - malware.arsenal237
-
+  - attack.stealth
+  - attack.privilege-escalation
+  - attack.command-and-control
+  - detection.emerging-threats
+logsource:
+  product: windows
+  category: pipe_created
 detection:
-  selection_event:
-    EventID:
-      - 23  # Pipe created
-      - 24  # Pipe connected
-
   selection_pipe_pattern:
-    PipeName|contains:
-      - '\\.\pipe\'
+    PipeName|contains: '\\.\pipe\'
 
   selection_source_process:
     Image|endswith:
@@ -240,7 +234,7 @@ detection:
       - 'winspool'
       - 'netdde'
 
-  condition: selection_event and selection_pipe_pattern and selection_source_process and not filter_legitimate
+  condition: selection_pipe_pattern and selection_source_process and not filter_legitimate
 
 falsepositives:
   - Legitimate RPC communication
@@ -253,15 +247,26 @@ level: critical
 
 ```yaml
 title: Suspicious Process Injection - Memory Allocation Pattern
-description: Detects process injection through memory allocation, writing, and thread creation sequence
+id: 4e8f2b71-9a3c-4d6e-8b1f-2e7a9c3d5f04
+description: >-
+    Detects process injection through a memory allocation, write, protection-change, and
+    remote-thread-creation API sequence targeting a browser process. Consolidated to a
+    single process_access selection using CallTrace (the original rule mixed a
+    non-Sysmon EventType field alongside API and TargetImage across what would have been
+    two different, incompatible event sources; the CallTrace-based selection below is the
+    coherent, reliably-mappable subset that preserves the same detection intent).
 status: experimental
 author: The Hunters Ledger
-date: 2026/01/26
-severity: CRITICAL
+date: '2026-01-26'
 tags:
   - attack.execution
+  - attack.stealth
+  - attack.privilege-escalation
   - attack.t1055.001
-  - attack.defense_evasion
+
+logsource:
+  product: windows
+  category: process_access
 
 detection:
   selection_target_processes:
@@ -271,22 +276,14 @@ detection:
       - 'msedge.exe'
       - 'firefox.exe'
 
-  selection_suspicious_apis:
-    EventType:
-      - 'CallCreateRemoteThreadApi'
-      - 'CallVirtualAllocExApi'
-      - 'CallWriteProcessMemoryApi'
-      - 'CallVirtualProtectExApi'
-    EventID: 10  # Image loaded
-
   selection_sequence:
-    API|contains|all:
+    CallTrace|contains|all:
       - 'AllocateVirtualMemory'
       - 'WriteVirtualMemory'
       - 'ProtectVirtualMemory'
       - 'CreateThreadEx'
 
-  condition: selection_target_processes and 3 of (selection_suspicious_apis, selection_sequence)
+  condition: selection_target_processes and selection_sequence
 
 falsepositives:
   - Legitimate software using process injection (installers, debuggers)
@@ -298,26 +295,36 @@ level: high
 
 ```yaml
 title: Suspicious Browser Credential Database Access
-description: Detects access to Chrome/Brave/Edge credential databases by non-browser processes
+id: 6c9e1d83-4b7f-4a2e-9c5d-3f8b2e6a1c05
+description: >-
+    Detects access to Chrome/Brave/Edge credential databases by non-browser processes.
+    Restructured the original selection's invalid literal OR: subkey (not valid Sigma
+    syntax) into two named selections combined via the condition string; detection intent
+    is unchanged.
 status: experimental
 author: The Hunters Ledger
-date: 2026/01/26
-severity: CRITICAL
+date: '2026-01-26'
 tags:
-  - attack.credential_access
+  - attack.credential-access
   - attack.t1555.003
+  - detection.emerging-threats
+
+logsource:
+  product: windows
+  category: file_event
 
 detection:
-  selection_browser_db_access:
+  selection_browser_db_generic:
     TargetFilename|contains|all:
       - 'User Data'
       - 'Login Data'
-    OR:
-      - TargetFilename|contains:
-          - 'Chrome\\User Data\\Default\\Cookies'
-          - 'Brave-Browser\\User Data\\Default\\Cookies'
-          - 'Edge\\User Data\\Default\\Cookies'
-          - 'Google\\Chrome\\User Data\\Default\\Web Data'
+
+  selection_browser_db_specific:
+    TargetFilename|contains:
+      - 'Chrome\\User Data\\Default\\Cookies'
+      - 'Brave-Browser\\User Data\\Default\\Cookies'
+      - 'Edge\\User Data\\Default\\Cookies'
+      - 'Google\\Chrome\\User Data\\Default\\Web Data'
 
   selection_process_exclusion:
     Image|endswith:
@@ -329,7 +336,7 @@ detection:
   filter_system_process:
     User|contains: 'SYSTEM'
 
-  condition: selection_browser_db_access and not (selection_process_exclusion or filter_system_process)
+  condition: (selection_browser_db_generic or selection_browser_db_specific) and not (selection_process_exclusion or filter_system_process)
 
 falsepositives:
   - Browser backup/sync tools
@@ -343,24 +350,28 @@ level: high
 
 ```yaml
 title: Suspicious Direct Syscall Usage - EDR Bypass
-description: Detects direct syscall invocation bypassing Windows API monitoring
+id: 8f3a5c92-6d1e-4b7f-a3c9-5d2b8e4f7a06
+description: >-
+    Detects direct Zw* syscall invocation bypassing Windows API monitoring, targeting a
+    browser process. Consolidated onto process_access/CallTrace (the original rule's
+    EventID list spanned two distinct Sysmon categories — CreateRemoteThread and
+    ProcessAccess — with a non-Sysmon-native API field; process_access is the coherent,
+    reliably-mappable subset that preserves the same detection intent).
 status: experimental
 author: The Hunters Ledger
-date: 2026/01/26
-severity: CRITICAL
+date: '2026-01-26'
 tags:
-  - attack.defense_evasion
+  - attack.stealth
+  - attack.discovery
   - attack.t1622
-  - malware.arsenal237
+
+logsource:
+  product: windows
+  category: process_access
 
 detection:
-  selection_syscall_pattern:
-    EventID:
-      - 8   # CreateRemoteThread
-      - 10  # ProcessAccess (syscall-based)
-
   selection_suspicious_syscalls:
-    API|contains|any:
+    CallTrace|contains:
       - 'ZwAllocateVirtualMemory'
       - 'ZwWriteVirtualMemory'
       - 'ZwCreateThreadEx'

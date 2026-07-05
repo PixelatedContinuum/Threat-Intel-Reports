@@ -128,7 +128,7 @@ rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {
 ```yaml
 title: Claude Code Permission Allowlist Modified with OpenClaw Installer Strings
 id: 54d80e73-2b2d-4932-a97b-d431db41c501
-status: test
+status: experimental
 description: >-
   Detects creation or modification of a Claude Code settings.local.json file containing
   OpenClaw-specific permission allowlist strings — evidence of attacker-customized AI-agent
@@ -138,18 +138,18 @@ references:
     - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/
     - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
 author: The Hunters Ledger
-date: 2026/05/27
+date: '2026-05-27'
 tags:
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
 detection:
     selection_path:
         TargetFilename|contains: '/.claude/settings.local.json'
-    selection_content:
-        TargetFilename|contains:
-            - 'openclaw'
     condition: selection_path
 falsepositives:
     - >-
@@ -174,7 +174,7 @@ level: high
 ```yaml
 title: DNS Resolution of OpenClaw AI-Agent Framework Distribution Domains
 id: 962739fd-fd90-4172-9147-d841800c2517
-status: test
+status: experimental
 description: >-
   Detects DNS resolution requests for openclaw.ai, docs.openclaw.ai, or lightmake.site —
   the OpenClaw AI-agent framework distribution, documentation, and adjacent-infrastructure
@@ -185,10 +185,14 @@ references:
     - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/
     - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
 author: The Hunters Ledger
-date: 2026/05/27
+date: '2026-05-27'
 tags:
-    - attack.defense-evasion
-    - attack.resource-development
+    - attack.stealth
+    - attack.defense-impairment
+    - attack.execution
+    - attack.t1685
+    - attack.t1059.004
+    - detection.emerging-threats
 logsource:
     category: dns
 detection:
@@ -215,9 +219,9 @@ level: medium
 **Deployment:** Linux and macOS endpoints with process-creation telemetry (auditd, Sysmon for Linux, ESA, EDR). Priority target: CI/CD agents, build servers, developer workstations.
 
 ```yaml
-title: OpenClaw AI-Agent Framework curl-pipe-bash Installer Execution
+title: OpenClaw AI-Agent Framework Curl-Pipe-Bash Installer Execution
 id: e02ddbf4-0a77-4c13-85ac-cd1ed9d8e66d
-status: test
+status: experimental
 description: >-
   Detects execution of the OpenClaw AI-agent framework curl-pipe-bash installer pipeline.
   The command-line pattern (curl fetching from openclaw.ai piped to bash) is the primary
@@ -228,10 +232,14 @@ references:
     - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/
     - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
 author: The Hunters Ledger
-date: 2026/05/27
+date: '2026-05-27'
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.defense-impairment
+    - attack.t1059.004
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -262,7 +270,7 @@ level: high
 ```yaml
 title: OpenClaw AI-Agent Gateway Service Started
 id: f6a6901a-73dc-49c9-8c05-5ca64aa89d23
-status: test
+status: experimental
 description: >-
   Detects invocation of the OpenClaw local-gateway service via the 'openclaw gateway --port'
   command pattern. The OpenClaw gateway functions as a local control-plane proxy between
@@ -273,10 +281,14 @@ references:
     - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/
     - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
 author: The Hunters Ledger
-date: 2026/05/27
+date: '2026-05-27'
 tags:
     - attack.command-and-control
-    - attack.defense-evasion
+    - attack.t1090.001
+    - attack.stealth
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -306,9 +318,9 @@ level: medium
 **Deployment:** Web proxy logs, DNS-based npm monitoring. Higher value on server-class and CI/CD agent hosts.
 
 ```yaml
-title: npm Registry Fetch for OpenClaw Package
+title: NPM Registry Fetch for OpenClaw Package
 id: d3a240e8-79a9-44d7-8b51-199389276d28
-status: test
+status: experimental
 description: >-
   Detects HTTP requests to the npm registry (registry.npmjs.org) for the openclaw package
   name — the alternative installation path for the OpenClaw AI-agent framework documented
@@ -319,10 +331,14 @@ references:
     - https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/
     - https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
 author: The Hunters Ledger
-date: 2026/05/27
+date: '2026-05-27'
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.t1059.007
+    - attack.stealth
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     category: proxy
 detection:

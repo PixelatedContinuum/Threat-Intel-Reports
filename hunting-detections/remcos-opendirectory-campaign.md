@@ -293,18 +293,15 @@ rule Remcos_Surveillance_Module {
 
 ```yaml
 title: Remcos RAT UAC Bypass via EnableLUA Registry Modification
-id: remcos-uac-bypass-enablelua-001
-status: stable
+id: 482a813a-346e-450c-8ff7-4b449a26ad7d
+status: test
 description: Detects UAC bypass by setting EnableLUA registry value to 0, commonly used by Remcos RAT
-references:
-    - https://attack.mitre.org/techniques/T1548/002/
-    - Internal Analysis OpenDirectory-203.159.90.147-Remcos
+date: '2026-02-04'
 author: The Hunters Ledger
-date: 2026/02/04
 tags:
-    - attack.privilege_escalation
-    - attack.defense_evasion
+    - attack.privilege-escalation
     - attack.t1548.002
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -335,18 +332,16 @@ level: critical
 
 ```yaml
 title: Remcos RAT Winlogon Userinit Persistence via Registry Modification
-id: remcos-userinit-hijack-001
-status: stable
+id: 208b4736-f00a-44bd-b71e-1230ece13876
+status: test
 description: Detects Userinit registry value modification for persistence, rare technique used by Remcos RAT
-references:
-    - https://attack.mitre.org/techniques/T1547/004/
-    - Internal Analysis OpenDirectory-203.159.90.147-Remcos
+date: '2026-02-04'
 author: The Hunters Ledger
-date: 2026/02/04
 tags:
     - attack.persistence
-    - attack.privilege_escalation
+    - attack.privilege-escalation
     - attack.t1547.004
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -357,7 +352,7 @@ detection:
         Details: 'C:\WINDOWS\system32\userinit.exe,'
     condition: selection and not filter_legitimate
 falsepositives:
-    - None expected (no legitimate modifications)
+    - Unlikely (no legitimate process modifies this value outside OS installation)
 level: critical
 ```
 
@@ -366,18 +361,16 @@ level: critical
 ### Sigma Rule 3: Remcos Mutex Detection
 
 ```yaml
-title: Remcos RAT Mutex Detection (Remcos_Mutex_Inj)
-id: remcos-mutex-detection-001
-status: stable
-description: Detects creation of Remcos RAT unique mutex (definitive indicator)
-references:
-    - https://attack.mitre.org/software/S0332/
-    - Internal Analysis OpenDirectory-203.159.90.147-Remcos
+title: Remcos RAT Mutex Detection (Remcos Mutex Inj)
+id: 412f0f16-665a-4623-9e3c-92d98012f77b
+status: test
+description: Detects execution of Remcos RAT from its characteristic AppData install path, used alongside the mutex Remcos_Mutex_Inj as a definitive indicator
+date: '2026-02-04'
 author: The Hunters Ledger
-date: 2026/02/04
 tags:
-    - attack.execution
-    - attack.defense_evasion
+    - attack.stealth
+    - attack.t1036
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -386,7 +379,7 @@ detection:
         Image|contains: '\AppData\Roaming\remcos\'
     condition: selection
 falsepositives:
-    - None expected
+    - Unlikely
 level: critical
 ```
 
@@ -396,18 +389,16 @@ level: critical
 
 ```yaml
 title: Remcos RAT Process Injection from AppData
-id: remcos-process-injection-001
+id: 320eaf61-97be-4fc8-bee0-cab1d45aba05
 status: experimental
 description: Detects WriteProcessMemory API calls from AppData executables targeting system processes
-references:
-    - https://attack.mitre.org/techniques/T1055/
-    - Internal Analysis OpenDirectory-203.159.90.147-Remcos
+date: '2026-02-04'
 author: The Hunters Ledger
-date: 2026/02/04
 tags:
-    - attack.defense_evasion
-    - attack.privilege_escalation
+    - attack.stealth
+    - attack.privilege-escalation
     - attack.t1055
+    - detection.emerging-threats
 logsource:
     category: process_access
     product: windows
@@ -438,17 +429,15 @@ level: high
 
 ```yaml
 title: Remcos RAT File Melting Behavior (install.bat)
-id: remcos-file-melting-001
-status: stable
+id: 62f7d36c-2d5d-4f21-a6c9-71589b95ddb0
+status: test
 description: Detects Remcos file melting technique using PING delay, DEL, and start commands
-references:
-    - https://attack.mitre.org/techniques/T1070/004/
-    - Internal Analysis OpenDirectory-203.159.90.147-Remcos
+date: '2026-02-04'
 author: The Hunters Ledger
-date: 2026/02/04
 tags:
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1070.004
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -473,18 +462,16 @@ level: high
 
 ```yaml
 title: Remcos RAT Browser Credential Theft Access
-id: remcos-credential-theft-001
-status: stable
+id: 27e252f6-c5d9-4545-ab96-b180ab116a88
+status: test
 description: Detects access to Chrome/Firefox credential databases by non-browser processes
-references:
-    - https://attack.mitre.org/techniques/T1555/003/
-    - Internal Analysis OpenDirectory-203.159.90.147-Remcos
+date: '2026-02-04'
 author: The Hunters Ledger
-date: 2026/02/04
 tags:
-    - attack.credential_access
+    - attack.credential-access
     - attack.t1555.003
     - attack.t1539
+    - detection.emerging-threats
 logsource:
     category: file_access
     product: windows
@@ -517,16 +504,15 @@ level: high
 
 ```yaml
 title: Remcos RAT C2 Communication to 203.159.90.147
-id: remcos-c2-communication-001
-status: stable
+id: 658a1095-258d-42e4-855d-4e52d9857dcf
+status: test
 description: Detects outbound network connections to Remcos C2 server 203.159.90.147
-references:
-    - Internal Analysis OpenDirectory-203.159.90.147-Remcos
+date: '2026-02-04'
 author: The Hunters Ledger
-date: 2026/02/04
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -536,7 +522,7 @@ detection:
         Initiated: 'true'
     condition: selection
 falsepositives:
-    - None expected for this specific IP during active campaign
+    - Unlikely for this specific IP during active campaign
 level: critical
 ```
 
@@ -546,18 +532,16 @@ level: critical
 
 ```yaml
 title: Remcos RAT Execution via Winlogon Userinit Hijack
-id: remcos-winlogon-child-001
-status: stable
+id: 78fef00f-cd92-4dcd-8413-c3ed49b56aab
+status: test
 description: Detects suspicious child processes of winlogon.exe from AppData
-references:
-    - https://attack.mitre.org/techniques/T1547/004/
-    - Internal Analysis OpenDirectory-203.159.90.147-Remcos
+date: '2026-02-04'
 author: The Hunters Ledger
-date: 2026/02/04
 tags:
     - attack.persistence
-    - attack.privilege_escalation
+    - attack.privilege-escalation
     - attack.t1547.004
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -572,7 +556,7 @@ detection:
             - '\dwm.exe'
     condition: selection and not filter_legitimate
 falsepositives:
-    - None expected
+    - Unlikely
 level: critical
 ```
 

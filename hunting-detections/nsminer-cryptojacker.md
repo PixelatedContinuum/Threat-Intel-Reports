@@ -110,7 +110,7 @@ rule NsMiner_Persistence_Directory {
 
 ```yaml
 title: NsMiner HTTP C2 Beacon to hrtests.ru
-id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+id: 53f6af86-2da9-495a-a3d2-f4560b1ae498
 status: experimental
 description: Detects HTTP beaconing to the NsMiner C2 domain hrtests.ru
 author: The Hunters Ledger
@@ -126,15 +126,16 @@ falsepositives:
     - Unlikely, domain is malicious infrastructure
 level: high
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.001
+    - detection.emerging-threats
 ```
 
 ### Rule 2: NsMiner Persistence Directory Creation
 
 ```yaml
 title: NsMiner Persistence Directory Creation
-id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+id: 4ecdd6e1-c381-4c53-a92f-a1e688accdfb
 status: experimental
 description: Detects creation of the NsMiner persistence directory in AppData\Roaming
 author: The Hunters Ledger
@@ -151,14 +152,16 @@ falsepositives:
 level: high
 tags:
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1547.001
+    - detection.emerging-threats
 ```
 
 ### Rule 3: Suspicious FTP Activity from Non-FTP Application
 
 ```yaml
 title: Suspicious FTP Connection from Non-Standard Application
-id: c3d4e5f6-a7b8-9012-cdef-123456789012
+id: ef8bac38-0045-4f03-abe3-dcd7c1389be7
 status: experimental
 description: Detects FTP connections from applications not typically associated with FTP
 author: The Hunters Ledger
@@ -180,8 +183,9 @@ falsepositives:
     - Legitimate applications using FTP
 level: medium
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.002
+    - detection.emerging-threats
 ```
 
 ---

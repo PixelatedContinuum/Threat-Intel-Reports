@@ -142,23 +142,17 @@ rule Arsenal237_Rust_Compiled
 
 ```yaml
 title: Arsenal-237 dec_fixed.exe Decryption Tool Execution
-id: arsenal-237-dec-fixed-exe-execution
-status: experimental
+id: f84722fb-218a-40e4-a976-18d6db0cec9b
+status: test
 description: Detects execution of Arsenal-237 dec_fixed.exe decryption tool with --folder-a parameter
 author: The Hunters Ledger
 date: 2026-01-26
-modified: 2026-01-26
-tags:
-  - ransomware
-  - Arsenal-237
-  - recovery_tool
-  - decryption
 logsource:
   product: windows
-  service: sysmon
+  category: process_creation
 detection:
   selection_process:
-    Image|endswith: 'dec_fixed.exe'
+    Image|endswith: '\dec_fixed.exe'
     CommandLine|contains: '--folder-a'
   selection_hash:
     Hashes|contains:
@@ -170,28 +164,28 @@ falsepositives:
   - Legitimate victim decryption operations (low probability)
   - Manual testing of recovered decryptor samples
 level: medium
-severity: low
-comment: This is a recovery tool, not an active threat. Detection prioritizes victim identification for post-incident response.
+tags:
+  - attack.execution
+  - attack.t1204.002
+  - detection.emerging-threats
 ```
 
 ### Rule 2: Directory Traversal and Enumeration Pattern
 
 ```yaml
 title: Arsenal-237 A-Z Directory Enumeration Pattern
-id: arsenal-237-directory-traversal-pattern
+id: ac4f5325-2109-4ebd-aba2-3c4bf70cb190
 status: experimental
-description: Detects Arsenal-237 characteristic A-Z subdirectory enumeration for encrypted file discovery
+description: Detects Arsenal-237 characteristic A-Z subdirectory enumeration for encrypted file discovery. Ransomware-specific directory organization pattern, but low false positive threshold given legitimate uses.
 author: The Hunters Ledger
 date: 2026-01-26
-modified: 2026-01-26
 tags:
-  - ransomware
-  - Arsenal-237
-  - discovery
-  - directory_traversal
+  - attack.discovery
+  - attack.t1083
+  - detection.emerging-threats
 logsource:
   product: windows
-  service: sysmon
+  category: file_event
 detection:
   selection_files:
     # Process accessing A-Z subdirectories in sequence
@@ -222,7 +216,6 @@ detection:
       - ':\X\'
       - ':\Y\'
       - ':\Z\'
-    EventType: CreateFile
   filter_system:
     Image|contains:
       - 'System32'
@@ -233,67 +226,56 @@ falsepositives:
   - Backup software using A-Z organization
   - Development tools with systematic directory access
 level: medium
-severity: low
-comment: Ransomware-specific directory organization pattern, but low false positive threshold given legitimate uses.
 ```
 
 ### Rule 3: Encrypted File Recovery Operations
 
 ```yaml
 title: Arsenal-237 Encrypted File Recovery (File Deletion Pattern)
-id: arsenal-237-encrypted-file-recovery
+id: 1a079f87-721d-4bb4-a4c7-c43e5939c1ab
 status: experimental
-description: Detects Arsenal-237 encrypted file recovery pattern - readme.txt deletion after file operations
+description: Detects Arsenal-237 encrypted file recovery pattern - readme.txt deletion after file operations. Low confidence indicator due to generic nature of readme.txt deletion; use in conjunction with other indicators. Correlation window (originally 5 minutes) is not expressible in base Sigma detection syntax — deploy as a Sigma correlation rule or SIEM-native lookback if a strict time window is required.
 author: The Hunters Ledger
 date: 2026-01-26
-modified: 2026-01-26
 tags:
-  - ransomware
-  - Arsenal-237
-  - recovery_tool
-  - ransomware_cleanup
+  - attack.stealth
+  - attack.t1070.004
+  - detection.emerging-threats
 logsource:
   product: windows
-  service: sysmon
+  category: file_delete
 detection:
   selection_cleanup:
-    EventType: FileDelete
     TargetFilename|endswith: 'readme.txt'
   selection_context:
-    # readme.txt deletion following creation of files in same directory
     Image|endswith:
       - 'dec_fixed.exe'
       - 'powershell.exe'
       - 'cmd.exe'
-  timespan: 5m
   condition: selection_cleanup and selection_context
 falsepositives:
   - Manual cleanup of ransom notes by IT teams
   - Cleanup scripts deleting readme.txt files (common filename)
   - Standard application installations deleting readme files
 level: low
-severity: low
-comment: Low confidence indicator due to generic nature of readme.txt deletion. Use in conjunction with other indicators.
 ```
 
 ### Rule 4: ChaCha20-Poly1305 Cryptographic Operations
 
 ```yaml
 title: Arsenal-237 ChaCha20-Poly1305 Cryptographic Operations
-id: arsenal-237-chacha20-operations
+id: fe86898b-5f79-4cee-b035-3cf967790ebb
 status: experimental
-description: Detects ChaCha20-Poly1305 AEAD cryptographic operations consistent with Arsenal-237 tools
+description: Detects ChaCha20-Poly1305 AEAD cryptographic operations consistent with Arsenal-237 tools. Generic cryptographic indicator with high false positive rate; most valuable in incident response context.
 author: The Hunters Ledger
 date: 2026-01-26
-modified: 2026-01-26
 tags:
-  - ransomware
-  - Arsenal-237
-  - cryptography
-  - decryption
+  - attack.impact
+  - attack.t1486
+  - detection.emerging-threats
 logsource:
   product: windows
-  service: sysmon
+  category: image_load
 detection:
   selection_modules:
     # Rust libraries for ChaCha20-Poly1305 implementation
@@ -302,7 +284,7 @@ detection:
       - 'poly1305'
       - 'aead'
   selection_process:
-    ParentImage|endswith:
+    Image|endswith:
       - 'cmd.exe'
       - 'powershell.exe'
       - 'explorer.exe'
@@ -316,8 +298,6 @@ falsepositives:
   - Development environments using cryptographic libraries
   - Security tools performing encryption/decryption
 level: low
-severity: low
-comment: Generic cryptographic indicator with high false positive rate. Most valuable in incident response context.
 ```
 
 ---

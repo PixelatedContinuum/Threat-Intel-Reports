@@ -10,164 +10,204 @@ hide: true
 ---
 
 ## Process creation for masquerading Sogou NSIS installer
-```
-title: SogouStealer masquerading NSIS installer execution
-id: 7e3c7c1c-7b4a-4f5e-9c0a-ss-nsis-sogou
+```yaml
+title: SogouStealer Masquerading NSIS Installer Execution
+id: a078683b-110a-4973-86bb-1666dba668bf
 status: stable
 description: Detects execution of suspected NSIS-based fake Sogou installers with cracked-build markers
-references: []
+references:
+    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou/
+author: The Hunters Ledger
+date: '2025-11-21'
 tags:
-  - attack.initial_access
-  - attack.t1036
+    - attack.stealth
+    - attack.t1036
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: process_creation
+    product: windows
+    category: process_creation
 detection:
-  selection_image:
-    Image|endswith:
-      - '\installer.exe'
-      - '\setup.exe'
-      - '\install.exe'
-  selection_cmdline:
-    CommandLine|contains:
-      - 'NSIS'
-      - 'Nullsoft'
-      - 'Sogou'
-      - '拼音'
-      - '吾爱破解'
-      - 'v15.1.0.1570'
-  condition: selection_image and selection_cmdline
+    selection_image:
+        Image|endswith:
+            - '\installer.exe'
+            - '\setup.exe'
+            - '\install.exe'
+    selection_cmdline:
+        CommandLine|contains:
+            - 'NSIS'
+            - 'Nullsoft'
+            - 'Sogou'
+            - '拼音'
+            - '吾爱破解'
+            - 'v15.1.0.1570'
+    condition: selection_image and selection_cmdline
+falsepositives:
+    - Legitimate NSIS-based installers whose command line coincidentally references these strings
 level: high
 ```
 
 ## Persistence via Run keys and shortcut manipulation
-```
-title: SogouStealer persistence via Run keys and LNK modification
-id: 1f2b5f1a-1d0b-4c84-8e2b-ss-persist-run-lnk
+```yaml
+title: SogouStealer Persistence via Run Keys and LNK Modification
+id: 190b57f6-a8c3-4f45-a39d-ed7340d66b9a
 status: stable
 description: Detects registry Run key entries and .lnk modifications pointing to %AppData% or %Temp%
+references:
+    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou/
+author: The Hunters Ledger
+date: '2025-11-21'
 tags:
-  - attack.persistence
-  - attack.t1547.001
-  - attack.t1547.009
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1547.001
+    - attack.t1547.009
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: registry_set
+    product: windows
+    category: registry_set
 detection:
-  selection_run:
-    TargetObject|contains:
-      - '\Software\Microsoft\Windows\CurrentVersion\Run'
-      - '\Software\Microsoft\Windows\CurrentVersion\RunOnce'
-    Details|contains:
-      - '\AppData\'
-      - '\Temp\'
-      - '.lnk'
-  condition: selection_run
+    selection_run:
+        TargetObject|contains:
+            - '\Software\Microsoft\Windows\CurrentVersion\Run'
+            - '\Software\Microsoft\Windows\CurrentVersion\RunOnce'
+        Details|contains:
+            - '\AppData\'
+            - '\Temp\'
+            - '.lnk'
+    condition: selection_run
+falsepositives:
+    - Legitimate installers that register Run key entries pointing to AppData or Temp during setup
 level: high
-fields:
-  - TargetObject
-  - Details
 ```
 
 ## File drop of core artifacts
-```
-title: SogouStealer artifact drop and staging
-id: 9d9e1a86-5c6d-4b82-9b89-ss-file-artifacts
+```yaml
+title: SogouStealer Artifact Drop and Staging
+id: 1d3185d1-08ce-4956-91bd-f4ce70d10a46
 status: stable
 description: Detects creation of known components used by the malware ecosystem
+references:
+    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou/
+author: The Hunters Ledger
+date: '2025-11-21'
 tags:
-  - attack.execution
-  - attack.defense_evasion
-  - attack.persistence
+    - attack.execution
+    - attack.stealth
+    - attack.persistence
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: file_create
+    product: windows
+    category: file_create
 detection:
-  selection_names:
-    TargetFilename|endswith:
-      - '\beacon_sdk.dll'
-      - '\SGDownload.exe'
-      - '\SGCurlHelper.dll'
-      - '\userNetSchedule.exe'
-      - '\UserExportDll.dll'
-      - '\UrlSignatureV.dat'
-      - '\pandorabox.cupf'
-      - '\PersonalCenter.cupf'
-  condition: selection_names
+    selection_names:
+        TargetFilename|endswith:
+            - '\beacon_sdk.dll'
+            - '\SGDownload.exe'
+            - '\SGCurlHelper.dll'
+            - '\userNetSchedule.exe'
+            - '\UserExportDll.dll'
+            - '\UrlSignatureV.dat'
+            - '\pandorabox.cupf'
+            - '\PersonalCenter.cupf'
+    condition: selection_names
+falsepositives:
+    - Unlikely; these filenames are specific to this malware ecosystem
 level: high
 ```
 
 ## Privilege escalation via access token manipulation (Sysmon)
-```
-title: Potential access token manipulation by suspicious installer
-id: 0c7b42ef-0c62-4a36-9e33-ss-token-manipulation
+```yaml
+title: Potential Access Token Manipulation by Suspicious Installer
+id: 11093bc3-b03a-481e-94fe-d1fa73329ebe
 status: experimental
 description: Flags sensitive privilege assignments indicative of token manipulation
+references:
+    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou/
+author: The Hunters Ledger
+date: '2025-11-21'
 tags:
-  - attack.privilege_escalation
-  - attack.t1134
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1134
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: process_access
+    product: windows
+    category: process_access
 detection:
-  selection:
-    GrantedAccess|contains:
-      - '0x1FFFFF'
-      - '0x00100000'
-    CallTrace|contains:
-      - 'OpenProcessToken'
-      - 'AdjustTokenPrivileges'
-  condition: selection
+    selection:
+        GrantedAccess|contains:
+            - '0x1FFFFF'
+            - '0x00100000'
+        CallTrace|contains:
+            - 'OpenProcessToken'
+            - 'AdjustTokenPrivileges'
+    condition: selection
+falsepositives:
+    - Legitimate security or administrative tooling that queries or adjusts process token privileges
 level: medium
 ```
 
 ## DNS queries to disposable C2 domains
-```
-title: DNS queries for SogouStealer disposable domains
-id: 8f4b2c6e-0c9a-4f5a-9a55-ss-dns-iocs
+```yaml
+title: DNS Queries for SogouStealer Disposable Domains
+id: cdfe5ba6-a9b6-40ab-8471-03ff533616b4
 status: stable
 description: Detects DNS lookups for known C2 domains decoded from config
+references:
+    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou/
+author: The Hunters Ledger
+date: '2025-11-21'
 tags:
-  - attack.command_and_control
-  - attack.t1071.001
+    - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: dns_query
+    product: windows
+    category: dns_query
 detection:
-  selection_domains:
-    QueryName|endswith:
-      - '6.ar'
-      - 'j.im'
-      - '5bng.ar'
-      - 'b.tk'
-      - 'k.ct'
-      - 'q.ar'
-      - 'rlh.cq'
-      - 's0.ndf'
-      - 'vpl.gu'
-      - 'x.pg'
-  condition: selection_domains
+    selection_domains:
+        QueryName|endswith:
+            - '6.ar'
+            - 'j.im'
+            - '5bng.ar'
+            - 'b.tk'
+            - 'k.ct'
+            - 'q.ar'
+            - 'rlh.cq'
+            - 's0.ndf'
+            - 'vpl.gu'
+            - 'x.pg'
+    condition: selection_domains
+falsepositives:
+    - Unlikely; these are campaign-specific disposable C2 domains
 level: high
 ```
 
 ## Network connection to known C2 IPs (Sysmon Event ID 3)
-```
-title: Network connections to known C2 IPs (Argentina Donweb & AWS Ashburn)
-id: 2b0ecf3e-8a49-4d44-9fd9-ss-net-c2-ips
+```yaml
+title: Network Connections to Known C2 IPs (Argentina Donweb and AWS Ashburn)
+id: 671cfa56-60e3-4b53-a849-f68ab5a39969
 status: stable
 description: Detects connections to IPs associated with disposable infrastructure used by the malware
+references:
+    - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou/
+author: The Hunters Ledger
+date: '2025-11-21'
 tags:
-  - attack.command_and_control
-  - attack.t1071.001
+    - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
-  product: windows
-  category: network_connection
+    product: windows
+    category: network_connection
 detection:
-  selection_ips:
-    DestinationIp:
-      - '149.50.136.243'
-      - '52.20.84.62'
-  condition: selection_ips
+    selection_ips:
+        DestinationIp:
+            - '149.50.136.243'
+            - '52.20.84.62'
+    condition: selection_ips
+falsepositives:
+    - Unlikely; these are campaign-specific C2 IPs, though shared/rotated hosting infrastructure could introduce noise over time
 level: high
 ```
 

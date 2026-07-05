@@ -197,7 +197,7 @@ rule MALW_ShinyHunters_DLS_HTML
 
 ```yaml
 title: ShinyHunters DLS — DNS Query for Actor-Controlled Domains
-id: a1b2c3d4-e5f6-4890-abcd-ef1234567890
+id: 3e5782b5-4523-4ca0-a21d-a1217b36ad81
 status: experimental
 description: Detects DNS queries from enterprise endpoints to ShinyHunters-controlled clearnet domains (shinyhunte.rs, pro-spero.ru). A query originating from a managed endpoint indicates direct contact with extortion actor infrastructure — either a victim system retrieving ransom materials or a compromised host beacon-checking actor domains.
 references:
@@ -234,7 +234,7 @@ level: high
 
 ```yaml
 title: ShinyHunters DLS — Outbound Connection to DLS IP Infrastructure
-id: b2c3d4e5-f6a7-4901-bcde-f12345678901
+id: e123fbde-1431-4f36-bc40-7c7bca18d950
 status: experimental
 description: Detects outbound network connections from managed endpoints to ShinyHunters Data Leak Site IP infrastructure. 91.215.85.22 hosts the clearnet DLS directory; 91.215.43.200 hosts the shinyhunte.rs actor-identity page. A direct connection from a managed endpoint to either IP warrants immediate investigation as a possible exfiltration indicator or ransom-material retrieval.
 references:
@@ -270,7 +270,7 @@ level: high
 
 ```yaml
 title: ShinyHunters DLS — Web Proxy Hit on DLS URL Paths
-id: c3d4e5f6-a7b8-4012-cdef-123456789012
+id: f9426448-3e1b-402e-8a1a-996b06c73be0
 status: experimental
 description: Detects HTTP proxy requests to ShinyHunters DLS URL paths (/pay_or_leak/ directory or INFORMATION.txt ransom note). These paths are exclusive to the ShinyHunters extortion infrastructure at 91.215.85.22 and shinyhunte.rs. A hit from an internal host indicates retrieval of ransom materials following extortion contact or active exfiltration confirmation by a threat actor using a compromised endpoint.
 references:
@@ -309,7 +309,7 @@ level: high
 
 ```yaml
 title: ShinyHunters DLS — Salesforce Bulk Export OAuth App Authorization
-id: d4e5f6a7-b8c9-4123-defa-234567890123
+id: 8bee360b-081a-4cf0-8448-07d7eb18d84e
 status: experimental
 description: Detects Salesforce OAuth connected application authorizations involving DataLoader or DataExporter family app names. The ShinyHunters 2026 campaign used vishing to convince helpdesk to authorize Salesforce bulk-export OAuth apps, enabling mass CRM data exfiltration across 28+ confirmed victims. This rule targets Salesforce Shield Event Monitoring logs (ConnectedApp event type). Note — the Salesforce native DataLoader application is filtered; alerts will fire on third-party or unrecognized DataLoader variants.
 references:
@@ -352,7 +352,7 @@ level: medium
 
 ```yaml
 title: ShinyHunters DLS — Okta MFA Factor Deactivation or Unexpected Enrollment
-id: e5f6a7b8-c9d0-4234-efab-345678901234
+id: ef025d6d-d54d-4db3-87b8-a255895ebafd
 status: experimental
 description: Detects Okta MFA factor deactivation or new factor enrollment events that match the ShinyHunters vishing TTP. Threat actors impersonate employees to convince IT support to reset MFA (user.mfa.factor.deactivate), then immediately enroll an actor-controlled authenticator device (user.mfa.factor.activate). For maximum fidelity, correlate these two event types by target user ID within a 30-minute window in your SIEM — this rule fires on either event individually to ensure coverage.
 references:
@@ -390,7 +390,7 @@ level: medium
 
 ```yaml
 title: ShinyHunters DLS — PROSPERO Bulletproof Hosting CIDR Range Access
-id: f6a7b8c9-d0e1-4345-fabc-456789012345
+id: 5a0f622b-3b12-4811-a857-0eaed858017c
 status: experimental
 description: Detects network connections to PROSPERO AS200593 IP prefixes associated with ShinyHunters DLS infrastructure and co-hosted extortion campaigns. These CIDR blocks are bulletproof hosting ranges and have been observed hosting multiple threat actor operations beyond ShinyHunters. This is a lower-fidelity, context-dependent indicator — enrich with destination reputation and correlate with other ShinyHunters indicators before actioning.
 references:

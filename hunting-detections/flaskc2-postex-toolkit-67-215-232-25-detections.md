@@ -211,7 +211,7 @@ rule Webshell_Ghost_Aatrox_ASP {
 ```yaml
 title: MSSQL CLR Backdoor Execution via sqlservr.exe Child cmd.exe
 id: 124c3140-63a5-4f3c-9700-c3893edd971b
-status: test
+status: experimental
 description: >-
   Detects cmd.exe spawned as a child of sqlservr.exe, indicating execution of a
   SQL Server CLR stored procedure that runs shell commands. This is the primary
@@ -220,14 +220,14 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
     - https://github.com/evi1ox/MSSQL_BackDoor
-    - https://attack.mitre.org/techniques/T1505/001/
 author: The Hunters Ledger
-date: 2026-06-12
+date: '2026-06-12'
 tags:
     - attack.persistence
     - attack.t1505.001
     - attack.execution
     - attack.t1059.003
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -256,7 +256,7 @@ level: high
 ```yaml
 title: MSSQL sqlservr.exe Initiating Outbound TCP Connection to External Host
 id: d04749cf-8423-4bbb-9fdc-cc5035787772
-status: test
+status: experimental
 description: >-
   Detects SQL Server process (sqlservr.exe) initiating outbound TCP connections
   to external hosts. In the FlaskC2-PostEx-Toolkit campaign, cmd_exec.dll opens
@@ -265,14 +265,14 @@ description: >-
   baselined and filtered.
 references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
-    - https://attack.mitre.org/techniques/T1505/001/
 author: The Hunters Ledger
-date: 2026-06-12
+date: '2026-06-12'
 tags:
     - attack.persistence
     - attack.t1505.001
     - attack.command-and-control
     - attack.t1095
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -324,7 +324,7 @@ level: high
 ```yaml
 title: MSSQL CLR Backdoor Installation via CREATE ASSEMBLY and Reverse Shell Procedure
 id: 68e96847-afed-4fbd-843f-952e22e89f97
-status: test
+status: experimental
 description: >-
   Detects SQL Server CLR backdoor installation sequence: enabling CLR execution,
   creating an assembly from binary, and registering a stored procedure via
@@ -334,20 +334,22 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
     - https://www.netspi.com/blog/technical/network-penetration-testing/attacking-sql-server-clr-assemblies/
-    - https://attack.mitre.org/techniques/T1505/001/
 author: The Hunters Ledger
-date: 2026-06-12
+date: '2026-06-12'
 tags:
     - attack.persistence
     - attack.t1505.001
+    - detection.emerging-threats
 logsource:
-    category: application
-    product: sql_server
+    product: windows
+    service: application
 detection:
     selection_clr:
+        Provider_Name|contains: 'MSSQL'
         EventID: 15457
         Message|contains: "clr enabled"
     selection_assembly:
+        Provider_Name|contains: 'MSSQL'
         Message|contains:
             - 'CREATE ASSEMBLY'
             - 'EXTERNAL NAME'
@@ -373,7 +375,7 @@ level: high
 ```yaml
 title: IIS Webshell Execution via w3wp.exe Spawning Shell Process
 id: bb2d9a6a-be5b-47e2-9902-ebbdc4831aa6
-status: test
+status: experimental
 description: >-
   Detects IIS worker process (w3wp.exe) spawning cmd.exe or wscript.exe, which
   indicates webshell-based command execution. In the FlaskC2-PostEx-Toolkit
@@ -382,14 +384,14 @@ description: >-
   spawn shell processes when executing operator commands.
 references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
-    - https://attack.mitre.org/techniques/T1505/003/
 author: The Hunters Ledger
-date: 2026-06-12
+date: '2026-06-12'
 tags:
     - attack.persistence
     - attack.t1505.003
     - attack.execution
     - attack.t1059.003
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -422,7 +424,7 @@ level: high
 ```yaml
 title: Ghost Webshell Aatrox Eval Gadget Parameter in IIS Request
 id: f2509a7c-9505-4b23-a2b4-b7619999f327
-status: test
+status: experimental
 description: >-
   Detects the Aatrox eval gadget parameter in IIS web requests, indicating
   interaction with the Ghost xiao-zu ASP webshell (miss.asp) as staged in the
@@ -430,14 +432,14 @@ description: >-
   VBScript via Execute Session("Aatrox") when the Aatrox parameter is present.
 references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
-    - https://attack.mitre.org/techniques/T1505/003/
 author: The Hunters Ledger
-date: 2026-06-12
+date: '2026-06-12'
 tags:
     - attack.persistence
     - attack.t1505.003
-    - attack.defense-evasion
+    - attack.stealth
     - attack.t1027.010
+    - detection.emerging-threats
 logsource:
     category: webserver
     product: iis
@@ -468,7 +470,7 @@ level: medium
 ```yaml
 title: FlaskC2-PostEx Native Tool Execution by Imphash
 id: 617292af-db3a-48e3-b18f-69ed31aef19e
-status: test
+status: experimental
 description: >-
   Detects execution of native post-exploitation tools from the
   FlaskC2-PostEx-Toolkit-67.215.232.25 campaign based on import-table hashes
@@ -478,14 +480,14 @@ description: >-
   survives file renaming.
 references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
-    - https://attack.mitre.org/techniques/T1134/001/
-    - https://attack.mitre.org/techniques/T1068/
 author: The Hunters Ledger
-date: 2026-06-12
+date: '2026-06-12'
 tags:
     - attack.privilege-escalation
+    - attack.stealth
     - attack.t1134.001
     - attack.t1068
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -500,7 +502,7 @@ detection:
             - '818cfde69b098e3348e8c7125e83915f'
     condition: selection
 falsepositives:
-    - None expected — these imphashes correspond to specific security tool builds with no legitimate enterprise use
+    - Unlikely — these imphashes correspond to specific security tool builds with no legitimate enterprise use
 level: high
 ```
 
@@ -518,7 +520,7 @@ level: high
 ```yaml
 title: CVE-2026-20817 WER LPE PoC Token Inspection of WerFault.exe
 id: ff8ee6c2-d705-4ebf-98bd-6ead3d775ae0
-status: test
+status: experimental
 description: >-
   Detects process access events targeting WerFault.exe with token query rights,
   consistent with the CVE-2026-20817 WER ALPC local-privilege-escalation PoC
@@ -530,12 +532,12 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
     - https://github.com/oxfemale/CVE-2026-20817
     - https://itm4n.github.io/cve-2026-20817-wersvc-eop/
-    - https://attack.mitre.org/techniques/T1068/
 author: The Hunters Ledger
-date: 2026-06-12
+date: '2026-06-12'
 tags:
     - attack.privilege-escalation
     - attack.t1068
+    - detection.emerging-threats
 logsource:
     category: process_access
     product: windows

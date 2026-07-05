@@ -540,9 +540,9 @@ rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
 
 ```yaml
 title: >-
-  Claude Code settings.local.json Modified to Pre-Approve curl-pipe-bash Execution
+  Claude Code settings.local.json Modified to Pre-Approve Curl-Pipe-Bash Execution
 id: 803d43fe-6b5a-48e1-b25f-9da5e74bca62
-status: test
+status: experimental
 description: >-
   Detects modification to ~/.claude/settings.local.json that adds an entry matching
   the curl-pipe-bash execution pattern to the permissions.allow array. This is the
@@ -554,11 +554,12 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
-  - attack.defense-evasion
+  - attack.stealth
   - attack.execution
   - attack.persistence
+  - detection.emerging-threats
 logsource:
   category: file_event
   product: linux
@@ -592,7 +593,7 @@ level: medium
 ```yaml
 title: Linux LD_PRELOAD Rootkit Persistence via /etc/ld.so.preload Modification
 id: 8961351c-34c4-4a6e-b031-16a6368ae15e
-status: test
+status: experimental
 description: >-
   Detects writes or creates of /etc/ld.so.preload, which is the persistence mechanism
   for userland LD_PRELOAD rootkits including the GHOST v5.1/v6.0 cryptojacker kit's
@@ -604,10 +605,11 @@ references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
   - https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.persistence
-  - attack.defense-evasion
+  - attack.stealth
+  - detection.emerging-threats
 logsource:
   product: linux
   category: file_event
@@ -639,7 +641,7 @@ level: high
 ```yaml
 title: Cryptojacker LD_PRELOAD Rootkit Drop to /lib/security (PAM-Style Camouflage Naming)
 id: 6c7e9d33-7dc3-411b-994f-37d431e05907
-status: test
+status: experimental
 description: >-
   Detects file creation in /lib/security or multiarch equivalents of .so files matching
   the GHOST cryptojacker kit's deceptive PAM-style naming convention (libpam_cache*).
@@ -650,10 +652,11 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.persistence
-  - attack.defense-evasion
+  - attack.stealth
+  - detection.emerging-threats
 logsource:
   product: linux
   category: file_event
@@ -690,7 +693,7 @@ level: high
 ```yaml
 title: Multiple AI Tool State Directories Co-Located with Offensive Tooling on Server Host
 id: 337c7b1d-0f56-4c27-932f-2ea507ba24f1
-status: test
+status: experimental
 description: >-
   Detects creation of multiple AI-agent CLI state directories (~/.claude, ~/.gemini,
   ~/.codex, ~/.rovodev) co-located with known offensive tooling (nuclei, frp, masscan,
@@ -703,10 +706,11 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.resource-development
   - attack.execution
+  - detection.emerging-threats
 logsource:
   category: process_creation
   product: linux
@@ -731,10 +735,10 @@ detection:
   condition: selection_ai_tools or selection_offensive_tools
 falsepositives:
   - >-
-    Legitimate penetration testers and security researchers using AI-assisted tooling
-    alongside standard offensive tools. Apply host-role classification before alerting.
-    This rule is designed for hunting on server infrastructure, not developer workstations.
-    Requires environmental baseline of expected tooling per host role.
+    Security researchers using AI-assisted tooling alongside authorized offensive-security
+    testing tools. Apply host-role classification before alerting. This rule is designed
+    for hunting on server infrastructure, not developer workstations. Requires environmental
+    baseline of expected tooling per host role.
 level: low
 ```
 
@@ -756,7 +760,7 @@ level: low
 ```yaml
 title: Trycloudflare.com Quick-Tunnel Egress from Non-Developer Server Host
 id: 5581299d-e9a1-4a83-b85c-8d68a93fd03b
-status: test
+status: experimental
 description: >-
   Detects DNS queries or process creation events for trycloudflare.com ephemeral tunnels
   originating from server-class hosts. Threat actors (Case 1 Russian Gemini operator)
@@ -768,9 +772,10 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.command-and-control
+  - detection.emerging-threats
 logsource:
   category: dns_query
   product: linux
@@ -799,9 +804,9 @@ level: high
 **Deployment:** Sysmon process creation, auditd execve, Linux endpoint agent
 
 ```yaml
-title: cloudflared access tcp Tunnel Registration to Non-Allowlisted Hostname
+title: Cloudflared Access TCP Tunnel Registration to Non-Allowlisted Hostname
 id: 0d88f829-c8e3-42e5-a3c3-34cb8a5fec1a
-status: test
+status: experimental
 description: >-
   Detects execution of 'cloudflared access tcp' with the --hostname flag, indicating
   an operator is activating a Cloudflare tunnel to proxy TCP traffic (RDP, SSH, WinRM)
@@ -814,10 +819,11 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.command-and-control
   - attack.lateral-movement
+  - detection.emerging-threats
 logsource:
   category: process_creation
   product: linux
@@ -854,7 +860,7 @@ level: high
 ```yaml
 title: Outbound Gemini API Traffic from Non-AI-Workload Server Host (Stolen Key Validation)
 id: 06d6f95f-2946-4bb9-b0ff-49921d91922f
-status: test
+status: experimental
 description: >-
   Detects outbound DNS queries to generativelanguage.googleapis.com from server-class
   hosts without a legitimate AI-application workload designation. Case 1 (Russian
@@ -867,10 +873,11 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.credential-access
   - attack.resource-development
+  - detection.emerging-threats
 logsource:
   category: dns_query
   product: linux
@@ -905,7 +912,7 @@ title: >-
   Instana API Enumeration via Stolen JWT from Non-Management-Platform Source
   (ARPA Observability Harvester)
 id: f9c5ebeb-d6b8-4425-bb85-bfa4d30e28ac
-status: test
+status: experimental
 description: >-
   Detects PowerShell execution of Instana API enumeration scripts using the -SkipCertificateCheck
   flag alongside hardcoded apiToken authorization headers, characteristic of the Turkish ARPA
@@ -918,10 +925,11 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.collection
   - attack.exfiltration
+  - detection.emerging-threats
 logsource:
   product: windows
   category: ps_script
@@ -960,7 +968,7 @@ level: high
 ```yaml
 title: Rovodev AI Agent Directory Creation on Server Infrastructure Host
 id: c88a8604-f07b-452b-821e-ecd610edd062
-status: test
+status: experimental
 description: >-
   Detects creation of ~/.rovodev/ directories on server-class hosts, indicating the
   presence of the Atlassian Rovodev AI coding agent. While Rovodev is a legitimate
@@ -973,10 +981,11 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.resource-development
   - attack.execution
+  - detection.emerging-threats
 logsource:
   category: file_event
   product: linux
@@ -1007,7 +1016,7 @@ level: medium
 ```yaml
 title: GHOST Kit ComfyUI Fake Custom Node PerformanceMonitor Registration (Case 9)
 id: 3f6f8f15-2716-4cc1-8eb6-12b9c3bf2c60
-status: test
+status: experimental
 description: >-
   Detects registration of the GHOST cryptojacker kit's fake ComfyUI custom node
   "PerformanceMonitor" (display name "GPU Performance Monitor") used to establish
@@ -1021,10 +1030,11 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.persistence
   - attack.impact
+  - detection.emerging-threats
 logsource:
   category: file_event
   product: linux
@@ -1064,26 +1074,29 @@ level: high
 **Deployment:** SIEM correlation with payment/authentication API access logs ingested, minimum 30-day baseline required to establish normal API call velocity per source IP
 
 ```yaml
-title: Suspected AI-Orchestrated Multi-Stage API Attack Sequence (60s Machine-Speed Window)
+title: Suspected AI-Orchestrated Multi-Stage API Attack Sequence (Machine-Speed Window)
 id: f8fbdc2e-b653-4b9c-b56d-2c004c202ea5
-status: test
+status: experimental
 description: >-
-  Correlation rule detecting machine-speed multi-stage API attack sequences characteristic
-  of LLM-orchestrated attack tooling. Case 8 documented a 6-stage payment API exploitation
-  completed in under 60 seconds — a cadence beyond normal human execution speed, indicating
-  LLM-assisted orchestration where the AI agent reads intermediate API responses and
-  immediately constructs the next authenticated request. Detection requires SIEM correlation
-  across API access logs: 4+ distinct API endpoint paths called in sequence from a single
-  source IP within 60 seconds. Requires API access log ingestion with per-request timestamps
-  and path logging. This rule provides hunting leads only — do not configure as a high-severity
-  automated alert without environmental baseline validation.
+  Detects requests to payment/authentication/transaction API endpoints characteristic of
+  the reconnaissance and exploitation stages in a machine-speed, multi-stage API attack
+  sequence tied to LLM-orchestrated attack tooling. Case 8 documented a 6-stage payment
+  API exploitation completed in under 60 seconds — a cadence beyond normal human execution
+  speed, indicating LLM-assisted orchestration where the AI agent reads intermediate API
+  responses and immediately constructs the next authenticated request. This selection-only
+  rule flags individual requests to the relevant endpoint paths; operationalizing the full
+  60-second/4+-endpoint velocity signature requires a SIEM correlation search (not
+  expressible as a single Sigma detection rule) across API access logs with per-request
+  timestamps and path logging. This rule provides hunting leads only — do not configure as
+  a high-severity automated alert without environmental baseline validation.
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.credential-access
   - attack.exfiltration
+  - detection.emerging-threats
 logsource:
   category: webserver
   product: linux
@@ -1094,8 +1107,7 @@ detection:
       - /auth/
       - /payment/
       - /transaction/
-  timeframe: 60s
-  condition: selection | count() by c-ip > 4
+  condition: selection
 falsepositives:
   - >-
     Legitimate payment processing automation, API health check systems, and load balancer
@@ -1119,7 +1131,7 @@ level: low
 ```yaml
 title: Egress to AEZA/Contabo/DigitalOcean-SG/IONOS/Korea-Telecom from Production Server (Hunting)
 id: bb917d1e-bb95-48d2-bb19-505cd6655456
-status: test
+status: experimental
 description: >-
   Hunting rule flagging outbound connections from production server hosts to IP ranges
   associated with the campaign's operator-hosting ASNs: AEZA International Group AS210558
@@ -1132,10 +1144,11 @@ description: >-
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
   - attack.resource-development
   - attack.command-and-control
+  - detection.emerging-threats
 logsource:
   category: network_connection
   product: linux

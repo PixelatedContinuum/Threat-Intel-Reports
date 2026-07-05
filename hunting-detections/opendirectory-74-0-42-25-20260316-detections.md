@@ -197,8 +197,10 @@ references:
 author: The Hunters Ledger
 date: 2026/03/17
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
     - attack.persistence
+    - attack.t1112
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -207,7 +209,7 @@ detection:
         TargetObject|startswith: 'HKCU\SOFTWARE\XWorm'
     condition: selection
 falsepositives:
-    - No known legitimate software uses the HKCU\SOFTWARE\XWorm registry key path
+    - Unlikely — no known legitimate software uses the HKCU\SOFTWARE\XWorm registry key path
 level: high
 ```
 
@@ -238,7 +240,11 @@ author: The Hunters Ledger
 date: 2026/03/17
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1547.001
+    - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -247,7 +253,7 @@ detection:
         TargetObject|contains: '\CurrentVersion\Run\vlctask'
     condition: selection
 falsepositives:
-    - Legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\vlcapp path; no known false positive scenario for this specific value name
+    - Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\vlcapp path
 level: high
 ```
 
@@ -279,7 +285,11 @@ author: The Hunters Ledger
 date: 2026/03/17
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1547.001
+    - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -325,7 +335,10 @@ date: 2026/03/17
 tags:
     - attack.execution
     - attack.initial-access
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1059.005
+    - attack.t1218.007
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -371,7 +384,10 @@ author: The Hunters Ledger
 date: 2026/03/17
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1059.001
+    - attack.t1027.011
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -423,6 +439,8 @@ author: The Hunters Ledger
 date: 2026/03/17
 tags:
     - attack.command-and-control
+    - attack.t1071
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -438,7 +456,7 @@ detection:
         Initiated: 'true'
     condition: selection
 falsepositives:
-    - No known legitimate services operate on 185.49.126.140 on these ports; false positive likelihood is negligible for this confirmed malicious IP and port combination
+    - Unlikely — no known legitimate services operate on 185.49.126.140 on these ports
 level: critical
 ```
 
@@ -472,6 +490,8 @@ date: 2026/03/17
 tags:
     - attack.command-and-control
     - attack.initial-access
+    - attack.t1219
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -482,7 +502,7 @@ detection:
         Initiated: 'true'
     condition: selection
 falsepositives:
-    - No legitimate ConnectWise ScreenConnect deployment is expected on adminxyzhosting.com port 8041; this domain and port combination is confirmed operator-specific malicious infrastructure
+    - Unlikely — no legitimate ConnectWise ScreenConnect deployment is expected on adminxyzhosting.com port 8041
 level: high
 ```
 

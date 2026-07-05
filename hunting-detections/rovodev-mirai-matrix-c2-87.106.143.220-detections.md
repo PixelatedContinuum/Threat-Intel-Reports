@@ -609,18 +609,21 @@ rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
 ```yaml
 title: ELF IoT Arch-Tagged Filename Execution on Linux Server — Naku/Pandora Mirai Family
 id: c4495249-9b11-406c-b4ca-5c099eb8ca81
-status: test
+status: experimental
 description: >-
   Detects execution of ELF binaries with IoT-targeted architecture-tag suffixes (arm5, arm6, arm7, m68k, mips, mpsl, ppc, sh4, spc) associated with the Naku/Pandora-Mirai 11-architecture IoT botnet family (UTA-2026-014). These filenames (Naku.{arch}, pandora.{arch}, nig) are specific to the Pandora-Mirai dropper's payload distribution and execution pattern. Execution of such binaries on server-class hosts indicates active compromise and botnet payload staging.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
     - https://vms.drweb.com/virus/?i=22410691&lng=en
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.t1059.004
+    - attack.initial-access
+    - attack.t1190
     - attack.command-and-control
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -667,16 +670,21 @@ level: high
 ```yaml
 title: Hidden-Prefix Cron Entry Creation in /etc/cron.d — Pandora-Mirai Persistence Pattern
 id: 6625f3f7-4e6f-40cb-905b-039786de8561
-status: test
+status: experimental
 description: >-
   Detects creation of dot-prefix hidden-filename cron entries in /etc/cron.d/ as used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh 5-vector persistence installer. The specific entry /etc/cron.d/.cache_update is the operator's primary cron persistence vector, scheduled to wget-pipe bot.sh from 87.106.143.220 every 5 minutes. Hidden-prefix filenames in this directory evade simple cron audits and are not a standard administration pattern.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.execution
+    - attack.privilege-escalation
+    - attack.t1053.003
+    - attack.stealth
+    - attack.t1564.001
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -706,16 +714,22 @@ level: high
 ```yaml
 title: Pandora-Mirai 5-Vector Linux Persistence Pattern — Multi-Mechanism Installer
 id: 311787eb-af20-4ec5-90b3-ef3cb6797771
-status: test
+status: experimental
 description: >-
   Detects the 5-vector Linux persistence pattern used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer. Monitors for creation of masquerade-named persistence files (/etc/init.d/sysupdate, /etc/systemd/system/system-update.service) alongside shell RC modification and hidden cron entry creation within a short time window. Each vector alone has moderate FP risk; co-occurrence within 60 seconds on a non-deployment host is high-confidence malicious.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.execution
+    - attack.privilege-escalation
+    - attack.t1037.004
+    - attack.t1053.003
+    - attack.t1543.002
+    - attack.t1546.004
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -728,7 +742,13 @@ detection:
         TargetFilename|startswith: '/etc/cron.d/.'
     selection_rclocal:
         TargetFilename: '/etc/rc.local'
-    condition: 2 of selection_*
+    condition: >-
+        (selection_sysupdate and selection_systemd) or
+        (selection_sysupdate and selection_cron_hidden) or
+        (selection_sysupdate and selection_rclocal) or
+        (selection_systemd and selection_cron_hidden) or
+        (selection_systemd and selection_rclocal) or
+        (selection_cron_hidden and selection_rclocal)
 falsepositives:
     - Legitimate system update scripts that use similar naming — verify service content references known-good update infrastructure
     - Server provisioning tools (cloud-init, Ansible) creating multiple persistence mechanisms simultaneously — correlate with deployment pipeline activity
@@ -749,16 +769,19 @@ level: high
 ```yaml
 title: PandoraNet Botnet ID in Process Command Line — Active Pandora-Mirai Infection
 id: 481ee321-8631-4a9d-b1b6-87e8a5676690
-status: test
+status: experimental
 description: >-
   Detects the PandoraNet operator-bespoke botnet ID string in process command line arguments, indicating active execution of the Pandora-Mirai IoT botnet (UTA-2026-014). The format is 'pandora_bot PandoraNet.{arch}' where arch is one of 11 IoT CPU architectures. This string is not observed in any other host in threat intelligence indexing and indicates active bot process on the monitored system.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.execution
+    - attack.t1059.004
     - attack.command-and-control
+    - attack.t1095
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -767,7 +790,7 @@ detection:
         CommandLine|contains: 'PandoraNet'
     condition: selection
 falsepositives:
-    - None — PandoraNet is an operator-bespoke botnet identifier not used by any known legitimate software
+    - Unlikely — PandoraNet is an operator-bespoke botnet identifier not used by any known legitimate software
 level: critical
 ```
 
@@ -784,17 +807,21 @@ level: critical
 ```yaml
 title: Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic
 id: 716bce61-4dcb-4479-b815-1391f5c7cd43
-status: test
+status: experimental
 description: >-
   Detects processes other than known watchdog daemons (watchdogd, systemd-watchdog) opening /dev/watchdog or /dev/misc/watchdog. This is a canonical Mirai botnet persistence mechanism — the bot opens the watchdog device and continuously pets it (ioctl WDIOC_KEEPALIVE) to prevent IoT device auto-reboot, keeping the infection persistent across watchdog-triggered reset cycles. Observed in Naku.arm (Pandora-Mirai family, UTA-2026-014) and generic to all Mirai/Sora derivative bots.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
-    - https://attack.mitre.org/techniques/T1014/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1014
     - attack.persistence
+    - attack.execution
+    - attack.privilege-escalation
+    - attack.t1053.003
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -833,15 +860,18 @@ level: medium
 ```yaml
 title: Outbound TCP/1337 to Matrix C2 Operator Infrastructure — Active Bot C2 Channel
 id: 23ab4d7b-192d-44ad-bad0-3e5d19514007
-status: test
+status: experimental
 description: >-
   Detects outbound TCP connections to port 1337 at 87.106.143.220 (1&1 IONOS DE VPS), the Matrix C2 JSON-over-TCP command-and-control channel used by the Pandora-Mirai operator (UTA-2026-014). The bot_register and heartbeat messages use netcat (nc -w 5 87.106.143.220 1337) with JSON payloads. Port 1337 is non-standard for legitimate server egress; connections to this specific IP indicate active bot C2 or infection-report traffic.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.command-and-control
+    - attack.t1071.001
+    - attack.t1095
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: linux
@@ -868,15 +898,18 @@ level: high
 ```yaml
 title: Outbound TCP/23 to Naku-Pandora CNC — Active Bot Connecting to Compromised Tourism VPS
 id: c9d77df7-5af0-4863-afea-ca13e6ccd3ce
-status: test
+status: experimental
 description: >-
   Detects outbound TCP connections to port 23 at 165.227.175.161 (DigitalOcean DO allocation — compromised GetYourGroup tourism VPS auvergne-rhone-alpes-for-groups.com). This is the hardcoded CNC endpoint for the Naku/Pandora-Mirai 11-architecture IoT botnet (UTA-2026-014), extracted via ARM ELF disassembly of Naku.arm (raw 32-bit constant 0xa1afe3a5 = 165.227.175.161, port 0x0017 = 23). CNC daemon planted on TCP/23 on a legitimate French tourism business VPS — parasitic hosting for OPSEC separation from operator-owned infrastructure.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.command-and-control
+    - attack.t1095
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: linux
@@ -904,16 +937,20 @@ level: high
 ```yaml
 title: Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host
 id: 7e3175bc-9a74-4c93-b358-de78d84250f4
-status: test
+status: experimental
 description: >-
   Detects Discord API (discord.com/api/v9/) egress traffic from non-developer server hosts, indicative of the Matrix C2 DDoS-as-a-Service Discord-bot customer interface (UTA-2026-014). The Discord bot dispatches DDoS attack commands on behalf of paying customers via a JavaScript bot running on the operator's IONOS VPS. Discord bot traffic from production server hosts in non-developer environments is anomalous and warrants investigation. Higher-confidence detection requires proxy logs with content inspection to identify attack-method dispatch patterns (ovh-nuke, syn-storm, frag-storm keywords in message content).
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.command-and-control
+    - attack.impact
+    - attack.t1498.001
     - attack.execution
+    - attack.t1059.007
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: linux
@@ -951,15 +988,17 @@ level: medium
 ```yaml
 title: Rovodev AI Agent Sessions Directory Creation on Server Host — Potential AI-Augmented Offensive Operations
 id: 273f8eea-72b3-48c7-a134-cdc5a65064d7
-status: test
+status: experimental
 description: >-
   Detects creation of Atlassian Rovodev AI coding agent session artifacts (~/.rovodev/sessions/ directory, session_context.json files exceeding 100KB) on server hosts. In the UTA-2026-014 case, the operator used Rovodev on their IONOS VPS to author a complete offensive framework (Matrix C2). Rovodev session directories on production server hosts outside of known DevOps pipelines warrant investigation, particularly when co-located with /root/matrix/ or similar offensive framework paths.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.resource-development
+    - attack.t1587.001
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -989,15 +1028,17 @@ level: medium
 ```yaml
 title: Rovodev Log File_Write Tool-Call with Offensive Content — AI-Augmented Offensive Operations Evidence
 id: 817e5ca2-7265-41b3-b344-bbf36afc3193
-status: test
+status: experimental
 description: >-
   Detects Atlassian Rovodev AI coding agent runtime log (rovodev.log) containing file_write tool-call patterns with Python shebang initial_content, indicating the AI agent authored Python files during the session. In the UTA-2026-014 case, the 8.5 MB rovodev.log captured file_write calls producing attack_engine.py, master_control.py, stealth_agent.py, and the Discord bot JavaScript dispatch table. Content inspection of Rovodev logs for offensive capability markers can identify AI-augmented offensive operations in progress or recently completed.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.resource-development
+    - attack.t1587.001
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -1024,16 +1065,19 @@ level: low
 ```yaml
 title: Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature
 id: c9d201aa-2fbb-4e1e-b269-76cf28670998
-status: test
+status: experimental
 description: >-
   Detects the operator-bespoke 22-character random-string charset '1gba4cdom53nhp12ei0kfj' in file content or process command lines. This string is present in all 11 architectures of the Naku/Pandora-Mirai ELF botnet (UTA-2026-014) — both XOR-0x54 encoded in stripped production builds and in plaintext in the arm7 debug build. It is not observed in any other host in threat intelligence indexing and constitutes a cross-architecture operator tracking signature. Detection in any context indicates Pandora-Mirai family presence.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1027
     - attack.command-and-control
+    - attack.t1095
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -1042,7 +1086,7 @@ detection:
         CommandLine|contains: '1gba4cdom53nhp12ei0kfj'
     condition: selection
 falsepositives:
-    - None — this string is operator-bespoke and not used in any known legitimate software
+    - Unlikely — this string is operator-bespoke and not used in any known legitimate software
 level: high
 ```
 
@@ -1057,18 +1101,21 @@ level: high
 **False Positive Risk:** LOW on server hosts; busybox SORA is not a legitimate busybox parameter
 
 ```yaml
-title: busybox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host
+title: BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host
 id: 625a0af0-2c6e-48b5-89ea-0c7e6b191147
-status: test
+status: experimental
 description: >-
   Detects execution of the '/bin/busybox SORA' command, which is the Sora-fork Mirai-derivative lineage signature. Decoded from XOR-0x54 region in all 11 Naku/Pandora-Mirai architectures (UTA-2026-014), replacing stock Mirai's '/bin/busybox MIRAI'. The Mirai bot calls this as part of its process enumeration and competitor-kill routine. Any process executing '/bin/busybox SORA' indicates active Sora-derivative bot execution on the host.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.t1059.004
+    - attack.command-and-control
+    - attack.t1095
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -1077,7 +1124,7 @@ detection:
         CommandLine|contains: '/bin/busybox SORA'
     condition: selection
 falsepositives:
-    - None — '/bin/busybox SORA' is not a valid busybox applet call and has no legitimate use
+    - Unlikely — '/bin/busybox SORA' is not a valid busybox applet call and has no legitimate use
 level: high
 ```
 

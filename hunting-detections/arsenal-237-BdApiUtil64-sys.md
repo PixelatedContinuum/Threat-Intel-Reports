@@ -191,28 +191,27 @@ rule Arsenal237_BdApiUtil_Kernel_Termination {
 
 ```yaml
 title: Suspicious Baidu Driver Load (BdApiUtil64.sys BYOVD)
-id: a1b2c3d4-e5f6-7890-1234-567890abcdef
+id: afb33d58-6f40-42c1-a14e-49f88ff5403c
 status: stable
 description: Detects loading of vulnerable Baidu driver (BdApiUtil64.sys) used in BYOVD attacks
 references:
     - Arsenal-237 malware toolkit analysis
     - BlackByte, Cuba, ALPHV ransomware campaigns
 author: The Hunters Ledger
-date: 2026-01-26
-modified: 2026-01-26
+date: '2026-01-26'
 tags:
-    - attack.defense_evasion
+    - attack.stealth
+    - attack.privilege-escalation
     - attack.t1068
-    - attack.t1562.001
 logsource:
     product: windows
     category: driver_load
 detection:
     selection_hash:
         Hashes|contains:
-            - '47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428'
-            - 'ced47b89212f3260ebeb41682a4b95ec'
-            - '148c0cde4f2ef807aea77d7368f00f4c519f47ef'
+            - 'SHA256=47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428'
+            - 'MD5=ced47b89212f3260ebeb41682a4b95ec'
+            - 'SHA1=148c0cde4f2ef807aea77d7368f00f4c519f47ef'
     selection_signature:
         ImageLoaded|contains: 'BdApiUtil'
         Signed: 'true'
@@ -232,18 +231,18 @@ level: critical
 
 ```yaml
 title: Suspicious Bprotect Service Creation (BdApiUtil64.sys)
-id: b2c3d4e5-f6g7-8901-2345-678901bcdefg
+id: 3057b63c-4d7a-463b-aa1e-3252c63b0e9d
 status: stable
 description: Detects creation of Bprotect service associated with BdApiUtil64.sys driver
 references:
     - Arsenal-237 BYOVD technique
 author: The Hunters Ledger
-date: 2026-01-26
+date: '2026-01-26'
 tags:
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1547.006
-    - attack.defense_evasion
-    - attack.t1562.001
+    - attack.stealth
 logsource:
     product: windows
     service: system
@@ -262,30 +261,30 @@ level: critical
 
 ```yaml
 title: Security Product Termination After Driver Load (BYOVD Pattern)
-id: c3d4e5f6-g7h8-9012-3456-789012cdefgh
+id: fdd3d742-8d32-43fd-948a-9bc302f13f5e
 status: stable
-description: Detects security product process termination shortly after suspicious driver load
+description: >-
+    Detects security product process termination events matching the BYOVD kill pattern.
+    Because a single-rule Sigma condition can no longer express the "termination shortly
+    after driver load" timing correlation (deprecated pipe/near syntax; requires a Sigma
+    correlation rule instead), this rule alerts on selection_termination alone — the
+    security-product-kill event. Analysts must manually correlate against a preceding
+    BdApiUtil/Baidu driver load (EventID 6) within a short window to confirm the BYOVD
+    pattern versus a routine AV service restart.
 references:
     - BYOVD attack pattern
     - Arsenal-237 toolkit
 author: The Hunters Ledger
-date: 2026-01-26
+date: '2026-01-26'
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
+    - attack.stealth
     - attack.impact
     - attack.t1489
 logsource:
     product: windows
-    service: sysmon
+    category: process_termination
 detection:
-    selection_driver:
-        EventID: 6
-        ImageLoaded|contains:
-            - 'BdApiUtil'
-            - 'Baidu'
     selection_termination:
-        EventID: 5
         Image|endswith:
             - 'MsMpEng.exe'
             - 'CSFalconService.exe'
@@ -294,8 +293,7 @@ detection:
             - 'SophosHealth.exe'
             - 'cb.exe'
             - 'MBAMService.exe'
-    timeframe: 60s
-    condition: selection_driver and selection_termination | near selection_driver
+    condition: selection_termination
 falsepositives:
     - Legitimate service restarts during updates (check timing correlation)
 level: critical
@@ -305,16 +303,15 @@ level: critical
 
 ```yaml
 title: DeviceIoControl Calls to BdApiUtil Driver
-id: d4e5f6g7-h8i9-0123-4567-890123defghi
+id: 9a61d638-005d-41d4-acd4-de01013ae3b2
 status: experimental
 description: Detects DeviceIoControl API calls to \\.\BdApiUtil device object
 references:
     - Arsenal-237 BYOVD IOCTL abuse
 author: The Hunters Ledger
-date: 2026-01-26
+date: '2026-01-26'
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
+    - attack.stealth
     - attack.collection
     - attack.t1005
 logsource:
@@ -322,10 +319,10 @@ logsource:
     category: process_access
 detection:
     selection_api:
-        CallTrace|contains: 'DeviceIoControl'
-    selection_device:
-        TargetObject|contains: '\\.\BdApiUtil'
-    condition: all of selection_*
+        CallTrace|contains|all:
+            - 'DeviceIoControl'
+            - '\\.\BdApiUtil'
+    condition: selection_api
 falsepositives:
     - Legitimate Baidu Antivirus operations (rare)
 level: high
@@ -335,18 +332,17 @@ level: high
 
 ```yaml
 title: KeServiceDescriptorTable Resolution (SSDT Bypass Attempt)
-id: e5f6g7h8-i9j0-1234-5678-901234efghij
+id: 0c757672-f00b-49d6-9406-cb6179ba3eac
 status: experimental
 description: Detects attempts to resolve KeServiceDescriptorTable for SSDT bypass
 references:
     - Advanced EDR evasion via SSDT bypass
     - Arsenal-237 BdApiUtil64.sys capability
 author: The Hunters Ledger
-date: 2026-01-26
+date: '2026-01-26'
 tags:
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1027.010
-    - attack.t1562.001
 logsource:
     product: windows
     category: kernel_api

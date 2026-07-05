@@ -180,7 +180,7 @@ rule TOOLKIT_BellaMain_AntiResearcherCanary
 ```yaml
 title: BellaMain PhaaS Admin Panel Path Access
 id: a3f7c291-84e2-4d1b-9c5a-f6e8b2d04371
-status: test
+status: experimental
 description: >-
   Detects HTTP GET or POST requests to the BellaMain Turkish PhaaS panel
   obfuscated admin directory V5VgjLU0jsDe. This 12-character random path is
@@ -191,10 +191,15 @@ description: >-
 references:
   - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
 author: The Hunters Ledger
-date: 2026/05/16
+date: '2026-05-16'
 tags:
   - attack.persistence
-  - attack.command-and-control
+  - attack.t1505.003
+  - attack.stealth
+  - attack.privilege-escalation
+  - attack.initial-access
+  - attack.t1078
+  - detection.emerging-threats
 logsource:
   category: webserver
 detection:
@@ -223,7 +228,7 @@ level: high
 ```yaml
 title: BellaMain PhaaS USOM Blocklist Poll and Telegram Bot Outbound
 id: b82d1f44-c7a9-4e53-a2f1-9d3c6b08e592
-status: test
+status: experimental
 description: >-
   Detects a web server process making outbound HTTP connections to both the
   Turkish CERT USOM URL blocklist (www.usom.gov.tr/url-list.txt) and the
@@ -238,10 +243,13 @@ references:
   - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
   - https://www.usom.gov.tr/
 author: The Hunters Ledger
-date: 2026/05/16
+date: '2026-05-16'
 tags:
   - attack.discovery
+  - attack.t1518.001
   - attack.command-and-control
+  - attack.t1102.002
+  - detection.emerging-threats
 logsource:
   category: proxy
   product: zeek
@@ -276,9 +284,9 @@ level: high
 **Deployment:** Linux auditd / Sysmon-for-Linux process creation events in SIEM, EDR process telemetry on PHP web servers
 
 ```yaml
-title: BellaMain PhaaS mysqldump Invocation by PHP Web Process
+title: BellaMain PhaaS Mysqldump Invocation by PHP Web Process
 id: c914e7a2-5b36-4f87-b3d8-2a1e9c047f83
-status: test
+status: experimental
 description: >-
   Detects mysqldump invoked with a plaintext -p password argument by a PHP or
   web server parent process. BellaMain's /yedek Telegram command executes
@@ -292,10 +300,13 @@ description: >-
 references:
   - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
 author: The Hunters Ledger
-date: 2026/05/16
+date: '2026-05-16'
 tags:
-  - attack.exfiltration
-  - attack.defense-evasion
+  - attack.collection
+  - attack.t1560
+  - attack.stealth
+  - attack.t1070
+  - detection.emerging-threats
 logsource:
   category: process_creation
   product: linux
@@ -353,10 +364,13 @@ description: >-
 references:
   - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
 author: The Hunters Ledger
-date: 2026/05/16
+date: '2026-05-16'
 tags:
   - attack.command-and-control
+  - attack.t1102.002
   - attack.exfiltration
+  - attack.t1041
+  - detection.emerging-threats
 logsource:
   category: dns
   product: zeek
@@ -392,25 +406,32 @@ level: medium
 ```yaml
 title: BellaMain PhaaS High-Frequency Multi-Bot Telegram Outbound
 id: e5f2b847-3a1c-4d96-8e04-7c9d3f2a1b56
-status: test
+status: experimental
 description: >-
-  Detects a burst of five or more outbound HTTPS requests to
-  api.telegram.org/bot* from a single source host within a 60-second window,
-  indicating BellaMain's automated four-bot credential-exfil pipeline
-  activating on a victim credential capture. BellaMain fires multiple
-  specialized bots simultaneously on each credential hit: the admin bot
-  receives the raw credential set, vergibot receives national-ID data, and
-  dekontbot and cekimbot handle approval workflows. The resulting burst of
-  outbound Telegram API calls to distinct bot-token URIs within a short
-  window is a behavioral fingerprint of the PhaaS automation layer.
+  Detects an individual outbound HTTPS request to api.telegram.org/bot* from
+  a source host. This base event rule feeds the paired correlation rule
+  (BellaMain PhaaS High-Frequency Multi-Bot Telegram Outbound — Burst
+  Correlation) that flags a burst of five or more such requests from a
+  single source host within a 60-second window, indicating BellaMain's
+  automated four-bot credential-exfil pipeline activating on a victim
+  credential capture. BellaMain fires multiple specialized bots
+  simultaneously on each credential hit: the admin bot receives the raw
+  credential set, vergibot receives national-ID data, and dekontbot and
+  cekimbot handle approval workflows. The resulting burst of outbound
+  Telegram API calls to distinct bot-token URIs within a short window is a
+  behavioral fingerprint of the PhaaS automation layer.
 references:
   - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
 author: The Hunters Ledger
-date: 2026/05/16
+date: '2026-05-16'
 tags:
   - attack.command-and-control
+  - attack.t1102.002
   - attack.exfiltration
+  - attack.t1041
   - attack.collection
+  - attack.t1119
+  - detection.emerging-threats
 logsource:
   category: proxy
   product: zeek
@@ -418,14 +439,45 @@ detection:
   selection:
     cs-host: 'api.telegram.org'
     cs-uri-stem|startswith: '/bot'
-  timeframe: 60s
-  condition: selection | count() by src_ip > 4
+  condition: selection
 falsepositives:
   - >-
     Web application platforms with legitimate high-frequency Telegram
     notification integrations (e.g., e-commerce order-notification bots)
     firing on concurrent order events — tune threshold or scope to web-server
     segments not expected to run application-layer Telegram integrations
+level: medium
+---
+title: BellaMain PhaaS High-Frequency Multi-Bot Telegram Outbound — Burst Correlation
+id: f4c1a936-2d7e-4b58-9a03-6e1f8c52d7ab
+status: experimental
+correlation:
+  type: event_count
+  rules:
+    - e5f2b847-3a1c-4d96-8e04-7c9d3f2a1b56
+  group-by:
+    - src_ip
+  timespan: 60s
+  condition:
+    gte: 5
+description: >-
+  Correlates the base rule BellaMain PhaaS High-Frequency Multi-Bot Telegram
+  Outbound to fire when a single source host generates five or more matching
+  outbound requests to api.telegram.org/bot* within a 60-second window — the
+  discriminating threshold that separates BellaMain's automated four-bot
+  exfil burst from a single legitimate notification-bot call.
+references:
+  - https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
+author: The Hunters Ledger
+date: '2026-05-16'
+tags:
+  - attack.command-and-control
+  - attack.t1102.002
+  - attack.exfiltration
+  - attack.t1041
+  - attack.collection
+  - attack.t1119
+  - detection.emerging-threats
 level: high
 ```
 

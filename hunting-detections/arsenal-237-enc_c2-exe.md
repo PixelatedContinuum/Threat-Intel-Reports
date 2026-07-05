@@ -208,13 +208,17 @@ Detects execution of enc_c2.exe process.
 
 ```yaml
 title: enc_c2.exe Process Execution - Ransomware
+id: c38ece37-0b38-4844-aa71-41814663daaf
+status: experimental
 description: Detects execution of enc_c2.exe ransomware executable
+author: The Hunters Ledger
+date: 2026-01-26
 logsource:
   product: windows
   category: process_creation
 detection:
   selection_filename:
-    - Image|endswith: 'enc_c2.exe'
+    - Image|endswith: '\enc_c2.exe'
     - OriginalFileName: 'enc_c2.exe'
   selection_commandline:
     CommandLine|contains:
@@ -224,13 +228,14 @@ detection:
       - '--bid'
   condition: selection_filename or selection_commandline
 falsepositives:
-  - None expected
+  - Unlikely
 level: critical
 tags:
   - attack.execution
   - attack.t1204.002
   - attack.impact
   - attack.t1486
+  - detection.emerging-threats
 ```
 
 ---
@@ -241,7 +246,11 @@ Detects creation of files with .locked extension (encrypted files).
 
 ```yaml
 title: Ransomware - File Creation with .locked Extension
+id: 9af9beea-9ea3-4e5b-ad1d-1bc229d936d0
+status: experimental
 description: Detects creation of encrypted files with .locked extension appended
+author: The Hunters Ledger
+date: 2026-01-26
 logsource:
   product: windows
   category: file_event
@@ -249,9 +258,9 @@ detection:
   selection:
     TargetFilename|endswith: '.locked'
   filter_excludes:
-    - TargetFilename|contains:
-        - '~$'
-        - 'Temp'
+    TargetFilename|contains:
+      - '~$'
+      - 'Temp'
   condition: selection and not filter_excludes
 falsepositives:
   - Legitimate .locked files (rare)
@@ -259,6 +268,7 @@ level: high
 tags:
   - attack.impact
   - attack.t1486
+  - detection.emerging-threats
 ```
 
 ---
@@ -269,7 +279,11 @@ Detects creation of README.txt ransom notes in user directories.
 
 ```yaml
 title: Ransomware - Ransom Note Creation (README.txt)
-description: Detects creation of README.txt ransom notes in user-accessible directories
+id: 4ef21242-5e99-4a82-961d-4ad5da6affe6
+status: experimental
+description: Detects creation of README.txt ransom notes in user-accessible directories. File-content inspection ("YOUR FILES HAVE BEEN ENCRYPTED" string match) is not expressible via Sysmon file_event telemetry (no Contents field) — filename/path pattern only; correlate with a YARA or EDR content-inspection rule for content confirmation.
+author: The Hunters Ledger
+date: 2026-01-26
 logsource:
   product: windows
   category: file_event
@@ -281,15 +295,14 @@ detection:
       - 'C:\Users\'
       - 'C:\Documents'
       - 'C:\Desktop'
-  selection_content:
-    Contents|contains: 'YOUR FILES HAVE BEEN ENCRYPTED'
   condition: selection_file and selection_location
 falsepositives:
-  - Legitimate README files (unlikely with encrypted content)
+  - Legitimate README files
 level: high
 tags:
   - attack.impact
   - attack.t1486
+  - detection.emerging-threats
 ```
 
 ---
@@ -300,7 +313,11 @@ Detects HTTP POST requests to .onion domains (Tor C2 communication).
 
 ```yaml
 title: Network - HTTP POST to .onion Domain (Tor C2)
+id: 0491b05a-d2d9-43e4-b1e5-5415c8b71788
+status: experimental
 description: Detects HTTP POST requests to .onion hidden service domains (Tor C2 communication)
+author: The Hunters Ledger
+date: 2026-01-26
 logsource:
   product: firewall
   category: http_request
@@ -316,9 +333,10 @@ falsepositives:
   - Legitimate Tor traffic (unlikely in enterprise environment)
 level: critical
 tags:
-  - attack.command_and_control
+  - attack.command-and-control
   - attack.t1071.001
   - attack.t1090.003
+  - detection.emerging-threats
 ```
 
 ---
@@ -329,7 +347,11 @@ Detects outbound connections to known Tor entry nodes.
 
 ```yaml
 title: Network - Outbound Connection to Tor Entry Node
+id: da88a948-fa85-4415-8d65-859d513d98a6
+status: experimental
 description: Detects outbound connections to known Tor entry nodes (indicates Tor client usage)
+author: The Hunters Ledger
+date: 2026-01-26
 logsource:
   product: firewall
   category: network_connection
@@ -345,7 +367,7 @@ detection:
   selection_direction:
     Direction: 'Outbound'
   filter_whitelisted:
-    DestinationIp|in:
+    DestinationIp:
       - '8.8.8.8'
       - '1.1.1.1'
   condition: selection and selection_direction and not filter_whitelisted
@@ -354,8 +376,9 @@ falsepositives:
   - Tor Browser usage (expected in some environments)
 level: high
 tags:
-  - attack.command_and_control
+  - attack.command-and-control
   - attack.t1090.003
+  - detection.emerging-threats
 ```
 
 ---
@@ -366,27 +389,32 @@ Confirms absence of persistence mechanisms (single-run model verification).
 
 ```yaml
 title: Registry - Absence of Ransomware Persistence Mechanisms
+id: 0ee562b4-ef75-4801-961d-a3479f9a0237
+status: experimental
 description: Verifies that systems do not contain persistence registry keys for known ransomware
+author: The Hunters Ledger
+date: 2026-01-26
 logsource:
   product: windows
   category: registry_event
 detection:
   selection:
-    RegistryPath|contains:
+    TargetObject|contains:
       - 'Software\Microsoft\Windows\CurrentVersion\Run'
       - 'Software\Microsoft\Windows\CurrentVersion\RunOnce'
       - 'Software\Microsoft\Windows NT\CurrentVersion\Winlogon'
-    RegistryValue|contains:
+    Details|contains:
       - 'enc_c2'
       - 'TEST_BUILD_001'
   condition: selection
 falsepositives:
-  - None
+  - Unlikely; this rule detects a negative condition (absence of persistence) rather than a malicious event
 level: medium
 tags:
   - attack.persistence
-  - detection_gap
-note: 'enc_c2.exe appears to use single-run model without persistence; this rule detects if infected systems show persistence artifacts'
+  - attack.privilege-escalation
+  - attack.t1547.001
+  - detection.emerging-threats
 ```
 
 ---
@@ -397,26 +425,30 @@ Detects repeated Sleep() calls indicating anti-debugging mechanism.
 
 ```yaml
 title: Process - TEB Anti-Debug Sleep Loop Detection
+id: 72490224-3052-4aaf-adcb-38d4201e2d67
+status: experimental
 description: Detects repeated Sleep(1000) calls indicating TEB-based anti-debugging
+author: The Hunters Ledger
+date: 2026-01-26
 logsource:
   product: windows
   category: process_access
 detection:
   selection:
-    Image|endswith: 'enc_c2.exe'
+    SourceImage|endswith: 'enc_c2.exe'
     CallTrace|contains:
       - 'Sleep'
       - 'SleepEx'
       - '0x3E8'  # 1000 milliseconds in hex
-  filter_normal:
-    CallCount|lt: 3  # Allow normal sleep calls
-  condition: selection and not filter_normal
+  condition: selection
 falsepositives:
   - Legitimate applications with sleep loops (rate limiting, polling)
 level: medium
 tags:
-  - attack.defense_evasion
+  - attack.stealth
+  - attack.discovery
   - attack.t1622
+  - detection.emerging-threats
 ```
 
 ---

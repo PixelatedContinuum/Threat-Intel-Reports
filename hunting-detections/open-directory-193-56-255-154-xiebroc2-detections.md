@@ -215,7 +215,7 @@ rule MALW_Covenant_PSFilelessLoader_GruntHTTP
 **Deployment:** Sysmon Event ID 7 (ImageLoad); requires Sysmon with ImageLoad enabled  
 
 ```yaml
-title: XiebroC2 Go Implant Loading Windows CLR at Runtime via go-clr
+title: XiebroC2 Go Implant Loading Windows CLR at Runtime via Go-Clr
 id: a3f7c821-5e4b-4d09-bc21-7f3a9e5c8d04
 status: experimental
 description: Detects a Go binary (main.exe) loading mscoree.dll or clr.dll at runtime, which is the behavioral signature of XiebroC2 v3.1 executing its inline-assembly command via the vendored go-clr library. Legitimate Go binaries do not host the Windows CLR in-process. This event fires regardless of whether the .NET assembly payload was written to disk, making it effective against fully fileless .NET delivery chains.
@@ -225,8 +225,11 @@ references:
 author: The Hunters Ledger
 date: 2026/04/03
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.execution
+    - attack.privilege-escalation
+    - attack.t1055.012
+    - detection.emerging-threats
 logsource:
     category: image_load
     product: windows
@@ -276,27 +279,27 @@ level: high
 title: XiebroC2 Process Hollowing via Suspended Child Process Creation
 id: b8d2e94f-7c13-4a8b-91f6-2e5d7b3c6a10
 status: experimental
-description: Detects XiebroC2 v3.1 executing its RunPE process hollowing technique by identifying suspended child process creation from a parent process named main.exe. XiebroC2 creates target processes with CREATE_SUSPENDED (creationflags 0x4) before performing entry point patching injection. The CreationFlags field value of 4 in Sysmon process creation events is the key discriminator alongside the suspicious parent image name.
+description: Detects XiebroC2 v3.1 executing its RunPE process hollowing technique by identifying suspended child process creation from a parent process named main.exe. XiebroC2 creates target processes with CREATE_SUSPENDED (creationflags 0x4) before performing entry point patching injection. Sysmon process creation events do not expose the raw CreationFlags value, so this rule anchors on the suspicious parent image name alone; combine with memory or injection telemetry for higher-confidence triage.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
 author: The Hunters Ledger
 date: 2026/04/03
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.privilege-escalation
+    - attack.t1055.012
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
 detection:
     selection_parent:
         ParentImage|endswith: '\main.exe'
-    selection_suspended:
-        CreationFlags: '0x4'
-    condition: selection_parent and selection_suspended
+    condition: selection_parent
 falsepositives:
-    - Legitimate process management software named main.exe that creates suspended child processes (highly unlikely)
+    - Legitimate process management software named main.exe that creates child processes (highly unlikely)
     - Security testing tools or debuggers launched from a binary coincidentally named main.exe
-level: high
+level: medium
 ```
 
 ---
@@ -321,7 +324,9 @@ author: The Hunters Ledger
 date: 2026/04/03
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1059.001
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -367,6 +372,8 @@ author: The Hunters Ledger
 date: 2026/04/03
 tags:
     - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: proxy
     product: windows
@@ -408,7 +415,10 @@ author: The Hunters Ledger
 date: 2026/04/03
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1059.001
+    - attack.t1027.011
+    - detection.emerging-threats
 logsource:
     category: ps_script
     product: windows

@@ -283,30 +283,30 @@ level: critical
 
 ```yaml
 title: Named Pipe Created Matching PrintSpoofer Pattern
-id: d5f4e6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8g
+id: 3e096e9e-0f1a-4f5c-b7c3-2d4a55b3792f
 status: stable
 description: Detects creation of named pipes ending in 'spoolss' by non-Spooler processes
 author: The Hunters Ledger
 date: 2026-02-08
 references:
     - "PrintSpoofer exploitation technique"
-    - "T1134.001 - Token Impersonation"
 tags:
-    - attack.privilege_escalation
+    - attack.stealth
+    - attack.privilege-escalation
     - attack.t1134.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: pipe_created
     definition: 'Requires Sysmon Event ID 17 (Pipe Created)'
 detection:
     selection:
-        EventID: 17
         PipeName|endswith: '\spoolss'
     filter:
         Image|endswith: '\spoolsv.exe'  # Legitimate Print Spooler
     condition: selection and not filter
 falsepositives:
-    - None expected (highly specific pattern)
+    - Unlikely — this is a highly specific pattern with no known legitimate cause outside the Print Spooler service itself
 level: critical
 ```
 
@@ -315,18 +315,18 @@ level: critical
 ### Rule 3: Process Command Line Contains revsocks Flags
 
 ```yaml
-title: Reverse SOCKS Proxy Execution (revsocks)
-id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+title: Reverse SOCKS Proxy Execution (Revsocks)
+id: 58c6a530-eeea-47e4-98f6-c16d4911b54a
 status: experimental
 description: Detects execution of revsocks or similar reverse proxy tools via command-line flags
 author: The Hunters Ledger
 date: 2026-02-08
 references:
     - "https://github.com/kost/revsocks"
-    - "T1090.001 - Internal Proxy"
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1090.001
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -342,7 +342,7 @@ detection:
     condition: selection_flags or selection_dns
 falsepositives:
     - Legitimate red team exercises (validate via change control)
-    - Penetration testing (verify authorized activity)
+    - Authorized offensive-security assessment (verify authorized activity)
 level: high
 ```
 
@@ -357,23 +357,21 @@ status: stable
 description: Detects outbound network connections to 91.236.230.250 (WebServer Compromise Kit C2)
 author: The Hunters Ledger
 date: 2026-02-08
-references:
-    - "WebServer-Compromise-Kit-91.236.230.250 Campaign"
 tags:
-    - attack.command_and_control
+    - attack.command-and-control
     - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
     definition: 'Requires Sysmon Event ID 3 or firewall logs'
 detection:
     selection:
-        EventID: 3
         DestinationIp: '91.236.230.250'
         Initiated: 'true'
     condition: selection
 falsepositives:
-    - None expected (known malicious IP)
+    - Unlikely — this is a known malicious IP with no legitimate enterprise use case
 level: critical
 ```
 

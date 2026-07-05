@@ -383,7 +383,7 @@ rule MAL_SystemdUnit_ARPA_Platform_Services {
 ```yaml
 title: PowerShell Instana API Call with Stored JWT Token from Unauthorized Host
 id: ba31534e-e868-47fc-bfcd-4c5a4ce0b85d
-status: test
+status: experimental
 description: >-
   Detects PowerShell processes invoking the Instana API endpoint for a specific OCP-hosted
   tenant with a stored JWT bearer token and certificate validation disabled (-SkipCertificateCheck).
@@ -394,12 +394,15 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.execution
-    - attack.collection
-    - attack.exfiltration
+    - attack.t1059.001
+    - attack.credential-access
+    - attack.t1552.001
     - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -434,9 +437,9 @@ level: high
 **Deployment:** Network firewall logs; proxy logs; DNS resolver logs correlated with HTTPS egress.
 
 ```yaml
-title: Outbound HTTPS to the victim organization OCP Instana Tenant from Non-Admin Host
+title: Outbound HTTPS to the Victim Organization OCP Instana Tenant from Non-Admin Host
 id: 024cd785-789d-4a99-8098-439f87c1df17
-status: test
+status: experimental
 description: >-
   Detects outbound HTTPS connections to the the victim organization OCP-hosted Instana tenant
   wildcard domain (*.ocpinstana.[victim-domain].com.tr) from any host not designated
@@ -447,11 +450,16 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
-    - attack.collection
-    - attack.credential-access
     - attack.command-and-control
+    - attack.t1071.001
+    - attack.stealth
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.initial-access
+    - attack.t1078
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -480,7 +488,7 @@ level: high
 ```yaml
 title: Systemd Unit File Created with ARPA Platform Service Naming Convention
 id: 4c27b8f2-a383-4cf0-a20a-21f8681231fa
-status: test
+status: experimental
 description: >-
   Detects creation of systemd unit files matching the Turkish ARPA operator's distinctive
   arpa-* naming pattern in /etc/systemd/system/. The operator deployed five service units
@@ -491,10 +499,14 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1543.002
     - attack.execution
+    - attack.t1569.002
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -523,7 +535,7 @@ level: high
 ```yaml
 title: Reverse SSH Tunnel Established from Windows Host to ARPA Operator Infrastructure
 id: 6465d373-414d-461d-8624-11153cc64d9c
-status: test
+status: experimental
 description: >-
   Detects the establishment of a reverse SSH tunnel from a victim-side Windows host to the
   Turkish ARPA operator's DigitalOcean VPS (209.38.205.158). The operator provided the
@@ -535,11 +547,16 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.command-and-control
+    - attack.t1572
     - attack.lateral-movement
+    - attack.t1021.004
     - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1098.004
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -579,7 +596,7 @@ level: critical
 ```yaml
 title: PuTTY Saved Session Created with ARPA Tunnel Naming Convention
 id: 785967aa-4fba-4679-8209-53c0f22b0631
-status: test
+status: experimental
 description: >-
   Detects creation of PuTTY saved sessions in the Windows registry with operator-distinctive
   naming patterns. The Turkish ARPA operator instructed the victim-side insider to create a
@@ -590,10 +607,13 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.command-and-control
-    - attack.persistence
+    - attack.t1572
+    - attack.lateral-movement
+    - attack.t1021.004
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -601,9 +621,7 @@ detection:
     selection_putty_path:
         TargetObject|contains: '\Software\SimonTatham\PuTTY\Sessions\'
     selection_arpa_session:
-        TargetObject|contains:
-            - 'ARPA_Tunnel'
-            - 'ARPA_tunnel'
+        TargetObject|contains: 'ARPA_Tunnel'
     condition: selection_putty_path and selection_arpa_session
 falsepositives:
     - Legitimate administrators creating PuTTY sessions for authorized remote management with similar names (verify session destination and key file)
@@ -624,7 +642,7 @@ level: high
 ```yaml
 title: Instana Stolen JWT or Long-Lived API Token Detected in Audit Log
 id: d4398d0e-e7ea-4b8d-a838-8b2a760fc468
-status: test
+status: experimental
 description: >-
   Detects use of the specific stolen the victim organization Instana JWT (jti 022a1b74) in API calls,
   or flags any Instana API token with an expiration lifetime exceeding 1 year — a governance
@@ -634,10 +652,16 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.credential-access
+    - attack.stealth
     - attack.persistence
+    - attack.privilege-escalation
+    - attack.initial-access
+    - attack.t1078
+    - attack.t1552.001
+    - detection.emerging-threats
 logsource:
     product: ibm_instana
     service: audit_log
@@ -646,11 +670,12 @@ detection:
         jwt_jti: '022a1b74-2332-4df5-a76b-60225ffa7ae3'
     selection_stolen_tenant:
         tenant: '[victim-tenant]'
-        source_ip|not:
+    filter_internal_source:
+        source_ip|cidr:
             - '10.0.0.0/8'
             - '172.16.0.0/12'
             - '192.168.0.0/16'
-    condition: selection_stolen_jti or selection_stolen_tenant
+    condition: selection_stolen_jti or (selection_stolen_tenant and not filter_internal_source)
 falsepositives:
     - Authorized Instana admin tools accessing the tenant from external IPs (verify against operations team allow-list)
     - Token rotation scripts running from external orchestration infrastructure
@@ -671,7 +696,7 @@ level: critical
 ```yaml
 title: Cross-Source Observability Platform Authentication Burst from Single Source IP
 id: b5756186-42bf-480c-b343-423a35d27336
-status: test
+status: experimental
 description: >-
   Detects a single source IP authenticating against two or more enterprise observability
   platforms (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria, Datadog, Dynatrace,
@@ -681,14 +706,25 @@ description: >-
   independently, creating a correlated authentication burst invisible to any single
   platform's audit log but detectable as a SIEM correlation across feeds. No known legitimate
   software produces this multi-platform authentication burst from a single external source.
+  This rule expresses the per-event pattern; deploy alongside a SIEM-native 10-minute
+  correlation window grouped by source IP, since Sigma's non-correlation rule format cannot
+  itself express the cross-event time-window aggregation.
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.collection
+    - attack.t1119
     - attack.credential-access
+    - attack.stealth
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.initial-access
+    - attack.t1078
     - attack.discovery
+    - attack.t1046
+    - detection.emerging-threats
 logsource:
     product: generic
     service: observability_audit
@@ -705,8 +741,13 @@ detection:
     selection_vmware_aria:
         EventSource: 'vmware_aria'
         EventType: 'api_authentication'
-    timeframe: 10m
-    condition: 2 of (selection_instana, selection_solarwinds, selection_zabbix, selection_vmware_aria)
+    condition: >-
+        (selection_instana and selection_solarwinds) or
+        (selection_instana and selection_zabbix) or
+        (selection_instana and selection_vmware_aria) or
+        (selection_solarwinds and selection_zabbix) or
+        (selection_solarwinds and selection_vmware_aria) or
+        (selection_zabbix and selection_vmware_aria)
 falsepositives:
     - Legitimate SIEM/SOAR platforms collecting from multiple APM sources via centralized service accounts (verify source IP against authorized integration allow-list)
     - Cross-platform monitoring dashboards with unified authentication service
@@ -725,24 +766,29 @@ level: high
 **Deployment:** Instana audit log export to SIEM; IBM Instana API analytics; rate-limiting alerts on the Instana tenant.
 
 ```yaml
-title: Rapid Instana Topology API Enumeration Burst from Single Source
+title: Rapid Instana Topology API Enumeration Requests from Single Source
 id: 43f7b91b-3870-4bd1-93c2-d364c8504a2e
-status: test
+status: experimental
 description: >-
-  Detects rapid automated enumeration of IBM Instana topology and event APIs from a single
-  source IP exceeding a rate threshold consistent with the Turkish ARPA operator's multi-worker
-  polling pattern. The operator's ARPA ETL platform runs 5 parallel systemd workers each
-  polling the Instana API at 5-minute cadence, producing bursts of topology and event requests
-  that exceed normal interactive or single-agent query rates. High request rates from source
-  IPs not on the Instana operations team allow-list indicate credential-based automated
-  reconnaissance of the Instana topology.
+  Detects requests to IBM Instana topology and event APIs, the endpoints targeted by the
+  Turkish ARPA operator's multi-worker polling pattern. A single request is not by itself
+  anomalous; the operator's ARPA ETL platform runs 5 parallel systemd workers each polling
+  the Instana API at 5-minute cadence, producing a burst that exceeds 10 requests per minute
+  from a single source IP — well above normal interactive or single-agent query rates. This
+  rule surfaces the underlying event for rate-based correlation in the SIEM layer — deploy
+  alongside a per-source-IP request-rate threshold (10+/min) since Sigma's non-correlation
+  rule format cannot itself express a count-over-time aggregation.
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.collection
+    - attack.t1119
+    - attack.t1213
     - attack.discovery
+    - attack.t1046
+    - detection.emerging-threats
 logsource:
     product: ibm_instana
     service: api_access_log
@@ -752,11 +798,11 @@ detection:
             - '/api/events'
             - '/api/topology'
             - '/api/applications'
-    timeframe: 1m
-    condition: selection | count() by SourceIP > 10
+    condition: selection
 falsepositives:
     - Authorized Instana integrations with high query frequency (verify against operations team allow-list)
     - Load testing or API validation tooling during maintenance windows
+    - Any single legitimate topology or event API query — this rule requires rate-based correlation (10+ requests/min from one source IP) to distinguish enumeration activity from normal API use
 level: medium
 ```
 
@@ -774,7 +820,7 @@ level: medium
 ```yaml
 title: Operator-Supplied SSH Key File Created in User SSH Directory
 id: f9b8ab33-5436-4f3a-a996-f737e54a3d37
-status: test
+status: experimental
 description: >-
   Detects creation of the Turkish ARPA operator-supplied SSH key files (rca_key.pem for
   OpenSSH, rca_key.ppk for PuTTY) in any Windows user's .ssh directory. The operator
@@ -786,10 +832,14 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1098.004
     - attack.command-and-control
+    - attack.t1572
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -819,7 +869,7 @@ level: high
 ```yaml
 title: Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Windows Host
 id: 47e5169f-572c-4d87-9fda-578a23e58beb
-status: test
+status: experimental
 description: >-
   Detects processes other than Splunk (which legitimately uses port 8089 for management)
   initiating TCP connections to localhost port 8089 on enterprise Windows hosts. Port 8089
@@ -831,10 +881,13 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.command-and-control
+    - attack.t1572
     - attack.lateral-movement
+    - attack.t1021.004
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -869,7 +922,7 @@ level: medium
 ```yaml
 title: Outbound HTTP Connection to Turkish ARPA Platform Endpoints from Internal Host
 id: af7bb4d0-34bf-4989-9e44-263ee76eef27
-status: test
+status: experimental
 description: >-
   Detects outbound HTTP connections from internal hosts to the Turkish ARPA operator's
   DigitalOcean VPS (209.38.205.158) on known ARPA platform ports (8090 for dashboard,
@@ -879,11 +932,14 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.exfiltration
+    - attack.t1020
+    - attack.t1041
     - attack.command-and-control
-    - attack.collection
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -896,7 +952,7 @@ detection:
             - 8096
     condition: selection
 falsepositives:
-    - None expected — this IP and port combination is specific to the operator's campaign infrastructure
+    - Unlikely — this IP and port combination is specific to the operator's campaign infrastructure
 level: critical
 ```
 
@@ -914,7 +970,7 @@ level: critical
 ```yaml
 title: SSH Reverse Tunnel Established from Enterprise AD-Joined Windows Workstation
 id: d49b3f9d-31e8-4ed8-8c62-87aba3aedd66
-status: test
+status: experimental
 description: >-
   Detects SSH or PuTTY processes on enterprise AD-joined Windows workstations establishing
   reverse tunnel connections (-R flag) to external IP addresses. In the Turkish ARPA
@@ -926,11 +982,13 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
-date: 2026/05/26
+date: '2026-05-26'
 tags:
     - attack.command-and-control
+    - attack.t1572
     - attack.lateral-movement
-    - attack.persistence
+    - attack.t1021.004
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -943,9 +1001,6 @@ detection:
     selection_reverse_flag:
         CommandLine|contains:
             - ' -R '
-    selection_external_dest:
-        CommandLine|contains:
-            - '209.38.205.158'
     filter_authorized_infra:
         CommandLine|contains:
             - '10.'

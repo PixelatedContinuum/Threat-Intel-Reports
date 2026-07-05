@@ -371,8 +371,11 @@ author: The Hunters Ledger
 date: 2026/04/23
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.stealth
     - attack.privilege-escalation
+    - attack.execution
+    - attack.t1053.005
+    - detection.emerging-threats
 logsource:
     product: windows
     service: security
@@ -409,7 +412,11 @@ author: The Hunters Ledger
 date: 2026/04/23
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.defense-impairment
+    - attack.t1112
+    - attack.t1027.011
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -443,8 +450,11 @@ references:
 author: The Hunters Ledger
 date: 2026/04/23
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.privilege-escalation
+    - attack.t1548.002
+    - attack.t1134.004
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -471,14 +481,17 @@ level: high
 title: Chaos Loader Operator Tri-Artifact Anti-Sandbox Gate Artefacts Present
 id: c4f7b2a9-6d3e-4c8f-d1a5-7b9e4f2c6a18
 status: test
-description: Detects simultaneous presence of the three artefacts checked by the Chaos/TorBrowserTor crypter's inverted anti-sandbox gate: a process running as 'admin' combined with creation of %TEMP%\VBE\ or %TEMP%\mapping.csv. The gate exits the dropper silently when all three match, suggesting this is the operator's own development host signature. Detecting these artefacts being created in combination on a target host may indicate the operator has deployed their staging environment or that the gate has been triggered. Alert on combination — not individual artefacts.
+description: 'Detects simultaneous presence of the three artefacts checked by the Chaos/TorBrowserTor crypter''s inverted anti-sandbox gate: a process running as ''admin'' combined with creation of %TEMP%\VBE\ or %TEMP%\mapping.csv. The gate exits the dropper silently when all three match, suggesting this is the operator''s own development host signature. Detecting these artefacts being created in combination on a target host may indicate the operator has deployed their staging environment or that the gate has been triggered. Alert on combination — not individual artefacts.'
 references:
     - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/
 author: The Hunters Ledger
 date: 2026/04/23
 tags:
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.discovery
     - attack.execution
+    - attack.t1497
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -522,7 +535,11 @@ author: The Hunters Ledger
 date: 2026/04/23
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1547.001
+    - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -551,13 +568,15 @@ level: high
 title: Chaos TorBrowserTor Ransomware Active Encryption — Extension and Shadow Copy Deletion
 id: 3b7e9f4a-c2d8-4b5e-e7a1-6c4f9b2e8d37
 status: test
-description: Detects active Chaos/TorBrowserTor ransomware execution combining two high-confidence indicators: creation of files with the .torbrowsertor extension (the ransomware's encrypted file marker) and execution of shadow copy or backup catalog deletion commands (vssadmin delete shadows, wmic shadowcopy delete, wbadmin delete catalog, bcdedit recoveryenabled no). Detection of the extension alone or anti-recovery commands alone is insufficient; the combination within a single host session indicates ransomware is actively encrypting files and destroying recovery paths.
+description: 'Detects active Chaos/TorBrowserTor ransomware execution combining two high-confidence indicators: creation of files with the .torbrowsertor extension (the ransomware''s encrypted file marker) and execution of shadow copy or backup catalog deletion commands (vssadmin delete shadows, wmic shadowcopy delete, wbadmin delete catalog, bcdedit recoveryenabled no). Detection of the extension alone or anti-recovery commands alone is insufficient; the combination within a single host session indicates ransomware is actively encrypting files and destroying recovery paths.'
 references:
     - https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/
 author: The Hunters Ledger
 date: 2026/04/23
 tags:
     - attack.impact
+    - attack.t1490
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -580,7 +599,7 @@ level: high
 
 **Detection Priority:** HIGH
 **Rationale:** The `DisableTaskMgr` registry value set to `1` under `HKCU\...\Policies\System` by Stage-5a is an active defense-impairment artefact. While this value is occasionally set by Group Policy, writing it from an `%APPDATA%` process with no associated GPO event is malicious.
-**ATT&CK Coverage:** T1562.001 (Impair Defenses — Disable or Modify Tools)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
 **False Positive Risk:** MEDIUM — Group Policy can set this value legitimately; correlate with process context (image path in %APPDATA%) to confirm
 
@@ -594,14 +613,17 @@ references:
 author: The Hunters Ledger
 date: 2026/04/23
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
+    - attack.persistence
+    - attack.t1112
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
 detection:
     selection:
         TargetObject|contains: '\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableTaskMgr'
-        Details: '1'
+        Details: 1
     filter_gpo:
         Image|contains:
             - '\Windows\System32\svchost.exe'
@@ -636,6 +658,8 @@ author: The Hunters Ledger
 date: 2026/04/23
 tags:
     - attack.command-and-control
+    - attack.t1090.001
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -669,7 +693,7 @@ level: medium
 **False Positive Risk:** VERY LOW — the literal username `pentest` paired with password `Qwerty12345` in a `net user /add` invocation is implausible as a benign artifact; legitimate IT provisioning does not produce this exact string
 
 ```yaml
-title: Chaos Loader Stage-2 Operator Backdoor Account 'pentest' Created
+title: Chaos Loader Stage-2 Operator Backdoor Account 'Pentest' Created
 id: 5e8c4f1b-2a9d-47b6-9c3e-7d1f8a2e6b54
 status: test
 description: Detects the hardcoded backdoor account creation command embedded in interact.py (sha256 f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad), the Stage-2 operator controller in the Chaos/TorBrowserTor multi-stage loader campaign at 94.103.1.13. The script downloads an XOR-encoded GodPotato assembly, decodes it with single-byte XOR key 0x42, reflectively loads it as a .NET assembly, and invokes its EntryPoint with the argument string 'net user pentest Qwerty12345 /add' — running as NT AUTHORITY\SYSTEM via GodPotato impersonation. The resulting local account is the operator's persistence anchor. Detection keys on the literal username/password combination in the net.exe command line, which catches the same operator regardless of how their loader chain mutates so long as the credential string remains stable.
@@ -680,8 +704,12 @@ author: The Hunters Ledger
 date: 2026/05/02
 tags:
     - attack.persistence
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.initial-access
     - attack.t1136.001
     - attack.t1078.003
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -783,7 +811,7 @@ The GodPotato family (`gp.exe`, `gp2.exe`, `gp_obf.exe`, `gp_fat.exe`, `svc.exe`
 **T1572 — Protocol Tunneling (Chisel / Plink)**
 `chisel.exe` and `plink.exe` are legitimate open-source tools with high detection rates under their own family signatures. The real Orcus C2 upstream behind the tunnel could not be identified from static analysis; without the resolved upstream IP or domain, a Suricata rule targeting chisel/plink traffic would require behavioral heuristics (e.g., periodic short-interval beaconing patterns) that would generate excessive FPs against legitimate SSH/HTTP tunnel use. Dynamic detonation of `myfile.exe` in an isolated environment is required to resolve the real upstream C2 and enable a targeted network rule.
 
-**T1562.001 — AMSI/ETW/ntdll Unhook (Perun's Fart)**
+**T1685 — AMSI/ETW/ntdll Unhook (Perun's Fart)**
 The Perun's Fart ntdll-unhook technique operates entirely in user-mode memory and does not produce Sysmon process-creation events. Effective detection requires EDR kernel-level hooks or memory integrity monitoring. A Sigma rule targeting the DLL load of `ntdll.dll` a second time (e.g., via Sysmon EID 7 image-load watching for `ntdll.dll` loaded from a non-standard path) is architecturally possible but requires significant tuning per environment and was assessed as out of scope for this campaign-specific rule set.
 
 **T1090.001 — Orcus Real Upstream C2**

@@ -394,11 +394,13 @@ description: |
     Shadow RAT infection with established persistence.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1547/001/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
     - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1547.001
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -437,11 +439,12 @@ description: |
     from a user-writable path is a strong indicator of an AMSI patching attempt.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1562/001/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     category: image_load
     product: windows
@@ -491,11 +494,12 @@ description: |
     The GrantedAccess value 0x1FFFFF indicates full process access including write permissions.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1562/006/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     category: process_access
     product: windows
@@ -532,7 +536,7 @@ level: high
 **Deployment:** SIEM (Sysmon Event ID 1 / process_creation), EDR
 
 ```yaml
-title: Windows Firewall Disabled via netsh opmode Command
+title: Windows Firewall Disabled via Netsh Opmode Command
 id: d7b42f19-3a58-4c82-9e31-0f5b8c2a6d94
 status: test
 description: |
@@ -544,11 +548,12 @@ description: |
     explicit maintenance windows.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1562/004/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
+    - attack.t1686
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -594,12 +599,14 @@ description: |
     to the malware binary in %AppData%.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1053/005/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
     - attack.persistence
     - attack.execution
+    - attack.privilege-escalation
+    - attack.t1053.005
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -642,11 +649,13 @@ description: |
     %AppData%\Roaming\.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1547/001/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
     - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1547.001
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -682,11 +691,13 @@ description: |
     by a process running from a user-writable path is a strong indicator of malware persistence.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1547/009/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
     - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1547.009
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -728,12 +739,13 @@ description: |
     API is a strong indicator of sandbox evasion behavior.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1497/001/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.discovery
+    - attack.t1497.001
+    - detection.emerging-threats
 logsource:
     category: dns_query
     product: windows
@@ -782,11 +794,12 @@ description: |
     system tool is abnormal and indicates deliberate MOTW suppression.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1553/005/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
+    - attack.t1553.005
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -832,12 +845,14 @@ description: |
     managed system paths, not user-writable locations.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
-    - https://attack.mitre.org/techniques/T1497/001/
 author: The Hunters Ledger
-date: 2026/04/04
+date: '2026-04-04'
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.discovery
+    - attack.t1497.001
+    - attack.t1082
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows

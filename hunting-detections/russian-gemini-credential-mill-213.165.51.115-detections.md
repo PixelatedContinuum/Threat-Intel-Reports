@@ -359,6 +359,7 @@ rule MAL_Russian_Operator_Persona_Strings {
       1 of ($bro_bratukh, $comp_doktora, $pognali) and
       1 of ($gemini_api_key, $api_endpoint, $cf_tunnel, $sniper_goods, $quantum_patriot)
 }
+```
 
 ---
 
@@ -376,7 +377,7 @@ rule MAL_Russian_Operator_Persona_Strings {
 ```yaml
 title: Gemini API Egress from Server-Class Infrastructure Host
 id: 173cf9ee-97c5-4d51-8487-856f63894ad5
-status: test
+status: experimental
 description: >-
   Detects outbound HTTPS connections to generativelanguage.googleapis.com from server-class
   hosts (non-developer workstations). From server infrastructure, this pattern indicates
@@ -386,10 +387,16 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
-    - attack.credential-access
-    - attack.resource-development
+    - attack.initial-access
+    - attack.stealth
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1078
+    - attack.execution
+    - attack.t1059.006
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: linux
@@ -425,7 +432,7 @@ level: medium
 ```yaml
 title: Gemini CLI Directory Creation with Executable Contents on Server Host
 id: dca5d3c0-5b22-453e-a36f-7696d927a739
-status: test
+status: experimental
 description: >-
   Detects creation of ~/.gemini/ directory containing executable scripts (.sh, .py) or
   AI-priming documents on server-class Linux hosts. The UTA-2026-012 operator stores C2
@@ -436,10 +443,13 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
-    - attack.persistence
     - attack.resource-development
+    - attack.t1587
+    - attack.execution
+    - attack.t1059.006
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -474,7 +484,7 @@ level: medium
 ```yaml
 title: Cloudflare Tunnel Registration to tralalarkefe.com Operator Infrastructure
 id: 1003c111-2038-43bc-b463-b5895cd6f408
-status: test
+status: experimental
 description: >-
   Detects cloudflared process invocations referencing the UTA-2026-012 operator's bespoke
   Cloudflare Tunnel domain tralalarkefe.com or its documented subdomains (c2, payloads,
@@ -484,10 +494,12 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
     - attack.command-and-control
-    - attack.defense-evasion
+    - attack.t1090.004
+    - attack.t1572
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -497,7 +509,7 @@ detection:
         CommandLine|contains: 'tralalarkefe.com'
     condition: selection
 falsepositives:
-    - None expected — tralalarkefe.com has no documented legitimate use
+    - Unlikely — tralalarkefe.com has no documented legitimate use
 level: high
 ```
 
@@ -515,7 +527,7 @@ level: high
 ```yaml
 title: Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname
 id: 57ce00ce-d1ee-4621-9654-cefb4bf3b60d
-status: test
+status: experimental
 description: >-
   Detects cloudflared access tcp invocations on Linux server-class hosts referencing hostnames
   outside an organizational allowlist. The UTA-2026-012 operator used cloudflared access tcp
@@ -527,10 +539,15 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
     - attack.command-and-control
+    - attack.t1090.004
+    - attack.t1572
     - attack.lateral-movement
+    - attack.t1021.001
+    - attack.t1021.004
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -565,7 +582,7 @@ level: medium
 ```yaml
 title: WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence
 id: 833c2659-c255-4e42-a6b8-2cfd8b0b8ac1
-status: test
+status: experimental
 description: >-
   Detects registry write to HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager
   pointing to %LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1 — the operator-bespoke
@@ -575,10 +592,16 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.privilege-escalation
+    - attack.t1547.001
+    - attack.stealth
+    - attack.t1036
+    - attack.execution
+    - attack.t1059.001
+    - detection.emerging-threats
 logsource:
     category: registry_set
     product: windows
@@ -588,7 +611,7 @@ detection:
             - '\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager'
     condition: selection
 falsepositives:
-    - None expected — WindowsUpdateManager is not a legitimate Windows Update component registry value
+    - Unlikely — WindowsUpdateManager is not a legitimate Windows Update component registry value
 level: high
 ```
 
@@ -606,7 +629,7 @@ level: high
 ```yaml
 title: Outbound HTTP to AntiPublic.one Credential Database API from Non-Research Host
 id: 163023b7-5615-4c9f-9e30-60af0bd2cd8e
-status: test
+status: experimental
 description: >-
   Detects outbound HTTP connections to antipublic.one/api/v2/search from non-security-research
   infrastructure. The UTA-2026-012 operator integrates this Russian paid breach-data lookup
@@ -616,10 +639,16 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
-    - attack.credential-access
     - attack.collection
+    - attack.t1213
+    - attack.initial-access
+    - attack.stealth
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1078
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: linux
@@ -650,7 +679,7 @@ level: high
 ```yaml
 title: Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern)
 id: 253e1a6a-f4f3-4227-9106-94e9fdb4f949
-status: test
+status: experimental
 description: >-
   Detects Python processes launching HTTP servers on non-standard ports (8081, 8090, 10101)
   co-occurring with utf-16le string in command line or script path — runtime signature of the
@@ -660,10 +689,14 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
     - attack.command-and-control
+    - attack.t1071.001
+    - attack.t1132.001
     - attack.execution
+    - attack.t1059.006
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: linux
@@ -700,33 +733,40 @@ level: low
 **Deployment:** Web Application Firewall, reverse proxy access logs, Zeek http.log
 
 ```yaml
-title: Mass WordPress wp-login.php Credential Validation Rate — Possible A2A Credential Mill
+title: Mass WordPress wp-login.php Credential Validation Requests — Possible A2A Credential Mill
 id: c6ff58ec-caa8-43e8-a73d-7869abcae0eb
-status: test
+status: experimental
 description: >-
-  Detects high-volume HTTP POST requests to /wp-login.php from a single source IP exceeding
-  500 requests per 60-second window — signature of mass_wp_mutator.py and nuclei wp_admin_hunter.yaml
-  credential validation used by UTA-2026-012. The operator's ThreadPoolExecutor 3-worker
-  configuration generates high POST volume against target lists of 30,000+ WordPress sites.
-  Threshold tuning guidance: 500/min is conservative; adjust based on environment baseline.
+  Detects HTTP POST requests to /wp-login.php, the endpoint targeted by mass_wp_mutator.py
+  and the operator's nuclei wp_admin_hunter.yaml template for UTA-2026-012 credential
+  validation at scale. A single request is not by itself anomalous; the operator's signature
+  is a high per-source-IP rate (500+ requests within a 60-second window driven by a
+  ThreadPoolExecutor 3-worker pipeline against target lists of 30,000+ WordPress sites).
+  This rule surfaces the underlying event for rate-based correlation in the SIEM or WAF layer
+  — deploy alongside a per-source-IP request-rate threshold (500+/min conservative baseline;
+  tune per environment) since Sigma's non-correlation rule format cannot itself express
+  a count-over-time aggregation.
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
     - attack.credential-access
-    - attack.initial-access
+    - attack.t1110.003
+    - attack.execution
+    - attack.t1059.006
+    - detection.emerging-threats
 logsource:
-    product: apache
-    service: access
+    category: webserver
 detection:
     selection:
         cs-uri-stem|contains: '/wp-login.php'
         cs-method: 'POST'
-    condition: selection | count(c-ip) by c-ip > 500
+    condition: selection
 falsepositives:
-    - Authorized load-testing or penetration testing against WordPress installations
+    - Authorized load-testing or authorized offensive-security assessments against WordPress installations
     - WordPress security scanner tools (WPScan, Jetpack Protect) — these generally use lower rates
+    - Any single legitimate login attempt to a WordPress site — this rule requires rate-based correlation (500+ requests/60s from one source IP) to distinguish credential-mill activity from normal traffic
 level: high
 ```
 
@@ -744,7 +784,7 @@ level: high
 ```yaml
 title: 1Password Vault Export File Created or Accessed by Non-1Password Process
 id: 0ced06f4-f028-44fa-b7fc-4f1a96c3076d
-status: test
+status: experimental
 description: >-
   Detects creation or access of 1Password vault export files (.1pux, .1pif) by processes
   other than the 1Password application. The UTA-2026-012 operator's credential ledger
@@ -755,10 +795,13 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
     - attack.credential-access
+    - attack.t1555.005
     - attack.collection
+    - attack.t1005
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -794,7 +837,7 @@ level: high
 ```yaml
 title: NTLM Hash Dump Followed by Cloudflare Tunnel Exfiltration Within 10 Minutes
 id: f4e6c9ce-7511-4e5e-9e52-adba3f0ae030
-status: test
+status: experimental
 description: >-
   Detects the sequence of NTLM credential dumping (lsass access or SAM hive read) followed
   within 10 minutes by outbound connections to Cloudflare Tunnel infrastructure
@@ -806,11 +849,16 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
     - attack.credential-access
+    - attack.t1003.001
+    - attack.t1003.002
     - attack.exfiltration
+    - attack.t1041
     - attack.command-and-control
+    - attack.t1090.004
+    - detection.emerging-threats
 logsource:
     category: process_access
     product: windows
@@ -825,7 +873,7 @@ detection:
 falsepositives:
     - Legitimate AV/EDR processes accessing lsass.exe for telemetry — filter by trusted Image paths (CrowdStrike, Defender, Carbon Black sensors)
     - Domain controller synchronization operations
-    - Note: this rule captures only the first event in the sequence; Cloudflare Tunnel egress correlation requires a SIEM temporal join rule (window 10 min) against DNS/network logs for *.trycloudflare.com or *.tralalarkefe.com
+    - "This rule captures only the first event in the sequence; Cloudflare Tunnel egress correlation requires a SIEM temporal join rule (window 10 min) against DNS/network logs for *.trycloudflare.com or *.tralalarkefe.com"
 level: high
 ```
 
@@ -843,7 +891,7 @@ level: high
 ```yaml
 title: AI Operator Handoff Document Filename Created on Server Filesystem
 id: 0532e874-0106-4db7-9fc7-2e44939eae23
-status: test
+status: experimental
 description: >-
   Detects file creation events matching the UTA-2026-012 operator's documented AI Operator
   Handoff Document naming conventions on server filesystems. Three exemplars confirmed:
@@ -854,10 +902,13 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
-    - attack.persistence
     - attack.resource-development
+    - attack.t1587
+    - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: linux
@@ -896,7 +947,7 @@ level: high
 ```yaml
 title: Telegram API Egress from Server Host with Americanpatriotus Channel Indicator
 id: 8be13baf-aa35-422c-8757-9cfea720af53
-status: test
+status: experimental
 description: >-
   Detects automated Telegram Bot API connections from server-class infrastructure, hunting
   for the UTA-2026-012 operator's quantum_patriot.py Telegram disinformation posting script
@@ -906,12 +957,14 @@ description: >-
   quantum_patriot in command line for higher-confidence detection.
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-    - https://www.trendmicro.com/ (TrendAI Research, 2026-05-22 — bandcampro operator coverage)
 author: The Hunters Ledger
-date: 2026/05/25
+date: '2026-05-25'
 tags:
-    - attack.impact
     - attack.command-and-control
+    - attack.t1102
+    - attack.execution
+    - attack.t1059.006
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: linux

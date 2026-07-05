@@ -233,22 +233,19 @@ id: 9a2c5b8f-3d1e-4f5a-8c9b-1a2d3e4f5a6b
 status: stable
 description: Detects creation of registry keys associated with Fodhelper UAC bypass technique
 references:
-    - https://attack.mitre.org/techniques/T1548/002/
     - https://github.com/hfiref0x/UACME
 author: The Hunters Ledger
-date: 2026/01/12
-modified: 2026/01/12
+date: '2026-01-12'
 tags:
-    - attack.privilege_escalation
+    - attack.privilege-escalation
     - attack.t1548.002
-    - attack.defense_evasion
+    - detection.emerging-threats
 logsource:
+    category: registry_event
     product: windows
-    service: sysmon
     definition: 'Sysmon Event ID 13 (Registry Value Set)'
 detection:
     selection:
-        EventID: 13
         TargetObject|contains: '\Software\Classes\ms-settings\shell\open\command'
     filter_legitimate:
         Image|endswith:
@@ -269,25 +266,22 @@ id: 7b3c6d9e-4f2a-5e8b-9c1d-2a3e4f5a6b7c
 status: experimental
 description: Detects process elevation via CMSTPLUA COM interface without UAC prompt
 references:
-    - https://attack.mitre.org/techniques/T1548/002/
     - https://enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 tags:
-    - attack.privilege_escalation
+    - attack.privilege-escalation
     - attack.t1548.002
+    - detection.emerging-threats
 logsource:
+    category: process_creation
     product: windows
-    service: security
-    definition: 'Windows Security Event ID 4688 (Process Creation)'
 detection:
     selection_process:
-        EventID: 4688
-        ParentProcessName|endswith: '\DllHost.exe'
-        TokenElevationType: '%%1937'  # High integrity level
+        ParentImage|endswith: '\DllHost.exe'
+        IntegrityLevel: 'High'
     selection_clsid:
         CommandLine|contains: '{6EDD6D74-C007-4E75-B76A-E5740995E24C}'
-    timeframe: 10s
     condition: selection_process or selection_clsid
 falsepositives:
     - Legitimate COM-based elevation by trusted Windows components
@@ -302,13 +296,12 @@ title: Suspicious Privilege Escalation Without UAC Consent
 id: 1c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f
 status: stable
 description: Detects privilege escalation to High integrity level without corresponding UAC consent event
-references:
-    - https://attack.mitre.org/techniques/T1548/002/
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 tags:
-    - attack.privilege_escalation
+    - attack.privilege-escalation
     - attack.t1548.002
+    - detection.emerging-threats
 logsource:
     product: windows
     service: security
@@ -320,7 +313,6 @@ detection:
         EventID: 4103  # UAC consent
     filter_system:
         SubjectUserName: 'SYSTEM'
-    timeframe: 5s
     condition: selection_elevation and not selection_no_consent and not filter_system
 falsepositives:
     - Scheduled tasks running with administrative privileges
@@ -336,13 +328,12 @@ title: Suspicious Child Process Spawned by fodhelper.exe
 id: 2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d
 status: stable
 description: Detects fodhelper.exe spawning unexpected child processes (potential UAC bypass)
-references:
-    - https://attack.mitre.org/techniques/T1548/002/
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 tags:
-    - attack.privilege_escalation
+    - attack.privilege-escalation
     - attack.t1548.002
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows

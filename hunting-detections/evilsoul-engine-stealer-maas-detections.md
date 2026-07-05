@@ -261,7 +261,7 @@ rule Tool_xaitax_ChromElevator_EvilSoul_Fork {
 ```yaml
 title: Browser Relaunched with Remote Debugging and Headless Flags by Non-Browser Parent
 id: b788a75b-a966-47d5-b91b-5fb92b2e9571
-status: test
+status: experimental
 description: >-
   Detects a Chromium-based browser process launched with --remote-debugging-port,
   --headless, and --user-data-dir simultaneously by a parent process that is not a
@@ -274,12 +274,13 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
     - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption
 author: The Hunters Ledger
-date: 2026-07-03
+date: '2026-07-03'
 tags:
     - attack.credential-access
     - attack.t1539
     - attack.collection
     - attack.t1185
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -323,7 +324,7 @@ level: high
 ```yaml
 title: Python Process Opens LSASS Handle After Stdin Execution (ABE Decryptor Pattern)
 id: e2ccff6f-eec8-4a34-a78e-4ac4bf5d50f3
-status: test
+status: experimental
 description: >-
   Detects a python.exe or pythonw.exe process that opens a handle to lsass.exe
   shortly after being launched with the -u - stdin-execution flag combination
@@ -334,11 +335,12 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
 author: The Hunters Ledger
-date: 2026-07-03
+date: '2026-07-03'
 tags:
     - attack.credential-access
     - attack.t1003.001
     - attack.t1539
+    - detection.emerging-threats
 logsource:
     category: process_access
     product: windows
@@ -371,7 +373,7 @@ level: high
 ```yaml
 title: Whole-Drive Windows Defender Exclusion Combined with Real-Time Monitoring Disable
 id: fde077ad-0afc-4158-bff6-f4c80604d461
-status: test
+status: experimental
 description: >-
   Detects PowerShell script block content that both adds a whole-drive
   (C:\) Windows Defender exclusion path and disables real-time monitoring in
@@ -382,10 +384,12 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
 author: The Hunters Ledger
-date: 2026-07-03
+date: '2026-07-03'
 tags:
-    - attack.defense-evasion
-    - attack.t1562.001
+    - attack.stealth
+    - attack.t1685
+    - attack.defense-impairment
+    - detection.emerging-threats
 logsource:
     category: ps_script
     product: windows
@@ -420,7 +424,7 @@ level: high
 ```yaml
 title: Scheduled Task Created with Microsoft Corporation Author and Hidden Flag
 id: c69291c1-70a6-4aa1-835f-bc26d4afcc2f
-status: test
+status: experimental
 description: >-
   Detects creation of a new scheduled task whose Task XML Author field is set
   to the literal string "Microsoft Corporation" combined with the hidden
@@ -431,12 +435,15 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
 author: The Hunters Ledger
-date: 2026-07-03
+date: '2026-07-03'
 tags:
     - attack.persistence
+    - attack.execution
+    - attack.privilege-escalation
     - attack.t1053.005
-    - attack.defense-evasion
+    - attack.stealth
     - attack.t1036.004
+    - detection.emerging-threats
 logsource:
     product: windows
     service: security
@@ -449,7 +456,7 @@ detection:
             - '<Hidden>true</Hidden>'
     condition: selection
 falsepositives:
-    - None expected — genuine Microsoft Corporation-authored tasks are pre-installed by the OS, not created via runtime Event ID 4698 registration by a user-context process
+    - Unlikely — genuine Microsoft Corporation-authored tasks are pre-installed by the OS, not created via runtime Event ID 4698 registration by a user-context process
 level: high
 ```
 
@@ -469,7 +476,7 @@ level: high
 ```yaml
 title: ChromElevator ABE-Bypass Tool Dropped to TEMP Executor Directory
 id: 2d54e3fa-a90b-4709-9521-b7a4ab95e76a
-status: test
+status: experimental
 description: >-
   Detects file creation of chromelevator.exe or chrome_decrypt.dll under a
   TEMP\executor\ path, matching the staging location used by the EvilSoul-Engine
@@ -480,12 +487,13 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
     - https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption
 author: The Hunters Ledger
-date: 2026-07-03
+date: '2026-07-03'
 tags:
     - attack.command-and-control
     - attack.t1105
     - attack.credential-access
     - attack.t1555.003
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -517,7 +525,7 @@ level: high
 ```yaml
 title: EvilSoul-Engine Watchdog Persistence Files Created in TEMP or Startup
 id: 5f925688-77fd-410a-9c8a-83ca801a5013
-status: test
+status: experimental
 description: >-
   Detects file creation of the specific watchdog and persistence-chain
   filenames used by the EvilSoul-Engine 299a2e7f build's redundant
@@ -527,12 +535,15 @@ description: >-
 references:
     - https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/
 author: The Hunters Ledger
-date: 2026-07-03
+date: '2026-07-03'
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.t1564.001
     - attack.persistence
+    - attack.execution
+    - attack.privilege-escalation
     - attack.t1053.005
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows

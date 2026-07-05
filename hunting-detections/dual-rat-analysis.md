@@ -198,12 +198,11 @@ rule NjRAT_XWorm_Triple_Persistence {
 #### Sigma Rule - Quasar RAT Scheduled Task Persistence
 ```yaml
 title: Quasar RAT Scheduled Task Persistence
-id: 8b5c3d1a-8f4e-4b9a-9c6d-3e4f9081
+id: 06347ef1-4a96-4d80-ba7b-d54d5148ced9
 status: experimental
 description: Detects Quasar RAT persistence through RuntimeBroker scheduled task creation
 author: The Hunters Ledger
-date: 2025/12/06
-modified: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     service: security
@@ -222,20 +221,20 @@ falsepositives:
 level: high
 tags:
     - attack.persistence
-    - defense_evasion
-    - t1053.005
-    - pulsar_rat
+    - attack.execution
+    - attack.privilege-escalation
+    - attack.t1053.005
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - Quasar RAT Process Injection
 ```yaml
 title: Quasar RAT Process Injection Activity
-id: a7b2c3d9-4e5f-8a9b-2c6d-4f7e9081
+id: 6e1ad431-a53d-49ab-b6b0-0f6fb647d3a1
 status: experimental
 description: Detects potential Quasar RAT process injection behavior
 author: The Hunters Ledger
-date: 2025/12/06
-modified: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: process_creation
@@ -253,51 +252,46 @@ falsepositives:
     - Legitimate software injection
 level: high
 tags:
-    - attack.defense_evasion
-    - attack.privilege_escalation
-    - t1055.003
-    - t1055
-    - pulsar_rat
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055.003
+    - attack.t1055
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - Quasar RAT Zone.Identifier Removal
 ```yaml
 title: Quasar RAT Mark of the Web Removal
-id: c9d4e5f2-6a7b-3c8d-4e9f-5a6b9081
+id: 469751f1-91ad-4b17-8c14-491a019f1f44
 status: experimental
 description: Detects Zone.Identifier alternate data stream deletion characteristic of Quasar RAT
 author: The Hunters Ledger
-date: 2025/12/06
-modified: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: file_delete
 detection:
     selection:
         TargetFilename|contains: ':Zone.Identifier'
-        Image|endswith:
-            - '\client.exe'
-            - '\Client.exe'
+        Image|endswith: '\Client.exe'
     condition: selection
 falsepositives:
     - Legitimate file management tools
 level: medium
 tags:
-    - attack.defense_evasion
-    - attack.initial_access
-    - t1070.004
-    - pulsar_rat
+    - attack.stealth
+    - attack.t1070.004
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - Quasar RAT C2 Communication
 ```yaml
 title: Quasar RAT Command and Control Communication
-id: d1e5f6a3-7b8c-4d9e-5f0a-6a7b9081
+id: 6e5cd22d-2176-4069-85e6-0fe1075ebf2c
 status: experimental
 description: Detects Quasar RAT C2 communication patterns
 author: The Hunters Ledger
-date: 2025/12/06
-modified: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: network_connection
@@ -312,11 +306,10 @@ falsepositives:
     - Legitimate applications using port 4782
 level: critical
 tags:
-    - attack.command_and_control
-    - t1071.001
-    - t1573
-    - t1041
-    - pulsar_rat
+    - attack.command-and-control
+    - attack.t1071.001
+    - attack.t1573
+    - detection.emerging-threats
 ```
 
 ### NjRAT/XWorm Detection Rules
@@ -324,12 +317,11 @@ tags:
 #### Sigma Rule - NjRAT/XWorm Triple Persistence
 ```yaml
 title: NjRAT/XWorm Triple Persistence Establishment
-id: e2f6a7b4-8c9d-4e0f-6a7b-3c8d9081
+id: ca1fba48-5756-40d7-ab90-9fad61dd00b8
 status: experimental
 description: Detects NjRAT/XWorm triple persistence mechanism establishment
 author: The Hunters Ledger
-date: 2025/12/06
-modified: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     service: security
@@ -355,21 +347,22 @@ falsepositives:
 level: high
 tags:
     - attack.persistence
-    - t1053.005
-    - t1547.001
-    - t1547.009
-    - njrat_xworm
+    - attack.execution
+    - attack.privilege-escalation
+    - attack.t1053.005
+    - attack.t1547.001
+    - attack.t1547.009
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - NjRAT/XWorm Pastebin Dead-Drop
 ```yaml
 title: NjRAT/XWorm Pastebin Dead-Drop C2 Resolution
-id: f3a7b8c5-9d0e-4f1a-7b2c-4e9d9081
+id: fa059bb8-a203-4528-a3ae-2b4f67b74576
 status: experimental
 description: Detects NjRAT/XWorm Pastebin dead-drop C2 resolution behavior
 author: The Hunters Ledger
-date: 2025/12/06
-modified: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: network_connection
@@ -381,27 +374,25 @@ detection:
         DestinationPort: 443
         DestinationHostname|contains: 'pastebin.com'
         Initiated: 'true'
-    timeframe: 5m
-    condition: selection | count() by Image > 0
+    condition: selection
 falsepositives:
     - Legitimate access to Pastebin from development tools
 level: high
 tags:
-    - attack.command_and_control
-    - t1102.001
-    - t1071.001
-    - njrat_xworm
+    - attack.command-and-control
+    - attack.t1102.001
+    - attack.t1071.001
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - NjRAT/XWorm Critical Process Protection
 ```yaml
 title: NjRAT/XWorm Critical Process Protection
-id: g4b8c9d6-0e1f-5a2b-8c9d-4f0a9081
+id: 50822c3d-7929-4862-9f72-29ced85d0719
 status: experimental
 description: Detects NjRAT/XWorm critical process protection mechanism
 author: The Hunters Ledger
-date: 2025/12/06
-modified: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: api_call
@@ -416,20 +407,18 @@ falsepositives:
     - Legitimate system processes
 level: high
 tags:
-    - attack.defense_evasion
-    - attack.impact
-    - njrat_xworm
+    - attack.defense-impairment
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - NjRAT/XWorm Anti-Sleep Mechanism
 ```yaml
 title: NjRAT/XWorm Anti-Sleep System Protection
-id: h5c9d0e7-1f2a-9b3c-5e0f-7a2b9081
+id: d3e50e4c-c6f1-4843-b891-7c501985d7c1
 status: experimental
 description: Detects NjRAT/XWorm anti-sleep mechanism to prevent system power saving
 author: The Hunters Ledger
-date: 2025/12/06
-modified: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: api_call
@@ -444,9 +433,9 @@ falsepositives:
     - Legitimate media applications preventing sleep
 level: medium
 tags:
-    - attack.defense_evasion
-    - attack.impact
-    - njrat_xworm
+    - attack.persistence
+    - attack.t1653
+    - detection.emerging-threats
 ```
 
 ---
@@ -628,11 +617,11 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 443 (msg:"NjRAT/XWorm Mobile User-Agent
 #### Sigma Rule - Suspicious Dead-Drop Service Access
 ```yaml
 title: Suspicious Access to Dead-Drop Services
-id: dead-drop-access-001
+id: e5ef6bed-378b-4b30-8a72-2813bf37c310
 status: experimental
 description: Detects access to common dead-drop services that may indicate C2 infrastructure resolution
 author: The Hunters Ledger
-date: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: network_connection
@@ -660,19 +649,20 @@ falsepositives:
     - Corporate tools using GitHub for configuration
 level: medium
 tags:
-    - attack.command_and_control
-    - t1102.001
-    - dead_drop_resolver
+    - attack.command-and-control
+    - attack.t1102.001
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - High-Frequency Process Creation
 ```yaml
 title: High-Frequency Process Creation from Scheduled Task
-id: high-freq-process-creation-001
+id: 4808ee63-bff2-4546-be28-8a8c3d200426
+name: high_freq_process_creation_base
 status: experimental
-description: Detects processes created at unusually high frequencies, potentially from aggressive scheduled tasks
+description: Detects individual process creation events consistent with an aggressive scheduled task; paired with a correlation rule below to flag high-frequency bursts
 author: The Hunters Ledger
-date: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: process_creation
@@ -680,16 +670,44 @@ detection:
     selection:
         ParentImage|contains: 'svchost.exe'
         CommandLine|contains: 'taskeng.exe'
-    timeframe: 1m
-    condition: selection | count() > 10
+    condition: selection
+falsepositives:
+    - Legitimate scheduled tasks with high frequency requirements
+    - System maintenance operations
+level: medium
+tags:
+    - attack.persistence
+    - attack.execution
+    - attack.privilege-escalation
+    - attack.t1053.005
+    - detection.emerging-threats
+---
+title: High-Frequency Process Creation from Scheduled Task - Correlation
+id: a262c95e-8779-4cc0-9d4d-cb5452f8a972
+status: experimental
+description: Raises severity when 10 or more matches of the base rule fire from the same parent process within 1 minute, consistent with an aggressive scheduled-task persistence loop
+author: The Hunters Ledger
+date: '2025-12-06'
+correlation:
+    type: event_count
+    rules:
+        - high_freq_process_creation_base
+    group-by:
+        - ParentImage
+        - ComputerName
+    timespan: 1m
+    condition:
+        gte: 10
 falsepositives:
     - Legitimate scheduled tasks with high frequency requirements
     - System maintenance operations
 level: high
 tags:
     - attack.persistence
-    - t1053.005
-    - scheduled_task_abuse
+    - attack.execution
+    - attack.privilege-escalation
+    - attack.t1053.005
+    - detection.emerging-threats
 ```
 
 ### Host-Based Behavioral Detection
@@ -697,11 +715,11 @@ tags:
 #### Sigma Rule - Memory Allocation Anomalies
 ```yaml
 title: Suspicious Memory Allocation Patterns
-id: memory-allocation-anomaly-001
+id: 8567d05a-84c2-4bb9-8014-88f9242bb761
 status: experimental
 description: Detects processes allocating memory with suspicious permissions that may indicate process injection
 author: The Hunters Ledger
-date: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: api_call
@@ -721,38 +739,113 @@ falsepositives:
     - Development tools and debuggers
 level: medium
 tags:
-    - attack.defense_evasion
-    - t1055
-    - process_injection
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055
+    - detection.emerging-threats
 ```
 
 #### Sigma Rule - API Call Sequence Analysis
 ```yaml
-title: Suspicious API Call Sequence for RAT Activity
-id: api-sequence-rat-001
+title: Suspicious API Call Sequence for RAT Activity - Hook Installation
+id: 6988a253-9be9-49a8-8450-13b1f35a3a2b
+name: rat_api_seq_hook
 status: experimental
-description: Detects sequences of API calls commonly associated with RAT surveillance and persistence activities
+description: First step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - window hook installation
 author: The Hunters Ledger
-date: 2025/12/06
+date: '2025-12-06'
 logsource:
     product: windows
     category: api_call
 detection:
-    sequence:
-        - CallTrace|contains: 'SetWindowsHookEx'
-        - CallTrace|contains: 'VirtualAllocEx'
-        - CallTrace|contains: 'CreateRemoteThread'
-    timeframe: 5m
-    condition: sequence
+    selection:
+        CallTrace|contains: 'SetWindowsHookEx'
+    condition: selection
+falsepositives:
+    - Legitimate software with similar API usage patterns
+    - Development and debugging tools
+level: medium
+tags:
+    - attack.collection
+    - attack.credential-access
+    - attack.t1056.001
+    - detection.emerging-threats
+---
+title: Suspicious API Call Sequence for RAT Activity - Remote Memory Allocation
+id: 487da0d4-79c3-46c5-aee2-1972ff801417
+name: rat_api_seq_alloc
+status: experimental
+description: Second step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - remote memory allocation
+author: The Hunters Ledger
+date: '2025-12-06'
+logsource:
+    product: windows
+    category: api_call
+detection:
+    selection:
+        CallTrace|contains: 'VirtualAllocEx'
+    condition: selection
+falsepositives:
+    - Legitimate software with similar API usage patterns
+    - Development and debugging tools
+level: medium
+tags:
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055.003
+    - detection.emerging-threats
+---
+title: Suspicious API Call Sequence for RAT Activity - Remote Thread Creation
+id: a1ea23fd-ff54-4115-bb49-89b7fa7b9cd4
+name: rat_api_seq_thread
+status: experimental
+description: Third step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - remote thread creation
+author: The Hunters Ledger
+date: '2025-12-06'
+logsource:
+    product: windows
+    category: api_call
+detection:
+    selection:
+        CallTrace|contains: 'CreateRemoteThread'
+    condition: selection
+falsepositives:
+    - Legitimate software with similar API usage patterns
+    - Development and debugging tools
+level: medium
+tags:
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055.003
+    - detection.emerging-threats
+---
+title: Suspicious API Call Sequence for RAT Activity - Correlation
+id: d8a1c743-f249-446d-8a89-8f5fe9dc4ed9
+status: experimental
+description: Correlates the ordered occurrence of window-hook installation, remote memory allocation, and remote thread creation within a short window - a sequence commonly associated with RAT surveillance and persistence activities
+author: The Hunters Ledger
+date: '2025-12-06'
+correlation:
+    type: temporal_ordered
+    rules:
+        - rat_api_seq_hook
+        - rat_api_seq_alloc
+        - rat_api_seq_thread
+    group-by:
+        - Image
+    timespan: 5m
 falsepositives:
     - Legitimate software with similar API usage patterns
     - Development and debugging tools
 level: high
 tags:
     - attack.collection
-    - attack.defense_evasion
-    - t1056.001
-    - t1055.003
+    - attack.credential-access
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1056.001
+    - attack.t1055.003
+    - detection.emerging-threats
 ```
 
 ### Enhanced PowerShell Hunting Queries

@@ -243,17 +243,15 @@ rule EncDec_enc_dec_Family_Comprehensive {
 
 ```yaml
 title: enc/dec Ransomware VSS Deletion Activity
-id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+id: ad52d938-ac86-4587-86c9-008ad0534b68
 status: stable
 description: Detects Volume Shadow Copy deletion commands consistent with enc/dec ransomware family
-references:
-    - enc/dec ransomware technical analysis
 author: The Hunters Ledger
-date: 2026/01/18
+date: '2026-01-18'
 tags:
     - attack.impact
     - attack.t1490
-    - attack.inhibit_system_recovery
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -291,22 +289,48 @@ level: critical
 
 ```yaml
 title: enc/dec Ransomware Multi-Drive Enumeration
-id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+id: ba117461-335d-4a80-9b8f-f8a06b77f445
+name: encdec_multidrive_base
 status: experimental
-description: Detects rapid sequential drive enumeration characteristic of enc/dec ransomware
+description: Detects individual drive-root file access events; paired with a correlation rule below to flag rapid sequential enumeration across 20+ drives within 10 seconds, characteristic of enc/dec ransomware
 author: The Hunters Ledger
-date: 2026/01/18
+date: '2026-01-18'
 tags:
     - attack.discovery
     - attack.t1083
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
 detection:
     selection:
         TargetFilename|re: '^[A-Z]:\\.*'
-    timeframe: 10s
-    condition: selection | count(by Image) > 20  # 20+ drives accessed in 10 seconds
+    condition: selection
+falsepositives:
+    - Backup software
+    - System inventory tools
+    - Legitimate file search utilities
+level: medium
+---
+title: enc/dec Ransomware Multi-Drive Enumeration - Correlation
+id: ece01fe2-7380-4d55-b2c7-5a9fa17a8113
+status: experimental
+description: Raises severity when the base rule matches 20 or more distinct drive-root file events from the same process within 10 seconds - rapid sequential drive enumeration characteristic of enc/dec ransomware
+author: The Hunters Ledger
+date: '2026-01-18'
+tags:
+    - attack.discovery
+    - attack.t1083
+    - detection.emerging-threats
+correlation:
+    type: event_count
+    rules:
+        - encdec_multidrive_base
+    group-by:
+        - Image
+    timespan: 10s
+    condition:
+        gte: 20
 falsepositives:
     - Backup software
     - System inventory tools
@@ -323,42 +347,7 @@ level: high
 
 ### Rule 3: ChaCha20 Cryptographic Activity Detection
 
-**Description:** Detects processes exhibiting ChaCha20 cryptographic operation patterns.
-
-**Fidelity:** MEDIUM (legitimate encryption software will false positive)
-
-```yaml
-title: enc/dec ChaCha20 Cryptographic Operations
-id: c3d4e5f6-a7b8-9012-cdef-123456789012
-status: experimental
-description: Detects processes loading or executing ChaCha20 cryptographic operations
-author: The Hunters Ledger
-date: 2026/01/18
-tags:
-    - attack.impact
-    - attack.t1486
-logsource:
-    category: process_access
-    product: windows
-detection:
-    selection_strings:
-        - Strings|contains: 'expand 32-byte k'  # ChaCha20 constant
-        - Strings|contains: 'chacha20'
-    selection_memory:
-        MemoryAllocation|gt: 100MB  # Large memory allocations for file encryption
-        CPUUsage|gt: 80  # High CPU during encryption
-    condition: selection_strings and selection_memory
-falsepositives:
-    - Legitimate encryption software
-    - VPN clients using ChaCha20
-    - Secure messaging applications (Signal, Wire, etc.)
-level: medium
-```
-
-**Implementation Notes:**
-- Requires EDR with memory scanning and CPU monitoring capabilities
-- Whitelist known legitimate ChaCha20 usage (VPNs, messaging apps)
-- Best used as correlation signal with other indicators
+**Coverage Gap:** An earlier version of this section carried a Sigma rule (`enc/dec ChaCha20 Cryptographic Operations`) intended to flag ChaCha20 key-schedule strings combined with high memory/CPU usage. It has been removed: the fields it relied on (`Strings`, `MemoryAllocation|gt`, `CPUUsage`) do not exist on any Sigma logsource category and cannot be produced by standard Windows telemetry (Sysmon, Security auditing, or ETW), so the rule could never match in a real SIEM. The ChaCha20 constant string ("expand 32-byte k") this rule targeted is already covered by the YARA rule `EncDec_ChaCha20_Constant` above, which performs the same string match against on-disk/in-memory file content — the correct mechanism for this indicator. No equivalent Sigma-native replacement is proposed at this time.
 
 ---
 
@@ -586,7 +575,6 @@ index=endpoint earliest=-24h
 |----------------|------------------------|---------------------|
 | ChaCha20 Constant | VPN clients (OpenVPN, WireGuard), secure messaging (Signal) | Whitelist known legitimate applications |
 | Multi-Drive Enumeration | Backup software, system inventory tools | Adjust threshold, whitelist known processes |
-| ChaCha20 Cryptographic Activity | Encryption software, secure communications | Correlate with other indicators, whitelist legitimate processes |
 | VSS Deletion | Scheduled maintenance, backup uninstall | Create maintenance window exceptions |
 
 **Tuning Recommendations:**

@@ -202,27 +202,29 @@ rule Arsenal237_LPE_WMIC {
 
 ```yaml
 title: Privilege Escalation via Token Impersonation (lpe.exe)
-id: a1b2c3d4-e5f6-7890-1234-567890abcdef
+id: 41794664-1101-4fbf-a117-c8c1a1f7f473
 status: experimental
 description: Detects token impersonation sequence characteristic of lpe.exe
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 references:
     - lpe.exe analysis report
     - Arsenal-237 malware toolkit investigation
 tags:
-    - attack.privilege_escalation
+    - attack.privilege-escalation
+    - attack.stealth
     - attack.t1134.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_access
 detection:
     selection_process_access:
         TargetImage|endswith:
-            - '\\winlogon.exe'
-            - '\\lsass.exe'
-            - '\\services.exe'
-            - '\\csrss.exe'
+            - '\winlogon.exe'
+            - '\lsass.exe'
+            - '\services.exe'
+            - '\csrss.exe'
         GrantedAccess:
             - '0x1410'  # PROCESS_QUERY_INFORMATION | PROCESS_VM_READ
             - '0x1000'  # PROCESS_QUERY_LIMITED_INFORMATION
@@ -240,65 +242,61 @@ level: critical
 ### Rule 2: UAC Bypass via Registry Hijack
 
 ```yaml
-title: UAC Bypass via ms-settings Registry Hijack (lpe.exe)
-id: b2c3d4e5-f6a7-8901-2345-678901bcdefg
+title: UAC Bypass via Ms-Settings Registry Hijack (lpe.exe)
+id: 78ff8cac-3e71-42c5-9fdf-acdb038ce94a
 status: experimental
-description: Detects UAC bypass via fodhelper.exe registry hijack (lpe.exe technique)
+description: Detects fodhelper.exe launched with reg.exe or lpe.exe as its parent process, the process-creation signature of the ms-settings registry-hijack UAC bypass. The original rule intent also matched the preceding registry write to the ms-settings Shell\Open\command key within 30 seconds; that is a separate event under a different logsource and single-event Sigma rules cannot express the cross-event correlation, so it has been dropped — this rule detects the fodhelper launch alone, which is independently a strong indicator since fodhelper.exe is a Microsoft-signed LOLBIN rarely spawned by reg.exe.
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 tags:
-    - attack.privilege_escalation
-    - attack.defense_evasion
+    - attack.privilege-escalation
     - attack.t1548.002
+    - detection.emerging-threats
 logsource:
     product: windows
-    category: registry_set
+    category: process_creation
 detection:
-    selection_registry:
-        TargetObject|contains:
-            - '\\Software\\Classes\\ms-settings\\Shell\\Open\\command'
-        EventType: SetValue
-    selection_fodhelper:
-        EventID: 1  # Process creation
-        Image|endswith: '\\fodhelper.exe'
+    selection:
+        Image|endswith: '\fodhelper.exe'
         ParentImage|endswith:
-            - '\\reg.exe'
-            - '\\lpe.exe'
-    timeframe: 30s
-    condition: selection_registry and selection_fodhelper
+            - '\reg.exe'
+            - '\lpe.exe'
+    condition: selection
 falsepositives:
     - Legitimate software installation (extremely rare)
-level: critical
+level: high
 ```
 
 ### Rule 3: Scheduled Task Creation as SYSTEM
 
 ```yaml
 title: Scheduled Task Created as SYSTEM (lpe.exe)
-id: c3d4e5f6-a7b8-9012-3456-789012cdefgh
+id: 19fbc402-5876-4f9b-905b-b5452dc7d634
 status: experimental
 description: Detects scheduled task creation with SYSTEM privileges from non-administrative process (direct use of schtasks.exe, not hijacking another component)
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 references:
     - Task names are likely randomized - detection should focus on /ru SYSTEM parameter, not task name
 tags:
-    - attack.privilege_escalation
+    - attack.privilege-escalation
     - attack.execution
+    - attack.persistence
     - attack.t1053.005
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
 detection:
     selection:
-        Image|endswith: '\\schtasks.exe'
+        Image|endswith: '\schtasks.exe'
         CommandLine|contains|all:
             - '/create'
             - '/ru'
             - 'SYSTEM'
     filter_admin:
         User|contains:
-            - 'NT AUTHORITY\\SYSTEM'
+            - 'SYSTEM'
             - 'Administrator'
     condition: selection and not filter_admin
 falsepositives:
@@ -311,60 +309,56 @@ level: high
 
 ```yaml
 title: Named Pipe Impersonation Attack (lpe.exe)
-id: d4e5f6a7-b8c9-0123-4567-890123defghi
+id: 3a0e534f-01ba-4ef6-bdac-99a3528c5f3b
 status: experimental
-description: Detects named pipe creation followed by impersonation attempt
+description: Detects creation of a named pipe used to stage a token-impersonation privilege-escalation attempt (a client connecting to and impersonating the security context of the pipe's creator). The original rule intent also matched a PowerShell process invoking NamedPipeClientStream within 60 seconds of the pipe creation; that is a separate event and single-event Sigma rules cannot express the cross-event correlation, so it has been dropped — this rule detects the pipe creation alone. Retagged from T1055.001 (Dynamic-link Library Injection, unrelated to named-pipe impersonation) to T1134.001 (Token Impersonation/Theft), the technique this behavior actually maps to.
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 tags:
-    - attack.privilege_escalation
-    - attack.t1055.001
+    - attack.privilege-escalation
+    - attack.stealth
+    - attack.t1134.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: pipe_created
 detection:
-    selection_pipe:
-        EventID: 17  # Sysmon pipe created
+    selection:
         PipeName|contains:
             - 'spoolss'
             - 'pipe'
-    selection_powershell:
-        EventID: 1  # Process creation
-        Image|endswith: '\\powershell.exe'
-        CommandLine|contains: 'NamedPipeClientStream'
-    timeframe: 60s
-    condition: selection_pipe and selection_powershell
+    condition: selection
 falsepositives:
     - Legitimate administrative tools using named pipes (rare)
-level: high
+level: medium
 ```
 
 ### Rule 5: WMIC Process Creation for Privilege Escalation
 
 ```yaml
 title: WMIC Process Creation for Privilege Escalation (lpe.exe)
-id: e5f6a7b8-c9d0-1234-5678-901234efghij
+id: 7e7d8199-93c4-4f53-ad05-84c4f3a08a96
 status: experimental
 description: Detects WMIC being used to create processes for privilege escalation
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 tags:
     - attack.execution
-    - attack.privilege_escalation
     - attack.t1047
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
 detection:
     selection:
-        Image|endswith: '\\wmic.exe'
+        Image|endswith: '\wmic.exe'
         CommandLine|contains|all:
             - 'process'
             - 'call'
             - 'create'
     filter_admin:
         User|contains:
-            - 'NT AUTHORITY\\SYSTEM'
+            - 'SYSTEM'
             - 'Administrator'
     condition: selection and not filter_admin
 falsepositives:
@@ -376,36 +370,28 @@ level: medium
 
 ```yaml
 title: Multi-Technique Privilege Escalation Sequence (lpe.exe)
-id: f6a7b8c9-d0e1-2345-6789-012345fghijk
+id: 4b346709-c283-4b91-97da-a13b4573be94
 status: experimental
-description: Detects multiple privilege escalation techniques attempted in rapid succession (lpe.exe signature)
+description: Detects scheduled-task creation with the /ru SYSTEM parameter, one of three privilege-escalation techniques (token impersonation, UAC bypass, SYSTEM scheduled task) lpe.exe attempts in rapid succession. The original rule intent required 2-of-3 techniques within 60 seconds across three different Windows logsources (process_access, registry_set, process_creation); single-event Sigma rules cannot express cross-logsource, cross-event correlation, so that has been dropped. This rule is now a duplicate of Rule 3 (Scheduled Task Created as SYSTEM) and adds no independent detection coverage — token impersonation and UAC-bypass coverage for this multi-technique pattern is provided individually by Rule 1 and Rule 2 in this file.
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 tags:
-    - attack.privilege_escalation
-    - attack.t1134.001
-    - attack.t1548.002
+    - attack.privilege-escalation
+    - attack.execution
+    - attack.persistence
     - attack.t1053.005
+    - detection.emerging-threats
 logsource:
     product: windows
-    category: correlation
+    category: process_creation
 detection:
-    selection_token:
-        EventType: 'ProcessAccess'
-        TargetImage|endswith:
-            - '\\winlogon.exe'
-            - '\\lsass.exe'
-    selection_registry:
-        EventType: 'RegistrySet'
-        TargetObject|contains: 'ms-settings\\Shell\\Open\\command'
-    selection_schtasks:
-        Image|endswith: '\\schtasks.exe'
+    selection:
+        Image|endswith: '\schtasks.exe'
         CommandLine|contains: '/ru SYSTEM'
-    timeframe: 60s
-    condition: 2 of selection_*
+    condition: selection
 falsepositives:
     - Extremely rare - investigate all matches
-level: critical
+level: high
 ```
 
 ---

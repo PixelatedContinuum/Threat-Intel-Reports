@@ -170,6 +170,8 @@ author: The Hunters Ledger
 date: 2026/04/06
 tags:
     - attack.command-and-control
+    - attack.t1071
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -204,13 +206,14 @@ date: 2026/04/06
 tags:
     - attack.exfiltration
     - attack.command-and-control
+    - attack.t1041
+    - detection.emerging-threats
 logsource:
     category: proxy
 detection:
     selection:
         c-uri|contains: '/submit.php'
         cs-method: 'GET'
-        c-port: 8443
     condition: selection
 falsepositives:
     - Legitimate web application endpoints using GET requests to paths named submit.php on non-standard ports (uncommon in enterprise environments)
@@ -236,8 +239,10 @@ references:
 author: The Hunters Ledger
 date: 2026/04/06
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.execution
+    - attack.t1027
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -251,7 +256,7 @@ detection:
             - '\stager.exe'
     condition: selection
 falsepositives:
-    - Red team or penetration testing environments using these exact binary names (unlikely in production; verify against known asset inventory)
+    - Authorized security assessment environments using these exact binary names (unlikely in production; verify against known asset inventory)
     - Legitimate software components coincidentally named run.exe or stager.exe (filter by ParentImage or hash if required)
 level: high
 ```
@@ -266,7 +271,7 @@ level: high
 **Deployment:** Endpoint EDR (Sysmon Event ID 1), script block logging, SIEM
 
 ```yaml
-title: OpenStrike Python Beacon ctypes VirtualAlloc Shellcode Injection
+title: OpenStrike Python Beacon Ctypes VirtualAlloc Shellcode Injection
 id: 1d6b4e82-9f3c-4a17-b5d8-2e7c9a6f1b34
 status: experimental
 description: Detects a Python process with command line arguments referencing ctypes and VirtualAlloc, matching the OpenStrike beacon_universal.py cross-platform shellcode injection pattern. The Python beacon uses ctypes.windll to call VirtualAlloc for RWX memory allocation and CreateThread for shellcode execution, enabling in-memory payload staging without dropping a compiled binary.
@@ -276,7 +281,10 @@ author: The Hunters Ledger
 date: 2026/04/06
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -308,13 +316,15 @@ level: high
 title: Cobalt Strike Malleable C2 Profile MALC User-Agent in Proxy Traffic
 id: 9e3c7a15-6f2b-4d84-a1c9-8b5e2d7f3a61
 status: experimental
-description: Detects the Cobalt Strike 3.x Malleable C2 profile User-Agent string containing the MALC suffix (full string: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; MALC)). This non-standard suffix is a distinctive indicator of a configured Malleable C2 profile and does not appear in any known legitimate browser or application user-agent string.
+description: 'Detects the Cobalt Strike 3.x Malleable C2 profile User-Agent string containing the MALC suffix (full string: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; MALC)). This non-standard suffix is a distinctive indicator of a configured Malleable C2 profile and does not appear in any known legitimate browser or application user-agent string.'
 references:
     - https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/
 author: The Hunters Ledger
 date: 2026/04/06
 tags:
     - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: proxy
 detection:

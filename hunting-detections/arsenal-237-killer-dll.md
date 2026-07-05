@@ -215,29 +215,27 @@ id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb0
 status: experimental
 description: Detects kernel driver service creation by rundll32.exe (BYOVD attack pattern for killer.dll)
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 references:
     - killer.dll analysis report
     - Arsenal-237 malware toolkit investigation
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
-    - attack.privilege_escalation
+    - attack.defense-impairment
+    - attack.t1685
+    - attack.privilege-escalation
     - attack.t1068
+    - detection.emerging-threats
 logsource:
     product: windows
     category: registry_set
-    service: sysmon
 detection:
     selection_service_create:
-        EventID: 13  # Registry value set (Sysmon)
         TargetObject|contains: '\System\CurrentControlSet\Services\'
         Details|contains: 'SERVICE_KERNEL_DRIVER'
     selection_parent:
         Image|endswith: '\rundll32.exe'
     filter_legitimate:
-        # Exclude legitimate Microsoft-signed rundll32 operations
-        Signature: 'Microsoft Corporation'
+        # Exclude legitimate driver installs staged directly under System32\Drivers
         TargetObject|contains: '\System32\Drivers\'
     condition: selection_service_create and selection_parent and not filter_legitimate
 falsepositives:
@@ -252,14 +250,15 @@ level: critical
 title: Mass Security Product Process Termination (BYOVD Attack)
 id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb1
 status: experimental
-description: Detects simultaneous termination of multiple security products (killer.dll behavior)
+description: Detects termination of a known security-product process, the killer.dll behavior of shutting down AV/EDR ahead of payload deployment. The original rule intent required 3+ distinct security processes to terminate within 60 seconds; single-event Sigma rules cannot express this volumetric/multi-event threshold, so it has been dropped — this rule now fires on any single matching termination and should be correlated with other security-product terminations in the same timeframe at review time.
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 references:
     - killer.dll analysis report
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_termination
@@ -274,12 +273,11 @@ detection:
             - '\avguard.exe'
             - '\NisSrv.exe'
             - '\vsserv.exe'
-    timeframe: 60s
-    condition: selection | count(Image) >= 3
+    condition: selection
 falsepositives:
-    - Administrator manually stopping multiple security services (should be investigated)
-    - Software conflicts causing cascading failures (rare)
-level: critical
+    - Administrator manually stopping a security service
+    - Legitimate software update or uninstall of the security product
+level: high
 ```
 
 ### Rule 3: DeviceIoControl with Malicious IOCTL Codes
@@ -288,36 +286,28 @@ level: critical
 title: DeviceIoControl Abuse with BYOVD IOCTL Codes
 id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb2
 status: experimental
-description: Detects DeviceIoControl calls with IOCTL codes used by killer.dll (0x800024B4, 0x8335003C)
+description: Detects loading of the vulnerable BdApiUtil/Process Explorer kernel drivers that killer.dll issues malicious IOCTL codes (0x800024B4, 0x8335003C) against to terminate security-product processes. The original rule intent also matched on the raw DeviceIoControl call and IOCTL code; that requires kernel-callback/ETW-TI telemetry with no standard Sigma logsource, so it has been dropped — this rule detects the vulnerable driver load, the reliably observable precondition for the IOCTL abuse.
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 references:
     - killer.dll analysis report
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
-    - attack.privilege_escalation
-    - attack.t1068
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     product: windows
     category: driver_load
-    service: etwti  # ETW Threat Intelligence or EDR telemetry
 detection:
-    selection_ioctl:
-        EventID: 1  # API call monitoring (requires ETW or EDR)
-        CallStack|contains: 'DeviceIoControl'
-        ControlCode:
-            - '0x800024B4'  # Baidu driver process termination
-            - '0x8335003C'  # Process Explorer driver process termination
-    selection_device:
-        DevicePath:
-            - '\\\\.\\BdApiUtil'
-            - '\\\\.\\PROCEXP152'
-    condition: selection_ioctl or selection_device
+    selection:
+        ImageLoaded|contains:
+            - 'BdApiUtil'
+            - 'PROCEXP152'
+    condition: selection
 falsepositives:
     - Legitimate use of Sysinternals Process Explorer (if version 17.0.7 - review required)
     - Legitimate Baidu Antivirus software (if installed in environment)
-level: critical
+level: high
 ```
 
 ### Rule 4: Short-Lived Kernel Driver Service
@@ -326,32 +316,27 @@ level: critical
 title: Short-Lived Kernel Driver Service (BYOVD Cleanup Pattern)
 id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb3
 status: experimental
-description: Detects kernel driver services created and deleted within 30 seconds (BYOVD cleanup behavior)
+description: Detects installation of a new kernel-mode driver service via the Service Control Manager, a rare event on most endpoints and the setup step of the BYOVD cleanup pattern (install driver, abuse it, remove it within seconds). The original rule intent correlated this with a matching service-deletion event within 30 seconds; single-event Sigma rules cannot express this cross-event timing, so it has been dropped — this rule fires on the driver-service install alone.
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 references:
     - killer.dll analysis report
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
-    - attack.t1070.004
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     product: windows
-    category: service
+    service: system
 detection:
-    selection_create:
-        EventID:
-            - 7045  # Service installed
-            - 4697  # Service installed (Security log)
+    selection:
+        Provider_Name: 'Service Control Manager'
+        EventID: 7045
         ServiceType: 'kernel mode driver'
-    selection_delete:
-        EventID: 7040  # Service state changed (stopped/deleted)
-        param1: 'demand start'  # Service stopped
-    timeframe: 30s
-    condition: selection_create and selection_delete
+    condition: selection
 falsepositives:
     - Driver installation testing by IT staff (should be reviewed)
-    - Failed driver installations (review for root cause)
+    - Legitimate hardware or security-software driver installation
 level: high
 ```
 
@@ -363,19 +348,20 @@ id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb4
 status: experimental
 description: Detects .sys driver files created in temp directories (BYOVD staging location)
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 references:
     - killer.dll analysis report
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
+    - attack.defense-impairment
+    - attack.t1685
+    - attack.stealth
     - attack.t1027.009
+    - detection.emerging-threats
 logsource:
     product: windows
     category: file_event
 detection:
     selection:
-        EventID: 11  # File created (Sysmon)
         TargetFilename|contains:
             - '\AppData\Local\Temp\'
             - '\Windows\Temp\'
@@ -386,7 +372,6 @@ detection:
         Image|contains:
             - '\Windows\System32\'
             - '\Program Files\'
-        Signature: 'Microsoft Corporation'
     condition: selection and not filter_legitimate
 falsepositives:
     - Legitimate driver installers using temp staging (should extract to System32\Drivers)

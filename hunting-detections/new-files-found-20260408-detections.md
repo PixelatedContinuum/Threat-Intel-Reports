@@ -277,8 +277,10 @@ references:
 author: The Hunters Ledger
 date: 2026/04/08
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.privilege-escalation
+    - attack.t1055
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows
@@ -313,7 +315,10 @@ references:
 author: The Hunters Ledger
 date: 2026/04/08
 tags:
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.privilege-escalation
+    - attack.t1055
+    - detection.emerging-threats
 logsource:
     category: pipe_created
     product: windows
@@ -323,7 +328,7 @@ detection:
         PipeName|endswith: '-server'
     condition: selection
 falsepositives:
-    - None known — MSSE-[0-9]+-server pipe naming is specific to the Cobalt Strike Artifact Kit default configuration; no legitimate Windows component uses this pattern
+    - Unlikely — MSSE-[0-9]+-server pipe naming is specific to the Cobalt Strike Artifact Kit default configuration; no legitimate Windows component uses this pattern
 level: high
 ```
 
@@ -347,7 +352,9 @@ author: The Hunters Ledger
 date: 2026/04/08
 tags:
     - attack.persistence
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     product: windows
     service: system
@@ -357,7 +364,7 @@ detection:
         ServiceName: 'DceRpcSs'
     condition: selection
 falsepositives:
-    - None known — DceRpcSs is not a legitimate Windows service name; any match should be treated as a high-confidence incident indicator requiring immediate investigation
+    - Unlikely — DceRpcSs is not a legitimate Windows service name; any match should be treated as a high-confidence incident indicator requiring immediate investigation
 level: critical
 ```
 
@@ -381,7 +388,10 @@ author: The Hunters Ledger
 date: 2026/04/08
 tags:
     - attack.persistence
+    - attack.privilege-escalation
     - attack.command-and-control
+    - attack.t1547.006
+    - detection.emerging-threats
 logsource:
     category: driver_load
     product: windows
@@ -417,8 +427,10 @@ references:
 author: The Hunters Ledger
 date: 2026/04/08
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.execution
+    - attack.t1129
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -427,7 +439,7 @@ detection:
         TargetFilename: 'C:\Windows\Temp\beacon.dll'
     condition: selection
 falsepositives:
-    - None known — the filename beacon.dll at this exact path is not used by any known legitimate software; any match should be treated as a high-confidence incident indicator
+    - Unlikely — the filename beacon.dll at this exact path is not used by any known legitimate software; any match should be treated as a high-confidence incident indicator
 level: critical
 ```
 
@@ -451,6 +463,8 @@ author: The Hunters Ledger
 date: 2026/04/08
 tags:
     - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: proxy
 detection:
@@ -458,7 +472,7 @@ detection:
         cs-user-agent|contains: 'BOIE9;ENUSSEM'
     condition: selection
 falsepositives:
-    - None known — BOIE9;ENUSSEM does not appear in any known legitimate browser or application user-agent string
+    - Unlikely — BOIE9;ENUSSEM does not appear in any known legitimate browser or application user-agent string
 level: high
 ```
 
@@ -482,6 +496,8 @@ author: The Hunters Ledger
 date: 2026/04/08
 tags:
     - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: proxy
 detection:
@@ -515,6 +531,8 @@ date: 2026/04/08
 tags:
     - attack.exfiltration
     - attack.command-and-control
+    - attack.t1041
+    - detection.emerging-threats
 logsource:
     category: proxy
 detection:

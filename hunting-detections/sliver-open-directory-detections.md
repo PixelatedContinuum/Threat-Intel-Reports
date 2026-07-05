@@ -414,8 +414,12 @@ author: The Hunters Ledger
 date: 2026/02/28
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.t1059.001
+    - attack.defense-impairment
+    - attack.t1685
     - attack.command-and-control
+    - attack.t1105
+    - detection.emerging-threats
 logsource:
     product: windows
     service: powershell
@@ -437,7 +441,7 @@ detection:
             - 'WindowsDefenderApplicationGuard'
     condition: (selection_amsi_bypass or selection_download) and not filter_legitimate
 falsepositives:
-    - Security research or penetration testing scripts using reflection-based AMSI bypass in authorized environments
+    - Security research or authorized offensive-security assessment scripts using reflection-based AMSI bypass in authorized environments
     - Red team exercises where PowerShell stagers are simulated
     - Automated patching scripts that coincidentally use WebClient DownloadFile (these will not match amsiInitFailed, so FP limited to download-only selection)
 level: high
@@ -471,11 +475,12 @@ status: experimental
 description: Detects Windows Defender real-time protection being disabled via a PowerShell process, matching the behavior of the stager.ps1 component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The stager calls Set-MpPreference -DisableRealtimeMonitoring $true, which generates Windows Defender Event ID 5001 when executed with sufficient privileges. This event in combination with PowerShell as the initiating process is a high-confidence indicator of malicious stager activity rather than legitimate administrative action.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
-    - https://attack.mitre.org/techniques/T1562/001/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     product: windows
     service: windefend
@@ -525,12 +530,14 @@ status: experimental
 description: Detects PowerShell creating an executable file in the user TEMP directory, matching the payload delivery behavior of the stager.ps1 component in the WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The stager downloads OneDriveSync.exe via Net.WebClient and writes it to %TEMP%\update.exe before execution. This Sysmon file event rule targets the file write action specifically, providing detection even if Script Block Logging is unavailable.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
-    - https://attack.mitre.org/techniques/T1105/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:
     - attack.execution
+    - attack.t1059.001
     - attack.command-and-control
+    - attack.t1105
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
@@ -584,12 +591,17 @@ status: experimental
 description: Detects sihost.exe (Shell Infrastructure Host) initiating outbound network connections to non-Microsoft destinations, indicating successful Sliver C2 beacon injection via process hollowing. The WebServer-Compromise-Kit-45.94.31.220 build pipeline explicitly targets sihost.exe for process hollowing (confirmed in build.log). The injected Sliver beacon beacons to mailuxe.net:443, mailmassange.duckdns.org:443, and mailuxe.net:8443 using HTTPS/mTLS. Legitimate sihost.exe does not initiate outbound HTTPS connections; any such connection is high-confidence evidence of process injection.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
-    - https://attack.mitre.org/techniques/T1055/012/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1055.012
+    - attack.privilege-escalation
+    - attack.t1620
+    - attack.t1134.004
     - attack.command-and-control
+    - attack.t1071.001
+    - detection.emerging-threats
 logsource:
     category: network_connection
     product: windows
@@ -647,11 +659,13 @@ status: experimental
 description: Detects a process whose reported CommandLine claims to be MicrosoftEdgeUpdate.exe but whose Image path does not correspond to a legitimate Microsoft Edge update installation directory. The arg_spoof.C module in the WebServer-Compromise-Kit-45.94.31.220 toolkit hardcodes the string 'MicrosoftEdgeUpdate.exe --update-check --silent' as the PEB CommandLine spoofing value. This technique is cosmetic deception targeting process-tree viewers and EDR rules that inspect CommandLine without cross-referencing the actual binary path. All binaries produced by this pipeline present this same spoofed identity.
 references:
     - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
-    - https://attack.mitre.org/techniques/T1036/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:
-    - attack.defense-evasion
+    - attack.stealth
+    - attack.t1036
+    - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows

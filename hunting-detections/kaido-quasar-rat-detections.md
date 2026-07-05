@@ -175,7 +175,7 @@ rule RAT_KAIDO_AntiAnalysis_SleepObfuscation {
 ```yaml
 title: KAIDO RAT Self-Deletion of Zone.Identifier Alternate Data Stream
 id: d428415f-5926-466a-abcb-5cb91be4d187
-status: test
+status: experimental
 description: >-
   Detects a process reading and then deleting its own Zone.Identifier
   alternate data stream shortly after launch, a Mark-of-the-Web bypass
@@ -184,19 +184,18 @@ description: >-
   seconds regardless of C2 connectivity.
 references:
     - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/
-    - https://attack.mitre.org/techniques/T1553/005/
 author: The Hunters Ledger
 date: 2026-07-03
 tags:
-    - attack.defense-evasion
+    - attack.defense-impairment
     - attack.t1553.005
+    - detection.emerging-threats
 logsource:
     category: file_event
     product: windows
 detection:
     selection:
         TargetFilename|endswith: ':Zone.Identifier'
-        EventID: 23
     filter_legit_installer:
         Image|contains:
             - '\Windows\System32\'
@@ -224,7 +223,7 @@ level: high
 ```yaml
 title: KAIDO RAT HVNC DXGI Named-Pipe Creation
 id: 6fadc50c-a64b-4120-b02e-f22516b0c815
-status: test
+status: experimental
 description: >-
   Detects creation of a named pipe matching the kaido_dxgi_ prefix used
   by the KAIDO Quasar-fork RAT's HVNC module to stream DXGI-captured
@@ -233,7 +232,6 @@ description: >-
   actively invoked by the operator over C2.
 references:
     - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/
-    - https://attack.mitre.org/techniques/T1219/
 author: The Hunters Ledger
 date: 2026-07-03
 tags:
@@ -241,6 +239,7 @@ tags:
     - attack.t1219
     - attack.collection
     - attack.t1113
+    - detection.emerging-threats
 logsource:
     category: pipe_created
     product: windows
@@ -250,8 +249,8 @@ detection:
     condition: selection
 falsepositives:
     - >-
-      None known — the kaido_dxgi_ pipe-name prefix has not been observed
-      in any legitimate Windows or third-party software during this analysis
+      Unlikely — the kaido_dxgi_ pipe-name prefix has not been observed
+      in any legitimate Windows or third-party software to date
 level: high
 ```
 
@@ -269,7 +268,7 @@ level: high
 ```yaml
 title: Process Named svchost.exe Executing from AppData Path
 id: 08e75208-eb8e-473d-9827-5a59ef4192db
-status: test
+status: experimental
 description: >-
   Detects a process named svchost.exe launching from a user-writable
   %AppData% subdirectory rather than the legitimate %SystemRoot%\System32
@@ -280,14 +279,15 @@ description: >-
   KAIDO-specific signal on its own.
 references:
     - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/
-    - https://attack.mitre.org/techniques/T1036/005/
 author: The Hunters Ledger
-date: 2026-07-03
+date: '2026-07-03'
 tags:
-    - attack.defense-evasion
+    - attack.stealth
     - attack.t1036.005
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1547.001
+    - detection.emerging-threats
 logsource:
     category: process_creation
     product: windows

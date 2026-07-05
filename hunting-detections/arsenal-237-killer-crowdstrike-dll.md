@@ -69,30 +69,31 @@ THEN CRITICAL ALERT - Possible killer_crowdstrike.dll execution
 
 ```yaml
 title: Critical - CrowdStrike Falcon Process Termination (killer_crowdstrike.dll)
-id: a1b2c3d4-e5f6-7890-1234-567890abcdef
+id: 7aba482e-4b15-44ca-b9e3-c85733066ced
 status: experimental
 description: Detects unexpected termination of CrowdStrike Falcon processes (killer_crowdstrike.dll behavior)
 author: The Hunters Ledger
-date: 2026/01/25
+date: '2026-01-25'
 references:
     - killer_crowdstrike.dll analysis report
     - Arsenal-237 malware toolkit investigation
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_termination
 detection:
     selection:
         Image|endswith:
-            - '\\CSFalconService.exe'
-            - '\\csagent.exe'
-            - '\\CSFalconContainer.exe'
+            - '\CSFalconService.exe'
+            - '\csagent.exe'
+            - '\CSFalconContainer.exe'
     filter_legitimate:
         # Exclude legitimate CrowdStrike updates/restarts
-        ParentImage: 'C:\\Program Files\\CrowdStrike\\*'
-        User: 'NT AUTHORITY\\SYSTEM'
+        ParentImage|startswith: 'C:\Program Files\CrowdStrike\'
+        User: 'SYSTEM'
     condition: selection and not filter_legitimate
 falsepositives:
     - Legitimate CrowdStrike Falcon updates or service restarts
@@ -104,67 +105,57 @@ level: critical
 
 ```yaml
 title: CrowdStrike Termination with Suspicious Service Creation
-id: b2c3d4e5-f6a7-8901-2345-678901bcdefg
+id: bb877b05-3f32-4437-8365-35cd3b58f35f
 status: experimental
-description: Detects CrowdStrike termination correlated with kernel driver service creation (BYOVD attack pattern)
+description: Detects installation of a new kernel-mode driver service, a rare event on most endpoints and a hallmark of the BYOVD (Bring Your Own Vulnerable Driver) technique Arsenal-237 uses to disable EDR/AV. The original rule intent correlated this signal with a CrowdStrike process termination within 60 seconds; single-event Sigma rules cannot express cross-event correlation, so that narrowing has been dropped — this rule now fires on any kernel-driver service install and should be triaged alongside CrowdStrike Falcon status.
 author: The Hunters Ledger
-date: 2026/01/25
-tags:
-    - attack.defense_evasion
-    - attack.t1562.001
-    - attack.privilege_escalation
-    - attack.t1068
+date: '2026-01-25'
 logsource:
     product: windows
-    category: correlation
+    service: system
 detection:
-    selection_termination:
-        EventID: 4689  # Process termination
-        ProcessName:
-            - 'CSFalconService.exe'
-            - 'csagent.exe'
-            - 'CSFalconContainer.exe'
-    selection_service:
-        EventID: 7045  # Service installed
+    selection:
+        Provider_Name: 'Service Control Manager'
+        EventID: 7045
         ServiceType: 'kernel mode driver'
-    timeframe: 60s
-    condition: selection_termination and selection_service
+    condition: selection
 falsepositives:
-    - Extremely rare - investigate all matches
-level: critical
+    - Legitimate driver installation (new hardware, security/monitoring software updates)
+level: high
+tags:
+    - attack.privilege-escalation
+    - attack.t1068
+    - detection.emerging-threats
 ```
 
 ### Rule 3: CrowdStrike Sensor Offline + Driver Loading
 
 ```yaml
 title: CrowdStrike Sensor Offline with Vulnerable Driver Loading
-id: c3d4e5f6-a7b8-9012-3456-789012cdefgh
+id: fddb4e86-c31e-4ccd-86d3-788882ef3d20
 status: experimental
-description: Detects CrowdStrike sensor disconnection correlated with vulnerable driver loading
+description: Detects loading of a known-vulnerable driver from a temporary directory, the BYOVD (Bring Your Own Vulnerable Driver) pattern Arsenal-237 uses to disable EDR/AV kernel hooks. The original rule intent correlated this signal with CrowdStrike Falcon sensor-offline telemetry; that telemetry is sourced from the CrowdStrike Falcon console/API rather than a Windows/Sysmon event log and cannot be expressed in a Sigma rule against Windows logsources, so the correlation has been dropped — this rule now fires on the driver load alone and should be triaged alongside CrowdStrike Falcon sensor health.
 author: The Hunters Ledger
-date: 2026/01/25
-tags:
-    - attack.defense_evasion
-    - attack.t1562.001
+date: '2026-01-25'
 logsource:
+    category: driver_load
     product: windows
-    category: correlation
 detection:
-    selection_sensor:
-        Source: 'CrowdStrike'
-        EventType: 'SensorOffline'
-    selection_driver:
-        EventID: 6  # Driver loaded (Sysmon)
+    selection_name:
         ImageLoaded|contains:
             - 'BdApiUtil64.sys'
             - 'ProcExp'
             - '.sys'
-        ImageLoaded|contains: '\\Temp\\'
-    timeframe: 60s
-    condition: selection_sensor and selection_driver
+    selection_path:
+        ImageLoaded|contains: '\Temp\'
+    condition: selection_name and selection_path
 falsepositives:
-    - Network connectivity issues causing sensor offline (without driver loading)
-level: critical
+    - Legitimate use of Process Explorer (ProcExp) from a temporary directory
+level: high
+tags:
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 ```
 
 ---

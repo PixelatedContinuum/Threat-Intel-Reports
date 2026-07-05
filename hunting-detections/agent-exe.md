@@ -197,26 +197,24 @@ id: e7f9a29d-de30-7aff-f419-1dbc14a97440
 status: experimental
 description: Detects creation of WinDefenderSvc.exe in user Startup folder (PoetRAT persistence)
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - agent.exe analysis report
     - Open Directory 109.230.231.37 investigation
 tags:
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1547.001
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     product: windows
     category: file_event
 detection:
     selection:
         TargetFilename|contains: '\Start Menu\Programs\Startup\WinDefenderSvc.exe'
-    filter:
-        # Exclude legitimate Windows Defender (signed by Microsoft)
-        Signature: 'Microsoft Corporation'
-        SignatureStatus: 'Valid'
-    condition: selection and not filter
+    condition: selection
 falsepositives:
     - Legitimate Windows Defender components (should be signed by Microsoft)
 level: critical
@@ -230,14 +228,16 @@ id: 4e856041-0182-42c6-2b38-48d63b94c376
 status: experimental
 description: Detects creation of WindowsDefenderUpdate registry Run key (PoetRAT persistence)
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - agent.exe analysis report
 tags:
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1547.001
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1036.005
+    - detection.emerging-threats
 logsource:
     product: windows
     category: registry_set
@@ -261,14 +261,17 @@ id: b1d5e55b-1c15-b7cb-8391-38625d9d2efa
 status: experimental
 description: Detects Golang-compiled executable creating persistence and using anti-debugging
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - agent.exe analysis report
 tags:
     - attack.persistence
+    - attack.privilege-escalation
     - attack.t1547.001
-    - attack.defense_evasion
+    - attack.stealth
+    - attack.discovery
     - attack.t1622
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
@@ -278,17 +281,12 @@ detection:
         Image|contains:
             - 'go.exe'
             - 'runtime.main'
-    selection_antidebug:
-        CallTrace|contains:
-            - 'NtQueryInformationProcess'
-            - 'SetConsoleCtrlHandler'
-            - 'IsDebuggerPresent'
     selection_persistence:
         CommandLine|contains:
             - '\Startup\'
             - 'CurrentVersion\Run'
             - 'schtasks'
-    condition: selection_golang and (selection_antidebug or selection_persistence)
+    condition: selection_golang and selection_persistence
 falsepositives:
     - Legitimate Golang applications with anti-tampering protections
 level: high
@@ -302,12 +300,13 @@ id: 6b86b273-ff34-fce1-9d6b-804eff5a3f57
 status: experimental
 description: Detects creation of .wd_installed marker file indicating PoetRAT infection
 author: The Hunters Ledger
-date: 2026/01/12
+date: '2026-01-12'
 references:
     - agent.exe analysis report
 tags:
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1070.004
+    - detection.emerging-threats
 logsource:
     product: windows
     category: file_event

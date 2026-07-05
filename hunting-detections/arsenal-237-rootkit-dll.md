@@ -282,9 +282,9 @@ references:
 author: The Hunters Ledger
 date: 2026-01-26
 tags:
-    - attack.privilege_escalation
-    - attack.defense_evasion
+    - attack.privilege-escalation
     - attack.t1068
+    - detection.emerging-threats
 logsource:
     product: windows
     category: driver_load
@@ -298,9 +298,7 @@ detection:
             - 'MD5=f72386e6b0e87a3245e0d6e4e4c5a1a0'
             - 'SHA1=d8e1c6d0c1c0d6e8c9e0d6e0c1c0d6e8c9e0d6e0'
             - 'SHA256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
-    selection_sysmon:
-        EventID: 6
-    condition: selection_sysmon and (selection_driver_name or selection_driver_hash)
+    condition: selection_driver_name or selection_driver_hash
 falsepositives:
     - Legitimate Baidu software installations (rare in enterprise environments)
 level: critical
@@ -312,50 +310,49 @@ level: critical
 title: Arsenal-237 Mass Security Product Termination
 id: b9d1e2f3-4a5b-6c7d-8e9f-0a1b2c3d4e5f
 status: experimental
-description: Detects mass termination of security products indicating Arsenal-237 rootkit.dll activity
+description: Detects termination of a known security-product process (Defender, CrowdStrike Falcon, or a third-party AV/EDR), the rootkit.dll behavior of shutting down endpoint protection ahead of payload deployment. The original rule intent required a volumetric threshold per vendor category (3+ Defender processes, 2+ CrowdStrike processes, or 3+ third-party processes within 60 seconds); single-event Sigma rules cannot express this volumetric/multi-event threshold, so it has been dropped — this rule now fires on any single matching termination and should be correlated with other security-product terminations in the same timeframe at review time.
 references:
     - Arsenal-237 Defense Evasion Framework
 author: The Hunters Ledger
 date: 2026-01-26
 tags:
-    - attack.defense_evasion
-    - attack.t1562.001
-    - attack.t1089
+    - attack.defense-impairment
+    - attack.t1685
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_termination
 detection:
     selection_defender:
-        TargetImage|endswith:
+        Image|endswith:
             - '\MsMpEng.exe'
             - '\MpCmdRun.exe'
             - '\NisSrv.exe'
             - '\SecurityHealthService.exe'
     selection_crowdstrike:
-        TargetImage|endswith:
+        Image|endswith:
             - '\CSFalconService.exe'
             - '\CSFalconContainer.exe'
             - '\CSAgent.exe'
     selection_thirdparty:
-        TargetImage|endswith:
+        Image|endswith:
             - '\ekrn.exe'
             - '\avp.exe'
             - '\MBAMService.exe'
             - '\ccSvcHst.exe'
             - '\SophosHealth.exe'
-    timeframe: 60s
-    condition: (selection_defender | count(gte 3) or selection_crowdstrike | count(gte 2) or selection_thirdparty | count(gte 3)) within timeframe
+    condition: selection_defender or selection_crowdstrike or selection_thirdparty
 falsepositives:
     - Legitimate security product updates or uninstallations
     - System administrator maintenance activities
-level: critical
+level: high
 ```
 
 ### Sigma Rule 3: rootkit.dll File System Stealth Activity
 
 ```yaml
 title: Arsenal-237 rootkit.dll File System Stealth Operations
-id: c1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e6f
+id: 2b2e6434-31f4-4d18-8077-a30ca4f77526
 status: experimental
 description: Detects Unicode-based file hiding operations from rootkit.dll
 references:
@@ -363,25 +360,21 @@ references:
 author: The Hunters Ledger
 date: 2026-01-26
 tags:
-    - attack.defense_evasion
+    - attack.stealth
     - attack.t1564.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: file_event
 detection:
     selection_dll:
         Image|endswith: '\rootkit.dll'
-    selection_operations:
-        EventID:
-            - 11  # File created
-            - 23  # File deleted
-            - 26  # File modified
     selection_unicode:
         TargetFilename|contains:
             - '\u'
             - '%u'
             - '\x'
-    condition: selection_dll and selection_operations and selection_unicode
+    condition: selection_dll and selection_unicode
 falsepositives:
     - Legitimate applications using Unicode file names
 level: high
@@ -399,9 +392,10 @@ references:
 author: The Hunters Ledger
 date: 2026-01-26
 tags:
-    - attack.defense_evasion
-    - attack.privilege_escalation
+    - attack.stealth
+    - attack.privilege-escalation
     - attack.t1055.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_access
@@ -419,9 +413,7 @@ detection:
             - '0x1F0FFF'  # PROCESS_ALL_ACCESS
             - '0x1FFFFF'  # PROCESS_ALL_ACCESS alternate
             - '0x1010'    # PROCESS_VM_WRITE | PROCESS_VM_OPERATION
-    selection_sysmon:
-        EventID: 10
-    condition: selection_sysmon and selection_source and selection_target_security and selection_access
+    condition: selection_source and selection_target_security and selection_access
 falsepositives:
     - Security software cross-process monitoring
     - Legitimate debugging activities
@@ -441,8 +433,8 @@ author: The Hunters Ledger
 date: 2026-01-26
 tags:
     - attack.execution
-    - attack.defense_evasion
     - attack.t1059.001
+    - detection.emerging-threats
 logsource:
     product: windows
     category: process_creation
