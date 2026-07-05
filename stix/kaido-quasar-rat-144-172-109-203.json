@@ -1,0 +1,844 @@
+{
+    "type": "bundle",
+    "id": "bundle--70d518d4-c219-45fa-9b1b-99ba8304488b",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.166666Z",
+            "modified": "2026-07-03T22:54:33.166666Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--0cc954d0-ab7e-5403-b760-ecce89342889",
+            "value": "144.172.109.203"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--bb14b624-d5e8-5f37-bd0e-c6226f7c9cf4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.168864Z",
+            "modified": "2026-07-03T22:54:33.168864Z",
+            "name": "ipv4: 144.172.109.203",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '144.172.109.203']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--23b2f09e-cec0-5eb7-afe8-88f3d5f79d8a",
+            "value": "179.43.150.50"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--98fc5b94-ab86-5d56-8310-f18fce62bda3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.177994Z",
+            "modified": "2026-07-03T22:54:33.177994Z",
+            "name": "ipv4: 179.43.150.50",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '179.43.150.50']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--ed0f5ce9-4850-50bd-a64e-1a7c3617c5cf",
+            "value": "kaidoo.com.br"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f728748b-968a-5d9d-998e-e1967686ca2e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.179629Z",
+            "modified": "2026-07-03T22:54:33.179629Z",
+            "name": "domain: kaidoo.com.br",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'kaidoo.com.br']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--afca77a1-8e44-570b-9584-63d3356769d3",
+            "value": "c2.kaidoo.com.br"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e7cc84a5-aa27-5a54-a7cf-38dc1dfa5d40",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.182081Z",
+            "modified": "2026-07-03T22:54:33.182081Z",
+            "name": "domain: c2.kaidoo.com.br",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'c2.kaidoo.com.br']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--4dea3ea7-6c0e-54b4-8e89-05dcbc4dc641",
+            "value": "www.kaidoo.com.br"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--6907b9eb-f4b5-5b94-83a6-6543590c8b03",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.183745Z",
+            "modified": "2026-07-03T22:54:33.183745Z",
+            "name": "domain: www.kaidoo.com.br",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'www.kaidoo.com.br']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--ea881463-6ef4-55f6-90e3-f31fef1715e8",
+            "value": "choix-relay.com"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--06a03fd5-b55a-56cd-b60f-8355d15ecbd5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.184652Z",
+            "modified": "2026-07-03T22:54:33.184652Z",
+            "name": "domain: choix-relay.com",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'choix-relay.com']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 40,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 40
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--20b2c0f9-0698-505b-9dd3-8c86e68b44f0",
+            "hashes": {
+                "SHA-256": "c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f6a4ebb0-f9e8-5832-8f9f-cb0159f65675",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.186109Z",
+            "modified": "2026-07-03T22:54:33.186109Z",
+            "name": "sha256: c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[file:hashes.'SHA-256' = 'c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--82831ab5-8d90-5114-9366-1e6684c24502",
+            "hashes": {
+                "SHA-256": "385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--595e7e26-9368-5b2b-8adf-87b418b18f01",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.188574Z",
+            "modified": "2026-07-03T22:54:33.188574Z",
+            "name": "sha256: 385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[file:hashes.'SHA-256' = '385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--2d19688b-470b-5e10-95ec-c25d8259ae59",
+            "hashes": {
+                "SHA-256": "022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d487abaa-2f25-5cb8-99d3-61c096417f12",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.189886Z",
+            "modified": "2026-07-03T22:54:33.189886Z",
+            "name": "sha256: 022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[file:hashes.'SHA-256' = '022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5da887a0-ef61-52cd-b2d1-178369b86c5b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.191858Z",
+            "modified": "2026-07-03T22:54:33.191858Z",
+            "name": "RAT_KAIDO_Quasar_Fork_Namespace",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: KAIDO Quasar-Fork RAT\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/\n*/\n\nrule RAT_KAIDO_Quasar_Fork_Namespace {\n   meta:\n      description = \"Detects the KAIDO Quasar-fork RAT via its rebranded namespace root Kaido.Common.Messages and Costura-embedded costura.kaido.common.dll asset, both of which survive the sample's obfuscation pass\"\n      license = \"CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d\"\n      hash2 = \"928f2ffa7fc84b74941fb714455d7bc14847b3af\"\n      hash3 = \"20989b06f7c670ab973da6609855bcf9\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"3c4d70e9-aaaf-50e7-b58b-a4b3595386e9\"\n   strings:\n      $ns1  = \"Kaido.Common.Messages\" ascii wide fullword\n      $ns2  = \"Kaido.Client.Helper.HVNC.ProcessController\" ascii wide\n      $cost = \"costura.kaido.common.dll\" ascii wide nocase\n      $desk = \"Default_runhost\" ascii wide fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      2 of ($ns1, $ns2, $cost, $desk)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--19f77272-bf46-5fed-8166-a49356cfb2c0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.192152Z",
+            "modified": "2026-07-03T22:54:33.192152Z",
+            "name": "RAT_KAIDO_HVNC_DXGI_Pipe",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule RAT_KAIDO_HVNC_DXGI_Pipe {\n   meta:\n      description = \"Detects the KAIDO RAT HVNC module via its DXGI-hook named-pipe transport strings (pipe prefix, env var, frame magic, reader-thread name) used to stream the hidden-desktop capture to the operator\"\n      license = \"CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"385d20ca574976e3ba3f4f3079420f8a1c3935c0ab4a3f87063beea27d41e254\"\n      hash2 = \"\"\n      hash3 = \"\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"eb4ef7d6-e3f0-5eea-8211-654d9ccff6fa\"\n   strings:\n      $pipe   = \"kaido_dxgi_\" ascii wide nocase\n      $envvar = \"KAIDO_DXGI_PIPE\" ascii wide fullword\n      $rdr    = \"DXGI FrameReader\" ascii wide\n      $fbk    = \"HVNC Capture Loop\" ascii wide\n      $clone  = \"[BrowserClone] Using handle hijacking for locked files...\" ascii wide\n      $magic  = { 4B 81 3F 44 }\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (2 of ($pipe, $envvar, $rdr, $fbk, $clone) or ($magic and 1 of ($pipe, $envvar)))\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--099e8f08-d95e-5cc5-8799-42d098252728",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.192324Z",
+            "modified": "2026-07-03T22:54:33.192324Z",
+            "name": "RAT_KAIDO_AntiAnalysis_SleepObfuscation",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule RAT_KAIDO_AntiAnalysis_SleepObfuscation {\n   meta:\n      description = \"Detects the KAIDO RAT via its developer-left anti-analysis debug string referencing sleep obfuscation with mutex and stack detection, used to evade sandbox timing-based detonation checks\"\n      license = \"CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\"\n      date = \"2026-07-03\"\n      hash1 = \"022944768c4326d611fa3edb100eb8277228717a220580e7ffce143341aa39fa\"\n      hash2 = \"\"\n      hash3 = \"\"\n      family = \"KAIDO\"\n      malware_type = \"RAT\"\n      campaign = \"KAIDO-EvilSoul-Engine-MaaS-144.172.103.98\"\n      id = \"683cd96b-bebc-5bcc-8d4c-3aa380acd5d6\"\n   strings:\n      $anti = \"[ANTI] Sleep obfuscation ENABLED (fixed: mutex + stack detection + 32MB cap)\" ascii wide\n      $ns    = \"Kaido.Common.Messages\" ascii wide fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      $anti and $ns\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9a1d8d47-7a03-54ed-8e57-0e3e3216fe8d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.192479Z",
+            "modified": "2026-07-03T22:54:33.192479Z",
+            "name": "KAIDO RAT Self-Deletion of Zone.Identifier Alternate Data Stream",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: KAIDO RAT Self-Deletion of Zone.Identifier Alternate Data Stream\nid: d428415f-5926-466a-abcb-5cb91be4d187\nstatus: test\ndescription: >-\n  Detects a process reading and then deleting its own Zone.Identifier\n  alternate data stream shortly after launch, a Mark-of-the-Web bypass\n  technique used by the KAIDO Quasar-fork RAT to suppress SmartScreen\n  re-checks on subsequent executions. Confirmed in a contained dynamic\n  detonation where the deletion occurred at T+2.4 seconds regardless of\n  C2 connectivity.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\n    - https://attack.mitre.org/techniques/T1553/005/\nauthor: The Hunters Ledger\ndate: 2026-07-03\ntags:\n    - attack.defense-evasion\n    - attack.t1553.005\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith: ':Zone.Identifier'\n        EventID: 23\n    filter_legit_installer:\n        Image|contains:\n            - '\\Windows\\System32\\'\n            - '\\Program Files\\Windows Defender\\'\n    condition: selection and not filter_legit_installer\nfalsepositives:\n    - >-\n      Self-updating legitimate software (browsers, some installers) that\n      clears its own Zone.Identifier stream after a user-consented first run\n    - Administrative scripts that bulk-clear MOTW on downloaded files\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--24dda273-27e3-5b34-8fa4-b52243069c74",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.192636Z",
+            "modified": "2026-07-03T22:54:33.192636Z",
+            "name": "KAIDO RAT HVNC DXGI Named-Pipe Creation",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: KAIDO RAT HVNC DXGI Named-Pipe Creation\nid: 6fadc50c-a64b-4120-b02e-f22516b0c815\nstatus: test\ndescription: >-\n  Detects creation of a named pipe matching the kaido_dxgi_ prefix used\n  by the KAIDO Quasar-fork RAT's HVNC module to stream DXGI-captured\n  hidden-desktop frames from the swap-chain hook to the operator's\n  reader thread. This pipe is created only when the HVNC capability is\n  actively invoked by the operator over C2.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\n    - https://attack.mitre.org/techniques/T1219/\nauthor: The Hunters Ledger\ndate: 2026-07-03\ntags:\n    - attack.command-and-control\n    - attack.t1219\n    - attack.collection\n    - attack.t1113\nlogsource:\n    category: pipe_created\n    product: windows\ndetection:\n    selection:\n        PipeName|contains: '\\kaido_dxgi_'\n    condition: selection\nfalsepositives:\n    - >-\n      None known \u2014 the kaido_dxgi_ pipe-name prefix has not been observed\n      in any legitimate Windows or third-party software during this analysis\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a3121d92-1965-5c21-a5f6-cc523d810126",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.192776Z",
+            "modified": "2026-07-03T22:54:33.192776Z",
+            "name": "Process Named svchost.exe Executing from AppData Path",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Process Named svchost.exe Executing from AppData Path\nid: 08e75208-eb8e-473d-9827-5a59ef4192db\nstatus: test\ndescription: >-\n  Detects a process named svchost.exe launching from a user-writable\n  %AppData% subdirectory rather than the legitimate %SystemRoot%\\System32\n  location. Observed as the install pattern used by the KAIDO Quasar-fork\n  RAT to masquerade as the Windows service host process, but this naming\n  and path pattern is also used by other unrelated malware families and\n  should be treated as a generic masquerade indicator rather than a\n  KAIDO-specific signal on its own.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/\n    - https://attack.mitre.org/techniques/T1036/005/\nauthor: The Hunters Ledger\ndate: 2026-07-03\ntags:\n    - attack.defense-evasion\n    - attack.t1036.005\n    - attack.persistence\n    - attack.t1547.001\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\svchost.exe'\n        Image|contains: '\\AppData\\'\n    filter_parent_system:\n        ParentImage|startswith:\n            - 'C:\\Windows\\System32\\'\n            - 'C:\\Windows\\SysWOW64\\'\n    condition: selection and not filter_parent_system\nfalsepositives:\n    - >-\n      Rare legitimate portable or sideloaded applications that ship a\n      binary literally named svchost.exe in a user profile path\n      (unusual but not impossible for poorly-vetted freeware)\n    - Other unrelated malware families that reuse the same masquerade pattern\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d7a82d87-5557-59e3-a359-2a7c1d5ba9c7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.192956Z",
+            "modified": "2026-07-03T22:54:33.192956Z",
+            "name": "THL KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:\"THL KAIDO-EvilSoul-MaaS Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)\"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--39c385c5-d66e-5e70-92e4-66313dede62b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.193122Z",
+            "modified": "2026-07-03T22:54:33.193122Z",
+            "name": "THL KAIDO-EvilSoul-MaaS TeamKAIDO C2 TLS Certificate Issuer (RAT C2 Fleet Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL KAIDO-EvilSoul-MaaS TeamKAIDO C2 TLS Certificate Issuer (RAT C2 Fleet Indicator)\"; flow:established,to_server; tls.cert_issuer; content:\"TeamKAIDO\"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ce8a027e-6f93-56dd-80d1-6df74faa0a30",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.193261Z",
+            "modified": "2026-07-03T22:54:33.193261Z",
+            "name": "THL KAIDO-EvilSoul-MaaS kaidoo.com.br C2 DNS Query (RAT C2 Resolution)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL KAIDO-EvilSoul-MaaS kaidoo.com.br C2 DNS Query (RAT C2 Resolution)\"; dns_query; content:\"kaidoo.com.br\"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-03T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "malware",
+            "spec_version": "2.1",
+            "id": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.193433Z",
+            "modified": "2026-07-03T22:54:33.193433Z",
+            "name": "",
+            "description": "KAIDO Quasar RAT, tag 'breach', C2 kaidoo.com.br:4782 (richest sample, 14 Costura deps)",
+            "malware_types": [
+                "backdoor"
+            ],
+            "is_family": false,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--451e1da6-6872-52b0-8f5e-b5cb1e6714ae",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.193836Z",
+            "modified": "2026-07-03T22:54:33.193836Z",
+            "name": "kaido-quasar-rat-144-172-109-203 infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--851bd5df-af0c-5bac-aaa5-576db546b20a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.194172Z",
+            "modified": "2026-07-03T22:54:33.194172Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--bb14b624-d5e8-5f37-bd0e-c6226f7c9cf4",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--b1413d53-9ef9-5860-93dc-5b5de06e35ca",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.194375Z",
+            "modified": "2026-07-03T22:54:33.194375Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--98fc5b94-ab86-5d56-8310-f18fce62bda3",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a323da37-1b55-5c3e-a7d7-a8d651162d43",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.194557Z",
+            "modified": "2026-07-03T22:54:33.194557Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--f728748b-968a-5d9d-998e-e1967686ca2e",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--4119cf89-ca91-59cf-8b47-28f82beddda4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.194714Z",
+            "modified": "2026-07-03T22:54:33.194714Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--e7cc84a5-aa27-5a54-a7cf-38dc1dfa5d40",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--af4f1da2-2e2e-5425-9af1-4e55cf3c3625",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.194898Z",
+            "modified": "2026-07-03T22:54:33.194898Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--6907b9eb-f4b5-5b94-83a6-6543590c8b03",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--cccf4082-2553-5cc0-acef-aa4d18faf0ed",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.195089Z",
+            "modified": "2026-07-03T22:54:33.195089Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--06a03fd5-b55a-56cd-b60f-8355d15ecbd5",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--fc434c74-4f27-5fed-bbcf-dfead2f04bc2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.195264Z",
+            "modified": "2026-07-03T22:54:33.195264Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--f6a4ebb0-f9e8-5832-8f9f-cb0159f65675",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--9b683a9f-5a5f-5da0-9333-f7aac644bf8b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.195595Z",
+            "modified": "2026-07-03T22:54:33.195595Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--595e7e26-9368-5b2b-8adf-87b418b18f01",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a442c119-1315-5b8b-9cab-2c23a263f395",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.19589Z",
+            "modified": "2026-07-03T22:54:33.19589Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--d487abaa-2f25-5cb8-99d3-61c096417f12",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--3061c24d-129b-58f9-a1b9-7817b8528dba",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196022Z",
+            "modified": "2026-07-03T22:54:33.196022Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--5da887a0-ef61-52cd-b2d1-178369b86c5b",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--24df5048-7288-5921-9727-f67f030b96d8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196142Z",
+            "modified": "2026-07-03T22:54:33.196142Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--19f77272-bf46-5fed-8166-a49356cfb2c0",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--8a3067c5-301b-5121-af24-88b2c596279f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196258Z",
+            "modified": "2026-07-03T22:54:33.196258Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--099e8f08-d95e-5cc5-8799-42d098252728",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--66c122b5-0067-51be-be72-2b39c5777cb2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196371Z",
+            "modified": "2026-07-03T22:54:33.196371Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--9a1d8d47-7a03-54ed-8e57-0e3e3216fe8d",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--4f191765-bbb4-5f90-ac73-b5b8adb776c3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196485Z",
+            "modified": "2026-07-03T22:54:33.196485Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--24dda273-27e3-5b34-8fa4-b52243069c74",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--57bf7fd7-b610-5253-b975-bb72882c0f71",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196596Z",
+            "modified": "2026-07-03T22:54:33.196596Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--a3121d92-1965-5c21-a5f6-cc523d810126",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--1b499edd-f702-5873-ac22-418e527da299",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196712Z",
+            "modified": "2026-07-03T22:54:33.196712Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--d7a82d87-5557-59e3-a359-2a7c1d5ba9c7",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--79058bd3-ddbd-561c-a7e2-6130cba51fd6",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196818Z",
+            "modified": "2026-07-03T22:54:33.196818Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--39c385c5-d66e-5e70-92e4-66313dede62b",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--288d4faa-32f0-5fb2-b319-831a145ab90e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.196929Z",
+            "modified": "2026-07-03T22:54:33.196929Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--ce8a027e-6f93-56dd-80d1-6df74faa0a30",
+            "target_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--b0f7250e-e44a-5c64-884a-c4a221d7f800",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.197047Z",
+            "modified": "2026-07-03T22:54:33.197047Z",
+            "relationship_type": "communicates-with",
+            "source_ref": "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+            "target_ref": "infrastructure--451e1da6-6872-52b0-8f5e-b5cb1e6714ae",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--caeb4af1-7cfb-51f1-9401-c7268353f962",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-03T22:54:33.197539Z",
+            "modified": "2026-07-03T22:54:33.197539Z",
+            "name": "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-07-03T00:00:00Z",
+            "object_refs": [
+                "ipv4-addr--0cc954d0-ab7e-5403-b760-ecce89342889",
+                "indicator--bb14b624-d5e8-5f37-bd0e-c6226f7c9cf4",
+                "ipv4-addr--23b2f09e-cec0-5eb7-afe8-88f3d5f79d8a",
+                "indicator--98fc5b94-ab86-5d56-8310-f18fce62bda3",
+                "domain-name--ed0f5ce9-4850-50bd-a64e-1a7c3617c5cf",
+                "indicator--f728748b-968a-5d9d-998e-e1967686ca2e",
+                "domain-name--afca77a1-8e44-570b-9584-63d3356769d3",
+                "indicator--e7cc84a5-aa27-5a54-a7cf-38dc1dfa5d40",
+                "domain-name--4dea3ea7-6c0e-54b4-8e89-05dcbc4dc641",
+                "indicator--6907b9eb-f4b5-5b94-83a6-6543590c8b03",
+                "domain-name--ea881463-6ef4-55f6-90e3-f31fef1715e8",
+                "indicator--06a03fd5-b55a-56cd-b60f-8355d15ecbd5",
+                "file--20b2c0f9-0698-505b-9dd3-8c86e68b44f0",
+                "indicator--f6a4ebb0-f9e8-5832-8f9f-cb0159f65675",
+                "file--82831ab5-8d90-5114-9366-1e6684c24502",
+                "indicator--595e7e26-9368-5b2b-8adf-87b418b18f01",
+                "file--2d19688b-470b-5e10-95ec-c25d8259ae59",
+                "indicator--d487abaa-2f25-5cb8-99d3-61c096417f12",
+                "indicator--5da887a0-ef61-52cd-b2d1-178369b86c5b",
+                "indicator--19f77272-bf46-5fed-8166-a49356cfb2c0",
+                "indicator--099e8f08-d95e-5cc5-8799-42d098252728",
+                "indicator--9a1d8d47-7a03-54ed-8e57-0e3e3216fe8d",
+                "indicator--24dda273-27e3-5b34-8fa4-b52243069c74",
+                "indicator--a3121d92-1965-5c21-a5f6-cc523d810126",
+                "indicator--d7a82d87-5557-59e3-a359-2a7c1d5ba9c7",
+                "indicator--39c385c5-d66e-5e70-92e4-66313dede62b",
+                "indicator--ce8a027e-6f93-56dd-80d1-6df74faa0a30",
+                "malware--d4a9c316-7c5a-5998-8380-00faff4963b9",
+                "infrastructure--451e1da6-6872-52b0-8f5e-b5cb1e6714ae",
+                "relationship--851bd5df-af0c-5bac-aaa5-576db546b20a",
+                "relationship--b1413d53-9ef9-5860-93dc-5b5de06e35ca",
+                "relationship--a323da37-1b55-5c3e-a7d7-a8d651162d43",
+                "relationship--4119cf89-ca91-59cf-8b47-28f82beddda4",
+                "relationship--af4f1da2-2e2e-5425-9af1-4e55cf3c3625",
+                "relationship--cccf4082-2553-5cc0-acef-aa4d18faf0ed",
+                "relationship--fc434c74-4f27-5fed-bbcf-dfead2f04bc2",
+                "relationship--9b683a9f-5a5f-5da0-9333-f7aac644bf8b",
+                "relationship--a442c119-1315-5b8b-9cab-2c23a263f395",
+                "relationship--3061c24d-129b-58f9-a1b9-7817b8528dba",
+                "relationship--24df5048-7288-5921-9727-f67f030b96d8",
+                "relationship--8a3067c5-301b-5121-af24-88b2c596279f",
+                "relationship--66c122b5-0067-51be-be72-2b39c5777cb2",
+                "relationship--4f191765-bbb4-5f90-ac73-b5b8adb776c3",
+                "relationship--57bf7fd7-b610-5253-b975-bb72882c0f71",
+                "relationship--1b499edd-f702-5873-ac22-418e527da299",
+                "relationship--79058bd3-ddbd-561c-a7e2-6130cba51fd6",
+                "relationship--288d4faa-32f0-5fb2-b319-831a145ab90e",
+                "relationship--b0f7250e-e44a-5c64-884a-c4a221d7f800"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

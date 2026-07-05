@@ -3,8 +3,8 @@ title: "EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service"
 date: '2026-07-03'
 layout: post
 permalink: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+thumbnail: /assets/images/cards/evilsoul-engine-stealer-maas-144-172-103-98.png
 hide: true
-unlisted: true
 category: "MaaS Operation"
 description: "Server-side teardown of the EvilSoul-Engine stealer-builder — a Brazilian Malware-as-a-Service factory that mass-produces uniquely-packed Discord, browser, and crypto-theft payloads with a working Chrome App-Bound-Encryption bypass and Microsoft Defender timing evasion."
 detection_page: /hunting-detections/evilsoul-engine-stealer-maas-detections/
@@ -21,6 +21,7 @@ ioc_highlights:
   - "evilsoul[.]xyz"
   - "198.1.195[.]210"
   - "299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c"
+stix_bundle: /stix/evilsoul-engine-stealer-maas-144-172-103-98.json
 ---
 
 **Campaign Identifier:** EvilSoul-Engine-Stealer-MaaS-144.172.103.98<br>

@@ -4,7 +4,6 @@ date: '2026-07-03'
 layout: post
 permalink: /hunting-detections/kaido-quasar-rat-detections/
 hide: true
-unlisted: true
 ---
 
 **Campaign:** KAIDO-EvilSoul-Engine-MaaS-144.172.103.98
