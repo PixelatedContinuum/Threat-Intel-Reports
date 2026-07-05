@@ -3,8 +3,9 @@ title: "EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service"
 date: '2026-07-03'
 layout: post
 permalink: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
-thumbnail: /assets/images/cards/evilsoul-engine-stealer-maas-144-172-103-98.png
 hide: true
+thumbnail: /assets/images/cards/evilsoul-engine-stealer-maas-144-172-103-98.png
+stix_bundle: /stix/evilsoul-engine-stealer-maas-144-172-103-98.json
 category: "MaaS Operation"
 description: "Server-side teardown of the EvilSoul-Engine stealer-builder — a Brazilian Malware-as-a-Service factory that mass-produces uniquely-packed Discord, browser, and crypto-theft payloads with a working Chrome App-Bound-Encryption bypass and Microsoft Defender timing evasion."
 detection_page: /hunting-detections/evilsoul-engine-stealer-maas-detections/
@@ -21,7 +22,6 @@ ioc_highlights:
   - "evilsoul[.]xyz"
   - "198.1.195[.]210"
   - "299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c"
-stix_bundle: /stix/evilsoul-engine-stealer-maas-144-172-103-98.json
 ---
 
 **Campaign Identifier:** EvilSoul-Engine-Stealer-MaaS-144.172.103.98<br>
@@ -34,7 +34,7 @@ stix_bundle: /stix/evilsoul-engine-stealer-maas-144-172-103-98.json
 
 ## 1. Executive Summary
 
-EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS) — a productized criminal factory that compiles and auto-distributes uniquely-packed Discord, browser, and cryptocurrency-theft payloads for paying customers. It is operated by the named, self-identified Brazilian actor `n_3_xl` / `@govbrasil`, branded KAIDO (`0xK41`), at HIGH confidence — the same actor whose KAIDO remote access trojan is documented in the companion report. The Hunters Ledger recovered and reverse-engineered the operation's complete server side — the stealer template, an automated builder, a JavaScript packer, a MongoDB-backed web control panel, and an exfiltration/delivery service — after an open-directory sweep surfaced the staging server at `144.172.103[.]98:8888`. This report answers the intelligence question that motivated the investigation: there was no public technical documentation of the EvilSoul-Engine stealer-builder — its Chrome App-Bound-Encryption (ABE-v20) bypass, its process-token-impersonation credential decryptor, or its Microsoft Defender timing-window evasion — and none of the operation's built payloads carried a working detection signature. This report closes that gap and hands defenders behavior-based detection for a threat that hash-blocking cannot durably catch.
+EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS) — a productized criminal factory that compiles and auto-distributes uniquely-packed Discord, browser, and cryptocurrency-theft payloads for paying customers. It is operated by the named, self-identified Brazilian actor `n_3_xl` / `@govbrasil`, branded KAIDO (`0xK41`), at HIGH confidence — the same actor whose KAIDO remote access trojan is documented in the companion report. The Hunters Ledger recovered and reverse-engineered the operation's complete server side — the stealer template, an automated builder, a JavaScript packer, a MongoDB-backed web control panel, and an exfiltration/delivery service — after an open-directory sweep surfaced the staging server at `144.172.103[.]98:8888`; with the origin already offline, its files were preserved and recovered via [Hunt.io's AttackCapture](https://hunt.io/). This report answers the intelligence question that motivated the investigation: there was no public technical documentation of the EvilSoul-Engine stealer-builder — its Chrome App-Bound-Encryption (ABE-v20) bypass, its process-token-impersonation credential decryptor, or its Microsoft Defender timing-window evasion — and none of the operation's built payloads carried a working detection signature. This report closes that gap and hands defenders behavior-based detection for a threat that hash-blocking cannot durably catch.
 
 **Why this matters.** EvilSoul-Engine weaponizes current-generation credential theft. Its built payloads defeat Chrome's newest cookie protection (App-Bound Encryption) two different ways, disable Microsoft Defender wholesale (whole-drive exclusion, real-time monitoring off, firewall off, antivirus process termination), and sit quietly past Defender's post-launch behavioral-monitoring window before doing anything noisy. Because the operation is a MaaS vendor, this capability does not stay with one operator — every customer who buys a build gets a uniquely repacked payload, and the factory's own packer guarantees that no two builds share a file hash. Across the 21 recovered files, no existing YARA signature produced a single hit. The correct defensive posture is to hunt behaviors, not hashes.
 

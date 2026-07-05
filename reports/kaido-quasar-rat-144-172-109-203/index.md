@@ -3,8 +3,9 @@ title: "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking
 date: '2026-07-03'
 layout: post
 permalink: /reports/kaido-quasar-rat-144-172-109-203/
-thumbnail: /assets/images/cards/kaido-quasar-rat-144-172-109-203.png
 hide: true
+thumbnail: /assets/images/cards/kaido-quasar-rat-144-172-109-203.png
+stix_bundle: /stix/kaido-quasar-rat-144-172-109-203.json
 category: "Remote Access Trojan"
 description: "KAIDO is a rebranded 64-bit Quasar RAT fork operated by a named Brazilian actor. Its Hidden-VNC module clones a victim's browser profile to drive their live, authenticated session on an invisible desktop — defeating device-trust and most 2FA. The C2 was live with May-2026 samples."
 detection_page: /hunting-detections/kaido-quasar-rat-detections/
@@ -23,7 +24,6 @@ ioc_highlights:
   - "kaidoo[.]com[.]br"
   - "c2.kaidoo[.]com[.]br"
   - "c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d"
-stix_bundle: /stix/kaido-quasar-rat-144-172-109-203.json
 ---
 
 **Campaign Identifier:** KAIDO-Quasar-RAT-144.172.109.203<br>
@@ -42,7 +42,7 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT. Beyond ordinary 
 
 This report was written to fill a documented gap: there was no public technical documentation of the KAIDO Quasar-fork RAT — its HVNC browser-session-hijack primitive, its full-spectrum surveillance dependency stack, its command-and-control gating, or its Mark-of-the-Web self-deletion behavior — and no public attribution tying the product line to the `n_3_xl` / `@govbrasil` / KAIDO (`0xK41`) operator. A search of a commercial threat-actor catalog returned zero entries for "KAIDO," "Quasar-fork," or the operator handles, consistent with a small-scale commodity operator running below the threshold of named-actor tracking rather than an absence of the threat.
 
-The analysis substrate is unusually strong for a commodity RAT. The operator's server-side toolkit was recovered in full from a torn-down open directory, and three KAIDO Quasar RAT builds (all roughly 1 MB 64-bit .NET assemblies masquerading as `svchost.exe`) were reverse-engineered statically and analyzed behaviorally. Static decompilation recovered the AES-256-GCM-encrypted configuration in full — command-and-control endpoints, the Quasar authentication key, the pinned server certificate, and the crypto parameters all decrypted cleanly to plaintext. Behavioral analysis confirmed the RAT's beacon behavior, its Mark-of-the-Web self-deletion, and a detection complication described below.
+The analysis substrate is unusually strong for a commodity RAT. The operator's server-side toolkit was recovered in full — via [Hunt.io's AttackCapture](https://hunt.io/) — from a torn-down open directory, and three KAIDO Quasar RAT builds (all roughly 1 MB 64-bit .NET assemblies masquerading as `svchost.exe`) were reverse-engineered statically and analyzed behaviorally. Static decompilation recovered the AES-256-GCM-encrypted configuration in full — command-and-control endpoints, the Quasar authentication key, the pinned server certificate, and the crypto parameters all decrypted cleanly to plaintext. Behavioral analysis confirmed the RAT's beacon behavior, its Mark-of-the-Web self-deletion, and a detection complication described below.
 
 The single most important operational finding is that KAIDO **withholds its behavior** until it reaches its operator. Left running without ever reaching a live command-and-control server, the RAT does nothing observable — no files dropped, no persistence written, no child processes, no HVNC. All of that behavior is gated behind a successful command-and-control handshake, so the sample looks near-benign to commodity sandboxes that do not simulate the Quasar protocol. Defenders should treat a "clean" automated-sandbox verdict on a suspected KAIDO sample as unreliable and pivot to the static and network indicators in this report.
 
