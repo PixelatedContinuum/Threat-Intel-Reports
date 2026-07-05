@@ -733,4 +733,4 @@ Section 16 details the four open research questions; this section lists the rema
 
 *Report B of a two-report campaign. See the companion report on the KAIDO Quasar-fork RAT (same operator, concurrently-live product line at `144.172.109[.]203`) for the operator's remote access trojan.*
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

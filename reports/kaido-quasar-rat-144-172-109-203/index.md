@@ -474,7 +474,7 @@ This report draws on the tiered source hierarchy defined in the project's source
 
 ---
 
-*© 2026 Joseph. All rights reserved. See LICENSE for terms.*
+*© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.*
 
 
 

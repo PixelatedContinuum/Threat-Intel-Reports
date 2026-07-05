@@ -1066,7 +1066,7 @@ Remediation strategy should reflect the injection architecture:
 **Created by:** Detection Engineer (Stage 3)
 **Coverage:** YARA (file and memory), Sigma (behavioral), Suricata (network), EDR queries (multiple platforms), SIEM queries (Splunk, Elastic)
 **Detection strategy note:** Rules are structured to target architectural constants that survive polymorphic regeneration — the SysWhispers3 hash seed, the Donut VEH bootstrap pattern, the XZ config header mode byte structure, and the fraudulent certificate serial — alongside specific-hash rules for the confirmed samples.
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 
 ---
 
@@ -1110,4 +1110,4 @@ Remediation strategy should reflect the injection architecture:
 
 ## License
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

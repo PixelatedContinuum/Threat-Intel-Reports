@@ -736,7 +736,7 @@ This negative finding matters for cross-case analysis at the parent campaign lev
 
 [**`/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/`**](/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/)
 
-The detection file contains 25 production-ready detection rules covering YARA file-based detection, Sigma log-based detection, and Suricata network-based detection. All rules are authored by The Hunters Ledger under the CC BY-NC 4.0 license and are deployable directly into compatible scanning/SIEM/IDS infrastructure.
+The detection file contains 25 production-ready detection rules covering YARA file-based detection, Sigma log-based detection, and Suricata network-based detection. All rules are authored by The Hunters Ledger under the CC BY 4.0 license and are deployable directly into compatible scanning/SIEM/IDS infrastructure.
 
 ### Detection Coverage Summary
 
@@ -938,7 +938,7 @@ Two reasons put these retractions in the analytical record: (a) other defenders 
 
 ---
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
 
 
 

@@ -396,7 +396,7 @@ Detection rules (YARA, Sigma) covering the file-content patterns documented in S
 
 **[`/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/`](https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/)**
 
-The detection file follows The Hunters Ledger conventions (CC BY-NC 4.0 license, "The Hunters Ledger" author field on all rules, YAML front matter, no body H1 title). Deploy per your internal detection-engineering processes; this report does not prescribe deployment specifics.
+The detection file follows The Hunters Ledger conventions (CC BY 4.0 license, "The Hunters Ledger" author field on all rules, YAML front matter, no body H1 title). Deploy per your internal detection-engineering processes; this report does not prescribe deployment specifics.
 
 ### Detection Strategy at the Category Level
 
@@ -556,7 +556,7 @@ This compressed structure (artifact analysis + defender hunt anchors) suits sing
 
 ---
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
 
 
 

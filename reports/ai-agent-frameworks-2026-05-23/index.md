@@ -984,7 +984,7 @@ For security teams considering investment in MCP-augmented threat-intel workflow
 ### 14.1 Linked Project Files
 
 - **IOC Feed (machine-readable JSON):** [`/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json) — Full IOC inventory for SIEM/EDR ingestion. No defanging applied.
-- **Detection Rules (YARA + Sigma + Suricata):** [`/hunting-detections/ai-agent-frameworks-2026-05-23-detections.md`](https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/) — 26 rules across 3 detection layers. Author: The Hunters Ledger. License: CC BY-NC 4.0.
+- **Detection Rules (YARA + Sigma + Suricata):** [`/hunting-detections/ai-agent-frameworks-2026-05-23-detections.md`](https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/) — 26 rules across 3 detection layers. Author: The Hunters Ledger. License: CC BY 4.0.
 
 ### 14.2 Sub-Reports (Series)
 
@@ -1088,7 +1088,7 @@ The campaign's headline analytical claims are surfaced here with their underlyin
 
 ---
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
 
 
 

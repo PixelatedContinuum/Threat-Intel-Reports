@@ -999,8 +999,8 @@ The operator's underground forum identity (if any) — alias on XSS, Exploit.in,
 ### 13.6 Detection and IOC Deliverables
 
 - **IOC Feed (machine-readable JSON):** [`/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json`](/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json) — full validated IOC inventory with context fields, unfanged for SIEM/EDR ingestion.
-- **Detection File (YARA + Sigma + Suricata):** [`/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/`](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) — 16 rules across three detection layers, CC BY-NC 4.0 licensed.
+- **Detection File (YARA + Sigma + Suricata):** [`/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/`](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) — 16 rules across three detection layers, CC BY 4.0 licensed.
 
 ---
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

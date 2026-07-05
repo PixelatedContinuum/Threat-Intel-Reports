@@ -1532,7 +1532,7 @@ Two companion files ship with this report: a machine-readable IOC feed and the d
   - Contents: 6 YARA rules + 8 Sigma rules + 4 Suricata signatures (18 rules across three detection layers)
   - Use case: deploy YARA in endpoint memory scanners and gateway AV; Sigma in SIEM/EDR via siegma converters; Suricata in network IDS/IPS
 
-Both files are licensed under Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0). The IOC `iocs.json` feed is intended for direct ingestion by SIEM/EDR pipelines without further parsing; the detection `detections.md` file requires platform-specific deployment (siegma converters for Sigma, etc.).
+Both files are licensed under Creative Commons Attribution 4.0 (CC BY 4.0). The IOC `iocs.json` feed is intended for direct ingestion by SIEM/EDR pipelines without further parsing; the detection `detections.md` file requires platform-specific deployment (siegma converters for Sigma, etc.).
 
 ---
 
@@ -1562,4 +1562,4 @@ The following assumptions underpin the analysis and are explicit so a future ana
 
 ---
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

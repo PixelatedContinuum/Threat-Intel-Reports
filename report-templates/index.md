@@ -366,10 +366,10 @@ Every report ends with:
 
 ## License
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
 ```
 
-IOC feeds and detection rule files are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
+IOC feeds and detection rule files are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
 
 ---
 

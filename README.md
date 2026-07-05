@@ -32,7 +32,7 @@ The reports on this site are produced using a custom-built AI-assisted workflow 
 
 ## Repository Structure
 - [Reports](/reports) → Full threat intelligence reports: technical analysis, MITRE mapping, attribution assessment, and defender guidance
-  *License: All Rights Reserved — free to read, but reuse requires written permission.*
+  *License: CC BY 4.0 — free to republish and adapt, including commercially, with attribution.*
 
 - [Hunting Detections](/hunting-detections) → YARA, Sigma, and Suricata rules written to public repository submission standards
   *License: Creative Commons BY 4.0 — free to use, including commercially, with attribution.*
@@ -67,7 +67,7 @@ Contributions are welcome.
 
 ## License
 
-**Reports:** © 2025 Joseph. All rights reserved. Free to read and reference, but reuse requires written permission.
+**Reports:** © 2025 Joseph, The Hunters Ledger. Licensed under CC BY 4.0 — free to republish and adapt, including commercially, with attribution.
 
 **Detections and IOC Feeds:** Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0). Free to use, including commercially. Attribution required.
 

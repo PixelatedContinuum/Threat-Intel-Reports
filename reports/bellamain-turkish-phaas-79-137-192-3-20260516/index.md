@@ -884,7 +884,7 @@ Two IOCs in the feed carry explicit FP context that defenders should review befo
 
 ## 11. Risk & Detection Posture
 
-The complete detection content (YARA + Sigma + Suricata) is published as a separate detection file at [`/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/`](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/). The file follows the project-standard Jekyll deployment conventions (CC BY-NC 4.0 license, "The Hunters Ledger" author field on every rule).
+The complete detection content (YARA + Sigma + Suricata) is published as a separate detection file at [`/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/`](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/). The file follows the project-standard Jekyll deployment conventions (CC BY 4.0 license, "The Hunters Ledger" author field on every rule).
 
 ### 11.1 Detection Coverage Summary
 
@@ -1080,4 +1080,4 @@ Tier-coded per CLAUDE.md SOURCE CREDIBILITY TIERS. All citations are sources tha
 
 ---
 
-© 2026 Joseph. All rights reserved. See LICENSE for terms.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
