@@ -3,14 +3,14 @@ title: STIX Bundles
 layout: page
 permalink: /stix/
 position: 4.5
-description: "Per-campaign STIX 2.1 bundles — import into OpenCTI, MISP, or any STIX-aware platform. Licensed CC BY-NC 4.0."
+description: "Per-campaign STIX 2.1 bundles — import into OpenCTI, MISP, or any STIX-aware platform. Licensed CC BY 4.0."
 thumbnail: /assets/images/cards/stix.png
 ---
 
 <div class="hl-page-header" style="--ph-accent: #22d3ee;">
   <div class="hl-page-header__label">STIX Bundles</div>
   <div class="hl-page-header__title">STIX 2.1 Threat Intelligence</div>
-  <div class="hl-page-header__desc">Per-campaign STIX 2.1 bundles — import into OpenCTI, MISP, or any STIX-aware platform. Licensed under <strong>CC BY-NC 4.0</strong>.</div>
+  <div class="hl-page-header__desc">Per-campaign STIX 2.1 bundles — import into OpenCTI, MISP, or any STIX-aware platform. Licensed under <strong>CC BY 4.0</strong>.</div>
 </div>
 
 <p style="margin:0 0 1.5rem;"><a class="hl-download-all" href="/stix/hunters-ledger-stix-bundles.zip" download>⬇ Download all campaigns (.zip)</a></p>

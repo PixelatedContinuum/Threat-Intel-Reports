@@ -20,7 +20,7 @@ import cardlib
 REPO = os.path.abspath(os.path.join(cardlib.HERE, "..", ".."))
 CARDS = os.path.join(REPO, "assets", "images", "cards")
 
-CC = "CC BY-NC 4.0"
+CC = "CC BY 4.0"
 
 # slug -> card spec. `accent` colors the spine + pill (matches each page's
 # --ph-accent); pill/kicker/title/subtitle mirror the page's header block.

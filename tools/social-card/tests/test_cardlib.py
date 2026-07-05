@@ -57,7 +57,7 @@ def test_render_hub_card():
     c.render_hub_card({"pill": "STIX 2.1", "kicker": "THREAT INTELLIGENCE",
                        "title": "STIX Bundles",
                        "subtitle": "Per-campaign STIX 2.1 bundles for import.",
-                       "footer_left": "CC BY-NC 4.0"}, p)
+                       "footer_left": "CC BY 4.0"}, p)
     from PIL import Image
     with Image.open(p) as im:            # context-manage so Windows releases the handle
         assert im.size == (1200, 630)
