@@ -366,33 +366,9 @@ falsepositives:
 level: medium
 ```
 
-### Rule 6: Multi-Technique Privilege Escalation Correlation
+### Coverage Note: Multi-Technique Privilege Escalation Sequence
 
-```yaml
-title: Multi-Technique Privilege Escalation Sequence (lpe.exe)
-id: 4b346709-c283-4b91-97da-a13b4573be94
-status: experimental
-description: Detects scheduled-task creation with the /ru SYSTEM parameter, one of three privilege-escalation techniques (token impersonation, UAC bypass, SYSTEM scheduled task) lpe.exe attempts in rapid succession. The original rule intent required 2-of-3 techniques within 60 seconds across three different Windows logsources (process_access, registry_set, process_creation); single-event Sigma rules cannot express cross-logsource, cross-event correlation, so that has been dropped. This rule is now a duplicate of Rule 3 (Scheduled Task Created as SYSTEM) and adds no independent detection coverage — token impersonation and UAC-bypass coverage for this multi-technique pattern is provided individually by Rule 1 and Rule 2 in this file.
-author: The Hunters Ledger
-date: '2026-01-25'
-tags:
-    - attack.privilege-escalation
-    - attack.execution
-    - attack.persistence
-    - attack.t1053.005
-    - detection.emerging-threats
-logsource:
-    product: windows
-    category: process_creation
-detection:
-    selection:
-        Image|endswith: '\schtasks.exe'
-        CommandLine|contains: '/ru SYSTEM'
-    condition: selection
-falsepositives:
-    - Extremely rare - investigate all matches
-level: high
-```
+The original "Multi-Technique Privilege Escalation Sequence" rule aimed to fire when lpe.exe attempted 2-of-3 privilege-escalation techniques (token impersonation, UAC bypass, SYSTEM scheduled task) within 60 seconds — a cross-logsource, cross-event correlation that base Sigma rules cannot express. After removing the deprecated aggregation syntax it collapsed to a plain `schtasks /ru SYSTEM` match already covered (more precisely) by **Rule 3 (Scheduled Task Created as SYSTEM)**, so it has been removed to avoid a redundant rule. The individual techniques remain covered by Rules 1–5 above; the full multi-technique sequence is best reconstructed with SIEM-side correlation across those rules.
 
 ---
 

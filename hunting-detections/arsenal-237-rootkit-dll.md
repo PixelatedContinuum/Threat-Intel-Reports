@@ -295,9 +295,9 @@ detection:
             - 'BdApiUtil.sys'
     selection_driver_hash:
         Hashes|contains:
-            - 'MD5=f72386e6b0e87a3245e0d6e4e4c5a1a0'
-            - 'SHA1=d8e1c6d0c1c0d6e8c9e0d6e0c1c0d6e8c9e0d6e0'
-            - 'SHA256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+            - 'MD5=ced47b89212f3260ebeb41682a4b95ec'
+            - 'SHA1=148c0cde4f2ef807aea77d7368f00f4c519f47ef'
+            - 'SHA256=47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428'
     condition: selection_driver_name or selection_driver_hash
 falsepositives:
     - Legitimate Baidu software installations (rare in enterprise environments)
