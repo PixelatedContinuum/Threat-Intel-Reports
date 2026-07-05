@@ -10,7 +10,7 @@ hide: true
 **Campaign:** ShinyHunters-DLS-91.215.85.22-20260417<br>
 **Date:** 2026-04-17<br>
 **Author:** The Hunters Ledger<br>
-**License:** CC BY-NC 4.0<br>
+**License:** CC BY 4.0<br>
 **Reference:** https://the-hunters-ledger.com/reports/shinyhunters-dls-91-215-85-22-20260417/
 
 ---
@@ -39,7 +39,7 @@ hide: true
     Date: 2026-04-17
     Identifier: ShinyHunters-DLS
     Reference: https://the-hunters-ledger.com/reports/shinyhunters-dls-91-215-85-22-20260417/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 -->
 
 ---
@@ -534,5 +534,5 @@ For environments where Tor client execution is prohibited, consider adding a sep
 
 ## License
 
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

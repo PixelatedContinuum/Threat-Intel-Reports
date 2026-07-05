@@ -10,7 +10,7 @@ hide: true
 **Campaign:** Inkognito-Russian-VPN-Phishing-185.221.196.118-20260516<br>
 **Date:** 2026-05-16
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
 
 ---
@@ -45,7 +45,7 @@ hide: true
     Date: 2026-05-16
     Identifier: Inkognito-FraudOperation-WebAssets
     Reference: https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 ```
 
@@ -762,5 +762,5 @@ The CryptOne fake exchange at cryptone.bot is fully Cloudflare-fronted with a Tu
 
 ## License
 
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

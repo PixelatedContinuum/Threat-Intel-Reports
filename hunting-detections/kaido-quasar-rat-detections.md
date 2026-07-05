@@ -10,7 +10,7 @@ unlisted: true
 **Campaign:** KAIDO-EvilSoul-Engine-MaaS-144.172.103.98
 **Date:** 2026-07-03
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/
 
 ---
@@ -53,13 +53,13 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC 
    Identifier: KAIDO Quasar-Fork RAT
    Author: The Hunters Ledger
    Source: https://the-hunters-ledger.com/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_KAIDO_Quasar_Fork_Namespace {
    meta:
       description = "Detects the KAIDO Quasar-fork RAT via its rebranded namespace root Kaido.Common.Messages and Costura-embedded costura.kaido.common.dll asset, both of which survive the sample's obfuscation pass"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/"
       date = "2026-07-03"
@@ -97,7 +97,7 @@ rule RAT_KAIDO_Quasar_Fork_Namespace {
 rule RAT_KAIDO_HVNC_DXGI_Pipe {
    meta:
       description = "Detects the KAIDO RAT HVNC module via its DXGI-hook named-pipe transport strings (pipe prefix, env var, frame magic, reader-thread name) used to stream the hidden-desktop capture to the operator"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/"
       date = "2026-07-03"
@@ -137,7 +137,7 @@ rule RAT_KAIDO_HVNC_DXGI_Pipe {
 rule RAT_KAIDO_AntiAnalysis_SleepObfuscation {
    meta:
       description = "Detects the KAIDO RAT via its developer-left anti-analysis debug string referencing sleep obfuscation with mutex and stack detection, used to evade sandbox timing-based detonation checks"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/kaido-quasar-rat-detections/"
       date = "2026-07-03"
@@ -374,5 +374,5 @@ alert dns $HOME_NET any -> any any (msg:"THL KAIDO-EvilSoul-MaaS kaidoo.com.br C
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

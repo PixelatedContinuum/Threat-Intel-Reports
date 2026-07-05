@@ -10,7 +10,7 @@ unlisted: true
 **Campaign:** KAIDO / EvilSoul-Engine Multi-Product MaaS Operator (144.172.103.98)
 **Date:** 2026-07-03
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/
 
 ---
@@ -48,13 +48,13 @@ unlisted: true
    Identifier: EvilSoul-Engine Stealer-Builder MaaS - Kit-Wide Obfuscator Anchors
    Author: The Hunters Ledger
    Source: https://the-hunters-ledger.com/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 rule EvilSoul_Engine_Obfuscator_XOR_Key {
    meta:
       description = "Detects EvilSoul-Engine stealer-builder MaaS output via the operator's hardcoded obfuscator XOR key constant and catchphrase comment, which survive js-confuser because they reside in the loader stage rather than the packed payload"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/"
       date = "2026-07-03"
@@ -76,7 +76,7 @@ rule EvilSoul_Engine_Obfuscator_XOR_Key {
 rule EvilSoul_Engine_SplitDomain_AntiGrep {
    meta:
       description = "Detects EvilSoul-Engine's split-string anti-grep evasion of its own backend domain, where 'evilsoul.xyz' is constructed at runtime as the concatenation 'evilso' + 'ul.xyz' to defeat static string-grep hunting for the plaintext domain"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/"
       date = "2026-07-03"
@@ -115,13 +115,13 @@ rule EvilSoul_Engine_SplitDomain_AntiGrep {
    Identifier: EvilSoul-Engine Stealer-Builder MaaS - Maploot/Tinarox Electron Builds
    Author: The Hunters Ledger
    Source: https://the-hunters-ledger.com/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 rule EvilSoul_Engine_Maploot_Tinarox_Embed_Titles {
    meta:
       description = "Detects EvilSoul-Engine Maploot/Tinarox Electron stealer builds via their branded Discord-embed exfil title strings, confirmed byte-for-byte shared across both game-masquerade builds after webcrack de-obfuscation"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/"
       date = "2026-07-03"
@@ -165,13 +165,13 @@ rule EvilSoul_Engine_Maploot_Tinarox_Embed_Titles {
    Identifier: EvilSoul-Engine Stealer-Builder MaaS - 299a2e7f Socket.IO WebPanel Variant
    Author: The Hunters Ledger
    Source: https://the-hunters-ledger.com/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 rule EvilSoul_Engine_299a2e7f_SocketIO_WebPanel {
    meta:
       description = "Detects the EvilSoul-Engine 299a2e7f Socket.IO WebPanel RAT build via its distinctive args-file suffix, WebPanel embed title, and webhook-resolution relay endpoint string, all recovered from the build's runtime memory"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/"
       date = "2026-07-03"
@@ -212,13 +212,13 @@ rule EvilSoul_Engine_299a2e7f_SocketIO_WebPanel {
    Identifier: EvilSoul-Engine Supply Chain - xaitax ChromElevator ABE-Bypass Fork
    Author: The Hunters Ledger
    Source: https://the-hunters-ledger.com/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 rule Tool_xaitax_ChromElevator_EvilSoul_Fork {
    meta:
       description = "Detects the @breakingupslow-forked build of the public xaitax Chrome-App-Bound-Encryption-Decryption (ChromElevator) tool pair, adopted by the EvilSoul-Engine operator as a runtime-fetched ABE-bypass supply-chain component; anchors on fork-specific attribution strings rather than the stock upstream tool's generic decryption logic"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/"
       date = "2026-07-03"
@@ -662,5 +662,5 @@ alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Operator ngrok Tun
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

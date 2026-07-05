@@ -10,7 +10,7 @@ hide: true
 **Campaign:** open-directory-94-103-1-13-20260423
 **Date:** 2026-04-23
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/open-directory-94-103-1-13-20260423/
 
 ---
@@ -50,7 +50,7 @@ Rules are grouped by family within each rule-type section:
     Date: 2026-04-23
     Identifier: Chaos-TorBrowserTor-Private-Crypter-OpenDirectory-94.103.1.13
     Reference: https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 -->
 
 ### Tier B — Custom Crypter / Builder Cross-Build Invariants
@@ -793,5 +793,5 @@ The actual chisel/plink tunnel destination for Orcus is unknown from static anal
 
 ## License
 
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

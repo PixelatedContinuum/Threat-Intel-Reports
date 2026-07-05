@@ -10,7 +10,7 @@ hide: true
 **Campaign:** AdaptixC2-OpenDirectory-Toolkit-45.130.148.125
 **Date:** 2026-04-30
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/
 
 ## Detection Coverage Summary
@@ -51,7 +51,7 @@ Two YARA false-positive clusters were identified during analysis and must be fil
     Date: 2026-04-30
     Identifier: AdaptixC2 Windows Beacon + Operator Injector + PowerShell Loader
     Reference: https://the-hunters-ledger.com/hunting-detections/opendirectory-45-130-148-125-20260430-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule MALW_AdaptixC2_Windows_Beacon_Stock
@@ -504,5 +504,5 @@ The following techniques observed in the malware-analyst findings cannot be cove
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

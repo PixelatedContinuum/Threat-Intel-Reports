@@ -376,5 +376,5 @@ sequence by host.id with maxspan=60s
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

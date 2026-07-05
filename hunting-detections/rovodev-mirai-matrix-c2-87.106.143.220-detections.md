@@ -10,7 +10,7 @@ hide: true
 **Campaign:** UTA-2026-014 / rovodev-mirai-matrix-c2-87.106.143.220
 **Date:** 2026-05-26
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 
 > **Note:** This is the per-case detection file for Sub-report 4 of 5 (Case 3) in the parent series `ai-agent-frameworks-2026-05-23`. Cross-operator AI-Generated Code Signature rules are in `ai-agent-frameworks-2026-05-23-detections.md` and are not duplicated here.
@@ -56,13 +56,13 @@ hide: true
    Identifier: Naku/Pandora-Mirai 11-arch IoT botnet (UTA-2026-014)
    Author: The Hunters Ledger
    Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 rule MAL_ELF_Naku_Pandora_Mirai_Family {
    meta:
       description = "Detects Naku/Pandora-Mirai 11-architecture IoT botnet based on operator-bespoke 22-char random-string charset, Sora-fork /bin/busybox SORA derivative marker (XOR-0x54 encoded), and canonical Mirai botnet symbols. Operator uses triple XOR keys (0x54/0x42/0x45); charset is present in all 11 release architectures and acts as cross-arch tracking signature."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -115,7 +115,7 @@ rule MAL_ELF_Naku_Pandora_Mirai_Family {
 rule MAL_Bash_Pandora_Dropper_Family {
    meta:
       description = "Detects pandora.sh / Naku.sh dropper class fetching 11-architecture Pandora-Mirai ELF binaries via wget/curl loop. Operator-specific arch-set (arm/arm5/arm6/arm7/m68k/mips/mpsl/ppc/sh4/spc/x86), execution-with-arch-tag pattern, and cleanup sequence identify this dropper family across both standard (port 80) and HTTPS-channel (port 443) variants."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -172,7 +172,7 @@ rule MAL_Bash_Pandora_Dropper_Family {
 rule MAL_Python_Matrix_C2_Framework_Family {
    meta:
       description = "Detects Matrix C2 Python DDoS-as-a-Service framework files authored via Atlassian Rovodev AI coding agent. Identifies master_control.py, attack_engine.py, and multi_vector_agent.py via AI-generated banner strings, operator-marketing comments, emoji-branded attack method catalog entries, and mass-infection docstring captured directly from Rovodev session file_write tool call payloads."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -228,7 +228,7 @@ rule MAL_Python_Matrix_C2_Framework_Family {
 rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
    meta:
       description = "Cross-operator detection for AI-generated offensive Python code using the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Detects co-occurrence of verbose docstrings, bare-except handlers, educational variable naming, emoji-in-output bleed, and version-numbered iteration chains that are structurally diagnostic of AI-authored offensive tooling. High FP risk in isolation; requires multi-criteria co-occurrence gate."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -292,7 +292,7 @@ rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
 rule MAL_Discord_Bot_DDoSasService_Customer_Interface {
    meta:
       description = "Detects Matrix C2 Discord-bot customer interface JavaScript dispatch table for DDoS-as-a-Service. Identifies the 13-attack-method catalog (udp-star, syn-storm, tcp-matrix, tcp-rst, udp-bypass, icmp-hell, multi-vector, http-flood, mass_infection, frag-storm, dns-rain, ovh-nuke, http-star) combined with VIP/free tier branding, GBPS capability estimates, and AI-Generated Code Signature emoji branding (🔥 🚀). Captured directly from Atlassian Rovodev session JSON rovodev.log."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -353,7 +353,7 @@ rule MAL_Discord_Bot_DDoSasService_Customer_Interface {
 rule MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt {
    meta:
       description = "Detects whatineed.txt-class operator natural-language prompts to AI coding agents specifying offensive capability development. Pattern includes C2 debugging request, GitHub C2-leak repository reference, automatic credential harvesting ('automatic give me login'), Discord integration request, and operator user-ID disclosure. This operator's exact file captured from 87.106.143.220 open-directory."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -403,7 +403,7 @@ rule MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt {
 rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored {
    meta:
       description = "Detects stealth_agent.py-class AI-authored Python backdoor connecting to 87.106.143.220:1337. Authored via escalated Rovodev prompt producing anti-debug, anti-VM, sandbox evasion, process hiding, rootkit install, systemd/cron persistence, self-destruct, and polymorphic payload generation combined with bare-except AI-code signature. Refines AI-Generated Code Signature criterion #4 (zero anti-analysis is PROMPT-CONDITIONAL, not structural)."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -456,7 +456,7 @@ rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored {
 rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {
    meta:
       description = "Detects operator-exposed Atlassian Rovodev AI coding agent session artifacts (session_context.json / rovodev.log) containing file_write tool calls with offensive Python initial_content payloads. These session JSONs document end-to-end AI co-authoring of offensive frameworks. The 257b6faf session (1.24 MB) and 8b911ec6 session (176 KB) captured from operator's 87.106.143.220 open-directory are the primary artifact class."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -506,7 +506,7 @@ rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {
 rule MAL_Python_Persistent_Bot_DualChannel_CNC {
    meta:
       description = "Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register + heartbeat messages with bot_type/arch/vendor fields) to Matrix C2 at 87.106.143.220:1337, hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit)."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -559,7 +559,7 @@ rule MAL_Python_Persistent_Bot_DualChannel_CNC {
 rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
    meta:
       description = "Narrow detection on the literal Discord operator snowflake ID 1441591352927326259 as it appears in operator artifacts (whatineed.txt prompt, Discord bot configs, operator notes). Snowflake decodes to account creation timestamp 2025-11-22T00:49:22 UTC — fresh ops persona ~182 days old at investigation. Also detects PandoraNet botnet ID co-occurrence in operator-exposed files. Use as a pivot/hunting rule rather than high-confidence detection."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
       date = "2026-05-26"
@@ -1273,6 +1273,6 @@ alert tls $HOME_NET any -> 87.106.54.213 any (msg:"THL - TLS Connection to Rovod
 
 ## License
 
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.
 

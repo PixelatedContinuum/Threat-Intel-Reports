@@ -10,7 +10,7 @@ hide: true
 **Campaign:** Turkish-ARPA-OpenClaw-State-Insurer-UTA-2026-013-209.38.205.158
 **Date:** 2026-05-26
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
 
 > **Scope note:** This file covers **Case 2 (Turkish ARPA Operator / the victim organization)** per-case detection signatures only. Cross-campaign and cross-operator signatures are in the parent file at `/hunting-detections/ai-agent-frameworks-2026-05-23-detections/`. Do not duplicate parent-file rules here.
@@ -54,7 +54,7 @@ hide: true
    Identifier: Turkish-ARPA-OpenClaw-State-Insurer-209.38.205.158
    Author: The Hunters Ledger
    Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 ---
@@ -72,7 +72,7 @@ hide: true
 rule MAL_PowerShell_Instana_Local_Collector_Family {
    meta:
       description = "Detects the Turkish ARPA operator's victim-side PowerShell collector that exfiltrates IBM Instana APM events from the victim organization's OCP-hosted Instana tenant to operator C2 at 209.38.205.158. Indicators: hardcoded victim Instana endpoint, stolen JWT delivery, Turkish-language operational comments, and POST to operator ARPA ingestion endpoint."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
@@ -108,7 +108,7 @@ rule MAL_PowerShell_Instana_Local_Collector_Family {
 rule MAL_Python_ARPA_Observability_Harvester_Platform {
    meta:
       description = "Detects the Turkish ARPA operator's multi-source observability-harvester Python platform (ARPA Korelasyon Motoru). Targets the operator self-branding docstring, dashboard footer, and multi-source ingestion patterns that identify this platform across source files, SQLite stores, and HTML dashboard responses."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
@@ -147,7 +147,7 @@ rule MAL_Python_ARPA_Observability_Harvester_Platform {
 rule MAL_PSScript_Insider_TunnelSetup_Turkish {
    meta:
       description = "Detects operator-authored Turkish-language insider-recruitment tunnel-setup documents (PUTTY_TUNNEL_DETAY.md, TUNNEL_RESTART.md, SSH_KEY_COZUM.md class). Operator instructs victim-side insider (the victim organization Windows AD user [employee ID — suppressed]) how to deploy reverse SSH tunnels from inside the victim network. Keyword combination is specific to this operator campaign."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
@@ -187,7 +187,7 @@ rule MAL_PSScript_Insider_TunnelSetup_Turkish {
 rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {
    meta:
       description = "Detects Python scripts implementing multi-source observability polling targeting IBM Instana, SolarWinds Orion, Zabbix, and VMware Aria from a single codebase — the core of the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP. Hardcoded victim Instana tenant and 5-minute cadence markers identify operator-authored vs legitimate cross-monitoring tools."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
@@ -226,7 +226,7 @@ rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {
 rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {
    meta:
       description = "Detects the Turkish ARPA operator's AI-augmented natural-language query interface over stolen observability data (ai_service.py + ai_assistant.db). Architecture: events table populated from stolen Instana monitoring data, situations table for AI root-cause analysis, ai_training_log table for conversation feedback. Candidate novel TTP: AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
@@ -266,7 +266,7 @@ rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {
 rule MAL_Python_ARPA_CrossSource_Correlation_ETL {
    meta:
       description = "Detects the Turkish ARPA operator's cross-source correlation ETL engine (correlation_v3.py and variants). Operator self-branded docstring 'ARPA Korelasyon Motoru v3 - Temporal Focus', Turkish-language diagnostic output, and API endpoint dispatch patterns uniquely identify this component of the ARPA platform."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
@@ -304,7 +304,7 @@ rule MAL_Python_ARPA_CrossSource_Correlation_ETL {
 rule MAL_Markdown_ARPA_OperatorNote_Family {
    meta:
       description = "Detects Turkish ARPA operator-authored operational Markdown notes (GERCEK_API_BULUNDU.md, INSTANA_INTEGRATION_SUMMARY.md class). Operator documents the discovery of victim Instana endpoints, integration steps, and references the public MehmetARPA/ARPA GitHub repository. Turkish-language operational narrative combined with victim-specific API references is operator-distinctive."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
@@ -342,7 +342,7 @@ rule MAL_Markdown_ARPA_OperatorNote_Family {
 rule MAL_SystemdUnit_ARPA_Platform_Services {
    meta:
       description = "Detects the Turkish ARPA operator's systemd service unit files persisting the ARPA observability-harvester platform (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel). Presence of this naming cluster in /etc/systemd/system/ indicates ARPA platform deployment on the target host."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
       date = "2026-05-26"
@@ -1117,5 +1117,5 @@ The following techniques and detection surfaces were observed in malware-analyst
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

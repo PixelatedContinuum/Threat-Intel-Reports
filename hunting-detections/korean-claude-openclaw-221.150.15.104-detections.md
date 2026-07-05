@@ -10,7 +10,7 @@ hide: true
 **Campaign:** Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104<br>
 **Date:** 2026-05-27<br>
 **Author:** The Hunters Ledger<br>
-**License:** CC BY-NC 4.0<br>
+**License:** CC BY 4.0<br>
 **Reference:** https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/
 
 ---
@@ -37,7 +37,7 @@ hide: true
    Identifier: Claude Code Attacker-Customized Allowlist — OpenClaw Operator (Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104)
    Author: The Hunters Ledger
    Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 ```
 
@@ -54,7 +54,7 @@ hide: true
 rule TOOL_ClaudeCode_OpenClaw_Allowlist_Specific {
    meta:
       description = "Detects attacker-customized Claude Code settings.local.json containing 3+ OpenClaw-specific permission allowlist entries pre-authorizing the OpenClaw curl|bash installer, npm global install, onboarding, docs fetch, gateway start, and UI launch — suppressing Claude Code safety prompts for the complete OpenClaw bring-up workflow"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/"
       date = "2026-05-27"
@@ -89,7 +89,7 @@ rule TOOL_ClaudeCode_OpenClaw_Allowlist_Specific {
 rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {
    meta:
       description = "Detects any Claude Code settings.local.json permission allowlist containing a Bash(curl ... | bash) or Bash(curl ... | sh) pre-authorization pattern — a high-signal heuristic for attacker-customized AI-agent allowlist abuse regardless of which specific tooling is being installed"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/"
       date = "2026-05-27"
@@ -409,5 +409,5 @@ The Sigma `file_event` rule (Rule Sigma-1) matches on file path metadata only; f
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

@@ -1,5 +1,5 @@
 # Hunters Ledger - consolidated Suricata detection feed
-# https://the-hunters-ledger.com/  |  License: CC BY-NC 4.0
+# https://the-hunters-ledger.com/  |  License: CC BY 4.0
 # 102 rules from 20 campaigns. SIDs renumbered into the Hunters Ledger
 # allocated block 3500000-3509999 (sidallocation.org); original SID noted above each rule.
 

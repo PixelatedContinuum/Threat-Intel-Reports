@@ -10,7 +10,7 @@ hide: true
 **Campaign:** OpenDirectory-DualRAT-MaaS-151.245.112.70
 **Date:** 2026-04-04
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 
 ---
@@ -45,7 +45,7 @@ hide: true
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
     Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_ShadowRAT_v2640_Client
@@ -95,7 +95,7 @@ rule RAT_ShadowRAT_v2640_Client
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
     Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_ShadowRAT_CommonDLL
@@ -138,7 +138,7 @@ rule RAT_ShadowRAT_CommonDLL
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
     Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_ShadowRAT_AMSI_ETW_Bypass
@@ -192,7 +192,7 @@ rule RAT_ShadowRAT_AMSI_ETW_Bypass
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
     Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_ShadowRAT_Crypto_Clipper
@@ -236,7 +236,7 @@ rule RAT_ShadowRAT_Crypto_Clipper
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
     Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_ShadowRAT_WinRE_Persistence
@@ -281,7 +281,7 @@ rule RAT_ShadowRAT_WinRE_Persistence
     Date: 2026-04-04
     Identifier: XWorm 3.0-5.0 OpenDirectory 151.245.112.70
     Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_XWorm_30_50_Config
@@ -336,7 +336,7 @@ rule RAT_XWorm_30_50_Config
     Date: 2026-04-04
     Identifier: XWorm 3.0-5.0 OpenDirectory 151.245.112.70
     Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_XWorm_Rijndael256ECB_Crypto
@@ -865,7 +865,7 @@ level: medium
 # Campaign: ShadowRAT-XWorm-OpenDirectory-151.245.112.70
 # Author: The Hunters Ledger
 # Date: 2026-04-04
-# License: CC BY-NC 4.0
+# License: CC BY 4.0
 # Reference: https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 # =============================================================================
 
@@ -1055,5 +1055,5 @@ ScreenConnect was deployed on the C2 server on 2026-03-01 for persistent victim 
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

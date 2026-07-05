@@ -10,7 +10,7 @@ hide: true
 **Campaign:** OpenStrike-CSBeacon-Toolkit-172.105.0.126
 **Date:** 2026-04-06
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/
 
 ## Detection Coverage Summary
@@ -45,7 +45,7 @@ hide: true
     Date: 2026-04-06
     Identifier: OpenStrike C2 toolkit recovered from open directory on 172.105.0.126
     Reference: https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_OpenStrike_C_Beacon
@@ -397,5 +397,5 @@ The 17-opcode Transform VM encodes C2 traffic in a campaign-specific way. Withou
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

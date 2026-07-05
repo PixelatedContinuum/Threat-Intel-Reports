@@ -10,7 +10,7 @@ hide: true
 **Campaign:** AI-Agent-Frameworks-MultiActor-2026-05-23
 **Date:** 2026-05-25
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 
 > **Scope note:** This file covers **campaign-wide and cross-cutting signatures** for the parent multi-actor investigation. Per-case operator-specific signatures (Case 1 Russian A2A deep-dive, Case 2 Turkish ARPA deep-dive, Case 3 Rovodev/Pandora deep-dive, Case 9 GHOST kit sub-report) are deferred to individual sub-report detection files. Rules here are designed for broad applicability and will fire regardless of which specific operator is present.
@@ -47,7 +47,7 @@ hide: true
    Identifier: AI-Agent-Framework-Abuse-MultiActor-2026-05-23
    Author: The Hunters Ledger
    Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 ### Group 1 — Novel AI-Abuse TTP Signatures
@@ -69,13 +69,13 @@ hide: true
    Identifier: AI-Agent-Framework-Abuse-MultiActor-2026-05-23
    Author: The Hunters Ledger
    Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 rule TOOLKIT_AI_Operator_Handoff_Document {
    meta:
       description = "Detects operator-authored Markdown handoff documents written for AI agent consumption — a novel artifact class where threat actors document their C2 infrastructure and session context for AI tool re-priming. Observed in Case 1 (Russian Gemini operator with explicit 'To: Gemini CLI' headers) and Case 3 (Rovodev operator with 22+ session-prime docs). Indicative of AI-integrated threat operators maintaining continuity across AI sessions."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
@@ -130,7 +130,7 @@ rule TOOLKIT_AI_Operator_Handoff_Document {
 rule TOOLKIT_LLM_Personalized_Credential_Mutator {
    meta:
       description = "Detects Python scripts implementing LLM-personalized credential mutation at attack time — threat actors invoking frontier LLM APIs (Gemini, GPT-4) with per-target email+domain+password context to generate 20 targeted mutations. Observed in Case 1 (russian-ai_sniper_brute.py using Gemini 2.5 Flash). Represents a qualitative upgrade over static hashcat-rules tradecraft documented since ~2015."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
@@ -185,7 +185,7 @@ rule TOOLKIT_LLM_Personalized_Credential_Mutator {
 rule SUSP_AI_Generated_Offensive_Code_Python {
    meta:
       description = "Detects Python offensive tools bearing the structural signature of AI-generated code: verbose docstrings co-occurring with bare-except handlers, defensive try/except wrapping, and educational variable names. Confirmed cross-operator across 3 independent actors (Case 1 Russian, Case 2 Turkish ARPA, Case 3 Rovodev). Individual criteria have FP risk; combination is MODERATE confidence for AI-assisted offensive tool authorship."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
@@ -254,7 +254,7 @@ import "elf"
 rule MAL_Linux_GHOST_LDPreload_Rootkit_Family {
    meta:
       description = "Detects the libpam_cache.so LD_PRELOAD userland rootkit shipped with the GHOST v5.1/v6.0 cryptojacker kit. Hooks readdir/readdir64/fopen/fopen64 to hide cryptominer processes and listening ports. Uses deceptive PAM-style filename camouflage. Constructor calls unsetenv('LD_PRELOAD') to defeat env-variable detection. Observed byte-identical across at least 2 customer deployments — commodity supply-chain kit."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
@@ -316,7 +316,7 @@ rule MAL_Linux_GHOST_LDPreload_Rootkit_Family {
 rule MAL_Linux_GHOST_Kit_Installer_Shell {
    meta:
       description = "Detects the GHOST v5.1/v6.0 cryptojacker kit installer (ghost.sh) based on distinctive operator-coined function names. The _anti_hisana function targets rival cryptojacker Hisana for displacement. _compile_hide_so compiles the LD_PRELOAD rootkit (libpam_cache.c) on victim hosts. _container_escape provides 4-variant container breakout capability for Docker/k8s/LXC cloud GPU environments. Confirmed via Hunt.io cross-host search — found only on GHOST kit customer hosts."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
@@ -372,7 +372,7 @@ rule MAL_Linux_GHOST_Kit_Installer_Shell {
 rule MAL_Linux_ARPA_Observability_Harvester_Systemd {
    meta:
       description = "Detects the Turkish ARPA operator's observability-harvester platform based on distinctive systemd service unit filenames and operator self-branding strings. ARPA ingests stolen observability telemetry (IBM Instana + SolarWinds + Zabbix + VMware Aria via stolen API tokens) into a TimescaleDB+Neo4j+Redis stack. The platform was found on 209.38.205.158 (DigitalOcean) harvesting data from a Turkish state-owned insurer victim with a stolen 10-year Instana JWT."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
@@ -423,7 +423,7 @@ rule MAL_Linux_ARPA_Observability_Harvester_Systemd {
 rule MAL_Linux_Pandora_Mirai_Naku_Suite {
    meta:
       description = "Detects the Rovodev operator's Pandora/Naku Mirai-variant botnet suite based on operator-bespoke naming patterns and the custom 22-character random-string charset. The suite covers 11 IoT architectures (arm, arm5, arm6, arm7, m68k, mips, mpsl, ppc, sh4, spc, x86) served from dual HTTP/HTTPS channels at /bins/Naku.{arch} and /Pandoras_Box/pandora.{arch}. Botnet ID 'PandoraNet' is suffixed by architecture in bot registration beacons."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
@@ -481,7 +481,7 @@ rule MAL_Linux_Pandora_Mirai_Naku_Suite {
 rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
    meta:
       description = "Detects the Russian Gemini operator's custom A2A (Agent-to-Agent) C2 backend built on Python stdlib BaseHTTPServer. Features zero authentication on all 5 API endpoints, a path-traversal-vulnerable file server, base64+UTF-16LE encoding (matching PowerShell EncodedCommand format), and Cloudflare Tunnel transport. Used in active operations against a named US-healthcare victim. The unauthenticated C2 creates a defender-takeover surface for victim notification."
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/"
       date = "2026-05-25"
@@ -1299,5 +1299,5 @@ The Korean operator Case 4 smoking-gun artifact (`settings.local.json` with Open
 
 ## License
 
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

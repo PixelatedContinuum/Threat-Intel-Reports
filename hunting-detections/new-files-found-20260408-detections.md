@@ -10,7 +10,7 @@ hide: true
 **Campaign:** OpenStrike-CSBeacon-Toolkit-172.105.0.126
 **Date:** 2026-04-08
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/new-files-found-20260408/
 
 > **Scope note:** These rules cover **only new artifacts and behaviors** discovered in the April 8 expanded analysis of 106 additional files from the same open directory (172.105.0.126:8888). Rules for the originally published seven samples (beacon.exe gen-3, loader chain, Python beacon, CS 3.x tripwired DLL, MALC user-agent, 172.105.0.126:8443 C2 infrastructure) are in the companion file at `/hunting-detections/open-directory-172-105-0-126-20260406-detections/`. Do not deploy both files without deduplication review.
@@ -45,7 +45,7 @@ hide: true
     Date: 2026-04-08
     Identifier: OpenStrike Generation 4 WinHTTP beacon with SHA256 key derivation
     Reference: https://the-hunters-ledger.com/reports/new-files-found-20260408/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule TOOLKIT_OpenStrike_Gen4_Beacon
@@ -93,7 +93,7 @@ rule TOOLKIT_OpenStrike_Gen4_Beacon
     Date: 2026-04-08
     Identifier: OpenStrike mini_beacon (gen-1) and mini_beacon2 (gen-2) prototypes
     Reference: https://the-hunters-ledger.com/reports/new-files-found-20260408/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule TOOLKIT_OpenStrike_Proto_Beacons
@@ -138,7 +138,7 @@ rule TOOLKIT_OpenStrike_Proto_Beacons
     Date: 2026-04-08
     Identifier: artifact32svc.exe / artifact64svc.exe — EAX-redirect process hollowing
     Reference: https://the-hunters-ledger.com/reports/new-files-found-20260408/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule MALW_ArtifactKit_EAXRedirect_Svc
@@ -181,7 +181,7 @@ rule MALW_ArtifactKit_EAXRedirect_Svc
     Date: 2026-04-08
     Identifier: covertvpn.dll — CS CovertVPN L2 bridge with embedded WinPcap stack
     Reference: https://the-hunters-ledger.com/reports/new-files-found-20260408/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule MALW_CovertVPN_L2Bridge
@@ -226,7 +226,7 @@ rule MALW_CovertVPN_L2Bridge
     Date: 2026-04-08
     Identifier: OpenStrike dll_loader.exe — disk-drop LoadLibraryA outlier loader
     Reference: https://the-hunters-ledger.com/reports/new-files-found-20260408/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule TOOLKIT_OpenStrike_DllLoader
@@ -641,5 +641,5 @@ A Suricata signature for outbound TCP to port 50050 was evaluated and rejected: 
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

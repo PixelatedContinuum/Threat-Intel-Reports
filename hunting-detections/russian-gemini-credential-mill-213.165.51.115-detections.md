@@ -10,7 +10,7 @@ hide: true
 **Campaign:** Russian-Gemini-Credential-Mill-UTA-2026-012-213.165.51.115
 **Date:** 2026-05-25
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/russian-gemini-credential-mill-213.165.51.115/
 
 > **Calibration / Prior-Art Note:** Trend Micro (TrendAI Research) published independent coverage of this same operator on 2026-05-22 ("One Man, One AI, One Fake Persona: Inside the 5-Year Influence and Fraud 'Patriot Bait' Campaign"; operator tracked as "bandcampro"). Cross-identification is DEFINITE via five-point IOC match: `@americanpatriotus` Telegram channel, 73 stolen Gemini API keys in operator inventory, 20-mutation-per-target generation, Quantum Patriot pipeline branding, and `GEMINI.md` jailbreak-persistence file. Rules in this file complement the Trend Micro coverage with per-case source-code-derived signatures not previously published. **AI Operator Handoff Document novelty MAINTAINED** (Trend Micro covers `GEMINI.md` jailbreak persistence; architecturally distinct from the operator-authored `C2_INFRA_TRANSFER.md / DEPLOYED_TOOLS.md / C2_MIGRATION_GUIDE.md` structured session-handoff documents). **LLM Credential Mutation novelty REFRAMED** as first source-code analysis with verbatim prompt reproduction (operational pattern independently confirmed by Trend Micro). **Unauthenticated Python-stdlib C2**: no prior art found in either publication.
@@ -40,7 +40,7 @@ hide: true
    Identifier: Russian Gemini Credential Mill — UTA-2026-012 (Case 1, ai-agent-frameworks-2026-05-23)
    Author: The Hunters Ledger
    Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
 ### Rule 1 — LLM-Personalized Credential Mutator Family
@@ -56,7 +56,7 @@ hide: true
 rule MAL_Python_LLMPersonalized_Credential_Mutator_Family {
    meta:
       description = "Detects ai_sniper_brute.py-class Python scripts using Gemini API for LLM-personalized per-target password mutation — verbatim role-priming prompt + AI_SNIPER output naming convention captured from UTA-2026-012 open-directory 213.165.51.115"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
@@ -95,7 +95,7 @@ rule MAL_Python_LLMPersonalized_Credential_Mutator_Family {
 rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
    meta:
       description = "Detects operator-authored AI Operator Handoff Documents — Markdown files containing session-start load directives co-occurring with C2 endpoint references or credential-table patterns. Three exemplars from UTA-2026-012: C2_MIGRATION_GUIDE.md, C2_INFRA_TRANSFER.md, DEPLOYED_TOOLS.md"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
@@ -140,7 +140,7 @@ rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
 rule MAL_Python_Stolen_LLM_Key_Validator {
    meta:
       description = "Detects check_keys.py-class Python scripts: bulk Gemini API key inventory (AIzaSy-prefixed keys in block string) validated against generativelanguage.googleapis.com/v1beta/models — stolen-key validation pipeline from UTA-2026-012"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
@@ -180,7 +180,7 @@ rule MAL_Python_Stolen_LLM_Key_Validator {
 rule MAL_Python_A2A_C2_Server_Unauthenticated {
    meta:
       description = "Detects c2_server.py-class Python stdlib unauthenticated C2 servers — BaseHTTPRequestHandler with /api/v1/{update,agents,interact,telemetry} endpoints, base64+UTF-16LE body decoding, zero auth — operator-built A2A C2 framework from UTA-2026-012"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
@@ -221,7 +221,7 @@ rule MAL_Python_A2A_C2_Server_Unauthenticated {
 rule MAL_Python_A2A_C2_Client_Console {
    meta:
       description = "Detects console.py/exec.py-class operator-side C2 client tools — X-Agent-ID header, HOSTNAME_user agent-ID format, base64+UTF-16LE command encoding, /api/v1/interact POST + /api/v1/get_results polling — A2A C2 framework from UTA-2026-012"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
@@ -260,7 +260,7 @@ rule MAL_Python_A2A_C2_Client_Console {
 rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {
    meta:
       description = "Narrow high-fidelity detection on the explicit 'To: Gemini CLI / From: Gemini CLI' header convention from C2_INFRA_TRANSFER.md — first-publication YARA signature for the AI Operator Handoff Document TTP (UTA-2026-012)"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
@@ -297,7 +297,7 @@ rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {
 rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {
    meta:
       description = "Detects WindowsUpdateManager.ps1 — operator-bespoke persistence script masquerading as Windows Update component; HKCU Run key value + %LOCALAPPDATA%\\Microsoft\\ path + Cloudflare Tunnel C2 callback to tralalarkefe.com — UTA-2026-012"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
@@ -337,7 +337,7 @@ rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {
 rule MAL_Russian_Operator_Persona_Strings {
    meta:
       description = "Detects UTA-2026-012 operator-authored files via Cyrillic persona strings (Братух/Бро addressing of Gemini, Комп Доктора victim-machine reference) co-occurring with C2 endpoint or API key indicators — high-specificity attribution aid for post-incident forensics"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/"
       date = "2026-05-25"
@@ -1118,5 +1118,5 @@ The operator holds the OpenDental MySQL root hash (value redacted — held offli
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

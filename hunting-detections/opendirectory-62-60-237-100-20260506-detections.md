@@ -10,7 +10,7 @@ hide: true
 **Campaign:** OpenDirectory-MultiFamily-MaaS-62.60.237.100
 **Date:** 2026-05-06
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/opendirectory-62-60-237-100-20260506/
 
 ---
@@ -48,7 +48,7 @@ DROP listed). Campaign active as of 2026-05-06.
     Date: 2026-05-06
     Identifier: HijackLoader_Penguish_Rugmi_AsyncRAT_OpenDirectory_62.60.237.100
     Reference: https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 ```
 
@@ -890,5 +890,5 @@ The following MITRE ATT&CK techniques were observed in the malware-analyst findi
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

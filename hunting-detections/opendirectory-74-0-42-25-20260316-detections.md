@@ -10,7 +10,7 @@ hide: true
 **Campaign:** ZeroTrace-MultiFamily-MaaS-74.0.42.25
 **Date:** 2026-03-17
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 
 ---
 
@@ -23,7 +23,7 @@ hide: true
     Date: 2026-03-17
     Identifier: XWorm V5.6 / PureRAT v4.1.9 / RavenRAT / XwormLoader / Aspdkzb
     Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule RAT_XWorm_V56_Stub
@@ -536,5 +536,5 @@ alert tcp $HOME_NET any -> any 8041 (msg:"THL MaaS Toolkit ScreenConnect Relay t
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.

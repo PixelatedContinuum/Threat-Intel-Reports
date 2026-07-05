@@ -35,10 +35,10 @@ The reports on this site are produced using a custom-built AI-assisted workflow 
   *License: All Rights Reserved — free to read, but reuse requires written permission.*
 
 - [Hunting Detections](/hunting-detections) → YARA, Sigma, and Suricata rules written to public repository submission standards
-  *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
+  *License: Creative Commons BY 4.0 — free to use, including commercially, with attribution.*
 
 - [IOC Feeds](/ioc-feeds) → Validated indicators of compromise (hashes, domains, IPs, registry keys) in structured JSON feeds
-  *License: Creative Commons BY-NC — free to use in your environment, but not for commercial use.*
+  *License: Creative Commons BY 4.0 — free to use, including commercially, with attribution.*
 
 ---
 
@@ -69,6 +69,6 @@ Contributions are welcome.
 
 **Reports:** © 2025 Joseph. All rights reserved. Free to read and reference, but reuse requires written permission.
 
-**Detections and IOC Feeds:** Licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). Free to use in your environment, not for commercial purposes. Attribution required.
+**Detections and IOC Feeds:** Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0). Free to use, including commercially. Attribution required.
 
 Please credit as: "Threat Intelligence Reports by Joseph" (https://github.com/PixelatedContinuum/Threat-Intel-Reports/)

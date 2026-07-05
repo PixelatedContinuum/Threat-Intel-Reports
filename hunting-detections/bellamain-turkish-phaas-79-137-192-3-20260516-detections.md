@@ -10,7 +10,7 @@ hide: true
 **Campaign:** BellaMain-Turkish-PhaaS-79-137-192-3-20260516
 **Date:** 2026-05-16
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/bellamain-turkish-phaas-79-137-192-3-20260516/
 
 ---
@@ -45,7 +45,7 @@ hide: true
     Date: 2026-05-16
     Identifier: BellaMain Turkish PhaaS V5VgjLU0jsDe
     Reference: https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule TOOLKIT_BellaMain_WadanzFunctions
@@ -89,7 +89,7 @@ rule TOOLKIT_BellaMain_WadanzFunctions
     Date: 2026-05-16
     Identifier: BellaMain Turkish PhaaS V5VgjLU0jsDe
     Reference: https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule TOOLKIT_BellaMain_AdminPanel
@@ -135,7 +135,7 @@ rule TOOLKIT_BellaMain_AdminPanel
     Date: 2026-05-16
     Identifier: BellaMain Turkish PhaaS V5VgjLU0jsDe
     Reference: https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
-    License: https://creativecommons.org/licenses/by-nc/4.0/
+    License: https://creativecommons.org/licenses/by/4.0/
 */
 
 rule TOOLKIT_BellaMain_AntiResearcherCanary
@@ -588,5 +588,5 @@ Evidence required to create a low-FP rule: a confirmed malicious serialized obje
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

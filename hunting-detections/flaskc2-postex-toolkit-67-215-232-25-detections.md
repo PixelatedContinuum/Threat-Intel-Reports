@@ -10,7 +10,7 @@ hide: true
 **Campaign:** FlaskC2-PostEx-Toolkit-67.215.232.25
 **Date:** 2026-06-12
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/flaskc2-postex-toolkit-67-215-232-25/
 
 ---
@@ -37,7 +37,7 @@ hide: true
    Identifier: FlaskC2-PostEx-Toolkit-67.215.232.25 — MSSQL CLR Backdoor + Webshells
    Author: The Hunters Ledger
    Source: https://the-hunters-ledger.com/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 ```
 
@@ -54,7 +54,7 @@ hide: true
 rule MSSQL_CLR_Backdoor_CmdExec_Banner {
    meta:
       description = "Detects custom MSSQL SQL-CLR reverse-shell backdoor (cmd_exec.dll) based on operator-specific banner string combined with SQLCLR assembly markers and reverse-shell plumbing strings"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/"
       date = "2026-06-12"
@@ -93,7 +93,7 @@ rule MSSQL_CLR_Backdoor_CmdExec_Banner {
 rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {
    meta:
       description = "Detects MSSQL SQL-CLR reverse-shell assemblies using the stored-procedure-exposed cmd-execution pattern, covering cmd_exec.dll variants where the banner string may be changed"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/"
       date = "2026-06-12"
@@ -137,7 +137,7 @@ rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {
 rule Webshell_NPCInfoList1_AES_Loader {
    meta:
       description = "Detects NPCInfoList1.aspx Godzilla-style AES .NET loader webshell based on hardcoded AES-128 key=IV value ca63457538b9b1e0 used for both key and initialization vector"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/"
       date = "2026-06-12"
@@ -173,7 +173,7 @@ rule Webshell_NPCInfoList1_AES_Loader {
 rule Webshell_Ghost_Aatrox_ASP {
    meta:
       description = "Detects Ghost small-group (Ghost xiao-zu) ASP webshell variant configured with Aatrox password and eval gadget, as staged in the FlaskC2-PostEx-Toolkit-67.215.232.25 campaign"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/"
       date = "2026-06-12"
@@ -673,6 +673,6 @@ No specific lateral movement artifacts were recovered from the open directory. R
 
 ## License
 
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.
 

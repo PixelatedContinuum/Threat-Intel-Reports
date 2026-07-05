@@ -10,7 +10,7 @@ hide: true
 **Campaign:** OpenDirectory-MultiCluster-Rhadamanthys-BellaMain-Inkognito-79.137.192.3<br>
 **Date:** 2026-05-15
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/
 
 ---
@@ -61,7 +61,7 @@ rule MALW_Rhadamanthys_FrontbSection
         mitre_attack = "T1027,T1140"
         reference_sample_sha256 = "804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50"
         reference_url = "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
 
     strings:
         $s_roland = "Roland" ascii wide
@@ -88,7 +88,7 @@ rule MALW_Rhadamanthys_Stage2_ImportSurface
         mitre_attack = "T1027.002,T1140"
         reference_sample_sha256 = "804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50"
         reference_url = "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
         fp_risk = "MEDIUM — minimal-import surface alone could match unrelated GDI-heavy applications; pair with other Rhadamanthys rules for high-confidence verdict."
 
     condition:
@@ -117,7 +117,7 @@ rule MALW_Rhadamanthys_Q3VMBytecodeModifiedMagic
         mitre_attack = "T1027.013"
         reference_sample_sha256 = "804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50"
         reference_url = "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
 
     strings:
         $b_magic_le = { 14 42 74 14 }
@@ -143,7 +143,7 @@ rule MALW_Rhadamanthys_CustomerCBCXOR_IV
         mitre_attack = "T1027,T1140"
         reference_sample_sha256 = "804f45487c1cda5b69c743f9eb691a12fe0fdcf0d3a9f32003898f1e3836af50"
         reference_url = "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
 
     strings:
         $b_iv = { f6 35 8d 79 df 69 c5 77 d9 dc e6 bb 77 fa 4f a7 }
@@ -167,7 +167,7 @@ rule MALW_Rhadamanthys_LoaderRC4Key
         mitre_attack = "T1140,T1027.002"
         reference_sample_sha256 = "5c38a5dd3703b1c4b8c2466b18ce9f4c45ef4c9bf6c3096bee8b24d20ecd247a"
         reference_url = "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
 
     strings:
         $b_rc4_key = { e0 80 25 40 d0 2d 0f ea eb 27 7d c7 20 e3 90 b0 6d fd 64 d8 f8 10 4d 95 81 e7 88 e5 12 71 5b }
@@ -191,7 +191,7 @@ rule MALW_Rhadamanthys_OperatorLoaderStrings
         mitre_attack = "T1027"
         reference_sample_sha256 = "5c38a5dd3703b1c4b8c2466b18ce9f4c45ef4c9bf6c3096bee8b24d20ecd247a"
         reference_url = "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
 
     strings:
         $s_id1 = "BombAUb23456" ascii fullword
@@ -218,7 +218,7 @@ rule MALW_BellaMain_PHPPanel
         mitre_attack = "T1071.001,T1102"
         reference_sample_sha256 = "f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88"
         reference_url = "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
 
     strings:
         $s_admindir = "V5VgjLU0jsDe" ascii
@@ -249,7 +249,7 @@ rule Tofsee_Bloater_2023_StaticTradecraft
         mitre_attack = "T1027.001,T1027.005,T1497,T1543.003,T1071.003,T1090.002"
         reference_sample_sha256 = "2910a52e0934c8f1cf247cf88d1fce010f2e52dfb1cf2f64ebf3dc53df4ef865"
         reference_url = "https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
 
     strings:
         $winhttp_only_writedata = "WinHttpWriteData" ascii
@@ -304,7 +304,7 @@ rule Tofsee_Cotenant_79_137_192_3_April2023_Build
         reference_sample_sha256 = "2910a52e0934c8f1cf247cf88d1fce010f2e52dfb1cf2f64ebf3dc53df4ef865"
         reference_imphash = "a41092e5e40602533850a4d1b2ecd182"
         reference_pdb = "C:\\sena\\tawateje_lenicetedev68.pdb"
-        license = "CC BY-NC 4.0"
+        license = "CC BY 4.0"
 
     strings:
         $pdb_full = "C:\\sena\\tawateje_lenicetedev68.pdb" ascii
@@ -547,6 +547,6 @@ The following areas were considered for detection coverage but excluded — defe
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.
 

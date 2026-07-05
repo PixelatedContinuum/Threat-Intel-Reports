@@ -9,7 +9,7 @@ position: 3
 <div class="hl-page-header" style="--ph-accent: #4ade80;">
   <div class="hl-page-header__label">Hunting Detections</div>
   <div class="hl-page-header__title">Sigma, YARA &amp; Suricata Rules</div>
-  <div class="hl-page-header__desc">Detection logic from original research, mapped to MITRE ATT&amp;CK. Free to use in your environment under <strong>CC BY-NC 4.0</strong>.</div>
+  <div class="hl-page-header__desc">Detection logic from original research, mapped to MITRE ATT&amp;CK. Free to use, including commercially, under <strong>CC BY 4.0</strong>.</div>
 </div>
 
 <details class="hl-feed">
@@ -19,7 +19,7 @@ position: 3
     <span class="hl-feed__chev" aria-hidden="true">▾</span>
   </summary>
   <div class="hl-feed__body">
-    <p class="hl-feed__desc">Every published detection here, consolidated into one auto-updating Suricata ruleset — point your sensor at it and pull on your own schedule. Free under <strong>CC BY-NC 4.0</strong>.</p>
+    <p class="hl-feed__desc">Every published detection here, consolidated into one auto-updating Suricata ruleset — point your sensor at it and pull on your own schedule. Free under <strong>CC BY 4.0</strong>.</p>
     <div class="hl-feed__cmd">
       <code id="hl-feed-cmd">suricata-update add-source hunters-ledger https://the-hunters-ledger.com/feeds/suricata/hunters-ledger.rules</code>
       <button type="button" class="hl-feed__copy" onclick="navigator.clipboard.writeText(document.getElementById('hl-feed-cmd').textContent);var b=this;b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1500);">Copy</button>

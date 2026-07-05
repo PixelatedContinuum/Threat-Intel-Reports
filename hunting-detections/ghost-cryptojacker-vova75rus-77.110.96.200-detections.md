@@ -10,7 +10,7 @@ hide: true
 **Campaign:** GHOST-Cryptojacker-Vova75Rus-77.110.96.200
 **Date:** 2026-05-25
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://the-hunters-ledger.com/reports/ghost-cryptojacker-vova75rus-77.110.96.200/
 
 > **Sub-report context:** This is the GHOST-kit-specific detection file. GHOST Case 9 is sub-report 1 of the parent series `ai-agent-frameworks-2026-05-23`. The parent detection file (`ai-agent-frameworks-2026-05-23-detections.md`) covers cross-campaign rules for all five cases in that series. Rules here go **deeper on Case 9** only — do not duplicate parent-level general coverage.
@@ -53,7 +53,7 @@ The following corrections from the investigation apply to detection rule derivat
    Identifier: GHOST Cryptojacker Kit Family — Vova75Rus / 77.110.96.200
    Author: The Hunters Ledger
    Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
-   License: CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
+   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 ```
 
@@ -70,7 +70,7 @@ The following corrections from the investigation apply to detection rule derivat
 rule MAL_Linux_GHOST_libpam_cache_Rootkit_Family {
    meta:
       description = "Detects GHOST cryptojacker kit LD_PRELOAD rootkit libpam_cache.so — ELF64 shared object hooking readdir/readdir64/fopen/fopen64 to hide miner processes, kit paths, and operator wallet prefixes from /proc listings; byte-identical across all known GHOST kit customer deployments"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -133,7 +133,7 @@ rule MAL_Linux_GHOST_libpam_cache_Rootkit_Family {
 rule MAL_Linux_GHOST_libpam_cache_Source {
    meta:
       description = "Detects GHOST cryptojacker kit LD_PRELOAD rootkit C source file libpam_cache.c — 98-line dense hand-written C with single-char identifiers, RTLD_NEXT hook resolution, unsetenv LD_PRELOAD constructor, and GHOST-specific hide-list contents; shipped alongside compiled .so on kit-author distribution server"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -187,7 +187,7 @@ rule MAL_Linux_GHOST_libpam_cache_Source {
 rule MAL_Linux_GHOST_Kit_Shell_Installer {
    meta:
       description = "Detects GHOST cryptojacker kit primary Bash installer ghost.sh — 1338-line English-language Bash script containing GHOST v5.1/v6.0 codename banner, competitor-displacement function _anti_hisana, 4 container-escape variants, LD_PRELOAD rootkit build/install functions, and multi-vector persistence; function names unique to GHOST kit family"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -240,7 +240,7 @@ rule MAL_Linux_GHOST_Kit_Shell_Installer {
 rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {
    meta:
       description = "Detects GHOST cryptojacker kit Hysteria v2 operator wrapper hyst.sh — Russian-language Bash script installing Hysteria v2 QUIC/UDP backdoor with bing.com SNI masquerade, per-victim TLS cert generation, /tmp/.hy2_* credential cache, and HTTP admin panel callback to :3301; operator-authored component of GHOST kit"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -287,7 +287,7 @@ rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {
 rule MAL_Linux_GHOST_min1_DualTelegram_Wrapper {
    meta:
       description = "Detects GHOST cryptojacker kit miner installer wrapper min1.sh — Russian-language Bash script with dual-Telegram OWNER/MIRROR architecture baked in; kit-author OWNER bot token prefix 8415540095 is baked into every GHOST customer deployment globally; catches all GHOST kit operators via single string match"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -331,7 +331,7 @@ rule MAL_Linux_GHOST_min1_DualTelegram_Wrapper {
 rule MAL_Linux_GHOST_ComfyUI_Python_Kit {
    meta:
       description = "Detects GHOST cryptojacker kit Python ComfyUI exploitation framework (py.py + scan.py) — Python scripts containing _build_python_fetcher downloader builder, PerformanceMonitor fake custom-node class, PIP_PAYLOAD_REPO GitHub URL config variable, and NODE_CLASS_MAPPINGS registration for ComfyUI persistence; 74KB+63KB kit shipped to both GHOST customer operators"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -381,7 +381,7 @@ rule MAL_Linux_GHOST_ComfyUI_Python_Kit {
 rule MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node {
    meta:
       description = "Detects GHOST cryptojacker kit post-compromise persistence via malicious ComfyUI custom node — Python file registering class PerformanceMonitor into NODE_CLASS_MAPPINGS; catches the installed persistence artifact regardless of delivery mechanism; hunt rule for ComfyUI custom-node integrity audits"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -419,7 +419,7 @@ rule MAL_Linux_GHOST_ComfyUI_Fake_PerformanceMonitor_Node {
 rule MAL_Linux_GHOST_check_comfyui_Scanner {
    meta:
       description = "Detects GHOST cryptojacker kit ComfyUI target verification script check_comfyui.sh — Bash script probing port 8188 /system_stats and /queue for ComfyUI identification, classifying results into sc_comfy/sc_manager/sc_nodes/sc_vuln output files; Russian-language comments; scanning component of GHOST ComfyUI exploitation pipeline"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -463,7 +463,7 @@ rule MAL_Linux_GHOST_check_comfyui_Scanner {
 rule MAL_Linux_GHOST_get_all_ranges_CloudEnumerator {
    meta:
       description = "Detects GHOST cryptojacker kit cloud-provider IP-range enumeration script get_all_ranges.sh — Bash script querying bgpview.io ASN API for 14+ cloud providers including ML-GPU-specific providers (Lambda Labs, Nebius, Datacrunch); reconnaissance prequel to ComfyUI exploitation pipeline targeting GPU-cloud environments"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -507,7 +507,7 @@ rule MAL_Linux_GHOST_get_all_ranges_CloudEnumerator {
 rule MAL_GHOST_OWNER_Telegram_Bot_Token_Indicator {
    meta:
       description = "Detects GHOST cryptojacker kit via kit-author Vova75Rus OWNER Telegram bot token prefix 8415540095: — baked into every GHOST customer deployment globally in min1.sh; single string match catches all downstream GHOST operators regardless of wallet, pool, or host configuration; supply-chain detection string covering entire GHOST kit customer base"
-      license = "CC BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/"
       date = "2026-05-25"
@@ -1318,5 +1318,5 @@ The `memfd_create` + `execveat` fileless execution pattern (Sigma 11) detects th
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Free to use, including commercially, with attribution to The Hunters Ledger.

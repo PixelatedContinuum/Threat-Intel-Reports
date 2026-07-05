@@ -10,7 +10,7 @@ hide: true
 **Campaign ID:** WebServer-Compromise-Kit-45.94.31.220
 **Generated:** 2026-03-01
 **Author:** The Hunters Ledger
-**License:** CC BY-NC 4.0
+**License:** CC BY 4.0
 **Reference:** https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
 **TLP:** WHITE
 
@@ -955,10 +955,10 @@ address range rather than an anonymous allocation.
 
 ---
 
-© 2026 Joseph. All rights reserved. Detection rules licensed under CC BY-NC 4.0
+© 2026 Joseph. All rights reserved. Detection rules licensed under CC BY 4.0
 
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
-Free to use in your environment, but not for commercial purposes.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
+Free to use, including commercially, with attribution to The Hunters Ledger.
