@@ -540,17 +540,15 @@ rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
 
 ```yaml
 title: >-
-  Claude Code settings.local.json Modified to Pre-Approve Curl-Pipe-Bash Execution
+  Claude Code settings.local.json or settings.json Modified
 id: 803d43fe-6b5a-48e1-b25f-9da5e74bca62
 status: experimental
 description: >-
-  Detects modification to ~/.claude/settings.local.json that adds an entry matching
-  the curl-pipe-bash execution pattern to the permissions.allow array. This is the
-  smoking-gun artifact for the Case 4 Korean operator's Claude Code allowlist abuse
-  technique, where an attacker pre-authorizes malicious tool installation (e.g., OpenClaw
-  via 'curl -fsSL https://openclaw.ai/install.sh | bash') to execute without Claude Code
-  safety prompts in subsequent sessions. The technique bypasses Claude Code's
-  human-approval loop for exact-match commands.
+  Detects modification of a Claude Code permissions file (settings.local.json /
+  settings.json). File-event telemetry cannot inspect the file content, so this is
+  a hunting lead: after it fires, review whether the change added an auto-approved
+  dangerous command (for example a curl-to-shell pattern) to the permissions
+  allow-list.
 references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
@@ -571,8 +569,8 @@ detection:
   condition: selection
 falsepositives:
   - >-
-    Legitimate Claude Code users adding safe commands to the permissions.allow array
-    (e.g., common npm/git commands). Investigate file content after alert — the
+    Routine or legitimate edits to Claude Code settings (common) — review the
+    added permission entries. Investigate file content after alert — the
     curl-pipe-bash and npm-i-g-unfamiliar patterns are the high-confidence indicators
     within a triggered file modification. Package managers (apt/brew) updating Claude
     configuration are unlikely to add curl-pipe-bash entries.
@@ -691,55 +689,95 @@ level: high
 **Deployment:** Endpoint agent filesystem scanning with host-role classification, IR artifact triage. Hunting-only on environments with significant developer population.
 
 ```yaml
-title: Multiple AI Tool State Directories Co-Located with Offensive Tooling on Server Host
-id: 337c7b1d-0f56-4c27-932f-2ea507ba24f1
+title: AI Coding-Agent Binary Execution on Server Host
+id: 67cd7a66-7487-4bc2-94b5-2db9ffbf2080
+name: ai_agent_tooling_exec_serverhost
 status: experimental
 description: >-
-  Detects creation of multiple AI-agent CLI state directories (~/.claude, ~/.gemini,
-  ~/.codex, ~/.rovodev) co-located with known offensive tooling (nuclei, frp, masscan,
-  .rovodev sessions) on server-class hosts. This pattern is a discriminator for
-  AI-integrated threat operators who leverage multiple AI assistants alongside their
-  offensive toolkit. Cases Demoted-1 and Demoted-2 demonstrate that multi-AI co-presence
-  alone is insufficient; the co-location with offensive tooling is the high-signal
-  component. Rule fires on process creation events showing AI-tool CLI execution from
-  a server-class host alongside offensive tool execution.
+    Base rule (not alerting on its own): execution of an AI coding-agent binary
+    from its state directory (Claude Code, Gemini CLI, RovoDev, OpenClaw) on a
+    server host. Paired with the correlation rule below, which flags co-location
+    with offensive tooling.
 references:
-  - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
+    - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
 tags:
-  - attack.resource-development
-  - attack.execution
-  - detection.emerging-threats
+    - attack.resource-development
+    - attack.execution
+    - detection.emerging-threats
 logsource:
-  category: process_creation
-  product: linux
+    category: process_creation
+    product: linux
 detection:
-  selection_ai_tools:
-    Image|contains:
-      - /.claude/
-      - /gemini
-      - /rovodev
-      - /openclaw
-  selection_offensive_tools:
-    Image|endswith:
-      - /nuclei
-      - /frpc
-      - /frps
-      - /masscan
-      - /nmap
-    CommandLine|contains:
-      - nuclei
-      - frpc
-      - masscan
-  condition: selection_ai_tools or selection_offensive_tools
+    selection_ai_tools:
+        Image|contains:
+            - /.claude/
+            - /gemini
+            - /rovodev
+            - /openclaw
+    condition: selection_ai_tools
 falsepositives:
-  - >-
-    Security researchers using AI-assisted tooling alongside authorized offensive-security
-    testing tools. Apply host-role classification before alerting. This rule is designed
-    for hunting on server infrastructure, not developer workstations. Requires environmental
-    baseline of expected tooling per host role.
+    - Legitimate developer or operator use of AI coding agents on the host
+level: informational
+---
+title: Offensive Tooling Execution on Server Host
+id: 2fa74c68-e65d-46b3-b516-cc12400ddaee
+name: offensive_tooling_exec_serverhost
+status: experimental
+description: >-
+    Base rule (not alerting on its own): execution of offensive/network tooling
+    (nuclei, frpc/frps, masscan, nmap). Paired with the correlation rule below.
+references:
+    - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
+author: The Hunters Ledger
+date: '2026-05-25'
+tags:
+    - attack.resource-development
+    - attack.execution
+    - detection.emerging-threats
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_offensive_tools:
+        Image|endswith:
+            - /nuclei
+            - /frpc
+            - /frps
+            - /masscan
+            - /nmap
+    condition: selection_offensive_tools
+falsepositives:
+    - Authorized security testing or network administration on the host
 level: low
+---
+title: AI Coding-Agent Tooling Co-Located with Offensive Tooling on the Same Host
+id: 337c7b1d-0f56-4c27-932f-2ea507ba24f1
+status: experimental
+description: >-
+    Fires when both AI coding-agent execution and offensive-tooling execution
+    are observed on the same host within 24 hours. This co-location - not either
+    signal alone - is the indicator of AI-orchestrated attack infrastructure.
+references:
+    - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
+author: The Hunters Ledger
+date: '2026-05-25'
+tags:
+    - attack.resource-development
+    - attack.execution
+    - detection.emerging-threats
+correlation:
+    type: temporal
+    rules:
+        - ai_agent_tooling_exec_serverhost
+        - offensive_tooling_exec_serverhost
+    group-by:
+        - host.name
+    timespan: 24h
+falsepositives:
+    - A host legitimately used both for AI-assisted development and authorized security testing
+level: high
 ```
 
 ---

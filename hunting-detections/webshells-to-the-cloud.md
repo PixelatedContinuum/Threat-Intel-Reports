@@ -270,16 +270,13 @@ level: medium
 ### Reverse Proxy Creation
 **Nginx Logs**
 ```yaml
-title: Reverse Proxy Config Changes
+title: nginx Configuration File Modified
 id: 4de0ab63-3b37-4203-ba70-721af47514f4
 status: experimental
 description: >-
-  Detects modification of nginx configuration files, consistent with the Webshells-to-the-Cloud
-  campaign operator establishing an outbound reverse-proxy relay to an external destination from
-  compromised infrastructure. Standard Sysmon-for-Linux/auditd file_event telemetry captures only
-  the file path, not its content — this rule flags any nginx config file write as a hunting lead;
-  confirming the specific 'upstream pointing to an external destination' pattern requires a
-  file-integrity monitoring tool with content-diff capability to inspect the changed configuration.
+  Detects file writes under /etc/nginx/. A malicious outbound reverse-proxy relay requires
+  a proxy_pass directive to an external host, which file-event telemetry cannot inspect -
+  treat this as a hunting lead requiring a content diff of the changed config.
 references:
     - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud/
 author: The Hunters Ledger
@@ -297,7 +294,10 @@ detection:
     condition: selection
 falsepositives:
     - Legitimate infrastructure changes adding a proxy upstream to an external, authorized destination
-level: high
+    - Certbot/TLS certificate renewals
+    - Configuration-management pushes
+    - Legitimate administrator edits to nginx config
+level: medium
 ```
 
 ---
