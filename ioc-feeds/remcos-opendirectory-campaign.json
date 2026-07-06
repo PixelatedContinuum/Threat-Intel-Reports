@@ -1,26 +1,9 @@
 {
   "name": "Remcos RAT OpenDirectory Campaign (203[.]159[.]90[.]147)",
   "reference": "OpenDirectory-203.159.90.147-Remcos Campaign Analysis",
-  "iocs": {
-    "files": [
+  "file_hashes": {
+    "sha256": [
       {
-        "type": "MD5",
-        "value": "3d7b442573acf64c3aad17b23d224dc9",
-        "filename": "Payload.exe",
-        "description": "VB6 Dropper",
-        "confidence": "DEFINITE",
-        "use_case": "Quick file identification, legacy systems"
-      },
-      {
-        "type": "SHA1",
-        "value": "d71f4efb31786ae71bdd5e7e32531a2698455954",
-        "filename": "Payload.exe",
-        "description": "VB6 Dropper",
-        "confidence": "DEFINITE",
-        "use_case": "Chain-of-custody evidence"
-      },
-      {
-        "type": "SHA256",
         "value": "db218dd5f53fbcf39a6db043c8455667c3dbef44abe14865e8b962b4c676372e",
         "filename": "Payload.exe",
         "description": "VB6 Dropper",
@@ -28,29 +11,48 @@
         "use_case": "Primary identifier, forensics, blockchain logging"
       },
       {
-        "type": "MD5",
-        "value": "04693af3b0a7c9788daba8e35f429ba6",
-        "filename": "Backdoor.exe / 0.dll / remcos.exe",
-        "description": "Remcos RAT Main Payload",
-        "confidence": "DEFINITE",
-        "use_case": "Quick file identification, legacy systems"
-      },
-      {
-        "type": "SHA1",
-        "value": "45aa592f3b30ef526e380978338718f540cff5d2",
-        "filename": "Backdoor.exe / 0.dll / remcos.exe",
-        "description": "Remcos RAT Main Payload",
-        "confidence": "DEFINITE",
-        "use_case": "Chain-of-custody evidence"
-      },
-      {
-        "type": "SHA256",
         "value": "ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82",
         "filename": "Backdoor.exe / 0.dll / remcos.exe",
         "description": "Remcos RAT Main Payload",
         "confidence": "DEFINITE",
         "use_case": "Primary identifier, forensics, blockchain logging"
+      }
+    ],
+    "md5": [
+      {
+        "value": "3d7b442573acf64c3aad17b23d224dc9",
+        "filename": "Payload.exe",
+        "description": "VB6 Dropper",
+        "confidence": "DEFINITE",
+        "use_case": "Quick file identification, legacy systems"
       },
+      {
+        "value": "04693af3b0a7c9788daba8e35f429ba6",
+        "filename": "Backdoor.exe / 0.dll / remcos.exe",
+        "description": "Remcos RAT Main Payload",
+        "confidence": "DEFINITE",
+        "use_case": "Quick file identification, legacy systems"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "d71f4efb31786ae71bdd5e7e32531a2698455954",
+        "filename": "Payload.exe",
+        "description": "VB6 Dropper",
+        "confidence": "DEFINITE",
+        "use_case": "Chain-of-custody evidence"
+      },
+      {
+        "value": "45aa592f3b30ef526e380978338718f540cff5d2",
+        "filename": "Backdoor.exe / 0.dll / remcos.exe",
+        "description": "Remcos RAT Main Payload",
+        "confidence": "DEFINITE",
+        "use_case": "Chain-of-custody evidence"
+      }
+    ]
+  },
+  "iocs": {
+    "files": [
       {
         "type": "File Size",
         "value": "172159",

@@ -1,26 +1,31 @@
 {
   "name": "Pulsar RAT Variant (server.exe)",
   "reference": "Internal Malware Analysis Report",
-  "iocs": {
-    "files": [
+  "file_hashes": {
+    "sha256": [
       {
-        "type": "MD5",
-        "value": "b5491b58348600c2766f86a5af2b867f",
-        "confidence": "DEFINITE",
-        "use_case": "Quick file identification, legacy systems"
-      },
-      {
-        "type": "SHA1",
-        "value": "dc795961c8e63782fc0f53c08e7ca2e593df99fa",
-        "confidence": "DEFINITE",
-        "use_case": "Chain-of-custody evidence"
-      },
-      {
-        "type": "SHA256",
         "value": "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766",
         "confidence": "DEFINITE",
         "use_case": "Primary identifier, forensics, blockchain logging"
-      },
+      }
+    ],
+    "md5": [
+      {
+        "value": "b5491b58348600c2766f86a5af2b867f",
+        "confidence": "DEFINITE",
+        "use_case": "Quick file identification, legacy systems"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "dc795961c8e63782fc0f53c08e7ca2e593df99fa",
+        "confidence": "DEFINITE",
+        "use_case": "Chain-of-custody evidence"
+      }
+    ]
+  },
+  "iocs": {
+    "files": [
       {
         "type": "File Size",
         "value": "1571840",

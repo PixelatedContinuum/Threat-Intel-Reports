@@ -11,11 +11,10 @@
     "reference": "https://the-hunters-ledger.com/reports/ghost-cryptojacker-vova75rus-77.110.96.200/",
     "prior_disclosure": "Censys (Mark Ellzey) 2026-04-07 - primary GHOST campaign disclosure for 77.110.96.200 only; this feed extends with sibling host 77.110.125.145, kit-author Vova75Rus supply chain, full hide-list inventory, and operator wallet drain chain"
   },
-  "file_indicators": {
+  "file_hashes": {
     "sha256": [
       {
         "value": "eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301",
-        "type": "sha256",
         "filename": "libpam_cache.so",
         "size_bytes": 14568,
         "confidence": "DEFINITE",
@@ -24,7 +23,6 @@
       },
       {
         "value": "edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff",
-        "type": "sha256",
         "filename": "libpam_cache.c",
         "size_bytes": 2636,
         "confidence": "DEFINITE",
@@ -32,23 +30,13 @@
       },
       {
         "value": "e943b58112f58517b95424dba9334bf97c5dc2dd2f069dca04b9e75b9fec56ba",
-        "type": "sha256",
         "filename": "ghost.sh",
         "size_bytes": 45289,
         "confidence": "DEFINITE",
         "context": "Operator-A copy (77.110.96.200) - 1338-line Bash installer GHOST v5.1; 43 functions including 4 container-escape variants; VT 13/63 with only generic signatures (Symantec PUA.Gen.2, Kaspersky HEUR:Downloader.Shell.Miner.a, Microsoft Trojan:Script/Wacatac.B!ml)"
       },
       {
-        "value": "025d683b3ebcfc6f246bbe05",
-        "type": "hash_fragment",
-        "filename": "ghost.sh",
-        "size_bytes": 45306,
-        "confidence": "DEFINITE",
-        "context": "SHA256 prefix (24 chars) - Operator-B copy (77.110.125.145) - same kit, 17-byte per-customer config-block delta (XMRIG_URL, LOL_URL, GHOST_URL, HIDE_SO_URL, XMR_POOL_2, LOL_POOL_2, XMR_WALLET, LOL_WALLET differ); partial SHA - full hash via Hunt index search-code _anti_hisana"
-      },
-      {
         "value": "822afb1fb29f22df8c951726d492021df2940223ed719881dafb40cda3894c5c",
-        "type": "sha256",
         "filename": "hyst.sh",
         "size_bytes": 8670,
         "confidence": "DEFINITE",
@@ -56,7 +44,6 @@
       },
       {
         "value": "008bc5ab73e75bb76131f91d68a3792d9e4393137c14afe8c44d44be2a2c46f6",
-        "type": "sha256",
         "filename": "min1.sh",
         "size_bytes": 4280,
         "confidence": "DEFINITE",
@@ -64,7 +51,6 @@
       },
       {
         "value": "dc232b55329d95fe2a47a8d637b7bffea06f18e3d8332ba94b042b1862213a1d",
-        "type": "sha256",
         "filename": "check_comfyui.sh",
         "size_bytes": 974,
         "confidence": "DEFINITE",
@@ -72,89 +58,22 @@
       },
       {
         "value": "9023734a70ee6a05d4ecd5466d0c5803f293601836deb00cc417a3add04bd93e",
-        "type": "sha256",
         "filename": "get_all_ranges.sh",
         "size_bytes": 3007,
         "confidence": "DEFINITE",
         "context": "Operator-A cloud IP-range scraper; Russian-language (4 Cyrillic words); 12 bgpview.io ASN queries + Oracle + Google official ranges; feeds ComfyUI scanner pipeline"
       },
       {
-        "value": "d22c3f5b",
-        "type": "hash_fragment",
-        "filename": "/sc/py.py",
-        "size_bytes": 74844,
-        "confidence": "DEFINITE",
-        "context": "SHA256 prefix (8 chars) - Operator-A copy - Python ComfyUI exploitation framework; kit-author component with PerformanceMonitor class registered into NODE_CLASS_MAPPINGS for persistence; same file at /c/py.py (byte-identical duplicate)"
-      },
-      {
-        "value": "1a00c2bd788e",
-        "type": "hash_fragment",
-        "filename": "/sc/scan.py",
-        "size_bytes": 63443,
-        "confidence": "DEFINITE",
-        "context": "SHA256 prefix (12 chars) - Operator-A Python scanner - slow cadence (3-4 hr rescan); payload reference q11.txt"
-      },
-      {
-        "value": "29293e3c5591",
-        "type": "hash_fragment",
-        "filename": "/123/scan.py",
-        "size_bytes": 63443,
-        "confidence": "DEFINITE",
-        "context": "SHA256 prefix (12 chars) - Operator-A Python scanner - aggressive cadence (1-hr rescan); payload reference q12.txt; same operator runs both variants"
-      },
-      {
-        "value": "0f68139f25cc",
-        "type": "hash_fragment",
-        "filename": "/sc/py.py",
-        "size_bytes": 74858,
-        "confidence": "DEFINITE",
-        "context": "SHA256 prefix (12 chars) - Operator-B copy (77.110.125.145) - same Python kit, 14-byte per-customer delta in PIP_PAYLOAD_REPO reference (jamestechdev-oss vs Vova75Rus)"
-      },
-      {
-        "value": "66acf3e38142",
-        "type": "hash_fragment",
-        "filename": "/sc/scan.py",
-        "size_bytes": 63457,
-        "confidence": "DEFINITE",
-        "context": "SHA256 prefix (12 chars) - Operator-B copy - same Python scanner, 14-byte per-customer delta"
-      },
-      {
-        "value": "51a71a055e05",
-        "type": "hash_fragment",
-        "filename": "New_scanner.py",
-        "size_bytes": 30617,
-        "confidence": "DEFINITE",
-        "context": "SHA256 prefix (12 chars) - Operator-B Russian-language customized scanner; 183 Cyrillic words including АГЕНТ НАСТРОЙКИ; simpler architecture than kit version (no PerformanceMonitor class); confirms Operator-B is Russian-speaking"
-      },
-      {
         "value": "6e5d897c7fd0060c7da2394ad1bb3584827c216f8aadac4f6ed41b2d915f0070",
-        "type": "sha256",
         "filename": "op_bash_history.txt",
         "size_bytes": 39441,
         "confidence": "HIGH",
         "context": "Operator-A bash command history recovered from 77.110.96.200 open directory; 1472 lines; 48 unique Cyrillic words; MIRROR Telegram bot token 8315596543:... typed in plaintext and NEVER cleared (operator OPSEC failure)"
-      },
-      {
-        "value": "9482a637974be835",
-        "type": "git_blob_sha_partial",
-        "filename": "dbus-session-monitor / xmrigggggsteal",
-        "size_bytes": 13000000,
-        "confidence": "HIGH",
-        "context": "Disguised xmrig binary in Vova75Rus/miner + Vova75Rus/legendary-carnival repos (both repos suspended by GitHub T&S 2026-05-25); legitimate upstream xmrig SHA - renamed for camouflage"
-      },
-      {
-        "value": "19ced92cd0608d71",
-        "type": "git_blob_sha_partial",
-        "filename": "gnome-shell-ext-updater / lmmiineeer",
-        "size_bytes": 8000000,
-        "confidence": "HIGH",
-        "context": "Disguised lolMiner binary in Vova75Rus/miner + Vova75Rus/legendary-carnival repos; legitimate upstream lolMiner SHA - renamed for camouflage"
       }
     ],
     "md5": [
       {
         "value": "296a800564111b0bad9fe63faf4e63ba",
-        "type": "md5",
         "filename": "libpam_cache.so",
         "confidence": "DEFINITE",
         "context": "MD5 of LD_PRELOAD rootkit binary - same on both customer hosts"
@@ -169,7 +88,18 @@
         "asn": "AS210644",
         "hosting_provider": "AEZA Germany",
         "role": "Operator-A C2 + payload distribution + Hysteria admin panel",
-        "ports_listening": [3333, 4444, 5555, 7777, 8027, 8029, 9999, 14433, 14444, 3301],
+        "ports_listening": [
+          3333,
+          4444,
+          5555,
+          7777,
+          8027,
+          8029,
+          9999,
+          14433,
+          14444,
+          3301
+        ],
         "confidence": "DEFINITE",
         "context": "Higher-OPSEC operator with self-hosted XMR pool proxy (:3333) and CFX pool proxy (:4444) - masks wallet attribution at pool layer; Hysteria v2 backdoor on UDP :14433/:14444; admin panel HTTP :3301; campaign LIVE as of 2026-05-25"
       },
@@ -720,6 +650,80 @@
       "type": "behavior",
       "confidence": "HIGH",
       "context": "Operator-A full mining+backdoor traffic pattern; correlation rule across multiple flow indicators"
+    }
+  ],
+  "partial_hash_indicators": [
+    {
+      "value": "025d683b3ebcfc6f246bbe05",
+      "type": "hash_fragment",
+      "filename": "ghost.sh",
+      "size_bytes": 45306,
+      "confidence": "DEFINITE",
+      "context": "SHA256 prefix (24 chars) - Operator-B copy (77.110.125.145) - same kit, 17-byte per-customer config-block delta (XMRIG_URL, LOL_URL, GHOST_URL, HIDE_SO_URL, XMR_POOL_2, LOL_POOL_2, XMR_WALLET, LOL_WALLET differ); partial SHA - full hash via Hunt index search-code _anti_hisana"
+    },
+    {
+      "value": "d22c3f5b",
+      "type": "hash_fragment",
+      "filename": "/sc/py.py",
+      "size_bytes": 74844,
+      "confidence": "DEFINITE",
+      "context": "SHA256 prefix (8 chars) - Operator-A copy - Python ComfyUI exploitation framework; kit-author component with PerformanceMonitor class registered into NODE_CLASS_MAPPINGS for persistence; same file at /c/py.py (byte-identical duplicate)"
+    },
+    {
+      "value": "1a00c2bd788e",
+      "type": "hash_fragment",
+      "filename": "/sc/scan.py",
+      "size_bytes": 63443,
+      "confidence": "DEFINITE",
+      "context": "SHA256 prefix (12 chars) - Operator-A Python scanner - slow cadence (3-4 hr rescan); payload reference q11.txt"
+    },
+    {
+      "value": "29293e3c5591",
+      "type": "hash_fragment",
+      "filename": "/123/scan.py",
+      "size_bytes": 63443,
+      "confidence": "DEFINITE",
+      "context": "SHA256 prefix (12 chars) - Operator-A Python scanner - aggressive cadence (1-hr rescan); payload reference q12.txt; same operator runs both variants"
+    },
+    {
+      "value": "0f68139f25cc",
+      "type": "hash_fragment",
+      "filename": "/sc/py.py",
+      "size_bytes": 74858,
+      "confidence": "DEFINITE",
+      "context": "SHA256 prefix (12 chars) - Operator-B copy (77.110.125.145) - same Python kit, 14-byte per-customer delta in PIP_PAYLOAD_REPO reference (jamestechdev-oss vs Vova75Rus)"
+    },
+    {
+      "value": "66acf3e38142",
+      "type": "hash_fragment",
+      "filename": "/sc/scan.py",
+      "size_bytes": 63457,
+      "confidence": "DEFINITE",
+      "context": "SHA256 prefix (12 chars) - Operator-B copy - same Python scanner, 14-byte per-customer delta"
+    },
+    {
+      "value": "51a71a055e05",
+      "type": "hash_fragment",
+      "filename": "New_scanner.py",
+      "size_bytes": 30617,
+      "confidence": "DEFINITE",
+      "context": "SHA256 prefix (12 chars) - Operator-B Russian-language customized scanner; 183 Cyrillic words including АГЕНТ НАСТРОЙКИ; simpler architecture than kit version (no PerformanceMonitor class); confirms Operator-B is Russian-speaking"
+    },
+    {
+      "value": "9482a637974be835",
+      "type": "git_blob_sha_partial",
+      "filename": "dbus-session-monitor / xmrigggggsteal",
+      "size_bytes": 13000000,
+      "confidence": "HIGH",
+      "context": "Disguised xmrig binary in Vova75Rus/miner + Vova75Rus/legendary-carnival repos (both repos suspended by GitHub T&S 2026-05-25); legitimate upstream xmrig SHA - renamed for camouflage"
+    },
+    {
+      "value": "19ced92cd0608d71",
+      "type": "git_blob_sha_partial",
+      "filename": "gnome-shell-ext-updater / lmmiineeer",
+      "size_bytes": 8000000,
+      "confidence": "HIGH",
+      "context": "Disguised lolMiner binary in Vova75Rus/miner + Vova75Rus/legendary-carnival repos; legitimate upstream lolMiner SHA - renamed for camouflage"
     }
   ]
 }

@@ -14,218 +14,273 @@
     ]
   },
   "file_hashes": {
-    "enc_exe": {
-      "sha256": "93c53ebc8d1ee19dad41cfb7989ed047136cd80669ec8ba7b0af4016f9123cc1",
-      "sha1": "ebad3ae916e075c119c1630f007e05fa5ce8cb6f",
-      "md5": "f6b678886d38dda59678e5422697aaee",
-      "size": "15.8 MB",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "enc.exe",
-      "variant": "Primary encryptor - earlier version",
-      "capabilities": [
-        "Network spreading",
-        "VM detection",
-        "Credential theft",
-        "File encryption (RSA-2048 + ChaCha20)",
-        "Volume Shadow Copy deletion"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant",
-        "EncDec_VSS_Deletion",
-        "EncDec_Rust_Artifacts",
-        "EncDec_AntiDebug_StackCheck",
-        "EncDec_Comprehensive"
-      ]
-    },
-    "enc_v2_exe": {
-      "sha256": "d942896e56eb6dc83c8788c92e6fe7c57ee419b9b092f3089c74b3f0e181b154",
-      "sha1": "60654d763e8918a10a5df9eb65b2676bd4e2a85d",
-      "md5": "59011f6a6c53f79b9d63d53b3ea7c251",
-      "size": "Unknown (estimated 15-20 MB)",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "enc_v2.exe",
-      "variant": "Version 2 encryptor - most comprehensively reverse engineered",
-      "capabilities": [
-        "Custom ChaCha20 implementation with AVX optimization",
-        "RSA-2048 + ChaCha20 hybrid encryption",
-        "Multi-layered anti-analysis (stack-checking, VEH, Sleep evasion)",
-        "Drive enumeration A-Z + network shares",
-        "VSS deletion via vssadmin/wmic",
-        "Runtime CPU dispatcher (AVX-512/AVX2/SSE)"
-      ],
-      "debug_artifacts": [
-        "Rust debug paths visible in binary"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant",
-        "EncDec_VSS_Deletion",
-        "EncDec_Rust_Artifacts",
-        "EncDec_AntiDebug_StackCheck",
-        "EncDec_Comprehensive"
-      ]
-    },
-    "updated_enc_exe": {
-      "sha256": "9cf27311a39f4915ef1ea36f101381c4b3b7fe0eeea43a9739df15c06a563651",
-      "sha1": "45714cf92b5820ca115568d8f4ea48293dcc66b6",
-      "md5": "91874b34526a38f9ca0727f323c3188a",
-      "size": "Unknown (estimated 15-20 MB)",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "updated_enc.exe",
-      "variant": "Evolutionary variant of enc_v2.exe",
-      "capabilities": [
-        "Identical technical signatures to enc_v2.exe",
-        "Shared anti-debugging loops",
-        "RSA-2048 + ChaCha20 hybrid encryption",
-        "Ransom note template: README.txt"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant",
-        "EncDec_VSS_Deletion",
-        "EncDec_Rust_Artifacts",
-        "EncDec_AntiDebug_StackCheck",
-        "EncDec_Comprehensive"
-      ]
-    },
-    "enc_pervictim_exe": {
-      "sha256": "e25e19888d615b9fb15da4cd7c4cd34dfa53250becff3d621c59c9fa38efdcf3",
-      "sha1": "c2d6e40976b237b8f0a034d30df9e60a7771c416",
-      "md5": "e2cbe3bc77b1ce11192fd0d542d6123a",
-      "size": "Unknown (estimated 15-20 MB)",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "enc_pervictim.exe",
-      "variant": "Per-victim key generation capability",
-      "capabilities": [
-        "Per-victim customized encryption keys",
-        "Runtime CPU dispatcher (AVX-512/AVX2/SSE)",
-        "Sophisticated cryptographic engine",
-        "Hardware-optimized ChaCha20 (multiple implementations)"
-      ],
-      "debug_artifacts": [
-        "chacha20_pervictim.rs",
-        "netusesrc/modules/disks.rs"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant",
-        "EncDec_VSS_Deletion",
-        "EncDec_Rust_Artifacts",
-        "EncDec_AntiDebug_StackCheck",
-        "EncDec_Comprehensive"
-      ]
-    },
-    "test_gui_enc_v2_exe": {
-      "sha256": "6c21c70ae517ccf548ac326ac133337b8d12200658ffba5a1f2d7053a34aadc6",
-      "sha1": "426a4740043780ff152ffd651a2abb7a8692f8e3",
-      "md5": "4ce7f0bda1f3606270e5f9677d526771",
-      "size": "Unknown",
-      "type": "PE32+ executable (GUI) x86-64, Rust-compiled",
-      "original_filename": "test_gui_enc_v2.exe",
-      "variant": "Testing variant with GUI components",
-      "capabilities": [
-        "Version 2 architecture",
-        "GUI interface for testing",
-        "Development/QA build"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant",
-        "EncDec_Rust_Artifacts"
-      ]
-    },
-    "dec_exe": {
-      "sha256": "2e6220c3ed90261bd9f0d30cc3684e7c3f763ce524fe7ff49de7bf92870031e9",
-      "sha1": "575e763b941f74ef329e37715c46fac45abb3985",
-      "md5": "0ad2f5880d34e9f231a28f0c0cad015b",
-      "size": "2.1 MB",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "dec.exe",
-      "variant": "Primary decryptor - reverse engineered",
-      "capabilities": [
-        "Command-line utility with --pass, --file, --folder parameters",
-        "PBKDF2 key derivation from password",
-        "RSA private key unwrapping",
-        "ChaCha20-Poly1305 AEAD decryption",
-        "Cleanup: deletes README_FOR_DECRYPT.txt, terminates ransom_note_exec.exe",
-        "Blocklists: system files/folders to prevent damage"
-      ],
-      "cryptographic_libraries": [
-        "ChaCha20-Poly1305",
-        "SHA-512",
-        "BLAKE2",
-        "SipHash"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant"
-      ]
-    },
-    "dec_fast_exe": {
-      "sha256": "62459f33fd9a933799857e537cb3fbfd41b32658cde2a5119cc5a819aecc53ca",
-      "sha1": "4490d9be948dbb8bc0b58c551c28bfb182a54d8a",
-      "md5": "9e492a9e4906946c20ae061fa29e62e5",
-      "size": "Unknown",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "dec_fast.exe",
-      "variant": "Performance-optimized decryption",
-      "capabilities": [
-        "Fast decryption (potentially reduced safety checks for speed)",
-        "Rapid file recovery"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant"
-      ]
-    },
-    "dec_pc3_exe": {
-      "sha256": "1252b4a85ea6d33651bbcee4708f0ec14d5915f7ebe9c8de0ffb5bfc6ad8f412",
-      "sha1": "7b7db113669abe951b5298f5a17d9fa4c2e0b84f",
-      "md5": "dddf209542b4cc9ab4f312eb46876aa9",
-      "size": "Unknown",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "dec_pc3.exe",
-      "variant": "Specialized decryption (possibly machine-specific)",
-      "capabilities": [
-        "Environment-specific decryption",
-        "Specialized configuration"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant"
-      ]
-    },
-    "dec_unique_exe": {
-      "sha256": "353800a0934e6de5d02f660fcde2be3e3b3d3bb70bcff3a157355c77a75cb935",
-      "sha1": "e60ee8e9516b1d9595d026c0ae84d3f93db0765e",
-      "md5": "7581ba60eb121a0ca0499a8fe8c3bdc9",
-      "size": "Unknown",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "dec_unique.exe",
-      "variant": "Variant with unique decryption parameters",
-      "capabilities": [
-        "Unique decryption scenarios",
-        "Specialized parameters"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant"
-      ]
-    },
-    "test_decryptor_exe": {
-      "sha256": "4a41291979ce387fd5470ad5afd9db2938669d813f7da7f43dd9f53413457399",
-      "sha1": "bced673ab0cf6f008264c763f399899471d30a53",
-      "md5": "3b53bd591f29e0a2cc3d500db4c4cf8a",
-      "size": "Unknown",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "test_decryptor.exe",
-      "variant": "Testing/QA decryption utility",
-      "capabilities": [
-        "Development build",
-        "Testing functionality"
-      ],
-      "yara_signatures": [
-        "EncDec_ChaCha20_Constant"
-      ]
-    },
-    "ransom_note_exec_exe": {
-      "type": "Associated executable - GUI ransom note display utility",
-      "original_filename": "ransom_note_exec.exe",
-      "purpose": "Display ransom note to victim",
-      "cleanup": "Terminated by dec.exe cleanup operations"
-    }
+    "sha256": [
+      {
+        "value": "93c53ebc8d1ee19dad41cfb7989ed047136cd80669ec8ba7b0af4016f9123cc1",
+        "filename": "enc.exe",
+        "size": "15.8 MB",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Primary encryptor - earlier version",
+        "capabilities": [
+          "Network spreading",
+          "VM detection",
+          "Credential theft",
+          "File encryption (RSA-2048 + ChaCha20)",
+          "Volume Shadow Copy deletion"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant",
+          "EncDec_VSS_Deletion",
+          "EncDec_Rust_Artifacts",
+          "EncDec_AntiDebug_StackCheck",
+          "EncDec_Comprehensive"
+        ]
+      },
+      {
+        "value": "d942896e56eb6dc83c8788c92e6fe7c57ee419b9b092f3089c74b3f0e181b154",
+        "filename": "enc_v2.exe",
+        "size": "Unknown (estimated 15-20 MB)",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Version 2 encryptor - most comprehensively reverse engineered",
+        "capabilities": [
+          "Custom ChaCha20 implementation with AVX optimization",
+          "RSA-2048 + ChaCha20 hybrid encryption",
+          "Multi-layered anti-analysis (stack-checking, VEH, Sleep evasion)",
+          "Drive enumeration A-Z + network shares",
+          "VSS deletion via vssadmin/wmic",
+          "Runtime CPU dispatcher (AVX-512/AVX2/SSE)"
+        ],
+        "debug_artifacts": [
+          "Rust debug paths visible in binary"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant",
+          "EncDec_VSS_Deletion",
+          "EncDec_Rust_Artifacts",
+          "EncDec_AntiDebug_StackCheck",
+          "EncDec_Comprehensive"
+        ]
+      },
+      {
+        "value": "9cf27311a39f4915ef1ea36f101381c4b3b7fe0eeea43a9739df15c06a563651",
+        "filename": "updated_enc.exe",
+        "size": "Unknown (estimated 15-20 MB)",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Evolutionary variant of enc_v2.exe",
+        "capabilities": [
+          "Identical technical signatures to enc_v2.exe",
+          "Shared anti-debugging loops",
+          "RSA-2048 + ChaCha20 hybrid encryption",
+          "Ransom note template: README.txt"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant",
+          "EncDec_VSS_Deletion",
+          "EncDec_Rust_Artifacts",
+          "EncDec_AntiDebug_StackCheck",
+          "EncDec_Comprehensive"
+        ]
+      },
+      {
+        "value": "e25e19888d615b9fb15da4cd7c4cd34dfa53250becff3d621c59c9fa38efdcf3",
+        "filename": "enc_pervictim.exe",
+        "size": "Unknown (estimated 15-20 MB)",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Per-victim key generation capability",
+        "capabilities": [
+          "Per-victim customized encryption keys",
+          "Runtime CPU dispatcher (AVX-512/AVX2/SSE)",
+          "Sophisticated cryptographic engine",
+          "Hardware-optimized ChaCha20 (multiple implementations)"
+        ],
+        "debug_artifacts": [
+          "chacha20_pervictim.rs",
+          "netusesrc/modules/disks.rs"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant",
+          "EncDec_VSS_Deletion",
+          "EncDec_Rust_Artifacts",
+          "EncDec_AntiDebug_StackCheck",
+          "EncDec_Comprehensive"
+        ]
+      },
+      {
+        "value": "6c21c70ae517ccf548ac326ac133337b8d12200658ffba5a1f2d7053a34aadc6",
+        "filename": "test_gui_enc_v2.exe",
+        "type": "PE32+ executable (GUI) x86-64, Rust-compiled",
+        "variant": "Testing variant with GUI components",
+        "capabilities": [
+          "Version 2 architecture",
+          "GUI interface for testing",
+          "Development/QA build"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant",
+          "EncDec_Rust_Artifacts"
+        ]
+      },
+      {
+        "value": "2e6220c3ed90261bd9f0d30cc3684e7c3f763ce524fe7ff49de7bf92870031e9",
+        "filename": "dec.exe",
+        "size": "2.1 MB",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Primary decryptor - reverse engineered",
+        "capabilities": [
+          "Command-line utility with --pass, --file, --folder parameters",
+          "PBKDF2 key derivation from password",
+          "RSA private key unwrapping",
+          "ChaCha20-Poly1305 AEAD decryption",
+          "Cleanup: deletes README_FOR_DECRYPT.txt, terminates ransom_note_exec.exe",
+          "Blocklists: system files/folders to prevent damage"
+        ],
+        "cryptographic_libraries": [
+          "ChaCha20-Poly1305",
+          "SHA-512",
+          "BLAKE2",
+          "SipHash"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant"
+        ]
+      },
+      {
+        "value": "62459f33fd9a933799857e537cb3fbfd41b32658cde2a5119cc5a819aecc53ca",
+        "filename": "dec_fast.exe",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Performance-optimized decryption",
+        "capabilities": [
+          "Fast decryption (potentially reduced safety checks for speed)",
+          "Rapid file recovery"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant"
+        ]
+      },
+      {
+        "value": "1252b4a85ea6d33651bbcee4708f0ec14d5915f7ebe9c8de0ffb5bfc6ad8f412",
+        "filename": "dec_pc3.exe",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Specialized decryption (possibly machine-specific)",
+        "capabilities": [
+          "Environment-specific decryption",
+          "Specialized configuration"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant"
+        ]
+      },
+      {
+        "value": "353800a0934e6de5d02f660fcde2be3e3b3d3bb70bcff3a157355c77a75cb935",
+        "filename": "dec_unique.exe",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Variant with unique decryption parameters",
+        "capabilities": [
+          "Unique decryption scenarios",
+          "Specialized parameters"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant"
+        ]
+      },
+      {
+        "value": "4a41291979ce387fd5470ad5afd9db2938669d813f7da7f43dd9f53413457399",
+        "filename": "test_decryptor.exe",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "variant": "Testing/QA decryption utility",
+        "capabilities": [
+          "Development build",
+          "Testing functionality"
+        ],
+        "yara_signatures": [
+          "EncDec_ChaCha20_Constant"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "f6b678886d38dda59678e5422697aaee",
+        "filename": "enc.exe"
+      },
+      {
+        "value": "59011f6a6c53f79b9d63d53b3ea7c251",
+        "filename": "enc_v2.exe"
+      },
+      {
+        "value": "91874b34526a38f9ca0727f323c3188a",
+        "filename": "updated_enc.exe"
+      },
+      {
+        "value": "e2cbe3bc77b1ce11192fd0d542d6123a",
+        "filename": "enc_pervictim.exe"
+      },
+      {
+        "value": "4ce7f0bda1f3606270e5f9677d526771",
+        "filename": "test_gui_enc_v2.exe"
+      },
+      {
+        "value": "0ad2f5880d34e9f231a28f0c0cad015b",
+        "filename": "dec.exe"
+      },
+      {
+        "value": "9e492a9e4906946c20ae061fa29e62e5",
+        "filename": "dec_fast.exe"
+      },
+      {
+        "value": "dddf209542b4cc9ab4f312eb46876aa9",
+        "filename": "dec_pc3.exe"
+      },
+      {
+        "value": "7581ba60eb121a0ca0499a8fe8c3bdc9",
+        "filename": "dec_unique.exe"
+      },
+      {
+        "value": "3b53bd591f29e0a2cc3d500db4c4cf8a",
+        "filename": "test_decryptor.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "ebad3ae916e075c119c1630f007e05fa5ce8cb6f",
+        "filename": "enc.exe"
+      },
+      {
+        "value": "60654d763e8918a10a5df9eb65b2676bd4e2a85d",
+        "filename": "enc_v2.exe"
+      },
+      {
+        "value": "45714cf92b5820ca115568d8f4ea48293dcc66b6",
+        "filename": "updated_enc.exe"
+      },
+      {
+        "value": "c2d6e40976b237b8f0a034d30df9e60a7771c416",
+        "filename": "enc_pervictim.exe"
+      },
+      {
+        "value": "426a4740043780ff152ffd651a2abb7a8692f8e3",
+        "filename": "test_gui_enc_v2.exe"
+      },
+      {
+        "value": "575e763b941f74ef329e37715c46fac45abb3985",
+        "filename": "dec.exe"
+      },
+      {
+        "value": "4490d9be948dbb8bc0b58c551c28bfb182a54d8a",
+        "filename": "dec_fast.exe"
+      },
+      {
+        "value": "7b7db113669abe951b5298f5a17d9fa4c2e0b84f",
+        "filename": "dec_pc3.exe"
+      },
+      {
+        "value": "e60ee8e9516b1d9595d026c0ae84d3f93db0765e",
+        "filename": "dec_unique.exe"
+      },
+      {
+        "value": "bced673ab0cf6f008264c763f399899471d30a53",
+        "filename": "test_decryptor.exe"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {
@@ -545,5 +600,14 @@
     "/reports/enc-dec-ransomware-family/",
     "/hunting-detections/enc-dec-ransomware-family/"
   ],
-  "license": "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+  "license": "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/",
+  "related_samples": [
+    {
+      "label": "ransom_note_exec_exe",
+      "type": "Associated executable - GUI ransom note display utility",
+      "original_filename": "ransom_note_exec.exe",
+      "purpose": "Display ransom note to victim",
+      "cleanup": "Terminated by dec.exe cleanup operations"
+    }
+  ]
 }

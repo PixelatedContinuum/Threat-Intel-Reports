@@ -4,60 +4,31 @@
   "severity": "CRITICAL",
   "confidence_level": "High",
   "file_hashes": {
-    "killer_dll": {
-      "md5": "c031054f6140e2c366eaf4263f827dbf",
-      "sha1": "c2f5519f00249aa1511c26a93165bf32f3b1efab",
-      "sha256": "10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d",
-      "size": "559104 bytes (546 KB)",
-      "type": "PE32+ DLL, Rust-compiled",
-      "original_filename": "killer.dll",
-      "family": "Arsenal-237 BYOVD Defense Evasion Module",
-      "family_confidence": "CONFIRMED (100%)",
-      "compiler": "Rust",
-      "export_function": "get_hostfxr_path",
-      "purpose": "Defense evasion via BYOVD technique - terminates security products"
-    },
-    "bdapiutil64_sys": {
-      "filename": "BdApiUtil64.sys",
-      "description": "Legitimately-signed Baidu Antivirus driver embedded in killer.dll",
-      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x800024B4",
-      "company": "Baidu, Inc.",
-      "product": "Baidu Antivirus BdApi Driver",
-      "version": "5.0.3.84333",
-      "digital_signature": "Valid (Signed by Baidu, Thawte, Symantec, VeriSign, Microsoft chain)",
-      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
-      "device_path": "\\\\.\\BdApiUtil",
-      "ioctl_code": "0x800024B4",
-      "ioctl_purpose": "Process termination command",
-      "kernel_capabilities": [
-        "ZwTerminateProcess (process termination)",
-        "FltEnumerateFilters (EDR/AV filter discovery)",
-        "CmRegisterCallback (registry manipulation)",
-        "PsSetCreateProcessNotifyRoutine (process monitoring)",
-        "IoDeleteDevice (device object manipulation)"
-      ]
-    },
-    "procexpdriver_sys": {
-      "filename": "ProcExpDriver.sys",
-      "description": "Legitimately-signed Sysinternals Process Explorer driver embedded in killer.dll",
-      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x8335003C",
-      "company": "Sysinternals - www.sysinternals.com",
-      "product": "Process Explorer",
-      "version": "17.0.7",
-      "internal_name": "procexp.sys",
-      "digital_signature": "Valid (Signed by Microsoft)",
-      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
-      "device_path": "\\\\.\\PROCEXP152",
-      "ioctl_code": "0x8335003C",
-      "ioctl_purpose": "Process termination command",
-      "kernel_capabilities": [
-        "ZwOpenProcess (process handle acquisition)",
-        "ZwQueryInformationProcess (process inspection)",
-        "PsLookupProcessByProcessId (process lookup)",
-        "ZwOpenProcessToken (token manipulation)",
-        "KeStackAttachProcess (address space attachment)"
-      ]
-    }
+    "sha256": [
+      {
+        "value": "10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d",
+        "filename": "killer.dll",
+        "size": "559104 bytes (546 KB)",
+        "type": "PE32+ DLL, Rust-compiled",
+        "family": "Arsenal-237 BYOVD Defense Evasion Module",
+        "family_confidence": "CONFIRMED (100%)",
+        "compiler": "Rust",
+        "export_function": "get_hostfxr_path",
+        "purpose": "Defense evasion via BYOVD technique - terminates security products"
+      }
+    ],
+    "md5": [
+      {
+        "value": "c031054f6140e2c366eaf4263f827dbf",
+        "filename": "killer.dll"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "c2f5519f00249aa1511c26a93165bf32f3b1efab",
+        "filename": "killer.dll"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {
@@ -388,5 +359,50 @@
   "timestamp": "2026-01-25T00:00:00Z",
   "analyst": "Threat Intelligence Team",
   "report_version": "1.0",
-  "license": "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+  "license": "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/",
+  "related_samples": [
+    {
+      "label": "bdapiutil64_sys",
+      "filename": "BdApiUtil64.sys",
+      "description": "Legitimately-signed Baidu Antivirus driver embedded in killer.dll",
+      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x800024B4",
+      "company": "Baidu, Inc.",
+      "product": "Baidu Antivirus BdApi Driver",
+      "version": "5.0.3.84333",
+      "digital_signature": "Valid (Signed by Baidu, Thawte, Symantec, VeriSign, Microsoft chain)",
+      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
+      "device_path": "\\\\.\\BdApiUtil",
+      "ioctl_code": "0x800024B4",
+      "ioctl_purpose": "Process termination command",
+      "kernel_capabilities": [
+        "ZwTerminateProcess (process termination)",
+        "FltEnumerateFilters (EDR/AV filter discovery)",
+        "CmRegisterCallback (registry manipulation)",
+        "PsSetCreateProcessNotifyRoutine (process monitoring)",
+        "IoDeleteDevice (device object manipulation)"
+      ]
+    },
+    {
+      "label": "procexpdriver_sys",
+      "filename": "ProcExpDriver.sys",
+      "description": "Legitimately-signed Sysinternals Process Explorer driver embedded in killer.dll",
+      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x8335003C",
+      "company": "Sysinternals - www.sysinternals.com",
+      "product": "Process Explorer",
+      "version": "17.0.7",
+      "internal_name": "procexp.sys",
+      "digital_signature": "Valid (Signed by Microsoft)",
+      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
+      "device_path": "\\\\.\\PROCEXP152",
+      "ioctl_code": "0x8335003C",
+      "ioctl_purpose": "Process termination command",
+      "kernel_capabilities": [
+        "ZwOpenProcess (process handle acquisition)",
+        "ZwQueryInformationProcess (process inspection)",
+        "PsLookupProcessByProcessId (process lookup)",
+        "ZwOpenProcessToken (token manipulation)",
+        "KeStackAttachProcess (address space attachment)"
+      ]
+    }
+  ]
 }

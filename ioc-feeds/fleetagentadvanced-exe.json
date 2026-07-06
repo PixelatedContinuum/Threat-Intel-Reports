@@ -6,37 +6,47 @@
   "discovery_date": "2026-01-04",
   "analysis_date": "2026-01-12",
   "file_hashes": {
-    "fleetagentadvanced_exe_dropper": {
-      "sha256": "172258e53b9506a7671deab25d2ad360cd833a4942609f1a4836d305ffe4578b",
-      "sha1": "5d00a9100c88ee1a6cba658c3a9a02305a4aef2a",
-      "md5": "5884b64f66c2297be1d3dd219b62dc58",
-      "size": "172544",
-      "type": "PE32 executable, .NET Framework (CLR v4.0.30319), Windows GUI",
-      "original_filename": "FleetAgentAdvanced.exe",
-      "internal_name": "FleetAgentAdvanced_final.exe",
-      "family": "FleetAgentAdvanced",
-      "family_confidence": "HIGH (90%)",
-      "role": "Dropper/Installer",
-      "yara_signatures": [
-        "FleetAgentAdvanced_Dropper_Core",
-        "FleetAgentAdvanced_Quad_Persistence_Pattern",
-        "FleetAgentAdvanced_TaskXML_AntiForensics"
-      ]
-    },
-    "runtimeoptimization_exe_payload": {
-      "sha256": "9fc6b69623133f5d6f1f4cda0ec4319300080c9bbaa0f88c93f01eeba84e80e7",
-      "sha1": "UNKNOWN",
-      "md5": "UNKNOWN",
-      "size": "27648",
-      "type": "PE32 executable (presumed .NET or native)",
-      "original_filename": "RuntimeOptimization.exe",
-      "location": "%APPDATA%\\Microsoft\\CLR\\RuntimeOptimization.exe",
-      "purpose": "Persistent backdoor/agent payload",
-      "deployment_method": "Dropped by FleetAgentAdvanced.exe via Base64 decoding",
-      "yara_signatures": [
-        "FleetAgentAdvanced_RuntimeOptimization_Payload"
-      ]
-    }
+    "sha256": [
+      {
+        "value": "172258e53b9506a7671deab25d2ad360cd833a4942609f1a4836d305ffe4578b",
+        "filename": "FleetAgentAdvanced.exe",
+        "size": "172544",
+        "type": "PE32 executable, .NET Framework (CLR v4.0.30319), Windows GUI",
+        "internal_name": "FleetAgentAdvanced_final.exe",
+        "family": "FleetAgentAdvanced",
+        "family_confidence": "HIGH (90%)",
+        "role": "Dropper/Installer",
+        "yara_signatures": [
+          "FleetAgentAdvanced_Dropper_Core",
+          "FleetAgentAdvanced_Quad_Persistence_Pattern",
+          "FleetAgentAdvanced_TaskXML_AntiForensics"
+        ]
+      },
+      {
+        "value": "9fc6b69623133f5d6f1f4cda0ec4319300080c9bbaa0f88c93f01eeba84e80e7",
+        "filename": "RuntimeOptimization.exe",
+        "size": "27648",
+        "type": "PE32 executable (presumed .NET or native)",
+        "location": "%APPDATA%\\Microsoft\\CLR\\RuntimeOptimization.exe",
+        "purpose": "Persistent backdoor/agent payload",
+        "deployment_method": "Dropped by FleetAgentAdvanced.exe via Base64 decoding",
+        "yara_signatures": [
+          "FleetAgentAdvanced_RuntimeOptimization_Payload"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "5884b64f66c2297be1d3dd219b62dc58",
+        "filename": "FleetAgentAdvanced.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "5d00a9100c88ee1a6cba658c3a9a02305a4aef2a",
+        "filename": "FleetAgentAdvanced.exe"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {

@@ -11,57 +11,30 @@
     "secondary_difference": "Contains embedded Microsoft-signed binary (purpose unknown - requires investigation)"
   },
   "file_hashes": {
-    "killer_crowdstrike_dll": {
-      "md5": "6926ea1b4c4bff01a23b7e1728583348",
-      "sha1": "81c2cea6e40cfbb52aceedaee626d4acf5f2744c",
-      "sha256": "e26e9221f4e9a437716a28c08c5f74c6a2ecae2c47b77091db7d21f36ed2f7d3",
-      "size": "475648 bytes (464 KB)",
-      "type": "PE32+ DLL, Rust-compiled",
-      "original_filename": "killer_crowdstrike.dll",
-      "family": "Arsenal-237 BYOVD Defense Evasion Module (CrowdStrike Variant)",
-      "family_confidence": "CONFIRMED (100%)",
-      "compiler": "Rust",
-      "purpose": "CrowdStrike Falcon-specific defense evasion via BYOVD technique"
-    },
-    "bdapiutil64_sys": {
-      "filename": "BdApiUtil64.sys",
-      "description": "Legitimately-signed Baidu Antivirus driver embedded in killer_crowdstrike.dll (identical to killer.dll)",
-      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x800024B4",
-      "company": "Baidu, Inc.",
-      "product": "Baidu Antivirus BdApi Driver",
-      "version": "5.0.3.84333",
-      "digital_signature": "Valid (Signed by Baidu, Thawte, Symantec, VeriSign, Microsoft chain)",
-      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
-      "device_path": "\\\\.\\BdApiUtil",
-      "ioctl_code": "0x800024B4",
-      "ioctl_purpose": "Process termination command"
-    },
-    "procexpdriver_sys": {
-      "filename": "ProcExpDriver.sys",
-      "description": "Legitimately-signed Sysinternals Process Explorer driver embedded in killer_crowdstrike.dll (identical to killer.dll)",
-      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x8335003C",
-      "company": "Sysinternals - www.sysinternals.com",
-      "product": "Process Explorer",
-      "version": "17.0.7",
-      "internal_name": "procexp.sys",
-      "digital_signature": "Valid (Signed by Microsoft)",
-      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
-      "device_path": "\\\\.\\PROCEXP152",
-      "ioctl_code": "0x8335003C",
-      "ioctl_purpose": "Process termination command"
-    },
-    "embedded_microsoft_binary": {
-      "description": "Embedded Microsoft-signed binary with unknown purpose (not present in killer.dll)",
-      "status": "IDENTIFIED - Requires dynamic analysis to determine exact purpose",
-      "hypotheses": [
-        "Alternative vulnerable driver exploitation",
-        "DLL side-loading vector for stealth",
-        "Code signing reputation enhancement"
-      ],
-      "digital_signature": "Valid (Microsoft Corporation, Microsoft Time-Stamp Service)",
-      "investigation_priority": "CRITICAL - May represent advanced exploitation technique",
-      "next_steps": "Binary extraction and dynamic analysis required"
-    }
+    "sha256": [
+      {
+        "value": "e26e9221f4e9a437716a28c08c5f74c6a2ecae2c47b77091db7d21f36ed2f7d3",
+        "filename": "killer_crowdstrike.dll",
+        "size": "475648 bytes (464 KB)",
+        "type": "PE32+ DLL, Rust-compiled",
+        "family": "Arsenal-237 BYOVD Defense Evasion Module (CrowdStrike Variant)",
+        "family_confidence": "CONFIRMED (100%)",
+        "compiler": "Rust",
+        "purpose": "CrowdStrike Falcon-specific defense evasion via BYOVD technique"
+      }
+    ],
+    "md5": [
+      {
+        "value": "6926ea1b4c4bff01a23b7e1728583348",
+        "filename": "killer_crowdstrike.dll"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "81c2cea6e40cfbb52aceedaee626d4acf5f2744c",
+        "filename": "killer_crowdstrike.dll"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {
@@ -350,5 +323,49 @@
   "timestamp": "2026-01-25T00:00:00Z",
   "analyst": "Threat Intelligence Team",
   "report_version": "1.0",
-  "license": "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+  "license": "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/",
+  "related_samples": [
+    {
+      "label": "bdapiutil64_sys",
+      "filename": "BdApiUtil64.sys",
+      "description": "Legitimately-signed Baidu Antivirus driver embedded in killer_crowdstrike.dll (identical to killer.dll)",
+      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x800024B4",
+      "company": "Baidu, Inc.",
+      "product": "Baidu Antivirus BdApi Driver",
+      "version": "5.0.3.84333",
+      "digital_signature": "Valid (Signed by Baidu, Thawte, Symantec, VeriSign, Microsoft chain)",
+      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
+      "device_path": "\\\\.\\BdApiUtil",
+      "ioctl_code": "0x800024B4",
+      "ioctl_purpose": "Process termination command"
+    },
+    {
+      "label": "procexpdriver_sys",
+      "filename": "ProcExpDriver.sys",
+      "description": "Legitimately-signed Sysinternals Process Explorer driver embedded in killer_crowdstrike.dll (identical to killer.dll)",
+      "purpose": "Vulnerable driver abused for process termination via IOCTL 0x8335003C",
+      "company": "Sysinternals - www.sysinternals.com",
+      "product": "Process Explorer",
+      "version": "17.0.7",
+      "internal_name": "procexp.sys",
+      "digital_signature": "Valid (Signed by Microsoft)",
+      "signature_status": "Legitimately signed - bypasses driver signature enforcement",
+      "device_path": "\\\\.\\PROCEXP152",
+      "ioctl_code": "0x8335003C",
+      "ioctl_purpose": "Process termination command"
+    },
+    {
+      "label": "embedded_microsoft_binary",
+      "description": "Embedded Microsoft-signed binary with unknown purpose (not present in killer.dll)",
+      "status": "IDENTIFIED - Requires dynamic analysis to determine exact purpose",
+      "hypotheses": [
+        "Alternative vulnerable driver exploitation",
+        "DLL side-loading vector for stealth",
+        "Code signing reputation enhancement"
+      ],
+      "digital_signature": "Valid (Microsoft Corporation, Microsoft Time-Stamp Service)",
+      "investigation_priority": "CRITICAL - May represent advanced exploitation technique",
+      "next_steps": "Binary extraction and dynamic analysis required"
+    }
+  ]
 }

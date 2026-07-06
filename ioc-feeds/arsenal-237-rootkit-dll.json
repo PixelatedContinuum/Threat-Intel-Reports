@@ -5,33 +5,45 @@
   "report_date": "2026-01-26",
   "confidence": "high",
   "severity": "critical",
-
-  "file_indicators": {
-    "primary_sample": {
-      "filename": "rootkit.dll",
-      "size": 413696,
-      "file_type": "PE64 DLL",
-      "compiler": "Rust (rustc)",
-      "md5": "674795d4d4ec09372904704633ea0d86",
-      "sha1": "483feeb4e391ae64a7d54637ea71d43a17d83c71",
-      "sha256": "e71240f26af1052172b5864cdddb78fcb990d7a96d53b7d22d19f5dfccdf9012",
-      "imphash": "Not available",
-      "ssdeep": "Not available"
-    },
-
-    "embedded_driver": {
-      "filename": "BdApiUtil64.sys",
-      "description": "Legitimately-signed Baidu driver embedded for BYOVD attacks",
-      "md5": "f72386e6b0e87a3245e0d6e4e4c5a1a0",
-      "sha1": "d8e1c6d0c1c0d6e8c9e0d6e0c1c0d6e8c9e0d6e0",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    }
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "e71240f26af1052172b5864cdddb78fcb990d7a96d53b7d22d19f5dfccdf9012",
+        "filename": "rootkit.dll",
+        "size": 413696,
+        "type": "PE64 DLL",
+        "compiler": "Rust (rustc)"
+      },
+      {
+        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "filename": "BdApiUtil64.sys",
+        "description": "Legitimately-signed Baidu driver embedded for BYOVD attacks"
+      }
+    ],
+    "md5": [
+      {
+        "value": "674795d4d4ec09372904704633ea0d86",
+        "filename": "rootkit.dll"
+      },
+      {
+        "value": "f72386e6b0e87a3245e0d6e4e4c5a1a0",
+        "filename": "BdApiUtil64.sys"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "483feeb4e391ae64a7d54637ea71d43a17d83c71",
+        "filename": "rootkit.dll"
+      },
+      {
+        "value": "d8e1c6d0c1c0d6e8c9e0d6e0c1c0d6e8c9e0d6e0",
+        "filename": "BdApiUtil64.sys"
+      }
+    ]
   },
-
   "network_indicators": {
     "note": "No direct network indicators - rootkit.dll focuses on local defense evasion"
   },
-
   "behavioral_indicators": {
     "byovd_deployment": {
       "description": "Deploys BdApiUtil64.sys vulnerable driver",
@@ -44,7 +56,6 @@
         "Alert on Baidu driver usage outside legitimate contexts"
       ]
     },
-
     "process_termination": {
       "description": "Terminates 20+ security products and analysis tools",
       "technique": "Impair Defenses: Disable or Modify Tools",
@@ -113,7 +124,6 @@
         "Monitor for analysis tool termination attempts"
       ]
     },
-
     "file_system_stealth": {
       "description": "Unicode-based file hiding capability via sub_180003c4b",
       "technique": "Hide Artifacts: Hidden Files and Directories",
@@ -126,7 +136,6 @@
         "Alert on discrepancies between file listings and actual presence"
       ]
     },
-
     "api_hooking": {
       "description": "UTF-8 encoding manipulation for API interception via sub_180003447",
       "technique": "Process Injection: Dynamic-link Library Injection",
@@ -139,7 +148,6 @@
         "Alert on DLL injection into security processes"
       ]
     },
-
     "powershell_integration": {
       "description": "PowerShell execution for script-based attacks",
       "technique": "Command and Scripting Interpreter: PowerShell",
@@ -151,7 +159,6 @@
         "Alert on PowerShell script block logging evasion"
       ]
     },
-
     "thread_based_execution": {
       "description": "Creates threads for defense evasion operations via sub_180035420",
       "technique": "Thread Execution Hijacking",
@@ -165,7 +172,6 @@
       ]
     }
   },
-
   "registry_indicators": {
     "service_persistence": {
       "description": "Potential service registration for driver persistence",
@@ -182,7 +188,6 @@
         "Detect modifications to existing security service configurations"
       ]
     },
-
     "security_product_tampering": {
       "description": "Registry modifications to disable security features",
       "technique": "Modify Registry",
@@ -200,7 +205,6 @@
       ]
     }
   },
-
   "filesystem_artifacts": {
     "dropped_files": [
       {
@@ -216,7 +220,6 @@
         "description": "Potential installation location for defense evasion framework"
       }
     ],
-
     "log_indicators": {
       "event_logs": [
         "Event ID 7045 (Service Installation) - BdApiUtil64 service",
@@ -228,7 +231,6 @@
       ]
     }
   },
-
   "mitre_attack_techniques": [
     {
       "technique_id": "T1055.001",
@@ -294,14 +296,12 @@
       "evidence": "Thread-based execution via sub_180035420 function"
     }
   ],
-
   "yara_rule_names": [
     "Arsenal237_Rootkit_DLL_Comprehensive",
     "Arsenal237_BYOVD_Baidu_Driver",
     "Arsenal237_Security_Product_Killer",
     "Arsenal237_Rust_Compiled_Malware"
   ],
-
   "detection_summary": {
     "critical_indicators": [
       "BdApiUtil64.sys driver loading",
@@ -319,7 +319,6 @@
       "Deploy EDR behavioral detection for mass process termination"
     ]
   },
-
   "threat_context": {
     "toolkit": "Arsenal-237",
     "source": "Open directory 109.230.231.37",
@@ -328,7 +327,6 @@
     "target_environment": "Windows enterprise with EDR/AV protection",
     "sophistication": "High - Rust compilation, multi-vector evasion, BYOVD integration"
   },
-
   "notes": [
     "rootkit.dll is NOT a traditional rootkit - it's an Advanced Defense Evasion Framework",
     "Works in conjunction with BdApiUtil64.sys for kernel-level operations",
