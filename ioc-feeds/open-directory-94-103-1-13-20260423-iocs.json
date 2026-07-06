@@ -19,58 +19,58 @@
     "updated": "2026-05-02T23:50:00Z",
     "notes": "2026-04-23 pDNS update: 7 co-tenant domains added + dhost.su ASN self-domain. | 2026-04-23 VT refresh: 94.103.1.13 5/94 confirmed; all 8 co-tenant domains 0/94 or NOT FOUND (Cloudflare fronting effective). | 2026-05-02 follow-up: staging server at 94.103.1.13:7777 globally offline since ~16:44 UTC (8-country external probe confirms TCP refused). interact.py SHA256 added to file_indicators (VT 18/63, Microsoft Trojan:Python/Multiverze!rfn). gp.xor URL context expanded with XOR-key 0x42 detail. Backdoor host-account credential pair pentest:Qwerty12345 added under host_artifacts."
   },
-  "file_indicators": {
+  "file_hashes": {
     "sha256": [
       {
-        "hash": "f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a",
+        "value": "f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a",
         "filename": "myfile.exe",
         "confidence": "DEFINITE",
         "context": "Orcus RAT v7 Wardow crack — primary sample, 865 KB .NET"
       },
       {
-        "hash": "b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5",
+        "value": "b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5",
         "filename": "p.exe",
         "confidence": "DEFINITE",
         "context": "Custom PrintSpoofer-class .NET x64 SpoolSS coercion + named-pipe impersonation (6.6 KB, compiled 2026-03-31 17:00:09 UTC)"
       },
       {
-        "hash": "3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4",
+        "value": "3b5d30e35f8e4f31a3e70d3754d02d0f045e39b6e0cfde22b1754667b7eb60a4",
         "filename": "mymain.bat",
         "confidence": "DEFINITE",
         "context": "2.6 MB DOSfuscated multi-stage loader — Stage 1 dropper for Chaos/TorBrowserTor delivery chain. VT 0/76 at time of submission."
       },
       {
-        "hash": "fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316",
+        "value": "fb39fa0dd70a8c7bee8c3b68d8ee2d93aa7ed34f358dd5174c8492bc0d3af316",
         "filename": "myfile.bat",
         "confidence": "DEFINITE",
         "context": "2.65 MB DOSfuscated multi-stage loader — sibling build of mymain.bat (same builder, per-campaign key rotation)"
       },
       {
-        "hash": "38c5737b1b417d70da8ba72f1b53babc5377733648c2e4b80ba33a991c0e3e9f",
+        "value": "38c5737b1b417d70da8ba72f1b53babc5377733648c2e4b80ba33a991c0e3e9f",
         "filename": "gp_obf.exe",
         "confidence": "HIGH",
         "context": "Obfuscated GodPotato (internal name SvcUtil.exe, compiled 2026-04-02)"
       },
       {
-        "hash": "c2a3592cf37b67b1bdcb389947e6469602b0e52bf247017740c7cc3dddc1e8ae",
+        "value": "c2a3592cf37b67b1bdcb389947e6469602b0e52bf247017740c7cc3dddc1e8ae",
         "filename": "gp_fat.exe",
         "confidence": "HIGH",
         "context": "GodPotato variant, 2026-04-02 build"
       },
       {
-        "hash": "cbcaa2bd24ca5ff49aa19790b882aeab5e14da4cf5a9bfcf7747dc5777abdca9",
+        "value": "cbcaa2bd24ca5ff49aa19790b882aeab5e14da4cf5a9bfcf7747dc5777abdca9",
         "filename": "svc.exe",
         "confidence": "HIGH",
         "context": "MSILHeracles Potato variant, epoch-zero timestamp (evasion)"
       },
       {
-        "hash": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
+        "value": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
         "filename": "gp.exe",
         "confidence": "HIGH",
         "context": "Standard GodPotato, labeled in version info"
       },
       {
-        "hash": "f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad",
+        "value": "f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad",
         "filename": "interact.py",
         "confidence": "DEFINITE",
         "context": "Stage-2 operator controller (951 bytes Python). Connects to local listener 127.0.0.1:4444, performs canonical PowerShell AMSI bypass (amsiInitFailed flip), then downloads http://94.103.1.13/gp.xor, single-byte XOR-decodes with key 0x42, reflectively loads as .NET assembly via [Reflection.Assembly]::Load, and invokes EntryPoint with -cmd \"net user pentest Qwerty12345 /add\" to create a hardcoded backdoor Administrator account. VT 18/63, Microsoft Trojan:Python/Multiverze!rfn, Kaspersky HEUR:Trojan-Downloader.PowerShell.Agent.gen, Symantec Trojan.Gen.NPE. First seen on VT 2026-04-21. Added in 2026-05-02 follow-up; see report §12.2.",
@@ -78,151 +78,151 @@
         "vt_first_seen": "2026-04-21T15:57:07Z"
       },
       {
-        "hash": "3027a212272957298bf4d32505370fa63fb162d6a6a6ec091af9d7626317a858",
+        "value": "3027a212272957298bf4d32505370fa63fb162d6a6a6ec091af9d7626317a858",
         "filename": "gp2.exe",
         "confidence": "HIGH",
         "context": "GodPotato CLR v2 variant"
       },
       {
-        "hash": "61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
+        "value": "61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
         "filename": "mimikatz.exe",
         "confidence": "HIGH",
         "context": "Stock gentilkiwi mimikatz, 2022-09-19 build"
       },
       {
-        "hash": "028f91c8430b11f62ebc08ea0e5199589283ab9d4bcec44381877ec59a7c1e2d",
+        "value": "028f91c8430b11f62ebc08ea0e5199589283ab9d4bcec44381877ec59a7c1e2d",
         "filename": "mimidrv.sys",
         "confidence": "HIGH",
         "context": "Mimikatz kernel driver, 2022-09-19 build"
       },
       {
-        "hash": "aef6ce3014add838cf676b57957d630cd2bb15b0c9193cf349bcffecddbc3623",
+        "value": "aef6ce3014add838cf676b57957d630cd2bb15b0c9193cf349bcffecddbc3623",
         "filename": "mimilib.dll",
         "confidence": "HIGH",
         "context": "Mimikatz SSPI password filter for LSA persistent credential harvesting"
       },
       {
-        "hash": "66928c3316a12091995198710e0c537430dacefac1dbe78f12a331e1520142bd",
+        "value": "66928c3316a12091995198710e0c537430dacefac1dbe78f12a331e1520142bd",
         "filename": "mimispool.dll",
         "confidence": "HIGH",
         "context": "Stock PrintNightmare CVE-2021-1675 payload DLL (VT 60/77)"
       },
       {
-        "hash": "cc585d962904351ce1d92195b0fc79034dc3b13144f7c7ff24cd9f768b25e9ef",
+        "value": "cc585d962904351ce1d92195b0fc79034dc3b13144f7c7ff24cd9f768b25e9ef",
         "filename": "mimilove.exe",
         "confidence": "HIGH",
         "context": "Mimikatz Win2000-targeted variant"
       },
       {
-        "hash": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
+        "value": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
         "filename": "PrintSpoofer.exe",
         "confidence": "HIGH",
         "context": "Stock public PrintSpoofer x64 tool, 2020-09-10"
       },
       {
-        "hash": "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
+        "value": "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
         "filename": "chisel.exe",
         "confidence": "HIGH",
         "context": "Chisel tunneling tool, Go 1.23.1, 9.8 MB"
       },
       {
-        "hash": "929cc7bcdff39d5ba305603b475cde8d86c2f6b69532cde8e27ea7e3710efbaa",
+        "value": "929cc7bcdff39d5ba305603b475cde8d86c2f6b69532cde8e27ea7e3710efbaa",
         "filename": "plink.exe",
         "confidence": "HIGH",
         "context": "PuTTY plink SSH client — used for SSH tunneling"
       },
       {
-        "hash": "4430a828f2b19bc729b2eea0405b27d19c568a769b12f0731c720a0ed888de1b",
+        "value": "4430a828f2b19bc729b2eea0405b27d19c568a769b12f0731c720a0ed888de1b",
         "filename": "mymain chunk 0 (decrypted)",
         "confidence": "DEFINITE",
         "context": "AMSI/ETW bypass + ntdll unhook stub (Perun's Fart) — .NET x86, 33 KB, assembly ZuJkzPEbpOBiWdtBk, compiled 2026-03-31 19:59:02 UTC. VT 40/77."
       },
       {
-        "hash": "8c3ef59cbc6f44ee96d6e5746fafb2288df3868c5fffa87dc7af24b302a45430",
+        "value": "8c3ef59cbc6f44ee96d6e5746fafb2288df3868c5fffa87dc7af24b302a45430",
         "filename": "mymain chunk 1 (decrypted)",
         "confidence": "DEFINITE",
         "context": "Nested crypter Stage 3 — .NET x86, 1.04 MB, assembly KevRPkjGQnsrQuDEGVu, compiled 2026-03-31 19:59:17 UTC. VT 49/77 (Lionic XWorm flag is generic shared-crypter-DNA, not actual XWorm)."
       },
       {
-        "hash": "36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504",
+        "value": "36dc72542530ff9707e4c2dcd935edac71129fcb9b7122502a8295264e86a504",
         "filename": "mymain Stage-4 (decrypted)",
         "confidence": "DEFINITE",
         "context": "Persistence installer + Stage-5 loader — .NET x86, 1.08 MB, assembly HQpmBSUELAUUTkvFfUDMffBkXlu. VT 47/77. Installs \\Microsoft Defender scheduled task + HKLM\\Software\\Microsoft Defender\\Payload registry blob."
       },
       {
-        "hash": "bec87d17b1c1ea975a3ad07fb6e1a79268a563321ffc5525af9dc4e48ea8c9fc",
+        "value": "bec87d17b1c1ea975a3ad07fb6e1a79268a563321ffc5525af9dc4e48ea8c9fc",
         "filename": "mymain Stage-4 ciphertext",
         "confidence": "HIGH",
         "context": "1,025,296-byte ciphertext extracted from chunk 1 resource vqnxIVVk..."
       },
       {
-        "hash": "7ad4db7a3294b2e1017686c97f9617a0c5f1ce5fcd0cbe58f8d6401d29ecbf39",
+        "value": "7ad4db7a3294b2e1017686c97f9617a0c5f1ce5fcd0cbe58f8d6401d29ecbf39",
         "filename": "mymain Stage-5a ciphertext",
         "confidence": "HIGH",
         "context": "11,856-byte ciphertext from Stage-4 resource IazvXcueDgcoXWWL..."
       },
       {
-        "hash": "06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4",
+        "value": "06f6df0f5e37620beb9e3e24a8d0f7742e7d5db7d0f8c1bd4fc10a869443e4e4",
         "filename": "mymain Stage-5a (decrypted) — Chaos/TorBrowserTor ransomware",
         "confidence": "DEFINITE",
         "context": "FINAL RANSOMWARE PAYLOAD (mymain build). 25,088 bytes .NET x86, ConsoleApplication7 assembly. Rijndael-256 CFB + RSA-2048 OAEP, .torbrowsertor extension. VT 57/77 ransomware.msil. Public sibling d0c78ca7... confirms Chaos/TorBrowserTor identity (multi-vendor signature match). VT known-name indf.exe."
       },
       {
-        "hash": "13faff78c8da6b10c8e28ed735484cf6c5ece9498a5d6e040828d46352f3519c",
+        "value": "13faff78c8da6b10c8e28ed735484cf6c5ece9498a5d6e040828d46352f3519c",
         "filename": "mymain Stage-5b ciphertext",
         "confidence": "HIGH",
         "context": "983,872-byte ciphertext from Stage-4 resource HxBTHTPGSMVbIZYM..."
       },
       {
-        "hash": "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8",
+        "value": "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8",
         "filename": "Stage-5b UAC bypass (decrypted) — CROSS-BUILD INVARIANT",
         "confidence": "DEFINITE",
         "context": "BYTE-IDENTICAL across mymain AND myfile builds. 1,009,664 bytes .NET x86 'UACbypass'. AppInfo RPC AiEnableDesktopRpcInterface GUID 201ef99a-7fa0-444c-9399-19ba84f12a1a via NtApiDotNet + PPID spoof via elevated taskmgr. UACME #41 family. VT 8/77 — the detection-gap hero of this investigation. Kaspersky HEUR:Exploit.MSIL.Inpat.gen is the most specific signature. Any host with this hash = this builder."
       },
       {
-        "hash": "58592e4b16f28cbcca420ab96f9303f71ba0062260a6eb71ebf0b1e34f3ca3d7",
+        "value": "58592e4b16f28cbcca420ab96f9303f71ba0062260a6eb71ebf0b1e34f3ca3d7",
         "filename": "myfile chunk 0 (decrypted)",
         "confidence": "DEFINITE",
         "context": "Perun's Fart ntdll unhook stub (myfile build) — .NET x86, 32,768 bytes. Same builder template as mymain chunk 0, different build artifact."
       },
       {
-        "hash": "4b4418928f1b445d555ded02a34ff3f378809d5aeb9da10649cc3562eaa2e5c0",
+        "value": "4b4418928f1b445d555ded02a34ff3f378809d5aeb9da10649cc3562eaa2e5c0",
         "filename": "myfile chunk 1 (decrypted)",
         "confidence": "DEFINITE",
         "context": "Nested crypter shell (myfile build) — .NET x86, 1,045,504 bytes. Executes inner AES-ECB → XOR → GZip pipeline to Assembly.Load Stage-4."
       },
       {
-        "hash": "008d097e1fcb21be25a99d435f76e2728fe5bcf90a0b7882899d61334a82f119",
+        "value": "008d097e1fcb21be25a99d435f76e2728fe5bcf90a0b7882899d61334a82f119",
         "filename": "myfile chunk 1 inner resource ciphertext",
         "confidence": "HIGH",
         "context": "1,025,424 bytes extracted from resource CXkfzafq...EHdigjZ"
       },
       {
-        "hash": "5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9",
+        "value": "5b0f529d2834ddb678a309954476a113b1d77ea19bd2b30d299ceee6b06d55b9",
         "filename": "myfile Stage-4 (decrypted)",
         "confidence": "DEFINITE",
         "context": "Persistence installer + Stage-5 loader (myfile build). .NET x86, 1,082,880 bytes, assembly mmZsNTboIPHyckaNPhEDqCUpPiUHq. Functionally equivalent to mymain Stage-4. Same cross-build mutex GUID."
       },
       {
-        "hash": "e452de35020f6f9dc818a13e299c15893c61b3c98d7883514c6ecede6cd136a3",
+        "value": "e452de35020f6f9dc818a13e299c15893c61b3c98d7883514c6ecede6cd136a3",
         "filename": "myfile Stage-5a ciphertext",
         "confidence": "HIGH",
         "context": "11,856 bytes (byte-exact size match to mymain Stage-5a — rebuilt per campaign)"
       },
       {
-        "hash": "13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c",
+        "value": "13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c",
         "filename": "myfile Stage-5a (decrypted) — Chaos/TorBrowserTor ransomware (myfile build)",
         "confidence": "DEFINITE",
         "context": "REBUILT PER-CAMPAIGN. 25,088 bytes .NET x86 (same size as mymain Stage-5a, different hash). Assembly name fudkk. Rotated config: spreadName='Recieve please.exe' (typo), processName='projectxx.exe', new RSA-2048 keypair. Unchanged: BTC wallets, Telegram, file extension, namespace. Source-code-level structural identity confirmed via grep-based dnSpy diff (session 12) — same exact source tree, only config field values rotate."
       },
       {
-        "hash": "ad8b5fc7533eefc16ca6e5e52c231abce1c87b9a01c290ec16f9b39a7778fbc2",
+        "value": "ad8b5fc7533eefc16ca6e5e52c231abce1c87b9a01c290ec16f9b39a7778fbc2",
         "filename": "myfile Stage-5b ciphertext",
         "confidence": "HIGH",
         "context": "983,872 bytes (byte-exact size match to mymain Stage-5b — decrypts to the SAME byte-identical UAC bypass PE da302511...)"
       },
       {
-        "hash": "165f4f41542937bc61aa09e5d3c5c3d81e120e11c4a1bf24b461b0a81f18de9e",
+        "value": "165f4f41542937bc61aa09e5d3c5c3d81e120e11c4a1bf24b461b0a81f18de9e",
         "filename": "mymain boot re-loader PS (decoded from scheduled task arg blob)",
         "confidence": "HIGH",
         "context": "4,423-char PowerShell script decoded from the 39,336-byte scheduled-task cmd.exe argument blob (XOR key 91). Structurally identical to outer PS1 loader — re-loads the entire crypter chain from HKLM\\Software\\Microsoft Defender\\Payload on every boot."
@@ -230,7 +230,7 @@
     ],
     "md5": [
       {
-        "hash": "76007508b8317dd76e31996c6adc875a",
+        "value": "76007508b8317dd76e31996c6adc875a",
         "filename": "myfile.exe",
         "confidence": "DEFINITE",
         "context": "Orcus RAT v7 Wardow crack — MD5 supplement"
@@ -238,7 +238,7 @@
     ],
     "sha1": [
       {
-        "hash": "1e68314f5a42897cea61456add6ffdd6048a9c99",
+        "value": "1e68314f5a42897cea61456add6ffdd6048a9c99",
         "filename": "myfile.exe",
         "confidence": "DEFINITE",
         "context": "Orcus RAT v7 Wardow crack — SHA1 supplement"

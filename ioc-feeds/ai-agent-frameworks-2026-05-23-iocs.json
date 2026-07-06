@@ -10,173 +10,172 @@
     "notes": "Parent report covering 8 active operator cases + 5 novel TTPs + 2 demoted-with-rationale. IOCs grouped by case to preserve operator attribution. NO defanging in JSON per project convention (machine-readable for SIEM/EDR ingestion). Case 9 GHOST kit IOCs reflect Censys 2026-04-07 prior art + Hunters Ledger multi-customer / kit-author / supply-chain extensions."
   },
   "file_hashes": {
-    "md5": [
-      {
-        "value": "296a800564111b0bad9fe63faf4e63ba",
-        "filename": "libpam_cache.so",
-        "case": "9",
-        "context": "GHOST kit LD_PRELOAD libc-hook rootkit; byte-identical across operator-A (77.110.96.200) and operator-B (77.110.125.145) deployments",
-        "confidence": "DEFINITE",
-        "action": "BLOCK"
-      }
-    ],
-    "sha1": [],
     "sha256": [
       {
         "value": "58ef3f244dab408fac7117606843a3dbcfb0754b2032a5950e977bc1811c0313",
         "filename": "bot.sh",
+        "confidence": "DEFINITE",
         "case": "3",
         "context": "Rovodev/Pandora Mirai bot deployment script",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17",
         "filename": "pandora.sh",
+        "confidence": "DEFINITE",
         "case": "3",
         "context": "Pandora.sh HTTP:80 dropper - Mirai/Xbash family, VT 12/63; execution_parent for Naku.spc per VT",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "a24f5b066c6b2e1d4b64d8e2ae863f579281489fcd990d46fb4ece3c2fb397f0",
         "filename": "godmode/SKILL.md",
+        "confidence": "MODERATE",
         "case": "ecosystem",
         "context": "Hermes ecosystem godmode jailbreak skill",
-        "confidence": "MODERATE",
         "action": "MONITOR",
         "false_positive_risk": "Legitimate NousResearch Hermes installations may carry this file"
       },
       {
         "value": "3a10ce135b52753beda81368712decc49a83715d527e00660c19f69d1b4879da",
         "filename": "SOUL.md",
+        "confidence": "MODERATE",
         "case": "ecosystem",
         "context": "Default Hermes/OpenClaw persona template",
-        "confidence": "MODERATE",
         "action": "MONITOR",
         "false_positive_risk": "Legitimate Hermes/OpenClaw installations carry this file by default; only malicious when combined with offensive tooling"
       },
       {
         "value": "f09aaa0fe090b5d0d43dc1724bf6e4167e1593b91bd249d7a58efc8a08c41e94",
         "filename": "bundled_manifest",
+        "confidence": "MODERATE",
         "case": "ecosystem",
         "context": "Hermes 87-skill bundled manifest",
-        "confidence": "MODERATE",
         "action": "MONITOR",
         "false_positive_risk": "Default Hermes bundle; only malicious when combined with offensive tooling"
       },
       {
         "value": "5305c7fc5dbae5c7630984ea0a00568594e4fbb84eca68ab6a05aef97c2e9e03",
         "filename": "stealth.ps1",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "Sliver-derivative C2 loader; VT 16/62; Microsoft Trojan:Script/Wacatac.B!ml; Kaspersky UDS:Trojan-Downloader.VBS.Agent; Symantec ISB.Downloader!gen412; process hollowing + AMSI/ETW bypass",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "2fd960f0ce8b9eb86b37d7389599df080bc831b397f3aaaf212b85278039c2ec",
         "filename": "launcher_combined.ps1",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "Sliver-derivative Start-Job orchestrator for screencap + keylogger",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "f3c7cde94261f6664891357b399198a73b9741a7a435527807dca5b3bb86e5f0",
         "filename": "screencap_v11.ps1",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "Sliver-derivative screencap client; streams to operator backend on TCP/9093",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "7112cd222d1c90fa18fc4f5520800a44891ad5770bdda71772d471377d66b1ee",
         "filename": "keylogger.ps1",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "Sliver-derivative keylogger; GetAsyncKeyState polling, batches POST to http://5.230.201.54/api/v/keylog",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "518e957c198aceb3b99e8863e311f48aa52a552c195a71822bd601810f337068",
         "filename": "kriminal_crypter.py",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "PyInstaller-stub crypter; class SliverCrypter; Fernet+zlib+b64; drops decrypted PE to %TEMP%\\svchost_upd.exe via CREATE_NO_WINDOW",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "7033c45472d358e48e333839e680509ee42d9349bc389d747a424ba74315939e",
         "filename": "encrypt_implant.py",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "Sliver-derivative primary implant encryptor; freshly generated Fernet key per run",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "5de806617a6d7949a547076d4eb304e6f695cfcac3860bf4c1d5838026ac871f",
         "filename": "test_decrypt.py",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "Sliver-derivative round-trip CI verifier; operator-side software engineering discipline indicator",
-        "confidence": "DEFINITE",
         "action": "MONITOR"
       },
       {
         "value": "d55e488cb7af11ab252cfacbfeb2c9d30289d371d9b54af85466e8814f25ca02",
         "filename": "loader_v29.ps1",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "Sliver loader iteration v29; 6671 bytes, 164 lines",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "2e07f091d401c1f2267537a2f7c2cb5f68a1c1d994abfc87270dcdf38e8f84bb",
         "filename": "ncrypt_load.ps1",
+        "confidence": "DEFINITE",
         "case": "10",
         "context": "Sliver-derivative obfuscated single-line loader; 13328 bytes",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301",
         "filename": "libpam_cache.so",
+        "confidence": "DEFINITE",
         "case": "9",
         "context": "GHOST kit LD_PRELOAD libc-hook rootkit (ELF64); byte-identical across operator-A and operator-B deployments; VT 0/0 NEVER SCANNED by any AV; 27 hide-strings + 9 hide-ports; hooks readdir/readdir64/fopen/fopen64",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "edafde0d33ff1a169c0c4eeaeec12d1759818c7cf4950fcee91c687e811e6cff",
         "filename": "libpam_cache.c",
+        "confidence": "DEFINITE",
         "case": "9",
         "context": "GHOST kit LD_PRELOAD rootkit C source (98 lines); dense single-character-identifier hand-written style",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "0c748b9e8bc6b5b4fe989df67655f3301d28ef81617b9cbe8e0f6a19d4f9b657",
         "filename": "dbus-session-monitor",
+        "confidence": "DEFINITE",
         "case": "9",
         "context": "XMrig miner disguised as dbus-session-monitor (Vova75Rus/miner GitHub repo); VT 39/65 with 5 YARA-rule hits confirming family",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "23c3719c7f949d6074fd3505928116df52de0e95e18a0a9e8c966b276b08e4ee",
         "filename": "gnome-shell-ext-updater",
+        "confidence": "DEFINITE",
         "case": "9",
         "context": "lolMiner GPU miner disguised as gnome-shell-ext-updater (Vova75Rus/miner GitHub repo); VT 23/64; sandbox classifies as XMrig",
-        "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "64afc3b3000000000000000000000000000000000000000000000000000000ff",
         "filename": "Naku.arm",
+        "confidence": "HIGH",
         "case": "3",
         "context": "Mirai.AW!xp ARM variant, VT 43/66 (sha256 truncated to prefix in source notes - placeholder for full value; mark as RESEARCH and confirm via VT before publishing)",
-        "confidence": "HIGH",
         "action": "BLOCK",
         "false_positive_risk": "Hash value is a prefix-padded placeholder; full SHA256 must be confirmed from Phase 9 notes before SIEM ingestion"
+      }
+    ],
+    "md5": [
+      {
+        "value": "296a800564111b0bad9fe63faf4e63ba",
+        "filename": "libpam_cache.so",
+        "confidence": "DEFINITE",
+        "case": "9",
+        "context": "GHOST kit LD_PRELOAD libc-hook rootkit; byte-identical across operator-A (77.110.96.200) and operator-B (77.110.125.145) deployments",
+        "action": "BLOCK"
       }
     ]
   },

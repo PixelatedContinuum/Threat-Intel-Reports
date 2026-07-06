@@ -1,4 +1,14 @@
 {
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "f7c4710fd67b0d4639e401180f44324c8c1b74ffe41789765059395289d99e20"
+      },
+      {
+        "value": "0d2803fdf1b1db767f7b1f5e06cfd0dd134eac4035c22661500e7f1ee7695320"
+      }
+    ]
+  },
   "IOCs": {
     "Infrastructure": [
       "185.38.150.7:9999",
@@ -29,10 +39,6 @@
       "main_mpsl",
       "/tmp/bn"
     ],
-    "Hashes": [
-      "f7c4710fd67b0d4639e401180f44324c8c1b74ffe41789765059395289d99e20",
-      "0d2803fdf1b1db767f7b1f5e06cfd0dd134eac4035c22661500e7f1ee7695320"
-    ],
     "Commands": [
       "adj_time_year",
       "curl",
@@ -47,5 +53,5 @@
       "admin:123456",
       "root"
     ]
-    }
+  }
 }

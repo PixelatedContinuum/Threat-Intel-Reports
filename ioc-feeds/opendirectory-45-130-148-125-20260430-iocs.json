@@ -16,184 +16,184 @@
       "static_since_discovery_hours": 80
     }
   },
-  "file_indicators": {
+  "file_hashes": {
     "sha256": [
       {
-        "hash": "358edb5d7e3e38c2da0a2ef323a281283aa96d47a8649014d114923b06866c12",
+        "value": "358edb5d7e3e38c2da0a2ef323a281283aa96d47a8649014d114923b06866c12",
         "filename": "agent.x64.dll",
         "confidence": "HIGH",
         "context": "AdaptixC2 Windows beacon, DLL form (production cluster, build counter 5). MinGW-w64 GCC built 2026-04-23 20:34:32 UTC. VT labels: Elastic Windows_Trojan_Adaptix_b2cda978, Kaspersky UDS:Backdoor.Win64.AdaptixC2.a, Microsoft Backdoor:Win64/AdaptixC2.MKB!MTB. 30/71 malicious detections."
       },
       {
-        "hash": "e55fd33ba5316622c42021f39c246c9055acaeca180779816a44b93454513c01",
+        "value": "e55fd33ba5316622c42021f39c246c9055acaeca180779816a44b93454513c01",
         "filename": "agent.x64.exe",
         "confidence": "HIGH",
         "context": "AdaptixC2 Windows beacon, EXE form sibling of cluster (1 second earlier compile). Same source as agent.x64.dll."
       },
       {
-        "hash": "5f10b9b68fcc2e3a15ee5b7dd996f2fadf5a1b65c7c73120abb6ec315c38d756",
+        "value": "5f10b9b68fcc2e3a15ee5b7dd996f2fadf5a1b65c7c73120abb6ec315c38d756",
         "filename": "msupdate.dll",
         "confidence": "HIGH",
         "context": "AdaptixC2 Windows beacon DLL renamed for sideload. Identical imphash, size, and timestamp to agent.x64.dll; differs by 1 byte in .edata from rename. Sideload candidate impersonating Microsoft Update DLL surface."
       },
       {
-        "hash": "5bc6603e47ddaea79b8050ea1c076d9d9c2d06a9f350f698d5147fbbbe4e7bac",
+        "value": "5bc6603e47ddaea79b8050ea1c076d9d9c2d06a9f350f698d5147fbbbe4e7bac",
         "filename": "embedded_dll.bin",
         "confidence": "HIGH",
         "context": "AdaptixC2 Windows beacon (DLL form, dev build, build counter 4). Carved from beacon.ps1's $sr blob at offset 0x3FF after 1023-byte MinGW RDI bootstrap. Compiled 2026-04-23 07:39:46 UTC — 13 hours earlier than production cluster. Demonstrates same-day operator iteration cycle."
       },
       {
-        "hash": "b4ffd7ca8f5505fd7b71882c67712e896c9d170a3b3b581baba78ee5d1c2b858",
+        "value": "b4ffd7ca8f5505fd7b71882c67712e896c9d170a3b3b581baba78ee5d1c2b858",
         "filename": "beacon.ps1",
         "confidence": "HIGH",
         "context": "Operator-written PowerShell loader. 5-block logic: AMSI bypass (string-concat amsi+Con+text + reflection on *iUtils) + Reflection.Assembly.Load of injector.dll ($dr) + base64+XOR-0xA7 decode of beacon shellcode ($sr) + injection into first explorer.exe via [SI]::Inject. 256 KB / 52 lines. ONE OF THE TWO VERIFIED CUSTOM CODE PIECES."
       },
       {
-        "hash": "5ea265ad3e6429cd2e8d9831360f7e2be9b8ba5a5b32a4a60c5c956a3f8fb285",
+        "value": "5ea265ad3e6429cd2e8d9831360f7e2be9b8ba5a5b32a4a60c5c956a3f8fb285",
         "filename": "injector.dll",
         "confidence": "HIGH",
         "context": "Operator-written .NET v4.7.2 PE injector (carved from beacon.ps1 $dr blob). 5,120 B. Class name 'SI' with static method Inject(uint32 pid, byte[] sc). Linux-built (PDB path /tmp/si_build/obj/Release/net472/si_build.pdb). W^X-aware classic CRT process injection (RW alloc → write → flip to RX, NOT RWX). ONE OF THE TWO VERIFIED CUSTOM CODE PIECES. AdaptixC2 ships NO stock .NET injector — confirmed operator-authored."
       },
       {
-        "hash": "20fcb557c7c4ada8173576b56aadc8f917c668b9e4b2aaf05fb90375147fd27f",
+        "value": "20fcb557c7c4ada8173576b56aadc8f917c668b9e4b2aaf05fb90375147fd27f",
         "filename": "beacon_shellcode.bin",
         "confidence": "HIGH",
         "context": "XOR-0xA7-decoded beacon shellcode (intermediate carved artifact). 185,855 B. First 1023 bytes are MinGW-w64 GCC RDI bootstrap; MZ at offset 0x3FF begins the embedded AdaptixC2 dev-build DLL."
       },
       {
-        "hash": "f68507d88b007817901ffe3537a2d3935de53344ddfb6f0838d4141e3c02e07d",
+        "value": "f68507d88b007817901ffe3537a2d3935de53344ddfb6f0838d4141e3c02e07d",
         "filename": "gopher.x64.exe",
         "confidence": "HIGH",
         "context": "AdaptixC2 Gopher Go agent (Windows variant). Pure Go 1.25.4, CGO_ENABLED=0, -trimpath set. 1,332 user functions. Full Cobalt Strike BOF execution runtime in Go (gopher/bof/{binutil,boffer,coffer,defwin,memory}). MessagePack C2 protocol. VCS rev a4b80bf370f704d6843e69433bfb5c06274f57df at 2026-03-04T20:36:06Z, vcs.modified=true. NOT custom — open-source AdaptixC2 framework component (Linux sibling identified by Kaspersky as AdaptixGopher)."
       },
       {
-        "hash": "4b41f36f82db6da8767a0a1c2997c8242d80b2d10a8f1d28c252a9306ec152b5",
+        "value": "4b41f36f82db6da8767a0a1c2997c8242d80b2d10a8f1d28c252a9306ec152b5",
         "filename": "agent.exe",
         "confidence": "HIGH",
         "context": "Ligolo-ng v0.8.3 stock upstream commodity reverse-tunneling agent (commit 913fe64e088d5db2185d392965bf4cd3dd1d9495). Go 1.24.0, goreleaser-built. 7.30 MB. Anticipated lateral-pivot tool."
       },
       {
-        "hash": "5db5e7f655c4ee94411df8110d1b6d02bb15574ac199fa7a553ce6c3cb25bf03",
+        "value": "5db5e7f655c4ee94411df8110d1b6d02bb15574ac199fa7a553ce6c3cb25bf03",
         "filename": "chisel.exe",
         "confidence": "HIGH",
         "context": "jpillora/chisel commodity Go reverse-tunneling tool. Go 1.26.1. 10.93 MB. Second pivot tool alongside Ligolo (operator-bundled redundancy)."
       },
       {
-        "hash": "144247b20c1f2aaf9ad5bedd1672a7ebd6041c9237d8931d1822e27c0562420b",
+        "value": "144247b20c1f2aaf9ad5bedd1672a7ebd6041c9237d8931d1822e27c0562420b",
         "filename": "amsi_bypass.ps1",
         "confidence": "HIGH",
         "context": "Small PowerShell AMSI bypass (177 B, 2 lines). Operator-bundled."
       },
       {
-        "hash": "fd9e3ad797022df67a406e1bb1bf1db57e2a14f66c668e22104a16bc735efc4e",
+        "value": "fd9e3ad797022df67a406e1bb1bf1db57e2a14f66c668e22104a16bc735efc4e",
         "filename": "download_exec.ps1",
         "confidence": "HIGH",
         "context": "Uncustomized PowerShell template (203 B, 3 lines) containing literal placeholder URL 'http://IP/tool.exe' — operator never customized this; bundled as future re-use template. Operator-profile signal: opportunistic kit collector."
       },
       {
-        "hash": "ec54e9e5802423d17f1390a25a811b7779c33d8e7ad942cd731dfd366998eccb",
+        "value": "ec54e9e5802423d17f1390a25a811b7779c33d8e7ad942cd731dfd366998eccb",
         "filename": "ADRecon.ps1",
         "confidence": "HIGH",
         "context": "Commodity AD reconnaissance PowerShell."
       },
       {
-        "hash": "af5c3a5f68323ac68b258dae37c20e48f594118d08479f92a78bd54d26debd9a",
+        "value": "af5c3a5f68323ac68b258dae37c20e48f594118d08479f92a78bd54d26debd9a",
         "filename": "Certify.exe",
         "confidence": "HIGH",
         "context": "Ghostpack/SpecterOps commodity AD CS abuse tool, .NET v4."
       },
       {
-        "hash": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
+        "value": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
         "filename": "GodPotato.exe",
         "confidence": "HIGH",
         "context": "Commodity Windows local privilege escalation tool, .NET v4."
       },
       {
-        "hash": "61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
+        "value": "61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
         "filename": "mimikatz.exe",
         "confidence": "HIGH",
         "context": "gentilkiwi mimikatz v2.2.0 commodity credential dumper. ProductName='mimikatz', CompanyName='gentilkiwi (Benjamin DELPY)' — confirms unmodified upstream."
       },
       {
-        "hash": "e8fbec25db4f9d95b5e8f41cca51a4b32be8674a4dea7a45b6f7aeb22dbc38db",
+        "value": "e8fbec25db4f9d95b5e8f41cca51a4b32be8674a4dea7a45b6f7aeb22dbc38db",
         "filename": "nc.exe",
         "confidence": "HIGH",
         "context": "Classic netcat (variant 1)."
       },
       {
-        "hash": "316f9165ba23b968d33966cd2cef70b10b9e5973117b3864b51048292bbb6742",
+        "value": "316f9165ba23b968d33966cd2cef70b10b9e5973117b3864b51048292bbb6742",
         "filename": "nc.exe",
         "confidence": "HIGH",
         "context": "Classic netcat (variant 2 — different binary)."
       },
       {
-        "hash": "507e8666c239397561c58609f7ea569c9c49ddbb900cd260e7e42b02d03cfd87",
+        "value": "507e8666c239397561c58609f7ea569c9c49ddbb900cd260e7e42b02d03cfd87",
         "filename": "PowerView.ps1",
         "confidence": "HIGH",
         "context": "Commodity AD enumeration PowerShell. Triggers MALWARE_RULES: spyeye YARA false-positive — DETECTION-ENGINEER MUST FILTER (PowerView is NOT SpyEye)."
       },
       {
-        "hash": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
+        "value": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
         "filename": "PrintSpoofer.exe",
         "confidence": "HIGH",
         "context": "Commodity Windows print-spooler local privilege escalation tool."
       },
       {
-        "hash": "1bfbefa4ff4d0df3ee0090b5079cf84ed2e8d5377ba5b7a30afd88367d57b9ff",
+        "value": "1bfbefa4ff4d0df3ee0090b5079cf84ed2e8d5377ba5b7a30afd88367d57b9ff",
         "filename": "Rubeus.exe",
         "confidence": "HIGH",
         "context": "Ghostpack commodity Kerberos abuse tool. YARA: HKTL_NET_GUID_Rubeus."
       },
       {
-        "hash": "29955ba1e2193047ee5f4561445f81e218ae4de1a295f8fd296ad536bf381f17",
+        "value": "29955ba1e2193047ee5f4561445f81e218ae4de1a295f8fd296ad536bf381f17",
         "filename": "RunasCs.exe",
         "confidence": "HIGH",
         "context": "Commodity credentialed-process-spawn tool. YARA: HKTL_NET_NAME_RunasCs."
       },
       {
-        "hash": "cb5a07900a7a01a7619e3391c0a2b59f81a8d8784c66698bb02263faef9311a1",
+        "value": "cb5a07900a7a01a7619e3391c0a2b59f81a8d8784c66698bb02263faef9311a1",
         "filename": "Seatbelt.exe",
         "confidence": "HIGH",
         "context": "Ghostpack commodity situational-awareness tool. YARA: HKTL_NET_GUID_SharpPack."
       },
       {
-        "hash": "277ff28006eac42319597abb10ae51541b5e6b06884c135a111416c833144973",
+        "value": "277ff28006eac42319597abb10ae51541b5e6b06884c135a111416c833144973",
         "filename": "SharpDPAPI.exe",
         "confidence": "HIGH",
         "context": "Ghostpack commodity DPAPI credential decryption tool."
       },
       {
-        "hash": "f091c63809e27e7d2ef3c3506f5c59563817a7876b737e3995540b051b225e51",
+        "value": "f091c63809e27e7d2ef3c3506f5c59563817a7876b737e3995540b051b225e51",
         "filename": "SharpHound.exe",
         "confidence": "MODERATE",
         "context": "PRELIMINARY — heavily packed SharpHound variant (1.35 MB, 86% high-entropy chunks, overall entropy 7.91). Signal of operator-applied AV-evasion to high-signature commodity tool. Plausible: ConfuserEx / .NET Reactor / Costura.Fody / Eazfuscator obfuscator. Confirmation requires lab-VM de4dot deobfuscation."
       },
       {
-        "hash": "f887e04ce6c43da608cfcb45e51398305bb3912ee9d88ac7569c917e245d404a",
+        "value": "f887e04ce6c43da608cfcb45e51398305bb3912ee9d88ac7569c917e245d404a",
         "filename": "SharpHound.ps1",
         "confidence": "HIGH",
         "context": "Commodity SharpHound PowerShell ingestor (stock variant)."
       },
       {
-        "hash": "8b5c0ec2718474c6959d39d36113efd01e42e1776103d2a90b3bedb4c6a091bb",
+        "value": "8b5c0ec2718474c6959d39d36113efd01e42e1776103d2a90b3bedb4c6a091bb",
         "filename": "SharpSecDump.exe",
         "confidence": "HIGH",
         "context": "Commodity SharpSecDump credential extraction tool. Was triage type=unknown (not pe) at preprocess time but VT-uploaded."
       },
       {
-        "hash": "ce709770ac09b79ed9894542a140e76a897bf897bd27855e11cc0ece7194114f",
+        "value": "ce709770ac09b79ed9894542a140e76a897bf897bd27855e11cc0ece7194114f",
         "filename": "winpeas.exe",
         "confidence": "HIGH",
         "context": "Commodity Windows enumeration / privilege escalation discovery tool."
       },
       {
-        "hash": "d9be165fc7009fc273039790375bf2447ebab1b7d73c88b064e1be1df43673b6",
+        "value": "d9be165fc7009fc273039790375bf2447ebab1b7d73c88b064e1be1df43673b6",
         "filename": "lazagne.exe",
         "confidence": "HIGH",
         "context": "lazagne 324 KB stock PyInstaller-built variant. Vanilla credential extractor."
       },
       {
-        "hash": "dc06d62ee95062e714f2566c95b8edaabfd387023b1bf98a09078b84007d5268",
+        "value": "dc06d62ee95062e714f2566c95b8edaabfd387023b1bf98a09078b84007d5268",
         "filename": "lazagne.exe",
         "confidence": "MODERATE",
         "context": "PRELIMINARY — heavily packed lazagne 10 MB variant (10,136,093 B; 31× larger than stock; 97% high-entropy chunks; YARA IsPacked + HasOverlay + anti_dbg + DebuggerException__SetConsoleCtrl). Plausible UPX-on-PyInstaller wrapping or stock newer lazagne v2.x with --collect-all + UPX. Pairs with SharpHound finding — selective operator AV-evasion tradecraft on most-signatured commodity tools. Confirmation requires lab-VM upx -t / upx -d."
@@ -201,28 +201,28 @@
     ],
     "imphashes": [
       {
-        "hash": "4cfec38bf3c1557ad25faba737f8e275",
+        "value": "4cfec38bf3c1557ad25faba737f8e275",
+        "confidence": "HIGH",
         "associated_files": [
           "agent.x64.dll",
           "msupdate.dll"
         ],
-        "confidence": "HIGH",
         "context": "Cluster imphash — AdaptixC2 Windows beacon DLL form, production cluster (build counter 5)"
       },
       {
-        "hash": "63cb3b95faad6b28fcce52a6aa698ff2",
+        "value": "63cb3b95faad6b28fcce52a6aa698ff2",
+        "confidence": "HIGH",
         "associated_files": [
           "agent.x64.exe"
         ],
-        "confidence": "HIGH",
         "context": "AdaptixC2 Windows beacon EXE-form sibling imphash"
       },
       {
-        "hash": "f67fc0b1a6e0c3b07adb524e2db8774f",
+        "value": "f67fc0b1a6e0c3b07adb524e2db8774f",
+        "confidence": "HIGH",
         "associated_files": [
           "embedded_dll.bin"
         ],
-        "confidence": "HIGH",
         "context": "AdaptixC2 Windows beacon dev-build (build counter 4) imphash — embedded in beacon.ps1 for delivery"
       }
     ],

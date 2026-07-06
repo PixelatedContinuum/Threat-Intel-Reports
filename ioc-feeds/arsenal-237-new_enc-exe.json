@@ -7,20 +7,31 @@
     "threat_level": "CRITICAL"
   },
   "file_hashes": {
-    "samples": [
+    "sha256": [
       {
+        "value": "90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2",
         "filename": "new_enc.exe",
-        "file_type": "PE64 (Portable Executable 64-bit)",
+        "type": "PE64 (Portable Executable 64-bit)",
+        "confidence": "CONFIRMED",
         "file_size": 1952256,
         "architecture": "x64",
         "compiler": "Rust (cargo toolchain)",
-        "hashes": {
-          "md5": "a16ba61114fa5a40afce54459bbff21e",
-          "sha1": "2c01cefba27c4d3fcb3b450cb8e625e89bc54363",
-          "sha256": "90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2"
-        },
-        "confidence": "CONFIRMED",
-        "ioc_type": ["file_hash", "executable"]
+        "ioc_type": [
+          "file_hash",
+          "executable"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "a16ba61114fa5a40afce54459bbff21e",
+        "filename": "new_enc.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "2c01cefba27c4d3fcb3b450cb8e625e89bc54363",
+        "filename": "new_enc.exe"
       }
     ]
   },
@@ -68,7 +79,10 @@
         ],
         "significance": "Manual operator deployment with targeted encryption capabilities",
         "confidence": "CONFIRMED",
-        "ioc_type": ["process_execution", "command_line_argument"]
+        "ioc_type": [
+          "process_execution",
+          "command_line_argument"
+        ]
       },
       {
         "process_name": "vssadmin.exe",
@@ -76,7 +90,10 @@
         "parent_process": "new_enc.exe OR cmd.exe",
         "significance": "Volume Shadow Copy deletion - Anti-recovery mechanism",
         "confidence": "CONFIRMED",
-        "ioc_type": ["process_execution", "anti_recovery_action"],
+        "ioc_type": [
+          "process_execution",
+          "anti_recovery_action"
+        ],
         "severity": "CRITICAL"
       },
       {
@@ -85,7 +102,10 @@
         "parent_process": "new_enc.exe",
         "significance": "Scheduled task creation for persistent ransom note display",
         "confidence": "CONFIRMED",
-        "ioc_type": ["process_execution", "persistence_mechanism"]
+        "ioc_type": [
+          "process_execution",
+          "persistence_mechanism"
+        ]
       }
     ]
   },
@@ -96,7 +116,10 @@
         "purpose": "Persistent display of ransom note on system login",
         "significance": "Ransomware persistence mechanism",
         "confidence": "CONFIRMED",
-        "ioc_type": ["scheduled_task", "persistence"],
+        "ioc_type": [
+          "scheduled_task",
+          "persistence"
+        ],
         "detection_method": "Registry: HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\RustRansomNoteTask"
       }
     ]
@@ -249,8 +272,21 @@
     "vm_detection_registry": [
       {
         "registry_key": "HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System\\BIOS",
-        "values_checked": ["SystemManufacturer", "SystemProductName", "BIOSVendor"],
-        "vm_indicators": ["QEMU", "VirtualBox", "VMware", "Hyper-V", "Citrix", "KVM", "Xen", "Parallels"],
+        "values_checked": [
+          "SystemManufacturer",
+          "SystemProductName",
+          "BIOSVendor"
+        ],
+        "vm_indicators": [
+          "QEMU",
+          "VirtualBox",
+          "VMware",
+          "Hyper-V",
+          "Citrix",
+          "KVM",
+          "Xen",
+          "Parallels"
+        ],
         "mitre_technique": "T1497.001",
         "confidence": "CONFIRMED",
         "ioc_type": "anti_analysis",
@@ -259,7 +295,15 @@
     ],
     "vm_detection_strings": [
       {
-        "string_patterns": ["VBOX", "VMWARE", "VIRTUAL", "QEMU", "XEN", "PARALLELS", "HYPERV"],
+        "string_patterns": [
+          "VBOX",
+          "VMWARE",
+          "VIRTUAL",
+          "QEMU",
+          "XEN",
+          "PARALLELS",
+          "HYPERV"
+        ],
         "method": "String pattern matching in system information",
         "mitre_technique": "T1497.001",
         "confidence": "CONFIRMED",
@@ -268,7 +312,16 @@
     ],
     "sandbox_detection": [
       {
-        "detection_pattern": ["sandbox", "virus", "malware", "test", "sample", "john doe", "cuckoo", "analysis"],
+        "detection_pattern": [
+          "sandbox",
+          "virus",
+          "malware",
+          "test",
+          "sample",
+          "john doe",
+          "cuckoo",
+          "analysis"
+        ],
         "target": "Username and Computer Name environment variables",
         "mitre_technique": "T1497.002",
         "confidence": "CONFIRMED",
@@ -447,10 +500,29 @@
       {
         "behavior": "Directory exclusion from encryption",
         "excluded_directories": [
-          "$recycle.bin", "config.msi", "$windows.~bt", "$windows.~ws", "windows",
-          "appdata", "application data", "boot", "google", "mozilla", "program files",
-          "program files (x86)", "programdata", "system volume information", "tor browser",
-          "windows.old", "intel", "msocache", "perflogs", "x64dbg", "public", "all users", "default"
+          "$recycle.bin",
+          "config.msi",
+          "$windows.~bt",
+          "$windows.~ws",
+          "windows",
+          "appdata",
+          "application data",
+          "boot",
+          "google",
+          "mozilla",
+          "program files",
+          "program files (x86)",
+          "programdata",
+          "system volume information",
+          "tor browser",
+          "windows.old",
+          "intel",
+          "msocache",
+          "perflogs",
+          "x64dbg",
+          "public",
+          "all users",
+          "default"
         ],
         "purpose": "Preserve system operability after encryption",
         "confidence": "CONFIRMED",
@@ -459,9 +531,35 @@
       {
         "behavior": "File extension exclusion from encryption",
         "excluded_extensions": [
-          "386", "adv", "ani", "bat", "bin", "cab", "cmd", "com", "cpl", "cur",
-          "dll", "drv", "exe", "hlp", "ico", "ldf", "lnk", "mod", "msc", "msp",
-          "msi", "ocx", "ps1", "scr", "sys", "theme", "wpx", "lock", "key"
+          "386",
+          "adv",
+          "ani",
+          "bat",
+          "bin",
+          "cab",
+          "cmd",
+          "com",
+          "cpl",
+          "cur",
+          "dll",
+          "drv",
+          "exe",
+          "hlp",
+          "ico",
+          "ldf",
+          "lnk",
+          "mod",
+          "msc",
+          "msp",
+          "msi",
+          "ocx",
+          "ps1",
+          "scr",
+          "sys",
+          "theme",
+          "wpx",
+          "lock",
+          "key"
         ],
         "purpose": "Prevent encryption of system executables",
         "confidence": "CONFIRMED",

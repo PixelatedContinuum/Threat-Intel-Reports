@@ -12,26 +12,24 @@
     "operator_type": "Named-brand commercial fraud operation (operator self-identifies 'Inkognito' as parent brand). Not a malware family — this is a web-application + commercial VPN + brand-impersonation phishing infrastructure."
   },
   "file_hashes": {
-    "md5": [],
-    "sha1": [],
     "sha256": [
       {
         "value": "8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978",
-        "context": "INK VPN main JavaScript bundle at inkconnect.ru/assets/index-CoeWw2zM.js (261,587 bytes) — Vite/React SPA frontend. Strong code-level operator IOC. Not on VirusTotal as of 2026-05-07 — first public capture.",
+        "type": "JavaScript (Vite/React production bundle)",
         "confidence": "HIGH",
-        "file_type": "JavaScript (Vite/React production bundle)"
+        "context": "INK VPN main JavaScript bundle at inkconnect.ru/assets/index-CoeWw2zM.js (261,587 bytes) — Vite/React SPA frontend. Strong code-level operator IOC. Not on VirusTotal as of 2026-05-07 — first public capture."
       },
       {
         "value": "d1ae63c928fd07d51cf79c5165e4431765201ca04a2bee3c309dc00092c4de7c",
-        "context": "INK VPN brand logo PNG at inkconnect.ru/logo.png — hooded-figure-with-eye Inkognito brand identity. Searchable via Censys/Shodan favicon hash variants and screenshot similarity for cluster expansion.",
+        "type": "PNG (brand logo)",
         "confidence": "HIGH",
-        "file_type": "PNG (brand logo)"
+        "context": "INK VPN brand logo PNG at inkconnect.ru/logo.png — hooded-figure-with-eye Inkognito brand identity. Searchable via Censys/Shodan favicon hash variants and screenshot similarity for cluster expansion."
       },
       {
         "value": "53b3515fda56dbbd1f8071a9ef3dc3be80cb7994df22ce8afc2e79147e899b70",
-        "context": "INK VPN favicon SVG at inkconnect.ru/favicon.svg — operator brand-identity asset for browser-tab pivoting.",
+        "type": "SVG (favicon)",
         "confidence": "HIGH",
-        "file_type": "SVG (favicon)"
+        "context": "INK VPN favicon SVG at inkconnect.ru/favicon.svg — operator brand-identity asset for browser-tab pivoting."
       }
     ]
   },
@@ -555,32 +553,96 @@
     "tls_defensive_posture": "inklens.ru deliberately rejects non-browser TLS clients (tlsv1 alert internal error on curl/wget) — cipher restriction or TLS-fingerprinting controls allow real browsers only"
   },
   "registrar_diversification": {
-    "REGRU-RU": ["unloki.ru", "bikaf.ru", "inklens.ru", "inkconnect.ru"],
-    "TIMEWEB-RU": ["akredup.ru (LOW confidence)"],
-    "HOSTINGER": ["a-loader.site", "divar-irantop.shop (MODERATE confidence)"],
-    "Namecheap": ["vetcorbeanca.eu", "vagtec.eu", "petkovalegal.eu (June 2023 batch, 14-day window)"],
-    "Gandi (FR)": ["inklens.co.uk (apex chameleon decoy, jurisdiction laundering)"],
-    "Unstoppable Domains": ["evotoptan.com"],
-    "FE-RU": ["00000xtrading.ru"],
-    "DYNADOT": ["bigass.monster (re-registered 2025-10-21)"]
+    "REGRU-RU": [
+      "unloki.ru",
+      "bikaf.ru",
+      "inklens.ru",
+      "inkconnect.ru"
+    ],
+    "TIMEWEB-RU": [
+      "akredup.ru (LOW confidence)"
+    ],
+    "HOSTINGER": [
+      "a-loader.site",
+      "divar-irantop.shop (MODERATE confidence)"
+    ],
+    "Namecheap": [
+      "vetcorbeanca.eu",
+      "vagtec.eu",
+      "petkovalegal.eu (June 2023 batch, 14-day window)"
+    ],
+    "Gandi (FR)": [
+      "inklens.co.uk (apex chameleon decoy, jurisdiction laundering)"
+    ],
+    "Unstoppable Domains": [
+      "evotoptan.com"
+    ],
+    "FE-RU": [
+      "00000xtrading.ru"
+    ],
+    "DYNADOT": [
+      "bigass.monster (re-registered 2025-10-21)"
+    ]
   },
   "operator_timeline": {
     "confirmed_continuous_presence": "2023-06-08 → 2026-05-07 (~2 years 11 months)",
     "key_milestones": [
-      {"date": "2023-06-08", "event": "vetcorbeanca.eu first observed on Stark IP — earliest confirmed operator activity (BEC infrastructure)"},
-      {"date": "2023-08-31", "event": "unloki.ru registered (long-term VPN brand)"},
-      {"date": "2023-11-17", "event": "unloki.ru migrated to Stark Industries 193.46.56.182 (still there 2.5+ years later)"},
-      {"date": "2024-02-12", "event": "users.outline.unloki.ru Outline VPN deployed (censorship-circumvention service)"},
-      {"date": "2025-05-17", "event": "00000xtrading.ru EspoCRM back-office deployed on 185.221.196.118"},
-      {"date": "2026-02-22", "event": "bikaf.ru Bikaf VPN consumer brand launched"},
-      {"date": "2026-03-02", "event": "cryptone.bot CryptOne fake exchange registered"},
-      {"date": "2026-03-18", "event": "inklens.ru registered + Telegram @inkconnectvpn channel first post (coordinated brand launch)"},
-      {"date": "2026-03-19", "event": "inklens.co.uk apex chameleon decoy registered"},
-      {"date": "2026-04-02", "event": "Primary phishing host migrated U1host DE → Timeweb RU"},
-      {"date": "2026-04-06", "event": "fi1.inklens.co.uk back-office activated (30-hour overlap with 00000xtrading.ru)"},
-      {"date": "2026-04-07", "event": "00000xtrading.ru decommissioned with kittenx-404 tombstone"},
-      {"date": "2026-04-17", "event": "inkconnect.ru registered + INK VPN site live in 11 minutes (flagship brand launch)"},
-      {"date": "2026-05-04", "event": "inklens.co.uk apex cover changed GitHub Pages → AmazonS3"}
+      {
+        "date": "2023-06-08",
+        "event": "vetcorbeanca.eu first observed on Stark IP — earliest confirmed operator activity (BEC infrastructure)"
+      },
+      {
+        "date": "2023-08-31",
+        "event": "unloki.ru registered (long-term VPN brand)"
+      },
+      {
+        "date": "2023-11-17",
+        "event": "unloki.ru migrated to Stark Industries 193.46.56.182 (still there 2.5+ years later)"
+      },
+      {
+        "date": "2024-02-12",
+        "event": "users.outline.unloki.ru Outline VPN deployed (censorship-circumvention service)"
+      },
+      {
+        "date": "2025-05-17",
+        "event": "00000xtrading.ru EspoCRM back-office deployed on 185.221.196.118"
+      },
+      {
+        "date": "2026-02-22",
+        "event": "bikaf.ru Bikaf VPN consumer brand launched"
+      },
+      {
+        "date": "2026-03-02",
+        "event": "cryptone.bot CryptOne fake exchange registered"
+      },
+      {
+        "date": "2026-03-18",
+        "event": "inklens.ru registered + Telegram @inkconnectvpn channel first post (coordinated brand launch)"
+      },
+      {
+        "date": "2026-03-19",
+        "event": "inklens.co.uk apex chameleon decoy registered"
+      },
+      {
+        "date": "2026-04-02",
+        "event": "Primary phishing host migrated U1host DE → Timeweb RU"
+      },
+      {
+        "date": "2026-04-06",
+        "event": "fi1.inklens.co.uk back-office activated (30-hour overlap with 00000xtrading.ru)"
+      },
+      {
+        "date": "2026-04-07",
+        "event": "00000xtrading.ru decommissioned with kittenx-404 tombstone"
+      },
+      {
+        "date": "2026-04-17",
+        "event": "inkconnect.ru registered + INK VPN site live in 11 minutes (flagship brand launch)"
+      },
+      {
+        "date": "2026-05-04",
+        "event": "inklens.co.uk apex cover changed GitHub Pages → AmazonS3"
+      }
     ]
   },
   "vendor_detection_summary": {

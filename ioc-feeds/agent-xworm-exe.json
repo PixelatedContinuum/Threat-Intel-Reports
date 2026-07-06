@@ -9,21 +9,33 @@
   "discovery_date": "2026-01-05",
   "report_date": "2026-01-12",
   "file_hashes": {
-    "agent_xworm_exe": {
-      "sha256": "0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc",
-      "sha1": "0102782950619820bbcd60efca256c907403cfb0",
-      "md5": "9d963f85812fd02e382a48c41fc0387e",
-      "size": "16384",
-      "type": "PE32 executable (console) Intel 80386, .NET assembly",
-      "original_filename": "agent_xworm.exe",
-      "framework": ".NET Framework v4.0.30319",
-      "family": "XWorm RAT",
-      "yara_signatures": [
-        "Agent_Xworm_Specific_Hash",
-        "XWorm_RAT_Generic",
-        "XWorm_PowerShell_Recon_Commands"
-      ]
-    }
+    "sha256": [
+      {
+        "value": "0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc",
+        "filename": "agent_xworm.exe",
+        "type": "PE32 executable (console) Intel 80386, .NET assembly",
+        "size": "16384",
+        "framework": ".NET Framework v4.0.30319",
+        "family": "XWorm RAT",
+        "yara_signatures": [
+          "Agent_Xworm_Specific_Hash",
+          "XWorm_RAT_Generic",
+          "XWorm_PowerShell_Recon_Commands"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "9d963f85812fd02e382a48c41fc0387e",
+        "filename": "agent_xworm.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "0102782950619820bbcd60efca256c907403cfb0",
+        "filename": "agent_xworm.exe"
+      }
+    ]
   },
   "network_indicators": {
     "c2_infrastructure": {
@@ -107,7 +119,12 @@
   },
   "capabilities": {
     "system_reconnaissance": {
-      "techniques": ["T1082", "T1033", "T1087", "T1016"],
+      "techniques": [
+        "T1082",
+        "T1033",
+        "T1087",
+        "T1016"
+      ],
       "confidence": "CONFIRMED (CAPA analysis)",
       "information_collected": [
         "OS version, architecture, .NET runtime (T1082)",
@@ -148,7 +165,10 @@
       "mitigation": "MANDATORY credential rotation for all users on compromised systems"
     },
     "persistence": {
-      "techniques": ["T1547.001", "T1053.005"],
+      "techniques": [
+        "T1547.001",
+        "T1053.005"
+      ],
       "confidence": "HIGHLY LIKELY (XWorm family capability)",
       "mechanisms": [
         "Registry Run keys (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run)",
@@ -160,7 +180,11 @@
       "detection": "Monitor for startup folder modifications, registry Run key creation, scheduled task additions"
     },
     "defense_evasion": {
-      "techniques": ["T1564.003", "T1027", "T1562.001"],
+      "techniques": [
+        "T1564.003",
+        "T1027",
+        "T1562.001"
+      ],
       "confirmed": [
         "Hidden console window (ShowWindow API)",
         "Base64 encoding for C2 traffic"
@@ -252,15 +276,28 @@
     "common_secondary_payloads": {
       "rats": {
         "percentage": "60%+",
-        "families": ["AsyncRAT", "QuasarRAT", "DcRAT", "NjRAT"]
+        "families": [
+          "AsyncRAT",
+          "QuasarRAT",
+          "DcRAT",
+          "NjRAT"
+        ]
       },
       "ransomware": {
         "percentage": "25%",
-        "families": ["LockBit Black", "Conti", "Hive"]
+        "families": [
+          "LockBit Black",
+          "Conti",
+          "Hive"
+        ]
       },
       "infostealers": {
         "percentage": "15%",
-        "families": ["RedLine Stealer", "Raccoon Stealer", "Vidar"]
+        "families": [
+          "RedLine Stealer",
+          "Raccoon Stealer",
+          "Vidar"
+        ]
       }
     },
     "typical_attack_chain": [

@@ -4,28 +4,40 @@
   "severity": "CRITICAL",
   "confidence_level": "High",
   "file_hashes": {
-    "BdApiUtil64_sys": {
-      "md5": "ced47b89212f3260ebeb41682a4b95ec",
-      "sha1": "148c0cde4f2ef807aea77d7368f00f4c519f47ef",
-      "sha256": "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428",
-      "size": "116800 bytes (114 KB)",
-      "type": "PE64 kernel driver",
-      "original_filename": "BdApiUtil64.sys",
-      "family": "Arsenal-237 BYOVD Component",
-      "family_confidence": "CONFIRMED (100%)",
-      "original_purpose": "Baidu Antivirus kernel driver",
-      "weaponized_purpose": "Kernel-level defense evasion, security product termination, credential theft",
-      "digital_signature": {
-        "signer": "Baidu Online Network Technology (Beijing) Co., Ltd",
-        "issuer": "VeriSign Class 3 Code Signing 2010 CA",
-        "valid_from": "2012-04-24",
-        "valid_to": "2015-04-24",
-        "status": "EXPIRED (but still loadable on Windows)",
-        "thumbprint": "65439929B67973EB192D6FF243E6767ADF0834E4"
-      },
-      "pdb_path": "D:\\jenkins\\workspace\\bav_5.0_workspace\\BavOutput\\Pdb\\Release\\BdApiUtil64.pdb",
-      "version": "5.0.3.84333"
-    }
+    "sha256": [
+      {
+        "value": "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428",
+        "filename": "BdApiUtil64.sys",
+        "type": "PE64 kernel driver",
+        "size": "116800 bytes (114 KB)",
+        "family": "Arsenal-237 BYOVD Component",
+        "family_confidence": "CONFIRMED (100%)",
+        "original_purpose": "Baidu Antivirus kernel driver",
+        "weaponized_purpose": "Kernel-level defense evasion, security product termination, credential theft",
+        "digital_signature": {
+          "signer": "Baidu Online Network Technology (Beijing) Co., Ltd",
+          "issuer": "VeriSign Class 3 Code Signing 2010 CA",
+          "valid_from": "2012-04-24",
+          "valid_to": "2015-04-24",
+          "status": "EXPIRED (but still loadable on Windows)",
+          "thumbprint": "65439929B67973EB192D6FF243E6767ADF0834E4"
+        },
+        "pdb_path": "D:\\jenkins\\workspace\\bav_5.0_workspace\\BavOutput\\Pdb\\Release\\BdApiUtil64.pdb",
+        "version": "5.0.3.84333"
+      }
+    ],
+    "md5": [
+      {
+        "value": "ced47b89212f3260ebeb41682a4b95ec",
+        "filename": "BdApiUtil64.sys"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "148c0cde4f2ef807aea77d7368f00f4c519f47ef",
+        "filename": "BdApiUtil64.sys"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {
@@ -185,7 +197,10 @@
     },
     "capability_4_file_access_and_data_theft": {
       "technique": "T1005 - Data from Information Repositories + T1555 - Credentials from Password Stores",
-      "ioctl_codes": ["0x80002648", "0x8000264c"],
+      "ioctl_codes": [
+        "0x80002648",
+        "0x8000264c"
+      ],
       "description": "Direct kernel-mode file access bypassing security restrictions for credential theft and sensitive data exfiltration",
       "input_buffer": "Minimum 0x208 bytes (520 bytes) - File path at offset 0x18",
       "output_buffer": "File contents or access status",

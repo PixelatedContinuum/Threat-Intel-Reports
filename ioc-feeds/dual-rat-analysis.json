@@ -2,27 +2,50 @@
   "campaign": "Dual-RAT Analysis: Quasar RAT vs. NjRAT/XWorm",
   "description": "Comprehensive IOCs for two distinct .NET RAT families representing different operational philosophies - stealth-focused Quasar RAT and resilience-focused NjRAT/XWorm",
   "file_hashes": {
-    "Quasar_RAT": {
-      "sha256": "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766",
-      "md5": "b5491b58348600c2766f86a5af2b867f",
-      "sha1": "dc795961c8e63782fc0f53c08e7ca2e593df99fa",
-      "size": "1571840",
-      "type": "C# .NET executable",
-      "original_filename": "client.exe",
-      "family": "Quasar RAT",
-      "yara_signatures": ["HKTL_NET_GUID_Quasar"]
-    },
-    "NjRAT_XWorm": {
-      "sha256": "950aadba6993619858294599b3458d5d2221f10fe72b3db3e49883d496a705bb",
-      "md5": "28bf5a76144fbc4b5f7f02dfee4e2c17",
-      "sha1": "944d9e8d6f02375b31908ee05a0164fbb4804108",
-      "size": "37888",
-      "type": "VB.NET executable",
-      "original_filename": "server (1).exe",
-      "family": "NjRAT/XWorm (Bladabindi variant)",
-      "version": "XWorm 3.0-5.0",
-      "yara_signatures": ["Njrat", "BlackWorm"]
-    }
+    "sha256": [
+      {
+        "value": "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766",
+        "filename": "client.exe",
+        "type": "C# .NET executable",
+        "size": "1571840",
+        "family": "Quasar RAT",
+        "yara_signatures": [
+          "HKTL_NET_GUID_Quasar"
+        ]
+      },
+      {
+        "value": "950aadba6993619858294599b3458d5d2221f10fe72b3db3e49883d496a705bb",
+        "filename": "server (1).exe",
+        "type": "VB.NET executable",
+        "size": "37888",
+        "family": "NjRAT/XWorm (Bladabindi variant)",
+        "version": "XWorm 3.0-5.0",
+        "yara_signatures": [
+          "Njrat",
+          "BlackWorm"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "b5491b58348600c2766f86a5af2b867f",
+        "filename": "client.exe"
+      },
+      {
+        "value": "28bf5a76144fbc4b5f7f02dfee4e2c17",
+        "filename": "server (1).exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "dc795961c8e63782fc0f53c08e7ca2e593df99fa",
+        "filename": "client.exe"
+      },
+      {
+        "value": "944d9e8d6f02375b31908ee05a0164fbb4804108",
+        "filename": "server (1).exe"
+      }
+    ]
   },
   "network_indicators": {
     "c2_infrastructure": {
@@ -40,12 +63,17 @@
       }
     },
     "reconnaissance_domains": {
-      "ip_discovery": ["ipwho.is", "api.ipify.org"],
+      "ip_discovery": [
+        "ipwho.is",
+        "api.ipify.org"
+      ],
       "purpose": "External IP discovery and geolocation before C2 contact",
       "protocol": "HTTPS"
     },
     "paste_services": {
-      "pastebin": ["pastebin.com/raw/"],
+      "pastebin": [
+        "pastebin.com/raw/"
+      ],
       "description": "Dead-drop resolver services for C2 infrastructure"
     }
   },
@@ -99,7 +127,11 @@
     "aggressive_persistence": {
       "technique": "Triple-redundant persistence mechanisms",
       "impact": "Self-healing capability makes removal extremely difficult",
-      "components": ["1-minute scheduled task", "registry Run key", "startup folder shortcut"]
+      "components": [
+        "1-minute scheduled task",
+        "registry Run key",
+        "startup folder shortcut"
+      ]
     },
     "critical_process_protection": {
       "technique": "RtlSetProcessIsCritical API",
@@ -108,49 +140,110 @@
     },
     "anti_sleep_mechanisms": {
       "technique": "SetThreadExecutionState API",
-      "flags": ["ES_CONTINUOUS", "ES_DISPLAY_REQUIRED", "ES_SYSTEM_REQUIRED"],
+      "flags": [
+        "ES_CONTINUOUS",
+        "ES_DISPLAY_REQUIRED",
+        "ES_SYSTEM_REQUIRED"
+      ],
       "impact": "Prevents system sleep during surveillance operations"
     }
   },
   "detection_opportunities": {
     "scheduled_task_anomalies": {
-      "indicators": ["Tasks with intervals under 5 minutes", "Tasks with legitimate process names but suspicious actions", "Tasks executing from user-writable directories"],
-      "tools": ["Windows Event Log monitoring", "EDR task scheduler monitoring"]
+      "indicators": [
+        "Tasks with intervals under 5 minutes",
+        "Tasks with legitimate process names but suspicious actions",
+        "Tasks executing from user-writable directories"
+      ],
+      "tools": [
+        "Windows Event Log monitoring",
+        "EDR task scheduler monitoring"
+      ]
     },
     "network_patterns": {
-      "indicators": ["HTTP requests to paste services followed by arbitrary TCP connections", "Mobile device user-agent from desktop processes", "Connections to port 4782"],
-      "tools": ["Network traffic analysis", "DNS monitoring", "Proxy logs"]
+      "indicators": [
+        "HTTP requests to paste services followed by arbitrary TCP connections",
+        "Mobile device user-agent from desktop processes",
+        "Connections to port 4782"
+      ],
+      "tools": [
+        "Network traffic analysis",
+        "DNS monitoring",
+        "Proxy logs"
+      ]
     },
     "process_behavior": {
-      "indicators": ["VB.NET processes with network activity", "Processes calling RtlSetProcessIsCritical", "Zone.Identifier stream deletion", "Processes with 37KB size and network connections"],
-      "tools": ["EDR behavioral monitoring", "Process creation monitoring", "API call monitoring"]
+      "indicators": [
+        "VB.NET processes with network activity",
+        "Processes calling RtlSetProcessIsCritical",
+        "Zone.Identifier stream deletion",
+        "Processes with 37KB size and network connections"
+      ],
+      "tools": [
+        "EDR behavioral monitoring",
+        "Process creation monitoring",
+        "API call monitoring"
+      ]
     },
     "registry_monitoring": {
-      "indicators": ["New Run key entries pointing to user directories", "Scheduled task registry modifications", "Multiple persistence mechanisms established simultaneously"],
-      "tools": ["Registry change alerting", "Configuration management monitoring"]
+      "indicators": [
+        "New Run key entries pointing to user directories",
+        "Scheduled task registry modifications",
+        "Multiple persistence mechanisms established simultaneously"
+      ],
+      "tools": [
+        "Registry change alerting",
+        "Configuration management monitoring"
+      ]
     }
   },
   "attribution_indicators": {
     "pulsar_rat": {
-      "threat_actors": ["APT10 (Stone Panda, Cicada)", "Sophisticated threat actors"],
-      "targeting": ["High-value targets", "Espionage operations", "Intellectual property theft"],
+      "threat_actors": [
+        "APT10 (Stone Panda, Cicada)",
+        "Sophisticated threat actors"
+      ],
+      "targeting": [
+        "High-value targets",
+        "Espionage operations",
+        "Intellectual property theft"
+      ],
       "confidence": "High for APT10 association, unknown for this specific sample"
     },
     "njrat_xworm": {
-      "threat_actors": ["Low-to-mid sophistication actors", "Opportunistic cybercriminals", "Script kiddies"],
-      "targeting": ["Mass deployment", "Opportunistic attacks", "Commodity malware distribution"],
+      "threat_actors": [
+        "Low-to-mid sophistication actors",
+        "Opportunistic cybercriminals",
+        "Script kiddies"
+      ],
+      "targeting": [
+        "Mass deployment",
+        "Opportunistic attacks",
+        "Commodity malware distribution"
+      ],
       "prevalence": "18,459+ compromised devices H1 2025, Top 5 malware H1 2025"
     }
   },
   "remediation_guidance": {
     "pulsar_rat": {
       "complexity": "MEDIUM",
-      "key_steps": ["Remove RuntimeBroker scheduled task", "Delete %AppData%\\SubDir\\Client.exe", "Scan for process injection artifacts", "Review logs for reconnaissance activity"],
+      "key_steps": [
+        "Remove RuntimeBroker scheduled task",
+        "Delete %AppData%\\SubDir\\Client.exe",
+        "Scan for process injection artifacts",
+        "Review logs for reconnaissance activity"
+      ],
       "forensics_required": "Thorough analysis for dwell time and data exfiltration scope"
     },
     "njrat_xworm": {
       "complexity": "HIGH",
-      "key_steps": ["Remove conhost scheduled task", "Delete conhost.exe from user profile", "Remove conhost registry Run key", "Delete conhost.lnk from startup folder", "Handle critical process protection safely"],
+      "key_steps": [
+        "Remove conhost scheduled task",
+        "Delete conhost.exe from user profile",
+        "Remove conhost registry Run key",
+        "Delete conhost.lnk from startup folder",
+        "Handle critical process protection safely"
+      ],
       "forensics_required": "Systematic cleanup and hunting for additional copies or reinfection vectors"
     }
   },

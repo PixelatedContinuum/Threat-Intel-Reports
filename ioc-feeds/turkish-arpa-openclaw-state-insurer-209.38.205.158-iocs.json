@@ -13,108 +13,108 @@
     "parent_investigation": "ai-agent-frameworks-2026-05-23",
     "notes": "Public release. Victim-identifying indicators (internal hostnames, insider Windows AD user ID, internal IPs) are excluded from this public feed and held offline for victim IR coordination. Victim and partner infrastructure is excluded from the public feed entirely."
   },
-  "file_indicators": {
+  "file_hashes": {
     "sha256": [
       {
         "value": "ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79",
-        "type": "sha256",
         "filename": "topology_mapper.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python Instana topology collector; hardcoded the victim organization JWT + production URL; Turkish docstring",
         "false_positive_risk": "NONE"
       },
       {
         "value": "9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77",
-        "type": "sha256",
         "filename": "instana_collector_v4.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python event collector v4 (iteration marker); same the victim organization JWT",
         "false_positive_risk": "NONE"
       },
       {
         "value": "65d2eb26067c3df4b139b02145bdba2065be5a403f38ad096f886230b41fda9b",
-        "type": "sha256",
         "filename": "correlation_v3.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python cross-source correlation engine v3; opens with operator self-branding docstring ARPA Korelasyon Motoru v3 - Temporal Focus",
         "false_positive_risk": "NONE"
       },
       {
         "value": "a4b39f13d17ae3ff7a0adb2cf1df459a72425513f392a1d8fc469f8f2e123de5",
-        "type": "sha256",
         "filename": "api_correlation_routes.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python Flask API routes for correlations/events; Turkish comments throughout",
         "false_positive_risk": "NONE"
       },
       {
         "value": "2dca67a8be5cd89863ab60a2351a553954afd641c8e6f6219785707276f0e8e3",
-        "type": "sha256",
         "filename": "event_correlation_api.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python underlying correlations API implementation",
         "false_positive_risk": "NONE"
       },
       {
         "value": "6d4eb14e08e742ce6adabc355855c5e80c6b84e6969b0a3cc58367e0f4babfd0",
-        "type": "sha256",
         "filename": "add_corr_endpoints.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python API patch script (variant 1); emits emoji-in-output bleed",
         "false_positive_risk": "NONE"
       },
       {
         "value": "c66a2561fdacb5997c4fa0501da8ef1639d429d22668bfba7cb2f5f9e97a2a6e",
-        "type": "sha256",
         "filename": "fix_api.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python API patch script (minimal variant)",
         "false_positive_risk": "NONE"
       },
       {
         "value": "5a58c88c64e3e54c874645fc5b32f12163e1901fe1b3fb7a3bc1d52c434b1c62",
-        "type": "sha256",
         "filename": "fix_api_endpoints.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python API patch script (re.replace variant)",
         "false_positive_risk": "NONE"
       },
       {
         "value": "29d1221c9e305374a78d17c01ea20a211d59427f789ed01e653341db51bf4c06",
-        "type": "sha256",
         "filename": "patch_api.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python API patch script (Hunt classifier flagged MALICIOUS; Turkish comments)",
         "false_positive_risk": "NONE"
       },
       {
         "value": "402422a918dc037e00aea323e2ab1ca3e758459d4cd5e620a4433e3c346c52f8",
-        "type": "sha256",
         "filename": "fix_db.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python DB schema patch; only file in cluster with try/except defensive pattern",
         "false_positive_risk": "NONE"
       },
       {
         "value": "a05b40ceb17e6277ca39f99433910c359764be0e0a42377686abb7fb1e7da410",
-        "type": "sha256",
         "filename": "check_corr.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python correlation DB query script; Turkish output SON 5 KORELASYON",
         "false_positive_risk": "NONE"
       },
       {
         "value": "2736b72ed047fb4d593d2e919c58b25db1a669faa51e630360c2825409bf4011",
-        "type": "sha256",
         "filename": "analyze_topology.py",
+        "type": "sha256",
         "confidence": "DEFINITE",
         "context": "Operator-authored Python topology DB analysis script; flagged IndentationError-prone (AI Copy-Paste Indentation Decay sub-signature)",
         "false_positive_risk": "NONE"
       },
       {
         "value": "3a10ce135b52753beda81368712decc49a83715d527e00660c19f69d1b4879da",
-        "type": "sha256",
         "filename": "SOUL.md",
+        "type": "sha256",
         "confidence": "MODERATE",
         "context": "Default Hermes / OpenClaw persona template — ecosystem-presence indicator; NOT unique to this operator",
         "false_positive_risk": "MEDIUM — present on legitimate OpenClaw / Hermes developer environments per parent Phase 1-2 cluster"

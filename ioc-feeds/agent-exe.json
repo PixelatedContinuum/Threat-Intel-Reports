@@ -4,31 +4,43 @@
   "severity": "CRITICAL",
   "confidence_level": "High",
   "file_hashes": {
-    "agent_exe": {
-      "sha256": "e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385",
-      "sha1": "e0fe41acd28cae74d75fcbf2f9309ff523c0f36a",
-      "md5": "b1d5e55b1c15b7cb839138625d9d2efa",
-      "size": "1571840",
-      "type": "PE32+ executable (console) x86-64, Golang-compiled",
-      "original_filename": "agent.exe",
-      "family": "PoetRAT",
-      "family_confidence": "MODERATE (60%)",
-      "yara_signatures": [
-        "Agent_exe_PoetRAT_Comprehensive",
-        "Golang_RAT_Generic_Detection"
-      ]
-    },
-    "windefendersvc_exe": {
-      "sha256": "4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1",
-      "size": "Unknown (persistence component)",
-      "type": "Dropped file - persistence component",
-      "original_filename": "WinDefenderSvc.exe",
-      "location": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\",
-      "purpose": "Startup folder persistence mechanism",
-      "yara_signatures": [
-        "PoetRAT_Persistence_Component"
-      ]
-    }
+    "sha256": [
+      {
+        "value": "e7f9a29dde307afff4191dbc14a974405f287b10f359a39305dccdc0ee949385",
+        "filename": "agent.exe",
+        "type": "PE32+ executable (console) x86-64, Golang-compiled",
+        "size": "1571840",
+        "family": "PoetRAT",
+        "family_confidence": "MODERATE (60%)",
+        "yara_signatures": [
+          "Agent_exe_PoetRAT_Comprehensive",
+          "Golang_RAT_Generic_Detection"
+        ]
+      },
+      {
+        "value": "4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1",
+        "filename": "WinDefenderSvc.exe",
+        "type": "Dropped file - persistence component",
+        "size": "Unknown (persistence component)",
+        "location": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\",
+        "purpose": "Startup folder persistence mechanism",
+        "yara_signatures": [
+          "PoetRAT_Persistence_Component"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "b1d5e55b1c15b7cb839138625d9d2efa",
+        "filename": "agent.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "e0fe41acd28cae74d75fcbf2f9309ff523c0f36a",
+        "filename": "agent.exe"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {

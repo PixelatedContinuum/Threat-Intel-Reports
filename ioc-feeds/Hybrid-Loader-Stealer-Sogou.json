@@ -1,4 +1,25 @@
 {
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "4e987719ab96064594c98b62000612f90fe4c34c08161c290ec3898f100f6891",
+        "filename": "Installer",
+        "impact": "Concrete detection artifacts for defenders to block or hunt"
+      }
+    ],
+    "md5": [
+      {
+        "value": "259b7806c2c9cade90acb0f18d940197",
+        "filename": "Installer"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "97f5b1508079584568d7f773d166d441097064b4",
+        "filename": "Installer"
+      }
+    ]
+  },
   "Consolidated_IOCs": {
     "Domains": [
       {
@@ -8,7 +29,7 @@
         "evidence": "Active DNS resolution during analysis",
         "impact": "Disposable VPS infrastructure used for short-lived C2 servers"
       },
-      { 
+      {
         "domain": "423down.com",
         "resolved_ip": "45.151.132.50",
         "location": "Seattle Washington Spartan Host Ltd",
@@ -85,14 +106,6 @@
         "impact": "Large-scale abuse of cloud infrastructure for phishing/malware"
       }
     ],
-    "File_Hashes": {
-      "Installer": {
-        "MD5": "259b7806c2c9cade90acb0f18d940197",
-        "SHA1": "97f5b1508079584568d7f773d166d441097064b4",
-        "SHA256": "4e987719ab96064594c98b62000612f90fe4c34c08161c290ec3898f100f6891",
-        "impact": "Concrete detection artifacts for defenders to block or hunt"
-      }
-    },
     "Mutex": {
       "evidence": "Mutex string identified in binary",
       "impact": "Ensures single instance execution; forensic detection opportunity"

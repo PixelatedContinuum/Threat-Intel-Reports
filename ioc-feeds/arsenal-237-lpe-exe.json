@@ -4,18 +4,30 @@
   "severity": "CRITICAL",
   "confidence_level": "High",
   "file_hashes": {
-    "lpe_exe": {
-      "md5": "47400a6b7c84847db0513e6dbc04e469",
-      "sha1": "6b7b8c3689d00b6b5daddab2c9cbc4582288fd1f",
-      "sha256": "c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e",
-      "size": "383488 bytes (374 KB)",
-      "type": "PE64 executable, Rust-compiled",
-      "original_filename": "lpe.exe",
-      "family": "Arsenal-237 Privilege Escalation Module",
-      "family_confidence": "CONFIRMED (100%)",
-      "compiler": "Rust",
-      "purpose": "Local privilege escalation to NT AUTHORITY\\SYSTEM via multi-technique approach"
-    }
+    "sha256": [
+      {
+        "value": "c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e",
+        "filename": "lpe.exe",
+        "type": "PE64 executable, Rust-compiled",
+        "size": "383488 bytes (374 KB)",
+        "family": "Arsenal-237 Privilege Escalation Module",
+        "family_confidence": "CONFIRMED (100%)",
+        "compiler": "Rust",
+        "purpose": "Local privilege escalation to NT AUTHORITY\\SYSTEM via multi-technique approach"
+      }
+    ],
+    "md5": [
+      {
+        "value": "47400a6b7c84847db0513e6dbc04e469",
+        "filename": "lpe.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "6b7b8c3689d00b6b5daddab2c9cbc4582288fd1f",
+        "filename": "lpe.exe"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {

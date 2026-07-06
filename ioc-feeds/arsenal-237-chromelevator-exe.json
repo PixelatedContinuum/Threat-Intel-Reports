@@ -10,17 +10,17 @@
   "file_hashes": {
     "sha256": [
       {
-        "hash": "92c4f4b7748f23d6dcd5af43595f34e4bb8e284a85d2c1647b189c1bb59a784a",
+        "value": "92c4f4b7748f23d6dcd5af43595f34e4bb8e284a85d2c1647b189c1bb59a784a",
         "filename": "chromelevator.exe",
-        "file_size": 1463808,
-        "file_type": "PE64 Console Application",
+        "type": "PE64 Console Application",
         "confidence": "CONFIRMED",
+        "file_size": 1463808,
         "notes": "Browser credential extraction tool from Arsenal-237 campaign"
       }
     ],
     "md5": [
       {
-        "hash": "bc376c951eacb36bf0909a43588e6444",
+        "value": "bc376c951eacb36bf0909a43588e6444",
         "filename": "chromelevator.exe",
         "confidence": "CONFIRMED",
         "notes": "Primary sample identifier"
@@ -28,7 +28,7 @@
     ],
     "sha1": [
       {
-        "hash": "78c8ab4a9932805f5fb32f4a19367642ea8ac6f6",
+        "value": "78c8ab4a9932805f5fb32f4a19367642ea8ac6f6",
         "filename": "chromelevator.exe",
         "confidence": "CONFIRMED",
         "notes": "Secondary sample identifier"
@@ -151,7 +151,11 @@
     "process_behavior": [
       {
         "behavior": "Process injection into browser processes",
-        "processes": ["chrome.exe", "brave.exe", "msedge.exe"],
+        "processes": [
+          "chrome.exe",
+          "brave.exe",
+          "msedge.exe"
+        ],
         "method": "Reflective DLL injection via direct syscalls",
         "confidence": "CONFIRMED",
         "detection_note": "Monitor for suspicious memory allocation, protection changes, and thread creation in browser processes"

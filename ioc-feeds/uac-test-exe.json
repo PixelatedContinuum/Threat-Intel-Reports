@@ -5,22 +5,34 @@
   "confidence_level": "High",
   "tool_classification": "Security Research Tool / UAC Bypass Proof-of-Concept",
   "file_hashes": {
-    "uac_test_exe": {
-      "sha256": "18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760",
-      "sha1": "08feb675d0553f98007c52b7658a725dee22d696",
-      "md5": "36191c81f6b9fa40dceaa4700ff86800",
-      "size": "285184",
-      "type": "PE32+ executable (console) x86-64, Rust-compiled",
-      "original_filename": "uac_test.exe",
-      "classification": "UAC Bypass PoC / Security Research Tool",
-      "malicious": false,
-      "policy_violation_risk": "HIGH (unauthorized security tool usage)",
-      "yara_signatures": [
-        "UAC_Test_PoC_Comprehensive",
-        "Generic_UAC_Bypass_Behavior",
-        "Rust_Compiled_UAC_Bypass"
-      ]
-    }
+    "sha256": [
+      {
+        "value": "18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760",
+        "filename": "uac_test.exe",
+        "type": "PE32+ executable (console) x86-64, Rust-compiled",
+        "size": "285184",
+        "classification": "UAC Bypass PoC / Security Research Tool",
+        "malicious": false,
+        "policy_violation_risk": "HIGH (unauthorized security tool usage)",
+        "yara_signatures": [
+          "UAC_Test_PoC_Comprehensive",
+          "Generic_UAC_Bypass_Behavior",
+          "Rust_Compiled_UAC_Bypass"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "36191c81f6b9fa40dceaa4700ff86800",
+        "filename": "uac_test.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "08feb675d0553f98007c52b7658a725dee22d696",
+        "filename": "uac_test.exe"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {

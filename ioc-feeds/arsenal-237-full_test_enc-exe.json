@@ -10,25 +10,25 @@
     "behavioral_confidence": "CONFIRMED"
   },
   "file_hashes": {
+    "sha256": [
+      {
+        "value": "4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518",
+        "filename": "full_test_enc.exe",
+        "confidence": "CONFIRMED"
+      }
+    ],
     "md5": [
       {
-        "hash": "1fe8b9a14f9f8435c5fb5156bcbc174e",
+        "value": "1fe8b9a14f9f8435c5fb5156bcbc174e",
         "filename": "full_test_enc.exe",
-        "file_size": "15565824",
-        "file_type": "PE32+ (64-bit Windows executable)",
-        "confidence": "CONFIRMED"
+        "type": "PE32+ (64-bit Windows executable)",
+        "confidence": "CONFIRMED",
+        "file_size": "15565824"
       }
     ],
     "sha1": [
       {
-        "hash": "bc0788a36b6b839fc917be0577cd14e584c71fd8",
-        "filename": "full_test_enc.exe",
-        "confidence": "CONFIRMED"
-      }
-    ],
-    "sha256": [
-      {
-        "hash": "4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518",
+        "value": "bc0788a36b6b839fc917be0577cd14e584c71fd8",
         "filename": "full_test_enc.exe",
         "confidence": "CONFIRMED"
       }

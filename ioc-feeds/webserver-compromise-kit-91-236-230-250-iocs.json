@@ -9,18 +9,32 @@
     "campaign_id": "WebServer-Compromise-Kit-91.236.230.250"
   },
   "file_hashes": {
+    "sha256": [
+      {
+        "value": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d"
+      },
+      {
+        "value": "ffc6662c5d68db31b5d468460e4bc3be2090d7ba3ee1e47dbe2803217bf424a9"
+      },
+      {
+        "value": "238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738"
+      }
+    ],
     "md5": [
-      "108da75de148145b8f056ec0827f1665",
-      "032300082d8bc63b3d0a7f3f3f83f5d1"
+      {
+        "value": "108da75de148145b8f056ec0827f1665"
+      },
+      {
+        "value": "032300082d8bc63b3d0a7f3f3f83f5d1"
+      }
     ],
     "sha1": [
-      "188098b9caf3bc4d1b68dcad50d2e1cbd2e9d519",
-      "c745d65554d946702f4484d47d6a4606c12c53e9"
-    ],
-    "sha256": [
-      "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
-      "ffc6662c5d68db31b5d468460e4bc3be2090d7ba3ee1e47dbe2803217bf424a9",
-      "238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738"
+      {
+        "value": "188098b9caf3bc4d1b68dcad50d2e1cbd2e9d519"
+      },
+      {
+        "value": "c745d65554d946702f4484d47d6a4606c12c53e9"
+      }
     ]
   },
   "network_indicators": {
@@ -288,26 +302,39 @@
     "kill_chain": [
       {
         "stage": "Initial Compromise",
-        "iocs": ["a.png", "91.236.230.250"],
+        "iocs": [
+          "a.png",
+          "91.236.230.250"
+        ],
         "notes": "Web server compromised, reverse shell deployed"
       },
       {
         "stage": "Post-Exploitation Download",
-        "iocs": ["http://91.236.230.250/", "PrintSpoofer.exe", "rev.exe"],
+        "iocs": [
+          "http://91.236.230.250/",
+          "PrintSpoofer.exe",
+          "rev.exe"
+        ],
         "notes": "Attacker downloads privilege escalation and pivoting tools from open directory"
       },
       {
         "stage": "Privilege Escalation",
-        "iocs": ["PrintSpoofer.exe", "SeImpersonatePrivilege", "\\\\pipe\\\\spoolss"],
+        "iocs": [
+          "PrintSpoofer.exe",
+          "SeImpersonatePrivilege",
+          "\\\\pipe\\\\spoolss"
+        ],
         "notes": "Escalation from IIS service account to SYSTEM"
       },
       {
         "stage": "Establish Persistence/Pivot",
-        "iocs": ["rev.exe", "SOCKS5 port 1080"],
+        "iocs": [
+          "rev.exe",
+          "SOCKS5 port 1080"
+        ],
         "notes": "Reverse SOCKS proxy for lateral movement and persistent access"
       }
     ]
   },
   "notes": "This IOC set represents a complete post-exploitation toolkit deployed after web server compromise. The combination of reverse shell, privilege escalation, and network pivoting tools indicates a sophisticated, manual intrusion rather than automated scanning. All three tools are legitimate red team utilities repurposed for malicious use, complicating attribution."
 }
-

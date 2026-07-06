@@ -9,24 +9,36 @@
   "discovery_date": "2026-01-10",
   "report_date": "2026-01-12",
   "file_hashes": {
-    "agent_xworm_v2_exe": {
-      "sha256": "f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e",
-      "sha1": "7c624e0b11c817d516f9411972191c4627fd2e53",
-      "md5": "4164a1945d8373255a5cb7e42f05c259",
-      "size": "15872",
-      "type": "PE32 executable (console) Intel 80386, .NET assembly",
-      "original_filename": "agent_xworm_v2.exe",
-      "internal_name": "agent_xw2",
-      "framework": ".NET Framework v4.0.30319",
-      "family": "XWorm RAT",
-      "version": "2.4.0",
-      "yara_signatures": [
-        "Agent_Xworm_V2_Specific_Hash",
-        "XWorm_RAT_V2_Family",
-        "XWorm_PowerShell_Recon_V2",
-        "XWorm_WebSocket_C2"
-      ]
-    }
+    "sha256": [
+      {
+        "value": "f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e",
+        "filename": "agent_xworm_v2.exe",
+        "type": "PE32 executable (console) Intel 80386, .NET assembly",
+        "size": "15872",
+        "internal_name": "agent_xw2",
+        "framework": ".NET Framework v4.0.30319",
+        "family": "XWorm RAT",
+        "version": "2.4.0",
+        "yara_signatures": [
+          "Agent_Xworm_V2_Specific_Hash",
+          "XWorm_RAT_V2_Family",
+          "XWorm_PowerShell_Recon_V2",
+          "XWorm_WebSocket_C2"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "4164a1945d8373255a5cb7e42f05c259",
+        "filename": "agent_xworm_v2.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "7c624e0b11c817d516f9411972191c4627fd2e53",
+        "filename": "agent_xworm_v2.exe"
+      }
+    ]
   },
   "network_indicators": {
     "c2_infrastructure": {
@@ -114,7 +126,15 @@
   },
   "capabilities": {
     "system_reconnaissance": {
-      "techniques": ["T1082", "T1033", "T1087", "T1057", "T1007", "T1016", "T1482"],
+      "techniques": [
+        "T1082",
+        "T1033",
+        "T1087",
+        "T1057",
+        "T1007",
+        "T1016",
+        "T1482"
+      ],
       "confidence": "CONFIRMED (CAPA analysis + embedded PowerShell)",
       "information_collected": [
         "OS version, architecture, .NET runtime (T1082)",
@@ -156,7 +176,10 @@
       "mitigation": "MANDATORY credential rotation for all users on compromised systems"
     },
     "persistence": {
-      "techniques": ["T1547.001", "T1053.005"],
+      "techniques": [
+        "T1547.001",
+        "T1053.005"
+      ],
       "confidence": "LIKELY (XWorm family capability, code structure supports)",
       "mechanisms": [
         "Registry Run keys (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run)",
@@ -168,7 +191,11 @@
       "detection": "Monitor for startup folder modifications, registry Run key creation, scheduled task additions"
     },
     "defense_evasion": {
-      "techniques": ["T1564.003", "T1027", "T1562.001"],
+      "techniques": [
+        "T1564.003",
+        "T1027",
+        "T1562.001"
+      ],
       "confirmed_in_v2_4_0": [
         "Hidden console window (ShowWindow API)",
         "Base64 encoding for C2 traffic and configuration"
@@ -262,15 +289,28 @@
     "common_secondary_payloads": {
       "rats": {
         "percentage": "60%+",
-        "families": ["AsyncRAT", "QuasarRAT", "DcRAT", "NjRAT"]
+        "families": [
+          "AsyncRAT",
+          "QuasarRAT",
+          "DcRAT",
+          "NjRAT"
+        ]
       },
       "ransomware": {
         "percentage": "25%",
-        "families": ["LockBit Black", "Conti", "Hive"]
+        "families": [
+          "LockBit Black",
+          "Conti",
+          "Hive"
+        ]
       },
       "infostealers": {
         "percentage": "15%",
-        "families": ["RedLine Stealer", "Raccoon Stealer", "Vidar"]
+        "families": [
+          "RedLine Stealer",
+          "Raccoon Stealer",
+          "Vidar"
+        ]
       }
     },
     "typical_attack_chain": [

@@ -7,29 +7,54 @@
     "main.exe (XiebroC2) SHA256 hash not captured in triage artifacts provided — obtain from infrastructure analyst or original retrieval",
     "s.d IP 192.168.1.100 excluded — RFC 1918 placeholder/test value, not a live C2"
   ],
-
-  "file_indicators": {
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "3aa45ceff7070ae6d183c5aa5f0d771a79c7cf37fe21a3906df976bee497bf20",
+        "filename": "GruntHTTP.exe",
+        "confidence": "HIGH",
+        "context": "Covenant C2 GruntStager Build 1 — standalone PE stager, C2 http://193.56.255.154:443, GUID prefix 614b847dc4"
+      },
+      {
+        "value": "cff2d990f0988e9c90f77d0a62c72ca8e9bf567f0c143fdc3a914dce65edec98",
+        "filename": "GruntHTTP.ps1",
+        "confidence": "HIGH",
+        "context": "PowerShell fileless loader wrapping Covenant GruntStager Build 2 — Base64+Deflate encoded PE embedded in script"
+      },
+      {
+        "value": "fc93712d44850bc730e1e4cf0f678a902e8f60a5d710b4bc19b0ab0b2fb79a95",
+        "filename": "extracted_payload.bin",
+        "confidence": "HIGH",
+        "context": "Covenant GruntStager Build 2 — extracted from GruntHTTP.ps1, same Covenant listener as Build 1, GUID prefix 7c6e1e0ee6"
+      },
+      {
+        "value": "ed4d2a1f86b73e6a3f2d5378ba93a044f8c760307acfd3b99a0fa3c0b94fd107",
+        "filename": "s.d",
+        "confidence": "HIGH",
+        "context": "Proof-of-concept DLL (non-operational staging test artifact)"
+      }
+    ],
     "md5": [
       {
-        "hash": "7cfe0a039b61ec049b53e8e664036a6e",
+        "value": "7cfe0a039b61ec049b53e8e664036a6e",
         "filename": "GruntHTTP.exe",
         "confidence": "HIGH",
         "context": "Covenant C2 GruntStager Build 1 — standalone PE, HTTP stager, 11776 bytes"
       },
       {
-        "hash": "ac9b16b8bdf544db92f325a0901c5544",
+        "value": "ac9b16b8bdf544db92f325a0901c5544",
         "filename": "GruntHTTP.ps1",
         "confidence": "HIGH",
         "context": "PowerShell fileless loader wrapping Covenant GruntStager Build 2, 7541 bytes"
       },
       {
-        "hash": "0e12e94cc5b7e591e02f8afab1dac7d1",
+        "value": "0e12e94cc5b7e591e02f8afab1dac7d1",
         "filename": "extracted_payload.bin",
         "confidence": "HIGH",
         "context": "Covenant GruntStager Build 2 — extracted from GruntHTTP.ps1 Base64+Deflate encoding, 11776 bytes"
       },
       {
-        "hash": "2ac67005d80a76c77417086375e444d1",
+        "value": "2ac67005d80a76c77417086375e444d1",
         "filename": "s.d",
         "confidence": "HIGH",
         "context": "Proof-of-concept DLL (non-operational) — 64-bit PE, Visual C++ 2022, 12800 bytes"
@@ -37,48 +62,22 @@
     ],
     "sha1": [
       {
-        "hash": "f0f4715a6d7063e7811502e9591f8265af0a2af6",
+        "value": "f0f4715a6d7063e7811502e9591f8265af0a2af6",
         "filename": "GruntHTTP.exe",
         "confidence": "HIGH",
         "context": "Covenant C2 GruntStager Build 1"
       },
       {
-        "hash": "a79cd499c68482e73852db2c70d4e06251a29d95",
+        "value": "a79cd499c68482e73852db2c70d4e06251a29d95",
         "filename": "GruntHTTP.ps1",
         "confidence": "HIGH",
         "context": "PowerShell fileless loader — Covenant GruntStager Build 2 delivery wrapper"
       },
       {
-        "hash": "7a502bd0e7fe586b97498058a72287dfd22f8d44",
+        "value": "7a502bd0e7fe586b97498058a72287dfd22f8d44",
         "filename": "s.d",
         "confidence": "HIGH",
         "context": "Proof-of-concept DLL"
-      }
-    ],
-    "sha256": [
-      {
-        "hash": "3aa45ceff7070ae6d183c5aa5f0d771a79c7cf37fe21a3906df976bee497bf20",
-        "filename": "GruntHTTP.exe",
-        "confidence": "HIGH",
-        "context": "Covenant C2 GruntStager Build 1 — standalone PE stager, C2 http://193.56.255.154:443, GUID prefix 614b847dc4"
-      },
-      {
-        "hash": "cff2d990f0988e9c90f77d0a62c72ca8e9bf567f0c143fdc3a914dce65edec98",
-        "filename": "GruntHTTP.ps1",
-        "confidence": "HIGH",
-        "context": "PowerShell fileless loader wrapping Covenant GruntStager Build 2 — Base64+Deflate encoded PE embedded in script"
-      },
-      {
-        "hash": "fc93712d44850bc730e1e4cf0f678a902e8f60a5d710b4bc19b0ab0b2fb79a95",
-        "filename": "extracted_payload.bin",
-        "confidence": "HIGH",
-        "context": "Covenant GruntStager Build 2 — extracted from GruntHTTP.ps1, same Covenant listener as Build 1, GUID prefix 7c6e1e0ee6"
-      },
-      {
-        "hash": "ed4d2a1f86b73e6a3f2d5378ba93a044f8c760307acfd3b99a0fa3c0b94fd107",
-        "filename": "s.d",
-        "confidence": "HIGH",
-        "context": "Proof-of-concept DLL (non-operational staging test artifact)"
       }
     ],
     "filenames": [
@@ -102,10 +101,8 @@
         "confidence": "HIGH",
         "context": "Proof-of-concept DLL — unusual extension (.d), original filename from open directory"
       }
-    ],
-    "file_paths": []
+    ]
   },
-
   "network_indicators": {
     "ipv4": [
       {
@@ -157,7 +154,6 @@
       }
     ]
   },
-
   "host_indicators": {
     "registry_keys": [],
     "scheduled_tasks": [],
@@ -165,7 +161,6 @@
     "mutexes": [],
     "named_pipes": []
   },
-
   "behavioral_indicators": {
     "network_patterns": [
       {
@@ -218,7 +213,6 @@
     ],
     "file_access_patterns": []
   },
-
   "crypto_artifacts": {
     "note": "Crypto artifacts are high-value IOCs enabling retrospective traffic decryption and build attribution. Not standard SIEM/EDR IOC types but included for analyst and threat hunter use.",
     "xiebro_c2_aes_key": {
@@ -243,7 +237,6 @@
       "context": "Covenant pre-shared AES-256 key for PS Embedded Stager (Build 2). Different from Build 1 — deliberate compartmentalization so compromise of one build does not affect the other."
     }
   },
-
   "build_artifacts": {
     "note": "Operator build artifacts enable attribution and cross-build correlation. Present as embedded strings in binary/script.",
     "covenant_session_token": {

@@ -8,33 +8,33 @@
     "severity": "CRITICAL",
     "report_version": "1.0"
   },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899",
+        "filename": "enc_c2.exe",
+        "confidence": "CONFIRMED",
+        "context": "PE32+ 64-bit Windows executable, primary identifier"
+      }
+    ],
+    "md5": [
+      {
+        "value": "32a3497e57604e1037f1ff9993a8fdaa",
+        "filename": "enc_c2.exe",
+        "confidence": "CONFIRMED",
+        "context": "PE32+ 64-bit Windows executable"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "34d3c75e79633eb3bf47e751fb31274760aeae09",
+        "filename": "enc_c2.exe",
+        "confidence": "CONFIRMED",
+        "context": "PE32+ 64-bit Windows executable"
+      }
+    ]
+  },
   "file_indicators": {
-    "hashes": {
-      "md5": [
-        {
-          "value": "32a3497e57604e1037f1ff9993a8fdaa",
-          "filename": "enc_c2.exe",
-          "confidence": "CONFIRMED",
-          "context": "PE32+ 64-bit Windows executable"
-        }
-      ],
-      "sha1": [
-        {
-          "value": "34d3c75e79633eb3bf47e751fb31274760aeae09",
-          "filename": "enc_c2.exe",
-          "confidence": "CONFIRMED",
-          "context": "PE32+ 64-bit Windows executable"
-        }
-      ],
-      "sha256": [
-        {
-          "value": "613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899",
-          "filename": "enc_c2.exe",
-          "confidence": "CONFIRMED",
-          "context": "PE32+ 64-bit Windows executable, primary identifier"
-        }
-      ]
-    },
     "file_properties": {
       "filename": "enc_c2.exe",
       "file_type": "PE32+ executable (64-bit Windows)",
@@ -143,7 +143,10 @@
     },
     "tor_connectivity": {
       "protocol": "SOCKS",
-      "default_ports": [9050, 9150],
+      "default_ports": [
+        9050,
+        9150
+      ],
       "detection": "Monitor for localhost SOCKS connections from suspicious processes",
       "mitigation": "Block outbound connections to Tor infrastructure at network perimeter"
     }
@@ -198,12 +201,33 @@
       "file_extension_handling": ".locked appended to encrypted files",
       "encryption_speed_estimate": "100-1000 files per minute",
       "target_file_types": [
-        "*.docx", "*.xlsx", "*.pptx", "*.doc", "*.xls", "*.ppt",
-        "*.jpg", "*.png", "*.gif", "*.mp4", "*.mp3", "*.wav",
-        "*.sql", "*.db", "*.sqlite", "*.mdb",
-        "*.zip", "*.rar", "*.7z", "*.tar",
-        "*.txt", "*.csv", "*.json", "*.xml",
-        "*.bak", "*.backup", "*.old"
+        "*.docx",
+        "*.xlsx",
+        "*.pptx",
+        "*.doc",
+        "*.xls",
+        "*.ppt",
+        "*.jpg",
+        "*.png",
+        "*.gif",
+        "*.mp4",
+        "*.mp3",
+        "*.wav",
+        "*.sql",
+        "*.db",
+        "*.sqlite",
+        "*.mdb",
+        "*.zip",
+        "*.rar",
+        "*.7z",
+        "*.tar",
+        "*.txt",
+        "*.csv",
+        "*.json",
+        "*.xml",
+        "*.bak",
+        "*.backup",
+        "*.old"
       ],
       "excluded_file_types": [
         "*.exe (system preservation)"

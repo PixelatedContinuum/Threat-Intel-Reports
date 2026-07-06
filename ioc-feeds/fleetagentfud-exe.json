@@ -6,27 +6,39 @@
   "discovery_date": "2026-01-04",
   "analysis_date": "2026-01-12",
   "file_hashes": {
-    "fleetagentfud_exe": {
-      "sha256": "072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff",
-      "sha1": "51aa8b08dc67cb91435ce58d4453a8ae5e0dd577",
-      "md5": "5b37f5fc42384834b7aac5081a5bac85",
-      "size": "17920",
-      "type": "PE32 executable, .NET Framework (CLR v4.0.30319), Windows GUI",
-      "original_filename": "FleetAgentFUD.exe",
-      "compilation": "Microsoft Visual C# .NET, Linker 11.0",
-      "entropy": "5.2171",
-      "family": "FleetAgentFUD",
-      "family_confidence": "HIGH (95%)",
-      "role": "RAT with FUD evasion",
-      "agent_version": "3.0.0",
-      "yara_signatures": [
-        "FleetAgentFUD_FileHash_Exact",
-        "FleetAgentFUD_WebSocket_C2_Pattern",
-        "FleetAgentFUD_PowerShell_Bypass",
-        "FleetAgentFUD_FUD_RAT_Behavioral_Pattern",
-        "FleetAgent_Family_General"
-      ]
-    }
+    "sha256": [
+      {
+        "value": "072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff",
+        "filename": "FleetAgentFUD.exe",
+        "type": "PE32 executable, .NET Framework (CLR v4.0.30319), Windows GUI",
+        "size": "17920",
+        "compilation": "Microsoft Visual C# .NET, Linker 11.0",
+        "entropy": "5.2171",
+        "family": "FleetAgentFUD",
+        "family_confidence": "HIGH (95%)",
+        "role": "RAT with FUD evasion",
+        "agent_version": "3.0.0",
+        "yara_signatures": [
+          "FleetAgentFUD_FileHash_Exact",
+          "FleetAgentFUD_WebSocket_C2_Pattern",
+          "FleetAgentFUD_PowerShell_Bypass",
+          "FleetAgentFUD_FUD_RAT_Behavioral_Pattern",
+          "FleetAgent_Family_General"
+        ]
+      }
+    ],
+    "md5": [
+      {
+        "value": "5b37f5fc42384834b7aac5081a5bac85",
+        "filename": "FleetAgentFUD.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "51aa8b08dc67cb91435ce58d4453a8ae5e0dd577",
+        "filename": "FleetAgentFUD.exe"
+      }
+    ]
   },
   "network_indicators": {
     "distribution_infrastructure": {

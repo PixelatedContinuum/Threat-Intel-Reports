@@ -7,28 +7,28 @@
     "threat_level": "CRITICAL"
   },
   "file_hashes": {
+    "sha256": [
+      {
+        "value": "158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14",
+        "filename": "nethost.dll",
+        "confidence": "CONFIRMED",
+        "yara_rule_link": "Arsenal-237-nethost-dll.yar"
+      }
+    ],
     "md5": [
       {
-        "hash": "f91ff1bb5699524524fff0e2587af040",
+        "value": "f91ff1bb5699524524fff0e2587af040",
         "filename": "nethost.dll",
-        "file_size": 440832,
         "type": "PE64 DLL",
-        "confidence": "CONFIRMED"
+        "confidence": "CONFIRMED",
+        "file_size": 440832
       }
     ],
     "sha1": [
       {
-        "hash": "622ddbacaf769aef383435162a203489c08c8468",
+        "value": "622ddbacaf769aef383435162a203489c08c8468",
         "filename": "nethost.dll",
         "confidence": "CONFIRMED"
-      }
-    ],
-    "sha256": [
-      {
-        "hash": "158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14",
-        "filename": "nethost.dll",
-        "confidence": "CONFIRMED",
-        "yara_rule_link": "Arsenal-237-nethost-dll.yar"
       }
     ]
   },

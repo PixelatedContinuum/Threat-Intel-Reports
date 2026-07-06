@@ -10,8 +10,6 @@
     "notes": "Most samples are PUBLIC tooling. The five operator-recompiled .NET tools (EfsPotato, GodPotato, SweetPotato, Rubeus, SharpSuccessor) are identified as their public counterparts via YARA HKTL-GUID + VT detection + capa signature, NOT byte-for-byte public-release hash identity. Only bespoke compiled code = cmd_exec.dll (custom BUILD of a known MSSQL CLR technique, not novel). CVE-2026-20817_PoC.exe is a non-weaponized demo PoC of a Jan-2026-patched CVE. EXCLUDED per analyst guardrails: proxy-era ports 5222-5455 (different-tenant/reallocation risk), benign VT downloaded_files (autodiscover.xml, :1337 dir-index page), inostage.ru/panel.inostage.ru (public-tool co-host noise), and generic .NET runtime imphashes f34d5f2d.../dae02f32... (non-discriminating stubs)."
   },
   "file_hashes": {
-    "md5": [],
-    "sha1": [],
     "sha256": [
       {
         "value": "a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262",
@@ -122,43 +120,43 @@
     "imphashes": [
       {
         "value": "f9a28c458284584a93b14216308d31bd",
-        "tool": "JuicyPotato (jp.exe)",
         "confidence": "HIGH",
+        "tool": "JuicyPotato (jp.exe)",
         "action": "HUNT",
         "notes": "Native-tool imphash; survives file renaming. Good Sigma/YARA pivot."
       },
       {
         "value": "545a81240793f9ca97306fa5b3ad76df",
-        "tool": "PrintSpoofer (p.exe/P64.exe)",
         "confidence": "HIGH",
+        "tool": "PrintSpoofer (p.exe/P64.exe)",
         "action": "HUNT",
         "notes": "Native-tool imphash; survives file renaming."
       },
       {
         "value": "959a83047e80ab68b368fdb3f4c6e4ea",
-        "tool": "RoguePotato.exe",
         "confidence": "HIGH",
+        "tool": "RoguePotato.exe",
         "action": "HUNT",
         "notes": "Native-tool imphash; survives file renaming."
       },
       {
         "value": "576d6e02a47c807b9063948ee683350c",
-        "tool": "RogueOxidResolver.exe",
         "confidence": "HIGH",
+        "tool": "RogueOxidResolver.exe",
         "action": "HUNT",
         "notes": "Native-tool imphash; survives file renaming."
       },
       {
         "value": "567531f08180ab3963b70889578118a3",
-        "tool": "Netcat nc64 (e.exe)",
         "confidence": "HIGH",
+        "tool": "Netcat nc64 (e.exe)",
         "action": "HUNT",
         "notes": "Native-tool imphash; survives file renaming."
       },
       {
         "value": "818cfde69b098e3348e8c7125e83915f",
-        "tool": "CVE-2026-20817_PoC.exe",
         "confidence": "MODERATE",
+        "tool": "CVE-2026-20817_PoC.exe",
         "action": "HUNT",
         "notes": "Native-tool imphash; survives file renaming. Low operational value (non-weaponized demo artifact)."
       }

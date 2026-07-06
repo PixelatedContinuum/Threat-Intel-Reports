@@ -3,34 +3,66 @@
   "campaign_id": "OpenDirectory-DualRAT-MaaS-151.245.112.70",
   "analysis_date": "2026-04-04",
   "confidence_note": "Confidence levels: HIGH (strong evidence from config decryption and code analysis), MEDIUM (moderate evidence, inferred from code structure), LOW (weak or circumstantial evidence)",
-  "file_indicators": {
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "3a4b0f50ea3eac55e22cbf24d873f9a1632d8f71e1fba91178c539030626ab32",
+        "filename": "ShadoClient.exe",
+        "confidence": "HIGH",
+        "context": "Shadow RAT v2.6.4.0 staging/test build (2,182,144 bytes, .NET 4.7.2, .NET Reactor packed)"
+      },
+      {
+        "value": "240e2575f20c75c6b5e2ea69bc0f0d9675ffd3fea315ca818bcbee2572ee972f",
+        "filename": "ShadowClient.exe",
+        "confidence": "HIGH",
+        "context": "Shadow RAT v2.6.4.0 production build (2,181,120 bytes, .NET 4.7.2, .NET Reactor packed)"
+      },
+      {
+        "value": "6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c",
+        "filename": "Shadow.Common.dll",
+        "confidence": "HIGH",
+        "context": "Shadow RAT shared library — core message types, Aes256 crypto, DNS utilities (109,568 bytes)"
+      },
+      {
+        "value": "b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531",
+        "filename": "XWormClient.exe",
+        "confidence": "HIGH",
+        "context": "XWorm 3.0-5.0 builder output #1 (74,752 bytes, .NET/VB.NET)"
+      },
+      {
+        "value": "291543374d0ee4f983132128dcef16ebc8c058f07b1dc1b1f7d7e11d189fd42a",
+        "filename": "XWormClient2.exe",
+        "confidence": "HIGH",
+        "context": "XWorm 3.0-5.0 builder output #2 (63,488 bytes, .NET/VB.NET)"
+      }
+    ],
     "md5": [
       {
-        "hash": "f162419fce4eb4dff92be342c47662c2",
+        "value": "f162419fce4eb4dff92be342c47662c2",
         "filename": "ShadoClient.exe",
         "confidence": "HIGH",
         "context": "Shadow RAT v2.6.4.0 staging/test build"
       },
       {
-        "hash": "8090c32b447f955e276ad8f005ea4775",
+        "value": "8090c32b447f955e276ad8f005ea4775",
         "filename": "ShadowClient.exe",
         "confidence": "HIGH",
         "context": "Shadow RAT v2.6.4.0 production build (8 feature flags enabled)"
       },
       {
-        "hash": "e4736090733ca81eeabdb16b4b8f9cc3",
+        "value": "e4736090733ca81eeabdb16b4b8f9cc3",
         "filename": "Shadow.Common.dll",
         "confidence": "HIGH",
         "context": "Shadow RAT shared library (message types, crypto, DNS utilities)"
       },
       {
-        "hash": "7e2fe58934874e442cfa183a34ceb24c",
+        "value": "7e2fe58934874e442cfa183a34ceb24c",
         "filename": "XWormClient.exe",
         "confidence": "HIGH",
         "context": "XWorm 3.0-5.0 builder output #1 (config key: PdqPY2fw6ffCVLQ8)"
       },
       {
-        "hash": "ca2e595881e56dbf63cf891ee14300cd",
+        "value": "ca2e595881e56dbf63cf891ee14300cd",
         "filename": "XWormClient2.exe",
         "confidence": "HIGH",
         "context": "XWorm 3.0-5.0 builder output #2 (config key: ZdoNsjYfT6begqDl)"
@@ -38,66 +70,34 @@
     ],
     "sha1": [
       {
-        "hash": "ad4e81b84f3c6f8b30863f90e8a09631112b0f5b",
+        "value": "ad4e81b84f3c6f8b30863f90e8a09631112b0f5b",
         "filename": "ShadoClient.exe",
         "confidence": "HIGH",
         "context": "Shadow RAT v2.6.4.0 staging/test build"
       },
       {
-        "hash": "d498af82aba3f8d9be1a5df2bcd07ae5a4011883",
+        "value": "d498af82aba3f8d9be1a5df2bcd07ae5a4011883",
         "filename": "ShadowClient.exe",
         "confidence": "HIGH",
         "context": "Shadow RAT v2.6.4.0 production build"
       },
       {
-        "hash": "3ef537af9aad6edc6792d53e25124a1649e5f655",
+        "value": "3ef537af9aad6edc6792d53e25124a1649e5f655",
         "filename": "Shadow.Common.dll",
         "confidence": "HIGH",
         "context": "Shadow RAT shared library"
       },
       {
-        "hash": "e69e32522835f37f18095e219385057b6bbdc959",
+        "value": "e69e32522835f37f18095e219385057b6bbdc959",
         "filename": "XWormClient.exe",
         "confidence": "HIGH",
         "context": "XWorm 3.0-5.0 builder output #1"
       },
       {
-        "hash": "7bb190d425645f02724329c6f909432e2441cc70",
+        "value": "7bb190d425645f02724329c6f909432e2441cc70",
         "filename": "XWormClient2.exe",
         "confidence": "HIGH",
         "context": "XWorm 3.0-5.0 builder output #2"
-      }
-    ],
-    "sha256": [
-      {
-        "hash": "3a4b0f50ea3eac55e22cbf24d873f9a1632d8f71e1fba91178c539030626ab32",
-        "filename": "ShadoClient.exe",
-        "confidence": "HIGH",
-        "context": "Shadow RAT v2.6.4.0 staging/test build (2,182,144 bytes, .NET 4.7.2, .NET Reactor packed)"
-      },
-      {
-        "hash": "240e2575f20c75c6b5e2ea69bc0f0d9675ffd3fea315ca818bcbee2572ee972f",
-        "filename": "ShadowClient.exe",
-        "confidence": "HIGH",
-        "context": "Shadow RAT v2.6.4.0 production build (2,181,120 bytes, .NET 4.7.2, .NET Reactor packed)"
-      },
-      {
-        "hash": "6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c",
-        "filename": "Shadow.Common.dll",
-        "confidence": "HIGH",
-        "context": "Shadow RAT shared library \u2014 core message types, Aes256 crypto, DNS utilities (109,568 bytes)"
-      },
-      {
-        "hash": "b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531",
-        "filename": "XWormClient.exe",
-        "confidence": "HIGH",
-        "context": "XWorm 3.0-5.0 builder output #1 (74,752 bytes, .NET/VB.NET)"
-      },
-      {
-        "hash": "291543374d0ee4f983132128dcef16ebc8c058f07b1dc1b1f7d7e11d189fd42a",
-        "filename": "XWormClient2.exe",
-        "confidence": "HIGH",
-        "context": "XWorm 3.0-5.0 builder output #2 (63,488 bytes, .NET/VB.NET)"
       }
     ],
     "filenames": [
@@ -190,21 +190,21 @@
         "port": "8990",
         "protocol": "TCP",
         "confidence": "HIGH",
-        "context": "Shadow RAT C2 listener \u2014 extracted from AES-256 encrypted config in both ShadoClient.exe and ShadowClient.exe"
+        "context": "Shadow RAT C2 listener — extracted from AES-256 encrypted config in both ShadoClient.exe and ShadowClient.exe"
       },
       {
         "ip": "151.245.112.70",
         "port": "7007",
         "protocol": "TCP",
         "confidence": "HIGH",
-        "context": "XWorm C2 listener \u2014 extracted from Rijndael-256-ECB encrypted config in both XWormClient.exe and XWormClient2.exe"
+        "context": "XWorm C2 listener — extracted from Rijndael-256-ECB encrypted config in both XWormClient.exe and XWormClient2.exe"
       },
       {
         "ip": "151.245.112.70",
         "port": "3000",
         "protocol": "TCP",
         "confidence": "MODERATE",
-        "context": "Shadow RAT cleartext port field \u2014 may be default/fallback or reconnection port, not confirmed active"
+        "context": "Shadow RAT cleartext port field — may be default/fallback or reconnection port, not confirmed active"
       },
       {
         "ip": "151.245.112.70",
@@ -218,14 +218,14 @@
         "port": "",
         "protocol": "",
         "confidence": "HIGH",
-        "context": "Current IP for epgoldsecurity.com \u2014 payload delivery server (Hostinger, AS47583)"
+        "context": "Current IP for epgoldsecurity.com — payload delivery server (Hostinger, AS47583)"
       },
       {
         "ip": "185.11.145.145",
         "port": "",
         "protocol": "",
         "confidence": "MODERATE",
-        "context": "Historical IP for epgoldsecurity.com \u2014 BlazingFast, AS47674, Netherlands. Active until 2026-03-26 migration",
+        "context": "Historical IP for epgoldsecurity.com — BlazingFast, AS47674, Netherlands. Active until 2026-03-26 migration",
         "false_positive_risk": "MODERATE"
       },
       {
@@ -233,7 +233,7 @@
         "port": "",
         "protocol": "",
         "confidence": "MODERATE",
-        "context": "Secondary historical BlazingFast IP for epgoldsecurity.com \u2014 same ASN/provider",
+        "context": "Secondary historical BlazingFast IP for epgoldsecurity.com — same ASN/provider",
         "false_positive_risk": "MODERATE"
       }
     ],
@@ -269,9 +269,9 @@
       {
         "url": "http://ip-api.com/line/?fields=hosting",
         "confidence": "HIGH",
-        "context": "XWorm anti-analysis callback \u2014 queries legitimate API to detect hosting/datacenter IPs. If response is 'true', malware exits silently.",
+        "context": "XWorm anti-analysis callback — queries legitimate API to detect hosting/datacenter IPs. If response is 'true', malware exits silently.",
         "false_positive_risk": "HIGH",
-        "note": "Legitimate service abused for sandbox evasion \u2014 do not block this URL as it will cause false positives"
+        "note": "Legitimate service abused for sandbox evasion — do not block this URL as it will cause false positives"
       }
     ],
     "user_agents": []
@@ -301,7 +301,7 @@
         "action": "%AppData%\\XWormClient.exe",
         "trigger": "Every 60 seconds (/sc minute /mo 1) at HIGHEST privilege (/rl highest)",
         "confidence": "HIGH",
-        "context": "XWorm aggressive scheduled task persistence \u2014 near-instant re-execution after termination",
+        "context": "XWorm aggressive scheduled task persistence — near-instant re-execution after termination",
         "value": "XWormClient"
       }
     ],
@@ -310,17 +310,17 @@
       {
         "name": "4c7e33e6-3f73-4b4c-a411-89fe63cdfa1e",
         "confidence": "HIGH",
-        "context": "Shadow RAT single-instance mutex \u2014 shared by both ShadoClient and ShadowClient builds. GUID format. Exits with code 2 if already running."
+        "context": "Shadow RAT single-instance mutex — shared by both ShadoClient and ShadowClient builds. GUID format. Exits with code 2 if already running."
       },
       {
         "name": "PdqPY2fw6ffCVLQ8",
         "confidence": "HIGH",
-        "context": "XWormClient.exe process mutex \u2014 derived from config AES key (lazy implementation)"
+        "context": "XWormClient.exe process mutex — derived from config AES key (lazy implementation)"
       },
       {
         "name": "ZdoNsjYfT6begqDl",
         "confidence": "HIGH",
-        "context": "XWormClient2.exe process mutex \u2014 different builder generation, same campaign"
+        "context": "XWormClient2.exe process mutex — different builder generation, same campaign"
       }
     ],
     "named_pipes": []
@@ -340,7 +340,7 @@
       {
         "pattern": "schtasks.exe /create /f /sc minute /mo 1 /tn XWormClient /tr ... /rl highest",
         "confidence": "HIGH",
-        "context": "XWorm scheduled task creation \u2014 every 60 seconds at HIGHEST privilege"
+        "context": "XWorm scheduled task creation — every 60 seconds at HIGHEST privilege"
       },
       {
         "pattern": "Process queries http://ip-api.com/line/?fields=hosting and exits if response is 'true'",
@@ -386,14 +386,14 @@
         "ns": "ns2.harrismanlieb.ink",
         "ip": "151.245.112.70",
         "confidence": "HIGH",
-        "context": "Self-hosted nameserver pointing to C2 IP \u2014 strong infrastructure clustering indicator",
+        "context": "Self-hosted nameserver pointing to C2 IP — strong infrastructure clustering indicator",
         "value": "ns2.harrismanlieb.ink"
       },
       {
         "ns": "ns2.latssko.com",
         "ip": "151.245.112.70",
         "confidence": "HIGH",
-        "context": "Self-hosted nameserver for previous operational domain \u2014 same self-hosting pattern",
+        "context": "Self-hosted nameserver for previous operational domain — same self-hosting pattern",
         "value": "ns2.latssko.com"
       }
     ],
