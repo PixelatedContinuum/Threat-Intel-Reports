@@ -74,7 +74,7 @@ rule NsMiner_Dropper_Downloader {
         uint16(0) == 0x5A4D and // PE file
         (
             (all of ($nsis*)) or
-            (3 of ($ftp*) and 2 of ($c2*))
+            (2 of ($ftp*) and 2 of ($c2*))
         )
 }
 ```
@@ -98,7 +98,7 @@ rule NsMiner_Persistence_Directory {
 
     condition:
         uint16(0) == 0x5A4D and // PE file
-        ($path1 and ($file1 or $file2 or $file3))
+        ($path1 and $path2 and ($file1 or $file2 or $file3))
 }
 ```
 

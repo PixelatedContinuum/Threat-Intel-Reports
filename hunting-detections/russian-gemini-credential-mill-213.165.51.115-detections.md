@@ -202,7 +202,8 @@ rule MAL_Python_A2A_C2_Server_Unauthenticated {
       filesize < 500KB and
       ($banner or ($handler_base and 3 of ($ep_update, $ep_agents, $ep_interact, $ep_telemetry, $ep_results))) and
       ($utf16_decode or $b64_decode) and
-      1 of ($ep_update, $ep_agents, $ep_interact, $ep_telemetry)
+      1 of ($ep_update, $ep_agents, $ep_interact, $ep_telemetry) and
+      ($payload_dir or $handler_base)
 }
 ```
 
@@ -277,7 +278,8 @@ rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {
       filesize < 100KB and
       (
          ($to_gemini and $from_gemini) or
-         ($new_session and ($to_gemini or $from_gemini or $subject_kw))
+         ($new_session and ($to_gemini or $from_gemini or $subject_kw)) or
+         ($bro_ru and ($to_gemini or $from_gemini or $subject_kw))
       )
 }
 ```
@@ -318,7 +320,8 @@ rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {
       filesize < 2MB and
       $reg_value and
       ($local_path or $run_key) and
-      1 of ($c2_domain, $payload_domain, $update_endpoint, $agent_id_hdr)
+      1 of ($c2_domain, $payload_domain, $update_endpoint, $agent_id_hdr) and
+      ($tls12_set or $invoke_rest)
 }
 ```
 

@@ -32,7 +32,7 @@ rule Arsenal237_nethost_dll_hash_detection {
         $filename = "nethost.dll" nocase
 
     condition:
-        filename or any of ($sha256_*, $md5_*, $sha1_*)
+        $filename or any of ($sha256_*, $md5_*, $sha1_*)
 }
 ```
 
@@ -55,7 +55,8 @@ rule Arsenal237_nethost_dll_c2_strings {
         $winsock_init = "WSAStartup"
 
     condition:
-        ($c2_targets or $env_discovery) and uint16(0) == 0x5a4d // MZ header
+        ($c2_targets or $env_discovery) and uint16(0) == 0x5a4d and // MZ header
+        ($rust_panic or $winsock_init)
 }
 ```
 

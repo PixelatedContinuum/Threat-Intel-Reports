@@ -148,7 +148,7 @@ rule PrivEsc_PrintSpoofer_SeImpersonate {
         (
             // High confidence: Tool name + core APIs
             (
-                $tool_name and
+                ($tool_name or $author_tag) and
                 $priv and
                 $api_impersonate and
                 ($api_createasuser or $api_createwithtoken)
@@ -157,8 +157,15 @@ rule PrivEsc_PrintSpoofer_SeImpersonate {
             (
                 ($pipe_format or ($pipe_spoolss and $sddl)) and
                 $api_impersonate and
+                $api_opentoken and
                 $api_duptoken and
                 2 of ($api_create*)
+            ) or
+            // Alternative: Print Spooler RPC trigger + token APIs
+            (
+                2 of ($rpc*) and
+                $api_impersonate and
+                ($api_createasuser or $api_createwithtoken)
             )
         )
 }
@@ -231,6 +238,16 @@ rule Proxy_Revsocks_Go_Binary {
                 $ua_ie11 and
                 $flag_connect and
                 ($flag_socks or $flag_dns or $flag_ws)
+            ) or
+            // DNS tunneling artifacts (dnstun-specific configuration flags)
+            (
+                $flag_dns and
+                ($dns_delay or $dns_type)
+            ) or
+            // Go build path + version string (build-provenance identification)
+            (
+                $go_path and
+                $version
             )
         )
 }

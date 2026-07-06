@@ -166,7 +166,7 @@ rule RAT_RavenRAT_Stub
     condition:
         uint16(0) == 0x5A4D and
         filesize < 15MB and
-        (($s1 and $s2) or (2 of ($s4, $s5, $s6, $s7) and $s8))
+        (($s1 and $s2 and $s3) or (2 of ($s4, $s5, $s6, $s7) and $s8))
 }
 ```
 

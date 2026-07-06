@@ -112,7 +112,7 @@ rule MAL_Linux_GHOST_libpam_cache_Rootkit_Family {
       // Require hook exports + multiple hide-list strings + port format string + proc hooks
       ($export_readdir and $export_fopen) and
       $port_fmt and
-      ($proc_net_tcp or $proc_cmdline) and
+      ($proc_net_tcp or $proc_cmdline or $proc_exe) and
       ($unsetenv_preload) and
       3 of ($hide_*)
 }
@@ -167,6 +167,7 @@ rule MAL_Linux_GHOST_libpam_cache_Source {
       $rtld_next and
       $constructor_attr and
       $unsetenv_call and
+      $port_fmt and
       2 of ($helper_*) and
       2 of ($hide_*)
 }
@@ -219,8 +220,8 @@ rule MAL_Linux_GHOST_Kit_Shell_Installer {
       filesize < 200KB and
       ($banner_v51 or $banner_v60) and
       $fn_anti_hisana and
-      $fn_compile_so and
-      ($fn_container_esc or ($fn_esc_cgroup and $fn_esc_mount)) and
+      ($fn_compile_so or $fn_install_preload) and
+      ($fn_container_esc or ($fn_esc_cgroup and $fn_esc_mount) or ($fn_esc_nsenter and $fn_esc_socket)) and
       ($fn_build_py or $fn_resurrection)
 }
 ```
@@ -268,7 +269,7 @@ rule MAL_Linux_GHOST_Hysteria_Operator_Wrapper {
       filesize < 30KB and
       $sni_masquerade and
       2 of ($hy2_*) and
-      ($panel_port or $hy2_installer or $api_vpn_report)
+      ($panel_port or $hy2_installer or $api_vpn_report or $ru_installs)
 }
 ```
 
@@ -312,7 +313,7 @@ rule MAL_Linux_GHOST_min1_DualTelegram_Wrapper {
    condition:
       filesize < 30KB and
       $owner_bot_prefix and
-      ($tg_owner_comment or $tg_mirror_comment or ($fn_tg and $pool_xmr_kryptex))
+      ($tg_owner_comment or $tg_mirror_comment or ($fn_tg and ($pool_xmr_kryptex or $pool_etc_kryptex or $fn_install_xmrig)))
 }
 ```
 
@@ -359,9 +360,9 @@ rule MAL_Linux_GHOST_ComfyUI_Python_Kit {
       $comfyui_stats     = "system_stats" ascii
    condition:
       filesize < 200KB and
-      ($fn_build_fetcher or $fn_plant_node) and
+      ($fn_build_fetcher or $fn_plant_node or $fn_find_nodes) and
       $class_perfmon and
-      ($pip_payload_repo or $node_mappings) and
+      ($pip_payload_repo or $node_mappings or $node_display) and
       ($comfyui_port or $comfyui_stats)
 }
 ```
@@ -443,7 +444,7 @@ rule MAL_Linux_GHOST_check_comfyui_Scanner {
    condition:
       filesize < 10KB and
       $port_8188 and
-      ($probe_system_stats or $probe_object_info) and
+      ($probe_system_stats or $probe_object_info or $probe_queue) and
       2 of ($out_*)
 }
 ```

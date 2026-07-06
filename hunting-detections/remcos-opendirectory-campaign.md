@@ -94,6 +94,8 @@ rule Remcos_RAT_Family_Detection {
 Detects specific Remcos RAT samples from the OpenDirectory 203[.]159[.]90[.]147 campaign.
 
 ```yara
+import "hash"
+
 rule Remcos_OpenDirectory_Campaign_203_159_90_147 {
     meta:
         description = "Detects specific Remcos RAT samples from OpenDirectory 203.159.90.147 campaign"
@@ -123,7 +125,7 @@ rule Remcos_OpenDirectory_Campaign_203_159_90_147 {
             hash.sha256(0, filesize) == "ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82" or
             hash.sha256(0, filesize) == "db218dd5f53fbcf39a6db043c8455667c3dbef44abe14865e8b962b4c676372e" or
             (
-                $mutex and
+                ($mutex or $window_class) and
                 (
                     $uac_cmd or
                     ($chrome_path and $firefox_path) or
@@ -204,7 +206,8 @@ rule Remcos_UAC_Bypass_Persistence {
             (any of ($uac_cmd_*) and $install_path) or
             (3 of ($persist_*) and $install_path) or
             ($persist_2 and $install_path and $remcos_mutex) or
-            ($remcos_mutex and 2 of ($persist_*) and any of ($uac_cmd_*))
+            ($remcos_mutex and 2 of ($persist_*) and any of ($uac_cmd_*)) or
+            ($melt_1 and $melt_3 and $install_path)
         )
 }
 ```

@@ -117,7 +117,7 @@ rule RAT_XiebroC2_v31_PaddedConfig_Build
     condition:
         uint16(0) == 0x5A4D and
         filesize < 25MB and
-        $s1 and $s2
+        $s1 and $s2 and $s3
 }
 ```
 

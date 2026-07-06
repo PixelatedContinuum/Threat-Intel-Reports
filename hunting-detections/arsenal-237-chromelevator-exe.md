@@ -62,13 +62,18 @@ rule Chromelevator_Browser_Credential_Extraction {
         ($filename and $payload and ($extraction or ($cookies and $passwords))) or
 
         // Strong detection: multiple browser targets + extraction capability
-        (3 of ($chrome, $brave, $edge) and 2 of ($extraction, $cookies, $passwords)) or
+        (3 of ($chrome, $brave, $edge) and 2 of ($extraction, $cookies, $passwords, $payments)) or
 
         // Behavioral detection: reflective loading + named pipe + browser targeting
         ($reflective and $named_pipe and any of ($chrome, $brave, $edge)) or
 
         // Command-line argument signature
-        (2 of ($verbose, $fingerprint, $output, $help) and any of ($chrome, $brave, $edge))
+        (2 of ($verbose, $fingerprint, $output, $help) and any of ($chrome, $brave, $edge)) or
+
+        // API-level corroboration: named-pipe IPC + embedded-resource loading APIs
+        // alongside browser targeting (the payload DLL is staged as a PE resource and
+        // delivered to the target browser process over the named pipe)
+        (2 of ($create_pipe, $connect_pipe, $find_resource, $load_resource) and any of ($chrome, $brave, $edge))
 }
 ```
 
@@ -121,8 +126,8 @@ rule Reflective_DLL_Injection_Framework {
 
     strings:
         // PE header parsing
-        $dos_header = "MZ" at 0
-        $nt_header = "PE" at 60
+        $dos_header = "MZ"
+        $nt_header = "PE"
         $pe_sig = { 50 45 00 00 }  // "PE\x00\x00"
 
         // Reflective loader
@@ -147,14 +152,19 @@ rule Reflective_DLL_Injection_Framework {
         $zw_create = "ZwCreateThreadEx" nocase ascii
 
     condition:
-        // Reflective DLL loading pattern
-        ($reflective_loader and $dos_header and $nt_header) or
+        // Reflective DLL loading pattern: MZ/PE header anchors at their canonical offsets,
+        // PE signature present, and PE-parsing-function strings alongside the reflective loader
+        ($reflective_loader and $dos_header at 0 and $nt_header at 60 and $pe_sig and
+         any of ($dos_hdr, $file_hdr, $opt_hdr)) or
 
         // Reflective injection via direct syscalls
         ($reflective_loader and all of ($zw_alloc, $zw_write, $zw_protect, $zw_create)) or
 
         // Reflective injection via Windows APIs
-        ($reflective_loader and all of ($alloc, $write, $protect, $create_remote))
+        ($reflective_loader and all of ($alloc, $write, $protect, $create_remote)) or
+
+        // Reflective export string as a standalone corroborating signal alongside memory injection APIs
+        ($reflective_export and any of ($alloc, $write, $protect, $create_remote))
 }
 ```
 

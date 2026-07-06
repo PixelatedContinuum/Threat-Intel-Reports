@@ -130,7 +130,7 @@ rule Arsenal237_Rust_Compiled
     condition:
         filesize > 900KB and filesize < 1MB and
         all of ($chacha20*, $poly1305*, $hex*) and
-        $rust_string1
+        $rust_string1 and $rust_string2
 }
 ```
 

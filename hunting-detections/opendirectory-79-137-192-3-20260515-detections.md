@@ -278,6 +278,7 @@ rule Tofsee_Bloater_2023_StaticTradecraft
         and pe.machine == pe.MACHINE_I386
         and pe.subsystem == pe.SUBSYSTEM_WINDOWS_GUI
         and pe.number_of_sections >= 4
+        and $winhttp_only_writedata
         and pe.imports("WINHTTP.dll", "WinHttpWriteData")
         and not pe.imports("WINHTTP.dll", "WinHttpOpen")
         and not pe.imports("WINHTTP.dll", "WinHttpConnect")

@@ -20,6 +20,8 @@ This document provides YARA rules, Sigma rules, SIEM queries, and network signat
 Detects the specific enc_c2.exe sample via cryptographic hash matching.
 
 ```yara
+import "hash"
+
 rule enc_c2_exe_file_hash {
     meta:
         description = "Detects enc_c2.exe ransomware sample by hash"
@@ -28,14 +30,12 @@ rule enc_c2_exe_file_hash {
         malware_type = "Ransomware"
         malware_family = "Arsenal-237"
         severity = "CRITICAL"
-
-    hash:
-        sha256 = "613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899"
-        md5 = "32a3497e57604e1037f1ff9993a8fdaa"
-        sha1 = "34d3c75e79633eb3bf47e751fb31274760aeae09"
+        hash1 = "613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899"
+        hash2 = "34d3c75e79633eb3bf47e751fb31274760aeae09"
+        hash3 = "32a3497e57604e1037f1ff9993a8fdaa"
 
     condition:
-        any of them
+        hash.sha256(0, filesize) == "613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899"
 }
 ```
 
@@ -168,7 +168,7 @@ rule teb_anti_debug_detection {
         $sleep_1000 = { 68 E8 03 00 00 FF 15 } // Push 0x3E8 (1000ms) / Call Sleep
 
     condition:
-        ($teb_api and ($sleep_loop or $sleep_1000))
+        ($teb_api and ($sleep_loop or $sleep_1000 or $stack_base))
 }
 ```
 

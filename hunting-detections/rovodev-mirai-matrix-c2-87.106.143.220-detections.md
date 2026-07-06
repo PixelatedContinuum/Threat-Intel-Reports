@@ -95,7 +95,8 @@ rule MAL_ELF_Naku_Pandora_Mirai_Family {
          ($charset_xor and $sora_xor) or
          ($charset_xor and $pandoranet) or
          ($sym_auth and $sym_resolve and $charset_xor) or
-         ($pandoranet and $sym_auth and $sym_resolve)
+         ($pandoranet and $sym_auth and $sym_resolve) or
+         ($charset_xor and $anime_xor)
       )
 }
 ```
@@ -539,7 +540,8 @@ rule MAL_Python_Persistent_Bot_DualChannel_CNC {
          ($wire_reg and $cnc_ep) or
          ($cron_hidden and ($initd_mask or $systemd_mask)) or
          ($reseed and $kill_comp) or
-         ($wire_hb and $cnc_port and $cron_hidden)
+         ($wire_hb and $cnc_port and $cron_hidden) or
+         ($wire_arch and $wire_vendor and ($wire_reg or $wire_hb))
       )
 }
 ```
@@ -584,8 +586,8 @@ rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
       (
          ($discord_id and $my_user) or
          ($discord_id and $pandoranet) or
-         ($discord_id and $ionos_ip) or
-         ($pandoranet and $ionos_ip and $discord_ctx)
+         ($discord_id and ($ionos_ip or $backup_ip)) or
+         ($pandoranet and ($ionos_ip or $backup_ip) and $discord_ctx)
       )
 }
 ```

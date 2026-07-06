@@ -228,9 +228,10 @@ rule MALW_Fraudulent_VMware_CodeSign_Cert_PEM
 
     condition:
         filesize < 10KB
-        and $pem_header
-        and $subject_cn
-        and $subject_l
+        and (
+            ($pem_header and $subject_cn and $subject_l)
+            or ($privkey_header and ($subject_cn or $subject_l))
+        )
 }
 ```
 

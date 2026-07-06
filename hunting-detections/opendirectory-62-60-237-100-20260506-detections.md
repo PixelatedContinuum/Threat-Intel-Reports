@@ -102,7 +102,7 @@ rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper
 rule MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher
 {
     meta:
-        description = "Detects operator-modified Wondershare Plowshare crash reporter (ExceptionHandler.dll) used as the HijackLoader stage-1 dispatcher. Identified by PDB path I:\CompanySource\Plowshare\Src\Symbol\Release\ExceptionHandler.pdb, operator-bespoke payload filenames (networkspec17.log, shadermgr93.rc), and the Wondershare-mimicking named pipe \\pipe\WondershareCrashServices."
+        description = "Detects operator-modified Wondershare Plowshare crash reporter (ExceptionHandler.dll) used as the HijackLoader stage-1 dispatcher. Identified by PDB path I:\\CompanySource\\Plowshare\\Src\\Symbol\\Release\\ExceptionHandler.pdb, operator-bespoke payload filenames (networkspec17.log, shadermgr93.rc), and the Wondershare-mimicking named pipe \\\\pipe\\WondershareCrashServices."
         author = "The Hunters Ledger"
         date = "2026-05-06"
         reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/"
@@ -110,7 +110,7 @@ rule MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher
         family = "HijackLoader"
 
     strings:
-        $pdb        = "I:\CompanySource\Plowshare\Src\Symbol\Release\ExceptionHandler.pdb" ascii
+        $pdb        = "I:\\CompanySource\\Plowshare\\Src\\Symbol\\Release\\ExceptionHandler.pdb" ascii
         $payload1   = "networkspec17.log" ascii wide
         $payload2   = "shadermgr93.rc" ascii wide
         $pipe       = "WondershareCrashServices" ascii wide
@@ -190,7 +190,7 @@ rule MALW_HijackLoader_Penguish_Stage3_Loader_PE
         $hash_rdb   = { 2D B6 03 B4 }
         $hash_zde   = { 32 FB 7E 6A }
         $hash_zqsi  = { D2 E6 69 AE }
-        $qihoo_pdb  = "C:\vmagent_new\bin\joblist\881673\out\Release\PromoUtil.pdb" ascii
+        $qihoo_pdb  = "C:\\vmagent_new\\bin\\joblist\\881673\\out\\Release\\PromoUtil.pdb" ascii
 
     condition:
         uint16(0) == 0x5A4D and
@@ -217,7 +217,7 @@ rule MALW_HijackLoader_Penguish_Stage3_Loader_PE
 rule MALW_HijackLoader_WVault_HollowHost_NetRAT
 {
     meta:
-        description = "Detects WVault.exe used as hollow host for injected .NET AsyncRAT-class RAT. WVault.exe is the genuine signed Qihoo 360 PromoUtil.exe renamed and dropped to C:\ProgramData\WVault.exe. Cross-campaign TTP cluster seen in 8+ campaigns since 2025."
+        description = "Detects WVault.exe used as hollow host for injected .NET AsyncRAT-class RAT. WVault.exe is the genuine signed Qihoo 360 PromoUtil.exe renamed and dropped to C:\\ProgramData\\WVault.exe. Cross-campaign TTP cluster seen in 8+ campaigns since 2025."
         author = "The Hunters Ledger"
         date = "2026-05-06"
         reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-62-60-237-100-20260506-detections/"
@@ -225,8 +225,8 @@ rule MALW_HijackLoader_WVault_HollowHost_NetRAT
         family = "HijackLoader"
 
     strings:
-        $pdb_qihoo  = "C:\vmagent_new\bin\joblist\881673\out\Release\PromoUtil.pdb" ascii
-        $drop_path  = "C:\ProgramData\WVault.exe" ascii wide
+        $pdb_qihoo  = "C:\\vmagent_new\\bin\\joblist\\881673\\out\\Release\\PromoUtil.pdb" ascii
+        $drop_path  = "C:\\ProgramData\\WVault.exe" ascii wide
         $persist    = "adv_ctrl" ascii wide
         $vs_company = "Qihoo 360 Technology Co." ascii wide
 

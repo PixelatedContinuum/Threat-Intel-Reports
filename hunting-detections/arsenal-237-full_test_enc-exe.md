@@ -69,8 +69,8 @@ rule Arsenal237_Ransomware_Lockbox_Strings {
     condition:
         uint16(0) == 0x5A4D and
         filesize > 10MB and filesize < 20MB and
-        (2 of ($ransom*) and $lockbox) or
-        (all of ($log*))
+        ((2 of ($ransom*) and $lockbox) or
+        (all of ($log*)))
 }
 ```
 
@@ -102,8 +102,8 @@ rule Arsenal237_Rayon_AntiAnalysis {
     condition:
         uint16(0) == 0x5A4D and
         filesize > 10MB and
-        (all of ($rayon, $walkdir, $sysinfo)) or
-        (2 of ($vm_detect, $vbox_detect, $encrypt_error*))
+        ((all of ($rayon, $walkdir, $sysinfo)) or
+        (2 of ($vm_detect, $vbox_detect, $encrypt_error*)))
 }
 ```
 
@@ -128,12 +128,14 @@ rule Arsenal237_NetworkShare_Enumeration {
 
         // Folder targeting string
         $folder_option = "--folder" ascii
+        $temp_path = "C:\\Windows\\Temp" ascii
 
     condition:
         uint16(0) == 0x5A4D and
         filesize > 10MB and
         ($netuse or $netuse_error or $unc_pattern) and
-        ($folder_option or "C:\\Windows\\Temp" ascii)
+        ($folder_option or $temp_path) and
+        $smb
 }
 ```
 
@@ -156,6 +158,7 @@ rule Arsenal237_FullTestEnc_Comprehensive {
 
         // Ransom indicators (must have)
         $ransom = "YOUR FILES HAVE BEEN ENCRYPTED!" ascii wide
+        $ransom_id = "Ransom ID" ascii
 
         // Performance/behavioral (must have at least 1)
         $rayon = "/rayon-" ascii
@@ -173,7 +176,7 @@ rule Arsenal237_FullTestEnc_Comprehensive {
         filesize > 10MB and filesize < 20MB and
         $chacha and $rsa_lib and $ransom and
         (1 of ($rayon, $walkdir, $sysinfo)) and
-        ($lockbox or $netuse or "Ransom ID" ascii)
+        ($lockbox or $netuse or $ransom_id)
 }
 ```
 

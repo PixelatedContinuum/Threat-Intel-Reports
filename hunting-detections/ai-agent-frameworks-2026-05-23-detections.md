@@ -226,9 +226,10 @@ rule SUSP_AI_Generated_Offensive_Code_Python {
    condition:
       filesize < 2MB and
       $doc1 and
+      1 of ($doc2, $doc3, $doc4) and
       ($exc1 or $exc2) and
       2 of ($var*) and
-      $rate1 and
+      1 of ($rate*) and
       2 of ($off*)
 }
 ```
@@ -297,7 +298,8 @@ rule MAL_Linux_GHOST_LDPreload_Rootkit_Family {
       3 of ($s*) and
       2 of ($p*) and
       all of ($h*) and
-      $c1
+      $c1 and
+      $f1
 }
 ```
 

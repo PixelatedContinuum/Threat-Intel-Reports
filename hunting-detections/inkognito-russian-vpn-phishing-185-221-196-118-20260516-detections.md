@@ -98,6 +98,8 @@ rule MALW_Inkognito_JSBundle_VPN_SPA
 **Deployment:** Web-proxy DLP pipeline; endpoint DLP on downloaded-file hash; threat-hunting tool HTTP-response body hash comparison.
 
 ```yara
+import "hash"
+
 rule MALW_Inkognito_BrandLogo_PNG
 {
     meta:
@@ -130,6 +132,8 @@ rule MALW_Inkognito_BrandLogo_PNG
 **Deployment:** Web-proxy DLP pipeline; endpoint DLP on downloaded-file hash.
 
 ```yara
+import "hash"
+
 rule MALW_Inkognito_Favicon_SVG
 {
     meta:

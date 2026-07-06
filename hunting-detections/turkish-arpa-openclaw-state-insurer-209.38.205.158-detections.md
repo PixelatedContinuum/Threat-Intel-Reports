@@ -89,7 +89,8 @@ rule MAL_PowerShell_Instana_Local_Collector_Family {
       $event_schema = "entity_type" ascii wide fullword
    condition:
       filesize < 50KB and
-      $victim_endpoint and $operator_c2 and $skip_cert
+      $victim_endpoint and $operator_c2 and $skip_cert and
+      (1 of ($turkish_comment, $arpa_server) or $event_schema)
 }
 ```
 
@@ -127,8 +128,13 @@ rule MAL_Python_ARPA_Observability_Harvester_Platform {
       $topology_endpoint = "/api/topology/unified" ascii wide
    condition:
       filesize < 5MB and
-      ($brand1 or $brand2) and
-      ($corr_endpoint or $topology_endpoint or $db_collector)
+      (
+         ($brand2 and $brand3 and $mock_data) or
+         (
+            ($brand1 or $brand2) and
+            ($corr_endpoint or $topology_endpoint or $db_collector or $db_ai)
+         )
+      )
 }
 ```
 
@@ -207,7 +213,11 @@ rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {
    condition:
       filesize < 500KB and
       $instana_tenant and
-      ($jwt_jti or ($instana_api and 2 of ($zabbix_ref, $solarwinds_ref, $vmware_aria)))
+      (
+         $jwt_jti or
+         ($instana_api and 2 of ($zabbix_ref, $solarwinds_ref, $vmware_aria)) or
+         ($cadence and $last_fetch)
+      )
 }
 ```
 
@@ -246,8 +256,8 @@ rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {
    condition:
       filesize < 500KB and
       $ai_db and
-      ($handler1 or $handler2 or $ai_training) and
-      ($arpa_path or $data_retrieval)
+      ($handler1 or $handler2 or $ai_training or $situations) and
+      ($arpa_path or $data_retrieval or $ai_service)
 }
 ```
 
@@ -285,7 +295,7 @@ rule MAL_Python_ARPA_CrossSource_Correlation_ETL {
    condition:
       filesize < 2MB and
       ($docstring or $turkish_diag) and
-      ($endpoint_dispatch or $topology_fn or $extract_fn)
+      ($endpoint_dispatch or $topology_fn or ($extract_fn and $turkish_extract) or ($docstring and $temporal))
 }
 ```
 
@@ -322,8 +332,8 @@ rule MAL_Markdown_ARPA_OperatorNote_Family {
       $turkish_label = "Instana API Test" ascii wide
    condition:
       filesize < 200KB and
-      ($gercek or $instana_summary or $github_ref) and
-      ($victim_ref or $api_token_label)
+      ($gercek or $instana_summary or $github_ref or $instana_port) and
+      ($victim_ref or $api_token_label or $turkish_label)
 }
 ```
 
