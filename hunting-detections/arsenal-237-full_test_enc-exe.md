@@ -13,35 +13,7 @@ hide: true
 
 ## YARA Rules
 
-### Rule 1: Exact Hash Detection (Highest Confidence)
-
-```yara
-rule Arsenal237_FullTestEnc_ExactHash {
-    meta:
-        description = "Detects full_test_enc.exe by exact cryptographic hash"
-        author = "The Hunters Ledger"
-        date = "2026-01-27"
-        malware_type = "Ransomware"
-        threat_level = "CRITICAL"
-        confidence = "DEFINITE"
-        reference = "Arsenal-237 Toolkit"
-
-    strings:
-        // File hashes
-        $sha256 = { 4d 1f e7 b5 4a 0c e9 ce 20 82 c1 67 b6 62 ec 13 8b 89 0e 3f 30 5e 67 bd c1 3a 5e 9a 24 70 85 18 }
-        // Note: YARA hex patterns are for demonstration; use native hash matching in YARA 4.2+
-
-    hashes:
-        sha256 = "4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518"
-        sha1 = "bc0788a36b6b839fc917be0577cd14e584c71fd8"
-        md5 = "1fe8b9a14f9f8435c5fb5156bcbc174e"
-
-    condition:
-        any of them
-}
-```
-
-### Rule 2: Rust Cryptographic Library Detection
+### Rule 1: Rust Cryptographic Library Detection
 
 ```yara
 rule Arsenal237_RustCrypto_ChaCha20_RSA {
@@ -68,7 +40,7 @@ rule Arsenal237_RustCrypto_ChaCha20_RSA {
 }
 ```
 
-### Rule 3: Ransom String and Extension Detection
+### Rule 2: Ransom String and Extension Detection
 
 ```yara
 rule Arsenal237_Ransomware_Lockbox_Strings {
@@ -102,7 +74,7 @@ rule Arsenal237_Ransomware_Lockbox_Strings {
 }
 ```
 
-### Rule 4: Parallel Processing and Anti-Analysis
+### Rule 3: Parallel Processing and Anti-Analysis
 
 ```yara
 rule Arsenal237_Rayon_AntiAnalysis {
@@ -135,7 +107,7 @@ rule Arsenal237_Rayon_AntiAnalysis {
 }
 ```
 
-### Rule 5: Network Share Enumeration Pattern
+### Rule 4: Network Share Enumeration Pattern
 
 ```yara
 rule Arsenal237_NetworkShare_Enumeration {
@@ -165,7 +137,7 @@ rule Arsenal237_NetworkShare_Enumeration {
 }
 ```
 
-### Rule 6: Comprehensive Arsenal-237 Detection
+### Rule 5: Comprehensive Arsenal-237 Detection
 
 ```yara
 rule Arsenal237_FullTestEnc_Comprehensive {

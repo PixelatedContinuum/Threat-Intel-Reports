@@ -24,27 +24,6 @@ Comprehensive detection coverage for FleetAgentFUD.exe, a "Fully Undetectable" R
 
 ### FleetAgentFUD.exe Core Detection Rules
 
-#### YARA Rule - FleetAgentFUD.exe File Hash & Characteristics
-```yaml
-rule FleetAgentFUD_FileHash_Exact {
-    meta:
-        description = "Detects FleetAgentFUD.exe by exact file hash and size"
-        author = "The Hunters Ledger"
-        date = "2026-01-12"
-        hash_sha256 = "072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff"
-        hash_sha1 = "51aa8b08dc67cb91435ce58d4453a8ae5e0dd577"
-        hash_md5 = "5b37f5fc42384834b7aac5081a5bac85"
-        severity = "CRITICAL"
-        ref = "Open Directory 109.230.231.37"
-        family = "FleetAgentFUD"
-
-    condition:
-        uint16(0) == 0x5A4D and // PE file
-        filesize == 17920 and // Exact size match
-        hash.sha256(0, filesize) == "072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff"
-}
-```
-
 #### YARA Rule - FleetAgentFUD WebSocket C2 Signatures
 ```yaml
 rule FleetAgentFUD_WebSocket_C2_Pattern {

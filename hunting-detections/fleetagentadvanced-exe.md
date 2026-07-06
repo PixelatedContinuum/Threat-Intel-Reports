@@ -92,25 +92,6 @@ rule FleetAgentAdvanced_Dropper_Core {
 }
 ```
 
-#### YARA Rule - RuntimeOptimization.exe Payload Detection
-```yaml
-rule FleetAgentAdvanced_RuntimeOptimization_Payload {
-    meta:
-        description = "Detects dropped RuntimeOptimization.exe payload"
-        author = "The Hunters Ledger"
-        date = "2026-01-12"
-        hash1 = "9fc6b69623133f5d6f1f4cda0ec4319300080c9bbaa0f88c93f01eeba84e80e7"
-        severity = "HIGH"
-        ref = "Dropped payload from FleetAgentAdvanced.exe"
-        family = "FleetAgentAdvanced"
-
-    condition:
-        uint16(0) == 0x5A4D and
-        filesize == 27648 and // 27 KB exact size
-        hash.sha256(0, filesize) == "9fc6b69623133f5d6f1f4cda0ec4319300080c9bbaa0f88c93f01eeba84e80e7"
-}
-```
-
 #### YARA Rule - Quad-Persistence Pattern Detection
 ```yaml
 rule FleetAgentAdvanced_Quad_Persistence_Pattern {

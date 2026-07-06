@@ -44,27 +44,7 @@ Detect advanced evasion via **KeServiceDescriptorTable** resolution and indirect
 
 ## YARA Detection Rules
 
-### Rule 1: BdApiUtil64.sys File Hash Detection
-
-```yara
-rule Arsenal237_BdApiUtil64_Hash {
-    meta:
-        description = "Detects Arsenal-237 BdApiUtil64.sys by file hash"
-        author = "The Hunters Ledger"
-        date = "2026-01-26"
-        hash = "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428"
-        severity = "CRITICAL"
-        family = "Arsenal-237"
-        technique = "T1068 - BYOVD Exploitation"
-
-    condition:
-        hash.sha256(0, filesize) == "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428" or
-        hash.md5(0, filesize) == "ced47b89212f3260ebeb41682a4b95ec" or
-        hash.sha1(0, filesize) == "148c0cde4f2ef807aea77d7368f00f4c519f47ef"
-}
-```
-
-### Rule 2: Baidu Driver Signature Pattern
+### Rule 1: Baidu Driver Signature Pattern
 
 ```yara
 rule Arsenal237_BdApiUtil_Signature {
@@ -90,7 +70,7 @@ rule Arsenal237_BdApiUtil_Signature {
 }
 ```
 
-### Rule 3: IOCTL Code Pattern Detection
+### Rule 2: IOCTL Code Pattern Detection
 
 ```yara
 rule Arsenal237_BdApiUtil_IOCTL_Abuse {
@@ -122,7 +102,7 @@ rule Arsenal237_BdApiUtil_IOCTL_Abuse {
 }
 ```
 
-### Rule 4: SSDT Bypass Pattern
+### Rule 3: SSDT Bypass Pattern
 
 ```yara
 rule Arsenal237_BdApiUtil_SSDT_Bypass {
@@ -152,7 +132,7 @@ rule Arsenal237_BdApiUtil_SSDT_Bypass {
 }
 ```
 
-### Rule 5: Kernel Process Termination Pattern
+### Rule 4: Kernel Process Termination Pattern
 
 ```yara
 rule Arsenal237_BdApiUtil_Kernel_Termination {

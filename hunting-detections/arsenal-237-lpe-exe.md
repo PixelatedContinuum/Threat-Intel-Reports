@@ -44,25 +44,7 @@ Monitor for UAC bypass registry modifications and unusual process hierarchies (s
 
 ## YARA Detection Rules
 
-### Rule 1: lpe.exe File Hash Detection
-
-```yara
-rule Arsenal237_LPE_EXE_Hash {
-    meta:
-        description = "Detects Arsenal-237 lpe.exe by file hash"
-        author = "The Hunters Ledger"
-        date = "2026-01-25"
-        hash = "c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e"
-        severity = "CRITICAL"
-        family = "Arsenal-237"
-
-    condition:
-        hash.sha256(0, filesize) == "c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e" or
-        hash.md5(0, filesize) == "47400a6b7c84847db0513e6dbc04e469"
-}
-```
-
-### Rule 2: Token Manipulation API Pattern
+### Rule 1: Token Manipulation API Pattern
 
 ```yara
 rule Arsenal237_LPE_Token_Manipulation {
@@ -93,7 +75,7 @@ rule Arsenal237_LPE_Token_Manipulation {
 }
 ```
 
-### Rule 3: UAC Bypass Registry Hijack Pattern
+### Rule 2: UAC Bypass Registry Hijack Pattern
 
 ```yara
 rule Arsenal237_LPE_UAC_Bypass {
@@ -117,7 +99,7 @@ rule Arsenal237_LPE_UAC_Bypass {
 }
 ```
 
-### Rule 4: Scheduled Task Privilege Escalation
+### Rule 3: Scheduled Task Privilege Escalation
 
 **Note**: Unlike UAC bypass (hijacking fodhelper.exe) or named pipe (exploiting Print Spooler), this technique uses **schtasks.exe directly** through its administrative capabilities. Task names are likely randomized at runtime and not hardcoded in the malware.
 
@@ -144,7 +126,7 @@ rule Arsenal237_LPE_Schtasks {
 }
 ```
 
-### Rule 5: Named Pipe Impersonation Pattern
+### Rule 4: Named Pipe Impersonation Pattern
 
 ```yara
 rule Arsenal237_LPE_Named_Pipe {
@@ -171,7 +153,7 @@ rule Arsenal237_LPE_Named_Pipe {
 }
 ```
 
-### Rule 6: WMIC Process Creation Pattern
+### Rule 5: WMIC Process Creation Pattern
 
 ```yara
 rule Arsenal237_LPE_WMIC {
@@ -622,7 +604,7 @@ sequence by host.id with maxspan=60s
 ### Deployment Priorities
 
 1. **Immediate (Day 1)**:
-   - Deploy file hash detection (YARA Rule 1, EDR Query 5)
+   - Deploy file hash detection via the IOC feed and EDR Query 5
    - Enable Sysmon Event ID 10 (Process Access) logging for token manipulation detection
    - Deploy Sigma Rule 1 (Token Impersonation) and Rule 2 (UAC Bypass)
 
