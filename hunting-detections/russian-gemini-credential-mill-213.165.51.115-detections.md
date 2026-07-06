@@ -1050,7 +1050,7 @@ alert http $HOME_NET any -> any any (
     flow:established,to_server;
     http.method; content:"POST";
     http.header_names; content:"X-Agent-ID"; nocase;
-    pcre:"/\/api\/v1\/(update|interact|telemetry|get_results)/U";
+    http.uri; pcre:"/\/api\/v1\/(update|interact|telemetry|get_results)/";
     classtype:trojan-activity;
     sid:9000003; rev:1;
     metadata:author "The Hunters Ledger",
@@ -1076,7 +1076,7 @@ alert http $HOME_NET any -> any any (
 alert http $HOME_NET any -> any any (
     msg:"THL - Outbound to AntiPublic.one Credential-DB API /api/v2/search (Credential Operator Tool)";
     flow:established,to_server;
-    http.host; content:"antipublic.one"; nocase; endswith;
+    http.host; content:"antipublic.one"; endswith;
     http.uri; content:"/api/v2/search"; startswith;
     classtype:policy-violation;
     sid:9000004; rev:1;

@@ -568,7 +568,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (\
     flow:established,to_client; \
     http.response_line; content:"404"; \
     http.header; content:"Server: kittenx"; nocase; \
-    http.header; content:"Content-Length: 148"; \
+    content:"Content-Length: 148"; \
     sid:9001002; rev:1; \
     classtype:trojan-activity; \
     metadata:affected_product Web_Browser, attack_target Client_Endpoint, \
@@ -615,7 +615,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (\
     msg:"THE HUNTERS LEDGER - Inkognito Operator X-Admin-Token in CORS Allow-Headers Response"; \
     flow:established,to_client; \
     http.header; content:"Access-Control-Allow-Headers"; nocase; \
-    http.header; content:"X-Admin-Token"; nocase; \
+    content:"X-Admin-Token"; nocase; \
     sid:9001004; rev:1; \
     classtype:trojan-activity; \
     metadata:affected_product Web_Browser, attack_target Client_Endpoint, \
@@ -638,7 +638,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (\
 alert http [185.221.196.118,176.124.211.174,77.239.101.23,193.46.56.182,79.137.203.87] any -> $HOME_NET any (\
     msg:"THE HUNTERS LEDGER - Inkognito Operator Via Caddy Header from Known Operator IPs"; \
     flow:established,to_client; \
-    http.header; content:"Via"; http.header; content:"1.1 Caddy"; nocase; \
+    http.header; content:"Via"; content:"1.1 Caddy"; nocase; \
     sid:9001005; rev:1; \
     classtype:trojan-activity; \
     metadata:affected_product Web_Browser, attack_target Client_Endpoint, \

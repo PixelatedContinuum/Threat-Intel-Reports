@@ -403,7 +403,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (
     msg:"MALWARE WebServer Compromise Kit Reverse Shell Banner";
     flow:to_server,established;
     content:"Spawn Shell"; depth:20; nocase;
-    reference:campaign,WebServer-Compromise-Kit-91.236.230.250;
+    reference:url,the-hunters-ledger.com/reports/webserver-compromise-kit-91-236-230-250/;
     classtype:trojan-activity;
     sid:1000001; rev:1;
     metadata:attack_target Client_Endpoint, deployment Perimeter, affected_product Windows, signature_severity Critical;
@@ -417,7 +417,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (
 ```suricata
 alert ip $HOME_NET any -> 91.236.230.250 any (
     msg:"MALWARE Outbound to WebServer Compromise Kit C2 Server";
-    reference:campaign,WebServer-Compromise-Kit-91.236.230.250;
+    reference:url,the-hunters-ledger.com/reports/webserver-compromise-kit-91-236-230-250/;
     classtype:trojan-activity;
     sid:1000002; rev:1;
     metadata:attack_target Client_Endpoint, deployment Perimeter, affected_product Any, signature_severity Critical;
@@ -434,7 +434,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (
     flow:to_server,established;
     http.user_agent; content:"Windows NT 6.1|3b| Trident/7.0"; nocase;
     threshold:type limit, track by_src, count 5, seconds 300;
-    reference:tool,revsocks;
+    reference:url,the-hunters-ledger.com/reports/webserver-compromise-kit-91-236-230-250/;
     classtype:policy-violation;
     sid:1000003; rev:1;
     metadata:attack_target Client_Endpoint, deployment Perimeter, signature_severity Medium;

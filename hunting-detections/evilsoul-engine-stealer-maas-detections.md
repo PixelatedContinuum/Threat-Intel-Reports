@@ -598,7 +598,7 @@ alert dns $HOME_NET any -> any any (msg:"THL EvilSoul-Engine DNS Query for evils
 **Deployment:** Network IDS/IPS at network egress.
 
 ```
-alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Socket.IO C2 Handshake to evilsoul.cc (299a2e7f WebPanel RAT)"; flow:established,to_server; http.host; content:"evilsoul.cc"; nocase; http.uri; content:"/socket.io/"; nocase; content:"transport=polling"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Socket.IO C2 Handshake to evilsoul.cc (299a2e7f WebPanel RAT)"; flow:established,to_server; http.host; content:"evilsoul.cc"; http.uri; content:"/socket.io/"; nocase; content:"transport=polling"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
 ```
 
 ### EvilSoul-Engine Webhook-Resolution Relay POST /tralalero
@@ -624,7 +624,7 @@ alert http $HOME_NET any -> 198.1.195.210 any (msg:"THL EvilSoul-Engine Webhook-
 **Deployment:** Network IDS/IPS at network egress.
 
 ```
-alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Discord Webhook Exfiltration POST Primary Sink (Maploot/Tinarox)"; flow:established,to_server; http.host; content:"discord.com"; nocase; http.uri; content:"/api/webhooks/1391195207508295750"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Discord Webhook Exfiltration POST Primary Sink (Maploot/Tinarox)"; flow:established,to_server; http.host; content:"discord.com"; http.uri; content:"/api/webhooks/1391195207508295750"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
 ```
 
 ### EvilSoul-Engine Discord Webhook Exfiltration — Secondary Sink (Maploot/Tinarox)
@@ -637,7 +637,7 @@ alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Discord Webhook Ex
 **Deployment:** Network IDS/IPS at network egress.
 
 ```
-alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Discord Webhook Exfiltration POST Secondary Sink (Maploot/Tinarox)"; flow:established,to_server; http.host; content:"discord.com"; nocase; http.uri; content:"/api/webhooks/1401355074235793458"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Discord Webhook Exfiltration POST Secondary Sink (Maploot/Tinarox)"; flow:established,to_server; http.host; content:"discord.com"; http.uri; content:"/api/webhooks/1401355074235793458"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
 ```
 
 ### EvilSoul-Engine Operator ngrok Tunnel Panel-Delivery Endpoint
@@ -650,7 +650,7 @@ alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Discord Webhook Ex
 **Deployment:** Network IDS/IPS at network egress; treat as a time-boxed indicator requiring periodic review.
 
 ```
-alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Operator ngrok Tunnel Panel-Delivery Endpoint (acf02ac96211)"; flow:established,to_server; http.host; content:"acf02ac96211.ngrok-free.app"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
+alert http $HOME_NET any -> any any (msg:"THL EvilSoul-Engine Operator ngrok Tunnel Panel-Delivery Endpoint (acf02ac96211)"; flow:established,to_server; http.host; content:"acf02ac96211.ngrok-free.app"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-03, reference https://the-hunters-ledger.com/hunting-detections/evilsoul-engine-stealer-maas-detections/;)
 ```
 
 ---
