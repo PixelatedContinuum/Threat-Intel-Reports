@@ -46,7 +46,7 @@ hide: true
    Yara Rule Set
    Identifier: AI-Agent-Framework-Abuse-MultiActor-2026-05-23
    Author: The Hunters Ledger
-   Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
+   Source: https://the-hunters-ledger.com/
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -68,7 +68,7 @@ hide: true
    Yara Rule Set
    Identifier: AI-Agent-Framework-Abuse-MultiActor-2026-05-23
    Author: The Hunters Ledger
-   Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
+   Source: https://the-hunters-ledger.com/
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 

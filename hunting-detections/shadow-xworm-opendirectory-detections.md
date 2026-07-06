@@ -44,7 +44,7 @@ hide: true
     Author: The Hunters Ledger
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
+    Reference: https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -54,7 +54,7 @@ rule RAT_ShadowRAT_v2640_Client
         description = "Detects Shadow RAT v2.6.4.0 client based on characteristic namespace strings, version constant, and Costura.Fody embedded assembly markers. Shadow RAT is a heavily modified Quasar RAT fork with HVNC, WinRE persistence, crypto clipper, and Kematian stealer integration."
         author = "The Hunters Ledger"
         date = "2026-04-04"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
         hash_sha256 = "3a4b0f50ea3eac55e22cbf24d873f9a1632d8f71e1fba91178c539030626ab32"
         family = "ShadowRAT"
 
@@ -94,7 +94,7 @@ rule RAT_ShadowRAT_v2640_Client
     Author: The Hunters Ledger
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
+    Reference: https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -104,7 +104,7 @@ rule RAT_ShadowRAT_CommonDLL
         description = "Detects Shadow.Common.dll, the shared library component of Shadow RAT containing core message types, AES-256 crypto, and protobuf-net serialization. This DLL is embedded via Costura.Fody and extracted at runtime. Matches on disk and in memory."
         author = "The Hunters Ledger"
         date = "2026-04-04"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
         hash_sha256 = "6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c"
         family = "ShadowRAT"
 
@@ -137,7 +137,7 @@ rule RAT_ShadowRAT_CommonDLL
     Author: The Hunters Ledger
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
+    Reference: https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -147,7 +147,7 @@ rule RAT_ShadowRAT_AMSI_ETW_Bypass
         description = "Detects Shadow RAT v2.6.4.0 AMSI and ETW bypass chain. AMSI bypass patches AmsiScanBuffer with a 15-byte shellcode returning E_INVALIDARG (0x80070057). ETW bypass patches EtwEventWrite with a single RET instruction. Both API names are obfuscated using asterisk-padding with runtime Replace() deobfuscation to evade static analysis."
         author = "The Hunters Ledger"
         date = "2026-04-04"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
         hash_sha256 = "3a4b0f50ea3eac55e22cbf24d873f9a1632d8f71e1fba91178c539030626ab32"
         family = "ShadowRAT"
 
@@ -191,7 +191,7 @@ rule RAT_ShadowRAT_AMSI_ETW_Bypass
     Author: The Hunters Ledger
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
+    Reference: https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -201,7 +201,7 @@ rule RAT_ShadowRAT_Crypto_Clipper
         description = "Detects Shadow RAT crypto clipper module via clipboard monitoring method names paired with multi-currency address fields (BTC/LTC/ETH) in Shadow.Common.dll. Enables real-time substitution of victim cryptocurrency addresses during financial transactions."
         author = "The Hunters Ledger"
         date = "2026-04-04"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
         hash_sha256 = "6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c"
         family = "ShadowRAT"
 
@@ -235,7 +235,7 @@ rule RAT_ShadowRAT_Crypto_Clipper
     Author: The Hunters Ledger
     Date: 2026-04-04
     Identifier: Shadow RAT v2.6.4.0 OpenDirectory 151.245.112.70
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
+    Reference: https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -245,7 +245,7 @@ rule RAT_ShadowRAT_WinRE_Persistence
         description = "Detects Shadow RAT WinRE persistence module via command handler method names and namespace string in Shadow.Common.dll. WinRE persistence survives OS reinstallation and is an uncommon technique with limited EDR behavioral coverage — file-level detection is the primary viable layer."
         author = "The Hunters Ledger"
         date = "2026-04-04"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
         hash_sha256 = "6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c"
         family = "ShadowRAT"
 
@@ -280,7 +280,7 @@ rule RAT_ShadowRAT_WinRE_Persistence
     Author: The Hunters Ledger
     Date: 2026-04-04
     Identifier: XWorm 3.0-5.0 OpenDirectory 151.245.112.70
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
+    Reference: https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -290,7 +290,7 @@ rule RAT_XWorm_30_50_Config
         description = "Detects XWorm 3.0-5.0 builder output based on campaign-specific config AES keys, the group tag <Xwormmm>, ip-api.com hosting detection string, and triple persistence indicators. The config key strings double as process mutexes in XWorm's implementation."
         author = "The Hunters Ledger"
         date = "2026-04-04"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
         hash_sha256 = "b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531"
         family = "XWorm"
 
@@ -335,7 +335,7 @@ rule RAT_XWorm_30_50_Config
     Author: The Hunters Ledger
     Date: 2026-04-04
     Identifier: XWorm 3.0-5.0 OpenDirectory 151.245.112.70
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/
+    Reference: https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -345,7 +345,7 @@ rule RAT_XWorm_Rijndael256ECB_Crypto
         description = "Detects XWorm 3.0-5.0 variants using the characteristic Rijndael-256-ECB config encryption with non-standard overlapping MD5 key derivation, combined with anti-analysis indicators. The MD5 hash is copied to a 32-byte key array at offsets 0 and 15 with a single overlap byte — a distinctive non-standard construction consistent across XWorm 3.0-5.0 variants."
         author = "The Hunters Ledger"
         date = "2026-04-04"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/shadow-xworm-opendirectory-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/shadow-xworm-opendirectory-detections/"
         hash_sha256 = "b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531"
         family = "XWorm"
 
@@ -393,7 +393,7 @@ description: |
     on the build variant (staging vs production). Presence of this key indicates an active
     Shadow RAT infection with established persistence.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -438,7 +438,7 @@ description: |
     from System32 or are explicitly filtered; a non-system, non-IDE process loading amsi.dll
     from a user-writable path is a strong indicator of an AMSI patching attempt.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -493,7 +493,7 @@ description: |
     EDR tools and security monitoring products that rely on ETW for .NET CLR event visibility.
     The GrantedAccess value 0x1FFFFF indicates full process access including write permissions.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -547,7 +547,7 @@ description: |
     profiles simultaneously and is rarely issued in managed enterprise environments outside of
     explicit maintenance windows.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -598,7 +598,7 @@ description: |
     name is derived from the install filename (typically "XWormClient") and the action points
     to the malware binary in %AppData%.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -648,7 +648,7 @@ description: |
     mechanisms deployed simultaneously. The value data points to the malware binary in
     %AppData%\Roaming\.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -690,7 +690,7 @@ description: |
     installers creating startup shortcuts typically run from Program Files; a shortcut created
     by a process running from a user-writable path is a strong indicator of malware persistence.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -738,7 +738,7 @@ description: |
     and researcher environments. A non-browser, non-network-tool process querying this specific
     API is a strong indicator of sandbox evasion behavior.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -793,7 +793,7 @@ description: |
     direct ADS stream deletion. Removal of Zone.Identifier by a process other than a browser or
     system tool is abnormal and indicates deliberate MOTW suppression.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:
@@ -844,7 +844,7 @@ description: |
     performed before any malicious behavior executes. Legitimate WMI inventory tools run from
     managed system paths, not user-writable locations.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/shadow-xworm-opendirectory/
+    - https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 author: The Hunters Ledger
 date: '2026-04-04'
 tags:

@@ -22,7 +22,7 @@ hide: true
     Author: The Hunters Ledger
     Date: 2026-03-17
     Identifier: XWorm V5.6 / PureRAT v4.1.9 / RavenRAT / XwormLoader / Aspdkzb
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316/
+    Reference: https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 
@@ -32,7 +32,7 @@ rule RAT_XWorm_V56_Stub
         description = "Detects XWorm V5.6 VB.NET victim stub by plaintext mutex string, protocol packet delimiter, and distinctive Telegram notification typo strings characteristic of this builder version"
         author = "The Hunters Ledger"
         date = "2026-03-17"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316/"
         hash_sha256 = "427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f"
         family = "XWorm"
 
@@ -56,7 +56,7 @@ rule TOOLKIT_XWorm_V56_Builder
         description = "Detects XWorm V5.6 builder and C2 server panel by version string, Telegram skull emoji format string, and sandbox VM detection URL characteristic of the V5.6 build"
         author = "The Hunters Ledger"
         date = "2026-03-17"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316/"
         hash_sha256 = "90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405"
         family = "XWorm"
 
@@ -79,7 +79,7 @@ rule MALW_XwormLoader_ReflectivePE
         description = "Detects XwormLoader native C++ 11-stage reflective PE loader by NOT-minus-0x3E decryption opcode sequence, .NET Framework LDR path spoof string, and operator-authored decoy comment strings embedded in the binary"
         author = "The Hunters Ledger"
         date = "2026-03-17"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316/"
         hash_sha256 = "f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478"
         family = "XwormLoader"
 
@@ -102,7 +102,7 @@ rule MALW_Aspdkzb_ConfuserEx_Loader
         description = "Detects Aspdkzb-family ConfuserEx-protected fileless loader cluster delivering PureRAT v4.1.9 via three-stage in-memory Assembly.Load chain; matched by distinctive internal namespace strings from the loader stages"
         author = "The Hunters Ledger"
         date = "2026-03-17"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316/"
         hash_sha256 = "978ead9671e59772eeeb73344fc3b0c068c5168de7f67f738269f5b59e681a9a"
         family = "Aspdkzb"
 
@@ -125,7 +125,7 @@ rule RAT_PureRAT_v419_Payload
         description = "Detects PureRAT v4.1.9 final stage .NET Reactor-obfuscated payload (Faidowra.dll) by deobfuscated internal namespace strings and MaaS version string characteristic of the v4.1.9 build"
         author = "The Hunters Ledger"
         date = "2026-03-17"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316/"
         hash_sha256 = "6b526c29a6961c1f03eeb1ec4ca3a0fdc5680e3f90db013dea8b27d8b63cce57"
         family = "PureRAT"
 
@@ -149,7 +149,7 @@ rule RAT_RavenRAT_Stub
         description = "Detects Raven RAT Delphi victim stub by hidden VNC class names from HVNC implementation and cryptocurrency wallet theft target strings; wallet names combined with Run key persistence value reduce false positive risk"
         author = "The Hunters Ledger"
         date = "2026-03-17"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316/"
         hash_sha256 = "a616c5fd9cee76d2df4d2cfec8d8519e6fd2ad605c1942e1e1cbb99aa09a278d"
         family = "RavenRAT"
 
@@ -193,7 +193,7 @@ description: >
     clipper wallet addresses (BTC, ETH, TRC20). Presence of this key indicates an active or
     recently active XWorm V5.6 infection on the host.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
 date: 2026/03/17
 tags:
@@ -235,7 +235,7 @@ description: >
     installations, which install to %ProgramFiles%. Presence of this key indicates successful
     persistence establishment by an unidentified DGA-capable malware family confirmed in this campaign.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
 date: 2026/03/17
 tags:
@@ -280,7 +280,7 @@ description: >
     Raven RAT provides keylogging, hidden VNC desktop creation, cryptocurrency wallet theft
     (Exodus, Atomic Wallet, Guarda, Wasabi), and SOCKS proxy capabilities.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
 date: 2026/03/17
 tags:
@@ -329,7 +329,7 @@ description: >
     spawning msiexec.exe with ALLUSERS=2 is characteristic of this phishing dropper and is not
     expected behavior in legitimate software deployment from this parent process.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
 date: 2026/03/17
 tags:
@@ -379,7 +379,7 @@ description: >
     The rule targets PowerShell spawned by remote access tools, command shells, or scripting
     interpreters not expected to launch PowerShell with policy bypass flags in normal operations.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
 date: 2026/03/17
 tags:
@@ -434,7 +434,7 @@ description: >
     to this IP on these ports represents confirmed malicious C2 activity warranting immediate
     investigation.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
 date: 2026/03/17
 tags:
@@ -484,7 +484,7 @@ description: >
     Detection of this connection pattern indicates an unauthorized ScreenConnect session
     established through phishing activity.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-74-0-42-25-20260316-detections/
 author: The Hunters Ledger
 date: 2026/03/17
 tags:

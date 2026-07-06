@@ -52,7 +52,7 @@ The following corrections from the investigation apply to detection rule derivat
    Yara Rule Set
    Identifier: GHOST Cryptojacker Kit Family — Vova75Rus / 77.110.96.200
    Author: The Hunters Ledger
-   Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
+   Source: https://the-hunters-ledger.com/
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 ```

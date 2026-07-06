@@ -55,7 +55,7 @@ hide: true
    Yara Rule Set
    Identifier: Naku/Pandora-Mirai 11-arch IoT botnet (UTA-2026-014)
    Author: The Hunters Ledger
-   Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
+   Source: https://the-hunters-ledger.com/
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 

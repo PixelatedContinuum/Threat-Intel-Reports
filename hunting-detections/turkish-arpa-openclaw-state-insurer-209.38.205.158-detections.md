@@ -53,7 +53,7 @@ hide: true
    Yara Rule Set
    Identifier: Turkish-ARPA-OpenClaw-State-Insurer-209.38.205.158
    Author: The Hunters Ledger
-   Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
+   Source: https://the-hunters-ledger.com/
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 

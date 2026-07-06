@@ -11,7 +11,7 @@ hide: true
 **Generated:** 2026-03-01
 **Author:** The Hunters Ledger
 **License:** CC BY 4.0
-**Reference:** https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
+**Reference:** https://the-hunters-ledger.com/reports/sliver-open-directory/
 **TLP:** WHITE
 
 ---
@@ -92,7 +92,7 @@ rule MALW_ScareCrow_Go_Loader_OneDriveSync
         hash_sha256     = "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
         hash_md5        = "9559366a6f6874ad914e308a34903c77"
         hash_sha1       = "67bb390c2dad7ebd9e9f706a6f2ba42e4cbcbee7"
-        reference       = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/"
+        reference       = "https://the-hunters-ledger.com/reports/sliver-open-directory/"
         tlp             = "WHITE"
         mitre_attack    = "T1027.002, T1055.012, T1027.013, T1106"
 
@@ -178,7 +178,7 @@ rule MALW_Fraudulent_VMware_CodeSign_Cert_PE
         author          = "The Hunters Ledger"
         date            = "2026-02-28"
         hash_sha256     = "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
-        reference       = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/"
+        reference       = "https://the-hunters-ledger.com/reports/sliver-open-directory/"
         tlp             = "WHITE"
         mitre_attack    = "T1553.002"
 
@@ -211,7 +211,7 @@ rule MALW_Fraudulent_VMware_CodeSign_Cert_PEM
         description     = "Detects the raw PEM-format fraudulent VMware code-signing certificate artifact from the WebServer-Compromise-Kit-45.94.31.220 campaign. This file (cert.pem) was exposed on the attacker's open directory alongside the unencrypted private key (key.pem). Any instance of this PEM file on a host indicates the signing capability has been distributed. The private key was confirmed unencrypted (PKCS#8 BEGIN PRIVATE KEY header)."
         author          = "The Hunters Ledger"
         date            = "2026-02-28"
-        reference       = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/"
+        reference       = "https://the-hunters-ledger.com/reports/sliver-open-directory/"
         tlp             = "WHITE"
         mitre_attack    = "T1553.002"
 
@@ -267,7 +267,7 @@ rule MALW_UPX_Packed_Sliver_Variant
         hash_sha256     = "d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea"
         hash_md5        = "f587753c0a46688af2ffea00573192e2"
         hash_sha1       = "8f27695dfd4f29e872c1661cdf225120182dd05b"
-        reference       = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/"
+        reference       = "https://the-hunters-ledger.com/reports/sliver-open-directory/"
         tlp             = "WHITE"
         mitre_attack    = "T1027.002"
 
@@ -330,7 +330,7 @@ rule TOOLKIT_ScareCrow_Build_Pipeline_Source_Artifacts
         description     = "Hunt rule detecting source code artifacts from the ScareCrow/SysWhispers3 build pipeline used in the WebServer-Compromise-Kit-45.94.31.220 campaign. Targets three distinctive source code markers: the XOR_KEY 0x42 define from string_obf.C, the Heaven's Gate far-return opcode sequence from heavens_gate.asm (34-byte compiled stub), and the SysWhispers3 SW3_SEED hash constant. Presence of these artifacts on a host indicates the offensive build pipeline has been deployed or is in use."
         author          = "The Hunters Ledger"
         date            = "2026-02-28"
-        reference       = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/"
+        reference       = "https://the-hunters-ledger.com/reports/sliver-open-directory/"
         tlp             = "WHITE"
         mitre_attack    = "T1027.013, T1106"
 
@@ -410,7 +410,7 @@ id: 3a7f2c91-5e4b-4d8a-b1c9-6f2e1a3d8b07
 status: experimental
 description: Detects the PowerShell stager used in the WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The stager uses .NET reflection to access the amsiInitFailed private static field (disabling AMSI for the session), then downloads an executable payload via Net.WebClient.DownloadFile. This specific AMSI bypass technique combined with an executable download is a high-confidence indicator of malicious stager activity. PowerShell Script Block Logging (Event ID 4104) captures the full stager content even when AMSI is subsequently bypassed.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
+    - https://the-hunters-ledger.com/reports/sliver-open-directory/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:
@@ -475,7 +475,7 @@ id: 8b4e1f72-9c3a-4e7d-a5b8-2d6f9c1e4a83
 status: experimental
 description: Detects Windows Defender real-time protection being disabled via a PowerShell process, matching the behavior of the stager.ps1 component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The stager calls Set-MpPreference -DisableRealtimeMonitoring $true, which generates Windows Defender Event ID 5001 when executed with sufficient privileges. This event in combination with PowerShell as the initiating process is a high-confidence indicator of malicious stager activity rather than legitimate administrative action.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
+    - https://the-hunters-ledger.com/reports/sliver-open-directory/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:
@@ -530,7 +530,7 @@ id: c2e5a8f3-7b1d-4c9e-8a4f-3e7b2d9c5f16
 status: experimental
 description: Detects PowerShell creating an executable file in the user TEMP directory, matching the payload delivery behavior of the stager.ps1 component in the WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The stager downloads OneDriveSync.exe via Net.WebClient and writes it to %TEMP%\update.exe before execution. This Sysmon file event rule targets the file write action specifically, providing detection even if Script Block Logging is unavailable.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
+    - https://the-hunters-ledger.com/reports/sliver-open-directory/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:
@@ -591,7 +591,7 @@ id: 6f1d4b8e-3c2a-4f7b-9e5d-8a1c3f6b9e2d
 status: experimental
 description: Detects sihost.exe (Shell Infrastructure Host) initiating outbound network connections to non-Microsoft destinations, indicating successful Sliver C2 beacon injection via process hollowing. The WebServer-Compromise-Kit-45.94.31.220 build pipeline explicitly targets sihost.exe for process hollowing (confirmed in build.log). The injected Sliver beacon beacons to mailuxe.net:443, mailmassange.duckdns.org:443, and mailuxe.net:8443 using HTTPS/mTLS. Legitimate sihost.exe does not initiate outbound HTTPS connections; any such connection is high-confidence evidence of process injection.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
+    - https://the-hunters-ledger.com/reports/sliver-open-directory/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:
@@ -659,7 +659,7 @@ id: 9d3e7a1f-4b8c-4e2a-b6d9-5c1f8e3a7b4d
 status: experimental
 description: Detects a process whose reported CommandLine claims to be MicrosoftEdgeUpdate.exe but whose Image path does not correspond to a legitimate Microsoft Edge update installation directory. The arg_spoof.C module in the WebServer-Compromise-Kit-45.94.31.220 toolkit hardcodes the string 'MicrosoftEdgeUpdate.exe --update-check --silent' as the PEB CommandLine spoofing value. This technique is cosmetic deception targeting process-tree viewers and EDR rules that inspect CommandLine without cross-referencing the actual binary path. All binaries produced by this pipeline present this same spoofed identity.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/
+    - https://the-hunters-ledger.com/reports/sliver-open-directory/
 author: The Hunters Ledger
 date: 2026/02/28
 tags:

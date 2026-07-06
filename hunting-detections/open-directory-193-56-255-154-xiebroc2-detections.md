@@ -44,7 +44,7 @@ Rules are grouped by family within each section. Rules covering shared infrastru
     Author: The Hunters Ledger
     Date: 2026-04-03
     Identifier: XiebroC2 v3.1 / Covenant GruntStager / PowerShell Fileless Loader
-    Reference: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    Reference: https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
     License: https://creativecommons.org/licenses/by/4.0/
 */
 ```
@@ -67,7 +67,7 @@ rule RAT_XiebroC2_v31_Go_TCP_Implant
         description = "Detects XiebroC2 v3.1 Go TCP implant based on hardcoded AES-128-ECB key, source-code typo in pclntab symbol table (WindosVersion), vendored offensive go-clr CLR hosting library import, and unique RunPE PE parser error strings. All four indicators are static artifacts embedded in any binary compiled from XiebroC2 3.1 source."
         author = "The Hunters Ledger"
         date = "2026-04-03"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
         hash_sha256 = "not_captured_in_triage"
         family = "XiebroC2"
 
@@ -105,7 +105,7 @@ rule RAT_XiebroC2_v31_PaddedConfig_Build
         description = "Detects XiebroC2 v3.1 build targeting 193.56.255.154 based on the space-padded C2 IP and port configuration strings embedded verbatim in the binary. XiebroC2 stores configuration as fixed-width space-padded literals to allow binary patching without recompilation, producing a distinctive 40-byte padded IP string not found in legitimate software."
         author = "The Hunters Ledger"
         date = "2026-04-03"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
         hash_sha256 = "not_captured_in_triage"
         family = "XiebroC2"
 
@@ -139,7 +139,7 @@ rule RAT_Covenant_GruntStager_OpenDirectory
         description = "Detects both Covenant C2 GruntStager builds (GruntHTTP.exe Build 1 and the PE extracted from GruntHTTP.ps1 Build 2) based on shared listener-level session token, build ID, and Covenant-specific namespace strings. Both builds share a single Covenant listener at 193.56.255.154:443 and produce identical values for these fields. Matching either sample confirms active Covenant stager deployment."
         author = "The Hunters Ledger"
         date = "2026-04-03"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
         hash_sha256 = "3aa45ceff7070ae6d183c5aa5f0d771a79c7cf37fe21a3906df976bee497bf20"
         family = "Covenant"
 
@@ -177,7 +177,7 @@ rule MALW_Covenant_PSFilelessLoader_GruntHTTP
         description = "Detects the GruntHTTP.ps1 PowerShell fileless loader that delivers Covenant GruntStager Build 2 via Base64+Deflate decoding and Reflection.Assembly::Load(). The rule anchors on the hardcoded Covenant session token embedded in the script alongside the decompression and reflective loading pattern — a combination unique to this malicious loader and not found in legitimate PowerShell scripts."
         author = "The Hunters Ledger"
         date = "2026-04-03"
-        reference = "https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
+        reference = "https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/"
         hash_sha256 = "cff2d990f0988e9c90f77d0a62c72ca8e9bf567f0c143fdc3a914dce65edec98"
         family = "Covenant"
 
@@ -220,7 +220,7 @@ id: a3f7c821-5e4b-4d09-bc21-7f3a9e5c8d04
 status: experimental
 description: Detects a Go binary (main.exe) loading mscoree.dll or clr.dll at runtime, which is the behavioral signature of XiebroC2 v3.1 executing its inline-assembly command via the vendored go-clr library. Legitimate Go binaries do not host the Windows CLR in-process. This event fires regardless of whether the .NET assembly payload was written to disk, making it effective against fully fileless .NET delivery chains.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
     - https://github.com/Ne0nd0g/go-clr
 author: The Hunters Ledger
 date: 2026/04/03
@@ -281,7 +281,7 @@ id: b8d2e94f-7c13-4a8b-91f6-2e5d7b3c6a10
 status: experimental
 description: Detects XiebroC2 v3.1 executing its RunPE process hollowing technique by identifying suspended child process creation from a parent process named main.exe. XiebroC2 creates target processes with CREATE_SUSPENDED (creationflags 0x4) before performing entry point patching injection. Sysmon process creation events do not expose the raw CreationFlags value, so this rule anchors on the suspicious parent image name alone; combine with memory or injection telemetry for higher-confidence triage.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
 author: The Hunters Ledger
 date: 2026/04/03
 tags:
@@ -319,7 +319,7 @@ id: c5e1f730-8b24-4c9d-a2e7-3f6b8d1e5c92
 status: experimental
 description: Detects XiebroC2 v3.1 executing its shell, OSshell, or OSpowershell commands by identifying hidden-window cmd.exe or powershell.exe child processes spawned from a parent named main.exe. All XiebroC2 command handler shells set CREATE_NO_WINDOW to suppress visible console output on the victim endpoint. This rule targets the parent-child relationship as the primary discriminator.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
 author: The Hunters Ledger
 date: 2026/04/03
 tags:
@@ -366,7 +366,7 @@ id: d9a4b257-3f81-4e7c-b5d8-6c2e9f0a4b73
 status: experimental
 description: Detects HTTP POST requests containing the Covenant C2 listener session token '75db-99b1-25fe4e9afbe58696-320bea73', which is hardcoded in both GruntHTTP.exe (Build 1) and the PE embedded in GruntHTTP.ps1 (Build 2). This token is a listener-level constant that appears in every registration and command-exchange POST from any host executing either stager build. The rule fires on both the PE-based and PowerShell-based delivery variants simultaneously, making it the highest-value single network detection for this campaign.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
     - https://github.com/cobbr/Covenant
 author: The Hunters Ledger
 date: 2026/04/03
@@ -409,7 +409,7 @@ id: e2c8d419-6a37-4f5b-8e90-4d1b7c5e2f85
 status: experimental
 description: Detects PowerShell scripts executing the GruntHTTP.ps1 fileless loader pattern — Base64 decoding of a compressed payload via System.IO.DeflateStream followed by Reflection.Assembly::Load() to execute the decompressed PE in memory. This three-stage chain (FromBase64String, DeflateStream, Reflection.Assembly::Load) in a single ScriptBlock is the specific technique used by the Covenant PS delivery wrapper analyzed in this campaign. Firing on Event ID 4104 ScriptBlock logs means this detection is effective even when the .ps1 file is never written to disk.
 references:
-    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/
     - https://github.com/cobbr/Covenant
 author: The Hunters Ledger
 date: 2026/04/03
@@ -462,7 +462,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET 443 (
     http.uri; content:"/en-us/"; startswith;
     http.request_body; content:"session=75db-99b1-25fe4e9afbe58696-320bea73";
     classtype:trojan-activity;
-    reference:url,pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;
+    reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;
     sid:9000101; rev:1;
     metadata:affected_product Windows, attack_target Client_Endpoint,
               created_at 2026_04_03, deployment Perimeter,
@@ -487,7 +487,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET 443 (
     http.user_agent; content:"Chrome/41.0.2228.0"; nocase;
     http.uri; content:"/en-us/"; startswith;
     classtype:trojan-activity;
-    reference:url,pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;
+    reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;
     sid:9000102; rev:1;
     metadata:affected_product Windows, attack_target Client_Endpoint,
               created_at 2026_04_03, deployment Perimeter,
@@ -515,7 +515,7 @@ alert tcp $HOME_NET any -> 193.56.255.154 4444 (
     flow:established,to_server;
     threshold:type both, track by_src, count 1, seconds 300;
     classtype:trojan-activity;
-    reference:url,pixelatedcontinuum.github.io/Threat-Intel-Reports/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;
+    reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;
     sid:9000103; rev:1;
     metadata:affected_product Windows, attack_target Client_Endpoint,
               created_at 2026_04_03, deployment Perimeter,

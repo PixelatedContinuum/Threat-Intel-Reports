@@ -21,12 +21,12 @@ Every report on this site starts with hands-on analysis: sandbox runs, static ex
 
 The reports on this site are produced using a custom-built AI-assisted workflow — a multi-agent system I researched, built, and refined over months of real analysis work. It handles the structured, repeatable parts of intelligence production so that my time stays focused on the analytical work that actually requires human judgment.
 
-[Behind the Reports: How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence](https://pixelatedcontinuum.github.io/Threat-Intel-Reports/behind-the-reports/)
+[Behind the Reports: How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence](https://the-hunters-ledger.com/behind-the-reports/)
 
 ---
 
 ## About Me
-- [About Me](https://pixelatedcontinuum.github.io/Threat-Intel-Reports/about-me/)
+- [About Me](https://the-hunters-ledger.com/about-me/)
 
 ---
 

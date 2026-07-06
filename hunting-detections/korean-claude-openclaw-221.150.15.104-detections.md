@@ -36,7 +36,7 @@ hide: true
    Yara Rule Set
    Identifier: Claude Code Attacker-Customized Allowlist — OpenClaw Operator (Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104)
    Author: The Hunters Ledger
-   Source: https://pixelatedcontinuum.github.io/Threat-Intel-Reports/
+   Source: https://the-hunters-ledger.com/
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 ```
