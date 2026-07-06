@@ -222,35 +222,7 @@ falsepositives:
 level: critical
 ```
 
-### Rule 2: .NET Process with Hidden Window and WebSocket Connection
-
-```yaml
-title: Suspicious .NET Process with Hidden Console and WebSocket Activity
-id: 4164a194-5d83-7325-5a5c-b7e42f05c259
-status: experimental
-description: Detects .NET executables hiding console window while establishing WebSocket connections (XWorm v2.x behavior)
-author: The Hunters Ledger
-date: '2026-01-12'
-references:
-    - XWorm RAT v2.x behavioral analysis
-tags:
-    - attack.stealth
-    - attack.t1564.003
-    - attack.command-and-control
-    - attack.t1071.001
-    - detection.emerging-threats
-logsource:
-    product: windows
-    category: process_creation
-detection:
-    selection_dotnet:
-        Image|endswith: '.exe'
-        CommandLine|contains: 'v4.0.30319'
-    condition: selection_dotnet
-falsepositives:
-    - Legitimate .NET applications with background WebSocket operations
-level: high
-```
+> **Coverage note (2026-07-06):** Rules matching generic file paths or ubiquitous behaviors were removed as false-positive sources; detection relies on the distinctive-artifact rules (extension/hash/mutex/C2-IP) and the companion YARA.
 
 ### Rule 3: PowerShell Spawned by Suspicious .NET Process from User Directory
 

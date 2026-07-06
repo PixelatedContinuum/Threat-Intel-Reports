@@ -37,7 +37,7 @@ detection:
     selection:
         ParentImage|endswith: '\wscript.exe'
         Image|endswith: '\powershell.exe'
-        CommandLine|contains:
+        CommandLine|contains|all:
             - 'System.Net.Http.HttpClient'
             - 'GetAsync'
             - 'update.png'

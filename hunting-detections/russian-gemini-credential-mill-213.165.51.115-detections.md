@@ -709,12 +709,7 @@ detection:
         CommandLine|contains:
             - 'c2_server'
             - 'BaseHTTPServer'
-    selection_port_indicators:
-        CommandLine|contains:
-            - ':8081'
-            - ':8090'
-            - ':10101'
-    condition: selection_python and (selection_c2_server or selection_port_indicators)
+    condition: selection_python and selection_c2_server
 falsepositives:
     - Legitimate Python web services on non-standard ports (Django dev server, Flask, etc.) — tune by excluding known-legitimate service paths and process owners
     - Security testing frameworks (Impacket, Responder) that use similar port patterns

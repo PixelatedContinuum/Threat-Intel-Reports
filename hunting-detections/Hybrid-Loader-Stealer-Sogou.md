@@ -51,7 +51,7 @@ level: high
 title: SogouStealer Persistence via Run Keys and LNK Modification
 id: 190b57f6-a8c3-4f45-a39d-ed7340d66b9a
 status: stable
-description: Detects registry Run key entries and .lnk modifications pointing to %AppData% or %Temp%
+description: Detects registry Run key entries referencing the SogouStealer ecosystem's own component filenames (beacon_sdk.dll, SGDownload.exe, userNetSchedule.exe)
 references:
     - https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou/
 author: The Hunters Ledger
@@ -71,12 +71,12 @@ detection:
             - '\Software\Microsoft\Windows\CurrentVersion\Run'
             - '\Software\Microsoft\Windows\CurrentVersion\RunOnce'
         Details|contains:
-            - '\AppData\'
-            - '\Temp\'
-            - '.lnk'
+            - 'beacon_sdk.dll'
+            - 'SGDownload.exe'
+            - 'userNetSchedule.exe'
     condition: selection_run
 falsepositives:
-    - Legitimate installers that register Run key entries pointing to AppData or Temp during setup
+    - Unlikely; these filenames are specific to this malware ecosystem
 level: high
 ```
 

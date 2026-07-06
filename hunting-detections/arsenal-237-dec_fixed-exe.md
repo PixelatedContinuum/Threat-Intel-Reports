@@ -170,63 +170,7 @@ tags:
   - detection.emerging-threats
 ```
 
-### Rule 2: Directory Traversal and Enumeration Pattern
-
-```yaml
-title: Arsenal-237 A-Z Directory Enumeration Pattern
-id: ac4f5325-2109-4ebd-aba2-3c4bf70cb190
-status: experimental
-description: Detects Arsenal-237 characteristic A-Z subdirectory enumeration for encrypted file discovery. Ransomware-specific directory organization pattern, but low false positive threshold given legitimate uses.
-author: The Hunters Ledger
-date: 2026-01-26
-tags:
-  - attack.discovery
-  - attack.t1083
-  - detection.emerging-threats
-logsource:
-  product: windows
-  category: file_event
-detection:
-  selection_files:
-    # Process accessing A-Z subdirectories in sequence
-    TargetFilename|contains:
-      - ':\A\'
-      - ':\B\'
-      - ':\C\'
-      - ':\D\'
-      - ':\E\'
-      - ':\F\'
-      - ':\G\'
-      - ':\H\'
-      - ':\I\'
-      - ':\J\'
-      - ':\K\'
-      - ':\L\'
-      - ':\M\'
-      - ':\N\'
-      - ':\O\'
-      - ':\P\'
-      - ':\Q\'
-      - ':\R\'
-      - ':\S\'
-      - ':\T\'
-      - ':\U\'
-      - ':\V\'
-      - ':\W\'
-      - ':\X\'
-      - ':\Y\'
-      - ':\Z\'
-  filter_system:
-    Image|contains:
-      - 'System32'
-      - 'Windows'
-  condition: selection_files and not filter_system
-falsepositives:
-  - Batch file operations with organized directory structures
-  - Backup software using A-Z organization
-  - Development tools with systematic directory access
-level: medium
-```
+> **Coverage note (2026-07-06):** Rules matching generic file paths or ubiquitous behaviors were removed as false-positive sources; detection relies on the distinctive-artifact rules (extension/hash/mutex/C2-IP) and the companion YARA.
 
 ### Rule 3: Encrypted File Recovery Operations
 

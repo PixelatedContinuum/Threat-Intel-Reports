@@ -717,7 +717,7 @@ tags:
 title: Suspicious Memory Allocation Patterns
 id: 8567d05a-84c2-4bb9-8014-88f9242bb761
 status: experimental
-description: Detects processes allocating memory with suspicious permissions that may indicate process injection
+description: Detects an AppData-resident process allocating memory with suspicious permissions that may indicate process injection
 author: The Hunters Ledger
 date: '2025-12-06'
 logsource:
@@ -727,6 +727,7 @@ detection:
     selection:
         CallTrace|contains: 'VirtualAllocEx'
         Parameters|contains: 'PAGE_EXECUTE_READWRITE'
+        Image|contains: '\AppData\'
     filter_system:
         Image|endswith:
             - '\svchost.exe'
@@ -735,8 +736,8 @@ detection:
             - '\csrss.exe'
     condition: selection and not filter_system
 falsepositives:
-    - Legitimate software requiring RWX memory
-    - Development tools and debuggers
+    - Legitimate software requiring RWX memory, if installed under AppData
+    - Development tools and debuggers running from a user-writable directory
 level: medium
 tags:
     - attack.stealth
@@ -751,7 +752,7 @@ title: Suspicious API Call Sequence for RAT Activity - Hook Installation
 id: 6988a253-9be9-49a8-8450-13b1f35a3a2b
 name: rat_api_seq_hook
 status: experimental
-description: First step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - window hook installation
+description: First step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - window hook installation from an AppData-resident process
 author: The Hunters Ledger
 date: '2025-12-06'
 logsource:
@@ -760,10 +761,11 @@ logsource:
 detection:
     selection:
         CallTrace|contains: 'SetWindowsHookEx'
+        Image|contains: '\AppData\'
     condition: selection
 falsepositives:
-    - Legitimate software with similar API usage patterns
-    - Development and debugging tools
+    - Legitimate software with similar API usage patterns, if installed under AppData
+    - Development and debugging tools running from a user-writable directory
 level: medium
 tags:
     - attack.collection
@@ -775,7 +777,7 @@ title: Suspicious API Call Sequence for RAT Activity - Remote Memory Allocation
 id: 487da0d4-79c3-46c5-aee2-1972ff801417
 name: rat_api_seq_alloc
 status: experimental
-description: Second step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - remote memory allocation
+description: Second step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - remote memory allocation from an AppData-resident process
 author: The Hunters Ledger
 date: '2025-12-06'
 logsource:
@@ -784,10 +786,11 @@ logsource:
 detection:
     selection:
         CallTrace|contains: 'VirtualAllocEx'
+        Image|contains: '\AppData\'
     condition: selection
 falsepositives:
-    - Legitimate software with similar API usage patterns
-    - Development and debugging tools
+    - Legitimate software with similar API usage patterns, if installed under AppData
+    - Development and debugging tools running from a user-writable directory
 level: medium
 tags:
     - attack.stealth
@@ -799,7 +802,7 @@ title: Suspicious API Call Sequence for RAT Activity - Remote Thread Creation
 id: a1ea23fd-ff54-4115-bb49-89b7fa7b9cd4
 name: rat_api_seq_thread
 status: experimental
-description: Third step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - remote thread creation
+description: Third step of a suspicious API call sequence commonly associated with RAT surveillance and persistence activities - remote thread creation from an AppData-resident process
 author: The Hunters Ledger
 date: '2025-12-06'
 logsource:
@@ -808,10 +811,11 @@ logsource:
 detection:
     selection:
         CallTrace|contains: 'CreateRemoteThread'
+        Image|contains: '\AppData\'
     condition: selection
 falsepositives:
-    - Legitimate software with similar API usage patterns
-    - Development and debugging tools
+    - Legitimate software with similar API usage patterns, if installed under AppData
+    - Development and debugging tools running from a user-writable directory
 level: medium
 tags:
     - attack.stealth

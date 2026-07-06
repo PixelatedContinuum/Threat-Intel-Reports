@@ -340,37 +340,7 @@ tags:
     - detection.emerging-threats
 ```
 
-#### Sigma Rule - WebSocket Connection from .NET Executable in AppData
-```yaml
-title: FleetAgentFUD WebSocket Connection from AppData .NET Executable
-id: 9d407138-8c0f-44d0-a7b4-d0e4435995c8
-status: experimental
-description: Detects WebSocket-like network connections from .NET executables in AppData (FleetAgentFUD C2 pattern)
-author: The Hunters Ledger
-date: '2026-01-12'
-logsource:
-    product: windows
-    category: network_connection
-detection:
-    selection_image:
-        Image|contains: '\AppData\'
-        Image|endswith: '.exe'
-    selection_port:
-        DestinationPort:
-            - 80
-            - 443
-            - 8080
-            - 8443
-    condition: selection_image and selection_port
-falsepositives:
-    - Legitimate .NET applications in AppData (Microsoft Teams, Discord, Slack) - verify digital signature
-    - Development/testing tools
-level: high
-tags:
-    - attack.command-and-control
-    - attack.t1071.001
-    - detection.emerging-threats
-```
+> **Coverage note (2026-07-06):** Rules matching generic file paths or ubiquitous behaviors were removed as false-positive sources; detection relies on the distinctive-artifact rules (extension/hash/mutex/C2-IP) and the companion YARA.
 
 #### Sigma Rule - File Download to Public/Temp from Suspicious Process
 ```yaml
@@ -998,7 +968,7 @@ Test-FleetAgentFUDDetections
 title: FleetAgentFUD Rapid System Reconnaissance Command
 id: 1316ab23-3a9b-40e7-a037-2ec3c4535404
 status: experimental
-description: Detects a single system reconnaissance command (sysinfo, processes, network, users, disk) typical of FleetAgentFUD automated profiling. Used as the base rule for the companion Rapid System Reconnaissance Pattern correlation rule, which flags 3 or more distinct recon commands from the same host in a short window.
+description: Detects a single system reconnaissance command (sysinfo, processes, network, users, disk) typical of FleetAgentFUD automated profiling, launched from a parent process rooted in AppData, Temp, or Users\Public — the FleetAgentFUD staging locations. Used as the base rule for the companion Rapid System Reconnaissance Pattern correlation rule, which flags 3 or more distinct recon commands from the same host in a short window.
 author: The Hunters Ledger
 date: '2026-01-12'
 logsource:
@@ -1013,10 +983,15 @@ detection:
             - 'Get-LocalUser'
             - 'ipconfig /all'
             - 'Win32_LogicalDisk'
-    condition: selection_powershell
+    selection_parent:
+        ParentImage|contains:
+            - '\AppData\'
+            - '\Temp\'
+            - '\Users\Public\'
+    condition: selection_powershell and selection_parent
 falsepositives:
-    - System administration scripts
-    - IT inventory tools
+    - System administration scripts launched from AppData/Temp (e.g. installer post-run steps)
+    - IT inventory tools staged in Temp during deployment
 level: medium
 tags:
     - attack.discovery
