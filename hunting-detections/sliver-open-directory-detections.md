@@ -117,7 +117,7 @@ rule MALW_ScareCrow_Go_Loader_OneDriveSync
         // Byte 6:    0x00 (stream flags byte 1)
         // Byte 7:    0x04 (mode byte = PROCESS HOLLOWING in ScareCrow dispatcher)
         // Bytes 8-11: E6 D6 B4 46 (CRC32 of stream flags)
-        // Confirmed at runtime offset 0xC000708000 in dynamic analysis session 3.
+        // This 12-byte sequence appears at runtime offset 0xC000708000 in the mapped payload.
         $xz_hollowing_header = { FD 37 7A 58 5A 00 00 04 E6 D6 B4 46 }
 
         // Argument spoofing hardcoded string — present in all binaries built by
