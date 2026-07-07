@@ -1116,26 +1116,27 @@ alert dns $HOME_NET any -> any any (
 
 ---
 
-### Rule 6 — cloudflared QUIC/UDP Egress from Server Hosts (Hunting Baseline)
+### Rule 6 — cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844)
 
-**Detection Priority:** LOW
-**Rationale:** cloudflared uses QUIC (UDP 443) as its preferred tunnel transport when available. Outbound UDP/443 from server-class hosts to Cloudflare infrastructure IP ranges is a hunting baseline for cloudflared tunnel-establishment activity. Combined with DNS detection of `tralalarkefe.com` or `trycloudflare.com`, this provides a transport-layer confirmation layer. Deploy as a hunting query, not a production alert.
+**Detection Priority:** LOW–MEDIUM
+**Rationale:** cloudflared (Cloudflare Tunnel) establishes its control-plane connection to Cloudflare's edge over **port 7844** — UDP for the QUIC transport, TCP for the HTTP/2 fallback ([Cloudflare docs](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/configure-tunnels/tunnel-with-firewall/), accessed 2026-07-07). This rule flags outbound QUIC to UDP 7844, a high-signal indicator that a host is running a Cloudflare Tunnel — the transport this operator used for C2. Because 7844 is Cloudflare's dedicated tunnel port (not general web QUIC, which is 443), this is far more specific than matching all of UDP/443 and does **not** fire on ordinary browsing or Cloudflare WARP.
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1090.004 (Domain Fronting)
-**Confidence:** LOW
-**False Positive Risk:** HIGH (standalone — many legitimate applications use QUIC to Cloudflare infrastructure). Deploy only as part of a multi-indicator hunting workflow, not as a standalone production alert. Combine with the DNS rules above for composite confidence.
-**Deployment:** Network flow telemetry, Zeek conn.log with UDP/443 filter on server-class host segments
+**Confidence:** MODERATE
+**False Positive Risk:** MEDIUM — legitimate Cloudflare Tunnel deployments also use UDP 7844. Treat this as a hunting signal (a host is running a tunnel), corroborate with the DNS rules above (`tralalarkefe.com` sid 9000001, `trycloudflare.com` sid 9000005), and/or scope the source to segments where Cloudflare Tunnel is not expected. The rule is `threshold`-limited (1 alert / source / hour) so it cannot flood a sensor even on a busy network. If TCP coverage is also wanted, add a companion `alert tcp $HOME_NET any -> $EXTERNAL_NET 7844` rule for the HTTP/2 fallback.
+**Deployment:** Network flow telemetry / IDS on egress; Zeek conn.log with a UDP/7844 filter.
 
 ```suricata
-alert udp $HOME_NET any -> $EXTERNAL_NET 443 (
-    msg:"THL - Outbound QUIC/UDP 443 Cloudflare Infrastructure (cloudflared Tunnel Hunting Baseline)";
+alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (
+    msg:"THL - cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844 Hunting)";
+    threshold:type limit, track by_src, count 1, seconds 3600;
     classtype:policy-violation;
-    sid:9000006; rev:1;
+    sid:9000006; rev:2;
     metadata:author "The Hunters Ledger",
               campaign "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115",
               mitre_tactic "command-and-control",
               mitre_technique "T1572 T1090.004",
-              confidence LOW, created_at 2026-05-25,
-              note "hunting-baseline-high-FP-combine-with-DNS-rules-9000001-9000005";
+              confidence MODERATE, created_at 2026-05-25, updated_at 2026-07-07,
+              note "cloudflared control-plane = UDP/TCP 7844 (Cloudflare docs), threshold-limited to prevent FP floods, legit Cloudflare Tunnel use also triggers -- hunting signal, corroborate with DNS rules 9000001/9000005";
 )
 ```
 
