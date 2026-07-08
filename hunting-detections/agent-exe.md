@@ -312,8 +312,7 @@ logsource:
     category: file_event
 detection:
     selection:
-        TargetFilename|contains: '\.wd_installed'
-        TargetFilename|contains: '\AppData\Local\Temp\'
+        TargetFilename|endswith: '.wd_installed'
     condition: selection
 falsepositives:
     - Unlikely - very specific naming pattern
