@@ -64,6 +64,13 @@
     ],
     "network": [
       {
+        "indicator": "185.208.159.182",
+        "type": "IPv4",
+        "purpose": "Open-directory distribution/staging host",
+        "confidence": "DEFINITE",
+        "notes": "Server hosting the PULSAR RAT open directory (campaign origin: PULSAR-RAT-185.208.159.182); later found co-hosting Quasar RAT and NjRAT/XWorm on the same infrastructure"
+      },
+      {
         "indicator": "pastebin.com",
         "type": "Domain",
         "purpose": "C2 config retrieval",

@@ -379,6 +379,11 @@
         "context": "Output submission endpoint - POST with ?id=<beacon_id_hex8> query parameter"
       },
       {
+        "url": "https://172.105.0.126:8443/submit.php",
+        "confidence": "MODERATE",
+        "context": "Beacon output-submission path seen via HTTP GET in the network-layer detection content. Distinct from /submit (POST) above, the C beacon's documented output path: this GET /submit.php variant is attributed to the co-hosted Cobalt Strike DLL beacon's GET-based output-accumulator behavior against its Malleable C2 get_uri, and is retained as a separate MODERATE-confidence indicator."
+      },
+      {
         "url": "https://172.105.0.126:8443/qz99",
         "confidence": "HIGH",
         "context": "Stage 1 shellcode download endpoint used by stager.exe - distinctive URI path"
