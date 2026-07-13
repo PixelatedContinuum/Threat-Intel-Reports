@@ -1,0 +1,24 @@
+# Repository line-ending policy: canonical form is LF for all text files.
+# Keeps diffs consistent regardless of the OS/editor that saved a file and
+# prevents whole-file CRLF<->LF flips. Binary assets are excluded so git never
+# alters their bytes.
+
+* text=auto eol=lf
+
+# Binary assets — never normalize (normalization would corrupt them).
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.pdf   binary
+*.zip   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
+*.otf   binary
+
+# SVG is XML text — keep it as LF text, not binary.
+*.svg text eol=lf
