@@ -11,6 +11,19 @@ document.addEventListener('DOMContentLoaded', function () {
   hljs.highlightAll();
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Tier subsection color-coding: tag the backfilled `### Detection Rules` /
+  // `### Hunting Rules` H3s so the CSS dividers apply (green = Detection,
+  // amber = Hunting). Runs independently of highlight.js above.
+  var hs = document.querySelectorAll('.hl-post-content h3');
+  for (var i = 0; i < hs.length; i++) {
+    var t = (hs[i].textContent || '').trim().toLowerCase();
+    if (t === 'detection rules') hs[i].classList.add('hl-tier-detection');
+    else if (t === 'hunting rules') hs[i].classList.add('hl-tier-hunting');
+  }
+});
+</script>
 {% endif %}
 <div class="hl-page" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">
 <div class="hl-post-header{% if page.path contains 'hunting-detections' %} hl-post-header--detect{% endif %}">

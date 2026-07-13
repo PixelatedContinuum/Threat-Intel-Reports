@@ -20,8 +20,8 @@ detection_sections:
     anchor: "#yara-rules"
   - label: "Sigma Rules"
     anchor: "#sigma-rules"
-  - label: "Suricata Rules"
-    anchor: "#suricata-rules"
+  - label: "Suricata Signatures"
+    anchor: "#suricata-signatures"
 layout: post
 permalink: /reports/zerotrace-74-0-42-25-20260316/
 thumbnail: /assets/images/cards/zerotrace-74-0-42-25-20260316.png

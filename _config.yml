@@ -39,6 +39,7 @@ plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll-redirect-from
 
 # Serve /.well-known/ (RFC 9116 security.txt). Jekyll drops dot-directories
 # from the build unless they are explicitly included.

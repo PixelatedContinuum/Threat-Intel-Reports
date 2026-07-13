@@ -12,6 +12,7 @@ entries:
     report_url: /reports/kaido-quasar-rat-144-172-109-203/
     stix_url: /stix/kaido-quasar-rat-144-172-109-203.json
     detection_url: /hunting-detections/kaido-quasar-rat-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/kaido-quasar-rat-iocs.json
   - title: "EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service"
     date: 2026-07-03
@@ -20,6 +21,7 @@ entries:
     report_url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
     stix_url: /stix/evilsoul-engine-stealer-maas-144-172-103-98.json
     detection_url: /hunting-detections/evilsoul-engine-stealer-maas-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/evilsoul-engine-stealer-maas-iocs.json
   - title: "Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host"
     date: 2026-06-12
@@ -28,6 +30,7 @@ entries:
     report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
     stix_url: /stix/flaskc2-postex-toolkit-67-215-232-25.json
     detection_url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json
 
   # ---------------- AI-Agent Framework Abuse — 6-report series (2026-05) ----------------
@@ -41,6 +44,7 @@ entries:
     report_url: /reports/ai-agent-frameworks-2026-05-23/
     stix_url: /stix/ai-agent-frameworks-2026-05-23.json
     detection_url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json
 
   - title: "Russian Gemini CLI Credential Mill (213.165.51.115)"
@@ -52,6 +56,7 @@ entries:
     report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
     stix_url: /stix/russian-gemini-credential-mill-213.165.51.115.json
     detection_url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json
 
   - title: "Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)"
@@ -63,6 +68,7 @@ entries:
     report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
     stix_url: /stix/turkish-arpa-openclaw-state-insurer-209.38.205.158.json
     detection_url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json
 
   - title: "GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)"
@@ -74,6 +80,7 @@ entries:
     report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
     stix_url: /stix/ghost-cryptojacker-vova75rus-77.110.96.200.json
     detection_url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json
 
   - title: "Rovodev AI-Co-Authored Mirai Variant + Matrix C2 (87.106.143.220)"
@@ -85,6 +92,7 @@ entries:
     report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
     stix_url: /stix/rovodev-mirai-matrix-c2-87.106.143.220.json
     detection_url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json
 
   - title: "Korean Claude Code + OpenClaw Operator (221.150.15.104)"
@@ -96,6 +104,7 @@ entries:
     report_url: /reports/korean-claude-openclaw-221.150.15.104/
     stix_url: /stix/korean-claude-openclaw-221.150.15.104.json
     detection_url: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json
 
   # ---------------- Full campaigns (report + detection + IOC) ----------------
@@ -106,6 +115,7 @@ entries:
     report_url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
     stix_url: /stix/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517.json
     detection_url: /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json
 
   - title: "BellaMain Turkish PhaaS Panel (79.137.192.3)"
@@ -117,6 +127,7 @@ entries:
     report_url: /reports/bellamain-turkish-phaas-79-137-192-3-20260516/
     stix_url: /stix/bellamain-turkish-phaas-79-137-192-3-20260516.json
     detection_url: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json
 
   - title: "Inkognito Russian VPN/Phishing Operator (INK VPN / INK Lens)"
@@ -128,6 +139,7 @@ entries:
     report_url: /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
     stix_url: /stix/inkognito-russian-vpn-phishing-185-221-196-118-20260516.json
     detection_url: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json
 
   - title: "Rhadamanthys MaaS Customer Deep-Dive (79.137.192.3)"
@@ -140,6 +152,7 @@ entries:
     report_url: /reports/opendirectory-79-137-192-3-20260515/
     stix_url: /stix/opendirectory-79-137-192-3-20260515.json
     detection_url: /hunting-detections/opendirectory-79-137-192-3-20260515-detections
+    detection_tiers: [detection, hunting]
     detection_title: "Detection Rules — Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito)"
     ioc_url: /ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json
     ioc_title: "Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito) — IOC Feed"
@@ -151,6 +164,7 @@ entries:
     report_url: /reports/opendirectory-62-60-237-100-20260506/
     stix_url: /stix/opendirectory-62-60-237-100-20260506.json
     detection_url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json
 
   - title: "AdaptixC2 Open Directory Exposure (45.130.148.125)"
@@ -160,6 +174,7 @@ entries:
     report_url: /reports/opendirectory-45-130-148-125-20260430/
     stix_url: /stix/opendirectory-45-130-148-125-20260430.json
     detection_url: /hunting-detections/opendirectory-45-130-148-125-20260430-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json
 
   - title: "Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)"
@@ -169,6 +184,7 @@ entries:
     report_url: /reports/open-directory-94-103-1-13-20260423/
     stix_url: /stix/open-directory-94-103-1-13-20260423.json
     detection_url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json
 
   - title: "ShinyHunters Data Leak Site (91.215.85.22)"
@@ -178,6 +194,7 @@ entries:
     report_url: /reports/shinyhunters-dls-91-215-85-22-20260417/
     stix_url: /stix/shinyhunters-dls-91-215-85-22-20260417.json
     detection_url: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json
 
   - title: "OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)"
@@ -187,6 +204,7 @@ entries:
     report_url: /reports/new-files-found-20260408/
     stix_url: /stix/new-files-found-20260408.json
     detection_url: /hunting-detections/new-files-found-20260408-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/new-files-found-20260408-iocs.json
 
   - title: "OpenStrike Beacon Toolkit (172.105.0.126)"
@@ -196,6 +214,7 @@ entries:
     report_url: /reports/open-directory-172-105-0-126-20260406/
     stix_url: /stix/open-directory-172-105-0-126-20260406.json
     detection_url: /hunting-detections/open-directory-172-105-0-126-20260406-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json
 
   - title: "Shadow RAT & XWorm Open Directory Campaign"
@@ -205,6 +224,7 @@ entries:
     report_url: /reports/shadow-xworm-opendirectory/
     stix_url: /stix/shadow-xworm-opendirectory.json
     detection_url: /hunting-detections/shadow-xworm-opendirectory-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/shadow-xworm-opendirectory-iocs.json
 
   - title: "Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2"
@@ -214,6 +234,7 @@ entries:
     report_url: /reports/open-directory-193-56-255-154-xiebroc2/
     stix_url: /stix/open-directory-193-56-255-154-xiebroc2.json
     detection_url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json
 
   - title: "ZeroTrace Multi-Family MaaS Operation (74.0.42.25)"
@@ -223,6 +244,7 @@ entries:
     report_url: /reports/zerotrace-74-0-42-25-20260316/
     stix_url: /stix/zerotrace-74-0-42-25-20260316.json
     detection_url: /hunting-detections/opendirectory-74-0-42-25-20260316-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json
 
   - title: "Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)"
@@ -232,6 +254,7 @@ entries:
     report_url: /reports/sliver-open-directory/
     stix_url: /stix/sliver-open-directory.json
     detection_url: /hunting-detections/sliver-open-directory-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/sliver-open-directory-iocs.json
 
   - title: "Webserver Compromise Kit (91.236.230.250)"
@@ -241,6 +264,7 @@ entries:
     report_url: /reports/webserver-compromise-kit-91-236-230-250/
     stix_url: /stix/webserver-compromise-kit-91-236-230-250.json
     detection_url: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json
 
   - title: "Remcos RAT OpenDirectory Campaign"
@@ -249,7 +273,8 @@ entries:
     tags: [RAT, Cred Theft, Persistence, Evasion]
     report_url: /reports/remcos-opendirectory/
     stix_url: /stix/remcos-opendirectory.json
-    detection_url: /hunting-detections/remcos-opendirectory-campaign
+    detection_url: /hunting-detections/remcos-opendirectory-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/remcos-opendirectory-campaign.json
 
   - title: "NsMiner: Multi-Stage Cryptojacking Operation"
@@ -258,7 +283,8 @@ entries:
     tags: [Cryptominer, Dropper, Persistence, Evasion]
     report_url: /reports/nsminer-cryptojacker/
     stix_url: /stix/nsminer-cryptojacker.json
-    detection_url: /hunting-detections/nsminer-cryptojacker
+    detection_url: /hunting-detections/nsminer-cryptojacker-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/nsminer-cryptojacker.json
 
   - title: "Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm"
@@ -267,7 +293,8 @@ entries:
     tags: [RAT, Injection, .NET, Cred Theft]
     report_url: /reports/dual-rat-analysis/
     stix_url: /stix/dual-rat-analysis.json
-    detection_url: /hunting-detections/dual-rat-analysis
+    detection_url: /hunting-detections/dual-rat-analysis-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/dual-rat-analysis.json
 
   - title: "PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment"
@@ -276,7 +303,8 @@ entries:
     tags: [RAT, Cred Theft, Evasion, .NET]
     report_url: /reports/PULSAR-RAT/
     stix_url: /stix/PULSAR-RAT.json
-    detection_url: /hunting-detections/PULSAR-RAT
+    detection_url: /hunting-detections/PULSAR-RAT-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/PULSAR-RAT.json
 
   - title: "Hybrid Loader/Stealer Ecosystem Masquerading as Sogou"
@@ -285,7 +313,8 @@ entries:
     tags: [Loader, Stealer, Cred Theft, Evasion]
     report_url: /reports/Hybrid-Loader-Stealer-Sogou/
     stix_url: /stix/Hybrid-Loader-Stealer-Sogou.json
-    detection_url: /hunting-detections/Hybrid-Loader-Stealer-Sogou
+    detection_url: /hunting-detections/Hybrid-Loader-Stealer-Sogou-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/Hybrid-Loader-Stealer-Sogou.json
 
   - title: "Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play"
@@ -294,7 +323,8 @@ entries:
     tags: [Loader, Stealer, Go, Injection]
     report_url: /reports/malware-analysis-houselet/
     stix_url: /stix/malware-analysis-houselet.json
-    detection_url: /hunting-detections/malware-analysis-houselet
+    detection_url: /hunting-detections/malware-analysis-houselet-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/malware-analysis-houselet.json
 
   - title: "AdvancedRouterScanner"
@@ -303,7 +333,8 @@ entries:
     tags: [Scanner, Python, Exploitation]
     report_url: /reports/AdvancedRouterScanner/
     stix_url: /stix/AdvancedRouterScanner.json
-    detection_url: /hunting-detections/AdvancedRouterScanner
+    detection_url: /hunting-detections/AdvancedRouterScanner-detections
+    detection_tiers: [hunting]
     ioc_url: /ioc-feeds/AdvancedRouterScanner.json
 
   - title: "From Webshells to The Cloud"
@@ -312,7 +343,8 @@ entries:
     tags: [Webshell, PHP, Exfil, C2]
     report_url: /reports/webshells-to-the-cloud/
     stix_url: /stix/webshells-to-the-cloud.json
-    detection_url: /hunting-detections/webshells-to-the-cloud
+    detection_url: /hunting-detections/webshells-to-the-cloud-detections
+    detection_tiers: [hunting]
     ioc_url: /ioc-feeds/webshells-to-the-cloud.json
 
   - title: "Quasar + XWorm + PowerShell"
@@ -321,7 +353,8 @@ entries:
     tags: [RAT, Loader, PowerShell, Evasion]
     report_url: /reports/quasar-xworm-powershell/
     stix_url: /stix/quasar-xworm-powershell.json
-    detection_url: /hunting-detections/quasar-xworm-detections
+    detection_url: /hunting-detections/quasar-xworm-powershell-detections
+    detection_tiers: [hunting]
     ioc_url: /ioc-feeds/quasar-xworm-powershell.json
 
   # ---------------- Report-only (Arsenal-237 overview reports) ----------------

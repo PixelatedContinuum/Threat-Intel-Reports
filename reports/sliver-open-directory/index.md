@@ -8,8 +8,8 @@ detection_sections:
     anchor: "#yara-rules"
   - label: "Sigma Rules"
     anchor: "#sigma-rules"
-  - label: "Behavioral Detection"
-    anchor: "#behavioral-detection-guidance"
+  - label: "Suricata Signatures"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - value: "45[.]94[.]31[.]220"
     note: "Sliver C2 open directory"

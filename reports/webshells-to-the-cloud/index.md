@@ -1,19 +1,13 @@
 ---
 title: "From Webshells to the Cloud"
 date: '2025-10-20'
-detection_page: /hunting-detections/webshells-to-the-cloud/
+detection_page: /hunting-detections/webshells-to-the-cloud-detections/
 ioc_feed: /ioc-feeds/webshells-to-the-cloud.json
 detection_sections:
-  - label: "Exploit Layer"
-    anchor: "#exploit-layer"
-  - label: "Webshell Layer"
-    anchor: "#webshell-layer"
-  - label: "Persistence Layer"
-    anchor: "#persistence-layer"
-  - label: "Exfiltration Layer"
-    anchor: "#exfiltration-layer"
-  - label: "Infrastructure Automation"
-    anchor: "#infrastructure-automation-layer"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
+  - label: "Suricata Signatures"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - value: "45[.]118[.]144[.]151"
     note: "Malicious infrastructure server"

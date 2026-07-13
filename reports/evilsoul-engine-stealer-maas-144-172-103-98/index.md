@@ -12,11 +12,11 @@ detection_page: /hunting-detections/evilsoul-engine-stealer-maas-detections/
 ioc_feed: /ioc-feeds/evilsoul-engine-stealer-maas-iocs.json
 detection_sections:
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - "evilsoul[.]cc"
   - "evilsoul[.]xyz"

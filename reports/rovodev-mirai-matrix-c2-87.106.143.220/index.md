@@ -14,16 +14,12 @@ description: "Technical analysis of an English-speaking Hybrid AI-augmented oper
 detection_page: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/
 ioc_feed: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json
 detection_sections:
-  - label: "Detection Coverage Summary"
-    anchor: "detection-coverage-summary"
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
-  - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - "87.106.143.220"
   - "165.227.175.161"

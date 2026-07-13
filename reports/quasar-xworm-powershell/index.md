@@ -1,13 +1,13 @@
 ---
 title: QuasarRAT + Xworm + PowerShell Loader
 date: '2025-10-17'
-detection_page: /hunting-detections/quasar-xworm-powershell/
+detection_page: /hunting-detections/quasar-xworm-powershell-detections/
 ioc_feed: /ioc-feeds/quasar-xworm-powershell.json
 detection_sections:
-  - label: "Sigma — VBScript Downloader"
-    anchor: "#sigma--suspicious-vbscript-downloading-powershell-payload"
-  - label: "YARA — Defender Exclusion"
-    anchor: "#yara--defender-exclusion-script"
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
 ioc_highlights:
   - value: "193[.]233[.]164[.]21"
     note: "Quasar + XWorm C2 server"

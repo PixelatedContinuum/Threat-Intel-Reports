@@ -14,16 +14,12 @@ description: "Technical analysis of an active compromise of a state-affiliated T
 detection_page: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 ioc_feed: /ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json
 detection_sections:
-  - label: "Detection Coverage Summary"
-    anchor: "detection-coverage-summary"
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
-  - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - "209.38.205.158"
   - "ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79"

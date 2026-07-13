@@ -14,16 +14,12 @@ description: "Parent report of a six-report series documenting 8 independent thr
 detection_page: /hunting-detections/ai-agent-frameworks-2026-05-23-detections/
 ioc_feed: /ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json
 detection_sections:
-  - label: "Detection Coverage Summary"
-    anchor: "detection-coverage-summary"
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
-  - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - "tralalarkefe.com"
   - "kryptex.network"

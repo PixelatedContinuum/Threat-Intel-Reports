@@ -1,19 +1,11 @@
 ---
 title: "AdvancedRouterScanner — Global Router Exploitation"
 date: '2025-10-25'
-detection_page: /hunting-detections/AdvancedRouterScanner/
+detection_page: /hunting-detections/AdvancedRouterScanner-detections/
 ioc_feed: /ioc-feeds/AdvancedRouterScanner.json
 detection_sections:
-  - label: "Exploit Layer"
-    anchor: "#exploit-layer"
-  - label: "Credential Layer"
-    anchor: "#credential-layer"
-  - label: "Execution Layer"
-    anchor: "#execution-layer"
-  - label: "Persistence Layer"
-    anchor: "#persistence-layer"
-  - label: "Exfiltration Layer"
-    anchor: "#exfiltration-layer"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
 ioc_highlights:
   - value: "185[.]38[.]150[.]7"
     note: "C2 / PoC host"

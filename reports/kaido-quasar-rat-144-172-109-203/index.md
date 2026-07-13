@@ -12,13 +12,11 @@ detection_page: /hunting-detections/kaido-quasar-rat-detections/
 ioc_feed: /ioc-feeds/kaido-quasar-rat-iocs.json
 detection_sections:
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
-  - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - "144.172.109[.]203"
   - "kaidoo[.]com[.]br"

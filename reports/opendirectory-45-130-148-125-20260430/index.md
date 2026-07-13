@@ -10,16 +10,12 @@ description: "An open directory on a Uzbekistani VPS exposed a complete AdaptixC
 detection_page: /hunting-detections/opendirectory-45-130-148-125-20260430-detections/
 ioc_feed: /ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json
 detection_sections:
-  - label: "Detection Coverage Summary"
-    anchor: "#detection-coverage-summary"
   - label: "YARA Rules"
     anchor: "#yara-rules"
   - label: "Sigma Rules"
     anchor: "#sigma-rules"
   - label: "Suricata Signatures"
     anchor: "#suricata-signatures"
-  - label: "Coverage Gaps"
-    anchor: "#coverage-gaps"
 ioc_highlights:
   - value: "45[.]130[.]148[.]125"
     note: "Operator C2 server (TCP/80, /4444, /8888)"

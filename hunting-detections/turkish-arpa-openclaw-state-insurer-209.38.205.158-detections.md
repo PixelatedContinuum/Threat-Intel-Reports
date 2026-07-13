@@ -21,34 +21,56 @@ hide: true
 
 ## Detection Coverage Summary
 
-| Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
-|---|---|---|---|
-| YARA | 8 | T1059.001, T1059.006, T1543.002, T1552.001, T1078, T1119, T1572 | LOW–MEDIUM |
-| Sigma | 12 | T1059.001, T1078, T1098.004, T1543.002, T1046, T1119, T1071.001, T1572, T1021.004, T1020 | LOW–HIGH (per rule) |
-| Suricata | 6 | T1071.001, T1572, T1059.001, T1046 | LOW–MEDIUM |
+This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) into Detection / Hunting per the project's four-gate tiering rubric. One Sigma rule and five Suricata rules are pure atomics — a bare C2 IP or a bare ecosystem domain with no surviving behavioral discriminator once the literal is removed — and are retired as standalone rules; their literals are already present in the campaign's IOC feed. Two Suricata rules are cut outright (one pre-existing overbroad withdrawal, one redundant duplicate of a broader surviving rule). One Sigma rule (`Sigma Rule 7`) contained dead detection logic — an impossible same-event `AND` across four mutually-exclusive `EventSource` values that could never be true on a single log record — and has been corrected to a satisfiable single-event selection, consistent with this file's own established pattern (see `Sigma Rule 8`) of surfacing a per-event signal and documenting the SIEM-side correlation it requires in prose rather than inventing unsupported correlation syntax.
 
-**Total:** 26 rules across 3 detection layers.
+| Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
+|---|---|---|---|---|
+| YARA | 7 | 1 | T1005, T1020, T1021.004, T1046, T1059.001, T1059.006, T1071.001, T1078, T1098.004, T1119, T1213, T1543.002, T1552.001, T1569.002, T1572, T1587 | 0 |
+| Sigma | 6 | 5 | T1021.004, T1046, T1059.001, T1071.001, T1078, T1098.004, T1119, T1213, T1543.002, T1552.001, T1569.002, T1572 | 1 |
+| Suricata | 1 | 1 | T1020, T1041, T1071.001, T1078 | 5 |
 
-**Priority breakdown:**
-- HIGH priority (deploy immediately, low tuning required): 14 rules
-- MEDIUM priority (deploy with environment-specific threshold tuning): 9 rules
-- LOW priority (hunting / governance baseline only): 3 rules
+**Total:** 21 rules across 3 detection layers (14 Detection, 7 Hunting), plus 6 atomics already carried in the IOC feed and 2 rules cut outright.
 
-**Coverage approach:** Rules are organized by the three campaign surfaces:
-1. **Victim-side artifacts** — PowerShell collector deployed on the victim organization hosts + insider reverse-tunnel tooling
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+
+**Coverage approach (unchanged from original analysis):** Rules are organized by the three campaign surfaces:
+1. **Victim-side artifacts** — PowerShell collector deployed on the victim organization's hosts + insider reverse-tunnel tooling
 2. **Operator-side platform artifacts** — ARPA Python ETL platform, systemd service naming, AI service, Markdown ops notes
 3. **Network / infrastructure layer** — C2 ingestion endpoints, DNS, SSH tunnel patterns, Instana API abuse
 
-**Calibration note (Observability-Tool Reverse Pipeline TTP novelty):** The "Observability-Tool Reverse Pipeline" TTP (operator ingests stolen APM credentials into own analytics platform via 4 cross-correlated monitoring sources) is maintained at high-MODERATE (top of MODERATE band) novelty confidence after full prior-art review. Closest adjacent documented case (UNC6395 OAuth-based CRM breach) is structurally distinct — one-time CRM exfiltration vs. sustained 4-source observability ETL. Rules in this file that target the multi-source cross-platform authentication pattern (Sigma rule 7, Suricata rule 2) are therefore covering a TTP with no existing published detection guidance as of 2026-05-26.
+**Highest-confidence anchors:**
+- The operator's self-branded strings (`ARPA Korelasyon Motoru`, the dashboard footer, the versioned `correlation_v3.py` docstring) — durable, near-zero FP; rebranding the entire platform is the only evasion path (YARA Detection).
+- The `arpa-*` systemd naming cluster and prefix pattern — five observed unit names plus a durable directory+prefix pattern that also catches unnamed future units (YARA + Sigma Detection).
+- The Turkish-language insider-recruitment Markdown filename family (`GERCEK_API_BULUNDU`, `PUTTY_TUNNEL_DETAY`, `SSH_KEY_COZUM`, etc.) combined with the `ARPA_Tunnel` session name and `rca_key` artifacts (YARA + Sigma Detection).
 
-**AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials (ai_service.py + ai_assistant.db pattern):** CANDIDATE novel TTP at N=1. Sigma rule 11 (AI operator NLQ egress) targets this pattern specifically. Needs N≥2 cross-operator validation before upgrading to confirmed novel TTP.
+**Atomics routed to the IOC feed (already present — no new feed entries required):** the operator C2 IP `209.38.205.158` (with its documented ports 8090/8095/8096) and the OpenClaw ecosystem domains (`openclaw.ai`, `docs.openclaw.ai`, `lightmake.site`, the Tencent skill-marketplace CDN) were each the sole discriminator of a rule with no surviving behavior once the literal is removed. All are already present in [`turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json) — no feed edits were made.
 
-**10-year Instana JWT governance defect:** The stolen JWT (`jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3`, exp ~2034-02) is a victim-side credential management defect — this is NOT an IBM Instana CVE. Sigma rule 6 (long-lived JWT detection) is a governance baseline rule for Instana customers; IBM PSIRT coordination is a product-hardening recommendation, not a CVE-disclosure path.
+**Victim-domain exception (Hunting, not atomic-routed):** two rules (Sigma Rule 2, Suricata Rule 1) key on the victim organization's own redacted Instana tenant hostname (`*.ocpinstana.[victim-domain].com.tr`) with no additional behavioral filter. Structurally this is an atomic pattern, but the underlying literal is the *victim's own asset* rather than attacker infrastructure — and the campaign's disclosure policy explicitly excludes victim infrastructure from the public IOC feed, so it cannot be routed there. Both rules are retained as **Hunting** tier for the victim organization's own internal/IR use (this file is already restricted-distribution per the Operational Sensitivity note above), not as general public-feed-eligible atomics. See Coverage Gaps for the full rationale.
+
+**Calibration notes carried forward from original analysis:**
+- **Observability-Tool Reverse Pipeline TTP novelty:** maintained at high-MODERATE (top of MODERATE band) novelty confidence after full prior-art review. Closest adjacent documented case (UNC6395 OAuth-based CRM breach) is structurally distinct — one-time CRM exfiltration vs. sustained 4-source observability ETL. The Sigma rule targeting the multi-source cross-platform authentication pattern (Sigma Rule 7, corrected below) is Hunting-tier — it surfaces the qualifying per-event signal but still requires SIEM-side correlation to realize the full novel-TTP detection value.
+- **AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials** (`ai_service.py` + `ai_assistant.db` pattern): CANDIDATE novel TTP at N=1. YARA Rule 5 targets this pattern specifically and is Hunting-tier pending N≥2 cross-operator validation.
+- **10-year Instana JWT governance defect:** the stolen JWT (`jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3`, exp ~2034-02) is a victim-side credential management defect — this is NOT an IBM Instana CVE. Sigma Rule 6 (long-lived JWT detection) is a Detection-tier governance baseline rule for Instana customers; IBM PSIRT coordination is a product-hardening recommendation, not a CVE-disclosure path.
 
 ---
 
 ## YARA Rules
 
+### Detection Rules
+
+#### Rule 1 — PowerShell Instana Local Collector
+
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1059.001 (PowerShell), T1552.001 (Credentials in Files), T1020 (Automated Exfiltration), T1071.001 (Web Protocols)
+**Confidence:** HIGH
+**Rationale:** Requires three anchors simultaneously — the victim organization's own Instana tenant endpoint fragment, the operator's specific `api/ingest/instana` C2 ingestion path, and the `-SkipCertificateCheck` flag — plus one of two Turkish-language markers or the event-schema field name. No single anchor carries the rule alone.
+**False Positives:** None known for the full combination. The victim tenant substring alone would also appear in legitimate internal admin scripts calling the same API — this is why the rule requires it in combination with the operator's ingestion path and the cert-bypass flag, not alone.
+**Blind Spots:** A rewritten collector that renames the operator's ingestion path AND drops `-SkipCertificateCheck` (e.g., using a properly-signed certificate) would evade; scoped to the victim organization's own environment by design (a per-case rule, not a general family signature).
+**Validation:** Run the collector script or an equivalent test file carrying all three anchors — must match; a legitimate internal Instana admin script lacking the operator's ingestion path must NOT fire.
+**Deployment:** Endpoint AV/EDR on Windows hosts; PowerShell Script Block Logging pipeline; email gateway scanning for PS1 attachments.
+
+```yara
 /*
    Yara Rule Set
    Identifier: Turkish-ARPA-OpenClaw-State-Insurer-209.38.205.158
@@ -57,18 +79,6 @@ hide: true
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
----
-
-### Rule 1 — PowerShell Instana Local Collector
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the victim-side PowerShell collector (`instana_local_collector.ps1`) deployed by the ARPA operator. The combination of the hardcoded the victim organization Instana tenant endpoint, the `-SkipCertificateCheck` flag, and the operator's ARPA ingestion C2 endpoint is essentially zero-FP in any environment other than the victim org — and even within the victim org, any unauthorized host running this script is a true positive.
-**ATT&CK Coverage:** T1059.001 (PowerShell), T1552.001 (Credentials in Files — stolen JWT hardcoded), T1020 (Automated Exfiltration), T1071.001 (Web Protocols)
-**Confidence:** HIGH
-**False Positive Risk:** NONE for the three-string combination. LOW for individual strings (ocpinstana string alone would fire on legitimate admin scripts using the same API within the victim organization).
-**Deployment:** Endpoint AV/EDR on Windows hosts; PowerShell Script Block Logging pipeline; email gateway scanning for PS1 attachments.
-
-```yara
 rule MAL_PowerShell_Instana_Local_Collector_Family {
    meta:
       description = "Detects the Turkish ARPA operator's victim-side PowerShell collector that exfiltrates IBM Instana APM events from the victim organization's OCP-hosted Instana tenant to operator C2 at 209.38.205.158. Indicators: hardcoded victim Instana endpoint, stolen JWT delivery, Turkish-language operational comments, and POST to operator ARPA ingestion endpoint."
@@ -94,15 +104,16 @@ rule MAL_PowerShell_Instana_Local_Collector_Family {
 }
 ```
 
----
+#### Rule 2 — ARPA Observability Harvester Platform
 
-### Rule 2 — ARPA Observability Harvester Platform
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the operator-side Python ETL platform (ARPA Korelasyon Motoru). The self-branding string `ARPA Korelasyon Motoru` in combination with multi-source ingestion references and the operator's database persistence identifiers constitutes a zero-FP signature for this specific operator platform. The dashboard footer string `ARPA © 2026 the victim organization | Read-Only Compliance | Mock Data: ❌` is unique to this operator's self-branding and has zero plausible legitimate appearance.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1059.006 (Python), T1119 (Automated Collection), T1543.002 (Systemd Service), T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**False Positive Risk:** NONE for the dashboard footer verbatim. LOW for the self-branding string alone (could appear in forks of the public GitHub repo).
+**Rationale:** Anchored on the operator's self-branded strings (`ARPA Korelasyon Motoru`, the dashboard footer, `Read-Only Compliance`) — durable across builds since renaming them means de-branding the entire platform, not editing a single file.
+**False Positives:** None known for the dashboard footer verbatim; low for the self-branding string alone (could appear in unauthorized forks of the operator's public GitHub repo).
+**Blind Spots:** A full de-branding of the ARPA platform (new project name, new dashboard footer, new file/endpoint paths) would evade; targets on-disk/in-memory artifacts of the operator-side platform, not the victim-side collector.
+**Validation:** Scan the operator's platform files or a memory dump carrying the branding strings — must match; unrelated Flask/Python monitoring dashboards must NOT fire.
 **Deployment:** Linux server file scanning, osquery file content checks, memory scanning on VPS infrastructure.
 
 ```yara
@@ -138,15 +149,16 @@ rule MAL_Python_ARPA_Observability_Harvester_Platform {
 }
 ```
 
----
+#### Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document
 
-### Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the operator-authored Turkish-language insider-recruitment tunnel-setup Markdown documents. These documents contain Turkish-language operational keywords specific to the operator's reverse-SSH-tunnel deployment campaign (PUTTY_TUNNEL_DETAY, SSH_KEY_COZUM family), operator-controlled IP references, and the insider Windows user path pattern. Finding any file matching this pattern on a corporate endpoint is a definitive true positive for insider-recruitment activity.
-**ATT&CK Coverage:** T1572 (Protocol Tunneling), T1098.004 (SSH Authorized Keys), T1021.004 (SSH)
+**Tier:** Detection
+**Robustness:** 3
+**ATT&CK Coverage:** T1572 (Protocol Tunneling), T1098.004 (SSH Authorized Keys), T1021.004 (Remote Services: SSH)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — the Turkish-language operational keywords combined with an IP address in the `209.38.205.158` range are highly specific. Risk of FP from Turkish IT staff using Turkish-language docs is LOW because the specific combination of reverse-tunnel commands + operator IP + named user path does not occur in legitimate admin workflows.
+**Rationale:** Requires 2-of-5 tunnel-setup markers (session name, key filenames, C2 IP, or port combo) AND 1-of-4 distinctive Turkish-language document filenames from the operator's insider-recruitment playbook. No single marker — including the C2 IP, which is only one of five alternatives — carries the rule alone.
+**False Positives:** Low — the combination of Turkish-language operational keywords, ARPA-branded tunnel naming, and the specific port-forward configuration does not occur in legitimate admin workflows, even among Turkish-speaking IT staff.
+**Blind Spots:** A future insider-recruitment campaign by the same operator using entirely renamed documents and a different tunnel port would evade; targets the on-disk documents, not the tunnel traffic itself (see the Sigma/Suricata rules below for the network-side behavior).
+**Validation:** Scan a copy of the operator's insider-recruitment document set — must satisfy both clauses; an unrelated Turkish-language IT document must NOT fire.
 **Deployment:** Endpoint file scanning (Windows user profile directories), DLP file content inspection, email attachment scanning.
 
 ```yara
@@ -178,15 +190,16 @@ rule MAL_PSScript_Insider_TunnelSetup_Turkish {
 }
 ```
 
----
+#### Rule 4 — Multi-Source Observability Polling Python Script
 
-### Rule 4 — Multi-Source Observability Polling Python Script
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the operator's Python polling scripts that simultaneously target multiple observability platforms (Instana + SolarWinds + Zabbix + VMware Aria) from a single source. This combination is specific to the Observability-Tool Reverse Pipeline TTP — legitimate monitoring scripts target one platform per script; cross-source ingestion patterns in a single Python file with hardcoded victim-specific endpoints are operator-distinctive.
-**ATT&CK Coverage:** T1059.006 (Python), T1046 (Network Service Discovery), T1119 (Automated Collection), T1078 (Valid Accounts — stolen credential use)
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1059.006 (Python), T1046 (Network Service Discovery), T1119 (Automated Collection), T1078 (Valid Accounts)
 **Confidence:** HIGH
-**False Positive Risk:** MEDIUM — organizations building their own cross-source monitoring integrations may have similar patterns. Reduce FP by requiring the victim-specific endpoint strings (`[victim-tenant]` tenant) in the condition; the 5-minute cadence marker and the stolen JWT jti reduce it further.
+**Rationale:** Always requires the victim's own Instana tenant identifier, combined with either the stolen JWT's unique `jti` value, the Instana API path plus 2-of-3 competing-platform references, or the cadence/last-fetch function-name pair. The mandatory victim-tenant anchor scopes this correctly to the victim's own environment (a per-case rule).
+**False Positives:** MEDIUM — organizations building their own in-house cross-source monitoring integrations against the same victim tenant could share this pattern; the stolen-JWT branch has effectively no FP since it keys on a specific known-compromised credential value.
+**Blind Spots:** A rewritten polling script targeting a different subset of platforms, or one that drops the cadence/last-fetch function names, could evade the weaker branches (the stolen-JWT branch remains durable as long as that credential is reused).
+**Validation:** Scan the operator's multi-source polling script — must match at least one branch; an unrelated single-platform monitoring script must NOT fire.
 **Deployment:** Linux server file scanning, SIEM file-create alerting on `/opt/` paths.
 
 ```yara
@@ -221,16 +234,134 @@ rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {
 }
 ```
 
----
+#### Rule 6 — ARPA Cross-Source Correlation ETL Engine
 
-### Rule 5 — ARPA AI Service Natural-Language Query Interface
+**Tier:** Detection
+**Robustness:** 3
+**ATT&CK Coverage:** T1059.006 (Python), T1119 (Automated Collection), T1005 (Data from Local System)
+**Confidence:** HIGH
+**Rationale:** Anchored on the operator's versioned, self-branded docstring (`ARPA Korelasyon Motoru v3 - Temporal Focus`) and Turkish-language diagnostic output (`=== SON 5 KORELASYON ===`) — no legitimate monitoring software emits Turkish-language diagnostic labels under this self-branding.
+**False Positives:** None known — the version-numbered self-branding and Turkish-language output are specific to this operator's toolkit.
+**Blind Spots:** A future version bump that also drops the Turkish-language diagnostic strings (an English-only refactor) would fall back to the weaker `extract_host_from_label` + `Service label` combination.
+**Validation:** Scan the correlation engine script — must match the docstring or Turkish diagnostic string; unrelated correlation/ETL tooling must NOT fire.
+**Deployment:** Linux server file scanning, code-repository scanning for publicly exposed operator code.
 
-**Detection Priority:** MEDIUM
-**Rationale:** Detects the operator's AI-augmented natural-language query interface (`ai_service.py` + `ai_assistant.db` + `data_retrieval.py` triad). This is the CANDIDATE novel TTP component — "AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials." The schema design (events table + situations table + ai_training_log table) combined with the SQLite database name `ai_assistant.db` co-located with observability data is operator-distinctive. FP risk is MEDIUM because legitimate monitoring systems may also use SQLite caches named similarly.
+```yara
+rule MAL_Python_ARPA_CrossSource_Correlation_ETL {
+   meta:
+      description = "Detects the Turkish ARPA operator's cross-source correlation ETL engine (correlation_v3.py and variants). Operator self-branded docstring 'ARPA Korelasyon Motoru v3 - Temporal Focus', Turkish-language diagnostic output, and API endpoint dispatch patterns uniquely identify this component of the ARPA platform."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
+      date = "2026-05-26"
+      family = "ARPA-observability-harvester"
+      malware_type = "observability-credential-harvester"
+      campaign = "Turkish-ARPA-State-Insurer-209.38.205.158"
+      id = "c6216184-81e7-5bf2-bd8b-4177ed18a036"
+   strings:
+      $docstring = "ARPA Korelasyon Motoru v3" ascii wide
+      $turkish_diag = "=== SON 5 KORELASYON ===" ascii wide
+      $endpoint_dispatch = "/api/correlations/" ascii wide fullword
+      $temporal = "Temporal Focus" ascii wide fullword
+      $topology_fn = "topology_mapper.py" ascii wide fullword
+      $extract_fn = "extract_host_from_label" ascii wide fullword
+      $turkish_extract = "Service label" ascii wide
+   condition:
+      filesize < 2MB and
+      ($docstring or $turkish_diag) and
+      ($endpoint_dispatch or $topology_fn or ($extract_fn and $turkish_extract) or ($docstring and $temporal))
+}
+```
+
+#### Rule 7 — ARPA Operator Ops Notes Markdown Family
+
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1587 (Develop Capabilities), T1552.001 (Credentials in Files)
+**Confidence:** HIGH
+**Rationale:** Requires one of four operator-specific note-filename/GitHub-handle markers AND one of three secondary markers (victim tenant reference, the generic `apiToken` field label, or a Turkish-language test label). The generic `apiToken` fallback alone is weak, but it never fires without one of the four distinctive primary markers also present.
+**False Positives:** Low — the combination of Turkish-language celebratory discovery notes, the specific GitHub handle, and victim-specific API references is operator-specific.
+**Blind Spots:** A future campaign by the same operator using an entirely different GitHub identity and non-Turkish note filenames would evade.
+**Validation:** Scan the operator's ops-notes directory — must satisfy both clauses; an unrelated Markdown file referencing a generic `apiToken` field must NOT fire alone.
+**Deployment:** Linux server file scanning, git repository content scanning, osquery file table on `/opt/ARPA/` and adjacent directories.
+
+```yara
+rule MAL_Markdown_ARPA_OperatorNote_Family {
+   meta:
+      description = "Detects Turkish ARPA operator-authored operational Markdown notes (GERCEK_API_BULUNDU.md, INSTANA_INTEGRATION_SUMMARY.md class). Operator documents the discovery of victim Instana endpoints, integration steps, and references the public MehmetARPA/ARPA GitHub repository. Turkish-language operational narrative combined with victim-specific API references is operator-distinctive."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
+      date = "2026-05-26"
+      family = "ARPA-observability-harvester"
+      malware_type = "operator-ops-note"
+      campaign = "Turkish-ARPA-State-Insurer-209.38.205.158"
+      id = "3369e5c8-06a2-5589-87c2-e26074c0dca3"
+   strings:
+      $gercek = "GERCEK_API_BULUNDU" ascii wide
+      $github_ref = "MehmetARPA/ARPA" ascii wide
+      $instana_summary = "INSTANA_INTEGRATION_SUMMARY" ascii wide
+      $instana_port = "INSTANA_PORT_TEST" ascii wide
+      $victim_ref = "[victim-tenant]" ascii wide nocase
+      $api_token_label = "apiToken" ascii wide fullword
+      $turkish_label = "Instana API Test" ascii wide
+   condition:
+      filesize < 200KB and
+      ($gercek or $instana_summary or $github_ref or $instana_port) and
+      ($victim_ref or $api_token_label or $turkish_label)
+}
+```
+
+#### Rule 8 — ARPA Platform Systemd Service Units
+
+**Tier:** Detection
+**Robustness:** 3
+**ATT&CK Coverage:** T1543.002 (Systemd Service), T1569.002 (System Services: Service Execution)
+**Confidence:** HIGH
+**Rationale:** Requires 2 of 5 distinctive `arpa-*` service names plus either `ExecStart=` or the `/opt/ARPA/` path — an operator would need to rename at least 4 of the 5 unit files to drop below the 2-of-5 threshold, and no legitimate software collides with this naming cluster.
+**False Positives:** Low — the `arpa-*` naming cluster for this specific set of five service names does not collide with any known legitimate software's systemd service naming pattern.
+**Blind Spots:** A full platform rebrand that renames all five unit files (and any successors) would evade; the companion Sigma file-creation rule (Sigma Rule 3) additionally catches the bare `arpa-*.service` prefix pattern for any single new unit, which is broader than this YARA rule's 2-of-5 requirement.
+**Validation:** Scan `/etc/systemd/system/` on a host running the ARPA platform — must match 2+ unit names; an unrelated Linux host's systemd directory must NOT fire.
+**Deployment:** Linux server file scanning on `/etc/systemd/system/`, osquery systemd_units table, auditd file_create watches on systemd directories.
+
+```yara
+rule MAL_SystemdUnit_ARPA_Platform_Services {
+   meta:
+      description = "Detects the Turkish ARPA operator's systemd service unit files persisting the ARPA observability-harvester platform (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel). Presence of this naming cluster in /etc/systemd/system/ indicates ARPA platform deployment on the target host."
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
+      date = "2026-05-26"
+      family = "ARPA-observability-harvester"
+      malware_type = "observability-credential-harvester"
+      campaign = "Turkish-ARPA-State-Insurer-209.38.205.158"
+      id = "4e1c0388-5ccf-57e5-bbfe-06500eaf6974"
+   strings:
+      $svc1 = "arpa-autolearn" ascii wide fullword
+      $svc2 = "arpa-continuous" ascii wide fullword
+      $svc3 = "arpa-daemon" ascii wide fullword
+      $svc4 = "arpa-instana-api" ascii wide fullword
+      $svc5 = "arpa-parallel" ascii wide fullword
+      $execstart = "ExecStart=" ascii wide
+      $opt_arpa = "/opt/ARPA/" ascii wide
+   condition:
+      filesize < 10KB and
+      2 of ($svc1, $svc2, $svc3, $svc4, $svc5) and
+      ($execstart or $opt_arpa)
+}
+```
+
+### Hunting Rules
+
+#### Rule 5 — ARPA AI Service Natural-Language Query Interface
+
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1059.006 (Python), T1213 (Data from Information Repositories)
-**Confidence:** MODERATE (AI service is in broken/dev state on observed host; pattern may not have replicated to other deployments)
-**False Positive Risk:** MEDIUM — `ai_assistant.db` combined with `_handle_event_query` handler dispatch is fairly distinctive; standalone database name is insufficient. Require the handler dispatch pattern plus the AI training log schema for lower FP.
-**Deployment:** Linux server file scanning, osquery SQLite schema inspection.
+**Confidence:** MODERATE — the AI service was observed in a broken/dev state on the single analyzed host; the pattern may not have replicated to other deployments.
+**Rationale:** The `ai_assistant.db` filename combined with a handler/training-log marker and an ARPA-specific path or filename is a reasonably distinctive combination, but a database literally named `ai_assistant.db` is not inherently unique on its own. This is the file's own explicitly self-assessed moderate-confidence, medium-FP component — a Hunting lead rather than an alerting-grade Detection rule.
+**False Positives:** MEDIUM — `ai_assistant.db` combined only with the generic `_handle_event_query`/`_handle_general_query` handler names (without the ARPA-specific path or filename) could occur in unrelated Python projects using similar SQLite-backed dispatch patterns.
+**Deployment:** Linux server file scanning, osquery SQLite schema inspection; triage hits against the co-located ARPA platform artifacts (YARA Rules 2, 6, 8) before escalating.
 
 ```yara
 rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {
@@ -263,131 +394,20 @@ rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {
 
 ---
 
-### Rule 6 — ARPA Cross-Source Correlation ETL Engine
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the operator's cross-source correlation ETL engine (`correlation_v3.py` and variants). The self-branded docstring `ARPA Korelasyon Motoru v3 - Temporal Focus` combined with the Turkish-language operator output strings and the correlation endpoint dispatch pattern are zero-FP. The `check_corr.py` Turkish output `=== SON 5 KORELASYON ===` is operator-distinctive — no legitimate monitoring software outputs Turkish-language diagnostic labels.
-**ATT&CK Coverage:** T1059.006 (Python), T1119 (Automated Collection), T1005 (Data from Local System)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — Turkish-language operational strings combined with the version-numbered self-branding are operator-specific.
-**Deployment:** Linux server file scanning, code-repository scanning for publicly exposed operator code.
-
-```yara
-rule MAL_Python_ARPA_CrossSource_Correlation_ETL {
-   meta:
-      description = "Detects the Turkish ARPA operator's cross-source correlation ETL engine (correlation_v3.py and variants). Operator self-branded docstring 'ARPA Korelasyon Motoru v3 - Temporal Focus', Turkish-language diagnostic output, and API endpoint dispatch patterns uniquely identify this component of the ARPA platform."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
-      date = "2026-05-26"
-      family = "ARPA-observability-harvester"
-      malware_type = "observability-credential-harvester"
-      campaign = "Turkish-ARPA-State-Insurer-209.38.205.158"
-      id = "c6216184-81e7-5bf2-bd8b-4177ed18a036"
-   strings:
-      $docstring = "ARPA Korelasyon Motoru v3" ascii wide
-      $turkish_diag = "=== SON 5 KORELASYON ===" ascii wide
-      $endpoint_dispatch = "/api/correlations/" ascii wide fullword
-      $temporal = "Temporal Focus" ascii wide fullword
-      $topology_fn = "topology_mapper.py" ascii wide fullword
-      $extract_fn = "extract_host_from_label" ascii wide fullword
-      $turkish_extract = "Service label" ascii wide
-   condition:
-      filesize < 2MB and
-      ($docstring or $turkish_diag) and
-      ($endpoint_dispatch or $topology_fn or ($extract_fn and $turkish_extract) or ($docstring and $temporal))
-}
-```
-
----
-
-### Rule 7 — ARPA Operator Ops Notes Markdown Family
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the operator-authored Turkish-language operational notes (GERCEK_API_BULUNDU.md class) co-located with the operator platform. These are the documents that captured the operator celebrating the discovery of the the victim organization Instana endpoint, documenting integration steps, and referencing the public GitHub repo. The `GERCEK_API_BULUNDU` string (Turkish: "Real API Found") combined with the GitHub handle reference and victim Instana URL is a zero-FP combination outside the operator's own infrastructure.
-**ATT&CK Coverage:** T1587 (Develop Capabilities), T1552.001 (Credentials in Files — API tokens documented in notes)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — the Turkish-language celebratory discovery note combined with the Instana API reference and GitHub handle is highly operator-specific.
-**Deployment:** Linux server file scanning, git repository content scanning, osquery file table on `/opt/ARPA/` and adjacent directories.
-
-```yara
-rule MAL_Markdown_ARPA_OperatorNote_Family {
-   meta:
-      description = "Detects Turkish ARPA operator-authored operational Markdown notes (GERCEK_API_BULUNDU.md, INSTANA_INTEGRATION_SUMMARY.md class). Operator documents the discovery of victim Instana endpoints, integration steps, and references the public MehmetARPA/ARPA GitHub repository. Turkish-language operational narrative combined with victim-specific API references is operator-distinctive."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
-      date = "2026-05-26"
-      family = "ARPA-observability-harvester"
-      malware_type = "operator-ops-note"
-      campaign = "Turkish-ARPA-State-Insurer-209.38.205.158"
-      id = "3369e5c8-06a2-5589-87c2-e26074c0dca3"
-   strings:
-      $gercek = "GERCEK_API_BULUNDU" ascii wide
-      $github_ref = "MehmetARPA/ARPA" ascii wide
-      $instana_summary = "INSTANA_INTEGRATION_SUMMARY" ascii wide
-      $instana_port = "INSTANA_PORT_TEST" ascii wide
-      $victim_ref = "[victim-tenant]" ascii wide nocase
-      $api_token_label = "apiToken" ascii wide fullword
-      $turkish_label = "Instana API Test" ascii wide
-   condition:
-      filesize < 200KB and
-      ($gercek or $instana_summary or $github_ref or $instana_port) and
-      ($victim_ref or $api_token_label or $turkish_label)
-}
-```
-
----
-
-### Rule 8 — ARPA Platform Systemd Service Units
-
-**Detection Priority:** HIGH
-**Rationale:** Detects operator-deployed systemd unit files matching the `arpa-*` naming pattern. The five unit files (`arpa-autolearn`, `arpa-continuous`, `arpa-daemon`, `arpa-instana-api`, `arpa-parallel`) form a distinctive cluster that does not appear in any other Hunt.io-indexed host over a 365-day window. Presence of any two of these unit file names in a systemd directory is an essentially zero-FP indicator of the ARPA platform deployment. Defenders can also hunt for the `[Service]\nExecStart=python3 /opt/ARPA/` pattern in unit file content.
-**ATT&CK Coverage:** T1543.002 (Systemd Service), T1569.002 (System Services: Service Execution)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — the `arpa-*` naming cluster for this specific set of five service names does not collide with any known legitimate software's systemd service naming pattern.
-**Deployment:** Linux server file scanning on `/etc/systemd/system/`, osquery systemd_units table, auditd file_create watches on systemd directories.
-
-```yara
-rule MAL_SystemdUnit_ARPA_Platform_Services {
-   meta:
-      description = "Detects the Turkish ARPA operator's systemd service unit files persisting the ARPA observability-harvester platform (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel). Presence of this naming cluster in /etc/systemd/system/ indicates ARPA platform deployment on the target host."
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/"
-      date = "2026-05-26"
-      family = "ARPA-observability-harvester"
-      malware_type = "observability-credential-harvester"
-      campaign = "Turkish-ARPA-State-Insurer-209.38.205.158"
-      id = "4e1c0388-5ccf-57e5-bbfe-06500eaf6974"
-   strings:
-      $svc1 = "arpa-autolearn" ascii wide fullword
-      $svc2 = "arpa-continuous" ascii wide fullword
-      $svc3 = "arpa-daemon" ascii wide fullword
-      $svc4 = "arpa-instana-api" ascii wide fullword
-      $svc5 = "arpa-parallel" ascii wide fullword
-      $execstart = "ExecStart=" ascii wide
-      $opt_arpa = "/opt/ARPA/" ascii wide
-   condition:
-      filesize < 10KB and
-      2 of ($svc1, $svc2, $svc3, $svc4, $svc5) and
-      ($execstart or $opt_arpa)
-}
-```
-
----
-
 ## Sigma Rules
 
----
+### Detection Rules
 
-### Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token
+#### Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token
 
-**Detection Priority:** HIGH
-**Rationale:** Detects PowerShell invoking the the victim organization Instana API endpoint with a stored bearer token from an unauthorized host. Within the victim org, only designated Instana admin systems should query the OCP-hosted tenant endpoint; any other Windows host doing so with `-SkipCertificateCheck` and a hardcoded `apiToken` is executing the operator's collector script or an equivalent.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1552.001 (Credentials in Files), T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**False Positive Risk:** LOW within the victim org if Instana API access is tightly controlled. MEDIUM in environments where multiple hosts legitimately query Instana APIs.
+**Rationale:** Requires a PowerShell/pwsh process AND an Instana-related command-line reference AND the `-SkipCertificateCheck` flag. The cert-bypass flag is generic alone, but ANDed with the more specific Instana-endpoint reference and the PowerShell-family image, the combination is durable for this environment.
+**False Positives:** LOW within the victim org if Instana API access is tightly controlled; legitimate Instana operations-team scripts that also use `-SkipCertificateCheck` for OCP self-signed certificates would collide.
+**Blind Spots:** A rewritten collector using a signed certificate (no `-SkipCertificateCheck`) or invoking the API from a non-PowerShell interpreter would evade.
+**Validation:** Execute the collector script (or an equivalent PowerShell test invoking the same three conditions) — must fire; an authorized Instana operations script using a different API path must NOT fire.
 **Deployment:** Sysmon + PowerShell Script Block Logging (Event ID 4104); SIEM correlation across endpoint telemetry.
 
 ```yaml
@@ -435,64 +455,16 @@ falsepositives:
 level: high
 ```
 
----
+#### Sigma Rule 3 — Systemd Unit Creation Matching `arpa-*` Naming Pattern
 
-### Sigma Rule 2 — Outbound HTTPS to the victim organization Instana Tenant from Unauthorized Host
-
-**Detection Priority:** HIGH
-**Rationale:** Detects outbound HTTPS connections to the `*.ocpinstana.[victim-domain].com.tr` wildcard domain from any host NOT on the Instana operations team allow-list. The operator harvested from this endpoint using a stolen JWT; any unauthorized system making requests to this tenant endpoint is either the collector script or a novel credential-abuse scenario.
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1078 (Valid Accounts — stolen credential use)
-**Confidence:** HIGH
-**False Positive Risk:** LOW if Instana access is restricted to designated hosts. This rule is most valuable as an egress alert on the victim org's network perimeter.
-**Deployment:** Network firewall logs; proxy logs; DNS resolver logs correlated with HTTPS egress.
-
-```yaml
-title: Outbound HTTPS to the Victim Organization OCP Instana Tenant from Non-Admin Host
-id: 024cd785-789d-4a99-8098-439f87c1df17
-status: experimental
-description: >-
-  Detects outbound HTTPS connections to the the victim organization OCP-hosted Instana tenant
-  wildcard domain (*.ocpinstana.[victim-domain].com.tr) from any host not designated
-  as an Instana operations system. The Turkish ARPA operator harvested victim observability
-  data from this endpoint using a stolen 10-year-lifetime JWT. Unauthorized hosts querying
-  this domain represent active credential abuse or deployment of the operator's PowerShell
-  collector script.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
-author: The Hunters Ledger
-date: '2026-05-26'
-tags:
-    - attack.command-and-control
-    - attack.t1071.001
-    - attack.stealth
-    - attack.persistence
-    - attack.privilege-escalation
-    - attack.initial-access
-    - attack.t1078
-    - detection.emerging-threats
-logsource:
-    category: network_connection
-    product: windows
-detection:
-    selection:
-        DestinationHostname|endswith: '.ocpinstana.[victim-domain].com.tr'
-        DestinationPort: 443
-    condition: selection
-falsepositives:
-    - Designated Instana operations team hosts performing authorized API queries
-    - Automated monitoring tools with legitimate access to the Instana tenant
-level: high
-```
-
----
-
-### Sigma Rule 3 — Systemd Unit Creation Matching `arpa-*` Naming Pattern
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the creation of systemd unit files matching the operator's distinctive `arpa-*` naming pattern in `/etc/systemd/system/`. All five operator-deployed service units use this prefix; no legitimate software in Hunt.io's 365-day index uses this exact naming scheme. Unit file creation in this path from a non-package-manager process is always suspicious; the `arpa-` prefix makes it operator-specific.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1543.002 (Systemd Service), T1569.002 (System Services: Service Execution)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — the `arpa-` prefix for systemd services does not conflict with known legitimate software service names.
+**Rationale:** Matches ANY file matching the `/etc/systemd/system/arpa-*.service` prefix pattern — broader than the YARA equivalent's fixed 2-of-5 enumeration, since it also catches unnamed future units sharing the same prefix. No legitimate software in a 365-day infrastructure index uses this exact naming scheme.
+**False Positives:** Low — the `arpa-` prefix for systemd services does not conflict with known legitimate software service names.
+**Blind Spots:** A platform rebrand that drops the `arpa-` prefix entirely would evade; targets file-creation telemetry only, not the resulting running service.
+**Validation:** Create a test file matching `/etc/systemd/system/arpa-test.service` — must fire; an unrelated `*.service` unit file must NOT fire.
 **Deployment:** auditd `file_create` watch on `/etc/systemd/system/`; Linux EDR file event telemetry.
 
 ```yaml
@@ -531,15 +503,16 @@ falsepositives:
 level: high
 ```
 
----
+#### Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP
 
-### Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the insider's reverse SSH tunnel establishment: outbound SSH from an internal Windows host with `-R 18080:localhost:8089` tunnel flags to the operator's DigitalOcean IP `209.38.205.158`. This is the defining behavioral pattern of the insider-recruitment component — an AD-joined user workstation should never initiate an SSH connection to an external VPS with reverse-forwarding flags in an enterprise environment.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1021.004 (Remote Services: SSH), T1098.004 (SSH Authorized Keys)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — SSH with `-R` reverse-forwarding from an enterprise Windows workstation to an external IP is extremely uncommon in legitimate workflows. Developers using ngrok or similar legitimate tunneling services will use different tooling and endpoints.
+**Rationale:** Requires an SSH-family tool AND (a tunnel-specific flag/port/IP OR the operator's session-name/key-file markers). Neither branch depends solely on the C2 IP — the `selection_arpa_session` branch fires on the operator's naming convention alone. Level demoted from the original `critical` to `high`: the rule is a strong process-creation combination, not a never-FP indicator (developer tunneling tools can share the same flags), matching this file's Gate-4 discipline of reserving `critical` for near-certain, immediate-incident signals.
+**False Positives:** LOW — SSH with `-R` reverse-forwarding from an enterprise Windows workstation to an external IP is extremely uncommon in legitimate workflows; developers using ngrok or similar legitimate tunneling services use different tooling and endpoints.
+**Blind Spots:** A future insider-recruitment iteration using a different reverse-tunnel port and renamed session/key artifacts would evade both branches.
+**Validation:** Launch `ssh.exe`/`putty.exe`/`plink.exe` with the `-R 18080:localhost:8089` flag toward the operator IP, or referencing `ARPA_Tunnel`/`rca_key` — must fire; an unrelated SSH connection with no reverse flag must NOT fire.
 **Deployment:** Sysmon Event ID 1 (process creation); Windows Security Event ID 4688; EDR process telemetry.
 
 ```yaml
@@ -589,18 +562,19 @@ detection:
 falsepositives:
     - Authorized developer tunneling tools with similar flag patterns (verify against endpoint management)
     - Legitimate reverse-tunnel software for remote support (verify endpoint ownership and destination IP)
-level: critical
+level: high
 ```
 
----
+#### Sigma Rule 5 — PuTTY Saved Session Created with Tunnel or ARPA Name
 
-### Sigma Rule 5 — PuTTY Saved Session Created with Tunnel or ARPA Name
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the creation of PuTTY saved sessions named `ARPA_Tunnel` or containing "Tunnel" in a context suggesting the operator's reverse-tunnel setup. The operator supplied the insider with instructions to create a PuTTY saved session named exactly `ARPA_Tunnel` pointing to `209.38.205.158`. Registry key creation by a Windows user for this session name is a definitive true positive for the insider-deployment phase.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1021.004 (Remote Services: SSH)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — `ARPA_Tunnel` is operator-specific. Generic "Tunnel" in PuTTY session names is MEDIUM FP risk from legitimate developer or DevOps users.
+**Rationale:** Requires BOTH the PuTTY saved-sessions registry path AND the operator's `ARPA_Tunnel` session name — a recurring, brand-consistent element the operator instructed the insider to use, not an arbitrary one-off string.
+**False Positives:** Low — `ARPA_Tunnel` is operator-specific; generic "Tunnel" in PuTTY session names is not matched by this rule (only the exact `ARPA_Tunnel` substring is).
+**Blind Spots:** A future campaign instructing the insider to use a different session name would evade.
+**Validation:** Create a PuTTY saved session named `ARPA_Tunnel` — must fire; an unrelated PuTTY session name must NOT fire.
 **Deployment:** Sysmon Event ID 12/13/14 (registry events); Windows Security registry audit.
 
 ```yaml
@@ -638,15 +612,16 @@ falsepositives:
 level: high
 ```
 
----
+#### Sigma Rule 6 — Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)
 
-### Sigma Rule 6 — Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)
-
-**Detection Priority:** MEDIUM
-**Rationale:** Governance defect detection rule. Detects the specific stolen JWT (`jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3`) used by the ARPA operator, OR any Instana API token with an expiration beyond 1 year from issuance. The 10-year-lifetime JWT is a victim-side credential management defect that allowed sustained unauthorized access over an extended window. This rule is a governance baseline — IBM PSIRT coordination is a product-hardening recommendation, not a CVE-disclosure. Note: this rule targets Instana audit log telemetry, which requires the victim org to have enabled Instana audit export.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1078 (Valid Accounts), T1552.001 (Credentials in Files)
-**Confidence:** HIGH (for the specific stolen JWT); MODERATE (for the generic long-lived token governance pattern)
-**False Positive Risk:** LOW for the specific JTI. MEDIUM for the generic long-lifetime pattern depending on how the Instana instance is configured.
+**Confidence:** HIGH (for the specific stolen JWT); MODERATE (for the generic long-lived-token governance branch)
+**Rationale:** The first branch keys on the exact `jti` of a specific, known-compromised credential — a durable indicator that does not "rotate" the way attacker C2 infrastructure does, since it identifies known-bad evidence rather than active attacker infrastructure. The second branch requires the victim tenant identifier AND a genuine behavioral filter (source not in RFC1918 ranges), unlike the bare tenant-only match in Sigma Rule 2 below. Level demoted from the original `critical` to `high`: the condition mixes a near-certain branch (known-stolen JTI) with a MODERATE-confidence governance branch (external access to the tenant) under one rule-level field, so `high` is the honest ceiling for the combined rule.
+**False Positives:** LOW for the specific JTI; MEDIUM for the generic long-lived-token governance pattern depending on how the Instana instance is configured — authorized Instana admin tools or token-rotation scripts running from external orchestration infrastructure could trigger the second branch.
+**Blind Spots:** If the victim rotates away from the stolen JWT (recommended remediation), the first branch stops matching by design; the second branch depends on the Instana instance exporting audit telemetry with a `source_ip` field.
+**Validation:** Replay an API call using the known stolen `jti` — must fire; replay a call using an internal-source IP against the same tenant — must NOT fire the second branch.
 **Deployment:** Instana audit log export to SIEM; IBM Instana customer portal API token review.
 
 ```yaml
@@ -689,36 +664,135 @@ detection:
 falsepositives:
     - Authorized Instana admin tools accessing the tenant from external IPs (verify against operations team allow-list)
     - Token rotation scripts running from external orchestration infrastructure
-level: critical
+level: high
 ```
 
----
+#### Sigma Rule 9 — Operator-Supplied SSH Key File in User `.ssh` Directory
 
-### Sigma Rule 7 — Cross-Source Observability Platform Authentication from Single Source IP
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the defining behavioral pattern of the Observability-Tool Reverse Pipeline TTP: the same source IP authenticating against two or more of the target's observability platforms (Instana + SolarWinds + Zabbix + VMware Aria + Datadog + Dynatrace + New Relic + Prometheus) within a short time window. Legitimate monitoring integrations do not authenticate to multiple disparate observability platforms from the same source IP simultaneously — this pattern is specific to operator-built cross-source ETL. This is the most analytically valuable rule for novel-TTP detection.
-**ATT&CK Coverage:** T1078 (Valid Accounts), T1119 (Automated Collection), T1046 (Network Service Discovery)
-**Confidence:** MODERATE — requires SIEM correlation across multiple observability platform audit feeds simultaneously.
-**False Positive Risk:** MEDIUM — cross-platform integration tools (e.g., a legitimate SIEM collecting from multiple APM sources) may trigger this. Reduce FP by requiring the platforms to include at least one premium APM (Instana / Datadog / Dynatrace) alongside one infrastructure-monitoring tool (SolarWinds / Zabbix / Prometheus).
-**Deployment:** SIEM correlation rule requiring audit log feeds from at least 2 of the listed platforms; requires observability platform audit export to be enabled.
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1098.004 (SSH Authorized Keys), T1572 (Protocol Tunneling)
+**Confidence:** HIGH
+**Rationale:** Requires the `.ssh` directory path context AND one of two key filenames (`rca_key.pem`/`rca_key.ppk`). These filenames recur across the operator's own SSH-key naming convention documented elsewhere in this investigation (`rca_key.ppk`, `rca_key.pem`, `rc_deploy_key.ppk`, `rca_deploy_key` all share the same "rc(a)" root, tracing back to the operator's earlier `/opt/rca-platform/` deployment) rather than being an arbitrary one-off choice.
+**False Positives:** LOW — `rca_key.pem`/`rca_key.ppk` are operator-distinctive filenames; generic key files in `.ssh` directories are common, but this specific naming is operator-specific.
+**Blind Spots:** A future campaign iteration that abandons the "rc(a)" naming convention entirely would evade.
+**Validation:** Create a file named `rca_key.pem` or `rca_key.ppk` inside any user's `.ssh` directory — must fire; an unrelated key file in the same directory must NOT fire.
+**Deployment:** Sysmon Event ID 11 (file creation); EDR file monitoring on `C:\Users\*\.ssh\`.
 
 ```yaml
-title: Cross-Source Observability Platform Authentication Burst from Single Source IP
+title: Operator-Supplied SSH Key File Created in User SSH Directory
+id: f9b8ab33-5436-4f3a-a996-f737e54a3d37
+status: experimental
+description: >-
+  Detects creation of the Turkish ARPA operator-supplied SSH key files (rca_key.pem for
+  OpenSSH, rca_key.ppk for PuTTY) in any Windows user's .ssh directory. The operator
+  distributed these specific key files to the victim-side insider (the victim organization Windows
+  AD user [employee ID — suppressed]) as part of the tunnel-deployment toolkit documented in the operator's
+  Turkish-language insider-recruitment handoff documents. Presence of these filenames in
+  any user's .ssh directory indicates insider toolkit deployment regardless of the containing
+  user account.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
+author: The Hunters Ledger
+date: '2026-05-26'
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1098.004
+    - attack.command-and-control
+    - attack.t1572
+    - detection.emerging-threats
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        TargetFilename|contains: '\.ssh\'
+        TargetFilename|endswith:
+            - '\rca_key.pem'
+            - '\rca_key.ppk'
+    condition: selection
+falsepositives:
+    - Legitimate administrators who happen to name their SSH keys rca_key (verify key fingerprint and origin against CA records)
+level: high
+```
+
+### Hunting Rules
+
+#### Sigma Rule 2 — Outbound HTTPS to the Victim Organization Instana Tenant
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1078 (Valid Accounts)
+**Confidence:** MODERATE
+**Rationale:** As written, this rule keys solely on the victim's own Instana tenant hostname plus the generic port 443 — no host-based discriminator despite the original title's "Non-Admin Host" claim. Durability governs over as-written precision (per the tiering rubric's tie-breaker): this fires identically for the victim organization's own designated Instana admin hosts and for any unauthorized host. Retained as Hunting rather than routed to the IOC feed, because the underlying literal is the victim's own asset and the campaign's disclosure policy excludes victim infrastructure from the public feed (see Coverage Gaps). Level demoted from `high` to `medium` to reflect the absence of any behavioral filter.
+**False Positives:** MEDIUM-HIGH — this rule fires on every connection to the tenant domain, including the victim organization's own designated Instana operations hosts; an analyst must cross-reference hits against the operations team allow-list before treating any hit as suspicious.
+**Deployment:** Network firewall logs; proxy logs; DNS resolver logs correlated with HTTPS egress. Deploy only within the victim organization's own environment.
+
+```yaml
+title: Outbound HTTPS to the Victim Organization OCP Instana Tenant
+id: 024cd785-789d-4a99-8098-439f87c1df17
+status: experimental
+description: >-
+  Detects outbound HTTPS connections to the the victim organization OCP-hosted Instana tenant
+  wildcard domain (*.ocpinstana.[victim-domain].com.tr). The Turkish ARPA operator harvested
+  victim observability data from this endpoint using a stolen 10-year-lifetime JWT. This
+  selection has no host-based filter — it fires identically for designated Instana operations
+  hosts and for unauthorized hosts — so hits must be triaged against the operations team
+  allow-list before escalation. Scoped to the victim organization's own environment; the
+  underlying hostname is excluded from the public IOC feed per the campaign's disclosure policy.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
+author: The Hunters Ledger
+date: '2026-05-26'
+tags:
+    - attack.command-and-control
+    - attack.t1071.001
+    - attack.stealth
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.initial-access
+    - attack.t1078
+    - detection.emerging-threats
+logsource:
+    category: network_connection
+    product: windows
+detection:
+    selection:
+        DestinationHostname|endswith: '.ocpinstana.[victim-domain].com.tr'
+        DestinationPort: 443
+    condition: selection
+falsepositives:
+    - Designated Instana operations team hosts performing authorized API queries — this rule does not distinguish them from unauthorized hosts and requires analyst triage against the allow-list
+    - Automated monitoring tools with legitimate access to the Instana tenant
+level: medium
+```
+
+#### Sigma Rule 7 — Observability Platform Authentication Event (Cross-Source Burst Indicator)
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1078 (Valid Accounts), T1119 (Automated Collection), T1046 (Network Service Discovery)
+**Confidence:** MODERATE — requires SIEM correlation across multiple observability platform audit feeds to realize the full novel-TTP detection value.
+**Rationale:** The original rule's condition ANDed together four selections that each pin a different, mutually-exclusive value of the same `EventSource` field (e.g. `selection_instana and selection_solarwinds`) — a single log record cannot simultaneously carry two different `EventSource` values, so the original condition could never evaluate true on any event. This is dead logic, not merely broad logic, and has been corrected here to a satisfiable single-event selection (`1 of selection_*`) matching an authentication event on any one of the four platforms. Consistent with this file's own established pattern for Sigma Rule 8, this rule surfaces the per-event building block; the cross-platform correlation itself (the same source IP authenticating to 2+ of these platforms within a 10-minute window) still requires a SIEM-native correlation layer grouped by source IP, since this is broader and requires no proof of a second platform.
+**False Positives:** MEDIUM — cross-platform integration tools (e.g., a legitimate SIEM or SOAR platform collecting from multiple APM sources via a centralized service account) will also match a single-platform authentication event; this rule is not meant to be alerted on standalone.
+**Deployment:** SIEM correlation rule requiring audit log feeds from at least 2 of the listed platforms; requires observability platform audit export to be enabled. Deploy alongside a SIEM-native rule that counts distinct `EventSource` values per source IP within a 10-minute window — this Sigma rule alone only confirms that a qualifying event type occurred.
+
+```yaml
+title: Observability Platform API Authentication Event (Cross-Source Burst Building Block)
 id: b5756186-42bf-480c-b343-423a35d27336
 status: experimental
 description: >-
-  Detects a single source IP authenticating against two or more enterprise observability
-  platforms (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria, Datadog, Dynatrace,
-  New Relic, Prometheus) within a 10-minute window. This pattern is the defining behavioral
-  signature of the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP:
-  operator-built cross-source ETL platforms authenticate to each stolen monitoring source
-  independently, creating a correlated authentication burst invisible to any single
-  platform's audit log but detectable as a SIEM correlation across feeds. No known legitimate
-  software produces this multi-platform authentication burst from a single external source.
-  This rule expresses the per-event pattern; deploy alongside a SIEM-native 10-minute
-  correlation window grouped by source IP, since Sigma's non-correlation rule format cannot
-  itself express the cross-event time-window aggregation.
+  Detects an authentication event against one of four enterprise observability platforms
+  (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria). This is a single-event building block:
+  the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP is defined by the SAME
+  source IP authenticating against 2 or more of these platforms within a 10-minute window,
+  which requires cross-event correlation that this per-event Sigma rule cannot itself express.
+  Deploy alongside a SIEM-native correlation counting distinct EventSource values per source IP
+  within a 10-minute window; a single match on this rule alone is common and not indicative of
+  malicious activity. (Corrected from the original rule, whose condition ANDed together four
+  selections that each require a different, mutually exclusive EventSource value on the SAME
+  event record — logic that could never evaluate true on any single log event.)
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
@@ -727,11 +801,6 @@ tags:
     - attack.collection
     - attack.t1119
     - attack.credential-access
-    - attack.stealth
-    - attack.persistence
-    - attack.privilege-escalation
-    - attack.initial-access
-    - attack.t1078
     - attack.discovery
     - attack.t1046
     - detection.emerging-threats
@@ -751,28 +820,21 @@ detection:
     selection_vmware_aria:
         EventSource: 'vmware_aria'
         EventType: 'api_authentication'
-    condition: >-
-        (selection_instana and selection_solarwinds) or
-        (selection_instana and selection_zabbix) or
-        (selection_instana and selection_vmware_aria) or
-        (selection_solarwinds and selection_zabbix) or
-        (selection_solarwinds and selection_vmware_aria) or
-        (selection_zabbix and selection_vmware_aria)
+    condition: 1 of selection_*
 falsepositives:
-    - Legitimate SIEM/SOAR platforms collecting from multiple APM sources via centralized service accounts (verify source IP against authorized integration allow-list)
-    - Cross-platform monitoring dashboards with unified authentication service
-level: high
+    - Legitimate SIEM/SOAR platforms collecting from multiple APM sources via centralized service accounts — a single hit is common and requires the companion cross-source correlation before treating as suspicious
+    - Any single legitimate authentication event to one of these platforms — this rule is a building block and should not be alerted on standalone
+level: low
 ```
 
----
+#### Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source
 
-### Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the operator's automated Instana topology enumeration pattern: more than 10 `GET /api/events` or `/api/topology` calls per minute from a single source IP. The operator's sliding-window collector queries Instana at 10-minute intervals per invocation but drives 5-minute polling across multiple parallel workers from the operator-side ETL — creating a distinctive rapid-enumeration pattern in Instana API audit logs that differs from legitimate interactive use.
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1046 (Network Service Discovery), T1213 (Data from Information Repositories), T1119 (Automated Collection)
-**Confidence:** HIGH
-**False Positive Risk:** MEDIUM — legitimate automated monitoring tools may query the same API at high frequency. Reduce FP by combining with source IP not-in-allow-list condition.
+**Confidence:** MODERATE — a single request is not by itself anomalous.
+**Rationale:** Matches ANY request to Instana's own legitimate topology/event API paths — necessarily broad, since these are the platform's normal REST endpoints. The rule's own description already documents that it requires a SIEM-side rate threshold (10+ requests/minute from one source) to distinguish enumeration from ordinary interactive or single-agent use; unchanged from the original, which already carried an honest MEDIUM FP self-assessment.
+**False Positives:** MEDIUM — legitimate automated monitoring tools may query the same API at high frequency; any single legitimate topology or event API query also matches this selection.
 **Deployment:** Instana audit log export to SIEM; IBM Instana API analytics; rate-limiting alerts on the Instana tenant.
 
 ```yaml
@@ -816,65 +878,15 @@ falsepositives:
 level: medium
 ```
 
----
+#### Sigma Rule 10 — Non-Splunk Process Connecting to Localhost Port 8089
 
-### Sigma Rule 9 — Operator-Supplied SSH Key File in User `.ssh` Directory
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the appearance of the operator-supplied SSH key files (`rca_key.pem` or `rca_key.ppk`) in any Windows user `.ssh` directory. The operator supplied these specific files to the victim-side insider as part of the tunnel-deployment toolkit. Presence of these filenames in a user profile `.ssh` directory is a definitive indicator of insider-toolkit deployment.
-**ATT&CK Coverage:** T1098.004 (SSH Authorized Keys), T1572 (Protocol Tunneling)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — `rca_key.pem` and `rca_key.ppk` are operator-distinctive filenames. Generic key files in `.ssh` dirs are common; this specific naming is operator-specific.
-**Deployment:** Sysmon Event ID 11 (file creation); EDR file monitoring on `C:\Users\*\.ssh\`
-
-```yaml
-title: Operator-Supplied SSH Key File Created in User SSH Directory
-id: f9b8ab33-5436-4f3a-a996-f737e54a3d37
-status: experimental
-description: >-
-  Detects creation of the Turkish ARPA operator-supplied SSH key files (rca_key.pem for
-  OpenSSH, rca_key.ppk for PuTTY) in any Windows user's .ssh directory. The operator
-  distributed these specific key files to the victim-side insider (the victim organization Windows
-  AD user [employee ID — suppressed]) as part of the tunnel-deployment toolkit documented in the operator's
-  Turkish-language insider-recruitment handoff documents. Presence of these filenames in
-  any user's .ssh directory indicates insider toolkit deployment regardless of the containing
-  user account.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
-author: The Hunters Ledger
-date: '2026-05-26'
-tags:
-    - attack.persistence
-    - attack.privilege-escalation
-    - attack.t1098.004
-    - attack.command-and-control
-    - attack.t1572
-    - detection.emerging-threats
-logsource:
-    category: file_event
-    product: windows
-detection:
-    selection:
-        TargetFilename|contains: '\.ssh\'
-        TargetFilename|endswith:
-            - '\rca_key.pem'
-            - '\rca_key.ppk'
-    condition: selection
-falsepositives:
-    - Legitimate administrators who happen to name their SSH keys rca_key (verify key fingerprint and origin against CA records)
-level: high
-```
-
----
-
-### Sigma Rule 10 — Network Connection to Port 8089 from Internal Host (Insider-Side Tunnel Bind)
-
-**Detection Priority:** MEDIUM
-**Rationale:** Detects network connections initiated to `localhost:8089` from processes on victim-side Windows hosts. Port 8089 is the insider-side tunnel bind point: the reverse SSH tunnel forwards from `localhost:8089` on the insider's machine out through the SSH connection to the operator's listener on port 18080. Any process initiating a connection to localhost:8089 in this context is communicating through the insider's reverse tunnel into the operator's network.
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1021.004 (Remote Services: SSH)
-**Confidence:** MODERATE — port 8089 is not uniquely operator-specific (other software binds to this port; Splunk uses 8089 for management).
-**False Positive Risk:** HIGH — Splunk uses port 8089 for its management API by default. Reduce FP by filtering for processes that are NOT `splunkd.exe` or `splunk.exe` initiating these connections.
-**Deployment:** Sysmon Event ID 3 (network connection); EDR network telemetry on Windows endpoints. Requires filtering for non-Splunk initiators.
+**Confidence:** MODERATE — port 8089 is not uniquely operator-specific.
+**Rationale:** Keys on a single generic port literal (8089) with only a Splunk-process exclusion filter; other legitimate custom services can bind to the same port beyond just Splunk, which the original author already flagged as HIGH FP risk.
+**False Positives:** HIGH — Splunk uses port 8089 for its management API by default (excluded here), but custom internal web services or other monitoring agents commonly use 8089 as a secondary management port too.
+**Deployment:** Sysmon Event ID 3 (network connection); EDR network telemetry on Windows endpoints. Requires filtering for non-Splunk initiators; cross-reference hits against known internal services using this port before escalation.
 
 ```yaml
 title: Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Windows Host
@@ -887,7 +899,7 @@ description: >-
   architecture: traffic from localhost:8089 on the insider's machine is forwarded through
   the SSH reverse tunnel to the operator's listener on port 18080 at 209.38.205.158.
   Non-Splunk processes binding or connecting to this port in an enterprise context indicate
-  tunnel activity.
+  tunnel activity, but the port is not unique to this campaign and requires triage.
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
@@ -918,63 +930,14 @@ falsepositives:
 level: medium
 ```
 
----
+#### Sigma Rule 12 — Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation
 
-### Sigma Rule 11 — AI Operator Natural-Language Query API Egress to ARPA Platform Endpoint
-
-**Detection Priority:** MEDIUM
-**Rationale:** Detects outbound HTTP connections to the operator's ARPA platform endpoints (`209.38.205.158` on ports 8090/8095/8096) from server hosts within the target organization. This covers the scenario where the victim-side collector or a future variant of the AI service phones home to the operator's AI query interface. Also useful for hunting from the defender side if proxy or firewall egress logs capture the endpoint.
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1020 (Automated Exfiltration), T1041 (Exfiltration Over C2 Channel)
-**Confidence:** HIGH (for specific operator IP and ports)
-**False Positive Risk:** NONE for the specific operator IP and port combination. LOW if the rule is broadened to any non-standard port egress from server hosts.
-**Deployment:** Network egress logs; proxy logs; SIEM correlation on outbound connections.
-
-```yaml
-title: Outbound HTTP Connection to Turkish ARPA Platform Endpoints from Internal Host
-id: af7bb4d0-34bf-4989-9e44-263ee76eef27
-status: experimental
-description: >-
-  Detects outbound HTTP connections from internal hosts to the Turkish ARPA operator's
-  DigitalOcean VPS (209.38.205.158) on known ARPA platform ports (8090 for dashboard,
-  8095 for topology API, 8096 for Instana data ingestion). These cleartext HTTP connections
-  carry Instana event payloads from victim infrastructure to the operator's analytics
-  platform. The IP and port combination is unique to this operator's campaign infrastructure.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
-author: The Hunters Ledger
-date: '2026-05-26'
-tags:
-    - attack.exfiltration
-    - attack.t1020
-    - attack.t1041
-    - attack.command-and-control
-    - attack.t1071.001
-    - detection.emerging-threats
-logsource:
-    category: network_connection
-    product: windows
-detection:
-    selection:
-        DestinationIp: '209.38.205.158'
-        DestinationPort:
-            - 8090
-            - 8095
-            - 8096
-    condition: selection
-falsepositives:
-    - Unlikely — this IP and port combination is specific to the operator's campaign infrastructure
-level: critical
-```
-
----
-
-### Sigma Rule 12 — Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the broader pattern of insider-deployed reverse SSH tunnels from enterprise AD-joined Windows workstations to external IPs. This is a higher-sensitivity, higher-coverage version of Sigma Rule 4 that covers the broader insider-tunnel behavioral pattern beyond the specific ARPA operator IP. Useful as a standing hunt rule for environments where insiders have SSH tools available on endpoints.
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1021.004 (Remote Services: SSH)
-**Confidence:** HIGH
-**False Positive Risk:** MEDIUM — developers with legitimate remote-access needs may use SSH tunneling to authorized dev/staging servers. Reduce FP by narrowing to non-developer workstations or excluding known authorized destination IPs.
+**Confidence:** MODERATE
+**Rationale:** A generalized, campaign-agnostic version of Sigma Rule 4 — no hardcoded operator IP, matching any SSH-family tool with a reverse-forwarding flag excluding naive RFC1918-ish substrings. The original author explicitly framed this as a "standing hunt rule," which this file's own MEDIUM FP self-assessment supports; level demoted from `high` to `medium` because the exclusion filter is a loose substring match (not a proper CIDR check) and legitimate developer tunneling can share the same flag pattern.
+**False Positives:** MEDIUM — developers with legitimate remote-access needs may use SSH tunneling with the `-R` flag to authorized dev/staging servers; the naive substring exclusion (`10.`, `172.`, `192.168.`) can both under- and over-exclude destinations.
 **Deployment:** Sysmon Event ID 1; Windows Security Event ID 4688; EDR process telemetry on AD-joined workstations.
 
 ```yaml
@@ -987,8 +950,9 @@ description: >-
   operator campaign, an insider (Windows AD user [employee ID — suppressed]) was supplied with operator-provided
   SSH keys and instructions to establish reverse tunnels from inside the victim organization's
   network to 209.38.205.158:18080. Reverse SSH tunnels from enterprise workstations to
-  external IPs are a high-confidence indicator of insider-facilitated external access
-  regardless of the specific destination IP.
+  external IPs are a hunting-grade indicator of insider-facilitated external access
+  regardless of the specific destination IP, but require triage against authorized
+  developer tunneling use.
 references:
     - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 author: The Hunters Ledger
@@ -1020,113 +984,62 @@ detection:
 falsepositives:
     - Authorized developers using reverse SSH tunnels for remote development (verify against IT-authorized tunneling policy and destination IP allow-list)
     - Remote support tools using SSH tunneling to authorized jump hosts
-level: high
+level: medium
 ```
 
 ---
 
 ## Suricata Signatures
 
----
+### Detection Rules
 
-### Suricata Rule 1 — DNS Query Egress to the victim organization Instana Wildcard Domain (Hunting Baseline)
+#### HTTP POST to ARPA Instana Ingestion Endpoint (IP-Agnostic)
 
-**Detection Priority:** MEDIUM
-**Rationale:** Detects DNS queries to `*.ocpinstana.[victim-domain].com.tr` from any host NOT on the approved Instana operations team list. The operator's victim-side collector resolves this domain before connecting to the Instana API. Within the victim organization, legitimate monitoring access should come from a small set of designated hosts; unauthorized DNS queries to this domain from other internal hosts are hunting-baseline indicators.
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1078 (Valid Accounts)
-**Confidence:** MODERATE (DNS alone is not definitive without the subsequent HTTPS connection context)
-**False Positive Risk:** MEDIUM — any internal host resolving this domain for legitimate Instana administration. Useful as a hunting baseline, not a high-confidence alert. Suppress for designated Instana operations team hosts.
-**Deployment:** DNS resolver logging; network-level DNS capture; Suricata on egress DNS traffic.
-
-```suricata
-alert dns $HOME_NET any -> any any (msg:"THL-ARPA-001 DNS Query to the victim organization Instana OCP Tenant - Potential Unauthorized Collector Activity"; dns.query; content:"ocpinstana.[victim-domain].com.tr"; nocase; threshold:type limit, track by_src, count 1, seconds 300; sid:9001001; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1071.001;)
-```
-
----
-
-### Suricata Rule 2 — HTTP Egress to ARPA Operator Platform Ports (C2 Ingestion Endpoints)
-
-**Detection Priority:** HIGH
-**Rationale:** Detects cleartext HTTP connections from internal hosts to the operator's ARPA platform on its known ports (8090 dashboard, 8095 topology API, 8096 Instana ingestion endpoint). The operator's ingestion endpoint at `209.38.205.158:8096/api/ingest/instana` receives stolen Instana event payloads in cleartext with no authentication. Any internal host initiating HTTP connections to this IP on these ports is either running the operator's collector or directly interacting with the operator's platform.
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1041 (Exfiltration Over C2 Channel), T1020 (Automated Exfiltration)
-**Confidence:** HIGH — the operator IP and port combination is specific to this campaign
-**False Positive Risk:** NONE — `209.38.205.158` on these ports has no legitimate business purpose for any enterprise network.
-**Deployment:** Suricata on egress internet traffic; inline IPS for immediate block capability.
-
-```suricata
-alert http $HOME_NET any -> 209.38.205.158 any (msg:"THL-ARPA-002 HTTP Egress to ARPA Operator Platform - Active C2 Ingestion or Dashboard Access"; http.uri; content:"/api/"; flow:to_server,established; sid:9001002; rev:1; classtype:trojan-activity; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1041;)
-
-alert http $HOME_NET any -> 209.38.205.158 any (msg:"THL-ARPA-003 HTTP POST to ARPA Operator Instana Ingestion Endpoint - Observability Data Exfiltration"; http.method; content:"POST"; http.uri; content:"/api/ingest/instana"; startswith; flow:to_server,established; sid:9001003; rev:1; classtype:trojan-activity; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1020;)
-```
-
----
-
-### Suricata Rule 3 — Outbound SSH Connection to ARPA Operator VPS (Insider Tunnel Registration)
-
-**Detection Priority:** HIGH
-**Rationale:** Detects outbound SSH connections from internal Windows hosts to the operator's DigitalOcean VPS (`209.38.205.158`) on port 22. In the insider-recruitment component, the victim-side insider initiates an SSH connection with reverse-tunnel flags (`-R 18080:localhost:8089`) to this IP. While Suricata cannot inspect the SSH payload for tunnel flags on an encrypted session, the destination IP on SSH from an internal corporate host is sufficient for alerting.
-**ATT&CK Coverage:** T1572 (Protocol Tunneling), T1021.004 (Remote Services: SSH)
-**Confidence:** HIGH — SSH connections from internal corporate hosts to this specific DigitalOcean IP have no legitimate business purpose.
-**False Positive Risk:** LOW — SSH to this specific operator IP from an enterprise network is not expected to be legitimate.
-**Deployment:** Suricata on egress TCP traffic; network firewall logging; inline IPS for potential block.
-
-```suricata
-alert tcp $HOME_NET any -> 209.38.205.158 22 (msg:"THL-ARPA-004 Outbound SSH to ARPA Operator VPS - Potential Insider Reverse Tunnel Registration"; flags:S; flow:to_server; threshold:type limit, track by_src, count 1, seconds 60; sid:9001004; rev:1; classtype:trojan-activity; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1572;)
-```
-
----
-
-### Suricata Rule 4 — HTTP POST to `/api/ingest/instana` with Instana JWT Bearer Token
-
-**Detection Priority:** HIGH
-**Rationale:** Detects HTTP POST requests to any operator-side ingestion endpoint path `/api/ingest/instana` carrying an Instana `apiToken` header. This pattern represents the operator-side reverse-pipeline ingestion: victim-side collector POSTs stolen Instana event data to the operator's ARPA platform. If the operator migrates to a different IP, this application-layer signature continues to catch the ingestion pattern regardless of destination IP change.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1020 (Automated Exfiltration), T1041 (Exfiltration Over C2 Channel), T1071.001 (Web Protocols)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — the `/api/ingest/instana` URI path is operator-coined and not used by legitimate IBM Instana products (IBM's own ingestion endpoints have different path structures).
+**Rationale:** Anchored on the operator-coined URI path `/api/ingest/instana`, not used by legitimate IBM Instana products. Retained without a destination-IP restriction so it continues to catch the ingestion pattern regardless of infrastructure rotation — strictly broader than (and here replaces) the original file's IP-scoped duplicate of the same signature (see Coverage Gaps).
+**False Positives:** None known — the `/api/ingest/instana` URI path is operator-coined and not used by legitimate IBM Instana products (IBM's own ingestion endpoints use a different path structure).
+**Blind Spots:** A rewritten collector using a different ingestion path, or TLS-only delivery (this rule matches cleartext HTTP), would evade; proxy TLS inspection is required for an encrypted variant.
+**Validation:** Replay a cleartext HTTP POST to `/api/ingest/instana` against any destination — must fire; an unrelated HTTP POST to a different API path must NOT fire.
 **Deployment:** Suricata on egress HTTP traffic; proxy with TLS inspection for encrypted variants.
 
 ```suricata
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL-ARPA-005 HTTP POST to Operator ARPA Instana Ingestion Endpoint - Stolen Observability Data Exfiltration"; http.method; content:"POST"; http.uri; content:"/api/ingest/instana"; startswith; flow:to_server,established; sid:9001005; rev:1; classtype:trojan-activity; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1020;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Turkish-ARPA-State-Insurer HTTP POST to ARPA Instana Ingestion Endpoint (Observability Data Exfiltration)"; http.method; content:"POST"; http.uri; content:"/api/ingest/instana"; startswith; flow:to_server,established; classtype:trojan-activity; sid:9001005; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/;)
 ```
 
----
+### Hunting Rules
 
-### Suricata Rule 5 — HTTP Egress to OpenClaw Distribution Domains from Server Hosts
+#### DNS Query Egress to the Victim Organization Instana Tenant
 
-**Detection Priority:** MEDIUM
-**Rationale:** Detects outbound HTTP/HTTPS connections to the OpenClaw framework distribution domains (`openclaw.ai`, `docs.openclaw.ai`, `lightmake.site`) and the associated Tencent Cloud skill-marketplace CDN from server hosts. Legitimate developer workstations accessing these domains for OpenClaw development are MEDIUM FP risk; server hosts initiating outbound connections to these domains are higher confidence for OpenClaw-based operator activity. The Tencent Cloud skills bucket (`skillhub-1388575217.cos.ap-guangzhou.myqcloud.com`) is the OpenClaw skill marketplace CDN and should never appear in server egress logs.
-**ATT&CK Coverage:** T1588.002 (Obtain Capabilities: Tool), T1071.001 (Web Protocols)
-**Confidence:** MODERATE (OpenClaw domains alone don't prove malicious use; co-location with offensive tooling is the discriminator)
-**False Positive Risk:** MEDIUM — legitimate OpenClaw developers accessing documentation. HIGH if deployed broadly on developer-workstation networks.
-**Deployment:** Suricata on DNS egress (preferred) or HTTP egress; deploy on server-subnet traffic only to reduce FP.
-
-```suricata
-alert dns $HOME_NET any -> any any (msg:"THL-ARPA-006 DNS Query to OpenClaw Distribution or Skill-Marketplace Domain - Potential Operator Framework Presence"; dns.query; content:"openclaw.ai"; nocase; sid:9001006; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1588;)
-
-alert dns $HOME_NET any -> any any (msg:"THL-ARPA-007 DNS Query to OpenClaw Tencent Skill Marketplace CDN - OpenClaw Framework Skill Update"; dns.query; content:"skillhub-1388575217.cos.ap-guangzhou.myqcloud.com"; nocase; sid:9001007; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1588;)
-
-alert dns $HOME_NET any -> any any (msg:"THL-ARPA-008 DNS Query to lightmake.site - OpenClaw Vendor Domain"; dns.query; content:"lightmake.site"; nocase; sid:9001008; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1588;)
-```
-
----
-
-### Suricata Rule 6 — Long-Lived SSH Session to External IP from Internal Windows Host (Reverse Tunnel Behavioral Pattern)
-
-**Detection Priority:** MEDIUM
-**Rationale:** Detects long-lived SSH sessions from internal Windows hosts to external IPs — the network-level behavioral pattern of an established reverse SSH tunnel. The insider's reverse tunnel must stay connected to maintain the operator's access; the session duration (hours to days) distinguishes it from transient SSH administration. This rule uses Suricata's flow tracking to flag TCP sessions on port 22 that exceed a duration threshold. Note: this rule has higher FP risk and is primarily useful as a hunting tool in environments where outbound SSH is tightly controlled.
-**ATT&CK Coverage:** T1572 (Protocol Tunneling), T1021.004 (Remote Services: SSH)
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1078 (Valid Accounts)
 **Confidence:** MODERATE
-**False Positive Risk:** HIGH in development-heavy environments where SSH tunneling is common. LOW in enterprise corporate environments where SSH from Windows workstations is not standard.
-**Deployment:** Suricata on egress TCP; best deployed on non-developer corporate workstation subnets.
+**Rationale:** Keys solely on the victim's own redacted Instana tenant domain plus a threshold — no host-based discriminator. Structurally an atomic pattern, but the underlying literal is the victim's own asset and cannot be published to the public IOC feed per the campaign's disclosure policy (see Coverage Gaps). Retained as Hunting for the victim organization's own internal detection use; the original author already labeled this a "Hunting Baseline."
+**False Positives:** MEDIUM — any internal host resolving this domain for legitimate Instana administration; suppress for designated Instana operations team hosts during triage.
+**Deployment:** DNS resolver logging; network-level DNS capture; Suricata on egress DNS traffic. Deploy only within the victim organization's own environment.
 
 ```suricata
-# [WITHDRAWN 2026-06-19] Overbroad — flow-only $HOME_NET -> EXTERNAL:22 matched ALL outbound SSH (git-over-SSH, admin). Specific reverse-tunnel rule ARPA-004 ($HOME_NET -> 209.38.205.158 22) retained.
-# alert tcp $HOME_NET any -> $EXTERNAL_NET 22 (msg:"THL-ARPA-009 Long-Lived SSH Session from Internal Windows Host to External IP - Potential Reverse Tunnel Maintenance"; flow:to_server,established; threshold:type limit, track by_src, count 1, seconds 3600; sid:9001009; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1572;)
+alert dns $HOME_NET any -> any any (msg:"THL Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)"; dns.query; content:"ocpinstana.[victim-domain].com.tr"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:9001001; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/;)
 ```
 
 ---
 
 ## Coverage Gaps
+
+**Atomics routed to the IOC feed (already present — no feed edits made).** Six rules from the original file keyed solely on one hard-coded, rotation-prone literal with no surviving behavioral discriminator once that literal is removed:
+- **Sigma Rule 11** (`Outbound HTTP Connection to Turkish ARPA Platform Endpoints`) — bare match on the operator IP `209.38.205.158` plus a fixed port list (8090/8095/8096). Both the IP and its ports are already documented in [`turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json) (`network_indicators.ipv4`).
+- **Suricata sid 9001002** (`HTTP Egress to ARPA Operator Platform`) — matched the same operator IP plus a generic `/api/` URI substring, which adds no discriminating value on its own (it matches virtually any REST API traffic).
+- **Suricata sid 9001004** (`Outbound SSH Connection to ARPA Operator VPS`) — matched the operator IP plus a bare port-22 SYN, with no application-layer discriminator (Suricata cannot inspect payload inside an encrypted SSH session).
+- **Suricata sids 9001006, 9001007, 9001008** (`HTTP/DNS Egress to OpenClaw Distribution Domains`) — bare `content` matches on `openclaw.ai`, the Tencent skill-marketplace CDN, and `lightmake.site`. All three domains are already present in the feed's `network_indicators.domains` with `action: MONITOR`; the original author's own MODERATE confidence / MEDIUM-HIGH FP self-assessment ("OpenClaw domains alone don't prove malicious use") supports routing rather than retaining as standalone signatures.
+
+**Cut outright (not routed to feed — no residual detection value).**
+- **Suricata sid 9001003** (bundled under the original "Suricata Rule 2") duplicated the `/api/ingest/instana` URI-based POST detection with an unnecessary destination-IP restriction to `209.38.205.158`. The surviving Suricata Detection rule above (sid 9001005) implements the identical URI-based logic without that restriction and is therefore strictly broader — retaining both provided no additional coverage.
+- **Suricata sid 9001009** (`Long-Lived SSH Session from Internal Windows Host to External IP`) was already withdrawn by a prior edit (2026-06-19) as overbroad — a flow-only `$HOME_NET -> $EXTERNAL_NET:22` match fires on all outbound SSH, including legitimate git-over-SSH and administration. It remains commented out in the source; no further action taken here beyond confirming the withdrawal rationale still holds.
+
+**Victim-domain exception — why Sigma Rule 2 and the Suricata DNS rule are Hunting rather than atomic-routed.** Both key on the victim organization's own redacted Instana tenant hostname (`*.ocpinstana.[victim-domain].com.tr`) with no additional behavioral filter — structurally the same "bare domain" pattern as the routed atomics above. The difference: this hostname is the *victim's own asset*, not attacker-controlled infrastructure, and the campaign's disclosure policy (see the IOC feed's `metadata.notes`) explicitly excludes victim infrastructure from the public feed. Cutting these rules entirely would discard real governance/access-anomaly value for the one audience this restricted-distribution, per-case file explicitly serves — the victim organization's own IR team. Both rules are retained as Hunting with an explicit false-positives note that designated Instana admin hosts will also match and require triage.
 
 The following techniques and detection surfaces were observed in malware-analyst findings but could not be covered with high-confidence, production-ready rules due to data availability or structural detection limitations. Each gap is documented with the evidence that was present and what additional data would enable rule creation.
 
@@ -1141,15 +1054,15 @@ The following techniques and detection surfaces were observed in malware-analyst
 
 **Technique:** T1199 (Trusted Relationship), T1078.002 (Domain Accounts), T1098.004 (SSH Authorized Keys)
 **Observed:** The operator recruited a specifically-named Windows AD user (`[employee ID — suppressed]`) at the victim organization. The insider's activities inside the victim network (file creation, SSH tool usage, registry changes) are detectable only from inside the victim's AD domain with adequate Sysmon/EDR coverage.
-**Why rules cannot be created at this stage:** Sigma rules 4, 5, 9, 10, and 12 in this file cover the observable host-level indicators; however, the most valuable detection data (AD authentication logs, lateral movement inside the network, file access to internal resources) requires victim-org cooperation and access to their internal SIEM/EDR. External third-party detection of insider behavior is structurally limited to network-egress and DNS patterns — both of which are covered in the Suricata rules.
+**Why rules cannot be created at this stage:** Sigma Rules 4, 5, and 9 (Detection tier) and Sigma Rules 10 and 12 (Hunting tier) in this file cover the observable host-level indicators; however, the most valuable detection data (AD authentication logs, lateral movement inside the network, file access to internal resources) requires victim-org cooperation and access to their internal SIEM/EDR. External third-party detection of insider behavior is structurally limited to network-egress and DNS patterns — both of which are covered in the Suricata rules.
 **What would enable detection:** Victim-org IR engagement; preservation and sharing of Windows AD audit logs for the `[employee ID — suppressed]` account (2026-03-01 → present); Sysmon deployment retrospective on the insider's workstation.
 
 ### Gap 3 — Cross-Source ETL Detection Prior to Export
 
 **Technique:** T1119 (Automated Collection), T1213 (Data from Information Repositories), novel Observability-Tool Reverse Pipeline TTP
-**Observed:** The operator's cross-source ETL ingests data from all four observability sources (Instana + SolarWinds + Zabbix + VMware Aria) and correlates them into `unified_cross_source_topology.json`. The export/exfiltration event is detectable via Sigma rule 7 (multi-platform auth burst) and Suricata rule 2 (HTTP POST to C2). However, the collection event within each platform (normal API calls using stolen credentials that look identical to legitimate admin calls) is undetectable without the cross-platform correlation context.
-**Why rules cannot be created:** Individual API calls to each platform using valid stolen credentials are indistinguishable from legitimate admin access at the single-platform level. Detection requires cross-platform correlation (Sigma rule 7) that most victim orgs cannot execute without SIEM integration across all four observability platform audit feeds simultaneously.
-**What would enable detection:** IBM Instana audit log integration to SIEM; SolarWinds Orion API audit log export; Zabbix audit log SIEM integration; VMware Aria audit event export. Cross-source authentication burst correlation (Sigma rule 7) becomes operative once at least two of these feeds are integrated.
+**Observed:** The operator's cross-source ETL ingests data from all four observability sources (Instana + SolarWinds + Zabbix + VMware Aria) and correlates them into `unified_cross_source_topology.json`. The export/exfiltration event is detectable via the Suricata Detection rule above (HTTP POST to the ARPA ingestion endpoint). However, the collection event within each platform (normal API calls using stolen credentials that look identical to legitimate admin calls) is undetectable without cross-platform correlation context.
+**Why rules cannot be created:** Individual API calls to each platform using valid stolen credentials are indistinguishable from legitimate admin access at the single-platform level. Detection requires cross-platform correlation that most victim orgs cannot execute without SIEM integration across all four observability platform audit feeds simultaneously. Sigma Rule 7 (Hunting tier, corrected in this backfill) surfaces the qualifying per-event building block but cannot itself express the cross-event, cross-platform correlation — that requires a SIEM-native rule counting distinct `EventSource` values per source IP within a time window, layered on top of Sigma Rule 7.
+**What would enable detection:** IBM Instana audit log integration to SIEM; SolarWinds Orion API audit log export; Zabbix audit log SIEM integration; VMware Aria audit event export. The cross-source authentication-burst correlation becomes operative once at least two of these feeds are integrated and a SIEM-native correlation rule is layered on top of Sigma Rule 7.
 
 ### Gap 4 — SolarWinds Orion Stolen-Credential Abuse Detection
 
@@ -1176,11 +1089,11 @@ The following techniques and detection surfaces were observed in malware-analyst
 
 **Technique:** Novel CANDIDATE TTP — "AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials" (N=1, needs N≥2)
 **Observed:** The operator built `ai_service.py` + `ai_assistant.db` as a natural-language query interface over stolen Instana monitoring data. The service is in a broken/dev state on the current deployment but the architecture is intact (events table populated with 50 rows from the victim organization Instana).
-**Why rules cannot be created for the AI query session itself:** When functional, the AI query sessions would consist of natural-language HTTP requests to the operator's own platform on `localhost` (or via the reverse tunnel). These are operator-internal and invisible to external detection. The only detectable artifact is the `ai_assistant.db` database presence (covered by YARA rule 5) and the broken-state Python traceback in `ai_service.log` (covered by YARA rule 2 via the file path pattern).
+**Why rules cannot be created for the AI query session itself:** When functional, the AI query sessions would consist of natural-language HTTP requests to the operator's own platform on `localhost` (or via the reverse tunnel). These are operator-internal and invisible to external detection. The only detectable artifact is the `ai_assistant.db` database presence (covered by YARA Rule 5, Hunting tier) and the broken-state Python traceback in `ai_service.log` (covered by YARA Rule 2, Detection tier, via the file path pattern).
 **What would enable better coverage:** N=2 validation of the AI-Augmented Reconnaissance TTP across a second independent operator; analysis of a functional AI service session to characterize its network I/O patterns (LLM API calls to Moonshot AI, database queries, response formatting); operator-host access log export if the service becomes functional.
 
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
 Free to use, including commercially, with attribution to The Hunters Ledger.

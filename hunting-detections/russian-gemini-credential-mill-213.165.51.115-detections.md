@@ -19,22 +19,43 @@ hide: true
 
 ## Detection Coverage Summary
 
-| Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
-|---|---|---|---|
-| YARA | 8 | T1587, T1059.006, T1027, T1071.001, T1547.001 | LOW–MEDIUM |
-| Sigma | 12 | T1071.001, T1547.001, T1090.004, T1110.003, T1555.005, T1003.002, T1041, T1102 | LOW–MEDIUM |
-| Suricata | 6 | T1071.001, T1090.004, T1572, T1568 | LOW |
+This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with a Gemini-CLI-augmented credential mill. Coverage below is reorganized by tier: **Detection** rules are precise/durable enough to alert on; **Hunting** rules are broader scoping leads that need analyst triage. Rules keyed solely on one of the operator's rotatable domains (or a third-party service domain being abused) are retired as standalone signatures — those atomics already live in the campaign's IOC feed.
 
-**Total rules:** 26 across 3 detection layers.
+| Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
+|---|---|---|---|---|
+| YARA | 7 | 1 | T1110.003, T1059.006, T1587, T1078, T1552.001, T1071.001, T1132.001, T1087, T1547.001, T1036 | 0 |
+| Sigma | 4 | 6 | T1555.005, T1005, T1003.001, T1003.002, T1587, T1071.001, T1090.004, T1572, T1036.005, T1547.001, T1059.001, T1110.003 | 3 |
+| Suricata | 1 | 1 | T1071.001, T1132.001, T1041, T1090.004, T1572 | 4 |
 
-**Deployment priority:** Rules marked HIGH should be deployed first and are suitable for production alerting. Rules marked MEDIUM require environment-specific tuning (particularly server-class host scoping). Rules marked LOW are hunting baselines that produce meaningful signal only in targeted threat-hunting campaigns.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
 
-**Cross-campaign deduplication:** Rules already covered at the parent campaign level (`ai-agent-frameworks-2026-05-23-detections.md`) are not duplicated here. This file goes deeper on Case 1 operator-specific indicators: `A2A C2 MULTI-AGENT CONSOLE` string, Gemini role-priming prompts, `X-Agent-ID` header format, `tralalarkefe.com` infrastructure, Russian-language operator persona strings, and AntiPublic.one integration.
+**Highest-confidence anchors:**
+- The A2A C2 endpoint set (`/api/v1/update`, `/api/v1/interact`, `/api/v1/telemetry`) plus the operator-bespoke `X-Agent-ID` header — survives full domain/IP rotation, and anchors both a YARA rule and the Suricata Detection signature.
+- The LLM-personalized credential-mutation prompt fragments (`"Act as an expert red-team password analyst"`, `"generate exactly 20 likely current mutations"`) paired with operator-bespoke output filenames (`AI_SNIPER_GOODS`, `AI_ADMIN_MUTANTS`) — first-publication signature for a novel TTP.
+
+**Atomics routed to the IOC feed:** `tralalarkefe.com` (and its `c2.` / `payloads.` / `windows_server.` / `gil_dr1.` / `catchall1.` / `10101.` subdomains), `generativelanguage.googleapis.com`, `antipublic.one`, and the `tenant-upcoming-great-descending.trycloudflare.com` bootstrap subdomain are transient indicators already carried in [`russian-gemini-credential-mill-213.165.51.115-iocs.json`](/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json) — no feed edits were required for this backfill (all four domains were already present). 7 of the original file's rules (3 Sigma, 4 Suricata) each keyed solely on one of these domains with no distinguishing filter surviving its removal; they are retired as standalone signatures below and cross-referenced in Coverage Gaps.
+
+**Salvage note:** two originally single-object rules were split during tiering to separate a high-confidence, low-FP core from a broader, real-FP-bearing branch that was folded into the same `condition:` — see the AI Operator Handoff Document Sigma pair and the WordPress credential-mill rate rule (rewritten as a proper Sigma `event_count` correlation) below.
 
 ---
 
 ## YARA Rules
 
+### Detection Rules
+
+#### LLM-Personalized Credential Mutator Family
+
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python), T1587 (Develop Capabilities)
+**Confidence:** HIGH
+**Rationale:** Requires the Gemini API import AND one of three verbatim role-priming prompt fragments AND one of four operator-bespoke output filenames. The prompt wording and filenames are bespoke enough that no legitimate software plausibly combines them with a Gemini API import; an operator would need to both reword every prompt fragment and rename every output file to evade.
+**False Positives:** None known — the combination of a Gemini API client import, the exact role-priming phrase, and an AI-mutation output filename pattern has negligible legitimate-software overlap.
+**Blind Spots:** A full prompt rewrite plus output-filename rename evades detection; the rule targets on-disk Python source, not an in-memory or compiled variant.
+**Validation:** Scan `ai_sniper_brute.py` or a functional equivalent — the three-clause combination must match; a benign script that merely imports `google.generativeai` (with no role-priming prompt or bespoke output filename) must NOT fire.
+**Deployment:** Endpoint AV/EDR file scan, SIEM file-creation alert, git-hook pre-commit scan on CI/CD pipelines, developer workstation endpoint protection.
+
+```yara
 /*
    Yara Rule Set
    Identifier: Russian Gemini Credential Mill — UTA-2026-012 (Case 1, ai-agent-frameworks-2026-05-23)
@@ -43,16 +64,6 @@ hide: true
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
 
-### Rule 1 — LLM-Personalized Credential Mutator Family
-
-**Detection Priority:** HIGH
-**Rationale:** Detects `ai_sniper_brute.py`-class scripts by the distinctive combination of the Gemini API import, the verbatim role-priming prompt fragment, the per-target input structure (email + domain + password), and the operator-self-named output file convention. The "Act as an expert red-team password analyst" phrase combined with a Gemini API import is the highest-signal single-artifact indicator of this novel TTP — it has not appeared in any prior public YARA rule corpus.
-**ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python), T1587 (Develop Capabilities)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — The combination of a Gemini API client import, the exact role-priming phrase, and an AI mutation output filename pattern has negligible legitimate-software overlap. Red-team tools that use LLMs for password mutation are themselves malicious tradecraft; the rule intentionally covers that broader class.
-**Deployment:** Endpoint AV/EDR file scan, SIEM file-creation alert, git-hook pre-commit scan on CI/CD pipelines, developer workstation endpoint protection
-
-```yara
 rule MAL_Python_LLMPersonalized_Credential_Mutator_Family {
    meta:
       description = "Detects ai_sniper_brute.py-class Python scripts using Gemini API for LLM-personalized per-target password mutation — verbatim role-priming prompt + AI_SNIPER output naming convention captured from UTA-2026-012 open-directory 213.165.51.115"
@@ -80,16 +91,17 @@ rule MAL_Python_LLMPersonalized_Credential_Mutator_Family {
 }
 ```
 
----
+#### AI Operator Handoff Document Family
 
-### Rule 2 — AI Operator Handoff Document Family
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the three documented AI Operator Handoff Document exemplars (`C2_MIGRATION_GUIDE.md`, `C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`) and the broader pattern of operator-authored Markdown files intended for AI session priming. The combination of a session-start load directive with operational content (C2 endpoints or credential tables) is the novel-TTP detection signature. This class has no prior YARA coverage.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1071.001 (Web Protocols — C2 endpoint references within the document)
 **Confidence:** HIGH
-**False Positive Risk:** MEDIUM — AI-assisted documentation that contains `When starting a new session` is used by legitimate AI-augmented development workflows (e.g., `CLAUDE.md` project files). The rule is tuned to require co-occurrence with operational content markers (C2 endpoint patterns or credential-table indicators) to suppress these FPs. Deploy with content-type filter: `.md` files in `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class hosts are higher-risk than on developer workstations.
-**Deployment:** Endpoint file-creation monitoring, filesystem hunt on server-class Linux hosts, git-repo secret-scanning pipeline
+**Rationale:** Requires a session-priming marker (the To/From Gemini CLI header pair, a session-start load directive, or a knowledge-transfer marker paired with a named handoff-document filename) AND co-occurrence with an operational C2 artifact (an `/api/v1/` endpoint, the `cloudflared access tcp` fragment, or the `X-Agent-ID` header). The co-occurrence requirement is what keeps this Detection-eligible despite the broader "AI-assisted documentation" surface being real.
+**False Positives:** AI-augmented developer documentation (e.g., a project's own `CLAUDE.md`) can contain a session-start directive, but will not also carry a C2 endpoint pattern or the `X-Agent-ID` header — the required co-occurrence suppresses this class of FP.
+**Blind Spots:** A handoff document that omits any of the four C2-artifact markers (e.g., references C2 infrastructure only by IP, with no `/api/v1/` path or bespoke header) evades the second clause.
+**Validation:** Scan a captured AI Operator Handoff Document (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`) — both clauses must match; a legitimate `CLAUDE.md`/`AGENTS.md` project file with no C2 content must NOT fire.
+**Deployment:** Endpoint file-creation monitoring, filesystem hunt on server-class Linux hosts, git-repo secret-scanning pipeline. Recommended additional scoping: prioritize `.md` files under `~/.gemini/`, `~/.claude/`, `~/.codex/` on server-class hosts over developer workstations.
 
 ```yara
 rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
@@ -125,16 +137,17 @@ rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
 }
 ```
 
----
+#### Stolen LLM API Key Validator
 
-### Rule 3 — Stolen LLM API Key Validator
-
-**Detection Priority:** HIGH
-**Rationale:** Detects `check_keys.py`-class scripts containing bulk Gemini API key inventories (40+ keys in a triple-quoted Python string block) validated against the Generative Language API model-listing endpoint. The `AIzaSy` prefix regex combined with the validation endpoint string and MD5-based key-state tracking is the operator's own pattern for rotating stolen keys without re-testing already-confirmed ones.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1078 (Valid Accounts — stolen API keys), T1059.006 (Python), T1552.001 (Unsecured Credentials in Files)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — A script containing 40+ Gemini API keys in a block string with a validation loop against Google's models endpoint is not a legitimate development pattern. Legitimate SDK usage embeds one key per configuration; bulk-key validators are intrinsically malicious tooling. Narrow FP surface: internal key-rotation test harnesses at API-reseller companies; these can be allowlisted by path/author.
-**Deployment:** Endpoint AV/EDR file scan, SIEM file-creation monitoring, developer workstation endpoint protection, CI/CD secret scanning
+**Rationale:** Requires the `AIzaSy` key-prefix regex literal AND a bulk-storage or search marker (`raw_keys`/`re.findall`) AND a validation-pipeline marker (the models endpoint, a valid-keys output, or a retest marker), with a 2-of-N reinforcement across all seven anchors. A single-key legitimate SDK usage cannot satisfy this combination — bulk-key validators are themselves malicious tooling regardless of family.
+**False Positives:** None known — a script containing 40+ Gemini API keys in a block string with a validation loop against Google's models endpoint is not a legitimate development pattern.
+**Blind Spots:** A rewrite that stores keys in a different structure (e.g., one per line in an external file, loaded without the `raw_keys`/`findall` marker in-code) evades the second clause.
+**Validation:** Scan `check_keys.py` or a functional equivalent — all four condition clauses must be satisfied; a legitimate single-key SDK integration must NOT fire.
+**Deployment:** Endpoint AV/EDR file scan, SIEM file-creation monitoring, developer workstation endpoint protection, CI/CD secret scanning.
 
 ```yara
 rule MAL_Python_Stolen_LLM_Key_Validator {
@@ -165,16 +178,17 @@ rule MAL_Python_Stolen_LLM_Key_Validator {
 }
 ```
 
----
+#### A2A C2 Server (Unauthenticated Python stdlib)
 
-### Rule 4 — A2A C2 Server (Unauthenticated Python stdlib)
-
-**Detection Priority:** HIGH
-**Rationale:** Detects `c2_server.py`-class scripts — operator-built Python stdlib HTTP C2 servers with zero authentication, the operator's bespoke `/api/v1/` endpoint set, base64+UTF-16LE encoding, and `BaseHTTPRequestHandler` as the server base class. The combination of the five specific endpoint paths, the "A2A C2 MULTI-AGENT CONSOLE" banner string, and the UTF-16LE decode call is essentially a fingerprint of this specific operator's framework.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1087 (Account Discovery — `/api/v1/agents` dumps all beacons)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — No legitimate web application framework uses `BaseHTTPServer.BaseHTTPRequestHandler` with this exact set of `/api/v1/` paths and UTF-16LE body decoding. The banner string "A2A C2 MULTI-AGENT CONSOLE" is the operator's own term for their framework and has no legitimate-software counterpart.
-**Deployment:** Endpoint AV/EDR file scan, server-side file integrity monitoring, threat hunting on Linux server filesystems
+**Rationale:** The operator's own banner string ("A2A C2 MULTI-AGENT CONSOLE"), or the combination of `BaseHTTPRequestHandler` with three of five bespoke `/api/v1/` endpoint paths, is essentially a fingerprint of this specific framework — no legitimate web application framework pairs `BaseHTTPServer.BaseHTTPRequestHandler` with this exact endpoint set and UTF-16LE body decoding.
+**False Positives:** None known.
+**Blind Spots:** A rewrite onto a different HTTP framework (Flask/FastAPI) with renamed endpoints and a dropped banner string evades detection.
+**Validation:** Scan `c2_server.py` or a functional equivalent — the banner or endpoint-combination clause, plus the encoding clause, must both match; an unrelated `BaseHTTPRequestHandler`-based Python service with different endpoints must NOT fire.
+**Deployment:** Endpoint AV/EDR file scan, server-side file integrity monitoring, threat hunting on Linux server filesystems.
 
 ```yara
 rule MAL_Python_A2A_C2_Server_Unauthenticated {
@@ -207,16 +221,17 @@ rule MAL_Python_A2A_C2_Server_Unauthenticated {
 }
 ```
 
----
+#### A2A C2 Client Console / Exec Tool
 
-### Rule 5 — A2A C2 Client Console / Exec Tool
-
-**Detection Priority:** HIGH
-**Rationale:** Detects `console.py` and `exec.py`-class operator-side C2 client tools. The diagnostic combination is the `X-Agent-ID` bespoke header, UTF-16LE encoding of commands before POST, and polling of `/api/v1/get_results`. The `HOSTNAME_user` agent-ID format combined with the "A2A C2" banner is essentially unique to this operator framework.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1059.006 (Python)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — The `X-Agent-ID` header name combined with the `HOSTNAME_user` format string and UTF-16LE encoding before HTTP POST is not a pattern found in any legitimate Python HTTP client library or application framework.
-**Deployment:** Endpoint AV/EDR file scan, server-side file integrity monitoring, threat hunting on Linux operator-side hosts
+**Rationale:** The `X-Agent-ID` bespoke header combined with UTF-16LE command encoding and `/api/v1/get_results` polling is not a pattern found in any legitimate Python HTTP client library — it is required alongside one of four corroborating operator-specific markers.
+**False Positives:** None known.
+**Blind Spots:** A rewrite that renames the header and drops the UTF-16LE encoding scheme evades detection.
+**Validation:** Scan `console.py`/`exec.py` or a functional equivalent — the header clause plus one corroborating marker must match; a generic Python HTTP client with a custom header name (but not `X-Agent-ID` specifically) must NOT fire.
+**Deployment:** Endpoint AV/EDR file scan, server-side file integrity monitoring, threat hunting on Linux operator-side hosts.
 
 ```yara
 rule MAL_Python_A2A_C2_Client_Console {
@@ -246,16 +261,17 @@ rule MAL_Python_A2A_C2_Client_Console {
 }
 ```
 
----
+#### C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity)
 
-### Rule 6 — C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity)
-
-**Detection Priority:** HIGH
-**Rationale:** Narrowest and highest-fidelity rule in this set. The literal `**To:** Gemini CLI` / `**From:** Gemini CLI` header combination on a Markdown file is first-publication as a named YARA signature for the AI Operator Handoff Document TTP. This exact header pattern is specific to the `C2_INFRA_TRANSFER.md` exemplar from UTA-2026-012 and its descendants. Any file matching this pattern warrants immediate investigation — it is a deliberate operator artifact, not an incidental string.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1071.001 (Web Protocols — C2 references)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — The `**To:** Gemini CLI` / `**From:** Gemini CLI` combination is not used by any legitimate Gemini CLI documentation, Google SDK examples, or standard developer workflow. Markdown inter-document correspondence using the Gemini CLI as both sender and recipient is a novel operator-invented convention.
-**Deployment:** Endpoint file-creation monitoring, SIEM filesystem alert, threat hunting in `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class hosts
+**Rationale:** The literal `**To:** Gemini CLI` / `**From:** Gemini CLI` header combination on a Markdown file — or that pairing with a Cyrillic operator-persona marker — has no known use in legitimate Gemini CLI documentation, Google SDK examples, or standard developer workflow. First-publication signature for the AI Operator Handoff Document TTP.
+**False Positives:** None known.
+**Blind Spots:** A reformatted handoff document that drops the exact `**To:**`/`**From:**` bold-markdown convention evades this narrow rule (the broader Family rule above provides fallback coverage via the session-start directive).
+**Validation:** Scan `C2_INFRA_TRANSFER.md` or a functional equivalent — the header pair must match; unrelated Markdown documentation referencing "Gemini CLI" in prose (not as a To/From header) must NOT fire.
+**Deployment:** Endpoint file-creation monitoring, SIEM filesystem alert, threat hunting in `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class hosts.
 
 ```yara
 rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {
@@ -284,16 +300,17 @@ rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {
 }
 ```
 
----
+#### PowerShell WindowsUpdateManager Stealer Loader
 
-### Rule 7 — PowerShell WindowsUpdateManager Stealer Loader
-
-**Detection Priority:** HIGH
-**Rationale:** Detects the operator's persistence-layer PowerShell script (`WindowsUpdateManager.ps1`) based on the operator-bespoke registry value name, the `%LOCALAPPDATA%\Microsoft\` deployment path, and the Cloudflare Tunnel C2 callback pattern. `WindowsUpdateManager` under `HKCU\Run` is a deliberate Windows Update component masquerade; legitimate Windows Update processes do not run under HKCU Run keys. The co-occurrence of this value name with a `tralalarkefe.com` or `payloads.*` URL fetch is high-confidence operator-bound persistence.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036 (Masquerading), T1105 (Ingress Tool Transfer), T1059.001 (PowerShell)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — `WindowsUpdateManager` as an HKCU\Run value name with a Cloudflare Tunnel C2 URL is not a pattern found in any legitimate Windows Update or Windows Defender component. The operator chose this masquerade name deliberately; its presence in a Run key combined with any C2 callback URL is a detection-grade signal.
-**Deployment:** Endpoint AV/EDR file scan, PowerShell script-block logging (Event 4104), file integrity monitoring on `%LOCALAPPDATA%\Microsoft\`
+**Rationale:** Requires the `WindowsUpdateManager` masquerade value name AND a corroborating path/key context AND one of four C2-artifact markers (domain, payload-domain, endpoint path, or bespoke header — three of which do not depend on the operator's specific domain) AND a PowerShell networking primitive. Because the C2-artifact clause has non-domain fallback options, the rule still fires after full domain rotation.
+**False Positives:** None known — `WindowsUpdateManager` as an HKCU\Run value name combined with any of the four C2-artifact markers is not a pattern found in any legitimate Windows Update or Windows Defender component.
+**Blind Spots:** A rebuild that renames the registry value AND replaces all four C2-artifact markers with something outside this anchor set evades detection.
+**Validation:** Scan `WindowsUpdateManager.ps1` or a functional equivalent — all four clauses must match; a legitimate PowerShell script using `Invoke-RestMethod` with no `WindowsUpdateManager` reference must NOT fire.
+**Deployment:** Endpoint AV/EDR file scan, PowerShell script-block logging (Event 4104), file integrity monitoring on `%LOCALAPPDATA%\Microsoft\`.
 
 ```yara
 rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {
@@ -325,16 +342,17 @@ rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {
 }
 ```
 
----
+### Hunting Rules
 
-### Rule 8 — Russian Operator Persona Strings
+#### Russian Operator Persona Strings
 
-**Detection Priority:** MEDIUM
-**Rationale:** Detects operator-authored files containing Cyrillic persona strings observed in handoff documents and session JSONs — `Братух` (informal "Bro" used to address Gemini), `Комп Доктора` ("Doctor's PC" referring to a victim machine), `Погнали` ("Let's go" — operator's session-start idiom), `тачка` ("machine/computer" slang). These strings co-occurring with operational content (C2 endpoint references, API key patterns, credential formats) in a single file is a high-confidence attribution signal for UTA-2026-012 activity specifically. Standalone these strings appear in legitimate Russian-language content; the operational co-occurrence is the detection trigger.
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1587 (Develop Capabilities — operator infrastructure docs)
 **Confidence:** MODERATE
-**False Positive Risk:** HIGH (standalone), LOW (with operational co-occurrence condition). Deploy only with the composite condition — the rule is structured to require Cyrillic persona strings co-occurring with C2 or credential indicators.
-**Deployment:** Threat hunting on server-class Linux hosts, forensic investigation of seized operator infrastructure, post-incident artifact analysis
+**Rationale:** Requires one of three Cyrillic persona strings (informal address terms for Gemini, a victim-machine nickname, or a session-start idiom) AND one of five operational markers. Two of the five operational markers (`/api/v1/` and the bare `AIzaSy` key prefix) are individually generic — they appear across many unrelated APIs and any project with a legitimate Gemini key — so the composite condition carries real, analyst-triage-worthy FP risk rather than alerting-grade precision. Framed by design as a forensic/attribution aid, not a production detection.
+**False Positives:** Standalone, the Cyrillic persona strings appear in ordinary Russian-language content; combined with the generic `/api/v1/` path fragment or a bare `AIzaSy` key prefix (present in any legitimate Gemini-integrated codebase authored in Russian), the composite condition can still produce non-operator hits.
+**Deployment:** Threat hunting on server-class Linux hosts, forensic investigation of seized operator infrastructure, post-incident artifact analysis. Deploy only with the full composite condition — never on the persona strings alone.
 
 ```yara
 rule MAL_Russian_Operator_Persona_Strings {
@@ -368,416 +386,19 @@ rule MAL_Russian_Operator_Persona_Strings {
 
 ## Sigma Rules
 
-### Rule 1 — Gemini API Egress from Server-Class Hosts
+### Detection Rules
 
-**Detection Priority:** HIGH
-**Rationale:** Outbound HTTPS to `generativelanguage.googleapis.com` from server infrastructure (not developer workstations) is the stolen-key validation signature for `check_keys.py` and the LLM credential mutation pipeline. Legitimate server-side use of the Gemini API exists (ML inference services, chatbot backends) but is expected to use a single stable API key, not a rotating pool. High-frequency model-listing endpoint queries (`/v1beta/models`) from the same source IP with key diversity are the operator's validation pattern. This rule fires on any server-class egress to this domain as a hunting baseline — tune to alert only for key-rotation-frequency patterns in enriched environments.
-**ATT&CK Coverage:** T1078 (Valid Accounts — stolen API key validation), T1059.006 (Python)
-**Confidence:** HIGH
-**False Positive Risk:** MEDIUM — Legitimate ML inference backend servers make outbound calls to this domain. Tune by adding allowlist for known ML-service hosts and by alerting only when the same source IP queries the `/v1beta/models` endpoint more than 10 times within 60 seconds (key-rotation pattern vs single-key legitimate use).
-**Deployment:** Network proxy logs, Zeek ssl.log, DNS resolver logs
+#### 1Password Vault Export File Created or Accessed by Non-1Password Process
 
-```yaml
-title: Gemini API Egress from Server-Class Infrastructure Host
-id: 173cf9ee-97c5-4d51-8487-856f63894ad5
-status: experimental
-description: >-
-  Detects outbound HTTPS connections to generativelanguage.googleapis.com from server-class
-  hosts (non-developer workstations). From server infrastructure, this pattern indicates
-  stolen Gemini API key validation (check_keys.py-class tools) or LLM-personalized credential
-  mutation (ai_sniper_brute.py-class tools) — both documented in UTA-2026-012 open-directory
-  213.165.51.115. Legitimate ML inference backend servers should be added to an allowlist.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-author: The Hunters Ledger
-date: '2026-05-25'
-tags:
-    - attack.initial-access
-    - attack.stealth
-    - attack.persistence
-    - attack.privilege-escalation
-    - attack.t1078
-    - attack.execution
-    - attack.t1059.006
-    - detection.emerging-threats
-logsource:
-    category: network_connection
-    product: linux
-detection:
-    selection:
-        DestinationHostname|endswith:
-            - 'generativelanguage.googleapis.com'
-            - '.generativelanguage.googleapis.com'
-    filter_known_ml_services:
-        Image|contains:
-            - '/usr/bin/python'
-            - 'jupyter'
-            - 'notebook'
-    condition: selection and not filter_known_ml_services
-falsepositives:
-    - Legitimate ML inference backend services calling the Gemini API — add known ML-service hosts to allowlist
-    - Google Cloud SDK operations on GCP-hosted infrastructure
-    - Developer workstations (scope rule to server-class hosts by IP range or asset tag)
-level: medium
-```
-
----
-
-### Rule 2 — Gemini CLI Directory Created on Server Host
-
-**Detection Priority:** HIGH
-**Rationale:** The `~/.gemini/` directory being created on a server-class Linux host is an operator-side installation signal. The operator's AI Operator Handoff Documents reference `~/.gemini/skills/cf-c2-manager/`, `~/.gemini/GEMINI.md`, and `~/.gemini/tmp/root/chats/` (session JSON storage). None of these paths exist in legitimate server deployments. Executable content (`.sh`, `.py`) created within `~/.gemini/` on a server is a higher-confidence sub-indicator.
-**ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
-**Confidence:** HIGH
-**False Positive Risk:** LOW on server-class hosts. MEDIUM on developer workstations (Gemini CLI is a legitimate developer tool). Scope this rule to server-class infrastructure by asset group or IP range.
-**Deployment:** Sysmon (Linux), auditd, file-integrity monitoring
-
-```yaml
-title: Gemini CLI Directory Creation with Executable Contents on Server Host
-id: dca5d3c0-5b22-453e-a36f-7696d927a739
-status: experimental
-description: >-
-  Detects creation of ~/.gemini/ directory containing executable scripts (.sh, .py) or
-  AI-priming documents on server-class Linux hosts. The UTA-2026-012 operator stores C2
-  management skills (~/.gemini/skills/cf-c2-manager/SKILL.md), session handoff documents
-  (~/.gemini/GEMINI.md), and Gemini CLI session JSONs (~/.gemini/tmp/root/chats/) on the
-  C2 server itself. Legitimate Gemini CLI usage on servers is uncommon; co-location with
-  operational scripts is a high-confidence operator signal.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-author: The Hunters Ledger
-date: '2026-05-25'
-tags:
-    - attack.resource-development
-    - attack.t1587
-    - attack.execution
-    - attack.t1059.006
-    - detection.emerging-threats
-logsource:
-    category: file_event
-    product: linux
-detection:
-    selection_gemini_dir:
-        TargetFilename|contains: '/.gemini/'
-    selection_executable:
-        TargetFilename|endswith:
-            - '.sh'
-            - '.py'
-            - '.ps1'
-            - 'GEMINI.md'
-            - 'SKILL.md'
-    condition: selection_gemini_dir and selection_executable
-falsepositives:
-    - Legitimate Gemini CLI usage by developers on developer workstations — scope rule to server-class hosts only
-    - Google Cloud Workstations with Gemini CLI installed by default
-level: medium
-```
-
----
-
-### Rule 3 — Cloudflare Tunnel Registration to tralalarkefe.com
-
-**Detection Priority:** HIGH
-**Rationale:** `cloudflared access tcp --hostname *.tralalarkefe.com` process execution on any host is a direct indicator of UTA-2026-012 operator infrastructure activity — either the operator's own server registering a victim-access tunnel or a victim-side beacon re-registration event. `tralalarkefe.com` is the operator's bespoke domain with no legitimate use.
-**ATT&CK Coverage:** T1090.004 (Domain Fronting — Cloudflare Tunnel), T1572 (Protocol Tunneling)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — `tralalarkefe.com` has no documented legitimate use. Any `cloudflared` invocation referencing this domain warrants immediate investigation.
-**Deployment:** Sysmon Event ID 1 / auditd execve, EDR process-creation telemetry
-
-```yaml
-title: Cloudflare Tunnel Registration to tralalarkefe.com Operator Infrastructure
-id: 1003c111-2038-43bc-b463-b5895cd6f408
-status: experimental
-description: >-
-  Detects cloudflared process invocations referencing the UTA-2026-012 operator's bespoke
-  Cloudflare Tunnel domain tralalarkefe.com or its documented subdomains (c2, payloads,
-  windows_server, gil_dr1, catchall1, 10101). cloudflared access tcp --hostname *.tralalarkefe.com
-  was observed in operator-side ps output captured from session JSON 2026-03-19T22-26-389c5d67.
-  Any host executing cloudflared with this domain should be treated as compromised or operator-side.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-author: The Hunters Ledger
-date: '2026-05-25'
-tags:
-    - attack.command-and-control
-    - attack.t1090.004
-    - attack.t1572
-    - detection.emerging-threats
-logsource:
-    category: process_creation
-    product: linux
-detection:
-    selection:
-        Image|endswith: '/cloudflared'
-        CommandLine|contains: 'tralalarkefe.com'
-    condition: selection
-falsepositives:
-    - Unlikely — tralalarkefe.com has no documented legitimate use
-level: high
-```
-
----
-
-### Rule 4 — cloudflared access tcp to Unapproved Hostname (Org Allowlist Bypass)
-
-**Detection Priority:** MEDIUM
-**Rationale:** The operator uses `cloudflared access tcp --hostname <victim-tunnel>.tralalarkefe.com` to maintain persistent reverse-access tunnels to victim machines without exposing the victim IP. This Sigma rule fires on any `cloudflared access tcp` invocation on server-class Linux hosts where the hostname argument does not match an organizational allowlist. Defenders can populate the allowlist filter with their known legitimate Cloudflare Tunnel hostnames.
-**ATT&CK Coverage:** T1090.004 (Domain Fronting), T1572 (Protocol Tunneling), T1021.001 (RDP via tunnel), T1021.004 (SSH via tunnel)
-**Confidence:** MODERATE
-**False Positive Risk:** MEDIUM — Organizations with legitimate Cloudflare Tunnel deployments will generate FPs. Tune by populating the allowlist filter with known-legitimate tunnel hostnames. Alert only on `cloudflared access tcp` (the operator's victim-access tunnel command) rather than `cloudflared tunnel run` (the service-side registration command).
-**Deployment:** auditd execve, Sysmon (Linux), EDR process-creation on server-class hosts
-
-```yaml
-title: Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname
-id: 57ce00ce-d1ee-4621-9654-cefb4bf3b60d
-status: experimental
-description: >-
-  Detects cloudflared access tcp invocations on Linux server-class hosts referencing hostnames
-  outside an organizational allowlist. The UTA-2026-012 operator used cloudflared access tcp
-  --hostname windows_server.tralalarkefe.com and --hostname gil_dr1.tralalarkefe.com to
-  maintain persistent reverse-TCP tunnels to the victim machines for RDP and SSH.
-  This pattern allows persistent victim access without victim-side firewall rule changes.
-  Tune by adding your organization's known legitimate Cloudflare Tunnel hostnames to the
-  allowlist filter below.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-author: The Hunters Ledger
-date: '2026-05-25'
-tags:
-    - attack.command-and-control
-    - attack.t1090.004
-    - attack.t1572
-    - attack.lateral-movement
-    - attack.t1021.001
-    - attack.t1021.004
-    - detection.emerging-threats
-logsource:
-    category: process_creation
-    product: linux
-detection:
-    selection:
-        Image|endswith: '/cloudflared'
-        CommandLine|contains|all:
-            - 'access'
-            - 'tcp'
-            - '--hostname'
-    filter_known_legit:
-        CommandLine|contains:
-            - 'your-org-tunnel.example.com'  # REPLACE with org's known CF Tunnel hostnames
-    condition: selection and not filter_known_legit
-falsepositives:
-    - Legitimate organizational Cloudflare Tunnel deployments — populate the allowlist filter with known tunnel hostnames
-    - Developer workstations running cloudflared for legitimate service exposure
-level: medium
-```
-
----
-
-### Rule 5 — PowerShell WindowsUpdateManager Registry Run Key Persistence
-
-**Detection Priority:** HIGH
-**Rationale:** Registry write to `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager` is the operator's victim-side persistence mechanism documented in `C2_INFRA_TRANSFER.md`. Legitimate Windows Update components do not create HKCU Run keys; the `WindowsUpdateManager` value name is the operator's own masquerade choice. The file path `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` pointing to a PowerShell script in a Microsoft-named subfolder amplifies the masquerade.
-**ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036 (Masquerading), T1059.001 (PowerShell)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — No legitimate Windows component writes `WindowsUpdateManager` to a HKCU Run key. The name is intentionally close to legitimate Windows Update services but structurally incorrect (HKCU scope, PowerShell script, non-standard path format). Alert with HIGH priority on first match.
-**Deployment:** Sysmon Event ID 13 (registry value set), Windows Event ID 4657, EDR registry monitoring
-
-```yaml
-title: WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence
-id: 833c2659-c255-4e42-a6b8-2cfd8b0b8ac1
-status: experimental
-description: >-
-  Detects registry write to HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager
-  pointing to %LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1 — the operator-bespoke
-  victim-side persistence mechanism for the UTA-2026-012 PowerShell C2 beacon documented
-  in C2_INFRA_TRANSFER.md. Legitimate Windows Update components do not create HKCU Run keys.
-  The WindowsUpdateManager value name is the operator's deliberate masquerade of Windows Update.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-author: The Hunters Ledger
-date: '2026-05-25'
-tags:
-    - attack.persistence
-    - attack.privilege-escalation
-    - attack.t1547.001
-    - attack.stealth
-    - attack.t1036
-    - attack.execution
-    - attack.t1059.001
-    - detection.emerging-threats
-logsource:
-    category: registry_set
-    product: windows
-detection:
-    selection:
-        TargetObject|contains:
-            - '\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager'
-    condition: selection
-falsepositives:
-    - Unlikely — WindowsUpdateManager is not a legitimate Windows Update component registry value
-level: high
-```
-
----
-
-### Rule 6 — Outbound to AntiPublic.one Credential-DB API from Non-Research Host
-
-**Detection Priority:** HIGH
-**Rationale:** HTTP POST to `antipublic.one/api/v2/search` from any non-security-research infrastructure is a high-confidence credential-operator signal. The operator integrates AntiPublic.one (Russian paid breach-data lookup service) via a JWT in `mass_wp_mutator.py` to cross-check targets against historical credential corpora before live brute-force. Legitimate organizations do not query AntiPublic.one from production infrastructure.
-**ATT&CK Coverage:** T1213 (Data from Information Repositories), T1078 (Valid Accounts — credential pre-validation)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — AntiPublic.one is a known Russian carding/credential-validation service. Legitimate security research tools that query this service (OSINT analysts, credential-monitoring platforms) can be added to an allowlist by source IP. Production and server infrastructure has no legitimate reason to call this endpoint.
-**Deployment:** Proxy logs, Zeek http.log, WAF egress rules
-
-```yaml
-title: Outbound HTTP to AntiPublic.one Credential Database API from Non-Research Host
-id: 163023b7-5615-4c9f-9e30-60af0bd2cd8e
-status: experimental
-description: >-
-  Detects outbound HTTP connections to antipublic.one/api/v2/search from non-security-research
-  infrastructure. The UTA-2026-012 operator integrates this Russian paid breach-data lookup
-  service (mass_wp_mutator.py ANTIPUBLIC_API_URL constant) to cross-check target email/password
-  combinations against historical credential corpora before live WordPress brute-force.
-  Production and server infrastructure has no legitimate reason to query this endpoint.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-author: The Hunters Ledger
-date: '2026-05-25'
-tags:
-    - attack.collection
-    - attack.t1213
-    - attack.initial-access
-    - attack.stealth
-    - attack.persistence
-    - attack.privilege-escalation
-    - attack.t1078
-    - detection.emerging-threats
-logsource:
-    category: network_connection
-    product: linux
-detection:
-    selection:
-        DestinationHostname|endswith: 'antipublic.one'
-        DestinationPort:
-            - 443
-            - 80
-    condition: selection
-falsepositives:
-    - Legitimate OSINT analysts or credential-monitoring platforms querying AntiPublic.one — allowlist by source IP
-    - Security vendor threat-intel feeds querying the service for breach-data correlation
-level: high
-```
-
----
-
-### Rule 7 — Python HTTP Server with UTF-16LE Encoding in Process Command Line
-
-**Detection Priority:** MEDIUM
-**Rationale:** Python process spawning an HTTP server on a non-standard port combined with `utf-16le` or `utf16le` in the process environment or command line arguments is the runtime signature of the operator's `c2_server.py` deployment. The UTF-16LE encoding is the C2's body encoding scheme; `BaseHTTPServer` on a non-standard port (8081/8090/10101 vs the standard 8000/8080) is the deployment pattern.
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1059.006 (Python)
-**Confidence:** MODERATE
-**False Positive Risk:** HIGH (standalone, broad Python HTTP server detection). MEDIUM with the UTF-16LE co-condition. Deploy as a hunting query rather than a production alert without additional tuning. Combine with network-layer detection (Suricata Rule 3) for higher-fidelity composite alerting.
-**Deployment:** EDR process-creation telemetry, auditd execve, threat hunting
-
-```yaml
-title: Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern)
-id: 253e1a6a-f4f3-4227-9106-94e9fdb4f949
-status: experimental
-description: >-
-  Detects Python processes launching HTTP servers on non-standard ports (8081, 8090, 10101)
-  co-occurring with utf-16le string in command line or script path — runtime signature of the
-  UTA-2026-012 operator's c2_server.py BaseHTTPServer deployment. The UTF-16LE encoding is the
-  C2's body encoding scheme for PowerShell beacon commands. Non-standard ports (8081/8090/10101)
-  are the operator's documented multi-instance deployment pattern from c2_server.log filenames.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-author: The Hunters Ledger
-date: '2026-05-25'
-tags:
-    - attack.command-and-control
-    - attack.t1071.001
-    - attack.t1132.001
-    - attack.execution
-    - attack.t1059.006
-    - detection.emerging-threats
-logsource:
-    category: process_creation
-    product: linux
-detection:
-    selection_python:
-        Image|endswith:
-            - '/python3'
-            - '/python'
-    selection_c2_server:
-        CommandLine|contains:
-            - 'c2_server'
-            - 'BaseHTTPServer'
-    condition: selection_python and selection_c2_server
-falsepositives:
-    - Legitimate Python web services on non-standard ports (Django dev server, Flask, etc.) — tune by excluding known-legitimate service paths and process owners
-    - Security testing frameworks (Impacket, Responder) that use similar port patterns
-level: low
-```
-
----
-
-### Rule 8 — Mass WordPress Credential Validation Rate (Brute-Force Spray)
-
-**Detection Priority:** HIGH
-**Rationale:** More than 500 HTTP POST requests to `/wp-login.php` from a single source IP within a 60-second window is the mass-credential-validation signature of `mass_wp_mutator.py` and the operator's nuclei `wp_admin_hunter.yaml` template. Legitimate WordPress authentication does not generate this volume from a single source. This threshold is derived from the operator's ThreadPoolExecutor 3-worker configuration — at 3 concurrent workers, even a slow mutation pipeline generates hundreds of POSTs per minute against a target list.
-**ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python)
-**Confidence:** HIGH
-**False Positive Risk:** MEDIUM — Load-testing tools, penetration testers, and automated performance testing may trigger this threshold. Tune the threshold upward (to 1000+/min) for environments with known load-testing activity; downward (to 100+/min) for environments where any WordPress brute-force activity is anomalous.
-**Deployment:** Web Application Firewall, reverse proxy access logs, Zeek http.log
-
-```yaml
-title: Mass WordPress wp-login.php Credential Validation Requests — Possible A2A Credential Mill
-id: c6ff58ec-caa8-43e8-a73d-7869abcae0eb
-status: experimental
-description: >-
-  Detects HTTP POST requests to /wp-login.php, the endpoint targeted by mass_wp_mutator.py
-  and the operator's nuclei wp_admin_hunter.yaml template for UTA-2026-012 credential
-  validation at scale. A single request is not by itself anomalous; the operator's signature
-  is a high per-source-IP rate (500+ requests within a 60-second window driven by a
-  ThreadPoolExecutor 3-worker pipeline against target lists of 30,000+ WordPress sites).
-  This rule surfaces the underlying event for rate-based correlation in the SIEM or WAF layer
-  — deploy alongside a per-source-IP request-rate threshold (500+/min conservative baseline;
-  tune per environment) since Sigma's non-correlation rule format cannot itself express
-  a count-over-time aggregation.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
-author: The Hunters Ledger
-date: '2026-05-25'
-tags:
-    - attack.credential-access
-    - attack.t1110.003
-    - attack.execution
-    - attack.t1059.006
-    - detection.emerging-threats
-logsource:
-    category: webserver
-detection:
-    selection:
-        cs-uri-stem|contains: '/wp-login.php'
-        cs-method: 'POST'
-    condition: selection
-falsepositives:
-    - Authorized load-testing or authorized offensive-security assessments against WordPress installations
-    - WordPress security scanner tools (WPScan, Jetpack Protect) — these generally use lower rates
-    - Any single legitimate login attempt to a WordPress site — this rule requires rate-based correlation (500+ requests/60s from one source IP) to distinguish credential-mill activity from normal traffic
-level: high
-```
-
----
-
-### Rule 9 — 1Password Vault Export or Download Pattern
-
-**Detection Priority:** HIGH
-**Rationale:** The operator's `CREDENTIALS.md` ledger references a 1Password vault export dated 2026-03-20 from an unidentified victim — one of multiple credential stores compromised in the operation. File creation events matching 1Password vault export formats (`.1pux`, `.1pif`, `1Password Export*`) combined with immediate access from a Python or PowerShell process (rather than the 1Password application itself) is a high-confidence data-theft signal.
+**Tier:** Detection
+**Robustness:** 2
 **ATT&CK Coverage:** T1555.005 (Credentials from Password Stores — Password Managers), T1005 (Data from Local System)
 **Confidence:** HIGH
-**False Positive Risk:** MEDIUM — Legitimate 1Password vault exports by authorized users (for migration, backup) will trigger this rule. Tune by suppressing alerts where the accessing process is the 1Password application or a known backup agent. Alert when the accessing process is Python, PowerShell, or an unrecognized binary.
-**Deployment:** Sysmon Event ID 11 (file creation), EDR file-access monitoring
+**Rationale:** Requires a 1Password vault-export file extension/name pattern AND a filter excluding the legitimate 1Password application images. This combination — export artifact plus a non-1Password accessing process — is a durable technique signal independent of any campaign-specific domain or filename.
+**False Positives:** Legitimate authorized 1Password vault migration or backup workflows by IT staff; the 1Password CLI (`op.exe`) used for authorized scripted access is not excluded by the current filter and should be allowlisted per-deployment.
+**Blind Spots:** A theft routine that renames the exported file before it touches disk (avoiding the `.1pux`/`.1pif`/`1Password Export` pattern) evades detection.
+**Validation:** Trigger a 1Password vault export from a non-1Password process (e.g., a Python script reading the export directory) — must match; a export created and immediately handled by `1Password.exe` itself must NOT fire.
+**Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-creation telemetry).
 
 ```yaml
 title: 1Password Vault Export File Created or Accessed by Non-1Password Process
@@ -821,29 +442,31 @@ falsepositives:
 level: high
 ```
 
----
+#### Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask
 
-### Rule 10 — NTLM Hash Dump Followed by Cloudflare Tunnel Egress (Correlation)
-
-**Detection Priority:** HIGH
-**Rationale:** The operator dumped NTLM hashes from the the victim domain (local SAM hashes from multiple machines across two internal subnets) and then exfiltrated them via the Cloudflare Tunnel C2 (`c2.tralalarkefe.com` or `windows_server.tralalarkefe.com`). Detection of NTLM dump tooling (lsass access, SAM dump commands) followed within 10 minutes by outbound connections to `*.trycloudflare.com` or `*.tralalarkefe.com` is a high-confidence exfiltration-via-tunnel composite signal.
-**ATT&CK Coverage:** T1003.001 (LSASS Memory), T1003.002 (SAM), T1041 (Exfiltration Over C2 Channel), T1090.004 (Domain Fronting)
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1003.001 (LSASS Memory), T1003.002 (SAM)
 **Confidence:** MODERATE
-**False Positive Risk:** LOW on the composite condition. The NTLM-dump-to-Cloudflare-Tunnel sequence within a 10-minute window is not a legitimate administrator pattern.
-**Deployment:** EDR correlation rules, SIEM temporal correlation queries, Sysmon Event ID 10 (lsass access) + network log correlation
+**Rationale:** **Retitled during tiering** — the original title ("NTLM Hash Dump Followed by Cloudflare Tunnel Exfiltration Within 10 Minutes") described a two-stage correlation, but the YAML logic below only ever implemented the first stage (LSASS process-access with credential-dumping-associated `GrantedAccess` masks); the Cloudflare Tunnel egress half was never encoded and would require a separate SIEM temporal join (see Coverage Gaps). The title now matches the logic that actually ships. The GrantedAccess-mask pattern itself is a well-established, durable LSASS-credential-access signature independent of this campaign's specific infrastructure.
+**False Positives:** Legitimate AV/EDR processes accessing lsass.exe for telemetry (filtered by trusted Image path); domain controller synchronization operations.
+**Blind Spots:** Captures only the LSASS-access stage; does not by itself confirm exfiltration occurred. Credential-dumping tools that request a narrower access mask than the three listed evade this rule.
+**Validation:** Run a credential-dumping tool against `lsass.exe` — the GrantedAccess mask match must fire; a trusted EDR/AV sensor accessing lsass.exe for its own telemetry must NOT fire (verify the Image filter covers your deployed sensor).
+**Deployment:** EDR correlation rules, SIEM temporal correlation queries, Sysmon Event ID 10 (lsass access) + network log correlation (pair with DNS/network monitoring for `*.trycloudflare.com` / `*.tralalarkefe.com` egress within a 10-minute window for the full two-stage signal — see Coverage Gaps).
 
 ```yaml
-title: NTLM Hash Dump Followed by Cloudflare Tunnel Exfiltration Within 10 Minutes
+title: Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask
 id: f4e6c9ce-7511-4e5e-9e52-adba3f0ae030
 status: experimental
 description: >-
-  Detects the sequence of NTLM credential dumping (lsass access or SAM hive read) followed
-  within 10 minutes by outbound connections to Cloudflare Tunnel infrastructure
-  (*.trycloudflare.com or *.tralalarkefe.com). This sequence was observed in the UTA-2026-012
-  the healthcare-victim compromise where local SAM NTLM hashes were dumped and exfiltrated via
-  Cloudflare Tunnel C2 — confirmed by the operator's own credential ledger containing
-  plaintext NTLM hashes from two internal subnets. This is a temporal-correlation rule
-  requiring SIEM event-chain logic.
+  Detects LSASS process access using GrantedAccess masks associated with credential-dumping
+  tooling (0x1010, 0x1410, 0x1fffff). This is the first stage of a sequence observed in the
+  UTA-2026-012 healthcare-victim compromise, where local SAM NTLM hashes were dumped and then
+  exfiltrated via Cloudflare Tunnel C2 — confirmed by the operator's own credential ledger
+  containing plaintext NTLM hashes from two internal subnets. This rule captures only the
+  LSASS-access stage; the follow-on Cloudflare Tunnel egress requires a separate SIEM temporal
+  join (not expressible in a single non-correlation Sigma selection) — see the companion
+  report's Coverage Gaps.
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
@@ -852,10 +475,6 @@ tags:
     - attack.credential-access
     - attack.t1003.001
     - attack.t1003.002
-    - attack.exfiltration
-    - attack.t1041
-    - attack.command-and-control
-    - attack.t1090.004
     - detection.emerging-threats
 logsource:
     category: process_access
@@ -871,32 +490,34 @@ detection:
 falsepositives:
     - Legitimate AV/EDR processes accessing lsass.exe for telemetry — filter by trusted Image paths (CrowdStrike, Defender, Carbon Black sensors)
     - Domain controller synchronization operations
-    - "This rule captures only the first event in the sequence; Cloudflare Tunnel egress correlation requires a SIEM temporal join rule (window 10 min) against DNS/network logs for *.trycloudflare.com or *.tralalarkefe.com"
 level: high
 ```
 
----
+#### AI Operator Handoff Document Bespoke Filename Created on Server Filesystem
 
-### Rule 11 — AI Operator Handoff Document Filename on Filesystem
-
-**Detection Priority:** HIGH
-**Rationale:** File creation events matching the operator's documented handoff document naming convention (`C2_MIGRATION_GUIDE.md`, `C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `CLOUDFLARE_INFRA.md`) anywhere on a server filesystem is a high-confidence indicator of operator-authored AI priming documents. These specific filenames are not used by any known legitimate software.
-**ATT&CK Coverage:** T1587 (Develop Capabilities), T1071.001 (Web Protocols — C2 references within documents)
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1587 (Develop Capabilities)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — These specific filenames (`C2_MIGRATION_GUIDE.md`, `C2_INFRA_TRANSFER.md`) are not used by any known legitimate software. `DEPLOYED_TOOLS.md` and `CLOUDFLARE_INFRA.md` are more generic but when combined with the `~/.gemini/` directory path are highly specific.
-**Deployment:** File integrity monitoring, Sysmon Event ID 11, EDR file-creation telemetry
+**Rationale:** **Salvage-split from the original combined rule** — the original `condition: selection_specific_names or selection_gemini_dir_context` OR'd this bespoke-filename branch together with a broader `~/.gemini/` + generic-tooling-filename branch that includes `GEMINI.md`/`SKILL.md` (the *standard* legitimate Gemini CLI config filenames). Splitting isolates the two bespoke, no-known-legitimate-collision filenames (`C2_MIGRATION_GUIDE.md`, `C2_INFRA_TRANSFER.md`) into a Detection-grade rule; the broader/generic branch is now its own Hunting rule below.
+**False Positives:** None known — these specific filenames are not used by any known legitimate software.
+**Blind Spots:** A rebuild that renames both exemplar filenames evades detection (the broader Hunting-tier companion rule below provides fallback coverage for the `~/.gemini/` directory context).
+**Validation:** Create a file named `C2_INFRA_TRANSFER.md` or `C2_MIGRATION_GUIDE.md` anywhere on a monitored filesystem — must match; creation of an unrelated Markdown file must NOT fire.
+**Deployment:** File integrity monitoring, Sysmon Event ID 11, EDR file-creation telemetry.
 
 ```yaml
-title: AI Operator Handoff Document Filename Created on Server Filesystem
+title: AI Operator Handoff Document Bespoke Filename Created on Server Filesystem
 id: 0532e874-0106-4db7-9fc7-2e44939eae23
 status: experimental
 description: >-
-  Detects file creation events matching the UTA-2026-012 operator's documented AI Operator
-  Handoff Document naming conventions on server filesystems. Three exemplars confirmed:
-  C2_MIGRATION_GUIDE.md (Russian-language C2 redeployment guide for new Gemini CLI sessions),
-  C2_INFRA_TRANSFER.md (explicit To/From Gemini CLI header — AI-to-AI knowledge transfer),
-  DEPLOYED_TOOLS.md (When starting a new session load directive). Any of these filenames
-  on server infrastructure warrants immediate investigation.
+  Detects file creation events matching the UTA-2026-012 operator's two confirmed
+  bespoke AI Operator Handoff Document filenames: C2_MIGRATION_GUIDE.md (Russian-language
+  C2 redeployment guide for new Gemini CLI sessions) and C2_INFRA_TRANSFER.md (explicit
+  To/From Gemini CLI header — AI-to-AI knowledge transfer). Neither filename has a known
+  legitimate-software use. Split from the original combined rule during tiering to isolate
+  this no-known-collision branch from the broader ~/.gemini/ directory-context branch,
+  which includes the standard legitimate Gemini CLI config filenames GEMINI.md/SKILL.md
+  and carries meaningfully higher false-positive risk (see the companion Hunting rule).
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
@@ -904,8 +525,6 @@ date: '2026-05-25'
 tags:
     - attack.resource-development
     - attack.t1587
-    - attack.command-and-control
-    - attack.t1071.001
     - detection.emerging-threats
 logsource:
     category: file_event
@@ -915,260 +534,420 @@ detection:
         TargetFilename|endswith:
             - '/C2_MIGRATION_GUIDE.md'
             - '/C2_INFRA_TRANSFER.md'
-    selection_gemini_dir_context:
-        TargetFilename|contains:
-            - '/.gemini/'
-        TargetFilename|endswith:
-            - 'DEPLOYED_TOOLS.md'
-            - 'CLOUDFLARE_INFRA.md'
-            - 'SKILL.md'
-            - 'GEMINI.md'
-    condition: selection_specific_names or selection_gemini_dir_context
+    condition: selection_specific_names
 falsepositives:
-    - C2_MIGRATION_GUIDE.md and C2_INFRA_TRANSFER.md — no known legitimate use; alert unconditionally
-    - DEPLOYED_TOOLS.md and CLOUDFLARE_INFRA.md in ~/.gemini/ context — low FP; investigate any match on server hosts
-    - SKILL.md and GEMINI.md in ~/.gemini/ — tune by adding operator-side allowlist for authorized Gemini CLI developer installations
+    - Unlikely — C2_MIGRATION_GUIDE.md and C2_INFRA_TRANSFER.md have no known legitimate use; investigate any match
 level: high
 ```
 
----
+#### Mass WordPress wp-login.php Credential Validation Rate Exceeded (Correlation)
 
-### Rule 12 — Telegram API Egress with Americanpatriotus Channel Reference
-
-**Detection Priority:** MEDIUM
-**Rationale:** Outbound API calls to `api.telegram.org` from server infrastructure combined with the `@americanpatriotus` channel identifier or Telegram Bot API `sendMessage` calls is the runtime signature of `quantum_patriot.py` — the operator's co-located Telegram disinformation content machine. Detecting automated Telegram API posting from server infrastructure (vs user workstations) is the key discrimination.
-**ATT&CK Coverage:** T1102 (Web Service — Telegram as C2/dissemination channel), T1059.006 (Python)
-**Confidence:** MODERATE
-**False Positive Risk:** HIGH (Telegram API egress from servers is common in legitimate bot deployments). MEDIUM with `americanpatriotus` string in traffic content (not easily inspectable on TLS without proxy inspection). Deploy as a DNS-level alert for `api.telegram.org` from server-class hosts combined with the channel-ID pattern where content inspection is available.
-**Deployment:** Proxy with TLS inspection, DNS resolver logs (server-class hosts), network egress monitoring
+**Tier:** Detection (correlation) / base selection below is Hunting — non-alerting, tallied separately
+**Robustness:** 2
+**ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python)
+**Confidence:** HIGH
+**Rationale:** **Salvage-rewrite from a bare selection to a proper Sigma `event_count` correlation.** The original rule's `detection:` block matched any single POST to `/wp-login.php` with no aggregation — as written it fires on ordinary, ubiquitous WordPress login traffic, since a single request to this endpoint is not itself anomalous (the original text acknowledged this in prose but never encoded the threshold). This entry contains **two Sigma objects, tallied separately, co-located in one block per correlation-rule convention**: the base selection (below, tier Hunting on its own — non-alerting, informational, exists only to feed the correlation) and the correlation itself (tier Detection — the actual alert). The correlation encodes the operator's real signature: 500+ requests to `/wp-login.php` from one source within 60 seconds, derived from the operator's 3-worker `ThreadPoolExecutor` pipeline against 30,000+ target sites. Volume-based, so it survives target-list and infrastructure rotation entirely.
+**False Positives:** Authorized load-testing or offensive-security assessments against WordPress installations at or above the threshold; tune the count threshold upward for environments with known legitimate load-testing activity.
+**Blind Spots:** An operator who throttles below the 500/60s threshold (e.g., reduces worker count) evades the correlation; the `c-ip` group-by field name assumes a W3C-extended-format webserver log — adjust the field name to match your log source's actual client-IP field.
+**Validation:** Replay 500+ POSTs to `/wp-login.php` from one source within 60 seconds — the correlation must fire; fewer than 500 requests, or the same volume spread across many source IPs, must NOT fire.
+**Deployment:** Web Application Firewall, reverse proxy access logs, Zeek http.log, SIEM with Sigma correlation-rule support.
 
 ```yaml
-title: Telegram API Egress from Server Host with Americanpatriotus Channel Indicator
-id: 8be13baf-aa35-422c-8757-9cfea720af53
+title: WordPress wp-login.php POST Request (Correlation Base)
+id: c6ff58ec-caa8-43e8-a73d-7869abcae0eb
 status: experimental
 description: >-
-  Detects automated Telegram Bot API connections from server-class infrastructure, hunting
-  for the UTA-2026-012 operator's quantum_patriot.py Telegram disinformation posting script
-  which sends to the @americanpatriotus channel. The americanpatriotus channel was independently
-  confirmed by Trend Micro (TrendAI Research, 2026-05-22) as a UTA-2026-012 / bandcampro
-  attribution IOC. Correlate server-class Telegram API egress with process name python or
-  quantum_patriot in command line for higher-confidence detection.
+  Base selection for the Mass WordPress Credential Validation Rate correlation rule below.
+  Matches individual HTTP POST requests to /wp-login.php — not alerting-grade on its own
+  (a single login POST is ordinary WordPress traffic); tier Hunting/informational, serves
+  only as the correlation's input event.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
+author: The Hunters Ledger
+date: '2026-05-25'
+tags:
+    - attack.credential-access
+    - attack.t1110.003
+    - detection.emerging-threats
+logsource:
+    category: webserver
+detection:
+    selection:
+        cs-uri-stem|contains: '/wp-login.php'
+        cs-method: 'POST'
+    condition: selection
+falsepositives:
+    - Any single legitimate login attempt to a WordPress site — not anomalous in isolation; see the correlation rule for the rate-based signal
+level: informational
+---
+title: Mass WordPress wp-login.php Credential Validation Rate Exceeded — Possible A2A Credential Mill
+id: a3f5c8e2-6b4d-4a91-8f2e-5d7c9b1a4e63
+status: experimental
+description: >-
+  Fires when the base wp-login.php POST selection exceeds 500 events from a single source IP
+  within a 60-second window — the mass-credential-validation signature of mass_wp_mutator.py
+  and the operator's nuclei wp_admin_hunter.yaml template for UTA-2026-012 credential
+  validation at scale (driven by a ThreadPoolExecutor 3-worker pipeline against target lists
+  of 30,000+ WordPress sites). Replaces the original non-aggregating selection, which fired
+  on any single POST and had no meaningful precision without this threshold.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
+author: The Hunters Ledger
+date: '2026-05-25'
+tags:
+    - attack.credential-access
+    - attack.t1110.003
+    - detection.emerging-threats
+correlation:
+    type: event_count
+    rules:
+        - c6ff58ec-caa8-43e8-a73d-7869abcae0eb
+    group-by:
+        - c-ip
+    timespan: 60s
+    condition:
+        gte: 500
+falsepositives:
+    - Authorized load-testing or authorized offensive-security assessments against WordPress installations at or above the threshold
+    - WordPress security scanner tools (WPScan, Jetpack Protect) — these generally use lower rates than 500/60s
+level: high
+```
+
+### Hunting Rules
+
+> **Tally note:** this subsection has 5 physical entries. A 6th Hunting-tallied object — the `wp-login.php` POST correlation *base* selection (id `c6ff58ec-caa8-43e8-a73d-7869abcae0eb`) — is co-located with its correlation rule under Detection Rules above, per the correlation co-location convention, rather than duplicated here.
+
+#### Gemini CLI Directory Creation with Executable Contents on Server Host
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
+**Confidence:** MODERATE
+**Rationale:** The `~/.gemini/` directory paired with executable content is a genuine operator-side installation signal, but the selection logic itself does not encode a server-vs-workstation distinction (that scoping is deployment guidance, not detection logic) — and `GEMINI.md`/`SKILL.md` are the *standard* filenames the legitimate Gemini CLI itself creates on any developer machine. Scored on the logic as written, not the title: this is a broad directory+extension combination with a real legitimate-tool collision, not a durable Detection anchor.
+**False Positives:** Legitimate Gemini CLI usage by developers on developer workstations — any project-init creates `GEMINI.md`; Google Cloud Workstations with Gemini CLI installed by default.
+**Deployment:** Sysmon (Linux), auditd, file-integrity monitoring. Scope to server-class hosts by asset group or IP range before treating hits as high-confidence.
+
+```yaml
+title: Gemini CLI Directory Creation with Executable Contents on Server Host
+id: dca5d3c0-5b22-453e-a36f-7696d927a739
+status: experimental
+description: >-
+  Detects creation of ~/.gemini/ directory containing executable scripts (.sh, .py) or
+  AI-priming documents on server-class Linux hosts. The UTA-2026-012 operator stores C2
+  management skills (~/.gemini/skills/cf-c2-manager/SKILL.md), session handoff documents
+  (~/.gemini/GEMINI.md), and Gemini CLI session JSONs (~/.gemini/tmp/root/chats/) on the
+  C2 server itself. Legitimate Gemini CLI usage on servers is uncommon, but GEMINI.md and
+  SKILL.md are the tool's own standard config filenames created on any developer machine —
+  scope this rule to server-class infrastructure before treating hits as high-confidence.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
+author: The Hunters Ledger
+date: '2026-05-25'
+tags:
+    - attack.resource-development
+    - attack.t1587
+    - attack.execution
+    - attack.t1059.006
+    - detection.emerging-threats
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection_gemini_dir:
+        TargetFilename|contains: '/.gemini/'
+    selection_executable:
+        TargetFilename|endswith:
+            - '.sh'
+            - '.py'
+            - '.ps1'
+            - 'GEMINI.md'
+            - 'SKILL.md'
+    condition: selection_gemini_dir and selection_executable
+falsepositives:
+    - Legitimate Gemini CLI usage by developers on developer workstations — scope rule to server-class hosts only
+    - Google Cloud Workstations with Gemini CLI installed by default
+level: medium
+```
+
+#### Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1090.004 (Domain Fronting), T1572 (Protocol Tunneling), T1021.001 (RDP via tunnel), T1021.004 (SSH via tunnel)
+**Confidence:** MODERATE
+**Rationale:** Anchored on the technique (`cloudflared access tcp --hostname`, the interactive reverse-tunnel-to-arbitrary-host command form) rather than any specific domain, so it survives full rotation of the operator's infrastructure — but it requires an organization-specific allowlist to be populated before deployment, and ships with only a placeholder value.
+**False Positives:** Organizations with legitimate Cloudflare Tunnel deployments using the `access tcp` command form (as opposed to the more common `tunnel run` service registration); developer workstations running cloudflared for legitimate service exposure.
+**Deployment:** auditd execve, Sysmon (Linux), EDR process-creation on server-class hosts. Populate `filter_known_legit` with your organization's known Cloudflare Tunnel hostnames before deployment.
+
+```yaml
+title: Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname
+id: 57ce00ce-d1ee-4621-9654-cefb4bf3b60d
+status: experimental
+description: >-
+  Detects cloudflared access tcp invocations on Linux server-class hosts referencing hostnames
+  outside an organizational allowlist. The UTA-2026-012 operator used cloudflared access tcp
+  --hostname windows_server.tralalarkefe.com and --hostname gil_dr1.tralalarkefe.com to
+  maintain persistent reverse-TCP tunnels to the victim machines for RDP and SSH.
+  This pattern allows persistent victim access without victim-side firewall rule changes.
+  Tune by adding your organization's known legitimate Cloudflare Tunnel hostnames to the
+  allowlist filter below.
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
 date: '2026-05-25'
 tags:
     - attack.command-and-control
-    - attack.t1102
+    - attack.t1090.004
+    - attack.t1572
+    - attack.lateral-movement
+    - attack.t1021.001
+    - attack.t1021.004
+    - detection.emerging-threats
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection:
+        Image|endswith: '/cloudflared'
+        CommandLine|contains|all:
+            - 'access'
+            - 'tcp'
+            - '--hostname'
+    filter_known_legit:
+        CommandLine|contains: 'your-org-tunnel.example.com'  # REPLACE with org's known CF Tunnel hostnames
+    condition: selection and not filter_known_legit
+falsepositives:
+    - Legitimate organizational Cloudflare Tunnel deployments — populate the allowlist filter with known tunnel hostnames
+    - Developer workstations running cloudflared for legitimate service exposure
+level: medium
+```
+
+#### WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036 (Masquerading)
+**Confidence:** MODERATE
+**Rationale:** Keyed on a single operator-chosen literal — the `WindowsUpdateManager` masquerade value name — with no combinatorial fallback in the Sigma logic itself (unlike the YARA loader rule, which pairs this same value name with an additional C2-artifact clause). A rebuild that renames this one value fully evades. Today's false-positive rate is low (no legitimate Windows component uses this exact value name), but durability, not current precision, caps the tier here — **level recalibrated from the original `high` to `medium`** to match the Hunting tier per the level-discipline gate, since the rule does not survive a rename.
+**False Positives:** None known today — `WindowsUpdateManager` is not a legitimate Windows Update component registry value; risk is entirely in the rule going stale after a rebuild, not in false alarms against current builds.
+**Deployment:** Sysmon Event ID 13 (registry value set), Windows Event ID 4657, EDR registry monitoring. Pair with the YARA PowerShell-loader rule (which requires a corroborating C2-artifact clause) for higher-confidence composite alerting.
+
+```yaml
+title: WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence
+id: 833c2659-c255-4e42-a6b8-2cfd8b0b8ac1
+status: experimental
+description: >-
+  Detects registry write to HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager
+  pointing to %LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1 — the operator-bespoke
+  victim-side persistence mechanism for the UTA-2026-012 PowerShell C2 beacon documented
+  in C2_INFRA_TRANSFER.md. Legitimate Windows Update components do not create HKCU Run keys.
+  The WindowsUpdateManager value name is the operator's deliberate masquerade of Windows Update,
+  but is a single renameable literal with no fallback anchor in this selection — a rebuild
+  that renames the value evades detection entirely, so this is scoped as a Hunting signal
+  rather than a Detection one despite today's low false-positive rate.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
+author: The Hunters Ledger
+date: '2026-05-25'
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1547.001
+    - attack.stealth
+    - attack.t1036
+    - detection.emerging-threats
+logsource:
+    category: registry_set
+    product: windows
+detection:
+    selection:
+        TargetObject|contains:
+            - '\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateManager'
+    condition: selection
+falsepositives:
+    - Unlikely today — WindowsUpdateManager is not a legitimate Windows Update component registry value; a future rebuild renaming this value would evade rather than false-positive
+level: medium
+```
+
+#### Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern)
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1059.006 (Python)
+**Confidence:** MODERATE
+**Rationale:** Keyed on the `c2_server`/`BaseHTTPServer` command-line substring — a script-naming/library-usage literal that a rebuild can trivially rename or replace. Retained as a hunting query, not a production alert, per the original assessment.
+**False Positives:** Legitimate Python web services on non-standard ports (Django dev server, Flask, etc.); security testing frameworks (Impacket, Responder) using similar port patterns.
+**Deployment:** EDR process-creation telemetry, auditd execve, threat hunting. Combine with the network-layer Suricata signature for higher-fidelity composite alerting.
+
+```yaml
+title: Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern)
+id: 253e1a6a-f4f3-4227-9106-94e9fdb4f949
+status: experimental
+description: >-
+  Detects Python processes launching HTTP servers on non-standard ports (8081, 8090, 10101)
+  co-occurring with utf-16le string in command line or script path — runtime signature of the
+  UTA-2026-012 operator's c2_server.py BaseHTTPServer deployment. The UTF-16LE encoding is the
+  C2's body encoding scheme for PowerShell beacon commands. Non-standard ports (8081/8090/10101)
+  are the operator's documented multi-instance deployment pattern from c2_server.log filenames.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
+author: The Hunters Ledger
+date: '2026-05-25'
+tags:
+    - attack.command-and-control
+    - attack.t1071.001
+    - attack.t1132.001
     - attack.execution
     - attack.t1059.006
     - detection.emerging-threats
 logsource:
-    category: network_connection
+    category: process_creation
     product: linux
 detection:
-    selection_telegram_api:
-        DestinationHostname|endswith: 'api.telegram.org'
-    selection_python_process:
+    selection_python:
         Image|endswith:
             - '/python3'
             - '/python'
-    condition: selection_telegram_api and selection_python_process
+    selection_c2_server:
+        CommandLine|contains:
+            - 'c2_server'
+            - 'BaseHTTPServer'
+    condition: selection_python and selection_c2_server
 falsepositives:
-    - Legitimate Telegram bot deployments on server infrastructure (customer notification bots, alert bots, CI/CD bots) — allowlist by source IP or process path
-    - Authorized social media management tools using Telegram APIs
+    - Legitimate Python web services on non-standard ports (Django dev server, Flask, etc.) — tune by excluding known-legitimate service paths and process owners
+    - Security testing frameworks (Impacket, Responder) that use similar port patterns
 level: low
+```
+
+#### Gemini CLI Directory Tooling Filename Created on Server Host
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1587 (Develop Capabilities)
+**Confidence:** MODERATE
+**Rationale:** **Salvage-split from the original combined rule** (companion to the Detection-tier bespoke-filename rule above) — isolates the broader `~/.gemini/` directory-context branch, which matches `DEPLOYED_TOOLS.md`/`CLOUDFLARE_INFRA.md`/`SKILL.md`/`GEMINI.md`. `SKILL.md` and `GEMINI.md` are the Gemini CLI's own standard configuration filenames, created by any legitimate developer install — this branch carries meaningfully higher FP than the bespoke-filename Detection rule it was split from, so it is scoped here as a hunting lead requiring analyst review, with **level recalibrated from the original `high` to `medium`**.
+**False Positives:** `SKILL.md` and `GEMINI.md` in `~/.gemini/` — real collision with legitimate, authorized Gemini CLI developer installations; `DEPLOYED_TOOLS.md`/`CLOUDFLARE_INFRA.md` are more generic than the Detection-tier exemplars but still uncommon outside this operator's convention.
+**Deployment:** File integrity monitoring, Sysmon Event ID 11, EDR file-creation telemetry. Add an operator-side allowlist for authorized Gemini CLI developer installations before treating `SKILL.md`/`GEMINI.md` hits as investigation-worthy.
+
+```yaml
+title: Gemini CLI Directory Tooling Filename Created on Server Host
+id: b7d2e4f1-9a3c-4e58-b1d6-3f8a2c5e9d74
+status: experimental
+description: >-
+  Detects file creation events matching the UTA-2026-012 operator's broader AI Operator
+  Handoff Document naming conventions co-located in the ~/.gemini/ directory: DEPLOYED_TOOLS.md
+  (When starting a new session load directive), CLOUDFLARE_INFRA.md, SKILL.md, and GEMINI.md.
+  Split from the original combined rule during tiering because SKILL.md and GEMINI.md are
+  the Gemini CLI's own standard configuration filenames, created by any legitimate developer
+  installation — this branch carries real false-positive risk and is scoped as a hunting
+  lead requiring an operator-side allowlist, distinct from the no-known-collision bespoke
+  filenames covered by the companion Detection-tier rule.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
+author: The Hunters Ledger
+date: '2026-05-25'
+tags:
+    - attack.resource-development
+    - attack.t1587
+    - detection.emerging-threats
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection_gemini_dir_context:
+        TargetFilename|contains: '/.gemini/'
+        TargetFilename|endswith:
+            - 'DEPLOYED_TOOLS.md'
+            - 'CLOUDFLARE_INFRA.md'
+            - 'SKILL.md'
+            - 'GEMINI.md'
+    condition: selection_gemini_dir_context
+falsepositives:
+    - >-
+      SKILL.md and GEMINI.md in ~/.gemini/ — real collision with legitimate, authorized
+      Gemini CLI developer installations; tune by adding an operator-side allowlist
+    - DEPLOYED_TOOLS.md and CLOUDFLARE_INFRA.md in ~/.gemini/ context — lower FP; investigate any match on server hosts
+level: medium
 ```
 
 ---
 
 ## Suricata Signatures
 
-### Rule 1 — DNS Query to *.tralalarkefe.com (Any Host)
+### Detection Rules
 
-**Detection Priority:** HIGH
-**Rationale:** Any DNS query resolving `tralalarkefe.com` or any subdomain is a high-confidence indicator of either operator-side infrastructure activity or victim-side C2 beacon activity. The domain has no documented legitimate use. The operator's documented subdomains include `c2`, `payloads`, `windows_server`, `gil_dr1`, `catchall1`, and `10101` — any new subdomain should also be treated as operator-controlled.
-**ATT&CK Coverage:** T1568 (Dynamic Resolution), T1090.004 (Domain Fronting — Cloudflare Tunnel), T1071.001 (Web Protocols)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — `tralalarkefe.com` has no documented legitimate use outside this operator's infrastructure.
-**Deployment:** Network DNS monitoring, Zeek dns.log, SIEM ingestion from DNS resolver logs
+#### A2A C2 Beacon POST to Operator Endpoint with X-Agent-ID Header
 
-```suricata
-alert dns $HOME_NET any -> any any (
-    msg:"THL - DNS Query to UTA-2026-012 Operator C2 Domain tralalarkefe.com";
-    dns.query; content:"tralalarkefe.com"; nocase; endswith;
-    classtype:trojan-activity;
-    sid:9000001; rev:1;
-    metadata:author "The Hunters Ledger",
-              campaign "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115",
-              mitre_tactic "command-and-control",
-              mitre_technique "T1568 T1090.004 T1071.001",
-              confidence HIGH, created_at 2026-05-25;
-)
-```
-
----
-
-### Rule 2 — DNS Query to generativelanguage.googleapis.com from Server-Class Hosts (Hunting Baseline)
-
-**Detection Priority:** MEDIUM
-**Rationale:** DNS queries to `generativelanguage.googleapis.com` from server-class hosts (defined via `$SERVER_NET` variable — tune for your environment) are the network-layer indicator of stolen Gemini API key validation or LLM-personalized credential mutation tooling. This is a hunting baseline, not a production alert — legitimate ML inference services query this domain. Deploy with a frequency threshold or combine with the YARA file detection for composite alerting.
-**ATT&CK Coverage:** T1078 (Valid Accounts — stolen API key reuse), T1059.006 (Python)
-**Confidence:** MODERATE
-**False Positive Risk:** MEDIUM — Any server-side ML inference backend using the Gemini API will trigger this. Tune by scoping `$SERVER_NET` to infrastructure where Gemini API calls are not expected, and by adding a rate threshold (>10 queries/minute from a single source = key-rotation pattern).
-**Deployment:** DNS resolver monitoring on server-class host segments, Zeek dns.log with server-IP filter
-
-```suricata
-alert dns $HOME_NET any -> any any (
-    msg:"THL - Gemini Generative Language API DNS Query from Server-Class Host (Stolen Key Hunting Baseline)";
-    dns.query; content:"generativelanguage.googleapis.com"; nocase; endswith;
-    classtype:policy-violation;
-    sid:9000002; rev:1;
-    metadata:author "The Hunters Ledger",
-              campaign "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115",
-              mitre_tactic "credential-access resource-development",
-              mitre_technique "T1078 T1059.006",
-              confidence MODERATE, created_at 2026-05-25,
-              note "hunting-baseline-tune-to-server-segments-only";
-)
-```
-
----
-
-### Rule 3 — HTTP POST to A2A C2 Endpoints with X-Agent-ID Header
-
-**Detection Priority:** HIGH
-**Rationale:** HTTP POST to the operator's documented C2 endpoint paths (`/api/v1/update`, `/api/v1/interact`, `/api/v1/telemetry`, `/api/v1/get_results`) carrying the `X-Agent-ID` header is the victim-side beacon signature. The `X-Agent-ID` header is operator-bespoke; no legitimate web application framework uses this header name in this endpoint naming pattern.
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1041 (Exfiltration Over C2 Channel)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — The combination of `/api/v1/update` or `/api/v1/interact` paths with the `X-Agent-ID` header is operator-bespoke and has no known legitimate-software counterpart.
-**Deployment:** Inline or passive HTTP inspection, Zeek http.log, WAF/proxy with content inspection
+**Rationale:** Anchors on the operator-bespoke `X-Agent-ID` header name, the POST method, and the `/api/v1/` endpoint family — none of which reference the operator's specific domain, so the rule survives complete infrastructure rotation. No legitimate web application framework uses this header name in this endpoint naming pattern. Added a literal `content` prefilter ahead of the URI `pcre` (not present in the original) so the regex is gated behind a content match per current formatting standards.
+**False Positives:** None known — the combination of `/api/v1/update` or `/api/v1/interact` paths with the `X-Agent-ID` header is operator-bespoke and has no known legitimate-software counterpart.
+**Blind Spots:** A rewrite that renames the header and endpoint family evades detection; TLS-encrypted traffic without inline decryption is not inspectable at the HTTP layer by this signature alone (pair with the TLS/JA-fingerprint layer if available).
+**Validation:** Replay a PCAP of an A2A C2 beacon check-in — must alert; an unrelated HTTP POST carrying neither the header nor the endpoint pattern must NOT fire.
+**Deployment:** Inline or passive HTTP inspection, Zeek http.log, WAF/proxy with content inspection.
 
 ```suricata
-alert http $HOME_NET any -> any any (
-    msg:"THL - A2A C2 Beacon POST to Operator C2 Endpoint with X-Agent-ID Header";
-    flow:established,to_server;
-    http.method; content:"POST";
-    http.header_names; content:"X-Agent-ID"; nocase;
-    http.uri; pcre:"/\/api\/v1\/(update|interact|telemetry|get_results)/";
-    classtype:trojan-activity;
-    sid:9000003; rev:1;
-    metadata:author "The Hunters Ledger",
-              campaign "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115",
-              mitre_tactic "command-and-control exfiltration",
-              mitre_technique "T1071.001 T1132.001 T1041",
-              confidence HIGH, created_at 2026-05-25;
-)
+alert http $HOME_NET any -> any any (msg:"THL - A2A C2 Beacon POST to Operator C2 Endpoint with X-Agent-ID Header"; flow:established,to_server; http.method; content:"POST"; http.header_names; content:"X-Agent-ID"; nocase; http.uri; content:"/api/v1/"; pcre:"/\/api\/v1\/(update|interact|telemetry|get_results)/"; classtype:trojan-activity; sid:9000003; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/;)
 ```
 
----
+### Hunting Rules
 
-### Rule 4 — HTTP Egress to antipublic.one /api/v2/search
+#### cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844)
 
-**Detection Priority:** HIGH
-**Rationale:** HTTP GET or POST to `antipublic.one/api/v2/search` from any internal host is the network-layer indicator of the operator's paid breach-data lookup integration. `antipublic.one` is a known Russian credential-database service; its `/api/v2/search` endpoint is the bulk-lookup API used by `mass_wp_mutator.py`. No legitimate enterprise application queries this endpoint.
-**ATT&CK Coverage:** T1213 (Data from Information Repositories), T1078 (Valid Accounts)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — No legitimate enterprise application queries the AntiPublic breach-data API from production infrastructure. Security research tools that use this service generate low-volume single-query patterns distinct from the operator's bulk-query pattern.
-**Deployment:** Egress proxy, WAF, Zeek http.log
-
-```suricata
-alert http $HOME_NET any -> any any (
-    msg:"THL - Outbound to AntiPublic.one Credential-DB API /api/v2/search (Credential Operator Tool)";
-    flow:established,to_server;
-    http.host; content:"antipublic.one"; endswith;
-    http.uri; content:"/api/v2/search"; startswith;
-    classtype:policy-violation;
-    sid:9000004; rev:1;
-    metadata:author "The Hunters Ledger",
-              campaign "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115",
-              mitre_tactic "credential-access collection",
-              mitre_technique "T1213 T1078",
-              confidence HIGH, created_at 2026-05-25;
-)
-```
-
----
-
-### Rule 5 — trycloudflare.com Tunnel Bootstrap DNS from Server Hosts
-
-**Detection Priority:** MEDIUM
-**Rationale:** DNS queries resolving `*.trycloudflare.com` from server-class hosts are a hunting baseline for Cloudflare quick-tunnel bootstrap activity. The operator used `tenant-upcoming-great-descending.trycloudflare.com` as the bootstrap channel for seeding new VPS instances via `install_c2_bundle.sh`. Legitimate use of trycloudflare.com by developer workstations is common; server-class hosts querying this domain is anomalous.
-**ATT&CK Coverage:** T1090.004 (Domain Fronting), T1572 (Protocol Tunneling), T1105 (Ingress Tool Transfer)
-**Confidence:** MODERATE
-**False Positive Risk:** MEDIUM — Developers using `cloudflared tunnel --url` for local development tunnel testing generate legitimate trycloudflare.com queries. Server-class hosts are the correct scope; developer workstations should be excluded.
-**Deployment:** DNS resolver monitoring (server-class host segments), Zeek dns.log
-
-```suricata
-alert dns $HOME_NET any -> any any (
-    msg:"THL - Cloudflare Quick-Tunnel Bootstrap DNS Query from Server-Class Host (trycloudflare.com)";
-    dns.query; content:"trycloudflare.com"; nocase; endswith;
-    classtype:policy-violation;
-    sid:9000005; rev:1;
-    metadata:author "The Hunters Ledger",
-              campaign "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115",
-              mitre_tactic "command-and-control",
-              mitre_technique "T1090.004 T1572 T1105",
-              confidence MODERATE, created_at 2026-05-25,
-              note "tune-to-server-segments-exclude-developer-workstations";
-)
-```
-
----
-
-### Rule 6 — cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844)
-
-**Detection Priority:** LOW–MEDIUM
-**Rationale:** cloudflared (Cloudflare Tunnel) establishes its control-plane connection to Cloudflare's edge over **port 7844** — UDP for the QUIC transport, TCP for the HTTP/2 fallback ([Cloudflare docs](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/configure-tunnels/tunnel-with-firewall/), accessed 2026-07-07). This rule flags outbound QUIC to UDP 7844, a high-signal indicator that a host is running a Cloudflare Tunnel — the transport this operator used for C2. Because 7844 is Cloudflare's dedicated tunnel port (not general web QUIC, which is 443), this is far more specific than matching all of UDP/443 and does **not** fire on ordinary browsing or Cloudflare WARP.
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1090.004 (Domain Fronting)
 **Confidence:** MODERATE
-**False Positive Risk:** MEDIUM — legitimate Cloudflare Tunnel deployments also use UDP 7844. Treat this as a hunting signal (a host is running a tunnel), corroborate with the DNS rules above (`tralalarkefe.com` sid 9000001, `trycloudflare.com` sid 9000005), and/or scope the source to segments where Cloudflare Tunnel is not expected. The rule is `threshold`-limited (1 alert / source / hour) so it cannot flood a sensor even on a busy network. If TCP coverage is also wanted, add a companion `alert tcp $HOME_NET any -> $EXTERNAL_NET 7844` rule for the HTTP/2 fallback.
-**Deployment:** Network flow telemetry / IDS on egress; Zeek conn.log with a UDP/7844 filter.
+**Rationale:** Cloudflare Tunnel's control-plane connects to Cloudflare's edge over UDP/TCP 7844 specifically — Cloudflare's dedicated tunnel port, not general web QUIC (443) — so this is meaningfully narrower than matching all UDP/443 and does not fire on ordinary browsing or Cloudflare WARP. It is still a port-based signal that any Cloudflare Tunnel deployment (legitimate or not) will trigger, so it stays a hunting lead rather than an alert.
+**False Positives:** Legitimate Cloudflare Tunnel deployments also use UDP 7844.
+**Deployment:** Network flow telemetry / IDS on egress; Zeek conn.log with a UDP/7844 filter. Corroborate with DNS visibility for `*.tralalarkefe.com` and the campaign's Cloudflare quick-tunnel subdomain (both carried in the IOC feed) and/or scope the source to segments where Cloudflare Tunnel is not expected.
 
 ```suricata
-alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (
-    msg:"THL - cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844 Hunting)";
-    threshold:type limit, track by_src, count 1, seconds 3600;
-    classtype:policy-violation;
-    sid:9000006; rev:2;
-    metadata:author "The Hunters Ledger",
-              campaign "OpenDirectory-RussianGeminiCredentialMill-213.165.51.115",
-              mitre_tactic "command-and-control",
-              mitre_technique "T1572 T1090.004",
-              confidence MODERATE, created_at 2026-05-25, updated_at 2026-07-07,
-              note "cloudflared control-plane = UDP/TCP 7844 (Cloudflare docs), threshold-limited to prevent FP floods, legit Cloudflare Tunnel use also triggers -- hunting signal, corroborate with DNS rules 9000001/9000005";
-)
+alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (msg:"THL - cloudflared Tunnel QUIC Egress to Cloudflare Edge (UDP 7844 Hunting)"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:policy-violation; sid:9000006; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/;)
 ```
 
 ---
 
 ## Coverage Gaps
 
+### Atomics Retired to the IOC Feed (7 rules: 3 Sigma, 4 Suricata)
+
+Every rule below keyed solely on one hard-coded domain, with no combinatorial or behavioral clause surviving its removal — per the routing test, these are IOC-feed entries, not standalone rules. All underlying domains were **already present** in [`russian-gemini-credential-mill-213.165.51.115-iocs.json`](/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json); no feed edits were required.
+
+- **Sigma — Gemini API Egress from Server-Class Infrastructure Host** (`173cf9ee-97c5-4d51-8487-856f63894ad5`): keyed on `generativelanguage.googleapis.com` (DestinationHostname match). The accompanying filter excluded, rather than isolated, the likely-Python accessing process, so it added no real precision beyond the bare domain match. The domain is preserved in the feed with a `MONITOR` action and an explicit `high` false-positive-risk note (it is Google's own legitimate API domain, abused rather than owned by the operator).
+- **Sigma — Cloudflare Tunnel Registration to tralalarkefe.com Operator Infrastructure** (`1003c111-2038-43bc-b463-b5895cd6f408`): keyed on `tralalarkefe.com` in a `cloudflared` command line. Removing the domain leaves "any cloudflared execution," which is not malicious on its own — the durable, non-domain-specific version of this technique lead is retained as the Hunting-tier "Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname" rule above.
+- **Sigma — Outbound HTTP to AntiPublic.one Credential Database API from Non-Research Host** (`163023b7-5615-4c9f-9e30-60af0bd2cd8e`): keyed on `antipublic.one` (DestinationHostname match). Preserved in the feed with a `MONITOR` action.
+- **Suricata — DNS Query to \*.tralalarkefe.com** (sid `9000001`): keyed on the same root domain as the Sigma entry above; retired for the same reason.
+- **Suricata — DNS Query to generativelanguage.googleapis.com from Server-Class Hosts** (sid `9000002`): keyed on the same domain as the Sigma entry above; retired for the same reason.
+- **Suricata — HTTP Egress to antipublic.one /api/v2/search** (sid `9000004`): the `/api/v2/search` URI clause is a generic-sounding REST path with no specificity of its own once the `antipublic.one` host anchor is removed; retired for the same reason as the Sigma AntiPublic entry.
+- **Suricata — trycloudflare.com Tunnel Bootstrap DNS from Server Hosts** (sid `9000005`): keyed on the bare `trycloudflare.com` suffix — Cloudflare's entire free quick-tunnel product surface, not an operator-specific atomic. The campaign's actual atomic (the specific bootstrap subdomain `tenant-upcoming-great-descending.trycloudflare.com`) is already in the feed; the bare-suffix version added no incremental value and would have been a needlessly broad new feed entry, so it was retired rather than generalized into a new block entry.
+
+### Cut Rule
+
+**Telegram API Egress with Americanpatriotus Channel Reference** (original Sigma rule `8be13baf-aa35-422c-8757-9cfea720af53`). The rule's title and rationale describe detecting posting activity to the `@americanpatriotus` channel, but the YAML `detection:` logic never actually references that channel identifier anywhere — Sigma cannot inspect TLS-encrypted message bodies, so the channel name was never encodable in the first place. As written, the logic reduces to "`api.telegram.org` DNS/network match AND a Python process," which the original text itself acknowledged is common in legitimate bot deployments ("False Positive Risk: HIGH"). With the channel-specific claim removed, nothing distinguishing survives — this fires on ubiquitous, legitimate Telegram-bot activity with no pivot value, and does not clear the precision bar even for Hunting. **What would enable a rule:** TLS-inspecting proxy visibility into the message body, or a Telegram Bot API token/chat-ID specific to this operator's bot (neither was recovered from this investigation).
+
 ### Techniques Observed But Not Fully Covered
 
-**1. LLM-Vendor-Side Detection (Gemini API abuse telemetry)**
-The operator's `check_keys.py` validates 40+ stolen Gemini API keys against Google's model-listing endpoint with high key-diversity from a single source IP. Detection of this key-rotation pattern requires server-side telemetry from Google's Generative Language API — specifically, `/v1beta/models` calls where a single source IP cycles through >10 distinct `?key=` values within 60 seconds. This is beyond standard defender scope. **Coordination path:** Google Trust & Safety (`trust-and-safety@google.com`) with the operator's full key inventory from `Evidence/russian-check_keys.py`. The Suricata Rule 2 provides a network-layer hunting baseline but cannot discriminate single-key legitimate use from 40-key rotation at the protocol level without server-side telemetry.
+**1. LLM-Vendor-Side Detection (Gemini API abuse telemetry).** The operator's `check_keys.py` validates 40+ stolen Gemini API keys against Google's model-listing endpoint with high key-diversity from a single source IP. Detecting this key-rotation pattern requires server-side telemetry from Google's Generative Language API — specifically, `/v1beta/models` calls where a single source IP cycles through >10 distinct `?key=` values within 60 seconds. This is beyond standard defender scope, and beyond what a domain-match Sigma/Suricata rule can encode (see the retired Gemini-egress entries above). **Coordination path:** Google Trust & Safety, with the operator's full key inventory.
 
-**2. Telegram Disinformation Content Detection**
-The `quantum_patriot.py` script posts AI-rewritten RSS content to `@americanpatriotus` via the Telegram Bot API. Detecting the content of specific disinformation posts (to distinguish this channel's AI-generated content from organic political posting) requires semantic content classification beyond standard SOC capability. The Sigma Rule 12 provides a process-level signal (Python → Telegram API egress) but cannot inspect TLS-encrypted message bodies without a transparent proxy. **Coordination path:** Telegram Trust & Safety for the `@americanpatriotus` channel, independently corroborated by Trend Micro (2026-05-22).
+**2. Telegram Disinformation Content Detection.** The `quantum_patriot.py` script posts AI-rewritten RSS content to `@americanpatriotus` via the Telegram Bot API. Distinguishing this channel's AI-generated content from organic political posting requires semantic content classification beyond standard SOC capability and beyond what any network-layer Sigma/Suricata rule can encode — see the Cut rule above. **Coordination path:** Telegram Trust & Safety for the `@americanpatriotus` channel, independently corroborated by Trend Micro (2026-05-22).
 
-**3. GitHub PAT Abuse Correlation**
-The operator's GitHub PAT (`ghp_tdcX...G4PDaRW` for `oravepo546-stack`) is used for repository management and potentially exfiltration of victim artifacts via GitHub as an exfil channel. Per-PAT API call correlation across GitHub infrastructure requires GitHub Trust & Safety coordination — the specific PAT can be revoked and its API call history audited server-side. MITRE technique covered: T1567.002 (Exfiltration to Cloud Storage). **Coordination path:** GitHub Trust & Safety with the operator's account identifiers `sonner1337` and `oravepo546-stack`.
+**3. GitHub PAT Abuse Correlation.** The operator's GitHub PAT is used for repository management and potentially exfiltration of victim artifacts via GitHub as an exfil channel (T1567.002). Per-PAT API call correlation across GitHub infrastructure requires GitHub Trust & Safety coordination. **Coordination path:** GitHub Trust & Safety, with the operator's account identifiers.
 
-**4. Per-Victim Cloudflare Tunnel Access Detection**
-The operator's `windows_server.tralalarkefe.com` and `gil_dr1.tralalarkefe.com` Cloudflare Tunnel endpoints provided persistent RDP and SSH access to the victim machines at the time of capture. Detecting specific victim-machine beacon activity on these tunnels from the defender's side requires either (a) the victim's network egress logs showing outbound connections to Cloudflare infrastructure or (b) Cloudflare PSIRT coordination to identify which Cloudflare account is operating the `tralalarkefe.com` tunnels. **Coordination path:** Cloudflare PSIRT with the operator's Cloudflare API token (`pBkv...BztGF2`, defanged — full token in `Evidence/russian-arsenal-CREDENTIALS.md`). Suricata Rule 1 and Rule 5 provide network-layer signals for environments with DNS logging.
+**4. Per-Victim Cloudflare Tunnel Access Detection.** The operator's `windows_server.tralalarkefe.com` and `gil_dr1.tralalarkefe.com` Cloudflare Tunnel endpoints provided persistent RDP and SSH access to the victim machines at capture time. Detecting specific victim-machine beacon activity on these tunnels from the defender's side requires either victim-side egress logs or Cloudflare PSIRT coordination. The domain-level DNS signal for these subdomains lives in the IOC feed rather than as a standalone rule (see Atomics Retired above); the port-based QUIC/7844 Hunting rule above provides a domain-independent fallback signal.
 
-**5. agent_final.ps1 PowerShell Beacon (Binary Not Captured)**
-The PowerShell beacon `agent_final.ps1` is referenced extensively in the operator's handoff documents as the victim-side agent component, but the binary itself was not extractable from Hunt.io (PS1 content is not object-stored). YARA and Sigma rules for the victim-side beacon are derived from the endpoint-contract specification in handoff documents rather than direct code analysis. Confidence: HIGH (behavioral reconstruction from C2 server source + operator documentation); DEFINITE requires direct binary capture. If the beacon is later recovered from a victim-side forensic investigation, the following indicators from the C2 server source code should enable high-confidence matching: `X-Agent-ID: HOSTNAME_username` header format, 5-second beacon interval to `/api/v1/update`, `Mozilla/5.0 (Windows NT 10.0; Win64; x64)` User-Agent, `base64(UTF-16LE)` body encoding on `/api/v1/telemetry` POST.
+**5. agent_final.ps1 PowerShell Beacon (Binary Not Captured).** The victim-side PowerShell beacon `agent_final.ps1` is referenced extensively in the operator's handoff documents, but the binary itself was not recovered — rules for it are derived from the C2 server's endpoint-contract specification rather than direct code analysis. If the beacon is later recovered, the following indicators should enable high-confidence matching: `X-Agent-ID: HOSTNAME_username` header format, 5-second beacon interval to `/api/v1/update`, `Mozilla/5.0 (Windows NT 10.0; Win64; x64)` User-Agent, `base64(UTF-16LE)` body encoding on `/api/v1/telemetry` POST.
 
-**6. WMI EventConsumer Fileless Persistence (stealth.ps1)**
-The operator's `C2_MIGRATION_GUIDE.md` references a `stealth.ps1` script providing WMI EventConsumer + EventFilter + FilterToConsumerBinding triplet persistence in addition to the HKCU Registry Run key. The `stealth.ps1` binary was not extractable from Hunt.io. Generic WMI subscription persistence detection (Sysmon Event ID 19/20/21 matching `\\.\root\subscription`) covers this technique pattern but cannot provide the operator-specific file/value-name signatures without direct binary access.
+**6. WMI EventConsumer Fileless Persistence (stealth.ps1).** The operator's `C2_MIGRATION_GUIDE.md` references a `stealth.ps1` script providing WMI EventConsumer + EventFilter + FilterToConsumerBinding triplet persistence, in addition to the HKCU Registry Run key covered above. The `stealth.ps1` binary was not recovered; generic WMI subscription persistence detection (Sysmon Event ID 19/20/21 matching `\\.\root\subscription`) covers the technique pattern but cannot provide operator-specific file/value-name signatures without direct binary access.
 
-**7. OpenDental MySQL Hash Reuse / Database Access**
-The operator holds the OpenDental MySQL root hash (value redacted — held offline). Detection of unauthorized OpenDental database access would require MySQL audit logging at the the victim practice-management server — out of scope for a third-party detection provider. **Coordination path:** Direct victim notification (via HC3/HHS OCR HIPAA track) is the correct response path; database-level detection is the practice's own security team scope.
+**7. NTLM Dump → Cloudflare Tunnel Exfiltration (Full Temporal Correlation).** The Detection-tier "Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask" Sigma rule above captures only the LSASS-access stage of the operator's documented two-stage sequence (dump, then exfiltrate via Cloudflare Tunnel within roughly 10 minutes). A full `temporal_ordered` Sigma correlation joining LSASS access to Cloudflare Tunnel/`trycloudflare.com` egress by host within a 10-minute window was not attempted in this backfill — the cross-event-type `group-by` field alignment (process-access telemetry vs. network-connection telemetry) needs validation against a live SIEM schema before publication. **What would enable this:** confirming the common host-identifier field name across both log sources in the target deployment.
+
+**8. OpenDental MySQL Hash Reuse / Database Access.** The operator holds the OpenDental MySQL root hash from the primary named victim. Detection of unauthorized OpenDental database access would require MySQL audit logging at the victim's practice-management server — out of scope for a third-party detection provider. **Coordination path:** Direct victim notification (via HC3/HHS OCR HIPAA track).
 
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
 Free to use, including commercially, with attribution to The Hunters Ledger.

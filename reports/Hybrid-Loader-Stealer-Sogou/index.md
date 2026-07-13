@@ -1,17 +1,15 @@
 ---
 title: "Hybrid Ecosystem Masquerading as Sogou"
 date: '2025-11-21'
-detection_page: /hunting-detections/Hybrid-Loader-Stealer-Sogou/
+detection_page: /hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/
 ioc_feed: /ioc-feeds/Hybrid-Loader-Stealer-Sogou.json
 detection_sections:
-  - label: "Process Masquerade"
-    anchor: "#process-creation-for-masquerading-sogou-nsis-installer"
-  - label: "Persistence"
-    anchor: "#persistence-via-run-keys-and-shortcut-manipulation"
-  - label: "File Drops"
-    anchor: "#file-drop-of-core-artifacts"
-  - label: "C2 DNS Queries"
-    anchor: "#dns-queries-to-disposable-c2-domains"
+  - label: "YARA Rules"
+    anchor: "#yara-rules"
+  - label: "Sigma Rules"
+    anchor: "#sigma-rules"
+  - label: "Suricata Signatures"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - value: "27[.]184[.]28[.]134"
     note: "Sogou stealer C2 server"

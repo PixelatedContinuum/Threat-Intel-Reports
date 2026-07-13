@@ -17,21 +17,42 @@ hide: true
 
 ## Detection Coverage Summary
 
-| Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
-|---|---|---|---|
-| YARA | 4 | T1505.001, T1505.003, T1620, T1140 | LOW–MEDIUM |
-| Sigma | 7 | T1505.001, T1505.003, T1059.003, T1134.001, T1068, T1027.010, T1071.001 | LOW–MEDIUM |
-| Suricata | 3 | T1071.001, T1095, T1105 | LOW |
+A bespoke MSSQL SQL-CLR reverse-shell backdoor (`cmd_exec.dll`), two webshells (a Godzilla-style AES .NET loader and a commodity Ghost小组 ASP shell), and a bespoke Flask C2 panel were staged alongside a public Windows post-exploitation toolkit on a single host. Coverage here is scoped to the bespoke and commodity-configured components; the five operator-recompiled .NET tools (EfsPotato, GodPotato, SweetPotato, Rubeus, SharpSuccessor) are already detected by existing public YARA rules — those rules are referenced in Coverage Gaps rather than re-authored here.
 
-**Scope note:** Detection scope for this campaign covers bespoke and commodity-configured items. The five operator-recompiled .NET tools (EfsPotato, GodPotato, SweetPotato, Rubeus, SharpSuccessor) are already detected by existing public YARA rules — those rules are referenced in the Coverage Gaps section rather than re-authored here.
+| Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
+|---|---|---|---|---|
+| YARA | 2 | 2 | T1505.001, T1505.003, T1059.003, T1059.005, T1027.010, T1095, T1620, T1140 | 0 |
+| Sigma | 3 | 3 | T1505.001, T1505.003, T1059.003, T1059.005, T1027.010, T1095, T1068 | 1 |
+| Suricata | 1 | 2 | T1071.001, T1095, T1105 | 1 |
 
-**Highest-value rule:** `MSSQL_CLR_Backdoor_CmdExec_Banner` — the `cmd_exec.dll` banner string `[*] Connected to SQL Server CLR backdoor` is a high-confidence, operator-specific anchor for a backdoor that evades generic sandboxes (Zenbox 98% harmless) and is scored clean by Microsoft and Kaspersky AV.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+
+**Highest-confidence anchors:**
+- `MSSQL_CLR_Backdoor_CmdExec_Banner` — the operator-specific banner `[*] Connected to SQL Server CLR backdoor` is not present in any public MSSQL CLR reference implementation and evades generic sandboxes and mainstream AV (YARA Detection).
+- `MSSQL CLR Backdoor Execution via sqlservr.exe Child cmd.exe` and `IIS Webshell Execution via w3wp.exe Spawning Shell Process` — family-agnostic process-ancestry chokepoints that catch the technique regardless of which specific CLR backdoor or webshell build is used (Sigma Detection).
+- Flask C2 `/health` five-field JSON response fingerprint — re-anchored off the staging IP onto `$EXTERNAL_NET` during this pass, so the signature now survives infrastructure rotation (Suricata Detection).
+
+**Atomics routed to the IOC feed:** the staging IP `67.215.232.25` and the six native-tool imphashes (JuicyPotato, PrintSpoofer, RoguePotato, RogueOxidResolver, Netcat nc64, CVE-2026-20817 PoC) were already present in [`flaskc2-postex-toolkit-67-215-232-25-iocs.json`](/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json). The two rules that keyed solely on these hardcoded values — a pure-IP Suricata block and an imphash-only Sigma selector — are retired here; both indicators remain block/hunt-actionable via the feed.
 
 ---
 
 ## YARA Rules
 
-```
+### Detection Rules
+
+#### cmd_exec.dll — MSSQL CLR Backdoor (Banner Anchor)
+
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1505.001 (SQL Stored Procedures), T1095 (Non-Application Layer Protocol)
+**Confidence:** HIGH
+**Rationale:** The banner string `[*] Connected to SQL Server CLR backdoor` is a distinctive, operator-authored print string not present in any public MSSQL CLR reference implementation — a "typo banner"-class anchor. Robustness is capped at 2 rather than 3 because the banner is a removable print statement (an operator could strip it in a cleaned build); the paired 2-of-5 supporting-string clause is mostly generic SQLCLR/networking API names and does not itself add durable discrimination.
+**False Positives:** None known — the banner string is operator-specific and not found in any legitimate SQL Server assembly.
+**Blind Spots:** A rebuild that removes or changes the banner text evades this rule entirely; the companion "Assembly Structure" rule below provides fallback coverage for that scenario.
+**Validation:** Scan the analyzed sample (`hash1` below) — the banner plus 2 of the 5 supporting strings must match; a legitimate SQL Server CLR assembly must NOT fire.
+**Deployment:** Endpoint AV/EDR, memory scanner, .NET assembly inspection, MSSQL assembly staging directories.
+
+```yara
 /*
    Yara Rule Set
    Identifier: FlaskC2-PostEx-Toolkit-67.215.232.25 — MSSQL CLR Backdoor + Webshells
@@ -39,18 +60,7 @@ hide: true
    Source: https://the-hunters-ledger.com/
    License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/
 */
-```
 
-### cmd_exec.dll — MSSQL CLR Backdoor (Banner Anchor — Highest Value)
-
-**Detection Priority:** HIGH
-**Rationale:** The banner string `[*] Connected to SQL Server CLR backdoor` is specific to this operator's custom build and is not present in any public MSSQL CLR reference implementation. Combined with SQLCLR namespace markers and reverse-shell plumbing, this rule targets a backdoor that evades generic sandboxes (VT Zenbox 98% harmless) and is scored clean by Microsoft and Kaspersky AV.
-**ATT&CK Coverage:** T1505.001 (SQL Stored Procedures), T1095 (Non-Application Layer Protocol)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — the banner string is operator-specific; the combination with SQLCLR attributes is not present in any legitimate SQL Server assembly.
-**Deployment:** Endpoint AV/EDR, memory scanner, .NET assembly inspection, MSSQL assembly staging directories
-
-```yara
 rule MSSQL_CLR_Backdoor_CmdExec_Banner {
    meta:
       description = "Detects custom MSSQL SQL-CLR reverse-shell backdoor (cmd_exec.dll) based on operator-specific banner string combined with SQLCLR assembly markers and reverse-shell plumbing strings"
@@ -78,16 +88,54 @@ rule MSSQL_CLR_Backdoor_CmdExec_Banner {
 }
 ```
 
----
+#### NPCInfoList1.aspx — AES .NET Loader Webshell (Godzilla-Style)
 
-### cmd_exec.dll — MSSQL CLR Backdoor (Assembly Structure — Broader Coverage)
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1505.003 (Web Shell), T1620 (Reflective Code Loading), T1140 (Deobfuscate/Decode Files or Information)
+**Confidence:** HIGH
+**Rationale:** The AES-128 key=IV `ca63457538b9b1e0` is hardcoded and reused for both key and initialization vector — an unusual, distinctive configuration artifact not present in stock Godzilla webshells (which derive the key via MD5). Robustness 2 rather than 3: the key is a per-build config constant that a redeployment could rotate, but it is not a filename and requires no combination to carry the rule.
+**False Positives:** None known — the specific 16-byte hex string used as both AES key and IV is highly distinctive and not found in legitimate .NET applications.
+**Blind Spots:** A redeployment that rotates the AES key evades this rule; memory-only delivery of the class-K payload is not covered (see Coverage Gaps).
+**Validation:** Scan the analyzed sample (`hash1` below) — the key string plus at least one of the reflection/crypto API strings must match; a benign .NET application using RijndaelManaged for an unrelated purpose must NOT fire alone (the key literal is required).
+**Deployment:** Web server file scanning, IIS directory monitoring, endpoint AV.
 
-**Detection Priority:** MEDIUM
-**Rationale:** Catches MSSQL CLR reverse-shell assemblies built from the same public technique (evi1ox/MSSQL_BackDoor, Metasploit mssql_clr_payload pattern) even if the operator changes the banner string. Requires the SQLCLR stored-procedure registration pattern combined with raw TCP socket and hidden cmd.exe execution strings. Will match variants that omit or rename the banner.
+```yara
+rule Webshell_NPCInfoList1_AES_Loader {
+   meta:
+      description = "Detects NPCInfoList1.aspx Godzilla-style AES .NET loader webshell based on hardcoded AES-128 key=IV value ca63457538b9b1e0 used for both key and initialization vector"
+      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
+      author = "The Hunters Ledger"
+      reference = "https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/"
+      date = "2026-06-12"
+      hash1 = "eb689aea9673cc025f91d8376da07e849519d19071609a60c193776d8eca8b54"
+      family = "Godzilla-style .NET loader webshell"
+      malware_type = "Webshell"
+      campaign = "FlaskC2-PostEx-Toolkit-67.215.232.25"
+      id = "c8c8d323-6db6-565a-a13a-0fd9e927c655"
+   strings:
+      $aeskey   = "ca63457538b9b1e0" ascii wide
+      $asmload  = "Assembly.Load" ascii wide
+      $createi  = "CreateInstance" ascii wide
+      $aescbc   = "RijndaelManaged" ascii wide
+   condition:
+      filesize < 32KB and
+      $aeskey and
+      ($asmload or $createi or $aescbc)
+}
+```
+
+### Hunting Rules
+
+#### cmd_exec.dll — MSSQL CLR Backdoor (Assembly Structure)
+
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1505.001 (SQL Stored Procedures), T1059.003 (Windows Command Shell), T1095 (Non-Application Layer Protocol)
 **Confidence:** MODERATE
-**False Positive Risk:** MEDIUM — legitimate MSSQL CLR assemblies may use TcpClient; the `reverse_shell` or `cmd_exec` method name combined with SqlProcedureAttribute narrows this significantly.
-**Deployment:** Endpoint AV/EDR, MSSQL assembly inspection, memory scanner
+**Rationale:** Requires four independent clauses (SQLCLR marker, exec-method name, network class, process-output-redirect API) to all hold — a genuine combination, not a single renameable literal. Kept at Hunting rather than Detection because the original assessment flagged real ambiguity: legitimate MSSQL CLR assemblies can use `TcpClient`, and the exec-method clause can be satisfied by the generic `ExecuteCommand` name alone rather than the more distinctive `reverse_shell`/`cmd_exec` names.
+**False Positives:** A legitimate MSSQL CLR assembly that combines TCP networking, process spawning with output capture, and a method named `ExecuteCommand` (a common DB-access-layer naming convention) could satisfy all four clauses without being malicious.
+**Deployment:** Endpoint AV/EDR, MSSQL assembly inspection, memory scanner — use as a broader corpus sweep alongside the Banner Anchor Detection rule above, not as a standalone alerting rule.
 
 ```yara
 rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {
@@ -122,52 +170,15 @@ rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {
 }
 ```
 
----
+#### miss.asp — Ghost小组 ASP Webshell (Aatrox Eval Gadget)
 
-### NPCInfoList1.aspx — AES .NET Loader Webshell (Godzilla-Style)
-
-**Detection Priority:** HIGH
-**Rationale:** The AES-128 key=IV `ca63457538b9b1e0` is hardcoded in the webshell and used for both key and initialization vector — an unusual, detectable configuration not present in stock Godzilla webshells (which derive the key via MD5). This is the strongest file-level anchor for this specific loader variant.
-**ATT&CK Coverage:** T1505.003 (Web Shell), T1620 (Reflective Code Loading), T1140 (Deobfuscate/Decode Files or Information)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — the specific 16-byte hex string used as both AES key and IV is highly distinctive and not found in legitimate .NET applications.
-**Deployment:** Web server file scanning, IIS directory monitoring, endpoint AV
-
-```yara
-rule Webshell_NPCInfoList1_AES_Loader {
-   meta:
-      description = "Detects NPCInfoList1.aspx Godzilla-style AES .NET loader webshell based on hardcoded AES-128 key=IV value ca63457538b9b1e0 used for both key and initialization vector"
-      license = "CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/"
-      author = "The Hunters Ledger"
-      reference = "https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/"
-      date = "2026-06-12"
-      hash1 = "eb689aea9673cc025f91d8376da07e849519d19071609a60c193776d8eca8b54"
-      family = "Godzilla-style .NET loader webshell"
-      malware_type = "Webshell"
-      campaign = "FlaskC2-PostEx-Toolkit-67.215.232.25"
-      id = "c8c8d323-6db6-565a-a13a-0fd9e927c655"
-   strings:
-      $aeskey   = "ca63457538b9b1e0" ascii wide
-      $asmload  = "Assembly.Load" ascii wide
-      $createi  = "CreateInstance" ascii wide
-      $aescbc   = "RijndaelManaged" ascii wide
-   condition:
-      filesize < 32KB and
-      $aeskey and
-      ($asmload or $createi or $aescbc)
-}
-```
-
----
-
-### miss.asp — Ghost小组 ASP Webshell (Aatrox Eval Gadget)
-
-**Detection Priority:** MEDIUM
-**Rationale:** Two complementary anchors: the `Ghost小组` gb2312 title identifies the public Chinese ASP webshell family; `Execute Session("Aatrox")` / `UserPass="Aatrox"` are the operator-configured password and stored eval gadget. The eval gadget pattern is particularly valuable because it persists in session across requests.
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1505.003 (Web Shell), T1059.005 (Visual Basic), T1027.010 (Command Obfuscation)
-**Confidence:** HIGH (for the Aatrox anchor — commodity reuse of this password is possible)
-**False Positive Risk:** MEDIUM — `Ghost小组` alone matches the entire webshell family (globally reused); `Aatrox` alone is a common gaming reference. The combination reduces FP risk substantially. Tune by requiring both anchors if single-anchor FP rate is high.
-**Deployment:** Web server file scanning, IIS directory monitoring, endpoint AV
+**Confidence:** MODERATE
+**Rationale:** The rule's real discriminating power rests on a single operator-chosen literal (`Aatrox`, the webshell's configured password/eval-gadget name, in either of two close variants) — durable against a `Ghost小组` family-wide rebrand but not against this specific deployment choosing a different password. The paired clause (`Ghost` OR `WScript.Shell` OR `Scripting.FileSystemObject`) adds little: the latter two APIs are near-ubiquitous in any ASP webshell, legitimate or not.
+**False Positives:** `Ghost小组` alone matches the entire globally-reused public webshell family; `Aatrox` alone is a common League of Legends reference. The combination reduces but does not eliminate FP risk — this is a scoping lead, not an alerting-grade signature.
+**Deployment:** Web server file scanning, IIS directory monitoring, endpoint AV — corpus sweep for this specific configured instance.
 
 ```yara
 rule Webshell_Ghost_Aatrox_ASP {
@@ -199,14 +210,19 @@ rule Webshell_Ghost_Aatrox_ASP {
 
 ## Sigma Rules
 
-### MSSQL CLR Backdoor — sqlservr.exe Spawning cmd.exe Child
+### Detection Rules
 
-**Detection Priority:** HIGH
-**Rationale:** SQL Server (`sqlservr.exe`) does not spawn `cmd.exe` in normal operation. A child `cmd.exe` process under `sqlservr.exe` is a strong indicator that a SQL-CLR stored procedure is executing shell commands — the core behavioral signature of cmd_exec.dll. This catches the backdoor at execution time regardless of whether the DLL is on disk.
+#### MSSQL CLR Backdoor — sqlservr.exe Spawning cmd.exe Child
+
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1505.001 (SQL Stored Procedures), T1059.003 (Windows Command Shell)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — legitimate SQL Server workloads do not spawn cmd.exe; administrative scripts that do (e.g., xp_cmdshell) generate the same pattern and should be baselined and excluded via allowlist.
-**Deployment:** Sysmon (Event ID 1), Windows Security Event Log (4688), EDR process telemetry
+**Rationale:** SQL Server does not spawn `cmd.exe` in normal operation. This process-ancestry pairing is a technique chokepoint — it catches ANY SQL-CLR stored procedure that shells out, regardless of which specific backdoor build is used, and survives recompilation or renaming of the CLR assembly itself.
+**False Positives:** Legitimate administrative use of `xp_cmdshell` generates the same pattern — baseline and exclude authorized instances. SQL Server maintenance jobs that intentionally invoke `cmd.exe` via CLR or job steps.
+**Blind Spots:** A CLR backdoor that shells out via a mechanism other than spawning `cmd.exe` directly (e.g., in-process `Process.Start` of a non-cmd binary) is not covered.
+**Validation:** Trigger a SQL-CLR stored procedure that spawns `cmd.exe` — must match; routine SQL Server query execution with no shell spawn must NOT fire.
+**Deployment:** Sysmon (Event ID 1), Windows Security Event Log (4688), EDR process telemetry.
 
 ```yaml
 title: MSSQL CLR Backdoor Execution via sqlservr.exe Child cmd.exe
@@ -242,16 +258,117 @@ falsepositives:
 level: high
 ```
 
----
+#### MSSQL CLR Assembly Enablement and Reverse-Shell Procedure Registration
 
-### MSSQL CLR Backdoor — Outbound TCP Connection from sqlservr.exe
-
-**Detection Priority:** HIGH
-**Rationale:** SQL Server initiates outbound TCP connections for replication, linked servers, and mail — but these go to known, expected destinations. An outbound TCP connection to an unknown external IP from `sqlservr.exe` on a non-standard port (not 1433/445/25) indicates a CLR reverse-shell attempting to connect to operator infrastructure.
-**ATT&CK Coverage:** T1505.001 (SQL Stored Procedures), T1095 (Non-Application Layer Protocol)
+**Tier:** Detection
+**Robustness:** 2
+**ATT&CK Coverage:** T1505.001 (SQL Stored Procedures)
 **Confidence:** HIGH
-**False Positive Risk:** LOW–MEDIUM — requires tuning to exclude known SQL Server replication targets, linked server destinations, and Database Mail SMTP. Most environments have a small, stable set of expected outbound SQL Server connections.
-**Deployment:** Sysmon (Event ID 3), network flow telemetry, EDR network telemetry
+**Rationale:** Tightened during this pass — the original condition OR'd in `CREATE ASSEMBLY` and `EXTERNAL NAME` as standalone triggers, but both phrases appear in ordinary, legitimate SQLCLR deployment activity (custom aggregates, data-type extensions) with no distinguishing filter, which dragged the whole rule toward baseline noise. The rule now keeps only the two genuinely rare/distinctive signals: CLR enablement via `sp_configure` (EventID 15457, disabled by default and rarely toggled in production) and the `reverse_shell` procedure name in `EXTERNAL NAME` registration (zero legitimate use).
+**False Positives:** Authorized .NET CLR assembly deployment by DBAs that also happens to enable CLR in the same change window — correlate with change management tickets. Development environments where CLR assemblies are used legitimately.
+**Blind Spots:** A build that registers the reverse-shell procedure under a different name than `reverse_shell` evades the second selector; CLR enablement alone (first selector) still provides fallback coverage if the environment doesn't already have CLR enabled.
+**Validation:** Trigger CLR enablement via `sp_configure 'clr enabled', 1` or register a procedure via `EXTERNAL NAME` referencing a `reverse_shell` method — either must match; routine SQL Server query activity with CLR already disabled must NOT fire.
+**Deployment:** SQL Server Audit / Extended Events, Windows Application Event Log (MSSQL error log integration), SIEM with SQL Server log ingestion.
+
+```yaml
+title: MSSQL CLR Backdoor Installation via CREATE ASSEMBLY and Reverse Shell Procedure
+id: 68e96847-afed-4fbd-843f-952e22e89f97
+status: experimental
+description: >-
+  Detects SQL Server CLR backdoor installation indicators: enabling CLR
+  execution via sp_configure, or registering a stored procedure named
+  reverse_shell via EXTERNAL NAME. The reverse_shell procedure name has
+  no legitimate use and is a direct indicator of cmd_exec.dll
+  installation; CLR enablement alone is rare in production and disabled
+  by default.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
+    - https://www.netspi.com/blog/technical/network-penetration-testing/attacking-sql-server-clr-assemblies/
+author: The Hunters Ledger
+date: '2026-06-12'
+tags:
+    - attack.persistence
+    - attack.t1505.001
+    - detection.emerging-threats
+logsource:
+    product: windows
+    service: application
+detection:
+    selection_clr:
+        Provider_Name|contains: 'MSSQL'
+        EventID: 15457
+        Message|contains: 'clr enabled'
+    selection_reverse_shell:
+        Provider_Name|contains: 'MSSQL'
+        Message|contains: 'reverse_shell'
+    condition: selection_clr or selection_reverse_shell
+falsepositives:
+    - Authorized .NET CLR assembly deployment by DBAs — correlate with change management tickets
+    - Development environments where CLR assemblies are used legitimately
+level: high
+```
+
+#### IIS Webshell Execution — w3wp.exe Spawning cmd.exe or WScript
+
+**Tier:** Detection
+**Robustness:** 3
+**ATT&CK Coverage:** T1505.003 (Web Shell), T1059.003 (Windows Command Shell), T1059.005 (Visual Basic)
+**Confidence:** HIGH
+**Rationale:** IIS worker process spawning a shell interpreter is a well-established, family-agnostic technique chokepoint for webshell command execution — it catches both webshells staged in this campaign (`miss.asp` via `WScript.Shell`, `NPCInfoList1.aspx` via its loaded payload) and any other webshell family exercising the same execution pattern, and survives any campaign-specific renaming.
+**False Positives:** Legacy web applications that intentionally invoke shell processes from application code — baseline expected patterns. Authorized IIS management scripts running under the application pool identity.
+**Blind Spots:** A webshell that executes entirely in-process (no child process spawn — e.g., pure .NET reflection without a shell hop) is not covered by this rule.
+**Validation:** Trigger a webshell command that shells out from `w3wp.exe` — must match; normal IIS request handling with no shell spawn must NOT fire.
+**Deployment:** Sysmon (Event ID 1), Windows Security Event Log (4688), EDR process telemetry.
+
+```yaml
+title: IIS Webshell Execution via w3wp.exe Spawning Shell Process
+id: bb2d9a6a-be5b-47e2-9902-ebbdc4831aa6
+status: experimental
+description: >-
+  Detects IIS worker process (w3wp.exe) spawning cmd.exe or wscript.exe, which
+  indicates webshell-based command execution. In the FlaskC2-PostEx-Toolkit
+  campaign, both miss.asp (Ghost xiao-zu ASP webshell via WScript.Shell) and
+  NPCInfoList1.aspx (Godzilla-style .NET loader) run under w3wp.exe and can
+  spawn shell processes when executing operator commands.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
+author: The Hunters Ledger
+date: '2026-06-12'
+tags:
+    - attack.persistence
+    - attack.t1505.003
+    - attack.execution
+    - attack.t1059.003
+    - detection.emerging-threats
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        ParentImage|endswith: '\w3wp.exe'
+        Image|endswith:
+            - '\cmd.exe'
+            - '\wscript.exe'
+            - '\cscript.exe'
+            - '\powershell.exe'
+    condition: selection
+falsepositives:
+    - Legacy web applications that intentionally invoke shell processes — baseline expected patterns
+    - Authorized IIS management scripts running under the application pool identity
+level: high
+```
+
+### Hunting Rules
+
+#### MSSQL CLR Backdoor — Outbound TCP Connection from sqlservr.exe
+
+**Tier:** Hunting
+**Robustness:** 2
+**ATT&CK Coverage:** T1505.001 (SQL Stored Procedures), T1095 (Non-Application Layer Protocol)
+**Confidence:** MODERATE
+**Rationale:** Behaviorally durable (no renameable literal — pure process-plus-destination-class logic), but the rule fires on any external connection from `sqlservr.exe`, and three common, legitimate enterprise patterns (replication, linked servers, Database Mail) require environment-specific baselining before this stops being meaningfully noisy. Demoted from the original `high` level to a Hunting scoping lead.
+**False Positives:** SQL Server linked servers pointing to external databases. Database Mail (SMTP outbound) — filter by port 25/587. SQL Server replication to external publishers — baseline expected destination IPs.
+**Deployment:** Sysmon (Event ID 3), network flow telemetry, EDR network telemetry — baseline per environment before considering promotion to Detection.
 
 ```yaml
 title: MSSQL sqlservr.exe Initiating Outbound TCP Connection to External Host
@@ -307,129 +424,29 @@ falsepositives:
     - SQL Server linked servers pointing to external databases
     - Database Mail (SMTP outbound) — filter by port 25/587
     - SQL Server replication to external publishers — baseline expected destination IPs
-level: high
+level: medium
 ```
 
----
+#### Webshell Eval Gadget — Aatrox Query Parameter
 
-### MSSQL CLR Assembly Enablement and Backdoor Installation
-
-**Detection Priority:** HIGH
-**Rationale:** The `sp_configure 'clr enabled'` + `CREATE ASSEMBLY` + `CREATE PROCEDURE ... EXTERNAL NAME` sequence is the installation footprint of any SQL-CLR backdoor. The combination of enabling CLR (unusual in production environments), creating an assembly from binary, and registering a procedure named `reverse_shell` is a direct installation signature for cmd_exec.dll. Even without the procedure name, the sequence alone warrants investigation.
-**ATT&CK Coverage:** T1505.001 (SQL Stored Procedures)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — CLR enablement is disabled by default and rarely changed. `CREATE ASSEMBLY` from a binary is a developer or DBA action that should be logged and approved. The procedure name `reverse_shell` in `EXTERNAL NAME` has zero legitimate use.
-**Deployment:** SQL Server Audit / Extended Events, Windows Application Event Log (MSSQL error log integration), SIEM with SQL Server log ingestion
-
-```yaml
-title: MSSQL CLR Backdoor Installation via CREATE ASSEMBLY and Reverse Shell Procedure
-id: 68e96847-afed-4fbd-843f-952e22e89f97
-status: experimental
-description: >-
-  Detects SQL Server CLR backdoor installation sequence: enabling CLR execution,
-  creating an assembly from binary, and registering a stored procedure via
-  EXTERNAL NAME. The procedure name reverse_shell in EXTERNAL NAME is a direct
-  indicator of cmd_exec.dll installation. Even without the procedure name, this
-  sequence in production is high-risk.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
-    - https://www.netspi.com/blog/technical/network-penetration-testing/attacking-sql-server-clr-assemblies/
-author: The Hunters Ledger
-date: '2026-06-12'
-tags:
-    - attack.persistence
-    - attack.t1505.001
-    - detection.emerging-threats
-logsource:
-    product: windows
-    service: application
-detection:
-    selection_clr:
-        Provider_Name|contains: 'MSSQL'
-        EventID: 15457
-        Message|contains: "clr enabled"
-    selection_assembly:
-        Provider_Name|contains: 'MSSQL'
-        Message|contains:
-            - 'CREATE ASSEMBLY'
-            - 'EXTERNAL NAME'
-            - 'reverse_shell'
-    condition: selection_clr or selection_assembly
-falsepositives:
-    - Authorized .NET CLR assembly deployment by DBAs — correlate with change management tickets
-    - Development environments where CLR assemblies are used legitimately
-level: high
-```
-
----
-
-### IIS Webshell Execution — w3wp.exe Spawning cmd.exe or WScript
-
-**Detection Priority:** HIGH
-**Rationale:** IIS worker process (`w3wp.exe`) spawning `cmd.exe` or `wscript.exe` is the behavioral hallmark of a webshell executing operator commands. This covers both the `miss.asp` Ghost小组 webshell (which calls `WScript.Shell`) and any cmd-execution webshell deployed to the target IIS server.
-**ATT&CK Coverage:** T1505.003 (Web Shell), T1059.003 (Windows Command Shell), T1059.005 (Visual Basic)
-**Confidence:** HIGH
-**False Positive Risk:** LOW–MEDIUM — legitimate applications occasionally spawn cmd.exe from w3wp.exe via legacy code; these should be baselined. Most modern IIS applications do not require shell execution.
-**Deployment:** Sysmon (Event ID 1), Windows Security Event Log (4688), EDR process telemetry
-
-```yaml
-title: IIS Webshell Execution via w3wp.exe Spawning Shell Process
-id: bb2d9a6a-be5b-47e2-9902-ebbdc4831aa6
-status: experimental
-description: >-
-  Detects IIS worker process (w3wp.exe) spawning cmd.exe or wscript.exe, which
-  indicates webshell-based command execution. In the FlaskC2-PostEx-Toolkit
-  campaign, both miss.asp (Ghost xiao-zu ASP webshell via WScript.Shell) and
-  NPCInfoList1.aspx (Godzilla-style .NET loader) run under w3wp.exe and can
-  spawn shell processes when executing operator commands.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
-author: The Hunters Ledger
-date: '2026-06-12'
-tags:
-    - attack.persistence
-    - attack.t1505.003
-    - attack.execution
-    - attack.t1059.003
-    - detection.emerging-threats
-logsource:
-    category: process_creation
-    product: windows
-detection:
-    selection:
-        ParentImage|endswith: '\w3wp.exe'
-        Image|endswith:
-            - '\cmd.exe'
-            - '\wscript.exe'
-            - '\cscript.exe'
-            - '\powershell.exe'
-    condition: selection
-falsepositives:
-    - Legacy web applications that intentionally invoke shell processes — baseline expected patterns
-    - Authorized IIS management scripts running under the application pool identity
-level: high
-```
-
----
-
-### Webshell Eval Gadget — Aatrox Session Parameter
-
-**Detection Priority:** MEDIUM
-**Rationale:** The `Execute Session("Aatrox")` gadget in miss.asp persists the eval backdoor across requests. Detection in IIS access logs or application logs for the `Aatrox` parameter in POST requests to .asp files indicates active webshell interaction with this specific webshell family configured with this password.
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1505.003 (Web Shell), T1027.010 (Command Obfuscation)
-**Confidence:** HIGH (the string is specific; commodity reuse of this password is possible but uncommon)
-**False Positive Risk:** MEDIUM — `Aatrox` is a League of Legends champion name and could theoretically appear in legitimate gaming-related web content; in a corporate IIS context it is highly anomalous.
-**Deployment:** IIS access logs, SIEM with web server log ingestion, WAF log monitoring
+**Confidence:** MODERATE
+**Rationale:** Corrected during this pass — the original rule's `selection_body` clause matched any `POST` to any `.asp` file with no check for the `Aatrox` literal at all, making the rule fire on ordinary classic-ASP form submissions. That clause has been removed; the rule now matches only the genuinely distinctive `Aatrox` query-string parameter. This remains a single operator-chosen literal (this deployment's webshell password/eval-trigger), durable against a family-wide rebrand but not against a different password choice.
+**False Positives:** `Aatrox` is a League of Legends champion name and could theoretically appear in legitimate gaming-related web content; highly anomalous as a query parameter against a corporate IIS `.asp` endpoint.
+**Deployment:** IIS access logs, SIEM with web server log ingestion, WAF log monitoring.
 
 ```yaml
 title: Ghost Webshell Aatrox Eval Gadget Parameter in IIS Request
 id: f2509a7c-9505-4b23-a2b4-b7619999f327
 status: experimental
 description: >-
-  Detects the Aatrox eval gadget parameter in IIS web requests, indicating
-  interaction with the Ghost xiao-zu ASP webshell (miss.asp) as staged in the
-  FlaskC2-PostEx-Toolkit campaign. The webshell stores and executes arbitrary
-  VBScript via Execute Session("Aatrox") when the Aatrox parameter is present.
+  Detects the Aatrox eval gadget parameter in the query string of IIS
+  web requests to .asp files, indicating interaction with the Ghost
+  xiao-zu ASP webshell (miss.asp) as staged in the FlaskC2-PostEx-Toolkit
+  campaign. The webshell stores and executes arbitrary VBScript via
+  Execute Session("Aatrox") when the Aatrox parameter is present.
 references:
     - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
 author: The Hunters Ledger
@@ -447,75 +464,24 @@ detection:
     selection:
         cs-uri-stem|endswith: '.asp'
         cs-uri-query|contains: 'Aatrox'
-    selection_body:
-        cs-uri-stem|endswith: '.asp'
-        cs-method: 'POST'
-    condition: selection or selection_body
+    condition: selection
 falsepositives:
-    - Legitimate web applications with parameters containing the string Aatrox — extremely unlikely in corporate IIS environments
+    - >-
+      Aatrox is a League of Legends champion name and could theoretically
+      appear in legitimate gaming-related web content; highly anomalous
+      as a query parameter against a corporate IIS .asp endpoint
 level: medium
 ```
 
----
+#### CVE-2026-20817 WER LPE PoC — Anomalous WerFault.exe Token Inspection
 
-### Native Post-Exploitation Tool Execution — Imphash Detection
-
-**Detection Priority:** HIGH
-**Rationale:** The six native tools in this toolkit (JuicyPotato, PrintSpoofer, RoguePotato, RogueOxidResolver, nc64, CVE-PoC) carry stable imphashes that survive renaming. Operators frequently rename these tools to evade filename-based detection; imphash-based detection catches them regardless of what the file is called.
-**ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft), T1068 (Exploitation for Privilege Escalation)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — these imphashes correspond to specific compiled builds of known privilege-escalation tools with no legitimate use in enterprise environments.
-**Deployment:** Sysmon (Event ID 1 with hash enrichment), EDR process telemetry with imphash field
-
-```yaml
-title: FlaskC2-PostEx Native Tool Execution by Imphash
-id: 617292af-db3a-48e3-b18f-69ed31aef19e
-status: experimental
-description: >-
-  Detects execution of native post-exploitation tools from the
-  FlaskC2-PostEx-Toolkit-67.215.232.25 campaign based on import-table hashes
-  (imphash). The covered tools are JuicyPotato (f9a28c45), PrintSpoofer
-  (545a8124), RoguePotato (959a8304), RogueOxidResolver (576d6e02), Netcat
-  nc64 (567531f0), and CVE-2026-20817 PoC (818cfde6). Imphash-based detection
-  survives file renaming.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
-author: The Hunters Ledger
-date: '2026-06-12'
-tags:
-    - attack.privilege-escalation
-    - attack.stealth
-    - attack.t1134.001
-    - attack.t1068
-    - detection.emerging-threats
-logsource:
-    category: process_creation
-    product: windows
-detection:
-    selection:
-        Imphash|contains:
-            - 'f9a28c458284584a93b14216308d31bd'
-            - '545a81240793f9ca97306fa5b3ad76df'
-            - '959a83047e80ab68b368fdb3f4c6e4ea'
-            - '576d6e02a47c807b9063948ee683350c'
-            - '567531f08180ab3963b70889578118a3'
-            - '818cfde69b098e3348e8c7125e83915f'
-    condition: selection
-falsepositives:
-    - Unlikely — these imphashes correspond to specific security tool builds with no legitimate enterprise use
-level: high
-```
-
----
-
-### CVE-2026-20817 WER LPE PoC — Anomalous WerFault.exe Token Inspection
-
-**Detection Priority:** LOW
-**Rationale:** On hosts missing the January 2026 WER patch, the CVE-2026-20817 PoC enumerates processes looking for `WerFault.exe` and opens its token for inspection (`OpenProcessToken` with `TOKEN_QUERY`). This behavior — a non-WER parent process opening WerFault.exe's token — is anomalous. Rule is LOW priority because the vulnerability is patched and the sample is non-weaponized, but retains value on unpatched hosts.
+**Tier:** Hunting
+**Robustness:** 2
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation)
 **Confidence:** MODERATE
-**False Positive Risk:** HIGH — security tooling and EDR products legitimately inspect WerFault.exe process tokens; this rule should only be deployed in environments confirmed to be running pre-January-2026 unpatched Windows builds, or for retrospective hunting.
-**Deployment:** Sysmon (Event ID 10 — ProcessAccess), EDR process-access telemetry. Deploy only on hosts running Windows 10/11 or Server 2019/2022 without the January 2026 cumulative update.
+**Rationale:** The process-access pattern (a non-WER process opening `WerFault.exe`'s token) is a genuine, durable technique signal, but the original assessment's own FP Risk of HIGH and narrow applicability window (only relevant on hosts missing the January 2026 cumulative update, and the analyzed sample is a non-weaponized PoC that never achieves elevation) keep this at Hunting rather than Detection.
+**False Positives:** EDR and security tooling that monitors WerFault.exe token state. Crash reporting integrations that inspect WerFault process state. Only deploy on unpatched hosts (pre-January 2026 Windows cumulative update) — patched hosts render this moot.
+**Deployment:** Sysmon (Event ID 10 — ProcessAccess), EDR process-access telemetry. Deploy only on hosts running Windows 10/11 or Server 2019/2022 without the January 2026 cumulative update, or for retrospective hunting.
 
 ```yaml
 title: CVE-2026-20817 WER LPE PoC Token Inspection of WerFault.exe
@@ -562,90 +528,59 @@ level: low
 
 ## Suricata Signatures
 
-### Flask C2 Health Endpoint — Distinctive JSON Field-Combo
+### Detection Rules
 
-**Detection Priority:** HIGH
-**Rationale:** The `/health` endpoint of this bespoke Flask C2 returns a JSON object with a highly distinctive field combination (`active_servers`, `pending_commands`, `completed_commands`, `status`, `timestamp`) that is not found in any known public C2 framework or web application framework. This endpoint is unauthenticated and accessible without credentials, making it a reliable network-level detection anchor. The `Werkzeug/3.1.6 Python/3.12.3` Server header provides an additional discriminator.
+#### Flask C2 Health Endpoint — Distinctive JSON Field-Combo
+
+**Tier:** Detection
+**Robustness:** 3
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1105 (Ingress Tool Transfer)
 **Confidence:** HIGH
-**False Positive Risk:** LOW — the specific combination of all five JSON field names in a single response is uniquely characteristic of this C2 implementation. No known legitimate application or public C2 framework uses this exact field set.
-**Deployment:** Network IDS/IPS, perimeter firewall with DPI capability, SIEM with network flow data
+**Rationale:** The `/health` endpoint returns a JSON object with a five-field combination (`active_servers`, `pending_commands`, `completed_commands`, `status`, `timestamp`) not found in any known public C2 framework or web application framework — a genuine protocol/config fingerprint. Re-anchored during this pass: the original rule pinned the destination to the single staging IP, which would blind the signature the moment the operator moves infrastructure; the destination is now `$EXTERNAL_NET`, so the content match — which carries all of the rule's real discrimination — survives infrastructure rotation.
+**False Positives:** None known — the specific combination of all five JSON field names in a single response is uniquely characteristic of this C2 implementation.
+**Blind Spots:** A rebuild of the C2 panel that changes the `/health` response field names or their combination evades this rule; TLS-terminated traffic without inspection visibility is not covered.
+**Validation:** Replay an HTTP response from a live instance of this C2's `/health` endpoint — must alert; an unrelated Werkzeug/Flask application's JSON response must NOT fire.
+**Deployment:** Network IDS/IPS, perimeter firewall with DPI capability, SIEM with network flow data.
 
 ```
-alert http $HOME_NET any -> 67.215.232.25 any (
-    msg:"THL FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active";
-    flow:established,to_client;
-    file_data;
-    content:"active_servers"; nocase;
-    content:"pending_commands"; nocase; distance:0;
-    content:"completed_commands"; nocase; distance:0;
-    content:"status"; nocase; distance:0;
-    content:"timestamp"; nocase; distance:0;
-    classtype:trojan-activity;
-    reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;
-    sid:9001001; rev:1;
-)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL FlaskC2-PostEx C2 Health Endpoint Response - Bespoke Flask C2 Active"; flow:established,to_client; file_data; content:"active_servers"; nocase; content:"pending_commands"; nocase; distance:0; content:"completed_commands"; nocase; distance:0; content:"status"; nocase; distance:0; content:"timestamp"; nocase; distance:0; classtype:trojan-activity; sid:9001001; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
 ```
 
----
+### Hunting Rules
 
-### Flask C2 Beacon Endpoints — POST-Only API Routes
+#### Flask C2 Beacon Endpoint — POST to /api/report
 
-**Detection Priority:** HIGH
-**Rationale:** The `/api/report` and `/api/heartbeat` URIs are the beacon check-in endpoints of this bespoke C2. These POST-only routes do not appear in any public C2 framework, web application, or monitoring tool. Any POST to these paths on any host is suspicious — the rule is written without IP pinning to catch operator infrastructure migration.
+**Tier:** Hunting
+**Robustness:** 1
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1095 (Non-Application Layer Protocol)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — these URIs are specific to this custom C2 implementation and are not standard REST API paths used by any known legitimate service.
-**Deployment:** Network IDS/IPS, perimeter/egress HTTP inspection, proxy logs
+**Confidence:** MODERATE
+**Rationale:** `/api/report` is a plausible, generic path segment used by many legitimate telemetry and error-reporting APIs across the internet — a single URI-path literal with no corroborating anchor (no distinctive header, response code, or body pattern). Deployed at a perimeter watching all outbound HTTP (no destination pinning, matching the campaign's intent to survive infrastructure rotation), this is a genuine scoping lead rather than an alerting-grade signature. Corrected the original rule's `msg`, which claimed coverage of `/api/heartbeat` as well — this rule only ever matched `/api/report`.
+**False Positives:** Any legitimate application whose API exposes a `/api/report` POST endpoint (common naming convention for telemetry/error-reporting); the `threshold` limits alert volume per source but does not address the underlying path-genericity.
+**Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
-alert http $HOME_NET any -> any any (
-    msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/report or /api/heartbeat";
-    flow:established,to_server;
-    http.method; content:"POST";
-    http.uri; content:"/api/report"; nocase;
-    classtype:trojan-activity;
-    reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;
-    sid:9001002; rev:1;
-)
-
-alert http $HOME_NET any -> any any (
-    msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/heartbeat";
-    flow:established,to_server;
-    http.method; content:"POST";
-    http.uri; content:"/api/heartbeat"; nocase;
-    classtype:trojan-activity;
-    reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;
-    sid:9001003; rev:1;
-)
+alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/report"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/report"; nocase; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
 ```
 
----
+#### Flask C2 Beacon Endpoint — POST to /api/heartbeat
 
-### Flask C2 IP Block — All Traffic to Known Infrastructure
-
-**Detection Priority:** HIGH
-**Rationale:** The entire campaign infrastructure is co-located on a single IP address (`67.215.232.25`) — the open-directory toolkit cache (`:1337`), the Flask C2 panel (`:8080`), and the opaque second listener (`:5000`). An IP-level block covers all current known operator surfaces. Ports 5222–5455 are excluded per analyst guidance (proxy-era historical tenancy on this IP — different-tenant risk).
-**ATT&CK Coverage:** T1071.001 (Web Protocols), T1105 (Ingress Tool Transfer)
-**Confidence:** HIGH
-**False Positive Risk:** LOW — VirusTotal scores this IP 15/91 malicious. AS36352 (HostPapa/ColoCrossing) is a commodity hosting provider; this IP has no known legitimate service.
-**Deployment:** Perimeter firewall, network IDS/IPS, SIEM threat intelligence feeds
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1071.001 (Web Protocols), T1095 (Non-Application Layer Protocol)
+**Confidence:** MODERATE
+**Rationale:** `/api/heartbeat` is an extremely common naming convention for health-check/keepalive endpoints across the microservices and monitoring-agent ecosystem — a single URI-path literal with no corroborating anchor. Same durability profile as the `/api/report` sibling rule: no destination pinning, so it survives infrastructure rotation, but the path segment alone is not distinctive enough to clear the Detection precision bar.
+**False Positives:** Any legitimate application's heartbeat/keepalive POST endpoint — this is one of the most common REST API path conventions in use; the `threshold` limits alert volume per source but does not address the underlying path-genericity.
+**Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
-alert ip $HOME_NET any -> 67.215.232.25 any (
-    msg:"THL FlaskC2-PostEx C2 Known Staging Host 67.215.232.25";
-    classtype:trojan-activity;
-    reference:url,the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;
-    threshold:type limit, track by_src, seconds 300, count 1;
-    sid:9001004; rev:1;
-)
+alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/heartbeat"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/heartbeat"; nocase; classtype:trojan-activity; sid:9001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
 ```
 
 ---
 
 ## Coverage Gaps
 
-The following MITRE ATT&CK techniques observed in analyst findings could not be covered with high-confidence, production-ready detection rules due to missing artifacts or insufficient specific indicators. These are documented limitations of passive open-directory analysis, not failures.
+**Atomics retired from this pass (2 rules).** A Sigma rule matching solely on six native-tool imphashes (T1134.001 — JuicyPotato, PrintSpoofer, RoguePotato, RogueOxidResolver, Netcat nc64, CVE-2026-20817 PoC) and a Suricata pure-IP block on `67.215.232.25` both keyed entirely on hardcoded values with no behavioral qualifier — per the tiering rubric's routing test, removing the literal leaves nothing to detect. All seven underlying values were already present in [`flaskc2-postex-toolkit-67-215-232-25-iocs.json`](/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json) (imphashes under `file_hashes.imphashes` with `action: HUNT`; the IP under `network_indicators.ipv4` with `action: BLOCK`) — no feed edits were required. T1134.001 (Token Impersonation/Theft) is consequently no longer represented by a standalone rule in this file; the capability remains hunt-actionable via the feed.
 
 **T1071.001 — Web Protocols (Flask C2 beacon implant, Type B artifact)**
 The beacon implant — the agent binary that POSTs to `/api/report` and `/api/heartbeat` — was not recovered. It is a Type B artifact: operator-pushed to a victim at runtime, never staged in the `:1337` open directory. `VT communicating_files=0` for this IP confirms no sample has been observed beaconing to this C2. Without the implant, no file-level YARA or behavioral Sigma can be authored for the client side. Evidence needed to close this gap: victim endpoint forensics, memory acquisition from a compromised host, or capture of the implant via network proxy on a live victim system.
@@ -666,7 +601,7 @@ These rules are not re-authored here to avoid duplication. Deploy the referenced
 Rubeus behavioral detection (Kerberoasting, Golden Ticket, Pass the Ticket) is covered by existing Sigma rules in the SigmaHQ repository (search `rubeus` in the `windows/process_creation/` rules). These are not re-authored. The operator-recompiled Rubeus binary is identified at the file level by the referenced Neo23x0 rules.
 
 **T1095 — Non-Application Layer Protocol (raw reverse-TCP shell)**
-The cmd_exec.dll reverse-shell channel is plaintext raw TCP with no protocol framing, making Suricata application-layer signature matching impractical. The operator supplies the destination IP and port at `EXEC` time (no hardcoded C2), so no IP-based block is possible for the shell channel itself. Detection coverage for this channel relies on the Sigma rules (sqlservr.exe outbound TCP) rather than Suricata DPI.
+The cmd_exec.dll reverse-shell channel is plaintext raw TCP with no protocol framing, making Suricata application-layer signature matching impractical. The operator supplies the destination IP and port at `EXEC` time (no hardcoded C2), so no IP-based block is possible for the shell channel itself. Detection coverage for this channel relies on the Sigma rule (sqlservr.exe outbound TCP, Hunting tier) rather than Suricata DPI.
 
 **T1021 — Remote Services (lateral movement)**
 No specific lateral movement artifacts were recovered from the open directory. Rubeus and SharpSuccessor provide the capability, but no lateral movement commands, target host lists, or SMB/WinRM usage were observed in the static analysis. Coverage relies on existing Kerberos-abuse and SharpSuccessor detection rules in SigmaHQ.
@@ -677,4 +612,3 @@ No specific lateral movement artifacts were recovered from the open directory. R
 
 Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
 Free to use, including commercially, with attribution to The Hunters Ledger.
-

@@ -10,16 +10,12 @@ description: "A Russian-speaking commodity-malware operator runs a live 15-month
 detection_page: /hunting-detections/opendirectory-62-60-237-100-20260506-detections/
 ioc_feed: /ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json
 detection_sections:
-  - label: "Detection Coverage Summary"
-    anchor: "#detection-coverage-summary"
   - label: "YARA Rules"
     anchor: "#yara-rules"
   - label: "Sigma Rules"
     anchor: "#sigma-rules"
   - label: "Suricata Signatures"
     anchor: "#suricata-signatures"
-  - label: "Coverage Gaps"
-    anchor: "#coverage-gaps"
 ioc_highlights:
   - value: "185[.]241[.]208[.]129"
     note: "C2 server (AS210558 1337 Services, Spamhaus DROP)"

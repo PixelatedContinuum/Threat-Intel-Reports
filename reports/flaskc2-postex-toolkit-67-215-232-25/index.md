@@ -11,13 +11,11 @@ detection_page: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detecti
 ioc_feed: /ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json
 detection_sections:
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
-  - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - "67.215.232[.]25"
   - "hxxp://67.215.232[.]25:8080/health"

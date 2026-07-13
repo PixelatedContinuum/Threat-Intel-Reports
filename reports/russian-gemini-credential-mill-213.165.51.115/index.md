@@ -14,16 +14,12 @@ description: "End-to-end technical analysis of a Russian-native AI-augmented cyb
 detection_page: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 ioc_feed: /ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json
 detection_sections:
-  - label: "Detection Coverage Summary"
-    anchor: "detection-coverage-summary"
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
-  - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#suricata-signatures"
 ioc_highlights:
   - "213.165.51.115"
   - "tralalarkefe.com"

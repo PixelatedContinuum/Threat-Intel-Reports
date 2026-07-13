@@ -14,14 +14,10 @@ description: "Capsule sub-report (Case 4 of the AI-Agent-Frameworks investigatio
 detection_page: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
 ioc_feed: /ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json
 detection_sections:
-  - label: "Detection Coverage Summary"
-    anchor: "detection-coverage-summary"
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
-  - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#sigma-rules"
 ioc_highlights:
   - "221.150.15.104"
   - "openclaw.ai"

@@ -2,7 +2,7 @@
 title: "Remcos OpenDirectory Campaign"
 date: '2026-02-04'
 last_updated: '2026-02-06'
-detection_page: /hunting-detections/remcos-opendirectory/
+detection_page: /hunting-detections/remcos-opendirectory-detections/
 ioc_feed: /ioc-feeds/remcos-opendirectory-campaign.json
 ioc_highlights:
   - value: "203[.]159[.]90[.]147"
@@ -13,11 +13,11 @@ ioc_highlights:
     note: "VB6 dropper — Payload.exe (MD5)"
 detection_sections:
   - label: "YARA Rules"
-    anchor: "#yara-rules-for-endpoint-detection"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "#sigma-rules-siem-detection"
-  - label: "Network Detection"
-    anchor: "#network-detection-signatures"
+    anchor: "#sigma-rules"
+  - label: "Suricata Signatures"
+    anchor: "#suricata-signatures"
 layout: post
 permalink: /reports/remcos-opendirectory/
 thumbnail: /assets/images/cards/remcos-opendirectory.png
