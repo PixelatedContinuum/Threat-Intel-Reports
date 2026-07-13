@@ -459,6 +459,25 @@ main.content {
   border-bottom: none !important;
 }
 
+/* Tier subsection dividers on Detection Library pages: `### Detection Rules` /
+   `### Hunting Rules` H3s, class-tagged by the tier auto-classer in post.html.
+   Detection = green (alerting-grade), Hunting = amber (analyst-triaged).
+   Inert until a page actually contains those tier subsections. */
+.hl-post-content h3.hl-tier-detection {
+  border-left-color: var(--hl-accent-green, #4ade80) !important;
+  background: linear-gradient(to right, rgba(74, 222, 128, 0.10), transparent) !important;
+  border-radius: 0 4px 4px 0;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+.hl-post-content h3.hl-tier-hunting {
+  border-left-color: #facc15 !important;
+  background: linear-gradient(to right, rgba(250, 204, 21, 0.10), transparent) !important;
+  border-radius: 0 4px 4px 0;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
 /* --- Code & pre -------------------------------------------- */
 .hl-post-content code {
   background: #1f1f1f;
@@ -2571,6 +2590,21 @@ button,
 .hl-filter__count { font-size: 0.75rem; color: var(--hl-text-muted); margin: 13px 2px; letter-spacing: 0.02em; }
 .hl-filter__empty { font-size: 0.9rem; color: var(--hl-text-muted); padding: 28px; text-align: center; border: 1px dashed var(--hl-border-card); border-radius: 8px; }
 .hl-filter__reset { background: none; border: none; color: var(--hl-accent-blue); cursor: pointer; font: inherit; padding: 0; }
+
+/* Tier axis (Detection / Hunting) — a second chip row, rendered only when the
+   catalog carries `detection_tiers`. Active chips are tier-colored to match the
+   in-page subsection dividers (green = Detection, amber = Hunting). */
+.hl-filter__chips--tier { margin-top: 9px; align-items: center; }
+.hl-filter__dim {
+  font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--hl-text-muted); font-weight: 600; margin-right: 2px; align-self: center;
+}
+.hl-chip-btn--detection.is-on {
+  background: rgba(74, 222, 128, 0.16); border-color: var(--hl-accent-green, #4ade80); color: #b7f7cf;
+}
+.hl-chip-btn--hunting.is-on {
+  background: rgba(250, 204, 21, 0.16); border-color: #facc15; color: #fde68a;
+}
 
 /* severity-colored meta on catalog cards */
 .hl-catalog-card[data-sev="critical"] .hl-catalog-card__meta { color: #ef4444; }

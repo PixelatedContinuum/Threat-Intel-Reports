@@ -5,24 +5,42 @@
   var cards = [].slice.call(grid.querySelectorAll('.hl-catalog-card'));
   var clusters = [].slice.call(grid.querySelectorAll('[data-series-cluster]'));
   var search = bar.querySelector('.hl-filter__search');
-  var chips = [].slice.call(bar.querySelectorAll('.hl-chip-btn'));
   var count = bar.querySelector('[data-filter-count]');
   var empty = bar.querySelector('[data-filter-empty]');
-  var allChip = bar.querySelector('.hl-chip-btn[data-tag=""]');
-  var active = {};
-  function activeTags() { return Object.keys(active); }
+
+  // Independent chip dimensions, each backed by a data-* attribute on the card:
+  //   data-tag  — campaign tags       data-tier — Detection / Hunting (optional axis)
+  // Within a dimension chips OR-combine; ACROSS dimensions they AND-combine
+  // (e.g. tier=Detection AND tag=RAT). A dimension with no rendered chips is
+  // inert (matches everything), so this stays identical to the tags-only page.
+  function Dim(attr) {
+    return {
+      attr: attr,
+      chips: [].slice.call(bar.querySelectorAll('.hl-chip-btn[' + attr + ']')),
+      allChip: bar.querySelector('.hl-chip-btn[' + attr + '=""]'),
+      active: {},
+      keys: function () { return Object.keys(this.active); }
+    };
+  }
+  var dims = [Dim('data-tag'), Dim('data-tier')];
+
+  function matchDim(card, dim) {
+    var keys = dim.keys();
+    if (keys.length === 0) return true;
+    var cv = (card.getAttribute(dim.attr) || '').split('|');
+    return keys.some(function (k) { return cv.indexOf(k) > -1; });
+  }
+
   function apply() {
     var term = (search && search.value || '').trim().toLowerCase();
-    var tags = activeTags();
     var shown = 0;
     cards.forEach(function (c) {
-      var ctags = (c.getAttribute('data-tags') || '').split('|');
-      var mt = tags.length === 0 || tags.some(function (t) { return ctags.indexOf(t) > -1; });
+      var md = dims.every(function (d) { return matchDim(c, d); });
       // Search matches BOTH the title and the tags, so e.g. "ransomware"
       // surfaces items tagged Ransomware even if it's not in the title.
       var hay = (c.getAttribute('data-title') || '') + '|' + (c.getAttribute('data-tags') || '');
       var mq = !term || hay.indexOf(term) > -1;
-      var vis = mt && mq;
+      var vis = md && mq;
       // .hl-card carries `display: block !important`, so a plain inline
       // `display:none` is overridden. Set/remove with `important` priority,
       // which sits above author !important in the cascade.
@@ -41,29 +59,35 @@
     if (count) count.textContent = 'Showing ' + shown + ' of ' + cards.length;
     if (empty) empty.hidden = shown !== 0;
   }
-  chips.forEach(function (ch) {
-    ch.addEventListener('click', function () {
-      var t = ch.getAttribute('data-tag');
-      if (t === '') {
-        active = {};
-        chips.forEach(function (x) { x.classList.remove('is-on'); });
-        allChip.classList.add('is-on');
-      } else {
-        allChip.classList.remove('is-on');
-        if (active[t]) { delete active[t]; ch.classList.remove('is-on'); }
-        else { active[t] = 1; ch.classList.add('is-on'); }
-        if (activeTags().length === 0) allChip.classList.add('is-on');
-      }
-      apply();
+
+  dims.forEach(function (dim) {
+    dim.chips.forEach(function (ch) {
+      ch.addEventListener('click', function () {
+        var t = ch.getAttribute(dim.attr);
+        if (t === '') {
+          dim.active = {};
+          dim.chips.forEach(function (x) { x.classList.remove('is-on'); });
+          if (dim.allChip) dim.allChip.classList.add('is-on');
+        } else {
+          if (dim.allChip) dim.allChip.classList.remove('is-on');
+          if (dim.active[t]) { delete dim.active[t]; ch.classList.remove('is-on'); }
+          else { dim.active[t] = 1; ch.classList.add('is-on'); }
+          if (dim.keys().length === 0 && dim.allChip) dim.allChip.classList.add('is-on');
+        }
+        apply();
+      });
     });
   });
+
   if (search) search.addEventListener('input', apply);
   var reset = bar.querySelector('[data-filter-reset]');
   if (reset) reset.addEventListener('click', function () {
-    active = {};
+    dims.forEach(function (d) {
+      d.active = {};
+      d.chips.forEach(function (x) { x.classList.remove('is-on'); });
+      if (d.allChip) d.allChip.classList.add('is-on');
+    });
     if (search) search.value = '';
-    chips.forEach(function (x) { x.classList.remove('is-on'); });
-    allChip.classList.add('is-on');
     apply();
   });
   apply();

@@ -1,5 +1,5 @@
 ---
-title: Hunting Detections
+title: Detection Library
 layout: page
 permalink: /hunting-detections/
 thumbnail: /assets/images/cards/hunting-detections.png
@@ -7,7 +7,7 @@ position: 3
 ---
 
 <div class="hl-page-header" style="--ph-accent: #4ade80;">
-  <div class="hl-page-header__label">Hunting Detections</div>
+  <div class="hl-page-header__label">Detection Library</div>
   <div class="hl-page-header__title">Sigma, YARA &amp; Suricata Rules</div>
   <div class="hl-page-header__desc">Detection logic from original research, mapped to MITRE ATT&amp;CK. Free to use, including commercially, under <strong>CC BY 4.0</strong>.</div>
 </div>
@@ -58,6 +58,6 @@ position: 3
 {% for e in det_entries %}
   {% if e.detection_title %}{% assign dtitle = e.detection_title %}{% else %}{% assign dtitle = e.title | prepend: "Detection Rules — " %}{% endif %}
   {% assign dtags = e.detection_tags | default: e.tags %}
-  {% include catalog-card.html url=e.detection_url title=dtitle date=e.date severity=e.severity tags=dtags %}
+  {% include catalog-card.html url=e.detection_url title=dtitle date=e.date severity=e.severity tags=dtags tiers=e.detection_tiers %}
 {% endfor %}
 </div>
