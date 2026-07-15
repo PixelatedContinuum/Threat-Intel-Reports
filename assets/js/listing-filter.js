@@ -8,12 +8,11 @@
   var count = bar.querySelector('[data-filter-count]');
   var empty = bar.querySelector('[data-filter-empty]');
 
-  // Independent chip dimensions. Each chip is selected by its own data-* attr
-  // (data-tag / data-tier). The matching CARD attribute can differ: chip
-  // data-tag maps to card data-tags, so Dim takes an explicit cardAttr.
-  // Within a dimension chips OR-combine; ACROSS dimensions they AND-combine
-  // (tier=Detection AND tag=RAT). A dimension with no rendered chips is inert
-  // (matches everything), so this stays identical to the tags-only page.
+  // Chip filter dimension (tags). A chip is selected by its data-* attr
+  // (data-tag); the matching CARD attribute can differ: chip data-tag maps to
+  // card data-tags, so Dim takes an explicit cardAttr. Chips OR-combine within
+  // a dimension; the Dim helper stays generic so a second axis can be re-added
+  // later. A dimension with no rendered chips is inert (matches everything).
   function Dim(attr, cardAttr) {
     return {
       attr: attr,
@@ -24,7 +23,7 @@
       keys: function () { return Object.keys(this.active); }
     };
   }
-  var dims = [Dim('data-tag', 'data-tags'), Dim('data-tier')];
+  var dims = [Dim('data-tag', 'data-tags')];
 
   function matchDim(card, dim) {
     var keys = dim.keys();

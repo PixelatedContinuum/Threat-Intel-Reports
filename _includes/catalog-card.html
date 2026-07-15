@@ -1,12 +1,10 @@
 {%- comment -%} One filterable listing card. Params: url, title, date (ISO), severity, tags (array),
-  tiers (optional array — e.g. ["detection","hunting"] — drives the Detection/Hunting filter axis),
   part_label (optional — small gold chip above the meta line, used by series clusters / series cards). {%- endcomment -%}
 {%- assign sevlabel = include.severity | upcase -%}
 {%- if include.severity == "med" -%}{%- assign sevlabel = "MED" -%}{%- endif -%}
 <a href="{{ include.url | relative_url }}" class="hl-card hl-catalog-card"
    data-title="{{ include.title | downcase | escape }}"
    data-tags="{{ include.tags | join: '|' | downcase | escape }}"
-   data-tier="{{ include.tiers | join: '|' | downcase | escape }}"
    data-sev="{{ include.severity }}">
   <div class="hl-card__inner">
     <div class="hl-card__bar hl-sev--{{ include.severity }}"></div>

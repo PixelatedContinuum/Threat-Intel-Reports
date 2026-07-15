@@ -58,6 +58,6 @@ position: 3
 {% for e in det_entries %}
   {% if e.detection_title %}{% assign dtitle = e.detection_title %}{% else %}{% assign dtitle = e.title | prepend: "Detection Rules — " %}{% endif %}
   {% assign dtags = e.detection_tags | default: e.tags %}
-  {% include catalog-card.html url=e.detection_url title=dtitle date=e.date severity=e.severity tags=dtags tiers=e.detection_tiers %}
+  {% include catalog-card.html url=e.detection_url title=dtitle date=e.date severity=e.severity tags=dtags %}
 {% endfor %}
 </div>
