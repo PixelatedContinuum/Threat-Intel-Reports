@@ -8,26 +8,28 @@
   var count = bar.querySelector('[data-filter-count]');
   var empty = bar.querySelector('[data-filter-empty]');
 
-  // Independent chip dimensions, each backed by a data-* attribute on the card:
-  //   data-tag  — campaign tags       data-tier — Detection / Hunting (optional axis)
+  // Independent chip dimensions. Each chip is selected by its own data-* attr
+  // (data-tag / data-tier). The matching CARD attribute can differ: chip
+  // data-tag maps to card data-tags, so Dim takes an explicit cardAttr.
   // Within a dimension chips OR-combine; ACROSS dimensions they AND-combine
-  // (e.g. tier=Detection AND tag=RAT). A dimension with no rendered chips is
-  // inert (matches everything), so this stays identical to the tags-only page.
-  function Dim(attr) {
+  // (tier=Detection AND tag=RAT). A dimension with no rendered chips is inert
+  // (matches everything), so this stays identical to the tags-only page.
+  function Dim(attr, cardAttr) {
     return {
       attr: attr,
+      cardAttr: cardAttr || attr,
       chips: [].slice.call(bar.querySelectorAll('.hl-chip-btn[' + attr + ']')),
       allChip: bar.querySelector('.hl-chip-btn[' + attr + '=""]'),
       active: {},
       keys: function () { return Object.keys(this.active); }
     };
   }
-  var dims = [Dim('data-tag'), Dim('data-tier')];
+  var dims = [Dim('data-tag', 'data-tags'), Dim('data-tier')];
 
   function matchDim(card, dim) {
     var keys = dim.keys();
     if (keys.length === 0) return true;
-    var cv = (card.getAttribute(dim.attr) || '').split('|');
+    var cv = (card.getAttribute(dim.cardAttr) || '').split('|');
     return keys.some(function (k) { return cv.indexOf(k) > -1; });
   }
 
