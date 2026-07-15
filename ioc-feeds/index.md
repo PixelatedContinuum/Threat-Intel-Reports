@@ -14,9 +14,7 @@ position: 4
 
 {% assign ioc_entries = site.data.catalog.entries | where_exp: "e", "e.ioc_url" | sort: "date" | reverse %}
 
-{% include listing-filter.html entries=ioc_entries tag_field="ioc_tags" placeholder="Search IOC feeds by name…" %}
-
-<div class="hl-grid" data-filter-grid>
+<div class="hl-grid">
 {% for e in ioc_entries %}
   {% if e.ioc_title %}{% assign ititle = e.ioc_title %}{% else %}{% assign ititle = e.title | append: " — IOC Feed" %}{% endif %}
   {% assign itags = e.ioc_tags | default: e.tags %}
