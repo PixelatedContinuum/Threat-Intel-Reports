@@ -17,7 +17,9 @@ thumbnail: /assets/images/cards/stix.png
 
 {% assign stix_entries = site.data.catalog.entries | where_exp: "e", "e.stix_url" | sort: "date" | reverse %}
 
-<div class="hl-grid">
+{% include listing-filter.html entries=stix_entries tag_field="stix_tags" placeholder="Search STIX bundles by name…" %}
+
+<div class="hl-grid" data-filter-grid>
 {% for e in stix_entries %}
   {% if e.stix_title %}{% assign stitle = e.stix_title %}{% else %}{% assign stitle = e.title | append: " — STIX Bundle" %}{% endif %}
   {% assign stags = e.stix_tags | default: e.tags %}

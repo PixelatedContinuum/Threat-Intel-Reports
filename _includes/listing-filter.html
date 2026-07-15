@@ -19,17 +19,6 @@
       {%- if u != "" and cnt >= 3 -%}<button type="button" class="hl-chip-btn" data-tag="{{ u | downcase }}">{{ u }}</button>{%- endif -%}
     {%- endfor -%}
   </div>
-  {%- comment -%} Tier axis (Detection / Hunting) — rendered ONLY when the catalog carries `detection_tiers` on any entry; AND-combined with the tag axis in listing-filter.js. Inert until a republish populates the field. {%- endcomment -%}
-  {%- assign has_tiers = false -%}
-  {%- for e in include.entries -%}{%- if e.detection_tiers -%}{%- assign has_tiers = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
-  {%- if has_tiers -%}
-  <div class="hl-filter__chips hl-filter__chips--tier">
-    <span class="hl-filter__dim">Tier</span>
-    <button type="button" class="hl-chip-btn hl-chip-btn--tier is-on" data-tier="">All</button>
-    <button type="button" class="hl-chip-btn hl-chip-btn--tier hl-chip-btn--detection" data-tier="detection">Detection</button>
-    <button type="button" class="hl-chip-btn hl-chip-btn--tier hl-chip-btn--hunting" data-tier="hunting">Hunting</button>
-  </div>
-  {%- endif -%}
   <div class="hl-filter__count" data-filter-count></div>
   <div class="hl-filter__empty" data-filter-empty hidden>No items match that filter. <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
 </div>
