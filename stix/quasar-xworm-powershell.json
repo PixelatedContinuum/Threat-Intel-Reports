@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--a67feb15-101e-44d9-9006-754c34699a52",
+    "id": "bundle--6d7a617a-271b-48df-9878-0852b54d72ac",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.293967Z",
-            "modified": "2026-06-14T11:57:20.293967Z",
+            "created": "2026-07-15T13:32:02.060533Z",
+            "modified": "2026-07-15T13:32:02.060533Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -23,17 +23,126 @@
             }
         },
         {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--1f2d1956-459a-575a-859b-d12750cee43f",
+            "hashes": {
+                "SHA-256": "6167ced165bdcc193cd9cb0898ef6c41fd50918fa2f1183aab82e478800c901a"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--9bfb30fd-991f-5dd0-8c1d-41539a465660",
+            "hashes": {
+                "SHA-256": "1490ded01ff88ad9e57edad2c7ecc547b99d3ac9b9ae1476b8999dca28821d12"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--254c4c04-e5b6-505e-aace-d44818afd592",
+            "hashes": {
+                "SHA-256": "62875fbcbbd446d7e2ed49860ddc76c8e6ac2c9ee91491e21788fdcc768d581d"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--a2e89fa6-ad31-52c1-b85f-92fb449a3326",
+            "hashes": {
+                "SHA-256": "34a84033d292c3631172efb2e47c9c6d184f1c21e122179faa14e180587a7089"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--835bc49b-f15f-5101-a4f9-a628a546b2f4",
+            "hashes": {
+                "SHA-256": "bf3b17a68cb437d8cf16bea481796dbdfbc82053056c47e25e841a06e2fd4ea6"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--103bb9ab-a5b0-555c-a50c-4953cc770288",
+            "hashes": {
+                "SHA-256": "4ea9a321958b4d2c43cadbb62e2b037b958ed5f9984033aa3a9d10a5423fd006"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--dfc37d90-de3b-5b3b-b4d6-ba55002dee5a",
+            "hashes": {
+                "SHA-256": "7e08939d4d431e427806e76daceff2186d26727fa591871f9f3ad49f3d2e91a4"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--d6d268ac-f978-5bb9-b665-9ada35356ec7",
+            "hashes": {
+                "SHA-256": "5a1424830fb4e19be0f79f543ba998aded16e9890a97977d0424062cfb28cbec"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--0dd396d2-eb3a-5187-b4f1-4a665743c67f",
+            "hashes": {
+                "SHA-256": "dd000e90853f1a78b47e080439588eead0e4cf7c1bb274cd20af626160df1249"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--79bb4efb-30f9-5b82-a87a-40716e3fa329",
+            "hashes": {
+                "SHA-256": "4ae132de21ab60da7d562f4c2d1f6d26650bbc0c80c542537bc7eb973d05f127"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--d362bdae-5db3-512e-b48f-f6367216bf38",
+            "hashes": {
+                "SHA-256": "153a6d225dffd61913f37ac68d19eb61c1c35374f03b9f94faf28a9bb16ede4b"
+            }
+        },
+        {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--dee64d05-a4d6-517a-9aa2-fef4d53bbeae",
+            "id": "indicator--9143bb13-7f75-5800-9b75-d8aaa29df852",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.2942Z",
-            "modified": "2026-06-14T11:57:20.2942Z",
-            "name": "Suspicious VBScript Downloading PowerShell Payload",
+            "created": "2026-07-15T13:32:02.061938Z",
+            "modified": "2026-07-15T13:32:02.061938Z",
+            "name": "PS_Defender_Exclusion_Quasar_Xworm",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious VBScript Downloading PowerShell Payload\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection:\n    ParentImage|endswith: '\\wscript.exe'\n    Image|endswith: '\\powershell.exe'\n    CommandLine|contains:\n      - \"System.Net.Http.HttpClient\"\n      - \"GetAsync\"\n      - \"update.png\"\n  condition: selection\nlevel: high",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: QuasarRAT / Xworm PowerShell Loader\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule PS_Defender_Exclusion_Quasar_Xworm {\n   meta:\n      description = \"Detects a PowerShell Microsoft Defender exclusion script used by the QuasarRAT/Xworm PowerShell loader campaign to whitelist the payload path and loader helper processes (powershell.exe, wscript.exe, cmd.exe, cvtres.exe)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/quasar-xworm-powershell-detections/\"\n      date = \"2025-10-17\"\n      hash1 = \"4ae132de21ab60da7d562f4c2d1f6d26650bbc0c80c542537bc7eb973d05f127\"\n      hash2 = \"153a6d225dffd61913f37ac68d19eb61c1c35374f03b9f94faf28a9bb16ede4b\"\n      family = \"QuasarRAT/Xworm\"\n      malware_type = \"Loader\"\n      campaign = \"QuasarRAT-Xworm-PowerShell-Loader-193.233.164.21\"\n      id = \"31039cfb-dcf2-4e86-87c2-bf063031b16e\"\n   strings:\n      $a = \"Add-MpPreference\" ascii wide nocase\n      $b = \"-ExclusionPath\" ascii wide nocase\n      $c = \"-ExclusionProcess\" ascii wide nocase\n      $d = \"update.png\" ascii wide nocase\n   condition:\n      all of them\n}",
+            "pattern_type": "yara",
+            "valid_from": "2025-10-17T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--dfaabb84-5ddb-5caa-90ba-800c76aabf01",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.0621Z",
+            "modified": "2026-07-15T13:32:02.0621Z",
+            "name": "VBScript-Spawned PowerShell In-Memory Payload Download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: VBScript-Spawned PowerShell In-Memory Payload Download\nid: ea533822-dc1e-40c2-8f04-e3742393c93e\nstatus: experimental\ndescription: >-\n  Detects a PowerShell process spawned by wscript.exe that uses .NET\n  HttpClient calls to download a payload disguised as an image file,\n  consistent with the QuasarRAT/Xworm PowerShell loader chain. Broadly\n  scoped \u2014 an analyst should triage the hits and confirm against the\n  campaign's payload-URL and C2 indicators in the IOC feed.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/quasar-xworm-powershell-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-17'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\wscript.exe'\n        Image|endswith: '\\powershell.exe'\n        CommandLine|contains|all:\n            - 'System.Net.Http.HttpClient'\n            - 'GetAsync'\n            - 'update.png'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate administrative or software-deployment scripts that\n      launch PowerShell from a Windows Script Host wrapper and fetch\n      content over HTTP\n    - Internal automation that uses .NET HttpClient from PowerShell to download update artifacts\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-17T00:00:00Z",
             "labels": [
@@ -44,19 +153,44 @@
             ]
         },
         {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.062236Z",
+            "modified": "2026-07-15T13:32:02.062236Z",
+            "name": "",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
             "type": "report",
             "spec_version": "2.1",
             "id": "report--b68533aa-3b85-5be9-a6db-a7265dc66bae",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.294464Z",
-            "modified": "2026-06-14T11:57:20.294464Z",
+            "created": "2026-07-15T13:32:02.063391Z",
+            "modified": "2026-07-15T13:32:02.063391Z",
             "name": "QuasarRAT + Xworm + PowerShell Loader",
             "report_types": [
                 "threat-report"
             ],
             "published": "2025-10-17T00:00:00Z",
             "object_refs": [
-                "indicator--dee64d05-a4d6-517a-9aa2-fef4d53bbeae"
+                "file--1f2d1956-459a-575a-859b-d12750cee43f",
+                "file--9bfb30fd-991f-5dd0-8c1d-41539a465660",
+                "file--254c4c04-e5b6-505e-aace-d44818afd592",
+                "file--a2e89fa6-ad31-52c1-b85f-92fb449a3326",
+                "file--835bc49b-f15f-5101-a4f9-a628a546b2f4",
+                "file--103bb9ab-a5b0-555c-a50c-4953cc770288",
+                "file--dfc37d90-de3b-5b3b-b4d6-ba55002dee5a",
+                "file--d6d268ac-f978-5bb9-b665-9ada35356ec7",
+                "file--0dd396d2-eb3a-5187-b4f1-4a665743c67f",
+                "file--79bb4efb-30f9-5b82-a87a-40716e3fa329",
+                "file--d362bdae-5db3-512e-b48f-f6367216bf38",
+                "indicator--9143bb13-7f75-5800-9b75-d8aaa29df852",
+                "indicator--dfaabb84-5ddb-5caa-90ba-800c76aabf01",
+                "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7"
             ],
             "labels": [
                 "RAT",

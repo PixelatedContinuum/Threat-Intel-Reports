@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--fed3f274-b0e6-48f7-9fa5-785903402f79",
+    "id": "bundle--8fbc7975-7cdc-40ae-8743-b2850303d979",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.259799Z",
-            "modified": "2026-06-14T11:57:20.259799Z",
+            "created": "2026-07-15T13:32:02.010808Z",
+            "modified": "2026-07-15T13:32:02.010808Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -23,17 +23,47 @@
             }
         },
         {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--75d40c75-41c6-53aa-b718-5b3e7130af4d",
+            "hashes": {
+                "SHA-256": "2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766"
+            }
+        },
+        {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--4f2dcf1f-4718-5cb2-90c8-c2d7ea5ce570",
+            "id": "indicator--9b5ee8a1-79e1-5d85-aec9-5c356857ea11",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.260171Z",
-            "modified": "2026-06-14T11:57:20.260171Z",
-            "name": "Pulsar_RAT_Critical_Variant",
+            "created": "2026-07-15T13:32:02.011129Z",
+            "modified": "2026-07-15T13:32:02.011129Z",
+            "name": "sha256: 2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Pulsar_RAT_Critical_Variant {\n    meta:\n        description = \"Detects Pulsar RAT variant (server.exe)\"\n        author = \"The Hunters Ledger\"\n        date = \"2025-11-30\"\n        threat_level = \"CRITICAL\"\n        confidence = \"HIGH\"\n        hash_sha256 = \"2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766\"\n        reference = \"Internal malware analysis report\"\n\n    strings:\n        // Core Pulsar identifiers\n        $pulsar = \"Pulsar.Common\" wide ascii\n        $hvnc = \"HVNC\" wide ascii\n        $keylog = \"KeyLogger\" wide ascii\n        $msgpack = \"MessagePackSerializer\" wide ascii\n        $bcrypt = \"BCryptEncrypt\" wide ascii\n\n        // Critical persistence indicators\n        $winre = \"Recovery\\OEM\\\" wide ascii nocase\n        $runonce = \"CurrentVersion\\RunOnce\" wide ascii\n\n        // Specific modules\n        $remote_desktop = \"RemoteDesktop\" wide ascii\n        $passwords = \"Passwords\" wide ascii\n\n    condition:\n        // PE32 file check\n        uint16(0) == 0x5A4D and uint32(uint32(0x3C)) == 0x00004550 and \n\n        // File size check (1.5 MB \u00b1 margin for variants)\n        filesize > 1MB and filesize < 2MB and\n\n        // Core strings must be present\n        all of ($pulsar, $hvnc, $keylog, $msgpack, $bcrypt, $winre) and\n\n        // At least 2 surveillance modules\n        2 of ($remote_desktop, $passwords)\n}",
+            "pattern": "[file:hashes.'SHA-256' = '2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2025-12-01T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f47c5c5c-43ae-52c5-913c-2d78754c6e0f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.01178Z",
+            "modified": "2026-07-15T13:32:02.01178Z",
+            "name": "RAT_Pulsar_Critical_Variant",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Pulsar RAT (server.exe)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_Pulsar_Critical_Variant {\n   meta:\n      description = \"Detects the Pulsar RAT .NET remote access trojan (server.exe) via a six-string combination anchored on its Pulsar.Common namespace root, HVNC/keylogger/credential modules, and WinRE Recovery\\\\OEM persistence path reference, combined with a PE32 filesize constraint calibrated to the analyzed 1.5MB build\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\"\n      date = \"2025-12-01\"\n      hash1 = \"2c4387ce18be279ea735ec4f0092698534921030aaa69949ae880e41a5c73766\"\n      hash2 = \"dc795961c8e63782fc0f53c08e7ca2e593df99fa\"\n      hash3 = \"b5491b58348600c2766f86a5af2b867f\"\n      family = \"Pulsar RAT\"\n      malware_type = \"RAT\"\n      campaign = \"PULSAR-RAT-185.208.159.182\"\n      id = \"fbc88eb4-454c-56dd-82cb-c3ff718f7291\"\n   strings:\n      $pulsar = \"Pulsar.Common\" ascii wide\n      $hvnc = \"HVNC\" ascii wide fullword\n      $keylog = \"KeyLogger\" ascii wide fullword\n      $msgpack = \"MessagePackSerializer\" ascii wide\n      $bcrypt = \"BCryptEncrypt\" ascii wide fullword\n      $winre = \"Recovery\\\\OEM\\\\\" ascii wide nocase\n      $remote_desktop = \"RemoteDesktop\" ascii wide fullword\n      $passwords = \"Passwords\" ascii wide fullword\n   condition:\n      uint16(0) == 0x5A4D and\n      uint32(uint32(0x3C)) == 0x00004550 and\n      filesize > 1MB and filesize < 2MB and\n      all of ($pulsar, $hvnc, $keylog, $msgpack, $bcrypt, $winre) and\n      2 of ($remote_desktop, $passwords)\n}",
             "pattern_type": "yara",
             "valid_from": "2025-12-01T00:00:00Z",
             "labels": [
@@ -44,19 +74,254 @@
             ]
         },
         {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--35a7e09a-022d-5a44-9a43-6dcea802ab1a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.011925Z",
+            "modified": "2026-07-15T13:32:02.011925Z",
+            "name": "Windows Recovery Environment OEM Directory File Write",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Windows Recovery Environment OEM Directory File Write\nid: 7845b2e3-1dea-4acf-8571-4ca3bc1981bc\nstatus: experimental\ndescription: >-\n  Detects a file being written into the Recovery\\OEM directory,\n  consistent with abuse of the Windows Recovery Environment (WinRE) for\n  persistence that survives standard registry-based remediation. This\n  path is not routinely written to outside OEM factory-imaging or\n  recovery-partition maintenance workflows.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\n    - https://the-hunters-ledger.com/reports/PULSAR-RAT/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.persistence\n    - attack.stealth\n    - attack.t1542.001\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\Recovery\\OEM\\'\n    condition: selection\nfalsepositives:\n    - >-\n      OEM factory-imaging or system-recovery tooling that legitimately\n      writes into the Recovery\\OEM path during authorized re-imaging or\n      recovery-partition maintenance\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-01T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a2a72cf4-1226-5ce7-bb34-d76739e0b5ba",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.012051Z",
+            "modified": "2026-07-15T13:32:02.012051Z",
+            "name": "Registry RunOnce Key Value Set",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Registry RunOnce Key Value Set\nid: b585d269-f6ab-4f38-a982-9c7dddf7adaa\nstatus: experimental\ndescription: >-\n  Detects a value being set under a CurrentVersion\\RunOnce registry key,\n  consistent with the RunOnce-based persistence used by the Pulsar RAT\n  campaign for both system-wide and per-user autostart execution.\n  RunOnce keys are used by fewer legitimate installers than the standard\n  Run key, but some deployment and update tooling still uses them for\n  reboot-continuation actions, so this is a broad technique-level lead\n  rather than a family-specific signature.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.001\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\CurrentVersion\\RunOnce\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Software installers and deployment/update tooling that use\n      RunOnce for legitimate reboot-continuation actions\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-01T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d25bd692-a7ee-53bd-a456-b34e55b26270",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.012174Z",
+            "modified": "2026-07-15T13:32:02.012174Z",
+            "name": "Headless Console Host or Command Shell Execution Flag",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Headless Console Host or Command Shell Execution Flag\nid: 0d751112-ebbe-497a-af7d-32b4b2672f83\nstatus: experimental\ndescription: >-\n  Detects a conhost or cmd.exe command line carrying a --headless or\n  /headless flag, used by the Pulsar RAT loader chain to run without a\n  visible console window. The same flag pattern also appears in\n  legitimate CI/build tooling and some Electron-based applications, so\n  this is a broad hunting lead rather than a family-specific signature;\n  no Pulsar-specific parent-process anchor was confirmed for this\n  campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.stealth\n    - attack.t1564.003\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_conhost:\n        CommandLine|contains|all:\n            - 'conhost'\n            - '--headless'\n    selection_cmd:\n        CommandLine|contains|all:\n            - 'cmd.exe'\n            - '/headless'\n    condition: 1 of selection_*\nfalsepositives:\n    - >-\n      Legitimate CI/build tooling and Electron-based applications that\n      launch a console host or command shell headlessly\nlevel: low",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-01T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.012297Z",
+            "modified": "2026-07-15T13:32:02.012297Z",
+            "name": "Non-Browser Process Accessing Browser Credential Store Files",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Non-Browser Process Accessing Browser Credential Store Files\nid: b1990326-898e-4188-8336-6d3c1d990934\nstatus: experimental\ndescription: >-\n  Detects a process other than a known browser executable accessing a\n  browser credential-store file (Chromium Login Data or Firefox\n  logins.json/key4.db), consistent with credential-theft modules that\n  read these files directly rather than through the browser's own\n  process.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.credential-access\n    - attack.t1555.003\n    - detection.emerging-threats\nlogsource:\n    category: file_access\n    product: windows\ndetection:\n    selection:\n        TargetFilename|endswith:\n            - '\\Login Data'\n            - '\\logins.json'\n            - '\\key4.db'\n    filter_browsers:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n            - '\\msedge.exe'\n            - '\\opera.exe'\n            - '\\brave.exe'\n    condition: selection and not filter_browsers\nfalsepositives:\n    - >-\n      Browser-sync, backup, profile-migration, or endpoint-security\n      scanning tools that legitimately read these credential-store\n      files\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-01T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c0aaa398-8b1e-524c-8805-c8193888b9fd",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.012415Z",
+            "modified": "2026-07-15T13:32:02.012415Z",
+            "name": "Connection to Public Paste-Hosting Service Domain",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Connection to Public Paste-Hosting Service Domain\nid: d7120dfa-2ad3-4215-8262-09344861e858\nstatus: experimental\ndescription: >-\n  Detects a process connecting to a public paste-hosting service\n  (Pastebin, Paste.ee, Hastebin), consistent with the dead-drop resolver\n  pattern the Pulsar RAT campaign uses to retrieve its dynamic C2\n  configuration from an attacker-controlled paste. These services are\n  also used for entirely legitimate purposes (developers sharing code,\n  logs, or configuration snippets), so this is a broad hunting lead and\n  should be correlated with process context and repeated-access volume\n  rather than alerted on directly.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/\nauthor: The Hunters Ledger\ndate: '2025-12-01'\ntags:\n    - attack.command-and-control\n    - attack.t1102.001\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationHostname|contains:\n            - 'pastebin.com'\n            - 'paste.ee'\n            - 'hastebin.com'\n    condition: selection\nfalsepositives:\n    - >-\n      Legitimate developer or administrative use of public paste\n      services to share code, logs, or configuration snippets\nlevel: low",
+            "pattern_type": "sigma",
+            "valid_from": "2025-12-01T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "malware",
+            "spec_version": "2.1",
+            "id": "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.012549Z",
+            "modified": "2026-07-15T13:32:02.012549Z",
+            "name": "",
+            "description": "",
+            "malware_types": [
+                "backdoor"
+            ],
+            "is_family": false,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--8b553fbb-ad52-5a26-8fe0-b2524c0bf693",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.012754Z",
+            "modified": "2026-07-15T13:32:02.012754Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--9b5ee8a1-79e1-5d85-aec9-5c356857ea11",
+            "target_ref": "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--9b383c62-24c2-58f0-b71f-d8c8cdf2c006",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.012863Z",
+            "modified": "2026-07-15T13:32:02.012863Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--f47c5c5c-43ae-52c5-913c-2d78754c6e0f",
+            "target_ref": "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--91a1360e-e3fa-50b3-a94c-a565510a0c5e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.01296Z",
+            "modified": "2026-07-15T13:32:02.01296Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--35a7e09a-022d-5a44-9a43-6dcea802ab1a",
+            "target_ref": "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--4d30d973-d65c-54b3-88b3-6daa666cb1df",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.013056Z",
+            "modified": "2026-07-15T13:32:02.013056Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--a2a72cf4-1226-5ce7-bb34-d76739e0b5ba",
+            "target_ref": "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--495e86f9-821e-547c-9069-ee0a05dce316",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.01315Z",
+            "modified": "2026-07-15T13:32:02.01315Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--d25bd692-a7ee-53bd-a456-b34e55b26270",
+            "target_ref": "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--b0a6c9d5-237b-5f47-8eb7-19f2e940d92c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.013245Z",
+            "modified": "2026-07-15T13:32:02.013245Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
+            "target_ref": "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a377beb8-1a27-5554-934b-67e83b14d21f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.013339Z",
+            "modified": "2026-07-15T13:32:02.013339Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--c0aaa398-8b1e-524c-8805-c8193888b9fd",
+            "target_ref": "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
             "type": "report",
             "spec_version": "2.1",
             "id": "report--63c70a80-72cc-5e25-b84d-647b47fa5196",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.260516Z",
-            "modified": "2026-06-14T11:57:20.260516Z",
+            "created": "2026-07-15T13:32:02.013442Z",
+            "modified": "2026-07-15T13:32:02.013442Z",
             "name": "PULSAR RAT (server.exe)",
             "report_types": [
                 "threat-report"
             ],
             "published": "2025-12-01T00:00:00Z",
             "object_refs": [
-                "indicator--4f2dcf1f-4718-5cb2-90c8-c2d7ea5ce570"
+                "file--75d40c75-41c6-53aa-b718-5b3e7130af4d",
+                "indicator--9b5ee8a1-79e1-5d85-aec9-5c356857ea11",
+                "indicator--f47c5c5c-43ae-52c5-913c-2d78754c6e0f",
+                "indicator--35a7e09a-022d-5a44-9a43-6dcea802ab1a",
+                "indicator--a2a72cf4-1226-5ce7-bb34-d76739e0b5ba",
+                "indicator--d25bd692-a7ee-53bd-a456-b34e55b26270",
+                "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
+                "indicator--c0aaa398-8b1e-524c-8805-c8193888b9fd",
+                "malware--80c48d46-b55f-5b31-b698-d78624da6b30",
+                "relationship--8b553fbb-ad52-5a26-8fe0-b2524c0bf693",
+                "relationship--9b383c62-24c2-58f0-b71f-d8c8cdf2c006",
+                "relationship--91a1360e-e3fa-50b3-a94c-a565510a0c5e",
+                "relationship--4d30d973-d65c-54b3-88b3-6daa666cb1df",
+                "relationship--495e86f9-821e-547c-9069-ee0a05dce316",
+                "relationship--b0a6c9d5-237b-5f47-8eb7-19f2e940d92c",
+                "relationship--a377beb8-1a27-5554-934b-67e83b14d21f"
             ],
             "labels": [
                 "RAT",

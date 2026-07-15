@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--1bc1c617-87e8-4561-b8c1-c2f399d0e9e1",
+    "id": "bundle--432aa928-638b-4f68-aa5d-a1f58a984271",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.775803Z",
-            "modified": "2026-06-16T16:00:54.775803Z",
+            "created": "2026-07-15T13:32:13.561325Z",
+            "modified": "2026-07-15T13:32:13.561325Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--b2ab1ebe-0d71-599c-bd69-654e47b8bb43",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.776076Z",
-            "modified": "2026-06-16T16:00:54.776076Z",
+            "created": "2026-07-15T13:32:13.561576Z",
+            "modified": "2026-07-15T13:32:13.561576Z",
             "name": "ipv4: 209.38.205.158",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--3a6001be-192e-5dc2-b6e9-6981b786784f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.776638Z",
-            "modified": "2026-06-16T16:00:54.776638Z",
+            "created": "2026-07-15T13:32:13.562196Z",
+            "modified": "2026-07-15T13:32:13.562196Z",
             "name": "ipv4: 31.223.97.87",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--f42ed891-2b65-55c8-8d53-ce40827e8227",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.777124Z",
-            "modified": "2026-06-16T16:00:54.777124Z",
+            "created": "2026-07-15T13:32:13.562908Z",
+            "modified": "2026-07-15T13:32:13.562908Z",
             "name": "url: http://209.38.205.158:8096/api/ingest/instana",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--97d54b60-1e1b-55cd-81dc-20775a2d5336",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.777687Z",
-            "modified": "2026-06-16T16:00:54.777687Z",
+            "created": "2026-07-15T13:32:13.563534Z",
+            "modified": "2026-07-15T13:32:13.563534Z",
             "name": "url: http://209.38.205.158:8090/",
             "indicator_types": [
                 "malicious-activity"
@@ -145,8 +145,8 @@
             "spec_version": "2.1",
             "id": "indicator--21cc8ceb-0872-5374-9601-eeceb36b0d25",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.778347Z",
-            "modified": "2026-06-16T16:00:54.778347Z",
+            "created": "2026-07-15T13:32:13.563996Z",
+            "modified": "2026-07-15T13:32:13.563996Z",
             "name": "url: http://209.38.205.158:8095/api/topology/unified",
             "indicator_types": [
                 "malicious-activity"
@@ -173,8 +173,8 @@
             "spec_version": "2.1",
             "id": "indicator--258052cd-a175-550e-baf4-c13b3a36d5f2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.778951Z",
-            "modified": "2026-06-16T16:00:54.778951Z",
+            "created": "2026-07-15T13:32:13.564437Z",
+            "modified": "2026-07-15T13:32:13.564437Z",
             "name": "url: https://github.com/MehmetARPA/ARPA",
             "indicator_types": [
                 "malicious-activity"
@@ -201,8 +201,8 @@
             "spec_version": "2.1",
             "id": "indicator--151d4657-7b52-534f-a1ea-24747312481a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.779448Z",
-            "modified": "2026-06-16T16:00:54.779448Z",
+            "created": "2026-07-15T13:32:13.564859Z",
+            "modified": "2026-07-15T13:32:13.564859Z",
             "name": "domain: openclaw.ai",
             "indicator_types": [
                 "malicious-activity"
@@ -229,8 +229,8 @@
             "spec_version": "2.1",
             "id": "indicator--9d991296-0e5b-5941-8271-2d9926393c06",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.779878Z",
-            "modified": "2026-06-16T16:00:54.779878Z",
+            "created": "2026-07-15T13:32:13.565297Z",
+            "modified": "2026-07-15T13:32:13.565297Z",
             "name": "domain: docs.openclaw.ai",
             "indicator_types": [
                 "malicious-activity"
@@ -257,8 +257,8 @@
             "spec_version": "2.1",
             "id": "indicator--99fb9224-781d-531e-93eb-1d66f8d5f043",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.780317Z",
-            "modified": "2026-06-16T16:00:54.780317Z",
+            "created": "2026-07-15T13:32:13.565714Z",
+            "modified": "2026-07-15T13:32:13.565714Z",
             "name": "domain: lightmake.site",
             "indicator_types": [
                 "malicious-activity"
@@ -285,8 +285,8 @@
             "spec_version": "2.1",
             "id": "indicator--be9afef6-22e4-5fe6-b6d2-b53acb5d58b1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.780737Z",
-            "modified": "2026-06-16T16:00:54.780737Z",
+            "created": "2026-07-15T13:32:13.56612Z",
+            "modified": "2026-07-15T13:32:13.56612Z",
             "name": "domain: skillhub-1388575217.cos.ap-guangzhou.myqcloud.com",
             "indicator_types": [
                 "malicious-activity"
@@ -315,8 +315,8 @@
             "spec_version": "2.1",
             "id": "indicator--b4e6c1cf-b63d-5a08-bb11-a510faeb00e7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.781245Z",
-            "modified": "2026-06-16T16:00:54.781245Z",
+            "created": "2026-07-15T13:32:13.566622Z",
+            "modified": "2026-07-15T13:32:13.566622Z",
             "name": "sha256: ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79",
             "indicator_types": [
                 "malicious-activity"
@@ -345,8 +345,8 @@
             "spec_version": "2.1",
             "id": "indicator--b44e6631-8144-5538-adc5-f03b86b9a10d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.781831Z",
-            "modified": "2026-06-16T16:00:54.781831Z",
+            "created": "2026-07-15T13:32:13.567193Z",
+            "modified": "2026-07-15T13:32:13.567193Z",
             "name": "sha256: 9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77",
             "indicator_types": [
                 "malicious-activity"
@@ -375,8 +375,8 @@
             "spec_version": "2.1",
             "id": "indicator--9dce4a3a-3d7b-56d4-9831-db9591363356",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.782362Z",
-            "modified": "2026-06-16T16:00:54.782362Z",
+            "created": "2026-07-15T13:32:13.567886Z",
+            "modified": "2026-07-15T13:32:13.567886Z",
             "name": "sha256: 65d2eb26067c3df4b139b02145bdba2065be5a403f38ad096f886230b41fda9b",
             "indicator_types": [
                 "malicious-activity"
@@ -405,8 +405,8 @@
             "spec_version": "2.1",
             "id": "indicator--c3066110-58ae-5997-904a-74605c6b8266",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.782886Z",
-            "modified": "2026-06-16T16:00:54.782886Z",
+            "created": "2026-07-15T13:32:13.568627Z",
+            "modified": "2026-07-15T13:32:13.568627Z",
             "name": "sha256: a4b39f13d17ae3ff7a0adb2cf1df459a72425513f392a1d8fc469f8f2e123de5",
             "indicator_types": [
                 "malicious-activity"
@@ -435,8 +435,8 @@
             "spec_version": "2.1",
             "id": "indicator--836bb762-dd95-598e-880c-d2d799ced5ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.78347Z",
-            "modified": "2026-06-16T16:00:54.78347Z",
+            "created": "2026-07-15T13:32:13.56948Z",
+            "modified": "2026-07-15T13:32:13.56948Z",
             "name": "sha256: 2dca67a8be5cd89863ab60a2351a553954afd641c8e6f6219785707276f0e8e3",
             "indicator_types": [
                 "malicious-activity"
@@ -465,8 +465,8 @@
             "spec_version": "2.1",
             "id": "indicator--91064aa9-6364-59dc-832a-279877d2ddd9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.784164Z",
-            "modified": "2026-06-16T16:00:54.784164Z",
+            "created": "2026-07-15T13:32:13.570154Z",
+            "modified": "2026-07-15T13:32:13.570154Z",
             "name": "sha256: 6d4eb14e08e742ce6adabc355855c5e80c6b84e6969b0a3cc58367e0f4babfd0",
             "indicator_types": [
                 "malicious-activity"
@@ -495,8 +495,8 @@
             "spec_version": "2.1",
             "id": "indicator--e373ea54-f50f-5c24-a837-867395968430",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.78491Z",
-            "modified": "2026-06-16T16:00:54.78491Z",
+            "created": "2026-07-15T13:32:13.570711Z",
+            "modified": "2026-07-15T13:32:13.570711Z",
             "name": "sha256: c66a2561fdacb5997c4fa0501da8ef1639d429d22668bfba7cb2f5f9e97a2a6e",
             "indicator_types": [
                 "malicious-activity"
@@ -525,8 +525,8 @@
             "spec_version": "2.1",
             "id": "indicator--7b5b193a-b8dc-599e-9009-f66f3179a45f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.785492Z",
-            "modified": "2026-06-16T16:00:54.785492Z",
+            "created": "2026-07-15T13:32:13.571244Z",
+            "modified": "2026-07-15T13:32:13.571244Z",
             "name": "sha256: 5a58c88c64e3e54c874645fc5b32f12163e1901fe1b3fb7a3bc1d52c434b1c62",
             "indicator_types": [
                 "malicious-activity"
@@ -555,8 +555,8 @@
             "spec_version": "2.1",
             "id": "indicator--6bcd235c-8d2c-5482-84d3-6586da8b6546",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.786016Z",
-            "modified": "2026-06-16T16:00:54.786016Z",
+            "created": "2026-07-15T13:32:13.571769Z",
+            "modified": "2026-07-15T13:32:13.571769Z",
             "name": "sha256: 29d1221c9e305374a78d17c01ea20a211d59427f789ed01e653341db51bf4c06",
             "indicator_types": [
                 "malicious-activity"
@@ -585,8 +585,8 @@
             "spec_version": "2.1",
             "id": "indicator--ddd32a98-59bf-5fd0-909d-655393ad2e58",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.78684Z",
-            "modified": "2026-06-16T16:00:54.78684Z",
+            "created": "2026-07-15T13:32:13.572584Z",
+            "modified": "2026-07-15T13:32:13.572584Z",
             "name": "sha256: 402422a918dc037e00aea323e2ab1ca3e758459d4cd5e620a4433e3c346c52f8",
             "indicator_types": [
                 "malicious-activity"
@@ -615,8 +615,8 @@
             "spec_version": "2.1",
             "id": "indicator--e2402970-d781-5e11-8ffe-dfa673ed1b95",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.787432Z",
-            "modified": "2026-06-16T16:00:54.787432Z",
+            "created": "2026-07-15T13:32:13.573119Z",
+            "modified": "2026-07-15T13:32:13.573119Z",
             "name": "sha256: a05b40ceb17e6277ca39f99433910c359764be0e0a42377686abb7fb1e7da410",
             "indicator_types": [
                 "malicious-activity"
@@ -645,8 +645,8 @@
             "spec_version": "2.1",
             "id": "indicator--1e7da7d2-1ca6-558e-8228-d57db196cef5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.787967Z",
-            "modified": "2026-06-16T16:00:54.787967Z",
+            "created": "2026-07-15T13:32:13.573645Z",
+            "modified": "2026-07-15T13:32:13.573645Z",
             "name": "sha256: 2736b72ed047fb4d593d2e919c58b25db1a669faa51e630360c2825409bf4011",
             "indicator_types": [
                 "malicious-activity"
@@ -675,13 +675,13 @@
             "spec_version": "2.1",
             "id": "indicator--ae58e1ea-eae1-5b47-8f31-7094fb441ad9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.788809Z",
-            "modified": "2026-06-16T16:00:54.788809Z",
+            "created": "2026-07-15T13:32:13.574708Z",
+            "modified": "2026-07-15T13:32:13.574708Z",
             "name": "MAL_PowerShell_Instana_Local_Collector_Family",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_PowerShell_Instana_Local_Collector_Family {\n   meta:\n      description = \"Detects the Turkish ARPA operator's victim-side PowerShell collector that exfiltrates IBM Instana APM events from the victim organization's OCP-hosted Instana tenant to operator C2 at 209.38.205.158. Indicators: hardcoded victim Instana endpoint, stolen JWT delivery, Turkish-language operational comments, and POST to operator ARPA ingestion endpoint.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"8fd415cd-73c0-5027-b5e3-be299bbec061\"\n   strings:\n      $victim_endpoint = \"ocpinstana.[victim-domain].com.tr\" ascii wide\n      $operator_c2 = \"api/ingest/instana\" ascii wide fullword\n      $skip_cert = \"-SkipCertificateCheck\" ascii wide fullword\n      $turkish_comment = \"Bu script local Windows makinede\" ascii wide\n      $arpa_server = \"ARPA sunucusuna gonderiliyor\" ascii wide\n      $event_schema = \"entity_type\" ascii wide fullword\n   condition:\n      filesize < 50KB and\n      $victim_endpoint and $operator_c2 and $skip_cert\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Turkish-ARPA-OpenClaw-State-Insurer-209.38.205.158\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MAL_PowerShell_Instana_Local_Collector_Family {\n   meta:\n      description = \"Detects the Turkish ARPA operator's victim-side PowerShell collector that exfiltrates IBM Instana APM events from the victim organization's OCP-hosted Instana tenant to operator C2 at 209.38.205.158. Indicators: hardcoded victim Instana endpoint, stolen JWT delivery, Turkish-language operational comments, and POST to operator ARPA ingestion endpoint.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"8fd415cd-73c0-5027-b5e3-be299bbec061\"\n   strings:\n      $victim_endpoint = \"ocpinstana.[victim-domain].com.tr\" ascii wide\n      $operator_c2 = \"api/ingest/instana\" ascii wide fullword\n      $skip_cert = \"-SkipCertificateCheck\" ascii wide fullword\n      $turkish_comment = \"Bu script local Windows makinede\" ascii wide\n      $arpa_server = \"ARPA sunucusuna gonderiliyor\" ascii wide\n      $event_schema = \"entity_type\" ascii wide fullword\n   condition:\n      filesize < 50KB and\n      $victim_endpoint and $operator_c2 and $skip_cert and\n      (1 of ($turkish_comment, $arpa_server) or $event_schema)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -696,13 +696,13 @@
             "spec_version": "2.1",
             "id": "indicator--c5004d42-592c-5831-9e09-ec689811eabf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.788954Z",
-            "modified": "2026-06-16T16:00:54.788954Z",
+            "created": "2026-07-15T13:32:13.574941Z",
+            "modified": "2026-07-15T13:32:13.574941Z",
             "name": "MAL_Python_ARPA_Observability_Harvester_Platform",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Python_ARPA_Observability_Harvester_Platform {\n   meta:\n      description = \"Detects the Turkish ARPA operator's multi-source observability-harvester Python platform (ARPA Korelasyon Motoru). Targets the operator self-branding docstring, dashboard footer, and multi-source ingestion patterns that identify this platform across source files, SQLite stores, and HTML dashboard responses.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"6ffe1dfa-a552-578c-b83c-1330dab61d55\"\n   strings:\n      $brand1 = \"ARPA Korelasyon Motoru\" ascii wide\n      $brand2 = \"ARPA \\xC2\\xA9 2026\" ascii wide\n      $brand3 = \"Read-Only Compliance\" ascii wide fullword\n      $mock_data = \"Mock Data: \\xE2\\x9D\\x8C\" ascii\n      $db_collector = \"/opt/ARPA/data/collector.db\" ascii wide\n      $db_ai = \"ai_assistant.db\" ascii wide fullword\n      $corr_endpoint = \"/api/correlations/\" ascii wide fullword\n      $topology_endpoint = \"/api/topology/unified\" ascii wide\n   condition:\n      filesize < 5MB and\n      ($brand1 or $brand2) and\n      ($corr_endpoint or $topology_endpoint or $db_collector)\n}",
+            "pattern": "rule MAL_Python_ARPA_Observability_Harvester_Platform {\n   meta:\n      description = \"Detects the Turkish ARPA operator's multi-source observability-harvester Python platform (ARPA Korelasyon Motoru). Targets the operator self-branding docstring, dashboard footer, and multi-source ingestion patterns that identify this platform across source files, SQLite stores, and HTML dashboard responses.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"6ffe1dfa-a552-578c-b83c-1330dab61d55\"\n   strings:\n      $brand1 = \"ARPA Korelasyon Motoru\" ascii wide\n      $brand2 = \"ARPA \\xC2\\xA9 2026\" ascii wide\n      $brand3 = \"Read-Only Compliance\" ascii wide fullword\n      $mock_data = \"Mock Data: \\xE2\\x9D\\x8C\" ascii\n      $db_collector = \"/opt/ARPA/data/collector.db\" ascii wide\n      $db_ai = \"ai_assistant.db\" ascii wide fullword\n      $corr_endpoint = \"/api/correlations/\" ascii wide fullword\n      $topology_endpoint = \"/api/topology/unified\" ascii wide\n   condition:\n      filesize < 5MB and\n      (\n         ($brand2 and $brand3 and $mock_data) or\n         (\n            ($brand1 or $brand2) and\n            ($corr_endpoint or $topology_endpoint or $db_collector or $db_ai)\n         )\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -717,8 +717,8 @@
             "spec_version": "2.1",
             "id": "indicator--7f19042e-b66b-5d0a-9616-7935e6c8adf3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.789076Z",
-            "modified": "2026-06-16T16:00:54.789076Z",
+            "created": "2026-07-15T13:32:13.575086Z",
+            "modified": "2026-07-15T13:32:13.575086Z",
             "name": "MAL_PSScript_Insider_TunnelSetup_Turkish",
             "indicator_types": [
                 "malicious-activity"
@@ -738,34 +738,13 @@
             "spec_version": "2.1",
             "id": "indicator--2f7ba00d-7211-50e6-9468-56cc8b547bc1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.789202Z",
-            "modified": "2026-06-16T16:00:54.789202Z",
+            "created": "2026-07-15T13:32:13.575248Z",
+            "modified": "2026-07-15T13:32:13.575248Z",
             "name": "MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {\n   meta:\n      description = \"Detects Python scripts implementing multi-source observability polling targeting IBM Instana, SolarWinds Orion, Zabbix, and VMware Aria from a single codebase \u2014 the core of the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP. Hardcoded victim Instana tenant and 5-minute cadence markers identify operator-authored vs legitimate cross-monitoring tools.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"7b048278-a144-592a-ac98-b703145488ca\"\n   strings:\n      $instana_tenant = \"[victim-tenant]\" ascii wide fullword\n      $instana_api = \"api/events?from=\" ascii wide\n      $zabbix_ref = \"zabbix\" ascii wide nocase fullword\n      $solarwinds_ref = \"solarwinds\" ascii wide nocase fullword\n      $vmware_aria = \"vmware\" ascii wide nocase fullword\n      $cadence = \"5min\" ascii wide fullword\n      $jwt_jti = \"022a1b74-2332-4df5-a76b-60225ffa7ae3\" ascii wide\n      $last_fetch = \"get_last_fetch_time\" ascii wide fullword\n   condition:\n      filesize < 500KB and\n      $instana_tenant and\n      ($jwt_jti or ($instana_api and 2 of ($zabbix_ref, $solarwinds_ref, $vmware_aria)))\n}",
-            "pattern_type": "yara",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--8ae54c7c-f8c9-5f5e-bbe4-f7f44beeceb5",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.789345Z",
-            "modified": "2026-06-16T16:00:54.789345Z",
-            "name": "MAL_Python_ARPA_AI_Service_NaturalLanguage_Query",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {\n   meta:\n      description = \"Detects the Turkish ARPA operator's AI-augmented natural-language query interface over stolen observability data (ai_service.py + ai_assistant.db). Architecture: events table populated from stolen Instana monitoring data, situations table for AI root-cause analysis, ai_training_log table for conversation feedback. Candidate novel TTP: AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"ai-augmented-reconnaissance\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"bcc21a4e-4647-57ec-be62-c2c1b1d055c4\"\n   strings:\n      $ai_db = \"ai_assistant.db\" ascii wide fullword\n      $ai_service = \"ai_service.py\" ascii wide fullword\n      $data_retrieval = \"data_retrieval.py\" ascii wide fullword\n      $handler1 = \"_handle_event_query\" ascii wide fullword\n      $handler2 = \"_handle_general_query\" ascii wide fullword\n      $ai_training = \"ai_training_log\" ascii wide fullword\n      $situations = \"situations\" ascii wide fullword\n      $arpa_path = \"/opt/ARPA/ai/\" ascii wide\n   condition:\n      filesize < 500KB and\n      $ai_db and\n      ($handler1 or $handler2 or $ai_training) and\n      ($arpa_path or $data_retrieval)\n}",
+            "pattern": "rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {\n   meta:\n      description = \"Detects Python scripts implementing multi-source observability polling targeting IBM Instana, SolarWinds Orion, Zabbix, and VMware Aria from a single codebase \u2014 the core of the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP. Hardcoded victim Instana tenant and 5-minute cadence markers identify operator-authored vs legitimate cross-monitoring tools.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"7b048278-a144-592a-ac98-b703145488ca\"\n   strings:\n      $instana_tenant = \"[victim-tenant]\" ascii wide fullword\n      $instana_api = \"api/events?from=\" ascii wide\n      $zabbix_ref = \"zabbix\" ascii wide nocase fullword\n      $solarwinds_ref = \"solarwinds\" ascii wide nocase fullword\n      $vmware_aria = \"vmware\" ascii wide nocase fullword\n      $cadence = \"5min\" ascii wide fullword\n      $jwt_jti = \"022a1b74-2332-4df5-a76b-60225ffa7ae3\" ascii wide\n      $last_fetch = \"get_last_fetch_time\" ascii wide fullword\n   condition:\n      filesize < 500KB and\n      $instana_tenant and\n      (\n         $jwt_jti or\n         ($instana_api and 2 of ($zabbix_ref, $solarwinds_ref, $vmware_aria)) or\n         ($cadence and $last_fetch)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -780,13 +759,13 @@
             "spec_version": "2.1",
             "id": "indicator--9c72e842-61e1-518e-86b6-52a2f1eae5d6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.789468Z",
-            "modified": "2026-06-16T16:00:54.789468Z",
+            "created": "2026-07-15T13:32:13.575407Z",
+            "modified": "2026-07-15T13:32:13.575407Z",
             "name": "MAL_Python_ARPA_CrossSource_Correlation_ETL",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Python_ARPA_CrossSource_Correlation_ETL {\n   meta:\n      description = \"Detects the Turkish ARPA operator's cross-source correlation ETL engine (correlation_v3.py and variants). Operator self-branded docstring 'ARPA Korelasyon Motoru v3 - Temporal Focus', Turkish-language diagnostic output, and API endpoint dispatch patterns uniquely identify this component of the ARPA platform.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"c6216184-81e7-5bf2-bd8b-4177ed18a036\"\n   strings:\n      $docstring = \"ARPA Korelasyon Motoru v3\" ascii wide\n      $turkish_diag = \"=== SON 5 KORELASYON ===\" ascii wide\n      $endpoint_dispatch = \"/api/correlations/\" ascii wide fullword\n      $temporal = \"Temporal Focus\" ascii wide fullword\n      $topology_fn = \"topology_mapper.py\" ascii wide fullword\n      $extract_fn = \"extract_host_from_label\" ascii wide fullword\n      $turkish_extract = \"Service label\" ascii wide\n   condition:\n      filesize < 2MB and\n      ($docstring or $turkish_diag) and\n      ($endpoint_dispatch or $topology_fn or $extract_fn)\n}",
+            "pattern": "rule MAL_Python_ARPA_CrossSource_Correlation_ETL {\n   meta:\n      description = \"Detects the Turkish ARPA operator's cross-source correlation ETL engine (correlation_v3.py and variants). Operator self-branded docstring 'ARPA Korelasyon Motoru v3 - Temporal Focus', Turkish-language diagnostic output, and API endpoint dispatch patterns uniquely identify this component of the ARPA platform.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"observability-credential-harvester\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"c6216184-81e7-5bf2-bd8b-4177ed18a036\"\n   strings:\n      $docstring = \"ARPA Korelasyon Motoru v3\" ascii wide\n      $turkish_diag = \"=== SON 5 KORELASYON ===\" ascii wide\n      $endpoint_dispatch = \"/api/correlations/\" ascii wide fullword\n      $temporal = \"Temporal Focus\" ascii wide fullword\n      $topology_fn = \"topology_mapper.py\" ascii wide fullword\n      $extract_fn = \"extract_host_from_label\" ascii wide fullword\n      $turkish_extract = \"Service label\" ascii wide\n   condition:\n      filesize < 2MB and\n      ($docstring or $turkish_diag) and\n      ($endpoint_dispatch or $topology_fn or ($extract_fn and $turkish_extract) or ($docstring and $temporal))\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -801,13 +780,13 @@
             "spec_version": "2.1",
             "id": "indicator--f519fd3b-889b-5301-b085-3921ac07cace",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.789625Z",
-            "modified": "2026-06-16T16:00:54.789625Z",
+            "created": "2026-07-15T13:32:13.575536Z",
+            "modified": "2026-07-15T13:32:13.575536Z",
             "name": "MAL_Markdown_ARPA_OperatorNote_Family",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MAL_Markdown_ARPA_OperatorNote_Family {\n   meta:\n      description = \"Detects Turkish ARPA operator-authored operational Markdown notes (GERCEK_API_BULUNDU.md, INSTANA_INTEGRATION_SUMMARY.md class). Operator documents the discovery of victim Instana endpoints, integration steps, and references the public MehmetARPA/ARPA GitHub repository. Turkish-language operational narrative combined with victim-specific API references is operator-distinctive.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"operator-ops-note\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"3369e5c8-06a2-5589-87c2-e26074c0dca3\"\n   strings:\n      $gercek = \"GERCEK_API_BULUNDU\" ascii wide\n      $github_ref = \"MehmetARPA/ARPA\" ascii wide\n      $instana_summary = \"INSTANA_INTEGRATION_SUMMARY\" ascii wide\n      $instana_port = \"INSTANA_PORT_TEST\" ascii wide\n      $victim_ref = \"[victim-tenant]\" ascii wide nocase\n      $api_token_label = \"apiToken\" ascii wide fullword\n      $turkish_label = \"Instana API Test\" ascii wide\n   condition:\n      filesize < 200KB and\n      ($gercek or $instana_summary or $github_ref) and\n      ($victim_ref or $api_token_label)\n}",
+            "pattern": "rule MAL_Markdown_ARPA_OperatorNote_Family {\n   meta:\n      description = \"Detects Turkish ARPA operator-authored operational Markdown notes (GERCEK_API_BULUNDU.md, INSTANA_INTEGRATION_SUMMARY.md class). Operator documents the discovery of victim Instana endpoints, integration steps, and references the public MehmetARPA/ARPA GitHub repository. Turkish-language operational narrative combined with victim-specific API references is operator-distinctive.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"operator-ops-note\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"3369e5c8-06a2-5589-87c2-e26074c0dca3\"\n   strings:\n      $gercek = \"GERCEK_API_BULUNDU\" ascii wide\n      $github_ref = \"MehmetARPA/ARPA\" ascii wide\n      $instana_summary = \"INSTANA_INTEGRATION_SUMMARY\" ascii wide\n      $instana_port = \"INSTANA_PORT_TEST\" ascii wide\n      $victim_ref = \"[victim-tenant]\" ascii wide nocase\n      $api_token_label = \"apiToken\" ascii wide fullword\n      $turkish_label = \"Instana API Test\" ascii wide\n   condition:\n      filesize < 200KB and\n      ($gercek or $instana_summary or $github_ref or $instana_port) and\n      ($victim_ref or $api_token_label or $turkish_label)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -822,8 +801,8 @@
             "spec_version": "2.1",
             "id": "indicator--ea5fd09c-fe06-5e0b-8eb2-d1ed1f7455c1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.789795Z",
-            "modified": "2026-06-16T16:00:54.789795Z",
+            "created": "2026-07-15T13:32:13.575649Z",
+            "modified": "2026-07-15T13:32:13.575649Z",
             "name": "MAL_SystemdUnit_ARPA_Platform_Services",
             "indicator_types": [
                 "malicious-activity"
@@ -841,16 +820,16 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--3c847711-cc68-576d-a4bd-ea9eacafc47e",
+            "id": "indicator--8ae54c7c-f8c9-5f5e-bbe4-f7f44beeceb5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.789966Z",
-            "modified": "2026-06-16T16:00:54.789966Z",
-            "name": "PowerShell Instana API Call with Stored JWT Token from Unauthorized Host",
+            "created": "2026-07-15T13:32:13.57576Z",
+            "modified": "2026-07-15T13:32:13.57576Z",
+            "name": "MAL_Python_ARPA_AI_Service_NaturalLanguage_Query",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PowerShell Instana API Call with Stored JWT Token from Unauthorized Host\nid: ba31534e-e868-47fc-bfcd-4c5a4ce0b85d\nstatus: test\ndescription: >-\n  Detects PowerShell processes invoking the Instana API endpoint for a specific OCP-hosted\n  tenant with a stored JWT bearer token and certificate validation disabled (-SkipCertificateCheck).\n  This pattern matches the Turkish ARPA operator's victim-side collector (instana_local_collector.ps1)\n  targeting the the victim organization Instana tenant. Any host not designated as an Instana operations\n  system triggering this pattern should be treated as a true positive for credential-based\n  observability data exfiltration.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.execution\n    - attack.collection\n    - attack.exfiltration\n    - attack.command-and-control\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ps:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_instana:\n        CommandLine|contains:\n            - 'ocpinstana'\n            - 'api/ingest/instana'\n    selection_flags:\n        CommandLine|contains:\n            - '-SkipCertificateCheck'\n    condition: selection_ps and selection_instana and selection_flags\nfalsepositives:\n    - Legitimate Instana operations team scripts that use -SkipCertificateCheck for OCP self-signed certificates\n    - Authorized PowerShell monitoring automation targeting the same tenant endpoint\nlevel: high",
-            "pattern_type": "sigma",
+            "pattern": "rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {\n   meta:\n      description = \"Detects the Turkish ARPA operator's AI-augmented natural-language query interface over stolen observability data (ai_service.py + ai_assistant.db). Architecture: events table populated from stolen Instana monitoring data, situations table for AI root-cause analysis, ai_training_log table for conversation feedback. Candidate novel TTP: AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\"\n      date = \"2026-05-26\"\n      family = \"ARPA-observability-harvester\"\n      malware_type = \"ai-augmented-reconnaissance\"\n      campaign = \"Turkish-ARPA-State-Insurer-209.38.205.158\"\n      id = \"bcc21a4e-4647-57ec-be62-c2c1b1d055c4\"\n   strings:\n      $ai_db = \"ai_assistant.db\" ascii wide fullword\n      $ai_service = \"ai_service.py\" ascii wide fullword\n      $data_retrieval = \"data_retrieval.py\" ascii wide fullword\n      $handler1 = \"_handle_event_query\" ascii wide fullword\n      $handler2 = \"_handle_general_query\" ascii wide fullword\n      $ai_training = \"ai_training_log\" ascii wide fullword\n      $situations = \"situations\" ascii wide fullword\n      $arpa_path = \"/opt/ARPA/ai/\" ascii wide\n   condition:\n      filesize < 500KB and\n      $ai_db and\n      ($handler1 or $handler2 or $ai_training or $situations) and\n      ($arpa_path or $data_retrieval or $ai_service)\n}",
+            "pattern_type": "yara",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
                 "detection-rule"
@@ -862,15 +841,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--bce22686-5abb-5483-9a7d-5323accb15f2",
+            "id": "indicator--3c847711-cc68-576d-a4bd-ea9eacafc47e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.790136Z",
-            "modified": "2026-06-16T16:00:54.790136Z",
-            "name": "Outbound HTTPS to the victim organization OCP Instana Tenant from Non-Admin Host",
+            "created": "2026-07-15T13:32:13.575872Z",
+            "modified": "2026-07-15T13:32:13.575872Z",
+            "name": "PowerShell Instana API Call with Stored JWT Token from Unauthorized Host",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Outbound HTTPS to the victim organization OCP Instana Tenant from Non-Admin Host\nid: 024cd785-789d-4a99-8098-439f87c1df17\nstatus: test\ndescription: >-\n  Detects outbound HTTPS connections to the the victim organization OCP-hosted Instana tenant\n  wildcard domain (*.ocpinstana.[victim-domain].com.tr) from any host not designated\n  as an Instana operations system. The Turkish ARPA operator harvested victim observability\n  data from this endpoint using a stolen 10-year-lifetime JWT. Unauthorized hosts querying\n  this domain represent active credential abuse or deployment of the operator's PowerShell\n  collector script.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.collection\n    - attack.credential-access\n    - attack.command-and-control\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationHostname|endswith: '.ocpinstana.[victim-domain].com.tr'\n        DestinationPort: 443\n    condition: selection\nfalsepositives:\n    - Designated Instana operations team hosts performing authorized API queries\n    - Automated monitoring tools with legitimate access to the Instana tenant\nlevel: high",
+            "pattern": "title: PowerShell Instana API Call with Stored JWT Token from Unauthorized Host\nid: ba31534e-e868-47fc-bfcd-4c5a4ce0b85d\nstatus: experimental\ndescription: >-\n  Detects PowerShell processes invoking the Instana API endpoint for a specific OCP-hosted\n  tenant with a stored JWT bearer token and certificate validation disabled (-SkipCertificateCheck).\n  This pattern matches the Turkish ARPA operator's victim-side collector (instana_local_collector.ps1)\n  targeting the the victim organization Instana tenant. Any host not designated as an Instana operations\n  system triggering this pattern should be treated as a true positive for credential-based\n  observability data exfiltration.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.credential-access\n    - attack.t1552.001\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ps:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_instana:\n        CommandLine|contains:\n            - 'ocpinstana'\n            - 'api/ingest/instana'\n    selection_flags:\n        CommandLine|contains:\n            - '-SkipCertificateCheck'\n    condition: selection_ps and selection_instana and selection_flags\nfalsepositives:\n    - Legitimate Instana operations team scripts that use -SkipCertificateCheck for OCP self-signed certificates\n    - Authorized PowerShell monitoring automation targeting the same tenant endpoint\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -885,13 +864,13 @@
             "spec_version": "2.1",
             "id": "indicator--306831fd-abeb-5fbc-9814-e957544d5db7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.790379Z",
-            "modified": "2026-06-16T16:00:54.790379Z",
+            "created": "2026-07-15T13:32:13.575986Z",
+            "modified": "2026-07-15T13:32:13.575986Z",
             "name": "Systemd Unit File Created with ARPA Platform Service Naming Convention",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Systemd Unit File Created with ARPA Platform Service Naming Convention\nid: 4c27b8f2-a383-4cf0-a20a-21f8681231fa\nstatus: test\ndescription: >-\n  Detects creation of systemd unit files matching the Turkish ARPA operator's distinctive\n  arpa-* naming pattern in /etc/systemd/system/. The operator deployed five service units\n  (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel) to persist\n  the ARPA observability-harvester platform across reboots. This naming pattern has not been\n  observed in legitimate software in any known deployment context. File creation events matching\n  this pattern on any Linux host are high-confidence indicators of ARPA platform deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.persistence\n    - attack.execution\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|startswith: '/etc/systemd/system/arpa-'\n        TargetFilename|endswith: '.service'\n    condition: selection\nfalsepositives:\n    - Custom in-house monitoring software using the arpa- service name prefix (unlikely; verify with IT asset management)\n    - Legitimate open-source software with arpa- prefixed services (no known examples as of 2026-05-26)\nlevel: high",
+            "pattern": "title: Systemd Unit File Created with ARPA Platform Service Naming Convention\nid: 4c27b8f2-a383-4cf0-a20a-21f8681231fa\nstatus: experimental\ndescription: >-\n  Detects creation of systemd unit files matching the Turkish ARPA operator's distinctive\n  arpa-* naming pattern in /etc/systemd/system/. The operator deployed five service units\n  (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel) to persist\n  the ARPA observability-harvester platform across reboots. This naming pattern has not been\n  observed in legitimate software in any known deployment context. File creation events matching\n  this pattern on any Linux host are high-confidence indicators of ARPA platform deployment.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1543.002\n    - attack.execution\n    - attack.t1569.002\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|startswith: '/etc/systemd/system/arpa-'\n        TargetFilename|endswith: '.service'\n    condition: selection\nfalsepositives:\n    - Custom in-house monitoring software using the arpa- service name prefix (unlikely; verify with IT asset management)\n    - Legitimate open-source software with arpa- prefixed services (no known examples as of 2026-05-26)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -906,13 +885,13 @@
             "spec_version": "2.1",
             "id": "indicator--517a4808-e1fd-5c00-bbae-1563e2e712a6",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.790553Z",
-            "modified": "2026-06-16T16:00:54.790553Z",
+            "created": "2026-07-15T13:32:13.576099Z",
+            "modified": "2026-07-15T13:32:13.576099Z",
             "name": "Reverse SSH Tunnel Established from Windows Host to ARPA Operator Infrastructure",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Reverse SSH Tunnel Established from Windows Host to ARPA Operator Infrastructure\nid: 6465d373-414d-461d-8624-11153cc64d9c\nstatus: test\ndescription: >-\n  Detects the establishment of a reverse SSH tunnel from a victim-side Windows host to the\n  Turkish ARPA operator's DigitalOcean VPS (209.38.205.158). The operator provided the\n  victim-side insider (Windows AD user [employee ID \u2014 suppressed]) with SSH keys (rca_key.pem / rca_key.ppk)\n  and instructions to deploy -R 18080:localhost:8089 tunnels. This gives the operator live\n  network access inside the victim's perimeter. SSH with reverse-forwarding flags initiated\n  from an enterprise Windows workstation to any external IP is abnormal; the specific\n  operator IP makes this a definitive true positive.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.command-and-control\n    - attack.lateral-movement\n    - attack.persistence\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ssh:\n        Image|endswith:\n            - '\\ssh.exe'\n            - '\\putty.exe'\n            - '\\plink.exe'\n    selection_tunnel:\n        CommandLine|contains:\n            - '-R 18080'\n            - '18080:localhost:8089'\n            - '209.38.205.158'\n    selection_arpa_session:\n        CommandLine|contains:\n            - 'ARPA_Tunnel'\n            - 'rca_key'\n    condition: selection_ssh and (selection_tunnel or selection_arpa_session)\nfalsepositives:\n    - Authorized developer tunneling tools with similar flag patterns (verify against endpoint management)\n    - Legitimate reverse-tunnel software for remote support (verify endpoint ownership and destination IP)\nlevel: critical",
+            "pattern": "title: Reverse SSH Tunnel Established from Windows Host to ARPA Operator Infrastructure\nid: 6465d373-414d-461d-8624-11153cc64d9c\nstatus: experimental\ndescription: >-\n  Detects the establishment of a reverse SSH tunnel from a victim-side Windows host to the\n  Turkish ARPA operator's DigitalOcean VPS (209.38.205.158). The operator provided the\n  victim-side insider (Windows AD user [employee ID \u2014 suppressed]) with SSH keys (rca_key.pem / rca_key.ppk)\n  and instructions to deploy -R 18080:localhost:8089 tunnels. This gives the operator live\n  network access inside the victim's perimeter. SSH with reverse-forwarding flags initiated\n  from an enterprise Windows workstation to any external IP is abnormal; the specific\n  operator IP makes this a definitive true positive.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.004\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1098.004\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ssh:\n        Image|endswith:\n            - '\\ssh.exe'\n            - '\\putty.exe'\n            - '\\plink.exe'\n    selection_tunnel:\n        CommandLine|contains:\n            - '-R 18080'\n            - '18080:localhost:8089'\n            - '209.38.205.158'\n    selection_arpa_session:\n        CommandLine|contains:\n            - 'ARPA_Tunnel'\n            - 'rca_key'\n    condition: selection_ssh and (selection_tunnel or selection_arpa_session)\nfalsepositives:\n    - Authorized developer tunneling tools with similar flag patterns (verify against endpoint management)\n    - Legitimate reverse-tunnel software for remote support (verify endpoint ownership and destination IP)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -927,13 +906,13 @@
             "spec_version": "2.1",
             "id": "indicator--428a1ff6-bbe4-5c07-8422-4b538c2d9873",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.790798Z",
-            "modified": "2026-06-16T16:00:54.790798Z",
+            "created": "2026-07-15T13:32:13.576218Z",
+            "modified": "2026-07-15T13:32:13.576218Z",
             "name": "PuTTY Saved Session Created with ARPA Tunnel Naming Convention",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PuTTY Saved Session Created with ARPA Tunnel Naming Convention\nid: 785967aa-4fba-4679-8209-53c0f22b0631\nstatus: test\ndescription: >-\n  Detects creation of PuTTY saved sessions in the Windows registry with operator-distinctive\n  naming patterns. The Turkish ARPA operator instructed the victim-side insider to create a\n  PuTTY saved session named 'ARPA_Tunnel' targeting operator VPS 209.38.205.158 with\n  operator-supplied private key (rca_key.ppk). Registry creation of a PuTTY session named\n  ARPA_Tunnel or containing the operator IP is a definitive indicator of the insider\n  deployment phase of this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.command-and-control\n    - attack.persistence\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_putty_path:\n        TargetObject|contains: '\\Software\\SimonTatham\\PuTTY\\Sessions\\'\n    selection_arpa_session:\n        TargetObject|contains:\n            - 'ARPA_Tunnel'\n            - 'ARPA_tunnel'\n    condition: selection_putty_path and selection_arpa_session\nfalsepositives:\n    - Legitimate administrators creating PuTTY sessions for authorized remote management with similar names (verify session destination and key file)\nlevel: high",
+            "pattern": "title: PuTTY Saved Session Created with ARPA Tunnel Naming Convention\nid: 785967aa-4fba-4679-8209-53c0f22b0631\nstatus: experimental\ndescription: >-\n  Detects creation of PuTTY saved sessions in the Windows registry with operator-distinctive\n  naming patterns. The Turkish ARPA operator instructed the victim-side insider to create a\n  PuTTY saved session named 'ARPA_Tunnel' targeting operator VPS 209.38.205.158 with\n  operator-supplied private key (rca_key.ppk). Registry creation of a PuTTY session named\n  ARPA_Tunnel or containing the operator IP is a definitive indicator of the insider\n  deployment phase of this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.004\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection_putty_path:\n        TargetObject|contains: '\\Software\\SimonTatham\\PuTTY\\Sessions\\'\n    selection_arpa_session:\n        TargetObject|contains: 'ARPA_Tunnel'\n    condition: selection_putty_path and selection_arpa_session\nfalsepositives:\n    - Legitimate administrators creating PuTTY sessions for authorized remote management with similar names (verify session destination and key file)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -948,55 +927,13 @@
             "spec_version": "2.1",
             "id": "indicator--a023dcd7-9c8a-5690-a910-eebdea1e0cd5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.791065Z",
-            "modified": "2026-06-16T16:00:54.791065Z",
+            "created": "2026-07-15T13:32:13.576331Z",
+            "modified": "2026-07-15T13:32:13.576331Z",
             "name": "Instana Stolen JWT or Long-Lived API Token Detected in Audit Log",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Instana Stolen JWT or Long-Lived API Token Detected in Audit Log\nid: d4398d0e-e7ea-4b8d-a838-8b2a760fc468\nstatus: test\ndescription: >-\n  Detects use of the specific stolen the victim organization Instana JWT (jti 022a1b74) in API calls,\n  or flags any Instana API token with an expiration lifetime exceeding 1 year \u2014 a governance\n  defect that enabled the Turkish ARPA operator to maintain persistent access over a multi-year\n  window using a single stolen credential. This is not an IBM Instana CVE; it is a victim-side\n  token management defect. Sigma rule targets Instana audit log telemetry exported to SIEM.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.credential-access\n    - attack.persistence\nlogsource:\n    product: ibm_instana\n    service: audit_log\ndetection:\n    selection_stolen_jti:\n        jwt_jti: '022a1b74-2332-4df5-a76b-60225ffa7ae3'\n    selection_stolen_tenant:\n        tenant: '[victim-tenant]'\n        source_ip|not:\n            - '10.0.0.0/8'\n            - '172.16.0.0/12'\n            - '192.168.0.0/16'\n    condition: selection_stolen_jti or selection_stolen_tenant\nfalsepositives:\n    - Authorized Instana admin tools accessing the tenant from external IPs (verify against operations team allow-list)\n    - Token rotation scripts running from external orchestration infrastructure\nlevel: critical",
-            "pattern_type": "sigma",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--5574adf6-1a02-571c-af31-0aec8a1f2487",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.791333Z",
-            "modified": "2026-06-16T16:00:54.791333Z",
-            "name": "Cross-Source Observability Platform Authentication Burst from Single Source IP",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Cross-Source Observability Platform Authentication Burst from Single Source IP\nid: b5756186-42bf-480c-b343-423a35d27336\nstatus: test\ndescription: >-\n  Detects a single source IP authenticating against two or more enterprise observability\n  platforms (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria, Datadog, Dynatrace,\n  New Relic, Prometheus) within a 10-minute window. This pattern is the defining behavioral\n  signature of the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP:\n  operator-built cross-source ETL platforms authenticate to each stolen monitoring source\n  independently, creating a correlated authentication burst invisible to any single\n  platform's audit log but detectable as a SIEM correlation across feeds. No known legitimate\n  software produces this multi-platform authentication burst from a single external source.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.collection\n    - attack.credential-access\n    - attack.discovery\nlogsource:\n    product: generic\n    service: observability_audit\ndetection:\n    selection_instana:\n        EventSource: 'ibm_instana'\n        EventType: 'api_authentication'\n    selection_solarwinds:\n        EventSource: 'solarwinds_orion'\n        EventType: 'api_authentication'\n    selection_zabbix:\n        EventSource: 'zabbix'\n        EventType: 'api_login'\n    selection_vmware_aria:\n        EventSource: 'vmware_aria'\n        EventType: 'api_authentication'\n    timeframe: 10m\n    condition: 2 of (selection_instana, selection_solarwinds, selection_zabbix, selection_vmware_aria)\nfalsepositives:\n    - Legitimate SIEM/SOAR platforms collecting from multiple APM sources via centralized service accounts (verify source IP against authorized integration allow-list)\n    - Cross-platform monitoring dashboards with unified authentication service\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--644468ff-0b0a-5b4c-9bc5-9592d6651c22",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.791556Z",
-            "modified": "2026-06-16T16:00:54.791556Z",
-            "name": "Rapid Instana Topology API Enumeration Burst from Single Source",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Rapid Instana Topology API Enumeration Burst from Single Source\nid: 43f7b91b-3870-4bd1-93c2-d364c8504a2e\nstatus: test\ndescription: >-\n  Detects rapid automated enumeration of IBM Instana topology and event APIs from a single\n  source IP exceeding a rate threshold consistent with the Turkish ARPA operator's multi-worker\n  polling pattern. The operator's ARPA ETL platform runs 5 parallel systemd workers each\n  polling the Instana API at 5-minute cadence, producing bursts of topology and event requests\n  that exceed normal interactive or single-agent query rates. High request rates from source\n  IPs not on the Instana operations team allow-list indicate credential-based automated\n  reconnaissance of the Instana topology.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.collection\n    - attack.discovery\nlogsource:\n    product: ibm_instana\n    service: api_access_log\ndetection:\n    selection:\n        RequestPath|startswith:\n            - '/api/events'\n            - '/api/topology'\n            - '/api/applications'\n    timeframe: 1m\n    condition: selection | count() by SourceIP > 10\nfalsepositives:\n    - Authorized Instana integrations with high query frequency (verify against operations team allow-list)\n    - Load testing or API validation tooling during maintenance windows\nlevel: medium",
+            "pattern": "title: Instana Stolen JWT or Long-Lived API Token Detected in Audit Log\nid: d4398d0e-e7ea-4b8d-a838-8b2a760fc468\nstatus: experimental\ndescription: >-\n  Detects use of the specific stolen the victim organization Instana JWT (jti 022a1b74) in API calls,\n  or flags any Instana API token with an expiration lifetime exceeding 1 year \u2014 a governance\n  defect that enabled the Turkish ARPA operator to maintain persistent access over a multi-year\n  window using a single stolen credential. This is not an IBM Instana CVE; it is a victim-side\n  token management defect. Sigma rule targets Instana audit log telemetry exported to SIEM.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.credential-access\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.initial-access\n    - attack.t1078\n    - attack.t1552.001\n    - detection.emerging-threats\nlogsource:\n    product: ibm_instana\n    service: audit_log\ndetection:\n    selection_stolen_jti:\n        jwt_jti: '022a1b74-2332-4df5-a76b-60225ffa7ae3'\n    selection_stolen_tenant:\n        tenant: '[victim-tenant]'\n    filter_internal_source:\n        source_ip|cidr:\n            - '10.0.0.0/8'\n            - '172.16.0.0/12'\n            - '192.168.0.0/16'\n    condition: selection_stolen_jti or (selection_stolen_tenant and not filter_internal_source)\nfalsepositives:\n    - Authorized Instana admin tools accessing the tenant from external IPs (verify against operations team allow-list)\n    - Token rotation scripts running from external orchestration infrastructure\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1011,13 +948,76 @@
             "spec_version": "2.1",
             "id": "indicator--cc8ff1ab-1f99-551b-9de9-a132f268ab42",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.791713Z",
-            "modified": "2026-06-16T16:00:54.791713Z",
+            "created": "2026-07-15T13:32:13.576442Z",
+            "modified": "2026-07-15T13:32:13.576442Z",
             "name": "Operator-Supplied SSH Key File Created in User SSH Directory",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Operator-Supplied SSH Key File Created in User SSH Directory\nid: f9b8ab33-5436-4f3a-a996-f737e54a3d37\nstatus: test\ndescription: >-\n  Detects creation of the Turkish ARPA operator-supplied SSH key files (rca_key.pem for\n  OpenSSH, rca_key.ppk for PuTTY) in any Windows user's .ssh directory. The operator\n  distributed these specific key files to the victim-side insider (the victim organization Windows\n  AD user [employee ID \u2014 suppressed]) as part of the tunnel-deployment toolkit documented in the operator's\n  Turkish-language insider-recruitment handoff documents. Presence of these filenames in\n  any user's .ssh directory indicates insider toolkit deployment regardless of the containing\n  user account.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.persistence\n    - attack.command-and-control\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\.ssh\\'\n        TargetFilename|endswith:\n            - '\\rca_key.pem'\n            - '\\rca_key.ppk'\n    condition: selection\nfalsepositives:\n    - Legitimate administrators who happen to name their SSH keys rca_key (verify key fingerprint and origin against CA records)\nlevel: high",
+            "pattern": "title: Operator-Supplied SSH Key File Created in User SSH Directory\nid: f9b8ab33-5436-4f3a-a996-f737e54a3d37\nstatus: experimental\ndescription: >-\n  Detects creation of the Turkish ARPA operator-supplied SSH key files (rca_key.pem for\n  OpenSSH, rca_key.ppk for PuTTY) in any Windows user's .ssh directory. The operator\n  distributed these specific key files to the victim-side insider (the victim organization Windows\n  AD user [employee ID \u2014 suppressed]) as part of the tunnel-deployment toolkit documented in the operator's\n  Turkish-language insider-recruitment handoff documents. Presence of these filenames in\n  any user's .ssh directory indicates insider toolkit deployment regardless of the containing\n  user account.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1098.004\n    - attack.command-and-control\n    - attack.t1572\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection:\n        TargetFilename|contains: '\\.ssh\\'\n        TargetFilename|endswith:\n            - '\\rca_key.pem'\n            - '\\rca_key.ppk'\n    condition: selection\nfalsepositives:\n    - Legitimate administrators who happen to name their SSH keys rca_key (verify key fingerprint and origin against CA records)\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-25T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9a215236-ddd5-5137-b549-c4c17130d482",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.576553Z",
+            "modified": "2026-07-15T13:32:13.576553Z",
+            "name": "Outbound HTTPS to the Victim Organization OCP Instana Tenant",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Outbound HTTPS to the Victim Organization OCP Instana Tenant\nid: 024cd785-789d-4a99-8098-439f87c1df17\nstatus: experimental\ndescription: >-\n  Detects outbound HTTPS connections to the the victim organization OCP-hosted Instana tenant\n  wildcard domain (*.ocpinstana.[victim-domain].com.tr). The Turkish ARPA operator harvested\n  victim observability data from this endpoint using a stolen 10-year-lifetime JWT. This\n  selection has no host-based filter \u2014 it fires identically for designated Instana operations\n  hosts and for unauthorized hosts \u2014 so hits must be triaged against the operations team\n  allow-list before escalation. Scoped to the victim organization's own environment; the\n  underlying hostname is excluded from the public IOC feed per the campaign's disclosure policy.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1071.001\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.initial-access\n    - attack.t1078\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationHostname|endswith: '.ocpinstana.[victim-domain].com.tr'\n        DestinationPort: 443\n    condition: selection\nfalsepositives:\n    - Designated Instana operations team hosts performing authorized API queries \u2014 this rule does not distinguish them from unauthorized hosts and requires analyst triage against the allow-list\n    - Automated monitoring tools with legitimate access to the Instana tenant\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-25T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ec1db4c9-4ad6-5c57-9209-44c60f7fe4f4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.576665Z",
+            "modified": "2026-07-15T13:32:13.576665Z",
+            "name": "Observability Platform API Authentication Event (Cross-Source Burst Building Block)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Observability Platform API Authentication Event (Cross-Source Burst Building Block)\nid: b5756186-42bf-480c-b343-423a35d27336\nstatus: experimental\ndescription: >-\n  Detects an authentication event against one of four enterprise observability platforms\n  (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria). This is a single-event building block:\n  the Turkish ARPA operator's Observability-Tool Reverse Pipeline TTP is defined by the SAME\n  source IP authenticating against 2 or more of these platforms within a 10-minute window,\n  which requires cross-event correlation that this per-event Sigma rule cannot itself express.\n  Deploy alongside a SIEM-native correlation counting distinct EventSource values per source IP\n  within a 10-minute window; a single match on this rule alone is common and not indicative of\n  malicious activity. (Corrected from the original rule, whose condition ANDed together four\n  selections that each require a different, mutually exclusive EventSource value on the SAME\n  event record \u2014 logic that could never evaluate true on any single log event.)\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.collection\n    - attack.t1119\n    - attack.credential-access\n    - attack.discovery\n    - attack.t1046\n    - detection.emerging-threats\nlogsource:\n    product: generic\n    service: observability_audit\ndetection:\n    selection_instana:\n        EventSource: 'ibm_instana'\n        EventType: 'api_authentication'\n    selection_solarwinds:\n        EventSource: 'solarwinds_orion'\n        EventType: 'api_authentication'\n    selection_zabbix:\n        EventSource: 'zabbix'\n        EventType: 'api_login'\n    selection_vmware_aria:\n        EventSource: 'vmware_aria'\n        EventType: 'api_authentication'\n    condition: 1 of selection_*\nfalsepositives:\n    - Legitimate SIEM/SOAR platforms collecting from multiple APM sources via centralized service accounts \u2014 a single hit is common and requires the companion cross-source correlation before treating as suspicious\n    - Any single legitimate authentication event to one of these platforms \u2014 this rule is a building block and should not be alerted on standalone\nlevel: low",
+            "pattern_type": "sigma",
+            "valid_from": "2026-05-25T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5465d865-e801-5e6b-a68d-faf0e0be6148",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.576775Z",
+            "modified": "2026-07-15T13:32:13.576775Z",
+            "name": "Rapid Instana Topology API Enumeration Requests from Single Source",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Rapid Instana Topology API Enumeration Requests from Single Source\nid: 43f7b91b-3870-4bd1-93c2-d364c8504a2e\nstatus: experimental\ndescription: >-\n  Detects requests to IBM Instana topology and event APIs, the endpoints targeted by the\n  Turkish ARPA operator's multi-worker polling pattern. A single request is not by itself\n  anomalous; the operator's ARPA ETL platform runs 5 parallel systemd workers each polling\n  the Instana API at 5-minute cadence, producing a burst that exceeds 10 requests per minute\n  from a single source IP \u2014 well above normal interactive or single-agent query rates. This\n  rule surfaces the underlying event for rate-based correlation in the SIEM layer \u2014 deploy\n  alongside a per-source-IP request-rate threshold (10+/min) since Sigma's non-correlation\n  rule format cannot itself express a count-over-time aggregation.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.collection\n    - attack.t1119\n    - attack.t1213\n    - attack.discovery\n    - attack.t1046\n    - detection.emerging-threats\nlogsource:\n    product: ibm_instana\n    service: api_access_log\ndetection:\n    selection:\n        RequestPath|startswith:\n            - '/api/events'\n            - '/api/topology'\n            - '/api/applications'\n    condition: selection\nfalsepositives:\n    - Authorized Instana integrations with high query frequency (verify against operations team allow-list)\n    - Load testing or API validation tooling during maintenance windows\n    - Any single legitimate topology or event API query \u2014 this rule requires rate-based correlation (10+ requests/min from one source IP) to distinguish enumeration activity from normal API use\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1032,34 +1032,13 @@
             "spec_version": "2.1",
             "id": "indicator--04f62108-a242-5636-a305-81b292213800",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.791865Z",
-            "modified": "2026-06-16T16:00:54.791865Z",
+            "created": "2026-07-15T13:32:13.576888Z",
+            "modified": "2026-07-15T13:32:13.576888Z",
             "name": "Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Windows Host",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Windows Host\nid: 47e5169f-572c-4d87-9fda-578a23e58beb\nstatus: test\ndescription: >-\n  Detects processes other than Splunk (which legitimately uses port 8089 for management)\n  initiating TCP connections to localhost port 8089 on enterprise Windows hosts. Port 8089\n  is the insider-side tunnel bind point in the Turkish ARPA operator's reverse SSH tunnel\n  architecture: traffic from localhost:8089 on the insider's machine is forwarded through\n  the SSH reverse tunnel to the operator's listener on port 18080 at 209.38.205.158.\n  Non-Splunk processes binding or connecting to this port in an enterprise context indicate\n  tunnel activity.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.command-and-control\n    - attack.lateral-movement\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp:\n            - '127.0.0.1'\n            - '::1'\n        DestinationPort: 8089\n    filter_splunk:\n        Image|endswith:\n            - '\\splunkd.exe'\n            - '\\splunk.exe'\n    condition: selection and not filter_splunk\nfalsepositives:\n    - Custom internal web services or developer tooling binding to port 8089 (verify against IT asset management)\n    - Other monitoring agents that use 8089 as a secondary management port\nlevel: medium",
-            "pattern_type": "sigma",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--2e2de705-a6da-5bc7-9a9d-b37070f3b7c2",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792008Z",
-            "modified": "2026-06-16T16:00:54.792008Z",
-            "name": "Outbound HTTP Connection to Turkish ARPA Platform Endpoints from Internal Host",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Outbound HTTP Connection to Turkish ARPA Platform Endpoints from Internal Host\nid: af7bb4d0-34bf-4989-9e44-263ee76eef27\nstatus: test\ndescription: >-\n  Detects outbound HTTP connections from internal hosts to the Turkish ARPA operator's\n  DigitalOcean VPS (209.38.205.158) on known ARPA platform ports (8090 for dashboard,\n  8095 for topology API, 8096 for Instana data ingestion). These cleartext HTTP connections\n  carry Instana event payloads from victim infrastructure to the operator's analytics\n  platform. The IP and port combination is unique to this operator's campaign infrastructure.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.exfiltration\n    - attack.command-and-control\n    - attack.collection\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp: '209.38.205.158'\n        DestinationPort:\n            - 8090\n            - 8095\n            - 8096\n    condition: selection\nfalsepositives:\n    - None expected \u2014 this IP and port combination is specific to the operator's campaign infrastructure\nlevel: critical",
+            "pattern": "title: Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Windows Host\nid: 47e5169f-572c-4d87-9fda-578a23e58beb\nstatus: experimental\ndescription: >-\n  Detects processes other than Splunk (which legitimately uses port 8089 for management)\n  initiating TCP connections to localhost port 8089 on enterprise Windows hosts. Port 8089\n  is the insider-side tunnel bind point in the Turkish ARPA operator's reverse SSH tunnel\n  architecture: traffic from localhost:8089 on the insider's machine is forwarded through\n  the SSH reverse tunnel to the operator's listener on port 18080 at 209.38.205.158.\n  Non-Splunk processes binding or connecting to this port in an enterprise context indicate\n  tunnel activity, but the port is not unique to this campaign and requires triage.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.004\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp:\n            - '127.0.0.1'\n            - '::1'\n        DestinationPort: 8089\n    filter_splunk:\n        Image|endswith:\n            - '\\splunkd.exe'\n            - '\\splunk.exe'\n    condition: selection and not filter_splunk\nfalsepositives:\n    - Custom internal web services or developer tooling binding to port 8089 (verify against IT asset management)\n    - Other monitoring agents that use 8089 as a secondary management port\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1074,13 +1053,13 @@
             "spec_version": "2.1",
             "id": "indicator--05addf56-1dec-5cca-9547-25d2cb26f062",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792142Z",
-            "modified": "2026-06-16T16:00:54.792142Z",
+            "created": "2026-07-15T13:32:13.576999Z",
+            "modified": "2026-07-15T13:32:13.576999Z",
             "name": "SSH Reverse Tunnel Established from Enterprise AD-Joined Windows Workstation",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: SSH Reverse Tunnel Established from Enterprise AD-Joined Windows Workstation\nid: d49b3f9d-31e8-4ed8-8c62-87aba3aedd66\nstatus: test\ndescription: >-\n  Detects SSH or PuTTY processes on enterprise AD-joined Windows workstations establishing\n  reverse tunnel connections (-R flag) to external IP addresses. In the Turkish ARPA\n  operator campaign, an insider (Windows AD user [employee ID \u2014 suppressed]) was supplied with operator-provided\n  SSH keys and instructions to establish reverse tunnels from inside the victim organization's\n  network to 209.38.205.158:18080. Reverse SSH tunnels from enterprise workstations to\n  external IPs are a high-confidence indicator of insider-facilitated external access\n  regardless of the specific destination IP.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: 2026/05/26\ntags:\n    - attack.command-and-control\n    - attack.lateral-movement\n    - attack.persistence\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ssh_tools:\n        Image|endswith:\n            - '\\ssh.exe'\n            - '\\putty.exe'\n            - '\\plink.exe'\n    selection_reverse_flag:\n        CommandLine|contains:\n            - ' -R '\n    selection_external_dest:\n        CommandLine|contains:\n            - '209.38.205.158'\n    filter_authorized_infra:\n        CommandLine|contains:\n            - '10.'\n            - '172.'\n            - '192.168.'\n    condition: selection_ssh_tools and selection_reverse_flag and not filter_authorized_infra\nfalsepositives:\n    - Authorized developers using reverse SSH tunnels for remote development (verify against IT-authorized tunneling policy and destination IP allow-list)\n    - Remote support tools using SSH tunneling to authorized jump hosts\nlevel: high",
+            "pattern": "title: SSH Reverse Tunnel Established from Enterprise AD-Joined Windows Workstation\nid: d49b3f9d-31e8-4ed8-8c62-87aba3aedd66\nstatus: experimental\ndescription: >-\n  Detects SSH or PuTTY processes on enterprise AD-joined Windows workstations establishing\n  reverse tunnel connections (-R flag) to external IP addresses. In the Turkish ARPA\n  operator campaign, an insider (Windows AD user [employee ID \u2014 suppressed]) was supplied with operator-provided\n  SSH keys and instructions to establish reverse tunnels from inside the victim organization's\n  network to 209.38.205.158:18080. Reverse SSH tunnels from enterprise workstations to\n  external IPs are a hunting-grade indicator of insider-facilitated external access\n  regardless of the specific destination IP, but require triage against authorized\n  developer tunneling use.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/\nauthor: The Hunters Ledger\ndate: '2026-05-26'\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.lateral-movement\n    - attack.t1021.004\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_ssh_tools:\n        Image|endswith:\n            - '\\ssh.exe'\n            - '\\putty.exe'\n            - '\\plink.exe'\n    selection_reverse_flag:\n        CommandLine|contains:\n            - ' -R '\n    filter_authorized_infra:\n        CommandLine|contains:\n            - '10.'\n            - '172.'\n            - '192.168.'\n    condition: selection_ssh_tools and selection_reverse_flag and not filter_authorized_infra\nfalsepositives:\n    - Authorized developers using reverse SSH tunnels for remote development (verify against IT-authorized tunneling policy and destination IP allow-list)\n    - Remote support tools using SSH tunneling to authorized jump hosts\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1093,15 +1072,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--43cee0da-35e3-5a4c-8946-9e10cabefedf",
+            "id": "indicator--ce407375-d1cb-5c32-91c2-fcad76489e07",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792256Z",
-            "modified": "2026-06-16T16:00:54.792256Z",
-            "name": "THL-ARPA-001 DNS Query to the victim organization Instana OCP Tenant - Potential Unauthorized Collector Activity",
+            "created": "2026-07-15T13:32:13.57711Z",
+            "modified": "2026-07-15T13:32:13.57711Z",
+            "name": "THL Turkish-ARPA-State-Insurer HTTP POST to ARPA Instana Ingestion Endpoint (Observability Data Exfiltration)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL-ARPA-001 DNS Query to the victim organization Instana OCP Tenant - Potential Unauthorized Collector Activity\"; dns.query; content:\"ocpinstana.[victim-domain].com.tr\"; nocase; threshold:type limit, track by_src, count 1, seconds 300; sid:9001001; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1071.001;)",
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL Turkish-ARPA-State-Insurer HTTP POST to ARPA Instana Ingestion Endpoint (Observability Data Exfiltration)\"; http.method; content:\"POST\"; http.uri; content:\"/api/ingest/instana\"; startswith; flow:to_server,established; classtype:trojan-activity; sid:9001005; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1114,99 +1093,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--00aeff19-02a2-5782-b38d-df3d618be9e3",
+            "id": "indicator--35b24074-0824-5d47-9497-05a7e38fc675",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792371Z",
-            "modified": "2026-06-16T16:00:54.792371Z",
-            "name": "THL-ARPA-002 HTTP Egress to ARPA Operator Platform - Active C2 Ingestion or Dashboard Access",
+            "created": "2026-07-15T13:32:13.577227Z",
+            "modified": "2026-07-15T13:32:13.577227Z",
+            "name": "THL Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> 209.38.205.158 any (msg:\"THL-ARPA-002 HTTP Egress to ARPA Operator Platform - Active C2 Ingestion or Dashboard Access\"; http.uri; content:\"/api/\"; flow:to_server,established; sid:9001002; rev:1; classtype:trojan-activity; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1041;)\n\nalert http $HOME_NET any -> 209.38.205.158 any (msg:\"THL-ARPA-003 HTTP POST to ARPA Operator Instana Ingestion Endpoint - Observability Data Exfiltration\"; http.method; content:\"POST\"; http.uri; content:\"/api/ingest/instana\"; startswith; flow:to_server,established; sid:9001003; rev:1; classtype:trojan-activity; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1020;)",
-            "pattern_type": "suricata",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--d081419d-8d1f-56e2-a2c7-944c14ddffc1",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792487Z",
-            "modified": "2026-06-16T16:00:54.792487Z",
-            "name": "THL-ARPA-004 Outbound SSH to ARPA Operator VPS - Potential Insider Reverse Tunnel Registration",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert tcp $HOME_NET any -> 209.38.205.158 22 (msg:\"THL-ARPA-004 Outbound SSH to ARPA Operator VPS - Potential Insider Reverse Tunnel Registration\"; flags:S; flow:to_server; threshold:type limit, track by_src, count 1, seconds 60; sid:9001004; rev:1; classtype:trojan-activity; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1572;)",
-            "pattern_type": "suricata",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--32754607-a038-5ce7-b618-2e057479dee3",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792601Z",
-            "modified": "2026-06-16T16:00:54.792601Z",
-            "name": "THL-ARPA-005 HTTP POST to Operator ARPA Instana Ingestion Endpoint - Stolen Observability Data Exfiltration",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL-ARPA-005 HTTP POST to Operator ARPA Instana Ingestion Endpoint - Stolen Observability Data Exfiltration\"; http.method; content:\"POST\"; http.uri; content:\"/api/ingest/instana\"; startswith; flow:to_server,established; sid:9001005; rev:1; classtype:trojan-activity; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1020;)",
-            "pattern_type": "suricata",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--cf4ce0f1-dd2a-523d-9b58-d3073670a387",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792715Z",
-            "modified": "2026-06-16T16:00:54.792715Z",
-            "name": "THL-ARPA-006 DNS Query to OpenClaw Distribution or Skill-Marketplace Domain - Potential Operator Framework Presence",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL-ARPA-006 DNS Query to OpenClaw Distribution or Skill-Marketplace Domain - Potential Operator Framework Presence\"; dns.query; content:\"openclaw.ai\"; nocase; sid:9001006; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1588;)\n\nalert dns $HOME_NET any -> any any (msg:\"THL-ARPA-007 DNS Query to OpenClaw Tencent Skill Marketplace CDN - OpenClaw Framework Skill Update\"; dns.query; content:\"skillhub-1388575217.cos.ap-guangzhou.myqcloud.com\"; nocase; sid:9001007; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1588;)\n\nalert dns $HOME_NET any -> any any (msg:\"THL-ARPA-008 DNS Query to lightmake.site - OpenClaw Vendor Domain\"; dns.query; content:\"lightmake.site\"; nocase; sid:9001008; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1588;)",
-            "pattern_type": "suricata",
-            "valid_from": "2026-05-25T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--6cdbfdcf-b728-54e4-b0bc-9fe76cf895b1",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792835Z",
-            "modified": "2026-06-16T16:00:54.792835Z",
-            "name": "THL-ARPA-009 Long-Lived SSH Session from Internal Windows Host to External IP - Potential Reverse Tunnel Maintenance",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 22 (msg:\"THL-ARPA-009 Long-Lived SSH Session from Internal Windows Host to External IP - Potential Reverse Tunnel Maintenance\"; flow:to_server,established; flowage:age > 3600; threshold:type limit, track by_src, count 1, seconds 3600; sid:9001009; rev:1; classtype:policy-violation; metadata:author The_Hunters_Ledger, campaign Turkish-ARPA-State-Insurer, created 2026-05-26, mitre_attack T1572;)",
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL Turkish-ARPA-State-Insurer DNS Query to Victim Instana OCP Tenant (Potential Unauthorized Collector Activity)\"; dns.query; content:\"ocpinstana.[victim-domain].com.tr\"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:9001001; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/;)",
             "pattern_type": "suricata",
             "valid_from": "2026-05-25T00:00:00Z",
             "labels": [
@@ -1221,8 +1116,8 @@
             "spec_version": "2.1",
             "id": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.792977Z",
-            "modified": "2026-06-16T16:00:54.792977Z",
+            "created": "2026-07-15T13:32:13.577356Z",
+            "modified": "2026-07-15T13:32:13.577356Z",
             "name": "topology_mapper.py",
             "description": "Operator-authored Python Instana topology collector; hardcoded the victim organization JWT + production URL; Turkish docstring",
             "malware_types": [
@@ -1238,8 +1133,8 @@
             "spec_version": "2.1",
             "id": "malware--6f9899c6-2856-5007-9d7b-86026975b0fb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.793099Z",
-            "modified": "2026-06-16T16:00:54.793099Z",
+            "created": "2026-07-15T13:32:13.577476Z",
+            "modified": "2026-07-15T13:32:13.577476Z",
             "name": "instana_collector_v4.py",
             "description": "Operator-authored Python event collector v4 (iteration marker); same the victim organization JWT",
             "malware_types": [
@@ -1255,8 +1150,8 @@
             "spec_version": "2.1",
             "id": "malware--62fbecf0-2bc3-50b0-8d12-a586f52edbca",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.793211Z",
-            "modified": "2026-06-16T16:00:54.793211Z",
+            "created": "2026-07-15T13:32:13.577585Z",
+            "modified": "2026-07-15T13:32:13.577585Z",
             "name": "correlation_v3.py",
             "description": "Operator-authored Python cross-source correlation engine v3; opens with operator self-branding docstring ARPA Korelasyon Motoru v3 - Temporal Focus",
             "malware_types": [
@@ -1272,8 +1167,8 @@
             "spec_version": "2.1",
             "id": "malware--023296fe-325b-5feb-b079-1c700d169341",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.79332Z",
-            "modified": "2026-06-16T16:00:54.79332Z",
+            "created": "2026-07-15T13:32:13.57769Z",
+            "modified": "2026-07-15T13:32:13.57769Z",
             "name": "api_correlation_routes.py",
             "description": "Operator-authored Python Flask API routes for correlations/events; Turkish comments throughout",
             "malware_types": [
@@ -1289,8 +1184,8 @@
             "spec_version": "2.1",
             "id": "malware--5e905ee3-402e-5072-aa35-471e18fb228b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.793427Z",
-            "modified": "2026-06-16T16:00:54.793427Z",
+            "created": "2026-07-15T13:32:13.577796Z",
+            "modified": "2026-07-15T13:32:13.577796Z",
             "name": "event_correlation_api.py",
             "description": "Operator-authored Python underlying correlations API implementation",
             "malware_types": [
@@ -1306,8 +1201,8 @@
             "spec_version": "2.1",
             "id": "malware--0aeadf37-f1bd-51df-9181-f86023fc19c8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.793535Z",
-            "modified": "2026-06-16T16:00:54.793535Z",
+            "created": "2026-07-15T13:32:13.577902Z",
+            "modified": "2026-07-15T13:32:13.577902Z",
             "name": "add_corr_endpoints.py",
             "description": "Operator-authored Python API patch script (variant 1); emits emoji-in-output bleed",
             "malware_types": [
@@ -1323,8 +1218,8 @@
             "spec_version": "2.1",
             "id": "malware--2e22aeb1-a3af-5475-abbe-347c10d98df8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.793642Z",
-            "modified": "2026-06-16T16:00:54.793642Z",
+            "created": "2026-07-15T13:32:13.578006Z",
+            "modified": "2026-07-15T13:32:13.578006Z",
             "name": "fix_api.py",
             "description": "Operator-authored Python API patch script (minimal variant)",
             "malware_types": [
@@ -1340,8 +1235,8 @@
             "spec_version": "2.1",
             "id": "malware--62e71216-0ec5-5baf-959f-ab36886e720d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.793748Z",
-            "modified": "2026-06-16T16:00:54.793748Z",
+            "created": "2026-07-15T13:32:13.578111Z",
+            "modified": "2026-07-15T13:32:13.578111Z",
             "name": "fix_api_endpoints.py",
             "description": "Operator-authored Python API patch script (re.replace variant)",
             "malware_types": [
@@ -1357,8 +1252,8 @@
             "spec_version": "2.1",
             "id": "malware--5ff0189a-d0ae-5169-b29d-ee8ed905753b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.79386Z",
-            "modified": "2026-06-16T16:00:54.79386Z",
+            "created": "2026-07-15T13:32:13.578221Z",
+            "modified": "2026-07-15T13:32:13.578221Z",
             "name": "patch_api.py",
             "description": "Operator-authored Python API patch script (Hunt classifier flagged MALICIOUS; Turkish comments)",
             "malware_types": [
@@ -1374,8 +1269,8 @@
             "spec_version": "2.1",
             "id": "malware--bb007bc0-ae6a-5f80-8c17-decb4ded9df3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.793968Z",
-            "modified": "2026-06-16T16:00:54.793968Z",
+            "created": "2026-07-15T13:32:13.578325Z",
+            "modified": "2026-07-15T13:32:13.578325Z",
             "name": "fix_db.py",
             "description": "Operator-authored Python DB schema patch; only file in cluster with try/except defensive pattern",
             "malware_types": [
@@ -1391,8 +1286,8 @@
             "spec_version": "2.1",
             "id": "malware--5d004857-e636-528e-bca5-cd3a71e7f9c9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.794075Z",
-            "modified": "2026-06-16T16:00:54.794075Z",
+            "created": "2026-07-15T13:32:13.578429Z",
+            "modified": "2026-07-15T13:32:13.578429Z",
             "name": "check_corr.py",
             "description": "Operator-authored Python correlation DB query script; Turkish output SON 5 KORELASYON",
             "malware_types": [
@@ -1408,8 +1303,8 @@
             "spec_version": "2.1",
             "id": "malware--47d0976f-a481-5a58-b5fe-2a6d17e61d85",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.794182Z",
-            "modified": "2026-06-16T16:00:54.794182Z",
+            "created": "2026-07-15T13:32:13.578534Z",
+            "modified": "2026-07-15T13:32:13.578534Z",
             "name": "analyze_topology.py",
             "description": "Operator-authored Python topology DB analysis script; flagged IndentationError-prone (AI Copy-Paste Indentation Decay sub-signature)",
             "malware_types": [
@@ -1425,8 +1320,8 @@
             "spec_version": "2.1",
             "id": "tool--ffc6d932-83dd-5939-96bd-648cf1142527",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.7943Z",
-            "modified": "2026-06-16T16:00:54.7943Z",
+            "created": "2026-07-15T13:32:13.57865Z",
+            "modified": "2026-07-15T13:32:13.57865Z",
             "name": "Default Hermes / OpenClaw persona template \u2014 ecosystem-presence indicator; NOT unique to this operator",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -1437,8 +1332,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.794403Z",
-            "modified": "2026-06-16T16:00:54.794403Z",
+            "created": "2026-07-15T13:32:13.578748Z",
+            "modified": "2026-07-15T13:32:13.578748Z",
             "name": "turkish-arpa-openclaw-state-insurer-209.38.205.158 infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -1453,8 +1348,8 @@
             "spec_version": "2.1",
             "id": "relationship--1a28e56d-775c-55bc-8e8b-3a3fca1028e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.79496Z",
-            "modified": "2026-06-16T16:00:54.79496Z",
+            "created": "2026-07-15T13:32:13.579281Z",
+            "modified": "2026-07-15T13:32:13.579281Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--b2ab1ebe-0d71-599c-bd69-654e47b8bb43",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1467,8 +1362,8 @@
             "spec_version": "2.1",
             "id": "relationship--d6f0d785-e7f6-58f4-b236-e4428b298c6f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.795071Z",
-            "modified": "2026-06-16T16:00:54.795071Z",
+            "created": "2026-07-15T13:32:13.579399Z",
+            "modified": "2026-07-15T13:32:13.579399Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--3a6001be-192e-5dc2-b6e9-6981b786784f",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1481,8 +1376,8 @@
             "spec_version": "2.1",
             "id": "relationship--a995f650-0828-5764-9d62-5b774f4294e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.79517Z",
-            "modified": "2026-06-16T16:00:54.79517Z",
+            "created": "2026-07-15T13:32:13.579497Z",
+            "modified": "2026-07-15T13:32:13.579497Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--f42ed891-2b65-55c8-8d53-ce40827e8227",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1495,8 +1390,8 @@
             "spec_version": "2.1",
             "id": "relationship--d474038d-3b35-5700-9cf7-4ccce0637745",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.795277Z",
-            "modified": "2026-06-16T16:00:54.795277Z",
+            "created": "2026-07-15T13:32:13.579594Z",
+            "modified": "2026-07-15T13:32:13.579594Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--97d54b60-1e1b-55cd-81dc-20775a2d5336",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1509,8 +1404,8 @@
             "spec_version": "2.1",
             "id": "relationship--7b095df4-cc16-5295-9503-e749f9f25aa4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.795379Z",
-            "modified": "2026-06-16T16:00:54.795379Z",
+            "created": "2026-07-15T13:32:13.57969Z",
+            "modified": "2026-07-15T13:32:13.57969Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--21cc8ceb-0872-5374-9601-eeceb36b0d25",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1523,8 +1418,8 @@
             "spec_version": "2.1",
             "id": "relationship--fc97df89-32c2-505c-83f0-ff76a6d5ac73",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.795479Z",
-            "modified": "2026-06-16T16:00:54.795479Z",
+            "created": "2026-07-15T13:32:13.579785Z",
+            "modified": "2026-07-15T13:32:13.579785Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--258052cd-a175-550e-baf4-c13b3a36d5f2",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1537,8 +1432,8 @@
             "spec_version": "2.1",
             "id": "relationship--8bb1b3c9-d660-54a6-bf0d-2636876f1e2d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.795598Z",
-            "modified": "2026-06-16T16:00:54.795598Z",
+            "created": "2026-07-15T13:32:13.579879Z",
+            "modified": "2026-07-15T13:32:13.579879Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--151d4657-7b52-534f-a1ea-24747312481a",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1551,8 +1446,8 @@
             "spec_version": "2.1",
             "id": "relationship--8a777476-d643-58d0-a08b-c4a76fae08ba",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.795734Z",
-            "modified": "2026-06-16T16:00:54.795734Z",
+            "created": "2026-07-15T13:32:13.579974Z",
+            "modified": "2026-07-15T13:32:13.579974Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--9d991296-0e5b-5941-8271-2d9926393c06",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1565,8 +1460,8 @@
             "spec_version": "2.1",
             "id": "relationship--0a5f6d6c-6b15-5e3d-a084-7492d6acef99",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.795893Z",
-            "modified": "2026-06-16T16:00:54.795893Z",
+            "created": "2026-07-15T13:32:13.580069Z",
+            "modified": "2026-07-15T13:32:13.580069Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--99fb9224-781d-531e-93eb-1d66f8d5f043",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1579,8 +1474,8 @@
             "spec_version": "2.1",
             "id": "relationship--1dc72154-11aa-52e7-aeda-68807139dfe8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.796013Z",
-            "modified": "2026-06-16T16:00:54.796013Z",
+            "created": "2026-07-15T13:32:13.580196Z",
+            "modified": "2026-07-15T13:32:13.580196Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--be9afef6-22e4-5fe6-b6d2-b53acb5d58b1",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1593,8 +1488,8 @@
             "spec_version": "2.1",
             "id": "relationship--d4064fa3-0609-592c-a855-af1f1c0286ea",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.796135Z",
-            "modified": "2026-06-16T16:00:54.796135Z",
+            "created": "2026-07-15T13:32:13.580316Z",
+            "modified": "2026-07-15T13:32:13.580316Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--b4e6c1cf-b63d-5a08-bb11-a510faeb00e7",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1607,8 +1502,8 @@
             "spec_version": "2.1",
             "id": "relationship--99207795-9286-54ab-bbad-12b0f479d35c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.796242Z",
-            "modified": "2026-06-16T16:00:54.796242Z",
+            "created": "2026-07-15T13:32:13.580469Z",
+            "modified": "2026-07-15T13:32:13.580469Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--b44e6631-8144-5538-adc5-f03b86b9a10d",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1621,8 +1516,8 @@
             "spec_version": "2.1",
             "id": "relationship--b3b31b3a-24fc-5c6e-b7d9-8d9708fe3b0c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.796379Z",
-            "modified": "2026-06-16T16:00:54.796379Z",
+            "created": "2026-07-15T13:32:13.580613Z",
+            "modified": "2026-07-15T13:32:13.580613Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--9dce4a3a-3d7b-56d4-9831-db9591363356",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1635,8 +1530,8 @@
             "spec_version": "2.1",
             "id": "relationship--dac8ccb3-8fd3-59d2-8959-f6661355091a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.796505Z",
-            "modified": "2026-06-16T16:00:54.796505Z",
+            "created": "2026-07-15T13:32:13.580741Z",
+            "modified": "2026-07-15T13:32:13.580741Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--c3066110-58ae-5997-904a-74605c6b8266",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1649,8 +1544,8 @@
             "spec_version": "2.1",
             "id": "relationship--d5dd2391-ff48-5a72-a74f-19a19628173c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.796651Z",
-            "modified": "2026-06-16T16:00:54.796651Z",
+            "created": "2026-07-15T13:32:13.580874Z",
+            "modified": "2026-07-15T13:32:13.580874Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--836bb762-dd95-598e-880c-d2d799ced5ba",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1663,8 +1558,8 @@
             "spec_version": "2.1",
             "id": "relationship--195c8fd0-72e3-5172-838e-a9648abd58de",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.79681Z",
-            "modified": "2026-06-16T16:00:54.79681Z",
+            "created": "2026-07-15T13:32:13.581041Z",
+            "modified": "2026-07-15T13:32:13.581041Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--91064aa9-6364-59dc-832a-279877d2ddd9",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1677,8 +1572,8 @@
             "spec_version": "2.1",
             "id": "relationship--336c5ddf-8528-54fa-9453-7b6740ce8ac2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.796935Z",
-            "modified": "2026-06-16T16:00:54.796935Z",
+            "created": "2026-07-15T13:32:13.581165Z",
+            "modified": "2026-07-15T13:32:13.581165Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--e373ea54-f50f-5c24-a837-867395968430",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1691,8 +1586,8 @@
             "spec_version": "2.1",
             "id": "relationship--3e196621-848b-56c9-a955-f5f07b24e963",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797034Z",
-            "modified": "2026-06-16T16:00:54.797034Z",
+            "created": "2026-07-15T13:32:13.581315Z",
+            "modified": "2026-07-15T13:32:13.581315Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--7b5b193a-b8dc-599e-9009-f66f3179a45f",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1705,8 +1600,8 @@
             "spec_version": "2.1",
             "id": "relationship--c657c280-e763-5332-b420-0a2343824a88",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797133Z",
-            "modified": "2026-06-16T16:00:54.797133Z",
+            "created": "2026-07-15T13:32:13.581436Z",
+            "modified": "2026-07-15T13:32:13.581436Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--6bcd235c-8d2c-5482-84d3-6586da8b6546",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1719,8 +1614,8 @@
             "spec_version": "2.1",
             "id": "relationship--5b76ef82-85ff-5500-8a3a-b57485c90d1f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797229Z",
-            "modified": "2026-06-16T16:00:54.797229Z",
+            "created": "2026-07-15T13:32:13.581576Z",
+            "modified": "2026-07-15T13:32:13.581576Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--ddd32a98-59bf-5fd0-909d-655393ad2e58",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1733,8 +1628,8 @@
             "spec_version": "2.1",
             "id": "relationship--e711f012-264f-53fa-b7f7-b36198bd605b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797324Z",
-            "modified": "2026-06-16T16:00:54.797324Z",
+            "created": "2026-07-15T13:32:13.581682Z",
+            "modified": "2026-07-15T13:32:13.581682Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--e2402970-d781-5e11-8ffe-dfa673ed1b95",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1747,8 +1642,8 @@
             "spec_version": "2.1",
             "id": "relationship--b2f7c1d4-d62b-50ab-9794-b82251d58965",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797418Z",
-            "modified": "2026-06-16T16:00:54.797418Z",
+            "created": "2026-07-15T13:32:13.581771Z",
+            "modified": "2026-07-15T13:32:13.581771Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--1e7da7d2-1ca6-558e-8228-d57db196cef5",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1761,8 +1656,8 @@
             "spec_version": "2.1",
             "id": "relationship--980b0f5a-f9c2-572e-bbe0-2a0bdea86653",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797534Z",
-            "modified": "2026-06-16T16:00:54.797534Z",
+            "created": "2026-07-15T13:32:13.581862Z",
+            "modified": "2026-07-15T13:32:13.581862Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--ae58e1ea-eae1-5b47-8f31-7094fb441ad9",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1775,8 +1670,8 @@
             "spec_version": "2.1",
             "id": "relationship--f6175e24-7af2-55b7-9037-b36bef73c636",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797629Z",
-            "modified": "2026-06-16T16:00:54.797629Z",
+            "created": "2026-07-15T13:32:13.581952Z",
+            "modified": "2026-07-15T13:32:13.581952Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--c5004d42-592c-5831-9e09-ec689811eabf",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1789,8 +1684,8 @@
             "spec_version": "2.1",
             "id": "relationship--73b65feb-3fc3-58f2-b8d4-9788ebc031b0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797725Z",
-            "modified": "2026-06-16T16:00:54.797725Z",
+            "created": "2026-07-15T13:32:13.582042Z",
+            "modified": "2026-07-15T13:32:13.582042Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--7f19042e-b66b-5d0a-9616-7935e6c8adf3",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1803,8 +1698,8 @@
             "spec_version": "2.1",
             "id": "relationship--3bcaf988-6a16-559e-b294-99147e2209c8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797824Z",
-            "modified": "2026-06-16T16:00:54.797824Z",
+            "created": "2026-07-15T13:32:13.582133Z",
+            "modified": "2026-07-15T13:32:13.582133Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--2f7ba00d-7211-50e6-9468-56cc8b547bc1",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1815,24 +1710,10 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--c60be2f1-9361-5aa0-9e35-c98db6aec19f",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.797922Z",
-            "modified": "2026-06-16T16:00:54.797922Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--8ae54c7c-f8c9-5f5e-bbe4-f7f44beeceb5",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--2d2c8cbc-f679-5a9c-a5a6-cf661760a50f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798018Z",
-            "modified": "2026-06-16T16:00:54.798018Z",
+            "created": "2026-07-15T13:32:13.582228Z",
+            "modified": "2026-07-15T13:32:13.582228Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--9c72e842-61e1-518e-86b6-52a2f1eae5d6",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1845,8 +1726,8 @@
             "spec_version": "2.1",
             "id": "relationship--7a75de6c-b2fe-5a22-bc41-3282a3ec59b4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798113Z",
-            "modified": "2026-06-16T16:00:54.798113Z",
+            "created": "2026-07-15T13:32:13.582318Z",
+            "modified": "2026-07-15T13:32:13.582318Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--f519fd3b-889b-5301-b085-3921ac07cace",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1859,8 +1740,8 @@
             "spec_version": "2.1",
             "id": "relationship--265e2288-ebb1-51b6-a7a5-ff6e7c22da32",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798209Z",
-            "modified": "2026-06-16T16:00:54.798209Z",
+            "created": "2026-07-15T13:32:13.582408Z",
+            "modified": "2026-07-15T13:32:13.582408Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--ea5fd09c-fe06-5e0b-8eb2-d1ed1f7455c1",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1871,10 +1752,24 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
+            "id": "relationship--c60be2f1-9361-5aa0-9e35-c98db6aec19f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.582498Z",
+            "modified": "2026-07-15T13:32:13.582498Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--8ae54c7c-f8c9-5f5e-bbe4-f7f44beeceb5",
+            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
             "id": "relationship--c9ba24ed-026c-5b39-b68d-87ce3c6a8bca",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798303Z",
-            "modified": "2026-06-16T16:00:54.798303Z",
+            "created": "2026-07-15T13:32:13.582588Z",
+            "modified": "2026-07-15T13:32:13.582588Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--3c847711-cc68-576d-a4bd-ea9eacafc47e",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1885,24 +1780,10 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--31322bdf-5fbc-5c67-9ee9-9a631ad9acb6",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798398Z",
-            "modified": "2026-06-16T16:00:54.798398Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--bce22686-5abb-5483-9a7d-5323accb15f2",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--6a644301-6026-5235-984a-df448cbd077d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798494Z",
-            "modified": "2026-06-16T16:00:54.798494Z",
+            "created": "2026-07-15T13:32:13.582677Z",
+            "modified": "2026-07-15T13:32:13.582677Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--306831fd-abeb-5fbc-9814-e957544d5db7",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1915,8 +1796,8 @@
             "spec_version": "2.1",
             "id": "relationship--f48d82fb-6db5-57f5-897b-edf535bcb5ac",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798589Z",
-            "modified": "2026-06-16T16:00:54.798589Z",
+            "created": "2026-07-15T13:32:13.582767Z",
+            "modified": "2026-07-15T13:32:13.582767Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--517a4808-e1fd-5c00-bbae-1563e2e712a6",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1929,8 +1810,8 @@
             "spec_version": "2.1",
             "id": "relationship--7ffad784-641d-58f7-a815-bb3d608a991b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798683Z",
-            "modified": "2026-06-16T16:00:54.798683Z",
+            "created": "2026-07-15T13:32:13.582856Z",
+            "modified": "2026-07-15T13:32:13.582856Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--428a1ff6-bbe4-5c07-8422-4b538c2d9873",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1943,8 +1824,8 @@
             "spec_version": "2.1",
             "id": "relationship--9038ec44-4778-50b1-9572-328b17871935",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.79878Z",
-            "modified": "2026-06-16T16:00:54.79878Z",
+            "created": "2026-07-15T13:32:13.582946Z",
+            "modified": "2026-07-15T13:32:13.582946Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--a023dcd7-9c8a-5690-a910-eebdea1e0cd5",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1955,38 +1836,10 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--14000a05-516b-53e6-918d-8863ee96e670",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798883Z",
-            "modified": "2026-06-16T16:00:54.798883Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--5574adf6-1a02-571c-af31-0aec8a1f2487",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
-            "id": "relationship--314697f2-d875-5efe-b45f-a6d50fa45bab",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.798979Z",
-            "modified": "2026-06-16T16:00:54.798979Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--644468ff-0b0a-5b4c-9bc5-9592d6651c22",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--ba91ecb3-84e3-5655-b658-3f82f1a8b11b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799076Z",
-            "modified": "2026-06-16T16:00:54.799076Z",
+            "created": "2026-07-15T13:32:13.583036Z",
+            "modified": "2026-07-15T13:32:13.583036Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--cc8ff1ab-1f99-551b-9de9-a132f268ab42",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -1997,10 +1850,52 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
+            "id": "relationship--cdaaeab2-bcbe-591a-ade8-f37ff18984e7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.583126Z",
+            "modified": "2026-07-15T13:32:13.583126Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--9a215236-ddd5-5137-b549-c4c17130d482",
+            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--c41ff136-514a-573b-a5b1-2fbfdae2a5d0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.583385Z",
+            "modified": "2026-07-15T13:32:13.583385Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--ec1db4c9-4ad6-5c57-9209-44c60f7fe4f4",
+            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--6507d2db-2ee8-5806-bbeb-5e41c7597c64",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.583493Z",
+            "modified": "2026-07-15T13:32:13.583493Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--5465d865-e801-5e6b-a68d-faf0e0be6148",
+            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
             "id": "relationship--94f0c10f-8a42-50cb-95ff-3f218851023b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799173Z",
-            "modified": "2026-06-16T16:00:54.799173Z",
+            "created": "2026-07-15T13:32:13.583583Z",
+            "modified": "2026-07-15T13:32:13.583583Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--04f62108-a242-5636-a305-81b292213800",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -2011,24 +1906,10 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--33d3adc4-d5f7-53d9-b14e-403dbf136423",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799268Z",
-            "modified": "2026-06-16T16:00:54.799268Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--2e2de705-a6da-5bc7-9a9d-b37070f3b7c2",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
             "id": "relationship--d1e2872b-d904-5373-a61e-f03388107c68",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799364Z",
-            "modified": "2026-06-16T16:00:54.799364Z",
+            "created": "2026-07-15T13:32:13.583674Z",
+            "modified": "2026-07-15T13:32:13.583674Z",
             "relationship_type": "indicates",
             "source_ref": "indicator--05addf56-1dec-5cca-9547-25d2cb26f062",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
@@ -2039,12 +1920,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--4c28167e-5ad1-524f-a664-bf3aff076c00",
+            "id": "relationship--6778ae1b-32f6-50c4-92c3-55add879ae0f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799458Z",
-            "modified": "2026-06-16T16:00:54.799458Z",
+            "created": "2026-07-15T13:32:13.583764Z",
+            "modified": "2026-07-15T13:32:13.583764Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--43cee0da-35e3-5a4c-8946-9e10cabefedf",
+            "source_ref": "indicator--ce407375-d1cb-5c32-91c2-fcad76489e07",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -2053,68 +1934,12 @@
         {
             "type": "relationship",
             "spec_version": "2.1",
-            "id": "relationship--c292fc1a-4cd8-57ee-afbf-82bc64cca7b3",
+            "id": "relationship--a360540e-1353-5687-8286-15d1b36684a8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799553Z",
-            "modified": "2026-06-16T16:00:54.799553Z",
+            "created": "2026-07-15T13:32:13.583854Z",
+            "modified": "2026-07-15T13:32:13.583854Z",
             "relationship_type": "indicates",
-            "source_ref": "indicator--00aeff19-02a2-5782-b38d-df3d618be9e3",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
-            "id": "relationship--92adf8fa-de76-57cf-908f-04873dc81e49",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799648Z",
-            "modified": "2026-06-16T16:00:54.799648Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--d081419d-8d1f-56e2-a2c7-944c14ddffc1",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
-            "id": "relationship--f113a07e-43da-501e-a03b-65971507548b",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799744Z",
-            "modified": "2026-06-16T16:00:54.799744Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--32754607-a038-5ce7-b618-2e057479dee3",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
-            "id": "relationship--7bc5351c-c78a-58a5-b51b-ebfdc14a971e",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799839Z",
-            "modified": "2026-06-16T16:00:54.799839Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--cf4ce0f1-dd2a-523d-9b58-d3073670a387",
-            "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "relationship",
-            "spec_version": "2.1",
-            "id": "relationship--07ae2d32-59d6-5145-a08e-f5a51bd7f27b",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.799935Z",
-            "modified": "2026-06-16T16:00:54.799935Z",
-            "relationship_type": "indicates",
-            "source_ref": "indicator--6cdbfdcf-b728-54e4-b0bc-9fe76cf895b1",
+            "source_ref": "indicator--35b24074-0824-5d47-9497-05a7e38fc675",
             "target_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -2125,8 +1950,8 @@
             "spec_version": "2.1",
             "id": "relationship--f8fb739b-9338-5b15-8c0c-abe6c6e29b58",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800032Z",
-            "modified": "2026-06-16T16:00:54.800032Z",
+            "created": "2026-07-15T13:32:13.583946Z",
+            "modified": "2026-07-15T13:32:13.583946Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2139,8 +1964,8 @@
             "spec_version": "2.1",
             "id": "relationship--7ef41467-c310-53b8-a84c-b7a609910955",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800128Z",
-            "modified": "2026-06-16T16:00:54.800128Z",
+            "created": "2026-07-15T13:32:13.584038Z",
+            "modified": "2026-07-15T13:32:13.584038Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--6f9899c6-2856-5007-9d7b-86026975b0fb",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2153,8 +1978,8 @@
             "spec_version": "2.1",
             "id": "relationship--17e9acc5-e6c2-5ef1-9bb1-1daf3c47c3f0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800224Z",
-            "modified": "2026-06-16T16:00:54.800224Z",
+            "created": "2026-07-15T13:32:13.584129Z",
+            "modified": "2026-07-15T13:32:13.584129Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--62fbecf0-2bc3-50b0-8d12-a586f52edbca",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2167,8 +1992,8 @@
             "spec_version": "2.1",
             "id": "relationship--ce609547-8b39-52fd-bde2-c5102611288f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.80032Z",
-            "modified": "2026-06-16T16:00:54.80032Z",
+            "created": "2026-07-15T13:32:13.584225Z",
+            "modified": "2026-07-15T13:32:13.584225Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--023296fe-325b-5feb-b079-1c700d169341",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2181,8 +2006,8 @@
             "spec_version": "2.1",
             "id": "relationship--cabebd41-f2ff-51f4-8b6b-88deeda91b7b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800435Z",
-            "modified": "2026-06-16T16:00:54.800435Z",
+            "created": "2026-07-15T13:32:13.584314Z",
+            "modified": "2026-07-15T13:32:13.584314Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--5e905ee3-402e-5072-aa35-471e18fb228b",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2195,8 +2020,8 @@
             "spec_version": "2.1",
             "id": "relationship--9d160adb-f002-512f-a89b-9dad7ab54a3d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800533Z",
-            "modified": "2026-06-16T16:00:54.800533Z",
+            "created": "2026-07-15T13:32:13.584403Z",
+            "modified": "2026-07-15T13:32:13.584403Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--0aeadf37-f1bd-51df-9181-f86023fc19c8",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2209,8 +2034,8 @@
             "spec_version": "2.1",
             "id": "relationship--5d9b15d4-4f69-5d63-ab60-40ae272ac3bd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800631Z",
-            "modified": "2026-06-16T16:00:54.800631Z",
+            "created": "2026-07-15T13:32:13.584493Z",
+            "modified": "2026-07-15T13:32:13.584493Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--2e22aeb1-a3af-5475-abbe-347c10d98df8",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2223,8 +2048,8 @@
             "spec_version": "2.1",
             "id": "relationship--d772fe0f-057a-5bf7-bf75-580fbd941414",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800726Z",
-            "modified": "2026-06-16T16:00:54.800726Z",
+            "created": "2026-07-15T13:32:13.584583Z",
+            "modified": "2026-07-15T13:32:13.584583Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--62e71216-0ec5-5baf-959f-ab36886e720d",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2237,8 +2062,8 @@
             "spec_version": "2.1",
             "id": "relationship--8480b5be-d456-5476-b727-6667c22cafda",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800821Z",
-            "modified": "2026-06-16T16:00:54.800821Z",
+            "created": "2026-07-15T13:32:13.584673Z",
+            "modified": "2026-07-15T13:32:13.584673Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--5ff0189a-d0ae-5169-b29d-ee8ed905753b",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2251,8 +2076,8 @@
             "spec_version": "2.1",
             "id": "relationship--f53604fe-e836-5455-86cf-e9c42e494eee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.800917Z",
-            "modified": "2026-06-16T16:00:54.800917Z",
+            "created": "2026-07-15T13:32:13.584762Z",
+            "modified": "2026-07-15T13:32:13.584762Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--bb007bc0-ae6a-5f80-8c17-decb4ded9df3",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2265,8 +2090,8 @@
             "spec_version": "2.1",
             "id": "relationship--f926c9a1-bb30-5e54-9698-96d605f31567",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.801011Z",
-            "modified": "2026-06-16T16:00:54.801011Z",
+            "created": "2026-07-15T13:32:13.584851Z",
+            "modified": "2026-07-15T13:32:13.584851Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--5d004857-e636-528e-bca5-cd3a71e7f9c9",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2279,8 +2104,8 @@
             "spec_version": "2.1",
             "id": "relationship--08a43afe-3cca-5e35-9c92-21841221c046",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.801107Z",
-            "modified": "2026-06-16T16:00:54.801107Z",
+            "created": "2026-07-15T13:32:13.58494Z",
+            "modified": "2026-07-15T13:32:13.58494Z",
             "relationship_type": "communicates-with",
             "source_ref": "malware--47d0976f-a481-5a58-b5fe-2a6d17e61d85",
             "target_ref": "infrastructure--ae242048-51c8-5a5b-9787-3d154fcca2d3",
@@ -2293,8 +2118,8 @@
             "spec_version": "2.1",
             "id": "relationship--fea4680a-841b-5f78-9baa-282e633c05d4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.801224Z",
-            "modified": "2026-06-16T16:00:54.801224Z",
+            "created": "2026-07-15T13:32:13.58503Z",
+            "modified": "2026-07-15T13:32:13.58503Z",
             "relationship_type": "related-to",
             "source_ref": "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
             "target_ref": "tool--ffc6d932-83dd-5939-96bd-648cf1142527",
@@ -2307,8 +2132,8 @@
             "spec_version": "2.1",
             "id": "report--aed547b6-648b-561d-b984-464d52e75bcc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-16T16:00:54.801366Z",
-            "modified": "2026-06-16T16:00:54.801366Z",
+            "created": "2026-07-15T13:32:13.585163Z",
+            "modified": "2026-07-15T13:32:13.585163Z",
             "name": "Turkish ARPA Operator \u2014 AI-Augmented State-Insurer Observability Compromise + Insider Recruitment Artifact (UTA-2026-013)",
             "description": "Public release. Victim-identifying indicators (internal hostnames, insider Windows AD user ID, internal IPs) are excluded from this public feed and held offline for victim IR coordination. Victim and partner infrastructure is excluded from the public feed entirely.",
             "report_types": [
@@ -2365,28 +2190,23 @@
                 "indicator--c5004d42-592c-5831-9e09-ec689811eabf",
                 "indicator--7f19042e-b66b-5d0a-9616-7935e6c8adf3",
                 "indicator--2f7ba00d-7211-50e6-9468-56cc8b547bc1",
-                "indicator--8ae54c7c-f8c9-5f5e-bbe4-f7f44beeceb5",
                 "indicator--9c72e842-61e1-518e-86b6-52a2f1eae5d6",
                 "indicator--f519fd3b-889b-5301-b085-3921ac07cace",
                 "indicator--ea5fd09c-fe06-5e0b-8eb2-d1ed1f7455c1",
+                "indicator--8ae54c7c-f8c9-5f5e-bbe4-f7f44beeceb5",
                 "indicator--3c847711-cc68-576d-a4bd-ea9eacafc47e",
-                "indicator--bce22686-5abb-5483-9a7d-5323accb15f2",
                 "indicator--306831fd-abeb-5fbc-9814-e957544d5db7",
                 "indicator--517a4808-e1fd-5c00-bbae-1563e2e712a6",
                 "indicator--428a1ff6-bbe4-5c07-8422-4b538c2d9873",
                 "indicator--a023dcd7-9c8a-5690-a910-eebdea1e0cd5",
-                "indicator--5574adf6-1a02-571c-af31-0aec8a1f2487",
-                "indicator--644468ff-0b0a-5b4c-9bc5-9592d6651c22",
                 "indicator--cc8ff1ab-1f99-551b-9de9-a132f268ab42",
+                "indicator--9a215236-ddd5-5137-b549-c4c17130d482",
+                "indicator--ec1db4c9-4ad6-5c57-9209-44c60f7fe4f4",
+                "indicator--5465d865-e801-5e6b-a68d-faf0e0be6148",
                 "indicator--04f62108-a242-5636-a305-81b292213800",
-                "indicator--2e2de705-a6da-5bc7-9a9d-b37070f3b7c2",
                 "indicator--05addf56-1dec-5cca-9547-25d2cb26f062",
-                "indicator--43cee0da-35e3-5a4c-8946-9e10cabefedf",
-                "indicator--00aeff19-02a2-5782-b38d-df3d618be9e3",
-                "indicator--d081419d-8d1f-56e2-a2c7-944c14ddffc1",
-                "indicator--32754607-a038-5ce7-b618-2e057479dee3",
-                "indicator--cf4ce0f1-dd2a-523d-9b58-d3073670a387",
-                "indicator--6cdbfdcf-b728-54e4-b0bc-9fe76cf895b1",
+                "indicator--ce407375-d1cb-5c32-91c2-fcad76489e07",
+                "indicator--35b24074-0824-5d47-9497-05a7e38fc675",
                 "malware--7bdfe38a-04a0-534d-91dd-adfc255e5813",
                 "malware--6f9899c6-2856-5007-9d7b-86026975b0fb",
                 "malware--62fbecf0-2bc3-50b0-8d12-a586f52edbca",
@@ -2427,28 +2247,23 @@
                 "relationship--f6175e24-7af2-55b7-9037-b36bef73c636",
                 "relationship--73b65feb-3fc3-58f2-b8d4-9788ebc031b0",
                 "relationship--3bcaf988-6a16-559e-b294-99147e2209c8",
-                "relationship--c60be2f1-9361-5aa0-9e35-c98db6aec19f",
                 "relationship--2d2c8cbc-f679-5a9c-a5a6-cf661760a50f",
                 "relationship--7a75de6c-b2fe-5a22-bc41-3282a3ec59b4",
                 "relationship--265e2288-ebb1-51b6-a7a5-ff6e7c22da32",
+                "relationship--c60be2f1-9361-5aa0-9e35-c98db6aec19f",
                 "relationship--c9ba24ed-026c-5b39-b68d-87ce3c6a8bca",
-                "relationship--31322bdf-5fbc-5c67-9ee9-9a631ad9acb6",
                 "relationship--6a644301-6026-5235-984a-df448cbd077d",
                 "relationship--f48d82fb-6db5-57f5-897b-edf535bcb5ac",
                 "relationship--7ffad784-641d-58f7-a815-bb3d608a991b",
                 "relationship--9038ec44-4778-50b1-9572-328b17871935",
-                "relationship--14000a05-516b-53e6-918d-8863ee96e670",
-                "relationship--314697f2-d875-5efe-b45f-a6d50fa45bab",
                 "relationship--ba91ecb3-84e3-5655-b658-3f82f1a8b11b",
+                "relationship--cdaaeab2-bcbe-591a-ade8-f37ff18984e7",
+                "relationship--c41ff136-514a-573b-a5b1-2fbfdae2a5d0",
+                "relationship--6507d2db-2ee8-5806-bbeb-5e41c7597c64",
                 "relationship--94f0c10f-8a42-50cb-95ff-3f218851023b",
-                "relationship--33d3adc4-d5f7-53d9-b14e-403dbf136423",
                 "relationship--d1e2872b-d904-5373-a61e-f03388107c68",
-                "relationship--4c28167e-5ad1-524f-a664-bf3aff076c00",
-                "relationship--c292fc1a-4cd8-57ee-afbf-82bc64cca7b3",
-                "relationship--92adf8fa-de76-57cf-908f-04873dc81e49",
-                "relationship--f113a07e-43da-501e-a03b-65971507548b",
-                "relationship--7bc5351c-c78a-58a5-b51b-ebfdc14a971e",
-                "relationship--07ae2d32-59d6-5145-a08e-f5a51bd7f27b",
+                "relationship--6778ae1b-32f6-50c4-92c3-55add879ae0f",
+                "relationship--a360540e-1353-5687-8286-15d1b36684a8",
                 "relationship--f8fb739b-9338-5b15-8c0c-abe6c6e29b58",
                 "relationship--7ef41467-c310-53b8-a84c-b7a609910955",
                 "relationship--17e9acc5-e6c2-5ef1-9bb1-1daf3c47c3f0",

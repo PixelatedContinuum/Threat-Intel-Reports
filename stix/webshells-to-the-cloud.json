@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--b2fe514b-6135-4dd5-a279-226f1d7d1e21",
+    "id": "bundle--85d4900b-8a55-4871-9f41-baa4c407242c",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.730257Z",
-            "modified": "2026-06-14T11:57:34.730257Z",
+            "created": "2026-07-15T13:32:14.127085Z",
+            "modified": "2026-07-15T13:32:14.127085Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -23,17 +23,81 @@
             }
         },
         {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--817b337b-91c5-511f-ac1c-f7d14476f911",
+            "hashes": {
+                "SHA-256": "1b62bd9aef9d0a881a9fba620bc62d9934bc098657c7d03c67593a27c7070642"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--b03d8f64-f3cb-5c43-9499-6ee84c74fcfb",
+            "hashes": {
+                "SHA-256": "f75f22a3828a995759c3aeb21db02ccbb16362b68bd65e2005eae7ee819a5136"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--90a4c27a-1eb7-506b-8d0c-e92c145d4538",
+            "hashes": {
+                "SHA-256": "4213d1a7643745c41c67fde44f7251ac146de3ad10ef28bbcb3ef4bd3cd8607b"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--08ea2395-351a-5f1d-ab6e-43870cd71b70",
+            "hashes": {
+                "SHA-256": "4f4fad2fd314581f83dd0e9b4e0f36859a04e165a5abbd15d5ffeb4c63fc28c0"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--5c9bb6e6-0e91-5583-9960-23098c15eec0",
+            "hashes": {
+                "SHA-256": "83c29e70cd7fa3c3b0e43cd6df9bfc6915c8578693b16457de8401157228fdf8"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--466d810c-48ce-5aaf-80b8-e1e9079784e6",
+            "hashes": {
+                "SHA-256": "d98c2874389934881b1ae0162c7b11e7bd01535b7c46e3f873168fca2021deda"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--07fb05e8-f2d2-529c-9514-a45e651bd560",
+            "hashes": {
+                "SHA-256": "c0f67589eea4e605a31975b5c469e57c024576282a96d010a7dc4b1ecc339005"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--1670ccb4-631d-5119-8a4c-6a89dfa91492",
+            "hashes": {
+                "SHA-256": "02ed1649179ffd6136c2e5d6e48556255644aba38f03589e7b1c98ce66de8297"
+            }
+        },
+        {
             "type": "indicator",
             "spec_version": "2.1",
             "id": "indicator--c7864546-6dc9-5a7e-b56c-964de02692dd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.730619Z",
-            "modified": "2026-06-14T11:57:34.730619Z",
+            "created": "2026-07-15T13:32:14.128375Z",
+            "modified": "2026-07-15T13:32:14.128375Z",
             "name": "Suspicious File Manager Access",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious File Manager Access  \nlogsource:  \n  category: webserver  \ndetection:  \n  selection:  \n    uri_path|contains:  \n      - \"file-manager/backend/makefile\"  \n      - \"phpmyadmin/js/\"  \ncondition: selection  \nlevel: high",
+            "pattern": "title: Suspicious File Manager Access\nid: 417a6801-8ed4-4a4c-b00a-5fb13005905e\nstatus: experimental\ndescription: Detects HTTP requests to exposed file-manager and phpMyAdmin backend paths commonly abused for initial access and file staging in the Webshells-to-the-Cloud campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem|contains:\n            - 'file-manager/backend/makefile'\n            - 'phpmyadmin/js/'\n    condition: selection\nfalsepositives:\n    - Routine JavaScript asset loading on a legitimately deployed phpMyAdmin instance\n    - Legitimate administrative access to a deployed file-manager instance predating compromise\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -46,58 +110,16 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--9fa7bcfa-bedf-58fc-8445-05868bb8831f",
+            "id": "indicator--bd2e0bc7-9d5d-5952-a719-d9202a07271a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.73083Z",
-            "modified": "2026-06-14T11:57:34.73083Z",
-            "name": "Suspicious clp-fm Cookie",
+            "created": "2026-07-15T13:32:14.128542Z",
+            "modified": "2026-07-15T13:32:14.128542Z",
+            "name": "Suspicious Clp-Fm Cookie",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious clp-fm Cookie  \nlogsource:  \n  category: webserver  \ndetection:  \n  selection:  \n    http.cookie|contains: \"clp-fm=\"  \ncondition: selection  \nlevel: high",
+            "pattern": "title: Suspicious Clp-Fm Cookie\nid: f3f41eba-22fa-464d-bbce-47ca27ce5a34\nstatus: experimental\ndescription: Detects the operator-distinctive clp-fm session cookie used by the file-manager webshell component of the Webshells-to-the-Cloud campaign to maintain authenticated access to the compromised backend.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-cookie|contains: 'clp-fm='\n    condition: selection\nfalsepositives:\n    - Possible collision if CloudPanel's own File Manager feature uses a similarly-named session cookie on an unexploited instance\n    - Unlikely otherwise \u2014 this cookie name is not known to be used by other software\nlevel: medium",
             "pattern_type": "sigma",
-            "valid_from": "2025-10-20T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--263bb5a1-012d-578a-9db3-e16ac4853b88",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.730978Z",
-            "modified": "2026-06-14T11:57:34.730978Z",
-            "name": "Webshell Command Execution",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert http any any -> any any (msg:\"Webshell Command Execution\"; http.uri; content:\"cmd=\"; nocase; sid:100001; rev:1;)",
-            "pattern_type": "suricata",
-            "valid_from": "2025-10-20T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--5be4e918-ba0b-5267-bf57-03309259bedd",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.731116Z",
-            "modified": "2026-06-14T11:57:34.731116Z",
-            "name": "Suspicious POST param mxx",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "alert http any any -> any any (msg:\"Suspicious POST param mxx\"; http.request_body; content:\"mxx=\"; nocase; sid:100002; rev:1;)",
-            "pattern_type": "suricata",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
                 "detection-rule"
@@ -111,13 +133,13 @@
             "spec_version": "2.1",
             "id": "indicator--7450b221-9394-5c63-95c2-efc4d3a2103e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.731294Z",
-            "modified": "2026-06-14T11:57:34.731294Z",
+            "created": "2026-07-15T13:32:14.128667Z",
+            "modified": "2026-07-15T13:32:14.128667Z",
             "name": "Suspicious User Creation",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious User Creation  \nlogsource:  \n  category: auditd  \ndetection:  \n  selection:  \n    syscall: useradd  \n    exe: /usr/sbin/useradd  \n    a0: \"zeroday\"  \ncondition: selection  \nlevel: critical",
+            "pattern": "title: Suspicious User Creation\nid: 3dd2ccc6-76a3-4983-ae38-e76e4ef9922f\nstatus: experimental\ndescription: Detects creation of the operator-distinctive local account 'zeroday' via useradd, used as a persistence mechanism in the Webshells-to-the-Cloud campaign after initial webshell access.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1136.001\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    service: auditd\ndetection:\n    selection:\n        type: 'SYSCALL'\n        exe|endswith: '/useradd'\n        a0: 'zeroday'\n    condition: selection\nfalsepositives:\n    - Legitimate administrator provisioning a local account that happens to share this name (verify against IT asset management)\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -132,13 +154,13 @@
             "spec_version": "2.1",
             "id": "indicator--53f2b4e9-2432-58f0-b442-2a57d90393d2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.731434Z",
-            "modified": "2026-06-14T11:57:34.731434Z",
+            "created": "2026-07-15T13:32:14.128786Z",
+            "modified": "2026-07-15T13:32:14.128786Z",
             "name": "Webshell File Creation",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Webshell File Creation  \nlogsource:  \n  category: file  \ndetection:  \n  selection:  \n    file.path|endswith: \"/htdocs/app/files/public/shell.php\"  \ncondition: selection  \nlevel: high",
+            "pattern": "title: Webshell File Creation\nid: 3e0b3119-6680-4972-bf69-9461c9eff56b\nstatus: experimental\ndescription: Detects creation of the operator-distinctive webshell file at the compromised application's public files directory, observed in the Webshells-to-the-Cloud campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    product: linux\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|endswith: '/htdocs/app/files/public/shell.php'\n    condition: selection\nfalsepositives:\n    - Unlikely \u2014 this exact file path is specific to the compromised application instance observed in this campaign\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -153,13 +175,13 @@
             "spec_version": "2.1",
             "id": "indicator--353d5f0f-9e8e-5633-97c0-adfa4b1a5395",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.731565Z",
-            "modified": "2026-06-14T11:57:34.731565Z",
+            "created": "2026-07-15T13:32:14.128902Z",
+            "modified": "2026-07-15T13:32:14.128902Z",
             "name": "Rclone Execution",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Rclone Execution  \nlogsource:  \n  category: process_creation  \ndetection:  \n  selection:  \n    Image|endswith:  \n      - \"rclone\"  \n      - \"rclone.exe\"  \ncondition: selection  \nlevel: high",
+            "pattern": "title: Rclone Execution\nid: 960b3056-e0d5-4d0b-a422-f571d24a15cb\nstatus: experimental\ndescription: Detects execution of the rclone cloud-sync utility, used by the Webshells-to-the-Cloud campaign operator to stage and exfiltrate data to attacker-controlled cloud storage after webshell-based access.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.exfiltration\n    - attack.t1567.002\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith:\n            - '\\rclone.exe'\n    condition: selection\nfalsepositives:\n    - Legitimate IT administration or backup automation using rclone for authorized cloud-sync tasks\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -174,34 +196,13 @@
             "spec_version": "2.1",
             "id": "indicator--8bb6005c-d5c6-5f82-b0b2-e3b6407ceccd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.731701Z",
-            "modified": "2026-06-14T11:57:34.731701Z",
+            "created": "2026-07-15T13:32:14.129015Z",
+            "modified": "2026-07-15T13:32:14.129015Z",
             "name": "Dropbox API Traffic",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Dropbox API Traffic  \nlogsource:  \n  category: proxy  \ndetection:  \n  selection:  \n    dst_domain: \"api.dropboxapi.com\"  \ncondition: selection  \nlevel: medium",
-            "pattern_type": "sigma",
-            "valid_from": "2025-10-20T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--57f582eb-ac4f-561c-9cdf-07f13bdea362",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.731931Z",
-            "modified": "2026-06-14T11:57:34.731931Z",
-            "name": "Suspicious S3 Activity",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Suspicious S3 Activity  \nlogsource:  \n  category: aws.cloudtrail  \ndetection:  \n  selection:  \n    eventName:  \n      - \"PutObject\"  \n      - \"DeleteObject\"  \n    userIdentity.type: \"IAMUser\"  \ncondition: selection  \nlevel: high",
+            "pattern": "title: Dropbox API Traffic\nid: c9aac2c1-2261-4c14-ae47-bd9d193eb4bc\nstatus: experimental\ndescription: >-\n  Detects outbound traffic to the Dropbox API, used as an alternate cloud-storage exfiltration channel alongside rclone/S3 in the Webshells-to-the-Cloud campaign. Legitimate enterprise Dropbox integrations will require allowlist tuning.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.exfiltration\n    - attack.t1567.002\n    - detection.emerging-threats\nlogsource:\n    category: proxy\ndetection:\n    selection:\n        cs-host: 'api.dropboxapi.com'\n    condition: selection\nfalsepositives:\n    - Legitimate enterprise Dropbox integrations or file-sync clients (tune to server-class hosts or add known-good source allowlist)\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -216,13 +217,13 @@
             "spec_version": "2.1",
             "id": "indicator--5e808de1-0cc7-5b98-b1fb-a25c9d7ff191",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.732155Z",
-            "modified": "2026-06-14T11:57:34.732155Z",
+            "created": "2026-07-15T13:32:14.129128Z",
+            "modified": "2026-07-15T13:32:14.129128Z",
             "name": "Suspicious WordPress Install",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Suspicious WordPress Install  \nlogsource:  \n  category: webserver  \ndetection:  \n  selection:  \n    uri_path: \"/wp-admin/install.php\"  \n    http.method: \"POST\"  \ncondition: selection  \nlevel: medium",
+            "pattern": "title: Suspicious WordPress Install\nid: 02dc195f-4f04-4fd9-9fe0-224e63e90560\nstatus: experimental\ndescription: Detects a POST request to the WordPress installer endpoint, consistent with the Webshells-to-the-Cloud campaign operator standing up a new WordPress instance on compromised infrastructure as part of automated infrastructure buildout.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - detection.emerging-threats\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem: '/wp-admin/install.php'\n        cs-method: 'POST'\n    condition: selection\nfalsepositives:\n    - Legitimate first-time setup of a new WordPress installation by an administrator\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -235,15 +236,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--16bd37a9-5013-5ad5-b073-b52c41fd92de",
+            "id": "indicator--d6cde6d3-77ba-5e19-95ed-9eed221e07fb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.732406Z",
-            "modified": "2026-06-14T11:57:34.732406Z",
-            "name": "Reverse Proxy Config Changes",
+            "created": "2026-07-15T13:32:14.12924Z",
+            "modified": "2026-07-15T13:32:14.12924Z",
+            "name": "Nginx Configuration File Modified",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Reverse Proxy Config Changes  \nlogsource:  \n  category: webserver  \ndetection:  \n  selection:  \n    config_change: true  \n    upstream|contains: \"external\"  \ncondition: selection  \nlevel: high",
+            "pattern": "title: Nginx Configuration File Modified\nid: 4de0ab63-3b37-4203-ba70-721af47514f4\nstatus: experimental\ndescription: >-\n  Detects file writes under /etc/nginx/. A malicious outbound reverse-proxy relay requires\n  a proxy_pass directive to an external host, which file-event telemetry cannot inspect -\n  treat this as a hunting lead requiring a content diff of the changed config.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/\nauthor: The Hunters Ledger\ndate: '2025-10-20'\ntags:\n    - attack.command-and-control\n    - attack.t1090\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: linux\ndetection:\n    selection:\n        TargetFilename|contains: '/etc/nginx/'\n    condition: selection\nfalsepositives:\n    - Legitimate infrastructure changes adding a proxy upstream to an external, authorized destination\n    - Certbot/TLS certificate renewals\n    - Configuration-management pushes\n    - Legitimate administrator edits to nginx config\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2025-10-20T00:00:00Z",
             "labels": [
@@ -254,29 +255,69 @@
             ]
         },
         {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d7e06505-c2e0-5fc1-849f-a3b84ad1dbd1",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:14.129353Z",
+            "modified": "2026-07-15T13:32:14.129353Z",
+            "name": "THL Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL Webshells-To-Cloud-Modular-Intrusion Suspicious mxx POST Parameter (Webshell Command Parameter Indicator)\"; flow:established,to_server; http.request_body; content:\"mxx=\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:web-application-attack; sid:100002; rev:2; metadata:author The_Hunters_Ledger, date 2025-10-20, reference https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2025-10-20T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:14.129477Z",
+            "modified": "2026-07-15T13:32:14.129477Z",
+            "name": "",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
             "type": "report",
             "spec_version": "2.1",
             "id": "report--3a042466-61a6-5b3e-a1f9-5c5412cffba2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:34.73283Z",
-            "modified": "2026-06-14T11:57:34.73283Z",
+            "created": "2026-07-15T13:32:14.130341Z",
+            "modified": "2026-07-15T13:32:14.130341Z",
             "name": "From Webshells to the Cloud",
             "report_types": [
                 "threat-report"
             ],
             "published": "2025-10-20T00:00:00Z",
             "object_refs": [
+                "file--817b337b-91c5-511f-ac1c-f7d14476f911",
+                "file--b03d8f64-f3cb-5c43-9499-6ee84c74fcfb",
+                "file--90a4c27a-1eb7-506b-8d0c-e92c145d4538",
+                "file--08ea2395-351a-5f1d-ab6e-43870cd71b70",
+                "file--5c9bb6e6-0e91-5583-9960-23098c15eec0",
+                "file--466d810c-48ce-5aaf-80b8-e1e9079784e6",
+                "file--07fb05e8-f2d2-529c-9514-a45e651bd560",
+                "file--1670ccb4-631d-5119-8a4c-6a89dfa91492",
                 "indicator--c7864546-6dc9-5a7e-b56c-964de02692dd",
-                "indicator--9fa7bcfa-bedf-58fc-8445-05868bb8831f",
-                "indicator--263bb5a1-012d-578a-9db3-e16ac4853b88",
-                "indicator--5be4e918-ba0b-5267-bf57-03309259bedd",
+                "indicator--bd2e0bc7-9d5d-5952-a719-d9202a07271a",
                 "indicator--7450b221-9394-5c63-95c2-efc4d3a2103e",
                 "indicator--53f2b4e9-2432-58f0-b442-2a57d90393d2",
                 "indicator--353d5f0f-9e8e-5633-97c0-adfa4b1a5395",
                 "indicator--8bb6005c-d5c6-5f82-b0b2-e3b6407ceccd",
-                "indicator--57f582eb-ac4f-561c-9cdf-07f13bdea362",
                 "indicator--5e808de1-0cc7-5b98-b1fb-a25c9d7ff191",
-                "indicator--16bd37a9-5013-5ad5-b073-b52c41fd92de"
+                "indicator--d6cde6d3-77ba-5e19-95ed-9eed221e07fb",
+                "indicator--d7e06505-c2e0-5fc1-849f-a3b84ad1dbd1",
+                "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7"
             ],
             "labels": [
                 "Webshell",

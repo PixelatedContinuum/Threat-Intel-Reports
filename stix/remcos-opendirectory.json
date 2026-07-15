@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--88ad40d1-1e61-44ca-b469-ca26b53987f9",
+    "id": "bundle--11e7bb93-1eb1-4cda-9639-05eb7882e006",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.330002Z",
-            "modified": "2026-06-14T11:57:20.330002Z",
+            "created": "2026-07-15T13:32:02.103493Z",
+            "modified": "2026-07-15T13:32:02.103493Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -23,17 +23,77 @@
             }
         },
         {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--bbc8751e-4d9b-58ad-adfe-184e9219cc29",
+            "hashes": {
+                "SHA-256": "db218dd5f53fbcf39a6db043c8455667c3dbef44abe14865e8b962b4c676372e"
+            }
+        },
+        {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--633c5a48-e561-59e1-95ee-b4928d4afbf2",
+            "id": "indicator--3105cfe5-849c-5817-a819-d52fc2a81a14",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.330643Z",
-            "modified": "2026-06-14T11:57:20.330643Z",
-            "name": "Remcos_RAT_Family_Detection",
+            "created": "2026-07-15T13:32:02.103797Z",
+            "modified": "2026-07-15T13:32:02.103797Z",
+            "name": "sha256: db218dd5f53fbcf39a6db043c8455667c3dbef44abe14865e8b962b4c676372e",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Remcos_RAT_Family_Detection {\n    meta:\n        description = \"Detects Remcos RAT based on mutex, strings, and structural patterns\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-02-04\"\n        reference = \"OpenDirectory 203.159.90.147 Campaign\"\n        threat_level = \"critical\"\n        malware_family = \"Remcos\"\n        version = \"1.0\"\n        confidence = \"high\"\n        testing_notes = \"Validated against 8 Remcos RAT samples (100% detection rate, 0 false positives on 500-file clean corpus)\"\n        last_tested = \"2026-02-04\"\n\n    strings:\n        // Primary Identifiers\n        $mutex = \"Remcos_Mutex_Inj\" ascii wide\n        $banner = \" * REMCOS v\" ascii\n        $developer = \"Breaking-Security.Net\" ascii\n\n        // C2 Communication Strings\n        $c2_1 = \"Connected to C&C!\" ascii\n        $c2_2 = \"[KeepAlive]\" ascii\n        $c2_3 = \"[DataStart]\" ascii\n\n        // Keylogging Strings\n        $keylog_1 = \"onlinelogs\" ascii\n        $keylog_2 = \"offlinelogs\" ascii\n        $keylog_3 = \" [Ctrl + V]\" ascii\n        $keylog_4 = \"[Following text has been copied to clipboard:]\" ascii\n        $keylog_5 = \"[Following text has been pasted from clipboard:]\" ascii\n\n        // Credential Theft Strings\n        $cred_1 = \"[Chrome StoredLogins found, cleared!]\" ascii\n        $cred_2 = \"[Firefox StoredLogins cleared!]\" ascii\n        $cred_3 = \"[Chrome Cookies found, cleared!]\" ascii\n\n        // Persistence Strings\n        $persist_1 = \"Userinit\" ascii\n        $persist_2 = \"install.bat\" ascii\n        $persist_3 = \"EnableLUA\" ascii\n\n        // Remote Control Commands\n        $cmd_1 = \"consolecmd\" ascii\n        $cmd_2 = \"remscriptexecd\" ascii\n        $cmd_3 = \"getproclist\" ascii\n\n        // API Imports\n        $api_inject_1 = \"VirtualAllocEx\" ascii\n        $api_inject_2 = \"WriteProcessMemory\" ascii\n        $api_screen = \"GdipSaveImageToStream\" ascii\n        $api_audio = \"waveInOpen\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 5MB and\n        (\n            $mutex or\n            ($banner and $developer) or\n            (3 of ($c2_*)) or\n            (2 of ($keylog_*) and 2 of ($api_*)) or\n            (2 of ($cred_*)) or\n            (8 of them)\n        )\n}",
+            "pattern": "[file:hashes.'SHA-256' = 'db218dd5f53fbcf39a6db043c8455667c3dbef44abe14865e8b962b4c676372e']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-04T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--eef9bbdb-329f-5ef0-98fc-5fd0a8399c50",
+            "hashes": {
+                "SHA-256": "ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--bf8bc5d8-fb4d-5261-880f-e458d891c547",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.104461Z",
+            "modified": "2026-07-15T13:32:02.104461Z",
+            "name": "sha256: ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[file:hashes.'SHA-256' = 'ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-04T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--6303c19e-2dcb-51bc-8a55-8e07bc5c7f58",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.105105Z",
+            "modified": "2026-07-15T13:32:02.105105Z",
+            "name": "RAT_Remcos_Family_Detection",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Remcos RAT OpenDirectory Campaign (203.159.90.147)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule RAT_Remcos_Family_Detection {\n   meta:\n      description = \"Detects Remcos RAT via its mutex, C2 protocol banner, and internal log/command strings - a multi-branch fingerprint covering the commercial Remcos RAT family regardless of build customization\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\"\n      date = \"2026-02-04\"\n      hash1 = \"ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82\"\n      hash2 = \"45aa592f3b30ef526e380978338718f540cff5d2\"\n      hash3 = \"04693af3b0a7c9788daba8e35f429ba6\"\n      family = \"Remcos\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-203.159.90.147-Remcos\"\n      id = \"32642d64-41b4-5b64-801e-c295f9bfe4a9\"\n   strings:\n      $mutex = \"Remcos_Mutex_Inj\" ascii wide\n      $banner = \" * REMCOS v\" ascii\n      $developer = \"Breaking-Security.Net\" ascii\n\n      $c2_1 = \"Connected to C&C!\" ascii\n      $c2_2 = \"[KeepAlive]\" ascii\n      $c2_3 = \"[DataStart]\" ascii\n\n      $keylog_1 = \"onlinelogs\" ascii\n      $keylog_2 = \"offlinelogs\" ascii\n      $keylog_3 = \" [Ctrl + V]\" ascii\n      $keylog_4 = \"[Following text has been copied to clipboard:]\" ascii\n      $keylog_5 = \"[Following text has been pasted from clipboard:]\" ascii\n\n      $cred_1 = \"[Chrome StoredLogins found, cleared!]\" ascii\n      $cred_2 = \"[Firefox StoredLogins cleared!]\" ascii\n      $cred_3 = \"[Chrome Cookies found, cleared!]\" ascii\n\n      $persist_1 = \"Userinit\" ascii\n      $persist_2 = \"install.bat\" ascii\n      $persist_3 = \"EnableLUA\" ascii\n\n      $cmd_1 = \"consolecmd\" ascii\n      $cmd_2 = \"remscriptexecd\" ascii\n      $cmd_3 = \"getproclist\" ascii\n\n      $api_inject_1 = \"VirtualAllocEx\" ascii\n      $api_inject_2 = \"WriteProcessMemory\" ascii\n      $api_screen = \"GdipSaveImageToStream\" ascii\n      $api_audio = \"waveInOpen\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         $mutex or\n         ($banner and $developer) or\n         (3 of ($c2_*)) or\n         (2 of ($keylog_*) and 2 of ($api_*)) or\n         (2 of ($cred_*)) or\n         (8 of them)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -46,15 +106,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--44ae2c06-ef6a-5d15-a7ee-44c18abacecb",
+            "id": "indicator--96c2967d-069f-5671-bc19-f8a6f9bdd5ee",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.331013Z",
-            "modified": "2026-06-14T11:57:20.331013Z",
-            "name": "Remcos_OpenDirectory_Campaign_203_159_90_147",
+            "created": "2026-07-15T13:32:02.105254Z",
+            "modified": "2026-07-15T13:32:02.105254Z",
+            "name": "RAT_Remcos_OpenDirectory_Mutex_Install",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Remcos_OpenDirectory_Campaign_203_159_90_147 {\n    meta:\n        description = \"Detects specific Remcos RAT samples from OpenDirectory 203.159.90.147 campaign\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-02-04\"\n        campaign = \"OpenDirectory 203.159.90.147\"\n        c2_ip = \"203.159.90.147\"\n        threat_level = \"critical\"\n        confidence = \"very_high\"\n        version = \"1.0\"\n\n    strings:\n        $mutex = \"Remcos_Mutex_Inj\" ascii wide\n        $window_class = \"MsgWindowClass\" ascii\n        $uac_cmd = \"EnableLUA /t REG_DWORD /d 0 /f\" ascii wide\n        $chrome_path = \"\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\User Data\\\\Default\\\\Login Data\" ascii wide\n        $firefox_path = \"\\\\AppData\\\\Roaming\\\\Mozilla\\\\Firefox\\\\Profiles\\\\\" ascii wide\n        $install_path = \"\\\\AppData\\\\Roaming\\\\remcos\\\\remcos.exe\" ascii wide\n        $temp_dll = \"\\\\Temp\\\\0.dll\" ascii wide\n        $install_bat = \"install.bat\" ascii wide\n        $ping_delay = \"PING 127.0.0.1 -n 2\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 2MB and\n        (\n            hash.md5(0, filesize) == \"04693af3b0a7c9788daba8e35f429ba6\" or\n            hash.md5(0, filesize) == \"3d7b442573acf64c3aad17b23d224dc9\" or\n            (\n                $mutex and\n                (\n                    $uac_cmd or\n                    ($chrome_path and $firefox_path) or\n                    ($install_path and $temp_dll) or\n                    ($install_bat and $ping_delay)\n                )\n            )\n        )\n}",
+            "pattern": "rule RAT_Remcos_OpenDirectory_Mutex_Install {\n   meta:\n      description = \"Detects Remcos RAT samples from the OpenDirectory 203.159.90.147 campaign via the family mutex Remcos_Mutex_Inj combined with one of the campaign's UAC-bypass, browser-credential-path, or install/melt artifact combinations\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\"\n      date = \"2026-02-04\"\n      hash1 = \"ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82\"\n      hash2 = \"45aa592f3b30ef526e380978338718f540cff5d2\"\n      hash3 = \"04693af3b0a7c9788daba8e35f429ba6\"\n      family = \"Remcos\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-203.159.90.147-Remcos\"\n      id = \"393268d2-7545-5cea-ab00-81267cc5747f\"\n   strings:\n      $mutex = \"Remcos_Mutex_Inj\" ascii wide\n      $uac_cmd = \"EnableLUA /t REG_DWORD /d 0 /f\" ascii wide\n      $chrome_path = \"\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\User Data\\\\Default\\\\Login Data\" ascii wide\n      $firefox_path = \"\\\\AppData\\\\Roaming\\\\Mozilla\\\\Firefox\\\\Profiles\\\\\" ascii wide\n      $install_path = \"\\\\AppData\\\\Roaming\\\\remcos\\\\remcos.exe\" ascii wide\n      $temp_dll = \"\\\\Temp\\\\0.dll\" ascii wide\n      $install_bat = \"install.bat\" ascii wide\n      $ping_delay = \"PING 127.0.0.1 -n 2\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      $mutex and\n      (\n         $uac_cmd or\n         ($chrome_path and $firefox_path) or\n         ($install_path and $temp_dll) or\n         ($install_bat and $ping_delay)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -67,15 +127,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--4496d211-df4b-5d29-aa89-dfba780a5d08",
+            "id": "indicator--7dcd4df6-a544-5593-8b8f-731c84ee5e9e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.331252Z",
-            "modified": "2026-06-14T11:57:20.331252Z",
-            "name": "Remcos_VB6_Dropper_Obfuscated",
+            "created": "2026-07-15T13:32:02.105377Z",
+            "modified": "2026-07-15T13:32:02.105377Z",
+            "name": "RAT_Remcos_UAC_Bypass_Persistence",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Remcos_VB6_Dropper_Obfuscated {\n    meta:\n        description = \"Detects VB6 droppers for Remcos RAT\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-02-04\"\n        reference = \"OpenDirectory 203.159.90.147 Campaign - Payload.exe\"\n        threat_level = \"high\"\n        malware_type = \"dropper\"\n        confidence = \"medium-high\"\n\n    strings:\n        $vb6_runtime = \"MSVBVM60.DLL\" ascii nocase\n        $vb6_func_1 = \"rtcCreateObject2\" ascii\n        $vb6_func_2 = \"DllFunctionCall\" ascii\n        $vb6_func_3 = \"rtcShell\" ascii\n        $fso = \"Scripting.FileSystemObject\" wide\n        $dropped_name = \"0.dll\" wide ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        filesize < 500KB and\n        $vb6_runtime and\n        (\n            (2 of ($vb6_func_*) and $fso and $dropped_name) or\n            (3 of ($vb6_func_*) and ($fso or $dropped_name))\n        )\n}",
+            "pattern": "rule RAT_Remcos_UAC_Bypass_Persistence {\n   meta:\n      description = \"Detects Remcos RAT UAC-bypass and persistence mechanisms via reg.exe EnableLUA modification, Winlogon/Run-key persistence paths, and the mutex Remcos_Mutex_Inj, each branch anchored on the campaign's default install path or the family mutex\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\"\n      date = \"2026-02-04\"\n      hash1 = \"ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82\"\n      hash2 = \"45aa592f3b30ef526e380978338718f540cff5d2\"\n      hash3 = \"04693af3b0a7c9788daba8e35f429ba6\"\n      family = \"Remcos\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-203.159.90.147-Remcos\"\n      id = \"e53a05eb-deea-575f-bb7d-2a97e8d63bf0\"\n   strings:\n      $uac_cmd_1 = \"reg.exe ADD HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System /v EnableLUA\" ascii wide\n      $uac_cmd_2 = \"EnableLUA /t REG_DWORD /d 0 /f\" ascii wide\n      $persist_1 = \"Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\" ascii wide\n      $persist_2 = \"Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit\" ascii wide\n      $persist_3 = \"Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\" ascii wide\n      $install_path = \"AppData\\\\Roaming\\\\remcos\\\\remcos.exe\" ascii wide\n      $melt_1 = \"PING 127.0.0.1 -n 2\" ascii wide\n      $melt_3 = \"install.bat\" ascii wide\n      $remcos_mutex = \"Remcos_Mutex_Inj\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         (any of ($uac_cmd_*) and $install_path) or\n         (3 of ($persist_*) and $install_path) or\n         ($persist_2 and $install_path and $remcos_mutex) or\n         ($remcos_mutex and 2 of ($persist_*) and any of ($uac_cmd_*)) or\n         ($melt_1 and $melt_3 and $install_path)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -88,15 +148,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--1c122625-0f4b-5230-90a1-b50d40fa81c5",
+            "id": "indicator--60432c41-633b-575a-999f-6977add94743",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.331471Z",
-            "modified": "2026-06-14T11:57:20.331471Z",
-            "name": "Remcos_UAC_Bypass_Persistence",
+            "created": "2026-07-15T13:32:02.105494Z",
+            "modified": "2026-07-15T13:32:02.105494Z",
+            "name": "RAT_Remcos_Process_Injection_Mutex_Anchored",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Remcos_UAC_Bypass_Persistence {\n    meta:\n        description = \"Detects Remcos RAT UAC bypass and persistence mechanisms\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-02-04\"\n        technique = \"T1548.002 - Bypass UAC, T1547.001/004 - Persistence\"\n        threat_level = \"critical\"\n        confidence = \"high\"\n\n    strings:\n        $uac_cmd_1 = \"reg.exe ADD HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System /v EnableLUA\" ascii wide\n        $uac_cmd_2 = \"EnableLUA /t REG_DWORD /d 0 /f\" ascii wide\n        $persist_1 = \"Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\" ascii wide\n        $persist_2 = \"Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit\" ascii wide\n        $persist_3 = \"Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\" ascii wide\n        $install_path = \"AppData\\\\Roaming\\\\remcos\\\\remcos.exe\" ascii wide\n        $melt_1 = \"PING 127.0.0.1 -n 2\" ascii wide\n        $melt_3 = \"install.bat\" ascii wide\n        $remcos_mutex = \"Remcos_Mutex_Inj\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        (\n            (any of ($uac_cmd_*) and $install_path) or\n            (3 of ($persist_*) and $install_path) or\n            ($persist_2 and $install_path and $remcos_mutex) or\n            ($remcos_mutex and 2 of ($persist_*) and any of ($uac_cmd_*))\n        )\n}",
+            "pattern": "rule RAT_Remcos_Process_Injection_Mutex_Anchored {\n   meta:\n      description = \"Detects the Remcos RAT process-injection module via the family mutex Remcos_Mutex_Inj combined with 4 or more of its classic injection API imports (VirtualAllocEx, WriteProcessMemory, CreateRemoteThread, GetThreadContext, SetThreadContext, ResumeThread)\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\"\n      date = \"2026-02-04\"\n      hash1 = \"ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82\"\n      hash2 = \"45aa592f3b30ef526e380978338718f540cff5d2\"\n      hash3 = \"04693af3b0a7c9788daba8e35f429ba6\"\n      family = \"Remcos\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-203.159.90.147-Remcos\"\n      id = \"111690c6-c6a5-50fa-8f4b-1ea9c431e4f6\"\n   strings:\n      $api_1 = \"VirtualAllocEx\" ascii\n      $api_2 = \"WriteProcessMemory\" ascii\n      $api_3 = \"CreateRemoteThread\" ascii\n      $api_4 = \"GetThreadContext\" ascii\n      $api_5 = \"SetThreadContext\" ascii\n      $api_6 = \"ResumeThread\" ascii\n      $remcos_mutex = \"Remcos_Mutex_Inj\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      $remcos_mutex and\n      4 of ($api_*)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -109,15 +169,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--26b8f2eb-e534-5924-801a-1e7be0f0afe8",
+            "id": "indicator--2c1310a1-3b0d-552c-b40b-c620735ed29a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.331691Z",
-            "modified": "2026-06-14T11:57:20.331691Z",
-            "name": "Remcos_Process_Injection_Module",
+            "created": "2026-07-15T13:32:02.105608Z",
+            "modified": "2026-07-15T13:32:02.105608Z",
+            "name": "RAT_Remcos_Surveillance_LogStrings_Anchored",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Remcos_Process_Injection_Module {\n    meta:\n        description = \"Detects Remcos RAT process injection capabilities\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-02-04\"\n        technique = \"T1055 - Process Injection\"\n        threat_level = \"high\"\n        confidence = \"medium\"\n\n    strings:\n        $api_1 = \"VirtualAllocEx\" ascii\n        $api_2 = \"WriteProcessMemory\" ascii\n        $api_3 = \"CreateRemoteThread\" ascii\n        $api_4 = \"GetThreadContext\" ascii\n        $api_5 = \"SetThreadContext\" ascii\n        $api_6 = \"ResumeThread\" ascii\n        $target_1 = \"explorer.exe\" ascii wide\n        $target_2 = \"msedge.exe\" ascii wide\n        $desktop_ini = \"desktop.ini\" ascii wide\n        $remcos_mutex = \"Remcos_Mutex_Inj\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        (\n            (5 of ($api_*) and 2 of ($target_*)) or\n            ($remcos_mutex and 4 of ($api_*)) or\n            ($desktop_ini and 4 of ($api_*) and $target_1)\n        )\n}",
+            "pattern": "rule RAT_Remcos_Surveillance_LogStrings_Anchored {\n   meta:\n      description = \"Detects the Remcos RAT surveillance module via its distinctive internal log-folder naming (onlinelogs/offlinelogs) and clipboard-annotation string combined with keyboard-hook, clipboard, or idle-detection APIs\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\"\n      date = \"2026-02-04\"\n      hash1 = \"ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82\"\n      hash2 = \"45aa592f3b30ef526e380978338718f540cff5d2\"\n      hash3 = \"04693af3b0a7c9788daba8e35f429ba6\"\n      family = \"Remcos\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-203.159.90.147-Remcos\"\n      id = \"679e4b7b-2853-544e-9fad-c4c867973d02\"\n   strings:\n      $keylog_api_1 = \"SetWindowsHookExA\" ascii\n      $clip_api_1 = \"GetClipboardData\" ascii\n      $activity_1 = \"GetLastInputInfo\" ascii\n      $surv_str_1 = \"onlinelogs\" ascii\n      $surv_str_2 = \"offlinelogs\" ascii\n      $surv_str_3 = \"[Ctrl + V]\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         ($keylog_api_1 and $clip_api_1 and 2 of ($surv_str_*)) or\n         (3 of ($surv_str_*) and $activity_1)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -130,15 +190,36 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--ad2ffd93-7a1d-5b7e-8f30-59598c9fc8b4",
+            "id": "indicator--079f43e5-a0ae-574b-a7c7-68fffc2fa464",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.331916Z",
-            "modified": "2026-06-14T11:57:20.331916Z",
-            "name": "Remcos_Surveillance_Module",
+            "created": "2026-07-15T13:32:02.105721Z",
+            "modified": "2026-07-15T13:32:02.105721Z",
+            "name": "RAT_Remcos_Process_Injection_Generic_APIs",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule Remcos_Surveillance_Module {\n    meta:\n        description = \"Detects Remcos RAT surveillance capabilities\"\n        author = \"The Hunters Ledger\"\n        date = \"2026-02-04\"\n        technique = \"T1056.001, T1113, T1123, T1115 - Surveillance\"\n        threat_level = \"high\"\n        confidence = \"medium-high\"\n\n    strings:\n        $keylog_api_1 = \"SetWindowsHookExA\" ascii\n        $screen_api_1 = \"GdipSaveImageToStream\" ascii\n        $screen_api_2 = \"BitBlt\" ascii\n        $audio_api_1 = \"waveInOpen\" ascii\n        $audio_api_2 = \"waveInAddBuffer\" ascii\n        $clip_api_1 = \"GetClipboardData\" ascii\n        $surv_str_1 = \"onlinelogs\" ascii\n        $surv_str_2 = \"offlinelogs\" ascii\n        $surv_str_3 = \"[Ctrl + V]\" ascii\n        $activity_1 = \"GetLastInputInfo\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D and\n        (\n            (any of ($keylog_api_*) and any of ($screen_api_*) and any of ($audio_api_*)) or\n            (any of ($keylog_api_*) and any of ($clip_api_*) and 2 of ($surv_str_*)) or\n            (3 of ($surv_str_*) and $activity_1)\n        )\n}",
+            "pattern": "rule RAT_Remcos_Process_Injection_Generic_APIs {\n   meta:\n      description = \"Broad hunting rule for a classic process-injection API cluster (VirtualAllocEx/WriteProcessMemory/CreateRemoteThread/GetThreadContext/SetThreadContext/ResumeThread) combined with references to explorer.exe/msedge.exe or desktop.ini-triggered injection timing; observed in Remcos RAT samples from this campaign but not anchored on a family-specific string, so it will also match unrelated injection-capable software\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\"\n      date = \"2026-02-04\"\n      hash1 = \"ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82\"\n      hash2 = \"45aa592f3b30ef526e380978338718f540cff5d2\"\n      hash3 = \"04693af3b0a7c9788daba8e35f429ba6\"\n      family = \"Remcos\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-203.159.90.147-Remcos\"\n      id = \"e3bbbd84-7fb8-5d24-bb57-90ba103a749a\"\n   strings:\n      $api_1 = \"VirtualAllocEx\" ascii\n      $api_2 = \"WriteProcessMemory\" ascii\n      $api_3 = \"CreateRemoteThread\" ascii\n      $api_4 = \"GetThreadContext\" ascii\n      $api_5 = \"SetThreadContext\" ascii\n      $api_6 = \"ResumeThread\" ascii\n      $target_1 = \"explorer.exe\" ascii wide\n      $target_2 = \"msedge.exe\" ascii wide\n      $desktop_ini = \"desktop.ini\" ascii wide\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      (\n         (5 of ($api_*) and 2 of ($target_*)) or\n         ($desktop_ini and 4 of ($api_*) and $target_1)\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-02-04T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--23bb637b-379c-52d8-b1fb-f7491476ba0c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.105862Z",
+            "modified": "2026-07-15T13:32:02.105862Z",
+            "name": "RAT_Remcos_Surveillance_Generic_API_Cluster",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule RAT_Remcos_Surveillance_Generic_API_Cluster {\n   meta:\n      description = \"Broad hunting rule for the combined presence of keyboard-hook, screen-capture, and audio-recording APIs (SetWindowsHookExA, GdipSaveImageToStream/BitBlt, waveInOpen/waveInAddBuffer) in one binary; observed in Remcos RAT samples from this campaign but the API combination alone is also used by legitimate remote-support and employee-monitoring software\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\"\n      date = \"2026-02-04\"\n      hash1 = \"ebdd31a7622288b15439396a5758ffb0133d28b4bb11e9386187661a4b7d5f82\"\n      hash2 = \"45aa592f3b30ef526e380978338718f540cff5d2\"\n      hash3 = \"04693af3b0a7c9788daba8e35f429ba6\"\n      family = \"Remcos\"\n      malware_type = \"RAT\"\n      campaign = \"OpenDirectory-203.159.90.147-Remcos\"\n      id = \"5525c61f-9bf0-55ef-b6d0-0b15660eef3a\"\n   strings:\n      $keylog_api_1 = \"SetWindowsHookExA\" ascii\n      $screen_api_1 = \"GdipSaveImageToStream\" ascii\n      $screen_api_2 = \"BitBlt\" ascii\n      $audio_api_1 = \"waveInOpen\" ascii\n      $audio_api_2 = \"waveInAddBuffer\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 5MB and\n      $keylog_api_1 and\n      1 of ($screen_api_*) and\n      1 of ($audio_api_*)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -153,13 +234,13 @@
             "spec_version": "2.1",
             "id": "indicator--7b2a67f5-cce0-5f71-9d52-965bdf5bf3eb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.332125Z",
-            "modified": "2026-06-14T11:57:20.332125Z",
+            "created": "2026-07-15T13:32:02.105996Z",
+            "modified": "2026-07-15T13:32:02.105996Z",
             "name": "Remcos RAT UAC Bypass via EnableLUA Registry Modification",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Remcos RAT UAC Bypass via EnableLUA Registry Modification\nid: remcos-uac-bypass-enablelua-001\nstatus: stable\ndescription: Detects UAC bypass by setting EnableLUA registry value to 0, commonly used by Remcos RAT\nreferences:\n    - https://attack.mitre.org/techniques/T1548/002/\n    - Internal Analysis OpenDirectory-203.159.90.147-Remcos\nauthor: The Hunters Ledger\ndate: 2026/02/04\ntags:\n    - attack.privilege_escalation\n    - attack.defense_evasion\n    - attack.t1548.002\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\reg.exe'\n        - OriginalFileName: 'reg.exe'\n    selection_cli:\n        CommandLine|contains|all:\n            - 'ADD'\n            - 'HKLM'\n            - 'Policies\\System'\n            - 'EnableLUA'\n            - 'REG_DWORD'\n            - '/d 0'\n    selection_parent:\n        ParentImage|endswith: '\\cmd.exe'\n    condition: all of selection_*\nfalsepositives:\n    - Legitimate system administration (rare)\n    - Enterprise management tools (SCCM, Intune) - verify digital signature\nlevel: critical",
+            "pattern": "title: Remcos RAT UAC Bypass via EnableLUA Registry Modification\nid: 482a813a-346e-450c-8ff7-4b449a26ad7d\nstatus: experimental\ndescription: >-\n  Detects UAC bypass by setting the EnableLUA registry value to 0 via\n  reg.exe, a technique used by Remcos RAT to disable User Account\n  Control ahead of persistence installation\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.privilege-escalation\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        - Image|endswith: '\\reg.exe'\n        - OriginalFileName: 'reg.exe'\n    selection_cli:\n        CommandLine|contains|all:\n            - 'ADD'\n            - 'HKLM'\n            - 'Policies\\System'\n            - 'EnableLUA'\n            - 'REG_DWORD'\n            - '/d 0'\n    selection_parent:\n        ParentImage|endswith: '\\cmd.exe'\n    condition: all of selection_*\nfalsepositives:\n    - Legitimate system administration (rare)\n    - Enterprise management tools (SCCM, Intune) - verify digital signature\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -174,13 +255,13 @@
             "spec_version": "2.1",
             "id": "indicator--40981db6-2b8a-5c37-9e57-447e1502ebd5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.332323Z",
-            "modified": "2026-06-14T11:57:20.332323Z",
+            "created": "2026-07-15T13:32:02.106189Z",
+            "modified": "2026-07-15T13:32:02.106189Z",
             "name": "Remcos RAT Winlogon Userinit Persistence via Registry Modification",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Remcos RAT Winlogon Userinit Persistence via Registry Modification\nid: remcos-userinit-hijack-001\nstatus: stable\ndescription: Detects Userinit registry value modification for persistence, rare technique used by Remcos RAT\nreferences:\n    - https://attack.mitre.org/techniques/T1547/004/\n    - Internal Analysis OpenDirectory-203.159.90.147-Remcos\nauthor: The Hunters Ledger\ndate: 2026/02/04\ntags:\n    - attack.persistence\n    - attack.privilege_escalation\n    - attack.t1547.004\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit'\n    filter_legitimate:\n        Details: 'C:\\WINDOWS\\system32\\userinit.exe,'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - None expected (no legitimate modifications)\nlevel: critical",
+            "pattern": "title: Remcos RAT Winlogon Userinit Persistence via Registry Modification\nid: 208b4736-f00a-44bd-b71e-1230ece13876\nstatus: experimental\ndescription: >-\n  Detects modification of the Winlogon Userinit registry value to\n  append an additional executable path, a rare persistence technique\n  used by Remcos RAT that runs the payload at every user logon before\n  the desktop loads\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.004\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|contains: '\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit'\n    filter_legitimate:\n        Details: 'C:\\WINDOWS\\system32\\userinit.exe,'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Unlikely (no legitimate process modifies this value outside OS installation)\nlevel: critical",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -193,15 +274,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--e0653d8a-bfd3-56b2-9fda-83a8ca40fc80",
+            "id": "indicator--2772273f-81ac-5f2f-857d-1c6306d4dadf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.33249Z",
-            "modified": "2026-06-14T11:57:20.33249Z",
-            "name": "Remcos RAT Mutex Detection (Remcos_Mutex_Inj)",
+            "created": "2026-07-15T13:32:02.106384Z",
+            "modified": "2026-07-15T13:32:02.106384Z",
+            "name": "EnableLUA Registry Value Set to Disable User Account Control",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Remcos RAT Mutex Detection (Remcos_Mutex_Inj)\nid: remcos-mutex-detection-001\nstatus: stable\ndescription: Detects creation of Remcos RAT unique mutex (definitive indicator)\nreferences:\n    - https://attack.mitre.org/software/S0332/\n    - Internal Analysis OpenDirectory-203.159.90.147-Remcos\nauthor: The Hunters Ledger\ndate: 2026/02/04\ntags:\n    - attack.execution\n    - attack.defense_evasion\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|contains: '\\AppData\\Roaming\\remcos\\'\n    condition: selection\nfalsepositives:\n    - None expected\nlevel: critical",
+            "pattern": "title: EnableLUA Registry Value Set to Disable User Account Control\nid: 0ce7475a-f0d5-48fe-bd80-629f9df689aa\nstatus: experimental\ndescription: >-\n  Detects the EnableLUA registry value under the system UAC policy key\n  being set to 0 (disabled), regardless of which process performs the\n  write. Complements the reg.exe process-creation detection for the\n  same Remcos RAT UAC-bypass technique by catching the resulting\n  registry state change if a different mechanism (e.g. PowerShell\n  Set-ItemProperty) performs the write.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.privilege-escalation\n    - attack.t1548.002\n    - detection.emerging-threats\nlogsource:\n    category: registry_set\n    product: windows\ndetection:\n    selection:\n        TargetObject|endswith: '\\Policies\\System\\EnableLUA'\n        Details: 'DWORD (0x00000000)'\n    condition: selection\nfalsepositives:\n    - Legitimate system administration (rare)\n    - Enterprise management tools (SCCM, Intune, Group Policy) disabling UAC for legacy application compatibility\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -214,78 +295,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--1819d623-4094-5dd4-a023-3fc4b9ecaded",
+            "id": "indicator--b197d8bf-f851-5264-ae95-431e03d638c5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.332634Z",
-            "modified": "2026-06-14T11:57:20.332634Z",
-            "name": "Remcos RAT Process Injection from AppData",
+            "created": "2026-07-15T13:32:02.106553Z",
+            "modified": "2026-07-15T13:32:02.106553Z",
+            "name": "Remcos RAT File Melting Behavior via install.bat",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Remcos RAT Process Injection from AppData\nid: remcos-process-injection-001\nstatus: experimental\ndescription: Detects WriteProcessMemory API calls from AppData executables targeting system processes\nreferences:\n    - https://attack.mitre.org/techniques/T1055/\n    - Internal Analysis OpenDirectory-203.159.90.147-Remcos\nauthor: The Hunters Ledger\ndate: 2026/02/04\ntags:\n    - attack.defense_evasion\n    - attack.privilege_escalation\n    - attack.t1055\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection_source:\n        SourceImage|contains: '\\AppData\\'\n    selection_target:\n        TargetImage|endswith:\n            - '\\explorer.exe'\n            - '\\msedge.exe'\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n    selection_access:\n        GrantedAccess:\n            - '0x1F0FFF'\n            - '0x1FFFFF'\n            - '0x1000'\n    condition: all of selection_*\nfalsepositives:\n    - Legitimate software updates from AppData\n    - Development/debugging tools\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--9bdf2cad-c167-5c39-895a-5fa9d06fcc3a",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.332774Z",
-            "modified": "2026-06-14T11:57:20.332774Z",
-            "name": "Remcos RAT File Melting Behavior (install.bat)",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Remcos RAT File Melting Behavior (install.bat)\nid: remcos-file-melting-001\nstatus: stable\ndescription: Detects Remcos file melting technique using PING delay, DEL, and start commands\nreferences:\n    - https://attack.mitre.org/techniques/T1070/004/\n    - Internal Analysis OpenDirectory-203.159.90.147-Remcos\nauthor: The Hunters Ledger\ndate: 2026/02/04\ntags:\n    - attack.defense_evasion\n    - attack.t1070.004\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        Image|endswith: '\\cmd.exe'\n    selection_cli:\n        CommandLine|contains|all:\n            - 'PING 127.0.0.1'\n            - 'DEL'\n            - 'start'\n            - 'AppData\\Roaming\\remcos'\n    condition: all of selection_*\nfalsepositives:\n    - Custom administrative scripts (very rare pattern)\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--ac8ab85b-6b15-5ebd-a814-fde372f17b0a",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.332958Z",
-            "modified": "2026-06-14T11:57:20.332958Z",
-            "name": "Remcos RAT Browser Credential Theft Access",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Remcos RAT Browser Credential Theft Access\nid: remcos-credential-theft-001\nstatus: stable\ndescription: Detects access to Chrome/Firefox credential databases by non-browser processes\nreferences:\n    - https://attack.mitre.org/techniques/T1555/003/\n    - Internal Analysis OpenDirectory-203.159.90.147-Remcos\nauthor: The Hunters Ledger\ndate: 2026/02/04\ntags:\n    - attack.credential_access\n    - attack.t1555.003\n    - attack.t1539\nlogsource:\n    category: file_access\n    product: windows\ndetection:\n    selection_chrome:\n        TargetFilename|contains:\n            - '\\Google\\Chrome\\User Data\\Default\\Login Data'\n            - '\\Google\\Chrome\\User Data\\Default\\Cookies'\n    selection_firefox:\n        TargetFilename|contains:\n            - '\\Mozilla\\Firefox\\Profiles\\'\n        TargetFilename|endswith:\n            - '\\logins.json'\n            - '\\cookies.sqlite'\n    filter_legitimate:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n            - '\\msedge.exe'\n    condition: (selection_chrome or selection_firefox) and not filter_legitimate\nfalsepositives:\n    - Password managers (1Password, Bitwarden, LastPass)\n    - Backup software\nlevel: high",
-            "pattern_type": "sigma",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
-            "object_marking_refs": [
-                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
-            ]
-        },
-        {
-            "type": "indicator",
-            "spec_version": "2.1",
-            "id": "indicator--a278cfdc-1efe-567f-beae-83d4e72306b6",
-            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.333129Z",
-            "modified": "2026-06-14T11:57:20.333129Z",
-            "name": "Remcos RAT C2 Communication to 203.159.90.147",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "title: Remcos RAT C2 Communication to 203.159.90.147\nid: remcos-c2-communication-001\nstatus: stable\ndescription: Detects outbound network connections to Remcos C2 server 203.159.90.147\nreferences:\n    - Internal Analysis OpenDirectory-203.159.90.147-Remcos\nauthor: The Hunters Ledger\ndate: 2026/02/04\ntags:\n    - attack.command_and_control\n    - attack.t1071.001\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationIp: '203.159.90.147'\n        Initiated: 'true'\n    condition: selection\nfalsepositives:\n    - None expected for this specific IP during active campaign\nlevel: critical",
+            "pattern": "title: Remcos RAT File Melting Behavior via install.bat\nid: 62f7d36c-2d5d-4f21-a6c9-71589b95ddb0\nstatus: experimental\ndescription: >-\n  Detects the Remcos RAT self-deletion (\"file melting\") sequence - a\n  cmd.exe command line combining a PING-based delay, a DEL command, a\n  start command, and a reference to the campaign's remcos install\n  folder, used to remove the install.bat staging script after\n  installation completes\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.stealth\n    - attack.t1070.004\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_img:\n        Image|endswith: '\\cmd.exe'\n    selection_cli:\n        CommandLine|contains|all:\n            - 'PING 127.0.0.1'\n            - 'DEL'\n            - 'start'\n            - 'AppData\\Roaming\\remcos'\n    condition: all of selection_*\nfalsepositives:\n    - Custom administrative scripts referencing the same folder name (very rare pattern)\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -300,13 +318,13 @@
             "spec_version": "2.1",
             "id": "indicator--77f48efd-39c5-5ef8-9495-c1941b39d57d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.333298Z",
-            "modified": "2026-06-14T11:57:20.333298Z",
+            "created": "2026-07-15T13:32:02.106729Z",
+            "modified": "2026-07-15T13:32:02.106729Z",
             "name": "Remcos RAT Execution via Winlogon Userinit Hijack",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Remcos RAT Execution via Winlogon Userinit Hijack\nid: remcos-winlogon-child-001\nstatus: stable\ndescription: Detects suspicious child processes of winlogon.exe from AppData\nreferences:\n    - https://attack.mitre.org/techniques/T1547/004/\n    - Internal Analysis OpenDirectory-203.159.90.147-Remcos\nauthor: The Hunters Ledger\ndate: 2026/02/04\ntags:\n    - attack.persistence\n    - attack.privilege_escalation\n    - attack.t1547.004\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\winlogon.exe'\n        Image|contains: '\\AppData\\'\n    filter_legitimate:\n        Image|endswith:\n            - '\\userinit.exe'\n            - '\\LogonUI.exe'\n            - '\\dwm.exe'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - None expected\nlevel: critical",
+            "pattern": "title: Remcos RAT Execution via Winlogon Userinit Hijack\nid: 78fef00f-cd92-4dcd-8413-c3ed49b56aab\nstatus: experimental\ndescription: >-\n  Detects a child process of winlogon.exe launching from %AppData% -\n  winlogon.exe legitimately spawns only a small, fixed set of OS helper\n  processes, so any other AppData-sourced child is a strong indicator\n  of the Userinit-hijack persistence technique used by Remcos RAT\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1547.004\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith: '\\winlogon.exe'\n        Image|contains: '\\AppData\\'\n    filter_legitimate:\n        Image|endswith:\n            - '\\userinit.exe'\n            - '\\LogonUI.exe'\n            - '\\dwm.exe'\n    condition: selection and not filter_legitimate\nfalsepositives:\n    - Unlikely\nlevel: critical",
             "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
@@ -319,16 +337,16 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--25e1f940-313d-5344-8b24-6cf541913e64",
+            "id": "indicator--12a79448-82e1-57f2-83f7-f74b48336f73",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.333502Z",
-            "modified": "2026-06-14T11:57:20.333502Z",
-            "name": "MALWARE Remcos RAT C2 Communication to 203.159.90.147",
+            "created": "2026-07-15T13:32:02.1069Z",
+            "modified": "2026-07-15T13:32:02.1069Z",
+            "name": "Remcos RAT Execution from Default AppData Install Path",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert ip $HOME_NET any -> 203.159.90.147 any (msg:\"MALWARE Remcos RAT C2 Communication to 203.159.90.147\"; classtype:trojan-activity; sid:1000001; rev:1;)\n\nalert ip 203.159.90.147 any -> $HOME_NET any (msg:\"MALWARE Remcos RAT C2 Communication from 203.159.90.147\"; classtype:trojan-activity; sid:1000002; rev:1;)",
-            "pattern_type": "suricata",
+            "pattern": "title: Remcos RAT Execution from Default AppData Install Path\nid: 412f0f16-665a-4623-9e3c-92d98012f77b\nstatus: experimental\ndescription: >-\n  Detects process execution from the default Remcos RAT install folder\n  (AppData\\Roaming\\remcos\\). This is a path-based indicator, not a\n  mutex check - the malware's mutex Remcos_Mutex_Inj cannot be detected\n  via standard Sysmon/EDR process telemetry, only via YARA memory\n  scanning or EDR-native mutex enumeration. The install folder name is\n  configurable in the Remcos builder, so this indicator is brittle\n  against operator customization.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.stealth\n    - attack.t1036\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|contains: '\\AppData\\Roaming\\remcos\\'\n    condition: selection\nfalsepositives:\n    - >-\n      Any software that happens to install into a folder literally\n      named \"remcos\" (coincidental collision)\n    - >-\n      Brittle by design - operators can trivially rename this folder\n      via the Remcos builder, evading this indicator entirely on the\n      next build\nlevel: medium",
+            "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
                 "detection-rule"
@@ -340,16 +358,16 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--526ae594-a856-54ce-8180-e354cac3a177",
+            "id": "indicator--bea4da2b-6b1a-5b61-9ae6-f72b9129ef98",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.333713Z",
-            "modified": "2026-06-14T11:57:20.333713Z",
-            "name": "MALWARE Remcos RAT Screenshot Exfiltration (Encrypted PNG)",
+            "created": "2026-07-15T13:32:02.107034Z",
+            "modified": "2026-07-15T13:32:02.107034Z",
+            "name": "Suspicious Process Access from AppData to Browser or Explorer Process",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"MALWARE Remcos RAT Screenshot Exfiltration (Encrypted PNG)\"; flow:to_server,established; content:\"POST\"; http_method; content:\"|89 50 4E 47|\"; http_client_body; depth:4; classtype:trojan-activity; sid:1000004; rev:1;)",
-            "pattern_type": "suricata",
+            "pattern": "title: Suspicious Process Access from AppData to Browser or Explorer Process\nid: 320eaf61-97be-4fc8-bee0-cab1d45aba05\nstatus: experimental\ndescription: >-\n  Detects a process running from a user-writable %AppData% location\n  opening a handle with broad or write-capable access rights to\n  explorer.exe or a major browser process - a generic\n  process-injection telemetry pattern observed in the Remcos RAT\n  process-injection module used against this campaign, but not\n  anchored to any Remcos-specific string. The %AppData% source\n  location is common to a large amount of legitimate consumer\n  software.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.stealth\n    - attack.privilege-escalation\n    - attack.t1055\n    - detection.emerging-threats\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection_source:\n        SourceImage|contains: '\\AppData\\'\n    selection_target:\n        TargetImage|endswith:\n            - '\\explorer.exe'\n            - '\\msedge.exe'\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n    selection_access:\n        GrantedAccess:\n            - '0x1F0FFF'\n            - '0x1FFFFF'\n            - '0x1000'\n    condition: all of selection_*\nfalsepositives:\n    - Legitimate software updates from AppData\n    - Development/debugging tools\nlevel: medium",
+            "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
                 "detection-rule"
@@ -361,16 +379,16 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--db9eadf8-4120-5748-b03e-90567961298c",
+            "id": "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.333922Z",
-            "modified": "2026-06-14T11:57:20.333922Z",
-            "name": "MALWARE Remcos RAT OpenDirectory Malware Download",
+            "created": "2026-07-15T13:32:02.107194Z",
+            "modified": "2026-07-15T13:32:02.107194Z",
+            "name": "Non-Browser Process Accessing Browser Credential Store Files",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "alert http $HOME_NET any -> 203.159.90.147 any (msg:\"MALWARE Remcos RAT OpenDirectory Malware Download\"; flow:to_server,established; content:\"GET\"; http_method; content:\".exe\"; http_uri; nocase; classtype:trojan-activity; sid:1000006; rev:1;)",
-            "pattern_type": "suricata",
+            "pattern": "title: Non-Browser Process Accessing Browser Credential Store Files\nid: 27e252f6-c5d9-4545-ab96-b180ab116a88\nstatus: experimental\ndescription: >-\n  Detects access to Chrome or Firefox credential and cookie database\n  files by a process other than the browser itself - the technique\n  used by the Remcos RAT credential-theft module in this campaign.\n  This is a family-agnostic technique detector; legitimate password\n  managers and backup software are known to trigger it, so it is\n  tiered for hunting rather than direct alerting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/remcos-opendirectory-detections/\nauthor: The Hunters Ledger\ndate: '2026-02-04'\ntags:\n    - attack.credential-access\n    - attack.t1555.003\n    - attack.t1539\n    - detection.emerging-threats\nlogsource:\n    category: file_access\n    product: windows\ndetection:\n    selection_chrome:\n        TargetFilename|contains:\n            - '\\Google\\Chrome\\User Data\\Default\\Login Data'\n            - '\\Google\\Chrome\\User Data\\Default\\Cookies'\n    selection_firefox:\n        TargetFilename|contains: '\\Mozilla\\Firefox\\Profiles\\'\n        TargetFilename|endswith:\n            - '\\logins.json'\n            - '\\cookies.sqlite'\n    filter_legitimate:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\firefox.exe'\n            - '\\msedge.exe'\n    condition: (selection_chrome or selection_firefox) and not filter_legitimate\nfalsepositives:\n    - Password managers (1Password, Bitwarden, LastPass) importing saved browser credentials\n    - Backup software performing full user-profile backups\nlevel: medium",
+            "pattern_type": "sigma",
             "valid_from": "2026-02-04T00:00:00Z",
             "labels": [
                 "detection-rule"
@@ -380,169 +398,273 @@
             ]
         },
         {
-            "type": "indicator",
+            "type": "malware",
             "spec_version": "2.1",
-            "id": "indicator--bac1ca5d-9d27-51fc-9719-a5338fa0ace8",
+            "id": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.334132Z",
-            "modified": "2026-06-14T11:57:20.334132Z",
-            "name": "Remcos File Presence",
-            "indicator_types": [
-                "malicious-activity"
+            "created": "2026-07-15T13:32:02.107359Z",
+            "modified": "2026-07-15T13:32:02.107359Z",
+            "name": "Payload.exe",
+            "description": "",
+            "malware_types": [
+                "backdoor"
             ],
-            "pattern": "index=windows source=\"WinEventLog:Microsoft-Windows-Sysmon/Operational\" EventCode=11\n| where file_path=\"*\\\\AppData\\\\Roaming\\\\remcos\\\\remcos.exe\"\n| table _time, ComputerName, file_path, Image, User",
-            "pattern_type": "spl",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
+            "is_family": false,
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
         },
         {
-            "type": "indicator",
+            "type": "malware",
             "spec_version": "2.1",
-            "id": "indicator--b5f01ad8-0220-5e94-865d-4b641f7b6780",
+            "id": "malware--031d817c-8fb0-5278-813d-89441096c4a1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.334327Z",
-            "modified": "2026-06-14T11:57:20.334327Z",
-            "name": "UAC Disable Command",
-            "indicator_types": [
-                "malicious-activity"
+            "created": "2026-07-15T13:32:02.107526Z",
+            "modified": "2026-07-15T13:32:02.107526Z",
+            "name": "Backdoor.exe / 0.dll / remcos.exe",
+            "description": "",
+            "malware_types": [
+                "backdoor"
             ],
-            "pattern": "index=windows source=\"WinEventLog:Microsoft-Windows-Sysmon/Operational\" EventCode=1\n| where CommandLine=\"*EnableLUA*REG_DWORD*/d 0*\"\n| table _time, ComputerName, ParentImage, Image, CommandLine, User",
-            "pattern_type": "spl",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
+            "is_family": false,
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
         },
         {
-            "type": "indicator",
+            "type": "relationship",
             "spec_version": "2.1",
-            "id": "indicator--697c37c4-0d2b-5396-b95e-1fdea20aa413",
+            "id": "relationship--cdc55bda-a2d0-5412-9c48-db5d65c03144",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.334532Z",
-            "modified": "2026-06-14T11:57:20.334532Z",
-            "name": "Userinit Registry Modification",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "index=windows source=\"WinEventLog:Microsoft-Windows-Sysmon/Operational\" EventCode=13\n| where TargetObject=\"*\\\\Winlogon\\\\Userinit\" AND Details!=\"C:\\\\WINDOWS\\\\system32\\\\userinit.exe,\"\n| table _time, ComputerName, TargetObject, Details, Image, User",
-            "pattern_type": "spl",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
+            "created": "2026-07-15T13:32:02.107841Z",
+            "modified": "2026-07-15T13:32:02.107841Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--3105cfe5-849c-5817-a819-d52fc2a81a14",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
         },
         {
-            "type": "indicator",
+            "type": "relationship",
             "spec_version": "2.1",
-            "id": "indicator--a4c15e30-09a2-5ee7-ab1e-ec81ffd66620",
+            "id": "relationship--ad0d8e6f-6b85-5703-865e-8dd876a92014",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.334727Z",
-            "modified": "2026-06-14T11:57:20.334727Z",
-            "name": "Process Injection Sequence",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "index=windows source=\"WinEventLog:Microsoft-Windows-Sysmon/Operational\" EventCode=10\n| where SourceImage=\"*\\\\AppData\\\\*\" AND (TargetImage=\"*\\\\explorer.exe\" OR TargetImage=\"*\\\\msedge.exe\")\n| table _time, ComputerName, SourceImage, TargetImage, GrantedAccess",
-            "pattern_type": "spl",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
+            "created": "2026-07-15T13:32:02.107957Z",
+            "modified": "2026-07-15T13:32:02.107957Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--bf8bc5d8-fb4d-5261-880f-e458d891c547",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
         },
         {
-            "type": "indicator",
+            "type": "relationship",
             "spec_version": "2.1",
-            "id": "indicator--f6a010a3-35c0-56c0-b58f-3b468d74be15",
+            "id": "relationship--d42158dd-730b-58e7-aef5-dddf946117ab",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.33495Z",
-            "modified": "2026-06-14T11:57:20.33495Z",
-            "name": "Remcos Mutex Detection",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "DeviceProcessEvents\n| where ProcessCommandLine contains \"remcos.exe\"\n    or FolderPath contains @\"\\AppData\\Roaming\\remcos\\\"\n| project Timestamp, DeviceName, AccountName, ProcessCommandLine, FolderPath, SHA256",
-            "pattern_type": "kql",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
+            "created": "2026-07-15T13:32:02.108054Z",
+            "modified": "2026-07-15T13:32:02.108054Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--6303c19e-2dcb-51bc-8a55-8e07bc5c7f58",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
         },
         {
-            "type": "indicator",
+            "type": "relationship",
             "spec_version": "2.1",
-            "id": "indicator--6095728a-b803-55b3-8e8b-484d1f06ea95",
+            "id": "relationship--2b0c583b-fb74-56e8-972f-0f455750dfb2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.33519Z",
-            "modified": "2026-06-14T11:57:20.33519Z",
-            "name": "UAC Bypass Detection",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "DeviceRegistryEvents\n| where RegistryKey contains @\"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\"\n    and RegistryValueName == \"EnableLUA\"\n    and RegistryValueData == \"0\"\n| project Timestamp, DeviceName, ActionType, RegistryKey, RegistryValueName, RegistryValueData, InitiatingProcessFileName",
-            "pattern_type": "kql",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
+            "created": "2026-07-15T13:32:02.108159Z",
+            "modified": "2026-07-15T13:32:02.108159Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--96c2967d-069f-5671-bc19-f8a6f9bdd5ee",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
         },
         {
-            "type": "indicator",
+            "type": "relationship",
             "spec_version": "2.1",
-            "id": "indicator--0ac950cb-0cc7-5838-b89b-ca8f14f5f7af",
+            "id": "relationship--92ea0657-4d59-5081-ab2a-fb82ae21a7a7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.33542Z",
-            "modified": "2026-06-14T11:57:20.33542Z",
-            "name": "Userinit Hijack Detection",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "DeviceRegistryEvents\n| where RegistryKey contains @\"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\"\n    and RegistryValueName == \"Userinit\"\n    and RegistryValueData !contains \"C:\\\\WINDOWS\\\\system32\\\\userinit.exe,\"\n    and RegistryValueData contains \"AppData\"\n| project Timestamp, DeviceName, ActionType, RegistryKey, RegistryValueData, InitiatingProcessFileName",
-            "pattern_type": "kql",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
+            "created": "2026-07-15T13:32:02.108254Z",
+            "modified": "2026-07-15T13:32:02.108254Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--7dcd4df6-a544-5593-8b8f-731c84ee5e9e",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
         },
         {
-            "type": "indicator",
+            "type": "relationship",
             "spec_version": "2.1",
-            "id": "indicator--808ef9d5-0b9b-5bec-b884-cced9f8bd16c",
+            "id": "relationship--ed81d6d8-e220-535a-b6aa-e29851a1eb2f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.335637Z",
-            "modified": "2026-06-14T11:57:20.335637Z",
-            "name": "Remcos Network Connections",
-            "indicator_types": [
-                "malicious-activity"
-            ],
-            "pattern": "DeviceNetworkEvents\n| where RemoteIP == \"203.159.90.147\"\n| project Timestamp, DeviceName, InitiatingProcessFileName, InitiatingProcessFolderPath, RemoteIP, RemotePort",
-            "pattern_type": "kql",
-            "valid_from": "2026-02-04T00:00:00Z",
-            "labels": [
-                "detection-rule"
-            ],
+            "created": "2026-07-15T13:32:02.108349Z",
+            "modified": "2026-07-15T13:32:02.108349Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--60432c41-633b-575a-999f-6977add94743",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--88b20c66-9316-5985-b9df-a1abecd00695",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.108445Z",
+            "modified": "2026-07-15T13:32:02.108445Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--2c1310a1-3b0d-552c-b40b-c620735ed29a",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--8ecac126-b91e-57c3-ba31-12a7fc911930",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.108539Z",
+            "modified": "2026-07-15T13:32:02.108539Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--079f43e5-a0ae-574b-a7c7-68fffc2fa464",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--78d56699-61d8-5fc4-ad13-f4868a546a78",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.108634Z",
+            "modified": "2026-07-15T13:32:02.108634Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--23bb637b-379c-52d8-b1fb-f7491476ba0c",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--1f422de9-17c5-53a7-af97-73447ffd7434",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.108728Z",
+            "modified": "2026-07-15T13:32:02.108728Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--7b2a67f5-cce0-5f71-9d52-965bdf5bf3eb",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--e941d8d5-726a-5f52-8a3b-dcc9e7fd15a9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.108821Z",
+            "modified": "2026-07-15T13:32:02.108821Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--40981db6-2b8a-5c37-9e57-447e1502ebd5",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--0a7a25dc-10c6-59ab-bebf-3285f933c4ea",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.108914Z",
+            "modified": "2026-07-15T13:32:02.108914Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--2772273f-81ac-5f2f-857d-1c6306d4dadf",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--f5f1c921-8686-53ca-9c6e-36d857b9e843",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.109017Z",
+            "modified": "2026-07-15T13:32:02.109017Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--b197d8bf-f851-5264-ae95-431e03d638c5",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--19c26ec0-a601-589b-9430-2ffdba269557",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.10911Z",
+            "modified": "2026-07-15T13:32:02.10911Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--77f48efd-39c5-5ef8-9495-c1941b39d57d",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--5d14ca9b-db1f-5106-8319-375f98af937d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.109203Z",
+            "modified": "2026-07-15T13:32:02.109203Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--12a79448-82e1-57f2-83f7-f74b48336f73",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--55242495-82a6-5d32-b821-5767a774797e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.109303Z",
+            "modified": "2026-07-15T13:32:02.109303Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--bea4da2b-6b1a-5b61-9ae6-f72b9129ef98",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--d5df7eae-785b-5072-9897-2a9366725c02",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:02.109396Z",
+            "modified": "2026-07-15T13:32:02.109396Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
+            "target_ref": "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -552,39 +674,52 @@
             "spec_version": "2.1",
             "id": "report--cfe4d76a-a030-5b5a-874a-5f584b6c436b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:20.336297Z",
-            "modified": "2026-06-14T11:57:20.336297Z",
+            "created": "2026-07-15T13:32:02.109505Z",
+            "modified": "2026-07-15T13:32:02.109505Z",
             "name": "Remcos OpenDirectory Campaign",
             "report_types": [
                 "threat-report"
             ],
             "published": "2026-02-04T00:00:00Z",
             "object_refs": [
-                "indicator--633c5a48-e561-59e1-95ee-b4928d4afbf2",
-                "indicator--44ae2c06-ef6a-5d15-a7ee-44c18abacecb",
-                "indicator--4496d211-df4b-5d29-aa89-dfba780a5d08",
-                "indicator--1c122625-0f4b-5230-90a1-b50d40fa81c5",
-                "indicator--26b8f2eb-e534-5924-801a-1e7be0f0afe8",
-                "indicator--ad2ffd93-7a1d-5b7e-8f30-59598c9fc8b4",
+                "file--bbc8751e-4d9b-58ad-adfe-184e9219cc29",
+                "indicator--3105cfe5-849c-5817-a819-d52fc2a81a14",
+                "file--eef9bbdb-329f-5ef0-98fc-5fd0a8399c50",
+                "indicator--bf8bc5d8-fb4d-5261-880f-e458d891c547",
+                "indicator--6303c19e-2dcb-51bc-8a55-8e07bc5c7f58",
+                "indicator--96c2967d-069f-5671-bc19-f8a6f9bdd5ee",
+                "indicator--7dcd4df6-a544-5593-8b8f-731c84ee5e9e",
+                "indicator--60432c41-633b-575a-999f-6977add94743",
+                "indicator--2c1310a1-3b0d-552c-b40b-c620735ed29a",
+                "indicator--079f43e5-a0ae-574b-a7c7-68fffc2fa464",
+                "indicator--23bb637b-379c-52d8-b1fb-f7491476ba0c",
                 "indicator--7b2a67f5-cce0-5f71-9d52-965bdf5bf3eb",
                 "indicator--40981db6-2b8a-5c37-9e57-447e1502ebd5",
-                "indicator--e0653d8a-bfd3-56b2-9fda-83a8ca40fc80",
-                "indicator--1819d623-4094-5dd4-a023-3fc4b9ecaded",
-                "indicator--9bdf2cad-c167-5c39-895a-5fa9d06fcc3a",
-                "indicator--ac8ab85b-6b15-5ebd-a814-fde372f17b0a",
-                "indicator--a278cfdc-1efe-567f-beae-83d4e72306b6",
+                "indicator--2772273f-81ac-5f2f-857d-1c6306d4dadf",
+                "indicator--b197d8bf-f851-5264-ae95-431e03d638c5",
                 "indicator--77f48efd-39c5-5ef8-9495-c1941b39d57d",
-                "indicator--25e1f940-313d-5344-8b24-6cf541913e64",
-                "indicator--526ae594-a856-54ce-8180-e354cac3a177",
-                "indicator--db9eadf8-4120-5748-b03e-90567961298c",
-                "indicator--bac1ca5d-9d27-51fc-9719-a5338fa0ace8",
-                "indicator--b5f01ad8-0220-5e94-865d-4b641f7b6780",
-                "indicator--697c37c4-0d2b-5396-b95e-1fdea20aa413",
-                "indicator--a4c15e30-09a2-5ee7-ab1e-ec81ffd66620",
-                "indicator--f6a010a3-35c0-56c0-b58f-3b468d74be15",
-                "indicator--6095728a-b803-55b3-8e8b-484d1f06ea95",
-                "indicator--0ac950cb-0cc7-5838-b89b-ca8f14f5f7af",
-                "indicator--808ef9d5-0b9b-5bec-b884-cced9f8bd16c"
+                "indicator--12a79448-82e1-57f2-83f7-f74b48336f73",
+                "indicator--bea4da2b-6b1a-5b61-9ae6-f72b9129ef98",
+                "indicator--db6425fa-cfe2-56c9-baf9-7d4f9a0d646a",
+                "malware--cb6b9f0e-67c7-5303-9a9f-caa8d412d9f5",
+                "malware--031d817c-8fb0-5278-813d-89441096c4a1",
+                "relationship--cdc55bda-a2d0-5412-9c48-db5d65c03144",
+                "relationship--ad0d8e6f-6b85-5703-865e-8dd876a92014",
+                "relationship--d42158dd-730b-58e7-aef5-dddf946117ab",
+                "relationship--2b0c583b-fb74-56e8-972f-0f455750dfb2",
+                "relationship--92ea0657-4d59-5081-ab2a-fb82ae21a7a7",
+                "relationship--ed81d6d8-e220-535a-b6aa-e29851a1eb2f",
+                "relationship--88b20c66-9316-5985-b9df-a1abecd00695",
+                "relationship--8ecac126-b91e-57c3-ba31-12a7fc911930",
+                "relationship--78d56699-61d8-5fc4-ad13-f4868a546a78",
+                "relationship--1f422de9-17c5-53a7-af97-73447ffd7434",
+                "relationship--e941d8d5-726a-5f52-8a3b-dcc9e7fd15a9",
+                "relationship--0a7a25dc-10c6-59ab-bebf-3285f933c4ea",
+                "relationship--f5f1c921-8686-53ca-9c6e-36d857b9e843",
+                "relationship--19c26ec0-a601-589b-9430-2ffdba269557",
+                "relationship--5d14ca9b-db1f-5106-8319-375f98af937d",
+                "relationship--55242495-82a6-5d32-b821-5767a774797e",
+                "relationship--d5df7eae-785b-5072-9897-2a9366725c02"
             ],
             "labels": [
                 "RAT",

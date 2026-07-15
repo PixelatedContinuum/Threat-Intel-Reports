@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--0010ee61-6586-4dd9-81d8-1ff178789e02",
+    "id": "bundle--97dc1838-b0bc-4ee8-a322-a0b93524371e",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.803609Z",
-            "modified": "2026-06-14T11:57:33.803609Z",
+            "created": "2026-07-15T13:32:13.442765Z",
+            "modified": "2026-07-15T13:32:13.442765Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--f0d906fd-c2d0-5c67-becb-f48377b0a012",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.804163Z",
-            "modified": "2026-06-14T11:57:33.804163Z",
+            "created": "2026-07-15T13:32:13.443059Z",
+            "modified": "2026-07-15T13:32:13.443059Z",
             "name": "ipv4: 45.94.31.220",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--8b6efd7b-c37c-59a1-bd8c-2f66ca147b27",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.805337Z",
-            "modified": "2026-06-14T11:57:33.805337Z",
+            "created": "2026-07-15T13:32:13.443635Z",
+            "modified": "2026-07-15T13:32:13.443635Z",
             "name": "url: http://45.94.31.220:8000/OneDriveSync.exe",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--cbcf22a2-8de8-55a5-b24e-ff0e8ac1eef0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.806363Z",
-            "modified": "2026-06-14T11:57:33.806363Z",
+            "created": "2026-07-15T13:32:13.444159Z",
+            "modified": "2026-07-15T13:32:13.444159Z",
             "name": "url: http://45.94.31.220:8000/",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--7b313cb4-961c-54b0-9d04-6af34ceb7cd8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.807254Z",
-            "modified": "2026-06-14T11:57:33.807254Z",
+            "created": "2026-07-15T13:32:13.444606Z",
+            "modified": "2026-07-15T13:32:13.444606Z",
             "name": "domain: mailuxe.net",
             "indicator_types": [
                 "malicious-activity"
@@ -145,8 +145,8 @@
             "spec_version": "2.1",
             "id": "indicator--65a57841-bd46-566e-8bc1-6e004a89ca94",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.808288Z",
-            "modified": "2026-06-14T11:57:33.808288Z",
+            "created": "2026-07-15T13:32:13.445028Z",
+            "modified": "2026-07-15T13:32:13.445028Z",
             "name": "domain: mailmassange.duckdns.org",
             "indicator_types": [
                 "malicious-activity"
@@ -163,17 +163,77 @@
             "x_opencti_score": 80
         },
         {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--05f7f599-786d-5edc-9479-c751201517e6",
+            "hashes": {
+                "SHA-256": "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3c1e1859-a04a-5217-be9a-df5e8cd36145",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.44552Z",
+            "modified": "2026-07-15T13:32:13.44552Z",
+            "name": "sha256: e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[file:hashes.'SHA-256' = 'e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--c932c7a5-0341-51be-b94d-785aafc18ed9",
+            "hashes": {
+                "SHA-256": "d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--25c4bb20-6142-5af8-beaf-643b9f7918c3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.446089Z",
+            "modified": "2026-07-15T13:32:13.446089Z",
+            "name": "sha256: d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[file:hashes.'SHA-256' = 'd94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
             "type": "indicator",
             "spec_version": "2.1",
             "id": "indicator--83186ded-626d-5227-8a8d-296195e14af9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.809353Z",
-            "modified": "2026-06-14T11:57:33.809353Z",
+            "created": "2026-07-15T13:32:13.446728Z",
+            "modified": "2026-07-15T13:32:13.446728Z",
             "name": "MALW_ScareCrow_Go_Loader_OneDriveSync",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_ScareCrow_Go_Loader_OneDriveSync\n{\n    meta:\n        description     = \"Detects the ScareCrow-wrapped Go loader used in the WebServer-Compromise-Kit-45.94.31.220 campaign. Matches on Go build metadata preserved post-symbol-stripping, the SysWhispers3 HalosGate hash seed compiled into the syscall resolution module, and the XZ stream header pattern used by the ScareCrow injection mode dispatcher.\"\n        author          = \"The Hunters Ledger\"\n        date            = \"2026-02-28\"\n        hash_sha256     = \"e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b\"\n        hash_md5        = \"9559366a6f6874ad914e308a34903c77\"\n        hash_sha1       = \"67bb390c2dad7ebd9e9f706a6f2ba42e4cbcbee7\"\n        reference       = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\"\n        tlp             = \"WHITE\"\n        mitre_attack    = \"T1027.002, T1055.012, T1027.013, T1106\"\n\n    strings:\n        // Go build metadata \u00e2\u20ac\u201d present in Go binaries even after -trimpath and\n        // --skip-symbols; these strings survive ScareCrow polymorphic obfuscation\n        // because they are embedded in the Go runtime metadata section, not the\n        // payload body that ScareCrow encrypts.\n        $go_build_meta_1 = \"-buildmode=exe\" ascii wide\n        $go_build_meta_2 = \"-compiler=gc\" ascii wide\n        $go_build_meta_3 = \"-trimpath=true\" ascii wide\n\n        // SysWhispers3 HalosGate hash seed \u00e2\u20ac\u201d 0x9DEA8D94 in little-endian byte\n        // order. This 32-bit constant is the seed for the ROR8-based rolling hash\n        // used to resolve NT function names without string matching. Its presence\n        // alongside the Go build strings identifies SysWhispers3 compiled into a\n        // Go binary \u00e2\u20ac\u201d a combination not expected in legitimate software.\n        $sw3_seed = { 94 8D EA 9D }\n\n        // XZ stream header with ScareCrow process hollowing mode byte.\n        // Bytes 0-5: XZ magic \\xfd7zXZ\\x00\n        // Byte 6:    0x00 (stream flags byte 1)\n        // Byte 7:    0x04 (mode byte = PROCESS HOLLOWING in ScareCrow dispatcher)\n        // Bytes 8-11: E6 D6 B4 46 (CRC32 of stream flags)\n        // Confirmed at runtime offset 0xC000708000 in dynamic analysis session 3.\n        $xz_hollowing_header = { FD 37 7A 58 5A 00 00 04 E6 D6 B4 46 }\n\n        // Argument spoofing hardcoded string \u00e2\u20ac\u201d present in all binaries built by\n        // this pipeline. Written to PEB CommandLine.Buffer to masquerade the\n        // process as a Microsoft Edge updater. Source: arg_spoof.C.\n        $peb_spoof_string = \"MicrosoftEdgeUpdate.exe --update-check --silent\" wide\n\n    condition:\n        // PE64 header check\n        uint16(0) == 0x5A4D\n        and uint32(uint32(0x3C)) == 0x00004550\n        and uint8(uint32(0x3C) + 24) == 0x64  // PE32+ (64-bit)\n        // File size: OneDriveSync.exe is 32,786,672 bytes; allow up to 40MB for\n        // polymorphic variants from the same pipeline\n        and filesize > 25MB\n        and filesize < 40MB\n        // Require Go build metadata (all three strings confirm Go binary identity)\n        and all of ($go_build_meta_*)\n        // Plus at least one of the payload-specific signatures\n        and (\n            $sw3_seed\n            or $xz_hollowing_header\n            or $peb_spoof_string\n        )\n}",
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Sliver C2 / ScareCrow Loader Open Directory Kit\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule MALW_ScareCrow_Go_Loader_OneDriveSync {\n   meta:\n      description = \"Detects the ScareCrow-wrapped Go loader used in the WebServer-Compromise-Kit-45.94.31.220 campaign. Matches on Go build metadata preserved post-symbol-stripping, the SysWhispers3 HalosGate hash seed compiled into the syscall resolution module, and the XZ stream header pattern used by the ScareCrow injection mode dispatcher.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      hash1 = \"e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b\"\n      hash2 = \"67bb390c2dad7ebd9e9f706a6f2ba42e4cbcbee7\"\n      hash3 = \"9559366a6f6874ad914e308a34903c77\"\n      family = \"Sliver\"\n      malware_type = \"C2 Beacon / Loader\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"97119e1c-a746-54b7-b127-9ef332b9246f\"\n   strings:\n      $go_build_meta_1 = \"-buildmode=exe\" ascii wide\n      $go_build_meta_2 = \"-compiler=gc\" ascii wide\n      $go_build_meta_3 = \"-trimpath=true\" ascii wide\n\n      $sw3_seed = { 94 8D EA 9D }\n\n      $xz_hollowing_header = { FD 37 7A 58 5A 00 00 04 E6 D6 B4 46 }\n\n      $peb_spoof_string = \"MicrosoftEdgeUpdate.exe --update-check --silent\" wide\n\n   condition:\n      uint16(0) == 0x5A4D\n      and uint32(uint32(0x3C)) == 0x00004550\n      and uint8(uint32(0x3C) + 24) == 0x64\n      and filesize > 25MB\n      and filesize < 40MB\n      and all of ($go_build_meta_*)\n      and (\n         $sw3_seed\n         or $xz_hollowing_header\n         or $peb_spoof_string\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
@@ -188,13 +248,34 @@
             "spec_version": "2.1",
             "id": "indicator--2a6a61e7-a345-5cad-837e-2698f25a6f00",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.809543Z",
-            "modified": "2026-06-14T11:57:33.809543Z",
+            "created": "2026-07-15T13:32:13.446947Z",
+            "modified": "2026-07-15T13:32:13.446947Z",
             "name": "MALW_Fraudulent_VMware_CodeSign_Cert_PE",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_Fraudulent_VMware_CodeSign_Cert_PE\n{\n    meta:\n        description     = \"Detects PE binaries signed with the fraudulent VMware, Inc. Code Signing certificate used in the WebServer-Compromise-Kit-45.94.31.220 campaign. The certificate (serial 659EEB5AA4A489FB238993AF259D23F057F6D6D6) is self-signed with CA:TRUE and incorrectly lists Redmond, WA as the organization locality. Any binary presenting this Authenticode signature is malicious or signed by a compromised copy of the private key.\"\n        author          = \"The Hunters Ledger\"\n        date            = \"2026-02-28\"\n        hash_sha256     = \"e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b\"\n        reference       = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\"\n        tlp             = \"WHITE\"\n        mitre_attack    = \"T1553.002\"\n\n    strings:\n        // Certificate serial number as it appears in the Authenticode signature\n        // block embedded in the PE (PKCS#7 SignedData structure). The serial is\n        // stored in DER encoding \u00e2\u20ac\u201d these bytes are the raw serial octets in the\n        // order they appear in the ASN.1 structure.\n        $cert_serial = { 65 9E EB 5A A4 A4 89 FB 23 89 93 AF 25 9D 23 F0 57 F6 D6 D6 }\n\n        // Subject field strings as they appear in the X.509 DER encoding within\n        // the embedded PKCS#7 block. These UTF8String/PrintableString values are\n        // present verbatim in the binary's Authenticode signature.\n        $subject_cn    = \"VMware, Inc. Code Signing\" ascii\n        $subject_l     = \"Redmond\" ascii\n        $subject_o     = \"VMware, Inc.\" ascii\n\n    condition:\n        uint16(0) == 0x5A4D\n        and filesize < 100MB\n        // Serial match is highest-confidence anchor; require it plus at least\n        // one subject field to reduce risk of coincidental serial collision\n        and $cert_serial\n        and 2 of ($subject_cn, $subject_l, $subject_o)\n}\n\nrule MALW_Fraudulent_VMware_CodeSign_Cert_PEM\n{\n    meta:\n        description     = \"Detects the raw PEM-format fraudulent VMware code-signing certificate artifact from the WebServer-Compromise-Kit-45.94.31.220 campaign. This file (cert.pem) was exposed on the attacker's open directory alongside the unencrypted private key (key.pem). Any instance of this PEM file on a host indicates the signing capability has been distributed. The private key was confirmed unencrypted (PKCS#8 BEGIN PRIVATE KEY header).\"\n        author          = \"The Hunters Ledger\"\n        date            = \"2026-02-28\"\n        reference       = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\"\n        tlp             = \"WHITE\"\n        mitre_attack    = \"T1553.002\"\n\n    strings:\n        // PEM header and subject strings as they appear in the base64-encoded\n        // certificate. The serial in hex ASCII form appears in openssl text output\n        // but not in the raw PEM base64 \u00e2\u20ac\u201d use the subject strings instead.\n        $pem_header     = \"-----BEGIN CERTIFICATE-----\" ascii\n        $subject_cn     = \"VMware, Inc. Code Signing\" ascii\n        $subject_l      = \"Redmond\" ascii\n        // Private key PEM header \u00e2\u20ac\u201d signals the key.pem artifact or a combined PFX\n        // export. Finding this alongside the cert indicates full signing capability.\n        $privkey_header = \"-----BEGIN PRIVATE KEY-----\" ascii\n\n    condition:\n        filesize < 10KB\n        and $pem_header\n        and $subject_cn\n        and $subject_l\n}",
+            "pattern": "rule MALW_Fraudulent_VMware_CodeSign_Cert_PE {\n   meta:\n      description = \"Detects PE binaries signed with the fraudulent self-signed VMware, Inc. Code Signing certificate identity used in the WebServer-Compromise-Kit-45.94.31.220 campaign, either via the known certificate serial or via the self-signed VMware/Redmond subject-field fraud pattern alone, which survives certificate regeneration from the same template\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      hash1 = \"e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b\"\n      family = \"Sliver\"\n      malware_type = \"C2 Beacon / Code-Signing Fraud\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"751f1fad-4d99-5c21-a1a1-c04dae743f81\"\n   strings:\n      $cert_serial = { 65 9E EB 5A A4 A4 89 FB 23 89 93 AF 25 9D 23 F0 57 F6 D6 D6 }\n      $subject_cn  = \"VMware, Inc. Code Signing\" ascii\n      $subject_l   = \"Redmond\" ascii\n      $subject_o   = \"VMware, Inc.\" ascii\n   condition:\n      uint16(0) == 0x5A4D\n      and filesize < 100MB\n      and (\n         ($cert_serial and 1 of ($subject_cn, $subject_l, $subject_o))\n         or (2 of ($subject_cn, $subject_l, $subject_o))\n      )\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--4db5d131-8153-57af-8f1c-857a9fb38169",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.447087Z",
+            "modified": "2026-07-15T13:32:13.447087Z",
+            "name": "MALW_Fraudulent_VMware_CodeSign_Cert_PEM",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MALW_Fraudulent_VMware_CodeSign_Cert_PEM {\n   meta:\n      description = \"Detects the raw PEM-format fraudulent VMware code-signing certificate and private key artifacts from the WebServer-Compromise-Kit-45.94.31.220 campaign, recovered unencrypted from the attacker's open directory alongside the signed binaries\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      family = \"Sliver\"\n      malware_type = \"Code-Signing Fraud Artifact\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"69d3d214-5285-5614-8f41-e1a05f369d22\"\n   strings:\n      $pem_header     = \"-----BEGIN CERTIFICATE-----\" ascii\n      $subject_cn     = \"VMware, Inc. Code Signing\" ascii\n      $subject_l      = \"Redmond\" ascii\n      $privkey_header = \"-----BEGIN PRIVATE KEY-----\" ascii\n   condition:\n      filesize < 10KB\n      and (\n         ($pem_header and $subject_cn and $subject_l)\n         or ($privkey_header and ($subject_cn or $subject_l))\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
@@ -209,13 +290,13 @@
             "spec_version": "2.1",
             "id": "indicator--bd268db2-dc48-5911-a277-15fd7b927d78",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.809724Z",
-            "modified": "2026-06-14T11:57:33.809724Z",
+            "created": "2026-07-15T13:32:13.447224Z",
+            "modified": "2026-07-15T13:32:13.447224Z",
             "name": "MALW_UPX_Packed_Sliver_Variant",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule MALW_UPX_Packed_Sliver_Variant\n{\n    meta:\n        description     = \"Detects the UPX 5.0.2-packed Sliver C2 beacon variant recovered from the WebServer-Compromise-Kit-45.94.31.220 campaign (compressed.exe). Matches on UPX section naming, the Go build metadata present in the unpacked payload, and the packed file size fingerprint. UPX-packed Go binaries of this size are not common in legitimate enterprise software.\"\n        author          = \"The Hunters Ledger\"\n        date            = \"2026-02-28\"\n        hash_sha256     = \"d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea\"\n        hash_md5        = \"f587753c0a46688af2ffea00573192e2\"\n        hash_sha1       = \"8f27695dfd4f29e872c1661cdf225120182dd05b\"\n        reference       = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\"\n        tlp             = \"WHITE\"\n        mitre_attack    = \"T1027.002\"\n\n    strings:\n        // UPX section headers \u00e2\u20ac\u201d present in all UPX-packed binaries; provide\n        // baseline match, not sufficient alone\n        $upx0 = \"UPX0\" ascii\n        $upx1 = \"UPX1\" ascii\n        // UPX version string \u00e2\u20ac\u201d specific to UPX 5.0.2 as documented by radare2\n        $upx_ver = \"UPX 5.0.2\" ascii\n        // Go build metadata \u00e2\u20ac\u201d present in the UPX stub header region before\n        // self-extraction; visible without unpacking because Go embeds build\n        // info in a non-compressed region of UPX-packed Go binaries\n        $go_build_1 = \"-buildmode=exe\" ascii wide\n        $go_build_2 = \"-compiler=gc\" ascii wide\n        // UPX LZMA filter marker \u00e2\u20ac\u201d radare2 identified LZMA with brute filter\n        // flags in this specific build. The byte sequence appears in the UPX\n        // compression header identifying the algorithm and filter combination.\n        $upx_lzma_marker = { 03 05 }\n\n    condition:\n        uint16(0) == 0x5A4D\n        // Packed size: 15,869,168 bytes (\u00c2\u00b12MB for minor variants)\n        and filesize > 13MB\n        and filesize < 18MB\n        and $upx0\n        and $upx1\n        and ($upx_ver or $upx_lzma_marker)\n        and all of ($go_build_*)\n}",
+            "pattern": "rule MALW_UPX_Packed_Sliver_Variant {\n   meta:\n      description = \"Detects the UPX 5.0.2-packed Sliver C2 beacon variant recovered from the WebServer-Compromise-Kit-45.94.31.220 campaign (compressed.exe). Matches on UPX section naming, Go build metadata present in the unpacked payload, and the packed file size fingerprint; UPX packing is common in legitimate software so this is a hunting-tier lead, not an alerting rule\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      hash1 = \"d94c74a6cd6629be66898eaab03ce0446f655689e28e08f0c166eaf4af9d04ea\"\n      hash2 = \"8f27695dfd4f29e872c1661cdf225120182dd05b\"\n      hash3 = \"f587753c0a46688af2ffea00573192e2\"\n      family = \"Sliver\"\n      malware_type = \"C2 Beacon (UPX-packed variant)\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"45a1d524-05ea-5875-9ad3-609a4fe78278\"\n   strings:\n      $upx0 = \"UPX0\" ascii\n      $upx1 = \"UPX1\" ascii\n      $upx_ver = \"UPX 5.0.2\" ascii\n      $go_build_1 = \"-buildmode=exe\" ascii wide\n      $go_build_2 = \"-compiler=gc\" ascii wide\n      $upx_lzma_marker = { 03 05 }\n   condition:\n      uint16(0) == 0x5A4D\n      and filesize > 13MB\n      and filesize < 18MB\n      and $upx0\n      and $upx1\n      and ($upx_ver or $upx_lzma_marker)\n      and all of ($go_build_*)\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
@@ -230,13 +311,13 @@
             "spec_version": "2.1",
             "id": "indicator--62697b30-6a22-51f5-b4ec-d86663005c3e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.809915Z",
-            "modified": "2026-06-14T11:57:33.809915Z",
+            "created": "2026-07-15T13:32:13.447389Z",
+            "modified": "2026-07-15T13:32:13.447389Z",
             "name": "TOOLKIT_ScareCrow_Build_Pipeline_Source_Artifacts",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "rule TOOLKIT_ScareCrow_Build_Pipeline_Source_Artifacts\n{\n    meta:\n        description     = \"Hunt rule detecting source code artifacts from the ScareCrow/SysWhispers3 build pipeline used in the WebServer-Compromise-Kit-45.94.31.220 campaign. Targets three distinctive source code markers: the XOR_KEY 0x42 define from string_obf.C, the Heaven's Gate far-return opcode sequence from heavens_gate.asm (34-byte compiled stub), and the SysWhispers3 SW3_SEED hash constant. Presence of these artifacts on a host indicates the offensive build pipeline has been deployed or is in use.\"\n        author          = \"The Hunters Ledger\"\n        date            = \"2026-02-28\"\n        reference       = \"https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\"\n        tlp             = \"WHITE\"\n        mitre_attack    = \"T1027.013, T1106\"\n\n    strings:\n        // string_obf.C marker \u00e2\u20ac\u201d #define XOR_KEY 0x42\n        // The preprocessor define name and value combination identifies this\n        // specific module. XOR key 0x42 is common, but the define name\n        // XOR_KEY is specific to this source file.\n        $xor_key_define = \"#define XOR_KEY 0x42\" ascii\n\n        // SysWhispers3 seed define \u00e2\u20ac\u201d present in syscalls.h and referenced in\n        // syscalls.C. The specific value 0x9DEA8D94 identifies SysWhispers3\n        // vs. SysWhispers2 or other variants which use different seeds.\n        $sw3_seed_define = \"0x9DEA8D94\" ascii\n        $sw3_seed_name   = \"SW3_SEED\" ascii\n\n        // Heaven's Gate compiled 34-byte stub (heavens_gate.bin) \u00e2\u20ac\u201d opcode sequence\n        // for the far-return mode switch from CS=0x23 (32-bit) to CS=0x33 (64-bit).\n        // The sequence call+add pattern for position-independent address calculation\n        // followed by the far return is the distinctive compilation of this specific\n        // NASM source. This matches the pre-assembled binary (heavens_gate.bin) that\n        // is suitable for injection into 32-bit processes.\n        // Sequence: CALL $ +5 ; ADD [ESP], 5 ; RETF (to 64-bit segment)\n        $heavens_gate_stub = { E8 00 00 00 00 83 04 24 05 CB }\n\n        // Build workspace path \u00e2\u20ac\u201d appears in build artifacts if the attacker's Linux\n        // server path is embedded in any recovered file (e.g., debug symbols,\n        // build log, or stager script with hardcoded paths)\n        $build_path = \"/var/tmp/.cache-1f6a38a2-1771081283\" ascii\n\n    condition:\n        filesize < 5MB\n        and (\n            // Source code file match: XOR define plus SW3 seed = two modules present\n            ($xor_key_define and $sw3_seed_define and $sw3_seed_name)\n            // Or: Heaven's Gate compiled stub in a small binary (heavens_gate.bin)\n            or ($heavens_gate_stub and filesize < 100)\n            // Or: Build path artifact in any file\n            or $build_path\n        )\n}",
+            "pattern": "rule TOOLKIT_ScareCrow_Build_Pipeline_Source_Artifacts {\n   meta:\n      description = \"Hunt rule detecting source code and pre-assembled stub artifacts from the ScareCrow/SysWhispers3 build pipeline used in the WebServer-Compromise-Kit-45.94.31.220 campaign: the XOR_KEY 0x42 define paired with the SysWhispers3 SW3_SEED hash constant from string_obf.C/syscalls.C, or the compiled 10-byte Heaven's Gate far-return stub. Presence indicates the offensive build pipeline has been deployed to or is in use on the scanned host\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\"\n      date = \"2026-02-28\"\n      family = \"ScareCrow Build Pipeline\"\n      malware_type = \"Offensive Toolchain Source Artifacts\"\n      campaign = \"WebServer-Compromise-Kit-45.94.31.220\"\n      id = \"e38d897c-a2bf-5731-b1e0-1e00d4eecb75\"\n   strings:\n      $xor_key_define = \"#define XOR_KEY 0x42\" ascii\n      $sw3_seed_define = \"0x9DEA8D94\" ascii\n      $sw3_seed_name   = \"SW3_SEED\" ascii\n      $heavens_gate_stub = { E8 00 00 00 00 83 04 24 05 CB }\n   condition:\n      filesize < 5MB\n      and (\n         ($xor_key_define and $sw3_seed_define and $sw3_seed_name)\n         or ($heavens_gate_stub and filesize < 100)\n      )\n}",
             "pattern_type": "yara",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
@@ -249,15 +330,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--76af3af9-648e-5b90-aa18-adbf4546b20c",
+            "id": "indicator--edba4c71-8b49-5715-8258-fbe058cd8787",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.810115Z",
-            "modified": "2026-06-14T11:57:33.810115Z",
-            "name": "Sliver Stager PowerShell AMSI Bypass with Payload Download",
+            "created": "2026-07-15T13:32:13.447536Z",
+            "modified": "2026-07-15T13:32:13.447536Z",
+            "name": "Sliver Stager PowerShell AMSI Bypass via Reflection",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Sliver Stager PowerShell AMSI Bypass with Payload Download\nid: 3a7f2c91-5e4b-4d8a-b1c9-6f2e1a3d8b07\nstatus: experimental\ndescription: Detects the PowerShell stager used in the WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The stager uses .NET reflection to access the amsiInitFailed private static field (disabling AMSI for the session), then downloads an executable payload via Net.WebClient.DownloadFile. This specific AMSI bypass technique combined with an executable download is a high-confidence indicator of malicious stager activity. PowerShell Script Block Logging (Event ID 4104) captures the full stager content even when AMSI is subsequently bypassed.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\nauthor: The Hunters Ledger\ndate: 2026/02/28\ntags:\n    - attack.execution\n    - attack.defense-evasion\n    - attack.command-and-control\nlogsource:\n    product: windows\n    service: powershell\n    definition: 'Requires PowerShell Script Block Logging (Event ID 4104). Enable via GPO: Computer Configuration > Administrative Templates > Windows Components > Windows PowerShell > Turn on PowerShell Script Block Logging.'\ndetection:\n    selection_amsi_bypass:\n        EventID: 4104\n        ScriptBlockText|contains|all:\n            - 'amsiInitFailed'\n            - 'NonPublic,Static'\n            - 'SetValue'\n    selection_download:\n        EventID: 4104\n        ScriptBlockText|contains|all:\n            - 'DownloadFile'\n            - 'Net.WebClient'\n    filter_legitimate:\n        ScriptBlockText|contains:\n            - 'WindowsDefenderApplicationGuard'\n    condition: (selection_amsi_bypass or selection_download) and not filter_legitimate\nfalsepositives:\n    - Security research or penetration testing scripts using reflection-based AMSI bypass in authorized environments\n    - Red team exercises where PowerShell stagers are simulated\n    - Automated patching scripts that coincidentally use WebClient DownloadFile (these will not match amsiInitFailed, so FP limited to download-only selection)\nlevel: high",
+            "pattern": "title: Sliver Stager PowerShell AMSI Bypass via Reflection\nid: 3a7f2c91-5e4b-4d8a-b1c9-6f2e1a3d8b07\nstatus: experimental\ndescription: >-\n  Detects the PowerShell AMSI-bypass technique used by the stager\n  component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2\n  campaign. The stager uses .NET reflection to set the private static\n  amsiInitFailed field to true, disabling AMSI for the PowerShell session.\n  PowerShell Script Block Logging (Event ID 4104) captures the full\n  stager content even though the bypass fires after the script block is\n  logged.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: powershell\n    definition: >-\n      Requires PowerShell Script Block Logging (Event ID 4104). Enable via\n      GPO Computer Configuration, Administrative Templates, Windows\n      Components, Windows PowerShell, Turn on PowerShell Script Block\n      Logging.\ndetection:\n    selection_amsi_bypass:\n        EventID: 4104\n        ScriptBlockText|contains|all:\n            - 'amsiInitFailed'\n            - 'NonPublic,Static'\n            - 'SetValue'\n    filter_legitimate:\n        ScriptBlockText|contains:\n            - 'WindowsDefenderApplicationGuard'\n    condition: selection_amsi_bypass and not filter_legitimate\nfalsepositives:\n    - >-\n      Security research or authorized offensive-security assessment\n      scripts using reflection-based AMSI bypass in authorized\n      environments\n    - Red team exercises where PowerShell stagers are simulated\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
@@ -270,15 +351,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--042c523e-6a47-50c5-b6db-09239e1b92ee",
+            "id": "indicator--23892274-db8d-5f23-b803-d47955951620",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.810316Z",
-            "modified": "2026-06-14T11:57:33.810316Z",
-            "name": "Windows Defender Real-Time Protection Disabled by PowerShell Process",
+            "created": "2026-07-15T13:32:13.447718Z",
+            "modified": "2026-07-15T13:32:13.447718Z",
+            "name": "Windows Defender Real-Time Protection Disabled",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: Windows Defender Real-Time Protection Disabled by PowerShell Process\nid: 8b4e1f72-9c3a-4e7d-a5b8-2d6f9c1e4a83\nstatus: experimental\ndescription: Detects Windows Defender real-time protection being disabled via a PowerShell process, matching the behavior of the stager.ps1 component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The stager calls Set-MpPreference -DisableRealtimeMonitoring $true, which generates Windows Defender Event ID 5001 when executed with sufficient privileges. This event in combination with PowerShell as the initiating process is a high-confidence indicator of malicious stager activity rather than legitimate administrative action.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\n    - https://attack.mitre.org/techniques/T1562/001/\nauthor: The Hunters Ledger\ndate: 2026/02/28\ntags:\n    - attack.defense-evasion\nlogsource:\n    product: windows\n    service: windefend\ndetection:\n    selection_defender_disabled:\n        EventID: 5001\n    filter_admin_tools:\n        # Exclude known-legitimate management tools\n        # Expand this filter based on environment-specific management tooling\n        ProcessName|endswith:\n            - '\\MpCmdRun.exe'\n            - '\\msiexec.exe'\n    condition: selection_defender_disabled and not filter_admin_tools\nfalsepositives:\n    - Legitimate administrative scripts disabling Defender as part of authorized software installation\n    - Enterprise management platforms (SCCM, Intune) that disable Defender via PowerShell during provisioning\n    - Security testing in authorized environments\nlevel: high",
+            "pattern": "title: Windows Defender Real-Time Protection Disabled\nid: 8b4e1f72-9c3a-4e7d-a5b8-2d6f9c1e4a83\nstatus: experimental\ndescription: >-\n  Detects Windows Defender real-time protection being disabled (Event ID\n  5001), matching the defense-impairment step used by the stager\n  component of the WebServer-Compromise-Kit-45.94.31.220 Sliver C2\n  campaign, which calls Set-MpPreference -DisableRealtimeMonitoring $true\n  from PowerShell. The event fires regardless of which process disabled\n  protection, so this rule covers the technique generally rather than\n  only the PowerShell vector observed in this campaign.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.defense-impairment\n    - attack.t1685\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: windefend\ndetection:\n    selection_defender_disabled:\n        EventID: 5001\n    filter_admin_tools:\n        ProcessName|endswith:\n            - '\\MpCmdRun.exe'\n            - '\\msiexec.exe'\n    condition: selection_defender_disabled and not filter_admin_tools\nfalsepositives:\n    - >-\n      Legitimate administrative scripts disabling Defender as part of\n      authorized software installation\n    - >-\n      Enterprise management platforms (SCCM, Intune) disabling Defender\n      via PowerShell during provisioning\n    - Security testing in authorized environments\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
@@ -291,15 +372,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--089363d1-d793-5252-b863-4dcfc03ad663",
+            "id": "indicator--af50ac5d-be15-5568-a501-6bddcfd36694",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.810511Z",
-            "modified": "2026-06-14T11:57:33.810511Z",
-            "name": "PowerShell Drops Executable to TEMP Directory \u00e2\u20ac\u201d Sliver Stager Pattern",
+            "created": "2026-07-15T13:32:13.447887Z",
+            "modified": "2026-07-15T13:32:13.447887Z",
+            "name": "sihost.exe Initiating Anomalous Outbound Network Connection",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PowerShell Drops Executable to TEMP Directory \u00e2\u20ac\u201d Sliver Stager Pattern\nid: c2e5a8f3-7b1d-4c9e-8a4f-3e7b2d9c5f16\nstatus: experimental\ndescription: Detects PowerShell creating an executable file in the user TEMP directory, matching the payload delivery behavior of the stager.ps1 component in the WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. The stager downloads OneDriveSync.exe via Net.WebClient and writes it to %TEMP%\\update.exe before execution. This Sysmon file event rule targets the file write action specifically, providing detection even if Script Block Logging is unavailable.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\n    - https://attack.mitre.org/techniques/T1105/\nauthor: The Hunters Ledger\ndate: 2026/02/28\ntags:\n    - attack.execution\n    - attack.command-and-control\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_ps_exe_drop:\n        Image|endswith: '\\powershell.exe'\n        TargetFilename|contains: '\\AppData\\Local\\Temp\\'\n        TargetFilename|endswith: '.exe'\n    filter_known_installers:\n        # Common legitimate PowerShell-based installer patterns \u00e2\u20ac\u201d tune per environment\n        TargetFilename|contains:\n            - '\\AppData\\Local\\Temp\\chocolatey'\n            - '\\AppData\\Local\\Temp\\scoop'\n            - '\\AppData\\Local\\Temp\\winget'\n    condition: selection_ps_exe_drop and not filter_known_installers\nfalsepositives:\n    - Legitimate software deployment scripts that use PowerShell to download and stage installers to TEMP\n    - Package manager scripts (Chocolatey, Scoop, winget) that stage executables during installation\n    - IT automation frameworks (Ansible, Salt, Puppet) that deploy via PowerShell to TEMP paths\nlevel: high",
+            "pattern": "title: sihost.exe Initiating Anomalous Outbound Network Connection\nid: 6f1d4b8e-3c2a-4f7b-9e5d-8a1c3f6b9e2d\nstatus: experimental\ndescription: >-\n  Detects sihost.exe (Shell Infrastructure Host) initiating outbound\n  network connections to non-Microsoft destinations on ports 443 or 8443,\n  indicating successful C2 beacon injection via process hollowing. The\n  WebServer-Compromise-Kit-45.94.31.220 build pipeline explicitly targets\n  sihost.exe for process hollowing; the injected Sliver beacon used this\n  technique to beacon out over HTTPS/mTLS. Legitimate sihost.exe does not\n  initiate outbound HTTPS connections to arbitrary external addresses, so\n  this rule generalizes to any injected beacon using the same injection\n  target, not only this campaign's specific C2 domains.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.stealth\n    - attack.t1055.012\n    - attack.privilege-escalation\n    - attack.t1620\n    - attack.t1134.004\n    - attack.command-and-control\n    - attack.t1071.001\n    - detection.emerging-threats\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection_sihost_network:\n        Image|endswith: '\\sihost.exe'\n        Initiated: 'true'\n        DestinationPort:\n            - 443\n            - 8443\n    filter_microsoft_infra:\n        DestinationHostname|endswith:\n            - '.microsoft.com'\n            - '.windows.com'\n            - '.windowsupdate.com'\n            - '.msftconnecttest.com'\n    condition: selection_sihost_network and not filter_microsoft_infra\nfalsepositives:\n    - >-\n      Custom enterprise environments where sihost.exe behavior has been\n      modified by legitimate software\n    - >-\n      Proxy or network security software that injects monitoring DLLs\n      into sihost.exe, causing unusual network calls\nlevel: high",
             "pattern_type": "sigma",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
@@ -312,15 +393,15 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--6df9da2c-6b88-517c-b03c-f17a4c045b62",
+            "id": "indicator--2a9c6993-9b67-5fec-9e1b-ff75e25b0bef",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.810676Z",
-            "modified": "2026-06-14T11:57:33.810676Z",
-            "name": "sihost.exe Initiating Anomalous Outbound Network Connection \u00e2\u20ac\u201d Sliver C2 Beacon",
+            "created": "2026-07-15T13:32:13.448083Z",
+            "modified": "2026-07-15T13:32:13.448083Z",
+            "name": "PowerShell WebClient DownloadFile Execution (Sliver Stager Download Pattern)",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: sihost.exe Initiating Anomalous Outbound Network Connection \u00e2\u20ac\u201d Sliver C2 Beacon\nid: 6f1d4b8e-3c2a-4f7b-9e5d-8a1c3f6b9e2d\nstatus: experimental\ndescription: Detects sihost.exe (Shell Infrastructure Host) initiating outbound network connections to non-Microsoft destinations, indicating successful Sliver C2 beacon injection via process hollowing. The WebServer-Compromise-Kit-45.94.31.220 build pipeline explicitly targets sihost.exe for process hollowing (confirmed in build.log). The injected Sliver beacon beacons to mailuxe.net:443, mailmassange.duckdns.org:443, and mailuxe.net:8443 using HTTPS/mTLS. Legitimate sihost.exe does not initiate outbound HTTPS connections; any such connection is high-confidence evidence of process injection.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\n    - https://attack.mitre.org/techniques/T1055/012/\nauthor: The Hunters Ledger\ndate: 2026/02/28\ntags:\n    - attack.defense-evasion\n    - attack.command-and-control\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection_sihost_network:\n        Image|endswith: '\\sihost.exe'\n        Initiated: 'true'\n        DestinationPort:\n            - 443\n            - 8443\n    filter_microsoft_infra:\n        # sihost.exe may contact Microsoft endpoints during normal Windows Update\n        # or telemetry; filter known Microsoft IP ranges and domains\n        DestinationHostname|endswith:\n            - '.microsoft.com'\n            - '.windows.com'\n            - '.windowsupdate.com'\n            - '.msftconnecttest.com'\n    condition: selection_sihost_network and not filter_microsoft_infra\nfalsepositives:\n    - Custom enterprise environments where sihost.exe behavior has been modified by legitimate software\n    - Proxy or network security software that injects monitoring DLLs into sihost.exe causing unusual network calls\nlevel: high",
+            "pattern": "title: PowerShell WebClient DownloadFile Execution (Sliver Stager Download Pattern)\nid: 7d3f9a52-1c6e-4b8d-9a3f-5e8c2d4b7f91\nstatus: experimental\ndescription: >-\n  Detects PowerShell using Net.WebClient.DownloadFile, matching the\n  payload retrieval technique used by the stager component of the\n  WebServer-Compromise-Kit-45.94.31.220 Sliver C2 campaign. Split out\n  from the campaign's original combined AMSI-bypass-or-download rule\n  because the download pattern alone is common to many legitimate\n  PowerShell deployment and automation scripts; use for hunting and\n  triage, not alerting.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    product: windows\n    service: powershell\n    definition: 'Requires PowerShell Script Block Logging (Event ID 4104).'\ndetection:\n    selection_download:\n        EventID: 4104\n        ScriptBlockText|contains|all:\n            - 'DownloadFile'\n            - 'Net.WebClient'\n    filter_legitimate:\n        ScriptBlockText|contains:\n            - 'WindowsDefenderApplicationGuard'\n    condition: selection_download and not filter_legitimate\nfalsepositives:\n    - >-\n      Automated patching, deployment, or CI/CD scripts that use\n      Net.WebClient.DownloadFile to retrieve legitimate installers or\n      updates\n    - >-\n      IT automation frameworks that stage files via PowerShell WebClient\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
@@ -333,20 +414,75 @@
         {
             "type": "indicator",
             "spec_version": "2.1",
-            "id": "indicator--49569e72-c7be-5ccc-abcc-fa2a942071e6",
+            "id": "indicator--9cd77d59-329c-5012-a181-694761d1f1b8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.810842Z",
-            "modified": "2026-06-14T11:57:33.810842Z",
-            "name": "PEB CommandLine Spoofing \u00e2\u20ac\u201d Process Claims MicrosoftEdgeUpdate Identity",
+            "created": "2026-07-15T13:32:13.44822Z",
+            "modified": "2026-07-15T13:32:13.44822Z",
+            "name": "PowerShell Drops Executable to TEMP Directory",
             "indicator_types": [
                 "malicious-activity"
             ],
-            "pattern": "title: PEB CommandLine Spoofing \u00e2\u20ac\u201d Process Claims MicrosoftEdgeUpdate Identity\nid: 9d3e7a1f-4b8c-4e2a-b6d9-5c1f8e3a7b4d\nstatus: experimental\ndescription: Detects a process whose reported CommandLine claims to be MicrosoftEdgeUpdate.exe but whose Image path does not correspond to a legitimate Microsoft Edge update installation directory. The arg_spoof.C module in the WebServer-Compromise-Kit-45.94.31.220 toolkit hardcodes the string 'MicrosoftEdgeUpdate.exe --update-check --silent' as the PEB CommandLine spoofing value. This technique is cosmetic deception targeting process-tree viewers and EDR rules that inspect CommandLine without cross-referencing the actual binary path. All binaries produced by this pipeline present this same spoofed identity.\nreferences:\n    - https://pixelatedcontinuum.github.io/Threat-Intel-Reports/reports/sliver-open-directory/\n    - https://attack.mitre.org/techniques/T1036/\nauthor: The Hunters Ledger\ndate: 2026/02/28\ntags:\n    - attack.defense-evasion\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_spoof_cmdline:\n        CommandLine|contains|all:\n            - 'MicrosoftEdgeUpdate.exe'\n            - '--update-check'\n            - '--silent'\n    filter_legitimate_edge_update:\n        # Legitimate MicrosoftEdgeUpdate.exe runs from these paths only\n        Image|contains:\n            - '\\Microsoft\\EdgeUpdate\\'\n            - '\\Microsoft\\Edge\\Application\\'\n    condition: selection_spoof_cmdline and not filter_legitimate_edge_update\nfalsepositives:\n    - Legitimate Microsoft Edge update processes running from non-standard installation paths (uncommon but possible in enterprise repackaging scenarios)\n    - Security tooling that simulates Edge update processes for testing purposes\nlevel: medium",
+            "pattern": "title: PowerShell Drops Executable to TEMP Directory\nid: c2e5a8f3-7b1d-4c9e-8a4f-3e7b2d9c5f16\nstatus: experimental\ndescription: >-\n  Detects PowerShell creating an executable file in the user TEMP\n  directory, matching the payload-staging behavior of the stager\n  component in the WebServer-Compromise-Kit-45.94.31.220 Sliver C2\n  campaign \u2014 the stager writes OneDriveSync.exe to %TEMP%\\update.exe\n  before execution. This rule implements only the file-write event; the\n  campaign's stager also opens a network connection immediately\n  beforehand and launches the dropped file with a hidden window, but\n  neither of those events is correlated here, so this selector alone is\n  broader than the full three-event chain and is scoped as a hunting\n  lead rather than an alerting rule.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.command-and-control\n    - attack.t1105\n    - detection.emerging-threats\nlogsource:\n    category: file_event\n    product: windows\ndetection:\n    selection_ps_exe_drop:\n        Image|endswith: '\\powershell.exe'\n        TargetFilename|contains: '\\AppData\\Local\\Temp\\'\n        TargetFilename|endswith: '.exe'\n    filter_known_installers:\n        TargetFilename|contains:\n            - '\\AppData\\Local\\Temp\\chocolatey'\n            - '\\AppData\\Local\\Temp\\scoop'\n            - '\\AppData\\Local\\Temp\\winget'\n    condition: selection_ps_exe_drop and not filter_known_installers\nfalsepositives:\n    - >-\n      Legitimate software deployment scripts that use PowerShell to\n      download and stage installers to TEMP\n    - >-\n      Package manager scripts (Chocolatey, Scoop, winget) that stage\n      executables during installation\n    - >-\n      IT automation frameworks (Ansible, Salt, Puppet) that deploy via\n      PowerShell to TEMP paths\nlevel: medium",
             "pattern_type": "sigma",
             "valid_from": "2026-02-28T00:00:00Z",
             "labels": [
                 "detection-rule"
             ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1d52ae5a-d1a2-528d-a1c3-ad86302eefc5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.448334Z",
+            "modified": "2026-07-15T13:32:13.448334Z",
+            "name": "Process Claims MicrosoftEdgeUpdate Identity from Non-Standard Location",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Process Claims MicrosoftEdgeUpdate Identity from Non-Standard Location\nid: 9d3e7a1f-4b8c-4e2a-b6d9-5c1f8e3a7b4d\nstatus: experimental\ndescription: >-\n  Detects a process whose reported CommandLine references\n  MicrosoftEdgeUpdate.exe while its Image path does not correspond to a\n  legitimate Microsoft Edge update installation directory. The\n  arg_spoof.C module in the WebServer-Compromise-Kit-45.94.31.220\n  toolkit overwrites the PEB CommandLine buffer with the hardcoded\n  string 'MicrosoftEdgeUpdate.exe --update-check --silent' to spoof\n  process-tree viewers and EDR rules that inspect CommandLine without\n  cross-referencing the true binary path. Generalized from the\n  campaign's exact hardcoded argument string to the broader\n  CommandLine-vs-Image mismatch pattern so the rule also covers a\n  rebuild that keeps the masquerade but changes the arguments; this\n  trades some campaign specificity for durability, so it is scoped as a\n  hunting lead rather than an alerting rule.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/sliver-open-directory-detections/\nauthor: The Hunters Ledger\ndate: 2026-02-28\ntags:\n    - attack.stealth\n    - attack.t1036\n    - attack.t1036.005\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection_spoof_cmdline:\n        CommandLine|contains: 'MicrosoftEdgeUpdate.exe'\n    filter_legitimate_edge_update:\n        Image|contains:\n            - '\\Microsoft\\EdgeUpdate\\'\n            - '\\Microsoft\\Edge\\Application\\'\n    condition: selection_spoof_cmdline and not filter_legitimate_edge_update\nfalsepositives:\n    - >-\n      Legitimate Microsoft Edge update processes running from\n      non-standard installation paths (uncommon but possible in\n      enterprise repackaging scenarios)\n    - >-\n      Security tooling that simulates Edge update processes for testing\n      purposes\n    - >-\n      Any process whose command-line arguments happen to reference\n      MicrosoftEdgeUpdate.exe as a string without impersonating it\n      (rare)\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-02-28T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "malware",
+            "spec_version": "2.1",
+            "id": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.448464Z",
+            "modified": "2026-07-15T13:32:13.448464Z",
+            "name": "OneDriveSync.exe",
+            "description": "Polymorphic builds may produce different hashes; use certificate serial (659EEB5AA4A489FB238993AF259D23F057F6D6D6) as more durable indicator. File can be executed to trigger full kill chain but requires elevated privileges for some evasion techniques.",
+            "malware_types": [
+                "backdoor"
+            ],
+            "is_family": false,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "malware",
+            "spec_version": "2.1",
+            "id": "malware--a35e0671-c5e3-5dda-bfb8-c4e56e84f28e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.448586Z",
+            "modified": "2026-07-15T13:32:13.448586Z",
+            "name": "compressed.exe",
+            "description": "Same C2 configuration as OneDriveSync.exe. Compression ratio indicates 50% size reduction; use for bandwidth-constrained delivery scenarios.",
+            "malware_types": [
+                "backdoor"
+            ],
+            "is_family": false,
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -356,8 +492,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--45293914-4086-5703-9eab-784355ce3204",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.810995Z",
-            "modified": "2026-06-14T11:57:33.810995Z",
+            "created": "2026-07-15T13:32:13.448698Z",
+            "modified": "2026-07-15T13:32:13.448698Z",
             "name": "sliver-open-directory infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -368,12 +504,292 @@
             ]
         },
         {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--69b51dd2-9079-532e-bbcf-9515525e895d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449189Z",
+            "modified": "2026-07-15T13:32:13.449189Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--f0d906fd-c2d0-5c67-becb-f48377b0a012",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--b7a46893-fb9a-5dda-bad7-94012ba22112",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449319Z",
+            "modified": "2026-07-15T13:32:13.449319Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--8b6efd7b-c37c-59a1-bd8c-2f66ca147b27",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--455e543b-ad06-5be7-8f87-c2f8d0efed78",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449421Z",
+            "modified": "2026-07-15T13:32:13.449421Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--cbcf22a2-8de8-55a5-b24e-ff0e8ac1eef0",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--fd03de7a-ddca-526e-9a66-b640fa689922",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449516Z",
+            "modified": "2026-07-15T13:32:13.449516Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--7b313cb4-961c-54b0-9d04-6af34ceb7cd8",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--73733c1c-75e9-592f-86d8-04b8930a4ed9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449612Z",
+            "modified": "2026-07-15T13:32:13.449612Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--65a57841-bd46-566e-8bc1-6e004a89ca94",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--545537b6-d39e-50ec-9b16-079c9a637e34",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449707Z",
+            "modified": "2026-07-15T13:32:13.449707Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--3c1e1859-a04a-5217-be9a-df5e8cd36145",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--6061a315-f3de-5483-8120-21c3591c8ff1",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449802Z",
+            "modified": "2026-07-15T13:32:13.449802Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--25c4bb20-6142-5af8-beaf-643b9f7918c3",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--f0e4dd0f-3a62-55a1-a27a-45b7c76e70ba",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449897Z",
+            "modified": "2026-07-15T13:32:13.449897Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--83186ded-626d-5227-8a8d-296195e14af9",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--cb0d6530-64a1-5909-9b2c-5e9067f9c7ae",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.449991Z",
+            "modified": "2026-07-15T13:32:13.449991Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--2a6a61e7-a345-5cad-837e-2698f25a6f00",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--c8aeaaa1-0a17-5469-a634-3a428c98c2c8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450084Z",
+            "modified": "2026-07-15T13:32:13.450084Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--4db5d131-8153-57af-8f1c-857a9fb38169",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--d25416cc-4001-5d7d-9410-f4b9a338c434",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450178Z",
+            "modified": "2026-07-15T13:32:13.450178Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--bd268db2-dc48-5911-a277-15fd7b927d78",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--4c1020c9-c174-5a29-8feb-4b38c54e0b74",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450271Z",
+            "modified": "2026-07-15T13:32:13.450271Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--62697b30-6a22-51f5-b4ec-d86663005c3e",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--6ecfe0bd-24fe-5e48-bd80-7a2a7bec2a4f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450365Z",
+            "modified": "2026-07-15T13:32:13.450365Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--edba4c71-8b49-5715-8258-fbe058cd8787",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--b0582293-a7cf-56ba-b37e-e4c2da4be577",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450459Z",
+            "modified": "2026-07-15T13:32:13.450459Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--23892274-db8d-5f23-b803-d47955951620",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--fad2d47a-68fa-5285-8159-f2a5a6ace262",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450553Z",
+            "modified": "2026-07-15T13:32:13.450553Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--af50ac5d-be15-5568-a501-6bddcfd36694",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--9efc846b-c36f-5163-8e5b-8ed38a6659b2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450647Z",
+            "modified": "2026-07-15T13:32:13.450647Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--2a9c6993-9b67-5fec-9e1b-ff75e25b0bef",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--5da111ef-e35a-5381-b5a7-ccd402cd3655",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450741Z",
+            "modified": "2026-07-15T13:32:13.450741Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--9cd77d59-329c-5012-a181-694761d1f1b8",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--874ea96d-1dc8-597d-8877-6d1a29b31aa2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.450835Z",
+            "modified": "2026-07-15T13:32:13.450835Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--1d52ae5a-d1a2-528d-a1c3-ad86302eefc5",
+            "target_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--b7bcf8c9-1fb0-50a1-b2df-abd2bbf2dbcb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.45093Z",
+            "modified": "2026-07-15T13:32:13.45093Z",
+            "relationship_type": "communicates-with",
+            "source_ref": "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+            "target_ref": "infrastructure--45293914-4086-5703-9eab-784355ce3204",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--547f1fc5-384b-5c49-b4fc-ef2726346798",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-15T13:32:13.451025Z",
+            "modified": "2026-07-15T13:32:13.451025Z",
+            "relationship_type": "communicates-with",
+            "source_ref": "malware--a35e0671-c5e3-5dda-bfb8-c4e56e84f28e",
+            "target_ref": "infrastructure--45293914-4086-5703-9eab-784355ce3204",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
             "type": "report",
             "spec_version": "2.1",
             "id": "report--ca5a5217-efd5-53a5-921f-c00641d56de7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-06-14T11:57:33.811832Z",
-            "modified": "2026-06-14T11:57:33.811832Z",
+            "created": "2026-07-15T13:32:13.451139Z",
+            "modified": "2026-07-15T13:32:13.451139Z",
             "name": "Open Directory Exposure: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220) - Technical Analysis & Threat Assessment",
             "report_types": [
                 "threat-report"
@@ -390,16 +806,44 @@
                 "indicator--7b313cb4-961c-54b0-9d04-6af34ceb7cd8",
                 "domain-name--91ac696f-abc4-58d4-adbe-2d75863d521e",
                 "indicator--65a57841-bd46-566e-8bc1-6e004a89ca94",
+                "file--05f7f599-786d-5edc-9479-c751201517e6",
+                "indicator--3c1e1859-a04a-5217-be9a-df5e8cd36145",
+                "file--c932c7a5-0341-51be-b94d-785aafc18ed9",
+                "indicator--25c4bb20-6142-5af8-beaf-643b9f7918c3",
                 "indicator--83186ded-626d-5227-8a8d-296195e14af9",
                 "indicator--2a6a61e7-a345-5cad-837e-2698f25a6f00",
+                "indicator--4db5d131-8153-57af-8f1c-857a9fb38169",
                 "indicator--bd268db2-dc48-5911-a277-15fd7b927d78",
                 "indicator--62697b30-6a22-51f5-b4ec-d86663005c3e",
-                "indicator--76af3af9-648e-5b90-aa18-adbf4546b20c",
-                "indicator--042c523e-6a47-50c5-b6db-09239e1b92ee",
-                "indicator--089363d1-d793-5252-b863-4dcfc03ad663",
-                "indicator--6df9da2c-6b88-517c-b03c-f17a4c045b62",
-                "indicator--49569e72-c7be-5ccc-abcc-fa2a942071e6",
-                "infrastructure--45293914-4086-5703-9eab-784355ce3204"
+                "indicator--edba4c71-8b49-5715-8258-fbe058cd8787",
+                "indicator--23892274-db8d-5f23-b803-d47955951620",
+                "indicator--af50ac5d-be15-5568-a501-6bddcfd36694",
+                "indicator--2a9c6993-9b67-5fec-9e1b-ff75e25b0bef",
+                "indicator--9cd77d59-329c-5012-a181-694761d1f1b8",
+                "indicator--1d52ae5a-d1a2-528d-a1c3-ad86302eefc5",
+                "malware--5b94c9e8-a0f7-51bc-b1b4-aee24f8a47fa",
+                "malware--a35e0671-c5e3-5dda-bfb8-c4e56e84f28e",
+                "infrastructure--45293914-4086-5703-9eab-784355ce3204",
+                "relationship--69b51dd2-9079-532e-bbcf-9515525e895d",
+                "relationship--b7a46893-fb9a-5dda-bad7-94012ba22112",
+                "relationship--455e543b-ad06-5be7-8f87-c2f8d0efed78",
+                "relationship--fd03de7a-ddca-526e-9a66-b640fa689922",
+                "relationship--73733c1c-75e9-592f-86d8-04b8930a4ed9",
+                "relationship--545537b6-d39e-50ec-9b16-079c9a637e34",
+                "relationship--6061a315-f3de-5483-8120-21c3591c8ff1",
+                "relationship--f0e4dd0f-3a62-55a1-a27a-45b7c76e70ba",
+                "relationship--cb0d6530-64a1-5909-9b2c-5e9067f9c7ae",
+                "relationship--c8aeaaa1-0a17-5469-a634-3a428c98c2c8",
+                "relationship--d25416cc-4001-5d7d-9410-f4b9a338c434",
+                "relationship--4c1020c9-c174-5a29-8feb-4b38c54e0b74",
+                "relationship--6ecfe0bd-24fe-5e48-bd80-7a2a7bec2a4f",
+                "relationship--b0582293-a7cf-56ba-b37e-e4c2da4be577",
+                "relationship--fad2d47a-68fa-5285-8159-f2a5a6ace262",
+                "relationship--9efc846b-c36f-5163-8e5b-8ed38a6659b2",
+                "relationship--5da111ef-e35a-5381-b5a7-ccd402cd3655",
+                "relationship--874ea96d-1dc8-597d-8877-6d1a29b31aa2",
+                "relationship--b7bcf8c9-1fb0-50a1-b2df-abd2bbf2dbcb",
+                "relationship--547f1fc5-384b-5c49-b4fc-ef2726346798"
             ],
             "labels": [
                 "C2",
