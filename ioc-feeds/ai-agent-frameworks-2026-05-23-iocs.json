@@ -157,6 +157,14 @@
         "case": "9",
         "context": "lolMiner GPU miner disguised as gnome-shell-ext-updater (Vova75Rus/miner GitHub repo); VT 23/64; sandbox classifies as XMrig",
         "action": "BLOCK"
+      },
+      {
+        "value": "64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a551a34e383",
+        "filename": "Naku.arm",
+        "confidence": "DEFINITE",
+        "case": "3",
+        "context": "Naku.arm - Pandora-Mirai 11-arch IoT botnet bot binary (Rovodev operator, Case 3). VT 43/66; Microsoft Mirai.AW!xp; 64,784 bytes. Full 11-architecture sample set for this case is carried in rovodev-mirai-matrix-c2-87.106.143.220-iocs.json.",
+        "action": "BLOCK"
       }
     ],
     "md5": [
