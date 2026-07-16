@@ -382,124 +382,142 @@ entries:
     date: 2026-01-15
     severity: critical
     tags: [Ransomware, Rust]
-    detection_url: /hunting-detections/arsenal-237-full_test_enc-exe
+    detection_url: /hunting-detections/arsenal-237-full_test_enc-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-full_test_enc-exe.json
 
   - title: "Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)"
     date: 2026-01-15
     severity: critical
     tags: [Ransomware, Rust]
-    detection_url: /hunting-detections/arsenal-237-new_enc-exe
+    detection_url: /hunting-detections/arsenal-237-new_enc-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-new_enc-exe.json
 
   - title: "Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)"
     date: 2026-01-15
     severity: critical
     tags: [Ransomware, Rust]
-    detection_url: /hunting-detections/arsenal-237-dec_fixed-exe
+    detection_url: /hunting-detections/arsenal-237-dec_fixed-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-dec_fixed-exe.json
 
   - title: "Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)"
     date: 2026-01-15
     severity: critical
     tags: [Ransomware, C2, Rust]
-    detection_url: /hunting-detections/arsenal-237-enc_c2-exe
+    detection_url: /hunting-detections/arsenal-237-enc_c2-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-enc_c2-exe.json
 
   - title: "Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)"
     date: 2026-01-15
     severity: critical
     tags: [Cred Theft, .NET]
-    detection_url: /hunting-detections/arsenal-237-chromelevator-exe
+    detection_url: /hunting-detections/arsenal-237-chromelevator-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-chromelevator-exe.json
 
   - title: "Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)"
     date: 2026-01-15
     severity: critical
     tags: [DLL Hijack, Persistence]
-    detection_url: /hunting-detections/arsenal-237-nethost-dll
+    detection_url: /hunting-detections/arsenal-237-nethost-dll-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-nethost-dll.json
 
   - title: "Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)"
     date: 2026-01-15
     severity: critical
     tags: [Rootkit, Evasion]
-    detection_url: /hunting-detections/arsenal-237-rootkit-dll
+    detection_url: /hunting-detections/arsenal-237-rootkit-dll-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-rootkit-dll.json
 
   - title: "Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)"
     date: 2026-01-15
     severity: critical
     tags: [BYOVD, Priv Esc]
-    detection_url: /hunting-detections/arsenal-237-BdApiUtil64-sys
+    detection_url: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-BdApiUtil64-sys.json
 
   - title: "Arsenal-237 New Files: lpe.exe (Privilege Escalation)"
     date: 2026-01-15
     severity: critical
     tags: [Priv Esc]
-    detection_url: /hunting-detections/arsenal-237-lpe-exe
+    detection_url: /hunting-detections/arsenal-237-lpe-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-lpe-exe.json
 
   - title: "Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)"
     date: 2026-01-15
     severity: critical
     tags: [Evasion, BYOVD]
-    detection_url: /hunting-detections/arsenal-237-killer-crowdstrike-dll
+    detection_url: /hunting-detections/arsenal-237-killer-crowdstrike-dll-detections
+    detection_tiers: [detection]
     ioc_url: /ioc-feeds/arsenal-237-killer-crowdstrike-dll.json
 
   - title: "Arsenal-237 New Files: killer.dll (BYOVD Process Termination)"
     date: 2026-01-15
     severity: critical
     tags: [BYOVD, Evasion]
-    detection_url: /hunting-detections/arsenal-237-killer-dll
+    detection_url: /hunting-detections/arsenal-237-killer-dll-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/arsenal-237-killer-dll.json
 
   - title: "Arsenal-237: enc/dec Ransomware Family"
     date: 2026-01-15
     severity: critical
     tags: [Ransomware, Rust]
-    detection_url: /hunting-detections/enc-dec-ransomware-family
+    detection_url: /hunting-detections/enc-dec-ransomware-family-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/enc-dec-ransomware-family.json
 
   - title: "Arsenal-237: uac_test.exe"
     date: 2026-01-15
     severity: med
     tags: [Priv Esc, Evasion]
-    detection_url: /hunting-detections/uac-test-exe
+    detection_url: /hunting-detections/uac-test-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/uac-test-exe.json
 
   - title: "Arsenal-237: FleetAgentFUD.exe"
     date: 2026-01-15
     severity: med
     tags: [Dropper, Evasion]
-    detection_url: /hunting-detections/fleetagentfud-exe
+    detection_url: /hunting-detections/fleetagentfud-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/fleetagentfud-exe.json
 
   - title: "Arsenal-237: FleetAgentAdvanced.exe"
     date: 2026-01-15
     severity: med
     tags: [Dropper, Persistence]
-    detection_url: /hunting-detections/fleetagentadvanced-exe
+    detection_url: /hunting-detections/fleetagentadvanced-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/fleetagentadvanced-exe.json
 
   - title: "Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)"
     date: 2026-01-15
     severity: med
     tags: [RAT, C2]
-    detection_url: /hunting-detections/agent-xworm-v2-exe
+    detection_url: /hunting-detections/agent-xworm-v2-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/agent-xworm-v2-exe.json
 
   - title: "Arsenal-237: agent_xworm.exe (XWorm RAT v6)"
     date: 2026-01-15
     severity: med
     tags: [RAT, C2]
-    detection_url: /hunting-detections/agent-xworm-exe
+    detection_url: /hunting-detections/agent-xworm-exe-detections
+    detection_tiers: [detection, hunting]
     ioc_url: /ioc-feeds/agent-xworm-exe.json
 
   - title: "Arsenal-237: agent.exe (PoetRAT)"
     date: 2026-01-15
     severity: med
     tags: [RAT, C2]
-    detection_url: /hunting-detections/agent-exe
+    detection_url: /hunting-detections/agent-exe-detections
+    detection_tiers: [hunting]
     ioc_url: /ioc-feeds/agent-exe.json

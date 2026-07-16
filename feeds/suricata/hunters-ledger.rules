@@ -1,9 +1,15 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 62 rules from 25 campaigns. SIDs are STABLE across rebuilds (persistent
+# 67 rules from 29 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)' then '#   confidence / rate-limit / FP note'.
 
+# agent-xworm-exe (orig sid:1000013)
+#   rate-limited
+alert tcp $HOME_NET any -> any any (msg:"THL Arsenal-237 XWorm AgentSec Authentication Secret Pattern (C2 Handshake Indicator)"; flow:to_server,established; content:"AgentSec_"; nocase; pcre:"/AgentSec_[0-9A-Za-z]{40,50}/i"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500151; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/agent-xworm-exe-detections/;)
+# agent-xworm-v2-exe (orig sid:1000023)
+#   rate-limited
+alert tcp $HOME_NET any -> any any (msg:"THL HUNT XWormV2-109.230.231.37 AgentSec Authentication Secret Pattern in TCP Payload (Unconfirmed Wire Encoding)"; flow:established,to_server; content:"AgentSec_"; nocase; pcre:"/AgentSec_[0-9A-Za-z]{40,50}/i"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500152; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/agent-xworm-v2-exe-detections/;)
 # ai-agent-frameworks-2026-05-23 (orig sid:9200007)
 #   rate-limited
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL AI-Agent-Campaign Russian A2A C2 X-Agent-Id Header + API Endpoint (Case 1 C2 Protocol Indicator)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/v1/"; http.header_names; content:"X-Agent-Id"; nocase; classtype:trojan-activity; threshold:type limit,track by_src,count 3,seconds 3600; sid:3500145; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
@@ -28,6 +34,8 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign hashvault.pr
 # ai-agent-frameworks-2026-05-23 (orig sid:9200006)
 #   rate-limited
 alert quic $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade (GHOST Kit Backdoor Non-Microsoft Destination)"; quic.sni; content:"bing.com"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500146; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+# arsenal-237-enc_c2-exe (orig sid:1000001)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"RANSOMWARE enc_c2.exe Tor C2 Beacon - POST /c2/beacon.php"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/c2/beacon.php"; http.header; content:"Content-Type: application/json"; classtype:trojan-activity; metadata:author The_Hunters_Ledger, date 2026-01-26, reference https://the-hunters-ledger.com/hunting-detections/arsenal-237-enc_c2-exe-detections/; sid:3500153; rev:2;)
 # bellamain-turkish-phaas-79-137-192-3-20260516 (orig sid:9001004)
 #   rate-limited
 alert http $HOME_NET any -> any any (msg:"THL BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)"; flow:established,to_server; http.host; content:"usom.gov.tr"; endswith; http.uri; content:"url-list.txt"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:3500009; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-16, reference https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/;)
@@ -46,6 +54,11 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL FlaskC2-PostEx C2 Health
 alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/report"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/report"; nocase; classtype:trojan-activity; sid:3500018; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
 # flaskc2-postex-toolkit-67-215-232-25 (orig sid:9001003)
 alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/heartbeat"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/heartbeat"; nocase; classtype:trojan-activity; sid:3500019; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
+# fleetagentfud-exe (orig sid:2100022)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (Custom C2 Protocol Indicator)"; flow:established,to_server; http.header_names; content:"X-Agent-Secret"; classtype:trojan-activity; sid:3500154; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/;)
+# fleetagentfud-exe (orig sid:2100023)
+#   rate-limited
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (Custom C2 Client Indicator)"; flow:established,to_server; http.user_agent; content:"Mozilla/4.0 (compatible|3b| MSIE 6.0|3b| Windows NT 5.2|3b| .NET CLR"; http.header; content:"Connection|3a 20|Upgrade"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500155; rev:1; metadata:author The_Hunters_Ledger, date 2026-01-12, reference https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/;)
 # ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100104)
 alert http $HOME_NET any -> 77.110.0.0/16 any (msg:"THL GHOST Cryptojacker Kit Distribution File Download from AEZA Hosting Range"; flow:established,to_server; http.uri; pcre:"/\/(libpam_cache\.so|ghost\.sh|hyst\.sh|min1\.sh|libpam_cache\.c)$/"; classtype:trojan-activity; sid:3500024; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, tag Dropper, tag GHOST_kit;)
 # ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100103)

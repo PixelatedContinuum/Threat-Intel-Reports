@@ -157,15 +157,6 @@
         "case": "9",
         "context": "lolMiner GPU miner disguised as gnome-shell-ext-updater (Vova75Rus/miner GitHub repo); VT 23/64; sandbox classifies as XMrig",
         "action": "BLOCK"
-      },
-      {
-        "value": "64afc3b3000000000000000000000000000000000000000000000000000000ff",
-        "filename": "Naku.arm",
-        "confidence": "HIGH",
-        "case": "3",
-        "context": "Mirai.AW!xp ARM variant, VT 43/66 (sha256 truncated to prefix in source notes - placeholder for full value; mark as RESEARCH and confirm via VT before publishing)",
-        "action": "BLOCK",
-        "false_positive_risk": "Hash value is a prefix-padded placeholder; full SHA256 must be confirmed from Phase 9 notes before SIEM ingestion"
       }
     ],
     "md5": [

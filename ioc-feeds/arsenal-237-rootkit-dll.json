@@ -15,9 +15,18 @@
         "compiler": "Rust (rustc)"
       },
       {
-        "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "value": "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428",
         "filename": "BdApiUtil64.sys",
-        "description": "Legitimately-signed Baidu driver embedded for BYOVD attacks"
+        "description": "Legitimately-signed Baidu driver embedded for BYOVD attacks",
+        "type": "PE64 kernel driver",
+        "size": "116800 bytes (114 KB)",
+        "digital_signature": {
+          "signer": "Baidu Online Network Technology (Beijing) Co., Ltd",
+          "issuer": "VeriSign Class 3 Code Signing 2010 CA",
+          "status": "EXPIRED (but still loadable on Windows)",
+          "thumbprint": "65439929B67973EB192D6FF243E6767ADF0834E4"
+        },
+        "version": "5.0.3.84333"
       }
     ],
     "md5": [
@@ -26,7 +35,7 @@
         "filename": "rootkit.dll"
       },
       {
-        "value": "f72386e6b0e87a3245e0d6e4e4c5a1a0",
+        "value": "ced47b89212f3260ebeb41682a4b95ec",
         "filename": "BdApiUtil64.sys"
       }
     ],
@@ -36,7 +45,7 @@
         "filename": "rootkit.dll"
       },
       {
-        "value": "d8e1c6d0c1c0d6e8c9e0d6e0c1c0d6e8c9e0d6e0",
+        "value": "148c0cde4f2ef807aea77d7368f00f4c519f47ef",
         "filename": "BdApiUtil64.sys"
       }
     ]
