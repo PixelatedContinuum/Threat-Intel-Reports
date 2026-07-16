@@ -368,12 +368,12 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
 **15:27:59** - **System baseline captured via Autoruns**
 - Autoruns entries: 1,554 total autostart locations recorded
 - System state: Clean baseline established for comparison
-- Monitoring tools: FakeNet, Sysmon, Noriben behavioral monitoring active
+- Telemetry: process, file, registry and network monitoring active
 
 #### Initial Execution Phase
 **15:28:04** - **FleetAgentAdvanced.exe executed (PID 8832)**
 - **User context**: Standard user privileges (no UAC bypass observed)
-- **Execution path**: C:\Users\FlareVM\.MalwareAnalysis\Samples\incoming\FleetAgentAdvanced.exe
+- **Executed as**: `FleetAgentAdvanced.exe`
 - **Process characteristics**:
   - Threads: 6 active threads created
   - GUI application (no visible window despite GUI subsystem)
@@ -381,7 +381,7 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
 
 #### Rapid Deployment Sequence (1.3-second window)
 **15:28:04.670** (T+0.670s) - **Dropped RuntimeOptimization.exe**
-- **Action**: Created `C:\Users\FlareVM\AppData\Roaming\Microsoft\CLR\RuntimeOptimization.exe`
+- **Action**: Created `%APPDATA%\Microsoft\CLR\RuntimeOptimization.exe`
 - **File size**: 27,648 bytes (27 KB)
 - **Purpose**: Secondary persistent payload
 - **Technique**: File system write to user-writable AppData location
@@ -390,7 +390,7 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
 **15:28:04.673** (T+0.673s) - **Created Startup Folder LNK Shortcuts (×2)**
 - **Action**: Created TWO `.lnk` shortcut files in Startup folder
 - **Files**: `Microsoft .NET Runtime Optimization.lnk` (duplicate entries for redundancy)
-- **Target**: `C:\Users\FlareVM\AppData\Roaming\Microsoft\CLR\RuntimeOptimization.exe`
+- **Target**: `%APPDATA%\Microsoft\CLR\RuntimeOptimization.exe`
 - **Location**: `%AppData%\Microsoft\Windows\Start Menu\Programs\Startup\`
 - **Purpose**: Persistence Mechanisms #2 & #3 - Execute on user login via Startup folder
 - **Technique**: Registry Run Keys / Startup Folder (MITRE T1547.001)
@@ -430,7 +430,7 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
   - No local network scanning
   - No localhost connections
 - **Process behavior**: FleetAgentAdvanced.exe (PID 8832) remained active but completely dormant
-- **FakeNet observations**: No network interception despite active monitoring
+- **Network**: no outbound traffic observed despite active monitoring
 
 **Assessment - Why No Network Activity?**
 
@@ -465,7 +465,7 @@ This complete network silence is **HIGHLY UNUSUAL** for typical malware and sugg
 - **Detected changes**: **4 NEW autostart entries** identified (Autoruns comparison report)
 - **Entry details**:
   - 2× entries under `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\Startup`
-  - Entries pointing to: `Microsoft .NET Runtime Optimization.lnk` → `c:\users\flarevm\appdata\roaming\microsoft\clr\runtimeoptimization.exe`
+  - Entries pointing to: `Microsoft .NET Runtime Optimization.lnk` → `%APPDATA%\Microsoft\CLR\RuntimeOptimization.exe`
   - Duplicate entries confirm dual LNK file creation for redundancy
 - **Confirmation**: All four persistence mechanisms successfully created and active
 - **Autoruns entries increase**: 1,554 baseline → 1,558 post-infection (+4 entries)

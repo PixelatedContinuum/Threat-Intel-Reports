@@ -237,7 +237,7 @@ Tools used across the analysis and referenced throughout this section:
 - **disassembler (Binary Ninja)** — native PE work on the custom PrintSpoofer-class binary and the signed PrintNightmare DLL.
 - **interactive debugger (x64dbg)** — Stage-5b AppInfo RPC bypass behavioral confirmation.
 - **malware analysis VM (FLARE-VM)** — static analysis environment; samples were never detonated on an internet-connected host.
-- **behavioral sandbox (Noriben)** — behavioral baseline captures on selected stages with network egress blocked.
+- **Behavioural sandbox** — baseline captures on selected stages with network egress blocked.
 
 Subsequent references in this section use the general category term (decompiler, disassembler, debugger, sandbox) per the plain-language accessibility convention.
 

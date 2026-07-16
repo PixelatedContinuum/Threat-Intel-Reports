@@ -467,7 +467,7 @@ XWorm RAT → AsyncRAT → LockBit Black ransomware
 ## Dynamic Analysis Findings
 
 ### Execution Environment
-**Analysis conducted in isolated Windows 10 virtual machine (FlareVM) with FakeNet-NG network simulation**
+**Behavioural findings below are from controlled execution on an instrumented Windows 10 host with simulated network services.**
 
 ### Behavioral Observations
 

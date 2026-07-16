@@ -298,7 +298,7 @@ Key `0x42` (ASCII 'B'). Decoded buffers are stack-allocated via `_alloca()` — 
 
 Two operations disguise the loader's identity before injection:
 
-**PPID Spoofing (ScareCrow-delegated):** `update.exe` is created with a spoofed parent PID using `PROC_THREAD_ATTRIBUTE_PARENT_PROCESS`, causing it to appear as a child of a legitimate Windows process (likely `explorer.exe` or `svchost.exe`) rather than PowerShell. DEFINITE confirmation: hollow target is invisible in behavioral sandbox (Noriben) descendant tracking and memory forensics tool (Volatility) `windows.pstree` across all three analysis sessions.
+**PPID Spoofing (ScareCrow-delegated):** `update.exe` is created with a spoofed parent PID using `PROC_THREAD_ATTRIBUTE_PARENT_PROCESS`, causing it to appear as a child of a legitimate Windows process (likely `explorer.exe` or `svchost.exe`) rather than PowerShell. DEFINITE confirmation: the hollowed target does not appear in behavioural descendant tracking or in memory-forensic process-tree reconstruction.
 
 **Argument Spoofing (arg_spoof.C):**
 
@@ -990,7 +990,7 @@ update.exe → NtCreateThread()           (execution)
 | Hollow target not live-confirmed             | Monitoring focused on sihost.exe based on assumption                                 | MEDIUM   |
 | Sliver PE not extracted from memory          | Cannot confirm Sliver version or additional config options                           | MEDIUM   |
 | AMSI patch bytes not byte-verified           | Cannot confirm AmsiScanBuffer was actually patched                                   | LOW      |
-| Canary domain behavior not tested            | Whether beacon aborted in FlareVM environment is uncertain                           | LOW      |
+| Canary domain behavior not tested            | Whether the beacon aborts in an analysis environment is uncertain                           | LOW      |
 | Build workspace on internal endpoint not assessed | Implicitly a different threat scenario — see note below                         | LOW      |
 
 

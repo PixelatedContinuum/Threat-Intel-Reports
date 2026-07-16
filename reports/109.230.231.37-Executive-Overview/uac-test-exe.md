@@ -401,7 +401,7 @@ The absence of these techniques **confirms** the tool's educational purpose.
 - **OS**: Windows 10 x64 (Sandbox VM)
 - **User Context**: Administrator (elevated privileges)
 - **Network**: Isolated (no internet access)
-- **Monitoring**: Noriben (process monitor), TCPView (network), Autoruns (persistence), Volatility (memory)
+- **Telemetry**: process, network, persistence and memory monitoring
 
 #### Baseline Establishment (Pre-Execution)
 

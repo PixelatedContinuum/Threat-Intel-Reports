@@ -598,7 +598,7 @@ Each of the seven detailed threat reports includes detection and intelligence re
     <tr>
       <td><strong>Network Indicators (Xworm)</strong></td>
       <td class="confirmed">CONFIRMED</td>
-      <td>Hardcoded C2 IP in static strings + active connection attempts in FakeNet-NG logs</td>
+      <td>Hardcoded C2 IP in static strings + active outbound connection attempts observed</td>
     </tr>
     <tr>
       <td><strong>Network Indicators (agent.exe/FleetAgent)</strong></td>

@@ -203,9 +203,9 @@ Quasar RAT removes the Zone.Identifier alternate data stream from downloaded fil
 
 ### Dynamic Sandbox Analysis
 
-### Execution Timeline (Noriben Analysis)
+### Execution Timeline
 
-> **Analyst note:** The following timeline captures client.exe's behavior step-by-step as observed in a behavioral sandbox (Noriben). Each phase records the actual system calls, file operations, and network connections in execution order — the sequence a defender would see in endpoint logs.
+> **Analyst note:** The following timeline captures client.exe's behavior step-by-step as observed in a behavioural sandbox. Each phase records the actual system calls, file operations, and network connections in execution order — the sequence a defender would see in endpoint logs.
 
 #### Phase 1: Initial Execution & Installation
 **Time: 20:10:54**

@@ -639,7 +639,7 @@ Operationally efficient (only one secret to store) but cryptographically lazy �
 
 The DLL has an empty import table (`ImportTableIsBad` YARA) — APIs resolved at runtime via PEB walking + CRC32 hashing. This is the same pattern as pe_03. The empty import table prevents naive defenders from seeing `crypt32` imports, but the cert install is captured behaviorally by VT C2AE sandbox.
 
-> **Caveat:** the cert install was not directly observed in the analyst's 5-minute behavioral sandbox window. Procmon CSV and behavioral sandbox Registry Activity section both lack the cert-blob write. PE_06 is in the malware (VT confirms) but is conditionally loaded — either the loader didn't reach pe_06 in 5 minutes, or its invocation depends on a host-fingerprint check that didn't match the FlareVM lab environment.
+> **Caveat:** the cert install was not directly observed behaviourally; the process and registry telemetry lack the cert-blob write. PE_06 is in the malware (VT confirms) but is conditionally loaded — either the loader didn't reach pe_06 in 5 minutes, or its invocation depends on a host-fingerprint check that didn't match the analysis environment.
 
 ### 4.9 pe_07 — Operator-Bespoke Bundle-Cleanup Helper (Campaign-Unique)
 
@@ -688,7 +688,7 @@ The runtime drop hash differs from the bundle hash (`c085a724…` vs `ca9f859f�
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-wvault-qihoo-properties.png" | relative_url }}" alt="Process Explorer Properties dialog for WVault.exe (PID 2596). The Image tab shows: Image File 'Promotion Utility Application' with the Qihoo 360 yellow-and-green icon, Version 8.6.0.1311, Build Time 'Mon Mar 31 00:17:37 2025', Path 'C:\\ProgramData\\WVault.exe', Command line 'C:\\ProgramData\\WVault.exe', Current directory 'C:\\Users\\FlareVM\\AppData\\Roaming\\adv_ctrl\\', Autostart Location n/a, Parent listed as 'Non-existent Process (9840)', User FlareVM\\FlareVM, Started 7:26:40 AM 5/6/2026, Image x86, DEP enabled, ASLR Bottom-Up, Control Flow Guard Disabled, Stack Protection Disabled.">
-  <figcaption><em>Figure 11: Process Explorer view of <code>WVault.exe</code> at runtime. The properties confirm the file is the genuine Qihoo 360 "Promotion Utility Application" (v8.6.0.1311, Mar 2025 build) — not operator-built. The current directory <code>C:\Users\FlareVM\AppData\Roaming\adv_ctrl\</code> reveals the operator's persistence directory codename <code>adv_ctrl</code>, and the parent process listing as <code>&lt;Non-existent Process&gt;</code> indicates the launching parent already exited (consistent with the <code>WinExec</code> fire-and-forget pattern from <code>InitializeSetup()</code>).</em></figcaption>
+  <figcaption><em>Figure 11: Process properties for <code>WVault.exe</code> at runtime. The properties confirm the file is the genuine Qihoo 360 "Promotion Utility Application" (v8.6.0.1311, Mar 2025 build) — not operator-built. The current directory <code>%APPDATA%\adv_ctrl\</code> reveals the operator's persistence directory codename <code>adv_ctrl</code>, and the parent process listing as <code>&lt;Non-existent Process&gt;</code> indicates the launching parent already exited (consistent with the <code>WinExec</code> fire-and-forget pattern from <code>InitializeSetup()</code>).</em></figcaption>
 </figure>
 
 ---
@@ -812,7 +812,7 @@ These tools are genuine and signed (where applicable). They are not malicious in
 
 ## 6. Dynamic / Behavioral Analysis
 
-Dynamic detonation of `Carriers.exe` confirmed the full loader chain — process tree, file-drop sequence, .NET injection into `WVault.exe`, legacy `.job` persistence, and C2 beacon to `185.241.208.129:56167` — end-to-end, within 43 seconds of sample launch. The run used FlareVM @ 192.168.100.100, REMnux gateway @ 192.168.100.1 (INetSim + Suricata + Zeek + tcpdump), a 305-second behavioral sandbox (Noriben) monitoring window inside a 37-minute total wrapper, and Sysmon EVTX capturing the full 33-minute beacon span.
+`Carriers.exe` executes its full loader chain — process tree, file-drop sequence, .NET injection into `WVault.exe`, legacy `.job` persistence, and C2 beacon to `185.241.208.129:56167` — end-to-end within 43 seconds of launch, then beacons continuously.
 
 ### 6.1 Process Tree
 
@@ -854,7 +854,7 @@ Same 13 files copied to persistent location, plus `shadermgr93.rc`, `networkspec
 **Phase 3 — CrystSupervisor32.exe PID 9840 (persistent) drops the inner stages:**
 
 ```
-14:26:31.08  C:\Users\FlareVM\AppData\Roaming\adv_ctrl\Crisp.exe
+14:26:31.08  %APPDATA%\adv_ctrl\Crisp.exe
 14:26:40.87  C:\ProgramData\WVault.exe
 %LocalAppData%\Temp\807D7B6.tmp (3,344,451 bytes - encrypted payload)
 %LocalAppData%\Temp\865FDFD.tmp (40-byte metadata blob)
@@ -929,7 +929,7 @@ Created by `Crisp.exe` (PID 10072) at `07:27:24.62`:
 ```xml
 <Task version="1.1">
   <RegistrationInfo>
-    <Author>Flare\FlareVM</Author>
+    <Author>DOMAIN\User</Author>
     <URI>\watchermgmt</URI>
   </RegistrationInfo>
   <Triggers>
@@ -950,7 +950,7 @@ Created by `Crisp.exe` (PID 10072) at `07:27:24.62`:
   </Settings>
   <Principals>
     <Principal id="Author">
-      <UserId>Flare\FlareVM</UserId>
+      <UserId>DOMAIN\User</UserId>
       <RunLevel>HighestAvailable</RunLevel>
       <LogonType>InteractiveToken</LogonType>
     </Principal>
@@ -988,7 +988,7 @@ HKEY_USERS\<SID>\Software\Microsoft\SystemCertificates\Root\Certificates\
   <figcaption><em>Figure 15: VirusTotal C2AE behavioral sandbox confirming the GoProxy MITM CA certificate install. The malware writes the certificate blob into the user's <code>SystemCertificates\Root\Certificates\&lt;thumbprint&gt;\Blob</code> registry path — placing it into the Trusted Root Certification Authorities store and enabling transparent HTTPS interception with no browser warnings. The thumbprint <code>0174E68C97DDF1E0EEEA415EA336A163D2B61AFD</code> is a durable hunt indicator: defenders can search for this exact registry path in EDR telemetry to detect this operator's TLS-MITM tradecraft on infected hosts.</em></figcaption>
 </figure>
 
-The cert install was not directly observed in the analyst's 5-minute behavioral sandbox window (likely beyond the monitoring window or conditional on host fingerprinting that did not match the lab environment). VT C2AE sandbox confirms the technique.
+The cert install was not directly observed behaviourally (likely beyond the observation window or conditional on host fingerprinting that did not match the lab environment). VT C2AE sandbox confirms the technique.
 
 **Why autorunsc misses the `.job` mechanism:** the `.job → XML` migration creates the System32\Tasks file but may not register a corresponding `TaskCache` GUID entry at `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tasks\{GUID}`. Autorunsc primarily enumerates scheduled tasks via the registry-side TaskCache; the XML alone isn't enough for autorunsc to flag it.
 
@@ -999,8 +999,8 @@ Round 12 static analysis predicted per-host random env vars set by the loader. R
 | Env var name | Env var value | Set by | Notes |
 |---|---|---|---|
 | `EUOJCZYGOUCUG` | `utvogo` | CrystSupervisor32.exe (PID 3640) | First random env var; set BEFORE PID 9840 spawn |
-| `FVTADTEB` | `C:\Users\FlareVM\AppData\Local\Temp\807D7B6.tmp` | CrystSupervisor32.exe (PID 9840) | Path to encrypted payload file |
-| `JJZIUTSQYJMNTZ` | `C:\Users\FlareVM\AppData\Local\Temp\865FDFD.tmp` | CrystSupervisor32.exe (PID 9840) | Path to a SECOND encrypted payload |
+| `FVTADTEB` | `%TEMP%\807D7B6.tmp` | CrystSupervisor32.exe (PID 9840) | Path to encrypted payload file |
+| `JJZIUTSQYJMNTZ` | `%TEMP%\865FDFD.tmp` | CrystSupervisor32.exe (PID 9840) | Path to a SECOND encrypted payload |
 | `PBZULMYY` | `C:\ProgramData\adv_ctrl\CrystSupervisor32.exe` | CrystSupervisor32.exe (PID 9840) | Path to persistent loader |
 
 Observed lengths (8, 13, 14, 8 chars) match the Round 12 static-analysis predicted range (8–16 chars, uppercase ASCII A–Z, four random env vars per host, deterministic from hostname). **The PATTERN is byte-confirmed.** **The exact algorithm is NOT byte-confirmed** — no FLARE-derived seed produces `EUOJCZYGOUCUG` in 1M-seed brute force. The static reverse missed something material in the algorithm.
@@ -1059,7 +1059,7 @@ This delete-then-rewrite pattern is unusual — possibly anti-forensics (wipe + 
 - Other communicating files on this IP: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` (sister samples)
 - Historical resolutions cluster around banking phishing infrastructure: `caisseregionale-agricole.com`, `securepay.ddns.net`, `paiementsecurise.ddns.net`, `securepay.life`, `netbillerdown.com`
 
-The TLS handshake to INetSim's dummy listener never completed (INetSim closed the connection after the ClientHello), so the server cert fingerprint and HTTP/HTTPS payloads were not captured. The JA3 hash is high-value for detection — fingerprints the malware's TLS client behavior independently of the C2 IP.
+The TLS handshake did not complete past the ClientHello, so the server certificate fingerprint and HTTP/HTTPS payloads are unavailable. The JA3 hash is high-value for detection — fingerprints the malware's TLS client behavior independently of the C2 IP.
 
 ### 6.8 DNS Activity (49 unique queries — none point to C2)
 
@@ -1069,7 +1069,7 @@ Of the 49 unique DNS A queries during the session, **NONE point to operator-cont
 - Microsoft telemetry / Office365 / Edge / Skype: ~25 queries
 - Update services: Windows Update, Brave updates, Intel updates, Malwarebytes updates
 - CRL / OCSP: Comodo, DigiCert, GlobalSign, Sectigo, Symantec
-- Baseline: doh.xfinity.com (DoH probe), test.com (INetSim self-test), api2.amplitude.com (analytics)
+- Baseline: doh.xfinity.com (DoH probe), test.com (connectivity self-test), api2.amplitude.com (analytics)
 
 **The malware does NOT use DNS for C2 resolution.** The C2 IP `185.241.208.129` is hardcoded in the loader/payload, never queried via DNS. Sysmon EID 22 confirms zero DNS queries from `Carriers.exe`, `Carriers.tmp`, `CrystSupervisor32.exe`, `WVault.exe`, or `Crisp.exe`.
 
@@ -1082,11 +1082,11 @@ Of the 49 unique DNS A queries during the session, **NONE point to operator-cont
 | Count | Signature | Significance |
 |---|---|---|
 | **2** | **`ET DROP Spamhaus DROP Listed Traffic Inbound group 37`** | Direct hit on the C2 IP — confirms reputation match |
-| 4 | `SURICATA STREAM ESTABLISHED packet out of window` | TCP state reassembly noise from INetSim's response handling |
+| 4 | `SURICATA STREAM ESTABLISHED packet out of window` | TCP state reassembly noise from the responder side |
 | 3 | `SURICATA STREAM ESTABLISHED invalid ack` | Same |
 | 3 | `SURICATA STREAM Packet with invalid ack` | Same |
 
-No Suricata-fired AsyncRAT/zgRAT/DCRat SSL-cert detections occurred in this run because the TLS handshake never completed (INetSim closed connections immediately, before the server certificate was sent). The pre-existing VT IDS hits on `Carriers.exe` (HIGH confidence — three independent rules: AsyncRAT JA3, AsyncRAT/zgRAT SSL cert pattern, DCRat C&C SSL cert) provide the family-attribution signal that this run did not directly observe.
+No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handshake never completed and the server certificate was never sent. The pre-existing VT IDS hits on `Carriers.exe` (HIGH confidence — three independent rules: AsyncRAT JA3, AsyncRAT/zgRAT SSL cert pattern, DCRat C&C SSL cert) provide the family-attribution signal that this run did not directly observe.
 
 ---
 
