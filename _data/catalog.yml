@@ -5,6 +5,16 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ===== PENDING GO-LIVE: SE-Asia Government Exploitation Toolkit (uncomment at launch) =====
+  #  - title: "Ambition vs. Reach: An Exploitation Toolkit Targeting Southeast Asian Government Systems"
+  #    date: 2026-07-17
+  #    severity: high
+  #    tags: [Government, Exploitation, OpenDirectory, SE-Asia]
+  #    report_url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
+  #    detection_url: /hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections
+  #    detection_title: "Detection Rules: SE-Asia Government Exploitation Toolkit"
+  #    ioc_url: /ioc-feeds/seasia-gov-exploitation-toolkit-144-172-106-236-iocs.json
+  # =========================================================================================
   - title: "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking"
     date: 2026-07-03
     severity: high
