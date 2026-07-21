@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    process-tree layout — operator platform root fanning out to six target groups.
+    Side-rail colours: #dc2626 root/operator + confirmed exposure, #7f1d1d confirmed theft,
+    #eab308 access without confirmed theft, #6b7280 attempted only.
+    Connectors #666666 2px, no arrowheads.
+  -->
+  <defs>
+    <filter id="treeShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1600" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1599" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="41" font-weight="700" fill="#ffffff">The Target Landscape</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Roughly 12 to 14 entities across five groups and standalone threads</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Outcome status differs sharply by target; most were attempted, not compromised</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== ROOT — operator platform (red side-rail) =========== -->
+  <g filter="url(#treeShadow)">
+    <rect x="200" y="196" width="600" height="110" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="200" y="196" width="6" height="110" rx="3" fill="#dc2626"/>
+    <text x="220" y="234" font-size="23" font-weight="600" fill="#ffffff">Operator platform, <tspan font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace" font-size="22">192.3.1.116</tspan></text>
+    <text x="220" y="268" font-size="18" fill="#e5e5e5">Open directory on port 7777, AS36352, United States</text>
+    <text x="220" y="292" font-size="16" fill="#cccccc">Targeting drawn from operator-side files, not from any victim disclosure</text>
+  </g>
+
+  <!-- =========== SPINE =========== -->
+  <line x1="500" y1="306" x2="500" y2="336" stroke="#666666" stroke-width="2"/>
+  <line x1="140" y1="336" x2="500" y2="336" stroke="#666666" stroke-width="2"/>
+  <line x1="140" y1="336" x2="140" y2="1263" stroke="#666666" stroke-width="2"/>
+
+  <!-- =========== BRANCH A — rent-to-own commerce (deep red) =========== -->
+  <line x1="140" y1="414" x2="180" y2="414" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="180" y="346" width="760" height="136" rx="8" fill="#1a1a1a" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="180" y="346" width="6" height="136" rx="3" fill="#7f1d1d"/>
+    <text x="200" y="380" font-size="23" font-weight="600" fill="#ffffff">Rent-to-own commerce platform</text>
+    <text x="920" y="379" text-anchor="end" font-size="16" font-weight="700" letter-spacing="0.5" fill="#cccccc">CONFIRMED THEFT</text>
+    <text x="200" y="412" font-size="18" fill="#e5e5e5">CONFIRMED data theft. Real names plus order and financial records for at</text>
+    <text x="200" y="438" font-size="18" fill="#e5e5e5">least five named individuals. Four independent sourcing channels. An armed</text>
+    <text x="200" y="464" font-size="18" fill="#e5e5e5">account-takeover weapon staged against a staff account, never confirmed fired.</text>
+  </g>
+
+  <!-- =========== BRANCH B — construction-cost consulting (red) =========== -->
+  <line x1="140" y1="589" x2="180" y2="589" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="180" y="508" width="760" height="162" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="180" y="508" width="6" height="162" rx="3" fill="#dc2626"/>
+    <text x="200" y="542" font-size="23" font-weight="600" fill="#ffffff">Construction-cost consulting platform</text>
+    <text x="920" y="541" text-anchor="end" font-size="16" font-weight="700" letter-spacing="0.5" fill="#cccccc">CONFIRMED EXPOSURE</text>
+    <text x="200" y="574" font-size="18" fill="#e5e5e5">CONFIRMED exposure. Unauthenticated database console disclosed a 93-table</text>
+    <text x="200" y="600" font-size="18" fill="#e5e5e5">schema, 427 endpoints, 830 SQL statements and the root username at time of</text>
+    <text x="200" y="626" font-size="18" fill="#e5e5e5">capture. A later re-check found it remediated. The only target with a</text>
+    <text x="200" y="652" font-size="18" fill="#e5e5e5">confirmed registered legal entity.</text>
+  </g>
+
+  <!-- =========== BRANCH C — four-product commerce group (yellow) =========== -->
+  <line x1="140" y1="764" x2="180" y2="764" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="180" y="696" width="760" height="136" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="180" y="696" width="6" height="136" rx="3" fill="#eab308"/>
+    <text x="200" y="730" font-size="23" font-weight="600" fill="#ffffff">Four-product commerce group</text>
+    <text x="920" y="729" text-anchor="end" font-size="16" font-weight="700" letter-spacing="0.5" fill="#cccccc">ACCESS, NO CONFIRMED THEFT</text>
+    <text x="200" y="762" font-size="18" fill="#e5e5e5">Device rental, a mall backend, a consumer app and a credit-rental platform,</text>
+    <text x="200" y="788" font-size="18" fill="#e5e5e5">linked as sister products by shared frontend build artifacts. Reconnaissance</text>
+    <text x="200" y="814" font-size="18" fill="#e5e5e5">plus unconfirmed brute force, and one confirmed information disclosure.</text>
+  </g>
+
+  <!-- =========== BRANCH D — second commerce platform (yellow) =========== -->
+  <line x1="140" y1="926" x2="180" y2="926" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="180" y="858" width="760" height="136" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="180" y="858" width="6" height="136" rx="3" fill="#eab308"/>
+    <text x="200" y="892" font-size="23" font-weight="600" fill="#ffffff">Second commerce platform</text>
+    <text x="920" y="891" text-anchor="end" font-size="16" font-weight="700" letter-spacing="0.5" fill="#cccccc">NO CONFIRMED SUCCESS</text>
+    <text x="200" y="924" font-size="18" fill="#e5e5e5">Account registration, login and administrative-route enumeration through a</text>
+    <text x="200" y="950" font-size="18" fill="#e5e5e5">self-registered account. No successful administrative access and no</text>
+    <text x="200" y="976" font-size="18" fill="#e5e5e5">confirmed data theft.</text>
+  </g>
+
+  <!-- =========== BRANCH E — insurance asset management and others (grey) =========== -->
+  <line x1="140" y1="1088" x2="180" y2="1088" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="180" y="1020" width="760" height="136" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="180" y="1020" width="6" height="136" rx="3" fill="#6b7280"/>
+    <text x="200" y="1054" font-size="23" font-weight="600" fill="#ffffff">Insurance asset management, and others</text>
+    <text x="920" y="1053" text-anchor="end" font-size="16" font-weight="700" letter-spacing="0.5" fill="#cccccc">ATTEMPTED ONLY</text>
+    <text x="200" y="1086" font-size="18" fill="#e5e5e5">A ledger product, a dating platform, an insurance asset manager, a</text>
+    <text x="200" y="1112" font-size="18" fill="#e5e5e5">mobile-OEM developer API and several unidentified probes.</text>
+    <text x="200" y="1138" font-size="18" fill="#e5e5e5">All attempted, none confirmed compromised.</text>
+  </g>
+
+  <!-- =========== BRANCH F — loan-referral API, ownership unresolved (grey) =========== -->
+  <line x1="140" y1="1263" x2="180" y2="1263" stroke="#666666" stroke-width="2"/>
+  <g filter="url(#treeShadow)">
+    <rect x="180" y="1182" width="760" height="162" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="180" y="1182" width="6" height="162" rx="3" fill="#6b7280"/>
+    <text x="200" y="1216" font-size="23" font-weight="600" fill="#ffffff">Loan-referral API, ownership unresolved</text>
+    <text x="920" y="1215" text-anchor="end" font-size="16" font-weight="700" letter-spacing="0.5" fill="#cccccc">NO VICTIM NAMED</text>
+    <text x="200" y="1248" font-size="18" fill="#e5e5e5">A response returned real personal-data-shaped records from a system reporting</text>
+    <text x="200" y="1274" font-size="18" fill="#e5e5e5">70,859 records. DEFINITE that records were returned. INSUFFICIENT on</text>
+    <text x="200" y="1300" font-size="18" fill="#e5e5e5">ownership and authenticity. It may be the operator's own lead-generation</text>
+    <text x="200" y="1326" font-size="18" fill="#e5e5e5">backend, so no victim is named.</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1400" x2="940" y2="1400" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1438" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Sectors: installment and rent-to-own commerce · credit rental · loan referral</text>
+  <text x="500" y="1468" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Targeting constrains the actor class. It attributes nobody.</text>
+  <text x="500" y="1500" text-anchor="middle" font-size="15" fill="#cccccc">Attribution to any named actor is INSUFFICIENT. Tracked internally as UTA-2026-019.</text>
+
+  <!-- =========== Color chip legend =========== -->
+  <g transform="translate(80, 1540)">
+    <rect x="0" y="0" width="16" height="16" fill="#7f1d1d"/>
+    <text x="24" y="13" font-size="14" fill="#888888">confirmed theft</text>
+    <rect x="160" y="0" width="16" height="16" fill="#dc2626"/>
+    <text x="184" y="13" font-size="14" fill="#888888">confirmed exposure</text>
+    <rect x="345" y="0" width="16" height="16" fill="#eab308"/>
+    <text x="369" y="13" font-size="14" fill="#888888">access without confirmed theft</text>
+    <rect x="620" y="0" width="16" height="16" fill="#6b7280"/>
+    <text x="644" y="13" font-size="14" fill="#888888">attempted only</text>
+  </g>
+</svg>

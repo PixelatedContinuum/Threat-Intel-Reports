@@ -5,6 +5,18 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ===== PENDING GO-LIVE: MultiVector Grey-Market PII Harvesting Operation (uncomment at launch) =====
+  # Gate: hold unlisted until a disclosure recipient confirms resolution, or ~30 days from 2026-07-21
+  # (i.e. on or after 2026-08-20), whichever comes first.
+  #  - title: "Inside a Multi-Vector PII-Harvesting Operator Directory"
+  #    date: 2026-07-21
+  #    severity: high
+  #    tags: [OpenDirectory, DataTheft, E-Commerce, China]
+  #    report_url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
+  #    detection_url: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections
+  #    detection_title: "Detection Rules: MultiVector Grey-Market PII Harvesting Operation"
+  #    ioc_url: /ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json
+  # ==================================================================================================
   # ===== PENDING GO-LIVE: SE-Asia Government Exploitation Toolkit (uncomment at launch) =====
   #  - title: "Ambition vs. Reach: An Exploitation Toolkit Targeting Southeast Asian Government Systems"
   #    date: 2026-07-17

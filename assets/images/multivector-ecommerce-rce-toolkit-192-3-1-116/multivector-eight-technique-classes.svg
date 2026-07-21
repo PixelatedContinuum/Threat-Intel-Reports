@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1450" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    phase-grid layout — 8 commodity technique classes, 3 + 3 + 2
+    Grey (#6b7280) = no evidenced success.  Red (#dc2626) = produced access or data.
+  -->
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1450" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1449" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="58" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Eight Commodity Technique Classes</text>
+  <text x="500" y="100" text-anchor="middle" font-size="24" fill="#f5f5f5">Every technique is well documented and years old,</text>
+  <text x="500" y="130" text-anchor="middle" font-size="24" fill="#f5f5f5">with mature public proof-of-concept code</text>
+  <text x="500" y="164" text-anchor="middle" font-size="17" fill="#cccccc">None is novel. None is a zero-day. Six had no public detection coverage identified</text>
+  <line x1="60" y1="190" x2="940" y2="190" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== ROW 1 — CLASS 1 (grey) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="220" width="280" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="220" width="280" height="44" rx="8" fill="#6b7280"/>
+    <rect x="60" y="251" width="280" height="13" fill="#6b7280"/>
+    <text x="78" y="249" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">CLASS 1</text>
+    <text x="322" y="249" text-anchor="end" font-size="15" font-weight="700" fill="#cccccc">NO SUCCESS</text>
+    <text x="78" y="300" font-size="21" font-weight="600" fill="#ffffff">Logback</text>
+    <text x="78" y="326" font-size="21" font-weight="600" fill="#ffffff">insertFromJNDI</text>
+    <text x="78" y="360" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CVE-2021-42550</text>
+    <text x="78" y="384" font-size="17" fill="#e5e5e5">Rogue LDAP listener</text>
+    <text x="78" y="408" font-size="17" fill="#e5e5e5">stood up on port 1389</text>
+    <line x1="78" y1="426" x2="322" y2="426" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="78" y="448" font-size="16" font-weight="700" fill="#888888" letter-spacing="0.5">OUTCOME</text>
+    <text x="78" y="474" font-size="17" fill="#e5e5e5">Chain stalled at bind.</text>
+    <text x="78" y="496" font-size="17" fill="#e5e5e5">Both attempts logged.</text>
+    <text x="78" y="526" font-size="17" font-weight="600" fill="#fb923c">anchor: insertFromJNDI</text>
+  </g>
+
+  <!-- =========== ROW 1 — CLASS 2 (grey) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="360" y="220" width="280" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="360" y="220" width="280" height="44" rx="8" fill="#6b7280"/>
+    <rect x="360" y="251" width="280" height="13" fill="#6b7280"/>
+    <text x="378" y="249" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">CLASS 2</text>
+    <text x="622" y="249" text-anchor="end" font-size="15" font-weight="700" fill="#cccccc">NO SUCCESS</text>
+    <text x="378" y="300" font-size="21" font-weight="600" fill="#ffffff">Logback</text>
+    <text x="378" y="326" font-size="21" font-weight="600" fill="#ffffff">FileAppender write</text>
+    <text x="378" y="360" font-size="17" fill="#e5e5e5">Arbitrary file write</text>
+    <text x="378" y="384" font-size="17" fill="#e5e5e5">via appender config,</text>
+    <text x="378" y="408" font-size="17" fill="#e5e5e5">aimed at a JSP drop</text>
+    <line x1="378" y1="426" x2="622" y2="426" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="378" y="448" font-size="16" font-weight="700" fill="#888888" letter-spacing="0.5">OUTCOME</text>
+    <text x="378" y="474" font-size="17" fill="#e5e5e5">No victim deployment</text>
+    <text x="378" y="496" font-size="17" fill="#e5e5e5">observed.</text>
+    <text x="378" y="526" font-size="17" font-weight="600" fill="#fb923c">anchor: FileAppender</text>
+  </g>
+
+  <!-- =========== ROW 1 — CLASS 3 (grey) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="660" y="220" width="280" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="660" y="220" width="280" height="44" rx="8" fill="#6b7280"/>
+    <rect x="660" y="251" width="280" height="13" fill="#6b7280"/>
+    <text x="678" y="249" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">CLASS 3</text>
+    <text x="922" y="249" text-anchor="end" font-size="15" font-weight="700" fill="#cccccc">NO SUCCESS</text>
+    <text x="678" y="300" font-size="21" font-weight="600" fill="#ffffff">SnakeYAML</text>
+    <text x="678" y="326" font-size="21" font-weight="600" fill="#ffffff">deserialization</text>
+    <text x="678" y="360" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">CVE-2022-1471 family</text>
+    <text x="678" y="384" font-size="17" fill="#e5e5e5">ScriptEngineManager</text>
+    <text x="678" y="408" font-size="17" fill="#e5e5e5">gadget chain</text>
+    <line x1="678" y1="426" x2="922" y2="426" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="678" y="448" font-size="16" font-weight="700" fill="#888888" letter-spacing="0.5">OUTCOME</text>
+    <text x="678" y="474" font-size="17" fill="#e5e5e5">No confirmed</text>
+    <text x="678" y="496" font-size="17" fill="#e5e5e5">execution.</text>
+    <text x="678" y="526" font-size="17" font-weight="600" fill="#fb923c">anchor: SnakeYAML gadget</text>
+  </g>
+
+  <!-- =========== ROW 2 — CLASS 4 (grey) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="570" width="280" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="570" width="280" height="44" rx="8" fill="#6b7280"/>
+    <rect x="60" y="601" width="280" height="13" fill="#6b7280"/>
+    <text x="78" y="599" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">CLASS 4</text>
+    <text x="322" y="599" text-anchor="end" font-size="15" font-weight="700" fill="#cccccc">NO SUCCESS</text>
+    <text x="78" y="650" font-size="21" font-weight="600" fill="#ffffff">Eureka registry</text>
+    <text x="78" y="676" font-size="21" font-weight="600" fill="#ffffff">with XStream</text>
+    <text x="78" y="710" font-size="17" fill="#e5e5e5">Service-registry</text>
+    <text x="78" y="734" font-size="17" fill="#e5e5e5">deserialization. A real</text>
+    <text x="78" y="758" font-size="17" fill="#e5e5e5">target engaged, registered</text>
+    <line x1="78" y1="776" x2="322" y2="776" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="78" y="798" font-size="16" font-weight="700" fill="#888888" letter-spacing="0.5">OUTCOME</text>
+    <text x="78" y="824" font-size="17" fill="#e5e5e5">Success callback</text>
+    <text x="78" y="846" font-size="17" fill="#e5e5e5">never observed.</text>
+    <text x="78" y="876" font-size="17" font-weight="600" fill="#fb923c">anchor: XStream markers</text>
+  </g>
+
+  <!-- =========== ROW 2 — CLASS 5 (grey) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="360" y="570" width="280" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="360" y="570" width="280" height="44" rx="8" fill="#6b7280"/>
+    <rect x="360" y="601" width="280" height="13" fill="#6b7280"/>
+    <text x="378" y="599" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">CLASS 5</text>
+    <text x="622" y="599" text-anchor="end" font-size="15" font-weight="700" fill="#cccccc">NO SUCCESS</text>
+    <text x="378" y="650" font-size="21" font-weight="600" fill="#ffffff">XXE leading</text>
+    <text x="378" y="676" font-size="21" font-weight="600" fill="#ffffff">to SSRF</text>
+    <text x="378" y="710" font-size="17" fill="#e5e5e5">Reaches internal hosts,</text>
+    <text x="378" y="734" font-size="17" fill="#e5e5e5">including cloud instance</text>
+    <text x="378" y="758" font-size="17" fill="#e5e5e5">metadata endpoints</text>
+    <line x1="378" y1="776" x2="622" y2="776" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="378" y="798" font-size="16" font-weight="700" fill="#888888" letter-spacing="0.5">OUTCOME</text>
+    <text x="378" y="824" font-size="17" fill="#e5e5e5">Payloads crafted,</text>
+    <text x="378" y="846" font-size="17" fill="#e5e5e5">no captured result.</text>
+    <text x="378" y="876" font-size="17" font-weight="600" fill="#fb923c">anchor: metadata fetch</text>
+  </g>
+
+  <!-- =========== ROW 2 — CLASS 6 (grey) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="660" y="570" width="280" height="320" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="660" y="570" width="280" height="44" rx="8" fill="#6b7280"/>
+    <rect x="660" y="601" width="280" height="13" fill="#6b7280"/>
+    <text x="678" y="599" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">CLASS 6</text>
+    <text x="922" y="599" text-anchor="end" font-size="15" font-weight="700" fill="#cccccc">NO SUCCESS</text>
+    <text x="678" y="650" font-size="21" font-weight="600" fill="#ffffff">SSRF to Redis</text>
+    <text x="678" y="676" font-size="21" font-weight="600" fill="#ffffff">to SSH key</text>
+    <text x="678" y="710" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">gopher:// smuggling</text>
+    <text x="678" y="734" font-size="17" fill="#e5e5e5">CONFIG abuse writes an</text>
+    <text x="678" y="758" font-size="17" fill="#e5e5e5">authorized key for root</text>
+    <line x1="678" y1="776" x2="922" y2="776" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="678" y="798" font-size="16" font-weight="700" fill="#888888" letter-spacing="0.5">OUTCOME</text>
+    <text x="678" y="824" font-size="17" fill="#e5e5e5">Attempted, not</text>
+    <text x="678" y="846" font-size="17" fill="#e5e5e5">evidenced.</text>
+    <text x="678" y="876" font-size="17" font-weight="600" fill="#fb923c">anchor: gopher:// URIs</text>
+  </g>
+
+  <!-- =========== ROW 3 — CLASS 7 (red, productive) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="920" width="430" height="330" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="920" width="430" height="48" rx="8" fill="#dc2626"/>
+    <rect x="60" y="955" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="951" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">CLASS 7</text>
+    <text x="470" y="951" text-anchor="end" font-size="17" font-weight="700" fill="#ffffff">PRODUCTIVE</text>
+    <text x="80" y="1006" font-size="23" font-weight="600" fill="#ffffff">Jolokia and JMX abuse</text>
+    <text x="80" y="1046" font-size="18" fill="#e5e5e5">Management-interface access reached</text>
+    <text x="80" y="1072" font-size="18" fill="#e5e5e5">with no restrictor configured at time of capture.</text>
+    <line x1="80" y1="1096" x2="470" y2="1096" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="80" y="1120" font-size="17" font-weight="700" fill="#888888" letter-spacing="0.5">OUTCOME</text>
+    <text x="80" y="1148" font-size="18" fill="#ffffff">PRODUCTIVE. The likely master access</text>
+    <text x="80" y="1174" font-size="18" fill="#ffffff">vector for this toolkit.</text>
+    <text x="80" y="1232" font-size="18" font-weight="600" fill="#fb923c">anchor: Jolokia write operations</text>
+  </g>
+
+  <!-- =========== ROW 3 — CLASS 8 (red, productive) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="920" width="430" height="330" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="920" width="430" height="48" rx="8" fill="#dc2626"/>
+    <rect x="510" y="955" width="430" height="13" fill="#dc2626"/>
+    <text x="530" y="951" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">CLASS 8</text>
+    <text x="920" y="951" text-anchor="end" font-size="17" font-weight="700" fill="#ffffff">PRODUCTIVE</text>
+    <text x="530" y="1006" font-size="23" font-weight="600" fill="#ffffff">Unauthenticated Druid console</text>
+    <text x="530" y="1046" font-size="18" fill="#e5e5e5">StatViewServlet exposed without auth</text>
+    <text x="530" y="1072" font-size="18" fill="#e5e5e5">at time of capture.</text>
+    <line x1="530" y1="1096" x2="920" y2="1096" stroke="#2a2a2a" stroke-width="1"/>
+    <text x="530" y="1120" font-size="17" font-weight="700" fill="#888888" letter-spacing="0.5">OUTCOME</text>
+    <text x="530" y="1148" font-size="18" fill="#ffffff">PRODUCTIVE. Full data model disclosed,</text>
+    <text x="530" y="1174" font-size="18" fill="#ffffff">along with the root USERNAME only,</text>
+    <text x="530" y="1200" font-size="18" fill="#ffffff">not the password.</text>
+    <text x="530" y="1232" font-size="18" font-weight="600" fill="#fb923c">anchor: unauthenticated /druid/*</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1284" x2="940" y2="1284" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1318" text-anchor="middle" font-size="17" font-weight="600" fill="#ffffff">Detection anchors:  insertFromJNDI  ·  ScriptEngineManager gadget  ·  XStream markers</text>
+  <text x="500" y="1346" text-anchor="middle" font-size="17" font-weight="600" fill="#ffffff">gopher:// smuggling  ·  unauthenticated /druid/*  ·  Jolokia write operations</text>
+  <text x="500" y="1378" text-anchor="middle" font-size="15" fill="#cccccc">Six of the eight had no public Sigma, Suricata or YARA coverage identified.</text>
+  <text x="500" y="1400" text-anchor="middle" font-size="15" fill="#cccccc">Commodity technique with absent detection is the gap.</text>
+  <text x="500" y="1428" text-anchor="middle" font-size="14" fill="#888888">Color legend, bands: grey no evidenced success · red produced access or data</text>
+</svg>

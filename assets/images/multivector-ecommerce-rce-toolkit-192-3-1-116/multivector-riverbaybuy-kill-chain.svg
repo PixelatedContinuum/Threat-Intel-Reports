@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1800" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1800" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1799" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Confirmed Multi-Victim Harvest</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">How an exposed management interface became real customer records</text>
+  <text x="500" y="138" text-anchor="middle" font-size="18" fill="#cccccc">Names and order records confirmed for at least five individuals;</text>
+  <text x="500" y="164" text-anchor="middle" font-size="18" fill="#cccccc">fuller identity fields highly likely, not confirmed</text>
+  <line x1="60" y1="186" x2="940" y2="186" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STEP 1 — ORANGE: initial access =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="216" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="216" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="249" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="247" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+    <text x="200" y="247" font-size="23" font-weight="600" fill="#111111">Unrestricted management interface</text>
+    <text x="80" y="302" font-size="21" fill="#ffffff">Jolokia/Actuator was reachable externally, no access restrictor</text>
+    <text x="80" y="336" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">"no access restrictor, access to any MBean is allowed"</text>
+    <text x="80" y="370" font-size="18" fill="#e5e5e5">The likely master access vector for everything that follows</text>
+    <text x="80" y="404" font-size="18" fill="#fb923c" font-weight="600">Alert on external Jolokia/JMX reachability</text>
+  </g>
+  <line x1="500" y1="436" x2="500" y2="476" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 2 — RED: operator action =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="482" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="482" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="515" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="513" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
+    <text x="200" y="513" font-size="23" font-weight="600" fill="#ffffff">Memory and log capture</text>
+    <text x="80" y="568" font-size="21" fill="#ffffff">Java heap dumps retrieved, plus application request/response logs</text>
+    <text x="80" y="602" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">/actuator/heapdump  ·  /actuator/logfile</text>
+    <text x="80" y="636" font-size="18" fill="#e5e5e5">Three heap snapshots captured from the target's running application</text>
+    <text x="80" y="670" font-size="18" fill="#fb923c" font-weight="600">Alert on heap-dump retrieval success, 200 plus a large response body</text>
+  </g>
+  <line x1="500" y1="702" x2="500" y2="742" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 3 — YELLOW: data sourcing =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="748" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="748" width="880" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="781" width="880" height="13" fill="#eab308"/>
+    <text x="80" y="779" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 3</text>
+    <text x="200" y="779" font-size="23" font-weight="600" fill="#111111">Real order identifiers extracted</text>
+    <text x="80" y="838" font-size="21" fill="#ffffff">Live order IDs mined from captured memory, not guessed</text>
+    <text x="80" y="876" font-size="18" fill="#e5e5e5">Four independent sourcing channels feed this stage, including identifier enumeration</text>
+    <text x="80" y="914" font-size="18" fill="#fb923c" font-weight="600">Watch sequential record-ID enumeration on detail endpoints</text>
+  </g>
+  <line x1="500" y1="968" x2="500" y2="1008" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 4 — RED: operator action =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1014" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1014" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="1047" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="1045" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 4</text>
+    <text x="200" y="1045" font-size="23" font-weight="600" fill="#ffffff">Identifier resolved to user</text>
+    <text x="80" y="1104" font-size="21" fill="#ffffff">Each order ID resolved to a distinct platform user</text>
+    <text x="80" y="1142" font-size="18" fill="#e5e5e5">Purpose-built to iterate across up to 30 distinct users in one pass</text>
+    <text x="80" y="1180" font-size="18" fill="#fb923c" font-weight="600">Correlate one session resolving many unrelated record owners</text>
+  </g>
+  <line x1="500" y1="1234" x2="500" y2="1274" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 5 — DEEP RED: confirmed outcome =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1280" width="880" height="275" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1280" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="1313" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="1311" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 5</text>
+    <text x="200" y="1311" font-size="23" font-weight="600" fill="#ffffff">Customer records harvested</text>
+    <text x="80" y="1364" font-size="21" fill="#ffffff">Real names tied to real order records</text>
+    <text x="80" y="1396" font-size="21" fill="#ffffff">for at least five named individuals</text>
+    <text x="80" y="1430" font-size="18" fill="#e5e5e5">CONFIRMED by an operator-authored identifier-to-name mapping,</text>
+    <text x="80" y="1460" font-size="18" fill="#e5e5e5">corroborated by live order IDs in captured memory</text>
+    <text x="80" y="1492" font-size="18" fill="#fb923c" font-weight="600">Fuller identity fields targeted by a separate endpoint</text>
+    <text x="80" y="1522" font-size="18" fill="#fb923c" font-weight="600">HIGHLY LIKELY but NOT confirmed by any captured output</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1605" x2="940" y2="1605" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1639" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  external /actuator/heapdump success  ·  Jolokia MBean access</text>
+  <text x="500" y="1669" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Sequential order-ID enumeration  ·  one session resolving many record owners</text>
+  <text x="500" y="1705" text-anchor="middle" font-size="15" fill="#cccccc">The decryption sub-effort against one individual's encrypted identity fields</text>
+  <text x="500" y="1727" text-anchor="middle" font-size="15" fill="#cccccc">did not succeed. The key was not recoverable.</text>
+  <text x="500" y="1757" text-anchor="middle" font-size="14" fill="#888888">Legend: orange = initial access · red = operator action · yellow = data sourcing · deep red = outcome</text>
+</svg>

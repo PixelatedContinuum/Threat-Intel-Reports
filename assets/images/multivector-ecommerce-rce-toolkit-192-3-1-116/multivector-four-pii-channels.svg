@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1050" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    Layout: phase-grid (2 columns x 2 rows = 4 channels)
+    Point of the diagram: redundancy. Four independent sourcing routes to one
+    platform's customer records; closing any single one leaves three.
+    Band colors used: #dc2626 (confirmed productive), #eab308 (available and used).
+  -->
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1050" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1049" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="32" font-weight="700" fill="#ffffff">Four Independent Paths to the Same Customer Data</text>
+  <text x="500" y="104" text-anchor="middle" font-size="24" fill="#f5f5f5">No single fix would have closed all four channels</text>
+  <text x="500" y="138" text-anchor="middle" font-size="17" fill="#cccccc">All four target one platform's customer records; each was usable on its own</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== CHANNEL 1 (top-left, RED) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="196" width="430" height="310" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="229" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">CHANNEL 1</text>
+    <text x="470" y="227" text-anchor="end" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="0.5">CONFIRMED PRODUCTIVE</text>
+    <text x="80" y="278" font-size="22" font-weight="600" fill="#ffffff">Heap-dump memory mining</text>
+    <text x="80" y="316" font-size="20" fill="#ffffff">Live order identifiers recovered from</text>
+    <text x="80" y="344" font-size="20" fill="#ffffff">Java heap snapshots pulled from the</text>
+    <text x="80" y="372" font-size="20" fill="#ffffff">running application</text>
+    <text x="80" y="410" font-size="17" fill="#e5e5e5">Real identifiers, not guesses. This is the</text>
+    <text x="80" y="434" font-size="17" fill="#e5e5e5">channel that seeded the confirmed harvest</text>
+    <text x="80" y="480" font-size="17" fill="#fb923c" font-weight="700">External heap-dump retrieval success</text>
+  </g>
+
+  <!-- =========== CHANNEL 2 (top-right, RED) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="196" width="430" height="310" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="196" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="510" y="229" width="430" height="13" fill="#dc2626"/>
+    <text x="530" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">CHANNEL 2</text>
+    <text x="920" y="227" text-anchor="end" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="0.5">CONFIRMED PRODUCTIVE</text>
+    <text x="530" y="274" font-size="22" font-weight="600" fill="#ffffff">Manufactured log harvesting</text>
+    <text x="530" y="306" font-size="20" fill="#ffffff">Log verbosity raised through the</text>
+    <text x="530" y="332" font-size="20" fill="#ffffff">management interface so request and</text>
+    <text x="530" y="358" font-size="20" fill="#ffffff">response bodies were written, then</text>
+    <text x="530" y="384" font-size="20" fill="#ffffff">retrieved</text>
+    <text x="530" y="412" font-size="17" fill="#e5e5e5">Confirmed effective. A captured session</text>
+    <text x="530" y="433" font-size="17" fill="#e5e5e5">identifier taken from live logs was reused</text>
+    <text x="530" y="454" font-size="17" fill="#e5e5e5">to pull that user's orders</text>
+    <text x="530" y="480" font-size="17" fill="#fb923c" font-weight="700">Log-level change followed by logfile read</text>
+  </g>
+
+  <!-- =========== CHANNEL 3 (bottom-left, YELLOW) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="546" width="430" height="310" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="546" width="430" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="579" width="430" height="13" fill="#eab308"/>
+    <text x="80" y="577" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">CHANNEL 3</text>
+    <text x="470" y="577" text-anchor="end" font-size="15" font-weight="700" fill="#111111" letter-spacing="0.5">AVAILABLE AND USED</text>
+    <text x="80" y="628" font-size="22" font-weight="600" fill="#ffffff">Request-history endpoint</text>
+    <text x="80" y="666" font-size="20" fill="#ffffff">The framework's own recent-request</text>
+    <text x="80" y="694" font-size="20" fill="#ffffff">trace surface, exposing captured</text>
+    <text x="80" y="722" font-size="20" fill="#ffffff">traffic</text>
+    <text x="80" y="760" font-size="17" fill="#e5e5e5">A built-in diagnostic surface, exposed</text>
+    <text x="80" y="784" font-size="17" fill="#e5e5e5">rather than exploited</text>
+    <text x="80" y="830" font-size="17" fill="#fb923c" font-weight="700">External access to request-trace endpoints</text>
+  </g>
+
+  <!-- =========== CHANNEL 4 (bottom-right, YELLOW) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="546" width="430" height="310" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="546" width="430" height="46" rx="8" fill="#eab308"/>
+    <rect x="510" y="579" width="430" height="13" fill="#eab308"/>
+    <text x="530" y="577" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">CHANNEL 4</text>
+    <text x="920" y="577" text-anchor="end" font-size="15" font-weight="700" fill="#111111" letter-spacing="0.5">AVAILABLE AND USED</text>
+    <text x="530" y="628" font-size="22" font-weight="600" fill="#ffffff">Order-identifier enumeration</text>
+    <text x="530" y="666" font-size="20" fill="#ffffff">Structured, predictable record</text>
+    <text x="530" y="694" font-size="20" fill="#ffffff">identifiers brute-forced across</text>
+    <text x="530" y="722" font-size="20" fill="#ffffff">sequence ranges</text>
+    <text x="530" y="760" font-size="17" fill="#e5e5e5">Works with no access to memory or logs</text>
+    <text x="530" y="784" font-size="17" fill="#e5e5e5">at all, purely against the public API</text>
+    <text x="530" y="808" font-size="17" fill="#fb923c" font-weight="700">Sequential record-ID enumeration</text>
+    <text x="530" y="830" font-size="17" fill="#fb923c" font-weight="700">on detail endpoints</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="896" x2="940" y2="896" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="930" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">Detection anchors: /actuator/heapdump · /actuator/logfile · request-trace endpoints</text>
+  <text x="500" y="960" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">Sequential identifier enumeration across a narrow range on a detail endpoint</text>
+  <text x="500" y="992" text-anchor="middle" font-size="15" fill="#cccccc">Redundancy is the finding. Closing one channel leaves three, so remediation must address the class.</text>
+  <text x="500" y="1022" text-anchor="middle" font-size="14" fill="#888888">Legend: red = confirmed productive channel · yellow = used, outcome less directly evidenced</text>
+</svg>

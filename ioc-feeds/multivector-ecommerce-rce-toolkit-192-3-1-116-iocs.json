@@ -1,0 +1,479 @@
+{
+  "metadata": {
+    "malware_name": "MultiVector E-Commerce RCE Toolkit (192.3.1.116)",
+    "family": "Operator toolkit (no malware family)",
+    "campaign_id": "MultiVector-Ecommerce-RCE-Toolkit-192.3.1.116",
+    "report_date": "2026-07-21",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "notes": "Exposed operator open directory holding a multi-vector offensive toolkit. There is no malware sample, no implant and no malware family, so this feed carries no file_hashes. Four categories are deliberately excluded: believed-real victim credentials, the operator's live reconnaissance-API subscription key, all raw JWTs, and all victim personal data. Post-discovery crawler and scanner addresses are listed under non_indicators. See threat-intel-vault/research/multivector-ecommerce-rce-toolkit-192-3-1-116/stage1-malware-analyst.md."
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "192.3.1.116",
+        "purpose": "Operator host - open directory, rogue LDAP/JNDI server and RCE-callback listeners",
+        "asn": "AS36352",
+        "hosting_provider": "HostPapa",
+        "country": "US",
+        "ports": [7777, 9876, 1389],
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "false_positive_risk": false,
+        "context": "Primary operator infrastructure. Port 7777 is a plain Python static HTTP server serving the working directory; it does NOT execute the JSP web shell it hosts. Still live and growing as of 2026-07-21. A hosting-provider takedown request has been filed."
+      },
+      {
+        "value": "31.22.111.190",
+        "purpose": "Operator control-source address",
+        "asn": "AS215355",
+        "hosting_provider": "Alice Networks Ltd (small UK RIPE-registered reseller)",
+        "confidence": "MODERATE",
+        "confidence_detail": "HIGH that operator traffic originated from this address; MODERATE that the address is operator-controlled rather than shared rented egress. The lower of the two is used as the indicator confidence because the indicator's value depends on the attribution claim, not on the observation.",
+        "action": "HUNT",
+        "false_positive_risk": true,
+        "clustering_suitability": "NOT SUITABLE as a clustering discriminator. Valid only as a victim-side log search term and as a law-enforcement lead.",
+        "context": "The address the operator connects FROM to administer 192.3.1.116. Identical SSH_CLIENT and SSH_CONNECTION values observed across two independent environment dumps captured on the host. IMPORTANT: a reverse pivot resolved this address to hostnames following a numbered-node convention on privacy-registered short-TLD domains served through Chinese-market DNS, which is the standard shape of a commercial proxy-subscription service sold into the Chinese consumer market. Under that reading the address is a SHARED, RENTED EGRESS NODE rather than operator-controlled infrastructure. Confidence MODERATE: the reading rests on a naming and registration pattern, not on a service banner or a subscription artifact, and the competing reading that these are simply the operator's own tidily named hosts is weaker but not excluded. Consequences: do NOT block this address, and do NOT use it or its ASN to link future activity to this operator, because reverse-pivoting a shared proxy service returns other customers of that service and every match would be a false link. This is the same co-tenancy trap as a budget-VPS provider template mistaken for an operator link. It remains valid as a victim-side hunting term, since operator traffic genuinely did originate there."
+      }
+    ],
+    "ipv6": [],
+    "domains": [
+      {
+        "value": "vpn932081317.softether.net",
+        "purpose": "Operator VPN DDNS hostname",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_risk": false,
+        "context": "SoftEther DDNS name for a VPN the operator self-hosts on 192.3.1.116; still resolves to that address. Operator OPSEC infrastructure. Note the parent domain softether.net is a legitimate DDNS service - only this specific hostname is the indicator."
+      },
+      {
+        "value": "cs-pgcwufmiws.cn-hangzhou.fcapp.run",
+        "purpose": "Attack-traffic relay",
+        "confidence": "DEFINITE",
+        "action": "MONITOR",
+        "false_positive_risk": true,
+        "false_positive_note": "fcapp.run is Alibaba Cloud's default domain for ALL Function Compute deployments and is shared, legitimate infrastructure. Only this specific subdomain is the indicator. Do not block the parent domain.",
+        "context": "Legitimate Alibaba Cloud serverless endpoint reused by the operator as an attack relay. Confirmed across two independent attack types against the same target: UNION-based SQL injection and login/SMS/register probing. Used to obscure source IP or route around IP-based rate limiting."
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://192.3.1.116:7777/cmd.jsp",
+        "purpose": "Staged JSP web shell source",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "A functional generic bash-exec JSP web shell (reads a 'c' HTTP parameter, runs it via /bin/bash -c). DEFINITE that the file exists in the operator's own directory and is downloadable. UNCONFIRMED that it was ever deployed to any victim host. Port 7777 serves this file's source and does not execute it."
+      },
+      {
+        "value": "http://192.3.1.116:7777/xstream_rce_success",
+        "purpose": "Eureka XStream RCE success-beacon path",
+        "confidence": "DEFINITE",
+        "action": "HUNT",
+        "context": "Never observed hit across approximately 17,000 lines of the operator's own port-7777 access log. MODERATE confidence the callback did not fire; the log window begins roughly 68-76 minutes after the engagement concluded, so an earlier hit cannot be ruled out."
+      },
+      {
+        "value": "http://192.3.1.116:9876/rce_confirmed",
+        "purpose": "LDAP/JNDI chain RCE callback",
+        "confidence": "DEFINITE",
+        "action": "HUNT",
+        "context": "No comprehensive port-9876 access log exists in the reviewed corpus, so this callback's outcome is fully open. Both logged LDAP engagements stalled at BindResponse without a SearchRequest."
+      },
+      {
+        "value": "http://192.3.1.116:9876/yaml_rce_proof",
+        "purpose": "SnakeYAML deserialization RCE callback",
+        "confidence": "DEFINITE",
+        "action": "HUNT",
+        "context": "Embedded in poc.yml, a textbook ScriptEngineManager + URLClassLoader gadget chain of the CVE-2022-1471 family."
+      },
+      {
+        "value": "ldap://192.3.1.116:1389/cn=exploit",
+        "purpose": "Rogue LDAP/JNDI server",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "The callback target of the crafted Logback insertFromJNDI payload (CVE-2021-42550). Backed by ldap_server.py, ldap_server_v2.py and setup_jndi.sh in the operator's directory."
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [
+      {
+        "value": "/tmp/tomcat-docbase.7684244892297451797.9001/rce.jsp",
+        "confidence": "DEFINITE (payload references it) / UNCONFIRMED (write occurred)",
+        "context": "The FileAppender destination in logback-evil.xml - a Logback arbitrary-file-write route to a JSP web shell. Port 9001 in the path matches the Tomcat connector port independently observed in the target's Actuator log. Hunt target, not an assumed finding."
+      },
+      {
+        "value": "/root/.ssh/authorized_keys",
+        "confidence": "HIGH (attempted)",
+        "context": "Destination of the operator's own SSH public key in redis_ssrf.py's SSRF-to-Redis CONFIG-abuse chain (CONFIG SET dir / CONFIG SET dbfilename / SET / BGSAVE). Goal is passwordless root SSH. No confirmation the write succeeded on any target."
+      },
+      {
+        "value": "/root/.hermes",
+        "confidence": "HIGH",
+        "context": "Home directory of the off-the-shelf open-source agentic-AI framework running as root on the operator host. Operator-side path, not a victim indicator."
+      },
+      {
+        "value": "/tmp/cjs_token.txt",
+        "confidence": "DEFINITE",
+        "context": "Operator-side token cache shared between attack scripts targeting one platform, rather than each script re-authenticating."
+      },
+      {
+        "value": "/tmp/riverbay_heap.bin",
+        "confidence": "DEFINITE",
+        "context": "Operator-side path to a captured Java heap dump, hardcoded in the AES-key-hunting scripts and mined by the order-harvesting pipeline."
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [],
+    "scheduled_tasks": [],
+    "named_pipes": []
+  },
+  "operator_attribution_artifacts": {
+    "notes": "Identity-bearing material recovered from the operator's own directory. None has been pivoted to a publicly named threat actor; the operator is absent from both the Hunt.io and VirusTotal threat-actor catalogs.",
+    "ssh_key_comment": [
+      {
+        "value": "root@racknerd-19330af",
+        "confidence": "HIGH",
+        "context": "Default ssh-keygen comment shared unmodified across three distinct RSA-2048 key pairs with different fingerprints, indicating one build environment. The same identity authored the git clone reflog entries for the agent-framework plugins. The instance-identifier fragment 19330af is a concrete pivot candidate for passive DNS and historical SSH host-key scan data."
+      }
+    ],
+    "ssh_key_fingerprints": [
+      {
+        "value": "SHA256:NrOPd43spzdNoLCkknIYZ9AVGwWSeMwh17F5ozVGbs8",
+        "key_name": "pentest_key",
+        "key_type": "RSA-2048",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "SHA256:hFcvJD/F0LxPjqcxu75PjdJ/AIblWstkrW2BFNUdaEU",
+        "key_name": "pentest_ssh_key",
+        "key_type": "RSA-2048",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "SHA256:PAZ8kxHoR3c4ljwUht72SB7V6iwqkEOAFmCp1PpnHP8",
+        "key_name": "ssrf_key",
+        "key_type": "RSA-2048",
+        "confidence": "DEFINITE",
+        "context": "The key pair redis_ssrf.py is written to install into a target's /root/.ssh/authorized_keys."
+      }
+    ],
+    "operator_accounts": [
+      {
+        "value": "redteam01",
+        "user_id": 78,
+        "confidence": "DEFINITE",
+        "context": "Self-registered throwaway account on a target platform, used to obtain a bearer token."
+      },
+      {
+        "value": "redteam03",
+        "user_id": 80,
+        "confidence": "DEFINITE",
+        "context": "Self-registered throwaway account. Registration and login both confirmed successful, followed by enumeration of administrative API routes."
+      },
+      {
+        "value": "pentest_user_01",
+        "user_id": 8,
+        "confidence": "DEFINITE",
+        "context": "Self-registered throwaway account."
+      },
+      {
+        "value": "pentest_crack2",
+        "user_id": 76,
+        "confidence": "DEFINITE",
+        "context": "Self-registered throwaway account. Token cached at /tmp/cjs_token.txt and reused across scripts."
+      }
+    ],
+    "messaging_identifiers": [
+      {
+        "platform": "Telegram",
+        "type": "chat_id",
+        "value": "-1003921324184",
+        "display_name": "天蝎 (Scorpio)",
+        "confidence": "HIGH",
+        "context": "Live human-in-the-loop control channel for the agentic-AI framework running as root on the operator host."
+      },
+      {
+        "platform": "Telegram",
+        "type": "user_id",
+        "value": "951231562",
+        "display_name": "x x",
+        "confidence": "HIGH",
+        "context": "The controlling user in that channel."
+      }
+    ],
+    "session_identifier": [
+      {
+        "value": "20260601_060009_5f1e522a",
+        "confidence": "HIGH",
+        "context": "Agent-framework session identifier, decoding to 2026-06-01 06:00:09 UTC. Timeline anchor, one day after the earliest observed reconnaissance sweep."
+      }
+    ]
+  },
+  "behavioral_indicators": [
+    {
+      "pattern": "POST to a password-reset endpoint with a constant codeKey/codeTime verification context while a 4-digit code field iterates 0000-9999",
+      "confidence": "DEFINITE",
+      "log_source": "Application authentication logs; WAF logs",
+      "context": "The armed SMS account-takeover weapon: 10,000 individually pre-built curl commands sharing one real verification context, targeting a staff-type account with an intended new password of Hacked@123. Execution and outcome are UNCONFIRMED."
+    },
+    {
+      "pattern": "Jolokia/JMX setProperty raising an application logger to DEBUG or a Feign client to FULL, followed within minutes by a read of /actuator/logfile",
+      "confidence": "HIGH",
+      "log_source": "Web/proxy access logs; Spring Boot application logs",
+      "context": "Log-level manipulation used to manufacture sensitive data in a log the attacker then harvests. The likely enabling step behind the confirmed PII harvest."
+    },
+    {
+      "pattern": "Unauthenticated HTTP 200 on /druid/index.html, /druid/basic.json, /druid/sql.json, /druid/weburi.json or /druid/datasource.json from an external source",
+      "confidence": "DEFINITE",
+      "log_source": "Web/proxy access logs; WAF logs",
+      "context": "The highest-yield exposure class in this campaign. Frequently on a non-standard port (8157 in the observed case), so detection should not be anchored to 80/443."
+    },
+    {
+      "pattern": "Successful external GET on /actuator/heapdump or a Jolokia HotSpotDiagnostic dumpHeap invocation",
+      "confidence": "HIGH",
+      "log_source": "Web/proxy access logs including response size",
+      "context": "Java heap dumps were the source material for the confirmed harvest; live order IDs were regex-mined directly out of one."
+    },
+    {
+      "pattern": "Structured order-ID enumeration matching 001OI\\d{6}20\\d{6}\\d{7,10}, including constructed sequences of the form 001OI{seq:06d}20260601000000000",
+      "confidence": "DEFINITE",
+      "log_source": "Application access logs; API-gateway logs",
+      "context": "Confirms the target's order-ID scheme is predictable enough to enumerate - a structural IDOR risk, not only an information-disclosure one. Generalize on the identifier format rather than this literal scheme."
+    },
+    {
+      "pattern": "Account registration followed within minutes by that account's bearer token probing /api/users, /api/admin, /api/config, /api/system/info, /api/debug",
+      "confidence": "DEFINITE",
+      "log_source": "Application authentication and access logs correlated on user ID",
+      "context": "A standing operator technique confirmed reused across at least two separate target platforms."
+    },
+    {
+      "pattern": "Application-log mining for lines containing the enterprise-Java request/response markers 入参为 and 出参为, filtered for rpcResult:\"SUCCESS\"",
+      "confidence": "DEFINITE",
+      "log_source": "Spring Boot application logs; /actuator/logfile access",
+      "context": "The operator explicitly filtered OUT its own attack traffic (UNION SELECT, certificationOcr, idCardOcr) to isolate genuine customer data logged during normal operation."
+    },
+    {
+      "pattern": "JWT presented with an empty signature segment (alg:none) or carrying an admin-shaped role claim the issuer never mints",
+      "confidence": "HIGH",
+      "log_source": "API gateway; application authentication logs",
+      "context": "Two independent forgery variants were built: an HMAC-secret brute force against a candidate list including the jwt.io default, and a separate alg:none variant. No success artifact for either."
+    },
+    {
+      "pattern": "Full 65535-port scan at -T5 --min-rate 10000, or the specific profile 22,80,443,3306,6379,8080,8443,8888,9000,9001,9002,9090,8848,8157",
+      "confidence": "DEFINITE",
+      "log_source": "Firewall/flow logs; IDS",
+      "context": "The operator makes no attempt at stealth. Ports 8848 (Nacos) and 8157 (Druid) in the targeted profile identify the exposure classes this operator specifically hunts."
+    },
+    {
+      "pattern": "LDAP BindRequest to a non-standard port (1389/1099) from a Java application server with no SearchRequest following",
+      "confidence": "DEFINITE",
+      "log_source": "Network capture; egress firewall logs",
+      "context": "In both logged attempts the JNDI chain stalled after BindResponse. The bind alone is therefore the detectable event; waiting for a successful search would miss it entirely."
+    }
+  ],
+  "exploitation_payloads": [
+    {
+      "name": "logback-rce.xml",
+      "technique": "Logback insertFromJNDI RCE",
+      "cve": "CVE-2021-42550",
+      "confidence": "DEFINITE",
+      "signature_strings": ["insertFromJNDI", "env-entry-name=\"ldap://"],
+      "context": "Distinct from Log4Shell and comparatively under-reported. Points a vulnerable Logback-configured Java application at the operator's own rogue LDAP server."
+    },
+    {
+      "name": "logback-evil.xml",
+      "technique": "Logback FileAppender arbitrary file write to a JSP web shell",
+      "confidence": "DEFINITE",
+      "signature_strings": ["ch.qos.logback.core.FileAppender", ".jsp"],
+      "context": "A logging-framework route to a web shell, independent of the JNDI vector."
+    },
+    {
+      "name": "poc.yml",
+      "technique": "SnakeYAML unsafe-deserialization RCE",
+      "cve": "CVE-2022-1471 (technique family)",
+      "confidence": "DEFINITE",
+      "signature_strings": ["!!javax.script.ScriptEngineManager", "!!java.net.URLClassLoader", "!!java.net.URL"],
+      "context": "Textbook gadget chain pointing at the operator's shared RCE-proof listener."
+    },
+    {
+      "name": "cmd.jsp",
+      "technique": "Generic bash-exec JSP web shell",
+      "confidence": "DEFINITE (exists in operator directory) / UNCONFIRMED (deployed to any victim)",
+      "signature_strings": ["request.getParameter(\"c\")", "Runtime.getRuntime().exec", "/bin/bash"],
+      "context": "Two exploitation techniques are armed to deliver this single payload: Logback FileAppender direct write, and Eureka XStream RCE via remote curl download. No captured artifact shows the file present on any victim host."
+    },
+    {
+      "name": "internal_scan.svg",
+      "technique": "Multi-target XXE-to-SSRF including cloud instance metadata",
+      "confidence": "DEFINITE (payload) / UNCONFIRMED (outcome)",
+      "signature_strings": ["169.254.169.254/latest/meta-data/", "localhost:6379", "127.0.0.1:3306", "127.0.0.1:8080/actuator/"],
+      "context": "The cloud-metadata entity is the standout - it targets cloud IAM credential theft rather than internal service discovery."
+    },
+    {
+      "name": "xxe_payload.xml / xxe2.xml",
+      "technique": "XXE local file and environment read",
+      "confidence": "DEFINITE",
+      "signature_strings": ["<!ENTITY xxe SYSTEM \"file:///etc/passwd\">", "file:///proc/self/environ"],
+      "context": "Hand-crafted test code: the payloads use a sequential placeholder phone number and the well-known MD5 of the string 123456, confirming the target API expects a client-side MD5-hashed password."
+    },
+    {
+      "name": "redis_ssrf.py",
+      "technique": "SSRF to Redis CONFIG abuse to SSH authorized_keys write; gopher:// MySQL handshake smuggling",
+      "confidence": "HIGH (attempted)",
+      "signature_strings": ["CONFIG SET dir", "CONFIG SET dbfilename", "BGSAVE", "gopher://"],
+      "context": "The most technically advanced artifact in the corpus. CRLF-injects Redis protocol commands through an OCR-SSRF vector; also attempts file:// reads of /root/.ssh/id_rsa and /etc/passwd."
+    },
+    {
+      "name": "phish.svg",
+      "technique": "Session-expiry social-engineering lure",
+      "confidence": "MODERATE",
+      "context": "A rendered fake system notification for a named matchmaking platform. No matching credential-harvesting page was recovered from the corpus, so delivery is unconfirmed."
+    }
+  ],
+  "targeted_assets": {
+    "warning": "CONTEXT ONLY - DO NOT BLOCK. These are victim-side and target-side assets belonging to operating businesses. They are listed so defenders and national CERTs can correlate, not as blocklist entries. Several have unresolved ownership or registration status; none should be characterized as malicious.",
+    "confirmed_data_theft": [
+      {
+        "asset": "riverbaybuy.com",
+        "sector": "Rent-to-own / installment e-commerce",
+        "internal_handle": "hzsx",
+        "finding": "CONFIRMED harvest of real customer names and order/financial records for at least five named individuals, via four independent PII-sourcing channels. Fuller identity fields (national ID, email, emergency contacts) are HIGHLY LIKELY but not confirmed by any captured response.",
+        "confidence": "DEFINITE (names + order records) / HIGH (fuller fields)"
+      }
+    ],
+    "confirmed_exposure": [
+      {
+        "asset": "web.51qzp.com",
+        "also": ["www.51qzp.com", "82.157.119.235"],
+        "entity": "全咨聘（雄安）科技有限公司 (Quanzipin (Xiong'an) Technology Co., Ltd.)",
+        "sector": "Construction and engineering cost-consulting gig-work platform",
+        "finding": "Unauthenticated Druid StatViewServlet on port 8157 exposed, AT TIME OF CAPTURE, the production MySQL connection string, the schema name zhong_bao, the fact the application connects as root, a 93-table schema, 427 API endpoints and 830 SQL statements. The password was NOT disclosed. A read-only re-check on 2026-07-20 found the host NXDOMAIN and port 8157 closed - the exposure appears REMEDIATED.",
+        "confidence": "DEFINITE (exposure and retention) / MODERATE (PII-leak risk) / INSUFFICIENT (any actual data return)"
+      }
+    ],
+    "confirmed_unauthorized_access_no_theft": [
+      {
+        "asset": "chengjiastore.cn",
+        "also": ["www.chengjiastore.cn", "8.141.61.61"],
+        "finding": "Operator self-registered a working account, registration and login both succeeded, followed by enumeration of administrative API routes. No confirmed data theft.",
+        "confidence": "DEFINITE (unauthorized authenticated access)"
+      }
+    ],
+    "ownership_unresolved": [
+      {
+        "asset": "cdn.footballteam.cn",
+        "finding": "CDN serving image references inside a captured loan-referral API response that returned approximately 20 PII-shaped records from a backend self-reporting 70,859 system-wide. DEFINITE that records were returned to a client; INSUFFICIENT on ownership AND on record authenticity - this may be the operator's own lead-generation backend. No victim is named and no record content is reproduced.",
+        "confidence": "DEFINITE (data returned) / INSUFFICIENT (ownership, authenticity, access method)"
+      }
+    ],
+    "attempted_or_reconnaissance_only": [
+      "1.13.253.113",
+      "zujixiong.cn",
+      "manage.zujixiong.cn",
+      "merchant.zujixiong.cn",
+      "u.zujixiong.cn",
+      "web.zujixiong.cn",
+      "api.zujixiong.cn",
+      "mengchida.com",
+      "backend.mengchida.com",
+      "backend-mall.mengchida.com",
+      "mall.mengchida.com",
+      "mall-api.mengchida.com",
+      "njmaixi.cn",
+      "h5.njmaixi.cn",
+      "hfive.njmaixi.cn",
+      "m.njmaixi.cn",
+      "hs.zcmzh.com",
+      "jump.hs.zcmzh.com",
+      "3czu.cn",
+      "zxq.3czu.cn",
+      "baby-api.coderqiang.com",
+      "baby-cdn.coderqiang.com",
+      "haimi-file.oss-cn-hangzhou.aliyuncs.com",
+      "ai-ledger.sodaapp.com.cn",
+      "hiij.hxjyam.com",
+      "open.oppomobile.com",
+      "api.renrendrc.com",
+      "39.105.40.102",
+      "47.94.128.49",
+      "47.111.160.102",
+      "39.108.60.192",
+      "8.155.170.217",
+      "39.99.129.123",
+      "39.104.38.237",
+      "39.104.118.153",
+      "47.110.134.211"
+    ],
+    "internal_addresses_referenced": [
+      {
+        "value": "10.206.0.16",
+        "context": "Internal address registered as a ZUUL Eureka service; links the Eureka-engaged target to the confirmed-theft platform (a HIGH inference, not DEFINITE)."
+      },
+      {
+        "value": "172.21.0.17",
+        "context": "Internal address targeted by a raw gopher:// MySQL authentication handshake. RFC1918 - not routable, context only."
+      }
+    ]
+  },
+  "framework_exposure_fingerprints": {
+    "notes": "Not indicators of compromise. These are the exposure surfaces this operator hunts, and are the most transferable defensive value in this feed.",
+    "items": [
+      "Alibaba Druid StatViewServlet exposed without authentication, frequently on a non-standard port",
+      "Spring Boot Actuator with unrestricted Jolokia ('no access restrictor, access to any MBean is allowed')",
+      "RuoYi (若依) schema fingerprint: sys_user, sys_role, sys_menu, sys_dept, sys_post, sys_dict_type, sys_oper_log, sys_logininfor, sys_job, sys_oss plus QRTZ_* Quartz tables",
+      "Apache Tomcat 8.5.65 (end-of-life since March 2024)",
+      "ThinkPHP 3.2.3 disclosing a full BT-panel server path via verbose stack traces",
+      "Laravel 8.83.9 on PHP 7.4.33 with uncaught routing exceptions in production",
+      "BT / aaPanel site-root convention /www/wwwroot/<domain>/",
+      "nginx 1.12.2 (end-of-life)",
+      "Nacos service-discovery console (port 8848) reachable externally",
+      "Swagger / api-docs endpoints reachable with weak or default HTTP Basic Auth"
+    ]
+  },
+  "non_indicators": [
+    {
+      "values": ["34.59.254.11", "44.245.20.76", "34.210.36.7", "205.210.31.232", "199.45.155.76"],
+      "reason": "AWS EC2-range crawler and scanner traffic that mass-downloaded every file in the open directory in tight repeating timestamp clusters after it was discovered. One address alone accounts for 1,379 hits in the port-7777 access log. Post-discovery researcher and scanner noise, not attacker or victim infrastructure."
+    },
+    {
+      "values": ["e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"],
+      "reason": "The standard empty-file SHA256. Present only because a downloaded public exploitation tool arrived as 0 bytes. Not campaign-specific."
+    },
+    {
+      "values": ["21.0.8.191"],
+      "reason": "Returned by two what-is-my-IP style proxy-check responses captured 43 seconds apart. Falls inside a block historically allocated to the US Department of Defense - most plausibly a placeholder or misconfigured value from whatever proxy-check service was queried, not a routable operator address."
+    },
+    {
+      "category": "Cobalt Strike beacon-scanner hits on five large high-entropy files",
+      "reason": "All five are CONFIRMED false positives. Every real Cobalt Strike config field is null (version Unknown, no domains, URIs, watermark, killdate, user agent or public key) - the classic empty-config scanner artifact. Do not carry 'CS beacon' forward for this campaign."
+    },
+    {
+      "category": "Jiagu-protected Android application package hash",
+      "reason": "A third-party target application flagged only by generic and explicitly deprecated signatures on near-uniform high-entropy packed content. FLAGGED AND UNVERIFIED - it requires actual unpacking before any claim. Publishing it as an indicator would misrepresent an unverified result about a legitimate vendor's application."
+    },
+    {
+      "category": "Residential submitter IP addresses and personal records inside the loan-referral API response",
+      "reason": "Personal data belonging to individual loan applicants. Never reproduced in any artifact."
+    },
+    {
+      "category": "Third-party lending-brand names appearing in captured platform content",
+      "reason": "Referenced third parties' own brands, not infrastructure and not indicators."
+    },
+    {
+      "category": "Generic framework error-page templates (Laravel, Spring Boot, Tomcat, nginx, ThinkPHP defaults)",
+      "reason": "Stock boilerplate duplicated many times across the capture set under different filenames. Useful only as a routing fingerprint when combined with a path or version detail, never as a standalone indicator."
+    }
+  ],
+  "excluded_by_handling_policy": {
+    "notes": "Recorded here so downstream consumers know these categories exist in the underlying evidence and were withheld deliberately, not overlooked.",
+    "categories": [
+      "Believed-real victim credentials: a MySQL password, a Redis password, an admin password candidate, an API-signing key and an HTTP Basic Auth pair, all belonging to target organizations. Withheld in full - publishing them, even defanged, is a disclosure hazard rather than an intelligence contribution.",
+      "The operator's live reconnaissance-API subscription key.",
+      "All raw JWTs recovered from the corpus, including three that decode to the operator's own throwaway accounts.",
+      "All victim personal data: customer and employee names, phone numbers, national ID numbers, order and financial records, and loan-applicant records."
+    ]
+  }
+}

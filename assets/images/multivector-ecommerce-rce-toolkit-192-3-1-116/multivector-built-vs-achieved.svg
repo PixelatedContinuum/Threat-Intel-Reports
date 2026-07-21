@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1750" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    Layout: phase-grid (2 columns).
+    Left column  = five technique classes the operator BUILT, none with evidenced success (grey).
+    Right column = the exposures that actually produced data (red) and the confirmed outcome (deep red).
+  -->
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1750" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1749" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">What Was Built Versus What Was Achieved</text>
+  <text x="500" y="106" text-anchor="middle" font-size="25" fill="#f5f5f5">Five RCE technique classes, no evidenced success</text>
+  <text x="500" y="140" text-anchor="middle" font-size="17" fill="#cccccc">Every confirmed record theft came from configuration failures, not software vulnerabilities</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== COLUMN HEADERS =========== -->
+  <text x="60" y="200" font-size="18" font-weight="700" fill="#cccccc" letter-spacing="1">BUILT, NO EVIDENCED SUCCESS</text>
+  <text x="510" y="200" font-size="18" font-weight="700" fill="#ffffff" letter-spacing="1">ACHIEVED VIA MISCONFIGURATION</text>
+
+  <!-- =========== LEFT 1 — Logback insertFromJNDI (GREY) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="216" width="430" height="230" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="216" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="249" width="430" height="13" fill="#6b7280"/>
+    <text x="80" y="247" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">BUILT 1</text>
+    <text x="170" y="247" font-size="21" font-weight="600" fill="#cccccc">Logback insertFromJNDI</text>
+    <text x="80" y="296" font-size="20" fill="#ffffff">CVE-2021-42550 JNDI lookup</text>
+    <text x="80" y="326" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">rogue LDAP/JNDI server on 1389</text>
+    <text x="80" y="354" font-size="17" fill="#e5e5e5">LDAP chain stalled at BindRequest</text>
+    <text x="80" y="382" font-size="17" fill="#e5e5e5">with no SearchRequest following</text>
+    <text x="80" y="416" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">SAME STALL IN BOTH LOGGED ATTEMPTS</text>
+  </g>
+
+  <!-- =========== LEFT 2 — Eureka + XStream (GREY) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="471" width="430" height="230" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="471" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="504" width="430" height="13" fill="#6b7280"/>
+    <text x="80" y="502" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">BUILT 2</text>
+    <text x="170" y="502" font-size="21" font-weight="600" fill="#cccccc">Eureka + XStream</text>
+    <text x="80" y="551" font-size="20" fill="#ffffff">Spring Cloud rogue registry</text>
+    <text x="80" y="581" font-size="17" fill="#e5e5e5">A real target engaged it and</text>
+    <text x="80" y="609" font-size="17" fill="#e5e5e5">registered a service</text>
+    <text x="80" y="637" font-size="17" fill="#e5e5e5">Success callback never observed</text>
+    <text x="80" y="671" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">MODERATE THAT IT DID NOT FIRE</text>
+  </g>
+
+  <!-- =========== LEFT 3 — SnakeYAML gadget (GREY) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="726" width="430" height="230" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="726" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="759" width="430" height="13" fill="#6b7280"/>
+    <text x="80" y="757" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">BUILT 3</text>
+    <text x="170" y="757" font-size="21" font-weight="600" fill="#cccccc">SnakeYAML gadget</text>
+    <text x="80" y="806" font-size="20" fill="#ffffff">Deserialization, CVE-2022-1471</text>
+    <text x="80" y="836" font-size="17" fill="#e5e5e5">ScriptEngineManager gadget document</text>
+    <text x="80" y="864" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">callback port 9876 prepared</text>
+    <text x="80" y="892" font-size="17" fill="#e5e5e5">No confirmed execution captured</text>
+    <text x="80" y="926" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">NO EVIDENCED SUCCESS</text>
+  </g>
+
+  <!-- =========== LEFT 4 — XXE to SSRF (GREY) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="981" width="430" height="230" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="981" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="1014" width="430" height="13" fill="#6b7280"/>
+    <text x="80" y="1012" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">BUILT 4</text>
+    <text x="170" y="1012" font-size="21" font-weight="600" fill="#cccccc">XXE to SSRF</text>
+    <text x="80" y="1061" font-size="20" fill="#ffffff">XXE escalating to SSRF</text>
+    <text x="80" y="1091" font-size="17" fill="#e5e5e5">Reaches cloud instance metadata</text>
+    <text x="80" y="1119" font-size="17" fill="#e5e5e5">Payloads crafted and delivered</text>
+    <text x="80" y="1147" font-size="17" fill="#e5e5e5">No captured outcome of any kind</text>
+    <text x="80" y="1181" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">OUTCOME NOT EVIDENCED</text>
+  </g>
+
+  <!-- =========== LEFT 5 — Staged JSP web shell (GREY) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="1236" width="430" height="230" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1236" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="1269" width="430" height="13" fill="#6b7280"/>
+    <text x="80" y="1267" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">BUILT 5</text>
+    <text x="170" y="1267" font-size="21" font-weight="600" fill="#cccccc">Staged JSP web shell</text>
+    <text x="80" y="1316" font-size="20" fill="#ffffff">Staged, not deployed</text>
+    <text x="80" y="1346" font-size="17" fill="#e5e5e5">Present only in the operator's</text>
+    <text x="80" y="1374" font-size="17" fill="#e5e5e5">own directory</text>
+    <text x="80" y="1402" font-size="17" fill="#e5e5e5">Deployment to any victim host is</text>
+    <text x="80" y="1436" font-size="16" font-weight="700" fill="#cccccc" letter-spacing="0.5">UNCONFIRMED</text>
+  </g>
+
+  <!-- =========== RIGHT 1 — Jolokia / Actuator (RED) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="216" width="430" height="340" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="216" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="510" y="249" width="430" height="13" fill="#dc2626"/>
+    <text x="530" y="247" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">ACHIEVED 1</text>
+    <text x="660" y="247" font-size="21" font-weight="600" fill="#ffffff">Jolokia + Actuator</text>
+    <text x="530" y="302" font-size="21" fill="#ffffff">Actuator exposed without restriction</text>
+    <text x="530" y="338" font-size="18" fill="#e5e5e5">No access restrictor configured, so any</text>
+    <text x="530" y="368" font-size="18" fill="#e5e5e5">MBean on the JVM is reachable</text>
+    <text x="530" y="400" font-size="18" fill="#e5e5e5">Assessed as the likely master vector</text>
+    <text x="530" y="432" font-size="18" fill="#e5e5e5">Yielded heap dumps and a database</text>
+    <text x="530" y="462" font-size="18" fill="#e5e5e5">credential; the value is withheld here</text>
+    <text x="530" y="502" font-size="17" font-weight="700" fill="#fb923c">Anchor: external heapdump success</text>
+  </g>
+
+  <!-- =========== RIGHT 2 — Druid console (RED) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="616" width="430" height="360" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="616" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="510" y="649" width="430" height="13" fill="#dc2626"/>
+    <text x="530" y="647" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">ACHIEVED 2</text>
+    <text x="660" y="647" font-size="21" font-weight="600" fill="#ffffff">Druid console open</text>
+    <text x="530" y="702" font-size="21" fill="#ffffff">Unauthenticated Druid console</text>
+    <text x="530" y="740" font-size="18" fill="#e5e5e5">Exposed the JDBC URL and 93-table schema</text>
+    <text x="530" y="772" font-size="18" fill="#e5e5e5">427 API endpoints, 830 SQL statements</text>
+    <text x="530" y="804" font-size="18" fill="#e5e5e5">Root USERNAME exposed, NOT the password</text>
+    <text x="530" y="840" font-size="18" fill="#e5e5e5">Exposed at time of capture; a later</text>
+    <text x="530" y="870" font-size="18" fill="#e5e5e5">re-check found it remediated</text>
+    <text x="530" y="912" font-size="17" font-weight="700" fill="#fb923c">Anchor: unauthenticated /druid/*.json</text>
+  </g>
+
+  <!-- =========== RIGHT 3 — Confirmed harvest (DEEP RED) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="1036" width="430" height="310" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="1036" width="430" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="510" y="1069" width="430" height="13" fill="#7f1d1d"/>
+    <text x="530" y="1067" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">OUTCOME</text>
+    <text x="660" y="1067" font-size="21" font-weight="600" fill="#ffffff">Confirmed harvest</text>
+    <text x="530" y="1122" font-size="21" fill="#ffffff">Real customer names plus order</text>
+    <text x="530" y="1152" font-size="21" fill="#ffffff">and financial records</text>
+    <text x="530" y="1190" font-size="18" fill="#e5e5e5">For at least five named individuals</text>
+    <text x="530" y="1222" font-size="18" fill="#e5e5e5">Record contents are withheld here</text>
+    <text x="530" y="1254" font-size="18" fill="#e5e5e5">Fuller identity fields are HIGHLY LIKELY,</text>
+    <text x="530" y="1286" font-size="18" fill="#e5e5e5">not confirmed by any captured output</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1550" x2="940" y2="1550" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1580" text-anchor="middle" font-size="14" fill="#888888" letter-spacing="1">DETECTION ANCHORS</text>
+  <text x="500" y="1610" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">Unauthenticated /druid/*.json access  ·  external /actuator/heapdump success</text>
+  <text x="500" y="1640" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">Jolokia setProperty log-level change followed by /actuator/logfile read</text>
+  <text x="500" y="1674" text-anchor="middle" font-size="15" fill="#cccccc">Bounded harm: the decryption effort was a high-confidence negative, the key was not recoverable.</text>
+  <text x="500" y="1704" text-anchor="middle" font-size="14" fill="#888888">Legend: grey = built, not evidenced · red = exposure exploited · deep red = confirmed outcome</text>
+</svg>
