@@ -580,3 +580,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
 })();
 </script>
+
+<style>
+/* Phase B: collapsible Technical Teardown (<details class="hl-teardown">) */
+.hl-teardown { border: 1px solid rgba(128,128,128,0.35); border-radius: 8px; margin: 1.6em 0; }
+.hl-teardown > summary { cursor: pointer; padding: 0.75em 1em; font-weight: 600; list-style: none; }
+.hl-teardown > summary::-webkit-details-marker { display: none; }
+.hl-teardown > summary::before { content: '\25B8\00a0\00a0'; opacity: 0.8; }
+.hl-teardown[open] > summary::before { content: '\25BE\00a0\00a0'; }
+.hl-teardown > summary:hover { text-decoration: underline; }
+.hl-teardown[open] > summary { border-bottom: 1px solid rgba(128,128,128,0.35); margin-bottom: 0.4em; }
+.hl-teardown > *:not(summary) { margin-left: 1em; margin-right: 1em; }
+</style>
+<script>
+/* Phase B: open a collapsed <details> when navigating to an anchor inside it (TOC links, heading permalinks, deep-links, back/forward). Guarded: no-op on pages without matching anchors/details. */
+(function () {
+  function openAncestorDetails(el) {
+    var p = el && el.parentElement, opened = false;
+    while (p) { if (p.tagName === 'DETAILS' && !p.open) { p.open = true; opened = true; } p = p.parentElement; }
+    return opened;
+  }
+  function targetFromHash(hash) {
+    if (!hash || hash.length < 2) return null;
+    var id; try { id = decodeURIComponent(hash.slice(1)); } catch (e) { id = hash.slice(1); }
+    return document.getElementById(id);
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!a) return;
+    var el = targetFromHash(a.getAttribute('href'));
+    if (el) openAncestorDetails(el);
+  }, true);
+  function handleHash() {
+    var el = targetFromHash(location.hash);
+    if (el && openAncestorDetails(el)) setTimeout(function () { el.scrollIntoView(); }, 0);
+  }
+  window.addEventListener('hashchange', handleHash);
+  window.addEventListener('load', function () { if (location.hash) setTimeout(handleHash, 60); });
+})();
+</script>
