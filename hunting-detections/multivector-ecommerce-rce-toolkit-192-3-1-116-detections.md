@@ -4,7 +4,6 @@ date: '2026-07-21'
 layout: post
 permalink: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
 hide: true
-unlisted: true
 ---
 
 **Campaign:** MultiVector-Ecommerce-RCE-Toolkit-192.3.1.116
@@ -375,7 +374,7 @@ falsepositives:
 level: high
 ```
 
-#### Unauthenticated External Access to an Apache Druid Monitoring Console
+#### Unauthenticated External Access to an Alibaba Druid Monitoring Console
 
 **Tier:** Detection
 **Robustness:** 2
@@ -387,11 +386,11 @@ level: high
 **Deployment:** Web/proxy access-log ingestion, WAF log ingestion.
 
 ```yaml
-title: Unauthenticated External Access to an Apache Druid Monitoring Console
+title: Unauthenticated External Access to an Alibaba Druid Monitoring Console
 id: b2857306-3872-446e-a6cf-f093e48e3252
 status: experimental
 description: >-
-    Detects a successful external request to an Apache Druid StatViewServlet
+    Detects a successful external request to an Alibaba Druid StatViewServlet
     monitoring path. An unauthenticated Druid console exposes the production
     JDBC connection string, full database schema and executed SQL statement
     history to anyone who can reach it; a single request returning 200 on
@@ -917,7 +916,7 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 JWT alg-none Authentication Bypass Attempt (Forged Token Header)"; flow:established,to_server; http.header; content:"Bearer eyJhbGciOiJub25lIn0"; classtype:attempted-admin; sid:1000009; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)
 ```
 
-#### Unauthenticated External Access to Apache Druid Monitoring Console (Network Layer, Flowbits Pair)
+#### Unauthenticated External Access to Alibaba Druid Monitoring Console (Network Layer, Flowbits Pair)
 
 **Tier:** Detection
 **Robustness:** 2
@@ -929,8 +928,8 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 **Deployment:** Network IDS at the perimeter, as a complement to the Sigma access-log rule for environments without centralized web-log ingestion. **Ships as a linked flowbits pair, deploy both rules together.** `http.uri` (request-side) and `http.response_body` (response-side) cannot be combined in a single rule on the deployed Suricata engine (8.0.5), so the original single-rule design is split into a silent setter (sid:1000010, matches the external `/druid/` request and sets flowbit `thl.mvec.druid.uri`, `flowbits:noalert` so it never alerts on its own) and a checker (sid:1000011, matches the 200-status, `JavaClassPath`-bearing response on the same flow, but only if the setter's flowbit is set). **If sid:1000010 is not loaded, sid:1000011 will never fire**; it silently depends on its setter being present in the same ruleset. This split also corrects a directionality slip in the original single-rule version, which mixed a request-only buffer into a response-direction (`to_client`) declaration; the setter below correctly matches the external client's request (`to_server`, since the victim's Druid console is the TCP server) and the checker matches the victim's response (`to_client`).
 
 ```
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Apache Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)"; flow:established,to_server; http.uri; content:"/druid/"; flowbits:set,thl.mvec.druid.uri; flowbits:noalert; classtype:attempted-recon; sid:1000010; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Unauthenticated External Access to Apache Druid Monitoring Console (requires flowbits setter sid:1000010)"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:"200"; http.response_body; content:"JavaClassPath"; classtype:attempted-recon; sid:1000011; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)"; flow:established,to_server; http.uri; content:"/druid/"; flowbits:set,thl.mvec.druid.uri; flowbits:noalert; classtype:attempted-recon; sid:1000010; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3.1.116 Unauthenticated External Access to Alibaba Druid Monitoring Console (requires flowbits setter sid:1000010)"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:"200"; http.response_body; content:"JavaClassPath"; classtype:attempted-recon; sid:1000011; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)
 ```
 
 ### Hunting Rules
