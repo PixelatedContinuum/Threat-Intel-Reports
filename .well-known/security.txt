@@ -2,6 +2,8 @@
 # https://the-hunters-ledger.com
 Contact: mailto:intel@the-hunters-ledger.com
 Contact: https://www.linkedin.com/in/josephrharrison
+Encryption: https://the-hunters-ledger.com/assets/pgp/hunters-ledger-pubkey.asc
+Encryption: openpgp4fpr:228FD729F9C545CEF38164A89FA0CE305AF91383
 Expires: 2027-06-21T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://the-hunters-ledger.com/.well-known/security.txt
