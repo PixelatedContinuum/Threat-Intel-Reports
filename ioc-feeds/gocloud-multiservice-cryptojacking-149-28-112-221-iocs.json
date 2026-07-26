@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "malware_name": "GOCLOUD Multi-Service Cryptojacking",
+    "family": "XMRig (GOCLOUD / OmniHunter deployment toolkit)",
+    "campaign_id": "GOCLOUD-MultiService-Cryptojacking-149.28.112.221",
+    "report_date": "2026-07-26",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "notes": "Two-node commodity cryptojacking operation bound by a shared FOFA API key and Monero wallet. THIRD-PARTY VICTIM INDICATORS ARE DELIBERATELY WITHHELD from this published feed (heartbeat-confirmed mining hosts, the Redis-verified host, and the hardcoded Jenkins re-attack targets are routed to a CERT-disclosure track, not the public feed). An operator account-identifier string paired with the FOFA key is also withheld: it traces to an unrelated third party's published tooling and is assessed as copied residue, not operator identity, so the finding is published without naming the person. The FOFA key VALUE is retained as an operator IOC. Excluded as non-operator: experimentaldumain.com and all historical domain resolutions on node 1 (prior-tenant recycled-IP artifacts; this is a pure raw-IP operation). The node-2 /xmrig ELF is the stock XMRig Linux binary; ignore any Mirai tag as a loose-signature false positive."
+  },
+  "file_hashes": {
+    "sha256": [
+      { "value": "55aec7f75af2e0489ff72c28322eccdfbc946cc00f539c2051382877cac03426", "filename": "batch_exploit.py", "type": "Python", "confidence": "HIGH", "description": "GOCLOUD BatchExploit v1 central exploit dispatcher" },
+      { "value": "eb80f735708491d8d8ce530c565128466c3de35a5f71ccfc74cfaeddc2f56906", "filename": "fofa_batch.py", "type": "Python", "confidence": "HIGH", "description": "FOFA targeting engine, 26 categories, country=CN" },
+      { "value": "b5d14e96d3e3fa64942878356a5cdd678d4649bbd94a738d4a4eda6fbb23f73c", "filename": "add_log4spring_to_batch.py", "type": "Python", "confidence": "HIGH", "description": "Injects ex_log4shell/ex_spring4shell" },
+      { "value": "5cdc82aa60c2e61afbaa9d07ca9768680f24691d92529f1a7b5f5009b0e983ad", "filename": "add_oa_funcs.py", "type": "Python", "confidence": "HIGH", "description": "OA/ERP exploit patcher (captured copy is a broken draft)" },
+      { "value": "c11d728f2b217bcae87d591c9c57ae858e51bf4d3dba66c895f0487138554cb9", "filename": "append_part.py", "type": "Python", "confidence": "HIGH", "description": "Adds EXPLOIT_EXTRA tier" },
+      { "value": "e362368c4278a61c5f839002c2978aefd9d9ee169604b7b77f6775ce16f436f9", "filename": "loop_batch.py", "type": "Python", "confidence": "HIGH", "description": "Converts dispatcher to infinite-loop daemon" },
+      { "value": "05da77d45a34b8b765bc1b167c13dc1a02948a6bc56318dc092f6ca3928dfe15", "filename": "fix_fofa.py", "type": "Python", "confidence": "HIGH" },
+      { "value": "083089894dcad87d9b904fd4f8b77537a39ee92cc4cbfcb8aa707fefbe4e0793", "filename": "fix_fofa2.py", "type": "Python", "confidence": "HIGH" },
+      { "value": "12244cc4f0cd75f55813f5f7d58876bd2617f394b6e05f256ff490952f026a89", "filename": "inject_fofa.sh", "type": "Shell", "confidence": "HIGH" },
+      { "value": "f76c282b03bdde8d46a7a7963bad0573a22de85428bdb9bd7d9187e02407b5a2", "filename": "exploit_runner.py", "type": "Python", "confidence": "HIGH", "description": "Multi-product exploit runner; carries wallet typo constant" },
+      { "value": "a803409aba9b33053405ead81d78b41b60f9fd7d23bc2bb84abd79f4928a9f6d", "filename": "exploit_v2.py", "type": "Python", "confidence": "HIGH" },
+      { "value": "9867fbd3a153826434ec5c6897cd50b07fe4a44521c5879f929477d2ca3131c7", "filename": "exploit_v3.py", "type": "Python", "confidence": "HIGH" },
+      { "value": "ed23790c390b5f66f775d9d61a0c44ca7a085d0a017f018704b1295f3e544792", "filename": "re_exploit.py", "type": "Python", "confidence": "HIGH", "description": "Re-attack script against hardcoded Jenkins targets" },
+      { "value": "15285dc7c839ab6333829923953eb8d6b78896bf45ab09e58c42a8df2a305fcf", "filename": "redrop.py", "type": "Python", "confidence": "HIGH", "description": "Fairness wrapper + :8888 C2 panel scraper" },
+      { "value": "ce7b0d28af186355cbaad547bc4f2c33c2dba531d4de332a73ae657b4a045247", "filename": "insert_zero.py", "type": "Python", "confidence": "HIGH", "description": "Patches /opt/omnihunter_v4.py" },
+      { "value": "da6857dbf4f5cb3b02b14694cd0ad05b75461d8c835c96497bf5e4a300dbf406", "filename": "zero_day_extras.py", "type": "Python", "confidence": "HIGH", "description": "OmniHunter rce_log4shell/rce_spring4shell source" },
+      { "value": "8e481b0e94a1a68daa3bcd07917376815f1c5b5fa7d1e4e08e52ee9bfb59a985", "filename": "report_server.py", "type": "Python", "confidence": "HIGH", "description": "Raw telemetry logger, port 8081" },
+      { "value": "1f1ff47b72e29d746d129513a2e2c9bb7c09499a369ca02033867fd3c779aa13", "filename": "run_report.py", "type": "Python", "confidence": "HIGH" },
+      { "value": "ef2e0baccff058ea01e498b1b3ad9b2e5c32a747a466d6dfe8e27e3dc5334f39", "filename": "report_miner.sh", "type": "Shell", "confidence": "HIGH", "description": "Post-compromise recon; carries wallet typo constant" },
+      { "value": "84cf60ab90d870362d39e9ba137d8058865176c04275a49087ff6da1496db429", "filename": "probe_target.py", "type": "Python", "confidence": "HIGH", "description": "Diagnostic against known Jenkins victims" },
+      { "value": "a7ee4a022b7275b523286af9c6eb70a1ed0c3f11938c704272dbdd4f78cac32d", "filename": "scanner.py", "type": "Python", "confidence": "HIGH", "description": "Early-gen one-shot scanner; carries wallet typo constant" },
+      { "value": "8b4ab6726d42d4f5f972f68951b7449171ca9bbe7326c0170cec6f578f3677f2", "filename": "loop_scan.py", "type": "Python", "confidence": "HIGH", "description": "Early-gen one-shot scanner" },
+      { "value": "73576e66c3ac6dc2560e8b7c2248204604123f56d9af107537be6c992e58ef1e", "filename": "watchdog2.py", "type": "Python", "confidence": "HIGH", "description": "Self-healing dead-worker re-exploitation daemon" },
+      { "value": "2991a9e980d61047d1d313a60222c4140188542c8f757d548a4c0bac45aadf61", "filename": "log4j_listener.py", "type": "Python", "confidence": "HIGH", "description": "Log4Shell hit-counter (scan-only, no victims evidenced)" },
+      { "value": "f9e08584c52572a047f05cd6cf7ac57a94d3dd9ef71b4143b4161e8b0d168b34", "filename": "setup.sh", "type": "Shell", "confidence": "HIGH", "description": "VPS bootstrap; wallet typo operationally live here" },
+      { "value": "2b6ef3ed0039382655c915c9782612a7b728f067a7ec65bcbd2ed5ad5bf72cdd", "filename": "fix_vultr.sh", "type": "Shell", "confidence": "HIGH", "description": "Port-8080 payload-server deploy (revised)" },
+      { "value": "f6c69dd4222d23286908d228aee9500e1cd04f80b325c5452df9721977d1a057", "filename": "vultr_miner_serve.sh", "type": "Shell", "confidence": "HIGH", "description": "Port-8080 payload-server deploy" },
+      { "value": "310d2a78c7bead6aa6573a2e9bc7da14e6c89231868a9589ff33a389de3fd326", "filename": "deploy_v3.sh", "type": "Shell", "confidence": "HIGH", "description": "Deploys GOCLOUD OmniHunter v3" },
+      { "value": "ede2225fd7df049f90f625bc525c9c6dbf809c4ca463a8f0e633f066997a3c59", "filename": "upgrade_v31.sh", "type": "Shell", "confidence": "HIGH", "description": "Upgrades OmniHunter to v3.1" },
+      { "value": "004315d53cc4e68b16f0a1acb1f09d9501ea26e6fde1686b2018cd677a346c5c", "filename": "winminer.ps1", "type": "PowerShell", "confidence": "HIGH", "description": "Windows XMRig deployer; VT 9/61, Kaspersky UDS:Trojan.PowerShell.Generic" },
+      { "value": "5194aa67974a69549f1f839c973ca17cc0ce8c6ca41ab199d74599befba08db7", "filename": "miner.sh", "type": "Shell", "confidence": "HIGH", "description": "GOCLOUD miner v7 Linux XMRig deployer" },
+      { "value": "c0c6f46cbadac40fddc0d3a2ec857e2f403201d57e2bd2a5a56256e37817b7d0", "filename": "config.json", "type": "JSON", "confidence": "HIGH", "description": "Served static XMRig config" },
+      { "value": "f4c5ab27bceb6ab6c6ec8f48b3b84701a0ba6966e30042bf5765a5d97018b5d2", "filename": "deploy.ps1", "type": "PowerShell", "confidence": "HIGH", "description": "Windows worm - internet-cafe miner + LAN spread (凌凯矿机 v3.0); typo'd wallet live" },
+      { "value": "f42af99f65f1edeb5ed13b3f68643e7d8abacfceb878ba7e79581caedbd7f09f", "filename": "allinone.ps1", "type": "PowerShell", "confidence": "HIGH", "description": "One-click Windows deploy; typo'd wallet live" },
+      { "value": "6780e9cc6cad66975bb7d895cd0944b72c5a843b80f6c4fef3cc4ebeb1ce628a", "filename": "setup.bat", "type": "Batch", "confidence": "HIGH", "description": "c3pool + worm.vbs via certutil + schtasks" },
+      { "value": "b47275a8e98d6df99f6b5619b73156c97c7355a193e2b7f728e6c0c80a5c82bb", "filename": "infect.ps1", "type": "PowerShell", "confidence": "HIGH", "description": "Win10/11 5-method per-target infection engine" },
+      { "value": "cee14e449b9da683734b1f4122a40f1d6e478fe93015702137b62a79a5414ad3", "filename": "omnihunter.py", "type": "Python", "confidence": "HIGH", "description": "OmniHunter v4 orchestrator (node 2); carries shared FOFA key + correct wallet" },
+      { "value": "f800c809dfdc0ce22be0fe638734212380d99293fc466242b3fea6e6e858e9df", "filename": "listener2.py", "type": "Python", "confidence": "HIGH", "description": "Reverse-shell catcher + unauthenticated :9997 control plane (node 2)" },
+      { "value": "44a14aafec8482f691801e28a3893c1ae1fdfbbed4dce963b002b7095f6cb120", "filename": "a.py", "type": "Python", "confidence": "HIGH", "description": "LAN lateral-movement probe (canary payloads, not a worm)" },
+      { "value": "93c071da49e7746f0ba72472f0f51c642b70ba76fb52d1de21f3822a76d05c05", "filename": "xmrig.exe", "type": "PE64 executable", "confidence": "HIGH", "description": "Stock XMRig Windows miner (node 2)" },
+      { "value": "11bd2c9f9e2397c9a16e0990e4ed2cf0679498fe0fd418a3dfdac60b5c160ee5", "filename": "WinRing0x64.sys", "type": "PE64 driver", "confidence": "HIGH", "description": "Stock WinRing0 1.2.0.5 MSR driver bundled with XMRig" },
+      { "value": "eba9b6cdefd4d681985e90d200f1ec88b16c37b6d52a29146064872695f5867e", "filename": "authorized_keys", "type": "SSH public key", "confidence": "MODERATE", "description": "Operator RSA public key, comment root@8b36b1911725 (Docker build-container); pivot artifact, not itself malicious" }
+    ],
+    "md5": [
+      { "value": "03164fbe18dde4df7d2838875de0b3f3", "filename": "batch_exploit.py" },
+      { "value": "7b4d362c803b5ac4493fcd29960c24c5", "filename": "fofa_batch.py" },
+      { "value": "2b7baa3814e957130c077bf0fdb997c3", "filename": "add_log4spring_to_batch.py" },
+      { "value": "c8e53975c40124715ca2eb437286008b", "filename": "add_oa_funcs.py" },
+      { "value": "c0ca7eabc61dd30126245ab6be81694a", "filename": "append_part.py" },
+      { "value": "f3f2b7cae394aa2cd5de84af43257228", "filename": "loop_batch.py" },
+      { "value": "45a8e403cff83db321d15de1af346f46", "filename": "fix_fofa.py" },
+      { "value": "38809c38ae693ae37aca7b66c8ef13be", "filename": "fix_fofa2.py" },
+      { "value": "1cc6e1b5189fafeb2184ba229d82ad66", "filename": "inject_fofa.sh" },
+      { "value": "7e67ca8aaff1d884a66e8a95b33e1f6c", "filename": "exploit_runner.py" },
+      { "value": "c6d81db9ac10363fbd86e519a68ec522", "filename": "exploit_v2.py" },
+      { "value": "124c71fba93c3b97f9ca5b362c545a7e", "filename": "exploit_v3.py" },
+      { "value": "aa9114e22d7b24a1d8086d8a4508396a", "filename": "re_exploit.py" },
+      { "value": "f8b041e3259f1e741cecccd8c223d34a", "filename": "redrop.py" },
+      { "value": "db21e0dc87f8a5cd2df9e5818b7dd50b", "filename": "insert_zero.py" },
+      { "value": "7d319b28baadfd682ef24b7754a16253", "filename": "zero_day_extras.py" },
+      { "value": "61fd37bdb4a3462a1cb2291963a81236", "filename": "report_server.py" },
+      { "value": "544515c1b36fdadbdf1279b78203b0ec", "filename": "run_report.py" },
+      { "value": "df0c6dbe105518c5af4ce20232a2e6a3", "filename": "report_miner.sh" },
+      { "value": "f2a94d1edafd3ed51099403c3bc0e095", "filename": "probe_target.py" },
+      { "value": "fc63e63346fcb55e798d5b9db7ff188f", "filename": "scanner.py" },
+      { "value": "1e5f57171b9475a31fee0b6eab0c9b72", "filename": "loop_scan.py" },
+      { "value": "a1c2cc1162581f4994cbdf10d891cd84", "filename": "watchdog2.py" },
+      { "value": "800c4f1458eec9c27361af642029ab0a", "filename": "log4j_listener.py" },
+      { "value": "ef89fc5709e1c3a00c75f7769413518b", "filename": "setup.sh" },
+      { "value": "7daceb62a8e93322cc3a805921784b31", "filename": "fix_vultr.sh" },
+      { "value": "8a614f2a3c9afb2da5ce1fb5d10a77bf", "filename": "vultr_miner_serve.sh" },
+      { "value": "e4278d6f7ffef790416a71a2a08df209", "filename": "deploy_v3.sh" },
+      { "value": "92c3be7a90526c8306eed11cad48df2e", "filename": "upgrade_v31.sh" },
+      { "value": "dbfc0b53520ad8ef434b38f322a91388", "filename": "winminer.ps1" },
+      { "value": "6177ab813f6bfeba9c3ec6aeeeb5780a", "filename": "miner.sh" },
+      { "value": "03d633cbf5ce3f913ae726850b1eea51", "filename": "config.json" }
+    ],
+    "sha1": [
+      { "value": "a4f85666972d0d2714153df0e74e3547ae304f3d", "filename": "batch_exploit.py" },
+      { "value": "cbbfc6fc8bb87ef0b8feb456a27fc485c48e377b", "filename": "fofa_batch.py" },
+      { "value": "ab39f33dac97d822f8b6e7d7be6645ec820c1512", "filename": "add_log4spring_to_batch.py" },
+      { "value": "c1443b743e7c359eb2348beca2b296d64622a239", "filename": "add_oa_funcs.py" },
+      { "value": "d04ed8bc9404b140705dc89b584e13420019ac96", "filename": "append_part.py" },
+      { "value": "3c4587f48111b497b3cca29fff91640c0472c29a", "filename": "loop_batch.py" },
+      { "value": "9939f78a364cbaf439f357a1c0cd7b6bf280b423", "filename": "fix_fofa.py" },
+      { "value": "1b0196838c7b7e811a817b104eec1ecdc4f81c70", "filename": "fix_fofa2.py" },
+      { "value": "98819637c6c85b90f43182abacea1c11cc33821c", "filename": "inject_fofa.sh" },
+      { "value": "c1f2677257d00ef32d983e0017ad174874aa909a", "filename": "exploit_runner.py" },
+      { "value": "601e9e01501a48c235bbf16227e6f2bd5edb8362", "filename": "exploit_v2.py" },
+      { "value": "6da5c60ac22843f49e6e7b92fef6c84cf6458f09", "filename": "exploit_v3.py" },
+      { "value": "4238f03ba2c50d381818758643d7a950ff9b03ed", "filename": "re_exploit.py" },
+      { "value": "c129e17fa6975a04609c50d4370c33eede339584", "filename": "redrop.py" },
+      { "value": "0d480b2cace492a9d959319b4b468ce7a6d6aa0e", "filename": "insert_zero.py" },
+      { "value": "8df4befabbec4325d74c5e376f67141906594a0f", "filename": "zero_day_extras.py" },
+      { "value": "407132d53e79450a5f45521dff394f8a0cc5f302", "filename": "report_server.py" },
+      { "value": "7be8da5a80d3b5c3ba19c943325841d475f54de5", "filename": "run_report.py" },
+      { "value": "5c6be7e218d7ca45836fff49d81f962116b7ca9c", "filename": "report_miner.sh" },
+      { "value": "cf35d73ac4f7700572e3d2fe87ecba00ce42c8ad", "filename": "probe_target.py" },
+      { "value": "af049f183ba03bbeb82693b27f0313bf329d2f84", "filename": "scanner.py" },
+      { "value": "ddb8ba04bfa70bad014b6bc9691902cb119000b0", "filename": "loop_scan.py" },
+      { "value": "10216bdde04a3ebc2b04a28516aaf747a62a3696", "filename": "watchdog2.py" },
+      { "value": "87145935bb4c5cccebfd44eaaae035a5930ee899", "filename": "log4j_listener.py" },
+      { "value": "eac1c4de07e919c0836ddd1faec9d3047851b265", "filename": "setup.sh" },
+      { "value": "b4075b06481acbcc4f1077008606be922bddd552", "filename": "fix_vultr.sh" },
+      { "value": "b284ebce08f68ca2642885bcd6b2919815994e30", "filename": "vultr_miner_serve.sh" },
+      { "value": "bc88e62644d985b73a70be628d34774aa1754dd0", "filename": "deploy_v3.sh" },
+      { "value": "e507ac0e560aa0e7b3d72413c40beebfc9644050", "filename": "upgrade_v31.sh" },
+      { "value": "446fedd99169500bbd34de06bc5890de445d7280", "filename": "winminer.ps1" },
+      { "value": "5fe34b31fe3e3c741456ae6d3c55677cd1aff608", "filename": "miner.sh" },
+      { "value": "436aeda23fd425f88035a50404e22d01e499af7b", "filename": "config.json" }
+    ]
+  },
+  "partial_hash_indicators": [
+    { "hash_fragment": "91c550c9", "algorithm": "sha256", "filename": "worm.vbs", "confidence": "MODERATE", "context": "Node-1 :8080 worm propagation core; only an 8-char SHA256 prefix was captured" },
+    { "hash_fragment": "7e85d898", "algorithm": "sha256", "filename": "deploy.bat", "confidence": "MODERATE", "context": "Node-1 :8080 entry dropper; only an 8-char SHA256 prefix was captured" }
+  ],
+  "network_indicators": {
+    "ipv4": [
+      { "value": "149.28.112.221", "confidence": "DEFINITE", "action": "BLOCK", "purpose": "Operator node 1 - payload host + exploit engine", "notes": "AS20473 Vultr, US. Ports :80 bootstrap payloads, :1389 LDAP/JNDI, :8080 miner hosting + heartbeat, :8081 telemetry, :8888 C2 dashboard, :9999 Log4Shell stub. Mature-generation ports unreachable since mid-June." },
+      { "value": "122.51.91.77", "confidence": "DEFINITE", "action": "BLOCK", "purpose": "Operator node 2 - OmniHunter orchestrator + C2", "notes": "AS45090 Tencent Cloud (Shenzhen, CN). Ports :9998 payload/open-dir, :4444 C2 callback, :9997 unauthenticated control plane, :8081 xmrig dir. Fully unreachable since mid-June." }
+    ],
+    "ipv6": [],
+    "domains": [
+      { "value": "auto.c3pool.org", "confidence": "HIGH", "action": "MONITOR", "false_positive_risk": true, "notes": "Third-party public Monero mining pool (c3pool). Mining destination, not operator-owned; hunt/monitor rather than block outright." },
+      { "value": "pool.supportxmr.com", "confidence": "HIGH", "action": "MONITOR", "false_positive_risk": true, "notes": "Third-party public Monero pool; used by the Windows worm branch. Not operator-owned." },
+      { "value": "xmrpool.eu", "confidence": "HIGH", "action": "MONITOR", "false_positive_risk": true, "notes": "Third-party public Monero pool; used by the Windows worm branch. Not operator-owned." },
+      { "value": "download.c3pool.org", "confidence": "MODERATE", "action": "MONITOR", "false_positive_risk": true, "notes": "c3pool official installer host (setup_c3pool_miner.sh/.bat) abused by allinone.ps1 and omnihunter.py. Legitimate service; monitor context only." }
+    ],
+    "urls": [
+      { "value": "http://149.28.112.221:8080/miner.sh", "confidence": "HIGH", "action": "BLOCK", "purpose": "Linux miner delivery" },
+      { "value": "http://149.28.112.221:8080/xmrig.zip", "confidence": "HIGH", "action": "BLOCK", "purpose": "Windows XMRig fallback download" },
+      { "value": "http://149.28.112.221:8080/deploy.bat", "confidence": "HIGH", "action": "BLOCK", "purpose": "Windows worm entry dropper (certutil-fetched)" },
+      { "value": "http://149.28.112.221:8080/deploy.ps1", "confidence": "HIGH", "action": "BLOCK", "purpose": "Windows worm main deploy + LAN spread" },
+      { "value": "http://149.28.112.221:8080/allinone.ps1", "confidence": "HIGH", "action": "BLOCK", "purpose": "One-click Windows deploy (iex cradle)" },
+      { "value": "http://149.28.112.221:8080/worm.vbs", "confidence": "HIGH", "action": "BLOCK", "purpose": "Windows worm propagation core" },
+      { "value": "http://149.28.112.221:8080/infect.ps1", "confidence": "HIGH", "action": "BLOCK", "purpose": "Windows per-target infection engine" },
+      { "value": "http://149.28.112.221:8080/xmrig-win64.zip", "confidence": "HIGH", "action": "BLOCK", "purpose": "Windows miner binary" },
+      { "value": "http://149.28.112.221:8080/config.json", "confidence": "HIGH", "action": "MONITOR", "purpose": "Served XMRig config (pass=WORKER placeholder)" }
+    ],
+    "email_addresses": [],
+    "user_agents": []
+  },
+  "host_indicators": {
+    "registry_keys": [
+      { "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", "value_name": "WindowsWatchdog", "value_data": "wscript.exe C:\\Windows\\Temp\\worm.vbs", "value_type": "REG_SZ", "confidence": "HIGH", "context": "allinone.ps1 worm persistence fallback" }
+    ],
+    "file_paths": [
+      { "value": "%APPDATA%\\Microsoft\\Windows\\TimeService\\svchost.exe", "confidence": "HIGH", "context": "Renamed XMRig miner, attrib +H +S (deploy.ps1)" },
+      { "value": "%APPDATA%\\Microsoft\\Windows\\TimeService\\config.json", "confidence": "HIGH", "context": "XMRig config beside the renamed miner" },
+      { "value": "C:\\Windows\\Temp\\worm.vbs", "confidence": "HIGH", "context": "Worm propagation script (allinone.ps1)" },
+      { "value": "\\\\<host>\\C$\\Windows\\Temp\\svchost.exe", "confidence": "HIGH", "context": "LAN-spread miner drop via C$ (deploy.ps1 Method 2)" },
+      { "value": "/tmp/.X11-unix.*", "confidence": "HIGH", "context": "Linux miner X11-socket lookalike hiding directory (miner.sh)" },
+      { "value": "/tmp/m.sh", "confidence": "MODERATE", "context": "Linux miner staging path referenced in re_exploit.py / check scripts" }
+    ],
+    "mutex_names": [],
+    "service_names": [
+      { "service_name": "c3pool_miner", "display_name": "c3pool_miner.service", "binary_path": "XMRig under /tmp", "confidence": "HIGH" },
+      { "service_name": "omnihunter", "display_name": "omnihunter.service", "binary_path": "/opt/omnihunter_v3.py", "confidence": "HIGH" },
+      { "service_name": "vultr-miner-serve", "display_name": "vultr-miner-serve.service", "binary_path": "/opt/vultr_miner_serve.py", "confidence": "HIGH" }
+    ],
+    "scheduled_tasks": [
+      { "task_name": "WinJenkinsHeartbeat", "action": "XMRig heartbeat re-fire", "trigger": "At startup", "confidence": "HIGH" },
+      { "task_name": "WindowsTimeSync", "action": "%APPDATA%\\Microsoft\\Windows\\TimeService\\svchost.exe", "trigger": "At startup (SYSTEM, RunLevel Highest)", "confidence": "HIGH" },
+      { "task_name": "WindowsWatchdog", "action": "XMRig (c3pool) / worm.vbs", "trigger": "At startup", "confidence": "HIGH" }
+    ],
+    "named_pipes": []
+  },
+  "cryptocurrency_indicators": {
+    "monero_wallets": [
+      { "value": "42CThVKA9SxeeQDT8EcBK7UHNffREDw3q7W5ZyyoGvGufDVPbKzYb3Bap9z9qor7jwAU23r3jKHyoZCSYH8eK4a9BUyTRrE", "confidence": "DEFINITE", "action": "HUNT", "context": "Operator revenue address; used in every working miner config across both nodes" },
+      { "value": "42CThVKA9SxeeQDT8EcBK7UHNFFREDw3q7W5ZyyoGvGufDVPbKzYb3Bap9z9qor7jwAU23r3jKHyoZCSYH8eK4a9BUyTRrE", "confidence": "HIGH", "action": "HUNT", "context": "Typo variant (uppercase FF) - live in setup.sh, deploy.ps1, allinone.ps1. Not a checksum-valid Monero address; the entire Windows/internet-cafe branch mined to this dead address. Retained as an operator tooling IOC." }
+    ]
+  },
+  "credential_indicators": [
+    { "type": "fofa_api_key", "value": "b435f2336553ea069d3848ac2c4574aa", "confidence": "DEFINITE", "context": "Operator's FOFA API key, identical across both nodes and both toolkits (fofa_batch.py, deploy_v3.sh, omnihunter.py). The two-node pivot. Retained in full as an operator attack-infrastructure IOC per investigation scope; not a victim credential. The account-identifier string paired with it is withheld (traces to unrelated third-party tooling; publish the finding, not the person)." }
+  ]
+}

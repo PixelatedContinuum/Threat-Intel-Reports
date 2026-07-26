@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    GOCLOUD two-node architecture. Layout family: phase-grid, 2 columns x 2 rows.
+    Row 1: the two operator hosts. Row 2: what binds them, and what sits beside the crime.
+  -->
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1000" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="999" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">GOCLOUD: A Two-Node Operation</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">One operator, two clouds, bound by two shared secrets</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Both hosts have gone partly or fully dark; captured content is preserved</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== NODE 1 (top-left, RED, operator code / execution) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="196" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="229" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">NODE 1</text>
+    <text x="180" y="227" font-size="21" font-weight="600" fill="#ffffff">Payload host, exploit engine</text>
+    <text x="80" y="282" font-size="19" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">149.28.112.221</text>
+    <text x="80" y="312" font-size="18" fill="#ffffff">AS20473 Vultr, United States</text>
+    <text x="80" y="346" font-size="17" fill="#e5e5e5">:8080 payloads and miner heartbeat</text>
+    <text x="80" y="374" font-size="17" fill="#e5e5e5">:8081 telemetry · :8888 operator panel</text>
+    <text x="80" y="402" font-size="17" fill="#e5e5e5">:1389 Log4Shell listener, zero victims</text>
+    <text x="80" y="438" font-size="17" fill="#fb923c" font-weight="600">Reached by raw IP on every delivery path</text>
+  </g>
+
+  <!-- =========== NODE 2 (top-right, DEEP RED, command and control) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="196" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="196" width="430" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="510" y="229" width="430" height="13" fill="#7f1d1d"/>
+    <text x="530" y="227" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">NODE 2</text>
+    <text x="630" y="227" font-size="21" font-weight="600" fill="#ffffff">Orchestrator, reverse-shell C2</text>
+    <text x="530" y="282" font-size="19" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">122.51.91.77</text>
+    <text x="530" y="312" font-size="18" fill="#ffffff">AS45090 Tencent Cloud, China</text>
+    <text x="530" y="346" font-size="17" fill="#e5e5e5">:4444 and four more shell-catch ports</text>
+    <text x="530" y="374" font-size="17" fill="#e5e5e5">:9997 control plane, no authentication</text>
+    <text x="530" y="402" font-size="17" fill="#e5e5e5">:9998 world-readable open directory</text>
+    <text x="530" y="438" font-size="17" fill="#fb923c" font-weight="600">Anyone reaching :9997 owned the whole pool</text>
+  </g>
+
+  <!-- =========== THE BINDING (bottom-left, ORANGE, access / shared secrets) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="506" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="506" width="430" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="539" width="430" height="13" fill="#f97316"/>
+    <text x="80" y="537" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">BINDING</text>
+    <text x="200" y="537" font-size="21" font-weight="600" fill="#111111">Two secrets, both hosts</text>
+    <text x="80" y="592" font-size="19" fill="#ffffff">The same FOFA API key, verbatim</text>
+    <text x="80" y="622" font-size="19" fill="#ffffff">The same Monero wallet, verbatim</text>
+    <text x="80" y="656" font-size="17" fill="#e5e5e5">Reuse of the values is what binds the</text>
+    <text x="80" y="682" font-size="17" fill="#e5e5e5">hosts, whoever owns the accounts</text>
+    <text x="80" y="712" font-size="17" fill="#e5e5e5">Single-operator control: DEFINITE</text>
+    <text x="80" y="748" font-size="17" fill="#fb923c" font-weight="600">The key pivot is what revealed node 2</text>
+  </g>
+
+  <!-- =========== CO-RESIDENT BUSINESS (bottom-right, GREY, non-malicious tooling) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="506" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="506" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="510" y="539" width="430" height="13" fill="#6b7280"/>
+    <text x="530" y="537" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="0.5">ALSO ON NODE 2</text>
+    <text x="700" y="537" font-size="21" font-weight="600" fill="#ffffff">Legitimate business</text>
+    <text x="530" y="592" font-size="19" fill="#ffffff">A retail bookkeeping application</text>
+    <text x="530" y="622" font-size="19" fill="#ffffff">A competitor price dashboard</text>
+    <text x="530" y="656" font-size="17" fill="#e5e5e5">Both for the operator's own shop chain,</text>
+    <text x="530" y="682" font-size="17" fill="#e5e5e5">one of them signed by hand in its footer</text>
+    <text x="530" y="712" font-size="17" fill="#e5e5e5">The mining estate carries the shop name</text>
+    <text x="530" y="748" font-size="17" fill="#fb923c" font-weight="600">Business and crime, one box, one person</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="836" x2="940" y2="836" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="870" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  miner heartbeat parameter order  ·  worker labels gocloud_ and winjenkins_</text>
+  <text x="500" y="900" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">unauthenticated control verbs on the C2 port  ·  delivery one-liner piped to a shell</text>
+  <text x="500" y="934" text-anchor="middle" font-size="15" fill="#cccccc">Both host addresses and the wallet are published in the companion IOC feed.</text>
+  <text x="500" y="966" text-anchor="middle" font-size="14" fill="#888888">Legend: red = exploit engine · deep red = C2 · orange = shared secrets · grey = legitimate tooling</text>
+</svg>
