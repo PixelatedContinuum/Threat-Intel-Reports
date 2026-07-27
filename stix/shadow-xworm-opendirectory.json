@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--fbdd0454-86f3-4517-87c7-15f10a20c844",
+    "id": "bundle--98a05aa4-061e-46bb-9e38-6f92577607d0",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.060298Z",
-            "modified": "2026-07-15T13:32:13.060298Z",
+            "created": "2026-07-27T01:09:30.02849Z",
+            "modified": "2026-07-27T01:09:30.02849Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--3fee3b45-35a9-59d4-8549-5c770d1a7765",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.060556Z",
-            "modified": "2026-07-15T13:32:13.060556Z",
+            "created": "2026-07-27T01:09:30.029905Z",
+            "modified": "2026-07-27T01:09:30.029905Z",
             "name": "ipv4: 151.245.112.70",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--eb340713-edd6-5722-a7dd-db563b8dc218",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.062417Z",
-            "modified": "2026-07-15T13:32:13.062417Z",
+            "created": "2026-07-27T01:09:30.0361Z",
+            "modified": "2026-07-27T01:09:30.0361Z",
             "name": "ipv4: 187.124.244.54",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--c3deb49e-aa27-5677-9370-c0e1c110835f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.062834Z",
-            "modified": "2026-07-15T13:32:13.062834Z",
+            "created": "2026-07-27T01:09:30.036613Z",
+            "modified": "2026-07-27T01:09:30.036613Z",
             "name": "ipv4: 185.11.145.145",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--50b7f29d-dc44-5138-a447-6aa1bdb265a2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.06324Z",
-            "modified": "2026-07-15T13:32:13.06324Z",
+            "created": "2026-07-27T01:09:30.037209Z",
+            "modified": "2026-07-27T01:09:30.037209Z",
             "name": "ipv4: 185.11.145.254",
             "indicator_types": [
                 "malicious-activity"
@@ -145,8 +145,8 @@
             "spec_version": "2.1",
             "id": "indicator--43e12a95-cd20-534a-9ff2-652fba7140b8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.063699Z",
-            "modified": "2026-07-15T13:32:13.063699Z",
+            "created": "2026-07-27T01:09:30.037684Z",
+            "modified": "2026-07-27T01:09:30.037684Z",
             "name": "url: http://ip-api.com/line/?fields=hosting",
             "indicator_types": [
                 "malicious-activity"
@@ -173,8 +173,8 @@
             "spec_version": "2.1",
             "id": "indicator--80946398-8430-566d-9101-be4e017231e5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.064128Z",
-            "modified": "2026-07-15T13:32:13.064128Z",
+            "created": "2026-07-27T01:09:30.038925Z",
+            "modified": "2026-07-27T01:09:30.038925Z",
             "name": "domain: harrismanlieb.ink",
             "indicator_types": [
                 "malicious-activity"
@@ -201,8 +201,8 @@
             "spec_version": "2.1",
             "id": "indicator--885d35bb-c36b-56a0-8c81-de2588cbe0e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.064652Z",
-            "modified": "2026-07-15T13:32:13.064652Z",
+            "created": "2026-07-27T01:09:30.040127Z",
+            "modified": "2026-07-27T01:09:30.040127Z",
             "name": "domain: epgoldsecurity.com",
             "indicator_types": [
                 "malicious-activity"
@@ -229,8 +229,8 @@
             "spec_version": "2.1",
             "id": "indicator--7ad1cbf7-849a-5361-8566-b0fc424679bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.065315Z",
-            "modified": "2026-07-15T13:32:13.065315Z",
+            "created": "2026-07-27T01:09:30.040902Z",
+            "modified": "2026-07-27T01:09:30.040902Z",
             "name": "domain: latssko.com",
             "indicator_types": [
                 "malicious-activity"
@@ -257,8 +257,8 @@
             "spec_version": "2.1",
             "id": "indicator--fc29e995-7600-566d-b2fc-e10928d0f688",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.065939Z",
-            "modified": "2026-07-15T13:32:13.065939Z",
+            "created": "2026-07-27T01:09:30.04148Z",
+            "modified": "2026-07-27T01:09:30.04148Z",
             "name": "domain: breakingsecurity.online",
             "indicator_types": [
                 "malicious-activity"
@@ -285,8 +285,8 @@
             "spec_version": "2.1",
             "id": "indicator--68d996c6-38c0-5cba-adb4-7ad15ef7e97f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.066359Z",
-            "modified": "2026-07-15T13:32:13.066359Z",
+            "created": "2026-07-27T01:09:30.041975Z",
+            "modified": "2026-07-27T01:09:30.041975Z",
             "name": "domain: bluewiin.com",
             "indicator_types": [
                 "malicious-activity"
@@ -347,8 +347,8 @@
             "spec_version": "2.1",
             "id": "indicator--fee9ce18-b59d-5656-95df-05c439674ea8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.067595Z",
-            "modified": "2026-07-15T13:32:13.067595Z",
+            "created": "2026-07-27T01:09:30.043536Z",
+            "modified": "2026-07-27T01:09:30.043536Z",
             "name": "RAT_ShadowRAT_v2640_Client",
             "indicator_types": [
                 "malicious-activity"
@@ -368,8 +368,8 @@
             "spec_version": "2.1",
             "id": "indicator--a96ee6be-d8c9-51a1-99a5-0dc3ee599c61",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.067752Z",
-            "modified": "2026-07-15T13:32:13.067752Z",
+            "created": "2026-07-27T01:09:30.043682Z",
+            "modified": "2026-07-27T01:09:30.043682Z",
             "name": "RAT_ShadowRAT_CommonDLL",
             "indicator_types": [
                 "malicious-activity"
@@ -389,8 +389,8 @@
             "spec_version": "2.1",
             "id": "indicator--b5276956-268a-52ec-9330-2f331c55aeef",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.067878Z",
-            "modified": "2026-07-15T13:32:13.067878Z",
+            "created": "2026-07-27T01:09:30.043812Z",
+            "modified": "2026-07-27T01:09:30.043812Z",
             "name": "RAT_ShadowRAT_AMSI_ETW_Bypass",
             "indicator_types": [
                 "malicious-activity"
@@ -410,8 +410,8 @@
             "spec_version": "2.1",
             "id": "indicator--b62a9b40-db7a-51c8-9c12-6097c0b2f098",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.067998Z",
-            "modified": "2026-07-15T13:32:13.067998Z",
+            "created": "2026-07-27T01:09:30.043937Z",
+            "modified": "2026-07-27T01:09:30.043937Z",
             "name": "RAT_ShadowRAT_Crypto_Clipper",
             "indicator_types": [
                 "malicious-activity"
@@ -431,8 +431,8 @@
             "spec_version": "2.1",
             "id": "indicator--3a21f2ea-92db-53e6-9cf1-01cff3fe67ad",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.068112Z",
-            "modified": "2026-07-15T13:32:13.068112Z",
+            "created": "2026-07-27T01:09:30.044061Z",
+            "modified": "2026-07-27T01:09:30.044061Z",
             "name": "RAT_ShadowRAT_WinRE_Persistence",
             "indicator_types": [
                 "malicious-activity"
@@ -452,8 +452,8 @@
             "spec_version": "2.1",
             "id": "indicator--b36b85a8-4a34-5620-a622-6e64c278fb0a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.068226Z",
-            "modified": "2026-07-15T13:32:13.068226Z",
+            "created": "2026-07-27T01:09:30.044182Z",
+            "modified": "2026-07-27T01:09:30.044182Z",
             "name": "RAT_XWorm_30_50_Config",
             "indicator_types": [
                 "malicious-activity"
@@ -473,8 +473,8 @@
             "spec_version": "2.1",
             "id": "indicator--7f7af980-e0d7-5536-b5a8-eb288c4b9b04",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.068341Z",
-            "modified": "2026-07-15T13:32:13.068341Z",
+            "created": "2026-07-27T01:09:30.044297Z",
+            "modified": "2026-07-27T01:09:30.044297Z",
             "name": "RAT_XWorm_Rijndael256ECB_Crypto",
             "indicator_types": [
                 "malicious-activity"
@@ -494,8 +494,8 @@
             "spec_version": "2.1",
             "id": "indicator--be6c81bc-3947-54b6-b7d8-cf6b027cd664",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.068455Z",
-            "modified": "2026-07-15T13:32:13.068455Z",
+            "created": "2026-07-27T01:09:30.044412Z",
+            "modified": "2026-07-27T01:09:30.044412Z",
             "name": "XWorm Scheduled Task Persistence with One-Minute Execution Interval",
             "indicator_types": [
                 "malicious-activity"
@@ -515,8 +515,8 @@
             "spec_version": "2.1",
             "id": "indicator--2dc76a31-1838-5988-a6df-7f6cc1834553",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.068567Z",
-            "modified": "2026-07-15T13:32:13.068567Z",
+            "created": "2026-07-27T01:09:30.044535Z",
+            "modified": "2026-07-27T01:09:30.044535Z",
             "name": "Shadow RAT Registry Run Key Persistence",
             "indicator_types": [
                 "malicious-activity"
@@ -536,8 +536,8 @@
             "spec_version": "2.1",
             "id": "indicator--5394109e-f499-565d-94c3-04d89c068097",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.068682Z",
-            "modified": "2026-07-15T13:32:13.068682Z",
+            "created": "2026-07-27T01:09:30.04467Z",
+            "modified": "2026-07-27T01:09:30.04467Z",
             "name": "AMSI Bypass via Suspicious amsi.dll Load from Non-Standard Path",
             "indicator_types": [
                 "malicious-activity"
@@ -557,8 +557,8 @@
             "spec_version": "2.1",
             "id": "indicator--4f74826c-5fbc-58f0-870d-f795e2848a13",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.068796Z",
-            "modified": "2026-07-15T13:32:13.068796Z",
+            "created": "2026-07-27T01:09:30.04484Z",
+            "modified": "2026-07-27T01:09:30.04484Z",
             "name": "ETW Bypass via Process Access to ntdll.dll Memory Region",
             "indicator_types": [
                 "malicious-activity"
@@ -578,8 +578,8 @@
             "spec_version": "2.1",
             "id": "indicator--88de9ab5-02be-5e3d-bcf1-93d57b3517e1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.06891Z",
-            "modified": "2026-07-15T13:32:13.06891Z",
+            "created": "2026-07-27T01:09:30.045Z",
+            "modified": "2026-07-27T01:09:30.045Z",
             "name": "Windows Firewall Disabled via Netsh Opmode Command",
             "indicator_types": [
                 "malicious-activity"
@@ -599,8 +599,8 @@
             "spec_version": "2.1",
             "id": "indicator--a2e7629e-6d25-5229-9d17-edaffbc16735",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.069024Z",
-            "modified": "2026-07-15T13:32:13.069024Z",
+            "created": "2026-07-27T01:09:30.04514Z",
+            "modified": "2026-07-27T01:09:30.04514Z",
             "name": "XWorm Registry Run Key Persistence Using Malware Install Name",
             "indicator_types": [
                 "malicious-activity"
@@ -620,8 +620,8 @@
             "spec_version": "2.1",
             "id": "indicator--66e517ac-7162-5c8d-bd0c-5fb0958e3f44",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.069138Z",
-            "modified": "2026-07-15T13:32:13.069138Z",
+            "created": "2026-07-27T01:09:30.045305Z",
+            "modified": "2026-07-27T01:09:30.045305Z",
             "name": "Executable Shortcut Created in Windows Startup Folder by Non-System Process",
             "indicator_types": [
                 "malicious-activity"
@@ -641,8 +641,8 @@
             "spec_version": "2.1",
             "id": "indicator--e21eab37-9baf-590b-9aff-e9127047b8b9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.06925Z",
-            "modified": "2026-07-15T13:32:13.06925Z",
+            "created": "2026-07-27T01:09:30.045509Z",
+            "modified": "2026-07-27T01:09:30.045509Z",
             "name": "Non-Browser Process DNS Query to ip-api.com Hosting Detection Endpoint",
             "indicator_types": [
                 "malicious-activity"
@@ -662,8 +662,8 @@
             "spec_version": "2.1",
             "id": "indicator--ff6e51f7-cfc9-5ef2-847e-63ecb19bbe51",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.069362Z",
-            "modified": "2026-07-15T13:32:13.069362Z",
+            "created": "2026-07-27T01:09:30.045706Z",
+            "modified": "2026-07-27T01:09:30.045706Z",
             "name": "WMI Win32_ComputerSystem Query from User-Writable Directory",
             "indicator_types": [
                 "malicious-activity"
@@ -683,8 +683,8 @@
             "spec_version": "2.1",
             "id": "indicator--bddb8f7e-2162-531a-8e0b-a5b8723d36d5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.069474Z",
-            "modified": "2026-07-15T13:32:13.069474Z",
+            "created": "2026-07-27T01:09:30.045962Z",
+            "modified": "2026-07-27T01:09:30.045962Z",
             "name": "Zone.Identifier Alternate Data Stream Removal for SmartScreen Bypass",
             "indicator_types": [
                 "malicious-activity"
@@ -704,8 +704,8 @@
             "spec_version": "2.1",
             "id": "indicator--9ad2b0c1-ba4e-5464-af0f-8dc253bb5c18",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.069585Z",
-            "modified": "2026-07-15T13:32:13.069585Z",
+            "created": "2026-07-27T01:09:30.046116Z",
+            "modified": "2026-07-27T01:09:30.046116Z",
             "name": "THL TROJAN XWorm Anti-Analysis Hosting Check via ip-api.com",
             "indicator_types": [
                 "malicious-activity"
@@ -725,8 +725,8 @@
             "spec_version": "2.1",
             "id": "tool--d8640bfa-e83d-5b2e-b534-8b9b612a986e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.069724Z",
-            "modified": "2026-07-15T13:32:13.069724Z",
+            "created": "2026-07-27T01:09:30.046389Z",
+            "modified": "2026-07-27T01:09:30.046389Z",
             "name": "Shadow RAT v2.6.4.0 staging/test build",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -737,8 +737,8 @@
             "spec_version": "2.1",
             "id": "tool--a2679b1c-221e-5b15-83b3-3f1c9f269aeb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.069829Z",
-            "modified": "2026-07-15T13:32:13.069829Z",
+            "created": "2026-07-27T01:09:30.046517Z",
+            "modified": "2026-07-27T01:09:30.046517Z",
             "name": "Shadow RAT v2.6.4.0 production build",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -749,8 +749,8 @@
             "spec_version": "2.1",
             "id": "tool--0d1bc5db-c90b-5ccc-93ad-ab2d4b856614",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.069927Z",
-            "modified": "2026-07-15T13:32:13.069927Z",
+            "created": "2026-07-27T01:09:30.046631Z",
+            "modified": "2026-07-27T01:09:30.046631Z",
             "name": "Shadow RAT shared library \u2014 core message types",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -761,8 +761,8 @@
             "spec_version": "2.1",
             "id": "tool--295650c6-c3e5-5e73-a6c4-efc6b62d7701",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.07002Z",
-            "modified": "2026-07-15T13:32:13.07002Z",
+            "created": "2026-07-27T01:09:30.046734Z",
+            "modified": "2026-07-27T01:09:30.046734Z",
             "name": "XWorm 3.0-5.0 builder output #1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -773,8 +773,8 @@
             "spec_version": "2.1",
             "id": "tool--f2842a39-7b4f-55f3-a67e-227883a78e23",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.070111Z",
-            "modified": "2026-07-15T13:32:13.070111Z",
+            "created": "2026-07-27T01:09:30.04683Z",
+            "modified": "2026-07-27T01:09:30.04683Z",
             "name": "XWorm 3.0-5.0 builder output #2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -785,8 +785,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--d5a101c9-8f52-5ba3-bd1f-9e6553c94c0c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.070201Z",
-            "modified": "2026-07-15T13:32:13.070201Z",
+            "created": "2026-07-27T01:09:30.046924Z",
+            "modified": "2026-07-27T01:09:30.046924Z",
             "name": "shadow-xworm-opendirectory infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -801,8 +801,8 @@
             "spec_version": "2.1",
             "id": "report--d362fb2d-05fc-5938-936e-670754d7a6d8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:32:13.070703Z",
-            "modified": "2026-07-15T13:32:13.070703Z",
+            "created": "2026-07-27T01:09:30.047325Z",
+            "modified": "2026-07-27T01:09:30.047325Z",
             "name": "Shadow RAT v2.6.4.0 & XWorm 3.0-5.0 (OpenDirectory-DualRAT-MaaS-151.245.112.70) - Technical Analysis & Business Risk Assessment",
             "report_types": [
                 "threat-report"

@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--a3f654b0-9057-49f4-bd39-4cbbdc61dc9b",
+    "id": "bundle--68971d4c-43c9-4185-bf33-aa1078945641",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.020516Z",
-            "modified": "2026-07-15T13:31:12.020516Z",
+            "created": "2026-07-27T01:08:19.576337Z",
+            "modified": "2026-07-27T01:08:19.576337Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--e3c11a2a-efa6-5c35-8948-3d0499fed5f7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.020773Z",
-            "modified": "2026-07-15T13:31:12.020773Z",
+            "created": "2026-07-27T01:08:19.577727Z",
+            "modified": "2026-07-27T01:08:19.577727Z",
             "name": "ipv4: 221.150.15.104",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--43db6551-7b2f-527b-84e9-52e350a149da",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.021319Z",
-            "modified": "2026-07-15T13:31:12.021319Z",
+            "created": "2026-07-27T01:08:19.582828Z",
+            "modified": "2026-07-27T01:08:19.582828Z",
             "name": "url: http://221.150.15.104:8080/",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--596e5aad-4719-579f-b20a-cd696eedf295",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.02201Z",
-            "modified": "2026-07-15T13:31:12.02201Z",
+            "created": "2026-07-27T01:08:19.583718Z",
+            "modified": "2026-07-27T01:08:19.583718Z",
             "name": "url: https://openclaw.ai/install.sh",
             "indicator_types": [
                 "malicious-activity"
@@ -117,8 +117,8 @@
             "spec_version": "2.1",
             "id": "indicator--151d4657-7b52-534f-a1ea-24747312481a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.022752Z",
-            "modified": "2026-07-15T13:31:12.022752Z",
+            "created": "2026-07-27T01:08:19.58454Z",
+            "modified": "2026-07-27T01:08:19.58454Z",
             "name": "domain: openclaw.ai",
             "indicator_types": [
                 "malicious-activity"
@@ -145,8 +145,8 @@
             "spec_version": "2.1",
             "id": "indicator--9d991296-0e5b-5941-8271-2d9926393c06",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.023266Z",
-            "modified": "2026-07-15T13:31:12.023266Z",
+            "created": "2026-07-27T01:08:19.585637Z",
+            "modified": "2026-07-27T01:08:19.585637Z",
             "name": "domain: docs.openclaw.ai",
             "indicator_types": [
                 "malicious-activity"
@@ -173,8 +173,8 @@
             "spec_version": "2.1",
             "id": "indicator--99fb9224-781d-531e-93eb-1d66f8d5f043",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.023725Z",
-            "modified": "2026-07-15T13:31:12.023725Z",
+            "created": "2026-07-27T01:08:19.586479Z",
+            "modified": "2026-07-27T01:08:19.586479Z",
             "name": "domain: lightmake.site",
             "indicator_types": [
                 "malicious-activity"
@@ -195,8 +195,8 @@
             "spec_version": "2.1",
             "id": "indicator--3b0ec8af-225c-594e-9ffc-f169fdb3608a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.024232Z",
-            "modified": "2026-07-15T13:31:12.024232Z",
+            "created": "2026-07-27T01:08:19.587618Z",
+            "modified": "2026-07-27T01:08:19.587618Z",
             "name": "TOOL_ClaudeCode_OpenClaw_Allowlist_Specific",
             "indicator_types": [
                 "malicious-activity"
@@ -216,8 +216,8 @@
             "spec_version": "2.1",
             "id": "indicator--524f45d5-1eac-5d5f-97d7-7f397c6ed3a8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.024373Z",
-            "modified": "2026-07-15T13:31:12.024373Z",
+            "created": "2026-07-27T01:08:19.587803Z",
+            "modified": "2026-07-27T01:08:19.587803Z",
             "name": "TOOL_ClaudeCode_CurlBash_Allowlist_Generic",
             "indicator_types": [
                 "malicious-activity"
@@ -237,8 +237,8 @@
             "spec_version": "2.1",
             "id": "indicator--c62e52b4-cd5f-59ed-bcf0-fb9a9d0da525",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.024495Z",
-            "modified": "2026-07-15T13:31:12.024495Z",
+            "created": "2026-07-27T01:08:19.587935Z",
+            "modified": "2026-07-27T01:08:19.587935Z",
             "name": "Claude Code Permission Allowlist Modified with OpenClaw Installer Strings",
             "indicator_types": [
                 "malicious-activity"
@@ -258,8 +258,8 @@
             "spec_version": "2.1",
             "id": "indicator--63d62b73-65ce-508a-a0ae-78632739df0e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.024612Z",
-            "modified": "2026-07-15T13:31:12.024612Z",
+            "created": "2026-07-27T01:08:19.588058Z",
+            "modified": "2026-07-27T01:08:19.588058Z",
             "name": "OpenClaw AI-Agent Framework Curl-Pipe-Bash Installer Execution",
             "indicator_types": [
                 "malicious-activity"
@@ -279,8 +279,8 @@
             "spec_version": "2.1",
             "id": "indicator--b5ac95c8-9d6a-5abf-a4c3-8f2391c338cd",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.024727Z",
-            "modified": "2026-07-15T13:31:12.024727Z",
+            "created": "2026-07-27T01:08:19.588176Z",
+            "modified": "2026-07-27T01:08:19.588176Z",
             "name": "OpenClaw AI-Agent Gateway Service Started",
             "indicator_types": [
                 "malicious-activity"
@@ -300,8 +300,8 @@
             "spec_version": "2.1",
             "id": "indicator--aeabb830-a1e2-528b-b89f-74313aefd995",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.024841Z",
-            "modified": "2026-07-15T13:31:12.024841Z",
+            "created": "2026-07-27T01:08:19.588302Z",
+            "modified": "2026-07-27T01:08:19.588302Z",
             "name": "NPM Registry Fetch for OpenClaw Package",
             "indicator_types": [
                 "malicious-activity"
@@ -321,8 +321,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--070668c1-a16d-50a3-ad4a-b66be8f8f6d9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.024962Z",
-            "modified": "2026-07-15T13:31:12.024962Z",
+            "created": "2026-07-27T01:08:19.588441Z",
+            "modified": "2026-07-27T01:08:19.588441Z",
             "name": "korean-claude-openclaw-221.150.15.104 infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -337,8 +337,8 @@
             "spec_version": "2.1",
             "id": "report--076f15c9-d73d-5228-95a2-ee80898c22b8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:12.02524Z",
-            "modified": "2026-07-15T13:31:12.02524Z",
+            "created": "2026-07-27T01:08:19.588711Z",
+            "modified": "2026-07-27T01:08:19.588711Z",
             "name": "Korean Claude Code + OpenClaw Operator (221.150.15.104) - Attacker-Customized AI-Agent Permission Allowlist",
             "description": "Case 4 capsule sub-report. Smoking-gun artifact: operator's customized ~/.claude/settings.local.json allowlist pre-approving the OpenClaw installation chain. NO defanging in JSON per project convention (machine-readable for SIEM/EDR ingestion). No confirmed victims; threat-level MEDIUM reflects tradecraft observation only.",
             "report_types": [

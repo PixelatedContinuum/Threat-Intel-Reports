@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--addcd614-c442-4b69-91ba-1a25cd812ce6",
+    "id": "bundle--840d376e-2f70-4fc7-b773-e5d86f7e1e09",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.756502Z",
-            "modified": "2026-07-15T13:31:13.756502Z",
+            "created": "2026-07-27T01:08:23.162417Z",
+            "modified": "2026-07-27T01:08:23.162417Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.75676Z",
-            "modified": "2026-07-15T13:31:13.75676Z",
+            "created": "2026-07-27T01:08:23.163839Z",
+            "modified": "2026-07-27T01:08:23.163839Z",
             "name": "url: http://hrtests.ru/S.php",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--372252b6-c79c-570f-aa94-dd698fd7fed3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.757579Z",
-            "modified": "2026-07-15T13:31:13.757579Z",
+            "created": "2026-07-27T01:08:23.16854Z",
+            "modified": "2026-07-27T01:08:23.16854Z",
             "name": "domain: hrtests.ru",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--74bb5087-b725-5b31-8ab8-3341c5410653",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.758276Z",
-            "modified": "2026-07-15T13:31:13.758276Z",
+            "created": "2026-07-27T01:08:23.169383Z",
+            "modified": "2026-07-27T01:08:23.169383Z",
             "name": "domain: testswork.ru",
             "indicator_types": [
                 "malicious-activity"
@@ -167,8 +167,8 @@
             "spec_version": "2.1",
             "id": "indicator--0d90fcbd-64f5-5bf7-98dc-a5d220dcece8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.759516Z",
-            "modified": "2026-07-15T13:31:13.759516Z",
+            "created": "2026-07-27T01:08:23.171369Z",
+            "modified": "2026-07-27T01:08:23.171369Z",
             "name": "NsMiner_Dropper_Downloader",
             "indicator_types": [
                 "malicious-activity"
@@ -188,8 +188,8 @@
             "spec_version": "2.1",
             "id": "indicator--9f8f5298-1b3e-5592-8917-f152639ae10d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.759655Z",
-            "modified": "2026-07-15T13:31:13.759655Z",
+            "created": "2026-07-27T01:08:23.171669Z",
+            "modified": "2026-07-27T01:08:23.171669Z",
             "name": "NsMiner_Persistence_Directory",
             "indicator_types": [
                 "malicious-activity"
@@ -209,8 +209,8 @@
             "spec_version": "2.1",
             "id": "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.759777Z",
-            "modified": "2026-07-15T13:31:13.759777Z",
+            "created": "2026-07-27T01:08:23.171896Z",
+            "modified": "2026-07-27T01:08:23.171896Z",
             "name": "NsMiner Persistence Directory Creation",
             "indicator_types": [
                 "malicious-activity"
@@ -230,8 +230,8 @@
             "spec_version": "2.1",
             "id": "indicator--8d303952-9238-52e1-8b6d-7da8b941d291",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.759894Z",
-            "modified": "2026-07-15T13:31:13.759894Z",
+            "created": "2026-07-27T01:08:23.172068Z",
+            "modified": "2026-07-27T01:08:23.172068Z",
             "name": "Suspicious FTP Connection from Non-Standard Application",
             "indicator_types": [
                 "malicious-activity"
@@ -251,8 +251,8 @@
             "spec_version": "2.1",
             "id": "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.760019Z",
-            "modified": "2026-07-15T13:31:13.760019Z",
+            "created": "2026-07-27T01:08:23.172239Z",
+            "modified": "2026-07-27T01:08:23.172239Z",
             "name": "",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -263,8 +263,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--d9b882ee-1e8d-56f0-9646-12417ee055a0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.760661Z",
-            "modified": "2026-07-15T13:31:13.760661Z",
+            "created": "2026-07-27T01:08:23.173112Z",
+            "modified": "2026-07-27T01:08:23.173112Z",
             "name": "nsminer-cryptojacker infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -279,8 +279,8 @@
             "spec_version": "2.1",
             "id": "report--f5cf2d3d-4ab7-5767-8849-d0cbf388e3c2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-15T13:31:13.760879Z",
-            "modified": "2026-07-15T13:31:13.760879Z",
+            "created": "2026-07-27T01:08:23.17334Z",
+            "modified": "2026-07-27T01:08:23.17334Z",
             "name": "NsMiner: Multi-Stage Operation",
             "report_types": [
                 "threat-report"
