@@ -3,8 +3,8 @@ title: "GOCLOUD: A Commodity Cryptojacking Operation, Captured Whole"
 date: '2026-07-26'
 layout: post
 permalink: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
+thumbnail: /assets/images/cards/gocloud-multiservice-cryptojacking-149-28-112-221.png
 hide: true
-unlisted: true
 category: "Cryptojacking Operation"
 description: "A self-branded, single-operator commodity cryptojacking operation captured across two hosts. Its own ledgers claim roughly 7,145 successes; independent evidence covers seven hosts. The gap between the two is the finding."
 detection_page: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/
@@ -27,6 +27,7 @@ ioc_highlights:
     note: "OmniHunter exploitation orchestrator (SHA256)"
   - value: "55aec7f75af2e0489ff72c28322eccdfbc946cc00f539c2051382877cac03426"
     note: "Central exploit dispatcher (SHA256)"
+stix_bundle: /stix/gocloud-multiservice-cryptojacking-149-28-112-221.json
 ---
 
 **Campaign Identifier:** GOCLOUD-MultiService-Cryptojacking-149.28.112.221<br>

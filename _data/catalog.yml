@@ -5,22 +5,14 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
-  # ===== PENDING GO-LIVE: GOCLOUD Multi-Service Cryptojacking (uncomment at launch) =====
-  # Preview published 2026-07-26. Report + detection file both carry `unlisted: true`.
-  # Go-live also requires: drop both `unlisted:` flags, run update-metrics.py (23 rules,
-  # 134 indicators), regenerate the public Suricata feed (5 new rules), and surface the
-  # STIX bundle on /stix/.
-  # SOCIAL CARD: must be generated AFTER this entry is uncommented. severity_for_slug()
-  # falls back to "HIGH" when no live catalog entry exists, so a card built during preview
-  # is stamped HIGH regardless of the real threat level. This report is MEDIUM.
-  #  - title: "GOCLOUD Multi-Service Cryptojacking"
-  #    date: 2026-07-26
-  #    severity: med
-  #    tags: [Cryptojacking, OpenDirectory, China]
-  #    report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
-  #    detection_url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
-  #    ioc_url: /ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json
-  # ======================================================================================
+  - title: "GOCLOUD Multi-Service Cryptojacking"
+    date: 2026-07-26
+    severity: med
+    tags: [Cryptojacking, OpenDirectory, China]
+    report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
+    stix_url: /stix/gocloud-multiservice-cryptojacking-149-28-112-221.json
+    detection_url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
+    ioc_url: /ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json
   # ===== PENDING GO-LIVE: MultiVector Grey-Market PII Harvesting Operation (uncomment at launch) =====
   # Gate: hold unlisted until a disclosure recipient confirms resolution, or ~30 days from 2026-07-21
   # (i.e. on or after 2026-08-20), whichever comes first.
