@@ -4,8 +4,6 @@ date: '2026-01-27'
 layout: post
 permalink: /hunting-detections/arsenal-237-rootkit-dll-detections/
 hide: true
-redirect_from: /hunting-detections/arsenal-237-rootkit-dll/
-thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
@@ -22,10 +20,12 @@ rootkit.dll is a 64-bit, Rust-compiled defense-evasion framework from the Arsena
 
 Coverage below is retiered from the original draft: every rule was re-scored for durability (does it survive infrastructure rotation and renaming?), precision (documented false-positive profile), and level discipline, per the project's Detection/Hunting split. The rules that reach Detection anchor on the embedded driver's own identity — its real filename and hash, baked into a signed binary the operator cannot alter without breaking the exploit — and on the specific, hard-to-fake combination of many real security-vendor process names appearing together in one file. Two Sigma rules did not survive as originally written: a file-system-stealth selector checked a process `Image` field for a DLL name that can never appear there in real telemetry (a loaded DLL is never its own process image), and a PowerShell-integration rule's over-broad OR condition let it fire on ubiquitous, unrelated PowerShell automation flags with no tie to this campaign — that branch has produced false positives in production deployments. Both are detailed in Coverage Gaps, alongside a salvage that recovered a stronger process-access rule by dropping its own broken source-process clause.
 
+A third Sigma rule was retired on 2026-07-30 after production measurement: a single-event security-product-termination rule that could not express the technique it claimed, because a `process_termination` event names only the process that exited and never the one that killed it. The behaviour it targeted is already covered twice over — by the process-access Detection rule that survives in this file, and by the 3-distinct-products-in-60-seconds correlation in the companion killer.dll file, into which its unique vendor coverage has been folded. Details in the retirement note in Hunting Rules below.
+
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 2 | 2 | T1068, T1685, T1055.001, T1564.001, T1055 | 0 |
-| Sigma | 2 | 2 | T1068, T1055.001, T1685, T1059.001 | 0 |
+| Sigma | 2 | 1 | T1068, T1055.001, T1685, T1059.001 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
@@ -404,62 +404,28 @@ level: high
 
 ### Hunting Rules
 
-#### Security Product Process Termination
+#### Security Product Process Termination — RETIRED 2026-07-30
 
-**Tier:** Hunting
-**Robustness:** 2
-**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
-**Confidence:** MODERATE
-**Rationale:** The source rule's intent was a volumetric threshold (3+ Defender, 2+ CrowdStrike, or 3+ third-party terminations within 60 seconds) — Sigma's single-event model cannot express that, so it fires on any one matching termination. The target list is durable (real vendor process names the operator cannot rename), but a single termination event alone has plausible benign explanations, so this is a scoping lead rather than an alert: review for co-occurring terminations of other vendors' processes on the same host in a short window before treating a hit as the mass-termination behavior this rule was built to catch.
-**False Positives:** Legitimate security product updates or uninstallations; system administrator maintenance activities.
-**Deployment note:** Pair with a correlation search (count by host.name over a short window) to recover the intended volumetric signal; see Coverage Gaps.
+**Status:** Retired. Superseded by the correlation pair in the companion killer.dll detection file.
 
-```yaml
-title: Arsenal-237-Class Security Product Process Termination
-id: b9d1e2f3-4a5b-6c7d-8e9f-0a1b2c3d4e5f
-status: experimental
-description: >-
-  Detects termination of a single named security-product process (Defender,
-  CrowdStrike Falcon, or a third-party AV/EDR). Fires on any one matching
-  termination event; review for co-occurring terminations of other vendors'
-  processes on the same host in a short window before treating as a
-  mass-termination incident.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/arsenal-237-rootkit-dll-detections/
-author: The Hunters Ledger
-date: 2026-01-26
-tags:
-    - attack.defense-impairment
-    - attack.t1685
-    - detection.emerging-threats
-logsource:
-    product: windows
-    category: process_termination
-detection:
-    selection_defender:
-        Image|endswith:
-            - '\MsMpEng.exe'
-            - '\MpCmdRun.exe'
-            - '\NisSrv.exe'
-            - '\SecurityHealthService.exe'
-    selection_crowdstrike:
-        Image|endswith:
-            - '\CSFalconService.exe'
-            - '\CSFalconContainer.exe'
-            - '\CSAgent.exe'
-    selection_thirdparty:
-        Image|endswith:
-            - '\ekrn.exe'
-            - '\avp.exe'
-            - '\MBAMService.exe'
-            - '\ccSvcHst.exe'
-            - '\SophosHealth.exe'
-    condition: selection_defender or selection_crowdstrike or selection_thirdparty
-falsepositives:
-    - Legitimate security product updates or uninstallations
-    - System administrator maintenance activities
-level: medium
-```
+This rule (`b9d1e2f3-4a5b-6c7d-8e9f-0a1b2c3d4e5f`) fired on the termination of any single named security-product process. That is not a detection of the technique it claimed. In a `process_termination` event the `Image` field identifies the process that *exited*; the event carries no terminating-process identity at all, so the rule could not distinguish an EDR-killer shutting down protection from Microsoft Defender's own `MpCmdRun.exe` finishing a scheduled scan or `MsMpEng.exe` restarting for a signature update. Its own description acknowledged the gap, directing the reader to "review for co-occurring terminations of other vendors' processes… before treating as a mass-termination incident" — the correlation it described was never implemented here. Measured in production it produced hundreds of alerts across a 14-day window on a single workstation, all benign antivirus lifecycle activity. Its `id` was also not a valid UUID v4.
+
+The behaviour is genuinely worth detecting, and it is already detected correctly in
+[killer.dll detections](https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/),
+which implements the volumetric design this rule only described: a base rule at `level: informational`
+explicitly marked not-for-alerting, gated behind a `value_count` correlation that requires **3 or more
+distinct** security-product processes terminating on the same host within 60 seconds. Both files cover
+modules of the same toolkit, so one canonical correlation serves both rather than two competing copies
+producing duplicate alerts.
+
+The vendor coverage unique to this rule has been folded into that canonical base rule: CrowdStrike
+(`CSFalconService.exe`), Symantec (`ccSvcHst.exe`) and Sophos (`SophosHealth.exe`). Four entries were
+deliberately **not** carried over. `MpCmdRun.exe` and `SecurityHealthService.exe` are additional
+Microsoft Defender processes, and `CSFalconContainer.exe` / `CSAgent.exe` additional CrowdStrike ones;
+because the correlation counts *distinct process names* as a proxy for distinct products, stacking
+several processes from one vendor would let a single Defender or Falcon update cycle satisfy the
+3-distinct threshold on its own and inject false positives into an otherwise clean `high`-severity rule.
+Vendor breadth was added; same-vendor process multiplicity was not.
 
 #### PowerShell Execution with rootkit.dll on Parent Command Line
 

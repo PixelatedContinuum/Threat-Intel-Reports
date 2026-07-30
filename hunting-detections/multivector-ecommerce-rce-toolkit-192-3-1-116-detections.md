@@ -701,6 +701,7 @@ level: high
 **Confidence:** MODERATE
 **False Positives:** Routine internal vulnerability scanning or asset-discovery tooling covering the same common service ports; the underlying ports are also touched individually by ordinary traffic and legitimate scanning. Confirm against known scanner IP ranges before treating as hostile.
 **Deployment:** Firewall/flow-log correlation engine; useful as an early tripwire for a low-sophistication, unstealthy sweep rather than a standalone high-confidence alert.
+**Retiering note (2026-07-30):** the base rule now excludes connections the firewall rejected, via a `filter_rejected` selector on the `action` field. Deployed against perimeter firewall telemetry without that filter, the rule counts dropped packets, and because unsolicited internet scanning of any public address is a permanent background condition the paired correlation fires indefinitely on traffic that never reached a service. Observed in production across a 14-day window: four separate commodity-cloud sources (two AWS, one DigitalOcean, one Huawei Cloud) triggered the correlation while the firewall blocked all 5,175 associated packets, so every alert described activity that had already been stopped. Note that `action` values are not standardised across firewall vendors; verify the token your platform emits for a rejected connection and extend the filter list if it differs. Where a deployment cannot express connection disposition at all, scope the base rule's source to internal ranges instead, which retains its real value of catching lateral service discovery from a compromised internal host.
 
 ```yaml
 title: External Connection Attempt to a Service-Discovery-Profile Port
@@ -715,10 +716,17 @@ description: >-
     Nacos and Druid management consoles this operator specifically exploits
     elsewhere. Paired below with a correlation that flags a single source
     touching many distinct ports from this profile within a short window.
+    Connections the firewall rejected are excluded: an internet-facing
+    address is scanned continuously as a background condition, so counting
+    dropped packets makes the paired correlation fire indefinitely on traffic
+    that never reached a service. Restricting to connections the firewall
+    permitted changes the signal from "someone scanned us" to "someone
+    scanned us and something answered", which is the actionable form.
 references:
     - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
 author: The Hunters Ledger
 date: '2026-07-21'
+modified: '2026-07-30'
 tags:
     - attack.discovery
     - attack.t1046
@@ -741,7 +749,16 @@ detection:
             - 9090
             - 8848
             - 8157
-    condition: selection
+    filter_rejected:
+        action:
+            - 'block'
+            - 'blocked'
+            - 'deny'
+            - 'denied'
+            - 'drop'
+            - 'dropped'
+            - 'reject'
+    condition: selection and not filter_rejected
 falsepositives:
     - >-
         Routine internal vulnerability scanning or asset-discovery tooling

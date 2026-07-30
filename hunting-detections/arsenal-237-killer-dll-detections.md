@@ -4,8 +4,6 @@ date: '2026-01-25'
 layout: post
 permalink: /hunting-detections/arsenal-237-killer-dll-detections/
 hide: true
-redirect_from: /hunting-detections/arsenal-237-killer-dll/
-thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
@@ -257,6 +255,7 @@ level: high
 **Blind Spots:** An attacker who staggers terminations beyond 60 seconds, or who targets fewer than 3 distinct products from this specific 8-item list, evades the correlation.
 **Validation:** Replay 3 or more distinct termination events from the target list against the same `host.name` within 60 seconds — the correlation must fire; 1–2 distinct terminations in the same window must NOT trigger the correlation.
 **Deployment:** SIEM correlation engine with process-termination telemetry ingested (Sysmon Event ID 5 or EDR equivalent).
+**Update (2026-07-30):** the base rule's target list gained three vendors — CrowdStrike (`CSFalconService.exe`), Symantec (`ccSvcHst.exe`) and Sophos (`SophosHealth.exe`) — folded in from a redundant single-event termination rule retired from the companion rootkit.dll detection file, which fired on every ordinary antivirus process exit and is superseded by this correlation. Coverage was widened by vendor only. Additional processes belonging to vendors already listed (`MpCmdRun.exe` and `SecurityHealthService.exe` for Defender, `CSFalconContainer.exe` and `CSAgent.exe` for CrowdStrike) were deliberately left out: the correlation counts distinct process names as a stand-in for distinct products, so stacking several processes from one vendor would let that vendor's routine update cycle reach the 3-distinct threshold unaided and inject false positives into this `high`-severity rule.
 
 ```yaml
 title: Security Product Process Termination (Base Rule)
@@ -268,11 +267,16 @@ description: >-
   security-product process. Paired with the correlation rule below, which
   flags 3 or more DISTINCT security-product terminations on the same host
   within 60 seconds -- the killer.dll behavior of shutting down AV/EDR ahead
-  of payload deployment.
+  of payload deployment. The target list carries one representative process
+  per vendor by design: the correlation counts distinct process names as a
+  proxy for distinct products, so listing several processes belonging to the
+  same vendor would let one vendor's ordinary update cycle satisfy the
+  3-distinct threshold on its own.
 references:
   - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
+modified: '2026-07-30'
 tags:
   - attack.defense-impairment
   - attack.t1685
@@ -290,6 +294,9 @@ detection:
       - '\avguard.exe'
       - '\NisSrv.exe'
       - '\vsserv.exe'
+      - '\CSFalconService.exe'
+      - '\ccSvcHst.exe'
+      - '\SophosHealth.exe'
   condition: selection
 falsepositives:
   - >-
@@ -428,28 +435,32 @@ level: medium
 **Robustness:** 2
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation), T1543.003 (Windows Service)
 **Confidence:** LOW
-**Rationale:** Installation of a new kernel-mode driver service is a comparatively rare event on most endpoints and is the setup step of killer.dll's install-abuse-remove cleanup pattern, but the event alone does not distinguish a legitimate hardware or security-software driver install from this specific technique. *Retiering note:* the source rule's own description explains its intended correlation — pairing this with a matching service-deletion event within 30 seconds — was dropped because single-event Sigma rules cannot express cross-event timing. Unlike the mass-termination rule above, no concrete deletion-side selector existed anywhere in the source material to correlate against (Windows has no direct System-log analog to 7045 for service deletion), so fabricating one was avoided rather than guessed at; see Coverage Gaps. Demoted from the source's `level: high` to `medium` given the genuine, non-rare legitimate driver-install population.
-**False Positives:** Driver installation testing by IT staff (should be reviewed); legitimate hardware or security-software driver installation.
+**Rationale:** Installation of a new kernel-mode driver service is the setup step of killer.dll's install-abuse-remove cleanup pattern, but the event alone does not distinguish a legitimate hardware or security-software driver install from this specific technique. *Retiering note:* the source rule's own description explains its intended correlation — pairing this with a matching service-deletion event within 30 seconds — was dropped because single-event Sigma rules cannot express cross-event timing. Unlike the mass-termination rule above, no concrete deletion-side selector existed anywhere in the source material to correlate against (Windows has no direct System-log analog to 7045 for service deletion), so fabricating one was avoided rather than guessed at; see Coverage Gaps.
+**Retiering note (2026-07-30):** three corrections. The claim that this event is "comparatively rare on most endpoints" was wrong and has been removed from both the rationale and the rule description — Windows re-registers every boot-start, auto-start and demand-start kernel driver service through the Service Control Manager on each restart, so a routine reboot emits a burst of these events for drivers that were already installed. `level` moved from `medium` to `low` to match the `Tier: Hunting` and `Confidence: LOW` already recorded here; at `medium` the Sigma-to-Elastic deployment path creates an enabled alerting rule, which contradicts the hunting-lead framing. A filter now excludes `\system32\drivers\wd\`, Microsoft Defender's dynamically-updated driver folder, which only Defender can write to and which it re-registers on every boot. The rule's `id` was also replaced: the previous value was not a valid UUID v4 and would be rejected by SigmaHQ's validator.
+**False Positives:** Driver installation testing by IT staff (should be reviewed); legitimate hardware or security-software driver installation; reboot-driven re-registration of already-installed driver services.
 **Deployment:** Windows Event Log 7045 (System log), Sysmon-augmented service monitoring.
 
 ```yaml
 title: Kernel-Mode Driver Service Installed (Event 7045)
-id: 10eb1fbb-2be3-a09e-efb3-d97112e42bb3
+id: 93cc54a3-4d1b-4218-ac73-098940b2b1b2
 status: experimental
 description: >-
   Detects installation of a new kernel-mode driver service via the Service
-  Control Manager -- a comparatively rare event on most endpoints, and the
-  setup step of the killer.dll BYOVD module's install-abuse-remove cleanup
-  pattern. This event alone does not distinguish a legitimate hardware or
-  security-software driver install from the BYOVD setup step; killer.dll's
-  documented lifecycle removes the service within roughly 20 seconds, but no
-  concrete Sigma-expressible deletion-side telemetry was available to
-  correlate against (see Coverage Gaps), so this remains a single-event
-  hunting lead.
+  Control Manager, the setup step of the killer.dll BYOVD module's
+  install-abuse-remove cleanup pattern. This event alone does not distinguish
+  a legitimate hardware or security-software driver install from the BYOVD
+  setup step; killer.dll's documented lifecycle removes the service within
+  roughly 20 seconds, but no concrete Sigma-expressible deletion-side
+  telemetry was available to correlate against (see Coverage Gaps), so this
+  remains a single-event hunting lead and is deliberately levelled below the
+  alerting threshold. Microsoft Defender's own dynamically-updated driver
+  folder is excluded, since only Defender writes there and it re-registers
+  those services on every boot.
 references:
   - https://the-hunters-ledger.com/hunting-detections/arsenal-237-killer-dll-detections/
 author: The Hunters Ledger
 date: '2026-01-25'
+modified: '2026-07-30'
 tags:
   - attack.privilege-escalation
   - attack.t1068
@@ -463,11 +474,16 @@ detection:
     Provider_Name: 'Service Control Manager'
     EventID: 7045
     ServiceType: 'kernel mode driver'
-  condition: selection
+  filter_defender_managed_drivers:
+    ImagePath|contains: '\system32\drivers\wd\'
+  condition: selection and not filter_defender_managed_drivers
 falsepositives:
   - Driver installation testing by IT staff (should be reviewed)
   - Legitimate hardware or security-software driver installation
-level: medium
+  - >-
+    Reboot-driven re-registration of already-installed boot-start and
+    auto-start driver services, which emits this event for each one
+level: low
 ```
 
 #### Driver File (.sys) Created in Temp Directory

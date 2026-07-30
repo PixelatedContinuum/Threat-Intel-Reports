@@ -4,8 +4,6 @@ date: '2025-12-06'
 layout: post
 permalink: /hunting-detections/dual-rat-analysis-detections/
 hide: true
-redirect_from: /hunting-detections/dual-rat-analysis
-thumbnail: /assets/images/cards/dual-rat-analysis.png
 ---
 
 **Campaign:** Dual-RAT-185.208.159.182-Quasar-NjRAT
@@ -660,34 +658,41 @@ tags:
 
 **NjRAT/XWorm**
 
-#### NjRAT/XWorm AppData-Resident Process Remote Thread Creation
+#### Remote Thread Created by a Process Resident in AppData Roaming or Temp
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1055.003 (Thread Execution Hijacking)
 **Confidence:** MODERATE
-**Rationale:** Corrected from the original rule, which declared a non-existent `api_call` logsource category with a `CallTrace` field searched for the literal string "CreateRemoteThread" — no such category exists in SigmaHQ, and standard Windows telemetry does not expose arbitrary API calls this way (`CallTrace` is populated only by Sysmon Event ID 8 CreateRemoteThread and Event ID 10 ProcessAccess, neither of which records the literal function name as searchable text). Re-anchored on the `create_remote_thread` category, which is the real source for this event. No target-process constraint is carried from the original evidence, so this stays intentionally broad — a generic "AppData-resident process injects a remote thread" heuristic rather than a family-specific rule.
-**False Positives:** Legitimate AppData-installed software (auto-updaters, some games, hardware-control utilities) that performs remote thread injection for benign reasons.
+**Rationale:** Corrected from the original rule, which declared a non-existent `api_call` logsource category with a `CallTrace` field searched for the literal string "CreateRemoteThread" — no such category exists in SigmaHQ, and standard Windows telemetry does not expose arbitrary API calls this way (`CallTrace` is populated only by Sysmon Event ID 8 CreateRemoteThread and Event ID 10 ProcessAccess, neither of which records the literal function name as searchable text). Re-anchored on the `create_remote_thread` category, which is the real source for this event. No target-process constraint is carried from the original evidence, so this remains a behavioral heuristic rather than a family-specific rule, and the title no longer claims NjRAT/XWorm attribution the logic cannot support.
+**Retiering note (2026-07-30):** the selector was narrowed from `\AppData\` to `\AppData\Roaming\` and `\AppData\Local\Temp\`. The unqualified AppData match swept in `\AppData\Local\Programs\`, the canonical per-user install root for a large population of ordinary signed applications (editors, chat clients, browsers, developer tooling) whose updaters legitimately create remote threads. Measured against live telemetry the original selector produced tens of thousands of fires per endpoint at a very high benign rate, which is a false-positive profile no environment permitting per-user installs can absorb. Roaming and Local Temp are where the campaign's implants actually resided, so the narrowing preserves the intended coverage while removing the dominant benign population.
+**False Positives:** Auto-updaters, games and hardware-control utilities that unpack to Local Temp and perform remote thread injection for benign reasons. Installer and update processes staged in Temp are the main residual source.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (Sysmon Event ID 8 telemetry); triage against process reputation before escalating.
 
 ```yaml
-title: NjRAT/XWorm AppData-Resident Process Remote Thread Creation
+title: Remote Thread Created by a Process Resident in AppData Roaming or Temp
 id: a1ea23fd-ff54-4115-bb49-89b7fa7b9cd4
 status: experimental
 description: >-
-  Detects a process running from an AppData path creating a remote
-  thread in another process, a generic process-injection technique
-  step observed as part of the malware's surveillance/persistence
-  chain in this campaign. Corrected from the original rule, which
-  declared a non-existent "api_call" logsource category with a
-  CallTrace field searched for the literal string "CreateRemoteThread"
-  - standard Windows telemetry does not expose API calls this way;
-  re-anchored on the create_remote_thread category (Sysmon Event ID 8),
-  which is the real source for this event.
+  Detects a process running from a user's AppData Roaming or Local Temp
+  directory creating a remote thread in another process, a generic
+  process-injection step observed as part of the malware's
+  surveillance/persistence chain in this campaign. Two prior corrections
+  are folded in. The original rule declared a non-existent "api_call"
+  logsource category with a CallTrace field searched for the literal string
+  CreateRemoteThread; standard Windows telemetry does not expose API calls
+  that way, so it was re-anchored on the create_remote_thread category
+  (Sysmon Event ID 8). The selector was then narrowed from the whole
+  AppData tree to Roaming and Local Temp only, because AppData\Local\Programs
+  is the canonical per-user install root for a large population of ordinary
+  signed applications whose updaters legitimately inject remote threads;
+  matching all of AppData produced overwhelming false-positive volume in
+  any environment that allows per-user application installs.
 references:
     - https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/
 author: The Hunters Ledger
 date: '2025-12-06'
+modified: '2026-07-30'
 tags:
     - attack.stealth
     - attack.privilege-escalation
@@ -698,7 +703,9 @@ logsource:
     product: windows
 detection:
     selection:
-        SourceImage|contains: '\AppData\'
+        SourceImage|contains:
+            - '\AppData\Roaming\'
+            - '\AppData\Local\Temp\'
     condition: selection
 falsepositives:
     - >-
