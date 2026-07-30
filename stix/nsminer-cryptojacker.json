@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--840d376e-2f70-4fc7-b773-e5d86f7e1e09",
+    "id": "bundle--d0a06a1e-d2d3-47e4-9d07-20ce6e8e1643",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.162417Z",
-            "modified": "2026-07-27T01:08:23.162417Z",
+            "created": "2026-07-30T01:35:51.222503Z",
+            "modified": "2026-07-30T01:35:51.222503Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,8 +33,8 @@
             "spec_version": "2.1",
             "id": "indicator--c0a3c761-1047-54a2-997e-ed2bc05378c4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.163839Z",
-            "modified": "2026-07-27T01:08:23.163839Z",
+            "created": "2026-07-30T01:35:51.223943Z",
+            "modified": "2026-07-30T01:35:51.223943Z",
             "name": "url: http://hrtests.ru/S.php",
             "indicator_types": [
                 "malicious-activity"
@@ -61,8 +61,8 @@
             "spec_version": "2.1",
             "id": "indicator--372252b6-c79c-570f-aa94-dd698fd7fed3",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.16854Z",
-            "modified": "2026-07-27T01:08:23.16854Z",
+            "created": "2026-07-30T01:35:51.228475Z",
+            "modified": "2026-07-30T01:35:51.228475Z",
             "name": "domain: hrtests.ru",
             "indicator_types": [
                 "malicious-activity"
@@ -89,8 +89,8 @@
             "spec_version": "2.1",
             "id": "indicator--74bb5087-b725-5b31-8ab8-3341c5410653",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.169383Z",
-            "modified": "2026-07-27T01:08:23.169383Z",
+            "created": "2026-07-30T01:35:51.229439Z",
+            "modified": "2026-07-30T01:35:51.229439Z",
             "name": "domain: testswork.ru",
             "indicator_types": [
                 "malicious-activity"
@@ -167,8 +167,8 @@
             "spec_version": "2.1",
             "id": "indicator--0d90fcbd-64f5-5bf7-98dc-a5d220dcece8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.171369Z",
-            "modified": "2026-07-27T01:08:23.171369Z",
+            "created": "2026-07-30T01:35:51.231112Z",
+            "modified": "2026-07-30T01:35:51.231112Z",
             "name": "NsMiner_Dropper_Downloader",
             "indicator_types": [
                 "malicious-activity"
@@ -188,8 +188,8 @@
             "spec_version": "2.1",
             "id": "indicator--9f8f5298-1b3e-5592-8917-f152639ae10d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.171669Z",
-            "modified": "2026-07-27T01:08:23.171669Z",
+            "created": "2026-07-30T01:35:51.231262Z",
+            "modified": "2026-07-30T01:35:51.231262Z",
             "name": "NsMiner_Persistence_Directory",
             "indicator_types": [
                 "malicious-activity"
@@ -209,8 +209,8 @@
             "spec_version": "2.1",
             "id": "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.171896Z",
-            "modified": "2026-07-27T01:08:23.171896Z",
+            "created": "2026-07-30T01:35:51.231393Z",
+            "modified": "2026-07-30T01:35:51.231393Z",
             "name": "NsMiner Persistence Directory Creation",
             "indicator_types": [
                 "malicious-activity"
@@ -230,8 +230,8 @@
             "spec_version": "2.1",
             "id": "indicator--8d303952-9238-52e1-8b6d-7da8b941d291",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.172068Z",
-            "modified": "2026-07-27T01:08:23.172068Z",
+            "created": "2026-07-30T01:35:51.231541Z",
+            "modified": "2026-07-30T01:35:51.231541Z",
             "name": "Suspicious FTP Connection from Non-Standard Application",
             "indicator_types": [
                 "malicious-activity"
@@ -249,11 +249,83 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7",
+            "id": "tool--2f9c4fe7-7b38-590d-a8b4-346525113a4e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.172239Z",
-            "modified": "2026-07-27T01:08:23.172239Z",
-            "name": "",
+            "created": "2026-07-30T01:35:51.231768Z",
+            "modified": "2026-07-30T01:35:51.231768Z",
+            "name": "e06aa8ce984b",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--1f42c527-18cf-50bd-9821-b753e1ff3707",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-30T01:35:51.232315Z",
+            "modified": "2026-07-30T01:35:51.232315Z",
+            "name": "40fe74d3a111",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--4b7e4c71-29fb-5a13-90f2-ea55e3ec9110",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-30T01:35:51.232473Z",
+            "modified": "2026-07-30T01:35:51.232473Z",
+            "name": "a0eba3fda0d7",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--e29963a1-fe96-5c6a-a3da-2a12b3653301",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-30T01:35:51.232585Z",
+            "modified": "2026-07-30T01:35:51.232585Z",
+            "name": "d0326f0ddce4",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--87b20cd8-dff5-59fd-ba83-2a42c50c5140",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-30T01:35:51.232714Z",
+            "modified": "2026-07-30T01:35:51.232714Z",
+            "name": "42422d912b9c",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--bc7b78e9-4bd9-53d0-92c6-dc2d6db92079",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-30T01:35:51.232845Z",
+            "modified": "2026-07-30T01:35:51.232845Z",
+            "name": "67eff17c53a7",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--acd6fa25-74fc-5e4a-bb5c-6a93c72300b0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-07-30T01:35:51.232974Z",
+            "modified": "2026-07-30T01:35:51.232974Z",
+            "name": "572a6f9cb5b3",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -263,8 +335,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--d9b882ee-1e8d-56f0-9646-12417ee055a0",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.173112Z",
-            "modified": "2026-07-27T01:08:23.173112Z",
+            "created": "2026-07-30T01:35:51.233095Z",
+            "modified": "2026-07-30T01:35:51.233095Z",
             "name": "nsminer-cryptojacker infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -279,8 +351,8 @@
             "spec_version": "2.1",
             "id": "report--f5cf2d3d-4ab7-5767-8849-d0cbf388e3c2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:08:23.17334Z",
-            "modified": "2026-07-27T01:08:23.17334Z",
+            "created": "2026-07-30T01:35:51.23339Z",
+            "modified": "2026-07-30T01:35:51.23339Z",
             "name": "NsMiner: Multi-Stage Operation",
             "report_types": [
                 "threat-report"
@@ -304,7 +376,13 @@
                 "indicator--9f8f5298-1b3e-5592-8917-f152639ae10d",
                 "indicator--c7c5b82e-bda5-577c-b902-503115857c5d",
                 "indicator--8d303952-9238-52e1-8b6d-7da8b941d291",
-                "tool--40bcb495-3f14-5fd5-82cd-65910aed92b7",
+                "tool--2f9c4fe7-7b38-590d-a8b4-346525113a4e",
+                "tool--1f42c527-18cf-50bd-9821-b753e1ff3707",
+                "tool--4b7e4c71-29fb-5a13-90f2-ea55e3ec9110",
+                "tool--e29963a1-fe96-5c6a-a3da-2a12b3653301",
+                "tool--87b20cd8-dff5-59fd-ba83-2a42c50c5140",
+                "tool--bc7b78e9-4bd9-53d0-92c6-dc2d6db92079",
+                "tool--acd6fa25-74fc-5e4a-bb5c-6a93c72300b0",
                 "infrastructure--d9b882ee-1e8d-56f0-9646-12417ee055a0"
             ],
             "labels": [

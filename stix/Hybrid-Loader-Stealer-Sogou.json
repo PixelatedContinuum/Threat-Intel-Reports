@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--ef11a972-2514-4bad-b2a0-3081ff9bc27d",
+    "id": "bundle--2679fb62-cfd3-4c24-82d5-953020497092",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.769043Z",
-            "modified": "2026-07-27T01:06:38.769043Z",
+            "created": "2026-07-30T01:34:07.106079Z",
+            "modified": "2026-07-30T01:34:07.106079Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -35,8 +35,8 @@
             "spec_version": "2.1",
             "id": "indicator--ed0dac53-9969-5480-a878-8f56a11c5d05",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.770768Z",
-            "modified": "2026-07-27T01:06:38.770768Z",
+            "created": "2026-07-30T01:34:07.107842Z",
+            "modified": "2026-07-30T01:34:07.107842Z",
             "name": "SogouStealer_Ecosystem_Indicators",
             "indicator_types": [
                 "malicious-activity"
@@ -56,8 +56,8 @@
             "spec_version": "2.1",
             "id": "indicator--f982d887-c5c8-574e-b7e0-d3f07e012866",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.771402Z",
-            "modified": "2026-07-27T01:06:38.771402Z",
+            "created": "2026-07-30T01:34:07.108585Z",
+            "modified": "2026-07-30T01:34:07.108585Z",
             "name": "SogouStealer_C2_Scheduler_SignatureDB",
             "indicator_types": [
                 "malicious-activity"
@@ -77,8 +77,8 @@
             "spec_version": "2.1",
             "id": "indicator--9aa75bc9-fb08-5da9-a63f-922bed543b59",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.771547Z",
-            "modified": "2026-07-27T01:06:38.771547Z",
+            "created": "2026-07-30T01:34:07.108743Z",
+            "modified": "2026-07-30T01:34:07.108743Z",
             "name": "SogouStealer_Loader_Downloader",
             "indicator_types": [
                 "malicious-activity"
@@ -98,8 +98,8 @@
             "spec_version": "2.1",
             "id": "indicator--d8674b18-4fc4-5df6-8caa-5b3ed2301cec",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.771686Z",
-            "modified": "2026-07-27T01:06:38.771686Z",
+            "created": "2026-07-30T01:34:07.108893Z",
+            "modified": "2026-07-30T01:34:07.108893Z",
             "name": "SogouStealer Persistence via Run Keys and LNK Modification",
             "indicator_types": [
                 "malicious-activity"
@@ -119,8 +119,8 @@
             "spec_version": "2.1",
             "id": "indicator--6c41931f-ffdb-58f2-9549-9202740d2cf1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.771828Z",
-            "modified": "2026-07-27T01:06:38.771828Z",
+            "created": "2026-07-30T01:34:07.109035Z",
+            "modified": "2026-07-30T01:34:07.109035Z",
             "name": "SogouStealer Artifact Drop and Staging",
             "indicator_types": [
                 "malicious-activity"
@@ -140,8 +140,8 @@
             "spec_version": "2.1",
             "id": "indicator--c724046d-cdce-5ef1-80b7-ed844b92dd93",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.771958Z",
-            "modified": "2026-07-27T01:06:38.771958Z",
+            "created": "2026-07-30T01:34:07.109164Z",
+            "modified": "2026-07-30T01:34:07.109164Z",
             "name": "SogouStealer Masquerading NSIS Installer Execution",
             "indicator_types": [
                 "malicious-activity"
@@ -161,8 +161,8 @@
             "spec_version": "2.1",
             "id": "indicator--c469cca7-82a2-5d4a-8888-79ed86352d62",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.772128Z",
-            "modified": "2026-07-27T01:06:38.772128Z",
+            "created": "2026-07-30T01:34:07.109294Z",
+            "modified": "2026-07-30T01:34:07.109294Z",
             "name": "THL SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)",
             "indicator_types": [
                 "malicious-activity"
@@ -182,8 +182,8 @@
             "spec_version": "2.1",
             "id": "tool--2ae33423-5b4c-5513-8490-952253498e3e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.772361Z",
-            "modified": "2026-07-27T01:06:38.772361Z",
+            "created": "2026-07-30T01:34:07.109523Z",
+            "modified": "2026-07-30T01:34:07.109523Z",
             "name": "Installer",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -194,8 +194,8 @@
             "spec_version": "2.1",
             "id": "report--60de42bf-6fb0-59f8-8f0b-67e8bf184aaf",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-27T01:06:38.772702Z",
-            "modified": "2026-07-27T01:06:38.772702Z",
+            "created": "2026-07-30T01:34:07.109755Z",
+            "modified": "2026-07-30T01:34:07.109755Z",
             "name": "Hybrid Ecosystem Masquerading as Sogou",
             "report_types": [
                 "threat-report"
