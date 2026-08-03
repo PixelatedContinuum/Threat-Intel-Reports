@@ -5,6 +5,15 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ===== PENDING GO-LIVE - CloudSync Assembler Toolkit (uncomment at launch) =====
+  #  - title: "CloudSync: An Assembler's Intrusion Toolkit"
+  #    date: 2026-08-03
+  #    severity: high
+  #    tags: [Intrusion Toolkit, RAT, Access Broker]
+  #    report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
+  #    detection_url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
+  #    ioc_url: /ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json
+  # ==============================================================================
   - title: "GOCLOUD Multi-Service Cryptojacking"
     date: 2026-07-26
     severity: med

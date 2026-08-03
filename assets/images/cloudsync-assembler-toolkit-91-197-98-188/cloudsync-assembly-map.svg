@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    LAYOUT: phase-grid (2 columns, 3 rows)
+    Subject: what the operator authored vs what they sourced, and the attribution trap.
+  -->
+  <defs>
+    <filter id="phaseShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1300" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1299" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">What the Operator Actually Wrote</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Three named actors' tools in this kit. None is the operator.</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">A 22-file toolkit staged on one live open directory</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== OPERATOR-AUTHORED (top-left, RED) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="196" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="430" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="229" width="430" height="13" fill="#dc2626"/>
+    <text x="80" y="227" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="0.5">AUTHORED</text>
+    <text x="215" y="227" font-size="20" font-weight="600" fill="#ffffff">Operator's own code</text>
+    <text x="80" y="282" font-size="18" fill="#ffffff">CloudSync RAT, 5 builds</text>
+    <text x="80" y="312" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">C++ / MinGW-w64 / GCC 15.2 and 16.1</text>
+    <text x="80" y="342" font-size="16" fill="#e5e5e5">Per-victim Tor panel, no public docs</text>
+    <text x="80" y="372" font-size="18" fill="#ffffff">Deployment orchestrator, 1 build</text>
+    <text x="80" y="400" font-size="16" fill="#e5e5e5">Target-specific, localized to one forest</text>
+    <text x="80" y="428" font-size="18" fill="#ffffff">Deployment stub, 1 script</text>
+    <text x="80" y="458" font-size="15" fill="#fb923c" font-weight="600">That is the whole of it. The rest was acquired.</text>
+  </g>
+
+  <!-- =========== SOURCED FROM NAMED ACTORS (top-right, DEEP RED) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="196" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="196" width="430" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="510" y="229" width="430" height="13" fill="#7f1d1d"/>
+    <text x="530" y="227" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="0.5">SOURCED</text>
+    <text x="655" y="227" font-size="20" font-weight="600" fill="#ffffff">From named actors</text>
+    <text x="530" y="282" font-size="18" fill="#ffffff">CloudSync kit, ties to GDLockerSec</text>
+    <text x="530" y="310" font-size="16" fill="#e5e5e5">Hardcoded Telegram notify id 8116056430</text>
+    <text x="530" y="340" font-size="18" fill="#ffffff">Paralell loader, Blind Eagle toolkit</text>
+    <text x="530" y="368" font-size="16" fill="#e5e5e5">Nested-misspelled PDB path, base28 loader</text>
+    <text x="530" y="398" font-size="18" fill="#ffffff">Sharp4WebCmd, Larva-26009 assoc.</text>
+    <text x="530" y="426" font-size="16" fill="#e5e5e5">Documented ASPX shell, openly available</text>
+    <text x="530" y="458" font-size="15" fill="#fb923c" font-weight="600">These artifacts belong to the kit authors.</text>
+  </g>
+
+  <!-- =========== PUBLIC OFFENSIVE TOOLING (row 2 left, YELLOW) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="506" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="506" width="430" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="539" width="430" height="13" fill="#eab308"/>
+    <text x="80" y="537" font-size="15" font-weight="700" fill="#111111" letter-spacing="0.5">SOURCED</text>
+    <text x="205" y="537" font-size="20" font-weight="600" fill="#111111">Public offensive tooling</text>
+    <text x="80" y="592" font-size="18" fill="#ffffff">Lateral movement and escalation</text>
+    <text x="80" y="620" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">NetExec · PrintSpoofer · PsExec</text>
+    <text x="80" y="652" font-size="18" fill="#ffffff">Reverse shell and tunnelling</text>
+    <text x="80" y="680" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Nishang · chisel · bore · ssh · Tor</text>
+    <text x="80" y="712" font-size="16" fill="#e5e5e5">All maintained, documented, freely available</text>
+    <text x="80" y="744" font-size="15" fill="#fb923c" font-weight="600">Mature detections exist for all of these.</text>
+  </g>
+
+  <!-- =========== COMMERCIAL SOFTWARE (row 2 right, GREY) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="506" width="430" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="510" y="506" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="510" y="539" width="430" height="13" fill="#6b7280"/>
+    <text x="530" y="537" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="0.5">SOURCED</text>
+    <text x="655" y="537" font-size="20" font-weight="600" fill="#ffffff">Legitimate software</text>
+    <text x="530" y="592" font-size="18" fill="#ffffff">Three commercial RMM products</text>
+    <text x="530" y="620" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">AnyDesk · RustDesk · Radmin VPN</text>
+    <text x="530" y="652" font-size="16" fill="#e5e5e5">Installed unattended for durable access</text>
+    <text x="530" y="684" font-size="18" fill="#ffffff">Signed Microsoft components</text>
+    <text x="530" y="712" font-size="16" fill="#e5e5e5">Stock OpenSSH port and its LibreSSL DLL</text>
+    <text x="530" y="744" font-size="15" fill="#fb923c" font-weight="600">Benign binaries. The abuse is in the deployment.</text>
+  </g>
+
+  <!-- =========== COLLECTED, NEVER WIRED IN (row 3 left, GREY) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="60" y="816" width="430" height="250" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="816" width="430" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="849" width="430" height="13" fill="#6b7280"/>
+    <text x="80" y="847" font-size="15" font-weight="700" fill="#ffffff" letter-spacing="0.5">SOURCED</text>
+    <text x="205" y="847" font-size="20" font-weight="600" fill="#ffffff">Collected, never wired in</text>
+    <text x="80" y="902" font-size="18" fill="#ffffff">SentinelStealer, a commodity stealer</text>
+    <text x="80" y="930" font-size="16" fill="#e5e5e5">Its own unrelated C2 on unrelated hosting</text>
+    <text x="80" y="958" font-size="16" fill="#e5e5e5">Hunts wallet seeds and Steam secrets</text>
+    <text x="80" y="986" font-size="16" fill="#e5e5e5">Shares no constant with any other binary</text>
+    <text x="80" y="1022" font-size="15" fill="#fb923c" font-weight="600">Parked on the directory, not in the intrusion.</text>
+  </g>
+
+  <!-- =========== THE ATTRIBUTION TRAP (row 3 right, ORANGE) =========== -->
+  <g filter="url(#phaseShadow)">
+    <rect x="510" y="816" width="430" height="250" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="2"/>
+    <rect x="510" y="816" width="430" height="46" rx="8" fill="#f97316"/>
+    <rect x="510" y="849" width="430" height="13" fill="#f97316"/>
+    <text x="530" y="847" font-size="15" font-weight="700" fill="#111111" letter-spacing="0.5">THE TRAP</text>
+    <text x="655" y="847" font-size="20" font-weight="600" fill="#111111">Why all three fail</text>
+    <text x="530" y="902" font-size="18" fill="#ffffff">The three are mutually exclusive.</text>
+    <text x="530" y="932" font-size="16" fill="#e5e5e5">At most one tool match could ever have been</text>
+    <text x="530" y="958" font-size="16" fill="#e5e5e5">an identity. Once two must be provenance,</text>
+    <text x="530" y="984" font-size="16" fill="#e5e5e5">the third has no claim to be treated apart.</text>
+    <text x="530" y="1022" font-size="15" fill="#fb923c" font-weight="600">Named-actor attribution: INSUFFICIENT.</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1116" x2="940" y2="1116" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1152" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Tracked as UTA-2026-021, anchored on the infrastructure estate and the</text>
+  <text x="500" y="1182" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">target-specific orchestrator, never on the shared constant set</text>
+  <text x="500" y="1216" text-anchor="middle" font-size="15" fill="#cccccc">A shared constant may be a builder default. Anchoring tracking on one repeats the error at the tracking layer.</text>
+  <text x="500" y="1244" text-anchor="middle" font-size="14" fill="#888888">Legend: red = operator-authored · deep red = sourced from named actors · yellow = public offensive tooling</text>
+  <text x="500" y="1266" text-anchor="middle" font-size="14" fill="#888888">grey = legitimate or unintegrated · orange = the attribution trap</text>
+</svg>

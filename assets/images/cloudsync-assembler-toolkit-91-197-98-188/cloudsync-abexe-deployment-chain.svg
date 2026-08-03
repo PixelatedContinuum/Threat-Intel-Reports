@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    LAYOUT: vertical-chain (3 stages)
+    Subject: the ab.exe deployment orchestrator. Fixed order, failure-tolerant.
+  -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1180" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1179" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">The Deployment Orchestrator</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">Three stages, fixed order, and it continues when a stage fails</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">A consolidate-access tool, built for one target and run after entry</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STAGE 1 — RED: operator code =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="229" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 1</text>
+    <text x="215" y="227" font-size="23" font-weight="600" fill="#ffffff">Web shell first</text>
+    <text x="80" y="282" font-size="21" fill="#ffffff">A sourced ASPX shell is written into the IIS web root.</text>
+    <text x="80" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">C:\inetpub\wwwroot\aspnet_client\a.aspx   plus   log.txt</text>
+    <text x="80" y="350" font-size="18" fill="#e5e5e5">The shell is Sharp4WebCmd, a documented and openly available tool, carrying a</text>
+    <text x="80" y="378" font-size="18" fill="#e5e5e5">PowerShell runspace and a file-upload form. Not operator-written.</text>
+    <text x="80" y="404" font-size="18" fill="#fb923c" font-weight="600">A file created in aspnet_client, or w3wp.exe spawning powershell.exe</text>
+  </g>
+  <line x1="500" y1="416" x2="500" y2="456" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 2 — DEEP RED: persistence =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="462" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="462" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="495" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="493" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 2</text>
+    <text x="215" y="493" font-size="23" font-weight="600" fill="#ffffff">A directory account shaped like a machine</text>
+    <text x="80" y="548" font-size="21" fill="#ffffff">An account is created at the top of the forest and then hidden.</text>
+    <text x="80" y="582" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">New-ADUser -Name 'Guest$'  ·  password Admin@20…9n@@  ·  never expires</text>
+    <text x="80" y="616" font-size="18" fill="#e5e5e5">Added to Domain, Enterprise and Schema Admins, then hidden from the sign-in</text>
+    <text x="80" y="644" font-size="18" fill="#e5e5e5">screen. The group names in this build are German-localized.</text>
+    <text x="80" y="670" font-size="18" fill="#fb923c" font-weight="600">A user object whose name ends in a dollar sign but is not a computer</text>
+  </g>
+  <line x1="500" y1="682" x2="500" y2="722" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STAGE 3 — DEEP RED: durable access =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="728" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="728" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="761" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="759" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGE 3</text>
+    <text x="215" y="759" font-size="23" font-weight="600" fill="#ffffff">Commercial remote access, installed quietly</text>
+    <text x="80" y="814" font-size="21" fill="#ffffff">AnyDesk is fetched from the genuine vendor CDN and installed unattended.</text>
+    <text x="80" y="848" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">echo J9kzQ2Y0…Y0qO | AnyDesk.exe --set-password   ·   --start-with-win --silent</text>
+    <text x="80" y="882" font-size="18" fill="#e5e5e5">The password is piped over stdin, so it never appears on a command line. Two</text>
+    <text x="80" y="910" font-size="18" fill="#e5e5e5">install paths were observed, so a path-only hunt misses one of them.</text>
+    <text x="80" y="936" font-size="18" fill="#fb923c" font-weight="600">The pipeline is the anchor: a non-AnyDesk parent piping into AnyDesk</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="988" x2="940" y2="988" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1024" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">The order is fixed and the tool is failure-tolerant. A stage that fails is</text>
+  <text x="500" y="1054" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">logged and skipped, and the run continues to the next one.</text>
+  <text x="500" y="1088" text-anchor="middle" font-size="15" fill="#cccccc">So a defender may find any one stage present without the others. Finding none of them does not clear a host.</text>
+  <text x="500" y="1120" text-anchor="middle" font-size="15" fill="#cccccc">The account survives log rotation: query the directory for a user whose name ends in a dollar sign.</text>
+  <text x="500" y="1152" text-anchor="middle" font-size="14" fill="#888888">Legend: red = operator code · deep red = persistence and durable access</text>
+</svg>

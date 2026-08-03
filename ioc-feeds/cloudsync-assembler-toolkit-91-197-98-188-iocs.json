@@ -1,0 +1,450 @@
+{
+  "metadata": {
+    "malware_name": "CloudSync Assembler Toolkit",
+    "family": "CloudSync (custom C++ Tor-panel RAT) + SvchostPayload (.NET RAT) + SentinelStealer (sourced commodity)",
+    "campaign_id": "cloudsync-assembler-toolkit-91-197-98-188",
+    "report_date": "2026-08-03",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "notes": "Assembled 22-sample intrusion toolkit staged on a live open directory. Operator estate and the sourced commodity-stealer service are kept in SEPARATE tiers so they are never read as one infrastructure. Credentials are defanged to first-8+last-4 (disclosure hazard); the Telegram chat id 8116056430 is retained whole as the attribution artifact. Network IOCs are NOT defanged. The 22-file set is a snapshot of what was staged, not the operator's complete toolkit (one panel port, 91.92.43.221:5003, is live with no matching build in hand)."
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa",
+        "filename": "client.exe",
+        "type": "PE32 executable",
+        "confidence": "HIGH",
+        "description": "CloudSync dropper (later GCC 16.1 build); drops svchost.exe implant, C2 91.92.43.221:5000"
+      },
+      {
+        "value": "0ba14e1443c155a0e644b0d83d5f89c2c188556367d15ccd86f0b6787cfac4d7",
+        "filename": "q.exe",
+        "type": "PE32 executable",
+        "confidence": "HIGH",
+        "description": "CloudSync config-only variant of client.exe; C2 91.92.43.221:5002"
+      },
+      {
+        "value": "fe9e54800c54efb46301f4cff3c3870be6b617ebdbe2b786220dbd8b337a33b0",
+        "filename": "s.exe",
+        "type": "PE32 executable",
+        "confidence": "HIGH",
+        "description": "CloudSync config-only variant of client.exe; C2 91.92.43.221:5001"
+      },
+      {
+        "value": "6bd0366372b7d765e76c5a888d68a4991ad04ee614bdb589a20ffbe433db58fc",
+        "filename": "bk.exe",
+        "type": "PE32 executable",
+        "confidence": "HIGH",
+        "description": "CloudSync dropper (earlier GCC 15.2 build); dropped implant C2 91.197.98.188:5555, [END] terminator, genuine ad_setup=AnyDesk installer"
+      },
+      {
+        "value": "9744c12a06b4562e175d4aeb7b8fd5c1e1877ac30222af8243eeaae16df324b0",
+        "filename": "svhost4.exe",
+        "type": "PE32 executable",
+        "confidence": "HIGH",
+        "description": "CloudSync standalone implant (not a dropper); C2 91.197.98.188:7777, [C2_END] terminator"
+      },
+      {
+        "value": "d25a3a858e28faa68ca6c624d7d19350c11ac798c346be3067307463e40aaff1",
+        "filename": "ab.exe",
+        "type": "PE64 executable",
+        "confidence": "HIGH",
+        "description": "Deployment orchestrator: Sharp4WebCmd IIS web shell + AD backdoor Guest$ + AnyDesk. Hardcodes the victim AD domain."
+      },
+      {
+        "value": "0ff0cee1fbf1050fbe3ab91918e56334a93269265e5614717ec0441baa8c42df",
+        "filename": "ct.bat",
+        "type": "Batch script",
+        "confidence": "HIGH",
+        "description": "Infection stub: proxy-aware download of client.exe, AMSI bypass, Startup+Run persistence, USB worm"
+      },
+      {
+        "value": "4b115a9f745219e3f3abdea275da89f35e4ec5f3d43286e5efc58eaf8049f3f7",
+        "filename": "svhost.js",
+        "type": "WSH JScript",
+        "confidence": "HIGH",
+        "description": ".NET-chain fileless loader; custom AES/ChaCha crypto; PhotoStudioJS persistence; injects into MSBuild"
+      },
+      {
+        "value": "b4cc5ac328afd0e7eaf16216879046367e083279bfdb831da3a53c8a31df3d1b",
+        "filename": "rr.exe",
+        "type": "PE32 executable",
+        "confidence": "MODERATE",
+        "description": "Near-empty MinGW stub; most likely a build/test artifact or small base64 utility, NOT a loader"
+      },
+      {
+        "value": "7a5c5d1e41d5e2c8c0f09d5dccb78932de535963d21350b2581716c8a753fd66",
+        "filename": "SvchostPayload",
+        "type": "PE64 .NET (in-memory)",
+        "confidence": "HIGH",
+        "description": "Custom .NET RAT (browser theft, keylogger, Defender tamper). Exists only in memory on a victim - hunt behaviorally, not by disk hash."
+      },
+      {
+        "value": "e924acdb4aea72bdf1db5ab121a2bcbfddd33fd2d3d8c8907441ce3a6dfef10b",
+        "filename": "Crystal-Monk.dll",
+        "type": "PE64 .NET (in-memory)",
+        "confidence": "HIGH",
+        "description": "Paralell (Blind Eagle-associated) reflective injector into MSBuild. In-memory only - hunt behaviorally."
+      },
+      {
+        "value": "79b6f2eb6583a83aabe590264de08c0ad1eb7e960ae9a4bdbc6ed84142ce95a9",
+        "filename": "cls.exe",
+        "type": "PE32 .NET",
+        "confidence": "HIGH",
+        "description": "Sibling .NET RAT build (Microsoft Trojan:MSIL/Zilla, 47/70); beacons 2.27.248.138:4443; confirms Svc_<name>/<name>_Mutex builder"
+      }
+    ],
+    "md5": [
+      {
+        "value": "2ce0c7b067339c33da3ae88154d0a6b2",
+        "filename": "v.exe"
+      },
+      {
+        "value": "135877ecc663ee47340a4726078234f0",
+        "filename": "cls.exe"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "ae5ed7c741695e76561ef0b66b1792fc95a5d1d4",
+        "filename": "v.exe"
+      }
+    ],
+    "imphash": [
+      {
+        "value": "631b2c5416914cfd00211b30a94c2e93",
+        "tool": "pefile",
+        "description": "Shared by client.exe/q.exe/s.exe (config-only trio) - a cross-sample selector and open VT-retrohunt pivot"
+      },
+      {
+        "value": "0f59f07585bd3695d4c8fce4a8e46998",
+        "tool": "pefile",
+        "description": "bk.exe"
+      },
+      {
+        "value": "1709c1b06eaaf503f70b4d39e7cf131b",
+        "tool": "pefile",
+        "description": "svhost4.exe"
+      },
+      {
+        "value": "b318706357aecc6715c617608ee7e411",
+        "tool": "pefile",
+        "description": "ab.exe"
+      }
+    ]
+  },
+  "sentinelstealer_sample": {
+    "note": "SentinelStealer (v.exe) is a SOURCED commodity credential/crypto-wallet stealer the operator collected and PARKED, not integrated into the intrusion. It has NO file-encryption capability. Listed here (not among operator families) with its C2 in the sourced_commodity_stealer_indicators tier below.",
+    "sha256": "d61419108785340e5b48fb4ef5fec85f46bbeaa86636bdfa9706b7df16a2e0f4",
+    "md5": "2ce0c7b067339c33da3ae88154d0a6b2",
+    "sha1": "ae5ed7c741695e76561ef0b66b1792fc95a5d1d4",
+    "protector": "ConfuserEx2 Confuser.Core 1.6.0+447341964f",
+    "confidence": "HIGH"
+  },
+  "network_indicators": {
+    "operator_estate": {
+      "ipv4": [
+        {
+          "value": "91.197.98.188",
+          "port": 8000,
+          "protocol": "TCP",
+          "purpose": "Staging / open directory (HTTP)",
+          "asn": "AS197695 REG.RU",
+          "country": "RU",
+          "confidence": "HIGH",
+          "action": "BLOCK",
+          "notes": "Also serves CloudSync C2 on :5555 (bk dropped implant) and :7777 (svhost4), both cleartext TCP, wait-then-speak, no banner"
+        },
+        {
+          "value": "91.197.98.188",
+          "port": 5555,
+          "protocol": "TCP",
+          "purpose": "CloudSync C2 (bk dropped implant)",
+          "confidence": "HIGH",
+          "action": "BLOCK",
+          "notes": "Cleartext TCP, [END] terminator; continuously open in passive scan history"
+        },
+        {
+          "value": "91.197.98.188",
+          "port": 7777,
+          "protocol": "TCP",
+          "purpose": "CloudSync C2 (svhost4)",
+          "confidence": "HIGH",
+          "action": "BLOCK",
+          "notes": "Cleartext TCP, [C2_END] terminator; confirmed on the wire (Sysmon EID 3 + PCAP)"
+        },
+        {
+          "value": "91.92.43.221",
+          "port": 5000,
+          "protocol": "TCP",
+          "purpose": "CloudSync Flask panel / control-plane",
+          "asn": "AS207043 DEDIK SERVICES / AS210644 Aeza",
+          "country": "DE",
+          "confidence": "HIGH",
+          "action": "BLOCK",
+          "notes": "Ports 5000-5003 serve identical CloudSync-Dashboard panel; client->5000, s->5001, q->5002; 5003 live with no build in hand. Aeza OFAC-designated 2025; DEDIK-inside-designation unproven."
+        },
+        {
+          "value": "2.27.248.138",
+          "port": 4443,
+          "protocol": "TCP",
+          "purpose": ".NET RAT (SvchostPayload/cls) implant beacon",
+          "asn": "AS207043 DEDIK SERVICES",
+          "country": "DE",
+          "confidence": "HIGH",
+          "action": "BLOCK",
+          "notes": "Raw-IP TCP, no domain. :8443 = Express/socket.io operator panel (cert CN=localhost); :1337 = operator RDP (cert CN=DESKTOP-KHCG4S8)"
+        }
+      ],
+      "domains": [
+        {
+          "value": "api.telegram.org",
+          "purpose": "CloudSync first-run victim notify (bot token 8766495...fX6A, chat id 8116056430)",
+          "confidence": "HIGH",
+          "action": "HUNT",
+          "false_positive_risk": true,
+          "notes": "Legitimate Telegram API domain used by many benign apps. Only suspicious paired with a workstation running Tor / the CloudSync working directory. Do not block outright."
+        }
+      ],
+      "urls": [
+        {
+          "value": "http://91.197.98.188:8000/client.exe",
+          "purpose": "ct.bat payload delivery URL",
+          "confidence": "HIGH",
+          "action": "BLOCK",
+          "notes": "Fetched with a spoofed browser User-Agent and proxy-credential inheritance"
+        }
+      ]
+    },
+    "sourced_commodity_stealer_indicators": {
+      "tier_note": "SEPARATE TIER - these belong to a sourced, unintegrated commodity stealer (SentinelStealer/v.exe), NOT the operator's estate. c3lestial.fun is Hostinger-hosted, registered 2025-09-14 (six months before this campaign's infrastructure), with 20+ unrelated communicating files. Do not present beside 91.92.43.221 / 2.27.248.138 as one infrastructure.",
+      "domains": [
+        {
+          "value": "c3lestial.fun",
+          "purpose": "SentinelStealer C2 (TLS SNI; /receive.php recovered from memory, NO HTTP method observed)",
+          "confidence": "MODERATE",
+          "action": "HUNT",
+          "false_positive_risk": true,
+          "notes": "NOT operator-owned. Shared Hostinger hosting. Detect via TLS SNI; do NOT author a POST/method-bound rule on /receive.php - it would not fire on real traffic."
+        },
+        {
+          "value": "ip-api.com",
+          "purpose": "Victim geolocation lookup by v.exe (HTTP, absent User-Agent)",
+          "confidence": "LOW",
+          "action": "HUNT",
+          "false_positive_risk": true,
+          "notes": "Legitimate geolocation service, heavily used by benign software. Only a co-signal when paired with an unrelated TLS SNI within seconds."
+        }
+      ]
+    },
+    "context_only_not_malicious": [
+      {
+        "value": "download.anydesk.com",
+        "purpose": "ab.exe fetches AnyDesk from the legitimate vendor CDN at deploy time",
+        "false_positive_risk": true,
+        "notes": "Legitimate AnyDesk CDN - NOT malicious infrastructure. The signal is the sequence (a non-AnyDesk binary fetching it, then silent-install + password over stdin), not the domain."
+      }
+    ],
+    "investigated_and_excluded": {
+      "note": "Candidate infrastructure assessed during this investigation and RULED OUT as operator-controlled. Published so other researchers do not re-chase the same dead ends. These are NOT indicators of compromise and must not be blocked or alerted on.",
+      "entries": [
+        {
+          "indicator": "46.36.217.3",
+          "also": [
+            "stolotov.org",
+            "stolotov.net"
+          ],
+          "reason": "Swept in on a shared panel title. A detailed host view severs it: different OS build, no SSH host-key overlap, and a simpler panel that is not the RAT panel. Suspicious infrastructure, but not demonstrably this operator.",
+          "confidence": "LOW association"
+        },
+        {
+          "indicator": "65.20.90.34",
+          "reason": "Reverse DNS shows a proxy/relay footprint unrelated to this operator, and its panel title differs from the one being tracked. Probable false positive.",
+          "confidence": "LOW"
+        },
+        {
+          "indicator": "hopto.org",
+          "also": [
+            "aka1.hopto.org",
+            "johnathon-yerrow.sahs.ac.zw"
+          ],
+          "reason": "Prior-tenant passive-DNS residue on a recycled hosting IP. The provider recycles addresses; this predates the operator.",
+          "confidence": "excluded"
+        },
+        {
+          "indicator": "prior-tenant DGA and mail-spam pDNS on the CloudSync C2 address",
+          "reason": "Historic records from earlier tenants of a recycled IP. Not operator infrastructure.",
+          "confidence": "excluded"
+        }
+      ]
+    }
+  },
+  "host_indicators": {
+    "registry_keys": [
+      {
+        "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "value_name": "WUS",
+        "value_data": "<dropped svchost.exe>",
+        "value_type": "REG_SZ",
+        "family": "CloudSync (bk)",
+        "confidence": "HIGH"
+      },
+      {
+        "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "value_name": "SystemUpdate",
+        "value_data": "%APPDATA%\\...\\Startup\\~<RANDOM>.exe",
+        "value_type": "REG_SZ",
+        "family": "ct.bat",
+        "confidence": "HIGH"
+      },
+      {
+        "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Svc_<name>",
+        "value_name": "Svc_<name>",
+        "value_data": "<hex>",
+        "value_type": "REG_SZ",
+        "family": ".NET RAT (Svc_cls observed)",
+        "confidence": "HIGH"
+      },
+      {
+        "key": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\SpecialAccounts\\UserList",
+        "value_name": "Guest$",
+        "value_data": "0 (hidden)",
+        "value_type": "REG_DWORD",
+        "family": "ab.exe AD backdoor",
+        "confidence": "HIGH"
+      }
+    ],
+    "file_paths": [
+      "C:\\Users\\Public\\fs\\config.json",
+      "C:\\Users\\Public\\fs\\a.dat",
+      "C:\\Users\\Public\\fs\\b.log",
+      "C:\\Users\\Public\\fs\\first_run.flag",
+      "C:\\Users\\Public\\fs\\taskhostw.exe",
+      "C:\\Users\\Public\\fs\\hidden_service\\",
+      "C:\\Users\\Public\\filesystem\\",
+      "%APPDATA%\\tor\\torrc",
+      "%LOCALAPPDATA%\\Photo Studio\\PhotoStudio.js",
+      "%LOCALAPPDATA%\\Photo Studio\\PhotoStudio.vbs",
+      "%TEMP%\\log_<digits>_<digits>",
+      "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\~<RANDOM>.exe",
+      "C:\\inetpub\\wwwroot\\aspnet_client\\a.aspx",
+      "C:\\inetpub\\wwwroot\\aspnet_client\\log.txt"
+    ],
+    "mutex_names": [
+      {
+        "value": "Global\\WUDFHost",
+        "family": "CloudSync (bk)",
+        "confidence": "HIGH",
+        "false_positive_risk": true,
+        "notes": "Scope to the object name; a bare WUDFHost token collides with legitimate Windows WUDFHost.exe"
+      },
+      {
+        "value": "Global\\WinUpdateSvcMutex",
+        "family": "CloudSync (svhost4)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "Global\\<name>_Mutex",
+        "family": ".NET RAT (cls_Mutex observed)",
+        "confidence": "HIGH"
+      }
+    ],
+    "service_names": [
+      {
+        "service_name": "WinUpdateService",
+        "display_name": "Windows Update Service",
+        "binary_path": "<dropped svchost.exe path>",
+        "family": "CloudSync (svhost4)",
+        "confidence": "HIGH"
+      }
+    ],
+    "scheduled_tasks": [
+      {
+        "task_name": "PhotoStudioJS",
+        "action": "wscript.exe %LOCALAPPDATA%\\Photo Studio\\PhotoStudio.vbs",
+        "trigger": "At log on",
+        "family": ".NET chain",
+        "confidence": "HIGH"
+      },
+      {
+        "task_name": "WindowsUpdateService",
+        "action": "C:\\WINDOWS\\system32\\svchost.exe",
+        "trigger": "At log on (/delay 0000:30 /rl highest)",
+        "family": ".NET RAT",
+        "confidence": "HIGH"
+      }
+    ],
+    "ad_and_webshell_indicators": [
+      {
+        "type": "ad_backdoor_account",
+        "value": "user object 'Guest$' (sAMAccountName ends '$' but objectClass=user), member of Domanen-Admins/Organisations-Admins/Schema-Admins/Administratoren",
+        "family": "ab.exe",
+        "confidence": "HIGH",
+        "notes": "Targeting DEFINITE; achieved access MODERATE. whenCreated on Guest$ would date any successful intrusion."
+      },
+      {
+        "type": "web_shell",
+        "value": "Sharp4WebCmd ASPX at C:\\inetpub\\wwwroot\\aspnet_client\\a.aspx (title 'Sharp4WebCmd Command Console')",
+        "family": "ab.exe",
+        "confidence": "HIGH",
+        "notes": "Sourced tool (AhnLab-documented); shared with unrelated actor Larva-26009 - a shared tool, NOT an actor link"
+      },
+      {
+        "type": "remote_access_software",
+        "value": "unattended AnyDesk install at C:\\Program Files\\AnyDesk (implants) or C:\\ProgramData\\AnyDesk (ab.exe), --start-with-win, password set over stdin",
+        "family": "multiple",
+        "confidence": "HIGH"
+      }
+    ],
+    "victim_id_formats": [
+      "SYS-%08X (earlier builds)",
+      "UUID (later build)"
+    ]
+  },
+  "credential_indicators": {
+    "note": "Defanged to first-8+last-4 per project credential-redaction convention. These are disclosure hazards, not blocking indicators - the CloudSync C2 does not authenticate its peer, so a full auth key would enable impersonation of a live implant channel. Full values held only in the local investigation directory. The Telegram chat id is NOT a credential and is published whole as the attribution artifact.",
+    "defanged_credentials": [
+      {
+        "value": "X9kL2mP5...hJ0",
+        "role": "CloudSync C2 static auth key (32 chars), transmitted as registration message line 1",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "J9kzQ2Y0...Y0qO",
+        "role": "Shared AnyDesk unattended password (ab.exe, bk.exe, svhost4.exe)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "Admin@20...9n@@",
+        "role": "AD backdoor password (ab.exe variant)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "Admin@20...#Sec",
+        "role": "Password scheme in CloudSync implants (bk, svhost4)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "8766495...fX6A",
+        "role": "CloudSync Telegram bot token",
+        "confidence": "HIGH"
+      }
+    ],
+    "attribution_artifact_published_whole": [
+      {
+        "value": "8116056430",
+        "role": "CloudSync Telegram chat id; KELA maps to @GDLockerSec (MODERATE, single-source). Published whole - already public via KELA and central to the attribution thread.",
+        "confidence": "MODERATE"
+      }
+    ],
+    "dead_builder_defaults_not_credentials": [
+      {
+        "value": "BotToken ae6afcae...b8e5e4 / ChatID aceb0cef...065f99",
+        "role": "v.exe/SentinelStealer 64-hex config fields never referenced by any code - dead builder defaults, NOT Telegram credentials. Defanged even in screenshots.",
+        "confidence": "HIGH"
+      }
+    ]
+  }
+}

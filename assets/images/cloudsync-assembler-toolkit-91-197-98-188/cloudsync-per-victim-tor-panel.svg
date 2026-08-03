@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1430" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    LAYOUT: vertical-chain (4 steps)
+    Subject: CloudSync turns each victim into its own Tor hidden service hosting the control panel.
+  -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1430" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1429" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">One Tor Hidden Service Per Victim</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">The victim host becomes the control panel, reached over Tor</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">CloudSync needs no inbound port and no operator-side listener for control</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STEP 1 — YELLOW: staging =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="229" width="880" height="13" fill="#eab308"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+    <text x="200" y="227" font-size="23" font-weight="600" fill="#111111">Working directory, and Tor comes with it</text>
+    <text x="80" y="282" font-size="21" fill="#ffffff">The implant creates its own directory under the shared Public profile.</text>
+    <text x="80" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">C:\Users\Public\&lt;name&gt;\  with  hidden_service\  and  downloads\</text>
+    <text x="80" y="350" font-size="18" fill="#e5e5e5">Tor is embedded in the implant and dropped, not downloaded. Two builds use two</text>
+    <text x="80" y="378" font-size="18" fill="#e5e5e5">different directory names, so the durable pattern is the shape, not the name.</text>
+    <text x="80" y="404" font-size="18" fill="#fb923c" font-weight="600">Hunt the shape: a Public-profile directory containing hidden_service</text>
+  </g>
+  <line x1="500" y1="416" x2="500" y2="456" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 2 — RED: operator code =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="462" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="462" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="495" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="493" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
+    <text x="200" y="493" font-size="23" font-weight="600" fill="#ffffff">A hidden service is generated on the victim</text>
+    <text x="80" y="548" font-size="21" fill="#ffffff">Tor runs under a masqueraded name against a written torrc.</text>
+    <text x="80" y="582" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">HiddenServiceDir = the working directory   ·   HiddenServicePort 80 to 127.0.0.1</text>
+    <text x="80" y="616" font-size="18" fill="#e5e5e5">No build hardcodes an onion address. Each victim generates its own, and the</text>
+    <text x="80" y="644" font-size="18" fill="#e5e5e5">implant reads the resulting hostname file back to report it.</text>
+    <text x="80" y="670" font-size="18" fill="#fb923c" font-weight="600">A process writing a torrc and then reading a hostname file back</text>
+  </g>
+  <line x1="500" y1="682" x2="500" y2="722" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 3 — RED: operator code =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="728" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="728" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="761" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="759" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 3</text>
+    <text x="200" y="759" font-size="23" font-weight="600" fill="#ffffff">The panel runs locally, and the firewall is opened</text>
+    <text x="80" y="814" font-size="21" fill="#ffffff">The implant serves the browser control panel itself, on a local listener.</text>
+    <text x="80" y="848" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">netsh advfirewall firewall add rule name="WinUpdateSvc" dir=in action=allow</text>
+    <text x="80" y="882" font-size="18" fill="#e5e5e5">The port is generated at runtime and differs every execution. The rule NAME does</text>
+    <text x="80" y="910" font-size="18" fill="#e5e5e5">not, which is what makes it the anchor worth shipping.</text>
+    <text x="80" y="936" font-size="18" fill="#fb923c" font-weight="600">Ship the firewall rule name. Never ship the port.</text>
+  </g>
+  <line x1="500" y1="948" x2="500" y2="988" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 4 — DEEP RED: endgame =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="994" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="994" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="1027" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="1025" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 4</text>
+    <text x="200" y="1025" font-size="23" font-weight="600" fill="#ffffff">Registration out, operator in over Tor</text>
+    <text x="80" y="1080" font-size="21" fill="#ffffff">The implant registers to a dedicated panel host in cleartext TCP.</text>
+    <text x="80" y="1114" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">host profile + onion URL + stored credentials, closed by a bracketed literal</text>
+    <text x="80" y="1148" font-size="18" fill="#e5e5e5">The operator then reaches the victim's own panel over Tor. No inbound port is</text>
+    <text x="80" y="1176" font-size="18" fill="#fb923c" font-weight="600">exposed, and the control channel never touches operator-owned infrastructure.</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1254" x2="940" y2="1254" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1290" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors: firewall rule named WinUpdateSvc · a Public-profile</text>
+  <text x="500" y="1320" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">directory containing hidden_service · a dropped Tor binary under a false name</text>
+  <text x="500" y="1354" text-anchor="middle" font-size="15" fill="#cccccc">Once the hidden service is up the control traffic is opaque on the wire. Catch the setup, not the session.</text>
+  <text x="500" y="1386" text-anchor="middle" font-size="14" fill="#888888">Legend: yellow = staging · red = operator code · deep red = command and control</text>
+</svg>
