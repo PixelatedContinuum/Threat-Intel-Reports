@@ -282,7 +282,7 @@ The one thing the hosting does tell you is tempo. The staging host has SSH conti
 
 ---
 
-**TECHNICAL TEARDOWN.** *Everything from here through Section 11 is written for peers, and the deep-dive blocks are collapsed by default and expand on click. Indicators, detection guidance and the confidence summary in Sections 12 to 14 return to practitioner ground, so a reader who wants the hunt rather than the reverse engineering should skip ahead to Section 12.*
+**TECHNICAL TEARDOWN.** *The reverse engineering starts here. Deep-dive blocks are collapsed, so open whichever ones interest you and leave the rest shut. Indicators, detection guidance and the confidence summary are waiting in Sections 12 to 14.*
 
 ---
 
