@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 92 rules from 32 campaigns. SIDs are STABLE across rebuilds (persistent
+# 96 rules from 33 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)' then '#   confidence / rate-limit / FP note'.
 
@@ -39,6 +39,18 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"RANSOMWARE enc_c2.exe Tor C2
 # bellamain-turkish-phaas-79-137-192-3-20260516 (orig sid:9001004)
 #   rate-limited
 alert http $HOME_NET any -> any any (msg:"THL BellaMain-PhaaS USOM Blocklist Poll from Web Server (Security Tool Discovery Indicator)"; flow:established,to_server; http.host; content:"usom.gov.tr"; endswith; http.uri; content:"url-list.txt"; nocase; threshold:type limit,track by_src,count 1,seconds 300; classtype:policy-violation; sid:3500009; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-16, reference https://the-hunters-ledger.com/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/;)
+# cloudsync-assembler-toolkit-91-197-98-188 (orig sid:1000001)
+#   rate-limited
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit AUTO UPDATE C2 Registration Marker (C2 Registration)"; flow:established,to_server; content:"=== AUTO UPDATE ==="; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500181; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-03, reference https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/;)
+# cloudsync-assembler-toolkit-91-197-98-188 (orig sid:1000002)
+#   rate-limited
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit Shares Heartbeat Terminator Marker (C2 Heartbeat)"; flow:established,to_server; content:"[Shares]"; pcre:"/\[(C2_END|END)\]/"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500182; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-03, reference https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/;)
+# cloudsync-assembler-toolkit-91-197-98-188 (orig sid:1000003)
+#   rate-limited
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun TLS SNI (Sourced Commodity Stealer C2)"; flow:established,to_server; tls.sni; content:"c3lestial.fun"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500183; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-03, reference https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/;)
+# cloudsync-assembler-toolkit-91-197-98-188 (orig sid:1000004)
+#   rate-limited
+alert dns $HOME_NET any -> any any (msg:"THL HUNT CloudSync-Assembler-Toolkit SentinelStealer c3lestial.fun DNS Query (Sourced Commodity Stealer C2)"; dns_query; content:"c3lestial.fun"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500184; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-03, reference https://the-hunters-ledger.com/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/;)
 # dual-rat-analysis (orig sid:2100001)
 #   rate-limited
 alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL Dual-RAT-Quasar-NjRAT Quasar Binary Protocol C2 on TCP 4782 (RAT C2 Channel)"; flow:established,to_server; dsize:>0; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500118; rev:2; metadata:author The_Hunters_Ledger, date 2025-12-06, reference https://the-hunters-ledger.com/hunting-detections/dual-rat-analysis-detections/;)
