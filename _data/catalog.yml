@@ -10,6 +10,7 @@ entries:
     severity: high
     tags: [Intrusion Toolkit, RAT, Access Broker]
     report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
+    stix_url: /stix/cloudsync-assembler-toolkit-91-197-98-188.json
     detection_url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
     ioc_url: /ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json
   - title: "GOCLOUD Multi-Service Cryptojacking"

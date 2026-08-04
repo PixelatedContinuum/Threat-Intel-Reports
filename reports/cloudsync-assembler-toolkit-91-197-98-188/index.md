@@ -21,11 +21,12 @@ detection_sections:
   - label: "Coverage Gaps"
     anchor: "coverage-gaps"
 ioc_highlights:
-  - "91.197.98[.]188"
-  - "91.92.43[.]221"
-  - "2.27.248[.]138"
+  - "91[.]197[.]98[.]188"
+  - "91[.]92[.]43[.]221"
+  - "2[.]27[.]248[.]138"
   - "62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa"
   - "d25a3a858e28faa68ca6c624d7d19350c11ac798c346be3067307463e40aaff1"
+stix_bundle: /stix/cloudsync-assembler-toolkit-91-197-98-188.json
 ---
 
 **Campaign Identifier:** CloudSync-Assembler-Toolkit-91.197.98.188<br>
