@@ -534,11 +534,13 @@ level: medium
 #### Fileless PowerShell PE Dropper ExecutionPolicy Bypass from Non-Standard Parent
 
 **Tier:** Hunting
-**Robustness:** 1
+**Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1027.011 (Fileless Storage)
 **Confidence:** MODERATE
-**Rationale:** `-ExecutionPolicy Bypass` loading a `.ps1` file is common in both malicious and legitimate administrative tooling; the rule's only narrowing factor is a small denylist of "standard" parent processes, which is a broad NOT-filter rather than a positive behavioral anchor — most malicious and benign non-standard parents alike pass through untouched. This matches the puf.ps1/sync.ps1 fileless dropper chain but is not specific to it.
-**False Positives:** Legitimate administrative scripts invoked via remote management tools, scheduled tasks, or software deployment systems not on the standard-parent denylist.
+**Rationale:** `-ExecutionPolicy Bypass` loading a `.ps1` file is common in both malicious and legitimate administrative tooling. The rule originally narrowed on nothing but a four-entry denylist of standard parent processes, which is a broad NOT-filter rather than a positive behavioral anchor, so every developer tool, CI agent, package manager and automation framework that launches PowerShell this way passed straight through. `selection_staging_path` adds the missing positive anchor by requiring the script to live in a user-writable staging directory, which is where a dropper puts it and where routine tooling generally does not: an installer or a build system usually runs its scripts from an install directory or a source checkout. Repository- and Program-Files-resident automation therefore no longer matches, while the puf.ps1 and sync.ps1 chain still does.
+
+Note that this narrows on the *script's* location, not the parent process, deliberately: a parent-image denylist is environment-specific and belongs in local tuning, whereas the staging-directory anchor travels to any environment. The title's "fileless PE dropper" framing still describes the campaign behavior rather than anything the query itself tests, so this remains a hunting rule.
+**False Positives:** Software installers and updaters that stage a setup script under `%TEMP%` or `%APPDATA%` and invoke it with a policy bypass; legitimate administrative scripts run from a user-writable path via remote management tools, scheduled tasks, or deployment systems not on the standard-parent denylist.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM; tune the filter_standard_parents list per environment before using for anything beyond hunting.
 
 ```yaml
@@ -572,14 +574,23 @@ detection:
             - '-ExecutionPolicy'
             - 'Bypass'
             - '.ps1'
+    selection_staging_path:
+        CommandLine|contains:
+            - '\AppData\'
+            - '\Temp\'
+            - '\ProgramData\'
+            - '\Users\Public\'
+            - '\Downloads\'
+            - '\$Recycle.Bin\'
     filter_standard_parents:
         ParentImage|endswith:
             - '\explorer.exe'
             - '\services.exe'
             - '\svchost.exe'
             - '\msiexec.exe'
-    condition: selection and not filter_standard_parents
+    condition: selection and selection_staging_path and not filter_standard_parents
 falsepositives:
+    - Software installers and updaters that stage a setup script under %TEMP% or %APPDATA% and invoke it with a policy bypass from a parent not on the standard-parent list
     - Legitimate administrative scripts invoked via remote management tools, scheduled tasks, or software deployment systems; extend filter_standard_parents to include known-good deployment parent images in the target environment
 level: medium
 ```

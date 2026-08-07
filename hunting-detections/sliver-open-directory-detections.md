@@ -577,7 +577,7 @@ level: medium
 **ATT&CK Coverage:** T1036 (Masquerading), T1036.005 (Match Legitimate Name or Location)
 **Confidence:** MODERATE
 **Rationale:** Salvage-rewritten from the original exact-argument match (`CommandLine|contains|all` on the full hardcoded spoof string). The original condition's true discriminator was a single hardcoded literal — trivially changed in a rebuild. Generalized to match any CommandLine referencing `MicrosoftEdgeUpdate.exe` while the Image path is not a legitimate Edge update location, so the rule also covers a rebuild that keeps the masquerade but changes the arguments. This trades campaign-specific precision for durability; kept at `level: medium` (not promoted to Detection) since the broader match increases the false-positive surface relative to the exact-string original.
-**False Positives:** Legitimate Microsoft Edge update processes running from non-standard installation paths (uncommon but possible in enterprise repackaging scenarios); security tooling that simulates Edge update processes for testing purposes; any process whose command-line arguments happen to reference MicrosoftEdgeUpdate.exe as a string without impersonating it (rare).
+**False Positives:** Security tooling that simulates Edge update processes for testing; any process whose command-line arguments happen to reference MicrosoftEdgeUpdate.exe as a string without impersonating it (rare). Note the third filter path: Edge's own updater self-stages a copy into `C:\Program Files (x86)\Microsoft\Temp\EU<hex>.tmp\MicrosoftEdgeUpdate.exe` and runs it from there during an updater refresh, launched by the signed `MicrosoftEdgeUpdateSetup_X86_*.exe` under `\Microsoft\EdgeUpdate\Install\`. That path is neither of the two obvious install directories, so a version of this rule filtering only those two fires on every Windows host each time Edge updates its updater. The staging directory sits under `Program Files (x86)` and so requires administrative rights to write, which keeps it a reasonable filter rather than a trivial bypass.
 **Deployment:** Sysmon Event ID 1 (process creation) with CommandLine logging, or equivalent EDR process-tree telemetry.
 
 ```yaml
@@ -617,6 +617,7 @@ detection:
         Image|contains:
             - '\Microsoft\EdgeUpdate\'
             - '\Microsoft\Edge\Application\'
+            - '\Microsoft\Temp\EU'
     condition: selection_spoof_cmdline and not filter_legitimate_edge_update
 falsepositives:
     - >-
