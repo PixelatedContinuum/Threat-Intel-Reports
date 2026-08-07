@@ -25,7 +25,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 0 | 4 | T1071.001, T1059.001, T1685, T1115, T1105, T1082, T1036.005, T1129 | 0 |
-| Sigma | 3 | 5 | T1059.001, T1685, T1115, T1204.002, T1105, T1055, T1082, T1033 | 0 |
+| Sigma | 2 | 6 | T1059.001, T1685, T1115, T1204.002, T1105, T1055, T1082, T1033 | 0 |
 | Suricata | 1 | 1 | T1071.001 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
@@ -295,12 +295,16 @@ rule FleetAgent_Family_General {
 
 #### FleetAgentFUD PowerShell Execution Policy Bypass from AppData
 
-**Tier:** Detection
+**Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Impair Defenses)
-**Confidence:** HIGH
-**Rationale:** Requires three independent conditions together — `powershell.exe` process creation, a parent process rooted in `\AppData\`, an execution-policy bypass flag combination, AND a hidden-window flag. The added hidden-window requirement (beyond the two-condition subset that Multi-Stage Attack Pattern below reduces to) meaningfully narrows the population: legitimate AppData-rooted software rarely combines bypass flags with a deliberately hidden window.
-**False Positives:** Legitimate software installers using PowerShell from AppData (verify digital signature); administrative scripts executed from user directories.
+**Confidence:** LOW
+**Rationale:** Requires four conditions together — `powershell.exe` process creation, a parent rooted in `\AppData\`, an execution-policy bypass flag, and a hidden-window flag. The original assessment held that legitimate AppData-rooted software rarely combines a bypass flag with a deliberately hidden window, and scored the rule Detection tier at HIGH confidence on that basis.
+
+Production falsified it. All 10 matches in a measured 14-day window traced to the Visual Studio Code installer. The four conditions are narrow as a conjunction but not narrow in population, because all four are also the default fingerprint of Squirrel- and Electron-style auto-updaters (VS Code, Slack, Discord, GitHub Desktop), which install per-user under `%LocalAppData%` precisely to avoid needing admin rights, and self-update with a hidden window and a policy bypass because their update scripts are unsigned by policy and should not flash a console. The hidden-window flag does not separate malicious from benign here; it describes both.
+
+The detection logic is deliberately unchanged, so nothing stops being detected. What changes is response posture: at `level: high` this paged as an incident on routine software maintenance, which trains an analyst to discount every future hit from it, including a real one. The right differentiator would be parent-process code-signature status, which the false-positives note below has always implied. That is not implemented here because it was not verified whether this telemetry populates `process.parent.code_signature.*`, and shipping an unverified exclusion risks either doing nothing or blinding the rule to a loader signed with a stolen certificate.
+**False Positives:** Confirmed in production. Per-user installers and auto-updaters that install under `%LocalAppData%` and self-update silently, most commonly Visual Studio Code and other Electron- or Squirrel-based applications such as Slack, Discord and GitHub Desktop, invoke `powershell.exe` with an execution-policy bypass and a hidden window as a routine unattended part of the update flow. Corporate software-deployment tooling staging helper scripts under a user's AppData profile produces the same pattern. Any estate with a meaningful developer or Electron-application footprint should expect this rule to fire on routine software maintenance; review parent-process identity and code-signing status before treating a hit as suspicious.
 **Blind Spots:** An operator who stages from a non-AppData parent path (Temp, ProgramData) or drops the hidden-window flag evades.
 **Validation:** Trigger `powershell.exe -NoP -NonI -W Hidden -Exec Bypass -C ...` from an AppData-rooted parent process — must match; the same command from a `C:\Program Files\` parent must NOT fire.
 **Deployment:** Sysmon/EDR process-creation telemetry, Windows Security Event ID 4688 with command-line auditing enabled.
@@ -314,6 +318,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/fleetagentfud-exe-detections/
 author: The Hunters Ledger
 date: '2026-01-12'
+modified: '2026-08-07'
 logsource:
     product: windows
     category: process_creation
@@ -333,7 +338,7 @@ detection:
 falsepositives:
     - Legitimate software installers using PowerShell from AppData (verify digital signature)
     - Administrative scripts executed from user directories (review context)
-level: high
+level: medium
 tags:
     - attack.execution
     - attack.t1059.001

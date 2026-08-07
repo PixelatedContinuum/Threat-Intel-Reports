@@ -437,7 +437,11 @@ level: medium
 **Confidence:** LOW
 **Rationale:** Installation of a new kernel-mode driver service is the setup step of killer.dll's install-abuse-remove cleanup pattern, but the event alone does not distinguish a legitimate hardware or security-software driver install from this specific technique. *Retiering note:* the source rule's own description explains its intended correlation — pairing this with a matching service-deletion event within 30 seconds — was dropped because single-event Sigma rules cannot express cross-event timing. Unlike the mass-termination rule above, no concrete deletion-side selector existed anywhere in the source material to correlate against (Windows has no direct System-log analog to 7045 for service deletion), so fabricating one was avoided rather than guessed at; see Coverage Gaps.
 **Retiering note (2026-07-30):** three corrections. The claim that this event is "comparatively rare on most endpoints" was wrong and has been removed from both the rationale and the rule description — Windows re-registers every boot-start, auto-start and demand-start kernel driver service through the Service Control Manager on each restart, so a routine reboot emits a burst of these events for drivers that were already installed. `level` moved from `medium` to `low` to match the `Tier: Hunting` and `Confidence: LOW` already recorded here; at `medium` the Sigma-to-Elastic deployment path creates an enabled alerting rule, which contradicts the hunting-lead framing. A filter now excludes `\system32\drivers\wd\`, Microsoft Defender's dynamically-updated driver folder, which only Defender can write to and which it re-registers on every boot. The rule's `id` was also replaced: the previous value was not a valid UUID v4 and would be rejected by SigmaHQ's validator.
-**False Positives:** Driver installation testing by IT staff (should be reviewed); legitimate hardware or security-software driver installation; reboot-driven re-registration of already-installed driver services.
+**False Positives:** Driver installation testing by IT staff (should be reviewed); legitimate hardware or security-software driver installation, including OEM utilities such as Samsung Magician, AMD GPU and Intel chipset drivers, and third-party AV/EDR self-protection drivers like Malwarebytes Chameleon reinstalling on update; reboot-driven re-registration of already-installed boot-start and auto-start driver services, which emits this event for each one.
+
+The query also excludes Elastic Defend's own two kernel drivers, and that exclusion ships at source rather than as a local tune for a specific reason. This rule is Sigma-to-Elastic content, so it cannot be deployed without Elastic Agent, and Elastic Agent registers `elastic-endpoint-driver.sys` and `ElasticElam.sys` on every boot. Every deployment therefore inherits the same self-trigger on every restart. Measured over a 14-day window those two drivers were 6 of this rule's 24 fires, and excluding them cut it to 18. Note the residual blind spot this creates: a driver staged at a path ending in exactly one of those two filenames would no longer alert, which is a deliberate camouflage move rather than the generic case this rule exists to catch.
+
+Vendor drivers beyond Elastic's are deliberately **not** excluded. Whitelisting Samsung, AMD, Intel and Malwarebytes by name is whack-a-mole with no stopping point, and those are properties of a particular machine's hardware rather than of deploying this rule. Scope them locally where they occur.
 **Deployment:** Windows Event Log 7045 (System log), Sysmon-augmented service monitoring.
 
 ```yaml
@@ -474,9 +478,12 @@ detection:
     Provider_Name: 'Service Control Manager'
     EventID: 7045
     ServiceType: 'kernel mode driver'
-  filter_defender_managed_drivers:
-    ImagePath|contains: '\system32\drivers\wd\'
-  condition: selection and not filter_defender_managed_drivers
+  filter_known_benign_driver_paths:
+    ImagePath|contains:
+      - '\system32\drivers\wd\'
+      - '\elastic-endpoint-driver.sys'
+      - '\ElasticElam.sys'
+  condition: selection and not filter_known_benign_driver_paths
 falsepositives:
   - Driver installation testing by IT staff (should be reviewed)
   - Legitimate hardware or security-software driver installation
@@ -493,7 +500,11 @@ level: low
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1068 (Exploitation for Privilege Escalation)
 **Confidence:** LOW
 **Rationale:** Detects `.sys` files created in temp directories, killer.dll's staging location for its randomized-filename embedded drivers before service installation. Durable in that it does not depend on any specific filename (the malware itself uses a randomized lowercase charset), but legitimate driver installers — particularly third-party hardware vendors and some VPN/virtualization tooling — commonly stage `.sys` files in temp directories before proper installation, a pattern the source rule's own false-positives list already documents. *Retiering note:* demoted from the source's `level: high` to `medium` given this acknowledged, non-rare legitimate population.
-**False Positives:** Legitimate driver installers using temp staging (should extract to System32\Drivers); hardware vendor driver installers (review publisher signatures); a manually-run, downloaded driver installer executed directly from Downloads/Temp/AppData is not excluded by the parent-image filter.
+**False Positives:** Legitimate hardware and chipset vendor installers staging `.sys` files under their own root-level directories or under `Program Files (x86)` before final installation. AMD Software was confirmed staging `amdkmdag.sys` from `C:\AMD\...`; NVIDIA and Intel packages follow the same mechanic and are excluded on that basis, though not directly observed. A manually-run, downloaded driver installer executed directly from Downloads/Temp/AppData is still not excluded by the parent-image filter, nor is any vendor path outside the filter list.
+
+Two gaps were closed here after live measurement. The `Program Files` exclusion was a plain string bug: `\Program Files\` does not match `\Program Files (x86)\`, since the segment is followed by a space rather than a separator, so every 32-bit vendor installer on any Windows host hit this rule. The vendor-root gap is the same defect one level up, as installers routinely stage from branded root directories outside both excluded trees.
+
+On the breadth this costs: over a 14-day window the unfiltered selection matched 124 events, the two original exclusions cut that to 3, and the four additions cut it to 0. The rule remains broad in principle, since anything staged to ProgramData, Users\Public, or a Temp path from an unlisted process still fires. The named exclusions do create a lookalike-path risk, where a dropper staged as `C:\AMD\stage\driver.sys` now evades this rule. That risk is not new in kind: the rule already excluded all of `Program Files` and `System32` by literal path. The sibling Event 7045 rule is the compensating layer, since a driver still has to be registered as a kernel service to load, and that step is caught independently of where the file was staged.
 **Deployment:** Sysmon Event ID 11 (file creation) or EDR-equivalent file-event telemetry, filtered to temp-path `.sys` creation.
 
 ```yaml
@@ -527,10 +538,19 @@ detection:
     Image|contains:
       - '\Windows\System32\'
       - '\Program Files\'
+      - '\Program Files (x86)\'
+      - '\AMD\'
+      - '\NVIDIA\'
+      - '\Intel\'
   condition: selection and not filter_legitimate
 falsepositives:
   - Legitimate driver installers using temp staging (should extract to System32\Drivers)
-  - Hardware vendor driver installers (review publisher signatures)
+  - >-
+    Hardware and chipset vendor installers staging .sys files under their own
+    root-level directories or under Program Files (x86) before final
+    installation (AMD Software confirmed staging amdkmdag.sys via C:\AMD\;
+    NVIDIA and Intel packages follow the same mechanic). Review publisher
+    signatures for any vendor path not on the filter list.
   - >-
     A manually-run, downloaded driver installer executed directly from
     Downloads/Temp/AppData is not excluded by the parent-image filter.

@@ -155,7 +155,9 @@ level: high
 **ATT&CK Coverage:** T1547.001 (Boot or Logon Autostart Execution: Registry Run Keys)
 **Confidence:** MODERATE
 **Rationale:** Sysmon/EDR registry-set telemetry on any `CurrentVersion\RunOnce` key write is a durable technique-level signal that survives campaign infrastructure changes, since the OS-defined key path itself carries the detection value rather than any campaign-specific literal. The selector has no value-name or writing-process filter, and RunOnce — while used by fewer legitimate installers than the standard Run key — does see real deployment/update-tooling use, so this is scoped to Hunting rather than alerting-grade.
-**False Positives:** Software installers, patch-management, and deployment tooling (for example, SCCM/Intune post-install scripts) that use RunOnce for legitimate reboot-continuation actions.
+**False Positives:** The rule's most frequent false positives trace to two well-defined, universally-occurring channels, both filtered in the query above. The first is the Windows Restart Manager, where `csrss.exe` writes per-user `RunOnce\Application Restart #N` entries to relaunch applications after a servicing reboot. The second is Microsoft Edge's or Edge WebView2's own signed installer registering a `msedge_cleanup_{GUID}` post-update entry from its canonical `Program Files\Microsoft\{Edge,EdgeWebView}\Application\*\Installer\setup.exe` path. Both occur on any actively-updated Windows 11 endpoint and are not specific to any one network: measured over a 14-day window they were 7 of this rule's 9 fires, and filtering them cut it to 2.
+
+RunOnce still sees legitimate use beyond those two channels, most often MSI-based driver and application installers invoked through `msiexec.exe`, and other vendor setup executables staged under `%TEMP%`. `msiexec.exe` is deliberately left unfiltered because it is also a documented living-off-the-land binary for delivering attacker-controlled MSI packages, so those hits, and any RunOnce write outside the two filtered paths, still warrant analyst review.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry-set telemetry); analyst review of hits, cross-referenced against the WinRE rule above and the IOC feed's registry indicators for higher-confidence correlation.
 
 ```yaml
@@ -185,40 +187,61 @@ logsource:
 detection:
     selection:
         TargetObject|contains: '\CurrentVersion\RunOnce\'
-    condition: selection
+    filter_main_restart_manager:
+        Image: 'C:\Windows\System32\csrss.exe'
+        TargetObject|contains: '\RunOnce\Application Restart #'
+    filter_main_edge_installer_cleanup:
+        Image|startswith:
+            - 'C:\Program Files\Microsoft\Edge\Application\'
+            - 'C:\Program Files (x86)\Microsoft\Edge\Application\'
+            - 'C:\Program Files\Microsoft\EdgeWebView\Application\'
+            - 'C:\Program Files (x86)\Microsoft\EdgeWebView\Application\'
+        Image|endswith: '\Installer\setup.exe'
+    condition: selection and not 1 of filter_main_*
 falsepositives:
     - >-
       Software installers and deployment/update tooling that use
-      RunOnce for legitimate reboot-continuation actions
+      RunOnce for legitimate reboot-continuation actions, most often
+      MSI-based driver and application installers invoked through
+      msiexec.exe, which is deliberately not filtered because it is
+      also a living-off-the-land binary for delivering attacker-
+      controlled MSI packages
 level: medium
 ```
 
-#### Headless Console Host or Command Shell Execution Flag
+#### cmd.exe Launched with Non-Standard /headless Argument
 
 **Tier:** Hunting
-**Robustness:** 2
+**Robustness:** 1
 **ATT&CK Coverage:** T1564.003 (Hide Artifacts: Hidden Window)
-**Confidence:** MODERATE
-**Rationale:** The `--headless`/`/headless` flag combination on `conhost`/`cmd.exe` is a durable anti-forensic launch pattern that survives campaign infrastructure changes, but the same pattern is used by legitimate CI/build tooling and Electron-based applications — a limitation the original analysis already identified and left untightened for lack of a confirmed Pulsar-specific parent-process anchor. Scoped to Hunting with `level: low` accordingly.
-**False Positives:** Legitimate CI/build tooling and Electron-based applications that launch a console host or command shell headlessly.
+**Confidence:** LOW
+**Rationale:** This rule previously carried a second selector matching `conhost` with `--headless`. That selector has been removed. `--headless` is not attacker-chosen syntax, it is the argument signature Windows' own ConPTY API passes whenever an application hosts a console without a visible window, so Windows Terminal, VS Code, OpenSSH, WSL and effectively every Electron application with an integrated terminal produce it identically. Measured over a 14-day window, that branch accounted for **45 of the rule's 45 matches**, every one a signed Microsoft `conhost.exe` spawned by mainstream developer tooling, with no corroborating threat intelligence on any of them.
+
+A salvage rewrite was considered and rejected. Re-anchoring on parent-process trust would need either an open-ended denylist of legitimate ConPTY consumers, which will always lag new software, or an unsigned-parent requirement, which abandons the flag as the discriminator and converges on a more general "unsigned binary executes something" technique that belongs in a different rule. The original analysis had already noted it could not find a campaign-specific parent anchor; that gap is real and this rule stops pretending otherwise.
+
+What survives is the `cmd.exe` plus `/headless` selector. `cmd.exe` has no native `/headless` switch, so the string only appears where an operator or script author placed it deliberately. That branch matched nothing in the same window, which is the intended state for a narrow anomaly selector. Robustness drops 2 to 1 and confidence MODERATE to LOW to reflect that this now rests on a single decorative flag with no corroborating anchor.
+**False Positives:** None observed in the measured window. The retired `conhost` branch carried the entire false-positive burden.
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process_creation with command line); analyst review, prioritizing hits with an unusual parent process or an accompanying network connection.
+**Coverage gap:** A durable "hidden console execution" detection needs parent-process trust context this campaign's analysis never confirmed, or a process-creation show-window / `CREATE_NO_WINDOW` flag if the telemetry source exposes one. Either would be a materially more durable anchor than string-matching ConPTY's own implementation-detail argument.
 
 ```yaml
-title: Headless Console Host or Command Shell Execution Flag
+title: cmd.exe Launched with Non-Standard /headless Argument
 id: 0d751112-ebbe-497a-af7d-32b4b2672f83
 status: experimental
 description: >-
-  Detects a conhost or cmd.exe command line carrying a --headless or
-  /headless flag, used by the Pulsar RAT loader chain to run without a
-  visible console window. The same flag pattern also appears in
-  legitimate CI/build tooling and some Electron-based applications, so
-  this is a broad hunting lead rather than a family-specific signature;
-  no Pulsar-specific parent-process anchor was confirmed for this
-  campaign.
+  Detects a cmd.exe command line carrying a /headless argument. cmd.exe
+  has no native /headless switch, so the string only appears where an
+  operator or script author placed it deliberately. The companion
+  conhost --headless selector was removed: ConPTY is now the standard
+  mechanism Windows Terminal, VS Code, SSH, WSL and most Electron-based
+  developer tools use to host a console, and measured telemetry showed
+  that branch firing exclusively on signed Microsoft conhost.exe spawned
+  by mainstream tooling.
 references:
     - https://the-hunters-ledger.com/hunting-detections/PULSAR-RAT-detections/
 author: The Hunters Ledger
 date: '2025-12-01'
+modified: '2026-08-07'
 tags:
     - attack.stealth
     - attack.t1564.003
@@ -227,19 +250,17 @@ logsource:
     category: process_creation
     product: windows
 detection:
-    selection_conhost:
-        CommandLine|contains|all:
-            - 'conhost'
-            - '--headless'
-    selection_cmd:
+    selection:
         CommandLine|contains|all:
             - 'cmd.exe'
             - '/headless'
-    condition: 1 of selection_*
+    condition: selection
 falsepositives:
     - >-
-      Legitimate CI/build tooling and Electron-based applications that
-      launch a console host or command shell headlessly
+      Not observed in production telemetry to date. A script or
+      documentation example referencing the literal string "/headless"
+      next to "cmd.exe" without executing it as a real argument could
+      still match
 level: low
 ```
 
