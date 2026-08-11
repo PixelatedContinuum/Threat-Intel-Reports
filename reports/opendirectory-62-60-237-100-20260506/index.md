@@ -1,6 +1,7 @@
 ---
 title: "HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign"
 date: '2026-05-06'
+last_updated: '2026-08-11'
 layout: post
 permalink: /reports/opendirectory-62-60-237-100-20260506/
 thumbnail: /assets/images/cards/opendirectory-62-60-237-100-20260506.png
@@ -339,6 +340,8 @@ Of the 17 files, only 3 are operator-controlled: `ExceptionHandler.dll` (the mod
 | Wondershare cert SHA1 thumbprint | `BC99A77A68F18005CAC0C784A176D3199F735ECF` |
 
 This is the genuine signed Wondershare `SlideShowEditor.exe` from DVD Creator, **renamed to `CrystSupervisor32.exe`**. The Authenticode signature against the full DigiCert chain to Trusted Root CA verifies cleanly; 14 sister copies of this binary exist in legitimate `Program Files (x86)\Wondershare\DVD Creator\` paths since 2021-06-12.
+
+I want to be precise about where the name `SlideShowEditor.exe` comes from, because it cannot be recovered from the file. This binary's version resource carries only `FileVersion 1.0.0.11` and `ProductVersion 1.0.0`, with no `OriginalFilename`, `CompanyName`, or `InternalName` entry, so nothing inside the PE states that name. I am identifying the binary from the Authenticode subject and from the sister copies sitting in Wondershare DVD Creator install paths, both of which are stable evidence. Third-party display names for this hash are not stable and have already shifted since analysis, so anyone hunting this file should pivot on the hash below rather than on any filename.
 
 The operator chose this binary because:
 - The Authenticode signature is genuine (defenders heuristically trust signed binaries)
@@ -798,7 +801,7 @@ The XLL delivery in a HijackLoader chain is itself under-documented in public re
 
 The operator does not commit to a single SFX format. WiX Burn, Inno Setup, 7-Zip SFX, and Embarcadero Delphi all appear. This is a deliberate evasion — a defender writing a YARA rule against a specific SFX format catches one vector but misses the others. Each variant performs the same loader chain unpack but uses a different outer-format wrapper.
 
-`LDKPOIZD.exe` carries the VT canonical filename `cytotoxin.exe` — an operator codename consistent with the eclectic-vocabulary operator-codename pattern documented in Section 11.
+`LDKPOIZD.exe` carries `cytotoxin.exe` as the `OriginalFilename` in its own PE version resource, an operator codename consistent with the eclectic-vocabulary operator-codename pattern documented in Section 11.
 
 ### 5.10 Bundled RMM and LOLBins (accessory toolkit)
 
@@ -1396,7 +1399,7 @@ The four fingerprints together require a single operator. Coincidental shared BP
 **Sophistication assessment:** The operator shows selective depth — high-tier work in chosen areas (multi-vendor camouflage, three-layer wrapping, cross-campaign-novel hollow-host pattern, per-host KDF) and commodity choices in others (Inno Setup near-stock wrapper, commodity HijackLoader loader, commodity Rugmi.HP cert installer). This is more diagnostic than uniform high-tier work — it shows what the operator prioritized and what they consciously skipped.
 
 **Operator codename lexicon (operator-curated identifiers):**
-`Penguish` (loader family), `cytotoxin` (LDKPOIZD VT canonical filename), `Apophyge` (Inno AppName — architectural term for column-base curve), `Veteran` (Inno DefaultDirName), `Plowshare` (operator project from PDB), `brokerbg` / `adv_ctrl` / `exttracer_net48` / `thread_adapter` / `Sulfathiazole` (persistence directory codenames), `Bravo/vida` (NDA campaign codename), AppId GUID `{1F2952E4-FC07-4482-B9E6-E795507DA7D2}`, Mega.io operator-typo subdir `busket/`.
+`Penguish` (loader family), `cytotoxin` (LDKPOIZD PE OriginalFilename), `Apophyge` (Inno AppName — architectural term for column-base curve), `Veteran` (Inno DefaultDirName), `Plowshare` (operator project from PDB), `brokerbg` / `adv_ctrl` / `exttracer_net48` / `thread_adapter` / `Sulfathiazole` (persistence directory codenames), `Bravo/vida` (NDA campaign codename), AppId GUID `{1F2952E4-FC07-4482-B9E6-E795507DA7D2}`, Mega.io operator-typo subdir `busket/`.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-apophyge-installer-config.png" | relative_url }}" alt="Plain-text dump of the Inno Setup [Setup] section embedded in Carriers.exe. The lines AppName=Apophyge and DefaultDirName=Veteran are highlighted in green. Other configuration values visible: AppId={{1F2952E4-FC07-4482-B9E6-E795507DA7D2}}, AppVersion=5.1, OutputBaseFilename=Carriers, Compression=lzma2, PrivilegesRequired=lowest, DisableDirPage=auto, DisableProgramGroupPage=auto, ChangesAssociations=no, ShowLanguageDialog=yes, WizardStyle=classic, WizardImageFile=embedded\\WizardImage0.png, WizardSmallImageFile=embedded\\WizardSmallImage0.png. Following the [Setup] block, [Files] entries list Source: '{tmp}\\BugSplat.dll' DestDir: '{tmp}' Flags: deleteafterinstall dontcopy, plus the same pattern for COMSupport.dll, CrystSupervisor32.exe, DBGHelp.dll, DVDSetting.dll, ExceptionHandler.dll.">
