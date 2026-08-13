@@ -11,15 +11,15 @@ detection_page: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-de
 ioc_feed: /ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json
 detection_sections:
   - label: "Detection Coverage Summary"
-    anchor: "detection-coverage-summary"
+    anchor: "#detection-coverage-summary"
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
+    anchor: "#suricata-signatures"
   - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#coverage-gaps"
 ioc_highlights:
   - "91[.]197[.]98[.]188"
   - "91[.]92[.]43[.]221"

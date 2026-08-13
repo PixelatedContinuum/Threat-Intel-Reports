@@ -11,15 +11,15 @@ detection_page: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-11
 ioc_feed: /ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json
 detection_sections:
   - label: "Detection Coverage Summary"
-    anchor: "detection-coverage-summary"
+    anchor: "#detection-coverage-summary"
   - label: "YARA Rules"
-    anchor: "yara-rules"
+    anchor: "#yara-rules"
   - label: "Sigma Rules"
-    anchor: "sigma-rules"
+    anchor: "#sigma-rules"
   - label: "Suricata Signatures"
-    anchor: "suricata-signatures"
+    anchor: "#suricata-signatures"
   - label: "Coverage Gaps"
-    anchor: "coverage-gaps"
+    anchor: "#coverage-gaps"
 ioc_highlights:
   - "192.3.1[.]116"
   - "31.22.111[.]190"
