@@ -43,15 +43,15 @@ entries:
   #    detection_url: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections
   #    detection_title: "Detection Rules: MultiVector Grey-Market PII Harvesting Operation"
   #    ioc_url: /ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json
-  # ===== PENDING GO-LIVE: SE-Asia Government Exploitation Toolkit (uncomment at launch) =====
-  #  - title: "The Middle Tier: A Non-APT Operator's Reach Into Four Southeast Asian Governments"
-  #    date: 2026-07-17
-  #    severity: high
-  #    tags: [Government, Exploitation, OpenDirectory, SE-Asia]
-  #    report_url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
-  #    detection_url: /hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections
-  #    detection_title: "Detection Rules: SE-Asia Government Exploitation Toolkit"
-  #    ioc_url: /ioc-feeds/seasia-gov-exploitation-toolkit-144-172-106-236-iocs.json
+  - title: "The Middle Tier: A Non-APT Operator's Reach Into Four Southeast Asian Governments"
+    date: 2026-08-13
+    severity: high
+    tags: [Government, Exploitation, OpenDirectory, SE-Asia]
+    report_url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
+    stix_url: /stix/seasia-gov-exploitation-toolkit-144-172-106-236.json
+    detection_url: /hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections
+    detection_title: "Detection Rules: SE-Asia Government Exploitation Toolkit"
+    ioc_url: /ioc-feeds/seasia-gov-exploitation-toolkit-144-172-106-236-iocs.json
   - title: "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking"
     date: 2026-07-03
     severity: high
