@@ -1,6 +1,7 @@
 ---
 title: "AdaptixC2 Open Directory Exposure — 45.130.148.125 Operator Toolkit"
 date: '2026-04-30'
+last_updated: '2026-08-12'
 layout: post
 permalink: /reports/opendirectory-45-130-148-125-20260430/
 thumbnail: /assets/images/cards/opendirectory-45-130-148-125-20260430.png
@@ -29,8 +30,10 @@ stix_bundle: /stix/opendirectory-45-130-148-125-20260430.json
 ---
 
 **Campaign Identifier:** AdaptixC2-OpenDirectory-Toolkit-45.130.148.125<br>
-**Last Updated:** May 7, 2026<br>
+**Last Updated:** August 12, 2026<br>
 **Threat Level:** HIGH
+
+> **August 2026 update.** The loader chain and beacon network behaviour in Sections 5.1 and 5.2 are now confirmed by controlled execution of the recovered samples, replacing the inferred kill chain in the original assessment. This adds three previously undocumented network anomalies, a server-side response signature decoded from the configuration, and a correction to how the AMSI bypass must be detected. The C2 address itself is no longer live and should be treated as historical, see the currency warning in Section 11.
 
 ---
 
@@ -346,6 +349,9 @@ The encrypted blob is byte-identical between the dev (07:39 UTC) and production 
 | 0x96+ | `parameter` | `X-Beacon-Id` | Stock heartbeat header field name |
 | 0xA6+ | `user_agents[1]` | `Mozilla/5.0 (Windows NT 6.2; rv:20.0) Gecko/20121202 Firefox/20.0` | **Stock AdaptixC2 default UA — Firefox 20 from February 2013** |
 | 0xF0+ | `http_headers` | `\r\n` (empty separator) | No extra headers |
+| 0xF7 | `ans_pre_size` | 26 | Length of the server response prefix `{"status": "ok", "data": "` — see Section 5.2 |
+| 0xFB | `ans_size` | 47 (26 + 21) | Full length of the response envelope, closing with `", "metrics": "sync"}` |
+| 0x103 | `rotation_mode` | 0 | Governs rotation across the `servers[]` list, of which there is one entry. URI cycling is unconditional and happens regardless of this field |
 | **0x10F** | **`proxy_port` (DEV BUILD ONLY)** | **3128** (zeroed in prod) | Squid HTTP proxy default port. **Operator developed through a local HTTP proxy for traffic inspection**, then forgot to clear the field before submitting the dev build to staging. |
 
 The stock Firefox 20 User-Agent is a 13-year-old fingerprint that no real browser sends in 2026 — it is one of the most reliable anomalies for hunting stock-AdaptixC2 deployments. The leftover `proxy_port = 3128` dev artifact is an operator-distinctive OpSec failure: it indicates the operator iteratively tested the listener through a local Squid/Burp/mitmproxy instance during development, and inadvertently shipped that artifact into the staging endpoint.
@@ -555,9 +561,9 @@ The full IOC list with hashes, sizes, contexts, and confidence levels is documen
 
 ## 5. Technical Analysis — Behavioral / Anticipated Kill Chain
 
-> **Analyst note:** This section walks through the operator's intended kill chain — what *would* happen step by step from initial victim execution through Linux-host pivoting — based on what the loader does, what the bundled toolkit can do, and what AdaptixC2 framework documentation says about its capabilities. Because no live victim was captured, every step is grounded in observable artifacts in the open directory rather than in observed traffic. Defenders should treat this as a hunt-priority list: each step lists the telemetry source that would catch it.
+> **Analyst note:** This section walks through the operator's kill chain from initial victim execution through Linux-host pivoting. Steps 2 through 7, covering the loader chain and the beacon's command-and-control behaviour, are confirmed by controlled execution of the recovered samples. Steps 1, 8 and 9, covering delivery, interactive operator activity and persistence, stay inferred from what the toolkit contains, because they depend on operator choices I have not seen exercised. Each step names the telemetry source that catches it.
 
-> **Important context:** No live victim observations are available. The 45.130.148.125 endpoint is a **static distribution endpoint** that has been unchanged since first crawl (80+ hours observed). The behavioral analysis below derives from (a) decoded PowerShell loader logic, (b) decompiled .NET injector, (c) decrypted AdaptixC2 beacon configuration, (d) sandbox classifications from VT vendor analyses, and (e) capabilities documented in public AdaptixC2 reporting. **Live C2 testing was not performed.**
+> **Important context (revised August 2026):** I hold no victim telemetry from this campaign, and the 45.130.148.125 endpoint was a static distribution point, unchanged across 80+ hours of observation. What I can now state about the loader chain and the beacon's network behaviour comes from running the recovered samples under control, which confirms the decoded PowerShell logic, the decompiled .NET injector, and the decrypted beacon configuration. What the operator actually did once inside a victim network is a separate question, and I cannot answer it from this evidence.
 
 ### 5.1 Anticipated kill chain (sequential, chronological)
 
@@ -577,11 +583,19 @@ The full IOC list with hashes, sizes, contexts, and confidence levels is documen
 | 8. Active C2 phase (operator-driven) | T+seconds–minutes | Operator interactively drives the beacon. Anticipated activity inferred from the bundled toolkit: AD reconnaissance (SharpHound + ADRecon.ps1 + PowerView.ps1); credential theft via mimikatz (LSASS, DCSync), SharpDPAPI (Credential Manager, browsers), lazagne (multi-source), SharpSecDump (SAM, NTDS), Rubeus (Kerberoasting, AS-REP Roasting); privilege escalation via GodPotato / PrintSpoofer (SeImpersonate abuse), RunasCs (token manipulation), Certify (AD CS abuse); lateral movement via Ligolo-ng v0.8.3 TUN tunnel or chisel; Linux pivot via the AdaptixC2 Linux ELF agent + `linpeas.sh` once a Linux foothold is reachable. | Process tree from `explorer.exe` running commodity post-exploitation tooling; LSASS access events; AD enumeration LDAP queries; LSASS handle-open events from non-system processes. |
 | 9. Persistence (operator-deployed, not observed) | — | No persistence-installer artifact is present at the staging endpoint. The PowerShell loader is execution-time only; persistence would be operator-deployed via the C2 channel. AdaptixC2 supports persistence via BOFs and arbitrary command execution, with mechanism choice at operator discretion. The bundled `msupdate.dll` (beacon DLL renamed for sideload by a legitimate Windows binary that imports `msupdate.dll`) is a deployment artifact only — operator preparation for sideload-style execution, not a confirmed-as-executed persistence path. The intended host binary is not documented in the open directory. | None at staging endpoint. Hunting at active-victim hosts: Run-key drops, Scheduled Task creation, WMI subscription, COM hijack — all reachable via standard AdaptixC2 BOFs. |
 
+**Steps 2 through 7 are confirmed in execution (August 2026).** Running the recovered samples under control reproduces the chain exactly as described above. Three points are worth drawing out for detection.
+
+The injection in step 5 produces a **Sysmon Event ID 8 with `SourceImage` set to `powershell.exe` and `TargetImage` set to `C:\Windows\explorer.exe`**, the new thread starting at the base of the freshly allocated region. PowerShell creating a remote thread inside `explorer.exe` is close to a zero-false-positive signal in a normal estate, and it is the strongest host-side detection in this report.
+
+After step 6 the beacon reports itself to its listener as running in host process `explorer.exe`, x64, elevated, under `NT AUTHORITY\SYSTEM`. That confirms the masquerade is effective and has a direct detection consequence, since network rules written around a standalone beacon binary will not fire on traffic whose parent is `explorer.exe`. It also settles which build ships inside the loader: the injected beacon reports a 4 second sleep rather than 5, identifying it as the earlier dev build from Section 4.2 rather than the production build staged beside it on disk.
+
+One caveat matters for anyone reproducing this. The loader reads its target from `(Get-Process explorer ...)` and exits at its own guard if that returns nothing, so on a host with no live `explorer.exe` the chain stops before injecting and emits no Event ID 8 at all. **An absent injection event is not evidence that the sample lacks the capability.**
+
 ### 5.2 C2 communication detail
 
-> **Analyst note:** This subsection lists the network-side observables for the beacon's command-and-control traffic. The values come from RC4-decrypting the configuration blob inside the beacon binary, not from captured traffic — meaning these are the values the operator *configured*, not necessarily the values currently in use. The combination of an `X-Beacon-Id` HTTP header and a Firefox 20 User-Agent on outbound POST is the single highest-fidelity AdaptixC2 framework signature regardless of operator and is the recommended primary network detection.
+> **Analyst note:** This subsection lists the network-side observables for the beacon's command-and-control traffic. The values below were first recovered by RC4-decrypting the configuration blob inside the beacon binary, and as of August 2026 every one of them is confirmed on the wire in controlled execution. The combination of an `X-Beacon-Id` HTTP header and a Firefox 20 User-Agent on outbound POST is the single highest-fidelity AdaptixC2 framework signature regardless of operator and is the recommended primary network detection.
 
-**Network indicators (DEFINITIVE — recovered from RC4-decrypted config):**
+**Network indicators (DEFINITIVE — recovered from RC4-decrypted config, confirmed on the wire):**
 
 | Field | Value |
 |---|---|
@@ -611,6 +625,33 @@ A 4–5 second sleep is **aggressively fast** for a production beacon. Most real
 
 The combination is the detection pivot. Any single component alone is a moderate-FP signal — the combination is the framework's stock-listener fingerprint.
 
+**The request shape carries three further anomalies (added August 2026).** A representative callback looks like this:
+
+```http
+POST /api/v1/status HTTP/1.1
+Accept: */*
+X-Beacon-Id: AVWHDmZTmgh6BPCSsdLKs0YGDGo5AD8GIWXIGm4Fc+MXxZrKY4jCskPT44/M3+rumD1W...
+User-Agent: Mozilla/5.0 (Windows NT 6.2; rv:20.0) Gecko/20121202 Firefox/20.0
+Host: 45.130.148.125
+Content-Length: 0
+Connection: Keep-Alive
+Cache-Control: no-cache
+```
+
+The first anomaly is that this is a `POST` with `Content-Length: 0`. The beacon carries all of its data in the `X-Beacon-Id` header, roughly 148 base64 characters per callback, and sends an empty body. Legitimate clients almost never issue a POST with no body alongside a large custom header, which makes this pairing a stronger discriminator than either the User-Agent or the URI set. It is also more durable than both, because unlike them it is not adjustable from the listener profile.
+
+The second is header ordering. `Host` appears after `User-Agent`, which no mainstream browser does, so a rule that inspects header sequence rather than header presence gains a further independent signal.
+
+The third is connection reuse. The full four-URI cycle runs over a single keep-alived TCP connection rather than one connection per callback, so flow-based analytics that count connection attempts will badly undercount the beacon. Volume thresholds should key on requests, not connections.
+
+**The server side has a signature too.** The listener wraps its response payload in a fixed JSON envelope:
+
+```json
+{"status": "ok", "data": "<payload>", "metrics": "sync"}
+```
+
+This is the framework's stock response template, and it is what the configuration's `ans_pre_size` and `ans_size` fields describe. The prefix `{"status": "ok", "data": "` is exactly 26 characters, matching `ans_pre_size`, and adding the 21 character suffix `", "metrics": "sync"}` gives the 47 recorded in `ans_size`. Any defender with visibility into response bodies, through a proxy or full packet capture, can detect on this envelope without relying on a single operator-configurable field.
+
 ### 5.3 Defense evasion observations
 
 > **Analyst note:** This subsection summarizes the seven discrete evasion techniques the operator's loader-plus-injector pair employs. Each row is a separate detection-engineering target — defenders should treat them as parallel hunt priorities rather than a single chain. The mix of "sophisticated-looking" techniques (W^X-aware allocation, AMSI bypass via reflection) sitting alongside textbook-lazy choices (broad `PROCESS_ALL_ACCESS` access mask, unobfuscated .NET P/Invoke imports) is itself a tradecraft fingerprint — see Section 4.3.2 for the discussion.
@@ -624,6 +665,10 @@ The combination is the detection pivot. Any single component alone is a moderate
 | String encryption (T1027) | RC4-encrypted config in `.rdata` blob — only the BASE64 alphabet leaks plaintext | HIGH |
 | DLL side-load preparation (T1574.002) | `msupdate.dll` rename of the beacon DLL — operator preparation, not confirmed-as-executed | MODERATE |
 | Selective AV-evasion on signatured commodity tools | SharpHound 86% / lazagne 97% high-entropy ratios | HIGH |
+
+**The AMSI bypass defeats the two most widely deployed AMSI signatures, and that is worth stating plainly (August 2026).** Most published detections for this technique look for the string `amsiInitFailed`, or for the type name `AmsiUtils`. This loader emits neither. It targets the `amsiContext` field instead of `amsiInitFailed`, it assembles that field name at runtime from three concatenated fragments so the literal never appears in the script text, and it locates the type by wildcard match on `*iUtils` so `AmsiUtils` never appears either.
+
+The consequence is that a rule written against either literal will not fire on this sample, even with full script-block logging enabled. The durable detection is behavioural rather than textual. Look for a script block that enumerates `[Ref].Assembly.GetTypes()`, filters on a wildcarded type name, then calls `SetValue` with a null target and a zero value against a `NonPublic, Static` field. That shape survives renaming the field and re-splitting the concatenation, which the string-literal approaches do not.
 
 **Anti-tooling tradecraft NOT present:**
 - No D/Invoke, no direct syscalls — all Win32 P/Invoke is via static `[DllImport]`, enumerable in the assembly's `ImplMap` metadata (see terminology note below)
@@ -927,15 +972,20 @@ The linked detection file documents both filters in its Coverage Gaps section.
 
 ### 10.5 Coverage gaps
 
-Three coverage gaps are flagged for downstream investigation:
+The HTTP-transport gap flagged in the original assessment is now closed. The loader chain, the injection into `explorer.exe`, and the beacon's HTTP callback behaviour are all confirmed in execution, and the network signatures in Section 5.2 are empirical rather than inferred. Four gaps remain.
 
-- **No live C2 traffic capture.** Behavioral detections derived from static analysis of the AdaptixC2 framework code, not from observed live traffic. Lab-VM controlled detonation in an isolated environment would refine the network signatures with empirical packet captures.
-- **AdaptixC2 v0.7+ Gopher BOF behavioral observability.** The Gopher Go agent's MessagePack-encoded C2 protocol and BOF execution runtime are not directly observed in dynamic analysis. Detection content for the Gopher transport is derived from the framework's published source code.
-- **Persistence detection.** No persistence mechanism was observed at the staging endpoint. The `msupdate.dll` sideload candidate is a deployment artifact only. Operator-deployed persistence in active operations would be visible only via DFIR captures, not from the staging-endpoint analysis.
+- **Alternative transports are unobserved.** AdaptixC2 supports SMB named-pipe and TCP transports alongside HTTP, and the `\\.\pipe\%08lx` template is present in these binaries. Every network signature in this report keys on HTTP fields, so an operator switching transport blinds all of them at once. Closing this needs Sysmon Event ID 17 and 18 named-pipe telemetry from a pivot beacon, which is not yet captured.
+- **No TLS variant, so no JA3S.** This operator ran plaintext HTTP on port 80. If they enable TLS on the listener, the User-Agent, URI and header signatures all go blind at once, and detection falls back to a TLS fingerprint that is not yet available for this framework build.
+- **Gopher agent behaviour.** The Gopher Go agent's MessagePack C2 protocol and BOF execution runtime remain characterised from the framework's published source rather than observed, and its Linux variant would need auditd or Sysmon-for-Linux telemetry that this analysis does not cover.
+- **Persistence.** No persistence mechanism is present at the staging endpoint. The `msupdate.dll` sideload candidate is a deployment artifact only, and operator-deployed persistence would be visible only through victim-side DFIR.
+
+One refinement to how the RC4 key should be treated. The key is not rotated automatically by the framework, as a key-per-build model would imply. It is an operator-editable field that the listener-creation interface pre-fills with a fresh random value, so a key-based detection holds only for as long as this operator keeps reusing the same listener instance, and it breaks the moment they create a new one and accept the default. That is why the key belongs in the IOC feed rather than in a durable rule.
 
 ---
 
 ## 11. Indicators of Compromise
+
+> **Currency warning, added August 2026.** `45.130.148.125` no longer hosts this infrastructure. Both the staging directory on port 8888 and the C2 listener on port 80 are gone, and the address now answers on port 80 with an nginx redirect to an unrelated commercial website. **Treat the IP as a historical indicator only.** Blocking it today will not stop this actor and will interfere with a legitimate third-party service, so it belongs in retrospective hunting against archived telemetry rather than in an active blocklist. The file hashes, the loader and injector fingerprints, the build-environment strings and the framework-level network signatures are all unaffected by this change and remain current.
 
 ### 11.1 IOC feed (linked package)
 
