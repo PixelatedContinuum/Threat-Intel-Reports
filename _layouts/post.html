@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
 {% if page.stix_bundle %}
 <div class="hl-stix-panel" id="hl-stix-panel">
   <div class="hl-stix-panel__hdr">STIX 2.1 Bundle</div>
-  <p class="hl-stix-panel__info">Machine-readable threat intel for this report — import into OpenCTI, MISP, or any STIX-aware platform.</p>
+  <p class="hl-stix-panel__info">Machine-readable threat intel for this report, ready to import into OpenCTI, MISP, or any STIX-aware platform.</p>
   <div class="hl-stix-panel__foot">
     <a href="{{ page.stix_bundle }}" target="_blank" rel="noopener noreferrer" class="hl-stix-panel__link">Download Bundle →</a>
     <a href="/stix/" class="hl-stix-panel__link hl-stix-panel__link--alt">Browse All STIX →</a>
@@ -559,7 +559,7 @@ document.addEventListener('DOMContentLoaded', function () {
   tLabel.textContent = 'Tip';
   toast.appendChild(tLabel);
   var tMsg = document.createElement('span');
-  tMsg.textContent = 'Click any section heading to copy a shareable link — save and bookmark your current spot to return to later!';
+  tMsg.textContent = 'Click any section heading to copy a shareable link, so you can save and bookmark your current spot to return to later!';
   toast.appendChild(tMsg);
   var tClose = document.createElement('button');
   tClose.className = 'hl-toast__close';
