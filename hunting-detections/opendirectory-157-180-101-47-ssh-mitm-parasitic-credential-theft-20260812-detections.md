@@ -22,7 +22,7 @@ unlisted: true
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 6 | 0 | T1557, T1071.001, T1021.004, T1552.004, T1686, T1056 | 9 |
-| Sigma | 7 | 7 | T1557, T1686, T1480, T1059.006, T1105, T1082, T1059, T1021.004, T1564.001, T1071.001, T1571 | 0 |
+| Sigma | 7 | 8 | T1557, T1686, T1480, T1059.006, T1105, T1082, T1059, T1021.004, T1564.001, T1071.001, T1571 | 0 |
 | Suricata | 2 | 1 | T1557, T1071.001 | 11 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting, and the hits need review.
@@ -417,9 +417,9 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1059.006 (Python), T1557 (Adversary-in-the-Middle)
 **Confidence:** HIGH
-**False Positives:** Unlikely for the interceptor and sniffer selectors, whose filenames and flag combinations are specific to this toolkit. The exclude_puller.py filename alone is genuinely generic and could theoretically collide with unrelated tooling.
-**Blind Spots:** The interceptor and exclude-puller selectors key on filenames the operator can rename on redeploy; only the sniffer selector's flag combination survives a filename change. All three components are double-forked and daemonized after this initial launch, so this rule only has one moment (the original `execve`) to catch them; a process-creation feed with gaps will miss it.
-**Validation:** Trigger by launching `python3 -u mitm_local.py`, or `python3 -u sniffer.py --iface eth0 --mitm-port 19923 --skip-ports 22 --own-ips 10.0.0.5 --output-only --backend auto`, or `python3 -u exclude_puller.py` on a lab host and confirm the rule fires on each. An unrelated Python script that happens to share one flag (`--output-only`, for instance) but not the full sniffer combination must not fire.
+**False Positives:** Unlikely. The interceptor selector requires the script to be the interpreter's direct execution target rather than merely present on the command line, and the sniffer selector's flag combination is specific to this toolkit.
+**Blind Spots:** The interceptor selector keys on a filename the operator can rename on redeploy; only the sniffer selector's flag combination survives that. Both components are double-forked and daemonized after this initial launch, so this rule only has one moment (the original `execve`) to catch them; a process-creation feed with gaps will miss it. Requiring the script to be the interpreter's direct positional target also means a shell-wrapped launch, such as `sh -c "python3 mitm_local.py"` where the top-level command line begins with `sh` rather than `python3`, will not fire. The interceptor selector also requires the interpreter to appear as `python3` specifically, consistent with every observed launch; a bare `python` symlink or a differently named interpreter binary would not match.
+**Validation:** Trigger `sel_interceptor` by launching `python3 -u mitm_local.py` or `python3 /dev/shm/.x9k2/mitm_local.py` on a lab host and confirm it fires; trigger `sel_sniffer` separately with `python3 -u sniffer.py --iface eth0 --mitm-port 19923 --skip-ports 22 --own-ips 10.0.0.5 --output-only --backend auto` and confirm it fires. A command line that only references the interceptor's filename without executing it as the interpreter's direct target, such as `python3 pyc_strings.py ./mitm_local.py`, `sha256sum mitm_local.py`, or `cp mitm_local.py /tmp/`, must not fire; nor must an unrelated Python script that happens to share one sniffer flag (`--output-only`, for instance) but not the full three-flag combination.
 **Deployment:** Linux EDR or SIEM ingesting normalized process-creation telemetry (auditd, Sysmon for Linux, or an EDR's native process feed).
 
 ```yaml
@@ -427,10 +427,13 @@ title: Command Line Consistent With SSH Interceptor Component Launch
 id: 15646ca3-99b5-4a3f-a25f-61f15cc3707c
 status: experimental
 description: >-
-  Detects process launch command lines matching the interceptor, sniffer, or exclusion-list
-  poller components of a self-hosted SSH adversary-in-the-middle platform observed deployed
-  fileless from tmpfs. The sniffer selector anchors on its flag combination rather than its
-  filename, since a filename alone is trivial for an operator to rename on redeploy.
+  Detects process launch command lines matching the interceptor or sniffer components of
+  a self-hosted SSH adversary-in-the-middle platform observed deployed fileless from tmpfs.
+  The interceptor selector requires a Python interpreter to execute the script directly, as
+  its own positional target, rather than merely mentioning the filename elsewhere on the
+  command line, which is what a file read, hash, or copy operation would otherwise trigger.
+  The sniffer selector anchors on its flag combination rather than its filename, since a
+  filename alone is trivial for an operator to rename on redeploy.
 references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
 author: The Hunters Ledger
@@ -446,20 +449,19 @@ logsource:
     product: linux
 detection:
     sel_interceptor:
-        CommandLine|contains: 'mitm_local.py'
+        Image|contains: 'python3'
+        CommandLine|re: 'python[0-9.]*( -[^ ]+)* [^ ]*mitm_local\.py( .*)?'
     sel_sniffer:
         CommandLine|contains|all:
             - '--skip-ports 22'
             - '--output-only'
             - '--backend auto'
-    sel_puller:
-        CommandLine|contains: 'exclude_puller.py'
     condition: 1 of sel_*
 falsepositives:
     - >-
-      Unlikely for the interceptor and sniffer selectors, whose filenames and flag
-      combinations are specific to this toolkit. The exclude_puller.py filename alone is
-      genuinely generic and could theoretically collide with unrelated tooling
+      Unlikely. The interceptor selector requires the script to be the interpreter's
+      direct execution target rather than merely present on the command line, and the
+      sniffer selector's flag combination is specific to this toolkit
 level: high
 ```
 
@@ -758,7 +760,58 @@ level: high
 
 ### Hunting Rules
 
-The four base selectors that feed the two correlation rules above (paramiko pip install, ipset package install, bare `uname -a`, bare `perl`) are Hunting-grade in their own right, but they are co-located with their correlations in the Detection subsection above rather than repeated here, because SigmaHQ's correlation syntax resolves its base rules by `id` from within the same document collection. The three rules below are the platform's remaining standalone Hunting-tier coverage.
+The four base selectors that feed the two correlation rules above (paramiko pip install, ipset package install, bare `uname -a`, bare `perl`) are Hunting-grade in their own right, but they are co-located with their correlations in the Detection subsection above rather than repeated here, because SigmaHQ's correlation syntax resolves its base rules by `id` from within the same document collection. The four rules below are the platform's remaining standalone Hunting-tier coverage.
+
+#### Python Interpreter Directly Executing exclude_puller.py
+
+**Tier:** Hunting
+**Robustness:** 1
+**ATT&CK Coverage:** T1059.006 (Python), T1557 (Adversary-in-the-Middle)
+**Confidence:** MODERATE
+**False Positives:** The exclude_puller.py filename is generic and plausible for unrelated exclusion-list or allow-list tooling outside this platform; requiring genuine execution rather than a mere reference on the command line removes the noisiest source of false hits but does not remove the risk of a name collision with unrelated software using the same filename.
+**Blind Spots:** Keys on a filename the operator can rename on redeploy, unlike the sniffer's flag-combination anchor in the companion Detection-tier rule above. This component is also double-forked and daemonized shortly after launch, so this rule only has one moment (the original `execve`) to catch it.
+**Deployment:** Linux EDR or SIEM ingesting normalized process-creation telemetry (auditd, Sysmon for Linux, or an EDR's native process feed); review hits manually rather than routing to automated response.
+
+```yaml
+title: Python Interpreter Directly Executing exclude_puller.py
+id: fa0e8562-33e9-47fd-8057-d81654bce447
+status: experimental
+description: >-
+  Detects a Python interpreter executing exclude_puller.py as its direct target,
+  observed as the exclusion-list poller component of a self-hosted SSH
+  adversary-in-the-middle platform that otherwise deploys fileless from tmpfs.
+  Requiring genuine execution rather than a mere reference on the command line
+  removes hits from tooling that reads, hashes, or copies the file by name, but the
+  filename itself is generic enough that this remains a hunting-grade selector rather
+  than a high-confidence one; see the companion Detection-tier rule for the platform's
+  interceptor and sniffer components.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
+author: The Hunters Ledger
+date: 2026-08-12
+tags:
+    - attack.execution
+    - attack.t1059.006
+    - attack.credential-access
+    - attack.collection
+    - attack.t1557
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    sel_puller:
+        Image|contains: 'python3'
+        CommandLine|re: 'python[0-9.]*( -[^ ]+)* [^ ]*exclude_puller\.py( .*)?'
+    condition: sel_puller
+falsepositives:
+    - >-
+      The exclude_puller.py filename is generic and plausible for unrelated
+      exclusion-list or allow-list tooling outside this platform; requiring genuine
+      execution rather than a mere reference on the command line removes the
+      noisiest source of false hits but does not remove the risk of a name collision
+      with unrelated software using the same filename
+level: medium
+```
 
 #### Iptables INPUT Drop Hiding a Non-Loopback High Port
 
