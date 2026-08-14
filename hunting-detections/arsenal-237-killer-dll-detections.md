@@ -542,7 +542,11 @@ detection:
       - '\AMD\'
       - '\NVIDIA\'
       - '\Intel\'
-  condition: selection and not filter_legitimate
+  filter_winre_servicing:
+    Image|endswith: '\DismHost.exe'
+    Image|contains: '\$WinREAgent\'
+    TargetFilename|contains: '\WinSxS\'
+  condition: selection and not 1 of filter_*
 falsepositives:
   - Legitimate driver installers using temp staging (should extract to System32\Drivers)
   - >-
@@ -554,6 +558,11 @@ falsepositives:
   - >-
     A manually-run, downloaded driver installer executed directly from
     Downloads/Temp/AppData is not excluded by the parent-image filter.
+  - >-
+    Windows Update and the Recovery Environment staging or removing inbox
+    drivers under the component store — DismHost.exe running out of
+    C:\$WinREAgent\Scratch\ and writing to WinSxS\Temp\InFlight\. Excluded at
+    source by filter_winre_servicing; see the rationale below.
 level: medium
 ```
 
@@ -572,6 +581,18 @@ level: medium
 - **Sigma mass-termination rule rebuilt as a real correlation.** The source rule's own description states its intended 3-or-more-distinct-products-in-60-seconds threshold could not be expressed in single-event Sigma and was dropped, leaving a single-event selector annotated "should be correlated with other security-product terminations... at review time." This is exactly what Sigma's `value_count` correlation type expresses natively — this file replaces the informal review-time note with a base rule (informational, not alerting alone) plus a `value_count` correlation (`gte: 3` distinct `Image` values per host per 60s), operationalizing the malware-analyst's own documented detection strategy from the IOC feed's `mass_process_termination.detection` field.
 - **Sigma level demotions.** Rule 1 (rundll32 kernel-driver service creation) demoted `critical` → `high`: its own false-positives list is non-empty, and the project convention reserves `critical` for near-certain, no-legitimate-path scenarios. The kernel-driver-service-install rule and the temp-directory driver-file rule were both demoted `high` → `medium`: both have acknowledged, non-rare legitimate populations (routine hardware/security-software driver installation; installer staging patterns) that place them at Hunting rather than Detection precision.
 - **Suricata rules cut** — see Cut Rules below.
+
+### FP remediation — 2026-08-13, "Driver File (.sys) Created in Temp Directory"
+
+`filter_winre_servicing` was added because the rule fired 100 times in a few seconds on a single Windows servicing pass. `DismHost.exe`, running from `C:\$WinREAgent\Scratch\<GUID>\`, deleted 100 legitimate inbox drivers (usbccgp.sys, cng.sys, http.sys, dxgkrnl.sys and the rest) out of `WinSxS\Temp\InFlight\`. Every Windows machine does this on a normal update cadence, so this was firing for any subscriber running Windows Update, not just here.
+
+The mechanism is worth stating plainly, because it is the third time this rule's exclusion list has proved incomplete against a real population (after the `\Program Files\` vs `\Program Files (x86)\` string bug and the missing AMD/NVIDIA/Intel vendor roots). The selection's third term is a bare `\Temp\` substring, which matches any path containing a folder literally named Temp — including the component store's own `WinSxS\Temp\InFlight\` staging area. The exclusion list is a path allowlist, and `C:\$WinREAgent\Scratch\...\DismHost.exe` matched none of its six entries.
+
+Measured over 30 days on the rule's own source index: 112 matching events before, 0 after, and all 112 were this one servicing population on a single host. The three new conditions are AND-ed, so all of `DismHost.exe`, a `$WinREAgent`-rooted process path, and a `WinSxS` target path must hold together.
+
+What it costs: an attacker who can run code from a path containing `$WinREAgent`, name that binary `DismHost.exe`, and stage the malicious driver under `WinSxS` is no longer caught by this rule. `$WinREAgent` is TrustedInstaller-managed and not user-writable, so that generally implies local admin already — post-exploitation rather than the initial-escalation case this rule mainly guards. It is a real narrowing, not a free one. A SYSTEM-context check was deliberately not used instead: genuine BYOVD also runs SYSTEM-adjacent, so that anchor would have gutted the rule rather than fixed it.
+
+One honest limit on the measurement: the after-count is 0 because no genuine BYOVD activity existed in the window, so it demonstrates the false positive is gone but cannot demonstrate retained coverage.
 
 ### Cut Rules (genuine noise or pure atomics — not carried forward as rules)
 

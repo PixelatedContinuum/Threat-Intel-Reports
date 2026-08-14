@@ -372,6 +372,14 @@ level: high
 **False Positives:** A legitimate scheduled task using similar naming is not expected but cannot be fully ruled out.
 **Deployment:** Linux/Windows file integrity monitoring, Sysmon file-event telemetry, scheduled-task audit logging.
 
+**FP remediation, 2026-08-13.** The selector was a bare `contains` on `RustRansomNoteTask` with no path constraint, so it matched the string anywhere on disk, including inside this rule's own YAML. Checking the rule into git reproduced the marker in a worktree and the detection detected itself, 24 events across two separate git operations, all of them `git.exe` writing copies under `rule-submissions/sigma/`. That is not a local habit: storing detection content in a versioned repo on a monitored host is close to standard detection-as-code practice, so this fires for any SOC that works the way SigmaHQ contributors do.
+
+It had already been tuned once. A local exception was applied on 2026-07-23 and matched 4 of 4 alerts, and the identical pattern still produced 8 fresh alerts in August, because a full-corpus Sigma redeploy silently detached it. A local exception was the wrong instrument twice over, once for scope and once for durability.
+
+The selector now also requires the file to sit under `C:\Windows\System32\Tasks\`, which is where Task Scheduler writes a definition once the task is actually registered and therefore able to run. An attacker cannot relocate that, whatever they name the task. Measured over 45 days on the rule's own source index: 24 matching events before, 0 after.
+
+This does not improve the rule's durability weakness, which is unchanged: a single attacker-chosen literal that a rebrand evades, and the reason it stays Hunting at Robustness 1. It is a precision fix only. One gap is unconfirmed: if a build ever stages an intermediate task-definition XML into a temp directory before calling `schtasks /create /xml`, that drop no longer matches. The marker appears to be a string embedded in the binary and passed as a task-name argument rather than staged as a file, but that is a LOW-confidence inference from the companion YARA rule's `$ransom_task` string, not something confirmed dynamically. A `process_creation` rule on `schtasks.exe` carrying the marker would cover that case and is immune to this whole false-positive class, since `git.exe` never spawns `schtasks.exe`.
+
 ```yaml
 title: RustRansomNoteTask Scheduled Task File Creation
 id: e803d43f-6b5a-48e1-b25f-9da5e74bca63
@@ -398,6 +406,7 @@ logsource:
 detection:
   selection:
     TargetFilename|contains: 'RustRansomNoteTask'
+    TargetFilename|startswith: 'C:\Windows\System32\Tasks\'
   condition: selection
 falsepositives:
   - Legitimate system tasks with similar naming are not expected but cannot be fully ruled out.

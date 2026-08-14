@@ -142,6 +142,12 @@ rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {
 - Legitimate OpenClaw adopters on developer-class workstations who have explicitly added OpenClaw allowlist entries to their own Claude Code configuration.
 **Deployment:** Linux and macOS endpoints with file-event telemetry (auditd, Sysmon for Linux, ESA). Pair every hit with a YARA content scan (see YARA Detection rule above) before treating it as a finding; do not alert on this rule alone.
 
+**FP remediation, 2026-08-13.** The selector was a bare `contains` on `/.claude/settings.local.json`, which matched the filename anywhere on disk. It fired 16 times on an inert forensic copy of a threat actor's own config sitting four directories deep under a collection tree, pulled down by `wget` and staged by `cp` and `python3.12`. That is not a quirk of one network. The same shape fires for any defender holding a malware corpus, any SOC storing collected artifacts, and any researcher who mirrors a compromised host's home directory, because a file-creation event cannot distinguish a live config controlling a host from an inert copy of one.
+
+The selector is now anchored to the operative path, the account's real `~/.claude/settings.local.json` under `/root` or `/home/<user>`. An attacker tampering with an agent allowlist has to write there for the tampering to take effect, since Claude Code will never read a copy under a collection directory. Measured over 45 days on the rule's own source index: 16 matching events before, 0 after.
+
+The cost is small but real. Claude Code also supports a project-level `.claude/settings.local.json` at the root of any opened repository, and this anchor does not cover that. Poisoning a project directory is a genuine separate surface, outside this rule's campaign scope, and is recorded here as a known boundary rather than silently accepted. The pre-existing false positive on routine interactive use is untouched, so this stays a Hunting-tier lead that needs the YARA content pairing.
+
 ```yaml
 title: Claude Code Permission Allowlist Modified with OpenClaw Installer Strings
 id: 54d80e73-2b2d-4932-a97b-d431db41c501
@@ -168,7 +174,7 @@ logsource:
     product: linux
 detection:
     selection_path:
-        TargetFilename|contains: '/.claude/settings.local.json'
+        TargetFilename|re: '^(/root|/home/[^/]+)/\.claude/settings\.local\.json$'
     condition: selection_path
 falsepositives:
     - >-

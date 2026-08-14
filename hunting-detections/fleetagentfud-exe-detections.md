@@ -309,6 +309,16 @@ The detection logic is deliberately unchanged, so nothing stops being detected. 
 **Validation:** Trigger `powershell.exe -NoP -NonI -W Hidden -Exec Bypass -C ...` from an AppData-rooted parent process — must match; the same command from a `C:\Program Files\` parent must NOT fire.
 **Deployment:** Sysmon/EDR process-creation telemetry, Windows Security Event ID 4688 with command-line auditing enabled.
 
+**FP remediation, 2026-08-13, partial.** The 2026-08-07 pass retiered this rule and dropped its level, but left the `detection:` block byte-for-byte unchanged, so nothing about what fires changed and the same population kept arriving. This pass edits the logic.
+
+Nothing in the query ties a match to FleetAgentFUD. Hidden-window PowerShell carrying an execution-policy bypass from an AppData-rooted parent is the ordinary shape of per-user installers and Squirrel/Electron auto-updaters, which live under `%LocalAppData%` precisely to avoid needing admin rights. Every subscriber running VS Code inherits this, so it is a defect rather than a local quirk. `filter_appx_management` now excludes the AppX cmdlet family, which is Windows Store packaging maintenance that no WebSocket-C2 or clipboard-polling implant has reason to invoke.
+
+Measured over 30 days on the rule's own source index: 37 matching events before, 7 after. Both numbers are worth reading carefully. The fix removes 81 percent of the noise, but the 7 survivors are the same VS Code updater invoking `Get-CimInstance Win32_Process` instead of an AppX cmdlet, so this does not fully close the false positive, and in this environment the rule retained no true positives to preserve. Chasing the remaining cmdlets one at a time would be the same enumerate-the-benign-tool pattern that has already failed on this rule once.
+
+The durable fix is a parent code-signature discriminator, which the 2026-08-07 rationale identified and declined for want of verified field population. That population is now confirmed present in this deployment, so the field exists, but a blanket trusted-parent exclusion is a far larger door than this one: it would blind the rule to any operator who signs their own installer. Deliberately not taken here, and left as the next step rather than quietly dropped.
+
+What this fix costs: `Add-AppxPackage` is itself a real initial-access primitive through malicious MSIX sideloading, so an operator who appends a decoy AppX cmdlet to an otherwise-malicious hidden bypass command line slips past this filter. That is a narrower exposure than a parent-path or signature exclusion would create, and a command line mixing real payload content with a decoy cmdlet is a distinguishable shape, but it is not zero.
+
 ```yaml
 title: FleetAgentFUD PowerShell Execution Policy Bypass from AppData
 id: 662e65e5-b424-40e0-9630-af1d2ccf3b3f
@@ -334,10 +344,26 @@ detection:
         CommandLine|contains:
             - '-W Hidden'
             - '-WindowStyle Hidden'
-    condition: selection_powershell and selection_parent and selection_hidden
+    filter_appx_management:
+        CommandLine|contains:
+            - 'Get-AppxPackage'
+            - 'Add-AppxPackage'
+            - 'Remove-AppxPackage'
+    condition: selection_powershell and selection_parent and selection_hidden and not filter_appx_management
 falsepositives:
     - Legitimate software installers using PowerShell from AppData (verify digital signature)
     - Administrative scripts executed from user directories (review context)
+    - >-
+      AppX/MSIX package management invoked as a documented step inside a
+      self-updater's install flow, such as VS Code's
+      Get-AppxPackage/Add-AppxPackage/Remove-AppxPackage cleanup. Excluded at
+      source by filter_appx_management.
+    - >-
+      Squirrel- and Electron-style auto-updaters more generally (VS Code,
+      Discord, Slack, GitHub Desktop). These stage under %LocalAppData% and
+      launch a hidden bypass PowerShell as their normal update path, which is
+      the same four-condition shape this rule selects on. Only the AppX-cmdlet
+      subset is excluded at source; the rest still require local scoping.
 level: medium
 tags:
     - attack.execution
