@@ -40,7 +40,7 @@ stix_bundle: /stix/new-files-found-20260408.json
 
 ## 1. Executive Summary
 
-**Bottom Line Up Front:** A previously identified threat actor (UTA-2026-004 *(an internal tracking label used by The Hunters Ledger — see Section 8)*) was found staging a complete offensive toolkit across 106 files on the same open directory documented April 6, 2026. The toolkit includes cracked Cobalt Strike 4.9.1, a four-generation custom implant development chain (the newest generation still work-in-progress), and a Layer 2 network tunneling module. Overall risk: HIGH (7.5/10). The toolkit is assessed as pre-deployment — no confirmed victims. The highest-priority defensive finding is an EAX-redirect process injection technique that bypasses the detection logic most endpoint security products use for this attack class. 72 of 98 samples submitted to VirusTotal had no prior submissions and no prior public reporting.
+A previously identified threat actor, UTA-2026-004 *(an internal tracking label used by The Hunters Ledger, see Section 8)*, was found staging a complete offensive toolkit across 106 files on the same open directory documented on 6 April 2026. The toolkit includes cracked Cobalt Strike 4.9.1, a four-generation custom implant development chain whose newest generation is still work-in-progress, and a Layer 2 network tunneling module. Overall risk is HIGH, 7.5 out of 10. I assess the toolkit as pre-deployment, with no confirmed victims. The highest-priority defensive finding is an EAX-redirect process injection technique that bypasses the detection logic most endpoint security products use for this attack class. 72 of the 98 samples submitted to VirusTotal had no prior submissions and no prior public reporting.
 
 **What Was Found**
 
@@ -104,7 +104,7 @@ The original April 6 report documented the existence of OpenStrike and confirmed
 
 **Overall Risk Score: 7.5/10 — HIGH**
 
-**Threat Actor:** UTA-2026-004 (maintained from April 6 report). No attribution upgrade warranted — see Section 8 for full assessment.
+The threat actor is UTA-2026-004, maintained from the April 6 report, and no attribution upgrade is warranted, see Section 8 for the full assessment.
 
 **For Technical Teams**
 
@@ -217,7 +217,7 @@ The April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/o
 | Encrypted CS post-ex modules (AES-128-CBC) | 56 | Unknown (encrypted) | INVENTORY ONLY |
 | **Total** | **106** | | |
 
-**Note on encrypted sleeve DLLs:** 56 of 106 files are AES-128-CBC encrypted post-exploitation modules (Cobalt Strike "sleeve" DLLs including mimikatz, hashdump, and browser credential theft). Decryption was blocked by an auth/JAR keypair mismatch — the operator assembled their toolkit from multiple cracked CS distributions (see Section 5.3). Based on the CS 4.9.1 installation structure, these are stock CS post-ex modules. No custom intelligence was lost.
+The encrypted sleeve DLLs need a note. 56 of the 106 files are AES-128-CBC encrypted post-exploitation modules, Cobalt Strike sleeve DLLs including mimikatz, hashdump and browser credential theft. Decryption was blocked by an auth and JAR keypair mismatch, because the operator assembled their toolkit from multiple cracked CS distributions (see Section 5.3). Based on the CS 4.9.1 installation structure these are stock CS post-ex modules, so no custom intelligence was lost.
 
 ---
 
@@ -432,7 +432,7 @@ Outbound (callback to server):
   <figcaption><em>Figure 8: Encrypt-then-MAC verification in the decryption path — the function splits incoming data into ciphertext and HMAC tag, recomputes HMAC-SHA256 over the ciphertext, and performs a non-constant-time comparison (two 8-byte quadword == checks) before decrypting. The non-constant-time comparison is a theoretical timing oracle, though low practical risk over HTTP.</em></figcaption>
 </figure>
 
-**Encrypt-then-MAC Pattern:** This is the cryptographically correct ordering — authenticate the ciphertext, not the plaintext. Standard Cobalt Strike uses a similar split (SHA256 → [AES key][HMAC key]) documented by Elastic Security Labs and Unit42. The operator replicated CS's key derivation pattern while eliminating the RSA dependency — indicating study of CS internals (MODERATE confidence, based on architectural similarity to documented CS crypto design).
+The encrypt-then-MAC pattern is the cryptographically correct ordering, authenticating the ciphertext rather than the plaintext. Standard Cobalt Strike uses a similar split, SHA256 into an AES key and an HMAC key, as documented by Elastic Security Labs and Unit42. The operator replicated CS's key derivation pattern while eliminating the RSA dependency, which indicates study of CS internals, and I hold that MODERATE on architectural similarity to the documented CS crypto design.
 
 **Three Identified Crypto Weaknesses:**
 
@@ -760,9 +760,9 @@ The single VPS at `172.105.0.126` serves five distinct operational roles:
 | 8888 | Open directory / staging server | Complete toolkit exposure |
 | 50050 | CS team server management | cs_ts.log confirmed CS 4.9.1, externally accessible |
 
-**OPSEC finding — port 50050 external exposure:** The CS team server management interface is externally accessible. This exposes the operator's team server to scanning, fingerprinting, and potential exploitation by third parties, and makes the installation trivially confirmable via Shodan.
+One OPSEC finding stands out, port 50050 exposed externally. The CS team server management interface is externally accessible, which exposes the operator's team server to scanning, fingerprinting and potential exploitation by third parties, and makes the installation trivially confirmable via Shodan.
 
-**Hosting context:** Linode/Akamai Technologies (AS63949), Canadian jurisdiction (ARIN). Commercial mainstream VPS — zero bulletproof hosting indicators. Canadian jurisdiction lowers the barrier for abuse reporting and law enforcement coordination relative to non-cooperative jurisdictions.
+For hosting context, this is Linode/Akamai Technologies (AS63949) under Canadian jurisdiction (ARIN), a commercial mainstream VPS with zero bulletproof hosting indicators. Canadian jurisdiction lowers the barrier for abuse reporting and law enforcement coordination relative to non-cooperative jurisdictions.
 
 ### 5.2 RSA Key Ecosystem Mapping
 
@@ -800,7 +800,7 @@ The mismatch is evidence of toolkit assembly from at least two different cracked
 - **SSL pivot:** Shodan query `ssl:"Pwn3rs Striked"` identifies active deployments sharing this distribution — documented by researcher Chris Duggan (@TLP_R3D, September 2024)
 - **Attribution status:** "Pwn3rs" is distribution branding, NOT an operator persona. Attributing this campaign to an actor named "Pwn3rs" would misrepresent the evidence.
 
-**Infrastructure pivot result:** The specific SSL cert SHA256 `6e8efd85...` returned no hits in either open-source or paid threat intelligence platforms (Shodan and Censys paid queries both yielded zero results). This confirms the team server was either not indexed by internet scanners prior to the April 6 discovery, actively blocked scan traffic, or the cert is unique to this single deployment. This pivot is closed — no additional infrastructure was identified through certificate correlation.
+The infrastructure pivot closed empty. The specific SSL cert SHA256 `6e8efd85...` returned no hits in either open-source or paid threat intelligence platforms, with Shodan and Censys paid queries both yielding zero results. That confirms the team server was either not indexed by internet scanners before the April 6 discovery, actively blocked scan traffic, or the cert is unique to this single deployment. The pivot is closed, and no additional infrastructure was identified through certificate correlation.
 
 ### 6.2 CS Watermark 987654321 — Distribution-Level Indicator
 
@@ -814,7 +814,7 @@ Watermark 987654321 is a high-prevalence pirated CS watermark found in multiple 
 
 **Critical finding — You Dun attribution rejected:** The You Dun group has been documented using watermark 987654321. The infrastructure analyst explicitly assessed this attribution as INSUFFICIENT: Canadian Linode hosting (atypical for documented You Dun infrastructure), zero Chinese-language strings in 106 samples, no Chinese domestic C2 patterns, and no key overlaps with documented You Dun infrastructure. The shared watermark is explained by shared distribution availability, not operational linkage.
 
-**Prevalence caveat:** Watermark 987654321 appears in hundreds of active CS deployments. Presence of this watermark alone is not a clustering signal — additional technical evidence is required to link deployments sharing this watermark.
+One caveat on prevalence. Watermark 987654321 appears in hundreds of active CS deployments, so its presence alone is not a clustering signal, and additional technical evidence is needed to link deployments sharing it.
 
 ### 6.3 EAX-Redirect in the Broader CS Ecosystem
 
@@ -834,11 +834,11 @@ CrowdStrike's 2024 research on HijackLoader confirmed that EAX register redirect
 | Cobalt Strike 3.x / 4.4 artifacts | Older cracked distributions | Legacy cracked tooling |
 | WinPcap 4.1.3 (npf.sys + wpcap.dll) | Embedded in CovertVPN DLL | Legitimate packet capture driver repurposed |
 
-**Hosting provider:** Linode/Akamai Technologies (AS63949), Canada. Commercial legitimate VPS — no bulletproof hosting indicators. Canadian jurisdiction lowers the barrier for abuse reporting and law enforcement coordination. Downstream abuse risk to other Linode customers is limited to shared-IP reputation effects.
+The hosting provider is Linode/Akamai Technologies (AS63949) in Canada, a commercial legitimate VPS with no bulletproof hosting indicators. Canadian jurisdiction lowers the barrier for abuse reporting and law enforcement coordination, and downstream abuse risk to other Linode customers is limited to shared-IP reputation effects.
 
-**Supply chain implications:** UNKNOWN — the toolkit is assessed as pre-deployment. No trojanized delivery vector or software supply chain compromise has been observed. The social engineering kit templates (analytics.js, keylogger.js) remain undeployed with template placeholders intact. No downstream victims or compromised legitimate software packages have been identified.
+Supply chain implications are UNKNOWN, because I assess the toolkit as pre-deployment. No trojanized delivery vector or software supply chain compromise has been observed. The social engineering kit templates, `analytics.js` and `keylogger.js`, remain undeployed with their template placeholders intact, and no downstream victims or compromised legitimate software packages have been identified.
 
-**Developer ecosystem risk:** OpenStrike is an undocumented custom implant family with no prior public threat intelligence. A completed gen-5 — one that resolves the missing nonce exchange — would be invisible to all CS-specific detection signatures. If the operator's development files were subsequently leaked or shared, other actors could adopt the same capability.
+There is a developer ecosystem risk. OpenStrike is an undocumented custom implant family with no prior public threat intelligence, and a completed gen-5, one that resolves the missing nonce exchange, would be invisible to every CS-specific detection signature. If the operator's development files were subsequently leaked or shared, other actors could adopt the same capability.
 
 ### 6.5 Mixed CS Version Sourcing Pattern
 
@@ -872,13 +872,13 @@ All 10 custom GCC 15 operator tools — including all four OpenStrike beacon gen
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
-**Attribution Decision:** UTA-2026-004 — maintained. No upgrade warranted.
+I maintain the UTA-2026-004 attribution, with no upgrade warranted, and named-actor confidence stays INSUFFICIENT below 50 percent.
 
-**Confidence:** INSUFFICIENT for any named actor (<50%).
 
-**"Pwn3rs" as actor persona — REJECTED:** Pwn3rs/Pwn3rzs is cracked CS distribution branding originating from bbs.kanxue.com (October 2023), confirmed by multiple Tier 3 and forum-level sources. The name appears in team server logs because the cracked JAR's license emulation code generates it — not because the operator chose it.
 
-**"You Dun" attribution — INSUFFICIENT:** Watermark 987654321 overlap with documented You Dun cases is explained by shared distribution availability. Six technical dimensions contradict a You Dun/UTA-2026-004 linkage: hosting geography, language artifacts, C2 architecture, compiler toolchain, RSA key sets, and operational timing.
+"Pwn3rs" as an actor persona is REJECTED. Pwn3rs and Pwn3rzs are cracked CS distribution branding originating from bbs.kanxue.com in October 2023, confirmed by multiple Tier 3 and forum-level sources. The name appears in team server logs because the cracked JAR's license emulation code generates it, not because the operator chose it.
+
+The "You Dun" attribution is INSUFFICIENT. The watermark 987654321 overlap with documented You Dun cases is explained by shared distribution availability, and six technical dimensions contradict a You Dun to UTA-2026-004 linkage, hosting geography, language artifacts, C2 architecture, compiler toolchain, RSA key sets, and operational timing.
 
 **Alternative Hypotheses:**
 
@@ -996,7 +996,7 @@ IOCs are provided in structured machine-readable format. This feed contains only
 | Sigma | 8 | EAX-redirect hollowing; DceRpcSs service; MSSE pipe; npf.sys temp load; Gen-4 C2 polling; CovertVPN ICMP; dll_loader path; rundll32 no-args |
 | Suricata | 6 | Gen-4 beaconing; stager downloads; Malleable C2 profiles B and C; CovertVPN HTTP; CovertVPN ICMP |
 
-**Companion file for original samples:** [/hunting-detections/open-directory-172-105-0-126-20260406-detections/](/hunting-detections/open-directory-172-105-0-126-20260406-detections/)
+The companion file for the original samples is at [/hunting-detections/open-directory-172-105-0-126-20260406-detections/](/hunting-detections/open-directory-172-105-0-126-20260406-detections/)
 
 Deploy both detection files for full campaign coverage. Review for deduplication before production deployment.
 
@@ -1133,7 +1133,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 ## 15. Related Investigation
 
-**Original April 6 Report:** [/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)
+The original April 6 report is at [/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)
 
 The original investigation established the OpenStrike family name, the Trinity Protocol cryptographic architecture, UTA-2026-004 designation, and the initial infrastructure profile for 172.105.0.126. Both reports together constitute the complete public technical record of the OpenStrike campaign through April 8, 2026. Deploy IOC feeds and detection rules from both investigations for full coverage.
 

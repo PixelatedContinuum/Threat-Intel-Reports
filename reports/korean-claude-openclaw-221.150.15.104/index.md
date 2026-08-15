@@ -106,7 +106,7 @@ Hunt.io's open-directory crawler indexed the operator's exposed home directory a
 
 ### Named-Victim Status
 
-**None confirmed.** The captured filesystem contains no victim identities, exfiltrated data, email targets, compromised credentials, or traffic logs against named infrastructure. The operator's `~/.claude/history.jsonl` (session command history) and `~/.claude/projects/` (transcript directory) were deliberately not pulled per The Hunters Ledger credential-redaction discipline — operator session transcripts can surface incidentally-mentioned third-party identities and yield defenders nothing operationally usable in a tradecraft-observation case (Section 10.2).
+None are confirmed. The captured filesystem contains no victim identities, exfiltrated data, email targets, compromised credentials, or traffic logs against named infrastructure. The operator's `~/.claude/history.jsonl`, their session command history, and `~/.claude/projects/`, the transcript directory, were deliberately not pulled under The Hunters Ledger credential-redaction discipline, because operator session transcripts can surface incidentally-mentioned third-party identities and yield defenders nothing operationally usable in a tradecraft-observation case (Section 10.2).
 
 ### Operator Residential Exposure Pattern
 
@@ -205,7 +205,7 @@ The schema is Anthropic Claude Code's documented per-directory and global permis
 | 6 | `Bash(openclaw gateway --port 18789)` | Start the OpenClaw local gateway listener on TCP port 18789 | Local service / proxy bring-up |
 | 7 | `Bash(open http://127.0.0.1:18789/)` | Open the OpenClaw gateway web UI in the operator's default browser | UI activation (macOS-specific — `open` is the macOS command for "open the default app for this URL") |
 
-**The macOS signal.** Entry 7's `open` command — the macOS equivalent of Linux `xdg-open` or Windows `start` — strongly suggests a macOS or macOS-compatible host. The co-located `~/.openclaw/completions/openclaw.ps1` (a PowerShell completion script) yields three candidate readings: (a) the operator runs PowerShell-on-macOS, (b) OpenClaw ships the PowerShell completion in its standard distribution regardless of host OS, or (c) the operator also runs OpenClaw on a separate Windows host that synced here. Reading (b) is most parsimonious — the file is standard install layout, not affirmative evidence of PowerShell on this host — so the macOS read (entry 7) stays higher-confidence.
+The macOS signal comes from entry 7's `open` command, the macOS equivalent of Linux `xdg-open` or Windows `start`, which strongly suggests a macOS or macOS-compatible host. The co-located `~/.openclaw/completions/openclaw.ps1`, a PowerShell completion script, yields three candidate readings, that the operator runs PowerShell-on-macOS, that OpenClaw ships the PowerShell completion in its standard distribution regardless of host OS, or that the operator also runs OpenClaw on a separate Windows host that synced here. The second is most parsimonious, since the file is standard install layout rather than affirmative evidence of PowerShell on this host, so the macOS read from entry 7 stays higher-confidence.
 
 **The collective effect.** The seven entries form one complete sequence — probe, install (via both `curl | bash` and a redundant npm path), onboard, fetch docs, start the gateway, open the UI. The operator compressed what would normally be a multi-step interactive workflow, with a safety prompt at every step, into a single pre-approved chain.
 
@@ -264,7 +264,7 @@ The operator's tool is not Claude Code or OpenClaw but **both, integrated** — 
 
 The parent investigation independently observed this same model in Case 2: Case 2 ([Turkish ARPA](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/) §4.3) shows the same side-loaded **OpenClaw** toolkit (over a Moonshot Kimi backend) — an ecosystem-level shared tool driven by the documented OpenClaw exposure crisis, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
-**Why this matters.** Singular-tool framing misjudges the threat surface — defenders must inventory and monitor both and understand the integration. A posture that allows mainstream AI CLIs but blocks all side-loaded toolkits fails here unless the side-loaded toolkit itself is detected.
+This matters because singular-tool framing misjudges the threat surface. Defenders have to inventory and monitor both tools and understand the integration. A posture that allows mainstream AI CLIs but blocks all side-loaded toolkits fails here unless the side-loaded toolkit itself is detected.
 
 ### 4.4 The OpenClaw Distribution Ecosystem
 
@@ -305,7 +305,7 @@ The artifact does not document what the gateway UI **contains** — that require
 - **Loopback-only scope.** The allowlist binds `127.0.0.1:18789`, the loopback interface, so the gateway is reachable only from the host — consistent with OpenClaw mediating between local tools, not remote callers. Expect no external port-18789 exposure unless the operator deliberately bound `0.0.0.0:18789` or set up a port-forward; the artifact shows neither.
 - **Process-tree signal.** When Claude Code starts the gateway, the host's process tree shows Claude Code spawning a Bash subprocess that exec's `openclaw gateway`. Lineage-tracing endpoint detection can flag it: Claude Code → Bash → unfamiliar gateway listener.
 
-**Why this matters at the kill-chain level.** The gateway is the operational hub for the operator's tool integration. Detecting its bring-up via any of three independent paths — allowlist content scan, listening-port inventory, or process-tree lineage — yields defense-in-depth even though no single signal is uniquely diagnostic in isolation.
+This matters at the kill-chain level. The gateway is the operational hub for the operator's tool integration, and detecting its bring-up via any of three independent paths, an allowlist content scan, a listening-port inventory, or process-tree lineage, yields defense in depth even though no single signal is uniquely diagnostic in isolation.
 
 ---
 
@@ -382,7 +382,7 @@ At LOW confidence the evidence supports "weak indicators suggest" and no more. S
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-**Full IOC feed:** [`/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json) — every indicator for this case, with type / confidence / recommended action.
+The full IOC feed is at [`/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
 ---
 
@@ -398,13 +398,13 @@ The detection file follows The Hunters Ledger conventions (CC BY 4.0 license, "T
 
 The strategy is **three independent paths against the same workflow**, so defenders catch the activity even if one path is missed.
 
-**Deployment-scope discipline.** On developer-class endpoints (where engineering, DevOps, or data-science staff routinely install third-party CLIs), all three paths below carry a non-trivial false-positive rate — developers legitimately install unfamiliar tools, and some allowlist entries reflect normal workflow. Highest-signal targets are **server-class endpoints, jump hosts, CI/CD agent nodes, and non-developer workstations**, where Claude Code presence is itself anomalous. For confirmed developer endpoints, prefer **allowlist content review** (is this a known-authorized package from a recognized vendor?) over automatic blocking. The three paths:
+Deployment scope needs discipline. On developer-class endpoints, where engineering, DevOps or data-science staff routinely install third-party CLIs, all three paths below carry a non-trivial false-positive rate, because developers legitimately install unfamiliar tools and some allowlist entries reflect normal workflow. The highest-signal targets are **server-class endpoints, jump hosts, CI/CD agent nodes, and non-developer workstations**, where Claude Code presence is itself anomalous. For confirmed developer endpoints, prefer **allowlist content review**, asking whether this is a known-authorized package from a recognized vendor, over automatic blocking. The three paths run as follows:
 
-**Path 1 — Filesystem content hunt.** YARA scanning `~/.claude/settings.local.json` and `<project>/.claude/settings.local.json` for the documented allowlist patterns. The primary path, broadest reach — it catches the technique against any tool, not just OpenClaw.
+The first path is a filesystem content hunt, YARA scanning `~/.claude/settings.local.json` and `<project>/.claude/settings.local.json` for the documented allowlist patterns. It is the primary path with the broadest reach, because it catches the technique against any tool, not just OpenClaw.
 
 **Path 2 — Process-tree lineage.** Sigma for a Claude Code parent spawning Bash subprocesses that exec `curl ... | bash`, global npm installs of unfamiliar packages, or local listener bring-up. The runtime path — catches the abuse when the allowlist is actually used, not just statically present.
 
-**Path 3 — Listening-port inventory.** Endpoint queries surfacing TCP port `18789` bindings on developer- and admin-class endpoints. The post-hoc path — catches a host where the gateway is currently running, regardless of how it started.
+The third path is a listening-port inventory, endpoint queries surfacing TCP port `18789` bindings on developer-class and admin-class endpoints. It is the post-hoc path, catching a host where the gateway is currently running regardless of how it started.
 
 ### Response Orientation
 
@@ -483,7 +483,7 @@ Findings organized by confidence level. The body attaches per-claim confidence i
 
 ### 10.2 Dynamic Analysis Coverage
 
-**Dynamic analysis: not applicable.** No binary was captured to detonate, and no live operator-side traffic capture exists — there is nothing to sandbox. The operator's `~/.claude/history.jsonl` (session command history) and `~/.claude/projects/` (session-content transcripts) were deliberately not pulled per The Hunters Ledger credential-redaction discipline: those files would expose operator session contents that risk surfacing third-party identities if the operator used Claude Code against named targets, and they yield defenders nothing operationally usable in a tradecraft-observation case. This is consistent with the project standard.
+Dynamic analysis does not apply here. No binary was captured to detonate and no live operator-side traffic capture exists, so there is nothing to sandbox. The operator's `~/.claude/history.jsonl`, their session command history, and `~/.claude/projects/`, the session-content transcripts, were deliberately not pulled under The Hunters Ledger credential-redaction discipline, because those files would expose operator session contents that risk surfacing third-party identities if the operator used Claude Code against named targets, and they yield defenders nothing operationally usable in a tradecraft-observation case. That is consistent with the project standard.
 
 ### 10.3 Coverage Gaps and Open Questions
 

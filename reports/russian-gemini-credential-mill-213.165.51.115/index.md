@@ -245,7 +245,7 @@ Every link in the operator's chain — credential acquisition, LLM personalizati
 
 > **Analyst note:** This subsection documents the operator's source code for the per-target password mutation script that uses Google's Gemini 2.5 Flash to generate 20 likely current passwords per target from email + domain + a known prior password. The detection logic is in the verbatim role-priming prompt: the phrase `"Act as an expert red-team password analyst"` combined with Gemini API import and the operator's bespoke output filename `AI_SNIPER_GOODS.txt` has negligible legitimate-software overlap and is the highest-signal single-artifact YARA detection in the campaign. This is the first source-code analysis with verbatim prompt reproduction of this technique class.
 
-**Confidence:** DEFINITE (source code captured from operator open directory)
+I hold this DEFINITE, with the source code captured from the operator's open directory.
 
 **Technique reframing (per Section 13 calibration):** Trend Micro independently confirmed this technique is operational ("Patriot Bait" 2026-05-22). The Hunters Ledger contribution is reframed from "first ever documentation" to **first source-code analysis with verbatim prompt reproduction**. The novelty claim is retained at HIGH confidence.
 
@@ -275,9 +275,9 @@ The exact phrasing varies slightly across operator iterations; the *structure* �
 - `# Медленно, в 3 потока, чтобы не банили прокси и API` ("Slowly, in 3 threads, so they don't ban the proxies and API")
 - `# Инициализация ИИ (Используем Flash для скорости)` ("AI initialization (Using Flash for speed)")
 
-**Why this matters:** Static password mangling rules (hashcat best64.rule, OneRuleToRuleThemAll) generate ~64 mutations per password using deterministic transformations (l33t-speak, leading/trailing digits, capitalization variants). The LLM-personalized approach generates per-target mutations that incorporate context the rules cannot — the user's likely birth year inferred from their email, their company name, common-substitution patterns specific to a given target's domain. Empirical effectiveness against targeted users is plausibly meaningfully higher than rule-based mangling; the operator's continued investment in this script across multiple iterations is observational evidence of effectiveness in the operator's own assessment.
+This matters because static password mangling rules (hashcat best64.rule, OneRuleToRuleThemAll) generate roughly 64 mutations per password using deterministic transformations, l33t-speak, leading and trailing digits, capitalization variants. The LLM-personalized approach generates per-target mutations that incorporate context those rules cannot reach, the user's likely birth year inferred from their email, their company name, and common-substitution patterns specific to a given target's domain. Empirical effectiveness against targeted users is plausibly meaningfully higher than rule-based mangling, and the operator's continued investment in this script across multiple iterations is observational evidence of effectiveness in their own assessment.
 
-**Detection strategy:** YARA rule covers the combination of Gemini API import + verbatim role-prime phrase fragment + AI_SNIPER / AI_ADMIN_MUTANTS output filename convention + ULTRA_GOLD_TARGETS input filename + `[+++ AI SUPER GOOD +++]` success format. Detection rules in Section 10; full YARA rule body in the linked detection file.
+To detect it, a YARA rule covers the combination of the Gemini API import, the verbatim role-prime phrase fragment, the AI_SNIPER and AI_ADMIN_MUTANTS output filename convention, the ULTRA_GOLD_TARGETS input filename, and the `[+++ AI SUPER GOOD +++]` success format. Detection rules are in Section 10, and the full YARA rule body is in the linked detection file.
 
 **Companion artifact: `AI_ADMIN_MUTANTS.txt`** — operator-self-named output file for an admin-account targeted variant of `ai_sniper_brute.py`. The presence of both `AI_SNIPER_GOODS.txt` and `AI_ADMIN_MUTANTS.txt` operator-self-named filenames in the open directory is independent corroboration that this tooling is operator-built, not commodity downloaded.
 
@@ -285,9 +285,9 @@ The exact phrasing varies slightly across operator iterations; the *structure* �
 
 > **Analyst note:** This subsection documents a novel artifact class — Markdown documents authored by the operator specifically to prime new Google Gemini CLI sessions with prior session operational state. Three exemplars on disk: `C2_MIGRATION_GUIDE.md`, `C2_INFRA_TRANSFER.md`, and `DEPLOYED_TOOLS.md`. The architecture is distinct from the `GEMINI.md` jailbreak-persistence file that Trend Micro documented in their 2026-05-22 publication — those files achieve persistence by being auto-loaded by the AI on session start; AI Operator Handoff Documents are operator-loaded reference documents that carry operational session state. This is a tradecraft pattern, not a single-file persistence trick.
 
-**Confidence:** HIGH (three exemplars on disk; novelty claim MAINTAINED per Section 13)
+I hold this HIGH, on three exemplars on disk, and the novelty claim is MAINTAINED per Section 13.
 
-**Pattern structure:** Each document follows a similar form:
+Each document follows a similar structural form:
 - Title indicating purpose (`C2 Infrastructure Transfer`, `Deployed Tools Inventory`, `C2 Migration Guide`)
 - Explicit AI-to-AI header indicating intended consumer (`**To:** Gemini CLI` / `**From:** Gemini CLI` on `C2_INFRA_TRANSFER.md`)
 - Session-start load directive (`When starting a new session, refer to this file` on `DEPLOYED_TOOLS.md`)
@@ -302,15 +302,15 @@ The exact phrasing varies slightly across operator iterations; the *structure* �
 
 **Why this is structurally distinct from `GEMINI.md` jailbreak persistence:** Trend Micro documented `GEMINI.md` as a content-level persistence pattern — the operator places jailbreak content in `GEMINI.md` in the working directory, and Gemini CLI auto-loads `GEMINI.md` on session start, which effectively persists the jailbreak across sessions without operator effort. This is a *persistence* pattern (content-level, auto-loaded). The three AI Operator Handoff Documents documented here are *session-handoff* patterns (operationally-loaded by operator reference, content-bearing of operational state). The two patterns are complementary but architecturally distinct: jailbreak persistence answers "how do I get the AI to do disallowed things every session?"; AI Operator Handoff Documents answer "how do I get a new AI session up to speed on what the prior session was doing?"
 
-**Why this matters:** As AI agents move from chat-style interactions to multi-session operational workflows, the operator's information-handoff pattern across sessions becomes a tradecraft surface. The three exemplars on disk represent a measurable evolution of operator tradecraft for AI-augmented operations — the operator is producing structured documentation specifically for AI consumption, treating the AI as an operational team member that needs to be briefed on prior work. This pattern will diffuse; defenders preparing for AI-augmented attacker workflows should expect to see this artifact class in other operator open directories going forward. The same artifact class appears at 22+ exemplars in Case 3 ([Rovodev](/reports/rovodev-mirai-matrix-c2-87.106.143.220/) §4.4) — two facets of one novel TTP (operator-authored-for-AI here; AI-generated, superlative-named there), a shared tradecraft pattern, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
+This matters because as AI agents move from chat-style interactions to multi-session operational workflows, the operator's information-handoff pattern across sessions becomes a tradecraft surface. The three exemplars on disk represent a measurable evolution of operator tradecraft for AI-augmented operations, with the operator producing structured documentation specifically for AI consumption and treating the AI as an operational team member that needs briefing on prior work. This pattern will diffuse, and defenders preparing for AI-augmented attacker workflows should expect to see this artifact class in other operator open directories going forward. The same artifact class appears at 22+ exemplars in Case 3 ([Rovodev](/reports/rovodev-mirai-matrix-c2-87.106.143.220/) §4.4), two facets of one novel TTP, operator-authored-for-AI here and AI-generated with superlative naming there, a shared tradecraft pattern rather than coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
-**Detection strategy:** YARA rule for Markdown files combining session-start load directive (`When starting a new session, refer to this file` or equivalent) with operational-content markers (C2 endpoint URL patterns, credential-table indicators). Higher-risk filesystem locations: `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class Linux hosts. The rule is tuned with `MEDIUM` FP risk acknowledgment — legitimate AI-assisted development workflows can produce Markdown files with similar directive structure (`CLAUDE.md` project files); the operational-content co-occurrence is the disambiguator.
+To detect it, write a YARA rule for Markdown files combining a session-start load directive (`When starting a new session, refer to this file` or equivalent) with operational-content markers such as C2 endpoint URL patterns and credential-table indicators. The higher-risk filesystem locations are `~/.gemini/`, `~/.claude/` and `~/.codex/` directories on server-class Linux hosts. The rule carries a `MEDIUM` FP risk acknowledgment, because legitimate AI-assisted development workflows can produce Markdown files with a similar directive structure (`CLAUDE.md` project files), and the operational-content co-occurrence is the disambiguator.
 
 ### 4.3 Operator-Built Unauthenticated Python-stdlib C2 Backend (`c2_server.py`)
 
 > **Analyst note:** This subsection documents the operator's custom C2 server, written in Python using only the standard library `http.server.BaseHTTPServer` (no FastAPI, Flask, or aiohttp dependency). Five endpoints are referenced in client code; four are implemented in the server; one (`/api/v1/get_results`) is called by clients but is not implemented in the server. The mismatch is direct evidence of in-place iterative development against a live victim — the operator was deploying and iterating simultaneously. The C2 is unauthenticated by design, meaning any network-reachable actor can enumerate agents (`/api/v1/agents`) or issue commands (`/api/v1/interact`) without credentials — a significant finding for coordinated-disclosure and law enforcement.
 
-**Confidence:** DEFINITE (source code captured from operator open directory; the literal banner string `A2A C2 MULTI-AGENT CONSOLE` is in `console.py`)
+I hold this DEFINITE, with the source code captured from the operator's open directory and the literal banner string `A2A C2 MULTI-AGENT CONSOLE` sitting in `console.py`.
 
 **Server architecture:**
 
@@ -326,53 +326,53 @@ The exact phrasing varies slightly across operator iterations; the *structure* �
 | `/api/v1/telemetry` | YES | Agent → server: telemetry channel (host info, process snapshots) |
 | `/api/v1/get_results` | **NO — called by client but not implemented in server** | Intended: agent → server result return path. Iterative-dev evidence: the operator deployed client code that calls an endpoint they had not yet implemented server-side. |
 
-**The unauthenticated-by-design property:** All five `/api/v1/*` endpoints accept arbitrary HTTP clients without any agent-authentication step — no token, session cookie, or shared secret is required. This means that any network-reachable actor can call `/api/v1/agents` to enumerate registered agents, or `/api/v1/interact` to queue arbitrary commands for those agents, without presenting credentials.
+The server is unauthenticated by design. All five `/api/v1/*` endpoints accept arbitrary HTTP clients with no agent-authentication step at all, no token, no session cookie, no shared secret. Any network-reachable actor can call `/api/v1/agents` to enumerate registered agents, or `/api/v1/interact` to queue arbitrary commands for those agents, without presenting credentials.
 
 This unauthenticated surface is a significant finding for **coordinated disclosure and law enforcement**. Cloudflare PSIRT, acting under legal authority and in coordination with law enforcement, can use the disclosed API token and endpoint inventory to support a targeted takedown of the tunnel infrastructure. Law enforcement agencies with appropriate legal process may use these endpoints as part of a court-authorized disruption operation.
 
 **Victim-side defenders should NOT interact directly with attacker infrastructure.** Issuing commands to `/api/v1/interact` or querying `/api/v1/agents` from a victim network — without explicit authorization from law enforcement — may constitute unauthorized access to a computer system under applicable computer-misuse law (e.g., 18 U.S.C. § 1030 in the US). Direct interaction with live attacker infrastructure also risks destroying forensic evidence, alerting the operator, and contaminating the evidence chain. The correct action is to document the finding, preserve local forensic artifacts, and route the disclosure through law enforcement and the relevant platform abuse channels. The endpoint signatures are documented in the Section 10 detection file.
 
-**The `A2A C2 MULTI-AGENT CONSOLE` banner:** The operator's `console.py` interactive shell prints this literal banner string on startup. The banner is the operator's self-applied name for their custom C2 framework. It is the operator's branding for their own work — and the highest-signal single-string fingerprint of this operator's C2 across any future deployment, regardless of infrastructure migration.
+The `A2A C2 MULTI-AGENT CONSOLE` banner is worth its own note. The operator's `console.py` interactive shell prints that literal string on startup, and it is their self-applied name for their custom C2 framework. It is their branding for their own work, and the highest-signal single-string fingerprint of this operator's C2 across any future deployment, regardless of infrastructure migration.
 
 **Why the in-place iterative development matters:** Operators who deploy stable, tested tooling against live victims typically have client-server interface contracts that are complete by deployment. The `/api/v1/get_results` mismatch is direct evidence that this operator was developing the C2 while deployed against the healthcare victim — adding client-side calls before completing server-side handlers. This is a *mid-tier selective sophistication* signal: the operator is capable of building a custom C2 (rather than using a commodity framework like Sliver or Cobalt Strike), but is operating without the engineering discipline that would prevent client/server interface mismatches on a live deployment.
 
-**Detection strategy:** YARA rule covers the `A2A C2 MULTI-AGENT CONSOLE` banner string in Python source files plus the bespoke endpoint family. Sigma rule covers HTTP requests with `X-Agent-ID` header format `HOSTNAME_user` and URI `/api/v1/{update,agents,interact,telemetry,get_results}`. Suricata signature covers the HTTP request pattern at network perimeter. Full rule bodies in Section 10 detection file.
+To detect it, a YARA rule covers the `A2A C2 MULTI-AGENT CONSOLE` banner string in Python source files plus the bespoke endpoint family. A Sigma rule covers HTTP requests carrying an `X-Agent-ID` header in the format `HOSTNAME_user` with a URI matching `/api/v1/{update,agents,interact,telemetry,get_results}`. A Suricata signature covers the same HTTP request pattern at the network perimeter. Full rule bodies are in the Section 10 detection file.
 
 **Path-traversal surface (`self.path` dispatched without normalization):**
 
 Python's `BaseHTTPRequestHandler` stores the raw HTTP request URI in `self.path` with no library-level normalization or boundary enforcement. The captured `c2_server.py` `do_GET` / `do_POST` dispatch logic uses `self.path` directly for endpoint routing without applying `urllib.parse.unquote()`, `os.path.normpath()`, or `os.path.realpath()` boundary checks. Any handler invocation that constructs a local filesystem path from `self.path` — the pattern `open(os.path.join(server_root, self.path.lstrip('/')), 'rb')` observed in the source — is traversable by a caller issuing a URI containing `../` sequences (e.g., `GET /../../../../etc/passwd HTTP/1.1`).
 
-**Confidence:** DEFINITE for the absent-sanitization code pattern (source code captured and reviewed). HIGH for the practical traversal condition — exploitability depends on which handler invocations reach filesystem operations; the primary endpoint-routing handlers serve structured API responses, but in-place iterative additions cannot be excluded without exhaustive dynamic testing.
+I hold the absent-sanitization code pattern DEFINITE, from source code captured and reviewed, and the practical traversal condition HIGH. Exploitability depends on which handler invocations reach filesystem operations, and while the primary endpoint-routing handlers serve structured API responses, in-place iterative additions cannot be excluded without exhaustive dynamic testing.
 
-**Defender-relevant implication:** The path-traversal surface compounds the zero-auth property documented above. Any network-reachable actor — including a defender conducting counter-intelligence enumeration against the C2 — can attempt filesystem reads without credential or token requirements. The operator's server working directory at `cloudflared`-launch time determines the reachable scope; operator workstation artifacts (Gemini session logs, key inventories, credential ledgers) reachable via traversal would materially extend the intelligence available from the five API endpoints alone.
+For defenders, the path-traversal surface compounds the zero-auth property documented above. Any network-reachable actor, including a defender conducting counter-intelligence enumeration against the C2, can attempt filesystem reads with no credential or token requirement. The operator's server working directory at `cloudflared`-launch time determines the reachable scope, and operator workstation artifacts such as Gemini session logs, key inventories and credential ledgers reachable via traversal would materially extend the intelligence available from the five API endpoints alone.
 
-**MITRE ATT&CK:** T1083 (File and Directory Discovery) — path-traversal read access to the operator's server filesystem from a network-adjacent position.
+This maps to T1083 (File and Directory Discovery), path-traversal read access to the operator's server filesystem from a network-adjacent position.
 
 ### 4.4 Stolen LLM API Key Validation + Rotation Pipeline
 
 > **Analyst note:** This subsection documents the operator's pipeline for validating, testing, and rotating through an inventory of stolen frontier-LLM API keys. Three companion scripts (`check_keys.py`, `test_gemini_3.1.py`, `retest_keys.py`) work against an inventory of 40+ Gemini API keys plus an OpenAI key plus a Venice AI key, all tracked by MD5 hash. The operator's publicly-open-sourced GitHub repository `oravepo546-stack/Gemini-CLI-api-key-rotation` provides a round-robin key rotation wrapper with cooldown-on-429 behavior. This is frontier-LLM compute theft from legitimate API key holders.
 
-**Confidence:** DEFINITE (source code captured; inventory file captured; GitHub repository publicly visible)
+I hold this DEFINITE, with the source code captured, the inventory file captured, and the GitHub repository publicly visible.
 
-**Key inventory:** 40+ Google Gemini API keys (format `AIzaSy*`), 1 OpenAI API key (format `sk-*`), 1 Venice AI key, each tracked by MD5 hash in an operator-maintained inventory file. The inventory file format includes per-key fields for source (where the key was stolen from), last test timestamp, current rate-limit status, and rotation cooldown timestamp.
+The key inventory holds 40+ Google Gemini API keys (format `AIzaSy*`), 1 OpenAI API key (format `sk-*`), and 1 Venice AI key, each tracked by MD5 hash in an operator-maintained inventory file. That file's format includes per-key fields for source (where the key was stolen from), last test timestamp, current rate-limit status, and rotation cooldown timestamp.
 
-**Validation script (`check_keys.py`):** Iterates the key inventory, issues a minimal Gemini API request per key, classifies the response (valid, rate-limited, revoked, unknown error), updates the inventory file with the result. The script is designed for batch-validation runs (e.g., overnight) and is tuned to back off when a key starts returning 429 rate-limit responses.
+The validation script `check_keys.py` iterates the key inventory, issues a minimal Gemini API request per key, classifies the response as valid, rate-limited, revoked or unknown error, and updates the inventory file with the result. It is designed for batch-validation runs, overnight for instance, and is tuned to back off when a key starts returning 429 rate-limit responses.
 
-**Active-test script (`test_gemini_3.1.py`):** Per-key test of the operator's actual prompt template against Gemini 2.5 Flash — confirms a key is usable for the credential mutation workflow specifically (not just that it accepts API calls).
+The active-test script `test_gemini_3.1.py` runs a per-key test of the operator's actual prompt template against Gemini 2.5 Flash, confirming a key is usable for the credential mutation workflow specifically rather than merely accepting API calls.
 
-**Retest script (`retest_keys.py`):** Reactivates previously-rate-limited keys after a cooldown window. The operator's GitHub repository `oravepo546-stack/Gemini-CLI-api-key-rotation` provides the same logic in a more polished, publicly-published form.
+The retest script `retest_keys.py` reactivates previously rate-limited keys after a cooldown window. The operator's GitHub repository `oravepo546-stack/Gemini-CLI-api-key-rotation` provides the same logic in a more polished, publicly published form.
 
 **The operator's publicly-published GitHub repository:** `github.com/oravepo546-stack/Gemini-CLI-api-key-rotation` is a round-robin Gemini API key rotation wrapper. The repository is under the operator's secondary GitHub identity (`oravepo546-stack` organization account, distinct from the primary `sonner1337` user account). The captured GitHub PAT (defanged: `ghp_tdcX...DaRW`) is associated with this organization account. This is direct operator-side OPSEC failure — the operator's *technique* for rotating stolen API keys is publicly published under an operator-controlled identity that links back to operational artifacts on the operator workstation.
 
-**Why this matters:** Frontier-LLM API keys represent shifted compute cost — the legitimate key holder's billing account is charged for the operator's attacks. 40+ keys at modest per-day usage represents a significant cumulative AI-compute resource. The validation + rotation pipeline is the engineering effort that makes the stolen-key model sustainable at operational tempo.
+This matters because frontier-LLM API keys represent shifted compute cost, with the legitimate key holder's billing account charged for the operator's attacks. 40+ keys at modest per-day usage adds up to a significant cumulative AI-compute resource. The validation and rotation pipeline is the engineering effort that makes the stolen-key model sustainable at operational tempo.
 
-**Detection strategy:** Sigma rule for outbound HTTPS to `generativelanguage.googleapis.com/v1beta/models?key=AIzaSy*` with high key-diversity from a single source IP (>10 distinct keys per hour from one source is a strong rotation-pipeline signal). Server-class host scoping reduces FP risk vs. developer workstations that legitimately use multiple Gemini keys for testing.
+To detect it, a Sigma rule watches outbound HTTPS to `generativelanguage.googleapis.com/v1beta/models?key=AIzaSy*` with high key diversity from a single source IP, where more than 10 distinct keys per hour from one source is a strong rotation-pipeline signal. Scoping to server-class hosts reduces FP risk against developer workstations that legitimately use multiple Gemini keys for testing.
 
 ### 4.5 Cloudflare Tunnel Topology + Persistent Victim Access
 
 > **Analyst note:** This subsection documents the operator's use of Cloudflare Tunnel under an operator-owned custom domain (`tralalarkefe.com`) to provide persistent, TLS-encrypted, IP-block-resistant access into the healthcare victim environment. Six tunnel subdomains are configured. Two of the six provide direct operator-side inbound access into victim hosts: `windows_server.tralalarkefe.com` for RDP/WinRM into the Windows server, and `gil_dr1.tralalarkefe.com` for SSH. This is a meaningful evolution beyond documented `trycloudflare.com` quick-tunnel abuse — the custom-domain tunnel survives quick-tunnel teardown and enables post-migration agent reconnection.
 
-**Confidence:** DEFINITE (Cloudflare API token captured; full tunnel inventory captured from operator filesystem)
+I hold this DEFINITE, with the Cloudflare API token captured and the full tunnel inventory pulled from the operator's filesystem.
 
 **Tunnel inventory (six subdomains under `tralalarkefe.com`):**
 
@@ -385,19 +385,19 @@ Python's `BaseHTTPRequestHandler` stores the raw HTTP request URI in `self.path`
 | `catchall1.tralalarkefe.com` | Catch-all tunnel | HTTPS | Unknown role |
 | `10101.tralalarkefe.com` | Numbered tunnel (port-numbered) | HTTPS | Unknown role; possibly C2 instance on port 10101 |
 
-**Plus one ephemeral bootstrap tunnel:** `tenant-upcoming-great-descending.trycloudflare.com` is a `trycloudflare.com` ephemeral quick-tunnel used for one-time bootstrap payload bundle delivery. Quick-tunnels cannot be pre-blocked at the domain level (any defender block of `*.trycloudflare.com` is overbroad), which makes them ideal for one-time delivery; the operator pairs the ephemeral quick-tunnel with the stable custom-domain tunnel for subsequent persistent access.
+There is also one ephemeral bootstrap tunnel. `tenant-upcoming-great-descending.trycloudflare.com` is a `trycloudflare.com` ephemeral quick-tunnel used for one-time bootstrap payload bundle delivery. Quick-tunnels cannot be pre-blocked at the domain level, because any defender block of `*.trycloudflare.com` is overbroad, which makes them ideal for one-time delivery. The operator pairs the ephemeral quick-tunnel with the stable custom-domain tunnel for subsequent persistent access.
 
 **Why this is more persistent than documented `trycloudflare.com` abuse:** The Proofpoint 2024-08-01 RAT-via-Cloudflare-Tunnel coverage documented the `trycloudflare.com` quick-tunnel pattern. Quick-tunnels are ephemeral by design — they expire when the operator-side `cloudflared` process terminates, and the random subdomain is not reused. Custom-domain tunnels under an operator-owned domain are stable — the tunnel UUID and subdomain remain bound to the operator's Cloudflare account, and a new `cloudflared` process can reconnect to the same tunnel UUID after migration. This enables post-migration agent reconnection: if the operator's source IP changes, the agent still beacons to `c2.tralalarkefe.com` successfully.
 
-**The captured Cloudflare full-admin API token:** The operator's API token (defanged: `pBkvccy9...TBztGF2`) provides Cloudflare PSIRT a single subpoena-grade lever to tear down the entire C2 transport layer — all six tunnel subdomains plus the operator-controlled zone (`6d415863...18f47af5`). This is the **single most actionable disclosure target in the campaign**. Cloudflare PSIRT engagement is the recommended Tier-0 disclosure action.
+The captured Cloudflare full-admin API token is the lever. The operator's token (defanged to `pBkvccy9...TBztGF2`) gives Cloudflare PSIRT a single subpoena-grade way to tear down the entire C2 transport layer, all six tunnel subdomains plus the operator-controlled zone (`6d415863...18f47af5`). This is the **single most actionable disclosure target in the campaign**, and Cloudflare PSIRT engagement is the recommended Tier-0 disclosure action.
 
-**Detection strategy:** Sigma rule for outbound HTTPS to `*.tralalarkefe.com` SNI. Sigma rule for `cloudflared access tcp --hostname *.tralalarkefe.com` argv on internal Linux hosts (catches operator-side use; for victim-side detection, look for any `cloudflared` process running with non-organization-account credentials). Detection rules in Section 10.
+To detect it, one Sigma rule watches outbound HTTPS to the `*.tralalarkefe.com` SNI, and another watches `cloudflared access tcp --hostname *.tralalarkefe.com` argv on internal Linux hosts. The second catches operator-side use; for victim-side detection, look instead for any `cloudflared` process running with non-organization-account credentials. Detection rules are in Section 10.
 
 ### 4.6 Healthcare Victim Compromise (HIPAA-Regulated Active Breach)
 
 > **Analyst note:** This subsection documents the primary victim of the operator's credential mill: a US dental practice. The compromise is active at capture time with operator-controlled Cloudflare Tunnel persistent access into the victim's internal environment. The Active Directory domain is `[victim AD domain — redacted]`, two internal subnets are compromised, full local NTLM hash inventory is captured (6 hashes), and the OpenDental MySQL root password hash is captured. Patient Health Information governed by HIPAA is at material risk pending tunnel teardown by Cloudflare PSIRT and direct notification to the practice. The disclosure coordination path is HC3 (HHS Health Sector Cybersecurity Coordination Center).
 
-**Confidence:** DEFINITE (operator-side artifacts capture full victim environment inventory; GCP project `[victim-named GCP project — redacted]` operator-named-after-victim signal)
+I hold this DEFINITE, because operator-side artifacts capture the full victim environment inventory, and the GCP project `[victim-named GCP project, redacted]` carries the operator's own naming-after-the-victim signal.
 
 **Identifying the healthcare victim from operator-side artifacts:** Three converging anchors identify the victim:
 
@@ -425,9 +425,9 @@ The specific practice name is not published in this report body; The Hunters Led
   - `windows_server.tralalarkefe.com` (RDP/WinRM)
   - `gil_dr1.tralalarkefe.com` (SSH)
 
-**HIPAA risk framing:** OpenDental stores Patient Health Information (PHI) including patient demographics, clinical notes, treatment plans, payment information, insurance information. Operator-controlled root access to the OpenDental MySQL database provides full PHI read capability. Whether PHI has already been exfiltrated requires victim-side forensic analysis (egress data volume review against the operator-access time window); the *capability* is configured and operational at capture time.
+On HIPAA risk, OpenDental stores Patient Health Information (PHI) including patient demographics, clinical notes, treatment plans, payment information and insurance information. Operator-controlled root access to the OpenDental MySQL database provides full PHI read capability. Whether PHI has already been exfiltrated requires victim-side forensic analysis, an egress data volume review against the operator-access time window, but the *capability* is configured and operational at capture time.
 
-**Disclosure coordination:** Tier-0 highest priority. Two parallel disclosure tracks:
+Disclosure coordination is Tier-0 highest priority, running on two parallel tracks:
 
 1. **Direct practice notification of the healthcare victim** — The Hunters Ledger coordinates direct notification; this is required for any victim-side remediation to begin.
 2. **HC3 (HHS Health Sector Cybersecurity Coordination Center)** — Federal sector-CERT coordination path for HIPAA-regulated victims. HC3 maintains the standard healthcare-sector threat intelligence dissemination channel.
@@ -438,9 +438,9 @@ The HIPAA Breach Notification Rule sets specific timelines and notification requ
 
 > **Analyst note:** This subsection documents the operator's sovereignty-diversified infrastructure stack: AEZA AS210644 (OFAC-sanctioned Russian-corporate bulletproof-adjacent hosting) for the operator workstation, Google Cloud Platform (legitimate cloud provider) for operator C2 / proxy / mail-test instances, and Cloudflare (legitimate edge provider) for the victim-facing C2 transport layer. The three-platform stack provides operator-side OPSEC layering: victim-side defenders see only Cloudflare and GCP traffic; AEZA hosting is operator-side only. The single largest OPSEC failure is the operator-named GCP project `[victim-named GCP project — redacted]` carrying the victim's name into a billing-account-associated identity surface.
 
-**Confidence:** DEFINITE (all three platforms captured with operator-side metadata)
+I hold this DEFINITE, with all three platforms captured alongside operator-side metadata.
 
-**Platform 1 — AEZA AS210644 (`213.165.51.115`):** Operator workstation hosting. AEZA Group LLC is a Russian-corporate provider with OFAC sanctions effective 2025-07-01 (Federal Register citation 2025-20573, effective 2025-11-21). Known AEZA customer base includes BianLian ransomware, RedLine infostealer, Meduza infostealer, Lumma infostealer, BlackSprut darknet marketplace, Doppelganger disinformation, plus this operator (UTA-2026-012) and the Case 9 GHOST cryptojacker operators (Sub-report 1). AEZA's non-cooperative abuse response posture combined with OFAC sanction status places the provider in the bulletproof-adjacent class. The operator's open-directory exposure on `213.165.51.115` was self-cleaned between Phase 7 and Phase 8 capture (totalItems: 0 by 2026-05-23) — operator detected and responded to exposure within days.
+The first platform is AEZA AS210644 at `213.165.51.115`, hosting the operator workstation. AEZA Group LLC is a Russian-corporate provider under OFAC sanctions effective 2025-07-01 (Federal Register citation 2025-20573, effective 2025-11-21). Its known customer base includes BianLian ransomware, RedLine infostealer, Meduza infostealer, Lumma infostealer, the BlackSprut darknet marketplace, Doppelganger disinformation, plus this operator (UTA-2026-012) and the Case 9 GHOST cryptojacker operators (Sub-report 1). AEZA's non-cooperative abuse response posture combined with its OFAC sanction status places the provider in the bulletproof-adjacent class. The operator's open-directory exposure on `213.165.51.115` was self-cleaned between the Phase 7 and Phase 8 captures, reaching totalItems: 0 by 2026-05-23, so the operator detected and responded to the exposure within days.
 
 **Platform 2 — Google Cloud Platform (three instances + two projects):**
 
@@ -452,29 +452,29 @@ The HIPAA Breach Notification Rule sets specific timelines and notification requ
 
 **Platform 3 — Cloudflare (custom domain `tralalarkefe.com` + 6 tunnel subdomains + zone `6d415863...18f47af5` + full-admin API token):** Detailed in subsection 4.5. The operator-controlled API token provides Cloudflare PSIRT a single subpoena-grade lever.
 
-**Why this matters for defenders:** The sovereignty-diversified stack means victim-side defenders see only Cloudflare and GCP traffic — the AEZA hosting is invisible to victim-side telemetry. Egress block on Cloudflare or GCP IP ranges is overbroad (both providers are legitimate edge / cloud providers used by many legitimate organizations). The defensible blocks are: (a) SNI block on `*.tralalarkefe.com`, (b) DNS block on `tralalarkefe.com` and any captured tunnel subdomain, (c) IP block on the specific GCP instances captured (`34.34.81.129`, `34.34.57.141`, `35.192.41.201`).
+For defenders, the sovereignty-diversified stack means victim-side telemetry shows only Cloudflare and GCP traffic, and the AEZA hosting is invisible from that vantage. An egress block on Cloudflare or GCP IP ranges is overbroad, since both are legitimate edge and cloud providers used by many legitimate organizations. The defensible blocks are (a) an SNI block on `*.tralalarkefe.com`, (b) a DNS block on `tralalarkefe.com` and any captured tunnel subdomain, and (c) an IP block on the specific GCP instances captured (`34.34.81.129`, `34.34.57.141`, `35.192.41.201`).
 
 ### 4.8 Co-located Telegram Disinformation Operation (`@americanpatriotus` / Quantum Patriot)
 
 > **Analyst note:** This subsection documents the cross-domain finding: the same operator who runs the credential mill against US healthcare also runs a US-targeted political Telegram disinformation channel `@americanpatriotus` ("Quantum Patriot" branding). The channel has ~17,000 subscribers per Trend Micro's independent coverage; the operation has been active since 2021 (5-year campaign per Trend Micro) with an AI pivot in September 2025. A live posting workflow was captured in operator Gemini CLI session 2026-03-25T18-27 with anti-fraud / JD-Vance themed content authored by Gemini under operator instruction. Solo-actor cross-domain combination is rare in published reporting — DFRLab and OpenMinds document Russian-operated US-targeted Telegram networks at scale but typically attribute these to coordinated teams, not solo actors.
 
-**Confidence:** DEFINITE (channel co-located on same operator infrastructure; live posting workflow captured in operator Gemini CLI session JSONs; Trend Micro independent confirmation)
+I hold this DEFINITE, because the channel is co-located on the same operator infrastructure, the live posting workflow is captured in the operator's Gemini CLI session JSONs, and Trend Micro independently confirms it.
 
-**Channel identifiers:** Telegram channel `@americanpatriotus`. Self-applied content branding "Quantum Patriot." Trend Micro reports ~17,000 subscribers and a 5-year operational history beginning 2021. Content profile per Trend Micro and Hunters Ledger session-capture observation: US-domestic political content, anti-fraud framing, JD-Vance themed posts, broadly aligned with Russian-disinformation US-political messaging templates documented by DFRLab and OpenMinds.
+The channel is Telegram's `@americanpatriotus`, self-branded "Quantum Patriot". Trend Micro reports roughly 17,000 subscribers and a 5-year operational history beginning in 2021. The content profile, per Trend Micro and our own session-capture observation, is US-domestic political content with anti-fraud framing and JD-Vance themed posts, broadly aligned with the Russian-disinformation US-political messaging templates documented by DFRLab and OpenMinds.
 
-**AI augmentation pattern:** The operator's Gemini CLI session 2026-03-25T18-27 captures a live posting workflow: the operator instructs Gemini to draft a post on a specific topic (e.g., anti-fraud framing of a specific event), Gemini drafts the post, the operator reviews and posts to `@americanpatriotus`. Per Trend Micro, the AI pivot occurred in September 2025 — the channel was operator-authored content-only from 2021–2025, then operator-with-AI-assistance from late 2025 onward. The Gemini-augmented posting workflow is direct evidence of the AI-augmentation phase.
+The AI augmentation shows directly. The operator's Gemini CLI session 2026-03-25T18-27 captures a live posting workflow where the operator instructs Gemini to draft a post on a specific topic, such as anti-fraud framing of a specific event, Gemini drafts it, and the operator reviews and posts to `@americanpatriotus`. Per Trend Micro the AI pivot occurred in September 2025, with the channel operator-authored content-only from 2021 to 2025 and operator-with-AI-assistance from late 2025 onward. The Gemini-augmented posting workflow is direct evidence of that later phase.
 
-**Why this is rare in published reporting:** DFRLab's catalog of Russian-operated Kremlin Telegram networks (2023, ongoing) and OpenMinds' research on Russian disinfo US-targeted channel networks typically attribute these operations to **coordinated teams** — multiple operators sharing infrastructure, content templates, and amplification networks. The combination of (a) financial cybercrime against US healthcare, (b) US-targeted political Telegram disinformation, (c) AI augmentation of both operations, and (d) **single-operator profile** (one solo actor running both) is a behavioral observation that does not match the documented coordinated-team baseline. Trend Micro's "One Man, One AI, One Fake Persona" framing captures the same single-operator characterization.
+This is rare in published reporting. DFRLab's catalog of Russian-operated Kremlin Telegram networks (2023, ongoing) and OpenMinds' research on Russian disinfo US-targeted channel networks typically attribute these operations to **coordinated teams**, multiple operators sharing infrastructure, content templates, and amplification networks. The combination of (a) financial cybercrime against US healthcare, (b) US-targeted political Telegram disinformation, (c) AI augmentation of both operations, and (d) a **single-operator profile**, one solo actor running both, is a behavioral observation that does not match the documented coordinated-team baseline. Trend Micro's "One Man, One AI, One Fake Persona" framing captures the same single-operator characterization.
 
 **The state-direction MODERATE-sensitivity assumption:** A solo operator running a 5-year political disinformation channel raises a reasonable question of state direction or tasking — Russian state services have documented patterns of providing channel infrastructure or content templates to non-state operators. The Hunters Ledger and Trend Micro both characterize this operator as financially-motivated primary + political IO secondary; state direction cannot be ruled out from current evidence, but it is not supported either. This is documented as a MODERATE-sensitivity assumption in Section 9 (Threat Actor Assessment); resolution requires DFRLab-methodology content analysis of the channel's amplification network and Russian state-disinfo template overlap.
 
-**Recommended cross-domain coordination:** DFRLab (channel content analysis), Stanford Internet Observatory (cross-domain operator class research), OpenMinds (ecosystem positioning of `@americanpatriotus` within documented 52-channel conduit networks).
+For cross-domain coordination I would recommend DFRLab for channel content analysis, Stanford Internet Observatory for cross-domain operator class research, and OpenMinds for ecosystem positioning of `@americanpatriotus` within the documented 52-channel conduit networks.
 
 ### 4.9 Commodity Service Procurement Layer (AntiPublic.one + nuclei + Stealer Logs)
 
 > **Analyst note:** This subsection documents the commodity-tier services the operator integrates into the custom credential mill: AntiPublic.one (commercial paid breach-data API, 6.56B records per service description, JWT-authenticated), nuclei (ProjectDiscovery legitimate open-source vulnerability scanner with operator-bespoke `wp_admin_hunter.yaml` template), and downstream stealer-logs from infostealer markets. The hybrid resource model — custom-built C2 + commodity paid services + commodity stolen LLM keys — is a HIGH-confidence dimension of the operator profile (Section 9).
 
-**Confidence:** DEFINITE (JWT captured; nuclei tool + custom template captured; stealer log integration captured in scripts)
+I hold this DEFINITE, with the JWT captured, the nuclei tool and its custom template captured, and the stealer-log integration captured in the scripts.
 
 **Commodity service 1 — AntiPublic.one paid subscription:**
 
@@ -490,9 +490,9 @@ The HIPAA Breach Notification Rule sets specific timelines and notification requ
 - **Operator-bespoke template `wp_admin_hunter.yaml`** — custom nuclei template authored by the operator (or sourced from a commodity template marketplace) targeting WordPress admin discovery and credential validation
 - **Why this matters:** nuclei is a legitimate open-source tool with extensive legitimate use cases; the operator's mega-hunt log size and the operator-bespoke template are the operational-context signals that distinguish offensive use from defensive use
 
-**Commodity service 3 — downstream stealer logs:** Operator scripts reference stealer-log market formats (RedLine / Lumma / Meduza log directory conventions), consistent with operator purchasing pre-stolen credential logs from infostealer markets as upstream input to the credential mill. The operator's hybrid resource model layers commodity stolen logs into the LLM-personalized mutation pipeline — stolen logs provide the `Most Recent Password from dump:` input, the LLM mutator generates the 20 current candidate mutations, the WordPress validation rig tests the candidates against ~30,000 sites.
+The third commodity service is downstream stealer logs. Operator scripts reference stealer-log market formats, the RedLine, Lumma and Meduza log directory conventions, consistent with the operator purchasing pre-stolen credential logs from infostealer markets as upstream input to the credential mill. The hybrid resource model layers those commodity logs into the LLM-personalized mutation pipeline, where stolen logs provide the `Most Recent Password from dump:` input, the LLM mutator generates the 20 current candidate mutations, and the WordPress validation rig tests them against roughly 30,000 sites.
 
-**Why the hybrid resource model matters:** The hybrid — custom C2 + LLM personalization + commodity breach data + commodity scanning — yields measurably higher throughput per operator-hour than either a pure-custom or pure-commodity baseline. Building everything from scratch would be slow and expensive for a solo operator; relying entirely on commodity tooling would cap throughput at the commodity-stuffing baseline. This is the AI-augmented mid-tier operator class in action: the operator extracts disproportionate leverage from frontier-LLM compute, currently the cheapest unit of intelligence it can buy or steal.
+The hybrid resource model matters because it yields measurably higher throughput per operator-hour than either a pure-custom or a pure-commodity baseline, pairing custom C2 and LLM personalization with commodity breach data and commodity scanning. Building everything from scratch would be slow and expensive for a solo operator, and relying entirely on commodity tooling would cap throughput at the commodity-stuffing baseline. This is the AI-augmented mid-tier operator class in action, extracting disproportionate leverage from frontier-LLM compute, currently the cheapest unit of intelligence they can buy or steal.
 
 ---
 
@@ -502,8 +502,8 @@ The HIPAA Breach Notification Rule sets specific timelines and notification requ
 
 ### 5.1 `ai_sniper_brute.py` — LLM-Personalized Credential Mutator
 
-**File type:** Python source, captured from operator open directory
-**Confidence:** DEFINITE (source code directly inspected)
+This is Python source captured from the operator's open directory, and I hold it DEFINITE from direct inspection of that source.
+
 
 **Imports and dependencies:**
 - `google.generativeai` (Google Gemini Python client)
@@ -534,8 +534,8 @@ These strings combine into Rule 1 in the linked detection file (Section 10).
 
 > **Analyst note:** This section walks through the operator's hand-built C2 backend, which is a Python standard-library HTTP server with no authentication on any endpoint. The architecture is unsophisticated by C2-framework standards but actively operated against real victims — and the source code captures direct evidence of in-place iterative development (one endpoint is called by the client but not yet implemented by the server). Defenders should treat this class of operator-built tooling as a recognizable pattern, not an exotic outlier.
 
-**File types:** Python source, captured from operator open directory
-**Confidence:** DEFINITE (source code directly inspected)
+These are Python sources captured from the operator's open directory, and I hold them DEFINITE from direct inspection.
+
 
 **`c2_server.py` structural inventory:**
 - Subclasses `http.server.BaseHTTPRequestHandler`
@@ -570,8 +570,7 @@ The same structural signature was independently validated on two other operators
 > **Analyst note:** These three Markdown files are the most distinctive artifact class in the case — operator-written documentation produced specifically to re-prime a new AI agent session with full operational context. The pattern treats the AI agent as a teammate who has lost memory between sessions. Defenders watching for this artifact class on suspected attacker hosts should expect short, structured Markdown files with operational narrative + endpoint inventories + credential ledgers, sometimes with explicit "From: / To:" headers naming the AI agent.
 
 
-**File types:** Markdown, captured from operator open directory
-**Confidence:** HIGH (three exemplars; novelty claim MAINTAINED per Section 13)
+These are Markdown files captured from the operator's open directory. I hold them HIGH on three exemplars, and the novelty claim is MAINTAINED per Section 13.
 
 **Common structural pattern (across all three documents):**
 
@@ -623,8 +622,8 @@ These strings combine into Rule 2 in the linked detection file (Section 10).
 > **Analyst note:** This subsection covers a PowerShell beacon referenced in operator handoff documents but not directly extracted in this investigation. The "Quasar-class" framing is based on operator-side text references to a "Quasar fork"; the public Quasar RAT family is .NET-based, so this is at most a rewritten-in-PowerShell variant, not a Quasar binary in the canonical sense. Treat the lineage as inferred and tied specifically to the operator's own naming, not as a settled malware-family classification.
 
 
-**File type:** PowerShell, referenced in operator handoff documents; full source not extracted
-**Confidence:** MODERATE (operator-side reference + dynamic-analysis network evidence; binary not captured)
+This is PowerShell, referenced in the operator's handoff documents, though the full source was not extracted. I hold it MODERATE, on an operator-side reference plus dynamic-analysis network evidence, with the binary itself never captured.
+
 
 The PowerShell beacon `agent_final.ps1` is referenced in `DEPLOYED_TOOLS.md` as the victim-side agent component. The full source code was not extracted in the captured open-directory snapshot. Inferred behavior from operator-side notes and observed network traffic:
 
@@ -637,7 +636,7 @@ The MODERATE confidence floor on this component reflects that the binary was not
 
 ### 5.5 Operator Persona-String Inventory (Russian-Native Idiom)
 
-**Confidence:** DEFINITE (extracted from 122 Gemini CLI session JSONs in Phase 11 analysis)
+I hold this DEFINITE, extracted from 122 Gemini CLI session JSONs in the Phase 11 analysis.
 
 The operator's informal Russian idiom registers across handoff documents, source-code comments, and Gemini CLI session JSONs:
 
@@ -659,7 +658,7 @@ These strings do not Google-Translate cleanly — the idiom register is consiste
 
 ### 6.1 Gemini CLI Session Workflow Pattern
 
-**Confidence:** DEFINITE (122 session JSONs captured)
+I hold this DEFINITE, with 122 session JSONs captured.
 
 The operator interacts with Gemini CLI in multi-turn, multi-hour, multi-thread sessions. Phase 11 analysis identified 122 distinct session JSONs spanning 2026-03-19 through 2026-03-30 with multiple operational threads:
 
@@ -673,7 +672,7 @@ The session pattern is the **operator-runs-it-with-AI-assist** model — not the
 
 ### 6.2 Mass WordPress Validation Run (Network Behavior)
 
-**Confidence:** DEFINITE (38.7 MB nuclei mega-hunt log captured)
+I hold this DEFINITE, with the 38.7 MB nuclei mega-hunt log captured.
 
 Network behavior pattern of a mass-WP-validation run:
 
@@ -683,11 +682,11 @@ Network behavior pattern of a mass-WP-validation run:
 4. **Success capture** — successful credential pairs written to `AI_SNIPER_GOODS.txt` (or sibling output files)
 5. **Multi-hour runtime** — the 38.7 MB log size suggests multi-hour runtime; tempo throttled per operator's Russian comment on 3-thread concurrency
 
-**Egress source IP:** the mass-WP-validation run egresses from operator-side infrastructure (the AEZA workstation or the GCP proxy `34.34.57.141` — the captured log does not unambiguously identify which); per-target rate is throttled to ~3 concurrent requests per the operator's source comments.
+The mass-WP-validation run egresses from operator-side infrastructure, either the AEZA workstation or the GCP proxy `34.34.57.141`, and the captured log does not unambiguously identify which. Per-target rate is throttled to roughly 3 concurrent requests, per the operator's own source comments.
 
 ### 6.3 Live Disinformation Posting Workflow (Session 2026-03-25T18-27)
 
-**Confidence:** DEFINITE (full session JSON captured)
+I hold this DEFINITE, with the full session JSON captured.
 
 Captured session 2026-03-25T18-27 documents the operator's live posting workflow to `@americanpatriotus`:
 
@@ -700,7 +699,7 @@ The AI-augmentation pattern is the post-September-2025 phase of the channel per 
 
 ### 6.4 Cloudflare Tunnel Registration and Victim-Side Persistent Access
 
-**Confidence:** DEFINITE (tunnel inventory + Cloudflare API token captured)
+I hold this DEFINITE, with the tunnel inventory and the Cloudflare API token both captured.
 
 Behavioral sequence for establishing victim-side persistent access via Cloudflare Tunnel:
 
@@ -718,7 +717,7 @@ The defender-visible indicators on the victim side:
 
 ### 6.5 Detection-Aware Open-Directory Cleanup
 
-**Confidence:** DEFINITE (Hunt.io platform snapshots before and after; totalItems: 0 by 2026-05-23)
+I hold this DEFINITE, on Hunt.io platform snapshots before and after, showing totalItems: 0 by 2026-05-23.
 
 The operator detected the public exposure and wiped the open directory within days — but kept the live infrastructure running. Hunt.io first observed the `213.165.51.115` open directory on 2026-03-30, and The Hunters Ledger deep-pulled the arsenal across multiple investigation phases through 2026-05-23. Between Phase 7 and Phase 8 capture the directory was cleaned (totalItems: 0 by 2026-05-23), plausibly after the operator noticed Hunt.io indexing or the Trend Micro publication ramp-up. The cleanup is detection-and-response behavior, not abandonment: the Cloudflare Tunnel and GCP overlay stayed operational.
 
@@ -748,7 +747,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-**Full IOC feed:** [`/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json) — every indicator for this case, with type / confidence / recommended action.
+The full IOC feed is at [`/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
 ---
 
@@ -758,13 +757,13 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 ### 9.1 Attribution Conclusion
 
-**Attribution:** Russian-native AI-augmented mid-tier criminal operator running cross-domain operation — credential mill against US healthcare (the healthcare victim) + US-targeted political Telegram disinformation (`@americanpatriotus` "Quantum Patriot" channel).
+I attribute this to a Russian-native, AI-augmented, mid-tier criminal operator running a cross-domain operation, a credential mill against US healthcare (the healthcare victim) alongside US-targeted political Telegram disinformation via the `@americanpatriotus` "Quantum Patriot" channel.
 
-**Confidence:** **MODERATE 83%** (top of the MODERATE band 70-85% per CLAUDE.md). Upgraded from parent-campaign MODERATE 75% via Trend Micro Tier-2 independent corroboration (5-point IOC match).
+I hold that at **MODERATE 83%**, the top of the MODERATE band (70-85%). That is upgraded from the parent campaign's MODERATE 75% by Trend Micro Tier-2 independent corroboration on a 5-point IOC match.
 
-**Ceiling without external evidence:** HIGH 88-90% on operator class profile. DEFINITE requires Tier-1 government attribution or 3+ Tier-2 vendor convergence (currently 2: Trend Micro + The Hunters Ledger).
+Without external evidence the ceiling is HIGH, 88-90%, on operator class profile. DEFINITE would require Tier-1 government attribution or convergence from 3 or more Tier-2 vendors, and there are currently 2, Trend Micro and The Hunters Ledger.
 
-**Named-actor attribution:** **INSUFFICIENT (<50%)** — `bandcampro` is a Trend Micro vendor tracking handle, not a real-name identification. No publicly named individual is supportable from current evidence.
+Named-actor attribution stays **INSUFFICIENT (<50%)**, because `bandcampro` is a Trend Micro vendor tracking handle rather than a real-name identification. No publicly named individual is supportable from current evidence.
 
 ### 9.2 Vendor Catalog Reconciliation
 
@@ -783,19 +782,19 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 **Statistical implausibility of two independent operators:** The probability of two independent operators using identical Telegram channel + identical 4-IP infrastructure + identical Gemini-CLI integration architecture + identical Quantum Patriot branding is effectively zero. The cross-identification is DEFINITE.
 
-**Detection-engineer naming convention:** Use **"UTA-2026-012 (Trend Micro: bandcampro)"** in all downstream artifact authoring to maintain cross-vendor traceability.
+Downstream artifact authoring should use **"UTA-2026-012 (Trend Micro: bandcampro)"** to maintain cross-vendor traceability.
 
 ### 9.3 Four-Axis Operator Profile (Phase 11 Synthesis)
 
 Synthesizing the 122-session Gemini CLI corpus (the investigation's Phase 11 deep-read), the operator's behavioral profile resolves on four axes:
 
-**Axis 1 — Russian-native:** DEFINITE confidence. Evidence: informal idiom register (`Бро`, `братух`, `Погнали`, `тачка`, `Комп Доктора`); Cyrillic-English technical bilingualism in source code comments; in-session credential ledger format header `Формат: Имя тачки - Юзер - Пароль` re-pasted across 4+ Gemini CLI sessions; Trend Micro independent characterization as Russian-speaking. Strings do not Google-Translate cleanly — the register is consistent with a native Russian speaker.
+The first axis is Russian-native, and I hold it DEFINITE. The evidence is an informal idiom register (`Бро`, `братух`, `Погнали`, `тачка`, `Комп Доктора`), Cyrillic-English technical bilingualism in source code comments, an in-session credential ledger format header `Формат: Имя тачки - Юзер - Пароль` re-pasted across 4+ Gemini CLI sessions, and Trend Micro's independent characterization as Russian-speaking. The strings do not Google-Translate cleanly, and the register is consistent with a native Russian speaker.
 
-**Axis 2 — Mid-tier selective sophistication:** HIGH confidence. Sophisticated dimensions: Cloudflare custom-domain Tunnel topology; GCP multi-instance overlay; AEZA bulletproof workstation; AI workflow integration; persistent victim access via Cloudflare Tunnel. Rough OPSEC dimensions: victim-named GCP project `[victim-named GCP project — redacted]`; full Cloudflare API token in plaintext; GitHub PAT in plaintext; AntiPublic.one JWT in plaintext; 40+ stolen Gemini keys not encrypted; open-directory exposure on port 8082. Incomplete implementation: `/api/v1/get_results` endpoint called by client but NOT server-implemented (direct evidence of in-place iterative development against a live victim); documentation drift across infrastructure notes; zero-auth, path-traversal-vulnerable C2 backend.
+The second axis is mid-tier selective sophistication, and I hold it HIGH. The sophisticated dimensions are the Cloudflare custom-domain Tunnel topology, the GCP multi-instance overlay, the AEZA bulletproof workstation, the AI workflow integration, and persistent victim access via Cloudflare Tunnel. The rough OPSEC dimensions are a victim-named GCP project `[victim-named GCP project, redacted]`, a full Cloudflare API token in plaintext, a GitHub PAT in plaintext, an AntiPublic.one JWT in plaintext, 40+ stolen Gemini keys left unencrypted, and open-directory exposure on port 8082. The incomplete implementation shows in the `/api/v1/get_results` endpoint called by client but never server-implemented, direct evidence of in-place iterative development against a live victim, plus documentation drift across infrastructure notes and a zero-auth, path-traversal-vulnerable C2 backend.
 
-**Axis 3 — Active campaign with concurrent R&D:** HIGH confidence. Evidence: `min1.sh` and other operator-built tooling Last Modified during the investigation window; 122 Gemini CLI session JSONs span multiple operational threads and concurrent development; operator iterating on C2 source while deployed against the healthcare victim; open-directory cleaned (totalItems: 0 by 2026-05-23) within days of exposure — detection-and-response behavior consistent with continued operator activity.
+The third axis is an active campaign with concurrent R&D, and I hold it HIGH. `min1.sh` and other operator-built tooling were Last Modified during the investigation window, 122 Gemini CLI session JSONs span multiple operational threads and concurrent development, the operator iterated on C2 source while deployed against the healthcare victim, and the open directory was cleaned to totalItems: 0 by 2026-05-23 within days of exposure, detection-and-response behavior consistent with continued operator activity.
 
-**Axis 4 — Hybrid resource model:** HIGH confidence. Custom-built: `c2_server.py` Python stdlib BaseHTTPServer only (no FastAPI/Flask/aiohttp dependency); `ai_sniper_brute.py` operator-authored. Commodity paid: `nuclei` mega-hunt log 38.7 MB; AntiPublic.one paid subscription (JWT `sub:31703`). Commodity stolen: 40+ stolen Gemini API keys with MD5 hash tracking; OpenAI key; Venice AI key.
+The fourth axis is the hybrid resource model, and I hold it HIGH. Custom-built are `c2_server.py`, Python stdlib BaseHTTPServer only with no FastAPI, Flask or aiohttp dependency, and the operator-authored `ai_sniper_brute.py`. Commodity paid are the 38.7 MB `nuclei` mega-hunt log and the AntiPublic.one paid subscription (JWT `sub:31703`). Commodity stolen are the 40+ Gemini API keys with MD5 hash tracking, the OpenAI key, and the Venice AI key.
 
 ### 9.4 Cross-Domain Finding (Rare in Published Reporting)
 
@@ -821,7 +820,7 @@ The MODERATE 83% confidence can be elevated via the following paths:
 
 ### 9.6 Alternative Hypothesis Considered and Rejected
 
-**H2 (rejected, effectively zero probability):** Coincidental adjacent-operator misidentification between Trend Micro `bandcampro` and The Hunters Ledger UTA-2026-012. Refuted by the 5-point IOC match including 4-of-4 IP exact match.
+H2, which I reject at effectively zero probability, is coincidental adjacent-operator misidentification between Trend Micro's `bandcampro` and our UTA-2026-012. The 5-point IOC match, including a 4-of-4 exact IP match, refutes it.
 
 ### 9.7 Defensive Boundaries (What This Assessment Does NOT Claim)
 
@@ -969,43 +968,43 @@ This section documents analytical corrections, prior-art reframings, and scope a
 
 ### Calibration 1 — Trend Micro Prior-Art Reframing (LLM Credential Mutation Novelty)
 
-**Original framing (parent campaign analysis):** "First ever documentation of LLM-Personalized Credential Mutation in the wild."
+I originally framed this, in the parent campaign analysis, as the "first ever documentation of LLM-Personalized Credential Mutation in the wild."
 
 **Reframed (after Trend Micro 2026-05-22 publication discovery):** "**First source-code analysis with verbatim prompt reproduction** of the LLM-Personalized Credential Mutation technique. The operational pattern is independently confirmed by Trend Micro in 'One Man, One AI, One Fake Persona: Inside the 5-Year Influence and Fraud Patriot Bait Campaign' (2026-05-22, operator tracked as 'bandcampro'). The Hunters Ledger contribution is the line-by-line source code with the verbatim role-priming prompt template; Trend Micro's contribution is the macro-level operational pattern confirmation."
 
-**Why the reframing was made:** Trend Micro independently surfaced this operator three days before this report's investigation window closed. Cross-identification is DEFINITE via 5-point IOC match. Maintaining the original "first ever documentation" claim would be a credibility-damaging accuracy failure. The reframed novelty claim — first source-code analysis with verbatim prompt — is independently defensible from the captured `ai_sniper_brute.py` source and is not affected by Trend Micro's coverage.
+I reframed it because Trend Micro independently surfaced this operator three days before the investigation window closed. Cross-identification is DEFINITE via the 5-point IOC match, and maintaining the original "first ever documentation" claim would have been a credibility-damaging accuracy failure. The reframed novelty claim, first source-code analysis with a verbatim prompt, is independently defensible from the captured `ai_sniper_brute.py` source and is unaffected by Trend Micro's coverage.
 
 ### Calibration 2 — AI Operator Handoff Documents Novelty Claim MAINTAINED
 
-**Status:** The AI Operator Handoff Document novelty claim is MAINTAINED at HIGH confidence. Trend Micro covers the `GEMINI.md` jailbreak-persistence pattern (which is content-level persistence inside a single file the AI auto-loads); The Hunters Ledger covers three operator-authored Markdown documents (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`) that carry operational session state with explicit AI-to-AI headers and session-start load directives. These are architecturally distinct artifact classes.
+I maintain the AI Operator Handoff Document novelty claim at HIGH confidence. Trend Micro covers the `GEMINI.md` jailbreak-persistence pattern, which is content-level persistence inside a single file the AI auto-loads. What we cover is three operator-authored Markdown documents (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`) that carry operational session state with explicit AI-to-AI headers and session-start load directives. These are architecturally distinct artifact classes.
 
 ### Calibration 3 — Operator-Built Unauthenticated Python-stdlib C2 Novelty Claim MAINTAINED
 
 > **Analyst note:** This calibration section explains where our reporting overlaps with Trend Micro's prior coverage and where it goes deeper. The headline: our source-code-level analysis of the operator-built C2 backend (including the endpoint-mismatch evidence of in-place iterative development) is net-new to public reporting.
 
-**Status:** The operator-built C2 source-code analysis is net-new to public reporting. Trend Micro provided high-level C2 mention without source-code analysis; The Hunters Ledger source-code-level analysis with the `/api/v1/get_results` iterative-dev evidence is net-new.
+The operator-built C2 source-code analysis is net-new to public reporting. Trend Micro provided a high-level C2 mention without source-code analysis, and the source-code-level analysis here, with the `/api/v1/get_results` iterative-dev evidence, is net-new.
 
 ### Calibration 4 — `web_scraper_bot.py` Dead-Code Finding
 
-**Finding:** `web_scraper_bot.py` is present in the operator's open directory but is dead code — referenced in older versions of operator notes but no longer integrated into the active credential mill pipeline. The active pipeline uses `mass_wp_mutator.py` + `nuclei` + AntiPublic.one integration. The dead-code presence is operator development-iteration artifact, not active operational tooling. Original initial-phase analysis included this in the active arsenal; subsequent phases corrected to dead-code classification.
+`web_scraper_bot.py` is present in the operator's open directory but is dead code, referenced in older versions of the operator's notes and no longer integrated into the active credential mill pipeline. The active pipeline uses `mass_wp_mutator.py`, `nuclei` and the AntiPublic.one integration. The dead-code presence is a development-iteration artifact rather than active operational tooling. My initial-phase analysis included it in the active arsenal, and subsequent phases corrected that to dead-code classification.
 
 ### Calibration 5 — `@americanpatriotus` Channel Scope Narrowed
 
-**Original framing:** Operator-only inventory of disinformation operations.
+I originally framed this as an operator-only inventory of disinformation operations.
 
 **Narrowed (after Phase 11 122-session analysis):** Specifically `@americanpatriotus` "Quantum Patriot" Telegram channel — confirmed via session captures and Trend Micro independent reporting. Additional operator-run channels are not ruled out by the evidence base; current evidence supports only `@americanpatriotus`. Future investigation would broaden the channel inventory if additional Telegram automation scripts or session captures surface.
 
 ### Calibration 6 — the healthcare victim Victim Scope Narrowed
 
-**Original framing (parent campaign analysis):** Russian operator victim scope inferred broadly from credential capture.
+I originally inferred, in the parent campaign analysis, a broad Russian-operator victim scope from the credential capture.
 
 **Narrowed (after Phase 11 122-session analysis):** **the healthcare victim is the only victim in the 122-session Gemini CLI corpus.** Zero references to the Case 2 Turkish ARPA campaign victim appear in the Russian operator's sessions — the Case 2 victim is exclusively a Turkish ARPA campaign target and does not overlap with this operator's scope. The narrowing is important for disclosure scope: this operator's victim-disclosure scope is the healthcare victim only.
 
 ### Calibration 7 — Attribution Confidence Band Normalization
 
-**Original (attribution-analyst output):** "MODERATE-HIGH 83%" hybrid band.
+The original output used a "MODERATE-HIGH 83%" hybrid band.
 
-**Normalized (per CLAUDE.md CONFIDENCE LEVELS):** "MODERATE 83%" with explanatory annotation "top of the MODERATE band 70-85%." Project standard does not include "MODERATE-HIGH" hybrid bands; descriptive annotations within canonical bands are used instead.
+I normalized that to "MODERATE 83%" with the explanatory annotation "top of the MODERATE band 70-85%". The project standard has no "MODERATE-HIGH" hybrid band, and descriptive annotations within canonical bands are used instead.
 
 ---
 

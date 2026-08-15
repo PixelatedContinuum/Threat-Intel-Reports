@@ -214,7 +214,7 @@ The flagship operator-facing site `inkconnect.ru` is a **fully-featured commerci
 | Web font | Google Fonts — `Inter` family | `<link>` reference in HTML |
 | TLS certificate | Let's Encrypt | First-cert timestamp matches REGRU-RU registration moment |
 
-**JS bundle:** `https://inkconnect.ru/assets/index-CoeWw2zM.js` — 261,587 bytes, SHA256 `8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978`, NOT FOUND on VirusTotal. Hardcoded API path prefix `/api/`. String-scraping the bundle recovered the complete API endpoint enumeration:
+The JS bundle at `https://inkconnect.ru/assets/index-CoeWw2zM.js` runs 261,587 bytes, SHA256 `8a69fe67a7e9908aa1248c632ffd784033fc4dc613d0b5589279ccc62f717978`, and is NOT FOUND on VirusTotal. It carries a hardcoded API path prefix of `/api/`, and string-scraping it recovered the complete API endpoint enumeration:
 
 ```
 /api/auth/login              /api/promo-code
@@ -232,7 +232,7 @@ This is **a fully-featured commercial VPN backend**: user auth (login / logout /
 
 #### Executive Technical Context
 
-**What This Means:** Many "criminal VPN" cases involve a fake VPN that exists only to harvest credentials or distribute malware. INK VPN is the opposite — it is a *real* VPN service with a *real* paid subscription. The operator collects revenue from genuine paying customers, runs nodes that actually proxy their traffic, and provides customer support via Telegram. The criminality is not in the VPN itself; it is in **what else the same operator runs alongside the VPN** (the 467+ brand-impersonation phishing library, the BEC burn domains, the fake crypto exchange). The legitimate VPN service builds operator-customer trust and provides cover for the rest of the portfolio.
+Many criminal VPN cases involve a fake VPN that exists only to harvest credentials or distribute malware. INK VPN is the opposite, a *real* VPN service with a *real* paid subscription. The operator collects revenue from genuine paying customers, runs nodes that actually proxy their traffic, and provides customer support via Telegram. The criminality is not in the VPN itself, it is in **what else the same operator runs alongside it**, the 467+ brand-impersonation phishing library, the BEC burn domains, and the fake crypto exchange. The legitimate VPN service builds operator-customer trust and provides cover for the rest of the portfolio.
 
 **Example — Real-World Analogy:**
 > **Technical:** Operator runs a legitimate commercial VPN with a full subscription backend and Russian payment-processor integration, alongside a 467+ brand-impersonation phishing subdomain library on overlapping infrastructure.
@@ -251,7 +251,7 @@ via: 1.1 Caddy
 
 `X-Admin-Token` is **not a standard HTTP header**. There is no public RFC or framework-default for it. The operator added it to the CORS allow-list, which means the operator-controlled frontend (or admin tools) sends it as the auth primitive for privileged API calls. **This is a high-value cross-cluster pivot:** any other web-application surface accepting `X-Admin-Token` in its CORS allow-headers list would be a strong candidate for additional operator infrastructure not yet linked to the INK brand portfolio.
 
-**Detection Strategy:** Hunt for the `X-Admin-Token` header in HTTP request headers, response headers, or CORS preflight `Access-Control-Request-Headers` or `Access-Control-Allow-Headers` lists in web-proxy logs, Zeek HTTP logs, or Suricata HTTP rules. See the [separate detection file](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) for the Suricata rule `SIG_Inkognito_XAdminToken_Request`.
+To detect it, hunt for the `X-Admin-Token` header in HTTP request headers, response headers, or CORS preflight `Access-Control-Request-Headers` and `Access-Control-Allow-Headers` lists, across web-proxy logs, Zeek HTTP logs, or Suricata HTTP rules. See the [separate detection file](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) for the Suricata rule `SIG_Inkognito_XAdminToken_Request`.
 
 **Russian payment integration — operator legal-entity surface:** The INK VPN site visibly advertises payment via **SBP** (Russia's Faster Payments System), **T-Pay** (Tinkoff Bank's payment system), and standard card payments. Russian payment integration of this kind requires the operator to have a Russian payment-processor merchant account — typically requires a registered Russian legal entity (an OOO or IP). This is an attribution lead: the INK VPN operator is operating openly in the Russian payment system, which means they are either operating as a Russian-registered business OR they have laundered the merchant account through a front company. Either reading provides downstream investigative surface (SBP / T-Pay merchant ID lookup would resolve the legal entity).
 
@@ -267,7 +267,7 @@ The 467+ figure should be treated as **a floor, not a complete enumeration**: pa
 
 Subdomain analysis splits cleanly into two pools.
 
-**(A) Brand-impersonation phishing pre-stage.** Pre-positioned URLs for victim-facing campaigns. The subdomain itself does the impersonation; an active campaign would simply switch the response from 404 to a cloned login page. Confirmed targets include:
+The first use is a brand-impersonation phishing pre-stage, pre-positioned URLs for victim-facing campaigns. The subdomain itself does the impersonation, and an active campaign would simply switch the response from 404 to a cloned login page. Confirmed targets include:
 
 | Subdomain | Targeted brand | Likely victim |
 |---|---|---|
@@ -315,14 +315,14 @@ The presence of Argo CD, Redis admin tools, UAT/staging environment names, and C
 
 #### Executive Technical Context
 
-**What This Means:** A "brand-impersonation phishing subdomain library" is not a library in the literal sense. It is a set of pre-registered DNS names, each one chosen to match a specific brand, each one already wired to operator infrastructure. The subdomains return 404 because the operator hasn't yet activated a phishing page on them. But the staging work is done: when the operator decides to run a campaign targeting (for example) AnyDesk customers, they don't need to register a new domain (which would create a fresh-domain detection signal), they don't need to wait for DNS propagation, they don't need a new SSL cert (Let's Encrypt automation handles that). They just point the existing `anydesk.inklens.ru` subdomain at the cloned login page and start sending phishing emails. Activation latency: seconds to minutes.
+A brand-impersonation phishing subdomain library is not a library in the literal sense. It is a set of pre-registered DNS names, each chosen to match a specific brand and each already wired to operator infrastructure. The subdomains return 404 because the operator has not yet activated a phishing page on them, but the staging work is done. When they decide to run a campaign targeting AnyDesk customers, say, they need no new domain registration, which would create a fresh-domain detection signal, no wait for DNS propagation, and no new SSL cert, since Let's Encrypt automation handles that. They just point the existing `anydesk.inklens.ru` subdomain at the cloned login page and start sending phishing emails, with an activation latency of seconds to minutes.
 
 **Example — Real-World Analogy:**
 > **Technical:** 467+ pre-positioned brand-impersonation subdomains under `*.inklens.ru` returning HTTP 404, each ready to be activated to a cloned login page in seconds.
 > **Simplified:** Imagine a counterfeiter who keeps 467 pre-printed envelopes in a desk drawer. Each envelope has a different real company's logo and return address. Most days the drawer just sits closed. But when the counterfeiter wants to send a fake invoice impersonating "Wells Fargo," they pull out the matching envelope, stuff a fake invoice inside, and drop it in the mail — no envelope-printing delay, no logo-design work, no waiting for materials. The infrastructure is the desk drawer, not the invoice. The 467 envelopes are the cost-sunk capability.
 > **Security Impact:** Defenders cannot wait until a specific brand-impersonation subdomain "goes live" to add it to a block list. By the time the subdomain is observed serving a credential-harvest page, the campaign is already running. The defensive posture is to block the entire `*.inklens.ru` and `*.inklens.co.uk` namespace at DNS resolution, treat any DNS query from enterprise endpoints as a high-fidelity hunt finding, and identify which subdomain matches their own brand so they can monitor for any campaign aimed at their customers or employees.
 
-**Detection Strategy:** DNS-resolver hunts for any query to `*.inklens.ru`, `*.inklens.co.uk`, `*.inkconnect.ru`, `*.bikaf.ru`, `*.bigass.monster`, `*.unloki.ru` from any enterprise endpoint. Even a single DNS query to one of these subdomains is high-fidelity — these subdomains do not appear on legitimate browsing patterns. See the [separate detection file](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) for the Sigma rule `sigma_inkognito_dns_brand_impersonation`. Defenders should also identify which subdomain matches their brand (e.g., `<company-name>.inklens.ru`, if any) and add a brand-monitoring alert.
+To detect it, run DNS-resolver hunts for any query to `*.inklens.ru`, `*.inklens.co.uk`, `*.inkconnect.ru`, `*.bikaf.ru`, `*.bigass.monster` or `*.unloki.ru` from any enterprise endpoint. Even a single DNS query to one of these subdomains is high-fidelity, because they do not appear in legitimate browsing patterns. See the [separate detection file](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) for the Sigma rule `sigma_inkognito_dns_brand_impersonation`. Defenders should also identify which subdomain matches their brand, `<company-name>.inklens.ru` if any, and add a brand-monitoring alert.
 
 ### 4.3 BEC burn-domain infrastructure — three June-2023 `.eu` domains
 
@@ -357,9 +357,9 @@ The `mail.*` subdomain with SPF/DKIM-ready DNS configuration is the canonical pa
 
 #### Executive Technical Context
 
-**What This Means:** Business Email Compromise (BEC) is a category of fraud where an attacker sends emails that impersonate a legitimate business — typically a vendor, a law firm, or an executive — and tricks the recipient into changing wire-transfer routing, releasing sensitive documents, or approving an invoice. The hardest BEC emails to detect are the ones that come from a domain that *looks* like a legitimate business and *passes* email authentication (SPF, DKIM, DMARC). The operator's June 2023 setup of three `.eu` domains with self-served mail infrastructure on Stark Industries is exactly this — they registered believable domain names ("Petkova Legal," a vet clinic, a tech company), configured them with full mail authentication, and kept them operational for nearly a year each.
+Business Email Compromise is a category of fraud where an attacker sends emails impersonating a legitimate business, typically a vendor, a law firm or an executive, and tricks the recipient into changing wire-transfer routing, releasing sensitive documents, or approving an invoice. The hardest BEC emails to detect come from a domain that *looks* like a legitimate business and *passes* email authentication through SPF, DKIM and DMARC. The operator's June 2023 setup of three `.eu` domains with self-served mail infrastructure on Stark Industries is exactly that. They registered believable names, a "Petkova Legal", a vet clinic, a tech company, configured full mail authentication, and kept each operational for nearly a year.
 
-**Business Impact:** Finance and legal teams are the primary BEC targets. An email from `someone@petkovalegal.eu` to a finance team member requesting a wire transfer or document review would pass standard email-authentication checks. Modern email security still relies heavily on sender domain reputation; a domain that has been quietly active for 9-12 months passes most reputation gates. The defensive response is finance-and-legal-team training (verify any wire-transfer change via voice callback), DMARC enforcement on defender-owned domains (so attackers cannot spoof the defender's brand to their customers), and Reverse-SOA monitoring for the `admin@<domain>.eu` pattern on Stark Industries TR ASNs (AS44477 / AS209847) to surface additional operator-controlled burn domains as they emerge.
+Finance and legal teams are the primary BEC targets. An email from `someone@petkovalegal.eu` to a finance team member requesting a wire transfer or document review would pass standard email-authentication checks, and modern email security still leans heavily on sender domain reputation, so a domain quietly active for 9 to 12 months passes most reputation gates. The defensive response is finance-and-legal-team training to verify any wire-transfer change via voice callback, DMARC enforcement on defender-owned domains so attackers cannot spoof that brand to its customers, and Reverse-SOA monitoring for the `admin@<domain>.eu` pattern on Stark Industries TR ASNs (AS44477, AS209847) to surface additional operator-controlled burn domains as they emerge.
 
 ### 4.4 Fake crypto exchange — CryptOne
 
@@ -371,9 +371,9 @@ Operationally, "fake crypto exchange" sites in this class typically follow a doc
 
 #### Executive Technical Context
 
-**What This Means:** CryptOne sits in the brand portfolio as a high-conversion monetization vector. Where INK VPN generates modest recurring revenue from real subscribers, and the INK Lens credential-harvest library generates resellable credential dumps, a fake crypto exchange can extract larger one-time sums from individual victims who are tricked into "depositing" funds. The Cloudflare fronting prevents direct origin enumeration but does not block defensive detection at the DNS-resolution layer.
+CryptOne sits in the brand portfolio as a high-conversion monetization vector. Where INK VPN generates modest recurring revenue from real subscribers and the INK Lens credential-harvest library generates resellable credential dumps, a fake crypto exchange can extract larger one-time sums from individual victims tricked into depositing funds. The Cloudflare fronting prevents direct origin enumeration but does not block defensive detection at the DNS-resolution layer.
 
-**Detection Strategy:** DNS queries to `cryptone.bot` from any enterprise endpoint should be treated as a high-priority alert. Crypto exchange sites are an unusual destination for enterprise traffic, and `cryptone.bot` specifically is operator-controlled with no legitimate use case. The detection rule belongs in the same DNS hunt-list as the INK Lens brand-impersonation subdomains.
+To detect it, treat DNS queries to `cryptone.bot` from any enterprise endpoint as a high-priority alert. Crypto exchange sites are an unusual destination for enterprise traffic, and `cryptone.bot` specifically is operator-controlled with no legitimate use case. That rule belongs in the same DNS hunt-list as the INK Lens brand-impersonation subdomains.
 
 ### 4.5 Centralized VPN/proxy fleet — Marzban + Outline + regional brand fronts
 
@@ -395,9 +395,9 @@ The **Outline VPN service at `users.outline.unloki.ru`** (deployed 2024-02-12) i
 
 #### Executive Technical Context
 
-**What This Means:** VPN providers — legitimate or otherwise — have **total visibility** into the traffic of every subscriber whose connection they relay. INK VPN subscribers, Bikaf VPN subscribers, `bigass.monster` subscribers, and the Outline censorship-circumvention users at `users.outline.unloki.ru` all route their traffic through operator-controlled exit nodes. The operator can log destination IPs, observed SNI values, traffic timing, packet sizes, and (for unencrypted protocols or where the operator has any breaking primitive) packet contents.
+VPN providers, legitimate or otherwise, have **total visibility** into the traffic of every subscriber whose connection they relay. INK VPN subscribers, Bikaf VPN subscribers, `bigass.monster` subscribers, and the Outline censorship-circumvention users at `users.outline.unloki.ru` all route through operator-controlled exit nodes. The operator can log destination IPs, observed SNI values, traffic timing, packet sizes, and, for unencrypted protocols or wherever they hold a breaking primitive, packet contents.
 
-**Business Impact:** Any enterprise employee who connects to a personal device through INK VPN, Bikaf VPN, `bigass.monster`, or the unloki Outline server while accessing enterprise resources is exposing destination metadata to the operator. This is a known general risk for criminal VPN providers; the relevant Inkognito-specific finding is that the operator runs multiple brand fronts orchestrated through a single Marzban panel, so blocking one brand domain at perimeter does not address the parallel brand fronts. The defensive response is to block all five active VPN brand fronts together (`inkconnect.ru`, `bikaf.ru`, `bigass.monster`, `unloki.ru`, and the regional VPN node subdomains under `inklens.co.uk`).
+Any enterprise employee who connects a personal device through INK VPN, Bikaf VPN, `bigass.monster` or the unloki Outline server while accessing enterprise resources is exposing destination metadata to the operator. That is a known general risk with criminal VPN providers, and the Inkognito-specific finding is that this operator runs multiple brand fronts orchestrated through a single Marzban panel, so blocking one brand domain at the perimeter does not address the parallel fronts. The defensive response is to block all five active VPN brand fronts together, `inkconnect.ru`, `bikaf.ru`, `bigass.monster`, `unloki.ru`, and the regional VPN node subdomains under `inklens.co.uk`.
 
 ### 4.6 Operator-fingerprint signatures — kittenx-404, Yandex/Google account control, asset hashes
 
@@ -405,7 +405,7 @@ The **Outline VPN service at `users.outline.unloki.ru`** (deployed 2024-02-12) i
 
 #### Deep Technical Analysis
 
-**The kittenx-404 decommission tombstone.** When the operator retires a brand domain, they don't NXDOMAIN it — they leave it pointed at a specific 404-returning HTTP server with the exact response signature:
+When the operator retires a brand domain they do not NXDOMAIN it. They leave it pointed at a specific 404-returning HTTP server carrying an exact response signature, the kittenx-404 decommission tombstone:
 
 ```
 HTTP/2 404
@@ -422,7 +422,7 @@ This `kittenx-404` tombstone is the operator's standard "decommissioned" signatu
 
 The operator presumably keeps decommissioned domains registered for residual deliverability and SEO benefits while preventing leaked operational details — the `kittenx` 404 page contains no operator content. This is **a cross-domain operator fingerprint**: any other domain returning the same Server header + 404 + content-length 148 signature is a candidate for additional Inkognito infrastructure. The fingerprint can be operationalized via Censys or Shodan (internet-wide host/service search engines) HTTP search.
 
-**Operator account-control fingerprints.** The operator controls three distinct verification accounts with three external services, each one bound to a specific brand domain via DNS or HTML meta-tag verification:
+The operator controls three distinct verification accounts with three external services, each bound to a specific brand domain via DNS or HTML meta-tag verification:
 
 | Account fingerprint | Bound to | Pivot |
 |---|---|---|
@@ -432,7 +432,7 @@ The operator presumably keeps decommissioned domains registered for residual del
 
 The fact that the operator uses **two separate Google accounts** (one per primary brand) demonstrates account-segregation OPSEC — an inkconnect.ru takedown would not compromise the inklens.ru account access, and vice versa. The single Yandex account on inklens.ru is the highest-value pivot because the verification ID is embedded in the served HTML rather than in a DNS TXT record, making it searchable via web-crawl pipelines.
 
-**Operator-built static asset hashes.** Three production-served asset hashes were captured. All three are operator-controlled and unique to the brand:
+Three production-served asset hashes were captured, all operator-controlled and unique to the brand:
 
 | Asset URL | SHA256 | VT status | Significance |
 |---|---|---|---|
@@ -442,7 +442,7 @@ The fact that the operator uses **two separate Google accounts** (one per primar
 
 The logo personifies the brand: hooded anonymous user with watchful eye = "Inkognito". The Telegram channel description (`Надежный VPN от Inkognito! Видь то что скрыто, оставаясь в тумане войны!` — "Reliable VPN from Inkognito! See what is hidden, while remaining in the fog of war!") supplies the verbal half of the same brand identity.
 
-**Why these matter as detection content.** The detection file at [`/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/`](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) implements each operator fingerprint as a specific rule. The kittenx-404 tombstone becomes a Suricata HTTP signature; the X-Admin-Token header becomes a Suricata + Sigma HTTP-content rule; the Yandex Webmaster ID and Google Search Console TXT values become content-search rules suitable for web-proxy or web-crawl-pipeline deployment; the static asset SHA256s become YARA rules for web-proxy DLP and threat-hunting cached-content pipelines.
+These matter as detection content. The detection file at [`/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/`](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/) implements each operator fingerprint as a specific rule. The kittenx-404 tombstone becomes a Suricata HTTP signature, the X-Admin-Token header becomes a Suricata plus Sigma HTTP-content rule, the Yandex Webmaster ID and Google Search Console TXT values become content-search rules suitable for web-proxy or web-crawl-pipeline deployment, and the static asset SHA256s become YARA rules for web-proxy DLP and threat-hunting cached-content pipelines.
 
 ---
 
@@ -493,7 +493,7 @@ Domain registration to fully-operational live deployment for `inkconnect.ru` (th
 
 **11 minutes from registration to fully-operational live deployment.** This is a deliberate, professional rollout — the operator clearly has a pre-prepared pipeline: DNS templates ready, Let's Encrypt automation pre-configured, Cloudflare integration scripted, Timeweb hosting setup primed. Combined with the Argo CD / Redis admin / UAT-pipeline subdomains in §4.2(B), the picture is of an operator who treats fraud infrastructure as a software product with a release process.
 
-**Detection implication:** Certificate Transparency monitoring on REGRU-RU + Let's Encrypt cert-issuance bursts within 90 seconds of registration is a defender pivot for catching the operator's next brand launch in flight.
+That has a detection implication. Certificate Transparency monitoring on REGRU-RU plus Let's Encrypt cert-issuance bursts within 90 seconds of registration is a defender pivot for catching the operator's next brand launch in flight.
 
 ---
 
@@ -553,7 +553,7 @@ The `inklens.co.uk` apex chameleon-decoy lifecycle:
 | 2026-04-06 | DomainTools captured screenshot showing the **github.com homepage** rendering on `inklens.co.uk` |
 | 2026-05-04 | Server type changed `github.com` → **"AmazonS3"** — apex moved to S3 cover |
 
-**Why this matters.** A typical first step in domain triage is to load the apex URL in a browser and screenshot it. With this setup, a researcher loading `https://inklens.co.uk` on 2026-04-06 saw github.com — they would mark the domain as benign and move on. Meanwhile `fi1.inklens.co.uk` resolves directly to the operator's Aeza Italy IP (`185.221.196.118`) and serves the actual EspoCRM back-office. The TLD/registrar/hosting choice is also deliberate **jurisdiction-laundering**: `.co.uk` (UK ccTLD), Gandi (FR registrar), then U1host (DE) → GitHub (US) → S3 (US). No Russian fingerprint anywhere on the apex paper trail. Combined with the absence of operator domains on VirusTotal (0/92 detection), this is sustained anti-attribution discipline.
+This matters because a typical first step in domain triage is to load the apex URL in a browser and screenshot it. With this setup, a researcher loading `https://inklens.co.uk` on 2026-04-06 saw github.com, marked the domain benign, and moved on. Meanwhile `fi1.inklens.co.uk` resolves directly to the operator's Aeza Italy IP (`185.221.196.118`) and serves the actual EspoCRM back-office. The TLD, registrar and hosting choices are also deliberate **jurisdiction-laundering**, a `.co.uk` UK ccTLD, Gandi as a French registrar, then U1host in Germany to GitHub in the US to S3 in the US, with no Russian fingerprint anywhere on the apex paper trail. Combined with the absence of operator domains on VirusTotal at 0/92 detection, that is sustained anti-attribution discipline.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/inkognito-russian-vpn-phishing-185-221-196-118-20260516/inklens-couk-apex-github-decoy.jpg" | relative_url }}" alt="DomainTools-captured screenshot of inklens.co.uk apex on 2026-04-06 rendering the legitimate github.com homepage in full — including GitHub's blue branded background, the headline The future of building happens together, GitHub Copilot marketing copy, a GitHub Copilot product screenshot, code/plan/collaborate/automate/secure feature navigation, and the standard GitHub footer. There is nothing on the rendered page that suggests the domain is operator-controlled.">
@@ -562,7 +562,7 @@ The `inklens.co.uk` apex chameleon-decoy lifecycle:
 
 This pattern is documented as **a novel technique variant** in the threat-intel record. The closest analog is FIN7 domain aging (Silent Push 2024), which uses benign static content rather than a live cloud redirect chain. No Tier-1 or Tier-2 vendor has previously documented this specific cloud-redirect chameleon-decoy variant.
 
-**Detection Strategy:** DNS-based apex-vs-subdomain divergence monitoring. If an apex domain consistently resolves to GitHub Pages (`140.82.x.x` ranges) or AmazonS3 (`s3.amazonaws.com` IPs) while subdomains under that apex resolve to a different provider entirely (especially a bulletproof hoster like Aeza or Stark), the apex is potentially a chameleon decoy.
+To detect it, monitor DNS for apex-versus-subdomain divergence. If an apex domain consistently resolves to GitHub Pages (`140.82.x.x` ranges) or Amazon S3 (`s3.amazonaws.com` IPs) while subdomains under that apex resolve to a different provider entirely, especially a bulletproof hoster like Aeza or Stark, the apex is potentially a chameleon decoy.
 
 ### 6.3 Decommission tombstone — `kittenx-404` operator fingerprint
 
@@ -739,7 +739,7 @@ The combination of `nginx/1.29.8 + via: 1.1 Caddy + X-Admin-Token in allow-heade
 
 ### 8.5 Ecosystem Exposure
 
-**Ecosystem exposure: UNKNOWN.** This investigation is passive-only (no telemetry, no endpoint visibility, no subscriber data). No data source is available to estimate how many enterprise networks have queried Inkognito infrastructure, how many enterprise users have subscribed to INK VPN or Bikaf VPN, or how many organizations appear in the 467+ brand-impersonation target list from a victim perspective rather than an operator-catalog perspective.
+Ecosystem exposure is UNKNOWN. This investigation is passive-only, with no telemetry, no endpoint visibility and no subscriber data. No data source is available to estimate how many enterprise networks have queried Inkognito infrastructure, how many enterprise users have subscribed to INK VPN or Bikaf VPN, or how many organizations appear in the 467+ brand-impersonation target list from a victim perspective rather than an operator-catalog perspective.
 
 What the investigation does establish about exposure surface: the brand-impersonation library targets at least 18+ enterprise verticals spanning US banking (Wells Fargo), enterprise SaaS (Asana, Accenture, Adyen), Chinese internet (Tencent, Sina), Russian telecom (Tele2), remote-access tooling (AnyDesk), Microsoft enterprise stack (OWA 2013, SWDC), and developer infrastructure (Jenkins CI) — see §4.2 for the full enumerated target list. Any organization whose brand appears in §4.2 should treat their own brand-impersonation subdomain as actively staged against their customers or employees, even though no in-flight payload was observed at evidence cutoff. Ecosystem exposure assessment should be revisited if telemetry becomes available from endpoint or DNS-resolver sources with visibility into Inkognito infrastructure queries.
 
@@ -856,7 +856,7 @@ This is not an incident response playbook. Defenders facing an in-flight campaig
 
 ### 10.3 Persistence-Removal Targets
 
-**Not applicable.** Inkognito has no on-host persistence — there is no malware to remove. Response is entirely at the network, DNS, proxy, and WHOIS-monitoring layer.
+None of this applies here. Inkognito has no on-host persistence and there is no malware to remove, so response sits entirely at the network, DNS, proxy and WHOIS-monitoring layer.
 
 ---
 

@@ -282,7 +282,7 @@ The one thing the hosting does tell you is tempo. The staging host has SSH conti
 
 ---
 
-**TECHNICAL TEARDOWN.** *The reverse engineering starts here. Deep-dive blocks are collapsed, so open whichever ones interest you and leave the rest shut. Indicators, detection guidance and the confidence summary are waiting in Sections 12 to 14.*
+*The **technical teardown** starts here. The reverse engineering runs from this point, with deep-dive blocks collapsed, so open whichever ones interest you and leave the rest shut. Indicators, detection guidance and the confidence summary are waiting in Sections 12 to 14.*
 
 ---
 
@@ -471,7 +471,7 @@ That failure tolerance is a design decision and it tells you something. An opera
 
 `v.exe` is the SentinelStealer build the operator collected and never wired in. Section 6 covers why it is not part of this operation. What matters technically is its capability profile, and specifically the one thing it does not have.
 
-**There is no ransomware in this kit.** `v.exe` is a credential-recovery and cryptocurrency-wallet stealer with an injection capability, and I hold "no file-encryption capability" at near-DEFINITE on positive evidence rather than on a failure to find any. That determination got it wrong twice before it settled, which is why the teardown shows the working rather than asserting the result.
+There is no ransomware in this kit. `v.exe` is a credential-recovery and cryptocurrency-wallet stealer with an injection capability, and I hold "no file-encryption capability" at near-DEFINITE on positive evidence rather than on a failure to find any. That determination got it wrong twice before it settled, which is why the teardown shows the working rather than asserting the result.
 
 <details markdown="1" class="hl-teardown">
 <summary>Full teardown: the AD backdoor command, the AnyDesk stage, ct.bat's self-gating control flow, and the no-locker determination</summary>

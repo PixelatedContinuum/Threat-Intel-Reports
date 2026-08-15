@@ -34,11 +34,11 @@ This report analyzes **11 new malware samples** added to the same open directory
 
 Arsenal-237 is a modular ransomware toolkit built for enterprise compromise across three sequential phases: privilege escalation and defense disablement, persistence and credential access, then ransomware deployment.
 
-**Phase 1 — Privilege escalation and defense disablement.** lpe.exe achieves NT AUTHORITY\SYSTEM through five techniques: token impersonation from lsass.exe and winlogon.exe, registry UAC bypass via fodhelper.exe hijacking, and SYSTEM-level scheduled tasks. With SYSTEM privileges, killer.dll and its CrowdStrike-specific variant killer_crowdstrike.dll load the signed but vulnerable BdApiUtil64.sys (Baidu antivirus driver) and issue kernel-mode IOCTL commands (e.g., 0x800024B4) to terminate CSFalconService.exe, csagent.exe, and more than 20 other security products. rootkit.dll extends this by adding Unicode-based file hiding, API hooking for call interception, PowerShell integration, and anti-forensics measures that target process-monitoring and packet-analysis tools.
+In Phase 1 the operator escalates privilege and disables the defenses. lpe.exe reaches NT AUTHORITY\SYSTEM through five techniques, token impersonation from lsass.exe and winlogon.exe, registry UAC bypass via fodhelper.exe hijacking, and SYSTEM-level scheduled tasks. With SYSTEM privileges, killer.dll and its CrowdStrike-specific variant killer_crowdstrike.dll load the signed but vulnerable BdApiUtil64.sys (a Baidu antivirus driver) and issue kernel-mode IOCTL commands such as 0x800024B4 to terminate CSFalconService.exe, csagent.exe, and more than 20 other security products. rootkit.dll extends this by adding Unicode-based file hiding, API hooking for call interception, PowerShell integration, and anti-forensics measures that target process-monitoring and packet-analysis tools.
 
-**Phase 2 — Persistence and credential access.** nethost.dll establishes persistence via DLL hijacking, beacons to hardcoded TCP targets (8.8.8.8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration. chromelevator.exe uses reflective DLL injection and direct syscalls to extract cookies, passwords, and payment data from Chrome, Brave, and Edge credential stores.
+In Phase 2 they move to persistence and credential access. nethost.dll establishes persistence via DLL hijacking, beacons to hardcoded TCP targets (8.8.8.8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration. chromelevator.exe uses reflective DLL injection and direct syscalls to extract cookies, passwords, and payment data from Chrome, Brave, and Edge credential stores.
 
-**Phase 3 — Ransomware deployment.** new_enc.exe targets Veritas Backup Exec agents and VSS snapshots using a hardcoded ChaCha20 key (67e6096a...) — a test-variant operational security lapse. full_test_enc.exe deploys multi-threaded hybrid encryption (RSA-OAEP + ChaCha20) across all accessible drives and network shares without C2 dependence, making decryption impossible without the operator's RSA private key. dec_fixed.exe — a victim-specific decryptor carrying a distinct hardcoded key (1e0d8597...) — confirms per-victim key management and an active RaaS model (CONFIRMED).
+In Phase 3 they deploy the ransomware. new_enc.exe targets Veritas Backup Exec agents and VSS snapshots using a hardcoded ChaCha20 key (67e6096a...), a test-variant operational security lapse. full_test_enc.exe deploys multi-threaded hybrid encryption (RSA-OAEP plus ChaCha20) across all accessible drives and network shares without C2 dependence, which makes decryption impossible without the operator's RSA private key. dec_fixed.exe, a victim-specific decryptor carrying a distinct hardcoded key (1e0d8597...), confirms per-victim key management and an active RaaS model (CONFIRMED).
 
 ### The Organizational Threat in Plain Terms
 
@@ -176,81 +176,81 @@ All 11 components have individual detailed reports with full technical analysis,
 
 #### 1. [killer.dll - Basic BYOVD Process Termination](./killer-dll.md)
 
-**Component Type:** Security Product Disabler (BYOVD-based)
+This component is a security product disabler working through a vulnerable driver.
 
-**Technical Summary:** Driver-level process terminator that loads BdApiUtil64.sys for kernel access and terminates security product processes. Serves as the foundation for the CrowdStrike-specific variant.
+It is a driver-level process terminator that loads BdApiUtil64.sys for kernel access and terminates security product processes, and it serves as the foundation for the CrowdStrike-specific variant.
 
 **File Identifiers:**
 - MD5: `c031054f6140e2c366eaf4263f827dbf`
 - SHA256: `10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d`
 
-**Confidence Level:** CONFIRMED (static and behavioral analysis)
+I hold this CONFIRMED, on static and behavioral analysis.
 
-**Link to Full Report:** [./killer-dll.md](./killer-dll.md)
+The full report is at [./killer-dll.md](./killer-dll.md).
 
 ---
 
 #### 2. [killer_crowdstrike.dll - CrowdStrike-Specific Process Termination](./killer_crowdstrike-dll.md)
 
-**Component Type:** EDR-Specific Defense Disabler
+This component is an EDR-specific defense disabler.
 
-**Technical Summary:** killer.dll variant with product-specific targeting of CSFalconService.exe and csagent.exe. The CrowdStrike-specific function names and driver interactions confirm the threat actor researched enterprise EDR deployments before building this variant.
+It is a killer.dll variant with product-specific targeting of CSFalconService.exe and csagent.exe. The CrowdStrike-specific function names and driver interactions confirm the threat actor researched enterprise EDR deployments before building this variant.
 
 **File Identifiers:**
 - MD5: `6926ea1b4c4bff01a23b7e1728583348`
 - SHA256: `e26e9221f4e9a437716a28c08c5f74c6a2ecae2c47b77091db7d21f36ed2f7d3`
 
-**Confidence Level:** CONFIRMED (product-specific function names and driver interactions)
+I hold this CONFIRMED, on product-specific function names and driver interactions.
 
-**Link to Full Report:** [./killer_crowdstrike-dll.md](./killer_crowdstrike-dll.md)
+The full report is at [./killer_crowdstrike-dll.md](./killer_crowdstrike-dll.md).
 
 ---
 
 #### 3. [lpe.exe - Privilege Escalation Wrapper](./lpe-exe.md)
 
-**Component Type:** Privilege Escalation Tool
+This component is a privilege escalation tool.
 
-**Technical Summary:** Privilege escalation wrapper using five techniques — token impersonation from lsass.exe and winlogon.exe, registry UAC bypass via fodhelper.exe hijacking, and SYSTEM-level scheduled tasks — to reach NT AUTHORITY\SYSTEM. All kernel-mode operations in Phase 1 depend on the privileges this component delivers.
+It is a privilege escalation wrapper using five techniques, token impersonation from lsass.exe and winlogon.exe, registry UAC bypass via fodhelper.exe hijacking, and SYSTEM-level scheduled tasks, to reach NT AUTHORITY\SYSTEM. Every kernel-mode operation in Phase 1 depends on the privileges this component delivers.
 
 **File Identifiers:**
 - MD5: `47400a6b7c84847db0513e6dbc04e469`
 - SHA256: `c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e`
 
-**Confidence Level:** CONFIRMED (API calls and capability testing)
+I hold this CONFIRMED, on API calls and capability testing.
 
-**Link to Full Report:** [./lpe-exe.md](./lpe-exe.md)
+The full report is at [./lpe-exe.md](./lpe-exe.md).
 
 ---
 
 #### 4. [BdApiUtil64.sys - Vulnerable Baidu Driver (BYOVD)](./BdApiUtil64-sys.md)
 
-**Component Type:** Vulnerable Driver for Kernel Access
+This component is a vulnerable driver used to reach kernel access.
 
-**Technical Summary:** Signed Baidu antivirus driver with a known privilege escalation vulnerability. Arsenal-237 loads this driver via BYOVD — abusing its legitimate Windows signature to pass kernel protection checks, then exploiting the vulnerability for kernel-mode code execution. This driver loading precedes rootkit injection.
+It is a signed Baidu antivirus driver carrying a known privilege escalation vulnerability. Arsenal-237 loads it via BYOVD, abusing its legitimate Windows signature to pass kernel protection checks, then exploiting the vulnerability for kernel-mode code execution. This driver loading precedes rootkit injection.
 
 **File Identifiers:**
 - MD5: `ced47b89212f3260ebeb41682a4b95ec`
 - SHA256: `47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428`
 
-**Confidence Level:** CONFIRMED (known CVE and exploitation pattern)
+I hold this CONFIRMED, on a known CVE and its exploitation pattern.
 
-**Link to Full Report:** [./BdApiUtil64-sys.md](./BdApiUtil64-sys.md)
+The full report is at [./BdApiUtil64-sys.md](./BdApiUtil64-sys.md).
 
 ---
 
 #### 5. [rootkit.dll - Kernel-Mode Rootkit](./rootkit-dll.md)
 
-**Component Type:** Kernel-Mode Persistence and Hiding
+This component is a kernel-mode rootkit providing persistence and hiding.
 
-**Technical Summary:** Kernel-mode rootkit installed via BYOVD exploitation. Hides malware processes, threads, and drivers from user-mode enumeration; maintains persistence across reboots; and adds Unicode-based file hiding, API hooking, PowerShell integration, and anti-forensics targeting process-monitoring and packet-analysis tools. User-mode detection tools cannot see objects this rootkit conceals — infected systems require kernel-mode forensics or a full rebuild.
+It is a kernel-mode rootkit installed via BYOVD exploitation. It hides malware processes, threads, and drivers from user-mode enumeration, maintains persistence across reboots, and adds Unicode-based file hiding, API hooking, PowerShell integration, and anti-forensics targeting process-monitoring and packet-analysis tools. User-mode detection tools cannot see the objects this rootkit conceals, so infected systems need kernel-mode forensics or a full rebuild.
 
 **File Identifiers:**
 - MD5: `674795d4d4ec09372904704633ea0d86`
 - SHA256: `e71240f26af1052172b5864cdddb78fcb990d7a96d53b7d22d19f5dfccdf9012`
 
-**Confidence Level:** CONFIRMED (kernel driver analysis)
+I hold this CONFIRMED, on kernel driver analysis.
 
-**Link to Full Report:** [./rootkit-dll.md](./rootkit-dll.md)
+The full report is at [./rootkit-dll.md](./rootkit-dll.md).
 
 ---
 
@@ -258,33 +258,33 @@ All 11 components have individual detailed reports with full technical analysis,
 
 #### 6. [nethost.dll - Masquerading .NET Loader (DLL Hijacking)](./nethost-dll.md)
 
-**Component Type:** Persistence Mechanism (DLL Hijacking)
+This component is a persistence mechanism working through DLL hijacking.
 
-**Technical Summary:** Masquerades as the legitimate .NET runtime component nethost.dll. Loaded by legitimate .NET processes, it establishes DLL-hijacking persistence that survives reboots, beacons to hardcoded TCP targets (8.8.8.8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration.
+It masquerades as the legitimate .NET runtime component nethost.dll. Loaded by legitimate .NET processes, it establishes DLL-hijacking persistence that survives reboots, beacons to hardcoded TCP targets (8.8.8.8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration.
 
 **File Identifiers:**
 - MD5: `f91ff1bb5699524524fff0e2587af040`
 - SHA256: `158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14`
 
-**Confidence Level:** CONFIRMED (file analysis and hijacking patterns)
+I hold this CONFIRMED, on file analysis and the hijacking patterns.
 
-**Link to Full Report:** [./nethost-dll.md](./nethost-dll.md)
+The full report is at [./nethost-dll.md](./nethost-dll.md).
 
 ---
 
 #### 7. [chromelevator.exe - Browser Credential Theft](./chromelevator-exe.md)
 
-**Component Type:** Credential Harvesting Tool
+This component is a credential harvesting tool.
 
-**Technical Summary:** Uses reflective DLL injection and direct syscalls to extract cookies, passwords, and payment data from Chrome, Edge, and Brave credential stores. Direct syscalls bypass EDR hooks that would normally flag credential-store access. Stolen credentials enable lateral movement without additional exploitation.
+It uses reflective DLL injection and direct syscalls to extract cookies, passwords, and payment data from Chrome, Edge, and Brave credential stores. The direct syscalls bypass EDR hooks that would normally flag credential-store access, and the stolen credentials enable lateral movement without further exploitation.
 
 **File Identifiers:**
 - MD5: `bc376c951eacb36bf0909a43588e6444`
 - SHA256: `92c4f4b7748f23d6dcd5af43595f34e4bb8e284a85d2c1647b189c1bb59a784a`
 
-**Confidence Level:** CONFIRMED (static analysis and behavioral observation)
+I hold this CONFIRMED, on static analysis and behavioral observation.
 
-**Link to Full Report:** [./chromelevator-exe.md](./chromelevator-exe.md)
+The full report is at [./chromelevator-exe.md](./chromelevator-exe.md).
 
 ---
 
@@ -292,65 +292,65 @@ All 11 components have individual detailed reports with full technical analysis,
 
 #### 8. [enc_c2.exe - Rust Ransomware with Tor C2](./enc_c2-exe.md)
 
-**Component Type:** Ransomware Encryptor (Remote-Controlled Variant)
+This component is a ransomware encryptor, the remote-controlled variant.
 
-**Technical Summary:** Rust ransomware with real-time Tor-based C2 control and ChaCha20 file encryption. Builder ID tracking in the binary enables RaaS affiliate attribution. The Tor C2 channel lets the operator monitor encryption progress and coordinate ransom negotiation; network-level blocking of the C2 IP is ineffective against Tor hidden services.
+It is Rust ransomware with real-time Tor-based C2 control and ChaCha20 file encryption. Builder ID tracking in the binary enables RaaS affiliate attribution. The Tor C2 channel lets the operator monitor encryption progress and coordinate ransom negotiation, and network-level blocking of the C2 IP is ineffective against Tor hidden services.
 
 **File Identifiers:**
 - MD5: `32a3497e57604e1037f1ff9993a8fdaa`
 - SHA256: `613d4d0f1612686742889e834ebc9ebff6ae021cf81a4c50f66369195ca01899`
 
-**Confidence Level:** CONFIRMED (Rust code analysis and C2 communication)
+I hold this CONFIRMED, on Rust code analysis and the C2 communication.
 
-**Link to Full Report:** [./enc_c2-exe.md](./enc_c2-exe.md)
+The full report is at [./enc_c2-exe.md](./enc_c2-exe.md).
 
 ---
 
 #### 9. [new_enc.exe - Human-Operated Rust Ransomware (v0.5-beta)](./new_enc-exe.md)
 
-**Component Type:** Advanced Ransomware Encryptor
+This component is an advanced ransomware encryptor.
 
-**Technical Summary:** Rust ransomware (v0.5-beta) targeting Veritas Backup Exec agents and VSS snapshots with a hardcoded ChaCha20 key (67e6096a...). The hardcoded key is an operational security lapse: files encrypted by this test variant are potentially decryptable without ransom payment. The v0.5-beta designation and backup-targeting logic confirm a development iteration, not a deployment-ready build. Operational deployments use enc_c2.exe or full_test_enc.exe instead.
+It is Rust ransomware (v0.5-beta) targeting Veritas Backup Exec agents and VSS snapshots with a hardcoded ChaCha20 key (67e6096a...). That hardcoded key is an operational security lapse, because files encrypted by this test variant are potentially decryptable without ransom payment. The v0.5-beta designation and the backup-targeting logic confirm a development iteration rather than a deployment-ready build, and operational deployments use enc_c2.exe or full_test_enc.exe instead.
 
 **File Identifiers:**
 - MD5: `a16ba61114fa5a40afce54459bbff21e`
 - SHA256: `90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2`
 
-**Confidence Level:** CONFIRMED (binary analysis confirms hardcoded key and targeting logic)
+I hold this CONFIRMED, because binary analysis confirms both the hardcoded key and the targeting logic.
 
-**Link to Full Report:** [./new_enc-exe.md](./new_enc-exe.md)
+The full report is at [./new_enc-exe.md](./new_enc-exe.md).
 
 ---
 
 #### 10. [dec_fixed.exe - Ransomware Decryptor](./dec_fixed-exe.md)
 
-**Component Type:** Victim-Specific Decryption Tool
+This component is a victim-specific decryption tool.
 
-**Technical Summary:** Victim-specific decryptor carrying a key (1e0d8597...) distinct from all other Arsenal-237 samples — CONFIRMED evidence of per-victim key management. The per-victim key model is the operational signature of a RaaS platform: it enables affiliate tracking, victim-specific negotiations, and decryption licensing control.
+It is a victim-specific decryptor carrying a key (1e0d8597...) distinct from every other Arsenal-237 sample, which is CONFIRMED evidence of per-victim key management. The per-victim key model is the operational signature of a RaaS platform, because it enables affiliate tracking, victim-specific negotiations, and decryption licensing control.
 
 **File Identifiers:**
 - MD5: `7c5493a0a5df52682a5c2ba433634601`
 - SHA256: `d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802`
 
-**Confidence Level:** CONFIRMED (key analysis and decryption verification)
+I hold this CONFIRMED, on key analysis and decryption verification.
 
-**Link to Full Report:** [./dec_fixed-exe.md](./dec_fixed-exe.md)
+The full report is at [./dec_fixed-exe.md](./dec_fixed-exe.md).
 
 ---
 
 #### 11. [full_test_enc.exe - Advanced Rust Ransomware (RSA+ChaCha20)](./full_test_enc-exe.md)
 
-**Component Type:** Enterprise-Grade Ransomware Encryptor
+This component is an enterprise-grade ransomware encryptor.
 
-**Technical Summary:** The most capable Arsenal-237 variant recovered. Deploys multi-threaded hybrid encryption (RSA-OAEP + ChaCha20) across all accessible drives and network shares without C2 dependence. RSA-OAEP wraps each file's ChaCha20 symmetric key with the operator's public key; only the operator's RSA private key can recover it. Brute-force is cryptographically infeasible. Recovery without the operator's private key or unencrypted offline backups is not possible. Binary size: 15.5 MB (bundled cryptographic libraries).
+It is the most capable Arsenal-237 variant recovered. It deploys multi-threaded hybrid encryption (RSA-OAEP plus ChaCha20) across all accessible drives and network shares without C2 dependence. RSA-OAEP wraps each file's ChaCha20 symmetric key with the operator's public key, so only the operator's RSA private key can recover it, and brute force is cryptographically infeasible. Recovery without that private key or unencrypted offline backups is not possible. The binary is 15.5 MB, carrying bundled cryptographic libraries.
 
 **File Identifiers:**
 - MD5: `1fe8b9a14f9f8435c5fb5156bcbc174e`
 - SHA256: `4d1fe7b54a0ce9ce2082c167b662ec138b890e3f305e67bdc13a5e9a24708518`
 
-**Confidence Level:** CONFIRMED (cryptographic analysis and hybrid encryption verification)
+I hold this CONFIRMED, on cryptographic analysis and hybrid encryption verification.
 
-**Link to Full Report:** [./full_test_enc-exe.md](./full_test_enc-exe.md)
+The full report is at [./full_test_enc-exe.md](./full_test_enc-exe.md).
 
 ---
 
@@ -404,19 +404,19 @@ Seven observed characteristics mark Arsenal-237 as a mature, professionally deve
 
 ### Arsenal-237 Attribution Context
 
-**Threat Tier:** Professional ransomware operation — likely RaaS provider
+The threat tier is a professional ransomware operation, likely a RaaS provider.
 
-**Operational Model:** HIGH confidence — Ransomware-as-a-Service (RaaS). Evidence: per-victim key architecture in dec_fixed.exe enables affiliate tracking; builder ID in enc_c2.exe ties builds to affiliates; multiple scenario-specific variants support flexible affiliate deployment.
+The operational model is Ransomware-as-a-Service, which I hold at HIGH confidence. The per-victim key architecture in dec_fixed.exe enables affiliate tracking, the builder ID in enc_c2.exe ties builds to affiliates, and the multiple scenario-specific variants support flexible affiliate deployment.
 
-**Geographic Origin:** INSUFFICIENT — Rust implementation and English-language strings are common globally and do not support geographic attribution. The Tor-based C2 in enc_c2.exe intentionally obscures the developer's location.
+On geographic origin the evidence is INSUFFICIENT. Rust implementation and English-language strings are common globally and support no geographic attribution, and the Tor-based C2 in enc_c2.exe intentionally obscures the developer's location.
 
-**Threat Activity Timeline:** MODERATE — Active development underway. Multiple test/beta variants (new_enc.exe v0.5-beta, full_test_enc.exe test version) confirm an active pre-deployment testing phase; operational campaigns appear imminent or recently initiated.
+On the threat activity timeline I sit at MODERATE, with active development underway. Multiple test and beta variants (new_enc.exe v0.5-beta, the full_test_enc.exe test version) confirm an active pre-deployment testing phase, and operational campaigns appear imminent or recently initiated.
 
 ### Infrastructure Assessment
 
-**C2 Infrastructure:** Tor-based (enc_c2.exe) — CONFIRMED by observed beaconing. MODERATE confidence that multiple hidden service addresses provide redundancy; this architecture defeats ISP- and network-level blocking.
+The C2 infrastructure is Tor-based, in enc_c2.exe, and CONFIRMED by observed beaconing. I hold at MODERATE confidence that multiple hidden service addresses provide redundancy, and this architecture defeats ISP-level and network-level blocking.
 
-**Hosting Model:** MODERATE — Infrastructure resilience indicators suggest abuse-tolerant hosting, consistent with standard RaaS operational practice.
+On the hosting model I sit at MODERATE. Infrastructure resilience indicators suggest abuse-tolerant hosting, consistent with standard RaaS operational practice.
 
 ---
 

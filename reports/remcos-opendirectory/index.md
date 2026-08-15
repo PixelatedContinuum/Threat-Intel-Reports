@@ -104,7 +104,7 @@ Operationally, the threat actor's consolidation of distribution and C2 on a sing
 
 ### Attack Infrastructure
 
-**Primary IP Address:** 203[.]159[.]90[.]147
+The primary IP address is 203[.]159[.]90[.]147.
 
 **Dual-Purpose Infrastructure:**
 - **Distribution:** Open directory hosting Payload.exe, Backdoor.exe, and related samples
@@ -274,7 +274,7 @@ Remcos RAT remains a critical and actively exploited threat in 2025–2026. Secu
 
 ### Mechanism 1: UAC Bypass via EnableLUA Registry Modification
 
-**Technique:** System-wide UAC disablement
+The technique is system-wide UAC disablement.
 
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -301,7 +301,7 @@ Remcos RAT remains a critical and actively exploited threat in 2025–2026. Secu
 - Registry monitoring: Write to HKLM\...\Policies\System\EnableLUA
 - Event ID 4657 (registry value modification), Event ID 4688 (process creation)
 
-**MITRE ATT&CK:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
+This maps to T1548.002, Abuse Elevation Control Mechanism: Bypass User Account Control.
 
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -312,7 +312,7 @@ Remcos RAT remains a critical and actively exploited threat in 2025–2026. Secu
 
 ### Mechanism 2: Winlogon Userinit Hijacking
 
-**Technique:** Winlogon helper executable hijacking
+The technique is Winlogon helper executable hijacking.
 
 **Registry Modification:**
 ```
@@ -342,7 +342,7 @@ Modified:  "C:\WINDOWS\system32\userinit.exe, "C:\Users\[USER]\AppData\Roaming\r
 - Process monitoring: Suspicious children of winlogon.exe
 - Baseline: Legitimate value should contain only "C:\WINDOWS\system32\userinit.exe,"
 
-**MITRE ATT&CK:** T1547.004 (Boot or Logon Autostart Execution: Winlogon Helper DLL)
+This maps to T1547.004, Boot or Logon Autostart Execution: Winlogon Helper DLL.
 
 ### Mechanism 3: File Installation and "Melting"
 
@@ -401,7 +401,7 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 - Shell Hijack: HKLM\...\Winlogon\Shell (appends malware path alongside explorer.exe)
 - Policies Explorer Run: HKLM\...\Policies\Explorer\Run
 
-**MITRE ATT&CK:** T1547.001 (Boot or Logon Autostart: Registry Run Keys)
+This maps to T1547.001, Boot or Logon Autostart: Registry Run Keys.
 
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -435,7 +435,7 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 - CreateURLMoniker API carries the request
 - Encryption key stored in configuration
 
-**MITRE ATT&CK:** T1113 (Screen Capture)
+This maps to T1113, Screen Capture.
 
 ### Audio Recording
 
@@ -447,7 +447,7 @@ Data: "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
 - Local storage in configurable directory
 - Batch exfiltration mechanism
 
-**MITRE ATT&CK:** T1123 (Audio Capture)
+This maps to T1123, Audio Capture.
 
 ### Keylogging and Clipboard Monitoring
 
@@ -521,7 +521,7 @@ Indicators:
 
 > **Analyst note:** Process injection is a technique where malware inserts its own code into a legitimate running program — like Windows Explorer — so that its activity appears to come from that trusted program. This lets Remcos hide its network connections and file operations inside processes that security tools are configured to trust.
 
-**Injection Technique:** Process Hollowing / Classic DLL Injection
+The injection technique is process hollowing, or classic DLL injection.
 
 **API Call Sequence:**
 ```
@@ -550,7 +550,7 @@ Core Injection APIs:
 
 **Novel Technique: desktop.ini Timing Trigger**
 
-**Discovery:** desktop.ini file paths found on the stack during WriteProcessMemory calls
+I found it through desktop.ini file paths sitting on the stack during WriteProcessMemory calls.
 
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -598,7 +598,7 @@ PROCEXPL
 - Detects process exploration tool (PROCEXPL process) — real-time process viewer for Windows
 - Likely alters behavior or terminates when a VM or analysis tool is detected
 
-**MITRE ATT&CK:** T1497.001 (Virtualization/Sandbox Evasion)
+This maps to T1497.001, Virtualization/Sandbox Evasion.
 
 ### Stealth Mechanisms
 
@@ -637,9 +637,9 @@ PROCEXPL
 
 ### Primary C2 Server
 
-**IP Address:** 203[.]159[.]90[.]147
-**Protocol:** TCP (SOCK_STREAM)
-**Discovery Method:** Dynamic analysis breakpoint on ws2_32.gethostbyname
+The IP address is 203[.]159[.]90[.]147.
+The protocol is TCP, using `SOCK_STREAM`.
+I found it through a dynamic analysis breakpoint on `ws2_32.gethostbyname`.
 
 **C2 Characteristics:**
 - Direct IP connection (no DNS resolution observed for primary C2)
@@ -746,7 +746,7 @@ Live C2 traffic was not captured during analysis: the malware was analyzed in an
 ### Impact
 - T1529 - System Shutdown/Reboot
 
-**Total Techniques:** 27 distinct MITRE ATT&CK techniques across 10 tactics
+In total that is 27 distinct MITRE ATT&CK techniques across 10 tactics.
 
 ---
 
@@ -754,7 +754,7 @@ Live C2 traffic was not captured during analysis: the malware was analyzed in an
 
 ### Remcos RAT Global Threat Landscape
 
-**Threat Severity:** CRITICAL
+Threat severity is CRITICAL.
 
 **Current Activity (2025-2026):**
 - **September–October 2025:** 11% of all infostealer incidents attributed to Remcos (CyberProof Research)
@@ -784,7 +784,7 @@ Live C2 traffic was not captured during analysis: the malware was analyzed in an
 - Cryptocurrency theft operations
 - Illegal gambling platform targeting
 
-**Assessment:** Remcos serves as a multi-purpose tool across the threat actor spectrum, from low-skill cybercriminals to nation-state APT groups. Attribution based solely on Remcos usage is unreliable without additional infrastructure, TTP, or targeting analysis.
+My assessment is that Remcos serves as a multi-purpose tool across the threat actor spectrum, from low-skill cybercriminals through to nation-state APT groups. Attribution resting on Remcos usage alone is unreliable without additional infrastructure, TTP, or targeting analysis.
 
 ---
 
@@ -792,25 +792,25 @@ Live C2 traffic was not captured during analysis: the malware was analyzed in an
 
 ### Campaign Sophistication Assessment
 
-**Technical Sophistication:** Medium-High
+Technical sophistication is medium to high.
 - Multi-stage VB6 dropper with obfuscation
 - Five persistence mechanisms (including rare Userinit hijack)
 - Process injection with desktop.ini timing trigger
 - UAC bypass via EnableLUA registry modification
 - Anti-VM/sandbox detection
 
-**Operational Security:** Low-Medium
+Operational security is low to medium.
 - **CRITICAL OPSEC FAILURE:** Distribution and C2 consolidated on a single IP
 - **Open-Directory Exposure:** Public malware hosting reduces anonymity
 - **Infrastructure Reuse:** Open-directory hosting suggests long-term infrastructure
 
-**Targeting:** Opportunistic (likely)
+Targeting is opportunistic, likely.
 - Open-directory distribution suggests broad, non-targeted distribution
 - Could be repurposed for targeted attacks if customized per victim
 
 ### Threat Actor Profile
 
-**Most Likely Attribution:** Cybercriminal / Initial Access Broker
+The most likely attribution is a cybercriminal or an initial access broker.
 
 **Reasoning:**
 1. Open-directory distribution consistent with opportunistic cybercrime
@@ -819,7 +819,7 @@ Live C2 traffic was not captured during analysis: the malware was analyzed in an
 4. Credential theft capabilities consistent with financial fraud or IAB access sales
 5. Poor OPSEC inconsistent with nation-state APT tradecraft
 
-**Assessment Confidence:** MODERATE
+I hold that assessment at MODERATE.
 - Attribution based on TTPs, infrastructure patterns, and targeting
 - No definitive indicators linking to known threat groups
 - Cannot rule out APT false-flag operations entirely

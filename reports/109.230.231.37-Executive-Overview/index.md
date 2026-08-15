@@ -42,7 +42,7 @@ The repository contains a **10-variant ransomware toolkit** — five encryptors 
 - **Per-victim key generation** with professional R&D indicators: versioned builds (v2), testing utilities (test_gui, test_decryptor)
 - **Mathematically unrecoverable encryption** without the attacker's RSA-2048 private key
 
-**Strategic Implications:** This toolkit enables a dual-threat model — silent data exfiltration followed by ransomware deployment that eliminates recovery through Volume Shadow Copy deletion.
+Strategically, this toolkit enables a dual-threat model, silent data exfiltration followed by ransomware deployment that eliminates recovery through Volume Shadow Copy deletion.
 
 **WHAT WAS FOUND:**
 The Hunters Ledger analysis examined **16 malware samples across 7 reports** selected from an open directory containing 38 malicious executables. Samples include a Golang-compiled RAT, Xworm RAT versions 1 and 2.4.0, a **10-variant custom ransomware family (enc/dec toolkit)**, persistence droppers (FleetAgentAdvanced, FleetAgentFUD), and a UAC bypass proof-of-concept. All Xworm variants share C2 infrastructure at **109.230.231.37**, indicating centralized operations. FleetAgentAdvanced.exe implements **quadruple-redundant persistence** across Registry Run keys, Scheduled Tasks, and dual Startup folder shortcuts — designed to survive multiple cleanup attempts.
@@ -149,11 +149,11 @@ Each malware sample analyzed in this investigation has three companion resources
 
 **[enc/dec Ransomware Family (10 variants)](enc-dec-ransomware-family.md)** | Comprehensive Report
 **Risk:** CRITICAL | **Capabilities:** Custom ChaCha20+RSA-2048 encryption, AVX-512 hardware optimization, Volume Shadow Copy deletion, per-victim key generation
-**Key Finding:** Professional R&D environment with versioned builds, testing utilities, mathematically unrecoverable encryption, and dual espionage+destruction operations capability
+The key finding is a professional R&D environment with versioned builds, testing utilities, mathematically unrecoverable encryption, and a dual espionage-plus-destruction operational capability.
 
 **[agent.exe - PoetRAT Malware](agent-exe.md)** | 34 KB Report
 **Risk:** CRITICAL | **Capabilities:** Process injection, dual persistence, extensive cryptography, credential theft potential
-**Key Finding:** Golang-compiled RAT with dormant C2, masquerading as Windows Defender service (WinDefenderSvc.exe)
+The key finding is a Golang-compiled RAT with a dormant C2, masquerading as a Windows Defender service through `WinDefenderSvc.exe`.
 
 ---
 
@@ -161,19 +161,19 @@ Each malware sample analyzed in this investigation has three companion resources
 
 **[agent_xworm.exe - Xworm RAT v1](agent-xworm-exe.md)** | 21 KB Report
 **Risk:** HIGH | **C2 Server:** 109.230.231.37 | **Capabilities:** PowerShell execution, system reconnaissance
-**Key Finding:** Hardcoded C2 authentication token reveals centralized threat infrastructure
+The key finding is a hardcoded C2 authentication token that reveals centralized threat infrastructure.
 
 **[agent_xworm_v2.exe - Xworm RAT v2.4.0](agent-xworm-v2-exe.md)** | 27 KB Report
 **Risk:** HIGH | **C2 Server:** 109.230.231.37 | **Protocol:** WebSocket-based C2
-**Key Finding:** Enhanced version with WebSocket protocol upgrade from TCP-based predecessor
+The key finding is an enhanced version carrying a WebSocket protocol upgrade from its TCP-based predecessor.
 
 **[FleetAgentAdvanced.exe - Multi-Persistence Dropper](fleetagentadvanced-exe.md)** | 68 KB Report
 **Risk:** HIGH | **Persistence Layers:** 4 mechanisms | **Dropped Payload:** RuntimeOptimization.exe (27 KB)
-**Key Finding:** Quadruple-redundant persistence (Registry Run + Scheduled Task + 2x Startup LNK) deployed in 1.3 seconds
+The key finding is quadruple-redundant persistence, a Registry Run key plus a scheduled task plus two Startup LNKs, all deployed in 1.3 seconds.
 
 **[FleetAgentFUD.exe - WebSocket RAT](fleetagentfud-exe.md)** | 53 KB Report
 **Risk:** HIGH | **Size:** 17.5 KB | **Protocol:** WebSocket with X-Agent-Secret header
-**Key Finding:** Lightweight FUD (Fully Undetectable) design with PowerShell-based post-exploitation capabilities
+The key finding is a lightweight fully-undetectable design with PowerShell-based post-exploitation capabilities.
 
 ---
 
@@ -181,7 +181,7 @@ Each malware sample analyzed in this investigation has three companion resources
 
 **[uac_test.exe - UAC Bypass PoC](uac-test-exe.md)** | 46 KB Report
 **Risk:** LOW (2.1/10) | **Type:** Security research tool
-**Key Finding:** CMSTPLUA COM + Fodhelper UAC bypass techniques; detected admin privileges and self-terminated without execution
+The key finding is CMSTPLUA COM and Fodhelper UAC bypass techniques, where the sample detected admin privileges and self-terminated without executing.
 
 ---
 
@@ -257,12 +257,12 @@ Beyond the 7 reports, **32 additional malware samples** from the same open direc
 
 ### Key Findings from AutomatedReports
 
-**Infrastructure Insight:** The 32+ samples confirm this is a **threat actor toolkit repository**, not a single-purpose distribution point. The diversity of families — RAT variants, ransomware components, credential stealers, testing tools — indicates:
+The infrastructure tells its own story. The 32+ samples confirm this is a **threat actor toolkit repository** rather than a single-purpose distribution point, and the diversity of families, RAT variants, ransomware components, credential stealers and testing tools, indicates:
 - **Organized operations** with mature development processes (test builds, versioned releases)
 - **Malware-as-a-Service infrastructure** covering multiple attack scenarios
 - **Tool chain coverage** from initial access (RATs) through privilege escalation (UAC bypass), credential theft (steal_browser), to impact (encryption utilities)
 
-**Detection Priority:** Automated detection signatures (YARA, file hashes) for all 32 samples are available in the detection packages alongside the 7 priority reports.
+On detection priority, automated signatures, YARA and file hashes, for all 32 samples are available in the detection packages alongside the 7 priority reports.
 
 > **Automated Analysis:** All 32 samples underwent automated static analysis via the StaticTriage framework. Full reports will be published as manual analysis surfaces high-impact findings. Raw static triage data from these samples is available on request via The Hunters Ledger contact page.
 
@@ -565,17 +565,17 @@ Each of the seven detailed threat reports includes detection and intelligence re
 
 ### Per-Sample Resources
 
-**MITRE ATT&CK Mappings:** TTP coverage across 14+ ATT&CK techniques per sample
+The MITRE ATT&CK mappings give TTP coverage across 14+ techniques per sample.
 
-**YARA Rules:** File-based detection signatures enabling hash-independent detection
+The YARA rules provide file-based detection signatures enabling hash-independent detection.
 
-**Sigma Rules:** Behavioral detection rules for SIEM platforms
+The Sigma rules provide behavioral detection for SIEM platforms.
 
-**Network Signatures:** Suricata/Snort IDS rules for C2 traffic detection
+The network signatures provide Suricata and Snort IDS rules for C2 traffic detection.
 
-**Hunting Queries:** PowerShell scripts and SPL/KQL queries for threat hunting platforms
+The hunting queries provide PowerShell scripts and SPL and KQL queries for threat hunting platforms.
 
-**Timeline Analysis:** Second-by-second execution chronology showing malware behavior progression
+The timeline analysis provides a second-by-second execution chronology showing how the malware behavior progresses.
 
 ---
 
@@ -626,15 +626,15 @@ This campaign reflects several trends in the current threat landscape:
 
 **1. Purpose-Built Ransomware Development (CRITICAL FINDING):** The custom ransomware toolkit demonstrates professional malware development practices with destructive capabilities for financial gain or dual-use scenarios. The custom cryptographic implementation (ChaCha20+RSA-2048 with AVX-512 optimization) reflects significant R&D investment — this is a purpose-built capability, not commodity ransomware.
 
-**2. Commoditization of Advanced Capabilities:** Remote access trojan functionality, WebSocket-based C2 protocols, and multi-layer persistence mechanisms are now accessible via open directories, lowering barriers to entry for less experienced threat actors.
+Second, advanced capabilities are being commoditized. Remote access trojan functionality, WebSocket-based C2 protocols and multi-layer persistence mechanisms are now accessible via open directories, which lowers barriers to entry for less experienced threat actors.
 
-**3. Shared Infrastructure Patterns:** Multiple distinct malware families sharing C2 infrastructure (109.230.231.37) suggests centralized threat operations or malware-as-a-service (MaaS) business models. Infrastructure-based blocking provides outsized defensive value — a single network indicator neutralizes multiple threat families simultaneously.
+Third, the infrastructure patterns are shared. Multiple distinct malware families sharing C2 infrastructure at 109.230.231.37 suggests centralized threat operations or a malware-as-a-service business model. Infrastructure-based blocking therefore provides outsized defensive value, because a single network indicator neutralizes multiple threat families at once.
 
-**4. Evasion-First Design:** Deceptive Microsoft-themed naming conventions, anti-forensic behaviors (immediate task.xml deletion), and environment-aware dormancy mechanisms indicate operators prioritizing stealth and long-term persistence over immediate impact.
+Fourth, the design is evasion-first. Deceptive Microsoft-themed naming conventions, anti-forensic behaviors such as immediate `task.xml` deletion, and environment-aware dormancy mechanisms all indicate operators prioritizing stealth and long-term persistence over immediate impact.
 
-**5. Persistence Engineering:** FleetAgentAdvanced's quadruple-redundant persistence architecture reflects operators anticipating partial remediation efforts and designing survival mechanisms accordingly. Complete system rebuild is preferred over incremental cleanup for HIGH-risk samples from this set.
+Fifth, the persistence engineering is deliberate. FleetAgentAdvanced's quadruple-redundant persistence architecture reflects operators anticipating partial remediation efforts and designing survival mechanisms accordingly. A complete system rebuild is preferred over incremental cleanup for HIGH-risk samples from this set.
 
-**6. Mature R&D Process:** Versioned builds (enc_v2.exe), testing utilities (test_decryptor.exe, test_gui_enc_v2.exe), and per-victim key generation tools (enc_pervictim.exe) demonstrate a development process with quality assurance testing — indicators of organized, well-resourced operations rather than ad-hoc criminal activity.
+Sixth, the R&D process is mature. Versioned builds (`enc_v2.exe`), testing utilities (`test_decryptor.exe`, `test_gui_enc_v2.exe`), and per-victim key generation tools (`enc_pervictim.exe`) demonstrate a development process with quality assurance testing, which indicates organized, well-resourced operations rather than ad-hoc criminal activity.
 
 ---
 

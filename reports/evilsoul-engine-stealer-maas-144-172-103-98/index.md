@@ -36,7 +36,7 @@ ioc_highlights:
 
 EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS) — a productized criminal factory that compiles and auto-distributes uniquely-packed Discord, browser, and cryptocurrency-theft payloads for paying customers. It is operated by the named, self-identified Brazilian actor `n_3_xl` / `@govbrasil`, branded KAIDO (`0xK41`), at HIGH confidence — the same actor whose KAIDO remote access trojan is documented in the companion report. The Hunters Ledger recovered and reverse-engineered the operation's complete server side — the stealer template, an automated builder, a JavaScript packer, a MongoDB-backed web control panel, and an exfiltration/delivery service — after an open-directory sweep surfaced the staging server at `144.172.103[.]98:8888`; with the origin already offline, its files were preserved and recovered via [Hunt.io's AttackCapture](https://hunt.io/). This report answers the intelligence question that motivated the investigation: there was no public technical documentation of the EvilSoul-Engine stealer-builder — its Chrome App-Bound-Encryption (ABE-v20) bypass, its process-token-impersonation credential decryptor, or its Microsoft Defender timing-window evasion — and none of the operation's built payloads carried a working detection signature. This report closes that gap and hands defenders behavior-based detection for a threat that hash-blocking cannot durably catch.
 
-**Why this matters.** EvilSoul-Engine weaponizes current-generation credential theft. Its built payloads defeat Chrome's newest cookie protection (App-Bound Encryption) two different ways, disable Microsoft Defender wholesale (whole-drive exclusion, real-time monitoring off, firewall off, antivirus process termination), and sit quietly past Defender's post-launch behavioral-monitoring window before doing anything noisy. Because the operation is a MaaS vendor, this capability does not stay with one operator — every customer who buys a build gets a uniquely repacked payload, and the factory's own packer guarantees that no two builds share a file hash. Across the 21 recovered files, no existing YARA signature produced a single hit. The correct defensive posture is to hunt behaviors, not hashes.
+This matters because EvilSoul-Engine weaponizes current-generation credential theft. Its built payloads defeat Chrome's newest cookie protection, App-Bound Encryption, in two different ways, disable Microsoft Defender wholesale through whole-drive exclusion, real-time monitoring off, firewall off and antivirus process termination, and sit quietly past Defender's post-launch behavioral-monitoring window before doing anything noisy. Because the operation is a MaaS vendor, that capability does not stay with one operator, since every customer who buys a build gets a uniquely repacked payload and the factory's own packer guarantees no two builds share a file hash. Across the 21 recovered files, no existing YARA signature produced a single hit. The correct defensive posture is to hunt behaviors, not hashes.
 
 **What was found — at a glance.**
 
@@ -46,11 +46,11 @@ EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS) — a
 - A commodity supply-chain component (Section 8): the operation adopted a public red-team tool (xaitax "ChromElevator") for its App-Bound-Encryption bypass — not novel tradecraft, but a live example of criminal reuse of published offensive tooling.
 - A dead staging box, a live operator (Section 3): the recovered directory is a torn-down staging instance — all its channels are dead — but the operator is concurrently active on the KAIDO product line (see the companion report). Killing this infrastructure does not remove the threat.
 
-**Attribution.** The operation is attributed at HIGH confidence to the self-identified Brazilian commodity-malware operator `n_3_xl` / `@govbrasil` (KAIDO / `0xK41`) — a financially-motivated MaaS vendor, not a targeted-intrusion actor. The tooling lineage traces to the EvilSoul-Engine MaaS, whose developer is a separate Brazilian actor, `@breakingupslow` (DEFINITE lineage). These are two distinct people: `n_3_xl` is assessed as a customer, reseller, or affiliate of the EvilSoul operation at MODERATE confidence, not the same individual as its developer. Because a named actor is identified at HIGH confidence, no unattributed-threat-actor (UTA) designation is used. Section 9 sets out the full attribution reasoning.
+I attribute the operation at HIGH confidence to the self-identified Brazilian commodity-malware operator `n_3_xl` / `@govbrasil` (KAIDO / `0xK41`), a financially-motivated MaaS vendor rather than a targeted-intrusion actor. The tooling lineage traces to the EvilSoul-Engine MaaS, whose developer is a separate Brazilian actor, `@breakingupslow`, at DEFINITE lineage. These are two distinct people, and I assess `n_3_xl` as a customer, reseller or affiliate of the EvilSoul operation at MODERATE confidence, not the same individual as its developer. Because a named actor is identified at HIGH confidence, no UTA designation is used. Section 9 sets out the full attribution reasoning.
 
-**Victimology — stated honestly.** The recovered logs contain no confirmed victims: one operator test box and one unresolved possible-victim host (whose harvested personal data is redacted in this report). A recovered file listing 2,229 hardware IDs is not a victim count — its meaning was not determinable from the recovered evidence and it is most plausibly imported license or blocklist data (INSUFFICIENT). Section 3 explains this in full.
+On victimology, stated honestly, the recovered logs contain no confirmed victims, only one operator test box and one unresolved possible-victim host whose harvested personal data is redacted here. A recovered file listing 2,229 hardware IDs is not a victim count, because its meaning was not determinable from the recovered evidence and it is most plausibly imported license or blocklist data, which I hold INSUFFICIENT. Section 3 explains this in full.
 
-**Overall risk: HIGH (8.5/10).** The operation weaponizes credential theft that defeats the newest browser and endpoint protections, disables defenses on the host, evades behavioral sandboxes, and — being sold as MaaS — propagates that capability to arbitrary downstream buyers. It stops short of CRITICAL only because it has no self-propagation or lateral-movement capability and no confirmed victims in the recovered data; distribution is buyer-driven social engineering. Section 2 details the risk scoring.
+Overall risk is HIGH, 8.5 out of 10. The operation weaponizes credential theft that defeats the newest browser and endpoint protections, disables defenses on the host, evades behavioral sandboxes, and, being sold as MaaS, propagates that capability to arbitrary downstream buyers. It stops short of CRITICAL only because it has no self-propagation or lateral-movement capability and no confirmed victims in the recovered data, with distribution driven by buyer-side social engineering. Section 2 details the risk scoring.
 
 ---
 
@@ -179,11 +179,11 @@ One build-specific detail is a useful detection anchor. Discord's encrypted-toke
 
 #### Executive technical context
 
-**What this means:** stealing a Discord token is like stealing a signed, pre-authenticated door badge rather than the key. The attacker walks straight in as the victim, and by also grabbing the recovery codes, changes the locks behind them.
+Stealing a Discord token is like stealing a signed, pre-authenticated door badge rather than the key. The attacker walks straight in as the victim, and by also grabbing the recovery codes, changes the locks behind them.
 
-**Security impact:** for consumers, this is loss of a primary social and, increasingly, financial identity (Discord accounts carry billing data and are gateways to communities and marketplaces). For organizations, a compromised employee Discord account is a social-engineering launchpad and, where Discord is used for coordination, a foothold into internal discussion.
+For consumers the security impact is loss of a primary social and, increasingly, financial identity, since Discord accounts carry billing data and act as gateways to communities and marketplaces. For organizations, a compromised employee Discord account is a social-engineering launchpad and, where Discord is used for coordination, a foothold into internal discussion.
 
-**Detection strategy:** the enrichment traffic — a burst of requests to `discord.com/api/v9/` endpoints (`/users/@me`, billing, relationships) from a non-browser process shortly after execution — is a behavioral tell that survives repacking. Exfiltration of the harvest lands on Discord webhooks (Section 5.6).
+To detect it, the enrichment traffic is the tell, a burst of requests to `discord.com/api/v9/` endpoints (`/users/@me`, billing, relationships) from a non-browser process shortly after execution, and it survives repacking. Exfiltration of the harvest lands on Discord webhooks (Section 5.6).
 
 ### 5.2 Browser credential and cookie theft — three mechanisms
 
@@ -226,9 +226,9 @@ At capability altitude: this technique borrows the identity of a highly-privileg
   <figcaption><em>Figure 4: Capability evidence — the process-token-impersonation ABE-v20 decryptor, the operation's most sophisticated single component. This decryptor script is piped to a downloaded portable Python runtime over standard input, so no <code>.py</code> file ever touches disk. It enables <code>SeDebugPrivilege</code>, borrows the security context of <code>lsass.exe</code>, and uses that privileged identity to unwrap the app-bound key. The detection anchor is the behavioral chain — <code>python -u -</code> reading from stdin, enabling the debug privilege, and opening a handle to <code>lsass.exe</code> in short succession (Sysmon Event ID 1 + 10) — because file-scanning alone cannot catch a script that is never written to disk.</em></figcaption>
 </figure>
 
-**Detection strategy:** the behavioral signature is specific and high-value — a Python process reading a script from standard input (`python -u -`), enabling the debug privilege, and opening a handle to `lsass.exe`, all in short succession from a stealer parent. This maps to Sysmon process-creation (Event ID 1) plus process-access (Event ID 10) telemetry and is the second-highest-value hunt in this report. Because the script never touches disk, file-scanning alone will miss it; the process-behavior chain is what catches it.
+To detect it, the behavioral signature is specific and high-value, a Python process reading a script from standard input (`python -u -`), enabling the debug privilege, and opening a handle to `lsass.exe`, all in short succession from a stealer parent. That maps to Sysmon process-creation (Event ID 1) plus process-access (Event ID 10) telemetry and is the second-highest-value hunt in this report. Because the script never touches disk, file-scanning alone will miss it, and the process-behavior chain is what catches it.
 
-**Reality check.** These three mechanisms are not equally novel. Mechanism 1 is commodity and broadly detected. Mechanism 2 (CDP cookie theft) is an increasingly common technique across the stealer landscape, not unique to this operation, but it is genuinely effective against App-Bound Encryption. Mechanism 3 is the sophisticated component, and even it is assessed as adapted from public proof-of-concept code. The operation's skill is in *integration and evasion*, not in inventing primitives.
+A reality check belongs here. These three mechanisms are not equally novel. Mechanism 1 is commodity and broadly detected. Mechanism 2, CDP cookie theft, is increasingly common across the stealer landscape rather than unique to this operation, though it is genuinely effective against App-Bound Encryption. Mechanism 3 is the sophisticated component, and even that I assess as adapted from public proof-of-concept code. The operation's skill is in *integration and evasion*, not in inventing primitives.
 
 ### 5.3 Cryptocurrency and gaming theft
 
@@ -255,9 +255,9 @@ The `stealer.js` build sequences its work to defeat behavioral monitoring. It ru
   <figcaption><em>Figure 5: Capability evidence — the anti-emulation stall and decoy window that accompany the Defender behavioral-window timing evasion. The operator's own comment ("Defender emulator has ~2-3s timeout") states the intent: burn more than 4.5 seconds of pointless CPU so an automated emulator that gives up quickly never reaches the malicious code, while a fake loading screen occupies the victim. This is the short-stall companion to the 7-10 minute pre-harvest sleep. For defenders, the stall itself is not the anchor — the reliable signal is the burst of credential-access behavior that follows the delay (Section 14).</em></figcaption>
 </figure>
 
-**Note on the timing figure.** The sleep duration (7-10 minutes) is directly observed in the code; the specific claim that this outlasts "a 2-4 minute Defender window" is an inference from observed behavior, not a vendor-published constant. The general technique — timing operations to outlast behavioral monitoring — is well-documented.
+The timing figure needs a note. The sleep duration of 7 to 10 minutes is directly observed in the code, but the specific claim that it outlasts a 2 to 4 minute Defender window is an inference from observed behavior rather than a vendor-published constant. The general technique, timing operations to outlast behavioral monitoring, is well documented.
 
-**Detection strategy:** a long, deliberate sleep early in a process's life followed by a burst of credential-access behavior is itself a suspicious sequence. More reliably, the *noisy* operations that follow the sleep (CDP cookie theft, DPAPI calls) are what detection should target — the sleep delays them but does not hide them.
+To detect it, a long deliberate sleep early in a process's life followed by a burst of credential-access behavior is itself a suspicious sequence. More reliably, the *noisy* operations that follow the sleep, CDP cookie theft and DPAPI calls, are what detection should target, because the sleep delays them without hiding them.
 
 #### Endpoint-defense suppression
 
@@ -265,7 +265,7 @@ The `299a2e7f` build carries a six-function suppression chain that disables host
 
 This is not evasion, it is demolition. A whole-drive Defender exclusion means *nothing on the disk is scanned* thereafter. Real-time monitoring off and firewall off remove the two controls most likely to flag the subsequent exfiltration.
 
-**Detection strategy:** these commands are the single best centralized-log detection in the report, because they are executed through PowerShell and land in PowerShell script-block logging (Windows Event ID 4104) regardless of the endpoint agent's health. Even after the payload has disabled Defender, the *record of it disabling Defender* is in the event log. A rule on `Add-MpPreference -ExclusionPath 'C:\'` or `Set-MpPreference -DisableRealtimeMonitoring $true` from an unexpected parent is high-signal and low-false-positive.
+To detect it, these commands are the single best centralized-log detection in the report, because they execute through PowerShell and land in PowerShell script-block logging (Windows Event ID 4104) regardless of the endpoint agent's health. Even after the payload has disabled Defender, the *record of it disabling Defender* sits in the event log. A rule on `Add-MpPreference -ExclusionPath 'C:\'` or `Set-MpPreference -DisableRealtimeMonitoring $true` from an unexpected parent is high-signal and low-false-positive.
 
 #### Anti-analysis
 
@@ -291,7 +291,7 @@ The stealer packages its harvest and ships it out through several redundant chan
 - Cloud file hosts — loot archives uploaded to gofile.io.
 - Operator backend — the `evilsoul[.]xyz` backend receives injected data and serves tool downloads (`/dcinjection-send`, `/upload-txts`, `/download/panel`).
 
-**Detection strategy:** the network signatures here are strong precisely because they are hardcoded. Discord webhook POSTs to the two known IDs, uploads to gofile, and traffic to the `evilsoul[.]xyz` / `evilsoul[.]cc` backends are all directly hunted in the companion Suricata and IOC content. Because gofile and Discord are legitimate shared services, the *specific* webhook IDs and backend domains are the discriminating indicators, not the services themselves.
+To detect it, the network signatures are strong precisely because they are hardcoded. Discord webhook POSTs to the two known IDs, uploads to gofile, and traffic to the `evilsoul[.]xyz` and `evilsoul[.]cc` backends are all directly hunted in the companion Suricata and IOC content. Because gofile and Discord are legitimate shared services, the *specific* webhook IDs and backend domains are the discriminating indicators, not the services themselves.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/evilsoul-engine-stealer-maas-144-172-103-98/operator-exfil-embed-0xk41.png" | relative_url }}" alt="Web-panel exfiltration log showing repeated /send-data and /send-embed requests keyed to a KAIDO-DAY license key, each carrying a Discord embed authored '0xK41 ~ BrowserData', and each failing with 'Failed to send data to webhook' and 'Unknown Webhook' errors.">
@@ -327,7 +327,7 @@ This design lets the operator rotate exfiltration destinations without rebuildin
 
 This tier fetches its Chrome App-Bound-Encryption bypass tooling at runtime from a public GitHub account (`github[.]com/sqlban/configs`), downloading `chromelevator.exe` and `chrome_decrypt.dll` to `%TEMP%\executor\`. The `sqlban` account has since been taken down (now returns 404). Those two tools are the commodity xaitax ABE pair analyzed in Section 8.
 
-**Detection strategy:** the drop of `chromelevator.exe` or `chrome_decrypt.dll` into `%TEMP%\executor\` (Sysmon file-create, Event ID 11) is a direct file-based anchor, and the runtime fetch from a raw GitHub URL by a pkg-Node process is a network-plus-process behavioral tell.
+To detect it, the drop of `chromelevator.exe` or `chrome_decrypt.dll` into `%TEMP%\executor\` (Sysmon file-create, Event ID 11) is a direct file-based anchor, and the runtime fetch from a raw GitHub URL by a pkg-Node process is a network-plus-process behavioral tell.
 
 ### 6.4 A distinct build in the same family
 
@@ -436,9 +436,9 @@ Attribution rests on identity artifacts recovered directly from the kit's own co
 
 ### 10.1 The two actors
 
-**Kit operator (primary attribution):** `n_3_xl` / `@govbrasil` / KAIDO (`0xK41`), Brazil — HIGH confidence (85%). This is the actor who runs the recovered EvilSoul-Engine deployment and the concurrently-live KAIDO product line. The attribution is *self-attested*: the kit's own configuration names `t[.]me/n_3_xl` as the operator contact, that channel is publicly titled "[KAIDO]," and the `@govbrasil` support handle's bio reads "Kaido" and lists "Maldev @n_3_xl." The KAIDO Quasar remote access trojan (documented in the companion report) resolves to the operator-branded `kaidoo[.]com[.]br` and a self-signed `TeamKAIDO` C2 certificate — directly-observed operator infrastructure, not just external reporting. Brazil is corroborated six ways: Portuguese code and logs; EvilSoul reported as a Brazilian Discord stealer; KAIDO reported as a Brazilian banking MaaS; the builder IP on a Brazilian host; prior `evilsoul[.]cc` São Paulo and Brazilian-bank payment references; and a Brazilian phone number in the possible-victim host record. Because a named actor is identified at HIGH confidence, no UTA designation is used or appropriate.
+The primary attribution is to the kit operator, `n_3_xl` / `@govbrasil` / KAIDO (`0xK41`) in Brazil, which I hold HIGH at 85 percent. This is the actor running the recovered EvilSoul-Engine deployment and the concurrently-live KAIDO product line. The attribution is *self-attested*, because the kit's own configuration names `t[.]me/n_3_xl` as the operator contact, that channel is publicly titled "[KAIDO]," and the `@govbrasil` support handle's bio reads "Kaido" and lists "Maldev @n_3_xl." The KAIDO Quasar remote access trojan, documented in the companion report, resolves to the operator-branded `kaidoo[.]com[.]br` and a self-signed `TeamKAIDO` C2 certificate, which is directly-observed operator infrastructure rather than external reporting. Brazil is corroborated six ways, Portuguese code and logs, EvilSoul reported as a Brazilian Discord stealer, KAIDO reported as a Brazilian banking MaaS, the builder IP on a Brazilian host, prior `evilsoul[.]cc` São Paulo and Brazilian-bank payment references, and a Brazilian phone number in the possible-victim host record. Because a named actor is identified at HIGH confidence, no UTA designation is used or appropriate.
 
-**Tooling lineage:** EvilSoul-Engine MaaS, developer `@breakingupslow`, Brazil — DEFINITE (lineage) / MODERATE (relationship). The recovered kit *is built on* the EvilSoul-Engine MaaS: the npm project is literally named `EvilSoul-Engine`, the build configuration carries `EVIL-DAY-*` license keys, and the kit sits on the same Brazilian hosting ecosystem as the reported EvilSoul cluster. That lineage is DEFINITE. The EvilSoul developer is a separate named actor, `@breakingupslow` (Telegram ID `5834325304`), documented in public reporting as the author of the EvilSoul Discord infostealer. `n_3_xl`'s relationship to that operation — customer, reseller, or affiliate — is assessed at MODERATE confidence: enough evidence to assert a licensing/affiliate tie, not enough to specify its exact commercial form.
+The tooling lineage runs to the EvilSoul-Engine MaaS, developer `@breakingupslow` in Brazil, which I hold DEFINITE on lineage and MODERATE on relationship. The recovered kit *is built on* that MaaS, since the npm project is literally named `EvilSoul-Engine`, the build configuration carries `EVIL-DAY-*` license keys, and the kit sits on the same Brazilian hosting ecosystem as the reported EvilSoul cluster. That lineage is DEFINITE. The EvilSoul developer is a separate named actor, `@breakingupslow` (Telegram ID `5834325304`), documented in public reporting as the author of the EvilSoul Discord infostealer. I assess `n_3_xl`'s relationship to that operation, as customer, reseller or affiliate, at MODERATE, enough evidence to assert a licensing or affiliate tie but not enough to specify its exact commercial form.
 
 ### 10.2 The retracted equation — do not reintroduce
 
@@ -452,21 +452,21 @@ The corrected model is two related-but-distinct Brazilian operators, connected b
 
 ### 10.3 Confidence statement (project format)
 
-**Threat actor (kit operator):** `n_3_xl` / `@govbrasil` / KAIDO (`0xK41` brand) — Brazilian commodity-malware operator.
-**Confidence:** HIGH (85%)
+The kit operator is `n_3_xl` / `@govbrasil` / KAIDO (the `0xK41` brand), a Brazilian commodity-malware operator, and I hold that at HIGH, 85 percent.
+
 - **Why:** Self-attested operator identity in the kit's own config (`t.me/n_3_xl` titled "[KAIDO]"), reciprocally confirmed by `@govbrasil` ("Maldev @n_3_xl"); pervasive `0xK41`/KAIDO brand ownership; directly-observed KAIDO C2 infrastructure; Brazil corroborated six ways.
 - **Missing:** Real-world legal identity (all operator domains privacy-registered from day one).
 - **Would increase confidence:** A non-WHOIS identity link (a leak, a reused operator email, a cross-platform handle-to-name correlation), or government/vendor-catalog attribution (none exists).
 
-**Tooling lineage:** EvilSoul-Engine MaaS (developer `@breakingupslow` — a SEPARATE actor).
-**Confidence:** DEFINITE (lineage) / MODERATE (`n_3_xl`'s relationship to the EvilSoul operation)
+The tooling lineage is the EvilSoul-Engine MaaS, whose developer `@breakingupslow` is a SEPARATE actor. I hold the lineage DEFINITE and `n_3_xl`'s relationship to the EvilSoul operation MODERATE.
+
 - **Why (lineage DEFINITE):** npm project literally named "EvilSoul-Engine"; EVIL-DAY license keys; shared Brazilian hosting ecosystem.
 - **Why (relationship MODERATE):** rests on the EVIL-DAY key plus shared-infra adjacency plus one Tier-3 OSINT source never directly retrieved (persistent access block; triangulated via search index).
 
 **Same-individual (`n_3_xl` == `@breakingupslow`):** RETRACTED — LOW / UNSUPPORTED (<50%)
 - An Analysis of Competing Hypotheses resolves this as the losing hypothesis; it is not reintroduced.
 
-**Motivation:** Financially-motivated commodity cybercrime (MaaS vendor) — HIGH
+The motivation is financially-motivated commodity cybercrime as a MaaS vendor, which I hold HIGH.
 - Tiered "DAY" license keys, a sales subdomain, Telegram customer support, a customer control panel, and multi-host build delivery. No espionage, hacktivism, or targeted-attack indicators.
 
 ### 10.4 Source and confidence caveats
@@ -514,7 +514,7 @@ Two caveats bound the attribution honestly. First, the primary public source for
 | Impact / T1489 | Service Stop | `net stop WinDefend`; AV `taskkill` (`299a2e7f`) |
 | Resource Development / T1588.002 | Obtain Capabilities: Tool | xaitax ChromElevator adopted as supply-chain ABE bypass (DEFINITE) |
 
-**Coverage note.** The mapping is credential-access- and defense-evasion-heavy, exactly as expected for a stealer-builder MaaS: the operation's purpose is to harvest secrets (Credential Access, Collection) while removing the controls that would stop it (Defense Evasion) and shipping the results out (Exfiltration). The Impact techniques (BSOD, service stop) belong to the `299a2e7f` interactive tier and are what distinguishes it from a pure stealer.
+On coverage, the mapping is credential-access- and defense-evasion-heavy, exactly as expected for a stealer-builder MaaS, because the operation's purpose is to harvest secrets through Credential Access and Collection while removing the controls that would stop it through Defense Evasion, then shipping the results out through Exfiltration. The Impact techniques, BSOD and service stop, belong to the `299a2e7f` interactive tier and are what distinguishes it from a pure stealer.
 
 ---
 
@@ -578,7 +578,7 @@ An unrelated co-tenant was observed on the historical `evilsoul1337[.]xyz` host 
 
 The complete, validated, machine-readable indicator set is published as a separate feed:
 
-**IOC feed:** [`/ioc-feeds/evilsoul-engine-stealer-maas-iocs.json`](/ioc-feeds/evilsoul-engine-stealer-maas-iocs.json)
+The IOC feed is at [`/ioc-feeds/evilsoul-engine-stealer-maas-iocs.json`](/ioc-feeds/evilsoul-engine-stealer-maas-iocs.json)
 
 The feed is formatted for direct ingestion into SIEM and EDR tooling (no defanging in the JSON; credential-type indicators such as bot and webhook tokens are truncated to first-8 + last-4 per the project's secrets-handling rule). The report body does not duplicate the full indicator list — the counts and highest-value indicators below orient a reader; the feed is authoritative.
 
@@ -609,7 +609,7 @@ For a defender triaging quickly, these are the discriminating indicators — cho
 - **ABE-tool drop path** — `%TEMP%\executor\chromelevator.exe` and `chrome_decrypt.dll`.
 - **Shared Steam API key** — `440D7F4D810EF9298D25EDDF37C1F902` (byte-identical across Maploot/Tinarox).
 
-**Reproduction detail retained:** the SHA256 for the `299a2e7f` Socket.IO WebPanel tier is `299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c`; for Maploot, `763303b69ad589bef248b66d1db93d5e567d9d60f95511806289289ff42a548e`; for Tinarox, `fe55908030318879f08b185b9c5b6e6f9d6f691154c361d60cce80162d844212`. The full set, with per-indicator confidence and recommended action (`BLOCK` / `HUNT`), is in the feed.
+For reproduction, the SHA256 for the `299a2e7f` Socket.IO WebPanel tier is `299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c`, for Maploot it is `763303b69ad589bef248b66d1db93d5e567d9d60f95511806289289ff42a548e`, and for Tinarox it is `fe55908030318879f08b185b9c5b6e6f9d6f691154c361d60cce80162d844212`. The full set, with per-indicator confidence and recommended action of `BLOCK` or `HUNT`, is in the feed.
 
 A durability caveat, repeated because it governs how these are used: because every EvilSoul-Engine customer build is uniquely repacked, the file hashes have **LOW** durability against *new* builds — they catch the specific samples analyzed, not the next customer's payload. Treat the string/behavioral anchors and the network indicators as the primary detection layer; treat the hashes as a confirming layer for known samples.
 
@@ -619,7 +619,7 @@ A durability caveat, repeated because it governs how these are used: because eve
 
 The full detection content — YARA rules, Sigma rules, and Suricata signatures — is published as a separate file:
 
-**Detection rules:** [`/hunting-detections/evilsoul-engine-stealer-maas-detections/`](/hunting-detections/evilsoul-engine-stealer-maas-detections/)
+The detection rules are at [`/hunting-detections/evilsoul-engine-stealer-maas-detections/`](/hunting-detections/evilsoul-engine-stealer-maas-detections/)
 
 That file provides 5 YARA rules (targeting the operator-signature packer constant, the built-tier anchors, and the ABE tool pair), 6 Sigma rules (targeting the CDP cookie-theft relaunch, the process-token-impersonation decryptor, the Defender-suppression chain, and the Microsoft-masquerade scheduled task), and 6 Suricata signatures (Socket.IO handshake, relay endpoint, Discord webhook exfiltration). This section explains *what to hunt and why* at the analytical level; the rule syntax lives in the detection file.
 

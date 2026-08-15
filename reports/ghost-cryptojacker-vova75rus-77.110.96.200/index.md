@@ -41,7 +41,7 @@ stix_bundle: /stix/ghost-cryptojacker-vova75rus-77.110.96.200.json
 
 ## 1. Executive Summary
 
-**Bottom line:** The GHOST cryptojacker is a commodity kit, not a single-host campaign — and this investigation named its author. A `PIP_PAYLOAD_REPO` GitHub URL in Operator-B's ComfyUI scanner pivoted (Hunt SQL) to `Vova75Rus/ComfyUI-Shell-Executor`, attributing the kit to **Vova75Rus at HIGH confidence (88%)** (§9.2). The proof the kit is sold, not bespoke: a **byte-identical `libpam_cache.so` LD_PRELOAD rootkit** (MD5 `296a8005...`) shipped to two separate AEZA customer hosts (§5.1), each carrying the kit-author's hardcoded **OWNER Telegram bot** (§4.7). GitHub Trust & Safety suspended Vova75Rus account-wide on 2026-05-25, ~24 hours after disclosure submission — disrupting the kit-author payload channel at the supply-chain's single intervention point.
+The GHOST cryptojacker is a commodity kit rather than a single-host campaign, and this investigation named its author. A `PIP_PAYLOAD_REPO` GitHub URL in Operator-B's ComfyUI scanner pivoted (Hunt SQL) to `Vova75Rus/ComfyUI-Shell-Executor`, attributing the kit to **Vova75Rus at HIGH confidence (88%)** (§9.2). What proves the kit is sold rather than bespoke is a **byte-identical `libpam_cache.so` LD_PRELOAD rootkit** (MD5 `296a8005...`) shipped to two separate AEZA customer hosts (§5.1), each carrying the kit author's hardcoded **OWNER Telegram bot** (§4.7). GitHub Trust & Safety suspended Vova75Rus account-wide on 2026-05-25, roughly 24 hours after disclosure submission, disrupting the kit-author payload channel at the supply chain's single intervention point.
 
 The kit is GPU-cloud cryptojacking against exposed ComfyUI / Stable-Diffusion / ML-inference services (especially A100-tier instances on Lambda Labs, Datacrunch, Nebius, and hyperscalers) for Monero (XMR) and Conflux (CFX) revenue. It is intermediate-to-advanced at the kit layer and variable at the operator layer; §3 classifies both. The work extends the primary public disclosure (Censys ARC, Mark Ellzey, 2026-04-07), which documented the kit on one host — the seven net-new contributions are listed under *Why This Threat Is Significant* below.
 
@@ -90,9 +90,9 @@ This is an **active and actively-iterating** cryptojacking campaign with confirm
 </tbody>
 </table>
 
-**Overall Campaign Risk Score: 8.0/10 — HIGH.** The campaign is rated HIGH (not CRITICAL) because (a) GitHub T&S has disrupted the upstream kit-author payload distribution channel (Tier-0 action successful 2026-05-25), (b) Operator-B's host is abandoned (5 days post-Censys), and (c) operator-level capabilities remain bounded by individual infrastructure rather than reaching campaign-scale victim volume. If the AEZA-hosted Operator-A continues live iteration without provider response, or if additional kit-customer operators are discovered on AEZA infrastructure, the threat level should be reassessed.
+The campaign scores 8.0 out of 10 overall, which puts it in the HIGH band. I rate it HIGH rather than CRITICAL because (a) GitHub T&S has disrupted the upstream kit-author payload distribution channel (Tier-0 action successful 2026-05-25), (b) Operator-B's host is abandoned, 5 days post-Censys, and (c) operator-level capabilities remain bounded by individual infrastructure rather than reaching campaign-scale victim volume. If the AEZA-hosted Operator-A continues live iteration without a provider response, or if additional kit-customer operators are discovered on AEZA infrastructure, the threat level should be reassessed.
 
-**Disclosure outcome (2026-06-19).** Of the three Hetzner-customer ComfyUI hosts flagged in the cloud-provider disclosure cascade, one customer has since independently confirmed and remediated a cryptojacker infection — the host was isolated, taken offline, and slated for a full wipe. This is the first *victim-attested* evidence that the kit's ComfyUI targeting converts to live compromise, as opposed to the operator-artifact-confirmed access documented in the parent report's Cases 1 and 2. Confidence is **MODERATE**: a customer absorbing full host downtime and a reimage corroborates a real compromise, but they shared no forensic detail tying their infection specifically to the GHOST `libpam_cache.so` kit rather than to an opportunistic cryptojacker reaching the same exposed host.
+One disclosure outcome landed on 2026-06-19. Of the three Hetzner-customer ComfyUI hosts flagged in the cloud-provider disclosure cascade, one customer has since independently confirmed and remediated a cryptojacker infection, isolating the host, taking it offline, and slating it for a full wipe. That is the first *victim-attested* evidence that the kit's ComfyUI targeting converts to live compromise, as opposed to the operator-artifact-confirmed access documented in the parent report's Cases 1 and 2. I hold it **MODERATE**, because a customer absorbing full host downtime and a reimage corroborates a real compromise, but they shared no forensic detail tying their infection specifically to the GHOST `libpam_cache.so` kit rather than to an opportunistic cryptojacker reaching the same exposed host.
 
 ### Threat Actor Summary
 
@@ -251,13 +251,13 @@ The capabilities below build the hidden, persistent cryptojacking outcome summar
 
 > **Analyst note:** This subsection covers the kit's userland rootkit — a small shared library (~14 KB) that, when loaded into every process on the system via the LD_PRELOAD mechanism, intercepts standard C library calls so that certain processes, files, and network ports become invisible to common diagnostic tools (`ps`, `ls`, `ss`, `netstat`). It is **not** a kernel-mode rootkit and **not** a PAM authentication backdoor despite the misleading filename. The hide-list (27 strings + 9 ports) is the structural fingerprint of the kit family.
 
-**Confidence:** DEFINITE — full source code (98 lines of C) and byte-identical ELF binary pulled from open directories on both customer hosts.
+I hold this DEFINITE, on full source code (98 lines of C) and a byte-identical ELF binary pulled from open directories on both customer hosts.
 
-**Technical mechanism.** LD_PRELOAD is a standard userland mechanism: a path-list environment variable that tells the dynamic linker (a userland process-loading component that resolves shared-library symbols at runtime) to load specified shared objects ahead of system libraries when starting any new process. When the dynamic linker resolves a symbol like `readdir`, it returns the LD_PRELOAD-loaded library's version if one exists. The GHOST kit writes `/lib/security/libpam_cache.so` (the deceptively-named rootkit) to `/etc/ld.so.preload` (a system-wide configuration file). From that point forward, every new process on the system loads the rootkit's hook functions before the real libc functions.
+LD_PRELOAD is a standard userland mechanism, a path-list environment variable that tells the dynamic linker (a userland process-loading component that resolves shared-library symbols at runtime) to load specified shared objects ahead of system libraries when starting any new process. When the dynamic linker resolves a symbol like `readdir`, it returns the LD_PRELOAD-loaded library's version if one exists. The GHOST kit writes `/lib/security/libpam_cache.so`, the deceptively-named rootkit, into `/etc/ld.so.preload`, a system-wide configuration file. From that point forward, every new process on the system loads the rootkit's hook functions before the real libc functions.
 
-**Hooked functions.** Four libc calls are intercepted: `readdir` (32-bit directory enumeration), `readdir64` (64-bit directory enumeration), `fopen` (file open), and `fopen64` (large-file fopen). The rootkit's hook functions call the real libc functions, then filter the results against the hide-list before returning to the caller.
+Four libc calls are intercepted, `readdir` (32-bit directory enumeration), `readdir64` (64-bit directory enumeration), `fopen` (file open), and `fopen64` (large-file fopen). The rootkit's hook functions call the real libc functions, then filter the results against the hide-list before returning to the caller.
 
-**Hide-list inventory.** 27 strings + 9 ports. The 27 strings cover three categories:
+The hide-list inventory runs to 27 strings and 9 ports. The 27 strings cover three categories:
 
 - **Miner binary names:** `xmrig`, `lolMiner`, `lolminer`, `khugepaged_` (disguised binary name with deliberate trailing underscore), `nv_uvm_` (NVIDIA kernel-module camouflage)
 - **Kit paths:** `fontconfig/.cpu`, `fontconfig/.gpu`, `.pid_guard`, `libpam_cache`, `inotify_guard`, scattered persistence locations
@@ -267,19 +267,19 @@ The 9 ports cover the mining pool service ports (`:3333`, `:4444`, `:5555`, `:77
 
 **What this means in practice.** A SOC analyst running `ps aux | grep xmrig` on a compromised host sees zero results. `ls /lib/security/` does not list `libpam_cache.so`. `cat /proc/net/tcp` does not show the mining pool connections. `ss -tlnp` does not show the Hysteria admin panel listener. The host appears clean to standard tooling — but the underlying behavior is unchanged. Mining continues; C2 traffic continues; container escape opportunities are unhidden because they happen at the kernel level below the rootkit's userland hooks.
 
-**Why the libpam_cache filename is deceptive.** The naming convention `libpam_*` is the standard Linux PAM (Pluggable Authentication Modules) module naming pattern. A defender encountering `libpam_cache.so` under `/lib/security/` will reasonably treat it as a legitimate PAM module on first inspection — PAM stack modules live under `/lib/security/`, `/lib/x86_64-linux-gnu/security/`, or `/usr/lib/security/`, and the filename convention matches. Direct source inspection of the 98-line C source refutes the PAM-module reading entirely: zero PAM symbols, zero `pam_authenticate` / `pam_handle_t` / `pam_acct_mgmt` references, zero authentication-flow code. The filename is masquerade only (MITRE T1036.005 — Match Legitimate Name or Location).
+The `libpam_cache` filename is deceptive by design. The naming convention `libpam_*` is the standard Linux PAM (Pluggable Authentication Modules) module naming pattern. A defender encountering `libpam_cache.so` under `/lib/security/` will reasonably treat it as a legitimate PAM module on first inspection, because PAM stack modules live under `/lib/security/`, `/lib/x86_64-linux-gnu/security/`, or `/usr/lib/security/`, and the filename convention matches. Direct source inspection of the 98-line C source refutes the PAM-module reading entirely, with zero PAM symbols, zero `pam_authenticate` / `pam_handle_t` / `pam_acct_mgmt` references, and zero authentication-flow code. The filename is masquerade only (MITRE T1036.005, Match Legitimate Name or Location).
 
-**Why this is significant.** Most defenders' mental model for "rootkit" is a kernel-mode rootkit that requires kernel exploitation, kernel module loading privileges, or a kernel-vulnerability chain. The LD_PRELOAD libc-hook rootkit pattern requires none of these — only the ability to write `/etc/ld.so.preload` (root-equivalent file write). The detection profile is fundamentally different: no `lsmod` entry, no kernel symbol table entries, no kernel taint flag. Standard rootkit-detection tools that focus on kernel-mode artifacts will miss this entire family.
+This is significant because most defenders' mental model for a rootkit is a kernel-mode rootkit that requires kernel exploitation, kernel module loading privileges, or a kernel-vulnerability chain. The LD_PRELOAD libc-hook rootkit pattern requires none of these, only the ability to write `/etc/ld.so.preload`, a root-equivalent file write. The detection profile is fundamentally different, with no `lsmod` entry, no kernel symbol table entries, and no kernel taint flag. Standard rootkit-detection tools that focus on kernel-mode artifacts will miss this entire family.
 
 **Byte-identical across customers is the central evidence anchor.** Both 77.110.96.200 and 77.110.125.145 ship the **same** MD5 296a800564111b0bad9fe63faf4e63ba binary. The per-customer wallet-prefix hide strings (`4BBj3gj4` for Operator-A vs the absence of Operator-A's prefix for Operator-B, and Operator-B's `46a5osgf` substituted in) are present **as static strings inside the binary** — the kit author pre-compiles per-customer binaries with these strings baked in, **not** per-victim. Operator-B's binary on disk is the operator's customer copy as shipped by the kit author. This proves the kit-author tier exists structurally, regardless of how many operators are observed downstream.
 
-**Detection strategy.** YARA rules in Section 10 detect the rootkit on three axes: (1) the combination of `readdir` + `fopen` exports in an ELF64 shared object, (2) the GHOST-specific hide-list strings (`khugepaged_`, `nv_uvm_`, `inotify_guard`, `libpam_cache`), and (3) the hide-port format string `:%04X`. A Sigma rule covers `/etc/ld.so.preload` write events from auditd. A separate Sigma rule covers `libpam_cache.so` creation under any `/lib/*/security/` directory. The detection-engineer also derived behavioral rules for the watchdog process name `inotify_guard` (a process whose name should not appear on legitimate Linux systems).
+To detect it, the YARA rules in Section 10 work on three axes, (1) the combination of `readdir` and `fopen` exports in an ELF64 shared object, (2) the GHOST-specific hide-list strings (`khugepaged_`, `nv_uvm_`, `inotify_guard`, `libpam_cache`), and (3) the hide-port format string `:%04X`. A Sigma rule covers `/etc/ld.so.preload` write events from auditd, and a separate Sigma rule covers `libpam_cache.so` creation under any `/lib/*/security/` directory. There are also behavioral rules for the watchdog process name `inotify_guard`, a process name that should not appear on any legitimate Linux system.
 
 ### 4.2 GHOST Kit Shell-Script Suite
 
 > **Analyst note:** This subsection covers the kit's outer shell orchestration — the bash scripts that handle installation, payload fetch, miner configuration, Hysteria v2 backdoor setup, ComfyUI target verification, and cloud-provider IP-range enumeration. The 1,338-line `ghost.sh` installer is the central orchestrator; the other scripts are operator-facing wrappers. Russian-language operator commentary in `hyst.sh`, `min1.sh`, `check_comfyui.sh`, and `get_all_ranges.sh` is what attributes those scripts to the operator (vs. the kit author).
 
-**Confidence:** DEFINITE — full scripts captured.
+I hold this DEFINITE, with the full scripts captured.
 
 **`ghost.sh` (45,289 bytes / 1,338 lines / 43 functions).** The kit's central installer. Captured on both 77.110.96.200 (full SHA-256 `e943b581...9fec56ba`) and 77.110.125.145 (SHA-256 prefix `025d683b...`). The two copies differ in exactly 17 bytes — the wallet addresses, mining pool URLs, and `PIP_PAYLOAD_REPO` GitHub URL — confirming the per-customer config-substitution distribution model.
 
@@ -298,21 +298,21 @@ Key functions (43 total):
 
 The first line of `ghost.sh` is the kit-author self-identification comment: `# GHOST v5.1 (Anti-Hisana + Resurrection + Spread + Escape)`. Censys references a v6.0 "Domination Edition" but no v6.0 sample was captured in this investigation; v6.0 capability differences relative to v5.1 are unknown.
 
-**`hyst.sh` (8,670 bytes).** Hysteria v2 backdoor installation wrapper. Russian-language operator commentary (10 Cyrillic words including ИТОГО, Запуск, Перезапуск). Installs the Hysteria v2 server binary, generates random credentials at `/tmp/.hy2_password`, `/tmp/.hy2_port`, `/tmp/.hy2_uri`. Admin panel callback at `http://77.110.96.200:3301` (Operator-A's host). bing.com SNI masquerade configured.
+`hyst.sh` (8,670 bytes) is the Hysteria v2 backdoor installation wrapper, carrying Russian-language operator commentary (10 Cyrillic words including ИТОГО, Запуск, Перезапуск). It installs the Hysteria v2 server binary and generates random credentials at `/tmp/.hy2_password`, `/tmp/.hy2_port` and `/tmp/.hy2_uri`. The admin panel calls back to `http://77.110.96.200:3301`, Operator-A's host, with a bing.com SNI masquerade configured.
 
-**`min1.sh` (4,280 bytes).** Miner-only installer with the dual-Telegram architecture. Russian-language commentary. **Operator-A's most-modified file** (Last Modified 2026-05-24T17:10:29Z — same day as analysis, 47 days post-Censys). The presence of both OWNER bot 8415540095 (kit-author-baked) and MIRROR bot 8315596543 (operator-set) in the same file is the structural signature of the dual-monitoring architecture. VT detection: 0/53 — undetected by every AV vendor 6 weeks after the Censys disclosure.
+`min1.sh` (4,280 bytes) is the miner-only installer carrying the dual-Telegram architecture, with Russian-language commentary. It is **Operator-A's most-modified file**, last modified 2026-05-24T17:10:29Z, the same day as analysis and 47 days post-Censys. The presence of both the OWNER bot 8415540095 (kit-author-baked) and the MIRROR bot 8315596543 (operator-set) in the same file is the structural signature of the dual-monitoring architecture. VT detection stood at 0/53, undetected by every AV vendor 6 weeks after the Censys disclosure.
 
-**`check_comfyui.sh` (974 bytes).** Operator-A ComfyUI target verification script. Russian-language (4 Cyrillic words including ИТОГО, Найдено). Performs HTTP GETs against `<target>:8188/system_stats` and `<target>:8188/queue` to confirm ComfyUI presence and queue accessibility before payload deployment.
+`check_comfyui.sh` (974 bytes) is Operator-A's ComfyUI target verification script, in Russian (4 Cyrillic words including ИТОГО, Найдено). It performs HTTP GETs against `<target>:8188/system_stats` and `<target>:8188/queue` to confirm ComfyUI presence and queue accessibility before payload deployment.
 
-**`get_all_ranges.sh` (3,007 bytes).** Operator-A cloud IP-range scraper. Russian-language (4 Cyrillic words). Queries `bgpview.io` for 12 cloud-provider ASNs (Lambda Labs, Datacrunch, Nebius, Hetzner, Linode, OVH, Scaleway, Tencent, Contabo, AEZA, Huawei, DigitalOcean) plus official Oracle and Google IP-range JSON URLs. The output feeds the ComfyUI scanner pipeline.
+`get_all_ranges.sh` (3,007 bytes) is Operator-A's cloud IP-range scraper, in Russian (4 Cyrillic words). It queries `bgpview.io` for 12 cloud-provider ASNs (Lambda Labs, Datacrunch, Nebius, Hetzner, Linode, OVH, Scaleway, Tencent, Contabo, AEZA, Huawei, DigitalOcean) plus the official Oracle and Google IP-range JSON URLs. The output feeds the ComfyUI scanner pipeline.
 
 ### 4.3 Python ComfyUI Exploitation Framework
 
 > **Analyst note:** This subsection covers the kit's exploitation layer — two large Python files (~75 KB and ~63 KB) implementing the ComfyUI port-8188 scanner and the post-exploitation payload deployment. The "PerformanceMonitor fake custom node" pattern uses ComfyUI's legitimate plugin-loading mechanism (NODE_CLASS_MAPPINGS) to register a malicious class that runs every time ComfyUI loads; this provides Python-runtime persistence inside the ComfyUI process itself, separate from the OS-level 5-vector persistence chain.
 
-**Confidence:** DEFINITE — both Python files captured from Operator-A's open directory.
+I hold this DEFINITE, with both Python files captured from Operator-A's open directory.
 
-**`py.py` (74,844 bytes).** Python ComfyUI exploitation framework. Kit-author component. Contains the `PerformanceMonitor` class registered into `NODE_CLASS_MAPPINGS` (a ComfyUI dictionary that maps custom-node class names to their implementations). When ComfyUI loads custom nodes at startup, it walks `NODE_CLASS_MAPPINGS` and instantiates each class. The malicious `PerformanceMonitor` class runs its constructor at every ComfyUI startup, providing Python-runtime persistence inside the ComfyUI process.
+`py.py` (74,844 bytes) is the Python ComfyUI exploitation framework and a kit-author component. It contains the `PerformanceMonitor` class registered into `NODE_CLASS_MAPPINGS`, a ComfyUI dictionary that maps custom-node class names to their implementations. When ComfyUI loads custom nodes at startup it walks `NODE_CLASS_MAPPINGS` and instantiates each class, so the malicious `PerformanceMonitor` class runs its constructor at every ComfyUI startup, giving Python-runtime persistence inside the ComfyUI process.
 
 Key kit-author functions in py.py:
 
@@ -324,15 +324,15 @@ The fact that `py.py` lives at both `/sc/py.py` (Operator-A's full path) and `/c
 
 **`scan.py` (63,443 bytes — slow cadence variant; 29293e3c... is a faster variant with 1-hour rescan).** Python ComfyUI scanner. Two cadence variants observed: a slow ~3-4 hour rescan cadence (at `/sc/scan.py`) and a faster ~1 hour aggressive cadence (at `/123/scan.py`). Both scan port 8188 across the IP corpus produced by `get_all_ranges.sh`. The scanner outputs target lists referencing `q10.txt` / `q11.txt` payload corpora.
 
-**`q10.txt` and 4,573-IP scope correction.** The `q10.txt` file (4,573 IPs) was initially read as a victim list. Phase 16 forensic review (Section 13 retraction) confirmed `q10.txt` is the **operator's loose target candidate list** of port-8188-responsive hosts — not a confirmed-compromised victim list. The narrower confirmed-vulnerable population is 78 high-confidence ComfyUI hosts (21 Tier-A confirmed-vulnerable + 57 Tier-B exposed-but-unconfirmed). Alibaba Cloud (9 unique IPs, 6 Tier-A) is the highest-density confirmed-vulnerable provider in the corpus.
+`q10.txt` needed a scope correction. The file (4,573 IPs) was initially read as a victim list. The Phase 16 forensic review (Section 13 retraction) confirmed `q10.txt` is the **operator's loose target candidate list** of port-8188-responsive hosts, not a confirmed-compromised victim list. The narrower confirmed-vulnerable population is 78 high-confidence ComfyUI hosts, 21 Tier-A confirmed-vulnerable plus 57 Tier-B exposed-but-unconfirmed. Alibaba Cloud (9 unique IPs, 6 Tier-A) is the highest-density confirmed-vulnerable provider in the corpus.
 
-**Detection strategy for ComfyUI defenders.** Audit `custom_nodes/` directories for any Python file containing both `class PerformanceMonitor` and `NODE_CLASS_MAPPINGS` (Sigma rule MAL_GHOST_ComfyUI_PerformanceMonitor_Node in Section 10). If ComfyUI is exposed to the public internet on port 8188, this combination is the GHOST persistence signature.
+ComfyUI defenders should audit `custom_nodes/` directories for any Python file containing both `class PerformanceMonitor` and `NODE_CLASS_MAPPINGS` (Sigma rule MAL_GHOST_ComfyUI_PerformanceMonitor_Node in Section 10). If ComfyUI is exposed to the public internet on port 8188, that combination is the GHOST persistence signature.
 
 ### 4.4 Container-Escape Suite (4 Variants)
 
 > **Analyst note:** This subsection covers the kit's container-escape capability — four distinct techniques for elevating from inside a Linux container (e.g., a ComfyUI Docker container running on a cloud GPU instance) to the underlying host. The four variants cover the common misconfiguration surfaces. Real-world success depends on the specific container runtime configuration (cgroup version, mounted paths, exposed sockets, namespace isolation).
 
-**Confidence:** HIGH on code-level intent (4 variants present in `ghost.sh`); MODERATE on real-world execution success rate (depends on host configuration).
+I hold code-level intent at HIGH, with 4 variants present in `ghost.sh`, and the real-world execution success rate at MODERATE, because it depends on host configuration.
 
 **Variant 1: cgroup release_agent abuse (`_escape_via_cgroup`).** Writes a binary path to a cgroup's `release_agent` file. When the cgroup's last process exits, the kernel executes the specified binary **on the host**, not in the container. Requires cgroup v1 with writeable `release_agent` exposed from the container. MITRE T1611.
 
@@ -342,19 +342,19 @@ The fact that `py.py` lives at both `/sc/py.py` (Operator-A's full path) and `/c
 
 **Variant 4: Docker socket abuse (`_escape_via_socket`).** If `/var/run/docker.sock` is mounted into the container (common in CI/CD container patterns), the attacker can issue Docker API commands from inside the container — including `docker run --privileged -v /:/host` to spawn a new privileged container with the host filesystem mounted.
 
-**Defender implication.** For cloud-GPU multi-tenant environments running ComfyUI inside containers, any of these four variants succeeding elevates a single-tenant compromise to a host-level compromise, potentially affecting all tenants on the same host. The kit attempts all four variants in sequence — defender mitigation requires hardening **all four** surfaces, not just one. Runtime-layer detection of container-escape attempts (T1611) falls to dedicated runtime-security tooling rather than generic Sigma or YARA; the detection file's Coverage Gaps section notes this explicitly and identifies the appropriate tool categories for T1611 coverage.
+For cloud-GPU multi-tenant environments running ComfyUI inside containers, any of these four variants succeeding elevates a single-tenant compromise to a host-level compromise, potentially affecting every tenant on the same host. The kit attempts all four variants in sequence, so defender mitigation requires hardening **all four** surfaces rather than one. Runtime-layer detection of container-escape attempts (T1611) falls to dedicated runtime-security tooling rather than generic Sigma or YARA, and the detection file's Coverage Gaps section notes this explicitly and identifies the appropriate tool categories for T1611 coverage.
 
 ### 4.5 Hysteria v2 Backdoor + 5-Vector Persistence
 
 > **Analyst note:** This subsection covers the kit's covert remote-access channel (Hysteria v2, a QUIC-over-UDP proxy/backdoor protocol that uses TLS SNI masquerade — making the traffic look like normal HTTPS to bing.com on standard network monitoring) and the 5-vector persistence chain that ensures the kit survives reboots and standard remediation attempts.
 
-**Confidence:** HIGH — Hysteria v2 installer captured, persistence chain enumerated in `ghost.sh`.
+I hold this HIGH, with the Hysteria v2 installer captured and the persistence chain enumerated in `ghost.sh`.
 
-**Hysteria v2 backdoor.** Hysteria v2 is a legitimate-upstream open-source QUIC-based proxy server (designed for high-latency network conditions); the GHOST kit deploys it as a backdoor. UDP 14433 + 14444 listener with bing.com SNI in the QUIC TLS handshake. HTTP admin panel on TCP 3301 (the panel's default credentials are admin/pickmezr per Censys documentation; this investigation confirmed the same). The credentials are stored in `/tmp/.hy2_password` plaintext; the URI is at `/tmp/.hy2_uri`.
+Hysteria v2 is a legitimate upstream open-source QUIC-based proxy server designed for high-latency network conditions, and the GHOST kit deploys it as a backdoor. It runs a UDP 14433 and 14444 listener with bing.com SNI in the QUIC TLS handshake, plus an HTTP admin panel on TCP 3301 (the panel's default credentials are admin/pickmezr per Censys documentation, which this investigation confirmed). The credentials are stored in `/tmp/.hy2_password` in plaintext, and the URI is at `/tmp/.hy2_uri`.
 
 Why bing.com SNI matters: a network monitoring tool that inspects TLS handshakes (or QUIC ClientHello) will see SNI = bing.com. Without explicit SNI-vs-destination correlation logic, that tool will not flag the mismatch between the SNI (Microsoft) and the destination IP (the operator's host on AEZA), and the traffic will pass as legitimate bing.com HTTPS — most commodity network monitoring stacks lack SNI-vs-destination correlation by default.
 
-**5-vector persistence chain.** The kit installs persistence at five independent locations to ensure that no single-vector cleanup attempt removes the malware:
+The kit installs a 5-vector persistence chain, five independent locations chosen so that no single-vector cleanup attempt removes the malware:
 
 1. **`/etc/ld.so.preload`** — primary LD_PRELOAD entry pointing to `libpam_cache.so`
 2. **systemd system unit** — `/etc/systemd/system/systemd-journal-flush.service` (masquerading legitimate systemd unit name)
@@ -362,25 +362,25 @@ Why bing.com SNI matters: a network monitoring tool that inspects TLS handshakes
 4. **System V init script** — `/etc/init.d/fontcache` (covers older distros or hosts with both systemd and sysv-init present)
 5. **Crontab + shell-RC injection** — `/var/spool/cron/.font_<random>` + injection into `~/.bashrc` / `~/.profile`
 
-**Scatter-copy redundancy.** Beyond the 5 persistence vectors, the rootkit binary itself is scatter-copied to multiple locations:
+Beyond the 5 persistence vectors, the rootkit binary itself is scatter-copied to multiple locations for redundancy:
 
 - `$HOME/.local/share/.cache/fontconfig/` (XDG-fontconfig camouflage)
 - `/etc/udev/hwdb.d/.backup-cache`
 - `/var/spool/cron/.font_<random>`
 
-**Immutable flag protection.** Each persistence file is chmod-protected with `chattr +i` (Linux immutable extended attribute). A defender attempting `rm /etc/ld.so.preload` will see `Operation not permitted` even as root — the file must first be chattr-cleared (`chattr -i`) before it can be deleted. Defenders unfamiliar with extended attributes will likely misread the EPERM error as a permissions issue rather than recognize it as an immutable-flag block (MODERATE-confidence indication based on common SOC analyst familiarity patterns — the `chattr` toolchain is a less-common subset of Linux administrative knowledge than `chmod` / `chown`).
+Each persistence file is protected with `chattr +i`, the Linux immutable extended attribute. A defender attempting `rm /etc/ld.so.preload` will see `Operation not permitted` even as root, because the file must first be chattr-cleared with `chattr -i` before it can be deleted. Defenders unfamiliar with extended attributes will likely misread that EPERM as a permissions issue rather than recognizing it as an immutable-flag block, which I hold at MODERATE confidence based on common SOC analyst familiarity patterns, since the `chattr` toolchain is a less-common subset of Linux administrative knowledge than `chmod` or `chown`.
 
-**inotify_guard watchdog daemon.** A separate daemon process named `inotify_guard` (one of the rootkit's hidden process names, present in the hide-list) uses Linux inotify to watch the persistence file paths. When any persistence file is deleted, the watchdog detects the inotify event and re-creates the persistence file from a scatter-copy source. The watchdog runs in a separate process from the rootkit itself; killing the rootkit process does not kill the watchdog.
+A separate daemon process named `inotify_guard`, one of the rootkit's hidden process names and present in the hide-list, uses Linux inotify to watch the persistence file paths. When any persistence file is deleted, the watchdog detects the inotify event and re-creates the file from a scatter-copy source. The watchdog runs in a separate process from the rootkit itself, so killing the rootkit process does not kill the watchdog.
 
-**Cross-process resurrection.** The combined effect: a defender who runs `chattr -i /etc/ld.so.preload && rm /etc/ld.so.preload && reboot` will find `/etc/ld.so.preload` re-created from a scatter copy via the inotify_guard watchdog within minutes of system startup. Eradication requires enumerating **all** persistence vectors, killing the watchdog, and removing scatter copies in a single coordinated action — or rebuilding the host from known-good media.
+The combined effect is cross-process resurrection. A defender who runs `chattr -i /etc/ld.so.preload && rm /etc/ld.so.preload && reboot` will find `/etc/ld.so.preload` re-created from a scatter copy via the inotify_guard watchdog within minutes of system startup. Eradication requires enumerating **all** persistence vectors, killing the watchdog, and removing scatter copies in a single coordinated action, or rebuilding the host from known-good media.
 
 ### 4.6 Multi-Cloud Target Enumeration
 
 > **Analyst note:** This subsection covers the kit's victim-discovery pipeline — the cloud-provider IP-range enumeration that feeds the ComfyUI port-8188 scanner. The operator does not scan the entire IPv4 space; instead, the kit narrows scanning to IP ranges belonging to specific cloud GPU providers (especially A100-tier providers) before probing for ComfyUI. This targeting model is what makes the campaign GPU-cloud-focused rather than internet-wide.
 
-**Confidence:** DEFINITE — `get_all_ranges.sh` captured with explicit ASN list.
+I hold this DEFINITE, with `get_all_ranges.sh` captured and carrying an explicit ASN list.
 
-**Target ASN inventory (16+ providers).** From `get_all_ranges.sh`:
+The target ASN inventory covers 16+ providers, taken from `get_all_ranges.sh`:
 
 - **A100-tier specialized GPU providers:** Lambda Labs, Datacrunch, Nebius
 - **Hyperscalers:** AWS, GCP, Oracle, Tencent
@@ -388,27 +388,27 @@ Why bing.com SNI matters: a network monitoring tool that inspects TLS handshakes
 - **Budget hosting:** Contabo, AEZA
 - **Sources:** `bgpview.io/asn/<asn>/prefixes` for 12 ASNs + Oracle's official `cloud-public-ip-ranges.json` + Google's `cloud.json`
 
-**Why A100-tier matters.** A100 GPUs running the lolMiner Octopus algorithm against Conflux (CFX) yield 8-12x the hashrate of consumer-grade GPUs. The CFX-Octopus / A100 combination is specifically high-margin for the operator. The Conflux blockchain is liquid on multiple exchanges (Binance, OKX, Gate.io, KuCoin, MEXC, Kraken) providing the off-ramp.
+A100-tier hardware matters because A100 GPUs running the lolMiner Octopus algorithm against Conflux (CFX) yield 8-12x the hashrate of consumer-grade GPUs. The CFX-Octopus and A100 combination is specifically high-margin for the operator, and the Conflux blockchain is liquid on multiple exchanges (Binance, OKX, Gate.io, KuCoin, MEXC, Kraken) which provides the off-ramp.
 
-**ComfyUI scanner pipeline.** `get_all_ranges.sh` → IP corpus → `scan.py` probes port 8188 → `check_comfyui.sh` verifies `/system_stats` and `/queue` endpoints → vulnerable hosts go to `q10.txt` / `q11.txt` → exploitation payload deployment. The slow-cadence variant (~3-4 hour rescan) and aggressive variant (~1 hour rescan) likely represent different operational phases.
+The ComfyUI scanner pipeline runs `get_all_ranges.sh` to build an IP corpus, then `scan.py` probes port 8188, then `check_comfyui.sh` verifies the `/system_stats` and `/queue` endpoints, then vulnerable hosts go to `q10.txt` and `q11.txt` for exploitation payload deployment. The slow-cadence variant (~3-4 hour rescan) and the aggressive variant (~1 hour rescan) likely represent different operational phases.
 
-**Detection at the network level.** Egress DNS to `bgpview.io` from a non-research host is anomalous. HTTP GETs to `cloud.google.com/.../cloud.json` or `docs.oracle.com/.../cloud-public-ip-ranges.json` from a server (rather than a developer workstation) similarly suggest target-enumeration activity. Sigma rule MAL_GHOST_BGPView_Cloud_Range_Enumeration in Section 10 covers this pattern.
+At the network level, egress DNS to `bgpview.io` from a non-research host is anomalous. HTTP GETs to `cloud.google.com/.../cloud.json` or `docs.oracle.com/.../cloud-public-ip-ranges.json` from a server rather than a developer workstation similarly suggest target-enumeration activity. Sigma rule MAL_GHOST_BGPView_Cloud_Range_Enumeration in Section 10 covers that pattern.
 
 ### 4.7 Dual-Telegram Supply-Chain Architecture
 
 > **Analyst note:** This subsection covers the kit's most distinctive analytical finding — the dual-Telegram bot architecture in which the kit author maintains an OWNER bot baked into every customer deployment (providing kit-author visibility into all downstream customer operations) and each operator separately configures a MIRROR bot for their own monitoring. The OWNER bot is the highest-value detection string in the entire campaign because a single match catches every GHOST customer worldwide regardless of operator-side variation.
 
-**Confidence:** DEFINITE — both bot tokens captured in `min1.sh`.
+I hold this DEFINITE, with both bot tokens captured in `min1.sh`.
 
-**OWNER bot 8415540095 (kit-author).** Baked into every customer GHOST kit deployment by Vova75Rus. The kit author receives Telegram notifications from every downstream operator's mining operations — providing real-time visibility into per-customer mining stats, wallet balances, victim host counts, and operational uptime. This is structurally a SaaS-vendor telemetry channel applied to a malware kit. The OWNER bot is **not** configurable by the operator; the operator-side `min1.sh` references the OWNER token as a hardcoded constant.
+The OWNER bot 8415540095 belongs to the kit author and is baked into every customer GHOST kit deployment by Vova75Rus. The kit author receives Telegram notifications from every downstream operator's mining operations, giving real-time visibility into per-customer mining stats, wallet balances, victim host counts, and operational uptime. That is structurally a SaaS-vendor telemetry channel applied to a malware kit. The OWNER bot is **not** configurable by the operator, and the operator-side `min1.sh` references the OWNER token as a hardcoded constant.
 
-**MIRROR bot 8315596543 (Operator-A).** Operator-A's own visibility channel, named ЗЕРКАЛО — ТЫ ("Mirror — You" in Russian) in operator commentary. The MIRROR bot is operator-set and operator-controlled — providing the operator with the same kind of monitoring view the kit author gets via the OWNER bot. Operator-A's MIRROR token was typed in bash history without clearing — an OPSEC failure that confirmed Operator-A's ownership of the MIRROR bot (Section 9 attribution evidence).
+The MIRROR bot 8315596543 is Operator-A's own visibility channel, named ЗЕРКАЛО — ТЫ ("Mirror — You" in Russian) in operator commentary. It is operator-set and operator-controlled, giving the operator the same kind of monitoring view the kit author gets via the OWNER bot. Operator-A's MIRROR token was typed in bash history without clearing, an OPSEC failure that confirmed Operator-A's ownership of the MIRROR bot (Section 9 attribution evidence).
 
-**Why this matters analytically.** A single-actor scenario would not maintain two parallel Telegram-bot tokens with different IDs in the same script. The OWNER + MIRROR architecture only makes operational sense in a kit-sales business model where the kit author needs supply-chain visibility independent from each customer's operational visibility. The architecture itself is the structural fingerprint of the commodity-kit business model — and the OWNER bot token is the channel that catches every downstream customer.
+Analytically this matters because a single-actor scenario would not maintain two parallel Telegram-bot tokens with different IDs in the same script. The OWNER and MIRROR architecture only makes operational sense in a kit-sales business model where the kit author needs supply-chain visibility independent from each customer's operational visibility. The architecture itself is the structural fingerprint of the commodity-kit business model, and the OWNER bot token is the channel that catches every downstream customer.
 
-**Why this matters operationally.** The OWNER bot is the kit-author-owned channel — disrupting it disrupts the kit-author's supply-chain monitoring across **all** customers globally. The MIRROR bot is operator-specific — disrupting it disrupts one customer only.
+Operationally it matters too. The OWNER bot is the kit-author-owned channel, so disrupting it disrupts the kit author's supply-chain monitoring across **all** customers globally. The MIRROR bot is operator-specific, so disrupting it disrupts one customer only.
 
-**Detection.** The single highest-value detection signature in this campaign: HTTPS request to `api.telegram.org/bot8415540095:*` from any host. Suricata rule MAL_GHOST_OWNER_Telegram_Bot_Indicator in Section 10. YARA byte-string match for `8415540095` in any binary or script catches deployments at-rest. Sigma rule for bash history matching the bot token regex catches operator-OPSEC failures across many cryptojacker families, not just GHOST.
+The single highest-value detection signature in this campaign is an HTTPS request to `api.telegram.org/bot8415540095:*` from any host, covered by Suricata rule MAL_GHOST_OWNER_Telegram_Bot_Indicator in Section 10. A YARA byte-string match for `8415540095` in any binary or script catches deployments at rest, and a Sigma rule for bash history matching the bot token regex catches operator-OPSEC failures across many cryptojacker families, not just GHOST.
 
 ---
 
@@ -429,9 +429,9 @@ Why bing.com SNI matters: a network monitoring tool that inspects TLS handshakes
 - First seen on VT (host of derivative `libpam_cache.so` SHA `eaaa10c8...`): 2026-04-08T17:42:05Z
 - VT detection: 0/0 (this specific hash never submitted to VirusTotal as of analysis date)
 
-**Byte-identical across customer hosts.** The same MD5 (296a800564111b0bad9fe63faf4e63ba) was pulled from open directories on both 77.110.96.200 and 77.110.125.145. The two binaries are bit-for-bit identical. This is the central evidence anchor for the kit-sales business model (Section 3 and Section 9).
+The binary is byte-identical across customer hosts. The same MD5 (296a800564111b0bad9fe63faf4e63ba) was pulled from open directories on both 77.110.96.200 and 77.110.125.145, and the two are bit-for-bit identical. This is the central evidence anchor for the kit-sales business model (Sections 3 and 9).
 
-**Source-code availability.** Alongside the binary at `http://77.110.96.200/libpam_cache.c` (and the sibling host equivalent), the kit author ships the 98-line C source. Direct C-source inspection refutes any PAM authentication functionality: zero PAM symbols, zero `pam_authenticate` / `pam_handle_t` / `pam_acct_mgmt` references, zero authentication-flow code. The "pam" in the filename is masquerade only.
+The source code ships alongside the binary. At `http://77.110.96.200/libpam_cache.c` and the sibling host equivalent, the kit author provides the 98-line C source. Direct inspection of that source refutes any PAM authentication functionality, with zero PAM symbols, zero `pam_authenticate` / `pam_handle_t` / `pam_acct_mgmt` references, and zero authentication-flow code. The "pam" in the filename is masquerade only.
 
 **Function exports of forensic interest:**
 
@@ -465,14 +465,14 @@ LD_PRELOAD
 
 The presence of `4BBj3gj4` (Operator-A XMR wallet first-8) and `cfx:aaj5xb` (Operator-A CFX wallet first-9) **as static strings in the binary** is the evidence that the kit author pre-compiles per-customer binaries with operator wallet prefixes baked in. Operator-B's copy of the binary substitutes Operator-B's wallet prefixes (`46a5osgf` for XMR; `cfx:aat5y` for CFX) in the same static-string locations.
 
-**Source-code review highlights.** The 98-line C source is concise. Key implementation details:
+The 98-line C source is concise, and a few implementation details stand out:
 
 - The hide-list arrays (`H[]` for strings, `P[]` for ports) are initialized at compile time, not loaded from a config file. This is what makes per-customer pre-compilation necessary.
 - The `readdir`/`readdir64` hooks call the real libc version, then iterate the returned entries and filter against `H[]` by `strstr` substring match. Filtered entries are skipped; the hook returns the next non-matching entry to the caller.
 - The `fopen`/`fopen64` hooks check if the requested filename is `/proc/net/tcp` (or its TCP6/UDP/UDP6 siblings). For those paths, the hook opens the real file, reads its contents into a buffer, filters out lines matching any `P[]` port entry (using `:%04X` format string to format candidate hex ports), then returns a `fmemopen`-backed FILE* containing the filtered contents to the caller.
 - The library constructor immediately calls `unsetenv("LD_PRELOAD")` so that any child process spawned by the current process does not inherit the LD_PRELOAD environment. This means the rootkit auto-extends to direct children via `/etc/ld.so.preload` (system-wide) but does not propagate through environment inheritance. **Forensic implication:** memory-scanning tools that inspect process environments will find `LD_PRELOAD` absent from running processes even while the rootkit is actively loaded — the constructor strips the variable before any analyst-visible process state is recorded. A defender who sees no `LD_PRELOAD` in a process environment dump should not conclude the rootkit is absent; `/etc/ld.so.preload` must be audited directly.
 
-**No anti-analysis tradecraft.** The binary has no anti-debugger calls, no anti-VM checks, no string obfuscation, no packed sections. Static analysis is straightforward — the author optimized for compactness and reliability, not for anti-analysis evasion. This is consistent with the userland LD_PRELOAD model (the rootkit relies on its hooks running before defender tooling rather than on resisting analysis once captured).
+There is no anti-analysis tradecraft at all. The binary has no anti-debugger calls, no anti-VM checks, no string obfuscation and no packed sections, so static analysis is straightforward. The author optimized for compactness and reliability rather than for evasion once captured, which is consistent with the userland LD_PRELOAD model, where the rootkit relies on its hooks running before defender tooling rather than on resisting analysis.
 
 ### 5.2 ghost.sh Function-by-Function Walkthrough (Selected Functions)
 
@@ -485,7 +485,7 @@ The presence of `4BBj3gj4` (Operator-A XMR wallet first-8) and `cfx:aaj5xb` (Ope
 - Function count: 43 functions
 - Per-customer config delta: 17 bytes (wallet addresses, pool URLs, PIP_PAYLOAD_REPO GitHub URL)
 
-**First-line self-identification.** Line 1 reads `# GHOST v5.1 (Anti-Hisana + Resurrection + Spread + Escape)`. This is the kit-author self-description; the four parenthesized terms map to the kit's four marquee capability categories.
+The first line self-identifies. Line 1 reads `# GHOST v5.1 (Anti-Hisana + Resurrection + Spread + Escape)`, which is the kit author's own description, and the four parenthesized terms map to the kit's four main capability categories.
 
 **Selected function inventory (43 total functions in the installer):**
 
@@ -509,7 +509,7 @@ The presence of `4BBj3gj4` (Operator-A XMR wallet first-8) and `cfx:aaj5xb` (Ope
 
 **Memfd_create fileless execution: `_memfd_launch`** — uses the `memfd_create` syscall (T1620 — Reflective Code Loading) to load and execute the miner binary from an anonymous in-memory file descriptor without writing to disk. SysV shm fallback for older systems where `memfd_create` is unavailable.
 
-**Upstream OSS attribution.** Files written by the kit's UnamWebPanel component contain the comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */`. This is the upstream-author attribution from the UnamWebPanel codebase (UnamSanctam is the GitHub identity of the upstream OSS author; the comment is in the original UnamWebPanel source). The presence of this comment in deployed PHP files anchors the UnamSanctam → Vova75Rus supply-chain relationship — Vova75Rus bundles UnamWebPanel into the GHOST kit without modifying the upstream attribution.
+The upstream OSS attribution survives intact. Files written by the kit's UnamWebPanel component carry the comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */`, which comes from the UnamWebPanel codebase (UnamSanctam is the GitHub identity of the upstream OSS author, and the comment is in the original source). Its presence in deployed PHP files anchors the UnamSanctam to Vova75Rus supply-chain relationship, because Vova75Rus bundles UnamWebPanel without modifying the upstream attribution.
 
 ---
 
@@ -519,7 +519,7 @@ The presence of `4BBj3gj4` (Operator-A XMR wallet first-8) and `cfx:aaj5xb` (Ope
 
 ### 6.1 Operator Bash History Forensics (Operator-A, 77.110.96.200)
 
-**File metadata.** 1,472 lines / ~39 KB. The bash history was readable in the open directory — an OPSEC failure by the operator who had not cleared or scrubbed the history. The history covers operator hands-on activity on the kit's deployment server.
+The file runs to 1,472 lines and roughly 39 KB. The bash history was readable in the open directory, an OPSEC failure by an operator who had not cleared or scrubbed it. The history covers hands-on operator activity on the kit's deployment server.
 
 **Volume signals:**
 
@@ -537,17 +537,17 @@ The presence of `4BBj3gj4` (Operator-A XMR wallet first-8) and `cfx:aaj5xb` (Ope
 
 The bash history shows the operator's typical operational sequence — a step-by-step ComfyUI exploitation workflow:
 
-**Step 1 — Cloud IP-range refresh.** Operator runs `./get_all_ranges.sh` to refresh the cloud-provider IP corpus. The script queries bgpview.io for 12 cloud-provider ASNs plus official Oracle and Google IP-range JSONs.
+First the operator refreshes the cloud IP ranges. They run `./get_all_ranges.sh` to refresh the cloud-provider IP corpus, and the script queries bgpview.io for 12 cloud-provider ASNs plus the official Oracle and Google IP-range JSONs.
 
-**Step 2 — ComfyUI port-8188 scan.** Operator runs the Python scanner (`./scan.py` or `./py.py`) against the refreshed IP corpus. The scanner outputs candidate ComfyUI hosts that respond on port 8188.
+Second they scan for ComfyUI on port 8188. They run the Python scanner (`./scan.py` or `./py.py`) against the refreshed IP corpus, and it outputs candidate ComfyUI hosts that respond on port 8188.
 
-**Step 3 — Target verification.** Operator runs `./check_comfyui.sh <target>` for each candidate, performing HTTP GETs against `<target>:8188/system_stats` and `<target>:8188/queue` to confirm ComfyUI presence and queue accessibility. Output lines include Russian-language commentary (Найдено = "found", ИТОГО = "total") for the operator's own status tracking.
+Third they verify the targets. They run `./check_comfyui.sh <target>` for each candidate, performing HTTP GETs against `<target>:8188/system_stats` and `<target>:8188/queue` to confirm ComfyUI presence and queue accessibility. Output lines carry Russian-language commentary (Найдено for "found", ИТОГО for "total") for the operator's own status tracking.
 
-**Step 4 — Payload deployment.** For verified targets, the operator runs the GHOST kit installer remotely. The installer fetches `libpam_cache.so` from the kit-author's GitHub-hosted `HIDE_SO_URL` (or from the operator's host as a fallback), installs the 5-vector persistence chain, sets up Hysteria v2, configures the dual-Telegram architecture, and starts mining.
+Fourth they deploy the payload. For verified targets the operator runs the GHOST kit installer remotely, and it fetches `libpam_cache.so` from the kit author's GitHub-hosted `HIDE_SO_URL` (or from the operator's host as a fallback), installs the 5-vector persistence chain, sets up Hysteria v2, configures the dual-Telegram architecture, and starts mining.
 
-**Step 5 — Monitoring.** The OWNER bot (8415540095) reports back to the kit author; the MIRROR bot (8315596543) reports back to the operator. Operator-A watches both channels via Telegram client.
+Fifth they monitor. The OWNER bot (8415540095) reports back to the kit author and the MIRROR bot (8315596543) reports back to the operator, and Operator-A watches both channels via a Telegram client.
 
-**Step 6 — Iteration.** Operator-A actively modifies `min1.sh` and other operator-facing scripts to adjust mining parameters, Telegram message formats, or pool routing. The 2026-05-24T17:10:29Z `min1.sh` modification is the most recent observed iteration.
+Sixth they iterate. Operator-A actively modifies `min1.sh` and other operator-facing scripts to adjust mining parameters, Telegram message formats, or pool routing, and the 2026-05-24T17:10:29Z `min1.sh` modification is the most recent iteration observed.
 
 ### 6.3 Live-Iteration Evidence: min1.sh Modification 2026-05-24
 
@@ -596,7 +596,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-**Full IOC feed:** [`/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json) — every indicator for this case, with type / confidence / recommended action.
+The full IOC feed is at [`/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
 ---
 
@@ -634,7 +634,7 @@ This 4-tier model is the **ruling result** of the Analysis of Competing Hypothes
 
 ### 9.2 Vova75Rus — HIGH Confidence (88%), NAMED Actor
 
-**Identity attribution.** GitHub UID 73169104, handle `Vova75Rus`. Account created 2020-10-20; suspended by GitHub Trust & Safety 2026-05-25.
+The identity anchors on GitHub UID 73169104, handle `Vova75Rus`. The account was created 2020-10-20 and suspended by GitHub Trust & Safety on 2026-05-25.
 
 **Confidence statement.**
 - **Confidence:** HIGH (88%)
@@ -704,9 +704,9 @@ The historical wallet cfx:aasktcha7r... drains to the same consolidator as the c
 
 UnamSanctam is included in this section for **supply-chain context only**. UnamSanctam is **not** a Case 9 threat actor.
 
-**Role characterization.** Active GitHub developer since 2014; 860 followers; 6 public repositories with 2,584 cumulative stars (UnamWebPanel 198 + SilentCryptoMiner 1020 + SilentXMRMiner 643 + SilentETHMiner 254 + UnamBinder 279 + UnamDownloader 190). Supplies upstream OSS tooling that downstream malware kits (including GHOST) bundle. SilentCryptoMiner was disabled by GitHub for ToS violations; remaining repositories active.
+UnamSanctam has been an active GitHub developer since 2014, with 860 followers and 6 public repositories carrying 2,584 cumulative stars (UnamWebPanel 198, SilentCryptoMiner 1020, SilentXMRMiner 643, SilentETHMiner 254, UnamBinder 279, UnamDownloader 190). They supply upstream OSS tooling that downstream malware kits, including GHOST, bundle. SilentCryptoMiner was disabled by GitHub for ToS violations, and the remaining repositories are active.
 
-**Scope of UnamSanctam's involvement in GHOST.** Passive — the upstream attribution comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */` appears in the GHOST kit's deployed PHP files because Vova75Rus bundles UnamWebPanel without modifying the attribution. No evidence of direct UnamSanctam involvement in the GHOST kit's authorship, distribution, or operation.
+UnamSanctam's involvement in GHOST is passive. The upstream attribution comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */` appears in the GHOST kit's deployed PHP files because Vova75Rus bundles UnamWebPanel without modifying the attribution. There is no evidence of direct UnamSanctam involvement in the GHOST kit's authorship, distribution, or operation.
 
 **Disambiguation from Kaspersky SilentCryptoMiner coverage.** Kaspersky Securelist has documented 2,000+ Russian victims of SilentCryptoMiner campaigns (YouTube delivery and SIEM agent delivery). Those campaigns are attributable to **OPERATORS** using SilentCryptoMiner, not to UnamSanctam as an operator. UnamSanctam is the upstream OSS author; the operators are separate identities. The same architectural distinction applies to GHOST: Vova75Rus is the kit author; Operator-A and Operator-B are separate operator identities.
 
@@ -716,7 +716,7 @@ UnamSanctam is included in this section for **supply-chain context only**. UnamS
 
 Hisana exists in the public threat-intelligence record only via GHOST kit artifact references — `_anti_hisana` function name, `kill_list.patterns` regex entry, port 10808 C2 port. Zero independent public threat intelligence on Hisana's developer identity, infrastructure, or victim scope. This is a documented intelligence gap.
 
-**Implication for GHOST attribution.** Hisana's existence as a rival cryptojacker that GHOST specifically targets for displacement is consistent with the commodity-kit business model — kit authors compete on the supply side for operator customers, and operators benefit from kit-side competitor displacement to ensure exclusive GPU use. Hisana is therefore **ecosystem context** that strengthens the kit-sales business model framing for GHOST, even though Hisana's identity remains unattributed.
+For GHOST attribution, Hisana's existence as a rival cryptojacker that GHOST specifically targets for displacement is consistent with the commodity-kit business model, because kit authors compete on the supply side for operator customers and operators benefit from kit-side competitor displacement to keep exclusive GPU use. Hisana is therefore **ecosystem context** that strengthens the kit-sales framing for GHOST, even though Hisana's own identity remains unattributed.
 
 ### 9.7 Negative Finding: AI-Generated Code Signature ABSENT from GHOST Kit
 
@@ -742,7 +742,7 @@ The detection file contains 25 production-ready detection rules covering YARA fi
 | Sigma | 12 | T1574.006, T1222.002, T1543.002, T1053.003, T1554, T1480.002, T1620, T1495, T1070.002, T1057, T1595.002, T1102.002 | LOW-MEDIUM |
 | Suricata | 6 | T1496.001, T1572, T1071.001, T1071.004, T1102.002, T1595.002 | LOW |
 
-**Priority distribution:** 4 HIGH-priority rules, 6 MEDIUM-priority, 12 LOW-priority across all rule types.
+By priority that is 4 HIGH rules, 6 MEDIUM and 12 LOW across all rule types.
 
 ### Highest-Priority Detection: OWNER Telegram Bot Indicator
 
@@ -758,7 +758,7 @@ The single most valuable detection rule across the entire GHOST family is `MAL_G
 
 Defenders should deploy the rules in three layers:
 
-**Layer 1 — File-based at-rest detection (YARA).** Scan endpoint filesystems for the rootkit binary, kit scripts, and Python framework. Highest-confidence catch is the byte-identical `libpam_cache.so` (hash match) and the kit scripts (string + structural match).
+The first layer is file-based at-rest detection with YARA. Scan endpoint filesystems for the rootkit binary, the kit scripts, and the Python framework. The highest-confidence catch is the byte-identical `libpam_cache.so` on hash match, and the kit scripts on string and structural match.
 
 **Layer 2 — Log-based behavioral detection (Sigma).** Audit auditd file events on `/etc/ld.so.preload`, `/lib/security/`, persistence file paths, `chattr +i` syscalls, container-escape preconditions (cgroup release_agent writes, Docker socket access from non-Docker-group processes). Sigma rules also cover ComfyUI custom-node directory writes containing the `PerformanceMonitor` class signature.
 
@@ -873,9 +873,9 @@ Six initial readings were disproven by direct evidence during the investigation 
 
 ### 13.1 T1556.003 mis-mapping → T1014 + T1574.006 + T1564.001 + T1027 (Phase 7 → Phase 15)
 
-**Initial framing (Phase 7 session-start):** `libpam_cache.so` was categorized as a PAM authentication backdoor (T1556.003 — Modify Authentication Process: PAM) based on the deceptive filename matching the standard Linux PAM module naming convention (`libpam_*` under `/lib/security/`).
+I initially framed this in Phase 7 as a PAM authentication backdoor, categorizing `libpam_cache.so` as T1556.003 (Modify Authentication Process: PAM) on the basis of the deceptive filename matching the standard Linux PAM module naming convention (`libpam_*` under `/lib/security/`).
 
-**Refutation (Phase 15):** Direct source-code inspection of the 98-line C source confirmed the file contains:
+Phase 15 refuted that. Direct inspection of the 98-line C source confirmed the file contains:
 - Zero PAM symbols
 - Zero `pam_authenticate` / `pam_handle_t` / `pam_acct_mgmt` references
 - Zero authentication-flow code
@@ -893,7 +893,7 @@ This retraction is reflected in Section 7 ATT&CK mapping and in the detection-fi
 
 ### 13.2 Vova75Rus = Operator-A conflation REFUTED (Phase 15)
 
-**Initial framing:** Early investigation advanced the hypothesis that Vova75Rus and Operator-A were the same identity (single actor wearing both the kit-author and operator hats).
+I initially advanced the hypothesis that Vova75Rus and Operator-A were the same identity, a single actor wearing both the kit-author and the operator hats.
 
 **Refutation (Phase 15 wallet-match test):**
 - Vova75Rus's own mining setup: XTM/Tari via Kryptex worker `1238rkM7gGg3sl` on `xtm-rx-eu.kryptex.network:8038`.
@@ -904,29 +904,29 @@ A single actor would not maintain two parallel mining setups with distinct telem
 
 ### 13.3 q10.txt 4,573-IP scope correction (Phase 16)
 
-**Initial framing:** The `q10.txt` file containing 4,573 IP addresses was initially read as a victim list — implying a 4,573-host compromise scope.
+I initially read the `q10.txt` file containing 4,573 IP addresses as a victim list, which implied a 4,573-host compromise scope.
 
-**Refutation (Phase 16):** Direct review of `q10.txt` contents and cross-reference against the ComfyUI scanner pipeline confirmed `q10.txt` is the **operator's loose target candidate list** — IPs that responded on port 8188 during scanning, not IPs that were successfully compromised. The narrower confirmed-vulnerable population is 78 hosts (21 Tier-A confirmed-vulnerable + 57 Tier-B exposed-but-unconfirmed).
+Phase 16 refuted that. Direct review of the `q10.txt` contents, cross-referenced against the ComfyUI scanner pipeline, confirmed it is the **operator's loose target candidate list**, IPs that responded on port 8188 during scanning rather than IPs that were successfully compromised. The narrower confirmed-vulnerable population is 78 hosts, 21 Tier-A confirmed-vulnerable plus 57 Tier-B exposed-but-unconfirmed.
 
 The 4,573-IP corpus is not published as an IOC list because most of those hosts are not compromised. Cloud-provider disclosure cascade routing is limited to the 78 confirmed-vulnerable hosts.
 
 ### 13.4 VT "dropped_files" SHA-256s 44a3bab2... and ac941ead... mis-attribution
 
-**Initial framing:** VirusTotal's `dropped_files` relationship for `ghost.sh` and `min1.sh` surfaced SHA-256s `44a3bab2c338e3bca24c00f7c3da1301eb4a5a889f1c667cc781e1bdacd3b9e7` and `ac941ead01d5451a7a9fd4be4ba9b60b2d3e4138670ae868e655b3b393253227`. These were initially read as operator miner binaries.
+I initially read two hashes as operator miner binaries. VirusTotal's `dropped_files` relationship for `ghost.sh` and `min1.sh` surfaced SHA-256s `44a3bab2c338e3bca24c00f7c3da1301eb4a5a889f1c667cc781e1bdacd3b9e7` and `ac941ead01d5451a7a9fd4be4ba9b60b2d3e4138670ae868e655b3b393253227`.
 
-**Refutation:** Direct VT lookup confirmed these are `/var/log/auth.log.1.gz` and `/var/log/kern.log.1.gz` — sandbox-host log archives the kit scripts touched during log-clearing tradecraft, NOT operator miner deliverables. Excluded from the IOC feed and detection rules.
+A direct VT lookup refuted that. They are `/var/log/auth.log.1.gz` and `/var/log/kern.log.1.gz`, sandbox-host log archives the kit scripts touched during log-clearing tradecraft, not operator miner deliverables. Both are excluded from the IOC feed and the detection rules.
 
 ### 13.5 Operator-B "Asia-based" hypothesis EXPLICITLY RETRACTED
 
-**Initial framing:** Operator-B was tentatively framed as Asia-based on the basis of the `cfx-asia1.nanopool.org` pool config in Operator-B's deployment.
+I tentatively framed Operator-B as Asia-based on the basis of the `cfx-asia1.nanopool.org` pool config in their deployment.
 
-**Refutation:** Pool routing region is an **operational convenience** choice (latency optimization), not a geographic indicator. The 183 unique Cyrillic words in Operator-B's `New_scanner.py` upgrade Operator-B's attribution to DEFINITE Russian-speaking. The Asia-based hypothesis is withdrawn.
+That was wrong. Pool routing region is an **operational convenience** choice about latency, not a geographic indicator. The 183 unique Cyrillic words in Operator-B's `New_scanner.py` upgrade their attribution to DEFINITE Russian-speaking, and I withdraw the Asia-based hypothesis.
 
 ### 13.6 "First public documentation" framing → "Technical deep-dive extension" framing
 
-**Initial framing:** Early draft material referenced this report as the "first public documentation" of the GHOST cryptojacker kit.
+Early draft material referenced this as the "first public documentation" of the GHOST cryptojacker kit.
 
-**Refutation:** Censys ARC (Mark Ellzey) published primary research on GHOST on 2026-04-07. This investigation is a **technical deep-dive extension** of Censys's primary disclosure, not a first-publication. The seven net-new contributions over Censys are documented in Section 1 (sibling deployment, byte-identical binary, OWNER bot, full hide-list inventory, structured detection rules, VT detection landscape snapshot, Conflux drain chain). The "first public documentation" framing has been retracted throughout this report; "extends Censys coverage" is the correct framing.
+That was wrong. Censys ARC (Mark Ellzey) published primary research on GHOST on 2026-04-07, so this is a **technical deep-dive extension** of the Censys primary disclosure rather than a first publication. The seven net-new contributions over Censys are documented in Section 1 (sibling deployment, byte-identical binary, OWNER bot, full hide-list inventory, structured detection rules, VT detection landscape snapshot, Conflux drain chain). I have retracted the "first public documentation" framing throughout, and "extends Censys coverage" is the correct framing.
 
 ### Why These Retractions Are Documented
 

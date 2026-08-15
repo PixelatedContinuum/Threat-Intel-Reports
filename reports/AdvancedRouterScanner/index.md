@@ -365,7 +365,7 @@ Timeline Analysis
   </tbody>
 </table>
 
-**Interpretation:** Concentration across specific regional ISPs indicates targeted infrastructure exploitation rather than random scanning. Normalization gaps in enrichment data should be remediated for complete threat landscape visibility.
+Interpreting that, concentration across specific regional ISPs indicates targeted infrastructure exploitation rather than random scanning. Normalization gaps in the enrichment data should be remediated for complete threat landscape visibility.
 
 ---
 
@@ -376,8 +376,8 @@ PoC host now presents TLS cert Issuer CN `yuyu`, seen on only three hosts:
 - 39[.]97[.]249[.]120 (RDP open)
 - 219[.]151[.]188[.]41 (RDP open)
 
-**Why it matters:** Shared cert + RDP exposure suggests linked infrastructure or victims.  
-**Defensive actions:** Monitor for CN `yuyu`, RDP traffic, and block if observed.
+It matters because a shared certificate plus RDP exposure suggests linked infrastructure or victims.  
+Defensively, monitor for CN `yuyu` and for RDP traffic, and block if observed.
 
 ---
 
@@ -407,7 +407,7 @@ The second exposed directory (176[.]65[.]137[.]13:80) revealed a more operationa
 
 **Assessment**
 This host functioned as an operator hub, staging tools, scanning, and launching exploitation at scale.  
-**Note:** The exploit file was not found in VirusTotal and when uploaded, came back with no detections and was clean.
+The exploit file was not found in VirusTotal, and when uploaded it came back clean with no detections.
 
 ---
 

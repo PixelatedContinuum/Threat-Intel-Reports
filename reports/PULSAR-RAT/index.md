@@ -106,7 +106,7 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 - **Isolate Confirmed Systems:** Network-isolate without powering down (preserve volatile memory)
 - **Evidence Preservation:** Capture memory and disk images before remediation
 
-**Capability detail:** Section 6 · Detection coverage: sidebar · IOC feed: sidebar · Response guidance: Section 7
+Capability detail sits in Section 6, detection coverage and the IOC feed are in the sidebar, and response guidance is in Section 7.
 
 ### Primary Threat Vector
 - **Distribution Point:** Open directory at hxxp://185[.]208[.]159[.]182/d/server[.]exe
@@ -125,7 +125,7 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 
 **Infrastructure context:** `185[.]208[.]159[.]182` (AS42624, associated with "NOAVARAN SHABAKEH SABZ MEHREGAN Ltd." and "SETEL CONECTA S.L.") has been reported as an active C2 node for RedLine Stealer on port `1912`, a Quasar RAT distribution point, and hosts additional malware families documented in the follow-up investigation — [Dual-RAT Analysis]({{ "/reports/dual-rat-analysis/" | relative_url }}). Threat intelligence feeds flag the broader `185.208.15x.xxx` range for malicious activity across multiple platforms (HIGH confidence — OSINT correlation).
 
-**Capability cross-references:** full technical detail in Section 6 (capabilities), Section 6/Evasion subsection (anti-analysis), Section 7 (incident response). Risk scores below are reproduced from the BLUF for convenience; the scoring methodology is in Section 3.
+For cross-references, the full technical detail is in Section 6 for capabilities, in Section 6's Evasion subsection for anti-analysis, and in Section 7 for incident response. The risk scores below are reproduced from the BLUF for convenience, and the scoring methodology is in Section 3.
 
 ### Risk Rating: CRITICAL
 
@@ -448,7 +448,7 @@ The analyzed sample was obtained from an open web directory:
 
 ### File Naming Techniques to Evade Suspicion
 
-**CONFIRMED filename from distribution:** `server.exe`
+The confirmed filename from distribution is `server.exe`.
 
 **Common RAT distribution filenames:**
 - Generic system names: `server.exe`, `client.exe`, `update.exe`, `setup.exe`
@@ -458,13 +458,13 @@ The analyzed sample was obtained from an open web directory:
 
 ### Defense Strategies by Attack Vector
 
-**Email Security:** Email filtering with attachment scanning, DMARC/SPF/DKIM enforcement, and attachment sandboxing reduce delivery success rates for phishing-based campaigns.
+On email security, filtering with attachment scanning, DMARC, SPF and DKIM enforcement, and attachment sandboxing all reduce delivery success rates for phishing-based campaigns.
 
-**Web Security:** DNS filtering to block known-malicious domains; egress controls restricting access to open directory listings; browser isolation for untrusted content.
+On web security, DNS filtering blocks known-malicious domains, egress controls restrict access to open directory listings, and browser isolation contains untrusted content.
 
-**Endpoint Protection:** Application control (whitelisting) blocks unauthorized .NET executables. Behavioral EDR catches evasive malware that signature-based AV misses.
+On endpoint protection, application control through whitelisting blocks unauthorized .NET executables, and behavioral EDR catches evasive malware that signature-based AV misses.
 
-**Network Controls:** Egress filtering on known-malicious IP ranges; monitoring for outbound connections to paste sites from unexpected hosts; IDS/IPS signatures for known Quasar-family traffic patterns.
+On network controls, egress filtering covers known-malicious IP ranges, monitoring catches outbound connections to paste sites from unexpected hosts, and IDS/IPS signatures cover known Quasar-family traffic patterns.
 
 ### User Awareness
 
@@ -1028,7 +1028,7 @@ This mapping supports security control gap analysis:
 > **Remediation Impact:** High — May require complete system rebuild for assured removal
 > **Business Impact:** Survives standard remediation in some scenarios, enabling long-term access
 
-**CONFIDENCE LEVEL:** HIGH (technique present in code) — VERIFICATION REQUIRED FOR SPECIFIC SYSTEMS
+I hold this HIGH, because the technique is present in the code, though verification is still required for specific systems.
 
 ### Critical Finding: Recovery Partition Persistence - Understanding the Risks
 
@@ -1144,7 +1144,7 @@ Write-Host "Consider imaging the partition first for forensic preservation" -For
 - Well-understood and reliable
 - Detected by most EDR solutions
 
-**Detection:** Standard registry monitoring will catch this. Any competent EDR/endpoint security solution monitors RunOnce modifications.
+Standard registry monitoring will catch this, and any competent EDR or endpoint security solution monitors RunOnce modifications.
 
 ---
 
@@ -1220,7 +1220,7 @@ Detection:    Requires specialized monitoring (see below)
 - Legitimate driver (usbmmsvc64.exe) may be digitally signed
 - Activity appears to originate from victim's computer
 
-**Detection Methods:** See Appendix C for detailed HVNC detection procedures and industry research
+Appendix C carries the detailed HVNC detection procedures and industry research.
 
 
 
@@ -1409,7 +1409,7 @@ Pulsar includes UAC (User Account Control) bypass capabilities, allowing it to:
 - COM interface abuse
 - Windows registry manipulation
 
-**Detection:** Modern EDR monitors UAC bypass attempts through behavioral analysis.
+Modern EDR monitors UAC bypass attempts through behavioral analysis.
 
 ---
 
@@ -1426,7 +1426,7 @@ The malware uses Windows security token manipulation:
 - Can access resources using service account identities
 - Can escalate privileges beyond initial infection context
 
-**Detection:** Security Event 4672 (Special privileges assigned to new logon) can indicate token manipulation when correlated with other suspicious activity.
+Security Event 4672, special privileges assigned to a new logon, can indicate token manipulation when correlated with other suspicious activity.
 
 ---
 
@@ -1669,7 +1669,7 @@ The malware uses:
 4. **Force re-authentication** - Invalidate all active sessions for affected accounts
 5. **Enable MFA** - If not already enabled, require multi-factor authentication
 
-**Important:** Change passwords from a DIFFERENT, CLEAN system. Do not change passwords from the compromised system (malware may capture new passwords).
+Change passwords from a DIFFERENT, CLEAN system. Do not change them from the compromised system, because the malware may capture the new ones.
 
 **Prioritization:**
 1. Domain administrator accounts (highest impact)
@@ -1768,7 +1768,7 @@ Confirmed data exfiltration may trigger notification obligations under applicabl
 3. Any uncertainty remains about the scope of compromise
 4. The organization has resources and processes for rebuild
 
-**Rebuild Process:** See Appendix A.1 for detailed step-by-step procedures
+Appendix A.1 carries the detailed step-by-step rebuild procedures.
 
 **Business Impact:**
 - **Downtime**: Several hours per system
@@ -1898,7 +1898,7 @@ Use this matrix to guide the rebuild vs. cleanup decision:
 - **5-7 points either**: Rebuild recommended unless strong business justification for cleanup
 - **8+ points for cleanup**: Cleanup may be considered with intensive monitoring
 
-**In practice:** Most enterprise security teams default to rebuild for any RAT compromise due to superior assurance and lower long-term risk.
+In practice most enterprise security teams default to rebuild for any RAT compromise, because it gives superior assurance and lower long-term risk.
 
 --- 
 
@@ -1951,7 +1951,7 @@ Application control allows only approved executables to run, blocking unauthoriz
 - Firewall rules restricting inter-segment traffic
 - Monitor and alert on segment-crossing connections
 
-**Business benefit:** Even if one workstation is compromised, database servers in different segment remain protected.
+The business benefit is that even if one workstation is compromised, database servers in a different segment stay protected.
 
 ---
 
@@ -1963,18 +1963,18 @@ DNS filtering blocks known-malicious domains and reveals suspicious query patter
 
 **Egress Filtering:**
 
-**Traditional approach:** Allow all outbound traffic (only filter inbound)
+The traditional approach allows all outbound traffic and filters only inbound.
 
 **Better approach:**
 - Whitelist approved outbound destinations
 - Monitor and alert on outbound connections to unknown destinations
 - Block by default, allow by exception
 
-**Business impact:** Moderate implementation effort, but prevents data exfiltration to attacker infrastructure.
+The business impact is moderate implementation effort, and in exchange it prevents data exfiltration to attacker infrastructure.
 
 ---
 
-**Pastebin Blocking Analysis:** See Appendix B for detailed business impact analysis and implementation strategies
+Appendix B carries the detailed business impact analysis and implementation strategies for Pastebin blocking.
 
 --- 
 
@@ -2013,7 +2013,7 @@ Phishing simulation programs measure click and reporting rates over time and dir
 
 ### Q1: "How do I know if my system has WinRE persistence?"
 
-**Short answer:** Difficult to confirm without specialized tools and expertise.
+The short answer is that it is difficult to confirm without specialized tools and expertise.
 
 **Safe verification steps:**
 
@@ -2038,13 +2038,13 @@ Phishing simulation programs measure click and reporting rates over time and dir
 
 Manual inspection of recovery partitions without forensic training risks rendering the system unbootable or destroying evidence.
 
-**Practical guidance:** Given the verification difficulty, the default recommendation when WinRE-capable malware was present is system rebuild — unless forensic analysis can definitively rule out recovery partition compromise.
+Practically, given how hard verification is, the default recommendation when WinRE-capable malware was present is a system rebuild, unless forensic analysis can definitively rule out recovery partition compromise.
 
 ---
 
 ### Q2: "Can the recovery partition be cleaned instead of rebuilding?"
 
-**Short answer:** Risky — malware may have additional persistence mechanisms not yet found.
+The short answer is that it is risky, because the malware may have additional persistence mechanisms not yet found.
 
 **The core problem:**
 - Malware often implements multiple persistence mechanisms
@@ -2060,13 +2060,13 @@ Industry incident response guidance consistently identifies partial remediation 
 - Maintain intensive extended monitoring
 - Prepare to rebuild at the first sign of re-infection
 
-**Default recommendation:** System rebuild eliminates uncertainty and provides the highest assurance of clean state.
+The default recommendation is a system rebuild, which eliminates uncertainty and gives the highest assurance of a clean state.
 
 ---
 
 ### Q3: "Is blocking Pastebin really necessary?"
 
-**Short answer:** Not always — depends on the environment, risk tolerance, and monitoring capabilities.
+The short answer is not always, because it depends on the environment, risk tolerance, and monitoring capabilities.
 
 **Reality check:**
 - Pastebin blocking is ONE control, not a silver bullet
@@ -2092,7 +2092,7 @@ Industry incident response guidance consistently identifies partial remediation 
 
 ### Q4: "What if rebuilding every potentially affected system is not feasible?"
 
-**Short answer:** Prioritize based on risk, with the understanding that systems not rebuilt carry residual compromise risk.
+The short answer is to prioritize based on risk, with the understanding that systems not rebuilt carry residual compromise risk.
 
 **Risk-based prioritization framework:**
 
@@ -2127,13 +2127,13 @@ Industry incident response guidance consistently identifies partial remediation 
 - Image-based deployment (network imaging) reduces rebuild time significantly
 - Phased approach: critical systems first, lower-risk systems over time
 
-**Risk tradeoff:** Rebuild removes a known, bounded risk. Accepting a retained compromise preserves an unknown, open-ended risk that may expand over time.
+The risk tradeoff is that a rebuild removes a known, bounded risk, while accepting a retained compromise preserves an unknown, open-ended risk that may expand over time.
 
 --- 
 
 ### Q5: "Our antivirus didn't detect this - is our AV worthless?"
 
-**Short answer:** No, but AV alone is insufficient for modern threats.
+The short answer is no, though AV alone is insufficient against modern threats.
 
 **Why traditional AV missed this:**
 
@@ -2164,7 +2164,7 @@ Industry incident response guidance consistently identifies partial remediation 
 - **User awareness:** Prevents execution in first place
 - **Application control:** Prevents unauthorized execution regardless of AV detection
 
-**Modern security approach:** "Defense in Depth"
+The modern security approach is defense in depth.
 - AV is ONE layer, not the ONLY layer
 - Multiple controls means one failure doesn't equal breach
 - Assume one control will fail, ensure others can compensate
@@ -2173,7 +2173,7 @@ Industry incident response guidance consistently identifies partial remediation 
 
 ### Q6: "How long might attackers have had access before detection?"
 
-**Short answer:** Unknown without forensic analysis - could be days to months.
+The short answer is unknown without forensic analysis, and it could be anywhere from days to months.
 
 **What affects dwell time:**
 
@@ -2191,7 +2191,7 @@ Industry incident response guidance consistently identifies partial remediation 
 ✗ No SOC or security team monitoring
 ✗ Sophisticated attacker operational security
 
-**Industry data:** Published incident response reports consistently show median dwell times measured in days to weeks for externally detected compromises, and shorter windows for organizations with mature internal detection. Advanced persistent threat (APT) dwell times are routinely measured in months. The key variable is the quality of endpoint and network monitoring in place at the time of infection.
+Published incident response reports consistently show median dwell times measured in days to weeks for externally detected compromises, and shorter windows for organizations with mature internal detection. Advanced persistent threat dwell times are routinely measured in months. The key variable is the quality of endpoint and network monitoring in place at the time of infection.
 
 **For this specific case:**
 
@@ -2220,7 +2220,7 @@ Industry incident response guidance consistently identifies partial remediation 
 
 Pulsar RAT is not ransomware with a specific destructive purpose, nor spyware with a single objective. It is a universal remote control tool — attackers can do anything a user can do, plus administrative actions. Any infected system should be treated as if an attacker is at the keyboard.
 
-**Practical implications:** Every credential used on the infected system is exposed. Every data asset accessible to the compromised account is exposed. Every system reachable from that network location is at risk. Active MFA sessions during the compromise window may have been bypassed.
+Practically, every credential used on the infected system is exposed, every data asset accessible to the compromised account is exposed, and every system reachable from that network location is at risk. Active MFA sessions during the compromise window may also have been bypassed.
 
 ### 2. Persistence — Understanding the Real Risk
 
@@ -2238,9 +2238,9 @@ Encrypted C2, dynamic infrastructure, anti-analysis checks, and legitimate signe
 
 ### 5. Business Impact
 
-**Direct:** Incident response effort, system rebuilds, credential rotation.
+Direct costs cover incident response effort, system rebuilds and credential rotation.
 
-**Indirect:** Productivity loss, regulatory notification obligations (if data exfiltration confirmed), legal engagement, potential reputational harm from disclosed breach.
+Indirect costs cover productivity loss, regulatory notification obligations where data exfiltration is confirmed, legal engagement, and potential reputational harm from a disclosed breach.
 
 ---
 

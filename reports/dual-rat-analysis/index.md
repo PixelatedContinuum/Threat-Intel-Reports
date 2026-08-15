@@ -140,13 +140,13 @@ Quasar RAT is a professional-grade espionage tool associated with APT10 and soph
 Quasar RAT compiles as a C# .NET assembly with a modular architecture: dedicated namespaces handle core functionality, surveillance, system control, and network operations. Capability analysis (CAPA) detected 134 distinct functions, including process injection, privilege escalation, keylogging, screenshot capture, and browser credential harvesting. Anti-analysis features span VM detection for VirtualBox, VMware, and QEMU environments; debugger evasion; and sandbox detection.
 
 #### Executive Technical Context
-**What This Means**: Quasar's modular C# architecture allows the operator to customize capabilities per target. 134 detected functions represent a feature set comparable to commercial remote access software.
+Quasar's modular C# architecture lets the operator customize capabilities per target. Its 134 detected functions represent a feature set comparable to commercial remote access software.
 
-**Business Impact**: Professional code quality and anti-analysis depth indicate state-sponsored or highly sophisticated criminal operations — this is a purpose-built espionage tool, not opportunistic malware.
+Professional code quality and anti-analysis depth indicate state-sponsored or highly sophisticated criminal operations. This is a purpose-built espionage tool, not opportunistic malware.
 
-**Detection Implications**: Traditional signature-based detection is ineffective. Process injection hides malicious activity within legitimate processes; easy recompilation defeats static signatures; encrypted C2 prevents network inspection. Behavioral monitoring is the reliable detection path.
+Traditional signature-based detection is ineffective. Process injection hides malicious activity within legitimate processes, easy recompilation defeats static signatures, and encrypted C2 prevents network inspection. Behavioral monitoring is the reliable detection path.
 
-**Resource Allocation**: Effective defense requires behavioral EDR with process injection detection and network monitoring for encrypted C2 patterns.
+Effective defense takes behavioral EDR with process injection detection, plus network monitoring for encrypted C2 patterns.
 
 ### Persistence Mechanism Analysis
 
@@ -157,13 +157,13 @@ Quasar RAT compiles as a C# .NET assembly with a modular architecture: dedicated
 Quasar RAT establishes persistence through a single scheduled task named "RuntimeBroker," created to execute on user logon with highest privileges from a user-writable directory. Registry artifacts written to the TaskCache include the task GUID and execution parameters.
 
 #### Executive Technical Context
-**What This Means**: The "RuntimeBroker" task name mimics a legitimate Windows process, attempting to blend in with normal system operations. However, legitimate RuntimeBroker is a system process, not a scheduled task, making this detectable with proper baseline knowledge.
+The "RuntimeBroker" task name mimics a legitimate Windows process, trying to blend into normal system operations. The legitimate RuntimeBroker is a system process rather than a scheduled task, though, which makes this detectable with proper baseline knowledge.
 
-**Business Impact**: Single persistence mechanism creates lower event log noise but also provides single point of failure for defenders. If identified and removed, the malware loses persistence completely.
+A single persistence mechanism creates lower event log noise, but it also gives defenders a single point of failure. If it is identified and removed, the malware loses persistence completely.
 
-**Detection Strategy**: Monitor for scheduled task named "RuntimeBroker" (T1053.005) executing from a user-writable directory. Monitor for task actions executing from "%AppData%\SubDir\Client.exe". Monitor for ONLOGON triggers with HIGHEST privilege requests.
+To detect it, monitor for a scheduled task named "RuntimeBroker" (T1053.005) executing from a user-writable directory, for task actions executing from `%AppData%\SubDir\Client.exe`, and for ONLOGON triggers requesting HIGHEST privilege.
 
-**Remediation Complexity**: **MEDIUM** - Single persistence mechanism makes cleanup straightforward, but thorough forensics required to determine dwell time and data exfiltration scope.
+Remediation complexity is **MEDIUM**. The single persistence mechanism makes cleanup straightforward, but thorough forensics is still needed to establish dwell time and data exfiltration scope.
 
 ### Command & Control Infrastructure
 
@@ -174,13 +174,13 @@ Quasar RAT establishes persistence through a single scheduled task named "Runtim
 Quasar RAT connects directly to fixed C2 infrastructure at 185.208.159.182 on port 4782 using custom encryption. Before establishing the C2 channel, the malware performs pre-beacon reconnaissance — making HTTP requests to external IP discovery services (ipwho.is, api.ipify.org) to determine the victim's external IP address.
 
 #### Executive Technical Context
-**What This Means**: Direct IP connection creates single point of failure for C2 infrastructure. If defenders block 185.208.159.182, the malware loses all communication capabilities.
+A direct IP connection gives the C2 infrastructure a single point of failure. If defenders block 185.208.159.182, the malware loses all communication.
 
-**Business Impact**: Fixed C2 infrastructure makes network-based blocking effective, but the custom encryption prevents Deep Packet Inspection (DPI) from identifying malicious payloads.
+Fixed C2 infrastructure makes network-based blocking effective, though the custom encryption stops Deep Packet Inspection from identifying malicious payloads.
 
-**Detection Strategy**: Monitor for outbound TCP connections to 185.208.159.182:4782. Monitor for processes making HTTP requests to IP geolocation services like ipwho.is or api.ipify.org before establishing unusual TCP connections. Monitor for encrypted traffic patterns consistent with C2 beacons (regular intervals, small payloads).
+To detect it, monitor for outbound TCP connections to 185.208.159.182:4782, for processes making HTTP requests to IP geolocation services such as ipwho.is or api.ipify.org before opening unusual TCP connections, and for encrypted traffic patterns consistent with C2 beacons, meaning regular intervals and small payloads.
 
-**Infrastructure Resilience**: **LOW** - Bullet-proof hosting provider but fixed IP address enables effective blocking through network security controls.
+Infrastructure resilience is **LOW**. The hosting is bulletproof, but the fixed IP address makes blocking through network security controls effective.
 
 ### Mark of the Web Removal Capability
 
@@ -191,13 +191,13 @@ Quasar RAT connects directly to fixed C2 infrastructure at 185.208.159.182 on po
 Quasar RAT removes the Zone.Identifier alternate data stream from downloaded files using the DeleteFile API, stripping the mark-of-the-web that Windows uses to identify potentially dangerous downloads. The effect is that the file appears to Windows as if it originated locally.
 
 #### Executive Technical Context
-**What This Means**: The malware actively removes security markers that Windows uses to warn users about downloaded files, making the malware appear as if it originated locally.
+The malware actively removes the security markers Windows uses to warn users about downloaded files, so the file appears to have originated locally.
 
-**Business Impact**: This technique increases user deception and can bypass basic security awareness training. Users may execute files they would otherwise avoid due to security warnings.
+That increases user deception and can bypass basic security awareness training, because users may execute files they would otherwise avoid on seeing a security warning.
 
-**Detection Strategy**: Monitor for processes deleting the alternate data stream ":Zone.Identifier" from downloaded files. Monitor for files that lose their Zone.Identifier after being written to disk. Monitor for security tool logs showing missing download source information.
+To detect it, monitor for processes deleting the `:Zone.Identifier` alternate data stream from downloaded files, for files that lose their Zone.Identifier after being written to disk, and for security tool logs showing missing download source information.
 
-**Security Control Implications**: This technique bypasses Windows SmartScreen filtering, application reputation systems, and user security awareness based on download warnings.
+This technique bypasses Windows SmartScreen filtering, application reputation systems, and any user security awareness that rests on download warnings.
 
 ---
 
@@ -286,7 +286,7 @@ Purpose: Establish command and control channel
 ### Behavioral Analysis Summary
 
 #### Executive Technical Context
-**What This Timeline Shows**: Quasar RAT executes a methodical, four-phase infection: installation, persistence, reconnaissance, then C2 establishment — with approximately four minutes between first execution and first C2 contact.
+The timeline shows Quasar RAT executing a methodical, four-phase infection, installation, persistence, reconnaissance and then C2 establishment, with roughly four minutes between first execution and first C2 contact.
 
 **Key Behavioral Indicators**:
 1. **Security bypass**: Immediate Zone.Identifier removal
@@ -295,7 +295,7 @@ Purpose: Establish command and control channel
 4. **Pre-C2 reconnaissance**: IP discovery before contacting C2
 5. **Delayed C2 contact**: ~4 minutes between execution and C2 connection
 
-**Business Impact**: The four-minute delay before C2 contact is a deliberate evasion technique targeting dynamic analysis sandboxes with short observation windows.
+That four-minute delay before C2 contact is a deliberate evasion technique aimed at dynamic analysis sandboxes running short observation windows.
 
 **Detection Windows**:
 - **Initial execution**: File creation and Zone.Identifier removal
@@ -351,13 +351,13 @@ NjRAT/XWorm is commodity malware optimized for mass deployment through aggressiv
 NjRAT/XWorm compiles as a VB.NET executable with a module-based structure: dedicated components handle client-server communication, surveillance operations, and persistence. Capability analysis detected 62 distinct functions, including persistence via registry keys and scheduled tasks, webcam streaming, keylogging, GZip data compression, and C2 resolution through Pastebin dead-drops. The malware also implements critical process protection and anti-sleep mechanisms to maintain operational continuity.
 
 #### Executive Technical Context
-**What This Means**: The VB.NET codebase and 37KB size reflect efficiency-focused design — rapid deployment over feature breadth. The 62 detected functions cover core RAT capabilities without Quasar's extensive feature set.
+The VB.NET codebase and 37KB size reflect an efficiency-focused design, favouring rapid deployment over feature breadth. The 62 detected functions cover core RAT capabilities without Quasar's extensive feature set.
 
-**Business Impact**: NjRAT's prevalence (18,459+ infections H1 2025) demonstrates high operational effectiveness despite its simplicity. Compact size evades file-size-based detection heuristics and accelerates phishing distribution.
+NjRAT's prevalence, 18,459+ infections in H1 2025, demonstrates high operational effectiveness despite its simplicity. The compact size evades file-size-based detection heuristics and accelerates phishing distribution.
 
-**Detection Advantages**: VB.NET compilation produces distinct runtime characteristics detectable through behavioral monitoring. The smaller codebase is also more tractable for static analysis than heavily obfuscated C# variants.
+VB.NET compilation produces distinct runtime characteristics that behavioral monitoring can detect, and the smaller codebase is more tractable for static analysis than heavily obfuscated C# variants.
 
-**Resource Allocation**: Effective defense requires scheduled task monitoring for sub-5-minute intervals, registry Run key alerting, network monitoring for Pastebin dead-drop patterns, and process monitoring for VB.NET executables with network activity.
+Effective defense takes scheduled task monitoring for sub-5-minute intervals, registry Run key alerting, network monitoring for Pastebin dead-drop patterns, and process monitoring for VB.NET executables showing network activity.
 
 ### Triple-Redundant Persistence Mechanism
 
@@ -368,13 +368,13 @@ NjRAT/XWorm compiles as a VB.NET executable with a module-based structure: dedic
 NjRAT/XWorm establishes three simultaneous persistence mechanisms: a high-frequency scheduled task named "conhost" that executes every minute, a registry Run key entry pointing to the malware executable, and a startup folder shortcut. This triple-redundant design means the malware survives removal of any individual mechanism.
 
 #### Executive Technical Context
-**What This Means**: Triple-redundant persistence creates a self-healing capability — removing one or two mechanisms leaves the third to re-establish the others. The 1-minute scheduled task interval is unusually aggressive and has no legitimate equivalent in standard software.
+Triple-redundant persistence creates a self-healing capability, since removing one or two mechanisms leaves the third to re-establish the others. The 1-minute scheduled task interval is unusually aggressive and has no legitimate equivalent in standard software.
 
-**Business Impact**: Complete removal requires systematic elimination of all three mechanisms, plus hunting for additional copies and reinfection vectors. Partial removal leads to rapid re-establishment and extended dwell time.
+Complete removal requires systematically eliminating all three mechanisms, plus hunting for additional copies and reinfection vectors. Partial removal leads to rapid re-establishment and extended dwell time.
 
-**Detection Strategy**: Monitor for scheduled task "conhost" executing at 1-minute intervals (T1053.005). Monitor for simultaneous creation of a "conhost" scheduled task, "conhost" Run key, and "conhost.lnk" in the Startup folder. Monitor for new Run key entries pointing to user-writable directories and Startup folder additions from non-installer processes.
+To detect it, monitor for a scheduled task named "conhost" executing at 1-minute intervals (T1053.005), for simultaneous creation of a "conhost" scheduled task, a "conhost" Run key and a "conhost.lnk" in the Startup folder, and for new Run key entries pointing to user-writable directories alongside Startup folder additions from non-installer processes.
 
-**Remediation Complexity**: **HIGH** — Requires systematic removal of all three mechanisms plus thorough hunting for additional copies or reinfection vectors.
+Remediation complexity is **HIGH**, requiring systematic removal of all three mechanisms plus thorough hunting for additional copies or reinfection vectors.
 
 ### Pastebin Dead-Drop C2 Architecture
 
@@ -385,13 +385,13 @@ NjRAT/XWorm establishes three simultaneous persistence mechanisms: a high-freque
 NjRAT/XWorm resolves its C2 endpoint via Pastebin dead-drop. The malware sends an HTTP GET request to `https://pastebin.com/raw/bzg5zj8n` using a spoofed mobile user-agent string, then parses the response to extract the actual C2 IP and port for TCP connection establishment.
 
 #### Executive Technical Context
-**What This Means**: Dead-drop C2 architecture lets the attacker change servers in seconds by editing a Pastebin post — without updating or redeploying the malware. The current C2 address is never burned into the binary.
+Dead-drop C2 architecture lets the attacker change servers in seconds by editing a Pastebin post, with no need to update or redeploy the malware. The current C2 address is never burned into the binary.
 
-**Business Impact**: Traditional IOC-based blocking (IP and domain blacklists) is ineffective against this architecture. Blocking the current C2 IP does not prevent reinfected or persistent systems from resolving a new one. Behavior-based detection is the reliable response path.
+Traditional IOC-based blocking on IP and domain blacklists is ineffective against that architecture, because blocking the current C2 IP does not stop reinfected or persistent systems resolving a new one. Behavior-based detection is the reliable response path.
 
-**Detection Strategy**: Monitor for HTTP GET requests to `https://pastebin.com/raw/bzg5zj8n`. Monitor for non-browser processes making HTTPS requests to pastebin.com followed by TCP connections to arbitrary IPs and ports. Monitor for the mobile user-agent string `Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1` originating from desktop processes.
+To detect it, monitor for HTTP GET requests to `https://pastebin.com/raw/bzg5zj8n`, for non-browser processes making HTTPS requests to pastebin.com followed by TCP connections to arbitrary IPs and ports, and for the mobile user-agent string `Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1` originating from desktop processes.
 
-**Infrastructure Resilience**: **HIGH** — The attacker can change C2 endpoints in seconds, making takedown operations ineffective against already-deployed implants.
+Infrastructure resilience is **HIGH**, because the attacker can change C2 endpoints in seconds, which makes takedown operations ineffective against already-deployed implants.
 
 ### Critical Process Protection & Anti-Sleep
 
@@ -402,13 +402,13 @@ NjRAT/XWorm resolves its C2 endpoint via Pastebin dead-drop. The malware sends a
 NjRAT/XWorm calls `RtlSetProcessIsCritical` to mark itself as critical to system operation — a designation normally reserved for core Windows processes — triggering a BSOD if the process is forcibly terminated. The malware also calls `SetThreadExecutionState` to prevent system sleep during surveillance operations.
 
 #### Executive Technical Context
-**What This Means**: Attempting to kill the process through standard task management will crash the system. Anti-sleep functionality ensures surveillance continues uninterrupted during extended operations.
+Attempting to kill the process through standard task management will crash the system. The anti-sleep functionality keeps surveillance running uninterrupted through extended operations.
 
-**Business Impact**: These mechanisms force a careful, tool-specific removal sequence. An analyst who terminates the process through normal means will trigger a system crash, requiring a reboot and potentially complicating forensic collection.
+These mechanisms force a careful, tool-specific removal sequence. An analyst who terminates the process by normal means will trigger a system crash, requiring a reboot and potentially complicating forensic collection.
 
-**Detection Strategy**: Monitor for `RtlSetProcessIsCritical` (T1489) calls from non-system processes such as user-space `conhost.exe`. Monitor for `SetThreadExecutionState` calls from non-system processes. Monitor for system crashes following process termination attempts.
+To detect it, monitor for `RtlSetProcessIsCritical` (T1489) calls from non-system processes such as a user-space `conhost.exe`, for `SetThreadExecutionState` calls from non-system processes, and for system crashes following process termination attempts.
 
-**Remediation Implications**: Specialized tools and procedures are required to safely clear critical-process protection before termination — standard task-kill approaches will crash the host.
+Remediation needs specialized tools and procedures to safely clear critical-process protection before termination, because standard task-kill approaches will crash the host.
 
 ---
 
@@ -495,7 +495,7 @@ Purpose: System crash handling
 ### Behavioral Analysis Summary
 
 #### Executive Technical Context
-**What This Timeline Shows**: NjRAT/XWorm establishes all three persistence mechanisms immediately upon execution, before resolving C2 — prioritizing survival over stealth.
+The timeline shows NjRAT/XWorm establishing all three persistence mechanisms immediately on execution, before resolving C2, which prioritizes survival over stealth.
 
 **Key Behavioral Indicators**:
 1. **Process masquerading**: Drops payload as "conhost.exe"
@@ -510,7 +510,7 @@ Purpose: System crash handling
 - **Network**: Pastebin HTTPS access followed by arbitrary TCP connections
 - **System protection**: `RtlSetProcessIsCritical` API calls from non-system processes
 
-**Business Impact**: Aggressive persistence and critical-process protection make this malware difficult to remove and hazardous to terminate without specialized tooling.
+Aggressive persistence and critical-process protection together make this malware difficult to remove and hazardous to terminate without specialized tooling.
 
 ---
 
@@ -527,7 +527,7 @@ Both Quasar RAT and NjRAT/XWorm reach victims primarily through phishing and soc
 - PowerShell droppers for fileless execution and defense evasion
 - Software vulnerability exploitation in targeted environments
 
-**Typical victim profile**: High-value targets in government, defense, energy, and manufacturing — sectors where APT10 operates.
+The typical victim profile is high-value targets in government, defense, energy and manufacturing, the sectors where APT10 operates.
 
 ### NjRAT/XWorm Delivery Patterns
 **Mass-delivery approach**:
@@ -537,7 +537,7 @@ Both Quasar RAT and NjRAT/XWorm reach victims primarily through phishing and soc
 - Trojanized software distributed through underground forums
 - Exploit kit integration for automated infection of vulnerable systems
 
-**Typical victim profile**: Broad opportunistic targeting across industries.
+The typical victim profile here is broad opportunistic targeting across industries.
 
 ### Key Risk Factors
 - Email is the primary vector for both families

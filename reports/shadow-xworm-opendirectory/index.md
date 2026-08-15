@@ -305,16 +305,16 @@ Full hashes are available in the [IOC feed](/ioc-feeds/shadow-xworm-opendirector
 
 Many of the key findings in this report — C2 addresses, shared infrastructure, operator feature flags, and single-operator attribution — were established through manual configuration decryption performed during this investigation. Both Shadow RAT and XWorm store their configurations in encrypted form within the compiled binaries, meaning the raw samples cannot simply be opened and read.
 
-**Shadow RAT config decryption:** The encrypted configuration was extracted from a binary resource embedded in the .NET assembly. A custom Python decryptor was written to replicate the malware's PBKDF2 key derivation (50,000 iterations with a static 32-byte salt extracted from `Shadow.Common.dll`) and AES-256-CBC decryption. The wire format for each config field — `[HMAC-SHA256 (32 bytes)][IV (16 bytes)][AES-256-CBC ciphertext]` — was reverse-engineered from decompiled code (see Section 5.3 for full technical detail). This process was applied independently to both builds (`ShadoClient.exe` and `ShadowClient.exe`), producing a field-by-field comparison that confirmed identical C2 infrastructure and divergent feature flags between the staging and production variants.
+Decrypting the Shadow RAT config started from an encrypted configuration extracted from a binary resource embedded in the .NET assembly. I wrote a custom Python decryptor to replicate the malware's PBKDF2 key derivation, 50,000 iterations with a static 32-byte salt extracted from `Shadow.Common.dll`, and its AES-256-CBC decryption. The wire format for each config field, `[HMAC-SHA256 (32 bytes)][IV (16 bytes)][AES-256-CBC ciphertext]`, was reverse-engineered from decompiled code, with the full technical detail in Section 5.3. I applied this independently to both builds, `ShadoClient.exe` and `ShadowClient.exe`, producing a field-by-field comparison that confirmed identical C2 infrastructure and divergent feature flags between the staging and production variants.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-decrypted-config.png" | relative_url }}" alt="Terminal output of the Shadow RAT config decryptor showing derived AES key, PBKDF2 parameters, and decrypted config values including C2 host 151.245.112.70 port 8990, mutex GUID, install path, and version 2.6.4.0">
   <figcaption><em>Figure 2: Shadow RAT config decryptor terminal output — all four builds independently resolved to the same C2 address (151.245.112.70:8990), establishing single-operator control of both RAT families.</em></figcaption>
 </figure>
 
-**XWorm config decryption:** XWorm's configuration uses a weaker scheme — Rijndael-256-ECB with a key derived from a non-standard overlapping MD5 construction (see Section 6.4). A separate Python decryptor was written to replicate this derivation and decrypt the config class fields. This was applied to both XWorm builds (`XWormClient.exe` and `XWormClient2.exe`), each of which used a different builder-generated AES key but resolved to the same C2 address.
+XWorm's configuration uses a weaker scheme, Rijndael-256-ECB with a key derived from a non-standard overlapping MD5 construction, covered in Section 6.4. I wrote a separate Python decryptor to replicate that derivation and decrypt the config class fields, then applied it to both XWorm builds, `XWormClient.exe` and `XWormClient2.exe`, each of which used a different builder-generated AES key but resolved to the same C2 address.
 
-**Why this matters:** The decrypted configurations from all four samples independently resolved to the same C2 IP address (`151.245.112.70`) — Shadow RAT on port 8990, XWorm on port 7007. This is the primary evidence establishing DEFINITE confidence that a single operator controls both malware families. Without this decryption work, the connection between the two RAT families would have remained unconfirmed, as no plaintext configuration data is visible in the packed binaries.
+This matters because the decrypted configurations from all four samples independently resolved to the same C2 IP address, `151.245.112.70`, with Shadow RAT on port 8990 and XWorm on port 7007. That is the primary evidence establishing DEFINITE confidence that a single operator controls both malware families. Without the decryption work the connection between the two RAT families would have stayed unconfirmed, because no plaintext configuration data is visible in the packed binaries.
 
 ### Two Shadow RAT Builds: Staging vs. Production
 
@@ -357,7 +357,7 @@ A disassembler (Binary Ninja) with .NET Reactor Slayer (a .NET deobfuscation too
 
 The entry point after deobfuscation is `mzugzeoqhnabysgpche.KOwpTYUq38OZkEm4OsqXZ8pyS7Gu.Main` — the outer obfuscated class wrapper from .NET Reactor. The binary is not digitally signed.
 
-**Extraction workflow and what it produced:** .NET Reactor Slayer was run against `ShadoClient.exe` to strip the outer packer layer, producing an unpacked working copy (`ShadoClient_Slayed.exe`). The tool also dumped the 28 Costura.Fody-embedded assemblies to disk as standalone DLL files — these assemblies are stored inside the original binary as compressed resources and are never written to disk during normal execution, so dumping them is the only way to inspect their code statically. Cross-assembly analysis in a .NET decompiler (dnSpy) required explicitly loading each extracted DLL alongside the main binary to resolve references; without this, decompiled methods that call into the embedded libraries appear as unresolved symbols. `Shadow.Common.dll` in particular holds the shared message types, the PBKDF2 salt and derivation logic, and the AES/HMAC cryptographic primitives — decompiling this DLL in isolation was what enabled the config decryption described in Section 4.
+The extraction workflow produced the material everything else rests on. Running .NET Reactor Slayer against `ShadoClient.exe` stripped the outer packer layer and produced an unpacked working copy, `ShadoClient_Slayed.exe`. It also dumped the 28 Costura.Fody-embedded assemblies to disk as standalone DLL files, and since those assemblies live inside the original binary as compressed resources and are never written to disk during normal execution, dumping them is the only way to inspect their code statically. Cross-assembly analysis in a .NET decompiler required explicitly loading each extracted DLL alongside the main binary to resolve references, without which decompiled methods calling into the embedded libraries appear as unresolved symbols. `Shadow.Common.dll` in particular holds the shared message types, the PBKDF2 salt and derivation logic, and the AES and HMAC primitives, and decompiling that DLL in isolation is what enabled the config decryption described in Section 4.
 
 **What this means for detection:** The presence of `AForge.Video.DirectShow`, `NAudio`, and `SharpDX` in a process that has no legitimate UI visible to the user is a strong behavioral anomaly. A process loading webcam and audio capture libraries while invisible to the user should be treated as suspicious even without signature matches. Critically, defenders will not find the 28 embedded DLLs as separate files on disk during a live investigation — Costura.Fody loads them from compressed resources directly into memory at runtime. File-based scanning and disk forensics alone will only see the single packed executable. Observing the actual loaded assemblies (including `Shadow.Common.dll`) requires memory forensics: enumerating loaded .NET modules in the suspect process (e.g., via `Get-Process | Select-Object -ExpandProperty Modules`, Process Hacker, or a memory-forensics tool's module-listing plugin) or dumping the managed heap. Hash-based IOC matching against the 28 extracted DLL SHA256 values — published in the companion IOC feed — will only match if the DLLs have been dumped from memory or extracted from a captured sample; it will not match the running process's on-disk footprint.
 
@@ -414,7 +414,7 @@ This obfuscation defeats static YARA rules looking for literal API name strings.
 
 The ETW bypass is simpler: `EtwEventWrite` in `ntdll.dll` is resolved and its first byte overwritten with `0xC3` (the x86/x64 RET instruction). This causes `EtwEventWrite` to return immediately without writing any event to the ETW infrastructure. The consequence: Sysmon, Windows Defender, and any EDR tool consuming CLR ETW events will receive no telemetry from the Shadow RAT process after this point.
 
-**Detection impact summary:** After these two bypasses fire, Shadow RAT becomes effectively invisible to:
+Once these two bypasses fire, Shadow RAT becomes effectively invisible to:
 - AMSI-based in-memory scanning (antivirus/EDR)
 - CLR ETW events (Sysmon EID 8, process-level .NET activity)
 - Security tools that rely on ETW consumers for behavioral detection
@@ -445,7 +445,7 @@ Wire format for each config field: `[HMAC-SHA256 (32 bytes)][IV (16 bytes)][AES-
 
 The HMAC is verified before decryption (encrypt-then-MAC ordering — cryptographically correct and stronger than MAC-then-encrypt). This means any modification to the ciphertext is detected before decryption is attempted.
 
-**Anti-tampering via RSA signature (DEFINITE):** After decrypting the config, Shadow RAT performs an additional RSA signature verification: `SHA256(AES_key)` is verified against an embedded RSA signature using an X.509 certificate baked into the binary. If this verification fails, the client exits immediately. This design means:
+Shadow RAT also anti-tampers via an RSA signature, which I hold DEFINITE. After decrypting the config it verifies `SHA256(AES_key)` against an embedded RSA signature using an X.509 certificate baked into the binary, and if that verification fails the client exits immediately. That design means:
 
 1. An analyst cannot modify the C2 address in the encrypted config without the operator's RSA private key
 2. Sinkholing (redirecting malware to a researcher-controlled server) requires the private key
@@ -493,7 +493,7 @@ The Windows Recovery Environment (WinRE) is the pre-boot recovery system used wh
 
 This technique is uncommon: few EDR products monitor WinRE for modification, and most incident response playbooks do not include WinRE checks. Its presence in this codebase elevates the remediation complexity for any confirmed compromise.
 
-**Important caveat:** This capability is command-activated — the operator must explicitly issue the `DoAddWinREPersistence` command against a compromised host. Its presence in the recovered samples does not confirm deployment on every victim; it confirms the operator has the capability to deploy it selectively. Scope assessment for any confirmed infection must include a WinRE modification check.
+One caveat matters here. The capability is command-activated, so the operator has to explicitly issue `DoAddWinREPersistence` against a compromised host. Its presence in the recovered samples does not confirm deployment on every victim, only that the operator can deploy it selectively. Scope assessment for any confirmed infection should still include a WinRE modification check.
 
 **Startup item management (HIGH confidence):**
 
@@ -566,7 +566,7 @@ ScreenConnect (ConnectWise) was deployed to the C2 server at 151.245.112.70 on o
 - Microphone/audio: NAudio library stack (Wasapi, WinForms, WinMM) (`GetMicrophoneAudioResponse`)
 - Clipboard monitoring: `GetClipboardTextResponse`, `SendClipboardData`
 
-**HVNC deeper context:** HVNC (Hidden VNC) is more invasive than standard screen capture. Standard screen capture shows what the victim sees. HVNC creates a separate hidden desktop session the victim cannot see at all. An operator using HVNC can open browsers, log into accounts, and conduct transactions on the compromised machine while the victim sees their normal desktop. This capability is particularly relevant for financial fraud — the operator can conduct banking or crypto transactions directly on the victim's machine using the victim's authenticated browser sessions.
+HVNC deserves more context, because Hidden VNC is more invasive than standard screen capture. Standard screen capture shows what the victim sees, whereas HVNC creates a separate hidden desktop session the victim cannot see at all. An operator using HVNC can open browsers, log into accounts, and conduct transactions on the compromised machine while the victim sees their normal desktop. That is particularly relevant for financial fraud, because the operator can run banking or crypto transactions directly on the victim's machine using the victim's authenticated browser sessions.
 
 ---
 
@@ -635,7 +635,7 @@ Makes an HTTP GET request to `http://ip-api.com/line/?fields=hosting` at the sta
 
 This check uses a legitimate, widely-available public API rather than a custom-built evasion technique, making it harder to block without disrupting legitimate services. Cloud sandboxes (AWS, Azure, GCP hosted), datacenter-based analysis environments, and any system behind a commercial hosting provider's IP range will be detected. The check fires on every execution, making it a reliable behavioral detection trigger for defenders: legitimate software rarely makes this specific API call before establishing C2 connections.
 
-**Detection opportunity:** The sequence `HTTP GET http://ip-api.com/line/?fields=hosting` followed by a TCP connection to port 7007 within seconds of process creation is a high-fidelity behavioral pattern for this specific XWorm campaign.
+There is a detection opportunity in the sequence. An `HTTP GET http://ip-api.com/line/?fields=hosting` followed by a TCP connection to port 7007 within seconds of process creation is a high-fidelity behavioral pattern for this specific XWorm campaign.
 
 ---
 
@@ -664,7 +664,7 @@ This standard Windows autorun key causes XWorm to launch at every user login.
 **Mechanism 3 — Startup Folder Shortcut (DEFINITE):**
 A `.lnk` shortcut file at `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\XWormClient.lnk` is created via the Windows COM `WScript.Shell` object. This provides a third persistence mechanism that also triggers on user login.
 
-**Remediation implication:** All three locations must be confirmed clean before considering XWorm remediated. The scheduled task is the most aggressive — if the registry key and startup shortcut are removed but the scheduled task is missed, XWorm will continue re-launching every 60 seconds.
+That carries a remediation implication. All three locations have to be confirmed clean before XWorm counts as remediated. The scheduled task is the most aggressive of the three, so if the registry key and startup shortcut are removed but the scheduled task is missed, XWorm keeps re-launching every 60 seconds.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-triple-persistence.png" | relative_url }}" alt="Decompiled XWorm persistence installation code showing all three mechanisms deployed in sequence: schtasks scheduled task creation, HKCU Run registry key write via Registry.SetValue, and startup folder LNK shortcut creation via WScript.Shell COM object">
@@ -689,7 +689,7 @@ XWorm uses a non-standard key derivation process for config encryption:
   <figcaption><em>Figure 14: XWorm Rijndael-ECB config decryption — the overlapping MD5 key construction is visible in the two Array.Copy calls at offsets 0 and 15, producing the distinctive 32-byte key pattern with a trailing null byte.</em></figcaption>
 </figure>
 
-**Why this matters:** ECB (Electronic Codebook) mode is the weakest cipher block mode — identical plaintext blocks always produce identical ciphertext blocks. This means config extraction is straightforward once the key is identified. The overlapping MD5 construction is a recognizable signature pattern: the 32-byte key will always show the MD5 hash followed (with a 1-byte shift) by the same MD5 hash, with a trailing null byte.
+This matters because ECB, Electronic Codebook mode, is the weakest cipher block mode, since identical plaintext blocks always produce identical ciphertext blocks. Config extraction is therefore straightforward once the key is identified. The overlapping MD5 construction is a recognizable signature pattern, because the 32-byte key always shows the MD5 hash followed, with a 1-byte shift, by the same MD5 hash, with a trailing null byte.
 
 The runtime C2 communication key `Nothing2hide` uses the same derivation scheme.
 
@@ -699,9 +699,9 @@ The runtime C2 communication key `Nothing2hide` uses the same derivation scheme.
 
 XWorm communicates with `151.245.112.70:7007` over TCP. The runtime communication is encrypted with Rijndael-256-ECB using the key derived from `Nothing2hide` (see Section 6.4). Unlike Shadow RAT's protobuf-net serialization, XWorm uses a simpler string-based command protocol.
 
-**Anti-analysis pre-flight (DEFINITE):** Before establishing C2 connection, XWorm makes an HTTP GET to `http://ip-api.com/line/?fields=hosting`. This check precedes every C2 connection attempt — it is not a one-time install-time check. This makes it a reliable network-level detection indicator on any execution.
+XWorm runs an anti-analysis pre-flight, which I hold DEFINITE. Before establishing a C2 connection it makes an HTTP GET to `http://ip-api.com/line/?fields=hosting`, and that check precedes every C2 connection attempt rather than running once at install time, which makes it a reliable network-level detection indicator on any execution.
 
-**HWID fingerprinting (DEFINITE):** XWorm generates a hardware identifier by computing MD5 of the concatenation of `ProcessorCount + UserName + MachineName + OSVersion + DriveSize`. This HWID is stored at `HKCU\Software\<HWID>` and transmitted to the C2 server for victim tracking. The registry key path (a 32-character hex string directly under `HKCU\Software`) is a distinctive host indicator.
+XWorm also fingerprints the host, which I hold DEFINITE. It generates a hardware identifier by computing the MD5 of `ProcessorCount + UserName + MachineName + OSVersion + DriveSize`, stores that HWID at `HKCU\Software\<HWID>`, and transmits it to the C2 server for victim tracking. The registry key path, a 32-character hex string sitting directly under `HKCU\Software`, is a distinctive host indicator.
 
 **USB spread (MODERATE — config present, propagation code not confirmed in static analysis):**
 The config field `USB.exe` specifies the filename used when spreading to removable drives. This capability is present in the config; independent confirmation of the propagation code logic was not completed in static analysis.
@@ -735,7 +735,7 @@ The C2 server is a Windows VPS hosted at Strike.bz (a budget VPS provider) in AS
 | 135 | MSRPC | Exposed |
 | 5985 | WinRM | Exposed |
 
-**Why the port exposure matters:** An attacker-controlled server with RDP (3389), SMB (445), and WinRM (5985) all exposed to the internet — and running unpatched against CVE-2020-0796 (a critical SMB vulnerability) — represents poor operational security. Threat actors with more advanced tradecraft typically restrict remote administration ports and apply security patches to their infrastructure. This exposure profile is consistent with the LOW-confidence assessment of an independent, less-experienced operator rather than a sophisticated organized group.
+The port exposure matters. An attacker-controlled server with RDP (3389), SMB (445) and WinRM (5985) all exposed to the internet, running unpatched against CVE-2020-0796, a critical SMB vulnerability, represents poor operational security. Threat actors with more advanced tradecraft typically restrict remote administration ports and patch their own infrastructure. This exposure profile fits the LOW-confidence assessment of an independent, less-experienced operator rather than a sophisticated organized group.
 
 ---
 
@@ -751,7 +751,7 @@ The operator used a systematic domain rotation strategy, maintaining approximate
 | `harrismanlieb.ink` | 2026-02-12 to present | **Active** | Primary C2 + payload hosting | Self-hosted NS (ns2.harrismanlieb.ink) |
 | `epgoldsecurity.com` | 2026-02-20 to present | **Active** | Payload delivery (open directory) | Migrated from BlazingFast to Hostinger 2026-03-26 |
 
-**DomainTools risk scores:** Both `harrismanlieb.ink` and `epgoldsecurity.com` received 100/100 DomainTools risk scores. Both were weaponized immediately upon registration (0-day registration to malicious use), a pattern consistent with purpose-registered attack infrastructure rather than repurposed legitimate domains.
+DomainTools scored both `harrismanlieb.ink` and `epgoldsecurity.com` at 100/100 risk. Both were weaponized immediately on registration, a zero-day gap between registration and malicious use, which fits purpose-registered attack infrastructure rather than repurposed legitimate domains.
 
 **breakingsecurity.online — Remcos brand impersonation:** This domain was active for only three days in January 2026, immediately before the operator's infrastructure stabilized. Its name deliberately mimics BreakingSecurity (breakingsecurity.net), the legitimate developer and seller of Remcos RAT. The operator may have used this domain to attract aspiring cybercriminals seeking Remcos access, delivering Shadow RAT or XWorm instead under the guise of a "free" or "cracked" Remcos tool. The specific purpose remains MODERATE confidence — plausible but not confirmed.
 
@@ -793,13 +793,13 @@ These failures are consistent with an inexperienced individual operator rather t
 
 ### Attribution Statement
 
-**Threat Actor:** Unknown (UTA-2026-003)
-**Confidence:** LOW (55%)
-**Assessment:** Independent, financially-motivated MaaS consumer — single operator
+The threat actor is unknown, designated UTA-2026-003. I hold that at LOW, 55 percent, and assess them as an independent, financially-motivated MaaS consumer operating alone.
 
-**Why this confidence:** Zero named-actor infrastructure overlaps were identified across 151.245.112.70, AS203662, and all five operator domains. All tooling is either open-source (Shadow RAT/Pulsar fork, Kematian Stealer) or commercially available MaaS (XWorm). The single-operator profile is DEFINITE (shared C2 IP across all four builds). Financial motivation is DEFINITE (crypto clipper, credential stealer, Steam token theft, browser password recovery). Low OPSEC is inconsistent with organized group tradecraft.
 
-**What's missing:** No operator handle, no forum presence, no email reuse across domains, no code similarity analysis against named-group private tooling, no HUMINT context. All five domains use WHOIS privacy protection preventing registrant analysis.
+
+That confidence rests on finding zero named-actor infrastructure overlaps across 151.245.112.70, AS203662, and all five operator domains. All the tooling is either open-source, the Shadow RAT/Pulsar fork and Kematian Stealer, or commercially available MaaS in XWorm. The single-operator profile is DEFINITE, on the shared C2 IP across all four builds, and financial motivation is DEFINITE too, on the crypto clipper, credential stealer, Steam token theft and browser password recovery. The low OPSEC is inconsistent with organized group tradecraft.
+
+What is missing is any operator handle, forum presence, or email reuse across domains, plus code similarity analysis against named-group private tooling and any HUMINT context. All five domains use WHOIS privacy protection, which blocks registrant analysis.
 
 **What would increase confidence:**
 - Operator handle in crimeware forums tied to this infrastructure → MODERATE confidence toward named persona
@@ -954,9 +954,9 @@ This campaign is a concrete example of how the Malware-as-a-Service (MaaS) econo
 - **XWorm:** A commercially sold builder-based RAT available for a flat fee, generating production-ready payloads with configurable C2 and encryption keys. The operator ran the XWorm builder twice, producing two differently-keyed variants — a standard consumer pattern requiring no technical expertise beyond purchasing access.
 - **Kematian Stealer:** An open-source stealer with a documented GitHub repository. Its integration into Shadow RAT by the original developer means any fork of Shadow RAT/Pulsar inherits stealer capability automatically.
 
-**What this means for defenders:** The MaaS model decouples capability from skill. A threat actor at the capability level evidenced here — poor OPSEC, commodity tooling, no custom development — can nonetheless deploy a 50+ capability RAT with AMSI/ETW bypass and WinRE persistence. Detection strategies that assume a correlation between attack sophistication and actor skill level will underestimate the threat posed by MaaS consumers. The relevant detection targets are the tools' behavioral fingerprints, not indicators of developer sophistication.
+For defenders, the MaaS model decouples capability from skill. A threat actor at the capability level evidenced here, with poor OPSEC, commodity tooling and no custom development, can still deploy a 50+ capability RAT carrying AMSI and ETW bypass and WinRE persistence. Detection strategies that assume a correlation between attack sophistication and actor skill will underestimate the threat a MaaS consumer poses. The relevant detection targets are the tools' behavioral fingerprints, not indicators of developer sophistication.
 
-**Supply chain risk:** The open-source Quasar/Pulsar lineage and the Kematian integration mean that any future operator who obtains the Shadow RAT source code inherits the full capability set documented here. If the source is shared or leaked further, additional campaigns with identical technical profiles but different C2 infrastructure should be expected. Detection rules targeting the AMSI shellcode byte sequence, the Shadow.Common.Messages namespace strings, and the XWorm overlapping-MD5 key derivation pattern are more durable than infrastructure-based IOCs.
+There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus the Kematian integration mean any future operator who obtains the Shadow RAT source inherits the full capability set documented here. If that source is shared or leaked further, expect additional campaigns with identical technical profiles but different C2 infrastructure. Detection rules targeting the AMSI shellcode byte sequence, the `Shadow.Common.Messages` namespace strings, and the XWorm overlapping-MD5 key derivation pattern are more durable than infrastructure-based IOCs.
 
 ---
 
@@ -1403,51 +1403,51 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 ### A. Shadow RAT / Quasar RAT Lineage
 
-**MITRE ATT&CK (Tier 1):** "S0262: Quasar RAT" — official ATT&CK technique mappings for Quasar lineage. [https://attack.mitre.org/software/S0262/](https://attack.mitre.org/software/S0262/)
+MITRE ATT&CK (Tier 1) publishes "S0262: Quasar RAT", the official ATT&CK technique mappings for the Quasar lineage, at [https://attack.mitre.org/software/S0262/](https://attack.mitre.org/software/S0262/)
 
-**Malpedia (Tier 2 — Fraunhofer FKIE):** `win.quasar_rat` and `win.pulsar_rat` entries. [https://malpedia.caad.fkie.fraunhofer.de/details/win.quasar_rat](https://malpedia.caad.fkie.fraunhofer.de/details/win.quasar_rat)
+Malpedia (Tier 2, Fraunhofer FKIE) carries the `win.quasar_rat` and `win.pulsar_rat` entries, at [https://malpedia.caad.fkie.fraunhofer.de/details/win.quasar_rat](https://malpedia.caad.fkie.fraunhofer.de/details/win.quasar_rat)
 
-**ThreatMon (Tier 2):** "Pulsar RAT Report" (2025-06-13) — technical analysis of Pulsar RAT.
+ThreatMon (Tier 2) published the "Pulsar RAT Report" on 2026-06-13, a technical analysis of Pulsar RAT.
 
-**The Hunters Ledger (Tier 2):** "PULSAR RAT Technical Analysis & Business Risk Assessment" — prior investigation by this publication; namespace/capability comparison baseline.
+The Hunters Ledger (Tier 2) published "PULSAR RAT Technical Analysis & Business Risk Assessment", a prior investigation by this publication that provides the namespace and capability comparison baseline.
 
 ### B. XWorm MaaS Landscape
 
-**ANY.RUN (Tier 2):** "2025 Annual Threat Report" — documents 174% XWorm detection surge in 2025.
+ANY.RUN (Tier 2) documents a 174% XWorm detection surge in 2025 in its "2025 Annual Threat Report".
 
-**Cyble (Tier 2):** "EvilCoder / XWorm pricing research" — XWorm v4.1-5.0 pricing; v6.0 by XCoderTools.
+Cyble (Tier 2) published "EvilCoder / XWorm pricing research", covering XWorm v4.1-5.0 pricing and v6.0 by XCoderTools.
 
-**Picus Security (Tier 2):** "XWorm V6 Analysis" — capability breakdown of latest XWorm version.
+Picus Security (Tier 2) published "XWorm V6 Analysis", a capability breakdown of the latest XWorm version.
 
-**Huntress (Tier 2):** "XWorm threat library" — behavioral detection analysis.
+Huntress (Tier 2) maintains an "XWorm threat library" entry with behavioral detection analysis.
 
 ### C. Tax-Season Campaign Context
 
-**Microsoft Security Blog (Tier 2):** "Tax-themed phishing campaign targeting organizations" (March 19, 2026) — 29,000+ user targeting, February 2026 peak, MSI installer delivery.
+The Microsoft Security Blog (Tier 2) published "Tax-themed phishing campaign targeting organizations" on 19 March 2026, covering 29,000+ user targeting, a February 2026 peak, and MSI installer delivery.
 
-**Check Point Research (Tier 2):** Tax season 2026 campaign analysis.
+Check Point Research (Tier 2) published its tax season 2026 campaign analysis.
 
-**IRS Dirty Dozen 2026 (Tier 1):** Official IRS documentation of tax-themed cyberattack campaigns.
+The IRS Dirty Dozen 2026 (Tier 1) is the official IRS documentation of tax-themed cyberattack campaigns.
 
 ### D. Kematian Stealer
 
-**CYFIRMA (Tier 2):** "Kematian Stealer Deep Dive" — technical analysis of credential theft capabilities.
+CYFIRMA (Tier 2) published "Kematian Stealer Deep Dive", a technical analysis of its credential theft capabilities.
 
-**K7 Labs (Tier 2):** "Kematian Stealer Analysis" — behavioral analysis and detection guidance.
+K7 Labs (Tier 2) published "Kematian Stealer Analysis", covering behavioral analysis and detection guidance.
 
-**HivePro (Tier 2):** "Kematian Stealer Threat Advisory TA2024269" — threat actor context and IOC coverage.
+HivePro (Tier 2) published "Kematian Stealer Threat Advisory TA2024269", covering threat actor context and IOC coverage.
 
 ### E. ScreenConnect Abuse
 
-**G DATA (Tier 2):** "EvilConwi Campaign Analysis" (June 2025) — ScreenConnect abuse and post-access RAT deployment.
+G DATA (Tier 2) published its "EvilConwi Campaign Analysis" in June 2025, covering ScreenConnect abuse and post-access RAT deployment.
 
-**Acronis TRU (Tier 2):** "ScreenConnect Trojanized Installers" — delivery mechanism analysis.
+Acronis TRU (Tier 2) published "ScreenConnect Trojanized Installers", a delivery mechanism analysis.
 
-**Forcepoint X-Labs (Tier 2):** "ScreenConnect Attack Analysis" — post-session deployment timing.
+Forcepoint X-Labs (Tier 2) published "ScreenConnect Attack Analysis", covering post-session deployment timing.
 
 ### F. Government & Regulatory Context
 
-**HHS.gov (Tier 1):** "Remcos RAT Advisory" — US government advisory relevant to breakingsecurity.online impersonation context.
+HHS.gov (Tier 1) published a "Remcos RAT Advisory", a US government advisory relevant to the breakingsecurity.online impersonation context.
 
 ---
 

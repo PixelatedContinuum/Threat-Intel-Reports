@@ -35,9 +35,9 @@ stix_bundle: /stix/nsminer-cryptojacker.json
 
 ## 1. Executive Summary
 
-**Threat Identified:** A multi-stage cryptojacking campaign distributes the **NsMiner** payload from an open directory at 125.19.150.122. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
+I identified a multi-stage cryptojacking campaign distributing the **NsMiner** payload from an open directory at 125.19.150.122. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
 
-**Business Impact:** The dropper hijacks CPU and electrical resources for the attacker's cryptocurrency mining, causing system slowdowns and hardware strain. The downloader component (`tftp.exe`) poses a compounding risk: it can fetch secondary payloads — including ransomware or data stealers — at any time after initial infection.
+The dropper hijacks CPU and electrical resources for the attacker's cryptocurrency mining, causing system slowdowns and hardware strain. The downloader component `tftp.exe` compounds that risk, because it can fetch secondary payloads, ransomware or data stealers among them, at any time after initial infection.
 
 **Key Findings:**
 *   **Attack Chain:** `IMG001.exe` establishes persistence under `%APPDATA%\NsMiner`, then extracts and runs `tftp.exe`, which fetches the final miner payload by credential-stuffing over a dozen FTP servers.
@@ -57,9 +57,9 @@ stix_bundle: /stix/nsminer-cryptojacker.json
 
 ---
 
-**Malware Family:** NsMiner Cryptojacker
-**Primary Threat:** Resource Hijacking (Cryptomining)
-**Risk Level:** HIGH
+The malware family is the NsMiner cryptojacker.
+The primary threat is resource hijacking through cryptomining.
+Risk level is HIGH.
 
 ---
 
@@ -137,7 +137,7 @@ The NSIS installer dropper bundles malicious scripts and payloads inside a struc
 *   The "CN" filename suffix strongly indicates the **CryptoNight** algorithm, historically favored for **Monero (XMR)** mining due to its CPU-friendly design.
 *   Automated analysis confirms both binaries are packed with VMProtect (a commercial protector that uses virtualization and obfuscation), which defeats signature-based detection and blocks static reverse engineering of the miner configuration.
 
-**Analysis Note:** Full unpacking of the VMProtect layer was not completed in this analysis pass. A dedicated unpacking effort is required to recover the miner's embedded configuration and confirm the mining pool and wallet address.
+One analysis note belongs here. Full unpacking of the VMProtect layer was not completed in this pass, and a dedicated unpacking effort is needed to recover the miner's embedded configuration and confirm the mining pool and wallet address.
 
 ## 4. MITRE ATT&CK Mapping
 

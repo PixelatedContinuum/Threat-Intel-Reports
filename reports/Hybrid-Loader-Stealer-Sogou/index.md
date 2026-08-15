@@ -497,7 +497,7 @@ The PE analysis tool (peframe) provided additional context on the malware’s st
 >**52.20.84.62:** Amazon EC2 node in Ashburn, VA. Massive domain count shows shared cloud environment abuse. Attackers exploit churnable infrastructure for stealth and scalability.  
 >Follow-up investigation identified a domain in a LNK file pointing to **423down[.]com**, which resolved to **45.151.132[.]50** as of 11/23/2025. The site presented a download page with links to additional sites and downloads consistent with the other activities observed on this directory. These artifacts were added to the IOC feed on 11/23/2025.
 
-**Operational Impact:** Both IPs confirm reliance on cheap ccTLDs + disposable hosting/cloud services to maintain short-lived, churnable C2 servers.  
+Operationally, both IPs confirm reliance on cheap ccTLDs plus disposable hosting and cloud services to maintain short-lived, churnable C2 servers.  
 
 ## Behavioral Assessment
 
@@ -724,7 +724,7 @@ The installer is the cornerstone of the **SogouStealer ecosystem** — a multi-l
 > **Analyst note:** This section maps each component to its role in the attack chain, identifying which binary handles delivery, which handles C2, and which provides the UI disguise. Each named file was recovered from the installer package and confirmed through static and behavioral analysis.
 
 ### Stage 1: Wrapper / Staging File
-**Role:** Initial dropper and staging ground.  
+It acts as the initial dropper and staging ground.  
 
 **Key Behaviors:**
 - Masquerades as legitimate Sogou Input Method installer.  
@@ -736,12 +736,12 @@ The installer is the cornerstone of the **SogouStealer ecosystem** — a multi-l
   - **UserExportDll.dll** – export module, persistence routines.  
 - Prepares environment for execution.  
 
-**Impact:** Ensures persistence and sets the stage for the main payload to run without interruption.  
+It ensures persistence and sets the stage for the main payload to run without interruption.  
 
 ---
 
 ### Stage 2: Embedded Installer Payload
-**Role:** True malicious agent (multi‑purpose stealer/RAT).  
+This is the true malicious agent, a multi-purpose stealer and RAT.  
 
 **Key Behaviors:**
 - Runs in the background while presenting a normal installer interface.  
@@ -756,12 +756,12 @@ The installer is the cornerstone of the **SogouStealer ecosystem** — a multi-l
 - Disguises traffic as certificate checks or Sogou updates.  
 - Maintains long‑term RAT‑like control.  
 
-**Impact:** Provides surveillance, privilege escalation, persistence, exfiltration, and covert C2 communication.  
+It provides surveillance, privilege escalation, persistence, exfiltration and covert C2 communication.  
 
 ---
 
 ### Stage 3: User Interface Disguise
-**Role:** Reinforces legitimacy and lowers suspicion.  
+It reinforces legitimacy and lowers suspicion.  
 
 **Key Behaviors:**
 - Deploys theme resources to mimic genuine software:  
@@ -769,7 +769,7 @@ The installer is the cornerstone of the **SogouStealer ecosystem** — a multi-l
   - **PersonalCenter.cupf** – larger UI package, branded “Personal Center” interface.  
 - Ensures user perceives installer as genuine software.  
 
-**Impact:** Strengthens masquerade, making malicious activity appear like normal application behavior.  
+It strengthens the masquerade, making malicious activity look like normal application behavior.  
 
 ---
 
@@ -778,7 +778,7 @@ The installer is the cornerstone of the **SogouStealer ecosystem** — a multi-l
 >**Stage 2 (Payload):** Multi‑purpose stealer/RAT — surveillance, privilege escalation, persistence, exfiltration, C2.  
 >**Stage 3 (UI Disguise):** Legitimacy cues — themed resources to mask malicious behavior.  
 
-**Operational Design:** The infection chain is deliberately layered. The wrapper ensures delivery and stability, while the embedded payload executes the full malicious capability set, and the UI disguise maintains user trust.
+The infection chain is deliberately layered by design. The wrapper ensures delivery and stability, the embedded payload executes the full malicious capability set, and the UI disguise maintains user trust.
 
 ## Final Analysis & Conclusion
 

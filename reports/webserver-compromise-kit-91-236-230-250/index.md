@@ -58,7 +58,7 @@ This toolkit enables a complete compromise workflow:
 
 The presence of an open directory suggests either operational security failure or intentional "public toolkit" distribution for multiple actors. All three tools are legitimate red team utilities repurposed for malicious use, complicating attribution and demonstrating the actor's reliance on proven, publicly available capabilities.
 
-**Defensive Priority:** CRITICAL - Immediate blocking of infrastructure (91.236.230.250) and deployment of detection rules targeting distinctive behavioral patterns (IIS spawning command shells, PrintSpoofer named pipe creation, reverse SOCKS proxy execution).
+Defensive priority is CRITICAL. Block the infrastructure at 91.236.230.250 immediately and deploy detection rules targeting the distinctive behavioral patterns, IIS spawning command shells, PrintSpoofer named pipe creation, and reverse SOCKS proxy execution.
 
 ---
 
@@ -69,9 +69,9 @@ This campaign targets any internet-exposed IIS/.NET application, with no sector 
 ### Campaign Overview
 
 **Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250
-**Discovery Date:** February 6, 2026
-**Infrastructure Status:** Active as of February 8, 2026
-**Targeting Pattern:** Opportunistic (any organization running vulnerable IIS/.NET applications)
+I discovered this on 6 February 2026.
+The infrastructure was active as of 8 February 2026.
+Targeting is opportunistic, reaching any organization running vulnerable IIS or .NET applications.
 
 ### Threat Landscape Assessment
 
@@ -179,7 +179,7 @@ CreateProcess(Application, "", ref pSec, ref pSec, true, 0,
 WaitForSingleObject(pInfo.hProcess, INFINITE);
 ```
 
-**Result:** The attacker receives an interactive `cmd.exe` shell. The `WaitForSingleObject` call blocks the IIS worker thread, maintaining the connection.
+The attacker receives an interactive `cmd.exe` shell, and the `WaitForSingleObject` call blocks the IIS worker thread, which maintains the connection.
 
 **MITRE ATT&CK Mapping:**
 - **Initial Access:** T1190 (Exploit Public-Facing Application)
@@ -229,7 +229,7 @@ PrintSpoofer exploits the **SeImpersonatePrivilege** commonly granted to service
 4. Tool impersonates Spooler's token
 5. Escalates to SYSTEM
 
-**MITRE ATT&CK:** T1134.001 (Token Impersonation/Theft)
+This maps to T1134.001, Token Impersonation/Theft.
 
 #### Technical Deep Dive
 
@@ -242,7 +242,7 @@ Creates Named Pipe with format:
 \\.\pipe\{UUID}\pipe\spoolss
 ```
 
-**Critical IOC:** The suffix `\pipe\spoolss` is mandatory to bypass Print Spooler's path validation.
+One IOC is critical, the suffix `\pipe\spoolss`, which is mandatory to bypass Print Spooler's path validation.
 
 **Stage 2: RPC Coercion**
 
@@ -354,7 +354,7 @@ The entire kit — C2 listener and malware distribution — runs on a single com
 
 ### Hosting Provider: BlueVPS OU AS62005
 
-**Abuse Tolerance:** MODERATE-LOW
+Abuse tolerance is moderate to low.
 
 **VPS hosting provider characteristics:**
 - Estonian company (RIPE registry)
@@ -415,8 +415,8 @@ The entire kit — C2 listener and malware distribution — runs on a single com
 
 ### Conclusion
 
-**Threat Actor:** Unknown (Cannot Attribute)
-**Confidence:** INSUFFICIENT (<50%)
+The threat actor is unknown and I cannot attribute, so confidence stays INSUFFICIENT below 50 percent.
+
 
 **Rationale:**
 - All tools are public, unmodified
@@ -430,7 +430,7 @@ The entire kit — C2 listener and malware distribution — runs on a single com
 - Testing or staging infrastructure for planned operations
 - Penetration tester with inadequate operational security
 
-**Recommendation:** Treat as generic post-exploitation threat. Focus on technique-based detection.
+I recommend treating this as a generic post-exploitation threat and focusing on technique-based detection.
 
 ---
 
@@ -440,7 +440,7 @@ The entire kit — C2 listener and malware distribution — runs on a single com
 
 **Complete coverage in:** [Detection Rules & Hunting Queries]({{ "/hunting-detections/webserver-compromise-kit-91-236-230-250-detections" | relative_url }})
 
-**Includes:** YARA, Sigma, Suricata, EDR queries
+It includes YARA, Sigma, Suricata and EDR queries.
 
 ### Priority Detection Matrix
 

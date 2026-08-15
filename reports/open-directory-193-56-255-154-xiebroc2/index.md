@@ -218,7 +218,7 @@ The open directory at `193.56.255.154:80` (port 80, served by Python SimpleHTTP 
   </tbody>
 </table>
 
-**Family confidence:** DEFINITE — embedded source paths (`C:/Users/admin/Desktop/code/XiebroC2-3.1/`), Covenant namespace strings (`GruntStager`), and hardcoded configurations extracted directly from the binaries confirm both framework identities with no ambiguity.
+I hold the family DEFINITE. Embedded source paths (`C:/Users/admin/Desktop/code/XiebroC2-3.1/`), Covenant namespace strings (`GruntStager`), and hardcoded configurations extracted directly from the binaries confirm both framework identities with no ambiguity.
 
 ## 3.2 File Identifiers
 
@@ -275,7 +275,7 @@ Structured IOCs in machine-readable format: [ioc-feeds/opendirectory-193-56-255-
 
 XiebroC2 (repository: `INotGreen/XiebroC2`) is a lightweight, cross-platform C2 framework developed by GitHub user INotGreen, positioned as a lower-resource-footprint alternative to commercial C2 platforms. The framework is Chinese in origin and written in Go, producing native Windows binaries as implants. Version 3.1, released in early 2024, introduced WebSocket transport, SOCKS5 reverse proxy, macOS client support, and screen capture capability.
 
-**Evidence of this exact version:** The disassembler (Ghidra) recovered the following paths from the binary's pclntab (Go runtime symbol table) — a structure that preserves source file locations for every compiled function:
+The evidence for this exact version came from decompilation, which recovered the following paths from the binary's pclntab, the Go runtime symbol table, a structure that preserves source file locations for every compiled function:
 
 ```
 C:/Users/admin/Desktop/code/XiebroC2-3.1/Implant/Implant/ImplantGo/cmd/tcp/windows/main.go:32
@@ -293,7 +293,7 @@ This is **DEFINITE** family identification — no ambiguity. The compile path ad
   <figcaption><em>Figure 2: The disassembler recovering the XiebroC2 v3.1 source path from the binary's pclntab — the Go runtime symbol table that preserves compilation metadata. This is the definitive family identification evidence.</em></figcaption>
 </figure>
 
-**Source code typo as detection artifact:** The function name `main/Helper/sysinfo.WindosVersion` (missing the second 'w' in "Windows") is a typo preserved from the XiebroC2 3.1 source code. This string is unique to this version and is a static detection target that matches any XiebroC2 3.1 binary regardless of C2 address configuration.
+A source code typo doubles as a detection artifact. The function name `main/Helper/sysinfo.WindosVersion`, missing the second 'w' in "Windows", is a typo preserved from the XiebroC2 3.1 source. That string is unique to this version and is a static detection target matching any XiebroC2 3.1 binary regardless of C2 address configuration.
 
 ## 4.2 Hardcoded C2 Configuration
 
@@ -327,7 +327,7 @@ The 16-byte AES encryption key used for **all** C2 traffic — both commands sen
 | Algorithm | AES-128-ECB (no IV) |
 | Confidence | DEFINITE (static analysis) |
 
-**Why this key matters for defenders:** AES-ECB (Electronic Codebook mode) is cryptographically weak — identical plaintext produces identical ciphertext, and there is no initialization vector. The keyboard-walk pattern of the key (`QWERt` from the top-left keyboard row) confirms this is the **XiebroC2 framework default** — the same key documented by AhnLab ASEC in their September 2025 analysis of XiebroC2 MS-SQL targeting campaigns [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. Any network capture of traffic to `193.56.255.154:4444` can be decrypted offline using this key.
+This key matters for defenders. AES-ECB, Electronic Codebook mode, is cryptographically weak, because identical plaintext produces identical ciphertext and there is no initialization vector. The keyboard-walk pattern of the key, `QWERt` from the top-left keyboard row, confirms it is the **XiebroC2 framework default**, the same key AhnLab ASEC documented in their September 2025 analysis of XiebroC2 MS-SQL targeting campaigns [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. Any network capture of traffic to `193.56.255.154:4444` can be decrypted offline with it.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-aes-ecb-encrypt-call.png" | relative_url }}" alt="Decompiled code showing the call to main/Encrypt::aesECBncrypt confirming AES-ECB mode encryption is used for all C2 traffic">
@@ -356,7 +356,7 @@ After decryption, the payload is encoded in MessagePack format (a compact binary
 
 **Outbound responses** use identical framing. Large payloads (such as file downloads or screen captures) are chunked at 50 KB (51,200 bytes) per write. An 8-second heartbeat ticker sends periodic keepalive messages to maintain the C2 connection.
 
-**Beacon jitter:** The connection watchdog (`Run_main()`) sleeps a randomly jittered interval of **0–4,999 milliseconds** between reconnection attempts, seeded from nanosecond-precision system time. This deliberate randomization prevents regular-interval network detection signatures.
+The beacon jitters. Its connection watchdog (`Run_main()`) sleeps a randomly jittered interval of **0 to 4,999 milliseconds** between reconnection attempts, seeded from nanosecond-precision system time, and that deliberate randomization defeats regular-interval network detection signatures.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-messagepack-decode-switch.png" | relative_url }}" alt="Decompiled code showing the MessagePack decode switch statement that dispatches incoming operator commands to their respective handler functions">
@@ -384,9 +384,9 @@ On every new connection, the implant sends a 15-field MessagePack registration p
 | 13 | Group tag |
 | 14 | Victim hostname |
 
-**Operational significance:** The operator receives a full host profile — OS version, username, internal IP, admin status, and .NET availability — on first connection. If admin status is false, the operator knows privilege escalation is needed before advanced techniques apply. The `.NET CLR version` field determines what .NET assemblies can run via the `inline-assembly` command.
+Operationally the operator receives a full host profile on first connection, OS version, username, internal IP, admin status and .NET availability. If admin status is false they know privilege escalation is needed before advanced techniques apply, and the `.NET CLR version` field determines what assemblies can run via the `inline-assembly` command.
 
-**GBK encoding artifact:** All shell output handlers call `ConvertGBKToUTF8()` before returning results to the C2. This is a runtime artifact of the operator's Windows system locale being configured for Chinese-language character sets (GBK = Windows code page 936, Simplified Chinese) — a direct operator environment indicator.
+The GBK encoding is an artifact worth noting. All shell output handlers call `ConvertGBKToUTF8()` before returning results to the C2, which is a runtime artifact of the operator's Windows system locale being set to Chinese-language character sets, GBK being Windows code page 936, Simplified Chinese, and a direct operator environment indicator.
 
 ## 4.6 Command Set — 36 Post-Exploitation Capabilities
 
@@ -480,16 +480,16 @@ github.com/Ne0nd0g/go-clr::go-clr.LoadAssembly(...);      // load operator .NET 
 github.com/Ne0nd0g/go-clr::go-clr.InvokeAssembly(...);    // execute, return stdout to C2
 ```
 
-**Operational significance:** The operator can deliver any .NET Framework 4.x assembly as post-exploitation tooling — credential harvesters, Active Directory enumeration tools, privilege escalation utilities. The assembly runs entirely inside `main.exe`: no child process is spawned, no file is written to disk, no console window appears. The assembly's output is captured and returned to the C2 dashboard as a text block.
+Operationally the operator can deliver any .NET Framework 4.x assembly as post-exploitation tooling, credential harvesters, Active Directory enumeration tools, privilege escalation utilities. The assembly runs entirely inside `main.exe`, with no child process spawned, no file written to disk and no console window shown, and its output is captured and returned to the C2 dashboard as a text block.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-go-clr-inline-assembly.png" | relative_url }}" alt="Decompiled code showing the github.com/Ne0nd0g/go-clr library call chain used to host the .NET CLR in-process and execute operator-supplied assemblies without writing to disk">
   <figcaption><em>Figure 6: The go-clr library call that hosts the .NET runtime directly inside main.exe — enabling fileless execution of any .NET tool the operator delivers, with output piped back to the C2 dashboard.</em></figcaption>
 </figure>
 
-**Detection constraint:** `main.exe` has no `mscoree.dll` import in its static import table. A legitimate Go binary never loads the CLR at runtime. Sysmon Event ID 7 (Image Load) observing `main.exe` loading `mscoree.dll` or `clr.dll` is definitively anomalous.
+There is a detection constraint. `main.exe` carries no `mscoree.dll` import in its static import table, and a legitimate Go binary never loads the CLR at runtime, so Sysmon Event ID 7 (Image Load) showing `main.exe` loading `mscoree.dll` or `clr.dll` is definitively anomalous.
 
-**ETW detection path:** The `Microsoft-Windows-DotNETRuntime` ETW provider fires `AssemblyLoad` events (Event ID 152) for every assembly loaded, including in-process CLR-hosted assemblies. These events fire regardless of disk artifacts, making them the primary detection surface for fileless .NET execution.
+ETW gives another path. The `Microsoft-Windows-DotNETRuntime` provider fires `AssemblyLoad` events (Event ID 152) for every assembly loaded, including in-process CLR-hosted assemblies. Those events fire regardless of disk artifacts, which makes them the primary detection surface for fileless .NET execution.
 
 The full import path `github.com/Ne0nd0g/go-clr` is embedded in any Go binary using this library via the pclntab symbol table, providing a static YARA detection target.
 
@@ -538,7 +538,7 @@ Step 8: Real-time output streaming:
   <figcaption><em>Figure 8: CreateProcess called with flag 0x4 (CREATE_SUSPENDED) — the target process is spawned but frozen before it executes, giving the implant time to overwrite its code with the payload before resuming it.</em></figcaption>
 </figure>
 
-**EDR evasion:** The `PAGE_READWRITE → PAGE_EXECUTE_READ` permission sequence (never `PAGE_EXECUTE_READWRITE`) avoids RWX allocations, which many security tools flag explicitly. The `CREATE_SUSPENDED` + `NtQueryInformationProcess` + `ReadProcessMemory` API sequence is a reliable behavioral detection signature.
+For EDR evasion, the `PAGE_READWRITE` to `PAGE_EXECUTE_READ` permission sequence, never `PAGE_EXECUTE_READWRITE`, avoids RWX allocations that many security tools flag explicitly. The `CREATE_SUSPENDED` plus `NtQueryInformationProcess` plus `ReadProcessMemory` API sequence is a reliable behavioral detection signature.
 
 **Unique error strings (YARA targets):**
 ```
@@ -578,7 +578,7 @@ All four injection APIs are resolved dynamically via `golang.org/x/sys/windows.L
   <figcaption><em>Figure 10: The complete four-step shellcode injection chain — allocate remote memory, write shellcode, change permissions from RW to RX (avoiding the detectable RWX state), then launch the thread. All four APIs are resolved dynamically at runtime to evade static import analysis.</em></figcaption>
 </figure>
 
-**Detection signature:** The four-API sequence `VirtualAllocEx` → `WriteProcessMemory` → `VirtualProtectEx (RW→RX)` → `CreateRemoteThreadEx` from `main.exe` targeting another process is a high-confidence behavioral detection signal.
+The detection signature is the four-API sequence `VirtualAllocEx`, `WriteProcessMemory`, `VirtualProtectEx` (RW to RX), then `CreateRemoteThreadEx`, issued from `main.exe` against another process.
 
 ## 4.10 SOCKS5 Reverse Proxy (Lateral Movement Enabler)
 
@@ -680,9 +680,9 @@ Two separate Covenant stager builds were present on the staging server — a del
   </tbody>
 </table>
 
-**Intelligence interpretation:** The matching `session=` token and `i=` parameter confirm both stagers were generated against the same Covenant listener. The different GUID prefixes and AES pre-shared keys confirm they are separate stager instances. The design is deliberate: compromising one build's pre-shared key does not compromise the other build's session security.
+Interpreting that intelligence, the matching `session=` token and `i=` parameter confirm both stagers were generated against the same Covenant listener, while the different GUID prefixes and AES pre-shared keys confirm they are separate stager instances. The design is deliberate, because compromising one build's pre-shared key does not compromise the other build's session security.
 
-**Detection consequence:** The shared `session=` token `75db-99b1-25fe4e9afbe58696-320bea73` appears in every HTTP POST from every host running either stager build. A single network detection rule targeting this string catches both delivery mechanisms simultaneously.
+That has a detection consequence. The shared `session=` token `75db-99b1-25fe4e9afbe58696-320bea73` appears in every HTTP POST from every host running either stager build, so a single network detection rule targeting that string catches both delivery mechanisms at once.
 
 ## 5.4 Default HTTP Profile — High-Value Fingerprinting
 
@@ -700,9 +700,9 @@ The operator did not customize Covenant's HTTP communication profile. All defaul
 | POST format | `i=[32hex]&data=[base64]&session=[token]` | DPI, proxy |
 | Protocol anomaly | HTTP (cleartext) on port 443 | Protocol inspection |
 
-**Notable anomaly:** The Chrome 41 User-Agent corresponds to a browser version released in 2015, no longer in circulation on modern networks. Any proxy or firewall alert on this exact User-Agent string carries near-zero false positive rate in a modern enterprise environment.
+One anomaly is notable. The Chrome 41 User-Agent corresponds to a browser version released in 2015 and no longer in circulation on modern networks, so any proxy or firewall alert on that exact string carries a near-zero false positive rate in a modern enterprise environment.
 
-**Port 443 anomaly:** The Covenant listener runs cleartext HTTP on port 443 (conventionally HTTPS/TLS). This bypasses controls that allow outbound port 443 without protocol inspection while avoiding TLS certificate overhead. Network sensors capable of protocol inspection detect HTTP on port 443 as an immediate anomaly.
+Port 443 is anomalous too. The Covenant listener runs cleartext HTTP on port 443, conventionally HTTPS and TLS, which bypasses controls that allow outbound 443 without protocol inspection while avoiding TLS certificate overhead. Network sensors capable of protocol inspection detect HTTP on port 443 as an immediate anomaly.
 
 ## 5.5 GruntHTTP.ps1 — PowerShell Fileless Delivery
 
@@ -753,11 +753,11 @@ UTA Tracking:       MODERATE confidence (72%)
 
 Despite insufficient evidence for named actor attribution, the available evidence supports characterizing a distinct, trackable operator. Three distinctive characteristics were identified (minimum 2 technical required):
 
-**Characteristic 1 [TECHNICAL]:** GBK-to-UTF8 charset conversion hardcoded in **all** XiebroC2 shell command handlers. This is a runtime artifact of the operator's Windows system locale being configured for Chinese-language character sets (GBK = Windows code page 936, Simplified Chinese). This is not a framework default behavior in the XiebroC2 source code — it reflects the operator's own build environment.
+The first characteristic is technical, GBK-to-UTF8 charset conversion hardcoded in **all** XiebroC2 shell command handlers. That is a runtime artifact of the operator's Windows system locale being set to Chinese-language character sets, GBK being Windows code page 936, Simplified Chinese. It is not framework default behavior in the XiebroC2 source, so it reflects the operator's own build environment.
 
-**Characteristic 2 [TECHNICAL]:** Operator compile path `C:/Users/admin/Desktop/code/XiebroC2-3.1/` embedded in the XiebroC2 binary's pclntab symbol table, combined with the campaign tag `"vps"` hardcoded in the binary. These are direct artifacts of the operator's build process — including the operator's username (`admin`) and their deliberate choice of infrastructure label.
+The second characteristic is also technical, the operator compile path `C:/Users/admin/Desktop/code/XiebroC2-3.1/` embedded in the XiebroC2 binary's pclntab symbol table, combined with the campaign tag `"vps"` hardcoded in the binary. Both are direct artifacts of the operator's build process, including their username, `admin`, and their deliberate choice of infrastructure label.
 
-**Characteristic 3 [INFRASTRUCTURE]:** Shared OPSEC failure pattern across two VPS servers — `193.56.255.154` (AS9009/M247 Singapore) and `92.60.75.103` (AS49791/Newserverlife Kazakhstan) — in the same two-week window (March–April 2026). Both servers exhibit: Covenant admin panel publicly exposed on port 7443; open staging directory serving payloads; custom tool with embedded development artifacts (XiebroC2 compile path; Hermes DLL PDB path). The developer username `iamem` from the Hermes DLL PDB path (`C:\Users\iamem\source\repos\Hermes\x64\Release\Hermes.pdb`) is a candidate persistent operator identifier.
+The third characteristic is infrastructural, a shared OPSEC failure pattern across two VPS servers, `193.56.255.154` (AS9009/M247 Singapore) and `92.60.75.103` (AS49791/Newserverlife Kazakhstan), inside the same two-week window across March and April 2026. Both expose a Covenant admin panel publicly on port 7443, serve payloads from an open staging directory, and carry a custom tool with embedded development artifacts, the XiebroC2 compile path on one and the Hermes DLL PDB path on the other. The developer username `iamem` from that PDB path (`C:\Users\iamem\source\repos\Hermes\x64\Release\Hermes.pdb`) is a candidate persistent operator identifier.
 
 ## 6.3 Why Named Actor Attribution is Rejected
 
@@ -874,7 +874,7 @@ A secondary pivot from the historical phishing activity on `193.56.255.154` iden
 | 47001/tcp | WinRM alt HTTP | WinRM doubly exposed |
 | 49664–49672/tcp | Dynamic RPC | Print Spooler on 49671 (PrintNightmare attack surface) |
 
-**Historical context:** The same IP hosted Canadian financial sector phishing (Desjardins + BMO impersonation domains) in 2023, confirmed by a Desjardins impersonation TLS certificate (SHA-1: `3a8c1f5edecf8c69df88d655d87dbc6d6decf258`) issued 2023-04-14. Whether the 2023 phishing operator and the 2026 C2 operator are the same entity remains unresolved. Passive DNS records show 27 total resolutions to this IP, including 13+ BMO and Desjardins phishing domains that expired through March 2026.
+There is historical context on this IP. It hosted Canadian financial sector phishing, Desjardins and BMO impersonation domains, in 2023, confirmed by a Desjardins impersonation TLS certificate (SHA-1 `3a8c1f5edecf8c69df88d655d87dbc6d6decf258`) issued 2023-04-14. Whether the 2023 phishing operator and the 2026 C2 operator are the same entity stays unresolved. Passive DNS records show 27 total resolutions to this IP, including 13+ BMO and Desjardins phishing domains that expired through March 2026.
 
 ## 7.2 Secondary Server: 92.60.75.103 (MODERATE confidence — same operator)
 
@@ -912,7 +912,7 @@ AhnLab ASEC documented XiebroC2 in credential brute-force campaigns targeting ex
 **Covenant ecosystem:**
 Covenant's documented threat actor users include: (1) **APT28** (documented, DIFFERENT heavily-modified variant using cloud-based C2 routing — explicitly inconsistent with this campaign's stock default profile, as detailed in Section 6.3); (2) various red team operators who use the archived framework for legitimate authorized testing; and (3) crimeware operators who deploy the framework without customization, relying on its default HTTP profile and pre-shared key infrastructure. No Tier 1 or Tier 2 source has attributed default-profile Covenant (matching the fingerprints in this investigation) to any named nation-state actor. The stock Chrome 41 User-Agent, unmodified URL paths, and static session token are consistent with an operator who compiled and deployed the framework without reviewing or modifying its default configuration — a profile that aligns with the crimeware hypothesis in Section 6.4.
 
-**Infrastructure overlap assessment:** Zero confirmed overlaps between `193.56.255.154` or `92.60.75.103` and any published campaign attribution exist in available open-source intelligence. Both IPs are assessed as newly provisioned for this campaign based on passive DNS and certificate issuance dates.
+On infrastructure overlap, there are zero confirmed overlaps between `193.56.255.154` or `92.60.75.103` and any published campaign attribution in available open-source intelligence. I assess both IPs as newly provisioned for this campaign, on passive DNS and certificate issuance dates.
 
 ---
 
@@ -1231,13 +1231,13 @@ This section is a brief orientation for readers who need to understand what to a
 
 ## Appendix A — Evidence Data Gap Note
 
-**main.exe SHA256 hash:** The triage preprocessing log was confirmed to have been run against `s.d` only (SHA256 match confirmed in `hashes.txt`). The SHA256 for `main.exe` (XiebroC2 implant) was not captured in the triage artifacts available to this analysis. This hash is documented as absent from the IOC feed with a data gap note. Organizations retrieving this file should compute its SHA256 independently. Presence of the space-padded C2 config strings and pclntab typo `WindosVersion` in a binary is sufficient for YARA-based identification without the hash.
+The `main.exe` SHA256 is a gap. The triage preprocessing log was confirmed to have been run against `s.d` only, with the SHA256 match confirmed in `hashes.txt`, and the SHA256 for `main.exe`, the XiebroC2 implant, was not captured in the triage artifacts available here. I document that hash as absent from the IOC feed with a data gap note, and organizations retrieving the file should compute its SHA256 independently. The space-padded C2 config strings and the pclntab typo `WindosVersion` are together sufficient for YARA-based identification without it.
 
 ## Appendix B — XiebroC2 v3.1 AES Key: Framework Default Confirmation
 
 The AES-128-ECB key `QWERt_CSDMAHUATW` was independently documented by AhnLab ASEC in their September 2025 analysis of XiebroC2 campaigns targeting exposed MS-SQL servers [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. The ASEC sample connected to a different IP (`1.94.185.235:8433`) using WebSocket transport, while this investigation's sample uses `193.56.255.154:4444` with TCP transport — confirming these are different deployments using the same framework default key.
 
-**Implication for threat hunting:** The key `QWERt_CSDMAHUATW` can serve as a detection string for any XiebroC2 deployment that uses the default key configuration, not just this specific campaign. The AhnLab ASEC Q4 2025 MS-SQL statistics report confirms XiebroC2 remained active through the end of 2025 [https://asec.ahnlab.com/en/92003/].
+For threat hunting, the key `QWERt_CSDMAHUATW` can serve as a detection string for any XiebroC2 deployment using the default key configuration, not just this campaign. The AhnLab ASEC Q4 2025 MS-SQL statistics report confirms XiebroC2 remained active through the end of 2025 [https://asec.ahnlab.com/en/92003/].
 
 ## Appendix C — Covenant Framework Historical Adoption Context
 

