@@ -27,35 +27,82 @@
     return String(name).toLowerCase().trim().replace(/\s+/g, '-');
   }
 
+  // A grid row carries null where a rowspan reserves a column past that row's
+  // last physical cell, so a missing cell has to read as empty rather than throw.
   function cellText(cell) {
-    return (cell.textContent || '').replace(/\s+/g, ' ').trim();
+    return cell ? (cell.textContent || '').replace(/\s+/g, ' ').trim() : '';
   }
 
   function hasWordChar(s) {
     return /[A-Za-z0-9]/.test(s);
   }
 
-  // Normalises a raw cell fragment into a tactic display name, or null.
+  // Abbreviations that actually occur in the published corpus, keyed lowercase.
+  // Both were found by running the parser over the live pages, not guessed: an
+  // invented alias would assign a tactic no report ever claimed.
+  var TACTIC_ALIASES = {
+    'priv. escalation': 'Privilege Escalation',
+    'c&c': 'Command and Control'
+  };
+
+  // hasOwnProperty, because a cell reading "constructor" or "toString" would
+  // otherwise resolve to an inherited Object member instead of null.
+  function matchTactic(t) {
+    for (var i = 0; i < TACTIC_ORDER.length; i++) {
+      if (TACTIC_ORDER[i].toLowerCase() === t.toLowerCase()) return TACTIC_ORDER[i];
+    }
+    var key = t.toLowerCase();
+    return Object.prototype.hasOwnProperty.call(TACTIC_ALIASES, key) ? TACTIC_ALIASES[key] : null;
+  }
+
+  // Normalises a raw cell fragment into a tactic display name, or null. A cell
+  // naming two tactics, "Exfiltration / Impact", resolves to the first, which
+  // the column convention makes the primary one.
   function normaliseTactic(raw) {
     var t = String(raw || '').replace(/[\s\/|:]+$/, '').trim();
     if (!t) return null;
-    for (var i = 0; i < TACTIC_ORDER.length; i++) {
-      if (TACTIC_ORDER[i].toLowerCase() === t.toLowerCase()) return TACTIC_ORDER[i];
+    var direct = matchTactic(t);
+    if (direct) return direct;
+    var parts = t.split('/');
+    if (parts.length < 2) return null;
+    for (var i = 0; i < parts.length; i++) {
+      var seg = matchTactic(parts[i].trim());
+      if (seg) return seg;
     }
     return null;
   }
 
-  // Every technique ID in one cell, with the first and last match objects kept so
-  // callers slice on the real offset rather than re-finding the text.
+  // A cell reading "T1071.001/004" is one base technique carrying two
+  // sub-technique numbers. The trailing \b matters: without it a four-digit
+  // continuation would be truncated into a bogus three-digit sub-technique.
+  var SUBTECH_RUN_RE = /^(?:\s*\/\s*\d{3}\b)+/;
+
+  // Every technique ID in one cell, with the offset of the first ID and the end
+  // of the last, so callers slice on the real position rather than re-finding
+  // the text. A sub-technique run is expanded into one ID per number and is
+  // consumed whole, so the trailing 004 cannot be mistaken for a technique name.
+  // The dotted base is required, since a bare "T1071/004" is genuinely ambiguous.
   function techniqueMatches(text) {
     var re = new RegExp(TECH_RE.source, 'g');
-    var ids = [], first = null, last = null, m;
+    var ids = [], start = -1, end = -1, m;
     while ((m = re.exec(text)) !== null) {
+      if (start === -1) start = m.index;
       ids.push(m[0]);
-      if (!first) first = m;
-      last = m;
+      end = m.index + m[0].length;
+      var dot = m[0].indexOf('.');
+      if (dot !== -1) {
+        var run = SUBTECH_RUN_RE.exec(text.slice(end));
+        if (run) {
+          var extra = run[0].match(/\d{3}/g);
+          for (var i = 0; i < extra.length; i++) {
+            ids.push(m[0].slice(0, dot) + '.' + extra[i]);
+          }
+          end += run[0].length;
+          re.lastIndex = end;
+        }
+      }
     }
-    return { ids: ids, first: first, last: last };
+    return { ids: ids, start: start, end: end };
   }
 
   // Returns every technique the row carries, as an array. Empty when the row has
@@ -70,11 +117,11 @@
     if (idx === -1) return [];
 
     var own = cellText(cells[idx]);
-    var before = own.slice(0, found.first.index);
+    var before = own.slice(0, found.start);
     // A cell listing several IDs is a list, not one technique plus its name, so
-    // anchor the trailing text on the last ID and no ID can leak into the name.
-    var anchor = found.ids.length > 1 ? found.last : found.first;
-    var after = own.slice(anchor.index + anchor[0].length);
+    // the trailing text is anchored past the LAST ID and no ID can leak into the
+    // name. With a single ID the two offsets coincide.
+    var after = own.slice(found.end);
 
     // Tactic: text before the ID in its own cell, else the nearest earlier cell.
     var tactic = normaliseTactic(before);
@@ -134,13 +181,55 @@
     return -1;
   }
 
+  // Expands rowspan so a merged Tactic cell applies to its continuation rows.
+  // Without this a table using <td rowspan="3">Initial Access</td> drops every
+  // technique in the second and third rows into unmapped, which is how one live
+  // report published 11 techniques where it documents 46. The span is stated by
+  // the HTML, so this lays the table out the way a browser does rather than
+  // guessing a tactic. A column a span reserves past the row's last physical
+  // cell is filled with null, keeping every row dense for index lookups.
+  //
+  // Row and cell scoping is unchanged, so tfoot totals and nested tables are
+  // still not read as data.
+  function tableGrid(table) {
+    var rows = [].slice.call(table.querySelectorAll(':scope > tbody > tr, :scope > tr'));
+    var grid = [], pending = [];
+    for (var r = 0; r < rows.length; r++) {
+      var cells = [].slice.call(rows[r].querySelectorAll(':scope > td, :scope > th'));
+      var out = [], c = 0, k = 0;
+      while (true) {
+        var held = pending[c] && pending[c].remaining > 0;
+        if (!held && k >= cells.length) {
+          var more = false;
+          for (var q = c; q < pending.length; q++) {
+            if (pending[q] && pending[q].remaining > 0) { more = true; break; }
+          }
+          if (!more) break;
+        }
+        if (held) {
+          out[c] = pending[c].cell;
+          pending[c].remaining--;
+        } else if (k < cells.length) {
+          var cell = cells[k++];
+          out[c] = cell;
+          var rs = parseInt(cell.getAttribute('rowspan') || '1', 10);
+          if (rs > 1) pending[c] = { cell: cell, remaining: rs - 1 };
+        } else {
+          out[c] = null;
+        }
+        c++;
+      }
+      grid.push(out);
+    }
+    return grid;
+  }
+
   function parseTable(table) {
     var confIndex = confidenceColumnIndex(table);
-    // Scoped so tfoot totals and nested tables are not read as data.
-    var rows = table.querySelectorAll(':scope > tbody > tr, :scope > tr');
+    var grid = tableGrid(table);
     var techniques = [], unmapped = [], seen = {};
-    for (var i = 0; i < rows.length; i++) {
-      var cells = rows[i].querySelectorAll(':scope > td, :scope > th');
+    for (var i = 0; i < grid.length; i++) {
+      var cells = grid[i];
       if (!cells.length) continue;
       var parsed = parseRow(cells, confIndex);
       for (var j = 0; j < parsed.length; j++) {

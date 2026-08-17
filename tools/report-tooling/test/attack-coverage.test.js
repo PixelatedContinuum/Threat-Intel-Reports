@@ -245,6 +245,101 @@ test('a row with no resolvable tactic lands in unmapped', () => {
   });
 });
 
+// --- Merged tactic cells (rowspan) ---------------------------------------
+// Real corpus tables merge the Tactic column with rowspan, so a continuation
+// row carries no tactic cell at all. Reading each <tr> independently drops
+// every one of those techniques into `unmapped`: the live PULSAR-RAT strip
+// claimed 11 techniques where the report documents 46, and the Navigator layer
+// it exports omitted 76% of them.
+
+test('a merged tactic cell reaches every row it spans', () => {
+  const r = AC.parseTable(firstTable(fixtures.rowspanTactic));
+  assert.strictEqual(r.unmapped.length, 0, 'a spanned tactic is stated, not missing');
+  assert.deepStrictEqual(r.techniques.map((t) => t.id),
+    ['T1566.001', 'T1566.002', 'T1189']);
+  r.techniques.forEach((t) => {
+    assert.strictEqual(t.tactic, 'Initial Access', t.id + ' must inherit the merged tactic');
+  });
+  // The confidence column is the LAST column here, so these also prove the
+  // confidence index still lines up with grid columns on a continuation row.
+  assert.deepStrictEqual(r.techniques.map((t) => t.confidence),
+    ['MODERATE', 'HIGH', 'LOW']);
+  assert.deepStrictEqual(r.techniques.map((t) => t.name),
+    ['Spearphishing Attachment', 'Spearphishing Link', 'Drive-by Compromise']);
+  assert.deepStrictEqual(r.techniques.map((t) => t.evidence),
+    ['Email delivery', 'Link to open directory', 'Compromised sites'],
+    'evidence must be the implementation cell, never the confidence word');
+});
+
+test('consecutive merged tactic cells do not bleed into each other', () => {
+  const r = AC.parseTable(firstTable(fixtures.twoRowspanBlocks));
+  assert.strictEqual(r.unmapped.length, 0);
+  assert.deepStrictEqual(r.techniques.map((t) => [t.id, t.tactic]), [
+    ['T1059.001', 'Execution'],
+    ['T1059.003', 'Execution'],
+    ['T1547.001', 'Persistence'],
+    ['T1543.003', 'Persistence']
+  ], 'the second block continuation row must inherit Persistence, not Execution');
+});
+
+test('a rowspan stops exactly at the end of its span', () => {
+  const r = AC.parseTable(firstTable(fixtures.rowspanEndsExactly));
+  assert.strictEqual(r.unmapped.length, 0);
+  assert.deepStrictEqual(r.techniques.map((t) => [t.id, t.tactic]), [
+    ['T1046', 'Discovery'],
+    ['T1057', 'Discovery'],
+    ['T1486', 'Impact']
+  ], 'the third row carries its own tactic and must not inherit the held one');
+});
+
+// --- Tactic spellings the corpus actually uses ----------------------------
+
+test('an abbreviated tactic resolves through the alias map', () => {
+  const priv = AC.parseTable(firstTable(fixtures.abbreviatedTactic));
+  assert.strictEqual(priv.unmapped.length, 0);
+  assert.deepStrictEqual(priv.techniques[0], {
+    id: 'T1068',
+    tactic: 'Privilege Escalation',
+    name: 'Exploitation for Privilege Escalation',
+    confidence: 'HIGH',
+    evidence: 'PrintSpoofer SeImpersonate LPE (sourced)'
+  });
+
+  const c2 = AC.parseTable(firstTable(fixtures.abbreviatedC2AndCompoundId));
+  assert.strictEqual(c2.unmapped.length, 0);
+  c2.techniques.forEach((t) => assert.strictEqual(t.tactic, 'Command and Control'));
+});
+
+test('a dual-tactic cell resolves to the primary tactic named first', () => {
+  const r = AC.parseTable(firstTable(fixtures.dualTacticCell));
+  assert.strictEqual(r.unmapped.length, 0);
+  assert.deepStrictEqual(r.techniques[0], {
+    id: 'T1041',
+    tactic: 'Exfiltration',
+    name: 'Exfiltration Over C2 Channel',
+    confidence: 'HIGH',
+    evidence: 'Data theft through botnet infrastructure'
+  });
+});
+
+test('a compound cell yields every sub-technique of its base', () => {
+  const r = AC.parseTable(firstTable(fixtures.abbreviatedC2AndCompoundId));
+  assert.deepStrictEqual(r.techniques.map((t) => t.id), ['T1071.001', 'T1071.004']);
+  r.techniques.forEach((t) => {
+    assert.strictEqual(t.name, '', 'the trailing 004 is a technique, never a name');
+    assert.strictEqual(t.evidence, 'HTTPS/DNS tunneling');
+  });
+});
+
+test('a four-digit continuation is not truncated into a sub-technique', () => {
+  const html = '<table><thead><tr><th>Tactic</th><th>Technique</th><th>Evidence</th></tr>' +
+    '</thead><tbody><tr><td>Execution</td><td>T1059.001/2024 revision</td>' +
+    '<td>encoded command</td></tr></tbody></table>';
+  const r = AC.parseTable(firstTable(html));
+  assert.deepStrictEqual(r.techniques.map((t) => t.id), ['T1059.001'],
+    'only a genuine three-digit sub-technique may be expanded');
+});
+
 const TWO_ACTOR_PAGE = `
   <h2 id="s11">11. MITRE ATT&CK Mapping</h2>
   <details class="hl-teardown"><summary>Full ATT&CK table</summary>
@@ -297,7 +392,9 @@ test('discovers genuine mapping tables and rejects tactic-less ID tables', () =>
     'current3col', 'current4col', 'legacyIdInTechnique', 'legacySplitIdName',
     'legacyEvidenceObserved', 'legacy5colConfidence', 'legacy5colComponent',
     'componentThenConfidence', 'emptyConfidenceCell', 'configurationColumn',
-    'idPrecededByFalseMatch', 'rowHeaderTactic', 'tfootTotals', 'nestedTableInCell'
+    'idPrecededByFalseMatch', 'rowHeaderTactic', 'tfootTotals', 'nestedTableInCell',
+    'rowspanTactic', 'twoRowspanBlocks', 'rowspanEndsExactly',
+    'abbreviatedTactic', 'abbreviatedC2AndCompoundId', 'dualTacticCell'
   ];
   const REJECT = ['notAnAttackTable', 'missingTactic', 'parenthesisedId', 'multiIdCoverage'];
 

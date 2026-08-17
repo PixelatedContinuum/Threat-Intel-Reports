@@ -141,6 +141,71 @@ module.exports = {
     '<tfoot><tr><td>Impact</td><td>T1490 Inhibit System Recovery</td>' +
     '<td>Totals row, not a mapping</td></tr></tfoot></table>',
 
+  // Shape 9: a merged Tactic cell spanning its continuation rows. The live
+  // PULSAR-RAT mapping table is built this way, 10 rowspans across 47 rows, so
+  // reading each tr independently drops 36 of its 47 rows into unmapped.
+  // Live in reports/PULSAR-RAT/index.md.
+  rowspanTactic:
+    '<table><thead><tr><th>Tactic</th><th>Technique ID</th>' +
+    '<th>Technique Name</th><th>Implementation</th><th>Confidence</th></tr></thead>' +
+    '<tbody>' +
+    '<tr><td rowspan="3"><strong>Initial Access</strong></td><td>T1566.001</td>' +
+    '<td>Spearphishing Attachment</td><td>Email delivery</td><td>MODERATE</td></tr>' +
+    '<tr><td>T1566.002</td><td>Spearphishing Link</td>' +
+    '<td>Link to open directory</td><td>HIGH</td></tr>' +
+    '<tr><td>T1189</td><td>Drive-by Compromise</td>' +
+    '<td>Compromised sites</td><td>LOW</td></tr>' +
+    '</tbody></table>',
+
+  // Two merged Tactic cells back to back. The second block's continuation row
+  // must inherit ITS OWN tactic, not the first block's.
+  twoRowspanBlocks:
+    '<table><thead><tr><th>Tactic</th><th>Technique ID</th>' +
+    '<th>Technique Name</th><th>Evidence</th></tr></thead><tbody>' +
+    '<tr><td rowspan="2">Execution</td><td>T1059.001</td>' +
+    '<td>PowerShell</td><td>encoded command</td></tr>' +
+    '<tr><td>T1059.003</td><td>Windows Command Shell</td><td>cmd.exe spawn</td></tr>' +
+    '<tr><td rowspan="2">Persistence</td><td>T1547.001</td>' +
+    '<td>Registry Run Keys</td><td>HKCU Run value</td></tr>' +
+    '<tr><td>T1543.003</td><td>Windows Service</td><td>service created</td></tr>' +
+    '</tbody></table>',
+
+  // A rowspan="2" tactic followed by a row carrying its own tactic cell. An
+  // off-by-one in the span countdown would hold Discovery over the Impact row.
+  rowspanEndsExactly:
+    '<table><thead><tr><th>Tactic</th><th>Technique ID</th>' +
+    '<th>Technique Name</th><th>Evidence</th></tr></thead><tbody>' +
+    '<tr><td rowspan="2">Discovery</td><td>T1046</td>' +
+    '<td>Network Service Discovery</td><td>port sweep</td></tr>' +
+    '<tr><td>T1057</td><td>Process Discovery</td><td>tasklist</td></tr>' +
+    '<tr><td>Impact</td><td>T1486</td>' +
+    '<td>Data Encrypted for Impact</td><td>files encrypted</td></tr>' +
+    '</tbody></table>',
+
+  // The abbreviated tactic "Priv. Escalation" inside the merged column.
+  // Live in reports/cloudsync-assembler-toolkit-91-197-98-188/index.md, 3 rows.
+  abbreviatedTactic: table(
+    ['Tactic / Technique', 'Name', 'Evidence'],
+    [['Priv. Escalation / T1068', 'Exploitation for Privilege Escalation',
+      'PrintSpoofer SeImpersonate LPE (sourced)']]
+  ),
+
+  // The abbreviated tactic "C&C" alongside a compound cell naming two
+  // sub-techniques of one base. Both occur in the same live table.
+  // Live in reports/webserver-compromise-kit-91-236-230-250/index.md.
+  abbreviatedC2AndCompoundId: table(
+    ['Tactic', 'Technique', 'Evidence'],
+    [['C&C', 'T1071.001/004', 'HTTPS/DNS tunneling']]
+  ),
+
+  // A dual-tactic cell. The column convention names the primary tactic first.
+  // Live in reports/AdvancedRouterScanner/index.md.
+  dualTacticCell: table(
+    ['Tactic', 'Technique ID', 'Technique Name', 'Implementation'],
+    [['Exfiltration / Impact', 'T1041', 'Exfiltration Over C2 Channel',
+      'Data theft through botnet infrastructure']]
+  ),
+
   // A nested table inside a cell. Its rows are not data rows and its cells do not
   // belong to the outer row.
   nestedTableInCell:
