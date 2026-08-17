@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-const { checkMarkdown } = require('../check-report.js');
+const { checkMarkdown, checkFile } = require('../check-report.js');
 
 const GOOD = [
   '| Tactic / Technique | Name | Evidence |',
@@ -303,7 +303,13 @@ test('a dependency that will not load is NOT CHECKED and exits 2, never a FAIL a
        jsdom, has to check the report and clear it. */
     const ok = runGate(t.gate, [t.report], { NODE_PATH: path.join(TOOLING, 'node_modules') });
     assert.strictEqual(ok.status, 0, 'with deps resolvable the same gate must actually run');
-    assert.doesNotMatch(ok.stdout, /NOT CHECKED/);
+    /* Scoped to the verdict at line start rather than anywhere in the output.
+       A markdown-path PASS now legitimately carries "glossary NOT CHECKED" on
+       the same line, because extracted tables cannot exercise the glossary
+       exclusion list. Asserting the absence of that string anywhere would make
+       an honest sub-verdict read as a broken gate. */
+    assert.doesNotMatch(ok.stdout, /^NOT CHECKED/m,
+      'the gate is the thing being cleared here, so its own verdict must not be NOT CHECKED');
     assert.match(ok.stdout, /^PASS/);
   } finally {
     fs.rmSync(t.root, { recursive: true, force: true });
@@ -334,4 +340,24 @@ test('a dependency that resolves but exports nothing usable is NOT CHECKED too',
   } finally {
     fs.rmSync(t.root, { recursive: true, force: true });
   }
+});
+
+/* The markdown path sees only extracted tables, so it has none of the pre, a or
+   heading elements the glossary exclusion list is about. Reporting PASS there
+   would claim a check that never ran. */
+test('the markdown path reports the glossary as NOT CHECKED, never PASS', () => {
+  const r = checkMarkdown([
+    '| Tactic / Technique | Name | Evidence |',
+    '|---|---|---|',
+    '| Execution / T1059.004 | Unix Shell | interactive bash |'
+  ].join('\n'), 'fixture.md');
+  assert.strictEqual(r.status, 'PASS', 'the strip claim still passes');
+  assert.strictEqual(r.glossary.status, 'NOT CHECKED');
+  assert.match(r.glossary.reason, /no rendered body/);
+});
+
+test('a report the gate could not read reports the glossary as NOT CHECKED too', () => {
+  const r = checkFile('no-such-report-anywhere.md');
+  assert.strictEqual(r.status, 'NOT CHECKED');
+  assert.strictEqual(r.glossary.status, 'NOT CHECKED');
 });

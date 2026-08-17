@@ -69,10 +69,35 @@ if (!DEPS_REASON) {
   if (unusable) DEPS_REASON = 'gate dependency loaded but is unusable: ' + unusable + '.';
 }
 
+/* The glossary checker gets its OWN guard rather than joining the block above.
+   A broken glossary module must not disable the strip gate, and a strip-side
+   dependency failure must not silently mark the glossary as fine. Each claim
+   reports its own state, which is the gate-honesty contract applied per check
+   rather than per run. */
+var CG = null;
+var GLOSS_REASON = null;
+try {
+  CG = require('./lib/check-glossary.js');
+  if (!CG || typeof CG.glossaryProblems !== 'function') {
+    throw new Error('check-glossary.js loaded but exports no glossaryProblems');
+  }
+} catch (e) {
+  GLOSS_REASON = 'glossary checker did not load: ' +
+    String((e && e.message) || e).split('\n')[0].trim();
+}
+
+var GLOSS_MARKDOWN_REASON =
+  'markdown path has no rendered body; glossary verified post-push against the live URL';
+
+function glossaryNotChecked(reason) {
+  return { status: 'NOT CHECKED', reason: reason, marks: 0 };
+}
+
 /* Reported against whichever path the caller asked about, so the operator sees
    what was skipped as well as why. */
 function depsNotChecked(p) {
-  return { status: 'NOT CHECKED', path: p, reason: DEPS_REASON, problems: [], missing: [] };
+  return { status: 'NOT CHECKED', path: p, reason: DEPS_REASON, problems: [], missing: [],
+           glossary: glossaryNotChecked('gate dependencies did not load, so nothing was verified') };
 }
 
 var TECH_RE = /\bT\d{4}(?:\.\d{3})?\b/g;
@@ -249,6 +274,10 @@ function checkMarkdown(md, label) {
   var doc = new JSDOM('<body>' + html + '</body>').window.document;
   var r = checkDom(doc, label || 'report');
   r.path = label || 'report';
+  // extractTables yields ONLY the tables, so the pre, a and heading elements the
+  // exclusion list is about are not in this DOM at all. Reporting PASS here would
+  // claim a check that never ran.
+  r.glossary = glossaryNotChecked(GLOSS_MARKDOWN_REASON);
   return r;
 }
 
@@ -256,7 +285,8 @@ function checkFile(file) {
   if (DEPS_REASON) return depsNotChecked(file);
   var md;
   try { md = fs.readFileSync(file, 'utf8'); }
-  catch (e) { return { status: 'NOT CHECKED', path: file, reason: e.message, problems: [], missing: [] }; }
+  catch (e) { return { status: 'NOT CHECKED', path: file, reason: e.message, problems: [], missing: [],
+                       glossary: glossaryNotChecked('report could not be read') }; }
   return checkMarkdown(md, file);
 }
 
@@ -265,18 +295,35 @@ async function checkUrl(url) {
   var html;
   try {
     var res = await fetch(url);
-    if (!res.ok) return { status: 'NOT CHECKED', path: url, reason: 'HTTP ' + res.status, problems: [], missing: [] };
+    if (!res.ok) return { status: 'NOT CHECKED', path: url, reason: 'HTTP ' + res.status, problems: [], missing: [],
+                          glossary: glossaryNotChecked('report body was not retrieved') };
     html = await res.text();
   } catch (e) {
-    return { status: 'NOT CHECKED', path: url, reason: e.message, problems: [], missing: [] };
+    return { status: 'NOT CHECKED', path: url, reason: e.message, problems: [], missing: [],
+             glossary: glossaryNotChecked('report body was not retrieved') };
   }
   var doc = new JSDOM(html).window.document;
   var body = doc.querySelector('.hl-post-content') || doc.querySelector('.hl-post-body');
-  if (!body) return { status: 'NOT CHECKED', path: url, reason: 'no report body container', problems: [], missing: [] };
+  if (!body) return { status: 'NOT CHECKED', path: url, reason: 'no report body container', problems: [], missing: [],
+                      glossary: glossaryNotChecked('report body was not retrieved') };
   var wrapper = new JSDOM('<body></body>').window.document;
   wrapper.body.innerHTML = body.innerHTML;
   var r = checkDom(wrapper, url);
   r.path = url;
+
+  /* AFTER checkDom, never before. markTerms inserts span elements into the body,
+     and running it first would let glossary marks perturb the table parse this
+     gate's primary claim depends on. */
+  if (GLOSS_REASON) {
+    r.glossary = glossaryNotChecked(GLOSS_REASON);
+  } else {
+    var g = CG.glossaryProblems(wrapper.body, wrapper, null);
+    r.glossary = { status: g.status, marks: g.marks, reason: g.reason };
+    if (g.problems.length) {
+      r.problems = r.problems.concat(g.problems);
+      r.status = 'FAIL';
+    }
+  }
   return r;
 }
 
@@ -296,8 +343,10 @@ if (require.main === module) {
     if (asJson) {
       console.log(JSON.stringify(r, function (k, v) { return k === 'layer' ? undefined : v; }, 2));
     } else {
+      var gloss = r.glossary || glossaryNotChecked('no glossary verdict recorded');
       var tail = r.status === 'NOT CHECKED' ? r.reason
-        : r.status === 'PASS' ? r.tables + ' tables, ' + r.techniques + ' techniques, ' + r.unmapped + ' unmapped'
+        : r.status === 'PASS' ? r.tables + ' tables, ' + r.techniques + ' techniques, ' +
+            r.unmapped + ' unmapped, glossary ' + gloss.status
         : r.problems.join('; ');
       console.log(r.status.padEnd(12) + r.path + '   ' + tail);
       if (verbose && r.problems.length) r.problems.forEach(function (p) { console.log('    ' + p); });
