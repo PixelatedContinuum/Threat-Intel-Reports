@@ -3300,6 +3300,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-attack__detail[hidden] { display: none; }
 .hl-attack__detailhead { font-size: 0.68em; letter-spacing: 0.05em;
   opacity: 0.6; margin-bottom: 0.5em; text-transform: uppercase; }
+.hl-attack__prompt { font-size: 0.78em; opacity: 0.58; margin: 0; }
 .hl-attack__chip { display: inline-block; font-size: 0.72em; font-family: monospace;
   padding: 3px 8px; margin: 0 4px 4px 0; border-radius: 3px;
   background: rgba(74,158,255,0.16); border: 1px solid rgba(74,158,255,0.4); }

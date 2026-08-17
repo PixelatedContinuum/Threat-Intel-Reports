@@ -245,6 +245,16 @@
     return n;
   }
 
+  var PROMPT_TEXT = '\u25B8 Select a tactic above to list its techniques';
+
+  // The detail panel is never hidden. It shows either this prompt or a
+  // selected tactic's chips, so filling it never shifts the page.
+  function showPrompt(detail, doc) {
+    detail.innerHTML = '';
+    detail.appendChild(el(doc, 'p', 'hl-attack__prompt', PROMPT_TEXT));
+    detail.removeAttribute('hidden');
+  }
+
   function renderStrip(parsed, doc) {
     if (!parsed.techniques.length && !parsed.unmapped.length) return null;
 
@@ -280,7 +290,7 @@
     wrap.appendChild(bars);
 
     var detail = el(doc, 'div', 'hl-attack__detail');
-    detail.setAttribute('hidden', 'hidden');
+    showPrompt(detail, doc);
     wrap.appendChild(detail);
 
     if (parsed.unmapped.length) {
@@ -336,7 +346,7 @@
         [].forEach.call(strip.querySelectorAll('.hl-attack__seg'), function (s) {
           s.classList.remove('is-open');
         });
-        if (already || !list.length) { detail.setAttribute('hidden', 'hidden'); return; }
+        if (already || !list.length) { showPrompt(detail, doc); return; }
 
         seg.classList.add('is-open');
         detail.innerHTML = '';
@@ -369,6 +379,7 @@
     toNavigatorLayer: toNavigatorLayer,
     groupByTactic: groupByTactic,
     renderStrip: renderStrip,
+    showPrompt: showPrompt,
     init: init
   };
 });

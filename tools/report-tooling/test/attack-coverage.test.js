@@ -370,6 +370,18 @@ test('renders nothing at all when a table yields no techniques', () => {
   assert.strictEqual(AC.renderStrip(AC.parseTable(firstTable(fixtures.notAnAttackTable)), doc), null);
 });
 
+test('a freshly rendered strip shows the prompt', () => {
+  const doc = new JSDOM('<body></body>').window.document;
+  const strip = AC.renderStrip(AC.parseTable(firstTable(fixtures.current3col)), doc);
+  const prompts = strip.querySelectorAll('.hl-attack__prompt');
+  assert.strictEqual(prompts.length, 1, 'exactly one prompt is shown');
+  assert.ok(prompts[0].textContent.includes('Select a tactic'),
+    'the prompt text tells the reader what to do');
+  assert.ok(!strip.querySelector('.hl-attack__detail').hasAttribute('hidden'),
+    'the detail panel is never hidden, even before any tactic is selected');
+  assert.strictEqual(strip.querySelectorAll('.hl-attack__chip').length, 0);
+});
+
 // --- Browser wiring -------------------------------------------------------
 // init() reads the GLOBAL document, so a test drives the real browser path by
 // pointing that global at a jsdom document and dispatching genuine click
@@ -428,8 +440,9 @@ test('init inserts one strip immediately above its mapping table', () => {
     assert.strictEqual(table.previousElementSibling, strips[0],
       'the strip must sit immediately before the table it summarises');
     assert.strictEqual(strips[0].querySelectorAll('.hl-attack__seg').length, 14);
-    assert.ok(page.doc.querySelector('.hl-attack__detail').hasAttribute('hidden'),
-      'the detail panel starts collapsed');
+    const detail = page.doc.querySelector('.hl-attack__detail');
+    assert.ok(!detail.hasAttribute('hidden'), 'the detail panel is never hidden, even at init');
+    assert.ok(detail.querySelector('.hl-attack__prompt'), 'it opens showing the prompt');
   } finally {
     page.restore();
   }
@@ -463,7 +476,10 @@ test('clicking the same segment again collapses it', () => {
     assert.ok(!detail.hasAttribute('hidden'), 'precondition: the first click opened it');
 
     clickSeg(page.doc, 'Credential Access');
-    assert.ok(detail.hasAttribute('hidden'), 'the second click must collapse the detail');
+    assert.ok(detail.querySelector('.hl-attack__prompt'),
+      'the second click must restore the prompt');
+    assert.strictEqual(detail.querySelectorAll('.hl-attack__chip').length, 0,
+      'no chips remain once the prompt is restored');
     assert.deepStrictEqual(openTactics(page.doc), [], 'no segment stays marked open');
   } finally {
     page.restore();
@@ -499,18 +515,62 @@ test('clicking an empty segment opens nothing', () => {
       'precondition: Impact is an uncovered tactic in this fixture');
 
     clickSeg(page.doc, 'Impact');
-    assert.ok(detail.hasAttribute('hidden'), 'an empty tactic must not open an empty box');
+    assert.ok(detail.querySelector('.hl-attack__prompt'),
+      'an empty tactic must not open an empty box');
+    assert.strictEqual(detail.querySelectorAll('.hl-attack__chip').length, 0,
+      'no chips remain');
     assert.deepStrictEqual(openTactics(page.doc), []);
 
     // From a closed strip a dead handler would look identical to the real one,
     // so run the same click against an open strip: the empty tactic has to
-    // close what is showing rather than leave another tactic chips on screen.
+    // restore the prompt rather than leave another tactic's chips on screen.
     clickSeg(page.doc, 'Credential Access');
-    assert.ok(!detail.hasAttribute('hidden'), 'precondition: a populated tactic is open');
+    assert.strictEqual(detail.querySelectorAll('.hl-attack__chip').length, 1,
+      'precondition: a populated tactic is open');
     clickSeg(page.doc, 'Impact');
-    assert.ok(detail.hasAttribute('hidden'),
-      'clicking an empty tactic must close the panel, not strand the previous chips');
+    assert.ok(detail.querySelector('.hl-attack__prompt'),
+      'clicking an empty tactic must restore the prompt, not strand the previous chips');
+    assert.strictEqual(detail.querySelectorAll('.hl-attack__chip').length, 0,
+      'no chips remain');
     assert.deepStrictEqual(openTactics(page.doc), []);
+  } finally {
+    page.restore();
+  }
+});
+
+test('clicking a populated tactic replaces the prompt with chips', () => {
+  const page = bootPage('<h2>11. MITRE ATT&CK Mapping</h2>' + fixtures.current3col);
+  try {
+    const detail = page.doc.querySelector('.hl-attack__detail');
+    assert.ok(detail.querySelector('.hl-attack__prompt'), 'precondition: the prompt is showing');
+
+    clickSeg(page.doc, 'Credential Access');
+    assert.strictEqual(detail.querySelectorAll('.hl-attack__prompt').length, 0,
+      'the prompt must be gone once a tactic is selected');
+    assert.strictEqual(detail.querySelectorAll('.hl-attack__chip').length, 1,
+      'the chip count must equal that tactic\'s technique count');
+  } finally {
+    page.restore();
+  }
+});
+
+test('the panel is never hidden across a full click cycle', () => {
+  const page = bootPage('<h2>11. MITRE ATT&CK Mapping</h2>' + fixtures.current3col);
+  try {
+    const detail = page.doc.querySelector('.hl-attack__detail');
+    assert.strictEqual(detail.hasAttribute('hidden'), false, 'never hidden on initial render');
+
+    clickSeg(page.doc, 'Credential Access');
+    assert.strictEqual(detail.hasAttribute('hidden'), false,
+      'never hidden after opening a populated segment');
+
+    clickSeg(page.doc, 'Credential Access');
+    assert.strictEqual(detail.hasAttribute('hidden'), false,
+      'never hidden after collapsing that segment again');
+
+    clickSeg(page.doc, 'Impact');
+    assert.strictEqual(detail.hasAttribute('hidden'), false,
+      'never hidden after clicking a grey segment');
   } finally {
     page.restore();
   }
