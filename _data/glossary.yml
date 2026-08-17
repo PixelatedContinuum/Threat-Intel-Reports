@@ -1,0 +1,183 @@
+# Hover definitions for report prose. Matched client-side by assets/js/glossary.js.
+# One sentence each. Never define a term by restating it.
+#
+# case_sensitive: true for acronyms, so "C2" does not match "c2" inside a filename.
+# aliases: additional surface forms that map to the same definition.
+#
+# Adding a term here applies it to EVERY published report at once, with no per-report
+# review. After any edit, run `npm run verify` in tools/report-tooling.
+
+- term: C2
+  aliases: ["command and control", "command-and-control"]
+  case_sensitive: true
+  short: "The channel and servers an operator uses to issue instructions to malware already running on a victim host."
+
+- term: open directory
+  aliases: ["open dir"]
+  case_sensitive: false
+  short: "A web server left listing its own files, which exposes an operator's tooling to anyone who finds the URL."
+
+- term: lateral movement
+  case_sensitive: false
+  short: "Moving from the first compromised machine to others inside the same network."
+
+- term: beacon
+  aliases: ["beaconing"]
+  case_sensitive: false
+  short: "The periodic call-home an implant makes to its C2, whose regularity is often what gives it away."
+
+- term: ASN
+  aliases: ["Autonomous System Number"]
+  case_sensitive: true
+  short: "The number identifying a block of IP addresses under one operator's routing control, useful for grouping infrastructure."
+
+- term: bulletproof hosting
+  case_sensitive: false
+  short: "Hosting sold on the promise that abuse complaints and takedown requests will be ignored."
+
+- term: process injection
+  case_sensitive: false
+  short: "Running code inside another process's memory so it inherits that process's identity and trust."
+
+- term: kill chain
+  case_sensitive: false
+  short: "The ordered stages of an intrusion, from first access through to the operator's actual objective."
+
+- term: entropy
+  case_sensitive: false
+  short: "A measure of randomness in a file's bytes, high in packed or encrypted data and low in plain text."
+
+- term: passive DNS
+  case_sensitive: false
+  short: "Historical records of which names resolved to which addresses, which lets you pivot across infrastructure over time."
+
+- term: JARM
+  case_sensitive: true
+  short: "A fingerprint of how a server completes TLS handshakes, which often stays constant across an operator's servers."
+
+- term: JA4X
+  case_sensitive: true
+  short: "A fingerprint derived from an X.509 certificate's structure, used to cluster infrastructure that shares a generation method."
+
+- term: packer
+  aliases: ["packed"]
+  case_sensitive: false
+  short: "A wrapper that compresses or encrypts an executable so its real code only appears in memory at run time."
+
+- term: SOCKS
+  aliases: ["SOCKS5", "SOCKS proxy"]
+  case_sensitive: true
+  short: "A generic proxy protocol that relays arbitrary TCP traffic, commonly used to tunnel out of a compromised network."
+
+- term: process hollowing
+  case_sensitive: false
+  short: "Starting a legitimate program, stripping out its code in memory, and replacing it with malicious code before it runs."
+
+- term: web shell
+  aliases: ["webshell"]
+  case_sensitive: false
+  short: "A script planted on a web server that gives the operator command execution through ordinary HTTP requests."
+
+- term: credential dumping
+  case_sensitive: false
+  short: "Extracting passwords, hashes or tokens from a compromised machine so they can be reused elsewhere."
+
+- term: sinkhole
+  aliases: ["sinkholed", "sinkholing"]
+  case_sensitive: false
+  short: "Redirecting malicious domain traffic to a controlled server, usually to measure infections or cut off the operator."
+
+- term: reverse shell
+  case_sensitive: false
+  short: "A shell where the victim machine dials out to the operator, which gets through firewalls that block inbound connections."
+
+- term: LSASS
+  aliases: ["lsass.exe", "Local Security Authority Subsystem Service"]
+  case_sensitive: true
+  short: "The Windows process holding logged-on credentials in memory, and a long-standing theft target."
+
+- term: LOLBin
+  aliases: ["LOLBins", "Living Off the Land Binary", "living off the land"]
+  case_sensitive: true
+  short: "A tool already present and trusted on the system, abused so the operator never has to bring their own binary."
+
+- term: certificate transparency
+  aliases: ["CT log", "CT logs"]
+  case_sensitive: false
+  short: "Public append-only logs of issued TLS certificates, which make newly registered attacker domains discoverable."
+
+- term: Mark-of-the-Web
+  aliases: ["MoTW"]
+  case_sensitive: true
+  short: "A tag Windows attaches to downloaded files that triggers extra warnings, and which malware frequently strips."
+
+- term: typosquat
+  aliases: ["typosquatting", "typosquatted"]
+  case_sensitive: false
+  short: "A domain registered as a near-miss spelling of a real one, relying on the reader not looking closely."
+
+- term: BYOVD
+  aliases: ["Bring Your Own Vulnerable Driver"]
+  case_sensitive: true
+  short: "Loading a signed but vulnerable driver on purpose, then exploiting it to get kernel-level access."
+
+# Tail terms, added only where a term appears in at least two reports. Counts
+# measured 2026-08-17 across reports/*/index.md.
+
+- term: exfiltration
+  aliases: ["exfiltrate", "exfiltrated", "exfiltrating"]
+  case_sensitive: false
+  short: "Moving stolen data out of a victim network to somewhere the operator controls."
+
+- term: pivot
+  aliases: ["pivoting", "pivoted"]
+  case_sensitive: false
+  short: "Using one known indicator to find related infrastructure, such as moving from an IP to every domain that resolved to it."
+
+- term: loader
+  case_sensitive: false
+  short: "A small first-stage program whose only job is to fetch and launch the real payload."
+
+- term: implant
+  case_sensitive: false
+  short: "The component left running on a compromised host to give the operator continued access."
+
+- term: dropper
+  case_sensitive: false
+  short: "A program that carries its payload inside itself and writes it to disk on execution, rather than downloading it."
+
+- term: WHOIS
+  case_sensitive: false
+  short: "The registration record for a domain or address block, naming who registered it and when."
+
+- term: rootkit
+  case_sensitive: false
+  short: "Code that hides an intruder's files, processes or network connections from the tools an administrator would use to find them."
+
+- term: imphash
+  aliases: ["import hash"]
+  case_sensitive: false
+  short: "A hash of an executable's import table, which survives renaming and is often the primary anchor when the original filename is absent."
+
+- term: HVNC
+  aliases: ["Hidden Virtual Network Computing"]
+  case_sensitive: true
+  short: "A hidden desktop an operator can run and control programs on, which never appears on the victim's monitor."
+
+- term: n-day
+  aliases: ["n-days"]
+  case_sensitive: false
+  short: "A vulnerability that is already public and already patched, exploited against systems that have not applied the fix."
+
+- term: W^X
+  case_sensitive: true
+  short: "An allocation pattern where memory is writable or executable but never both at once, which slips past rules watching for write-and-execute pages."
+
+- term: SSRF
+  aliases: ["Server-Side Request Forgery"]
+  case_sensitive: true
+  short: "A flaw that makes a server fetch a URL of the attacker's choosing, often to reach internal services only that server can see."
+
+- term: ProxyLogon
+  case_sensitive: true
+  short: "A 2021 Microsoft Exchange vulnerability chain giving an unauthenticated attacker code execution on the mail server, usually ending in a web shell."
