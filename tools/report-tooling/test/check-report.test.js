@@ -161,3 +161,67 @@ test('a bare confidence word never reaches a layer comment', () => {
     });
   }
 });
+
+// The PULSAR-RAT shape, reduced. Before rowspan support this parsed as
+// 1 mapped and 2 unmapped. The gate must FAIL that state rather than
+// reporting that a strip rendered successfully.
+const PULSAR_SHAPE = [
+  '<table>',
+  '<thead><tr><th>Tactic</th><th>Technique ID</th><th>Technique Name</th>',
+  '<th>Implementation</th><th>Confidence</th></tr></thead>',
+  '<tbody>',
+  '<tr><td rowspan="3">Initial Access</td><td>T1566.001</td><td>Spearphishing Attachment</td>',
+  '<td>email delivery</td><td>MODERATE</td></tr>',
+  '<tr><td>T1566.002</td><td>Spearphishing Link</td><td>open dir link</td><td>CONFIRMED</td></tr>',
+  '<tr><td>T1189</td><td>Drive-by Compromise</td><td>compromised sites</td><td>LOW</td></tr>',
+  '</tbody></table>'
+].join('\n');
+
+test('the rowspan shape that would have shipped a wrong strip now passes', () => {
+  const r = checkMarkdown(PULSAR_SHAPE, 'pulsar.md');
+  assert.strictEqual(r.status, 'PASS');
+  assert.strictEqual(r.techniques, 3, 'all three rows, not just the span starter');
+  assert.strictEqual(r.unmapped, 0);
+  r.layer.techniques.forEach((t) => assert.strictEqual(t.tactic, 'initial-access'));
+});
+
+test('an unmapped technique is a FAIL, since that is what the old bug looked like', () => {
+  const halfBroken = [
+    '| Tactic / Technique | Name | Evidence |',
+    '|---|---|---|',
+    '| Execution / T1059.004 | Unix Shell | ok |',
+    '| Nonsense Tactic / T1055 | Injection | not a real tactic |'
+  ].join('\n');
+  const r = checkMarkdown(halfBroken, 'half.md');
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /no resolvable tactic/i);
+});
+
+// Part A's refinement. A Tactic-headed table whose technique column holds
+// counts rather than IDs is not a mapping table and must be skipped, not failed.
+test('a tactic-summary table declaring no technique IDs is skipped, not failed', () => {
+  const summary = [
+    '| Tactic | Techniques Observed | Coverage Level | Business Impact |',
+    '|---|---|---|---|',
+    '| Initial Access | 3 | Comprehensive | High |',
+    '| Execution | 4 | Comprehensive | High |'
+  ].join('\n');
+  const r = checkMarkdown(summary, 'summary.md');
+  assert.strictEqual(r.status, 'PASS');
+  assert.strictEqual(r.tables, 0, 'a table with zero declared IDs is not a mapping table');
+});
+
+// The guard on Part A's safety argument. If emphasis could hide an ID from the
+// raw scan, the zero-ID skip would become a hole. It cannot: emphasis markers
+// are non-word characters, so the word boundary still matches.
+test('emphasis never hides a declared ID from the raw scan', () => {
+  const bolded = [
+    '| Tactic | Technique ID | Technique Name |',
+    '|---|---|---|',
+    '| **Execution** | **T1204.002** | User Execution |'
+  ].join('\n');
+  const r = checkMarkdown(bolded, 'bold.md');
+  assert.strictEqual(r.status, 'PASS');
+  assert.strictEqual(r.techniques, 1);
+  assert.strictEqual(r.layer.techniques[0].techniqueID, 'T1204.002');
+});

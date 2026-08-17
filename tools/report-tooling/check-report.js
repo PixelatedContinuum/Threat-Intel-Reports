@@ -93,7 +93,28 @@ function checkDom(doc, label) {
   var candidates = [];
   [].forEach.call(doc.body.querySelectorAll('table'), function (t) {
     var p = AC.parseTable(t);
-    if (p.techniques.length || hasTacticHeader(t)) candidates.push({ el: t, parsed: p });
+    if (!p.techniques.length && !hasTacticHeader(t)) return;
+
+    var ids = declaredIds(t);
+
+    /* A Tactic-headed table that declares ZERO technique IDs anywhere (for
+       example PULSAR-RAT's "ATT&CK Tactic Coverage Analysis" table, whose
+       Techniques Observed column holds counts such as 3 and 4, never an ID)
+       is not a mapping table. Skip it outright, exactly as a non-candidate
+       table is skipped: it is not counted in `tables`, and it cannot fail
+       rule 1 below.
+
+       This is safe because rule 1 exists to catch a table whose techniques
+       the PARSER could not read, which is what the bold-emphasis defect
+       looked like: a real mapping table whose IDs were present in the markup
+       but the parser failed to extract them. Formatting can never hide an ID
+       from this raw scan, because emphasis markers are non-word characters,
+       so \bT1204\b still matches inside **T1204.002**. A table with
+       genuinely zero declared IDs therefore cannot be concealing techniques
+       the parser lost, so it is not the shape rule 1 exists to catch. */
+    if (!p.techniques.length && ids.size === 0) return;
+
+    candidates.push({ el: t, parsed: p, ids: ids });
   });
 
   candidates.forEach(function (c) {
@@ -120,7 +141,7 @@ function checkDom(doc, label) {
     }
 
     var gaps = [];
-    declaredIds(t).forEach(function (id) {
+    c.ids.forEach(function (id) {
       declared++;
       if (own.has(id)) return;
       gaps.push(id);
