@@ -1,6 +1,7 @@
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert');
+const { resolveObjectURL } = require('node:buffer');
 const { JSDOM } = require('jsdom');
 const fixtures = require('./fixtures/tables.js');
 const AC = require('../../../assets/js/attack-coverage.js');
@@ -367,4 +368,185 @@ test('renders an unmapped notice only when there are unmapped techniques', () =>
 test('renders nothing at all when a table yields no techniques', () => {
   const doc = new JSDOM('<body></body>').window.document;
   assert.strictEqual(AC.renderStrip(AC.parseTable(firstTable(fixtures.notAnAttackTable)), doc), null);
+});
+
+// --- Browser wiring -------------------------------------------------------
+// init() reads the GLOBAL document, so a test drives the real browser path by
+// pointing that global at a jsdom document and dispatching genuine click
+// events. Nothing here reimplements the handlers: the assertions run against
+// whatever init() actually wired up.
+
+function bootPage(innerHtml, title) {
+  const dom = new JSDOM('<body><div class="hl-post-content">' +
+    '<h1>' + (title || 'Test Report') + '</h1>' + innerHtml + '</div></body>');
+  const hadDoc = 'document' in global;
+  const prevDoc = global.document;
+  const restore = () => {
+    if (hadDoc) global.document = prevDoc;
+    else delete global.document;
+  };
+  global.document = dom.window.document;
+  // A throw from init() would otherwise strand the global and make every later
+  // test fail for the wrong reason.
+  try {
+    AC.init();
+  } catch (e) {
+    restore();
+    throw e;
+  }
+  return { dom: dom, doc: dom.window.document, restore: restore };
+}
+
+// `inner` dispatches from a descendant of the segment instead of the segment
+// itself. That is what a real click produces, since the bar fill covers most of
+// the segment, and it is the path the delegated handler resolves with closest().
+function clickSeg(doc, tactic, inner) {
+  const seg = doc.querySelector('.hl-attack__seg[data-tactic="' + tactic + '"]');
+  assert.ok(seg, 'no segment rendered for tactic ' + tactic);
+  const target = inner ? seg.querySelector(inner) : seg;
+  assert.ok(target, 'no ' + inner + ' inside the ' + tactic + ' segment');
+  target.dispatchEvent(new doc.defaultView.MouseEvent('click', { bubbles: true }));
+  return seg;
+}
+
+function openTactics(doc) {
+  return Array.from(doc.querySelectorAll('.hl-attack__seg.is-open'))
+    .map((s) => s.getAttribute('data-tactic'));
+}
+
+function chipText(detail) {
+  return Array.from(detail.querySelectorAll('.hl-attack__chip')).map((c) => c.textContent);
+}
+
+test('init inserts one strip immediately above its mapping table', () => {
+  const page = bootPage('<h2>11. MITRE ATT&CK Mapping</h2>' + fixtures.current3col);
+  try {
+    const strips = page.doc.querySelectorAll('.hl-attack');
+    assert.strictEqual(strips.length, 1, 'exactly one strip for one mapping table');
+
+    const table = page.doc.querySelector('table');
+    assert.strictEqual(table.previousElementSibling, strips[0],
+      'the strip must sit immediately before the table it summarises');
+    assert.strictEqual(strips[0].querySelectorAll('.hl-attack__seg').length, 14);
+    assert.ok(page.doc.querySelector('.hl-attack__detail').hasAttribute('hidden'),
+      'the detail panel starts collapsed');
+  } finally {
+    page.restore();
+  }
+});
+
+test('clicking a populated segment reveals that tactic chips', () => {
+  const page = bootPage('<h2>11. MITRE ATT&CK Mapping</h2>' + fixtures.current3col);
+  try {
+    const detail = page.doc.querySelector('.hl-attack__detail');
+    clickSeg(page.doc, 'Credential Access');
+
+    assert.ok(!detail.hasAttribute('hidden'), 'the detail panel must open');
+    assert.deepStrictEqual(openTactics(page.doc), ['Credential Access']);
+    assert.strictEqual(
+      detail.querySelector('.hl-attack__detailhead').textContent,
+      'Credential Access \u00b7 1 technique',
+      'the head names the tactic and its technique count');
+    assert.deepStrictEqual(chipText(detail), ['T1110.003 Password Spraying']);
+    assert.strictEqual(
+      detail.querySelector('.hl-attack__chip').getAttribute('data-confidence'), 'MODERATE');
+  } finally {
+    page.restore();
+  }
+});
+
+test('clicking the same segment again collapses it', () => {
+  const page = bootPage('<h2>11. MITRE ATT&CK Mapping</h2>' + fixtures.current3col);
+  try {
+    const detail = page.doc.querySelector('.hl-attack__detail');
+    clickSeg(page.doc, 'Credential Access');
+    assert.ok(!detail.hasAttribute('hidden'), 'precondition: the first click opened it');
+
+    clickSeg(page.doc, 'Credential Access');
+    assert.ok(detail.hasAttribute('hidden'), 'the second click must collapse the detail');
+    assert.deepStrictEqual(openTactics(page.doc), [], 'no segment stays marked open');
+  } finally {
+    page.restore();
+  }
+});
+
+test('clicking a different segment switches rather than accumulating', () => {
+  const page = bootPage('<h2>11. MITRE ATT&CK Mapping</h2>' + fixtures.current3col);
+  try {
+    const detail = page.doc.querySelector('.hl-attack__detail');
+    clickSeg(page.doc, 'Credential Access');
+    clickSeg(page.doc, 'Reconnaissance', '.hl-attack__fill');
+
+    assert.ok(!detail.hasAttribute('hidden'), 'the detail stays open on the new tactic');
+    assert.deepStrictEqual(openTactics(page.doc), ['Reconnaissance'],
+      'only the most recently clicked segment is open');
+    assert.strictEqual(
+      detail.querySelector('.hl-attack__detailhead').textContent,
+      'Reconnaissance \u00b7 1 technique');
+    assert.deepStrictEqual(chipText(detail), ['T1595.002 Vulnerability Scanning'],
+      'the chips belong to the second tactic, not the first');
+  } finally {
+    page.restore();
+  }
+});
+
+test('clicking an empty segment opens nothing', () => {
+  const page = bootPage('<h2>11. MITRE ATT&CK Mapping</h2>' + fixtures.current3col);
+  try {
+    const detail = page.doc.querySelector('.hl-attack__detail');
+    const impact = page.doc.querySelector('.hl-attack__seg[data-tactic="Impact"]');
+    assert.strictEqual(impact.getAttribute('data-count'), '0',
+      'precondition: Impact is an uncovered tactic in this fixture');
+
+    clickSeg(page.doc, 'Impact');
+    assert.ok(detail.hasAttribute('hidden'), 'an empty tactic must not open an empty box');
+    assert.deepStrictEqual(openTactics(page.doc), []);
+
+    // From a closed strip a dead handler would look identical to the real one,
+    // so run the same click against an open strip: the empty tactic has to
+    // close what is showing rather than leave another tactic chips on screen.
+    clickSeg(page.doc, 'Credential Access');
+    assert.ok(!detail.hasAttribute('hidden'), 'precondition: a populated tactic is open');
+    clickSeg(page.doc, 'Impact');
+    assert.ok(detail.hasAttribute('hidden'),
+      'clicking an empty tactic must close the panel, not strand the previous chips');
+    assert.deepStrictEqual(openTactics(page.doc), []);
+  } finally {
+    page.restore();
+  }
+});
+
+test('the export button downloads a correctly named Navigator layer', async () => {
+  const page = bootPage('<h2>11. MITRE ATT&CK Mapping</h2>' + fixtures.current3col,
+    'SE-Asia Gov Toolkit');
+  const proto = page.dom.window.HTMLAnchorElement.prototype;
+  const realClick = proto.click;
+  const captured = [];
+  // The only stub: jsdom treats a real anchor activation as a navigation it has
+  // not implemented. Blob, createObjectURL and the JSON serialisation are all
+  // genuine, so the assertions below read the bytes the browser would download.
+  proto.click = function () { captured.push({ name: this.download, href: this.href }); };
+  try {
+    const button = page.doc.querySelector('.hl-attack__export');
+    button.dispatchEvent(new page.dom.window.MouseEvent('click', { bubbles: true }));
+
+    assert.strictEqual(captured.length, 1, 'exactly one download triggered');
+    const name = captured[0].name;
+    assert.ok(/-layer\.json$/.test(name), 'filename must end in -layer.json, got ' + name);
+    assert.strictEqual(name, name.toLowerCase(), 'filename must be lowercase, got ' + name);
+    assert.ok(!/\s/.test(name), 'filename must carry no whitespace, got ' + name);
+    assert.strictEqual(name, 'se-asia-gov-toolkit-11-mitre-att-ck-mapping-layer.json');
+
+    const blob = resolveObjectURL(captured[0].href);
+    assert.ok(blob, 'the anchor href must resolve back to the generated blob');
+    assert.strictEqual(blob.type, 'application/json');
+    const layer = JSON.parse(await blob.text());
+    assert.strictEqual(layer.versions.layer, '4.5');
+    assert.strictEqual(layer.name, 'SE-Asia Gov Toolkit: 11. MITRE ATT&CK Mapping');
+    assert.deepStrictEqual(layer.techniques.map((t) => t.techniqueID),
+      ['T1595.002', 'T1110.003']);
+  } finally {
+    proto.click = realClick;
+    page.restore();
+  }
 });

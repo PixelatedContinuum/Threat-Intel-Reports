@@ -293,6 +293,71 @@
     return wrap;
   }
 
+  function download(doc, filename, obj) {
+    var blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = doc.createElement('a');
+    a.href = url; a.download = filename;
+    doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  function slugify(s) {
+    return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+  }
+
+  function init() {
+    var doc = document;
+    var body = doc.querySelector('.hl-post-content') || doc.querySelector('.hl-post-body');
+    if (!body) return;
+
+    var reportTitle = (doc.querySelector('h1') || {}).textContent || doc.title || '';
+    reportTitle = reportTitle.replace(/\s+/g, ' ').trim();
+
+    findMappingTables(body).forEach(function (table) {
+      var parsed = parseTable(table);
+      parsed.label = labelForTable(table);
+      var strip = renderStrip(parsed, doc);
+      if (!strip) return;
+
+      var anchor = insertionPointFor(table);
+      anchor.parentNode.insertBefore(strip, anchor);
+
+      var detail = strip.querySelector('.hl-attack__detail');
+      var groups = groupByTactic(parsed.techniques);
+
+      strip.querySelector('.hl-attack__bars').addEventListener('click', function (e) {
+        var seg = e.target.closest ? e.target.closest('.hl-attack__seg') : null;
+        if (!seg) return;
+        var tactic = seg.getAttribute('data-tactic');
+        var list = groups[tactic] || [];
+        var already = seg.classList.contains('is-open');
+
+        [].forEach.call(strip.querySelectorAll('.hl-attack__seg'), function (s) {
+          s.classList.remove('is-open');
+        });
+        if (already || !list.length) { detail.setAttribute('hidden', 'hidden'); return; }
+
+        seg.classList.add('is-open');
+        detail.innerHTML = '';
+        detail.appendChild(el(doc, 'div', 'hl-attack__detailhead',
+          tactic + ' \u00b7 ' + list.length + ' technique' + (list.length === 1 ? '' : 's')));
+        list.forEach(function (t) {
+          var chip = el(doc, 'span', 'hl-attack__chip', t.id + ' ' + t.name);
+          chip.setAttribute('data-confidence', t.confidence);
+          detail.appendChild(chip);
+        });
+        detail.removeAttribute('hidden');
+      });
+
+      strip.querySelector('.hl-attack__export').addEventListener('click', function () {
+        download(doc,
+          slugify(reportTitle + '-' + (parsed.label || 'attack')) + '-layer.json',
+          toNavigatorLayer(parsed, { reportTitle: reportTitle }));
+      });
+    });
+  }
+
   return {
     TACTIC_ORDER: TACTIC_ORDER,
     tacticSlug: tacticSlug,
@@ -303,6 +368,7 @@
     insertionPointFor: insertionPointFor,
     toNavigatorLayer: toNavigatorLayer,
     groupByTactic: groupByTactic,
-    renderStrip: renderStrip
+    renderStrip: renderStrip,
+    init: init
   };
 });
