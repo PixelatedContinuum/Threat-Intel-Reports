@@ -144,3 +144,44 @@ test('a once_per_report term still marks only once within a single section', () 
   const root = mark('<h2>One</h2><p>The C2 replied, and the C2 replied again.</p>');
   assert.strictEqual(root.querySelectorAll('.hl-gloss').length, 1);
 });
+
+/* jsdom reports every rect as zero, so the real-geometry path was previously
+   exercised by nothing. Stubbing the two rects the function reads makes it
+   testable, which matters because live it silently flipped none of the 19
+   marks that needed it and nothing threw. */
+function stubRect(el, left, width) {
+  el.getBoundingClientRect = () => ({ left, width, right: left + width, top: 0, bottom: 0, height: 0 });
+}
+
+test('applyEdgeClasses flips a mark whose tooltip would overflow the container', () => {
+  const root = mark('<h2>A</h2><p>Credentials came from LSASS memory.</p>');
+  const m = root.querySelector('.hl-gloss');
+  stubRect(root, 0, 844);
+  stubRect(m, 780, 40);
+  assert.strictEqual(G.applyEdgeClasses(root), 1);
+  assert.ok(m.classList.contains('hl-gloss--right'));
+});
+
+test('applyEdgeClasses clears a stale flip when the container grows', () => {
+  const root = mark('<h2>A</h2><p>Credentials came from LSASS memory.</p>');
+  const m = root.querySelector('.hl-gloss');
+  stubRect(root, 0, 844);
+  stubRect(m, 780, 40);
+  G.applyEdgeClasses(root);
+  assert.ok(m.classList.contains('hl-gloss--right'), 'flipped at the narrow width');
+
+  stubRect(root, 0, 1600);
+  assert.strictEqual(G.applyEdgeClasses(root), 0);
+  assert.ok(!m.classList.contains('hl-gloss--right'),
+    'a class that only ever accumulated would leave the tooltip anchored right forever');
+});
+
+test('applyEdgeClasses changes nothing when the container cannot be measured', () => {
+  const root = mark('<h2>A</h2><p>Credentials came from LSASS memory.</p>');
+  const m = root.querySelector('.hl-gloss');
+  m.classList.add('hl-gloss--right');
+  stubRect(root, 0, 0);
+  assert.strictEqual(G.applyEdgeClasses(root), 0);
+  assert.ok(m.classList.contains('hl-gloss--right'),
+    'an unmeasurable container is not evidence the flip is wrong, so nothing is touched');
+});

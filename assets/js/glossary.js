@@ -164,10 +164,16 @@
     return markLeft + tooltipMaxWidth > containerWidth;
   }
 
-  /* Applies the flip class using real geometry. Returns the number of marks
-     flipped, which is 0 under jsdom because every rect there is zero. A green
-     unit suite therefore says nothing about this function's browser behaviour;
-     the manual browser check is what covers it. */
+  /* Applies or clears the flip class from real geometry, returning how many
+     marks are flipped.
+
+     It TOGGLES rather than only adding, because the decision depends on the
+     container width: widen the window and a mark that needed the flip no longer
+     does, and a class that only ever accumulated would leave the tooltip
+     anchored right for the rest of the session.
+
+     A container of zero width means nothing was measurable, which is the jsdom
+     case, and the honest response is to change nothing rather than guess. */
   function applyEdgeClasses(rootEl) {
     var marks = rootEl.querySelectorAll('.hl-gloss');
     if (!marks.length || !rootEl.getBoundingClientRect) return 0;
@@ -179,9 +185,37 @@
       if (prefersRightAnchor(r.left - box.left, r.width, box.width, TOOLTIP_MAX_PX)) {
         m.classList.add('hl-gloss--right');
         flipped++;
+      } else {
+        m.classList.remove('hl-gloss--right');
       }
     });
     return flipped;
+  }
+
+  /* Measures only once layout has settled, and again whenever it changes.
+
+     Calling applyEdgeClasses straight from init is wrong even though the script
+     is deferred: parsing is done by then, but webfonts have not landed and this
+     layout's own inline JS is still moving panels around, so the rects read at
+     that moment are not the ones the reader ends up with. Live, that measured
+     every mark as needing no flip and applied the class to none of 19 that
+     wanted it. Nothing threw and nothing looked wrong, which is why only a
+     browser caught it. */
+  function scheduleEdgeClasses(rootEl) {
+    var run = function () { applyEdgeClasses(rootEl); };
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(run);
+    else run();
+    if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+      document.fonts.ready.then(run)['catch'](function () {});
+    }
+    if (typeof window !== 'undefined' && window.addEventListener) {
+      window.addEventListener('load', run);
+      var timer = null;
+      window.addEventListener('resize', function () {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(run, 150);
+      });
+    }
   }
 
   function init() {
@@ -194,7 +228,7 @@
     try { terms = JSON.parse(raw.textContent); } catch (e) { return; }
     if (!terms || !terms.length) return;
     markTerms(body, terms, doc);
-    applyEdgeClasses(body);
+    scheduleEdgeClasses(body);
   }
 
   return {
@@ -203,6 +237,7 @@
     markTerms: markTerms,
     prefersRightAnchor: prefersRightAnchor,
     applyEdgeClasses: applyEdgeClasses,
+    scheduleEdgeClasses: scheduleEdgeClasses,
     init: init
   };
 });
