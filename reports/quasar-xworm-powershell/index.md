@@ -186,7 +186,7 @@ Analysts can pivot on:
 
 > **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`.
 
-<table class=”professional-table”>
+<table class="professional-table">
   <thead>
     <tr>
       <th>Tactic / Technique</th>
