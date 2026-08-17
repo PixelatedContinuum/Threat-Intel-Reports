@@ -313,3 +313,35 @@ test('discovers genuine mapping tables and rejects tactic-less ID tables', () =>
   assert.strictEqual(MAPPING.length + REJECT.length, Object.keys(fixtures).length,
     'every fixture must be classified as MAPPING or REJECT');
 });
+
+test('generates a schema-correct Navigator 4.5 layer', () => {
+  const parsed = AC.parseTable(firstTable(fixtures.current3col));
+  parsed.label = '11.1 Operator toolkit';
+  const layer = AC.toNavigatorLayer(parsed, { reportTitle: 'SE-Asia Toolkit' });
+
+  assert.strictEqual(layer.domain, 'enterprise-attack');
+  assert.strictEqual(layer.versions.layer, '4.5');
+  assert.strictEqual(layer.versions.navigator, '4.9.0');
+  assert.strictEqual(layer.versions.attack, '19');
+  assert.strictEqual(layer.name, 'SE-Asia Toolkit: 11.1 Operator toolkit');
+
+  const t = layer.techniques.find((x) => x.techniqueID === 'T1595.002');
+  assert.strictEqual(t.tactic, 'reconnaissance');
+  assert.strictEqual(t.score, 100);
+  assert.strictEqual(t.enabled, true);
+  assert.ok(t.comment.length > 0);
+});
+
+test('confidence maps onto the layer score band', () => {
+  const parsed = AC.parseTable(firstTable(fixtures.current4col));
+  const layer = AC.toNavigatorLayer(parsed, { reportTitle: 'X' });
+  const byId = Object.fromEntries(layer.techniques.map((t) => [t.techniqueID, t.score]));
+  assert.strictEqual(byId['T1055.002'], 100);
+  assert.strictEqual(byId['T1583.003'], 60);
+});
+
+test('unmapped techniques are excluded from the layer, since tactic is unknown', () => {
+  const parsed = AC.parseTable(firstTable(fixtures.missingTactic));
+  const layer = AC.toNavigatorLayer(parsed, { reportTitle: 'X' });
+  assert.strictEqual(layer.techniques.length, 0);
+});

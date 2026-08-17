@@ -202,6 +202,35 @@
     return table;
   }
 
+  var SCORE = { DEFINITE: 100, HIGH: 100, MODERATE: 60, LOW: 30, INSUFFICIENT: 0 };
+
+  function toNavigatorLayer(parsed, opts) {
+    opts = opts || {};
+    var title = opts.reportTitle || 'The Hunter\u2019s Ledger';
+    var name = parsed.label ? title + ': ' + parsed.label : title;
+    return {
+      name: name.slice(0, 250),
+      domain: 'enterprise-attack',
+      description: 'ATT&CK coverage exported from ' + title +
+        '. Unmapped techniques, if any, are omitted because their tactic could not be resolved.',
+      versions: { attack: '19', navigator: '4.9.0', layer: '4.5' },
+      techniques: parsed.techniques.map(function (t) {
+        return {
+          techniqueID: t.id,
+          tactic: tacticSlug(t.tactic),
+          score: SCORE[t.confidence] === undefined ? 100 : SCORE[t.confidence],
+          comment: (t.name ? t.name + '. ' : '') + (t.evidence || ''),
+          enabled: true
+        };
+      }),
+      gradient: {
+        colors: ['#c7e3ff', '#1f6feb'],
+        minValue: 0,
+        maxValue: 100
+      }
+    };
+  }
+
   return {
     TACTIC_ORDER: TACTIC_ORDER,
     tacticSlug: tacticSlug,
@@ -209,6 +238,7 @@
     parseTable: parseTable,
     findMappingTables: findMappingTables,
     labelForTable: labelForTable,
-    insertionPointFor: insertionPointFor
+    insertionPointFor: insertionPointFor,
+    toNavigatorLayer: toNavigatorLayer
   };
 });
