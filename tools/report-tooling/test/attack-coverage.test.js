@@ -345,3 +345,26 @@ test('unmapped techniques are excluded from the layer, since tactic is unknown',
   const layer = AC.toNavigatorLayer(parsed, { reportTitle: 'X' });
   assert.strictEqual(layer.techniques.length, 0);
 });
+
+test('renders one segment per tactic, including empty ones', () => {
+  const doc = new JSDOM('<body></body>').window.document;
+  const parsed = AC.parseTable(firstTable(fixtures.current3col));
+  const strip = AC.renderStrip(parsed, doc);
+  assert.strictEqual(strip.querySelectorAll('[data-tactic]').length, 14);
+  const empty = strip.querySelectorAll('[data-tactic][data-count="0"]');
+  assert.strictEqual(empty.length, 12, 'two tactics covered, twelve empty');
+});
+
+test('renders an unmapped notice only when there are unmapped techniques', () => {
+  const doc = new JSDOM('<body></body>').window.document;
+  const clean = AC.renderStrip(AC.parseTable(firstTable(fixtures.current3col)), doc);
+  assert.strictEqual(clean.querySelector('[data-unmapped]'), null);
+
+  const dirty = AC.renderStrip(AC.parseTable(firstTable(fixtures.missingTactic)), doc);
+  assert.strictEqual(dirty.querySelector('[data-unmapped]').getAttribute('data-unmapped'), '1');
+});
+
+test('renders nothing at all when a table yields no techniques', () => {
+  const doc = new JSDOM('<body></body>').window.document;
+  assert.strictEqual(AC.renderStrip(AC.parseTable(firstTable(fixtures.notAnAttackTable)), doc), null);
+});

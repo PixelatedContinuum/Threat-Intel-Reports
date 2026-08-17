@@ -231,6 +231,68 @@
     };
   }
 
+  function groupByTactic(techniques) {
+    var groups = {};
+    for (var i = 0; i < TACTIC_ORDER.length; i++) groups[TACTIC_ORDER[i]] = [];
+    techniques.forEach(function (t) { if (groups[t.tactic]) groups[t.tactic].push(t); });
+    return groups;
+  }
+
+  function el(doc, tag, cls, text) {
+    var n = doc.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function renderStrip(parsed, doc) {
+    if (!parsed.techniques.length && !parsed.unmapped.length) return null;
+
+    var groups = groupByTactic(parsed.techniques);
+    var max = 1;
+    TACTIC_ORDER.forEach(function (t) { if (groups[t].length > max) max = groups[t].length; });
+
+    var wrap = el(doc, 'div', 'hl-attack');
+    var head = el(doc, 'div', 'hl-attack__head');
+    head.appendChild(el(doc, 'span', 'hl-attack__label', parsed.label || 'ATT&CK coverage'));
+    head.appendChild(el(doc, 'span', 'hl-attack__count',
+      parsed.techniques.length + ' techniques \u00b7 ' +
+      TACTIC_ORDER.filter(function (t) { return groups[t].length; }).length + ' of 14 tactics'));
+    var dl = el(doc, 'button', 'hl-attack__export', '\u2193 Navigator layer');
+    dl.setAttribute('type', 'button');
+    head.appendChild(dl);
+    wrap.appendChild(head);
+
+    var bars = el(doc, 'div', 'hl-attack__bars');
+    TACTIC_ORDER.forEach(function (tactic) {
+      var list = groups[tactic];
+      var seg = el(doc, 'button', 'hl-attack__seg');
+      seg.setAttribute('type', 'button');
+      seg.setAttribute('data-tactic', tactic);
+      seg.setAttribute('data-count', String(list.length));
+      seg.setAttribute('aria-label', tactic + ', ' + list.length + ' techniques');
+      var fill = el(doc, 'span', 'hl-attack__fill');
+      fill.style.height = list.length ? Math.round((list.length / max) * 100) + '%' : '4px';
+      seg.appendChild(fill);
+      seg.appendChild(el(doc, 'span', 'hl-attack__seglabel', tactic));
+      bars.appendChild(seg);
+    });
+    wrap.appendChild(bars);
+
+    var detail = el(doc, 'div', 'hl-attack__detail');
+    detail.setAttribute('hidden', 'hidden');
+    wrap.appendChild(detail);
+
+    if (parsed.unmapped.length) {
+      var note = el(doc, 'p', 'hl-attack__unmapped',
+        parsed.unmapped.length + ' technique(s) could not be assigned a tactic from this table ' +
+        'and are excluded from the layer export.');
+      note.setAttribute('data-unmapped', String(parsed.unmapped.length));
+      wrap.appendChild(note);
+    }
+    return wrap;
+  }
+
   return {
     TACTIC_ORDER: TACTIC_ORDER,
     tacticSlug: tacticSlug,
@@ -239,6 +301,8 @@
     findMappingTables: findMappingTables,
     labelForTable: labelForTable,
     insertionPointFor: insertionPointFor,
-    toNavigatorLayer: toNavigatorLayer
+    toNavigatorLayer: toNavigatorLayer,
+    groupByTactic: groupByTactic,
+    renderStrip: renderStrip
   };
 });
