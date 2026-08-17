@@ -12,49 +12,124 @@ var AC = require(path.join(__dirname, '..', '..', 'assets', 'js', 'attack-covera
 var { extractTables } = require('./lib/extract-tables.js');
 
 var TECH_RE = /\bT\d{4}(?:\.\d{3})?\b/g;
+var TECH_ONE = /\bT\d{4}(?:\.\d{3})?\b/;
 var TACTIC_SLUGS = new Set(AC.TACTIC_ORDER.map(AC.tacticSlug));
 var BARE_CONF = /^(HIGH|MODERATE|LOW|DEFINITE|INSUFFICIENT)\.?$/i;
+var TACTIC_HEADER = /^\s*tactic/i;
+
+// Row and cell scoping matches the parser's, so a nested table is not read as
+// data here either.
+var ROWS = ':scope > thead > tr, :scope > tbody > tr, :scope > tr';
+var CELLS = ':scope > td, :scope > th';
+var HEADER_CELLS = ':scope > thead > tr > th, :scope > tbody > tr > th, :scope > tr > th';
 
 function idsIn(text) {
   return new Set((text.match(TECH_RE) || []));
 }
 
-function checkDom(doc, label) {
-  var tables = AC.findMappingTables(doc.body);
-  var problems = [], missing = [];
-  var techniques = 0, unmapped = 0;
-  var layer = null;
-  var parsedIds = new Set(), rawIds = new Set();
+/* A table is a CANDIDATE mapping table when the author signalled a Tactic
+   column, or when the parser already reads a technique out of it. Anything else
+   is ignored outright: it gets no ID scan and contributes to no count. That
+   correctly drops the two shapes SHAPES.md rejects by design, detection-coverage
+   tables (Rule Type | Count | MITRE Techniques Covered | Overall FP Risk) and
+   technique tables with no Tactic column, both of which carry IDs without being
+   ATT&CK mappings.
 
-  // Raw IDs come only from tables, never from prose. A technique mentioned in a
-  // sentence is not a mapping-table gap.
-  //
-  // Read cell by cell, never the table's whole textContent. textContent
-  // concatenates adjacent cells with no separator, which breaks the ID regex at
-  // BOTH ends: "Execution" + "T1059.004" reads as "ExecutionT1059.004" where the
-  // leading word boundary never matches and the ID vanishes, and "T1059.004" +
-  // "Unix Shell" reads as "T1059.004Unix" where the trailing boundary fails and
-  // the ID truncates to the parent "T1059". Either one corrupts the very
-  // comparison this gate exists to make, the first by hiding a real gap and the
-  // second by inventing one. Same trap that the parser's own discovery step
-  // documents.
+   The header half of the test is what keeps the gate honest. Scoping the ID scan
+   to tables the parser ACCEPTED would be simpler and would be wrong, because it
+   makes a total parse failure invisible: a table whose tactic cells are bold
+   resolves zero tactics, so it would be dropped as "not a mapping table" and its
+   silently lost techniques would report PASS. A total-failure shape is precisely
+   what this gate exists to catch, so a declared Tactic column pulls the table
+   into scope whether or not anything parsed. */
+function hasTacticHeader(t) {
+  var ths = t.querySelectorAll(HEADER_CELLS);
+  for (var i = 0; i < ths.length; i++) {
+    if (TACTIC_HEADER.test(ths[i].textContent || '')) return true;
+  }
+  return false;
+}
+
+/* Declared IDs are ROW-SCOPED. In each row the first cell carrying a technique
+   ID ends the scan, and only cells 0..that one count as declared. Evidence and
+   implementation columns come after it, so a historical aside such as
+   "Formerly T1562.004" in an evidence cell is correctly not a declared ID and
+   does not fail a report that is right as written.
+
+   The compound-cell defence survives this, because a cell reading
+   "T1071.001/004" IS the technique-ID cell and therefore sits inside the scanned
+   range.
+
+   Cells are joined with a separator, never read as the row's textContent:
+   textContent concatenates adjacent cells with nothing between them, so
+   "Execution" + "T1059.004" reads as "ExecutionT1059.004" and the leading word
+   boundary never matches. */
+function declaredIds(t) {
+  var out = new Set();
+  [].forEach.call(t.querySelectorAll(ROWS), function (row) {
+    var cs = row.querySelectorAll(CELLS);
+    for (var i = 0; i < cs.length; i++) {
+      if (TECH_ONE.test(cs[i].textContent || '')) {
+        var text = [].slice.call(cs, 0, i + 1).map(function (c) {
+          return c.textContent || '';
+        }).join(' | ');
+        idsIn(text).forEach(function (id) { out.add(id); });
+        return;
+      }
+    }
+  });
+  return out;
+}
+
+function checkDom(doc, label) {
+  var problems = [], missing = [];
+  var techniques = 0, unmapped = 0, declared = 0;
+  var layer = null;
+  var parsedIds = new Set();
+
+  // Parse every table once, then keep only the candidates. Deriving the
+  // candidate set from the same parse the checks below use keeps discovery and
+  // checking from drifting apart.
+  var candidates = [];
   [].forEach.call(doc.body.querySelectorAll('table'), function (t) {
-    var text = [].map.call(t.querySelectorAll('td, th'), function (c) {
-      return c.textContent || '';
-    }).join(' | ');
-    idsIn(text).forEach(function (id) { rawIds.add(id); });
+    var p = AC.parseTable(t);
+    if (p.techniques.length || hasTacticHeader(t)) candidates.push({ el: t, parsed: p });
   });
 
-  tables.forEach(function (t) {
-    var p = AC.parseTable(t);
+  candidates.forEach(function (c) {
+    var t = c.el, p = c.parsed;
     p.label = AC.labelForTable(t);
+    var name = p.label || 'unlabelled table';
     techniques += p.techniques.length;
     unmapped += p.unmapped.length;
-    p.techniques.concat(p.unmapped).forEach(function (x) { parsedIds.add(x.id); });
-    if (p.unmapped.length) {
-      problems.push(p.unmapped.length + ' technique(s) with no resolvable tactic in "' +
-        (p.label || 'unlabelled table') + '"');
+
+    var own = new Set();
+    p.techniques.concat(p.unmapped).forEach(function (x) {
+      parsedIds.add(x.id);
+      own.add(x.id);
+    });
+
+    // A candidate that resolves nothing is either a tenth shape or a parse that
+    // has collapsed. Either way the author's mapping did not survive, and that
+    // is the loudest possible failure, not a table to quietly skip.
+    if (!p.techniques.length) {
+      problems.push('candidate mapping table yielded no techniques in "' + name + '"');
     }
+    if (p.unmapped.length) {
+      problems.push(p.unmapped.length + ' technique(s) with no resolvable tactic in "' + name + '"');
+    }
+
+    var gaps = [];
+    declaredIds(t).forEach(function (id) {
+      declared++;
+      if (own.has(id)) return;
+      gaps.push(id);
+      if (missing.indexOf(id) === -1) missing.push(id);
+    });
+    if (gaps.length) {
+      problems.push('IDs declared in "' + name + '" but not parsed: ' + gaps.join(', '));
+    }
+
     var l = AC.toNavigatorLayer(p, { reportTitle: label });
     layer = layer || l;
     if (l.versions.layer !== '4.5') problems.push('layer version is ' + l.versions.layer);
@@ -67,19 +142,12 @@ function checkDom(doc, label) {
     });
   });
 
-  rawIds.forEach(function (id) { if (!parsedIds.has(id)) missing.push(id); });
-  if (missing.length) problems.push('IDs in source but not parsed: ' + missing.join(', '));
-  if (rawIds.size && !tables.length) {
-    problems.push('technique IDs present but no mapping table was discovered');
-    rawIds.forEach(function (id) { if (missing.indexOf(id) === -1) missing.push(id); });
-  }
-
   return {
     status: problems.length ? 'FAIL' : 'PASS',
-    tables: tables.length,
+    tables: candidates.length,
     techniques: techniques,
     unmapped: unmapped,
-    rawIds: rawIds.size,
+    declaredIds: declared,
     parsedIds: parsedIds.size,
     missing: missing,
     problems: problems,
