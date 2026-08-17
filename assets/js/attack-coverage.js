@@ -1,11 +1,14 @@
 /* The Hunter's Ledger: ATT&CK coverage strip and Navigator layer export.
-   Parses the rendered DOM, never markdown: the corpus carries at least seven
+   Parses the rendered DOM, never markdown: the corpus carries at least eight
    distinct mapping-table shapes and the full set is not statically enumerable. */
 (function (root, factory) {
   'use strict';
   var api = factory();
   if (typeof module === 'object' && module.exports) { module.exports = api; }
-  else { root.HLAttackCoverage = api; api.init(); }
+  else {
+    root.HLAttackCoverage = api;
+    if (typeof api.init === 'function') { api.init(); }
+  }
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
@@ -17,6 +20,8 @@
   ];
 
   var TECH_RE = /\bT\d{4}(?:\.\d{3})?\b/;
+  var CONF_HEADER_RE = /^conf(idence|\.)?$/i;
+  var CONF_VALUE_RE = /HIGH|MODERATE|LOW|DEFINITE|INSUFFICIENT/;
 
   function tacticSlug(name) {
     return String(name).toLowerCase().trim().replace(/\s+/g, '-');
@@ -24,6 +29,10 @@
 
   function cellText(cell) {
     return (cell.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function hasWordChar(s) {
+    return /[A-Za-z0-9]/.test(s);
   }
 
   // Normalises a raw cell fragment into a tactic display name, or null.
@@ -36,60 +45,111 @@
     return null;
   }
 
-  function parseRow(cells, confIndex) {
-    var idx = -1, match = null;
-    for (var i = 0; i < cells.length; i++) {
-      var m = cellText(cells[i]).match(TECH_RE);
-      if (m) { idx = i; match = m[0]; break; }
+  // Every technique ID in one cell, with the first and last match objects kept so
+  // callers slice on the real offset rather than re-finding the text.
+  function techniqueMatches(text) {
+    var re = new RegExp(TECH_RE.source, 'g');
+    var ids = [], first = null, last = null, m;
+    while ((m = re.exec(text)) !== null) {
+      ids.push(m[0]);
+      if (!first) first = m;
+      last = m;
     }
-    if (idx === -1) return null;
+    return { ids: ids, first: first, last: last };
+  }
+
+  // Returns every technique the row carries, as an array. Empty when the row has
+  // no ID at all. Detection-coverage tables list several IDs in one cell and none
+  // of them are dropped.
+  function parseRow(cells, confIndex) {
+    var idx = -1, found = null;
+    for (var i = 0; i < cells.length; i++) {
+      var candidate = techniqueMatches(cellText(cells[i]));
+      if (candidate.ids.length) { idx = i; found = candidate; break; }
+    }
+    if (idx === -1) return [];
 
     var own = cellText(cells[idx]);
-    var before = own.slice(0, own.indexOf(match));
-    var after = own.slice(own.indexOf(match) + match.length);
+    var before = own.slice(0, found.first.index);
+    // A cell listing several IDs is a list, not one technique plus its name, so
+    // anchor the trailing text on the last ID and no ID can leak into the name.
+    var anchor = found.ids.length > 1 ? found.last : found.first;
+    var after = own.slice(anchor.index + anchor[0].length);
 
     // Tactic: text before the ID in its own cell, else the nearest earlier cell.
     var tactic = normaliseTactic(before);
     for (var j = idx - 1; j >= 0 && !tactic; j--) tactic = normaliseTactic(cellText(cells[j]));
 
-    // Name: remainder of the ID's own cell, else the next cell.
-    var name = after.replace(/^[\s\/|:.-]+/, '').trim();
-    if (!name && cells[idx + 1]) name = cellText(cells[idx + 1]);
+    // Name: what follows the ID in its own cell, else the text before the ID when
+    // that text is not the tactic, else the next cell. Leftover punctuation is not
+    // a name, so each step is gated on finding an actual word character.
+    var name = after.replace(/^[\s\/|:.,;)\]\u2013\u2014-]+/, '').replace(/[\s(\[]+$/, '').trim();
+    if (!hasWordChar(name)) name = tactic ? '' : before.replace(/[\s(\[]+$/, '').trim();
+    if (!hasWordChar(name) && found.ids.length === 1 && cells[idx + 1]) name = cellText(cells[idx + 1]);
+    if (!hasWordChar(name)) name = '';
 
+    // Confidence: the column when it parses, else an inline marker, else HIGH.
+    // The inline fallback also has to cover an empty or unparseable column cell.
     var rowText = [].map.call(cells, cellText).join(' ');
-    var confidence = 'HIGH';
+    var confidence = null;
     if (confIndex >= 0 && cells[confIndex]) {
-      var c = cellText(cells[confIndex]).toUpperCase();
-      if (/HIGH|MODERATE|LOW|DEFINITE|INSUFFICIENT/.test(c)) confidence = c.match(/HIGH|MODERATE|LOW|DEFINITE|INSUFFICIENT/)[0];
-    } else if (/\(MODERATE\)/i.test(rowText)) { confidence = 'MODERATE'; }
-    else if (/\(LOW\)/i.test(rowText)) { confidence = 'LOW'; }
+      var cm = cellText(cells[confIndex]).toUpperCase().match(CONF_VALUE_RE);
+      if (cm) confidence = cm[0];
+    }
+    if (!confidence) {
+      if (/\(MODERATE\)/i.test(rowText)) confidence = 'MODERATE';
+      else if (/\(LOW\)/i.test(rowText)) confidence = 'LOW';
+      else confidence = 'HIGH';
+    }
 
-    var evidence = cells.length > idx + 1 ? cellText(cells[cells.length - 1]) : '';
+    // Evidence: the last cell that is neither the confidence column nor the ID
+    // cell. Taking the last cell unconditionally returns the confidence word on
+    // every Component / Confidence table.
+    var lastIdx = cells.length - 1;
+    if (lastIdx === confIndex) lastIdx--;
+    var evidence = lastIdx > idx ? cellText(cells[lastIdx]) : '';
 
-    return { id: match, tactic: tactic, name: name, confidence: confidence, evidence: evidence };
+    var out = [];
+    for (var k = 0; k < found.ids.length; k++) {
+      out.push({
+        id: found.ids[k],
+        tactic: tactic,
+        name: name,
+        confidence: confidence,
+        evidence: evidence
+      });
+    }
+    return out;
   }
 
+  // Index over the header row's own cells. Counting th across the whole table
+  // desynchronises the index from a row's cells whenever a th sits in tbody.
   function confidenceColumnIndex(table) {
-    var th = table.querySelectorAll('th');
-    for (var i = 0; i < th.length; i++) {
-      if (/^conf/i.test(cellText(th[i]))) return i;
+    var hdr = table.querySelector(':scope > thead > tr:last-of-type') ||
+              table.querySelector(':scope > tbody > tr, :scope > tr');
+    var hc = hdr ? hdr.querySelectorAll(':scope > th, :scope > td') : [];
+    for (var i = 0; i < hc.length; i++) {
+      if (CONF_HEADER_RE.test(cellText(hc[i]))) return i;
     }
     return -1;
   }
 
   function parseTable(table) {
     var confIndex = confidenceColumnIndex(table);
-    var rows = table.querySelectorAll('tbody tr, tr');
+    // Scoped so tfoot totals and nested tables are not read as data.
+    var rows = table.querySelectorAll(':scope > tbody > tr, :scope > tr');
     var techniques = [], unmapped = [], seen = {};
     for (var i = 0; i < rows.length; i++) {
-      var cells = rows[i].querySelectorAll('td');
+      var cells = rows[i].querySelectorAll(':scope > td, :scope > th');
       if (!cells.length) continue;
-      var t = parseRow(cells, confIndex);
-      if (!t) continue;
-      var key = t.id + '|' + (t.tactic || '');
-      if (seen[key]) continue;
-      seen[key] = true;
-      if (t.tactic) techniques.push(t); else unmapped.push(t);
+      var parsed = parseRow(cells, confIndex);
+      for (var j = 0; j < parsed.length; j++) {
+        var t = parsed[j];
+        var key = t.id + '|' + (t.tactic || '');
+        if (seen[key]) continue;
+        seen[key] = true;
+        if (t.tactic) techniques.push(t); else unmapped.push(t);
+      }
     }
     return { label: '', techniques: techniques, unmapped: unmapped };
   }

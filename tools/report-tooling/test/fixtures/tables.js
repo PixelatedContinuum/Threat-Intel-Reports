@@ -1,6 +1,7 @@
 'use strict';
 
-// The seven ATT&CK mapping table structures observed across the published corpus.
+// The ATT&CK mapping table structures observed across the published corpus, plus
+// the malformed and adjacent shapes the parser has to survive.
 // Each fixture is a complete <table> so tests exercise real DOM parsing.
 
 function table(headers, rows) {
@@ -70,5 +71,83 @@ module.exports = {
   missingTactic: table(
     ['Technique', 'Evidence'],
     [['T1071.001', 'HTTPS beaconing']]
-  )
+  ),
+
+  // Shape 8: ID in trailing parentheses, no tactic column.
+  // Live in reports/opendirectory-45-130-148-125-20260430/index.md.
+  parenthesisedId: table(
+    ['Technique', 'Evidence', 'Confidence'],
+    [['AMSI bypass via reflection (T1562.001)', 'reflection concatenation', 'HIGH']]
+  ),
+
+  // The Component / Confidence shape carrying real evidence, so evidence must be
+  // the Component text and never the confidence word.
+  // Live in reports/zerotrace-74-0-42-25-20260316/index.md, 34 rows.
+  componentThenConfidence: table(
+    ['Tactic', 'Technique ID', 'Technique Name', 'Component', 'Confidence'],
+    [[
+      'Resource Development',
+      'T1583.001',
+      'Acquire Infrastructure: Domains',
+      'chainconnects.net, adminxyzhosting.com',
+      'HIGH'
+    ]]
+  ),
+
+  // A detection-coverage table, not a mapping table: one cell lists several IDs
+  // and there is no tactic column at all. Every ID must still be returned.
+  // Live in reports/bellamain-turkish-phaas-79-137-192-3-20260516/index.md.
+  multiIdCoverage: table(
+    ['Rule Type', 'Count', 'MITRE Techniques Covered', 'Overall FP Risk'],
+    [['YARA', '3', 'T1505.003, T1027.013, T1070, T1056, T1119', 'LOW\u2013MEDIUM']]
+  ),
+
+  // A confidence column that exists but is empty, with the marker inline in the
+  // evidence instead. The inline fallback has to run.
+  emptyConfidenceCell: table(
+    ['Tactic / Technique', 'Name', 'Conf.', 'Evidence'],
+    [['Credential Access / T1110.003', 'Password Spraying', '', 'single-password spray (MODERATE)']]
+  ),
+
+  // A header whose name only starts with "conf": it is not a confidence column.
+  configurationColumn: table(
+    ['Tactic', 'Technique', 'Configuration', 'Evidence'],
+    [['Impact', 'T1486 Data Encrypted for Impact', 'LOW memory mode', 'enc.exe over SMB (MODERATE)']]
+  ),
+
+  // A near-match the ID regex rejects, sitting earlier in the same cell than the
+  // real ID. Re-finding the match by string search lands on the wrong offset.
+  idPrecededByFalseMatch: table(
+    ['Tactic', 'Technique', 'Evidence'],
+    [['Execution', 'PORT1059 handler, T1059 Command-Line Interface', 'cmd.exe spawn']]
+  ),
+
+  // A row header th inside tbody. Counting th across the whole table desynchronises
+  // the confidence index from the row's own cells.
+  rowHeaderTactic:
+    '<table><thead><tr>' +
+    '<th>Tactic</th><th>Technique ID</th><th>Technique Name</th>' +
+    '<th>Confidence</th><th>Key Evidence</th>' +
+    '</tr></thead><tbody><tr>' +
+    '<th scope="row">Collection</th><td>T1213</td>' +
+    '<td>Data from Information Repositories</td><td>LOW</td><td>CKAN harvest</td>' +
+    '</tr></tbody></table>',
+
+  // A tfoot totals row carrying a technique ID: not a data row.
+  tfootTotals:
+    '<table><thead><tr><th>Tactic</th><th>Technique</th><th>Evidence</th></tr></thead>' +
+    '<tbody><tr><td>Execution</td><td>T1059.004 Unix Shell</td>' +
+    '<td>Interactive bash captured</td></tr></tbody>' +
+    '<tfoot><tr><td>Impact</td><td>T1490 Inhibit System Recovery</td>' +
+    '<td>Totals row, not a mapping</td></tr></tfoot></table>',
+
+  // A nested table inside a cell. Its rows are not data rows and its cells do not
+  // belong to the outer row.
+  nestedTableInCell:
+    '<table><thead><tr><th>Tactic</th><th>Technique ID</th>' +
+    '<th>Technique Name</th><th>Evidence</th></tr></thead>' +
+    '<tbody><tr><td>Persistence</td><td>T1505.003</td><td>Web Shell</td>' +
+    '<td>WordPress plugin-dir shell<table><tbody><tr>' +
+    '<td> note</td><td> see T1486 for the follow-on</td>' +
+    '</tr></tbody></table></td></tr></tbody></table>'
 };
