@@ -154,10 +154,61 @@
     return { label: '', techniques: techniques, unmapped: unmapped };
   }
 
+  // A table is a mapping table iff it parses to at least one technique with a
+  // RESOLVABLE TACTIC. Two real corpus shapes carry technique IDs but are not
+  // ATT&CK mappings: detection-coverage tables whose cells hold comma-separated
+  // ID lists with no Tactic column, and technique tables that put the ID in
+  // parentheses with no Tactic column. Neither can populate a tactic-organised
+  // strip, and a strip that is entirely Unmapped is noise rather than honesty.
+  //
+  // Deriving discovery FROM parsing also makes the two impossible to drift
+  // apart. An earlier version tested the table's whole textContent, which
+  // concatenates adjacent cells with no separator, so a legacy row read
+  // "ExecutionT1059.004" and the word boundary never matched. That version was
+  // correct on 3 of 9 fixtures while looking fine on the two shapes anyone
+  // would spot-check.
+  function findMappingTables(root) {
+    var all = root.querySelectorAll('table'), out = [];
+    for (var i = 0; i < all.length; i++) {
+      if (parseTable(all[i]).techniques.length) out.push(all[i]);
+    }
+    return out;
+  }
+
+  function labelForTable(table) {
+    var node = table;
+    while (node) {
+      var prev = node.previousElementSibling;
+      while (prev) {
+        if (/^H[1-6]$/.test(prev.tagName)) {
+          return (prev.textContent || '').replace(/\s+/g, ' ').trim();
+        }
+        prev = prev.previousElementSibling;
+      }
+      node = node.parentElement;
+      if (node && node.tagName === 'BODY') break;
+    }
+    return '';
+  }
+
+  // The strip belongs above the teardown, not inside it, so the summary stays
+  // visible without opening the collapse.
+  function insertionPointFor(table) {
+    var node = table;
+    while (node && node.parentElement) {
+      if (node.tagName === 'DETAILS' && node.classList.contains('hl-teardown')) return node;
+      node = node.parentElement;
+    }
+    return table;
+  }
+
   return {
     TACTIC_ORDER: TACTIC_ORDER,
     tacticSlug: tacticSlug,
     parseRow: parseRow,
-    parseTable: parseTable
+    parseTable: parseTable,
+    findMappingTables: findMappingTables,
+    labelForTable: labelForTable,
+    insertionPointFor: insertionPointFor
   };
 });

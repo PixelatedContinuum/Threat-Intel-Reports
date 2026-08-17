@@ -243,3 +243,73 @@ test('a row with no resolvable tactic lands in unmapped', () => {
     evidence: 'HTTPS beaconing'
   });
 });
+
+const TWO_ACTOR_PAGE = `
+  <h2 id="s11">11. MITRE ATT&CK Mapping</h2>
+  <details class="hl-teardown"><summary>Full ATT&CK table</summary>
+    <h3>11.1 Operator toolkit</h3>
+    ${fixtures.current3col}
+    <h3>11.2 Second-actor GSocket kit</h3>
+    ${fixtures.legacySplitIdName}
+  </details>`;
+
+test('each mapping table is parsed separately and never merged', () => {
+  const doc = new JSDOM('<body>' + TWO_ACTOR_PAGE + '</body>').window.document;
+  const tables = AC.findMappingTables(doc.body);
+  assert.strictEqual(tables.length, 2);
+
+  const first = AC.parseTable(tables[0]);
+  const second = AC.parseTable(tables[1]);
+  assert.strictEqual(first.techniques.length, 2);
+  assert.strictEqual(second.techniques.length, 1);
+
+  const firstIds = first.techniques.map((t) => t.id);
+  assert.ok(!firstIds.includes('T1505.003'),
+    'second actor technique must not appear in the operator set');
+});
+
+test('each table is labelled from its nearest preceding heading', () => {
+  const doc = new JSDOM('<body>' + TWO_ACTOR_PAGE + '</body>').window.document;
+  const tables = AC.findMappingTables(doc.body);
+  assert.strictEqual(AC.labelForTable(tables[0]), '11.1 Operator toolkit');
+  assert.strictEqual(AC.labelForTable(tables[1]), '11.2 Second-actor GSocket kit');
+});
+
+test('a table inside a teardown inserts the strip above the teardown', () => {
+  const doc = new JSDOM('<body>' + TWO_ACTOR_PAGE + '</body>').window.document;
+  const table = AC.findMappingTables(doc.body)[0];
+  assert.strictEqual(AC.insertionPointFor(table).tagName, 'DETAILS');
+});
+
+test('a table with no teardown ancestor inserts directly above itself', () => {
+  const doc = new JSDOM('<body><h2>x</h2>' + fixtures.current3col + '</body>').window.document;
+  const table = AC.findMappingTables(doc.body)[0];
+  assert.strictEqual(AC.insertionPointFor(table).tagName, 'TABLE');
+});
+
+// Regression guard on BOTH discovery failures found during implementation.
+// Every fixture below was partitioned by running the real parser, not by
+// guessing. The REJECT set is the point: all four carry technique IDs, and
+// none of them is an ATT&CK mapping table.
+test('discovers genuine mapping tables and rejects tactic-less ID tables', () => {
+  const MAPPING = [
+    'current3col', 'current4col', 'legacyIdInTechnique', 'legacySplitIdName',
+    'legacyEvidenceObserved', 'legacy5colConfidence', 'legacy5colComponent',
+    'componentThenConfidence', 'emptyConfidenceCell', 'configurationColumn',
+    'idPrecededByFalseMatch', 'rowHeaderTactic', 'tfootTotals', 'nestedTableInCell'
+  ];
+  const REJECT = ['notAnAttackTable', 'missingTactic', 'parenthesisedId', 'multiIdCoverage'];
+
+  MAPPING.forEach((k) => {
+    const doc = new JSDOM('<body>' + fixtures[k] + '</body>').window.document;
+    assert.strictEqual(AC.findMappingTables(doc.body).length, 1, k + ' should be discovered');
+  });
+  REJECT.forEach((k) => {
+    const doc = new JSDOM('<body>' + fixtures[k] + '</body>').window.document;
+    assert.strictEqual(AC.findMappingTables(doc.body).length, 0, k + ' must NOT be discovered');
+  });
+
+  // Guards against the partition silently going stale if a fixture is added.
+  assert.strictEqual(MAPPING.length + REJECT.length, Object.keys(fixtures).length,
+    'every fixture must be classified as MAPPING or REJECT');
+});
