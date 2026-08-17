@@ -7,13 +7,80 @@
 
 var path = require('node:path');
 var fs = require('node:fs');
-var { JSDOM } = require('jsdom');
-var AC = require(path.join(__dirname, '..', '..', 'assets', 'js', 'attack-coverage.js'));
-var { extractTables } = require('./lib/extract-tables.js');
+
+/* Dependency guard, and why it is here.
+
+   These three requires used to sit bare at module top level. When one of them
+   cannot resolve, Node throws MODULE_NOT_FOUND before any status object exists,
+   and the process exits 1 with a raw stack trace. Exit 1 is this gate's FAIL
+   code, and its documented meaning is "this report's ATT&CK content is wrong".
+   So a missing node_modules made the gate blame the author's report for the
+   gate's own brokenness, and sent them hunting a table defect that was never
+   there.
+
+   That is the inversion homelab-soc/docs/gate-honesty-contract.md exists to
+   prevent. The contract's rule is that NOT CHECKED is never folded into PASS.
+   Folding it into FAIL is the same class of lie and arguably worse, because a
+   manufactured accusation costs the author real time, while a false reassurance
+   is at least quiet. A gate that could not run says so, names the reason, and
+   exits 2.
+
+   Loading inside a try leaves the module usable rather than dead: every entry
+   point below returns a NOT CHECKED result carrying DEPS_REASON instead of
+   throwing. */
+var JSDOM = null;
+var AC = null;
+var extractTables = null;
+var DEPS_REASON = null;
+
+/* Node's thrown output opens with its own stack-frame header, the useless
+   "node:internal/modules/cjs/loader:1424" line. An operator needs the Error line
+   instead, so read e.message, and for the overwhelmingly common cause, a
+   dependency that was never installed, name the remedy alongside it. */
+function dependencyReason(e) {
+  var msg = String((e && e.message) || e || 'unknown error').split('\n')[0].trim();
+  var missing = (e && e.code === 'MODULE_NOT_FOUND') || /cannot find module/i.test(msg);
+  return missing
+    ? 'gate dependency did not load: ' + msg + '. Run `npm ci` in tools/report-tooling.'
+    : 'gate dependency did not load: ' + msg;
+}
+
+try {
+  JSDOM = require('jsdom').JSDOM;
+  AC = require(path.join(__dirname, '..', '..', 'assets', 'js', 'attack-coverage.js'));
+  extractTables = require('./lib/extract-tables.js').extractTables;
+} catch (e) {
+  DEPS_REASON = dependencyReason(e);
+}
+
+/* A require can also resolve and still hand back something unusable, when a
+   half-written install or a renamed export leaves the binding undefined. That
+   throws a TypeError rather than MODULE_NOT_FOUND, either just below at
+   TACTIC_SLUGS or later inside a check, and lands back at the same uncaught
+   exit 1 this guard exists to eliminate. Same failure wearing a different
+   error type, so it gets the same NOT CHECKED answer. */
+if (!DEPS_REASON) {
+  var unusable =
+    typeof JSDOM !== 'function' ? 'jsdom did not export JSDOM'
+    : typeof extractTables !== 'function' ? 'lib/extract-tables.js did not export extractTables'
+    : !AC || !Array.isArray(AC.TACTIC_ORDER) || typeof AC.tacticSlug !== 'function'
+      ? 'attack-coverage.js did not export TACTIC_ORDER and tacticSlug'
+    : null;
+  if (unusable) DEPS_REASON = 'gate dependency loaded but is unusable: ' + unusable + '.';
+}
+
+/* Reported against whichever path the caller asked about, so the operator sees
+   what was skipped as well as why. */
+function depsNotChecked(p) {
+  return { status: 'NOT CHECKED', path: p, reason: DEPS_REASON, problems: [], missing: [] };
+}
 
 var TECH_RE = /\bT\d{4}(?:\.\d{3})?\b/g;
 var TECH_ONE = /\bT\d{4}(?:\.\d{3})?\b/;
-var TACTIC_SLUGS = new Set(AC.TACTIC_ORDER.map(AC.tacticSlug));
+// Keyed on DEPS_REASON, not on AC being truthy: a stub exporting {} is truthy
+// and would throw here at load, which is the exit 1 the guard above exists to
+// stop. Past that check AC is known usable, so this is safe.
+var TACTIC_SLUGS = DEPS_REASON ? null : new Set(AC.TACTIC_ORDER.map(AC.tacticSlug));
 var BARE_CONF = /^(HIGH|MODERATE|LOW|DEFINITE|INSUFFICIENT)\.?$/i;
 var TACTIC_HEADER = /^\s*tactic/i;
 
@@ -177,6 +244,7 @@ function checkDom(doc, label) {
 }
 
 function checkMarkdown(md, label) {
+  if (DEPS_REASON) return depsNotChecked(label || 'report');
   var html = extractTables(md).join('\n');
   var doc = new JSDOM('<body>' + html + '</body>').window.document;
   var r = checkDom(doc, label || 'report');
@@ -185,6 +253,7 @@ function checkMarkdown(md, label) {
 }
 
 function checkFile(file) {
+  if (DEPS_REASON) return depsNotChecked(file);
   var md;
   try { md = fs.readFileSync(file, 'utf8'); }
   catch (e) { return { status: 'NOT CHECKED', path: file, reason: e.message, problems: [], missing: [] }; }
@@ -192,6 +261,7 @@ function checkFile(file) {
 }
 
 async function checkUrl(url) {
+  if (DEPS_REASON) return depsNotChecked(url);
   var html;
   try {
     var res = await fetch(url);

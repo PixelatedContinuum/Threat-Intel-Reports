@@ -1,6 +1,10 @@
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { spawnSync } = require('node:child_process');
 const { checkMarkdown } = require('../check-report.js');
 
 const GOOD = [
@@ -224,4 +228,110 @@ test('emphasis never hides a declared ID from the raw scan', () => {
   assert.strictEqual(r.status, 'PASS');
   assert.strictEqual(r.techniques, 1);
   assert.strictEqual(r.layer.techniques[0].techniqueID, 'T1204.002');
+});
+
+/* The gate's honesty about ITSELF, which is a different question from every test
+   above. Those ask whether the gate reads a report correctly. This one asks what
+   the gate says when it cannot run at all.
+
+   jsdom, the parser and lib/extract-tables.js used to be required bare at module
+   top level, so a tree without node_modules threw MODULE_NOT_FOUND and exited 1.
+   Exit 1 is the FAIL code, meaning "this report's ATT&CK content is wrong", so a
+   broken install manufactured an accusation against a report that was fine. See
+   the guard comment in check-report.js and homelab-soc/docs/gate-honesty-contract.md.
+
+   The failure is exercised for real rather than mocked: the three source files
+   are copied into a temp tree with no node_modules and the copy runs as a
+   subprocess, which is exactly what an operator meets after a fresh clone. */
+const TOOLING = path.join(__dirname, '..');
+const SITE = path.join(TOOLING, '..', '..');
+
+function buildTempGate() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-attack-gate-'));
+  const tooling = path.join(root, 'tools', 'report-tooling');
+  fs.mkdirSync(path.join(tooling, 'lib'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'assets', 'js'), { recursive: true });
+  fs.copyFileSync(path.join(TOOLING, 'check-report.js'), path.join(tooling, 'check-report.js'));
+  fs.copyFileSync(
+    path.join(TOOLING, 'lib', 'extract-tables.js'),
+    path.join(tooling, 'lib', 'extract-tables.js')
+  );
+  fs.copyFileSync(
+    path.join(SITE, 'assets', 'js', 'attack-coverage.js'),
+    path.join(root, 'assets', 'js', 'attack-coverage.js')
+  );
+  const report = path.join(root, 'report.md');
+  fs.writeFileSync(report, GOOD + '\n', 'utf8');
+  return { root, gate: path.join(tooling, 'check-report.js'), report };
+}
+
+function runGate(gate, args, extraEnv) {
+  const env = Object.assign({}, process.env, extraEnv || {});
+  // A NODE_PATH inherited from the ambient environment would resolve jsdom from
+  // outside the temp tree and silently defeat the point of the test.
+  if (!extraEnv || !extraEnv.NODE_PATH) delete env.NODE_PATH;
+  return spawnSync(process.execPath, [gate].concat(args), { encoding: 'utf8', env: env });
+}
+
+test('a dependency that will not load is NOT CHECKED and exits 2, never a FAIL against the report', () => {
+  const t = buildTempGate();
+  try {
+    const r = runGate(t.gate, [t.report]);
+    assert.strictEqual(r.status, 2,
+      'exit 2 is NOT CHECKED; 1 would accuse the report and 0 would clear it');
+    assert.match(r.stdout, /NOT CHECKED/);
+
+    // The reason must name the real cause. Node's own first line of output is
+    // "node:internal/modules/cjs/loader:1424", which tells an operator nothing.
+    assert.match(r.stdout, /cannot find module/i);
+    assert.match(r.stdout, /npm ci/, 'the reason must carry the remedy');
+    assert.doesNotMatch(r.stdout, /node:internal/,
+      'a Node stack-frame header is not a reason');
+    assert.doesNotMatch(r.stderr, /MODULE_NOT_FOUND/,
+      'the load failure must be caught, not thrown at the operator');
+
+    const j = runGate(t.gate, [t.report, '--json']);
+    assert.strictEqual(j.status, 2);
+    const parsed = JSON.parse(j.stdout);
+    assert.strictEqual(parsed.status, 'NOT CHECKED');
+    assert.ok(parsed.reason && parsed.reason.length > 0,
+      'NOT CHECKED without a reason is not an honest result');
+    assert.match(parsed.reason, /cannot find module/i);
+
+    /* Vacuity guard. Without this, a gate that exited 2 unconditionally would
+       satisfy every assertion above. The SAME copied gate, handed a resolvable
+       jsdom, has to check the report and clear it. */
+    const ok = runGate(t.gate, [t.report], { NODE_PATH: path.join(TOOLING, 'node_modules') });
+    assert.strictEqual(ok.status, 0, 'with deps resolvable the same gate must actually run');
+    assert.doesNotMatch(ok.stdout, /NOT CHECKED/);
+    assert.match(ok.stdout, /^PASS/);
+  } finally {
+    fs.rmSync(t.root, { recursive: true, force: true });
+  }
+});
+
+/* The same inversion wearing a different error type. A dependency can resolve
+   and still export nothing usable, which throws a TypeError rather than
+   MODULE_NOT_FOUND and so exits 1 on its own path back to blaming the report. */
+test('a dependency that resolves but exports nothing usable is NOT CHECKED too', () => {
+  const t = buildTempGate();
+  try {
+    // jsdom stays resolvable through NODE_PATH, which isolates this to the
+    // parser: it loads cleanly and hands back an object the gate cannot use.
+    fs.writeFileSync(
+      path.join(t.root, 'assets', 'js', 'attack-coverage.js'),
+      'module.exports = {};\n',
+      'utf8'
+    );
+    const env = { NODE_PATH: path.join(TOOLING, 'node_modules') };
+    const r = runGate(t.gate, [t.report, '--json'], env);
+    assert.strictEqual(r.status, 2, 'exit 2, not the uncaught-TypeError exit 1');
+    assert.doesNotMatch(r.stderr, /TypeError/, 'the gate must catch this, not throw it');
+    const parsed = JSON.parse(r.stdout);
+    assert.strictEqual(parsed.status, 'NOT CHECKED');
+    assert.match(parsed.reason, /unusable/i);
+    assert.match(parsed.reason, /attack-coverage/i, 'the reason must name what is broken');
+  } finally {
+    fs.rmSync(t.root, { recursive: true, force: true });
+  }
 });
