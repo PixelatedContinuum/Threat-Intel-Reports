@@ -6,15 +6,25 @@
 #
 # Adding a term here applies it to EVERY published report at once, with no per-report
 # review. After any edit, run `npm run verify` in tools/report-tooling.
+#
+# once_per_report: true marks the term where the reader first meets it and then stops
+# for the rest of the page, instead of once per <h2> section. Reserved for the handful
+# of terms common enough that per-section marking gets repetitive: measured across the
+# corpus, the six flagged below produced 56% of all marking on their own, with C2
+# averaging eight marks a report. The house standard's objection to defining terms a
+# defender already knows bites at that rate, and the hover exemption holds only while
+# the marking stays quiet.
 
 - term: C2
   aliases: ["command and control", "command-and-control"]
   case_sensitive: true
+  once_per_report: true
   short: "The channel and servers an operator uses to issue instructions to malware already running on a victim host."
 
 - term: open directory
   aliases: ["open dir"]
   case_sensitive: false
+  once_per_report: true
   short: "A web server left listing its own files, which exposes an operator's tooling to anyone who finds the URL."
 
 - term: lateral movement
@@ -24,6 +34,7 @@
 - term: beacon
   aliases: ["beaconing"]
   case_sensitive: false
+  once_per_report: true
   short: "The periodic call-home an implant makes to its C2, whose regularity is often what gives it away."
 
 - term: ASN
@@ -127,15 +138,18 @@
 - term: exfiltration
   aliases: ["exfiltrate", "exfiltrated", "exfiltrating"]
   case_sensitive: false
+  once_per_report: true
   short: "Moving stolen data out of a victim network to somewhere the operator controls."
 
 - term: pivot
   aliases: ["pivoting", "pivoted"]
   case_sensitive: false
+  once_per_report: true
   short: "Using one known indicator to find related infrastructure, such as moving from an IP to every domain that resolved to it."
 
 - term: loader
   case_sensitive: false
+  once_per_report: true
   short: "A small first-stage program whose only job is to fetch and launch the real payload."
 
 - term: implant

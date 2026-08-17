@@ -116,25 +116,38 @@
   // Keeps consuming the tail of one text node so several distinct terms in the
   // same paragraph are all marked. The guard bounds a pathological node rather
   // than trusting the loop to always shrink.
-  function markInNode(node, matchers, used, doc) {
+  function markInNode(node, matchers, used, usedOnce, doc) {
     var current = node, guard = 0;
     while (current && guard++ < 50) {
       var best = bestMatch(current.nodeValue, matchers, used);
       if (!best) return;
       used[best.m.entry.term] = true;
+      if (best.m.entry.once_per_report) usedOnce[best.m.entry.term] = true;
       current = markOne(current, best, doc);
     }
   }
 
+  /* Two scopes, because one rate does not fit every term.
+
+     Most terms mark once per <h2> section: per page is too sparse in a long
+     report. But measurement across the published corpus showed six common terms
+     producing 56% of all marking, C2 alone averaging eight marks a report. The
+     house standard's objection to defining terms a defender already knows
+     applies with full force once the marking is that repetitive, and the hover
+     exemption holds only while it stays quiet. A term carrying
+     once_per_report is therefore explained where the reader first meets it and
+     then stops for the rest of the page. */
   function markTerms(rootEl, terms, doc) {
     var matchers = buildMatchers(terms);
+    var usedOnce = {};
     sections(rootEl).forEach(function (blocks) {
       var used = {};
+      Object.keys(usedOnce).forEach(function (k) { used[k] = true; });
       blocks.forEach(function (block) {
         textNodesUnder(block, doc).forEach(function (node) {
           if (isExcluded(node)) return;
           if (INDICATOR_RE.test(node.nodeValue)) return;
-          markInNode(node, matchers, used, doc);
+          markInNode(node, matchers, used, usedOnce, doc);
         });
       });
     });

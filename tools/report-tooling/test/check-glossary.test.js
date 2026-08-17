@@ -75,3 +75,15 @@ test('loadTerms reads the real committed term file', () => {
   assert.strictEqual(c2.case_sensitive, true);
   assert.ok(c2.aliases.indexOf('command and control') !== -1, 'aliases parsed');
 });
+
+test('loadTerms parses the once_per_report flag from the real term file', () => {
+  const terms = CG.loadTerms();
+  const c2 = terms.find((t) => t.term === 'C2');
+  assert.strictEqual(c2.once_per_report, true, 'C2 is flagged once per report');
+  const lsass = terms.find((t) => t.term === 'LSASS');
+  assert.notStrictEqual(lsass.once_per_report, true, 'a rare term is not flagged');
+  const flagged = terms.filter((t) => t.once_per_report).map((t) => t.term).sort();
+  assert.deepStrictEqual(flagged,
+    ['C2', 'beacon', 'exfiltration', 'loader', 'open directory', 'pivot'],
+    'exactly the six highest-frequency terms carry the flag');
+});

@@ -53,6 +53,7 @@ function loadTerms(file) {
     if (!kv) return;
     if (kv[1] === 'short') cur.short = strip(kv[2]);
     if (kv[1] === 'case_sensitive') cur.case_sensitive = kv[2].trim() === 'true';
+    if (kv[1] === 'once_per_report') cur.once_per_report = kv[2].trim() === 'true';
     if (kv[1] === 'aliases') {
       cur.aliases = (kv[2].match(/"[^"]*"/g) || []).map(function (s) { return s.slice(1, -1); });
     }

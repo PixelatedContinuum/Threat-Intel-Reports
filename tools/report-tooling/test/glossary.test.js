@@ -9,7 +9,8 @@ const TERMS = [
   { term: 'open directory', case_sensitive: false, short: 'Exposed file listing.' },
   { term: 'hosting', case_sensitive: false, short: 'Generic hosting.' },
   { term: 'bulletproof hosting', case_sensitive: false, short: 'Abuse-tolerant hosting.' },
-  { term: 'beacon', aliases: ['beaconing'], case_sensitive: false, short: 'Periodic call-home.' }
+  { term: 'beacon', aliases: ['beaconing'], case_sensitive: false, short: 'Periodic call-home.' },
+  { term: 'C2', case_sensitive: true, once_per_report: true, short: 'Operator channel.' }
 ];
 
 function mark(html) {
@@ -121,4 +122,25 @@ test('applyEdgeClasses is a no-op under jsdom, where every rect is zero', () => 
   const root = mark('<h2>A</h2><p>Credentials came from LSASS memory.</p>');
   assert.strictEqual(G.applyEdgeClasses(root), 0);
   assert.strictEqual(root.querySelectorAll('.hl-gloss--right').length, 0);
+});
+
+/* Measured on the live corpus, six common terms produced 56% of all marking and
+   C2 alone averaged eight marks a report. once_per_report drops those to one, so
+   the marking stays quiet enough for the house-standard exemption to hold. */
+test('a once_per_report term marks once for the whole page, not once per section', () => {
+  const root = mark('<h2>One</h2><p>The C2 replied.</p><h2>Two</h2><p>The C2 again.</p>');
+  const got = [...root.querySelectorAll('.hl-gloss')].map((m) => m.textContent);
+  assert.deepStrictEqual(got, ['C2']);
+});
+
+test('a per-section term keeps marking in each section alongside a once-per-report one', () => {
+  const root = mark('<h2>One</h2><p>The C2 reached LSASS.</p>' +
+                    '<h2>Two</h2><p>The C2 reached LSASS again.</p>');
+  const got = [...root.querySelectorAll('.hl-gloss')].map((m) => m.textContent);
+  assert.deepStrictEqual(got, ['C2', 'LSASS', 'LSASS']);
+});
+
+test('a once_per_report term still marks only once within a single section', () => {
+  const root = mark('<h2>One</h2><p>The C2 replied, and the C2 replied again.</p>');
+  assert.strictEqual(root.querySelectorAll('.hl-gloss').length, 1);
 });
