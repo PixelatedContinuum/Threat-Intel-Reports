@@ -3312,3 +3312,23 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   .hl-attack__seglabel { display: none; }
   .hl-attack__bars { height: 46px; }
 }
+
+/* ---- Hover glossary (assets/js/glossary.js) ---- */
+/* Marking stays deliberately quiet: a bright underline on every known term
+   would interrupt the expert reader the deep sections are written for, which
+   is the objection the house standard raises against unconditional notes. */
+.hl-gloss { border-bottom: 1px dotted var(--hl-text-muted, #888888); cursor: help;
+  position: relative; }
+.hl-gloss:hover, .hl-gloss:focus { border-bottom-color: currentColor; outline: none; }
+.hl-gloss::after { content: attr(data-gloss); position: absolute; left: 0; top: 1.5em;
+  z-index: 40; width: max-content; max-width: min(320px, 78vw);
+  padding: 0.5em 0.7em; border-radius: 6px; font-size: 0.82rem;
+  line-height: 1.45; font-weight: 400; text-align: left; white-space: normal;
+  background: var(--hl-bg-card, #1a1a1a); color: var(--hl-text-primary, #eeeeee);
+  border: 1px solid var(--hl-border-card, #2a2a2a);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+  opacity: 0; visibility: hidden; transition: opacity 0.12s; pointer-events: none; }
+.hl-gloss:hover::after, .hl-gloss:focus::after { opacity: 1; visibility: visible; }
+/* Set by applyEdgeClasses() when a left-anchored tooltip would leave the column.
+   The 320px above and TOOLTIP_MAX_PX in glossary.js must change together. */
+.hl-gloss--right::after { left: auto; right: 0; }
