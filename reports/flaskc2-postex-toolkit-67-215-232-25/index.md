@@ -22,6 +22,19 @@ ioc_highlights:
   - "hxxp://67.215.232[.]25:1337/"
   - "a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262"
 stix_bundle: /stix/flaskc2-postex-toolkit-67-215-232-25.json
+figure_nav:
+  - image: flaskc2-postex-kill-chain.svg
+    parts:
+      - label: "MSSQL CLR backdoor"
+        anchor: "#4-the-mssql-clr-reverse-shell-backdoor-cmd_execdll"
+      - label: "IIS webshell"
+        anchor: "#61-npcinfolist1aspx--aes-in-memory-net-loader-webshell"
+      - label: "Potato suite to SYSTEM"
+        anchor: "#71-the-seimpersonate-potato-suite-six-tools"
+      - label: "Kerberos abuse"
+        anchor: "#72-rubeus--ghostpack-kerberos-abuse"
+      - label: "The Flask C2"
+        anchor: "#5-the-bespoke-flask-c2-beacon-api"
 ---
 
 **Campaign Identifier:** FlaskC2-PostEx-Toolkit-67.215.232.25<br>

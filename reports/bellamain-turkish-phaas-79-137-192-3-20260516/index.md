@@ -33,6 +33,29 @@ category: "Phishing-as-a-Service"
 hide: true
 description: "BellaMain is an operator-developed Turkish Phishing-as-a-Service panel and matched seven-kit brand-impersonation bundle, recovered in full PHP source from an open directory on Aeza Group OFAC-sanctioned hosting. The panel ships first-class operator tradecraft rarely visible at the source layer — USOM (Turkey CERT) blocklist self-monitoring, four-bot Telegram C2 with identity-vs-card role separation, three Telegram-triggered TRUNCATE evidence-destruction commands, mysqldump-to-Telegram backup-as-exfil, a 70/30 TRX/TRON revenue split via live Binance TRXTRY rate conversion, invite-only operator gating with one-time-consume referral codes, and a code-level Wadanz developer signature. First public source-code disclosure for this PhaaS family. Tracked under UTA-2026-008."
 stix_bundle: /stix/bellamain-turkish-phaas-79-137-192-3-20260516.json
+figure_nav:
+  - image: bellamain-single-tenant-database.svg
+    parts:
+      - label: "The shared schema"
+        anchor: "#62-mysql-schema-inferred"
+      - label: "Seven brand kits"
+        anchor: "#58-seven-named-turkish-brand-impersonations--the-target-surface"
+      - label: "The panel source"
+        anchor: "#51-full-php-source-recovery--what-it-unlocks"
+      - label: "Hardcoded credentials"
+        anchor: "#63-notable-strings--operator-identity-and-anti-researcher-canary"
+  - image: bellamain-victim-funnel-chronology.svg
+    parts:
+      - label: "Kit page render"
+        anchor: "#58-seven-named-turkish-brand-impersonations--the-target-surface"
+      - label: "Identity and card capture"
+        anchor: "#53-four-bot-telegram-c2-with-role-separation"
+      - label: "Payout"
+        anchor: "#56-7030-trxtron-payout-flow-via-live-binance-trxtry-rate"
+      - label: "Evidence destruction"
+        anchor: "#54-truncate-evidence-destruction-on-demand--anti-forensics"
+      - label: "The full chronology"
+        anchor: "#71-operator-workflow-reconstruction-chronological"
 ---
 
 **Campaign Identifier:** BellaMain-Turkish-PhaaS-79.137.192.3<br>

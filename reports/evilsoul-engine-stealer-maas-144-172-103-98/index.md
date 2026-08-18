@@ -22,6 +22,27 @@ ioc_highlights:
   - "evilsoul[.]xyz"
   - "198.1.195[.]210"
   - "299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c"
+figure_nav:
+  - image: infra-cluster.svg
+    parts:
+      - label: "The dead origin cluster"
+        anchor: "#121-the-evilsoul-engine-cluster-dead-origin"
+      - label: "Origin behind Cloudflare"
+        anchor: "#123-origin-exposed-despite-cloudflare"
+      - label: "The two actors"
+        anchor: "#101-the-two-actors"
+      - label: "The retracted equation"
+        anchor: "#102-the-retracted-equation--do-not-reintroduce"
+  - image: vt-corpus-map.svg
+    parts:
+      - label: "The factory"
+        anchor: "#the-server-side-factory"
+      - label: "Maploot and Tinarox"
+        anchor: "#7-the-maploot-and-tinarox-electron-twins--one-exfiltration-stack-two-builds"
+      - label: "The Socket.IO variant"
+        anchor: "#6-the-299a2e7f-socketio-variant--stealer-plus-remote-access-trojan"
+      - label: "Who owns which"
+        anchor: "#101-the-two-actors"
 ---
 
 **Campaign Identifier:** EvilSoul-Engine-Stealer-MaaS-144.172.103.98<br>

@@ -27,6 +27,37 @@ ioc_highlights:
   - "62aa8e470e60aa9fa77df6e6e63b7c253657e95d6018240b1752a9ca9fe389fa"
   - "d25a3a858e28faa68ca6c624d7d19350c11ac798c346be3067307463e40aaff1"
 stix_bundle: /stix/cloudsync-assembler-toolkit-91-197-98-188.json
+figure_nav:
+  - image: cloudsync-assembly-map.svg
+    parts:
+      - label: "What they wrote"
+        anchor: "#7-cloudsync-the-tor-hidden-service-panel-rat"
+      - label: "What they acquired"
+        anchor: "#the-sourced-components-tool-by-tool"
+      - label: "The five buckets"
+        anchor: "#the-five-buckets"
+      - label: "The three named actors"
+        anchor: "#111-the-three-threads-in-one-frame"
+      - label: "The orchestrator"
+        anchor: "#9-the-orchestrator-the-stub-and-the-parked-stealer"
+  - image: cloudsync-per-victim-tor-panel.svg
+    parts:
+      - label: "Working directory"
+        anchor: "#host-side-artifacts"
+      - label: "Why Tor per victim"
+        anchor: "#why-the-tor-architecture-is-the-interesting-choice"
+      - label: "The C2 protocol"
+        anchor: "#the-c2-protocol"
+      - label: "Unauthenticated peer"
+        anchor: "#the-command-channel-does-not-authenticate-its-peer"
+  - image: cloudsync-abexe-deployment-chain.svg
+    parts:
+      - label: "Stage by stage"
+        anchor: "#abexe-stage-by-stage"
+      - label: "ct.bat self-gating"
+        anchor: "#ctbat-and-why-the-self-gating-matters"
+      - label: "The parked stealer"
+        anchor: "#sentinelstealers-capability-profile-and-the-locker-question"
 ---
 
 **Campaign Identifier:** CloudSync-Assembler-Toolkit-91.197.98.188<br>

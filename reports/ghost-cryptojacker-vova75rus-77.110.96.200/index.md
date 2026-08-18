@@ -27,6 +27,19 @@ ioc_highlights:
   - "e943b58112f58517b95424dba9334bf97c5dc2dd2f069dca04b9e75b9fec56ba"
   - "008bc5ab6e62c9e55e3dd2da5ef31e1e0f05f35c5898a8ef5c7aeaf6e2a2c46f6"
 stix_bundle: /stix/ghost-cryptojacker-vova75rus-77.110.96.200.json
+figure_nav:
+  - image: ghost-kit-4tier-supply-chain.svg
+    parts:
+      - label: "Tier 1 · UnamSanctam"
+        anchor: "#95-unamsanctam--high-confidence-90-on-passive-oss-role-not-a-case-9-threat-actor"
+      - label: "Tier 2 · Vova75Rus"
+        anchor: "#92-vova75rus--high-confidence-88-named-actor"
+      - label: "Tier 3 · Operator A"
+        anchor: "#93-uta-2026-016-operator-a-7711096200--low-confidence-65-top-of-the-low-band-50-70"
+      - label: "Tier 4 · Operator B"
+        anchor: "#94-uta-2026-017-operator-b-77110125145--low-confidence-60-within-the-low-band-50-70"
+      - label: "The model itself"
+        anchor: "#91-the-4-tier-supply-chain-model-central-attribution-finding"
 ---
 
 **Campaign Identifier:** GHOST-Cryptojacker-Vova75Rus-77.110.96.200<br>
