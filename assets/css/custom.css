@@ -3332,3 +3332,34 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 /* Set by applyEdgeClasses() when a left-anchored tooltip would leave the column.
    The 320px above and TOOLTIP_MAX_PX in glossary.js must change together. */
 .hl-gloss--right::after { left: auto; right: 0; }
+
+/* ---- Detection picker (assets/js/detection-picker.js) ---- */
+.hl-picker { border: 1px solid var(--hl-border-card, #2a2a2a); border-radius: 8px;
+  padding: 0.9em 1em; margin: 1.6em 0; background: var(--hl-bg-card, #1a1a1a); }
+.hl-picker__head { display: flex; align-items: baseline; gap: 0.75em; flex-wrap: wrap; }
+.hl-picker__label { font-weight: 600; font-size: 0.9em; }
+.hl-picker__count { font-size: 0.78em; opacity: 0.65; }
+.hl-picker__filters { display: flex; gap: 0.5em; flex-wrap: wrap; margin: 0.8em 0 0; }
+.hl-picker__chip { font: inherit; font-size: 0.74em; padding: 3px 10px; border-radius: 999px;
+  cursor: pointer; background: transparent; color: inherit;
+  border: 1px solid var(--hl-border-card, #2a2a2a); opacity: 0.75; }
+.hl-picker__chip:hover { opacity: 1; }
+.hl-picker__chip[aria-pressed="true"] { opacity: 1; border-color: currentColor;
+  background: rgba(74,158,255,0.16); }
+.hl-picker__actions { display: flex; gap: 0.6em; align-items: center; flex-wrap: wrap;
+  margin-top: 0.9em; padding-top: 0.8em;
+  border-top: 1px solid var(--hl-border-card, #2a2a2a); }
+.hl-picker__btn { font: inherit; font-size: 0.76em; padding: 4px 12px; border-radius: 5px;
+  cursor: pointer; background: transparent; color: inherit; border: 1px solid currentColor; }
+.hl-picker__btn:hover:not([disabled]) { background: rgba(74,158,255,0.12); }
+.hl-picker__btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.hl-picker__note { font-size: 0.76em; opacity: 0.7; margin-left: auto; }
+.hl-picker__warn { font-size: 0.76em; margin-top: 0.6em;
+  color: var(--hl-sev-high-lbl, #fb923c); }
+.hl-picker__warn:empty { display: none; }
+/* One checkbox per rule, placed beside its heading so selection happens where
+   the reader is reading rather than in a list detached from the rules. */
+.hl-rule-pick { margin-right: 0.5em; vertical-align: middle; cursor: pointer; }
+/* A rule whose body lives inside an earlier bundle cannot be taken on its own. */
+.hl-rule-xref { font-size: 0.72em; opacity: 0.7; margin-left: 0.4em; font-style: italic; }
+.hl-rule-hidden { display: none; }
