@@ -31,6 +31,41 @@ category: "MaaS Operation"
 hide: true
 description: "Three operationally separate threat actors share one Aeza bulletproof staging IP. Cluster C is a Rhadamanthys MaaS customer with a custom VS2019 loader, EAX-redirect hollowing into InstallUtil.exe, and a 34-month-stable Hostkey NL C2 that survived Operation Endgame Phase 3."
 stix_bundle: /stix/opendirectory-79-137-192-3-20260515.json
+figure_nav:
+  - image: rhadamanthys-cluster-c-kill-chain.svg
+    parts:
+      - label: "14-second sleep gauntlet"
+        anchor: "#63-14-second-anti-analysis-sleep--runtime-mechanics"
+      - label: "RC4 decrypt of Stage 2"
+        anchor: "#51-loader-rc4-decryption-of-the-embedded-stage-2"
+      - label: "EAX-redirect hollowing"
+        anchor: "#62-eax-redirect-process-hollowing--runtime-mechanics"
+      - label: "Registry write"
+        anchor: "#64-stage-2-registry-write-to-sibcodesn"
+      - label: "C2 beacon"
+        anchor: "#65-c2-beacon--first-request-structure"
+      - label: "The full chain"
+        anchor: "#61-cluster-c-kill-chain-overview"
+  - image: rhadamanthys-maas-vendor-customer-architecture.svg
+    parts:
+      - label: "Vendor vs customer"
+        anchor: "#vendor-versus-customer--a-critical-distinction"
+      - label: "Vendor Stage-2"
+        anchor: "#43-stage-2-capabilities-vendor--canonical-rhadamanthys"
+      - label: "Customer loader"
+        anchor: "#42-loader-side-capabilities-customer"
+      - label: "UTA-2026-010"
+        anchor: "#93-uta-2026-010--rhadamanthys-maas-customer-cluster-c-primary"
+  - image: opendirectory-79-137-192-3-three-cluster-cotenancy.svg
+    parts:
+      - label: "Cluster A, BellaMain"
+        anchor: "#91-uta-2026-008--bellamain-turkish-phaas-operator-cluster-a"
+      - label: "Cluster B, Inkognito"
+        anchor: "#92-uta-2026-009--inkognito-russian-vpnphishing-operator-cluster-b"
+      - label: "Cluster C, Rhadamanthys"
+        anchor: "#93-uta-2026-010--rhadamanthys-maas-customer-cluster-c-primary"
+      - label: "Are they linked?"
+        anchor: "#94-cross-cluster-linkage-assessment"
 ---
 
 **Campaign Identifier:** OpenDirectory-MultiCluster-Rhadamanthys-BellaMain-Inkognito-79.137.192.3<br>

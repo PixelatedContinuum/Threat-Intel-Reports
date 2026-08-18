@@ -28,6 +28,29 @@ ioc_highlights:
   - value: "55aec7f75af2e0489ff72c28322eccdfbc946cc00f539c2051382877cac03426"
     note: "Central exploit dispatcher (SHA256)"
 stix_bundle: /stix/gocloud-multiservice-cryptojacking-149-28-112-221.json
+figure_nav:
+  - image: gocloud-two-node-architecture.svg
+    parts:
+      - label: "Node 1, exploit engine"
+        anchor: "#81-the-exploit-engine-and-its-five-stage-build-history"
+      - label: "Node 2, C2 stack"
+        anchor: "#85-the-c2-stack-and-an-unauthenticated-control-port"
+      - label: "Orchestration"
+        anchor: "#84-orchestration-and-self-healing"
+      - label: "The dead Log4Shell port"
+        anchor: "#87-the-dead-log4shell-branch"
+  - image: gocloud-targeting-to-mining-pipeline.svg
+    parts:
+      - label: "1 · Discover"
+        anchor: "#83-omnihunter-and-the-detect-first-methodology"
+      - label: "2 · Exploit"
+        anchor: "#81-the-exploit-engine-and-its-five-stage-build-history"
+      - label: "3 · Deliver"
+        anchor: "#84-orchestration-and-self-healing"
+      - label: "4 · Mine"
+        anchor: "#86-the-windows-worm-branch-and-the-wallet-that-earned-nothing"
+      - label: "Claimed vs real reach"
+        anchor: "#5-the-gap-between-claimed-and-real-reach"
 ---
 
 **Campaign Identifier:** GOCLOUD-MultiService-Cryptojacking-149.28.112.221<br>
