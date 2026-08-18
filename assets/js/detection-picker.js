@@ -157,6 +157,113 @@
     return null;
   }
 
+  var ENGINE_SECTIONS = { 'YARA Rules': 1, 'Sigma Rules': 1, 'Suricata Signatures': 1 };
+
+  /* Divides the page into units so filtering can hide a whole rule, and a whole
+     section once nothing in it survives.
+
+     Hiding only the heading and the code block was not enough. A rule is a
+     heading, several metadata paragraphs and then its body, so filtering left
+     orphaned "Tier: / Robustness:" paragraphs behind with nothing above them.
+     Worse, the engine's own H2 and its intro stayed put, so filtering to
+     Suricata still showed a YARA Rules heading introducing no rules at all: 81
+     of 104 top-level elements survived a filter that kept 11 of 22 rules.
+
+     Every top-level element gets three coordinates. `sec` is the engine section
+     it belongs to, or -1 for page furniture such as the coverage summary, the
+     gaps section and the licence, which must never be hidden. `sub` is the
+     tier subsection. `group` is the rule it belongs to, or -1 for the headings
+     and prose that introduce a section rather than a rule.
+
+     A horizontal rule is carried forward onto the section it precedes, so
+     hiding a section does not leave a stray divider behind. */
+  function layoutUnits(rootEl, okList) {
+    var byEl = [];
+    okList.forEach(function (b, i) { byEl.push({ el: b.el, i: i }); });
+    function ruleIndexIn(el) {
+      for (var i = 0; i < byEl.length; i++) {
+        if (el === byEl[i].el || (el.contains && el.contains(byEl[i].el))) return byEl[i].i;
+      }
+      return -1;
+    }
+
+    var units = [], groups = [];
+    var sec = -1, sub = -1, group = -1, inEngine = false, carry = [];
+
+    [].forEach.call(rootEl.children, function (el) {
+      if (el.classList && el.classList.contains('hl-picker')) return;
+
+      if (el.tagName === 'HR') { carry.push(el); return; }
+
+      if (el.tagName === 'H2') {
+        inEngine = !!ENGINE_SECTIONS[(el.textContent || '').trim()];
+        if (inEngine) { sec++; }
+        sub = -1; group = -1;
+        var s = inEngine ? sec : -1;
+        carry.forEach(function (h) { units.push({ el: h, sec: s, sub: -1, group: -1 }); });
+        carry = [];
+        units.push({ el: el, sec: s, sub: -1, group: -1 });
+        return;
+      }
+
+      // A divider that turned out not to precede a section is page furniture.
+      carry.forEach(function (h) { units.push({ el: h, sec: -1, sub: -1, group: -1 }); });
+      carry = [];
+
+      if (!inEngine) { units.push({ el: el, sec: -1, sub: -1, group: -1 }); return; }
+
+      if (el.tagName === 'H3') {
+        sub++; group = -1;
+        units.push({ el: el, sec: sec, sub: sub, group: -1 });
+        return;
+      }
+
+      if (el.tagName === 'H4') {
+        groups.push({ sec: sec, sub: sub, rule: -1 });
+        group = groups.length - 1;
+        units.push({ el: el, sec: sec, sub: sub, group: group });
+        return;
+      }
+
+      if (group >= 0) {
+        var r = ruleIndexIn(el);
+        if (r >= 0) groups[group].rule = r;
+      }
+      units.push({ el: el, sec: sec, sub: sub, group: group });
+    });
+
+    carry.forEach(function (h) { units.push({ el: h, sec: -1, sub: -1, group: -1 }); });
+    return { units: units, groups: groups };
+  }
+
+  /* Which elements should be on screen, given the set of rules that pass the
+     filter. A group with no rule of its own, a retirement note or a
+     cross-referenced entry, follows its section: it cannot be filtered on its
+     own merits but it should not outlive the section that frames it. */
+  function visibilityFor(layout, visibleRuleIdx) {
+    var vis = {};
+    visibleRuleIdx.forEach(function (i) { vis[i] = true; });
+
+    var secLive = {}, subLive = {};
+    layout.groups.forEach(function (g) {
+      if (g.rule >= 0 && vis[g.rule]) {
+        secLive[g.sec] = true;
+        subLive[g.sec + ':' + g.sub] = true;
+      }
+    });
+
+    return layout.units.map(function (u) {
+      if (u.sec < 0) return true;                       // page furniture, always shown
+      if (u.group >= 0) {
+        var g = layout.groups[u.group];
+        if (g.rule < 0) return !!secLive[u.sec];        // no rule of its own
+        return !!vis[g.rule];
+      }
+      if (u.sub >= 0) return !!subLive[u.sec + ':' + u.sub];
+      return !!secLive[u.sec];
+    });
+  }
+
   function chip(doc, kind, val, label) {
     var b = doc.createElement('button');
     b.className = 'hl-picker__chip';
@@ -236,12 +343,14 @@
       });
     }
 
+    // Built once: the DOM shape does not change, only what is shown.
+    var layout = layoutUnits(body, bound.ok);
+
     function refresh() {
       var vis = visible();
-      bound.ok.forEach(function (b, i) {
-        var on = vis.indexOf(String(i)) !== -1;
-        if (b.heading) b.heading.classList.toggle('hl-rule-hidden', !on);
-        if (b.block) b.block.classList.toggle('hl-rule-hidden', !on);
+      var shown = visibilityFor(layout, vis.map(Number));
+      layout.units.forEach(function (u, i) {
+        u.el.classList.toggle('hl-rule-hidden', !shown[i]);
       });
       var n = Object.keys(state.selected).length;
       panel.querySelector('.hl-picker__count').textContent =
@@ -316,6 +425,8 @@
     bind: bind,
     headingFor: headingFor,
     blockFor: blockFor,
+    layoutUnits: layoutUnits,
+    visibilityFor: visibilityFor,
     applyFilters: applyFilters,
     bundle: bundle,
     filenameFor: filenameFor,

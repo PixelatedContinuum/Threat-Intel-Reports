@@ -182,3 +182,109 @@ test('finds the heading and the block through a Rouge wrapper', () => {
   assert.strictEqual(D.blockFor(codes[1], root).className, 'language-yaml',
     'hiding must target the wrapper, or filtering leaves an empty box behind');
 });
+
+/* Filtering has to remove a whole rule and a whole dead section, not just the
+   heading and the code block. On the live multivector page, filtering to
+   Suricata left 81 of 104 top-level elements standing: a YARA Rules heading
+   introducing nothing, both tier subheadings, and five orphaned metadata
+   paragraphs with no rule above them. */
+function detectionPage() {
+  return new JSDOM([
+    '<body><div class="hl-post-content">',
+    '<p>Campaign metadata</p>',
+    '<hr>',
+    '<h2>Detection Coverage Summary</h2>',
+    '<p>summary prose</p>',
+    '<hr>',
+    '<h2>YARA Rules</h2>',
+    '<p>All five rules below target the payload class.</p>',
+    '<h3>Detection Rules</h3>',
+    '<h4>Yara One</h4>',
+    '<p>Tier: Detection</p>',
+    '<pre><code>rule A { condition: true }</code></pre>',
+    '<hr>',
+    '<h2>Suricata Signatures</h2>',
+    '<p>network prose</p>',
+    '<h3>Detection Rules</h3>',
+    '<h4>Suri One</h4>',
+    '<p>Tier: Detection</p>',
+    '<pre><code>alert tcp any any -> any any (sid:1;)</code></pre>',
+    '<hr>',
+    '<h2>Coverage Gaps</h2>',
+    '<p>gaps prose</p>',
+    '<h2>License</h2>',
+    '<p>licence prose</p>',
+    '</div></body>'
+  ].join('')).window.document;
+}
+
+function visibleText(root, shown, layout) {
+  return layout.units
+    .filter((u, i) => shown[i])
+    .map((u) => u.el.tagName + ':' + (u.el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40));
+}
+
+test('filtering to one engine hides the other engine section entirely', () => {
+  const doc = detectionPage();
+  const root = doc.querySelector('.hl-post-content');
+  const codes = [...root.querySelectorAll('pre > code')];
+  const ok = [
+    { el: codes[0], engine: 'yara', tier: 'Detection', rule: { engine: 'yara', tier: 'Detection' } },
+    { el: codes[1], engine: 'suricata', tier: 'Detection', rule: { engine: 'suricata', tier: 'Detection' } }
+  ];
+  const layout = D.layoutUnits(root, ok);
+
+  const shown = D.visibilityFor(layout, [1]);          // Suricata only
+  const text = visibleText(root, shown, layout).join(' | ');
+
+  assert.doesNotMatch(text, /YARA Rules/, 'the dead engine heading goes');
+  assert.doesNotMatch(text, /payload class/, 'and its intro prose with it');
+  assert.doesNotMatch(text, /Yara One/, 'and the rule heading');
+  assert.match(text, /Suricata Signatures/, 'the live engine section stays');
+  assert.match(text, /Suri One/);
+});
+
+test('a hidden rule takes its metadata paragraphs with it', () => {
+  const doc = detectionPage();
+  const root = doc.querySelector('.hl-post-content');
+  const codes = [...root.querySelectorAll('pre > code')];
+  const ok = [
+    { el: codes[0], engine: 'yara', tier: 'Detection', rule: {} },
+    { el: codes[1], engine: 'suricata', tier: 'Detection', rule: {} }
+  ];
+  const layout = D.layoutUnits(root, ok);
+  const shown = D.visibilityFor(layout, [1]);
+  const tierParas = layout.units.filter((u, i) => shown[i] && /^Tier:/.test(u.el.textContent || ''));
+  assert.strictEqual(tierParas.length, 1, 'only the surviving rule keeps its metadata');
+});
+
+test('page furniture outside the engine sections is never hidden', () => {
+  const doc = detectionPage();
+  const root = doc.querySelector('.hl-post-content');
+  const codes = [...root.querySelectorAll('pre > code')];
+  const ok = [
+    { el: codes[0], engine: 'yara', tier: 'Detection', rule: {} },
+    { el: codes[1], engine: 'suricata', tier: 'Detection', rule: {} }
+  ];
+  const layout = D.layoutUnits(root, ok);
+  const shown = D.visibilityFor(layout, []);           // nothing matches at all
+  const text = visibleText(root, shown, layout).join(' | ');
+  assert.match(text, /Detection Coverage Summary/);
+  assert.match(text, /Coverage Gaps/);
+  assert.match(text, /License/);
+  assert.doesNotMatch(text, /YARA Rules/);
+  assert.doesNotMatch(text, /Suricata Signatures/);
+});
+
+test('every rule visible means every element visible', () => {
+  const doc = detectionPage();
+  const root = doc.querySelector('.hl-post-content');
+  const codes = [...root.querySelectorAll('pre > code')];
+  const ok = [
+    { el: codes[0], engine: 'yara', tier: 'Detection', rule: {} },
+    { el: codes[1], engine: 'suricata', tier: 'Detection', rule: {} }
+  ];
+  const layout = D.layoutUnits(root, ok);
+  const shown = D.visibilityFor(layout, [0, 1]);
+  assert.strictEqual(shown.filter(Boolean).length, layout.units.length);
+});
