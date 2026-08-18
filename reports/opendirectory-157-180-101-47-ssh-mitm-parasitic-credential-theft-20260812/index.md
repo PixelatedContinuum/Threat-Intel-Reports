@@ -31,6 +31,19 @@ ioc_highlights:
     note: "mitm_local.py, the interceptor (SHA256)"
   - value: "16ecc69027371c47a27296702c78dbd48013a98605989d5e5c2c4cc8159020ef"
     note: "Deployment tooling (SHA256)"
+figure_nav:
+  - image: ssh-mitm-parasitic-capture-sequence.svg
+    parts:
+      - label: "The interception"
+        anchor: "#5-the-interception-mechanism"
+      - label: "How it hides"
+        anchor: "#6-deployment-concealment-and-withdrawal"
+      - label: "What the database admits"
+        anchor: "#7-the-collection-architecture-and-what-its-database-admits"
+      - label: "Why it is parasitic"
+        anchor: "#the-parasitic-capture-mechanism"
+      - label: "How to hunt it"
+        anchor: "#the-host-anchors-cheapest-first"
 ---
 
 **Campaign Identifier:** SSHInterception-ParasiticCredentialTheft-157.180.101.47<br>

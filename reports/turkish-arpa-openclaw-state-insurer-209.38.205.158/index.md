@@ -27,6 +27,19 @@ ioc_highlights:
   - "9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77"
   - "a4b39f13d17ae3ff7a0adb2cf1df459a72425513f392a1d8fc469f8f2e123de5"
 stix_bundle: /stix/turkish-arpa-openclaw-state-insurer-209.38.205.158.json
+figure_nav:
+  - image: arpa-observability-reverse-pipeline.svg
+    parts:
+      - label: "The stolen Instana JWT"
+        anchor: "#51-powershell-collector-script-turkish-instana_local_collectorps1"
+      - label: "The reverse pipeline"
+        anchor: "#42-observability-tool-reverse-pipeline--novel-ttp-at-maximalist-scale"
+      - label: "Cross-source ETL"
+        anchor: "#45-cross-source-etl--7552-element-unified-topology"
+      - label: "AI-augmented recon"
+        anchor: "#46-ai-augmented-infrastructure-reconnaissance-using-stolen-apm-credentials-candidate-novel-ttp-n1"
+      - label: "The ARPA platform"
+        anchor: "#41-arpa-korelasyon-motoru-platform-architecture"
 ---
 
 **Campaign Identifier:** Turkish-ARPA-OpenClaw-State-Insurer-UTA-2026-013-209.38.205.158<br>

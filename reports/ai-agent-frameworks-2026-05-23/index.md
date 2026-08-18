@@ -27,6 +27,17 @@ ioc_highlights:
   - "87.106.143.220"
   - "5.230.201.54"
 stix_bundle: /stix/ai-agent-frameworks-2026-05-23.json
+figure_nav:
+  - image: ai-threat-actor-3class-taxonomy.svg
+    parts:
+      - label: "Class 1 · AI-integrated"
+        anchor: "#41-case-1--russian-gemini-credential-mill-operator"
+      - label: "Class 2 · Hybrid augmented"
+        anchor: "#42-case-2--turkish-arpa-observability-harvester-operator"
+      - label: "Class 2 · second exemplar"
+        anchor: "#43-case-3--rovodevpandora-mirai-botnet-operator"
+      - label: "The taxonomy itself"
+        anchor: "#410-three-class-ai-threat-actor-taxonomy"
 ---
 
 **Campaign Identifier:** AI-Agent-Frameworks-MultiActor-2026-05-23<br>
