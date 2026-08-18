@@ -120,6 +120,10 @@ function parse(src, slug) {
     if (badIndex !== -1) {
       unresolved.push({
         name: name, engine: engine, line: pending.line,
+        // Carried so the generator can reconcile its Tier-line count exactly.
+        // A bundle consumes several lines under one heading, so counting
+        // entries instead of lines would make the invariant unenforceable.
+        tier_raw: tiersRaw,
         reason: 'unrecognised tier "' + tiersRaw[badIndex] +
                 '": expected a value beginning Detection or Hunting'
       });

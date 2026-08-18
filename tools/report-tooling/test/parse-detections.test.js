@@ -205,3 +205,21 @@ test('a fence inside a section is never confused with a heading in its body', ()
   assert.strictEqual(r.rules.length, 1);
   assert.match(r.rules[0].body, /not a heading/);
 });
+
+/* The generator reconciles its Tier-line count exactly, and a bundle consumes
+   several lines under one heading, so an unresolved entry has to report the
+   lines it consumed or the invariant cannot be enforced. */
+test('an unresolved entry reports the tier lines it consumed', () => {
+  const src = [
+    '## Sigma Rules',
+    '#### Odd One',
+    '**Tier:** Hunting',
+    '**Tier:** Experimental',
+    '```yaml',
+    'title: x',
+    '```'
+  ].join('\n');
+  const r = P.parse(src, 'demo');
+  assert.strictEqual(r.unresolved.length, 1);
+  assert.deepStrictEqual(r.unresolved[0].tier_raw, ['Hunting', 'Experimental']);
+});
