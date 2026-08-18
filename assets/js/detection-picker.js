@@ -79,8 +79,14 @@
     ].join('\n');
   }
 
-  /* YARA imports must precede the first rule block or the file will not
-     compile, so they are lifted out of each body and emitted once at the top. */
+  /* Imports are lifted out of each body and emitted once at the top, which is
+     the canonical form YARA documents and keeps a 20-rule bundle from repeating
+     the same import 20 times.
+
+     Measured, so the comment does not overclaim: yarac 4.5.5 accepts imports
+     between complete rules and accepts duplicates, so a naive concatenation
+     would also compile. What it rejects is an import inside a rule block, which
+     concatenation never produces. This is tidiness and convention, not a rescue. */
   function bundleYara(rules) {
     var imports = [], bodies = [];
     rules.forEach(function (r) {
