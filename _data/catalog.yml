@@ -5,6 +5,20 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ===== PENDING GO-LIVE, Carrier Credential Harvesting Through a Customer's Router (13.140.145.210) =====
+  # HELD: public go-live waits on disclosure replies. 7 of 8 notifications sent 2026-08-17;
+  # D-05 Contabo is on a dated release for 2026-08-31. Three victim sites were still observably
+  # exposed at publication, so the preview is URL-only until those channels have had their say.
+  # Uncomment this block at launch, then drop `unlisted: true` from the report + detection front matter,
+  # run update-metrics.py, and regenerate the public Suricata feed.
+  #  - title: "Carrier Credential Harvesting Through a Customer's Router"
+  #    date: 2026-08-18
+  #    severity: high
+  #    tags: [Telecom, Cisco IOS-XE, WebLogic, Credential Theft]
+  #    report_url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
+  #    detection_url: /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
+  #    ioc_url: /ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json
+  # ====================================================================================================
   # ===== PENDING GO-LIVE — SSH Interception and Parasitic Credential Theft (157.180.101.47) =====
   # HELD: public go-live blocked pending the CERT-GOV-MD reply. 130 victims sit behind that channel.
   # Uncomment this block at launch, then drop `unlisted: true` from the report + detection front matter.

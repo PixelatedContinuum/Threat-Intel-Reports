@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    Layout family: vertical-chain (4 cards, closed loop)
+    Subject: exploitation that manufactures the artifact it then harvests
+    Campaign: WebLogicDeserialization-TelecomHarvester-13.140.145.210
+  -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <marker id="arrowLoop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#fb923c"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1500" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1499" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Exploitation That Makes Its Own Loot</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">The crash that blocks entry also writes the prize</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">A failed authentication attempt is not a wasted one. It leaves credentials on disk.</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STEP 1 — ORANGE =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="229" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+    <text x="200" y="227" font-size="23" font-weight="600" fill="#111111">Send a malformed header</text>
+    <text x="80" y="282" font-size="21" fill="#ffffff">The operator sends an Authorization header the parser cannot handle.</text>
+    <text x="80" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Authorization: &lt;malformed value, no scheme prefix&gt;</text>
+    <text x="80" y="352" font-size="18" fill="#fb923c" font-weight="600">Detect: repeated malformed Authorization headers on the WebUI</text>
+  </g>
+  <line x1="500" y1="396" x2="500" y2="436" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 2 — RED =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="442" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="442" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="475" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="473" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
+    <text x="200" y="473" font-size="23" font-weight="600" fill="#ffffff">The Lua parser dies</text>
+    <text x="80" y="528" font-size="21" fill="#ffffff">An arithmetic-on-nil error kills the authentication handler mid-request.</text>
+    <text x="80" y="562" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">smgmt_parse_auth_hdr  at  smgmt2.lua:336</text>
+    <text x="80" y="598" font-size="18" fill="#fb923c" font-weight="600">Detect: this exact trace repeating in the WebUI error log</text>
+  </g>
+  <line x1="500" y1="642" x2="500" y2="682" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 3 — YELLOW =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="688" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="688" width="880" height="46" rx="8" fill="#eab308"/>
+    <rect x="60" y="721" width="880" height="13" fill="#eab308"/>
+    <text x="80" y="719" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 3</text>
+    <text x="200" y="719" font-size="23" font-weight="600" fill="#111111">The device writes a core dump</text>
+    <text x="80" y="774" font-size="21" fill="#ffffff">Each crash saves the process memory, and that memory holds live credential material.</text>
+    <text x="80" y="808" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">VERNAZA_GRAFIC_MATRIZ_RP_0_nginx_*.core.gz</text>
+    <text x="80" y="844" font-size="18" fill="#fb923c" font-weight="600">Detect: new nginx core dumps appearing on a network device</text>
+  </g>
+  <line x1="500" y1="888" x2="500" y2="928" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 4 — DEEP RED =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="934" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="934" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="967" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="965" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 4</text>
+    <text x="200" y="965" font-size="23" font-weight="600" fill="#ffffff">Steal the dumps and mine them</text>
+    <text x="80" y="1020" font-size="21" fill="#ffffff">The same fileCopy primitive carries the dumps out to be searched for credentials.</text>
+    <text x="80" y="1054" font-size="18" fill="#e5e5e5">Here it failed. All 21 candidates were rejected and no tokens were recovered.</text>
+    <text x="80" y="1090" font-size="18" fill="#fb923c" font-weight="600">The mechanism worked. The credential recovery did not.</text>
+  </g>
+
+  <!-- =========== LOOP-BACK ARROW =========== -->
+  <path d="M 940 1034 L 972 1034 L 972 296 L 944 296" fill="none" stroke="#fb923c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowLoop)"/>
+  <text x="500" y="1176" text-anchor="middle" font-size="18" fill="#fb923c" font-weight="600">Every retry restocks the shelf it is about to empty</text>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1230" x2="940" y2="1230" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1264" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  smgmt2.lua:336 arithmetic-on-nil  ·  malformed Authorization headers</text>
+  <text x="500" y="1294" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">unexplained nginx core dumps written on an IOS-XE device</text>
+  <text x="500" y="1330" text-anchor="middle" font-size="15" fill="#cccccc">65 dumps were taken in total, spanning 2026-02-06 to 2026-07-23, so most predate this operator.</text>
+  <text x="500" y="1358" text-anchor="middle" font-size="15" fill="#cccccc">One dump is directly attributable to them. Attribution of the other 64 is unresolved.</text>
+  <text x="500" y="1392" text-anchor="middle" font-size="14" fill="#888888">Legend: orange = initial trigger · red = execution · yellow = artifact created · deep red = collection</text>
+</svg>

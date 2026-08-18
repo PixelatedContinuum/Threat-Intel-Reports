@@ -3446,6 +3446,277 @@ open-directory-94-103-1-13-20260423-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1105, T1071.001]
+opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections:
+  - name: "WSMA_CVE_2023_20198_DoubleEncode_Exfil"
+    engine: yara
+    tier: Detection
+    fence: 0
+    hash: "42a0bbb2"
+    head: "rule WSMA_CVE_2023_20198_DoubleEncode_Exfil { me"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190, T1048.003]
+  - name: "WebLogic_CVE_2024_21182_OpaqueReference_JNDI"
+    engine: yara
+    tier: Detection
+    fence: 1
+    hash: "d1f919e5"
+    head: "rule WebLogic_CVE_2024_21182_OpaqueReference_JND"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "WebLogic_JNDI_HelloFromLdap_CallbackMarker"
+    engine: yara
+    tier: Detection
+    fence: 2
+    hash: "a3295c40"
+    head: "rule WebLogic_JNDI_HelloFromLdap_CallbackMarker "
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1132.001]
+  - name: "Rootkit_Userland_OriginalsBackup_TarSet"
+    engine: yara
+    tier: Detection
+    fence: 3
+    hash: "db6f1bea"
+    head: "rule Rootkit_Userland_OriginalsBackup_TarSet { m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1554, T1014]
+  - name: "Webshell_PHP_XCMD_Header_Dispatcher"
+    engine: yara
+    tier: Detection
+    fence: 4
+    hash: "0a9e60b8"
+    head: "rule Webshell_PHP_XCMD_Header_Dispatcher { meta:"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1505.003]
+  - name: "GeoServer_CVE_2024_36401_ValueReference_Exec"
+    engine: yara
+    tier: Detection
+    fence: 5
+    hash: "50798ff0"
+    head: "rule GeoServer_CVE_2024_36401_ValueReference_Exe"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "PublicTool_DirtyFrag_LinuxKernel_LPE"
+    engine: yara
+    tier: Hunting
+    fence: 6
+    hash: "61da8b9a"
+    head: "rule PublicTool_DirtyFrag_LinuxKernel_LPE { meta"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1068]
+  - name: "PublicTool_CVE_2023_21839_WebLogic_GoExploit"
+    engine: yara
+    tier: Hunting
+    fence: 7
+    hash: "f9e37c7c"
+    head: "rule PublicTool_CVE_2023_21839_WebLogic_GoExploi"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1190, T1588.005]
+  - name: "Java Process Spawns Unix Shell Following WebLogic JNDI Exploitation"
+    engine: sigma
+    tier: Detection
+    fence: 8
+    hash: "c145748b"
+    head: "title: Java Process Spawns Unix Shell Following "
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1059.004]
+  - name: "Chisel Client Establishing a Reverse SOCKS Tunnel"
+    engine: sigma
+    tier: Detection
+    fence: 9
+    hash: "c60457a5"
+    head: "title: Chisel Client Establishing a Reverse SOCK"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1572]
+  - name: "Registry Hive Export of SAM or SYSTEM to a Non-Standard Location"
+    engine: sigma
+    tier: Detection
+    fence: 10
+    hash: "01f2ec31"
+    head: "title: Registry Hive Export of SAM or SYSTEM to "
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1003.002]
+  - name: "Command Shell Spawned by a Web Server or Application Server Process"
+    engine: sigma
+    tier: Detection
+    fence: 11
+    hash: "eb1f3e97"
+    head: "title: Command Shell Spawned by a Web Server or "
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1059.001, T1059.003]
+  - name: "PowerShell Remoting Session Establishment Command"
+    engine: sigma
+    tier: Detection
+    fence: 12
+    hash: "5fc230ba"
+    head: "title: PowerShell Remoting Session Establishment"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1021.006]
+  - name: "Net Use Command Targeting an Administrative Share With Explicit Credentials"
+    engine: sigma
+    tier: Detection
+    fence: 13
+    hash: "bfd360c7"
+    head: "title: Net Use Command Targeting an Administrati"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1021.002]
+  - name: "Content Change to /etc/passwd or /usr/bin/su Outside a Package Transaction"
+    engine: sigma
+    tier: Detection
+    fence: 14
+    hash: "426bae71"
+    head: "title: Content Change to /etc/passwd or /usr/bin"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1098, T1222.002]
+  - name: "Chisel or PuTTY Plink Binary Written to Disk"
+    engine: sigma
+    tier: Hunting
+    fence: 15
+    hash: "7e3c3198"
+    head: "title: Chisel or PuTTY Plink Binary Written to D"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1105]
+  - name: "Content Change to a Core Process or Network Inspection Utility"
+    engine: sigma
+    tier: Hunting
+    fence: 16
+    hash: "1479fb3b"
+    head: "title: Content Change to a Core Process or Netwo"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1014]
+  - name: "Creation or Modification of the safe_pollRadiusLog Watchdog Script"
+    engine: sigma
+    tier: Hunting
+    fence: 17
+    hash: "be7775fc"
+    head: "title: Creation or Modification of the safe_poll"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1543, T1070.006]
+  - name: "Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS"
+    engine: suricata
+    tier: Detection
+    fence: 18
+    hash: "66bcfe40"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1048.003, T1041]
+  - name: "Cisco IOS-XE Double-Encoded WSMA Path Bypass (Operator Fingerprint)"
+    engine: suricata
+    tier: Detection
+    fence: 19
+    hash: "27caebf3"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass URI"
+    engine: suricata
+    tier: Detection
+    fence: 20
+    hash: "dadc0302"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token"
+    engine: suricata
+    tier: Detection
+    fence: 21
+    hash: "6d25fba2"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "Cisco WSMA fileCopy Exfiltration Primitive to External dstURL"
+    engine: suricata
+    tier: Detection
+    fence: 22
+    hash: "e3684e90"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1048.003]
+  - name: "WebLogic T3/IIOP JNDI OpaqueReference Injection"
+    engine: suricata
+    tier: Detection
+    fence: 23
+    hash: "53be9bcd"
+    head: "alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "Malicious LDAP-JNDI Callback Response"
+    engine: suricata
+    tier: Detection
+    fence: 24
+    hash: "906d7ab2"
+    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "GeoServer OGC-Filter RCE via valueReference exec()"
+    engine: suricata
+    tier: Detection
+    fence: 25
+    hash: "018ab022"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "Non-Standard X-CMD Webshell Dispatch Header"
+    engine: suricata
+    tier: Detection
+    fence: 26
+    hash: "e565987f"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1505.003]
+  - name: "PRTG Bulk Credential Extraction via getobjectproperty.htm"
+    engine: suricata
+    tier: Detection
+    fence: 27
+    hash: "503973a6"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1555]
+  - name: "Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake"
+    engine: suricata
+    tier: Hunting
+    fence: 28
+    hash: "64693d40"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1572]
+  - name: "PRTG Bulk Device Inventory Query via table.json"
+    engine: suricata
+    tier: Hunting
+    fence: 29
+    hash: "b9d6798c"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1555]
 opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections:
   - name: "MITM_Interceptor_SourceStrings"
     engine: yara

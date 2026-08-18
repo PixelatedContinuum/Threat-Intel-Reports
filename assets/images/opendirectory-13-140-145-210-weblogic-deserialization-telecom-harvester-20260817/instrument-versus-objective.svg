@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!--
+    Layout family: vertical-chain (3 cards)
+    Subject: objectives versus instruments, the access path into the carrier
+    Campaign: WebLogicDeserialization-TelecomHarvester-13.140.145.210
+  -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1240" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1239" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== TITLE =========== -->
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">The Customer Was Not the Target</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">A printing firm's router was the way in to a carrier</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Distinguishing what was used as an instrument from what was actually wanted.</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- =========== STEP 1 — ORANGE: the instrument =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="230" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="229" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">THE INSTRUMENT</text>
+    <text x="330" y="227" font-size="23" font-weight="600" fill="#111111">One ordinary business customer</text>
+    <text x="80" y="282" font-size="21" fill="#ffffff">A 96-person printing and office-supplies company in Quito, founded 1950.</text>
+    <text x="80" y="316" font-size="18" fill="#e5e5e5">Its edge router is carrier-managed, and its management plane has faced the internet since 2022.</text>
+    <text x="80" y="350" font-size="18" fill="#e5e5e5">Nothing about the company itself was interesting to this operator.</text>
+    <text x="80" y="390" font-size="18" fill="#fb923c" font-weight="600">The target was pre-selected by name, not found by chance</text>
+  </g>
+  <line x1="500" y1="426" x2="500" y2="466" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 2 — RED: what was actually taken =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="472" width="880" height="230" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="472" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="505" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="503" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">WHAT WAS TAKEN</text>
+    <text x="330" y="503" font-size="23" font-weight="600" fill="#ffffff">Only the device's own material</text>
+    <text x="80" y="558" font-size="21" fill="#ffffff">The firmware image, the crash dumps, the configuration files, and cwmp_inventory.</text>
+    <text x="80" y="592" font-size="18" fill="#e5e5e5">No business data. No documents. No lateral movement into the company network.</text>
+    <text x="80" y="626" font-size="18" fill="#e5e5e5">The operator held an arbitrary file-read primitive and chose not to use it that way.</text>
+    <text x="80" y="666" font-size="18" fill="#fb923c" font-weight="600">You do not steal a printer's router firmware to learn about printing</text>
+  </g>
+  <line x1="500" y1="702" x2="500" y2="742" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- =========== STEP 3 — DEEP RED: the objective =========== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="748" width="880" height="230" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="748" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="781" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="779" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">THE OBJECTIVE</text>
+    <text x="330" y="779" font-size="23" font-weight="600" fill="#ffffff">The carrier's credential plane</text>
+    <text x="80" y="834" font-size="21" fill="#ffffff">The stolen configs were mined in one pass for the carrier's own secrets.</text>
+    <text x="80" y="868" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">tacacs · radius · acs · cwmp · tr069 · community · key 7 · key 5</text>
+    <text x="80" y="902" font-size="18" fill="#e5e5e5">Device AAA secrets, SNMP communities, stored passwords, and TR-069 provisioning data.</text>
+    <text x="80" y="942" font-size="18" fill="#fb923c" font-weight="600">Reached through the softest door, not the front one</text>
+  </g>
+
+  <!-- =========== FOOTER =========== -->
+  <line x1="60" y1="1030" x2="940" y2="1030" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1064" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Defender takeaway:  the interesting victim is not always the big one</text>
+  <text x="500" y="1094" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">An unremarkable customer's managed router is a route into the carrier that manages it</text>
+  <text x="500" y="1130" text-anchor="middle" font-size="15" fill="#cccccc">This device sat exposed for roughly four years, and nobody was watching it.</text>
+  <text x="500" y="1158" text-anchor="middle" font-size="15" fill="#cccccc">Carrier-managed CPE often falls between the customer's scope and the carrier's.</text>
+  <text x="500" y="1192" text-anchor="middle" font-size="14" fill="#888888">Legend: orange = the instrument · red = what was taken · deep red = the objective</text>
+</svg>
