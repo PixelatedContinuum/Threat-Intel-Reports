@@ -33,6 +33,31 @@ category: "Fraud Operation"
 hide: true
 description: "Inkognito is a Russian-speaking multi-product fraud operator that has run continuously for nearly three years. The operator pairs a real commercially-billed VPN service with a 467+ brand-impersonation phishing subdomain library targeting US banking, enterprise SaaS, Chinese internet giants, and Russian telecom. Apex chameleon-decoy tradecraft, an 11-minute domain-to-live deployment pipeline, and infrastructure spanning two sanctioned bulletproof hosters (Aeza, Stark/Worktitans) define the operator footprint. This is the first public cross-brand documentation of the Inkognito portfolio."
 stix_bundle: /stix/inkognito-russian-vpn-phishing-185-221-196-118-20260516.json
+figure_nav:
+  - image: inkognito-brand-portfolio.svg
+    parts:
+      - label: "INK VPN"
+        anchor: "#41-commercial-vpn-backend--ink-vpn"
+      - label: "INK Lens"
+        anchor: "#42-brand-impersonation-phishing-library--ink-lens"
+      - label: "BEC burn domains"
+        anchor: "#43-bec-burn-domain-infrastructure--three-june-2023-eu-domains"
+      - label: "CryptOne"
+        anchor: "#44-fake-crypto-exchange--cryptone"
+      - label: "unloki, Outline, regional fronts"
+        anchor: "#45-centralized-vpnproxy-fleet--marzban--outline--regional-brand-fronts"
+  - image: inkognito-operator-timeline.svg
+    parts:
+      - label: "2023 BEC burn domains"
+        anchor: "#43-bec-burn-domain-infrastructure--three-june-2023-eu-domains"
+      - label: "unloki, the long anchor"
+        anchor: "#45-centralized-vpnproxy-fleet--marzban--outline--regional-brand-fronts"
+      - label: "EspoCRM back office"
+        anchor: "#53-back-office-stack--espocrm-single-instance-deployment"
+      - label: "11-minute deploy"
+        anchor: "#55-build--deployment-automation-fingerprint--11-minute-domain-to-live"
+      - label: "Full timeline"
+        anchor: "#61-sustained-operation-timeline--2-years-11-months-of-continuous-presence"
 ---
 
 **Campaign Identifier:** Inkognito-Russian-VPN-Phishing-185.221.196.118<br>

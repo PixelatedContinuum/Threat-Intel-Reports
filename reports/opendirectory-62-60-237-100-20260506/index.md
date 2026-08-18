@@ -29,6 +29,39 @@ ioc_highlights:
   - value: "68fb61225b457172368d43af7ec2afe48f59404089d095584944edbfd0171feb"
     note: "pe_03 — HijackLoader proper (SHA256)"
 stix_bundle: /stix/opendirectory-62-60-237-100-20260506.json
+figure_nav:
+  - image: hijackloader-kill-chain-overview.svg
+    parts:
+      - label: "Eight delivery vectors"
+        anchor: "#31-the-eight-delivery-vectors"
+      - label: "Carriers.exe wrapper"
+        anchor: "#41-carriersexe--inno-setup-pascal-script-anti-triage-wrapper"
+      - label: "Stage-2 shellcode"
+        anchor: "#44-stage-2-shellcode-5808-bytes"
+      - label: "Encrypted stage-3 carrier"
+        anchor: "#45-networkspec17log--encrypted-stage-3-carrier"
+      - label: "Stage-3 PE bundle"
+        anchor: "#46-stage-3-pe-bundle--multi-vendor-camouflage"
+      - label: "HijackLoader proper"
+        anchor: "#47-pe_03--hijackloader--penguish--rugmi-proper"
+      - label: ".NET injection"
+        anchor: "#63-net-injection-into-renamed-qihoo-promoutilexe-wvaultexe"
+      - label: "Persistence"
+        anchor: "#64-persistence-legacy-job--defender-exclusion--cert-install"
+      - label: "C2 beacon"
+        anchor: "#67-c2-beacon-definite--three-independent-capture-sources"
+  - image: hijackloader-process-tree.svg
+    parts:
+      - label: "Carriers.exe"
+        anchor: "#41-carriersexe--inno-setup-pascal-script-anti-triage-wrapper"
+      - label: "CrystSupervisor32.exe"
+        anchor: "#42-crystsupervisor32exe--renamed-wondershare-slideshoweditorexe"
+      - label: "ExceptionHandler.dll"
+        anchor: "#43-exceptionhandlerdll--operator-modified-wondershare-plowshare-crash-reporter"
+      - label: "WVault.exe"
+        anchor: "#410-pe_08--genuine-qihoo-360-promoutilexe-becomes-wvaultexe-at-runtime"
+      - label: "The full tree"
+        anchor: "#61-process-tree"
 ---
 
 **Campaign Identifier:** HijackLoader-Penguish-MultiVector-62.60.237.100<br>

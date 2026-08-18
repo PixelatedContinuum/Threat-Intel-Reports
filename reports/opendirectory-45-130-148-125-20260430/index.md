@@ -27,6 +27,23 @@ ioc_highlights:
   - value: "358edb5d7e3e38c2da0a2ef323a281283aa96d47a8649014d114923b06866c12"
     note: "AdaptixC2 production beacon DLL (SHA256)"
 stix_bundle: /stix/opendirectory-45-130-148-125-20260430.json
+figure_nav:
+  - image: adaptixc2-kill-chain-overview.svg
+    parts:
+      - label: "PowerShell loader chain"
+        anchor: "#43-operator-written-powershell--net-injector-the-only-custom-code"
+      - label: "Beacon in explorer.exe"
+        anchor: "#41-adaptixc2-framework-attribution-and-beacon-cluster"
+      - label: "RC4 beacon config"
+        anchor: "#42-rc4-encrypted-beacon-configuration-recovered-key--parsed-config--layout-matches-stock-adaptixc2-framework-source"
+      - label: "C2 traffic"
+        anchor: "#52-c2-communication-detail"
+      - label: "Post-exploitation toolkit"
+        anchor: "#46-commodity-post-exploitation-toolkit-brief-inventory"
+      - label: "Linux pivot"
+        anchor: "#44-linux-and-go-agent-components"
+      - label: "The full chain"
+        anchor: "#51-anticipated-kill-chain-sequential-chronological"
 ---
 
 **Campaign Identifier:** AdaptixC2-OpenDirectory-Toolkit-45.130.148.125<br>
