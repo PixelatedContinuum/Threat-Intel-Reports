@@ -3373,27 +3373,29 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   margin: 0.9rem auto 0;
   max-width: 100%;
 }
-/* Scoped under .hl-post-content deliberately. A bare .hl-fignav__chip is
-   specificity 0,1,0 and the theme's own `.hl-post-content a` is 0,2,0, so the
-   unscoped rule loses and every chip renders in the body link colour. Confirmed
-   live: the chips shipped blue before this selector was widened. */
+/* Scoped under .hl-post-content AND marked important, both deliberately, and
+   neither is enough on its own. The theme declares
+   `.hl-post-content a { color: var(--hl-accent-blue) !important; }`, so a chip
+   is styled as an ordinary body link until this rule both matches at equal
+   specificity and carries its own important. Confirmed live: the chips shipped
+   in link blue, and widening the selector alone did not change that. */
 .hl-post-content .hl-fignav__chip {
   display: inline-block;
   padding: 0.28em 0.72em;
   border: 1px solid var(--hl-border-card);
   border-radius: 999px;
   background: var(--hl-bg-card);
-  color: var(--hl-text-muted);
+  color: var(--hl-text-muted) !important;
   font-size: 0.8rem;
   line-height: 1.35;
-  text-decoration: none;
+  text-decoration: none !important;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 .hl-post-content .hl-fignav__chip:hover,
 .hl-post-content .hl-fignav__chip:focus-visible {
-  color: var(--hl-text-primary);
+  color: var(--hl-text-primary) !important;
   border-color: var(--ph-accent, var(--hl-text-muted));
-  text-decoration: none;
+  text-decoration: none !important;
 }
 /* The destination marker. Keyed to the card border rather than the accent so it
    reads as "you landed here" and not as an error state. */
