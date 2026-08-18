@@ -93,11 +93,31 @@ function glossaryNotChecked(reason) {
   return { status: 'NOT CHECKED', reason: reason, marks: 0 };
 }
 
+/* And the figure-nav checker gets its own, for the same reason. Unlike the
+   glossary this one IS fully checkable from markdown, because it derives the
+   anchors the site will generate rather than needing a rendered body. */
+var CFN = null;
+var FIGNAV_REASON = null;
+try {
+  CFN = require('./lib/check-figure-nav.js');
+  if (!CFN || typeof CFN.checkMarkdown !== 'function') {
+    throw new Error('check-figure-nav.js loaded but exports no checkMarkdown');
+  }
+} catch (e) {
+  FIGNAV_REASON = 'figure-nav checker did not load: ' +
+    String((e && e.message) || e).split('\n')[0].trim();
+}
+
+function figureNavNotChecked(reason) {
+  return { status: 'NOT CHECKED', reason: reason, problems: [], entries: 0, chips: 0 };
+}
+
 /* Reported against whichever path the caller asked about, so the operator sees
    what was skipped as well as why. */
 function depsNotChecked(p) {
   return { status: 'NOT CHECKED', path: p, reason: DEPS_REASON, problems: [], missing: [],
-           glossary: glossaryNotChecked('gate dependencies did not load, so nothing was verified') };
+           glossary: glossaryNotChecked('gate dependencies did not load, so nothing was verified'),
+           figureNav: figureNavNotChecked('gate dependencies did not load, so nothing was verified') };
 }
 
 var TECH_RE = /\bT\d{4}(?:\.\d{3})?\b/g;
@@ -278,6 +298,15 @@ function checkMarkdown(md, label) {
   // exclusion list is about are not in this DOM at all. Reporting PASS here would
   // claim a check that never ran.
   r.glossary = glossaryNotChecked(GLOSS_MARKDOWN_REASON);
+
+  /* The figure-nav check needs the RAW markdown, not the extracted tables: it
+     reads the front matter and derives the heading anchors, so unlike the
+     glossary it is complete on this path rather than deferred to the URL. */
+  r.figureNav = FIGNAV_REASON ? figureNavNotChecked(FIGNAV_REASON) : CFN.checkMarkdown(md, label);
+  if (r.figureNav.status === 'FAIL') {
+    r.status = 'FAIL';
+    r.problems = (r.problems || []).concat(r.figureNav.problems);
+  }
   return r;
 }
 
@@ -286,7 +315,8 @@ function checkFile(file) {
   var md;
   try { md = fs.readFileSync(file, 'utf8'); }
   catch (e) { return { status: 'NOT CHECKED', path: file, reason: e.message, problems: [], missing: [],
-                       glossary: glossaryNotChecked('report could not be read') }; }
+                       glossary: glossaryNotChecked('report could not be read'),
+                       figureNav: figureNavNotChecked('report could not be read') }; }
   return checkMarkdown(md, file);
 }
 
@@ -296,16 +326,19 @@ async function checkUrl(url) {
   try {
     var res = await fetch(url);
     if (!res.ok) return { status: 'NOT CHECKED', path: url, reason: 'HTTP ' + res.status, problems: [], missing: [],
-                          glossary: glossaryNotChecked('report body was not retrieved') };
+                          glossary: glossaryNotChecked('report body was not retrieved'),
+                          figureNav: figureNavNotChecked('report body was not retrieved') };
     html = await res.text();
   } catch (e) {
     return { status: 'NOT CHECKED', path: url, reason: e.message, problems: [], missing: [],
-             glossary: glossaryNotChecked('report body was not retrieved') };
+             glossary: glossaryNotChecked('report body was not retrieved'),
+             figureNav: figureNavNotChecked('report body was not retrieved') };
   }
   var doc = new JSDOM(html).window.document;
   var body = doc.querySelector('.hl-post-content') || doc.querySelector('.hl-post-body');
   if (!body) return { status: 'NOT CHECKED', path: url, reason: 'no report body container', problems: [], missing: [],
-                      glossary: glossaryNotChecked('report body was not retrieved') };
+                      glossary: glossaryNotChecked('report body was not retrieved'),
+                      figureNav: figureNavNotChecked('report body was not retrieved') };
   var wrapper = new JSDOM('<body></body>').window.document;
   wrapper.body.innerHTML = body.innerHTML;
   var r = checkDom(wrapper, url);
@@ -322,6 +355,20 @@ async function checkUrl(url) {
     if (g.problems.length) {
       r.problems = r.problems.concat(g.problems);
       r.status = 'FAIL';
+    }
+  }
+
+  /* The FULL document, not the wrapper. The figure_nav JSON block the layout
+     emits sits outside .hl-post-content, so a wrapper built from that container
+     alone carries the figures but not the declaration, and the check would read
+     every report as declaring nothing. */
+  if (FIGNAV_REASON) {
+    r.figureNav = figureNavNotChecked(FIGNAV_REASON);
+  } else {
+    r.figureNav = CFN.checkDom(doc, url);
+    if (r.figureNav.status === 'FAIL') {
+      r.status = 'FAIL';
+      r.problems = r.problems.concat(r.figureNav.problems);
     }
   }
   return r;
@@ -346,7 +393,8 @@ if (require.main === module) {
       var gloss = r.glossary || glossaryNotChecked('no glossary verdict recorded');
       var tail = r.status === 'NOT CHECKED' ? r.reason
         : r.status === 'PASS' ? r.tables + ' tables, ' + r.techniques + ' techniques, ' +
-            r.unmapped + ' unmapped, glossary ' + gloss.status
+            r.unmapped + ' unmapped, glossary ' + gloss.status +
+            ', figure-nav ' + (r.figureNav || {}).status
         : r.problems.join('; ');
       console.log(r.status.padEnd(12) + r.path + '   ' + tail);
       if (verbose && r.problems.length) r.problems.forEach(function (p) { console.log('    ' + p); });

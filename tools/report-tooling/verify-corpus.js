@@ -91,6 +91,8 @@ function pad(s, n) { return String(s).padEnd(n); }
 
   var counts = { PASS: 0, FAIL: 0, 'NOT CHECKED': 0 };
   var glossCounts = { PASS: 0, FAIL: 0, 'NOT CHECKED': 0 };
+  var figCounts = { PASS: 0, FAIL: 0, 'NOT CHECKED': 0 };
+  var figEntries = 0, figChips = 0, figSilent = 0;
   var techniques = 0, unmapped = 0, marks = 0, tables = 0;
   var attention = [];
 
@@ -100,6 +102,12 @@ function pad(s, n) { return String(s).padEnd(n); }
 
     var g = r.glossary || { status: 'NOT CHECKED', reason: 'no glossary verdict recorded' };
     glossCounts[g.status] = (glossCounts[g.status] || 0) + 1;
+
+    var fnv = r.figureNav || { status: 'NOT CHECKED', reason: 'no figure-nav verdict recorded' };
+    figCounts[fnv.status] = (figCounts[fnv.status] || 0) + 1;
+    figEntries += fnv.entries || 0;
+    figChips += fnv.chips || 0;
+    if (fnv.status === 'PASS' && !fnv.entries) figSilent++;
 
     techniques += r.techniques || 0;
     unmapped += r.unmapped || 0;
@@ -114,6 +122,8 @@ function pad(s, n) { return String(s).padEnd(n); }
 
     if (r.status !== 'PASS') attention.push(slug + ': ' + ((r.problems || []).join('; ') || r.reason));
     if (g.status === 'NOT CHECKED') attention.push(slug + ': glossary NOT CHECKED, ' + g.reason);
+    if (fnv.status === 'NOT CHECKED') attention.push(slug + ': figure-nav NOT CHECKED, ' + fnv.reason);
+    if (fnv.status === 'FAIL') attention.push(slug + ': figure-nav FAIL, ' + (fnv.problems || []).join('; '));
   }
 
   // Source side: is the manifest consistent with the markdown it came from?
@@ -146,6 +156,12 @@ function pad(s, n) { return String(s).padEnd(n); }
   console.log('techniques           ' + techniques);
   console.log('unmapped techniques  ' + unmapped);
   console.log('glossary marks       ' + marks);
+  console.log('figure-nav P/F/NC    ' + figCounts.PASS + ' / ' + figCounts.FAIL +
+    ' / ' + figCounts['NOT CHECKED']);
+  console.log('figure-nav declared  ' + figEntries + ' figures, ' + figChips + ' chips');
+  // Printed as a COUNT, never as silence. "chips everywhere" and "chips nowhere
+  // and nothing complained" must not look identical in this summary.
+  console.log('reports declaring 0  ' + figSilent);
 
   if (attention.length) {
     console.log('\n== needs attention ==');
@@ -154,8 +170,8 @@ function pad(s, n) { return String(s).padEnd(n); }
 
   // FAIL outranks NOT CHECKED, because a real defect is more urgent than an
   // unverified report, but neither can ever exit 0.
-  if (counts.FAIL || det.status === 'FAIL' || live.status === 'FAIL') process.exit(1);
-  if (counts['NOT CHECKED'] || glossCounts['NOT CHECKED'] ||
+  if (counts.FAIL || figCounts.FAIL || det.status === 'FAIL' || live.status === 'FAIL') process.exit(1);
+  if (counts['NOT CHECKED'] || glossCounts['NOT CHECKED'] || figCounts['NOT CHECKED'] ||
       det.status === 'NOT CHECKED' || live.status === 'NOT CHECKED') process.exit(2);
   process.exit(0);
 })();
