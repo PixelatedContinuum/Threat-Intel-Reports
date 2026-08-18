@@ -421,7 +421,7 @@ The most likely host is the carrier's AAA server, where the operator was already
 
 ### 7.5 The reconnaissance that scoped the signalling plane
 
-One script does the target selection, and it is scoped entirely to the state telecom, by organisation name and by network block. Roughly 55 queries, around 30 vulnerable-product categories each annotated with the relevant vulnerability identifiers in the operator's own comments.
+One script does the target selection, and it is scoped entirely to the state telecom, by organisation name and by network block. It carries 57 queries covering 36 distinct products, each annotated with the relevant vulnerability identifiers in the operator's own comments. 54 of those queries name a product and only 3 are broad network-block sweeps, so the reconnaissance was built around known-vulnerable software rather than around scanning address space and seeing what answered.
 
 Buried in it is a dedicated telecom block scanning for RADIUS, SIP, SMPP, Diameter, GTP and SS7 signalling ports. Those are correct, non-obvious mobile-core port numbers, chosen before the operation started, and they are the strongest independently checkable evidence for genuine telecom domain knowledge anywhere in this case. Getting into a national carrier's signalling plane is subscriber location, message interception and roaming visibility. It is not a quick-money move.
 
@@ -722,7 +722,7 @@ Two mapping decisions are worth stating rather than leaving for someone to query
 
 | Tactic / Technique | Name | Evidence |
 |---|---|---|
-| Reconnaissance / T1595.002 | Vulnerability Scanning | ~55 queries, all scoped to the state telecom, ~30 CVE categories |
+| Reconnaissance / T1595.002 | Vulnerability Scanning | 57 queries, all scoped to the state telecom, covering 36 distinct products |
 | Reconnaissance / T1596.005 | Scan Databases | Live third-party scan-service API key hard-coded at line 7 |
 | Reconnaissance / T1590.005 | IP Addresses | Two carrier netblocks scoped by name in the recon script |
 | Reconnaissance / T1592.004 | Client Configurations | Captured SSL-VPN portal and education-portal landing pages |
