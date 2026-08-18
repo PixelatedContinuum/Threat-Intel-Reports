@@ -624,6 +624,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <script type="application/json" id="hl-glossary-data">{{ site.data.glossary | jsonify }}</script>
 <script src="{{ '/assets/js/glossary.js' | relative_url }}" defer></script>
 {% endunless %}
+{% if page.figure_nav %}
+<script type="application/json" id="hl-figure-nav">{{ page.figure_nav | jsonify }}</script>
+<script src="{{ '/assets/js/figure-nav.js' | relative_url }}" defer></script>
+{% endif %}
 {% if page.path contains "hunting-detections" %}
 {% assign hl_slug = page.path | split: "/" | last | remove: ".md" %}
 {% assign hl_manifest = site.data.detection_manifests[hl_slug] %}

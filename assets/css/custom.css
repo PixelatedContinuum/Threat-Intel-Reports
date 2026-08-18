@@ -3363,3 +3363,45 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 /* A rule whose body lives inside an earlier bundle cannot be taken on its own. */
 .hl-rule-xref { font-size: 0.72em; opacity: 0.7; margin-left: 0.4em; font-style: italic; }
 .hl-rule-hidden { display: none; }
+
+/* ---- Infographic navigation chips (figure_nav) ---- */
+.hl-fignav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.9rem auto 0;
+  max-width: 100%;
+}
+.hl-fignav__chip {
+  display: inline-block;
+  padding: 0.28em 0.72em;
+  border: 1px solid var(--hl-border-card);
+  border-radius: 999px;
+  background: var(--hl-bg-card);
+  color: var(--hl-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.hl-fignav__chip:hover,
+.hl-fignav__chip:focus-visible {
+  color: var(--hl-text-primary);
+  border-color: var(--ph-accent, var(--hl-text-muted));
+  text-decoration: none;
+}
+/* The destination marker. Keyed to the card border rather than the accent so it
+   reads as "you landed here" and not as an error state. */
+.hl-fignav-target {
+  animation: hl-fignav-flash 1.6s ease-out 1;
+  border-radius: 4px;
+}
+@keyframes hl-fignav-flash {
+  0%   { background-color: var(--hl-border-card); }
+  100% { background-color: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hl-fignav-target { animation: none; outline: 2px solid var(--hl-border-card); }
+  .hl-fignav__chip { transition: none; }
+}
