@@ -223,3 +223,30 @@ test('an unresolved entry reports the tier lines it consumed', () => {
   assert.strictEqual(r.unresolved.length, 1);
   assert.deepStrictEqual(r.unresolved[0].tier_raw, ['Hunting', 'Experimental']);
 });
+
+/* Verification hashes the whole body rather than checking a prefix. Measurement
+   forced this: YARA rules open with a boilerplate comment, so on 15 of 56 pages
+   two or more rules share their first 48 characters, and a shared prefix cannot
+   detect the off-by-one it exists to detect. */
+test('each rule carries a hash of its body, and different bodies differ', () => {
+  const r = P.parse(SIMPLE, 'demo');
+  assert.match(r.rules[0].hash, /^[0-9a-f]{8}$/);
+  const hashes = r.rules.map((x) => x.hash);
+  assert.strictEqual(new Set(hashes).size, hashes.length, 'three distinct bodies, three distinct hashes');
+});
+
+test('the hash ignores whitespace differences a reader cannot see', () => {
+  const a = P.parse(['## YARA Rules', '#### R', '**Tier:** Detection',
+                     '```yara', 'rule A { condition: true }', '```'].join('\n'), 'demo');
+  const b = P.parse(['## YARA Rules', '#### R', '**Tier:** Detection',
+                     '```yara', 'rule A {   condition: true }  ', '```'].join('\n'), 'demo');
+  assert.strictEqual(a.rules[0].hash, b.rules[0].hash);
+});
+
+test('a cross-referenced rule has no hash, because it has no body of its own', () => {
+  const src = ['## Sigma Rules', '#### Base Documented Separately', '**Tier:** Hunting',
+               '#### Real', '**Tier:** Detection', '```yaml', 'title: Real', '```'].join('\n');
+  const r = P.parse(src, 'demo');
+  assert.strictEqual(r.rules[0].hash, null);
+  assert.match(r.rules[1].hash, /^[0-9a-f]{8}$/);
+});

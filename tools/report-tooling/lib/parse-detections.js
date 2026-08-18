@@ -30,6 +30,13 @@
 
    Only an unrecognised tier value is a failure. */
 
+var path = require('node:path');
+
+/* The SHIPPED hash module, required rather than reimplemented. The picker
+   recomputes these hashes in the browser, so a second copy here would be free
+   to drift and a drift reads as every rule failing verification. */
+var H = require(path.join(__dirname, '..', '..', '..', 'assets', 'js', 'hl-hash.js'));
+
 var ENGINES = {
   'YARA Rules': 'yara',
   'Sigma Rules': 'sigma',
@@ -147,7 +154,11 @@ function parse(src, slug) {
       attack: attack,
       cross_referenced: !fenceEvent,
       fence: fenceEvent ? fenceEvent.index : null,
+      // head stays for human review of the generated diff. Verification uses
+      // hash, because 15 of 56 pages carry rules sharing their first 48
+      // characters and a shared prefix cannot detect an off-by-one.
       head: fenceEvent ? headOf(fenceEvent.body.join('\n')) : null,
+      hash: fenceEvent ? H.ruleHash(fenceEvent.body.join('\n')) : null,
       body: fenceEvent ? fenceEvent.body.join('\n') : null
     };
     rules.push(entry);
@@ -175,6 +186,7 @@ function parse(src, slug) {
 
 module.exports = {
   parse: parse,
+  hash: H.ruleHash,
   normaliseTier: normaliseTier,
   ENGINES: ENGINES,
   HEAD_LEN: HEAD_LEN

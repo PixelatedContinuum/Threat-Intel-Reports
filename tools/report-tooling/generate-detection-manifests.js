@@ -51,6 +51,7 @@ function toYaml(bySlug) {
         out.push('    cross_referenced: true');
       } else {
         out.push('    fence: ' + r.fence);
+        out.push('    hash: ' + yamlEscape(r.hash));
         out.push('    head: ' + yamlEscape(r.head));
       }
       if (r.robustness !== null && !isNaN(r.robustness)) out.push('    robustness: ' + r.robustness);
@@ -106,6 +107,19 @@ function run(opts) {
       problems.push(f + ': accounted for ' + consumed + ' Tier lines but the file declares ' +
         declared + '. A rule was dropped or a tier line was read twice.');
     }
+
+    /* Two rules on one page with identical bodies would make the picker's
+       verification unable to tell them apart, and is almost certainly a
+       duplicated rule in the file. Reported rather than tolerated. */
+    var seen = {};
+    r.rules.forEach(function (x) {
+      if (!x.hash) return;
+      if (seen[x.hash]) {
+        problems.push(f + ': "' + x.name + '" has the same body as "' + seen[x.hash] + '"');
+      } else {
+        seen[x.hash] = x.name;
+      }
+    });
 
     bySlug[slug] = r.rules;
     rules += r.rules.length;
