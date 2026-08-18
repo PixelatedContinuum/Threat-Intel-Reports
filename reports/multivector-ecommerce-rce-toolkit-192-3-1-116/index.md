@@ -25,6 +25,49 @@ ioc_highlights:
   - "31.22.111[.]190"
   - "vpn932081317[.]softether[.]net"
   - "cs-pgcwufmiws[.]cn-hangzhou[.]fcapp[.]run"
+figure_nav:
+  - image: multivector-target-landscape.svg
+    parts:
+      - label: "Loan referral"
+        anchor: "#41-the-loan-referral-finding-with-its-ambiguity-front-and-centre"
+      - label: "Ecosystem context"
+        anchor: "#42-what-the-ecosystem-context-adds"
+      - label: "Content provider"
+        anchor: "#43-the-content-provider-filing-signal-hedged-and-single-source"
+  - image: multivector-eight-technique-classes.svg
+    parts:
+      - label: "Logback JNDI"
+        anchor: "#logback-insertfromjndi-cve-2021-42550"
+      - label: "Logback file write"
+        anchor: "#logback-fileappender-arbitrary-file-write"
+      - label: "SnakeYAML"
+        anchor: "#snakeyaml-unsafe-deserialization"
+      - label: "Eureka XStream"
+        anchor: "#spring-cloud-eureka-with-xstream-deserialization"
+      - label: "XXE to SSRF"
+        anchor: "#xxe-to-server-side-request-forgery-including-cloud-instance-metadata"
+      - label: "Redis to SSH key"
+        anchor: "#ssrf-to-redis-configuration-abuse-to-ssh-key-write"
+      - label: "Jolokia and JMX"
+        anchor: "#jolokia-and-jmx-management-interface-abuse"
+      - label: "Web shell"
+        anchor: "#the-staged-web-shell"
+  - image: multivector-built-vs-achieved.svg
+    parts:
+      - label: "Eureka, XStream"
+        anchor: "#91-eureka-and-xstream-engaged-outcome-not-evidenced"
+      - label: "LDAP, JNDI"
+        anchor: "#92-ldap-and-jndi-stalled-at-bind-in-both-logged-attempts"
+      - label: "Brute force"
+        anchor: "#93-brute-force-against-a-third-platform-executed-defended-successfully"
+      - label: "Management probes"
+        anchor: "#94-management-endpoint-probes-against-a-fourth-target-blocked-cleanly"
+      - label: "Self-registration"
+        anchor: "#95-a-second-platform-authenticated-access-through-a-self-registered-account-no-confirmed-theft"
+      - label: "Credentials held"
+        anchor: "#96-credentials-the-operator-holds-and-their-status"
+      - label: "The ledger"
+        anchor: "#97-the-outcome-ledger"
 ---
 
 **Campaign Identifier:** MultiVector-Ecommerce-RCE-Toolkit-192.3.1.116<br>
