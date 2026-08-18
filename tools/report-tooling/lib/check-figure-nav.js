@@ -254,11 +254,26 @@ module.exports = {
 };
 
 /* A command line, so the gate driver can exercise this end to end and the author
-   has a manual tool. Takes a report path or a published URL. */
+   has a manual tool. Takes a report path or a published URL.
+
+   --against <report.md> exists because a URL check alone is vacuous in the
+   minutes after a push. GitHub Pages serves the PREVIOUS build until the new one
+   lands, and the previous build of a newly-annotated report declares nothing, so
+   the checker reads it as "no figure_nav declared" and exits 0. That is a
+   truthful answer to the wrong question. Given the source, it can tell the
+   difference between an author who declared nothing and a build that has not
+   arrived, and it reports the second as NOT CHECKED rather than PASS. */
 if (require.main === module) {
-  var target = process.argv.slice(2).filter(function (a) { return a.indexOf('--') !== 0; })[0];
+  var argv = process.argv.slice(2);
+  var target = argv.filter(function (a) { return a.indexOf('--') !== 0; })[0];
+  var againstAt = argv.indexOf('--against');
+  var against = againstAt !== -1 ? argv[againstAt + 1] : null;
+  if (against) target = argv.filter(function (a) {
+    return a.indexOf('--') !== 0 && a !== against;
+  })[0];
   if (!target) {
-    console.error('usage: node lib/check-figure-nav.js <report.md|https://...>');
+    console.error('usage: node lib/check-figure-nav.js <report.md|https://...> ' +
+      '[--against <report.md>]');
     process.exit(2);
   }
   (async function () {
@@ -289,6 +304,23 @@ if (require.main === module) {
       try { src = fs.readFileSync(target, 'utf8'); }
       catch (e) { console.log('NOT CHECKED  ' + target + '  ' + e.message); process.exit(2); }
       r = checkMarkdown(src, target);
+    }
+    if (against && r.status === 'PASS') {
+      var srcExpected;
+      try { srcExpected = checkMarkdown(fs.readFileSync(against, 'utf8'), against); }
+      catch (e) {
+        console.log('NOT CHECKED  ' + target + '   --against source could not be read: ' +
+          e.message);
+        process.exit(2);
+      }
+      if (srcExpected.entries !== r.entries || srcExpected.chips !== r.chips) {
+        console.log('NOT CHECKED  ' + target + '   the page declares ' + r.entries +
+          ' figures and ' + r.chips + ' chips while ' + against + ' declares ' +
+          srcExpected.entries + ' and ' + srcExpected.chips +
+          '. The published build is almost certainly older than the source; ' +
+          'wait for the Pages build and run this again.');
+        process.exit(2);
+      }
     }
     var tail = r.status === 'PASS'
       ? (r.reason || r.entries + ' figures, ' + r.chips + ' chips')
