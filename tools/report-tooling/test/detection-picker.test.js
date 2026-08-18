@@ -1,0 +1,156 @@
+'use strict';
+const { test } = require('node:test');
+const assert = require('node:assert');
+const { JSDOM } = require('jsdom');
+const D = require('../../../assets/js/detection-picker.js');
+const H = require('../../../assets/js/hl-hash.js');
+
+const BODIES = [
+  'import "pe"\nrule A { condition: true }',
+  'rule B { condition: true }',
+  'title: S1'
+];
+
+const RULES = [
+  { name: 'Yara One', engine: 'yara', tier: 'Detection', fence: 0, hash: H.ruleHash(BODIES[0]) },
+  { name: 'Yara Two', engine: 'yara', tier: 'Hunting', fence: 1, hash: H.ruleHash(BODIES[1]) },
+  { name: 'Sig One', engine: 'sigma', tier: 'Detection', fence: 2, hash: H.ruleHash(BODIES[2]) }
+];
+
+function page(bodies) {
+  const blocks = (bodies || BODIES)
+    .map((b) => '<pre><code>' + b.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</code></pre>')
+    .join('');
+  return new JSDOM('<body><div class="hl-post-content">' + blocks + '</div></body>').window.document;
+}
+
+test('binds each rule to the fence its manifest points at', () => {
+  const doc = page();
+  const bound = D.bind(doc.querySelector('.hl-post-content'), RULES, doc);
+  assert.strictEqual(bound.ok.length, 3);
+  assert.deepStrictEqual(bound.mismatched, []);
+  assert.match(bound.ok[0].body, /rule A/);
+});
+
+/* The failure this design exists to prevent. A fence count that drifts by one
+   makes every later index point at the wrong rule, silently. */
+test('a hash that does not match its fence is refused, not downloaded', () => {
+  const doc = page();
+  const shifted = RULES.map((r) => Object.assign({}, r, { fence: r.fence + 1 }));
+  const bound = D.bind(doc.querySelector('.hl-post-content'), shifted, doc);
+  assert.strictEqual(bound.ok.length, 0);
+  assert.strictEqual(bound.mismatched.length, 3);
+  assert.match(bound.mismatched[0].reason, /does not match/i);
+});
+
+/* The reason the check is a hash rather than the opening characters: YARA rules
+   in this corpus open with a boilerplate comment, so several rules on a page
+   share their first 48 characters and a prefix check would clear the swap. */
+test('two rules sharing an opening are still told apart', () => {
+  const shared = [
+    '/* Yara Rule Set\n   Identifier: Alpha */\nrule A { condition: true }',
+    '/* Yara Rule Set\n   Identifier: Beta */\nrule B { condition: false }'
+  ];
+  const doc = page(shared);
+  const rules = [
+    { name: 'Alpha', engine: 'yara', tier: 'Detection', fence: 0, hash: H.ruleHash(shared[0]) },
+    { name: 'Beta', engine: 'yara', tier: 'Detection', fence: 1, hash: H.ruleHash(shared[1]) }
+  ];
+  assert.strictEqual(rules[0].hash === rules[1].hash, false, 'the fixture must not be degenerate');
+  const swapped = [
+    Object.assign({}, rules[0], { fence: 1 }),
+    Object.assign({}, rules[1], { fence: 0 })
+  ];
+  const bound = D.bind(doc.querySelector('.hl-post-content'), swapped, doc);
+  assert.strictEqual(bound.mismatched.length, 2, 'a swap is caught even with identical openings');
+});
+
+test('a fence index past the end of the page is refused with a reason', () => {
+  const doc = page();
+  const bound = D.bind(doc.querySelector('.hl-post-content'),
+    [Object.assign({}, RULES[0], { fence: 99 })], doc);
+  assert.strictEqual(bound.ok.length, 0);
+  assert.match(bound.mismatched[0].reason, /does not exist/);
+});
+
+/* Its body lives inside an earlier bundle, so it is listed but cannot be taken
+   on its own. It must not be reported as a verification failure. */
+test('a cross-referenced rule is listed, not selectable, and not a mismatch', () => {
+  const doc = page();
+  const rules = RULES.concat([
+    { name: 'Base Elsewhere', engine: 'sigma', tier: 'Hunting', cross_referenced: true }
+  ]);
+  const bound = D.bind(doc.querySelector('.hl-post-content'), rules, doc);
+  assert.strictEqual(bound.ok.length, 3);
+  assert.deepStrictEqual(bound.mismatched, []);
+  assert.strictEqual(bound.crossReferenced.length, 1);
+  assert.strictEqual(bound.crossReferenced[0].name, 'Base Elsewhere');
+});
+
+test('filters by engine and tier', () => {
+  assert.strictEqual(D.applyFilters(RULES, { engine: 'yara', tier: null }).length, 2);
+  assert.strictEqual(D.applyFilters(RULES, { engine: null, tier: 'Detection' }).length, 2);
+  assert.strictEqual(D.applyFilters(RULES, { engine: 'yara', tier: 'Detection' }).length, 1);
+  assert.strictEqual(D.applyFilters(RULES, { engine: null, tier: null }).length, 3);
+});
+
+/* A YARA file whose import appears after the first rule block does not compile.
+   Six fences in the corpus carry imports. */
+test('YARA bundles hoist and de-duplicate imports', () => {
+  const out = D.bundle('yara', [
+    { name: 'A', body: 'import "pe"\nrule A { condition: true }' },
+    { name: 'B', body: 'import "pe"\nimport "math"\nrule B { condition: true }' }
+  ], 'demo-slug');
+  const lines = out.split('\n').filter((l) => l.trim());
+  const firstRule = lines.findIndex((l) => /^rule /.test(l));
+  const imports = lines.filter((l) => /^import /.test(l));
+  assert.strictEqual(imports.length, 2, 'de-duplicated');
+  imports.forEach((imp) => {
+    assert.ok(lines.indexOf(imp) < firstRule, 'every import precedes the first rule');
+  });
+  assert.match(out, /rule A/);
+  assert.match(out, /rule B/);
+});
+
+test('a YARA bundle with no imports gains none', () => {
+  const out = D.bundle('yara', [{ name: 'A', body: 'rule A { condition: true }' }], 'demo-slug');
+  assert.doesNotMatch(out, /^import /m);
+});
+
+test('Sigma bundles separate documents so the stream stays valid', () => {
+  const out = D.bundle('sigma', [
+    { name: 'A', body: 'title: A' },
+    { name: 'B', body: 'title: B' }
+  ], 'demo-slug');
+  assert.strictEqual((out.match(/^---$/gm) || []).length, 1);
+  assert.match(out, /title: A[\s\S]*title: B/);
+});
+
+test('Suricata bundles concatenate without separators', () => {
+  const out = D.bundle('suricata', [
+    { name: 'A', body: 'alert tcp any any -> any any (msg:"A"; sid:1;)' },
+    { name: 'B', body: 'alert tcp any any -> any any (msg:"B"; sid:2;)' }
+  ], 'demo-slug');
+  assert.doesNotMatch(out, /^---$/m);
+  assert.strictEqual((out.match(/^alert /gm) || []).length, 2);
+});
+
+test('every bundle carries attribution', () => {
+  const out = D.bundle('suricata', [{ name: 'A', body: 'alert tcp any any -> any any (sid:1;)' }], 'demo-slug');
+  assert.match(out, /The Hunters Ledger/);
+  assert.match(out, /CC BY 4\.0/);
+  assert.match(out, /demo-slug/);
+});
+
+test('a Sigma bundle comments its header so the YAML still parses', () => {
+  const out = D.bundle('sigma', [{ name: 'A', body: 'title: A' }], 'demo-slug');
+  out.split('\n').slice(0, 3).forEach((l) => {
+    if (l.trim()) assert.match(l, /^#/, 'header lines must be YAML comments');
+  });
+});
+
+test('filenames follow slug and engine', () => {
+  assert.strictEqual(D.filenameFor('demo-slug', 'yara'), 'demo-slug-yara.yar');
+  assert.strictEqual(D.filenameFor('demo-slug', 'sigma'), 'demo-slug-sigma.yml');
+  assert.strictEqual(D.filenameFor('demo-slug', 'suricata'), 'demo-slug-suricata.rules');
+});
