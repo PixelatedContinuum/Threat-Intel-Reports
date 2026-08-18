@@ -13,6 +13,8 @@ var path = require('node:path');
 var fs = require('node:fs');
 
 var CR = require('./check-report.js');
+var SD = require('./lib/sweep-detections.js');
+var JSDOM = require('jsdom').JSDOM;
 
 var BASE = (process.env.HL_SITE_BASE || 'https://the-hunters-ledger.com').replace(/\/+$/, '');
 var ROOT = path.join(__dirname, '..', '..');
@@ -114,6 +116,24 @@ function pad(s, n) { return String(s).padEnd(n); }
     if (g.status === 'NOT CHECKED') attention.push(slug + ': glossary NOT CHECKED, ' + g.reason);
   }
 
+  // Source side: is the manifest consistent with the markdown it came from?
+  var det = SD.sweepSource();
+  console.log('');
+  console.log('== detection manifest (source) ==');
+  console.log(det.status.padEnd(12) + det.files + ' files, ' + det.rules +
+    ' rules, ' + det.xref + ' cross-referenced');
+  if (det.reason) console.log('  reason: ' + det.reason);
+  det.problems.slice(0, 10).forEach(function (p) { console.log('  ' + p); });
+
+  // Page side: does it still describe what kramdown actually rendered?
+  var live = await SD.sweepRendered(BASE, JSDOM);
+  console.log('');
+  console.log('== detection manifest (rendered pages) ==');
+  console.log(live.status.padEnd(12) + live.pages + ' pages, ' + live.bound +
+    ' rules bound, ' + live.xref + ' cross-referenced, ' + live.mismatched + ' mismatched');
+  if (live.reason) console.log('  reason: ' + live.reason);
+  live.problems.slice(0, 10).forEach(function (p) { console.log('  ' + p); });
+
   console.log('\n== corpus ==');
   console.log('reports checked      ' + urls.length +
     (listed ? ' (' + (urls.length - unlisted.length) + ' listed, ' +
@@ -134,7 +154,8 @@ function pad(s, n) { return String(s).padEnd(n); }
 
   // FAIL outranks NOT CHECKED, because a real defect is more urgent than an
   // unverified report, but neither can ever exit 0.
-  if (counts.FAIL) process.exit(1);
-  if (counts['NOT CHECKED'] || glossCounts['NOT CHECKED']) process.exit(2);
+  if (counts.FAIL || det.status === 'FAIL' || live.status === 'FAIL') process.exit(1);
+  if (counts['NOT CHECKED'] || glossCounts['NOT CHECKED'] ||
+      det.status === 'NOT CHECKED' || live.status === 'NOT CHECKED') process.exit(2);
   process.exit(0);
 })();
