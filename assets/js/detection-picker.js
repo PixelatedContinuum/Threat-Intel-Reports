@@ -128,9 +128,27 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 0);
   }
 
+  /* The block a fence occupies at the top level of the content.
+
+     Necessary because one page renders fences two different ways. A fence with
+     a language Rouge does not highlight comes through as a bare pre > code
+     sitting directly under the content div, while a highlighted one is wrapped
+     as div.language-x > div.highlight > pre > code. Walking siblings from the
+     pre finds the heading in the first shape and nothing at all in the second,
+     which on the multivector page gave 5 of 22 rules a checkbox.
+
+     It is also the element to hide when filtering: hiding the inner pre would
+     leave the wrapper div behind as an empty box. */
+  function blockFor(codeEl, rootEl) {
+    var n = codeEl;
+    while (n && n.parentNode && n.parentNode !== rootEl) n = n.parentNode;
+    return n && n.parentNode === rootEl ? n : null;
+  }
+
   // The heading that owns a fence is the nearest preceding h4.
-  function headingFor(codeEl) {
-    var n = codeEl.parentNode;
+  function headingFor(codeEl, rootEl) {
+    var n = blockFor(codeEl, rootEl);
+    if (!n) return null;
     while (n && n.previousElementSibling) {
       n = n.previousElementSibling;
       if (n.tagName === 'H4') return n;
@@ -177,7 +195,8 @@
     // A checkbox beside each rule's heading, so selection happens where the
     // reader is reading rather than in a list detached from the rules.
     bound.ok.forEach(function (b, i) {
-      var h = headingFor(b.el);
+      var h = headingFor(b.el, body);
+      b.block = blockFor(b.el, body);
       if (!h) return;
       var cb = doc.createElement('input');
       cb.type = 'checkbox';
@@ -222,7 +241,7 @@
       bound.ok.forEach(function (b, i) {
         var on = vis.indexOf(String(i)) !== -1;
         if (b.heading) b.heading.classList.toggle('hl-rule-hidden', !on);
-        if (b.el.parentNode) b.el.parentNode.classList.toggle('hl-rule-hidden', !on);
+        if (b.block) b.block.classList.toggle('hl-rule-hidden', !on);
       });
       var n = Object.keys(state.selected).length;
       panel.querySelector('.hl-picker__count').textContent =
@@ -295,6 +314,8 @@
 
   return {
     bind: bind,
+    headingFor: headingFor,
+    blockFor: blockFor,
     applyFilters: applyFilters,
     bundle: bundle,
     filenameFor: filenameFor,

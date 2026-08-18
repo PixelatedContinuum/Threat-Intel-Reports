@@ -94,8 +94,9 @@ test('filters by engine and tier', () => {
   assert.strictEqual(D.applyFilters(RULES, { engine: null, tier: null }).length, 3);
 });
 
-/* A YARA file whose import appears after the first rule block does not compile.
-   Six fences in the corpus carry imports. */
+/* Six fences in the corpus carry imports. yarac 4.5.5 does accept imports
+   between complete rules, so this is the canonical documented form and one copy
+   of each import rather than one per rule, not a rescue from a broken file. */
 test('YARA bundles hoist and de-duplicate imports', () => {
   const out = D.bundle('yara', [
     { name: 'A', body: 'import "pe"\nrule A { condition: true }' },
@@ -153,4 +154,31 @@ test('filenames follow slug and engine', () => {
   assert.strictEqual(D.filenameFor('demo-slug', 'yara'), 'demo-slug-yara.yar');
   assert.strictEqual(D.filenameFor('demo-slug', 'sigma'), 'demo-slug-sigma.yml');
   assert.strictEqual(D.filenameFor('demo-slug', 'suricata'), 'demo-slug-suricata.rules');
+});
+
+/* One page renders fences two ways. A language Rouge does not highlight comes
+   through as a bare pre > code under the content div; a highlighted one is
+   wrapped as div.language-x > div.highlight > pre > code. Walking siblings from
+   the pre finds the heading in the first shape and nothing in the second, which
+   live gave 5 of 22 rules a checkbox. */
+test('finds the heading and the block through a Rouge wrapper', () => {
+  const doc = new JSDOM([
+    '<body><div class="hl-post-content">',
+    '<h4>Bare Rule</h4><p>meta</p>',
+    '<pre><code>rule A { condition: true }</code></pre>',
+    '<h4>Wrapped Rule</h4><p>meta</p>',
+    '<div class="language-yaml"><div class="highlight"><pre class="highlight">',
+    '<code class="hljs">title: B</code></pre></div></div>',
+    '</div></body>'
+  ].join('')).window.document;
+  const root = doc.querySelector('.hl-post-content');
+  const codes = [...root.querySelectorAll('pre > code')];
+
+  assert.strictEqual(D.headingFor(codes[0], root).textContent, 'Bare Rule');
+  assert.strictEqual(D.headingFor(codes[1], root).textContent, 'Wrapped Rule',
+    'the wrapped shape must resolve too, or its rule gets no checkbox');
+
+  assert.strictEqual(D.blockFor(codes[0], root).tagName, 'PRE');
+  assert.strictEqual(D.blockFor(codes[1], root).className, 'language-yaml',
+    'hiding must target the wrapper, or filtering leaves an empty box behind');
 });
