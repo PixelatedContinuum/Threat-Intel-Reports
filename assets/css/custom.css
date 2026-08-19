@@ -3910,6 +3910,29 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-ioctable__chipn { opacity: 0.65; margin-left: 0.35em; }
 
+/* Deliberately UNCOLOURED, and the only thing in this row that is. The chips
+   carry meaning through hue; this one is an escape hatch, so it reads as
+   subordinate rather than as an eleventh indicator type. Matches the indicator
+   search's own clear control. */
+.hl-ioctable__clear {
+  font: inherit;
+  font-size: 0.72em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ioct-dim);
+  border: 1px dashed var(--ioct-border);
+  margin-left: 0.35em;
+}
+.hl-ioctable__clear:hover {
+  color: var(--hl-text-primary, #e6e6e6);
+  border-color: var(--hl-text-muted, #888888);
+}
+/* [hidden] loses to the display:flex the filter row would otherwise impose on
+   its children, which is how a "hidden" control ends up visible anyway. */
+.hl-ioctable__clear[hidden] { display: none; }
+
 .hl-ioctable__actions {
   display: flex;
   flex-wrap: wrap;

@@ -28,6 +28,7 @@
       root.querySelectorAll('.hl-ioctable__table tbody tr'));
     var chips = Array.prototype.slice.call(root.querySelectorAll('.hl-ioctable__chip'));
     var countEl = root.querySelector('.hl-ioctable__count');
+    var clearEl = root.querySelector('.hl-ioctable__clear');
     var slug = root.getAttribute('data-slug') || 'indicators';
 
     var active = {};
@@ -50,7 +51,23 @@
         countEl.textContent = n + ' shown' +
           (any ? ' of ' + rows.length : '');
       }
+      /* Hidden when there is nothing to clear, matching the indicator search's
+         own clear control. A button offering to undo a filter that is not
+         applied is worse than no button. */
+      if (clearEl) clearEl.hidden = !any;
     }
+
+    /* Clearing must unpress every chip as well as unhiding every row. A chip
+       left reading pressed over an unfiltered table would make the next click
+       FILTER rather than unfilter, which is the opposite of what it looks like
+       it would do. */
+    function clearAll() {
+      active = {};
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+      apply();
+    }
+
+    if (clearEl) clearEl.addEventListener('click', clearAll);
 
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {

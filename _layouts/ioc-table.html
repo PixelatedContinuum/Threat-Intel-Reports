@@ -46,6 +46,10 @@ layout: page
       {{ c[0] }} <span class="hl-ioctable__chipn">{{ c[1] }}</span>
     </button>
     {%- endfor -%}
+    {%- comment -%} Hidden until a chip is pressed, so it never advertises an action
+      that would do nothing. Ships hidden so a reader with JS off never sees a dead
+      control. {%- endcomment -%}
+    <button type="button" class="hl-ioctable__clear" hidden>Clear filters</button>
   </div>
 
   <div class="hl-ioctable__actions">
@@ -95,7 +99,7 @@ layout: page
   </p>
 </div>
 
-<script defer src="{{ '/assets/js/ioc-table.js' | relative_url }}?v=1"></script>
+<script defer src="{{ '/assets/js/ioc-table.js' | relative_url }}?v=2"></script>
 {%- endif -%}
 
 {{ content }}

@@ -139,3 +139,22 @@ test('the hues come from the palette the rest of the site already uses', functio
     .filter(function (h) { return !wire[h]; });
   assert.deepEqual(strays, [], 'hues not in the site palette: ' + strays.join(', '));
 });
+
+test('THE CLEAR BUTTON HONOURS [hidden] AGAINST THE FLEX ROW', function () {
+  /* A real defect class rather than a hypothetical one: `display: flex` on a
+     container sets `display` on its children, which beats the `display: none`
+     that the `hidden` attribute relies on. The control then ships "hidden" and
+     is plainly visible. Only an explicit rule closes it. */
+  var m = /\.hl-ioctable__clear\[hidden\]\s*\{([^}]*)\}/.exec(CSS);
+  assert.ok(m, 'no [hidden] rule for the clear button');
+  assert.match(m[1], /display:\s*none/);
+});
+
+test('the clear button is not coloured, so it reads as an escape hatch', function () {
+  // The chips carry meaning through hue. A coloured clear button would read as
+  // an eleventh indicator type.
+  var m = /\.hl-ioctable__clear \{([^}]*)\}/.exec(CSS);
+  assert.ok(m, '.hl-ioctable__clear rule is missing');
+  assert.ok(m[1].indexOf('--ioct-type') === -1,
+    'the clear button reads the per-type hue and will look like a type chip');
+});

@@ -56,7 +56,8 @@ function page(rows) {
   var dom = new JSDOM(
     '<!doctype html><html><body>' +
     '<div class="hl-ioctable" data-slug="demo" data-title="Demo Campaign">' +
-    '<div class="hl-ioctable__filters">' + chips + '</div>' +
+    '<div class="hl-ioctable__filters">' + chips +
+    '<button class="hl-ioctable__clear" hidden>Clear filters</button></div>' +
     '<div class="hl-ioctable__actions">' +
     '<button class="hl-ioctable__btn" data-act="copy">Copy shown</button>' +
     '<button class="hl-ioctable__btn" data-act="txt">Download .txt</button>' +
@@ -195,4 +196,77 @@ test('a page with no table container does not throw', function () {
   dom.window.eval(SRC);
   dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
   assert.ok(true);
+});
+
+/* --- clearing every filter at once -------------------------------------
+
+   Unpressing chips one at a time is fine at two and tedious at nine, and a page
+   showing a narrowed table with no obvious way back is the state worth designing
+   against. The button is HIDDEN when nothing is filtered, matching the indicator
+   search's own clear control, so it never advertises an action that would do
+   nothing. */
+
+test('the clear button is hidden while nothing is filtered', function () {
+  var p = page(ROWS);
+  assert.equal(p.doc.querySelector('.hl-ioctable__clear').hasAttribute('hidden'), true);
+});
+
+test('it appears as soon as one chip is pressed', function () {
+  var p = page(ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  assert.equal(p.doc.querySelector('.hl-ioctable__clear').hasAttribute('hidden'), false);
+});
+
+test('CLEARING RESTORES EVERY ROW', function () {
+  var p = page(ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__chip[data-type="domain"]');
+  assert.equal(visibleValues(p.doc).length, 3);
+  click(p.doc, '.hl-ioctable__clear');
+  assert.equal(visibleValues(p.doc).length, ROWS.length);
+});
+
+test('clearing unpresses every chip, so the control never lies about state', function () {
+  // A chip left reading pressed over an unfiltered table is worse than no
+  // button at all: the next click would then FILTER rather than unfilter.
+  var p = page(ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__chip[data-type="path"]');
+  click(p.doc, '.hl-ioctable__clear');
+  var pressed = Array.prototype.slice.call(p.doc.querySelectorAll('.hl-ioctable__chip'))
+    .filter(function (c) { return c.getAttribute('aria-pressed') === 'true'; });
+  assert.deepEqual(pressed, []);
+});
+
+test('it hides itself again once there is nothing left to clear', function () {
+  var p = page(ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__clear');
+  assert.equal(p.doc.querySelector('.hl-ioctable__clear').hasAttribute('hidden'), true);
+});
+
+test('the count returns to the unfiltered total after clearing', function () {
+  var p = page(ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__clear');
+  var txt = p.doc.querySelector('.hl-ioctable__count').textContent;
+  assert.match(txt, new RegExp('\\b' + ROWS.length + '\\b'));
+  assert.ok(txt.indexOf(' of ') === -1, 'still reads as filtered: ' + txt);
+});
+
+test('a chip pressed again after clearing filters rather than unfilters', function () {
+  // The state the previous test protects, exercised end to end.
+  var p = page(ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__clear');
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  assert.deepEqual(visibleValues(p.doc), ['185.49.126.140', '91.197.98.188']);
+});
+
+test('COPY AFTER CLEARING TAKES EVERYTHING, not the filter that was just dropped', function () {
+  var p = page(ROWS);
+  click(p.doc, '.hl-ioctable__chip[data-type="ipv4"]');
+  click(p.doc, '.hl-ioctable__clear');
+  click(p.doc, '.hl-ioctable__btn[data-act="copy"]');
+  assert.equal(p.cap.clipboard.split('\n').length, ROWS.length);
 });
