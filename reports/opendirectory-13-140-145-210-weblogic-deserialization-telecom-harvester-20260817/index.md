@@ -32,6 +32,33 @@ ioc_highlights:
     note: "exfil_nvram.sh, the WSMA fileCopy exfil script"
   - value: "5f2efa79f548b648a318e6c6f3512581574002b79fab97cfec10b77feba177b8"
     note: "serve_http.log, receipt of the 100 uploads"
+figure_nav:
+  - image: instrument-versus-objective.svg
+    parts:
+      - label: "Instrument vs objective"
+        anchor: "#41-objectives-versus-instruments"
+      - label: "What was taken"
+        anchor: "#61-what-was-taken"
+      - label: "Inside the carrier"
+        anchor: "#71-inside-the-carrier-a-confirmed-foothold"
+  - image: crash-harvest-loop.svg
+    parts:
+      - label: "The parser crash"
+        anchor: "#63-the-exploitation-mechanics-in-full"
+      - label: "The loop itself"
+        anchor: "#62-the-loop-that-manufactures-its-own-loot"
+      - label: "What it yielded"
+        anchor: "#61-what-was-taken"
+  - image: wsma-filecopy-self-exfiltration.svg
+    parts:
+      - label: "The double-encoded path"
+        anchor: "#63-the-exploitation-mechanics-in-full"
+      - label: "What left the device"
+        anchor: "#61-what-was-taken"
+      - label: "The network signature"
+        anchor: "#132-the-highest-value-network-signatures"
+      - label: "Where the data went"
+        anchor: "#83-where-the-data-went-is-unknown-and-that-is-a-real-finding"
 ---
 
 **Campaign Identifier:** WebLogicDeserialization-TelecomHarvester-13.140.145.210<br>
