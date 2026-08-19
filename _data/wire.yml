@@ -3,39 +3,39 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-19T13:26:05Z
+generated_at: 2026-08-19T19:02:36Z
 window_days: 30
 counts:
-  total: 530
-  research: 187
-  news: 343
+  total: 534
+  research: 189
+  news: 345
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 68
     color: 1
   - label: "cybercrime"
-    count: 50
+    count: 51
     color: 2
   - label: "artificial intelligence"
     count: 31
     color: 3
-  - label: "malware"
-    count: 30
-    color: 4
   - label: "data breaches"
     count: 29
-    color: 5
+    color: 4
   - label: "government"
+    count: 29
+    color: 5
+  - label: "malware"
     count: 29
     color: 6
   - label: "credential theft"
     count: 24
     color: 7
-  - label: "exploited"
-    count: 23
-    color: 8
   - label: "ransomware"
     count: 23
+    color: 8
+  - label: "exploited"
+    count: 22
     color: 9
   - label: "microsoft"
     count: 14
@@ -43,8 +43,8 @@ topics:
   - label: "supply chain attack"
     count: 14
     color: 11
-  - label: "zero-day"
-    count: 14
+  - label: "phishing"
+    count: 13
     color: 12
 label_colors:
   ".net downloader": 4
@@ -178,6 +178,7 @@ label_colors:
   "btmob": 8
   "bug bounty": 9
   "byovd": 12
+  "c2 infrastructure": 12
   "c2 relay": 2
   "c2looper": 2
   "cacheable": 2
@@ -281,7 +282,7 @@ label_colors:
   "cyberwarfare": 9
   "d2ip": 7
   "darkhotel": 10
-  "data breaches": 5
+  "data breaches": 4
   "data center": 7
   "data exfiltration": 9
   "data extortion": 2
@@ -317,7 +318,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 8
+  "exploited": 9
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
@@ -344,9 +345,10 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 6
+  "government": 5
   "hacker": 8
   "hacker conversations": 8
+  "hardware": 6
   "healthcare": 11
   "heights financial": 1
   "heptax": 12
@@ -377,7 +379,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 4
+  "malware": 6
   "meta": 5
   "metabase": 6
   "microsoft": 10
@@ -401,11 +403,12 @@ label_colors:
   "patches": 2
   "pdf attachment": 7
   "people": 7
+  "phishing": 12
   "plugin": 7
   "poc": 2
   "privacy": 12
   "public sector": 3
-  "ransomware": 9
+  "ransomware": 8
   "rat": 9
   "rce": 10
   "ruby": 6
@@ -427,10 +430,51 @@ label_colors:
   "threat source newsletter": 6
   "vmware": 2
   "vulnerabilities": 1
-  "zero-day": 12
   "zimbra": 11
   "zoom": 7
 items:
+  - title: "Electronic health record company CareCloud says 3.7 million people affected by breach"
+    url: "https://therecord.media/electronic-health-record-company-carecloud-data-breach"
+    source: "Recorded Future"
+    date: 2026-08-19T18:10:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Hackers compromise 14,500 Dahua web cameras in 35-day campaign"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-compromise-14-500-dahua-web-cameras-in-35-day-campaign/"
+    source: "BleepingComputer"
+    date: 2026-08-19T18:09:13Z
+    kind: news
+    labels: ["hardware"]
+  - title: "NSA, FBI warns of hackers using AI-generated tools in attacks on critical infrastructure technology"
+    url: "https://therecord.media/nsa-fbi-warns-of-hackers-using-ai-generated-tools-critical-infrastructure"
+    source: "Recorded Future"
+    date: 2026-08-19T17:58:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "US warns of AI-powered attacks on Siemens PLCs in critical infrastructure"
+    url: "https://www.bleepingcomputer.com/news/security/us-warns-of-ai-powered-attacks-on-siemens-plcs-in-critical-infrastructure/"
+    source: "BleepingComputer"
+    date: 2026-08-19T17:50:01Z
+    kind: news
+    labels: []
+  - title: "US charges Iranian hackers over $3.4 billion intellectual property theft"
+    url: "https://www.bleepingcomputer.com/news/security/us-charges-iranian-hackers-over-34-billion-intellectual-property-theft/"
+    source: "BleepingComputer"
+    date: 2026-08-19T15:56:09Z
+    kind: news
+    labels: ["legal"]
+  - title: "Password spraying attacks surge 155x as hackers exploit MFA gaps"
+    url: "https://www.bleepingcomputer.com/news/security/password-spraying-attacks-surge-155x-as-hackers-exploit-mfa-gaps/"
+    source: "BleepingComputer"
+    date: 2026-08-19T14:00:10Z
+    kind: news
+    labels: []
+  - title: "https://malbearlabs.com/shadow-hvnc-and-shadow-loader-the-kit-that-protects-its-license-better-than-its-customers-dd99520b6af3"
+    url: "https://malbearlabs.com/shadow-hvnc-and-shadow-loader-the-kit-that-protects-its-license-better-than-its-customers-dd99520b6af3"
+    source: "AlienVault"
+    date: 2026-08-19T13:24:07Z
+    kind: research
+    labels: []
   - title: "US charges Iranians for sprawling hacking campaign on government agencies, universities"
     url: "https://therecord.media/iran-cyberattacks-us-doj"
     source: "Recorded Future"
@@ -443,6 +487,12 @@ items:
     date: 2026-08-19T11:30:33Z
     kind: news
     labels: ["charged", "cyberwarfare", "government", "hacker", "iran", "reward", "us"]
+  - title: "From ClickFix to MaaS: Exposing a Modular Windows RAT and Its Admin Panel"
+    url: "https://www.netskope.com/blog/from-clickfix-to-maas-exposing-a-modular-windows-rat-and-its-admin-panel"
+    source: "AlienVault"
+    date: 2026-08-19T11:25:09Z
+    kind: research
+    labels: ["clickfix", "cryptocurrency theft", "grpc", "legionloader", "lummastealer", "maas", "modular architecture", "nodejs", "rat", "tor"]
   - title: "Cl0p Ransomware Group Names Over 40 Victims of PTC Windchill Campaign"
     url: "https://www.securityweek.com/cl0p-ransomware-group-names-over-40-victims-of-ptc-windchill-campaign/"
     source: "SecurityWeek"
@@ -515,6 +565,12 @@ items:
     date: 2026-08-18T20:48:20Z
     kind: research
     labels: ["2fa bypass", "adversary-in-the-middle", "credential theft", "html smuggling", "microsoft 365", "phishing-as-a-service", "session hijacking", "websocket"]
+  - title: "MacSync Stealer: C2 Infrastructure Rotation"
+    url: "https://otx.alienvault.com/pulse/6a84bafb3c129cc2f9de2762"
+    source: "AlienVault"
+    date: 2026-08-18T20:05:15Z
+    kind: research
+    labels: ["c2 infrastructure", "clickfix", "credential theft", "cryptocurrency wallet", "infostealer", "mac.c", "macos", "macsync", "macsync stealer", "malware-as-a-service"]
   - title: "Threat Brief: Mitigating Large-Scale Credential Attacks (Updated August 18)"
     url: "https://unit42.paloaltonetworks.com/large-scale-credential-attacks/"
     source: "Palo Alto Networks"
@@ -3581,33 +3637,3 @@ items:
     date: 2026-07-20T19:29:47Z
     kind: research
     labels: ["bindcloak", "code obfuscation", "dll sideloading", "east asia", "environmental keying", "government targeting", "middle east", "mixedkey", "telegram abuse", "teleshim"]
-  - title: "India says allegedly leaked nuclear plant files pose no safety risk"
-    url: "https://therecord.media/india-nuclear-plant-kudankulam-world-leaks-documents"
-    source: "Recorded Future"
-    date: 2026-07-20T18:20:00Z
-    kind: news
-    labels: ["cybercrime", "industry"]
-  - title: "New HollowGraph malware uses Microsoft Graph for stealthy C2 comms"
-    url: "https://www.bleepingcomputer.com/news/security/new-hollowgraph-malware-uses-microsoft-graph-for-stealthy-c2-comms/"
-    source: "BleepingComputer"
-    date: 2026-07-20T17:43:01Z
-    kind: news
-    labels: []
-  - title: "Hackers were inside South Korea's diplomat training system for 9 months"
-    url: "https://therecord.media/south-korea-cyberattack-foreign-ministry"
-    source: "Recorded Future"
-    date: 2026-07-20T15:15:00Z
-    kind: news
-    labels: ["government"]
-  - title: "NadMesh Botnet Analysis: Product-Level Threat in the AI Services Era"
-    url: "https://blog.xlab.qianxin.com/nadmesh-botnet-analysis-a-product-grade-threat-for-the-ai-service-era"
-    source: "AlienVault"
-    date: 2026-07-20T14:51:14Z
-    kind: research
-    labels: ["ai infrastructure", "botnet", "credential theft", "cve-2016-0638", "docker", "go malware", "kubernetes", "mcp exploitation", "nadmesh", "redis", "shodan harvesting"]
-  - title: "SonicWall Zero-Days Exploited to Deliver Custom Malware for Weeks Before Patch"
-    url: "https://www.securityweek.com/sonicwall-zero-days-exploited-to-deliver-custom-malware-for-weeks-before-patch/"
-    source: "SecurityWeek"
-    date: 2026-07-20T14:11:05Z
-    kind: news
-    labels: ["exploited", "malware", "sonicwall", "vulnerabilities", "zero-day"]
