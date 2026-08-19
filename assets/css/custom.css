@@ -3568,8 +3568,18 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-post-content .hl-wire__item,
 .hl-wire__item {
   display: grid;
-  grid-template-columns: 11em minmax(0, 1fr) auto;
-  gap: 0.9em;
+  /* The tag column is CAPPED, never `auto`. With `auto` it sized to max-content,
+     so a row carrying three long tags took 24em and left the headline 6.8em,
+     which the theme's inherited `word-wrap: break-word` then chopped mid-word
+     ("Fraudule / nt / Employm / ent"). A hard minmax() cap means the tags can
+     never take space from the headline whatever they contain: the title column
+     is 19.7em (394px, ~48 characters) on the 900px container regardless.
+
+     14em with two tags leaves 89% of rows showing their tags on a single line,
+     measured over the live corpus. Three tags never beat 67% at any cap that
+     left the headline readable, which is why the page draws two. */
+  grid-template-columns: 8.5em minmax(0, 1fr) minmax(0, 14em);
+  gap: 0.7em;
   align-items: baseline;
   padding: 0.5em 0.7em;
   border-radius: 6px;
@@ -3607,10 +3617,27 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   box-shadow: inset 0 0 0 2px var(--wire-src);
 }
 
-.hl-wire__title { font-size: 0.86em; line-height: 1.45; }
+.hl-wire__title {
+  font-size: 0.86em;
+  line-height: 1.45;
+  min-width: 0;
+  /* The theme sets `body { word-wrap: break-word }`. With a properly sized
+     column a headline no longer needs to break, but this stops a single long
+     token dragging the rest of the headline apart if one ever does. */
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+}
 
 /* --- tags: topic colour where the label is one of the chips ---- */
-.hl-wire__labels { display: flex; gap: 0.35em; flex-wrap: wrap; justify-content: flex-end; }
+.hl-wire__labels {
+  display: flex;
+  gap: 0.3em;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-content: flex-start;
+  min-width: 0;
+}
 /* Every displayed label carries a colour, not just the twelve chip topics.
    521 of the 532 labels the page draws are not topics, and leaving those grey
    is what made the page look flat. The var() fallback keeps a label with no
@@ -3624,6 +3651,9 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   color: var(--wire-topic, var(--hl-text-muted));
   border: 1px solid color-mix(in srgb, var(--wire-topic, var(--hl-text-muted)) 42%, var(--hl-border-card));
   background: color-mix(in srgb, var(--wire-topic, var(--hl-text-muted)) 13%, transparent);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* --- filter chips: one colour each ---------------------------- */
@@ -3651,6 +3681,11 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-filter--wire .hl-filter__search { font-size: 0.78em; padding: 9px 13px; }
 .hl-filter--wire .hl-filter__count { font-size: 0.72em; }
+
+@media (max-width: 1000px) and (min-width: 781px) {
+  .hl-post-content .hl-wire__item,
+  .hl-wire__item { grid-template-columns: 7.5em minmax(0, 1fr) minmax(0, 11em); }
+}
 
 @media (max-width: 780px) {
   .hl-post-content .hl-wire__item,

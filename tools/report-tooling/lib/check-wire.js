@@ -18,7 +18,8 @@ var REQUIRED = ['title', 'url', 'source', 'date', 'kind'];
 // Hues defined in assets/css/custom.css as .hl-topic-c1 .. .hl-topic-c12.
 var PALETTE_SIZE = 12;
 // How many tags the page draws per item; the rest are never rendered.
-var DISPLAYED_LABELS = 3;
+// Two, not three: three left 60% of rows wrapping their tags to a second line.
+var DISPLAYED_LABELS = 2;
 var KINDS = { research: 1, news: 1 };
 
 function verdict(status, reason, problems, warnings, counts) {
