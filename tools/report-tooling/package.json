@@ -5,8 +5,9 @@
   "description": "Tests and live-corpus verification for the report ATT&CK coverage and glossary modules.",
   "scripts": {
     "test": "node --test \"test/**/*.test.js\"",
-    "verify": "node verify-corpus.js && node check-wire.js",
-    "verify:wire": "node check-wire.js"
+    "verify": "node verify-corpus.js && node check-wire.js && node check-ioc-index.js",
+    "verify:wire": "node check-wire.js",
+    "verify:lookup": "node check-ioc-index.js"
   },
   "devDependencies": {
     "jsdom": "^24.1.0",
