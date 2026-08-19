@@ -37,6 +37,7 @@ The investigation is ONGOING, with an expanded toolkit discovery still under ana
 ---
 
 ## Bottom Line Up Front
+{: .hl-tier-1}
 
 - **What it is:** A novel, previously undocumented multi-implant C2 toolkit self-named **"OpenStrike"** by its author (from source code docstrings, not an analyst designation) — three beacon variants (custom C, Python, cracked Cobalt Strike DLL), five shellcode loaders, and nine operator utility scripts — recovered from an open directory before any known compromise
 - **Risk level:** HIGH (7.5/10 overall) — no persistence, but evasion mechanisms create blind spots in GET-based exfil detection and standard CS injection defenses
@@ -48,6 +49,7 @@ The investigation is ONGOING, with an expanded toolkit discovery still under ana
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 This investigation documents a novel, previously undocumented multi-implant C2 toolkit called **"OpenStrike"** — a name chosen by the toolkit's author, not by this publication. The name appears in the Python beacon's source code docstring: `"OpenStrike Universal Beacon — Single-File Cross-Platform Implant"` and in the BOF executor module: `"OpenStrike BOF Executor"`. The toolkit was recovered from an open directory on a Linode VPS at `172.105.0.126`, had zero VirusTotal coverage at time of discovery, and its C2 protocol internals — an AES-128-CBC + HMAC-SHA256 cryptographic envelope shared across three distinct beacon variants via a single RSA-2048 key, here termed the "Trinity Protocol" — were not previously documented in public threat research. This report closes that gap, providing defenders with the first full technical analysis of OpenStrike's architecture, detection surface, and protocol internals.
 
@@ -120,6 +122,7 @@ Attribution is INSUFFICIENT (<50% confidence). The operator is tracked internall
 ---
 
 ## 2. Sample Inventory & Static Analysis
+{: .hl-tier-3}
 
 ### 2.1 Sample Inventory
 
@@ -529,6 +532,7 @@ The indicator to watch is `python.exe` opening `C:\Windows\System32\ntdll.dll` w
 ---
 
 ## 3. C2 Protocol Architecture
+{: .hl-tier-3}
 
 > **Analyst note:** This section describes how all three beacon types communicate with their C2 server. The protocol has three layers: an outer RSA handshake to establish a unique session key, an inner AES+HMAC envelope that encrypts and authenticates every message, and an HTTP transport layer that can be reshaped by the Malleable C2 system. The hardcoded IV is a critical weakness that enables defenders to retroactively decrypt captured traffic once a session key is recovered.
 
@@ -606,6 +610,7 @@ The GET-based exfiltration from the DLL beacon is the critical detection gap: co
 ---
 
 ## 4. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 <table class="professional-table">
   <thead>
@@ -808,6 +813,7 @@ The GET-based exfiltration from the DLL beacon is the critical detection gap: co
 ---
 
 ## 5. Threat Intelligence Context
+{: .hl-tier-2}
 
 ### 5.1 OpenStrike — Novel Toolkit, Zero Prior Coverage
 
@@ -917,6 +923,7 @@ On the Python beacon's SOCKS4a proxy, that capability enables network pivoting, 
 ---
 
 ## 6. Discovery Method: hunt.io Open Directory Capture
+{: .hl-tier-2}
 
 [hunt.io](https://hunt.io/)'s AttackCapture system recovered the complete OpenStrike toolkit before any victim was identified — an infrastructure-first, pre-compromise discovery. AttackCapture continuously scans for misconfigured servers exposing directory listings and automatically downloads and indexes exposed files.
 
@@ -927,6 +934,7 @@ The open directory was almost certainly an operator error, a misconfigured web s
 ---
 
 ## 7. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -958,6 +966,7 @@ In report language, the threat actor behind this toolkit cannot be attributed to
 ---
 
 ## 8. Confidence Levels Summary & Gaps
+{: .hl-tier-2}
 
 ### DEFINITE (Direct Evidence — No Ambiguity)
 
@@ -1023,6 +1032,7 @@ Watermark=0 in CS config reliably indicates a license-stripped build per NCC Gro
 ---
 
 ## 9. Indicators of Compromise
+{: .hl-tier-2}
 
 Machine-readable IOC feed: [`/ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json`](/ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json)
 
@@ -1046,6 +1056,7 @@ The feed contains 13 file hashes (SHA256 / SHA1 / MD5 for 7 binaries including o
 ---
 
 ## 10. Detection Rules & Hunting Queries
+{: .hl-tier-2}
 
 Full detection rule set — YARA, Sigma, Suricata, EDR hunting queries — is available in the separate detection file:
 
@@ -1071,6 +1082,7 @@ The detection file is at [`/hunting-detections/open-directory-172-105-0-126-2026
 ---
 
 ## 11. Key Takeaways
+{: .hl-tier-1}
 
 - **Trinity Protocol proves single-operator control.** The identical RSA-2048 public key embedded across three beacon variants written in different languages and compiled by different toolchains is definitive evidence of single-operator control. Any beacon carrying the documented modulus (`9f12c9cb6582f379...`) belongs to this operator's infrastructure. This finding also rules out MaaS operation and enables retroactive traffic decryption if memory is preserved.
 
@@ -1089,6 +1101,7 @@ The detection file is at [`/hunting-detections/open-directory-172-105-0-126-2026
 ---
 
 ## 12. Response Orientation
+{: .hl-tier-2}
 
 **Detection priorities — hunt these first:**
 
@@ -1113,6 +1126,7 @@ The detection file is at [`/hunting-detections/open-directory-172-105-0-126-2026
 ---
 
 ## 13. Ongoing Investigation: Expanded Toolkit Discovery
+{: .hl-tier-2}
 
 This strand is UNDER INVESTIGATION, discovered on 7 April 2026, with 116 additional files identified.
 
@@ -1195,6 +1209,7 @@ This report will be updated with these findings as analysis is completed. The "L
 ---
 
 ## 14. Appendices
+{: .hl-tier-2}
 
 ### Appendix A: Cryptographic Architecture Reference
 

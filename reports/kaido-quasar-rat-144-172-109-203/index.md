@@ -33,6 +33,7 @@ ioc_highlights:
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 KAIDO is operated by a named, self-identified Brazilian commodity-malware actor — `n_3_xl` (Telegram `@govbrasil`), working under the KAIDO / `0xK41` brand — and its command-and-control server was live with fresh samples as recently as May 2026. This report answers who runs the KAIDO Quasar-fork Remote Access Trojan (RAT), what it does to an infected host, and how defenders detect and respond to it. It is written from the perspective of a third-party threat-intelligence provider: it describes capability and impact at defensive altitude and does not reproduce the offensive implementation.
 
@@ -59,6 +60,7 @@ KAIDO is one of two product lines run by this operator. The other is the **EvilS
 ---
 
 ## 2. Risk Assessment
+{: .hl-tier-1}
 
 KAIDO earns a **HIGH** rating because it combines full remote control with a session-hijack primitive that defeats controls most organizations rely on as a backstop. The risk here is not that KAIDO steals a password — it is that KAIDO lets an operator sit inside the victim's own authenticated banking or exchange session, on the victim's own device, in real time. Controls that assume "the attacker has the password but not the device" do not help against that.
 
@@ -90,6 +92,7 @@ The recovered staging infrastructure is dead. The KAIDO Quasar RAT command-and-c
 ---
 
 ## 3. Technical Classification
+{: .hl-tier-2}
 
 > **Analyst note:** This section states what KAIDO is at a technical level — its family lineage, runtime, and install identity — and what confidence each classification carries. It is written to be readable without a reverse-engineering background; the deep mechanics follow in later sections.
 
@@ -122,6 +125,7 @@ Calling it a Quasar fork tells a defender two useful things immediately. First, 
 ---
 
 ## 4. Technical Capabilities Deep-Dive
+{: .hl-tier-3}
 
 ### 4.1 Hidden-desktop session hijacking (HVNC) — the capability that sets this apart
 
@@ -187,6 +191,7 @@ A commodity automated sandbox that detonates KAIDO without simulating the Quasar
 ---
 
 ## 5. Static Analysis Findings
+{: .hl-tier-3}
 
 > **Analyst note:** Static analysis means examining the malware without running it — decompiling the code and reading its embedded data. For KAIDO this was especially productive because the operator's obfuscation renamed identifiers but did not defeat logic-level decompilation, so the configuration and capability map recovered as plaintext.
 
@@ -228,6 +233,7 @@ Static analysis recovered a set of strings that survive the obfuscation pass and
 ---
 
 ## 6. Dynamic Analysis Findings
+{: .hl-tier-3}
 
 > **Analyst note:** Dynamic analysis means running the malware and recording what it does, rather than only reading its code. The defining result — that the RAT withholds its behavior until it reaches its operator — is documented chronologically below.
 
@@ -270,6 +276,7 @@ Once connected, the operator has full Quasar-lineage remote control plus the two
 ---
 
 ## 7. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Confidence note:** rows are HIGH confidence unless marked `(DEFINITE)` — directly observed with no alternative explanation — or `(MODERATE)` — supported by static or dependency-based evidence but not triggered without a live operator connection. The Executive Summary and Section 4 provide the higher-level view of which capabilities are directly confirmed versus inferred.
 
@@ -299,6 +306,7 @@ Reading this table, the DEFINITE rows are the ones a defender can act on today w
 ---
 
 ## 8. Indicators of Compromise
+{: .hl-tier-2}
 
 The complete, machine-readable indicator set is published as a separate JSON feed for direct ingestion into SIEM and EDR platforms: **[`/ioc-feeds/kaido-quasar-rat-iocs.json`](/ioc-feeds/kaido-quasar-rat-iocs.json)**. Indicators are defanged in the prose below for safe reading; the JSON feed carries them in un-defanged, ingestion-ready form. The KAIDO indicator set comprises 5 file hashes, 4 command-and-control network indicators, and a set of host and TLS-certificate anchors.
 
@@ -337,6 +345,7 @@ A dedicated certificate and fingerprint fleet-sweep across three independent int
 ---
 
 ## 9. Detection and Response Guidance
+{: .hl-tier-2}
 
 Full detection content — YARA rules, Sigma rules, and Suricata signatures — is published in a separate file for direct deployment: **[`/hunting-detections/kaido-quasar-rat-detections/`](/hunting-detections/kaido-quasar-rat-detections/)**. That file contains three YARA rules, three Sigma rules, and three Suricata signatures, all derived from the static and dynamic evidence in this report. This section summarizes the detection strategy and its known limits; it does not restate the rules.
 
@@ -367,6 +376,7 @@ This is not an incident-response playbook — organizations with a live KAIDO de
 ---
 
 ## 10. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Analyst note:** This section states who operates KAIDO and how confident that attribution is. It rests primarily on identity artifacts the operator embedded in their own toolkit and self-published on their own sales channels — self-attested evidence, not third-party inference. Because a specific actor is named at HIGH confidence, no unattributed-actor (UTA) designation applies.
 
@@ -392,6 +402,7 @@ The motivation is financially-motivated commodity cybercrime, which I hold HIGH.
 ---
 
 ## 11. Threat Intelligence Context
+{: .hl-tier-2}
 
 > **Analyst note:** This section situates KAIDO's specific findings against what is publicly documented about the techniques it uses — separating what is original to this operator from what is commodity reuse.
 
@@ -406,6 +417,7 @@ The KAIDO command-and-control host has shown continuity for approximately ten mo
 ---
 
 ## 12. Confidence Summary
+{: .hl-tier-2}
 
 This report is built on strong direct evidence — full static configuration recovery and behavioral analysis — but several findings rest on inference rather than direct observation. This section organizes every major finding by confidence level so a reader can weigh each claim without re-deriving it from the narrative sections above.
 
@@ -444,6 +456,7 @@ KAIDO is one of two product lines run by this operator. The EvilSoul-Engine stea
 ---
 
 ## 13. References and Appendices
+{: .hl-tier-2}
 
 This report draws on the tiered source hierarchy defined in the project's source-credibility standard (Tier 1 = government/reproduced Tier-1 corroboration; Tier 2 = major-vendor or structured commercial/OSINT tooling; Tier 3 = named-researcher OSINT or reputable security journalism; Tier 4 = unverified social media, not used as a sole source).
 

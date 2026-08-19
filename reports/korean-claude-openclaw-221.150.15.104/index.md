@@ -36,6 +36,7 @@ stix_bundle: /stix/korean-claude-openclaw-221.150.15.104.json
 > **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
 
 ## Bottom Line Up Front
+{: .hl-tier-1}
 
 A Korean operator pre-approved an `openclaw.ai` installer in Claude Code's permission allowlist (`~/.claude/settings.local.json`), silencing every safety prompt for the full OpenClaw install-and-run chain. Seven pre-authorized entries — recovered from the operator's own open-directory exposure (`221.150.15.104`, Korea Telecom) — describe that chain end to end. This is the parent investigation's first DEFINITE artifact-level evidence of an operator deliberately customizing an AI-agent CLI's safety-prompt mechanism to streamline toolkit deployment.
 
@@ -44,6 +45,7 @@ No malware binary was extracted and no victims were observed; the captured artif
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 An operator pre-approving an `openclaw.ai` installer in Claude Code's permission allowlist is the first DEFINITE artifact-level answer to a question the parent investigation could previously only pose: **how do AI-augmented operators silence the safety friction of running attack-adjacent toolchains through mainstream AI-agent CLIs?** The captured `~/.claude/settings.local.json` is the operator's actual on-disk configuration — not a researcher's reconstruction of a hypothesized attack.
 
@@ -97,6 +99,7 @@ SOC and threat-hunting priorities:
 ---
 
 ## 2. Campaign Context
+{: .hl-tier-2}
 
 Case 4 captured a Korean operator's residential open-directory exposure — one of several cases in the parent investigation on how AI-augmented operators pair mainstream AI-agent CLIs (Claude Code, Gemini CLI) with side-loaded dual-use frameworks (OpenClaw). This **capsule sub-report** expands that case to the artifact level, deepening what umbrella Section 4.4 covers at capsule depth. The parent owns the cross-case framing; this sub-report does not restate it (see the [parent report](/reports/ai-agent-frameworks-2026-05-23/)).
 
@@ -121,6 +124,7 @@ This sub-report covers **only the operator tradecraft in the `settings.local.jso
 ---
 
 ## 3. Technical Classification
+{: .hl-tier-2}
 
 This is an **operator-tradecraft analysis report, not a malware analysis report.** The captured evidence is not a malicious binary, exploit payload, or packed dropper — it is a 442-byte JSON configuration file documenting how the operator reconfigured a mainstream AI-agent CLI to lower safety friction.
 
@@ -168,6 +172,7 @@ The seven-entry `permissions.allow` array is the **glue**: the operator's mechan
 ---
 
 ## 4. Technical Capabilities Deep-Dive
+{: .hl-tier-3}
 
 This section examines the smoking-gun artifact, the permission-prompt bypass it abuses, the co-located Claude Code + OpenClaw architecture, the OpenClaw distribution ecosystem the allowlist points at, and the gateway service on port 18789 the allowlist authorizes Claude Code to start.
 
@@ -310,6 +315,7 @@ This matters at the kill-chain level. The gateway is the operational hub for the
 ---
 
 ## 5. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
@@ -318,6 +324,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 ---
 
 ## 6. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-015 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -379,6 +386,7 @@ At LOW confidence the evidence supports "weak indicators suggest" and no more. S
 ---
 
 ## 7. Indicators of Compromise
+{: .hl-tier-2}
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
@@ -387,6 +395,7 @@ The full IOC feed is at [`/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.
 ---
 
 ## 8. Detection and Response Guidance
+{: .hl-tier-2}
 
 Detection rules (YARA, Sigma) covering the file-content patterns documented in Section 4.2 are provided in:
 
@@ -431,6 +440,7 @@ This is not an incident response guide. Defenders with confirmed findings should
 ---
 
 ## 9. Confidence Summary
+{: .hl-tier-2}
 
 Findings organized by confidence level. The body attaches per-claim confidence inline; this is the consolidated index.
 
@@ -474,6 +484,7 @@ Findings organized by confidence level. The body attaches per-claim confidence i
 ---
 
 ## 10. Analysis Scope, Static and Dynamic Coverage, and Gaps
+{: .hl-tier-2}
 
 > **Analyst note:** Standard Hunters Ledger malware analysis reports include sample-level static analysis (binary unpacking, disassembly, string analysis) and dynamic analysis (sandbox detonation, behavioral observation, network capture). This case is a tradecraft-observation report rather than a sample analysis: the captured artifact is a 442-byte configuration JSON, not a malware binary. This section documents what analysis was performed, what was deliberately out of scope, and what evidence gaps remain — so defenders consuming this report can calibrate their reliance on the findings accurately.
 
@@ -516,6 +527,7 @@ Defenders building hunt and detection logic should anchor on the DEFINITE artifa
 ---
 
 ## 11. References and Appendices
+{: .hl-tier-2}
 
 ### Parent Investigation
 

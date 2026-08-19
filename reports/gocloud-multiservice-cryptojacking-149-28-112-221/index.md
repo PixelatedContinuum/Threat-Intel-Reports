@@ -58,6 +58,7 @@ figure_nav:
 **Threat Level:** MEDIUM
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 GOCLOUD is a complete commodity cryptojacking operation, run by a single operator and captured whole across the two servers it ran on. One host carried the payloads and the exploit engine; the other carried an exploitation orchestrator, a reverse-shell control plane, and, in the same directories, the operator's own legitimate small business. End to end it is exactly what the high-volume, low-sophistication tier of threat looks like when you get to see all of it at once. The operator pulls target lists from the FOFA search engine, scoped entirely to Chinese-hosted enterprise software, sprays 27 classes of exposed service with a mix of default credentials and public N-day exploits, and drops the stock XMRig Monero miner on anything that answers. Commodity cryptojacking is usually written up as a family or a wallet; this one was captured as an operation, which is what lets the effectiveness question be answered instead of assumed.
 
@@ -70,6 +71,7 @@ My governing principle here is that the operator's self-reported telemetry is no
 I rate the operation MEDIUM. The capability set is broad and the operation was actively maintained, with a self-healing re-exploitation daemon and an hourly orchestrator, which raises the ceiling, while the evidenced real-world effectiveness is low enough to keep it out of HIGH. Beyond the mostly-failed exploitation, the entire Windows and internet-cafe branch mined to a checksum-invalid wallet the operator does not control, earning nothing (Section 8). The operator is tracked internally as UTA-2026-020 *(an internal tracking label used by The Hunters Ledger, explained in Section 11)*; no public name fits the evidence. The profile settled at low-to-mid tier, genuinely capable in one narrow place and out of its depth nearly everywhere else, a Chinese-language actor who, tellingly, ran a real retail business on the same box as the crime. For a defender who finds this on a host, the first move is to block the operator infrastructure and hunt the XMRig heartbeat and `svchost.exe`-from-`%APPDATA%` fingerprints in Section 13, then close the default-credential and N-day exposures that were the way in.
 
 ## 2. Key Takeaways
+{: .hl-tier-1}
 
 - Roughly 7,145 successes are asserted in the operator's ledgers against 7 independently evidenced hosts. The counters record exploit-function return values rather than compromises, and most of those functions return true on nothing.
 - The bulk tier of threat is visible here as one whole operation, from FOFA-driven targeting through default-credential and N-day exploitation of 27 exposed Chinese-enterprise-software classes to a stock XMRig payload, run end to end by one person.
@@ -79,6 +81,7 @@ I rate the operation MEDIUM. The capability set is broad and the operation was a
 - The defense is foundational. Closing default credentials and patching N-day RCEs neutralizes this entire tier, and the concrete host and network indicators to hunt are in the detection guidance and the companion feed.
 
 ## 3. Business Risk Assessment
+{: .hl-tier-1}
 
 The operation rates **MEDIUM, 5.2/10**. That number holds two facts in tension. The capability on paper is broad and was actively maintained, which raises the ceiling, while the evidenced real-world effectiveness is low enough that the operation never earns a HIGH. A defender exposed on any one of the 27 targeted service classes is genuinely at risk of a working miner and, on Windows, of a LAN worm. A defender not exposed on any of them is very nearly unaffected, because the operator selects nothing by industry and everything by open port.
 
@@ -104,6 +107,7 @@ The operation rates **MEDIUM, 5.2/10**. That number holds two facts in tension. 
 The weighted result lands the operation squarely in the MEDIUM band. Nothing here argues for an urgent, all-hands response, and the argument I am making is the opposite one, that threats of exactly this shape are handled by getting the foundations right rather than by treating each one as a crisis.
 
 ## 4. Campaign Scope and Targeting
+{: .hl-tier-2}
 
 The operator selected targets by exposed technology and never by industry. Every FOFA query in the targeting engine is scoped `country="CN"`, and the product mix reads as an inventory of the Chinese enterprise-software and network-device market, covering the Seeyon, Tongda, Xinhu, Yonyou, Kingdee and Weaver office and ERP suites, Ruijie routers, and Hikvision and Dahua cameras, alongside the globally common exposures of phpMyAdmin, MongoDB, GitLab, Jenkins, Redis and Confluence. Whatever runs the vulnerable software gets hit, and the sector of the organization behind it is never consulted. That indiscriminate, exposure-driven selection is the defining characteristic of this whole tier of threat.
 
@@ -129,6 +133,7 @@ There are two distinct victim populations. The server-side branch aims at the ex
 No victim addresses appear anywhere in this report. The independently-evidenced hosts, the internet-cafe victim, and the operator's hardcoded re-attack set are third-party victims on a separate disclosure track, and they are described here only by count and character. The operation was active in mid-2026 and both operator hosts have since gone partly or fully dark, for reasons this investigation could not determine (takedown, an operator pause, and services that were only ever bound to localhost are all still consistent with what was seen). The captured evidence is a preserved snapshot and is unaffected by the hosts going quiet.
 
 ## 5. The Gap Between Claimed and Real Reach
+{: .hl-tier-2}
 
 The single most important number in this report is a fiction, and the second is small. The operator's ledgers across both hosts claim roughly 7,145 successes. Independent evidence covers 7 hosts. Neither number is in dispute; the point is that they are measuring different things, and the operator's is not measuring compromise.
 
@@ -164,6 +169,7 @@ None of this is a walk-back of the threat, and the counter-pole matters as much 
 I want to be straight about how this landed for me, because it is the part of the read I trust most. An operator-claimed deployment count in the thousands briefly pulled my estimate toward "these attacks really do work at scale," and that number caught me in the same reflex I attribute to most people, dismissing miner campaigns as background noise that never compromises much worth caring about. Reading the success-check code then killed the number. What survived the correction was not the effectiveness claim but the lesson under it. This tier does land on real machines, and it slips by precisely because attention is spent on louder threats.
 
 ## 6. Technical Classification
+{: .hl-tier-2}
 
 GOCLOUD is a cryptojacking deployment toolkit, a mass-exploitation front end bolted to a stock coin miner, plus a Windows LAN worm branch. The payload is not novel and the toolkit is not a named commodity family; it is bespoke operator code wrapped around off-the-shelf parts.
 
@@ -183,6 +189,7 @@ The two hosts are bound at DEFINITE confidence by an identical private FOFA API 
 One naming point belongs here because it recurs through the report. The tool self-brands are GOCLOUD and OmniHunter only. A third string, `凌凯矿机` (Língkǎi mining rigs), appears in the Windows branch and is worth being precise about, because it is not a malware family or a separate tool brand at all. It is a name the operator carried over from a legitimate business of their own, which Section 11 covers in general terms. Treat it as a useful detection string and not as a family label, and do not expect to find it in anyone's malware taxonomy. The internet-cafe victimology is unaffected either way, because it rests on the operator's own deployment-script header rather than on the branding.
 
 ## 7. How the Operation Works: Architecture and Kill Chain
+{: .hl-tier-2}
 
 The operation runs on two hosts with clearly divided jobs. The Vultr host in the US holds the payloads and the exploit engine, and it is where victims fetch the miner from. The Tencent Cloud host in Shenzhen holds the OmniHunter orchestrator, the reverse-shell control plane, and, beside them, the operator's own business tooling. The split is coherent tradecraft rather than an accident. The recon and control sit close to the Chinese victims, and a disposable Western box distributes the payloads.
 
@@ -221,6 +228,7 @@ Two parts of that loop are worth a defender's attention before the rest. The hea
 ---
 
 ## 8. Technical Teardown
+{: .hl-tier-3}
 
 From here I am writing for peers, with the training wheels off. The sections below are the reverse engineering behind the findings above, and the genuinely deep material is collapsed so the page stays readable, so open a section to read the mechanics. The through-line I kept coming back to is this. Individual techniques in this kit are often correct, but the integration around them is careless, and the operator's own verification catches only the errors that throw a Python traceback. That single property explains both why the ledger overcounts and why my read of the operator moved the way it did.
 
@@ -353,6 +361,7 @@ The inbound traffic that the box did attract was itself being profiled. A cluste
 </details>
 
 ## 9. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 The operation spans ten tactics, and the mapping below is unusually well-grounded because it derives from direct reads of the operator's own code and runtime logs rather than from inferred behavior. For a defender, the techniques that carry the most detection value are the masquerade (T1036.005, `svchost.exe` from `%APPDATA%`), the scheduled-task and systemd persistence (T1053.005, T1543.002), the ingress cradles (T1105, `certutil` and `iex`), the SMB admin-share spread (T1021.002), and the compute-hijacking payload itself (T1496.001). The full table is collapsed below.
 
@@ -405,6 +414,7 @@ Technique IDs are validated against the current ATT&CK catalog. All rows are HIG
 </details>
 
 ## 10. Threat Intelligence Context
+{: .hl-tier-2}
 
 This context stays tied to what the analysis found. It covers where this operator sits in the documented cryptojacking tier, why its claimed-versus-real gap is a property of that tier rather than a quirk of one actor, why the services it targets never get fixed, and what the whole thing says for a defender deciding where to spend attention.
 
@@ -462,6 +472,7 @@ The through-line I kept returning to is the one that should carry this report, t
 The honest complication belongs in the report rather than hidden from it. The same DBIR data shows the sophisticated end growing too, with zero-day exploitation of edge devices and VPNs rising sharply. Both things are true at once. Foundational hygiene, patching known CVEs, eliminating default credentials, and not exposing databases, neutralizes the entire GOCLOUD tier and the large majority of opportunistic volume; a separate, smaller, better-resourced set of threats needs more. The claim the evidence supports is that foundational controls stop the largest volume of what is out there, not that sophistication does not matter, and the argument is strongest kept there.
 
 ## 11. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-020 is an internal tracking designation assigned by The Hunters Ledger to an actor observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports; it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -520,6 +531,7 @@ The toolkit carries its FOFA API key together with an account identifier, and th
 The reason the finding is worth publishing at all is the analytic consequence, and it is genuinely useful. This is the second confirmed case of this operator carrying a third party's identifier verbatim in their code; the first was a public WebLogic proof-of-concept's placeholder hostname, left in place unchanged. When the same operator does this twice, the rule that follows is that a bare string in this toolkit is weak identity evidence by default and should be treated as copied until something shows otherwise. That is a caveat other analysts can carry into the next commodity kit they open, and it is the durable part of the identity work.
 
 ## 12. Indicators of Compromise
+{: .hl-tier-2}
 
 The validated, machine-readable indicators are published as a separate feed at [`/ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json`](/ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json). They are not embedded here; the summary below is orientation only.
 
@@ -536,6 +548,7 @@ The validated, machine-readable indicators are published as a separate feed at [
 A few things about the feed are worth stating in prose. Third-party victim addresses are **deliberately withheld** from the published feed, because the heartbeat-confirmed mining hosts, the Redis-verified host, and the operator's hardcoded re-attack set are on a separate disclosure track, and none of them appears here or anywhere in this report. The FOFA API key value is retained as an operator indicator because it is what bound the two hosts and pivoted the investigation, but the account identifier paired with it is withheld, because it traces to an unrelated third party's published tooling (Section 11.3). The Monero wallet is carried in both its correct and typo forms; the typo variant receives nothing, and it is listed as a toolkit fingerprint, never as an address that credits the operator. The pools are legitimate third-party services shared by many benign miners, so they carry a monitor rather than block disposition. Finally, `experimentaldumain.com` and all nine historical domain resolutions on the first host are excluded as prior-tenant recycled-IP artifacts; this is a pure raw-IP operation, and no file in either toolkit references any domain.
 
 ## 13. Detection and Response Guidance
+{: .hl-tier-2}
 
 The full rule set, 7 YARA rules, 11 Sigma rules, and 5 Suricata signatures with per-rule tiering and validation notes, is published separately at [`/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/`](/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/). The rules are not reproduced here.
 
@@ -564,6 +577,7 @@ This is a brief orientation to what to address, not an incident-response procedu
 - Remove the persistence artifacts named above and confirm the miner service is gone.
 
 ## 14. Confidence Summary and Coverage Gaps
+{: .hl-tier-2}
 
 The findings that carry the report rest on direct reads of the operator's own code and logs, which is why so much of it is DEFINITE. Held at DEFINITE are the two-node binding by the shared FOFA key and wallet, the XMRig payload identity, the syntax error in the captured OA patcher draft, the zero-callback Log4Shell run, the port-based split between the operation's two generations, and the Windows branch mining to a checksum-invalid wallet. Held at HIGH are the finding that the Log4Shell branch never produced a victim (bounded by the one captured listener run), single-operator control, a real co-resident business entity tied to the operator, the distinct-untracked-actor cluster (around 85%), the Chinese-language-operator read (around 85%), the actor-type read (around 88%), and the rejection of a state nexus (around 90%). Held at MODERATE are whether the operator owns or runs that business, whether this is one person or a small team (around 70%), LLM-assisted authorship as against forum-PoC assembly, the copied-residue-versus-borrowed-credential sub-question on the FOFA account, the existence of OmniHunter v1 and v2, and the missing-status-check reading of the TongdaOA branch (MODERATE-HIGH). Only a named-actor attribution stays at INSUFFICIENT (around 15%).
 
@@ -576,6 +590,7 @@ The gaps are stated because they bound what the report can claim. Most of node 2
 On node 2, `/accounting/` was captured empty and uncharacterized. Several of the Windows worm files were characterized from the deployment chain rather than read at code level. And, as noted in Section 11, the operator's business identity and locality could not be corroborated in the public business registries reachable from here, which is why they are described in general terms rather than named, and which is a limit of the available tooling rather than a negative finding. The revenue figures throughout are estimates from a per-host benchmark, not a pool-side or on-chain measurement.
 
 ## 15. References
+{: .hl-tier-2}
 
 Companion artifacts for this report:
 

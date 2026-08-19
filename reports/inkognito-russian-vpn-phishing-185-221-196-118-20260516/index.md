@@ -75,6 +75,7 @@ figure_nav:
 > **Risk vs. Detection Posture:** The Inkognito fraud-operation infrastructure analyzed in this report scores **7.5/10 (HIGH)** based on enterprise-grade DevOps tradecraft, sustained 2-year-11-month continuous operation, a 467+ pre-staged brand-impersonation subdomain library across 18+ enterprise verticals, deliberate provider segmentation across two sanctioned bulletproof hosters, and 0/92 VirusTotal detection across all operator infrastructure. The threat level is not CRITICAL because no in-flight credential-harvest payloads were observed on the impersonation subdomains at the evidence cutoff — all currently return HTTP 404, awaiting activation. If any subdomain in the library is switched live and observed harvesting credentials, the rating for that activation should be reassessed to CRITICAL.
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 **Inkognito is a Russian-speaking multi-product fraud operator that has run continuously since 2023-06-08 — nearly three years of sustained operation — currently centered on a polished commercial VPN brand (INK VPN at `inkconnect.ru`) bolted to a 467+ brand-impersonation phishing subdomain library under `inklens.ru` targeting Wells Fargo, AnyDesk, Outlook Web Access 2013, Jenkins, Tencent, Sina, Tele2, Apple Siri, Accenture, Asana, and 18+ other enterprise verticals.** Defenders facing the question "what does the Inkognito operator's infrastructure, brand portfolio, and tradecraft look like — and how should we detect the brand-impersonation phishing surface used against enterprise targets" can act on three findings: (1) **block** the six confirmed operator IPs and 22+ confirmed operator domains; (2) **hunt DNS** for any query from enterprise networks to a brand-impersonation subdomain matching defender-monitored products under `*.inklens.ru` / `*.inklens.co.uk` — these subdomains exist only to be clicked; and (3) **deploy operator-fingerprint detection** for the `Server: kittenx` 404 decommission tombstone, the custom `X-Admin-Token` HTTP header, and the operator's Yandex Webmaster ID `98466329` to surface additional operator infrastructure not yet linked to the INK brand portfolio.
 
@@ -130,6 +131,7 @@ The risk is not a single act of intrusion. It is the **infrastructure surface** 
 ---
 
 ## 2. How This Investigation Unfolded
+{: .hl-tier-2}
 
 This report is a **standalone derivative** of the OpenDirectory 79.137.192.3 investigation published on 2026-05-15. The originating pivot was a single open-directory exposure on Aeza Group AS216246 staging IP `79.137.192.3` that surfaced three operationally separate threat clusters co-tenanted on the same multi-tenant bulletproof staging utility. That parent investigation, published at [`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/), covered:
 
@@ -160,6 +162,7 @@ Three findings from the parent investigation made Inkognito worth promoting to a
 ---
 
 ## 3. Technical Classification
+{: .hl-tier-2}
 
 > **Analyst note:** This section identifies *what kind of threat* Inkognito is in technical-defender terms. Inkognito is **not a malware family** in the conventional sense — there is no PE binary, no malware sample, no on-host execution surface to recover. It is a **named-brand commercial fraud operation** running across web applications, a commercial VPN service, brand-impersonation phishing infrastructure, BEC burn domains, and a fake crypto exchange. The classification table below reflects that distinction.
 
@@ -215,6 +218,7 @@ To set correct defender expectations, several things this operation is **not**:
 ---
 
 ## 4. Capabilities Deep-Dive
+{: .hl-tier-3}
 
 > **Analyst note:** This section enumerates *what the operator can do* across each functional role of the operation. Because there is no on-host malware, capabilities are organized by the operator's product portfolio: commercial VPN backend (§4.1), brand-impersonation phishing library (§4.2), BEC burn-domain infrastructure (§4.3), fake crypto exchange (§4.4), centralized proxy/VPN fleet (§4.5), and the operator-fingerprint signatures that tie all of it together (§4.6). Each subsection covers the technical mechanism, what the operator can do with it operationally, and what defenders can hunt for.
 
@@ -472,6 +476,7 @@ These matter as detection content. The detection file at [`/hunting-detections/i
 ---
 
 ## 5. Static Analysis Findings
+{: .hl-tier-3}
 
 > **Analyst note:** "Static analysis" for Inkognito means inspecting the production web-application stack the operator serves to victims, without running anything. There is no PE binary to import-walk, no .text section to disassemble, no encrypted strings to recover. This section covers the HTTP response headers (server software, custom headers, CORS configuration), HTML and JavaScript and CSS and asset payloads (cryptographic hashes for IOC-feed inclusion, build-toolchain fingerprints, hardcoded API endpoints), TLS configuration posture, and the DNS / WHOIS / registrar fingerprint of the infrastructure. All evidence below was captured 2026-05-07 via WARP-routed `curl` scraping of the live operator front-ends, so the operator never saw the analyst home IP.
 
@@ -523,6 +528,7 @@ That has a detection implication. Certificate Transparency monitoring on REGRU-R
 ---
 
 ## 6. Dynamic Analysis Findings
+{: .hl-tier-3}
 
 > **Analyst note:** With no malware binary in scope, "dynamic analysis" for Inkognito means observing the operator's web infrastructure as it serves requests, mutates over time, and responds to real-world events. Sources for the observations below are DomainTools passive DNS (registration, hosting, and apex/subdomain timelines across all operator domains), WHOIS history (registrar, NS, SOA, registrant fields), reverse-IP enumeration on operator-controlled IPs, and direct WARP-routed HTTP probing of live operator front-ends. None of the observations required code execution.
 
@@ -652,6 +658,7 @@ The cross-cluster overlap test was run against 35 cluster-defining IOCs spanning
 ---
 
 ## 7. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)` or `(LOW)`. The Confidence Summary in Section 11 organizes findings by confidence level for the higher-level view. Because Inkognito has no PE malware, the mapping is concentrated on Resource Development, Initial Access, Defense Evasion, Command and Control, and Impact tactics — the operator-action layer rather than on-host execution.
 
@@ -683,6 +690,7 @@ The cross-cluster overlap test was run against 35 cluster-defining IOCs spanning
 ---
 
 ## 8. Indicators of Compromise
+{: .hl-tier-2}
 
 > **Full machine-readable IOC feed:** the complete, validated, machine-readable IOC inventory is at [`/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json`](/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json). The feed is **unfanged** (no `[.]` substitution) and ready for SIEM/EDR ingestion. The table below is a defanged human-readable summary of the **highest-priority block-list and hunt candidates**; consult the IOC feed for full context fields (`first_seen`, `last_seen`, `confidence`, `purpose`, `notes`), service objects (registry/scheduled-task structures), and the complete subdomain enumeration.
 
@@ -771,6 +779,7 @@ What the investigation does establish about exposure surface: the brand-imperson
 ---
 
 ## 9. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-009 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -858,6 +867,7 @@ The MODERATE distinct-actor (78%) and INSUFFICIENT named-actor (<50%) confidence
 ---
 
 ## 10. Detection and Response Orientation
+{: .hl-tier-2}
 
 > **Full detection content:** YARA rules (3), Sigma rules (8), and Suricata signatures (5) — totaling 16 rules — are in the [separate detection file](/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/). This section does not duplicate detection content; it provides priority and orientation only.
 
@@ -886,6 +896,7 @@ None of this applies here. Inkognito has no on-host persistence and there is no 
 ---
 
 ## 11. Confidence Summary
+{: .hl-tier-2}
 
 Findings organized by confidence level (per CLAUDE.md CONFIDENCE LEVELS framework). This summary provides the higher-level view that the inline `(MODERATE)` / `(LOW)` markers in the MITRE table and elsewhere reference.
 
@@ -933,6 +944,7 @@ Findings organized by confidence level (per CLAUDE.md CONFIDENCE LEVELS framewor
 ---
 
 ## 12. Coverage Gaps and Open Questions
+{: .hl-tier-2}
 
 > **Analyst note:** This section documents what the investigation could not determine and what evidence would close the gap. It serves both as honesty about analytical limits and as a roadmap for follow-up work — either by The Hunters Ledger in future investigations or by readers with access to paid threat-intelligence services.
 
@@ -981,6 +993,7 @@ The operator's underground forum identity (if any) — alias on XSS, Exploit.in,
 ---
 
 ## 13. References and Cross-References
+{: .hl-tier-2}
 
 ### 13.1 Parent Investigation and Cross-References
 
