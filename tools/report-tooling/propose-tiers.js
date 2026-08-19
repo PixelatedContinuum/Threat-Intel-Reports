@@ -89,7 +89,64 @@ function proposeFor(md) {
 }
 
 var args = process.argv.slice(2);
-var only = args.filter(function (a) { return a.indexOf('--') !== 0; })[0];
+var applyAt = args.indexOf('--apply');
+var applyList = applyAt !== -1 ? args[applyAt + 1] : null;
+var only = args.filter(function (a) {
+  return a.indexOf('--') !== 0 && a !== applyList;
+})[0];
+
+/* --apply writes the markers. It takes the tier for EVERY h2 in order, and
+   refuses a list whose length does not match, because a short list would mark
+   the wrong sections and a silent partial pass is the defect the gate exists to
+   catch. Idempotent: a heading that already carries a marker is left alone. */
+function applyTiers(slug, list) {
+  var file = path.join(REPORTS, slug, 'index.md');
+  var md = fs.readFileSync(file, 'utf8');
+  var tiers = String(list).split(',').map(function (t) { return t.trim(); });
+
+  var lines = md.split(/\r?\n/);
+  var fenced = false;
+  var seen = 0;
+  var frontEnd = -1;
+  for (var f = 1; f < lines.length; f++) { if (lines[f] === '---') { frontEnd = f; break; } }
+
+  var heads = [];
+  for (var i = frontEnd + 1; i < lines.length; i++) {
+    if (/^\s*(```|~~~)/.test(lines[i])) { fenced = !fenced; continue; }
+    if (fenced) continue;
+    if (/^##\s+\S/.test(lines[i])) heads.push(i);
+  }
+
+  if (heads.length !== tiers.length) {
+    console.error('refusing to apply: ' + slug + ' has ' + heads.length +
+      ' sections but ' + tiers.length + ' tiers were given');
+    process.exit(1);
+  }
+  for (var t = 0; t < tiers.length; t++) {
+    if (!/^[123]$/.test(tiers[t])) {
+      console.error('refusing to apply: "' + tiers[t] + '" is not 1, 2 or 3');
+      process.exit(1);
+    }
+  }
+
+  // Insert from the bottom up so earlier indices stay valid.
+  var added = 0, skipped = 0;
+  for (var h = heads.length - 1; h >= 0; h--) {
+    var at = heads[h];
+    var next = lines[at + 1] === undefined ? '' : lines[at + 1];
+    if (/^\{:\s*\.hl-tier-[123]\s*\}\s*$/.test(next.trim())) { skipped++; continue; }
+    lines.splice(at + 1, 0, '{: .hl-tier-' + tiers[h] + '}');
+    added++;
+  }
+  fs.writeFileSync(file, lines.join('\n'), 'utf8');
+  console.log(slug + ': ' + added + ' markers written, ' + skipped + ' already present');
+}
+
+if (applyList) {
+  if (!only) { console.error('--apply needs a slug'); process.exit(2); }
+  applyTiers(only, applyList);
+  process.exit(0);
+}
 
 var slugs = fs.readdirSync(REPORTS, { withFileTypes: true })
   .filter(function (e) { return e.isDirectory(); })
