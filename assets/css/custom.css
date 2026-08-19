@@ -2614,9 +2614,17 @@ button,
 .hl-filter__empty { font-size: 0.9rem; color: var(--hl-text-muted); padding: 28px; text-align: center; border: 1px dashed var(--hl-border-card); border-radius: 8px; }
 .hl-filter__reset { background: none; border: none; color: var(--hl-accent-blue); cursor: pointer; font: inherit; padding: 0; }
 
-/* Day axis — only /wire/ renders it. A single date, not a range: the ask was
-   "pick a date, see that day". */
-.hl-filter__date { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+/* Date axis — only /wire/ renders it. A single date, not a range: the ask was
+   "pick a date, see that day".
+
+   It sits under a topic row that wraps to three lines, so at 10px with no rule
+   it read as a fourth line of chips rather than a different kind of control.
+   The hairline and the padding give it its own band. */
+.hl-filter__date {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin-top: 18px; padding-top: 16px;
+  border-top: 1px solid var(--hl-border-card);
+}
 /* `display: flex` above sets `display` on every child, which overrides the
    `display: none` the hidden attribute relies on, so a hidden control in this
    row would sit there plainly visible. Same defect class as the IOC viewer's

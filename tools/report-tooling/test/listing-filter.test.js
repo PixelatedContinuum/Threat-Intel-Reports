@@ -186,7 +186,7 @@ test('the kind axis is inert on a page that renders no kind chips', function () 
 
 var DATE_ROW =
   '<div class="hl-filter__date">' +
-  '<label class="hl-filter__dim" for="d">Day</label>' +
+  '<label class="hl-filter__dim" for="d">Date</label>' +
   '<input class="hl-filter__dateinput" type="date" id="d" data-filter-date>' +
   '<button class="hl-filter__datereset" data-filter-date-clear hidden>Clear date</button>' +
   '</div>';

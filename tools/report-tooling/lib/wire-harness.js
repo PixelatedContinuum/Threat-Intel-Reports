@@ -69,7 +69,7 @@ function build(JSDOM, parts) {
   var dateRow = d.createElement('div');
   dateRow.className = 'hl-filter__date';
   dateRow.innerHTML =
-    '<label class="hl-filter__dim" for="hl-wire-date">Day</label>' +
+    '<label class="hl-filter__dim" for="hl-wire-date">Date</label>' +
     '<input class="hl-filter__dateinput" type="date" id="hl-wire-date" data-filter-date ' +
     'aria-label="Show only headlines from this date">' +
     '<button type="button" class="hl-filter__datereset" data-filter-date-clear hidden>Clear date</button>';

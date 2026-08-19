@@ -42,7 +42,7 @@ position: 2.5
     {%- for t in wire.topics -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c{{ t.color }}" data-tag="{{ t.label }}">{{ t.label }} <span class="hl-chip-btn__n">{{ t.count }}</span></button>{%- endfor -%}
   </div>
   <div class="hl-filter__date">
-    <label class="hl-filter__dim" for="hl-wire-date">Day</label>
+    <label class="hl-filter__dim" for="hl-wire-date">Date</label>
     <input class="hl-filter__dateinput" type="date" id="hl-wire-date" data-filter-date aria-label="Show only headlines from this date">
     <button type="button" class="hl-filter__datereset" data-filter-date-clear hidden>Clear date</button>
   </div>
