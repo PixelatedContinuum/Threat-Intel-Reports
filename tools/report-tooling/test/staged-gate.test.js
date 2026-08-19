@@ -33,10 +33,13 @@ test('a DELETED detection file still routes to the manifest gate', function () {
   assert.deepEqual(ids(p), ['manifest']);
 });
 
-test('an IOC feed edit routes to the index and the viewer tables', function () {
-  var p = SG.plan(['ioc-feeds/acme-iocs.json']);
-  assert.deepEqual(ids(p), ['ioc-index', 'ioc-tables']);
-});
+test('an IOC feed edit routes to the index, the viewer tables AND the safety gate',
+  function () {
+    // A feed edit is the only way an unblockable value reaches the published
+    // product, so it always routes to the blocklist-safety check.
+    var p = SG.plan(['ioc-feeds/acme-iocs.json']);
+    assert.deepEqual(ids(p), ['feed-hygiene', 'ioc-index', 'ioc-tables']);
+  });
 
 test('a catalog edit routes to both, because publication status gates both',
   function () {
@@ -114,7 +117,7 @@ test('a mixed commit queues every check it touches, deduplicated', function () {
     'reports/two/index.md',
     'README.md'
   ], { existing: ['reports/one/index.md', 'reports/two/index.md'] });
-  assert.deepEqual(ids(p), ['ioc-index', 'ioc-tables', 'manifest', 'wire']);
+  assert.deepEqual(ids(p), ['feed-hygiene', 'ioc-index', 'ioc-tables', 'manifest', 'wire']);
   assert.deepEqual(p.reports.sort(), ['reports/one/index.md', 'reports/two/index.md']);
   assert.equal(p.owed.length, 1);
 });
