@@ -14,12 +14,12 @@ position: 2.5
 {%- assign wire = site.data.wire -%}
 {%- if wire and wire.items and wire.items != empty -%}
 
-<div class="hl-wire__prov">
-  <div class="hl-wire__prov-title">Where this comes from</div>
-  <p>The headlines are other people’s reporting, but the pipeline is mine. Every item here comes out of the OpenCTI threat-intelligence platform I run and maintain myself, the same instance that holds the <a href="/stix/">STIX bundles</a> for every report I publish and feeds the blocklists on my own network. Nothing on this page is scraped.</p>
-</div>
-
 <p class="hl-wire__freshness">Updated {{ wire.generated_at | date: "%-d %B %Y, %H:%M" }} UTC &middot; {{ wire.counts.total }} items from the last {{ wire.window_days }} days</p>
+
+<details class="hl-wire__prov">
+  <summary>Generated from my own OpenCTI instance, not scraped</summary>
+  <p>The headlines are other people’s reporting, but the pipeline is mine. Every item here comes out of the OpenCTI threat-intelligence platform I run and maintain myself, the same instance that holds the <a href="/stix/">STIX bundles</a> for every report I publish and feeds the blocklists on my own network. It refreshes twice a day, straight from that platform.</p>
+</details>
 
 {%- comment -%}
   The chip vocabulary comes precomputed from wire.topics rather than from the

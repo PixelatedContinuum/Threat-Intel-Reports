@@ -3527,29 +3527,38 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   margin: 0 0 1.2em;
   line-height: 1.6;
 }
-/* Provenance. The distinction this has to carry is that the CONTENT is other
-   people's reporting while the PIPELINE is ours, so it sits above the feed
-   rather than in the header blurb where it would read as a disclaimer. */
+/* Provenance, as a one-line disclosure rather than a callout box. The claim has
+   to be on the page, but a bordered block above the feed interrupted the read.
+   Collapsed it is one muted line carrying the whole point; the detail is a click
+   away for anyone who wants it. Same disclosure convention as the report
+   teardowns, so the marker is already familiar. */
 .hl-wire__prov {
-  border: 1px solid var(--hl-border-card);
-  border-left: 3px solid var(--hl-accent-blue, #58a6ff);
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--hl-accent-blue, #58a6ff) 6%, var(--hl-bg-card));
-  padding: 0.85em 1.1em;
-  margin: 0 0 1.1em;
+  margin: -0.5em 0 1.2em;
+  font-size: 0.76em;
+  color: var(--hl-text-muted);
 }
-.hl-wire__prov-title {
-  font-size: 0.68em;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--hl-accent-blue, #58a6ff);
-  margin-bottom: 0.35em;
+.hl-wire__prov > summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-block;
+  color: var(--hl-text-muted);
+  border-bottom: 1px dotted var(--hl-border-card);
+  transition: color 0.12s;
 }
-.hl-wire__prov p {
-  margin: 0;
-  font-size: 0.8em;
+.hl-wire__prov > summary::-webkit-details-marker { display: none; }
+.hl-wire__prov > summary::before {
+  content: "B8";
+  display: inline-block;
+  margin-right: 0.45em;
+  transition: transform 0.15s;
+}
+.hl-wire__prov[open] > summary::before { transform: rotate(90deg); }
+.hl-wire__prov > summary:hover { color: var(--hl-text-primary); }
+.hl-wire__prov > p {
+  margin: 0.6em 0 0;
+  padding-left: 1.2em;
   line-height: 1.62;
-  color: var(--hl-text-primary);
+  max-width: 62ch;
 }
 
 /* Kind axis. The counts used to be a static readout describing a distinction
