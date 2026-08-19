@@ -19,6 +19,7 @@ var fs = require('node:fs');
 var path = require('node:path');
 var C = require('../../assets/js/ioc-classify.js');
 var CS = require('./lib/catalog-status.js');
+var B = require('./lib/benign.js');
 
 var ROOT = path.join(__dirname, '..', '..');
 var FEED_DIR = path.join(ROOT, 'ioc-feeds');
@@ -30,11 +31,16 @@ var ROLE_KEYS = ['context', 'description', 'role', 'note', 'type'];
 var VALUE_KEYS = ['value', 'indicator', 'ip', 'domain', 'url', 'hash',
                   'sha256', 'sha1', 'md5', 'name'];
 
+/* Index-side only. The PAGE still extracts these from pasted text so they
+   count toward "N indicators checked"; they simply never match. See lib/benign.js. */
+function keep(r) { return r && !B.isBenign(r.type, r.value); }
+
 function collect(node, out, role) {
   if (node == null) return;
   if (typeof node === 'string') {
     var r = C.classify(node);
-    if (r) out.push({ key: r.type + ':' + r.value, role: role || null });
+    if (keep(r)) out.push({ key: r.type + ':' + r.value, role: role || null });
+    else if (r) out.suppressed = (out.suppressed || 0) + 1;
     return;
   }
   if (Array.isArray(node)) {
@@ -57,7 +63,8 @@ function collect(node, out, role) {
     var val = node[VALUE_KEYS[v]];
     if (typeof val === 'string') {
       var res = C.classify(val);
-      if (res) { out.push({ key: res.type + ':' + res.value, role: myRole || null }); tookValue = true; }
+      if (keep(res)) { out.push({ key: res.type + ':' + res.value, role: myRole || null }); tookValue = true; }
+      else if (res) { out.suppressed = (out.suppressed || 0) + 1; tookValue = true; }
     }
   }
   Object.keys(node).forEach(function (key) {
@@ -71,6 +78,7 @@ function collect(node, out, role) {
 function build(feeds, catalogText, unlistedBySlug) {
   var cat = CS.resolve(catalogText, unlistedBySlug || {});
   var indicators = {}, reports = {};
+  var suppressed = 0;
   var coverage = { indexed: [], embargoed: [], unknown: [], empty: [] };
 
   Object.keys(feeds).sort().forEach(function (file) {
@@ -80,6 +88,7 @@ function build(feeds, catalogText, unlistedBySlug) {
 
     var found = [];
     collect(feeds[file], found, null);
+    if (found.suppressed) suppressed += found.suppressed;
     if (!found.length) { coverage.empty.push(file); return; }
 
     var slug = CS.slugOf(file);
@@ -106,7 +115,8 @@ function build(feeds, catalogText, unlistedBySlug) {
     counts: {
       indicators: Object.keys(indicators).length,
       reports: Object.keys(reports).length,
-      multi_report: multi
+      multi_report: multi,
+      suppressed_benign: suppressed
     },
     coverage: coverage,
     conflicts: cat.conflicts || [],
@@ -162,6 +172,10 @@ if (require.main === module) {
   console.log('wrote ' + OUT);
   console.log('  ' + idx.counts.indicators + ' indicators across ' +
     idx.counts.reports + ' reports (' + idx.counts.multi_report + ' in more than one)');
+  if (idx.counts.suppressed_benign) {
+    console.log('  ' + idx.counts.suppressed_benign + ' benign value(s) suppressed ' +
+      '(public resolvers, RFC1918, major platforms) so the page does not cry wolf');
+  }
   console.log('  indexed ' + c.indexed.length + ', embargoed ' + c.embargoed.length +
     ', unknown ' + c.unknown.length + ', empty ' + c.empty.length);
   if (c.embargoed.length) console.log('  EMBARGOED (correctly excluded): ' + c.embargoed.join(', '));

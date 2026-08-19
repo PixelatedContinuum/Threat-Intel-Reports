@@ -1,9 +1,10 @@
 {
- "generated_at": "2026-08-19T14:30:24Z",
+ "generated_at": "2026-08-19T14:45:22Z",
  "counts": {
-  "indicators": 1689,
+  "indicators": 1670,
   "reports": 54,
-  "multi_report": 158
+  "multi_report": 155,
+  "suppressed_benign": 23
  },
  "coverage": {
   "indexed": [
@@ -1399,30 +1400,6 @@
     "role": "installer_url"
    }
   ],
-  "url:https://github.com/keyosbuff/C2-Leak": [
-   {
-    "report": "ai-agent-frameworks-2026-05-23"
-   }
-  ],
-  "url:https://github.com/Vova75Rus/ComfyUI-Shell-Executor": [
-   {
-    "report": "ai-agent-frameworks-2026-05-23"
-   },
-   {
-    "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
-    "role": "Operator-A PIP_PAYLOAD_REPO"
-   }
-  ],
-  "url:https://github.com/jamestechdev-oss/ComfyUI-Shell-Plugin": [
-   {
-    "report": "ai-agent-frameworks-2026-05-23",
-    "role": "Operator-B's GHOST kit PIP_PAYLOAD_REPO - DELETED + entire account scrubbed"
-   },
-   {
-    "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
-    "role": "Operator-B PIP_PAYLOAD_REPO"
-   }
-  ],
   "email:elyasbetter@gmail.com": [
    {
     "report": "ai-agent-frameworks-2026-05-23"
@@ -1888,19 +1865,6 @@
   "sha1:622ddbacaf769aef383435162a203489c08c8468": [
    {
     "report": "arsenal-237-nethost-dll.json"
-   }
-  ],
-  "ipv4:8.8.8.8": [
-   {
-    "report": "arsenal-237-nethost-dll.json"
-   }
-  ],
-  "ipv4:127.0.0.1": [
-   {
-    "report": "arsenal-237-nethost-dll.json"
-   },
-   {
-    "report": "open-directory-94-103-1-13-20260423"
    }
   ],
   "sha256:90d223b70448d68f7f48397df6a9e57de3a6b389d5d8dc0896be633ca95720f2": [
@@ -3303,18 +3267,6 @@
     "role": "EvilSoul webhook-resolution relay; POSTs {key} receives {webhook} (PART B)"
    }
   ],
-  "url:https://github.com/sqlban/configs/raw/refs/heads/main/chromelevator.exe": [
-   {
-    "report": "evilsoul-engine-stealer-maas",
-    "role": "Chrome ABE-bypass tool download (299a2e7f supply chain); account now 404 (PART B)"
-   }
-  ],
-  "url:https://github.com/sqlban/configs/raw/refs/heads/main/chrome_decrypt.dll": [
-   {
-    "report": "evilsoul-engine-stealer-maas",
-    "role": "Chrome ABE-bypass DLL download (299a2e7f supply chain); account now 404 (PART B)"
-   }
-  ],
   "url:http://evilsoul.xyz/download/decrypter/chrome_inject.exe": [
    {
     "report": "evilsoul-engine-stealer-maas",
@@ -3716,12 +3668,6 @@
     "role": "Kryptex pool (Russian mining service)"
    }
   ],
-  "domain:bing.com": [
-   {
-    "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
-    "role": "Hysteria v2 SNI masquerade"
-   }
-  ],
   "domain:icanhazip.com": [
    {
     "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
@@ -3804,30 +3750,6 @@
    {
     "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
     "role": "Operator-B self-hosted kit URL - 17-byte per-customer config delta vs Operator-A's copy"
-   }
-  ],
-  "url:https://github.com/Vova75Rus/miner": [
-   {
-    "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
-    "role": "Kit-author OPSEC-leftover repo"
-   }
-  ],
-  "url:https://github.com/Vova75Rus/legendary-carnival": [
-   {
-    "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
-    "role": "Kit-author staging repo"
-   }
-  ],
-  "url:https://github.com/Vova75Rus/Dim": [
-   {
-    "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
-    "role": "Kit-author admin panel deployment"
-   }
-  ],
-  "url:https://github.com/Vova75Rus/Notes.github.io": [
-   {
-    "report": "ghost-cryptojacker-vova75rus-77.110.96.200",
-    "role": "Kit-author personal GitHub Pages site"
    }
   ],
   "domain:fontconfig-cache.service": [
@@ -5426,22 +5348,12 @@
     "report": "nsminer-cryptojacker.json"
    }
   ],
-  "ipv4:235.31.147.10": [
-   {
-    "report": "nsminer-cryptojacker.json"
-   }
-  ],
   "ipv4:56.255.40.10": [
    {
     "report": "nsminer-cryptojacker.json"
    }
   ],
   "ipv4:85.230.83.10": [
-   {
-    "report": "nsminer-cryptojacker.json"
-   }
-  ],
-  "ipv4:251.46.111.10": [
    {
     "report": "nsminer-cryptojacker.json"
    }
@@ -5477,11 +5389,6 @@
    }
   ],
   "ipv4:94.158.41.10": [
-   {
-    "report": "nsminer-cryptojacker.json"
-   }
-  ],
-  "ipv4:252.158.2.10": [
    {
     "report": "nsminer-cryptojacker.json"
    }
@@ -9324,12 +9231,6 @@
     "role": "Tunnel alias for payload server at 127.0.0.1:10101"
    }
   ],
-  "domain:generativelanguage.googleapis.com": [
-   {
-    "report": "russian-gemini-credential-mill-213.165.51.115",
-    "role": "domain"
-   }
-  ],
   "url:https://payloads.tralalarkefe.com/run_bg.ps1": [
    {
     "report": "russian-gemini-credential-mill-213.165.51.115",
@@ -9628,16 +9529,6 @@
    }
   ],
   "domain:webhook.site": [
-   {
-    "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
-   }
-  ],
-  "domain:raw.githubusercontent.com": [
-   {
-    "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
-   }
-  ],
-  "domain:github.com": [
    {
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
    }
@@ -10241,12 +10132,6 @@
    }
   ],
   "url:http://209.38.205.158:8095/api/topology/unified": [
-   {
-    "report": "turkish-arpa-openclaw-state-insurer-209.38.205.158",
-    "role": "url"
-   }
-  ],
-  "url:https://github.com/MehmetARPA/ARPA": [
    {
     "report": "turkish-arpa-openclaw-state-insurer-209.38.205.158",
     "role": "url"
