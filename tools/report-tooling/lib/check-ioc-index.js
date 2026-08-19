@@ -94,6 +94,24 @@ function check(doc, status, fresh) {
       '(public resolvers, RFC1918, major platforms)');
   }
 
+  /* The card slug on /ioc-feeds/ is derived in LIQUID (`remove: '-iocs.json'`,
+     which strips every occurrence) while this pipeline derives it in JS (an
+     end-anchored regex). Two implementations of one rule is the drift class the
+     shared classifier exists to avoid, and it cannot be shared here because one
+     side is Liquid. So the rule is checked instead: if the two ever disagree for
+     a feed, that feed's card can never match its own indicators and the search
+     silently returns nothing for it. */
+  Object.keys(status || {}).forEach(function (f) {
+    if (status[f] !== 'published') return;
+    var jsSlug = f.replace(/-iocs\.json$/, '');
+    var liquidSlug = f.split('-iocs.json').join('');
+    if (jsSlug !== liquidSlug) {
+      problems.push('slug rules disagree for "' + f + '": this pipeline says "' +
+        jsSlug + '", the page\'s Liquid says "' + liquidSlug + '". That card ' +
+        'could never match its own indicators.');
+    }
+  });
+
   // --- key shape --------------------------------------------------------
   Object.keys(inds).forEach(function (key) {
     var i = key.indexOf(':');

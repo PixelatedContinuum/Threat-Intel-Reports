@@ -115,3 +115,26 @@ test('a stale index fails, by regenerate-and-diff', function () {
   assert.equal(r.status, 'FAIL');
   assert.match(r.problems.join(' '), /stale/i);
 });
+
+test('a filename where the Liquid and JS slug rules disagree fails', function () {
+  // The card slug is derived in Liquid on the page and in JS here. Liquid's
+  // `remove:` strips EVERY occurrence; the JS regex is end-anchored. A filename
+  // containing "-iocs.json" more than once splits them, and that card could
+  // never match its own indicators.
+  var d = doc();
+  var r = CK.check(d, { 'a-iocs.json-b-iocs.json': 'published' }, d);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /slug rules disagree/);
+});
+
+test('every real feed name passes the slug-rule check', function () {
+  var fs = require('node:fs'), path = require('node:path');
+  var dir = path.join(__dirname, '..', '..', '..', 'ioc-feeds');
+  var status = {};
+  fs.readdirSync(dir).filter(function (f) { return /\.json$/.test(f); })
+    .forEach(function (f) { status[f] = 'published'; });
+  var d = doc({ coverage: { indexed: Object.keys(status), embargoed: [], unknown: [], empty: [] } });
+  var r = CK.check(d, status, d);
+  assert.ok(r.problems.filter(function (p) { return /slug rules disagree/.test(p); }).length === 0,
+    'a real feed filename breaks the two slug rules apart');
+});
