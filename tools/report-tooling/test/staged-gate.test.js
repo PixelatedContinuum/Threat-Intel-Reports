@@ -71,6 +71,14 @@ test('a wire data edit routes to the wire gate', function () {
   assert.deepEqual(ids(SG.plan(['_data/wire.yml'])), ['wire']);
 });
 
+test('a wire PAGE edit routes to the wire gate too', function () {
+  /* check-wire.js reads wire/index.md as well as the data file, because the day
+     filter is only correct while the page derives each row's day once. Routing
+     on the data file alone would let an edit that re-derives it, or drops
+     data-day, commit with the gate never running. */
+  assert.deepEqual(ids(SG.plan(['wire/index.md'])), ['wire']);
+});
+
 test('a report edit routes to that report only, not the corpus', function () {
   var p = SG.plan(['reports/acme/index.md'], { existing: ['reports/acme/index.md'] });
   assert.deepEqual(p.reports, ['reports/acme/index.md']);

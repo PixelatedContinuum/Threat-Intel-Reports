@@ -182,4 +182,66 @@ function check(doc, sources, now) {
   });
 }
 
-module.exports = { check: check, STALE_HOURS: STALE_HOURS };
+/* Verifies wire/index.md still derives each row's day EXACTLY ONCE.
+
+   The page groups rows under a day heading and the filter narrows to a picked
+   day. Both need the same answer to "which day is this row". _config.yml sets no
+   `timezone:`, so a second derivation elsewhere in the stack would not merely be
+   redundant, it would disagree: Liquid's `date:` filter formats in the build
+   host's zone while `new Date(iso)` in a browser is always UTC, and any headline
+   filed within a few hours of midnight would sit under one day's heading and
+   inside another day's filter results with nothing to report it.
+
+   So the rule is that `data-day` carries the SAME `day` variable the grouping
+   already computed. Re-deriving it in the template would still be internally
+   consistent today and would still be a second definition of one rule, which is
+   this codebase's signature failure and has now cost four separate defects.
+
+   `src` is the text of wire/index.md, or null when it could not be read. This
+   pins template STRUCTURE, not rendered output; that a reader's browser then
+   filters correctly is the browser check. */
+function checkPage(src) {
+  if (src === null || src === undefined) {
+    return verdict('NOT CHECKED', 'wire/index.md is absent or unreadable, so ' +
+      'nothing was verified about how the page derives each row\'s day.');
+  }
+
+  var problems = [];
+
+  // The single derivation that both the heading and the filter must share.
+  if (!/\{%-?\s*assign\s+day\s*=\s*i\.date\s*\|\s*date:\s*["']%Y-%m-%d["']/.test(src)) {
+    problems.push('the `day` assign from i.date is missing or changed shape, so ' +
+      'the grouping and the day filter no longer share one derivation');
+  }
+
+  // The row must carry that variable, not its own copy of the expression.
+  if (!/data-day="\{\{-?\s*day\s*-?\}\}"/.test(src)) {
+    if (/data-day="\{\{[^}]*i\.date/.test(src)) {
+      problems.push('data-day re-derives the day from i.date instead of carrying ' +
+        'the `day` variable the heading grouping already computed. Two ' +
+        'definitions of one rule; use {{ day }}');
+    } else {
+      problems.push('rows carry no data-day="{{ day }}", so the day filter on ' +
+        '/wire/ has nothing to match against and silently shows everything');
+    }
+  }
+
+  // The heading grouping must still be driven by that same variable.
+  if (!/\{%-?\s*if\s+day\s*!=\s*current_day\s*-?%\}/.test(src)) {
+    problems.push('day headings are no longer grouped on the `day` variable, so ' +
+      'a heading and the rows beneath it can disagree about the date');
+  }
+
+  /* The filter module reaches the reader through a versioned URL. Shipping new
+     markup against a cached older script is invisible on a fresh browser and
+     total on a returning one, which has already happened once here. */
+  var v = src.match(/listing-filter\.js[^"]*\?v=(\d+)/);
+  if (!v) {
+    problems.push('the listing-filter.js tag carries no ?v= cache-bust, so a ' +
+      'returning reader can get new markup against the old script');
+  }
+
+  return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
+}
+
+module.exports = { check: check, checkPage: checkPage, STALE_HOURS: STALE_HOURS };

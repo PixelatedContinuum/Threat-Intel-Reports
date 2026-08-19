@@ -187,3 +187,76 @@ test('an undrawn fourth label needs no colour', function () {
   var r = CW.check(d, SOURCES, NOW);
   assert.equal(r.status, 'PASS');
 });
+
+/* ---- checkPage: the day is derived exactly once -------------------------
+
+   The heading above a row and the day filter that narrows to it both need the
+   same answer to "which day is this row", and _config.yml sets no `timezone:`,
+   so a second derivation would genuinely disagree near midnight rather than
+   merely duplicating work. */
+
+var PAGE_OK = [
+  '{%- assign current_day = "" -%}',
+  '{%- for i in wire.items -%}',
+  '{%- assign day = i.date | date: "%Y-%m-%d" -%}',
+  '{%- if day != current_day -%}',
+  '{%- assign current_day = day -%}',
+  '<div class="hl-wire__day" data-filter-group>{{ i.date | date: "%A %-d %B %Y" }}</div>',
+  '{%- endif -%}',
+  '<a class="hl-wire__item" data-kind="{{ i.kind }}" data-day="{{ day }}"></a>',
+  '{%- endfor -%}',
+  '<script defer src="{{ \'/assets/js/listing-filter.js\' | relative_url }}?v=10"></script>'
+].join('\n');
+
+test('the shipped page shape passes the page gate', function () {
+  var r = CW.checkPage(PAGE_OK);
+  assert.equal(r.status, 'PASS', r.problems.join(' | '));
+});
+
+test('an unreadable page is NOT CHECKED, never a pass', function () {
+  var r = CW.checkPage(null);
+  assert.equal(r.status, 'NOT CHECKED');
+  assert.match(r.reason, /nothing was verified/i);
+});
+
+test('re-deriving the day on the row is caught as a second definition', function () {
+  // Internally consistent today, and still two definitions of one rule.
+  var bad = PAGE_OK.replace('data-day="{{ day }}"',
+    'data-day="{{ i.date | date: \'%Y-%m-%d\' }}"');
+  var r = CW.checkPage(bad);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /re-derives the day/i);
+});
+
+test('dropping data-day entirely is caught', function () {
+  // The filter would then match nothing and the page would show everything,
+  // which reads as a working control that quietly ignores the reader.
+  var bad = PAGE_OK.replace(' data-day="{{ day }}"', '');
+  var r = CW.checkPage(bad);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /no data-day/i);
+});
+
+test('losing the day assign is caught', function () {
+  var bad = PAGE_OK.replace('{%- assign day = i.date | date: "%Y-%m-%d" -%}', '');
+  var r = CW.checkPage(bad);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /share one derivation/i);
+});
+
+test('grouping headings on something other than `day` is caught', function () {
+  var bad = PAGE_OK.replace('{%- if day != current_day -%}',
+    '{%- if i.date != current_day -%}');
+  var r = CW.checkPage(bad);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /no longer grouped on the `day` variable/i);
+});
+
+test('a missing cache-bust on the filter script is caught', function () {
+  // New markup against a cached old script is invisible on a fresh browser and
+  // total on a returning one. It has already happened here once.
+  var bad = PAGE_OK.replace('?v=10', '');
+  var r = CW.checkPage(bad);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /cache-bust/i);
+});

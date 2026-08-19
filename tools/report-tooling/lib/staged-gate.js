@@ -90,7 +90,13 @@ function plan(paths, opts) {
         p === '_data/ioc_tables.yml' || /^reports\/[^/]+\/index\.md$/.test(p)) {
       want['ioc-tables'] = true;
     }
-    if (p === '_data/wire.yml') want.wire = true;
+    /* The data file, and now the page too. check-wire.js also reads
+       wire/index.md, because the day filter is only correct while the page
+       derives each row's day exactly once: the heading grouping and `data-day`
+       must come from the same `day` variable. Routing on the data file alone
+       would let an edit that re-derives it, drops `data-day` entirely, or
+       forgets the script cache-bust commit with the gate never running. */
+    if (p === '_data/wire.yml' || p === 'wire/index.md') want.wire = true;
     if (p === '_data/glossary.yml' && owed.indexOf(OWED_GLOSSARY) === -1) owed.push(OWED_GLOSSARY);
 
     // Only the report body carries the machinery. A figure beside it does not.

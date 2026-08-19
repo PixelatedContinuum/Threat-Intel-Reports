@@ -14,6 +14,7 @@ var fs = require('node:fs');
 var ROOT = path.join(__dirname, '..', '..');
 var WIRE = path.join(ROOT, '_data', 'wire.yml');
 var SOURCES = path.join(ROOT, '_data', 'wire-sources.yml');
+var PAGE = path.join(ROOT, 'wire', 'index.md');
 
 var yaml, CW;
 try {
@@ -59,4 +60,16 @@ if (r.warnings.length) {
     r.warnings.join(', '));
 }
 
-process.exit(r.status === 'PASS' ? 0 : 1);
+/* The data is only half of it. The page decides how each row's day is derived,
+   and the day filter is only correct while that derivation happens once. */
+var pageSrc = null;
+try { pageSrc = fs.readFileSync(PAGE, 'utf8'); } catch (e) { pageSrc = null; }
+var p = CW.checkPage(pageSrc);
+console.log(p.status + '  ' + PAGE + (p.status === 'PASS' ? '  (day derived once, cache-bust present)' : ''));
+if (p.reason) console.log('   ' + p.reason);
+p.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
+
+if (r.status === 'PASS' && p.status === 'PASS') process.exit(0);
+// NOT CHECKED on the page alone is not a pass, and is not a FAIL either.
+if (r.status === 'PASS' && p.status === 'NOT CHECKED') process.exit(2);
+process.exit(1);

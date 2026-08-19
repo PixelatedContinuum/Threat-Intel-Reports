@@ -29,13 +29,25 @@ position: 2.5
   The markup and class names are the include's, so the CSS and the JS are shared.
 {%- endcomment -%}
 <div class="hl-filter hl-filter--wire" data-listing-filter>
-  <input class="hl-filter__search" type="text" placeholder="Filter headlines…" aria-label="Filter headlines" autocomplete="off">
+  {%- comment -%}
+    The box already matches BOTH the headline and the item's labels, so an actor
+    name like cl0p surfaces items tagged with it and never mentioned in the
+    title. Nobody knew that from "Filter headlines…", so the placeholder names
+    what it searches. It stops at what the data supports: actor names reach 11%
+    of items, which is worth finding but not worth a chip axis of its own.
+  {%- endcomment -%}
+  <input class="hl-filter__search" type="text" placeholder="Search headlines, topics, actors…" aria-label="Search headlines, topics and actors" autocomplete="off">
   <div class="hl-filter__chips hl-filter__chips--topic">
     <button type="button" class="hl-chip-btn is-on" data-tag="">All</button>
     {%- for t in wire.topics -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c{{ t.color }}" data-tag="{{ t.label }}">{{ t.label }} <span class="hl-chip-btn__n">{{ t.count }}</span></button>{%- endfor -%}
   </div>
+  <div class="hl-filter__date">
+    <label class="hl-filter__dim" for="hl-wire-date">Day</label>
+    <input class="hl-filter__dateinput" type="date" id="hl-wire-date" data-filter-date aria-label="Show only headlines from this date">
+    <button type="button" class="hl-filter__datereset" data-filter-date-clear hidden>Clear date</button>
+  </div>
   <div class="hl-filter__count" data-filter-count></div>
-  <div class="hl-filter__empty" data-filter-empty hidden>No headlines match that filter. <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
+  <div class="hl-filter__empty" data-filter-empty hidden><span data-filter-empty-msg>No headlines match that filter.</span> <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
 </div>
 
 <div class="hl-wire" data-filter-grid data-filter-item=".hl-wire__item">
@@ -46,11 +58,11 @@ position: 2.5
 {%- assign current_day = day -%}
 <div class="hl-wire__day" data-filter-group>{{ i.date | date: "%A %-d %B %Y" }}</div>
 {%- endif -%}
-<a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ i.url }}" target="_blank" rel="noopener noreferrer" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}" data-kind="{{ i.kind }}"><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 2 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-topic-c{{ tc }}{% endif %}">{{ l }}</span>{%- endfor -%}</span></a>
+<a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ i.url }}" target="_blank" rel="noopener noreferrer" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}" data-kind="{{ i.kind }}" data-day="{{ day }}"><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 2 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-topic-c{{ tc }}{% endif %}">{{ l }}</span>{%- endfor -%}</span></a>
 {%- endfor -%}
 </div>
 
-<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=9"></script>
+<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=10"></script>
 
 {%- else -%}
 
