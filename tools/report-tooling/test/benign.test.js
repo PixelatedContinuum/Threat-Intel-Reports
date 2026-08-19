@@ -57,3 +57,47 @@ test('hashes and emails are never suppressed, being specific by construction', f
   assert.equal(B.isBenign('sha256', 'a'.repeat(64)), false);
   assert.equal(B.isBenign('email', 'anyone@google.com'), false);
 });
+
+/* --- filename suppression ------------------------------------------------
+
+   Added 2026-08-19. Before `filename` existed as a type, 222 of 1,670 indexed
+   values were filenames the classifier had called domains, chrome.exe,
+   MsMpEng.exe, csfalconservice.exe and svchost.exe among them. A defender
+   pasting a process list got hits that meant nothing. */
+
+test('a Windows binary carries no signal as a bare filename', function () {
+  assert.equal(B.isBenign('filename', 'svchost.exe'), true);
+  assert.equal(B.isBenign('filename', 'lsass.exe'), true);
+  assert.equal(B.isBenign('filename', 'explorer.exe'), true);
+});
+
+test('a mainstream security agent carries no signal either', function () {
+  assert.equal(B.isBenign('filename', 'msmpeng.exe'), true);
+  assert.equal(B.isBenign('filename', 'csfalconservice.exe'), true);
+  assert.equal(B.isBenign('filename', 'sentinelagent.exe'), true);
+});
+
+test('a browser is suppressed, being on every desktop estate', function () {
+  assert.equal(B.isBenign('filename', 'chrome.exe'), true);
+  assert.equal(B.isBenign('filename', 'msedge.exe'), true);
+});
+
+test('A GENERIC-LOOKING NAME THAT SHIPS WITH NOTHING STAYS INDEXED', function () {
+  // The line is "does its presence carry signal", not "does it look distinctive".
+  // Nothing ships agent.exe or payload.exe, so a hit is worth a look.
+  assert.equal(B.isBenign('filename', 'agent.exe'), false);
+  assert.equal(B.isBenign('filename', 'windefendersvc.exe'), false);
+  assert.equal(B.isBenign('filename', 'xmrig.exe'), false);
+  assert.equal(B.isBenign('filename', 'mimikatz.exe'), false);
+});
+
+test('suppression is exact, so a lookalike is not swept up with it', function () {
+  assert.equal(B.isBenign('filename', 'chrome.exe.bak'), false);
+  assert.equal(B.isBenign('filename', 'notchrome.exe'), false);
+});
+
+test('the filename list is lowercase throughout, matching classifier output', function () {
+  B.BENIGN_FILENAMES.forEach(function (f) {
+    assert.equal(f, f.toLowerCase(), f + ' is not lowercase');
+  });
+});

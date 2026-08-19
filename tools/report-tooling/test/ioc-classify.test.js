@@ -118,3 +118,54 @@ test('a parenthesised defang also survives', function () {
   var got = C.extract('contacted evil(.)test').map(function (x) { return x.value; });
   assert.ok(got.indexOf('evil.test') > -1);
 });
+
+/* --- the filename type ---------------------------------------------------
+
+   Added 2026-08-19 after measuring the live index: 222 of 1,670 indexed values
+   were filenames typed as `domain`, because `payload.dll` satisfies the domain
+   grammar exactly as `example.co` does. Among them were chrome.exe, brave.exe,
+   msedge.exe, MsMpEng.exe, csfalconservice.exe and csagent.exe, all present on
+   ordinary Windows estates. Anyone pasting a process list or an EDR export into
+   the public search box was told their environment matched an investigation.
+
+   They are in the feeds for a real reason (the rootkit terminates them), so the
+   fix is not to remove them from the feeds. It is to stop calling a filename a
+   domain, and to suppress the ubiquitous ones from the index the way 8.8.8.8 is
+   already suppressed.
+
+   The extension list deliberately EXCLUDES anything that is also a real TLD:
+   .com, .sh, .py and .so all resolve as domains and must keep doing so. A
+   filename mistyped as a domain is a display nit; a domain mistyped as a
+   filename would stop a real indicator matching, so the ambiguity is resolved
+   in the safe direction and recorded. */
+
+test('a filename is typed as a filename, not as a domain', function () {
+  assert.deepEqual(C.classify('payload.dll'), { type: 'filename', value: 'payload.dll' });
+  assert.deepEqual(C.classify('WinDefenderSvc.exe'),
+    { type: 'filename', value: 'windefendersvc.exe' });
+  assert.equal(C.classify('bdapiutil64.sys').type, 'filename');
+});
+
+test('AN EXTENSION THAT IS ALSO A TLD STAYS A DOMAIN', function () {
+  // The safe direction. Losing a real domain match costs more than mislabelling
+  // a shell script, and nothing in a bare token separates the two.
+  assert.equal(C.classify('tool.com').type, 'domain');
+  assert.equal(C.classify('evil.sh').type, 'domain');
+  assert.equal(C.classify('grab.py').type, 'domain');
+  assert.equal(C.classify('lib.so').type, 'domain');
+});
+
+test('a real domain is unaffected by the filename rule', function () {
+  assert.equal(C.classify('bot.example.com').type, 'domain');
+  assert.equal(C.classify('cdn.evil.test').type, 'domain');
+  assert.equal(C.classify('example.co').type, 'domain');
+});
+
+test('a path is not a filename, since it carries no bare-token shape', function () {
+  assert.equal(C.classify('C:\\Windows\\Temp\\x.exe'), null);
+  assert.equal(C.classify('%TEMP%\\svchost_upd.exe'), null);
+});
+
+test('filename is listed in TYPES, so consumers can enumerate it', function () {
+  assert.ok(C.TYPES.indexOf('filename') > -1);
+});

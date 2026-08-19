@@ -27,6 +27,23 @@
   var RX_EMAIL  = /^[^@\s]+@([a-z0-9](?:[a-z0-9\-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9\-]*[a-z0-9])?)*\.[a-z]{2,24})$/i;
   var RX_DOMAIN = /^(?=.{4,253}$)([a-z0-9](?:[a-z0-9\-]*[a-z0-9])?)(\.[a-z0-9](?:[a-z0-9\-]*[a-z0-9])?)*\.[a-z]{2,24}$/i;
 
+  /* A filename is not a domain, however much `payload.dll` looks like one.
+
+     Measured on the live index 2026-08-19: 222 of 1,670 indexed values were
+     filenames typed as `domain`, because they satisfy the domain grammar exactly
+     as `example.co` does. Among them chrome.exe, brave.exe, msedge.exe,
+     MsMpEng.exe, csfalconservice.exe and csagent.exe, all of which sit on
+     ordinary Windows estates. Anyone pasting a process list or an EDR export into
+     the public search box was told their environment matched an investigation.
+
+     The extensions below deliberately EXCLUDE any that is also a real TLD: .com,
+     .sh, .py and .so all resolve as domains and must keep doing so. Nothing in a
+     bare token separates `evil.sh` the script from `evil.sh` the St Helena
+     domain, so the ambiguity is resolved in the safe direction: a filename
+     mislabelled as a domain is a display nit, a domain mislabelled as a filename
+     would stop a real indicator matching. */
+  var RX_FILENAME = /^[a-z0-9][a-z0-9._$@~-]*\.(exe|dll|ps1|bat|cmd|vbs|vbe|jar|elf|bin|scr|msi|lnk|sys|hta|wsf|jse|jsp|aspx|ocx|cpl|drv|pyc|apk|deb|rpm|iso|img)$/i;
+
   function refang(s) {
     return String(s)
       .replace(/\[\.\]/g, '.')
@@ -78,8 +95,10 @@
       return { type: 'ipv4', value: m[1] };
     }
 
-    if (RX_EMAIL.test(s))  return { type: 'email',  value: s.toLowerCase() };
-    if (RX_DOMAIN.test(s)) return { type: 'domain', value: s.toLowerCase() };
+    if (RX_EMAIL.test(s))  return { type: 'email',    value: s.toLowerCase() };
+    // Before the domain test, or every .exe is a domain.
+    if (RX_FILENAME.test(s)) return { type: 'filename', value: s.toLowerCase() };
+    if (RX_DOMAIN.test(s)) return { type: 'domain',   value: s.toLowerCase() };
     return null;
   }
 
@@ -119,6 +138,6 @@
   return {
     classify: classify,
     extract: extract,
-    TYPES: ['sha256', 'sha1', 'md5', 'url', 'ipv4', 'email', 'domain']
+    TYPES: ['sha256', 'sha1', 'md5', 'url', 'ipv4', 'email', 'domain', 'filename']
   };
 }));

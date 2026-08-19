@@ -49,6 +49,55 @@ var BENIGN_DOMAINS = [
   'sectigo.com', 'globalsign.com', 'localhost', 'example.com', 'example.org'
 ];
 
+/* Filenames that ship with the operating system, with a mainstream security
+   product, or with standard analyst tooling.
+
+   Measured on the live index 2026-08-19, before `filename` existed as a type:
+   222 of 1,670 indexed values were filenames the classifier had called domains,
+   and among them sat chrome.exe, brave.exe, msedge.exe, MsMpEng.exe,
+   csfalconservice.exe, csagent.exe, svchost.exe, lsass.exe and explorer.exe.
+   Anyone pasting a process list, an autoruns export or an EDR inventory into the
+   public search box was told their environment matched an investigation.
+
+   Every one of them is in a feed for a real reason: the rootkit terminates 20+
+   security products, the stealer walks browser profiles, the ransomware copies
+   itself to %APPDATA%\svchost.exe as a masquerade. Those are true statements and
+   the feeds keep making them. What is suppressed is the BARE FILENAME as a
+   searchable indicator, because that is where the signal is absent: the path
+   %APPDATA%\svchost.exe is a real indicator and is typed separately, while
+   "svchost.exe" on its own is on every Windows machine ever built.
+
+   The line is the same one the domain list uses. Not "is this benign" but "does
+   its presence in a defender's logs carry any signal". A generic-looking name
+   that is NOT standard issue, agent.exe, main.exe, payload.exe, stays indexed,
+   because nothing ships those and a hit is worth a look. */
+var BENIGN_FILENAMES = [
+  // Windows itself
+  'cmd.exe', 'csrss.exe', 'explorer.exe', 'lsass.exe', 'services.exe', 'svchost.exe',
+  'winlogon.exe', 'schtasks.exe', 'vssadmin.exe', 'calc.exe', 'smartscreen.exe',
+  'sgrmbroker.exe', 'w3wp.exe', 'wscsvc.exe', 'config.msi', 'dbghelp.dll',
+  // Microsoft Defender
+  'msmpeng.exe', 'mpcmdrun.exe', 'mpsigstub.exe', 'nissrv.exe', 'mssense.exe',
+  'senseir.exe', 'sensecncproxy.exe', 'sensesampleuploader.exe',
+  'mpdefendercoreservice.exe', 'securityhealthservice.exe',
+  'windowssecurityhealthservice.exe', 'wdfilter.sys', 'wdnisdrv.sys',
+  // Browsers
+  'chrome.exe', 'brave.exe', 'msedge.exe',
+  // Mainstream endpoint security, present wherever that vendor is deployed
+  'csagent.exe', 'csagent.sys', 'csfalconservice.exe', 'csfalconcontainer.exe',
+  'csdevicecontrol.exe', 'csnamedpipeproxy.exe', 'sentinelagent.exe',
+  'sentinelstaticengine.exe', 'sophoshealth.exe', 'mbamservice.exe',
+  'ekrn.exe', 'avp.exe', 'ccsvchst.exe', 'cylancesvc.exe', 'cyserver.exe',
+  'wrsa.exe', 'wvault.exe',
+  // Standard analyst tooling, in these feeds because malware detects or kills it
+  'procexp.exe', 'procexp64.exe', 'procexp.sys', 'procexpdriver.sys',
+  'procmon.exe', 'procmon64.exe', 'tcpview.exe', 'autoruns.exe',
+  'wireshark.exe', 'fiddler.exe', 'x32dbg.exe', 'x64dbg.exe', 'windbg.exe',
+  'ollydbg.exe', 'ida.exe', 'ida64.exe', 'ghidra.exe', 'dnspy.exe',
+  'pestudio.exe', 'volatility.exe', 'rekall.exe', 'ftkimager.exe',
+  'processhacker.exe'
+];
+
 var BENIGN_IPS = [
   '8.8.8.8', '8.8.4.4',           // Google DNS
   '1.1.1.1', '1.0.0.1',           // Cloudflare DNS
@@ -61,6 +110,8 @@ var domainSet = {};
 BENIGN_DOMAINS.forEach(function (d) { domainSet[d] = 1; });
 var ipSet = {};
 BENIGN_IPS.forEach(function (i) { ipSet[i] = 1; });
+var fileSet = {};
+BENIGN_FILENAMES.forEach(function (f) { fileSet[f] = 1; });
 
 /* True when `value` of `type` must not enter the index. */
 function isBenign(type, value) {
@@ -84,11 +135,13 @@ function isBenign(type, value) {
     var m = /^https?:\/\/([^\/:?#]+)/i.exec(value);
     return m ? isBenign('domain', m[1].toLowerCase()) || isBenign('ipv4', m[1]) : false;
   }
+  if (type === 'filename') return !!fileSet[value];
   return false;   // hashes and emails are specific by construction
 }
 
 module.exports = {
   isBenign: isBenign,
   BENIGN_DOMAINS: BENIGN_DOMAINS,
-  BENIGN_IPS: BENIGN_IPS
+  BENIGN_IPS: BENIGN_IPS,
+  BENIGN_FILENAMES: BENIGN_FILENAMES
 };
