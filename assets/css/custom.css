@@ -3413,77 +3413,71 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 
 /* ---- Register switch (Brief / Analyst / Full) ---- */
+/* Deliberately low profile. No card, no fill, one line tall: this is a reading
+   preference, not a finding, and it sits above the first section where anything
+   boxed would compete with the report itself. */
 .hl-viewswitch {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin: 0 0 1.8rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--hl-border-card);
-  border-radius: 8px;
-  background: var(--hl-bg-card);
+  gap: 0.5rem;
+  margin: 0 0 1.6rem;
+  padding: 0 0 0.55rem;
+  border-bottom: 1px solid var(--hl-border-card);
 }
 .hl-viewswitch__label {
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--hl-text-muted);
 }
-.hl-viewswitch__group { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.hl-viewswitch__group { display: flex; flex-wrap: wrap; gap: 0.2rem; }
 /* Scoped AND important, both needed: the theme declares
    `.hl-post-content a { color: … !important }` and the same wash reaches controls
    rendered inside the post body. B3's chips shipped in link blue for exactly this
    reason, and every test suite stayed green because nothing reads CSS. */
 .hl-post-content .hl-viewswitch__btn {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.1rem;
-  padding: 0.42em 0.9em;
-  border: 1px solid var(--hl-border-card);
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.32em;
+  padding: 0.12em 0.5em;
+  border: 0;
+  border-radius: 4px;
   background: transparent;
   color: var(--hl-text-muted) !important;
-  line-height: 1.3;
-  text-align: left;
+  font-size: 0.76rem;
+  line-height: 1.5;
   cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-}
-.hl-viewswitch__btn-name {
-  font-size: 0.84rem;
-  font-weight: 600;
-}
-/* Deliberately not the accent colour: the explanation is there to be read once
-   and then ignored, so it sits a step quieter than the name above it. */
-.hl-viewswitch__btn-desc {
-  font-size: 0.7rem;
-  opacity: 0.8;
-  white-space: nowrap;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 .hl-post-content .hl-viewswitch__btn:hover,
 .hl-post-content .hl-viewswitch__btn:focus-visible {
   color: var(--hl-text-primary) !important;
-  border-color: var(--ph-accent, var(--hl-text-muted));
+  background: rgba(255, 255, 255, 0.05);
 }
 .hl-post-content .hl-viewswitch__btn[aria-pressed="true"] {
   color: var(--hl-text-primary) !important;
-  border-color: var(--ph-accent, var(--hl-text-primary));
-  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 -1px 0 0 var(--ph-accent, var(--hl-text-primary));
+  border-radius: 0;
+}
+/* The count is the compare-at-a-glance number, so it stays legible but never
+   competes with the name it follows. */
+.hl-viewswitch__btn-count {
+  font-size: 0.68rem;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
 }
 .hl-viewswitch__status {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--hl-text-muted);
   margin-left: auto;
   white-space: nowrap;
 }
-/* Narrow screens: the descriptions are the first thing to go, because the button
-   names alone still work once the strip has been read at any width. The status
-   moves under the group rather than squeezing it. */
+/* A previewed sentence is someone else's view, so it reads one shade quieter
+   than the one describing what is actually on screen. */
+.hl-viewswitch__status[data-preview] { opacity: 0.75; font-style: italic; }
 @media (max-width: 620px) {
-  .hl-viewswitch__btn-desc { display: none; }
-  .hl-post-content .hl-viewswitch__btn { padding: 0.3em 0.8em; border-radius: 999px; }
-  .hl-viewswitch__status { margin-left: 0; flex-basis: 100%; }
+  .hl-viewswitch__status { margin-left: 0; flex-basis: 100%; white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hl-post-content .hl-viewswitch__btn { transition: none; }

@@ -140,39 +140,61 @@ test('an unmarked section counts toward brief, matching how apply treats it', fu
   assert.deepStrictEqual(RS.sectionCounts(body), { brief: 2, analyst: 2, full: 3 });
 });
 
-test('each button carries a name and a visible explanation with its count', function () {
+test('each button shows its name and its count on one line', function () {
   var d = build([1, 2, 3]);
   var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
   var btns = c.querySelectorAll('button');
   assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-name').textContent, 'Brief');
-  assert.match(btns[0].querySelector('.hl-viewswitch__btn-desc').textContent,
-    /bottom line only, 1 section$/);
-  assert.match(btns[2].querySelector('.hl-viewswitch__btn-desc').textContent,
-    /teardown included, 3 sections$/);
+  assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-count').textContent, '1');
+  assert.strictEqual(btns[2].querySelector('.hl-viewswitch__btn-count').textContent, '3');
+  // The sentence is NOT in the button; it belongs to the status strip.
+  assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-desc'), null);
 });
 
-test('the accessible name is one readable string, not two stacked fragments', function () {
+test('the accessible name still carries the explanation the button no longer shows', function () {
   var d = build([1, 2, 3]);
   var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
   assert.strictEqual(c.querySelector('button').getAttribute('aria-label'),
-    'Brief: The bottom line only, 1 section');
+    'Brief: the operational brief only, 1 section');
 });
 
 test('buildControl still works with no counts, so the signature stays additive', function () {
   var d = build([1, 2, 3]);
   var c = RS.buildControl(d, 'full');
   assert.strictEqual(c.querySelectorAll('button').length, 3);
-  assert.strictEqual(c.querySelector('.hl-viewswitch__btn-desc').textContent,
-    'The bottom line only');
+  assert.strictEqual(c.querySelector('.hl-viewswitch__btn-count'), null);
 });
 
-test('the status reads as a count in every view, never blank', function () {
-  var d = build([1, 2, 3]);
-  d.querySelector('.hl-post-content').insertBefore(
-    RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content'))),
-    d.querySelector('.hl-post-content').firstChild);
+function withControl(tiers, view) {
+  var d = build(tiers);
+  var body = d.querySelector('.hl-post-content');
+  body.insertBefore(RS.buildControl(d, view, RS.sectionCounts(body)), body.firstChild);
+  return d;
+}
+
+test('the status describes the active view, never blank', function () {
+  var d = withControl([1, 2, 3], 'full');
   RS.apply(d, 'full');
-  assert.strictEqual(d.getElementById('hl-view-status').textContent, 'Showing all 3 sections');
+  assert.strictEqual(d.getElementById('hl-view-status').textContent,
+    '3 sections, everything, teardown included');
   RS.apply(d, 'brief');
-  assert.strictEqual(d.getElementById('hl-view-status').textContent, 'Showing 1 of 3 sections');
+  assert.strictEqual(d.getElementById('hl-view-status').textContent,
+    '1 section, the operational brief only');
+});
+
+test('a preview shows another view without changing the active one', function () {
+  var d = withControl([1, 2, 3], 'brief');
+  RS.apply(d, 'brief');
+  RS.setStatus(d, 'brief', 'full');
+  var live = d.getElementById('hl-view-status');
+  assert.strictEqual(live.textContent, '3 sections, everything, teardown included');
+  assert.ok(live.hasAttribute('data-preview'));
+  // still filtered to brief
+  assert.strictEqual(d.getElementById('s2').hasAttribute('hidden'), true);
+});
+
+test('previewing the active view is not marked as a preview', function () {
+  var d = withControl([1, 2, 3], 'brief');
+  RS.setStatus(d, 'brief', 'brief');
+  assert.strictEqual(d.getElementById('hl-view-status').hasAttribute('data-preview'), false);
 });

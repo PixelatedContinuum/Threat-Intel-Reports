@@ -20,15 +20,17 @@
 
   var VIEWS = { brief: 1, analyst: 2, full: 3 };
 
-  /* Each button carries its explanation on its face rather than in a title
-     attribute, because a tooltip is invisible to anyone who does not hover and
-     to everyone on a touch screen. The counts are read off the page, so a reader
-     can see how much each view gives them before choosing. */
+  /* A button shows its name and its section count on one line; the sentence
+     explaining it lives in the strip on the right, describing whichever view is
+     active and previewing whichever is hovered or focused. That keeps the whole
+     control one line tall while still explaining itself, which a title attribute
+     never does for touch or keyboard. */
   var LABELS = [
-    ['brief', 'Brief', 'The bottom line only'],
-    ['analyst', 'Analyst', 'Adds tradecraft and intel'],
-    ['full', 'Full', 'Everything, teardown included']
+    ['brief', 'Brief', 'the operational brief only'],
+    ['analyst', 'Analyst', 'adds tradecraft and intel'],
+    ['full', 'Full', 'everything, teardown included']
   ];
+  var DESC = { brief: LABELS[0][2], analyst: LABELS[1][2], full: LABELS[2][2] };
 
   function tierOf(h2) {
     var m = String(h2.className || '').match(/\bhl-tier-([123])\b/);
@@ -99,14 +101,7 @@
     });
     /* Says something on load, not only after a click. An empty strip beside three
        buttons reads as a control that has not finished loading. */
-    var live = doc.getElementById('hl-view-status');
-    if (live) {
-      var total = sectionCounts(body).full;
-      var shown = total - hiddenCount;
-      live.textContent = hiddenCount
-        ? 'Showing ' + shown + ' of ' + plural(total)
-        : 'Showing all ' + plural(total);
-    }
+    setStatus(doc, view);
     return hiddenCount;
   }
 
@@ -148,20 +143,22 @@
       b.setAttribute('aria-pressed', spec[0] === view ? 'true' : 'false');
 
       var n = counts ? counts[spec[0]] : null;
-      var desc = spec[2] + (n === null ? '' : ', ' + plural(n));
 
       var name = doc.createElement('span');
       name.className = 'hl-viewswitch__btn-name';
       name.textContent = spec[1];
       b.appendChild(name);
 
-      var sub = doc.createElement('span');
-      sub.className = 'hl-viewswitch__btn-desc';
-      sub.textContent = desc;
-      b.appendChild(sub);
+      if (n !== null) {
+        var cnt = doc.createElement('span');
+        cnt.className = 'hl-viewswitch__btn-count';
+        cnt.textContent = String(n);
+        b.appendChild(cnt);
+      }
 
-      // One readable name for assistive tech instead of two stacked fragments.
-      b.setAttribute('aria-label', spec[1] + ': ' + desc);
+      // One readable name for assistive tech instead of separate fragments.
+      b.setAttribute('aria-label', spec[1] + ': ' + spec[2] +
+        (n === null ? '' : ', ' + plural(n)));
       group.appendChild(b);
     });
     wrap.appendChild(group);
@@ -173,6 +170,20 @@
     wrap.appendChild(live);
 
     return wrap;
+  }
+
+  /* The strip carries the sentence: what the active view shows, or a preview of
+     whatever the reader is pointing at. */
+  function setStatus(doc, view, preview) {
+    var live = doc.getElementById('hl-view-status');
+    if (!live) return;
+    var body = doc.querySelector('.hl-post-content');
+    if (!body) return;
+    var counts = sectionCounts(body);
+    var which = preview || view;
+    live.textContent = plural(counts[which] || 0) + ', ' + (DESC[which] || '');
+    if (preview && preview !== view) live.setAttribute('data-preview', '');
+    else live.removeAttribute('data-preview');
   }
 
   function setPressed(doc, view) {
@@ -217,16 +228,31 @@
     if (distinctTiers(body) < 2) return;
 
     var view = viewFromHash(location.hash) || 'full';
+    var currentView = view;
     var control = buildControl(doc, view, sectionCounts(body));
     body.insertBefore(control, body.firstChild);
     // Populate the status immediately, so the strip is never blank on load.
     apply(doc, view);
     setPressed(doc, view);
 
+    /* Hover and keyboard focus preview the sentence for the button under the
+       pointer, so the reader can compare all three without the control needing
+       three lines of its own. */
+    ['mouseover', 'focusin'].forEach(function (ev) {
+      control.addEventListener(ev, function (e) {
+        var b = e.target && e.target.closest ? e.target.closest('.hl-viewswitch__btn') : null;
+        if (b) setStatus(doc, currentView, b.getAttribute('data-view'));
+      });
+    });
+    ['mouseleave', 'focusout'].forEach(function (ev) {
+      control.addEventListener(ev, function () { setStatus(doc, currentView); });
+    });
+
     control.addEventListener('click', function (e) {
       var b = e.target && e.target.closest ? e.target.closest('.hl-viewswitch__btn') : null;
       if (!b) return;
       var v = b.getAttribute('data-view');
+      currentView = v;
       apply(doc, v);
       setPressed(doc, v);
       try {
@@ -274,6 +300,7 @@
     distinctTiers: distinctTiers,
     buildControl: buildControl,
     sectionCounts: sectionCounts,
+    setStatus: setStatus,
     apply: apply,
     revealFor: revealFor,
     viewFromHash: viewFromHash,
