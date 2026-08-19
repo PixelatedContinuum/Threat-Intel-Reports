@@ -42,7 +42,7 @@
      domain, so the ambiguity is resolved in the safe direction: a filename
      mislabelled as a domain is a display nit, a domain mislabelled as a filename
      would stop a real indicator matching. */
-  var RX_FILENAME = /^[a-z0-9][a-z0-9._$@~-]*\.(exe|dll|ps1|bat|cmd|vbs|vbe|jar|elf|bin|scr|msi|lnk|sys|hta|wsf|jse|jsp|aspx|ocx|cpl|drv|pyc|apk|deb|rpm|iso|img)$/i;
+  var RX_FILENAME = /^[a-z0-9][a-z0-9._$@~-]*\.(exe|dll|ps1|bat|cmd|vbs|vbe|jse|jar|elf|bin|scr|msi|lnk|sys|hta|wsf|jsp|aspx|asp|php|ocx|cpl|drv|pyc|apk|deb|rpm|iso|img|js|json|xml|html|htm|svg|css|doc|docx|docm|xls|xlsx|xll|csv|txt|log|ini|cfg|conf|rc|url|job|msc|reg|rar|gz|tar|war|dmp|pcap|ndf|old|tmp|png|jpg|jpeg|gif|ttf|woff|sql|arm|mips|mpsl|ppc|x86|x64|yar|yara)$/i;
 
   function refang(s) {
     return String(s)

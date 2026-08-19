@@ -11,10 +11,11 @@
   feed_url: "/ioc-feeds/AdvancedRouterScanner.json"
   report_url: "/reports/AdvancedRouterScanner/"
   detection_url: "/hunting-detections/AdvancedRouterScanner-detections"
-  total: 11
-  untyped: 23
+  total: 12
+  untyped: 22
   counts:
-    domain: 5
+    domain: 1
+    filename: 5
     ipv4: 3
     path: 1
     sha256: 2
@@ -29,18 +30,6 @@
       value: "185.38.150.7"
       context: null
     - type: "domain"
-      value: "boatnet.arm"
-      context: null
-    - type: "domain"
-      value: "boatnet.mips"
-      context: null
-    - type: "domain"
-      value: "boatnet.mpsl"
-      context: null
-    - type: "domain"
-      value: "boatnet.ppc"
-      context: null
-    - type: "domain"
       value: "bot.gribostress.pro"
       context: null
     - type: "sha256"
@@ -51,6 +40,21 @@
       context: null
     - type: "path"
       value: "/tmp/bn"
+      context: null
+    - type: "filename"
+      value: "boatnet.arm"
+      context: null
+    - type: "filename"
+      value: "boatnet.mips"
+      context: null
+    - type: "filename"
+      value: "boatnet.mpsl"
+      context: null
+    - type: "filename"
+      value: "boatnet.ppc"
+      context: null
+    - type: "filename"
+      value: "boatnet.x86"
       context: null
 "Hybrid-Loader-Stealer-Sogou.json":
   slug: "Hybrid-Loader-Stealer-Sogou"
@@ -64,7 +68,8 @@
   total: 17
   untyped: 16
   counts:
-    domain: 11
+    domain: 10
+    filename: 1
     ipv4: 3
     md5: 1
     sha1: 1
@@ -104,9 +109,6 @@
       value: "rlh.cq"
       context: null
     - type: "domain"
-      value: "s0.ndf"
-      context: null
-    - type: "domain"
       value: "vpl.gu"
       context: null
     - type: "domain"
@@ -120,6 +122,9 @@
       context: null
     - type: "md5"
       value: "259b7806c2c9cade90acb0f18d940197"
+      context: null
+    - type: "filename"
+      value: "s0.ndf"
       context: null
 "PULSAR-RAT.json":
   slug: "PULSAR-RAT"
@@ -309,9 +314,9 @@
   total: 103
   untyped: 303
   counts:
-    domain: 26
+    domain: 25
     email: 1
-    filename: 6
+    filename: 7
     ipv4: 24
     md5: 2
     path: 16
@@ -441,9 +446,6 @@
     - type: "domain"
       value: "lightmake.site"
       context: "OpenClaw developer brand domain"
-    - type: "domain"
-      value: "naku.arm"
-      context: null
     - type: "domain"
       value: "openclaw.ai"
       context: "OpenClaw distribution domain (curl install + npm i -g)"
@@ -618,6 +620,9 @@
     - type: "filename"
       value: "loader_v29.ps1"
       context: "Sliver loader iteration v29; 6671 bytes, 164 lines"
+    - type: "filename"
+      value: "naku.arm"
+      context: null
     - type: "filename"
       value: "ncrypt_load.ps1"
       context: "Sliver-derivative obfuscated single-line loader; 13328 bytes"
@@ -826,15 +831,11 @@
   total: 9
   untyped: 15
   counts:
-    domain: 1
-    filename: 3
+    filename: 4
     md5: 1
     sha1: 1
     sha256: 3
   rows:
-    - type: "domain"
-      value: "readme.txt"
-      context: "Target for automatic deletion after successful decryption"
     - type: "sha256"
       value: "1e0d8597856270d1926cfcf252af1b14a776c20b3b50168df9311314202e73ba"
       context: null
@@ -859,6 +860,9 @@
     - type: "filename"
       value: "new_enc.exe"
       context: null
+    - type: "filename"
+      value: "readme.txt"
+      context: "Target for automatic deletion after successful decryption"
 "arsenal-237-enc_c2-exe.json":
   slug: "arsenal-237-enc_c2-exe"
   page_url: "/ioc-feeds/arsenal-237-enc_c2-exe/"
@@ -871,8 +875,8 @@
   total: 11
   untyped: 81
   counts:
-    domain: 2
-    filename: 1
+    domain: 1
+    filename: 2
     md5: 1
     path: 3
     registry: 1
@@ -880,9 +884,6 @@
     sha256: 1
     url: 1
   rows:
-    - type: "domain"
-      value: "readme.txt"
-      context: null
     - type: "domain"
       value: "rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion"
       context: null
@@ -912,6 +913,9 @@
       context: "Standard persistence location (not observed in this sample)"
     - type: "filename"
       value: "enc_c2.exe"
+      context: null
+    - type: "filename"
+      value: "readme.txt"
       context: null
 "arsenal-237-full_test_enc-exe.json":
   slug: "arsenal-237-full_test_enc-exe"
@@ -1105,17 +1109,13 @@
   total: 12
   untyped: 105
   counts:
-    domain: 1
-    filename: 1
+    filename: 2
     md5: 1
     path: 5
     registry: 2
     sha1: 1
     sha256: 1
   rows:
-    - type: "domain"
-      value: "arsenal-237-nethost-dll.yar"
-      context: null
     - type: "sha256"
       value: "158f61b6d10ea2ce78769703a2ffbba9c08f0172e37013de960d9efe5e9fde14"
       context: null
@@ -1147,6 +1147,9 @@
       value: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
       context: "nethost.dll itself does not modify registry; investigate if found alongside rootkit.dll"
     - type: "filename"
+      value: "arsenal-237-nethost-dll.yar"
+      context: null
+    - type: "filename"
       value: "nethost.dll"
       context: null
 "arsenal-237-new_enc-exe.json":
@@ -1161,16 +1164,12 @@
   total: 8
   untyped: 151
   counts:
-    domain: 1
-    filename: 2
+    filename: 3
     md5: 1
     registry: 1
     sha1: 1
     sha256: 2
   rows:
-    - type: "domain"
-      value: "windows.old"
-      context: null
     - type: "sha256"
       value: "67e6096a85ae67bb72f36e3c3af54fa57f520e518c68059babd9831f19cde05b"
       context: null
@@ -1191,6 +1190,9 @@
       context: null
     - type: "filename"
       value: "new_enc.exe"
+      context: null
+    - type: "filename"
+      value: "windows.old"
       context: null
 "arsenal-237-rootkit-dll.json":
   slug: "arsenal-237-rootkit-dll"
@@ -1280,8 +1282,9 @@
   total: 35
   untyped: 84
   counts:
-    domain: 10
+    domain: 3
     email: 1
+    filename: 7
     ipv4: 1
     md5: 1
     sha1: 1
@@ -1298,28 +1301,7 @@
       value: "cryptone.bot"
       context: null
     - type: "domain"
-      value: "dolap.rar"
-      context: null
-    - type: "domain"
       value: "evotoptan.com"
-      context: null
-    - type: "domain"
-      value: "kargo.rar"
-      context: null
-    - type: "domain"
-      value: "letgo.rar"
-      context: null
-    - type: "domain"
-      value: "pttavm.rar"
-      context: null
-    - type: "domain"
-      value: "sahibinden.rar"
-      context: null
-    - type: "domain"
-      value: "shopier.rar"
-      context: null
-    - type: "domain"
-      value: "turkcell.rar"
       context: null
     - type: "url"
       value: "https://79.137.192.3/"
@@ -1393,6 +1375,27 @@
     - type: "email"
       value: "hello@cryptone.bot"
       context: null
+    - type: "filename"
+      value: "dolap.rar"
+      context: null
+    - type: "filename"
+      value: "kargo.rar"
+      context: null
+    - type: "filename"
+      value: "letgo.rar"
+      context: null
+    - type: "filename"
+      value: "pttavm.rar"
+      context: null
+    - type: "filename"
+      value: "sahibinden.rar"
+      context: null
+    - type: "filename"
+      value: "shopier.rar"
+      context: null
+    - type: "filename"
+      value: "turkcell.rar"
+      context: null
 "cloudsync-assembler-toolkit-91-197-98-188":
   slug: "cloudsync-assembler-toolkit-91-197-98-188"
   page_url: "/ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188/"
@@ -1405,8 +1408,8 @@
   total: 65
   untyped: 39
   counts:
-    domain: 10
-    filename: 11
+    domain: 9
+    filename: 12
     ipv4: 5
     md5: 6
     path: 15
@@ -1456,9 +1459,6 @@
       context: null
     - type: "domain"
       value: "stolotov.org"
-      context: null
-    - type: "domain"
-      value: "svhost.js"
       context: null
     - type: "url"
       value: "http://91.197.98.188:8000/client.exe"
@@ -1605,6 +1605,9 @@
       value: "s.exe"
       context: "CloudSync config-only variant of client.exe; C2 91.92.43.221:5001"
     - type: "filename"
+      value: "svhost.js"
+      context: null
+    - type: "filename"
       value: "svhost4.exe"
       context: "CloudSync standalone implant (not a dropper); C2 91.197.98.188:7777, [C2_END] terminator"
     - type: "filename"
@@ -1689,11 +1692,10 @@
   feed_url: "/ioc-feeds/enc-dec-ransomware-family.json"
   report_url: null
   detection_url: "/hunting-detections/enc-dec-ransomware-family-detections"
-  total: 43
-  untyped: 64
+  total: 44
+  untyped: 63
   counts:
-    domain: 1
-    filename: 11
+    filename: 13
     ipv4: 1
     md5: 10
     sha1: 10
@@ -1702,9 +1704,6 @@
     - type: "ipv4"
       value: "109.230.231.37"
       context: null
-    - type: "domain"
-      value: "readme.txt"
-      context: "Primary ransom note deployed by enc_v2.exe, updated_enc.exe, enc.exe"
     - type: "sha256"
       value: "1252b4a85ea6d33651bbcee4708f0ec14d5915f7ebe9c8de0ffb5bfc6ad8f412"
       context: null
@@ -1820,6 +1819,12 @@
       value: "ransom_note_exec.exe"
       context: null
     - type: "filename"
+      value: "readme.txt"
+      context: "Primary ransom note deployed by enc_v2.exe, updated_enc.exe, enc.exe"
+    - type: "filename"
+      value: "readme_for_decrypt.txt"
+      context: "Decryption instructions ransom note"
+    - type: "filename"
       value: "test_decryptor.exe"
       context: null
     - type: "filename"
@@ -1837,11 +1842,11 @@
   feed_url: "/ioc-feeds/evilsoul-engine-stealer-maas-iocs.json"
   report_url: "/reports/evilsoul-engine-stealer-maas-144-172-103-98/"
   detection_url: "/hunting-detections/evilsoul-engine-stealer-maas-detections"
-  total: 73
-  untyped: 51
+  total: 74
+  untyped: 50
   counts:
     domain: 12
-    filename: 1
+    filename: 2
     ipv4: 6
     md5: 5
     path: 13
@@ -2069,6 +2074,9 @@
     - type: "filename"
       value: "costura.kaido.common.dll"
       context: "Costura embedded asset name"
+    - type: "filename"
+      value: "kaido_debug.txt"
+      context: "Operator-tagged debug artifact"
 "flaskc2-postex-toolkit-67-215-232-25":
   slug: "flaskc2-postex-toolkit-67-215-232-25"
   page_url: "/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25/"
@@ -2081,8 +2089,7 @@
   total: 42
   untyped: 13
   counts:
-    domain: 1
-    filename: 13
+    filename: 14
     ipv4: 1
     md5: 6
     path: 1
@@ -2091,9 +2098,6 @@
   rows:
     - type: "ipv4"
       value: "67.215.232.25"
-      context: null
-    - type: "domain"
-      value: "miss.asp"
       context: null
     - type: "url"
       value: "http://67.215.232.25:1337/"
@@ -2193,6 +2197,9 @@
       context: null
     - type: "filename"
       value: "jp.exe"
+      context: null
+    - type: "filename"
+      value: "miss.asp"
       context: null
     - type: "filename"
       value: "npcinfolist1.aspx"
@@ -2322,10 +2329,11 @@
   feed_url: "/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json"
   report_url: "/reports/ghost-cryptojacker-vova75rus-77.110.96.200/"
   detection_url: "/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections"
-  total: 50
-  untyped: 150
+  total: 51
+  untyped: 149
   counts:
     domain: 14
+    filename: 1
     ipv4: 2
     md5: 1
     path: 12
@@ -2482,6 +2490,9 @@
     - type: "path"
       value: "/var/spool/cron/.font_"
       context: "Persistent crontab entry with font_-prefixed filename camouflage"
+    - type: "filename"
+      value: "op_bash_history.txt"
+      context: null
 "gocloud-multiservice-cryptojacking-149-28-112-221":
   slug: "gocloud-multiservice-cryptojacking-149-28-112-221"
   page_url: "/ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221/"
@@ -2494,8 +2505,8 @@
   total: 151
   untyped: 136
   counts:
-    domain: 15
-    filename: 9
+    domain: 14
+    filename: 10
     ipv4: 2
     md5: 33
     path: 8
@@ -2516,9 +2527,6 @@
     - type: "domain"
       value: "auto.c3pool.org"
       context: null
-    - type: "domain"
-      value: "config.json"
-      context: "Served static XMRig config"
     - type: "domain"
       value: "download.c3pool.org"
       context: null
@@ -2933,6 +2941,9 @@
     - type: "filename"
       value: "allinone.ps1"
       context: "One-click Windows deploy; typo'd wallet live"
+    - type: "filename"
+      value: "config.json"
+      context: "Served static XMRig config"
     - type: "filename"
       value: "deploy.bat"
       context: "Node-1 :8080 entry dropper; only an 8-char SHA256 prefix was captured"
@@ -4294,8 +4305,8 @@
   total: 111
   untyped: 68
   counts:
-    domain: 48
-    filename: 1
+    domain: 47
+    filename: 2
     ipv4: 12
     md5: 1
     sha256: 43
@@ -4385,9 +4396,6 @@
     - type: "domain"
       value: "kwpbby.in"
       context: null
-    - type: "domain"
-      value: "lgt81941.xls"
-      context: "Alien InfoStealer via CVE-2017-0199 on .181. LOW-MODERATE operator-attribution."
     - type: "domain"
       value: "live-dashboard-v10.py"
       context: "Operator main Flask C2 dashboard (matches live port-8888 service)"
@@ -4634,6 +4642,9 @@
     - type: "filename"
       value: "goodpeopleswellmeans.hta"
       context: "HTA dropper on .181 (1/1 VT scan). LOW-MODERATE operator-attribution."
+    - type: "filename"
+      value: "lgt81941.xls"
+      context: "Alien InfoStealer via CVE-2017-0199 on .181. LOW-MODERATE operator-attribution."
 "opendirectory-45-130-148-125-20260430":
   slug: "opendirectory-45-130-148-125-20260430"
   page_url: "/ioc-feeds/opendirectory-45-130-148-125-20260430/"
@@ -4882,11 +4893,11 @@
   feed_url: "/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json"
   report_url: "/reports/opendirectory-62-60-237-100-20260506/"
   detection_url: "/hunting-detections/opendirectory-62-60-237-100-20260506-detections"
-  total: 173
-  untyped: 92
+  total: 175
+  untyped: 90
   counts:
-    domain: 25
-    filename: 25
+    domain: 9
+    filename: 43
     ipv4: 5
     md5: 15
     path: 19
@@ -4911,18 +4922,6 @@
       value: "80.253.249.186"
       context: null
     - type: "domain"
-      value: "1.msc"
-      context: "MSC file (GrimResource technique); Tier-1 simplest variant"
-    - type: "domain"
-      value: "807d7b6.tmp"
-      context: null
-    - type: "domain"
-      value: "865fdfd.tmp"
-      context: "PE-mapping metadata blob (40 bytes); pointed at by env var JJZIUTSQYJMNTZ"
-    - type: "domain"
-      value: "carriers.tmp"
-      context: "Inno Setup runtime extracted from Carriers.exe; spawns CrystSupervisor32.exe"
-    - type: "domain"
       value: "g.s4.mega.io"
       context: "Mega.io subdomain; VT 1/58 malicious"
     - type: "domain"
@@ -4932,20 +4931,8 @@
       value: "microsoft.com-app.cc"
       context: null
     - type: "domain"
-      value: "mozhno-li-vyvesti-dengi-s-krakena.html"
-      context: "Russian 'can-you-withdraw-money-from-Kraken' historical URL on second-stage IP"
-    - type: "domain"
-      value: "mscfile.msc"
-      context: "MSC file (Tier-2); inside Price.zip"
-    - type: "domain"
-      value: "nda.doc"
-      context: "Macro Office doc; downloads from Mega.io /busket/Bravo/vida/NGZTDICF.exe"
-    - type: "domain"
       value: "nda2026.zip"
       context: "Russian-doll archive containing NDA.zip"
-    - type: "domain"
-      value: "networkspec17.log"
-      context: null
     - type: "domain"
       value: "onedrive.to"
       context: null
@@ -4953,34 +4940,10 @@
       value: "price.zip"
       context: "Russian-doll archive containing MSCFile.msc and other lures"
     - type: "domain"
-      value: "price2.pdf.msc"
-      context: "MSC file (GrimResource Tier-2 with Defender exclusion + dual-source download)"
-    - type: "domain"
       value: "price2026.zip"
       context: "Sibling zip variant"
     - type: "domain"
-      value: "price3.xll"
-      context: "Excel XLL add-in (3.4 MB DLL with init.dll,#1 rundll32 entry); macro-block bypass"
-    - type: "domain"
-      value: "price4.xls"
-      context: "Macro Office doc; downloads from Mega.io /busket/putty2.exe"
-    - type: "domain"
-      value: "price5.docm"
-      context: "Macro Office doc; 29/63 VT; downloads from Mega.io /busket/putty2.exe"
-    - type: "domain"
-      value: "price6.doc"
-      context: "Macro Office doc; downloads from Mega.io /busket/putty2.exe"
-    - type: "domain"
       value: "s3.g.s4.mega.io"
-      context: null
-    - type: "domain"
-      value: "shadermgr93.rc"
-      context: null
-    - type: "domain"
-      value: "vsezbsrabotat.url"
-      context: null
-    - type: "domain"
-      value: "watchermgmt.job"
       context: null
     - type: "domain"
       value: "www-microsoft.live"
@@ -5340,14 +5303,26 @@
       value: "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{1F2952E4-FC07-4482-B9E6-E795507DA7D2}_is1"
       context: "Inno Setup AppId GUID post-install marker — campaign IOC"
     - type: "filename"
+      value: "1.msc"
+      context: "MSC file (GrimResource technique); Tier-1 simplest variant"
+    - type: "filename"
       value: "13223.lnk"
       context: "LNK shortcut chained through 2.url"
+    - type: "filename"
+      value: "807d7b6.tmp"
+      context: null
+    - type: "filename"
+      value: "865fdfd.tmp"
+      context: "PE-mapping metadata blob (40 bytes); pointed at by env var JJZIUTSQYJMNTZ"
     - type: "filename"
       value: "bugsplat.dll"
       context: null
     - type: "filename"
       value: "carriers.exe"
       context: null
+    - type: "filename"
+      value: "carriers.tmp"
+      context: "Inno Setup runtime extracted from Carriers.exe; spawns CrystSupervisor32.exe"
     - type: "filename"
       value: "carriers_agreements_009rcarheffd..scr"
       context: null
@@ -5373,11 +5348,29 @@
       value: "exceptionhandler.dll"
       context: null
     - type: "filename"
+      value: "macros64_2_.xll"
+      context: "Excel XLL add-in (49 KB)"
+    - type: "filename"
+      value: "mozhno-li-vyvesti-dengi-s-krakena.html"
+      context: "Russian 'can-you-withdraw-money-from-Kraken' historical URL on second-stage IP"
+    - type: "filename"
+      value: "mscfile.msc"
+      context: "MSC file (Tier-2); inside Price.zip"
+    - type: "filename"
       value: "mwxtckdb.exe"
       context: "Penguish family loader; VT 43/73; same VHash family as Carriers.exe"
     - type: "filename"
+      value: "nda.doc"
+      context: "Macro Office doc; downloads from Mega.io /busket/Bravo/vida/NGZTDICF.exe"
+    - type: "filename"
       value: "nda_agreementsfdp.msi"
       context: "RTLO-disguised MSI installer (filename appears as .PDF via U+202E)"
+    - type: "filename"
+      value: "nda_verification222.url"
+      context: "NDA-themed .url; points to onedrive.to"
+    - type: "filename"
+      value: "networkspec17.log"
+      context: null
     - type: "filename"
       value: "nleresource.dll"
       context: null
@@ -5391,6 +5384,24 @@
       value: "ppmanlyp.exe"
       context: null
     - type: "filename"
+      value: "price2.pdf.msc"
+      context: "MSC file (GrimResource Tier-2 with Defender exclusion + dual-source download)"
+    - type: "filename"
+      value: "price3.xll"
+      context: "Excel XLL add-in (3.4 MB DLL with init.dll,#1 rundll32 entry); macro-block bypass"
+    - type: "filename"
+      value: "price4.xls"
+      context: "Macro Office doc; downloads from Mega.io /busket/putty2.exe"
+    - type: "filename"
+      value: "price5.docm"
+      context: "Macro Office doc; 29/63 VT; downloads from Mega.io /busket/putty2.exe"
+    - type: "filename"
+      value: "price6.doc"
+      context: "Macro Office doc; downloads from Mega.io /busket/putty2.exe"
+    - type: "filename"
+      value: "shadermgr93.rc"
+      context: null
+    - type: "filename"
       value: "sss.lnk"
       context: "LNK shortcut targeting explorer.exe + UNC argument"
     - type: "filename"
@@ -5399,6 +5410,12 @@
     - type: "filename"
       value: "vfszqptv.exe"
       context: "Sibling Embarcadero Delphi loader on staging server"
+    - type: "filename"
+      value: "vsezbsrabotat.url"
+      context: null
+    - type: "filename"
+      value: "watchermgmt.job"
+      context: null
     - type: "filename"
       value: "ws_imageproc.dll"
       context: null
@@ -5877,8 +5894,8 @@
   total: 84
   untyped: 167
   counts:
-    domain: 28
-    filename: 5
+    domain: 18
+    filename: 15
     ipv4: 12
     md5: 4
     path: 3
@@ -5945,19 +5962,10 @@
       value: "cryptone.bot"
       context: null
     - type: "domain"
-      value: "dolap.rar"
-      context: "Hardcoded Telegram bot token 6797512084 + group -1002104835510 + admin alias @AresRS34"
-    - type: "domain"
       value: "evotoptan.com"
       context: null
     - type: "domain"
-      value: "favicon.svg"
-      context: null
-    - type: "domain"
       value: "fi1.inklens.co.uk"
-      context: null
-    - type: "domain"
-      value: "index-coeww2zm.js"
       context: null
     - type: "domain"
       value: "inkconnect.ru"
@@ -5969,31 +5977,10 @@
       value: "inklens.ru"
       context: null
     - type: "domain"
-      value: "kargo.rar"
-      context: null
-    - type: "domain"
-      value: "letgo.rar"
-      context: null
-    - type: "domain"
-      value: "logo.png"
-      context: null
-    - type: "domain"
       value: "marzban.inklens.co.uk"
       context: null
     - type: "domain"
       value: "petkovalegal.eu"
-      context: null
-    - type: "domain"
-      value: "pttavm.rar"
-      context: null
-    - type: "domain"
-      value: "sahibinden.rar"
-      context: null
-    - type: "domain"
-      value: "shopier.rar"
-      context: null
-    - type: "domain"
-      value: "turkcell.rar"
       context: null
     - type: "domain"
       value: "unloki.ru"
@@ -6128,16 +6115,46 @@
       value: "a52d0a1829a0ff_15m.exe"
       context: null
     - type: "filename"
+      value: "dolap.rar"
+      context: "Hardcoded Telegram bot token 6797512084 + group -1002104835510 + admin alias @AresRS34"
+    - type: "filename"
       value: "embedded_payload.bin"
+      context: null
+    - type: "filename"
+      value: "favicon.svg"
       context: null
     - type: "filename"
       value: "incurious.exe"
       context: null
     - type: "filename"
+      value: "index-coeww2zm.js"
+      context: null
+    - type: "filename"
+      value: "kargo.rar"
+      context: null
+    - type: "filename"
       value: "kourimaobaku.exe"
       context: null
     - type: "filename"
+      value: "letgo.rar"
+      context: null
+    - type: "filename"
+      value: "logo.png"
+      context: null
+    - type: "filename"
+      value: "pttavm.rar"
+      context: null
+    - type: "filename"
+      value: "sahibinden.rar"
+      context: null
+    - type: "filename"
+      value: "shopier.rar"
+      context: null
+    - type: "filename"
       value: "staticlittlesource.exe"
+      context: null
+    - type: "filename"
+      value: "turkcell.rar"
       context: null
 "quasar-xworm-powershell.json":
   slug: "quasar-xworm-powershell"
@@ -6206,8 +6223,7 @@
   total: 24
   untyped: 84
   counts:
-    domain: 1
-    filename: 2
+    filename: 3
     ipv4: 1
     md5: 2
     path: 7
@@ -6218,9 +6234,6 @@
   rows:
     - type: "ipv4"
       value: "203.159.90.147"
-      context: null
-    - type: "domain"
-      value: "p.ini"
       context: null
     - type: "url"
       value: "http://203.159.90.147/Backdoor.exe"
@@ -6284,6 +6297,9 @@
       context: null
     - type: "filename"
       value: "backdoor.exe"
+      context: null
+    - type: "filename"
+      value: "p.ini"
       context: null
     - type: "filename"
       value: "payload.exe"
@@ -6473,11 +6489,12 @@
   feed_url: "/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json"
   report_url: "/reports/russian-gemini-credential-mill-213.165.51.115/"
   detection_url: "/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections"
-  total: 55
-  untyped: 149
+  total: 59
+  untyped: 145
   counts:
-    domain: 33
+    domain: 32
     email: 1
+    filename: 5
     ipv4: 6
     md5: 1
     path: 5
@@ -6505,9 +6522,6 @@
     - type: "domain"
       value: "10101.tralalarkefe.com"
       context: "Tunnel alias for payload server at 127.0.0.1:10101"
-    - type: "domain"
-      value: "1passwordexport-xraolk4zizhjpdwpvemgprdxbe-20260320-060857.csv"
-      context: null
     - type: "domain"
       value: "allkitchensurfaces.com"
       context: null
@@ -6649,6 +6663,21 @@
     - type: "registry"
       value: "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsUpdateManager"
       context: null
+    - type: "filename"
+      value: "1passwordexport-xraolk4zizhjpdwpvemgprdxbe-20260320-060857.csv"
+      context: null
+    - type: "filename"
+      value: "ai_admin_mutants.txt"
+      context: null
+    - type: "filename"
+      value: "ai_sniper_goods.txt"
+      context: null
+    - type: "filename"
+      value: "all_wp_30k_logins.txt"
+      context: null
+    - type: "filename"
+      value: "ultra_gold_targets.txt"
+      context: "Operator's curated target list input to ai_sniper_brute.py. Operator-bespoke filename."
 "seasia-gov-exploitation-toolkit-144-172-106-236":
   slug: "seasia-gov-exploitation-toolkit-144-172-106-236"
   page_url: "/ioc-feeds/seasia-gov-exploitation-toolkit-144-172-106-236/"
@@ -7010,8 +7039,9 @@
   total: 27
   untyped: 108
   counts:
-    domain: 9
+    domain: 8
     email: 2
+    filename: 1
     ipv4: 2
     sha1: 4
     url: 10
@@ -7025,9 +7055,6 @@
     - type: "domain"
       value: "europa.zip"
       context: null
-    - type: "domain"
-      value: "information.txt"
-      context: "Actor-authored ransom note served at every path on the DLS"
     - type: "domain"
       value: "ns1.ddos-guard.net"
       context: "DDoS-Guard authoritative NS for shinyhunte.rs"
@@ -7097,6 +7124,9 @@
     - type: "email"
       value: "abuse@pro-spero.ru"
       context: "PROSPERO RIPE abuse-contact — historically unresponsive per community reports"
+    - type: "filename"
+      value: "information.txt"
+      context: "Actor-authored ransom note served at every path on the DLS"
 "sliver-open-directory":
   slug: "sliver-open-directory"
   page_url: "/ioc-feeds/sliver-open-directory/"
@@ -7391,8 +7421,7 @@
   total: 18
   untyped: 30
   counts:
-    domain: 1
-    filename: 2
+    filename: 3
     ipv4: 1
     md5: 2
     path: 6
@@ -7402,9 +7431,6 @@
   rows:
     - type: "ipv4"
       value: "91.236.230.250"
-      context: null
-    - type: "domain"
-      value: "a.png"
       context: null
     - type: "url"
       value: "http://91.236.230.250/"
@@ -7449,6 +7475,9 @@
       value: "\\\\pipe\\\\spoolss"
       context: null
     - type: "filename"
+      value: "a.png"
+      context: null
+    - type: "filename"
       value: "printspoofer.exe"
       context: null
     - type: "filename"
@@ -7466,7 +7495,8 @@
   total: 17
   untyped: 7
   counts:
-    domain: 6
+    domain: 2
+    filename: 4
     ipv4: 3
     sha256: 8
   rows:
@@ -7480,22 +7510,10 @@
       value: "45.118.144.151"
       context: null
     - type: "domain"
-      value: "ami.php"
-      context: null
-    - type: "domain"
       value: "juyu1.yifanyi.app"
       context: null
     - type: "domain"
-      value: "rclone.php"
-      context: null
-    - type: "domain"
-      value: "reverseproxysite.php"
-      context: null
-    - type: "domain"
       value: "shellcp.info"
-      context: null
-    - type: "domain"
-      value: "wordpressinstaller.php"
       context: null
     - type: "sha256"
       value: "02ed1649179ffd6136c2e5d6e48556255644aba38f03589e7b1c98ce66de8297"
@@ -7520,4 +7538,16 @@
       context: null
     - type: "sha256"
       value: "f75f22a3828a995759c3aeb21db02ccbb16362b68bd65e2005eae7ee819a5136"
+      context: null
+    - type: "filename"
+      value: "ami.php"
+      context: null
+    - type: "filename"
+      value: "rclone.php"
+      context: null
+    - type: "filename"
+      value: "reverseproxysite.php"
+      context: null
+    - type: "filename"
+      value: "wordpressinstaller.php"
       context: null

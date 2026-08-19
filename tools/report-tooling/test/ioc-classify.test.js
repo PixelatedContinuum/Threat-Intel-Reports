@@ -10,6 +10,8 @@
 
 var test = require('node:test');
 var assert = require('node:assert');
+var fs = require('node:fs');
+var path = require('node:path');
 var C = require('../../../assets/js/ioc-classify.js');
 
 function t(v) { var r = C.classify(v); return r && r.type; }
@@ -168,4 +170,80 @@ test('a path is not a filename, since it carries no bare-token shape', function 
 
 test('filename is listed in TYPES, so consumers can enumerate it', function () {
   assert.ok(C.TYPES.indexOf('filename') > -1);
+});
+
+/* --- the filename extension list, checked against IANA -------------------
+
+   The list is hand-curated and must stay that way: it is loaded in the browser,
+   so shipping 1,439 TLDs to every reader to decide whether `payload.dll` is a
+   file would be absurd. What CAN be automated is the safety property, and this
+   is the one that matters. Every entry must NOT be a real TLD, or the classifier
+   starts calling live domains filenames and a real indicator stops matching.
+
+   `tools/report-tooling/data/iana-tlds.txt` is a dated snapshot of
+   https://data.iana.org/TLD/tlds-alpha-by-domain.txt. Refresh it when adding an
+   extension. It caught .ps (Palestine) in the candidate list, which recall alone
+   had waved through.
+
+   The deliberate exclusions are asserted too, so nobody "helpfully" adds them
+   back: .sh, .py, .so, .md, .pl, .rs, .zip and .mov are all live TLDs, and
+   `shinyhunte.rs` in the corpus is a real domain hack rather than a Rust file. */
+
+var TLD_FILE = path.join(__dirname, '..', 'data', 'iana-tlds.txt');
+
+function ianaTlds() {
+  if (!fs.existsSync(TLD_FILE)) return null;
+  var out = {};
+  fs.readFileSync(TLD_FILE, 'utf8').split(String.fromCharCode(10)).forEach(function (l) {
+    l = l.trim().toLowerCase();
+    if (l && l.charAt(0) !== '#') out[l] = true;
+  });
+  return Object.keys(out).length ? out : null;
+}
+
+function declaredExtensions() {
+  var src = fs.readFileSync(
+    path.join(__dirname, '..', '..', '..', 'assets', 'js', 'ioc-classify.js'), 'utf8');
+  var m = /RX_FILENAME\s*=\s*\/\^[^(]*\(([^)]+)\)/.exec(src);
+  assert.ok(m, 'could not read the extension list out of ioc-classify.js');
+  return m[1].split('|');
+}
+
+test('NO FILENAME EXTENSION IS ALSO A REAL TLD', function () {
+  var tlds = ianaTlds();
+  if (!tlds) {
+    assert.fail('NOT CHECKED: ' + TLD_FILE + ' is missing, so this run verified ' +
+      'nothing about TLD collisions. Refresh it from data.iana.org.');
+  }
+  var collisions = declaredExtensions().filter(function (e) { return tlds[e]; });
+  assert.deepEqual(collisions, [],
+    'these extensions are live TLDs and will steal real domains: ' + collisions.join(', '));
+});
+
+test('the extensions that ARE tlds stay excluded, and stay resolving as domains', function () {
+  var tlds = ianaTlds();
+  assert.ok(tlds, 'the IANA snapshot is required for this case');
+  ['sh', 'py', 'so', 'md', 'pl', 'rs', 'zip', 'mov', 'ps'].forEach(function (e) {
+    assert.ok(tlds[e], '.' + e + ' is no longer a TLD; the exclusion may be revisitable');
+    assert.equal(C.classify('thing.' + e).type, 'domain',
+      'thing.' + e + ' must stay a domain, .' + e + ' is a live TLD');
+  });
+});
+
+test('the widened list types what the corpus actually carries', function () {
+  // Every one of these was sitting in the live index typed as a domain.
+  [['svhost.js', 'filename'], ['miss.asp', 'filename'], ['rclone.php', 'filename'],
+   ['dolap.rar', 'filename'], ['carriers.tmp', 'filename'], ['boatnet.arm', 'filename'],
+   ['boatnet.mips', 'filename'], ['readme.txt', 'filename'], ['price6.doc', 'filename'],
+   ['config.json', 'filename'], ['favicon.svg', 'filename']].forEach(function (pair) {
+    assert.equal(C.classify(pair[0]).type, pair[1], pair[0]);
+  });
+});
+
+test('and leaves every real domain in the corpus alone', function () {
+  ['pastebin.com', 'ip-api.com', 'stolotov.net', 'evilsoul.xyz', 'hopto.org',
+   'shinyhunte.rs', 'openclaw.ai', 'ifconfig.me', 'gsocket.io', 'antipublic.one',
+   'webhook.site', 'systemtools.dev'].forEach(function (d) {
+    assert.equal(C.classify(d).type, 'domain', d);
+  });
 });
