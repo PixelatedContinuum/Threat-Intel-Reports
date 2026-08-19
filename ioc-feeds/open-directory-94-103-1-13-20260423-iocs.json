@@ -384,15 +384,6 @@
         "confidence": "DEFINITE",
         "context": "Operator staging / open-directory payload host. ASN209207 Digital Hosting Provider LLC (NL-routed, RU-registered), single upstream AS48014 AlbaHost. ASN assigned 2026-01-19. VT 5/94 malicious + 1 suspicious (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious). All samples in this investigation pulled from here via t.ps1/t2.ps1/potato.ps1/interact.py.",
         "vt_detections_2026_04_23": "5/94 malicious + 1 suspicious — CONFIRMED unchanged from session-8 baseline (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious)"
-      },
-      {
-        "ip": "172.86.76.198",
-        "port": "3000",
-        "protocol": "TCP",
-        "confidence": "LOW",
-        "context": "AS14956 RouterHosting LLC [AE]. VT 5/94 malicious. Target of otp2.py and otp_brute.py (endpoint /api/auth/verify-otp). Direction unclear — could be attacker-staged OTP bypass infrastructure or another victim service. Do not block without further investigation.",
-        "false_positive_risk": true,
-        "false_positive_note": "Ambiguous operator vs victim role — AS14956 is a commercial hosting provider; many legitimate services co-reside."
       }
     ],
     "domains": [
@@ -471,17 +462,6 @@
         "do_not_block": true,
         "vt_detections": "0/94 (clean; Romanian ICI registrar)",
         "vt_last_checked": "2026-04-23"
-      },
-      {
-        "domain": "dhost.su",
-        "value": "dhost.su",
-        "confidence": "MODERATE",
-        "context": "ASN self-domain for Digital Hosting Provider LLC (AS209207). Confirmed via AbuseIPDB / IPInfo 2026-04-23. Soviet-era .su TLD, operator-friendly cheap hosting provider. Not a direct operator indicator but useful for clustering other IPs on the same ASN if/when additional AS209207 activity emerges.",
-        "false_positive_risk": true,
-        "false_positive_note": "This is the hosting provider's own domain, not an operator-controlled domain. Do not block — use as context only.",
-        "do_not_block": true,
-        "vt_detections": "0/94 (clean; BEGET-SU registrar — well-known low-cost Russian registrar, consistent with RU-operator tradecraft)",
-        "vt_last_checked": "2026-04-23"
       }
     ],
     "urls": [
@@ -491,13 +471,6 @@
         "context": "XOR-encoded GodPotato payload hosted on staging server (port 80, distinct from the 7777 open-directory port). Single-byte XOR with key 0x42; pulled by interact.py (see file_indicators sha256 f90fd97e...) via DownloadData → in-memory bxor 0x42 decode → [Reflection.Assembly]::Load → EntryPoint.Invoke. As of 2026-05-02 the host is offline globally; URL retained for derivative-loader hunting (any script performing DownloadData against an HTTP target named *.xor followed by Reflection.Assembly.Load is a high-fidelity hunt for this loader pattern regardless of operator infrastructure rotation).",
         "encoding": "XOR-single-byte key=0x42",
         "host_status_2026_05_02": "OFFLINE — confirmed via 8-country external probe (check-host.net), TCP refused on port 80 and 7777"
-      },
-      {
-        "url": "http://172.86.76.198:3000/api/auth/verify-otp",
-        "confidence": "MODERATE",
-        "context": "Node.js OTP verification endpoint targeted by otp2.py / otp_brute.py (brute-force script)",
-        "false_positive_risk": true,
-        "false_positive_note": "May be victim-side rather than operator-controlled"
       }
     ],
     "loopback_c2": [
@@ -511,42 +484,6 @@
     ],
     "victim_infrastructure_do_not_block": [
       {
-        "ip": "85.238.98.37",
-        "port": "8080",
-        "protocol": "HTTP",
-        "confidence": "HIGH",
-        "context": "VICTIM — SnipeIT installation at Odessa, Ukraine organization (PTR karaoke.tenet.odessa.ua). ASN AS6876 TENET Scientific Production Enterprise LLC [UA]. VT 0/94 (legitimate host). Operator tool: snipeit_attack.py. HUNT for compromise; DO NOT block as C2.",
-        "false_positive_risk": true,
-        "false_positive_note": "This is a victim the operator is attacking — NOT operator-controlled. Previously misclassified as C2, corrected session 8."
-      },
-      {
-        "ip": "178.20.159.99",
-        "port": "8080",
-        "protocol": "HTTP",
-        "confidence": "HIGH",
-        "context": "VICTIM — Ukrainian SIP PBX admin panel ('Verkhovyna SIP Administration', Werkzeug/Flask dev server, live since 2025-09-15). ASN AS42331 PE Freehost [UA], PTR cf1431409.freehost.com.ua. VT 0/94. Operator tools: attack.py, attack2.py, attack3.py, attack4.py (brute-force the admin login). HUNT for compromise; DO NOT block.",
-        "false_positive_risk": true,
-        "false_positive_note": "Previously misclassified as operator C2; retracted session 8 after OSINT confirmation this is a live Ukrainian SIP PBX admin panel being brute-forced."
-      },
-      {
-        "ip": "185.237.218.100",
-        "port": "25",
-        "protocol": "SMTP",
-        "confidence": "HIGH",
-        "context": "VICTIM — shared hosting (PTR na100.ru) for ~100 Russian car-enthusiast forums. ASN AS50979 Green Floid LLC [LV/RU]. VT 0/94. Operator tool: exim_test.py (Exim MTA RCE exploit). HUNT for compromise; DO NOT block.",
-        "false_positive_risk": true,
-        "false_positive_note": "Victim, not C2. Exim MTA on shared hosting is the target. Co-hosted legitimate domains include mitsubishi-org.ru (not a typosquat — a real Russian Mitsubishi fan forum, Alexa #610,472)."
-      },
-      {
-        "ip": "192.227.113.124",
-        "port": "4028",
-        "protocol": "TCP",
-        "confidence": "HIGH",
-        "context": "VICTIM — CGMiner RPC API endpoint on Cloud South mining host. ASN AS13886 Cloud South [US]. VT 0/94. Operator tools: cgminer_probe.py, cgminer2.py, cgminer3.py. HUNT for compromise or mining-pool hijack; DO NOT block.",
-        "false_positive_risk": true,
-        "false_positive_note": "Victim/target — cgminer RPC probe, not operator C2"
-      },
-      {
         "ip": "192.227.108.142",
         "port": "4028",
         "protocol": "TCP",
@@ -554,15 +491,6 @@
         "context": "Cloud South neighbor (same ASN, 5 /24s apart from 192.227.113.124) — mining-demographic reconnaissance target. ASN AS13886 Cloud South [US]. VT 0/94.",
         "false_positive_risk": true,
         "false_positive_note": "Victim/target, not operator C2"
-      },
-      {
-        "ip": "37.17.245.209",
-        "port": "varies",
-        "protocol": "TCP",
-        "confidence": "LOW",
-        "context": "Ukrainian host (AS43361 LUMINA LLC [UA]), no PTR, VT 0/94. Target type unknown — probed by port_check.py. Do not block.",
-        "false_positive_risk": true,
-        "false_positive_note": "Unknown role, likely target rather than C2"
       }
     ]
   },
@@ -989,6 +917,42 @@
       "type": "vt_known_name",
       "value": "indf.exe",
       "context": "Stage-5a filename on VirusTotal — pivot IOC for hunting unknown Chaos/TorBrowserTor deployments"
+    }
+  ],
+  "hunt_only_never_block": [
+    {
+      "value": "172.86.76.198",
+      "category": "author-marked never-block"
+    },
+    {
+      "value": "dhost.su",
+      "category": "author-marked never-block"
+    },
+    {
+      "value": "http://172.86.76.198:3000/api/auth/verify-otp",
+      "category": "author-marked never-block",
+      "context": "Node.js OTP verification endpoint targeted by otp2.py / otp_brute.py (brute-force script)"
+    },
+    {
+      "value": "85.238.98.37",
+      "category": "author-marked never-block"
+    },
+    {
+      "value": "178.20.159.99",
+      "category": "author-marked never-block"
+    },
+    {
+      "value": "185.237.218.100",
+      "category": "author-marked never-block"
+    },
+    {
+      "value": "192.227.113.124",
+      "category": "author-marked never-block"
+    },
+    {
+      "value": "37.17.245.209",
+      "category": "author-marked never-block",
+      "context": "Ukrainian host (AS43361 LUMINA LLC [UA]), no PTR, VT 0/94. Target type unknown — probed by port_check.py. Do not block."
     }
   ]
 }

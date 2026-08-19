@@ -63,10 +63,7 @@
       }
     },
     "reconnaissance_domains": {
-      "ip_discovery": [
-        "ipwho.is",
-        "api.ipify.org"
-      ],
+      "ip_discovery": [],
       "purpose": "External IP discovery and geolocation before C2 contact",
       "protocol": "HTTPS"
     },
@@ -250,5 +247,15 @@
   "timestamp": "2025-12-06T00:00:00Z",
   "analyst": "Hunter's Ledger",
   "confidence_level": "High",
-  "license": "© 2025 Joseph. All rights reserved. Free to read, but reuse requires written permission."
+  "license": "© 2025 Joseph. All rights reserved. Free to read, but reuse requires written permission.",
+  "hunt_only_never_block": [
+    {
+      "value": "ipwho.is",
+      "category": "ip lookup service"
+    },
+    {
+      "value": "api.ipify.org",
+      "category": "ip lookup service"
+    }
+  ]
 }

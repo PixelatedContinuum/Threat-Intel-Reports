@@ -71,20 +71,6 @@
         "notes": "Server hosting the PULSAR RAT open directory (campaign origin: PULSAR-RAT-185.208.159.182); later found co-hosting Quasar RAT and NjRAT/XWorm on the same infrastructure"
       },
       {
-        "indicator": "pastebin.com",
-        "type": "Domain",
-        "purpose": "C2 config retrieval",
-        "confidence": "MODERATE",
-        "notes": "Also includes variants like paste.ee, hastebin.com"
-      },
-      {
-        "indicator": "hxxps://ipwho.is/",
-        "type": "URL",
-        "purpose": "Victim IP geolocation",
-        "confidence": "HIGH",
-        "notes": "Low business impact to block"
-      },
-      {
         "indicator": "hxxps://www.amyuni.com/downloads/usbmmidd_v2.zip",
         "type": "URL",
         "purpose": "Virtual display driver (HVNC)",
@@ -142,5 +128,17 @@
         "false_positive_risk": "Medium"
       }
     ]
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "pastebin.com",
+      "category": "paste or code sharing",
+      "context": "Also includes variants like paste.ee, hastebin.com"
+    },
+    {
+      "value": "https://ipwho.is/",
+      "category": "ip lookup service",
+      "context": "Low business impact to block"
+    }
+  ]
 }

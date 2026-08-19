@@ -17,23 +17,15 @@
         "asn": "AS36352",
         "hosting_provider": "HostPapa",
         "country": "US",
-        "ports": [7777, 9876, 1389],
+        "ports": [
+          7777,
+          9876,
+          1389
+        ],
         "confidence": "DEFINITE",
         "action": "BLOCK",
         "false_positive_risk": false,
         "context": "Primary operator infrastructure. Port 7777 is a plain Python static HTTP server serving the working directory; it does NOT execute the JSP web shell it hosts. Still live and growing as of 2026-07-21. A hosting-provider takedown request has been filed."
-      },
-      {
-        "value": "31.22.111.190",
-        "purpose": "Operator control-source address",
-        "asn": "AS215355",
-        "hosting_provider": "Alice Networks Ltd (small UK RIPE-registered reseller)",
-        "confidence": "MODERATE",
-        "confidence_detail": "HIGH that operator traffic originated from this address; MODERATE that the address is operator-controlled rather than shared rented egress. The lower of the two is used as the indicator confidence because the indicator's value depends on the attribution claim, not on the observation.",
-        "action": "HUNT",
-        "false_positive_risk": true,
-        "clustering_suitability": "NOT SUITABLE as a clustering discriminator. Valid only as a victim-side log search term and as a law-enforcement lead.",
-        "context": "The address the operator connects FROM to administer 192.3.1.116. Identical SSH_CLIENT and SSH_CONNECTION values observed across two independent environment dumps captured on the host. IMPORTANT: a reverse pivot resolved this address to hostnames following a numbered-node convention on privacy-registered short-TLD domains served through Chinese-market DNS, which is the standard shape of a commercial proxy-subscription service sold into the Chinese consumer market. Under that reading the address is a SHARED, RENTED EGRESS NODE rather than operator-controlled infrastructure. Confidence MODERATE: the reading rests on a naming and registration pattern, not on a service banner or a subscription artifact, and the competing reading that these are simply the operator's own tidily named hosts is weaker but not excluded. Consequences: do NOT block this address, and do NOT use it or its ASN to link future activity to this operator, because reverse-pivoting a shared proxy service returns other customers of that service and every match would be a false link. This is the same co-tenancy trap as a budget-VPS provider template mistaken for an operator link. It remains valid as a victim-side hunting term, since operator traffic genuinely did originate there."
       }
     ],
     "ipv6": [],
@@ -45,15 +37,6 @@
         "action": "BLOCK",
         "false_positive_risk": false,
         "context": "SoftEther DDNS name for a VPN the operator self-hosts on 192.3.1.116; still resolves to that address. Operator OPSEC infrastructure. Note the parent domain softether.net is a legitimate DDNS service - only this specific hostname is the indicator."
-      },
-      {
-        "value": "cs-pgcwufmiws.cn-hangzhou.fcapp.run",
-        "purpose": "Attack-traffic relay",
-        "confidence": "DEFINITE",
-        "action": "MONITOR",
-        "false_positive_risk": true,
-        "false_positive_note": "fcapp.run is Alibaba Cloud's default domain for ALL Function Compute deployments and is shared, legitimate infrastructure. Only this specific subdomain is the indicator. Do not block the parent domain.",
-        "context": "Legitimate Alibaba Cloud serverless endpoint reused by the operator as an attack relay. Confirmed across two independent attack types against the same target: UNION-based SQL injection and login/SMS/register probing. Used to obscure source IP or route around IP-based rate limiting."
       }
     ],
     "urls": [
@@ -280,14 +263,20 @@
       "technique": "Logback insertFromJNDI RCE",
       "cve": "CVE-2021-42550",
       "confidence": "DEFINITE",
-      "signature_strings": ["insertFromJNDI", "env-entry-name=\"ldap://"],
+      "signature_strings": [
+        "insertFromJNDI",
+        "env-entry-name=\"ldap://"
+      ],
       "context": "Distinct from Log4Shell and comparatively under-reported. Points a vulnerable Logback-configured Java application at the operator's own rogue LDAP server."
     },
     {
       "name": "logback-evil.xml",
       "technique": "Logback FileAppender arbitrary file write to a JSP web shell",
       "confidence": "DEFINITE",
-      "signature_strings": ["ch.qos.logback.core.FileAppender", ".jsp"],
+      "signature_strings": [
+        "ch.qos.logback.core.FileAppender",
+        ".jsp"
+      ],
       "context": "A logging-framework route to a web shell, independent of the JNDI vector."
     },
     {
@@ -295,35 +284,56 @@
       "technique": "SnakeYAML unsafe-deserialization RCE",
       "cve": "CVE-2022-1471 (technique family)",
       "confidence": "DEFINITE",
-      "signature_strings": ["!!javax.script.ScriptEngineManager", "!!java.net.URLClassLoader", "!!java.net.URL"],
+      "signature_strings": [
+        "!!javax.script.ScriptEngineManager",
+        "!!java.net.URLClassLoader",
+        "!!java.net.URL"
+      ],
       "context": "Textbook gadget chain pointing at the operator's shared RCE-proof listener."
     },
     {
       "name": "cmd.jsp",
       "technique": "Generic bash-exec JSP web shell",
       "confidence": "DEFINITE (exists in operator directory) / UNCONFIRMED (deployed to any victim)",
-      "signature_strings": ["request.getParameter(\"c\")", "Runtime.getRuntime().exec", "/bin/bash"],
+      "signature_strings": [
+        "request.getParameter(\"c\")",
+        "Runtime.getRuntime().exec",
+        "/bin/bash"
+      ],
       "context": "Two exploitation techniques are armed to deliver this single payload: Logback FileAppender direct write, and Eureka XStream RCE via remote curl download. No captured artifact shows the file present on any victim host."
     },
     {
       "name": "internal_scan.svg",
       "technique": "Multi-target XXE-to-SSRF including cloud instance metadata",
       "confidence": "DEFINITE (payload) / UNCONFIRMED (outcome)",
-      "signature_strings": ["169.254.169.254/latest/meta-data/", "localhost:6379", "127.0.0.1:3306", "127.0.0.1:8080/actuator/"],
+      "signature_strings": [
+        "169.254.169.254/latest/meta-data/",
+        "localhost:6379",
+        "127.0.0.1:3306",
+        "127.0.0.1:8080/actuator/"
+      ],
       "context": "The cloud-metadata entity is the standout - it targets cloud IAM credential theft rather than internal service discovery."
     },
     {
       "name": "xxe_payload.xml / xxe2.xml",
       "technique": "XXE local file and environment read",
       "confidence": "DEFINITE",
-      "signature_strings": ["<!ENTITY xxe SYSTEM \"file:///etc/passwd\">", "file:///proc/self/environ"],
+      "signature_strings": [
+        "<!ENTITY xxe SYSTEM \"file:///etc/passwd\">",
+        "file:///proc/self/environ"
+      ],
       "context": "Hand-crafted test code: the payloads use a sequential placeholder phone number and the well-known MD5 of the string 123456, confirming the target API expects a client-side MD5-hashed password."
     },
     {
       "name": "redis_ssrf.py",
       "technique": "SSRF to Redis CONFIG abuse to SSH authorized_keys write; gopher:// MySQL handshake smuggling",
       "confidence": "HIGH (attempted)",
-      "signature_strings": ["CONFIG SET dir", "CONFIG SET dbfilename", "BGSAVE", "gopher://"],
+      "signature_strings": [
+        "CONFIG SET dir",
+        "CONFIG SET dbfilename",
+        "BGSAVE",
+        "gopher://"
+      ],
       "context": "The most technically advanced artifact in the corpus. CRLF-injects Redis protocol commands through an OCR-SSRF vector; also attempts file:// reads of /root/.ssh/id_rsa and /etc/passwd."
     },
     {
@@ -347,7 +357,10 @@
     "confirmed_exposure": [
       {
         "asset": "web.51qzp.com",
-        "also": ["www.51qzp.com", "82.157.119.235"],
+        "also": [
+          "www.51qzp.com",
+          "82.157.119.235"
+        ],
         "entity": "全咨聘（雄安）科技有限公司 (Quanzipin (Xiong'an) Technology Co., Ltd.)",
         "sector": "Construction and engineering cost-consulting gig-work platform",
         "finding": "Unauthenticated Druid StatViewServlet on port 8157 exposed, AT TIME OF CAPTURE, the production MySQL connection string, the schema name zhong_bao, the fact the application connects as root, a 93-table schema, 427 API endpoints and 830 SQL statements. The password was NOT disclosed. A read-only re-check on 2026-07-20 found the host NXDOMAIN and port 8157 closed - the exposure appears REMEDIATED.",
@@ -357,7 +370,10 @@
     "confirmed_unauthorized_access_no_theft": [
       {
         "asset": "chengjiastore.cn",
-        "also": ["www.chengjiastore.cn", "8.141.61.61"],
+        "also": [
+          "www.chengjiastore.cn",
+          "8.141.61.61"
+        ],
         "finding": "Operator self-registered a working account, registration and login both succeeded, followed by enumeration of administrative API routes. No confirmed data theft.",
         "confidence": "DEFINITE (unauthorized authenticated access)"
       }
@@ -395,7 +411,6 @@
       "haimi-file.oss-cn-hangzhou.aliyuncs.com",
       "ai-ledger.sodaapp.com.cn",
       "hiij.hxjyam.com",
-      "open.oppomobile.com",
       "api.renrendrc.com",
       "39.105.40.102",
       "47.94.128.49",
@@ -435,15 +450,25 @@
   },
   "non_indicators": [
     {
-      "values": ["34.59.254.11", "44.245.20.76", "34.210.36.7", "205.210.31.232", "199.45.155.76"],
+      "values": [
+        "34.59.254.11",
+        "44.245.20.76",
+        "34.210.36.7",
+        "205.210.31.232",
+        "199.45.155.76"
+      ],
       "reason": "AWS EC2-range crawler and scanner traffic that mass-downloaded every file in the open directory in tight repeating timestamp clusters after it was discovered. One address alone accounts for 1,379 hits in the port-7777 access log. Post-discovery researcher and scanner noise, not attacker or victim infrastructure."
     },
     {
-      "values": ["e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"],
+      "values": [
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ],
       "reason": "The standard empty-file SHA256. Present only because a downloaded public exploitation tool arrived as 0 bytes. Not campaign-specific."
     },
     {
-      "values": ["21.0.8.191"],
+      "values": [
+        "21.0.8.191"
+      ],
       "reason": "Returned by two what-is-my-IP style proxy-check responses captured 43 seconds apart. Falls inside a block historically allocated to the US Department of Defense - most plausibly a placeholder or misconfigured value from whatever proxy-check service was queried, not a routable operator address."
     },
     {
@@ -475,5 +500,21 @@
       "All raw JWTs recovered from the corpus, including three that decode to the operator's own throwaway accounts.",
       "All victim personal data: customer and employee names, phone numbers, national ID numbers, order and financial records, and loan-applicant records."
     ]
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "open.oppomobile.com",
+      "category": "vendor download"
+    },
+    {
+      "value": "31.22.111.190",
+      "category": "author-marked never-block",
+      "context": "Operator control-source address"
+    },
+    {
+      "value": "cs-pgcwufmiws.cn-hangzhou.fcapp.run",
+      "category": "author-marked never-block",
+      "context": "Attack-traffic relay"
+    }
+  ]
 }

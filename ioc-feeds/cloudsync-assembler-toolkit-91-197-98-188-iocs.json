@@ -198,16 +198,7 @@
           "notes": "Raw-IP TCP, no domain. :8443 = Express/socket.io operator panel (cert CN=localhost); :1337 = operator RDP (cert CN=DESKTOP-KHCG4S8)"
         }
       ],
-      "domains": [
-        {
-          "value": "api.telegram.org",
-          "purpose": "CloudSync first-run victim notify (bot token 8766495...fX6A, chat id 8116056430)",
-          "confidence": "HIGH",
-          "action": "HUNT",
-          "false_positive_risk": true,
-          "notes": "Legitimate Telegram API domain used by many benign apps. Only suspicious paired with a workstation running Tor / the CloudSync working directory. Do not block outright."
-        }
-      ],
+      "domains": [],
       "urls": [
         {
           "value": "http://91.197.98.188:8000/client.exe",
@@ -228,25 +219,10 @@
           "action": "HUNT",
           "false_positive_risk": true,
           "notes": "NOT operator-owned. Shared Hostinger hosting. Detect via TLS SNI; do NOT author a POST/method-bound rule on /receive.php - it would not fire on real traffic."
-        },
-        {
-          "value": "ip-api.com",
-          "purpose": "Victim geolocation lookup by v.exe (HTTP, absent User-Agent)",
-          "confidence": "LOW",
-          "action": "HUNT",
-          "false_positive_risk": true,
-          "notes": "Legitimate geolocation service, heavily used by benign software. Only a co-signal when paired with an unrelated TLS SNI within seconds."
         }
       ]
     },
-    "context_only_not_malicious": [
-      {
-        "value": "download.anydesk.com",
-        "purpose": "ab.exe fetches AnyDesk from the legitimate vendor CDN at deploy time",
-        "false_positive_risk": true,
-        "notes": "Legitimate AnyDesk CDN - NOT malicious infrastructure. The signal is the sequence (a non-AnyDesk binary fetching it, then silent-install + password over stdin), not the domain."
-      }
-    ],
+    "context_only_not_malicious": [],
     "investigated_and_excluded": {
       "note": "Candidate infrastructure assessed during this investigation and RULED OUT as operator-controlled. Published so other researchers do not re-chase the same dead ends. These are NOT indicators of compromise and must not be blocked or alerted on.",
       "entries": [
@@ -265,7 +241,6 @@
           "confidence": "LOW"
         },
         {
-          "indicator": "hopto.org",
           "also": [
             "aka1.hopto.org",
             "johnathon-yerrow.sahs.ac.zw"
@@ -446,5 +421,26 @@
         "confidence": "HIGH"
       }
     ]
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "api.telegram.org",
+      "category": "messaging platform",
+      "context": "Legitimate Telegram API domain used by many benign apps. Only suspicious paired with a workstation running Tor / the CloudSync working directory. Do not block outright."
+    },
+    {
+      "value": "ip-api.com",
+      "category": "ip lookup service",
+      "context": "Legitimate geolocation service, heavily used by benign software. Only a co-signal when paired with an unrelated TLS SNI within seconds."
+    },
+    {
+      "value": "download.anydesk.com",
+      "category": "vendor download",
+      "context": "Legitimate AnyDesk CDN - NOT malicious infrastructure. The signal is the sequence (a non-AnyDesk binary fetching it, then silent-install + password over stdin), not the domain."
+    },
+    {
+      "value": "hopto.org",
+      "category": "dynamic dns provider"
+    }
+  ]
 }

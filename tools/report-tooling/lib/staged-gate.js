@@ -33,6 +33,12 @@ var CHECKS = {
     cmd: 'check-ioc-index.js',
     why: 'ioc-feeds/, the catalog or the index itself is staged'
   },
+  'feed-hygiene': {
+    id: 'feed-hygiene',
+    label: 'feed blocklist safety',
+    cmd: 'check-ioc-feeds.js',
+    why: 'ioc-feeds/ is staged'
+  },
   'ioc-tables': {
     id: 'ioc-tables',
     label: 'feed viewer tables',
@@ -73,6 +79,9 @@ function plan(paths, opts) {
         p === 'assets/data/ioc-index.json') {
       want['ioc-index'] = true;
     }
+    /* A feed edit is the only way an unblockable value reaches the published
+       product, so it always routes to the safety gate. */
+    if (/^ioc-feeds\/.+\.json$/.test(p)) want['feed-hygiene'] = true;
     /* The viewer tables derive from the same two sources as the index, plus the
        report front matter that carries the other half of the publication signal,
        and the generated stubs themselves. A stub surviving after its campaign

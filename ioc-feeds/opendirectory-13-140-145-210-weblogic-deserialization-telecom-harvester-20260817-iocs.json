@@ -534,124 +534,6 @@
         "notes": "Attributed by the byte-identical double-encoded WSMA path appearing in the victim router's own nginx log on 2026-07-24. VT 1/91",
         "false_positive_risk": true,
         "false_positive_note": "Commercial VPN/proxy egress range. Other tenants use the same infrastructure. Do not treat co-located activity as this operator's"
-      },
-      {
-        "value": "200.24.221.121",
-        "role": "VICTIM - Cisco ISR 1100 management address, IOS-XE 16.6.4, hostname VERNAZA_GRAFIC_MATRIZ",
-        "asn": "AS19114",
-        "hosting": "Otecel S.A. (Movistar Ecuador)",
-        "confidence": "DEFINITE",
-        "action": "HUNT",
-        "notes": "Confirmed compromised via CVE-2023-20198 plus the CVE-2023-20273 double-encode WSMA bypass. This is a victim address, not operator infrastructure. Do not block"
-      },
-      {
-        "value": "200.24.221.122",
-        "role": "VICTIM - egress address of the same site, source of all 100 exfiltration PUTs",
-        "asn": "AS19114",
-        "hosting": "Otecel S.A. (Movistar Ecuador)",
-        "confidence": "DEFINITE",
-        "action": "HUNT",
-        "notes": "Sophos appliance whose certificate issuer is Vernaza Grafic. Victim address, do not block"
-      },
-      {
-        "value": "192.168.1.6",
-        "role": "VICTIM - IOSd internal web backend on the compromised router",
-        "confidence": "DEFINITE",
-        "action": "HUNT",
-        "notes": "RFC1918 address internal to the victim device. Context only",
-        "false_positive_risk": true,
-        "false_positive_note": "Private address space. Meaningful only in the context of an IOS-XE WebUI nginx upstream"
-      },
-      {
-        "value": "200.107.12.110",
-        "role": "VICTIM - CNT EP host, internal foothold and SSH jump host",
-        "asn": "AS28006",
-        "hosting": "CNT EP",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Fetched chisel_win.exe from the operator staging server on 2026-07-13 19:51 and connected back as a reverse SOCKS tunnel"
-      },
-      {
-        "value": "200.107.12.93",
-        "role": "VICTIM - CNT EP host staged with plink.exe",
-        "asn": "AS28006",
-        "hosting": "CNT EP",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Fetched plink.exe from the operator staging server on 2026-07-13 19:59"
-      },
-      {
-        "value": "200.107.9.80",
-        "role": "VICTIM - CNT EP radius01 AAA/RADIUS server",
-        "asn": "AS28006",
-        "hosting": "CNT EP",
-        "rdns": "80.9.107.200.static.anycast.cnt-grms.ec",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Most prioritised single target in the corpus, appearing across three unrelated tool families. Reachability is victim-side confirmed; the root session is operator-side inference only and is held at MODERATE"
-      },
-      {
-        "value": "200.107.7.86",
-        "role": "VICTIM - CNT-internal host labelled SYS-GAD by the operator",
-        "asn": "AS28006",
-        "hosting": "CNT EP",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Reconnaissance target of i786.sh. No exploitation observed"
-      },
-      {
-        "value": "181.112.150.104",
-        "role": "VICTIM - CNT EP PRTG monitoring server, build 24.1.90.1306",
-        "asn": "AS28006",
-        "hosting": "CNT EP",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Targeted by prtg_extract.sh with hard-coded prtgadmin credentials. Compromise UNCONFIRMED, no captured output. TLS certificate *.bomberosquito.gob.ec indicates a monitored-entity relationship, which is collateral context not a demonstrated target"
-      },
-      {
-        "value": "181.112.229.138",
-        "role": "TARGET - WebLogic on port 7001, attack FAILED",
-        "asn": "AS28006",
-        "hosting": "CNT EP allocation, ISP of record Danrema S.A. GAD Municipal de Nabon environment",
-        "confidence": "DEFINITE",
-        "action": "HUNT",
-        "notes": "CVE-2024-21182 attempt failed with three independent confirmations: 401, 404, and no callback on any listener. Confirmed defensive success by the target. Edge device is MikroTik RouterOS 6.49.15 fronting Proxmox VE with cluster certificate CN=proxmox.nabon"
-      },
-      {
-        "value": "192.168.10.12",
-        "role": "VICTIM - internal host labelled CATASTRO, WAMP plus GeoServer :8080",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Assessed as the cadastre server of GAD Municipal de Quininde. Two PHP webshells present",
-        "false_positive_risk": true,
-        "false_positive_note": "Private address space, meaningful only with the webshell and GeoServer context"
-      },
-      {
-        "value": "192.168.10.1",
-        "role": "TARGET - internal lateral-movement target of the WinRM and IPC$ spray",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "No success artifact exists",
-        "false_positive_risk": true,
-        "false_positive_note": "Private address space, extremely common gateway address"
-      },
-      {
-        "value": "104.21.41.159",
-        "role": "Cloudflare proxy A record for radius-sync.com",
-        "confidence": "LOW",
-        "action": "MONITOR",
-        "notes": "Resolution context only",
-        "false_positive_risk": true,
-        "false_positive_note": "Shared Cloudflare edge infrastructure serving millions of unrelated sites. Never block"
-      },
-      {
-        "value": "172.67.148.55",
-        "role": "Cloudflare proxy A record for radius-sync.com",
-        "confidence": "LOW",
-        "action": "MONITOR",
-        "notes": "Resolution context only",
-        "false_positive_risk": true,
-        "false_positive_note": "Shared Cloudflare edge infrastructure serving millions of unrelated sites. Never block"
       }
     ],
     "ipv6": [],
@@ -661,36 +543,10 @@
         "role": "Operator-owned domain",
         "created": "2026-07-11",
         "registrar_expiry": "2029",
-        "nameservers": [
-          "paloma.ns.cloudflare.com",
-          "peyton.ns.cloudflare.com"
-        ],
+        "nameservers": [],
         "confidence": "HIGH",
         "action": "BLOCK",
         "notes": "Origin 13.140.145.210 unmasked from the operator's own capture log, which records Cloudflare edge addresses delivering Host: radius-sync.com and cf-ray headers to the VPS. VT 0/91. Named to impersonate telecom AAA infrastructure. WHOIS privacy applied approximately four minutes after registration"
-      },
-      {
-        "value": "certificacion.educacionbilingue.gob.ec",
-        "role": "TARGET - Ecuador Ministry of Education, SEIBE CESLI portal",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Landing page captured by the operator under a _cve filename. Compromise UNKNOWN"
-      },
-      {
-        "value": "nube.educacionbilingue.gob.ec",
-        "role": "TARGET - Ecuador Ministry of Education",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Appears in the same captured page. Compromise UNKNOWN"
-      },
-      {
-        "value": "bancanet.banamex.com",
-        "role": "TARGET - Citibanamex password-reset endpoint",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "notes": "Probed with real customer-ID ranges at escalating concurrency. Intent held at MODERATE because bodies are discarded, there is no validity logic, and the scripts self-label BENCHMARK",
-        "false_positive_risk": true,
-        "false_positive_note": "Legitimate bank domain. This is a victim/target, never a blockable indicator"
       },
       {
         "value": "serviciosnabon.com",
@@ -721,15 +577,6 @@
         "confidence": "DEFINITE",
         "action": "BLOCK",
         "notes": "Directory listing closed 2026-08-04"
-      },
-      {
-        "value": "https://bancanet.banamex.com/MXGCB/REST/forpasswrd/getCustomerName.jws",
-        "role": "TARGET - probed bank password-reset endpoint",
-        "confidence": "HIGH",
-        "action": "HUNT",
-        "false_positive_risk": true,
-        "false_positive_note": "Legitimate bank endpoint. Never block",
-        "context": "VICTIM-SIDE endpoint, not operator infrastructure. Mexican bank password-reset endpoint iterated over customerId ranges by vps_bench{,2,3}.sh. Intent MODERATE: the scripts discard the response body and self-label BENCHMARK, so this is as consistent with a rate-limit probe as with a customer-enumeration oracle. Do not block."
       }
     ],
     "user_agents": [
@@ -1144,5 +991,27 @@
     "timeline_precision": "The 424,946,514-byte exfiltration is a single day, 2026-07-24. The February-to-July span on the stolen core dumps is their age on the victim device, a pre-existing cache taken in one pass. This is not five months of operator dwell time.",
     "corpus_size": "169 unique operator files, carrying 171 operator-assigned filenames. merged-manifest.json holds 169 because two operator files were saved twice under different names and deduplicated by content hash: sph_admin.txt is byte-identical to sph_cve.txt, and wl_14882.txt is byte-identical to wl_t3.txt.",
     "attribution": "No named-actor attribution. Operator-authored artifacts are uniformly Spanish. Two Chinese-authored public tools are present in the kit, and their documentation language is a property of the downloaded tools, not of the operator; it must not be cited as attribution evidence."
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "paloma.ns.cloudflare.com",
+      "category": "provider nameserver",
+      "context": "Operator-owned domain"
+    },
+    {
+      "value": "peyton.ns.cloudflare.com",
+      "category": "provider nameserver",
+      "context": "Operator-owned domain"
+    },
+    {
+      "value": "104.21.41.159",
+      "category": "author-marked never-block",
+      "context": "Cloudflare proxy A record for radius-sync.com"
+    },
+    {
+      "value": "172.67.148.55",
+      "category": "author-marked never-block",
+      "context": "Cloudflare proxy A record for radius-sync.com"
+    }
+  ]
 }

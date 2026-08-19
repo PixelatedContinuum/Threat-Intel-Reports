@@ -576,23 +576,6 @@
         "domain": "www-microsoft.live",
         "confidence": "HIGH",
         "context": "Typosquat; historical resolution to 62.60.237.100 (2025-10-03); discovered via VT historical pDNS; same operator as the other two typosquats"
-      },
-      {
-        "domain": "s3.g.s4.mega.io",
-        "confidence": "HIGH",
-        "context": "Mega.io abuse — operator bucket aileqac3yep7oqdhygjpberqqnk2zrnhck2lx; subdir 'busket' (typo); hosts putty.exe, putty2.exe, Bravo/vida/NGZTDICF.exe; VT 13/60 malicious",
-        "false_positive_risk": "Mega.io is legitimate cloud storage — only flag URLs containing the specific bucket ID + /busket/ path"
-      },
-      {
-        "domain": "g.s4.mega.io",
-        "confidence": "MODERATE",
-        "context": "Mega.io subdomain; VT 1/58 malicious"
-      },
-      {
-        "domain": "goproxy.github.io",
-        "confidence": "MODERATE",
-        "context": "Open-source GoProxy MITM proxy project; appears as CN in CA cert installed by pe_06 for HTTPS interception; the project itself is legitimate but cert install in user trust store is malicious",
-        "false_positive_risk": "GoProxy is a legitimate open-source project — flag CA cert install in HKCU/HKLM trust stores, not the domain itself"
       }
     ],
     "urls": [
@@ -1103,5 +1086,22 @@
       "validity": "2022-04-08 to 2025-04-05",
       "context": "GENUINE Wondershare cert; signs legitimate Wondershare DVD Creator and other products; adding to revocation feeds would block legit customers worldwide"
     }
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "s3.g.s4.mega.io",
+      "category": "file hosting endpoint",
+      "context": "Mega.io abuse — operator bucket aileqac3yep7oqdhygjpberqqnk2zrnhck2lx; subdir 'busket' (typo); hosts putty.exe, putty2.exe, Bravo/vida/NGZTDICF.exe; VT 13/60 malicious"
+    },
+    {
+      "value": "g.s4.mega.io",
+      "category": "file hosting endpoint",
+      "context": "Mega.io subdomain; VT 1/58 malicious"
+    },
+    {
+      "value": "goproxy.github.io",
+      "category": "paste or code sharing",
+      "context": "Open-source GoProxy MITM proxy project; appears as CN in CA cert installed by pe_06 for HTTPS interception; the project itself is legitimate but cert install in user trust store is malicious"
+    }
+  ]
 }

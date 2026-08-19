@@ -136,7 +136,7 @@
   report_url: "/reports/PULSAR-RAT/"
   detection_url: "/hunting-detections/PULSAR-RAT-detections"
   total: 11
-  untyped: 17
+  untyped: 15
   counts:
     domain: 1
     ipv4: 1
@@ -152,10 +152,10 @@
       context: null
     - type: "domain"
       value: "pastebin.com"
-      context: null
+      context: "Also includes variants like paste.ee, hastebin.com"
     - type: "url"
       value: "https://ipwho.is/"
-      context: null
+      context: "Low business impact to block"
     - type: "url"
       value: "https://www.amyuni.com/downloads/usbmmidd_v2.zip"
       context: null
@@ -312,7 +312,7 @@
   report_url: "/reports/ai-agent-frameworks-2026-05-23/"
   detection_url: "/hunting-detections/ai-agent-frameworks-2026-05-23-detections"
   total: 103
-  untyped: 303
+  untyped: 299
   counts:
     domain: 25
     email: 1
@@ -2330,7 +2330,7 @@
   report_url: "/reports/ghost-cryptojacker-vova75rus-77.110.96.200/"
   detection_url: "/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections"
   total: 51
-  untyped: 149
+  untyped: 143
   counts:
     domain: 14
     filename: 1
@@ -3905,7 +3905,7 @@
   report_url: "/reports/open-directory-94-103-1-13-20260423/"
   detection_url: "/hunting-detections/open-directory-94-103-1-13-20260423-detections"
   total: 99
-  untyped: 120
+  untyped: 111
   counts:
     domain: 9
     filename: 23
@@ -4894,7 +4894,7 @@
   report_url: "/reports/opendirectory-62-60-237-100-20260506/"
   detection_url: "/hunting-detections/opendirectory-62-60-237-100-20260506-detections"
   total: 175
-  untyped: 90
+  untyped: 88
   counts:
     domain: 9
     filename: 43
@@ -6490,7 +6490,7 @@
   report_url: "/reports/russian-gemini-credential-mill-213.165.51.115/"
   detection_url: "/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections"
   total: 59
-  untyped: 145
+  untyped: 143
   counts:
     domain: 32
     email: 1
@@ -6746,7 +6746,7 @@
       context: null
     - type: "domain"
       value: "localroot.sbs"
-      context: null
+      context: "Second-actor loader / staging domain"
     - type: "domain"
       value: "master.gs.thc.org"
       context: null

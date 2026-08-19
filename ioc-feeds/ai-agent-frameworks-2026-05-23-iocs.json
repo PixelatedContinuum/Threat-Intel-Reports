@@ -945,16 +945,6 @@
         "context": "Turkish ARPA operator systemd unit - autonomous learning daemon for stolen Instana telemetry processing"
       },
       {
-        "value": "arpa-continuous.service",
-        "type": "service_name",
-        "service_name": "arpa-continuous.service",
-        "display_name": "ARPA Continuous Collection Service",
-        "binary_path": "(operator-side ARPA platform)",
-        "case": "2",
-        "confidence": "DEFINITE",
-        "context": "Turkish ARPA operator systemd unit - continuous collection daemon for victim-side observability harvest"
-      },
-      {
         "value": "arpa-daemon.service",
         "type": "service_name",
         "service_name": "arpa-daemon.service",
@@ -983,16 +973,6 @@
         "case": "2",
         "confidence": "DEFINITE",
         "context": "Turkish ARPA operator parallel worker - distributed task processor across operator-side ARPA platform"
-      },
-      {
-        "value": "system-update.service",
-        "type": "service_name",
-        "service_name": "system-update.service",
-        "display_name": "System Update Service",
-        "binary_path": "(operator-deployed; victim-side; legitimate-name camouflage)",
-        "case": "3",
-        "confidence": "DEFINITE",
-        "context": "Rovodev/Pandora victim-side systemd unit using legitimate-name camouflage; part of 5-vector persistence sequence on compromised hosts"
       },
       {
         "value": "sysupdate",
@@ -1262,5 +1242,17 @@
       "HTTP POST to /api/v/keylog URI from any source",
       "HTML Application (.hta) execution via mshta.exe from invoice-themed filename"
     ]
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "arpa-continuous.service",
+      "category": "author-marked never-block",
+      "context": "Turkish ARPA operator systemd unit - continuous collection daemon for victim-side observability harvest"
+    },
+    {
+      "value": "system-update.service",
+      "category": "author-marked never-block",
+      "context": "Rovodev/Pandora victim-side systemd unit using legitimate-name camouflage; part of 5-vector persistence sequence on compromised hosts"
+    }
+  ]
 }

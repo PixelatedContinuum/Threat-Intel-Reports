@@ -225,7 +225,6 @@
     ],
     "canary_indicators": [
       {
-        "value": "intezer.com",
         "confidence": "CANARY (NOT MALICIOUS)",
         "description": "Sandbox detection canary domain — used to detect analysis environment",
         "context": "DNS query to intezer.com is built into Sliver beacon configuration as an anti-sandbox measure. If the beacon resolves intezer.com successfully, it infers it is NOT running in an isolated sandbox and proceeds with C2 operations. Query to this domain is NOT a sign of malicious infrastructure; it is a defensive TTI (Tactics, Techniques, Indicators) evasion check.",
@@ -816,6 +815,13 @@
         "binary-identification"
       ],
       "source": "OneDriveSync.exe PE binary metadata, compiled with Go 1.24.2"
+    }
+  ],
+  "hunt_only_never_block": [
+    {
+      "value": "intezer.com",
+      "category": "security vendor",
+      "context": "Sandbox detection canary domain — used to detect analysis environment"
     }
   ]
 }

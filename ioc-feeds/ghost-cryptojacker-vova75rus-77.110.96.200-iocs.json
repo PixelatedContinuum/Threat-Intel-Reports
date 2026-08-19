@@ -166,33 +166,6 @@
         "false_positive_notes": "bing.com is a major search engine with extremely high legitimate traffic volume; DO NOT BLOCK; use as SNI-vs-destination-IP correlation signal only"
       },
       {
-        "value": "icanhazip.com",
-        "type": "domain",
-        "role": "External IP detection",
-        "confidence": "LOW",
-        "context": "Used by both operator and Hysteria installer for victim IP detection",
-        "false_positive_risk": "high",
-        "false_positive_notes": "icanhazip.com is a legitimate IP-detection service with broad legitimate use; DO NOT BLOCK; use as correlation signal only"
-      },
-      {
-        "value": "ifconfig.me",
-        "type": "domain",
-        "role": "External IP detection",
-        "confidence": "LOW",
-        "context": "Same role as icanhazip.com",
-        "false_positive_risk": "high",
-        "false_positive_notes": "legitimate IP-detection service; DO NOT BLOCK"
-      },
-      {
-        "value": "ip.sb",
-        "type": "domain",
-        "role": "External IP detection",
-        "confidence": "LOW",
-        "context": "Same role as icanhazip.com",
-        "false_positive_risk": "high",
-        "false_positive_notes": "legitimate IP-detection service; DO NOT BLOCK"
-      },
-      {
         "value": "get.hy2.sh",
         "type": "domain",
         "role": "Hysteria v2 installer source (legitimate)",
@@ -724,6 +697,23 @@
       "size_bytes": 8000000,
       "confidence": "HIGH",
       "context": "Disguised lolMiner binary in Vova75Rus/miner + Vova75Rus/legendary-carnival repos; legitimate upstream lolMiner SHA - renamed for camouflage"
+    }
+  ],
+  "hunt_only_never_block": [
+    {
+      "value": "icanhazip.com",
+      "category": "ip lookup service",
+      "context": "Used by both operator and Hysteria installer for victim IP detection"
+    },
+    {
+      "value": "ifconfig.me",
+      "category": "ip lookup service",
+      "context": "Same role as icanhazip.com"
+    },
+    {
+      "value": "ip.sb",
+      "category": "ip lookup service",
+      "context": "Same role as icanhazip.com"
     }
   ]
 }

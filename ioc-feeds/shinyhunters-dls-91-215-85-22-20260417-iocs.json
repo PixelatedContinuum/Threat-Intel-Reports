@@ -354,20 +354,7 @@
         "context": "Original onion listed in DLS ransom note; operator self-reports inactive as of April 2026 (ransom note is stale)"
       }
     ],
-    "nameservers": [
-      {
-        "value": "ns1.ddos-guard.net",
-        "ns": "ns1.ddos-guard.net",
-        "confidence": "DEFINITE",
-        "context": "DDoS-Guard authoritative NS for shinyhunte.rs"
-      },
-      {
-        "value": "ns2.ddos-guard.net",
-        "ns": "ns2.ddos-guard.net",
-        "confidence": "DEFINITE",
-        "context": "DDoS-Guard authoritative NS for shinyhunte.rs"
-      }
-    ],
+    "nameservers": [],
     "abuse_contacts": [
       {
         "value": "abuse@pro-spero.ru",
@@ -656,5 +643,17 @@
         "notes": "Actor-on-actor / cybercriminal-ecosystem content; exposes forum users including possible research/LE personas"
       }
     ]
-  }
+  },
+  "hunt_only_never_block": [
+    {
+      "value": "ns1.ddos-guard.net",
+      "category": "provider nameserver",
+      "context": "DDoS-Guard authoritative NS for shinyhunte.rs"
+    },
+    {
+      "value": "ns2.ddos-guard.net",
+      "category": "provider nameserver",
+      "context": "DDoS-Guard authoritative NS for shinyhunte.rs"
+    }
+  ]
 }
