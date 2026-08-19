@@ -32,4 +32,50 @@ The glossary sweep runs the matcher in Node against the fetched HTML, so it is v
 before the module ships and will catch a bad exclusion pre-push. It does **not** prove
 the module loads and runs in a browser; only opening a report does that.
 
+---
+
+## The pre-commit machinery gate
+
+Activate it once per clone:
+
+    git config core.hooksPath tools/git-hooks
+
+The hook lives at `tools/git-hooks/pre-commit` and is tracked in the repo, so the rules
+are reviewable in a diff. It is **not** installed into `.git/hooks/` and is inert until
+the config above is set, which keeps the unattended Wire timer on LXC-102 free of a gate
+that could block its twice-daily commit.
+
+**What it is for.** The publish skill gates every surface for a campaign that ships
+through it, Steps 1a to 1f before the push and `npm run verify` after. Nothing gated the
+edits that are *not* a publish: a detection-tiering backfill, a redaction sweep, a bulk
+correction across published feeds. Those invalidate a generated artifact without
+regenerating it, and until the next campaign ships nobody finds out.
+
+It routes on staged paths, so a commit touching only prose runs nothing and says so:
+
+| Staged | Runs | Catches |
+|---|---|---|
+| `hunting-detections/*.md`, `_data/detection_manifests.yml` | `check-detection-manifest.js` | manifest stale against source |
+| `ioc-feeds/*.json`, `_data/catalog.yml`, `assets/data/ioc-index.json` | `check-ioc-index.js` | index stale, embargoed feed leaking |
+| `_data/wire.yml` | `check-wire.js` | malformed or description-bearing wire data |
+| `reports/*/index.md` | `check-report.js` on the changed reports only | orphaned figure-nav anchors, partly-marked tiers, broken strip |
+| `_data/glossary.yml` | nothing runnable | prints the post-push sweep as owed |
+
+**FAIL blocks the commit. NOT CHECKED warns and allows.** Blocking on NOT CHECKED would
+make an absent `node_modules` un-committable, and the answer to that is a permanent
+`--no-verify` habit, which costs the whole gate. NOT CHECKED is never folded into PASS
+and always carries its reason and its remedy.
+
+**It cannot replace `npm run verify`, and does not try to.** `verify-corpus.js` fetches
+the live site, so running it from a pre-commit hook would check the *previously
+published* build, which by construction does not contain the change being committed. It
+would pass, and pass for the wrong reason. The glossary's render side, the picker's rule
+binding and anything about appearance still need the published build, and the hook prints
+them as owed rather than implying coverage.
+
+`node check-detection-manifest.js` gates `_data/detection_manifests.yml` on its own. It
+regenerates the manifest in memory and diffs it against the committed file, the same
+regenerate-and-diff approach `check-ioc-index.js` uses. Line endings and a trailing
+newline are not drift.
+
 Nothing here is published: `_config.yml` excludes `tools/*` from the Jekyll build.

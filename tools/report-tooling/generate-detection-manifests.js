@@ -126,14 +126,21 @@ function run(opts) {
     r.rules.forEach(function (x) { if (x.cross_referenced) xref++; });
   });
 
+  /* Serialised once and both written and returned, so the staleness check in
+     lib/check-detection-manifest.js compares against the same text the writer
+     produces. A second serialisation would be a second implementation of one
+     rule, and those drift silently. */
+  var text = toYaml(bySlug);
+
   if (!opts.dryRun) {
-    fs.writeFileSync(OUT, toYaml(bySlug), 'utf8');
+    fs.writeFileSync(OUT, text, 'utf8');
   }
 
   return {
     status: problems.length ? 'FAIL' : (skipped ? 'NOT CHECKED' : 'PASS'),
     files: files.length, rules: rules, xref: xref, slugs: Object.keys(bySlug).length,
-    problems: problems, reason: skipped ? skipped + ' file(s) could not be read' : undefined
+    problems: problems, reason: skipped ? skipped + ' file(s) could not be read' : undefined,
+    yaml: text
   };
 }
 

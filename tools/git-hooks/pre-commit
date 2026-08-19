@@ -1,0 +1,17 @@
+#!/bin/sh
+# The machinery gate. All logic is in precommit.js so it can be unit-tested;
+# this shim only locates node and gets out of the way.
+#
+# Activate per clone:   git config core.hooksPath tools/git-hooks
+# Deactivate:           git config --unset core.hooksPath
+#
+# Deliberately NOT installed into .git/hooks/: tracked here means the rules are
+# reviewable in a diff, and per-clone activation keeps the unattended Wire timer
+# on LXC-102 free of a gate that could block its twice-daily commit.
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "machinery gate  NOT CHECKED  node is not on PATH; nothing was verified."
+  exit 0
+fi
+
+exec node "$(git rev-parse --show-toplevel)/tools/git-hooks/precommit.js"
