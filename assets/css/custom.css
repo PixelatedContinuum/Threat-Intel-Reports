@@ -3547,7 +3547,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-wire__prov > summary::-webkit-details-marker { display: none; }
 .hl-wire__prov > summary::before {
-  content: "B8";
+  content: '▸';
   display: inline-block;
   margin-right: 0.45em;
   transition: transform 0.15s;
