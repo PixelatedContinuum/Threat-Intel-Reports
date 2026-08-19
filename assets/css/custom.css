@@ -3834,6 +3834,10 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-ioctable {
   --ioct-border: var(--hl-border-card, #2a2a2a);
   --ioct-dim: var(--hl-text-muted, #9aa0a6);
+  /* Inherited default. A type with no hue mapped below stays readable in the
+     muted grey rather than disappearing, and because this sits on the CONTAINER
+     any directly-set value beats it regardless of specificity. */
+  --ioct-type: var(--ioct-dim);
   margin: 1.4em 0 2.4em;
 }
 
@@ -3851,6 +3855,41 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   gap: 0.45em;
   margin-bottom: 0.85em;
 }
+/* --- indicator-type palette: chips and table labels share it -------------
+
+   Hues are taken from the Wire's existing 12-hue topic palette rather than
+   invented, so a coloured thing on this site means the same kind of thing
+   everywhere. Assigned semantically and FIXED per type, never hashed: a reader
+   who learns that cyan is a domain on one feed page must find it is a domain on
+   the next one too.
+
+   Cool hues are network (ipv4, domain, url), violets are file hashes (sha256,
+   sha1, md5), pink is email, and warm hues are host artefacts (path, registry,
+   filename). So the two halves of a hunt, what to look for on the wire and what
+   to look for on the box, separate at a glance before any label is read.
+
+   THE DEFAULT IS DECLARED ON THE CONTAINER, deliberately. A var() fallback
+   written on the same element it falls back for is an override rather than a
+   fallback: `.hl-ioctable__chip` and a `[data-type]` rule would both be scored
+   and source order would decide, which is exactly how every publisher colour on
+   the Wire got defined and then discarded. Declared on the container it is
+   INHERITED, and a directly-set value always beats an inherited one whatever
+   the specificity.
+
+   One selector serves both surfaces because the chip button and the table row
+   both carry `data-type`, so a chip is always painted the same hue as the rows
+   it filters to. */
+.hl-ioctable [data-type="ipv4"]     { --ioct-type: #58a6ff; }  /* blue    */
+.hl-ioctable [data-type="domain"]   { --ioct-type: #22d3ee; }  /* cyan    */
+.hl-ioctable [data-type="url"]      { --ioct-type: #2dd4bf; }  /* teal    */
+.hl-ioctable [data-type="sha256"]   { --ioct-type: #a371f7; }  /* purple  */
+.hl-ioctable [data-type="sha1"]     { --ioct-type: #818cf8; }  /* indigo  */
+.hl-ioctable [data-type="md5"]      { --ioct-type: #e879f9; }  /* fuchsia */
+.hl-ioctable [data-type="email"]    { --ioct-type: #f472b6; }  /* pink    */
+.hl-ioctable [data-type="path"]     { --ioct-type: #fbbf24; }  /* amber   */
+.hl-ioctable [data-type="registry"] { --ioct-type: #fb923c; }  /* orange  */
+.hl-ioctable [data-type="filename"] { --ioct-type: #a3e635; }  /* lime    */
+
 .hl-ioctable__chip {
   font: inherit;
   font-size: 0.74em;
@@ -3858,17 +3897,18 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   border-radius: 999px;
   cursor: pointer;
   background: transparent;
-  color: inherit;
-  border: 1px solid var(--ioct-border);
-  opacity: 0.75;
+  color: var(--ioct-type);
+  border: 1px solid color-mix(in srgb, var(--ioct-type) 34%, var(--ioct-border));
 }
-.hl-ioctable__chip:hover { opacity: 1; }
+.hl-ioctable__chip:hover {
+  border-color: var(--ioct-type);
+  color: color-mix(in srgb, var(--ioct-type) 70%, #ffffff);
+}
 .hl-ioctable__chip[aria-pressed="true"] {
-  opacity: 1;
-  border-color: currentColor;
-  background: rgba(248, 113, 113, 0.16);
+  border-color: var(--ioct-type);
+  background: color-mix(in srgb, var(--ioct-type) 20%, transparent);
 }
-.hl-ioctable__chipn { opacity: 0.6; margin-left: 0.35em; }
+.hl-ioctable__chipn { opacity: 0.65; margin-left: 0.35em; }
 
 .hl-ioctable__actions {
   display: flex;
@@ -3912,12 +3952,15 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-ioctable__table td { vertical-align: top; }
 .hl-ioctable__table tbody tr[hidden] { display: none; }
 
+/* Inherits --ioct-type from its own <tr data-type>, so the label matches the
+   chip that filters to it without a second lookup or a second rule. */
 .hl-ioctable__type {
   font-size: 0.72em;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--ioct-dim);
+  color: var(--ioct-type);
   white-space: nowrap;
+  font-weight: 600;
 }
 .hl-ioctable__table code { font-size: 0.84em; }
 
