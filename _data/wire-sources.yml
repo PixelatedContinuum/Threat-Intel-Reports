@@ -1,0 +1,168 @@
+# The entire Wire filter, in one reviewable file.
+#
+# Classification is by source, on measurement (see the spec, section 2). A
+# research source publishes threat research by definition, so its source IS the
+# filter and it passes through untouched. A news source takes the keyword rule
+# below, which is approximate in both directions and is applied only where that
+# is tolerable.
+#
+# An unknown source takes `default`, which is `news` and must never be
+# `exclude`: a new feed appearing in OpenCTI has to show up filtered rather than
+# vanish silently. check-wire.js warns by name so it gets classified deliberately.
+sources:
+  AlienVault: research
+  Palo Alto Networks: research
+  Cisco Talos: research
+  Crowdstrike: research
+  Elastic: research
+  Microsoft: research
+  BitDefender: research
+  BleepingComputer: news
+  SecurityWeek: news
+  Recorded Future: news
+  Krebs on Security: news
+  # Publishes "Maltrail IOC for 2026-08-12" style dumps, one a day. IOC lists,
+  # not articles, so there is nothing for a reader to click through to.
+  Krawczyk Industries Limited: exclude
+  # Our own reports. Already published on this site.
+  The Hunters Ledger: exclude
+
+default: news
+
+# A term ending in "*" is a prefix match. Every other term is word-bounded,
+# which is what stops "rat" firing on "corporate" and "bot" on "robot". A
+# boundary is only asserted on a side that ends in a word character, so
+# "raises $" still reaches "Raises $7.5 Million".
+keep:
+  - ransomware
+  - malware
+  - backdoor
+  - botnet
+  - bot
+  - rootkit
+  - stealer
+  - infostealer
+  - trojan
+  - spyware
+  - worm
+  - loader
+  - dropper
+  - rat
+  - rats
+  - c2
+  - command-and-control
+  - phish*
+  - smishing
+  - vishing
+  - exploit*
+  - zero-day
+  - zero day
+  - 0-day
+  - cve-*
+  - vulnerab*
+  - rce
+  - privilege escalation
+  - sql injection
+  - xss
+  - deserializ*
+  - breach*
+  - leak*
+  - hack*
+  - compromis*
+  - intrusion
+  - attack*
+  - threat actor
+  - apt
+  - nation-state
+  - espionage
+  - campaign
+  - supply chain
+  - credential*
+  - password spray*
+  - brute force
+  - brute-force
+  - ddos
+  - wiper
+  - cryptomin*
+  - cryptojack*
+  - webshell
+  - web shell
+  - persistence
+  - lateral movement
+  - exfiltrat*
+  - patch*
+  - advisor*
+  - cisa
+  - fbi
+  - takedown
+  - arrest*
+  - indict*
+  - sanction*
+  - theft
+  - stolen
+  - cybercriminal*
+  - fraud*
+  - scam*
+  - victim*
+  - breached
+  - spoof*
+
+# Topic chips are precomputed by the generator, not counted in Liquid. Measured
+# reason: 531 items carry 1,267 distinct labels, which the generic listing-filter
+# include would turn into 133 chips and 3.2 million loop iterations per build.
+#
+# Sources use their own vocabularies, so these fold variants of one concept onto
+# a single chip.
+topic_aliases:
+  vulnerability: vulnerabilities
+  vulnerabilities: vulnerabilities
+  data breach: data breaches
+  data breaches: data breaches
+  ai: artificial intelligence
+  malware & threats: malware
+  cyberattack: cyberattacks
+  phishing attack: phishing
+
+# Labels too generic to be a useful control. "security" sits on 28% of items, so
+# filtering by it selects nearly the whole page and tells the reader nothing.
+topic_stop:
+  - security
+  - news
+  - news briefs
+  - featured
+  - general
+  - technology
+  - observation
+  - osint
+  - perpetual
+  - unsupervised
+  - manual-collection
+
+drop:
+  - "raises $"
+  - "secures $"
+  - "raised $"
+  - series a
+  - series b
+  - series c
+  - funding round
+  - acquir*
+  - merger
+  - webinar
+  - virtual event
+  - summit
+  - conference
+  - ciso conversations
+  - appoints
+  - names new
+  - hires
+  - joins as
+  - earnings
+  - ipo
+  - tests faster
+  - tests new
+  - rolls out
+  - now available
+  - preview build
+  - insider build
+  - subscription

@@ -3476,3 +3476,86 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 @media (prefers-reduced-motion: reduce) {
   .hl-post-content .hl-viewswitch__btn { transition: none; }
 }
+
+/* ---------- The Wire (Track A1) ----------
+   Link colour is set with a scoped selector AND its own !important because the
+   theme marks `.hl-post-content a` important. This exact cascade bit the
+   figure-nav chips, which shipped in the theme's link blue with every suite
+   green, because no test in this repo reads CSS. */
+.hl-wire__freshness {
+  font-size: 0.82rem;
+  color: var(--hl-text-muted);
+  margin: 0 0 1.1rem;
+}
+.hl-wire__kindkey { white-space: nowrap; }
+.hl-wire__kindkey::before {
+  content: "";
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  margin: 0 5px 0 8px;
+  vertical-align: baseline;
+}
+.hl-wire__kindkey--research::before { background: var(--hl-accent-blue, #58a6ff); }
+.hl-wire__kindkey--news::before { background: #3d4756; }
+
+.hl-wire { display: flex; flex-direction: column; }
+
+.hl-wire__day {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hl-text-muted);
+  margin: 1.4rem 0 0.4rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--hl-border-card);
+}
+.hl-wire__day:first-child { margin-top: 0.6rem; }
+
+.hl-post-content .hl-wire__item,
+.hl-wire__item {
+  display: grid;
+  grid-template-columns: 10.5rem minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: baseline;
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  text-decoration: none !important;
+  color: var(--hl-text-primary) !important;
+  transition: background 0.12s;
+}
+.hl-post-content .hl-wire__item:hover,
+.hl-wire__item:hover { background: var(--hl-bg-card); }
+.hl-wire__item--research { border-left-color: var(--hl-accent-blue, #58a6ff); }
+.hl-wire__item--news { border-left-color: #3d4756; }
+
+.hl-wire__src {
+  font-size: 0.76rem;
+  color: var(--hl-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hl-wire__title { font-size: 0.94rem; line-height: 1.45; }
+.hl-wire__labels { display: flex; gap: 0.3rem; flex-wrap: wrap; justify-content: flex-end; }
+.hl-wire__label {
+  font-size: 0.66rem;
+  padding: 0.08rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--hl-border-card);
+  color: var(--hl-text-muted);
+  white-space: nowrap;
+}
+.hl-chip-btn__n { opacity: 0.55; font-size: 0.72rem; margin-left: 2px; }
+
+@media (max-width: 760px) {
+  .hl-post-content .hl-wire__item,
+  .hl-wire__item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+    padding: 0.6rem;
+  }
+  .hl-wire__labels { justify-content: flex-start; }
+  .hl-wire__src { font-size: 0.72rem; }
+}

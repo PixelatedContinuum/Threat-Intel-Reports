@@ -2,8 +2,15 @@
   var bar = document.querySelector('[data-listing-filter]');
   var grid = document.querySelector('[data-filter-grid]');
   if (!bar || !grid) return;
-  var cards = [].slice.call(grid.querySelectorAll('.hl-catalog-card'));
+  // The filterable unit is a catalog card on every listing page and a row on
+  // /wire/. A grid names its own selector; the default keeps the four existing
+  // pages behaving exactly as they did.
+  var cardSel = grid.getAttribute('data-filter-item') || '.hl-catalog-card';
+  var cards = [].slice.call(grid.querySelectorAll(cardSel));
   var clusters = [].slice.call(grid.querySelectorAll('[data-series-cluster]'));
+  // A group heading (a date row on the Wire) owns every item that follows it
+  // until the next heading. Inert on pages that render none.
+  var groups = [].slice.call(grid.querySelectorAll('[data-filter-group]'));
   var search = bar.querySelector('.hl-filter__search');
   var count = bar.querySelector('[data-filter-count]');
   var empty = bar.querySelector('[data-filter-empty]');
@@ -52,10 +59,21 @@
     // A series cluster is a shell around its member cards — hide the shell
     // (header + box) when the filter has hidden every card inside it.
     clusters.forEach(function (cl) {
-      var kids = [].slice.call(cl.querySelectorAll('.hl-catalog-card'));
+      var kids = [].slice.call(cl.querySelectorAll(cardSel));
       var any = kids.some(function (k) { return k.style.display !== 'none'; });
       if (any) { cl.style.removeProperty('display'); }
       else { cl.style.setProperty('display', 'none', 'important'); }
+    });
+    // A date heading with every row beneath it filtered away would otherwise
+    // sit on the page introducing nothing.
+    groups.forEach(function (g) {
+      var any = false;
+      for (var n = g.nextElementSibling; n; n = n.nextElementSibling) {
+        if (n.hasAttribute('data-filter-group')) break;
+        if (n.matches(cardSel) && n.style.display !== 'none') { any = true; break; }
+      }
+      if (any) { g.style.removeProperty('display'); }
+      else { g.style.setProperty('display', 'none', 'important'); }
     });
     if (count) count.textContent = 'Showing ' + shown + ' of ' + cards.length;
     if (empty) empty.hidden = shown !== 0;
