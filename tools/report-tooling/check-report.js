@@ -112,12 +112,31 @@ function figureNavNotChecked(reason) {
   return { status: 'NOT CHECKED', reason: reason, problems: [], entries: 0, chips: 0 };
 }
 
+/* And the tier checker gets its own, same reasoning again. */
+var CTIER = null;
+var TIERS_REASON = null;
+try {
+  CTIER = require('./lib/check-tiers.js');
+  if (!CTIER || typeof CTIER.checkMarkdown !== 'function') {
+    throw new Error('check-tiers.js loaded but exports no checkMarkdown');
+  }
+} catch (e) {
+  TIERS_REASON = 'tier checker did not load: ' +
+    String((e && e.message) || e).split('\n')[0].trim();
+}
+
+function tiersNotChecked(reason) {
+  return { status: 'NOT CHECKED', reason: reason, problems: [], marked: 0, unmarked: 0,
+           byTier: { 1: 0, 2: 0, 3: 0 } };
+}
+
 /* Reported against whichever path the caller asked about, so the operator sees
    what was skipped as well as why. */
 function depsNotChecked(p) {
   return { status: 'NOT CHECKED', path: p, reason: DEPS_REASON, problems: [], missing: [],
            glossary: glossaryNotChecked('gate dependencies did not load, so nothing was verified'),
-           figureNav: figureNavNotChecked('gate dependencies did not load, so nothing was verified') };
+           figureNav: figureNavNotChecked('gate dependencies did not load, so nothing was verified'),
+           tiers: tiersNotChecked('gate dependencies did not load, so nothing was verified') };
 }
 
 var TECH_RE = /\bT\d{4}(?:\.\d{3})?\b/g;
@@ -307,6 +326,12 @@ function checkMarkdown(md, label) {
     r.status = 'FAIL';
     r.problems = (r.problems || []).concat(r.figureNav.problems);
   }
+
+  r.tiers = TIERS_REASON ? tiersNotChecked(TIERS_REASON) : CTIER.checkMarkdown(md, label);
+  if (r.tiers.status === 'FAIL') {
+    r.status = 'FAIL';
+    r.problems = (r.problems || []).concat(r.tiers.problems);
+  }
   return r;
 }
 
@@ -316,7 +341,8 @@ function checkFile(file) {
   try { md = fs.readFileSync(file, 'utf8'); }
   catch (e) { return { status: 'NOT CHECKED', path: file, reason: e.message, problems: [], missing: [],
                        glossary: glossaryNotChecked('report could not be read'),
-                       figureNav: figureNavNotChecked('report could not be read') }; }
+                       figureNav: figureNavNotChecked('report could not be read'),
+                       tiers: tiersNotChecked('report could not be read') }; }
   return checkMarkdown(md, file);
 }
 
@@ -327,18 +353,21 @@ async function checkUrl(url) {
     var res = await fetch(url);
     if (!res.ok) return { status: 'NOT CHECKED', path: url, reason: 'HTTP ' + res.status, problems: [], missing: [],
                           glossary: glossaryNotChecked('report body was not retrieved'),
-                          figureNav: figureNavNotChecked('report body was not retrieved') };
+                          figureNav: figureNavNotChecked('report body was not retrieved'),
+                          tiers: tiersNotChecked('report body was not retrieved') };
     html = await res.text();
   } catch (e) {
     return { status: 'NOT CHECKED', path: url, reason: e.message, problems: [], missing: [],
              glossary: glossaryNotChecked('report body was not retrieved'),
-             figureNav: figureNavNotChecked('report body was not retrieved') };
+             figureNav: figureNavNotChecked('report body was not retrieved'),
+             tiers: tiersNotChecked('report body was not retrieved') };
   }
   var doc = new JSDOM(html).window.document;
   var body = doc.querySelector('.hl-post-content') || doc.querySelector('.hl-post-body');
   if (!body) return { status: 'NOT CHECKED', path: url, reason: 'no report body container', problems: [], missing: [],
                       glossary: glossaryNotChecked('report body was not retrieved'),
-                      figureNav: figureNavNotChecked('report body was not retrieved') };
+                      figureNav: figureNavNotChecked('report body was not retrieved'),
+                      tiers: tiersNotChecked('report body was not retrieved') };
   var wrapper = new JSDOM('<body></body>').window.document;
   wrapper.body.innerHTML = body.innerHTML;
   var r = checkDom(wrapper, url);
@@ -371,6 +400,19 @@ async function checkUrl(url) {
       r.problems = r.problems.concat(r.figureNav.problems);
     }
   }
+
+  /* The full document again, because the tier classes live on the h2s inside
+     .hl-post-content and the wrapper preserves them, but reading the same source
+     as figure-nav keeps the two verdicts describing one page. */
+  if (TIERS_REASON) {
+    r.tiers = tiersNotChecked(TIERS_REASON);
+  } else {
+    r.tiers = CTIER.checkDom(doc, url);
+    if (r.tiers.status === 'FAIL') {
+      r.status = 'FAIL';
+      r.problems = r.problems.concat(r.tiers.problems);
+    }
+  }
   return r;
 }
 
@@ -394,7 +436,8 @@ if (require.main === module) {
       var tail = r.status === 'NOT CHECKED' ? r.reason
         : r.status === 'PASS' ? r.tables + ' tables, ' + r.techniques + ' techniques, ' +
             r.unmapped + ' unmapped, glossary ' + gloss.status +
-            ', figure-nav ' + (r.figureNav || {}).status
+            ', figure-nav ' + (r.figureNav || {}).status +
+            ', tiers ' + (r.tiers || {}).status
         : r.problems.join('; ');
       console.log(r.status.padEnd(12) + r.path + '   ' + tail);
       if (verbose && r.problems.length) r.problems.forEach(function (p) { console.log('    ' + p); });

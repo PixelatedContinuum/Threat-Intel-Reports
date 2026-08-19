@@ -93,6 +93,8 @@ function pad(s, n) { return String(s).padEnd(n); }
   var glossCounts = { PASS: 0, FAIL: 0, 'NOT CHECKED': 0 };
   var figCounts = { PASS: 0, FAIL: 0, 'NOT CHECKED': 0 };
   var figEntries = 0, figChips = 0, figSilent = 0;
+  var tierCounts = { PASS: 0, FAIL: 0, 'NOT CHECKED': 0 };
+  var tierMarked = 0, tierSilent = 0;
   var techniques = 0, unmapped = 0, marks = 0, tables = 0;
   var attention = [];
 
@@ -109,6 +111,11 @@ function pad(s, n) { return String(s).padEnd(n); }
     figChips += fnv.chips || 0;
     if (fnv.status === 'PASS' && !fnv.entries) figSilent++;
 
+    var tv = r.tiers || { status: 'NOT CHECKED', reason: 'no tier verdict recorded' };
+    tierCounts[tv.status] = (tierCounts[tv.status] || 0) + 1;
+    tierMarked += tv.marked || 0;
+    if (tv.status === 'PASS' && !tv.marked) tierSilent++;
+
     techniques += r.techniques || 0;
     unmapped += r.unmapped || 0;
     tables += r.tables || 0;
@@ -124,6 +131,8 @@ function pad(s, n) { return String(s).padEnd(n); }
     if (g.status === 'NOT CHECKED') attention.push(slug + ': glossary NOT CHECKED, ' + g.reason);
     if (fnv.status === 'NOT CHECKED') attention.push(slug + ': figure-nav NOT CHECKED, ' + fnv.reason);
     if (fnv.status === 'FAIL') attention.push(slug + ': figure-nav FAIL, ' + (fnv.problems || []).join('; '));
+    if (tv.status === 'NOT CHECKED') attention.push(slug + ': tiers NOT CHECKED, ' + tv.reason);
+    if (tv.status === 'FAIL') attention.push(slug + ': tiers FAIL, ' + (tv.problems || []).join('; '));
   }
 
   // Source side: is the manifest consistent with the markdown it came from?
@@ -162,6 +171,11 @@ function pad(s, n) { return String(s).padEnd(n); }
   // Printed as a COUNT, never as silence. "chips everywhere" and "chips nowhere
   // and nothing complained" must not look identical in this summary.
   console.log('reports declaring 0  ' + figSilent);
+  console.log('tiers P/F/NC         ' + tierCounts.PASS + ' / ' + tierCounts.FAIL +
+    ' / ' + tierCounts['NOT CHECKED']);
+  console.log('sections marked      ' + tierMarked);
+  // A count, never a silence, for the same reason as the figure-nav line above.
+  console.log('reports unmarked     ' + tierSilent);
 
   if (attention.length) {
     console.log('\n== needs attention ==');
@@ -170,8 +184,10 @@ function pad(s, n) { return String(s).padEnd(n); }
 
   // FAIL outranks NOT CHECKED, because a real defect is more urgent than an
   // unverified report, but neither can ever exit 0.
-  if (counts.FAIL || figCounts.FAIL || det.status === 'FAIL' || live.status === 'FAIL') process.exit(1);
+  if (counts.FAIL || figCounts.FAIL || tierCounts.FAIL ||
+      det.status === 'FAIL' || live.status === 'FAIL') process.exit(1);
   if (counts['NOT CHECKED'] || glossCounts['NOT CHECKED'] || figCounts['NOT CHECKED'] ||
+      tierCounts['NOT CHECKED'] ||
       det.status === 'NOT CHECKED' || live.status === 'NOT CHECKED') process.exit(2);
   process.exit(0);
 })();
