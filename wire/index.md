@@ -8,7 +8,7 @@ position: 2.5
 <div class="hl-page-header" style="--ph-accent: #58a6ff;">
   <div class="hl-page-header__label">The Wire</div>
   <div class="hl-page-header__title">Threat Intelligence Headlines</div>
-  <div class="hl-page-header__desc">Recent threat-intel reporting from public sources, refreshed twice daily. Headlines and links only, every item goes to the original publisher. This is aggregation rather than original research; the analysis lives in <a href="/reports/">Reports</a>.</div>
+  <div class="hl-page-header__desc">Recent threat-intel reporting from public sources, refreshed twice daily. Headlines and links only, every item goes to the original publisher. This is aggregation rather than original research. My original research can be found in the <a href="/reports/">reports section</a>.</div>
 </div>
 
 {%- assign wire = site.data.wire -%}
@@ -23,7 +23,7 @@ position: 2.5
   and cost 3.2 million iterations on every build. Both measured, not assumed.
   The markup and class names are the include's, so the CSS and the JS are shared.
 {%- endcomment -%}
-<div class="hl-filter" data-listing-filter>
+<div class="hl-filter hl-filter--wire" data-listing-filter>
   <input class="hl-filter__search" type="text" placeholder="Filter headlines…" aria-label="Filter headlines" autocomplete="off">
   <div class="hl-filter__chips">
     <button type="button" class="hl-chip-btn is-on" data-tag="">All</button>
@@ -41,7 +41,7 @@ position: 2.5
 {%- assign current_day = day -%}
 <div class="hl-wire__day" data-filter-group>{{ i.date | date: "%A %-d %B %Y" }}</div>
 {%- endif -%}
-<a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ i.url }}" target="_blank" rel="noopener noreferrer" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}"><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 3 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-wire__label--topic hl-topic-c{{ tc }}{% endif %}">{{ l }}</span>{%- endfor -%}</span></a>
+<a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ i.url }}" target="_blank" rel="noopener noreferrer" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}"><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 3 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-topic-c{{ tc }}{% endif %}">{{ l }}</span>{%- endfor -%}</span></a>
 {%- endfor -%}
 </div>
 

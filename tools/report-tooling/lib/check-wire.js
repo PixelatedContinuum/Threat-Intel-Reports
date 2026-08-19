@@ -17,6 +17,8 @@ var STALE_HOURS = 36;
 var REQUIRED = ['title', 'url', 'source', 'date', 'kind'];
 // Hues defined in assets/css/custom.css as .hl-topic-c1 .. .hl-topic-c12.
 var PALETTE_SIZE = 12;
+// How many tags the page draws per item; the rest are never rendered.
+var DISPLAYED_LABELS = 3;
 var KINDS = { research: 1, news: 1 };
 
 function verdict(status, reason, problems, warnings, counts) {
@@ -137,11 +139,32 @@ function check(doc, sources, now) {
   });
 
   Object.keys(lc).forEach(function (lab) {
-    if (!(doc.topics || []).some(function (t) { return t && t.label === lab; })) {
-      problems.push('label_colors carries "' + lab + '", which is not a topic, ' +
-        'so a tag would be coloured with no chip to match it');
+    var v = lc[lab];
+    if (!Number.isInteger(v) || v < 1 || v > PALETTE_SIZE) {
+      problems.push('label_colors["' + lab + '"] is ' + JSON.stringify(v) +
+        ', outside the 1-' + PALETTE_SIZE + ' palette the CSS defines');
     }
   });
+
+  /* A displayed label with no colour renders grey among coloured siblings.
+     521 of the 532 labels this page draws are not chip topics, and leaving them
+     uncoloured is precisely what made the first build look flat, so an
+     unmapped one is a defect rather than a cosmetic gap. */
+  var uncoloured = [];
+  items.forEach(function (it) {
+    (it.labels || []).slice(0, DISPLAYED_LABELS).forEach(function (l) {
+      if (!Object.prototype.hasOwnProperty.call(lc, String(l)) &&
+          uncoloured.indexOf(String(l)) === -1) {
+        uncoloured.push(String(l));
+      }
+    });
+  });
+  if (uncoloured.length) {
+    problems.push(uncoloured.length + ' displayed label(s) have no colour in ' +
+      'label_colors, so they would render grey among coloured siblings: ' +
+      uncoloured.slice(0, 6).join(', ') +
+      (uncoloured.length > 6 ? ', …' : ''));
+  }
 
   var c = doc.counts || {};
   if (Number(c.total) !== items.length ||

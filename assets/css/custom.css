@@ -3542,7 +3542,17 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 
 /* --- the list ------------------------------------------------- */
-.hl-wire { display: flex; flex-direction: column; }
+.hl-wire {
+  display: flex;
+  flex-direction: column;
+  /* Default publisher colour, set HERE and not on the item. Both
+     `.hl-wire__item` and `.hl-wire__item--src-x` are single-class selectors, so
+     a fallback declared on the item ties on specificity and wins purely by
+     coming later in the file, which silently flattened every border to grey.
+     Declared on the container it is inherited instead, and any value the item
+     sets directly beats it regardless of order. */
+  --wire-src: #4b5563;
+}
 
 .hl-wire__day {
   font-size: 0.72em;
@@ -3557,7 +3567,6 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 
 .hl-post-content .hl-wire__item,
 .hl-wire__item {
-  --wire-src: #4b5563;                 /* fallback for an unclassified source */
   display: grid;
   grid-template-columns: 11em minmax(0, 1fr) auto;
   gap: 0.9em;
@@ -3598,23 +3607,23 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   box-shadow: inset 0 0 0 2px var(--wire-src);
 }
 
-.hl-wire__title { font-size: 0.92em; line-height: 1.45; }
+.hl-wire__title { font-size: 0.86em; line-height: 1.45; }
 
 /* --- tags: topic colour where the label is one of the chips ---- */
 .hl-wire__labels { display: flex; gap: 0.35em; flex-wrap: wrap; justify-content: flex-end; }
+/* Every displayed label carries a colour, not just the twelve chip topics.
+   521 of the 532 labels the page draws are not topics, and leaving those grey
+   is what made the page look flat. The var() fallback keeps a label with no
+   mapped colour readable rather than invisible. */
 .hl-wire__label {
-  font-size: 0.66em;
-  padding: 0.12em 0.55em;
+  font-size: 0.68em;
+  padding: 0.14em 0.6em;
   border-radius: 999px;
-  border: 1px solid var(--hl-border-card);
-  color: var(--hl-text-muted);
   white-space: nowrap;
   line-height: 1.5;
-}
-.hl-wire__label--topic {
-  color: var(--wire-topic);
-  border-color: color-mix(in srgb, var(--wire-topic) 38%, var(--hl-border-card));
-  background: color-mix(in srgb, var(--wire-topic) 11%, transparent);
+  color: var(--wire-topic, var(--hl-text-muted));
+  border: 1px solid color-mix(in srgb, var(--wire-topic, var(--hl-text-muted)) 42%, var(--hl-border-card));
+  background: color-mix(in srgb, var(--wire-topic, var(--hl-text-muted)) 13%, transparent);
 }
 
 /* --- filter chips: one colour each ---------------------------- */
@@ -3633,6 +3642,16 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-chip-btn__n { opacity: 0.6; font-size: 0.85em; margin-left: 3px; }
 
+/* Chip sizing is scoped to the Wire. `.hl-chip-btn` is shared with four other
+   listing pages and is set in rem, so it renders 12.8px against this page's
+   20px body. Changing the shared rule would resize every listing at once. */
+.hl-filter--wire .hl-chip-btn {
+  font-size: 0.72em;
+  padding: 7px 15px;
+}
+.hl-filter--wire .hl-filter__search { font-size: 0.78em; padding: 9px 13px; }
+.hl-filter--wire .hl-filter__count { font-size: 0.72em; }
+
 @media (max-width: 780px) {
   .hl-post-content .hl-wire__item,
   .hl-wire__item {
@@ -3641,5 +3660,5 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
     padding: 0.7em;
   }
   .hl-wire__labels { justify-content: flex-start; margin-top: 0.15em; }
-  .hl-wire__title { font-size: 0.95em; }
+  .hl-wire__title { font-size: 0.9em; }
 }

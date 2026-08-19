@@ -155,10 +155,35 @@ test('a tag coloured differently from its chip fails', function () {
   assert.match(r.problems.join(' '), /would not match its chip/i);
 });
 
-test('a label_colors entry with no chip fails', function () {
+test('a label_colors entry that is not a chip topic is fine', function () {
+  // 521 of 532 displayed labels are not topics. Colouring only the topics is
+  // what made the first build look flat, so extra entries are expected.
   var d = doc({ topics: [{ label: 'security', count: 1, color: 3 }],
-                label_colors: { security: 3, orphan: 5 } });
+                label_colors: { security: 3, 'some-other-label': 5 } });
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+});
+
+test('a label_colors value outside the palette fails', function () {
+  var d = doc({ label_colors: { security: 3, other: 77 } });
   var r = CW.check(d, SOURCES, NOW);
   assert.equal(r.status, 'FAIL');
-  assert.match(r.problems.join(' '), /not a topic/i);
+  assert.match(r.problems.join(' '), /palette/i);
+});
+
+test('a displayed label with no colour fails', function () {
+  // Renders grey among coloured siblings: the flatness defect returning.
+  var d = doc();
+  d.items[0].labels = ['security', 'unmapped-label'];
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /no colour in label_colors/i);
+});
+
+test('an undrawn fourth label needs no colour', function () {
+  // The page draws three tags per item; the rest are never rendered.
+  var d = doc();
+  d.items[0].labels = ['security', 'security', 'security', 'never-drawn'];
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
 });

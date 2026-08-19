@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-19T11:56:09Z
+generated_at: 2026-08-19T12:24:40Z
 window_days: 30
 counts:
-  total: 530
+  total: 529
   research: 187
-  news: 343
+  news: 342
 topics:
   - label: "vulnerabilities"
     count: 70
@@ -47,18 +47,539 @@ topics:
     count: 14
     color: 12
 label_colors:
+  ".net downloader": 4
+  "2fa bypass": 1
+  "@tanstack": 7
+  "abyssos": 10
+  "accessibility abuse": 6
+  "account farming": 5
+  "account takeover": 2
+  "account trafficking": 3
+  "account-enumeration": 7
+  "active exploitation": 2
+  "active-directory-targeting": 4
+  "adaptixc2": 8
+  "administrative access": 12
+  "adobe": 1
+  "adversary-in-the-middle": 9
+  "adversary-in-the-middle (aitm)": 1
+  "aerospace targeting": 10
+  "aeternum": 11
+  "aeza group": 2
+  "affiliate fraud": 7
+  "africa": 4
+  "agent-to-agent": 9
+  "ai agent security": 1
+  "ai api": 4
+  "ai assistant exposure": 1
+  "ai benchmark": 9
+  "ai developers": 3
+  "ai fraud": 2
+  "ai gateway": 6
+  "ai infrastructure": 11
+  "ai integration": 10
+  "ai profiling": 10
+  "ai testing": 12
+  "ai-assisted-development": 9
+  "ai-driven-influence": 11
+  "ai-generated personas": 9
+  "aisuru": 7
+  "aitm phishing": 5
+  "akira": 2
+  "alert": 2
+  "alibaba": 12
+  "amadey": 5
+  "amd": 6
+  "amnesiastealer": 8
+  "amos": 6
+  "analog devices": 11
+  "android": 9
+  "android apk": 11
+  "android banking trojan": 11
+  "android rat": 12
+  "android trojan": 5
+  "android tv boxes": 12
+  "anthropic": 8
+  "anti-analysis": 11
+  "anti-forensic": 2
+  "anti-malware research": 1
+  "antino": 3
+  "antino backdoor": 10
+  "anubis": 2
+  "anydesk": 9
+  "aone-cli": 8
+  "apache hadoop targeting": 8
+  "apache tomcat": 6
+  "api keys": 2
+  "apple": 12
+  "application security": 6
+  "apprunner": 7
+  "apt": 5
+  "apt29": 2
+  "apt34": 12
+  "aquilarat": 10
+  "arcbridge": 7
+  "architectural vulnerability": 5
+  "arista": 10
+  "armenia": 5
   "artificial intelligence": 3
+  "astral-pe": 3
+  "asyncrat": 11
+  "atlassian": 8
+  "atomic stealer": 5
+  "audio surveillance": 7
+  "australia": 10
+  "authentication broker": 3
+  "authentication bypass": 4
+  "autoit": 8
+  "autonomous attack operations": 8
+  "autonomous threat": 8
+  "aws": 7
+  "aws bedrock": 1
+  "aws-secrets": 7
+  "azure": 1
+  "babadeda": 2
+  "babadedaloader": 11
+  "babuk": 7
+  "backdoor": 11
+  "backdoor deployment": 10
+  "bank": 4
+  "bank of america impersonation": 5
+  "banking credentials": 12
+  "banking trojan": 4
+  "base64": 3
+  "base64 obfuscation": 6
+  "batch api exploitation": 10
+  "batch endpoint": 5
+  "beacon": 6
+  "beagle": 12
+  "beagle backdoor": 7
+  "bearlyfy": 10
+  "bec campaign": 10
+  "benchmark": 9
+  "bindcloak": 3
+  "birdtroy": 1
+  "bixby": 2
+  "black hat": 6
+  "blackfile": 3
+  "blinddoor": 9
+  "blockchain": 8
+  "blockchain c2": 1
+  "blockchain loader": 7
+  "blueshell": 10
+  "bmc": 6
+  "boryptgrab": 6
+  "bot networks": 10
+  "botnet": 6
+  "brand impersonation": 7
+  "bridgehead": 7
+  "brinks home": 12
+  "brown health": 12
+  "browser credential harvesting": 8
+  "browser credential theft": 10
+  "browser extension": 11
+  "browser hijacking": 12
+  "browser password decryptor": 5
+  "btmob": 8
+  "bug bounty": 9
+  "byovd": 12
+  "c2 communication": 1
+  "c2 infrastructure": 12
+  "c2 relay": 2
+  "c2looper": 2
+  "cacheable": 2
+  "calendar c2": 5
+  "camview": 6
+  "captive portal compromise": 6
+  "carecloud": 10
+  "castleloader": 11
+  "castlestealer": 12
+  "cav3rn": 7
+  "cavern": 9
+  "central asia": 5
+  "chacha20 encryption": 1
+  "chaindrop": 8
+  "chaindrop worm": 3
+  "chaotic eclipse": 12
+  "charity": 12
+  "chatgpt": 1
+  "chatgpt abuse": 3
+  "chatgpt atlas": 4
+  "check point": 6
+  "chepro": 1
+  "chick-fil-a": 12
+  "china": 5
+  "china-nexus": 11
+  "chinese-speaking threat actor": 7
+  "chipmaker patch tuesday": 5
+  "chisel": 4
+  "chocoshell": 10
+  "chonkychicken": 3
+  "chrome": 12
+  "chrome extension": 7
+  "chrome extensions": 8
+  "chrome hijacking": 12
+  "chromeggscalator": 11
+  "ci compromise": 2
+  "ci/cd attack": 12
+  "ci/cd compromise": 6
+  "cisa": 6
+  "cisa kev": 12
+  "cisco": 9
+  "cisco talos antivirus": 7
+  "cisco talos dns security": 7
+  "cisco talos email filtering": 6
+  "cisco talos incident response": 3
+  "cl-sta-1114": 8
+  "cl0p": 3
+  "clamav": 8
+  "claroty": 10
+  "claude": 4
+  "claude ai": 12
+  "claude code": 9
+  "claude-hooks": 3
+  "clickfix": 3
+  "clickfix campaign": 9
+  "clipboard hijacking": 10
+  "clipper": 3
+  "cloud credentials": 9
+  "cloud infrastructure abuse": 8
+  "cloud secrets": 4
+  "cloud security": 9
+  "cloud tokens": 5
+  "cloudflare tunnel": 9
+  "cloudflare tunnels": 6
+  "cloudflare turnstile": 3
+  "cloudflare workers": 6
+  "cloudflared": 7
+  "clover health investments": 1
+  "cmsmap": 1
+  "cncmachinerms": 9
+  "cobalt-strike": 4
+  "coca-cola": 4
+  "code obfuscation": 4
+  "code signing abuse": 10
+  "command and control": 7
+  "communicationuxtheme.dll": 10
+  "contactless payment fraud": 3
+  "container escape": 12
+  "coolclient": 8
+  "copycop": 7
+  "corepack impersonation": 12
+  "cpanel exploitation": 5
+  "crackerdrv": 3
+  "crat": 2
+  "credential dumping": 3
+  "credential harvesting": 4
+  "credential spraying": 8
+  "credential stuffing": 11
   "credential theft": 7
+  "credential-based attacks": 12
+  "credential-harvesting": 1
+  "credential-theft": 5
+  "critical infrastructure": 4
+  "crm": 12
+  "cross-platform": 10
+  "cross-platform malware": 7
+  "cross-site scripting": 9
+  "cryptocurrency": 12
+  "cryptocurrency lure": 4
+  "cryptocurrency mining": 6
+  "cryptocurrency theft": 3
+  "cryptocurrency wallet theft": 2
+  "cryptomining": 1
+  "ctir trends": 12
+  "custom tcp protocol": 8
+  "cve-2007-3010": 7
+  "cve-2013-3307": 1
+  "cve-2016-6277": 9
+  "cve-2017-7269": 4
+  "cve-2017-7921": 7
+  "cve-2017-8291": 8
+  "cve-2018-14558": 10
+  "cve-2020-25078": 12
+  "cve-2021-27101": 2
+  "cve-2023-34362": 11
+  "cve-2023-43770": 12
+  "cve-2024-42009": 3
+  "cve-2025-24813": 7
+  "cve-2025-49113": 3
+  "cve-2025-60719": 2
+  "cve-2025-66376": 9
+  "cve-2026-16232": 12
+  "cve-2026-18556": 7
+  "cve-2026-42897": 4
+  "cve-2026-60137": 11
+  "cve-2026-63030": 12
+  "cve-2026-66747": 10
+  "cve-2026-68820": 2
+  "cves": 9
+  "cyber espionage": 12
+  "cyber-espionage": 3
   "cybercrime": 2
+  "cyberespionage": 8
+  "d2ip": 7
+  "darkhotel": 10
   "data breaches": 5
+  "data center": 7
+  "data exfiltration": 9
+  "data extortion": 2
+  "data leak": 9
+  "data theft": 9
+  "dcrat": 12
+  "ddos engine": 12
+  "dentaquest": 4
+  "desktop capture": 2
+  "dev#popper": 8
+  "developer credentials": 4
+  "developer infrastructure": 1
+  "developer targeting": 7
+  "device code phishing": 5
+  "dgfip": 12
+  "directx shader encryption": 3
+  "discord hijacking": 12
+  "discord token theft": 8
+  "disruption": 1
+  "dkom": 5
+  "dll components": 10
+  "dll sideloading": 11
+  "dns tunneling": 11
+  "dns-tunneling": 8
+  "docusign phishing": 4
+  "domain compromise": 2
+  "dos": 2
+  "dprk-linked": 1
+  "drivetroy": 2
+  "dropcatch": 4
+  "edge device exploitation": 7
+  "electron application": 2
+  "electron framework": 12
+  "email account takeover": 6
+  "email credential theft": 6
+  "email security": 12
+  "encryption": 5
+  "endlessdoors": 1
+  "endoor": 11
+  "endpoint security": 11
+  "energy": 10
+  "energy sector": 2
+  "ernst&young": 2
+  "estee lauder": 11
+  "ethereum": 5
+  "ethereum c2": 6
+  "etherhiding": 9
+  "etw patching": 6
+  "evasion techniques": 12
+  "evooo1bot": 10
+  "exfiltration": 3
+  "expired domains": 4
+  "exploit": 9
   "exploited": 8
+  "exposure management": 4
+  "extortion": 12
+  "ey": 8
+  "fairlife": 10
+  "fake government notices": 3
+  "fake installers": 10
+  "fake signups": 2
+  "fake zoom installer": 12
+  "fakecaptcha": 7
+  "fastjson": 10
+  "fdmtp": 3
+  "feedback friday": 10
+  "firefox": 3
+  "firewall": 10
+  "fmc": 10
+  "forensic evasion": 12
+  "fortinet": 7
+  "france": 3
+  "fraud": 6
+  "fraud & identity theft": 11
+  "fraudulent employment": 10
+  "frontier ai": 3
+  "fruitfly": 3
+  "funding": 11
+  "funding/m&a": 12
+  "gaming": 5
+  "gatesentinel": 7
+  "gemini": 7
+  "geoserver": 2
+  "ghost tapping": 2
+  "ghostdesk": 6
+  "ghostjacking": 2
+  "github": 3
+  "github abuse": 1
+  "github actions": 6
+  "github compromise": 1
+  "gitlab": 3
+  "gms": 3
+  "go backdoor": 3
+  "gocs": 10
+  "godfather": 12
+  "gogrpc": 12
+  "google": 7
+  "google authenticator": 6
+  "google chrome": 1
+  "google cloud": 8
+  "google sheets c2": 12
   "government": 6
+  "hacker": 8
+  "hacker conversations": 8
+  "hackerai": 10
+  "half-click exploit": 11
+  "healthcare": 11
+  "heights financial": 1
+  "heptax": 12
+  "hidden execution": 12
+  "high profile threats": 2
+  "hmi manipulation": 3
+  "hollowgraph": 11
+  "honeymyte": 10
+  "hospital": 12
+  "http": 2
+  "hugging face": 6
+  "humans of talos": 8
+  "ics": 3
+  "ics patch tuesday": 12
+  "ics/ot": 1
+  "identity": 8
+  "identity & access": 10
+  "impersonation websites": 4
+  "in other news": 8
+  "india": 1
+  "india taxation phishing": 3
+  "industry": 8
+  "infection chain": 8
+  "influence operations": 11
+  "information stealer": 6
+  "infostealer": 8
+  "infrastructure diversification": 10
+  "inside the modern soc": 3
+  "insights": 5
+  "intel": 12
+  "intercom": 3
+  "iot compromise": 4
+  "iran": 6
+  "ivanti": 7
+  "javascript": 11
+  "jetbrains": 6
+  "jfrog": 8
+  "json": 4
+  "kemp loadmaster": 3
+  "keylogger": 1
+  "lampion": 4
+  "landing page top story": 2
+  "lazarus": 12
+  "lazarus group": 5
+  "leadership": 11
+  "legal": 7
+  "legion loader": 7
+  "levi strauss": 5
+  "linked devices abuse": 2
+  "linux": 2
+  "litellm": 9
+  "living-off-the-land": 1
+  "llvm obfuscation": 12
+  "macos": 11
+  "macos malware": 2
+  "macos targeting": 10
   "malware": 4
+  "marcus hutchins": 7
+  "mcbs": 7
+  "messaging platform": 3
+  "meta": 5
+  "meta ai": 11
+  "metabase": 6
+  "mfa": 6
   "microsoft": 10
+  "microsoft 365": 4
+  "microsoft defender": 3
+  "midnight blizzard": 10
+  "mini shai-hulud": 7
+  "minnesota": 8
+  "mobile": 4
+  "mobile & wireless": 4
+  "modular architecture": 1
+  "msi installer": 1
+  "multi-stage attack": 4
+  "multi-stage loader": 5
+  "mustang panda": 5
+  "mythos": 10
+  "n-able": 9
+  "n-central": 6
+  "naming": 2
+  "nation-state": 11
+  "network security": 6
+  "next-gen siem & log management": 11
+  "npm": 7
+  "obfuscation techniques": 4
+  "omada": 8
+  "on the radar": 4
+  "openai": 4
+  "openssl": 10
+  "oracle": 12
+  "oracle cpu": 6
+  "oracle cspu": 1
+  "origin energy": 10
+  "paidwork": 3
+  "pass-ta-key": 3
+  "patch": 10
+  "patch tuesday": 11
+  "patches": 2
+  "pdf attachment": 7
+  "people": 7
+  "phantom stealer": 11
+  "phishing": 10
+  "phishing campaign": 6
+  "plead guilty": 2
+  "plugin": 7
+  "poc": 2
+  "privacy": 12
+  "public sector": 3
+  "pypi": 10
+  "ransom paid": 12
   "ransomware": 9
+  "rat": 9
+  "rce": 10
+  "ringcentral": 5
+  "rockwell": 9
+  "router": 9
+  "ruby": 6
+  "ruby on rails": 12
+  "ruflo": 8
+  "rufroot": 3
+  "safepal": 2
+  "salesforce": 3
+  "sap": 8
+  "scam": 10
+  "scam alert": 4
+  "screen sharing": 6
+  "securing ai": 4
+  "security-labs": 3
+  "servicenow": 1
+  "sharepoint": 11
+  "shipmonk": 5
+  "software": 5
+  "sonicwall": 8
+  "suno": 11
+  "supply chain": 8
   "supply chain attack": 11
+  "supply chain security": 4
+  "talos ir trends": 6
+  "teamcity": 8
+  "threat hunting & intel": 9
+  "threat source newsletter": 6
+  "threat spotlight": 2
+  "unc6671": 12
+  "unlimited technology systems": 1
+  "vibe coding": 6
+  "vmware": 2
   "vulnerabilities": 1
+  "wordpress": 9
   "zero-day": 12
+  "zimbra": 11
+  "zoom": 7
+  "zoomsday": 4
 items:
   - title: "Cl0p Ransomware Group Names Over 40 Victims of PTC Windchill Campaign"
     url: "https://www.securityweek.com/cl0p-ransomware-group-names-over-40-victims-of-ptc-windchill-campaign/"
@@ -3234,9 +3755,3 @@ items:
     date: 2026-07-20T12:32:40Z
     kind: news
     labels: ["openssl", "vulnerabilities"]
-  - title: "Hugging Face discloses breach linked to autonomous AI agent"
-    url: "https://www.bleepingcomputer.com/news/security/hugging-face-breach-autonomous-ai-agent-system-internal-datasets-credentials/"
-    source: "BleepingComputer"
-    date: 2026-07-20T11:56:28Z
-    kind: news
-    labels: []
