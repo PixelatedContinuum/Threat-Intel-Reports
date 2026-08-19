@@ -1,0 +1,101 @@
+---
+layout: page
+---
+{%- comment -%}
+  One IOC feed, rendered for a person.
+
+  The stub page carries `ioc_slug` in its front matter and this layout looks the
+  table up in _data/ioc_tables.yml. Nothing re-derives a slug here: the generator
+  already knows it, and two rules for one slug is the failure that bit the catalog
+  cards.
+
+  Rendered at BUILD time rather than fetched client-side, so the indicators are
+  real HTML: readable without JS, indexable, and reviewable in a diff. The script
+  only adds filtering, copying and downloading on top of a table that already works.
+
+  Embargoed feeds have no stub, so they never reach this layout.
+{%- endcomment -%}
+{%- assign t = site.data.ioc_tables[page.ioc_slug] -%}
+
+<div class="hl-page-header" style="--ph-accent: #f87171;">
+  <div class="hl-page-header__label">IOC Feed</div>
+  <div class="hl-page-header__title">{{ t.title | default: page.title }}</div>
+  <div class="hl-page-header__desc">
+    {%- if t -%}
+      {{ t.total }} indicator{% if t.total != 1 %}s{% endif %} extracted from this
+      investigation's feed. Filter by type, then copy or download exactly what is on screen.
+    {%- else -%}
+      This page's data is missing from <code>_data/ioc_tables.yml</code>. Re-run
+      <code>generate-ioc-tables.js</code>.
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if t -%}
+<div class="hl-ioctable" data-slug="{{ page.ioc_slug }}" data-title="{{ t.title | escape }}">
+
+  <div class="hl-ioctable__links">
+    <a class="hl-ioctable__link" href="{{ t.feed_url | relative_url }}">Raw JSON feed</a>
+    {%- if t.report_url %}<a class="hl-ioctable__link" href="{{ t.report_url | relative_url }}">Full report</a>{% endif -%}
+    {%- if t.detection_url %}<a class="hl-ioctable__link" href="{{ t.detection_url | relative_url }}">Detection rules</a>{% endif -%}
+  </div>
+
+  <div class="hl-ioctable__filters" role="group" aria-label="Filter by indicator type">
+    {%- for c in t.counts -%}
+    <button type="button" class="hl-ioctable__chip" data-type="{{ c[0] }}" aria-pressed="false">
+      {{ c[0] }} <span class="hl-ioctable__chipn">{{ c[1] }}</span>
+    </button>
+    {%- endfor -%}
+  </div>
+
+  <div class="hl-ioctable__actions">
+    <button type="button" class="hl-ioctable__btn" data-act="copy">Copy shown</button>
+    <button type="button" class="hl-ioctable__btn" data-act="txt">Download .txt</button>
+    <button type="button" class="hl-ioctable__btn" data-act="csv">Download .csv</button>
+    <span class="hl-ioctable__count" role="status" aria-live="polite">{{ t.total }} shown</span>
+  </div>
+
+  <div class="hl-ioctable__scroll">
+    <table class="hl-ioctable__table">
+      <thead><tr><th>Type</th><th>Indicator</th></tr></thead>
+      <tbody>
+      {%- for r in t.rows -%}
+        <tr data-type="{{ r.type }}"{% if r.context %} data-context="{{ r.context | escape }}"{% endif %}>
+          <td><span class="hl-ioctable__type">{{ r.type }}</span></td>
+          <td><code>{{ r.value }}</code></td>
+        </tr>
+      {%- endfor -%}
+      </tbody>
+    </table>
+  </div>
+
+  {%- comment -%}
+    Printed as a COUNT, never as silence. A feed carries values no pattern can type
+    safely: command names, JARM fingerprints, free-text behavioural notes. A table
+    that showed 22 rows and said nothing would read as the whole feed.
+  {%- endcomment -%}
+  <p class="hl-ioctable__untyped">
+    {%- if t.untyped > 0 -%}
+      {{ t.untyped }} further value{% if t.untyped != 1 %}s{% endif %} in this feed
+      {% if t.untyped == 1 %}is{% else %}are{% endif %} not shown above, because
+      {% if t.untyped == 1 %}it is{% else %}they are{% endif %} not an indicator type
+      that can be recognised reliably by shape: command names, fingerprints and
+      behavioural patterns among them. They are all in the
+      <a href="{{ t.feed_url | relative_url }}">raw JSON</a>, which remains the complete record.
+    {%- else -%}
+      Every recognisable value in this feed is shown above. The
+      <a href="{{ t.feed_url | relative_url }}">raw JSON</a> additionally carries the
+      analyst context, confidence and MITRE mapping for each one.
+    {%- endif -%}
+  </p>
+
+  <p class="hl-ioctable__licence">
+    Licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, free to use
+    commercially with attribution to The Hunters Ledger.
+  </p>
+</div>
+
+<script defer src="{{ '/assets/js/ioc-table.js' | relative_url }}?v=1"></script>
+{%- endif -%}
+
+{{ content }}

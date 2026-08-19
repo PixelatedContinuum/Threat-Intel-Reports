@@ -33,16 +33,29 @@ test('a DELETED detection file still routes to the manifest gate', function () {
   assert.deepEqual(ids(p), ['manifest']);
 });
 
-test('an IOC feed edit routes to the index gate', function () {
+test('an IOC feed edit routes to the index and the viewer tables', function () {
   var p = SG.plan(['ioc-feeds/acme-iocs.json']);
-  assert.deepEqual(ids(p), ['ioc-index']);
+  assert.deepEqual(ids(p), ['ioc-index', 'ioc-tables']);
 });
 
-test('a catalog edit routes to the index gate, because publication status gates the index',
+test('a catalog edit routes to both, because publication status gates both',
   function () {
     var p = SG.plan(['_data/catalog.yml']);
-    assert.deepEqual(ids(p), ['ioc-index']);
+    assert.deepEqual(ids(p), ['ioc-index', 'ioc-tables']);
   });
+
+test('A REPORT EDIT ROUTES TO THE VIEWER TABLES, because front matter is half the signal',
+  function () {
+    // `unlisted: true` is the other half of the publication signal. A go-live that
+    // flips only the front matter must still reach the gate that would notice.
+    var p = SG.plan(['reports/acme/index.md'], { existing: ['reports/acme/index.md'] });
+    assert.deepEqual(ids(p), ['ioc-tables']);
+  });
+
+test('a surviving viewer stub routes to its own gate', function () {
+  var p = SG.plan(['ioc-feeds/acme/index.md'], { existing: ['ioc-feeds/acme/index.md'] });
+  assert.deepEqual(ids(p), ['ioc-tables']);
+});
 
 test('staging a generated artifact by hand still gates it', function () {
   // Someone hand-editing the manifest or the index is the case the gate most
@@ -58,7 +71,6 @@ test('a wire data edit routes to the wire gate', function () {
 test('a report edit routes to that report only, not the corpus', function () {
   var p = SG.plan(['reports/acme/index.md'], { existing: ['reports/acme/index.md'] });
   assert.deepEqual(p.reports, ['reports/acme/index.md']);
-  assert.deepEqual(p.checks, []);
 });
 
 test('a DELETED report is not checked, because there is no file to read', function () {
@@ -66,10 +78,10 @@ test('a DELETED report is not checked, because there is no file to read', functi
   assert.deepEqual(p.reports, []);
 });
 
-test('a figure or asset inside a report directory does not trigger a report check', function () {
-  var p = SG.plan(['reports/acme/fig-1.png'], { existing: ['reports/acme/fig-1.png'] });
+test('a figure inside a report directory routes nothing at all', function () {
+  var p = SG.plan(['reports/acme/fig-2.png'], { existing: ['reports/acme/fig-2.png'] });
+  assert.deepEqual(ids(p), []);
   assert.deepEqual(p.reports, []);
-  assert.deepEqual(p.checks, []);
 });
 
 test('a glossary edit produces an owed-sweep notice, never a check', function () {
@@ -102,7 +114,7 @@ test('a mixed commit queues every check it touches, deduplicated', function () {
     'reports/two/index.md',
     'README.md'
   ], { existing: ['reports/one/index.md', 'reports/two/index.md'] });
-  assert.deepEqual(ids(p), ['ioc-index', 'manifest', 'wire']);
+  assert.deepEqual(ids(p), ['ioc-index', 'ioc-tables', 'manifest', 'wire']);
   assert.deepEqual(p.reports.sort(), ['reports/one/index.md', 'reports/two/index.md']);
   assert.equal(p.owed.length, 1);
 });

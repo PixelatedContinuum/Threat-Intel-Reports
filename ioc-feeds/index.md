@@ -32,7 +32,11 @@ redirect_from:
   {% if e.ioc_title %}{% assign ititle = e.ioc_title %}{% else %}{% assign ititle = e.title | append: " — IOC Feed" %}{% endif %}
   {% assign itags = e.ioc_tags | default: e.tags %}
   {% assign islug = e.ioc_url | split: '/' | last | remove: '-iocs.json' %}
-  {% include catalog-card.html url=e.ioc_url title=ititle date=e.date severity=e.severity tags=itags slug=islug %}
+  {%- comment -%} The card opens the readable table when one exists, and falls back to the
+    raw JSON when it does not, so a feed with nothing typeable still links somewhere real
+    rather than 404ing. The raw feed is linked prominently from the table page either way. {%- endcomment -%}
+  {% if site.data.ioc_tables[islug] %}{% assign icard = site.data.ioc_tables[islug].page_url %}{% else %}{% assign icard = e.ioc_url %}{% endif %}
+  {% include catalog-card.html url=icard title=ititle date=e.date severity=e.severity tags=itags slug=islug %}
 {% endfor %}
 </div>
 

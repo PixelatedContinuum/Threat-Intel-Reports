@@ -57,6 +57,7 @@ It routes on staged paths, so a commit touching only prose runs nothing and says
 |---|---|---|
 | `hunting-detections/*.md`, `_data/detection_manifests.yml` | `check-detection-manifest.js` | manifest stale against source |
 | `ioc-feeds/*.json`, `_data/catalog.yml`, `assets/data/ioc-index.json` | `check-ioc-index.js` | index stale, embargoed feed leaking |
+| `ioc-feeds/*.json`, `_data/catalog.yml`, `reports/*/index.md`, the stubs | `check-ioc-tables.js` | viewer tables stale, a stub surviving after re-embargo |
 | `_data/wire.yml` | `check-wire.js` | malformed or description-bearing wire data |
 | `reports/*/index.md` | `check-report.js` on the changed reports only | orphaned figure-nav anchors, partly-marked tiers, broken strip |
 | `_data/glossary.yml` | nothing runnable | prints the post-push sweep as owed |
@@ -77,5 +78,11 @@ them as owed rather than implying coverage.
 regenerates the manifest in memory and diffs it against the committed file, the same
 regenerate-and-diff approach `check-ioc-index.js` uses. Line endings and a trailing
 newline are not drift.
+
+`node generate-ioc-tables.js` writes `_data/ioc_tables.yml` and one stub page per PUBLISHED
+feed under `ioc-feeds/<slug>/`, and REMOVES a stub whose feed is no longer published.
+`node check-ioc-tables.js` gates both by regenerate-and-diff. Only published feeds get a
+page: the three embargoed campaigns keep their raw JSON, which is live-but-unlisted by
+design, and gain no rendered surface.
 
 Nothing here is published: `_config.yml` excludes `tools/*` from the Jekyll build.

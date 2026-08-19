@@ -33,6 +33,12 @@ var CHECKS = {
     cmd: 'check-ioc-index.js',
     why: 'ioc-feeds/, the catalog or the index itself is staged'
   },
+  'ioc-tables': {
+    id: 'ioc-tables',
+    label: 'feed viewer tables',
+    cmd: 'check-ioc-tables.js',
+    why: 'ioc-feeds/, the catalog or a viewer stub is staged'
+  },
   wire: {
     id: 'wire',
     label: 'wire data',
@@ -66,6 +72,14 @@ function plan(paths, opts) {
     if (/^ioc-feeds\/.+\.json$/.test(p) || p === '_data/catalog.yml' ||
         p === 'assets/data/ioc-index.json') {
       want['ioc-index'] = true;
+    }
+    /* The viewer tables derive from the same two sources as the index, plus the
+       report front matter that carries the other half of the publication signal,
+       and the generated stubs themselves. A stub surviving after its campaign
+       went back under embargo is the failure this routing exists to reach. */
+    if (/^ioc-feeds\//.test(p) || p === '_data/catalog.yml' ||
+        p === '_data/ioc_tables.yml' || /^reports\/[^/]+\/index\.md$/.test(p)) {
+      want['ioc-tables'] = true;
     }
     if (p === '_data/wire.yml') want.wire = true;
     if (p === '_data/glossary.yml' && owed.indexOf(OWED_GLOSSARY) === -1) owed.push(OWED_GLOSSARY);

@@ -3819,3 +3819,117 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   font-style: italic;
   padding-top: 0.4em;
 }
+
+
+/* --- IOC feed viewer (/ioc-feeds/<slug>/) --------------------------------
+
+   Sized in `em` throughout. The theme sets body { font-size: 1.25em } = 20px
+   while `rem` resolves against the 16px root, so a number copied from another
+   component is safe and a UNIT copied from one is not. This cost a 22% undersized
+   component once already.
+
+   Every colour default is declared on the CONTAINER so it is inherited. A
+   variable fallback written on the same element it falls back for is an override,
+   not a fallback: the two selectors score equally and source order decides. */
+.hl-ioctable {
+  --ioct-border: var(--hl-border-card, #2a2a2a);
+  --ioct-dim: var(--hl-text-muted, #9aa0a6);
+  margin: 1.4em 0 2.4em;
+}
+
+.hl-ioctable__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9em;
+  margin-bottom: 1.1em;
+}
+.hl-ioctable__link { font-size: 0.82em; }
+
+.hl-ioctable__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45em;
+  margin-bottom: 0.85em;
+}
+.hl-ioctable__chip {
+  font: inherit;
+  font-size: 0.74em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--ioct-border);
+  opacity: 0.75;
+}
+.hl-ioctable__chip:hover { opacity: 1; }
+.hl-ioctable__chip[aria-pressed="true"] {
+  opacity: 1;
+  border-color: currentColor;
+  background: rgba(248, 113, 113, 0.16);
+}
+.hl-ioctable__chipn { opacity: 0.6; margin-left: 0.35em; }
+
+.hl-ioctable__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  align-items: center;
+  padding-bottom: 0.9em;
+  border-bottom: 1px solid var(--ioct-border);
+}
+.hl-ioctable__btn {
+  font: inherit;
+  font-size: 0.76em;
+  padding: 4px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  border: 1px solid currentColor;
+}
+.hl-ioctable__btn:hover { background: rgba(248, 113, 113, 0.12); }
+.hl-ioctable__count {
+  font-size: 0.76em;
+  color: var(--ioct-dim);
+  margin-left: auto;
+}
+
+/* The table scrolls inside its own box rather than pushing the page sideways.
+   A sha256 is 64 unbreakable characters, and the site's overflow-wrap rule is
+   scoped to <code>, which is why every value is wrapped in one. */
+.hl-ioctable__scroll { overflow-x: auto; }
+.hl-ioctable__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+/* The type column is held at a fixed band. `auto` here would be max-content and
+   a long value in the sibling column would crush it, which is the failure the
+   Wire hit with its tag column. */
+.hl-ioctable__table th:first-child,
+.hl-ioctable__table td:first-child { width: 7.5em; }
+.hl-ioctable__table td { vertical-align: top; }
+.hl-ioctable__table tbody tr[hidden] { display: none; }
+
+.hl-ioctable__type {
+  font-size: 0.72em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ioct-dim);
+  white-space: nowrap;
+}
+.hl-ioctable__table code { font-size: 0.84em; }
+
+.hl-ioctable__untyped,
+.hl-ioctable__licence {
+  font-size: 0.8em;
+  color: var(--ioct-dim);
+  margin-top: 1.1em;
+}
+
+@media (max-width: 640px) {
+  .hl-ioctable__count { margin-left: 0; width: 100%; }
+  .hl-ioctable__table th:first-child,
+  .hl-ioctable__table td:first-child { width: 5.5em; }
+}
