@@ -30,6 +30,7 @@ stix_bundle: /stix/webshells-to-the-cloud.json
 ---
 
 ## BLUF (Bottom Line Up Front)
+{: .hl-tier-1}
 
 ### Executive Summary
 
@@ -95,6 +96,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 ---
 
 ## Technical Analysis
+{: .hl-tier-3}
 
 ### Infrastructure Overview
 <table class="professional-table">
@@ -230,6 +232,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 ---
 
 ## Attack Chain Analysis
+{: .hl-tier-3}
 
 ### Campaign Structure Summary
 <table class="professional-table">
@@ -380,5 +383,6 @@ A: Cloud access monitoring, API security controls, regular access reviews, and l
 ---
 
 ## License
+{: .hl-tier-2}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

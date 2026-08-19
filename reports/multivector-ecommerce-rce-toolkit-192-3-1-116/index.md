@@ -77,6 +77,7 @@ figure_nav:
 ---
 
 ## 1. Operational Brief
+{: .hl-tier-1}
 
 I keep running into this same setup, in my own investigations and across public reporting, often enough now that I read it as a pattern and not a one-off. A low-skill operator stages a large pile of attack scripts they almost certainly did not hand-write, then wires an off-the-shelf agentic-AI framework in as the console they run the whole operation from.
 
@@ -129,6 +130,7 @@ Structured indicators are published in the machine-readable [IOC feed](/ioc-feed
 ---
 
 ## 2. Threat Classification and Campaign Scope
+{: .hl-tier-2}
 
 This is an operator toolkit and captured-data cache, not a malware family, and the classification has direct consequences for how a defender should use this report. There is nothing to signature. Detection value lies in the exposure surfaces this operator consumes and the request patterns that consume them.
 
@@ -191,6 +193,7 @@ Second, requesting `hxxp://192.3.1[.]116:7777/cmd[.]jsp` returns the **source** 
 ---
 
 ## 3. Risk Assessment
+{: .hl-tier-1}
 
 The overall risk score is **7.2/10**, which puts the threat level at **HIGH**.
 
@@ -245,6 +248,7 @@ What outlasts the address is the shopping list. Unauthenticated monitoring conso
 ---
 
 ## 4. The Wider Target Landscape
+{: .hl-tier-2}
 
 Twelve to fourteen entities show up across five corporate groups and at least seven loose threads, and once you step outside the two anchors, none of them were compromised. The operator looked, probed, and moved on.
 
@@ -302,6 +306,7 @@ So no target in this report gets called a grey-market operator on the strength o
 ---
 
 ## 5. The LLM-Assisted Operator: What the Staging Directory Shows About the How
+{: .hl-tier-2}
 
 Plenty of reporting now says threat actors are using AI. Very little of it shows the mechanics, because the mechanics normally sit on the attacker's own machine where no researcher can see them. This directory is one of the cases where they were left in the open.
 
@@ -357,6 +362,7 @@ And none of this is novel to this operator. Commodity agentic-AI adoption as a h
 ---
 
 ## 6. Anchor 1: riverbaybuy.com, Confirmed Multi-Victim Data Theft
+{: .hl-tier-3}
 
 Four independent data-sourcing channels converged on one platform, and the operator's own scripts retain the results of a completed extraction. That combination, planning plus a preserved outcome, is what separates this target from every other thread in the campaign. It is also the one target where the harm is real and named, not hypothetical.
 
@@ -502,6 +508,7 @@ This is a finding and not a caveat. In a campaign that is overwhelmingly capabil
 ---
 
 ## 7. Anchor 2: Quanzipin, the Clean and Fixable Exposure
+{: .hl-tier-3}
 
 An unauthenticated database-monitoring console handed a threat actor the full data model of a live production platform, and the platform has since closed it. This is the most actionable finding in the investigation. It is concrete, the fix is unambiguous, and the boundary of the harm is knowable. It is also the only target here with a registered legal entity behind it, which made it the one exposure that could actually be reported to someone. It is also the clearest teaching case here: the harm from an exposed monitoring console is what an attacker learns, and that knowledge does not expire when the console is closed.
 
@@ -564,6 +571,7 @@ One useful negative turned up elsewhere in the campaign. A second Druid instance
 ---
 
 ## 8. The Exploitation Toolkit: Eight Commodity Technique Classes
+{: .hl-tier-3}
 
 No exploitation class in this toolkit is novel and none is a zero-day. All eight exploitation technique classes come from the well-documented public record with mature proof-of-concept code available, and that is what makes the campaign transferable instead of a curiosity: these are the techniques a defender will actually meet. The gap worth acting on is that six of the eight had no published Sigma, Suricata or YARA coverage before this investigation. A fully commodity technique set with no shipped detection is a live defensive hole, and closing it does not depend on this operator staying active.
 
@@ -684,6 +692,7 @@ Also present are brute-force input wordlists, which are frequently misread as ha
 ---
 
 ## 9. Observed Outcomes: What Was Achieved Versus What Was Built
+{: .hl-tier-2}
 
 Outcome artifacts exist for six separate exploitation efforts in this campaign, and five of the six are negative. That ratio is the calibration that matters most here. Most published threat reporting describes what an attacker's tools can do, because a captured tool is all there is to describe. Here the operator's own logs, error messages and result files survived alongside the tooling, so it is possible to say what actually happened, and most of what happened was failure. A reader who treated the toolkit inventory in Section 8 as a breach summary would overstate the harm by a wide margin.
 
@@ -798,6 +807,7 @@ The pattern in that table is the campaign's central lesson for defenders. Every 
 ---
 
 ## 10. Operator Infrastructure and Control Plane
+{: .hl-tier-2}
 
 The operator runs one host that does everything, wrapped in three independent and non-overlapping obfuscation choices. Consolidation on a single platform is why the exposure of one open port revealed the entire operation, including the agent console described in Section 5.
 
@@ -833,6 +843,7 @@ The tempo is steady and unhurried. One host has run continuously since at least 
 ---
 
 ## 11. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 Thirty-six techniques map across eleven tactics, and the attempted-versus-achieved split is carried inside the table rather than flattened out of it. That is why the per-row confidence column is retained here: a mapping that reads as thirty-six achieved techniques would describe a different and much worse campaign than the evidence supports.
 
@@ -901,6 +912,7 @@ Nothing under Impact maps beyond T1531. There is no ransomware, no wiper, no des
 ---
 
 ## 12. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-019 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports, it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -1011,6 +1023,7 @@ Future matching should anchor on characteristics one and three, which are infras
 ---
 
 ## 13. Indicators of Compromise and Detection Coverage
+{: .hl-tier-2}
 
 The machine-readable indicators live in the [IOC feed](/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json) and the rules live in the [detection file](/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/). Neither is reproduced here, so take them from the source rather than retyping anything out of this page.
 
@@ -1062,6 +1075,7 @@ Reused valid credentials produce traffic indistinguishable from their legitimate
 ---
 
 ## 14. Confidence Summary, Gaps and Calibration
+{: .hl-tier-2}
 
 In a corpus that is overwhelmingly capability and not outcome, the difference between what an operator built and what an operator achieved is the entire intelligence value. Here is where that line sits.
 
@@ -1136,6 +1150,7 @@ Several conclusions in this report were revised downward before publication. The
 ---
 
 ## Response Orientation
+{: .hl-tier-2}
 
 This is not an incident response guide. It is a short orientation on what to address. Readers with an active incident should engage their own response function.
 
@@ -1162,6 +1177,7 @@ Containment categories.
 ---
 
 ## References
+{: .hl-tier-2}
 
 These sources support this report's central claims: that every technique class observed here is drawn from the well-documented public record with mature proof-of-concept code already available, and that commodity agentic-AI adoption by offensive operators is an actively documented trend and not a novelty. Both claims are what make the operator's failure to convert any of it into stolen data meaningful, so they are worth being able to check.
 

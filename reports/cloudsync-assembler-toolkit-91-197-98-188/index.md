@@ -67,6 +67,7 @@ figure_nav:
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 An assembler-model operator looks like this. Twenty-two files staged on one open web directory, of which the operator plausibly wrote three. Around those three sit a delivery loader bought or borrowed from a criminal builder service, an ASPX web shell from a Chinese .NET security community, a commodity credential stealer they collected and never even wired in, six separate public offensive-tooling ecosystems, and three unrelated commercial remote-desktop products.
 
@@ -96,6 +97,7 @@ This report exists because CloudSync has no public documentation anywhere and be
 ---
 
 ## 2. Business Risk Assessment
+{: .hl-tier-1}
 
 The toolkit scores **8.3/10, HIGH**. What drives that number is not any single capability but the completeness of the chain, running from a proxy-aware delivery stub through fileless execution, forest-level domain persistence, internal network mapping and a full lateral-movement toolset, aimed at an organization that holds patient data.
 
@@ -133,6 +135,7 @@ The one piece of genuinely good news is that the kit contains no ransomware. I c
 ---
 
 ## 3. Campaign Scope and Target Landscape
+{: .hl-tier-2}
 
 The scope is wider than one victim, and finding that out changed how urgent this became. The organization named in the tooling is a German outpatient healthcare provider, but that organization does not run its own perimeter. Its internet-facing services sit behind an edge operated by a small regional IT provider, and the same edge fronts several other customers.
 
@@ -161,6 +164,7 @@ I hold that at **LOW**, and I want to be precise about why rather than dressing 
 ---
 
 ## 4. Technical Classification
+{: .hl-tier-2}
 
 This is a toolkit, not a sample, and reading it as a sample is how an analyst ends up attributing it to the wrong person. Twenty-two files were staged on one open directory, and they fall into five buckets whose provenance runs from operator-authored to entirely off the shelf.
 
@@ -210,6 +214,7 @@ I read this as a specialist who buys or borrows the parts they are not good at, 
 ---
 
 ## 5. The Attack Chain, End to End
+{: .hl-tier-2}
 
 The operator runs two toolchains that reach the same place by different routes, and the useful way to read them is side by side. Both end with durable remote access plus credential theft on a host the operator can return to.
 
@@ -252,6 +257,7 @@ The other thing the architecture tells you is how much work went into it. Static
 ---
 
 ## 6. Threat Intelligence: Where the Kit Came From
+{: .hl-tier-2}
 
 The supply chain behind this operation is the intelligence, so this section walks the sourcing rather than the threat landscape. Every component below is somebody else's work, which is what makes the composition itself the operator's signature.
 
@@ -318,6 +324,7 @@ The one thing the hosting does tell you is tempo. The staging host has SSH conti
 ---
 
 ## 7. CloudSync: The Tor-Hidden-Service Panel RAT
+{: .hl-tier-3}
 
 CloudSync is one builder's output across five recovered samples, written in C++ and cross-compiled from Linux with MinGW-w64, and it is genuinely unusual in one respect. Rather than calling home to a panel the operator hosts, it turns the victim into the panel. The implant carries a statically linked Tor build, provisions a hidden service on the victim host, and serves an HTML control interface from an embedded HTTP server reachable only through that per-victim onion address.
 
@@ -412,6 +419,7 @@ The string `ad_setup` matches Tor's own `circpad_setup_machine_on_circ`. Only `b
 ---
 
 ## 8. The Fileless .NET Chain
+{: .hl-tier-3}
 
 This is the part of the toolkit that changed my view of the operator, and it is worth saying why before the mechanics.
 
@@ -489,6 +497,7 @@ One tempting cross-toolchain link does not exist, and it is worth stating plainl
 ---
 
 ## 9. The Orchestrator, the Stub, and the Parked Stealer
+{: .hl-tier-3}
 
 Three smaller files complete the kit, and one of them is the most important artifact in the case.
 
@@ -599,6 +608,7 @@ On the network side it queries `http://ip-api.com/json/` over plain HTTP with **
 ---
 
 ## 10. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 Coverage spans 12 of the 14 enterprise tactics, which is what a complete intrusion kit rather than a single family looks like. Reconnaissance and Resource Development are absent because both describe operator activity that is not visible from the staged files.
 
@@ -673,6 +683,7 @@ The techniques that carry the most detection value are concentrated in Defense E
 ---
 
 ## 11. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-[YEAR]-[###] is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports, it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -795,6 +806,7 @@ The honest caveat on both readings is the same bound stated in Section 7.2. The 
 ---
 
 ## 12. Indicators of Compromise
+{: .hl-tier-2}
 
 The validated, machine-readable feed is published separately at **[`cloudsync-assembler-toolkit-91-197-98-188-iocs.json`](/ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json)**, marked TLP:CLEAR and formatted for direct ingestion. Network indicators in the feed are not defanged, because a defanged value breaks the parser that is supposed to consume it.
 
@@ -835,6 +847,7 @@ Credentials are defanged throughout to first eight and last four characters, bec
 ---
 
 ## 13. Detection and Response Guidance
+{: .hl-tier-2}
 
 The full rule set is published separately at **[`cloudsync-assembler-toolkit-91-197-98-188-detections.md`](/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/)**, organized by component rather than by campaign, because each component needs to attribute correctly for the rules to stay useful when the operator swaps one out. Coverage is **7 YARA rules, 18 Sigma rules and 4 Suricata signatures**, split into Detection tier for the high-fidelity alerting-grade rules and Hunting tier for the broader ones that expect analyst review.
 
@@ -894,6 +907,7 @@ Not a runbook. This is what to look at, for an organization that finds any of it
 ---
 
 ## 14. Confidence Summary and Evidence Gaps
+{: .hl-tier-2}
 
 | Finding | Confidence |
 |---|---|
@@ -966,6 +980,7 @@ A supporting detail was retracted without the conclusion collapsing. A server ve
 ---
 
 ## 15. References
+{: .hl-tier-2}
 
 ### Primary sources for kit provenance
 

@@ -46,6 +46,7 @@ figure_nav:
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 A live single-host Windows post-exploitation operation at `67.215.232[.]25` pairs a **bespoke Flask C2 beacon API** with a **custom MSSQL SQL-CLR reverse-shell backdoor** and a complete public privilege-escalation toolkit. This report delivers the first public documentation of that C2's beacon route surface and its shared-host link to the reverse-engineered tooling. Three co-located services run on one budget US VPS: an open directory on port 1337 caching a 17-file toolkit, the Flask C2 panel on port 8080, and an opaque second Flask listener on port 5000. The operator's objective is unambiguous from the toolkit's composition: gain a foothold as a service account that holds SeImpersonatePrivilege — through either an IIS webshell or the MSSQL backdoor — escalate to SYSTEM with the "Potato" suite, then pivot through Active Directory with Kerberos and dMSA abuse, all orchestrated through the Flask panel.
 
@@ -69,6 +70,7 @@ The defensive bottom line is that the custom MSSQL CLR backdoor is the highest-v
 ---
 
 ## 2. Campaign Architecture and Kill Chain
+{: .hl-tier-2}
 
 > **Analyst note:** This section maps how the operator intends to move from initial access on a target server all the way to domain control, using the tools staged in the open directory. Think of it as a blueprint: each stage hands off to the next, and every tool on the list serves a specific step in that path.
 
@@ -119,6 +121,7 @@ The craft signal in this campaign is narrow and worth stating plainly: the opera
 ---
 
 ## 3. Technical Classification
+{: .hl-tier-2}
 
 | Attribute | Assessment |
 |---|---|
@@ -137,6 +140,7 @@ The campaign is not a single malware family and should not be described as one. 
 ---
 
 ## 4. The MSSQL CLR Reverse-Shell Backdoor (cmd_exec.dll)
+{: .hl-tier-3}
 
 > **Analyst note:** This section dissects the one piece of custom compiled code in the toolkit — a tiny .NET library designed to be loaded *inside* Microsoft SQL Server, where it gives the operator a remote command shell running with SQL Server's privileges. The same design that makes it powerful (it only runs inside the database engine) is exactly what makes it nearly invisible to automated malware scanners, which never load it into a real SQL Server. That blind spot is the central detection lesson of this report.
 
@@ -201,6 +205,7 @@ The report's position, stated plainly: this component is **detection-valuable, n
 ---
 
 ## 5. The Bespoke Flask C2 Beacon API
+{: .hl-tier-3}
 
 > **Analyst note:** This section documents the operator's command-and-control server — the system that infected machines report back to and receive instructions from. Unlike off-the-shelf C2 frameworks (Cobalt Strike, Sliver, and similar), this one appears to be hand-built in Python. It is deliberately minimal: it exposes only three web addresses, has no login page or dashboard, and uses an unusual internal vocabulary. Mapping that small, distinctive surface is one of the two original contributions of this report, and it yields a low-false-positive network signature defenders can deploy.
 
@@ -247,6 +252,7 @@ The linkage must be stated with its precise strength: it is **shared-host only**
 ---
 
 ## 6. Initial-Access and LPE Components
+{: .hl-tier-3}
 
 This section covers the operation's two webshell footholds and the carried CVE proof-of-concept. The webshells are the IIS half of the dual-foothold model (the MSSQL half, `cmd_exec.dll`, is covered in Section 4); the CVE PoC is a patch callout rather than a live threat.
 
@@ -304,6 +310,7 @@ To frame this honestly, and I maintain the framing, I do **not** claim the opera
 ---
 
 ## 7. The Public Post-Exploitation Toolkit
+{: .hl-tier-3}
 
 The bulk of the staged toolkit is public, commodity tooling — six SeImpersonate "Potato" escalators, the GhostPack Rubeus Kerberos toolkit, SharpSuccessor for dMSA abuse, and Netcat. This report documents each at the depth needed to detect and contextualize it within the operator's chain, without re-deriving the well-published research behind each tool. The honest-framing distinction from Section 2.2 carries throughout: five of these are operator-recompiled .NET builds identified by signature, and the native tools are prebuilt public binaries identified by hash.
 
@@ -365,6 +372,7 @@ The operational tempo is telling. The infrastructure went live 2026-03-09 and th
 ---
 
 ## 8. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. The Confidence Summary in Section 11 organizes findings by confidence level for the higher-level view. Mappings describe capability staged in the toolkit; where a capability is staged but not observed executing, it is marked. Technique IDs were validated against the MITRE ATT&CK Enterprise matrix.
 
@@ -396,6 +404,7 @@ Checking tactic coverage, Initial Access, Execution, Persistence, Privilege Esca
 ---
 
 ## 9. Threat Actor Assessment
+{: .hl-tier-2}
 
 Attribution to a named threat actor is **not possible** from the available evidence. Two independent intelligence corpora return no actor association (VirusTotal `related_threat_actors`: none; Hunt.io threat-actor catalog: none, live-verified 2026-06-12), no security vendor at any credibility tier attributes this activity, and the single prior public reference (Breakglass Intelligence, 2026-04-09) likewise reports attribution as unknown. The confidence in attribution is **INSUFFICIENT (<50%)** — the formal designation is **Unknown threat actor**.
 
@@ -431,6 +440,7 @@ Prior art is credited to Breakglass Intelligence, who first documented the C2 pa
 ---
 
 ## 10. Indicators of Compromise
+{: .hl-tier-2}
 
 The complete, validated, machine-readable IOC feed is published separately at the **[IOC feed]({{ page.ioc_feed }})** (JSON, no defanging — SIEM/EDR-ingestible). This section summarizes the highest-value indicators and the exclusion rationale; it is not the full feed, and IOCs are not embedded in this report.
 
@@ -453,6 +463,7 @@ The indicator counts run to 15 SHA256 file hashes, 1 DEFINITE bespoke backdoor a
 ---
 
 ## 11. Risk Assessment
+{: .hl-tier-1}
 
 The toolkit's *capability* ceiling is HIGH, but the *campaign* threat level is MEDIUM — the operation is idle and unvictimed. The override callout at the top of this report explains the distinction.
 
@@ -493,6 +504,7 @@ Against an unprepared MSSQL, IIS, or Active Directory environment, this toolkit 
 ---
 
 ## 12. Detection and Response Guidance
+{: .hl-tier-2}
 
 A complete, deployable detection package accompanies this report: **[detection rules]({{ page.detection_page }})** (4 YARA rules, 7 Sigma rules, 3 Suricata signatures) and the machine-readable **[IOC feed]({{ page.ioc_feed }})**. Detection rules are not embedded in this report. The package is built around the campaign's central problem — the bespoke MSSQL backdoor that automated tooling misses — and it includes coverage for the IIS webshell vector, the native-tool imphashes, and the distinctive Flask C2 network signature. The detection file's [Coverage Gaps]({{ page.detection_page }}#coverage-gaps) section documents, honestly, what could not be covered (the unrecovered beacon implant and webshell payload, and the reliance on existing public rules for the recompiled .NET tooling).
 
@@ -517,6 +529,7 @@ The brief orientation below is intended only to point defenders at *what to addr
 ---
 
 ## 13. Gaps and Limitations
+{: .hl-tier-2}
 
 These are documented limits of passive, OSINT-and-static analysis of an idle host — not failures of analysis.
 
@@ -531,6 +544,7 @@ These are documented limits of passive, OSINT-and-static analysis of an idle hos
 ---
 
 ## 14. References and Sources
+{: .hl-tier-2}
 
 **Prior public reference (credited):**
 - Breakglass Intelligence (2026-04-09): "Flask C2 — 67.215.232.25 unauth /health" — first public documentation of the C2 panel; reports attribution unknown. `https://intel.breakglass.tech/post/flask-c2-67-215-232-25-unauth-health-hostpapa` (post #158873). Tier 3.

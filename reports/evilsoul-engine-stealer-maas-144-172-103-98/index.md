@@ -54,6 +54,7 @@ figure_nav:
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS) — a productized criminal factory that compiles and auto-distributes uniquely-packed Discord, browser, and cryptocurrency-theft payloads for paying customers. It is operated by the named, self-identified Brazilian actor `n_3_xl` / `@govbrasil`, branded KAIDO (`0xK41`), at HIGH confidence — the same actor whose KAIDO remote access trojan is documented in the companion report. The Hunters Ledger recovered and reverse-engineered the operation's complete server side — the stealer template, an automated builder, a JavaScript packer, a MongoDB-backed web control panel, and an exfiltration/delivery service — after an open-directory sweep surfaced the staging server at `144.172.103[.]98:8888`; with the origin already offline, its files were preserved and recovered via [Hunt.io's AttackCapture](https://hunt.io/). This report answers the intelligence question that motivated the investigation: there was no public technical documentation of the EvilSoul-Engine stealer-builder — its Chrome App-Bound-Encryption (ABE-v20) bypass, its process-token-impersonation credential decryptor, or its Microsoft Defender timing-window evasion — and none of the operation's built payloads carried a working detection signature. This report closes that gap and hands defenders behavior-based detection for a threat that hash-blocking cannot durably catch.
 
@@ -76,6 +77,7 @@ Overall risk is HIGH, 8.5 out of 10. The operation weaponizes credential theft t
 ---
 
 ## 2. Business Risk Assessment
+{: .hl-tier-1}
 
 EvilSoul-Engine scores 8.5/10 — HIGH, driven by credential-theft capability that defeats current browser and endpoint protections and by a MaaS distribution model that propagates that capability to any buyer. The score is a weighted average across six risk dimensions; each is justified by specific, observed capability rather than family reputation.
 
@@ -111,6 +113,7 @@ The endpoint's own defenses are a target. Several tiers actively disable Microso
 ---
 
 ## 3. Operational Reality and Victimology
+{: .hl-tier-2}
 
 Hold two truths at once: the recovered infrastructure is a dead staging box, and the operator behind it is concurrently active. The open directory at `144.172.103[.]98:8888` was a genuine, torn-down staging instance of the operation's newer EvilSoul-Engine stealer-builder line (HIGH confidence — its exact purpose as a pre-production staging box versus a proof-of-concept build environment cannot be distinguished from the recovered artifacts, but both readings agree it was non-production and operator-controlled) — captured over a single roughly one-week window (2026-06-06 to 2026-06-13) and confirmed dead by 2026-06-27. All of its channels are verified offline: the Telegram bot returns `401 Unauthorized`, the Discord webhooks return `10015 Unknown Webhook`, and the origin server is down. But the same operator's KAIDO Quasar remote access trojan command-and-control at `144.172.109[.]203` was live with fresh samples first seen in May 2026 — samples that predate the June open-directory capture. This is a live, multi-product operator caught through one dead staging artifact, not a defunct one-off campaign.
 
@@ -132,6 +135,7 @@ Victim targeting is opportunistic and consumer-facing, not sector-specific or ge
 ---
 
 ## 4. Technical Classification and Ecosystem Overview
+{: .hl-tier-2}
 
 > **Analyst note:** EvilSoul-Engine is a productized stealer *factory*, not a single payload. The recovered open directory is the server side: a builder that injects a customer's configuration into a stealer template, runs a packer over it, compiles an executable, and auto-distributes the result across file hosts and a Telegram bot. This section describes the shape of the operation — its server-side components and the tiers of payload it produces — so the capability deep-dives that follow have a map to sit on. Offensive internals (injector code, exact packer routines) are summarized at capability altitude, not reproduced.
 
@@ -183,6 +187,7 @@ Across all 21 recovered files, no existing YARA signature produced a single hit,
 ---
 
 ## 5. Technical Capabilities — The Built Stealer Payload
+{: .hl-tier-3}
 
 The EvilSoul-Engine stealer harvests a consumer's full credential footprint — Discord accounts, browser secrets, cryptocurrency wallets, and gaming accounts — and defeats the newest browser protection (Chrome App-Bound Encryption) to do it. This section walks each capability class with the specific evidence recovered from `stealer.js` and its sibling builds, then translates what each means for defenders. The capabilities are stated at the level of *what the malware does and how it is detected*; the offensive code paths are described at capability altitude, not reproduced.
 
@@ -322,6 +327,7 @@ To detect it, the network signatures are strong precisely because they are hardc
 ---
 
 ## 6. The 299a2e7f Socket.IO Variant — Stealer Plus Remote Access Trojan
+{: .hl-tier-3}
 
 > **Analyst note:** This is a distinct EvilSoul-Engine product tier — not just a fire-and-forget stealer, but a stealer with a full real-time remote access trojan bolted on, driven over a persistent Socket.IO channel. Its payload was V8 bytecode, so static analysis was unable to read it; its decrypted source was recovered from process memory during observed execution. This section describes what the tier can do to an infected host and how each capability is detected. The remote-control internals are summarized at capability altitude.
 
@@ -361,6 +367,7 @@ Because this tier's payload is V8 bytecode, static analysis was insufficient and
 ---
 
 ## 7. The Maploot and Tinarox Electron Twins — One Exfiltration Stack, Two Builds
+{: .hl-tier-3}
 
 > **Analyst note:** Maploot and Tinarox are two EvilSoul-Engine Electron builds that masquerade as free games and are delivered as MSI installers. Their significance is evidentiary: they prove, at the byte level, that the same operator produced both — and they let defenders watch the factory's packer *evolve* between two builds. This section explains the shared capabilities, the decisive same-operator finding, and what the twins reveal about the builder.
 
@@ -393,6 +400,7 @@ Maploot's backend serves its own copy of the Chrome App-Bound-Encryption injecto
 ---
 
 ## 8. The Commodity App-Bound-Encryption Bypass Tool (Supply-Chain Reuse)
+{: .hl-tier-3}
 
 > **Analyst note:** The Chrome credential-decryption tool that multiple EvilSoul-Engine tiers fetch at runtime is not the operator's own invention — it is a public, well-documented red-team tool that the operation adopted. This distinction matters for accurate reporting: it is a supply-chain-adoption story, not a novel-tradecraft story. This section covers what the tool does (at capability altitude), how it is family-named by antivirus vendors, and why its provenance is intel-relevant.
 
@@ -422,6 +430,7 @@ Two points for defenders:
 ---
 
 ## 9. Dynamic Analysis — The 299a2e7f Execution Behavior
+{: .hl-tier-3}
 
 > **Analyst note:** The `299a2e7f` Socket.IO variant ships as V8 bytecode, which static tooling cannot read as source. Its behavior and its decrypted JavaScript source were instead recovered from observed execution — the malware's own process memory exposed the source it was running, described in Section 6. This section presents what the sample did, in the order it did it.
 
@@ -450,6 +459,7 @@ Not triggered during this execution — a run-specific gap, not a negative findi
 ---
 
 ## 10. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Analyst note:** Attribution here operates on two separate levels that must not be collapsed: *who operates the recovered kit* and *whose builder it is*. These are two different Brazilian actors. This section states each at its assessed confidence, preserves the investigation's corrected conclusions, and flags the one equation that was investigated and retracted so it is not reintroduced.
 
@@ -497,6 +507,7 @@ Two caveats bound the attribution honestly. First, the primary public source for
 ---
 
 ## 11. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(DEFINITE)` (directly observed, no alternative explanation) or `(MODERATE)` (code evidence, not fully triggered in the observed runs). The Confidence Summary in Section 14 organizes findings by confidence level for the higher-level view. This table covers the EvilSoul-Engine stealer-builder ecosystem only; the KAIDO Quasar RAT techniques are mapped in the companion report.
 
@@ -540,6 +551,7 @@ On coverage, the mapping is credential-access- and defense-evasion-heavy, exactl
 ---
 
 ## 12. Infrastructure Analysis
+{: .hl-tier-2}
 
 > **Analyst note:** This section maps the EvilSoul-Engine infrastructure cluster — the dead origin, the builder host, and the exfiltration backends. The takeaway for defenders is which indicators are durable (operator-provisioned, safe to block) versus which are shared services (block the specific value, not the provider). The infrastructure attribution is a corroborating layer, not the primary basis for naming the operator.
 
@@ -596,6 +608,7 @@ An unrelated co-tenant was observed on the historical `evilsoul1337[.]xyz` host 
 ---
 
 ## 13. Indicators of Compromise
+{: .hl-tier-2}
 
 The complete, validated, machine-readable indicator set is published as a separate feed:
 
@@ -637,6 +650,7 @@ A durability caveat, repeated because it governs how these are used: because eve
 ---
 
 ## 14. Detection and Response Guidance
+{: .hl-tier-2}
 
 The full detection content — YARA rules, Sigma rules, and Suricata signatures — is published as a separate file:
 
@@ -707,6 +721,7 @@ The detection file's 6 Sigma rules and 6 Suricata signatures back these five pri
 ---
 
 ## 15. Response Orientation
+{: .hl-tier-2}
 
 This is a brief orientation on *what to address*, not a step-by-step incident-response procedure. Teams with an active-response need should engage their own incident-response function or a dedicated playbook.
 
@@ -729,6 +744,7 @@ This is a brief orientation on *what to address*, not a step-by-step incident-re
 ---
 
 ## 16. Coverage Gaps and Open Questions
+{: .hl-tier-2}
 
 This section lists what the investigation was unable to resolve, so a reader can weigh confidence accurately and knows what further evidence would close each gap.
 
@@ -743,6 +759,7 @@ The four factory-output executables are hash-only. The `static/*.exe` files refe
 ---
 
 ## 17. Assumptions, Caveats, and Data Gaps
+{: .hl-tier-2}
 
 Section 16 details the four open research questions; this section lists the remaining scope boundaries and interpretive calls that bound how this report's findings should be read.
 

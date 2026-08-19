@@ -36,6 +36,7 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 > **Update — April 24, 2026.** A re-scan of the DLS on 2026-04-24 identified
 > **seven additional named victims** uploaded after this report's original
@@ -98,6 +99,7 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 ---
 
 ## 2. Infrastructure Overview
+{: .hl-tier-2}
 
 > **Analyst note:** This section describes the publication-side infrastructure — the servers and domains the operator uses to host stolen data and publish ransom communications. It does not describe how the operator initially compromised victims; that chain is covered in Section 5. The key takeaway is that ShinyHunters segments their leak site (data) from their identity page (PGP keys, communications) across two distinct Russian providers, which makes single-provider takedown ineffective.
 
@@ -155,6 +157,7 @@ The infrastructure constitutes a five-node resilience architecture: DLS clearnet
 ---
 
 ## 3. Actor Operations
+{: .hl-tier-2}
 
 > **Analyst note:** This section documents how the operator brands and structures the leak site itself — the ransom note, the filename convention, the upload cadence, and the directory layout. These are the artifacts a defender will encounter when an organization discovers itself listed on the DLS, and they are the basis for the YARA filename rules in the linked detection file.
 
@@ -231,6 +234,7 @@ The two 2020 keys cross-signed the rotation handoff to the current key on 2026-0
 ---
 
 ## 4. Victim Inventory and Disclosure Status
+{: .hl-tier-2}
 
 > **Analyst note:** This section is the consolidated 29-victim roster derived from the DLS file inventory and subdirectory structure, cross-checked against public press, breach trackers (HIBP, ransomware.live), and class-action court filings. The single-most-important finding here is that twenty-eight of twenty-nine named victims have prior public reporting; one — Alert360 — does not.
 
@@ -406,6 +410,7 @@ The operator's stated posture is that data will remain on the DLS "indefinitely,
 ---
 
 ## 5. Campaign Context and TTP Chain
+{: .hl-tier-2}
 
 > **Analyst note:** This section steps back from the leak-site host itself to describe the campaign that produced its contents — how victims were initially compromised, how data moved from victim CRMs to the DLS, and how this fits into the broader Scattered LAPSUS$ Hunters cluster. This is the *cause* of which the DLS is the *consequence*; defenders looking for upstream detection opportunities should focus here.
 
@@ -456,6 +461,7 @@ On net assessment, the campaign cluster is *expanding* rather than contracting, 
 ---
 
 ## 6. Hosting and Co-Tenancy Analysis
+{: .hl-tier-2}
 
 > **Analyst note:** This section assesses the two hosting providers underlying the operation. The takeaway is that PROSPERO is a confirmed Russian bulletproof host with extensive prior abuse documentation, DDoS-Guard is a structurally-abused commercial DDoS-mitigation service, and the operator's choice to split across both is a deliberate OPSEC decision. A neighbor-scan of the entire PROSPERO footprint found no additional ShinyHunters infrastructure.
 
@@ -499,6 +505,7 @@ Neighbor-scan enumeration identified a Ledger hardware-wallet typosquat (`ledger
 ---
 
 ## 7. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Analyst note:** This section presents the formal attribution conclusion and the evidence behind it. Attribution is DEFINITE at 96% confidence — the highest level used by this publication outside of direct law-enforcement attribution naming the specific IP. The 4% margin reflects the absence of an FBI / CISA / Five Eyes advisory naming `91.215.85.22` itself; everything else aligns. No Unattributed Threat Actor (UTA) designation is needed here because ShinyHunters is a publicly named actor with six years of documented operations.
 
@@ -559,6 +566,7 @@ A claimed Telegram contact for "James" at `t.me/wokawoka10` is given. Treat all 
 ---
 
 ## 8. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Analyst note:** This section maps the observed ShinyHunters / Scattered LAPSUS$ Hunters TTPs to MITRE ATT&CK technique IDs. Coverage is restricted to TTPs with HIGH or higher confidence based on either direct artifact observation on `91.215.85.22` (filename branding, ransom note, infrastructure segmentation) or Tier-1/Tier-2 attribution of the upstream chain (IC3, CERT-EU, Google GTIG, Mandiant, Mitiga). Lower-confidence techniques inferred from sub-cluster reporting are omitted to keep the table actionable.
 
@@ -588,6 +596,7 @@ A claimed Telegram contact for "James" at `t.me/wokawoka10` is given. Treat all 
 ---
 
 ## 9. Detection and Hunting Guidance
+{: .hl-tier-2}
 
 > **Analyst note:** This section is a brief orientation to detection priorities. Full YARA rules (filename and ransom-note string anchors), Sigma rules (network connection, DNS query, file-write, anomalous OAuth authorization), and Suricata signatures are in the linked detection file. Detection rules in this report are intentionally not duplicated.
 
@@ -605,6 +614,7 @@ Full YARA, Sigma, and Suricata rules are published separately in [`shinyhunters-
 ---
 
 ## 10. Response Orientation
+{: .hl-tier-2}
 
 This is a brief orientation for readers who need to know *what to address*, not *how to address it*. Organizations facing actual exposure should engage their incident response function or a dedicated playbook.
 
@@ -632,6 +642,7 @@ This is a brief orientation for readers who need to know *what to address*, not 
 ---
 
 ## 11. Confidence Levels Summary
+{: .hl-tier-2}
 
 | Claim | Confidence | Basis |
 |---|---|---|
@@ -651,6 +662,7 @@ This is a brief orientation for readers who need to know *what to address*, not 
 ---
 
 ## 12. FAQ / Key Intelligence Questions
+{: .hl-tier-2}
 
 **Q1. Who operates 91.215.85.22, and what is the attribution confidence?**
 
@@ -679,6 +691,7 @@ Plan for persistence. The operator deliberately segments infrastructure across t
 ---
 
 ## 13. Gaps and Open Questions
+{: .hl-tier-2}
 
 - **Direct law-enforcement IP attribution.** No FBI / CISA / Five Eyes / Europol advisory has named `91.215.85.22` specifically. Government advisories cover TTP clusters at the actor level, not operator-side IPs.
 - **Current PGP key body.** Full key body for `F4953411767DE71BEDCDABCB76F4E26F7A20978A` not independently recovered (`/newpgp` returned HTTP 404 at investigation time; pastebin mirror at `https://pastebin.com/raw/sb7aB9eU` not verified as still resolvable during this investigation). Resolution path: direct keyserver query against `keyserver.ubuntu.com`, `keys.openpgp.org`, or SKS network mirrors for fingerprint `F4953411767DE71BEDCDABCB76F4E26F7A20978A`.
@@ -691,6 +704,7 @@ Plan for persistence. The operator deliberately segments infrastructure across t
 ---
 
 ## 14. Appendix: References and Further Reading
+{: .hl-tier-2}
 
 **Tier-1 sources (government / CERT)**
 
