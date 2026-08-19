@@ -174,6 +174,22 @@ async function main() {
       (await page.evaluate('document.querySelectorAll(".hl-wire__item").length')) === built.rows,
       built.rows + ' rows expected');
 
+    /* The published template's own data-day, checked against the published
+       page's own day headings. This is the only thing anywhere that sees the
+       DEPLOYED template rather than the working tree, and a disagreement is the
+       timezone split that carrying the day exists to prevent. Before the filter
+       shipped, no row carried the attribute and this reports NOT CHECKED. */
+    if (!built.deployed.carriedRows) {
+      check('NOT CHECKED: the published page carries no data-day yet', false,
+        'nothing to compare against its headings; the working-tree source shape is ' +
+        'covered by check-wire.js instead');
+    } else {
+      check('the published data-day agrees with the published day headings',
+        built.disagreements.length === 0,
+        built.disagreements.length ? built.disagreements.join('; ')
+          : built.deployed.carriedRows + ' of ' + built.rows + ' rows, every one matching');
+    }
+
     var errs = page.consoleErrors();
     check('no script error blocked the filter module', errs.length === 0,
       errs.length ? errs.slice(0, 3).join(' | ') +

@@ -169,3 +169,80 @@ test('a page missing the filter bar throws', function () {
     WH.build(JSDOM, parts({ liveHtml: '<html><body><div data-filter-grid></div></body></html>' }));
   }, /no \[data-listing-filter\]|rendered no wire rows/);
 });
+
+/* ---- once the feature ships, the harness reads it instead of adding it ----
+
+   Injecting unconditionally was right while the day filter was unreleased. The
+   moment it deployed, doing so would have built a page with TWO date controls
+   and every later assertion would have addressed the injected one rather than
+   the one actually shipped, which is the quietest way for a browser gate to
+   stop checking anything. */
+
+// A published page: it already carries the control, the span, and its own data-day.
+var SHIPPED_BAR =
+  '<div class="hl-filter" data-listing-filter>' +
+  '<input class="hl-filter__search" placeholder="Search headlines, topics, actors…">' +
+  '<div class="hl-filter__chips"><button class="hl-chip-btn" data-tag="">All</button></div>' +
+  '<div class="hl-filter__date"><label class="hl-filter__dim">Date</label>' +
+  '<input class="hl-filter__dateinput" type="date" data-filter-date>' +
+  '<button class="hl-filter__datereset" data-filter-date-clear hidden>Clear date</button></div>' +
+  '<div class="hl-filter__count" data-filter-count></div>' +
+  '<div class="hl-filter__empty" data-filter-empty hidden>' +
+  '<span data-filter-empty-msg>No headlines match that filter.</span>' +
+  '<button data-filter-reset>Clear filters</button></div>' +
+  '</div>';
+
+function shipped(rowsHtml) {
+  return '<html><head></head><body>' + SHIPPED_BAR +
+    '<div class="hl-wire" data-filter-grid data-filter-item=".hl-wire__item">' +
+    rowsHtml + '</div></body></html>';
+}
+
+var SHIPPED_ROWS =
+  '<div class="hl-wire__day" data-filter-group>Tuesday 18 August 2026</div>' +
+  '<a class="hl-wire__item" data-day="2026-08-18"></a>' +
+  '<a class="hl-wire__item" data-day="2026-08-18"></a>' +
+  '<div class="hl-wire__day" data-filter-group>Sunday 16 August 2026</div>' +
+  '<a class="hl-wire__item" data-day="2026-08-16"></a>';
+
+test('a shipped page gets exactly one date control, not a second', function () {
+  var b = WH.build(JSDOM, parts({ liveHtml: shipped(SHIPPED_ROWS) }));
+  var doc = new JSDOM(b.html).window.document;
+  assert.equal(doc.querySelectorAll('[data-filter-date]').length, 1);
+  assert.equal(doc.querySelectorAll('[data-filter-date-clear]').length, 1);
+  assert.equal(doc.querySelectorAll('[data-filter-empty-msg]').length, 1);
+  assert.equal(b.deployed.control, true);
+  assert.equal(b.deployed.emptyMsg, true);
+});
+
+test('a shipped page reports how many rows carry data-day', function () {
+  var b = WH.build(JSDOM, parts({ liveHtml: shipped(SHIPPED_ROWS) }));
+  assert.equal(b.deployed.carriedRows, 3);
+  assert.deepEqual(b.disagreements, []);
+});
+
+test('a deployed data-day disagreeing with its own heading is reported', function () {
+  /* The timezone split that carrying the day exists to prevent, seen against
+     the DEPLOYED template rather than the working tree. */
+  var bad = SHIPPED_ROWS.replace('<a class="hl-wire__item" data-day="2026-08-18"></a>',
+    '<a class="hl-wire__item" data-day="2026-08-17"></a>');
+  var b = WH.build(JSDOM, parts({ liveHtml: shipped(bad) }));
+  assert.equal(b.disagreements.length, 1);
+  assert.match(b.disagreements[0], /2026-08-18 heading carries data-day="2026-08-17"/);
+});
+
+test('a template tagging only some rows is reported, not averaged away', function () {
+  // The untagged rows would be invisible to every date a reader picks.
+  var partial = SHIPPED_ROWS.replace('<a class="hl-wire__item" data-day="2026-08-16"></a>',
+    '<a class="hl-wire__item"></a>');
+  var b = WH.build(JSDOM, parts({ liveHtml: shipped(partial) }));
+  assert.equal(b.deployed.carriedRows, 2);
+  assert.match(b.disagreements.join(' '), /2 of 3 rows carry data-day/);
+});
+
+test('a pre-release page still reports nothing carried, so the check says NOT CHECKED', function () {
+  var b = WH.build(JSDOM, parts());
+  assert.equal(b.deployed.carriedRows, 0);
+  assert.equal(b.deployed.control, false);
+  assert.deepEqual(b.disagreements, []);
+});

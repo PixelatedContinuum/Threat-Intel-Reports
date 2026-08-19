@@ -49,6 +49,17 @@ function build(JSDOM, parts) {
   var current = null;
   var rows = 0;
   var dayCounts = {};
+  /* Once the day filter ships, the fetched page carries its OWN data-day, and
+     the synthesis below becomes a CHECK instead: the value the published
+     template emitted must equal the day of the heading the row is actually
+     sitting under.
+
+     This is the one place anything can see the deployed template, and a
+     disagreement here is precisely the timezone split that carrying the day
+     rather than deriving it twice exists to prevent. Before the filter shipped
+     no row carried the attribute and this stays silent. */
+  var disagreements = [];
+  var carried = 0;
   var kids = [].slice.call(grid.children);
   for (var i = 0; i < kids.length; i++) {
     var node = kids[i];
@@ -57,32 +68,56 @@ function build(JSDOM, parts) {
       if (!current) throw new Error('unparseable day heading: ' + node.textContent);
     } else if (node.classList && node.classList.contains('hl-wire__item')) {
       if (!current) throw new Error('a row appeared before any day heading');
+      var was = node.getAttribute('data-day');
+      if (was) {
+        carried++;
+        if (was !== current && disagreements.length < 5) {
+          disagreements.push('a row under the ' + current + ' heading carries data-day="' + was + '"');
+        }
+      }
       node.setAttribute('data-day', current);
       rows++;
       dayCounts[current] = (dayCounts[current] || 0) + 1;
     }
   }
   if (!rows) throw new Error('the fetched page rendered no wire rows');
+  /* Partial carriage means the template tags some rows and not others, and the
+     untagged ones would be invisible to every date the reader picks. */
+  if (carried && carried !== rows) {
+    disagreements.push(carried + ' of ' + rows + ' rows carry data-day; the rest would be ' +
+      'invisible to the day filter');
+  }
 
-  // --- the filter-bar markup the template change adds ---
-  var chips = bar.querySelector('.hl-filter__chips');
-  var dateRow = d.createElement('div');
-  dateRow.className = 'hl-filter__date';
-  dateRow.innerHTML =
-    '<label class="hl-filter__dim" for="hl-wire-date">Date</label>' +
-    '<input class="hl-filter__dateinput" type="date" id="hl-wire-date" data-filter-date ' +
-    'aria-label="Show only headlines from this date">' +
-    '<button type="button" class="hl-filter__datereset" data-filter-date-clear hidden>Clear date</button>';
-  chips.insertAdjacentElement('afterend', dateRow);
+  /* --- the filter-bar markup, added only if the published page lacks it ---
+
+     Injecting unconditionally was right while the feature was unreleased. Now
+     that it has shipped it would build a page with TWO date controls, and every
+     assertion below would silently address the injected one rather than the
+     deployed one. */
+  var hadControl = !!bar.querySelector('[data-filter-date]');
+  if (!hadControl) {
+    var chips = bar.querySelector('.hl-filter__chips');
+    var dateRow = d.createElement('div');
+    dateRow.className = 'hl-filter__date';
+    dateRow.innerHTML =
+      '<label class="hl-filter__dim" for="hl-wire-date">Date</label>' +
+      '<input class="hl-filter__dateinput" type="date" id="hl-wire-date" data-filter-date ' +
+      'aria-label="Show only headlines from this date">' +
+      '<button type="button" class="hl-filter__datereset" data-filter-date-clear hidden>Clear date</button>';
+    chips.insertAdjacentElement('afterend', dateRow);
+  }
 
   var search = bar.querySelector('.hl-filter__search');
   search.setAttribute('placeholder', 'Search headlines, topics, actors…');
   search.setAttribute('aria-label', 'Search headlines, topics and actors');
 
   var empty = bar.querySelector('[data-filter-empty]');
-  var resetBtn = empty.querySelector('[data-filter-reset]');
-  empty.innerHTML = '<span data-filter-empty-msg>No headlines match that filter.</span> ';
-  if (resetBtn) empty.appendChild(resetBtn);
+  var hadMsg = !!empty.querySelector('[data-filter-empty-msg]');
+  if (!hadMsg) {
+    var resetBtn = empty.querySelector('[data-filter-reset]');
+    empty.innerHTML = '<span data-filter-empty-msg>No headlines match that filter.</span> ';
+    if (resetBtn) empty.appendChild(resetBtn);
+  }
 
   // --- swap every remote asset for the working tree ---
   [].slice.call(d.querySelectorAll('link[rel="stylesheet"], script[src]'))
@@ -110,7 +145,13 @@ function build(JSDOM, parts) {
     if (!dayCounts[iso]) gaps.push(iso);
   }
 
-  return { html: html, rows: rows, days: days, dayCounts: dayCounts, gaps: gaps };
+  return {
+    html: html, rows: rows, days: days, dayCounts: dayCounts, gaps: gaps,
+    // How much of what is under test the published page already ships, and
+    // whether its own data-day agrees with its own headings.
+    deployed: { control: hadControl, emptyMsg: hadMsg, carriedRows: carried },
+    disagreements: disagreements
+  };
 }
 
 module.exports = { build: build, headingToDay: headingToDay };
