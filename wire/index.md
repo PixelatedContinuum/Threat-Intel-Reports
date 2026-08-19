@@ -27,7 +27,7 @@ position: 2.5
   <input class="hl-filter__search" type="text" placeholder="Filter headlines…" aria-label="Filter headlines" autocomplete="off">
   <div class="hl-filter__chips">
     <button type="button" class="hl-chip-btn is-on" data-tag="">All</button>
-    {%- for t in wire.topics -%}<button type="button" class="hl-chip-btn" data-tag="{{ t.label }}">{{ t.label }} <span class="hl-chip-btn__n">{{ t.count }}</span></button>{%- endfor -%}
+    {%- for t in wire.topics -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c{{ t.color }}" data-tag="{{ t.label }}">{{ t.label }} <span class="hl-chip-btn__n">{{ t.count }}</span></button>{%- endfor -%}
   </div>
   <div class="hl-filter__count" data-filter-count></div>
   <div class="hl-filter__empty" data-filter-empty hidden>No headlines match that filter. <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
@@ -41,7 +41,7 @@ position: 2.5
 {%- assign current_day = day -%}
 <div class="hl-wire__day" data-filter-group>{{ i.date | date: "%A %-d %B %Y" }}</div>
 {%- endif -%}
-<a class="hl-wire__item hl-wire__item--{{ i.kind }}" href="{{ i.url }}" target="_blank" rel="noopener noreferrer" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}"><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 3 -%}<span class="hl-wire__label">{{ l }}</span>{%- endfor -%}</span></a>
+<a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ i.url }}" target="_blank" rel="noopener noreferrer" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}"><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 3 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-wire__label--topic hl-topic-c{{ tc }}{% endif %}">{{ l }}</span>{%- endfor -%}</span></a>
 {%- endfor -%}
 </div>
 

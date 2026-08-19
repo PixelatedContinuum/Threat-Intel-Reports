@@ -3,37 +3,62 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-19T11:38:37Z
+generated_at: 2026-08-19T11:56:09Z
 window_days: 30
 counts:
-  total: 531
+  total: 530
   research: 187
-  news: 344
+  news: 343
 topics:
   - label: "vulnerabilities"
     count: 70
+    color: 1
   - label: "cybercrime"
     count: 49
+    color: 2
   - label: "artificial intelligence"
     count: 31
-  - label: "data breaches"
-    count: 30
+    color: 3
   - label: "malware"
     count: 30
+    color: 4
+  - label: "data breaches"
+    count: 29
+    color: 5
   - label: "government"
     count: 28
+    color: 6
   - label: "credential theft"
     count: 24
+    color: 7
   - label: "exploited"
     count: 23
+    color: 8
   - label: "ransomware"
     count: 23
+    color: 9
   - label: "microsoft"
     count: 14
+    color: 10
   - label: "supply chain attack"
     count: 14
+    color: 11
   - label: "zero-day"
     count: 14
+    color: 12
+label_colors:
+  "artificial intelligence": 3
+  "credential theft": 7
+  "cybercrime": 2
+  "data breaches": 5
+  "exploited": 8
+  "government": 6
+  "malware": 4
+  "microsoft": 10
+  "ransomware": 9
+  "supply chain attack": 11
+  "vulnerabilities": 1
+  "zero-day": 12
 items:
   - title: "Cl0p Ransomware Group Names Over 40 Victims of PTC Windchill Campaign"
     url: "https://www.securityweek.com/cl0p-ransomware-group-names-over-40-victims-of-ptc-windchill-campaign/"
@@ -3215,9 +3240,3 @@ items:
     date: 2026-07-20T11:56:28Z
     kind: news
     labels: []
-  - title: "New Index Tracks Material Breaches — And Refuses to Add Up the Losses"
-    url: "https://www.securityweek.com/new-index-tracks-material-breaches-and-refuses-to-add-up-the-losses/"
-    source: "SecurityWeek"
-    date: 2026-07-20T11:46:50Z
-    kind: news
-    labels: ["data breaches"]

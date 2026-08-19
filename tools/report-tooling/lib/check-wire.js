@@ -15,6 +15,8 @@
 // One missed run of a twice-daily timer is tolerated; two consecutive fail.
 var STALE_HOURS = 36;
 var REQUIRED = ['title', 'url', 'source', 'date', 'kind'];
+// Hues defined in assets/css/custom.css as .hl-topic-c1 .. .hl-topic-c12.
+var PALETTE_SIZE = 12;
 var KINDS = { research: 1, news: 1 };
 
 function verdict(status, reason, problems, warnings, counts) {
@@ -112,11 +114,32 @@ function check(doc, sources, now) {
   /* The page renders chips straight from `topics` without checking them against
      the items, so a chip naming a label nothing carries is a control that
      selects an empty page. */
+  var lc = doc.label_colors || {};
   (doc.topics || []).forEach(function (t) {
     var lab = t && t.label;
     if (lab && !labelsPresent[String(lab)]) {
       problems.push('topic chip "' + lab + '" matches no item label, so the ' +
         'chip would filter the page to nothing');
+    }
+    /* The colour is a class suffix the CSS palette defines for 1..PALETTE_SIZE.
+       Anything outside that renders a chip with no colour variable set, which
+       is a silent visual regression: the chip still works, it just goes grey
+       while its siblings are coloured. */
+    var col = t && t.color;
+    if (!Number.isInteger(col) || col < 1 || col > PALETTE_SIZE) {
+      problems.push('topic chip "' + lab + '" has colour ' + JSON.stringify(col) +
+        ', which is outside the 1-' + PALETTE_SIZE + ' palette the CSS defines');
+    } else if (lab && lc[lab] !== col) {
+      problems.push('topic chip "' + lab + '" is colour ' + col +
+        ' but label_colors says ' + JSON.stringify(lc[lab]) +
+        ', so its tags would not match its chip');
+    }
+  });
+
+  Object.keys(lc).forEach(function (lab) {
+    if (!(doc.topics || []).some(function (t) { return t && t.label === lab; })) {
+      problems.push('label_colors carries "' + lab + '", which is not a topic, ' +
+        'so a tag would be coloured with no chip to match it');
     }
   });
 

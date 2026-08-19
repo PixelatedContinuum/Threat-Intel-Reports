@@ -12,7 +12,8 @@ function doc(over) {
     window_days: 30,
     counts: { total: 2, research: 1, news: 1 },
     // Must name a label an item actually carries, or the topic check fires.
-    topics: [{ label: 'security', count: 1 }],
+    topics: [{ label: 'security', count: 1, color: 3 }],
+    label_colors: { security: 3 },
     items: [
       { title: 'A', url: 'https://x.test/a', source: 'AlienVault',
         date: '2026-08-18T10:00:00Z', kind: 'research', labels: [] },
@@ -122,8 +123,42 @@ test('an empty item list is NOT CHECKED, not a silent pass', function () {
 test('a topic chip naming a label no item carries fails', function () {
   // A chip that selects nothing is a dead control, and the page renders chips
   // straight from this list without checking them against the items.
-  var d = doc({ topics: [{ label: 'nonexistent', count: 3 }] });
+  var d = doc({ topics: [{ label: 'nonexistent', count: 3, color: 1 }],
+                label_colors: { nonexistent: 1 } });
   var r = CW.check(d, SOURCES, NOW);
   assert.equal(r.status, 'FAIL');
-  assert.match(r.problems.join(' '), /topic/i);
+  assert.match(r.problems.join(' '), /topic chip/i);
+});
+
+test('a topic colour outside the CSS palette fails', function () {
+  // Renders a chip with no colour variable: it still filters, it just goes
+  // grey while every sibling is coloured. Silent visual regression.
+  var d = doc({ topics: [{ label: 'security', count: 1, color: 99 }],
+                label_colors: { security: 99 } });
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /palette/i);
+});
+
+test('a missing topic colour fails', function () {
+  var d = doc({ topics: [{ label: 'security', count: 1 }], label_colors: {} });
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /palette/i);
+});
+
+test('a tag coloured differently from its chip fails', function () {
+  var d = doc({ topics: [{ label: 'security', count: 1, color: 3 }],
+                label_colors: { security: 7 } });
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /would not match its chip/i);
+});
+
+test('a label_colors entry with no chip fails', function () {
+  var d = doc({ topics: [{ label: 'security', count: 1, color: 3 }],
+                label_colors: { security: 3, orphan: 5 } });
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /not a topic/i);
 });
