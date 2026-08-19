@@ -3727,8 +3727,14 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    root, which is what shipped the Wire 22% small. */
 .hl-iocsearch { margin: 0 0 1.1em; }
 /* A TEXTAREA, not an input: `<input type="text">` strips newlines out of a
-   pasted list, which is how most people paste one. It starts one row tall and
-   grows to fit what was pasted, capped so it cannot push the cards off screen. */
+   pasted list, which is how most people paste one, and that silently collapsed
+   a whole list into one string.
+
+   It is a FIXED height and never grows. Paste a thousand indicators and the box
+   stays put, scrolling internally: you cannot see the whole list, but nothing
+   below it moves and every pasted value is still searched. `resize: vertical`
+   stays so a reader who wants to see more can drag it, which is their choice
+   rather than the page deciding. */
 .hl-iocsearch__in {
   width: 100%;
   box-sizing: border-box;
@@ -3742,8 +3748,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   padding: 0.7em 0.9em;
   resize: vertical;
   overflow-y: auto;
-  min-height: 2.6em;
-  max-height: 260px;
+  height: 4.2em;
 }
 .hl-iocsearch__in:focus {
   outline: none;
@@ -3790,7 +3795,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   margin: 0.6em 0 0;
   padding: 0 0 0 0.8em;
   border-left: 1px solid var(--hl-border-card);
-  max-height: 17em;
+  max-height: 15em;
   overflow-y: auto;
 }
 .hl-iocsearch__row {

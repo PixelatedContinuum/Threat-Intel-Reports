@@ -205,3 +205,30 @@ test('a messy real-world paste survives quoting and trailing punctuation', async
   assert.deepEqual(visible(w), ['alpha', 'beta']);
   assert.match(resultText(w), /2 of your 3/);
 });
+
+test('a very large paste is searched in full and never resizes the box', async function () {
+  // The box is a fixed height that scrolls internally: a reader cannot see the
+  // whole list, but nothing below it moves and every pasted value is searched.
+  var w = build();
+  var box = w.document.querySelector('.hl-iocsearch__in');
+  var before = box.style.height;
+  var many = [];
+  for (var i = 0; i < 400; i++) many.push('10.9.' + (i >> 8) + '.' + (i & 255));
+  many.push('185.38.150.7');          // one real one buried at the end
+  await type(w, many.join(NL));
+  assert.equal(box.style.height, before, 'the script must never set a height');
+  assert.deepEqual(visible(w), ['alpha'], 'the buried real indicator is still found');
+  assert.match(resultText(w), /1 of your 401/);
+});
+
+test('the breakdown caps rather than building unbounded DOM', async function () {
+  var w = build();
+  var many = [];
+  for (var i = 0; i < 300; i++) many.push('shared.test');   // dedupes to one
+  many.push('185.38.150.7');
+  await type(w, many.join(NL));
+  // extract() dedupes, so this is 2 unique indicators, both real.
+  assert.match(resultText(w), /2 of your 2/);
+  assert.ok(w.document.querySelectorAll('.hl-iocsearch__row').length <= 202,
+    'the breakdown is bounded');
+});

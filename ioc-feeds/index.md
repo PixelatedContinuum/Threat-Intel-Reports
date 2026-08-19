@@ -15,7 +15,7 @@ redirect_from:
 </div>
 
 <div class="hl-iocsearch">
-  <textarea class="hl-iocsearch__in" rows="1" spellcheck="false" autocomplete="off"
+  <textarea class="hl-iocsearch__in" rows="2" spellcheck="false" autocomplete="off"
     placeholder="Paste one indicator, or a whole list. IPs, domains, URLs and hashes, separated by commas, spaces or newlines."
     aria-label="Search for indicators across every published feed"></textarea>
   <button type="button" class="hl-iocsearch__clear" hidden>Clear</button>

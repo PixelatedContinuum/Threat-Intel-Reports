@@ -35,9 +35,10 @@
   var cards = [].slice.call(document.querySelectorAll('.hl-catalog-card[data-slug]'));
   var index = null, loading = null, timer = null;
 
-  // Above this many matches the breakdown is capped, because a 200-line list
-  // pushes the cards it is meant to introduce off the screen.
-  var DETAIL_CAP = 25;
+  /* The breakdown scrolls inside a fixed box, so this cap is only a guard
+     against a pathological paste building tens of thousands of DOM rows. The
+     card narrowing always covers every match regardless of this. */
+  var DETAIL_CAP = 200;
 
   function load() {
     if (index) return Promise.resolve(index);
@@ -56,11 +57,6 @@
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
     });
-  }
-
-  function autoGrow() {
-    input.style.height = 'auto';
-    input.style.height = Math.min(input.scrollHeight, 260) + 'px';
   }
 
   function clearAll(msg) {
@@ -154,8 +150,10 @@
     });
   }
 
+  /* The box never resizes itself. Paste a thousand indicators and it stays the
+     same height, scrolling internally: you cannot see the whole list, but the
+     page below never moves and the search still works on all of it. */
   input.addEventListener('input', function () {
-    autoGrow();
     clearTimeout(timer);
     timer = setTimeout(run, 200);
   });
@@ -166,7 +164,6 @@
   });
   clear.addEventListener('click', function () {
     input.value = '';
-    autoGrow();
     clearAll('');
     input.focus();
   });
