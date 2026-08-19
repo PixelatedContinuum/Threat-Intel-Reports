@@ -3420,18 +3420,18 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0 0 1.6rem;
-  padding: 0 0 0.55rem;
+  gap: 0.7rem;
+  margin: 0 0 1.7rem;
+  padding: 0 0 0.6rem;
   border-bottom: 1px solid var(--hl-border-card);
 }
 .hl-viewswitch__label {
-  font-size: 0.68rem;
-  letter-spacing: 0.07em;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--hl-text-muted);
 }
-.hl-viewswitch__group { display: flex; flex-wrap: wrap; gap: 0.2rem; }
+.hl-viewswitch__group { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 /* Scoped AND important, both needed: the theme declares
    `.hl-post-content a { color: … !important }` and the same wash reaches controls
    rendered inside the post body. B3's chips shipped in link blue for exactly this
@@ -3440,12 +3440,12 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   display: inline-flex;
   align-items: baseline;
   gap: 0.32em;
-  padding: 0.12em 0.5em;
+  padding: 0.15em 0.55em;
   border: 0;
   border-radius: 4px;
   background: transparent;
   color: var(--hl-text-muted) !important;
-  font-size: 0.76rem;
+  font-size: 1rem;
   line-height: 1.5;
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
@@ -3463,12 +3463,12 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 /* The count is the compare-at-a-glance number, so it stays legible but never
    competes with the name it follows. */
 .hl-viewswitch__btn-count {
-  font-size: 0.68rem;
-  opacity: 0.65;
+  font-size: 0.82rem;
+  opacity: 0.6;
   font-variant-numeric: tabular-nums;
 }
 .hl-viewswitch__status {
-  font-size: 0.68rem;
+  font-size: 0.85rem;
   color: var(--hl-text-muted);
   margin-left: auto;
   white-space: nowrap;

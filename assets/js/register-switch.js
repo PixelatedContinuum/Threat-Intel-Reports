@@ -25,10 +25,15 @@
      active and previewing whichever is hovered or focused. That keeps the whole
      control one line tall while still explaining itself, which a title attribute
      never does for touch or keyboard. */
+  /* The names come from the house register-tier vocabulary in CLAUDE.md, not from
+     invented shorthand: Tier 1 is the Operational Brief, Tier 2 is Tradecraft and
+     Intel, Tier 3 is the Technical Teardown. A reader who has seen one report
+     recognises the same three words on the next one. The sentence in the strip
+     then says what each view ADDS, which the name alone cannot. */
   var LABELS = [
-    ['brief', 'Brief', 'the operational brief only'],
-    ['analyst', 'Analyst', 'adds tradecraft and intel'],
-    ['full', 'Full', 'everything, teardown included']
+    ['brief', 'Executive Brief', 'the bottom line and what to do first'],
+    ['analyst', 'Tradecraft & Intel', 'adds infrastructure, actor and detection'],
+    ['full', 'Full Teardown', 'adds the deep technical analysis']
   ];
   var DESC = { brief: LABELS[0][2], analyst: LABELS[1][2], full: LABELS[2][2] };
 
@@ -181,7 +186,8 @@
     if (!body) return;
     var counts = sectionCounts(body);
     var which = preview || view;
-    live.textContent = plural(counts[which] || 0) + ', ' + (DESC[which] || '');
+    live.textContent = (counts[which] || 0) + ' of ' + plural(counts.full) +
+      ', ' + (DESC[which] || '');
     if (preview && preview !== view) live.setAttribute('data-preview', '');
     else live.removeAttribute('data-preview');
   }

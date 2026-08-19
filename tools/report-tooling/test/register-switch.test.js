@@ -144,7 +144,7 @@ test('each button shows its name and its count on one line', function () {
   var d = build([1, 2, 3]);
   var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
   var btns = c.querySelectorAll('button');
-  assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-name').textContent, 'Brief');
+  assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-name').textContent, 'Executive Brief');
   assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-count').textContent, '1');
   assert.strictEqual(btns[2].querySelector('.hl-viewswitch__btn-count').textContent, '3');
   // The sentence is NOT in the button; it belongs to the status strip.
@@ -155,7 +155,7 @@ test('the accessible name still carries the explanation the button no longer sho
   var d = build([1, 2, 3]);
   var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
   assert.strictEqual(c.querySelector('button').getAttribute('aria-label'),
-    'Brief: the operational brief only, 1 section');
+    'Executive Brief: the bottom line and what to do first, 1 section');
 });
 
 test('buildControl still works with no counts, so the signature stays additive', function () {
@@ -176,10 +176,10 @@ test('the status describes the active view, never blank', function () {
   var d = withControl([1, 2, 3], 'full');
   RS.apply(d, 'full');
   assert.strictEqual(d.getElementById('hl-view-status').textContent,
-    '3 sections, everything, teardown included');
+    '3 of 3 sections, adds the deep technical analysis');
   RS.apply(d, 'brief');
   assert.strictEqual(d.getElementById('hl-view-status').textContent,
-    '1 section, the operational brief only');
+    '1 of 3 sections, the bottom line and what to do first');
 });
 
 test('a preview shows another view without changing the active one', function () {
@@ -187,7 +187,7 @@ test('a preview shows another view without changing the active one', function ()
   RS.apply(d, 'brief');
   RS.setStatus(d, 'brief', 'full');
   var live = d.getElementById('hl-view-status');
-  assert.strictEqual(live.textContent, '3 sections, everything, teardown included');
+  assert.strictEqual(live.textContent, '3 of 3 sections, adds the deep technical analysis');
   assert.ok(live.hasAttribute('data-preview'));
   // still filtered to brief
   assert.strictEqual(d.getElementById('s2').hasAttribute('hidden'), true);
@@ -197,4 +197,20 @@ test('previewing the active view is not marked as a preview', function () {
   var d = withControl([1, 2, 3], 'brief');
   RS.setStatus(d, 'brief', 'brief');
   assert.strictEqual(d.getElementById('hl-view-status').hasAttribute('data-preview'), false);
+});
+
+test('the button names use the house register-tier vocabulary', function () {
+  var d = build([1, 2, 3]);
+  var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
+  assert.deepStrictEqual(
+    [...c.querySelectorAll('.hl-viewswitch__btn-name')].map(function (n) { return n.textContent; }),
+    ['Executive Brief', 'Tradecraft & Intel', 'Full Teardown']);
+});
+
+test('the status counts against the full total in every view', function () {
+  var d = withControl([1, 1, 2, 2, 3], 'full');
+  RS.apply(d, 'analyst');
+  assert.match(d.getElementById('hl-view-status').textContent, /^4 of 5 sections, /);
+  RS.apply(d, 'brief');
+  assert.match(d.getElementById('hl-view-status').textContent, /^2 of 5 sections, /);
 });
