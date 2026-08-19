@@ -49,10 +49,20 @@
     return m ? m[1].toLowerCase() + m[2].toLowerCase() + m[3] : url;
   }
 
+  /* Template and redaction placeholders. Measured in the real feeds:
+     "http://.../bins/Naku.{arch}" is a build template, and
+     "https://[victim-subdomain].ocpinstana.[victim-domain].com.tr" is a
+     REDACTED victim URL. Neither is a concrete indicator anyone could match on,
+     and the second should never reach a public index at all. Rejecting them in
+     the classifier fixes both sides at once: the generator stops indexing them
+     and the page stops trying to find them. */
+  var RX_PLACEHOLDER = /[{}\[\]<>]/;
+
   function classify(raw) {
     if (raw == null) return null;
     var s = trim(refang(raw));
     if (!s || /\s/.test(s)) return null;
+    if (RX_PLACEHOLDER.test(s)) return null;
 
     if (RX_SHA256.test(s)) return { type: 'sha256', value: s.toLowerCase() };
     if (RX_SHA1.test(s))   return { type: 'sha1',   value: s.toLowerCase() };
@@ -79,7 +89,16 @@
      every URL would be shredded. */
   function extract(text) {
     var out = [], seen = {};
-    var tokens = String(text == null ? '' : text).split(/[\s,;<>"'()\[\]{}|]+/);
+    /* Refang the WHOLE text before tokenising. Brackets are delimiters, so
+       splitting first would shred "bot[.]example[.]com" into three useless
+       fragments, and a defanged paste is the single most likely thing a
+       defender copies out of a threat report. */
+    var tokens = refang(String(text == null ? '' : text)
+      .replace(/\[\.\]/g, '.')
+      .replace(/\(\.\)/g, '.')
+      .replace(/\[:\]/g, ':')
+      .replace(/\bhxxp/gi, 'http'))
+      .split(/[\s,;<>"'()\[\]{}|]+/);
     for (var i = 0; i < tokens.length; i++) {
       var tok = tokens[i];
       if (!tok) continue;

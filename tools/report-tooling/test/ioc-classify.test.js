@@ -93,3 +93,28 @@ test('extract on empty or junk input returns an empty array', function () {
   assert.deepEqual(C.extract(''), []);
   assert.deepEqual(C.extract('the quick brown fox'), []);
 });
+
+test('template and redaction placeholders are rejected', function () {
+  // Both measured in real feeds, and both were found by the round-trip test
+  // rather than by inspection.
+  assert.equal(t('http://87.106.143.220:443/bins/Naku.{arch}'), null,
+    'a build template is not a concrete indicator');
+  assert.equal(t('https://[victim-subdomain].ocpinstana.[victim-domain].com.tr'), null,
+    'a REDACTED victim url must never be indexed');
+  assert.equal(t('evil.com<script>'), null);
+});
+
+test('a defanged paste survives tokenising, which is the common case', function () {
+  // Brackets are token delimiters, so refanging has to happen BEFORE the split
+  // or "bot[.]example[.]com" is shredded into three useless fragments. This is
+  // the single most likely format a defender copies out of a threat report.
+  var got = C.extract('beacon to bot[.]example[.]com and hxxp://evil[.]test/a').map(
+    function (x) { return x.type + ':' + x.value; });
+  assert.ok(got.indexOf('domain:bot.example.com') > -1, 'defanged domain');
+  assert.ok(got.indexOf('url:http://evil.test/a') > -1, 'defanged url');
+});
+
+test('a parenthesised defang also survives', function () {
+  var got = C.extract('contacted evil(.)test').map(function (x) { return x.value; });
+  assert.ok(got.indexOf('evil.test') > -1);
+});
