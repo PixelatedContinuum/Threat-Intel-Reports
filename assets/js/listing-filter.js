@@ -55,7 +55,11 @@
       // surfaces items tagged Ransomware even if it's not in the title.
       var hay = (c.getAttribute('data-title') || '') + '|' + (c.getAttribute('data-tags') || '');
       var mq = !term || hay.indexOf(term) > -1;
-      var vis = md && mq;
+      // An external control (the IOC search on /ioc-feeds/) can veto a card
+      // without knowing anything about this module's dimensions. Absent the
+      // attribute, which is every other page, this is inert.
+      var vetoed = c.getAttribute('data-veto') === '1';
+      var vis = md && mq && !vetoed;
       // .hl-card carries `display: block !important`, so a plain inline
       // `display:none` is overridden. Set/remove with `important` priority,
       // which sits above author !important in the cascade.
@@ -104,6 +108,9 @@
       });
     });
   });
+
+  // An external control mutates data-veto, then asks for a re-apply.
+  document.addEventListener('hl:refilter', apply);
 
   if (search) search.addEventListener('input', apply);
   var reset = bar.querySelector('[data-filter-reset]');

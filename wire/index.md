@@ -30,14 +30,7 @@ position: 2.5
 {%- endcomment -%}
 <div class="hl-filter hl-filter--wire" data-listing-filter>
   <input class="hl-filter__search" type="text" placeholder="Filter headlines…" aria-label="Filter headlines" autocomplete="off">
-  <div class="hl-filter__chips hl-filter__chips--kind">
-    <span class="hl-filter__dim">Source</span>
-    <button type="button" class="hl-chip-btn is-on" data-kind="">All</button>
-    <button type="button" class="hl-chip-btn hl-chip-btn--research" data-kind="research">Research <span class="hl-chip-btn__n">{{ wire.counts.research }}</span></button>
-    <button type="button" class="hl-chip-btn hl-chip-btn--news" data-kind="news">News <span class="hl-chip-btn__n">{{ wire.counts.news }}</span></button>
-  </div>
   <div class="hl-filter__chips hl-filter__chips--topic">
-    <span class="hl-filter__dim">Topic</span>
     <button type="button" class="hl-chip-btn is-on" data-tag="">All</button>
     {%- for t in wire.topics -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c{{ t.color }}" data-tag="{{ t.label }}">{{ t.label }} <span class="hl-chip-btn__n">{{ t.count }}</span></button>{%- endfor -%}
   </div>

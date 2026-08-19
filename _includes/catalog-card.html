@@ -5,7 +5,8 @@
 <a href="{{ include.url | relative_url }}" class="hl-card hl-catalog-card"
    data-title="{{ include.title | downcase | escape }}"
    data-tags="{{ include.tags | join: '|' | downcase | escape }}"
-   data-sev="{{ include.severity }}">
+   data-sev="{{ include.severity }}"
+   {% if include.slug %}data-slug="{{ include.slug }}"{% endif %}>
   <div class="hl-card__inner">
     <div class="hl-card__bar hl-sev--{{ include.severity }}"></div>
     <div>

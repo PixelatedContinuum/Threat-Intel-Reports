@@ -3561,37 +3561,6 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   max-width: 62ch;
 }
 
-/* Kind axis. The counts used to be a static readout describing a distinction
-   the reader could see but not act on; they are the control now. Research and
-   news keep the filled/hollow dot the rows use, so the chip and the row read as
-   the same thing. */
-.hl-filter__chips--kind { align-items: center; }
-.hl-filter__chips--topic { margin-top: 9px; align-items: center; }
-.hl-chip-btn--research::before,
-.hl-chip-btn--news::before {
-  content: "";
-  display: inline-block;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  margin-right: 7px;
-  vertical-align: baseline;
-}
-.hl-chip-btn--research::before { background: var(--hl-accent-blue, #58a6ff); }
-.hl-chip-btn--news::before {
-  background: transparent;
-  box-shadow: inset 0 0 0 2px var(--hl-text-muted);
-}
-.hl-chip-btn--research { border-color: color-mix(in srgb, var(--hl-accent-blue, #58a6ff) 34%, var(--hl-border-card)); }
-.hl-chip-btn--research.is-on {
-  background: color-mix(in srgb, var(--hl-accent-blue, #58a6ff) 20%, transparent);
-  border-color: var(--hl-accent-blue, #58a6ff);
-  color: #cfe3ff;
-}
-.hl-chip-btn--news.is-on {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: var(--hl-text-muted);
-  color: var(--hl-text-primary);
-}
 
 /* --- the list ------------------------------------------------- */
 .hl-wire {
@@ -3751,85 +3720,57 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   .hl-wire__title { font-size: 0.9em; }
 }
 
-/* ---------- Indicator Lookup (Track A4) ----------
-   Sizes in `em`, never `rem`: the theme sets body to 1.25em = 20px while `rem`
-   resolves against the 16px root, which is what shipped the Wire 22% small. */
-.hl-lookup { margin: 0 0 1.4em; }
-.hl-lookup__in {
+/* ---------- Indicator search on /ioc-feeds/ (Track A4) ----------
+   The feed cards are already the answer, so the search narrows the existing
+   grid rather than rendering a second result list. Sizes in `em`, never `rem`:
+   the theme sets body to 1.25em = 20px while `rem` resolves against the 16px
+   root, which is what shipped the Wire 22% small. */
+.hl-iocsearch { margin: 0 0 1.1em; }
+.hl-iocsearch__in {
   width: 100%;
   box-sizing: border-box;
   font-family: ui-monospace, Menlo, Consolas, monospace;
-  font-size: 0.76em;
-  line-height: 1.55;
+  font-size: 0.78em;
   color: var(--hl-text-primary);
   background: var(--hl-bg-card);
   border: 1px solid var(--hl-border-card);
-  border-radius: 6px;
-  padding: 0.8em 0.9em;
-  resize: vertical;
-}
-.hl-lookup__in:focus { outline: none; border-color: var(--hl-accent-green, #4ade80); }
-.hl-lookup__bar { display: flex; align-items: center; gap: 1em; margin: 0.7em 0 0; flex-wrap: wrap; }
-.hl-lookup__go {
-  font-family: inherit;
-  font-size: 0.78em;
-  padding: 0.55em 1.3em;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #0b0b0b;
-  background: var(--hl-accent-green, #4ade80);
-  border: 1px solid var(--hl-accent-green, #4ade80);
-}
-.hl-lookup__go:hover { filter: brightness(1.08); }
-.hl-lookup__go:disabled { opacity: 0.5; cursor: default; }
-.hl-lookup__status { font-size: 0.76em; color: var(--hl-text-muted); }
-
-.hl-lookup__hit {
-  border: 1px solid var(--hl-border-card);
-  border-left: 3px solid var(--hl-accent-green, #4ade80);
   border-radius: 6px;
   padding: 0.7em 0.9em;
-  margin: 0.7em 0 0;
-  background: var(--hl-bg-card);
 }
-.hl-lookup__val { display: flex; align-items: baseline; gap: 0.6em; flex-wrap: wrap; }
-.hl-lookup__val code {
-  font-size: 0.8em;
+.hl-iocsearch__in:focus {
+  outline: none;
+  border-color: var(--hl-accent-green, #4ade80);
+}
+.hl-iocsearch__clear {
+  font-family: inherit;
+  font-size: 0.72em;
+  margin-top: 0.5em;
+  padding: 0.35em 0.9em;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--hl-text-muted);
+  background: transparent;
+  border: 1px solid var(--hl-border-card);
+}
+.hl-iocsearch__clear:hover { color: var(--hl-text-primary); border-color: #3d4756; }
+.hl-iocsearch__result {
+  font-size: 0.78em;
+  line-height: 1.6;
+  margin-top: 0.6em;
+  color: var(--hl-text-muted);
+}
+.hl-iocsearch__result:empty { margin-top: 0; }
+.hl-iocsearch__result--hit {
   color: var(--hl-text-primary);
+  border-left: 3px solid var(--hl-accent-green, #4ade80);
+  padding-left: 0.8em;
+}
+.hl-iocsearch__result--none {
+  border-left: 3px solid var(--hl-border-card);
+  padding-left: 0.8em;
+}
+.hl-iocsearch__result strong {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.94em;
   word-break: break-all;
-}
-.hl-lookup__type {
-  font-size: 0.62em; text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--hl-text-muted); border: 1px solid var(--hl-border-card);
-  border-radius: 999px; padding: 0.1em 0.5em;
-}
-.hl-lookup__multi { font-size: 0.68em; color: var(--hl-accent-gold-light, #f4e9c8); }
-.hl-lookup__hitrow {
-  display: flex; align-items: baseline; gap: 0.7em; flex-wrap: wrap;
-  margin-top: 0.5em; font-size: 0.76em;
-}
-.hl-lookup__campaign { color: var(--hl-text-primary); }
-.hl-lookup__meta, .hl-lookup__role { color: var(--hl-text-muted); }
-.hl-lookup__links { display: flex; gap: 0.8em; }
-.hl-post-content .hl-lookup__links a,
-.hl-lookup__links a { color: var(--hl-accent-blue, #58a6ff) !important; }
-.hl-sev-tag {
-  font-size: 0.62em; letter-spacing: 0.06em; border-radius: 3px;
-  padding: 0.1em 0.45em; color: #0b0b0b;
-}
-.hl-sev-tag.hl-sev--critical { background: var(--hl-sev-critical, #dc2626); color: #fff; }
-.hl-sev-tag.hl-sev--high { background: var(--hl-sev-high, #f97316); }
-.hl-sev-tag.hl-sev--med { background: var(--hl-sev-med, #eab308); }
-.hl-sev-tag.hl-sev--low { background: var(--hl-sev-low, #3b82f6); color: #fff; }
-
-.hl-lookup__none {
-  font-size: 0.8em; color: var(--hl-text-muted); margin: 0.9em 0 0;
-  padding: 0.9em; border: 1px dashed var(--hl-border-card); border-radius: 6px;
-}
-.hl-lookup__privacy, .hl-lookup__caveat {
-  font-size: 0.76em; line-height: 1.6; color: var(--hl-text-muted); margin: 0 0 0.7em;
-}
-@media (max-width: 780px) {
-  .hl-lookup__bar { flex-direction: column; align-items: flex-start; gap: 0.5em; }
-  .hl-lookup__hitrow { gap: 0.4em; }
 }
