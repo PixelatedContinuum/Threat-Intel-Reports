@@ -32,6 +32,7 @@ stix_bundle: /stix/AdvancedRouterScanner.json
 ---
 
 ## BLUF (Bottom Line Up Front)
+{: .hl-tier-1}
 
 AdvancedRouterScanner is a custom, semi-private exploitation framework targeting embedded network devices (primarily Huawei/Four-Faith OEM equipment) via exposed CGI endpoints and default credentials. Two open directories — a proof-of-concept (PoC) host at 185[.]38[.]150[.]7:9999 and an operational hub at 176[.]65[.]137[.]13:80 — confirm the campaign has transitioned from research into active botnet recruitment. Enrichment of ~65,000 targeted IPs resolves ~50,000 with ASN metadata, with 45.5% concentrated in Brazil. The tool is not publicly available and carries unique fingerprints that make every reappearance attributable to the same actor.
 
@@ -79,6 +80,7 @@ AdvancedRouterScanner is a custom, semi-private exploitation framework targeting
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 AdvancedRouterScanner combines global opportunistic scanning with vendor-specific exploitation logic to compromise embedded network devices at scale. The campaign chains five stages: IP list aggregation, service enumeration, vendor fingerprinting, default-credential brute-forcing, and payload delivery for botnet recruitment. Two open directories provided direct access to operator tooling and logs, confirming active exploitation with payload delivery to at least the ARM architecture targets that returned HTTP 200 responses.
 
@@ -94,6 +96,7 @@ The tool bears unique fingerprints — the `AdvancedRouterScanner` class name, `
 ---
 
 ## 2. Tool Overview (poc.py)
+{: .hl-tier-3}
 Name: poc.py (generic filename).  
 Unique Class: AdvancedRouterScanner.  
 Capabilities:
@@ -112,6 +115,7 @@ Note: This file was not found in VirusTotal and when uploaded, came back with no
 ---
 
 ## 3. Targeting (ips.txt)
+{: .hl-tier-2}
 
 > **Analyst note:** ips.txt is the master target list bundled with the tool. Its composition reveals how the operator aggregated targets — a mix of curated ISP ranges, automated scan dumps, and sloppy inclusions — which in turn signals operational intent.
 
@@ -133,6 +137,7 @@ Assessment: Aggregated from multiple sources (scan dumps, ISP sweeps, configs). 
 ---
 
 ## 4. Results Analysis
+{: .hl-tier-2}
 
 > **Analyst note:** The results files are the operator's own exploitation logs — recovered from the open directory. They show which devices responded to attacks and what access was gained, confirming the tool moved beyond scanning into active compromise.
 
@@ -156,6 +161,7 @@ Timeline Analysis
 ---
 
 ## 5. Campaign Flow
+{: .hl-tier-2}
 
 > **Analyst note:** This five-stage chain describes how the operator moves from a raw IP list to a compromised router enrolled in botnet infrastructure. Each stage feeds the next; the PoC and hub hosts each serve different phases.
 
@@ -181,6 +187,7 @@ Timeline Analysis
 ---
 
 ## 6. Unique Fingerprints (Pivot Anchors)
+{: .hl-tier-2}
 
 > **Analyst note:** These fingerprints are the detection surface. Because the tool is not publicly available, any future network observation matching the class name, output format, or endpoint trio can be attributed to this campaign with high confidence.
 
@@ -192,6 +199,7 @@ Timeline Analysis
 ---
 
 ## 7. External Search Findings
+{: .hl-tier-2}
 - GitHub: Many unrelated poc.py files, but none with AdvancedRouterScanner or the same vendor logic.  
 - Router scanning repos: Exist, but do not use the same class names, results format, or Huawei endpoint trio.  
 - Huawei research repos: Confirm known defaults, but not packaged into this scanner.  
@@ -201,6 +209,7 @@ Timeline Analysis
 ---
 
 ## 8. Threat Assessment
+{: .hl-tier-2}
 
 ### Overall Assessment
 - **Nature:** Custom/semi-private router exploitation tool
@@ -233,6 +242,7 @@ Timeline Analysis
 ---
 
 ## 9. Defensive Recommendations
+{: .hl-tier-2}
 - Network operators: Audit router fleets for default credentials and exposed management endpoints.  
 - Defenders: Monitor outbound connections to the identified infrastructure on ports 21/22/23; build detection rules for repeated default login attempts; flag Huawei-specific endpoint traffic; watch for parallel outbound connections consistent with threaded scanning.  
 - Detection rules covering the AdvancedRouterScanner fingerprints are in the linked detection file.
@@ -240,6 +250,7 @@ Timeline Analysis
 ---
 
 ## 10. Key Takeaways
+{: .hl-tier-1}
 - The poc.py script is a unique campaign artifact.  
 - It combines global opportunistic scanning with vendor‑specific exploitation.  
 - Results confirm Huawei routers in Vietnam were compromised.  
@@ -249,6 +260,7 @@ Timeline Analysis
 ---
 
 ## Target Analysis & Geographic Distribution
+{: .hl-tier-2}
 
 ### Target Enrichment Summary
 <table class="professional-table">
@@ -370,6 +382,7 @@ Interpreting that, concentration across specific regional ISPs indicates targete
 ---
 
 ## Follow-Up: Certificate Pivot
+{: .hl-tier-2}
 
 PoC host now presents TLS cert Issuer CN `yuyu`, seen on only three hosts:
 - 185[.]38[.]150[.]7 (PoC)
@@ -382,6 +395,7 @@ Defensively, monitor for CN `yuyu` and for RDP traffic, and block if observed.
 ---
 
 ## Additional Findings After Pivots (176[.]65[.]137[.]13)
+{: .hl-tier-2}
 
 > **Analyst note:** The second open directory exposed the operator's working environment — shell history, exploit logs, and staged payloads. This is operational intelligence recovered directly from attacker infrastructure, not inferred behavior.
 
@@ -412,6 +426,7 @@ The exploit file was not found in VirusTotal, and when uploaded it came back cle
 ---
 
 ## MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Analyst note:** The MITRE ATT&CK framework is a standardized catalog of adversary behaviors. The table below maps each observed technique in this campaign to its ATT&CK identifier, allowing defenders to cross-reference against existing detection coverage.
 
@@ -646,5 +661,6 @@ A: Network segmentation, regular firmware updates, credential management, and co
 ---
 
 ## License
+{: .hl-tier-2}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

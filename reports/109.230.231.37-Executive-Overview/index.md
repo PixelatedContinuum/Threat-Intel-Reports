@@ -25,6 +25,7 @@ stix_bundle: /stix/109.230.231.37-Executive-Overview.json
 ---
 
 ## EXECUTIVE SUMMARY (BLUF)
+{: .hl-tier-1}
 
 ### The Bottom Line
 
@@ -78,6 +79,7 @@ This analysis covers seven publication-quality malware reports on 16 samples sel
 ---
 
 ## Quick Reference: Malware Analysis Resources
+{: .hl-tier-2}
 ### Arsenal-237: Threat Actor R&D Repository Exposed
 
 Each malware sample analyzed in this investigation has three companion resources: a technical report with behavioral analysis and response guidance, a detection package with YARA/Sigma rules for hunting and prevention, and a machine-readable IOC feed in JSON format for SIEM/EDR ingestion.
@@ -93,6 +95,7 @@ Each malware sample analyzed in this investigation has three companion resources
 ---
 
 ## Quick Facts Box
+{: .hl-tier-1}
 
 <table class="professional-table">
   <thead>
@@ -144,6 +147,7 @@ Each malware sample analyzed in this investigation has three companion resources
 ---
 
 ## Risk Categorization
+{: .hl-tier-1}
 
 ### CRITICAL Risk - Immediate Analysis Recommended
 
@@ -186,6 +190,7 @@ The key finding is CMSTPLUA COM and Fodhelper UAC bypass techniques, where the s
 ---
 
 ## Campaign Summary
+{: .hl-tier-1}
 
 Analysis of the open directory at **109.230.231.37** (38 malicious executables total, 16 examined in depth) reveals a multi-tier threat ecosystem combining remote access trojans, **custom ransomware capabilities**, multi-layer persistence droppers, and proof-of-concept exploitation tools. Shared C2 infrastructure, diverse malware families coordinated through centralized infrastructure, and deceptive Microsoft-themed naming ("WinDefenderSvc.exe", "Microsoft .NET Runtime Optimization") designed to blend with legitimate system processes all indicate organized operations.
 
@@ -215,6 +220,7 @@ All Xworm variants share a single C2 server (**109.230.231.37**), providing defe
 ---
 
 ## Additional Analysis: AutomatedReports Overview
+{: .hl-tier-2}
 
 Beyond the 7 reports, **32 additional malware samples** from the same open directory received automated static analysis through a custom-built StaticTriage framework. These samples provide context for the distribution infrastructure's full scope.
 
@@ -269,6 +275,7 @@ On detection priority, automated signatures, YARA and file hashes, for all 32 sa
 ---
 
 ## Business Impact Analysis
+{: .hl-tier-1}
 
 ### Impact Scenarios by Likelihood
 
@@ -335,6 +342,7 @@ On detection priority, automated signatures, YARA and file hashes, for all 32 sa
 ---
 
 ## Quick Start Detection Guide
+{: .hl-tier-2}
 
 ### IMMEDIATE ACTIONS (Deploy Within 24 Hours)
 
@@ -416,6 +424,7 @@ Configure SIEM correlation rules for these behavioral patterns:
 ---
 
 ## Indicators of Compromise (IOCs)
+{: .hl-tier-2}
 
 ### Network Indicators
 
@@ -560,6 +569,7 @@ Get-Service | Select-Object Name, Status, StartType
 ---
 
 ## Detection & Intelligence Resources
+{: .hl-tier-2}
 
 Each of the seven detailed threat reports includes detection and intelligence resources:
 
@@ -621,6 +631,7 @@ The timeline analysis provides a second-by-second execution chronology showing h
 ---
 
 ## Strategic Implications
+{: .hl-tier-1}
 
 This campaign reflects several trends in the current threat landscape:
 
@@ -666,5 +677,6 @@ From the 38 executables in the open directory, **16 samples were selected for an
 ---
 
 ## License
+{: .hl-tier-2}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

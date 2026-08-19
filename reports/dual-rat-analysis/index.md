@@ -36,6 +36,7 @@ stix_bundle: /stix/dual-rat-analysis.json
 ---
 
 ## BLUF (Bottom Line Up Front)
+{: .hl-tier-1}
 
 ### Executive Summary
 
@@ -96,6 +97,7 @@ Two .NET Remote Access Trojans — Quasar RAT and NjRAT/XWorm — were discovere
 ---
 
 ## Sample 1: Quasar RAT Analysis
+{: .hl-tier-3}
 
 ### File Identification
 - **Original Filename**: client.exe
@@ -306,6 +308,7 @@ That four-minute delay before C2 contact is a deliberate evasion technique aimed
 ---
 
 ## Sample 2: NjRAT/XWorm Analysis
+{: .hl-tier-3}
 
 ### File Identification
 - **Original Filename**: server (1).exe
@@ -515,6 +518,7 @@ Aggressive persistence and critical-process protection together make this malwar
 ---
 
 ## Delivery Method Analysis & Initial Access Vectors
+{: .hl-tier-2}
 
 ### Common Infection Vectors
 
@@ -555,6 +559,7 @@ The typical victim profile here is broad opportunistic targeting across industri
 ---
 
 ## Future Evolution & Threat Trends
+{: .hl-tier-2}
 
 ### Emerging Capabilities to Watch
 
@@ -597,6 +602,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
 ---
 
 ## Comparative Technical Analysis
+{: .hl-tier-3}
 
 **Investigation Context**: The co-presence of Quasar RAT and NjRAT/XWorm on the same infrastructure as [PULSAR RAT]({{ "/reports/PULSAR-RAT/" | relative_url }}) indicates an operator assembling a multi-tool capability set — one family for targeted stealth operations, one for resilient mass deployment.
 
@@ -635,6 +641,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
 ---
 
 ## MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 ### Quasar RAT - ATT&CK Mapping
 
@@ -832,6 +839,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
 ---
 
 ## Frequently Asked Questions
+{: .hl-tier-2}
 
 ### Technical Questions
 
@@ -872,5 +880,6 @@ A: Both RATs enable comprehensive data theft and surveillance — keylogging, sc
 ---
 
 ## License
+{: .hl-tier-2}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

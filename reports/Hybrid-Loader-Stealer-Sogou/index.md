@@ -32,6 +32,7 @@ stix_bundle: /stix/Hybrid-Loader-Stealer-Sogou.json
 ---
 
 ## BLUF (Bottom Line Up Front)
+{: .hl-tier-1}
 
 The installer masquerading as cracked Sogou Input Method is the delivery mechanism for a live cybercrime hub. Reverse engineering confirms a two-stage hybrid loader/stealer: a wrapper that establishes persistence and drops components, followed by an embedded payload performing surveillance, credential theft, privilege escalation, and covert C2 communication. An exposed directory at 27[.]184[.]28[.]134:8081 revealed an active QingLong Panel — a task-automation framework — with a valid authentication token proving operators are authenticated and executing jobs, including JD[.]com cookie theft, IPTV piracy scripts, and Android malware distribution. Command-and-control routes through disposable ccTLD domains (6[.]ar, J[.]im) resolving to Argentina and Amazon AWS infrastructure. A benign promotional document found alongside the malware links the technical operation to commercial monetization channels (Taobao, WeChat).
 
@@ -77,6 +78,7 @@ The installer masquerading as cracked Sogou Input Method is the delivery mechani
 ---
 
 ## Executive Summary
+{: .hl-tier-1}
 
 The cracked Sogou Input Method file is the entry point for a multi-purpose cybercrime operation, not an isolated malware sample. Infrastructure analysis of the exposed directory at 27[.]184[.]28[.]134:8081 revealed a live QingLong Panel — a task-automation framework (see §Comprehensive Malware Analysis) — with Android malware, JD[.]com cookie-stealing tools, IPTV piracy scripts, and orchestration utilities alongside the Windows installer. A valid authentication token (token.json) confirms operators are authenticated and executing scheduled jobs; logs show token generation and RTSP streaming services are active.
 
@@ -85,6 +87,7 @@ The installer itself is a multi-component NSIS package blending malicious binari
 Command-and-control relies on disposable ccTLD domains and cloud IPs (6[.]ar → 149[.]50[.]136[.]243, J[.]im → 52[.]20[.]84[.]62). A benign Word document (如意素材库.docx) found in the directory promotes a Taobao shop and WeChat ID, connecting the technical infrastructure to commercial monetization channels. The operator’s goal is scalable fraud, piracy, and credential monetization, managed under a single automation framework.
 
 ## Comprehensive Malware Analysis
+{: .hl-tier-3}
 
 ### File Overview
 
@@ -184,6 +187,7 @@ Command-and-control relies on disposable ccTLD domains and cloud IPs (6[.]ar →
 - Executes persistence, LNK manipulation, and payload execution in the background.  
 
 ## Capability Findings Summary
+{: .hl-tier-3}
 
 - **File System:** Create/delete/copy/move files, read/write, enumerate recursively, read .ini files.  
 - **Registry:** Create/open/delete registry keys and values.  
@@ -197,6 +201,7 @@ Command-and-control relies on disposable ccTLD domains and cloud IPs (6[.]ar →
 ---
 
 ## Expanded Capability Findings
+{: .hl-tier-3}
 
 > **Analyst note:** This section details the specific technical capabilities identified through static analysis tools. Each capability was confirmed by observed API calls, function signatures, or behavioral patterns — not inferred from the filename or metadata alone. Understanding these capabilities helps defenders know what to look for in endpoint telemetry.
 
@@ -272,6 +277,7 @@ Command-and-control relies on disposable ccTLD domains and cloud IPs (6[.]ar →
 >Impact analysis highlights the attacker’s ability to steal sensitive data, maintain persistence, and evade defenses, all while masquerading as trusted software.  
 
 ## YARA Hits
+{: .hl-tier-3}
 
 - **General Traits:** PE32 Windows executable, packed, overlay present.  
 - **Crypto/Encoding:** CRC32 hashing, base64 encoding.  
@@ -283,6 +289,7 @@ Command-and-control relies on disposable ccTLD domains and cloud IPs (6[.]ar →
 ---
 
 ## Expanded YARA Hits
+{: .hl-tier-3}
 
 > **Analyst note:** YARA rules are pattern-matching signatures used to identify malware traits from static file content — think of them as fingerprints for code patterns, file structures, and embedded strings. Each hit below represents a specific pattern that fired against this binary and what it reveals about the malware’s design.
 
@@ -342,6 +349,7 @@ The scan produced several hits that provide insight into the malware’s composi
 >Network indicator hits tie directly to decoded domains, strengthening the case for active C2 infrastructure.  
 
 ## peframe Results
+{: .hl-tier-3}
 
 - **Features:** Mutex creation, anti‑debugging, cryptographic routines.  
 - **Behavior:** XOR encoding, privilege escalation, screenshot capture, registry manipulation, token abuse, file operations.  
@@ -354,6 +362,7 @@ The scan produced several hits that provide insight into the malware’s composi
 ---
 
 ## Expanded peframe Results
+{: .hl-tier-3}
 
 > **Analyst note:** PE (Portable Executable) analysis examines a Windows binary’s internal structure — its metadata, imported functions, sections, and anomalies — without running it. The findings below reveal what capabilities the binary declares at the structural level, corroborating the behavioral evidence from capability analysis and YARA.
 
@@ -419,6 +428,7 @@ The PE analysis tool (peframe) provided additional context on the malware’s st
   - Others expired or placeholders. 
 
 ## Infrastructure Analysis
+{: .hl-tier-2}
 
 ### WHOIS & IP Enrichment
 
@@ -500,6 +510,7 @@ The PE analysis tool (peframe) provided additional context on the malware’s st
 Operationally, both IPs confirm reliance on cheap ccTLDs plus disposable hosting and cloud services to maintain short-lived, churnable C2 servers.  
 
 ## Behavioral Assessment
+{: .hl-tier-3}
 
 ### Masquerade
 - **Evidence:** The installer metadata explicitly claims to be “Sogou Input Method v15.1.0.1570,” a legitimate release line. However, the packaging format is NSIS (not used by Sogou), and the binary contains XOR‑encoded configuration blobs, disposable domains, and persistence mechanisms. Legitimate Sogou installers do not include anti‑VM checks, screenshot capture, or clipboard theft.  
@@ -543,6 +554,7 @@ Operationally, both IPs confirm reliance on cheap ccTLDs plus disposable hosting
 >C2 infrastructure is disposable, cloud‑based, and disguised as legitimate traffic, making detection and takedown difficult.  
 
 ## Document Triage Findings
+{: .hl-tier-3}
 
 ### File Analyzed
 - **Filename:** 如意素材库.docx  
@@ -590,6 +602,7 @@ Operationally, both IPs confirm reliance on cheap ccTLDs plus disposable hosting
 - **Connection:** Links technical infrastructure (malware, automation, piracy) with commercial outreach (mainstream platforms like Taobao and WeChat).  
 
 ## Linkage Analysis: Promotional Document and Cybercrime Hub
+{: .hl-tier-2}
 
 ### Context
 During the broader investigation, a benign Microsoft Word document (**如意素材库.docx**) was discovered. While technically safe, its content provided identifiers that connect the technical infrastructure (malware, automation, piracy) with commercial outreach channels (Taobao and WeChat).
@@ -627,6 +640,7 @@ During the broader investigation, a benign Microsoft Word document (**如意素�
 The exposed directory and live QingLong Panel established the ecosystem context; the NSIS installer is where the infection begins. The file (**搜狗拼音输入法_v15.1.0.1570去广告精简优化版_无毒_吾爱破解.exe**) uses packaging formats that differ from legitimate Sogou releases, and embeds persistence, obfuscation, and covert C2 communications directly within the installation process.  
 
 ## Complete Installer Summary
+{: .hl-tier-3}
 
 ### Artifacts of Interest
 
@@ -687,6 +701,7 @@ XOR-decoded domains (6[.]ar, J[.]im), endpoint token CGI1, active IPs (149[.]50[
 The installer is the cornerstone of the **SogouStealer ecosystem** — a multi-layered orchestration tool, not a passive wrapper. It masquerades as trusted software, executes malicious actions silently during installation, establishes redundant persistence, evades detection, collects sensitive data, escalates privileges, disrupts systems, and communicates with disposable infrastructure disguised as legitimate traffic.  
 
 ## Final Infection Chain
+{: .hl-tier-2}
 
 > **Analyst note:** This section traces the malware's execution from the moment a victim runs the installer through to active C2 communication. The chain runs in two stages — a staging wrapper that establishes the foothold and an embedded payload that performs the actual data collection and remote control. Understanding where each stage begins helps defenders identify the earliest viable detection point.
 
@@ -720,6 +735,7 @@ The installer is the cornerstone of the **SogouStealer ecosystem** — a multi-l
 >**Operational Design:** The infection chain is deliberately layered. The wrapper ensures delivery and stability, while the embedded payload executes the full malicious capability set.  
 
 ## Final Infection Chain Flow & Components
+{: .hl-tier-3}
 
 > **Analyst note:** This section maps each component to its role in the attack chain, identifying which binary handles delivery, which handles C2, and which provides the UI disguise. Each named file was recovered from the installer package and confirmed through static and behavioral analysis.
 
@@ -781,6 +797,7 @@ It strengthens the masquerade, making malicious activity look like normal applic
 The infection chain is deliberately layered by design. The wrapper ensures delivery and stability, the embedded payload executes the full malicious capability set, and the UI disguise maintains user trust.
 
 ## Final Analysis & Conclusion
+{: .hl-tier-2}
 
 ### Context of Discovery
 What began as a suspicious installer masquerading as a cracked Sogou Input Method release expanded into evidence of a multi-purpose cybercrime hub: an exposed directory at 27[.]184[.]28[.]134:8081 hosting a live QingLong Panel with valid authentication tokens, alongside Android malware, JD[.]com cookie-stealing tools, and IPTV piracy scripts.
@@ -792,10 +809,12 @@ What began as a suspicious installer masquerading as a cracked Sogou Input Metho
 - The installer is the cornerstone of the ecosystem: NSIS packaging, XOR-encoded C2 config, redundant persistence, and evasion are integrated directly into the installation process — the user sees a wizard while malicious execution is already underway.  
 
 ## Conclusion
+{: .hl-tier-1}
 
 The Sogou masquerade is the visible surface of a scaled cybercrime operation. The two-stage infection chain — wrapper persistence plus embedded stealer/RAT payload — ensures the operator maintains control long after the initial install. Disposable infrastructure, live panel automation, and commercial monetization channels (Taobao, WeChat) confirm this is an active, professionally managed operation targeting e-commerce credentials at scale.
 
 ## MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 ### Initial Access
 - **T1036 – Masquerading**  
@@ -963,5 +982,6 @@ A: The malware establishes persistence through two independent mechanisms — re
 ---
 
 ## License
+{: .hl-tier-2}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

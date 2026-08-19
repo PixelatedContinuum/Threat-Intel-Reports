@@ -30,6 +30,7 @@ stix_bundle: /stix/quasar-xworm-powershell.json
 ---
 
 ## BLUF (Bottom Line Up Front)
+{: .hl-tier-1}
 
 A VBScript stager fetches a PowerShell script disguised as `update.png`, executes it in memory, and uses it to disable Microsoft Defender across the entire `C:\` drive before deploying two commodity remote access trojans — QuasarRAT and XWorm — both communicating to `193[.]233[.]164[.]21` via `dns4up[.]duckdns[.]org`. Any victim where this chain ran has lost endpoint visibility and carries persistent, full-capability remote access. See the Technical Analysis section for the loader chain and RAT capabilities; see Detection & Response Guidance for immediate priorities.
 
@@ -70,6 +71,7 @@ A VBScript stager fetches a PowerShell script disguised as `update.png`, execute
 ---
 
 ## Technical Analysis
+{: .hl-tier-3}
 
 ### Overview
 
@@ -181,6 +183,7 @@ Analysts can pivot on:
 ---
 
 ## Attack Tactics & Procedures
+{: .hl-tier-2}
 
 ### MITRE ATT&CK Mapping
 
@@ -259,6 +262,7 @@ Analysts can pivot on:
 ---
 
 ## Detection & Response Guidance
+{: .hl-tier-2}
 
 ### Immediate Priorities
 
@@ -278,6 +282,7 @@ Analysts can pivot on:
 ---
 
 ## Frequently Asked Questions
+{: .hl-tier-2}
 
 **Q: Why is fileless execution particularly dangerous?**
 It evades traditional file-based detection, leaves minimal forensic artifacts, and bypasses security controls that rely on file scanning.
@@ -291,5 +296,6 @@ Some network monitoring systems inspect image-extension files less aggressively 
 ---
 
 ## License
+{: .hl-tier-2}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

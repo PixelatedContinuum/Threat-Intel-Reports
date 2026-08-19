@@ -39,6 +39,7 @@ stix_bundle: /stix/new-files-found-20260408.json
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 A previously identified threat actor, UTA-2026-004 *(an internal tracking label used by The Hunters Ledger, see Section 8)*, was found staging a complete offensive toolkit across 106 files on the same open directory documented on 6 April 2026. The toolkit includes cracked Cobalt Strike 4.9.1, a four-generation custom implant development chain whose newest generation is still work-in-progress, and a Layer 2 network tunneling module. Overall risk is HIGH, 7.5 out of 10. I assess the toolkit as pre-deployment, with no confirmed victims. The highest-priority defensive finding is an EAX-redirect process injection technique that bypasses the detection logic most endpoint security products use for this attack class. 72 of the 98 samples submitted to VirusTotal had no prior submissions and no prior public reporting.
 
@@ -121,6 +122,7 @@ No immediate incident response is required — this toolkit is assessed as pre-o
 ---
 
 ## 2. Relationship to April 6 Report
+{: .hl-tier-2}
 
 > **Analyst note:** This report is a continuation of the original OpenStrike analysis published April 6, 2026. Readers unfamiliar with the original report are strongly encouraged to read it first — it establishes the OpenStrike family name, the Trinity Protocol cryptographic architecture, and the initial infrastructure profile for 172.105.0.126. This report documents only what was new in the expanded file set.
 
@@ -150,6 +152,7 @@ The April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/o
 ---
 
 ## 3. Malware Classification & Sample Inventory
+{: .hl-tier-2}
 
 ### 3.1 Classification
 
@@ -222,6 +225,7 @@ The encrypted sleeve DLLs need a note. 56 of the 106 files are AES-128-CBC encry
 ---
 
 ## 4. Technical Analysis
+{: .hl-tier-3}
 
 ### 4.1 The OpenStrike 4-Generation Implant Evolution
 
@@ -747,6 +751,7 @@ Six JavaScript templates recovered: `analytics.js` (credential harvester), `keyl
 ---
 
 ## 5. Infrastructure Analysis
+{: .hl-tier-2}
 
 ### 5.1 Server Architecture: 172.105.0.126
 
@@ -789,6 +794,7 @@ The mismatch is evidence of toolkit assembly from at least two different cracked
 ---
 
 ## 6. Threat Intelligence Context
+{: .hl-tier-2}
 
 ### 6.1 CS 4.9.1 "Pwn3rs" Cracked Distribution
 
@@ -851,6 +857,7 @@ The inference: UTA-2026-004 accumulated artifacts from CS 3.x-era material (pre-
 ---
 
 ## 7. VirusTotal Intelligence: 72-of-98 First Reports
+{: .hl-tier-2}
 
 | Category | Submitted | First-Reports | Previously Known |
 |---|---|---|---|
@@ -867,6 +874,7 @@ All 10 custom GCC 15 operator tools — including all four OpenStrike beacon gen
 ---
 
 ## 8. Threat Actor Assessment: UTA-2026-004
+{: .hl-tier-2}
 
 > **Analyst note:** This section addresses who is behind this campaign and what we can and cannot determine about their identity. The short answer is: we cannot identify a specific named actor. The longer answer explains what the evidence does tell us — and why the evidence that might suggest a Chinese-linked actor is insufficient for that conclusion.
 
@@ -910,6 +918,7 @@ Building on the April 6 profile, the following characteristics are now confirmed
 ---
 
 ## 9. MITRE ATT&CK Coverage
+{: .hl-tier-2}
 
 *Table shows only HIGH confidence technique mappings. LOW confidence techniques omitted.*
 
@@ -949,6 +958,7 @@ Building on the April 6 profile, the following characteristics are now confirmed
 ---
 
 ## 10. Indicators of Compromise
+{: .hl-tier-2}
 
 IOCs are provided in structured machine-readable format. This feed contains only new indicators from the April 8 expanded analysis — not duplicating the April 6 feed.
 
@@ -987,6 +997,7 @@ IOCs are provided in structured machine-readable format. This feed contains only
 ---
 
 ## 11. Detection Rules
+{: .hl-tier-2}
 
 **[/hunting-detections/new-files-found-20260408-detections/](/hunting-detections/new-files-found-20260408-detections/)**
 
@@ -1003,6 +1014,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 ---
 
 ## 12. Intelligence Gaps and Confidence Summary
+{: .hl-tier-2}
 
 ### Findings by Confidence Level
 
@@ -1074,6 +1086,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 ---
 
 ## 13. Response Orientation
+{: .hl-tier-2}
 
 **Detection priorities (highest-fidelity behavioral indicators):**
 
@@ -1099,6 +1112,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 ---
 
 ## 14. References
+{: .hl-tier-2}
 
 **Primary Sources (Tier 1):**
 
@@ -1132,6 +1146,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 ---
 
 ## 15. Related Investigation
+{: .hl-tier-2}
 
 The original April 6 report is at [/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)
 
