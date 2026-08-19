@@ -1,14 +1,23 @@
 /* Indicator search on /ioc-feeds/.
 
-   The feed cards are already the answer a reader wants, so this does not render
-   its own result list. It narrows the existing grid to the feeds containing the
-   indicator, and the reader clicks the card they already recognise to go and
-   read the whole feed. One surface, not two.
+   The feed cards are already the answer for a single indicator, so this narrows
+   the existing grid rather than rendering a parallel result list, and the reader
+   clicks the card they already recognise.
+
+   A LIST is different. Narrowing 54 cards to 21 tells someone who pasted 40
+   indicators almost nothing: they need to know WHICH of theirs matched and which
+   did not. So above one indicator, a compact per-indicator breakdown appears
+   alongside the narrowing.
 
    It cooperates with listing-filter.js rather than fighting it: this sets
-   `data-veto` on cards that do not contain the indicator, then fires
+   `data-veto` on cards that do not contain any pasted indicator, then fires
    `hl:refilter` so the shared module re-applies. Two scripts both writing
    `style.display` would race.
+
+   The input is a TEXTAREA, not an input. `<input type="text">` silently strips
+   newlines from pasted content, which collapsed a pasted list into one giant
+   string; that string once ended in `.test` and was classified as a single
+   domain. Newline-separated is how most people paste a list.
 
    Matching goes through the SAME ioc-classify.js the index generator used. If
    this normalised differently, every search would quietly return nothing and
@@ -22,8 +31,13 @@
   var input = root.querySelector('.hl-iocsearch__in');
   var clear = root.querySelector('.hl-iocsearch__clear');
   var result = root.querySelector('.hl-iocsearch__result');
+  var detail = root.querySelector('.hl-iocsearch__detail');
   var cards = [].slice.call(document.querySelectorAll('.hl-catalog-card[data-slug]'));
   var index = null, loading = null, timer = null;
+
+  // Above this many matches the breakdown is capped, because a 200-line list
+  // pushes the cards it is meant to introduce off the screen.
+  var DETAIL_CAP = 25;
 
   function load() {
     if (index) return Promise.resolve(index);
@@ -36,17 +50,7 @@
     return loading;
   }
 
-  function refilter() {
-    document.dispatchEvent(new CustomEvent('hl:refilter'));
-  }
-
-  function reset(msg) {
-    cards.forEach(function (c) { c.removeAttribute('data-veto'); });
-    result.textContent = msg || '';
-    result.className = 'hl-iocsearch__result';
-    clear.hidden = !(input.value || '').trim();
-    refilter();
-  }
+  function refilter() { document.dispatchEvent(new CustomEvent('hl:refilter')); }
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -54,35 +58,76 @@
     });
   }
 
+  function autoGrow() {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 260) + 'px';
+  }
+
+  function clearAll(msg) {
+    cards.forEach(function (c) { c.removeAttribute('data-veto'); });
+    result.textContent = msg || '';
+    result.className = 'hl-iocsearch__result';
+    detail.innerHTML = '';
+    clear.hidden = !(input.value || '').trim();
+    refilter();
+  }
+
+  function say(html, kind) {
+    result.innerHTML = html;
+    result.className = 'hl-iocsearch__result hl-iocsearch__result--' + kind;
+  }
+
+  /* Per-indicator breakdown, shown only for a list. For one indicator the card
+     narrowing already says everything. */
+  function renderDetail(matched, missed, idx) {
+    var rows = matched.slice(0, DETAIL_CAP).map(function (m) {
+      var feeds = idx.indicators[m.type + ':' + m.value].map(function (h) {
+        return esc((idx.reports[h.report] || {}).title || h.report);
+      });
+      return '<li class="hl-iocsearch__row hl-iocsearch__row--hit">' +
+        '<code>' + esc(m.value) + '</code>' +
+        '<span class="hl-iocsearch__in-feed">' + feeds.join(', ') + '</span></li>';
+    });
+    var more = matched.length > DETAIL_CAP
+      ? '<li class="hl-iocsearch__row hl-iocsearch__more">and ' +
+        (matched.length - DETAIL_CAP) + ' more matched</li>' : '';
+    var none = missed.length
+      ? '<li class="hl-iocsearch__row hl-iocsearch__row--miss">' + missed.length +
+        ' of your indicators are not in any published feed</li>' : '';
+    detail.innerHTML = '<ul class="hl-iocsearch__list">' +
+      rows.join('') + more + none + '</ul>';
+  }
+
   function run() {
     var raw = (input.value || '').trim();
     clear.hidden = !raw;
-    if (!raw) { reset(''); return; }
+    if (!raw) { clearAll(''); return; }
 
     load().then(function (idx) {
       var found = C.extract(raw);
+      detail.innerHTML = '';
+
       if (!found.length) {
-        reset('');
-        result.textContent = 'That does not look like an IP, domain, URL or hash.';
-        result.className = 'hl-iocsearch__result hl-iocsearch__result--none';
+        cards.forEach(function (c) { c.removeAttribute('data-veto'); });
+        say('Nothing in that text looks like an IP, domain, URL or hash.', 'none');
+        refilter();
         return;
       }
 
-      // Union across everything pasted, so a small list works as well as one value.
-      var slugs = {}, matched = [];
+      var slugs = {}, matched = [], missed = [];
       found.forEach(function (f) {
         var hits = idx.indicators[f.type + ':' + f.value];
-        if (!hits) return;
+        if (!hits) { missed.push(f); return; }
         matched.push(f);
         hits.forEach(function (h) { slugs[h.report] = 1; });
       });
 
       if (!matched.length) {
         cards.forEach(function (c) { c.removeAttribute('data-veto'); });
-        result.innerHTML = found.length === 1
+        say(found.length === 1
           ? '<strong>' + esc(found[0].value) + '</strong> does not appear in any published feed.'
-          : 'None of the ' + found.length + ' indicators appear in any published feed.';
-        result.className = 'hl-iocsearch__result hl-iocsearch__result--none';
+          : 'None of your ' + found.length + ' indicators appear in any published feed.',
+          'none');
         refilter();
         return;
       }
@@ -93,29 +138,36 @@
         else c.setAttribute('data-veto', '1');
       });
 
-      var lead = matched.length === 1
-        ? '<strong>' + esc(matched[0].value) + '</strong> appears in '
-        : matched.length + ' of your ' + found.length + ' indicators appear in ';
-      result.innerHTML = lead + n + (n === 1 ? ' feed' : ' feeds') +
-        ' below. Open the card to see the full feed and what else it contains.';
-      result.className = 'hl-iocsearch__result hl-iocsearch__result--hit';
+      if (found.length === 1) {
+        say('<strong>' + esc(matched[0].value) + '</strong> appears in ' + n +
+            (n === 1 ? ' feed' : ' feeds') + ' below. Open the card to see the full ' +
+            'feed and what else it contains.', 'hit');
+      } else {
+        say('<strong>' + matched.length + ' of your ' + found.length +
+            '</strong> indicators appear in ' + n + (n === 1 ? ' feed' : ' feeds') +
+            ' below.', 'hit');
+        renderDetail(matched, missed, idx);
+      }
       refilter();
     })['catch'](function (e) {
-      result.textContent = 'Could not load the indicator index (' + e.message + ').';
-      result.className = 'hl-iocsearch__result hl-iocsearch__result--none';
+      say('Could not load the indicator index (' + e.message + ').', 'none');
     });
   }
 
   input.addEventListener('input', function () {
+    autoGrow();
     clearTimeout(timer);
-    timer = setTimeout(run, 180);
+    timer = setTimeout(run, 200);
   });
+  // A textarea takes Enter as a newline, which a pasted list needs, so the
+  // explicit trigger is the modifier chord.
   input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { clearTimeout(timer); run(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { clearTimeout(timer); run(); }
   });
   clear.addEventListener('click', function () {
     input.value = '';
-    reset('');
+    autoGrow();
+    clearAll('');
     input.focus();
   });
 })();

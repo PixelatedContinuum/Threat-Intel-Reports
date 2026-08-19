@@ -15,11 +15,12 @@ redirect_from:
 </div>
 
 <div class="hl-iocsearch">
-  <input class="hl-iocsearch__in" type="text" spellcheck="false" autocomplete="off"
-    placeholder="Paste an IP, domain, URL or hash to find its feed…"
-    aria-label="Search for an indicator across every published feed">
+  <textarea class="hl-iocsearch__in" rows="1" spellcheck="false" autocomplete="off"
+    placeholder="Paste one indicator, or a whole list. IPs, domains, URLs and hashes, separated by commas, spaces or newlines."
+    aria-label="Search for indicators across every published feed"></textarea>
   <button type="button" class="hl-iocsearch__clear" hidden>Clear</button>
   <div class="hl-iocsearch__result" role="status" aria-live="polite"></div>
+  <div class="hl-iocsearch__detail"></div>
 </div>
 
 {% assign ioc_entries = site.data.catalog.entries | where_exp: "e", "e.ioc_url" | sort: "date" | reverse %}

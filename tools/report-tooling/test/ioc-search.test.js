@@ -33,9 +33,10 @@ var INDEX = {
 
 var PAGE =
   '<div class="hl-iocsearch">' +
-    '<input class="hl-iocsearch__in">' +
+    '<textarea class="hl-iocsearch__in"></textarea>' +
     '<button class="hl-iocsearch__clear" hidden>Clear</button>' +
     '<div class="hl-iocsearch__result"></div>' +
+    '<div class="hl-iocsearch__detail"></div>' +
   '</div>' +
   '<div class="hl-filter" data-listing-filter>' +
     '<input class="hl-filter__search">' +
@@ -116,7 +117,7 @@ test('text that is not an indicator at all says that, not "no match"', async fun
   var w = build();
   await type(w, 'the quick brown fox');
   assert.deepEqual(visible(w), ['alpha', 'beta', 'gamma']);
-  assert.match(resultText(w), /does not look like an IP, domain, URL or hash/);
+  assert.match(resultText(w), /Nothing in that text looks like an IP, domain, URL or hash/);
 });
 
 test('clearing the box restores every card', async function () {
@@ -150,5 +151,57 @@ test('pasting several indicators unions their feeds', async function () {
   var w = build();
   await type(w, '185.38.150.7 and shared.test');
   assert.deepEqual(visible(w), ['alpha', 'beta']);
-  assert.match(resultText(w), /2 of your 2 indicators/);
+  assert.match(resultText(w), /2 of your 2/);
+});
+
+// Built from a code point rather than an escape: a newline written as a
+// backslash escape kept getting mangled by the tooling that authored this file.
+var NL = String.fromCharCode(10);
+var LIST = ['185.38.150.7', 'shared.test', '203.0.113.99'];
+
+function detailText(w) {
+  return w.document.querySelector('.hl-iocsearch__detail').textContent;
+}
+
+test('a NEWLINE separated list works, which is how lists are actually pasted', async function () {
+  // This is the regression. `<input type="text">` strips newlines from pasted
+  // content, so a pasted list collapsed into one string; the concatenation once
+  // ended in ".test" and was classified as a single domain, reporting a clean
+  // "not in any feed" for a list that was mostly real.
+  var w = build();
+  await type(w, LIST.join(NL));
+  assert.deepEqual(visible(w), ['alpha', 'beta']);
+  assert.match(resultText(w), /2 of your 3/);
+});
+
+test('a comma separated list works', async function () {
+  var w = build();
+  await type(w, '185.38.150.7, shared.test, 203.0.113.99');
+  assert.deepEqual(visible(w), ['alpha', 'beta']);
+  assert.match(resultText(w), /2 of your 3/);
+});
+
+test('a list gets a per-indicator breakdown naming each feed', async function () {
+  // Narrowing 54 cards to 21 tells someone who pasted 40 indicators nothing
+  // about WHICH of theirs matched. For a list, the breakdown is the answer.
+  var w = build();
+  await type(w, LIST.join(NL));
+  var t = detailText(w);
+  assert.match(t, /185\.38\.150\.7/, 'names the matched indicator');
+  assert.match(t, /Alpha/, 'names the feed it is in');
+  assert.match(t, /1 of your indicators are not in any published feed/,
+    'and says how many missed');
+});
+
+test('a single indicator gets NO breakdown, the card is enough', async function () {
+  var w = build();
+  await type(w, '185.38.150.7');
+  assert.equal(detailText(w), '');
+});
+
+test('a messy real-world paste survives quoting and trailing punctuation', async function () {
+  var w = build();
+  await type(w, 'src="185.38.150.7", host=shared.test;' + NL + '  203.0.113.99  ');
+  assert.deepEqual(visible(w), ['alpha', 'beta']);
+  assert.match(resultText(w), /2 of your 3/);
 });

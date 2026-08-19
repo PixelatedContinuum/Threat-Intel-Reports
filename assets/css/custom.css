@@ -3726,16 +3726,24 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    the theme sets body to 1.25em = 20px while `rem` resolves against the 16px
    root, which is what shipped the Wire 22% small. */
 .hl-iocsearch { margin: 0 0 1.1em; }
+/* A TEXTAREA, not an input: `<input type="text">` strips newlines out of a
+   pasted list, which is how most people paste one. It starts one row tall and
+   grows to fit what was pasted, capped so it cannot push the cards off screen. */
 .hl-iocsearch__in {
   width: 100%;
   box-sizing: border-box;
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: 0.78em;
+  line-height: 1.5;
   color: var(--hl-text-primary);
   background: var(--hl-bg-card);
   border: 1px solid var(--hl-border-card);
   border-radius: 6px;
   padding: 0.7em 0.9em;
+  resize: vertical;
+  overflow-y: auto;
+  min-height: 2.6em;
+  max-height: 260px;
 }
 .hl-iocsearch__in:focus {
   outline: none;
@@ -3773,4 +3781,36 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: 0.94em;
   word-break: break-all;
+}
+
+/* Per-indicator breakdown, shown only for a pasted LIST. For one indicator the
+   card narrowing already says everything. */
+.hl-iocsearch__list {
+  list-style: none;
+  margin: 0.6em 0 0;
+  padding: 0 0 0 0.8em;
+  border-left: 1px solid var(--hl-border-card);
+  max-height: 17em;
+  overflow-y: auto;
+}
+.hl-iocsearch__row {
+  display: flex;
+  gap: 0.7em;
+  align-items: baseline;
+  flex-wrap: wrap;
+  font-size: 0.74em;
+  line-height: 1.6;
+  padding: 0.12em 0;
+}
+.hl-iocsearch__row code {
+  font-size: 0.94em;
+  color: var(--hl-text-primary);
+  word-break: break-all;
+}
+.hl-iocsearch__row--hit code { color: var(--hl-accent-green, #4ade80); }
+.hl-iocsearch__in-feed { color: var(--hl-text-muted); }
+.hl-iocsearch__row--miss, .hl-iocsearch__more {
+  color: var(--hl-text-muted);
+  font-style: italic;
+  padding-top: 0.4em;
 }
