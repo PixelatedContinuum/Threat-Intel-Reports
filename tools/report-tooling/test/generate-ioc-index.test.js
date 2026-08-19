@@ -23,7 +23,7 @@ var UNLISTED = { 'held': true };
 var FEED_TOP = {
   metadata: { campaign: 'Live One' },
   file_hashes: { sha256: [{ value: 'a'.repeat(64), context: 'dropper' }] },
-  network_indicators: { ips: ['185.38.150.7:9999'], domains: ['Bot.Example.COM'] },
+  network_indicators: { ips: ['185.38.150.7:9999'], domains: ['Bot.GriboStress.PRO'] },  // a real one; example.com is benign-suppressed
   behavioral_indicators: ['Isolate infected systems from the network']
 };
 
@@ -40,7 +40,7 @@ test('indicators are extracted from a top-level feed', function () {
   var idx = build({ 'live-one-iocs.json': FEED_TOP });
   assert.ok(idx.indicators['sha256:' + 'a'.repeat(64)], 'hash indexed');
   assert.ok(idx.indicators['ipv4:185.38.150.7'], 'ip indexed with port stripped');
-  assert.ok(idx.indicators['domain:bot.example.com'], 'domain lowercased');
+  assert.ok(idx.indicators['domain:bot.gribostress.pro'], 'domain lowercased');
 });
 
 test('indicators are extracted from a nested feed too', function () {
@@ -119,4 +119,16 @@ test('an indicator in two reports lists both', function () {
 test('an unparseable feed does not crash the build', function () {
   var idx = build({ 'live-one-iocs.json': { __unparseable: 'Unexpected token' } });
   assert.deepEqual(idx.coverage.empty, ['live-one-iocs.json']);
+});
+
+test('signal-free values never enter the index, and are counted', function () {
+  // 8.8.8.8 really is in the Arsenal-237 feed. It is a true statement about the
+  // malware and a useless thing to match a defender's logs against.
+  var idx = build({ 'live-one-iocs.json': {
+    network_indicators: { ips: ['8.8.8.8', '185.38.150.7'], domains: ['github.com'] }
+  } });
+  assert.ok(!idx.indicators['ipv4:8.8.8.8'], 'public resolver suppressed');
+  assert.ok(!idx.indicators['domain:github.com'], 'major platform suppressed');
+  assert.ok(idx.indicators['ipv4:185.38.150.7'], 'the real attacker IP is kept');
+  assert.equal(idx.counts.suppressed_benign, 2, 'suppression is counted, not silent');
 });
