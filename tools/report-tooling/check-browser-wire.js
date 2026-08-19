@@ -18,7 +18,6 @@
 var path = require('node:path');
 var fs = require('node:fs');
 var https = require('node:https');
-var http = require('node:http');
 
 var ROOT = path.join(__dirname, '..', '..');
 var BASE = (process.env.HL_SITE_BASE || 'https://the-hunters-ledger.com').replace(/\/+$/, '');
@@ -32,10 +31,11 @@ function notChecked(reason) {
   process.exit(2);
 }
 
-var CDP, HARNESS, JSDOM;
+var CDP, HARNESS, SERVER, JSDOM;
 try {
   CDP = require('./lib/cdp.js');
   HARNESS = require('./lib/wire-harness.js');
+  SERVER = require('./lib/page-server.js');
   JSDOM = require('jsdom').JSDOM;
 } catch (e) {
   notChecked(e.message + '. Run `npm ci` in tools/report-tooling, then re-run.');
@@ -56,61 +56,12 @@ function fetchText(url) {
   });
 }
 
-/* The harness is served over HTTP rather than opened from file://.
-
-   Under file:// the page's own root-relative asset URLs resolve against the
-   drive root, the font request fails CORS outright, and the console fills with
-   errors that say nothing about the site. Masking those would have meant a
-   console check that could never fail. Serving the real assets from the working
-   tree removes the whole class instead. */
-var TYPES = {
-  '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript',
-  '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf',
-  '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
-  '.svg': 'image/svg+xml', '.gif': 'image/gif', '.ico': 'image/x-icon',
-  '.json': 'application/json', '.txt': 'text/plain; charset=utf-8'
-};
-
-function serve(html) {
-  var misses = [];
-  return new Promise(function (resolve) {
-    var srv = http.createServer(function (req, res) {
-      var url = req.url.split('?')[0];
-      if (url === '/' || url === '/wire/' || url === '/wire/index.html') {
-        res.writeHead(200, { 'content-type': TYPES['.html'] });
-        return res.end(html);
-      }
-      // Anything else comes out of the working tree, so the page loads the
-      // fonts and images it actually ships with.
-      var rel = decodeURIComponent(url).replace(/^\/+/, '');
-      var file = path.join(ROOT, rel);
-      if (file.indexOf(ROOT) !== 0 || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
-        /* Not everything the page loads lives in this repo. The theme's own
-           fonts come out of the Jekyll gem and are copied into _site at build
-           time, so they exist on the published site and nowhere in the working
-           tree. Proxy those rather than carve an exclusion into the console
-           check: an exclusion big enough to cover them would also hide a real
-           missing asset. A path that is missing in BOTH places is named. */
-        return https.get(BASE + url, function (up) {
-          if (up.statusCode !== 200) {
-            up.resume();
-            misses.push(url);
-            res.writeHead(404); return res.end('not found');
-          }
-          res.writeHead(200, { 'content-type': up.headers['content-type'] || 'application/octet-stream' });
-          up.pipe(res);
-        }).on('error', function () {
-          misses.push(url + ' (proxy failed)');
-          res.writeHead(404); res.end('not found');
-        });
-      }
-      res.writeHead(200, { 'content-type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream' });
-      fs.createReadStream(file).pipe(res);
-    });
-    srv.misses = misses;
-    srv.listen(0, '127.0.0.1', function () { resolve(srv); });
-  });
-}
+/* The harness is served over HTTP by lib/page-server.js rather than opened
+   from file://, and that module carries the reasons. In short: under file:// the
+   page's root-relative asset URLs resolve against the drive root and the font
+   request fails CORS outright, filling the console with errors that say nothing
+   about the site. This checker had its own copy of that server until the report
+   checker needed the same thing; one definition of one rule. */
 
 var results = [];
 function check(name, pass, detail) {
@@ -151,8 +102,8 @@ async function main() {
   var first = built.days[0];
   var last = built.days[built.days.length - 1];
 
-  var srv = await serve(built.html);
-  var origin = 'http://127.0.0.1:' + srv.address().port;
+  var srv = await SERVER.start({ '/wire/': built.html }, { root: ROOT, base: BASE });
+  var origin = srv.origin;
 
   var page;
   try {

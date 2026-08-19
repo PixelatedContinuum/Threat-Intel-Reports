@@ -179,21 +179,88 @@ async function open(url, opts) {
         JSON.stringify(props || []) + '.forEach(function(p){o[p]=c[p];});' +
         'return JSON.stringify(o);})()'));
     },
-    // A real pointer press and release at the element's centre, not el.click().
+    /* Put an element into :hover (or :focus, :active) and leave it there.
+
+       Synthetic mouse moves do NOT produce hover state in headless Chrome. That
+       was measured, not assumed: dispatching mouseMoved at the element's exact
+       centre, confirmed by elementFromPoint, left `el.matches(":hover")` false
+       and the glossary tooltip at opacity 0, through a plain move and through a
+       move-away-and-back. `CSS.forcePseudoState` flipped both immediately.
+
+       This matters beyond one tooltip: a hover check built on mouse moves would
+       report every CSS-driven hover reveal on the site as broken, and a check
+       written to pass anyway would be reporting nothing at all. Pass an empty
+       array to release. */
+    forcePseudo: async function (selector, classes) {
+      var doc = await send('DOM.getDocument', { depth: 1 });
+      var found = await send('DOM.querySelector', {
+        nodeId: doc.result.root.nodeId, selector: selector
+      });
+      var nodeId = found.result && found.result.nodeId;
+      if (!nodeId) throw new Error('forcePseudo target not present: ' + selector);
+      await send('CSS.enable', {});
+      await send('CSS.forcePseudoState', {
+        nodeId: nodeId, forcedPseudoClasses: classes || []
+      });
+      return nodeId;
+    },
+
+    /* A real pointer press and release at the element's centre, not el.click().
+
+       TWO things here are load-bearing, both learned from a check that reported
+       nonsense with total confidence.
+
+       `behavior: "instant"` is required because this site sets
+       `html { scroll-behavior: smooth }`. With smooth scrolling, scrollIntoView
+       ANIMATES, so a rect read immediately afterwards is the PRE-scroll
+       position, and the click lands on whatever happens to sit at those stale
+       coordinates. On a long report that put a figure-nav chip click 39,000px
+       away from the chip; the page moved, so it looked like the feature had
+       worked, and the check failed for a reason that had nothing to do with it.
+
+       And the landing is VERIFIED before dispatching. A mis-click is otherwise
+       silent: the event goes somewhere, some handler may run, and the check
+       reports on an element nobody meant to touch. */
     click: async function (selector) {
       var pt = await this.json('(function(){var e=document.querySelector(' +
-        JSON.stringify(selector) + ');if(!e)return null;e.scrollIntoView({block:"center"});' +
-        'var r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()');
+        JSON.stringify(selector) + ');if(!e)return null;' +
+        'e.scrollIntoView({block:"center",behavior:"instant"});return null;})()');
+      // Re-read after the scroll has been applied, never in the same expression.
+      await sleep(120);
+      pt = await this.json('(function(){var e=document.querySelector(' +
+        JSON.stringify(selector) + ');if(!e)return null;' +
+        'var r=e.getBoundingClientRect();var x=r.x+r.width/2,y=r.y+r.height/2;' +
+        'var hit=document.elementFromPoint(x,y);' +
+        'return {x:x,y:y,onTarget:!!hit&&(hit===e||e.contains(hit)||hit.contains(e)),' +
+        'hit:hit?(hit.tagName+"."+(hit.className||"").toString().split(" ")[0]):null};})()');
       if (!pt) throw new Error('click target not present: ' + selector);
+      if (!pt.onTarget) {
+        throw new Error('click for "' + selector + '" would land on ' + pt.hit +
+          ' at (' + Math.round(pt.x) + ',' + Math.round(pt.y) + '); the target is ' +
+          'covered or off-screen, so the click was not dispatched');
+      }
       await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: pt.x, y: pt.y, button: 'left', clickCount: 1 });
       await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: pt.x, y: pt.y, button: 'left', clickCount: 1 });
       await sleep(200);
     },
-    // How many matches are actually painted, by computed display.
+    /* How many matches are actually RENDERED, measured by box rather than by the
+       element's own computed display.
+
+       `getComputedStyle(el).display` reports the element's OWN value and does not
+       inherit `none` from an ancestor, so a link inside a hidden list item still
+       reports `inline` and counts as visible. That produced a confident false
+       failure the first time this ran against a report: the register switch hides
+       the `<li>`, all 53 TOC links still reported themselves visible, and the
+       check called a working feature broken.
+
+       A zero-area box is the honest signal: only `display: none`, on the element
+       or on any ancestor, collapses it. `visibility: hidden` and `opacity: 0`
+       keep their box and are deliberately NOT counted as hidden here, because
+       they are a different question and the glossary tooltip asks it separately. */
     visibleCount: function (selector) {
       return evaluate('[].slice.call(document.querySelectorAll(' +
         JSON.stringify(selector) + ')).filter(function(e){' +
-        'return getComputedStyle(e).display!=="none";}).length');
+        'var r=e.getBoundingClientRect();return r.width>0||r.height>0;}).length');
     },
     screenshot: async function (file) {
       var s = await send('Page.captureScreenshot', { format: 'png' });
