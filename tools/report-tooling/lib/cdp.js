@@ -18,6 +18,7 @@
 
 var http = require('node:http');
 var fs = require('node:fs');
+var path = require('node:path');
 var childProcess = require('node:child_process');
 
 /* Chrome for Testing ships with the Playwright browser download and is present
@@ -170,6 +171,26 @@ async function open(url, opts) {
     json: async function (expression) {
       return JSON.parse(await evaluate('JSON.stringify(' + expression + ')'));
     },
+    /* Wait until a selector matches, rather than guessing a settle time.
+
+       The picker, the register switch and the figure-nav chips are all BUILT by
+       JavaScript after load, so "is it there" and "is it there yet" look
+       identical to a single check. A fixed 2500ms settle reported the picker
+       absent on a 30-rule page where it appears at about 3s, which reads as a
+       feature that never rendered rather than a check that asked too early.
+       Returns true if it appeared, false on timeout, so the caller can say
+       NOT CHECKED honestly instead of failing. */
+    waitFor: async function (selector, timeoutMs) {
+      var deadline = Date.now() + (timeoutMs || 8000);
+      for (;;) {
+        if (await evaluate('!!document.querySelector(' + JSON.stringify(selector) + ')')) {
+          return true;
+        }
+        if (Date.now() > deadline) return false;
+        await sleep(200);
+      }
+    },
+
     // Computed style of the first match, the thing jsdom cannot answer at all.
     computed: async function (selector, props) {
       return JSON.parse(await evaluate(
@@ -262,6 +283,76 @@ async function open(url, opts) {
         JSON.stringify(selector) + ')).filter(function(e){' +
         'var r=e.getBoundingClientRect();return r.width>0||r.height>0;}).length');
     },
+    /* Catch what the page hands the reader.
+
+       Both the detection picker and the feed viewer build a Blob, make an object
+       URL, set `<a download>` and click it. jsdom has no download at all, so the
+       feed viewer's own module keeps a `window.__lastDownloadText` hook purely so
+       a test could see SOMETHING. That hook tests the string the page built, not
+       the file a reader receives, and those differ whenever the download itself
+       is what breaks.
+
+       `behavior: "allow"` rather than `"allowAndName"`, deliberately: allowAndName
+       writes every file under a GUID, which would silently discard the filename,
+       and the filename is half the claim (an engine-native `.yar` / `.yml` /
+       `.rules` is what makes a bundle usable). Both were measured. */
+    armDownloads: async function (dir) {
+      fs.mkdirSync(dir, { recursive: true });
+      await send('Browser.setDownloadBehavior', {
+        behavior: 'allow', downloadPath: dir, eventsEnabled: true
+      });
+      function complete() {
+        return fs.readdirSync(dir).filter(function (f) {
+          return !/\.crdownload$/i.test(f);
+        });
+      }
+      return {
+        dir: dir,
+        // Names present right now. Pass this to waitNew so a second download is
+        // never confused with the first.
+        snapshot: complete,
+        /* Wait for `n` files that were NOT in `before`, each non-empty and stable
+           in size across two polls.
+
+           Deleting between downloads was tried first and does not work: on
+           Windows the file Chrome has just written is still held, the unlink
+           fails silently, and the next wait returns the PREVIOUS download. That
+           produced a TXT check reading a CSV. Waiting for genuinely new files
+           sidesteps the deletion entirely.
+
+           Size stability matters because Chrome creates the final file and then
+           writes into it, so a fast poll can read zero bytes and report a
+           content mismatch that is really a race. */
+        waitNew: async function (before, n, timeoutMs) {
+          var seen = {};
+          (before || []).forEach(function (f) { seen[f] = true; });
+          var deadline = Date.now() + (timeoutMs || 8000);
+          var sizes = {};
+          for (;;) {
+            var fresh = complete().filter(function (f) { return !seen[f]; });
+            var stable = fresh.filter(function (f) {
+              var s = fs.statSync(path.join(dir, f)).size;
+              var was = sizes[f];
+              sizes[f] = s;
+              return s > 0 && was === s;
+            });
+            if (stable.length >= n) {
+              return stable.map(function (f) {
+                return { name: f, content: fs.readFileSync(path.join(dir, f), 'utf8') };
+              });
+            }
+            if (Date.now() > deadline) {
+              // Report whatever arrived, named, rather than pretending to none.
+              return fresh.map(function (f) {
+                return { name: f, content: fs.readFileSync(path.join(dir, f), 'utf8') };
+              });
+            }
+            await sleep(150);
+          }
+        }
+      };
+    },
+
     screenshot: async function (file) {
       var s = await send('Page.captureScreenshot', { format: 'png' });
       fs.writeFileSync(file, Buffer.from(s.result.data, 'base64'));

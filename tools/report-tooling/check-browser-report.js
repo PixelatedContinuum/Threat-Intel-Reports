@@ -77,8 +77,13 @@ function pickSlug() {
   try {
     cat = yaml.load(fs.readFileSync(path.join(ROOT, '_data', 'catalog.yml'), 'utf8'));
   } catch (e) { return null; }
-  var entries = (cat && cat.entries) || cat || [];
-  if (!Array.isArray(entries)) entries = [];
+  /* Array first, explicitly. Every Array has an `entries` METHOD, so the
+     familiar `(cat && cat.entries) || cat` yields a function for a bare array
+     and silently selects nothing. See lib/download-targets.js for the full note.
+     _data/catalog.yml is a mapping with an `entries:` key, which is why this
+     shape has worked. */
+  var entries = Array.isArray(cat) ? cat
+    : (cat && Array.isArray(cat.entries) ? cat.entries : []);
   var best = null, bestScore = -1;
   entries.forEach(function (e) {
     if (!e || !e.report_url) return;

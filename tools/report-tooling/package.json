@@ -8,9 +8,10 @@
     "verify": "node verify-corpus.js && node check-wire.js && node check-ioc-index.js",
     "verify:wire": "node check-wire.js",
     "verify:lookup": "node check-ioc-index.js",
-    "verify:browser": "node check-browser-wire.js && node check-browser-report.js",
+    "verify:browser": "node check-browser-wire.js && node check-browser-report.js && node check-browser-downloads.js",
     "verify:browser:wire": "node check-browser-wire.js",
-    "verify:browser:report": "node check-browser-report.js"
+    "verify:browser:report": "node check-browser-report.js",
+    "verify:browser:downloads": "node check-browser-downloads.js"
   },
   "devDependencies": {
     "jsdom": "^24.1.0",
