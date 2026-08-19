@@ -55,6 +55,7 @@ figure_nav:
 > **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 A Turkish-speaking operator is actively running a custom intelligence-collection platform against a **state-affiliated Turkish financial-sector victim**, built entirely on stolen monitoring credentials. The operator weaponized the OpenClaw AI agent framework into a self-branded analytics platform — `ARPA Korelasyon Motoru` ("ARPA Correlation Engine") — that cross-correlates **four stolen enterprise observability sources** (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria) into a single 7,552-element view of the victim's internal infrastructure, and recruited a named in-network insider via operator-authored Turkish-language reverse-SSH-tunnel documentation. Every dimension is documented from primary-source artifacts pulled directly from the operator's open-directory-exposed VPS at `209.38.205.158` (DigitalOcean Frankfurt, AS14061) — not from downstream effects. This is an **active, named-victim, insider-in-chain** compromise: the credential-rotation timeline is the remediation timeline, and it is currently running.
 
@@ -126,6 +127,7 @@ For executives reading only this section: the ARPA platform is a textbook case o
 ---
 
 ## 2. Business Risk Assessment
+{: .hl-tier-1}
 
 This is a sustained, multi-source observability-data exfiltration campaign against a state-affiliated Turkish corporate victim with an in-network insider configured at capture time — not a one-off incident. The risk is twofold: the **immediate-victim risk** (the victim's stolen-credential remediation timeline is actively running), and the **broader-class risk** for any organization with a comparable observability stack (IBM Instana on OCP + SolarWinds Orion + Zabbix + VMware Aria) lacking source-IP allow-listing and admin-token-grade rotation on monitoring credentials.
 
@@ -168,6 +170,7 @@ Each scenario below derives from observed operator capabilities and infrastructu
 ---
 
 ## 3. Technical Classification
+{: .hl-tier-2}
 
 The ARPA platform is operator-built custom tooling, not a commodity malware family or a derivative of any publicly known kit. Classification draws on the operator's own self-branding (`ARPA Korelasyon Motoru` appears in code docstrings, dashboard footer, and the GitHub repository name), the architectural composition (5 systemd daemons + 4 persistence backends), and the operator's deliberate adoption of the OpenClaw AI agent framework as the upstream substrate.
 
@@ -226,6 +229,7 @@ The net classification is **Advanced operator with selectively sophisticated pla
 ---
 
 ## 4. Capabilities Deep-Dive
+{: .hl-tier-3}
 
 > **Executive Impact Summary:** The ARPA platform's eight capability surfaces (4.1–4.8) function together as an integrated intelligence-analyst pipeline over stolen victim telemetry. Three are the defender priorities: 4.2 (4-source Observability-Tool Reverse Pipeline novel TTP), 4.4 (insider-recruitment artifact), and 4.6 (AI-Augmented Infrastructure Reconnaissance, CANDIDATE novel TTP). Subsections 4.1, 4.3, 4.5, 4.7, and 4.8 provide architectural context for those three.
 
@@ -512,6 +516,7 @@ For cloud-provider abuse coordination, the defender takeaway is that the operato
 ---
 
 ## 5. Static Analysis
+{: .hl-tier-3}
 
 > **Analyst note:** This section walks through the static code analysis of the three artifact classes recovered from the operator's open directory: the victim-side PowerShell collector script (designed for insider deployment on a victim-organization workstation), the ARPA platform Python source code (the operator's analytics platform), and the Turkish-language Markdown operator notes (the insider-recruitment documentation). Static analysis means examining the code without running it — the goal is to extract the operator's intent and architectural decisions from what they wrote, not from what the code does at runtime.
 
@@ -631,6 +636,7 @@ The eight documents follow a Turkish-language uppercase naming convention (`PUTT
 ---
 
 ## 6. Dynamic / Behavioral Analysis
+{: .hl-tier-3}
 
 > **Analyst note:** This section presents the chronological behavior of the ARPA platform during a single 5-minute polling cycle, plus the insider-deployment behavior and the AI-augmented query interface behavior. Dynamic analysis is normally a sandbox-based observation of a malware sample at runtime; in this case, the platform is operator-hosted (not victim-side) so the "dynamic" view is reconstructed from observed operator filesystem state, captured HTTP service responses on the open directory, and the daily-topology log that the operator generated.
 
@@ -708,6 +714,7 @@ Local Turkish time for the 21:22–21:30 UTC capture window is 00:22–00:30 (UT
 ---
 
 ## 7. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
@@ -716,6 +723,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 ---
 
 ## 8. Indicators of Compromise
+{: .hl-tier-2}
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
@@ -724,6 +732,7 @@ The full IOC feed is at [`/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.
 ---
 
 ## 9. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-013 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -811,6 +820,7 @@ Current attribution confidence ceiling is **high-MODERATE 78% within MODERATE ba
 ---
 
 ## 10. Risk and Detection
+{: .hl-tier-2}
 
 > **Analyst note:** This section orients defenders to the detection-coverage map for this campaign and references the linked detection file for the actual rule content. Detection rules are not embedded in this report — they are in the separate detection file that ships alongside this report and the structured IOC feed.
 
@@ -853,6 +863,7 @@ This is not an incident-response guide. Readers with active IR requirements shou
 ---
 
 ## 11. Confidence Levels Summary
+{: .hl-tier-2}
 
 Findings organized by confidence level for the higher-level view:
 
@@ -917,6 +928,7 @@ Findings organized by confidence level for the higher-level view:
 ---
 
 ## 12. Coverage Gaps
+{: .hl-tier-2}
 
 Nine gaps bound what this investigation can assess from external evidence; each subsection names the gap and what would close it. Surfacing gaps is attribution discipline; concealing them damages credibility.
 
@@ -959,6 +971,7 @@ Operator account bindings for Moonshot AI / Kimi and for OpenClaw remain unknown
 ---
 
 ## 13. Calibration Notes and Retractions
+{: .hl-tier-2}
 
 This section documents analytical retractions, novelty-claim calibration after full prior-art review, and framing decisions that affect downstream interpretation.
 
@@ -1005,6 +1018,7 @@ The parent attribution-analyst output used a hybrid "MODERATE/HIGH" label at 78%
 ---
 
 ## 14. Defender Follow-Ups
+{: .hl-tier-2}
 
 Hunt strategies and hardening guidance for adjacent observability-platform customer populations and the broader Turkish state sector.
 

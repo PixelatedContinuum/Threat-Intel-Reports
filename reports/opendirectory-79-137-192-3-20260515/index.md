@@ -81,6 +81,7 @@ figure_nav:
 > **Risk vs. Campaign Threat Level:** The Cluster C Rhadamanthys MaaS-customer loader analyzed in this report scores **9.2/10 (CRITICAL)** based on a top-tier modern infostealer Stage-2, an active 34-month C2 (`79.133.180.168:3394`) that survived the November 2025 Operation Endgame Phase 3 takedown, and a mature anti-analysis stack (3-layer encrypted-blob synthesis + operator-modified Q3VM-derivative bytecode VM + EAX-redirect process hollowing into `InstallUtil.exe`). Clusters A (BellaMain Turkish PhaaS) and B (Inkognito VPN/phishing) score HIGH individually; the campaign-level CRITICAL rating is anchored on Cluster C.
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 A single open-directory pivot on `79.137.192.3` (Aeza Group AS216246, Russian bulletproof hosting) surfaced **three operationally separate threat clusters co-tenanted on the same multi-tenant staging utility — none of which share operator-level evidence with each other**. The headline defender-actionable finding is **Cluster C: a Rhadamanthys infostealer Stage-2 (DEFINITE 97% — Microsoft `Trojan:Win32/Rhadamanthys!ic`, CAPE Rhadamanthys, 48/63 VirusTotal vendors) wrapped in a customer-built loader (`staticlittlesource.exe`)** that beacons to a Hostkey Netherlands C2 which has remained live for ~34 months and **survived the November 2025 Operation Endgame Phase 3 disruption** (the largest Rhadamanthys takedown on record — 1,025+ vendor servers seized covering 525,000+ infections in 226 countries). **Strategic implication:** Operation Endgame targeted vendor-side server infrastructure; customer-side C2s operating independently of the vendor's distribution network were outside the takedown's enforcement perimeter — meaning the MaaS customer model enables persistent operational continuity even when the vendor ecosystem is disrupted at scale. Cluster A is a Turkish-targeting Phishing-as-a-Service panel (BellaMain) operated by `@AresRS34` with developer pseudonym `Wadanz`; Cluster B is a 3-year-old Russian multi-product fraud operation (Inkognito) running 467+ brand-impersonation subdomains alongside a legitimate-looking VPN front. **Co-tenancy on the multi-tenant Aeza utility IP is not operationally diagnostic** — the U.S. Treasury OFAC Aeza Group sanction (July 1, 2025) documents Aeza simultaneously hosting BianLian, RedLine, Lumma, Meduza, and BlackSprut as five separate actor ecosystems, providing Tier-1 authoritative confirmation that bulletproof hosting co-residency is a service-utility relationship, not an operator-linkage signal.
 
@@ -124,6 +125,7 @@ Because named-actor attribution is INSUFFICIENT for all three operators, the rec
 ---
 
 ## 2. How This Investigation Unfolded
+{: .hl-tier-2}
 
 This section provides a brief narrative arc — useful for understanding why the report has three clusters, why two of them play a supporting role, and how the analytical framing on co-tenancy was reached. Readers who want to skip directly to Cluster C technical analysis can jump to Section 4.
 
@@ -150,6 +152,7 @@ This framing controls the rest of the report. Clusters A, B, and C are presented
 ---
 
 ## 3. Technical Classification
+{: .hl-tier-2}
 
 | Field | Cluster A — BellaMain | Cluster B — Inkognito | **Cluster C — Rhadamanthys (PRIMARY)** |
 |---|---|---|---|
@@ -217,6 +220,7 @@ This distinction is operationally important because the customer's loader and pe
 ---
 
 ## 4. Capabilities Deep-Dive
+{: .hl-tier-3}
 
 > **Analyst note:** This section enumerates what the Cluster C Rhadamanthys Stage-2 and the customer-built loader are capable of doing once executed. The Stage-2 capabilities are the canonical Rhadamanthys feature set documented across multiple Tier-2 vendor reports; the loader capabilities are this specific customer's tradecraft. Clusters A and B receive condensed capability summaries because they are not the report's headline focus.
 
@@ -352,6 +356,7 @@ The operational model is provide-then-phish. The legitimate VPN service builds o
 ---
 
 ## 5. Static Analysis
+{: .hl-tier-3}
 
 > **Analyst note:** This section walks through the static reverse-engineering work that produced the technical findings underpinning the report. The novel material — the 3-layer encrypted-blob synthesis, the Q3VM-derivative bytecode VM, the per-customer cipher fingerprints — is concentrated here. Defenders who only need detection content can skip to Section 8 (IOCs) and Section 10 (Detection Coverage); analysts and researchers who want to reproduce the analysis or extend it to sibling samples should read this section carefully.
 
@@ -571,6 +576,7 @@ For Cluster B, Inkognito, no PE samples were recovered, because the operation is
 ---
 
 ## 6. Dynamic Analysis
+{: .hl-tier-3}
 
 > **Analyst note:** This section covers the runtime behavior observed during sandbox execution and reconstruction from static analysis. The Cluster C loader's execution path is the primary focus — from the lure file landing on disk through the EAX-redirect process hollowing into `InstallUtil.exe` to the first C2 beacon. Clusters A and B are not covered in this section because their operational model is web-application based and does not have a meaningful "dynamic execution" surface to instrument.
 
@@ -711,6 +717,7 @@ For Cluster B, Inkognito, there is likewise no malware execution surface. The dy
 ---
 
 ## 7. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. The Confidence Summary in Section 11 organizes findings by confidence level for the higher-level view.
 
@@ -763,6 +770,7 @@ The mapping below covers all three clusters. Cluster C (Rhadamanthys MaaS-custom
 ---
 
 ## 8. Indicators of Compromise
+{: .hl-tier-2}
 
 Structured IOCs are published in machine-readable format in the separate IOC feed file:
 
@@ -837,6 +845,7 @@ For the complete validated indicator set with confidence levels and contextual m
 ---
 
 ## 9. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-[YEAR]-[###] is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -935,6 +944,7 @@ The 7-dimension test produces zero matches. Co-tenancy on `79.137.192.3` is ther
 ---
 
 ## 10. Risk & Detection
+{: .hl-tier-2}
 
 This section provides the defender-actionable detection coverage summary. Detection rules in YARA, Sigma, and Suricata format are published in the separate detection file:
 
@@ -1002,6 +1012,7 @@ This is a brief response orientation, not an incident-response playbook. Confirm
 ---
 
 ## 11. Confidence Summary
+{: .hl-tier-2}
 
 This section organizes the report's findings by confidence level for the higher-level view. Confidence levels follow the project-wide CLAUDE.md scale (DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT).
 
@@ -1057,6 +1068,7 @@ This section organizes the report's findings by confidence level for the higher-
 ---
 
 ## 12. Coverage Gaps and Open Questions
+{: .hl-tier-2}
 
 This section documents what was not concluded in this investigation — the deferred work, the indirect inferences awaiting cross-validation, and the named-actor attribution ceiling. Surfacing gaps explicitly is part of the threat-intelligence rigor the project applies (CLAUDE.md → CONFIDENCE LEVELS).
 
@@ -1102,6 +1114,7 @@ No confirmed reporting on the Rhadamanthys vendor's arrest or resumed operations
 ---
 
 ## 13. References
+{: .hl-tier-2}
 
 This report draws on Tier-1 (government / authoritative), Tier-2 (major-vendor research), and Tier-3 (reputable security journalism) sources. Each cited claim ties back to one or more entries below. Citations follow the Admiralty Code (reliability × information-quality) per CLAUDE.md SOURCE CREDIBILITY TIERS.
 

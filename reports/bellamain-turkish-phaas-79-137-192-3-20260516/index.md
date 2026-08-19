@@ -71,6 +71,7 @@ figure_nav:
 > Cluster C (a Rhadamanthys MaaS customer at `79.133.180.168`) is covered only in the parent report.
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 **BellaMain is an operator-developed Turkish Phishing-as-a-Service (PhaaS) panel — recovered in full PHP source form from an open directory on OFAC-sanctioned Aeza Group hosting (`79.137.192.3`, AS216246, Moscow) — that ships operator-grade anti-takedown tradecraft normally invisible to sample- or network-only analysis: a self-built USOM (Turkey CERT) blocklist monitor, four-bot Telegram C2 with deliberate identity-vs-card role separation, three Telegram-triggered TRUNCATE commands that wipe stolen credentials on demand, mysqldump-to-Telegram backup-as-exfil, a 70/30 TRX/TRON revenue split that uses the live Binance TRXTRY rate as a payout calculator, invite-only operator gating with one-time-consume referral codes, and a code-level `Wadanz` developer pseudonym hard-coded into the panel's session-encryption functions.** This report directly answers the primary intelligence question: *what does operator-grade Turkish-targeting PhaaS tradecraft look like at the source-code layer, and what unique tradecraft does full-source recovery surface that sample/network-only analysis cannot?* The seven kit RAR archives impersonate Dolap, Letgo, PTT AVM, Sahibinden, Shopier, Turkcell, and Yurtiçi Kargo — Turkey's highest-traffic consumer marketplaces and telecom — and capture not just payment cards but also Turkish national identity numbers (TC Kimlik Numarası) on a dedicated Telegram alerting channel.
 
@@ -129,6 +130,7 @@ Because this is a first public disclosure, the IOCs and detection signatures in 
 ---
 
 ## 2. How This Investigation Unfolded
+{: .hl-tier-2}
 
 This report is a **standalone derivative** of the OpenDirectory 79.137.192.3 investigation published on 2026-05-15. The originating pivot was a single open-directory exposure on Aeza Group AS216246 staging IP `79.137.192.3` that surfaced three operationally separate threat clusters co-tenanted on the same multi-tenant bulletproof staging utility. That parent investigation, published at [`/reports/opendirectory-79-137-192-3-20260515/`](/reports/opendirectory-79-137-192-3-20260515/), covered:
 
@@ -160,6 +162,7 @@ Three findings from the parent investigation made BellaMain worth promoting to s
 ---
 
 ## 3. Business Risk Assessment
+{: .hl-tier-1}
 
 > **What this section is for.** Translating the technical findings in Sections 4–8 into the risk language a business reader needs: what data is at risk, who is at risk, and what the realistic impact looks like. This is not a generic threat-landscape overview — every claim below ties back to a specific BellaMain feature documented elsewhere in this report.
 
@@ -214,6 +217,7 @@ BellaMain does not target ICS/OT, healthcare, or enterprise networks, and deploy
 ---
 
 ## 4. Technical Classification
+{: .hl-tier-2}
 
 | Field | Value |
 |---|---|
@@ -265,6 +269,7 @@ PHP code quality itself is unremarkable: linear procedural style, plaintext hard
 ---
 
 ## 5. Technical Capabilities Deep-Dive
+{: .hl-tier-3}
 
 BellaMain's nine capabilities reveal operator-grade tradecraft concentrated at the operations and anti-takedown layer — not at the code layer. Each subsection below leads with an analyst-note conclusion, then provides Evidence, Why This Matters, and Detection guidance, in order of distinctiveness.
 
@@ -488,6 +493,7 @@ A PHP file containing `DELETE FROM refkodlari` next to a `SELECT * FROM refkodla
 ---
 
 ## 6. Static Analysis Findings
+{: .hl-tier-3}
 
 ### 6.1 File Inventory
 
@@ -604,6 +610,7 @@ The panel and all seven kits share a single session cookie name `2tUgyO@H9E!4CuQ
 ---
 
 ## 7. Dynamic Findings — Behavioral Analysis
+{: .hl-tier-3}
 
 > **Analyst note on "dynamic" analysis here.** BellaMain is server-side PHP source, not a PE binary, so there is no malware-detonation sandbox to run. "Dynamic" findings below are reconstructed from the source code's execution paths — the behaviors that *will* execute when the panel is deployed and a victim hits a kit page. Where direct external observation was possible (Telegram bot status, live URL endpoints on `79.137.192.3`), those are noted. We did not stand up a live MySQL + PHP instance of the panel.
 
@@ -700,6 +707,7 @@ BellaMain has no host-malware persistence — it is a server-side PHP applicatio
 ---
 
 ## 8. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. The Confidence Summary in [Section 12](#12-confidence-levels-summary) organizes findings by confidence level for the higher-level view.
 >
@@ -743,6 +751,7 @@ Checking tactic coverage, Reconnaissance, Privilege Escalation and Lateral Movem
 ---
 
 ## 9. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-008 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -842,6 +851,7 @@ What would increase confidence:
 ---
 
 ## 10. Indicators of Compromise (Reference)
+{: .hl-tier-2}
 
 The complete machine-readable IOC inventory is published as a separate JSON feed at [`/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json`](/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json). The IOC feed is **not** defanged — values are in canonical RFC-shaped form for direct ingestion into SIEM / EDR / proxy platforms.
 
@@ -906,6 +916,7 @@ Two IOCs in the feed carry explicit FP context that defenders should review befo
 ---
 
 ## 11. Risk & Detection Posture
+{: .hl-tier-2}
 
 The complete detection content (YARA + Sigma + Suricata) is published as a separate detection file at [`/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/`](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/). The file follows the project-standard Jekyll deployment conventions (CC BY 4.0 license, "The Hunters Ledger" author field on every rule).
 
@@ -952,6 +963,7 @@ The detection set covers the published BellaMain surface but does not address:
 ---
 
 ## 12. Confidence Levels Summary
+{: .hl-tier-2}
 
 This section organizes findings by confidence level so readers can quickly assess what is established fact versus analytical judgment.
 
@@ -1043,6 +1055,7 @@ These are the assumptions whose change would materially alter the conclusion:
 ---
 
 ## 13. Response Guidance
+{: .hl-tier-2}
 
 > This is intentionally a brief response orientation, not an incident response playbook. Organizations facing a confirmed BellaMain encounter should engage their internal IR team or a dedicated playbook — that is out of scope for this publication.
 
@@ -1070,6 +1083,7 @@ These are the assumptions whose change would materially alter the conclusion:
 ---
 
 ## 14. References
+{: .hl-tier-2}
 
 Tier-coded per CLAUDE.md SOURCE CREDIBILITY TIERS. All citations are sources that contributed directly to evidence or context in this report — no inventive citations.
 

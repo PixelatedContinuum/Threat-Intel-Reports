@@ -41,6 +41,7 @@ stix_bundle: /stix/rovodev-mirai-matrix-c2-87.106.143.220.json
 > **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 **An English-speaking operator used Atlassian Rovodev — an enterprise AI coding agent — to author a complete offensive C2 framework end-to-end, and the open directory at `87.106.143.220` (1&1 IONOS Germany, AS8560) preserved the AI doing it.** Two Rovodev session JSONs (1.24 MB + 176 KB) and an 8.5 MB runtime log captured the operator's natural-language prompts and the AI's `file_write` tool calls — with `initial_content` payloads — building eight DEFINITE AI-authored framework files. This is the input side of the authoring workflow, not the output-side AI-generated code prior public reporting has measured. Downstream of that framework sits a Pandora-Mirai 11-architecture IoT botnet (operator filename `Naku`) and a 13-attack-method Matrix C2, productized as a Discord-fronted DDoS-as-a-Service. The arsenal is dissected in §4; the AI co-authoring evidence chain in §4.4; the bespoke binary reverse engineering in §4.8 and §5; the attribution in §9.
 
@@ -99,6 +100,7 @@ For executives reading only this section: this case is the first publicly docume
 ---
 
 ## 2. Business Risk Assessment
+{: .hl-tier-1}
 
 This is not a one-off incident — it is a sustained, productized criminal-SaaS DDoS-for-hire operation with an active IoT-botnet propagation channel and an AI-co-authored development workflow. The risk profile is twofold: the **immediate operator-host risk** (Matrix C2 framework live and serving paying customers per the captured tier-model evidence; eleven-architecture Naku bot suite available for download from operator infrastructure; parasitic CNC daemon planted on a legitimate German tourism business's production VPS), and the **broader-class risk** for any organization with internet-exposed IoT devices (Huawei HG532 routers, Realtek-SDK-based UPnP devices, Netgear DGN-series routers, ZyXEL / Dasan / Netis / Guangzhou consumer-broadband CPE) without recent firmware updates and without outbound TCP/23 egress filtering.
 
@@ -140,6 +142,7 @@ For AI-coding-agent T&S notification, Atlassian Trust & Safety can action the op
 ---
 
 ## 3. Technical Classification
+{: .hl-tier-2}
 
 This is a **multi-component multi-family** campaign, not a single-family analysis. The Pandora-Mirai bot suite, the Matrix C2 Python framework, and the operator-authored standalone scripts each have distinct authorship, family characteristics, and AI-integration profiles. The campaign-level classification is best described as **a multi-family operator deployment sharing infrastructure and an AI-augmented authorship workflow**.
 
@@ -176,6 +179,7 @@ Phase 11 REFUTED the MaaS hypothesis. The operator is a **downstream adopter** o
 ---
 
 ## 4. Capabilities Deep-Dive
+{: .hl-tier-3}
 
 The campaign couples a Pandora-Mirai 11-architecture IoT bot suite with an AI-co-authored Matrix C2 framework, productized as a tiered DDoS-as-a-Service. Nine subsections document each component at the depth required for defender reproduction, validation, and detection authoring: the bot suite, the Matrix C2 Python framework, the DDoS-as-a-Service tier model, the Rovodev AI co-authoring evidence chain, the cross-3-operator universal-subset structural signature, the dual-channel build/deploy tradecraft, the operator-OPSEC split-architecture pattern, the Naku.arm static reverse engineering findings, and the escalated-prompt `stealth_agent.py` capability set.
 
@@ -705,6 +709,7 @@ This is DIRECT AI-PROMPTED anti-analysis — the operator's prompt to Rovodev es
 ---
 
 ## 5. Static Analysis Findings
+{: .hl-tier-3}
 
 > **Analyst note:** Static analysis depth is split across two distinct artifact classes for this case — the Naku/Pandora 11-architecture ELF binaries (compiled C code requiring strings analysis + cross-architecture comparison + targeted ARM ELF disassembly to extract operator-bespoke modifications) and the Matrix C2 Python framework + AI-authored standalone scripts (AI-authored source code that can be read directly). Where the artifact is operator-authored source captured intact, capability extraction is DEFINITE; where it is a compiled binary the extraction is HIGH from VirusTotal family-rule consensus + cross-arch operator-permanent indicator confirmation + ARM-disassembly-recovered hardcoded constants.
 
@@ -821,6 +826,7 @@ Regardless of which read is correct for this operator, the cross-case Turkey sig
 ---
 
 ## 6. Dynamic / Behavioral Analysis
+{: .hl-tier-3}
 
 > **Analyst note:** Behavioral observations in this case come primarily from operator-side captured infrastructure (filesystem inventory, configuration files, Rovodev session JSONs, runtime log files, deployed scripts captured intact) plus VirusTotal sandbox detonation data on three of the eleven Naku binaries (arm5/arm7/x86) and direct ARM ELF disassembly of Naku.arm. This is appropriate for the case — the artifacts captured ARE the behavioral evidence (operator's own deployed persistence scripts, AI-tool session transcripts, embedded CNC constants, plaintext exploit payloads). No workstation-side dynamic detonation was performed (operator's binaries are sample files; lab-VM dynamic analysis is downstream work).
 
@@ -913,6 +919,7 @@ This is a defender-relevant operator-class signal — the operator demonstrably 
 ---
 
 ## 7. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
@@ -921,6 +928,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 ---
 
 ## 8. Indicators of Compromise
+{: .hl-tier-2}
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
@@ -929,6 +937,7 @@ The full IOC feed is at [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs
 ---
 
 ## 9. Threat Actor Assessment — UTA-2026-014
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-014 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -1039,6 +1048,7 @@ The following claims are NOT supported by current evidence and MUST NOT be made:
 ---
 
 ## 10. Risk & Detection
+{: .hl-tier-2}
 
 Detection coverage for this campaign is published as a per-case detection file: [`/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/`](/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/). The file contains **29 rules** distributed across three rule classes:
 
@@ -1090,6 +1100,7 @@ The following block provides defender response orientation at the action-categor
 ---
 
 ## 11. Confidence Summary
+{: .hl-tier-2}
 
 This section organizes the report's findings by confidence level using the project-standard scale (CLAUDE.md → CONFIDENCE LEVELS). The scale is canonical (DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT) — no hybrid bands.
 
@@ -1147,6 +1158,7 @@ This section organizes the report's findings by confidence level using the proje
 ---
 
 ## 12. Coverage Gaps
+{: .hl-tier-2}
 
 The following gaps in this investigation are documented for downstream defender awareness, follow-up coordination, and methodological transparency.
 
@@ -1203,6 +1215,7 @@ Hunt.io threat-actor catalog queries for Mirai / Sora / Pandora timed out (Conve
 ---
 
 ## 13. Calibration Notes / Retractions
+{: .hl-tier-2}
 
 This section documents calibration decisions where prior-phase analysis was refined, retracted, or refuted during the investigation. The calibration record is published transparently as part of the report's methodological evidence trail.
 
@@ -1259,6 +1272,7 @@ The calibration outcome is that this operational-business-class signature **sepa
 ---
 
 ## 14. Defender Follow-Ups
+{: .hl-tier-2}
 
 This section summarizes downstream defender actions: active-hunt strategies and strategic recommendations defenders can apply against the campaign's tradecraft.
 

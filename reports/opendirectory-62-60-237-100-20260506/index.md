@@ -69,12 +69,14 @@ figure_nav:
 **Threat Level:** HIGH
 
 ## BLUF / Bottom Line Up Front
+{: .hl-tier-1}
 
 A live, 15-month-old multi-vector phishing campaign on OFAC-sanctioned bulletproof infrastructure (`62.60.237[.]100`, AS210644 AEZA, Finland) delivers a HijackLoader / Penguish / Rugmi loader chain that ends in an AsyncRAT-class .NET RAT beaconing to `185.241.208[.]129:56167` on Spamhaus DROP-listed AS210558 (1337 Services, Poland). The campaign is tracked here as **UTA-2026-007** (an internal Hunters Ledger designation — see Section 11). Threat level is **HIGH** (overall risk score 7.5/10) — the multiplicity of evasion layers (multi-vendor camouflage bundle, hostname-keyed per-host KDF, renamed signed Qihoo binary as .NET injection host, legacy `.job` autorunsc blind spot) compresses time-to-detect from sample launch to first C2 beacon to ~43 seconds. The single highest-value durable defender signal is the **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3`** — it fingerprints the malware's TLS client behavior independently of the C2 IP and rotating-IP infrastructure cannot defeat it. Attribution to a publicly named threat group rests at LOW confidence (58%); Russian-speaking operator language attribution is HIGH confidence (90%).
 
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 A Russian-speaking commodity-malware operator, tracked here as **UTA-2026-007** *(an internal tracking label used by The Hunters Ledger — see Section 11)*, runs an end-to-end multi-vector phishing-to-RAT campaign that delivers a HijackLoader / Penguish / Rugmi loader chain into a .NET AsyncRAT-class final stealer. This report byte-confirms the full chain — Inno Setup dropper with Pascal-script anti-triage, LZNT1-chunked encrypted payload, eight embedded PE files, a multi-vendor camouflage bundle, and hollowing into a renamed signed third-party vendor binary (genuine Qihoo 360 PromoUtil dropped as `WVault.exe`) for .NET injection — all with PCAP, EVTX, memory forensics tool (Volatility), and Process Explorer evidence in one corpus. The campaign is live (DEFINITE — three independent network capture sources confirm active C2) and the operator's choice of OFAC-sanctioned plus Spamhaus DROP-listed dual-bulletproof hosting indicates a high risk-tolerance profile (HIGH confidence, per Section 8).
 
@@ -141,6 +143,7 @@ Public reporting matches and gaps are inventoried in Section 2.2; the threat-act
 ---
 
 ## 2. Threat Intelligence Summary — HijackLoader Family Background and Evolution
+{: .hl-tier-2}
 
 The primary loader family in this campaign is HijackLoader, a modular commodity loader that is tracked under at least six aliases across vendor reporting:
 
@@ -213,6 +216,7 @@ The loader has evolved measurably between 2023 and 2026. Key milestones from pub
 ---
 
 ## 3. Kill Chain Overview
+{: .hl-tier-2}
 
 > **Analyst note:** This section walks the kill chain end-to-end at a high level so the rest of the report has a shared map. Each stage gets a plain-language description of what happens, who triggers it, and what the defender should look for. Sections 4 through 6 then go deep on each technical layer. If you only read one technical section, read this one — it gives you the shape of the campaign at one glance.
 
@@ -273,6 +277,7 @@ Both themes target B2B business workflows — consistent with broad opportunisti
 ---
 
 ## 4. Static Analysis — Distribution Layer
+{: .hl-tier-3}
 
 Three distribution-layer components carry the loader chain: `Carriers.exe` (the Inno Setup wrapper a triage pipeline encounters first), `CrystSupervisor32.exe` (the genuine signed side-load host), and `ExceptionHandler.dll` (the operator's modified DLL that drives the chain). All three are analyzed below.
 
@@ -730,6 +735,7 @@ The runtime drop hash differs from the bundle hash (`c085a724…` vs `ca9f859f�
 ---
 
 ## 5. Static Analysis — The Eight Delivery Vectors
+{: .hl-tier-3}
 
 All eight initial-access vectors converge on the same loader chain. Each was extracted from the open directory and analyzed independently at the static-artifact level.
 
@@ -847,6 +853,7 @@ These tools are genuine and signed (where applicable). They are not malicious in
 ---
 
 ## 6. Dynamic / Behavioral Analysis
+{: .hl-tier-3}
 
 `Carriers.exe` executes its full loader chain — process tree, file-drop sequence, .NET injection into `WVault.exe`, legacy `.job` persistence, and C2 beacon to `185.241.208.129:56167` — end-to-end within 43 seconds of launch, then beacons continuously.
 
@@ -1127,6 +1134,7 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 ---
 
 ## 7. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)` or `(DEFINITE)`. The Confidence Summary in Section 12 organizes findings by confidence level for the higher-level view.
 
@@ -1177,6 +1185,7 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 ---
 
 ## 8. Infrastructure Analysis
+{: .hl-tier-2}
 
 > **Analyst note:** The campaign uses three different hosting providers for three different purposes — a primary staging server on a Russian-jurisdiction bulletproof host that has been formally sanctioned by the US Treasury, a C2 server on a Spamhaus DROP-listed bulletproof host in Poland, and a second-stage payload host in Germany. The deliberate dual-bulletproof-hosting selection — sanctioned AS210644 plus DROP-listed AS210558 — is itself a signal about the operator's risk tolerance. They are willing to operate on infrastructure that the US Treasury and Spamhaus have publicly flagged. This rules out cautious operators or low-skill operators who would have moved to less-marked hosting after sanction announcements; it does not, by itself, attribute the campaign to any specific named actor.
 
@@ -1278,6 +1287,7 @@ This IP serves the legitimate Wondershare DLL pack (`BugSplat.dll`, `COMSupport.
 ---
 
 ## 9. Final-Stage Family Identification
+{: .hl-tier-2}
 
 > **Analyst note:** The final stage of this kill chain is a .NET RAT injected into the renamed Qihoo `WVault.exe` host. Three independent VirusTotal IDS rules fire on the C2 SSL handshake — one for AsyncRAT/zgRAT-style SSL certs, one for DCRat C&C SSL certs, and one for the AsyncRAT JA3 hash. All three families are .NET-based and are sometimes paired with HijackLoader. This narrows the final stage to AsyncRAT-class with HIGH confidence, but pinning the specific variant — AsyncRAT, DCRat, zgRAT, VenomRAT, or a heavily-modified fork — would require either a TLS man-in-the-middle of the C2 traffic or a memory dump of `WVault.exe` while the .NET assembly is loaded. Neither was achieved in this 5-minute behavioral sandbox window. The cipher gap on the on-disk encrypted payload (`807D7B6.tmp`) further limits variant pinning.
 
@@ -1315,6 +1325,7 @@ The gap itself is a positive finding — the operator's per-host KDF exceeds com
 ---
 
 ## 10. Detection & Response
+{: .hl-tier-2}
 
 > **Analyst note:** This section consolidates detection coverage and response orientation into a single operational reference. The detection content (six YARA rules, eight Sigma rules, four Suricata signatures) is published as a separate file (link below) so defenders can pull rules into their detection stack without parsing the report. The response orientation block at the end (Section 10.4) is a brief operational reference — it lists detection priorities, persistence targets, and containment categories. This is not a step-by-step incident-response procedure; readers with confirmed compromises should engage their internal IR teams or dedicated playbooks for sequencing and execution.
 
@@ -1371,6 +1382,7 @@ Defenders should assume a 43-second window from sample launch to first C2 beacon
 ---
 
 ## 11. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-007 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -1461,6 +1473,7 @@ If any of these gaps closes — especially code-similarity to a named actor or g
 ---
 
 ## 12. Confidence Summary
+{: .hl-tier-2}
 
 The most operationally critical findings carry DEFINITE confidence; the outstanding gaps fall at LOW or INSUFFICIENT. Findings are organized by level below.
 
@@ -1520,6 +1533,7 @@ The most operationally critical findings carry DEFINITE confidence; the outstand
 ---
 
 ## 13. FAQ / Key Intelligence Questions
+{: .hl-tier-2}
 
 Eight questions cover the most common operational concerns raised by this campaign. Each answer cross-references the primary evidence section.
 
@@ -1550,6 +1564,7 @@ No. Both were ruled out at INSUFFICIENT confidence (Section 11.2). TAG-150 / Gra
 ---
 
 ## 14. References to Companion Files
+{: .hl-tier-2}
 
 Two companion files ship with this report: a machine-readable IOC feed and the detection-rule collection. Deployed URLs and raw filenames are listed below.
 
@@ -1569,6 +1584,7 @@ Both files are licensed under Creative Commons Attribution 4.0 (CC BY 4.0). The 
 ---
 
 ## 15. Gaps & Assumptions
+{: .hl-tier-2}
 
 These gaps and assumptions do not block publication. The story is coherent: HIGH confidence on family attribution, DEFINITE on C2 endpoint, HIGH on the loader chain end-to-end, MODERATE on the per-host KDF pattern, INSUFFICIENT on the exact stealer variant. The cipher gap itself becomes a positive finding — the operator's per-host KDF exceeds commodity AsyncRAT/DCRat patterns.
 

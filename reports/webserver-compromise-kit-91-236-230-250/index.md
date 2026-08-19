@@ -36,10 +36,12 @@ stix_bundle: /stix/webserver-compromise-kit-91-236-230-250.json
 ---
 
 ## BLUF (Bottom Line Up Front)
+{: .hl-tier-1}
 
 A three-component post-exploitation kit hosted on an open directory at `91.236.230.250` provides everything an attacker needs to compromise an IIS/.NET web server: an ASP.NET reverse shell (`a.png`) for command execution, PrintSpoofer for escalation to NT AUTHORITY\SYSTEM, and revsocks (`rev.exe`) for persistent network pivoting. All three tools are publicly available red team utilities — none are modified — meaning technique-based detection takes priority over hash-based blocking. Block `91.236.230.250` immediately; deploy detection rules targeting IIS spawning command shells, PrintSpoofer named pipe creation, and anomalous outbound proxy traffic.
 
 ## Executive Summary
+{: .hl-tier-1}
 
 An open directory at `91.236.230.250` exposes a complete post-exploitation toolkit for IIS/.NET web servers: an ASP.NET reverse shell for initial access, a privilege escalation binary for SYSTEM-level control, and a reverse SOCKS proxy for persistent network tunneling and lateral movement.
 
@@ -63,6 +65,7 @@ Defensive priority is CRITICAL. Block the infrastructure at 91.236.230.250 immed
 ---
 
 ## Threat Intelligence Context
+{: .hl-tier-2}
 
 This campaign targets any internet-exposed IIS/.NET application, with no sector or geographic specificity — the toolkit's effectiveness depends on the prevalence of vulnerable web servers, not selective victim profiling.
 
@@ -119,6 +122,7 @@ The reverse proxy capabilities (DNS tunneling, WebSocket encapsulation) indicate
 ---
 
 ## Technical Analysis
+{: .hl-tier-3}
 
 ### Component 1: ASP.NET Reverse Shell (a.png)
 
@@ -336,6 +340,7 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 ---
 
 ## Infrastructure Analysis
+{: .hl-tier-2}
 
 The entire kit — C2 listener and malware distribution — runs on a single commodity VPS at `91.236.230.250`, indicating a minimal, single-operator setup rather than resilient criminal infrastructure.
 
@@ -380,6 +385,7 @@ Abuse tolerance is moderate to low.
 ---
 
 ## Attack Chain Reconstruction
+{: .hl-tier-2}
 
 > **Analyst note:** This section traces the full intrusion sequence from initial web server exploitation through persistent network access. Each stage maps to a distinct toolkit component; understanding the chain helps prioritize which detection controls break the attack earliest.
 
@@ -412,6 +418,7 @@ Abuse tolerance is moderate to low.
 ---
 
 ## Attribution Assessment
+{: .hl-tier-2}
 
 ### Conclusion
 
@@ -435,6 +442,7 @@ I recommend treating this as a generic post-exploitation threat and focusing on 
 ---
 
 ## Detection & Hunting
+{: .hl-tier-2}
 
 ### Detection Summary
 
@@ -476,6 +484,7 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
 ---
 
 ## Indicators of Compromise
+{: .hl-tier-2}
 
 ### File Hashes
 
@@ -525,6 +534,7 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
 ---
 
 ## Mitigation & Response
+{: .hl-tier-2}
 
 ### Immediate Actions
 
@@ -573,6 +583,7 @@ Set-Service Spooler -StartupType Disabled
 ---
 
 ## References & Sources
+{: .hl-tier-2}
 
 ### Tool Repositories
 
@@ -594,5 +605,6 @@ Set-Service Spooler -StartupType Disabled
 ---
 
 ## License
+{: .hl-tier-2}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

@@ -53,6 +53,7 @@ figure_nav:
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 A skilled operator ran a commercial AI coding assistant with genuine engineering discipline, and used it to go from an idea to a working SSH interception platform in roughly 23 hours. What he built cannot be found by scanning for it. Every relay carries a firewall rule that drops any packet reaching the interception port from anywhere but loopback, so a port scan of a live compromised node returns nothing no matter how many nodes are running. The hunt has to happen on the host or in the traffic, and the rest of this report is about how.
 
@@ -81,6 +82,7 @@ If you run VPN, proxy or Tor exit infrastructure, or you are a hosting provider 
 ---
 
 ## 2. Risk Assessment
+{: .hl-tier-1}
 
 I score this campaign **7.3 out of 10, HIGH**, and the interesting part of that number is what pulls it down rather than what pushes it up. Capability sits at the top of the scale for credential theft and near the top for evasion. Persistence sits close to the bottom, because there is none on the victim and almost none on the relay. A platform that takes root on hundreds of machines and installs nothing is unusual enough that the score deserves the explanation the table gives it.
 
@@ -113,6 +115,7 @@ That last point deserves a defender's translation. Most of the identity controls
 ---
 
 ## 3. Campaign Scope, and Who Was Actually Harmed
+{: .hl-tier-2}
 
 Three separate populations were harmed by this operation, and they are harmed in different ways, so a defender working out whether any of this touches them needs to know which one they might be in.
 
@@ -147,6 +150,7 @@ The speed there is the finding, not the log deletion. Clearing logs is common pr
 ---
 
 ## 4. Technical Classification
+{: .hl-tier-2}
 
 | Field | Value |
 |---|---|
@@ -178,6 +182,7 @@ The production interceptor is 674 lines and declares `VERSION = '2.0'`. After th
 ---
 
 ## 5. The Interception Mechanism
+{: .hl-tier-3}
 
 The theft happens in one function, and it works because the fake server refuses to answer until the real server has answered first. When a redirected SSH connection arrives, the interceptor logs the username and password in plaintext, opens its own connection to the genuine destination using exactly those credentials, and returns `AUTH_SUCCESSFUL` to the client only once the genuine destination has accepted them. If the real server refuses, the client is told the attempt failed. If the real server accepts, the client is told it succeeded and is handed a live proxied session to the machine it was actually trying to reach.
 
@@ -295,6 +300,7 @@ Step 6 is worth dwelling on. The operator's own handoff notes record the payload
 ---
 
 ## 6. Deployment, Concealment and Withdrawal
+{: .hl-tier-3}
 
 The interceptor reaches a relay with no download step at all, which is why there is no staging server to find and no fetch artifact to catch. Eight files are base64-encoded directly into the SSH command line and written on the far side by an inline `python3` heredoc. There is no `scp`, no `wget` and no `curl` anywhere in the delivery path. The operator's own success check is grepping the SSH output for the string `MITM PID`, and the deploy command carries `sshpass` with a plaintext password, which tells you he already held working root credentials for every relay before he ever deployed to it.
 
@@ -393,6 +399,7 @@ command -v ipset || apt-get install -y ipset || yum install -y ipset
 ---
 
 ## 7. The Collection Architecture, and What Its Database Admits
+{: .hl-tier-3}
 
 The receiver settles the question the whole investigation kept circling, and it settles it without relying on a single word the operator ever said. Every table that holds captured material carries an index on the **target**. The attacker's own address is stored in four of those tables and indexed in none of them, with no query anywhere that filters on it. The one question this database cannot answer efficiently is "what did this attacker do", which is the only question a defender has. An index is a declaration of how its author intends to query his own data, and this one declares an asset register organised by victim rather than an investigation organised around an adversary.
 
@@ -471,6 +478,7 @@ One motive-adjacent observation sits at MODERATE. Three of the excluded hosts ar
 ---
 
 ## 8. Root Taken, and Deliberately Spent on Nothing
+{: .hl-tier-2}
 
 The escalation is automatic and the restraint that follows it is the most diagnostic thing in the case. Within seconds of a successful capture the platform replays the same stolen password to `sudo` on the same host, reaching uid=0 on any box where the captured account is sudo-capable, and the operator explicitly accepted the forensic cost of that in his own engineering notes as up to one failed entry in the target's authentication log. What it then does with root is run a 597-byte Perl script that records the hostname, the user identity, the kernel version, the non-loopback addresses, the uptime, and whether root has authorized keys configured. Then it leaves. Nothing is stolen, nothing is installed, and nothing is left behind.
 
@@ -534,6 +542,7 @@ A second and narrower set of figures covers only the `AUTH_SUCCESS` log-line str
 ---
 
 ## 9. The Infrastructure, and the Supply Chain Behind It
+{: .hl-tier-2}
 
 This is not a bulletproof-hosting operation, and reputation feeds are literally blind to it. The confirmed core sits on two large, reputationally ordinary commercial clouds and one unremarkable Dutch reseller. None of the three carries a Spamhaus DROP listing, underground bulletproof advertising, or a jurisdiction chosen for non-cooperation. Zero of 91 VirusTotal engines flag any of the live operator addresses as malicious, and none of them returns a single related threat actor. Anybody hunting this operator with reputation data alone would find nothing at all, and Section 13 explains why that absence is itself a measured finding rather than a gap in our work.
 
@@ -598,6 +607,7 @@ The asymmetry is the instructive part, and it is the most useful thing in this r
 ---
 
 ## 10. The AI Coding Assistant as a Force Multiplier
+{: .hl-tier-2}
 
 Almost everything published about AI-assisted crime is about people using AI to do work they could not otherwise do. This is the opposite case, and that is why it is here. The operator is demonstrably skilled without the tool, and what the artifacts show is somebody who is *also* skilled at running the tool, which is a different and considerably more dangerous thing. Five practices show up across the recovered material, and I hold the existence of each at DEFINITE because they are artifacts rather than impressions.
 
@@ -680,6 +690,7 @@ Two consequences follow for anybody reading the underlying material. The platfor
 ---
 
 ## 11. What the Public Record Does Not Contain
+{: .hl-tier-2}
 
 Two findings in this report are documented absences rather than positive discoveries, and I want to be exact about what that means before either one gets repeated somewhere with the caveats stripped off. An absence is worth publishing when the search behind it was thorough and its limits are stated. It is not a claim of having invented anything, and neither of these is a first-ever.
 
@@ -718,6 +729,7 @@ There is one further thing in that Unit 42 case worth carrying, and it is not ab
 ---
 
 ## 12. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 Four mapping decisions belong in front of the table, because each one is a place where a careless mapping would send a defender looking at the wrong telemetry.
 
@@ -788,6 +800,7 @@ Thirteen of the fourteen tactics are populated. Impact is empty by evidence, and
 ---
 
 ## 13. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-022 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports, it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -901,6 +914,7 @@ And the shared infrastructure category matters most for avoiding harm. The Tor e
 ---
 
 ## 14. Indicators of Compromise
+{: .hl-tier-2}
 
 The full machine-readable indicator set is published separately as a [JSON IOC feed](/ioc-feeds/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json), undefanged and ready for ingestion. It carries 38 SHA256 file hashes plus one MD5 of the receiver as actually deployed, the seven operator addresses in Section 9, four operator URLs, the receiver's TLS certificate hashes and JA4X and JARM values, three server banners, the port set, and the host-side artifacts covering file paths, naming patterns, service and cron entries, process names, command-line patterns, log strings, log-line formats, database artifacts and HTTP headers.
 
@@ -921,6 +935,7 @@ Two further exclusions are deliberate. The webhook token, the provider and aggre
 ---
 
 ## 15. Detection and Hunting Guidance
+{: .hl-tier-2}
 
 The full rule set is published separately at [Detection Rules, SSH Interception and Parasitic Credential Theft](/hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/), carrying 6 YARA rules, 14 Sigma rule-documents across 10 YAML blocks, and 3 Suricata signatures. A reader counting Sigma headings will find 10 rather than 14, because two of those blocks each pair a correlation rule with the two base rules it counts, and every document in a group carries its own tier. By tier the whole set is 15 alerting-grade rules and 8 hunting rules, with the Sigma documents splitting 7 and 7, all 6 YARA rules alerting, and the Suricata signatures splitting 2 and 1. The coverage-gaps section is worth reading before deploying any of it, and everything below is the reasoning that shaped those rules.
 
@@ -989,6 +1004,7 @@ Containment falls into five categories.
 ---
 
 ## 16. Confidence Summary, Gaps, and What Would Change This
+{: .hl-tier-2}
 
 The characterisation of this actor has been stable across the whole investigation while nearly every number attached to it has moved, and that is the honest shape of the case. The behaviours are well evidenced. The magnitudes are floors drawn from a partial sample, and each deeper look has raised them. Anyone acting on this should treat every count as a **lower bound** and the pattern as the reliable part.
 

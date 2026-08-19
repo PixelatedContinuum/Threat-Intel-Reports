@@ -53,6 +53,7 @@ figure_nav:
 > **Data source:** The open-directory intelligence behind this investigation was surfaced via [Hunt.io](https://hunt.io)'s [AttackCapture](https://hunt.io/features/attackcapture) platform, which sponsors this report series. The analysis, findings, and conclusions are The Hunters Ledger's own.
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 The GHOST cryptojacker is a commodity kit rather than a single-host campaign, and this investigation named its author. A `PIP_PAYLOAD_REPO` GitHub URL in Operator-B's ComfyUI scanner pivoted (Hunt SQL) to `Vova75Rus/ComfyUI-Shell-Executor`, attributing the kit to **Vova75Rus at HIGH confidence (88%)** (§9.2). What proves the kit is sold rather than bespoke is a **byte-identical `libpam_cache.so` LD_PRELOAD rootkit** (MD5 `296a8005...`) shipped to two separate AEZA customer hosts (§5.1), each carrying the kit author's hardcoded **OWNER Telegram bot** (§4.7). GitHub Trust & Safety suspended Vova75Rus account-wide on 2026-05-25, roughly 24 hours after disclosure submission, disrupting the kit-author payload channel at the supply chain's single intervention point.
 
@@ -131,6 +132,7 @@ The technical depth lives in §3–§6 (classification through dynamic analysis)
 ---
 
 ## 2. Business Risk Assessment
+{: .hl-tier-1}
 
 For an organization running GPU-cloud ML inference (or hosting third-party workloads on GPU infrastructure), the GHOST kit poses a dual-layer business risk: immediate resource theft — someone else mines cryptocurrency on your hardware — and deeper compromise, where the kit's container-escape suite, persistence depth, and credential-harvest functions open a follow-on access vector inside the tenant boundary.
 
@@ -169,6 +171,7 @@ The phases below describe the **categories of work** required to investigate and
 ---
 
 ## 3. Technical Classification
+{: .hl-tier-2}
 
 GHOST is a composite cryptojacking *kit* — a userland LD_PRELOAD rootkit, a ComfyUI exploitation framework, a Hysteria v2 backdoor, and legitimate mining binaries, glued by a 1,338-line installer and distributed through a 4-tier supply chain. The subsections below establish its structure and place it against peer threats in the cryptojacking ecosystem.
 
@@ -242,6 +245,7 @@ The kit-author tier shows several indicators consistent with professional develo
 ---
 
 ## 4. Technical Capabilities Deep-Dive
+{: .hl-tier-3}
 
 The capabilities below build the hidden, persistent cryptojacking outcome summarized in §1: a libc-hook rootkit hides processes/files/ports from standard tooling, a 5-vector chain plus immutable flags and a cross-process watchdog make full host rebuild the defensible remediation, and container-escape variants reach into cloud-tenant boundaries. Each capability's confidence is in the matrix; the subsections that follow give the evidence.
 
@@ -426,6 +430,7 @@ The single highest-value detection signature in this campaign is an HTTPS reques
 ---
 
 ## 5. Static Analysis Findings
+{: .hl-tier-3}
 
 > **Analyst note:** This section documents the static (file-on-disk, no execution) analysis of the kit's two most important artifacts — the libpam_cache.so ELF binary and the ghost.sh installer script. Static analysis here refers to file structure dissection, string extraction, and source-code review of the captured artifacts; no malware was executed on production infrastructure to produce these findings.
 
@@ -527,6 +532,7 @@ The upstream OSS attribution survives intact. Files written by the kit's UnamWeb
 ---
 
 ## 6. Dynamic / Behavioral Analysis
+{: .hl-tier-3}
 
 > **Analyst note:** This section documents the operator's actual hands-on-keyboard activity on Operator-A's host (77.110.96.200), reconstructed from a 1,472-line bash history file recovered from the open directory. The bash history is the most direct evidence of operator tradecraft, OPSEC posture, and operational iteration tempo available in this investigation. No malware was detonated by The Hunters Ledger to produce this section; the dynamic analysis is reconstructed from operator-side artifacts left in the open directory.
 
@@ -598,6 +604,7 @@ The patterns below reconstruct GHOST's network behavior from the kit's static co
 ---
 
 ## 7. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
@@ -606,6 +613,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 ---
 
 ## 8. Indicators of Compromise
+{: .hl-tier-2}
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
@@ -614,6 +622,7 @@ The full IOC feed is at [`/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-
 ---
 
 ## 9. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-016 and UTA-2026-017 are internal tracking designations assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. These labels will not appear in external threat intelligence feeds or vendor reports — they are specific to this publication. If future evidence links this activity to a known named actor, the designations will be retired and updated accordingly.
 
@@ -740,6 +749,7 @@ This negative finding matters for cross-case analysis at the parent campaign lev
 ---
 
 ## 10. Risk & Detection
+{: .hl-tier-2}
 
 **Full detection rule set** is available in the separate detection file:
 
@@ -809,6 +819,7 @@ This is a third-party intelligence publication, not an incident response playboo
 ---
 
 ## 11. Confidence Summary
+{: .hl-tier-2}
 
 This summary organizes every finding by confidence level, from DEFINITE down to INSUFFICIENT, per the project's CONFIDENCE LEVELS framework. The MITRE ATT&CK mapping (§7) marks per-technique confidence in the companion detection file; the view below spans all findings, not just the technique table.
 
@@ -866,6 +877,7 @@ This summary organizes every finding by confidence level, from DEFINITE down to 
 ---
 
 ## 12. Coverage Gaps
+{: .hl-tier-2}
 
 None of the six evidence-data gaps below invalidates a central conclusion of this report; each marks a known limit, surfaced openly so follow-on investigators can prioritize the work that would close it. Closing any of them would extend the current attribution and detection coverage, not overturn it.
 
@@ -881,6 +893,7 @@ The central conclusions each gap leaves standing: the 4-tier supply chain model,
 ---
 
 ## 13. Calibration Notes / Retractions
+{: .hl-tier-2}
 
 Six initial readings were disproven by direct evidence during the investigation and are retracted below — none touches the central conclusions, but each shaped the analysis along the way. Documenting them openly is part of the project's commitment to evidence-based intelligence and source-citation integrity.
 

@@ -38,6 +38,7 @@ stix_bundle: /stix/zerotrace-74-0-42-25-20260316.json
 ---
 
 ## 1. Executive Summary
+{: .hl-tier-1}
 
 ZeroTrace, a named threat actor corroborated by multiple independent security vendors, left their complete staging server open and accessible without authentication. The open directory at `74.0.42.25` exposed 4,750 files: four simultaneous RAT families, 9.1 million stolen credentials, 500 pre-staged phishing links, and an on-demand ransomware module — infrastructure active and undetected for 16+ months as of the analysis date (2026-03-16).
 
@@ -58,6 +59,7 @@ The threat vector is email phishing. `Attachment.vbs` delivers ScreenConnect, wh
 
 
 ## 2. Key Takeaways
+{: .hl-tier-1}
 
 **1. Four Remote Access Tools on one server: a double-edged sword**  
 The consolidation of XWorm, PureRAT, PureHVNC, and ScreenConnect C2 on a single IP (`185.49.126.140`) is an operational security failure by the operator — but it also means that blocking one IP simultaneously disrupts all four malware families. This is the highest-priority blocking action available to defenders.
@@ -77,6 +79,7 @@ The OPSEC failures (open directory, exposed C2 panel, debug logs in droppers) in
 ---
 
 ## 3. Business Risk Assessment 
+{: .hl-tier-1}
 
 
 | Impact Scenario                                  | Likelihood | Explanation                                                                                                                                                                                                                                                                                          |
@@ -103,6 +106,7 @@ For ongoing monitoring, watch for reinfection via bulk ScreenConnect links, sinc
 ---
 
 ## 4. What Was Found: Malware Classification 
+{: .hl-tier-2}
 
 
 | Family                     | Type                              | Samples                            | Confidence                  | C2                               |
@@ -140,6 +144,7 @@ On sophistication I put this operator at intermediate. They assemble commodity a
 ---
 
 ## 5. Technical Capabilities Deep-Dive
+{: .hl-tier-3}
 
 > **Executive Impact Summary:**
 >
@@ -633,6 +638,7 @@ Enigma Virtual Box is a commercial application virtualization tool.
 ---
 
 ## 6. Attack Chain Reconstruction — Kill Chain
+{: .hl-tier-2}
 
 > **Analyst note:** This section reconstructs the full attack chain from initial access through persistence and fraud. Three parallel delivery vectors are documented; most victim encounters begin with Vector A (phishing email).
 
@@ -699,6 +705,7 @@ Operator runs `vicTest.exe` on their server (port 8777 listener) → compiled vi
 ---
 
 ## 7. Threat Intelligence Context
+{: .hl-tier-2}
 
 ### XWorm V5.6 Landscape Context
 
@@ -734,6 +741,7 @@ CYFIRMA (Tier 2) independently documented the ZeroTrace Team in 2025, confirming
 ---
 
 ## 8. Threat Actor Assessment — ZeroTrace
+{: .hl-tier-2}
 
 The threat actor is ZeroTrace. I hold the operating identity at HIGH, 88 percent, and the full campaign scope at MODERATE, 72 percent.
 
@@ -791,6 +799,7 @@ A false flag is LOW likelihood. Staging a realistic open directory with 32+ bina
 ---
 
 ## 9. Credential and Victim Data Inventory
+{: .hl-tier-2}
 
 | File                          | Format             | Entries   | Summary                                                                                                                                                                                  |
 | ----------------------------- | ------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -825,6 +834,7 @@ The targeting profile centres on corporate O365 and BEC, cryptocurrency users (C
 ---
 
 ## 10. Incident Response Guidance
+{: .hl-tier-2}
 
 ### Priority 1: Immediate Containment
 
@@ -869,6 +879,7 @@ For credential reset scope, assume any credentials entered on affected systems s
 ---
 
 ## 11. Defensive Hardening Recommendations
+{: .hl-tier-2}
 
 ### Security Control Gaps This Campaign Exploits
 
@@ -895,6 +906,7 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 ---
 
 ## 12. Confidence Levels Summary
+{: .hl-tier-2}
 
 ### DEFINITE (Direct evidence, no ambiguity)
 
@@ -952,6 +964,7 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 ---
 
 ## 13. FAQ
+{: .hl-tier-2}
 
 **Q1: "Should we assume the XWorm ransomware module has already been deployed?"**
 Short answer: No — but the capability exists and there is no warning before deployment.
@@ -1003,6 +1016,7 @@ This report documents confirmed malicious infrastructure and provides IOCs for d
 ---
 
 ## 14. IOCs
+{: .hl-tier-2}
 
 The complete machine-readable IOC feed is available in the structured JSON format:
 
@@ -1028,6 +1042,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 ---
 
 ## 15. Detections
+{: .hl-tier-2}
 
 **Detection Rules File:** [{{ "/hunting-detections/opendirectory-74-0-42-25-20260316-detections/" | relative_url }}]({{ "/hunting-detections/opendirectory-74-0-42-25-20260316-detections/" | relative_url }})
 
@@ -1042,6 +1057,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 ---
 
 ## 16. Appendix A — MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 
 | Tactic               | Technique ID | Technique Name                             | Component                                                            | Confidence |
@@ -1085,6 +1101,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 ---
 
 ## 17. Appendix B — Research References
+{: .hl-tier-2}
 
 **XWorm V5.6:**
 
@@ -1125,5 +1142,6 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 ---
 
 ## License
+{: .hl-tier-2}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

@@ -37,6 +37,7 @@ stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 ---
 
 ## 1. BLUF / Bottom Line Up Front
+{: .hl-tier-1}
 
 An open directory discovered on the Russian-registered bulletproof-adjacent VPS **94.103.1.13** (AS209207 Digital Hosting Provider LLC, upstream AS48014 AlbaHost) is hosting a pre-production cybercrime staging kit whose terminal payload is a **Chaos ransomware builder variant** configured as `.torbrowsertor`. The kit is operated by a financially-motivated actor tracked internally as **UTA-2026-005** *(an internal tracking label used by The Hunters Ledger — see Section 7)*. Attribution to any publicly named threat actor is **INSUFFICIENT (0%)**; family-level identification of the Chaos builder lineage is **DEFINITE (97%)**.
 
@@ -56,6 +57,7 @@ This report documents the loader chain in defender-actionable detail and hands o
 ---
 
 ## 2. Key Takeaways
+{: .hl-tier-1}
 
 - **The loader, not the ransomware, is the novel story.** Chaos/TorBrowserTor is well-documented commodity ransomware; its clipboard wallets and Telegram handle (`@TorBrowserTor`) are **Chaos builder defaults** with zero operator-specific attribution value. The defender-actionable novelty lives in the **private five-stage batch loader** (`mymain.bat`, `myfile.bat`) that delivers it.
 - **Four crypter-chain behaviors have no located prior public reporting:** the Console.Title launch-gate trick, the inverted tri-artifact anti-sandbox gate (`admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv`), cross-layer AES+XOR key reuse as a builder fingerprint, and the specific Stage-5b UACME #41 AppInfo RPC bypass PE (byte-identical across both builds, 8/77 VT).
@@ -68,6 +70,7 @@ This report documents the loader chain in defender-actionable detail and hands o
 ---
 
 ## 3. Executive Summary
+{: .hl-tier-1}
 
 ### What Was Found
 
@@ -109,6 +112,7 @@ Family-level identification is DEFINITE at 97 percent. This is the Chaos ransomw
 ---
 
 ## 4. Threat Intelligence Summary
+{: .hl-tier-2}
 
 This section synthesizes threat-intelligence research (research-analyst output, stage2-research.md) with infrastructure findings (infrastructure-analyst output, stage2-infrastructure.md). Content is strictly tied to findings from the malware analysis and is not a generic threat landscape overview.
 
@@ -229,6 +233,7 @@ Four of seven target IPs are on Ukrainian ASNs — consistent with opportunistic
 ---
 
 ## 5. Technical Analysis
+{: .hl-tier-3}
 
 The technical core of this report is the **five-stage private crypter chain** carried inside `mymain.bat` and `myfile.bat`. This section walks the chain in chronological order from the moment a user double-clicks the batch file through to Chaos/TorBrowserTor ransomware detonation. Each kill chain stage heading opens with an analyst-note blockquote for readers who want the high-level summary before the technical detail.
 
@@ -599,6 +604,7 @@ Documenting only the commodity layer — Chaos ransomware, UACME #41, Perun's Fa
 ---
 
 ## 6. MITRE ATT&CK Mapping
+{: .hl-tier-2}
 
 > **Analyst note:** The table below maps observed behaviors to MITRE ATT&CK techniques. Only techniques with HIGH or DEFINITE confidence are included. The private-crypter chain heavily exercises Defense Evasion (TA0005), Persistence (TA0003), and Privilege Escalation (TA0004) tactics; the ransomware payload adds Impact (TA0040).
 
@@ -645,6 +651,7 @@ Documenting only the commodity layer — Chaos ransomware, UACME #41, Perun's Fa
 ---
 
 ## 7. Threat Actor Assessment
+{: .hl-tier-2}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-005 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
@@ -744,6 +751,7 @@ Consolidated view of every major analytical claim in this report with its confid
 ---
 
 ## 8. Detection & Response
+{: .hl-tier-2}
 
 This section covers the minimum defender orientation for the UTA-2026-005 kit. Detection content (YARA, Sigma, Suricata, EDR queries) is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/) — this report does not duplicate those rules. What follows is the prioritized hunting and response orientation.
 
@@ -792,6 +800,7 @@ Third-party perspective — these are action categories with rationale, not step
 ---
 
 ## 9. FAQ / Key Intelligence Questions
+{: .hl-tier-2}
 
 **Q1: Is this the Cisco Talos "Chaos RaaS group" from 2025?**
 
@@ -832,6 +841,7 @@ Short version: Stage 4 of this loader needs to know the path of the batch file t
 ---
 
 ## 10. Gaps & Assumptions
+{: .hl-tier-2}
 
 The two most consequential gaps in this investigation are the unknown Orcus C2 upstream and the absence of confirmed victim telemetry. Both limit the operational scope assessment and are the priority targets for follow-on analysis. All confirmed gaps, analytical assumptions, and the evidence that would change each assessment are catalogued below.
 
@@ -872,6 +882,7 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 ---
 
 ## 11. References and Further Reading
+{: .hl-tier-2}
 
 **Chaos ransomware family (B1 sources):**
 - WatchGuard: Chaos ransomware family tracker (2021–2026).
@@ -905,6 +916,7 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 ---
 
 ## 12. Addendum — 2026-05-02 Follow-up
+{: .hl-tier-2}
 
 > **Analyst note:** This section was appended on 2026-05-02 to capture two developments since the original 2026-04-23 publication: (1) the staging server `94.103.1.13:7777` went globally offline, consistent with operator takedown after sustained external probing; (2) deeper analysis of `interact.py` — referenced but not fully decomposed in the original — yielded one new sample-level IOC (its SHA256), one new host-side persistence IOC (a hardcoded backdoor account credential pair), and one detection-relevant detail (the XOR key used to obfuscate the staged GodPotato payload). All three are now reflected in the IOC feed and detection content.
 
