@@ -19,10 +19,15 @@
   'use strict';
 
   var VIEWS = { brief: 1, analyst: 2, full: 3 };
+
+  /* Each button carries its explanation on its face rather than in a title
+     attribute, because a tooltip is invisible to anyone who does not hover and
+     to everyone on a touch screen. The counts are read off the page, so a reader
+     can see how much each view gives them before choosing. */
   var LABELS = [
-    ['brief', 'Brief', 'The operational brief only'],
-    ['analyst', 'Analyst', 'Adds tradecraft and intelligence'],
-    ['full', 'Full', 'Everything, including the technical teardown']
+    ['brief', 'Brief', 'The bottom line only'],
+    ['analyst', 'Analyst', 'Adds tradecraft and intel'],
+    ['full', 'Full', 'Everything, teardown included']
   ];
 
   function tierOf(h2) {
@@ -92,16 +97,35 @@
       for (var j = 0; j < items.length; j++) setHidden(items[j], hide);
       if (hide) hiddenCount++;
     });
+    /* Says something on load, not only after a click. An empty strip beside three
+       buttons reads as a control that has not finished loading. */
     var live = doc.getElementById('hl-view-status');
     if (live) {
+      var total = sectionCounts(body).full;
+      var shown = total - hiddenCount;
       live.textContent = hiddenCount
-        ? hiddenCount + ' section' + (hiddenCount === 1 ? '' : 's') + ' hidden'
-        : 'showing the full report';
+        ? 'Showing ' + shown + ' of ' + plural(total)
+        : 'Showing all ' + plural(total);
     }
     return hiddenCount;
   }
 
-  function buildControl(doc, view) {
+  /* How many sections each view would show, counted from the page itself. An
+     unmarked section counts as Tier 1 for the same reason apply() treats it that
+     way: it can never be the thing that disappears. */
+  function sectionCounts(body) {
+    var n = { 1: 0, 2: 0, 3: 0 };
+    sectionsFor(body).forEach(function (sec) { n[sec.tier || 1]++; });
+    return {
+      brief: n[1],
+      analyst: n[1] + n[2],
+      full: n[1] + n[2] + n[3]
+    };
+  }
+
+  function plural(n) { return n + ' section' + (n === 1 ? '' : 's'); }
+
+  function buildControl(doc, view, counts) {
     var wrap = doc.createElement('div');
     wrap.className = 'hl-viewswitch';
     wrap.id = 'hl-viewswitch';
@@ -122,8 +146,22 @@
       b.className = 'hl-viewswitch__btn';
       b.setAttribute('data-view', spec[0]);
       b.setAttribute('aria-pressed', spec[0] === view ? 'true' : 'false');
-      b.setAttribute('title', spec[2]);
-      b.textContent = spec[1];
+
+      var n = counts ? counts[spec[0]] : null;
+      var desc = spec[2] + (n === null ? '' : ', ' + plural(n));
+
+      var name = doc.createElement('span');
+      name.className = 'hl-viewswitch__btn-name';
+      name.textContent = spec[1];
+      b.appendChild(name);
+
+      var sub = doc.createElement('span');
+      sub.className = 'hl-viewswitch__btn-desc';
+      sub.textContent = desc;
+      b.appendChild(sub);
+
+      // One readable name for assistive tech instead of two stacked fragments.
+      b.setAttribute('aria-label', spec[1] + ': ' + desc);
       group.appendChild(b);
     });
     wrap.appendChild(group);
@@ -179,8 +217,11 @@
     if (distinctTiers(body) < 2) return;
 
     var view = viewFromHash(location.hash) || 'full';
-    var control = buildControl(doc, view);
+    var control = buildControl(doc, view, sectionCounts(body));
     body.insertBefore(control, body.firstChild);
+    // Populate the status immediately, so the strip is never blank on load.
+    apply(doc, view);
+    setPressed(doc, view);
 
     control.addEventListener('click', function (e) {
       var b = e.target && e.target.closest ? e.target.closest('.hl-viewswitch__btn') : null;
@@ -213,8 +254,6 @@
       if (id) revealFor(doc, id);
     });
 
-    if (view !== 'full') apply(doc, view);
-
     // The TOC is built by the layout's own inline script, which may not have run
     // yet when a deferred module initialises. Re-apply once on load so a
     // non-default view reaches the TOC entries too.
@@ -234,6 +273,7 @@
     sectionsFor: sectionsFor,
     distinctTiers: distinctTiers,
     buildControl: buildControl,
+    sectionCounts: sectionCounts,
     apply: apply,
     revealFor: revealFor,
     viewFromHash: viewFromHash,

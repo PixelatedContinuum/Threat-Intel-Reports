@@ -3430,21 +3430,36 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   text-transform: uppercase;
   color: var(--hl-text-muted);
 }
-.hl-viewswitch__group { display: flex; gap: 0.25rem; }
+.hl-viewswitch__group { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 /* Scoped AND important, both needed: the theme declares
    `.hl-post-content a { color: … !important }` and the same wash reaches controls
    rendered inside the post body. B3's chips shipped in link blue for exactly this
    reason, and every test suite stayed green because nothing reads CSS. */
 .hl-post-content .hl-viewswitch__btn {
-  padding: 0.3em 0.85em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  padding: 0.42em 0.9em;
   border: 1px solid var(--hl-border-card);
-  border-radius: 999px;
+  border-radius: 8px;
   background: transparent;
   color: var(--hl-text-muted) !important;
-  font-size: 0.8rem;
-  line-height: 1.35;
+  line-height: 1.3;
+  text-align: left;
   cursor: pointer;
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.hl-viewswitch__btn-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+/* Deliberately not the accent colour: the explanation is there to be read once
+   and then ignored, so it sits a step quieter than the name above it. */
+.hl-viewswitch__btn-desc {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  white-space: nowrap;
 }
 .hl-post-content .hl-viewswitch__btn:hover,
 .hl-post-content .hl-viewswitch__btn:focus-visible {
@@ -3460,6 +3475,15 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   font-size: 0.72rem;
   color: var(--hl-text-muted);
   margin-left: auto;
+  white-space: nowrap;
+}
+/* Narrow screens: the descriptions are the first thing to go, because the button
+   names alone still work once the strip has been read at any width. The status
+   moves under the group rather than squeezing it. */
+@media (max-width: 620px) {
+  .hl-viewswitch__btn-desc { display: none; }
+  .hl-post-content .hl-viewswitch__btn { padding: 0.3em 0.8em; border-radius: 999px; }
+  .hl-viewswitch__status { margin-left: 0; flex-basis: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hl-post-content .hl-viewswitch__btn { transition: none; }

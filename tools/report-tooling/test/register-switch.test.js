@@ -129,3 +129,50 @@ test('revealFor resolves a target nested inside a hidden section', function () {
   assert.strictEqual(RS.revealFor(d, 'p2'), 'full');
   assert.strictEqual(d.getElementById('p2').hasAttribute('hidden'), false);
 });
+
+test('sectionCounts reports what each view would show', function () {
+  var body = build([1, 1, 2, 2, 2, 3]).querySelector('.hl-post-content');
+  assert.deepStrictEqual(RS.sectionCounts(body), { brief: 2, analyst: 5, full: 6 });
+});
+
+test('an unmarked section counts toward brief, matching how apply treats it', function () {
+  var body = build([1, null, 3]).querySelector('.hl-post-content');
+  assert.deepStrictEqual(RS.sectionCounts(body), { brief: 2, analyst: 2, full: 3 });
+});
+
+test('each button carries a name and a visible explanation with its count', function () {
+  var d = build([1, 2, 3]);
+  var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
+  var btns = c.querySelectorAll('button');
+  assert.strictEqual(btns[0].querySelector('.hl-viewswitch__btn-name').textContent, 'Brief');
+  assert.match(btns[0].querySelector('.hl-viewswitch__btn-desc').textContent,
+    /bottom line only, 1 section$/);
+  assert.match(btns[2].querySelector('.hl-viewswitch__btn-desc').textContent,
+    /teardown included, 3 sections$/);
+});
+
+test('the accessible name is one readable string, not two stacked fragments', function () {
+  var d = build([1, 2, 3]);
+  var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
+  assert.strictEqual(c.querySelector('button').getAttribute('aria-label'),
+    'Brief: The bottom line only, 1 section');
+});
+
+test('buildControl still works with no counts, so the signature stays additive', function () {
+  var d = build([1, 2, 3]);
+  var c = RS.buildControl(d, 'full');
+  assert.strictEqual(c.querySelectorAll('button').length, 3);
+  assert.strictEqual(c.querySelector('.hl-viewswitch__btn-desc').textContent,
+    'The bottom line only');
+});
+
+test('the status reads as a count in every view, never blank', function () {
+  var d = build([1, 2, 3]);
+  d.querySelector('.hl-post-content').insertBefore(
+    RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content'))),
+    d.querySelector('.hl-post-content').firstChild);
+  RS.apply(d, 'full');
+  assert.strictEqual(d.getElementById('hl-view-status').textContent, 'Showing all 3 sections');
+  RS.apply(d, 'brief');
+  assert.strictEqual(d.getElementById('hl-view-status').textContent, 'Showing 1 of 3 sections');
+});
