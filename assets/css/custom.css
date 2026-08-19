@@ -3527,18 +3527,61 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   margin: 0 0 1.2em;
   line-height: 1.6;
 }
-.hl-wire__kindkey { white-space: nowrap; }
-.hl-wire__kindkey::before {
+/* Provenance. The distinction this has to carry is that the CONTENT is other
+   people's reporting while the PIPELINE is ours, so it sits above the feed
+   rather than in the header blurb where it would read as a disclaimer. */
+.hl-wire__prov {
+  border: 1px solid var(--hl-border-card);
+  border-left: 3px solid var(--hl-accent-blue, #58a6ff);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--hl-accent-blue, #58a6ff) 6%, var(--hl-bg-card));
+  padding: 0.85em 1.1em;
+  margin: 0 0 1.1em;
+}
+.hl-wire__prov-title {
+  font-size: 0.68em;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hl-accent-blue, #58a6ff);
+  margin-bottom: 0.35em;
+}
+.hl-wire__prov p {
+  margin: 0;
+  font-size: 0.8em;
+  line-height: 1.62;
+  color: var(--hl-text-primary);
+}
+
+/* Kind axis. The counts used to be a static readout describing a distinction
+   the reader could see but not act on; they are the control now. Research and
+   news keep the filled/hollow dot the rows use, so the chip and the row read as
+   the same thing. */
+.hl-filter__chips--kind { align-items: center; }
+.hl-filter__chips--topic { margin-top: 9px; align-items: center; }
+.hl-chip-btn--research::before,
+.hl-chip-btn--news::before {
   content: "";
   display: inline-block;
-  width: 8px; height: 8px;
+  width: 7px; height: 7px;
   border-radius: 50%;
-  margin: 0 5px 0 9px;
+  margin-right: 7px;
+  vertical-align: baseline;
 }
-.hl-wire__kindkey--research::before { background: var(--hl-text-muted); }
-.hl-wire__kindkey--news::before {
+.hl-chip-btn--research::before { background: var(--hl-accent-blue, #58a6ff); }
+.hl-chip-btn--news::before {
   background: transparent;
   box-shadow: inset 0 0 0 2px var(--hl-text-muted);
+}
+.hl-chip-btn--research { border-color: color-mix(in srgb, var(--hl-accent-blue, #58a6ff) 34%, var(--hl-border-card)); }
+.hl-chip-btn--research.is-on {
+  background: color-mix(in srgb, var(--hl-accent-blue, #58a6ff) 20%, transparent);
+  border-color: var(--hl-accent-blue, #58a6ff);
+  color: #cfe3ff;
+}
+.hl-chip-btn--news.is-on {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--hl-text-muted);
+  color: var(--hl-text-primary);
 }
 
 /* --- the list ------------------------------------------------- */
@@ -3681,6 +3724,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-filter--wire .hl-filter__search { font-size: 0.78em; padding: 9px 13px; }
 .hl-filter--wire .hl-filter__count { font-size: 0.72em; }
+.hl-filter--wire .hl-filter__dim { font-size: 0.66em; margin-right: 6px; }
 
 @media (max-width: 1000px) and (min-width: 781px) {
   .hl-post-content .hl-wire__item,

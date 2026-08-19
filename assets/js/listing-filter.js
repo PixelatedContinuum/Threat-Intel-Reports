@@ -30,7 +30,14 @@
       keys: function () { return Object.keys(this.active); }
     };
   }
+  /* Axes, in the order a chip row appears. The tag axis is always present. A
+     second axis is picked up only when a page actually renders chips for it,
+     so the four listing pages that render one row are unaffected. Axes AND
+     together: picking a topic and a kind narrows to items matching both. */
   var dims = [Dim('data-tag', 'data-tags')];
+  if (bar.querySelector('.hl-chip-btn[data-kind]')) {
+    dims.push(Dim('data-kind', 'data-kind'));
+  }
 
   function matchDim(card, dim) {
     var keys = dim.keys();

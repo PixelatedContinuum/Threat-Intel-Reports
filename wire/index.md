@@ -14,7 +14,12 @@ position: 2.5
 {%- assign wire = site.data.wire -%}
 {%- if wire and wire.items and wire.items != empty -%}
 
-<p class="hl-wire__freshness">Updated {{ wire.generated_at | date: "%-d %B %Y, %H:%M" }} UTC &middot; {{ wire.counts.total }} items from the last {{ wire.window_days }} days &middot; <span class="hl-wire__kindkey hl-wire__kindkey--research">{{ wire.counts.research }} research</span> <span class="hl-wire__kindkey hl-wire__kindkey--news">{{ wire.counts.news }} news</span></p>
+<div class="hl-wire__prov">
+  <div class="hl-wire__prov-title">Where this comes from</div>
+  <p>The headlines are other people’s reporting, but the pipeline is mine. Every item here comes out of the OpenCTI threat-intelligence platform I run and maintain myself, the same instance that holds the <a href="/stix/">STIX bundles</a> for every report I publish and feeds the blocklists on my own network. Nothing on this page is scraped.</p>
+</div>
+
+<p class="hl-wire__freshness">Updated {{ wire.generated_at | date: "%-d %B %Y, %H:%M" }} UTC &middot; {{ wire.counts.total }} items from the last {{ wire.window_days }} days</p>
 
 {%- comment -%}
   The chip vocabulary comes precomputed from wire.topics rather than from the
@@ -25,7 +30,14 @@ position: 2.5
 {%- endcomment -%}
 <div class="hl-filter hl-filter--wire" data-listing-filter>
   <input class="hl-filter__search" type="text" placeholder="Filter headlines…" aria-label="Filter headlines" autocomplete="off">
-  <div class="hl-filter__chips">
+  <div class="hl-filter__chips hl-filter__chips--kind">
+    <span class="hl-filter__dim">Source</span>
+    <button type="button" class="hl-chip-btn is-on" data-kind="">All</button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--research" data-kind="research">Research <span class="hl-chip-btn__n">{{ wire.counts.research }}</span></button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--news" data-kind="news">News <span class="hl-chip-btn__n">{{ wire.counts.news }}</span></button>
+  </div>
+  <div class="hl-filter__chips hl-filter__chips--topic">
+    <span class="hl-filter__dim">Topic</span>
     <button type="button" class="hl-chip-btn is-on" data-tag="">All</button>
     {%- for t in wire.topics -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c{{ t.color }}" data-tag="{{ t.label }}">{{ t.label }} <span class="hl-chip-btn__n">{{ t.count }}</span></button>{%- endfor -%}
   </div>
@@ -41,11 +53,11 @@ position: 2.5
 {%- assign current_day = day -%}
 <div class="hl-wire__day" data-filter-group>{{ i.date | date: "%A %-d %B %Y" }}</div>
 {%- endif -%}
-<a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ i.url }}" target="_blank" rel="noopener noreferrer" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}"><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 2 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-topic-c{{ tc }}{% endif %}">{{ l }}</span>{%- endfor -%}</span></a>
+<a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ i.url }}" target="_blank" rel="noopener noreferrer" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}" data-kind="{{ i.kind }}"><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 2 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-topic-c{{ tc }}{% endif %}">{{ l }}</span>{%- endfor -%}</span></a>
 {%- endfor -%}
 </div>
 
-<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=8"></script>
+<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=9"></script>
 
 {%- else -%}
 
