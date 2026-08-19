@@ -155,7 +155,7 @@ test('the accessible name still carries the explanation the button no longer sho
   var d = build([1, 2, 3]);
   var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
   assert.strictEqual(c.querySelector('button').getAttribute('aria-label'),
-    'Executive Brief: the bottom line and what to do first, 1 section');
+    'Executive Brief: the bottom line and what to do, 1 section');
 });
 
 test('buildControl still works with no counts, so the signature stays additive', function () {
@@ -176,10 +176,10 @@ test('the status describes the active view, never blank', function () {
   var d = withControl([1, 2, 3], 'full');
   RS.apply(d, 'full');
   assert.strictEqual(d.getElementById('hl-view-status').textContent,
-    '3 of 3 sections, adds the deep technical analysis');
+    '3 of 3 sections, adds the deep teardown');
   RS.apply(d, 'brief');
   assert.strictEqual(d.getElementById('hl-view-status').textContent,
-    '1 of 3 sections, the bottom line and what to do first');
+    '1 of 3 sections, the bottom line and what to do');
 });
 
 test('a preview shows another view without changing the active one', function () {
@@ -187,7 +187,7 @@ test('a preview shows another view without changing the active one', function ()
   RS.apply(d, 'brief');
   RS.setStatus(d, 'brief', 'full');
   var live = d.getElementById('hl-view-status');
-  assert.strictEqual(live.textContent, '3 of 3 sections, adds the deep technical analysis');
+  assert.strictEqual(live.textContent, '3 of 3 sections, adds the deep teardown');
   assert.ok(live.hasAttribute('data-preview'));
   // still filtered to brief
   assert.strictEqual(d.getElementById('s2').hasAttribute('hidden'), true);
@@ -213,4 +213,11 @@ test('the status counts against the full total in every view', function () {
   assert.match(d.getElementById('hl-view-status').textContent, /^4 of 5 sections, /);
   RS.apply(d, 'brief');
   assert.match(d.getElementById('hl-view-status').textContent, /^2 of 5 sections, /);
+});
+
+test('the control renders no standalone label, the names carry it', function () {
+  var d = build([1, 2, 3]);
+  var c = RS.buildControl(d, 'full', RS.sectionCounts(d.querySelector('.hl-post-content')));
+  assert.strictEqual(c.querySelector('.hl-viewswitch__label'), null);
+  assert.strictEqual(c.children.length, 2);
 });

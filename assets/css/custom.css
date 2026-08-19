@@ -3425,12 +3425,6 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   padding: 0 0 0.6rem;
   border-bottom: 1px solid var(--hl-border-card);
 }
-.hl-viewswitch__label {
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--hl-text-muted);
-}
 .hl-viewswitch__group { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 /* Scoped AND important, both needed: the theme declares
    `.hl-post-content a { color: … !important }` and the same wash reaches controls

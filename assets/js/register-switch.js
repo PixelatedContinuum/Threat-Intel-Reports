@@ -31,9 +31,9 @@
      recognises the same three words on the next one. The sentence in the strip
      then says what each view ADDS, which the name alone cannot. */
   var LABELS = [
-    ['brief', 'Executive Brief', 'the bottom line and what to do first'],
-    ['analyst', 'Tradecraft & Intel', 'adds infrastructure, actor and detection'],
-    ['full', 'Full Teardown', 'adds the deep technical analysis']
+    ['brief', 'Executive Brief', 'the bottom line and what to do'],
+    ['analyst', 'Tradecraft & Intel', 'adds infrastructure and actor'],
+    ['full', 'Full Teardown', 'adds the deep teardown']
   ];
   var DESC = { brief: LABELS[0][2], analyst: LABELS[1][2], full: LABELS[2][2] };
 
@@ -129,11 +129,6 @@
     var wrap = doc.createElement('div');
     wrap.className = 'hl-viewswitch';
     wrap.id = 'hl-viewswitch';
-
-    var label = doc.createElement('span');
-    label.className = 'hl-viewswitch__label';
-    label.textContent = 'Read as';
-    wrap.appendChild(label);
 
     var group = doc.createElement('div');
     group.className = 'hl-viewswitch__group';
