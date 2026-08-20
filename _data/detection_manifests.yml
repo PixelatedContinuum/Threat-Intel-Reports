@@ -516,8 +516,8 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: suricata
     tier: Hunting
     fence: 24
-    hash: "c4ef8428"
-    head: "alert quic $HOME_NET any -> any any (msg:\"THL HU"
+    hash: "2b22d550"
+    head: "alert quic $HOME_NET any -> any [14433,14444] (m"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1090.004, T1665]
@@ -2262,8 +2262,8 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: suricata
     tier: Hunting
     fence: 21
-    hash: "0376e142"
-    head: "alert udp $HOME_NET any -> any 14433:14444 (msg:"
+    hash: "eaae43ad"
+    head: "alert udp $HOME_NET any -> $EXTERNAL_NET 14433:1"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1572, T1571]
@@ -5860,7 +5860,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     engine: sigma
     tier: Hunting
     fence: 17
-    hash: "e11b052b"
+    hash: "dd2e8725"
     head: "title: Non-Splunk Process Connecting to Localhos"
     robustness: 1
     confidence: "MODERATE — port 8089 is not uniquely operator-specific."
@@ -6097,7 +6097,7 @@ webshells-to-the-cloud-detections:
     engine: sigma
     tier: Hunting
     fence: 7
-    hash: "cf577c3d"
+    hash: "ef54c36e"
     head: "title: Nginx Configuration File Modified id: 4de"
     robustness: 2
     confidence: "MODERATE"

@@ -21,7 +21,7 @@ hide: true
 
 ## Detection Coverage Summary
 
-This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) into Detection / Hunting per the project's four-gate tiering rubric. One Sigma rule and five Suricata rules are pure atomics, a bare C2 IP or a bare ecosystem domain with no surviving behavioral discriminator once the literal is removed, and are retired as standalone rules; their literals are already present in the campaign's IOC feed. Two Suricata rules are cut outright (one pre-existing overbroad withdrawal, one redundant duplicate of a broader surviving rule). One Sigma rule (`Sigma Rule 7`) contained dead detection logic, an impossible same-event `AND` across four mutually-exclusive `EventSource` values that could never be true on a single log record, and has been corrected to a satisfiable single-event selection, consistent with this file's own established pattern (see `Sigma Rule 8`) of surfacing a per-event signal and documenting the SIEM-side correlation it requires in prose rather than inventing unsupported correlation syntax.
+This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) into Detection / Hunting per the project's four-gate tiering rubric. One Sigma rule and five Suricata rules are pure atomics. A bare C2 IP or a bare ecosystem domain with no surviving behavioral discriminator once the literal is removed, and are retired as standalone rules; their literals are already present in the campaign's IOC feed. Two Suricata rules are cut outright (one pre-existing overbroad withdrawal, one redundant duplicate of a broader surviving rule). One Sigma rule (`Sigma Rule 7`) contained dead detection logic, an impossible same-event `AND` across four mutually-exclusive `EventSource` values that could never be true on a single log record, and has been corrected to a satisfiable single-event selection, consistent with this file's own established pattern (see `Sigma Rule 8`) of surfacing a per-event signal and documenting the SIEM-side correlation it requires in prose rather than inventing unsupported correlation syntax.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
@@ -40,7 +40,7 @@ This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) i
 
 **Highest-confidence anchors:**
 - The operator's self-branded strings (`ARPA Korelasyon Motoru`, the dashboard footer, the versioned `correlation_v3.py` docstring), durable, near-zero FP; rebranding the entire platform is the only evasion path (YARA Detection).
-- The `arpa-*` systemd naming cluster and prefix pattern, five observed unit names plus a durable directory+prefix pattern that also catches unnamed future units (YARA + Sigma Detection).
+- The `arpa-*` systemd naming cluster and prefix pattern. Five observed unit names plus a durable directory+prefix pattern that also catches unnamed future units (YARA + Sigma Detection).
 - The Turkish-language insider-recruitment Markdown filename family (`GERCEK_API_BULUNDU`, `PUTTY_TUNNEL_DETAY`, `SSH_KEY_COZUM`, etc.) combined with the `ARPA_Tunnel` session name and `rca_key` artifacts (YARA + Sigma Detection).
 
 **Atomics routed to the IOC feed (already present, no new feed entries required):** the operator C2 IP `209.38.205.158` (with its documented ports 8090/8095/8096) and the OpenClaw ecosystem domains (`openclaw.ai`, `docs.openclaw.ai`, `lightmake.site`, the Tencent skill-marketplace CDN) were each the sole discriminator of a rule with no surviving behavior once the literal is removed. All are already present in [`turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json). No feed edits were made.
@@ -888,6 +888,8 @@ level: medium
 **False Positives:** HIGH — Splunk uses port 8089 for its management API by default (excluded here), but custom internal web services or other monitoring agents commonly use 8089 as a secondary management port too.
 **Deployment:** Sysmon Event ID 3 (network connection); EDR network telemetry on Windows endpoints. Requires filtering for non-Splunk initiators; cross-reference hits against known internal services using this port before escalation.
 
+**FP remediation note (2026-08-20):** TCP/8089 is Splunk's conventional default, not an IANA reservation or an OS-enforced binding, so any locally installed software may use it. Naming only Splunk in the exclusion covered one instance of an unbounded behaviour class. Confirmed in production: 4,402 alerts over 14 days, 100 percent of them Razer App Engine, a signed vendor application shipped with consumer gaming peripherals and therefore present across ordinary Windows fleets rather than peculiar to any one network. Excluding it is a source fix and not a local tune, because every subscriber running this rule inherits the same collision. Measured 4,402 to 0 with no residual, over both a 14-day and a 90-day window. Both exclusions are directory-pinned rather than filename-pinned, so a binary of either name dropped elsewhere on disk still alerts. `level` moves to `low` to match the Robustness-1 tiering this rule already carried: a lone hit is a hunting lead, and priority belongs to hits that co-occur with the reverse-tunnel establishment covered by Sigma Rule 12 (`d49b3f9d-31e8-4ed8-8c62-87aba3aedd66`).
+
 ```yaml
 title: Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Windows Host
 id: 47e5169f-572c-4d87-9fda-578a23e58beb
@@ -921,13 +923,30 @@ detection:
         DestinationPort: 8089
     filter_splunk:
         Image|endswith:
-            - '\splunkd.exe'
-            - '\splunk.exe'
-    condition: selection and not filter_splunk
+            - '\Splunk\bin\splunkd.exe'
+            - '\Splunk\bin\splunk.exe'
+            - '\SplunkUniversalForwarder\bin\splunkd.exe'
+            - '\SplunkUniversalForwarder\bin\splunk.exe'
+    filter_razer:
+        Image|contains: '\Razer\RazerAppEngine\'
+        Image|endswith: '\razerappengine.exe'
+    condition: selection and not 1 of filter_*
 falsepositives:
+    - >-
+        Razer App Engine (razerappengine.exe), which binds an unrelated local IPC service to port 8089.
+        Excluded above. Measured at 4,402 alerts over 14 days from a single host with no tunnel present.
+        Razer peripheral software is stock consumer tooling, so this collision occurs on any fleet that
+        permits the hardware.
+    - >-
+        Any other vendor or line-of-business software that binds port 8089 for its own local IPC. The port
+        is a Splunk convention, not a reservation, so this class is open-ended and the exclusion list will
+        need extending as new collisions are observed.
     - Custom internal web services or developer tooling binding to port 8089 (verify against IT asset management)
     - Other monitoring agents that use 8089 as a secondary management port
-level: medium
+    - >-
+        A single hit with no corresponding SSH, PuTTY or Plink reverse-tunnel establishment on the same host
+        (Sigma rule d49b3f9d-31e8-4ed8-8c62-87aba3aedd66). Treat as informational until corroborated.
+level: low
 ```
 
 #### Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation
@@ -1039,7 +1058,7 @@ alert dns $HOME_NET any -> any any (msg:"THL Turkish-ARPA-State-Insurer DNS Quer
 - **Suricata sid 9001003** (bundled under the original "Suricata Rule 2") duplicated the `/api/ingest/instana` URI-based POST detection with an unnecessary destination-IP restriction to `209.38.205.158`. The surviving Suricata Detection rule above (sid 9001005) implements the identical URI-based logic without that restriction and is therefore strictly broader, retaining both provided no additional coverage.
 - **Suricata sid 9001009** (`Long-Lived SSH Session from Internal Windows Host to External IP`) was already withdrawn by a prior edit (2026-06-19) as overbroad. A flow-only `$HOME_NET -> $EXTERNAL_NET:22` match fires on all outbound SSH, including legitimate git-over-SSH and administration. It remains commented out in the source; no further action taken here beyond confirming the withdrawal rationale still holds.
 
-**Victim-domain exception: why Sigma Rule 2 and the Suricata DNS rule are Hunting rather than atomic-routed.** Both key on the victim organization's own redacted Instana tenant hostname (`*.ocpinstana.[victim-domain].com.tr`) with no additional behavioral filter, structurally the same "bare domain" pattern as the routed atomics above. The difference: this hostname is the *victim's own asset*, not attacker-controlled infrastructure, and the campaign's disclosure policy (see the IOC feed's `metadata.notes`) explicitly excludes victim infrastructure from the public feed. Cutting these rules entirely would discard real governance/access-anomaly value for the one audience this restricted-distribution, per-case file explicitly serves, the victim organization's own IR team. Both rules are retained as Hunting with an explicit false-positives note that designated Instana admin hosts will also match and require triage.
+**Victim-domain exception: why Sigma Rule 2 and the Suricata DNS rule are Hunting rather than atomic-routed.** Both key on the victim organization's own redacted Instana tenant hostname (`*.ocpinstana.[victim-domain].com.tr`) with no additional behavioral filter, structurally the same "bare domain" pattern as the routed atomics above. The difference: this hostname is the *victim's own asset*, not attacker-controlled infrastructure, and the campaign's disclosure policy (see the IOC feed's `metadata.notes`) explicitly excludes victim infrastructure from the public feed. Cutting these rules entirely would discard real governance/access-anomaly value for the one audience this restricted-distribution, per-case file explicitly serves. The victim organization's own IR team. Both rules are retained as Hunting with an explicit false-positives note that designated Instana admin hosts will also match and require triage.
 
 The following techniques and detection surfaces were observed in malware-analyst findings but could not be covered with high-confidence, production-ready rules due to data availability or structural detection limitations. Each gap is documented with the evidence that was present and what additional data would enable rule creation.
 

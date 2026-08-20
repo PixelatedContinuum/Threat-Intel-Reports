@@ -473,15 +473,6 @@
         "host_status_2026_05_02": "OFFLINE, confirmed via 8-country external probe (check-host.net), TCP refused on port 80 and 7777"
       }
     ],
-    "loopback_c2": [
-      {
-        "ip": "127.0.0.1",
-        "port": "20268",
-        "protocol": "TCP",
-        "confidence": "DEFINITE",
-        "context": "Orcus RAT local C2 listener, real upstream hidden behind chisel/plink tunnel. Static analysis cannot reveal the true upstream endpoint; dynamic detonation required to enumerate the tunnel peer."
-      }
-    ],
     "victim_infrastructure_do_not_block": [
       {
         "ip": "192.227.108.142",
@@ -953,6 +944,24 @@
       "value": "37.17.245.209",
       "category": "author-marked never-block",
       "context": "Ukrainian host (AS43361 LUMINA LLC [UA]), no PTR, VT 0/94. Target type unknown, probed by port_check.py. Do not block."
+    }
+  ],
+  "non_indicators": [
+    {
+      "warning": "CONTEXT ONLY - DO NOT INGEST AS INDICATORS, DO NOT BLOCK, DO NOT ALERT ON THESE VALUES. They are recorded so analysts can read the campaign evidence correctly. Every value here is non-routable, victim-internal, or otherwise unsafe to match on: matching it would fire on the consumer's own loopback or private network rather than on adversary activity. Automated ingestion must skip this block. It is deliberately outside network_indicators for that reason."
+    },
+    {
+      "values": [
+        "127.0.0.1"
+      ],
+      "reason": "Loopback bound by the Orcus RAT as its local C2 listener on TCP/20268. The real upstream is hidden behind a chisel/plink tunnel, so the loopback address is an artifact of the tunnel architecture rather than an endpoint anyone can block; static analysis cannot reveal the true upstream and dynamic detonation is required to enumerate the tunnel peer. Confidence DEFINITE that the listener exists, but the value itself is not a matchable indicator. Originally carried in network_indicators.loopback_c2.",
+      "original_entry": {
+        "ip": "127.0.0.1",
+        "port": "20268",
+        "protocol": "TCP",
+        "confidence": "DEFINITE",
+        "context": "Orcus RAT local C2 listener, real upstream hidden behind chisel/plink tunnel. Static analysis cannot reveal the true upstream endpoint; dynamic detonation required to enumerate the tunnel peer."
+      }
     }
   ]
 }

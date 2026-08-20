@@ -323,18 +323,28 @@ level: medium
 - Legitimate administrator edits to nginx config.
 **Deployment:** Linux file-integrity monitoring; pair every hit with a manual diff of the changed configuration file.
 
+**FP remediation note (2026-08-20):** the rule shipped with no process filter and no exclusions at all, so every write under `/etc/nginx/` matched, package upgrades, configuration-management pushes, certbot renewals and ordinary admin edits alike. The false positives listed above were written down at authoring time and never implemented in the detection logic. Production confirmed the consequence: 36 alerts, 100 percent of them `/usr/bin/sed` performing a routine `sed -i` in-place edit burst.
+
+The fix anchors on the writing process being part of the web-server runtime rather than denylisting admin tooling. A webshell rewriting its host's nginx config necessarily executes inside that process family, because that is how it obtained code execution in the first place, so the anchor is structural and survives renaming and infrastructure rotation. A denylist of admin tools is open-ended by contrast and grows forever. Measured 36 to 0 across both 14-day and 90-day windows, with `process.executable` populated on 100 percent of events, so the anchor is genuinely discriminating rather than silently suppressing the rule through a missing field.
+
+**Blind spot, stated rather than hidden:** a webshell that shells out (`system("sed -i ... /etc/nginx/...")`) writes as `sed` with php-fpm as its *parent*, and this anchor tests the writing process only, so that path is missed. Anchoring on the parent or on the web-server user would cover it, and neither is implementable here: on this telemetry `process.parent.executable`, `process.parent.name`, `process.Ext.ancestry` and `user.name` are all unpopulated for Linux `file_event` (0 of 36), leaving a numeric `user.id` as the only identity present. Writing a parent-based condition would produce a rule that silently matches nothing, which is a worse failure than the gap it would claim to close. Covering the shell-out path needs parent attribution in the file-event pipeline first.
+
 ```yaml
 title: Nginx Configuration File Modified
 id: 4de0ab63-3b37-4203-ba70-721af47514f4
 status: experimental
 description: >-
-  Detects file writes under /etc/nginx/. A malicious outbound reverse-proxy relay requires
-  a proxy_pass directive to an external host, which file-event telemetry cannot inspect -
-  treat this as a hunting lead requiring a content diff of the changed config.
+  Detects file writes under /etc/nginx/ made by a process in the web-server runtime
+  (nginx, php/php-fpm, httpd or apache2), consistent with a webshell rewriting its own
+  host's nginx config to add a malicious proxy_pass upstream. Writes by shells, package
+  managers and configuration-management agents run outside the web-server process context
+  and are not matched. A proxy_pass directive to an external host still requires a manual
+  content diff of the changed file to confirm intent.
 references:
     - https://the-hunters-ledger.com/hunting-detections/webshells-to-the-cloud-detections/
 author: The Hunters Ledger
 date: '2025-10-20'
+modified: '2026-08-20'
 tags:
     - attack.command-and-control
     - attack.t1090
@@ -343,14 +353,23 @@ logsource:
     category: file_event
     product: linux
 detection:
-    selection:
+    selection_path:
         TargetFilename|contains: '/etc/nginx/'
-    condition: selection
+    selection_web_runtime:
+        Image|contains:
+            - 'nginx'
+            - 'php'
+            - 'httpd'
+            - 'apache2'
+    condition: selection_path and selection_web_runtime
 falsepositives:
-    - Legitimate infrastructure changes adding a proxy upstream to an external, authorized destination
-    - Certbot/TLS certificate renewals
-    - Configuration-management pushes
-    - Legitimate administrator edits to nginx config
+    - >-
+        Web-hosting control-panel software whose PHP backend legitimately writes nginx vhost
+        configuration in response to an administrator action, for example CloudPanel and similar
+        nginx plus PHP-FPM panels.
+    - >-
+        An nginx module or embedded scripting engine such as njs deliberately configured to rewrite
+        its own configuration.
 level: medium
 ```
 
