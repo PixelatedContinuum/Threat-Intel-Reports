@@ -9,67 +9,67 @@
         "value": "042761408e83155d24884a72291d9f10803becd790fbcfa6ff65e9e72eb44446",
         "filename": "beacon_windows_x64.exe",
         "confidence": "HIGH",
-        "context": "Gen-4 OpenStrike beacon — 10 commands, AES-128-CBC + HMAC-SHA256, key exchange missing (WIP)"
+        "context": "Gen-4 OpenStrike beacon, 10 commands, AES-128-CBC + HMAC-SHA256, key exchange missing (WIP)"
       },
       {
         "value": "03492f128fcc3910bda15f393c30ad3e04f5a50de36464d1e24038f49d889324",
         "filename": "mini_beacon.exe",
         "confidence": "HIGH",
-        "context": "Gen-1 OpenStrike prototype — HTTP-only poller, no crypto, no commands"
+        "context": "Gen-1 OpenStrike prototype, HTTP-only poller, no crypto, no commands"
       },
       {
         "value": "9bdb680d4368713273509e8c104c1903b9790ee725cc2319997e1da705af5ca0",
         "filename": "mini_beacon2.exe",
         "confidence": "HIGH",
-        "context": "Gen-2 OpenStrike — RSA-1024 registration, elevation check, no commands"
+        "context": "Gen-2 OpenStrike, RSA-1024 registration, elevation check, no commands"
       },
       {
         "value": "0d050b35abaa2a47340ec925727b0d508605733676552dbc94080c2da9f863d2",
         "filename": "beacon_full.x64.dll",
         "confidence": "HIGH",
-        "context": "CS 4.4 beacon DLL — RSA-1024, watermark=0, port 80"
+        "context": "CS 4.4 beacon DLL, RSA-1024, watermark=0, port 80"
       },
       {
         "value": "3b2d746d0974bb5ffec7d21b47d793fb1eef2af930d639b2f494cbe900fe0c3e",
         "filename": "beacon_port80.x64.dll",
         "confidence": "HIGH",
-        "context": "CS 3.x beacon DLL — RSA-2048 Trinity key, watermark=0, port 80"
+        "context": "CS 3.x beacon DLL, RSA-2048 Trinity key, watermark=0, port 80"
       },
       {
         "value": "ad1fc7f801bd2166edeeeb5f97fa087bb1769cde57e500a7c0eb2a844e3ad95f",
         "filename": "beacon80.dll",
         "confidence": "HIGH",
-        "context": "CS 4.4 beacon DLL — Malleable C2 profile (/en_US/all.js), watermark=987654321, IE9 UA"
+        "context": "CS 4.4 beacon DLL, Malleable C2 profile (/en_US/all.js), watermark=987654321, IE9 UA"
       },
       {
         "value": "af688b120db0a3b324e2cd468cfead71b7895a3c815f4026d51ac7fca0cb8ab4",
         "filename": "covertvpn.dll",
         "confidence": "HIGH",
-        "context": "CovertVPN L2 bridge — ICMP tunnel, 5 transport channels, embedded WinPcap 4.1.3"
+        "context": "CovertVPN L2 bridge, ICMP tunnel, 5 transport channels, embedded WinPcap 4.1.3"
       },
       {
         "value": "701b4f60411a26abfb137f476c9328900843ee5a49780f2fcd23a5cb15498f16",
         "filename": "artifact32svc.exe",
         "confidence": "HIGH",
-        "context": "Artifact Kit service variant — EAX-redirect process hollowing, DceRpcSs service"
+        "context": "Artifact Kit service variant, EAX-redirect process hollowing, DceRpcSs service"
       },
       {
         "value": "6797ba96336c64648d6bcccdbead8d9ab6f18d77f0108239e31a063b32665770",
         "filename": "artifact64svc.exe",
         "confidence": "HIGH",
-        "context": "x64 Artifact Kit service variant — mirrors artifact32svc hollowing pattern"
+        "context": "x64 Artifact Kit service variant, mirrors artifact32svc hollowing pattern"
       },
       {
         "value": "820cf45c92b9cce9536ad108fc4b8c1c501bb6f4e30119b1bef0486670de02e4",
         "filename": "beacon_dl.exe",
         "confidence": "HIGH",
-        "context": "Custom CreateThread loader — download-mode beacon payload"
+        "context": "Custom CreateThread loader, download-mode beacon payload"
       },
       {
         "value": "89ec81f862be889f6e8bfbad7c3c39410a9039467f1fdfe8752f64a59e113d10",
         "filename": "beacon_full.exe",
         "confidence": "HIGH",
-        "context": "Custom CreateThread loader — full-feature beacon payload"
+        "context": "Custom CreateThread loader, full-feature beacon payload"
       },
       {
         "value": "04720e01f0599ff97d85f74d1483245c59353bb5ea391f2c4c9cb6ce4ef46d35",
@@ -81,19 +81,19 @@
         "value": "f0fc7d3b3f7b2fa10b796102889a44d57a7ad403d2038bada3c0fbd983d13c81",
         "filename": "beacon_rdi.exe | beacon_cs_debug.exe",
         "confidence": "HIGH",
-        "context": "Hardcoded-offset RDI loader — call buf+0x1649c | Debug beacon config — port 809, 5s sleep, /ga.js URI"
+        "context": "Hardcoded-offset RDI loader, call buf+0x1649c | Debug beacon config, port 809, 5s sleep, /ga.js URI"
       },
       {
         "value": "7c643568b3212363cd97511f2607ad2481b9f3b6f6a829999df469af7c0184b7",
         "filename": "beacon_srdi2.exe",
         "confidence": "HIGH",
-        "context": "sRDI v2 loader — same base loader as beacon_loader, 310KB payload"
+        "context": "sRDI v2 loader, same base loader as beacon_loader, 310KB payload"
       },
       {
         "value": "b0f0fe97b653e4564db8cf24cbd4cc2cad46f9c6629b67c2f147e647729f5b46",
         "filename": "dll_loader.exe",
         "confidence": "HIGH",
-        "context": "Disk-drop loader — LoadLibraryA(C:\\Windows\\Temp\\beacon.dll), infinite keepalive"
+        "context": "Disk-drop loader, LoadLibraryA(C:\\Windows\\Temp\\beacon.dll), infinite keepalive"
       },
       {
         "value": "8ab7e87b34d65393618fabd5b48017d803e795064d4a290128c3eea1e54742f0",
@@ -105,25 +105,25 @@
         "value": "86b581e40a9ff912683b6f3579d155a8d765669acbba10d400abce451a898be5",
         "filename": "stager_http_x64.exe",
         "confidence": "HIGH",
-        "context": "1KB PE stager — port 80, URI /au2U"
+        "context": "1KB PE stager, port 80, URI /au2U"
       },
       {
         "value": "f618c8073bbc18f36ebf522aa15e680bf63e867b115c27ab1546c2326507917b",
         "filename": "stager_http_x64.ps1",
         "confidence": "HIGH",
-        "context": "PS1 stager wrapper — port 80, URI /msI4"
+        "context": "PS1 stager wrapper, port 80, URI /msI4"
       },
       {
         "value": "46a74c19bc3fecb149c452c286b912999a43e7808194a55ede4d9a19e56f4081",
         "filename": "beacon_patched.exe",
         "confidence": "HIGH",
-        "context": "Artifact-wrapped beacon — Trinity RSA-2048, port 80, watermark 987654321"
+        "context": "Artifact-wrapped beacon, Trinity RSA-2048, port 80, watermark 987654321"
       },
       {
         "value": "5c65b88fe12e6116d917e0a04ca57c4d3784d283a350d9e3dcec2691fe7eff2c",
         "filename": "beacon_x64_sniff.exe",
         "confidence": "HIGH",
-        "context": "Sniffer beacon config — port 809, /ga.js URI"
+        "context": "Sniffer beacon config, port 809, /ga.js URI"
       },
       {
         "value": "5dad2214471215e262910e9dcb348cf42c62fc8d8b26a85c8e959d5f1ce78c80",
@@ -137,37 +137,37 @@
         "value": "b6e01011e2d38855dd6a4b10a79acffe",
         "filename": "beacon_windows_x64.exe",
         "confidence": "HIGH",
-        "context": "Gen-4 OpenStrike beacon — fully reversed, SHA256 key derivation, 10 commands"
+        "context": "Gen-4 OpenStrike beacon, fully reversed, SHA256 key derivation, 10 commands"
       },
       {
         "value": "1cf68b213a6ba7a2b864822cc72ed4fa",
         "filename": "beacon_loader.exe",
         "confidence": "HIGH",
-        "context": "Base shellcode loader — VirtualAlloc(RWX) indirect call"
+        "context": "Base shellcode loader, VirtualAlloc(RWX) indirect call"
       },
       {
         "value": "08ca0ff3c1e3c38c6e973654689d8346",
         "filename": "beacon_rdi.exe",
         "confidence": "HIGH",
-        "context": "RDI loader — hardcoded offset 0x1649c ReflectiveLoader call"
+        "context": "RDI loader, hardcoded offset 0x1649c ReflectiveLoader call"
       },
       {
         "value": "e7765cb6d6c71277d49ef4ca7429638c",
         "filename": "beacon_dl.exe",
         "confidence": "HIGH",
-        "context": "CreateThread loader — download-mode beacon payload"
+        "context": "CreateThread loader, download-mode beacon payload"
       },
       {
         "value": "3d60ae2e584a1be1c264cfdaa12a5e4d",
         "filename": "covertvpn.dll",
         "confidence": "HIGH",
-        "context": "CovertVPN L2 bridge — 5 transport channels, WinPcap driver dropper"
+        "context": "CovertVPN L2 bridge, 5 transport channels, WinPcap driver dropper"
       },
       {
         "value": "b5d391099c1376d81ebdc91b3fc55eae",
         "filename": "dll_loader.exe",
         "confidence": "HIGH",
-        "context": "Disk-drop DLL loader — hardcoded C:\\Windows\\Temp\\beacon.dll"
+        "context": "Disk-drop DLL loader, hardcoded C:\\Windows\\Temp\\beacon.dll"
       }
     ],
     "sha1": [
@@ -280,7 +280,7 @@
         "port": "80",
         "protocol": "TCP",
         "confidence": "HIGH",
-        "context": "C2 listener — stagers (/au2U, /msI4) and multiple beacon configs. NOTE: port 8443 C2 already in April 6 feed.",
+        "context": "C2 listener, stagers (/au2U, /msI4) and multiple beacon configs. NOTE: port 8443 C2 already in April 6 feed.",
         "false_positive_risk": "MODERATE - Linode shared hosting IP; block only in context of associated behavioral indicators"
       },
       {
@@ -288,14 +288,14 @@
         "port": "809",
         "protocol": "TCP",
         "confidence": "HIGH",
-        "context": "Additional C2 listener — debug and sniffer beacon configs (/ga.js)"
+        "context": "Additional C2 listener, debug and sniffer beacon configs (/ga.js)"
       },
       {
         "ip": "172.105.0.126",
         "port": "50050",
         "protocol": "TCP",
         "confidence": "HIGH",
-        "context": "CS team server management port — if externally accessible, additional exposure vector"
+        "context": "CS team server management port, if externally accessible, additional exposure vector"
       }
     ],
     "ipv6": [],
@@ -324,12 +324,12 @@
       {
         "url": "http://172.105.0.126/ga.js",
         "confidence": "HIGH",
-        "context": "Profile B Malleable C2 GET URI — Google Analytics masquerade (3 beacons)"
+        "context": "Profile B Malleable C2 GET URI, Google Analytics masquerade (3 beacons)"
       },
       {
         "url": "http://172.105.0.126:809/ga.js",
         "confidence": "HIGH",
-        "context": "Profile B on port 809 — debug/sniffer beacon configs"
+        "context": "Profile B on port 809, debug/sniffer beacon configs"
       }
     ],
     "user_agents": [
@@ -350,14 +350,14 @@
         "display_name": "DceRpcSs",
         "binary_path": "[artifact32svc.exe or artifact64svc.exe path]",
         "confidence": "HIGH",
-        "context": "Artifact Kit service variant — masquerades as legitimate Windows RpcSs service"
+        "context": "Artifact Kit service variant, masquerades as legitimate Windows RpcSs service"
       },
       {
         "name": "npf",
         "display_name": "npf",
         "binary_path": "%TEMP%\\npf.sys",
         "confidence": "HIGH",
-        "context": "CovertVPN WinPcap kernel driver service — installed from temp directory"
+        "context": "CovertVPN WinPcap kernel driver service, installed from temp directory"
       }
     ],
     "mutexes": [],
@@ -368,7 +368,7 @@
       {
         "pattern": "rundll32.exe spawned with no command-line arguments by a service process, with CREATE_SUSPENDED flag",
         "confidence": "HIGH",
-        "context": "EAX-redirect process hollowing — Artifact Kit service variant. Detection anchor: SetThreadContext on suspended thread, NOT NtUnmapViewOfSection"
+        "context": "EAX-redirect process hollowing, Artifact Kit service variant. Detection anchor: SetThreadContext on suspended thread, NOT NtUnmapViewOfSection"
       },
       {
         "pattern": "VirtualAllocEx(PAGE_READWRITE) followed by WriteProcessMemory followed by VirtualProtectEx(PAGE_EXECUTE_READ) targeting rundll32.exe",
@@ -400,7 +400,7 @@
       {
         "pattern": "Named pipe created matching \\\\.\\pipe\\MSSE-[0-9]{1,4}-server (range 0-9897)",
         "confidence": "HIGH",
-        "context": "Artifact Kit default named pipe pattern — MSSE = Microsoft Security Service Extension masquerade. GetTickCount() % 9898 determines pipe number."
+        "context": "Artifact Kit default named pipe pattern, MSSE = Microsoft Security Service Extension masquerade. GetTickCount() % 9898 determines pipe number."
       }
     ]
   },
@@ -408,13 +408,13 @@
     "rsa_1024_modulus_prefix": "008cadd72dbf3cc108000f1752e32cb6e0ebd1e5f043c4e34301598a5f64f032",
     "rsa_1024_context": "RSA-1024 public key shared across CS 4.4 beacons (beacon_full.x64.dll, beacon80.dll) and gen-2 custom beacon (mini_beacon2.exe). Ties custom implant development to CS 4.4 infrastructure.",
     "aes_iv": "abcdefghijklmnop",
-    "aes_iv_context": "Hardcoded AES-128-CBC IV — shared across gen-3 and gen-4 OpenStrike beacons. Already in April 6 feed but confirmed in gen-4.",
+    "aes_iv_context": "Hardcoded AES-128-CBC IV, shared across gen-3 and gen-4 OpenStrike beacons. Already in April 6 feed but confirmed in gen-4.",
     "cs_watermark_987654321": "987654321",
-    "cs_watermark_context": "Second cracked CS distribution watermark — found in beacon80.dll and all 7 artifact-wrapped beacons. Associated with Chinese-language cracked CS packages.",
+    "cs_watermark_context": "Second cracked CS distribution watermark, found in beacon80.dll and all 7 artifact-wrapped beacons. Associated with Chinese-language cracked CS packages.",
     "ssl_cert_sha256": "6e8efd85110de376426cde809f25d50ffcbb1d0e39d11c82913757cb277e15dd",
-    "ssl_cert_context": "Team server SSL certificate — searchable in Shodan/Censys for infrastructure pivoting",
+    "ssl_cert_context": "Team server SSL certificate, searchable in Shodan/Censys for infrastructure pivoting",
     "jar_authkey_pub_md5": "8bb4df00c120881a1945a43e2bb2379e",
-    "jar_authkey_context": "RSA-2048 public key fingerprint from CS 4.9.1 JAR authkey.pub — does NOT match the .auth file (keypair mismatch confirms mixed cracked builds)"
+    "jar_authkey_context": "RSA-2048 public key fingerprint from CS 4.9.1 JAR authkey.pub. Does NOT match the .auth file (keypair mismatch confirms mixed cracked builds)"
   },
   "cobalt_strike_configs": [
     {

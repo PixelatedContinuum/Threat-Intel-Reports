@@ -13,7 +13,7 @@
       "B": "Inkognito Russian VPN/phishing (INK VPN brand portfolio)",
       "C": "Rhadamanthys MaaS-customer loader + canonical Stage-2 (PRIMARY)"
     },
-    "cluster_linkage_confidence": "LOW (downgraded from MODERATE in §23.12.7 — three clusters share multi-tenant Aeza staging IP only; no operator-level evidence overlap)"
+    "cluster_linkage_confidence": "LOW (downgraded from MODERATE in §23.12.7, three clusters share multi-tenant Aeza staging IP only; no operator-level evidence overlap)"
   },
   "file_hashes": {
     "sha256": [
@@ -58,7 +58,7 @@
         "size": 462848,
         "first_seen": "2024-04-16",
         "confidence": "HIGH",
-        "context": "Contacts DIFFERENT C2 45.81.39.169 (OCULUS NETWORKS US) — proves multi-customer Rhadamanthys MaaS architecture",
+        "context": "Contacts DIFFERENT C2 45.81.39.169 (OCULUS NETWORKS US), proves multi-customer Rhadamanthys MaaS architecture",
         "action": "BLOCK"
       },
       {
@@ -171,7 +171,7 @@
         "size": 261587,
         "vt_detections": "Not in VT (first capture)",
         "confidence": "DEFINITE",
-        "context": "inkconnect.ru /assets/index-CoeWw2zM.js — strong code-level operator IOC for Inkognito cluster",
+        "context": "inkconnect.ru /assets/index-CoeWw2zM.js, strong code-level operator IOC for Inkognito cluster",
         "action": "MONITOR"
       },
       {
@@ -181,7 +181,7 @@
         "type": "Inkognito INK VPN brand logo (hooded figure with eye-in-hood)",
         "vt_detections": "Not in VT (first capture)",
         "confidence": "DEFINITE",
-        "context": "inkconnect.ru /logo.png — visual brand IOC for Inkognito cluster; pivot opportunity via Censys/Shodan favicon search",
+        "context": "inkconnect.ru /logo.png, visual brand IOC for Inkognito cluster; pivot opportunity via Censys/Shodan favicon search",
         "action": "MONITOR"
       },
       {
@@ -257,8 +257,8 @@
         "purpose": "BellaMain panel + 7 phishing kits + CryptOne staging server",
         "asn": "AS216246 Aeza Group LLC (Russia)",
         "confidence": "DEFINITE",
-        "context": "Multi-tenant Aeza bulletproof IP — also hosts Cluster C historical loader, Cluster B brief co-tenancy, BriansClub, CRD Club, RedLine, SmokeLoader, Tofsee tenants",
-        "false_positive_risk": "Multi-tenant IP — connection alone is not cluster-attributable; cross-evidence with operator IOCs required",
+        "context": "Multi-tenant Aeza bulletproof IP, also hosts Cluster C historical loader, Cluster B brief co-tenancy, BriansClub, CRD Club, RedLine, SmokeLoader, Tofsee tenants",
+        "false_positive_risk": "Multi-tenant IP, connection alone is not cluster-attributable; cross-evidence with operator IOCs required",
         "action": "BLOCK"
       },
       {
@@ -338,7 +338,7 @@
       {
         "value": "00000xtrading.ru",
         "cluster": "B",
-        "purpose": "Inkognito operator EspoCRM back-office (May 2025 – Apr 2026); decommissioned via kittenx-404 tombstone",
+        "purpose": "Inkognito operator EspoCRM back-office (May 2025, Apr 2026); decommissioned via kittenx-404 tombstone",
         "confidence": "DEFINITE",
         "action": "BLOCK"
       },
@@ -368,14 +368,14 @@
       {
         "value": "fi1.inklens.co.uk",
         "cluster": "B",
-        "purpose": "Inkognito operator's CURRENT back-office (Apr 2026 – present)",
+        "purpose": "Inkognito operator's CURRENT back-office (Apr 2026, present)",
         "confidence": "DEFINITE",
         "action": "BLOCK"
       },
       {
         "value": "marzban.inklens.co.uk",
         "cluster": "B",
-        "purpose": "Marzban Xray/V2Ray VPN admin panel — operator's central node-management platform",
+        "purpose": "Marzban Xray/V2Ray VPN admin panel, operator's central node-management platform",
         "confidence": "DEFINITE",
         "action": "BLOCK"
       },
@@ -389,7 +389,7 @@
       {
         "value": "unloki.ru",
         "cluster": "B",
-        "purpose": "Long-term VPN brand front (Outline-based, 2023-08 – present)",
+        "purpose": "Long-term VPN brand front (Outline-based, 2023-08, present)",
         "infrastructure": "193.46.56.182 / Stark TR (since 2023-11)",
         "confidence": "DEFINITE",
         "action": "BLOCK"
@@ -404,7 +404,7 @@
       {
         "value": "vetcorbeanca.eu",
         "cluster": "B",
-        "purpose": "Operator BEC burn domain (2023-06-08 — earliest operator activity, Romanian veterinary clinic theme), 6-day apex burn",
+        "purpose": "Operator BEC burn domain (2023-06-08, earliest operator activity, Romanian veterinary clinic theme), 6-day apex burn",
         "confidence": "HIGH",
         "action": "BLOCK"
       },
@@ -464,14 +464,14 @@
       {
         "value": "https://79.133.180.168:3394/e6d92c6b5b2a03bee7fbab40/icng5os4.lwcci",
         "cluster": "C",
-        "purpose": "Rhadamanthys beacon URL (2026-04-03 — same panel ID, different terminal filename)",
+        "purpose": "Rhadamanthys beacon URL (2026-04-03, same panel ID, different terminal filename)",
         "confidence": "HIGH",
         "action": "BLOCK"
       },
       {
         "value": "https://79.133.180.168/forwarding/fwmjd8fs.mqi5u",
         "cluster": "C",
-        "purpose": "Alternate URL prefix (2026-03-09 — different URL scheme; possibly relay/forwarder endpoint or earlier Rhadamanthys URL scheme)",
+        "purpose": "Alternate URL prefix (2026-03-09, different URL scheme; possibly relay/forwarder endpoint or earlier Rhadamanthys URL scheme)",
         "confidence": "MODERATE",
         "action": "BLOCK"
       },
@@ -552,7 +552,7 @@
         "value_type": "REG_DWORD or REG_SZ (per-build varies)",
         "cluster": "C",
         "confidence": "HIGH",
-        "context": "Family-stable Rhadamanthys marker — observed across multiple sibling Stage-2 sandbox runs (Dapato dropper, bc9fe5e9..., e827d13c..., 457aecd8...). No known benign software writes this key. Per-instance value is license/build timestamp from MaaS panel.",
+        "context": "Family-stable Rhadamanthys marker, observed across multiple sibling Stage-2 sandbox runs (Dapato dropper, bc9fe5e9..., e827d13c..., 457aecd8...). No known benign software writes this key. Per-instance value is license/build timestamp from MaaS panel.",
         "action": "DETECT"
       }
     ],
@@ -579,7 +579,7 @@
         "name": ".frontb",
         "cluster": "C",
         "confidence": "DEFINITE",
-        "context": "Rhadamanthys family signature — pre-allocated empty runtime buffer for decrypted Stage-2 payload. Rare in legitimate software."
+        "context": "Rhadamanthys family signature, pre-allocated empty runtime buffer for decrypted Stage-2 payload. Rare in legitimate software."
       }
     ],
     "cipher_artifacts": [
@@ -589,7 +589,7 @@
         "cluster": "C",
         "location": ".rdata file_offset 0x0001c434 of Rhadamanthys Stage-2",
         "confidence": "HIGH",
-        "context": "CUSTOMER-SPECIFIC fingerprint — different MaaS customers presumably have different IVs. Highest-value per-customer detection IOC."
+        "context": "CUSTOMER-SPECIFIC fingerprint, different MaaS customers presumably have different IVs. Highest-value per-customer detection IOC."
       },
       {
         "type": "31-byte RC4 key",
@@ -604,7 +604,7 @@
         "value": "0x14744214",
         "cluster": "C",
         "confidence": "HIGH",
-        "context": "Operator-modified from stock Q3VM 0x12721444 (per amnesia.sh / Outpost24 prior art). Vendor-side detection primitive — useful YARA pattern for Rhadamanthys Stage-2 builds."
+        "context": "Operator-modified from stock Q3VM 0x12721444 (per amnesia.sh / Outpost24 prior art). Vendor-side detection primitive, useful YARA pattern for Rhadamanthys Stage-2 builds."
       }
     ],
     "operator_strings": [
@@ -617,7 +617,7 @@
       {
         "value": "Ahuh783bhASbsxAsiopJQAiwhhbchG&*#U897u*#&*473",
         "cluster": "C",
-        "context": "45-char operator credential — likely panel-auth or C2-auth token (highest-fidelity pivot)",
+        "context": "45-char operator credential, likely panel-auth or C2-auth token (highest-fidelity pivot)",
         "confidence": "HIGH"
       },
       {
@@ -642,7 +642,7 @@
       {
         "value": "AUJsgbSyhusW*(&w3rrkjfgSAGscG)",
         "cluster": "C",
-        "context": "Logged from FUN_00402400 (RC4 decryptor) — possibly key-related but distinct from actual RC4 key",
+        "context": "Logged from FUN_00402400 (RC4 decryptor), possibly key-related but distinct from actual RC4 key",
         "confidence": "HIGH"
       },
       {
@@ -692,21 +692,21 @@
         "type": "Google Site Verification",
         "value": "_Lq_FX-CDt3OmZqq5PNFfmQTZtLSHTNsVkViLTzpTwk",
         "cluster": "B",
-        "context": "inkconnect.ru — operator Google Search Console account #1",
+        "context": "inkconnect.ru, operator Google Search Console account #1",
         "confidence": "HIGH"
       },
       {
         "type": "Google Site Verification",
         "value": "xskfj4k4tX_-enfPvu9WrUiWauHFlbuVmyV7thcjwds",
         "cluster": "B",
-        "context": "inklens.ru — operator Google Search Console account #2",
+        "context": "inklens.ru, operator Google Search Console account #2",
         "confidence": "HIGH"
       },
       {
         "type": "Custom API auth header",
         "value": "X-Admin-Token",
         "cluster": "B",
-        "context": "CORS-allowed on api.inkconnect.ru — INK VPN backend custom auth",
+        "context": "CORS-allowed on api.inkconnect.ru, INK VPN backend custom auth",
         "confidence": "DEFINITE"
       }
     ]
@@ -759,7 +759,7 @@
       "type": "Customer support channel",
       "value": "@inkconnectvpn",
       "cluster": "B",
-      "context": "Public-facing Inkognito customer support channel — 797 subscribers, first post 2026-03-18; tagline 'Надежный VPN от Inkognito! Видь то что скрыто, оставаясь в тумане войны!'",
+      "context": "Public-facing Inkognito customer support channel, 797 subscribers, first post 2026-03-18; tagline 'Надежный VPN от Inkognito! Видь то что скрыто, оставаясь в тумане войны!'",
       "confidence": "DEFINITE"
     }
   ],
@@ -768,7 +768,7 @@
       "type": "Rhadamanthys customer panel ID",
       "value": "e6d92c6b5b2a03bee7fbab40",
       "cluster": "C",
-      "context": "24-hex-char stable identifier — observed across 4/3/2026 + 5/13/2026 beacons; POSSIBLY customer-specific (LOW direct evidence per §23.13.2; MODERATE indirect inference from per-build SibCode\\sn timestamp variation)",
+      "context": "24-hex-char stable identifier, observed across 4/3/2026 + 5/13/2026 beacons; POSSIBLY customer-specific (LOW direct evidence per §23.13.2; MODERATE indirect inference from per-build SibCode\\sn timestamp variation)",
       "confidence": "HIGH"
     }
   ],

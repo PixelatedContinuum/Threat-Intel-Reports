@@ -9,13 +9,13 @@
       "Penguish",
       "Rugmi"
     ],
-    "final_stealer_family": "AsyncRAT-class .NET RAT (AsyncRAT / zgRAT / DCRat — variant inconclusive)",
+    "final_stealer_family": "AsyncRAT-class .NET RAT (AsyncRAT / zgRAT / DCRat, variant inconclusive)",
     "report_date": "2026-05-06",
     "analyst": "The Hunters Ledger",
     "confidence_overall": "HIGH",
     "tlp": "WHITE",
     "confidence_note": "Confidence levels: HIGH (strong evidence with minor gaps), MODERATE (notable gaps), LOW (weak evidence). DEFINITE for direct evidence with no ambiguity.",
-    "perspective": "Third-party threat intelligence — IOC feed for ingestion into SIEM/EDR/perimeter blocklists"
+    "perspective": "Third-party threat intelligence, IOC feed for ingestion into SIEM/EDR/perimeter blocklists"
   },
   "file_hashes": {
     "sha256": [
@@ -35,20 +35,20 @@
         "value": "44f009ca786bc541cda11c61bab7b272e96ce9e3d656c10bdac2e126f3a9cc35",
         "filename": "CrystSupervisor32.exe",
         "confidence": "HIGH",
-        "context": "Genuine signed Wondershare SlideShowEditor.exe (renamed); side-load HOST. CAMPAIGN-SPECIFIC USE; same hash exists in legit Wondershare distribution. DO NOT add to generic blocklists — flag only when found in operator drop paths"
+        "context": "Genuine signed Wondershare SlideShowEditor.exe (renamed); side-load HOST. CAMPAIGN-SPECIFIC USE; same hash exists in legit Wondershare distribution. DO NOT add to generic blocklists, flag only when found in operator drop paths"
       },
       {
         "value": "c085a724a067eec46d9a2c1eeae3cc04db33b9840f5c33eb87cc3027e12a6bcd",
         "filename": "WVault.exe",
         "confidence": "HIGH",
         "context": "Renamed Qihoo 360 PromoUtil.exe; runtime drop, hollow target for .NET RAT injection. CAMPAIGN-SPECIFIC USE; binary itself is legit-signed. Flag presence of orphan WVault.exe with .NET CLR threads",
-        "false_positive_risk": "Hash is legitimate Qihoo 360 product — only flag when dropped to non-standard paths (C:\\ProgramData\\WVault.exe)"
+        "false_positive_risk": "Hash is legitimate Qihoo 360 product, only flag when dropped to non-standard paths (C:\\ProgramData\\WVault.exe)"
       },
       {
         "value": "c2e62475768c9546efe1da92a55f3bb2a55350eed83241139917aabd1ad25f8a",
         "filename": "Crisp.exe",
         "confidence": "HIGH",
-        "context": "Genuine Crisp Squirrel paulb StubExecutable; persistence-establishing binary that drops watchermgmt.job. CAMPAIGN-SPECIFIC USE — flag when found in %APPDATA%\\adv_ctrl\\"
+        "context": "Genuine Crisp Squirrel paulb StubExecutable; persistence-establishing binary that drops watchermgmt.job. CAMPAIGN-SPECIFIC USE, flag when found in %APPDATA%\\adv_ctrl\\"
       },
       {
         "value": "a3d0a9c71be732cdaafc7c1a9ef00c2a5a01e93b4a29c8944f8ea14a79f52ce0",
@@ -270,7 +270,7 @@
         "value": "a1cc69dfb1350f4c9fe1a9ef24c27fd2d72eea9407457c472fbb98c49aa6b6b9",
         "filename": "Excel_2016_Windows.bat",
         "confidence": "HIGH",
-        "context": "Macro security disable BAT — sets Office VBAWarnings=1"
+        "context": "Macro security disable BAT, sets Office VBAWarnings=1"
       },
       {
         "value": "e3a777326a9a1a91d3224b90683642db22d2b7143dd21985200b9ac3ad2afc05",
@@ -364,7 +364,7 @@
         "value": "051ba42fa7a26bf65df9922daa07c458",
         "filename": "CrystSupervisor32.exe",
         "confidence": "HIGH",
-        "context": "IMPHASH; matches genuine Wondershare SlideShowEditor.exe — only flag with context"
+        "context": "IMPHASH; matches genuine Wondershare SlideShowEditor.exe, only flag with context"
       },
       {
         "value": "921f3ea587ffbd647ff4d520165ecd50",
@@ -413,12 +413,12 @@
       {
         "name": "watchermgmt.job",
         "confidence": "HIGH",
-        "context": "Persistence — legacy .job file in C:\\Windows\\Tasks\\"
+        "context": "Persistence, legacy .job file in C:\\Windows\\Tasks\\"
       },
       {
         "name": "watchermgmt",
         "confidence": "HIGH",
-        "context": "Persistence — XML-format migrated task in C:\\Windows\\System32\\Tasks\\"
+        "context": "Persistence, XML-format migrated task in C:\\Windows\\System32\\Tasks\\"
       },
       {
         "name": "cytotoxin.exe",
@@ -428,7 +428,7 @@
       {
         "name": "Apophyge",
         "confidence": "HIGH",
-        "context": "Inno Setup AppName operator codename — distinctive (architectural term, eclectic vocabulary signal)"
+        "context": "Inno Setup AppName operator codename, distinctive (architectural term, eclectic vocabulary signal)"
       },
       {
         "name": "Veteran",
@@ -490,13 +490,13 @@
         "path": "C:\\Users\\*\\AppData\\Local\\Temp\\????????.tmp",
         "confidence": "MODERATE",
         "context": "Encrypted payload pattern (8-hex-char tmp files referenced by per-host random env vars)",
-        "false_positive_risk": "Generic %TEMP% .tmp pattern is broad — pair with env var names of length 8-16"
+        "false_positive_risk": "Generic %TEMP% .tmp pattern is broad. Pair with env var names of length 8-16"
       },
       {
         "value": "C:\\Windows\\Tasks\\watchermgmt.job",
         "path": "C:\\Windows\\Tasks\\watchermgmt.job",
         "confidence": "HIGH",
-        "context": "Legacy .job persistence — autorunsc blind spot"
+        "context": "Legacy .job persistence, autorunsc blind spot"
       },
       {
         "value": "C:\\Windows\\System32\\Tasks\\watchermgmt",
@@ -557,7 +557,7 @@
         "asn": "AS7203",
         "asn_org": "Leaseweb USA",
         "country": "US",
-        "false_positive_risk": "Likely victim/3rd-party — DO NOT block at perimeter without further verification"
+        "false_positive_risk": "Likely victim/3rd-party. DO NOT block at perimeter without further verification"
       }
     ],
     "domains": [
@@ -597,22 +597,22 @@
       {
         "url": "http://109.120.137.6/PUTTY.exe",
         "confidence": "HIGH",
-        "context": "Second-stage payload — invoked by embedded shell-redirect commands containing post-fetch -OutFile and ren/del operations"
+        "context": "Second-stage payload, invoked by embedded shell-redirect commands containing post-fetch -OutFile and ren/del operations"
       },
       {
         "url": "https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty.exe",
         "confidence": "HIGH",
-        "context": "Mega.io payload — Tier-1 MSC chain"
+        "context": "Mega.io payload, Tier-1 MSC chain"
       },
       {
         "url": "https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty2.exe",
         "confidence": "HIGH",
-        "context": "Mega.io payload — Price-themed (Price5.docm, Price6.doc, Price4.xls)"
+        "context": "Mega.io payload, Price-themed (Price5.docm, Price6.doc, Price4.xls)"
       },
       {
         "url": "https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/Bravo/vida/NGZTDICF.exe",
         "confidence": "HIGH",
-        "context": "Mega.io payload — NDA-themed (NDA.doc); 'Bravo/vida' is operator NDA campaign codename"
+        "context": "Mega.io payload, NDA-themed (NDA.doc); 'Bravo/vida' is operator NDA campaign codename"
       },
       {
         "url": "http://80.253.249.186:5504/BugSplat.dll",
@@ -670,7 +670,7 @@
         "value": "\\\\onedrive.to\\DavWWWRoot\\Carriers\\",
         "unc": "\\\\onedrive.to\\DavWWWRoot\\Carriers\\",
         "confidence": "HIGH",
-        "context": "WebDAV path — primary distribution"
+        "context": "WebDAV path, primary distribution"
       },
       {
         "value": "\\\\onedrive.to\\DavWWWRoot\\Carriers\\putty.exe",
@@ -779,7 +779,7 @@
         "value_data": "*",
         "value_type": "REG_SZ",
         "confidence": "HIGH",
-        "context": "Inno Setup AppId GUID post-install marker — campaign IOC"
+        "context": "Inno Setup AppId GUID post-install marker, campaign IOC"
       },
       {
         "value": "HKCU\\Software\\Microsoft\\Office\\1[6,9].0\\Word\\Security",
@@ -885,17 +885,17 @@
       {
         "pattern": "Process accessing C:\\Windows\\Tasks\\*.job (file create) from non-system-installer parent",
         "confidence": "HIGH",
-        "context": "Legacy .job persistence — autorunsc blind spot"
+        "context": "Legacy .job persistence, autorunsc blind spot"
       },
       {
         "pattern": "Process delete-then-rewrite pattern on %TEMP%\\<8hex>.tmp via SetDispositionInformationEx (FILE_DISPOSITION_DELETE + POSIX_SEMANTICS)",
         "confidence": "MODERATE",
-        "context": "Anti-forensics — wipe + restore to clear forensic file IDs OR state-reset between stages"
+        "context": "Anti-forensics, wipe + restore to clear forensic file IDs OR state-reset between stages"
       },
       {
         "pattern": "Multiple Wondershare DLLs (BugSplat.dll, COMSupport.dll, DBGHelp.dll, NLEService.dll, NLETransitionMgr.dll, WS_ImageProc.dll, WS_Log.dll, WsBurn.dll, WSUtilities.dll, DVDSetting.dll, NLEResource.dll) co-located with networkspec17.log AND shadermgr93.rc in %TEMP%\\is-*.tmp\\",
         "confidence": "HIGH",
-        "context": "Bundle-format detection — pure decoy DLLs surrounding operator artifacts"
+        "context": "Bundle-format detection, pure decoy DLLs surrounding operator artifacts"
       }
     ],
     "ttp_clusters": [
@@ -945,7 +945,7 @@
     {
       "type": "operator_codename",
       "value": "Apophyge",
-      "context": "Inno Setup AppName — architectural term for column-base curve; eclectic vocabulary signal"
+      "context": "Inno Setup AppName, architectural term for column-base curve; eclectic vocabulary signal"
     },
     {
       "type": "operator_codename",
@@ -975,7 +975,7 @@
     {
       "type": "operator_codename",
       "value": "busket",
-      "context": "Mega.io subdir typo of 'bucket' — language tell"
+      "context": "Mega.io subdir typo of 'bucket', language tell"
     },
     {
       "type": "language_signal",
@@ -1009,7 +1009,7 @@
     }
   ],
   "known_legitimate_DO_NOT_BLOCKLIST": {
-    "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists — flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations.",
+    "context": "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations.",
     "wondershare_dlls": [
       {
         "hash": "44f009ca786bc541cda11c61bab7b272e96ce9e3d656c10bdac2e126f3a9cc35",
@@ -1091,7 +1091,7 @@
     {
       "value": "s3.g.s4.mega.io",
       "category": "file hosting endpoint",
-      "context": "Mega.io abuse — operator bucket aileqac3yep7oqdhygjpberqqnk2zrnhck2lx; subdir 'busket' (typo); hosts putty.exe, putty2.exe, Bravo/vida/NGZTDICF.exe; VT 13/60 malicious"
+      "context": "Mega.io abuse, operator bucket aileqac3yep7oqdhygjpberqqnk2zrnhck2lx; subdir 'busket' (typo); hosts putty.exe, putty2.exe, Bravo/vida/NGZTDICF.exe; VT 13/60 malicious"
     },
     {
       "value": "g.s4.mega.io",

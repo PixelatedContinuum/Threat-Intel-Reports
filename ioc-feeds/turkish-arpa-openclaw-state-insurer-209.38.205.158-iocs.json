@@ -116,8 +116,8 @@
         "filename": "SOUL.md",
         "type": "sha256",
         "confidence": "MODERATE",
-        "context": "Default Hermes / OpenClaw persona template — ecosystem-presence indicator; NOT unique to this operator",
-        "false_positive_risk": "MEDIUM — present on legitimate OpenClaw / Hermes developer environments per parent Phase 1-2 cluster"
+        "context": "Default Hermes / OpenClaw persona template, ecosystem-presence indicator; NOT unique to this operator",
+        "false_positive_risk": "MEDIUM, present on legitimate OpenClaw / Hermes developer environments per parent Phase 1-2 cluster"
       }
     ]
   },
@@ -131,17 +131,17 @@
         "first_seen": "2026-03-14",
         "last_seen": "2026-05-24",
         "action": "BLOCK",
-        "false_positive_risk": "NONE — confirmed operator-owned infrastructure"
+        "false_positive_risk": "NONE, confirmed operator-owned infrastructure"
       },
       {
         "value": "31.223.97.87",
         "type": "ipv4",
         "confidence": "HIGH",
-        "context": "Operator interactive source IP — TurkNet AS12735 residential/SMB Turkish ISP; captured 2026-05-20 21:22-21:30 UTC = 00:22-00:30 local Turkish time; 0/91 VT clean",
+        "context": "Operator interactive source IP, TurkNet AS12735 residential/SMB Turkish ISP; captured 2026-05-20 21:22-21:30 UTC = 00:22-00:30 local Turkish time; 0/91 VT clean",
         "first_seen": "2026-05-20",
         "last_seen": "2026-05-20",
         "action": "MONITOR (attribution)",
-        "false_positive_risk": "MEDIUM — TurkNet residential / SMB IPs can be NAT-shared; do NOT preemptively block, attribution-only context; Turkish law enforcement subpoena target for subscriber identification"
+        "false_positive_risk": "MEDIUM, TurkNet residential / SMB IPs can be NAT-shared; do NOT preemptively block, attribution-only context; Turkish law enforcement subpoena target for subscriber identification"
       }
     ],
     "domains": [
@@ -149,9 +149,9 @@
         "value": "openclaw.ai",
         "type": "domain",
         "confidence": "HIGH",
-        "context": "OpenClaw distribution domain — operator framework provider; ecosystem watch for related operators using same framework",
+        "context": "OpenClaw distribution domain, operator framework provider; ecosystem watch for related operators using same framework",
         "action": "MONITOR",
-        "false_positive_risk": "MEDIUM — also legitimately used by OpenClaw developers"
+        "false_positive_risk": "MEDIUM, also legitimately used by OpenClaw developers"
       },
       {
         "value": "docs.openclaw.ai",
@@ -173,9 +173,9 @@
         "value": "skillhub-1388575217.cos.ap-guangzhou.myqcloud.com",
         "type": "domain",
         "confidence": "HIGH",
-        "context": "Tencent COS bucket — OpenClaw shared skill marketplace; egress from non-developer environments is OpenClaw-presence signal",
+        "context": "Tencent COS bucket, OpenClaw shared skill marketplace; egress from non-developer environments is OpenClaw-presence signal",
         "action": "MONITOR",
-        "false_positive_risk": "MEDIUM — legitimate Tencent Cloud Object Storage bucket; also used by OpenClaw developers"
+        "false_positive_risk": "MEDIUM, legitimate Tencent Cloud Object Storage bucket; also used by OpenClaw developers"
       }
     ],
     "urls": [
@@ -207,7 +207,7 @@
         "value": "https://github.com/MehmetARPA/ARPA",
         "type": "url",
         "confidence": "DEFINITE",
-        "context": "Operator public GitHub repository; same project codename as embedded in operator code; identity artifact. Account suspended by GitHub T&S 2026-05-25 — URL now returns HTTP 404; preserve as evidence IOC",
+        "context": "Operator public GitHub repository; same project codename as embedded in operator code; identity artifact. Account suspended by GitHub T&S 2026-05-25, URL now returns HTTP 404; preserve as evidence IOC",
         "action": "MONITOR",
         "false_positive_risk": "NONE"
       }
@@ -221,7 +221,7 @@
         "confidence": "MODERATE",
         "context": "Operator residential ISP for source IP 31.223.97.87; attribution-only context",
         "action": "MONITOR (attribution only)",
-        "false_positive_risk": "HIGH — legitimate Turkish consumer ISP serving millions; do NOT use for blocking"
+        "false_positive_risk": "HIGH, legitimate Turkish consumer ISP serving millions; do NOT use for blocking"
       }
     ]
   },
@@ -371,7 +371,7 @@
         "type": "filename_markdown",
         "confidence": "DEFINITE",
         "context": "Hermes/OpenClaw agent persona file; presence at user home dir + co-located offensive tooling is the discriminator",
-        "false_positive_risk": "MEDIUM — also present on legitimate Hermes / OpenClaw developer environments"
+        "false_positive_risk": "MEDIUM, also present on legitimate Hermes / OpenClaw developer environments"
       },
       {
         "value": "IDENTITY.md",
@@ -429,7 +429,7 @@
         "type": "filepath_home_dir",
         "confidence": "DEFINITE",
         "context": "OpenClaw runtime + skills installation path",
-        "false_positive_risk": "MEDIUM — present on legitimate OpenClaw developer environments; discriminator is co-located offensive tooling"
+        "false_positive_risk": "MEDIUM, present on legitimate OpenClaw developer environments; discriminator is co-located offensive tooling"
       },
       {
         "value": "~/.skillhub/",
@@ -452,7 +452,7 @@
         "type": "filename_markdown",
         "confidence": "DEFINITE",
         "context": "Operator-authored Turkish-language insider PuTTY reverse-tunnel setup; insider-recruitment artifact",
-        "false_positive_risk": "NONE — operator-distinctive Turkish filename pattern"
+        "false_positive_risk": "NONE, operator-distinctive Turkish filename pattern"
       },
       {
         "value": "TUNNEL_RESTART.md",
@@ -521,21 +521,21 @@
         "value": "INSTANA_API_TEST.md",
         "type": "filename_markdown",
         "confidence": "DEFINITE",
-        "context": "Operator-authored Turkish ops note — cleartext apiToken + internal IP + curl commands",
+        "context": "Operator-authored Turkish ops note, cleartext apiToken + internal IP + curl commands",
         "false_positive_risk": "NONE"
       },
       {
         "value": "INSTANA_INTEGRATION_SUMMARY.md",
         "type": "filename_markdown",
         "confidence": "DEFINITE",
-        "context": "Operator-authored Turkish ops note — references public GitHub repo MehmetARPA/ARPA",
+        "context": "Operator-authored Turkish ops note, references public GitHub repo MehmetARPA/ARPA",
         "false_positive_risk": "NONE"
       },
       {
         "value": "INSTANA_PORT_TEST.md",
         "type": "filename_markdown",
         "confidence": "DEFINITE",
-        "context": "Operator-authored ops note — port-scanning notes for Instana endpoint",
+        "context": "Operator-authored ops note, port-scanning notes for Instana endpoint",
         "false_positive_risk": "NONE"
       }
     ],
@@ -575,7 +575,7 @@
         "type": "putty_session_profile_name",
         "confidence": "DEFINITE",
         "context": "Operator-supplied PuTTY saved-session name for insider's reverse-tunnel configuration",
-        "false_positive_risk": "NONE — distinctive operator-self-branded session name"
+        "false_positive_risk": "NONE, distinctive operator-self-branded session name"
       }
     ]
   },
@@ -603,13 +603,13 @@
         "type": "operator_branding_string",
         "confidence": "DEFINITE",
         "context": "Operator self-branded project name (Turkish: ARPA Correlation Engine); appears in correlation_v3.py docstring + ARPA dashboard footer",
-        "false_positive_risk": "LOW — Turkish phrase combining proper noun ARPA with Correlation Engine; unlikely collision with legitimate software"
+        "false_positive_risk": "LOW, Turkish phrase combining proper noun ARPA with Correlation Engine; unlikely collision with legitimate software"
       },
       {
         "value": "ARPA © 2026 the victim organization | Read-Only Compliance | Mock Data: ❌",
         "type": "dashboard_footer_string",
         "confidence": "DEFINITE",
-        "context": "ARPA dashboard footer text verbatim — fingerprint string for the operator's dashboard",
+        "context": "ARPA dashboard footer text verbatim, fingerprint string for the operator's dashboard",
         "false_positive_risk": "NONE"
       }
     ],
@@ -632,8 +632,8 @@
         "value": "print('✅ API endpoints added')",
         "type": "python_statement",
         "confidence": "DEFINITE",
-        "context": "Operator emoji-in-output bleed in add_corr_endpoints.py — AI-Generated Code Signature sub-pattern 9",
-        "false_positive_risk": "LOW — emoji print in Python is uncommon outside AI-generated code"
+        "context": "Operator emoji-in-output bleed in add_corr_endpoints.py, AI-Generated Code Signature sub-pattern 9",
+        "false_positive_risk": "LOW, emoji print in Python is uncommon outside AI-generated code"
       },
       {
         "value": "print('=== SON 5 KORELASYON ===')",
@@ -679,7 +679,7 @@
         "type": "temporal_pattern",
         "confidence": "HIGH",
         "context": "Operator interactive dashboard navigation captured in server_v3_chain_0520_2121.log; 00:22-00:30 local Turkish time (late-evening / overnight Turkish working hours)",
-        "false_positive_risk": "N/A — temporal attribution context"
+        "false_positive_risk": "N/A, temporal attribution context"
       }
     ]
   }

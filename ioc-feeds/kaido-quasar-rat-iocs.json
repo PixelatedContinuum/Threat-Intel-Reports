@@ -8,7 +8,7 @@
     "tlp": "CLEAR",
     "campaign_slug": "evilsoul-engine-stealer-maas-144-172-103-98",
     "report_slug": "kaido-quasar-rat-144-172-109-203",
-    "operator": "n_3_xl / @govbrasil / KAIDO (0xK41), Brazil — HIGH (named actor, no UTA)",
+    "operator": "n_3_xl / @govbrasil / KAIDO (0xK41), Brazil, HIGH (named actor, no UTA)",
     "note": "KAIDO Quasar-fork RAT product line (Report A). Companion feed: evilsoul-engine-stealer-maas-iocs.json (EvilSoul-Engine stealer-builder ecosystem, same operator). Credential-type indicators defanged to first-8 + last-4 per project rule; full values held in local investigation Evidence only."
   },
   "file_hashes": {
@@ -28,18 +28,18 @@
   "network_indicators": {
     "ipv4": [
       {"value": "144.172.109.203", "port": 4782, "confidence": "DEFINITE", "action": "BLOCK", "context": "Live KAIDO Quasar RAT C2, AS14956 RouterHosting US; :8443 TeamKAIDO cert; :4782 Quasar protocol", "purpose": "C2"},
-      {"value": "179.43.150.50", "confidence": "MODERATE", "action": "MONITOR", "context": "Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only — do not probe", "purpose": "C2 fronting host"}
+      {"value": "179.43.150.50", "confidence": "MODERATE", "action": "MONITOR", "context": "Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only. Do not probe", "purpose": "C2 fronting host"}
     ],
     "ipv6": [],
     "domains": [
       {"value": "kaidoo.com.br", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT primary C2 (port 4782); DNS confirmed in contained detonation"},
       {"value": "c2.kaidoo.com.br", "confidence": "DEFINITE", "action": "BLOCK", "context": "KAIDO Quasar RAT secondary C2 (port 443)"},
       {"value": "www.kaidoo.com.br", "confidence": "HIGH", "action": "BLOCK", "context": "KAIDO brand domain"},
-      {"value": "choix-relay.com", "confidence": "LOW", "action": "MONITOR", "context": "French 'choix' domain co-resident on the Swiss KAIDO host (179.43.150.50); possible parallel phishing line — MODERATE-LOW"}
+      {"value": "choix-relay.com", "confidence": "LOW", "action": "MONITOR", "context": "French 'choix' domain co-resident on the Swiss KAIDO host (179.43.150.50); possible parallel phishing line, MODERATE-LOW"}
     ],
     "urls": [],
     "tls_certificates": [
-      {"value": "C7DC584B7C6C5C6322D2E20C0475443C7169207E0114C2D05362920AA2A1F692", "type": "sha256", "confidence": "HIGH", "context": "KAIDO C2 cert on 144.172.109.203:8443 — CN=kaido-c2, Issuer O=TeamKAIDO; JA4X bbd6cc0fca29_bbd6cc0fca29_795797892f9c; best fleet-enumeration pivot"}
+      {"value": "C7DC584B7C6C5C6322D2E20C0475443C7169207E0114C2D05362920AA2A1F692", "type": "sha256", "confidence": "HIGH", "context": "KAIDO C2 cert on 144.172.109.203:8443, CN=kaido-c2, Issuer O=TeamKAIDO; JA4X bbd6cc0fca29_bbd6cc0fca29_795797892f9c; best fleet-enumeration pivot"}
     ]
   },
   "host_indicators": {
@@ -56,7 +56,7 @@
   },
   "detection_anchor_strings": {
     "kaido_rat": [
-      {"value": "Kaido.Common.Messages", "confidence": "HIGH", "context": "Namespace root — survives obfuscation"},
+      {"value": "Kaido.Common.Messages", "confidence": "HIGH", "context": "Namespace root, survives obfuscation"},
       {"value": "Kaido.Client.Helper.HVNC.ProcessController", "confidence": "HIGH", "context": "HVNC launcher class"},
       {"value": "costura.kaido.common.dll", "confidence": "HIGH", "context": "Costura embedded asset name"},
       {"value": "Default_runhost", "confidence": "DEFINITE", "context": "HVNC hidden-desktop literal"},

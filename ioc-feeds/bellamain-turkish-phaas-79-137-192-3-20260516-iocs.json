@@ -14,7 +14,7 @@
       "Full PHP source code recovered from open-directory at 79.137.192.3 (Aeza Group, Moscow, AS216246).",
       "BellaMain.zip (panel) was novel to VirusTotal at time of analysis (first public disclosure).",
       "Hardcoded canary Telegram bot token 6797512084:AAGbJVoC* is REVOKED (Telegram returned 401 Unauthorized on getMe prior to publication). Token value retained as historical IOC for hunting on stored copies of older kit RARs.",
-      "All operator domains are 0/92 detection on VirusTotal as of 2026-05-07 — defenders should not rely on AV verdicts for this campaign."
+      "All operator domains are 0/92 detection on VirusTotal as of 2026-05-07, defenders should not rely on AV verdicts for this campaign."
     ]
   },
   "file_hashes": {
@@ -40,7 +40,7 @@
       {
         "value": "f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88",
         "filename": "BellaMain.zip",
-        "purpose": "PhaaS panel backend — 65 PHP files + 14 directories; first public disclosure",
+        "purpose": "PhaaS panel backend, 65 PHP files + 14 directories; first public disclosure",
         "size_bytes": 19244108,
         "entropy_overall": 7.9998,
         "vt_status": "Not in VirusTotal at 2026-05-07",
@@ -151,7 +151,7 @@
         "value": "AS216246",
         "owner": "Aeza Group LLC",
         "country": "RU",
-        "purpose": "Current announcement of 79.137.192.3 — bulletproof Russian hoster",
+        "purpose": "Current announcement of 79.137.192.3, bulletproof Russian hoster",
         "confidence": "DEFINITE",
         "action": "MONITOR"
       },
@@ -179,7 +179,7 @@
         "purpose": "Listed as evotoptan/ subdirectory on BellaMain server. Briefly resolved to 79.137.192.3 on 2026-03-31 (22-minute window). Now Namecheap shared (68.65.121.242)",
         "confidence": "MODERATE",
         "action": "MONITOR",
-        "false_positive_risk": "MEDIUM (Namecheap shared hosting hosts many unrelated sites — combine with kit landing-page URL pattern)"
+        "false_positive_risk": "MEDIUM (Namecheap shared hosting hosts many unrelated sites, combine with kit landing-page URL pattern)"
       }
     ],
     "urls": [
@@ -203,7 +203,7 @@
       },
       {
         "value": "https://79.137.192.3/no/",
-        "purpose": "Card phishing SPA lure (LIVE) — hash routes #kart, #avantajlar, #sss",
+        "purpose": "Card phishing SPA lure (LIVE), hash routes #kart, #avantajlar, #sss",
         "confidence": "DEFINITE",
         "action": "BLOCK"
       },
@@ -215,17 +215,17 @@
       },
       {
         "value": "https://www.usom.gov.tr/url-list.txt",
-        "purpose": "USOM blocklist endpoint polled by panel usmcheck.php — operator-side outbound call",
+        "purpose": "USOM blocklist endpoint polled by panel usmcheck.php, operator-side outbound call",
         "confidence": "DEFINITE",
         "action": "MONITOR",
-        "false_positive_risk": "HIGH — this is a legitimate Turkish CERT URL; legitimate security tools also fetch it. Detection value is in seeing this fetch FROM a non-Turkish-CERT-affiliated PHP host."
+        "false_positive_risk": "HIGH. This is a legitimate Turkish CERT URL; legitimate security tools also fetch it. Detection value is in seeing this fetch FROM a non-Turkish-CERT-affiliated PHP host."
       },
       {
         "value": "https://api.binance.com/api/v3/ticker/price?symbol=TRXTRY",
         "purpose": "Live TRX/TRY rate query in BellaMain cekimbot.php for payout calculation",
         "confidence": "DEFINITE",
         "action": "MONITOR",
-        "false_positive_risk": "HIGH — legitimate crypto applications also query Binance API. Detection value is operator-side context."
+        "false_positive_risk": "HIGH, legitimate crypto applications also query Binance API. Detection value is operator-side context."
       }
     ],
     "email_addresses": [
@@ -243,19 +243,19 @@
     "file_paths": [
       {
         "value": "BellaMain/V5VgjLU0jsDe/",
-        "purpose": "Obfuscated 12-char admin directory inside the BellaMain panel — strongest deployment fingerprint",
+        "purpose": "Obfuscated 12-char admin directory inside the BellaMain panel, strongest deployment fingerprint",
         "confidence": "DEFINITE",
         "action": "HUNT"
       },
       {
         "value": "BellaMain/V5VgjLU0jsDe/manager.php",
-        "purpose": "BellaMain admin Telegram bot webhook — 12-command set including /yedek, /usom, /hesapsil, /kartsil, /girislogsil, /bloke, /aktif",
+        "purpose": "BellaMain admin Telegram bot webhook, 12-command set including /yedek, /usom, /hesapsil, /kartsil, /girislogsil, /bloke, /aktif",
         "confidence": "DEFINITE",
         "action": "HUNT"
       },
       {
         "value": "BellaMain/V5VgjLU0jsDe/backup.php",
-        "purpose": "MySQL backup-as-exfil script — invokes mysqldump with plaintext password on command line",
+        "purpose": "MySQL backup-as-exfil script, invokes mysqldump with plaintext password on command line",
         "confidence": "DEFINITE",
         "action": "HUNT"
       },
@@ -267,13 +267,13 @@
       },
       {
         "value": "BellaMain/V5VgjLU0jsDe/cekimbot.php",
-        "purpose": "Withdrawal-approval Telegram webhook — hardcodes authorized approver UIDs and TRXTRY Binance lookup",
+        "purpose": "Withdrawal-approval Telegram webhook, hardcodes authorized approver UIDs and TRXTRY Binance lookup",
         "confidence": "DEFINITE",
         "action": "HUNT"
       },
       {
         "value": "BellaMain/database/fonk.php",
-        "purpose": "Utility file containing sifreleWadanz / sifrecozWadanz helper functions — strongest code-author pivot",
+        "purpose": "Utility file containing sifreleWadanz / sifrecozWadanz helper functions, strongest code-author pivot",
         "confidence": "DEFINITE",
         "action": "HUNT"
       }
@@ -287,7 +287,7 @@
     {
       "type": "bot_token",
       "value": "6797512084:AAGbJVoC0zcKWYPbFG8oc_bACPn6gUEye_E",
-      "purpose": "Anti-researcher canary token — hardcoded in all 6 kit girislog.php files plus panel dashboard.php",
+      "purpose": "Anti-researcher canary token, hardcoded in all 6 kit girislog.php files plus panel dashboard.php",
       "status": "REVOKED (Telegram returned 401 Unauthorized on getMe prior to publication)",
       "confidence": "DEFINITE",
       "action": "HUNT (historical artifact value)"
@@ -323,7 +323,7 @@
     {
       "type": "username",
       "value": "@AresRS34",
-      "purpose": "Operator alias in anti-researcher canary string (kit girislog.php) — corresponds to real privacy-restricted Telegram user",
+      "purpose": "Operator alias in anti-researcher canary string (kit girislog.php), corresponds to real privacy-restricted Telegram user",
       "confidence": "HIGH",
       "action": "HUNT"
     }
@@ -346,7 +346,7 @@
     {
       "type": "mysql_database_name",
       "value": "jakartaxdw",
-      "context": "Hardcoded in BellaMain panel config.php and connect.php plus every kit's database/connect.php — proves co-deployment design",
+      "context": "Hardcoded in BellaMain panel config.php and connect.php plus every kit's database/connect.php, proves co-deployment design",
       "confidence": "DEFINITE"
     },
     {
@@ -358,7 +358,7 @@
     {
       "type": "mysql_password",
       "value": "W!@25#8Tb2gxq15",
-      "context": "Same as above — appears literally in 8 separate PHP files",
+      "context": "Same as above, appears literally in 8 separate PHP files",
       "confidence": "DEFINITE"
     },
     {
@@ -376,7 +376,7 @@
     {
       "type": "gtm_container",
       "value": "GTM-K7F5T5N",
-      "context": "Google Tag Manager container ID embedded in every kit page — may be operator-controlled OR a hijacked container from a compromised legitimate site",
+      "context": "Google Tag Manager container ID embedded in every kit page, may be operator-controlled OR a hijacked container from a compromised legitimate site",
       "confidence": "HIGH"
     }
   ],

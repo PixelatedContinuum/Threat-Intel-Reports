@@ -4,10 +4,10 @@
     "report_date": "2026-03-01",
     "malware_name": "Sliver C2 with ScareCrow Loader",
     "malware_family": "Sliver C2 + ScareCrow EDR Evasion Kit",
-    "analysis_source": "Exposed open directory at 45.94.31.220 — attacker build workspace forensics",
+    "analysis_source": "Exposed open directory at 45.94.31.220, attacker build workspace forensics",
     "analyst": "The Hunters Ledger",
     "tlp": "WHITE",
-    "confidence_overview": "HIGH — Direct analysis of recovered attacker build artifacts, source code, compiled binaries, and operational logs",
+    "confidence_overview": "HIGH, Direct analysis of recovered attacker build artifacts, source code, compiled binaries, and operational logs",
     "confidence_note": "DEFINITE indicators are from hardcoded values, recovered source code, or binary analysis; HIGH indicators are inferred from code logic with strong supporting evidence; MODERATE indicators involve assumptions not directly confirmed in execution; canary indicators are explicitly noted as non-malicious",
     "ioc_count_summary": {
       "file_hashes_md5": 2,
@@ -99,7 +99,7 @@
         "value": "45.94.31.220",
         "confidence": "HIGH",
         "description": "C2 server, payload delivery server, attacker build workspace",
-        "context": "Primary infrastructure. Hosts: (1) Sliver C2 listeners on ports 443, 8443; (2) HTTP payload delivery server on port 8000; (3) build server running automated build pipeline. All attacker functions centralized on single IP — significant operational risk but simplifies detection.",
+        "context": "Primary infrastructure. Hosts: (1) Sliver C2 listeners on ports 443, 8443; (2) HTTP payload delivery server on port 8000; (3) build server running automated build pipeline. All attacker functions centralized on single IP, significant operational risk but simplifies detection.",
         "purpose": "C2 callbacks, stager payload delivery, attacker workspace",
         "ports": [
           443,
@@ -110,7 +110,7 @@
         "asn_verification_note": "AS210558 confirmed from Krebs on Security / DOJ Operation Talent reporting; should be verified against current RIPE NCC data",
         "hosting_provider": "1337 Services GmbH",
         "country": "Netherlands",
-        "provider_reputation": "Bulletproof hosting — known tolerance for abuse reports and offensive infrastructure",
+        "provider_reputation": "Bulletproof hosting, known tolerance for abuse reports and offensive infrastructure",
         "hunting_value": "CRITICAL",
         "detection_action": "BLOCK outbound connections; hunt for connections from internal systems",
         "first_seen": "2026-02-14T15:01:23Z",
@@ -136,7 +136,7 @@
           8443
         ],
         "dns_resolution": "45.94.31.220",
-        "whois_status": "Registered domain (not dynamic DNS) — indicates deliberate infrastructure preparation",
+        "whois_status": "Registered domain (not dynamic DNS), indicates deliberate infrastructure preparation",
         "hunting_value": "CRITICAL",
         "detection_action": "BLOCK; hunt for DNS queries; use sinkholing when available",
         "first_seen": "2026-02-14T15:01:23Z",
@@ -153,14 +153,14 @@
         "value": "mailmassange.duckdns.org",
         "confidence": "HIGH",
         "description": "Backup/fallback Sliver C2 domain (DuckDNS dynamic DNS service)",
-        "context": "Configured as backup C2 in Sliver shellcode. DuckDNS provides infrastructure resilience: if primary domain (mailuxe.net) is blocked or sinkholed, attacker can redirect beacon traffic to alternate IP via DuckDNS dynamic update. Free service, anonymous creation, trivially changeable — typical cybercrime operational security.",
+        "context": "Configured as backup C2 in Sliver shellcode. DuckDNS provides infrastructure resilience: if primary domain (mailuxe.net) is blocked or sinkholed, attacker can redirect beacon traffic to alternate IP via DuckDNS dynamic update. Free service, anonymous creation, trivially changeable, typical cybercrime operational security.",
         "purpose": "C2 beacon callbacks (fallback/backup)",
         "ports": [
           443
         ],
-        "dns_resolution": "Dynamic (DuckDNS service — resolves to attacker-controlled IP)",
+        "dns_resolution": "Dynamic (DuckDNS service, resolves to attacker-controlled IP)",
         "provider": "DuckDNS (free dynamic DNS service)",
-        "infrastructure_resilience": "MODERATE — provides fallback if primary domain is burned",
+        "infrastructure_resilience": "MODERATE, provides fallback if primary domain is burned",
         "hunting_value": "HIGH",
         "detection_action": "BLOCK; monitor DNS queries; DuckDNS subdomains are trivially created/replaced",
         "first_seen": "2026-02-14T15:01:23Z",
@@ -226,7 +226,7 @@
     "canary_indicators": [
       {
         "confidence": "CANARY (NOT MALICIOUS)",
-        "description": "Sandbox detection canary domain — used to detect analysis environment",
+        "description": "Sandbox detection canary domain, used to detect analysis environment",
         "context": "DNS query to intezer.com is built into Sliver beacon configuration as an anti-sandbox measure. If the beacon resolves intezer.com successfully, it infers it is NOT running in an isolated sandbox and proceeds with C2 operations. Query to this domain is NOT a sign of malicious infrastructure; it is a defensive TTI (Tactics, Techniques, Indicators) evasion check.",
         "purpose": "Sandbox detection / evasion check",
         "hunting_value": "NONE (benign indicator of evasion technique)",
@@ -268,9 +268,9 @@
         "path": "%TEMP%\\update.tmp",
         "confidence": "MODERATE",
         "description": "Process Ghosting temporary file; deleted before process visible",
-        "context": "If process ghosting technique is used, OneDriveSync.exe creates %TEMP%\\update.tmp with FILE_FLAG_DELETE_ON_CLOSE, then calls NtCreateSection(SEC_IMAGE) to load the temp file as process executable. File is deleted before process appears in Process Explorer or task lists — making 'ghosted' process invisible to standard enumeration.",
-        "purpose": "Process Ghosting evasion — hide beacon process from enumeration",
-        "technique": "Process Ghosting (T1564.012 variant) — create process from deleted file",
+        "context": "If process ghosting technique is used, OneDriveSync.exe creates %TEMP%\\update.tmp with FILE_FLAG_DELETE_ON_CLOSE, then calls NtCreateSection(SEC_IMAGE) to load the temp file as process executable. File is deleted before process appears in Process Explorer or task lists, making 'ghosted' process invisible to standard enumeration.",
+        "purpose": "Process Ghosting evasion, hide beacon process from enumeration",
+        "technique": "Process Ghosting (T1564.012 variant), create process from deleted file",
         "hunting_value": "HIGH",
         "detection_action": "Hunt for: (1) CreateFile with DELETE_ON_CLOSE flag in %TEMP%; (2) NtCreateSection(SEC_IMAGE) on temp file; (3) NtCreateProcessEx without corresponding image file on disk",
         "first_seen": "2026-02-14",
@@ -290,7 +290,7 @@
         "context": "build.log specifies C:\\Windows\\System32\\sihost.exe as the target process for PPID spoofing and injection. If process hollowing succeeds, injected Sliver beacon will run within sihost.exe context, masquerading as legitimate Windows Shell Experience Host process. Real parent (spoofed parent declared in config) will be sihost.exe.",
         "purpose": "Process injection target for beacon execution",
         "parent_process": "Spoofed parent declared in PPID spoofing configuration",
-        "injection_method": "Process hollowing (XZ-mode with byte 0x04) — hollow sihost.exe image and inject Donut-wrapped Sliver shellcode",
+        "injection_method": "Process hollowing (XZ-mode with byte 0x04), hollow sihost.exe image and inject Donut-wrapped Sliver shellcode",
         "hunting_value": "CRITICAL",
         "detection_action": "Hunt for: (1) sihost.exe spawned with mismatched parent (declare parent != actual parent); (2) sihost.exe with injected threads not originating from its own image; (3) sihost.exe with outbound network connections not in normal code path",
         "first_seen": "2026-02-14",
@@ -341,7 +341,7 @@
           "vmware-impersonation"
         ],
         "false_positive_risk": "NONE",
-        "notes": "If attacker re-generates new certificate with same key pair, thumbprint (SKI) will persist. Certificate was intentionally left unencrypted on server — operational security failure suggests attacker may not be monitoring for exposure."
+        "notes": "If attacker re-generates new certificate with same key pair, thumbprint (SKI) will persist. Certificate was intentionally left unencrypted on server, operational security failure suggests attacker may not be monitoring for exposure."
       }
     ],
     "memory_indicators": [
@@ -453,7 +453,7 @@
       "description": "AMSI bypass reflection variable; PowerShell Script Block Logging indicator",
       "context": "stager.ps1 uses reflection to bypass AMSI by setting amsiInitFailed = true via $PSClass.fields. When AMSI checks if initialization failed, it returns true, causing AMSI to disable itself for that PowerShell session. String 'amsiInitFailed' will appear in PowerShell Script Block Logging (Event ID 4104) if captured.",
       "source": "stager.ps1 PowerShell script",
-      "technique": "T1562.001 (Impair Defenses: Disable or Modify Tools — AMSI Bypass)",
+      "technique": "T1562.001 (Impair Defenses: Disable or Modify Tools, AMSI Bypass)",
       "hunting_value": "HIGH",
       "detection_action": "Hunt PowerShell logs for: (1) Script Block Logging EID 4104 containing 'amsiInitFailed'; (2) Reflection patterns setting AMSI fields; (3) Subsequent PowerShell commands executed after AMSI bypass",
       "tags": [
@@ -469,7 +469,7 @@
       "description": "Windows Defender real-time monitoring disable command; present in stager.ps1",
       "context": "stager.ps1 executes this PowerShell cmdlet to disable Defender real-time protection if running with admin privileges. Command is plaintext in stager script. If execution succeeds, generates Windows Defender Operational Event ID 5001 (real-time protection disabled).",
       "source": "stager.ps1 PowerShell script (line ~35)",
-      "technique": "T1562.001 (Impair Defenses: Disable or Modify Tools — Defender Disable)",
+      "technique": "T1562.001 (Impair Defenses: Disable or Modify Tools, Defender Disable)",
       "hunting_value": "CRITICAL",
       "detection_action": "Hunt for: (1) PowerShell execution of this cmdlet; (2) Windows Defender Event ID 5001 (real-time protection disabled); (3) Combination: Stager script + Defender disable + beacon execution",
       "tags": [
@@ -503,7 +503,7 @@
       "hex_representation": "0x9DEA8D94",
       "little_endian_bytes": "\\x94\\x8D\\xEA\\x9D",
       "source": "syscalls.C source code, compiled into OneDriveSync.exe",
-      "technique": "T1106 (Native API — direct syscall invocation via SysWhispers3)",
+      "technique": "T1106 (Native API, direct syscall invocation via SysWhispers3)",
       "hunting_value": "HIGH",
       "detection_action": "Binary analysis: Scan for this seed value in compiled binaries; indicates SysWhispers3 usage and direct syscall invocation technique",
       "tags": [
@@ -591,7 +591,7 @@
           "description": "CommandLine contains %TEMP%\\update.exe or Image path is %TEMP%\\update.exe"
         }
       ],
-      "uniqueness": "High — three-event chain is distinctive: (1) PowerShell connection to non-standard port, (2) executable creation in %TEMP%, (3) execution from temp location",
+      "uniqueness": "High. Three-event chain is distinctive: (1) PowerShell connection to non-standard port, (2) executable creation in %TEMP%, (3) execution from temp location",
       "false_positive_risk": "LOW",
       "tags": [
         "stager-pattern",
@@ -625,7 +625,7 @@
           "description": "sihost.exe contains injected thread with PAGE_EXECUTE_READWRITE region; 18-19 MB anonymous memory"
         }
       ],
-      "uniqueness": "High — parent process mismatch combined with network activity from system process is uncommon",
+      "uniqueness": "High, parent process mismatch combined with network activity from system process is uncommon",
       "false_positive_risk": "MODERATE (process injection is used for legitimate purposes; correlation with C2 ports eliminates most false positives)",
       "tags": [
         "ppid-spoofing",
@@ -651,7 +651,7 @@
         "EDR: Monitor for large (> 10 MB) private memory allocations with execute permissions",
         "Memory dump analysis: Search for NOP sled (\\x90 bytes) followed by \\x9A (CALLF) at base+0x59"
       ],
-      "uniqueness": "High — 18-19 MB anonymous executable regions are distinctive for Donut-wrapped shellcode; small executable allocations are more common",
+      "uniqueness": "High, 18-19 MB anonymous executable regions are distinctive for Donut-wrapped shellcode; small executable allocations are more common",
       "false_positive_risk": "LOW (large executable anonymous regions are rare in benign software)",
       "tags": [
         "donut-shellcode",
@@ -678,7 +678,7 @@
         "Check for CA:TRUE flag (legitimate code-signing certs never have this)",
         "Compare certificate serial to 659EEB5AA4A489FB238993AF259D23F057F6D6D6"
       ],
-      "uniqueness": "VERY HIGH — this specific certificate serial is unique to this campaign",
+      "uniqueness": "VERY HIGH. This specific certificate serial is unique to this campaign",
       "false_positive_risk": "NONE",
       "tags": [
         "code-signing-fraud",
@@ -720,7 +720,7 @@
           "result": "Process appears in process list with no corresponding image file on disk (empty ImagePath)"
         }
       ],
-      "uniqueness": "Very High — Process Ghosting is a specific evasion technique with distinctive API call sequence",
+      "uniqueness": "Very High, Process Ghosting is a specific evasion technique with distinctive API call sequence",
       "false_positive_risk": "NONE (legitimate software does not use Process Ghosting)",
       "tags": [
         "process-ghosting",
@@ -746,7 +746,7 @@
         "Code pattern: $pscm = [System.Reflection.BindingFlags]... or similar reflection API usage",
         "Subsequent PowerShell commands executed in same session after AMSI bypass setup"
       ],
-      "uniqueness": "High — this exact AMSI bypass pattern is used by many threat actors but is distinctive for this campaign",
+      "uniqueness": "High. This exact AMSI bypass pattern is used by many threat actors but is distinctive for this campaign",
       "false_positive_risk": "NONE (AMSI bypass via this method is never used by benign scripts)",
       "tags": [
         "amsi-bypass",
@@ -781,7 +781,7 @@
           "indicator": "PowerShell parent process chain confirms execution context (admin elevation)"
         }
       ],
-      "uniqueness": "Moderate — this cmdlet is used by other threat actors, but combination with stager pattern is distinctive",
+      "uniqueness": "Moderate. This cmdlet is used by other threat actors, but combination with stager pattern is distinctive",
       "false_positive_risk": "LOW (Defender disable is rarely executed by benign operations; legitimate admin operations typically don't execute this during normal operations)",
       "tags": [
         "defender-disable",
@@ -807,7 +807,7 @@
         "Search for 'go1.24' or similar version string",
         "Combine with other indicators (Donut signature, C2 port behavior) for stronger detection"
       ],
-      "uniqueness": "Low — Go compiler metadata is common in all Go binaries; not unique to this malware",
+      "uniqueness": "Low, Go compiler metadata is common in all Go binaries; not unique to this malware",
       "false_positive_risk": "HIGH (many benign Go programs use the same build flags)",
       "tags": [
         "go-compiler",
@@ -821,7 +821,7 @@
     {
       "value": "intezer.com",
       "category": "security vendor",
-      "context": "Sandbox detection canary domain — used to detect analysis environment"
+      "context": "Sandbox detection canary domain, used to detect analysis environment"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-19T17:44:53Z",
+ "generated_at": "2026-08-20T13:43:13Z",
  "counts": {
   "indicators": 1687,
   "reports": 54,
@@ -2801,31 +2801,31 @@
   "sha256:fc53e32f7aec1789b26a0c4c46397306f9ba332ccf9babb657bc41eef868ff0e": [
    {
     "report": "evilsoul-engine-stealer-maas",
-    "role": "chrome_decrypt.dll — xaitax ABE-bypass companion DLL; commodity (PART B)"
+    "role": "chrome_decrypt.dll, xaitax ABE-bypass companion DLL; commodity (PART B)"
    }
   ],
   "sha256:cb679a4f6381f366d89c237cf07fcb09580b2e3c10c1e03a813a538e6e574c70": [
    {
     "report": "evilsoul-engine-stealer-maas",
-    "role": "static/sv2.exe — unrecovered EvilSoul builder output (hash only) (PART B)"
+    "role": "static/sv2.exe, unrecovered EvilSoul builder output (hash only) (PART B)"
    }
   ],
   "sha256:ce357b006e2c8df3a093332242d90832b023456eae272ce2c8610363107152dd": [
    {
     "report": "evilsoul-engine-stealer-maas",
-    "role": "static/snew.exe — unrecovered EvilSoul builder output (hash only) (PART B)"
+    "role": "static/snew.exe, unrecovered EvilSoul builder output (hash only) (PART B)"
    }
   ],
   "sha256:787624b4414a7553a50dc65e037cef8cdd5bb8ea4d79a26b9e6aee5ebb6cf8a6": [
    {
     "report": "evilsoul-engine-stealer-maas",
-    "role": "static/sfix.exe — unrecovered EvilSoul builder output (hash only) (PART B)"
+    "role": "static/sfix.exe, unrecovered EvilSoul builder output (hash only) (PART B)"
    }
   ],
   "sha256:0e7d6bade5a05e7b021683eba1a61f4aecbce2bd3cf3bee70cf12e995304c3a0": [
    {
     "report": "evilsoul-engine-stealer-maas",
-    "role": "static/tpkg.exe — unrecovered EvilSoul builder output (hash only) (PART B)"
+    "role": "static/tpkg.exe, unrecovered EvilSoul builder output (hash only) (PART B)"
    }
   ],
   "md5:20989b06f7c670ab973da6609855bcf9": [
@@ -2878,7 +2878,7 @@
   "ipv4:144.172.103.98": [
    {
     "report": "evilsoul-engine-stealer-maas",
-    "role": "Origin open directory (KAIDO Services), AS14956 RouterHosting US — DEAD as of 2026-06-27"
+    "role": "Origin open directory (KAIDO Services), AS14956 RouterHosting US, DEAD as of 2026-06-27"
    }
   ],
   "ipv4:144.172.109.203": [
@@ -2911,7 +2911,7 @@
    },
    {
     "report": "kaido-quasar-rat",
-    "role": "Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only — do not probe"
+    "role": "Current kaidoo.com.br A-record, AS51852 Private Layer CH; passive only. Do not probe"
    }
   ],
   "domain:kaidoo.com.br": [
@@ -3030,11 +3030,11 @@
   "domain:kaido.common.messages": [
    {
     "report": "evilsoul-engine-stealer-maas",
-    "role": "Namespace root — survives obfuscation"
+    "role": "Namespace root, survives obfuscation"
    },
    {
     "report": "kaido-quasar-rat",
-    "role": "Namespace root — survives obfuscation"
+    "role": "Namespace root, survives obfuscation"
    }
   ],
   "domain:kaido.client.helper.hvnc.processcontroller": [
@@ -4806,121 +4806,121 @@
   "sha256:03492f128fcc3910bda15f393c30ad3e04f5a50de36464d1e24038f49d889324": [
    {
     "report": "new-files-found-20260408",
-    "role": "Gen-1 OpenStrike prototype — HTTP-only poller, no crypto, no commands"
+    "role": "Gen-1 OpenStrike prototype, HTTP-only poller, no crypto, no commands"
    }
   ],
   "filename:mini_beacon.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Gen-1 OpenStrike prototype — HTTP-only poller, no crypto, no commands"
+    "role": "Gen-1 OpenStrike prototype, HTTP-only poller, no crypto, no commands"
    }
   ],
   "sha256:9bdb680d4368713273509e8c104c1903b9790ee725cc2319997e1da705af5ca0": [
    {
     "report": "new-files-found-20260408",
-    "role": "Gen-2 OpenStrike — RSA-1024 registration, elevation check, no commands"
+    "role": "Gen-2 OpenStrike, RSA-1024 registration, elevation check, no commands"
    }
   ],
   "filename:mini_beacon2.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Gen-2 OpenStrike — RSA-1024 registration, elevation check, no commands"
+    "role": "Gen-2 OpenStrike, RSA-1024 registration, elevation check, no commands"
    }
   ],
   "sha256:0d050b35abaa2a47340ec925727b0d508605733676552dbc94080c2da9f863d2": [
    {
     "report": "new-files-found-20260408",
-    "role": "CS 4.4 beacon DLL — RSA-1024, watermark=0, port 80"
+    "role": "CS 4.4 beacon DLL, RSA-1024, watermark=0, port 80"
    }
   ],
   "filename:beacon_full.x64.dll": [
    {
     "report": "new-files-found-20260408",
-    "role": "CS 4.4 beacon DLL — RSA-1024, watermark=0, port 80"
+    "role": "CS 4.4 beacon DLL, RSA-1024, watermark=0, port 80"
    }
   ],
   "sha256:3b2d746d0974bb5ffec7d21b47d793fb1eef2af930d639b2f494cbe900fe0c3e": [
    {
     "report": "new-files-found-20260408",
-    "role": "CS 3.x beacon DLL — RSA-2048 Trinity key, watermark=0, port 80"
+    "role": "CS 3.x beacon DLL, RSA-2048 Trinity key, watermark=0, port 80"
    }
   ],
   "filename:beacon_port80.x64.dll": [
    {
     "report": "new-files-found-20260408",
-    "role": "CS 3.x beacon DLL — RSA-2048 Trinity key, watermark=0, port 80"
+    "role": "CS 3.x beacon DLL, RSA-2048 Trinity key, watermark=0, port 80"
    }
   ],
   "sha256:ad1fc7f801bd2166edeeeb5f97fa087bb1769cde57e500a7c0eb2a844e3ad95f": [
    {
     "report": "new-files-found-20260408",
-    "role": "CS 4.4 beacon DLL — Malleable C2 profile (/en_US/all.js), watermark=987654321, IE9 UA"
+    "role": "CS 4.4 beacon DLL, Malleable C2 profile (/en_US/all.js), watermark=987654321, IE9 UA"
    }
   ],
   "filename:beacon80.dll": [
    {
     "report": "new-files-found-20260408",
-    "role": "CS 4.4 beacon DLL — Malleable C2 profile (/en_US/all.js), watermark=987654321, IE9 UA"
+    "role": "CS 4.4 beacon DLL, Malleable C2 profile (/en_US/all.js), watermark=987654321, IE9 UA"
    }
   ],
   "sha256:af688b120db0a3b324e2cd468cfead71b7895a3c815f4026d51ac7fca0cb8ab4": [
    {
     "report": "new-files-found-20260408",
-    "role": "CovertVPN L2 bridge — ICMP tunnel, 5 transport channels, embedded WinPcap 4.1.3"
+    "role": "CovertVPN L2 bridge, ICMP tunnel, 5 transport channels, embedded WinPcap 4.1.3"
    }
   ],
   "filename:covertvpn.dll": [
    {
     "report": "new-files-found-20260408",
-    "role": "CovertVPN L2 bridge — ICMP tunnel, 5 transport channels, embedded WinPcap 4.1.3"
+    "role": "CovertVPN L2 bridge, ICMP tunnel, 5 transport channels, embedded WinPcap 4.1.3"
    }
   ],
   "sha256:701b4f60411a26abfb137f476c9328900843ee5a49780f2fcd23a5cb15498f16": [
    {
     "report": "new-files-found-20260408",
-    "role": "Artifact Kit service variant — EAX-redirect process hollowing, DceRpcSs service"
+    "role": "Artifact Kit service variant, EAX-redirect process hollowing, DceRpcSs service"
    }
   ],
   "filename:artifact32svc.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Artifact Kit service variant — EAX-redirect process hollowing, DceRpcSs service"
+    "role": "Artifact Kit service variant, EAX-redirect process hollowing, DceRpcSs service"
    }
   ],
   "sha256:6797ba96336c64648d6bcccdbead8d9ab6f18d77f0108239e31a063b32665770": [
    {
     "report": "new-files-found-20260408",
-    "role": "x64 Artifact Kit service variant — mirrors artifact32svc hollowing pattern"
+    "role": "x64 Artifact Kit service variant, mirrors artifact32svc hollowing pattern"
    }
   ],
   "filename:artifact64svc.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "x64 Artifact Kit service variant — mirrors artifact32svc hollowing pattern"
+    "role": "x64 Artifact Kit service variant, mirrors artifact32svc hollowing pattern"
    }
   ],
   "sha256:820cf45c92b9cce9536ad108fc4b8c1c501bb6f4e30119b1bef0486670de02e4": [
    {
     "report": "new-files-found-20260408",
-    "role": "Custom CreateThread loader — download-mode beacon payload"
+    "role": "Custom CreateThread loader, download-mode beacon payload"
    }
   ],
   "filename:beacon_dl.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Custom CreateThread loader — download-mode beacon payload"
+    "role": "Custom CreateThread loader, download-mode beacon payload"
    }
   ],
   "sha256:89ec81f862be889f6e8bfbad7c3c39410a9039467f1fdfe8752f64a59e113d10": [
    {
     "report": "new-files-found-20260408",
-    "role": "Custom CreateThread loader — full-feature beacon payload"
+    "role": "Custom CreateThread loader, full-feature beacon payload"
    }
   ],
   "filename:beacon_full.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Custom CreateThread loader — full-feature beacon payload"
+    "role": "Custom CreateThread loader, full-feature beacon payload"
    }
   ],
   "sha256:04720e01f0599ff97d85f74d1483245c59353bb5ea391f2c4c9cb6ce4ef46d35": [
@@ -4943,25 +4943,25 @@
   "sha256:7c643568b3212363cd97511f2607ad2481b9f3b6f6a829999df469af7c0184b7": [
    {
     "report": "new-files-found-20260408",
-    "role": "sRDI v2 loader — same base loader as beacon_loader, 310KB payload"
+    "role": "sRDI v2 loader, same base loader as beacon_loader, 310KB payload"
    }
   ],
   "filename:beacon_srdi2.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "sRDI v2 loader — same base loader as beacon_loader, 310KB payload"
+    "role": "sRDI v2 loader, same base loader as beacon_loader, 310KB payload"
    }
   ],
   "sha256:b0f0fe97b653e4564db8cf24cbd4cc2cad46f9c6629b67c2f147e647729f5b46": [
    {
     "report": "new-files-found-20260408",
-    "role": "Disk-drop loader — LoadLibraryA(C:\\Windows\\Temp\\beacon.dll), infinite keepalive"
+    "role": "Disk-drop loader, LoadLibraryA(C:\\Windows\\Temp\\beacon.dll), infinite keepalive"
    }
   ],
   "filename:dll_loader.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Disk-drop loader — LoadLibraryA(C:\\Windows\\Temp\\beacon.dll), infinite keepalive"
+    "role": "Disk-drop loader, LoadLibraryA(C:\\Windows\\Temp\\beacon.dll), infinite keepalive"
    }
   ],
   "sha256:8ab7e87b34d65393618fabd5b48017d803e795064d4a290128c3eea1e54742f0": [
@@ -4979,49 +4979,49 @@
   "sha256:86b581e40a9ff912683b6f3579d155a8d765669acbba10d400abce451a898be5": [
    {
     "report": "new-files-found-20260408",
-    "role": "1KB PE stager — port 80, URI /au2U"
+    "role": "1KB PE stager, port 80, URI /au2U"
    }
   ],
   "filename:stager_http_x64.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "1KB PE stager — port 80, URI /au2U"
+    "role": "1KB PE stager, port 80, URI /au2U"
    }
   ],
   "sha256:f618c8073bbc18f36ebf522aa15e680bf63e867b115c27ab1546c2326507917b": [
    {
     "report": "new-files-found-20260408",
-    "role": "PS1 stager wrapper — port 80, URI /msI4"
+    "role": "PS1 stager wrapper, port 80, URI /msI4"
    }
   ],
   "filename:stager_http_x64.ps1": [
    {
     "report": "new-files-found-20260408",
-    "role": "PS1 stager wrapper — port 80, URI /msI4"
+    "role": "PS1 stager wrapper, port 80, URI /msI4"
    }
   ],
   "sha256:46a74c19bc3fecb149c452c286b912999a43e7808194a55ede4d9a19e56f4081": [
    {
     "report": "new-files-found-20260408",
-    "role": "Artifact-wrapped beacon — Trinity RSA-2048, port 80, watermark 987654321"
+    "role": "Artifact-wrapped beacon, Trinity RSA-2048, port 80, watermark 987654321"
    }
   ],
   "filename:beacon_patched.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Artifact-wrapped beacon — Trinity RSA-2048, port 80, watermark 987654321"
+    "role": "Artifact-wrapped beacon, Trinity RSA-2048, port 80, watermark 987654321"
    }
   ],
   "sha256:5c65b88fe12e6116d917e0a04ca57c4d3784d283a350d9e3dcec2691fe7eff2c": [
    {
     "report": "new-files-found-20260408",
-    "role": "Sniffer beacon config — port 809, /ga.js URI"
+    "role": "Sniffer beacon config, port 809, /ga.js URI"
    }
   ],
   "filename:beacon_x64_sniff.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Sniffer beacon config — port 809, /ga.js URI"
+    "role": "Sniffer beacon config, port 809, /ga.js URI"
    }
   ],
   "sha256:5dad2214471215e262910e9dcb348cf42c62fc8d8b26a85c8e959d5f1ce78c80": [
@@ -5039,43 +5039,43 @@
   "md5:b6e01011e2d38855dd6a4b10a79acffe": [
    {
     "report": "new-files-found-20260408",
-    "role": "Gen-4 OpenStrike beacon — fully reversed, SHA256 key derivation, 10 commands"
+    "role": "Gen-4 OpenStrike beacon, fully reversed, SHA256 key derivation, 10 commands"
    }
   ],
   "md5:1cf68b213a6ba7a2b864822cc72ed4fa": [
    {
     "report": "new-files-found-20260408",
-    "role": "Base shellcode loader — VirtualAlloc(RWX) indirect call"
+    "role": "Base shellcode loader, VirtualAlloc(RWX) indirect call"
    }
   ],
   "md5:08ca0ff3c1e3c38c6e973654689d8346": [
    {
     "report": "new-files-found-20260408",
-    "role": "RDI loader — hardcoded offset 0x1649c ReflectiveLoader call"
+    "role": "RDI loader, hardcoded offset 0x1649c ReflectiveLoader call"
    }
   ],
   "filename:beacon_rdi.exe": [
    {
     "report": "new-files-found-20260408",
-    "role": "RDI loader — hardcoded offset 0x1649c ReflectiveLoader call"
+    "role": "RDI loader, hardcoded offset 0x1649c ReflectiveLoader call"
    }
   ],
   "md5:e7765cb6d6c71277d49ef4ca7429638c": [
    {
     "report": "new-files-found-20260408",
-    "role": "CreateThread loader — download-mode beacon payload"
+    "role": "CreateThread loader, download-mode beacon payload"
    }
   ],
   "md5:3d60ae2e584a1be1c264cfdaa12a5e4d": [
    {
     "report": "new-files-found-20260408",
-    "role": "CovertVPN L2 bridge — 5 transport channels, WinPcap driver dropper"
+    "role": "CovertVPN L2 bridge, 5 transport channels, WinPcap driver dropper"
    }
   ],
   "md5:b5d391099c1376d81ebdc91b3fc55eae": [
    {
     "report": "new-files-found-20260408",
-    "role": "Disk-drop DLL loader — hardcoded C:\\Windows\\Temp\\beacon.dll"
+    "role": "Disk-drop DLL loader, hardcoded C:\\Windows\\Temp\\beacon.dll"
    }
   ],
   "sha1:12fdfc45cdc448581ba3e64479f079caedba81a3": [
@@ -5137,13 +5137,13 @@
   "url:http://172.105.0.126/ga.js": [
    {
     "report": "new-files-found-20260408",
-    "role": "Profile B Malleable C2 GET URI — Google Analytics masquerade (3 beacons)"
+    "role": "Profile B Malleable C2 GET URI, Google Analytics masquerade (3 beacons)"
    }
   ],
   "url:http://172.105.0.126:809/ga.js": [
    {
     "report": "new-files-found-20260408",
-    "role": "Profile B on port 809 — debug/sniffer beacon configs"
+    "role": "Profile B on port 809, debug/sniffer beacon configs"
    }
   ],
   "sha256:008cadd72dbf3cc108000f1752e32cb6e0ebd1e5f043c4e34301598a5f64f032": [
@@ -5600,13 +5600,13 @@
   "sha256:f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a": [
    {
     "report": "open-directory-94-103-1-13-20260423",
-    "role": "Orcus RAT v7 Wardow crack — primary sample, 865 KB .NET"
+    "role": "Orcus RAT v7 Wardow crack, primary sample, 865 KB .NET"
    }
   ],
   "filename:myfile.exe": [
    {
     "report": "open-directory-94-103-1-13-20260423",
-    "role": "Orcus RAT v7 Wardow crack — primary sample, 865 KB .NET"
+    "role": "Orcus RAT v7 Wardow crack, primary sample, 865 KB .NET"
    }
   ],
   "sha256:b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5": [
@@ -5808,13 +5808,13 @@
   "sha256:929cc7bcdff39d5ba305603b475cde8d86c2f6b69532cde8e27ea7e3710efbaa": [
    {
     "report": "open-directory-94-103-1-13-20260423",
-    "role": "PuTTY plink SSH client — used for SSH tunneling"
+    "role": "PuTTY plink SSH client, used for SSH tunneling"
    }
   ],
   "filename:plink.exe": [
    {
     "report": "open-directory-94-103-1-13-20260423",
-    "role": "PuTTY plink SSH client — used for SSH tunneling"
+    "role": "PuTTY plink SSH client, used for SSH tunneling"
    }
   ],
   "sha256:4430a828f2b19bc729b2eea0405b27d19c568a769b12f0731c720a0ed888de1b": [
@@ -5884,7 +5884,7 @@
   "sha256:e452de35020f6f9dc818a13e299c15893c61b3c98d7883514c6ecede6cd136a3": [
    {
     "report": "open-directory-94-103-1-13-20260423",
-    "role": "11,856 bytes (byte-exact size match to mymain Stage-5a — rebuilt per campaign)"
+    "role": "11,856 bytes (byte-exact size match to mymain Stage-5a, rebuilt per campaign)"
    }
   ],
   "sha256:13665bd2b75f8ff7d51e6e7d1d5213f4e1143aedf995258117d3e603e5c69d1c": [
@@ -5905,13 +5905,13 @@
   "md5:76007508b8317dd76e31996c6adc875a": [
    {
     "report": "open-directory-94-103-1-13-20260423",
-    "role": "Orcus RAT v7 Wardow crack — MD5 supplement"
+    "role": "Orcus RAT v7 Wardow crack, MD5 supplement"
    }
   ],
   "sha1:1e68314f5a42897cea61456add6ffdd6048a9c99": [
    {
     "report": "open-directory-94-103-1-13-20260423",
-    "role": "Orcus RAT v7 Wardow crack — SHA1 supplement"
+    "role": "Orcus RAT v7 Wardow crack, SHA1 supplement"
    }
   ],
   "filename:indf.exe": [
@@ -6002,7 +6002,7 @@
   "md5:b12f3970cc224d0eb98b4030f9c2e753": [
    {
     "report": "open-directory-94-103-1-13-20260423",
-    "role": "Orcus RAT v7 Wardow crack mutex — single-instance guard for myfile.exe"
+    "role": "Orcus RAT v7 Wardow crack mutex, single-instance guard for myfile.exe"
    }
   ],
   "md5:e3c6cefd462d48f0b30a5ebcd238b5b1": [
@@ -6100,7 +6100,7 @@
   "md5:7cfe0a039b61ec049b53e8e664036a6e": [
    {
     "report": "opendirectory-193-56-255-154-20260403",
-    "role": "Covenant C2 GruntStager Build 1 — standalone PE, HTTP stager, 11776 bytes"
+    "role": "Covenant C2 GruntStager Build 1, standalone PE, HTTP stager, 11776 bytes"
    }
   ],
   "md5:ac9b16b8bdf544db92f325a0901c5544": [
@@ -6117,7 +6117,7 @@
   "md5:2ac67005d80a76c77417086375e444d1": [
    {
     "report": "opendirectory-193-56-255-154-20260403",
-    "role": "Proof-of-concept DLL (non-operational) — 64-bit PE, Visual C++ 2022, 12800 bytes"
+    "role": "Proof-of-concept DLL (non-operational), 64-bit PE, Visual C++ 2022, 12800 bytes"
    }
   ],
   "sha1:f0f4715a6d7063e7811502e9591f8265af0a2af6": [
@@ -6129,7 +6129,7 @@
   "sha1:a79cd499c68482e73852db2c70d4e06251a29d95": [
    {
     "report": "opendirectory-193-56-255-154-20260403",
-    "role": "PowerShell fileless loader — Covenant GruntStager Build 2 delivery wrapper"
+    "role": "PowerShell fileless loader, Covenant GruntStager Build 2 delivery wrapper"
    }
   ],
   "sha1:7a502bd0e7fe586b97498058a72287dfd22f8d44": [
@@ -6141,7 +6141,7 @@
   "filename:main.exe": [
    {
     "report": "opendirectory-193-56-255-154-20260403",
-    "role": "XiebroC2 v3.1 Go TCP implant — original filename from open directory at 193.56.255.154"
+    "role": "XiebroC2 v3.1 Go TCP implant, original filename from open directory at 193.56.255.154"
    }
   ],
   "ipv4:193.56.255.154": [
@@ -6157,13 +6157,13 @@
   "url:http://193.56.255.154:443/en-us/docs.html": [
    {
     "report": "opendirectory-193-56-255-154-20260403",
-    "role": "Covenant stager C2 POST path — random path selected from pool"
+    "role": "Covenant stager C2 POST path, random path selected from pool"
    }
   ],
   "url:http://193.56.255.154:443/en-us/test.html": [
    {
     "report": "opendirectory-193-56-255-154-20260403",
-    "role": "Covenant stager C2 POST path — random path selected from pool"
+    "role": "Covenant stager C2 POST path, random path selected from pool"
    }
   ],
   "md5:a19ea23062db990386a3a478cb89d52e": [
@@ -6216,13 +6216,13 @@
   "sha256:32b9b9a82913dae5e40842f68791cc639fe690603ccc1d85fe1ae2e99b7bf26b": [
    {
     "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
-    "role": "Notification dispatcher (Telegram/Discord/webhook — channel unknown)"
+    "role": "Notification dispatcher (Telegram/Discord/webhook, channel unknown)"
    }
   ],
   "domain:beast-notify.py": [
    {
     "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
-    "role": "Notification dispatcher (Telegram/Discord/webhook — channel unknown)"
+    "role": "Notification dispatcher (Telegram/Discord/webhook, channel unknown)"
    }
   ],
   "sha256:96babe4f65d33dafcdb2425039012d5b2cf8c01b04d0680c5551482ccea27b64": [
@@ -6947,7 +6947,7 @@
   "sha256:316f9165ba23b968d33966cd2cef70b10b9e5973117b3864b51048292bbb6742": [
    {
     "report": "opendirectory-45-130-148-125-20260430",
-    "role": "Classic netcat (variant 2 — different binary)."
+    "role": "Classic netcat (variant 2, different binary)."
    }
   ],
   "sha256:507e8666c239397561c58609f7ea569c9c49ddbb900cd260e7e42b02d03cfd87": [
@@ -7066,7 +7066,7 @@
   "md5:4cfec38bf3c1557ad25faba737f8e275": [
    {
     "report": "opendirectory-45-130-148-125-20260430",
-    "role": "Cluster imphash — AdaptixC2 Windows beacon DLL form, production cluster (build counter 5)"
+    "role": "Cluster imphash, AdaptixC2 Windows beacon DLL form, production cluster (build counter 5)"
    }
   ],
   "md5:63cb3b95faad6b28fcce52a6aa698ff2": [
@@ -7533,13 +7533,13 @@
   "sha256:a1cc69dfb1350f4c9fe1a9ef24c27fd2d72eea9407457c472fbb98c49aa6b6b9": [
    {
     "report": "opendirectory-62-60-237-100-20260506",
-    "role": "Macro security disable BAT — sets Office VBAWarnings=1"
+    "role": "Macro security disable BAT, sets Office VBAWarnings=1"
    }
   ],
   "filename:excel_2016_windows.bat": [
    {
     "report": "opendirectory-62-60-237-100-20260506",
-    "role": "Macro security disable BAT — sets Office VBAWarnings=1"
+    "role": "Macro security disable BAT, sets Office VBAWarnings=1"
    }
   ],
   "sha256:e3a777326a9a1a91d3224b90683642db22d2b7143dd21985200b9ac3ad2afc05": [
@@ -7646,7 +7646,7 @@
   "md5:051ba42fa7a26bf65df9922daa07c458": [
    {
     "report": "opendirectory-62-60-237-100-20260506",
-    "role": "IMPHASH; matches genuine Wondershare SlideShowEditor.exe — only flag with context"
+    "role": "IMPHASH; matches genuine Wondershare SlideShowEditor.exe, only flag with context"
    }
   ],
   "md5:921f3ea587ffbd647ff4d520165ecd50": [
@@ -7733,19 +7733,19 @@
   "url:https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty.exe": [
    {
     "report": "opendirectory-62-60-237-100-20260506",
-    "role": "Mega.io payload — Tier-1 MSC chain"
+    "role": "Mega.io payload, Tier-1 MSC chain"
    }
   ],
   "url:https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty2.exe": [
    {
     "report": "opendirectory-62-60-237-100-20260506",
-    "role": "Mega.io payload — Price-themed (Price5.docm, Price6.doc, Price4.xls)"
+    "role": "Mega.io payload, Price-themed (Price5.docm, Price6.doc, Price4.xls)"
    }
   ],
   "url:https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/Bravo/vida/NGZTDICF.exe": [
    {
     "report": "opendirectory-62-60-237-100-20260506",
-    "role": "Mega.io payload — NDA-themed (NDA.doc); 'Bravo/vida' is operator NDA campaign codename"
+    "role": "Mega.io payload, NDA-themed (NDA.doc); 'Bravo/vida' is operator NDA campaign codename"
    }
   ],
   "url:http://80.253.249.186:5504/BugSplat.dll": [
@@ -7969,79 +7969,79 @@
   "sha256:239858491f2a7c4cb5dd44967e364f57fcbefd850da987bb62f06bd58a1f78f9": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 33280 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 33280 bytes"
    }
   ],
   "filename:2.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 33280 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 33280 bytes"
    }
   ],
   "sha256:61cc1fad658dd5f21e239a3767636da9038c4c08079596c6ab59d70506938b41": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 36864 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 36864 bytes"
    }
   ],
   "filename:5666.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 36864 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 36864 bytes"
    }
   ],
   "sha256:59e43c18ee26c1056efc9628de025e3026db63c9536f6cbd39de847762d2048e": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 36864 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 36864 bytes"
    }
   ],
   "filename:99999999.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 36864 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 36864 bytes"
    }
   ],
   "sha256:427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — primary analysis sample; C2 config fully decrypted"
+    "role": "XWorm V5.6 client stub, primary analysis sample; C2 config fully decrypted"
    }
   ],
   "filename:xclient.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — primary analysis sample; C2 config fully decrypted"
+    "role": "XWorm V5.6 client stub, primary analysis sample; C2 config fully decrypted"
    }
   ],
   "sha256:205bffe1f49e256a8ec879667da1babbcf38b6e4d6600823012a68a8dda3c82d": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 36864 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 36864 bytes"
    }
   ],
   "filename:xclient9999.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 36864 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 36864 bytes"
    }
   ],
   "sha256:102eedd5355f9aca9b3f4714a3b106b00e6defd097a2e711f878d9633d1ae4fc": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 40960 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 40960 bytes"
    }
   ],
   "filename:new_vzzzzzz_2828.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — VB.NET, 40960 bytes"
+    "role": "XWorm V5.6 client stub, VB.NET, 40960 bytes"
    }
   ],
   "sha256:f57c6dbff5270b02651c2886771a8dd8cc40fcd23fa5e2902d26bb10be741bf2": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 client stub — deceptive filename mimics Windows Calculator"
+    "role": "XWorm V5.6 client stub, deceptive filename mimics Windows Calculator"
    }
   ],
   "sha256:90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405": [
@@ -8077,107 +8077,109 @@
   "sha256:57fa1c8ea6e8de464bf88591e56a2f25cd665233132361576d0887dabbf70b66": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 322048 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 322048 bytes"
    }
   ],
   "filename:binajg.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 322048 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 322048 bytes"
    }
   ],
   "sha256:a5f36f63a80d9cfe948e70f796df38e7f1a73b4b965f78bd9b3db13053223639": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
    }
   ],
   "filename:eokqegd.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
    }
   ],
   "sha256:5285f56688c3aa2cba539102c64e8cf50149233cdcab3d12af34205aadb4f3cb": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
    }
   ],
   "filename:geejuev.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
    }
   ],
   "sha256:69e4b2fe9e8649e824a46e6f39722b563d00c6ada1feb8fe2a97110bd98681e2": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
    }
   ],
   "filename:jhmwqqkp.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
    }
   ],
   "sha256:c31e7a44565282835e712aa5117d6b312de4c3e65c9c560a10f650dbf320b778": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324096 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324096 bytes"
    }
   ],
   "filename:kwwrxbsoa.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324096 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324096 bytes"
    }
   ],
   "sha256:2346318752005aeff0eb2b1bc0d8190422c39f98c2b0f3003bb93a95daa82346": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 323584 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 323584 bytes"
    }
   ],
   "filename:oiflbd.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 323584 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 323584 bytes"
    }
   ],
   "sha256:a9341a1a658bd7aed229a8508a6903fe7b94774924af14133f23b75d752dcfba": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
    }
   ],
   "filename:ptmrxpgw.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
    }
   ],
   "sha256:defa0f24844cb36a905194ab863a15c0215aa98ce8a1372583aaeafc20b5223d": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
    }
   ],
   "filename:tckimpw.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 1 — ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+    "role": "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
    }
   ],
   "sha256:469af06d07e937df94534fb2b620af98a86503ab97a615f7134697b7cfe58a1c": [
    {
-    "report": "opendirectory-74-0-42-25-20260316"
+    "report": "opendirectory-74-0-42-25-20260316",
+    "role": "Stage 2 inner loader, extracted via ExtremeDumper; TEA cipher; .NET Reactor; 325120 bytes"
    }
   ],
   "filename:zvafsyattl.exe": [
    {
-    "report": "opendirectory-74-0-42-25-20260316"
+    "report": "opendirectory-74-0-42-25-20260316",
+    "role": "Stage 2 inner loader, extracted via ExtremeDumper; TEA cipher; .NET Reactor; 325120 bytes"
    }
   ],
   "sha256:6b526c29a6961c1f03eeb1ec4ca3a0fdc5680e3f90db013dea8b27d8b63cce57": [
@@ -8223,13 +8225,13 @@
   "sha256:8c87cec82356df6bf83af0b966b51ab5dc25b8cc63e9bbae82216e048483dec1": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "PureHVNC victim stub — C2 185.49.126.140:8000; references PHVNC.exe; VB.NET 62464 bytes"
+    "role": "PureHVNC victim stub, C2 185.49.126.140:8000; references PHVNC.exe; VB.NET 62464 bytes"
    }
   ],
   "filename:xh.exe": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "PureHVNC victim stub — C2 185.49.126.140:8000; references PHVNC.exe; VB.NET 62464 bytes"
+    "role": "PureHVNC victim stub, C2 185.49.126.140:8000; references PHVNC.exe; VB.NET 62464 bytes"
    }
   ],
   "sha256:901c3f01d0f32c8aa077031c931ee8d35896d049203a215f1c0bb4e084f1ec07": [
@@ -8246,12 +8248,14 @@
   ],
   "sha256:0f37a2620339a4af7129848fbd9e3a4076103d037f86a80dc452f2363e3cdee9": [
    {
-    "report": "opendirectory-74-0-42-25-20260316"
+    "report": "opendirectory-74-0-42-25-20260316",
+    "role": "ScreenConnect client installer v2, Authenticode-signed; post-overlay-strip; 5210112 bytes"
    }
   ],
   "sha256:75322da03881d88e2cc672184aedb24ca05465af8c3aab2a45ff9d0fedd043f0": [
    {
-    "report": "opendirectory-74-0-42-25-20260316"
+    "report": "opendirectory-74-0-42-25-20260316",
+    "role": "ScreenConnect client installer v3, Authenticode-signed; post-overlay-strip; 5767168 bytes"
    }
   ],
   "sha256:7a848e3509c5945f1104c0baa89032ac6e329a84844ca6bf4177b9308d98b2d3": [
@@ -8267,7 +8271,7 @@
   "sha256:e2c666332d1a0aa7dca6ed3ac41c040925e740bd1ff19c0172e87334bad5270c": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Operator PE-to-base64 encoding utility — Guna UI v2; .NET 4.7.2"
+    "role": "Operator PE-to-base64 encoding utility, Guna UI v2; .NET 4.7.2"
    }
   ],
   "sha256:3b62ba4040d0d470521dce089c13cd8491d1463acbcc8391a49923caa02c08e9": [
@@ -8341,7 +8345,7 @@
   "md5:f4b00fbc6a3ce80b474334a3ccaadcf0": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 stub — primary analysis sample"
+    "role": "XWorm V5.6 stub, primary analysis sample"
    }
   ],
   "md5:4c4cf9a5b492434e4003ad10761593dc": [
@@ -8359,7 +8363,7 @@
   "md5:3828190a6dca5ee2a5b103b3aec7c28f": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 stub — deceptive filename"
+    "role": "XWorm V5.6 stub, deceptive filename"
    }
   ],
   "md5:56ccb739926a725e78a7acf9af52c4bb": [
@@ -8377,7 +8381,7 @@
   "md5:554cbfabfb7bce86780241a0087d51fb": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Aspdkzb loader cluster — Stage 1"
+    "role": "Aspdkzb loader cluster, Stage 1"
    }
   ],
   "md5:7b2cd7af699ed4d7aba346f7bb80b39a": [
@@ -8431,13 +8435,13 @@
   "md5:9c6229a5dc777bf98e512a8db44b66f0": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 2 inner loader — extracted"
+    "role": "Stage 2 inner loader, extracted"
    }
   ],
   "md5:fa9405a7c7bfca793f3f8c0c25dc9445": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "PureRAT v4.1.9 payload — extracted"
+    "role": "PureRAT v4.1.9 payload, extracted"
    }
   ],
   "md5:0c4a765f0924b6867fb08407098327db": [
@@ -8467,25 +8471,25 @@
   "md5:490a1ac297430d0c6b530c66feec6c6e": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "ScreenConnect launcher — original pre-strip MD5"
+    "role": "ScreenConnect launcher, original pre-strip MD5"
    }
   ],
   "md5:56bdd11e2169e8475a95f201eb6a267f": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "ScreenConnect installer v2 — original pre-strip MD5"
+    "role": "ScreenConnect installer v2, original pre-strip MD5"
    }
   ],
   "md5:7c98c4d9e3b8909e1a0ef97557236540": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "ScreenConnect installer v3 — original pre-strip MD5"
+    "role": "ScreenConnect installer v3, original pre-strip MD5"
    }
   ],
   "md5:56042f57da3e53a2b058e8bcf3e81493": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "vlc_boxed.exe — original pre-strip MD5"
+    "role": "vlc_boxed.exe, original pre-strip MD5"
    }
   ],
   "md5:67cc371575c0b685378f811763c3cae0": [
@@ -8545,7 +8549,7 @@
   "sha1:257b07c4b9eb72403769a12604e9ddb2bf5545fa": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 stub — primary analysis sample"
+    "role": "XWorm V5.6 stub, primary analysis sample"
    }
   ],
   "sha1:6ea6481241e1ba63a204634c3d2813b34ced29ad": [
@@ -8563,7 +8567,7 @@
   "sha1:e63f78986c06a3e5a9298069495418b784f2cd6b": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "XWorm V5.6 stub — deceptive filename"
+    "role": "XWorm V5.6 stub, deceptive filename"
    }
   ],
   "sha1:5b01b90137871c3c8f0d04f510c4d56b23932cbc": [
@@ -8635,13 +8639,13 @@
   "sha1:99440d52f2442f107d245ebcb186293a2c47db45": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Stage 2 inner loader — extracted"
+    "role": "Stage 2 inner loader, extracted"
    }
   ],
   "sha1:4edc47021e17dd02d2b0c8b839a9dbd4da5949db": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "PureRAT v4.1.9 payload — extracted"
+    "role": "PureRAT v4.1.9 payload, extracted"
    }
   ],
   "sha1:079afe270f2addfe137265d2322c22c50415c741": [
@@ -8676,25 +8680,25 @@
   "ipv4:74.0.42.25": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "Open directory / malware staging server — ASN 40662 Layer7 Technologies NL; IPXO lease"
+    "role": "Open directory / malware staging server, ASN 40662 Layer7 Technologies NL; IPXO lease"
    }
   ],
   "ipv4:74.0.42.162": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "chainconnects.net current hosting IP — same /24 as 74.0.42.25; ASN 40662"
+    "role": "chainconnects.net current hosting IP, same /24 as 74.0.42.25; ASN 40662"
    }
   ],
   "ipv4:74.0.42.44": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "chainconnects.net prior hosting IP (2026-01-29 to 2026-02-10) — ASN 40662"
+    "role": "chainconnects.net prior hosting IP (2026-01-29 to 2026-02-10), ASN 40662"
    }
   ],
   "ipv4:185.49.126.97": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "adminxyzhosting.com historical IP (2024-10-23 to 2025-01-09) — ASN 199654 NL"
+    "role": "adminxyzhosting.com historical IP (2024-10-23 to 2025-01-09), ASN 199654 NL"
    }
   ],
   "domain:adminxyzhosting.com": [
@@ -8731,7 +8735,7 @@
   "url:https://chainconnects.net/Bin/support.ClientSetup.msi?e=Access&y=Guest": [
    {
     "report": "opendirectory-74-0-42-25-20260316",
-    "role": "ScreenConnect client MSI download URL — hardcoded in Attachment.vbs"
+    "role": "ScreenConnect client MSI download URL, hardcoded in Attachment.vbs"
    }
   ],
   "url:http://adminxyzhosting.com/Bin/Update.Client.exe": [
@@ -9071,13 +9075,13 @@
   "sha256:e4d3d361ba8b25f8effcf7786b32185cf7255059fcf55b2509101779703a15aa": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "Naku.arm5 — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp."
+    "role": "Naku.arm5, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp."
    }
   ],
   "sha256:b7d999255a12da91f23453ec940cdc52b64e59c6e205f227ceae98a83027de20": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "Naku.arm6 — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp."
+    "role": "Naku.arm6, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.AW!xp."
    }
   ],
   "sha256:595f4315f00c2fce839eabe9880f669990256d6638fb148996872e37ffc9b28a": [
@@ -9088,25 +9092,25 @@
   "sha256:ee24f4f0fb9795bca8daba73f99bf1846fe5cdb400f5345ef4a4476b20ab5bc4": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "Naku.m68k — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.BO!xp."
+    "role": "Naku.m68k, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.BO!xp."
    }
   ],
   "sha256:afd49e3ceb20a8e861fa4804b6ea988f8aefd6942f84973f32b8e24c7df03410": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "Naku.mips — Pandora-Mirai variant. VT 41/64. Microsoft Mirai.FC!MTB."
+    "role": "Naku.mips, Pandora-Mirai variant. VT 41/64. Microsoft Mirai.FC!MTB."
    }
   ],
   "sha256:ef693f29b4ae47b1aa5920237946c3b0518ce84dd37e6fd6c6ee2e3e9dd6cd44": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "Naku.mpsl — Pandora-Mirai variant. VT 42/66. Microsoft Mirai.DY!MTB."
+    "role": "Naku.mpsl, Pandora-Mirai variant. VT 42/66. Microsoft Mirai.DY!MTB."
    }
   ],
   "sha256:f90658253261f8dc63446dac49a88baa0742f46a2f5448fb330acb58017980ef": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "Naku.ppc — Pandora-Mirai variant. VT 42/65. Microsoft Mirai.BL!xp."
+    "role": "Naku.ppc, Pandora-Mirai variant. VT 42/65. Microsoft Mirai.BL!xp."
    }
   ],
   "sha256:8aca22aa0fc77775521eaa916f490d7a433fd8f0c0f8104bb113f6127be0e530": [
@@ -9157,7 +9161,7 @@
   "sha256:63f0da53daac05df184c96949bcfa2e5d0d5fee425900a75ae58662479c14099": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "http_flood.py — Matrix C2 simple HTTP/HTTPS flooder (100 threads, no rate limiting)."
+    "role": "http_flood.py, Matrix C2 simple HTTP/HTTPS flooder (100 threads, no rate limiting)."
    }
   ],
   "sha256:65eb951a0b4a0fd1e524137bbd3052255497cccac380beb11661beb45ac9b489": [
@@ -9188,7 +9192,7 @@
   "sha256:33c50d71a1d9e6aa2598942893809dbfa617a2a0e86044b36b83802b382d7652": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "matrix/amps/ssdp_amplifier.py — UDP/1900 SSDP M-SEARCH reflector."
+    "role": "matrix/amps/ssdp_amplifier.py, UDP/1900 SSDP M-SEARCH reflector."
    }
   ],
   "sha256:4809a7ee9f5dbcbe86cfbd77a45e2a268a37bcc947e8e1621164df653597948b": [
@@ -9214,7 +9218,7 @@
   "sha256:79b01dd6e9e808b8e14c9a7dd2751264dd4d5fd96508de383c0fdbfd81a814dc": [
    {
     "report": "rovodev-mirai-matrix-c2-87.106.143.220",
-    "role": "matrix/proxies/proxy_chain.py — SOCKS5 proxy chain builder with TOR helpers."
+    "role": "matrix/proxies/proxy_chain.py, SOCKS5 proxy chain builder with TOR helpers."
    }
   ],
   "sha256:e091a8cb3286e61f87a0d515705d79f8eebdbc64accc9e147ca48f35aa85ce2c": [
@@ -9293,7 +9297,7 @@
   "url:https://payloads.tralalarkefe.com/run_bg.ps1": [
    {
     "report": "russian-gemini-credential-mill-213.165.51.115",
-    "role": "Operator's stager PowerShell — first stage of universal infection one-liner"
+    "role": "Operator's stager PowerShell, first stage of universal infection one-liner"
    }
   ],
   "url:https://c2.tralalarkefe.com/api/v1/update": [
@@ -9775,7 +9779,7 @@
   "ipv4:187.124.244.54": [
    {
     "report": "shadow-xworm-opendirectory",
-    "role": "Current IP for epgoldsecurity.com — payload delivery server (Hostinger, AS47583)"
+    "role": "Current IP for epgoldsecurity.com, payload delivery server (Hostinger, AS47583)"
    }
   ],
   "ipv4:185.11.145.145": [
@@ -9786,7 +9790,7 @@
   "ipv4:185.11.145.254": [
    {
     "report": "shadow-xworm-opendirectory",
-    "role": "Secondary historical BlazingFast IP for epgoldsecurity.com — same ASN/provider"
+    "role": "Secondary historical BlazingFast IP for epgoldsecurity.com, same ASN/provider"
    }
   ],
   "domain:harrismanlieb.ink": [
@@ -9823,13 +9827,13 @@
   "domain:ns2.harrismanlieb.ink": [
    {
     "report": "shadow-xworm-opendirectory",
-    "role": "Self-hosted nameserver pointing to C2 IP — strong infrastructure clustering indicator"
+    "role": "Self-hosted nameserver pointing to C2 IP, strong infrastructure clustering indicator"
    }
   ],
   "domain:ns2.latssko.com": [
    {
     "report": "shadow-xworm-opendirectory",
-    "role": "Self-hosted nameserver for previous operational domain — same self-hosting pattern"
+    "role": "Self-hosted nameserver for previous operational domain, same self-hosting pattern"
    }
   ],
   "sha1:7aa3fe6ebcb4ecc1a61568a0eab0d2b08d802b4d": [
@@ -9947,13 +9951,13 @@
   "email:abuse@pro-spero.ru": [
    {
     "report": "shinyhunters-dls-91-215-85-22-20260417",
-    "role": "PROSPERO RIPE abuse-contact — historically unresponsive per community reports"
+    "role": "PROSPERO RIPE abuse-contact, historically unresponsive per community reports"
    }
   ],
   "email:abuse@ddos-guard.net": [
    {
     "report": "shinyhunters-dls-91-215-85-22-20260417",
-    "role": "DDoS-Guard RIPE abuse-contact — historically unresponsive"
+    "role": "DDoS-Guard RIPE abuse-contact, historically unresponsive"
    }
   ],
   "sha1:f4953411767de71bedcdabcb76f4e26f7a20978a": [
@@ -10110,7 +10114,7 @@
   "domain:intezer.com": [
    {
     "report": "sliver-open-directory",
-    "role": "Sandbox detection canary domain — used to detect analysis environment"
+    "role": "Sandbox detection canary domain, used to detect analysis environment"
    }
   ],
   "sha256:ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79": [

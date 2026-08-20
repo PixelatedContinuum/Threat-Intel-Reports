@@ -21,7 +21,7 @@
         "value": "6682f3b4568807b0e57acbf2acd627e25be44304cac9241f2b51efa892aaab0c",
         "filename": "Shadow.Common.dll",
         "confidence": "HIGH",
-        "context": "Shadow RAT shared library — core message types, Aes256 crypto, DNS utilities (109,568 bytes)"
+        "context": "Shadow RAT shared library, core message types, Aes256 crypto, DNS utilities (109,568 bytes)"
       },
       {
         "value": "b7fa1e5cefb7f5ad367271f29bde8558566c17da169b5dac797c79beb3fc4531",
@@ -190,21 +190,21 @@
         "port": "8990",
         "protocol": "TCP",
         "confidence": "HIGH",
-        "context": "Shadow RAT C2 listener — extracted from AES-256 encrypted config in both ShadoClient.exe and ShadowClient.exe"
+        "context": "Shadow RAT C2 listener, extracted from AES-256 encrypted config in both ShadoClient.exe and ShadowClient.exe"
       },
       {
         "ip": "151.245.112.70",
         "port": "7007",
         "protocol": "TCP",
         "confidence": "HIGH",
-        "context": "XWorm C2 listener — extracted from Rijndael-256-ECB encrypted config in both XWormClient.exe and XWormClient2.exe"
+        "context": "XWorm C2 listener, extracted from Rijndael-256-ECB encrypted config in both XWormClient.exe and XWormClient2.exe"
       },
       {
         "ip": "151.245.112.70",
         "port": "3000",
         "protocol": "TCP",
         "confidence": "MODERATE",
-        "context": "Shadow RAT cleartext port field — may be default/fallback or reconnection port, not confirmed active"
+        "context": "Shadow RAT cleartext port field, may be default/fallback or reconnection port, not confirmed active"
       },
       {
         "ip": "151.245.112.70",
@@ -218,14 +218,14 @@
         "port": "",
         "protocol": "",
         "confidence": "HIGH",
-        "context": "Current IP for epgoldsecurity.com — payload delivery server (Hostinger, AS47583)"
+        "context": "Current IP for epgoldsecurity.com, payload delivery server (Hostinger, AS47583)"
       },
       {
         "ip": "185.11.145.145",
         "port": "",
         "protocol": "",
         "confidence": "MODERATE",
-        "context": "Historical IP for epgoldsecurity.com — BlazingFast, AS47674, Netherlands. Active until 2026-03-26 migration",
+        "context": "Historical IP for epgoldsecurity.com, BlazingFast, AS47674, Netherlands. Active until 2026-03-26 migration",
         "false_positive_risk": "MODERATE"
       },
       {
@@ -233,7 +233,7 @@
         "port": "",
         "protocol": "",
         "confidence": "MODERATE",
-        "context": "Secondary historical BlazingFast IP for epgoldsecurity.com — same ASN/provider",
+        "context": "Secondary historical BlazingFast IP for epgoldsecurity.com, same ASN/provider",
         "false_positive_risk": "MODERATE"
       }
     ],
@@ -269,9 +269,9 @@
       {
         "url": "http://ip-api.com/line/?fields=hosting",
         "confidence": "HIGH",
-        "context": "XWorm anti-analysis callback — queries legitimate API to detect hosting/datacenter IPs. If response is 'true', malware exits silently.",
+        "context": "XWorm anti-analysis callback, queries legitimate API to detect hosting/datacenter IPs. If response is 'true', malware exits silently.",
         "false_positive_risk": "HIGH",
-        "note": "Legitimate service abused for sandbox evasion — do not block this URL as it will cause false positives"
+        "note": "Legitimate service abused for sandbox evasion. Do not block this URL as it will cause false positives"
       }
     ],
     "user_agents": []
@@ -301,7 +301,7 @@
         "action": "%AppData%\\XWormClient.exe",
         "trigger": "Every 60 seconds (/sc minute /mo 1) at HIGHEST privilege (/rl highest)",
         "confidence": "HIGH",
-        "context": "XWorm aggressive scheduled task persistence — near-instant re-execution after termination",
+        "context": "XWorm aggressive scheduled task persistence, near-instant re-execution after termination",
         "value": "XWormClient"
       }
     ],
@@ -310,17 +310,17 @@
       {
         "name": "4c7e33e6-3f73-4b4c-a411-89fe63cdfa1e",
         "confidence": "HIGH",
-        "context": "Shadow RAT single-instance mutex — shared by both ShadoClient and ShadowClient builds. GUID format. Exits with code 2 if already running."
+        "context": "Shadow RAT single-instance mutex, shared by both ShadoClient and ShadowClient builds. GUID format. Exits with code 2 if already running."
       },
       {
         "name": "PdqPY2fw6ffCVLQ8",
         "confidence": "HIGH",
-        "context": "XWormClient.exe process mutex — derived from config AES key (lazy implementation)"
+        "context": "XWormClient.exe process mutex, derived from config AES key (lazy implementation)"
       },
       {
         "name": "ZdoNsjYfT6begqDl",
         "confidence": "HIGH",
-        "context": "XWormClient2.exe process mutex — different builder generation, same campaign"
+        "context": "XWormClient2.exe process mutex, different builder generation, same campaign"
       }
     ],
     "named_pipes": []
@@ -340,7 +340,7 @@
       {
         "pattern": "schtasks.exe /create /f /sc minute /mo 1 /tn XWormClient /tr ... /rl highest",
         "confidence": "HIGH",
-        "context": "XWorm scheduled task creation — every 60 seconds at HIGHEST privilege"
+        "context": "XWorm scheduled task creation, every 60 seconds at HIGHEST privilege"
       },
       {
         "pattern": "Process queries http://ip-api.com/line/?fields=hosting and exits if response is 'true'",
@@ -386,14 +386,14 @@
         "ns": "ns2.harrismanlieb.ink",
         "ip": "151.245.112.70",
         "confidence": "HIGH",
-        "context": "Self-hosted nameserver pointing to C2 IP — strong infrastructure clustering indicator",
+        "context": "Self-hosted nameserver pointing to C2 IP, strong infrastructure clustering indicator",
         "value": "ns2.harrismanlieb.ink"
       },
       {
         "ns": "ns2.latssko.com",
         "ip": "151.245.112.70",
         "confidence": "HIGH",
-        "context": "Self-hosted nameserver for previous operational domain — same self-hosting pattern",
+        "context": "Self-hosted nameserver for previous operational domain, same self-hosting pattern",
         "value": "ns2.latssko.com"
       }
     ],

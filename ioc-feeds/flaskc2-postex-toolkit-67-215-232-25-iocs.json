@@ -174,7 +174,7 @@
         "country": "US",
         "city": "Los Angeles",
         "first_seen": "2026-03-11",
-        "notes": "VT 15/91 malicious, reputation -1. communicating_files=0 (beacon implant unrecovered). IP-only (no domain) — fully blockable at the IP. No sibling C2 found (5 convergent negative pivots)."
+        "notes": "VT 15/91 malicious, reputation -1. communicating_files=0 (beacon implant unrecovered). IP-only (no domain), fully blockable at the IP. No sibling C2 found (5 convergent negative pivots)."
       }
     ],
     "ipv6": [],
@@ -279,9 +279,9 @@
     }
   ],
   "false_positive_notes": [
-    "67.215.232.25 is on shared hosting (HostPapa/ColoCrossing, AS36352) — IP block covers the known infra but confirm port/service context before broad blocking of the /21.",
+    "67.215.232.25 is on shared hosting (HostPapa/ColoCrossing, AS36352), IP block covers the known infra but confirm port/service context before broad blocking of the /21.",
     "The native-tool and operator-recompiled .NET hashes are widely-shared public hacktools; presence indicates hacktool staging but not necessarily this specific operator. The bespoke cmd_exec.dll SHA256 (a7029ef2...) and the [*] Connected to SQL Server CLR backdoor banner are the operator-specific anchors.",
-    "Werkzeug/3.1.6 and Python 3.12.3 are common — the /health JSON field-combo (active_servers+pending_commands+completed_commands+status+timestamp) is the discriminating C2 signature, not the server banner alone.",
+    "Werkzeug/3.1.6 and Python 3.12.3 are common. The /health JSON field-combo (active_servers+pending_commands+completed_commands+status+timestamp) is the discriminating C2 signature, not the server banner alone.",
     "Aatrox is a League-of-Legends champion name in common use; treat as a commodity webshell password/eval-param, not an operator identity artifact."
   ]
 }

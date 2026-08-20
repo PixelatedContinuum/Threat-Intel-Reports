@@ -2,7 +2,7 @@
   "malware_name": "ShinyHunters-DLS",
   "campaign_id": "ShinyHunters-DLS-DataLeak-91.215.85.22",
   "analysis_date": "2026-04-17",
-  "confidence_note": "Confidence levels: DEFINITE (direct evidence, no ambiguity), HIGH (strong evidence, minor gaps), MODERATE (reasonable evidence, notable gaps), LOW (weak/circumstantial). No SHA256 hashes for archive payloads — the investigation deliberately did not download stolen-victim-PII archives. IOCs focus on infrastructure, URLs, filename patterns, PGP fingerprints, and actor-identity artifacts.",
+  "confidence_note": "Confidence levels: DEFINITE (direct evidence, no ambiguity), HIGH (strong evidence, minor gaps), MODERATE (reasonable evidence, notable gaps), LOW (weak/circumstantial). No SHA256 hashes for archive payloads. The investigation deliberately did not download stolen-victim-PII archives. IOCs focus on infrastructure, URLs, filename patterns, PGP fingerprints, and actor-identity artifacts.",
   "analyst_notes": [
     "This is a Data Leak Site / extortion infrastructure investigation, not a malware-binary investigation.",
     "28 of 29 named victims on this DLS are publicly reported as ShinyHunters victims; Alert360 is the sole unacknowledged victim.",
@@ -22,147 +22,147 @@
       {
         "name": "shouldve_paid_the_fucking_ransom_zenbusiness_SHINYHUNTERS.zip",
         "confidence": "DEFINITE",
-        "context": "ZenBusiness dump — 821 GB, 2026-04-05"
+        "context": "ZenBusiness dump, 821 GB, 2026-04-05"
       },
       {
         "name": "europa.zip",
         "confidence": "HIGH",
-        "context": "European Commission / Europa.eu breach — 94 GB, 2026-03-28 (attribution via timing + size alignment with EC disclosure)"
+        "context": "European Commission / Europa.eu breach, 94 GB, 2026-03-28 (attribution via timing + size alignment with EC disclosure)"
       },
       {
         "name": "shouldve_PAID_THE-ransom-beaconpointe-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Beacon Pointe dump — 43.3 GB"
+        "context": "Beacon Pointe dump, 43.3 GB"
       },
       {
         "name": "shouldve_paid_the_ransom_bumble-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Bumble dump — 29.5 GB"
+        "context": "Bumble dump, 29.5 GB"
       },
       {
         "name": "shouldve_paid_the_ransom_berkadia-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Berkadia dump — 27.6 GB"
+        "context": "Berkadia dump, 27.6 GB"
       },
       {
         "name": "SHOULDVE_PAID_THE_FUCKING_RANSOM_Kemper-SHINYHUNTERS.7z",
         "confidence": "DEFINITE",
-        "context": "Kemper dump — 26.8 GB, 2026-04-15 fresh tranche"
+        "context": "Kemper dump, 26.8 GB, 2026-04-15 fresh tranche"
       },
       {
         "name": "shouldve_paid_the_ransom_amtrak-SHINYHUNTERS.7z",
         "confidence": "DEFINITE",
-        "context": "Amtrak dump — 17.5 GB, 2026-04-15 fresh tranche"
+        "context": "Amtrak dump, 17.5 GB, 2026-04-15 fresh tranche"
       },
       {
         "name": "shouldve_paid_the_ransom_pathstone.com_shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Pathstone dump — 15.2 GB"
+        "context": "Pathstone dump, 15.2 GB"
       },
       {
         "name": "shouldve_paid-the_ransom_aura-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Aura dump — 11.5 GB"
+        "context": "Aura dump, 11.5 GB"
       },
       {
         "name": "shouldve-paid-the-fucking-ransom-edmunds-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Edmunds dump — 11.4 GB"
+        "context": "Edmunds dump, 11.4 GB"
       },
       {
         "name": "SHOULDVE_PAID_THE_RANSOM_CARGURUS_shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "CarGurus dump — 7.2 GB"
+        "context": "CarGurus dump, 7.2 GB"
       },
       {
         "name": "shouldve_paid_the_ransom_mcgrawhill-SHINYHUNTERS.7z",
         "confidence": "DEFINITE",
-        "context": "McGraw-Hill dump — 5.2 GB, 2026-04-15 fresh tranche"
+        "context": "McGraw-Hill dump, 5.2 GB, 2026-04-15 fresh tranche"
       },
       {
         "name": "shouldve-paid-the-ransom-soundcloud-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "SoundCloud dump — 2.8 GB"
+        "context": "SoundCloud dump, 2.8 GB"
       },
       {
         "name": "mercer_didnt_pay_the_ransom_shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Mercer Advisors dump — 2.5 GB"
+        "context": "Mercer Advisors dump, 2.5 GB"
       },
       {
         "name": "shouldve_paid_the_Damn_ransom_figure.com-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Figure.com dump — 2.5 GB"
+        "context": "Figure.com dump, 2.5 GB"
       },
       {
         "name": "shouldve-paid-the-ransom-matchgroup-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Match Group dump — 1.7 GB"
+        "context": "Match Group dump, 1.7 GB"
       },
       {
         "name": "shouldve-paid-the-ransom-betterment-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Betterment dump — 1.6 GB"
+        "context": "Betterment dump, 1.6 GB"
       },
       {
         "name": "shouldve_paid_the_fucking_ransom_infiniteCAMPUS-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Infinite Campus dump — 1.1 GB"
+        "context": "Infinite Campus dump, 1.1 GB"
       },
       {
         "name": "shouldve_paid_the_ransom_harvard_shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Harvard University dump — 1.0 GB"
+        "context": "Harvard University dump, 1.0 GB"
       },
       {
         "name": "pay-the-ransom-next-time-panera-bread-shinyhunters-dont-be-the-next-headline.7z",
         "confidence": "DEFINITE",
-        "context": "Panera Bread dump — 759 MB"
+        "context": "Panera Bread dump, 759 MB"
       },
       {
         "name": "SHOULDVE_PAID_THE_FUCKING_RANSOM_HALLMARK.7z",
         "confidence": "DEFINITE",
-        "context": "Hallmark dump — 568 MB"
+        "context": "Hallmark dump, 568 MB"
       },
       {
         "name": "you_shouldve_paid_the_ransom_why_didnt_you_CFGI_shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "CFGI dump — 475 MB"
+        "context": "CFGI dump, 475 MB"
       },
       {
         "name": "shouldve_paid_the_ransom_upenn_shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "UPenn dump — 461 MB"
+        "context": "UPenn dump, 461 MB"
       },
       {
         "name": "shouldve_paid_the_ransom_rockstar_shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Rockstar Games dump — 419 MB"
+        "context": "Rockstar Games dump, 419 MB"
       },
       {
         "name": "shoulda-paid-the-ransom-crunchbase-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "Crunchbase dump — 402 MB"
+        "context": "Crunchbase dump, 402 MB"
       },
       {
         "name": "canadagoose_shouldve_paid_the_ransom_SHINYHUNTERS.7z",
         "confidence": "DEFINITE",
-        "context": "Canada Goose dump — 157 MB"
+        "context": "Canada Goose dump, 157 MB"
       },
       {
         "name": "shouldve_paid_the_ransom_abrigo-SHINYHUNTERS.7z",
         "confidence": "DEFINITE",
-        "context": "Abrigo dump — 61 MB, 2026-04-15 fresh tranche"
+        "context": "Abrigo dump, 61 MB, 2026-04-15 fresh tranche"
       },
       {
         "name": "shouldve-paid-the-ransom-carmax-shinyhunters.7z",
         "confidence": "DEFINITE",
-        "context": "CarMax dump — 61 MB"
+        "context": "CarMax dump, 61 MB"
       },
       {
         "name": "bf_03_2026.sql.7z",
         "confidence": "HIGH",
-        "context": "BreachForums v5 user database dump (~340K records) — 43 MB, 2026-03-27"
+        "context": "BreachForums v5 user database dump (~340K records), 43 MB, 2026-03-27"
       }
     ],
     "file_paths": [
@@ -181,7 +181,7 @@
       {
         "path": "/pay_or_leak/alert360/",
         "confidence": "HIGH",
-        "context": "Victim subdirectory (INFORMATION.txt only, no archive — extortion-negotiation stage)",
+        "context": "Victim subdirectory (INFORMATION.txt only, no archive, extortion-negotiation stage)",
         "value": "/pay_or_leak/alert360/"
       },
       {
@@ -259,7 +259,7 @@
         "value": "91.202.233.0/24",
         "range": "91.202.233.0/24",
         "confidence": "HIGH",
-        "context": "Adjacent PROSPERO-announced prefix (AS200593) — see infrastructure-analyst output for co-tenant findings"
+        "context": "Adjacent PROSPERO-announced prefix (AS200593). See infrastructure-analyst output for co-tenant findings"
       },
       {
         "value": "193.24.123.0/24",
@@ -288,7 +288,7 @@
         "asn": "AS34665",
         "name": "Petersburg Internet Network Ltd",
         "confidence": "MODERATE",
-        "context": "Historical carrier (per OTX) — prior-assigned before PROSPERO"
+        "context": "Historical carrier (per OTX), prior-assigned before PROSPERO"
       }
     ],
     "domains": [
@@ -360,13 +360,13 @@
         "value": "abuse@pro-spero.ru",
         "email": "abuse@pro-spero.ru",
         "confidence": "DEFINITE",
-        "context": "PROSPERO RIPE abuse-contact — historically unresponsive per community reports"
+        "context": "PROSPERO RIPE abuse-contact, historically unresponsive per community reports"
       },
       {
         "value": "abuse@ddos-guard.net",
         "email": "abuse@ddos-guard.net",
         "confidence": "DEFINITE",
-        "context": "DDoS-Guard RIPE abuse-contact — historically unresponsive"
+        "context": "DDoS-Guard RIPE abuse-contact, historically unresponsive"
       }
     ],
     "server_banners": [
@@ -374,7 +374,7 @@
         "value": "nginx/1.22.1",
         "banner": "nginx/1.22.1",
         "confidence": "DEFINITE",
-        "context": "Both DLS (91.215.85.22) and shinyhunte.rs origin run same nginx version — possibly common server image"
+        "context": "Both DLS (91.215.85.22) and shinyhunte.rs origin run same nginx version, possibly common server image"
       }
     ],
     "user_agents": []
@@ -465,7 +465,7 @@
         "type": "telegram",
         "value": "https://t.me/wokawoka10",
         "confidence": "LOW",
-        "context": "Claimed 'James' contact per Dec 2025 internal statement; not independently verified; possible planted artifact — pivot-only indicator"
+        "context": "Claimed 'James' contact per Dec 2025 internal statement; not independently verified; possible planted artifact, pivot-only indicator"
       }
     ],
     "archive_references": [
@@ -482,7 +482,7 @@
       {
         "url": "https://web.archive.org/web/20251012013224/https://shinyhunte.rs/",
         "confidence": "HIGH",
-        "context": "Snapshot showing self-branded 'Scattered LAPSUS$ Hunters | DLS' page title — collective-branding confirmation"
+        "context": "Snapshot showing self-branded 'Scattered LAPSUS$ Hunters | DLS' page title, collective-branding confirmation"
       },
       {
         "url": "https://web.archive.org/web/20251217231546/https://shinyhunte.rs/",
@@ -496,7 +496,7 @@
       {
         "pattern": "External download of any file matching (?i)should(ve|a).*paid.*ransom.*shinyhunters regex",
         "confidence": "HIGH",
-        "context": "Enterprise file-share or endpoint-download appearance of ShinyHunters-branded archives — sign of either (a) SOC IR collection, or (b) unauthorized re-host/distribution"
+        "context": "Enterprise file-share or endpoint-download appearance of ShinyHunters-branded archives, sign of either (a) SOC IR collection, or (b) unauthorized re-host/distribution"
       },
       {
         "pattern": "HTTP/HTTPS connection to 91.215.85.22/pay_or_leak/ or INFORMATION.txt from internal hosts",
@@ -508,12 +508,12 @@
       {
         "pattern": "DNS query for shinyhunte.rs from enterprise endpoints",
         "confidence": "HIGH",
-        "context": "Identity-page resolution — suspicious unless from security-research workstation"
+        "context": "Identity-page resolution, suspicious unless from security-research workstation"
       },
       {
         "pattern": "DNS query for pro-spero.ru from enterprise endpoints",
         "confidence": "MODERATE",
-        "context": "PROSPERO operator-domain resolution — less targeted than direct DLS-IP traffic"
+        "context": "PROSPERO operator-domain resolution, less targeted than direct DLS-IP traffic"
       },
       {
         "pattern": "HTTP/HTTPS traffic to 91.215.43.200 (shinyhunte.rs origin) bypassing DDoS-Guard front",

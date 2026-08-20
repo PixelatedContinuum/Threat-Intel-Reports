@@ -18,7 +18,7 @@
     "sha256": [],
     "sha1": [],
     "md5": [],
-    "notes": "No malware binary observed for Case 4. The primary captured artifact is the operator's configuration file (settings.local.json, 442 bytes) — not a hashable malware sample. Preserved offline at Evidence/korean-attacker-claude-settings.local.json in the parent investigation directory."
+    "notes": "No malware binary observed for Case 4. The primary captured artifact is the operator's configuration file (settings.local.json, 442 bytes), not a hashable malware sample. Preserved offline at Evidence/korean-attacker-claude-settings.local.json in the parent investigation directory."
   },
   "network_indicators": {
     "ipv4": [
@@ -42,21 +42,21 @@
         "value": "openclaw.ai",
         "type": "tooling_distribution",
         "confidence": "DEFINITE",
-        "context": "OpenClaw product / installer hosting domain; referenced in operator's pre-approved Claude Code allowlist as the curl|bash installer source — Dual-use: publicly distributed AI-agent framework with both legitimate-purpose adopters and confirmed-malicious operators (this case + Case 2 Turkish ARPA + Case 7 Korean operator)",
+        "context": "OpenClaw product / installer hosting domain; referenced in operator's pre-approved Claude Code allowlist as the curl|bash installer source, Dual-use: publicly distributed AI-agent framework with both legitimate-purpose adopters and confirmed-malicious operators (this case + Case 2 Turkish ARPA + Case 7 Korean operator)",
         "action": "Monitor DNS resolution from server-class and non-developer hosts; alert on HTTPS connection from production endpoints"
       },
       {
         "value": "docs.openclaw.ai",
         "type": "tooling_documentation",
         "confidence": "DEFINITE",
-        "context": "OpenClaw documentation host; referenced in operator's pre-approved Claude Code WebFetch allowlist entry — Same dual-use status as openclaw.ai parent domain",
+        "context": "OpenClaw documentation host; referenced in operator's pre-approved Claude Code WebFetch allowlist entry, Same dual-use status as openclaw.ai parent domain",
         "action": "Monitor for `WebFetch(domain:docs.openclaw.ai)` pattern in Claude Code permission allowlists"
       },
       {
         "value": "lightmake.site",
         "type": "tooling_infrastructure",
         "confidence": "MODERATE",
-        "context": "OpenClaw-adjacent infrastructure component referenced in parent-investigation hosting-and-egress signature list — Not directly observed in Case 4 artifact; promoted to this feed from parent investigation umbrella's OpenClaw ecosystem documentation",
+        "context": "OpenClaw-adjacent infrastructure component referenced in parent-investigation hosting-and-egress signature list, Not directly observed in Case 4 artifact; promoted to this feed from parent investigation umbrella's OpenClaw ecosystem documentation",
         "action": "Monitor DNS resolution + HTTPS connections from non-developer hosts"
       }
     ],
@@ -101,7 +101,7 @@
         "value": "~/.openclaw/",
         "type": "openclaw_installation_directory",
         "confidence": "DEFINITE",
-        "context": "OpenClaw home-directory installation; expected to be present co-located with Claude Code on hosts running the attacker tradecraft pattern documented in this case — Presence alone is not malicious (OpenClaw is dual-use); the diagnostic is the combination of OpenClaw installation + attacker-customized Claude Code allowlist + open-directory exposure or other operator signals",
+        "context": "OpenClaw home-directory installation; expected to be present co-located with Claude Code on hosts running the attacker tradecraft pattern documented in this case, Presence alone is not malicious (OpenClaw is dual-use); the diagnostic is the combination of OpenClaw installation + attacker-customized Claude Code allowlist + open-directory exposure or other operator signals",
         "action": "Inventory; surface combined Claude Code + OpenClaw installations for review"
       },
       {
@@ -153,7 +153,7 @@
         "type": "allowlist_entry",
         "confidence": "DEFINITE",
         "action": "Add to YARA strings + Sigma file-content rules",
-        "context": "Operator's allowlist entry pre-approving the macOS `open` command to launch the OpenClaw gateway web UI in the operator's default browser (macOS-specific command — operator's host is likely macOS or a macOS-compatible environment)"
+        "context": "Operator's allowlist entry pre-approving the macOS `open` command to launch the OpenClaw gateway web UI in the operator's default browser (macOS-specific command, operator's host is likely macOS or a macOS-compatible environment)"
       }
     ],
     "package_names": [
@@ -181,7 +181,7 @@
     "primary_finding": "First DEFINITE artifact-level evidence of an attacker pre-customizing an AI-agent CLI's permission allowlist to lower safety friction for installing and running a side-loaded AI agent framework (OpenClaw).",
     "operator_workflow": "Claude Code is used as the human-facing AI assistant. The operator-customized settings.local.json pre-authorizes the OpenClaw installer fetch, global install, onboarding, doc fetch, gateway start on port 18789, and gateway UI launch. The seven-entry sequence collectively describes the complete OpenClaw bring-up workflow that the operator has pre-authorized Claude Code to execute without per-command safety prompts.",
     "operator_class": "AI-integrated mature operator per umbrella Section 4.10 taxonomy. Operator OPSEC paradox: allowlist sophistication + residential Korea Telecom exposure.",
-    "novelty_claim": "Allowlist-customization-bypass technique is documented at first-public-documentation level by The Hunters Ledger. Operators who read this report can reproduce the technique against any AI-agent CLI with similar permission-prompt safety mechanisms — the defensive value is the hunt anchor (the file + content patterns), not the technique-secrecy.",
+    "novelty_claim": "Allowlist-customization-bypass technique is documented at first-public-documentation level by The Hunters Ledger. Operators who read this report can reproduce the technique against any AI-agent CLI with similar permission-prompt safety mechanisms. The defensive value is the hunt anchor (the file + content patterns), not the technique-secrecy.",
     "victim_count": 0,
     "victim_class_observed": "None confirmed; case is tradecraft observation only.",
     "active_status_at_publication": "Host remains exposed at the discovery URL as of investigation close; operator activity is dormant or off-host since 2026-03-11 first-seen."

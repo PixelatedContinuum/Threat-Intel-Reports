@@ -1,6 +1,6 @@
 {
   "campaign": "uac_test.exe (UAC Bypass PoC) - Open Directory 109.230.231.37",
-  "description": "Comprehensive IOCs for uac_test.exe, a security research and penetration testing tool designed to demonstrate User Account Control (UAC) bypass techniques on Windows systems. This is NOT weaponized malware—it lacks C2 infrastructure, persistence mechanisms, and malicious payloads. The tool implements two well-documented UAC bypass methods: CMSTPLUA COM interface abuse and Fodhelper registry hijacking. Discovered on open directory at IP 109.230.231.37 alongside weaponized RAT variants.",
+  "description": "Comprehensive IOCs for uac_test.exe, a security research and penetration testing tool designed to demonstrate User Account Control (UAC) bypass techniques on Windows systems. This is NOT weaponized malware to it lacks C2 infrastructure, persistence mechanisms, and malicious payloads. The tool implements two well-documented UAC bypass methods: CMSTPLUA COM interface abuse and Fodhelper registry hijacking. Discovered on open directory at IP 109.230.231.37 alongside weaponized RAT variants.",
   "severity": "MEDIUM",
   "confidence_level": "High",
   "tool_classification": "Security Research Tool / UAC Bypass Proof-of-Concept",

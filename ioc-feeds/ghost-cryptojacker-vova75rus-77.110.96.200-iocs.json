@@ -483,7 +483,7 @@
         "type": "telegram_bot_id_prefix",
         "role": "Operator-A MIRROR bot",
         "confidence": "DEFINITE",
-        "context": "Operator-A's own visibility channel (ЗЕРКАЛО — ТЫ / Mirror — You); typed in bash history without clearing - operator OPSEC failure"
+        "context": "Operator-A's own visibility channel (ЗЕРКАЛО, ТЫ / Mirror, You); typed in bash history without clearing - operator OPSEC failure"
       }
     ],
     "wallets": [

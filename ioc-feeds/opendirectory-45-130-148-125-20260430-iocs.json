@@ -40,7 +40,7 @@
         "value": "5bc6603e47ddaea79b8050ea1c076d9d9c2d06a9f350f698d5147fbbbe4e7bac",
         "filename": "embedded_dll.bin",
         "confidence": "HIGH",
-        "context": "AdaptixC2 Windows beacon (DLL form, dev build, build counter 4). Carved from beacon.ps1's $sr blob at offset 0x3FF after 1023-byte MinGW RDI bootstrap. Compiled 2026-04-23 07:39:46 UTC — 13 hours earlier than production cluster. Demonstrates same-day operator iteration cycle."
+        "context": "AdaptixC2 Windows beacon (DLL form, dev build, build counter 4). Carved from beacon.ps1's $sr blob at offset 0x3FF after 1023-byte MinGW RDI bootstrap. Compiled 2026-04-23 07:39:46 UTC, 13 hours earlier than production cluster. Demonstrates same-day operator iteration cycle."
       },
       {
         "value": "b4ffd7ca8f5505fd7b71882c67712e896c9d170a3b3b581baba78ee5d1c2b858",
@@ -52,7 +52,7 @@
         "value": "5ea265ad3e6429cd2e8d9831360f7e2be9b8ba5a5b32a4a60c5c956a3f8fb285",
         "filename": "injector.dll",
         "confidence": "HIGH",
-        "context": "Operator-written .NET v4.7.2 PE injector (carved from beacon.ps1 $dr blob). 5,120 B. Class name 'SI' with static method Inject(uint32 pid, byte[] sc). Linux-built (PDB path /tmp/si_build/obj/Release/net472/si_build.pdb). W^X-aware classic CRT process injection (RW alloc → write → flip to RX, NOT RWX). ONE OF THE TWO VERIFIED CUSTOM CODE PIECES. AdaptixC2 ships NO stock .NET injector — confirmed operator-authored."
+        "context": "Operator-written .NET v4.7.2 PE injector (carved from beacon.ps1 $dr blob). 5,120 B. Class name 'SI' with static method Inject(uint32 pid, byte[] sc). Linux-built (PDB path /tmp/si_build/obj/Release/net472/si_build.pdb). W^X-aware classic CRT process injection (RW alloc → write → flip to RX, NOT RWX). ONE OF THE TWO VERIFIED CUSTOM CODE PIECES. AdaptixC2 ships NO stock .NET injector, confirmed operator-authored."
       },
       {
         "value": "20fcb557c7c4ada8173576b56aadc8f917c668b9e4b2aaf05fb90375147fd27f",
@@ -64,7 +64,7 @@
         "value": "f68507d88b007817901ffe3537a2d3935de53344ddfb6f0838d4141e3c02e07d",
         "filename": "gopher.x64.exe",
         "confidence": "HIGH",
-        "context": "AdaptixC2 Gopher Go agent (Windows variant). Pure Go 1.25.4, CGO_ENABLED=0, -trimpath set. 1,332 user functions. Full Cobalt Strike BOF execution runtime in Go (gopher/bof/{binutil,boffer,coffer,defwin,memory}). MessagePack C2 protocol. VCS rev a4b80bf370f704d6843e69433bfb5c06274f57df at 2026-03-04T20:36:06Z, vcs.modified=true. NOT custom — open-source AdaptixC2 framework component (Linux sibling identified by Kaspersky as AdaptixGopher)."
+        "context": "AdaptixC2 Gopher Go agent (Windows variant). Pure Go 1.25.4, CGO_ENABLED=0, -trimpath set. 1,332 user functions. Full Cobalt Strike BOF execution runtime in Go (gopher/bof/{binutil,boffer,coffer,defwin,memory}). MessagePack C2 protocol. VCS rev a4b80bf370f704d6843e69433bfb5c06274f57df at 2026-03-04T20:36:06Z, vcs.modified=true. NOT custom, open-source AdaptixC2 framework component (Linux sibling identified by Kaspersky as AdaptixGopher)."
       },
       {
         "value": "4b41f36f82db6da8767a0a1c2997c8242d80b2d10a8f1d28c252a9306ec152b5",
@@ -88,7 +88,7 @@
         "value": "fd9e3ad797022df67a406e1bb1bf1db57e2a14f66c668e22104a16bc735efc4e",
         "filename": "download_exec.ps1",
         "confidence": "HIGH",
-        "context": "Uncustomized PowerShell template (203 B, 3 lines) containing literal placeholder URL 'http://IP/tool.exe' — operator never customized this; bundled as future re-use template. Operator-profile signal: opportunistic kit collector."
+        "context": "Uncustomized PowerShell template (203 B, 3 lines) containing literal placeholder URL 'http://IP/tool.exe', operator never customized this; bundled as future re-use template. Operator-profile signal: opportunistic kit collector."
       },
       {
         "value": "ec54e9e5802423d17f1390a25a811b7779c33d8e7ad942cd731dfd366998eccb",
@@ -112,7 +112,7 @@
         "value": "61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
         "filename": "mimikatz.exe",
         "confidence": "HIGH",
-        "context": "gentilkiwi mimikatz v2.2.0 commodity credential dumper. ProductName='mimikatz', CompanyName='gentilkiwi (Benjamin DELPY)' — confirms unmodified upstream."
+        "context": "gentilkiwi mimikatz v2.2.0 commodity credential dumper. ProductName='mimikatz', CompanyName='gentilkiwi (Benjamin DELPY)', confirms unmodified upstream."
       },
       {
         "value": "e8fbec25db4f9d95b5e8f41cca51a4b32be8674a4dea7a45b6f7aeb22dbc38db",
@@ -124,13 +124,13 @@
         "value": "316f9165ba23b968d33966cd2cef70b10b9e5973117b3864b51048292bbb6742",
         "filename": "nc.exe",
         "confidence": "HIGH",
-        "context": "Classic netcat (variant 2 — different binary)."
+        "context": "Classic netcat (variant 2, different binary)."
       },
       {
         "value": "507e8666c239397561c58609f7ea569c9c49ddbb900cd260e7e42b02d03cfd87",
         "filename": "PowerView.ps1",
         "confidence": "HIGH",
-        "context": "Commodity AD enumeration PowerShell. Triggers MALWARE_RULES: spyeye YARA false-positive — DETECTION-ENGINEER MUST FILTER (PowerView is NOT SpyEye)."
+        "context": "Commodity AD enumeration PowerShell. Triggers MALWARE_RULES: spyeye YARA false-positive. DETECTION-ENGINEER MUST FILTER (PowerView is NOT SpyEye)."
       },
       {
         "value": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
@@ -166,7 +166,7 @@
         "value": "f091c63809e27e7d2ef3c3506f5c59563817a7876b737e3995540b051b225e51",
         "filename": "SharpHound.exe",
         "confidence": "MODERATE",
-        "context": "PRELIMINARY — heavily packed SharpHound variant (1.35 MB, 86% high-entropy chunks, overall entropy 7.91). Signal of operator-applied AV-evasion to high-signature commodity tool. Plausible: ConfuserEx / .NET Reactor / Costura.Fody / Eazfuscator obfuscator. Confirmation requires lab-VM de4dot deobfuscation."
+        "context": "PRELIMINARY, heavily packed SharpHound variant (1.35 MB, 86% high-entropy chunks, overall entropy 7.91). Signal of operator-applied AV-evasion to high-signature commodity tool. Plausible: ConfuserEx / .NET Reactor / Costura.Fody / Eazfuscator obfuscator. Confirmation requires lab-VM de4dot deobfuscation."
       },
       {
         "value": "f887e04ce6c43da608cfcb45e51398305bb3912ee9d88ac7569c917e245d404a",
@@ -196,7 +196,7 @@
         "value": "dc06d62ee95062e714f2566c95b8edaabfd387023b1bf98a09078b84007d5268",
         "filename": "lazagne.exe",
         "confidence": "MODERATE",
-        "context": "PRELIMINARY — heavily packed lazagne 10 MB variant (10,136,093 B; 31× larger than stock; 97% high-entropy chunks; YARA IsPacked + HasOverlay + anti_dbg + DebuggerException__SetConsoleCtrl). Plausible UPX-on-PyInstaller wrapping or stock newer lazagne v2.x with --collect-all + UPX. Pairs with SharpHound finding — selective operator AV-evasion tradecraft on most-signatured commodity tools. Confirmation requires lab-VM upx -t / upx -d."
+        "context": "PRELIMINARY, heavily packed lazagne 10 MB variant (10,136,093 B; 31× larger than stock; 97% high-entropy chunks; YARA IsPacked + HasOverlay + anti_dbg + DebuggerException__SetConsoleCtrl). Plausible UPX-on-PyInstaller wrapping or stock newer lazagne v2.x with --collect-all + UPX. Pairs with SharpHound finding, selective operator AV-evasion tradecraft on most-signatured commodity tools. Confirmation requires lab-VM upx -t / upx -d."
       }
     ],
     "imphashes": [
@@ -207,7 +207,7 @@
           "agent.x64.dll",
           "msupdate.dll"
         ],
-        "context": "Cluster imphash — AdaptixC2 Windows beacon DLL form, production cluster (build counter 5)"
+        "context": "Cluster imphash, AdaptixC2 Windows beacon DLL form, production cluster (build counter 5)"
       },
       {
         "value": "63cb3b95faad6b28fcce52a6aa698ff2",
@@ -223,7 +223,7 @@
         "associated_files": [
           "embedded_dll.bin"
         ],
-        "context": "AdaptixC2 Windows beacon dev-build (build counter 4) imphash — embedded in beacon.ps1 for delivery"
+        "context": "AdaptixC2 Windows beacon dev-build (build counter 4) imphash, embedded in beacon.ps1 for delivery"
       }
     ],
     "filenames": [
@@ -250,7 +250,7 @@
       {
         "name": "agent.exe",
         "confidence": "MODERATE",
-        "context": "Ligolo-ng v0.8.3 in this kit; filename is generic — name alone is insufficient for attribution"
+        "context": "Ligolo-ng v0.8.3 in this kit; filename is generic, name alone is insufficient for attribution"
       },
       {
         "name": "msupdate.dll",
@@ -260,12 +260,12 @@
       {
         "name": "gopher.x64.exe",
         "confidence": "HIGH",
-        "context": "AdaptixC2 Gopher Go agent — distinctive name (gopher = Go mascot)"
+        "context": "AdaptixC2 Gopher Go agent, distinctive name (gopher = Go mascot)"
       },
       {
         "name": "beacon.ps1",
         "confidence": "MODERATE",
-        "context": "Operator-written loader; filename common to many C2 frameworks — combine with content hash"
+        "context": "Operator-written loader; filename common to many C2 frameworks, combine with content hash"
       },
       {
         "name": "injector.dll",
@@ -277,7 +277,7 @@
       {
         "path": "/tmp/si_build/obj/Release/net472/si_build.pdb",
         "confidence": "HIGH",
-        "context": "PDB path leaked in operator-written .NET injector — Linux-built (forward slashes, /tmp/ prefix), standard `dotnet build -c Release` layout. Strong actor build-environment fingerprint for cross-operation tracking.",
+        "context": "PDB path leaked in operator-written .NET injector, Linux-built (forward slashes, /tmp/ prefix), standard `dotnet build -c Release` layout. Strong actor build-environment fingerprint for cross-operation tracking.",
         "value": "/tmp/si_build/obj/Release/net472/si_build.pdb"
       }
     ],
@@ -298,13 +298,13 @@
       {
         "string": "Mingw-w64 runtime failure:",
         "confidence": "HIGH",
-        "context": "Toolchain confirmation string in AdaptixC2 beacon binaries — confirms MinGW-w64 GCC build (operator's choice for compiling AdaptixC2 from source on Linux)",
+        "context": "Toolchain confirmation string in AdaptixC2 beacon binaries, confirms MinGW-w64 GCC build (operator's choice for compiling AdaptixC2 from source on Linux)",
         "value": "Mingw-w64 runtime failure:"
       },
       {
         "string": "_Z11GetVersionsv",
         "confidence": "HIGH",
-        "context": "Itanium-ABI mangled C++ export name in dev build (embedded_dll.bin) — same export, mangled vs unmangled across builds proves same source",
+        "context": "Itanium-ABI mangled C++ export name in dev build (embedded_dll.bin), same export, mangled vs unmangled across builds proves same source",
         "value": "_Z11GetVersionsv"
       },
       {
@@ -331,7 +331,7 @@
         "filename": "agent.bin",
         "confidence": "HIGH",
         "context": "AdaptixC2 Linux ELF agent (Gopher Linux variant). 6.13 MB. NOTE: Only 16-char SHA256 prefix recovered from project notes; full hash available via VT lookup at https://www.virustotal.com/gui/file-analysis/NjliMGNkODAzOGRmNmRjNDVhZjgzOGE1OTU4ZDgxZmU6MTc3NzE3OTM0Mg==. VT labels: bartblaze YARA Adaptix_Beacon, Kaspersky HEUR:Backdoor.Linux.AdaptixGopher.a, Microsoft HackTool:Linux/AdaptixC2.A!MTB. 15/65 detections. Confirms operator's Linux post-ex capability.",
-        "false_positive_risk": "LOW — full SHA256 needs to be retrieved from VT before defender ingestion",
+        "false_positive_risk": "LOW, full SHA256 needs to be retrieved from VT before defender ingestion",
         "value": "b__truncated_e89deceab1155a73",
         "prefix": "b__truncated_e89deceab1155a73"
       },
@@ -339,7 +339,7 @@
         "filename": "agent.x64.bin",
         "confidence": "HIGH",
         "context": "AdaptixC2 Windows beacon (Shellcode-form / PE-headers-stripped variant of cluster). 184,832 B. NOTE: Only 16-char SHA256 prefix recovered from project notes; full hash available via VT lookup at https://www.virustotal.com/gui/file-analysis/YWY1OTUxMzRhNDc2MDIxM2M5ODg4Y2Q3OWUyMGIzN2Y6MTc3NzE3OTM0NA==. VHash differs from cluster DLL by 1 character. VT labels: Elastic YARA Windows_Trojan_Adaptix_b2cda978, Kaspersky Trojan:Win32/Wacatac.B!ml. 27/63 detections.",
-        "false_positive_risk": "LOW — full SHA256 needs to be retrieved from VT before defender ingestion",
+        "false_positive_risk": "LOW, full SHA256 needs to be retrieved from VT before defender ingestion",
         "value": "b__truncated_88a0826c131b8478",
         "prefix": "b__truncated_88a0826c131b8478"
       }
@@ -352,7 +352,7 @@
         "port": "80",
         "protocol": "TCP",
         "confidence": "HIGH",
-        "context": "AdaptixC2 beacon C2 endpoint (HTTP plaintext, no TLS). Combined with open-directory staging on TCP/8888 — same IP, two services. ASN AS35682 BEST INTERNET SOLUTION XK (Uzbekistan).",
+        "context": "AdaptixC2 beacon C2 endpoint (HTTP plaintext, no TLS). Combined with open-directory staging on TCP/8888, same IP, two services. ASN AS35682 BEST INTERNET SOLUTION XK (Uzbekistan).",
         "first_seen": "2026-04-26"
       },
       {
@@ -383,8 +383,8 @@
       {
         "url": "http://45.130.148.125:80/jquery-3.3.1.min.js",
         "confidence": "HIGH",
-        "context": "AdaptixC2 beacon C2 URL (POST). OPERATOR-ADDED beyond stock 3-URI default — extends the JS-asset masquerade theme. Detection rule must combine with destination IP to avoid FP on legitimate jQuery 3.3.1 traffic.",
-        "false_positive_risk": "MODERATE — match in combination with destination IP 45.130.148.125 and either X-Beacon-Id header or Firefox 20 stock UA, NOT alone"
+        "context": "AdaptixC2 beacon C2 URL (POST). OPERATOR-ADDED beyond stock 3-URI default, extends the JS-asset masquerade theme. Detection rule must combine with destination IP to avoid FP on legitimate jQuery 3.3.1 traffic.",
+        "false_positive_risk": "MODERATE, match in combination with destination IP 45.130.148.125 and either X-Beacon-Id header or Firefox 20 stock UA, NOT alone"
       }
     ],
     "user_agents": [
@@ -392,7 +392,7 @@
         "ua": "Mozilla/5.0 (Windows NT 6.2; rv:20.0) Gecko/20121202 Firefox/20.0",
         "confidence": "HIGH",
         "context": "STOCK AdaptixC2 listener default UA (Firefox 20 from February 2013). Anomalous in 2026 traffic. Identifies 'any operator running stock AdaptixC2 with default profile,' not this specific operator. Useful as framework-level detection signature.",
-        "false_positive_risk": "LOW — Firefox 20 in 2026 is highly anomalous"
+        "false_positive_risk": "LOW, Firefox 20 in 2026 is highly anomalous"
       }
     ],
     "http_headers": [
@@ -418,7 +418,7 @@
         "sleep_seconds_prod": 5,
         "jitter_seconds": 0,
         "confidence": "HIGH",
-        "context": "Aggressively fast 4–5 second beacon callback cadence with deterministic timing (zero jitter). Most production beacons run 30–60+ second sleeps. Suggests test/staging deployment OR short-engagement operation OR operator preference for responsive interactive sessions.",
+        "context": "Aggressively fast 4 to 5 second beacon callback cadence with deterministic timing (zero jitter). Most production beacons run 30 to 60+ second sleeps. Suggests test/staging deployment OR short-engagement operation OR operator preference for responsive interactive sessions.",
         "value": "4s dev / 5s prod sleep, 0 jitter"
       }
     ]
@@ -441,7 +441,7 @@
         "target": "explorer.exe",
         "selection_method": "First instance of 'explorer.exe' returned by Get-Process (no SessionId filter)",
         "confidence": "HIGH",
-        "context": "beacon.ps1 → [SI]::Inject(<first explorer.exe PID>, $sc) — cross-process classic CRT injection into long-lived, network-active, trusted-looking host process",
+        "context": "beacon.ps1 → [SI]::Inject(<first explorer.exe PID>, $sc), cross-process classic CRT injection into long-lived, network-active, trusted-looking host process",
         "value": "explorer.exe"
       }
     ]
@@ -464,7 +464,7 @@
         "value_hex": "0xbe4c0149",
         "decimal": 3192652105,
         "confidence": "HIGH",
-        "context": "Server-assigned per-agent ID (NOT a framework watermark as initially mis-hypothesized). Identical across dev and production builds — proves both come from one AdaptixC2 listener instance on the operator's server."
+        "context": "Server-assigned per-agent ID (NOT a framework watermark as initially mis-hypothesized). Identical across dev and production builds, proves both come from one AdaptixC2 listener instance on the operator's server."
       },
       {
         "field": "listener_type",
@@ -479,7 +479,7 @@
         "field": "proxy_port (DEV BUILD ONLY)",
         "value": 3128,
         "confidence": "HIGH",
-        "context": "DEV-BUILD LEFTOVER ARTIFACT — Squid HTTP proxy default port (also common for Burp Suite / mitmproxy local intercepts when 8080 is taken). Operator developed AdaptixC2 listener through a local HTTP proxy for traffic inspection during development, then forgot to clear the field before submitting the dev build to the directory. Cleared (zeroed) in production build. First hard evidence of operator's dev-environment plumbing."
+        "context": "DEV-BUILD LEFTOVER ARTIFACT, Squid HTTP proxy default port (also common for Burp Suite / mitmproxy local intercepts when 8080 is taken). Operator developed AdaptixC2 listener through a local HTTP proxy for traffic inspection during development, then forgot to clear the field before submitting the dev build to the directory. Cleared (zeroed) in production build. First hard evidence of operator's dev-environment plumbing."
       },
       {
         "field": "sleep_delay_change",
@@ -530,7 +530,7 @@
         "context": "Classic .NET CRT injection signature"
       },
       {
-        "pattern": "explorer.exe makes outbound HTTP POSTs to 45.130.148.125:80 every 4–5 seconds with deterministic timing (zero jitter) to one of 4 URIs, carrying X-Beacon-Id header and Firefox 20 UA",
+        "pattern": "explorer.exe makes outbound HTTP POSTs to 45.130.148.125:80 every 4 to 5 seconds with deterministic timing (zero jitter) to one of 4 URIs, carrying X-Beacon-Id header and Firefox 20 UA",
         "log_source": "Sysmon Event ID 3 (network connection) + proxy/firewall HTTP logs",
         "confidence": "HIGH",
         "context": "Active beacon C2 traffic signature"
@@ -545,7 +545,7 @@
       {
         "pattern": "Single-byte XOR with key 0xA7 on base64-decoded shellcode buffer",
         "confidence": "HIGH",
-        "context": "Operator's chosen XOR key for the beacon shellcode unwrap step. 0xA7 is one of the canonical CS-family single-byte keys (alongside 0x2E, 0x69, 0xFF) — operator picked one of those. AdaptixC2 ships no PowerShell loader stage, so this is operator-built."
+        "context": "Operator's chosen XOR key for the beacon shellcode unwrap step. 0xA7 is one of the canonical CS-family single-byte keys (alongside 0x2E, 0x69, 0xFF), operator picked one of those. AdaptixC2 ships no PowerShell loader stage, so this is operator-built."
       },
       {
         "pattern": "MZ at offset 0x3FF in ~185 KB shellcode buffer (after 1,023-byte MinGW-w64 GCC RDI bootstrap)",
@@ -560,7 +560,7 @@
         "context": "Code-style fingerprint for the operator's SI class CRT injector. Could match if same actor's code appears in other operations."
       },
       {
-        "pattern": "Magic constant tuple: 0x1FFFFF (PROCESS_ALL_ACCESS), 0x3000 (MEM_COMMIT|RESERVE), 0x04 (PAGE_READWRITE alloc), 0x20 (PAGE_EXECUTE_READ flip — W^X-aware, NOT 0x40 RWX), 3000 ms WaitForSingleObject timeout",
+        "pattern": "Magic constant tuple: 0x1FFFFF (PROCESS_ALL_ACCESS), 0x3000 (MEM_COMMIT|RESERVE), 0x04 (PAGE_READWRITE alloc), 0x20 (PAGE_EXECUTE_READ flip, W^X-aware, NOT 0x40 RWX), 3000 ms WaitForSingleObject timeout",
         "confidence": "HIGH",
         "context": "YARA-able combination of literal numeric tokens for the SI injector class. W^X-aware flip is the distinctive sophistication signal."
       }
@@ -589,7 +589,7 @@
         "affected_samples": [
           "all 3 Go binaries"
         ],
-        "context": "Go standard library — NOT malicious-crypto signal alone"
+        "context": "Go standard library, NOT malicious-crypto signal alone"
       },
       {
         "yara_rule": "DEPRECATED_RULES: android_meterpreter",
@@ -630,7 +630,7 @@
         "context": "Used for Ligolo-ng v0.8.3 stock build"
       },
       {
-        "indicator": "Same-day dev/prod build cadence: 2026-04-23 07:39:46 UTC dev → 2026-04-23 20:34:31–32 UTC prod (13-hour iteration)",
+        "indicator": "Same-day dev/prod build cadence: 2026-04-23 07:39:46 UTC dev → 2026-04-23 20:34:31 to 32 UTC prod (13-hour iteration)",
         "type": "Operational cadence",
         "confidence": "HIGH",
         "context": "Operator's same-day iteration cycle captured by open directory"
@@ -649,7 +649,7 @@
         "context": "Operator wraps a SUBSET of tools, not blanket evasion. Other tools (Rubeus, SharpDPAPI, mimikatz, Seatbelt, RunasCs, etc.) show NO packing anomalies. Mid-tier tradecraft signal."
       },
       {
-        "observation": "100% commodity open-source toolkit end-to-end (AdaptixC2 + Ligolo-ng + Ghostpack/SpecterOps + linpeas.sh) — actor wrote NOTHING for the C2/post-ex stack",
+        "observation": "100% commodity open-source toolkit end-to-end (AdaptixC2 + Ligolo-ng + Ghostpack/SpecterOps + linpeas.sh), actor wrote NOTHING for the C2/post-ex stack",
         "confidence": "HIGH",
         "context": "Only 2 verified custom code pieces: beacon.ps1 PowerShell delivery wrapper + injector.dll .NET v4.7.2 SI class injector"
       },

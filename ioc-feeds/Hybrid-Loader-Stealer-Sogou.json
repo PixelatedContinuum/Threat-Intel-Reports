@@ -47,49 +47,49 @@
         "domain": "5bNG.ar",
         "resolved_ip": null,
         "evidence": "Present in XOR-decoded config but not actively resolving",
-        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+        "impact": "Reflects attacker’s disposable domain strategy, infrastructure can be cycled in/out of campaigns"
       },
       {
         "domain": "B.tk",
         "resolved_ip": null,
         "evidence": "Present in XOR-decoded config but not actively resolving",
-        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+        "impact": "Reflects attacker’s disposable domain strategy, infrastructure can be cycled in/out of campaigns"
       },
       {
         "domain": "K.ct",
         "resolved_ip": null,
         "evidence": "Present in XOR-decoded config but not actively resolving",
-        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+        "impact": "Reflects attacker’s disposable domain strategy, infrastructure can be cycled in/out of campaigns"
       },
       {
         "domain": "Q.ar",
         "resolved_ip": null,
         "evidence": "Present in XOR-decoded config but not actively resolving",
-        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+        "impact": "Reflects attacker’s disposable domain strategy, infrastructure can be cycled in/out of campaigns"
       },
       {
         "domain": "rlh.cq",
         "resolved_ip": null,
         "evidence": "Present in XOR-decoded config but not actively resolving",
-        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+        "impact": "Reflects attacker’s disposable domain strategy, infrastructure can be cycled in/out of campaigns"
       },
       {
         "domain": "s0.ndf",
         "resolved_ip": null,
         "evidence": "Present in XOR-decoded config but not actively resolving",
-        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+        "impact": "Reflects attacker’s disposable domain strategy, infrastructure can be cycled in/out of campaigns"
       },
       {
         "domain": "vpl.gu",
         "resolved_ip": null,
         "evidence": "Present in XOR-decoded config but not actively resolving",
-        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+        "impact": "Reflects attacker’s disposable domain strategy, infrastructure can be cycled in/out of campaigns"
       },
       {
         "domain": "X.pg",
         "resolved_ip": null,
         "evidence": "Present in XOR-decoded config but not actively resolving",
-        "impact": "Reflects attacker’s disposable domain strategy — infrastructure can be cycled in/out of campaigns"
+        "impact": "Reflects attacker’s disposable domain strategy, infrastructure can be cycled in/out of campaigns"
       }
     ],
     "IPs": [
