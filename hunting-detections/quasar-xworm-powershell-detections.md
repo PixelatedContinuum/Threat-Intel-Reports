@@ -26,9 +26,9 @@ This campaign chains a VBScript dropper, a PowerShell loader that pulls a payloa
 | Sigma | 0 | 1 | T1059.001, T1105 | 0 |
 | Suricata | 0 | 0 | — | 1 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
-**Atomics routed to the IOC feed:** the C2 IP `193.233.164.21`, the DuckDNS C2 domain `dns4up.duckdns.org`, and the payload URL `hxxp://193.233.164.21/update.png` are transient indicators carried in [`quasar-xworm-powershell-iocs.json`](/ioc-feeds/quasar-xworm-powershell-iocs.json) rather than as standalone network signatures — a rule keyed solely on the domain stops detecting the moment the operator rotates it, and `/update.png` alone fires on ubiquitous benign traffic (removing the literal leaves nothing to match). Block them via the feed.
+**Atomics routed to the IOC feed:** the C2 IP `193.233.164.21`, the DuckDNS C2 domain `dns4up.duckdns.org`, and the payload URL `hxxp://193.233.164.21/update.png` are transient indicators carried in [`quasar-xworm-powershell-iocs.json`](/ioc-feeds/quasar-xworm-powershell-iocs.json) rather than as standalone network signatures. A rule keyed solely on the domain stops detecting the moment the operator rotates it, and `/update.png` alone fires on ubiquitous benign traffic (removing the literal leaves nothing to match). Block them via the feed.
 
 ---
 
@@ -145,10 +145,10 @@ level: medium
 
 **Network indicators routed to the IOC feed, not standalone signatures.** The original file shipped two Suricata rules that were pure atomic/ubiquitous matches and have been removed in favor of the IOC feed:
 
-- A DNS rule keyed solely on `dns4up.duckdns.org` (Robustness 0) — a single C2 domain that a `dns_query` signature stops detecting the moment the operator rotates it. Carried in [`quasar-xworm-powershell-iocs.json`](/ioc-feeds/quasar-xworm-powershell-iocs.json).
-- An HTTP rule matching `content:"/update.png"` on `any -> any` — `/update.png` is a ubiquitous benign path with no pivot value, so a global content match is noise rather than detection. The specific payload URL (`hxxp://193.233.164.21/update.png`) and its host are carried in the feed instead.
+- A DNS rule keyed solely on `dns4up.duckdns.org` (Robustness 0), a single C2 domain that a `dns_query` signature stops detecting the moment the operator rotates it. Carried in [`quasar-xworm-powershell-iocs.json`](/ioc-feeds/quasar-xworm-powershell-iocs.json).
+- An HTTP rule matching `content:"/update.png"` on `any -> any`, `/update.png` is a ubiquitous benign path with no pivot value, so a global content match is noise rather than detection. The specific payload URL (`hxxp://193.233.164.21/update.png`) and its host are carried in the feed instead.
 
-**No standalone Quasar/Xworm implant network rule.** The QuasarRAT and Xworm C2 protocols for this campaign were not captured on the wire in a form that yields a durable content anchor; the implant sample hashes are carried in the IOC feed. A durable TLS-certificate or protocol-field signature would require observed C2 traffic — see the feed for the atomic implant indicators.
+**No standalone Quasar/Xworm implant network rule.** The QuasarRAT and Xworm C2 protocols for this campaign were not captured on the wire in a form that yields a durable content anchor; the implant sample hashes are carried in the IOC feed. A durable TLS-certificate or protocol-field signature would require observed C2 traffic. See the feed for the atomic implant indicators.
 
 ---
 

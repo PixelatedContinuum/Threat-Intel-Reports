@@ -17,7 +17,7 @@ hide: true
 
 ## Detection Coverage Summary
 
-A bespoke MSSQL SQL-CLR reverse-shell backdoor (`cmd_exec.dll`), two webshells (a Godzilla-style AES .NET loader and a commodity Ghost小组 ASP shell), and a bespoke Flask C2 panel were staged alongside a public Windows post-exploitation toolkit on a single host. Coverage here is scoped to the bespoke and commodity-configured components; the five operator-recompiled .NET tools (EfsPotato, GodPotato, SweetPotato, Rubeus, SharpSuccessor) are already detected by existing public YARA rules — those rules are referenced in Coverage Gaps rather than re-authored here.
+A bespoke MSSQL SQL-CLR reverse-shell backdoor (`cmd_exec.dll`), two webshells (a Godzilla-style AES .NET loader and a commodity Ghost小组 ASP shell), and a bespoke Flask C2 panel were staged alongside a public Windows post-exploitation toolkit on a single host. Coverage here is scoped to the bespoke and commodity-configured components; the five operator-recompiled .NET tools (EfsPotato, GodPotato, SweetPotato, Rubeus, SharpSuccessor) are already detected by existing public YARA rules. Those rules are referenced in Coverage Gaps rather than re-authored here.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
@@ -25,14 +25,14 @@ A bespoke MSSQL SQL-CLR reverse-shell backdoor (`cmd_exec.dll`), two webshells (
 | Sigma | 3 | 3 | T1505.001, T1505.003, T1059.003, T1059.005, T1027.010, T1095, T1068 | 1 |
 | Suricata | 1 | 2 | T1071.001, T1095, T1105 | 1 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- `MSSQL_CLR_Backdoor_CmdExec_Banner` — the operator-specific banner `[*] Connected to SQL Server CLR backdoor` is not present in any public MSSQL CLR reference implementation and evades generic sandboxes and mainstream AV (YARA Detection).
-- `MSSQL CLR Backdoor Execution via sqlservr.exe Child cmd.exe` and `IIS Webshell Execution via w3wp.exe Spawning Shell Process` — family-agnostic process-ancestry chokepoints that catch the technique regardless of which specific CLR backdoor or webshell build is used (Sigma Detection).
-- Flask C2 `/health` five-field JSON response fingerprint — re-anchored off the staging IP onto `$EXTERNAL_NET` during this pass, so the signature now survives infrastructure rotation (Suricata Detection).
+- `MSSQL_CLR_Backdoor_CmdExec_Banner`, the operator-specific banner `[*] Connected to SQL Server CLR backdoor` is not present in any public MSSQL CLR reference implementation and evades generic sandboxes and mainstream AV (YARA Detection).
+- `MSSQL CLR Backdoor Execution via sqlservr.exe Child cmd.exe` and `IIS Webshell Execution via w3wp.exe Spawning Shell Process`, family-agnostic process-ancestry chokepoints that catch the technique regardless of which specific CLR backdoor or webshell build is used (Sigma Detection).
+- Flask C2 `/health` five-field JSON response fingerprint, re-anchored off the staging IP onto `$EXTERNAL_NET` during this pass, so the signature now survives infrastructure rotation (Suricata Detection).
 
-**Atomics routed to the IOC feed:** the staging IP `67.215.232.25` and the six native-tool imphashes (JuicyPotato, PrintSpoofer, RoguePotato, RogueOxidResolver, Netcat nc64, CVE-2026-20817 PoC) were already present in [`flaskc2-postex-toolkit-67-215-232-25-iocs.json`](/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json). The two rules that keyed solely on these hardcoded values — a pure-IP Suricata block and an imphash-only Sigma selector — are retired here; both indicators remain block/hunt-actionable via the feed.
+**Atomics routed to the IOC feed:** the staging IP `67.215.232.25` and the six native-tool imphashes (JuicyPotato, PrintSpoofer, RoguePotato, RogueOxidResolver, Netcat nc64, CVE-2026-20817 PoC) were already present in [`flaskc2-postex-toolkit-67-215-232-25-iocs.json`](/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json). The two rules that keyed solely on these hardcoded values (a pure-IP Suricata block and an imphash-only Sigma selector) are retired here; both indicators remain block/hunt-actionable via the feed.
 
 ---
 
@@ -40,7 +40,7 @@ A bespoke MSSQL SQL-CLR reverse-shell backdoor (`cmd_exec.dll`), two webshells (
 
 ### Detection Rules
 
-#### cmd_exec.dll — MSSQL CLR Backdoor (Banner Anchor)
+#### cmd_exec.dll: MSSQL CLR Backdoor (Banner Anchor)
 
 **Tier:** Detection
 **Robustness:** 2
@@ -88,7 +88,7 @@ rule MSSQL_CLR_Backdoor_CmdExec_Banner {
 }
 ```
 
-#### NPCInfoList1.aspx — AES .NET Loader Webshell (Godzilla-Style)
+#### NPCInfoList1.aspx: AES .NET Loader Webshell (Godzilla-Style)
 
 **Tier:** Detection
 **Robustness:** 2
@@ -127,7 +127,7 @@ rule Webshell_NPCInfoList1_AES_Loader {
 
 ### Hunting Rules
 
-#### cmd_exec.dll — MSSQL CLR Backdoor (Assembly Structure)
+#### cmd_exec.dll: MSSQL CLR Backdoor (Assembly Structure)
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -170,7 +170,7 @@ rule MSSQL_CLR_Backdoor_CmdExec_Assembly_Strings {
 }
 ```
 
-#### miss.asp — Ghost小组 ASP Webshell (Aatrox Eval Gadget)
+#### miss.asp: Ghost小组 ASP Webshell (Aatrox Eval Gadget)
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -212,7 +212,7 @@ rule Webshell_Ghost_Aatrox_ASP {
 
 ### Detection Rules
 
-#### MSSQL CLR Backdoor — sqlservr.exe Spawning cmd.exe Child
+#### MSSQL CLR Backdoor: sqlservr.exe Spawning cmd.exe Child
 
 **Tier:** Detection
 **Robustness:** 3
@@ -308,7 +308,7 @@ falsepositives:
 level: high
 ```
 
-#### IIS Webshell Execution — w3wp.exe Spawning cmd.exe or WScript
+#### IIS Webshell Execution: w3wp.exe Spawning cmd.exe or WScript
 
 **Tier:** Detection
 **Robustness:** 3
@@ -360,7 +360,7 @@ level: high
 
 ### Hunting Rules
 
-#### MSSQL CLR Backdoor — Outbound TCP Connection from sqlservr.exe
+#### MSSQL CLR Backdoor: Outbound TCP Connection from sqlservr.exe
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -427,7 +427,7 @@ falsepositives:
 level: medium
 ```
 
-#### Webshell Eval Gadget — Aatrox Query Parameter
+#### Webshell Eval Gadget: Aatrox Query Parameter
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -473,7 +473,7 @@ falsepositives:
 level: medium
 ```
 
-#### CVE-2026-20817 WER LPE PoC — Anomalous WerFault.exe Token Inspection
+#### CVE-2026-20817 WER LPE PoC: Anomalous WerFault.exe Token Inspection
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -530,7 +530,7 @@ level: low
 
 ### Detection Rules
 
-#### Flask C2 Health Endpoint — Distinctive JSON Field-Combo
+#### Flask C2 Health Endpoint: Distinctive JSON Field-Combo
 
 **Tier:** Detection
 **Robustness:** 3
@@ -548,7 +548,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL FlaskC2-PostEx C2 Health
 
 ### Hunting Rules
 
-#### Flask C2 Beacon Endpoint — POST to /api/report
+#### Flask C2 Beacon Endpoint: POST to /api/report
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -562,7 +562,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL FlaskC2-PostEx C2 Health
 alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /api/report"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/api/report"; nocase; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-06-12, reference https://the-hunters-ledger.com/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/;)
 ```
 
-#### Flask C2 Beacon Endpoint — POST to /api/heartbeat
+#### Flask C2 Beacon Endpoint: POST to /api/heartbeat
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -580,30 +580,30 @@ alert http $HOME_NET any -> any any (msg:"THL FlaskC2-PostEx C2 Beacon POST to /
 
 ## Coverage Gaps
 
-**Atomics retired from this pass (2 rules).** A Sigma rule matching solely on six native-tool imphashes (T1134.001 — JuicyPotato, PrintSpoofer, RoguePotato, RogueOxidResolver, Netcat nc64, CVE-2026-20817 PoC) and a Suricata pure-IP block on `67.215.232.25` both keyed entirely on hardcoded values with no behavioral qualifier — per the tiering rubric's routing test, removing the literal leaves nothing to detect. All seven underlying values were already present in [`flaskc2-postex-toolkit-67-215-232-25-iocs.json`](/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json) (imphashes under `file_hashes.imphashes` with `action: HUNT`; the IP under `network_indicators.ipv4` with `action: BLOCK`) — no feed edits were required. T1134.001 (Token Impersonation/Theft) is consequently no longer represented by a standalone rule in this file; the capability remains hunt-actionable via the feed.
+**Atomics retired from this pass (2 rules).** A Sigma rule matching solely on six native-tool imphashes (T1134.001, JuicyPotato, PrintSpoofer, RoguePotato, RogueOxidResolver, Netcat nc64, CVE-2026-20817 PoC) and a Suricata pure-IP block on `67.215.232.25` both keyed entirely on hardcoded values with no behavioral qualifier, per the tiering rubric's routing test, removing the literal leaves nothing to detect. All seven underlying values were already present in [`flaskc2-postex-toolkit-67-215-232-25-iocs.json`](/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json) (imphashes under `file_hashes.imphashes` with `action: HUNT`; the IP under `network_indicators.ipv4` with `action: BLOCK`). No feed edits were required. T1134.001 (Token Impersonation/Theft) is consequently no longer represented by a standalone rule in this file; the capability remains hunt-actionable via the feed.
 
-**T1071.001 — Web Protocols (Flask C2 beacon implant, Type B artifact)**
-The beacon implant — the agent binary that POSTs to `/api/report` and `/api/heartbeat` — was not recovered. It is a Type B artifact: operator-pushed to a victim at runtime, never staged in the `:1337` open directory. `VT communicating_files=0` for this IP confirms no sample has been observed beaconing to this C2. Without the implant, no file-level YARA or behavioral Sigma can be authored for the client side. Evidence needed to close this gap: victim endpoint forensics, memory acquisition from a compromised host, or capture of the implant via network proxy on a live victim system.
+**T1071.001 Web Protocols (Flask C2 beacon implant, Type B artifact)**
+The beacon implant (the agent binary that POSTs to `/api/report` and `/api/heartbeat`) was not recovered. It is a Type B artifact: operator-pushed to a victim at runtime, never staged in the `:1337` open directory. `VT communicating_files=0` for this IP confirms no sample has been observed beaconing to this C2. Without the implant, no file-level YARA or behavioral Sigma can be authored for the client side. Evidence needed to close this gap: victim endpoint forensics, memory acquisition from a compromised host, or capture of the implant via network proxy on a live victim system.
 
-**T1620 — Reflective Code Loading (NPCInfoList1.aspx class-K payload)**
-The in-memory .NET assembly loaded by the Godzilla-style webshell (`class K`) is a Type B artifact — it is AES-128-CBC encrypted in transit and delivered by the operator on demand, never written to disk, and not recoverable from the open directory. The YARA rule authored here detects the *loader* (NPCInfoList1.aspx) but cannot detect the *payload*. Evidence needed: network capture of a POST body to NPCInfoList1.aspx (which would contain the AES-encrypted payload), or victim endpoint memory acquisition.
+**T1620 Reflective Code Loading (NPCInfoList1.aspx class-K payload)**
+The in-memory .NET assembly loaded by the Godzilla-style webshell (`class K`) is a Type B artifact. It is AES-128-CBC encrypted in transit and delivered by the operator on demand, never written to disk, and not recoverable from the open directory. The YARA rule authored here detects the *loader* (NPCInfoList1.aspx) but cannot detect the *payload*. Evidence needed: network capture of a POST body to NPCInfoList1.aspx (which would contain the AES-encrypted payload), or victim endpoint memory acquisition.
 
-**T1134.001 + T1068 — Potato Suite (operator-recompiled .NET tools)**
+**T1134.001 + T1068 Potato Suite (operator-recompiled .NET tools)**
 EfsPotato, GodPotato, SweetPotato, Rubeus, and SharpSuccessor were operator-recompiled from source, defeating hash-based detection. Existing public YARA rules already cover these tools via type-lib GUID matching and string-based signatures:
-- `HKTL_NET_GUID_SweetPotato` (Neo23x0/signature-base) — SweetPotato
-- `tool_efspotato` + `tool_sharpefspotato_strings` (Neo23x0/signature-base) — EfsPotato
-- `Windows_Exploit_FakePipe` (Elastic) — EfsPotato/PetitPotam
-- GhostPack Rubeus rules (Neo23x0/signature-base) — Rubeus
+- `HKTL_NET_GUID_SweetPotato` (Neo23x0/signature-base): SweetPotato
+- `tool_efspotato` + `tool_sharpefspotato_strings` (Neo23x0/signature-base): EfsPotato
+- `Windows_Exploit_FakePipe` (Elastic): EfsPotato/PetitPotam
+- GhostPack Rubeus rules (Neo23x0/signature-base): Rubeus
 - These rules fire on the operator-recompiled builds in this campaign (confirmed via VirusTotal)
 These rules are not re-authored here to avoid duplication. Deploy the referenced rules from Neo23x0/signature-base.
 
-**T1558.003, T1558.001, T1550.003 — Kerberos Abuse (Rubeus)**
+**T1558.003, T1558.001, T1550.003 Kerberos Abuse (Rubeus)**
 Rubeus behavioral detection (Kerberoasting, Golden Ticket, Pass the Ticket) is covered by existing Sigma rules in the SigmaHQ repository (search `rubeus` in the `windows/process_creation/` rules). These are not re-authored. The operator-recompiled Rubeus binary is identified at the file level by the referenced Neo23x0 rules.
 
-**T1095 — Non-Application Layer Protocol (raw reverse-TCP shell)**
+**T1095 Non-Application Layer Protocol (raw reverse-TCP shell)**
 The cmd_exec.dll reverse-shell channel is plaintext raw TCP with no protocol framing, making Suricata application-layer signature matching impractical. The operator supplies the destination IP and port at `EXEC` time (no hardcoded C2), so no IP-based block is possible for the shell channel itself. Detection coverage for this channel relies on the Sigma rule (sqlservr.exe outbound TCP, Hunting tier) rather than Suricata DPI.
 
-**T1021 — Remote Services (lateral movement)**
+**T1021 Remote Services (lateral movement)**
 No specific lateral movement artifacts were recovered from the open directory. Rubeus and SharpSuccessor provide the capability, but no lateral movement commands, target host lists, or SMB/WinRM usage were observed in the static analysis. Coverage relies on existing Kerberos-abuse and SharpSuccessor detection rules in SigmaHQ.
 
 ---

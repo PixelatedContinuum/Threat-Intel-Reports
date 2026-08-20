@@ -28,7 +28,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Sigma | 3 | 1 | T1548.002 | 0 |
 | Suricata | 0 | 0 | — | 2 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Atomics routed to the IOC feed:** the distribution IP (`109.230.231.37`) and the sample's SHA-256/MD5/SHA-1 hashes were already present in [`uac-test-exe.json`](/ioc-feeds/uac-test-exe.json) before this retiering pass. The two IP-match Suricata signatures added no detection value beyond the feed's IP entry and have been retired; the file hash remains available as a fast-path exact-match branch inside the YARA multi-signal combination rule below, alongside its behavioral logic. See Coverage Gaps for the full reasoning on every retired rule.
 

@@ -25,21 +25,21 @@ hide: true
 | Sigma | 4 | 6 | T1014, T1027, T1037.004, T1053.003, T1059.004, T1059.007, T1095, T1190, T1498.001, T1543.002, T1546.004, T1564.001, T1587.001 | 2 |
 | Suricata | 2 | 8 | T1027, T1059.007, T1071.001, T1095, T1190, T1498.001, T1584.004, T1587.001, T1588.001 | 3 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
-**Retiering note (this revision):** this file was re-tiered against the `detection-rule-tiering` 4-gate rubric (durability → precision → level; novelty not applied at site scope). Original rule bodies are preserved wherever the gates supported Detection or Hunting as originally written. Five rules whose entire detection logic reduced to a single hardcoded IP with no surviving behavioral content — two Sigma network-connection rules and three Suricata rules — are removed as standalone rules; the underlying IPs were already present in the campaign IOC feed, so no feed edits were required. Several brittle-but-real rules (three YARA, one Sigma, seven Suricata) were salvaged via capability-abstraction rewrites — most commonly, dropping a mandatory hardcoded-IP condition term or broadening a Suricata destination from a single operator IP to `$EXTERNAL_NET` — so the underlying behavioral/structural signal survives infrastructure rotation. Each salvage is called out in the affected rule's Rationale.
+**Retiering note (this revision):** this file was re-tiered against the `detection-rule-tiering` 4-gate rubric (durability → precision → level; novelty not applied at site scope). Original rule bodies are preserved wherever the gates supported Detection or Hunting as originally written. Five rules whose entire detection logic reduced to a single hardcoded IP with no surviving behavioral content, two Sigma network-connection rules and three Suricata rules, are removed as standalone rules; the underlying IPs were already present in the campaign IOC feed, so no feed edits were required. Several brittle-but-real rules (three YARA, one Sigma, seven Suricata) were salvaged via capability-abstraction rewrites. Most commonly, dropping a mandatory hardcoded-IP condition term or broadening a Suricata destination from a single operator IP to `$EXTERNAL_NET`, so the underlying behavioral/structural signal survives infrastructure rotation. Each salvage is called out in the affected rule's Rationale.
 
 **Highest-confidence anchors:**
-- The operator-bespoke 22-char charset (`1gba4cdom53nhp12ei0kfj`, XOR-0x54 encoded) present in all 11 Naku/Pandora-Mirai architectures, combined with the Sora-fork `/bin/busybox SORA` marker and canonical Mirai debug symbols — cross-arch YARA coverage with near-zero FP.
-- The Matrix C2 Python framework's AI-authored banner/docstring/emoji-branding combination and the Discord-bot 13-method attack dispatch table — both structurally unique to this operator's build and resistant to single-string rename.
-- The `/etc/cron.d/.` hidden-prefix cron persistence Sigma rule — a pure technique-level signal (T1564.001) carrying zero operator-specific literals, so it survives complete infrastructure and binary-naming rotation.
+- The operator-bespoke 22-char charset (`1gba4cdom53nhp12ei0kfj`, XOR-0x54 encoded) present in all 11 Naku/Pandora-Mirai architectures, combined with the Sora-fork `/bin/busybox SORA` marker and canonical Mirai debug symbols, cross-arch YARA coverage with near-zero FP.
+- The Matrix C2 Python framework's AI-authored banner/docstring/emoji-branding combination and the Discord-bot 13-method attack dispatch table. Both structurally unique to this operator's build and resistant to single-string rename.
+- The `/etc/cron.d/.` hidden-prefix cron persistence Sigma rule, a pure technique-level signal (T1564.001) carrying zero operator-specific literals, so it survives complete infrastructure and binary-naming rotation.
 
-**Atomics routed to the IOC feed:** the Matrix C2 JSON-over-TCP/1337 channel (`87.106.143.220:1337`), the parasitic Naku CNC (`165.227.175.161:23`), and the two IONOS VPS IPs used as bare TLS-pivot destinations (`87.106.143.220`, `87.106.54.213`) were each the sole discriminator of a standalone Sigma or Suricata rule with no surviving behavioral content once the IP was mentally removed. All four IPs were already present with rich context in [`rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json) prior to this revision — no feed edits were required.
+**Atomics routed to the IOC feed:** the Matrix C2 JSON-over-TCP/1337 channel (`87.106.143.220:1337`), the parasitic Naku CNC (`165.227.175.161:23`), and the two IONOS VPS IPs used as bare TLS-pivot destinations (`87.106.143.220`, `87.106.54.213`) were each the sole discriminator of a standalone Sigma or Suricata rule with no surviving behavioral content once the IP was mentally removed. All four IPs were already present with rich context in [`rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json) prior to this revision. No feed edits were required.
 
-**Calibration note — prior art:**
+**Calibration note, prior art:**
 - Pandora-Mirai variant family traces to Doctor Web September 2023 (Tier 2 / B2); original scope was Android-TV only. The 11-architecture IoT extension documented here is first public characterization.
 - AI-Generated Offensive Code Structural Signature: Google GTIG documents "verbose docstrings" + "textbook Pythonic format" for individual exploit scripts; the 5-criteria universal-subset signature confirmed cross-3-operators is net-new public characterization.
-- Atlassian Rovodev abuse: first publicly-documented case (no prior art found in Tier 1–3 sources).
+- Atlassian Rovodev abuse: first publicly-documented case (no prior art found in Tier 1 to 3 sources).
 - MaaS hypothesis REFUTED (Phase 11): Pandora-Mirai is open-source shared ecosystem. This operator is a downstream adopter, not the variant author.
 
 ---
@@ -48,9 +48,9 @@ hide: true
 
 This campaign spans three operator-artifact groups, each labeled inline within the Detection/Hunting subsections below:
 
-- **Pandora-Mirai (Naku ELF Bot Suite)** — the 11-architecture IoT botnet binaries and their bash dropper.
-- **Matrix C2 Framework** — the AI-co-authored Python DDoS-as-a-Service framework and its Discord-bot customer interface.
-- **Rovodev Operator Artifacts** — the operator's AI-agent session artifacts and natural-language prompts exposed via open directory.
+- **Pandora-Mirai (Naku ELF Bot Suite)**, the 11-architecture IoT botnet binaries and their bash dropper.
+- **Matrix C2 Framework**, the AI-co-authored Python DDoS-as-a-Service framework and its Discord-bot customer interface.
+- **Rovodev Operator Artifacts**, the operator's AI-agent session artifacts and natural-language prompts exposed via open directory.
 
 ---
 
@@ -567,7 +567,7 @@ rule MAL_Discord_OperatorID_Snowflake_PandoraNet {
 
 **Pandora-Mirai (Naku ELF Bot Suite)**
 
-#### ELF IoT Arch-Tagged Filename Execution on Linux Server — Naku/Pandora Mirai Family
+#### ELF IoT Arch-Tagged Filename Execution on Linux Server: Naku/Pandora Mirai Family
 
 **Tier:** Detection
 **Robustness:** 2
@@ -630,7 +630,7 @@ falsepositives:
 level: high
 ```
 
-#### Hidden-Prefix Cron Entry Creation in /etc/cron.d — Pandora-Mirai Persistence Pattern
+#### Hidden-Prefix Cron Entry Creation in /etc/cron.d: Pandora-Mirai Persistence Pattern
 
 **Tier:** Detection
 **Robustness:** 3
@@ -676,7 +676,7 @@ falsepositives:
 level: high
 ```
 
-#### Pandora-Mirai Persistence Pattern — Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)
+#### Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)
 
 **Tier:** Detection
 **Robustness:** 2
@@ -726,7 +726,7 @@ falsepositives:
 level: high
 ```
 
-#### BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host
+#### BusyBox SORA Marker Execution: Sora-Derivative Mirai-Fork Active on Host
 
 **Tier:** Detection
 **Robustness:** 2
@@ -770,7 +770,7 @@ level: high
 
 **Pandora-Mirai (Naku ELF Bot Suite)**
 
-#### PandoraNet Botnet ID in Process Command Line — Active Pandora-Mirai Infection
+#### PandoraNet Botnet ID in Process Command Line: Active Pandora-Mirai Infection
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -808,7 +808,7 @@ falsepositives:
 level: medium
 ```
 
-#### Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic
+#### Non-Watchdog Process Opening /dev/watchdog: Mirai-Canonical Persistence Tactic
 
 **Tier:** Hunting
 **Robustness:** 3
@@ -857,7 +857,7 @@ falsepositives:
 level: medium
 ```
 
-#### Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature
+#### Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String: Family Tracking Signature
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -946,7 +946,7 @@ level: medium
 
 **Rovodev Operator Artifacts**
 
-#### Rovodev AI Agent Sessions Directory Creation on Server Host — Potential AI-Augmented Offensive Operations
+#### Rovodev AI Agent Sessions Directory Creation on Server Host: Potential AI-Augmented Offensive Operations
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -986,7 +986,7 @@ falsepositives:
 level: medium
 ```
 
-#### Rovodev Log File_Write Tool-Call Pattern — AI-Augmented Offensive Operations Evidence
+#### Rovodev Log File_Write Tool-Call Pattern: AI-Augmented Offensive Operations Evidence
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -1027,7 +1027,7 @@ level: low
 
 ## Suricata Signatures
 
-> **Metadata modernization note:** the original file's Suricata rules predate the `suricata-rule-formatting` skill and used a non-standard `metadata:` schema (`affected_product`/`attack_target`/`created_at`/`deployment`/`signature_severity`/`tag`) and a `"THL - "` (hyphenated) `msg` prefix. All rules below are reformatted to the canonical `metadata:author The_Hunters_Ledger, date, reference` schema and the `"THL <CampaignTag> ..."` `msg` convention. `sid` values are preserved unchanged from the original (9001002–9001014) to avoid retiring any existing feed-generator SID mapping; `rev` is bumped to `2` on every rule whose detection logic changed (destination broadened) and left at `1` where logic is unchanged. The withdrawn DNS rule (`sid:9001001`, commented out in the original file since 2026-06-19 for matching all `github.com` DNS lookups) remains withdrawn and is not reproduced here.
+> **Metadata modernization note:** the original file's Suricata rules predate the `suricata-rule-formatting` skill and used a non-standard `metadata:` schema (`affected_product`/`attack_target`/`created_at`/`deployment`/`signature_severity`/`tag`) and a `"THL - "` (hyphenated) `msg` prefix. All rules below are reformatted to the canonical `metadata:author The_Hunters_Ledger, date, reference` schema and the `"THL <CampaignTag> ..."` `msg` convention. `sid` values are preserved unchanged from the original (9001002 to 9001014) to avoid retiring any existing feed-generator SID mapping; `rev` is bumped to `2` on every rule whose detection logic changed (destination broadened) and left at `1` where logic is unchanged. The withdrawn DNS rule (`sid:9001001`, commented out in the original file since 2026-06-19 for matching all `github.com` DNS lookups) remains withdrawn and is not reproduced here.
 
 ### Detection Rules
 
@@ -1115,7 +1115,7 @@ alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 keyosbuff C2-Leak Rep
 
 **Campaign-Level**
 
-#### Naku Binary Fetch URI Pattern — Historical Aruba Distribution Convention
+#### Naku Binary Fetch URI Pattern: Historical Aruba Distribution Convention
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -1129,7 +1129,7 @@ alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 keyosbuff C2-Leak Rep
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL UTA-2026-014 Naku Binary Fetch URI Pattern - Historical Aruba Primary Distribution Convention (Bare Substring Anchor)"; flow:established,to_server; http.uri; content:"Naku."; nocase; classtype:trojan-activity; sid:9001008; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
-#### Naku Binary Fetch URI Pattern — Historical Aruba Backup Distribution Convention
+#### Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution Convention
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -1159,7 +1159,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 23 (msg:"THL UTA-2026-014 Naku-Pandora 
 
 **Matrix C2 Framework**
 
-#### Matrix C2 Discord Bot Attack-Method Dispatch — ovh-nuke
+#### Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -1173,7 +1173,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 23 (msg:"THL UTA-2026-014 Naku-Pandora 
 alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 Matrix C2 Discord Bot Attack-Method Dispatch ovh-nuke (DDoS-as-a-Service Customer Interface, Requires TLS Interception)"; flow:established,to_server; http.host; content:"discord.com"; http.request_body; content:"ovh-nuke"; nocase; classtype:trojan-activity; sid:9001011; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-26, reference https://the-hunters-ledger.com/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/;)
 ```
 
-#### Matrix C2 Discord Bot Attack-Method Dispatch — syn-storm/frag-storm/udp-bypass/icmp-hell
+#### Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -1191,21 +1191,21 @@ alert http $HOME_NET any -> any any (msg:"THL UTA-2026-014 Matrix C2 Discord Bot
 
 ## Coverage Gaps
 
-**Atomics routed to the IOC feed (5 rules removed from this revision).** Two Sigma `network_connection` rules (outbound TCP/1337 to `87.106.143.220`, outbound TCP/23 to `165.227.175.161`) and three Suricata rules (the pure TCP/23 CNC-connection rule against `165.227.175.161`, and the two bare-TLS-connection "pivot" rules against `87.106.143.220`/`87.106.54.213` — the latter's own original commentary already conceded "actual JARM matching should be implemented via threat intel feeds") each reduced, once the hardcoded IP was mentally removed, to no surviving behavioral content. All four underlying IPs were already present with rich context in [`rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json) — no feed edits were required. **What would enable a rule:** a distinctive, destination-agnostic protocol or content signature for either channel (see the salvaged CNC-protocol Suricata rule above for the Naku channel, which does carry such a signature for the parasitic CNC's *command structure* — the pure-IP connection rule for the same IP was still separately routed to the feed since it added no signal beyond the address itself).
+**Atomics routed to the IOC feed (5 rules removed from this revision).** Two Sigma `network_connection` rules (outbound TCP/1337 to `87.106.143.220`, outbound TCP/23 to `165.227.175.161`) and three Suricata rules (the pure TCP/23 CNC-connection rule against `165.227.175.161`, and the two bare-TLS-connection "pivot" rules against `87.106.143.220`/`87.106.54.213`. The latter's own original commentary already conceded "actual JARM matching should be implemented via threat intel feeds") each reduced, once the hardcoded IP was mentally removed, to no surviving behavioral content. All four underlying IPs were already present with rich context in [`rovodev-mirai-matrix-c2-87.106.143.220-iocs.json`](/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json). No feed edits were required. **What would enable a rule:** a distinctive, destination-agnostic protocol or content signature for either channel (see the salvaged CNC-protocol Suricata rule above for the Naku channel, which does carry such a signature for the parasitic CNC's *command structure*. The pure-IP connection rule for the same IP was still separately routed to the feed since it added no signal beyond the address itself).
 
-**Suricata rule redundancy — three overlapping bare-`"Naku."` substring rules.** After salvaging the destination-hardcoded Aruba and IONOS-backup rules to `$EXTERNAL_NET`, three Hunting-tier Suricata rules (sid 9001006, 9001008, 9001009) now carry functionally identical detection logic (`http.uri; content:"Naku."; nocase`) distinguished only by `msg`/`sid`. They are preserved as three separate entries in this revision to keep the rule-count accounting auditable against the original file. **What would enable consolidation:** a future revision merging these into one Hunting rule (retiring two `sid`s) once historical per-VPS attribution is no longer needed for the — now largely dark — Aruba Italy distribution servers.
+**Suricata rule redundancy: three overlapping bare-`"Naku."` substring rules.** After salvaging the destination-hardcoded Aruba and IONOS-backup rules to `$EXTERNAL_NET`, three Hunting-tier Suricata rules (sid 9001006, 9001008, 9001009) now carry functionally identical detection logic (`http.uri; content:"Naku."; nocase`) distinguished only by `msg`/`sid`. They are preserved as three separate entries in this revision to keep the rule-count accounting auditable against the original file. **What would enable consolidation:** a future revision merging these into one Hunting rule (retiring two `sid`s) once historical per-VPS attribution is no longer needed for the now largely dark Aruba Italy distribution servers.
 
-**github.com/keyosbuff/C2-Leak — deleted upstream source gap.** The operator's declared upstream Mirai code source is now 404/deleted. Without access to that repository, a direct code-diff comparison between the upstream source and the operator's Naku variant cannot be performed; all operator-bespoke modifications documented here (triple XOR keys, double Huawei scanner, 22-char charset, string-length-prefixed option keys, `.anime` marker) were discovered independently via binary analysis. **What would enable closure:** a GitHub Archive scrape capturing the repo before deletion, or a second operator referencing the same repository.
+**github.com/keyosbuff/C2-Leak: deleted upstream source gap.** The operator's declared upstream Mirai code source is now 404/deleted. Without access to that repository, a direct code-diff comparison between the upstream source and the operator's Naku variant cannot be performed; all operator-bespoke modifications documented here (triple XOR keys, double Huawei scanner, 22-char charset, string-length-prefixed option keys, `.anime` marker) were discovered independently via binary analysis. **What would enable closure:** a GitHub Archive scrape capturing the repo before deletion, or a second operator referencing the same repository.
 
-**Matrix C2 Python protocol — no public reference for comparison.** The Matrix C2 JSON-over-TCP protocol has no documented reference implementation to compare against; the operator built it from scratch (AI-co-authored). Detection coverage is IP/port-level only (routed to the IOC feed per above); no deep-packet-inspection signature exists for the JSON payload itself. **What would enable a rule:** passive capture of an actual C2 session from a compromised victim host, yielding a payload-structure content anchor independent of the current C2 IP.
+**Matrix C2 Python protocol: no public reference for comparison.** The Matrix C2 JSON-over-TCP protocol has no documented reference implementation to compare against; the operator built it from scratch (AI-co-authored). Detection coverage is IP/port-level only (routed to the IOC feed per above); no deep-packet-inspection signature exists for the JSON payload itself. **What would enable a rule:** passive capture of an actual C2 session from a compromised victim host, yielding a payload-structure content anchor independent of the current C2 IP.
 
-**Pandora 11-arch IoT evolution — no prior public documentation for the extended family.** Prior public documentation of the Pandora-Mirai family (Doctor Web, September 2023) covers only the Android-TV scope; the 11-architecture IoT extension is first public characterization here. If a second downstream operator adopts the IoT-extended codebase with different naming/charset conventions, the family-specific rules in this file will not transfer. **Current coverage:** HIGH for this specific operator's build; MODERATE for the broader Pandora-Mirai IoT-extended family class.
+**Pandora 11-arch IoT evolution: no prior public documentation for the extended family.** Prior public documentation of the Pandora-Mirai family (Doctor Web, September 2023) covers only the Android-TV scope; the 11-architecture IoT extension is first public characterization here. If a second downstream operator adopts the IoT-extended codebase with different naming/charset conventions, the family-specific rules in this file will not transfer. **Current coverage:** HIGH for this specific operator's build; MODERATE for the broader Pandora-Mirai IoT-extended family class.
 
-**Parasitic-CNC-on-legitimate-VPS OPSEC pattern — no Mirai-family literature precedent.** The operator's use of a compromised legitimate tourism VPS specifically for the Naku CNC, while reserving operator-owned infrastructure for the higher-value Matrix C2 customer service, is a documented-here split-channel OPSEC pattern with no Mirai-family literature precedent found in Tier 1–3 sources. Behavioral detection of this OPSEC strategy (versus the IP-level indicators, now in the feed) would require network telemetry correlating a CNC process with co-located legitimate web-hosting traffic on the same host — standard IDS setups do not surface this. **Current coverage:** LOW (network-level detection only via the feed; no class-level behavioral detection).
+**Parasitic-CNC-on-legitimate-VPS OPSEC pattern: no Mirai-family literature precedent.** The operator's use of a compromised legitimate tourism VPS specifically for the Naku CNC, while reserving operator-owned infrastructure for the higher-value Matrix C2 customer service, is a documented-here split-channel OPSEC pattern with no Mirai-family literature precedent found in Tier 1 to 3 sources. Behavioral detection of this OPSEC strategy (versus the IP-level indicators, now in the feed) would require network telemetry correlating a CNC process with co-located legitimate web-hosting traffic on the same host, standard IDS setups do not surface this. **Current coverage:** LOW (network-level detection only via the feed; no class-level behavioral detection).
 
-**Rovodev session JSON detection — requires Atlassian-side telemetry for non-exposed operators.** The on-disk session artifacts detected by the YARA and Sigma rules above are only visible when the operator makes an OPSEC error (exposing the session JSON via open directory). In a non-exposed deployment, the operator's use of Rovodev for offensive code authoring is invisible to standard endpoint/network tooling. **Current coverage:** LOW — endpoint artifact detection only (requires operator OPSEC failure); zero coverage of in-progress Rovodev offensive sessions that are never exposed.
+**Rovodev session JSON detection: requires Atlassian-side telemetry for non-exposed operators.** The on-disk session artifacts detected by the YARA and Sigma rules above are only visible when the operator makes an OPSEC error (exposing the session JSON via open directory). In a non-exposed deployment, the operator's use of Rovodev for offensive code authoring is invisible to standard endpoint/network tooling. **Current coverage:** LOW, endpoint artifact detection only (requires operator OPSEC failure); zero coverage of in-progress Rovodev offensive sessions that are never exposed.
 
-**Discord operator account — vendor channel required for termination.** The Discord operator account snowflake is detected via the Hunting-tier YARA rule above (artifact exposure only). Account termination and bot takedown require direct coordination with Discord Trust & Safety; there is no standard detection-engineering workflow for this action. **Current coverage:** DETECTION present (Hunting-tier artifact match); remediation is out of scope for a detection rule.
+**Discord operator account: vendor channel required for termination.** The Discord operator account snowflake is detected via the Hunting-tier YARA rule above (artifact exposure only). Account termination and bot takedown require direct coordination with Discord Trust & Safety; there is no standard detection-engineering workflow for this action. **Current coverage:** DETECTION present (Hunting-tier artifact match); remediation is out of scope for a detection rule.
 
 ---
 

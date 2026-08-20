@@ -28,7 +28,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Sigma | 2 | 2 | T1685, T1068 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Atomics routed to the IOC feed:** none of the three original rules keyed solely on a hard-coded atomic; all three encode multi-condition host behavior. The toolkit's atomic indicators, the shared distribution/C2 IP (`109.230.231.37`) and the sample's file hashes, are already present in [`arsenal-237-killer-crowdstrike-dll.json`](/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json).
 

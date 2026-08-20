@@ -25,19 +25,19 @@ Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 are two distinct RAT families distributed 
 | Sigma | 1 | 9 | T1547.001, T1547.009, T1053.005, T1685, T1686.003, T1553.005, T1497.001, T1082 | 0 |
 | Suricata | 0 | 1 | T1497.001 | 5 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- The `Shadow.Common.*` namespace root and Costura-embedded `costura.shadow.common.dll.compressed` asset — survive the .NET Reactor packing pass intact, near-zero FP (YARA Detection, both the client and shared-DLL rules).
-- XWorm's combination of a 1-minute scheduled-task interval, HIGHEST privilege, and an AppData execution path — a behavioral chokepoint independent of any build-specific literal, so it survives a rebuild that renames the install file, mutex, or task name (Sigma Detection).
+- The `Shadow.Common.*` namespace root and Costura-embedded `costura.shadow.common.dll.compressed` asset, survive the .NET Reactor packing pass intact, near-zero FP (YARA Detection, both the client and shared-DLL rules).
+- XWorm's combination of a 1-minute scheduled-task interval, HIGHEST privilege, and an AppData execution path, a behavioral chokepoint independent of any build-specific literal, so it survives a rebuild that renames the install file, mutex, or task name (Sigma Detection).
 
-**Atomics routed to the IOC feed:** five of the original file's six Suricata rules keyed solely on one hardcoded value — the two C2 IP:port pairs (`151.245.112.70:8990` Shadow RAT, `151.245.112.70:7007` XWorm), the unconfirmed fallback (`151.245.112.70:3000`), and the two delivery/C2 domains (`harrismanlieb.ink`, `epgoldsecurity.com`) — and removing the literal leaves no behavior to detect. All five values were already present in [`shadow-xworm-opendirectory-iocs.json`](/ioc-feeds/shadow-xworm-opendirectory-iocs.json) from the original analysis; no feed edits were required.
+**Atomics routed to the IOC feed:** five of the original file's six Suricata rules keyed solely on one hardcoded value, the two C2 IP:port pairs (`151.245.112.70:8990` Shadow RAT, `151.245.112.70:7007` XWorm), the unconfirmed fallback (`151.245.112.70:3000`), and the two delivery/C2 domains (`harrismanlieb.ink`, `epgoldsecurity.com`), and removing the literal leaves no behavior to detect. All five values were already present in [`shadow-xworm-opendirectory-iocs.json`](/ioc-feeds/shadow-xworm-opendirectory-iocs.json) from the original analysis; no feed edits were required.
 
 ---
 
 ## Multi-Family Organization
 
-This campaign distributes two unrelated RAT families from one open-directory server. Per-type sections below (YARA / Sigma / Suricata) are **not** duplicated per family — each stays a single H2 section, split into Detection/Hunting tier subsections, with families distinguished by a bold **Shadow RAT v2.6.4.0** / **XWorm 3.0-5.0** label inside each subsection. The one rule that covers behavior common to both families (Zone.Identifier ADS self-deletion) is labeled **Campaign-Level**.
+This campaign distributes two unrelated RAT families from one open-directory server. Per-type sections below (YARA / Sigma / Suricata) are **not** duplicated per family. Each stays a single H2 section, split into Detection/Hunting tier subsections, with families distinguished by a bold **Shadow RAT v2.6.4.0** / **XWorm 3.0-5.0** label inside each subsection. The one rule that covers behavior common to both families (Zone.Identifier ADS self-deletion) is labeled **Campaign-Level**.
 
 ---
 
@@ -47,7 +47,7 @@ This campaign distributes two unrelated RAT families from one open-directory ser
 
 **Shadow RAT v2.6.4.0**
 
-#### Shadow RAT v2.6.4.0 Client — Namespace + Costura Fingerprint
+#### Shadow RAT v2.6.4.0 Client: Namespace + Costura Fingerprint
 
 **Tier:** Detection
 **Robustness:** 3
@@ -102,7 +102,7 @@ rule RAT_ShadowRAT_v2640_Client {
 }
 ```
 
-#### Shadow RAT v2.6.4.0 — Shadow.Common.dll Shared Library
+#### Shadow RAT v2.6.4.0: Shadow.Common.dll Shared Library
 
 **Tier:** Detection
 **Robustness:** 3
@@ -142,7 +142,7 @@ rule RAT_ShadowRAT_CommonDLL {
 }
 ```
 
-#### Shadow RAT v2.6.4.0 — AMSI + ETW Bypass Chain
+#### Shadow RAT v2.6.4.0: AMSI + ETW Bypass Chain
 
 **Tier:** Detection
 **Robustness:** 3
@@ -193,7 +193,7 @@ rule RAT_ShadowRAT_AMSI_ETW_Bypass {
 }
 ```
 
-#### Shadow RAT v2.6.4.0 — Cryptocurrency Clipper Module
+#### Shadow RAT v2.6.4.0: Cryptocurrency Clipper Module
 
 **Tier:** Detection
 **Robustness:** 3
@@ -234,7 +234,7 @@ rule RAT_ShadowRAT_Crypto_Clipper {
 }
 ```
 
-#### Shadow RAT v2.6.4.0 — WinRE Persistence Module
+#### Shadow RAT v2.6.4.0: WinRE Persistence Module
 
 **Tier:** Detection
 **Robustness:** 3
@@ -274,7 +274,7 @@ rule RAT_ShadowRAT_WinRE_Persistence {
 
 **XWorm 3.0-5.0**
 
-#### XWorm 3.0-5.0 — Config and Builder Markers
+#### XWorm 3.0-5.0: Config and Builder Markers
 
 **Tier:** Detection
 **Robustness:** 3
@@ -330,7 +330,7 @@ rule RAT_XWorm_30_50_Config {
 
 **XWorm 3.0-5.0**
 
-#### XWorm 3.0-5.0 — Rijndael-256-ECB Config Crypto Pattern
+#### XWorm 3.0-5.0: Rijndael-256-ECB Config Crypto Pattern
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -917,29 +917,29 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL TROJAN XWorm Anti-Analys
 
 ## Coverage Gaps
 
-**Atomics routed to the IOC feed (5 of the original file's 6 Suricata rules).** Every pure IP:port rule and pure single-domain DNS rule keyed solely on one hardcoded value with no behavioral qualifier surviving the literal's removal — per the tiering rubric's routing test, these are IOC-feed entries, not rules:
+**Atomics routed to the IOC feed (5 of the original file's 6 Suricata rules).** Every pure IP:port rule and pure single-domain DNS rule keyed solely on one hardcoded value with no behavioral qualifier surviving the literal's removal, per the tiering rubric's routing test, these are IOC-feed entries, not rules:
 
-- `151.245.112.70:8990` (Shadow RAT C2) and `151.245.112.70:7007` (XWorm C2) — direct IP:port matches with no content anchor.
-- `151.245.112.70:3000` (Shadow RAT unconfirmed fallback port) — same pattern, and the original analysis itself could not confirm the port's purpose.
-- `harrismanlieb.ink` and `epgoldsecurity.com` — pure `dns.query` domain-literal matches.
+- `151.245.112.70:8990` (Shadow RAT C2) and `151.245.112.70:7007` (XWorm C2), direct IP:port matches with no content anchor.
+- `151.245.112.70:3000` (Shadow RAT unconfirmed fallback port), same pattern, and the original analysis itself could not confirm the port's purpose.
+- `harrismanlieb.ink` and `epgoldsecurity.com`, pure `dns.query` domain-literal matches.
 
 All five values were already present in [`shadow-xworm-opendirectory-iocs.json`](/ioc-feeds/shadow-xworm-opendirectory-iocs.json) (`network_indicators.ipv4` and `network_indicators.domains`) from the original analysis; no feed edits were required. The remaining Suricata rule (ip-api.com hosting-check) retains real content anchors beyond a single atomic value and is carried forward as a Hunting-tier signature above.
 
 **Corrections made during this re-tiering pass:**
-- **Zone.Identifier rule logsource category** — corrected from `file_event` (Sysmon file-creation) to `file_delete`. As originally written, the rule would have matched every downloaded file system-wide (Windows creates the Zone.Identifier ADS automatically on every download), which is pure baseline noise rather than a MOTW-bypass signal. Anchoring on deletion instead — matching the actual documented behavior (both families delete their own ADS post-install) — is what gives this rule genuine Hunting value.
-- **ATT&CK tag/ID refresh to the currently-installed ATT&CK v19 data** — `T1562.001`/`T1562.004`/`T1562.006` no longer exist as technique IDs (verified against the installed pySigma `mitre_attack` module); the AMSI/ETW bypass rules already correctly used `T1685` (Disable or Modify Tools) and are unchanged. The netsh firewall-disable rule's `attack.t1686` tag was valid but generic; refined to the more specific `attack.t1686.003` (Windows Host Firewall), the exact sub-technique matching `netsh firewall set opmode disable`.
-- **Suricata rule 3 (ip-api.com check)** — reformatted to a single physical line (matching the engine's expected `.rules` format), added a `threshold` to bound alert volume, and updated `metadata` to the current `author`/`date`/`reference` convention. `rev` bumped to 2 to reflect the body change; `sid` and `msg` text preserved unchanged for feed-quarantine stability.
+- **Zone.Identifier rule logsource category** corrected from `file_event` (Sysmon file-creation) to `file_delete`. As originally written, the rule would have matched every downloaded file system-wide (Windows creates the Zone.Identifier ADS automatically on every download), which is pure baseline noise rather than a MOTW-bypass signal. Anchoring on deletion instead, matching the actual documented behavior (both families delete their own ADS post-install). Is what gives this rule genuine Hunting value.
+- **ATT&CK tag/ID refresh to the currently-installed ATT&CK v19 data**. `T1562.001`/`T1562.004`/`T1562.006` no longer exist as technique IDs (verified against the installed pySigma `mitre_attack` module); the AMSI/ETW bypass rules already correctly used `T1685` (Disable or Modify Tools) and are unchanged. The netsh firewall-disable rule's `attack.t1686` tag was valid but generic; refined to the more specific `attack.t1686.003` (Windows Host Firewall), the exact sub-technique matching `netsh firewall set opmode disable`.
+- **Suricata rule 3 (ip-api.com check)** reformatted to a single physical line (matching the engine's expected `.rules` format), added a `threshold` to bound alert volume, and updated `metadata` to the current `author`/`date`/`reference` convention. `rev` bumped to 2 to reflect the body change; `sid` and `msg` text preserved unchanged for feed-quarantine stability.
 - **No rules were Cut.** Every rule from the original 23 (7 YARA + 10 Sigma + 6 Suricata) retained analytical value as either a Detection or Hunting rule, or was preserved as an existing IOC-feed entry.
 
-**T1055.012 — Process Hollowing (Shadow RAT RunPE).** Shadow RAT includes `UseRunPE`, `RunPETarget`, and `ExecuteInMemoryDotNet` fields in its config and message handlers. However, behavioral analysis was conducted statically — no confirmed observation of which processes are hollowed or under what command conditions. A behavioral Sigma rule for process hollowing requires observed parent-child process pairs and hollow-process characteristics. **What would enable a rule:** the specific target-process/parent-process pairing from an executed hollowing command.
+**T1055.012 Process Hollowing (Shadow RAT RunPE).** Shadow RAT includes `UseRunPE`, `RunPETarget`, and `ExecuteInMemoryDotNet` fields in its config and message handlers. However, behavioral analysis was conducted statically. No confirmed observation of which processes are hollowed or under what command conditions. A behavioral Sigma rule for process hollowing requires observed parent-child process pairs and hollow-process characteristics. **What would enable a rule:** the specific target-process/parent-process pairing from an executed hollowing command.
 
-**T1572 — Protocol Tunneling via Ngrok.** Shadow RAT includes Ngrok tunnel management capability (path and token config fields). The Ngrok binary is not embedded — it must be downloaded or pre-installed by the operator. A detection rule would require the Ngrok binary hash or the specific API endpoint used for tunnel establishment. **What would enable a rule:** observation of Ngrok deployment in an active incident.
+**T1572 Protocol Tunneling via Ngrok.** Shadow RAT includes Ngrok tunnel management capability (path and token config fields). The Ngrok binary is not embedded. It must be downloaded or pre-installed by the operator. A detection rule would require the Ngrok binary hash or the specific API endpoint used for tunnel establishment. **What would enable a rule:** observation of Ngrok deployment in an active incident.
 
-**T1091 — Replication Through Removable Media (XWorm USB spread).** XWorm has `USB.exe` as a config field and the USB spread capability is documented in the codebase (covered by the YARA config rule above as a corroborating string), but the propagation mechanism code was not independently confirmed in static analysis of the recovered samples. A dedicated file-based or process-based Sigma rule for the spread mechanism itself requires dynamic analysis confirmation. **What would enable a rule:** the specific file-write or process-execution pattern from an observed USB-spread event.
+**T1091 Replication Through Removable Media (XWorm USB spread).** XWorm has `USB.exe` as a config field and the USB spread capability is documented in the codebase (covered by the YARA config rule above as a corroborating string), but the propagation mechanism code was not independently confirmed in static analysis of the recovered samples. A dedicated file-based or process-based Sigma rule for the spread mechanism itself requires dynamic analysis confirmation. **What would enable a rule:** the specific file-write or process-execution pattern from an observed USB-spread event.
 
-**T1102.001 — Dead Drop Resolver (Pastebin fallback).** Shadow RAT includes a Pastebin dead-drop C2 fallback, but the boolean controlling it (`YuMK50gqNyIF4mYC6wcG2HeN`) was `false` in both recovered builds, and no Pastebin URLs were observed. **What would enable a rule:** observation of an active Pastebin-based C2 URL in a future campaign build.
+**T1102.001 Dead Drop Resolver (Pastebin fallback).** Shadow RAT includes a Pastebin dead-drop C2 fallback, but the boolean controlling it (`YuMK50gqNyIF4mYC6wcG2HeN`) was `false` in both recovered builds, and no Pastebin URLs were observed. **What would enable a rule:** observation of an active Pastebin-based C2 URL in a future campaign build.
 
-**T1219 — Remote Access Tools (ScreenConnect).** ScreenConnect was deployed on the C2 server on 2026-03-01 for persistent victim access. ScreenConnect is a legitimate RMM product, so a detection rule targeting its binary hashes or known relay ports (port 8040) would generate excessive false positives in environments that legitimately use ConnectWise ScreenConnect. Detection should instead focus on network anomalies — unexpected ScreenConnect traffic from endpoints with no managed-IT justification — which is outside the scope of a static signature.
+**T1219 Remote Access Tools (ScreenConnect).** ScreenConnect was deployed on the C2 server on 2026-03-01 for persistent victim access. ScreenConnect is a legitimate RMM product, so a detection rule targeting its binary hashes or known relay ports (port 8040) would generate excessive false positives in environments that legitimately use ConnectWise ScreenConnect. Detection should instead focus on network anomalies, unexpected ScreenConnect traffic from endpoints with no managed-IT justification, which is outside the scope of a static signature.
 
 ---
 

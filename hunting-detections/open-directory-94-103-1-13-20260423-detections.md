@@ -25,14 +25,14 @@ This campaign delivers Chaos ransomware (TorBrowserTor variant) through a privat
 | Sigma | 3 | 8 | T1027.011, T1036.005, T1053.005, T1071.001, T1078.003, T1090.001, T1112, T1134.004, T1136.001, T1486, T1490, T1497, T1547.001, T1548.002, T1685 | 0 |
 | Suricata | 0 | 1 | T1071.001, T1105 | 1 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339` and Stage-5b UAC-bypass PE hash `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` — byte-identical across both observed builds, zero public prior hits (YARA Detection).
-- Stage-5b UAC-bypass process ancestry `taskmgr.exe` → `conhost.exe --headless` — a PPID-spoofing technique chokepoint that survives any future rebuild (Sigma Detection).
-- `CrackedByWardow` AES key and fixed IV — hardcoded crack-tool-wide constants shared by every Orcus instance patched with this specific crack, not unique to this operator (YARA Detection).
+- Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339` and Stage-5b UAC-bypass PE hash `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8`, byte-identical across both observed builds, zero public prior hits (YARA Detection).
+- Stage-5b UAC-bypass process ancestry `taskmgr.exe` → `conhost.exe --headless`, a PPID-spoofing technique chokepoint that survives any future rebuild (Sigma Detection).
+- `CrackedByWardow` AES key and fixed IV, hardcoded crack-tool-wide constants shared by every Orcus instance patched with this specific crack, not unique to this operator (YARA Detection).
 
-**Atomics routed to the IOC feed:** the operator staging host `94.103.1.13` is a transient indicator — a Suricata signature keyed on the IP alone (with no content/protocol anchor beyond a bare HTTP GET) stops detecting the moment the host is abandoned. The underlying IP is already carried with full context in [`open-directory-94-103-1-13-20260423-iocs.json`](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json) — no new feed entries were required. Block it via the feed.
+**Atomics routed to the IOC feed:** the operator staging host `94.103.1.13` is a transient indicator, a Suricata signature keyed on the IP alone (with no content/protocol anchor beyond a bare HTTP GET) stops detecting the moment the host is abandoned. The underlying IP is already carried with full context in [`open-directory-94-103-1-13-20260423-iocs.json`](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json). No new feed entries were required. Block it via the feed.
 
 ---
 
@@ -40,10 +40,10 @@ This campaign delivers Chaos ransomware (TorBrowserTor variant) through a privat
 
 Rules are grouped by family within each Detection/Hunting subsection (this replaces the original Tier A / Tier B framing, which measured novelty rather than alerting fidelity):
 
-- **Custom Crypter / Builder** — the private loader/crypter that stages and persists all subsequent payloads. Cross-build invariants (Stage-4 mutex GUID, Stage-5b UAC-bypass PE, structural decode-pipeline anchors) are Detection-grade; per-build in-memory key material (mymain/myfile) and masquerade artifact names chosen for this build only are Hunting-grade.
-- **Chaos / TorBrowserTor Ransomware** — the Stage-5a encryption payload.
-- **Orcus RAT v7 (Wardow Crack)** — the secondary RAT staged alongside the ransomware.
-- **Operator Backdoor Account** — the Stage-2 GodPotato-privileged local account creation (added in the 2026-05-02 follow-up).
+- **Custom Crypter / Builder**, the private loader/crypter that stages and persists all subsequent payloads. Cross-build invariants (Stage-4 mutex GUID, Stage-5b UAC-bypass PE, structural decode-pipeline anchors) are Detection-grade; per-build in-memory key material (mymain/myfile) and masquerade artifact names chosen for this build only are Hunting-grade.
+- **Chaos / TorBrowserTor Ransomware**, the Stage-5a encryption payload.
+- **Orcus RAT v7 (Wardow Crack)**, the secondary RAT staged alongside the ransomware.
+- **Operator Backdoor Account**, the Stage-2 GodPotato-privileged local account creation (added in the 2026-05-02 follow-up).
 
 ---
 
@@ -293,7 +293,7 @@ rule RAT_OrcusRAT_v7_WardowCrack {
 
 ### Hunting Rules
 
-**Custom Crypter / Builder — Build-Specific Anchors**
+**Custom Crypter / Builder: Build-Specific Anchors**
 
 #### mymain Build In-Memory Crypter Keys
 
@@ -366,7 +366,7 @@ rule MALW_ChaosLoader_myfile_InMemory_CrypterKeys {
 
 **Custom Crypter / Builder**
 
-#### Stage-5b UAC Bypass via PPID Spoof — Conhost Child of Taskmgr
+#### Stage-5b UAC Bypass via PPID Spoof: Conhost Child of Taskmgr
 
 **Tier:** Detection
 **Robustness:** 3
@@ -765,7 +765,7 @@ level: medium
 **False Positives:** Legitimate backup software cleanup operations (`vssadmin`, `wbadmin`); system administrators running manual shadow-copy management. Correlate with concurrent `.torbrowsertor` file creation for confirmation (see the correlation rule above).
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
-> **YAML location note:** this rule's full definition (`name: chaos_antirecovery_commands`) is presented above under **Detection Rules → Chaos / TorBrowserTor Ransomware → "Encrypted File Extension Created + Anti-Recovery Command Correlation"**, in the same fenced YAML block as its correlation partner — Sigma correlation rules must resolve referenced base rules within the same document, so it cannot be duplicated here as a second copy. Its tier is Hunting, as documented in this entry; only the physical YAML placement differs from the type→tier layout.
+> **YAML location note:** this rule's full definition (`name: chaos_antirecovery_commands`) is presented above under **Detection Rules → Chaos / TorBrowserTor Ransomware → "Encrypted File Extension Created + Anti-Recovery Command Correlation"**, in the same fenced YAML block as its correlation partner. Sigma correlation rules must resolve referenced base rules within the same document, so it cannot be duplicated here as a second copy. Its tier is Hunting, as documented in this entry; only the physical YAML placement differs from the type→tier layout.
 
 #### Task Manager Disabled via Registry Policy
 
@@ -960,7 +960,7 @@ level: medium
 alert http $HOME_NET any -> any any (msg:"THL OpenDirectory-94.103.1.13 XOR-Encoded Payload Staging Download via .xor URI Suffix (Loader Staging Indicator)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:".xor"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-23, reference https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/;)
 ```
 
-> **Cut — pure IP-match rule retired.** The original file also carried a Suricata signature keyed solely on the operator staging IP `94.103.1.13` (with only a bare `http.method; content:"GET"` alongside it, which matches essentially all HTTP GET traffic and adds no discriminating power). Per the routing test, a rule that detects nothing once its single hard-coded IP is removed is an IOC-feed entry, not a signature — `94.103.1.13` is already carried with full context in the campaign's IOC feed. See Coverage Gaps.
+> **Cut: pure IP-match rule retired.** The original file also carried a Suricata signature keyed solely on the operator staging IP `94.103.1.13` (with only a bare `http.method; content:"GET"` alongside it, which matches essentially all HTTP GET traffic and adds no discriminating power). Per the routing test, a rule that detects nothing once its single hard-coded IP is removed is an IOC-feed entry, not a signature, `94.103.1.13` is already carried with full context in the campaign's IOC feed. See Coverage Gaps.
 
 ---
 
@@ -968,30 +968,30 @@ alert http $HOME_NET any -> any any (msg:"THL OpenDirectory-94.103.1.13 XOR-Enco
 
 ### Retiering Notes (2026-07-12 backfill)
 
-**Cut: pure IP-match Suricata rule.** The original file's `THL-OPDIR-94103113 — HTTP to Chaos/TorBrowserTor Staging Host` signature keyed solely on the destination IP `94.103.1.13`, with a `http.method; content:"GET"` clause that adds no discriminating power (it matches virtually all HTTP GET traffic). This is a pure IOC-feed entry, not a signature; the IP is already present with full context (ASN, VT detections, first-seen dates) in `open-directory-94-103-1-13-20260423-iocs.json` — no feed edit was required.
+**Cut: pure IP-match Suricata rule.** The original file's `THL-OPDIR-94103113: HTTP to Chaos/TorBrowserTor Staging Host` signature keyed solely on the destination IP `94.103.1.13`, with a `http.method; content:"GET"` clause that adds no discriminating power (it matches virtually all HTTP GET traffic). This is a pure IOC-feed entry, not a signature; the IP is already present with full context (ASN, VT detections, first-seen dates) in `open-directory-94-103-1-13-20260423-iocs.json`. No feed edit was required.
 
-**ATT&CK technique ID verified, not corrected: T1685.** The originally-published file cited "T1685 (Disable or Modify Tools)" in the Task Manager Disabled Sigma rule and the AMSI/ETW/ntdll Unhook gap below. An earlier pass of this backfill incorrectly "corrected" both to T1562.001 on the assumption that T1685 was invalid — that assumption was wrong. Checked directly against the current MITRE ATT&CK technique catalog (via the installed `pySigma`/`sigma check` data, not from memory), T1685 is a valid, current technique: ATT&CK restructured the former T1562 (Impair Defenses) sub-techniques into standalone top-level techniques under a newer "Defense Impairment" tactic (TA0112) — T1685 (Disable or Modify Tools), T1686 (Disable or Modify System Firewall), T1687 (Exploitation for Defense Impairment) — and T1562.001 no longer exists in that catalog. Both entries have been reverted to T1685. This is recorded as a methodology note: always verify technique IDs against the tool's live data, not training-era recall.
+**ATT&CK technique ID verified, not corrected: T1685.** The originally-published file cited "T1685 (Disable or Modify Tools)" in the Task Manager Disabled Sigma rule and the AMSI/ETW/ntdll Unhook gap below. An earlier pass of this backfill incorrectly "corrected" both to T1562.001 on the assumption that T1685 was invalid. That assumption was wrong. Checked directly against the current MITRE ATT&CK technique catalog (via the installed `pySigma`/`sigma check` data, not from memory), T1685 is a valid, current technique: ATT&CK restructured the former T1562 (Impair Defenses) sub-techniques into standalone top-level techniques under a newer "Defense Impairment" tactic (TA0112), T1685 (Disable or Modify Tools), T1686 (Disable or Modify System Firewall), T1687 (Exploitation for Defense Impairment), and T1562.001 no longer exists in that catalog. Both entries have been reverted to T1685. This is recorded as a methodology note: always verify technique IDs against the tool's live data, not training-era recall.
 
-**Attacker-chosen masquerade literals do not survive a rebuild.** The Stage-4 scheduled-task name, the Stage-4 registry masquerade path, and the Stage-5a Run-key value name and self-copy filenames are all cosmetic choices with no functional reason to stay stable — a future build could rename any of them independently. These indicators remain genuinely useful Hunting leads for the two builds observed to date, but none of them qualify as Detection-tier since precision this clean is an artifact of having observed the operator's current naming choices, not of the underlying technique. No name-independent technique-level rewrite was attempted for any of them: Windows Security auditing does not reliably expose scheduled-task RunLevel/trigger type or registry-value size as separate queryable Sigma fields, and the two self-copy filenames (`svchost.exe`, `projectxx.exe`) don't share a common masquerade pattern that would let a single broader rule cover both. **What would raise confidence:** a third build reusing any of these literals unchanged, which would elevate that specific artifact to a cross-build invariant the way the Stage-4 mutex GUID and Stage-5b UAC-bypass PE already are.
+**Attacker-chosen masquerade literals do not survive a rebuild.** The Stage-4 scheduled-task name, the Stage-4 registry masquerade path, and the Stage-5a Run-key value name and self-copy filenames are all cosmetic choices with no functional reason to stay stable. A future build could rename any of them independently. These indicators remain genuinely useful Hunting leads for the two builds observed to date, but none of them qualify as Detection-tier since precision this clean is an artifact of having observed the operator's current naming choices, not of the underlying technique. No name-independent technique-level rewrite was attempted for any of them: Windows Security auditing does not reliably expose scheduled-task RunLevel/trigger type or registry-value size as separate queryable Sigma fields, and the two self-copy filenames (`svchost.exe`, `projectxx.exe`) don't share a common masquerade pattern that would let a single broader rule cover both. **What would raise confidence:** a third build reusing any of these literals unchanged, which would elevate that specific artifact to a cross-build invariant the way the Stage-4 mutex GUID and Stage-5b UAC-bypass PE already are.
 
 ### Techniques Without High-Confidence Rules (from original analysis)
 
-**T1620 — Reflective Code Loading (Assembly.Load)**
-Every .NET stage in this crypter dispatches the next stage via `[System.Reflection.Assembly]::Load([byte[]])`. This is a powerful behavioral anchor but cannot be captured in a high-fidelity Sigma rule without AMSI/ETW telemetry that logs the loaded bytes — standard Sysmon process-creation does not surface Assembly.Load calls. A YARA rule targeting the in-memory PowerShell pattern (`[System.Reflection.Assembly]::Load` + `[System.Security.Cryptography.Aes]::Create()`) would be medium-confidence but was not included because the AES API call appears in many legitimate scripts and would generate significant FP volume without per-host baseline tuning.
+**T1620 Reflective Code Loading (Assembly.Load)**
+Every .NET stage in this crypter dispatches the next stage via `[System.Reflection.Assembly]::Load([byte[]])`. This is a powerful behavioral anchor but cannot be captured in a high-fidelity Sigma rule without AMSI/ETW telemetry that logs the loaded bytes, standard Sysmon process-creation does not surface Assembly.Load calls. A YARA rule targeting the in-memory PowerShell pattern (`[System.Reflection.Assembly]::Load` + `[System.Security.Cryptography.Aes]::Create()`) would be medium-confidence but was not included because the AES API call appears in many legitimate scripts and would generate significant FP volume without per-host baseline tuning.
 
-**T1003.001 — LSASS Credential Dumping (Mimikatz)**
+**T1003.001 LSASS Credential Dumping (Mimikatz)**
 The staged Mimikatz suite is stock September 2022 gentilkiwi builds. Existing SigmaHQ community rules (e.g., `proc_creation_win_mimikatz_exec`) and public YARA repositories already cover these hashes and command patterns comprehensively. Reproducing them here would be redundant and dilute the campaign-specific value of this rule set. Defenders should ensure existing Mimikatz detections are deployed and reference community rules for coverage.
 
-**T1068 — PrintNightmare / GodPotato / PrintSpoofer**
-The GodPotato family (`gp.exe`, `gp2.exe`, `gp_obf.exe`, `gp_fat.exe`, `svc.exe`) and `PrintSpoofer.exe` are commodity public tools with high VT detection rates (26–38/77). Community YARA and Sigma rules cover these. The custom `p.exe` SpoolSS coercer is 6.6 KB and would be a valid YARA target; however, without confirmed unique strings from full decompilation of that specific binary, a YARA rule risks being too generic. A hash-based detection on SHA256 `b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5` is the safest approach and is captured in the IOC feed.
+**T1068 PrintNightmare / GodPotato / PrintSpoofer**
+The GodPotato family (`gp.exe`, `gp2.exe`, `gp_obf.exe`, `gp_fat.exe`, `svc.exe`) and `PrintSpoofer.exe` are commodity public tools with high VT detection rates (26 to 38/77). Community YARA and Sigma rules cover these. The custom `p.exe` SpoolSS coercer is 6.6 KB and would be a valid YARA target; however, without confirmed unique strings from full decompilation of that specific binary, a YARA rule risks being too generic. A hash-based detection on SHA256 `b9ffbeed12325c450ba0f3c55cdcd243cdb704115aa3aee784bbdee3243f84e5` is the safest approach and is captured in the IOC feed.
 
-**T1572 — Protocol Tunneling (Chisel / Plink)**
+**T1572 Protocol Tunneling (Chisel / Plink)**
 `chisel.exe` and `plink.exe` are legitimate open-source tools with high detection rates under their own family signatures. The real Orcus C2 upstream behind the tunnel could not be identified from static analysis; without the resolved upstream IP or domain, a Suricata rule targeting chisel/plink traffic would require behavioral heuristics (e.g., periodic short-interval beaconing patterns) that would generate excessive FPs against legitimate SSH/HTTP tunnel use. Resolving the real upstream C2 requires observing the malware past the tunnel handshake.
 
-**T1685 — AMSI/ETW/ntdll Unhook (Perun's Fart)**
+**T1685 AMSI/ETW/ntdll Unhook (Perun's Fart)**
 The Perun's Fart ntdll-unhook technique operates entirely in user-mode memory and does not produce Sysmon process-creation events. Effective detection requires EDR kernel-level hooks or memory integrity monitoring. A Sigma rule targeting a second load of `ntdll.dll` from a non-standard path (e.g., via Sysmon Event ID 7 image-load) is architecturally possible but requires significant per-environment tuning and was assessed as out of scope for this campaign-specific rule set.
 
-**T1090.001 — Orcus Real Upstream C2**
+**T1090.001 Orcus Real Upstream C2**
 The actual chisel/plink tunnel destination for Orcus is unknown from static analysis. No Suricata IP/domain rule can be written for the real C2 without resolving the upstream peer. The loopback-connection Sigma rule above covers the host-side indicator; the network gap remains open.
 
 ---

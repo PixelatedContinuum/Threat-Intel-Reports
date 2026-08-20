@@ -10,7 +10,7 @@
   <!-- header -->
   <text x="500" y="60" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">How a Report Is Made</text>
   <text x="500" y="102" text-anchor="middle" font-size="23" fill="#f5f5f5">A solo analyst's raw analysis becomes publication-ready intelligence, via a team of AI agents</text>
-  <text x="500" y="135" text-anchor="middle" font-size="17" fill="#cccccc">A human frames the work at the front and signs off at two checkpoints — the agents and gates run in between.</text>
+  <text x="500" y="135" text-anchor="middle" font-size="17" fill="#cccccc">A human frames the work at the front and signs off at two checkpoints. The agents and gates run in between.</text>
   <line x1="60" y1="162" x2="940" y2="162" stroke="#2a2a2a" stroke-width="1"/>
 
   <!-- STAGE 0a HUMAN (gold, full) -->
@@ -20,7 +20,7 @@
     <rect x="60" y="220" width="880" height="12" fill="#b8902f"/>
     <text x="80" y="217" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 0 · THE HUMAN STARTS THE WORK</text>
     <text x="80" y="272" font-size="20" font-weight="700" fill="#ffffff">Human Input &amp; Framing</text>
-    <text x="80" y="300" font-size="17" fill="#e5e5e5">You choose which samples to analyze, provide the raw analysis, and frame the investigation —</text>
+    <text x="80" y="300" font-size="17" fill="#e5e5e5">You choose which samples to analyze, provide the raw analysis, and frame the investigation,</text>
     <text x="80" y="322" font-size="17" fill="#e5e5e5">what questions matter and what the findings mean. The judgment no automated system can replicate.</text>
   </g>
   <line x1="500" y1="328" x2="500" y2="366" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
@@ -45,7 +45,7 @@
     <text x="80" y="591" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 1 · READS THE RAW ANALYSIS</text>
     <text x="80" y="650" font-size="22" font-weight="700" fill="#ffffff">Malware Analyst</text>
     <text x="80" y="680" font-size="18" fill="#e5e5e5">The only agent that reads the raw data (sandbox, memory, network, static). Produces the structured</text>
-    <text x="80" y="704" font-size="18" fill="#e5e5e5">technical findings document <tspan fill="#ffffff" font-weight="600">and the validated IOC feed</tspan> — via the MITRE ATT&amp;CK and IOC Formatting skills.</text>
+    <text x="80" y="704" font-size="18" fill="#e5e5e5">technical findings document <tspan fill="#ffffff" font-weight="600">and the validated IOC feed</tspan>, via the MITRE ATT&amp;CK and IOC Formatting skills.</text>
   </g>
   <line x1="500" y1="718" x2="500" y2="756" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
@@ -76,9 +76,9 @@
     <text x="381" y="813" font-size="15" font-weight="700" fill="#111111" letter-spacing="0.3">DETECTION ENGINEER</text>
     <text x="381" y="864" font-size="15" fill="#e5e5e5">Writes the detection</text>
     <text x="381" y="886" font-size="15" fill="#e5e5e5">rules: YARA, Sigma and</text>
-    <text x="381" y="912" font-size="15" fill="#e5e5e5">Suricata — to public-repo</text>
+    <text x="381" y="912" font-size="15" fill="#e5e5e5">Suricata, to public-repo</text>
     <text x="381" y="934" font-size="15" fill="#e5e5e5">submission standards.</text>
-    <text x="381" y="970" font-size="14" fill="#888888">Validated by a hook.</text>
+    <text x="381" y="970" font-size="14" fill="#888888">Compiled by real engines.</text>
   </g>
   <!-- 2C Infrastructure -->
   <g filter="url(#cardShadow)">
@@ -107,7 +107,7 @@
     <text x="80" y="1079" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 3 · CONDITIONAL</text>
     <text x="80" y="1138" font-size="22" font-weight="700" fill="#ffffff">Attribution Analyst</text>
     <text x="80" y="1168" font-size="18" fill="#e5e5e5">Weighs infrastructure + research into an actor assessment with calibrated confidence. Skipped when</text>
-    <text x="80" y="1190" font-size="18" fill="#e5e5e5">evidence is thin — an honest "Unknown" beats a guess dressed up as analysis.</text>
+    <text x="80" y="1190" font-size="18" fill="#e5e5e5">evidence is thin. An honest "Unknown" beats a guess dressed up as analysis.</text>
   </g>
   <line x1="500" y1="1198" x2="500" y2="1236" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
@@ -118,7 +118,7 @@
     <rect x="60" y="1271" width="880" height="13" fill="#58a6ff"/>
     <text x="80" y="1269" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 4 · SYNTHESIS</text>
     <text x="80" y="1328" font-size="22" font-weight="700" fill="#ffffff">Report Writer</text>
-    <text x="80" y="1358" font-size="18" fill="#e5e5e5">Synthesizes every finding into first drafts of all three deliverables at once — evidence-gated, so a</text>
+    <text x="80" y="1358" font-size="18" fill="#e5e5e5">Synthesizes every finding into first drafts of all three deliverables at once, evidence-gated, so a</text>
     <text x="80" y="1380" font-size="18" fill="#e5e5e5">claim the analysis doesn't support becomes a documented gap, never invented filler.</text>
   </g>
   <line x1="500" y1="1388" x2="500" y2="1426" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
@@ -146,12 +146,12 @@
   </g>
   <line x1="500" y1="1596" x2="500" y2="1634" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- STAGE 5 Editor (blue) + CHECKPOINT 2 (gold) -->
+  <!-- STAGE 6 Editor (blue) + CHECKPOINT 2 (gold) -->
   <g filter="url(#cardShadow)">
     <rect x="60" y="1636" width="425" height="150" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
     <rect x="60" y="1636" width="425" height="44" rx="8" fill="#58a6ff"/>
     <rect x="60" y="1668" width="425" height="12" fill="#58a6ff"/>
-    <text x="80" y="1665" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 5 · POLISH</text>
+    <text x="80" y="1665" font-size="16" font-weight="700" fill="#111111" letter-spacing="0.5">STAGE 6 · POLISH</text>
     <text x="80" y="1718" font-size="20" font-weight="700" fill="#ffffff">Report Editor</text>
     <text x="80" y="1748" font-size="17" fill="#e5e5e5">Final formatting and</text>
     <text x="80" y="1770" font-size="17" fill="#e5e5e5">consistency pass.</text>

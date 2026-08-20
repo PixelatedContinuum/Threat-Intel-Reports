@@ -558,7 +558,7 @@ arsenal-237-BdApiUtil64-sys-detections:
     robustness: 2
     confidence: "LOW"
     attack: [T1685]
-  - name: "BdApiUtil64.sys BYOVD Kill Pattern — Driver Load Followed by Security-Product Termination (Correlation)"
+  - name: "BdApiUtil64.sys BYOVD Kill Pattern: Driver Load Followed by Security-Product Termination (Correlation)"
     engine: sigma
     tier: Detection
     fence: 4
@@ -879,7 +879,7 @@ arsenal-237-killer-dll-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1685, T1068]
-  - name: "Mass Security-Product Termination — 3+ Distinct Products Within 60 Seconds (Correlation)"
+  - name: "Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation)"
     engine: sigma
     tier: Detection
     fence: 4
@@ -1605,7 +1605,7 @@ dual-rat-analysis-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1102.001, T1071.001]
-  - name: "NjRAT/XWorm Triple-Redundant Persistence — Base Rules + 2-of-3 Correlation"
+  - name: "NjRAT/XWorm Triple-Redundant Persistence: Base Rules + 2-of-3 Correlation"
     engine: sigma
     tier: Hunting
     fence: 8
@@ -1714,7 +1714,7 @@ evilsoul-engine-stealer-maas-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1071.001, T1105]
-  - name: "xaitax ChromElevator ABE-Bypass Tool — @breakingupslow Fork"
+  - name: "xaitax ChromElevator ABE-Bypass Tool: @breakingupslow Fork"
     engine: yara
     tier: Detection
     fence: 3
@@ -1796,7 +1796,7 @@ evilsoul-engine-stealer-maas-detections:
     confidence: "HIGH"
     attack: [T1071.001, T1041]
 flaskc2-postex-toolkit-67-215-232-25-detections:
-  - name: "cmd_exec.dll — MSSQL CLR Backdoor (Banner Anchor)"
+  - name: "cmd_exec.dll: MSSQL CLR Backdoor (Banner Anchor)"
     engine: yara
     tier: Detection
     fence: 0
@@ -1805,7 +1805,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1505.001, T1095]
-  - name: "NPCInfoList1.aspx — AES .NET Loader Webshell (Godzilla-Style)"
+  - name: "NPCInfoList1.aspx: AES .NET Loader Webshell (Godzilla-Style)"
     engine: yara
     tier: Detection
     fence: 1
@@ -1814,7 +1814,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1505.003, T1620, T1140]
-  - name: "cmd_exec.dll — MSSQL CLR Backdoor (Assembly Structure)"
+  - name: "cmd_exec.dll: MSSQL CLR Backdoor (Assembly Structure)"
     engine: yara
     tier: Hunting
     fence: 2
@@ -1823,7 +1823,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1505.001, T1059.003, T1095]
-  - name: "miss.asp — Ghost小组 ASP Webshell (Aatrox Eval Gadget)"
+  - name: "miss.asp: Ghost小组 ASP Webshell (Aatrox Eval Gadget)"
     engine: yara
     tier: Hunting
     fence: 3
@@ -1832,7 +1832,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1505.003, T1059.005, T1027.010]
-  - name: "MSSQL CLR Backdoor — sqlservr.exe Spawning cmd.exe Child"
+  - name: "MSSQL CLR Backdoor: sqlservr.exe Spawning cmd.exe Child"
     engine: sigma
     tier: Detection
     fence: 4
@@ -1850,7 +1850,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1505.001]
-  - name: "IIS Webshell Execution — w3wp.exe Spawning cmd.exe or WScript"
+  - name: "IIS Webshell Execution: w3wp.exe Spawning cmd.exe or WScript"
     engine: sigma
     tier: Detection
     fence: 6
@@ -1859,7 +1859,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1505.003, T1059.003, T1059.005]
-  - name: "MSSQL CLR Backdoor — Outbound TCP Connection from sqlservr.exe"
+  - name: "MSSQL CLR Backdoor: Outbound TCP Connection from sqlservr.exe"
     engine: sigma
     tier: Hunting
     fence: 7
@@ -1868,7 +1868,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1505.001, T1095]
-  - name: "Webshell Eval Gadget — Aatrox Query Parameter"
+  - name: "Webshell Eval Gadget: Aatrox Query Parameter"
     engine: sigma
     tier: Hunting
     fence: 8
@@ -1877,7 +1877,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1505.003, T1027.010]
-  - name: "CVE-2026-20817 WER LPE PoC — Anomalous WerFault.exe Token Inspection"
+  - name: "CVE-2026-20817 WER LPE PoC: Anomalous WerFault.exe Token Inspection"
     engine: sigma
     tier: Hunting
     fence: 9
@@ -1886,7 +1886,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1068]
-  - name: "Flask C2 Health Endpoint — Distinctive JSON Field-Combo"
+  - name: "Flask C2 Health Endpoint: Distinctive JSON Field-Combo"
     engine: suricata
     tier: Detection
     fence: 10
@@ -1895,7 +1895,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1071.001, T1105]
-  - name: "Flask C2 Beacon Endpoint — POST to /api/report"
+  - name: "Flask C2 Beacon Endpoint: POST to /api/report"
     engine: suricata
     tier: Hunting
     fence: 11
@@ -1904,7 +1904,7 @@ flaskc2-postex-toolkit-67-215-232-25-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1071.001, T1095]
-  - name: "Flask C2 Beacon Endpoint — POST to /api/heartbeat"
+  - name: "Flask C2 Beacon Endpoint: POST to /api/heartbeat"
     engine: suricata
     tier: Hunting
     fence: 12
@@ -2258,7 +2258,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.004, T1574.006, T1105]
-  - name: "GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress — Known Operator Ports"
+  - name: "GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports"
     engine: suricata
     tier: Hunting
     fence: 21
@@ -2267,7 +2267,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1572, T1571]
-  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server — Covert Mining Report"
+  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report"
     engine: suricata
     tier: Hunting
     fence: 22
@@ -3186,7 +3186,7 @@ open-directory-172-105-0-126-20260406-detections:
     confidence: "HIGH"
     attack: [T1071.001]
 open-directory-193-56-255-154-xiebroc2-detections:
-  - name: "XiebroC2 v3.1 Go TCP Implant — Source-Code Artifact Combination"
+  - name: "XiebroC2 v3.1 Go TCP Implant: Source-Code Artifact Combination"
     engine: yara
     tier: Detection
     fence: 1
@@ -3204,7 +3204,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1071.001, T1036, T1573.002]
-  - name: "Covenant PowerShell Fileless Loader — GruntHTTP.ps1"
+  - name: "Covenant PowerShell Fileless Loader: GruntHTTP.ps1"
     engine: yara
     tier: Detection
     fence: 3
@@ -3213,7 +3213,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.001, T1027, T1140, T1620]
-  - name: "XiebroC2 v3.1 Binary-Patchable Config — Padded-IPv4 Structural Pattern"
+  - name: "XiebroC2 v3.1 Binary-Patchable Config: Padded-IPv4 Structural Pattern"
     engine: yara
     tier: Hunting
     fence: 4
@@ -3231,7 +3231,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1620]
-  - name: "Covenant C2 GruntStager HTTP Beacon — Campaign Session Token Detected"
+  - name: "Covenant C2 GruntStager HTTP Beacon: Campaign Session Token Detected"
     engine: sigma
     tier: Detection
     fence: 6
@@ -3249,7 +3249,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1059.001, T1059.003]
-  - name: "PowerShell Fileless Loader — Deflate Decode with Reflective Assembly Load"
+  - name: "PowerShell Fileless Loader: Deflate Decode with Reflective Assembly Load"
     engine: sigma
     tier: Hunting
     fence: 8
@@ -3258,7 +3258,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1059.001, T1140, T1620]
-  - name: "Covenant GruntStager C2 Beacon — Campaign Session Token in HTTP POST"
+  - name: "Covenant GruntStager C2 Beacon: Campaign Session Token in HTTP POST"
     engine: suricata
     tier: Detection
     fence: 9
@@ -3267,7 +3267,7 @@ open-directory-193-56-255-154-xiebroc2-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1071.001]
-  - name: "Covenant GruntStager Masquerade — Chrome 41 Windows 7 UA on Port 443"
+  - name: "Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA on Port 443"
     engine: suricata
     tier: Detection
     fence: 10
@@ -3349,7 +3349,7 @@ open-directory-94-103-1-13-20260423-detections:
     robustness: 1
     confidence: "DEFINITE (behavior) / build-specific (durability)"
     attack: [T1027, T1140, T1620]
-  - name: "Stage-5b UAC Bypass via PPID Spoof — Conhost Child of Taskmgr"
+  - name: "Stage-5b UAC Bypass via PPID Spoof: Conhost Child of Taskmgr"
     engine: sigma
     tier: Detection
     fence: 8
@@ -3899,7 +3899,7 @@ opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detect
     confidence: "MODERATE"
     attack: [T1557]
 opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections:
-  - name: "CVE-2026-41940 cPanel Harvester Toolkit — Bespoke Component Filenames"
+  - name: "CVE-2026-41940 cPanel Harvester Toolkit: Bespoke Component Filenames"
     engine: yara
     tier: Detection
     fence: 0
@@ -3980,7 +3980,7 @@ opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
     robustness: 3
     confidence: "HIGH"
     attack: [T1212, T1190]
-  - name: "Operator Flask C2 Dashboard Banner Hunt — Werkzeug/3.1.8 + /login-2fa"
+  - name: "Operator Flask C2 Dashboard Banner Hunt: Werkzeug/3.1.8 + /login-2fa"
     engine: suricata
     tier: Hunting
     fence: 9
@@ -3990,7 +3990,7 @@ opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
     confidence: "HIGH for the banner match today; durability is limited (see Rationale)"
     attack: [T1071.001]
 opendirectory-45-130-148-125-20260430-detections:
-  - name: "AdaptixC2 Windows Beacon — Stock Framework Fingerprint"
+  - name: "AdaptixC2 Windows Beacon: Stock Framework Fingerprint"
     engine: yara
     tier: Detection
     fence: 0
@@ -4008,7 +4008,7 @@ opendirectory-45-130-148-125-20260430-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1090.001, T1572]
-  - name: "AdaptixC2 Operator .NET Injector — si_build Build Fingerprint"
+  - name: "AdaptixC2 Operator .NET Injector: si_build Build Fingerprint"
     engine: yara
     tier: Hunting
     fence: 2
@@ -4017,7 +4017,7 @@ opendirectory-45-130-148-125-20260430-detections:
     robustness: 1
     confidence: "HIGH (fingerprint) / MODERATE (forward attribution value)"
     attack: [T1055, T1055.002]
-  - name: "AdaptixC2 PowerShell Loader — AMSI Bypass and SI Injector Invocation"
+  - name: "AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation"
     engine: yara
     tier: Hunting
     fence: 3
@@ -4044,7 +4044,7 @@ opendirectory-45-130-148-125-20260430-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1055, T1055.002]
-  - name: "AdaptixC2 PowerShell Loader — AMSI Bypass and SI Injector Invocation"
+  - name: "AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation"
     engine: sigma
     tier: Hunting
     fence: 6
@@ -4062,7 +4062,7 @@ opendirectory-45-130-148-125-20260430-detections:
     robustness: 2
     confidence: "MODERATE for the shape; HIGH that the shape is present in this loader"
     attack: [T1059.001, T1685]
-  - name: "AdaptixC2 Default Listener — Anomalous Firefox 20 User-Agent with X-Beacon-Id Header"
+  - name: "AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent with X-Beacon-Id Header"
     engine: sigma
     tier: Hunting
     fence: 8
@@ -4071,7 +4071,7 @@ opendirectory-45-130-148-125-20260430-detections:
     robustness: 1
     confidence: "HIGH for the anomaly signal; catches any operator running the framework default, not this operator specifically"
     attack: [T1071.001, T1573.001]
-  - name: "AdaptixC2 Beacon — High-Frequency Deterministic HTTP POST Cadence to Stock URIs"
+  - name: "AdaptixC2 Beacon: High-Frequency Deterministic HTTP POST Cadence to Stock URIs"
     engine: sigma
     tier: Hunting
     fence: 9
@@ -4743,7 +4743,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 1
     confidence: "HIGH for the artifact itself; the underlying pivot value degrades if the operator rotates the Discord account"
     attack: [T1584.004]
-  - name: "ELF IoT Arch-Tagged Filename Execution on Linux Server — Naku/Pandora Mirai Family"
+  - name: "ELF IoT Arch-Tagged Filename Execution on Linux Server: Naku/Pandora Mirai Family"
     engine: sigma
     tier: Detection
     fence: 10
@@ -4752,7 +4752,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.004, T1190]
-  - name: "Hidden-Prefix Cron Entry Creation in /etc/cron.d — Pandora-Mirai Persistence Pattern"
+  - name: "Hidden-Prefix Cron Entry Creation in /etc/cron.d: Pandora-Mirai Persistence Pattern"
     engine: sigma
     tier: Detection
     fence: 11
@@ -4761,7 +4761,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1053.003, T1564.001]
-  - name: "Pandora-Mirai Persistence Pattern — Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)"
+  - name: "Pandora-Mirai Persistence Pattern: Multi-Mechanism Installer (Init.d, Systemd, Hidden Cron)"
     engine: sigma
     tier: Detection
     fence: 12
@@ -4770,7 +4770,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1037.004, T1053.003, T1543.002]
-  - name: "BusyBox SORA Marker Execution — Sora-Derivative Mirai-Fork Active on Host"
+  - name: "BusyBox SORA Marker Execution: Sora-Derivative Mirai-Fork Active on Host"
     engine: sigma
     tier: Detection
     fence: 13
@@ -4779,7 +4779,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.004, T1095]
-  - name: "PandoraNet Botnet ID in Process Command Line — Active Pandora-Mirai Infection"
+  - name: "PandoraNet Botnet ID in Process Command Line: Active Pandora-Mirai Infection"
     engine: sigma
     tier: Hunting
     fence: 14
@@ -4788,7 +4788,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 1
     confidence: "HIGH for the artifact; retiered on durability"
     attack: [T1095, T1059.004]
-  - name: "Non-Watchdog Process Opening /dev/watchdog — Mirai-Canonical Persistence Tactic"
+  - name: "Non-Watchdog Process Opening /dev/watchdog: Mirai-Canonical Persistence Tactic"
     engine: sigma
     tier: Hunting
     fence: 15
@@ -4797,7 +4797,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1014, T1053.003]
-  - name: "Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String — Family Tracking Signature"
+  - name: "Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String: Family Tracking Signature"
     engine: sigma
     tier: Hunting
     fence: 16
@@ -4815,7 +4815,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1059.007, T1498.001]
-  - name: "Rovodev AI Agent Sessions Directory Creation on Server Host — Potential AI-Augmented Offensive Operations"
+  - name: "Rovodev AI Agent Sessions Directory Creation on Server Host: Potential AI-Augmented Offensive Operations"
     engine: sigma
     tier: Hunting
     fence: 18
@@ -4824,7 +4824,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1587.001]
-  - name: "Rovodev Log File_Write Tool-Call Pattern — AI-Augmented Offensive Operations Evidence"
+  - name: "Rovodev Log File_Write Tool-Call Pattern: AI-Augmented Offensive Operations Evidence"
     engine: sigma
     tier: Hunting
     fence: 19
@@ -4878,7 +4878,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1588.001, T1584.004]
-  - name: "Naku Binary Fetch URI Pattern — Historical Aruba Distribution Convention"
+  - name: "Naku Binary Fetch URI Pattern: Historical Aruba Distribution Convention"
     engine: suricata
     tier: Hunting
     fence: 25
@@ -4887,7 +4887,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 1
     confidence: "LOW–MODERATE"
     attack: [T1071.001, T1190]
-  - name: "Naku Binary Fetch URI Pattern — Historical Aruba Backup Distribution Convention"
+  - name: "Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution Convention"
     engine: suricata
     tier: Hunting
     fence: 26
@@ -4905,7 +4905,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "MODERATE — heuristic, unvalidated against live traffic"
     attack: [T1095, T1027]
-  - name: "Matrix C2 Discord Bot Attack-Method Dispatch — ovh-nuke"
+  - name: "Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke"
     engine: suricata
     tier: Hunting
     fence: 28
@@ -4914,7 +4914,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1059.007, T1498.001]
-  - name: "Matrix C2 Discord Bot Attack-Method Dispatch — syn-storm/frag-storm/udp-bypass/icmp-hell"
+  - name: "Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell"
     engine: suricata
     tier: Hunting
     fence: 29
@@ -5340,7 +5340,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     confidence: "MODERATE"
     attack: [T1102]
 shadow-xworm-opendirectory-detections:
-  - name: "Shadow RAT v2.6.4.0 Client — Namespace + Costura Fingerprint"
+  - name: "Shadow RAT v2.6.4.0 Client: Namespace + Costura Fingerprint"
     engine: yara
     tier: Detection
     fence: 0
@@ -5349,7 +5349,7 @@ shadow-xworm-opendirectory-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1027.002, T1573.001]
-  - name: "Shadow RAT v2.6.4.0 — Shadow.Common.dll Shared Library"
+  - name: "Shadow RAT v2.6.4.0: Shadow.Common.dll Shared Library"
     engine: yara
     tier: Detection
     fence: 1
@@ -5358,7 +5358,7 @@ shadow-xworm-opendirectory-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1573.001, T1542.003]
-  - name: "Shadow RAT v2.6.4.0 — AMSI + ETW Bypass Chain"
+  - name: "Shadow RAT v2.6.4.0: AMSI + ETW Bypass Chain"
     engine: yara
     tier: Detection
     fence: 2
@@ -5367,7 +5367,7 @@ shadow-xworm-opendirectory-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1685, T1027]
-  - name: "Shadow RAT v2.6.4.0 — Cryptocurrency Clipper Module"
+  - name: "Shadow RAT v2.6.4.0: Cryptocurrency Clipper Module"
     engine: yara
     tier: Detection
     fence: 3
@@ -5376,7 +5376,7 @@ shadow-xworm-opendirectory-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1115]
-  - name: "Shadow RAT v2.6.4.0 — WinRE Persistence Module"
+  - name: "Shadow RAT v2.6.4.0: WinRE Persistence Module"
     engine: yara
     tier: Detection
     fence: 4
@@ -5385,7 +5385,7 @@ shadow-xworm-opendirectory-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1542.003]
-  - name: "XWorm 3.0-5.0 — Config and Builder Markers"
+  - name: "XWorm 3.0-5.0: Config and Builder Markers"
     engine: yara
     tier: Detection
     fence: 5
@@ -5394,7 +5394,7 @@ shadow-xworm-opendirectory-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1027, T1497.001, T1053.005, T1091]
-  - name: "XWorm 3.0-5.0 — Rijndael-256-ECB Config Crypto Pattern"
+  - name: "XWorm 3.0-5.0: Rijndael-256-ECB Config Crypto Pattern"
     engine: yara
     tier: Hunting
     fence: 6
@@ -5521,7 +5521,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1657, T1485]
-  - name: "ShinyHunters Actor Identity — Domain + Collective Name"
+  - name: "ShinyHunters Actor Identity: Domain + Collective Name"
     engine: yara
     tier: Hunting
     fence: 2
@@ -5539,7 +5539,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1583.001]
-  - name: "ShinyHunters DLS — Web Proxy Hit on DLS Content Path"
+  - name: "ShinyHunters DLS: Web Proxy Hit on DLS Content Path"
     engine: sigma
     tier: Hunting
     fence: 4
@@ -5548,7 +5548,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1657, T1485]
-  - name: "ShinyHunters DLS — Salesforce Bulk Export OAuth App Authorization"
+  - name: "ShinyHunters DLS: Salesforce Bulk Export OAuth App Authorization"
     engine: sigma
     tier: Hunting
     fence: 5
@@ -5557,7 +5557,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "MODERATE — requires Salesforce Shield / Event Monitoring to be enabled; app-name matching depends on how third-party OAuth clients are registered."
     attack: [T1528, T1213]
-  - name: "ShinyHunters DLS — Okta MFA Factor Deactivation or Unexpected Enrollment"
+  - name: "ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment"
     engine: sigma
     tier: Hunting
     fence: 6
@@ -5566,7 +5566,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 1
     confidence: "MODERATE — the individual events are common in legitimate IT operations; the detection value comes from correlating the two events by user within a time window, which standard Sigma syntax cannot express in one rule (see Coverage Gaps)."
     attack: [T1566.004, T1528, T1098]
-  - name: "ShinyHunters DLS — PROSPERO Bulletproof Hosting CIDR Range Access"
+  - name: "ShinyHunters DLS: PROSPERO Bulletproof Hosting CIDR Range Access"
     engine: sigma
     tier: Hunting
     fence: 7
@@ -5575,7 +5575,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 1
     confidence: "MODERATE — range-level indicator; specificity is lower than IP or domain indicators."
     attack: [T1583.003, T1090.003]
-  - name: "ShinyHunters DLS — HTTP Host Header shinyhunte.rs"
+  - name: "ShinyHunters DLS: HTTP Host Header shinyhunte.rs"
     engine: suricata
     tier: Detection
     fence: 8
@@ -5584,7 +5584,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1583.001, T1657]
-  - name: "ShinyHunters DLS — TLS SNI shinyhunte.rs"
+  - name: "ShinyHunters DLS: TLS SNI shinyhunte.rs"
     engine: suricata
     tier: Detection
     fence: 9
@@ -5593,7 +5593,7 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1583.001, T1657]
-  - name: "ShinyHunters DLS — HTTP Request to DLS Content Path (pay_or_leak)"
+  - name: "ShinyHunters DLS: HTTP Request to DLS Content Path (pay_or_leak)"
     engine: suricata
     tier: Detection
     fence: 10
@@ -5703,7 +5703,7 @@ sliver-open-directory-detections:
     confidence: "MODERATE"
     attack: [T1036, T1036.005]
 turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
-  - name: "Rule 1 — PowerShell Instana Local Collector"
+  - name: "Rule 1: PowerShell Instana Local Collector"
     engine: yara
     tier: Detection
     fence: 0
@@ -5712,7 +5712,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.001, T1552.001, T1020, T1071.001]
-  - name: "Rule 2 — ARPA Observability Harvester Platform"
+  - name: "Rule 2: ARPA Observability Harvester Platform"
     engine: yara
     tier: Detection
     fence: 1
@@ -5721,7 +5721,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1059.006, T1119, T1543.002, T1071.001]
-  - name: "Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document"
+  - name: "Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document"
     engine: yara
     tier: Detection
     fence: 2
@@ -5730,7 +5730,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1098.004, T1021.004]
-  - name: "Rule 4 — Multi-Source Observability Polling Python Script"
+  - name: "Rule 4: Multi-Source Observability Polling Python Script"
     engine: yara
     tier: Detection
     fence: 3
@@ -5739,7 +5739,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.006, T1046, T1119, T1078]
-  - name: "Rule 6 — ARPA Cross-Source Correlation ETL Engine"
+  - name: "Rule 6: ARPA Cross-Source Correlation ETL Engine"
     engine: yara
     tier: Detection
     fence: 4
@@ -5748,7 +5748,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1059.006, T1119, T1005]
-  - name: "Rule 7 — ARPA Operator Ops Notes Markdown Family"
+  - name: "Rule 7: ARPA Operator Ops Notes Markdown Family"
     engine: yara
     tier: Detection
     fence: 5
@@ -5757,7 +5757,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1587, T1552.001]
-  - name: "Rule 8 — ARPA Platform Systemd Service Units"
+  - name: "Rule 8: ARPA Platform Systemd Service Units"
     engine: yara
     tier: Detection
     fence: 6
@@ -5766,7 +5766,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1543.002, T1569.002]
-  - name: "Rule 5 — ARPA AI Service Natural-Language Query Interface"
+  - name: "Rule 5: ARPA AI Service Natural-Language Query Interface"
     engine: yara
     tier: Hunting
     fence: 7
@@ -5775,7 +5775,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "MODERATE — the AI service was observed in a broken/dev state on the single analyzed host; the pattern may not have replicated to other deployments."
     attack: [T1059.006, T1213]
-  - name: "Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token"
+  - name: "Sigma Rule 1: PowerShell Process Invoking Instana API with Stored JWT Bearer Token"
     engine: sigma
     tier: Detection
     fence: 8
@@ -5784,7 +5784,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.001, T1552.001, T1071.001]
-  - name: "Sigma Rule 3 — Systemd Unit Creation Matching `arpa-*` Naming Pattern"
+  - name: "Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern"
     engine: sigma
     tier: Detection
     fence: 9
@@ -5793,7 +5793,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1543.002, T1569.002]
-  - name: "Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP"
+  - name: "Sigma Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP"
     engine: sigma
     tier: Detection
     fence: 10
@@ -5802,7 +5802,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1021.004, T1098.004]
-  - name: "Sigma Rule 5 — PuTTY Saved Session Created with Tunnel or ARPA Name"
+  - name: "Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name"
     engine: sigma
     tier: Detection
     fence: 11
@@ -5811,7 +5811,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1021.004]
-  - name: "Sigma Rule 6 — Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)"
+  - name: "Sigma Rule 6: Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)"
     engine: sigma
     tier: Detection
     fence: 12
@@ -5820,7 +5820,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH (for the specific stolen JWT); MODERATE (for the generic long-lived-token governance branch)"
     attack: [T1078, T1552.001]
-  - name: "Sigma Rule 9 — Operator-Supplied SSH Key File in User `.ssh` Directory"
+  - name: "Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory"
     engine: sigma
     tier: Detection
     fence: 13
@@ -5829,7 +5829,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1098.004, T1572]
-  - name: "Sigma Rule 2 — Outbound HTTPS to the Victim Organization Instana Tenant"
+  - name: "Sigma Rule 2: Outbound HTTPS to the Victim Organization Instana Tenant"
     engine: sigma
     tier: Hunting
     fence: 14
@@ -5838,7 +5838,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1071.001, T1078]
-  - name: "Sigma Rule 7 — Observability Platform Authentication Event (Cross-Source Burst Indicator)"
+  - name: "Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator)"
     engine: sigma
     tier: Hunting
     fence: 15
@@ -5847,7 +5847,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE — requires SIEM correlation across multiple observability platform audit feeds to realize the full novel-TTP detection value."
     attack: [T1078, T1119, T1046]
-  - name: "Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source"
+  - name: "Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source"
     engine: sigma
     tier: Hunting
     fence: 16
@@ -5856,7 +5856,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE — a single request is not by itself anomalous."
     attack: [T1046, T1213, T1119]
-  - name: "Sigma Rule 10 — Non-Splunk Process Connecting to Localhost Port 8089"
+  - name: "Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089"
     engine: sigma
     tier: Hunting
     fence: 17
@@ -5865,7 +5865,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE — port 8089 is not uniquely operator-specific."
     attack: [T1572, T1021.004]
-  - name: "Sigma Rule 12 — Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation"
+  - name: "Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation"
     engine: sigma
     tier: Hunting
     fence: 18

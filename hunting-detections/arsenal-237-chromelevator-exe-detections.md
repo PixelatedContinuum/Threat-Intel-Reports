@@ -28,7 +28,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Sigma | 2 | 2 | T1555.003, T1055.001, T1106 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Atomics routed to the IOC feed:** the sample's SHA256/SHA1/MD5 hashes, the `chromelevator.exe` filename, its staging paths, and the browser credential-database file paths it targets were already present in [`arsenal-237-chromelevator-exe.json`](/ioc-feeds/arsenal-237-chromelevator-exe.json) before this retiering pass. No rule was demoted to a new feed entry: the two named-pipe and HTTP-POST network signatures in the original draft were cut outright rather than routed, since the campaign has no confirmed network indicator (IP, domain, or URI) to route, only local named-pipe IPC, per the IOC feed's own empty `network_indicators.domains`/`ips` arrays.
 
@@ -475,7 +475,7 @@ level: medium
 
 ## Suricata Signatures
 
-No Detection or Hunting Suricata coverage is published for this campaign. chromelevator.exe has no confirmed network command-and-control channel; the injected payload DLL communicates with the parent process over a local named pipe, not over the network. The two network signatures in the original draft (a TCP content match on the literal string "VERBOSE_", and a generic HTTP POST URI substring match on "credentials") were not grounded in any observed network behavior and have been cut rather than retiered — see Coverage Gaps.
+No Detection or Hunting Suricata coverage is published for this campaign. chromelevator.exe has no confirmed network command-and-control channel; the injected payload DLL communicates with the parent process over a local named pipe, not over the network. The two network signatures in the original draft (a TCP content match on the literal string "VERBOSE_", and a generic HTTP POST URI substring match on "credentials") were not grounded in any observed network behavior and have been cut rather than retiered. See Coverage Gaps.
 
 ---
 
@@ -483,7 +483,7 @@ No Detection or Hunting Suricata coverage is published for this campaign. chrome
 
 No network-based detection exists for this campaign because no network C2 channel has been observed; all inter-process communication runs over a local named pipe between chromelevator.exe and its injected payload. If a future Arsenal-237 component is confirmed to exfiltrate the extracted credentials over the network, network coverage should be revisited against that component's actual traffic rather than against chromelevator.exe itself.
 
-Rule conservation: the original draft contained 3 YARA, 5 Sigma, and 2 Suricata rules (10 total). This pass produced 4 Detection (2 YARA, 2 Sigma), 3 Hunting (1 YARA, 2 Sigma), and 3 Cut (1 Sigma, 2 Suricata), with 0 rules demoted to new IOC-feed atomics — 4 + 3 + 3 = 10.
+Rule conservation: the original draft contained 3 YARA, 5 Sigma, and 2 Suricata rules (10 total). This pass produced 4 Detection (2 YARA, 2 Sigma), 3 Hunting (1 YARA, 2 Sigma), and 3 Cut (1 Sigma, 2 Suricata), with 0 rules demoted to new IOC-feed atomics: 4 + 3 + 3 = 10.
 
 ### Retiering Fixes Applied
 

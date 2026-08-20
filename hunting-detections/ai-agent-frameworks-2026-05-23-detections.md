@@ -27,19 +27,19 @@ This campaign spans 8 active operator cases plus 5 novel AI-abuse TTPs first doc
 | Sigma | 6 | 8 | T1574.006, T1090.004, T1587, T1685, T1496.001, T1119, T1657 | 0 |
 | Suricata | 1 | 7 | T1090.004, T1496.001, T1071.001, T1665 | 1 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- The GHOST kit's `libpam_cache.so` LD_PRELOAD rootkit — ELF structural validation (dynsym hook enumeration for `readdir`/`fopen`) combined with kit-standard hide-strings and camouflage paths; byte-identical across 2 customer deployments, 0/0 AV at discovery (YARA Detection).
-- The Russian operator's A2A C2 protocol — the `X-Agent-Id` custom header paired with the `/api/v1/` URI prefix in the same HTTP request; an operator-bespoke combination not seen in legitimate server-management frameworks (Suricata Detection).
+- The GHOST kit's `libpam_cache.so` LD_PRELOAD rootkit, ELF structural validation (dynsym hook enumeration for `readdir`/`fopen`) combined with kit-standard hide-strings and camouflage paths; byte-identical across 2 customer deployments, 0/0 AV at discovery (YARA Detection).
+- The Russian operator's A2A C2 protocol. The `X-Agent-Id` custom header paired with the `/api/v1/` URI prefix in the same HTTP request; an operator-bespoke combination not seen in legitimate server-management frameworks (Suricata Detection).
 
-**Atomics routed to the IOC feed:** the Case 10 Sliver-derivative C2 IP (`5.230.201.54`) and its JARM fingerprint had no additional network discriminator beyond the bare IP match — both were already captured in [`ai-agent-frameworks-2026-05-23-iocs.json`](/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json); the standalone Suricata signature has been retired in favor of the feed entry.
+**Atomics routed to the IOC feed:** the Case 10 Sliver-derivative C2 IP (`5.230.201.54`) and its JARM fingerprint had no additional network discriminator beyond the bare IP match. Both were already captured in [`ai-agent-frameworks-2026-05-23-iocs.json`](/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json); the standalone Suricata signature has been retired in favor of the feed entry.
 
 ---
 
 ## Multi-Family Organization
 
-This campaign spans 8 operator cases rather than distinct malware families, so rules are grouped by **theme/case** (bold labels) inside each tier, mirroring the original draft's thematic grouping: **Novel AI-Abuse TTPs** (cross-case), **GHOST Kit** (Case 9), **Campaign Infrastructure Artifacts** (Cases 1–3), and per-case network/hunting groupings. A rule covering behavior common to multiple cases carries a **Campaign-Level** label.
+This campaign spans 8 operator cases rather than distinct malware families, so rules are grouped by **theme/case** (bold labels) inside each tier, mirroring the original draft's thematic grouping: **Novel AI-Abuse TTPs** (cross-case), **GHOST Kit** (Case 9), **Campaign Infrastructure Artifacts** (Cases 1 to 3), and per-case network/hunting groupings. A rule covering behavior common to multiple cases carries a **Campaign-Level** label.
 
 ---
 
@@ -730,7 +730,7 @@ falsepositives:
 level: high
 ```
 
-**Campaign-Level — AI-Tool + Offensive-Tool Co-Location (Correlation)**
+**Campaign-Level: AI-Tool + Offensive-Tool Co-Location (Correlation)**
 
 #### AI Coding-Agent Tooling Co-Located with Offensive Tooling on the Same Host
 
@@ -979,7 +979,7 @@ falsepositives:
 level: medium
 ```
 
-**Campaign-Level — Operator Infrastructure Egress**
+**Campaign-Level: Operator Infrastructure Egress**
 
 #### Trycloudflare.com Quick-Tunnel Egress from Server Host
 
@@ -1073,7 +1073,7 @@ falsepositives:
 level: low
 ```
 
-**Case 8 — AI-Orchestrated Payment API Attack**
+**Case 8: AI-Orchestrated Payment API Attack**
 
 #### Suspected AI-Orchestrated Multi-Stage API Attack Sequence (Machine-Speed Window)
 
@@ -1130,7 +1130,7 @@ level: low
 
 ### Detection Rules
 
-**Case 1 — Russian A2A C2**
+**Case 1: Russian A2A C2**
 
 #### A2A C2 X-Agent-Id Header + API Endpoint Pattern
 
@@ -1150,7 +1150,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL AI-Agent-Campaign Russia
 
 ### Hunting Rules
 
-**Campaign-Level — Operator Infrastructure Egress**
+**Campaign-Level: Operator Infrastructure Egress**
 
 #### trycloudflare.com DNS Query Egress from Server Hosts
 
@@ -1219,19 +1219,19 @@ alert quic $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Hysteria v2
 
 ### Retiering Fixes Applied (2026-07-13 Backfill)
 
-This file was re-scored against the project's four-gate Detection/Hunting/Cut rubric. Beyond re-tiering, the following defects were corrected — each was either an atomic-only trigger path masquerading as a durable signature, a missing/invalid Sigma tag, or a technically unsound network match:
+This file was re-scored against the project's four-gate Detection/Hunting/Cut rubric. Beyond re-tiering, the following defects were corrected. Each was either an atomic-only trigger path masquerading as a durable signature, a missing/invalid Sigma tag, or a technically unsound network match:
 
 - **YARA bare-literal OR-paths removed (4 rules).** The AI Operator Handoff Document, ARPA Observability Harvester, Pandora/Naku Suite, and Russian A2A C2 rules each originally let one hardcoded, atomic value (a domain, a victim-specific JWT JTI, or two distribution IPs) trigger the whole rule alone via a bare OR branch. Each has been tightened to require the atomic to co-occur with a genuine behavioral/structural indicator; every underlying value was already present in the IOC feed, so no feed edits were required.
-- **Sigma missing technique-ID tags (12 of 12 rule-headings).** Every Sigma rule in the original file carried tactic tags only, with no matching `attack.tXXXX` technique tag — a SigmaHQ validation failure. Each rule now carries at least one technique tag drawn from its own documented ATT&CK Coverage evidence, verified against the real `sigma check` tool rather than assumed: the tool required an added `attack.execution` tactic tag alongside `attack.t1574.006` on the two LD_PRELOAD rules; rejected `attack.t1562.001` outright as invalid (MITRE renumbered Impair Defenses to the top-level **T1685**); and then required the new ATT&CK v19 `attack.defense-impairment` (TA0112) tactic tag alongside `attack.t1685` on the settings.local.json rule. All three rounds of feedback came from the tool, not guesswork — `sigma check` returns 0 errors and 0 issues on the final file.
-- **Sigma8 (Instana enumeration) broken selector removed.** The original `selection_token` block included a literal, never-filled-in placeholder string `'[victim-tenant]'` (non-functional — it could never match real telemetry) and a bare `apiToken` OR-path (a generic term common in legitimate API scripts, which would have fired this HIGH-level rule broadly). Both were removed; the rule now anchors solely on the `-SkipCertificateCheck` + `ocpinstana` combination.
+- **Sigma missing technique-ID tags (12 of 12 rule-headings).** Every Sigma rule in the original file carried tactic tags only, with no matching `attack.tXXXX` technique tag, a SigmaHQ validation failure. Each rule now carries at least one technique tag drawn from its own documented ATT&CK Coverage evidence, verified against the real `sigma check` tool rather than assumed: the tool required an added `attack.execution` tactic tag alongside `attack.t1574.006` on the two LD_PRELOAD rules; rejected `attack.t1562.001` outright as invalid (MITRE renumbered Impair Defenses to the top-level **T1685**); and then required the new ATT&CK v19 `attack.defense-impairment` (TA0112) tactic tag alongside `attack.t1685` on the settings.local.json rule. All three rounds of feedback came from the tool, not guesswork. `sigma check` returns 0 errors and 0 issues on the final file.
+- **Sigma8 (Instana enumeration) broken selector removed.** The original `selection_token` block included a literal, never-filled-in placeholder string `'[victim-tenant]'` (non-functional, it could never match real telemetry) and a bare `apiToken` OR-path (a generic term common in legitimate API scripts, which would have fired this HIGH-level rule broadly). Both were removed; the rule now anchors solely on the `-SkipCertificateCheck` + `ocpinstana` combination.
 - **Sigma3 and Sigma9 single-value lists converted to scalars**, per SigmaHQ's list-of-one convention.
-- **Sigma11 tags replaced**, not merely supplemented — the original tactic tags didn't correspond to any technique the rule's own evidence named; replaced with `attack.impact` + `attack.t1657` (Financial Theft), which the rule's rationale already cited.
-- **Sigma5 (trycloudflare.com) demoted from `level: high` to `level: medium`** — Sigma cannot restrict a DNS-query selector to server-class hosts, so the rule fires identically on any developer/CI host using the same free tunnel service; the original level overstated confidence.
-- **Suricata Rule 3 (mining-pool PCRE) split into 4 content-anchored rules**, eliminating a PCRE-only match with no `content` prefilter (a named anti-pattern). `xmrig.com` was dropped from the domain set — it is the legitimate XMRig project's own homepage, not a mining-pool destination, and its presence in the original list appears to be a data-quality error rather than an observed indicator.
-- **Suricata Rule 4 (Hysteria bing.com SNI) rewritten** from raw byte-offset `content` matching (unlikely to match real, RFC-9001-encrypted QUIC Initial packets) to the `quic` protocol keyword with the `quic.sni` sticky buffer — the real `suricata -T` (8.0.5) engine rejected an initial `tls.sni` attempt, confirming Suricata exposes QUIC-derived fields via dedicated `quic.*` buffers rather than `tls.*`.
-- **Suricata Rule 5 (Sliver JARM/IP) cut to the IOC feed.** The rule had no content, TLS, or JA3/JA4 anchor beyond the destination IP (`5.230.201.54`) — the `jarm` value appeared only in `metadata`, which Suricata does not evaluate as a match condition, not as an actual filter. Both the IP and the JARM fingerprint were already present in the IOC feed; the rule added no detection value beyond the feed entry and has been retired.
+- **Sigma11 tags replaced**, not merely supplemented. The original tactic tags didn't correspond to any technique the rule's own evidence named; replaced with `attack.impact` + `attack.t1657` (Financial Theft), which the rule's rationale already cited.
+- **Sigma5 (trycloudflare.com) demoted from `level: high` to `level: medium`**. Sigma cannot restrict a DNS-query selector to server-class hosts, so the rule fires identically on any developer/CI host using the same free tunnel service; the original level overstated confidence.
+- **Suricata Rule 3 (mining-pool PCRE) split into 4 content-anchored rules**, eliminating a PCRE-only match with no `content` prefilter (a named anti-pattern). `xmrig.com` was dropped from the domain set. It is the legitimate XMRig project's own homepage, not a mining-pool destination, and its presence in the original list appears to be a data-quality error rather than an observed indicator.
+- **Suricata Rule 4 (Hysteria bing.com SNI) rewritten** from raw byte-offset `content` matching (unlikely to match real, RFC-9001-encrypted QUIC Initial packets) to the `quic` protocol keyword with the `quic.sni` sticky buffer. The real `suricata -T` (8.0.5) engine rejected an initial `tls.sni` attempt, confirming Suricata exposes QUIC-derived fields via dedicated `quic.*` buffers rather than `tls.*`.
+- **Suricata Rule 5 (Sliver JARM/IP) cut to the IOC feed.** The rule had no content, TLS, or JA3/JA4 anchor beyond the destination IP (`5.230.201.54`). The `jarm` value appeared only in `metadata`, which Suricata does not evaluate as a match condition, not as an actual filter. Both the IP and the JARM fingerprint were already present in the IOC feed; the rule added no detection value beyond the feed entry and has been retired.
 
-### Per-Case Operator-Specific Signatures — Deferred to Sub-Reports
+### Per-Case Operator-Specific Signatures: Deferred to Sub-Reports
 
 This parent detection file covers campaign-wide and cross-cutting signatures. Four sub-reports with their own per-case detection files are downstream deliverables:
 
@@ -1242,34 +1242,34 @@ This parent detection file covers campaign-wide and cross-cutting signatures. Fo
 | Case 3 (Rovodev/Pandora) | Per-architecture Naku binary hash anchors (11 hashes), Matrix C2 Discord integration detection, `master_control.py`/`attack_engine.py` per-hash YARA, `stealth_agent.py` anti-VM evasion-specific signatures | The Pandora/Naku YARA rule covers the campaign-wide naming pattern; per-binary hashes and Matrix C2 Discord-specific detection belong in Case 3 sub-report |
 | Case 9 (GHOST Kit) | Operator-A wallet-specific YARA (77.110.96.200 customer only), `min1.sh` dual-Telegram reporter token detection, Telegram C2 channel specific bot token IOC rules, `hyst.sh` Python framework per-hash | The case9-libpam-pull draft includes a wallet-specific rule preserved in the sub-report; this parent file covers the family-level signatures only |
 
-### Case 7 and Case 8 — Capsule Cases with Thin Technical Artifacts
+### Case 7 and Case 8: Capsule Cases with Thin Technical Artifacts
 
 | Case | Gap | Evidence Available | What Would Enable Coverage |
 |---|---|---|---|
 | Case 7 (Weevely+frp+Claude) | Weevely PHP webshell behavioral Sigma, parent process analysis, PHP webshell pattern | Directory-listing observation only; no Weevely payload binary extracted | Weevely payload extraction and detonation; existing public webshell rules already cover Weevely generically — no new YARA contribution from this case alone |
 | Case 8 (AI-Orchestrated Payment API Attack) | Specific payment API endpoint sequence signatures | 6-stage timeline preserved; LLM vendor unidentified; no operator infrastructure files extracted | Full API access log including intermediate response tokens and confirmation of which LLM API was used for orchestration; current evidence supports only the generic 60s correlation rule (Hunting-tier Sigma) |
 
-### LLM-Vendor-Side Detection — Out of Defender Scope
+### LLM-Vendor-Side Detection: Out of Defender Scope
 
 The following threat behaviors involve LLM provider-side telemetry not available to defenders:
 
-- **Stolen API key abuse detection** — Gemini API key theft and abuse (Case 1: 40+ stolen keys) is detectable only by Google through API usage anomaly monitoring. Defender scope: monitor for API key files in unexpected filesystem locations (YARA rule) and unusual server-host AI API egress (Sigma rule).
-- **Prompt injection in AI agent sessions** — detection of malicious prompts injected into legitimate AI agent sessions requires LLM provider-side classification of prompt content.
-- **AI-generated code at generation time** — the Hunting-tier YARA rule catches the output on disk; the generation event itself is visible only to the LLM provider's inference logs.
-- **GHOST kit supply-chain OWNER bot monitoring** — the kit-author monitors every customer deployment via a hardcoded Telegram bot token. Detection requires Telegram API-side monitoring; the kit-author's GitHub account suspension disrupts the payload-distribution channel but the OWNER bot likely persists on a separate account.
+- **Stolen API key abuse detection**. Gemini API key theft and abuse (Case 1: 40+ stolen keys) is detectable only by Google through API usage anomaly monitoring. Defender scope: monitor for API key files in unexpected filesystem locations (YARA rule) and unusual server-host AI API egress (Sigma rule).
+- **Prompt injection in AI agent sessions**. Detection of malicious prompts injected into legitimate AI agent sessions requires LLM provider-side classification of prompt content.
+- **AI-generated code at generation time**. The Hunting-tier YARA rule catches the output on disk; the generation event itself is visible only to the LLM provider's inference logs.
+- **GHOST kit supply-chain OWNER bot monitoring**. The kit-author monitors every customer deployment via a hardcoded Telegram bot token. Detection requires Telegram API-side monitoring; the kit-author's GitHub account suspension disrupts the payload-distribution channel but the OWNER bot likely persists on a separate account.
 
-### Behavioral Runtime Detection of LLM API Abuse — Requires Vendor Telemetry
+### Behavioral Runtime Detection of LLM API Abuse: Requires Vendor Telemetry
 
-- **Per-request prompt classification** — detecting whether an outbound API call to `generativelanguage.googleapis.com` contains a malicious red-team password prompt requires body inspection with content classification. DLP with LLM-query-body inspection is the closest defender-side analog.
-- **Gemini CLI session recording** — the Russian operator's Gemini CLI session transcripts stored under `~/.gemini/` on the operator's server are recoverable during IR for full attack-timeline reconstruction, but are not detectable at runtime from defender infrastructure.
+- **Per-request prompt classification**, detecting whether an outbound API call to `generativelanguage.googleapis.com` contains a malicious red-team password prompt requires body inspection with content classification. DLP with LLM-query-body inspection is the closest defender-side analog.
+- **Gemini CLI session recording**. The Russian operator's Gemini CLI session transcripts stored under `~/.gemini/` on the operator's server are recoverable during IR for full attack-timeline reconstruction, but are not detectable at runtime from defender infrastructure.
 
-### Sliver Case 10 — Staging Phase, Feed-Only Coverage
+### Sliver Case 10: Staging Phase, Feed-Only Coverage
 
-Case 10's Sliver deployment was in a staging/learning phase at capture time (zero sessions, zero beacons — 60 practice recordings only). Production Sliver implant behavioral signatures could not be derived from staging artifacts alone. The prior draft's Suricata signature for this case matched only the destination IP (with the JARM fingerprint present in `metadata` but not evaluated as a filter); that signature added no detection value over the IOC feed entry and has been retired (see Retiering Fixes above) — Case 10 is presently feed-only coverage (`5.230.201.54`, JARM `3fd3fd20d0...`). A full Sliver implant YARA rule would require a captured implant PE from a production operation.
+Case 10's Sliver deployment was in a staging/learning phase at capture time (zero sessions, zero beacons, 60 practice recordings only). Production Sliver implant behavioral signatures could not be derived from staging artifacts alone. The prior draft's Suricata signature for this case matched only the destination IP (with the JARM fingerprint present in `metadata` but not evaluated as a filter); that signature added no detection value over the IOC feed entry and has been retired (see Retiering Fixes above). Case 10 is presently feed-only coverage (`5.230.201.54`, JARM `3fd3fd20d0...`). A full Sliver implant YARA rule would require a captured implant PE from a production operation.
 
-### Korean Operator Case 4 — Single Artifact, Limited Coverage
+### Korean Operator Case 4: Single Artifact, Limited Coverage
 
-The Korean operator Case 4 smoking-gun artifact (`settings.local.json` with OpenClaw pre-authorization) is covered by the Hunting-tier Sigma rule in this file. Beyond this, the operator's broader toolchain (OpenClaw platform internals, port 18789 beacon, OpenClaw gateway traffic) was not deeply analyzed — only the Claude Code configuration artifact was extracted. A full Case 4 detection file would require OpenClaw binary reverse engineering and network traffic capture.
+The Korean operator Case 4 smoking-gun artifact (`settings.local.json` with OpenClaw pre-authorization) is covered by the Hunting-tier Sigma rule in this file. Beyond this, the operator's broader toolchain (OpenClaw platform internals, port 18789 beacon, OpenClaw gateway traffic) was not deeply analyzed. Only the Claude Code configuration artifact was extracted. A full Case 4 detection file would require OpenClaw binary reverse engineering and network traffic capture.
 
 ---
 

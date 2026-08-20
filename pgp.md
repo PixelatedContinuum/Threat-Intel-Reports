@@ -20,7 +20,7 @@ permalink: /pgp/
 Key ID `9FA0CE305AF91383`, RSA 4096, created 26 July 2026, valid to 26 July 2027.
 Identity: Joseph Harrison &lt;the.hunters.ledger@gmail.com&gt;.
 
-**Verify the fingerprint before you use the key.** Compare what you see here against a second,
+Verify the fingerprint before you use the key. Compare what you see here against a second,
 independent source rather than trusting this page alone. Checking a key against the same channel it
 arrived on proves nothing, and out-of-band verification is what defeats a substituted key.
 

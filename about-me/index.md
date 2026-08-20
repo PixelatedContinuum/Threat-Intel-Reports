@@ -34,9 +34,9 @@ thumbnail: /assets/images/cards/about.png
 <div class="hl-panel" style="--acc: #58a6ff;">
   <div class="hl-panel__title">Summary</div>
   <div class="hl-panel__body">
-    Cybersecurity SOC Operations Lead specializing in <strong>threat hunting, detection engineering, DFIR, malware analysis, and reverse engineering</strong> — with experience leading large analyst teams and optimizing SOC operations across automation and intelligence workflows. I drive the full intelligence lifecycle from proactive threat development and CTI collaboration to executive-ready reporting, while building AI-driven capabilities including LLM agents, MCP servers, and automation platforms to scale security outcomes.<br><br>
-    From this research I contribute directly to detection engineering — developing custom signatures and detection logic for client environments built from original malware analysis. My DFIR background runs alongside that, covering end-to-end incident response investigations, forensic artifact analysis, scope and impact determination for large enterprise clients. Both disciplines feed into the reports on this site.<br><br>
-    The Hunter's Ledger is where I publish the original research I conduct outside of client work — hands-on analysis turned into structured, actionable intelligence for the defender community.
+    Cybersecurity SOC Operations Lead specializing in threat hunting, detection engineering, DFIR, malware analysis, and reverse engineering, with experience leading large analyst teams and optimizing SOC operations across automation and intelligence workflows. I drive the full intelligence lifecycle from proactive threat development and CTI collaboration to executive-ready reporting, while building AI-driven capabilities including LLM agents, MCP servers, and automation platforms to scale security outcomes.<br><br>
+    From this research I contribute directly to detection engineering, developing custom signatures and detection logic for client environments built from original malware analysis. My DFIR background runs alongside that, covering end-to-end incident response investigations, forensic artifact analysis, scope and impact determination for large enterprise clients. Both disciplines feed into the reports on this site.<br><br>
+    The Hunter's Ledger is where I publish the original research I conduct outside of client work. It is hands-on analysis turned into structured, actionable intelligence for the defender community.
   </div>
 </div>
 
@@ -67,7 +67,7 @@ thumbnail: /assets/images/cards/about.png
     <div class="hl-panel__title">Certifications</div>
     <div class="hl-panel__body">
       <strong>GIAC Certified Forensic Analyst (GCFA)</strong><br>
-      GIAC Certified Enterprise Incident Responder (GEIR) — In Progress<br><br>
+      GIAC Certified Enterprise Incident Responder (GEIR), in progress<br><br>
       SANS FOR508: Advanced Incident Response, Threat Hunting, and Digital Forensics<br>
       SANS FOR608: Enterprise-Class Incident Response &amp; Threat Hunting
     </div>
@@ -75,8 +75,8 @@ thumbnail: /assets/images/cards/about.png
   <div class="hl-panel" style="--acc: #f97316;">
     <div class="hl-panel__title">Education</div>
     <div class="hl-panel__body">
-      <strong>M.S. Cybersecurity</strong> — American Public University System<br>
-      B.S. Information Technology (Cybersecurity Concentration) — American Public University System
+      <strong>M.S. Cybersecurity</strong>, American Public University System<br>
+      B.S. Information Technology (Cybersecurity Concentration), American Public University System
     </div>
   </div>
 </div>
@@ -86,7 +86,7 @@ thumbnail: /assets/images/cards/about.png
 <div class="hl-panel" style="--acc: #58a6ff;">
   <div class="hl-panel__title">Story</div>
   <div class="hl-panel__body">
-    <a href="https://hunt.io/blog/interview-joseph-harrison-threat-detection">From Munitions to Malware: Interview with Joseph Harrison About His Path to Threat Intelligence</a> — Hunt.io
+    <a href="https://hunt.io/blog/interview-joseph-harrison-threat-detection">From Munitions to Malware: Interview with Joseph Harrison About His Path to Threat Intelligence</a>, Hunt.io
   </div>
 </div>
 
@@ -95,7 +95,7 @@ thumbnail: /assets/images/cards/about.png
 <div class="hl-panel" style="--acc: #4ade80;">
   <div class="hl-panel__title">Conference Talk</div>
   <div class="hl-panel__body">
-    <a href="https://conf.splunk.com/files/2025/recordings/SEC1929.mp4">Rebooting Splunk UEBA: Leveraging the New UEBA's AI/ML Models</a> — Splunk .conf25
+    <a href="https://conf.splunk.com/files/2025/recordings/SEC1929.mp4">Rebooting Splunk UEBA: Leveraging the New UEBA's AI/ML Models</a>, Splunk .conf25
   </div>
 </div>
 
@@ -117,7 +117,7 @@ thumbnail: /assets/images/cards/about.png
 <div class="hl-panel" style="--acc: #f97316;">
   <div class="hl-panel__title">How It Works</div>
   <div class="hl-panel__body">
-    Every report on this site starts with a self-hosted collection platform that scans adversary infrastructure every night — discovering malware on open directories across 65 known bulletproof hosting networks. What it finds is then processed through a purpose-built AI agent workflow: ten specialized agents, structured skill frameworks, automated quality gates, and human checkpoints — turning raw analysis into intelligence that is timely, evidence-based, and worth acting on.<br><br>
+    Every report on this site starts with a self-hosted collection platform that scans adversary infrastructure every night, discovering malware on open directories across 65 known bulletproof hosting networks. What it finds is then processed through a purpose-built AI agent workflow: eight specialist agents, structured skill frameworks, automated quality gates, and human checkpoints, turning raw analysis into intelligence that is timely, evidence-based, and worth acting on.<br><br>
     <a href="{{ '/behind-the-reports/' | relative_url }}">Behind the Reports: How the Intelligence Is Produced →</a>
   </div>
 </div>

@@ -28,7 +28,7 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 | Sigma | 3 | 2 | T1134.001, T1548.002, T1053.005, T1047 | 0 |
 | Suricata | 0 | 0 | — | 0 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Atomics routed to the IOC feed:** this file never carried the SHA256/MD5/SHA1 hash or the distribution IP (`109.230.231.37`) as a standalone rule; both were already present in [`arsenal-237-lpe-exe.json`](/ioc-feeds/arsenal-237-lpe-exe.json), under `file_hashes` and `network_indicators.distribution_infrastructure` respectively. No atomics required routing during this retiering pass.
 

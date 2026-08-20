@@ -17,7 +17,7 @@ hide: true
 
 ## Detection Coverage Summary
 
-No malware binary exists in this campaign — the primary evidence is the operator's `~/.claude/settings.local.json` configuration artifact. Detection coverage targets two surfaces that retain analyst value after tiering: (1) the configuration-file artifact itself (YARA file-content matching) and (2) behavioral execution patterns generated when Claude Code — or a human operator — acts under the attacker-customized allowlist (Sigma process/file rules). The campaign's network indicators, the OpenClaw distribution/documentation domains and the operator's open-directory IP, are bare atomic matches with no surviving behavioral signal once the domain or IP literal is removed, so all three original Suricata signatures and one Sigma DNS rule route to the IOC feed instead of standing as rules.
+No malware binary exists in this campaign. The primary evidence is the operator's `~/.claude/settings.local.json` configuration artifact. Detection coverage targets two surfaces that retain analyst value after tiering: (1) the configuration-file artifact itself (YARA file-content matching) and (2) behavioral execution patterns generated when Claude Code, or a human operator, acts under the attacker-customized allowlist (Sigma process/file rules). The campaign's network indicators, the OpenClaw distribution/documentation domains and the operator's open-directory IP, are bare atomic matches with no surviving behavioral signal once the domain or IP literal is removed, so all three original Suricata signatures and one Sigma DNS rule route to the IOC feed instead of standing as rules.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
@@ -25,11 +25,11 @@ No malware binary exists in this campaign — the primary evidence is the operat
 | Sigma | 0 | 4 | T1562.001, T1059.004, T1059.007, T1090.001 | 1 |
 | Suricata | 0 | 0 | — | 3 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchor:** the 3-of-7 OpenClaw-specific allowlist string combination (YARA Detection rule below) is the campaign's one Detection-tier rule — no known legitimate Claude Code workflow pre-approves the full curl|bash-installer-through-gateway-launch chain in a single `settings.local.json`, and the combination requirement makes single-string FP collision negligible.
 
-**Atomics routed to the IOC feed:** the OpenClaw distribution/documentation domains (`openclaw.ai`, `docs.openclaw.ai`), the adjacent-infrastructure domain (`lightmake.site`), and the operator's open-directory IP (`221.150.15.104`) each anchored a rule with no other discriminator — removing the domain or IP left nothing behavioral to detect. All four indicators were already present in [`korean-claude-openclaw-221.150.15.104-iocs.json`](/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json) prior to this pass; no feed edits were required. See Coverage Gaps for the full per-rule accounting.
+**Atomics routed to the IOC feed:** the OpenClaw distribution/documentation domains (`openclaw.ai`, `docs.openclaw.ai`), the adjacent-infrastructure domain (`lightmake.site`), and the operator's open-directory IP (`221.150.15.104`) each anchored a rule with no other discriminator, removing the domain or IP left nothing behavioral to detect. All four indicators were already present in [`korean-claude-openclaw-221.150.15.104-iocs.json`](/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json) prior to this pass; no feed edits were required. See Coverage Gaps for the full per-rule accounting.
 
 **Key hunt anchor:** any `settings.local.json` (Claude Code global or per-project allowlist) whose `permissions.allow` array contains a `curl ... | bash` pattern, a global `npm i -g` of an unfamiliar package, or a local-listener invocation (`* --port <N>`) is worth reviewing regardless of which specific tooling is referenced. The specific OpenClaw strings are the precision anchor (Detection tier); the broader `curl|bash` pattern is the resilience anchor and is deliberately kept at Hunting tier because dual-use tool evaluation by legitimate developers produces the identical artifact.
 
@@ -138,7 +138,7 @@ rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {
 **Confidence:** MODERATE
 **Rationale:** Sigma `file_event` rules match on path metadata, not file content, in most back ends, so this rule cannot itself confirm OpenClaw-specific allowlist strings are present — it only signals that the file was written. Because Claude Code writes this same path during routine, everyday interactive use (any time a user accepts a new tool permission), the rule fires on ubiquitous benign activity on any fleet with real Claude Code adoption. The path itself is durable (Claude Code, not the operator, dictates the filename), but precision fails Detection grade — this is a scoping lead that must be paired with the YARA content rule above, not an alert.
 **False Positives:**
-- Routine Claude Code operation on any developer host — this file is written or updated whenever a user accepts a new tool permission, which is common, everyday interactive activity, not evidence of attacker customization by itself.
+- Routine Claude Code operation on any developer host. This file is written or updated whenever a user accepts a new tool permission, which is common, everyday interactive activity, not evidence of attacker customization by itself.
 - Legitimate OpenClaw adopters on developer-class workstations who have explicitly added OpenClaw allowlist entries to their own Claude Code configuration.
 **Deployment:** Linux and macOS endpoints with file-event telemetry (auditd, Sysmon for Linux, ESA). Pair every hit with a YARA content scan (see YARA Detection rule above) before treating it as a finding; do not alert on this rule alone.
 
@@ -342,32 +342,32 @@ level: medium
 
 ## Coverage Gaps
 
-**Gap 1 — No malware binary; no PE-class YARA rule possible.**
+**Gap 1: No malware binary; no PE-class YARA rule possible.**
 This campaign produced no executable artifact. The analysis subject is the operator's `~/.claude/settings.local.json` configuration file (442 bytes, JSON). PE-class YARA rules (MZ header, section entropy, import hash) are not applicable. All YARA coverage in this file is scoped to text-format JSON configuration files.
 
-**Gap 2 — Four atomics routed to the IOC feed (1 Sigma DNS rule + 3 Suricata signatures).**
-Four of the file's original rules keyed solely on a hardcoded domain or IP with no surviving behavioral signal once the literal is removed — per the tiering rubric's routing test, these are IOC-feed entries, not rules:
+**Gap 2: Four atomics routed to the IOC feed (1 Sigma DNS rule + 3 Suricata signatures).**
+Four of the file's original rules keyed solely on a hardcoded domain or IP with no surviving behavioral signal once the literal is removed, per the tiering rubric's routing test, these are IOC-feed entries, not rules:
 
 - **DNS Resolution of OpenClaw AI-Agent Framework Distribution Domains** (Sigma) matched only `dns.question.name` containing `openclaw.ai` or `lightmake.site`, with no other selector. `openclaw.ai`, `docs.openclaw.ai`, and `lightmake.site` are already carried in [`korean-claude-openclaw-221.150.15.104-iocs.json`](/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json) (`network_indicators.domains`).
 - **TLS SNI Match: openclaw.ai** and **TLS SNI Match: docs.openclaw.ai** (Suricata) each matched only an exact `tls.sni` string with no other content anchor. Both domains are already in the feed as above.
-- **HTTP Host Match: Operator Open Directory** (Suricata) matched only the destination IP `221.150.15.104` plus a bare `GET` method — no distinguishing header, URI path, or payload content. `221.150.15.104` is already in the feed (`network_indicators.ipv4`), and the discovery URL `http://221.150.15.104:8080/` is separately carried in `network_indicators.urls`.
+- **HTTP Host Match: Operator Open Directory** (Suricata) matched only the destination IP `221.150.15.104` plus a bare `GET` method, no distinguishing header, URI path, or payload content. `221.150.15.104` is already in the feed (`network_indicators.ipv4`), and the discovery URL `http://221.150.15.104:8080/` is separately carried in `network_indicators.urls`.
 
-No feed edits were required — all four indicators were already present from the original analysis. Cutting these rules also removes the T1082 (System Information Discovery) mapping the docs.openclaw.ai rule previously carried; no surviving rule covers that technique, and the mapping was tangential (a WebFetch-to-docs-domain proxy for discovery) even when the rule existed.
+No feed edits were required. All four indicators were already present from the original analysis. Cutting these rules also removes the T1082 (System Information Discovery) mapping the docs.openclaw.ai rule previously carried; no surviving rule covers that technique, and the mapping was tangential (a WebFetch-to-docs-domain proxy for discovery) even when the rule existed.
 
-**Gap 3 — No C2 protocol observed; no C2-traffic behavioral Sigma or Suricata rules possible.**
-The operator's open directory and configuration artifact do not expose a C2 channel. The OpenClaw gateway (port 18789) is a local loopback service — its external C2 behavior, if any, is not documented in the captured evidence and should not be fabricated. If future evidence documents the OpenClaw gateway's external egress protocol, C2-traffic rules should be added.
+**Gap 3: No C2 protocol observed; no C2-traffic behavioral Sigma or Suricata rules possible.**
+The operator's open directory and configuration artifact do not expose a C2 channel. The OpenClaw gateway (port 18789) is a local loopback service. Its external C2 behavior, if any, is not documented in the captured evidence and should not be fabricated. If future evidence documents the OpenClaw gateway's external egress protocol, C2-traffic rules should be added.
 
-**Gap 4 — OpenClaw skill execution behavior is undocumented in the captured evidence.**
+**Gap 4: OpenClaw skill execution behavior is undocumented in the captured evidence.**
 The `settings.local.json` artifact documents the install and gateway-bring-up chain but does not specify which OpenClaw skills the operator deployed or what attack capabilities they exercised. Related investigation material documents OpenClaw's broader attack-capability ecosystem, but that evidence belongs to those cases, not this artifact. No rules have been written for specific OpenClaw skill execution behavior from this case's evidence.
 
-**Gap 5 — Attacker evasion by tooling substitution.**
-The allowlist-customization technique — pre-approving `curl|bash`, a global npm install, and listener bring-up in `settings.local.json` — is fully documented in this report. An operator who reads it can substitute any other AI-agent framework for OpenClaw and bypass every OpenClaw-specific string rule. The resilience detection anchor is the broader `curl|bash`-in-allowlist YARA Hunting rule and the generic process-creation pattern, which fire on the structural pattern regardless of tool name — neither can be evaded by swapping the domain or package name without also changing the `curl|bash` distribution model itself.
+**Gap 5: Attacker evasion by tooling substitution.**
+The allowlist-customization technique, pre-approving `curl|bash`, a global npm install, and listener bring-up in `settings.local.json`, is fully documented in this report. An operator who reads it can substitute any other AI-agent framework for OpenClaw and bypass every OpenClaw-specific string rule. The resilience detection anchor is the broader `curl|bash`-in-allowlist YARA Hunting rule and the generic process-creation pattern, which fire on the structural pattern regardless of tool name. Neither can be evaded by swapping the domain or package name without also changing the `curl|bash` distribution model itself.
 
-**Gap 6 — macOS-specific `open` command detection not covered.**
+**Gap 6: macOS-specific `open` command detection not covered.**
 Allowlist entry 7 (`Bash(open http://127.0.0.1:18789/)`) uses the macOS `open` command to launch the OpenClaw gateway UI in the default browser. A Sigma rule for `process_creation` matching `Image|endswith: '/open'` with `CommandLine|contains: '127.0.0.1:18789'` is technically feasible on macOS with Sysmon for macOS or ESA telemetry, but was not written because the `open` command is extremely common on macOS (used by countless legitimate applications) and the port-specific matching alone would produce a high FP rate without additional context. This gap is best addressed by correlating port-18789 listener inventory (host level) with process logs rather than a standalone process-creation rule.
 
-**Gap 7 — Parent-process correlation would raise the two Hunting-tier process-execution rules to Detection.**
-Both the curl|bash installer rule and the gateway-startup rule cannot distinguish a legitimate developer manually running OpenClaw from Claude Code auto-executing the same command under the attacker-customized allowlist — the campaign's evidence is a static configuration-file artifact, not observed process telemetry, so no parent-process (Claude Code) chain is available to make that distinction. What would raise confidence: telemetry showing Claude Code's own process as the direct parent of the `curl|bash` installer or `openclaw gateway` invocation would support tightening both rules to Detection tier via a `ParentImage` constraint.
+**Gap 7: Parent-process correlation would raise the two Hunting-tier process-execution rules to Detection.**
+Both the curl|bash installer rule and the gateway-startup rule cannot distinguish a legitimate developer manually running OpenClaw from Claude Code auto-executing the same command under the attacker-customized allowlist. The campaign's evidence is a static configuration-file artifact, not observed process telemetry, so no parent-process (Claude Code) chain is available to make that distinction. What would raise confidence: telemetry showing Claude Code's own process as the direct parent of the `curl|bash` installer or `openclaw gateway` invocation would support tightening both rules to Detection tier via a `ParentImage` constraint.
 
 ---
 

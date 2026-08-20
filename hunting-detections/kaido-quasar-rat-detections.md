@@ -16,7 +16,7 @@ hide: true
 
 ## Detection Coverage Summary
 
-> **Scope note:** this file covers only the **KAIDO Quasar-fork RAT** product line (PART A of the parent investigation). The EvilSoul-Engine stealer-builder line is covered in a separate detection file — no rules are duplicated here.
+> **Scope note:** this file covers only the **KAIDO Quasar-fork RAT** product line (PART A of the parent investigation). The EvilSoul-Engine stealer-builder line is covered in a separate detection file. No rules are duplicated here.
 
 KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC (Hidden-VNC) module that clones the victim's entire browser profile and drives their already-authenticated session on a hidden desktop.
 
@@ -26,15 +26,15 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC 
 | Sigma | 0 | 3 | T1553.005, T1219, T1113, T1036.005, T1547.001 | 0 |
 | Suricata | 1 | 1 | T1071.001, T1573.001, T1095 | 1 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- Namespace root `Kaido.Common.Messages` and Costura asset `costura.kaido.common.dll` — survive obfuscation, near-zero FP (YARA Detection).
-- Raw TCP/4782 Quasar binary protocol + `TeamKAIDO`/`kaido-c2` TLS certificate issuer + JA4X `bbd6cc0fca29_bbd6cc0fca29_795797892f9c` — fleet-enumeration-grade (Suricata Detection).
+- Namespace root `Kaido.Common.Messages` and Costura asset `costura.kaido.common.dll`, survive obfuscation, near-zero FP (YARA Detection).
+- Raw TCP/4782 Quasar binary protocol + `TeamKAIDO`/`kaido-c2` TLS certificate issuer + JA4X `bbd6cc0fca29_bbd6cc0fca29_795797892f9c`, fleet-enumeration-grade (Suricata Detection).
 
-**Atomics routed to the IOC feed:** the primary C2 domain `kaidoo.com.br` (and its `c2.`/`www.` siblings) is a transient indicator — it lives in [`kaido-quasar-rat-iocs.json`](/ioc-feeds/kaido-quasar-rat-iocs.json) rather than as a standalone DNS signature (removing the domain leaves nothing to detect). Block it via the feed.
+**Atomics routed to the IOC feed:** the primary C2 domain `kaidoo.com.br` (and its `c2.`/`www.` siblings) is a transient indicator. It lives in [`kaido-quasar-rat-iocs.json`](/ioc-feeds/kaido-quasar-rat-iocs.json) rather than as a standalone DNS signature (removing the domain leaves nothing to detect). Block it via the feed.
 
-**Coverage note on HVNC runtime behavior:** the HVNC module (hidden-desktop creation, browser-profile clone, DXGI capture) is fully recovered from static analysis (DEFINITE/HIGH), but the malware is C2-gated and withholds all post-connection behavior — persistence, HVNC activation, credential collection — until a valid Quasar handshake completes (T1480). Behavioral rules for the named-pipe transport and install path are written from static/structural evidence; see Coverage Gaps for what would raise the HVNC-specific rules to DEFINITE.
+**Coverage note on HVNC runtime behavior:** the HVNC module (hidden-desktop creation, browser-profile clone, DXGI capture) is fully recovered from static analysis (DEFINITE/HIGH), but the malware is C2-gated and withholds all post-connection behavior (persistence, HVNC activation, credential collection) until a valid Quasar handshake completes (T1480). Behavioral rules for the named-pipe transport and install path are written from static/structural evidence; see Coverage Gaps for what would raise the HVNC-specific rules to DEFINITE.
 
 ---
 
@@ -364,15 +364,15 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL KAIDO-EvilSoul-MaaS Quas
 
 ## Coverage Gaps
 
-**Primary C2 domain routed to the IOC feed, not a rule.** `kaidoo.com.br` (and the `c2.` / `www.` siblings, plus the current A-record `179.43.150.50`) are transient atomic indicators: a `dns_query` signature keyed solely on the domain stops detecting the moment the operator rotates it, and removing the literal leaves no behavior to match. They are carried in [`kaido-quasar-rat-iocs.json`](/ioc-feeds/kaido-quasar-rat-iocs.json) (BLOCK action) instead. The secondary `c2.kaidoo.com.br:443` channel is covered there as well — no separate signature is warranted.
+**Primary C2 domain routed to the IOC feed, not a rule.** `kaidoo.com.br` (and the `c2.` / `www.` siblings, plus the current A-record `179.43.150.50`) are transient atomic indicators: a `dns_query` signature keyed solely on the domain stops detecting the moment the operator rotates it, and removing the literal leaves no behavior to match. They are carried in [`kaido-quasar-rat-iocs.json`](/ioc-feeds/kaido-quasar-rat-iocs.json) (BLOCK action) instead. The secondary `c2.kaidoo.com.br:443` channel is covered there as well. No separate signature is warranted.
 
-**HVNC runtime behavioral rule (hidden-desktop capture chain).** The HVNC module — hidden-desktop creation via `SetThreadDesktop` without `SwitchDesktop`, wholesale browser-profile clone via handle duplication, and DXGI swap-chain capture — is fully recovered from static analysis (DEFINITE/HIGH) but was **not** triggered in the wild during observation: the RAT withholds all post-connection behavior until a valid Quasar handshake completes (T1480). A precise Sysmon/EDR behavioral rule for the desktop-switch API sequence (`CreateDesktop("Default_runhost")` → `SetThreadDesktop` with no matching `SwitchDesktop` call) cannot be written with DEFINITE confidence from static evidence alone, since API-call-sequence telemetry requires the sequence to actually execute. **What would raise confidence:** observing the HVNC command execute would capture the exact API call sequence and process/thread telemetry for the desktop-switch pattern.
+**HVNC runtime behavioral rule (hidden-desktop capture chain).** The HVNC module, hidden-desktop creation via `SetThreadDesktop` without `SwitchDesktop`, wholesale browser-profile clone via handle duplication, and DXGI swap-chain capture, is fully recovered from static analysis (DEFINITE/HIGH) but was **not** triggered in the wild during observation: the RAT withholds all post-connection behavior until a valid Quasar handshake completes (T1480). A precise Sysmon/EDR behavioral rule for the desktop-switch API sequence (`CreateDesktop("Default_runhost")` → `SetThreadDesktop` with no matching `SwitchDesktop` call) cannot be written with DEFINITE confidence from static evidence alone, since API-call-sequence telemetry requires the sequence to actually execute. **What would raise confidence:** observing the HVNC command execute would capture the exact API call sequence and process/thread telemetry for the desktop-switch pattern.
 
-**Persistence mechanism (Registry Run key / Scheduled Task / Windows Service).** The install routine references `HKCU\...\Run` registry writes, a scheduled-task install path, and a Windows service install path (T1547.001, T1053.005, T1543.003 — all MODERATE), but none were observed because the RAT never reached the persistence stage. Writing a Sigma rule for a specific registry value name or scheduled task name would require guessing an unobserved parameter, risking either false negatives or unjustified specificity. **What would raise confidence:** observing the RAT past the C2 handshake, long enough for the actual persistence artifact names/paths to be written.
+**Persistence mechanism (Registry Run key / Scheduled Task / Windows Service).** The install routine references `HKCU\...\Run` registry writes, a scheduled-task install path, and a Windows service install path (T1547.001, T1053.005, T1543.003, all MODERATE), but none were observed because the RAT never reached the persistence stage. Writing a Sigma rule for a specific registry value name or scheduled task name would require guessing an unobserved parameter, risking either false negatives or unjustified specificity. **What would raise confidence:** observing the RAT past the C2 handshake, long enough for the actual persistence artifact names/paths to be written.
 
 **Process injection into cloned browser processes (T1055, MODERATE).** Decompiled code indicates HVNC reflectively injects a capture DLL into the cloned browser process running on the hidden desktop, but the specific injection API sequence (`CreateRemoteThread`, `QueueUserAPC`, or another technique) was not confirmed. **What would raise confidence:** capturing the injection sequence during HVNC execution via debugger or EDR API-hook telemetry.
 
-**Embedded pinned-certificate SHA1 thumbprint (`0acd8c90641e6e8b085aaf5a541c7ac050a65a4a`).** This value functions as the Quasar AUTHKEY across all three analyzed builds and is a strong static anchor, but is intentionally not a Suricata TLS-fingerprint rule — it is the client-embedded pinned cert used for the RAT's own outbound pinning validation, not the server-presented certificate an IDS observes on the wire. It is carried in the IOC feed as a static anchor.
+**Embedded pinned-certificate SHA1 thumbprint (`0acd8c90641e6e8b085aaf5a541c7ac050a65a4a`).** This value functions as the Quasar AUTHKEY across all three analyzed builds and is a strong static anchor, but is intentionally not a Suricata TLS-fingerprint rule. It is the client-embedded pinned cert used for the RAT's own outbound pinning validation, not the server-presented certificate an IDS observes on the wire. It is carried in the IOC feed as a static anchor.
 
 ---
 

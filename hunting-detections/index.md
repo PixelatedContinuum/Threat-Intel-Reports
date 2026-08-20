@@ -15,7 +15,7 @@ position: 3
 <details class="hl-feed">
   <summary class="hl-feed__toggle">
     <span aria-hidden="true">📡</span>
-    <span>Subscribe — live Suricata rule feed</span>
+    <span>Subscribe to the live Suricata rule feed</span>
     <span class="hl-feed__chev" aria-hidden="true">▾</span>
   </summary>
   <div class="hl-feed__body">

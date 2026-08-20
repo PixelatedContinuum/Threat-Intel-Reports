@@ -17,7 +17,7 @@ hide: true
 
 ## Detection Coverage Summary
 
-This detection package targets the **AdaptixC2** open-source post-exploitation framework as observed at `45.130.148.125`, plus the operator's bundled commodity toolkit (Ligolo-ng, Ghostpack/SpecterOps post-exploitation utilities). Rules also carry a content-layer split — **stock-framework indicators** (match any operator running stock AdaptixC2 with default-listener configuration: Firefox 20 UA, `X-Beacon-Id` header, default URI paths, RC4 config-blob layout in `.rdata`) versus **operator-specific indicators** (match the 45.130.148.125 operator only: recovered RC4 key, `si_build` build fingerprint, PDB path) — layered underneath the Detection/Hunting fidelity tiers below.
+This detection package targets the **AdaptixC2** open-source post-exploitation framework as observed at `45.130.148.125`, plus the operator's bundled commodity toolkit (Ligolo-ng, Ghostpack/SpecterOps post-exploitation utilities). Rules also carry a content-layer split, **stock-framework indicators** (match any operator running stock AdaptixC2 with default-listener configuration: Firefox 20 UA, `X-Beacon-Id` header, default URI paths, RC4 config-blob layout in `.rdata`) versus **operator-specific indicators** (match the 45.130.148.125 operator only: recovered RC4 key, `si_build` build fingerprint, PDB path), layered underneath the Detection/Hunting fidelity tiers below.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
@@ -25,16 +25,16 @@ This detection package targets the **AdaptixC2** open-source post-exploitation f
 | Sigma | 2 | 7 | T1055, T1055.002, T1059.001, T1069.002, T1071.001, T1087.002, T1090.001, T1482, T1572, T1573.001, T1620, T1685 | 0 |
 | Suricata | 2 | 3 | T1071.001, T1573.001 | 2 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- `powershell.exe` creating a remote thread inside `explorer.exe` — a technique chokepoint between two operating-system binaries, so it survives a rebuild, a rename, and full infrastructure rotation. Confirmed in execution, and the strongest host-side anchor in this package (Sigma Detection, Sysmon Event ID 8).
-- A `POST` carrying `Content-Length: 0` alongside a ~148-character base64 `X-Beacon-Id` header — legitimate clients essentially never pair an empty body with a large custom header, and neither element is adjustable from the listener profile (Suricata Detection).
-- `X-Beacon-Id` HTTP header — hardcoded in AdaptixC2's own source code, not a listener-profile-configurable field; the most durable stock-framework indicator in this package (Suricata Detection).
-- AdaptixC2 stock RTTI typeinfo strings (`9Connector`, `13ConnectorHTTP`) combined with the RDI loader export and heartbeat header — a framework source-level combination that survives an operator rebuild (YARA Detection).
-- Ligolo-ng's Go module import path (`nicocha30/ligolo-ng/pkg/`) — a tool-level anchor unfakeable without forking and renaming the upstream project (YARA + Sigma Detection).
+- `powershell.exe` creating a remote thread inside `explorer.exe`, a technique chokepoint between two operating-system binaries, so it survives a rebuild, a rename, and full infrastructure rotation. Confirmed in execution, and the strongest host-side anchor in this package (Sigma Detection, Sysmon Event ID 8).
+- A `POST` carrying `Content-Length: 0` alongside a ~148-character base64 `X-Beacon-Id` header, legitimate clients essentially never pair an empty body with a large custom header, and neither element is adjustable from the listener profile (Suricata Detection).
+- `X-Beacon-Id` HTTP header, hardcoded in AdaptixC2's own source code, not a listener-profile-configurable field; the most durable stock-framework indicator in this package (Suricata Detection).
+- AdaptixC2 stock RTTI typeinfo strings (`9Connector`, `13ConnectorHTTP`) combined with the RDI loader export and heartbeat header, a framework source-level combination that survives an operator rebuild (YARA Detection).
+- Ligolo-ng's Go module import path (`nicocha30/ligolo-ng/pkg/`), a tool-level anchor unfakeable without forking and renaming the upstream project (YARA + Sigma Detection).
 
-**Atomics routed to the IOC feed:** the operator's per-listener RC4 config key (`f443b9ce7e0658900f6a7ff0991cdee6`) and the C2 IP `45.130.148.125` are transient indicators, already present in [`opendirectory-45-130-148-125-20260430-iocs.json`](/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json) — both rotate on the operator's next rebuild or infrastructure move and carried no incremental detection value once separated from the durable framework-level anchors above. Three rules keyed solely on these two values were cut in favor of the feed. Block them via the feed.
+**Atomics routed to the IOC feed:** the operator's per-listener RC4 config key (`f443b9ce7e0658900f6a7ff0991cdee6`) and the C2 IP `45.130.148.125` are transient indicators, already present in [`opendirectory-45-130-148-125-20260430-iocs.json`](/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json). Both rotate on the operator's next rebuild or infrastructure move and carried no incremental detection value once separated from the durable framework-level anchors above. Three rules keyed solely on these two values were cut in favor of the feed. Block them via the feed.
 
 ### MITRE ATT&CK Coverage
 
@@ -55,8 +55,8 @@ The IOC feed and rules below address 39 distinct ATT&CK techniques observed in t
 
 Two YARA false-positive clusters were identified during analysis and must be filtered when triaging hunt results:
 
-- **Go-runtime PoetRat false positive** — `MALWARE_RULES: PoetRat_Python` triggers on every Go binary (`agent.exe` / Ligolo-ng, `chisel.exe`, `gopher.x64.exe`). PoetRAT is unrelated to this toolkit.
-- **PowerView spyeye false positive** — `MALWARE_RULES: spyeye` triggers on PowerView.ps1 due to a generic byte pattern. PowerView is a commodity AD reconnaissance PowerShell module, not SpyEye banking malware.
+- **Go-runtime PoetRat false positive**. `MALWARE_RULES: PoetRat_Python` triggers on every Go binary (`agent.exe` / Ligolo-ng, `chisel.exe`, `gopher.x64.exe`). PoetRAT is unrelated to this toolkit.
+- **PowerView spyeye false positive**. `MALWARE_RULES: spyeye` triggers on PowerView.ps1 due to a generic byte pattern. PowerView is a commodity AD reconnaissance PowerShell module, not SpyEye banking malware.
 
 ---
 
@@ -64,7 +64,7 @@ Two YARA false-positive clusters were identified during analysis and must be fil
 
 ### Detection Rules
 
-#### AdaptixC2 Windows Beacon — Stock Framework Fingerprint
+#### AdaptixC2 Windows Beacon: Stock Framework Fingerprint
 
 **Tier:** Detection
 **Robustness:** 3
@@ -160,7 +160,7 @@ rule MALW_Ligolo_ng_v083_Agent
 
 ### Hunting Rules
 
-#### AdaptixC2 Operator .NET Injector — si_build Build Fingerprint
+#### AdaptixC2 Operator .NET Injector: si_build Build Fingerprint
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -198,7 +198,7 @@ rule MALW_AdaptixC2_Operator_Injector_SI
 }
 ```
 
-#### AdaptixC2 PowerShell Loader — AMSI Bypass and SI Injector Invocation
+#### AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -341,7 +341,7 @@ level: high
 
 ### Hunting Rules
 
-#### AdaptixC2 PowerShell Loader — AMSI Bypass and SI Injector Invocation
+#### AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -433,7 +433,7 @@ falsepositives:
 level: medium
 ```
 
-#### AdaptixC2 Default Listener — Anomalous Firefox 20 User-Agent with X-Beacon-Id Header
+#### AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent with X-Beacon-Id Header
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -467,7 +467,7 @@ falsepositives:
 level: medium
 ```
 
-#### AdaptixC2 Beacon — High-Frequency Deterministic HTTP POST Cadence to Stock URIs
+#### AdaptixC2 Beacon: High-Frequency Deterministic HTTP POST Cadence to Stock URIs
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -703,11 +703,11 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL AdaptixC2 Stock Listener
 
 ## Coverage Gaps
 
-**Rules cut in favor of the IOC feed (3 of the original 17 rules).** Two Suricata signatures and one YARA rule keyed solely on the operator's per-listener RC4 config key (`f443b9ce7e0658900f6a7ff0991cdee6`) or the C2 IP `45.130.148.125` — both values already carried in [`opendirectory-45-130-148-125-20260430-iocs.json`](/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json). No feed edits were required.
+**Rules cut in favor of the IOC feed (3 of the original 17 rules).** Two Suricata signatures and one YARA rule keyed solely on the operator's per-listener RC4 config key (`f443b9ce7e0658900f6a7ff0991cdee6`) or the C2 IP `45.130.148.125`. Both values already carried in [`opendirectory-45-130-148-125-20260430-iocs.json`](/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json). No feed edits were required.
 
-- **YARA `MALW_AdaptixC2_Beacon_RC4_Operator_Key`** — required the RC4 key bytes plus the stock RTTI strings already covered by the Detection-tier `MALW_AdaptixC2_Windows_Beacon_Stock` rule; the key is generated per-listener-instance (`ax.random_string(32, hex)`) and rotates on the operator's next rebuild, so stripping it left a strictly weaker duplicate of an existing rule.
-- **Suricata SID 5001001 (`AdaptixC2 Operator Beacon C2 Traffic to 45.130.148.125 - Firefox 20 UA`)** — combined the hardcoded destination IP with a bare UA+POST match (no URI). Once the IP is set aside as an atomic, the surviving UA+POST signal is a strict subset of the Hunting-tier URI-qualified rules (SID 5001003/5001004) and less durable than the Detection-tier `X-Beacon-Id` header rule (SID 5001002) — no incremental coverage.
-- **Suricata SID 5001005 (`AdaptixC2 Operator RC4 Config Key Bytes in Traffic`)** — matched only the raw 16-byte RC4 key with no other qualifier; the rule's own original write-up already flagged it as "NOT suitable as a persistent production IDS rule (key rotates on operator rebuild)."
+- **YARA `MALW_AdaptixC2_Beacon_RC4_Operator_Key`** required the RC4 key bytes plus the stock RTTI strings already covered by the Detection-tier `MALW_AdaptixC2_Windows_Beacon_Stock` rule; the key is generated per-listener-instance (`ax.random_string(32, hex)`) and rotates on the operator's next rebuild, so stripping it left a strictly weaker duplicate of an existing rule.
+- **Suricata SID 5001001 (`AdaptixC2 Operator Beacon C2 Traffic to 45.130.148.125 - Firefox 20 UA`)** combined the hardcoded destination IP with a bare UA+POST match (no URI). Once the IP is set aside as an atomic, the surviving UA+POST signal is a strict subset of the Hunting-tier URI-qualified rules (SID 5001003/5001004) and less durable than the Detection-tier `X-Beacon-Id` header rule (SID 5001002), no incremental coverage.
+- **Suricata SID 5001005 (`AdaptixC2 Operator RC4 Config Key Bytes in Traffic`)** matched only the raw 16-byte RC4 key with no other qualifier; the rule's own original write-up already flagged it as "NOT suitable as a persistent production IDS rule (key rotates on operator rebuild)."
 
 The following techniques observed in the malware-analyst findings still cannot be covered with high-confidence, low-FP detection rules given currently available evidence. Each gap is documented with the specific obstacle and the evidence that would enable rule creation.
 

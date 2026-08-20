@@ -18,12 +18,12 @@ hide: true
   <div class="hl-feat" style="--fa: #b8902f;">
     <div class="hl-feat__dot"></div>
     <div class="hl-feat__title">Reach buyers, not eyeballs</div>
-    <p class="hl-feat__desc">Detection engineers, threat intelligence analysts, and security leadership doing daily work that informs procurement — not a CPM impressions buy.</p>
+    <p class="hl-feat__desc">Detection engineers, threat intelligence analysts, and security leadership doing daily work that informs procurement, not a CPM impressions buy.</p>
   </div>
   <div class="hl-feat" style="--fa: #58a6ff;">
     <div class="hl-feat__dot"></div>
     <div class="hl-feat__title">Credibility by association</div>
-    <p class="hl-feat__desc">Your brand sits alongside reverse engineering, working detection rules, and evidence-tied attribution — presented as a supporter of the defender community, not an advertiser.</p>
+    <p class="hl-feat__desc">Your brand sits alongside reverse engineering, working detection rules, and evidence-tied attribution, presented as a supporter of the defender community, not an advertiser.</p>
   </div>
   <div class="hl-feat" style="--fa: #4ade80;">
     <div class="hl-feat__dot"></div>
@@ -35,27 +35,27 @@ hide: true
 {% include section-header.html label="Who Reads This" accent="#58a6ff" %}
 
 <div class="hl-panel" style="--acc: #58a6ff;">
-  <p class="hl-panel__body" style="margin-bottom: 12px;">Every reader here is a working defender — the exact <strong>technical security audience vendors want in front of</strong>: the people who evaluate, recommend, deploy, and buy detection and tooling. The most active cohorts:</p>
+  <p class="hl-panel__body" style="margin-bottom: 12px;">Every reader here is a working defender, the exact <strong>technical security audience vendors want in front of</strong>: the people who evaluate, recommend, deploy, and buy detection and tooling. The most active cohorts:</p>
   <ul class="hl-panel__body" style="margin: 0; padding-left: 18px; line-height: 1.7;">
-    <li><strong>CISO and security leadership</strong> — taking risk framing, business impact, and vendor capability signals to inform tool evaluation.</li>
-    <li><strong>Threat intelligence analysts</strong> — pulling attribution assessments, infrastructure pivots, actor TTPs, and IOCs.</li>
-    <li><strong>Detection engineering teams</strong> — integrating ready-to-deploy YARA, Sigma, and Suricata rules with evidence backing.</li>
-    <li><strong>SOC analysts (L1 through L3)</strong> — using behavioral indicators, kill chain reconstruction, and ATT&amp;CK mapping to build hunt content.</li>
+    <li><strong>CISO and security leadership</strong>, taking risk framing, business impact, and vendor capability signals to inform tool evaluation.</li>
+    <li><strong>Threat intelligence analysts</strong>, pulling attribution assessments, infrastructure pivots, actor TTPs, and IOCs.</li>
+    <li><strong>Detection engineering teams</strong>, integrating ready-to-deploy YARA, Sigma, and Suricata rules with evidence backing.</li>
+    <li><strong>SOC analysts (L1 through L3)</strong>, using behavioral indicators, kill chain reconstruction, and ATT&amp;CK mapping to build hunt content.</li>
   </ul>
 </div>
 
-<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 16px 2px 12px;">Reach here is about <strong>relevance, not raw volume</strong> — the audience is concentrated exactly where security buying decisions get made:</p>
+<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 16px 2px 12px;">Reach here is about <strong>relevance, not raw volume</strong>. The audience is concentrated exactly where security buying decisions get made:</p>
 
 <div class="hl-feat-grid">
   <div class="hl-feat" style="--fa: #58a6ff;">
     <div class="hl-feat__dot"></div>
     <div class="hl-feat__stat">10K+ views</div>
-    <p class="hl-feat__desc">In a peak month and climbing — readers who come for working detection content, not general traffic.</p>
+    <p class="hl-feat__desc">In a peak month and climbing, readers who come for working detection content, not general traffic.</p>
   </div>
   <div class="hl-feat" style="--fa: #4ade80;">
     <div class="hl-feat__dot"></div>
     <div class="hl-feat__stat">3,500+ on LinkedIn</div>
-    <p class="hl-feat__desc">A following of detection engineers, threat-intel analysts, and security leaders — the roles that evaluate and buy.</p>
+    <p class="hl-feat__desc">A following of detection engineers, threat-intel analysts, and security leaders, the roles that evaluate and buy.</p>
   </div>
   <div class="hl-feat" style="--fa: #b8902f;">
     <div class="hl-feat__dot"></div>
@@ -64,13 +64,13 @@ hide: true
   </div>
 </div>
 
-<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site: every detection rule is submitted to the public <strong>Sigma and YARA rule repositories</strong> the community pulls from — so the research gets deployed in SOCs, labs, and hunt platforms used by defenders worldwide, well beyond direct readers.</p>
+<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site: every detection rule is submitted to the public <strong>Sigma and YARA rule repositories</strong> the community pulls from, so the research gets deployed in SOCs, labs, and hunt platforms used by defenders worldwide, well beyond direct readers.</p>
 
 {% include section-header.html label="Sponsorship Tiers" accent="#b8902f" %}
 
 <div class="hl-panel" style="--acc: #b8902f;">
   <span class="hl-panel__eyebrow">Flexible &amp; Custom</span>
-  <p class="hl-panel__body">These are starting points, not limits — bundle reports in any size, mix new and catalog, sponsor monthly, or build something custom. Tell me what you're trying to achieve and I'll shape a package around it.</p>
+  <p class="hl-panel__body">These are starting points, not limits. Bundle reports in any size, mix new and catalog, sponsor monthly, or build something custom. Tell me what you're trying to achieve and I'll shape a package around it.</p>
 </div>
 
 {% assign tiers = site.data.sponsors.tiers %}
@@ -123,13 +123,13 @@ hide: true
 {% include section-header.html label="Editorial Independence" accent="#58a6ff" %}
 
 <div class="hl-panel" style="--acc: #58a6ff;">
-  <p class="hl-panel__body" style="margin-bottom: 12px;">Sponsorship buys placement and brand association — not content control. These rules protect the credibility that makes the publication worth sponsoring in the first place.</p>
+  <p class="hl-panel__body" style="margin-bottom: 12px;">Sponsorship buys placement and brand association, not content control. These rules protect the credibility that makes the publication worth sponsoring in the first place.</p>
   <ul class="hl-panel__body" style="margin: 0; padding-left: 18px; line-height: 1.7;">
     <li>Sponsors do not review reports before publication.</li>
     <li>Sponsors do not influence findings, attribution claims, or recommendations.</li>
     <li>Sponsor-requested research topics are accepted as suggestions, not directed by sponsors.</li>
     <li>Sponsors are never named as analysts or contributors.</li>
-    <li>Sponsored placement is always clearly disclosed — this is not native advertising.</li>
+    <li>Sponsored placement is always clearly disclosed. This is not native advertising.</li>
   </ul>
 </div>
 
@@ -138,9 +138,9 @@ hide: true
 <div class="hl-panel" style="--acc: #b8902f;">
   <p class="hl-panel__body" style="margin-bottom: 12px;">Optional extras to add more reach whenever you want it.</p>
   <ul class="hl-panel__body" style="margin: 0; padding-left: 18px; line-height: 1.7;">
-    <li><strong>Newsletter mention</strong> — <span style="color: #b8902f; font-weight: 600;">$50</span> — One-off sponsored mention in a subscriber email send.</li>
-    <li><strong>Extra LinkedIn or X post</strong> — <span style="color: #b8902f; font-weight: 600;">$50</span> — A single dedicated sponsored post about your capability or content.</li>
-    <li><strong>Sponsor-suggested research topic</strong> — <span style="color: #b8902f; font-weight: 600;">$500+</span> — Choose a topic your organization needs intel about and I'll do the rest: original research and a published report on it. A new investigation, distinct from the topic alignment already included with a Report sponsorship; editorial independence preserved.</li>
+    <li><strong>Newsletter mention</strong>, <span style="color: #b8902f; font-weight: 600;">$50</span>. One-off sponsored mention in a subscriber email send.</li>
+    <li><strong>Extra LinkedIn or X post</strong>, <span style="color: #b8902f; font-weight: 600;">$50</span>. A single dedicated sponsored post about your capability or content.</li>
+    <li><strong>Sponsor-suggested research topic</strong>, <span style="color: #b8902f; font-weight: 600;">$500+</span>. Choose a topic your organization needs intel about and I'll do the rest: original research and a published report on it. A new investigation, distinct from the topic alignment already included with a Report sponsorship; editorial independence preserved.</li>
   </ul>
 </div>
 
@@ -158,7 +158,7 @@ hide: true
 
 <div class="hl-panel" style="--acc: #b8902f;">
   <div class="hl-panel__title">Ready to discuss sponsorship?</div>
-  <p class="hl-panel__body" style="margin-bottom: 14px;">Reach out however works best for you — email, LinkedIn message, async chat, or a call. Happy to walk through the audience and recent reports, or just answer questions. Custom packages and bundles welcome.</p>
+  <p class="hl-panel__body" style="margin-bottom: 14px;">Reach out however works best for you: email, LinkedIn message, async chat, or a call. Happy to walk through the audience and recent reports, or just answer questions. Custom packages and bundles welcome.</p>
   <div class="hl-cta-row">
     <a class="hl-cta" style="--acc: #b8902f;" href="mailto:intel@the-hunters-ledger.com?subject=Sponsorship Inquiry">intel@the-hunters-ledger.com&nbsp;&rarr;</a>
     <a class="hl-cta hl-cta--ghost" style="--acc: #b8902f;" href="https://www.linkedin.com/in/josephrharrison" target="_blank" rel="noopener noreferrer">LinkedIn</a>

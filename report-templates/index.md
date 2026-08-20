@@ -1,88 +1,105 @@
 ---
-title: Report Templates
+title: Report Format
 layout: page
 permalink: /report-templates/
 hide: true
 ---
 
-# Purpose
+## Purpose
 
-This section documents the **current report format** used by *The Hunters Ledger* for all threat intelligence publications. The format has evolved significantly from the site's earlier reports. If you are writing a new report or contributing one, this page is the authoritative reference.
+This page documents the **current report format** used by The Hunters Ledger. The format has changed substantially since the site's earlier reports, so where an older published report disagrees with this page, this page is right and the older report has not been backfilled yet.
 
-**Live reference implementations:**
-- [Open Directory Exposure: Sliver C2 Toolchain (45.94.31.220)]({{ "/reports/sliver-open-directory/" | relative_url }}) — full-format deep technical report with companion detection file and IOC feed
-- [WebServer Compromise Kit (91.236.230.250)]({{ "/reports/webserver-compromise-kit-91-236-230-250/" | relative_url }}) — multi-component open directory analysis
+Two reports on the site are written fully to the current standard and are the best things to read alongside this page:
+
+- [MultiVector E-Commerce RCE Toolkit (192.3.1.116)]({{ "/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/" | relative_url }}), full-format deep technical report with collapsible teardowns
+- [WebLogic Deserialization and Telecom Harvester (13.140.145.210)]({{ "/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/" | relative_url }}), on-box analysis with companion detection file and IOC feed
 
 ---
 
-## Three-File Structure
+## Four Files, Not Three
 
-Every full-format report consists of three companion files. All paths are relative to the repository root.
+A full-format publication is three content files plus one catalog entry. The catalog entry is what makes the other three visible, so a report without it is published but unreachable.
 
-| File | Purpose | Location |
+| File | Purpose | Rendered at |
 |---|---|---|
-| `reports/[name]/index.md` | Main technical report | Rendered at `/reports/[name]/` |
-| `ioc-feeds/[name]-iocs.json` | Machine-readable IOC feed | Listed at `/ioc-feeds/` |
-| `hunting-detections/[name]-detections.md` | YARA + Sigma + behavioral guidance | Listed at `/hunting-detections/` |
+| `reports/[slug]/index.md` | The report | `/reports/[slug]/` |
+| `ioc-feeds/[slug]-iocs.json` | Machine-readable IOC feed | `/ioc-feeds/` |
+| `hunting-detections/[slug]-detections.md` | YARA, Sigma, and Suricata rules | `/hunting-detections/` |
+| `_data/catalog.yml` | One entry driving all three listings | Every listing page and the home page |
 
-IOCs and detection rules are **never embedded in the main report**. They live in their companion files and are cross-referenced in Appendix A.
+IOCs and detection rules are **never embedded in the report body**. They live in their companion files and get referenced.
+
+### The catalog entry
+
+One entry per campaign. An entry appears in a listing only if it carries that listing's URL field, so a report with no `detection_url` simply does not show on the detections page.
+
+```yaml
+  - title: "Campaign or Tool Name"
+    date: YYYY-MM-DD            # ISO, unquoted
+    severity: high              # critical | high | med | low, must match the Threat Level header
+    tags: [Tag1, Tag2, Tag3]    # drives card badges and the filter chips
+    report_url: /reports/[slug]/
+    detection_url: /hunting-detections/[slug]-detections
+    ioc_url: /ioc-feeds/[slug]-iocs.json
+```
+
+Titles auto-normalize to `Detection Rules — {title}` and `{title} — IOC Feed` unless overridden with `detection_title` or `ioc_title`.
+
+Do not hand-edit `reports/index.md`, `hunting-detections/index.md`, `ioc-feeds/index.md`, or the home page's latest-reports block. All four generate from the catalog.
 
 ---
 
 ## YAML Front Matter
 
-Every report opens with this front matter block. The `hide: true` flag excludes it from the standard post listing while keeping it accessible via direct permalink and the reports index.
-
 ```yaml
 ---
-title: "[Report Title] — Technical Analysis & Threat Assessment"
+title: "[Report Title]"
 date: 'YYYY-MM-DD'
-last_updated: 'YYYY-MM-DD'               # optional — only when report is revised after publish
+last_updated: 'YYYY-MM-DD'               # only when revised after publish
 detection_page: /hunting-detections/[slug]-detections/
 ioc_feed: /ioc-feeds/[slug]-iocs.json
-detection_sections:                       # powers the green Detection panel on the report page
-  - label: "YARA Rules"                   # display label shown in the panel
-    anchor: "#yara-rules"                 # must match the Jekyll-generated H2 anchor exactly
+detection_sections:                       # powers the green Detection panel
+  - label: "YARA Rules"
+    anchor: "#yara-rules"                 # must match the Jekyll-generated H2 anchor
   - label: "Sigma Rules"
     anchor: "#sigma-rules"
   - label: "Suricata Rules"
     anchor: "#suricata-rules"
-ioc_highlights:                           # powers the blue IOC panel — 3–5 top indicators
+ioc_highlights:                           # powers the blue IOC panel, 3 to 5 indicators
   - value: "1.2.3.4"
-    note: "Primary C2 server"             # keep under 60 chars
-  - value: "abc123..."
-    note: "Main payload SHA256"
+    note: "Primary C2 server"             # keep under 60 characters
 layout: post
-permalink: /reports/[report-folder-name]/
+permalink: /reports/[slug]/
 category: "[Malware Category]"
 hide: true
-description: "[1–2 sentence summary for social sharing previews]"
+description: "[1 to 2 sentence summary for social sharing previews]"
 ---
 ```
 
-**`detection_sections`** — each `anchor` must match the H2 anchor Jekyll generates: lowercase, spaces → hyphens, special characters stripped. Include only the substantive rule sections (YARA, Sigma, Suricata, EDR queries); skip Overview, License, and summary sections.
+`detection_page`, `ioc_feed`, `detection_sections` and `ioc_highlights` drive the report page's own sidebar panels. They do **not** create the listing cards. Only the catalog entry does that.
 
-**`ioc_highlights`** — 3–5 top-priority indicators in the IOC quick-reference panel with one-click copy.
+Each `anchor` must match the anchor Jekyll generates from the heading: lowercased, spaces to hyphens, special characters stripped. Include only substantive rule sections and skip Overview, License, and summary sections.
 
-**Three hard rules:**
+### Three rules for `ioc_highlights`
 
-1. **Atomic indicators only.** Accepted: IPv4/IPv6 addresses, domains, full URLs, file hashes (MD5/SHA1/SHA256). Do NOT use: filenames, file paths, registry keys, mutex names, scheduled task names, tool names, strings, version numbers, or configuration values. These are not directly actionable by copy-paste into a hunt or detection tool.
+Only **atomic indicators** belong here. IPv4 and IPv6 addresses, domains, full URLs, and file hashes. Never filenames, paths, registry keys, mutex names, scheduled task names, tool names, strings, version numbers, or configuration values, because none of those can be pasted straight into a hunt.
 
-2. **Defang all network indicators.** Replace `.` with `[.]` in IPs and domains. Replace `http`/`https` with `hxxp`/`hxxps` in URLs. Hashes are not defanged.
-   - IP: `185.49.126.140` → `185[.]49[.]126[.]140`
-   - Domain: `evil.com` → `evil[.]com`
-   - URL: `hxxp://evil[.]com/payload`
-   - Hash: `f4b00fbc6a3ce80b474334a3ccaadcf0` — no change
+Every network indicator is defanged. Replace `.` with `[.]` in addresses and domains, and `http` with `hxxp` in URLs. Hashes are never defanged.
 
-3. **Prioritize by impact.** Order highest to lowest risk:
-   - Active C2 IPs and domains first — immediately blockable/huntable
-   - Payload hashes second — definitive file-based detection anchors
-   - Delivery domains and staging servers third
-   - Skip generic hosting IPs, low-uniqueness indicators, or anything not confirmed malicious
+| Type | Published as |
+|---|---|
+| IP | `185[.]49[.]126[.]140` |
+| Domain | `evil[.]com` |
+| URL | `hxxp://evil[.]com/payload` |
+| Hash | `f4b00fbc6a3ce80b474334a3ccaadcf0` |
 
-If fewer than 3 atomic IOCs exist, omit `ioc_highlights` entirely rather than padding with non-atomic values.
+Order them by what a defender acts on first. Active C2 addresses and domains lead, because those are immediately blockable. Payload hashes follow as file-based anchors, then delivery and staging infrastructure. Skip generic hosting addresses and anything not confirmed malicious. If there are fewer than three atomic indicators, omit the field rather than padding it.
 
-Immediately after the front matter (before the first heading), add the campaign identifier, last updated date, and threat level. Use `<br>` tags so each field renders on its own line:
+---
+
+## Campaign Metadata Block
+
+Immediately after the front matter, before the first heading. The `<br>` tags are required, because Jekyll otherwise collapses all three fields onto one line.
 
 ```markdown
 **Campaign Identifier:** [CampaignID]<br>
@@ -90,270 +107,181 @@ Immediately after the front matter (before the first heading), add the campaign 
 **Threat Level:** [CRITICAL/HIGH/MEDIUM/LOW]
 ```
 
-**Why `<br>` tags are required:** In Jekyll/Markdown, consecutive lines without a blank line between them are collapsed into a single paragraph. Without `<br>`, all three fields will render on one line instead of three.
+This block is the one place a bolded label followed by a colon is allowed. It is a fixed deployment format, not prose.
 
-**Campaign ID naming convention:** Describe *what was found*, not the assumed attacker.
-✓ `WebServer-Compromise-Kit-45.94.31.220`
-✗ `Attacker-Infrastructure-45.94.31.220`
+The campaign identifier describes **what was found**, never an assumption about who is behind it. `WebServer-Compromise-Kit-45.94.31.220` is right. `Attacker-Infrastructure-45.94.31.220` is not, unless attribution is genuinely HIGH or above, in which case the actor name may lead.
 
----
-
-## Report Section Structure
-
-The canonical section order for a full-format report. Brief sections at top (BLUF, ToC) precede the numbered body sections.
-
-### Before the Table of Contents
-
-```markdown
----
-
-## BLUF (Bottom Line Up Front)
-
-[2–4 sentences: what was found, what infrastructure, what capability, when discovered.]
-
-**Threat Category:** [Category] — [LEVEL] confidence ([XX]%). Designated **[UTA-YEAR-###]** *(an internal tracking label used by The Hunters Ledger — see Section 6)*.
-**Threat Level:** [CRITICAL/HIGH/MEDIUM/LOW] — [one-sentence rationale]
-**Intelligence Type:** [Descriptive/Explanatory/Anticipatory] — [what type of intelligence this report provides]
-
-> [Source/basis statement — what evidence this assessment is based on]
-
-> **Key caveat:** [Most important limitation or time-sensitivity note]
-
-[Optional lead figure — e.g., open directory screenshot — placed here before the ToC]
-```
-
-### Table of Contents (numbered)
-
-```markdown
----
-
-## Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Sample and Artifact Inventory](#2-sample-and-artifact-inventory)
-3. [Kill Chain Analysis](#3-kill-chain-analysis)
-4. [Evasion Techniques — Deep Technical Analysis](#4-evasion-techniques)
-5. [Infrastructure and Build Pipeline](#5-infrastructure-and-build-pipeline)
-6. [Threat Actor Assessment](#6-threat-actor-assessment)
-7. [MITRE ATT&CK Mapping](#7-mitre-attck-mapping)
-8. [Detection Opportunities](#8-detection-opportunities)
-9. [Analytical Caveats and Gaps](#9-analytical-caveats-and-gaps)
-10. [Response Guidance](#10-response-guidance)
-11. [Appendix A: IOC and Detection File References](#appendix-a)
-12. [Appendix B: Research References](#appendix-b)
-```
-
-### Numbered Body Sections
-
-**Heading level rule:** All top-level numbered sections (1–10 and Appendices) use `##` (H2) — never `#` (H1). The report title rendered by Jekyll is already the page H1; using `#` inside the body creates a duplicate H1 and breaks the site's TOC scan, which only builds from H2 headings. Sub-sections within a numbered section use `###` (H3).
-
-✓ Correct: `## 1. Executive Summary`
-✗ Wrong: `# 1. Executive Summary`
-
-**Section 1 — Executive Summary**
-High-level overview for a mixed audience. Covers the threat in plain terms, what defenders gained from the intelligence, and what the attacker built. Plain language first, technical depth second. Includes key analyst notes (operational caveats, confidence limitations).
-
-**Section 2 — Sample and Artifact Inventory**
-Enumerate all analyzed files: filename, size, type, MD5/SHA1/SHA256, brief description. May include a version / packer table. For open-directory cases, include file count, directory structure summary, and artifact categories recovered.
-
-**Section 3 — Kill Chain Analysis**
-The core technical section. See *Kill Chain Staging Format* below for the required structure. Stages are numbered 0–N. Stage 0 is typically the pre-victim build/setup activity if build artifacts are available.
-
-**Section 4 — Evasion Techniques — Deep Technical Analysis**
-A per-technique deep dive on each evasion method. Each sub-section opens with a `> **Plain language:**` blockquote before technical content. Covers mechanism, implementation details, detection implications, and confidence level for each technique.
-
-**Section 5 — Infrastructure and Build Pipeline**
-IP addresses, ASN, hosting provider, domain registration, certificate details, build environment. Cross-reference C2 configuration with observed evidence.
-
-**Section 6 — Threat Actor Assessment**
-Must open with the UTA explanatory blockquote (see *UTA Handling* below). Includes attribution confidence statement in the required format, indicators used, gaps, and what would increase confidence.
-
-**Section 7 — MITRE ATT&CK Mapping**
-Table format: Technique ID | Technique Name | Tactic | Evidence | Confidence. Group by tactic. Summarize total technique count and coverage notes.
-
-**Section 8 — Detection Opportunities**
-Summary of what is detectable and at which layer (file, behavioral, network, memory). Cross-reference to the companion detection file. Do not embed rule code here.
-
-**Section 9 — Analytical Caveats and Gaps**
-Enumerate unresolved questions and intelligence gaps as a numbered or bulleted list. Explicit about what was not observed, what could not be confirmed, and what would be needed to close each gap.
-
-**Section 10 — Response Guidance**
-Action categories only — not step-by-step procedures. Written for a third-party intelligence provider audience. No tool-specific configurations, no organization-specific recommendations.
-
-**Appendix A — IOC and Detection File References**
-Links to the companion files. Do not duplicate IOC content here.
-
-**Appendix B — Research References**
-All sources cited in the report. Named-source claims ("CISA confirms…", "Spamhaus flags…") require a URL citation here or must be replaced with general language.
+The Threat Level must match the overall risk score in the body. A report showing MEDIUM at the top while the body scores CRITICAL erodes trust faster than either number alone. Where campaign context justifies a lower header level than the capability score (confirmed-offline infrastructure, no confirmed victims), the report must carry a blockquote immediately after the header explaining the gap.
 
 ---
 
-## Kill Chain Staging Format
+## Structure
 
-Each stage uses this structure. The `> **Plain language:**` blockquote is **mandatory** for every stage — it is the only plain language format. Do not add a separate italic one-liner.
+Fourteen elements in order, from front matter to the license footer. The numbered sections use `##`, and the report title Jekyll renders is already the page H1.
 
-```markdown
-### Stage N — [Short Name]: [Source or Module]
-
-> **Plain language:** [1–3 sentences in non-technical English explaining what happens in this stage and why it matters to a non-technical reader.]
-
-[Technical content — evidence, code analysis, API calls, configuration values, confidence levels]
-```
-
-**Stage numbering convention:**
-- Stage 0 is typically pre-victim activity (build pipeline, attacker setup)
-- Stages 1–N follow the victim-side kill chain in chronological order
-- Sub-stages use bold labels: `**Sub-stage 5a — [Name]:**`
-
----
-
-## Plain Language Accessibility
-
-Every section containing dense technical content must open with a plain language summary blockquote:
-
-```markdown
-> **Plain language:** [1–3 sentences in non-technical English explaining what this section covers and why it matters. Maximum 3 sentences. Comprehensible to a non-technical executive.]
-```
-
-This blockquote appears **immediately after the section or stage heading**, before any technical content.
-
-**Content distribution targets:**
-
-| Content type | Target ratio |
+| # | Section |
 |---|---|
-| Technical analysis with plain-language explanations | 70–80% |
-| Response guidance (action categories only) | ≤10% |
-| Threat intelligence tied to observed findings | 10–20% |
+| 0 | YAML front matter and campaign metadata |
+| 1 | BLUF, three to five sentences |
+| 2 | Executive Summary (`## 1.`) |
+| 3 | Business Risk Assessment (`## 2.`), optional |
+| 4 | Technical Classification (`## 3.`) |
+| 5 | Technical Capabilities Deep-Dive (`## 4.`) |
+| 6 | Static Analysis Findings (`## 5.`) |
+| 7 | Dynamic Analysis Findings (`## 6.`) |
+| 8 | MITRE ATT&CK Mapping (`## 7.`) |
+| 9 | Indicators of Compromise (`## 8.`) |
+| 10 | Detection and Response Guidance (`## 9.`) |
+| 11 | Recommendations (`## 10.`) |
+| 12 | References and Appendices (`## 11.` and `## 12.`) |
+| 13 | License footer |
 
-No generic threat landscape content that is not tied to actual findings.
+Do not write a manual table of contents. The site builds a collapsible, hierarchical navigation panel by scanning H2 and H3 headings, and it expands the active chapter as the reader scrolls. A hand-written ToC section duplicates it and goes stale.
 
----
+Do not add a Quick Reference section either, because the sidebar panels already surface the IOC and detection links.
 
-## Tool Name Conventions
+### Heading levels
 
-On **first mention** of any analysis tool, include a parenthetical explaining its category:
+All top-level numbered sections use `##`. Never `#`, because that creates a second H1 and breaks the navigation scan. Sub-sections use `###` and nest under their chapter in the panel, so a clean `##` and `###` tree is what produces good navigation.
 
-| ✓ Correct (first use) | ✗ Wrong |
-|---|---|
-| `behavioral sandbox (Noriben)` | `Noriben` |
-| `memory forensics tool (Volatility)` | `Volatility` |
-| `disassembler (Binary Ninja)` | `Binary Ninja` |
-| `interactive debugger (x64dbg)` | `x64dbg` |
+### The three registers
 
-On **subsequent mentions**, use the general category term only — not the tool name:
+A report is one page that gets deeper as it is read, in three tiers, and the register drops one gear per tier.
 
-> "The behavioral sandbox logged 47 file creation events…" *(not "Noriben logged…")*
+The **top** is the operational brief. Plain, human, written in my own voice, and it has to stand alone for a reader who stops there. The **middle** is tradecraft and intelligence at a readable technical level: kill chain, infrastructure, attribution, detection pointers. The **bottom** is the technical teardown, written for a peer with the training wheels off.
 
-**Exception:** Standard, widely-known frameworks may be used without explanation on any mention: Sysmon, MITRE ATT&CK, Sigma, YARA.
+A uniform register across all three is the single loudest signal that nobody wrote the report.
 
----
+Section order follows the same descent. Executive material leads, which means the brief, the risk assessment, and who was affected. Technical depth follows, then the reference apparatus (ATT&CK, actor assessment, indicators, confidence) last. Risk is executive language and belongs near the front, not behind the teardown.
 
-## Figure Block Format
+### Collapsing the deep dives
 
-Screenshots and analytical images use this HTML block. Figures are numbered sequentially in document order.
+Wrap each genuinely deep dive in a collapsible block so the page reads short on load without losing any depth.
 
-```html
-<figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/[campaign-folder]/[filename].png" | relative_url }}" alt="[descriptive alt text]">
-  <figcaption><em>Figure N: [Description of what the image shows and why it is significant.]</em></figcaption>
-</figure>
-```
-
-Images live in `assets/images/[campaign-folder]/` with web-safe filenames (lowercase, hyphens for spaces).
-
-Only include screenshots that show accurate, meaningful analytical findings. Remove any figure that is inaccurate or that does not add intelligence value.
-
----
-
-## Confidence Levels
-
-Use this exact framework for all confidence claims throughout the report:
-
-| Level | Meaning |
-|---|---|
-| **DEFINITE** | Direct evidence — no ambiguity |
-| **HIGH** | Strong evidence — minor gaps |
-| **MODERATE** | Reasonable evidence — notable gaps |
-| **LOW** | Weak or circumstantial evidence |
-| **INSUFFICIENT** | Not enough data to assess |
-
-You have explicit permission to say "INSUFFICIENT" or "I don't know." Overstating confidence damages credibility more than acknowledging uncertainty.
-
----
-
-## Attribution Confidence Statement
-
-Every attribution claim in Section 6 must include this structured statement:
-
-```
-Threat Actor: [Name or "Unknown"]
-Confidence: [LEVEL] (XX%)
-  - Why this confidence: [Evidence supporting this level]
-  - What's missing: [Evidence gaps preventing higher confidence]
-  - What would increase confidence: [Specific research needed]
-```
-
-**Language precision by confidence level:**
-- **DEFINITE:** "attributed to", "confirmed as", "operated by"
-- **HIGH:** "highly likely", "strong indicators suggest", "probable attribution to"
-- **MODERATE:** "possible attribution to", "indicators suggest", "tentatively attributed to"
-- **LOW:** "weak indicators suggest", "insufficient evidence for attribution"
-- **INSUFFICIENT:** "cannot attribute", "attribution not possible"
-
----
-
-## UTA Handling
-
-When a report assigns a UTA (Unattributed Threat Actor) designation, two elements are required:
-
-**1 — BLUF parenthetical (first mention):**
 ```markdown
-Designated **UTA-2026-001** *(an internal tracking label used by The Hunters Ledger — see Section 6)*.
+<details markdown="1" class="hl-teardown">
+<summary>one-line teaser</summary>
+
+...the deep content...
+
+</details>
 ```
 
-**2 — Section 6 explanatory blockquote (opens the Threat Actor Assessment section):**
+`markdown="1"` keeps the inner headings, tables, and figures as real HTML, so the navigation panel still lists them, and the site auto-expands a collapsed block when a link targets something inside it.
+
+Three rules govern this. Keep a **meaningful** lead visible above every toggle, enough that the section stands on its own and a reader can decide whether to open the depth. Never collapse a section that is already short. And if collapsing would leave nothing substantive visible, write the plain-language overview first.
+
+This inverts the old pressure on length. Do not cut technical depth to keep a report readable. Add the depth and collapse it.
+
+---
+
+## Voice
+
+The full ruleset lives in the voice charter. These are the rules that get broken most.
+
+Write in the first person. I did the work, so the prose says so, which rules out "the analyst", "we assess", and any construction that makes the report itself into the actor. A report does not state, argue, or carry a caveat; the person writing it does. Being a third-party *provider* is about not taking the victim's side, and it says nothing about grammatical person.
+
+Em dashes and en dashes never appear as sentence punctuation, anywhere. Use a comma, split the sentence, or use parentheses.
+
+Never open a paragraph with a bolded label and a colon. Both `**Detection strategy.** The high-fidelity signal is…` and `**Confidence:** HIGH…` dissolve into the sentence, and the sentence is always better for it. This is the most persistent tell there is, and the campaign metadata block and table cells are the only exemptions.
+
+Avoid declaration-colons as well. A colon must not announce an elaboration mid-sentence where the sentence reads better joined. Roughly four in a full-length report is normal; past eight it has stopped being a choice.
+
+Break paragraphs at five or six sentences. That is a hard rule and an accessibility requirement rather than a preference, and a block that resists splitting is usually carrying two ideas.
+
+Use the real figure, never a hedge. It is our investigation, so we counted. Write "452 files" and "58 Python and 5 shell scripts", not "roughly 450" or "a hundred-plus scripts". Genuine measurement ranges stay ranges, and confidence percentages keep their "approximately" because they are estimates rather than counts.
+
+Keep bold surgical. A few-word key term or a verdict, never a full sentence or clause, and never a bolded lead-in on every paragraph. Most paragraphs carry no bold at all.
+
+Analyst notes are optional. A `> **Analyst note:**` blockquote earns its place only where a section carries genuine investigation-specific context or my own read on something, and one on every dense heading is a fingerprint rather than a feature. Never write one that opens with "this section covers X", defines a term a defender already knows, or restates the body. The executive summary, key takeaways, and response sections never carry one.
+
+---
+
+## Confidence and Attribution
+
+Use the project confidence scale: DEFINITE, HIGH, MODERATE, LOW, INSUFFICIENT. Saying INSUFFICIENT is always allowed and always better than an overclaim.
+
+Every attribution claim carries five things: the actor or "Unknown", the confidence level and percentage, why that level, what is missing, and what would raise it. Those five are a **content checklist, not a template**. Write them as flowing prose, never as a stack of bolded field labels, and never inside a fenced code block, which renders as a grey code box on the site.
+
+> My judgment is that this is unauthorized, malicious activity and not authorized security testing. I hold that at HIGH confidence, around 85 percent.
+>
+> That rests on four strong and five moderate inconsistencies with the authorized-testing hypothesis. What I cannot do is prove the absence of authorization from captured artifacts alone. A non-engagement confirmation from any one of the targeted platforms is what would move this higher.
+
+Attach confidence labels where a claim's confidence is load-bearing. Stamping a bracketed label on nearly every sentence reads as robotic and is itself a tell.
+
+---
+
+## The MITRE ATT&CK Table
+
+Two acceptable layouts. Column count is a matter of proportion, not safety, because the site CSS wraps long cell content at any width.
+
+**Three columns**, preferred when most rows are HIGH confidence. Open the section with a one-line note that all rows are HIGH unless marked, then append `(MODERATE)` inline on the few that are not.
+
 ```markdown
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-[YEAR]-[###] is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+| Tactic / Technique | Name | Evidence |
+|---|---|---|
+| Defense Evasion / T1055.002 | Portable Executable Injection | Embedded PE injection into `explorer.exe` via W^X |
+| Credential Access / T1003.001 | LSASS Memory | mimikatz v2.2.0 (gentilkiwi) |
 ```
 
----
+**Four columns**, adding `Conf.`, when confidence varies widely enough that per-row visibility matters.
 
-## Output Perspective
+Merge tactic and technique ID into one column, and drop redundant parent-technique prefixes, because the sub-technique ID already carries the parent. Write `LSASS Memory`, not `OS Credential Dumping: LSASS Memory`.
 
-All report content must reflect the perspective of a **third-party threat intelligence provider** — not an internal security team.
-
-**Never include:**
-- Monetary cost or damage estimates
-- Detailed step-by-step incident response procedures
-- Organization-specific recommendations ("Your SOC should…")
-- Tool-specific configurations ("Configure Splunk to…")
-- Compliance-specific procedures
-
-**Always use:**
-- Risk framing: "This enables attackers to…" — not "$50K in damages"
-- Action categories: "Isolate affected systems" — not step-by-step commands
-- Detection strategies: "Monitor for [behavior]" — not tool configuration blocks
-- Third-party neutral language throughout
+For a technique spanning two tactics, pick one for the first column and note the cross-tactic detail inline in the Evidence cell.
 
 ---
 
-## Source Citation Integrity
+## What Never Appears in a Report
 
-All named-source claims require a directly cited source. If a URL cannot be cited, remove the named attribution and use general language instead.
+Our own analysis tooling is never named. Use the category term alone, with no name and no parenthetical. Write "a behavioral sandbox", "memory forensics", "decompilation", "a debugger". Never name the sandbox, the disassembler, the lab image, a lab IP, a lab username, a run duration, or a session number. Better still, drop the frame and just state the behavior.
 
-| ✓ Correct (with citation) | `Threat intelligence feeds flag AS210558 as presumptively malicious infrastructure [Source: drop.spamhaus.org, accessed 2026-02-28]` |
-|---|---|
-| ✓ Correct (without citation) | `Threat intelligence feeds flag AS210558 as presumptively malicious infrastructure` |
-| ✗ Wrong | `Spamhaus recommends blocking AS210558` — named-source claim with no citation |
+Two things are exempt and must be kept. **Detection data sources the reader will use** (Sysmon, ATT&CK, Sigma, YARA, Suricata, Velociraptor) are guidance, not disclosure. **Tools the malware itself abuses** are the intelligence, so name them and keep every detail. The test is whose tool it is.
+
+Lab artifacts get normalized, not just redacted. A captured path of `C:\Users\<labuser>\AppData\Roaming\...` is not merely a leak, it is wrong intelligence, because it implies the malware targets a user by that name and anyone hunting the literal finds nothing. Publish `%APPDATA%\...`. The same goes for any `<Author>` or `<UserId>` field in a captured persistence artifact, and for screenshots showing a lab hostname or a sinkhole domain.
+
+Cost figures, step-by-step incident response, and organization-specific or tool-specific instructions all stay out. Use risk framing, action categories, and detection strategies instead.
+
+A named-source claim always needs a citation behind it. "Spamhaus recommends blocking AS210558" needs a URL. Without one, write "Threat intelligence feeds flag AS210558 as presumptively malicious infrastructure".
+
+### Angle-bracket placeholders
+
+Inside any raw HTML block, a placeholder like `<pid>` is parsed as an unclosed tag. It silently breaks the enclosing `</table>`, swallows every later heading, and kills the navigation panel.
+
+- Inside raw HTML: `<td>&lt;pid&gt;</td>`
+- In normal markdown, including inside backticks: `` `<pid>` `` is safe
+
+---
+
+## The Detection File
+
+Same deployment conventions as a report.
+
+```yaml
+---
+title: "Detection Rules — [Campaign Title]"
+date: 'YYYY-MM-DD'
+layout: post
+permalink: /hunting-detections/[slug]-detections/
+hide: true
+---
+```
+
+Followed by the campaign block, then top-level sections at `##` in this order: Detection Coverage Summary, Multi-Family Organization if applicable, YARA Rules, Sigma Rules, Suricata Signatures, Coverage Gaps, License. No body H1.
+
+Every YARA and Sigma rule carries an author field of exactly `The Hunters Ledger`.
+
+Every rule is tiered before it is written. **Detection** means durable and precise enough to alert on. **Hunting** means broad but worth a hunt team's time. **Cut** means it belongs in the IOC feed instead, which is where a hard-coded address or a single hash actually belongs.
+
+The per-rule metadata blocks (`**Tier:**`, `**Confidence:**`, `**False Positives:**` and the rest) repeat once per rule by design. They are a catalog a defender scans, so the no-label-colon rule does not apply to them and they must not be turned into prose.
 
 ---
 
 ## Hard Limits
 
-- **Report length:** 3,000 lines maximum
-- **IOC location:** `ioc-feeds/[name]-iocs.json` only — never embedded in the report
-- **Detection rules:** `hunting-detections/[name]-detections.md` only — never embedded in the report
-- **No Quick Reference section:** Do not include a "Quick Reference" table or section (linking to IOC/detection anchors). The report sidebar panels already surface these links — a Quick Reference section is redundant and adds unnecessary length.
+A report must not exceed **3,000 lines**. That is a backstop and never a target. Length is governed by prose discipline, and a campaign whose depth would exceed it becomes a multi-report series rather than one oversized report.
+
+IOCs live only in `ioc-feeds/[slug]-iocs.json`. Detection rules live only in `hunting-detections/[slug]-detections.md`. Neither is ever embedded in the report.
 
 ---
 
@@ -366,11 +294,11 @@ Every report ends with:
 
 ## License
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
 ```
 
-IOC feeds and detection rule files are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Detection files and IOC feeds carry the same CC BY 4.0 license.
 
 ---
 
-*Last updated: March 2026*
+*Last updated: August 2026.*

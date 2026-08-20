@@ -10,7 +10,7 @@ position: 1
 {% assign n_ioc = site.data.metrics.iocs %}
 <div class="hl-home-hero">
   <h1 class="hl-home-hero__title">Original Threat Intelligence Research</h1>
-  <p class="hl-home-hero__lede">Hands-on malware analysis turned into structured, evidence-based intelligence — technically deep enough to trust, clear enough to act on. Free and open: published by a solo analyst for the defender community, with no paywall or signup.</p>
+  <p class="hl-home-hero__lede">Hands-on malware analysis turned into structured, evidence-based intelligence, technically deep enough to trust and clear enough to act on. Free and open: published by a solo analyst for the defender community, with no paywall or signup.</p>
   <div class="hl-creds-strip">
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>{{ n_reports }}</strong>&nbsp;Reports</span>
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#4ade80;"></span><strong>{{ n_det }}</strong>&nbsp;Detection Rules</span>
@@ -52,10 +52,10 @@ position: 1
 {% include section-header.html label="Mission" accent="#58a6ff" %}
 
 <div class="hl-mission">
-  <p>Most threat intelligence fails defenders in one of two ways. It is either too shallow to be actionable — headlines dressed up as analysis — or technically rigorous but locked behind paywalls, stripped of indicators, and written for researchers rather than the people responding at 2am.</p>
-  <p>The Hunter's Ledger exists to fill that gap. Every report here is built from original research: real samples, real infrastructure, real detections. The goal is intelligence that a defender can open, read, and act on the same day — with IOCs ready to ingest, detection rules ready to deploy, and analysis deep enough to actually understand what a threat does and how to stop it.</p>
+  <p>Most threat intelligence fails defenders in one of two ways. It is either too shallow to be actionable (headlines dressed up as analysis), or technically rigorous but locked behind paywalls, stripped of indicators, and written for researchers rather than the people responding at 2am.</p>
+  <p>The Hunter's Ledger exists to fill that gap. Every report here is built from original research: real samples, real infrastructure, real detections. The goal is intelligence that a defender can open, read, and act on the same day, with IOCs ready to ingest, detection rules ready to deploy, and analysis deep enough to actually understand what a threat does and how to stop it.</p>
   <p class="hl-mission__close">All of it is free. Defenders should not have to pay to defend.</p>
-  <div class="hl-mission__note">Not a collection of open-source intel reports, IOCs, or TTPs — findings are from original research, though they may overlap with known threats.</div>
+  <div class="hl-mission__note">Not a collection of open-source intel reports, IOCs, or TTPs. Findings are from original research, though they may overlap with known threats.</div>
 </div>
 
 {% include section-header.html label="Explore" accent="#4ade80" %}
@@ -87,7 +87,7 @@ position: 1
   <a href="{{ '/consulting/' | relative_url }}" class="hl-nav-tile" style="--acc: #b8902f;"><div class="hl-nav-tile__title">Consulting</div><div class="hl-nav-tile__desc">Malware analysis, IR &amp; detection services</div></a>
   <a href="{{ '/support/' | relative_url }}" class="hl-nav-tile" style="--acc: #f472b6;"><div class="hl-nav-tile__title">Support</div><div class="hl-nav-tile__desc">Help keep the research free</div></a>
 </div>
-<div class="hl-contribute">Have original research, detections, or IOCs to share? Reach out at <a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a> — findings can be posted on your behalf as a co-author or attributed however you prefer.</div>
+<div class="hl-contribute">Have original research, detections, or IOCs to share? Reach out at <a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a>. Findings can be posted on your behalf as a co-author, or attributed however you prefer.</div>
 
 {% include section-header.html label="Resources" accent="#888888" %}
 

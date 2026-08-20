@@ -17,7 +17,7 @@ hide: true
 
 ## Detection Coverage Summary
 
-This open directory hosted three malicious payloads from a single staging server — a Go-based XiebroC2 v3.1 TCP implant, two builds of a Covenant C2 HTTP GruntStager (one standalone PE, one PowerShell-wrapped), and a non-operational proof-of-concept DLL. Coverage below is organized by rule type and tier; atomic indicators already captured in the IOC feed (the XiebroC2 C2 IP/port and the `main.exe` filename) are not duplicated as standalone rules.
+This open directory hosted three malicious payloads from a single staging server, a Go-based XiebroC2 v3.1 TCP implant, two builds of a Covenant C2 HTTP GruntStager (one standalone PE, one PowerShell-wrapped), and a non-operational proof-of-concept DLL. Coverage below is organized by rule type and tier; atomic indicators already captured in the IOC feed (the XiebroC2 C2 IP/port and the `main.exe` filename) are not duplicated as standalone rules.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
@@ -25,22 +25,22 @@ This open directory hosted three malicious payloads from a single staging server
 | Sigma | 2 | 2 | T1059.001, T1059.003, T1071.001, T1140, T1620 | 1 |
 | Suricata | 2 | 0 | T1036, T1071.001, T1571 | 1 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
 
 **Highest-confidence anchors:**
-- The `github.com/Ne0nd0g/go-clr` import path, the `WindosVersion` pclntab typo, and the custom RunPE parser error strings are compile-time artifacts baked into any binary built from XiebroC2 3.1 source — they survive AES-key rotation and are the strongest family anchors in the set (YARA Detection).
-- The Sigma CLR-load rule (image_load of `mscoree.dll`/`clr.dll` from a non-.NET-host process) requires no filename or campaign-specific literal at all — it detects the underlying reflective-CLR-hosting technique itself and is the most durable rule in this file (Sigma Detection, Robustness 3).
+- The `github.com/Ne0nd0g/go-clr` import path, the `WindosVersion` pclntab typo, and the custom RunPE parser error strings are compile-time artifacts baked into any binary built from XiebroC2 3.1 source. They survive AES-key rotation and are the strongest family anchors in the set (YARA Detection).
+- The Sigma CLR-load rule (image_load of `mscoree.dll`/`clr.dll` from a non-.NET-host process) requires no filename or campaign-specific literal at all. It detects the underlying reflective-CLR-hosting technique itself and is the most durable rule in this file (Sigma Detection, Robustness 3).
 
-**Atomics routed to the IOC feed:** the XiebroC2 C2 endpoint (`193.56.255.154:4444/TCP`) and the implant filename `main.exe` are transient/host-correlation indicators already present in [`opendirectory-193-56-255-154-20260403-iocs.json`](/ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json) — no new feed entries were required. One original Suricata rule (bare IP:port match, no content anchor) and one original Sigma rule (bare `ParentImage: main.exe` match, no injection-specific logic) keyed solely on these values with nothing behavioral surviving their removal; see Coverage Gaps for the full reasoning.
+**Atomics routed to the IOC feed:** the XiebroC2 C2 endpoint (`193.56.255.154:4444/TCP`) and the implant filename `main.exe` are transient/host-correlation indicators already present in [`opendirectory-193-56-255-154-20260403-iocs.json`](/ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json). No new feed entries were required. One original Suricata rule (bare IP:port match, no content anchor) and one original Sigma rule (bare `ParentImage: main.exe` match, no injection-specific logic) keyed solely on these values with nothing behavioral surviving their removal; see Coverage Gaps for the full reasoning.
 
 ---
 
 ## Multi-Family Organization
 
 This campaign involves three malicious payloads from a single staging server:
-- **XiebroC2 v3.1** — Go x86 TCP implant (`main.exe`)
-- **Covenant C2 GruntStager** — .NET HTTP stager (PE build: `GruntHTTP.exe`; PS build: `GruntHTTP.ps1`)
-- **PowerShell Fileless Loader** — Base64+Deflate wrapper delivering Covenant Build 2
+- **XiebroC2 v3.1**, Go x86 TCP implant (`main.exe`)
+- **Covenant C2 GruntStager**, .NET HTTP stager (PE build: `GruntHTTP.exe`; PS build: `GruntHTTP.ps1`)
+- **PowerShell Fileless Loader**, Base64+Deflate wrapper delivering Covenant Build 2
 
 Rules are grouped by family within each tier subsection (Detection Rules / Hunting Rules) inside each rule-type section below, per the site-wide type → tier → family layout.
 
@@ -62,7 +62,7 @@ Rules are grouped by family within each tier subsection (Detection Rules / Hunti
 
 **XiebroC2 v3.1**
 
-#### XiebroC2 v3.1 Go TCP Implant — Source-Code Artifact Combination
+#### XiebroC2 v3.1 Go TCP Implant: Source-Code Artifact Combination
 
 **Tier:** Detection
 **Robustness:** 3
@@ -144,7 +144,7 @@ rule RAT_Covenant_GruntStager_OpenDirectory {
 }
 ```
 
-#### Covenant PowerShell Fileless Loader — GruntHTTP.ps1
+#### Covenant PowerShell Fileless Loader: GruntHTTP.ps1
 
 **Tier:** Detection
 **Robustness:** 2
@@ -187,7 +187,7 @@ rule MALW_Covenant_PSFilelessLoader_GruntHTTP {
 
 **XiebroC2 v3.1**
 
-#### XiebroC2 v3.1 Binary-Patchable Config — Padded-IPv4 Structural Pattern
+#### XiebroC2 v3.1 Binary-Patchable Config: Padded-IPv4 Structural Pattern
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -242,7 +242,7 @@ rule RAT_XiebroC2_v31_PaddedConfig_Structural {
 **Validation:** Trigger the go-clr inline-assembly command on a XiebroC2 sample — must fire; launching any process in the filter list (`dotnet.exe`, `powershell.exe`, etc.) must NOT fire.
 **Deployment:** Sysmon Event ID 7 (ImageLoad); requires Sysmon with ImageLoad enabled.
 
-Corrected from the original: the YAML `tags` block listed `attack.t1055.012` (Process Hollowing) despite the rule's own description and detection logic describing an image-load event of `mscoree.dll`/`clr.dll` — that is T1620 (Reflective Code Loading), not process hollowing (which requires suspended-process creation and entry-point patching, an entirely different Sysmon event covered separately). The tag is corrected below and the unsupported `attack.privilege-escalation` tactic tag (this rule detects in-process CLR hosting, not escalation into a higher-privileged process) is dropped. This is the most durable rule in the file — it does not depend on any filename, IP, or campaign-specific literal.
+Corrected from the original: the YAML `tags` block listed `attack.t1055.012` (Process Hollowing) despite the rule's own description and detection logic describing an image-load event of `mscoree.dll`/`clr.dll`. That is T1620 (Reflective Code Loading), not process hollowing (which requires suspended-process creation and entry-point patching, an entirely different Sysmon event covered separately). The tag is corrected below and the unsupported `attack.privilege-escalation` tactic tag (this rule detects in-process CLR hosting, not escalation into a higher-privileged process) is dropped. This is the most durable rule in the file. It does not depend on any filename, IP, or campaign-specific literal.
 
 ```yaml
 title: XiebroC2 Go Implant Loading Windows CLR at Runtime via Go-Clr
@@ -301,7 +301,7 @@ level: high
 
 **Covenant C2 GruntStager**
 
-#### Covenant C2 GruntStager HTTP Beacon — Campaign Session Token Detected
+#### Covenant C2 GruntStager HTTP Beacon: Campaign Session Token Detected
 
 **Tier:** Detection
 **Robustness:** 2
@@ -312,7 +312,7 @@ level: high
 **Validation:** Replay a captured GruntStager beacon POST — must fire; ordinary HTTP/HTTPS proxy traffic without the token must NOT fire.
 **Deployment:** HTTP proxy logs (Squid, Bluecoat, Zscaler, etc.); web gateway telemetry; requires proxy logging of the request URI query string.
 
-Corrected from the original: the condition was `1 of (selection_session_token, selection_ua)` — an OR that let a bare sighting of the Chrome 41/Windows 7 User-Agent *alone*, with no URI or token match, fire the rule at `level: high`. That UA can appear on any legacy enterprise endpoint unrelated to this campaign, so the OR-combination understated the true false-positive rate of the weaker branch. Narrowed to the session-token clause alone (near-zero FP on its own); the UA pattern is retained as corroborating context in the description rather than a live alerting condition. The invalid `product: windows` paired with `category: proxy` (proxy logs are network-appliance logs, not Windows host logs) is also removed, and the field name is corrected from `cs-uri-query` to the real SigmaHQ `category: proxy` taxonomy field `c-uri-query` (confirmed against published proxy rules — `sigma check` rejects the `cs-` prefix as a non-existent field for this logsource).
+Corrected from the original: the condition was `1 of (selection_session_token, selection_ua)`, an OR that let a bare sighting of the Chrome 41/Windows 7 User-Agent *alone*, with no URI or token match, fire the rule at `level: high`. That UA can appear on any legacy enterprise endpoint unrelated to this campaign, so the OR-combination understated the true false-positive rate of the weaker branch. Narrowed to the session-token clause alone (near-zero FP on its own); the UA pattern is retained as corroborating context in the description rather than a live alerting condition. The invalid `product: windows` paired with `category: proxy` (proxy logs are network-appliance logs, not Windows host logs) is also removed, and the field name is corrected from `cs-uri-query` to the real SigmaHQ `category: proxy` taxonomy field `c-uri-query` (confirmed against published proxy rules, `sigma check` rejects the `cs-` prefix as a non-existent field for this logsource).
 
 ```yaml
 title: Covenant C2 GruntStager HTTP Beacon — Campaign Session Token Detected
@@ -408,7 +408,7 @@ level: medium
 
 **PowerShell Fileless Loader**
 
-#### PowerShell Fileless Loader — Deflate Decode with Reflective Assembly Load
+#### PowerShell Fileless Loader: Deflate Decode with Reflective Assembly Load
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -473,7 +473,7 @@ level: medium
 
 **Covenant C2 GruntStager**
 
-#### Covenant GruntStager C2 Beacon — Campaign Session Token in HTTP POST
+#### Covenant GruntStager C2 Beacon: Campaign Session Token in HTTP POST
 
 **Tier:** Detection
 **Robustness:** 2
@@ -484,13 +484,13 @@ level: medium
 **Validation:** Replay a captured GruntStager beacon POST — must alert; ordinary HTTP POST traffic without the token must NOT.
 **Deployment:** Network IDS/IPS inline or tap; HTTP inspection on port 443 (cleartext); requires HTTP body inspection enabled on the sensor.
 
-Corrected from the original: the `http` app-layer rule pinned destination port `443` — Suricata selects the HTTP parser by protocol recognition, not port, so pinning blind-spots any future port migration by the operator; changed to `any`. The old `reference:url,pixelatedcontinuum.github.io/...` line and the non-standard `metadata` schema (`affected_product`, `attack_target`, `created_at`, ...) are replaced with the required `metadata:author The_Hunters_Ledger, date, reference` schema pointing at the current site domain. A `threshold` was added for beacon noise control. `sid` is preserved unchanged from the original publication; `rev` bumped to reflect the logic/metadata change.
+Corrected from the original: the `http` app-layer rule pinned destination port `443`. Suricata selects the HTTP parser by protocol recognition, not port, so pinning blind-spots any future port migration by the operator; changed to `any`. The old `reference:url,pixelatedcontinuum.github.io/...` line and the non-standard `metadata` schema (`affected_product`, `attack_target`, `created_at`, ...) are replaced with the required `metadata:author The_Hunters_Ledger, date, reference` schema pointing at the current site domain. A `threshold` was added for beacon noise control. `sid` is preserved unchanged from the original publication; `rev` bumped to reflect the logic/metadata change.
 
 ```
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenDirectory-XiebroC2-Covenant Covenant GruntStager HTTP C2 Beacon (Campaign Session Token in POST Body)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/en-us/"; startswith; http.request_body; content:"session=75db-99b1-25fe4e9afbe58696-320bea73"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9000101; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-03, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-193-56-255-154-20260403-detections/;)
 ```
 
-#### Covenant GruntStager Masquerade — Chrome 41 Windows 7 UA on Port 443
+#### Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA on Port 443
 
 **Tier:** Detection
 **Robustness:** 2
@@ -511,10 +511,10 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenDirectory-XiebroC2-C
 
 ## Coverage Gaps
 
-**Atomics routed to the IOC feed (2 of the original file's 12 rules).** Two original rules keyed solely on a single hardcoded literal with no behavioral qualifier surviving its removal — per the tiering rubric's routing test, these are IOC-feed entries, not standing rules. Both underlying values were already present in [`opendirectory-193-56-255-154-20260403-iocs.json`](/ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json) — no feed edits were required.
+**Atomics routed to the IOC feed (2 of the original file's 12 rules).** Two original rules keyed solely on a single hardcoded literal with no behavioral qualifier surviving its removal, per the tiering rubric's routing test, these are IOC-feed entries, not standing rules. Both underlying values were already present in [`opendirectory-193-56-255-154-20260403-iocs.json`](/ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json). No feed edits were required.
 
-- **Suricata "XiebroC2 v3.1 TCP C2 Beacon"** (`alert tcp $HOME_NET any -> 193.56.255.154 4444`) carried no `content` match at all — a pure IP+port match with no protocol anchor, the textbook Suricata Cut/atomics criterion. A salvage to a content-based signature was not possible: the protocol's only structural element is a 4-byte length-prefix field (which varies per packet, not a fixed byte signature) followed by AES-128-ECB ciphertext (pseudo-random per block, no visible structure without decryption). A salvage to a *port-only* Hunting rule (the approach used elsewhere in this workflow when a C2 port is a documented family default, e.g. Quasar's 4782) was also not warranted here — 4444 is not documented as a fixed XiebroC2 default (the malware-analyst's evidence shows it as a per-deployment configurable field), and the rule's own original false-positive note already flags port 4444 alone as carrying moderate FP risk from unrelated legitimate tools (Metasploit's default listener port, some dev tools). The IP:port pair is already tracked as a network indicator in the IOC feed.
-- **Sigma "XiebroC2 Process Hollowing via Suspended Child Process Creation"** reduced, on inspection of its actual logic rather than its title, to a bare `ParentImage|endswith: '\main.exe'` selector with no other clause — Sysmon process-creation events do not expose `CreationFlags`, so the rule could not actually check for `CREATE_SUSPENDED` despite the title's claim. Removing the literal filename leaves the condition matching all process creation system-wide, so this is an atomic (filename) match dressed as a technique detection, not a genuine hollowing signature. `main.exe` is already tracked as the XiebroC2 filename in the IOC feed. A companion rule with a real behavioral qualifier (child process type) was salvageable and is retained below as a Hunting-tier lead — see "Shell Process Spawned from main.exe."
+- **Suricata "XiebroC2 v3.1 TCP C2 Beacon"** (`alert tcp $HOME_NET any -> 193.56.255.154 4444`) carried no `content` match at all, a pure IP+port match with no protocol anchor, the textbook Suricata Cut/atomics criterion. A salvage to a content-based signature was not possible: the protocol's only structural element is a 4-byte length-prefix field (which varies per packet, not a fixed byte signature) followed by AES-128-ECB ciphertext (pseudo-random per block, no visible structure without decryption). A salvage to a *port-only* Hunting rule (the approach used elsewhere in this workflow when a C2 port is a documented family default, e.g. Quasar's 4782) was also not warranted here, 4444 is not documented as a fixed XiebroC2 default (the malware-analyst's evidence shows it as a per-deployment configurable field), and the rule's own original false-positive note already flags port 4444 alone as carrying moderate FP risk from unrelated legitimate tools (Metasploit's default listener port, some dev tools). The IP:port pair is already tracked as a network indicator in the IOC feed.
+- **Sigma "XiebroC2 Process Hollowing via Suspended Child Process Creation"** reduced, on inspection of its actual logic rather than its title, to a bare `ParentImage|endswith: '\main.exe'` selector with no other clause, Sysmon process-creation events do not expose `CreationFlags`, so the rule could not actually check for `CREATE_SUSPENDED` despite the title's claim. Removing the literal filename leaves the condition matching all process creation system-wide, so this is an atomic (filename) match dressed as a technique detection, not a genuine hollowing signature. `main.exe` is already tracked as the XiebroC2 filename in the IOC feed. A companion rule with a real behavioral qualifier (child process type) was salvageable and is retained below as a Hunting-tier lead. See "Shell Process Spawned from main.exe."
 
 The following MITRE ATT&CK techniques were observed in the malware analysis but could not be
 covered with high-confidence, low-FP detection rules at this time. Evidence gaps or technique
