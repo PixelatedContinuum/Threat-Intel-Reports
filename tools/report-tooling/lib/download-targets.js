@@ -34,6 +34,27 @@ function foreignEngineIn(engine, text) {
   });
 }
 
+/* A YARA bundle only compiles if every `import` sits above the first rule.
+
+   The picker concatenates rule bodies and hoists their deduped imports, so an
+   import stranded below a rule means the bundle a defender downloads will not
+   load at all. Nothing else checks this: the rules are individually valid, and
+   the site's own gates compile the rules on the PAGE rather than the assembled
+   file. Returns null for a non-YARA bundle, or for one with no imports, so the
+   caller can report NOT CHECKED rather than a pass it did not earn. */
+function importsBeforeRules(engine, text) {
+  if (engine !== 'yara') return null;
+  var lines = String(text || '').split(/\r?\n/);
+  var lastImport = -1;
+  var firstRule = -1;
+  for (var i = 0; i < lines.length; i++) {
+    if (/^\s*import\s+"/.test(lines[i])) lastImport = i;
+    if (firstRule < 0 && /^\s*rule\s+[A-Za-z_]/.test(lines[i])) firstRule = i;
+  }
+  if (lastImport < 0 || firstRule < 0) return null;
+  return { ok: lastImport < firstRule, lastImport: lastImport + 1, firstRule: firstRule + 1 };
+}
+
 /* Which detection page to drive.
 
    Two requirements, both learned rather than assumed. It must be a page the
@@ -48,7 +69,8 @@ function foreignEngineIn(engine, text) {
    engine's rules. Without that, a download which ignored the tier filter would
    be indistinguishable from a correct one, and the check would pass on a broken
    picker. */
-function pickDetections(manifest, catalog) {
+function pickDetections(manifest, catalog, hints) {
+  hints = hints || {};
   var listed = {};
   /* Array FIRST, and explicitly.
 
@@ -99,8 +121,17 @@ function pickDetections(manifest, catalog) {
     });
     if (!pick || pick.subset >= pick.engineTotal) return;
 
-    var cand = { key: key, rules: rules.length, engines: names.sort(), pick: pick };
-    if (!best || cand.rules > best.rules) best = cand;
+    /* Prefer a page whose YARA rules actually declare imports.
+
+       Only 5 of 58 detection files do. Without one, the import-ordering check
+       has nothing to order and reports a vacuous result forever, which is the
+       clean-sweep-of-nothing shape this whole convention exists to stop. Rule
+       count still decides among equals. */
+    var hasImports = !!(hints[key] && hints[key].yaraImports) && pick.engine === 'yara';
+    var cand = { key: key, rules: rules.length, engines: names.sort(),
+                 pick: pick, yaraImports: hasImports,
+                 score: rules.length + (hasImports ? 100000 : 0) };
+    if (!best || cand.score > best.score) best = cand;
   });
   return best;
 }
@@ -140,6 +171,7 @@ module.exports = {
   EXT: EXT,
   countRules: countRules,
   foreignEngineIn: foreignEngineIn,
+  importsBeforeRules: importsBeforeRules,
   pickDetections: pickDetections,
   pickFeed: pickFeed,
   pickType: pickType

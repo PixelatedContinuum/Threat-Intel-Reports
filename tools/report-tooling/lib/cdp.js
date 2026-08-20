@@ -297,6 +297,20 @@ async function open(url, opts) {
        and the filename is half the claim (an engine-native `.yar` / `.yml` /
        `.rules` is what makes a bundle usable). Both were measured. */
     armDownloads: async function (dir) {
+      /* Native separators, always. Chrome accepts a forward-slash downloadPath
+         on Windows without complaint and then writes nothing at all: no error,
+         no event, an empty directory and every download check reporting
+         NOTHING ARRIVED. path.resolve normalises it.
+
+         AND GIVE EACH DOWNLOAD ITS OWN DIRECTORY. Under `behavior: "allow"`
+         Chrome does not rename a download whose filename already exists in the
+         target directory, it silently DISCARDS it: no file, no event, and the
+         page's own "Downloaded N file(s)" note still updates, so the page looks
+         like it worked. Proved by repeating a download under a different engine,
+         which landed immediately. Re-arm with a fresh sub-directory per download
+         rather than deleting between them, which does not work on Windows
+         either: the file Chrome just wrote is still held and the unlink fails. */
+      dir = path.resolve(dir);
       fs.mkdirSync(dir, { recursive: true });
       await send('Browser.setDownloadBehavior', {
         behavior: 'allow', downloadPath: dir, eventsEnabled: true

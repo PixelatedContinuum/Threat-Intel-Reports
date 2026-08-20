@@ -77,13 +77,39 @@ function skip(name, detail) {
   if (detail) console.log('         ' + detail);
 }
 
+/* A plain suffix test, not a RegExp built from an extension.
+
+   The regex form needs a literal backslash to escape the dot, and a literal
+   backslash written through a shell heredoc collapses. That has now happened six
+   times in this codebase; the fix that sticks is to need no escaping at all. */
+function endsWithEngineFile(name, engine) {
+  return String(name).slice(-(engine + EXT[engine]).length) === engine + EXT[engine];
+}
+
 function loadYaml(rel) {
   try { return yaml.load(fs.readFileSync(path.join(ROOT, '_data', rel), 'utf8')); }
   catch (e) { return null; }
 }
 
+/* Which detection files declare YARA imports, so the import-ordering check has
+   something real to order. Only 5 of 58 do, so left to chance it would report a
+   vacuous result forever. */
+function importHints() {
+  var hints = {};
+  var dir = path.join(ROOT, 'hunting-detections');
+  try {
+    fs.readdirSync(dir).forEach(function (f) {
+      if (!/\.md$/.test(f)) return;
+      var text = fs.readFileSync(path.join(dir, f), 'utf8');
+      hints[f.replace(/\.md$/, '')] = { yaraImports: /^\s*import\s+"/m.test(text) };
+    });
+  } catch (e) { /* no hints is not fatal, only less discerning */ }
+  return hints;
+}
+
 function pickDetections() {
-  return T.pickDetections(loadYaml('detection_manifests.yml'), loadYaml('catalog.yml'));
+  return T.pickDetections(loadYaml('detection_manifests.yml'),
+    loadYaml('catalog.yml'), importHints());
 }
 function pickFeed() { return T.pickFeed(loadYaml('ioc_tables.yml')); }
 
@@ -134,7 +160,15 @@ async function main() {
   console.log('');
 
   try {
-    var dl = await page.armDownloads(dlDir);
+    /* A fresh directory per download. Chrome silently DISCARDS a download whose
+       filename already exists in the target directory, and the page's own note
+       still updates, so it looks like it worked. See lib/cdp.js. */
+    var step = 0;
+    async function nextDl() {
+      step += 1;
+      return page.armDownloads(path.join(dlDir, 'd' + step));
+    }
+    var dl = await nextDl();
 
     // ================= the detection picker =================
     if (detUrl) {
@@ -177,7 +211,7 @@ async function main() {
           // The slug the page uses is what matters, so accept its own naming as
           // long as it ends in the engine-native extension and names the engine.
           check('the file is named for its engine and carries the native extension',
-            new RegExp(det.pick.engine + '\\' + EXT[det.pick.engine] + '$').test(files[0].name),
+            endsWithEngineFile(files[0].name, det.pick.engine),
             'got "' + files[0].name + '", expected something like "' + want + '"');
 
           var n = T.countRules(det.pick.engine, files[0].content);
@@ -194,6 +228,49 @@ async function main() {
 
           check('the bundle is not empty',
             files[0].content.trim().length > 20, files[0].content.length + ' bytes');
+
+          /* A YARA bundle with an import stranded below a rule does not compile
+             at all, so the file a defender downloads is useless. The site's own
+             gates compile the rules on the PAGE, never the assembled file. */
+          /* Imports are hoisted from the SELECTED rules, so a narrow subset often
+             carries none. Take the whole engine for this one check by releasing
+             the tier chip and re-selecting, which also exercises a second, wider
+             download path. */
+          await page.click(tierChip);
+          await CDP.sleep(250);
+          await page.click('.hl-picker__btn[data-act="all"]');
+          await CDP.sleep(200);
+          dl = await nextDl();
+          var beforeAll = dl.snapshot();
+          await page.click('.hl-picker__btn[data-act="dl"]');
+          var allFiles = await dl.waitNew(beforeAll, 1, 8000);
+          var engineFile = allFiles.filter(function (f) {
+            return endsWithEngineFile(f.name, det.pick.engine);
+          })[0];
+
+          check('dropping the tier filter widens that same engine bundle',
+            !!engineFile && T.countRules(det.pick.engine, engineFile.content) === det.pick.engineTotal,
+            engineFile ? T.countRules(det.pick.engine, engineFile.content) + ' rules, expected ' +
+              det.pick.engineTotal + ' (the subset was ' + det.pick.subset + ')'
+              : 'no ' + det.pick.engine + ' file in ' + allFiles.length + ' download(s)');
+
+          var imports = T.importsBeforeRules(det.pick.engine,
+            engineFile ? engineFile.content : files[0].content);
+          if (imports === null) {
+            /* Not applicable rather than NOT CHECKED. A bundle with no imports
+               has no ordering to get wrong, so the property is satisfied by
+               construction; calling that unverified would make the gate cry wolf
+               on every run. Target picking prefers a page WITH imports precisely
+               so this branch is the exception. */
+            console.log('   n/a   YARA import ordering: ' + (det.pick.engine === 'yara'
+              ? 'this bundle declares no imports, so there is no ordering to get wrong'
+              : 'not a YARA bundle (' + det.pick.engine + ')'));
+          } else {
+            check('every YARA import sits above the first rule, so the bundle compiles',
+              imports.ok,
+              'last import on line ' + imports.lastImport + ', first rule on line ' +
+                imports.firstRule);
+          }
         }
       }
       console.log('');
@@ -229,6 +306,7 @@ async function main() {
           vis.shown === feed.counts[type] && vis.types.length === 1 && vis.types[0] === type,
           vis.shown + ' of ' + vis.total + ' rows shown, types present: ' + vis.types.join(', '));
 
+        dl = await nextDl();
         var beforeCsv = dl.snapshot();
         await page.click('.hl-ioctable__btn[data-act="csv"]');
         var csvFiles = await dl.waitNew(beforeCsv, 1, 8000);
@@ -258,6 +336,7 @@ async function main() {
               wrongType[0].slice(0, 80) : 'all ' + (lines.length - 1) + ' rows are "' + type + '"');
         }
 
+        dl = await nextDl();
         var beforeTxt = dl.snapshot();
         await page.click('.hl-ioctable__btn[data-act="txt"]');
         var txtFiles = await dl.waitNew(beforeTxt, 1, 8000);
@@ -294,10 +373,8 @@ async function main() {
     page.close();
     srv.close();
     if (!keepDir) {
-      try {
-        fs.readdirSync(dlDir).forEach(function (f) { fs.unlinkSync(path.join(dlDir, f)); });
-        fs.rmdirSync(dlDir);
-      } catch (e) { /* best effort */ }
+      try { fs.rmSync(dlDir, { recursive: true, force: true }); }
+      catch (e) { /* best effort */ }
     }
   }
 

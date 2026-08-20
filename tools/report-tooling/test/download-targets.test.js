@@ -68,6 +68,38 @@ test('the word alert inside a rule body does not trip the suricata probe', funct
   assert.deepEqual(T.foreignEngineIn('yara', yara), []);
 });
 
+/* ---- YARA import ordering ----
+
+   A bundle with an import stranded below a rule does not compile, so the file a
+   defender downloads is useless. Nothing else catches it: the rules are
+   individually valid and the site's gates compile the rules on the PAGE, never
+   the assembled file. */
+
+test('imports above the first rule are accepted', function () {
+  var ok = 'import "pe"\nimport "hash"\n\nrule A {\n condition: true\n}\n';
+  assert.equal(T.importsBeforeRules('yara', ok).ok, true);
+});
+
+test('an import stranded below a rule is caught', function () {
+  var bad = 'import "pe"\n\nrule A {\n condition: true\n}\n\nimport "hash"\n\nrule B {\n condition: true\n}\n';
+  var r = T.importsBeforeRules('yara', bad);
+  assert.equal(r.ok, false);
+  assert.ok(r.lastImport > r.firstRule, 'it reports which lines disagree');
+});
+
+test('a bundle with no imports is NOT APPLICABLE, not a pass and not a failure', function () {
+  /* Nothing to order, so the property holds by construction. Reporting it as
+     verified would be a clean sweep of nothing; reporting it as unchecked would
+     make the gate cry wolf on most pages, since only 5 of 58 detection files
+     declare imports. */
+  assert.equal(T.importsBeforeRules('yara', 'rule A {\n condition: true\n}\n'), null);
+});
+
+test('the rule does not apply to non-YARA bundles', function () {
+  assert.equal(T.importsBeforeRules('sigma', 'title: X\nlogsource:\n  product: windows\n'), null);
+  assert.equal(T.importsBeforeRules('suricata', 'alert tcp any any -> any any (sid:1;)\n'), null);
+});
+
 /* ---- picking a detection page ---- */
 
 function manifest(over) {
