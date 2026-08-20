@@ -3,47 +3,47 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-20T07:00:39Z
+generated_at: 2026-08-20T19:01:01Z
 window_days: 30
 counts:
-  total: 529
-  research: 185
-  news: 344
+  total: 538
+  research: 190
+  news: 348
 topics:
   - label: "vulnerabilities"
-    count: 68
+    count: 71
     color: 1
   - label: "cybercrime"
-    count: 51
+    count: 49
     color: 2
   - label: "artificial intelligence"
-    count: 30
+    count: 32
     color: 3
-  - label: "data breaches"
+  - label: "malware"
     count: 29
     color: 4
   - label: "government"
-    count: 29
+    count: 28
     color: 5
-  - label: "malware"
-    count: 29
+  - label: "data breaches"
+    count: 27
     color: 6
   - label: "credential theft"
     count: 24
     color: 7
   - label: "exploited"
-    count: 22
+    count: 24
     color: 8
   - label: "ransomware"
-    count: 22
+    count: 21
     color: 9
-  - label: "microsoft"
-    count: 14
+  - label: "phishing"
+    count: 15
     color: 10
   - label: "supply chain attack"
     count: 14
     color: 11
-  - label: "phishing"
+  - label: "microsoft"
     count: 13
     color: 12
 label_colors:
@@ -57,7 +57,6 @@ label_colors:
   "account trafficking": 3
   "account-enumeration": 7
   "active exploitation": 2
-  "active-directory-targeting": 4
   "adaptixc2": 8
   "administrative access": 12
   "adobe": 1
@@ -80,8 +79,8 @@ label_colors:
   "ai integration": 10
   "ai profiling": 10
   "ai testing": 12
+  "ai vishing": 6
   "ai-assisted-development": 9
-  "ai-driven-influence": 11
   "ai-generated personas": 9
   "aisuru": 7
   "aitm phishing": 5
@@ -114,7 +113,6 @@ label_colors:
   "apprunner": 7
   "apt": 5
   "apt29": 2
-  "apt34": 12
   "aquilarat": 10
   "arcbridge": 7
   "architectural vulnerability": 5
@@ -127,6 +125,7 @@ label_colors:
   "atomic stealer": 5
   "audio surveillance": 7
   "australia": 10
+  "authentication": 6
   "authentication broker": 3
   "authentication bypass": 4
   "autoit": 8
@@ -140,10 +139,10 @@ label_colors:
   "babuk": 7
   "backdoor": 11
   "backdoor deployment": 10
+  "bait-and-switch": 5
   "bank": 4
   "bank of america impersonation": 5
   "banking credentials": 12
-  "banking trojan": 4
   "base64": 3
   "base64 obfuscation": 6
   "batch api exploitation": 10
@@ -160,6 +159,7 @@ label_colors:
   "blockchain": 8
   "blockchain c2": 1
   "blockchain loader": 7
+  "bloodalchemy": 3
   "bmc": 6
   "boryptgrab": 6
   "bot networks": 10
@@ -171,20 +171,20 @@ label_colors:
   "browser credential harvesting": 8
   "browser credential theft": 10
   "browser extension": 11
+  "browser extension campaign": 9
   "browser hijacking": 12
   "browser password decryptor": 5
   "btmob": 8
-  "bug bounty": 9
   "byovd": 12
   "c2 infrastructure": 12
   "c2 relay": 2
   "c2looper": 2
   "cacheable": 2
+  "camera": 3
   "camview": 6
   "captive portal compromise": 6
   "carecloud": 10
   "castlestealer": 12
-  "cav3rn": 7
   "central asia": 5
   "chacha20 encryption": 1
   "chaindrop": 8
@@ -196,7 +196,6 @@ label_colors:
   "chatgpt abuse": 3
   "chatgpt atlas": 4
   "check point": 6
-  "chepro": 1
   "chick-fil-a": 12
   "china": 5
   "china-nexus": 11
@@ -215,6 +214,7 @@ label_colors:
   "cisco talos antivirus": 7
   "cisco talos dns security": 7
   "cisco talos incident response": 3
+  "citrix": 11
   "cl-sta-1114": 8
   "cl0p": 3
   "clamav": 8
@@ -229,10 +229,8 @@ label_colors:
   "cloud tokens": 5
   "cloudflare tunnel": 9
   "cloudflare tunnels": 6
-  "cloudflare turnstile": 3
   "cloudflare workers": 6
   "cloudflared": 7
-  "clover health investments": 1
   "cmsmap": 1
   "cobalt-strike": 4
   "coca-cola": 4
@@ -253,6 +251,7 @@ label_colors:
   "critical infrastructure": 4
   "cross-platform malware": 7
   "cross-site scripting": 9
+  "crypto scam": 9
   "cryptocurrency": 12
   "cryptocurrency lure": 4
   "cryptocurrency theft": 3
@@ -276,8 +275,9 @@ label_colors:
   "cybercrime": 2
   "cyberwarfare": 9
   "d2ip": 7
+  "dahua": 9
   "darkhotel": 10
-  "data breaches": 4
+  "data breaches": 6
   "data center": 7
   "data exfiltration": 9
   "data extortion": 2
@@ -297,7 +297,6 @@ label_colors:
   "dll sideloading": 11
   "dns tunneling": 11
   "dns-tunneling": 8
-  "docusign phishing": 4
   "dprk-linked": 1
   "dropcatch": 4
   "edge device exploitation": 7
@@ -348,7 +347,6 @@ label_colors:
   "heptax": 12
   "hidden execution": 12
   "high profile threats": 2
-  "hollowgraph": 11
   "honeymyte": 10
   "hugging face": 6
   "humans of talos": 8
@@ -357,6 +355,7 @@ label_colors:
   "ics/ot": 1
   "identity": 8
   "identity & access": 10
+  "identity theft": 7
   "in other news": 8
   "industry": 8
   "infection chain": 8
@@ -373,17 +372,19 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 6
+  "malware": 4
   "meta": 5
   "metabase": 6
-  "microsoft": 10
+  "microsoft": 12
   "microsoft 365": 4
+  "mlflow": 1
   "mobile": 4
   "mobile & wireless": 4
   "modular architecture": 1
   "multi-stage attack": 4
   "n-able": 9
   "nation-state": 11
+  "netscaler": 5
   "network security": 6
   "next-gen siem & log management": 11
   "npm": 7
@@ -397,7 +398,7 @@ label_colors:
   "patches": 2
   "pdf attachment": 7
   "people": 7
-  "phishing": 12
+  "phishing": 10
   "plugin": 7
   "poc": 2
   "privacy": 12
@@ -413,7 +414,6 @@ label_colors:
   "scam": 10
   "securing ai": 4
   "security-labs": 3
-  "servicenow": 1
   "sharepoint": 11
   "software": 5
   "sonicwall": 8
@@ -422,11 +422,149 @@ label_colors:
   "teamcity": 8
   "threat hunting & intel": 9
   "threat source newsletter": 6
+  "threat spotlight": 2
   "vmware": 2
   "vulnerabilities": 1
-  "zimbra": 11
   "zoom": 7
 items:
+  - title: "Is Cyber missing the Marque?"
+    url: "https://blog.talosintelligence.com/is-cyber-missing-the-marque/"
+    source: "Cisco Talos"
+    date: 2026-08-20T18:00:18Z
+    kind: research
+    labels: ["threat source newsletter"]
+  - title: "Hackers poison arrayref Rust crate to push infostealer malware"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-poison-arrayref-rust-crate-to-push-infostealer-malware/"
+    source: "BleepingComputer"
+    date: 2026-08-20T17:53:52Z
+    kind: news
+    labels: []
+  - title: "Hackers Target Zimbra Servers in Active Exploitation Campaign"
+    url: "https://www.securityweek.com/hackers-target-zimbra-servers-in-active-exploitation-campaign/"
+    source: "SecurityWeek"
+    date: 2026-08-20T14:50:49Z
+    kind: news
+    labels: ["exploited", "vulnerabilities", "zimbra"]
+  - title: "Critical Elementor Pro bug exposes WordPress sites to RCE attacks"
+    url: "https://www.bleepingcomputer.com/news/security/critical-elementor-pro-bug-exposes-wordpress-sites-to-rce-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-20T14:39:48Z
+    kind: news
+    labels: []
+  - title: "How MSPs can catch phishing attacks email filters miss"
+    url: "https://www.bleepingcomputer.com/news/security/how-msps-can-catch-phishing-attacks-email-filters-miss/"
+    source: "BleepingComputer"
+    date: 2026-08-20T14:01:11Z
+    kind: news
+    labels: []
+  - title: "Threat Actor Hacks 14,000 IP Cameras in Ukraine and Russia"
+    url: "https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/"
+    source: "SecurityWeek"
+    date: 2026-08-20T13:16:35Z
+    kind: news
+    labels: ["camera", "dahua", "iot security", "russia", "ukraine"]
+  - title: "Atlassian, Splunk Patch Dozens of Critical, High-Severity Vulnerabilities"
+    url: "https://www.securityweek.com/atlassian-splunk-patch-dozens-of-critical-high-severity-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-08-20T12:24:53Z
+    kind: news
+    labels: ["atlassian", "patches", "splunk", "vulnerabilities"]
+  - title: "Citrix urges admins to patch new NetScaler flaws as soon as possible"
+    url: "https://www.bleepingcomputer.com/news/security/citrix-urges-admins-to-patch-new-netscaler-flaws-as-soon-as-possible/"
+    source: "BleepingComputer"
+    date: 2026-08-20T12:14:38Z
+    kind: news
+    labels: []
+  - title: "MLflow Vulnerability Exploited for Cloud Credential Theft"
+    url: "https://www.securityweek.com/mlflow-vulnerability-exploited-for-cloud-credential-theft/"
+    source: "SecurityWeek"
+    date: 2026-08-20T12:05:55Z
+    kind: news
+    labels: ["exploited", "mlflow", "vulnerabilities"]
+  - title: "Cisco Patches Critical Crosswork, Secure Workload Vulnerabilities"
+    url: "https://www.securityweek.com/cisco-patches-critical-crosswork-secure-workload-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-08-20T11:46:04Z
+    kind: news
+    labels: ["cisco", "patches", "vulnerabilities"]
+  - title: "AI-Assisted Tool Helped Secure Satellite Communication System After 2022 Russian Hacking"
+    url: "https://www.securityweek.com/ai-assisted-tool-helped-secure-satellite-communication-system-after-2022-russian-hacking/"
+    source: "SecurityWeek"
+    date: 2026-08-20T11:08:00Z
+    kind: news
+    labels: ["artificial intelligence", "ics/ot", "ot", "russia", "satellite", "security product"]
+  - title: "CISA warns of hackers exploiting critical MLflow vulnerability"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-warns-of-hackers-exploiting-critical-mlflow-vulnerability/"
+    source: "BleepingComputer"
+    date: 2026-08-20T11:06:14Z
+    kind: news
+    labels: []
+  - title: "New Manic Android malware can exfiltrate data through nearby devices"
+    url: "https://www.bleepingcomputer.com/news/security/new-manic-android-malware-can-exfiltrate-data-through-nearby-devices/"
+    source: "BleepingComputer"
+    date: 2026-08-20T10:02:02Z
+    kind: news
+    labels: ["mobile"]
+  - title: "UAT-10147 deploys SPECTRE: A cross-platform implant with Linux rootkit and BYOVD capabilities"
+    url: "https://blog.talosintelligence.com/uat-10147-deploys-spectre-a-cross-platform-implant-with-linux-rootkit-and-byovd-capabilities/"
+    source: "Cisco Talos"
+    date: 2026-08-20T10:00:50Z
+    kind: research
+    labels: ["threat spotlight"]
+  - title: "UAT-10147: Chinese-speaking adversary integrates agentic AI into post-compromise operations"
+    url: "https://blog.talosintelligence.com/uat-10147-chinese-speaking-adversary-integrates-agentic-ai-into-post-compromise-operations/"
+    source: "Cisco Talos"
+    date: 2026-08-20T10:00:32Z
+    kind: research
+    labels: ["threat spotlight"]
+  - title: "Identity Abuse Through Trusted Communication Channels"
+    url: "https://unit42.paloaltonetworks.com/communication-channel-identity-risks/"
+    source: "Palo Alto Networks"
+    date: 2026-08-20T10:00:25Z
+    kind: research
+    labels: ["authentication", "identity theft", "malware", "mfa", "remote access software", "social engineering", "threat research"]
+  - title: "Critical Zimbra RCE flaw now actively exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/critical-zimbra-rce-flaw-now-actively-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-20T09:46:54Z
+    kind: news
+    labels: []
+  - title: "Exploitation Expected for Critical Authentication Bypass Patched in Citrix NetScaler"
+    url: "https://www.securityweek.com/exploitation-expected-for-critical-authentication-bypass-patched-in-citrix-netscaler/"
+    source: "SecurityWeek"
+    date: 2026-08-20T08:33:25Z
+    kind: news
+    labels: ["citrix", "netscaler", "vulnerabilities"]
+  - title: "Critical GitLab Flaw Exploited Shortly After Disclosure"
+    url: "https://www.securityweek.com/critical-gitlab-flaw-exploited-shortly-after-disclosure/"
+    source: "SecurityWeek"
+    date: 2026-08-20T07:48:24Z
+    kind: news
+    labels: ["exploited", "gitlab", "vulnerabilities"]
+  - title: "41 deceptive download sites show a real link, then send you somewhere else"
+    url: "https://www.malwarebytes.com/blog/threat-intel/2026/08/41-deceptive-download-sites-show-a-real-link-then-send-you-somewhere-else"
+    source: "AlienVault"
+    date: 2026-08-20T07:25:38Z
+    kind: research
+    labels: ["affiliate fraud", "bait-and-switch", "deceptive downloads", "download studio", "fake software sites", "fakembam", "grand media", "javascript redirection"]
+  - title: "SilkParasite: Tracking a China-Nexus APT Across Central Asia"
+    url: "https://otx.alienvault.com/pulse/6a86a70eb8b57f155e62d4f7"
+    source: "AlienVault"
+    date: 2026-08-20T07:04:46Z
+    kind: research
+    labels: ["bloodalchemy", "central asia", "china-nexus apt", "cookietagrat", "cyberespionage", "deed rat", "dll sideloading", "drivesilkrat", "goginrat", "google drive c2", "government targeting", "nodeedgerat", "nomadrat", "shadowpad", "silkparasite", "spicerat"]
+  - title: "Hackers Using AI to Target Siemens PLCs in Critical US Sectors"
+    url: "https://www.securityweek.com/hackers-using-ai-to-target-siemens-plcs-in-critical-us-sectors/"
+    source: "SecurityWeek"
+    date: 2026-08-20T07:02:02Z
+    kind: news
+    labels: ["artificial intelligence", "ics", "ics/ot", "plc", "siemens"]
+  - title: "77 Firefox Extensions Linked to Crypto Wallet and Credential Theft"
+    url: "https://otx.alienvault.com/pulse/6a865251c21fa835e97512b4"
+    source: "AlienVault"
+    date: 2026-08-20T01:03:13Z
+    kind: research
+    labels: ["browser extension campaign", "cloudflare workers", "credential stealing", "cryptocurrency wallet theft", "firefox extensions", "phishing", "supabase abuse", "web3 impersonation"]
   - title: "Rogue ransomware affiliate poses as data recovery firm to steal payments"
     url: "https://www.bleepingcomputer.com/news/security/rogue-ransomware-affiliate-ransom-busters-poses-as-data-recovery-firm/"
     source: "BleepingComputer"
@@ -475,6 +613,18 @@ items:
     date: 2026-08-19T15:56:09Z
     kind: news
     labels: ["legal"]
+  - title: "Scammers are using fake crypto AML checkers to drain your wallet"
+    url: "https://otx.alienvault.com/pulse/6a85ce6de0b7994ff427898e"
+    source: "AlienVault"
+    date: 2026-08-19T15:40:29Z
+    kind: research
+    labels: ["crypto scam", "cryptocurrency", "fake aml checker", "fraudulent website", "ghostdesk", "phishing", "social engineering", "token theft", "wallet draining"]
+  - title: "Balonx Sistema: The Face Behind the PhaaS Affecting Mexican Banking"
+    url: "https://otx.alienvault.com/pulse/6a85ce6194c0be6ceb256c93"
+    source: "AlienVault"
+    date: 2026-08-19T15:40:17Z
+    kind: research
+    labels: ["ai vishing", "android rat", "callflow", "cryptocurrency payments", "mexican banking fraud", "phaas", "spyroid", "websocket hijacking"]
   - title: "Password spraying attacks surge 155x as hackers exploit MFA gaps"
     url: "https://www.bleepingcomputer.com/news/security/password-spraying-attacks-surge-155x-as-hackers-exploit-mfa-gaps/"
     source: "BleepingComputer"
@@ -3505,99 +3655,3 @@ items:
     date: 2026-07-21T20:06:55Z
     kind: news
     labels: []
-  - title: "Anubis ransomware claims Coca-Cola Fairlife attack, threatens data leak"
-    url: "https://www.bleepingcomputer.com/news/security/anubis-ransomware-claims-coca-cola-fairlife-attack-threatens-data-leak/"
-    source: "BleepingComputer"
-    date: 2026-07-21T18:50:54Z
-    kind: news
-    labels: []
-  - title: "Spain fines 23andMe nearly $3 million for cybersecurity failings enabling 2023 hack"
-    url: "https://therecord.media/spain-fines-23andme-3-million-cyber-failings-data-breach"
-    source: "Recorded Future"
-    date: 2026-07-21T17:10:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Critical wp2shell WordPress flaws exploited to install webshells"
-    url: "https://www.bleepingcomputer.com/news/security/critical-wp2shell-wordpress-flaws-exploited-to-install-webshells/"
-    source: "BleepingComputer"
-    date: 2026-07-21T16:41:50Z
-    kind: news
-    labels: []
-  - title: "Portugal-focused phishing campaign delivers multistage malware"
-    url: "https://otx.alienvault.com/pulse/6a5f98b0ca49303f8f2e4aa7"
-    source: "AlienVault"
-    date: 2026-07-21T16:05:04Z
-    kind: research
-    labels: ["banking trojan", "chepro", "lampion", "obfuscation techniques", "phishing campaign", "portugal targeting", "portuguese lures", "sapo impersonation", "vbs infection chain"]
-  - title: "Kenya probes hack of president's website after bitcoin ransom demand"
-    url: "https://therecord.media/kenya-probes-hack-of-presidents-website-after-ransom-demand"
-    source: "Recorded Future"
-    date: 2026-07-21T12:08:00Z
-    kind: news
-    labels: ["cybercrime", "government", "leadership"]
-  - title: "New HollowGraph Malware Abuses Microsoft 365 Calendar for C&C Communication"
-    url: "https://www.securityweek.com/new-hollowgraph-malware-abuses-microsoft-365-calendar-for-cc-communication/"
-    source: "SecurityWeek"
-    date: 2026-07-21T11:55:28Z
-    kind: news
-    labels: ["hollowgraph", "malware"]
-  - title: "Operation STANDOFF: A Campaign Hiding C2 Behind GitHub Redirects"
-    url: "https://otx.alienvault.com/pulse/6a5f5a54ab92617993537c0b"
-    source: "AlienVault"
-    date: 2026-07-21T11:39:00Z
-    kind: research
-    labels: ["active-directory-targeting", "ai-driven-influence", "amadey", "github-redirect-concealment", "glupteba", "pay-per-install", "proxy-botnet", "raccoon stealer", "redline", "russian-speaking", "smokeloader", "socelars", "telegram-account-farm", "timeweb-infrastructure", "xmrig"]
-  - title: "From E-Sign to RMM: DocuSign Kit Targets Windows and..."
-    url: "https://otx.alienvault.com/pulse/6a5f5a391cc670d0388a1d29"
-    source: "AlienVault"
-    date: 2026-07-21T11:38:33Z
-    kind: research
-    labels: ["cloudflare turnstile", "docusign phishing", "macos targeting", "meshagent", "rmm abuse", "screenconnect", "simplehelp", "uemsagent", "vbs deployment", "windows defender evasion"]
-  - title: "New Project CAV3RN .NET Native AOT communication module"
-    url: "https://securelist.com/project-cav3rn-cyberespionage-framework-using-outlook-and-dns/120757/"
-    source: "AlienVault"
-    date: 2026-07-21T11:19:50Z
-    kind: research
-    labels: ["apt34", "cav3rn", "cyberespionage", "dns aaaa", "encryption", "israel", "microsoft graph", "oilbooster", "oilcheck", "outlook calendar", "project cav3rn", "rdat", "sc5k", "solar", "veaty", "whisper"]
-  - title: "Estée Lauder Discloses Impact From Oracle EBS Zero-Day Hack"
-    url: "https://www.securityweek.com/estee-lauder-discloses-impact-from-oracle-ebs-zero-day-hack/"
-    source: "SecurityWeek"
-    date: 2026-07-21T11:12:33Z
-    kind: news
-    labels: ["cl0p", "data breaches", "estee lauder", "oracle ebs", "ransomware"]
-  - title: "Meta Paid $78,000 Bounty for Vulnerability Exposing Customer Support Data"
-    url: "https://www.securityweek.com/meta-pays-78000-bounty-for-vulnerability-exposing-customer-support-data/"
-    source: "SecurityWeek"
-    date: 2026-07-21T10:19:21Z
-    kind: news
-    labels: ["bug bounty", "data leak", "meta", "vulnerabilities"]
-  - title: "Critical Palo Alto VPN bug now exploited by Qilin ransomware gang"
-    url: "https://www.bleepingcomputer.com/news/security/critical-globalprotect-vpn-bug-now-exploited-in-ransomware-attacks/"
-    source: "BleepingComputer"
-    date: 2026-07-21T10:12:24Z
-    kind: news
-    labels: []
-  - title: "Clover Health Investments Discloses Data Breach"
-    url: "https://www.securityweek.com/clover-health-investments-discloses-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-07-21T09:36:51Z
-    kind: news
-    labels: ["clover health investments", "data breaches", "healthcare"]
-  - title: "Exploitation of ServiceNow Vulnerability Seen Days After Disclosure"
-    url: "https://www.securityweek.com/exploitation-of-servicenow-vulnerability-seen-days-after-disclosure/"
-    source: "SecurityWeek"
-    date: 2026-07-21T08:41:53Z
-    kind: news
-    labels: ["exploited", "servicenow", "vulnerabilities"]
-  - title: "Zimbra Update Patches Critical Vulnerabilities"
-    url: "https://www.securityweek.com/zimbra-update-patches-critical-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-07-21T08:20:08Z
-    kind: news
-    labels: ["vulnerabilities", "zimbra"]
-  - title: "Windows LegacyHive zero-day flaw gets free, unofficial patches"
-    url: "https://www.bleepingcomputer.com/news/security/windows-legacyhive-zero-day-flaw-gets-free-unofficial-patches/"
-    source: "BleepingComputer"
-    date: 2026-07-21T08:06:26Z
-    kind: news
-    labels: ["microsoft"]
