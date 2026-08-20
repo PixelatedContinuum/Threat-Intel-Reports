@@ -5,17 +5,17 @@ tiers:
     price_note: "Per Month"
     intro_price: "New sponsors: first 3 months $300/mo"
     annual_price: "$5,000"
-    description: "Flagship, always-on presence — and the strongest value per dollar. Standing brand presence across the whole site, for as long as you sponsor."
+    description: "Flagship, always-on presence, and the strongest value per dollar. Standing brand presence across the whole site, for as long as you sponsor."
     benefits:
-      - "Logo and tagline in the left-margin Sponsors panel on every page and report — standing, high-visibility placement"
+      - "Logo and tagline in the left-margin Sponsors panel on every page and report, a standing, high-visibility placement"
       - "Logo and a dofollow link in the site footer, across every page"
       - "Featured in the Sponsors section of this page"
-      - "Early access to upcoming reports — plus first option to sponsor any one exclusively before anyone else"
+      - "Early access to upcoming reports, plus first option to sponsor any one exclusively before anyone else"
       - "A welcome announcement post when you join, plus a monthly sponsor spotlight post"
       - "A one-time feature in a single report during your first month"
       - "Your logo in the subscriber email newsletter"
-      - "One sponsor-suggested research topic per year — a threat relevant to your space, researched and published"
-    best_fit: "Sponsors who want ongoing, site-wide brand association with the publication — visible to every reader, for as long as you sponsor."
+      - "One sponsor-suggested research topic per year, a threat relevant to your space, researched and published"
+    best_fit: "Sponsors who want ongoing, site-wide brand association with the publication, visible to every reader, for as long as you sponsor."
     slots: 3
   - id: report
     name: Report Sponsor
@@ -24,16 +24,16 @@ tiers:
     intro_price: "New sponsors: first report $100"
     catalog_price: "$115"
     catalog_price_note: "From the Catalog (25% off the new-report rate)"
-    description: "Exclusive single-report placement — one sponsor per report, no competing logos. Pick a new report at $150 or a catalog report at $115; catalog reports keep drawing search traffic long after publication."
+    description: "Exclusive single-report placement, one sponsor per report, no competing logos. Pick a new report at $150 or a catalog report at $115; catalog reports keep drawing search traffic long after publication."
     benefits:
-      - "Sole Sponsored-by banner at the top of the report — exclusive, no competing logos"
+      - "Sole Sponsored-by banner at the top of the report, exclusive, no competing logos"
       - "Logo and a dofollow link to your site or chosen landing page"
-      - "Permanent for the life of the report — it never expires, and keeps surfacing in search and hunts"
+      - "Permanent for the life of the report. It never expires, and keeps surfacing in search and hunts"
       - "The report's launch post credits you (LinkedIn, X, and subscriber email)"
       - "Early access to your report before it goes public"
-      - "Topic alignment — choose a report on a threat relevant to your product"
+      - "Topic alignment, so you choose a report on a threat relevant to your product"
       - "Bundle &amp; save: 3 reports $375 &middot; 6 reports $675 (any mix of new or catalog)"
-    best_fit: "Sponsors who want exclusive association with a specific report or research topic — sole placement, permanent for its life."
+    best_fit: "Sponsors who want exclusive association with a specific report or research topic, with sole placement, permanent for its life."
     slots: 3
 
 # Sponsor entry format:
@@ -41,7 +41,7 @@ tiers:
 #   name: Acme Security
 #   url: https://acmesecurity.com
 #   logo: /assets/images/sponsors/acme-security.png
-#   tagline: "Short description or message — one line."
+#   tagline: "Short description or message, one line."
 #   tier: monthly       # monthly | report
 #   active: true
 #
