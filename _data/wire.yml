@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-19T19:02:36Z
+generated_at: 2026-08-20T07:00:39Z
 window_days: 30
 counts:
-  total: 534
-  research: 189
-  news: 345
+  total: 529
+  research: 185
+  news: 344
 topics:
   - label: "vulnerabilities"
     count: 68
@@ -17,7 +17,7 @@ topics:
     count: 51
     color: 2
   - label: "artificial intelligence"
-    count: 31
+    count: 30
     color: 3
   - label: "data breaches"
     count: 29
@@ -31,10 +31,10 @@ topics:
   - label: "credential theft"
     count: 24
     color: 7
-  - label: "ransomware"
-    count: 23
-    color: 8
   - label: "exploited"
+    count: 22
+    color: 8
+  - label: "ransomware"
     count: 22
     color: 9
   - label: "microsoft"
@@ -131,7 +131,6 @@ label_colors:
   "authentication bypass": 4
   "autoit": 8
   "autonomous attack operations": 8
-  "autonomous threat": 8
   "aws": 7
   "aws bedrock": 1
   "aws-secrets": 7
@@ -154,7 +153,6 @@ label_colors:
   "bearlyfy": 10
   "bec campaign": 10
   "bindcloak": 3
-  "birdtroy": 1
   "bixby": 2
   "black hat": 6
   "blackfile": 3
@@ -182,13 +180,11 @@ label_colors:
   "c2 relay": 2
   "c2looper": 2
   "cacheable": 2
-  "calendar c2": 5
   "camview": 6
   "captive portal compromise": 6
   "carecloud": 10
   "castlestealer": 12
   "cav3rn": 7
-  "cavern": 9
   "central asia": 5
   "chacha20 encryption": 1
   "chaindrop": 8
@@ -240,7 +236,6 @@ label_colors:
   "cmsmap": 1
   "cobalt-strike": 4
   "coca-cola": 4
-  "code obfuscation": 4
   "code signing abuse": 10
   "command and control": 7
   "communicationuxtheme.dll": 10
@@ -304,7 +299,6 @@ label_colors:
   "dns-tunneling": 8
   "docusign phishing": 4
   "dprk-linked": 1
-  "drivetroy": 2
   "dropcatch": 4
   "edge device exploitation": 7
   "electron application": 2
@@ -318,7 +312,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 9
+  "exploited": 8
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
@@ -408,7 +402,7 @@ label_colors:
   "poc": 2
   "privacy": 12
   "public sector": 3
-  "ransomware": 8
+  "ransomware": 9
   "rat": 9
   "rce": 10
   "ruby": 6
@@ -433,6 +427,24 @@ label_colors:
   "zimbra": 11
   "zoom": 7
 items:
+  - title: "Rogue ransomware affiliate poses as data recovery firm to steal payments"
+    url: "https://www.bleepingcomputer.com/news/security/rogue-ransomware-affiliate-ransom-busters-poses-as-data-recovery-firm/"
+    source: "BleepingComputer"
+    date: 2026-08-19T20:59:58Z
+    kind: news
+    labels: []
+  - title: "Sakura Internet hack exposes data of up to 1.36 million accounts"
+    url: "https://www.bleepingcomputer.com/news/security/sakura-internet-hack-exposes-data-of-up-to-136-million-accounts/"
+    source: "BleepingComputer"
+    date: 2026-08-19T20:53:38Z
+    kind: news
+    labels: []
+  - title: "Healthtech firm CareCloud data breach impacts 3.7 million patients"
+    url: "https://www.bleepingcomputer.com/news/security/healthtech-firm-carecloud-data-breach-impacts-37-million-patients/"
+    source: "BleepingComputer"
+    date: 2026-08-19T20:07:12Z
+    kind: news
+    labels: ["healthcare"]
   - title: "Electronic health record company CareCloud says 3.7 million people affected by breach"
     url: "https://therecord.media/electronic-health-record-company-carecloud-data-breach"
     source: "Recorded Future"
@@ -553,6 +565,12 @@ items:
     date: 2026-08-19T06:54:05Z
     kind: research
     labels: ["credential theft", "cve-2021-27101", "cve-2023-34362", "cve-2026-12569", "data exfiltration", "dewmode", "extortion", "lemurloot", "manufacturing", "mass exploitation", "ptc windchill", "web shell"]
+  - title: "Benchmaxxing: When the Benchmark Becomes the Target"
+    url: "https://www.crowdstrike.com/en-us/blog/benchmaxxing-when-benchmark-becomes-the-target/"
+    source: "Crowdstrike"
+    date: 2026-08-19T05:00:00Z
+    kind: research
+    labels: ["securing ai"]
   - title: "CopyCop Targets AI Investment in Armenia"
     url: "https://otx.alienvault.com/pulse/6a84c51cdd3d70b59b0d8f38"
     source: "AlienVault"
@@ -3583,57 +3601,3 @@ items:
     date: 2026-07-21T08:06:26Z
     kind: news
     labels: ["microsoft"]
-  - title: "Denying the Worm: Detecting SANDWORM_MODE and the Emerging Class of AI Toolchain Supply Chain Attacks"
-    url: "https://www.crowdstrike.com/en-us/blog/denying-the-worm-sandworm-mode-and-ai-toolchain-supply-chain-attacks/"
-    source: "Crowdstrike"
-    date: 2026-07-21T05:00:00Z
-    kind: research
-    labels: ["securing ai"]
-  - title: "JADEPUFFER evolves: The agentic threat actor deploys ransomware built to destroy AI models"
-    url: "https://otx.alienvault.com/pulse/6a5eb7c2617139caf1fe0f2d"
-    source: "AlienVault"
-    date: 2026-07-21T00:05:22Z
-    kind: research
-    labels: ["ai infrastructure", "autonomous threat", "container escape", "cve-2025-3248", "encforge", "jadepuffer", "langflow", "machine learning", "ransomware"]
-  - title: "Estée Lauder discloses data breach via Oracle E-Business flaw"
-    url: "https://www.bleepingcomputer.com/news/security/est-e-lauder-discloses-data-breach-via-oracle-e-business-flaw/"
-    source: "BleepingComputer"
-    date: 2026-07-20T22:39:30Z
-    kind: news
-    labels: []
-  - title: "SonicWall SMA1000 flaws exploited as zero-days to push custom malware"
-    url: "https://www.bleepingcomputer.com/news/security/sonicwall-sma1000-flaws-exploited-as-zero-days-to-push-custom-malware/"
-    source: "BleepingComputer"
-    date: 2026-07-20T22:23:23Z
-    kind: news
-    labels: []
-  - title: "Hackers steal $23.7 million in crypto from Ostium in off-chain attack"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-steal-237-million-in-crypto-from-ostium-in-off-chain-attack/"
-    source: "BleepingComputer"
-    date: 2026-07-20T22:22:56Z
-    kind: news
-    labels: ["cryptocurrency"]
-  - title: "JadePuffer agentic attacks now target AI model data with ransomware"
-    url: "https://www.bleepingcomputer.com/news/security/jadepuffer-agentic-attacks-now-target-ai-model-data-with-ransomware/"
-    source: "BleepingComputer"
-    date: 2026-07-20T21:08:02Z
-    kind: news
-    labels: ["artificial intelligence"]
-  - title: "Analysis of Kimsuky's Attack on a South Korean Groupware Vendor Using a New Gomir Family Variant"
-    url: "https://otx.alienvault.com/pulse/6a5e7a9e8b20b763327b0d2d"
-    source: "AlienVault"
-    date: 2026-07-20T19:44:30Z
-    kind: research
-    labels: ["birdtroy", "drivetroy", "endoor", "gobear", "gomir", "google drive c2", "groupware", "httpspy", "httptroy", "kimsuky", "south korea", "supply-chain", "trollstealer"]
-  - title: "HOLLOWGRAPH: Turning Microsoft 365 Calendars into Covert Command-and-Control Channels"
-    url: "https://www.group-ib.com/blog/hollowgraph-microsoft-365/"
-    source: "AlienVault"
-    date: 2026-07-20T19:44:29Z
-    kind: research
-    labels: ["calendar c2", "cavern", "cyber espionage", "dns tunneling", "hollowgraph", "iranian-nexus", "israeli targets", "microsoft graph api abuse"]
-  - title: "Targeted Attack on Government Entities in the Middle East | Part 1"
-    url: "https://www.zscaler.com/blogs/security-research/targeted-attack-government-entities-middle-east-part-1"
-    source: "AlienVault"
-    date: 2026-07-20T19:29:47Z
-    kind: research
-    labels: ["bindcloak", "code obfuscation", "dll sideloading", "east asia", "environmental keying", "government targeting", "middle east", "mixedkey", "telegram abuse", "teleshim"]
