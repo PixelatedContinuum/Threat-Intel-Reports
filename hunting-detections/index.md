@@ -28,6 +28,7 @@ position: 3
     <p class="hl-feed__note"><strong>Other platforms</strong> (OPNsense, pfSense, Corelight, Stamus, Wazuh, Security Onion) can point straight at the raw feed URL, or add it by hand:<br><code class="hl-feed__alt">suricata-update add-source hunters-ledger https://the-hunters-ledger.com/feeds/suricata/hunters-ledger.rules</code></p>
     <div class="hl-feed__links">
       <a href="/feeds/suricata/hunters-ledger.rules">View raw feed →</a>
+      <a href="/feeds/suricata/changelog/">Changelog &amp; withdrawn SIDs →</a>
       <span class="hl-feed__meta">Auto-updates as new detections publish</span>
     </div>
   </div>
