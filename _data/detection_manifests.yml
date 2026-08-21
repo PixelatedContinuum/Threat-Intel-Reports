@@ -5321,24 +5321,33 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1102]
-  - name: "GSocket/THC Relay gs.thc.org Domain Query"
+  - name: "GSocket/THC GSRN Relay Pool Domain Query (both naming schemes)"
     engine: suricata
     tier: Hunting
     fence: 25
-    hash: "75d78cda"
+    hash: "40d8036a"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
-    robustness: 0
+    robustness: 2
     confidence: "MODERATE"
-    attack: [T1102]
+    attack: [T1090.002]
   - name: "GSocket/THC Relay gsocket.io Domain Query"
     engine: suricata
     tier: Hunting
     fence: 26
     hash: "c1e482d3"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
-    robustness: 0
+    robustness: 2
     confidence: "MODERATE"
     attack: [T1102]
+  - name: "GSocket Deployment: gsocket.io Installer Retrieval TLS SNI"
+    engine: suricata
+    tier: Hunting
+    fence: 27
+    hash: "f7112209"
+    head: "alert tls $HOME_NET any -> any any (msg:\"THL HUN"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1105]
 shadow-xworm-opendirectory-detections:
   - name: "Shadow RAT v2.6.4.0 Client: Namespace + Costura Fingerprint"
     engine: yara

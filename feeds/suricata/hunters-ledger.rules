@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 98 rules from 33 campaigns. SIDs are STABLE across rebuilds (persistent
+# 99 rules from 33 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -405,15 +405,20 @@ alert dns $HOME_NET any -> any any (msg:"THL BLOCK Second-Actor-GSocket-Kit loca
 #   FP: None known: the combination of the localroot.sbs host header and a /cat.sh URI suffix has no legitimate use.
 alert http $HOME_NET any -> any any (msg:"THL BLOCK Second-Actor-GSocket-Kit cat.sh Loader Payload Retrieval (Persistence Staging)"; flow:established,to_server; http.host; content:"localroot.sbs"; http.uri; content:"/cat.sh"; endswith; classtype:trojan-activity; sid:3500173; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-17, reference https://the-hunters-ledger.com/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections/;)
 # seasia-gov-exploitation-toolkit-144-172-106-236 (orig sid:1000006)
-#   TIER: Hunting  |  robustness 0  |  confidence MODERATE  |  BROAD - triage before alerting
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Any legitimate GSocket user (the tool has general-purpose NAT-traversal uses beyond this campaign). This rule has no pivot value on its own. It must...
-alert dns $HOME_NET any -> any any (msg:"THL HUNT GSocket-THC-Relay gs.thc.org NAT-Traversal Domain Query (Hunt-Only - Do Not Block - Shared Public Infrastructure)"; dns_query; content:".gs.thc.org"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:misc-activity; sid:3500174; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-17, reference https://the-hunters-ledger.com/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections/, signature_severity Informational;)
+alert dns $HOME_NET any -> any any (msg:"THL HUNT GSocket-THC-Relay GSRN Rendezvous Domain Query - Full gs.thc.org and gsN.thc.org Relay Pool (Hunt-Only - Do Not Block - Shared Public Infrastructure)"; dns.query; content:".thc.org"; fast_pattern; nocase; pcre:"/(?:^|\.)gs[0-9a-z-]*\.thc\.org$/i"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:misc-activity; sid:3500174; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-21, reference https://the-hunters-ledger.com/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections/, signature_severity Informational;)
 # seasia-gov-exploitation-toolkit-144-172-106-236 (orig sid:1000007)
-#   TIER: Hunting  |  robustness 0  |  confidence MODERATE  |  BROAD - triage before alerting
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
 #   FP: Any legitimate GSocket user; the content match also catches the cdn.gsocket.io subdomain by design. No pivot value on its own. Correlate with host...
 alert dns $HOME_NET any -> any any (msg:"THL HUNT GSocket-THC-Relay gsocket.io Domain Query (Hunt-Only - Do Not Block - Shared Public Infrastructure)"; dns_query; content:"gsocket.io"; nocase; isdataat:!1,relative; threshold:type limit,track by_src,count 1,seconds 3600; classtype:misc-activity; sid:3500175; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-17, reference https://the-hunters-ledger.com/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections/, signature_severity Informational;)
+# seasia-gov-exploitation-toolkit-144-172-106-236 (orig sid:1000008)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any legitimate GSocket install. Volume is inherently low, because this fires on the one-time installer fetch rather than on ongoing tunnel traffic....
+alert tls $HOME_NET any -> any any (msg:"THL HUNT GSocket-THC-Deploy gsocket.io Installer Retrieval TLS SNI (Hunt-Only - Do Not Block - Shared Public Infrastructure)"; flow:established,to_server; tls.sni; content:"gsocket.io"; fast_pattern; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:misc-activity; sid:3500199; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-21, reference https://the-hunters-ledger.com/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections/, signature_severity Informational;)
 # shadow-xworm-opendirectory (orig sid:2026040403)
 #   TIER: Hunting  |  robustness 2  |  confidence HIGH FOR THE BEHAVIOR (DOCUMENTED XWORM 3.0-5.0 BUILDER FEATURE); THE CAMPAIGN'S OWN IOC FEED FLAGS THE UNDERLYING DOMAIN AS HIGH FP RISK  |  BROAD - triage before alerting
 #   rate-limited

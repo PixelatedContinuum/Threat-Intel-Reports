@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-20T15:09:53Z",
+ "generated_at": "2026-08-21T12:15:30Z",
  "counts": {
   "indicators": 1753,
   "reports": 55,
@@ -9879,11 +9879,6 @@
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
    }
   ],
-  "ipv4:87.106.101.131": [
-   {
-    "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
-   }
-  ],
   "email:security-monitor@tni.mil.id": [
    {
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
@@ -9943,6 +9938,12 @@
   "domain:utah01-maas.cloudzy.com": [
    {
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
+   }
+  ],
+  "ipv4:87.106.101.131": [
+   {
+    "report": "seasia-gov-exploitation-toolkit-144-172-106-236",
+    "role": "GSRN public relay node (gs18.thc.org), seen embedded in the second-actor cat.sh loader"
    }
   ],
   "sha256:c739f55d53b632bddc229a332a5165d006ae14cdabe6740a9048619394ac3b93": [

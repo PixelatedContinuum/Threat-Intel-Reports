@@ -6957,7 +6957,7 @@
       context: null
     - type: "ipv4"
       value: "87.106.101.131"
-      context: null
+      context: "GSRN public relay node (gs18.thc.org), seen embedded in the second-actor cat.sh loader"
     - type: "domain"
       value: "api.telegram.org"
       context: null
