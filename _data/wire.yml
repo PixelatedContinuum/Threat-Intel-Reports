@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-20T19:01:01Z
+generated_at: 2026-08-21T07:01:01Z
 window_days: 30
 counts:
-  total: 538
-  research: 190
-  news: 348
+  total: 544
+  research: 200
+  news: 344
 topics:
   - label: "vulnerabilities"
     count: 71
     color: 1
   - label: "cybercrime"
-    count: 49
+    count: 50
     color: 2
   - label: "artificial intelligence"
-    count: 32
+    count: 31
     color: 3
   - label: "malware"
     count: 29
@@ -29,7 +29,7 @@ topics:
     count: 27
     color: 6
   - label: "credential theft"
-    count: 24
+    count: 25
     color: 7
   - label: "exploited"
     count: 24
@@ -41,7 +41,7 @@ topics:
     count: 15
     color: 10
   - label: "supply chain attack"
-    count: 14
+    count: 15
     color: 11
   - label: "microsoft"
     count: 13
@@ -58,6 +58,7 @@ label_colors:
   "account-enumeration": 7
   "active exploitation": 2
   "adaptixc2": 8
+  "adblocker": 3
   "administrative access": 12
   "adobe": 1
   "adversary-in-the-middle": 9
@@ -68,6 +69,7 @@ label_colors:
   "affiliate fraud": 7
   "africa": 4
   "agent-to-agent": 9
+  "agentic ai": 9
   "ai agent security": 1
   "ai api": 4
   "ai assistant exposure": 1
@@ -76,6 +78,7 @@ label_colors:
   "ai fraud": 2
   "ai gateway": 6
   "ai infrastructure": 11
+  "ai infrastructure targeting": 6
   "ai integration": 10
   "ai profiling": 10
   "ai testing": 12
@@ -106,8 +109,10 @@ label_colors:
   "anubis": 2
   "anydesk": 9
   "aone-cli": 8
+  "apac attacks": 2
   "apache hadoop targeting": 8
   "apache tomcat": 6
+  "app password phishing": 8
   "apple": 12
   "application security": 6
   "apprunner": 7
@@ -120,8 +125,11 @@ label_colors:
   "armenia": 5
   "artificial intelligence": 3
   "astral-pe": 3
+  "astroproxy": 1
   "asyncrat": 11
   "atlassian": 8
+  "atomic": 1
+  "atomic macos stealer": 10
   "atomic stealer": 5
   "audio surveillance": 7
   "australia": 10
@@ -137,12 +145,16 @@ label_colors:
   "babadeda": 2
   "babadedaloader": 11
   "babuk": 7
+  "back-to-school": 4
+  "backconnect infrastructure": 12
   "backdoor": 11
   "backdoor deployment": 10
+  "badiis": 8
   "bait-and-switch": 5
   "bank": 4
   "bank of america impersonation": 5
   "banking credentials": 12
+  "banking trojan": 4
   "base64": 3
   "base64 obfuscation": 6
   "batch api exploitation": 10
@@ -174,6 +186,7 @@ label_colors:
   "browser extension campaign": 9
   "browser hijacking": 12
   "browser password decryptor": 5
+  "browser-credentials": 9
   "btmob": 8
   "byovd": 12
   "c2 infrastructure": 12
@@ -224,6 +237,7 @@ label_colors:
   "clickfix": 3
   "clickfix campaign": 9
   "clipper": 3
+  "cloud & application security": 1
   "cloud credentials": 9
   "cloud security": 9
   "cloud tokens": 5
@@ -256,6 +270,7 @@ label_colors:
   "cryptocurrency lure": 4
   "cryptocurrency theft": 3
   "cryptocurrency wallet theft": 2
+  "cryptocurrency-stealer": 7
   "cryptomining": 1
   "ctir trends": 12
   "custom tcp protocol": 8
@@ -402,7 +417,6 @@ label_colors:
   "plugin": 7
   "poc": 2
   "privacy": 12
-  "public sector": 3
   "ransomware": 9
   "rat": 9
   "rce": 10
@@ -427,6 +441,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "China’s ‘SilkParasite’ espionage operation targeting Central Asia with AI-assisted malware"
+    url: "https://therecord.media/china-cyber-espionage-central-asia"
+    source: "Recorded Future"
+    date: 2026-08-20T19:30:00Z
+    kind: news
+    labels: ["cybercrime", "nation-state"]
   - title: "Is Cyber missing the Marque?"
     url: "https://blog.talosintelligence.com/is-cyber-missing-the-marque/"
     source: "Cisco Talos"
@@ -439,6 +459,36 @@ items:
     date: 2026-08-20T17:53:52Z
     kind: news
     labels: []
+  - title: "How Peer2Profit and Astroproxy Turn Your Bandwidth Into Someone Else's Product"
+    url: "https://www.silentpush.com/blog/peer2profit-astroproxy/"
+    source: "AlienVault"
+    date: 2026-08-20T17:09:15Z
+    kind: research
+    labels: ["astroproxy", "backconnect infrastructure", "bandwidth-sharing", "internal network exposure", "peer2profit", "privateloader", "proxy enumeration", "residential proxies", "sdk analysis"]
+  - title: "Distinct Clusters Target Individuals of Interest to Russia"
+    url: "https://otx.alienvault.com/pulse/6a8734bac622f3c7b2d9a633"
+    source: "AlienVault"
+    date: 2026-08-20T17:09:14Z
+    kind: research
+    labels: ["app password phishing", "atomic", "authentication abuse", "cherrypie", "device code phishing", "enginelight", "headrush", "hospitality captive portal", "oauth phishing", "russian cyber espionage", "unc5976", "unc6293", "unc7005", "vidar", "whatsapp device linking"]
+  - title: "N4D Mesh Controller: New infrastructure, a UPX-packed agent labeled \"go-titan,\" and how to hunt for it"
+    url: "https://securitylabs.datadoghq.com/articles/n4d-mesh-controller-go-titan-new-infrastructure-hunting/"
+    source: "AlienVault"
+    date: 2026-08-20T17:08:38Z
+    kind: research
+    labels: ["ai infrastructure targeting", "cloudflare tunnels", "credential theft", "cve-2023-48022", "cve-2026-26220", "cve-2026-27944", "cve-2026-33032", "cve-2026-39987", "go-titan", "lateral movement", "lightllm", "linux malware", "mcp exploitation", "n4d", "n4d mesh controller", "ray dashboard"]
+  - title: "Inside Kimsuky's Abuse of Legitimate Remote Control Tools Across Northeast Asia"
+    url: "https://www.enki.co.kr/en/media-center/blog/inside-kimsuky-s-abuse-of-legitimate-remote-control-tools-across-northeast-asia"
+    source: "AlienVault"
+    date: 2026-08-20T17:08:37Z
+    kind: research
+    labels: ["anydesk", "chrome extension", "chrome remote desktop", "gmail exfiltration", "keylogger", "lnk malware", "northeast asia", "onedrive", "powershell", "spear phishing"]
+  - title: "BRIDGEHEAD: An npm typosquatting campaign that crosses from WSL into Windows to plant a crypto-wallet stealer"
+    url: "https://otx.alienvault.com/pulse/6a8734846b4cc1afd4bde567"
+    source: "AlienVault"
+    date: 2026-08-20T17:08:20Z
+    kind: research
+    labels: ["browser-credentials", "cryptocurrency-stealer", "github-hosted-payload", "in-memory-execution", "npm", "rust", "supply-chain", "telegram", "typosquatting", "wsl"]
   - title: "Hackers Target Zimbra Servers in Active Exploitation Campaign"
     url: "https://www.securityweek.com/hackers-target-zimbra-servers-in-active-exploitation-campaign/"
     source: "SecurityWeek"
@@ -487,6 +537,24 @@ items:
     date: 2026-08-20T11:46:04Z
     kind: news
     labels: ["cisco", "patches", "vulnerabilities"]
+  - title: "Chinese-speaking adversary integrates agentic AI into post-compromise operations"
+    url: "https://blog.talosintelligence.com/uat-10147-chinese-speaking-adversary-integrates-agentic-ai-into-post-compromise-operations/"
+    source: "AlienVault"
+    date: 2026-08-20T11:45:49Z
+    kind: research
+    labels: ["agentic ai", "badiis", "chinese-speaking threat actor", "cve-2010-3904", "cve-2015-3246", "cve-2015-5287", "cve-2019-18935", "cve-2021-23758", "cve-2021-29441", "cve-2021-29442", "cve-2021-3156", "cve-2022-0847", "cve-2022-0995", "cve-2022-27925", "gh0stcringe", "meterpreter", "noodlerat", "pentestgpt", "quasarrat", "seo fraud", "spectre", "spectre implant", "viewstate deserialization", "web server exploitation"]
+  - title: "Blend between Banking Malware & Spyware"
+    url: "https://www.threatfabric.com/blogs/manic-blend-between-banking-malware-and-spyware"
+    source: "AlienVault"
+    date: 2026-08-20T11:45:48Z
+    kind: research
+    labels: ["android", "banking trojan", "cryptocurrency theft", "device takeover", "manic", "spyware", "ukraine targeted", "wi-fi mesh relay"]
+  - title: "Back-to-School Cyber Risks Surge as Education Remains the World's Most Attacked Sector"
+    url: "https://otx.alienvault.com/pulse/6a86e8ec6857330461471124"
+    source: "AlienVault"
+    date: 2026-08-20T11:45:48Z
+    kind: research
+    labels: ["apac attacks", "back-to-school", "credential theft", "domain registration", "education sector", "phishing campaigns", "student targeting"]
   - title: "AI-Assisted Tool Helped Secure Satellite Communication System After 2022 Russian Hacking"
     url: "https://www.securityweek.com/ai-assisted-tool-helped-secure-satellite-communication-system-after-2022-russian-hacking/"
     source: "SecurityWeek"
@@ -559,6 +627,12 @@ items:
     date: 2026-08-20T07:02:02Z
     kind: news
     labels: ["artificial intelligence", "ics", "ics/ot", "plc", "siemens"]
+  - title: "CrowdStrike Named Strongest Overall Leader in 2026 Frost Radar&trade;: Cloud Workload Protection Platforms"
+    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-named-strongest-overall-leader-2026-frost-radar-cwpp/"
+    source: "Crowdstrike"
+    date: 2026-08-20T05:00:00Z
+    kind: research
+    labels: ["cloud & application security"]
   - title: "77 Firefox Extensions Linked to Crypto Wallet and Credential Theft"
     url: "https://otx.alienvault.com/pulse/6a865251c21fa835e97512b4"
     source: "AlienVault"
@@ -577,6 +651,18 @@ items:
     date: 2026-08-19T20:53:38Z
     kind: news
     labels: []
+  - title: "Grandoreiro goes north: From Brazil to Mexico with a new DLL sideloading campaign"
+    url: "https://otx.alienvault.com/pulse/6a86146ca27454b03a4cbe2d"
+    source: "AlienVault"
+    date: 2026-08-19T20:39:08Z
+    kind: research
+    labels: ["anti-analysis", "banking trojan", "delphi", "dll sideloading", "grandoreiro", "latin america", "mexico", "sandbox evasion"]
+  - title: "Backdoor delivered through software updates"
+    url: "https://otx.alienvault.com/pulse/6a860ec89c057ba0e04331ae"
+    source: "AlienVault"
+    date: 2026-08-19T20:15:03Z
+    kind: research
+    labels: ["adblocker", "backdoor", "cryptocurrency mining", "download studio", "fakembam", "qt framework", "software update abuse", "supply chain attack", "torrent client", "xmrig"]
   - title: "Healthtech firm CareCloud data breach impacts 3.7 million patients"
     url: "https://www.bleepingcomputer.com/news/security/healthtech-firm-carecloud-data-breach-impacts-37-million-patients/"
     source: "BleepingComputer"
@@ -607,6 +693,12 @@ items:
     date: 2026-08-19T17:50:01Z
     kind: news
     labels: []
+  - title: "Post-DEF CON Phishing Uses Malicious Google Doc to Deliver Malware"
+    url: "https://www.huntress.com/blog/defcon-phishing-google-doc-malware"
+    source: "AlienVault"
+    date: 2026-08-19T15:56:58Z
+    kind: research
+    labels: ["amos", "atomic macos stealer", "black hat", "clickfix", "conference phishing", "cryptocurrency theft", "def con", "google apps script", "netsupport manager", "netsupport rat"]
   - title: "US charges Iranian hackers over $3.4 billion intellectual property theft"
     url: "https://www.bleepingcomputer.com/news/security/us-charges-iranian-hackers-over-34-billion-intellectual-property-theft/"
     source: "BleepingComputer"
@@ -3613,45 +3705,3 @@ items:
     date: 2026-07-22T07:48:49Z
     kind: news
     labels: ["artificial intelligence", "hugging face", "openai"]
-  - title: "Chick-fil-A discloses data breach after credential stuffing attacks"
-    url: "https://www.bleepingcomputer.com/news/security/chick-fil-a-discloses-data-breach-after-credential-stuffing-attacks/"
-    source: "BleepingComputer"
-    date: 2026-07-22T06:40:29Z
-    kind: news
-    labels: []
-  - title: "OpenAI says its AI models hacked Hugging Face during testing"
-    url: "https://www.bleepingcomputer.com/news/security/openai-says-its-ai-models-hacked-hugging-face-during-testing/"
-    source: "BleepingComputer"
-    date: 2026-07-22T05:19:20Z
-    kind: news
-    labels: []
-  - title: "CrowdStrike Falcon Platform Helps Meet U.S. Government Mandates for CISA BOD-26-04"
-    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-falcon-platform-helps-meet-us-goverment-mandates-cisa-bod-26-04/"
-    source: "Crowdstrike"
-    date: 2026-07-22T05:00:00Z
-    kind: research
-    labels: ["public sector"]
-  - title: "Inside a Global Procurement-Themed AiTM Phishing Campaign"
-    url: "https://otx.alienvault.com/pulse/6a6015d87a94549d768bc929"
-    source: "AlienVault"
-    date: 2026-07-22T00:59:04Z
-    kind: research
-    labels: ["aitm phishing", "credential theft", "domain compromise", "evilproxy", "flowerstorm", "kali365", "mfa bypass", "procurement lures", "session hijacking"]
-  - title: "Police dismantle Kratos phishing platform, arrest developer"
-    url: "https://www.bleepingcomputer.com/news/security/police-dismantle-kratos-phishing-platform-arrest-developer/"
-    source: "BleepingComputer"
-    date: 2026-07-21T23:07:33Z
-    kind: news
-    labels: ["legal"]
-  - title: "FakeGit campaign uses 7,600 GitHub repos to push SmartLoader malware"
-    url: "https://www.bleepingcomputer.com/news/security/fakegit-campaign-uses-7-600-github-repos-to-push-smartloader-malware/"
-    source: "BleepingComputer"
-    date: 2026-07-21T22:34:17Z
-    kind: news
-    labels: ["artificial intelligence"]
-  - title: "Critical SharePoint RCE flaw exploited to steal machine keys"
-    url: "https://www.bleepingcomputer.com/news/security/critical-sharepoint-rce-flaw-exploited-to-steal-machine-keys/"
-    source: "BleepingComputer"
-    date: 2026-07-21T20:06:55Z
-    kind: news
-    labels: []
