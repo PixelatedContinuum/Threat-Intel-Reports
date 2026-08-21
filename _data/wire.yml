@@ -3,48 +3,48 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-21T07:01:01Z
+generated_at: 2026-08-21T19:02:39Z
 window_days: 30
 counts:
-  total: 544
-  research: 200
-  news: 344
+  total: 550
+  research: 203
+  news: 347
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 70
     color: 1
   - label: "cybercrime"
-    count: 50
+    count: 53
     color: 2
-  - label: "artificial intelligence"
-    count: 31
-    color: 3
   - label: "malware"
     count: 29
+    color: 3
+  - label: "artificial intelligence"
+    count: 28
     color: 4
   - label: "government"
     count: 28
     color: 5
-  - label: "data breaches"
-    count: 27
-    color: 6
   - label: "credential theft"
+    count: 25
+    color: 6
+  - label: "data breaches"
     count: 25
     color: 7
   - label: "exploited"
     count: 24
     color: 8
   - label: "ransomware"
-    count: 21
+    count: 20
     color: 9
-  - label: "phishing"
-    count: 15
-    color: 10
   - label: "supply chain attack"
+    count: 19
+    color: 10
+  - label: "phishing"
     count: 15
     color: 11
   - label: "microsoft"
-    count: 13
+    count: 14
     color: 12
 label_colors:
   ".net downloader": 4
@@ -123,7 +123,8 @@ label_colors:
   "architectural vulnerability": 5
   "arista": 10
   "armenia": 5
-  "artificial intelligence": 3
+  "arrayref": 8
+  "artificial intelligence": 4
   "astral-pe": 3
   "astroproxy": 1
   "asyncrat": 11
@@ -188,6 +189,7 @@ label_colors:
   "browser password decryptor": 5
   "browser-credentials": 9
   "btmob": 8
+  "build-time execution": 10
   "byovd": 12
   "c2 infrastructure": 12
   "c2 relay": 2
@@ -237,6 +239,7 @@ label_colors:
   "clickfix": 3
   "clickfix campaign": 9
   "clipper": 3
+  "cloud": 7
   "cloud & application security": 1
   "cloud credentials": 9
   "cloud security": 9
@@ -251,6 +254,7 @@ label_colors:
   "code signing abuse": 10
   "command and control": 7
   "communicationuxtheme.dll": 10
+  "compile-time execution": 3
   "contactless payment fraud": 3
   "coolclient": 8
   "corepack impersonation": 12
@@ -258,8 +262,9 @@ label_colors:
   "crackerdrv": 3
   "crat": 2
   "credential harvesting": 4
+  "credential phishing": 9
   "credential stuffing": 11
-  "credential theft": 7
+  "credential theft": 6
   "credential-based attacks": 12
   "credential-theft": 5
   "critical infrastructure": 4
@@ -292,7 +297,7 @@ label_colors:
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 6
+  "data breaches": 7
   "data center": 7
   "data exfiltration": 9
   "data extortion": 2
@@ -330,6 +335,7 @@ label_colors:
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
+  "fake lock screen": 6
   "fakecaptcha": 7
   "fastjson": 10
   "feedback friday": 10
@@ -357,13 +363,13 @@ label_colors:
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
+  "head mare": 3
   "healthcare": 11
   "heights financial": 1
   "heptax": 12
   "hidden execution": 12
   "high profile threats": 2
   "honeymyte": 10
-  "hugging face": 6
   "humans of talos": 8
   "ics": 3
   "ics patch tuesday": 12
@@ -377,6 +383,7 @@ label_colors:
   "information stealer": 6
   "infostealer": 8
   "iran": 6
+  "isolated-vm": 5
   "ivanti": 7
   "jetbrains": 6
   "landing page top story": 2
@@ -387,7 +394,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 4
+  "malware": 3
   "meta": 5
   "metabase": 6
   "microsoft": 12
@@ -396,7 +403,6 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "modular architecture": 1
-  "multi-stage attack": 4
   "n-able": 9
   "nation-state": 11
   "netscaler": 5
@@ -407,13 +413,13 @@ label_colors:
   "on the radar": 4
   "oracle": 12
   "oracle cspu": 1
-  "paidwork": 3
   "patch": 10
   "patch tuesday": 11
   "patches": 2
   "pdf attachment": 7
   "people": 7
-  "phishing": 10
+  "phishing": 11
+  "phishing kit": 6
   "plugin": 7
   "poc": 2
   "privacy": 12
@@ -428,19 +434,133 @@ label_colors:
   "scam": 10
   "securing ai": 4
   "security-labs": 3
-  "sharepoint": 11
   "software": 5
   "sonicwall": 8
   "supply chain": 8
-  "supply chain attack": 11
+  "supply chain attack": 10
   "teamcity": 8
   "threat hunting & intel": 9
   "threat source newsletter": 6
   "threat spotlight": 2
+  "uncategorized": 10
   "vmware": 2
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "New SynkLoader malware pushed in Microsoft Teams phishing campaign"
+    url: "https://www.bleepingcomputer.com/news/security/new-synkloader-malware-pushed-in-microsoft-teams-phishing-campaign/"
+    source: "BleepingComputer"
+    date: 2026-08-21T18:01:30Z
+    kind: news
+    labels: []
+  - title: "Former NSA Director Paul Nakasone Launches National Security Advisory Firm"
+    url: "https://www.securityweek.com/former-nsa-director-paul-nakasone-launches-national-security-advisory-firm/"
+    source: "SecurityWeek"
+    date: 2026-08-21T16:27:52Z
+    kind: news
+    labels: ["uncategorized"]
+  - title: "U.S. Bank says breach claims related to fourth-party incident"
+    url: "https://therecord.media/us-bank-says-breach-claims-related-to-fourth-party-incident"
+    source: "Recorded Future"
+    date: 2026-08-21T16:16:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Hundreds of leaked AWS keys give full control over corporate accounts"
+    url: "https://www.bleepingcomputer.com/news/security/hundreds-of-leaked-aws-keys-give-full-control-over-corporate-accounts/"
+    source: "BleepingComputer"
+    date: 2026-08-21T15:55:15Z
+    kind: news
+    labels: ["cloud"]
+  - title: "In Other News: Zombie Card Attack, T-Mobile Cut Cable to Stop Hackers, GitHub Denies AI Caused Bug"
+    url: "https://www.securityweek.com/in-other-news-zombie-card-attack-t-mobile-cut-cable-to-stop-hackers-github-denies-ai-caused-bug/"
+    source: "SecurityWeek"
+    date: 2026-08-21T15:11:16Z
+    kind: news
+    labels: ["in other news", "vulnerabilities"]
+  - title: "Canada’s Hospital for Sick Children attacked by cybercriminals again as employee data stolen"
+    url: "https://therecord.media/canada-hospital-for-sick-children-attacked-again-employee-data"
+    source: "Recorded Future"
+    date: 2026-08-21T15:00:00Z
+    kind: news
+    labels: ["cybercrime", "privacy"]
+  - title: "New Phishing Toolkit Uses Passkeys to Maintain Access After Password Resets"
+    url: "https://www.securityweek.com/new-phishing-toolkit-uses-passkeys-to-maintain-access-after-password-resets/"
+    source: "SecurityWeek"
+    date: 2026-08-21T14:22:06Z
+    kind: news
+    labels: ["phishing", "phishing kit"]
+  - title: "Russian network monitoring firm confirms cyberattack claimed by pro-Ukraine hackers"
+    url: "https://therecord.media/russian-network-monitoring-firm-confirms-cyberattack-claimed-by-pro-ukraine-group"
+    source: "Recorded Future"
+    date: 2026-08-21T13:55:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Critical Isolated-vm Vulnerability Leads to RCE on Host"
+    url: "https://www.securityweek.com/critical-isolated-vm-vulnerability-leads-to-rce-on-host/"
+    source: "SecurityWeek"
+    date: 2026-08-21T12:26:07Z
+    kind: news
+    labels: ["isolated-vm", "vulnerabilities"]
+  - title: "CISA orders feds to patch actively exploited TrueConf Server flaws"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-trueconf-server-flaws/"
+    source: "BleepingComputer"
+    date: 2026-08-21T12:25:33Z
+    kind: news
+    labels: []
+  - title: "Microsoft warns of max severity Entra ID flaw exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/microsoft/microsoft-warns-of-max-severity-entra-id-flaw-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-21T11:04:10Z
+    kind: news
+    labels: ["microsoft"]
+  - title: "Hackers abuse FTP server banners to deliver new Windows malware"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-abuse-ftp-server-banners-to-deliver-new-windows-malware/"
+    source: "BleepingComputer"
+    date: 2026-08-21T11:00:00Z
+    kind: news
+    labels: []
+  - title: "SickKids data breach exposes employee and job applicant info"
+    url: "https://www.bleepingcomputer.com/news/security/sickkids-data-breach-exposes-employee-and-job-applicant-info/"
+    source: "BleepingComputer"
+    date: 2026-08-21T10:10:42Z
+    kind: news
+    labels: []
+  - title: "Rust Supply Chain Attack Linked to North Korean Hackers"
+    url: "https://www.securityweek.com/rust-supply-chain-attack-linked-to-north-korean-hackers/"
+    source: "SecurityWeek"
+    date: 2026-08-21T09:23:18Z
+    kind: news
+    labels: ["arrayref", "malware", "north korea", "rust", "supply chain attack", "supply chain security"]
+  - title: "Head Mare APT Group exploits vulnerabilities in unpatched TrueConf server to deliver PhantomCore malware to conference participants"
+    url: "https://otx.alienvault.com/pulse/6a87ffab05b89766cd6c1700"
+    source: "AlienVault"
+    date: 2026-08-21T07:35:07Z
+    kind: research
+    labels: ["backdoor", "head mare", "phantomcore", "phantomgraph", "supply chain attack", "trueconf", "video conferencing", "web shell", "zero-day exploitation"]
+  - title: "CISA Urges Immediate Patching of Exploited TrueConf Vulnerabilities"
+    url: "https://www.securityweek.com/cisa-urges-immediate-patching-of-exploited-trueconf-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-08-21T07:25:50Z
+    kind: news
+    labels: ["cisa kev", "exploited", "trueconf", "vulnerabilities"]
+  - title: "SynkLoader: when you throw in everything but the kitchen sink"
+    url: "https://otx.alienvault.com/pulse/6a87b22b1fbf04df7046d537"
+    source: "AlienVault"
+    date: 2026-08-21T02:04:26Z
+    kind: research
+    labels: ["credential phishing", "fake lock screen", "microsoft teams phishing", "modular loader", "multi-language evasion", "python loader", "reverse proxy", "synkloader"]
+  - title: "Supply Chain Attack on arrayref: Significant Overlap with DPRK Campaigns"
+    url: "https://www.wiz.io/blog/rust-supply-chain-attack-on-arrayref-significant-overlap-with-dprk-campaigns"
+    source: "AlienVault"
+    date: 2026-08-20T21:47:21Z
+    kind: research
+    labels: ["backdoor", "compile-time execution", "crates.io", "dprk", "mastra campaign", "proc-macro1", "rust", "supply chain attack", "typosquatting"]
+  - title: "Popular Rust Crates Compromised in Build-Time Supply Chain Attack"
+    url: "https://otx.alienvault.com/pulse/6a8775e8885af9073b89474a"
+    source: "AlienVault"
+    date: 2026-08-20T21:47:20Z
+    kind: research
+    labels: ["backdoor", "build-time execution", "ci/cd compromise", "credential theft", "proc-macro-en", "proc-macro1", "rust", "supply chain attack", "typosquatting"]
   - title: "China’s ‘SilkParasite’ espionage operation targeting Central Asia with AI-assisted malware"
     url: "https://therecord.media/china-cyber-espionage-central-asia"
     source: "Recorded Future"
@@ -3627,81 +3747,3 @@ items:
     date: 2026-07-22T19:18:00Z
     kind: news
     labels: ["cybercrime", "government"]
-  - title: "New Kimsuky campaign compromised South Korean software vendors"
-    url: "https://therecord.media/kimsuky-north-korea-espionage-groupware-companies"
-    source: "Recorded Future"
-    date: 2026-07-22T16:47:00Z
-    kind: news
-    labels: ["malware", "nation-state"]
-  - title: "How enterprise GenAI can amplify ransomware risk — and how to contain it"
-    url: "https://www.bleepingcomputer.com/news/security/how-enterprise-genai-can-amplify-ransomware-risk-and-how-to-contain-it/"
-    source: "BleepingComputer"
-    date: 2026-07-22T15:30:00Z
-    kind: news
-    labels: []
-  - title: "Abusing Trusted Business Workflows: A Multi-Stage Phantom Stealer Campaign"
-    url: "https://otx.alienvault.com/pulse/6a60df1ccbee3728dd9c71e5"
-    source: "AlienVault"
-    date: 2026-07-22T15:17:48Z
-    kind: research
-    labels: ["credential theft", "multi-stage attack", "phantom stealer", "phishing", "powershell obfuscation", "process injection", "reflective loading", "smtp exfiltration"]
-  - title: "Suno, Paidwork Data Breaches Affect Tens of Millions of Accounts"
-    url: "https://www.securityweek.com/suno-paidwork-data-breaches-affect-tens-of-millions-of-accounts/"
-    source: "SecurityWeek"
-    date: 2026-07-22T15:02:11Z
-    kind: news
-    labels: ["data breaches", "paidwork", "suno"]
-  - title: "Flaw in Adobe Extension With 300M Installs Enabled WhatsApp Data Theft"
-    url: "https://www.securityweek.com/flaw-in-adobe-extension-with-300m-installs-enabled-whatsapp-data-theft/"
-    source: "SecurityWeek"
-    date: 2026-07-22T14:22:31Z
-    kind: news
-    labels: ["adobe", "data leak", "vulnerabilities", "whatsapp"]
-  - title: "New InfraTrust report reveals infrastructure flaws admins should patch first"
-    url: "https://www.bleepingcomputer.com/news/security/new-infratrust-report-reveals-infrastructure-flaws-admins-should-patch-first/"
-    source: "BleepingComputer"
-    date: 2026-07-22T14:15:00Z
-    kind: news
-    labels: []
-  - title: "Vibe-Coded Apps Riddled With Exploitable Security Flaws"
-    url: "https://www.securityweek.com/vibe-coded-apps-riddled-with-exploitable-security-flaws/"
-    source: "SecurityWeek"
-    date: 2026-07-22T13:00:00Z
-    kind: news
-    labels: ["application security", "artificial intelligence", "vibe coding", "vulnerabilities"]
-  - title: "OpenAI models behind breach of Hugging Face systems, companies say"
-    url: "https://therecord.media/openai-cyberattack-hugging-face"
-    source: "Recorded Future"
-    date: 2026-07-22T12:00:00Z
-    kind: news
-    labels: []
-  - title: "CISA orders urgent action on actively exploited Langflow RCE flaw"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-langflow-rce-flaw/"
-    source: "BleepingComputer"
-    date: 2026-07-22T11:43:28Z
-    kind: news
-    labels: []
-  - title: "Fourth SharePoint Vulnerability Exploited in Past Month’s Wave of Attacks"
-    url: "https://www.securityweek.com/fourth-sharepoint-vulnerability-exploited-in-past-months-wave-of-attacks/"
-    source: "SecurityWeek"
-    date: 2026-07-22T11:29:16Z
-    kind: news
-    labels: ["exploited", "sharepoint", "vulnerabilities"]
-  - title: "Oracle Patches Over 1,400 Vulnerabilities With Quarterly Security Updates"
-    url: "https://www.securityweek.com/oracle-patches-over-1400-vulnerabilities-with-quarterly-security-updates/"
-    source: "SecurityWeek"
-    date: 2026-07-22T09:33:12Z
-    kind: news
-    labels: ["artificial intelligence", "oracle", "oracle cpu", "patches", "vulnerabilities"]
-  - title: "Ransomware Group Threatening to Leak Data Stolen From Coca-Cola’s Fairlife"
-    url: "https://www.securityweek.com/ransomware-group-threatening-to-leak-data-stolen-from-coca-colas-fairlife/"
-    source: "SecurityWeek"
-    date: 2026-07-22T08:32:02Z
-    kind: news
-    labels: ["coca-cola", "data breaches", "fairlife", "ransomware"]
-  - title: "OpenAI Says Its AI Models Broke Loose and Hacked Hugging Face"
-    url: "https://www.securityweek.com/openai-says-its-ai-models-broke-loose-and-hacked-hugging-face/"
-    source: "SecurityWeek"
-    date: 2026-07-22T07:48:49Z
-    kind: news
-    labels: ["artificial intelligence", "hugging face", "openai"]
