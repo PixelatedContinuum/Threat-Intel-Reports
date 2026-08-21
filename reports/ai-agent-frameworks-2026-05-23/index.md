@@ -61,7 +61,7 @@ This is the parent of a six-report series, surfaced via [Hunt.io open-directory 
 
 The eight active operator cases, each with its home section:
 
-- **[Case 1 — Russian Gemini credential-mill](/reports/russian-gemini-credential-mill-213.165.51.115/)** (UTA-2026-012, MODERATE 75%) — AEZA host, Cloudflare-Tunnel C2 under `tralalarkefe.com`, persistent RDP+SSH into the US healthcare victim, 40+ stolen Gemini keys; source of two novel TTPs. See §4.1.
+- **[Case 1 — Russian Gemini credential-mill](/reports/russian-gemini-credential-mill-213.165.51.115/)** (UTA-2026-012, since cross-identified with Trend Micro's `bandcampro` and raised to MODERATE-HIGH 83%) — AEZA host, Cloudflare-Tunnel C2 under `tralalarkefe.com`, persistent RDP+SSH into the US healthcare victim, 40+ stolen Gemini keys; source of two novel TTPs. See §4.1.
 - **[Case 2 — Turkish ARPA observability-harvester](/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/)** (UTA-2026-013, high-MODERATE 78%) — `ARPA Korelasyon Motoru` platform cross-correlating four stolen observability sources against a state-affiliated Turkish financial-sector victim, with insider AD recruitment. GitHub T&S actioned handle MehmetARPA on 2026-05-25. See §4.2.
 - **[Case 3 — Rovodev/Pandora Mirai botnet](/reports/rovodev-mirai-matrix-c2-87.106.143.220/)** (UTA-2026-014, LOW 60%) — IONOS host, 11-architecture Mirai botnet, Rovodev session JSONs capturing AI authoring the attack framework. See §4.3.
 - **[Case 4 — Korean Claude+OpenClaw](/reports/korean-claude-openclaw-221.150.15.104/)** (UTA-2026-015, LOW 55%) — `~/.claude/settings.local.json` pre-approving an `openclaw.ai` installer in the Claude Code allowlist. See §4.4.
@@ -108,7 +108,7 @@ The campaign scores 8.3 out of 10 overall, which puts it in the HIGH band. Remed
 This is a **multi-actor** campaign. Attribution spans one named actor and six UTA designations; full per-actor assessments are in §9.
 
 - **Vova75Rus** *(named, HIGH 88%)* — Case 9 GHOST kit author (separate identity from his customer operators).
-- **UTA-2026-012** *(an internal tracking label used by The Hunters Ledger — see Section 9)* — Case 1 Russian Gemini operator (MODERATE 75%).
+- **UTA-2026-012** *(an internal tracking label used by The Hunters Ledger — see Section 9)* — Case 1 Russian Gemini operator (MODERATE-HIGH 83%, cross-identified with Trend Micro's `bandcampro`).
 - **UTA-2026-013** — Case 2 Turkish ARPA operator (high-MODERATE 78%).
 - **UTA-2026-014** — Case 3 Rovodev/Pandora Mirai operator (LOW 60%).
 - **UTA-2026-015** — Case 4 Korean Claude+OpenClaw operator (LOW 55%).
@@ -265,7 +265,7 @@ Four of eight cases (2, 3, 9-A, 10) were active during the investigation window 
 
 ### 4.1 Case 1 — Russian Gemini Credential-Mill Operator
 
-Case 1 is the campaign's most technically integrated AI-augmented operator and the source of two of the five novel TTPs — LLM-Personalized Credential Mutation (§4.9.2) and AI Operator Handoff Documents (§4.9.1). On AEZA host `213.165.51.115` (OFAC-sanctioned July 2025, 4/5 bulletproof indicators), the operator runs a self-built unauthenticated Python-stdlib C2 (§4.9.5), an `ai_sniper_brute.py` pipeline that calls Gemini 2.5 Flash for per-target password mutations (5.5 MB `AI_ADMIN_MUTANTS.txt` on disk), and a Cloudflare-Tunnel C2 topology under operator-owned domain `tralalarkefe.com` whose `windows_server`/`gil_dr1` subdomains route persistent RDP+SSH into the confirmed US healthcare victim — a more durable model than ephemeral `*.trycloudflare.com` abuse (Proofpoint Aug 2024; Securonix SERPENTINE#CLOUD) because the operator owns the domain. A co-located disinformation operation (`@americanpatriotus`, `quantum_patriot.py`) uses the same Gemini key, rare cross-operation attribution evidence. Primary indicator: `tralalarkefe.com` (+ 5 named subdomains). Attribution UTA-2026-012 (MODERATE 75%). **Full analysis, full indicator table, and Phase 11 idiom analysis: [Case 1 sub-report](/reports/russian-gemini-credential-mill-213.165.51.115/).**
+Case 1 is the campaign's most technically integrated AI-augmented operator and the source of two of the five novel TTPs — LLM-Personalized Credential Mutation (§4.9.2) and AI Operator Handoff Documents (§4.9.1). On AEZA host `213.165.51.115` (OFAC-sanctioned July 2025, 4/5 bulletproof indicators), the operator runs a self-built unauthenticated Python-stdlib C2 (§4.9.5), an `ai_sniper_brute.py` pipeline that calls Gemini 2.5 Flash for per-target password mutations (5.5 MB `AI_ADMIN_MUTANTS.txt` on disk), and a Cloudflare-Tunnel C2 topology under operator-owned domain `tralalarkefe.com` whose `windows_server`/`gil_dr1` subdomains route persistent RDP+SSH into the confirmed US healthcare victim — a more durable model than ephemeral `*.trycloudflare.com` abuse (Proofpoint Aug 2024; Securonix SERPENTINE#CLOUD) because the operator owns the domain. A co-located disinformation operation (`@americanpatriotus`, `quantum_patriot.py`) uses the same Gemini key, rare cross-operation attribution evidence. Primary indicator: `tralalarkefe.com` (+ 5 named subdomains). Attribution UTA-2026-012 (MODERATE-HIGH 83%, cross-identified with Trend Micro's `bandcampro`). **Full analysis, full indicator table, and Phase 11 idiom analysis: [Case 1 sub-report](/reports/russian-gemini-credential-mill-213.165.51.115/).**
 
 ### 4.2 Case 2 — Turkish ARPA Observability-Harvester Operator
 
@@ -559,7 +559,7 @@ The language is Russian, evidenced by a personal-dedication page carrying a Russ
 
 The Tier-0 disposition landed. GitHub Trust & Safety took account-level action against Vova75Rus on 2026-05-25 and all 9 repositories now return HTTP 404, which is the strongest possible Tier-0 outcome for an upstream supply-chain actor. Wayback Machine snapshots at `web.archive.org/web/20260525020*/` are the canonical pre-takedown evidence record. Defenders should expect re-hosting attempts and monitor for new accounts matching the Vova75Rus naming and style patterns.
 
-### 9.2 UTA-2026-012 — Case 1 Russian Gemini Operator (MODERATE 75%)
+### 9.2 UTA-2026-012 — Case 1 Russian Gemini Operator (MODERATE-HIGH 83%)
 
 The profile is a Russian-native individual, an AI-augmented mid-tier criminal operator targeting the healthcare victim alongside the co-located @americanpatriotus disinformation channel.
 
@@ -578,7 +578,9 @@ The language is Russian, with the native idiom register confirmed in Phase 11.
 - Russian carding forum: `duty-free.cc` (forum-active operator; saved MHTML thread in operator archive)
 - AntiPublic combolist subscription: `antipublic.one`
 
-The UTA-2026-012 per-case attribution, with the full Phase 11 idiom analysis, is in the [Case 1 sub-report](/reports/russian-gemini-credential-mill-213.165.51.115/).
+Since this report was published, Trend Micro has independently documented the same operator as `bandcampro` in their "Patriot Bait" research, matching on all four operator addresses and on the `@americanpatriotus` channel. That is a second Tier-2 source arriving at the same operator by a different route, and it is what carries this case from 75 to 83 percent. It does not name a person, so the designation stays in place and is written as "UTA-2026-012 (Trend Micro: bandcampro)".
+
+The UTA-2026-012 per-case attribution, with the full Phase 11 idiom analysis and the cross-vendor reconciliation, is in the [Case 1 sub-report](/reports/russian-gemini-credential-mill-213.165.51.115/).
 
 ### 9.3 UTA-2026-013 — Case 2 Turkish ARPA Operator (high-MODERATE 78%)
 
@@ -790,7 +792,7 @@ The investigation identifies these detection gaps not currently covered by the l
 
 ### MODERATE Findings (Reasonable Evidence, Notable Gaps)
 
-- **UTA-2026-012 Case 1 attribution (75%)** — MODERATE (Russian-language register + AEZA + forum activity + persona-priming + GitHub handle, but no real-world identity).
+- **UTA-2026-012 Case 1 attribution (83%)** — MODERATE-HIGH (Russian-language register + AEZA + forum activity + persona-priming + GitHub handle, plus independent Trend Micro corroboration; still no real-world identity).
 - **UTA-2026-013 Case 2 attribution (78%)** — high-MODERATE, top of the MODERATE band (70-85%) approaching HIGH (five converging axes + insider recruitment, but state-aligned-loose vs. political-factional sub-type INSUFFICIENT).
 - **Case 9 commercial-sale model for GHOST kit** — MODERATE (17-byte diff + OWNER Telegram bot pattern across 2 customers; competing hypotheses remain plausible — affiliate program or personal multi-operator architecture — and cannot be ruled out without operator-financial evidence).
 - **AI-democratized script-kiddie class as a threat type** — MODERATE (theoretical; no pure exemplar in this dataset; documented honestly).
