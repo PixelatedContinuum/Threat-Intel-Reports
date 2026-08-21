@@ -2978,7 +2978,7 @@
   report_url: "/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/"
   detection_url: "/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections"
   total: 80
-  untyped: 88
+  untyped: 91
   counts:
     domain: 60
     ipv4: 10

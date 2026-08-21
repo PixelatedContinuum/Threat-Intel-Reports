@@ -103,7 +103,7 @@
     <text x="530" y="902" font-size="18" fill="#ffffff">Earlier consumer-VPN MVP (minimalist)</text>
     <text x="530" y="932" font-size="16" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">bikaf.ru  ·  Google-OAuth-only signin</text>
     <text x="530" y="962" font-size="16" fill="#e5e5e5">CCTV/IP-camera sub-brands also under apex</text>
-    <text x="530" y="988" font-size="16" fill="#e5e5e5">Retired via kittenx-404 tombstone Apr 2026</text>
+    <text x="530" y="988" font-size="16" fill="#e5e5e5">Retired Apr 2026 after ~2 months</text>
     <text x="530" y="1014" font-size="16" fill="#cccccc">Brand 2026-02-22 to ~2026-04 (~2 months)</text>
     <text x="530" y="1046" font-size="16" fill="#fb923c" font-weight="600">Replaced by INK VPN as the flagship</text>
   </g>
@@ -111,12 +111,12 @@
   <!-- DIVIDER + parent-brand summary band -->
   <line x1="60" y1="1146" x2="940" y2="1146" stroke="#2a2a2a" stroke-width="1"/>
   <text x="500" y="1182" text-anchor="middle" font-size="22" font-weight="700" fill="#ffffff">Parent brand: "Inkognito"  ·  Telegram @inkconnectvpn (797 subs, first post 2026-03-18)</text>
-  <text x="500" y="1212" text-anchor="middle" font-size="17" fill="#e5e5e5">Cross-brand operator fingerprints: `Server: kittenx` 404 tombstone  ·  `X-Admin-Token` HTTP header  ·  Yandex Webmaster ID 98466329</text>
+  <text x="500" y="1212" text-anchor="middle" font-size="17" fill="#e5e5e5">Cross-brand operator fingerprints: `X-Admin-Token` HTTP header  ·  Yandex Webmaster ID 98466329</text>
   <text x="500" y="1242" text-anchor="middle" font-size="17" fill="#e5e5e5">Each brand sits on different infrastructure (Timeweb / Stark / Cloudflare / Aeza / U1host) — deliberate provider segmentation</text>
 
   <!-- FOOTER -->
   <line x1="60" y1="1290" x2="940" y2="1290" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="500" y="1324" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  Server: kittenx 404 tombstone  ·  X-Admin-Token HTTP header</text>
+  <text x="500" y="1324" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  X-Admin-Token HTTP header</text>
   <text x="500" y="1354" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Yandex verification 98466329  ·  Google SC TXTs  ·  INK VPN asset SHA256s (8a69fe67… / d1ae63c9… / 53b3515f…)</text>
 
   <g transform="translate(80, 1390)">

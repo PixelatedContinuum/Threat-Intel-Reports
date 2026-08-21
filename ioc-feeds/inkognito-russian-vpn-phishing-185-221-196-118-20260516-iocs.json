@@ -199,7 +199,7 @@
       },
       {
         "value": "00000xtrading.ru",
-        "purpose": "Former operator EspoCRM back-office (May 2025 → Apr 2026, ~353 days). Decommissioned with kittenx-404 tombstone on 2026-04-07.",
+        "purpose": "Former operator EspoCRM back-office (May 2025 → Apr 2026, ~353 days). Decommissioned 2026-04-07.",
         "first_seen": "2025-05-17",
         "last_seen": "2026-04-07",
         "confidence": "HIGH",
@@ -207,7 +207,7 @@
       },
       {
         "value": "bikaf.ru",
-        "purpose": "Bikaf VPN, operator's consumer VPN brand (Feb 2026). Decommissioned ~April 2026 with kittenx-404 tombstone. Minimal MVP page with Google OAuth signin (contrasts with INK VPN's polished SPA).",
+        "purpose": "Bikaf VPN, operator's consumer VPN brand (Feb 2026). Decommissioned ~April 2026. Minimal MVP page with Google OAuth signin (contrasts with INK VPN's polished SPA).",
         "first_seen": "2026-02-22",
         "last_seen": "2026-04",
         "confidence": "HIGH",
@@ -457,13 +457,6 @@
         "confidence": "HIGH"
       }
     ],
-    "decommission_tombstone": {
-      "server_header": "kittenx",
-      "http_status": 404,
-      "content_length": 148,
-      "context": "Operator's standard 'decommissioned' signature applied to retired domains. Observed on 00000xtrading.ru (Apr 2026) and bikaf.ru (Apr/May 2026). Cross-domain operator fingerprint, strong cluster-expansion pivot.",
-      "confidence": "HIGH"
-    },
     "search_console_verifications": [
       {
         "type": "Google Search Console TXT verification",
@@ -633,7 +626,7 @@
       },
       {
         "date": "2026-04-07",
-        "event": "00000xtrading.ru decommissioned with kittenx-404 tombstone"
+        "event": "00000xtrading.ru decommissioned"
       },
       {
         "date": "2026-04-17",
@@ -649,5 +642,30 @@
     "operator_domain_vt_detection": "0/92 across all confirmed operator domains as of 2026-05-07",
     "vt_significance": "Despite multi-year operation, multi-product fraud activity, sanctioned-bulletproof hosting, and explicit Russian-language phishing brand impersonations, no commercial threat intelligence vendor has flagged these domains as malicious. First public capture.",
     "ink_vpn_artifact_vt_detection": "JS bundle (8a69fe67), logo PNG (d1ae63c9), favicon SVG (53b3515f) all return NOT FOUND on VirusTotal, first capture of these operator code artifacts."
+  },
+  "retracted_indicators": {
+    "warning": "CONTEXT ONLY - DO NOT INGEST AS INDICATORS, DO NOT BLOCK, DO NOT ALERT ON THESE VALUES. Entries here were published as operator indicators and have since been withdrawn after base-rate measurement showed they match third-party infrastructure. They are retained so a reader can see what was retracted and why, rather than finding it silently deleted. Automated ingestion must skip this block.",
+    "retracted": [
+      {
+        "id": "decommission_tombstone",
+        "retracted_on": "2026-08-21",
+        "original_bucket": "operator_fingerprints",
+        "original_entry": {
+          "server_header": "kittenx",
+          "http_status": 404,
+          "content_length": 148,
+          "context": "Operator's standard 'decommissioned' signature applied to retired domains. Observed on 00000xtrading.ru (Apr 2026) and bikaf.ru (Apr/May 2026). Cross-domain operator fingerprint, strong cluster-expansion pivot.",
+          "confidence": "HIGH"
+        },
+        "reason": "'kittenx' is VKontakte's web server banner, not an operator artifact. Measured against a 142.7-million-document web-scan corpus: the bare Server header returns 7083 observations in a 30-day window and 6844 of them (96.6%) sit on AS47541, VK's own ASN. The full three-signal triplet (Server: kittenx + status 404 + Content-Length 148) returns 84 hits, of which 83 (98.8%) are still VK. The 404-plus-148-byte pair on its own returns 175432. Both retired operator domains were Russian-hosted and inherited a platform default. No tightening recovers the signature, because the only discriminating element was the Server header and that header belongs to the platform. Ingesting this would alert on ordinary VK traffic in any subscriber environment.",
+        "downstream_actions": [
+          "Sigma rule 7f1a3c8b-2d5e-4b9a-8c0f-1e6d3a7b2c4f CUT (it had already dropped the Server-header check as unsupported in the proxy logsource, leaving it matching any 404 with a 148-byte body).",
+          "Suricata sid 9001002 CUT and its published feed SID withdrawn; it carried 'False Positives: None known'.",
+          "Report section 4.6 rewritten as a retraction; assumption (b) in section 12 marked INVALIDATED.",
+          "The two affected domains remain in network_indicators.domains as domain indicators, which is their correct home."
+        ],
+        "still_valid": "The other two operator fingerprints in this feed, the custom X-Admin-Token header and Yandex Webmaster ID 98466329, were base-rate tested at the same time and both returned zero against a passing control."
+      }
+    ]
   }
 }

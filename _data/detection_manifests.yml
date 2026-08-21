@@ -2512,28 +2512,10 @@ inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1566.002, T1656, T1036.005]
-  - name: "Inkognito Operator KittenX Decommission Tombstone HTTP Response"
-    engine: sigma
-    tier: Detection
-    fence: 3
-    hash: "fdf49cd5"
-    head: "title: Inkognito Operator KittenX Decommission T"
-    robustness: 2
-    confidence: "HIGH"
-    attack: [T1583.001, T1583.004]
-  - name: "Inkognito KittenX Decommission Tombstone HTTP Response"
-    engine: suricata
-    tier: Detection
-    fence: 4
-    hash: "ed16faa3"
-    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
-    robustness: 3
-    confidence: "HIGH"
-    attack: [T1583.001, T1583.004]
   - name: "Inkognito Custom X-Admin-Token Header in HTTP Request"
     engine: suricata
     tier: Hunting
-    fence: 5
+    fence: 3
     hash: "3448e895"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
@@ -2542,7 +2524,7 @@ inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections:
   - name: "Inkognito X-Admin-Token in CORS Allow-Headers Response"
     engine: suricata
     tier: Hunting
-    fence: 6
+    fence: 4
     hash: "2e99bd7e"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2

@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 99 rules from 33 campaigns. SIDs are STABLE across rebuilds (persistent
+# 98 rules from 33 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -166,11 +166,6 @@ alert tcp any any -> any any (msg:"THL HUNT GOCLOUD-Cryptojacking Linux Miner De
 #   rate-limited
 #   FP: Any unrelated HTTP request whose URI happens to contain the 5-character substring /cgi1 (uncommon but not impossible on generic CGI-driven web...
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)"; flow:established,to_server; http.uri; content:"/cgi1"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500148; rev:1; metadata:author The_Hunters_Ledger, date 2025-11-21, reference https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/;)
-# inkognito-russian-vpn-phishing-185-221-196-118-20260516 (orig sid:9001002)
-#   TIER: Detection  |  robustness 3  |  confidence HIGH
-#   rate-limited
-#   FP: None known — "kittenx" is not a known commodity web server; the full triplet has not been observed outside Inkognito infrastructure.
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL Inkognito KittenX Decommission Tombstone HTTP Response (Infrastructure Pivot Indicator)"; flow:established,to_client; http.response_line; content:"404"; http.header; content:"Server: kittenx"; nocase; content:"Content-Length: 148"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500029; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-16, reference https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/;)
 # inkognito-russian-vpn-phishing-185-221-196-118-20260516 (orig sid:9001003)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited

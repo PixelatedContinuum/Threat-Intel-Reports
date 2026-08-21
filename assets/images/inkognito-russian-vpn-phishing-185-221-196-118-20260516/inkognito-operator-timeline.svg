@@ -112,7 +112,7 @@
     <text x="80" y="1906" font-size="22" fill="#ffffff">bikaf.ru launches as the operator's first consumer-facing VPN MVP</text>
     <text x="80" y="1940" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Initial host Netts.ru (92.38.219.225)  →  later U1host DE (77.239.101.23)</text>
     <text x="80" y="1974" font-size="18" fill="#e5e5e5">Minimalist single-page MVP, Google OAuth only — product iteration phase</text>
-    <text x="80" y="2006" font-size="18" fill="#fb923c" font-weight="600">Two months later replaced by INK VPN; Bikaf retired via kittenx-404 tombstone</text>
+    <text x="80" y="2006" font-size="18" fill="#fb923c" font-weight="600">Two months later replaced by INK VPN; Bikaf retired Apr 2026</text>
   </g>
   <line x1="500" y1="2042" x2="500" y2="2082" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
 
@@ -139,7 +139,7 @@
     <text x="500" y="2385" font-size="23" font-weight="600" fill="#111111">Back-office rotation (30-hour overlap)</text>
     <text x="80" y="2438" font-size="22" fill="#ffffff">fi1.inklens.co.uk takes over from 00000xtrading.ru with 30-hour overlap window</text>
     <text x="80" y="2472" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Both serve from the same Aeza IT IP 185.221.196.118 — same EspoCRM instance, new front DNS</text>
-    <text x="80" y="2506" font-size="18" fill="#e5e5e5">00000xtrading.ru decommissioned with `Server: kittenx` 404 tombstone fingerprint</text>
+    <text x="80" y="2506" font-size="18" fill="#e5e5e5">00000xtrading.ru decommissioned; fi1.inklens.co.uk brought up 30h earlier</text>
     <text x="80" y="2538" font-size="18" fill="#fb923c" font-weight="600">Operator coordination: seamless rotation, no service interruption</text>
   </g>
   <line x1="500" y1="2574" x2="500" y2="2614" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
@@ -159,7 +159,7 @@
 
   <!-- FOOTER -->
   <line x1="60" y1="2870" x2="940" y2="2870" stroke="#2a2a2a" stroke-width="1"/>
-  <text x="500" y="2902" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  admin@&lt;domain&gt;.eu SOA pattern  ·  Server: kittenx 404 tombstone</text>
+  <text x="500" y="2902" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  admin@&lt;domain&gt;.eu SOA pattern  ·  X-Admin-Token header</text>
   <text x="500" y="2932" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">unloki.ru ↔ Stark TR (193.46.56.182) 2.5y stability  ·  Aeza IT 185.221.196.118 EspoCRM back-office</text>
   <text x="500" y="2972" text-anchor="middle" font-size="15" fill="#888888">Color legend  —  orange: origin / BEC infra · red: long-term operator-anchor brand · yellow: brand front / supporting · deep red: current flagship</text>
 </svg>

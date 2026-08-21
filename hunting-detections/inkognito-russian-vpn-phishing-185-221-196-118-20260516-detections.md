@@ -204,54 +204,39 @@ falsepositives:
 level: high
 ```
 
-#### Inkognito Operator KittenX Decommission Tombstone HTTP Response
+#### ~~Inkognito Operator KittenX Decommission Tombstone HTTP Response~~ — RETRACTED 2026-08-21
 
-**Tier:** Detection
-**Robustness:** 2
-**ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1583.004 (Server)
-**Confidence:** HIGH
-**Rationale:** The original selection included an `r-server: kittenx` field that is not a standard field for Sigma's `proxy` logsource category (W3C/Squid-derived proxy log taxonomies do not expose arbitrary response-header values as a queryable field) — a selection on a non-existent field can never match, so the clause was dead weight. Re-anchored to the two fields the proxy category does support (`sc-status`, `sc-bytes`); the exact 148-byte body size paired with a 404 status remains a reasonably distinctive combination. The full 3-signal signature (status + exact size + the highly distinctive `kittenx` Server header) is captured at the network layer by the companion Suricata rule, which can inspect headers directly.
-**False Positives:** Any unrelated web server that happens to return exactly a 404 status with a 148-byte response body (uncommon); security scanners replaying captured Inkognito HTTP responses in test environments.
-**Blind Spots:** Without the Server-header check, a coincidental 404/148-byte match on unrelated infrastructure cannot be distinguished at this layer alone — pair with the Suricata rule for full-fidelity confirmation.
-**Validation:** Request a decommissioned Inkognito domain — the proxy log must show status 404 and a 148-byte body; an unrelated site's 404 page must NOT coincidentally match both fields.
-**Deployment:** Web-proxy logs, Zeek http.log, Suricata (see companion rule for full-signature network-layer detection).
+> ⛔ **This rule has been cut. Do not deploy it, and remove it if you already have.**
+>
+> The rule selected on `sc-status: 404` and `sc-bytes: 148` only. The `Server: kittenx`
+> check had already been dropped from it because Sigma's `proxy` logsource category does
+> not expose arbitrary response headers, which left the rule matching **any** 404 carrying
+> a 148-byte body. Measured against a 142.7M-document web-scan corpus, that pair returns
+> **175,432 matches in a 30-day window**.
+>
+> The companion Suricata rule below, which *could* inspect the header, is retracted for a
+> separate and more fundamental reason: `Server: kittenx` is VKontakte's web server banner.
+> Of 7,083 observations of that header in 30 days, **6,844 (96.6%) sit on AS47541, VK's own
+> ASN**, and of the 84 hits on the full three-signal triplet, **83 (98.8%) are VK**. The
+> tombstone is a hosting-platform default that two Russian-hosted operator domains inherited,
+> not an operator-deployed fingerprint.
+>
+> **No tightening recovers this.** The only discriminating element was the Server header, and
+> that header is the platform's. Excluding VK leaves nothing to match, and both observed
+> domains are decommissioned. The two domains remain in the campaign IOC feed as domain
+> indicators, which is their correct home.
+>
+> **Coverage cost of the cut: none.** Neither rule ever matched operator-specific behaviour.
+>
+> The campaign report stated this exact failure mode as assumption (b) — *"treated as an
+> operator-deployed fingerprint, not a default from a third-party hosting platform ... if it
+> were a platform-level default ... the cross-domain attribution weight would drop
+> significantly."* That assumption has now been tested and invalidated. The other two
+> operator fingerprints, the custom `X-Admin-Token` header and the Yandex Webmaster ID, were
+> base-rate tested at the same time and both returned zero with a passing control, so they
+> stand.
 
-```yaml
-title: Inkognito Operator KittenX Decommission Tombstone HTTP Response
-id: 7f1a3c8b-2d5e-4b9a-8c0f-1e6d3a7b2c4f
-status: experimental
-description: >-
-  Detects the Inkognito fraud operator's standard HTTP decommission
-  tombstone at the proxy-log layer: an HTTP response with status 404 and
-  a response body of exactly 148 bytes. Applied to retired Inkognito-
-  controlled domains (observed on 00000xtrading.ru and bikaf.ru after
-  decommission). The full signature also includes a distinctive Server
-  header value (kittenx, not a commodity web server) — see the companion
-  Suricata rule for that layer, since standard proxy-log fields do not
-  expose arbitrary response headers. Any domain returning this status/size
-  combination is a candidate for additional Inkognito infrastructure not
-  yet linked to the known brand portfolio.
-references:
-    - https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/
-author: The Hunters Ledger
-date: 2026-05-16
-tags:
-    - attack.resource-development
-    - attack.t1583.001
-    - attack.t1583.004
-    - detection.emerging-threats
-logsource:
-    category: proxy
-detection:
-    selection_kittenx_response:
-        sc-status: 404
-        sc-bytes: 148
-    condition: selection_kittenx_response
-falsepositives:
-    - Any unrelated web server that happens to return exactly a 404 status with a 148-byte response body
-    - Security scanners replaying captured Inkognito HTTP responses in test environments
-level: high
-```
+---
 
 ---
 
@@ -261,21 +246,21 @@ level: high
 
 ### Detection Rules
 
-#### Inkognito KittenX Decommission Tombstone HTTP Response
+#### ~~Inkognito KittenX Decommission Tombstone HTTP Response~~ — RETRACTED 2026-08-21
 
-**Tier:** Detection
-**Robustness:** 3
-**ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1583.004 (Server)
-**Confidence:** HIGH
-**Rationale:** The full 3-signal signature — Server header `kittenx` (not a commodity web server, absent from any public open-source project index) combined with a 404 status and an exact 148-byte Content-Length — is a technique-level chokepoint: it is the operator's own custom tooling fingerprint, confirmed on two independently decommissioned domains, and fires regardless of which domain is being retired. This is the single highest-value pivot rule in the campaign.
-**False Positives:** None known — "kittenx" is not a known commodity web server; the full triplet has not been observed outside Inkognito infrastructure.
-**Blind Spots:** Evaded if the operator changes its decommission tombstone convention (a new Server header value, status, or body size); requires visibility into the HTTP response (plaintext, or TLS-inspecting proxy for HTTPS).
-**Validation:** Replay a capture of a decommissioned-domain response carrying the kittenx tombstone — must alert; an unrelated server's 404 page must NOT fire.
-**Deployment:** Suricata IDS/IPS at perimeter or inline network tap; Zeek complement via http.log.
+> ⛔ **Cut, published SID withdrawn. Do not deploy; remove if already deployed.**
+>
+> This rule matched `Server: kittenx` + status 404 + `Content-Length: 148` and carried
+> **"False Positives: None known"**. That claim was never base-rate tested and is false.
+> `kittenx` is VKontakte's web server banner: 6,844 of 7,083 observations in 30 days sit on
+> VK's own AS47541, and 83 of the 84 full-triplet hits are VK. The rule fires
+> `$EXTERNAL_NET -> $HOME_NET` on `to_client`, so in any subscriber environment it alerts
+> whenever a user loads VK-hosted content that 404s.
+>
+> See the retracted Sigma rule above for the full measurement and the reasoning on why no
+> tightening recovers it.
 
-```suricata
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL Inkognito KittenX Decommission Tombstone HTTP Response (Infrastructure Pivot Indicator)"; flow:established,to_client; http.response_line; content:"404"; http.header; content:"Server: kittenx"; nocase; content:"Content-Length: 148"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:9001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-16, reference https://the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/;)
-```
+---
 
 ### Hunting Rules
 
