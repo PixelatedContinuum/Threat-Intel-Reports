@@ -3381,6 +3381,241 @@
     - type: "filename"
       value: "houselet.exe"
       context: null
+"multivector-ecommerce-rce-toolkit-192-3-1-116":
+  slug: "multivector-ecommerce-rce-toolkit-192-3-1-116"
+  page_url: "/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116/"
+  title: "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign"
+  date: "2026-07-21"
+  severity: "high"
+  feed_url: "/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json"
+  report_url: "/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/"
+  detection_url: "/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections"
+  total: 72
+  untyped: 50
+  counts:
+    domain: 36
+    filename: 5
+    ipv4: 20
+    path: 6
+    sha256: 1
+    url: 4
+  rows:
+    - type: "ipv4"
+      value: "1.13.253.113"
+      context: null
+    - type: "ipv4"
+      value: "192.3.1.116"
+      context: null
+    - type: "ipv4"
+      value: "199.45.155.76"
+      context: null
+    - type: "ipv4"
+      value: "205.210.31.232"
+      context: null
+    - type: "ipv4"
+      value: "21.0.8.191"
+      context: null
+    - type: "ipv4"
+      value: "31.22.111.190"
+      context: "Operator control-source address"
+    - type: "ipv4"
+      value: "34.210.36.7"
+      context: null
+    - type: "ipv4"
+      value: "34.59.254.11"
+      context: null
+    - type: "ipv4"
+      value: "39.104.118.153"
+      context: null
+    - type: "ipv4"
+      value: "39.104.38.237"
+      context: null
+    - type: "ipv4"
+      value: "39.105.40.102"
+      context: null
+    - type: "ipv4"
+      value: "39.108.60.192"
+      context: null
+    - type: "ipv4"
+      value: "39.99.129.123"
+      context: null
+    - type: "ipv4"
+      value: "44.245.20.76"
+      context: null
+    - type: "ipv4"
+      value: "47.110.134.211"
+      context: null
+    - type: "ipv4"
+      value: "47.111.160.102"
+      context: null
+    - type: "ipv4"
+      value: "47.94.128.49"
+      context: null
+    - type: "ipv4"
+      value: "8.141.61.61"
+      context: null
+    - type: "ipv4"
+      value: "8.155.170.217"
+      context: null
+    - type: "ipv4"
+      value: "82.157.119.235"
+      context: null
+    - type: "domain"
+      value: "3czu.cn"
+      context: null
+    - type: "domain"
+      value: "ai-ledger.sodaapp.com.cn"
+      context: null
+    - type: "domain"
+      value: "api.renrendrc.com"
+      context: null
+    - type: "domain"
+      value: "api.zujixiong.cn"
+      context: null
+    - type: "domain"
+      value: "baby-api.coderqiang.com"
+      context: null
+    - type: "domain"
+      value: "baby-cdn.coderqiang.com"
+      context: null
+    - type: "domain"
+      value: "backend-mall.mengchida.com"
+      context: null
+    - type: "domain"
+      value: "backend.mengchida.com"
+      context: null
+    - type: "domain"
+      value: "cdn.footballteam.cn"
+      context: null
+    - type: "domain"
+      value: "ch.qos.logback.core.fileappender"
+      context: "A logging-framework route to a web shell, independent of the JNDI vector."
+    - type: "domain"
+      value: "chengjiastore.cn"
+      context: null
+    - type: "domain"
+      value: "cs-pgcwufmiws.cn-hangzhou.fcapp.run"
+      context: "Attack-traffic relay"
+    - type: "domain"
+      value: "h5.njmaixi.cn"
+      context: null
+    - type: "domain"
+      value: "haimi-file.oss-cn-hangzhou.aliyuncs.com"
+      context: null
+    - type: "domain"
+      value: "hfive.njmaixi.cn"
+      context: null
+    - type: "domain"
+      value: "hiij.hxjyam.com"
+      context: null
+    - type: "domain"
+      value: "hs.zcmzh.com"
+      context: null
+    - type: "domain"
+      value: "jump.hs.zcmzh.com"
+      context: null
+    - type: "domain"
+      value: "m.njmaixi.cn"
+      context: null
+    - type: "domain"
+      value: "mall-api.mengchida.com"
+      context: null
+    - type: "domain"
+      value: "mall.mengchida.com"
+      context: null
+    - type: "domain"
+      value: "manage.zujixiong.cn"
+      context: null
+    - type: "domain"
+      value: "mengchida.com"
+      context: null
+    - type: "domain"
+      value: "merchant.zujixiong.cn"
+      context: null
+    - type: "domain"
+      value: "njmaixi.cn"
+      context: null
+    - type: "domain"
+      value: "open.oppomobile.com"
+      context: null
+    - type: "domain"
+      value: "poc.yml"
+      context: "Textbook gadget chain pointing at the operator's shared RCE-proof listener."
+    - type: "domain"
+      value: "riverbaybuy.com"
+      context: null
+    - type: "domain"
+      value: "u.zujixiong.cn"
+      context: null
+    - type: "domain"
+      value: "vpn932081317.softether.net"
+      context: null
+    - type: "domain"
+      value: "web.51qzp.com"
+      context: null
+    - type: "domain"
+      value: "web.zujixiong.cn"
+      context: null
+    - type: "domain"
+      value: "www.51qzp.com"
+      context: null
+    - type: "domain"
+      value: "www.chengjiastore.cn"
+      context: null
+    - type: "domain"
+      value: "zujixiong.cn"
+      context: null
+    - type: "domain"
+      value: "zxq.3czu.cn"
+      context: null
+    - type: "url"
+      value: "http://192.3.1.116:7777/cmd.jsp"
+      context: null
+    - type: "url"
+      value: "http://192.3.1.116:7777/xstream_rce_success"
+      context: null
+    - type: "url"
+      value: "http://192.3.1.116:9876/rce_confirmed"
+      context: null
+    - type: "url"
+      value: "http://192.3.1.116:9876/yaml_rce_proof"
+      context: null
+    - type: "sha256"
+      value: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      context: null
+    - type: "path"
+      value: "/bin/bash"
+      context: null
+    - type: "path"
+      value: "/root/.hermes"
+      context: null
+    - type: "path"
+      value: "/root/.ssh/authorized_keys"
+      context: null
+    - type: "path"
+      value: "/tmp/cjs_token.txt"
+      context: null
+    - type: "path"
+      value: "/tmp/riverbay_heap.bin"
+      context: null
+    - type: "path"
+      value: "/tmp/tomcat-docbase.7684244892297451797.9001/rce.jsp"
+      context: null
+    - type: "filename"
+      value: "cmd.jsp"
+      context: null
+    - type: "filename"
+      value: "internal_scan.svg"
+      context: null
+    - type: "filename"
+      value: "logback-evil.xml"
+      context: "A logging-framework route to a web shell, independent of the JNDI vector."
+    - type: "filename"
+      value: "logback-rce.xml"
+      context: null
+    - type: "filename"
+      value: "phish.svg"
+      context: null
 "new-files-found-20260408":
   slug: "new-files-found-20260408"
   page_url: "/ioc-feeds/new-files-found-20260408/"

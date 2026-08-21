@@ -56,8 +56,8 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign hashvault.pr
 # ai-agent-frameworks-2026-05-23 (orig sid:9200006)
 #   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
-#   FP: Medium without a destination-IP allowlist for Microsoft's real Bing CDN ranges — legitimate bing.com QUIC connections will also match on SNI alone.
-alert quic $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade (GHOST Kit Backdoor Non-Microsoft Destination)"; quic.sni; content:"bing.com"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500146; rev:1; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
+#   FP: Low as of rev 2. Previously Medium, and in practice worse than that: with no destination constraint the rule matched every legitimate bing.com QUIC...
+alert quic $HOME_NET any -> any [14433,14444] (msg:"THL AI-Agent-Campaign Hysteria v2 QUIC bing.com SNI Masquerade on GHOST Kit Operator Ports"; flow:to_server; quic.sni; content:"bing.com"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500146; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20, reference https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/;)
 # arsenal-237-enc_c2-exe (orig sid:1000001)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   FP: Unlikely; requires a POST to this exact URI path with a JSON content type.
@@ -130,8 +130,8 @@ alert http $HOME_NET any -> 77.110.0.0/16 any (msg:"THL GHOST Cryptojacker Kit D
 # ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100103)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
-#   FP: Any legitimate or unrelated service that happens to use UDP 14433–14444 (uncommon but not impossible); the threshold limits alert volume per source.
-alert udp $HOME_NET any -> any 14433:14444 (msg:"THL GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress - Known Operator Ports"; threshold:type threshold,track by_src,count 5,seconds 60; classtype:trojan-activity; sid:3500023; rev:2; metadata:author The_Hunters_Ledger, date 2026-05-25, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
+#   FP: Any legitimate or unrelated service that happens to use UDP 14433–14444 (uncommon but not impossible); the threshold limits alert volume per source....
+alert udp $HOME_NET any -> $EXTERNAL_NET 14433:14444 (msg:"THL GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress Candidate - Known Operator Ports (Hunt Lead, Corroborate Before Escalating)"; threshold:type threshold,track by_src,count 5,seconds 60; classtype:policy-violation; sid:3500023; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-25, modified 2026-08-20, reference https://the-hunters-ledger.com/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/, signature_severity Minor, tag Backdoor, tag GHOST_kit, tag Hysteria_v2;)
 # ghost-cryptojacker-vova75rus-77.110.96.200 (orig sid:9100108)
 #   TIER: Hunting  |  robustness 1  |  confidence LOW–MODERATE  |  BROAD - triage before alerting
 #   rate-limited

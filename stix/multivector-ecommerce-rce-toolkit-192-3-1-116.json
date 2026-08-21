@@ -1,0 +1,1518 @@
+{
+    "type": "bundle",
+    "id": "bundle--e01f25ce-d8eb-4e9d-95ba-ff6599a6a250",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.468773Z",
+            "modified": "2026-08-20T15:26:38.468773Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--bb76bbaa-0ba4-5f4e-8e5b-345c15f9f636",
+            "value": "192.3.1.116"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--82b5c9d2-fdd7-58a9-836c-e5018dc631a0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.470224Z",
+            "modified": "2026-08-20T15:26:38.470224Z",
+            "name": "ipv4: 192.3.1.116",
+            "description": "Primary operator infrastructure. Port 7777 is a plain Python static HTTP server serving the working directory; it does NOT execute the JSP web shell it hosts. Still live and growing as of 2026-07-21. A hosting-provider takedown request has been filed.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '192.3.1.116']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--3a3c2d7f-c217-54b7-9cb8-04b6327e574a",
+            "value": "31.22.111.190"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--94920c04-9a86-5a62-8977-c5d22b169974",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.474093Z",
+            "modified": "2026-08-20T15:26:38.474093Z",
+            "name": "ipv4: 31.22.111.190",
+            "description": "The address the operator connects FROM to administer 192.3.1.116. Identical SSH_CLIENT and SSH_CONNECTION values observed across two independent environment dumps captured on the host. IMPORTANT: a reverse pivot resolved this address to hostnames following a numbered-node convention on privacy-registered short-TLD domains served through Chinese-market DNS, which is the standard shape of a commercial proxy-subscription service sold into the Chinese consumer market. Under that reading the address is a SHARED, RENTED EGRESS NODE rather than operator-controlled infrastructure. Confidence MODERATE: the reading rests on a naming and registration pattern, not on a service banner or a subscription artifact, and the competing reading that these are simply the operator's own tidily named hosts is weaker but not excluded. Consequences: do NOT block this address, and do NOT use it or its ASN to link future activity to this operator, because reverse-pivoting a shared proxy service returns other customers of that service and every match would be a false link. This is the same co-tenancy trap as a budget-VPS provider template mistaken for an operator link. It remains valid as a victim-side hunting term, since operator traffic genuinely did originate there.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '31.22.111.190']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--12b3023e-364f-5ff2-b9ad-4b81f275311a",
+            "value": "http://192.3.1.116:7777/cmd.jsp"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--06d5107f-750d-5ce8-8cd0-4e5d5d8416dc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.474665Z",
+            "modified": "2026-08-20T15:26:38.474665Z",
+            "name": "url: http://192.3.1.116:7777/cmd.jsp",
+            "description": "A functional generic bash-exec JSP web shell (reads a 'c' HTTP parameter, runs it via /bin/bash -c). DEFINITE that the file exists in the operator's own directory and is downloadable. UNCONFIRMED that it was ever deployed to any victim host. Port 7777 serves this file's source and does not execute it.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://192.3.1.116:7777/cmd.jsp']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--22c6d87b-d22e-5be9-a73a-7f2d44674c43",
+            "value": "http://192.3.1.116:7777/xstream_rce_success"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--56414e6a-3317-5fcc-b961-973e3dabdf2f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.475486Z",
+            "modified": "2026-08-20T15:26:38.475486Z",
+            "name": "url: http://192.3.1.116:7777/xstream_rce_success",
+            "description": "Never observed hit across approximately 17,000 lines of the operator's own port-7777 access log. MODERATE confidence the callback did not fire; the log window begins roughly 68-76 minutes after the engagement concluded, so an earlier hit cannot be ruled out.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://192.3.1.116:7777/xstream_rce_success']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--51c39a22-63ed-5796-8db9-bd86c77af22c",
+            "value": "http://192.3.1.116:9876/rce_confirmed"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2e5b54f3-d71f-5fbf-a04b-8fe7045049ed",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.476073Z",
+            "modified": "2026-08-20T15:26:38.476073Z",
+            "name": "url: http://192.3.1.116:9876/rce_confirmed",
+            "description": "No comprehensive port-9876 access log exists in the reviewed corpus, so this callback's outcome is fully open. Both logged LDAP engagements stalled at BindResponse without a SearchRequest.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://192.3.1.116:9876/rce_confirmed']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--04c5d836-6afd-565a-9935-2e0b78446bd7",
+            "value": "http://192.3.1.116:9876/yaml_rce_proof"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--46efe1f1-e9f8-5c7b-ad24-8a7c707dff63",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.476712Z",
+            "modified": "2026-08-20T15:26:38.476712Z",
+            "name": "url: http://192.3.1.116:9876/yaml_rce_proof",
+            "description": "Embedded in poc.yml, a textbook ScriptEngineManager + URLClassLoader gadget chain of the CVE-2022-1471 family.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://192.3.1.116:9876/yaml_rce_proof']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--07abb0ae-3ecb-5e79-9a76-1aa5487387ff",
+            "value": "ldap://192.3.1.116:1389/cn=exploit"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--62043009-8e87-55d8-8f03-789ef22953e2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.477352Z",
+            "modified": "2026-08-20T15:26:38.477352Z",
+            "name": "url: ldap://192.3.1.116:1389/cn=exploit",
+            "description": "The callback target of the crafted Logback insertFromJNDI payload (CVE-2021-42550). Backed by ldap_server.py, ldap_server_v2.py and setup_jndi.sh in the operator's directory.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'ldap://192.3.1.116:1389/cn=exploit']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--86c6a01d-539d-5373-af78-e53a2aba528a",
+            "value": "vpn932081317.softether.net"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a649bf3e-3a5a-581a-afae-d6dfa51eba87",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.477858Z",
+            "modified": "2026-08-20T15:26:38.477858Z",
+            "name": "domain: vpn932081317.softether.net",
+            "description": "SoftEther DDNS name for a VPN the operator self-hosts on 192.3.1.116; still resolves to that address. Operator OPSEC infrastructure. Note the parent domain softether.net is a legitimate DDNS service - only this specific hostname is the indicator.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'vpn932081317.softether.net']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--a9e5cfd9-3aba-58d4-904c-76f9631be3a4",
+            "value": "cs-pgcwufmiws.cn-hangzhou.fcapp.run"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a6103e7f-42b8-5e2d-898a-2a553272a023",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.478611Z",
+            "modified": "2026-08-20T15:26:38.478611Z",
+            "name": "domain: cs-pgcwufmiws.cn-hangzhou.fcapp.run",
+            "description": "Legitimate Alibaba Cloud serverless endpoint reused by the operator as an attack relay. Confirmed across two independent attack types against the same target: UNION-based SQL injection and login/SMS/register probing. Used to obscure source IP or route around IP-based rate limiting.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = 'cs-pgcwufmiws.cn-hangzhou.fcapp.run']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_score": 95
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a8ff77ad-5847-5fb0-8b5e-bca5765b43b7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.479883Z",
+            "modified": "2026-08-20T15:26:38.479883Z",
+            "name": "EXPL_Logback_InsertFromJNDI_CVE_2021_42550",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Logback insertFromJNDI RCE (CVE-2021-42550)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EXPL_Logback_InsertFromJNDI_CVE_2021_42550 {\n   meta:\n      description = \"Detects a Logback XML configuration using insertFromJNDI to trigger a JNDI lookup against an attacker-controlled ldap:// or rmi:// URI, the mechanism behind CVE-2021-42550. The insertFromJNDI element paired with a JNDI scheme in an env-entry-name attribute is not a pattern seen in legitimate logging configuration.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Logback insertFromJNDI RCE (CVE-2021-42550)\"\n      malware_type = \"Exploitation payload -- Java logging-framework RCE\"\n      id = \"ace3c6c6-23e3-500a-8ade-a75d8209a06b\"\n   strings:\n      $config = \"<configuration\" ascii\n      $jndi = \"insertFromJNDI\" ascii\n      $ldap = \"env-entry-name=\\\"ldap://\" ascii\n      $rmi = \"env-entry-name=\\\"rmi://\" ascii\n   condition:\n      filesize < 50KB and\n      $config and $jndi and\n      1 of ($ldap, $rmi)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--89c7d7bb-1271-57bc-a25a-1e811fab2190",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.480043Z",
+            "modified": "2026-08-20T15:26:38.480043Z",
+            "name": "EXPL_Logback_FileAppender_JSP_ArbitraryWrite",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Logback FileAppender Arbitrary File Write\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EXPL_Logback_FileAppender_JSP_ArbitraryWrite {\n   meta:\n      description = \"Detects a Logback XML configuration defining a FileAppender whose file destination ends in .jsp, an arbitrary-file-write technique that abuses a legitimate logging framework to drop a JSP web shell rather than using a conventional upload vector.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Logback FileAppender Arbitrary File Write\"\n      malware_type = \"Exploitation payload -- Java logging-framework arbitrary file write\"\n      id = \"37a281e7-61d6-5287-81af-9a6bcfd3a5b5\"\n   strings:\n      $config = \"<configuration\" ascii\n      $appender = \"ch.qos.logback.core.FileAppender\" ascii\n      $jsp_ext = /<file>[^<]{1,200}\\.jsp<\\/file>/ ascii\n   condition:\n      filesize < 50KB and\n      $config and $appender and $jsp_ext\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b20fbc46-118a-5cbc-b033-443b3f439bf3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.480165Z",
+            "modified": "2026-08-20T15:26:38.480165Z",
+            "name": "EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: SnakeYAML Deserialization Gadget (CVE-2022-1471 family)\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family {\n   meta:\n      description = \"Detects a SnakeYAML unsafe-deserialization payload using the classic javax.script.ScriptEngineManager plus java.net.URLClassLoader gadget chain (the CVE-2022-1471 family) to achieve remote code execution from an untrusted YAML document.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"SnakeYAML Deserialization Gadget (CVE-2022-1471 family)\"\n      malware_type = \"Exploitation payload -- Java deserialization RCE\"\n      id = \"914b2554-4595-586e-92e9-b29f6a9ec60e\"\n   strings:\n      $x1 = \"!!javax.script.ScriptEngineManager\" ascii\n      $x2 = \"!!java.net.URLClassLoader\" ascii\n      $x3 = \"!!java.net.URL\" ascii\n   condition:\n      filesize < 20KB and\n      all of ($x*)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--bea9eb10-5d1d-5d01-a246-3d6595a4858c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.480326Z",
+            "modified": "2026-08-20T15:26:38.480326Z",
+            "name": "WEBSHELL_Generic_JSP_Bash_Exec_Parameter",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: Generic JSP Web Shell\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {\n   meta:\n      description = \"Detects a minimal JSP web shell that reads a single HTTP request parameter and passes it directly to /bin/bash -c via Runtime.getRuntime().exec. The parameter name is kept generic since it varies by deployment; the proximity of getParameter to a bash -c exec call is the durable indicator of a functioning command-execution shell rather than legitimate application code.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"Generic JSP Web Shell\"\n      malware_type = \"Web shell\"\n      id = \"61eeb62a-80ed-5a4d-b709-0ac11517a820\"\n   strings:\n      $getparam = /request\\.getParameter\\([^)]{0,40}\\)/ ascii\n      $exec = \"Runtime.getRuntime().exec\" ascii\n      $bash = \"/bin/bash\" ascii\n      $dashc = \"\\\"-c\\\"\" ascii\n   condition:\n      filesize < 30KB and\n      $getparam and $exec and $bash and $dashc\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ad3e7db8-c7d3-5139-9439-d8a7483d40ae",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.480455Z",
+            "modified": "2026-08-20T15:26:38.480455Z",
+            "name": "EXPL_XXE_SSRF_Cloud_Metadata_Internal_Service_Probe",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "/*\n   Yara Rule Set\n   Identifier: XXE-to-SSRF Internal/Cloud-Metadata Probe\n   Author: The Hunters Ledger\n   Source: https://the-hunters-ledger.com/\n   License: CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\n*/\n\nrule EXPL_XXE_SSRF_Cloud_Metadata_Internal_Service_Probe {\n   meta:\n      description = \"Detects an XML or SVG document declaring an external entity (XXE) that resolves to the cloud instance metadata service or a well-known internal service port, a server-side request forgery technique used to pivot from a file-upload or XML-parsing feature into internal-network and cloud-credential reconnaissance.\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\"\n      date = \"2026-07-21\"\n      family = \"XXE-to-SSRF Internal/Cloud-Metadata Probe\"\n      malware_type = \"Exploitation payload -- XML External Entity SSRF\"\n      id = \"c643375b-9567-5b36-abf2-8db9880f4f5b\"\n   strings:\n      $entity = \"<!ENTITY\" ascii\n      $system = \"SYSTEM\" ascii\n      $meta = \"169.254.169.254\" ascii\n      $redis = \"127.0.0.1:6379\" ascii\n      $mysql = \"127.0.0.1:3306\" ascii\n      $actuator = \":8080/actuator\" ascii\n   condition:\n      filesize < 20KB and\n      $entity and $system and\n      1 of ($meta, $redis, $mysql, $actuator)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9f555ca7-066b-538e-b83e-ad9276e68633",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.480567Z",
+            "modified": "2026-08-20T15:26:38.480567Z",
+            "name": "External HTTP Request to Jolokia JMX Write Endpoint Targeting Logging Configuration",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: External HTTP Request to Jolokia JMX Write Endpoint Targeting Logging Configuration\nid: 00a7fbb6-7f52-4153-96cd-41042f0090eb\nname: jolokia_logger_write_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an external HTTP request to a Jolokia\n    (JMX-over-HTTP) write endpoint targeting a Logger or logging-level\n    attribute. Jolokia exposes JMX management operations over plain HTTP, and a\n    write operation against logging configuration lets a remote caller raise a\n    target application's log verbosity to manufacture sensitive data in the\n    log file for later retrieval. Paired below with a rule for the follow-on\n    actuator logfile read.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.initial-access\n    - attack.t1190\nlogsource:\n    category: webserver\ndetection:\n    selection_endpoint:\n        cs-uri-stem|contains: '/jolokia/write/'\n    selection_target:\n        cs-uri|contains:\n            - 'Logger'\n            - 'logging.level'\n    condition: selection_endpoint and selection_target\nfalsepositives:\n    - >-\n        Authorized internal application-performance-monitoring tooling that\n        manages Jolokia over HTTP from a trusted management network. Reviewed\n        only in combination with the follow-on logfile-read rule via the\n        correlation below.\nlevel: medium\n---\ntitle: External HTTP GET of the Spring Boot Actuator Log File Endpoint\nid: 9e4e2540-95c5-44a6-a433-add2bcba903f\nname: actuator_logfile_read_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an external HTTP GET of the Spring\n    Boot Actuator logfile endpoint. Reading the live application log is\n    unremarkable in isolation, since operations teams do this routinely, but\n    paired with a preceding Jolokia logger-level write it is the retrieval\n    step of a log-manufacturing technique that turns verbose request and\n    response tracing into a harvestable data source.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1213\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem|contains: '/actuator/logfile'\n    selection_success:\n        sc-status: 200\n    condition: selection and selection_success\nfalsepositives:\n    - >-\n        Authorized operations or monitoring staff retrieving the log file from\n        an approved management network. Not alerting on its own; reviewed\n        only in combination with the preceding logger-level-write event via\n        the correlation rule.\nlevel: informational\n---\ntitle: Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read\nid: 9df4b43e-0124-4eff-b32c-b6cfbaddf527\nstatus: experimental\ndescription: >-\n    Fires when the same external source both writes a Jolokia logger or\n    logging-level attribute, raising verbosity to DEBUG or FULL, and retrieves\n    the actuator logfile within a short window. Neither event alone is\n    unusual; the sequence is the signature of an operator manufacturing\n    sensitive data in application logs and then reading it back out, rather\n    than a routine operations workflow.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1213\n    - attack.initial-access\n    - attack.t1190\ncorrelation:\n    type: temporal_ordered\n    rules:\n        - jolokia_logger_write_base\n        - actuator_logfile_read_base\n    group-by:\n        - c-ip\n    timespan: 15m\nfalsepositives:\n    - >-\n        A single operations engineer using Jolokia for legitimate live\n        debugging from the same source IP as their log review, within the\n        same window. Uncommon outside a real incident-response or\n        troubleshooting session.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1d1e7db6-307d-5838-ab0b-48cda954f1cc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.480676Z",
+            "modified": "2026-08-20T15:26:38.480676Z",
+            "name": "Unauthenticated External Access to an Alibaba Druid Monitoring Console",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Unauthenticated External Access to an Alibaba Druid Monitoring Console\nid: b2857306-3872-446e-a6cf-f093e48e3252\nstatus: experimental\ndescription: >-\n    Detects a successful external request to an Alibaba Druid StatViewServlet\n    monitoring path. An unauthenticated Druid console exposes the production\n    JDBC connection string, full database schema and executed SQL statement\n    history to anyone who can reach it; a single request returning 200 on\n    these paths from outside the management network is a real\n    information-disclosure event regardless of who sent it. Frequently served\n    on a non-standard port, so this rule does not restrict to 80 or 443.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.reconnaissance\n    - attack.t1596.005\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/druid/index.html'\n            - '/druid/basic.json'\n            - '/druid/sql.json'\n            - '/druid/weburi.json'\n            - '/druid/datasource.json'\n    selection_success:\n        sc-status: 200\n    condition: selection_path and selection_success\nfalsepositives:\n    - >-\n        Authorized internal monitoring dashboards or an approved\n        attack-surface-management scan intentionally checking for this\n        exposure. Any external hit on these paths still warrants confirming\n        the console is properly restricted.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--6ea2f760-5ad4-5e90-b7f8-2c2adf34e3d9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.480786Z",
+            "modified": "2026-08-20T15:26:38.480786Z",
+            "name": "Successful External Retrieval of a Spring Boot Actuator Heap Dump",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Successful External Retrieval of a Spring Boot Actuator Heap Dump\nid: f872347d-00cd-463e-9817-96d4ef96f205\nstatus: experimental\ndescription: >-\n    Detects a successful, large-bodied external response from the Spring Boot\n    Actuator heapdump endpoint, or a Jolokia HotSpotDiagnostic dumpHeap\n    invocation. A heap dump commonly contains in-memory credentials, session\n    tokens and business data; this rule keys on confirmed success, a 200\n    status with a large response body, rather than the request alone, since\n    the request is trivially made and often blocked by an auth filter.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.collection\n    - attack.t1005\n    - attack.credential-access\n    - attack.t1552.001\nlogsource:\n    category: webserver\ndetection:\n    selection_path:\n        cs-uri-stem|contains:\n            - '/actuator/heapdump'\n            - '/heapdump'\n    selection_jolokia_dumpheap:\n        cs-uri|contains: 'HotSpotDiagnostic'\n    selection_success:\n        sc-status: 200\n    selection_large_body:\n        sc-bytes|gte: 1000000\n    condition: (selection_path or selection_jolokia_dumpheap) and selection_success and selection_large_body\nfalsepositives:\n    - >-\n        Authorized developer or support engineer pulling a heap dump for\n        legitimate memory-leak diagnosis from an approved internal source.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7e7b9e6a-3a9f-5dcf-9c50-3b50c0b4ef02",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.480924Z",
+            "modified": "2026-08-20T15:26:38.480924Z",
+            "name": "HTTP POST to a Password-Reset or Verification-Code Endpoint",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: HTTP POST to a Password-Reset or Verification-Code Endpoint\nid: fec7253f-ea82-48f6-97fb-b8ca61c293f8\nname: password_reset_endpoint_request_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): a single POST to a password-reset or\n    SMS/OTP verification-code endpoint. Ordinary and expected in isolation.\n    Paired below with a correlation that flags an abnormal volume of distinct\n    requests against the same endpoint in a short window, the shape of a\n    4-digit verification-code brute force run against one fixed context\n    token, as opposed to a user's occasional retry.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.credential-access\n    - attack.t1110.001\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-method: POST\n        cs-uri-stem|contains:\n            - 'restPassword'\n            - 'forgetPwd'\n    condition: selection\nfalsepositives:\n    - >-\n        A user repeatedly retrying a forgotten-password flow. Not alerting on\n        its own; reviewed only through the volume threshold in the\n        correlation rule below.\nlevel: informational\n---\ntitle: High-Volume Distinct Requests Against a Password-Reset or Verification-Code Endpoint\nid: 275a038d-07da-4c8c-9db0-fdf3f3a7106d\nstatus: experimental\ndescription: >-\n    Fires when 50 or more distinct query strings hit the same password-reset\n    or verification-code endpoint from one source within 10 minutes, the\n    volumetric shape of exhausting a short numeric code space such as all\n    10,000 four-digit combinations. This rule cannot confirm the ideal\n    discriminator, a constant verification-context token paired with only the\n    numeric code changing, because standard web-access-log telemetry does not\n    expose individual query parameters by name; volume against a fixed\n    endpoint is the available proxy. A defender with parsed API-gateway or WAF\n    logs exposing the context-token parameter directly should key on one\n    constant token value with many distinct code values instead, for\n    materially higher precision.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.credential-access\n    - attack.t1110.001\ncorrelation:\n    type: value_count\n    rules:\n        - password_reset_endpoint_request_base\n    group-by:\n        - c-ip\n        - cs-uri-stem\n    timespan: 10m\n    condition:\n        field: cs-uri-query\n        gte: 50\nfalsepositives:\n    - >-\n        A misbehaving client retry loop or a load-testing script exercising\n        the same endpoint. Uncommon in normal user behavior at this volume.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b3aec269-52f3-5ee8-942d-e4b192b09d13",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.481034Z",
+            "modified": "2026-08-20T15:26:38.481034Z",
+            "name": "Application Account Registration Request",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Application Account Registration Request\nid: e346cdb5-37c0-4bda-a4ad-2f36fe22c0e2\nname: account_registration_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an HTTP request to an account\n    registration or signup endpoint. Ordinary and expected on any application\n    with self-service signup. Paired below with a rule for sensitive\n    administrative route probing and a correlation that flags the same\n    source registering an account and then probing administrative routes\n    within minutes, a standing technique observed reused across multiple\n    targets: register a throwaway account, then use its token to walk admin,\n    config and system-information routes.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.resource-development\n    - attack.t1585\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-method: POST\n        cs-uri-stem|contains:\n            - 'register'\n            - 'signup'\n    condition: selection\nfalsepositives:\n    - >-\n        Ordinary customer or user self-service account creation. Not\n        alerting on its own; reviewed only in combination with the\n        admin-route-probe rule via the correlation below.\nlevel: informational\n---\ntitle: HTTP Request to a Sensitive Administrative or System-Information Route\nid: bdad563c-44c7-45f1-9a39-d8a1d31081bf\nname: sensitive_admin_route_probe_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an HTTP request to an\n    administrative, configuration, debug or system-information API route.\n    Legitimate admin users browse these routes routinely. Paired above with\n    the account registration rule and a correlation that flags the same\n    source registering a new account and then probing these routes within\n    minutes, since administrative routes should not be the first thing a\n    brand-new account touches.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.initial-access\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1078\nlogsource:\n    category: webserver\ndetection:\n    selection:\n        cs-uri-stem|contains:\n            - '/api/admin'\n            - '/api/users'\n            - '/api/config'\n            - '/api/system/info'\n            - '/api/debug'\n    condition: selection\nfalsepositives:\n    - >-\n        A legitimate administrator's normal use of the application's own\n        admin panel. Not alerting on its own; reviewed only in combination\n        with the preceding registration event via the correlation rule.\nlevel: informational\n---\ntitle: Newly Registered Account Probing Administrative Routes Within Minutes\nid: bd3e7b1b-7a0c-4713-8f2b-8dcece54d8de\nstatus: experimental\ndescription: >-\n    Fires when the same source registers an application account and then\n    requests an administrative, configuration, debug or system-information\n    route within 15 minutes. A brand-new self-service account has no\n    legitimate reason to immediately probe administrative surfaces; this\n    sequence was confirmed reused across multiple unrelated target platforms\n    by the same operator, making it a standing technique rather than a\n    one-off.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.resource-development\n    - attack.t1585\n    - attack.initial-access\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.t1078\ncorrelation:\n    type: temporal_ordered\n    rules:\n        - account_registration_base\n        - sensitive_admin_route_probe_base\n    group-by:\n        - c-ip\n    timespan: 15m\nfalsepositives:\n    - >-\n        A legitimate new employee or partner account being set up and then\n        immediately granted admin access by design. Uncommon for a genuine\n        self-service signup flow.\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9a3ae82d-cc2e-5ad1-b262-d82e29430aae",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.481146Z",
+            "modified": "2026-08-20T15:26:38.481146Z",
+            "name": "External Connection Attempt to a Service-Discovery-Profile Port",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: External Connection Attempt to a Service-Discovery-Profile Port\nid: a3f1f3b3-98a1-402a-a979-bce509a2bfb1\nname: firewall_scan_target_port_base\nstatus: experimental\ndescription: >-\n    Base rule (not alerting on its own): an inbound connection attempt on one\n    of a fixed 14-port profile this operator scans across multiple targets:\n    22, 80, 443, 3306, 6379, 8080, 8443, 8888, 9000, 9001, 9002, 9090, 8848\n    and 8157, a mix of standard admin, database and cache ports plus the\n    Nacos and Druid management consoles this operator specifically exploits\n    elsewhere. Paired below with a correlation that flags a single source\n    touching many distinct ports from this profile within a short window.\n    Connections the firewall rejected are excluded: an internet-facing\n    address is scanned continuously as a background condition, so counting\n    dropped packets makes the paired correlation fire indefinitely on traffic\n    that never reached a service. Restricting to connections the firewall\n    permitted changes the signal from \"someone scanned us\" to \"someone\n    scanned us and something answered\", which is the actionable form.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\nmodified: '2026-07-30'\ntags:\n    - attack.discovery\n    - attack.t1046\nlogsource:\n    category: firewall\ndetection:\n    selection:\n        dst_port:\n            - 22\n            - 80\n            - 443\n            - 3306\n            - 6379\n            - 8080\n            - 8443\n            - 8888\n            - 9000\n            - 9001\n            - 9002\n            - 9090\n            - 8848\n            - 8157\n    filter_rejected:\n        action:\n            - 'block'\n            - 'blocked'\n            - 'deny'\n            - 'denied'\n            - 'drop'\n            - 'dropped'\n            - 'reject'\n    condition: selection and not filter_rejected\nfalsepositives:\n    - >-\n        Routine internal vulnerability scanning or asset-discovery tooling\n        covering the same common service ports. Not alerting on its own;\n        reviewed only through the distinct-port-count threshold in the\n        correlation rule below.\nlevel: informational\n---\ntitle: Single Source Touching Many Distinct Ports From a Fixed Service-Discovery Profile\nid: 3e5e5239-e952-41ef-a287-05ab2a6301fd\nstatus: experimental\ndescription: >-\n    Fires when one source touches 8 or more of the 14 profiled ports within 5\n    minutes, an aggressive, unstealthy service-discovery sweep rather than\n    incidental traffic on one or two of these common ports. Low\n    sophistication and easy to detect; useful as an early tripwire rather\n    than a high-confidence standalone alert, since the underlying ports are\n    also touched individually by ordinary traffic and legitimate scanning.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/\nauthor: The Hunters Ledger\ndate: '2026-07-21'\ntags:\n    - attack.discovery\n    - attack.t1046\ncorrelation:\n    type: value_count\n    rules:\n        - firewall_scan_target_port_base\n    group-by:\n        - src_ip\n    timespan: 5m\n    condition:\n        field: dst_port\n        gte: 8\nfalsepositives:\n    - >-\n        An authorized internal vulnerability scanner or asset-inventory tool\n        covering the same port profile. Confirm against known scanner IP\n        ranges before treating as hostile.\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9373b70c-898e-5411-96d7-554bd657351e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.481296Z",
+            "modified": "2026-08-20T15:26:38.481296Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1099] (msg:\"THL DETECT MultiVector-192.3.1.116 LDAP Anonymous BindRequest to Non-Standard Directory Port (JNDI Callback Indicator)\"; flow:established,to_server; content:\"|30 0c 02 01 01 60 07 02 01 03 04 00 80 00|\"; classtype:attempted-admin; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--abd8d89c-1f8c-5744-897b-031fdf9f3bc9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.481427Z",
+            "modified": "2026-08-20T15:26:38.481427Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 SnakeYAML ScriptEngineManager Gadget Chain in HTTP Request Body (CVE-2022-1471 Family)\"; flow:established,to_server; http.request_body; content:\"!!javax.script.ScriptEngineManager\"; content:\"!!java.net.URLClassLoader\"; classtype:attempted-user; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7dc25ed0-4849-59a7-9adc-f9d42edc2938",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.481571Z",
+            "modified": "2026-08-20T15:26:38.481571Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 XXE Entity Declaration Targeting Cloud Metadata in Upload\"; flow:established,to_server; http.request_body; content:\"<!ENTITY\"; content:\"SYSTEM\"; content:\"169.254.169.254\"; classtype:attempted-admin; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2fc688ab-36d0-5473-90c7-653371dcbc65",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.481728Z",
+            "modified": "2026-08-20T15:26:38.481728Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP URI\"; flow:established,to_server; http.uri; content:\"gopher://\"; classtype:attempted-admin; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--8f3b5bd9-4f47-5cab-b3f0-af4cfeda6be3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.481835Z",
+            "modified": "2026-08-20T15:26:38.481835Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body\"; flow:established,to_server; http.request_body; content:\"gopher://\"; classtype:attempted-admin; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--4c6596a7-a60a-5e48-b037-96280be453ee",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.481943Z",
+            "modified": "2026-08-20T15:26:38.481943Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 SSRF-to-Redis CONFIG/BGSAVE Command Sequence via HTTP (SSH Key Write Chain)\"; flow:established,to_server; http.request_body; content:\"CONFIG SET dir\"; content:\"BGSAVE\"; classtype:attempted-admin; sid:1000006; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2766abc4-d6b2-5ea7-a1d7-74a33cdfd757",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.48205Z",
+            "modified": "2026-08-20T15:26:38.48205Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Request (Flowbits Setter -- pairs with sid:1000008)\"; flow:established,to_server; http.uri; content:\"/eureka/apps/delta\"; flowbits:set,thl.mvec.eureka.delta; flowbits:noalert; classtype:trojan-activity; sid:1000007; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)\nalert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Eureka Apps-Delta Response Containing XStream Gadget Markers (requires flowbits setter sid:1000007)\"; flow:established,to_client; flowbits:isset,thl.mvec.eureka.delta; http.response_body; content:\"java.lang.ProcessBuilder\"; classtype:trojan-activity; sid:1000008; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--0bd7d402-4d92-5ea3-a40e-93158c5f5690",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.482158Z",
+            "modified": "2026-08-20T15:26:38.482158Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 JWT alg-none Authentication Bypass Attempt (Forged Token Header)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 JWT alg-none Authentication Bypass Attempt (Forged Token Header)\"; flow:established,to_server; http.header; content:\"Bearer eyJhbGciOiJub25lIn0\"; classtype:attempted-admin; sid:1000009; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--9a79af54-9680-506d-9693-c2a35c86bc5a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.482266Z",
+            "modified": "2026-08-20T15:26:38.482266Z",
+            "name": "THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Alibaba Druid Console Path Request (Flowbits Setter -- pairs with sid:1000011)\"; flow:established,to_server; http.uri; content:\"/druid/\"; flowbits:set,thl.mvec.druid.uri; flowbits:noalert; classtype:attempted-recon; sid:1000010; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)\nalert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT MultiVector-192.3.1.116 Unauthenticated External Access to Alibaba Druid Monitoring Console (requires flowbits setter sid:1000010)\"; flow:established,to_client; flowbits:isset,thl.mvec.druid.uri; http.stat_code; content:\"200\"; http.response_body; content:\"JavaClassPath\"; classtype:attempted-recon; sid:1000011; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--18ec5594-a2ee-512b-a1bc-62fa09d75cd4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.482376Z",
+            "modified": "2026-08-20T15:26:38.482376Z",
+            "name": "THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (restPassword Verification-Code Brute-Force Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (restPassword Verification-Code Brute-Force Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"restPassword\"; nocase; threshold:type threshold,track by_src,count 50,seconds 600; classtype:attempted-admin; sid:1000012; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ece15069-8cc4-5ec6-b3b1-49e6460e72c8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.482485Z",
+            "modified": "2026-08-20T15:26:38.482485Z",
+            "name": "THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HOME_NET any (msg:\"THL HUNT MultiVector-192.3.1.116 Password-Reset Endpoint POST Burst (forgetPwd Verification-Code Brute-Force Indicator)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"forgetPwd\"; nocase; threshold:type threshold,track by_src,count 50,seconds 600; classtype:attempted-admin; sid:1000013; rev:2; metadata:author The_Hunters_Ledger, date 2026-07-21, reference https://the-hunters-ledger.com/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-07-21T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--4f83db55-e9f1-5071-aef3-ab98216b533a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.482609Z",
+            "modified": "2026-08-20T15:26:38.482609Z",
+            "name": "Vulnerability Scanning",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1595/002",
+                    "external_id": "T1595.002"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--7117772d-e0a9-526c-9a08-e1392a460b46",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.482768Z",
+            "modified": "2026-08-20T15:26:38.482768Z",
+            "name": "Scan Databases",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1596/005",
+                    "external_id": "T1596.005"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--68bc088a-0332-5331-b5b5-fc091f7b4673",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.482893Z",
+            "modified": "2026-08-20T15:26:38.482893Z",
+            "name": "Search Victim-Owned Websites",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1594",
+                    "external_id": "T1594"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--5b7a06ed-32c6-5260-95a8-8e82d3f41f1f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.48301Z",
+            "modified": "2026-08-20T15:26:38.48301Z",
+            "name": "Virtual Private Server",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1583/003",
+                    "external_id": "T1583.003"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--0876da5f-998d-56c9-bcbe-39e02e92a674",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.483126Z",
+            "modified": "2026-08-20T15:26:38.483126Z",
+            "name": "Web Services",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1583/006",
+                    "external_id": "T1583.006"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--4c5b0524-2a19-5f54-8fae-3dbc26269ae0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.483276Z",
+            "modified": "2026-08-20T15:26:38.483276Z",
+            "name": "Establish Accounts",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1585",
+                    "external_id": "T1585"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--39531dba-2ec0-5d58-b6b9-b3d2ae9ea5dd",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.483422Z",
+            "modified": "2026-08-20T15:26:38.483422Z",
+            "name": "Upload Malware",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1608/001",
+                    "external_id": "T1608.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.483535Z",
+            "modified": "2026-08-20T15:26:38.483535Z",
+            "name": "Exploit Public-Facing Application",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1190",
+                    "external_id": "T1190"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--856a360d-8aca-55ff-949d-fee64905d0a8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.483647Z",
+            "modified": "2026-08-20T15:26:38.483647Z",
+            "name": "Valid Accounts",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1078",
+                    "external_id": "T1078"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--89e07510-9fa4-50e5-96f7-ecd69827cb4d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.483762Z",
+            "modified": "2026-08-20T15:26:38.483762Z",
+            "name": "Phishing",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1566",
+                    "external_id": "T1566"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--73364e03-8914-541e-a33c-877b656c37e4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.483921Z",
+            "modified": "2026-08-20T15:26:38.483921Z",
+            "name": "Unix Shell",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1059/004",
+                    "external_id": "T1059.004"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--99faa775-7366-5b35-9527-17f7643bc506",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.484047Z",
+            "modified": "2026-08-20T15:26:38.484047Z",
+            "name": "Python",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1059/006",
+                    "external_id": "T1059.006"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--fd8dd968-9ef8-5d44-9278-54e070789645",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.484161Z",
+            "modified": "2026-08-20T15:26:38.484161Z",
+            "name": "Web Shell",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1505/003",
+                    "external_id": "T1505.003"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--0d14abc8-552e-578f-b93a-7fddab296376",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.484274Z",
+            "modified": "2026-08-20T15:26:38.484274Z",
+            "name": "SSH Authorized Keys",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1098/004",
+                    "external_id": "T1098.004"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--655489a2-5d78-575d-adcf-cc303e355763",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.484435Z",
+            "modified": "2026-08-20T15:26:38.484435Z",
+            "name": "External Proxy",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1090/002",
+                    "external_id": "T1090.002"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--81ac1dd0-a8ac-50ba-bd1a-cec2886340d5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.484552Z",
+            "modified": "2026-08-20T15:26:38.484552Z",
+            "name": "Protocol Tunneling",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1572",
+                    "external_id": "T1572"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--27b5f1a3-b9bd-5402-b20a-e08c9893f21f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.484702Z",
+            "modified": "2026-08-20T15:26:38.484702Z",
+            "name": "Masquerading",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1036",
+                    "external_id": "T1036"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--e143cf40-c9b0-5118-8096-34d60698c27b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.484814Z",
+            "modified": "2026-08-20T15:26:38.484814Z",
+            "name": "Password Guessing",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1110/001",
+                    "external_id": "T1110.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--dbdc0ff5-a0c3-52de-8a5b-d39dc834a1f9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.484927Z",
+            "modified": "2026-08-20T15:26:38.484927Z",
+            "name": "Password Spraying",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1110/003",
+                    "external_id": "T1110.003"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--1076c468-8982-548b-9292-726a22f83ecb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.485039Z",
+            "modified": "2026-08-20T15:26:38.485039Z",
+            "name": "Credentials In Files",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1552/001",
+                    "external_id": "T1552.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--ab051490-2415-5435-8760-f0735c0314bc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.485152Z",
+            "modified": "2026-08-20T15:26:38.485152Z",
+            "name": "Private Keys",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1552/004",
+                    "external_id": "T1552.004"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--be0beb0c-2499-5178-a012-309e486ef121",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.485275Z",
+            "modified": "2026-08-20T15:26:38.485275Z",
+            "name": "Cloud Instance Metadata API",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1552/005",
+                    "external_id": "T1552.005"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--cf58aebb-15dc-5973-bd33-f2dc67782e5b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.48539Z",
+            "modified": "2026-08-20T15:26:38.48539Z",
+            "name": "Web Cookies",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1606/001",
+                    "external_id": "T1606.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--4cbca60b-20d4-5fd7-8e70-29e9475fa89f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.485523Z",
+            "modified": "2026-08-20T15:26:38.485523Z",
+            "name": "Network Service Discovery",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1046",
+                    "external_id": "T1046"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--4305a0dc-35c1-52ba-9aa7-6d520eda0927",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.485642Z",
+            "modified": "2026-08-20T15:26:38.485642Z",
+            "name": "Software Discovery",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1518",
+                    "external_id": "T1518"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--e42939d6-6332-5a6c-8dac-6195c79081bc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.485769Z",
+            "modified": "2026-08-20T15:26:38.485769Z",
+            "name": "Data from Information Repositories",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1213",
+                    "external_id": "T1213"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--d6b8aa8c-cfd9-5f42-a8ac-2573005abb2f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.485941Z",
+            "modified": "2026-08-20T15:26:38.485941Z",
+            "name": "Automated Collection",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1119",
+                    "external_id": "T1119"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--85a49140-85ae-5130-8b39-bf9a5e79df72",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.486053Z",
+            "modified": "2026-08-20T15:26:38.486053Z",
+            "name": "Data from Local System",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1005",
+                    "external_id": "T1005"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--b1f2e4be-8bd7-50f4-9b12-8ff5a814d239",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.486166Z",
+            "modified": "2026-08-20T15:26:38.486166Z",
+            "name": "Web Protocols",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1071/001",
+                    "external_id": "T1071.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--5f44eb71-9380-5f9d-9c56-245d2f120e5b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.486278Z",
+            "modified": "2026-08-20T15:26:38.486278Z",
+            "name": "Bidirectional Communication",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1102/002",
+                    "external_id": "T1102.002"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--44bf0bb6-4445-5791-9daa-2c0a12978bf7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.486389Z",
+            "modified": "2026-08-20T15:26:38.486389Z",
+            "name": "Ingress Tool Transfer",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1105",
+                    "external_id": "T1105"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--f1cba010-705c-5d02-ab4f-54903c50ea4d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.4865Z",
+            "modified": "2026-08-20T15:26:38.4865Z",
+            "name": "Account Access Removal",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1531",
+                    "external_id": "T1531"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--1f73626a-7098-5a44-83d7-5b6ad96a1950",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.48662Z",
+            "modified": "2026-08-20T15:26:38.48662Z",
+            "name": "multivector-ecommerce-rce-toolkit-192-3-1-116 infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "vulnerability",
+            "spec_version": "2.1",
+            "id": "vulnerability--02fc8cc4-fdab-517d-88b4-f6bff7ebf1bc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.487089Z",
+            "modified": "2026-08-20T15:26:38.487089Z",
+            "name": "CVE-2021-42550",
+            "external_references": [
+                {
+                    "source_name": "cve",
+                    "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-42550",
+                    "external_id": "CVE-2021-42550"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "vulnerability",
+            "spec_version": "2.1",
+            "id": "vulnerability--111a765f-c6d4-50fb-b906-5e44fa392aa4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.48723Z",
+            "modified": "2026-08-20T15:26:38.48723Z",
+            "name": "CVE-2022-1471",
+            "external_references": [
+                {
+                    "source_name": "cve",
+                    "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-1471",
+                    "external_id": "CVE-2022-1471"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--d2cbc7b4-0c74-5743-bbb9-91e98e6c514c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-08-20T15:26:38.487557Z",
+            "modified": "2026-08-20T15:26:38.487557Z",
+            "name": "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign",
+            "description": "Exposed operator open directory holding a multi-vector offensive toolkit. There is no malware sample, no implant and no malware family, so this feed carries no file_hashes. Four categories are deliberately excluded: believed-real victim credentials, the operator's live reconnaissance-API subscription key, all raw JWTs, and all victim personal data. Post-discovery crawler and scanner addresses are listed under non_indicators. See threat-intel-vault/research/multivector-ecommerce-rce-toolkit-192-3-1-116/stage1-malware-analyst.md.",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-07-21T00:00:00Z",
+            "object_refs": [
+                "ipv4-addr--bb76bbaa-0ba4-5f4e-8e5b-345c15f9f636",
+                "indicator--82b5c9d2-fdd7-58a9-836c-e5018dc631a0",
+                "ipv4-addr--3a3c2d7f-c217-54b7-9cb8-04b6327e574a",
+                "indicator--94920c04-9a86-5a62-8977-c5d22b169974",
+                "url--12b3023e-364f-5ff2-b9ad-4b81f275311a",
+                "indicator--06d5107f-750d-5ce8-8cd0-4e5d5d8416dc",
+                "url--22c6d87b-d22e-5be9-a73a-7f2d44674c43",
+                "indicator--56414e6a-3317-5fcc-b961-973e3dabdf2f",
+                "url--51c39a22-63ed-5796-8db9-bd86c77af22c",
+                "indicator--2e5b54f3-d71f-5fbf-a04b-8fe7045049ed",
+                "url--04c5d836-6afd-565a-9935-2e0b78446bd7",
+                "indicator--46efe1f1-e9f8-5c7b-ad24-8a7c707dff63",
+                "url--07abb0ae-3ecb-5e79-9a76-1aa5487387ff",
+                "indicator--62043009-8e87-55d8-8f03-789ef22953e2",
+                "domain-name--86c6a01d-539d-5373-af78-e53a2aba528a",
+                "indicator--a649bf3e-3a5a-581a-afae-d6dfa51eba87",
+                "domain-name--a9e5cfd9-3aba-58d4-904c-76f9631be3a4",
+                "indicator--a6103e7f-42b8-5e2d-898a-2a553272a023",
+                "indicator--a8ff77ad-5847-5fb0-8b5e-bca5765b43b7",
+                "indicator--89c7d7bb-1271-57bc-a25a-1e811fab2190",
+                "indicator--b20fbc46-118a-5cbc-b033-443b3f439bf3",
+                "indicator--bea9eb10-5d1d-5d01-a246-3d6595a4858c",
+                "indicator--ad3e7db8-c7d3-5139-9439-d8a7483d40ae",
+                "indicator--9f555ca7-066b-538e-b83e-ad9276e68633",
+                "indicator--1d1e7db6-307d-5838-ab0b-48cda954f1cc",
+                "indicator--6ea2f760-5ad4-5e90-b7f8-2c2adf34e3d9",
+                "indicator--7e7b9e6a-3a9f-5dcf-9c50-3b50c0b4ef02",
+                "indicator--b3aec269-52f3-5ee8-942d-e4b192b09d13",
+                "indicator--9a3ae82d-cc2e-5ad1-b262-d82e29430aae",
+                "indicator--9373b70c-898e-5411-96d7-554bd657351e",
+                "indicator--abd8d89c-1f8c-5744-897b-031fdf9f3bc9",
+                "indicator--7dc25ed0-4849-59a7-9adc-f9d42edc2938",
+                "indicator--2fc688ab-36d0-5473-90c7-653371dcbc65",
+                "indicator--8f3b5bd9-4f47-5cab-b3f0-af4cfeda6be3",
+                "indicator--4c6596a7-a60a-5e48-b037-96280be453ee",
+                "indicator--2766abc4-d6b2-5ea7-a1d7-74a33cdfd757",
+                "indicator--0bd7d402-4d92-5ea3-a40e-93158c5f5690",
+                "indicator--9a79af54-9680-506d-9693-c2a35c86bc5a",
+                "indicator--18ec5594-a2ee-512b-a1bc-62fa09d75cd4",
+                "indicator--ece15069-8cc4-5ec6-b3b1-49e6460e72c8",
+                "attack-pattern--4f83db55-e9f1-5071-aef3-ab98216b533a",
+                "attack-pattern--7117772d-e0a9-526c-9a08-e1392a460b46",
+                "attack-pattern--68bc088a-0332-5331-b5b5-fc091f7b4673",
+                "attack-pattern--5b7a06ed-32c6-5260-95a8-8e82d3f41f1f",
+                "attack-pattern--0876da5f-998d-56c9-bcbe-39e02e92a674",
+                "attack-pattern--4c5b0524-2a19-5f54-8fae-3dbc26269ae0",
+                "attack-pattern--39531dba-2ec0-5d58-b6b9-b3d2ae9ea5dd",
+                "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
+                "attack-pattern--856a360d-8aca-55ff-949d-fee64905d0a8",
+                "attack-pattern--89e07510-9fa4-50e5-96f7-ecd69827cb4d",
+                "attack-pattern--73364e03-8914-541e-a33c-877b656c37e4",
+                "attack-pattern--99faa775-7366-5b35-9527-17f7643bc506",
+                "attack-pattern--fd8dd968-9ef8-5d44-9278-54e070789645",
+                "attack-pattern--0d14abc8-552e-578f-b93a-7fddab296376",
+                "attack-pattern--655489a2-5d78-575d-adcf-cc303e355763",
+                "attack-pattern--81ac1dd0-a8ac-50ba-bd1a-cec2886340d5",
+                "attack-pattern--27b5f1a3-b9bd-5402-b20a-e08c9893f21f",
+                "attack-pattern--e143cf40-c9b0-5118-8096-34d60698c27b",
+                "attack-pattern--dbdc0ff5-a0c3-52de-8a5b-d39dc834a1f9",
+                "attack-pattern--1076c468-8982-548b-9292-726a22f83ecb",
+                "attack-pattern--ab051490-2415-5435-8760-f0735c0314bc",
+                "attack-pattern--be0beb0c-2499-5178-a012-309e486ef121",
+                "attack-pattern--cf58aebb-15dc-5973-bd33-f2dc67782e5b",
+                "attack-pattern--4cbca60b-20d4-5fd7-8e70-29e9475fa89f",
+                "attack-pattern--4305a0dc-35c1-52ba-9aa7-6d520eda0927",
+                "attack-pattern--e42939d6-6332-5a6c-8dac-6195c79081bc",
+                "attack-pattern--d6b8aa8c-cfd9-5f42-a8ac-2573005abb2f",
+                "attack-pattern--85a49140-85ae-5130-8b39-bf9a5e79df72",
+                "attack-pattern--b1f2e4be-8bd7-50f4-9b12-8ff5a814d239",
+                "attack-pattern--5f44eb71-9380-5f9d-9c56-245d2f120e5b",
+                "attack-pattern--44bf0bb6-4445-5791-9daa-2c0a12978bf7",
+                "attack-pattern--f1cba010-705c-5d02-ab4f-54903c50ea4d",
+                "infrastructure--1f73626a-7098-5a44-83d7-5b6ad96a1950",
+                "vulnerability--02fc8cc4-fdab-517d-88b4-f6bff7ebf1bc",
+                "vulnerability--111a765f-c6d4-50fb-b906-5e44fa392aa4"
+            ],
+            "labels": [
+                "AI Abuse",
+                "OpenDirectory",
+                "DataTheft",
+                "E-Commerce",
+                "China"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

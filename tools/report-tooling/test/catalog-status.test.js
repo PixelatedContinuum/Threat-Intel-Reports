@@ -129,5 +129,8 @@ test('the real corpus has 50+ published and at least one embargoed', function ()
   var counts = { published: 0, embargoed: 0 };
   Object.keys(r.status).forEach(function (k) { counts[r.status[k]]++; });
   assert.ok(counts.published > 40, 'expected 40+ published, got ' + counts.published);
-  assert.ok(counts.embargoed >= 3, 'expected the 3 known embargoed campaigns, got ' + counts.embargoed);
+  // 2 as of 2026-08-21: 13.140.145.210 and 157.180.101.47. MultiVector was the third and
+  // was released that day, its 30-day hold having elapsed with CNCERT/CC confirming action.
+  // Still a real guard against an accidental mass-release of the two that remain held.
+  assert.ok(counts.embargoed >= 2, 'expected the 2 known embargoed campaigns, got ' + counts.embargoed);
 });

@@ -67,9 +67,11 @@ test('an uppercase paste of an indexed hash still matches', function () {
 });
 
 test('no embargoed campaign appears anywhere in the committed index', function () {
-  // The three campaigns held for disclosure as of 2026-08-19. This is a safety
+  // The campaigns held for disclosure as of 2026-08-20. This is a safety
   // assertion against the real artefact, not a unit test of the generator.
-  var held = /192-3-1-116|13-140-145-210|157-180-101-47/;
+  // 192-3-1-116 (MultiVector) was released 2026-08-20: CNCERT/CC confirmed action
+  // on all three of its reports, and its 30-day hold elapsed.
+  var held = /13-140-145-210|157-180-101-47/;
   var badReports = Object.keys(idx.reports).filter(function (s) { return held.test(s); });
   assert.deepEqual(badReports, [], 'embargoed campaign in the reports table');
   var badHits = [];

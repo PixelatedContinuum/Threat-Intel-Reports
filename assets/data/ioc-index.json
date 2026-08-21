@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-08-20T14:02:22Z",
+ "generated_at": "2026-08-20T15:09:53Z",
  "counts": {
-  "indicators": 1687,
-  "reports": 54,
+  "indicators": 1753,
+  "reports": 55,
   "multi_report": 142,
-  "suppressed_benign": 125
+  "suppressed_benign": 129
  },
  "coverage": {
   "indexed": [
@@ -40,6 +40,7 @@
    "kaido-quasar-rat-iocs.json",
    "korean-claude-openclaw-221.150.15.104-iocs.json",
    "malware-analysis-houselet.json",
+   "multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json",
    "new-files-found-20260408-iocs.json",
    "nsminer-cryptojacker.json",
    "open-directory-172-105-0-126-20260406-iocs.json",
@@ -64,7 +65,6 @@
    "webshells-to-the-cloud.json"
   ],
   "embargoed": [
-   "multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json",
    "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json",
    "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json"
   ],
@@ -328,6 +328,14 @@
    "report_url": "/reports/malware-analysis-houselet/",
    "detection_url": "/hunting-detections/malware-analysis-houselet-detections",
    "ioc_url": "/ioc-feeds/malware-analysis-houselet.json"
+  },
+  "multivector-ecommerce-rce-toolkit-192-3-1-116": {
+   "title": "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign",
+   "date": "2026-07-21",
+   "severity": "high",
+   "report_url": "/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/",
+   "detection_url": "/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections",
+   "ioc_url": "/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json"
   },
   "new-files-found-20260408": {
    "title": "OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)",
@@ -4791,6 +4799,341 @@
   "url:http://45.155.69.25/b8380e89dabaee4a.php": [
    {
     "report": "malware-analysis-houselet.json"
+   }
+  ],
+  "ipv4:192.3.1.116": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:vpn932081317.softether.net": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "url:http://192.3.1.116:7777/cmd.jsp": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "url:http://192.3.1.116:7777/xstream_rce_success": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "url:http://192.3.1.116:9876/rce_confirmed": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "url:http://192.3.1.116:9876/yaml_rce_proof": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "filename:logback-rce.xml": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "filename:logback-evil.xml": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116",
+    "role": "A logging-framework route to a web shell, independent of the JNDI vector."
+   }
+  ],
+  "domain:ch.qos.logback.core.fileappender": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116",
+    "role": "A logging-framework route to a web shell, independent of the JNDI vector."
+   }
+  ],
+  "domain:poc.yml": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116",
+    "role": "Textbook gadget chain pointing at the operator's shared RCE-proof listener."
+   }
+  ],
+  "filename:cmd.jsp": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "filename:internal_scan.svg": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "filename:phish.svg": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:riverbaybuy.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:web.51qzp.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:www.51qzp.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:82.157.119.235": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:chengjiastore.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:www.chengjiastore.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:8.141.61.61": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:cdn.footballteam.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:1.13.253.113": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:zujixiong.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:manage.zujixiong.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:merchant.zujixiong.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:u.zujixiong.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:web.zujixiong.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:api.zujixiong.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:mengchida.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:backend.mengchida.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:backend-mall.mengchida.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:mall.mengchida.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:mall-api.mengchida.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:njmaixi.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:h5.njmaixi.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:hfive.njmaixi.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:m.njmaixi.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:hs.zcmzh.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:jump.hs.zcmzh.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:3czu.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:zxq.3czu.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:baby-api.coderqiang.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:baby-cdn.coderqiang.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:haimi-file.oss-cn-hangzhou.aliyuncs.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:ai-ledger.sodaapp.com.cn": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:hiij.hxjyam.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:api.renrendrc.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:39.105.40.102": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:47.94.128.49": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:47.111.160.102": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:39.108.60.192": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:8.155.170.217": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:39.99.129.123": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:39.104.38.237": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:39.104.118.153": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:47.110.134.211": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:34.59.254.11": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:44.245.20.76": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:34.210.36.7": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:205.210.31.232": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:199.45.155.76": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:21.0.8.191": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "domain:open.oppomobile.com": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116"
+   }
+  ],
+  "ipv4:31.22.111.190": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116",
+    "role": "Operator control-source address"
+   }
+  ],
+  "domain:cs-pgcwufmiws.cn-hangzhou.fcapp.run": [
+   {
+    "report": "multivector-ecommerce-rce-toolkit-192-3-1-116",
+    "role": "Attack-traffic relay"
    }
   ],
   "sha256:042761408e83155d24884a72291d9f10803becd790fbcfa6ff65e9e72eb44446": [

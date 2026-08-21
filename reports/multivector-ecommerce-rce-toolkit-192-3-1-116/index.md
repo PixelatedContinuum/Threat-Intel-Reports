@@ -3,8 +3,8 @@ title: "Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campa
 date: '2026-07-21'
 layout: post
 permalink: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
+thumbnail: /assets/images/cards/multivector-ecommerce-rce-toolkit-192-3-1-116.png
 hide: true
-unlisted: true
 category: "PII Harvesting Operation"
 description: "An exposed staging directory shows how an ordinary operator now runs an intrusion campaign, with scores of probably-generated attack scripts, an off-the-shelf agentic-AI framework wired in as the console, and a defensive lesson in what actually stopped it."
 detection_page: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
@@ -25,6 +25,7 @@ ioc_highlights:
   - "31.22.111[.]190"
   - "vpn932081317[.]softether[.]net"
   - "cs-pgcwufmiws[.]cn-hangzhou[.]fcapp[.]run"
+stix_bundle: /stix/multivector-ecommerce-rce-toolkit-192-3-1-116.json
 figure_nav:
   - image: multivector-target-landscape.svg
     parts:
@@ -71,7 +72,7 @@ figure_nav:
 ---
 
 **Campaign Identifier:** MultiVector-Ecommerce-RCE-Toolkit-192.3.1.116<br>
-**Last Updated:** July 21, 2026<br>
+**Last Updated:** August 21, 2026<br>
 **Threat Level:** HIGH
 
 ---
@@ -93,7 +94,7 @@ I cannot prove the scripts were LLM-generated and do not claim it as fact. But t
 
 The tell that this is amplification and not mastery is also the finding a defender should take from the case. This operator carried an eight-class exploitation toolkit, and every class in it built to get code running or a key written, the two Logback routes, SnakeYAML, Eureka with XStream, the XXE chains and the Redis-to-SSH-key chain, produced not a single byte of stolen data between them. Everything they actually took came through doors left open, an unauthenticated database console, an unrestricted management interface, verbose application logs, and guessable order numbers.
 
-The one clever move in the whole corpus was not an exploit at all, and it is the piece that moved my read of this operator upward. Through an open management interface they raised the target application's own logging verbosity, made the application write customer records into its own logs, then read them back (Section 6.3). That one is real skill, and it is the exception in a corpus that otherwise ran on borrowed exploits that never landed.
+The one clever move in the whole corpus was not an exploit at all, and it is the piece that moved my read of this operator upward. Through an open management interface they raised the target application's own logging verbosity so the application would write customer records into its own logs, then read them back (Section 6.3). I read that sequence in the operator's own script, though no captured artifact shows that particular run completing. That one is real skill, and it is the exception in a corpus that otherwise ran on borrowed exploits that never landed.
 
 That inversion is the good news here, and it does not last long. What stopped this operator was nothing exotic. Encryption at rest held the most sensitive fields out of reach even after five script iterations went after them (Section 6.6), and closed management planes and working rate limits turned whole attack chains into error pages (Section 9). Small, ordinary controls did the work.
 
@@ -113,7 +114,7 @@ The negative findings carry as much intelligence value as the positives here, an
 
 ### Threat level: HIGH
 
-Rated on confirmed outcomes, not on the length of the technique list: confirmed theft of identifiable personal and financial records belonging to named individuals, an armed account-takeover weapon aimed at a staff account, live-used database and cache credentials, five mapped corporate groups plus at least seven further targeted threads, and an operator platform still live at the close of analysis. It is HIGH rather than CRITICAL because five of the six efforts that left an outcome artifact are negative, the confirmed theft covers one platform and five named individuals, not a population, and no destructive capability exists anywhere in the corpus. The full scoring is in Section 3.
+Rated on confirmed outcomes rather than on the length of the technique list. What is confirmed is theft of identifiable personal and financial records belonging to named individuals, an armed account-takeover weapon aimed at a staff account, live-used database and cache credentials, five mapped corporate groups plus at least seven further targeted threads, and an operator platform still live at the close of analysis. It is HIGH rather than CRITICAL because five of the six efforts that left an outcome artifact are negative, the confirmed theft covers one platform and five named individuals, not a population, and no destructive capability exists anywhere in the corpus. The full scoring is in Section 3.
 
 ### What to do first
 
@@ -188,7 +189,7 @@ The weight of evidence points clearly to unauthorized data theft. The authorized
 
 First, every file in the operator's working tree was retrievable by anyone who found the port, including private SSH keys, captured victim data, and control-plane environment dumps. This is the operational-security failure that makes the entire investigation possible.
 
-Second, requesting `hxxp://192.3.1[.]116:7777/cmd[.]jsp` returns the **source** of that file. The server does not execute JSP. The host is distributing a working web shell, not running one at that URL. Deployment of that web shell to any victim host is unconfirmed: it exists in the operator's own directory, and no captured artifact shows it present anywhere else.
+Second, requesting `hxxp://192.3.1[.]116:7777/cmd[.]jsp` returns the **source** of that file. The server does not execute JSP. The host is distributing a working web shell, not running one at that URL. Deployment of that web shell to any victim host is unconfirmed, because it exists only in the operator's own directory and no captured artifact shows it present anywhere else.
 
 ---
 
@@ -215,7 +216,7 @@ Five dimensions carry that score, weighted toward what the evidence actually sho
 <tbody>
 <tr><td>Data exfiltration</td><td>8/10</td><td>30%</td><td>Confirmed harvest of customer names and order/financial records for at least five named individuals, through four independent sourcing channels against one platform. A separate response returned roughly twenty personally-identifying records from a backend claiming far more system-wide, but its ownership and record authenticity are unresolved.</td></tr>
 <tr><td>Account compromise</td><td>7/10</td><td>25%</td><td>An armed, pre-staged verification-code brute force against a real staff account with a chosen replacement password. Authenticated access to a second platform through a self-registered account, followed by administrative-route probing, with the unauthorized characterization following the HIGH conduct judgment in Section 2.2, not standing as a separate confirmed finding. Live-used database and cache credentials on a third surface. Outcomes for the reset and the administrative login are unconfirmed.</td></tr>
-<tr><td>Scale of targeting</td><td>8/10</td><td>20%</td><td>Roughly five mapped corporate groups plus at least seven standalone or emerging threads, spanning e-commerce, device and credit rental, gig work, insurance asset management, loan referral and a mobile-OEM developer platform. No client separation of any kind.</td></tr>
+<tr><td>Scale of targeting</td><td>8/10</td><td>20%</td><td>Five mapped corporate groups plus at least seven standalone or emerging threads, spanning e-commerce, device and credit rental, gig work, insurance asset management, loan referral and a mobile-OEM developer platform. No client separation of any kind.</td></tr>
 <tr><td>Operator persistence and tempo</td><td>7/10</td><td>15%</td><td>The platform was still live and growing at the close of analysis, run continuously since at least April 2026 with no address rotation. Operator access observed across a multi-week span. A VPN and a serverless relay in place for source obscuration, plus an always-on control channel.</td></tr>
 <tr><td>Remote code execution</td><td>4/10</td><td>10%</td><td>Genuine crafted payloads across five vulnerability classes, but no evidenced success for any of them. For two of the five, the strongest available evidence points the other way.</td></tr>
 </tbody>
@@ -225,7 +226,7 @@ Five dimensions carry that score, weighted toward what the evidence actually sho
 
 ### 3.1 Why HIGH and not CRITICAL
 
-The case for CRITICAL is real: confirmed theft of identifiable personal and financial records belonging to named individuals, an armed account-takeover weapon aimed at a staff account, live-used database and cache credentials, roughly a dozen targeted organizations, and an operator platform still live at the close of analysis.
+The case for CRITICAL rests on the confirmed outcomes set out in Section 1, taken together, the theft of real financial records, the armed reset weapon, the live-used credentials, the breadth of the targeting, and a platform still live at the close of analysis.
 
 Three things hold it at HIGH. Evidence bounds the harm, not assumption, since five of the six efforts that left an outcome artifact are negative, among them the HIGH-confidence failure of the decryption effort. Confirmed theft covers one platform and at least five named individuals, not a population, and the fuller identity field set is highly likely, not confirmed. And no destructive capability exists anywhere in the corpus.
 
@@ -243,7 +244,7 @@ The operation was still running when the analysis closed. The directory was live
 
 So treat any blocklist entry for this platform as perishable. It buys time and nothing more, because the address is the cheapest thing the operator owns and the easiest to replace.
 
-What outlasts the address is the shopping list. Unauthenticated monitoring consoles, unrestricted management interfaces, verbose production stack traces, enumerable record identifiers, four-digit verification codes: none of that is specific to the organizations named here, and all of it is what the next operator will go looking for.
+What outlasts the address is the shopping list. Unauthenticated monitoring consoles, unrestricted management interfaces, verbose production stack traces, enumerable record identifiers and four-digit verification codes. None of that is specific to the organizations named here, and all of it is what the next operator will go looking for.
 
 ---
 
@@ -295,7 +296,7 @@ It tells you nothing about which one, and Section 12 keeps it that way. Reasonin
 
 ### 4.3 The content-provider filing signal, hedged and single-source
 
-None of the four target domains checked came back with a content-provider filing. Mainland-hosted sites are legally required to carry one, so the absence hints that several of these platforms are unregistered, and it explains the practical problem that ran through the whole disclosure effort: for most of these targets there is no registered company to notify.
+None of the four target domains checked came back with a content-provider filing. Mainland-hosted sites are legally required to carry one, so the absence hints that several of these platforms are unregistered, and it explains the practical problem that ran through the whole disclosure effort, which is that for most of these targets there is no registered company to notify.
 
 That is a MODERATE read on a single source, and it should be treated as one. The check ran against a commercial lookup service rather than the official national registry, which nobody queried directly at any stage.
 
@@ -323,17 +324,17 @@ None of that surprised me. I half expected it, having run into Hermes in other c
 
 The identification came from the operator's own version-control metadata, left readable in the open directory alongside everything else. The plugin directories carry their `.git` state intact, and the remote-tracking configuration in each points at a public repository. The reference logs record ordinary clone operations, authored by the same build identity that signs the operator's SSH key material. The core framework was then identified from the plugin project's own documentation.
 
-Two of the three plugins were independently verified as unmodified public clones. The third plugin's contents were not recovered, and that gap matters in one specific direction: it is the plugin that would hold custom capabilities if the operator wrote any. If it turns out to contain operator-authored offensive skills, "deployed off-the-shelf" would undersell what happened here. That question stays open.
+Two of the three plugins were independently verified as unmodified public clones. The third plugin's contents were not recovered, and that gap matters in one specific direction, because it is the plugin that would hold custom capabilities if the operator wrote any. If it turns out to contain operator-authored offensive skills, "deployed off-the-shelf" would undersell what happened here. That question stays open.
 
 Confidence splits here, and it should not be averaged. That the two examined plugins are public clones is DEFINITE. The core framework's identity rests on the plugin documentation naming it, which is HIGH rather than DEFINITE. The third plugin is unverified.
 
-A note on the public usernames appearing in the plugin repository records: they belong to the open-source plugin authors and are unrelated to the operator, who is a user of their public work. A second naming collision is worth flagging so it is never conflated. One of the target applications in this corpus bundles a mobile JavaScript engine that shares a name with the operator's agent framework. The two are entirely unrelated.
+The public usernames appearing in the plugin repository records belong to the open-source plugin authors and are unrelated to the operator, who is a user of their public work. A second naming collision is worth flagging so it is never conflated. One of the target applications in this corpus bundles a mobile JavaScript engine that shares a name with the operator's agent framework. The two are entirely unrelated.
 
 </details>
 
 What is established about how it was run comes down to four things. It operates as root on the operator host. It sits under a live messaging control channel with a single identified controlling user. It is driven interactively, human in the loop, not autonomously. And it lives on the staging box, never on a victim. A defender looking for this pattern is looking for an agent framework on attack infrastructure, not on their own estate.
 
-This report does **not** claim the framework executed any attack script. Nothing in the corpus shows it orchestrating any part of this campaign, and that question is fundamentally about host telemetry, which no public-research method can answer. The distinction matters for classification: an operator-scripted campaign using an AI console is a different and less advanced thing than an AI-executed campaign, and the evidence here supports only the first.
+This report does **not** claim the framework executed any attack script. Nothing in the corpus shows it orchestrating any part of this campaign, and that question is fundamentally about host telemetry, which no public-research method can answer. The distinction matters for classification, because an operator-scripted campaign using an AI console is a different and less advanced thing than an AI-executed campaign, and the evidence here supports only the first.
 
 The framework is also **not** an attribution discriminator on its own. Section 12.5 carries it only as one element of a platform composite, never as a standalone characteristic, because commodity software that anyone can install distinguishes nobody.
 
@@ -370,7 +371,7 @@ Four independent data-sourcing channels converged on one platform, and the opera
 
 `riverbaybuy[.]com` is a rent-to-own and installment commerce platform. Its internal handle is `hzsx`, visible in both the API path prefix `/hzsx/` and the Java package namespace `com.hzsx.rent.*`. It runs a Spring Cloud microservice stack behind a Eureka service registry with Feign HTTP clients (`OrderClient`, `UserCenterClient`, `ProductClient`), uses Ant Group's AntChain service for contract signing, and includes a distributed identifier-generation component. It shares an internal address with a separate Eureka-engaged target elsewhere in the campaign, a HIGH-confidence inference and not a DEFINITE link.
 
-Confirmed here: real customer names plus order and financial records for at least five named individuals, an armed account-takeover weapon aimed at a staff account, and live-used database and cache credentials.
+What is confirmed here is real customer names plus order and financial records for at least five named individuals, an armed account-takeover weapon aimed at a staff account, and live-used database and cache credentials.
 
 ### 6.2 The kill chain
 
@@ -406,6 +407,8 @@ Everything else in this toolkit is borrowed. This one is not, and it is the reas
 
 Most data theft is constrained by where the target already keeps its data, a database the attacker has to reach, a file they have to read, an API they have to call with valid credentials. This operator removed that constraint. Instead of hunting for a place where customer records already sat exposed, they reached into the application's own configuration and turned up its logging until the application started writing customer records into its log file, generated some traffic to make sure it did, then read the log back out. Nothing was exploited in the conventional sense. A management feature was used exactly as designed, by the wrong party.
 
+What I can state as DEFINITE is that the tooling exists and is written to run this sequence, because I read the operator's own script. Whether that particular script's own run succeeded is only MODERATE, since no outcome artifact for it was captured. The channel itself is confirmed effective on separate evidence, a session identifier taken from live logs and reused to pull that user's orders, which Section 6.4 sets out.
+
 It changed the story for me on how much credit this operator deserves, and it is more skill than I had given them going in. That is also all it changes. One technique this good does not lift the rest of the corpus, and the overall read in Section 12.2 stays where the evidence puts it.
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -422,11 +425,10 @@ Then they trigger the traffic. With verbose logging now active, the operator del
 
 Then they read it back. The operator pulls `/actuator/logfile`, the endpoint that serves the application's own log over HTTP, and filters it for the lines their trigger produced.
 
-The sequencing is the part that is hard to fault. Raise the level, then generate the traffic, then read: get that order wrong and you collect an empty log or you tip your hand with traffic nobody logged. Whoever built this understood that the application had to be given something to say before there was any point listening. That is a different kind of thinking from running someone else's exploit and hoping.
+The sequencing is the part that is hard to fault. Raise the level, then generate the traffic, then read. Get that order wrong and you collect an empty log, or you tip your hand with traffic nobody logged. Whoever built this understood that the application had to be given something to say before there was any point listening. That is a different kind of thinking from running someone else's exploit and hoping.
 
 The same script separately queries Jolokia for raw configuration values including the datasource connection URL, the connection-pool JDBC URL, and service-registry configuration. Those are administrative reads through the same interface.
 
-On confidence, I can say DEFINITE that the tooling exists and is written to perform this sequence, because I read the operator's own script. Whether this particular script's own run succeeded is only MODERATE, since no outcome artifact for it was captured.
 
 What it supplies is the missing mechanism behind a finding that is already confirmed. The operator's separate log-mining channel demonstrably pulled genuine customer data out of this target's application log, and this is the most plausible explanation for how that log came to hold it in the first place.
 
@@ -454,7 +456,7 @@ The evidence that this worked, and the boundary on how far it worked, both sit i
 
 The operator's first channel mines heap dumps, and on a busy commerce platform those carry live customer records and live order identifiers. The operator's harvesting script regex-extracts every real order identifier matching the pattern `001OI\d{6}20\d{6}\d{7,10}` directly out of a captured heap dump, resolves each identifier to its owning user account, then for up to 30 distinct real users pulls both the full order history and the identity-verification record in a single pass. It prints customer name, order identifier, product and stock-keeping unit, rental amount, installment count, shop name, status and timestamps.
 
-Three heap dumps were captured in total. Structurally they represent two distinct application processes. Two of them match each other closely across roughly a dozen independent metrics and represent the configuration-heavy and authentication-heavy backend tier. The third is the order-facing tier: it alone carries the literal platform hostname at 74 occurrences, the live order-identifier pattern at 51 occurrences, and the highest density of personally-identifying string shapes. That statistical profile independently corroborates that the third dump was the operator's actual harvesting source material. I hold that at HIGH, resting on a statistical fingerprint and not on direct process-identity metadata.
+Three heap dumps were captured in total. Structurally they represent two distinct application processes. Two of them match each other closely across roughly a dozen independent metrics and represent the configuration-heavy and authentication-heavy backend tier. The third is the order-facing tier, and it alone carries the literal platform hostname at 74 occurrences, the live order-identifier pattern at 51 occurrences, and the highest density of personally-identifying string shapes. That statistical profile independently corroborates that the third dump was the operator's actual harvesting source material. I hold that at HIGH, resting on a statistical fingerprint and not on direct process-identity metadata.
 
 Their second channel mines the verbose application log that Section 6.3 enabled. The operator pulls the framework's request-history endpoint and mines the application log for lines containing the enterprise-Java markers 入参为 and 出参为, meaning "input parameters are" and "output parameters are". That is a widespread convention in Chinese enterprise Java development which logs the request and response payload of every service call. The operator then explicitly filters **out** its own attack traffic, discarding lines containing `UNION SELECT` and the identity-verification and identity-document markers the operator's own probes generated, in order to isolate genuine successful responses containing real customer data.
 
@@ -476,7 +478,7 @@ This is the finding I could not close. A complete, ready-to-fire account-takeove
 
 The file is 3.27 MB and it is not a loop. It is 10,000 individually pre-built `curl` commands, one per possible four-digit verification code from `0000` to `9999`, all targeting the same password-reset endpoint on `riverbaybuy[.]com`. Every command carries an identical verification-context pair, `codeKey` and `codeTime`, which means a single real SMS verification was triggered against one real phone number and this file is the complete, ready-to-execute brute force of the code space that could match it. The account type in the request is a staff or operator type, not a customer, and the intended replacement password is a fixed operator-chosen string.
 
-What distinguishes it from the operator's exploratory work is that it is complete, pre-staged and immediately executable against a specific real staff account, requiring no further development. A parallel weapon exists against a different platform's supplier backend, brute-forcing a four-digit code on a password-recovery endpoint and chaining into a reset. That one targets a well-known placeholder phone number, so it reads as development work and not as an armed weapon. The distinction is worth preserving: one of these two is a test, and one is not.
+What distinguishes it from the operator's exploratory work is that it is complete, pre-staged and immediately executable against a specific real staff account, requiring no further development. A parallel weapon exists against a different platform's supplier backend, brute-forcing a four-digit code on a password-recovery endpoint and chaining into a reset. That one targets a well-known placeholder phone number, so it reads as development work and not as an armed weapon. The distinction is worth preserving, because one of these two is a test and one is not.
 
 The discriminator for detection is the constant verification context across many requests. Ordinary users retry a code two or three times, taking a fresh context after each expiry, while a brute force keeps one context constant and iterates a short numeric field. That shape is what the published Sigma correlation content keys on, and it generalizes to any platform with short numeric verification codes.
 
@@ -503,14 +505,14 @@ The five iterations read as an escalating search. The operator starts by asking 
 
 </details>
 
-This is a finding and not a caveat. In a campaign that is overwhelmingly capability and not outcome, a well-tested negative bounds the harm. This one says that the most sensitive fields the operator was pursuing were not obtained through the route the operator took. That is a materially different harm profile from the one a capability catalog alone would imply. The sub-effort stays at attempted.
+This is a finding and not a caveat. Where so little of this campaign converted into outcome, a well-tested negative is what bounds the harm. This one says that the most sensitive fields the operator was pursuing were not obtained through the route the operator took. That is a materially different harm profile from the one a capability catalog alone would imply. The sub-effort stays at attempted.
 
 ---
 
 ## 7. Anchor 2: Quanzipin, the Clean and Fixable Exposure
 {: .hl-tier-3}
 
-An unauthenticated database-monitoring console handed a threat actor the full data model of a live production platform, and the platform has since closed it. This is the most actionable finding in the investigation. It is concrete, the fix is unambiguous, and the boundary of the harm is knowable. It is also the only target here with a registered legal entity behind it, which made it the one exposure that could actually be reported to someone. It is also the clearest teaching case here: the harm from an exposed monitoring console is what an attacker learns, and that knowledge does not expire when the console is closed.
+An unauthenticated database-monitoring console handed a threat actor the full data model of a live production platform, and the platform has since closed it. This is the most actionable finding in the investigation. It is concrete, the fix is unambiguous, and the boundary of the harm is knowable. It is also the only target here with a registered legal entity behind it, which made it the one exposure that could actually be reported to someone. It is also the clearest teaching case here, because the harm from an exposed monitoring console is what an attacker learns, and that knowledge does not expire when the console is closed.
 
 ### 7.1 The target
 
@@ -540,7 +542,7 @@ An attacker reading that console does not need the data to benefit from it. They
 
 Careless reporting here would do real damage to a real company, so the boundary is explicit.
 
-Two things are CONFIRMED. The query text, schema and execution statistics went to anyone who could reach the unauthenticated monitor, and this operator took them: their own directory holds the full set of captured console pages. That is a genuine information-disclosure vulnerability on its own terms. Separately, the data-access layer pulls password hashes, wallet PINs and government identity numbers together, in bulk, at high frequency, and no attacker is needed for that to be a problem. It is how the application was built, and it would be worth fixing even if nobody had ever found the console.
+Two things are CONFIRMED. The query text, schema and execution statistics went to anyone who could reach the unauthenticated monitor, and this operator took them. Their own directory holds the full set of captured console pages. That is a genuine information-disclosure vulnerability on its own terms. Separately, the data-access layer pulls password hashes, wallet PINs and government identity numbers together, in bulk, at high frequency, and no attacker is needed for that to be a problem. It is how the application was built, and it would be worth fixing even if nobody had ever found the console.
 
 What the console never shows is returned data. Druid renders bound parameters as placeholder characters, so nothing captured here proves that a password, an identity number or a financial PIN ever reached a client.
 
@@ -573,7 +575,7 @@ One useful negative turned up elsewhere in the campaign. A second Druid instance
 ## 8. The Exploitation Toolkit: Eight Commodity Technique Classes
 {: .hl-tier-3}
 
-No exploitation class in this toolkit is novel and none is a zero-day. All eight exploitation technique classes come from the well-documented public record with mature proof-of-concept code available, and that is what makes the campaign transferable instead of a curiosity: these are the techniques a defender will actually meet. The gap worth acting on is that six of the eight had no published Sigma, Suricata or YARA coverage before this investigation. A fully commodity technique set with no shipped detection is a live defensive hole, and closing it does not depend on this operator staying active.
+No exploitation class in this toolkit is novel and none is a zero-day. All eight exploitation technique classes come from the well-documented public record with mature proof-of-concept code available, and that is what makes the campaign transferable instead of a curiosity. These are the techniques a defender will actually meet. The gap worth acting on is that six of the eight had no published Sigma, Suricata or YARA coverage before this investigation. A fully commodity technique set with no shipped detection is a live defensive hole, and closing it does not depend on this operator staying active.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/multivector-ecommerce-rce-toolkit-192-3-1-116/multivector-eight-technique-classes.svg" | relative_url }}" alt="Three-column grid infographic titled Eight Commodity Technique Classes, arranged in rows of three, three and two. Six cards carry grey bands indicating no evidenced success: Logback insertFromJNDI, CVE-2021-42550, where the chain stalled at bind in both logged attempts; Logback FileAppender arbitrary file write aimed at dropping a JSP, with no victim deployment observed; SnakeYAML deserialization of the CVE-2022-1471 family using a ScriptEngineManager gadget, with no confirmed execution; Eureka with XStream service-registry deserialization, where a real target engaged and registered but the success callback was never observed; XXE to server-side request forgery including the cloud instance metadata endpoint, where payloads were crafted but no result was captured; and SSRF to Redis CONFIG abuse writing an authorized SSH key for passwordless root, attempted but not evidenced. Two cards carry red bands indicating they produced access or data: Jolokia and JMX abuse, management-interface access reached with no restrictor configured at time of capture, assessed as the likely master access vector; and the unauthenticated Druid console StatViewServlet exposure, which disclosed the full data model and the root username only, not the password.">
@@ -591,18 +593,18 @@ No exploitation class in this toolkit is novel and none is a zero-day. All eight
 | Unauthenticated Druid monitoring-console exposure | Documented misconfiguration class | None found |
 | Jolokia and JMX management-interface abuse | Documented; the log-verbosity variant is thinly covered | Thin coverage for the general technique, none for the log-verbosity variant |
 
-Only one of the eight had a rule published against it before this work, and that rule came out of an earlier investigation in this same research program. Jolokia is the thin case: the general technique has some coverage, the log-verbosity variant none. Between them they show how narrow the published corpus is for this technique family.
+Only one of the eight had a rule published against it before this work, and that rule came out of an earlier investigation in this same research program. Jolokia is the thin case, where the general technique has some coverage and the log-verbosity variant none. Between them they show how narrow the published corpus is for this technique family.
 
 Two of the eight repay a close read even though neither produced a result. The Redis chain (Section 8.6) and the cloud-metadata payload (Section 8.5) both require understanding the seam between several systems, and both were correctly built. They sit a clear step below the log-verbosity technique in Section 6.3, the only thing here I would call original, but they are the best of the borrowed work. The rest is competent assembly of public material.
 
 <details markdown="1" class="hl-teardown">
-<summary>Expand the full per-class mechanics (6.1 to 6.8), including the payload construction and the detection design for each.</summary>
+<summary>Expand the full per-class mechanics (8.1 to 8.8), including the payload construction and the detection design for each.</summary>
 
 ### 8.1 Logback insertFromJNDI, CVE-2021-42550
 
 Log4Shell dominates public discussion of logging-framework remote code execution. Logback's own JNDI-lookup vulnerability landed in the same disclosure window and is comparatively under-documented, which makes a captured working payload for it a useful artifact.
 
-A working captured payload for this one is more useful than another write-up of the vulnerability class, so it leads the teardown. It is 220 bytes and points a vulnerable Logback-configured Java application at the operator's own rogue directory server on the standard rogue-JNDI port. The infrastructure link is what elevates this from a catalogued vulnerability to an observed technique: the callback target is this operator's own address, already backed by the operator's own directory-server scripts and setup tooling. The capability was not sitting unused. It was pointed at a real Logback-based target.
+A working captured payload for this one is more useful than another write-up of the vulnerability class, so it leads the teardown. It is 220 bytes and points a vulnerable Logback-configured Java application at the operator's own rogue directory server on the standard rogue-JNDI port. The infrastructure link is what elevates this from a catalogued vulnerability to an observed technique, because the callback target is this operator's own address, already backed by the operator's own directory-server scripts and setup tooling. The capability was not sitting unused. It was pointed at a real Logback-based target.
 
 It never landed. Both logged engagements with the operator's directory server stalled at the bind step without issuing a search request, and this payload depends on that same completion step (Section 9.2).
 
@@ -620,7 +622,7 @@ Detection here is unusually easy. A file-writing log appender configured with a 
 
 The captured document is a textbook `ScriptEngineManager` / `URLClassLoader` gadget chain, all on one line, pointing at the operator's shared callback listener. It is the same technique family as CVE-2022-1471.
 
-This is the one payload in the corpus with no sign of tailoring at all. The Logback file-write in 6.2 carries a destination port matched to a real observed target; this one is the public proof-of-concept with the callback host swapped in, nothing more. Its callback path even follows the same naming convention as the Eureka and JNDI callbacks, which is the operator's shared listener set showing through again.
+This is the one payload in the corpus with no sign of tailoring at all. The Logback file-write in 8.2 carries a destination port matched to a real observed target; this one is the public proof-of-concept with the callback host swapped in, nothing more. Its callback path even follows the same naming convention as the Eureka and JNDI callbacks, which is the operator's shared listener set showing through again.
 
 For detection, the three-string combination of `ScriptEngineManager`, `URLClassLoader` and the URL constructor is high precision. In transit this content most often arrives with a YAML or plain-text content type, and sometimes as multipart form data on file-upload endpoints, which is worth accounting for in any network rule.
 
@@ -640,7 +642,7 @@ The standout is a single SVG that probes four internal targets at once: the loca
 
 The payload is confirmed present and crafted; its outcome is not. No captured response shows the metadata service was reached.
 
-Two implementation details matter. The XML payloads use the sequential placeholder phone number `13912345678` and a password field carrying the well-known MD5 hash of the string `123456`, which confirms these are hand-crafted test documents, not replayed real submissions. The second detail is also a finding about the target: its registration and login API expects a client-side MD5-hashed password, an unsalted anti-pattern that is independent of whatever the server does downstream.
+Two implementation details matter. The XML payloads use the sequential placeholder phone number `13912345678` and a password field carrying the well-known MD5 hash of the string `123456`, which confirms these are hand-crafted test documents, not replayed real submissions. The second detail is also a finding about the target, whose registration and login API expects a client-side MD5-hashed password, an unsalted anti-pattern that is independent of whatever the server does downstream.
 
 An external-entity declaration referencing the cloud metadata address inside an uploaded XML or SVG document is a high-precision signal. Broader variants covering entities that reference local Redis, local MySQL or local management endpoints are worth carrying as separate rules so severity can differ, since cloud credential theft is materially more serious than internal service discovery.
 
@@ -658,11 +660,11 @@ Two independent signals catch it. At the network layer, Redis verbs arriving ove
 
 ### 8.7 Jolokia and JMX management-interface abuse
 
-This is the class that did the most damage in the campaign, and Section 6.3 covers the harvest it enabled in full. What belongs here is the surface itself. Jolokia exposes the application's managed beans over ordinary HTTP, so anyone who reaches it unauthenticated can read and write live configuration, which is how a logging level becomes an attacker's data-collection switch. The target's own captured configuration reported no access restrictor and access to any managed bean allowed. Detection splits the same way as the abuse: alert on any external write to a Jolokia or JMX endpoint, and alert far harder on one that changes a logging level.
+This is the class that did the most damage in the campaign, and Section 6.3 covers the harvest it enabled in full. What belongs here is the surface itself. Jolokia exposes the application's managed beans over ordinary HTTP, so anyone who reaches it unauthenticated can read and write live configuration, which is how a logging level becomes an attacker's data-collection switch. The target's own captured configuration reported no access restrictor and access to any managed bean allowed. Detection splits the same way as the abuse. Alert on any external write to a Jolokia or JMX endpoint, and alert far harder on one that changes a logging level.
 
 ### 8.8 The staged web shell
 
-A minimal but fully functional generic JSP web shell sits in the operator's directory: it reads a single HTTP parameter, runs its contents through the shell, and returns standard output and standard error.
+A minimal but fully functional generic JSP web shell sits in the operator's directory. It reads a single HTTP parameter, runs its contents through the shell, and returns standard output and standard error.
 
 Two of the exploitation techniques above are armed to deliver this one payload. The Logback file-write route writes it directly. The Eureka registry-poisoning route causes a client to fetch it over HTTP from the operator's host.
 
@@ -685,7 +687,7 @@ Real, working exploitation payloads coexist here with a download and tooling pip
 | An Android application build | 430 bytes, a cloud object-storage "no such key" error, confirming the operator was pulling builds from cloud storage and that this request failed |
 | A heap dump | 539 bytes, not a real heap dump |
 
-Six confirmed failed fetches plus three duplicate generic responses, all saved anyway under names implying real content, and most of the promising filenames dissolved into error pages once opened. One of the byte-identical files is worth a specific correction: its filename matches a production application JAR that genuinely exists on a target platform, and that is why the operator tried to fetch it. The fetch was blocked. It is not a JAR and it is not a backdoor.
+Six confirmed failed fetches plus three duplicate generic responses, all saved anyway under names implying real content, and most of the promising filenames dissolved into error pages once opened. One of the byte-identical files is worth a specific correction, because its filename matches a production application JAR that genuinely exists on a target platform, which is why the operator tried to fetch it. The fetch was blocked. It is not a JAR and it is not a backdoor.
 
 Also present are brute-force input wordlists, which are frequently misread as harvested credentials. A 28-line list mixes generic weak passwords with brand-customized guesses derived from the target's own name. Brand-specific lists exist for two further target clusters, including a 248-entry list for Quanzipin. A filename ending in `_pass.txt` is a shape heuristic, not a content verdict, and treating a guess list as stolen data is a known failure mode in this kind of analysis.
 
@@ -720,9 +722,9 @@ They opened with an inert decoy, 684 bytes, serving a static application list an
 
 They swapped in a verification tool next, one whose default payload is a bare success-beacon request, and its own log records it returning the deserialization payload eight times across the session.
 
-Then they put up the objective tool: same serving logic, but the payload now pulls the staged web shell from the operator's own host.
+Then they put up the objective tool, with the same serving logic but a payload that now pulls the staged web shell from the operator's own host.
 
-All three share the same behaviour pattern: serve two legitimate application-list responses, then switch to the malicious payload on the third and subsequent polls.
+All three share the same behaviour pattern, serving two legitimate application-list responses and then switching to the malicious payload on the third and subsequent polls.
 
 The server's claim of what it sent is **not proof** of what the target did with it. The proof point would be the success callback, and the operator's own access log for the callback host, 17,087 lines covering roughly fourteen hours, contains zero matches for any of the three success-callback paths used across this campaign's exploitation classes. That is the basis for the MODERATE negative stated above.
 
@@ -768,7 +770,7 @@ An account registration followed within minutes by that same account's token pro
 
 ### 9.6 Credentials the operator holds, and their status
 
-Values are withheld from this report and from the IOC feed, because publishing a victim organization's live credential, even defanged, is a disclosure hazard and not an intelligence contribution. What matters analytically is the status of each, and one detail that runs across the table is worth stating first: the two credentials most clearly in live use appear in none of the operator's brute-force wordlists, so how they were obtained is undocumented anywhere in the 452 files. That unexplained origin is one of the still-open threads in this case, and the unrestricted management interface in Section 6.2 is the leading candidate, not a demonstrated answer.
+Values are withheld from this report and from the IOC feed, because publishing a victim organization's live credential, even defanged, is a disclosure hazard and not an intelligence contribution. What matters analytically is the status of each, and one detail that runs across the table is worth stating first. The two credentials most clearly in live use appear in none of the operator's brute-force wordlists, so how they were obtained is undocumented anywhere in the 452 files. That unexplained origin is one of the still-open threads in this case, and the unrestricted management interface in Section 6.2 is the leading candidate, not a demonstrated answer.
 
 <details markdown="1" class="hl-teardown">
 <summary>The per-credential status table. Click to expand.</summary>
@@ -834,7 +836,7 @@ The operator runs one host that does everything, wrapped in three independent an
 
 </details>
 
-On the hosting, AS36352 is not bulletproof. It is a mainstream budget provider, assessed at HIGH confidence. The operator's control-source address sits on a small IP-leasing reseller network, and reverse resolution on it returned two hostnames whose numbered-node naming, privacy registration, regional DNS and CDN alias chain match the shape of a commercial proxy-subscription service. That reading is MODERATE, and it matters: it means the control-source address is most likely shared rented egress, not operator-controlled infrastructure, so it should not be used as an identity anchor. Reverse-pivoting a shared proxy network returns other customers, a co-tenancy trap that produces false links.
+On the hosting, AS36352 is not bulletproof. It is a mainstream budget provider, assessed at HIGH confidence. The operator's control-source address sits on a small IP-leasing reseller network, and reverse resolution on it returned two hostnames whose numbered-node naming, privacy registration, regional DNS and CDN alias chain match the shape of a commercial proxy-subscription service. That reading is MODERATE, and it matters, because it means the control-source address is most likely shared rented egress rather than operator-controlled infrastructure, so it should not be used as an identity anchor. Reverse-pivoting a shared proxy network returns other customers, a co-tenancy trap that produces false links.
 
 The three obfuscation choices do not cluster. The self-hosted VPN, the proxy egress and the serverless relay do not pivot to any sibling infrastructure and do not connect to each other technically. They read as three independent single-use decisions, not a designed operational-security architecture, which fits the rest of this operator's profile.
 
@@ -845,7 +847,7 @@ The tempo is steady and unhurried. One host has run continuously since at least 
 ## 11. MITRE ATT&CK Mapping
 {: .hl-tier-2}
 
-Thirty-six techniques map across eleven tactics, and the attempted-versus-achieved split is carried inside the table rather than flattened out of it. That is why the per-row confidence column is retained here: a mapping that reads as thirty-six achieved techniques would describe a different and much worse campaign than the evidence supports.
+Thirty-six techniques map across eleven tactics, and the attempted-versus-achieved split is carried inside the table rather than flattened out of it. That is why the per-row confidence column is retained here, because a mapping that reads as thirty-six achieved techniques would describe a different and much worse campaign than the evidence supports.
 
 <details markdown="1" class="hl-teardown">
 <summary>The full technique mapping, with per-row confidence and evidence. Click to expand.</summary>
@@ -893,7 +895,7 @@ Thirty-six techniques map across eleven tactics, and the attempted-versus-achiev
 
 ### 11.1 Three mappings worth expanding
 
-T1119 is DEFINITE, and it is the exception in a campaign that is otherwise capability without evidenced outcome. The distinguishing artifact is not the harvesting script but the operator's own retained dictionary mapping five real user identifiers to real personal names, commented as the known set from an earlier run. That is a record of a completed extraction, corroborated independently by live order identifiers recovered from heap memory.
+T1119 is DEFINITE, and it is the exception in a campaign that is otherwise capability without evidenced outcome. The distinguishing artifact is not the harvesting script but the operator's own retained dictionary mapping five real user identifiers to real personal names, commented as the known set from an earlier run. Section 6.4 sets out why that artifact records a completed extraction rather than a plan for one, and what corroborates it.
 
 T1531 stays MODERATE, and it is worth saying why. The account-takeover weapon is complete, pre-staged and immediately executable against a specific real staff account, with the replacement password written into all 10,000 requests. Nothing in the corpus shows whether it was fired or whether it succeeded. Rating it higher on the strength of how ready it looks is exactly the trap this report's calibration record in Section 14.4 exists to guard against.
 
@@ -933,7 +935,7 @@ The correct phrasing throughout is that **no public reporting was found**. This 
 
 Infrastructure overlap comes back at zero across four checks, three of them independently re-run.
 
-The operator platform returns no related threat actors at VirusTotal, re-verified live during this investigation, and no rows in the Hunt.io indicator feed. The Hunt.io threat-actor catalog was re-queried directly at the attribution stage and returns no actor association for either operator-side address, no indicator-feed rows for the platform, and no match for the activity profile. That catalog does independently record the operator directory as a malicious open directory, observed on 2026-06-03, which corroborates the finding itself while attributing it to nobody.
+The operator platform returns no related threat actors at VirusTotal, re-verified live during this investigation, and no rows in the Hunt.io indicator feed. The Hunt.io threat-actor catalog was re-queried directly and returns no actor association for either operator-side address, no indicator-feed rows for the platform, and no match for the activity profile. That catalog does independently record the operator directory as a malicious open directory, observed on 2026-06-03, which corroborates the finding itself while attributing it to nobody.
 
 The control-source address likewise returns nothing, carrying two generic vendor flags with no actor or campaign label, which is the signature of routine abuse listing. Neither operator-side address has a historical certificate record, and a corpus search for the build-host identifier returns nothing at all. Only one check is carried forward instead of re-run, the TLS-fingerprint reverse-pivot.
 
@@ -983,15 +985,15 @@ Nothing is compartmentalized either. Keys, tokens, harvested data, working notes
 
 My read is that those two bands are not a contradiction to be averaged away. They have different authors. The operator brings the intent and enough knowledge to specify what they want built, the model turns that into scaled working tooling, and nothing anywhere in that pipeline improves their operational discipline, so the ceiling rises and the floor does not. That is the whole shape of this actor, and it is why I would not put much weight on the length of the technique list. A list assembled this way measures how much the model wrote, not how good the operator is. The log-verbosity work is the one place I can see the operator's own ceiling instead of the model's, which is why I weigh it separately from the borrowed classes instead of averaging it in.
 
-Where that leaves me: someone who knows enough to be dangerous, working well above their own unaided level, and held back more by their own carelessness than by any limit on what they could reach for. That combination is not rare and it is getting less rare. That is the argument of Section 5 and the reason this report leads with the method instead of the person.
+Where that leaves me is someone who knows enough to be dangerous, working well above their own unaided level, and held back more by their own carelessness than by any limit on what they could reach for. That combination is not rare and it is getting less rare. That is the argument of Section 5 and the reason this report leads with the method instead of the person.
 
 ### 12.3 Solo operator versus small crew
 
 A single operator is more likely than a small crew, and I put that at MODERATE, around 65 percent solo, because the distinction does not resolve cleanly.
 
-For solo: one build environment produced all three key pairs with an unedited default comment; one identity authored the framework clone records; one control source is consistent across two independent captures; one continuous agent session appears in both captures; one controlling user is identified on the control channel; the account-naming series is a single sequential habit; and the unevenness of execution quality is uniform, where a crew usually shows at least two distinguishable standards of work.
+For a solo operator, one build environment produced all three key pairs with an unedited default comment; one identity authored the framework clone records; one control source is consistent across two independent captures; one continuous agent session appears in both captures; one controlling user is identified on the control channel; the account-naming series is a single sequential habit; and the unevenness of execution quality is uniform, where a crew usually shows at least two distinguishable standards of work.
 
-For a small crew: the control channel is a group and not a direct conversation; the target breadth and per-target tooling volume represent substantial working hours; and the account-naming series has a numbering gap.
+For a small crew, the control channel is a group and not a direct conversation; the target breadth and per-target tooling volume represent substantial working hours; and the account-naming series has a numbering gap.
 
 The group-chat observation is weak, since single-participant groups are entirely normal for bot control, and it is the only artifact pointing to more than one person. The volume argument is weaker still under the Section 5 reading, since generated tooling decouples output volume from headcount. The distinction does not change the risk to any defender.
 
@@ -999,7 +1001,7 @@ The group-chat observation is weak, since single-participant groups are entirely
 
 This is a Chinese-language operator working against mainland Chinese platforms. I hold the language and targeting at HIGH, and the operator's own location only at MODERATE.
 
-Supporting the language and orientation finding: the operator's own working labels, script comments and target annotations are in Chinese; brand-derived and pinyin-derived password guesses require familiarity with the target brands; the target set is near-exclusively mainland Chinese consumer platforms; and the control-source resolution pattern points at a proxy service sold into the Chinese consumer market.
+Supporting the language and orientation finding, the operator's own working labels, script comments and target annotations are in Chinese; brand-derived and pinyin-derived password guesses require familiarity with the target brands; the target set is near-exclusively mainland Chinese consumer platforms; and the control-source resolution pattern points at a proxy service sold into the Chinese consumer market.
 
 Limiting the location finding to MODERATE: the platform is US-hosted, the control source is registered in the RIPE region, and the operator routes through proxy infrastructure by design, the exact circumstance in which network-derived location assessments fail. Hosting jurisdiction is a purchasing decision and is **never stated here as operator nationality**. Language and targeting carry the regional assessment, and both language and targeting can be adopted.
 
@@ -1027,7 +1029,7 @@ Future matching should anchor on characteristics one and three, which are infras
 
 The machine-readable indicators live in the [IOC feed](/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json) and the rules live in the [detection file](/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/). Neither is reproduced here, so take them from the source rather than retyping anything out of this page.
 
-Coverage is behavioural and payload-class based, because there is no malware family to signature. No rule in the published set encodes this operator's address, hostnames or account names: those are atomic indicators and they live in the feed. A rule pinned to `192.3.1[.]116` dies with the takedown that is already filed, while the techniques outlive the infrastructure.
+Coverage is behavioural and payload-class based, because there is no malware family to signature. No rule in the published set encodes this operator's address, hostnames or account names, because those are atomic indicators and they live in the feed. A rule pinned to `192.3.1[.]116` dies with the takedown that is already filed, while the techniques outlive the infrastructure.
 
 | Rule type | Detection tier | Hunting tier | Focus |
 |---|---|---|---|
@@ -1111,7 +1113,7 @@ In a corpus that is overwhelmingly capability and not outcome, the difference be
 
 The first assumption is that all the identity artifacts belong to one continuous operator. The build-host identifier, control source, account-naming convention and messaging identifiers are all treated as one party.
 
-Supporting that: three key pairs share one build environment, the same identity authored the framework clone records, the control source is identical across two independent captures, and one continuous session appears in both. Against it: a resold or shared virtual machine image would reproduce a build-host comment across unrelated users, and the control source is probably shared proxy infrastructure.
+Supporting that, three key pairs share one build environment, the same identity authored the framework clone records, the control source is identical across two independent captures, and one continuous session appears in both. Against it, a resold or shared virtual machine image would reproduce a build-host comment across unrelated users, and the control source is probably shared proxy infrastructure.
 
 The net effect is that the single-operator reading is well supported for the platform-side artifacts and weaker for the control source, so I do not use the control source as an identity anchor.
 
@@ -1125,7 +1127,7 @@ The single highest-value missing artifact investigation-wide is an access log co
 
 Further gaps, recorded and not papered over: no captured output from the decryption effort showing a success line; no captured authenticated response proving the API documentation credential works; no confirmation of whether the staff account's password was actually reset; no business-registry resolution of the confirmed-theft platform's operating entity; and no recovery of the third framework plugin's contents, which bears directly on whether the operator wrote any custom capabilities for it.
 
-On the attribution side, the JARM/JA4X reverse-pivot was not re-queried, so one of the four infrastructure-overlap checks in Section 12 is carried forward from the investigation baseline instead of being independently re-run. The threat-actor-catalog check was re-run directly and returned no association, so the attribution conclusion no longer rests on a carried-forward absence.
+On the attribution side, the JARM/JA4X reverse-pivot was not re-queried, so one of the four infrastructure-overlap checks in Section 12 rests on the original result rather than a fresh query. The threat-actor-catalog check was re-run directly and returned no association, so the attribution conclusion no longer rests on a carried-forward absence.
 
 One further signal is worth recording for what it does not settle. That catalog does not classify the operator's control-source address as a commercial VPN or proxy service, which is weak evidence against the shared-egress reading in Section 10. A small regional subscription service would not be expected to appear in a VPN-detection dataset either way, so the MODERATE assessment there stands unchanged in both directions.
 
@@ -1179,7 +1181,7 @@ Containment categories.
 ## References
 {: .hl-tier-2}
 
-These sources support this report's central claims: that every technique class observed here is drawn from the well-documented public record with mature proof-of-concept code already available, and that commodity agentic-AI adoption by offensive operators is an actively documented trend and not a novelty. Both claims are what make the operator's failure to convert any of it into stolen data meaningful, so they are worth being able to check.
+These sources support the two central claims I make here: that every technique class observed here is drawn from the well-documented public record with mature proof-of-concept code already available, and that commodity agentic-AI adoption by offensive operators is an actively documented trend and not a novelty. Both claims are what make the operator's failure to convert any of it into stolen data meaningful, so they are worth being able to check.
 
 **Vulnerability and technique documentation**
 
@@ -1217,7 +1219,7 @@ These sources support this report's central claims: that every technique class o
 23. Anthropic, "AI-enabled cyber threats and MITRE ATT&CK." <https://www.anthropic.com/news/AI-enabled-cyber-threats-mitre-attack>
 24. Google Cloud Threat Intelligence, "AI vulnerability exploitation and initial access." <https://cloud.google.com/blog/topics/threat-intelligence/ai-vulnerability-exploitation-initial-access>
 25. Nous Research, Hermes Agent project. <https://hermes-agent.nousresearch.com/>
-26. Hunt.io, "Thailand's Ministry of Finance targeted with Hermes AI agent running unattended, Hades implant staged," 2026-07-23. <https://hunt.io/>
+26. Hunt.io, "Thailand's Ministry of Finance Targeted With Hermes AI Agent Running Unattended, Hades Implant Staged," 2026-07-23. <https://hunt.io/blog/thailand-ministry-finance-targeted-with-hermes-ai-agent>
 
 Reference 25 identifies the agent framework found on the operator host as off-the-shelf open-source software, and that identification is the basis for retracting an earlier characterization of it as operator-built. Reference 26 documents an independent case, reported in the same month by a separate research team, in which the same framework was found running against a government ministry in a different country. The two together are why Section 5 treats this working method as a pattern, not as one operator's quirk.
 
