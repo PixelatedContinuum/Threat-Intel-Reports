@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-21T19:02:39Z
+generated_at: 2026-08-22T07:01:11Z
 window_days: 30
 counts:
-  total: 550
-  research: 203
-  news: 347
+  total: 542
+  research: 200
+  news: 342
 topics:
   - label: "vulnerabilities"
     count: 70
     color: 1
   - label: "cybercrime"
-    count: 53
+    count: 51
     color: 2
   - label: "malware"
     count: 29
@@ -22,14 +22,14 @@ topics:
   - label: "artificial intelligence"
     count: 28
     color: 4
-  - label: "government"
-    count: 28
-    color: 5
-  - label: "credential theft"
-    count: 25
-    color: 6
   - label: "data breaches"
     count: 25
+    color: 5
+  - label: "government"
+    count: 25
+    color: 6
+  - label: "credential theft"
+    count: 24
     color: 7
   - label: "exploited"
     count: 24
@@ -80,7 +80,6 @@ label_colors:
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
   "ai integration": 10
-  "ai profiling": 10
   "ai testing": 12
   "ai vishing": 6
   "ai-assisted-development": 9
@@ -88,7 +87,6 @@ label_colors:
   "aisuru": 7
   "aitm phishing": 5
   "akira": 2
-  "alert": 2
   "alibaba": 12
   "amd": 6
   "amnesiastealer": 8
@@ -234,7 +232,6 @@ label_colors:
   "cl0p": 3
   "clamav": 8
   "claroty": 10
-  "claude ai": 12
   "claude code": 9
   "clickfix": 3
   "clickfix campaign": 9
@@ -243,7 +240,6 @@ label_colors:
   "cloud & application security": 1
   "cloud credentials": 9
   "cloud security": 9
-  "cloud tokens": 5
   "cloudflare tunnel": 9
   "cloudflare tunnels": 6
   "cloudflare workers": 6
@@ -264,7 +260,7 @@ label_colors:
   "credential harvesting": 4
   "credential phishing": 9
   "credential stuffing": 11
-  "credential theft": 6
+  "credential theft": 7
   "credential-based attacks": 12
   "credential-theft": 5
   "critical infrastructure": 4
@@ -297,7 +293,7 @@ label_colors:
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 7
+  "data breaches": 5
   "data center": 7
   "data exfiltration": 9
   "data extortion": 2
@@ -310,12 +306,10 @@ label_colors:
   "developer targeting": 7
   "device code phishing": 5
   "dgfip": 12
-  "directx shader encryption": 3
   "discord hijacking": 12
   "disruption": 1
   "dkom": 5
   "dll sideloading": 11
-  "dns tunneling": 11
   "dns-tunneling": 8
   "dprk-linked": 1
   "dropcatch": 4
@@ -359,7 +353,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 5
+  "government": 6
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -382,11 +376,13 @@ label_colors:
   "infection chain": 8
   "information stealer": 6
   "infostealer": 8
+  "insights": 5
   "iran": 6
   "isolated-vm": 5
   "ivanti": 7
   "jetbrains": 6
   "landing page top story": 2
+  "leadership": 11
   "legal": 7
   "levi strauss": 5
   "linked devices abuse": 2
@@ -402,7 +398,6 @@ label_colors:
   "mlflow": 1
   "mobile": 4
   "mobile & wireless": 4
-  "modular architecture": 1
   "n-able": 9
   "nation-state": 11
   "netscaler": 5
@@ -447,6 +442,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Connecting the Dots: Securing the Overlooked Corners of the Software Development Lifecycle (SDLC) Supply Chain"
+    url: "https://unit42.paloaltonetworks.com/sdlc-supply-chain/"
+    source: "Palo Alto Networks"
+    date: 2026-08-21T23:00:21Z
+    kind: research
+    labels: ["chaindrop", "insights", "npm packages", "software supply-chain attack", "supply chain"]
+  - title: "Lawmakers call for investigation into impact of CISA staffing cuts"
+    url: "https://therecord.media/lawmakers-call-for-investigation-into-impact-of-cisa-cuts"
+    source: "Recorded Future"
+    date: 2026-08-21T19:56:00Z
+    kind: news
+    labels: ["government", "leadership"]
   - title: "New SynkLoader malware pushed in Microsoft Teams phishing campaign"
     url: "https://www.bleepingcomputer.com/news/security/new-synkloader-malware-pushed-in-microsoft-teams-phishing-campaign/"
     source: "BleepingComputer"
@@ -3687,63 +3694,3 @@ items:
     date: 2026-07-23T07:30:50Z
     kind: research
     labels: ["authentication broker", "device code phishing", "email account takeover", "mfa bypass", "microsoft 365 compromise", "oauth 2.0 abuse", "session hijacking", "spearphishing"]
-  - title: "US Warns of Iranian Hackers Targeting Siemens, Schneider, and Rockwell ICS Devices"
-    url: "https://www.securityweek.com/us-warns-of-iranian-hackers-targeting-siemens-schneider-and-rockwell-ics-devices/"
-    source: "SecurityWeek"
-    date: 2026-07-23T05:28:50Z
-    kind: news
-    labels: ["alert", "government", "ics", "ics/ot", "iran", "ot", "plc", "rockwell automation", "schneider electric", "siemens"]
-  - title: "Inside FakeAgent: How a Claude Desktop Malvertising Campaign Hit 29 Organizations with SectopRAT"
-    url: "https://otx.alienvault.com/pulse/6a616004250472ee87e19829"
-    source: "AlienVault"
-    date: 2026-07-23T00:27:48Z
-    kind: research
-    labels: ["claude ai", "directx shader encryption", "dll sideloading", "ethereum blockchain", "etherhiding", "gpu anti-vm", "malvertising", "sectoprat", "stealc", "vmprotect"]
-  - title: "wp2shell hits WordPress: detecting pre-auth RCE from plugin drop to command execution"
-    url: "https://www.elastic.co/security-labs/wp2shell-wordpress-rce-detection-elastic-defend"
-    source: "Elastic"
-    date: 2026-07-23T00:00:00Z
-    kind: research
-    labels: ["security-labs"]
-  - title: "Swiss train maker Stadler refuses Everest $12 million ransomware demand"
-    url: "https://therecord.media/stadler-refuses-everest-ransom-demand"
-    source: "Recorded Future"
-    date: 2026-07-22T23:00:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Upbound says hack caused $13 million in fraudulent Acima leases"
-    url: "https://www.bleepingcomputer.com/news/security/upbound-says-hack-caused-13-million-in-fraudulent-acima-leases/"
-    source: "BleepingComputer"
-    date: 2026-07-22T21:43:39Z
-    kind: news
-    labels: []
-  - title: "Extension of CISA 2015 info-sharing protections passes as part of House’s defense bill"
-    url: "https://therecord.media/cisa-2015-extension-passes-house-ndaa"
-    source: "Recorded Future"
-    date: 2026-07-22T20:39:35Z
-    kind: news
-    labels: ["government", "industry"]
-  - title: "South Korea discloses data breach impacting diplomats worldwide"
-    url: "https://www.bleepingcomputer.com/news/security/south-korea-discloses-data-breach-impacting-diplomats-worldwide/"
-    source: "BleepingComputer"
-    date: 2026-07-22T20:06:54Z
-    kind: news
-    labels: ["government"]
-  - title: "Dolphin X Stealer Targets 300+ Apps and Profiles Users with AI"
-    url: "https://otx.alienvault.com/pulse/6a61203a6b39de0e8d3d7247"
-    source: "AlienVault"
-    date: 2026-07-22T19:55:38Z
-    kind: research
-    labels: ["ai profiling", "cloud tokens", "credential theft", "cryptocurrency wallets", "devops", "dolphin x", "infostealer", "rat", "ssh keys"]
-  - title: "Inside a TrickBot Variant Using DNS Tunneling for C2"
-    url: "https://www.fortinet.com/blog/threat-research/inside-a-trickbot-variant-using-dns-tunneling-for-c2"
-    source: "AlienVault"
-    date: 2026-07-22T19:55:37Z
-    kind: research
-    labels: ["dns tunneling", "modular architecture", "obfuscation techniques", "persistence mechanism", "process injection", "task scheduler", "trickbot"]
-  - title: "Federal agencies broaden alert on Iran-linked OT attacks"
-    url: "https://therecord.media/federal-agencies-broaden-alert-on-iran-linked-ot-attacks"
-    source: "Recorded Future"
-    date: 2026-07-22T19:18:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
