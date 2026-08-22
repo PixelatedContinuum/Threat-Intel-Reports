@@ -252,6 +252,9 @@
       {
         "domain": "latssko.com",
         "confidence": "HIGH",
+        "status": "available_for_registration",
+        "last_verified": "2026-08-22",
+        "status_note": "Registration confirmed available on 2026-08-22 (RDAP; the registry returned no record and the per-TLD control in the same run resolved, so this is an answer rather than a gap). Downgraded from BLOCK because this feed is auto-ingested: an available name can be registered by anyone, and blocking it would then hit whoever picks it up. Retained for historical and hunting context. Established from registration status, not from DNS resolution, which cannot tell an expired name from a parked one.",
         "context": "Previous operational domain on C2 IP. Active 2026-01-16 to 2026-02-20 (~35 days). Self-hosted NS (ns2), wildcard DNS. Rotated out when harrismanlieb.ink came online."
       },
       {
@@ -393,6 +396,9 @@
         "ns": "ns2.latssko.com",
         "ip": "151.245.112.70",
         "confidence": "HIGH",
+        "status": "available_for_registration",
+        "last_verified": "2026-08-22",
+        "status_note": "Registration confirmed available on 2026-08-22 (RDAP; the registry returned no record and the per-TLD control in the same run resolved, so this is an answer rather than a gap). Downgraded from BLOCK because this feed is auto-ingested: an available name can be registered by anyone, and blocking it would then hit whoever picks it up. Retained for historical and hunting context. Established from registration status, not from DNS resolution, which cannot tell an expired name from a parked one.",
         "context": "Self-hosted nameserver for previous operational domain, same self-hosting pattern",
         "value": "ns2.latssko.com"
       }

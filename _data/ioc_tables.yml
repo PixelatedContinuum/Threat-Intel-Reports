@@ -1843,7 +1843,7 @@
   report_url: "/reports/evilsoul-engine-stealer-maas-144-172-103-98/"
   detection_url: "/hunting-detections/evilsoul-engine-stealer-maas-detections"
   total: 74
-  untyped: 50
+  untyped: 54
   counts:
     domain: 12
     filename: 2
@@ -2978,7 +2978,7 @@
   report_url: "/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/"
   detection_url: "/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections"
   total: 80
-  untyped: 91
+  untyped: 93
   counts:
     domain: 60
     ipv4: 10
@@ -4538,7 +4538,7 @@
   report_url: "/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/"
   detection_url: "/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections"
   total: 111
-  untyped: 68
+  untyped: 72
   counts:
     domain: 47
     filename: 2
@@ -7106,7 +7106,7 @@
   report_url: "/reports/shadow-xworm-opendirectory/"
   detection_url: "/hunting-detections/shadow-xworm-opendirectory-detections"
   total: 48
-  untyped: 30
+  untyped: 34
   counts:
     domain: 8
     filename: 7

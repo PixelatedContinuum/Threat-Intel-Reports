@@ -321,7 +321,10 @@
         "first_seen": "2023-10-10",
         "last_seen": "2024-12-02",
         "confidence": "MODERATE",
-        "action": "BLOCK",
+        "status": "available_for_registration",
+        "last_verified": "2026-08-22",
+        "status_note": "Registration confirmed available on 2026-08-22 (RDAP; the registry returned no record and the per-TLD control in the same run resolved, so this is an answer rather than a gap). Downgraded from BLOCK because this feed is auto-ingested: an available name can be registered by anyone, and blocking it would then hit whoever picks it up. Retained for historical and hunting context. Established from registration status, not from DNS resolution, which cannot tell an expired name from a parked one.",
+        "action": "HUNT",
         "notes": "Same brief-Aeza-co-residency evidence quality used to exclude bclub.mp. Naming theme strongly Iran-targeting but linkage to Cluster B is not conclusive."
       },
       {

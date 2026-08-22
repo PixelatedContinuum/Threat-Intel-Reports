@@ -1,13 +1,13 @@
 {
     "type": "bundle",
-    "id": "bundle--f2d0b61a-4e19-4d7a-a486-5e94c15115e9",
+    "id": "bundle--4ab887af-8dfd-41e1-bd61-69735c1e76be",
     "objects": [
         {
             "type": "identity",
             "spec_version": "2.1",
             "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.721243Z",
-            "modified": "2026-07-30T01:37:24.721243Z",
+            "created": "2026-08-22T14:28:06.445409Z",
+            "modified": "2026-08-22T14:28:06.445409Z",
             "name": "The Hunters Ledger",
             "identity_class": "organization"
         },
@@ -33,9 +33,10 @@
             "spec_version": "2.1",
             "id": "indicator--3fee3b45-35a9-59d4-8549-5c770d1a7765",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.72262Z",
-            "modified": "2026-07-30T01:37:24.72262Z",
+            "created": "2026-08-22T14:28:06.446725Z",
+            "modified": "2026-08-22T14:28:06.446725Z",
             "name": "ipv4: 151.245.112.70",
+            "description": "Shadow RAT C2 listener, extracted from AES-256 encrypted config in both ShadoClient.exe and ShadowClient.exe",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -61,9 +62,10 @@
             "spec_version": "2.1",
             "id": "indicator--eb340713-edd6-5722-a7dd-db563b8dc218",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.728404Z",
-            "modified": "2026-07-30T01:37:24.728404Z",
+            "created": "2026-08-22T14:28:06.452247Z",
+            "modified": "2026-08-22T14:28:06.452247Z",
             "name": "ipv4: 187.124.244.54",
+            "description": "Current IP for epgoldsecurity.com, payload delivery server (Hostinger, AS47583)",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -89,9 +91,10 @@
             "spec_version": "2.1",
             "id": "indicator--c3deb49e-aa27-5677-9370-c0e1c110835f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.728905Z",
-            "modified": "2026-07-30T01:37:24.728905Z",
+            "created": "2026-08-22T14:28:06.452765Z",
+            "modified": "2026-08-22T14:28:06.452765Z",
             "name": "ipv4: 185.11.145.145",
+            "description": "Historical IP for epgoldsecurity.com, BlazingFast, AS47674, Netherlands. Active until 2026-03-26 migration",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -117,9 +120,10 @@
             "spec_version": "2.1",
             "id": "indicator--50b7f29d-dc44-5138-a447-6aa1bdb265a2",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.729525Z",
-            "modified": "2026-07-30T01:37:24.729525Z",
+            "created": "2026-08-22T14:28:06.453402Z",
+            "modified": "2026-08-22T14:28:06.453402Z",
             "name": "ipv4: 185.11.145.254",
+            "description": "Secondary historical BlazingFast IP for epgoldsecurity.com, same ASN/provider",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -145,9 +149,10 @@
             "spec_version": "2.1",
             "id": "indicator--43e12a95-cd20-534a-9ff2-652fba7140b8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.729988Z",
-            "modified": "2026-07-30T01:37:24.729988Z",
+            "created": "2026-08-22T14:28:06.453878Z",
+            "modified": "2026-08-22T14:28:06.453878Z",
             "name": "url: http://ip-api.com/line/?fields=hosting",
+            "description": "XWorm anti-analysis callback, queries legitimate API to detect hosting/datacenter IPs. If response is 'true', malware exits silently.",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -173,9 +178,10 @@
             "spec_version": "2.1",
             "id": "indicator--80946398-8430-566d-9101-be4e017231e5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.731235Z",
-            "modified": "2026-07-30T01:37:24.731235Z",
+            "created": "2026-08-22T14:28:06.455033Z",
+            "modified": "2026-08-22T14:28:06.455033Z",
             "name": "domain: harrismanlieb.ink",
+            "description": "Active primary domain on C2 IP 151.245.112.70. Registered 2026-02-12 (NameCheap). Self-hosted NS (ns2) pointing to C2 IP. DomainTools risk: 100/100. ScreenConnect deployed from March 1.",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -201,9 +207,10 @@
             "spec_version": "2.1",
             "id": "indicator--885d35bb-c36b-56a0-8c81-de2588cbe0e4",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.732165Z",
-            "modified": "2026-07-30T01:37:24.732165Z",
+            "created": "2026-08-22T14:28:06.455789Z",
+            "modified": "2026-08-22T14:28:06.455789Z",
             "name": "domain: epgoldsecurity.com",
+            "description": "Payload delivery server hosting open directory where all 4 malware samples were found. Registered 2026-02-20 (Registrar.eu). Migrated BlazingFast to Hostinger on March 26. DomainTools risk: 100/100.",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -229,9 +236,10 @@
             "spec_version": "2.1",
             "id": "indicator--7ad1cbf7-849a-5361-8566-b0fc424679bc",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.732843Z",
-            "modified": "2026-07-30T01:37:24.732843Z",
+            "created": "2026-08-22T14:28:06.456343Z",
+            "modified": "2026-08-22T14:28:06.456343Z",
             "name": "domain: latssko.com",
+            "description": "Previous operational domain on C2 IP. Active 2026-01-16 to 2026-02-20 (~35 days). Self-hosted NS (ns2), wildcard DNS. Rotated out when harrismanlieb.ink came online.",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -257,9 +265,10 @@
             "spec_version": "2.1",
             "id": "indicator--fc29e995-7600-566d-b2fc-e10928d0f688",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.733457Z",
-            "modified": "2026-07-30T01:37:24.733457Z",
+            "created": "2026-08-22T14:28:06.456833Z",
+            "modified": "2026-08-22T14:28:06.456833Z",
             "name": "domain: breakingsecurity.online",
+            "description": "Resolved to C2 IP for ~3 days (Jan 13-16, 2026). Impersonates BreakingSecurity (Remcos RAT developer). The legitimate site is breakingsecurity.net.",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -285,9 +294,10 @@
             "spec_version": "2.1",
             "id": "indicator--68d996c6-38c0-5cba-adb4-7ad15ef7e97f",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.733982Z",
-            "modified": "2026-07-30T01:37:24.733982Z",
+            "created": "2026-08-22T14:28:06.457315Z",
+            "modified": "2026-08-22T14:28:06.457315Z",
             "name": "domain: bluewiin.com",
+            "description": "Brief single-day resolution to C2 IP (Jan 16, 2026). Likely testing or staging. Minimal passive DNS footprint.",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -347,8 +357,8 @@
             "spec_version": "2.1",
             "id": "indicator--fee9ce18-b59d-5656-95df-05c439674ea8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.735575Z",
-            "modified": "2026-07-30T01:37:24.735575Z",
+            "created": "2026-08-22T14:28:06.45878Z",
+            "modified": "2026-08-22T14:28:06.45878Z",
             "name": "RAT_ShadowRAT_v2640_Client",
             "indicator_types": [
                 "malicious-activity"
@@ -368,8 +378,8 @@
             "spec_version": "2.1",
             "id": "indicator--a96ee6be-d8c9-51a1-99a5-0dc3ee599c61",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.735767Z",
-            "modified": "2026-07-30T01:37:24.735767Z",
+            "created": "2026-08-22T14:28:06.458946Z",
+            "modified": "2026-08-22T14:28:06.458946Z",
             "name": "RAT_ShadowRAT_CommonDLL",
             "indicator_types": [
                 "malicious-activity"
@@ -389,8 +399,8 @@
             "spec_version": "2.1",
             "id": "indicator--b5276956-268a-52ec-9330-2f331c55aeef",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.735902Z",
-            "modified": "2026-07-30T01:37:24.735902Z",
+            "created": "2026-08-22T14:28:06.459096Z",
+            "modified": "2026-08-22T14:28:06.459096Z",
             "name": "RAT_ShadowRAT_AMSI_ETW_Bypass",
             "indicator_types": [
                 "malicious-activity"
@@ -410,8 +420,8 @@
             "spec_version": "2.1",
             "id": "indicator--b62a9b40-db7a-51c8-9c12-6097c0b2f098",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.736027Z",
-            "modified": "2026-07-30T01:37:24.736027Z",
+            "created": "2026-08-22T14:28:06.459218Z",
+            "modified": "2026-08-22T14:28:06.459218Z",
             "name": "RAT_ShadowRAT_Crypto_Clipper",
             "indicator_types": [
                 "malicious-activity"
@@ -431,8 +441,8 @@
             "spec_version": "2.1",
             "id": "indicator--3a21f2ea-92db-53e6-9cf1-01cff3fe67ad",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.736148Z",
-            "modified": "2026-07-30T01:37:24.736148Z",
+            "created": "2026-08-22T14:28:06.459336Z",
+            "modified": "2026-08-22T14:28:06.459336Z",
             "name": "RAT_ShadowRAT_WinRE_Persistence",
             "indicator_types": [
                 "malicious-activity"
@@ -452,8 +462,8 @@
             "spec_version": "2.1",
             "id": "indicator--b36b85a8-4a34-5620-a622-6e64c278fb0a",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.736266Z",
-            "modified": "2026-07-30T01:37:24.736266Z",
+            "created": "2026-08-22T14:28:06.459452Z",
+            "modified": "2026-08-22T14:28:06.459452Z",
             "name": "RAT_XWorm_30_50_Config",
             "indicator_types": [
                 "malicious-activity"
@@ -473,8 +483,8 @@
             "spec_version": "2.1",
             "id": "indicator--7f7af980-e0d7-5536-b5a8-eb288c4b9b04",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.736388Z",
-            "modified": "2026-07-30T01:37:24.736388Z",
+            "created": "2026-08-22T14:28:06.459575Z",
+            "modified": "2026-08-22T14:28:06.459575Z",
             "name": "RAT_XWorm_Rijndael256ECB_Crypto",
             "indicator_types": [
                 "malicious-activity"
@@ -494,8 +504,8 @@
             "spec_version": "2.1",
             "id": "indicator--be6c81bc-3947-54b6-b7d8-cf6b027cd664",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.736506Z",
-            "modified": "2026-07-30T01:37:24.736506Z",
+            "created": "2026-08-22T14:28:06.459698Z",
+            "modified": "2026-08-22T14:28:06.459698Z",
             "name": "XWorm Scheduled Task Persistence with One-Minute Execution Interval",
             "indicator_types": [
                 "malicious-activity"
@@ -515,8 +525,8 @@
             "spec_version": "2.1",
             "id": "indicator--2dc76a31-1838-5988-a6df-7f6cc1834553",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.736622Z",
-            "modified": "2026-07-30T01:37:24.736622Z",
+            "created": "2026-08-22T14:28:06.459814Z",
+            "modified": "2026-08-22T14:28:06.459814Z",
             "name": "Shadow RAT Registry Run Key Persistence",
             "indicator_types": [
                 "malicious-activity"
@@ -536,8 +546,8 @@
             "spec_version": "2.1",
             "id": "indicator--5394109e-f499-565d-94c3-04d89c068097",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.736758Z",
-            "modified": "2026-07-30T01:37:24.736758Z",
+            "created": "2026-08-22T14:28:06.459929Z",
+            "modified": "2026-08-22T14:28:06.459929Z",
             "name": "AMSI Bypass via Suspicious amsi.dll Load from Non-Standard Path",
             "indicator_types": [
                 "malicious-activity"
@@ -557,8 +567,8 @@
             "spec_version": "2.1",
             "id": "indicator--4f74826c-5fbc-58f0-870d-f795e2848a13",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.736892Z",
-            "modified": "2026-07-30T01:37:24.736892Z",
+            "created": "2026-08-22T14:28:06.460081Z",
+            "modified": "2026-08-22T14:28:06.460081Z",
             "name": "ETW Bypass via Process Access to ntdll.dll Memory Region",
             "indicator_types": [
                 "malicious-activity"
@@ -578,8 +588,8 @@
             "spec_version": "2.1",
             "id": "indicator--88de9ab5-02be-5e3d-bcf1-93d57b3517e1",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.73701Z",
-            "modified": "2026-07-30T01:37:24.73701Z",
+            "created": "2026-08-22T14:28:06.460199Z",
+            "modified": "2026-08-22T14:28:06.460199Z",
             "name": "Windows Firewall Disabled via Netsh Opmode Command",
             "indicator_types": [
                 "malicious-activity"
@@ -599,8 +609,8 @@
             "spec_version": "2.1",
             "id": "indicator--a2e7629e-6d25-5229-9d17-edaffbc16735",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.737125Z",
-            "modified": "2026-07-30T01:37:24.737125Z",
+            "created": "2026-08-22T14:28:06.460313Z",
+            "modified": "2026-08-22T14:28:06.460313Z",
             "name": "XWorm Registry Run Key Persistence Using Malware Install Name",
             "indicator_types": [
                 "malicious-activity"
@@ -620,8 +630,8 @@
             "spec_version": "2.1",
             "id": "indicator--66e517ac-7162-5c8d-bd0c-5fb0958e3f44",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.737264Z",
-            "modified": "2026-07-30T01:37:24.737264Z",
+            "created": "2026-08-22T14:28:06.460431Z",
+            "modified": "2026-08-22T14:28:06.460431Z",
             "name": "Executable Shortcut Created in Windows Startup Folder by Non-System Process",
             "indicator_types": [
                 "malicious-activity"
@@ -641,8 +651,8 @@
             "spec_version": "2.1",
             "id": "indicator--e21eab37-9baf-590b-9aff-e9127047b8b9",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.737397Z",
-            "modified": "2026-07-30T01:37:24.737397Z",
+            "created": "2026-08-22T14:28:06.460545Z",
+            "modified": "2026-08-22T14:28:06.460545Z",
             "name": "Non-Browser Process DNS Query to ip-api.com Hosting Detection Endpoint",
             "indicator_types": [
                 "malicious-activity"
@@ -662,8 +672,8 @@
             "spec_version": "2.1",
             "id": "indicator--ff6e51f7-cfc9-5ef2-847e-63ecb19bbe51",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.737559Z",
-            "modified": "2026-07-30T01:37:24.737559Z",
+            "created": "2026-08-22T14:28:06.460659Z",
+            "modified": "2026-08-22T14:28:06.460659Z",
             "name": "WMI Win32_ComputerSystem Query from User-Writable Directory",
             "indicator_types": [
                 "malicious-activity"
@@ -683,8 +693,8 @@
             "spec_version": "2.1",
             "id": "indicator--bddb8f7e-2162-531a-8e0b-a5b8723d36d5",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.737684Z",
-            "modified": "2026-07-30T01:37:24.737684Z",
+            "created": "2026-08-22T14:28:06.460771Z",
+            "modified": "2026-08-22T14:28:06.460771Z",
             "name": "Zone.Identifier Alternate Data Stream Removal for SmartScreen Bypass",
             "indicator_types": [
                 "malicious-activity"
@@ -704,8 +714,8 @@
             "spec_version": "2.1",
             "id": "indicator--9ad2b0c1-ba4e-5464-af0f-8dc253bb5c18",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.737811Z",
-            "modified": "2026-07-30T01:37:24.737811Z",
+            "created": "2026-08-22T14:28:06.460883Z",
+            "modified": "2026-08-22T14:28:06.460883Z",
             "name": "THL TROJAN XWorm Anti-Analysis Hosting Check via ip-api.com",
             "indicator_types": [
                 "malicious-activity"
@@ -725,8 +735,8 @@
             "spec_version": "2.1",
             "id": "tool--d8640bfa-e83d-5b2e-b534-8b9b612a986e",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.738032Z",
-            "modified": "2026-07-30T01:37:24.738032Z",
+            "created": "2026-08-22T14:28:06.461065Z",
+            "modified": "2026-08-22T14:28:06.461065Z",
             "name": "Shadow RAT v2.6.4.0 staging/test build",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -737,8 +747,8 @@
             "spec_version": "2.1",
             "id": "tool--a2679b1c-221e-5b15-83b3-3f1c9f269aeb",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.73817Z",
-            "modified": "2026-07-30T01:37:24.73817Z",
+            "created": "2026-08-22T14:28:06.461189Z",
+            "modified": "2026-08-22T14:28:06.461189Z",
             "name": "Shadow RAT v2.6.4.0 production build",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -747,11 +757,11 @@
         {
             "type": "tool",
             "spec_version": "2.1",
-            "id": "tool--0d1bc5db-c90b-5ccc-93ad-ab2d4b856614",
+            "id": "tool--c9f59c21-4b02-56dd-8676-02d413cce25b",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.738279Z",
-            "modified": "2026-07-30T01:37:24.738279Z",
-            "name": "Shadow RAT shared library \u2014 core message types",
+            "created": "2026-08-22T14:28:06.461293Z",
+            "modified": "2026-08-22T14:28:06.461293Z",
+            "name": "Shadow RAT shared library",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
             ]
@@ -761,8 +771,8 @@
             "spec_version": "2.1",
             "id": "tool--295650c6-c3e5-5e73-a6c4-efc6b62d7701",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.738399Z",
-            "modified": "2026-07-30T01:37:24.738399Z",
+            "created": "2026-08-22T14:28:06.461392Z",
+            "modified": "2026-08-22T14:28:06.461392Z",
             "name": "XWorm 3.0-5.0 builder output #1",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -773,8 +783,8 @@
             "spec_version": "2.1",
             "id": "tool--f2842a39-7b4f-55f3-a67e-227883a78e23",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.738512Z",
-            "modified": "2026-07-30T01:37:24.738512Z",
+            "created": "2026-08-22T14:28:06.461491Z",
+            "modified": "2026-08-22T14:28:06.461491Z",
             "name": "XWorm 3.0-5.0 builder output #2",
             "object_marking_refs": [
                 "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
@@ -785,8 +795,8 @@
             "spec_version": "2.1",
             "id": "infrastructure--d5a101c9-8f52-5ba3-bd1f-9e6553c94c0c",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.738632Z",
-            "modified": "2026-07-30T01:37:24.738632Z",
+            "created": "2026-08-22T14:28:06.461592Z",
+            "modified": "2026-08-22T14:28:06.461592Z",
             "name": "shadow-xworm-opendirectory infrastructure",
             "infrastructure_types": [
                 "command-and-control",
@@ -801,8 +811,8 @@
             "spec_version": "2.1",
             "id": "report--d362fb2d-05fc-5938-936e-670754d7a6d8",
             "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
-            "created": "2026-07-30T01:37:24.739019Z",
-            "modified": "2026-07-30T01:37:24.739019Z",
+            "created": "2026-08-22T14:28:06.461977Z",
+            "modified": "2026-08-22T14:28:06.461977Z",
             "name": "Shadow RAT v2.6.4.0 & XWorm 3.0-5.0 (OpenDirectory-DualRAT-MaaS-151.245.112.70) - Technical Analysis & Business Risk Assessment",
             "report_types": [
                 "threat-report"
@@ -854,7 +864,7 @@
                 "indicator--9ad2b0c1-ba4e-5464-af0f-8dc253bb5c18",
                 "tool--d8640bfa-e83d-5b2e-b534-8b9b612a986e",
                 "tool--a2679b1c-221e-5b15-83b3-3f1c9f269aeb",
-                "tool--0d1bc5db-c90b-5ccc-93ad-ab2d4b856614",
+                "tool--c9f59c21-4b02-56dd-8676-02d413cce25b",
                 "tool--295650c6-c3e5-5e73-a6c4-efc6b62d7701",
                 "tool--f2842a39-7b4f-55f3-a67e-227883a78e23",
                 "infrastructure--d5a101c9-8f52-5ba3-bd1f-9e6553c94c0c"
