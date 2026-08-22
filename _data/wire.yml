@@ -3,48 +3,48 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-22T07:01:11Z
+generated_at: 2026-08-22T19:01:11Z
 window_days: 30
 counts:
-  total: 542
-  research: 200
-  news: 342
+  total: 516
+  research: 186
+  news: 330
 topics:
   - label: "vulnerabilities"
-    count: 70
+    count: 67
     color: 1
   - label: "cybercrime"
-    count: 51
+    count: 48
     color: 2
   - label: "malware"
-    count: 29
+    count: 28
     color: 3
   - label: "artificial intelligence"
-    count: 28
+    count: 25
     color: 4
-  - label: "data breaches"
-    count: 25
-    color: 5
   - label: "government"
-    count: 25
+    count: 24
+    color: 5
+  - label: "data breaches"
+    count: 23
     color: 6
-  - label: "credential theft"
-    count: 24
-    color: 7
   - label: "exploited"
-    count: 24
+    count: 23
+    color: 7
+  - label: "credential theft"
+    count: 22
     color: 8
   - label: "ransomware"
-    count: 20
+    count: 19
     color: 9
   - label: "supply chain attack"
     count: 19
     color: 10
-  - label: "phishing"
-    count: 15
-    color: 11
   - label: "microsoft"
     count: 14
+    color: 11
+  - label: "phishing"
+    count: 12
     color: 12
 label_colors:
   ".net downloader": 4
@@ -57,7 +57,6 @@ label_colors:
   "account trafficking": 3
   "account-enumeration": 7
   "active exploitation": 2
-  "adaptixc2": 8
   "adblocker": 3
   "administrative access": 12
   "adobe": 1
@@ -73,7 +72,6 @@ label_colors:
   "ai agent security": 1
   "ai api": 4
   "ai assistant exposure": 1
-  "ai benchmark": 9
   "ai developers": 3
   "ai fraud": 2
   "ai gateway": 6
@@ -133,7 +131,6 @@ label_colors:
   "audio surveillance": 7
   "australia": 10
   "authentication": 6
-  "authentication broker": 3
   "authentication bypass": 4
   "autoit": 8
   "autonomous attack operations": 8
@@ -156,10 +153,8 @@ label_colors:
   "banking trojan": 4
   "base64": 3
   "base64 obfuscation": 6
-  "batch api exploitation": 10
   "batch endpoint": 5
   "beacon": 6
-  "beagle": 12
   "bearlyfy": 10
   "bec campaign": 10
   "bindcloak": 3
@@ -180,7 +175,6 @@ label_colors:
   "brinks home": 12
   "brown health": 12
   "browser credential harvesting": 8
-  "browser credential theft": 10
   "browser extension": 11
   "browser extension campaign": 9
   "browser hijacking": 12
@@ -209,17 +203,14 @@ label_colors:
   "chatgpt abuse": 3
   "chatgpt atlas": 4
   "check point": 6
-  "chick-fil-a": 12
   "china": 5
   "china-nexus": 11
   "chipmaker patch tuesday": 5
   "chisel": 4
-  "chonkychicken": 3
   "chrome": 12
   "chrome extension": 7
   "chrome hijacking": 12
   "ci compromise": 2
-  "ci/cd attack": 12
   "ci/cd compromise": 6
   "cisa": 6
   "cisa kev": 12
@@ -228,7 +219,6 @@ label_colors:
   "cisco talos dns security": 7
   "cisco talos incident response": 3
   "citrix": 11
-  "cl-sta-1114": 8
   "cl0p": 3
   "clamav": 8
   "claroty": 10
@@ -244,7 +234,6 @@ label_colors:
   "cloudflare tunnels": 6
   "cloudflare workers": 6
   "cloudflared": 7
-  "cmsmap": 1
   "cobalt-strike": 4
   "coca-cola": 4
   "code signing abuse": 10
@@ -254,18 +243,15 @@ label_colors:
   "contactless payment fraud": 3
   "coolclient": 8
   "corepack impersonation": 12
-  "cpanel exploitation": 5
   "crackerdrv": 3
   "crat": 2
   "credential harvesting": 4
   "credential phishing": 9
-  "credential stuffing": 11
-  "credential theft": 7
+  "credential theft": 8
   "credential-based attacks": 12
   "credential-theft": 5
   "critical infrastructure": 4
   "cross-platform malware": 7
-  "cross-site scripting": 9
   "crypto scam": 9
   "cryptocurrency": 12
   "cryptocurrency lure": 4
@@ -280,10 +266,8 @@ label_colors:
   "cve-2017-7921": 7
   "cve-2021-27101": 2
   "cve-2023-34362": 11
-  "cve-2023-43770": 12
   "cve-2025-24813": 7
   "cve-2025-49113": 3
-  "cve-2025-66376": 9
   "cve-2026-42897": 4
   "cve-2026-60137": 11
   "cve-2026-66747": 10
@@ -293,10 +277,9 @@ label_colors:
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 5
+  "data breaches": 6
   "data center": 7
   "data exfiltration": 9
-  "data extortion": 2
   "data leak": 9
   "dcrat": 12
   "ddos engine": 12
@@ -304,7 +287,6 @@ label_colors:
   "desktop capture": 2
   "dev#popper": 8
   "developer targeting": 7
-  "device code phishing": 5
   "dgfip": 12
   "discord hijacking": 12
   "disruption": 1
@@ -325,7 +307,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 8
+  "exploited": 7
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
@@ -336,7 +318,6 @@ label_colors:
   "firefox": 3
   "forensic evasion": 12
   "fortinet": 7
-  "fraud": 6
   "fraud & identity theft": 11
   "frontier ai": 3
   "funding": 11
@@ -353,7 +334,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 6
+  "government": 5
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -386,14 +367,13 @@ label_colors:
   "legal": 7
   "levi strauss": 5
   "linked devices abuse": 2
-  "linux": 2
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
   "malware": 3
   "meta": 5
   "metabase": 6
-  "microsoft": 12
+  "microsoft": 11
   "microsoft 365": 4
   "mlflow": 1
   "mobile": 4
@@ -413,13 +393,12 @@ label_colors:
   "patches": 2
   "pdf attachment": 7
   "people": 7
-  "phishing": 11
+  "phishing": 12
   "phishing kit": 6
   "plugin": 7
   "poc": 2
   "privacy": 12
   "ransomware": 9
-  "rat": 9
   "rce": 10
   "ruby": 6
   "ruby on rails": 12
@@ -442,6 +421,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Hackers infect Android car head units with proxy botnet malware"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-infect-android-car-head-units-with-proxy-botnet-malware/"
+    source: "BleepingComputer"
+    date: 2026-08-22T14:14:24Z
+    kind: news
+    labels: ["hardware"]
+  - title: "Named Pipes Under Attack: Securing Windows Interprocess Communication"
+    url: "https://www.bleepingcomputer.com/news/security/named-pipes-under-attack-securing-windows-interprocess-communication/"
+    source: "BleepingComputer"
+    date: 2026-08-22T13:00:09Z
+    kind: news
+    labels: []
   - title: "Connecting the Dots: Securing the Overlooked Corners of the Software Development Lifecycle (SDLC) Supply Chain"
     url: "https://unit42.paloaltonetworks.com/sdlc-supply-chain/"
     source: "Palo Alto Networks"
@@ -3526,171 +3517,3 @@ items:
     date: 2026-07-23T19:48:30Z
     kind: news
     labels: ["artificial intelligence"]
-  - title: "Don’t swing at everything"
-    url: "https://blog.talosintelligence.com/dont-swing-at-everything/"
-    source: "Cisco Talos"
-    date: 2026-07-23T18:00:46Z
-    kind: research
-    labels: ["threat source newsletter"]
-  - title: "International alert spotlights Russia-linked attacks on Zimbra webmail"
-    url: "https://therecord.media/zimbra-webmail-zero-click-phishing-russia-laundry-bear"
-    source: "Recorded Future"
-    date: 2026-07-23T16:58:00Z
-    kind: news
-    labels: ["nation-state"]
-  - title: "Russian hackers exploit Zimbra zero-click flaw for email theft"
-    url: "https://www.bleepingcomputer.com/news/security/russian-hackers-exploit-zimbra-zero-click-flaw-for-email-theft/"
-    source: "BleepingComputer"
-    date: 2026-07-23T16:49:27Z
-    kind: news
-    labels: []
-  - title: "Hackers abuse Notepad++ plugins to stealthily install malware"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-abuse-notepad-plus-plus-plugins-to-stealthily-install-malware/"
-    source: "BleepingComputer"
-    date: 2026-07-23T16:32:35Z
-    kind: news
-    labels: []
-  - title: "Upgrades MaaS Ecosystem with Modular Tools"
-    url: "https://otx.alienvault.com/pulse/6a6241aa476b940a0df81e20"
-    source: "AlienVault"
-    date: 2026-07-23T16:30:34Z
-    kind: research
-    labels: ["browser credential theft", "chonkychicken", "chromeggscalator", "clickfix", "maas", "modular architecture", "revc2", "tag-127", "terralogger", "terrastealerv2", "tinyegg", "websocket c2"]
-  - title: "Operation RoundPress Rolls on with More Half-Click Webmail Zero-Days"
-    url: "https://otx.alienvault.com/pulse/6a6241a95227e5bddd350d13"
-    source: "AlienVault"
-    date: 2026-07-23T16:30:33Z
-    kind: research
-    labels: ["cross-site scripting", "cve-2023-43770", "cve-2024-42009", "cve-2025-27915", "cve-2025-3929", "cve-2025-49113", "cve-2026-8496", "eastern europe targeting", "gru", "half-click vulnerability", "operation roundpress", "spypress", "ta458", "webmail exploits", "zero-day"]
-  - title: "Zimbra Mailservers Targeted with Half-Click Exploits"
-    url: "https://otx.alienvault.com/pulse/6a6241a85c158acad5feb72c"
-    source: "AlienVault"
-    date: 2026-07-23T16:30:32Z
-    kind: research
-    labels: ["credential theft", "cve-2025-66376", "dns tunneling", "half-click exploits", "laundry bear", "russian intelligence", "ta488", "void blizzard", "xss vulnerability", "zimbra", "zimreaper"]
-  - title: "State Department imposes visa restrictions on foreign cyber scammers"
-    url: "https://therecord.media/visa-restrictions-cyber-scammers"
-    source: "Recorded Future"
-    date: 2026-07-23T16:29:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "Large-Scale GitHub Actions Abuse Powers a Distributed cPanel and WHM Exploitation Campaign"
-    url: "https://otx.alienvault.com/pulse/6a624074f254a9070c274d94"
-    source: "AlienVault"
-    date: 2026-07-23T16:25:24Z
-    kind: research
-    labels: ["ci/cd attack", "cpanel exploitation", "credential harvesting", "cve-2026-41940", "distributed scanning", "github actions abuse", "repository compromise", "supply chain", "whm vulnerability"]
-  - title: "Global Webmail Espionage"
-    url: "https://unit42.paloaltonetworks.com/russian-webmail-espionage/"
-    source: "AlienVault"
-    date: 2026-07-23T16:25:23Z
-    kind: research
-    labels: ["cl-sta-1114", "cve-2025-66376", "cyberespionage", "javascript injection", "laundry bear", "russian threat actor", "void blizzard", "zero-click phishing", "zimbra"]
-  - title: "A New Name in the Data Extortion Ecosystem?"
-    url: "https://otx.alienvault.com/pulse/6a623272a8b581c080b0aee0"
-    source: "AlienVault"
-    date: 2026-07-23T15:25:38Z
-    kind: research
-    labels: ["blackfile", "data extortion", "device code phishing", "identity-based attacks", "mfa abuse", "sharepoint exfiltration", "shinyhunters", "vishing"]
-  - title: "OpenAI Fixes ChatGPT Agent Flaw That Could Let Attackers Forge an AI Insider"
-    url: "https://www.securityweek.com/openai-fixes-chatgpt-agent-flaw-that-could-let-attackers-forge-an-ai-insider/"
-    source: "SecurityWeek"
-    date: 2026-07-23T15:09:59Z
-    kind: news
-    labels: ["artificial intelligence", "chatgpt", "vulnerabilities"]
-  - title: "Is Patching Dead? Vulnerability Management in the Post-Mythos Era"
-    url: "https://www.securityweek.com/is-patching-dead-vulnerability-management-in-the-post-mythos-era/"
-    source: "SecurityWeek"
-    date: 2026-07-23T15:00:00Z
-    kind: news
-    labels: ["artificial intelligence", "patch", "vulnerabilities"]
-  - title: "Email threat landscape: Q2 2026 trends and insights"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/07/23/email-threat-landscape-q2-2026-trends-and-insights/"
-    source: "Microsoft"
-    date: 2026-07-23T15:00:00Z
-    kind: research
-    labels: ["adversary-in-the-middle (aitm)", "credential theft", "phishing", "social engineering"]
-  - title: "Chick-fil-A Accounts Get Fried in Credential Stuffing Attack"
-    url: "https://www.securityweek.com/chick-fil-a-accounts-get-fried-in-credential-stuffing-attack/"
-    source: "SecurityWeek"
-    date: 2026-07-23T14:55:19Z
-    kind: news
-    labels: ["chick-fil-a", "credential stuffing", "data breaches"]
-  - title: "Russian Global Webmail Espionage"
-    url: "https://unit42.paloaltonetworks.com/russian-webmail-espionage/"
-    source: "Palo Alto Networks"
-    date: 2026-07-23T14:10:53Z
-    kind: research
-    labels: ["cl-sta-1114", "cybercrime", "javascript", "javascript injection", "nation-state", "obfuscation", "phishing", "threat research", "zimbra webmail"]
-  - title: "Major Australian energy supplier confirms customer data compromised"
-    url: "https://therecord.media/australia-origin-energy-data-breach"
-    source: "Recorded Future"
-    date: 2026-07-23T13:20:00Z
-    kind: news
-    labels: ["cybercrime", "industry"]
-  - title: "Nuclear-Sabotage Malware Benchmark Trips Up Most Frontier AI Models"
-    url: "https://www.securityweek.com/nuclear-sabotage-malware-benchmark-trips-up-most-frontier-ai-models/"
-    source: "SecurityWeek"
-    date: 2026-07-23T12:42:12Z
-    kind: news
-    labels: ["artificial intelligence", "ai benchmark", "benchmark", "malware", "sentinelone"]
-  - title: "JadeProx: Tracing a China-nexus Operation Through an OPSEC Mistake"
-    url: "https://www.group-ib.com/blog/jadeprox-china-nexus-triback-loader/"
-    source: "AlienVault"
-    date: 2026-07-23T11:57:13Z
-    kind: research
-    labels: ["adaptixc2", "beagle", "beagle backdoor", "china-nexus", "cve-2018-11511", "cve-2021-24139", "cve-2021-31755", "cve-2021-32305", "dll sideloading", "jadeprox", "phishing", "plugx", "southeast asia targeting", "triback loader", "xmrig"]
-  - title: "New RefluXFS Linux flaw lets attackers gain root privileges"
-    url: "https://www.bleepingcomputer.com/news/linux/new-refluxfs-linux-flaw-lets-attackers-gain-root-privileges/"
-    source: "BleepingComputer"
-    date: 2026-07-23T11:40:16Z
-    kind: news
-    labels: ["linux"]
-  - title: "Upbound Group Says Data Breach Led to $13 Million in Fraudulent Contract Losses"
-    url: "https://www.securityweek.com/upbound-group-says-data-breach-led-to-13-million-in-fraudulent-contract-losses/"
-    source: "SecurityWeek"
-    date: 2026-07-23T10:49:10Z
-    kind: news
-    labels: ["data breaches", "fraud", "fraud & identity theft", "upbound group"]
-  - title: "Chaos ransomware's msaRAT: Living off the browser to build a covert C2 channel"
-    url: "https://blog.talosintelligence.com/chaos-msarat-living-off-the-browser-to-build-covert-c2-channel/"
-    source: "Cisco Talos"
-    date: 2026-07-23T10:00:38Z
-    kind: research
-    labels: ["ransomware", "rat"]
-  - title: "Preview: Cisco Talos at Black Hat USA 2026"
-    url: "https://blog.talosintelligence.com/preview-cisco-talos-at-black-hat-usa-2026/"
-    source: "Cisco Talos"
-    date: 2026-07-23T10:00:14Z
-    kind: research
-    labels: []
-  - title: "New msaRAT malware uses Chrome, Edge browsers to route C2 traffic"
-    url: "https://www.bleepingcomputer.com/news/security/new-msarat-malware-uses-chrome-edge-browsers-to-route-c2-traffic/"
-    source: "BleepingComputer"
-    date: 2026-07-23T10:00:00Z
-    kind: news
-    labels: []
-  - title: "New Check Point Zero-Day Vulnerability Exploited in the Wild"
-    url: "https://www.securityweek.com/new-check-point-zero-day-vulnerability-exploited-in-the-wild/"
-    source: "SecurityWeek"
-    date: 2026-07-23T09:06:04Z
-    kind: news
-    labels: ["check point", "exploited", "vulnerabilities", "zero-day"]
-  - title: "Check Point warns of SmartConsole zero-day exploited in attacks"
-    url: "https://www.bleepingcomputer.com/news/security/check-point-patches-smartconsole-zero-day-exploited-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-07-23T08:13:07Z
-    kind: news
-    labels: []
-  - title: "Exploitation in the Wild of wp2shell"
-    url: "https://www.wiz.io/blog/wp2shell-cve-2026-63030-cve-2026-60137"
-    source: "AlienVault"
-    date: 2026-07-23T07:30:51Z
-    kind: research
-    labels: ["batch api exploitation", "cmsmap", "cve-2026-60137", "cve-2026-63030", "plugin upload", "pre-authentication", "rce", "sql injection", "webshell", "wordpress"]
-  - title: "Device Code Phishing: Turning a Convenience Feature Into an MFA Bypass"
-    url: "https://otx.alienvault.com/pulse/6a61c32adbac47eb19574196"
-    source: "AlienVault"
-    date: 2026-07-23T07:30:50Z
-    kind: research
-    labels: ["authentication broker", "device code phishing", "email account takeover", "mfa bypass", "microsoft 365 compromise", "oauth 2.0 abuse", "session hijacking", "spearphishing"]
