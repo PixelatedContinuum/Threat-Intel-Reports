@@ -3,27 +3,27 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-23T07:02:51Z
+generated_at: 2026-08-23T19:02:31Z
 window_days: 30
 counts:
-  total: 509
-  research: 183
-  news: 326
+  total: 499
+  research: 180
+  news: 319
 topics:
   - label: "vulnerabilities"
-    count: 67
+    count: 66
     color: 1
   - label: "cybercrime"
-    count: 48
+    count: 47
     color: 2
   - label: "malware"
-    count: 28
+    count: 27
     color: 3
-  - label: "artificial intelligence"
-    count: 24
-    color: 4
   - label: "government"
     count: 24
+    color: 4
+  - label: "artificial intelligence"
+    count: 23
     color: 5
   - label: "exploited"
     count: 23
@@ -38,7 +38,7 @@ topics:
     count: 19
     color: 9
   - label: "ransomware"
-    count: 18
+    count: 17
     color: 10
   - label: "microsoft"
     count: 14
@@ -56,7 +56,6 @@ label_colors:
   "account takeover": 2
   "account trafficking": 3
   "account-enumeration": 7
-  "active exploitation": 2
   "adblocker": 3
   "administrative access": 12
   "adobe": 1
@@ -119,7 +118,7 @@ label_colors:
   "arista": 10
   "armenia": 5
   "arrayref": 8
-  "artificial intelligence": 4
+  "artificial intelligence": 5
   "astral-pe": 3
   "astroproxy": 1
   "asyncrat": 11
@@ -130,7 +129,6 @@ label_colors:
   "audio surveillance": 7
   "authentication": 6
   "authentication bypass": 4
-  "autoit": 8
   "aws": 7
   "aws bedrock": 1
   "aws-secrets": 7
@@ -246,7 +244,6 @@ label_colors:
   "credential phishing": 9
   "credential theft": 7
   "credential-based attacks": 12
-  "critical infrastructure": 4
   "cross-platform malware": 7
   "crypto scam": 9
   "cryptocurrency": 12
@@ -298,7 +295,6 @@ label_colors:
   "endlessdoors": 1
   "endpoint security": 11
   "energy": 10
-  "energy sector": 2
   "ernst&young": 2
   "ethereum": 5
   "ethereum c2": 6
@@ -310,7 +306,6 @@ label_colors:
   "fake lock screen": 6
   "fakecaptcha": 7
   "fastjson": 10
-  "feedback friday": 10
   "firefox": 3
   "forensic evasion": 12
   "fortinet": 7
@@ -330,7 +325,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 5
+  "government": 4
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -417,6 +412,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "ToxicPanda Android malware uses VPN permissions to block Google Play"
+    url: "https://www.bleepingcomputer.com/news/security/toxicpanda-android-malware-uses-vpn-permissions-to-block-google-play/"
+    source: "BleepingComputer"
+    date: 2026-08-23T14:23:46Z
+    kind: news
+    labels: ["mobile"]
   - title: "Hackers infect Android car head units with proxy botnet malware"
     url: "https://www.bleepingcomputer.com/news/security/hackers-infect-android-car-head-units-with-proxy-botnet-malware/"
     source: "BleepingComputer"
@@ -3403,71 +3404,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/hermes-ai-agent-used-to-automate-attack-on-thai-finance-ministry/"
     source: "BleepingComputer"
     date: 2026-07-24T19:09:09Z
-    kind: news
-    labels: []
-  - title: "Hackers hijack hotel Wi-Fi DNS to steal Microsoft 365 accounts"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-hijack-hotel-wi-fi-dns-to-steal-microsoft-365-accounts/"
-    source: "BleepingComputer"
-    date: 2026-07-24T17:50:37Z
-    kind: news
-    labels: []
-  - title: "'Wrench' attacks against crypto holders appear to be on the rise"
-    url: "https://therecord.media/wrench-attacks-against-cryptocurrency-holders"
-    source: "Recorded Future"
-    date: 2026-07-24T15:55:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Security Advisory - Action Required - July 2026 Security Update"
-    url: "https://otx.alienvault.com/pulse/6a6375b8843a154abdf4a0f0"
-    source: "AlienVault"
-    date: 2026-07-24T14:24:56Z
-    kind: research
-    labels: ["active exploitation", "authentication bypass", "cve-2026-16232", "cve-2026-62144", "cve-2026-62145", "firewall", "gaiaos", "management products", "privilege escalation", "smartconsole"]
-  - title: "In Other News: Dolphin X AI-Powered Malware, Car Anti-Theft Device Hack, 400 Linux Kernel Flaws"
-    url: "https://www.securityweek.com/in-other-news-dolphin-x-ai-powered-malware-car-anti-theft-device-hack-400-linux-kernel-flaws/"
-    source: "SecurityWeek"
-    date: 2026-07-24T14:20:00Z
-    kind: news
-    labels: ["in other news", "malware", "ransomware", "vulnerabilities"]
-  - title: "Chick-fil-A data breach affects more than 13,000 customers"
-    url: "https://www.bleepingcomputer.com/news/security/chick-fil-a-data-breach-affects-more-than-13-000-customers/"
-    source: "BleepingComputer"
-    date: 2026-07-24T14:04:29Z
-    kind: news
-    labels: []
-  - title: "Slopsquatting, Phantom Domains, and HalluSquatting Are the Same AI Attack"
-    url: "https://www.bleepingcomputer.com/news/security/slopsquatting-phantom-domains-and-hallusquatting-are-the-same-ai-attack/"
-    source: "BleepingComputer"
-    date: 2026-07-24T14:01:11Z
-    kind: news
-    labels: []
-  - title: "June 2026 Threat Trend Report on APT Attacks (South Korea)"
-    url: "https://otx.alienvault.com/pulse/6a635bdf995351cf539c3b56"
-    source: "AlienVault"
-    date: 2026-07-24T12:34:39Z
-    kind: research
-    labels: ["apt", "autoit", "github abuse", "kimsuky", "lnk files", "pebbledash", "powershell", "prxclient", "south korea", "spear phishing", "task scheduler", "xenorat"]
-  - title: "Ongoing PLC Exploitation Against Critical U.S. Infrastructure"
-    url: "https://www.trendmicro.com/en_us/research/26/g/plc-exploitation.html"
-    source: "AlienVault"
-    date: 2026-07-24T12:34:37Z
-    kind: research
-    labels: ["critical infrastructure", "energy sector", "hmi manipulation", "industrial control systems", "iocontrol", "irgc-cec", "malpdb", "ot security", "plc exploitation", "water facilities"]
-  - title: "Industry Reactions to OpenAI Models Hacking Hugging Face: Feedback Friday"
-    url: "https://www.securityweek.com/industry-reactions-to-openai-models-hacking-hugging-face-feedback-friday/"
-    source: "SecurityWeek"
-    date: 2026-07-24T11:19:46Z
-    kind: news
-    labels: ["artificial intelligence", "feedback friday", "hugging face", "openai"]
-  - title: "Man gets six years for hacking 750 women's Snapchat accounts"
-    url: "https://www.bleepingcomputer.com/news/security/man-gets-six-years-for-hacking-750-womens-snapchat-accounts/"
-    source: "BleepingComputer"
-    date: 2026-07-24T11:17:19Z
-    kind: news
-    labels: []
-  - title: "Clop ransomware targets Windchill, FlexPLM in data theft attacks"
-    url: "https://www.bleepingcomputer.com/news/security/clop-ransomware-targets-windchill-flexplm-in-data-theft-attacks/"
-    source: "BleepingComputer"
-    date: 2026-07-24T07:36:39Z
     kind: news
     labels: []
