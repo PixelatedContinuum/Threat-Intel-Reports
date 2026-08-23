@@ -1387,7 +1387,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     head: "title: Windows Defender Tampering Via Set-MpPref"
     robustness: 3
     confidence: "HIGH"
-    attack: [T1562.001]
+    attack: [T1685]
   - name: "Photo Studio Masquerade Loader Files Under LocalAppData"
     engine: sigma
     tier: Detection
@@ -1477,7 +1477,7 @@ cloudsync-assembler-toolkit-91-197-98-188-detections:
     head: "title: AMSI Bypass Via AmsiUtils AmsiInitFailed "
     robustness: 2
     confidence: "HIGH"
-    attack: [T1562.001]
+    attack: [T1685]
   - name: "Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable"
     engine: sigma
     tier: Detection
@@ -2511,7 +2511,7 @@ inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections:
     head: "title: Inkognito Brand-Impersonation Subdomain D"
     robustness: 3
     confidence: "HIGH"
-    attack: [T1566.002, T1656, T1036.005]
+    attack: [T1566.002, T1684.001, T1036.005]
   - name: "Inkognito Custom X-Admin-Token Header in HTTP Request"
     engine: suricata
     tier: Hunting
@@ -2612,7 +2612,7 @@ korean-claude-openclaw-221.150.15.104-detections:
     head: "/* Yara Rule Set Identifier: Claude Code Attacke"
     robustness: 3
     confidence: "HIGH"
-    attack: [T1562.001, T1059.004]
+    attack: [T1685, T1059.004]
   - name: "Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist"
     engine: yara
     tier: Hunting
@@ -2621,7 +2621,7 @@ korean-claude-openclaw-221.150.15.104-detections:
     head: "rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic "
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1562.001, T1059.004]
+    attack: [T1685, T1059.004]
   - name: "Claude Code settings.local.json Written or Modified"
     engine: sigma
     tier: Hunting
@@ -2630,7 +2630,7 @@ korean-claude-openclaw-221.150.15.104-detections:
     head: "title: Claude Code Permission Allowlist Modified"
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1562.001]
+    attack: [T1685]
   - name: "OpenClaw Curl-Pipe-Bash Installer Execution"
     engine: sigma
     tier: Hunting
@@ -2639,7 +2639,7 @@ korean-claude-openclaw-221.150.15.104-detections:
     head: "title: OpenClaw AI-Agent Framework Curl-Pipe-Bas"
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1059.004, T1562.001]
+    attack: [T1059.004, T1685]
   - name: "OpenClaw Gateway Service Started"
     engine: sigma
     tier: Hunting
@@ -2648,7 +2648,7 @@ korean-claude-openclaw-221.150.15.104-detections:
     head: "title: OpenClaw AI-Agent Gateway Service Started"
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1090.001, T1562.001]
+    attack: [T1090.001, T1685]
   - name: "NPM Registry Fetch for OpenClaw Package"
     engine: sigma
     tier: Hunting
@@ -2657,7 +2657,7 @@ korean-claude-openclaw-221.150.15.104-detections:
     head: "title: NPM Registry Fetch for OpenClaw Package i"
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1059.007, T1562.001]
+    attack: [T1059.007, T1685]
 malware-analysis-houselet-detections:
   - name: "Unsigned Process With Sony Interactive Entertainment PE Description"
     engine: sigma
@@ -4488,7 +4488,7 @@ quasar-xworm-powershell-detections:
     head: "/* Yara Rule Set Identifier: QuasarRAT / Xworm P"
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1562.001]
+    attack: [T1685]
   - name: "VBScript-Spawned PowerShell In-Memory Payload Download"
     engine: sigma
     tier: Hunting

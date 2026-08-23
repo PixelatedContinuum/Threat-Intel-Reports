@@ -21,8 +21,8 @@ No malware binary exists in this campaign. The primary evidence is the operator'
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 1 | 1 | T1562.001, T1059.004 | 0 |
-| Sigma | 0 | 4 | T1562.001, T1059.004, T1059.007, T1090.001 | 1 |
+| YARA | 1 | 1 | T1685, T1059.004 | 0 |
+| Sigma | 0 | 4 | T1685, T1059.004, T1059.007, T1090.001 | 1 |
 | Suricata | 0 | 0 | — | 3 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -43,7 +43,7 @@ No malware binary exists in this campaign. The primary evidence is the operator'
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1562.001 (Disable or Modify Tools), T1059.004 (Unix Shell)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1059.004 (Unix Shell)
 **Confidence:** HIGH
 **Rationale:** Detects the operator's exact `settings.local.json` allowlist pattern pre-authorizing the complete OpenClaw installation and gateway-bring-up workflow. Requiring 3 of 7 distinctive OpenClaw-specific allowlist entries makes this a durable multi-string combination — no known legitimate Claude Code workflow pre-approves `curl|bash` + `npm i -g openclaw` + `openclaw gateway` together in one file, and no single renameable literal carries the rule alone.
 **False Positives:** None known — the combination of 3+ OpenClaw-specific allowlist strings in a `settings.local.json` file is not produced by any known legitimate developer workflow. Individual strings may appear separately in legitimate configurations; the 3-of-7 conjunction makes FP probability negligible.
@@ -91,7 +91,7 @@ rule TOOL_ClaudeCode_OpenClaw_Allowlist_Specific {
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1562.001 (Disable or Modify Tools), T1059.004 (Unix Shell)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1059.004 (Unix Shell)
 **Confidence:** MODERATE
 **Rationale:** Detects any `settings.local.json` Claude Code permission file containing a `Bash(curl ... | bash)` or `Bash(curl ... | sh)` pattern within a `permissions` block — a durable structural pattern that catches any pipe-to-shell installer allowlist entry regardless of which specific tooling is referenced, so it survives the operator swapping OpenClaw for another framework. The tradeoff is precision: developer endpoints with legitimate internal installer allowlists (corporate package feeds delivered via `curl | bash`) trigger this identically to attacker customization, so it stays Hunting rather than Detection.
 **False Positives:** Developer endpoints whose Claude Code allowlists include approved internal installer pipelines, for example corporate package feeds delivered via `curl | bash`.
@@ -134,7 +134,7 @@ rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1562.001 (Disable or Modify Tools)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** MODERATE
 **Rationale:** Sigma `file_event` rules match on path metadata, not file content, in most back ends, so this rule cannot itself confirm OpenClaw-specific allowlist strings are present — it only signals that the file was written. Because Claude Code writes this same path during routine, everyday interactive use (any time a user accepts a new tool permission), the rule fires on ubiquitous benign activity on any fleet with real Claude Code adoption. The path itself is durable (Claude Code, not the operator, dictates the filename), but precision fails Detection grade — this is a scoping lead that must be paired with the YARA content rule above, not an alert.
 **False Positives:**
@@ -193,7 +193,7 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1059.004 (Unix Shell), T1562.001 (Disable or Modify Tools)
+**ATT&CK Coverage:** T1059.004 (Unix Shell), T1685 (Disable or Modify Tools)
 **Confidence:** MODERATE
 **Rationale:** Detects the process-creation event for the OpenClaw `curl|bash` installer pipeline — the AND-combination of `curl`, `openclaw.ai`, and `bash` in one command line has no legitimate use outside of OpenClaw installation, so precision is genuinely tight. It stays Hunting rather than Detection because that same command line is exactly what a legitimate developer or evaluator runs when installing OpenClaw manually — the rule cannot distinguish attacker-driven, allowlist-suppressed execution from a human deliberately typing the documented install command, and no parent-process (Claude Code) correlation is available in the captured evidence to make that distinction. It is also domain-anchored (`openclaw.ai`), so it does not survive the vendor rotating install infrastructure — see the broader curl|bash YARA Hunting rule for the domain-independent resilience anchor.
 **False Positives:** Legitimate OpenClaw evaluation or installation on developer-class workstations, run manually and independent of any Claude Code allowlist.
@@ -243,7 +243,7 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1090.001 (Internal Proxy), T1562.001 (Disable or Modify Tools)
+**ATT&CK Coverage:** T1090.001 (Internal Proxy), T1685 (Disable or Modify Tools)
 **Confidence:** MODERATE
 **Rationale:** Detects invocation of the OpenClaw local-gateway service. The original selection OR-combined an image-name match with a bare `CommandLine` match on `gateway` + `--port` — the command-line branch alone is a generic pattern that would fire on any unrelated service using those two common tokens together, such as VPN gateways, API gateways, and countless other internal tools. Tightened here to require the `openclaw` binary image **and** the `gateway`/`--port` arguments together, removing the standalone false-positive-prone branch. Even tightened, legitimate OpenClaw adopters running the gateway locally trigger this identically to attacker-driven use, so it remains Hunting.
 **False Positives:** Legitimate OpenClaw adopters on developer-class workstations running the gateway for sanctioned evaluation or use.
@@ -296,7 +296,7 @@ level: medium
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1059.007 (JavaScript), T1562.001 (Disable or Modify Tools)
+**ATT&CK Coverage:** T1059.007 (JavaScript), T1685 (Disable or Modify Tools)
 **Confidence:** MODERATE
 **Rationale:** Detects HTTP requests to the npm registry for the `openclaw` package name — the alternative installation path documented in the operator's allowlist (`npm i -g openclaw`). Requiring both the registry host and the package-name substring together is a reasonable combination, but it still cannot distinguish an attacker-driven install from a developer intentionally evaluating the framework, and npm proxy/HTTP-inspection telemetry is not universally available. Deployed as a Hunting lead on hosts with no expected reason to fetch AI-agent tooling.
 **False Positives:** Legitimate developers evaluating or installing OpenClaw on sanctioned developer workstations.

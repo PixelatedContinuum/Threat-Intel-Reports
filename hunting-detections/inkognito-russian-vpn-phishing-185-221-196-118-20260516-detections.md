@@ -22,7 +22,7 @@ hide: true
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 2 | 0 | T1036.005, T1608.005 | 1 |
-| Sigma | 2 | 0 | T1566.002, T1656, T1036.005, T1583.001, T1583.004 | 5 |
+| Sigma | 2 | 0 | T1566.002, T1684.001, T1036.005, T1583.001, T1583.004 | 5 |
 | Suricata | 1 | 2 | T1583.001, T1583.004, T1071.001 | 6 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
@@ -146,7 +146,7 @@ rule MALW_Inkognito_Favicon_SVG
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1566.002 (Phishing: Spearphishing Link), T1656 (Impersonation), T1036.005 (Masquerading)
+**ATT&CK Coverage:** T1566.002 (Phishing: Spearphishing Link), T1684.001 (Impersonation), T1036.005 (Masquerading)
 **Confidence:** HIGH
 **Rationale:** The original rule enumerated 25 specific brand-impersonation subdomains via `QueryName|contains` — a static list that could never catch the remaining 440+ subdomains in the operator's inventory, let alone future additions (Robustness 1). Re-anchored to a wildcard on the parent zone (`QueryName|endswith: '.inklens.ru'`) with a filter excluding the operator's own enumerated DevOps subdomains, so the rule now covers the entire brand-impersonation platform regardless of which specific brand name is queried — a technique-level chokepoint (the platform itself), not an enumerated list.
 **False Positives:** Security researchers or threat hunters explicitly querying inklens.ru subdomains for investigation purposes; automated scanner infrastructure probing known-bad domain lists.

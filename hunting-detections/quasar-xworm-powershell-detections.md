@@ -22,7 +22,7 @@ This campaign chains a VBScript dropper, a PowerShell loader that pulls a payloa
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
-| YARA | 0 | 1 | T1562.001 | 0 |
+| YARA | 0 | 1 | T1685 | 0 |
 | Sigma | 0 | 1 | T1059.001, T1105 | 0 |
 | Suricata | 0 | 0 | — | 1 |
 
@@ -40,7 +40,7 @@ This campaign chains a VBScript dropper, a PowerShell loader that pulls a payloa
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1562.001 (Impair Defenses: Disable or Modify Tools)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** MODERATE
 **Rationale:** Matches a PowerShell script that adds Microsoft Defender exclusions for the payload path and the loader's helper processes. The `Add-MpPreference -ExclusionPath` / `-ExclusionProcess` combination is a real Defender-tampering technique, but it is also used by legitimate administrators and security tooling, so it is a broad hunting lead rather than a family-specific alerting signature. The build-specific `update.png` literal narrows the current sample but is trivially renamed, so the rule keys on the technique, not the campaign.
 **False Positives:**

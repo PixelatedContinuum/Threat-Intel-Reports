@@ -734,7 +734,7 @@ The full detection file is at [`/hunting-detections/ai-agent-frameworks-2026-05-
 | Detection Layer | Count | MITRE Techniques Covered | Overall FP Risk |
 |---|---|---|---|
 | YARA | 8 rules | T1574.006, T1014, T1564.001, T1587, T1059.006, T1027, T1498 | LOW–MEDIUM |
-| Sigma | 12 rules | T1574.006, T1014, T1059.006, T1583.006, T1102, T1496.001, T1562.001, T1071.001, T1027 | LOW–HIGH (per rule) |
+| Sigma | 12 rules | T1574.006, T1014, T1059.006, T1583.006, T1102, T1496.001, T1685, T1071.001, T1027 | LOW–HIGH (per rule) |
 | Suricata | 6 rules | T1583.006, T1102, T1496.001, T1071.001, T1573.001, T1090.004 | LOW–MEDIUM |
 | **Total** | **26 rules** | **Across 3 detection layers** | |
 
@@ -910,7 +910,7 @@ The single most operationally-useful Hunt.io MCP capability for this investigati
     {"name": "T1543.002", "source": "ttp"},
     {"name": "T1547.013", "source": "ttp"},
     {"name": "T1003.008", "source": "ttp"},
-    {"name": "T1070.002", "source": "ttp"},
+    {"name": "T1685.006", "source": "ttp"},
     {"name": "T1497.001", "source": "ttp"},
     {"name": "T1497.003", "source": "ttp"},
     {"name": "xmrig", "source": "tria.ge"}
@@ -918,7 +918,7 @@ The single most operationally-useful Hunt.io MCP capability for this investigati
 }
 ```
 
-Read together, those tags describe a **Linux platform with PAM modification persistence (T1556.003), systemd service persistence (T1543.002), XDG autostart persistence (T1547.013), `/etc/passwd` + `/etc/shadow` credential dumping (T1003.008), system-log clearing (T1070.002), system-check sandbox evasion (T1497.001), time-based sandbox evasion (T1497.003), and a confirmed xmrig (Monero miner) family classification from tria.ge sandbox detonation**. The analyst formed that platform model in seconds — without pulling any file content — and the model was correct end-to-end. This metadata directly drove Case 9's expansion from "capsule" depth to full case treatment: the breadth of TTP coverage signaled a systematic cryptojacking platform rather than a single-purpose scanner.
+Read together, those tags describe a **Linux platform with PAM modification persistence (T1556.003), systemd service persistence (T1543.002), XDG autostart persistence (T1547.013), `/etc/passwd` + `/etc/shadow` credential dumping (T1003.008), system-log clearing (T1685.006), system-check sandbox evasion (T1497.001), time-based sandbox evasion (T1497.003), and a confirmed xmrig (Monero miner) family classification from tria.ge sandbox detonation**. The analyst formed that platform model in seconds — without pulling any file content — and the model was correct end-to-end. This metadata directly drove Case 9's expansion from "capsule" depth to full case treatment: the breadth of TTP coverage signaled a systematic cryptojacking platform rather than a single-purpose scanner.
 
 **Concrete example — Case 3 (87.106.143.220) host-files listing:**
 

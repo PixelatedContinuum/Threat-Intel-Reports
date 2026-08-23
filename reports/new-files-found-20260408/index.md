@@ -937,7 +937,7 @@ Building on the April 6 profile, the following characteristics are now confirmed
 | Defense Evasion | T1036.005 | Match Legitimate Name or Location | HIGH | C:\Windows\Temp\beacon.dll; rundll32.exe as hollowing target |
 | Defense Evasion | T1027 | Obfuscated Files or Information | HIGH | XOR-encoded shellcode in Artifact Kit; AES-encrypted sleeve DLLs |
 | Defense Evasion | T1140 | Deobfuscate/Decode Files or Information | HIGH | 4-byte rolling XOR decode in artifact32svc pipe reader |
-| Defense Evasion | T1620.001 | Reflective Code Loading | HIGH | beacon_rdi.exe hardcoded-offset ReflectiveLoader call |
+| Defense Evasion | T1620 | Reflective Code Loading | HIGH | beacon_rdi.exe hardcoded-offset ReflectiveLoader call |
 | Defense Evasion | T1218.011 | Rundll32 | HIGH | rundll32.exe spawned with no arguments as hollowing target |
 | Discovery | T1082 | System Information Discovery | HIGH | GetComputerNameA, GetUserNameA across all beacon generations |
 | Discovery | T1057 | Process Discovery | HIGH | CreateToolhelp32Snapshot in gen-4 cmd_ps (0x20) |

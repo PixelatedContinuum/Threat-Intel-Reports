@@ -856,7 +856,7 @@ rootkit.dll's capabilities map to multiple MITRE ATT&CK techniques across Defens
   <tbody>
     <tr>
       <td><strong>Defense Evasion</strong></td>
-      <td>T1562.001</td>
+      <td>T1685</td>
       <td>Impair Defenses: Disable or Modify Tools</td>
       <td>Systematic termination of 20+ security products; CRITICAL capability</td>
       <td class="confirmed">CONFIRMED</td>
@@ -929,7 +929,7 @@ rootkit.dll's capabilities map to multiple MITRE ATT&CK techniques across Defens
 
 ### Technique Justification
 
-**T1562.001 - Impair Defenses (CRITICAL):**
+**T1685 - Disable or Modify Tools (CRITICAL):**
 - CONFIRMED through process termination list (20+ security products)
 - CONFIRMED through BYOVD exploitation of BdApiUtil64.sys IOCTL
 - Code reference: sub_180002f7b dispatcher loop

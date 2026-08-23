@@ -707,7 +707,7 @@ The cross-cluster overlap test was run against 35 cluster-defining IOCs spanning
 | Command and Control / T1090.003 | Multi-hop Proxy | Marzban-managed Xray/V2Ray fleet at `marzban.inklens.co.uk`; multiple regional VPN exit nodes (`fi1`, `de1`, `ger.bigass.monster`, `gr.nodes.unloki.ru`) |
 | Command and Control / T1102.001 | Web Service: Dead Drop Resolver | `inklens.co.uk` apex chameleon-decoy redirect chain (GitHub Pages → AmazonS3); plausible but unconfirmed use as controlled redirect target for operational subdomain discovery (LOW) |
 | Impact / T1657 | Financial Theft | Russian SBP / T-Pay / card payment integration on INK VPN; CryptOne fake exchange; BEC burn-domain infrastructure |
-| Impact / T1656 | Impersonation | 467+ brand-impersonation subdomains; CryptOne fake exchange impersonating legitimate crypto exchange |
+| Impact / T1684.001 | Impersonation | 467+ brand-impersonation subdomains; CryptOne fake exchange impersonating legitimate crypto exchange |
 
 ---
 

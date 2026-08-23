@@ -377,7 +377,7 @@ XWorm RAT → AsyncRAT → LockBit Black ransomware
     </tr>
     <tr>
       <td>Defense Evasion</td>
-      <td>T1562.001</td>
+      <td>T1685</td>
       <td>Impair Defenses: Disable Tools (AMSI/ETW)</td>
       <td class="confirmed">NOT IN v2.4.0 (v6.0 feature)</td>
     </tr>

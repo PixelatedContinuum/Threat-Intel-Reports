@@ -675,7 +675,7 @@ This section maps FleetAgentFUD.exe's observed behaviors and capabilities to the
     </tr>
     <tr>
       <td><strong>Defense Evasion</strong></td>
-      <td>T1562.001</td>
+      <td>T1685</td>
       <td>Impair Defenses: Disable or Modify Tools (PowerShell Execution Policy Bypass)</td>
       <td class="confirmed">CONFIRMED</td>
     </tr>
@@ -932,7 +932,7 @@ Protocol: TCP
 
 ---
 
-#### T1562.001 - Impair Defenses: Disable or Modify Tools
+#### T1685 - Disable or Modify Tools
 
 **Confidence:** CONFIRMED
 

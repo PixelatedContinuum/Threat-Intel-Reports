@@ -617,7 +617,7 @@ ScareCrow uses `PROC_THREAD_ATTRIBUTE_PARENT_PROCESS` at `CreateProcess` time. T
 
 > **Plain language:** Windows includes two built-in security reporting systems — ETW (Event Tracing for Windows) and AMSI (Antimalware Scan Interface) — that many security products rely on to receive alerts about suspicious activity. This technique silences both by modifying them in memory at startup, causing them to stop reporting anything from the malicious process.
 
-Implemented as the `PatchETW()` stub in `etw_amsi_patch.c`, mapping to T1562.006 (Indicator Blocking). I hold it HIGH, a ScareCrow-native capability confirmed by source documentation.
+Implemented as the `PatchETW()` stub in `etw_amsi_patch.c`, mapping to T1685 (Indicator Blocking). I hold it HIGH, a ScareCrow-native capability confirmed by source documentation.
 
 
 
@@ -629,7 +629,7 @@ The critical nuance for defenders is that user-mode ETW patching affects only us
 
 #### Technique 11: AMSI Patching
 
-Implemented as the `PatchAMSI()` stub in `etw_amsi_patch.c`, mapping to T1562.001. I hold it HIGH, ScareCrow-native, though byte-level verification of the `AmsiScanBuffer` prologue was not completed before the C2 went offline.
+Implemented as the `PatchAMSI()` stub in `etw_amsi_patch.c`, mapping to T1685. I hold it HIGH, ScareCrow-native, though byte-level verification of the `AmsiScanBuffer` prologue was not completed before the C2 went offline.
 
 
 
@@ -876,7 +876,7 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | Defense Evasion      | T1497.001    | System Checks                                | DEFINITE       | vm_checks.C: dwNumberOfProcessors < 2 → exit; GetTickCount() < 600000 → exit                                                        |
 | Defense Evasion      | T1497.003    | Time-Based Evasion                           | DEFINITE       | GetTickCount uptime check; 70% jitter on 300s base callback (effective 90–510s window)                                              |
 | Defense Evasion      | T1553.002    | Code Signing                                 | DEFINITE       | cert.pem serial 659EEB5AA4A489FB238993AF259D23F057F6D6D6; self-signed; applied to binaries                                          |
-| Defense Evasion      | T1562.001    | Disable or Modify Tools                      | DEFINITE       | stager: amsiInitFailed reflection; Set-MpPreference disable; ScareCrow: ETW + AMSI patches                                          |
+| Defense Impairment      | T1685    | Disable or Modify Tools                      | DEFINITE       | stager: amsiInitFailed reflection; Set-MpPreference disable; ScareCrow: ETW + AMSI patches                                          |
 | Defense Evasion      | T1620        | Reflective Code Loading                      | DEFINITE       | 18.4 MB PRV region; Donut RIP at base+0x59; Sliver PE never written to disk                                                         |
 | Defense Evasion      | T1070        | Indicator Removal                            | MODERATE (65%) | process_ghosting.c FILE_FLAG_DELETE_ON_CLOSE; temp file deleted before process visible                                              |
 | Discovery            | T1082        | System Information Discovery                 | DEFINITE       | vm_checks.C GetSystemInfo() for dwNumberOfProcessors                                                                                |
@@ -1089,7 +1089,7 @@ The rules target architectural constants that survive polymorphic regeneration, 
 
 - MITRE ATT&CK T1055.012 (Process Hollowing) — [https://attack.mitre.org/techniques/T1055/012/](https://attack.mitre.org/techniques/T1055/012/)
 - MITRE ATT&CK T1134.004 (PPID Spoofing) — [https://attack.mitre.org/techniques/T1134/004/](https://attack.mitre.org/techniques/T1134/004/)
-- MITRE ATT&CK T1562.006 (ETW patching) — [https://attack.mitre.org/techniques/T1562/006/](https://attack.mitre.org/techniques/T1562/006/)
+- MITRE ATT&CK T1685 (ETW patching) — [https://attack.mitre.org/techniques/T1685/](https://attack.mitre.org/techniques/T1685/)
 - MITRE ATT&CK T1553.002 (Code Signing) — [https://attack.mitre.org/techniques/T1553/002/](https://attack.mitre.org/techniques/T1553/002/)
 - GitHub optiv/ScareCrow — [https://github.com/optiv/ScareCrow](https://github.com/optiv/ScareCrow)
 - GitHub klezVirus/SysWhispers3 — [https://github.com/klezVirus/SysWhispers3](https://github.com/klezVirus/SysWhispers3)

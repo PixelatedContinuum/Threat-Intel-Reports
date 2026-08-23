@@ -52,7 +52,7 @@ An operator pre-approving an `openclaw.ai` installer in Claude Code's permission
 What was found, each detailed in its home section:
 
 - **The smoking-gun artifact** — a 442-byte, downloadable `~/.claude/settings.local.json` whose seven-entry `permissions.allow` array pre-authorizes Claude Code to run the full OpenClaw bring-up chain (environment probe → `curl ... | bash` install → global npm install → onboarding → docs fetch → gateway listener on TCP 18789 → browser UI launch) with no safety prompt. The operator pre-clicked "Always allow" for the entire workflow before any session began (full JSON and per-entry breakdown in Section 4.1).
-- **The permission-allowlist-customization TTP** — operator misuse of a documented Claude Code feature, not a vulnerability. The mechanism, the weaponization, and the file-level detection signal are dissected in Section 4.2 (maps to T1562.001).
+- **The permission-allowlist-customization TTP** — operator misuse of a documented Claude Code feature, not a vulnerability. The mechanism, the weaponization, and the file-level detection signal are dissected in Section 4.2 (maps to T1685).
 - **Co-located Claude Code + OpenClaw architecture** — the mainstream agent CLI glued to a side-loaded agent framework, a pattern the parent investigation also observed in Case 2 (Section 4.3).
 - **Reproducible defender hunt anchor** — the file itself is the detection signal, and it generalizes: the same hunt catches operator-customized allowlists pointing at *any* side-loaded toolkit, not just OpenClaw (Sections 7–8).
 - **Operator OPSEC paradox** — the operator who carefully tuned the allowlist exposed the whole home directory to the public internet, the recurring "AI-integrated mature operator" profile across the parent investigation (Section 6).
@@ -452,7 +452,7 @@ Findings organized by confidence level. The body attaches per-claim confidence i
 - The open directory was reachable at `http://221.150.15.104:8080/` as of Hunt.io first-seen 2026-03-11
 - The host filesystem contains `~/.openclaw/` co-located with `~/.claude/`
 - The host filesystem contains `~/.openclaw/completions/openclaw.ps1`
-- The artifact is direct evidence of attacker-modified Claude Code permission-allowlist content (T1562.001 mapping)
+- The artifact is direct evidence of attacker-modified Claude Code permission-allowlist content (T1685 mapping)
 - OpenClaw is publicly distributed via `openclaw.ai`, `docs.openclaw.ai`, and the npm registry
 
 ### HIGH (strong evidence, minor gaps)
@@ -545,7 +545,7 @@ Defenders building hunt and detection logic should anchor on the DEFINITE artifa
 - **Anthropic Claude Code documentation** — `https://docs.anthropic.com/en/docs/claude-code` — The canonical reference for Claude Code's permission-allowlist mechanism, including the `settings.local.json` schema and the `permissions.allow` semantics. Defenders unfamiliar with the mechanism should consult this documentation directly to understand the legitimate use case the operator has weaponized.
 - **OpenClaw product site** — `https://openclaw.ai/` — The OpenClaw maintainers' product page. Documents the legitimate installation paths (the same paths the operator's allowlist authorizes) and provides context on the framework's intended use.
 - **OpenClaw documentation** — `https://docs.openclaw.ai/` — The documentation host referenced in the operator's `WebFetch(domain:docs.openclaw.ai)` allowlist entry.
-- **MITRE ATT&CK T1562.001** — `https://attack.mitre.org/techniques/T1562/001/` — Reference for the Disable or Modify Tools technique that captures the allowlist-tampering pattern documented in this case.
+- **MITRE ATT&CK T1685** — `https://attack.mitre.org/techniques/T1685/` — Reference for the Disable or Modify Tools technique that captures the allowlist-tampering pattern documented in this case.
 
 ### Appendix A — The Hunters Ledger UTA Designation System
 

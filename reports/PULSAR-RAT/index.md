@@ -636,7 +636,7 @@ The following table maps all confirmed Pulsar RAT capabilities to MITRE ATT&CK t
       <td class="possible">LOW</td>
     </tr>
     <tr>
-      <td>T1562.001</td>
+      <td>T1685</td>
       <td>Impair Defenses: Disable or Modify Tools</td>
       <td>Anti-analysis techniques target security tools</td>
       <td class="likely">MODERATE</td>

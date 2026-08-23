@@ -677,7 +677,7 @@ Thread Execution Flow:
       <td>Potential capability through kernel driver access</td>
     </tr>
     <tr>
-      <td>T1562</td>
+      <td>T1685</td>
       <td>Impair Defenses</td>
       <td>Disable EDR (CrowdStrike Falcon)</td>
       <td class="confirmed">CONFIRMED</td>
@@ -742,7 +742,7 @@ Thread Execution Flow:
 
 **Arsenal-237 Campaign TTPs**:
 - **Stage 1**: T1548 (Abuse Elevation Control Mechanism) - lpe.exe privilege escalation
-- **Stage 2**: T1562 (Impair Defenses) - killer_crowdstrike.dll EDR termination
+- **Stage 2**: T1685 (Disable or Modify Tools) - killer_crowdstrike.dll EDR termination
 - **Stage 3**: T1098 (Account Manipulation) or T1561 (Disk Wipe) - ransomware deployment
 
 ---

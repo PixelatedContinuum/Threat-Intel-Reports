@@ -391,7 +391,7 @@ Technique IDs are validated against the current ATT&CK catalog. All rows are HIG
 | Persistence / T1543.002 | Systemd Service | `c3pool_miner`, `omnihunter`, `vultr-miner-serve` |
 | Persistence / T1547.001 | Registry Run Keys | HKLM Run `WindowsWatchdog` to `wscript.exe ...worm.vbs` |
 | Privilege Escalation / T1053.005 | Scheduled Task (SYSTEM) | Remote `schtasks ... /ru SYSTEM /f` on LAN spread |
-| Defense Evasion / T1562.001 | Disable or Modify Tools | `Set-MpPreference -DisableRealtimeMonitoring` + `%TEMP%` exclusion |
+| Defense Impairment / T1685 | Disable or Modify Tools | `Set-MpPreference -DisableRealtimeMonitoring` + `%TEMP%` exclusion |
 | Defense Evasion / T1036.005 | Match Legitimate Name or Location | `xmrig.exe` to `svchost.exe` under `%APPDATA%\...\TimeService` |
 | Defense Evasion / T1564.001 | Hidden Files and Directories | `attrib +H +S`; `/tmp/.X11-unix.` lookalike dir |
 | Defense Evasion / T1027.010 | Command Obfuscation | JNDI case/default-value bypass; `p.bat` `$`-token substitution |

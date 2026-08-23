@@ -19,7 +19,7 @@ hide: true
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 6 | 1 | T1046, T1055, T1620, T1027, T1140, T1136.002, T1098, T1105, T1091, T1071, T1571, T1090.003, T1036.005 | 14 |
-| Sigma | 17 | 1 | T1136.001, T1543.003, T1090.003, T1036.005, T1127.001, T1055, T1562.001, T1053.005, T1070.004, T1136.002, T1098.007, T1564.002, T1505.003, T1059.001, T1219.002, T1090, T1547.001 | 3 |
+| Sigma | 17 | 1 | T1136.001, T1543.003, T1090.003, T1036.005, T1127.001, T1055, T1685, T1053.005, T1070.004, T1136.002, T1098.007, T1564.002, T1505.003, T1059.001, T1219.002, T1090, T1547.001 | 3 |
 | Suricata | 4 | 0 | T1071, T1571, T1071.001 | 2 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, so they are safe to alert on. *Hunting rules* are broader, intended for scoping and threat-hunting, so expect to review the hits.
@@ -586,7 +586,7 @@ level: high
 
 **Tier:** Detection
 **Robustness:** 3
-**ATT&CK Coverage:** T1562.001 (Impair Defenses: Disable or Modify Tools)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
 **False Positives:** Administrative hardening or troubleshooting scripts that legitimately toggle Defender preferences
 **Blind Spots:** An attacker using the WMI `MSFT_MpPreference` class directly (bypassing the PowerShell cmdlet wrapper) would not produce this exact command line and would evade the rule
@@ -1044,7 +1044,7 @@ level: high
 
 **Tier:** Detection
 **Robustness:** 2
-**ATT&CK Coverage:** T1562.001 (Impair Defenses: Disable or Modify Tools)
+**ATT&CK Coverage:** T1685 (Disable or Modify Tools)
 **Confidence:** HIGH
 **False Positives:** Unlikely, legitimate scripts do not reflectively clear the AMSI initialization-failed field
 **Blind Spots:** Deliberately does NOT key on the literal "AmsiUtils" type-name string, since this campaign's stub constructs that string from a reversed literal specifically to evade signature matching on it; a variant that also renames or obfuscates the field name "amsiInitFailed" itself would evade this rule

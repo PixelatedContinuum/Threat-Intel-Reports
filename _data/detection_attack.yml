@@ -714,9 +714,9 @@
       rules: "BellaMain USOM Poll, Telegram Bot Outbound, and Correlations (SIGMA, Hunting)"
       count: 1
 "cloudsync-assembler-toolkit-91-197-98-188-detections":
-  total: 26
-  tactics: 6
-  unresolved: ["T1562.001"]
+  total: 27
+  tactics: 7
+  unresolved: []
   rows:
     - tactic: "Execution"
       id: "T1053.005"
@@ -803,6 +803,11 @@
       name: "Reflective Code Loading"
       rules: "Paralell Injector and SvchostPayload Type Names (YARA, Detection)"
       count: 1
+    - tactic: "Defense Impairment"
+      id: "T1685"
+      name: "Disable or Modify Tools"
+      rules: "Windows Defender Tampering Via Set-MpPreference Disable Switches (SIGMA, Detection); AMSI Bypass Via AmsiUtils AmsiInitFailed Field SetValue (SIGMA, Detection)"
+      count: 2
     - tactic: "Discovery"
       id: "T1046"
       name: "Network Service Discovery"
@@ -1359,9 +1364,9 @@
       rules: "GOCLOUD_Windows_Deploy_Worm_Lingkai (YARA, Detection); GOCLOUD_Windows_Miner_WinJenkins (YARA, Detection); GOCLOUD_Linux_Miner_v7 (YARA, Detection); Process Executed From X11-Socket-Lookalike Temp Directory (SIGMA, Detection); Systemd Or Cron Executing Binary From Tmp (SIGMA, Hunting)"
       count: 5
 "inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections":
-  total: 5
+  total: 6
   tactics: 4
-  unresolved: ["T1656"]
+  unresolved: []
   rows:
     - tactic: "Resource Development"
       id: "T1583.004"
@@ -1383,6 +1388,11 @@
       name: "Match Legitimate Resource Name or Location"
       rules: "Inkognito INK VPN JS Bundle (Brand/API String Combination) (YARA, Detection); Inkognito INK VPN Favicon SVG (Hash-or-Brand-String) (YARA, Detection); Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) (SIGMA, Detection)"
       count: 3
+    - tactic: "Stealth"
+      id: "T1684.001"
+      name: "Impersonation"
+      rules: "Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard) (SIGMA, Detection)"
+      count: 1
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
@@ -1439,9 +1449,9 @@
       rules: "KAIDO Anti-Analysis Sleep Obfuscation + Config Crypto Framing (YARA, Detection); KAIDO TeamKAIDO C2 TLS Certificate Issuer (SURICATA, Detection)"
       count: 2
 "korean-claude-openclaw-221.150.15.104-detections":
-  total: 3
-  tactics: 2
-  unresolved: ["T1562.001"]
+  total: 4
+  tactics: 3
+  unresolved: []
   rows:
     - tactic: "Execution"
       id: "T1059.004"
@@ -1453,6 +1463,11 @@
       name: "JavaScript"
       rules: "NPM Registry Fetch for OpenClaw Package (SIGMA, Hunting)"
       count: 1
+    - tactic: "Defense Impairment"
+      id: "T1685"
+      name: "Disable or Modify Tools"
+      rules: "OpenClaw-Specific Claude Code Allowlist (YARA, Detection); Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist (YARA, Hunting); Claude Code settings.local.json Written or Modified (SIGMA, Hunting); OpenClaw Curl-Pipe-Bash Installer Execution (SIGMA, Hunting); OpenClaw Gateway Service Started (SIGMA, Hunting); NPM Registry Fetch for OpenClaw Package (SIGMA, Hunting)"
+      count: 6
     - tactic: "Command and Control"
       id: "T1090.001"
       name: "Internal Proxy"
@@ -2429,14 +2444,19 @@
       rules: "BellaMain PhaaS Panel PHP Source (YARA, Detection)"
       count: 1
 "quasar-xworm-powershell-detections":
-  total: 2
-  tactics: 2
-  unresolved: ["T1562.001"]
+  total: 3
+  tactics: 3
+  unresolved: []
   rows:
     - tactic: "Execution"
       id: "T1059.001"
       name: "PowerShell"
       rules: "VBScript-Spawned PowerShell In-Memory Payload Download (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Defense Impairment"
+      id: "T1685"
+      name: "Disable or Modify Tools"
+      rules: "PowerShell Microsoft Defender Exclusion Script (YARA, Hunting)"
       count: 1
     - tactic: "Command and Control"
       id: "T1105"

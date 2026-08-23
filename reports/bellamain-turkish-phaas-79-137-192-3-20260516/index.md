@@ -737,7 +737,7 @@ BellaMain has no host-malware persistence — it is a server-side PHP applicatio
 | Resource Development / T1585.002 | Email Accounts | `hello@cryptone.bot` operator-controlled (vanity contact email on parked domain) (MODERATE) |
 | Resource Development / T1608.005 | Stage Capabilities: Link Target | 7 brand-impersonation kit RARs staged on operator open-directory at `79.137.192.3` |
 | Initial Access / T1566.002 | Spearphishing Link | Kits designed to be linked from SMS/email/social into a victim browser (specific lure delivery not directly recovered, but kit structure assumes this delivery) |
-| Initial Access / T1656 | Impersonation | 7 named Turkish marketplaces impersonated — pixel-perfect replicas loading legitimate CDN assets |
+| Initial Access / T1684.001 | Impersonation | 7 named Turkish marketplaces impersonated — pixel-perfect replicas loading legitimate CDN assets |
 | Execution / T1059.004 | Command and Scripting Interpreter: Unix Shell | `backup.php` calls `exec("mysqldump ...")` — shells out to OS-level `mysqldump` binary |
 | Persistence / T1505.003 | Web Shell | `V5VgjLU0jsDe/` admin directory functions as an operator web shell — `manager.php` accepts Telegram-routed commands that issue DB queries, TRUNCATE tables, and dump backups |
 | Defense Evasion / T1027.013 | Encrypted/Encoded Files or Information | `sifreleWadanz` = `base64(gzcompress(serialize()))` wrapping operator session data; not strong cryptography but obfuscates cookie content |

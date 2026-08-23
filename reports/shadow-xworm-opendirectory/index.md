@@ -992,14 +992,14 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
   <tbody>
     <tr>
       <td>Defense Evasion</td>
-      <td>T1562.001</td>
+      <td>T1685</td>
       <td>Disable or Modify Tools (AMSI)</td>
       <td class="confirmed">DEFINITE</td>
       <td>Patches <code>AmsiScanBuffer</code> with 15-byte shellcode returning E_INVALIDARG — direct code inspection</td>
     </tr>
     <tr>
       <td>Defense Evasion</td>
-      <td>T1562.006</td>
+      <td>T1685</td>
       <td>Indicator Blocking (ETW)</td>
       <td class="confirmed">DEFINITE</td>
       <td>Patches <code>EtwEventWrite</code> with RET (0xC3) to silence event tracing — direct code inspection</td>
@@ -1041,7 +1041,7 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
     </tr>
     <tr>
       <td>Defense Evasion</td>
-      <td>T1562.004</td>
+      <td>T1686</td>
       <td>Disable or Modify System Firewall</td>
       <td class="likely">HIGH</td>
       <td><code>DoDisableFirewall</code> command via netsh</td>

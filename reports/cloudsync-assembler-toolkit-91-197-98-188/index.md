@@ -647,7 +647,7 @@ The techniques that carry the most detection value are concentrated in Defense E
 | Defense Evasion / T1620 | Reflective Code Loading | in-memory .NET assembly load of both stages |
 | Defense Evasion / T1140 | Deobfuscate/Decode Files | base16 to base28 to AES layered decode |
 | Defense Evasion / T1027 | Obfuscated Files or Information | custom JScript crypto; Crypto Obfuscator; ConfuserEx2 |
-| Defense Evasion / T1562.001 | Impair Defenses: Disable or Modify Tools | `Set-MpPreference -DisableRealtimeMonitoring`; AMSI patch |
+| Defense Impairment / T1685 | Disable or Modify Tools | `Set-MpPreference -DisableRealtimeMonitoring`; AMSI patch |
 | Defense Evasion / T1036.005 | Match Legitimate Name or Location | `Guest$`; `taskhostw.exe` is Tor; `svchost`/`svhost` |
 | Defense Evasion / T1564.002 | Hidden Users | Winlogon `SpecialAccounts\UserList` write (DEFINITE) |
 | Defense Evasion / T1112 | Modify Registry | Defender exclusion keys; `UserList` hide |

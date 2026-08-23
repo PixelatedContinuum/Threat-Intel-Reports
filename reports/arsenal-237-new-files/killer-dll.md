@@ -1497,14 +1497,14 @@ Given anti-analysis sophistication, organizations must shift from **static detec
     </tr>
     <tr>
       <td><strong>Defense Evasion</strong></td>
-      <td>T1562.001</td>
+      <td>T1685</td>
       <td>Impair Defenses: Disable or Modify Tools</td>
       <td>Terminates 20+ security product processes via kernel IOCTL commands</td>
       <td class="confirmed">CONFIRMED</td>
     </tr>
     <tr>
       <td><strong>Defense Evasion</strong></td>
-      <td>T1562.002</td>
+      <td>T1685.001</td>
       <td>Impair Defenses: Disable Windows Event Logging</td>
       <td>Security product termination disables logging; inferred capability</td>
       <td class="likely">LIKELY</td>

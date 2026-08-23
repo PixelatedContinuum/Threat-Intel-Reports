@@ -762,7 +762,7 @@ The detection file contains 25 production-ready detection rules covering YARA fi
 | Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
 |---|---|---|---|
 | YARA | 10 | T1014, T1574.006, T1564.001, T1027, T1059.004, T1059.006, T1572, T1102.002, T1595.002 | LOW-MEDIUM |
-| Sigma | 12 | T1574.006, T1222.002, T1543.002, T1053.003, T1554, T1480.002, T1620, T1495, T1070.002, T1057, T1595.002, T1102.002 | LOW-MEDIUM |
+| Sigma | 12 | T1574.006, T1222.002, T1543.002, T1053.003, T1554, T1480.002, T1620, T1495, T1685.006, T1057, T1595.002, T1102.002 | LOW-MEDIUM |
 | Suricata | 6 | T1496.001, T1572, T1071.001, T1071.004, T1102.002, T1595.002 | LOW |
 
 By priority that is 4 HIGH rules, 6 MEDIUM and 12 LOW across all rule types.

@@ -1176,7 +1176,7 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 | Execution / T1053.005 | Scheduled Task | `watchermgmt.job` runs `CrystSupervisor32.exe` hourly via Task Scheduler |
 | Persistence / T1053.005 | Scheduled Task | Legacy `.job` at `C:\Windows\Tasks\watchermgmt.job` + auto-migrated XML at `C:\Windows\System32\Tasks\watchermgmt`; 1-hour heartbeat, daily recurrence |
 | Privilege Escalation / T1134 | Access Token Manipulation | `AdjustTokenPrivileges` + `OpenProcessToken` imports observed; YARA `escalate_priv` capa hit on Carriers.exe — usage may be stock Inno UAC self-elevation (MODERATE) |
-| Defense Evasion / T1574.002 | DLL Side-Loading | Genuine signed `SlideShowEditor.exe` (renamed `CrystSupervisor32.exe`) loads operator-modified `ExceptionHandler.dll` from `%TEMP%\is-*.tmp\` |
+| Defense Evasion / T1574.001 | DLL | Genuine signed `SlideShowEditor.exe` (renamed `CrystSupervisor32.exe`) loads operator-modified `ExceptionHandler.dll` from `%TEMP%\is-*.tmp\` |
 | Defense Evasion / T1055.012 | Process Hollowing | Stage-1 hollows `tapisrv.dll`; stage-2 hollows `input.dll`; runtime hollows `WVault.exe` (renamed Qihoo PromoUtil.exe) for .NET injection |
 | Defense Evasion / T1055.002 | Portable Executable Injection | Stage-2 shellcode (5,808 bytes) injected into `tapisrv.dll!.text` via `VirtualProtect(PAGE_EXECUTE_READWRITE)` + `memcpy` |
 | Defense Evasion / T1055 | Process Injection | `clr.dll!CreateAssemblyNameObject` + `clr.dll!GetIdentityAuthority` thread start addresses in `WVault.exe` (Process Explorer screenshots) |
@@ -1190,7 +1190,7 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 | Defense Evasion / T1036.007 | Double File Extension | `NDA_Agreements.PDF_2025-12-22 06-50-31-659.exe` long-timestamp pushes `.exe` off Explorer's column |
 | Defense Evasion / T1036.002 | Right-to-Left Override | `puttyfdp.scr`, `NDA_Agreementsfdp.msi` use U+202E; new variant `Carriers_Agreements_009RCARHEFfd..scr` adds Cyrillic-р homoglyph (`%d1%80`) |
 | Defense Evasion / T1480 | Execution Guardrails | Per-host hostname-keyed crypto — encrypted payload + env var names deterministic from hostname; resists static recovery on different machine (MODERATE) |
-| Defense Evasion / T1562.001 | Disable or Modify Tools | Defender exclusion `HKLM\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths\C:\ProgramData\adv_ctrl = 0` set via `MsMpEng.exe`; Tier-2 MSC `Add-MpPreference -ExclusionExtension *` (DEFINITE) |
+| Defense Impairment / T1685 | Disable or Modify Tools | Defender exclusion `HKLM\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths\C:\ProgramData\adv_ctrl = 0` set via `MsMpEng.exe`; Tier-2 MSC `Add-MpPreference -ExclusionExtension *` (DEFINITE) |
 | Defense Evasion / T1553.004 | Install Root Certificate | `pe_06` (Rugmi.HP) installs GoProxy CA cert (thumbprint `0174E68C97DDF1E0EEEA415EA336A163D2B61AFD`) at `HKEY_USERS\<SID>\Software\Microsoft\SystemCertificates\Root\Certificates\` (VT C2AE confirmed) |
 | Defense Evasion / T1112 | Modify Registry | Multiple registry writes — Defender exclusion, GoProxy cert blob, Inno AppId GUID Uninstall key |
 | Defense Evasion / T1497.003 | Time-Based Evasion | Stage-2 anti-sandbox `ZwDelayExecution × 9 × 5000ms` (45-second sleep) gated by `FUN_000002c0` |
@@ -1361,8 +1361,8 @@ The detection content for this campaign is published at:
 
 | Rule Type | Count | Key MITRE Techniques Covered | False-Positive Risk |
 |---|---|---|---|
-| YARA | 6 | T1027.009, T1027.013, T1204.002, T1574.002, T1055.012, T1055.002, T1620, T1480, T1036.005, T1218.014, T1059.005, T1105 | LOW–MEDIUM |
-| Sigma | 8 | T1204.002, T1036.005, T1055.012, T1055.002, T1574.002, T1053.005, T1059.005, T1112, T1562.001, T1218.014, T1480 | LOW–MEDIUM |
+| YARA | 6 | T1027.009, T1027.013, T1204.002, T1574.001, T1055.012, T1055.002, T1620, T1480, T1036.005, T1218.014, T1059.005, T1105 | LOW–MEDIUM |
+| Sigma | 8 | T1204.002, T1036.005, T1055.012, T1055.002, T1574.001, T1053.005, T1059.005, T1112, T1685, T1218.014, T1480 | LOW–MEDIUM |
 | Suricata | 4 | T1071.001, T1573.001, T1571, T1105, T1090.002 | LOW |
 
 ### 10.2 Priority deployment targets

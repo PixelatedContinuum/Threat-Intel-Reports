@@ -520,8 +520,8 @@ Two caveats bound the attribution honestly. First, the primary public source for
 | Execution / T1106 | Native API | `NtRaiseHardError` (BSOD), `BlockInput` P/Invoke (`299a2e7f`) |
 | Persistence / T1547.001 | Registry Run Keys / Startup Folder | HKCU/HKLM Run (`stealer.js`); `update.bat` + hidden `.lnk` (`299a2e7f`) |
 | Persistence / T1053.005 | Scheduled Task | Hidden task masquerading as `Microsoft Corporation` (`stealer.js`) |
-| Defense Evasion / T1562.001 | Disable or Modify Tools | Six-function suppression chain; `Set-MpPreference -DisableRealtimeMonitoring` (DEFINITE) |
-| Defense Evasion / T1562.004 | Disable/Modify System Firewall | `netsh advfirewall set allprofiles state off` (`299a2e7f`) |
+| Defense Impairment / T1685 | Disable or Modify Tools | Six-function suppression chain; `Set-MpPreference -DisableRealtimeMonitoring` (DEFINITE) |
+| Defense Impairment / T1686 | Disable or Modify System Firewall | `netsh advfirewall set allprofiles state off` (`299a2e7f`) |
 | Defense Evasion / T1036.004 | Masquerade Task or Service | `sc config` service masquerade; `Microsoft Corporation` hidden task |
 | Defense Evasion / T1564.001 | Hidden Files and Directories | `attrib +h` on `updatesystem.cmd`, `watcher.vbs`, startup `.lnk` |
 | Defense Evasion / T1027 | Obfuscated Files or Information | js-confuser → AES-GCM → XOR → base64; V8 bytecode (pkg-Node) |

@@ -1108,7 +1108,7 @@ BdApiUtil64.sys enables multiple MITRE ATT&CK techniques through its kernel-leve
 </tr>
 <tr>
 <td><strong>Defense Evasion</strong></td>
-<td>T1562.001</td>
+<td>T1685</td>
 <td>Impair Defenses: Disable or Modify Tools</td>
 <td>IOCTLs 0x800024b4 and 0x800024b8 terminate security product processes; registry callbacks (CmRegisterCallback) prevent security product restoration</td>
 <td class="confirmed">CONFIRMED</td>
@@ -1122,7 +1122,7 @@ BdApiUtil64.sys enables multiple MITRE ATT&CK techniques through its kernel-leve
 </tr>
 <tr>
 <td><strong>Defense Evasion</strong></td>
-<td>T1562.002</td>
+<td>T1685.001</td>
 <td>Impair Defenses: Disable Windows Event Logging</td>
 <td>IOCTL 0x800024b4/0x800024b8 terminates EventLog service; registry callbacks block re-enablement; registry manipulation (ZwSetValueKey) disables logging</td>
 <td class="confirmed">CONFIRMED</td>

@@ -681,12 +681,12 @@ This is the framework's stock response template, and it is what the configuratio
 
 | Technique | Evidence | Confidence |
 |---|---|---|
-| AMSI bypass via reflection (T1562.001) | `amsi`+`Con`+`text` concatenation, `*iUtils` reflection, `SetValue($null, 0)` zeroing — Matt Graeber lineage | HIGH |
+| AMSI bypass via reflection (T1685) | `amsi`+`Con`+`text` concatenation, `*iUtils` reflection, `SetValue($null, 0)` zeroing — Matt Graeber lineage | HIGH |
 | In-memory .NET assembly load (T1620) | `[Reflection.Assembly]::Load(byte[])` — no `Add-Type`, no temp file | HIGH |
 | W^X-aware classic process injection | RW alloc → write → flip to RX (NOT RWX) — defeats simple "RWX in remote process" EDR rules | HIGH |
 | Dynamic API resolution | Beacon has zero networking imports in IAT; all C2 calls resolved at runtime | HIGH |
 | String encryption (T1027) | RC4-encrypted config in `.rdata` blob — only the BASE64 alphabet leaks plaintext | HIGH |
-| DLL side-load preparation (T1574.002) | `msupdate.dll` rename of the beacon DLL — operator preparation, not confirmed-as-executed | MODERATE |
+| DLL side-load preparation (T1574.001) | `msupdate.dll` rename of the beacon DLL — operator preparation, not confirmed-as-executed | MODERATE |
 | Selective AV-evasion on signatured commodity tools | SharpHound 86% / lazagne 97% high-entropy ratios | HIGH |
 
 **The AMSI bypass defeats the two most widely deployed AMSI signatures, and that is worth stating plainly (August 2026).** Most published detections for this technique look for the string `amsiInitFailed`, or for the type name `AmsiUtils`. This loader emits neither. It targets the `amsiContext` field instead of `amsiInitFailed`, it assembles that field name at runtime from three concatenated fragments so the literal never appears in the script text, and it locates the type by wildcard match on `*iUtils` so `AmsiUtils` never appears either.
@@ -721,13 +721,13 @@ The kit covers **39 techniques across 9 ATT&CK tactics**:
 | Resource Development / T1588.002 | Obtain Tool | AdaptixC2 (Linux build), Ligolo-ng v0.8.3, Ghostpack/SpecterOps suite, mimikatz, lazagne, winpeas/linpeas |
 | Execution / T1059.001 | PowerShell | `beacon.ps1` 256 KB loader (AMSI bypass + reflective load + inject) |
 | Execution / T1620 | Reflective Code Loading | `[Reflection.Assembly]::Load([byte[]])` of `injector.dll`; RDI bootstrap maps beacon DLL |
-| Defense Evasion / T1562.001 | Disable or Modify Tools | AMSI bypass via `*iUtils` reflection + `SetValue($null, 0)` on `amsiContext` |
+| Defense Impairment / T1685 | Disable or Modify Tools | AMSI bypass via `*iUtils` reflection + `SetValue($null, 0)` on `amsiContext` |
 | Defense Evasion / T1027 | Obfuscated Files or Information | RC4-encrypted config + base64 + XOR 0xA7 shellcode layers |
 | Defense Evasion / T1140 | Deobfuscate/Decode Files | `beacon.ps1` base64 + XOR decode; beacon RC4-decrypts config at startup |
 | Defense Evasion / T1132.001 | Standard Encoding (Base64) | Base64 for `$dr` (injector) + `$sr` (shellcode); BASE64_table for C2 |
 | Defense Evasion / T1055 | Process Injection (parent) | `SI.Inject(uint32 pid, byte[] sc)` — `OpenProcess` → `VirtualAllocEx` → `VirtualProtectEx` → `WriteProcessMemory` → `CreateRemoteThread` |
 | Defense Evasion / T1055.002 | Portable Executable Injection | Embedded PE injection into `explorer.exe` via W^X (RW → RX, NOT RWX). Also Priv Esc. |
-| Defense Evasion / T1574.002 | DLL Side-Loading | `msupdate.dll` (beacon DLL renamed for sideload spoofing) — prep only (MODERATE) |
+| Defense Evasion / T1574.001 | DLL | `msupdate.dll` (beacon DLL renamed for sideload spoofing) — prep only (MODERATE) |
 | Credential Access / T1003.001 | LSASS Memory | mimikatz v2.2.0 (gentilkiwi) |
 | Credential Access / T1003.002 | Security Account Manager | SharpSecDump bundled |
 | Credential Access / T1003.003 | NTDS | SharpSecDump → NTDS.dit on DCs (MODERATE) |

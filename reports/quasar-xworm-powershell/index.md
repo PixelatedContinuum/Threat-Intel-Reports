@@ -204,7 +204,7 @@ Analysts can pivot on:
       <td>Fileless script block executed in memory via <code>.Invoke()</code></td>
     </tr>
     <tr>
-      <td><strong>Defense Evasion / T1562.001</strong></td>
+      <td><strong>Defense Evasion / T1685</strong></td>
       <td>Disable or Modify Tools</td>
       <td>Defender exclusions added via <code>Add-MpPreference</code> for entire <code>C:\</code> drive and key processes</td>
     </tr>
