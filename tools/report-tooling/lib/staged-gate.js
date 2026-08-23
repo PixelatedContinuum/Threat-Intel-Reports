@@ -50,6 +50,12 @@ var CHECKS = {
     label: 'wire data',
     cmd: 'check-wire.js',
     why: '_data/wire.yml is staged'
+  },
+  'detection-attack': {
+    id: 'detection-attack',
+    label: 'detection ATT&CK tables',
+    cmd: 'check-detection-attack.js',
+    why: 'hunting-detections/, its manifest, the ATT&CK tables or the catalog is staged'
   }
 };
 
@@ -74,6 +80,16 @@ function plan(paths, opts) {
   list.forEach(function (p) {
     if (/^hunting-detections\/.+\.md$/.test(p) || p === '_data/detection_manifests.yml') {
       want.manifest = true;
+      /* The ATT&CK tables derive from the manifest, so anything that can move the
+         manifest can move them. They also have two sources of their own: the
+         generated file itself, and the technique catalog an ATT&CK bump rewrites.
+         Routing on the detection markdown alone would let a catalog regeneration
+         land with 57 stale tables and every gate green. */
+      want['detection-attack'] = true;
+    }
+    if (p === '_data/detection_attack.yml' ||
+        p === 'tools/report-tooling/data/attack-techniques.tsv') {
+      want['detection-attack'] = true;
     }
     if (/^ioc-feeds\/.+\.json$/.test(p) || p === '_data/catalog.yml' ||
         p === 'assets/data/ioc-index.json') {

@@ -46,6 +46,20 @@ figure_nav:
         anchor: "#65-c2-beacon--first-request-structure"
       - label: "The full chain"
         anchor: "#61-cluster-c-kill-chain-overview"
+  - image: rhadamanthys-stage2-three-layer-synthesis.svg
+    parts:
+      - label: "The three-layer synthesis"
+        anchor: "#53-stage-2-3-layer-encrypted-blob-synthesis-novel-finding"
+      - label: "Import-surface camouflage"
+        anchor: "#52-stage-2-import-surface-camouflage"
+      - label: "CBC-XOR and the per-customer IV"
+        anchor: "#54-stage-2-cbc-xor-cipher-with-per-customer-iv"
+      - label: "The FS container"
+        anchor: "#55-stage-2-fs-container-with-5-type-tagged-entries"
+      - label: "The bytecode VM it feeds"
+        anchor: "#56-stage-2-q3vm-derivative-bytecode-vm-novel-finding"
+      - label: "Why this is canonical Rhadamanthys"
+        anchor: "#why-this-stage-2-is-canonical-rhadamanthys-definite-97"
   - image: rhadamanthys-maas-vendor-customer-architecture.svg
     parts:
       - label: "Vendor vs customer"

@@ -816,73 +816,28 @@ The Sogou masquerade is the visible surface of a scaled cybercrime operation. Th
 ## MITRE ATT&CK Mapping
 {: .hl-tier-2}
 
-### Initial Access
-- **T1036 – Masquerading**  
-  - **Evidence:** Installer disguised as Sogou Input Method.  
-  - **Impact:** Lowers suspicion, increases infection rates.  
+> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. Each is evidenced by the static, YARA and behavioural findings above.
 
----
+| Tactic / Technique | Name | Evidence |
+|---|---|---|
+| Execution / T1059 | Command and Scripting Interpreter | Custom NSIS installer actions execute the payload silently during installation |
+| Persistence / T1547.001 | Registry Run Keys / Startup Folder | Registry auto-start entries created by the wrapper |
+| Persistence / T1547.009 | Shortcut Modification | `IShellLink` API used to modify `.lnk` files, giving a second, redundant persistence path |
+| Stealth / T1027 | Obfuscated Files or Information | XOR/CRC32 encoding of the embedded configuration blob |
+| Stealth / T1027.002 | Software Packing | Encoded data carried in an overlay section |
+| Stealth / T1036 | Masquerading | Installer disguised as Sogou Input Method, which lowers suspicion and raises the install rate |
+| Stealth / T1134 | Access Token Manipulation | Token abuse flagged by both capability analysis and YARA, used to bypass restrictions |
+| Stealth / T1497.001 | System Checks | Xen string checks abort execution under virtualization |
+| Stealth / T1622 | Debugger Evasion | Anti-debugging via `FindWindowExA` and `GetLastError` |
+| Collection / T1113 | Screen Capture | Screenshot capability present in the payload |
+| Collection / T1115 | Clipboard Data | Clipboard read and write |
+| Collection / T1125 | Video Capture | Webcam capture routines |
+| Command and Control / T1071.001 | Web Protocols | HTTP/CGI communication with disposable domains, blending with legitimate certificate checks and Sogou update traffic |
+| Impact / T1529 | System Shutdown/Reboot | Shutdown and reboot functions, which also serve to activate persistence |
 
-### Execution
-- **T1059 – Command and Scripting Interpreter (NSIS scripting)**  
-  - **Evidence:** Custom NSIS installer actions.  
-  - **Impact:** Executes payloads silently during installation.  
-
----
-
-### Persistence
-- **T1547.001 – Registry Run Keys / Startup Folder**  
-  - **Evidence:** Registry auto‑start entries created.  
-- **T1547.009 – Shortcut Modification**  
-  - **Evidence:** IShellLink API usage to modify `.lnk` files.  
-- **Impact:** Multiple redundant persistence mechanisms ensure resilience.  
-
----
-
-### Privilege Escalation
-- **T1134 – Access Token Manipulation**  
-  - **Evidence:** Token abuse flagged by capability analysis and YARA.  
-  - **Impact:** Escalates privileges, bypasses restrictions.  
-
----
-
-### Defense Evasion
-- **T1027 – Obfuscated Files or Information**  
-  - **Evidence:** XOR/CRC32 encoding of config.  
-- **T1027.002 – Software Packing**  
-  - **Evidence:** Overlay section with encoded data.  
-- **T1497.001 – Virtualization/Sandbox Evasion**  
-  - **Evidence:** Xen string checks.  
-- **T1622 – Debugger Evasion**  
-  - **Evidence:** Anti‑debugging APIs (FindWindowExA, GetLastError).  
-- **Impact:** Frustrates analysis, prolongs operational lifespan.  
-
----
-
-### Collection
-- **T1113 – Screen Capture**  
-  - **Evidence:** Screenshot capability flagged.  
-- **T1125 – Video Capture (Webcam)**  
-  - **Evidence:** Webcam capture routines.  
-- **T1115 – Clipboard Data**  
-  - **Evidence:** Clipboard read/write detected.  
-- **Impact:** Enables theft of credentials, private data, and surveillance.  
-
----
-
-### Impact
-- **T1529 – System Shutdown/Reboot**  
-  - **Evidence:** Functions enabling shutdown/reboot.  
-  - **Impact:** Disrupts availability, forces reboots to activate persistence.  
-
----
-
-### Command & Control
-- **T1071.001 – Application Layer Protocol: Web Protocols**  
-  - **Evidence:** Communication with disposable domains via HTTP/CGI endpoints.  
-  - **Impact:** Blends malicious traffic with legitimate certificate checks and Sogou updates.  
-
----
+That is 14 techniques across 6 tactics. Tactics follow the current ATT&CK assignment, so a
+technique such as `T1134` Access Token Manipulation sits under Stealth rather than under the
+privilege-escalation heading an older mapping would have used.
 
 ### Analyst Notes
 - The ATT&CK mapping confirms the malware is multi‑functional: masquerading, executing silently, persisting redundantly, evading defenses, collecting data, escalating privileges, disrupting systems, and communicating covertly.  

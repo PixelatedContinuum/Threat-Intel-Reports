@@ -55,7 +55,7 @@ test('parses the current 4-column shape', () => {
   assert.strictEqual(r.techniques.length, 2);
   assert.deepStrictEqual(r.techniques[0], {
     id: 'T1055.002',
-    tactic: 'Defense Evasion',
+    tactic: 'Stealth',
     name: 'Portable Executable Injection',
     confidence: 'HIGH',
     evidence: 'RW to RX'
@@ -67,6 +67,35 @@ test('parses the current 4-column shape', () => {
     confidence: 'MODERATE',
     evidence: 'AS35682'
   });
+});
+
+/* ATT&CK v19 renamed TA0005 Defense Evasion to Stealth and added TA0112
+   Defense Impairment. Two properties have to hold at once and they pull in
+   opposite directions, so both are pinned here rather than left to the shape
+   tests above, which only happen to exercise the first one.
+
+   The 29 reports published before the rename say "Defense Evasion" in column 1.
+   If the alias regresses they do not fail loudly: their techniques go to
+   `unmapped` and the strip quietly reports less coverage than the table
+   documents, which is the exact failure the strip exists to prevent. */
+test('the v19 tactic set is what the strip organises by', () => {
+  assert.strictEqual(AC.TACTIC_ORDER.length, 15);
+  assert.ok(AC.TACTIC_ORDER.indexOf('Stealth') !== -1, 'TA0005 is Stealth in v19');
+  assert.ok(AC.TACTIC_ORDER.indexOf('Defense Impairment') !== -1, 'TA0112 is new in v19');
+  assert.strictEqual(AC.TACTIC_ORDER.indexOf('Defense Evasion'), -1,
+    'the v18 name is an alias, never a bar of its own, or techniques split across two');
+});
+
+test('a pre-v19 report saying "Defense Evasion" still maps, and maps to Stealth', () => {
+  const html = '<table><thead><tr><th>Tactic / Technique</th><th>Name</th>' +
+    '<th>Evidence</th></tr></thead><tbody>' +
+    '<tr><td>Defense Evasion / T1055.002</td><td>Portable Executable Injection</td>' +
+    '<td>RW to RX</td></tr>' +
+    '<tr><td>Defense Impairment / T1685</td><td>Disable or Modify Tools</td>' +
+    '<td>AMSI patch</td></tr></tbody></table>';
+  const r = AC.parseTable(firstTable(html));
+  assert.strictEqual(r.unmapped.length, 0, 'neither row may fall through to unmapped');
+  assert.deepStrictEqual(r.techniques.map(t => t.tactic), ['Stealth', 'Defense Impairment']);
 });
 
 test('parses legacy shape with ID and name sharing a cell', () => {
@@ -448,9 +477,9 @@ test('renders one segment per tactic, including empty ones', () => {
   const doc = new JSDOM('<body></body>').window.document;
   const parsed = AC.parseTable(firstTable(fixtures.current3col));
   const strip = AC.renderStrip(parsed, doc);
-  assert.strictEqual(strip.querySelectorAll('[data-tactic]').length, 14);
+  assert.strictEqual(strip.querySelectorAll('[data-tactic]').length, 15);
   const empty = strip.querySelectorAll('[data-tactic][data-count="0"]');
-  assert.strictEqual(empty.length, 12, 'two tactics covered, twelve empty');
+  assert.strictEqual(empty.length, 13, 'two tactics covered, thirteen empty');
 });
 
 test('renders an unmapped notice only when there are unmapped techniques', () => {
@@ -536,7 +565,7 @@ test('init inserts one strip immediately above its mapping table', () => {
     const table = page.doc.querySelector('table');
     assert.strictEqual(table.previousElementSibling, strips[0],
       'the strip must sit immediately before the table it summarises');
-    assert.strictEqual(strips[0].querySelectorAll('.hl-attack__seg').length, 14);
+    assert.strictEqual(strips[0].querySelectorAll('.hl-attack__seg').length, 15);
     const detail = page.doc.querySelector('.hl-attack__detail');
     assert.ok(!detail.hasAttribute('hidden'), 'the detail panel is never hidden, even at init');
     assert.ok(detail.querySelector('.hl-attack__prompt'), 'it opens showing the prompt');

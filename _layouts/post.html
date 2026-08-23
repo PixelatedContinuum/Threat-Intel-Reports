@@ -73,6 +73,45 @@ document.addEventListener('DOMContentLoaded', function () {
   </details>
   <div id="hl-toc-spacer" aria-hidden="true"></div>
   <div class="hl-post-content">
+{%- comment -%}
+  ATT&CK coverage table for a detection page, generated into
+  _data/detection_attack.yml from the (already gated) detection manifest.
+
+  Why it is here and not written into the markdown: a detection page states its
+  techniques as per-rule "ATT&CK Coverage:" lines and a per-engine summary whose
+  cells hold comma-separated ID lists. attack-coverage.js rejects that shape on
+  purpose, because it carries no tactic and so cannot populate a tactic-organised
+  strip. Rendering a real mapping table here is what lets the strip attach.
+
+  It sits inside an hl-teardown collapse deliberately. insertionPointFor() in
+  attack-coverage.js puts the strip ABOVE a teardown rather than inside it, so
+  the reader gets the compact tactic summary on load and the full table on one
+  click, instead of a 20-row table before the prose.
+
+  Only detection pages: reports author their own mapping table inline.
+{%- endcomment -%}
+{%- if page.path contains "hunting-detections" -%}
+  {%- assign _atk_key = page.path | split: "/" | last | remove: ".md" -%}
+  {%- assign _atk = site.data.detection_attack[_atk_key] -%}
+  {%- if _atk and _atk.rows.size > 0 %}
+<details class="hl-teardown">
+<summary>MITRE ATT&amp;CK coverage — {{ _atk.total }} technique{% if _atk.total != 1 %}s{% endif %} across {{ _atk.tactics }} tactic{% if _atk.tactics != 1 %}s{% endif %}</summary>
+<table>
+<thead><tr><th>Tactic / Technique</th><th>Name</th><th>Rules</th></tr></thead>
+<tbody>
+{%- for row in _atk.rows %}
+<tr><td>{{ row.tactic }} / {{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.rules }}</td></tr>
+{%- endfor %}
+</tbody>
+</table>
+{%- if _atk.unresolved.size > 0 %}
+<p><em>Not shown: {{ _atk.unresolved | join: ", " }} — carried by a rule in this
+file but not present in the ATT&amp;CK release these tables were built from, so
+the coverage above is narrower than the rule set.</em></p>
+{%- endif %}
+</details>
+  {%- endif -%}
+{%- endif %}
     {{ content }}
   </div>
   <aside class="hl-post-toc" id="hl-toc" aria-label="Table of contents">

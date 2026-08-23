@@ -12,11 +12,25 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
+  /* ATT&CK v19 tactic set, in kill-chain order. Two changes from the v18 list
+     this file shipped with, both forced by ATT&CK itself:
+
+       TA0005 "Defense Evasion" was RENAMED to "Stealth".
+       TA0112 "Defense Impairment" is NEW, and owns T1685 (the technique that
+       revoked the whole T1562 Impair Defenses tree) plus T1112 Modify Registry.
+
+     The published corpus already carries v19 techniques, so a v18 tactic list
+     had no bar to put them in. Reports written before the rename still say
+     "Defense Evasion" in column 1 and must keep parsing, which is what the
+     alias below is for.
+
+     This order must match TACTIC_DISPLAY in generate-attack-catalog.py.
+     check-detection-attack.js asserts the two agree. */
   var TACTIC_ORDER = [
     'Reconnaissance', 'Resource Development', 'Initial Access', 'Execution',
-    'Persistence', 'Privilege Escalation', 'Defense Evasion', 'Credential Access',
-    'Discovery', 'Lateral Movement', 'Collection', 'Command and Control',
-    'Exfiltration', 'Impact'
+    'Persistence', 'Privilege Escalation', 'Stealth', 'Defense Impairment',
+    'Credential Access', 'Discovery', 'Lateral Movement', 'Collection',
+    'Command and Control', 'Exfiltration', 'Impact'
   ];
 
   var TECH_RE = /\bT\d{4}(?:\.\d{3})?\b/;
@@ -42,7 +56,13 @@
   // invented alias would assign a tactic no report ever claimed.
   var TACTIC_ALIASES = {
     'priv. escalation': 'Privilege Escalation',
-    'c&c': 'Command and Control'
+    'c&c': 'Command and Control',
+    /* ATT&CK renamed TA0005 Defense Evasion to Stealth in v19. Every report
+       published before that says "Defense Evasion", and rewriting 29 published
+       mapping tables to chase a vendor rename would be churn against the
+       archive. The alias resolves the old name to the current tactic, so the
+       old tables and the generated detection tables land in the same bar. */
+    'defense evasion': 'Stealth'
   };
 
   // hasOwnProperty, because a cell reading "constructor" or "toString" would
@@ -356,7 +376,8 @@
     head.appendChild(el(doc, 'span', 'hl-attack__label', parsed.label || 'ATT&CK coverage'));
     head.appendChild(el(doc, 'span', 'hl-attack__count',
       parsed.techniques.length + ' techniques \u00b7 ' +
-      TACTIC_ORDER.filter(function (t) { return groups[t].length; }).length + ' of 14 tactics'));
+      TACTIC_ORDER.filter(function (t) { return groups[t].length; }).length +
+      ' of ' + TACTIC_ORDER.length + ' tactics'));
     var dl = el(doc, 'button', 'hl-attack__export', '\u2193 Navigator layer');
     dl.setAttribute('type', 'button');
     head.appendChild(dl);

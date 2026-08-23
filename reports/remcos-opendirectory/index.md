@@ -707,52 +707,37 @@ Live C2 traffic was not captured during analysis: the malware was analyzed in an
 ## 7. MITRE ATT&CK FRAMEWORK MAPPING
 {: .hl-tier-2}
 
-### Execution
-- T1059.003 - Command and Scripting Interpreter: Windows Command Shell
+> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. Every technique is evidenced by the static or dynamic findings in Sections 2 to 6.
 
-### Persistence
-- T1547.001 - Boot or Logon Autostart: Registry Run Keys (5 methods)
-- T1547.004 - Boot or Logon Autostart: Winlogon Helper DLL (Userinit hijack)
-
-### Privilege Escalation
-- T1548.002 - Abuse Elevation Control Mechanism: Bypass UAC
-
-### Defense Evasion
-- T1070.004 - Indicator Removal: File Deletion (melt technique)
-- T1027 - Obfuscated Files or Information (VB6 string obfuscation)
-- T1055 - Process Injection (explorer.exe, msedge.exe)
-- T1055.012 - Process Hollowing
-- T1497.001 - Virtualization/Sandbox Evasion (VM detection)
-- T1564.001 - Hide Artifacts: Hidden Files and Directories
-
-### Credential Access
-- T1555.003 - Credentials from Password Stores: Credentials from Web Browsers
-- T1539 - Steal Web Session Cookie
-
-### Discovery
-- T1010 - Application Window Discovery
-- T1057 - Process Discovery
-- T1082 - System Information Discovery
-- T1083 - File and Directory Discovery
-- T1033 - System Owner/User Discovery
-
-### Collection
-- T1056.001 - Input Capture: Keylogging
-- T1113 - Screen Capture (2 methods)
-- T1115 - Clipboard Data
-- T1123 - Audio Capture
-- T1005 - Data from Local System
-
-### Command and Control
-- T1071.001 - Application Layer Protocol: Web Protocols (HTTP)
-- T1573 - Encrypted Channel (encrypted screenshots)
-- T1001 - Data Obfuscation
-
-### Exfiltration
-- T1041 - Exfiltration Over C2 Channel
-
-### Impact
-- T1529 - System Shutdown/Reboot
+| Tactic / Technique | Name | Evidence |
+|---|---|---|
+| Execution / T1059.003 | Windows Command Shell | Payload executed via `cmd.exe` using VB6 runtime functions (`rtcShell`, `rtcCreateObject2`) |
+| Persistence / T1547.001 | Registry Run Keys / Startup Folder | Five separate Registry Run-key autostart methods |
+| Persistence / T1547.004 | Winlogon Helper DLL | Userinit hijack via the Winlogon Helper DLL |
+| Privilege Escalation / T1548.002 | Bypass User Account Control | UAC bypass for elevation |
+| Stealth / T1027 | Obfuscated Files or Information | VB6 string obfuscation throughout the dropper |
+| Stealth / T1055 | Process Injection | Injection into `explorer.exe` and `msedge.exe` |
+| Stealth / T1055.012 | Process Hollowing | Process hollowing of the injection target |
+| Stealth / T1070.004 | File Deletion | Melt technique — the dropper deletes itself after payload execution |
+| Stealth / T1497.001 | System Checks | VM detection; the sample terminates early under analysis |
+| Stealth / T1564.001 | Hidden Files and Directories | Payload written with a `.dll` extension and hidden attributes |
+| Credential Access / T1539 | Steal Web Session Cookie | Web session cookies stolen for session hijacking |
+| Credential Access / T1555.003 | Credentials from Web Browsers | Credentials harvested from browser password stores |
+| Discovery / T1010 | Application Window Discovery | Application window enumeration |
+| Discovery / T1033 | System Owner/User Discovery | Logged-on user identified |
+| Discovery / T1057 | Process Discovery | Running-process enumeration |
+| Discovery / T1082 | System Information Discovery | Host and OS information collected |
+| Discovery / T1083 | File and Directory Discovery | File and directory enumeration |
+| Collection / T1005 | Data from Local System | Files collected from the local system |
+| Collection / T1056.001 | Keylogging | Keylogging of user input |
+| Collection / T1113 | Screen Capture | Screen capture by two separate methods |
+| Collection / T1115 | Clipboard Data | Clipboard contents captured |
+| Collection / T1123 | Audio Capture | Microphone audio capture |
+| Command and Control / T1001 | Data Obfuscation | C2 traffic obfuscation |
+| Command and Control / T1071.001 | Web Protocols | HTTP application-layer C2 |
+| Command and Control / T1573 | Encrypted Channel | Screenshots encrypted before transit |
+| Exfiltration / T1041 | Exfiltration Over C2 Channel | Exfiltration over the existing C2 channel |
+| Impact / T1529 | System Shutdown/Reboot | Operator-triggered system shutdown / reboot |
 
 In total that is 27 distinct MITRE ATT&CK techniques across 10 tactics.
 

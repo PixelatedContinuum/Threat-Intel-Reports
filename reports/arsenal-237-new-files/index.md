@@ -407,6 +407,62 @@ Seven observed characteristics mark Arsenal-237 as a mature, professionally deve
 
 ---
 
+## MITRE ATT&CK Mapping
+{: .hl-tier-2}
+
+This landing page indexes eleven components, so its mapping is the union of theirs. Each row
+names the component that implements the technique, and the per-component reports carry the
+evidence behind it.
+
+> **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. Tactics follow the current ATT&CK assignment, which places the EDR-termination capability under Defense Impairment rather than under the older Defense Evasion tree.
+
+| Tactic / Technique | Name | Component |
+|---|---|---|
+| Execution / T1047 | Windows Management Instrumentation | `lpe.exe` |
+| Execution / T1053.005 | Scheduled Task | `lpe.exe`, `new_enc.exe` |
+| Execution / T1059 | Command and Scripting Interpreter | `dec_fixed.exe` |
+| Execution / T1059.001 | PowerShell | `rootkit.dll`, `nethost.dll` |
+| Execution / T1106 | Native API | `chromelevator.exe` |
+| Execution / T1204.002 | Malicious File | `enc_c2.exe` |
+| Persistence / T1543.003 | Windows Service | `killer.dll` |
+| Persistence / T1547.001 | Registry Run Keys / Startup Folder | `enc_c2.exe` |
+| Persistence / T1547.006 | Kernel Modules and Extensions | `BdApiUtil64.sys` |
+| Privilege Escalation / T1068 | Exploitation for Privilege Escalation | `killer.dll`, `killer_crowdstrike.dll`, `BdApiUtil64.sys`, `rootkit.dll` |
+| Privilege Escalation / T1548.002 | Bypass User Account Control | `lpe.exe` |
+| Stealth / T1014 | Rootkit | `BdApiUtil64.sys` |
+| Stealth / T1027 | Obfuscated Files or Information | `killer.dll` |
+| Stealth / T1027.009 | Embedded Payloads | `killer.dll` |
+| Stealth / T1055 | Process Injection | `rootkit.dll` |
+| Stealth / T1055.001 | Dynamic-link Library Injection | `rootkit.dll`, `chromelevator.exe` |
+| Stealth / T1070.004 | File Deletion | `dec_fixed.exe` |
+| Stealth / T1134.001 | Token Impersonation/Theft | `lpe.exe` |
+| Stealth / T1497.001 | System Checks | `new_enc.exe` |
+| Stealth / T1564.001 | Hidden Files and Directories | `rootkit.dll` |
+| Stealth / T1620 | Reflective Code Loading | `chromelevator.exe` |
+| Stealth / T1622 | Debugger Evasion | `enc_c2.exe`, `new_enc.exe` |
+| Defense Impairment / T1685 | Disable or Modify Tools | `killer.dll`, `killer_crowdstrike.dll`, `BdApiUtil64.sys`, `rootkit.dll` |
+| Credential Access / T1555.003 | Credentials from Web Browsers | `chromelevator.exe` |
+| Discovery / T1007 | System Service Discovery | `nethost.dll` |
+| Discovery / T1057 | Process Discovery | `new_enc.exe` |
+| Discovery / T1082 | System Information Discovery | `nethost.dll` |
+| Discovery / T1083 | File and Directory Discovery | `dec_fixed.exe` |
+| Discovery / T1135 | Network Share Discovery | `full_test_enc.exe` |
+| Discovery / T1518.001 | Security Software Discovery | `new_enc.exe` |
+| Command and Control / T1071.001 | Web Protocols | `nethost.dll`, `enc_c2.exe` |
+| Command and Control / T1090 | Proxy | `nethost.dll` |
+| Command and Control / T1090.003 | Multi-hop Proxy | `enc_c2.exe` |
+| Command and Control / T1105 | Ingress Tool Transfer | `nethost.dll` |
+| Exfiltration / T1020 | Automated Exfiltration | `nethost.dll` |
+| Impact / T1486 | Data Encrypted for Impact | `enc_c2.exe`, `dec_fixed.exe`, `full_test_enc.exe` |
+| Impact / T1489 | Service Stop | `new_enc.exe` |
+| Impact / T1490 | Inhibit System Recovery | `new_enc.exe` |
+
+That is 38 techniques across 10 tactics. The concentration in Stealth and Defense Impairment is
+the toolkit's defining shape: five of the eleven components exist only to remove the defender's
+visibility before the ransomware runs.
+
+---
+
 ## Threat Intelligence Summary
 {: .hl-tier-2}
 
@@ -747,11 +803,7 @@ Access detailed technical analysis for each toolkit component:
 
 ### External References
 
-- **MITRE ATT&CK:** Framework for mapping Arsenal-237 techniques to standard threat categories
-  - Privilege Escalation (T1134, T1543)
-  - Persistence (T1547, T1574, T1547.014)
-  - Credential Access (T1555, T1040)
-  - Impact (T1486, T1491)
+- **MITRE ATT&CK:** the full technique mapping for this toolkit is in the [MITRE ATT&CK Mapping](#mitre-attck-mapping) section above, and each component report carries the evidence for its own rows.
 
 - **Ransomware-as-a-Service Research:**
   - Provides context for Arsenal-237's operational model

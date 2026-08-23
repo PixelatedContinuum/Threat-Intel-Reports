@@ -21,16 +21,18 @@ test('a commit staging nothing relevant runs no checks', function () {
   assert.deepEqual(p.reports, []);
 });
 
-test('a detection edit routes to the manifest gate', function () {
+test('a detection edit routes to the manifest AND the ATT&CK-table gate', function () {
+  // Both derive from the same markdown. The ATT&CK tables derive from the
+  // manifest in turn, so an edit that moves one moves the other.
   var p = SG.plan(['hunting-detections/acme-detections.md']);
-  assert.deepEqual(ids(p), ['manifest']);
+  assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
 });
 
 test('a DELETED detection file still routes to the manifest gate', function () {
   // A deletion makes the manifest stale exactly as an edit does. Filtering
   // deletions out of the staged list would skip the check that catches it.
   var p = SG.plan(['hunting-detections/gone-detections.md'], { existing: [] });
-  assert.deepEqual(ids(p), ['manifest']);
+  assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
 });
 
 test('an IOC feed edit routes to the index, the viewer tables AND the safety gate',
@@ -63,8 +65,14 @@ test('a surviving viewer stub routes to its own gate', function () {
 test('staging a generated artifact by hand still gates it', function () {
   // Someone hand-editing the manifest or the index is the case the gate most
   // needs to catch, so the artifact triggers its own check.
-  assert.deepEqual(ids(SG.plan(['_data/detection_manifests.yml'])), ['manifest']);
+  assert.deepEqual(ids(SG.plan(['_data/detection_manifests.yml'])),
+    ['detection-attack', 'manifest']);
   assert.deepEqual(ids(SG.plan(['assets/data/ioc-index.json'])), ['ioc-index']);
+  assert.deepEqual(ids(SG.plan(['_data/detection_attack.yml'])), ['detection-attack']);
+  // An ATT&CK version bump rewrites the catalog and nothing else. Without this
+  // route the 57 generated tables would go stale with every gate still green.
+  assert.deepEqual(ids(SG.plan(['tools/report-tooling/data/attack-techniques.tsv'])),
+    ['detection-attack']);
 });
 
 test('a wire data edit routes to the wire gate', function () {
@@ -111,7 +119,7 @@ test('one check is queued once however many files trigger it', function () {
     'hunting-detections/b-detections.md',
     'hunting-detections/c-detections.md'
   ]);
-  assert.deepEqual(ids(p), ['manifest']);
+  assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
 });
 
 test('a mixed commit queues every check it touches, deduplicated', function () {
@@ -125,7 +133,8 @@ test('a mixed commit queues every check it touches, deduplicated', function () {
     'reports/two/index.md',
     'README.md'
   ], { existing: ['reports/one/index.md', 'reports/two/index.md'] });
-  assert.deepEqual(ids(p), ['feed-hygiene', 'ioc-index', 'ioc-tables', 'manifest', 'wire']);
+  assert.deepEqual(ids(p),
+    ['detection-attack', 'feed-hygiene', 'ioc-index', 'ioc-tables', 'manifest', 'wire']);
   assert.deepEqual(p.reports.sort(), ['reports/one/index.md', 'reports/two/index.md']);
   assert.equal(p.owed.length, 1);
 });
@@ -138,5 +147,5 @@ test('every queued check carries the reason it was queued, for the hook output',
 
 test('backslash paths are accepted, since git on Windows can hand them over', function () {
   var p = SG.plan(['hunting-detections\\acme-detections.md']);
-  assert.deepEqual(ids(p), ['manifest']);
+  assert.deepEqual(ids(p), ['detection-attack', 'manifest']);
 });

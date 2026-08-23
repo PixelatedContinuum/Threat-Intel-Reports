@@ -44,6 +44,20 @@ figure_nav:
         anchor: "#51-full-php-source-recovery--what-it-unlocks"
       - label: "Hardcoded credentials"
         anchor: "#63-notable-strings--operator-identity-and-anti-researcher-canary"
+  - image: bellamain-four-bot-telegram-c2.svg
+    parts:
+      - label: "The four bots and role separation"
+        anchor: "#53-four-bot-telegram-c2-with-role-separation"
+      - label: "adminbot's wipe commands"
+        anchor: "#54-truncate-evidence-destruction-on-demand--anti-forensics"
+      - label: "/yedek backup-as-exfil"
+        anchor: "#55-yedek-mysql-backup-as-exfil--telegram-as-cloud-storage"
+      - label: "/usom blocklist self-monitoring"
+        anchor: "#52-usom-blocklist-self-monitoring--the-distinctive-turkish-targeting-tradecraft"
+      - label: "cekimbot and the TRX payout"
+        anchor: "#56-7030-trxtron-payout-flow-via-live-binance-trxtry-rate"
+      - label: "The canary bot"
+        anchor: "#63-notable-strings--operator-identity-and-anti-researcher-canary"
   - image: bellamain-victim-funnel-chronology.svg
     parts:
       - label: "Kit page render"

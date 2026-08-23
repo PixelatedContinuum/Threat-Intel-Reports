@@ -50,6 +50,30 @@ figure_nav:
         anchor: "#64-persistence-legacy-job--defender-exclusion--cert-install"
       - label: "C2 beacon"
         anchor: "#67-c2-beacon-definite--three-independent-capture-sources"
+  - image: hijackloader-stage2-eight-phase-architecture.svg
+    parts:
+      - label: "The 5,808-byte shellcode"
+        anchor: "#44-stage-2-shellcode-5808-bytes"
+      - label: "The encrypted carrier"
+        anchor: "#45-networkspec17log--encrypted-stage-3-carrier"
+      - label: "The stage-3 PE bundle"
+        anchor: "#46-stage-3-pe-bundle--multi-vendor-camouflage"
+      - label: "HijackLoader proper"
+        anchor: "#47-pe_03--hijackloader--penguish--rugmi-proper"
+      - label: "The cipher gap"
+        anchor: "#66-cipher-gap-on-the-encrypted-payload"
+  - image: hijackloader-msc-tier1-chain.svg
+    parts:
+      - label: "The GrimResource trigger"
+        anchor: "#56-msc-grimresource-t1218014-mmc"
+      - label: "One vector among eight"
+        anchor: "#31-the-eight-delivery-vectors"
+      - label: "The MEGA payload fetch"
+        anchor: "#84-megaio-cloud-storage-abuse"
+      - label: "Where the chain lands"
+        anchor: "#61-process-tree"
+      - label: "Detection coverage"
+        anchor: "#101-coverage-summary"
   - image: hijackloader-process-tree.svg
     parts:
       - label: "Carriers.exe"

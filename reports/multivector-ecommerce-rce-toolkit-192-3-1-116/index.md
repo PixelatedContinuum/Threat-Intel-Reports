@@ -35,6 +35,38 @@ figure_nav:
         anchor: "#42-what-the-ecosystem-context-adds"
       - label: "Content provider"
         anchor: "#43-the-content-provider-filing-signal-hedged-and-single-source"
+  - image: multivector-riverbaybuy-kill-chain.svg
+    parts:
+      - label: "The target"
+        anchor: "#61-the-target"
+      - label: "The kill chain"
+        anchor: "#62-the-kill-chain"
+      - label: "Manufactured log verbosity"
+        anchor: "#63-the-standout-technique-elevating-log-verbosity-to-manufacture-harvestable-data"
+      - label: "Four sourcing channels"
+        anchor: "#64-four-independent-pii-sourcing-channels"
+      - label: "The account-takeover weapon"
+        anchor: "#65-the-armed-account-takeover-weapon"
+  - image: multivector-manufactured-log-harvest.svg
+    parts:
+      - label: "The standout technique"
+        anchor: "#63-the-standout-technique-elevating-log-verbosity-to-manufacture-harvestable-data"
+      - label: "Jolokia and JMX abuse"
+        anchor: "#jolokia-and-jmx-management-interface-abuse"
+      - label: "Where it sat in the chain"
+        anchor: "#62-the-kill-chain"
+      - label: "What it produced"
+        anchor: "#64-four-independent-pii-sourcing-channels"
+  - image: multivector-four-pii-channels.svg
+    parts:
+      - label: "The four channels"
+        anchor: "#64-four-independent-pii-sourcing-channels"
+      - label: "Manufactured log harvesting"
+        anchor: "#63-the-standout-technique-elevating-log-verbosity-to-manufacture-harvestable-data"
+      - label: "The chain that used them"
+        anchor: "#62-the-kill-chain"
+      - label: "What was confirmed stolen"
+        anchor: "#what-was-confirmed"
   - image: multivector-eight-technique-classes.svg
     parts:
       - label: "Logback JNDI"
@@ -69,6 +101,18 @@ figure_nav:
         anchor: "#96-credentials-the-operator-holds-and-their-status"
       - label: "The ledger"
         anchor: "#97-the-outcome-ledger"
+  - image: multivector-operator-platform.svg
+    parts:
+      - label: "The exposed working directory"
+        anchor: "#23-what-the-exposed-directory-is-and-what-it-is-not"
+      - label: "The JNDI callback target"
+        anchor: "#logback-insertfromjndi-cve-2021-42550"
+      - label: "The agent framework, and the retraction"
+        anchor: "#51-the-agent-framework-and-a-retraction-that-must-be-preserved"
+      - label: "The evasion layer"
+        anchor: "#10-operator-infrastructure-and-control-plane"
+      - label: "What it says about sophistication"
+        anchor: "#122-sophistication-two-bands-reported-separately"
 ---
 
 **Campaign Identifier:** MultiVector-Ecommerce-RCE-Toolkit-192.3.1.116<br>
