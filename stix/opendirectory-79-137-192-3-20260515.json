@@ -645,7 +645,7 @@
             "created": "2026-08-22T14:27:51.342413Z",
             "modified": "2026-08-22T14:27:51.342413Z",
             "name": "domain: 00000xtrading.ru",
-            "description": "Inkognito operator EspoCRM back-office (May 2025, Apr 2026); decommissioned via kittenx-404 tombstone",
+            "description": "Inkognito operator EspoCRM back-office (May 2025, Apr 2026); decommissioned 2026-04-07",
             "indicator_types": [
                 "malicious-activity"
             ],
@@ -819,7 +819,7 @@
             "created": "2026-08-22T14:27:51.345465Z",
             "modified": "2026-08-22T14:27:51.345465Z",
             "name": "domain: bikaf.ru",
-            "description": "Bikaf VPN consumer brand (decommissioned Apr/May 2026 via kittenx-404 tombstone, replaced by inkconnect.ru)",
+            "description": "Bikaf VPN consumer brand (decommissioned Apr/May 2026, replaced by inkconnect.ru)",
             "indicator_types": [
                 "malicious-activity"
             ],

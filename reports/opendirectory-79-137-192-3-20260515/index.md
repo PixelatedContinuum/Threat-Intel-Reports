@@ -363,7 +363,7 @@ The hardcoded Telegram bot token was REVOKED on 2026-05-07, returning HTTP 401 o
 - **EspoCRM back-office** on dedicated Aeza IT IP `185.221.196.118` — single-instance customer relationship management for the Inkognito brand portfolio
 - **Russian payment processor integration** — SBP (Sistema Bystrykh Platezhey, Russian Fast Payment System), T-Pay, and direct card processing
 - **`X-Admin-Token` custom API auth header** on `api.inkconnect.ru` — operator-controlled API surface for cross-product administration
-- **`kittenx-404` decommission tombstone HTTP header** — operator-standard fingerprint left on retired domains; cross-domain consistency confirms single-operator control
+- ~~**`kittenx-404` decommission tombstone HTTP header** — operator-standard fingerprint left on retired domains; cross-domain consistency confirms single-operator control~~ **Withdrawn 2026-08-21.** `kittenx` is VKontakte's default web server banner rather than an operator artifact, so this line carries no cross-domain attribution weight. See Section 9.2.
 
 The operational model is provide-then-phish. The legitimate VPN service builds operator-customer trust, then the same operator delivers targeted credential theft via the brand-impersonation INK Lens platform. The operation has run continuously for roughly 2.5 years, with the earliest BEC burn-domain `vetcorbeanca.eu` dating to 2023-06-08, across multi-tier provider segmentation, Aeza for back-office, Cloudflare for production fronts, Stark Industries for BEC burn domains, and Timeweb for some VPN edge nodes.
 
@@ -585,7 +585,7 @@ One caveat on the Q3VM lineage. I hold the Q3VM-derivative claim HIGH, on magic-
 
 For Cluster A, BellaMain, static analysis of `BellaMain.zip` (SHA256 `f791fae41cdd3f141221d1783ed4779c839de7fc834ff4fc80a5d7f74b11ff88`) recovered the full PHP source of the panel and all 7 phishing kits. The developer pseudonym `Wadanz` appears as a code-level suffix on the session-encryption helpers `sifreleWadanz` and `sifrecozWadanz` in `database/fonk.php`. The shared MySQL database name `jakartaxdw` is hardcoded across the panel and all 7 kits, the Telegram bot token `6797512084:AAGbJVoC0zcKWYPbFG8oc_bACPn6gUEye_E` is hardcoded in all 6 `girislog.php` files, and `V5VgjLU0jsDe` is the obfuscated panel-administration path.
 
-For Cluster B, Inkognito, no PE samples were recovered, because the operation is a web application plus VPN service rather than malware. Static analysis was limited to the production HTML, JavaScript and HTTP response patterns. The operator-controlled accounts identified are Google Search Console verifications `_Lq_FX-CDt3OmZqq5PNFfmQTZtLSHTNsVkViLTzpTwk` on `inkconnect.ru` and `xskfj4k4tX_-enfPvu9WrUiWauHFlbuVmyV7thcjwds` on `inklens.ru`, plus Yandex Webmaster verification `98466329` in the `inklens.ru` HTML meta tags. The `kittenx-404` decommission tombstone HTTP response, with a `kittenx` Server header and content-length 148, appears on multiple retired Inkognito-controlled domains and is the strongest cross-domain operator fingerprint.
+For Cluster B, Inkognito, no PE samples were recovered, because the operation is a web application plus VPN service rather than malware. Static analysis was limited to the production HTML, JavaScript and HTTP response patterns. The operator-controlled accounts identified are Google Search Console verifications `_Lq_FX-CDt3OmZqq5PNFfmQTZtLSHTNsVkViLTzpTwk` on `inkconnect.ru` and `xskfj4k4tX_-enfPvu9WrUiWauHFlbuVmyV7thcjwds` on `inklens.ru`, plus Yandex Webmaster verification `98466329` in the `inklens.ru` HTML meta tags. The `kittenx-404` decommission tombstone HTTP response, with a `kittenx` Server header and content-length 148, does appear on multiple retired Inkognito-controlled domains, but it was withdrawn as an operator fingerprint on 2026-08-21. `kittenx` is VKontakte's web server banner, so the response is a hosting-platform default that two Russian-hosted domains inherited rather than anything the operator deployed. See Section 9.2 for the measurement.
 
 ---
 
@@ -726,7 +726,7 @@ The rotation matters for detection because JARM is not stable across certificate
 
 For Cluster A, BellaMain, there is no malware execution surface. The dynamic behavior of interest is HTTP traffic to the kit URIs (`*/girislog.php`, `*/kartlaodeme.php`, `*/tgdekont.php`, `*/cekimbot.php`) and the Telegram bot exfil traffic to `api.telegram.org` carrying bot ID `6797512084`, which is revoked but still pivot-valuable. Web proxy and Suricata detection content covers these patterns, see the separate detection file.
 
-For Cluster B, Inkognito, there is likewise no malware execution surface. The dynamic indicators are HTTP requests carrying the `X-Admin-Token` custom auth header on `api.inkconnect.ru`, DNS queries for the brand-impersonation subdomain patterns under `*.inklens.ru` and `*.inklens.co.uk`, and HTTP responses carrying the `Server: kittenx` decommission tombstone. Detection content covers all three, see the separate detection file.
+For Cluster B, Inkognito, there is likewise no malware execution surface. The dynamic indicators are HTTP requests carrying the `X-Admin-Token` custom auth header on `api.inkconnect.ru` and DNS queries for the brand-impersonation subdomain patterns under `*.inklens.ru` and `*.inklens.co.uk`. Detection content covers both of these in the separate detection file. A third indicator listed here originally, HTTP responses carrying the `Server: kittenx` decommission tombstone, was withdrawn on 2026-08-21 together with the two detection rules built on it. See Section 9.2.
 
 ---
 
@@ -852,7 +852,7 @@ The feed contains validated, deduplicated, formatted indicators across all three
 - Google Search Console verifications: `_Lq_FX-CDt3OmZqq5PNFfmQTZtLSHTNsVkViLTzpTwk`, `xskfj4k4tX_-enfPvu9WrUiWauHFlbuVmyV7thcjwds`
 - Yandex Webmaster: `98466329`
 - Custom HTTP header: `X-Admin-Token` (on `api.inkconnect.ru`)
-- Decommission tombstone: HTTP `Server: kittenx`, content-length 148
+- ~~Decommission tombstone: HTTP `Server: kittenx`, content-length 148~~ **Withdrawn 2026-08-21.** VKontakte's default server banner, not an operator-controlled artifact. See Section 9.2.
 
 For the complete validated indicator set with confidence levels and contextual metadata, ingest the JSON feed.
 
@@ -886,10 +886,24 @@ Named-actor attribution stays INSUFFICIENT because there is no prior public TI o
 
 I hold distinct-actor confidence at MODERATE, 78 percent, and named-actor attribution at INSUFFICIENT, 30 percent.
 
+> ⛔ **Retraction, 2026-08-21.** One line of evidence below, the cross-domain `kittenx-404`
+> decommission tombstone, has been withdrawn and is struck through. `kittenx` is VKontakte's web
+> server banner, not an operator artifact. Measured against a 142.7-million-document web-scan
+> corpus, the bare `Server: kittenx` header returns 7,083 observations in 30 days and 6,844 of
+> them, 96.6 percent, sit on AS47541, VK's own network; of the 84 hits on the full three-signal
+> triplet, 83 are still VK. Both retired domains were Russian-hosted and inherited a platform
+> default rather than carrying anything the operator chose.
+>
+> The two detection rules built on it have been cut, and the hunt recommendation in Section 10.2
+> is withdrawn with them. I have deliberately NOT recalibrated the distinct-actor figure above.
+> It stays at MODERATE, 78 percent, pending my own judgment, so read it as an un-recalibrated
+> holdover rather than a considered re-affirmation. The remaining evidence stands, and the two
+> other operator fingerprints, the custom `X-Admin-Token` header and the Yandex Webmaster ID,
+> were base-rate tested in the same sweep and both returned zero against a passing control.
 
 **Key evidence supporting distinct-actor claim:**
 - **Operator self-identification:** `@inkconnectvpn` Telegram channel description self-identifies "Inkognito" as the parent brand ("Надежный VPN от Inkognito! Видь то что скрыто, оставаясь в тумане войны!")
-- **Cross-domain decommission tombstone:** `kittenx-404` HTTP fingerprint on multiple retired Inkognito-controlled domains — operator-standard fingerprint
+- ~~**Cross-domain decommission tombstone:** `kittenx-404` HTTP fingerprint on multiple retired Inkognito-controlled domains — operator-standard fingerprint~~ **WITHDRAWN 2026-08-21.** See the retraction note above.
 - **Operator-controlled Google×2 + Yandex×1 search-console accounts:** verifications hardcoded into HTML meta tags of `inkconnect.ru`, `inklens.ru` — operator owns these accounts
 - **Custom code primitives:** `X-Admin-Token` header on `api.inkconnect.ru`; EspoCRM single-instance back-office on dedicated Aeza IT IP
 - **2.5-year operational continuity:** earliest BEC burn-domain `vetcorbeanca.eu` 2023-06-08 through current
@@ -997,7 +1011,7 @@ The detection file contains rules across three clusters and four detection-conte
 **Cluster B (Inkognito) — MEDIUM PRIORITY:**
 
 1. **Web proxy log hunt:** HTTP requests carrying the `X-Admin-Token` header.
-2. **Web proxy log hunt:** HTTP responses with `Server: kittenx` and content-length 148 (decommission tombstone).
+2. ~~**Web proxy log hunt:** HTTP responses with `Server: kittenx` and content-length 148 (decommission tombstone).~~ **Withdrawn 2026-08-21.** Do not run this hunt. `kittenx` is VKontakte's default server banner, so it returns VK traffic rather than operator infrastructure. See Section 9.2.
 3. **DNS query hunt:** `*.inklens.ru`, `*.inklens.co.uk`, `*.inkconnect.ru`, `*.bikaf.ru`, `*.bigass.monster`, `*.unloki.ru`, brand-impersonation subdomain patterns under `inklens.*`.
 
 ### 10.3 Defender response orientation
@@ -1048,7 +1062,7 @@ This section organizes the report's findings by confidence level for the higher-
 - **CBC-XOR cipher with 16-byte IV `f6358d79df69c577d9dce6bb77fa4fa7`** — cipher routine at `FUN_00402790` reverse-engineered; IV recovered from `.rdata` at `0x0041c434`
 - **31-byte loader RC4 key recovered** — bytes at `&DAT_00433820` confirmed; RC4 KSA + PRGA implementation at `FUN_00402400` matches reference
 - **Cluster A Telegram exfil pipeline** — bot token revoked 2026-05-07 (HTTP 401 on `getMe`) confirms ownership transition, but bot ID retains pivot value
-- **Cluster B kittenx-404 cross-domain decommission tombstone** — observed on multiple retired Inkognito-controlled domains
+- ~~**Cluster B kittenx-404 cross-domain decommission tombstone** — observed on multiple retired Inkognito-controlled domains~~ **Withdrawn 2026-08-21.** The observation holds but the inference does not, because the banner is VKontakte's. See Section 9.2.
 - **Cluster B operator-controlled search-console accounts** — Google×2 + Yandex×1 verifications hardcoded in HTML meta tags
 - **Distinct-actor designations for all three clusters** — Cluster A 75%, Cluster B 78%, Cluster C 72% per ACH analysis
 - **Cross-cluster linkage = LOW (actively rebutted)** — anchored on Tier-1 OFAC Aeza sanction documenting 5 unrelated actors co-resident

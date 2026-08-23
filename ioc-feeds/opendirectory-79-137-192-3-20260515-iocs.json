@@ -338,7 +338,7 @@
       {
         "value": "00000xtrading.ru",
         "cluster": "B",
-        "purpose": "Inkognito operator EspoCRM back-office (May 2025, Apr 2026); decommissioned via kittenx-404 tombstone",
+        "purpose": "Inkognito operator EspoCRM back-office (May 2025, Apr 2026); decommissioned 2026-04-07",
         "confidence": "DEFINITE",
         "action": "BLOCK"
       },
@@ -382,7 +382,7 @@
       {
         "value": "bikaf.ru",
         "cluster": "B",
-        "purpose": "Bikaf VPN consumer brand (decommissioned Apr/May 2026 via kittenx-404 tombstone, replaced by inkconnect.ru)",
+        "purpose": "Bikaf VPN consumer brand (decommissioned Apr/May 2026, replaced by inkconnect.ru)",
         "confidence": "DEFINITE",
         "action": "BLOCK"
       },
