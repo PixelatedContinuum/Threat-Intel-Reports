@@ -3,39 +3,39 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-24T07:02:21Z
+generated_at: 2026-08-24T19:02:20Z
 window_days: 30
 counts:
-  total: 496
-  research: 179
-  news: 317
+  total: 503
+  research: 180
+  news: 323
 topics:
   - label: "vulnerabilities"
     count: 66
     color: 1
   - label: "cybercrime"
-    count: 47
+    count: 51
     color: 2
   - label: "malware"
-    count: 27
+    count: 28
     color: 3
-  - label: "government"
+  - label: "data breaches"
     count: 24
     color: 4
+  - label: "government"
+    count: 24
+    color: 5
   - label: "artificial intelligence"
     count: 23
-    color: 5
+    color: 6
   - label: "exploited"
     count: 23
-    color: 6
-  - label: "credential theft"
-    count: 22
     color: 7
-  - label: "data breaches"
+  - label: "credential theft"
     count: 22
     color: 8
   - label: "supply chain attack"
-    count: 19
+    count: 18
     color: 9
   - label: "ransomware"
     count: 17
@@ -88,6 +88,7 @@ label_colors:
   "amd": 6
   "amnesiastealer": 8
   "amos": 6
+  "amos stealer": 2
   "analog devices": 11
   "android": 9
   "android apk": 11
@@ -106,10 +107,10 @@ label_colors:
   "aone-cli": 8
   "apac attacks": 2
   "apache tomcat": 6
+  "apollo": 11
   "app password phishing": 8
   "apple": 12
   "application security": 6
-  "apprunner": 7
   "apt": 5
   "apt29": 2
   "aquilarat": 10
@@ -118,7 +119,7 @@ label_colors:
   "arista": 10
   "armenia": 5
   "arrayref": 8
-  "artificial intelligence": 5
+  "artificial intelligence": 6
   "astral-pe": 3
   "astroproxy": 1
   "asyncrat": 11
@@ -236,13 +237,13 @@ label_colors:
   "compile-time execution": 3
   "contactless payment fraud": 3
   "coolclient": 8
-  "corepack impersonation": 12
   "crackerdrv": 3
   "crat": 2
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 7
+  "credential theft": 8
   "credential-based attacks": 12
+  "critical infrastructure": 4
   "cross-platform malware": 7
   "crypto scam": 9
   "cryptocurrency": 12
@@ -264,12 +265,13 @@ label_colors:
   "cve-2026-60137": 11
   "cve-2026-66747": 10
   "cve-2026-68820": 2
+  "cyberattacks": 8
   "cybercrime": 2
   "cyberwarfare": 9
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 8
+  "data breaches": 4
   "data center": 7
   "data exfiltration": 9
   "data leak": 9
@@ -298,7 +300,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 6
+  "exploited": 7
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
@@ -324,7 +326,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 4
+  "government": 5
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -400,6 +402,7 @@ label_colors:
   "security-labs": 3
   "software": 5
   "sonicwall": 8
+  "spring": 5
   "supply chain": 8
   "supply chain attack": 9
   "teamcity": 8
@@ -411,6 +414,72 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Indian man who fled US arrested on charges he helped scammers siphon $7.5 million from the elderly"
+    url: "https://therecord.media/cyber-scam-indian-arrested"
+    source: "Recorded Future"
+    date: 2026-08-24T18:30:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "ReliaQuest Confirms ShinyHunters Hack, but Says Impact Was Limited"
+    url: "https://www.securityweek.com/reliaquest-confirms-shinyhunters-hack-but-says-impact-was-limited/"
+    source: "SecurityWeek"
+    date: 2026-08-24T17:38:21Z
+    kind: news
+    labels: ["cybercrime", "data breaches", "phishing", "reliaquest", "shinyhunters", "social engineering"]
+  - title: "ReliaQuest confirms failed data-theft attack after ShinyHunters breach"
+    url: "https://www.bleepingcomputer.com/news/security/reliaquest-confirms-failed-data-theft-attack-after-shinyhunters-breach/"
+    source: "BleepingComputer"
+    date: 2026-08-24T15:17:16Z
+    kind: news
+    labels: []
+  - title: "South Korean startup platform breach exposes key management failures"
+    url: "https://www.bleepingcomputer.com/news/security/south-korean-startup-platform-breach-exposes-key-management-failures/"
+    source: "BleepingComputer"
+    date: 2026-08-24T14:00:10Z
+    kind: news
+    labels: []
+  - title: "Hackers infecting Android car systems to build proxy botnet"
+    url: "https://therecord.media/android-botnet-china-hackers"
+    source: "Recorded Future"
+    date: 2026-08-24T12:15:00Z
+    kind: news
+    labels: ["cybercrime", "malware"]
+  - title: "Anatomy of a macOS ClickFix Crimekit that Weaponises EtherHiding"
+    url: "https://otx.alienvault.com/pulse/6a8c3403077781b7036ee79a"
+    source: "AlienVault"
+    date: 2026-08-24T12:07:31Z
+    kind: research
+    labels: ["amos", "amos stealer", "applescript", "clickfix", "etherhiding", "macos", "polygon blockchain", "social engineering", "xmrig", "xmrig cryptominer"]
+  - title: "91 Vulnerabilities Patched in Spring Application Framework"
+    url: "https://www.securityweek.com/91-vulnerabilities-patched-in-spring-application-framework/"
+    source: "SecurityWeek"
+    date: 2026-08-24T11:58:28Z
+    kind: news
+    labels: ["spring", "vulnerabilities"]
+  - title: "CISA orders urgent patching of actively exploited Zimbra flaw"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-orders-urgent-patching-of-actively-exploited-zimbra-flaw/"
+    source: "BleepingComputer"
+    date: 2026-08-24T10:45:12Z
+    kind: news
+    labels: []
+  - title: "Personal Information Exposed in Apollo Global Data Breach"
+    url: "https://www.securityweek.com/personal-information-exposed-in-apollo-global-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-08-24T10:08:42Z
+    kind: news
+    labels: ["apollo", "cybercrime", "data breaches"]
+  - title: "Iran-Linked Hackers Shut Down UK Power Plant for Four Days"
+    url: "https://www.securityweek.com/iran-linked-hackers-shut-down-uk-power-plant-for-four-days/"
+    source: "SecurityWeek"
+    date: 2026-08-24T09:22:09Z
+    kind: news
+    labels: ["critical infrastructure", "cyberattacks", "ics/ot", "iran", "uk"]
+  - title: "How a team of entity maintainers monitors, connects and scores entities in Elastic Security"
+    url: "https://www.elastic.co/security-labs/entity-resolution-identity-scoring-elastic-security"
+    source: "Elastic"
+    date: 2026-08-24T00:00:00Z
+    kind: research
+    labels: ["security-labs"]
   - title: "ToxicPanda Android malware uses VPN permissions to block Google Play"
     url: "https://www.bleepingcomputer.com/news/security/toxicpanda-android-malware-uses-vpn-permissions-to-block-google-play/"
     source: "BleepingComputer"
@@ -3363,27 +3432,3 @@ items:
     date: 2026-07-25T22:37:47Z
     kind: news
     labels: []
-  - title: "Malicious sites use JavaScript to build malware in browser memory"
-    url: "https://www.bleepingcomputer.com/news/security/malicious-sites-use-javascript-to-build-malware-in-browser-memory/"
-    source: "BleepingComputer"
-    date: 2026-07-25T15:21:09Z
-    kind: news
-    labels: []
-  - title: "ShinyHunters data leaks fuel $2,000 sextortion email scam"
-    url: "https://www.bleepingcomputer.com/news/security/shinyhunters-data-leaks-fuel-2-000-sextortion-email-scam/"
-    source: "BleepingComputer"
-    date: 2026-07-25T14:16:26Z
-    kind: news
-    labels: []
-  - title: "Rockwell Patches Code Execution Flaws in Arena Simulation Software"
-    url: "https://www.securityweek.com/rockwell-patches-code-execution-flaws-in-arena-simulation-software/"
-    source: "SecurityWeek"
-    date: 2026-07-25T08:30:00Z
-    kind: news
-    labels: ["ics", "ics/ot", "rockwell", "vulnerabilities"]
-  - title: "Fake Corepack Site Distributes Infostealer and Proxyware to Developers"
-    url: "https://otx.alienvault.com/pulse/6a646bc49938f4fb7a0a02f2"
-    source: "AlienVault"
-    date: 2026-07-25T07:54:44Z
-    kind: research
-    labels: ["apprunner", "corepack impersonation", "developer targeting", "infostealer", "node.js", "openshield", "phishing", "proxyware", "supply chain attack", "typosquatting"]
