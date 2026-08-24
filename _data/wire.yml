@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-23T19:02:31Z
+generated_at: 2026-08-24T07:02:21Z
 window_days: 30
 counts:
-  total: 499
-  research: 180
-  news: 319
+  total: 496
+  research: 179
+  news: 317
 topics:
   - label: "vulnerabilities"
     count: 66
@@ -197,7 +197,6 @@ label_colors:
   "chatgpt": 1
   "chatgpt abuse": 3
   "chatgpt atlas": 4
-  "check point": 6
   "china": 5
   "china-nexus": 11
   "chipmaker patch tuesday": 5
@@ -3388,21 +3387,3 @@ items:
     date: 2026-07-25T07:54:44Z
     kind: research
     labels: ["apprunner", "corepack impersonation", "developer targeting", "infostealer", "node.js", "openshield", "phishing", "proxyware", "supply chain attack", "typosquatting"]
-  - title: "Check Point SmartConsole Authentication Bypass (CVE-2026-16232)"
-    url: "https://op-c.net/blog/check-point-smartconsole-authentication-bypass-cve-2026-16232/"
-    source: "AlienVault"
-    date: 2026-07-24T21:40:32Z
-    kind: research
-    labels: ["authentication bypass", "check point", "cve-2026-16232", "cve-2026-62144", "cve-2026-62145", "exploitation", "gaia portal", "network security", "privilege escalation", "security management", "smartconsole"]
-  - title: "OnTrac notifies customers of data breach after network hack"
-    url: "https://www.bleepingcomputer.com/news/security/ontrac-notifies-customers-of-data-breach-after-network-hack/"
-    source: "BleepingComputer"
-    date: 2026-07-24T19:55:01Z
-    kind: news
-    labels: []
-  - title: "Hermes AI agent used to automate attack on Thai Finance Ministry"
-    url: "https://www.bleepingcomputer.com/news/security/hermes-ai-agent-used-to-automate-attack-on-thai-finance-ministry/"
-    source: "BleepingComputer"
-    date: 2026-07-24T19:09:09Z
-    kind: news
-    labels: []
