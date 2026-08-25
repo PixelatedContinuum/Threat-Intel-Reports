@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-25T16:01:50Z
+generated_at: 2026-08-25T18:02:51Z
 window_days: 30
 counts:
-  total: 527
-  research: 195
-  news: 332
+  total: 529
+  research: 196
+  news: 333
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -163,6 +163,7 @@ label_colors:
   "bixby": 2
   "black hat": 6
   "blackfile": 3
+  "blackrock": 2
   "blinddoor": 9
   "blockchain": 8
   "blockchain c2": 1
@@ -431,6 +432,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "What the Source Leak Says About HookBot"
+    url: "https://otx.alienvault.com/pulse/6a8dc2ed12d6752a7f9e258d"
+    source: "AlienVault"
+    date: 2026-08-25T16:29:33Z
+    kind: research
+    labels: ["android banking trojan", "blackrock", "cerberus", "cryptocurrency wallets", "docker deployment", "ermac", "hook", "hookbot", "lokibot", "overlay attacks", "source code leak", "vnc remote control", "xerxes"]
+  - title: "Massive DDoS attack disrupts Norway’s government digital services"
+    url: "https://www.bleepingcomputer.com/news/security/massive-ddos-attack-disrupts-norways-government-digital-services/"
+    source: "BleepingComputer"
+    date: 2026-08-25T15:52:36Z
+    kind: news
+    labels: []
   - title: "Hospital operator Nutex Health says data stolen in cyberattack"
     url: "https://www.bleepingcomputer.com/news/security/hospital-operator-nutex-health-says-data-stolen-in-cyberattack/"
     source: "BleepingComputer"
