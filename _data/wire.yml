@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-25T18:02:51Z
+generated_at: 2026-08-25T20:02:50Z
 window_days: 30
 counts:
-  total: 529
+  total: 530
   research: 196
-  news: 333
+  news: 334
 topics:
   - label: "vulnerabilities"
     count: 69
     color: 1
   - label: "cybercrime"
-    count: 52
+    count: 53
     color: 2
   - label: "malware"
     count: 30
@@ -432,6 +432,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Employee benefits platform Paylogix says hackers stole financial and health data"
+    url: "https://therecord.media/paylogix-cyberattack-akira-ransomware"
+    source: "Recorded Future"
+    date: 2026-08-25T18:45:00Z
+    kind: news
+    labels: ["cybercrime", "privacy"]
   - title: "What the Source Leak Says About HookBot"
     url: "https://otx.alienvault.com/pulse/6a8dc2ed12d6752a7f9e258d"
     source: "AlienVault"
