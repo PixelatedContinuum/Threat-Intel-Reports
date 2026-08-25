@@ -12,8 +12,12 @@
    so rather than reporting a clean sweep of zero. See
    homelab-soc/docs/gate-honesty-contract.md. */
 
-// One missed run of a twice-daily timer is tolerated; two consecutive fail.
-var STALE_HOURS = 36;
+// Calibrated against the two-hourly timer, not by the twice-daily era's rule
+// of thumb. Applied literally that rule lands near five hours, tight enough
+// that one OpenCTI hiccup or one push collision would fail the next publish.
+// Eight hours is four consecutive misses, which is a dead timer rather than a
+// blip, and still names one 4.5x sooner than the 36 hours this replaced.
+var STALE_HOURS = 8;
 var REQUIRED = ['title', 'url', 'source', 'date', 'kind'];
 // Hues defined in assets/css/custom.css as .hl-topic-c1 .. .hl-topic-c12.
 var PALETTE_SIZE = 12;
@@ -60,7 +64,7 @@ function check(doc, sources, now) {
   } else if ((now - gen) / 3600000 > STALE_HOURS) {
     problems.push('stale: generated_at is ' + ((now - gen) / 3600000).toFixed(1) +
       ' hours old, over the ' + STALE_HOURS + '-hour limit. The generator on ' +
-      'LXC-102 has missed at least two consecutive runs.');
+      'LXC-102 has missed at least four consecutive runs.');
   }
 
   var windowDays = Number(doc.window_days);

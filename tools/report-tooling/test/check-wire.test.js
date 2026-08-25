@@ -39,15 +39,16 @@ test('an absent file is NOT CHECKED, never PASS', function () {
 });
 
 test('a stale generated_at fails', function () {
-  // 40 hours old against a twice-daily timer: two consecutive misses.
-  var r = CW.check(doc({ generated_at: '2026-08-17T20:00:00Z' }), SOURCES, NOW);
+  // 10 hours old against the two-hourly timer: well past the eight-hour limit.
+  var r = CW.check(doc({ generated_at: '2026-08-19T02:00:00Z' }), SOURCES, NOW);
   assert.equal(r.status, 'FAIL');
   assert.match(r.problems.join(' '), /stale/i);
 });
 
-test('exactly one missed run still passes', function () {
-  // 30 hours old: one miss tolerated, per the spec's 36-hour threshold.
-  var r = CW.check(doc({ generated_at: '2026-08-18T06:00:00Z' }), SOURCES, NOW);
+test('a transient run of misses still passes', function () {
+  // 6 hours old: three missed runs, still inside the eight-hour threshold, so
+  // a blip on the generator does not fail somebody else's publish.
+  var r = CW.check(doc({ generated_at: '2026-08-19T06:00:00Z' }), SOURCES, NOW);
   assert.equal(r.status, 'PASS');
 });
 

@@ -8,7 +8,7 @@ position: 2.5
 <div class="hl-page-header" style="--ph-accent: #58a6ff;">
   <div class="hl-page-header__label">The Wire</div>
   <div class="hl-page-header__title">Threat Intelligence Headlines</div>
-  <div class="hl-page-header__desc">Recent threat-intel reporting from public sources, refreshed twice daily. Headlines and links only, every item goes to the original publisher. This is aggregation rather than original research. My original research can be found in the <a href="/reports/">reports section</a>.</div>
+  <div class="hl-page-header__desc">Recent threat-intel reporting from public sources, refreshed every two hours. Headlines and links only, every item goes to the original publisher. This is aggregation rather than original research. My original research can be found in the <a href="/reports/">reports section</a>.</div>
 </div>
 
 {%- assign wire = site.data.wire -%}
@@ -18,7 +18,7 @@ position: 2.5
 
 <details class="hl-wire__prov">
   <summary>Generated from my own OpenCTI instance, not scraped</summary>
-  <p>The headlines are other people’s reporting, but the pipeline is mine. Every item here comes out of the OpenCTI threat-intelligence platform I run and maintain myself, the same instance that holds the <a href="/stix/">STIX bundles</a> for every report I publish and feeds the blocklists on my own network. It refreshes twice a day, straight from that platform.</p>
+  <p>The headlines are other people’s reporting, but the pipeline is mine. Every item here comes out of the OpenCTI threat-intelligence platform I run and maintain myself, the same instance that holds the <a href="/stix/">STIX bundles</a> for every report I publish and feeds the blocklists on my own network. It refreshes every two hours, straight from that platform.</p>
 </details>
 
 {%- comment -%}
@@ -66,7 +66,7 @@ position: 2.5
 
 {%- else -%}
 
-<p class="hl-wire__freshness">The Wire is not currently available. The feed is regenerated twice daily; if this persists, the generator needs attention.</p>
+<p class="hl-wire__freshness">The Wire is not currently available. The feed is regenerated every two hours; if this persists, the generator needs attention.</p>
 
 {%- endif %}
 
