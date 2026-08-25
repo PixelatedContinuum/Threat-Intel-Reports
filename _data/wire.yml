@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-25T14:40:01Z
+generated_at: 2026-08-25T16:01:50Z
 window_days: 30
 counts:
-  total: 525
-  research: 194
-  news: 331
+  total: 527
+  research: 195
+  news: 332
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -431,6 +431,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Hospital operator Nutex Health says data stolen in cyberattack"
+    url: "https://www.bleepingcomputer.com/news/security/hospital-operator-nutex-health-says-data-stolen-in-cyberattack/"
+    source: "BleepingComputer"
+    date: 2026-08-25T14:44:16Z
+    kind: news
+    labels: ["healthcare"]
   - title: "WordPress Websites Targeted via MiniOrange Plugin Vulnerabilities"
     url: "https://www.securityweek.com/wordpress-websites-targeted-via-miniorange-plugin-vulnerabilities/"
     source: "SecurityWeek"
@@ -509,6 +515,12 @@ items:
     date: 2026-08-25T02:55:59Z
     kind: research
     labels: ["browser-in-browser", "credential-harvesting", "enterprise-targeting", "mobile-threats", "oauth-tokens", "phishing", "recruittrap", "social-engineering"]
+  - title: "Inside Elastic's agentic SOC: How we took AI alert triage from 60% to 92% accuracy"
+    url: "https://www.elastic.co/security-labs/alert-triage-agentic-soc-self-correcting-agents"
+    source: "Elastic"
+    date: 2026-08-25T00:00:00Z
+    kind: research
+    labels: ["security-labs"]
   - title: "US sanctions Iranian cyber actors as UK discloses power plant attack"
     url: "https://therecord.media/iran-cyberattacks-us-uk"
     source: "Recorded Future"
