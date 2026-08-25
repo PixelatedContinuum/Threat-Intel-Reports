@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-25T14:00:09Z
+generated_at: 2026-08-25T14:29:00Z
 window_days: 30
 counts:
-  total: 519
-  research: 187
-  news: 332
+  total: 523
+  research: 192
+  news: 331
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -419,8 +419,12 @@ label_colors:
   "supply chain attack": 10
   "teamcity": 8
   "threat hunting & intel": 9
+  "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
+  "trend micro research : articles, news, reports": 5
+  "trend micro research : artificial intelligence (ai)": 2
+  "trend micro research : cyber threats": 12
   "uncategorized": 10
   "vmware": 2
   "vulnerabilities": 1
@@ -804,6 +808,12 @@ items:
     date: 2026-08-20T14:01:11Z
     kind: news
     labels: []
+  - title: "Going with the Flow(s): Distinct Clusters Target Individuals of Interest to Russia"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/distinct-clusters-target-individuals-of-interest-to-russia/"
+    source: "Google"
+    date: 2026-08-20T14:00:00Z
+    kind: research
+    labels: ["threat intelligence"]
   - title: "Threat Actor Hacks 14,000 IP Cameras in Ukraine and Russia"
     url: "https://www.securityweek.com/threat-actor-hacks-14000-ip-cameras-in-ukraine-and-russia/"
     source: "SecurityWeek"
@@ -1182,6 +1192,12 @@ items:
     date: 2026-08-18T14:01:11Z
     kind: news
     labels: []
+  - title: "Staying Ahead of Adversarial AI Through Agentic Source Code Review"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/staying-ahead-of-adversarial-ai-through-agentic-source-code-review/"
+    source: "Google"
+    date: 2026-08-18T14:00:00Z
+    kind: research
+    labels: ["threat intelligence"]
   - title: "AI-Driven Vulnerability Surge Breaks the Traditional Patching Model"
     url: "https://www.securityweek.com/ai-driven-vulnerability-surge-breaks-the-traditional-patching-model/"
     source: "SecurityWeek"
@@ -2286,12 +2302,6 @@ items:
     date: 2026-08-06T22:26:39Z
     kind: research
     labels: ["blockchain", "chaindrop", "claude code", "developer tooling", "github", "high profile threats", "malware"]
-  - title: "UNC6671 Rebrands: Multi-Brand Vishing Extortion Targets Financial Services and Enterprise Cloud Environments"
-    url: "https://cloud.google.com/blog/topics/threat-intelligence/unc6671-targets-financial-services-and-enterprise-cloud-environments"
-    source: "AlienVault"
-    date: 2026-08-06T22:15:43Z
-    kind: research
-    labels: ["adversary-in-the-middle", "blackfile", "credential-harvesting", "data-theft-extortion", "helix", "phishing-resistant-mfa", "pink", "redact", "saas-exfiltration", "vishing"]
   - title: "Multi-Brand Vishing Extortion Targets Financial Services and Enterprise Cloud Environments"
     url: "https://cloud.google.com/blog/topics/threat-intelligence/unc6671-targets-financial-services-and-enterprise-cloud-environments"
     source: "AlienVault"
@@ -2340,6 +2350,12 @@ items:
     date: 2026-08-06T14:56:31Z
     kind: news
     labels: ["cybercrime", "hacker", "plead guilty", "snowflake"]
+  - title: "UNC6671 Rebrands: Multi-Brand Vishing Extortion Targets Financial Services and Enterprise Cloud Environments"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/unc6671-targets-financial-services-and-enterprise-cloud-environments/"
+    source: "Google"
+    date: 2026-08-06T14:00:00Z
+    kind: research
+    labels: ["threat intelligence"]
   - title: "Belarusian cybercriminal behind Ransom Cartel gets 16-year prison sentence"
     url: "https://therecord.media/belarus-hacker-ransomware-sentenced"
     source: "Recorded Future"
@@ -3066,6 +3082,12 @@ items:
     date: 2026-07-30T14:00:00Z
     kind: news
     labels: ["cybercrime", "government", "nation-state"]
+  - title: "Batten Down Your Packages: Mitigation Guidance for Supply Chain Compromise"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/mitigation-guidance-for-supply-chain-compromise/"
+    source: "Google"
+    date: 2026-07-30T14:00:00Z
+    kind: research
+    labels: ["threat intelligence"]
   - title: "OctLurk and SilkLurk: new Backdoors in Central Asia"
     url: "https://otx.alienvault.com/pulse/6a6b4b97df5f9df74333adfa"
     source: "AlienVault"
@@ -3144,6 +3166,12 @@ items:
     date: 2026-07-30T05:00:00Z
     kind: research
     labels: ["securing ai"]
+  - title: "Why the Open Secure AI Alliance Matters: Open Frontier Models, Open Deployment Flexibility"
+    url: "https://www.trendmicro.com/en_us/research/26/g/open-secure-ai-alliance.html"
+    source: "Trend Micro"
+    date: 2026-07-30T00:00:00Z
+    kind: research
+    labels: ["trend micro research : articles, news, reports", "trend micro research : artificial intelligence (ai)", "trend micro research : environments"]
   - title: "Russian hackers exploit Exchange OWA zero-day for long-term mailbox access"
     url: "https://www.bleepingcomputer.com/news/security/russian-hackers-exploit-exchange-owa-zero-day-for-long-term-mailbox-access/"
     source: "BleepingComputer"
@@ -3276,6 +3304,12 @@ items:
     date: 2026-07-29T02:59:33Z
     kind: research
     labels: ["clickfix", "credential theft", "evasion techniques", "ordinal execution", "phishing", "rundll32", "social engineering", "webdav"]
+  - title: "Tracking Over 35,000 Fake Sites in the 2026 World Cup Scam Wave"
+    url: "https://www.trendmicro.com/en_us/research/26/g/tracking-fake-sites-in-the-2026-world-cup-scam-wave.html"
+    source: "Trend Micro"
+    date: 2026-07-29T00:00:00Z
+    kind: research
+    labels: ["trend micro research : articles, news, reports", "trend micro research : cyber threats", "trend micro research : phishing", "trend micro research : research"]
   - title: "Stop rewriting detection rules by hand: automatic Sentinel-to-Elastic migration is here"
     url: "https://www.elastic.co/security-labs/sentinel-detection-rules-migration"
     source: "Elastic"
@@ -3534,9 +3568,3 @@ items:
     date: 2026-07-27T00:00:00Z
     kind: research
     labels: ["security-labs"]
-  - title: "GitHub, PyPI add time-absed defenses against supply chain attacks"
-    url: "https://www.bleepingcomputer.com/news/security/github-pypi-add-time-absed-defenses-against-supply-chain-attacks/"
-    source: "BleepingComputer"
-    date: 2026-07-26T14:13:39Z
-    kind: news
-    labels: []
