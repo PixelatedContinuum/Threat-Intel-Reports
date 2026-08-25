@@ -17,6 +17,17 @@ sources:
   Elastic: research
   Microsoft: research
   BitDefender: research
+  # Both of these ingested nothing until 2026-08-25: feeds.trendmicro.com had a
+  # broken TLS cert, and the cloud.google.com RSS path served the blog's HTML
+  # shell rather than a feed. Fixed by repointing to FeedBurner and to the
+  # cloudblog.withgoogle.com origin respectively.
+  Trend Micro: research
+  # The Google Threat Intelligence / Mandiant ingester files under the bare
+  # identity "Google", which is the string OpenCTI hands the exporter. Research
+  # rather than news on purpose: the keyword filter would drop titles like
+  # "Updated Cyber Threat Actor Naming System", which match none of the keep
+  # terms below, and Mandiant writes a lot of them.
+  Google: research
   BleepingComputer: news
   SecurityWeek: news
   Recorded Future: news
