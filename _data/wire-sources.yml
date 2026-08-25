@@ -28,6 +28,12 @@ sources:
   # "Updated Cyber Threat Actor Naming System", which match none of the keep
   # terms below, and Mandiant writes a lot of them.
   Google: research
+  # Trend Micro's vulnerability-research arm. This is the ZDI *blog* feed, which
+  # publishes articles with https links. Their published-advisories feed is
+  # deliberately NOT ingested: its item links are http, which the exporter drops
+  # and check-wire.js then fails as a missing url, and it batches up to 49
+  # advisories on a patch day, which would bury a day's actual headlines.
+  Zero Day Initiative: research
   BleepingComputer: news
   SecurityWeek: news
   Recorded Future: news
