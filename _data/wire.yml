@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-24T19:02:20Z
+generated_at: 2026-08-25T07:00:31Z
 window_days: 30
 counts:
-  total: 503
+  total: 505
   research: 180
-  news: 323
+  news: 325
 topics:
   - label: "vulnerabilities"
     count: 66
@@ -19,10 +19,10 @@ topics:
   - label: "malware"
     count: 28
     color: 3
-  - label: "data breaches"
-    count: 24
-    color: 4
   - label: "government"
+    count: 25
+    color: 4
+  - label: "data breaches"
     count: 24
     color: 5
   - label: "artificial intelligence"
@@ -271,7 +271,7 @@ label_colors:
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 4
+  "data breaches": 5
   "data center": 7
   "data exfiltration": 9
   "data leak": 9
@@ -326,7 +326,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 5
+  "government": 4
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -414,6 +414,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "US sanctions Iranian cyber actors as UK discloses power plant attack"
+    url: "https://therecord.media/iran-cyberattacks-us-uk"
+    source: "Recorded Future"
+    date: 2026-08-24T23:00:00Z
+    kind: news
+    labels: ["government", "nation-state"]
+  - title: "Unpatched Calix flaw lets hackers bypass NAT to expose internal devices"
+    url: "https://www.bleepingcomputer.com/news/security/unpatched-calix-flaw-lets-hackers-bypass-nat-to-expose-internal-devices/"
+    source: "BleepingComputer"
+    date: 2026-08-24T21:14:30Z
+    kind: news
+    labels: ["hardware"]
+  - title: "Hackers target WordPress sites in miniOrange auth bypass attacks"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-in-miniorange-auth-bypass-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-24T19:26:32Z
+    kind: news
+    labels: []
   - title: "Indian man who fled US arrested on charges he helped scammers siphon $7.5 million from the elderly"
     url: "https://therecord.media/cyber-scam-indian-arrested"
     source: "Recorded Future"
@@ -3424,11 +3442,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/github-pypi-add-time-absed-defenses-against-supply-chain-attacks/"
     source: "BleepingComputer"
     date: 2026-07-26T14:13:39Z
-    kind: news
-    labels: []
-  - title: "Steam forum ClickFix attacks infect gamers with XMRig cryptominers"
-    url: "https://www.bleepingcomputer.com/news/security/steam-forum-clickfix-attacks-infect-gamers-with-xmrig-cryptominers/"
-    source: "BleepingComputer"
-    date: 2026-07-25T22:37:47Z
     kind: news
     labels: []
