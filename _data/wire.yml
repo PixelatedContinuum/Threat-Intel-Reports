@@ -3,33 +3,33 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-25T20:02:50Z
+generated_at: 2026-08-25T22:02:30Z
 window_days: 30
 counts:
-  total: 530
+  total: 533
   research: 196
-  news: 334
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 69
     color: 1
   - label: "cybercrime"
-    count: 53
+    count: 54
     color: 2
   - label: "malware"
     count: 30
     color: 3
   - label: "government"
-    count: 26
+    count: 27
     color: 4
   - label: "exploited"
     count: 25
     color: 5
-  - label: "data breaches"
+  - label: "artificial intelligence"
     count: 24
     color: 6
-  - label: "artificial intelligence"
-    count: 23
+  - label: "data breaches"
+    count: 24
     color: 7
   - label: "credential theft"
     count: 23
@@ -123,7 +123,7 @@ label_colors:
   "arista": 10
   "armenia": 5
   "arrayref": 8
-  "artificial intelligence": 7
+  "artificial intelligence": 6
   "astral-pe": 3
   "astroproxy": 1
   "asyncrat": 11
@@ -282,7 +282,7 @@ label_colors:
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 6
+  "data breaches": 7
   "data center": 7
   "data exfiltration": 9
   "data leak": 9
@@ -432,6 +432,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Hackers abuse npm mirrors to host phishing redirect pages"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-abuse-npm-mirrors-to-host-phishing-redirect-pages/"
+    source: "BleepingComputer"
+    date: 2026-08-25T21:39:01Z
+    kind: news
+    labels: []
+  - title: "58 arrested in international cybercrime crackdown"
+    url: "https://therecord.media/58-arrested-international-cybercrime-crackdown-interpol"
+    source: "Recorded Future"
+    date: 2026-08-25T20:33:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "AnonyMousKIT PhaaS uses voice AI agents to phish iPhone passcodes"
+    url: "https://www.bleepingcomputer.com/news/security/anonymouskit-phaas-uses-voice-ai-agents-to-phish-iphone-passcodes/"
+    source: "BleepingComputer"
+    date: 2026-08-25T20:25:26Z
+    kind: news
+    labels: ["apple", "artificial intelligence"]
   - title: "Employee benefits platform Paylogix says hackers stole financial and health data"
     url: "https://therecord.media/paylogix-cyberattack-akira-ransomware"
     source: "Recorded Future"
