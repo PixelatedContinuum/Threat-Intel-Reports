@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T10:02:10Z
+generated_at: 2026-08-26T12:00:30Z
 window_days: 30
 counts:
-  total: 532
-  research: 193
-  news: 339
+  total: 531
+  research: 194
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 71
@@ -17,12 +17,12 @@ topics:
     count: 54
     color: 2
   - label: "malware"
-    count: 30
+    count: 28
     color: 3
-  - label: "government"
-    count: 27
-    color: 4
   - label: "exploited"
+    count: 26
+    color: 4
+  - label: "government"
     count: 26
     color: 5
   - label: "artificial intelligence"
@@ -32,13 +32,13 @@ topics:
     count: 23
     color: 7
   - label: "data breaches"
-    count: 23
+    count: 22
     color: 8
   - label: "supply chain attack"
     count: 18
     color: 9
   - label: "ransomware"
-    count: 17
+    count: 16
     color: 10
   - label: "microsoft"
     count: 14
@@ -106,7 +106,6 @@ label_colors:
   "antino": 3
   "antino backdoor": 10
   "antivirus removal": 7
-  "anubis": 2
   "anydesk": 9
   "aone-cli": 8
   "apac attacks": 2
@@ -240,7 +239,6 @@ label_colors:
   "cloudflare workers": 6
   "cloudflared": 7
   "cobalt-strike": 4
-  "coca-cola": 4
   "code signing abuse": 10
   "command and control": 7
   "communicationuxtheme.dll": 10
@@ -311,7 +309,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 5
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
@@ -338,7 +336,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 4
+  "government": 5
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -378,7 +376,6 @@ label_colors:
   "meta": 5
   "metabase": 6
   "microsoft": 11
-  "microsoft 365": 4
   "miniorange": 5
   "mlflow": 1
   "mobile": 4
@@ -423,6 +420,7 @@ label_colors:
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
+  "tool talk": 4
   "trend micro research : articles, news, reports": 5
   "trend micro research : artificial intelligence (ai)": 2
   "trend micro research : cyber threats": 12
@@ -431,6 +429,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "CISA: Over 100 Internet-Exposed Water Systems Targeted in July Cyberattacks"
+    url: "https://www.securityweek.com/cisa-over-100-internet-exposed-water-systems-targeted-in-july-cyberattacks/"
+    source: "SecurityWeek"
+    date: 2026-08-26T11:29:50Z
+    kind: news
+    labels: ["cisa", "ics", "ics/ot", "ot", "water"]
+  - title: "Hackers now exploit critical Gitea flaw in code injection attacks"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-now-exploit-critical-gitea-flaw-in-code-injection-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-26T11:07:48Z
+    kind: news
+    labels: []
+  - title: "Choose your fighter: Balancing competing requirements to select models for your AI SOC"
+    url: "https://blog.talosintelligence.com/choose-your-fighter-balancing-competing-requirements-to-select-models-for-your-ai-soc/"
+    source: "Cisco Talos"
+    date: 2026-08-26T10:00:05Z
+    kind: research
+    labels: ["artificial intelligence", "tool talk"]
   - title: "Chrome 152 Patches Over 300 Vulnerabilities"
     url: "https://www.securityweek.com/chrome-152-patches-over-300-vulnerabilities/"
     source: "SecurityWeek"
@@ -3599,27 +3615,3 @@ items:
     date: 2026-07-27T13:00:00Z
     kind: news
     labels: ["malware"]
-  - title: "Hackers used autonomous AI agent to spy on Thailand's finance ministry"
-    url: "https://therecord.media/thailand-hackers-ai-finance-ministry"
-    source: "Recorded Future"
-    date: 2026-07-27T12:00:00Z
-    kind: news
-    labels: ["government", "malware"]
-  - title: "Coca-Cola Confirms Data Breach After Fairlife Ransomware Attack"
-    url: "https://www.securityweek.com/coca-cola-confirms-data-breach-after-fairlife-ransomware-attack/"
-    source: "SecurityWeek"
-    date: 2026-07-27T11:29:03Z
-    kind: news
-    labels: ["anubis", "coca-cola", "data breaches", "fairlife", "ransomware"]
-  - title: "Hacked Public Wi-Fi Gateways Used to Harvest Corporate Credentials"
-    url: "https://www.securityweek.com/hacked-public-wi-fi-gateways-used-to-harvest-corporate-credentials/"
-    source: "SecurityWeek"
-    date: 2026-07-27T10:50:19Z
-    kind: news
-    labels: ["malware", "microsoft 365", "mobile & wireless", "wi-fi"]
-  - title: "Anthropic’s Opus 5 Nears Mythos 5 on Finding Bugs, but Falls Short on Exploits"
-    url: "https://www.securityweek.com/anthropics-opus-5-nears-mythos-5-on-finding-bugs-but-falls-short-on-exploits/"
-    source: "SecurityWeek"
-    date: 2026-07-27T10:02:41Z
-    kind: news
-    labels: ["artificial intelligence", "anthropic", "mythos", "opus"]
