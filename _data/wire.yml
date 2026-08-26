@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T20:02:30Z
+generated_at: 2026-08-26T22:02:01Z
 window_days: 30
 counts:
   total: 536
@@ -20,7 +20,7 @@ topics:
     count: 29
     color: 3
   - label: "government"
-    count: 26
+    count: 27
     color: 4
   - label: "artificial intelligence"
     count: 25
@@ -436,6 +436,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Critical Avada WordPress theme flaw enables zero-click RCE"
+    url: "https://www.bleepingcomputer.com/news/security/critical-avada-wordpress-theme-flaw-enables-zero-click-rce/"
+    source: "BleepingComputer"
+    date: 2026-08-26T21:33:20Z
+    kind: news
+    labels: []
+  - title: "Exclusive: NSA to host a hacker reunion in bid to rebuild secretive unit"
+    url: "https://therecord.media/nsa-to-host-hacker-reunion-in-bid-to-rebuild-secretive-unit"
+    source: "Recorded Future"
+    date: 2026-08-26T20:53:00Z
+    kind: news
+    labels: ["government", "leadership"]
   - title: "New GPUThor attack defeats NVIDIA ECC protection for root access"
     url: "https://www.bleepingcomputer.com/news/security/new-gputhor-attack-defeats-nvidia-ecc-protection-for-root-access/"
     source: "BleepingComputer"
@@ -3638,17 +3650,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/arista-patches-velocloud-orchestrator-zero-day-exploited-in-attacks/"
     source: "BleepingComputer"
     date: 2026-07-27T22:49:44Z
-    kind: news
-    labels: []
-  - title: "New Dysphoria DDoS botnet spreads to 200k devices worldwide"
-    url: "https://www.bleepingcomputer.com/news/security/new-dysphoria-ddos-botnet-spreads-to-200k-devices-worldwide/"
-    source: "BleepingComputer"
-    date: 2026-07-27T21:08:15Z
-    kind: news
-    labels: []
-  - title: "New Certighost PoC exploit lets attackers hijack Windows domains"
-    url: "https://www.bleepingcomputer.com/news/security/new-certighost-poc-exploit-lets-attackers-hijack-windows-domains/"
-    source: "BleepingComputer"
-    date: 2026-07-27T21:00:25Z
     kind: news
     labels: []
