@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T04:01:01Z
+generated_at: 2026-08-26T06:01:11Z
 window_days: 30
 counts:
-  total: 532
-  research: 194
+  total: 531
+  research: 193
   news: 338
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 70
     color: 1
   - label: "cybercrime"
     count: 54
@@ -23,22 +23,22 @@ topics:
     count: 27
     color: 4
   - label: "exploited"
-    count: 25
+    count: 26
     color: 5
   - label: "artificial intelligence"
     count: 24
     color: 6
-  - label: "data breaches"
-    count: 24
-    color: 7
   - label: "credential theft"
     count: 23
+    color: 7
+  - label: "data breaches"
+    count: 23
     color: 8
-  - label: "ransomware"
-    count: 18
-    color: 9
   - label: "supply chain attack"
     count: 18
+    color: 9
+  - label: "ransomware"
+    count: 17
     color: 10
   - label: "microsoft"
     count: 14
@@ -251,7 +251,7 @@ label_colors:
   "crat": 2
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 8
+  "credential theft": 7
   "credential-based attacks": 12
   "credential-harvesting": 1
   "critical infrastructure": 4
@@ -282,7 +282,7 @@ label_colors:
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 7
+  "data breaches": 8
   "data center": 7
   "data exfiltration": 9
   "data leak": 9
@@ -404,7 +404,7 @@ label_colors:
   "plugin": 7
   "poc": 2
   "privacy": 12
-  "ransomware": 9
+  "ransomware": 10
   "rce": 10
   "ruby": 6
   "ruby on rails": 12
@@ -418,7 +418,7 @@ label_colors:
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
-  "supply chain attack": 10
+  "supply chain attack": 9
   "teamcity": 8
   "threat hunting & intel": 9
   "threat intelligence": 9
@@ -432,6 +432,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "CISA Warns of Exploited Gitea Vulnerability"
+    url: "https://www.securityweek.com/cisa-warns-of-exploited-gitea-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-08-26T05:17:28Z
+    kind: news
+    labels: ["cisa kev", "exploited", "gitea", "vulnerabilities"]
   - title: "LACMA data breach last year exposed social security and medical data"
     url: "https://www.bleepingcomputer.com/news/security/lacma-data-breach-last-year-exposed-social-security-and-medical-data/"
     source: "BleepingComputer"
@@ -3612,15 +3618,3 @@ items:
     date: 2026-07-27T09:34:12Z
     kind: news
     labels: ["data breaches", "dentaquest", "healthcare"]
-  - title: "5 High-Impact Use Cases for Falcon Onum"
-    url: "https://www.crowdstrike.com/en-us/blog/five-high-impact-use-cases-for-falcon-onum/"
-    source: "Crowdstrike"
-    date: 2026-07-27T05:00:00Z
-    kind: research
-    labels: ["next-gen siem & log management"]
-  - title: "MCBS Data Breach Affects 1.2 Million Individuals"
-    url: "https://www.securityweek.com/mcbs-data-breach-affects-1-2-million-individuals/"
-    source: "SecurityWeek"
-    date: 2026-07-27T04:51:32Z
-    kind: news
-    labels: ["data breaches", "healthcare", "mcbs", "pear", "ransomware"]
