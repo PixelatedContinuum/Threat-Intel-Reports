@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T14:01:21Z
+generated_at: 2026-08-26T16:00:14Z
 window_days: 30
 counts:
   total: 535
@@ -17,16 +17,16 @@ topics:
     count: 54
     color: 2
   - label: "malware"
-    count: 27
+    count: 28
     color: 3
   - label: "government"
     count: 26
     color: 4
-  - label: "exploited"
+  - label: "artificial intelligence"
     count: 25
     color: 5
-  - label: "artificial intelligence"
-    count: 24
+  - label: "exploited"
+    count: 25
     color: 6
   - label: "credential theft"
     count: 24
@@ -78,6 +78,7 @@ label_colors:
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
   "ai integration": 10
+  "ai malware": 9
   "ai testing": 12
   "ai vishing": 6
   "ai-assisted-development": 9
@@ -113,7 +114,6 @@ label_colors:
   "apollo": 11
   "app password phishing": 8
   "apple": 12
-  "application security": 6
   "apt": 5
   "apt29": 2
   "aquilarat": 10
@@ -122,7 +122,7 @@ label_colors:
   "arista": 10
   "armenia": 5
   "arrayref": 8
-  "artificial intelligence": 6
+  "artificial intelligence": 5
   "astral-pe": 3
   "astroproxy": 1
   "asyncrat": 11
@@ -314,7 +314,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 5
+  "exploited": 6
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
@@ -335,7 +335,6 @@ label_colors:
   "geoserver": 2
   "ghostdesk": 6
   "ghostjacking": 2
-  "github": 3
   "gitlab": 3
   "gms": 3
   "google": 7
@@ -436,6 +435,30 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Iran-linked hackers expand infrastructure across Europe and Middle East, report says"
+    url: "https://therecord.media/iran-linked-hackers-expand-infrastructure-europe-middle-east"
+    source: "Recorded Future"
+    date: 2026-08-26T15:45:00Z
+    kind: news
+    labels: ["cybercrime", "malware"]
+  - title: "AI Speeds Up Malware Development, Not Its Success Rate: Analysis"
+    url: "https://www.securityweek.com/ai-speeds-up-malware-development-not-its-success-rate-analysis/"
+    source: "SecurityWeek"
+    date: 2026-08-26T15:23:45Z
+    kind: news
+    labels: ["artificial intelligence", "ai malware", "malware"]
+  - title: "Hackers target Microsoft SharePoint RCE chain with PoC exploit"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-target-microsoft-sharepoint-rce-chain-with-poc-exploit/"
+    source: "BleepingComputer"
+    date: 2026-08-26T14:47:51Z
+    kind: news
+    labels: []
+  - title: "FBI disrupts proxy network enabling Chinese espionage operations"
+    url: "https://www.bleepingcomputer.com/news/security/fbi-disrupts-proxy-network-enabling-chinese-espionage-operations/"
+    source: "BleepingComputer"
+    date: 2026-08-26T14:17:59Z
+    kind: news
+    labels: []
   - title: "Ubiquiti patches three max severity security vulnerabilities"
     url: "https://www.bleepingcomputer.com/news/security/ubiquiti-patches-three-max-severity-security-vulnerabilities/"
     source: "BleepingComputer"
@@ -3622,27 +3645,3 @@ items:
     date: 2026-07-27T16:45:15Z
     kind: research
     labels: ["blinddoor", "data exfiltration", "gogrpc", "grpc", "initial access broker", "microsoft teams", "powershell", "pygrpc", "quick assist", "ransomware", "revsocket", "rsox", "s3siphon", "socks proxy", "vishing"]
-  - title: "Hackers used Telegram phishing campaign to target exiled Belarusian activist"
-    url: "https://therecord.media/telegram-belarus-activist-russia-cyberattack"
-    source: "Recorded Future"
-    date: 2026-07-27T16:00:00Z
-    kind: news
-    labels: ["cybercrime", "malware"]
-  - title: "Coca-Cola confirms data theft in Fairlife ransomware attack"
-    url: "https://www.bleepingcomputer.com/news/security/coca-cola-confirms-data-theft-in-fairlife-ransomware-attack/"
-    source: "BleepingComputer"
-    date: 2026-07-27T15:39:51Z
-    kind: news
-    labels: []
-  - title: "Ernst & Young data breach claimed by ShinyHunters extortion gang"
-    url: "https://www.bleepingcomputer.com/news/security/ernst-and-young-data-breach-claimed-by-shinyhunters-extortion-gang/"
-    source: "BleepingComputer"
-    date: 2026-07-27T15:12:27Z
-    kind: news
-    labels: []
-  - title: "New GitHub, PyPI Policies Boost Supply Chain Security"
-    url: "https://www.securityweek.com/new-github-pypi-policies-boost-supply-chain-security/"
-    source: "SecurityWeek"
-    date: 2026-07-27T14:26:00Z
-    kind: news
-    labels: ["application security", "github", "pypi", "supply chain", "supply chain security"]
