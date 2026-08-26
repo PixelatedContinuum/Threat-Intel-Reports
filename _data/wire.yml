@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T18:02:09Z
+generated_at: 2026-08-26T20:02:30Z
 window_days: 30
 counts:
-  total: 532
-  research: 196
-  news: 336
+  total: 536
+  research: 199
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 71
@@ -122,6 +122,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "artificial intelligence": 5
+  "asiogate": 3
   "astral-pe": 3
   "astroproxy": 1
   "asyncrat": 11
@@ -145,6 +146,7 @@ label_colors:
   "badbox": 10
   "badiis": 8
   "bait-and-switch": 5
+  "bandook": 10
   "bank": 4
   "bank of america impersonation": 5
   "banking credentials": 12
@@ -208,6 +210,7 @@ label_colors:
   "chatgpt atlas": 4
   "china": 5
   "china-nexus": 11
+  "chinese-speaking operator": 4
   "chipmaker patch tuesday": 5
   "chisel": 4
   "chrome": 12
@@ -270,12 +273,14 @@ label_colors:
   "cve-2017-7921": 7
   "cve-2021-27101": 2
   "cve-2023-34362": 11
+  "cve-2023-49105": 4
   "cve-2025-24813": 7
   "cve-2025-49113": 3
   "cve-2026-42897": 4
   "cve-2026-60137": 11
   "cve-2026-66747": 10
   "cve-2026-68820": 2
+  "cyber-espionage": 3
   "cyberattacks": 8
   "cybercrime": 2
   "cyberwarfare": 9
@@ -431,6 +436,30 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "New GPUThor attack defeats NVIDIA ECC protection for root access"
+    url: "https://www.bleepingcomputer.com/news/security/new-gputhor-attack-defeats-nvidia-ecc-protection-for-root-access/"
+    source: "BleepingComputer"
+    date: 2026-08-26T18:48:24Z
+    kind: news
+    labels: ["hardware"]
+  - title: "Philippine Nuclear Agency and Naval Contractor Targeted by Suspected Chinese-Speaking Operator Using Known Vulnerabilities"
+    url: "https://otx.alienvault.com/pulse/6a8f1fe1d950c245b840741b"
+    source: "AlienVault"
+    date: 2026-08-26T17:18:25Z
+    kind: research
+    labels: ["chinese-speaking operator", "cve-2023-49105", "cve-2024-28000", "data exfiltration", "metasploit", "mettle", "naval contractor", "nuclear research", "owncloud exploitation", "philippines", "sliver", "south china sea", "wordpress compromise"]
+  - title: "Expands Toolset With New Backdoor, SSH Tunnel"
+    url: "https://otx.alienvault.com/pulse/6a8f1fe0b63c473eb499fd00"
+    source: "AlienVault"
+    date: 2026-08-26T17:18:24Z
+    kind: research
+    labels: ["backdoor", "cyber-espionage", "dll hijacking", "iranian threat actor", "mirage kitten", "ssh tunneling", "tortoiseshell", "twostroke", "wtsapi32.dll"]
+  - title: "Dark Caracal Reloaded: New Malware, Same Hunting Grounds"
+    url: "https://arcticwolf.com/resources/blog/dark-caracal-reloaded-new-malware-same-hunting-grounds/"
+    source: "AlienVault"
+    date: 2026-08-26T17:18:24Z
+    kind: research
+    labels: ["asiogate", "bandook", "blockchain infrastructure", "cyberespionage", "ethereum c2 fallback", "gocaracal", "latin america targeting", "modular framework", "venezuela"]
   - title: "US takes down alleged Chinese hacking tools used against Federal Reserve, DOJ and Senate"
     url: "https://therecord.media/qscan-qtrouter-us-takedown-alleged-china-hacking-tools"
     source: "Recorded Future"
