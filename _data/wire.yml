@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T08:01:24Z
+generated_at: 2026-08-26T10:02:10Z
 window_days: 30
 counts:
   total: 532
@@ -11,7 +11,7 @@ counts:
   news: 339
 topics:
   - label: "vulnerabilities"
-    count: 70
+    count: 71
     color: 1
   - label: "cybercrime"
     count: 54
@@ -28,10 +28,10 @@ topics:
   - label: "artificial intelligence"
     count: 24
     color: 6
-  - label: "data breaches"
-    count: 24
-    color: 7
   - label: "credential theft"
+    count: 23
+    color: 7
+  - label: "data breaches"
     count: 23
     color: 8
   - label: "supply chain attack"
@@ -251,7 +251,7 @@ label_colors:
   "crat": 2
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 8
+  "credential theft": 7
   "credential-based attacks": 12
   "credential-harvesting": 1
   "critical infrastructure": 4
@@ -282,14 +282,13 @@ label_colors:
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 7
+  "data breaches": 8
   "data center": 7
   "data exfiltration": 9
   "data leak": 9
   "dcrat": 12
   "ddos engine": 12
   "dead drop resolver": 7
-  "dentaquest": 4
   "desktop capture": 2
   "dev#popper": 8
   "developer targeting": 7
@@ -432,6 +431,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Chrome 152 Patches Over 300 Vulnerabilities"
+    url: "https://www.securityweek.com/chrome-152-patches-over-300-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-08-26T09:50:34Z
+    kind: news
+    labels: ["chrome", "patches", "vulnerabilities"]
   - title: "Sensitive Information Exposed in Nutex Health Data Breach"
     url: "https://www.securityweek.com/sensitive-information-exposed-in-nutex-health-data-breach/"
     source: "SecurityWeek"
@@ -3618,9 +3623,3 @@ items:
     date: 2026-07-27T10:02:41Z
     kind: news
     labels: ["artificial intelligence", "anthropic", "mythos", "opus"]
-  - title: "DentaQuest Data Breach Potentially Impacts Over 23 Million People"
-    url: "https://www.securityweek.com/dentaquest-data-breach-potentially-impacts-over-23-million-people/"
-    source: "SecurityWeek"
-    date: 2026-07-27T09:34:12Z
-    kind: news
-    labels: ["data breaches", "dentaquest", "healthcare"]
