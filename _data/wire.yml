@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T06:01:11Z
+generated_at: 2026-08-26T08:01:24Z
 window_days: 30
 counts:
-  total: 531
+  total: 532
   research: 193
-  news: 338
+  news: 339
 topics:
   - label: "vulnerabilities"
     count: 70
@@ -28,10 +28,10 @@ topics:
   - label: "artificial intelligence"
     count: 24
     color: 6
-  - label: "credential theft"
-    count: 23
-    color: 7
   - label: "data breaches"
+    count: 24
+    color: 7
+  - label: "credential theft"
     count: 23
     color: 8
   - label: "supply chain attack"
@@ -251,7 +251,7 @@ label_colors:
   "crat": 2
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 7
+  "credential theft": 8
   "credential-based attacks": 12
   "credential-harvesting": 1
   "critical infrastructure": 4
@@ -282,7 +282,7 @@ label_colors:
   "d2ip": 7
   "dahua": 9
   "darkhotel": 10
-  "data breaches": 8
+  "data breaches": 7
   "data center": 7
   "data exfiltration": 9
   "data leak": 9
@@ -432,6 +432,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Sensitive Information Exposed in Nutex Health Data Breach"
+    url: "https://www.securityweek.com/sensitive-information-exposed-in-nutex-health-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-08-26T07:41:50Z
+    kind: news
+    labels: ["data breaches", "healthcare", "nutex health"]
   - title: "CISA Warns of Exploited Gitea Vulnerability"
     url: "https://www.securityweek.com/cisa-warns-of-exploited-gitea-vulnerability/"
     source: "SecurityWeek"
