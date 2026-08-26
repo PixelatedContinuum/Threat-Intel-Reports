@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-25T22:02:30Z
+generated_at: 2026-08-26T00:00:51Z
 window_days: 30
 counts:
   total: 533
-  research: 196
-  news: 337
+  research: 195
+  news: 338
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -432,6 +432,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "LACMA data breach last year exposed social security and medical data"
+    url: "https://www.bleepingcomputer.com/news/security/lacma-data-breach-last-year-exposed-social-security-and-medical-data/"
+    source: "BleepingComputer"
+    date: 2026-08-25T21:58:14Z
+    kind: news
+    labels: []
   - title: "Hackers abuse npm mirrors to host phishing redirect pages"
     url: "https://www.bleepingcomputer.com/news/security/hackers-abuse-npm-mirrors-to-host-phishing-redirect-pages/"
     source: "BleepingComputer"
@@ -3624,9 +3630,3 @@ items:
     date: 2026-07-27T04:00:00Z
     kind: research
     labels: ["securing ai"]
-  - title: "Inside Elastic InfoSec's agentic SOC: How we cut AI agent LLM calls by 60%"
-    url: "https://www.elastic.co/security-labs/ai-agent-optimization-production-scale"
-    source: "Elastic"
-    date: 2026-07-27T00:00:00Z
-    kind: research
-    labels: ["security-labs"]
