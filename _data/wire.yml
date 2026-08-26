@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T12:00:30Z
+generated_at: 2026-08-26T14:01:21Z
 window_days: 30
 counts:
-  total: 531
-  research: 194
+  total: 535
+  research: 198
   news: 337
 topics:
   - label: "vulnerabilities"
@@ -17,19 +17,19 @@ topics:
     count: 54
     color: 2
   - label: "malware"
-    count: 28
+    count: 27
     color: 3
-  - label: "exploited"
-    count: 26
-    color: 4
   - label: "government"
     count: 26
+    color: 4
+  - label: "exploited"
+    count: 25
     color: 5
   - label: "artificial intelligence"
     count: 24
     color: 6
   - label: "credential theft"
-    count: 23
+    count: 24
     color: 7
   - label: "data breaches"
     count: 22
@@ -38,13 +38,13 @@ topics:
     count: 18
     color: 9
   - label: "ransomware"
-    count: 16
+    count: 15
     color: 10
-  - label: "microsoft"
+  - label: "clickfix"
     count: 14
     color: 11
-  - label: "clickfix"
-    count: 13
+  - label: "microsoft"
+    count: 14
     color: 12
 label_colors:
   ".net downloader": 4
@@ -157,6 +157,7 @@ label_colors:
   "beacon": 6
   "bearlyfy": 10
   "bec campaign": 10
+  "binary ninja": 5
   "bindcloak": 3
   "bitcoin": 2
   "bixby": 2
@@ -194,6 +195,7 @@ label_colors:
   "cacheable": 2
   "camera": 3
   "camview": 6
+  "canada revenue agency": 3
   "captive portal compromise": 6
   "carecloud": 10
   "castlestealer": 12
@@ -227,13 +229,15 @@ label_colors:
   "clamav": 8
   "claroty": 10
   "claude code": 9
-  "clickfix": 12
+  "claude desktop": 12
+  "clickfix": 11
   "clickfix campaign": 9
   "clipper": 3
   "cloud": 7
   "cloud & application security": 1
   "cloud credentials": 9
   "cloud security": 9
+  "cloudflare captcha": 5
   "cloudflare tunnel": 9
   "cloudflare tunnels": 6
   "cloudflare workers": 6
@@ -244,6 +248,7 @@ label_colors:
   "communicationuxtheme.dll": 10
   "compile-time execution": 3
   "contactless payment fraud": 3
+  "control-flow flattening": 10
   "coolclient": 8
   "crackerdrv": 3
   "crat": 2
@@ -309,12 +314,13 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 4
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
   "fake lock screen": 6
   "fake security scan": 12
+  "fake tax documents": 4
   "fakecaptcha": 7
   "fastjson": 10
   "firefox": 3
@@ -336,7 +342,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 5
+  "government": 4
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -375,7 +381,7 @@ label_colors:
   "malware": 3
   "meta": 5
   "metabase": 6
-  "microsoft": 11
+  "microsoft": 12
   "miniorange": 5
   "mlflow": 1
   "mobile": 4
@@ -386,6 +392,7 @@ label_colors:
   "network security": 6
   "next-gen siem & log management": 11
   "npm": 7
+  "nvidia": 3
   "omada": 8
   "on the radar": 4
   "oracle": 12
@@ -429,6 +436,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Ubiquiti patches three max severity security vulnerabilities"
+    url: "https://www.bleepingcomputer.com/news/security/ubiquiti-patches-three-max-severity-security-vulnerabilities/"
+    source: "BleepingComputer"
+    date: 2026-08-26T13:17:54Z
+    kind: news
+    labels: []
+  - title: "Adobe and Nvidia Patch Dozens of Vulnerabilities"
+    url: "https://www.securityweek.com/adobe-and-nvidia-patch-dozens-of-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-08-26T12:39:38Z
+    kind: news
+    labels: ["adobe", "nvidia", "patch", "vulnerabilities"]
+  - title: "RMM Phishing Campaign: Malware Analysis"
+    url: "https://any.run/cybersecurity-blog/us-campaign-malware-analysis"
+    source: "AlienVault"
+    date: 2026-08-26T12:32:30Z
+    kind: research
+    labels: ["canada revenue agency", "fake tax documents", "hands-on-keyboard access", "living-off-the-land", "password-protected archives", "phishing", "remote management monitoring", "rmm abuse", "social security administration", "vercel infrastructure"]
   - title: "CISA: Over 100 Internet-Exposed Water Systems Targeted in July Cyberattacks"
     url: "https://www.securityweek.com/cisa-over-100-internet-exposed-water-systems-targeted-in-july-cyberattacks/"
     source: "SecurityWeek"
@@ -459,12 +484,24 @@ items:
     date: 2026-08-26T07:41:50Z
     kind: news
     labels: ["data breaches", "healthcare", "nutex health"]
+  - title: "Fortinet Vulnerability CVE-2026-35616 and EKZ Stealer, Attacking Obfuscating Compilers with Binary Ninja Workflows"
+    url: "https://otx.alienvault.com/pulse/6a8e93fa515a9f75d15acbf5"
+    source: "AlienVault"
+    date: 2026-08-26T07:21:30Z
+    kind: research
+    labels: ["binary ninja", "control-flow flattening", "credential theft", "cve-2026-35616", "ekz stealer", "fortinet ems", "obfuscation analysis", "powershell exfiltration"]
   - title: "CISA Warns of Exploited Gitea Vulnerability"
     url: "https://www.securityweek.com/cisa-warns-of-exploited-gitea-vulnerability/"
     source: "SecurityWeek"
     date: 2026-08-26T05:17:28Z
     kind: news
     labels: ["cisa kev", "exploited", "gitea", "vulnerabilities"]
+  - title: "ClickFix Phishing Hidden in Malicious npm Packages"
+    url: "https://www.ox.security/blog/research-clickfix-phishing-npm-packages"
+    source: "AlienVault"
+    date: 2026-08-26T01:34:37Z
+    kind: research
+    labels: ["clickfix", "cloudflare captcha", "infrastructure abuse", "npm mirrors", "npm packages", "phishing campaign", "supply chain", "typosquatting"]
   - title: "LACMA data breach last year exposed social security and medical data"
     url: "https://www.bleepingcomputer.com/news/security/lacma-data-breach-last-year-exposed-social-security-and-medical-data/"
     source: "BleepingComputer"
@@ -609,6 +646,12 @@ items:
     date: 2026-08-24T21:19:20Z
     kind: research
     labels: ["clickfix", "dead drop resolver", "digital point", "dll sideloading", "lorem ipsum", "msi packages", "nodejs", "python", "social engineering", "supper", "wordpress compromise"]
+  - title: "Ten Minutes to Containment: How Agentic MXDR Scoped a Fake Claude Desktop Intrusion"
+    url: "https://www.cyberproof.com/blog/ten-minutes-to-containment-how-agentic-mxdr-scoped-a-fake-claude-desktop-intrusion/"
+    source: "AlienVault"
+    date: 2026-08-24T21:19:19Z
+    kind: research
+    labels: ["blockchain c2", "claude desktop", "dll sideloading", "docker desktop", "etherhiding", "fake installer", "fakeagent", "malvertising", "scheduled task persistence", "sectoprat"]
   - title: "Unpatched Calix flaw lets hackers bypass NAT to expose internal devices"
     url: "https://www.bleepingcomputer.com/news/security/unpatched-calix-flaw-lets-hackers-bypass-nat-to-expose-internal-devices/"
     source: "BleepingComputer"
@@ -3603,15 +3646,3 @@ items:
     date: 2026-07-27T14:26:00Z
     kind: news
     labels: ["application security", "github", "pypi", "supply chain", "supply chain security"]
-  - title: "PTC Windchill Vulnerability Exploited in Ransomware Campaign"
-    url: "https://www.securityweek.com/ptc-windchill-vulnerability-exploited-in-ransomware-campaign/"
-    source: "SecurityWeek"
-    date: 2026-07-27T13:19:30Z
-    kind: news
-    labels: ["cl0p", "exploited", "ransomware", "vulnerabilities"]
-  - title: "MedusaHVNC Malware Uses Hidden Windows Desktops to Evade Detection"
-    url: "https://www.securityweek.com/medusahvnc-malware-uses-hidden-windows-desktops-to-evade-detection/"
-    source: "SecurityWeek"
-    date: 2026-07-27T13:00:00Z
-    kind: news
-    labels: ["malware"]
