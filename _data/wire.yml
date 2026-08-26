@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-26T02:02:31Z
+generated_at: 2026-08-26T04:01:01Z
 window_days: 30
 counts:
-  total: 533
-  research: 195
+  total: 532
+  research: 194
   news: 338
 topics:
   - label: "vulnerabilities"
@@ -3624,9 +3624,3 @@ items:
     date: 2026-07-27T04:51:32Z
     kind: news
     labels: ["data breaches", "healthcare", "mcbs", "pear", "ransomware"]
-  - title: "CrowdStrike Joins the Open Secure AI Alliance to Advance AI Safety and Security"
-    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-joins-the-open-secure-ai-alliance/"
-    source: "Crowdstrike"
-    date: 2026-07-27T04:00:00Z
-    kind: research
-    labels: ["securing ai"]
