@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T14:02:18Z
+generated_at: 2026-08-27T16:00:38Z
 window_days: 30
 counts:
-  total: 533
+  total: 531
   research: 196
-  news: 337
+  news: 335
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 68
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 55
     color: 2
   - label: "malware"
     count: 29
@@ -307,7 +307,6 @@ label_colors:
   "electron framework": 12
   "email security": 12
   "endlessdoors": 1
-  "endpoint security": 11
   "energy": 10
   "ernst&young": 2
   "ethereum": 5
@@ -3618,15 +3617,3 @@ items:
     date: 2026-07-28T18:08:50Z
     kind: news
     labels: []
-  - title: "India’s Bank of Baroda confirms cyber incident after hackers claim data theft"
-    url: "https://therecord.media/india-bank-of-baroda-reports-cybersecurity-incident"
-    source: "Recorded Future"
-    date: 2026-07-28T14:45:57Z
-    kind: news
-    labels: ["cybercrime", "industry"]
-  - title: "Apple Patches 87 Vulnerabilities in iOS, 155 in macOS Tahoe"
-    url: "https://www.securityweek.com/apple-patches-87-vulnerabilities-in-ios-155-in-macos-tahoe/"
-    source: "SecurityWeek"
-    date: 2026-07-28T14:19:31Z
-    kind: news
-    labels: ["apple", "endpoint security", "patches", "vulnerabilities"]
