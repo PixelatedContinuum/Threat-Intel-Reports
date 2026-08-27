@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T06:00:28Z
+generated_at: 2026-08-27T08:01:38Z
 window_days: 30
 counts:
-  total: 531
+  total: 529
   research: 197
-  news: 334
+  news: 332
 topics:
   - label: "vulnerabilities"
-    count: 72
+    count: 70
     color: 1
   - label: "cybercrime"
     count: 52
@@ -22,10 +22,10 @@ topics:
   - label: "government"
     count: 27
     color: 4
-  - label: "exploited"
-    count: 26
-    color: 5
   - label: "artificial intelligence"
+    count: 24
+    color: 5
+  - label: "exploited"
     count: 24
     color: 6
   - label: "credential theft"
@@ -118,10 +118,9 @@ label_colors:
   "aquilarat": 10
   "arcbridge": 7
   "architectural vulnerability": 5
-  "arista": 10
   "armenia": 5
   "arrayref": 8
-  "artificial intelligence": 6
+  "artificial intelligence": 5
   "asiogate": 3
   "astral-pe": 3
   "astroproxy": 1
@@ -311,7 +310,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 5
+  "exploited": 6
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
@@ -319,7 +318,6 @@ label_colors:
   "fake security scan": 12
   "fake tax documents": 4
   "fakecaptcha": 7
-  "fastjson": 10
   "firefox": 3
   "forensic evasion": 12
   "fortinet": 7
@@ -3606,15 +3604,3 @@ items:
     date: 2026-07-28T08:42:52Z
     kind: news
     labels: ["google", "malware", "naming"]
-  - title: "Unpatched Fastjson Vulnerability Exploited in Attacks"
-    url: "https://www.securityweek.com/unpatched-fastjson-vulnerability-exploited-in-attacks/"
-    source: "SecurityWeek"
-    date: 2026-07-28T07:27:55Z
-    kind: news
-    labels: ["exploited", "fastjson", "json", "vulnerabilities"]
-  - title: "Critical Arista VeloCloud Orchestrator Vulnerability Exploited as Zero-Day"
-    url: "https://www.securityweek.com/critical-arista-velocloud-orchestrator-vulnerability-exploited-as-zero-day/"
-    source: "SecurityWeek"
-    date: 2026-07-28T06:40:36Z
-    kind: news
-    labels: ["arista", "exploited", "vulnerabilities", "zero-day"]
