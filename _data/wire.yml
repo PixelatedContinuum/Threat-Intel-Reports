@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T16:00:38Z
+generated_at: 2026-08-27T18:02:28Z
 window_days: 30
 counts:
-  total: 531
+  total: 533
   research: 196
-  news: 335
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 68
@@ -431,6 +431,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "PaperCut warns of NG, MF flaw exploited in zero-day attacks"
+    url: "https://www.bleepingcomputer.com/news/security/papercut-warns-of-ng-mf-flaw-exploited-in-zero-day-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-27T16:31:53Z
+    kind: news
+    labels: []
+  - title: "Manchester Airports Group says hackers stole travelers' data"
+    url: "https://www.bleepingcomputer.com/news/security/manchester-airports-group-says-hackers-stole-travelers-data/"
+    source: "BleepingComputer"
+    date: 2026-08-27T16:12:26Z
+    kind: news
+    labels: []
   - title: "Australia arrests alleged TeamPCP hackers behind supply-chain attacks"
     url: "https://www.bleepingcomputer.com/news/security/australia-arrests-alleged-teampcp-hackers-behind-supply-chain-attacks/"
     source: "BleepingComputer"
