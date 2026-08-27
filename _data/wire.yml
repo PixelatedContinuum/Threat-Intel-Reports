@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T04:02:08Z
+generated_at: 2026-08-27T06:00:28Z
 window_days: 30
 counts:
   total: 531
@@ -11,7 +11,7 @@ counts:
   news: 334
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 72
     color: 1
   - label: "cybercrime"
     count: 52
@@ -23,7 +23,7 @@ topics:
     count: 27
     color: 4
   - label: "exploited"
-    count: 25
+    count: 26
     color: 5
   - label: "artificial intelligence"
     count: 24
@@ -32,7 +32,7 @@ topics:
     count: 23
     color: 7
   - label: "data breaches"
-    count: 22
+    count: 21
     color: 8
   - label: "supply chain attack"
     count: 18
@@ -432,6 +432,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Recent Citrix NetScaler Vulnerability Exploited in the Wild"
+    url: "https://www.securityweek.com/recent-citrix-netscaler-vulnerability-exploited-in-the-wild/"
+    source: "SecurityWeek"
+    date: 2026-08-27T04:39:19Z
+    kind: news
+    labels: ["cisa kev", "citrix", "exploited", "vulnerabilities"]
   - title: "Critical Avada WordPress theme flaw enables zero-click RCE"
     url: "https://www.bleepingcomputer.com/news/security/critical-avada-wordpress-theme-flaw-enables-zero-click-rce/"
     source: "BleepingComputer"
@@ -3612,9 +3618,3 @@ items:
     date: 2026-07-28T06:40:36Z
     kind: news
     labels: ["arista", "exploited", "vulnerabilities", "zero-day"]
-  - title: "Origin Energy Data Breach Affects 900,000 Australians"
-    url: "https://www.securityweek.com/origin-energy-data-breach-affects-900000-australians/"
-    source: "SecurityWeek"
-    date: 2026-07-28T05:01:05Z
-    kind: news
-    labels: ["data breaches", "energy", "origin energy"]
