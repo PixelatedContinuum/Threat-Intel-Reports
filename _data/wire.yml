@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T20:02:01Z
+generated_at: 2026-08-27T22:01:21Z
 window_days: 30
 counts:
   total: 532
-  research: 197
-  news: 335
+  research: 196
+  news: 336
 topics:
   - label: "vulnerabilities"
     count: 68
     color: 1
   - label: "cybercrime"
-    count: 55
+    count: 56
     color: 2
-  - label: "malware"
+  - label: "government"
     count: 29
     color: 3
-  - label: "government"
-    count: 28
+  - label: "malware"
+    count: 29
     color: 4
   - label: "artificial intelligence"
     count: 25
@@ -29,7 +29,7 @@ topics:
     count: 24
     color: 6
   - label: "credential theft"
-    count: 23
+    count: 22
     color: 7
   - label: "data breaches"
     count: 21
@@ -184,7 +184,6 @@ label_colors:
   "browser password decryptor": 5
   "browser-credentials": 9
   "browser-in-browser": 9
-  "btmob": 8
   "build-time execution": 10
   "byovd": 12
   "c2 infrastructure": 12
@@ -336,7 +335,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 4
+  "government": 3
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -373,7 +372,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 3
+  "malware": 4
   "meta": 5
   "metabase": 6
   "microsoft": 12
@@ -431,6 +430,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "White House bans foreign-made equipment for power generation over cyber backdoor concerns"
+    url: "https://therecord.media/trump-cyber-electricity-parts"
+    source: "Recorded Future"
+    date: 2026-08-27T19:45:00Z
+    kind: news
+    labels: ["cybercrime", "government", "nation-state"]
   - title: "“Sorry, I can’t help with that”: How your guardrails might become the attacker’s best friend"
     url: "https://blog.talosintelligence.com/sorry-i-cant-help-with-that-how-your-guardrails-might-become-the-attackers-best-friend/"
     source: "Cisco Talos"
@@ -3617,9 +3622,3 @@ items:
     date: 2026-07-29T00:00:00Z
     kind: research
     labels: ["security-labs"]
-  - title: "Flying Eagle Android RAT: Leaked Source Code, 170 Active Servers, and a New Platform Called Night Dragon"
-    url: "https://otx.alienvault.com/pulse/6a691cbdc292b7f2437d3655"
-    source: "AlienVault"
-    date: 2026-07-28T21:18:53Z
-    kind: research
-    labels: ["android rat", "btmob", "china-nexus", "credential theft", "flying eagle", "mobile banking fraud", "night dragon", "spynote", "telegram distribution"]
