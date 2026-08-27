@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T08:01:38Z
+generated_at: 2026-08-27T10:01:38Z
 window_days: 30
 counts:
-  total: 529
-  research: 197
-  news: 332
+  total: 530
+  research: 196
+  news: 334
 topics:
   - label: "vulnerabilities"
     count: 70
     color: 1
   - label: "cybercrime"
-    count: 52
+    count: 53
     color: 2
   - label: "malware"
-    count: 29
+    count: 28
     color: 3
   - label: "government"
     count: 27
@@ -205,6 +205,7 @@ label_colors:
   "chatgpt abuse": 3
   "chatgpt atlas": 4
   "china": 5
+  "china apt": 12
   "china-nexus": 11
   "chinese-speaking operator": 4
   "chipmaker patch tuesday": 5
@@ -262,7 +263,6 @@ label_colors:
   "cryptocurrency wallet theft": 2
   "cryptocurrency-stealer": 7
   "cryptomining": 1
-  "ctir trends": 12
   "custom tcp protocol": 8
   "cve-2007-3010": 7
   "cve-2016-6277": 9
@@ -430,6 +430,30 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "CISA orders feds to patch Citrix NetScaler RCE flaw by Saturday"
+    url: "https://www.bleepingcomputer.com/news/security/cisa-hackers-now-exploiting-citrix-netscaler-rce-flaw-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-27T09:16:50Z
+    kind: news
+    labels: []
+  - title: "US Disrupts Chinese Hacking Platform Used in Military and Critical Infrastructure Attacks"
+    url: "https://www.securityweek.com/us-disrupts-chinese-hacking-platform-used-in-military-and-critical-infrastructure-attacks/"
+    source: "SecurityWeek"
+    date: 2026-08-27T09:01:06Z
+    kind: news
+    labels: ["china", "china apt", "disrupted", "disruption", "nation-state", "qtfy", "tracking & law enforcement"]
+  - title: "ATF confirms “major incident” after recent Qilin breach claims"
+    url: "https://www.bleepingcomputer.com/news/security/atf-confirms-major-incident-after-recent-qilin-breach-claims/"
+    source: "BleepingComputer"
+    date: 2026-08-27T08:13:50Z
+    kind: news
+    labels: []
+  - title: "Pro-Russian Hackers Claim Responsibility for Major Cyberattack on Norway’s Public Digital Services"
+    url: "https://www.securityweek.com/pro-russian-hackers-claim-responsibility-for-major-cyberattack-on-norways-public-digital-services/"
+    source: "SecurityWeek"
+    date: 2026-08-27T08:00:00Z
+    kind: news
+    labels: ["cybercrime", "cyberwarfare", "norway", "russia", "server killers"]
   - title: "Recent Citrix NetScaler Vulnerability Exploited in the Wild"
     url: "https://www.securityweek.com/recent-citrix-netscaler-vulnerability-exploited-in-the-wild/"
     source: "SecurityWeek"
@@ -3586,21 +3610,3 @@ items:
     date: 2026-07-28T11:00:00Z
     kind: news
     labels: ["funding", "funding/m&a", "patch", "vulnerabilities"]
-  - title: "IR Trends Q2 2026: Phishing and weaponized remote management tools drive attack chains"
-    url: "https://blog.talosintelligence.com/ir-trends-q2-2026/"
-    source: "Cisco Talos"
-    date: 2026-07-28T10:00:01Z
-    kind: research
-    labels: ["cisco talos incident response", "ctir trends", "talos ir trends"]
-  - title: "Data breach at medical billing firm MCBS affects 1.26 million people"
-    url: "https://www.bleepingcomputer.com/news/security/data-breach-at-medical-billing-firm-mcbs-affects-126-million-people/"
-    source: "BleepingComputer"
-    date: 2026-07-28T09:10:03Z
-    kind: news
-    labels: ["healthcare"]
-  - title: "Google Adopts New Threat Actor Naming System"
-    url: "https://www.securityweek.com/google-adopts-new-threat-actor-naming-system/"
-    source: "SecurityWeek"
-    date: 2026-07-28T08:42:52Z
-    kind: news
-    labels: ["google", "malware", "naming"]
