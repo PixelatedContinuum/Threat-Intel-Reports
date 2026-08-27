@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T12:01:33Z
+generated_at: 2026-08-27T14:02:18Z
 window_days: 30
 counts:
-  total: 532
-  research: 197
-  news: 335
+  total: 533
+  research: 196
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 69
     color: 1
   - label: "cybercrime"
-    count: 53
+    count: 56
     color: 2
   - label: "malware"
-    count: 28
+    count: 29
     color: 3
   - label: "government"
-    count: 27
+    count: 28
     color: 4
   - label: "artificial intelligence"
     count: 25
@@ -66,7 +66,6 @@ label_colors:
   "aeternum": 11
   "aeza group": 2
   "affiliate fraud": 7
-  "africa": 4
   "agent-to-agent": 9
   "agentic ai": 9
   "ai api": 4
@@ -121,6 +120,7 @@ label_colors:
   "architectural vulnerability": 5
   "armenia": 5
   "arrayref": 8
+  "arrested": 2
   "artificial intelligence": 5
   "asiogate": 3
   "astral-pe": 3
@@ -131,6 +131,7 @@ label_colors:
   "atomic macos stealer": 10
   "atomic stealer": 5
   "audio surveillance": 7
+  "australia": 10
   "authentication": 6
   "authentication bypass": 4
   "aws": 7
@@ -431,6 +432,30 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Australia arrests alleged TeamPCP hackers behind supply-chain attacks"
+    url: "https://www.bleepingcomputer.com/news/security/australia-arrests-alleged-teampcp-hackers-behind-supply-chain-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-27T13:31:13Z
+    kind: news
+    labels: ["legal"]
+  - title: "Australia charges two men for TeamPCP supply-chain hacking spree"
+    url: "https://therecord.media/australia-teampcp-hackers-arrested"
+    source: "Recorded Future"
+    date: 2026-08-27T13:00:00Z
+    kind: news
+    labels: ["cybercrime", "malware"]
+  - title: "Australia Arrests 2 Alleged TeamPCP Hackers"
+    url: "https://www.securityweek.com/australia-arrests-2-alleged-teampcp-hackers/"
+    source: "SecurityWeek"
+    date: 2026-08-27T12:48:03Z
+    kind: news
+    labels: ["arrested", "australia", "cybercrime", "hacker", "teampcp"]
+  - title: "DOJ firearms agency says hackers breached system containing investigation targets"
+    url: "https://therecord.media/doj-atf-cyberattack-qilin-ransomware"
+    source: "Recorded Future"
+    date: 2026-08-27T12:15:00Z
+    kind: news
+    labels: ["cybercrime", "government", "privacy"]
   - title: "OpenAI Agents Coordinated via Makeshift Message Board Ahead of Hugging Face Hack"
     url: "https://www.securityweek.com/openai-agents-coordinated-via-makeshift-message-board-ahead-of-hugging-face-hack/"
     source: "SecurityWeek"
@@ -3605,21 +3630,3 @@ items:
     date: 2026-07-28T14:19:31Z
     kind: news
     labels: ["apple", "endpoint security", "patches", "vulnerabilities"]
-  - title: "Is Your SSO Protected Against Modern Credential Attacks?"
-    url: "https://www.bleepingcomputer.com/news/security/is-your-sso-protected-against-modern-credential-attacks/"
-    source: "BleepingComputer"
-    date: 2026-07-28T14:00:10Z
-    kind: news
-    labels: []
-  - title: "Mirage Kitten targets Middle East and Africa region with new malware"
-    url: "https://otx.alienvault.com/pulse/6a689c34d4df4bb1475d80c7"
-    source: "AlienVault"
-    date: 2026-07-28T12:10:28Z
-    kind: research
-    labels: ["africa", "arcbridge", "backdoor", "bridgehead", "cyber-espionage", "lightrail", "middle east", "minifast", "miniupdate", "mirage kitten", "nightledger", "pollblend", "retrograde", "spear-phishing", "twostroke", "websocket tunneler"]
-  - title: "Over 24,000 exposed server BMCs leak password hash via decades-old flaw"
-    url: "https://www.bleepingcomputer.com/news/security/over-24-000-exposed-server-bmcs-leak-password-hash-via-decades-old-flaw/"
-    source: "BleepingComputer"
-    date: 2026-07-28T12:10:23Z
-    kind: news
-    labels: []
