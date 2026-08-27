@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T02:02:48Z
+generated_at: 2026-08-27T04:02:08Z
 window_days: 30
 counts:
-  total: 534
-  research: 199
-  news: 335
+  total: 531
+  research: 197
+  news: 334
 topics:
   - label: "vulnerabilities"
     count: 71
@@ -22,11 +22,11 @@ topics:
   - label: "government"
     count: 27
     color: 4
-  - label: "artificial intelligence"
-    count: 25
-    color: 5
   - label: "exploited"
     count: 25
+    color: 5
+  - label: "artificial intelligence"
+    count: 24
     color: 6
   - label: "credential theft"
     count: 23
@@ -121,7 +121,7 @@ label_colors:
   "arista": 10
   "armenia": 5
   "arrayref": 8
-  "artificial intelligence": 5
+  "artificial intelligence": 6
   "asiogate": 3
   "astral-pe": 3
   "astroproxy": 1
@@ -153,7 +153,6 @@ label_colors:
   "banking trojan": 4
   "base64": 3
   "base64 obfuscation": 6
-  "batch endpoint": 5
   "beacon": 6
   "bearlyfy": 10
   "bec campaign": 10
@@ -170,7 +169,6 @@ label_colors:
   "blog post": 6
   "bloodalchemy": 3
   "bmc": 6
-  "boryptgrab": 6
   "bot networks": 10
   "botnet": 6
   "brand impersonation": 7
@@ -179,7 +177,6 @@ label_colors:
   "brown health": 12
   "browser credential harvesting": 8
   "browser data theft": 1
-  "browser extension": 11
   "browser extension campaign": 9
   "browser hijacking": 12
   "browser password decryptor": 5
@@ -277,7 +274,6 @@ label_colors:
   "cve-2025-24813": 7
   "cve-2025-49113": 3
   "cve-2026-42897": 4
-  "cve-2026-60137": 11
   "cve-2026-66747": 10
   "cve-2026-68820": 2
   "cyber-espionage": 3
@@ -315,7 +311,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 6
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "fake government notices": 3
@@ -3622,21 +3618,3 @@ items:
     date: 2026-07-28T05:01:05Z
     kind: news
     labels: ["data breaches", "energy", "origin energy"]
-  - title: "Expanding the Castle: New Campaigns, New Tooling, and the NeedleStealer Connection"
-    url: "https://arcticwolf.com/resources/blog/castleloader-new-campaigns-new-tooling-and-the-needlestealer-connection/"
-    source: "AlienVault"
-    date: 2026-07-28T03:35:18Z
-    kind: research
-    labels: ["boryptgrab", "browser extension", "castleloader", "castlestealer", "cryptocurrency theft", "ironpython", "lobshot", "needlestealer", "netsupport rat", "powershell stager", "pythonrat", "wallet spoofer"]
-  - title: "Technical Advisory: wp2shell — Unauthenticated Remote Code Execution and Full Site Takeover in WordPress Core"
-    url: "https://businessinsights.bitdefender.com/technical-advisory-wp2shell-unauthenticated-remote-code-execution-full-site-takeover-wordpress-core"
-    source: "AlienVault"
-    date: 2026-07-28T03:35:17Z
-    kind: research
-    labels: ["batch endpoint", "cve-2026-60137", "cve-2026-63030", "remote code execution", "rest api", "sql injection", "webshell", "wordpress"]
-  - title: "For Some, So-Called ‘Skynet Day’ Came too Close to Sci-Fi After a Rogue Agent Hacked Into a Startup"
-    url: "https://www.securityweek.com/for-some-so-called-skynet-day-came-too-close-to-sci-fi-after-a-rogue-agent-hacked-into-a-startup/"
-    source: "SecurityWeek"
-    date: 2026-07-28T02:28:03Z
-    kind: news
-    labels: ["artificial intelligence"]
