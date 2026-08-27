@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T18:02:28Z
+generated_at: 2026-08-27T20:02:01Z
 window_days: 30
 counts:
-  total: 533
-  research: 196
-  news: 337
+  total: 532
+  research: 197
+  news: 335
 topics:
   - label: "vulnerabilities"
     count: 68
@@ -431,6 +431,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "“Sorry, I can’t help with that”: How your guardrails might become the attacker’s best friend"
+    url: "https://blog.talosintelligence.com/sorry-i-cant-help-with-that-how-your-guardrails-might-become-the-attackers-best-friend/"
+    source: "Cisco Talos"
+    date: 2026-08-27T18:00:24Z
+    kind: research
+    labels: ["threat source newsletter"]
   - title: "PaperCut warns of NG, MF flaw exploited in zero-day attacks"
     url: "https://www.bleepingcomputer.com/news/security/papercut-warns-of-ng-mf-flaw-exploited-in-zero-day-attacks/"
     source: "BleepingComputer"
@@ -3617,15 +3623,3 @@ items:
     date: 2026-07-28T21:18:53Z
     kind: research
     labels: ["android rat", "btmob", "china-nexus", "credential theft", "flying eagle", "mobile banking fraud", "night dragon", "spynote", "telegram distribution"]
-  - title: "CISA shares advice on isolating vital systems during cyberattacks"
-    url: "https://www.bleepingcomputer.com/news/security/cisa-shares-advice-on-isolating-vital-systems-during-cyberattacks/"
-    source: "BleepingComputer"
-    date: 2026-07-28T18:41:04Z
-    kind: news
-    labels: []
-  - title: "vBulletin fixes critical pre-auth RCE flaw with public exploit"
-    url: "https://www.bleepingcomputer.com/news/security/vbulletin-fixes-critical-pre-auth-rce-flaw-with-public-exploit/"
-    source: "BleepingComputer"
-    date: 2026-07-28T18:08:50Z
-    kind: news
-    labels: []
