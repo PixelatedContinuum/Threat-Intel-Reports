@@ -3,30 +3,30 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-28T12:00:51Z
+generated_at: 2026-08-28T14:01:51Z
 window_days: 30
 counts:
-  total: 534
-  research: 199
-  news: 335
+  total: 535
+  research: 198
+  news: 337
 topics:
   - label: "vulnerabilities"
-    count: 67
+    count: 68
     color: 1
   - label: "cybercrime"
     count: 56
     color: 2
-  - label: "government"
-    count: 29
-    color: 3
   - label: "malware"
     count: 29
+    color: 3
+  - label: "government"
+    count: 28
     color: 4
   - label: "artificial intelligence"
-    count: 25
+    count: 26
     color: 5
   - label: "exploited"
-    count: 24
+    count: 25
     color: 6
   - label: "credential theft"
     count: 22
@@ -180,7 +180,6 @@ label_colors:
   "bridgehead": 7
   "brinks home": 12
   "brown health": 12
-  "browser credential harvesting": 8
   "browser data theft": 1
   "browser extension campaign": 9
   "browser extensions": 4
@@ -342,7 +341,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 3
+  "government": 4
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -379,7 +378,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 4
+  "malware": 3
   "meta": 5
   "metabase": 6
   "microsoft": 11
@@ -437,6 +436,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Over 8,300 Gitea servers vulnerable to code execution attacks"
+    url: "https://www.bleepingcomputer.com/news/security/over-8-300-gitea-servers-vulnerable-to-code-execution-attacks/"
+    source: "BleepingComputer"
+    date: 2026-08-28T12:58:43Z
+    kind: news
+    labels: []
+  - title: "OpenAI Agents Exploited Linux Kernel Flaw on Company’s Own Systems"
+    url: "https://www.securityweek.com/openai-agents-exploited-linux-kernel-flaw-on-companys-own-systems/"
+    source: "SecurityWeek"
+    date: 2026-08-28T12:36:53Z
+    kind: news
+    labels: ["artificial intelligence", "cisa kev", "exploited", "linux", "linux kernel", "openai", "vulnerabilities"]
+  - title: "Toy-making giant Hasbro disclose data breach affecting employees"
+    url: "https://www.bleepingcomputer.com/news/security/toy-making-giant-hasbro-disclose-data-breach-affecting-employees/"
+    source: "BleepingComputer"
+    date: 2026-08-28T11:46:57Z
+    kind: news
+    labels: []
   - title: "ServiceNow warns of three max severity security vulnerabilities"
     url: "https://www.bleepingcomputer.com/news/security/servicenow-warns-of-three-max-severity-security-vulnerabilities/"
     source: "BleepingComputer"
@@ -3629,15 +3646,3 @@ items:
     date: 2026-07-29T14:05:04Z
     kind: research
     labels: ["credential theft", "cve-2026-42897", "half-click exploit", "javascript implant", "outlook web access", "owareaper", "ta488", "xss vulnerability", "zimreaper"]
-  - title: "Phantom Stealer Unmasked: Shellcode, Steganography, and Credential Theft"
-    url: "https://otx.alienvault.com/pulse/6a6a0753fc3cdb9a380c795d"
-    source: "AlienVault"
-    date: 2026-07-29T13:59:47Z
-    kind: research
-    labels: ["anti-analysis", "browser credential harvesting", "clipboard hijacking", "cryptocurrency theft", "lokibot", "phantom stealer", "powershell loader", "process injection", "quasar rat", "steganography"]
-  - title: "Russia accuses Telegram founder of aiding terrorism, seeks international arrest"
-    url: "https://therecord.media/russia-telegram-durov-arrest"
-    source: "Recorded Future"
-    date: 2026-07-29T12:45:00Z
-    kind: news
-    labels: ["government"]
