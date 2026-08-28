@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-28T20:00:22Z
+generated_at: 2026-08-28T22:02:41Z
 window_days: 30
 counts:
   total: 536
-  research: 198
-  news: 338
+  research: 199
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -23,7 +23,7 @@ topics:
     count: 28
     color: 4
   - label: "artificial intelligence"
-    count: 25
+    count: 26
     color: 5
   - label: "exploited"
     count: 25
@@ -439,6 +439,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Perturbation Probing: A New Diagnostic for the Fragility of LLM Safety"
+    url: "https://unit42.paloaltonetworks.com/perturbation-probing-llm-safety/"
+    source: "Palo Alto Networks"
+    date: 2026-08-28T22:00:07Z
+    kind: research
+    labels: ["artificial intelligence", "insights", "jailbreak", "llm"]
   - title: "PaperCut releases second emergency patch for exploited flaws"
     url: "https://www.bleepingcomputer.com/news/security/papercut-releases-second-emergency-patch-for-exploited-flaws/"
     source: "BleepingComputer"
@@ -3647,11 +3653,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/russian-hackers-exploit-exchange-owa-zero-day-for-long-term-mailbox-access/"
     source: "BleepingComputer"
     date: 2026-07-29T23:44:07Z
-    kind: news
-    labels: []
-  - title: "Cisco warns of FMC static credential flaw exploited in zero-day attacks"
-    url: "https://www.bleepingcomputer.com/news/security/cisco-warns-of-fmc-static-credential-flaw-exploited-in-zero-day-attacks/"
-    source: "BleepingComputer"
-    date: 2026-07-29T21:35:40Z
     kind: news
     labels: []
