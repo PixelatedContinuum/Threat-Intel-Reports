@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-28T06:00:28Z
+generated_at: 2026-08-28T08:00:21Z
 window_days: 30
 counts:
-  total: 532
+  total: 530
   research: 195
-  news: 337
+  news: 335
 topics:
   - label: "vulnerabilities"
     count: 68
@@ -32,13 +32,13 @@ topics:
     count: 21
     color: 7
   - label: "data breaches"
-    count: 21
+    count: 20
     color: 8
   - label: "supply chain attack"
     count: 18
     color: 9
   - label: "ransomware"
-    count: 17
+    count: 16
     color: 10
   - label: "microsoft"
     count: 14
@@ -300,7 +300,6 @@ label_colors:
   "device code phishing": 5
   "dgfip": 12
   "discord hijacking": 12
-  "disruption": 1
   "dkom": 5
   "dll sideloading": 11
   "dns-tunneling": 8
@@ -312,7 +311,6 @@ label_colors:
   "email security": 12
   "endlessdoors": 1
   "energy": 10
-  "ernst&young": 2
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
@@ -3614,15 +3612,3 @@ items:
     date: 2026-07-29T08:46:30Z
     kind: news
     labels: ["artificial intelligence", "exploited", "jfrog", "vulnerabilities", "zero-day"]
-  - title: "Dozens of Minnesota Water Utilities Targeted in Coordinated OT Attacks"
-    url: "https://www.securityweek.com/dozens-of-minnesota-water-utilities-targeted-in-coordinated-ot-attacks/"
-    source: "SecurityWeek"
-    date: 2026-07-29T07:53:22Z
-    kind: news
-    labels: ["disruption", "ics", "ics/ot", "minnesota", "ot", "water", "water utility"]
-  - title: "ShinyHunters Claims Ernst & Young Hack"
-    url: "https://www.securityweek.com/shinyhunters-claims-ernst-young-hack/"
-    source: "SecurityWeek"
-    date: 2026-07-29T06:23:34Z
-    kind: news
-    labels: ["data breaches", "ernst&young", "ey", "ransomware", "shinyhunters"]
