@@ -1,0 +1,147 @@
+{
+  "sid_base": 3500000,
+  "sid_last": 3500199,
+  "sid_alloc_range": "3500000-3509999",
+  "total_rules": 98,
+  "quarantined": 0,
+  "lint_dropped": 0,
+  "new_sid_assignments": 0,
+  "skipped_unlisted": [
+    "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812"
+  ],
+  "campaigns": [
+    {
+      "slug": "Hybrid-Loader-Stealer-Sogou",
+      "rules": 1
+    },
+    {
+      "slug": "agent-xworm-exe",
+      "rules": 1
+    },
+    {
+      "slug": "agent-xworm-v2-exe",
+      "rules": 1
+    },
+    {
+      "slug": "ai-agent-frameworks-2026-05-23",
+      "rules": 8
+    },
+    {
+      "slug": "arsenal-237-enc_c2-exe",
+      "rules": 1
+    },
+    {
+      "slug": "bellamain-turkish-phaas-79-137-192-3-20260516",
+      "rules": 1
+    },
+    {
+      "slug": "cloudsync-assembler-toolkit-91-197-98-188",
+      "rules": 4
+    },
+    {
+      "slug": "dual-rat-analysis",
+      "rules": 2
+    },
+    {
+      "slug": "evilsoul-engine-stealer-maas",
+      "rules": 1
+    },
+    {
+      "slug": "flaskc2-postex-toolkit-67-215-232-25",
+      "rules": 3
+    },
+    {
+      "slug": "fleetagentfud-exe",
+      "rules": 2
+    },
+    {
+      "slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
+      "rules": 3
+    },
+    {
+      "slug": "gocloud-multiservice-cryptojacking-149-28-112-221",
+      "rules": 5
+    },
+    {
+      "slug": "inkognito-russian-vpn-phishing-185-221-196-118-20260516",
+      "rules": 2
+    },
+    {
+      "slug": "kaido-quasar-rat",
+      "rules": 2
+    },
+    {
+      "slug": "multivector-ecommerce-rce-toolkit-192-3-1-116",
+      "rules": 13
+    },
+    {
+      "slug": "new-files-found-20260408",
+      "rules": 5
+    },
+    {
+      "slug": "open-directory-172-105-0-126-20260406",
+      "rules": 1
+    },
+    {
+      "slug": "open-directory-193-56-255-154-xiebroc2",
+      "rules": 2
+    },
+    {
+      "slug": "open-directory-94-103-1-13-20260423",
+      "rules": 1
+    },
+    {
+      "slug": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
+      "rules": 2
+    },
+    {
+      "slug": "opendirectory-45-130-148-125-20260430",
+      "rules": 5
+    },
+    {
+      "slug": "opendirectory-62-60-237-100-20260506",
+      "rules": 1
+    },
+    {
+      "slug": "opendirectory-74-0-42-25-20260316",
+      "rules": 1
+    },
+    {
+      "slug": "opendirectory-79-137-192-3-20260515",
+      "rules": 1
+    },
+    {
+      "slug": "rovodev-mirai-matrix-c2-87.106.143.220",
+      "rules": 10
+    },
+    {
+      "slug": "russian-gemini-credential-mill-213.165.51.115",
+      "rules": 2
+    },
+    {
+      "slug": "seasia-gov-exploitation-toolkit-144-172-106-236",
+      "rules": 8
+    },
+    {
+      "slug": "shadow-xworm-opendirectory",
+      "rules": 1
+    },
+    {
+      "slug": "shinyhunters-dls-91-215-85-22-20260417",
+      "rules": 3
+    },
+    {
+      "slug": "turkish-arpa-openclaw-state-insurer-209.38.205.158",
+      "rules": 2
+    },
+    {
+      "slug": "webserver-compromise-kit-91-236-230-250",
+      "rules": 2
+    },
+    {
+      "slug": "webshells-to-the-cloud",
+      "rules": 1
+    }
+  ]
+}

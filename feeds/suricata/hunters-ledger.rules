@@ -8,6 +8,11 @@
 #   rate-limited / inline note, when the rule carries one
 #   FP: the authoring false-positive note, where one was recorded
 
+# Hybrid-Loader-Stealer-Sogou (orig sid:1000001)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any unrelated HTTP request whose URI happens to contain the 5-character substring /cgi1 (uncommon but not impossible on generic CGI-driven web...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)"; flow:established,to_server; http.uri; content:"/cgi1"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500148; rev:1; metadata:author The_Hunters_Ledger, date 2025-11-21, reference https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/;)
 # agent-xworm-exe (orig sid:1000013)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited
@@ -161,11 +166,6 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT GOCLOUD-Cryptojacki
 #   rate-limited
 #   FP: Any traffic carrying the literal miner.sh|bash string, which is rare but possible in benign automation discussion or logs. Triage the flow direction...
 alert tcp any any -> any any (msg:"THL HUNT GOCLOUD-Cryptojacking Linux Miner Delivery One-Liner (miner.sh Piped To Bash)"; flow:established; content:"miner.sh|7c|bash"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500180; rev:1; metadata:author The_Hunters_Ledger, date 2026-07-26, reference https://the-hunters-ledger.com/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections/;)
-# Hybrid-Loader-Stealer-Sogou (orig sid:1000001)
-#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
-#   rate-limited
-#   FP: Any unrelated HTTP request whose URI happens to contain the 5-character substring /cgi1 (uncommon but not impossible on generic CGI-driven web...
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL SogouStealer-HybridLoader CGI1 C2 URI Pattern (C2 Transport Indicator)"; flow:established,to_server; http.uri; content:"/cgi1"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500148; rev:1; metadata:author The_Hunters_Ledger, date 2025-11-21, reference https://the-hunters-ledger.com/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections/;)
 # inkognito-russian-vpn-phishing-185-221-196-118-20260516 (orig sid:9001003)
 #   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
 #   rate-limited
