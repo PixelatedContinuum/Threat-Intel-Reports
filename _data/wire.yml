@@ -3,23 +3,23 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-28T14:01:51Z
+generated_at: 2026-08-28T16:00:28Z
 window_days: 30
 counts:
   total: 535
-  research: 198
-  news: 337
+  research: 197
+  news: 338
 topics:
   - label: "vulnerabilities"
-    count: 68
+    count: 69
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 55
     color: 2
-  - label: "malware"
-    count: 29
-    color: 3
   - label: "government"
+    count: 28
+    color: 3
+  - label: "malware"
     count: 28
     color: 4
   - label: "artificial intelligence"
@@ -29,7 +29,7 @@ topics:
     count: 25
     color: 6
   - label: "credential theft"
-    count: 22
+    count: 21
     color: 7
   - label: "data breaches"
     count: 20
@@ -38,7 +38,7 @@ topics:
     count: 18
     color: 9
   - label: "ransomware"
-    count: 16
+    count: 17
     color: 10
   - label: "microsoft"
     count: 14
@@ -131,6 +131,7 @@ label_colors:
   "astroproxy": 1
   "asyncapi": 2
   "asyncrat": 11
+  "atf": 7
   "atlassian": 8
   "atomic": 1
   "atomic macos stealer": 10
@@ -279,7 +280,6 @@ label_colors:
   "cve-2023-49105": 4
   "cve-2025-24813": 7
   "cve-2025-49113": 3
-  "cve-2026-42897": 4
   "cve-2026-66747": 10
   "cve-2026-68820": 2
   "cyber-espionage": 3
@@ -341,7 +341,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 4
+  "government": 3
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -378,7 +378,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 3
+  "malware": 4
   "meta": 5
   "metabase": 6
   "microsoft": 11
@@ -408,6 +408,7 @@ label_colors:
   "plugin": 7
   "poc": 2
   "privacy": 12
+  "qilin": 11
   "ransomware": 10
   "rce": 10
   "ruby": 6
@@ -436,6 +437,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "In Other News: Log4j RCE Scare, Minimus Shutdown, Iranian Hacker Sanctions"
+    url: "https://www.securityweek.com/in-other-news-log4j-rce-scare-minimus-shutdown-iranian-hacker-sanctions/"
+    source: "SecurityWeek"
+    date: 2026-08-28T15:35:34Z
+    kind: news
+    labels: ["in other news", "vulnerabilities"]
+  - title: "AI Is Accelerating Vulnerability Discovery. Can Defenders Keep Up?"
+    url: "https://www.bleepingcomputer.com/news/security/ai-is-accelerating-vulnerability-discovery-can-defenders-keep-up/"
+    source: "BleepingComputer"
+    date: 2026-08-28T14:00:10Z
+    kind: news
+    labels: []
+  - title: "ATF Confirms Cyber Incident After Ransomware Group Claims Attack"
+    url: "https://www.securityweek.com/atf-confirms-cyber-incident-after-ransomware-group-claims-attack/"
+    source: "SecurityWeek"
+    date: 2026-08-28T13:59:14Z
+    kind: news
+    labels: ["atf", "qilin", "ransomware"]
   - title: "Over 8,300 Gitea servers vulnerable to code execution attacks"
     url: "https://www.bleepingcomputer.com/news/security/over-8-300-gitea-servers-vulnerable-to-code-execution-attacks/"
     source: "BleepingComputer"
@@ -3628,21 +3647,3 @@ items:
     date: 2026-07-29T16:04:59Z
     kind: news
     labels: ["artificial intelligence"]
-  - title: "Hackers target over 30 Minnesota water utilities in coordinated OT attack"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-target-over-30-minnesota-water-utilities-in-coordinated-ot-attack/"
-    source: "BleepingComputer"
-    date: 2026-07-29T14:55:57Z
-    kind: news
-    labels: []
-  - title: "Laundry Bear’s webmail hackers had more in store after February, report says"
-    url: "https://therecord.media/russia-hackers-outlook-webmail-malware"
-    source: "Recorded Future"
-    date: 2026-07-29T14:45:00Z
-    kind: news
-    labels: ["cybercrime", "malware", "nation-state"]
-  - title: "Cleaning Out Inboxes: TA488 Comes for Outlook with Another Half-Click Exploit"
-    url: "https://otx.alienvault.com/pulse/6a6a0890823d4ce2caed584a"
-    source: "AlienVault"
-    date: 2026-07-29T14:05:04Z
-    kind: research
-    labels: ["credential theft", "cve-2026-42897", "half-click exploit", "javascript implant", "outlook web access", "owareaper", "ta488", "xss vulnerability", "zimreaper"]
