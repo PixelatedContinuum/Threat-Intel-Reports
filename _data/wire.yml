@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-27T22:01:21Z
+generated_at: 2026-08-28T00:03:01Z
 window_days: 30
 counts:
-  total: 532
-  research: 196
-  news: 336
+  total: 535
+  research: 198
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 68
@@ -23,7 +23,7 @@ topics:
     count: 29
     color: 4
   - label: "artificial intelligence"
-    count: 25
+    count: 26
     color: 5
   - label: "exploited"
     count: 24
@@ -38,7 +38,7 @@ topics:
     count: 18
     color: 9
   - label: "ransomware"
-    count: 15
+    count: 17
     color: 10
   - label: "clickfix"
     count: 14
@@ -57,7 +57,9 @@ label_colors:
   "account takeover": 2
   "account trafficking": 3
   "account-enumeration": 7
+  "active directory compromise": 7
   "adblocker": 3
+  "adcs exploitation": 11
   "administrative access": 12
   "adobe": 1
   "adversary-in-the-middle": 9
@@ -122,6 +124,7 @@ label_colors:
   "arrayref": 8
   "arrested": 2
   "artificial intelligence": 5
+  "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
   "astroproxy": 1
@@ -257,6 +260,7 @@ label_colors:
   "credential-based attacks": 12
   "credential-harvesting": 1
   "critical infrastructure": 4
+  "critical infrastructure targeting": 5
   "cross-platform malware": 7
   "crypto scam": 9
   "cryptocurrency": 12
@@ -287,12 +291,14 @@ label_colors:
   "data breaches": 8
   "data center": 7
   "data leak": 9
+  "data-exfiltration": 12
   "dcrat": 12
   "ddos engine": 12
   "dead drop resolver": 7
   "desktop capture": 2
   "dev#popper": 8
   "developer targeting": 7
+  "device code phishing": 5
   "dgfip": 12
   "discord hijacking": 12
   "disruption": 1
@@ -424,12 +430,17 @@ label_colors:
   "tool talk": 4
   "trend micro research : articles, news, reports": 5
   "trend micro research : artificial intelligence (ai)": 2
-  "trend micro research : cyber threats": 12
   "uncategorized": 10
   "vmware": 2
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Nearly 700 rogue AI agents coordinated in the Hugging Face attack"
+    url: "https://www.bleepingcomputer.com/news/security/nearly-700-rogue-ai-agents-coordinated-in-the-hugging-face-attack/"
+    source: "BleepingComputer"
+    date: 2026-08-27T21:38:53Z
+    kind: news
+    labels: ["artificial intelligence"]
   - title: "White House bans foreign-made equipment for power generation over cyber backdoor concerns"
     url: "https://therecord.media/trump-cyber-electricity-parts"
     source: "Recorded Future"
@@ -460,6 +471,12 @@ items:
     date: 2026-08-27T13:31:13Z
     kind: news
     labels: ["legal"]
+  - title: "‘The Gentlemen’ Profile: Why This Ransomware Group Wants In Before It Locks You Out"
+    url: "https://otx.alienvault.com/pulse/6a9035ff9a03d932d9008b31"
+    source: "AlienVault"
+    date: 2026-08-27T13:05:03Z
+    kind: research
+    labels: ["asia-pacific", "data-exfiltration", "dual-extortion", "encryption", "persistence", "privilege-escalation", "raas", "ransomware", "storm-2697", "the gentlemen"]
   - title: "Australia charges two men for TeamPCP supply-chain hacking spree"
     url: "https://therecord.media/australia-teampcp-hackers-arrested"
     source: "Recorded Future"
@@ -520,6 +537,12 @@ items:
     date: 2026-08-27T08:13:50Z
     kind: news
     labels: []
+  - title: "Caught in 4K: The Aurora Files"
+    url: "https://otx.alienvault.com/pulse/6a8feed78b0eee1b289d2bbf"
+    source: "AlienVault"
+    date: 2026-08-27T08:01:27Z
+    kind: research
+    labels: ["active directory compromise", "adcs exploitation", "aurora", "cryptocurrency laundering", "cve-2017-0144", "esxi encryption", "ransomware", "russian-speaking affiliate", "zig programming language"]
   - title: "Pro-Russian Hackers Claim Responsibility for Major Cyberattack on Norway’s Public Digital Services"
     url: "https://www.securityweek.com/pro-russian-hackers-claim-responsibility-for-major-cyberattack-on-norways-public-digital-services/"
     source: "SecurityWeek"
@@ -532,6 +555,18 @@ items:
     date: 2026-08-27T04:39:19Z
     kind: news
     labels: ["cisa kev", "citrix", "exploited", "vulnerabilities"]
+  - title: "Inside cyber espionage infrastructure"
+    url: "https://www.lumen.com/blog/en-us/the-infrastructure-quartermaster-inside-a-china-nexus-state-enablement-model"
+    source: "AlienVault"
+    date: 2026-08-26T22:00:43Z
+    kind: research
+    labels: ["china-nexus", "critical infrastructure targeting", "cyber espionage", "fast labyrinth", "proxy infrastructure", "qscan", "qtrouter", "quartermaster model"]
+  - title: "Inhospitable: Tracking Russian Cyber Espionage Infrastructure"
+    url: "https://www.validin.com/blog/inhospitable_russian_cyber_espionage_clusters/"
+    source: "AlienVault"
+    date: 2026-08-26T21:58:59Z
+    kind: research
+    labels: ["credential harvesting", "device code phishing", "dns pivoting", "evilginx", "infrastructure tracking", "oauth phishing", "russian cyber espionage", "think tank targeting"]
   - title: "Critical Avada WordPress theme flaw enables zero-click RCE"
     url: "https://www.bleepingcomputer.com/news/security/critical-avada-wordpress-theme-flaw-enables-zero-click-rce/"
     source: "BleepingComputer"
@@ -3610,15 +3645,3 @@ items:
     date: 2026-07-29T02:59:33Z
     kind: research
     labels: ["clickfix", "credential theft", "evasion techniques", "ordinal execution", "phishing", "rundll32", "social engineering", "webdav"]
-  - title: "Tracking Over 35,000 Fake Sites in the 2026 World Cup Scam Wave"
-    url: "https://www.trendmicro.com/en_us/research/26/g/tracking-fake-sites-in-the-2026-world-cup-scam-wave.html"
-    source: "Trend Micro"
-    date: 2026-07-29T00:00:00Z
-    kind: research
-    labels: ["trend micro research : articles, news, reports", "trend micro research : cyber threats", "trend micro research : phishing", "trend micro research : research"]
-  - title: "Stop rewriting detection rules by hand: automatic Sentinel-to-Elastic migration is here"
-    url: "https://www.elastic.co/security-labs/sentinel-detection-rules-migration"
-    source: "Elastic"
-    date: 2026-07-29T00:00:00Z
-    kind: research
-    labels: ["security-labs"]
