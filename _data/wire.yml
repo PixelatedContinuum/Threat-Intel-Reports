@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-28T18:02:42Z
+generated_at: 2026-08-28T20:00:22Z
 window_days: 30
 counts:
-  total: 535
-  research: 199
-  news: 336
+  total: 536
+  research: 198
+  news: 338
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -29,7 +29,7 @@ topics:
     count: 25
     color: 6
   - label: "credential theft"
-    count: 21
+    count: 20
     color: 7
   - label: "data breaches"
     count: 20
@@ -136,7 +136,6 @@ label_colors:
   "atlassian": 8
   "atomic": 1
   "atomic macos stealer": 10
-  "atomic stealer": 5
   "audio surveillance": 7
   "australia": 10
   "authentication": 6
@@ -440,6 +439,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "PaperCut releases second emergency patch for exploited flaws"
+    url: "https://www.bleepingcomputer.com/news/security/papercut-releases-second-emergency-patch-for-exploited-flaws/"
+    source: "BleepingComputer"
+    date: 2026-08-28T19:08:26Z
+    kind: news
+    labels: []
+  - title: "GiveWP WordPress donation plugin flaw lets hackers execute server commands"
+    url: "https://www.bleepingcomputer.com/news/security/givewp-wordpress-donation-plugin-flaw-lets-hackers-execute-server-commands/"
+    source: "BleepingComputer"
+    date: 2026-08-28T18:18:55Z
+    kind: news
+    labels: []
   - title: "PaperCut warns of hackers using printer management software flaw in attacks"
     url: "https://therecord.media/papercut-warns-of-hackers-using-printer-management-vulnerabilities"
     source: "Recorded Future"
@@ -3644,9 +3655,3 @@ items:
     date: 2026-07-29T21:35:40Z
     kind: news
     labels: []
-  - title: "Reverse Engineering the Six Stages of MacSync Stealer and RAT"
-    url: "https://otx.alienvault.com/pulse/6a6a47bf77b7d1fa679717d8"
-    source: "AlienVault"
-    date: 2026-07-29T18:34:39Z
-    kind: research
-    labels: ["amos", "atomic stealer", "credential theft", "cryptocurrency targeting", "macos stealer", "macsync", "malvertising", "rat", "sectoprat", "tcc bypass", "wallet trojan"]
