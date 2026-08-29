@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T16:01:38Z
+generated_at: 2026-08-29T18:02:42Z
 window_days: 30
 counts:
-  total: 518
-  research: 190
-  news: 328
+  total: 516
+  research: 189
+  news: 327
 topics:
   - label: "vulnerabilities"
     count: 65
@@ -3520,17 +3520,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/amazon-links-debug-chalk-npm-supply-chain-attacks-to-north-korean-hackers/"
     source: "BleepingComputer"
     date: 2026-07-30T18:13:24Z
-    kind: news
-    labels: []
-  - title: "You were onto something with “It’s the Climb,” Miley"
-    url: "https://blog.talosintelligence.com/you-were-onto-something-with-its-the-climb-miley/"
-    source: "Cisco Talos"
-    date: 2026-07-30T18:00:35Z
-    kind: research
-    labels: ["threat source newsletter"]
-  - title: "ShinyHunters claims Brinks Home breach, threatens to leak stolen data"
-    url: "https://www.bleepingcomputer.com/news/security/shinyhunters-claims-brinks-home-breach-threatens-to-leak-stolen-data/"
-    source: "BleepingComputer"
-    date: 2026-07-30T16:46:15Z
     kind: news
     labels: []
