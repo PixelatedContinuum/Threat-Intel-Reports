@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T06:00:32Z
+generated_at: 2026-08-29T08:01:42Z
 window_days: 30
 counts:
-  total: 535
+  total: 533
   research: 198
-  news: 337
+  news: 335
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 67
     color: 1
   - label: "cybercrime"
     count: 55
@@ -26,7 +26,7 @@ topics:
     count: 26
     color: 5
   - label: "exploited"
-    count: 25
+    count: 24
     color: 6
   - label: "credential theft"
     count: 20
@@ -3635,15 +3635,3 @@ items:
     date: 2026-07-30T09:28:37Z
     kind: news
     labels: ["claroty", "data center", "ics/ot", "ot", "report"]
-  - title: "Chrome 151 Patches 370 Vulnerabilities"
-    url: "https://www.securityweek.com/chrome-151-patches-370-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-07-30T07:51:24Z
-    kind: news
-    labels: ["chrome", "patches", "vulnerabilities"]
-  - title: "Cisco Secure FMC Zero-Day Exploited in the Wild"
-    url: "https://www.securityweek.com/cisco-secure-fmc-zero-day-exploited-in-the-wild/"
-    source: "SecurityWeek"
-    date: 2026-07-30T06:31:31Z
-    kind: news
-    labels: ["cisco", "exploited", "fmc", "vulnerabilities", "zero-day"]
