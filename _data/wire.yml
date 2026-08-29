@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T14:01:22Z
+generated_at: 2026-08-29T16:01:38Z
 window_days: 30
 counts:
-  total: 520
+  total: 518
   research: 190
-  news: 330
+  news: 328
 topics:
   - label: "vulnerabilities"
     count: 65
@@ -3532,17 +3532,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/shinyhunters-claims-brinks-home-breach-threatens-to-leak-stolen-data/"
     source: "BleepingComputer"
     date: 2026-07-30T16:46:15Z
-    kind: news
-    labels: []
-  - title: "Microsoft Teams vishing attacks lead to Chaos ransomware attacks"
-    url: "https://www.bleepingcomputer.com/news/security/microsoft-teams-vishing-attacks-lead-to-chaos-ransomware-attacks/"
-    source: "BleepingComputer"
-    date: 2026-07-30T15:56:33Z
-    kind: news
-    labels: []
-  - title: "Analog Devices discloses data breach, says operations unaffected"
-    url: "https://www.bleepingcomputer.com/news/security/analog-devices-discloses-data-breach-says-operations-unaffected/"
-    source: "BleepingComputer"
-    date: 2026-07-30T15:12:25Z
     kind: news
     labels: []
