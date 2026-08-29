@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T04:02:02Z
+generated_at: 2026-08-29T06:00:32Z
 window_days: 30
 counts:
   total: 535
@@ -40,11 +40,11 @@ topics:
   - label: "ransomware"
     count: 17
     color: 10
-  - label: "microsoft"
+  - label: "clickfix"
     count: 14
     color: 11
-  - label: "clickfix"
-    count: 13
+  - label: "microsoft"
+    count: 14
     color: 12
 label_colors:
   ".net downloader": 4
@@ -236,7 +236,7 @@ label_colors:
   "claroty": 10
   "claude code": 9
   "claude desktop": 12
-  "clickfix": 12
+  "clickfix": 11
   "clickfix campaign": 9
   "clipper": 3
   "cloud": 7
@@ -383,7 +383,7 @@ label_colors:
   "malware": 4
   "meta": 5
   "metabase": 6
-  "microsoft": 11
+  "microsoft": 12
   "miniorange": 5
   "mlflow": 1
   "mobile": 4
@@ -437,6 +437,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "TerminalFix campaign deploys a reverse tunnel through multistage intrusion"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/08/28/terminalfix-campaign-deploys-reverse-tunnel-through-multistage-intrusion/"
+    source: "Microsoft"
+    date: 2026-08-29T03:43:27Z
+    kind: research
+    labels: ["clickfix"]
   - title: "McKesson discloses breach after ShinyHunters claims patient data theft"
     url: "https://www.bleepingcomputer.com/news/security/mckesson-discloses-breach-after-shinyhunters-claims-patient-data-theft/"
     source: "BleepingComputer"
@@ -3641,9 +3647,3 @@ items:
     date: 2026-07-30T06:31:31Z
     kind: news
     labels: ["cisco", "exploited", "fmc", "vulnerabilities", "zero-day"]
-  - title: "Falcon AIDR Now Protects Copilot Studio Agents and Claude Code"
-    url: "https://www.crowdstrike.com/en-us/blog/falcon-aidr-protects-copilot-studio-agents-and-claude-code/"
-    source: "Crowdstrike"
-    date: 2026-07-30T05:00:00Z
-    kind: research
-    labels: ["securing ai"]
