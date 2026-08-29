@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T10:00:12Z
+generated_at: 2026-08-29T12:02:52Z
 window_days: 30
 counts:
-  total: 529
-  research: 196
-  news: 333
+  total: 525
+  research: 193
+  news: 332
 topics:
   - label: "vulnerabilities"
-    count: 66
+    count: 65
     color: 1
   - label: "cybercrime"
     count: 55
@@ -32,13 +32,13 @@ topics:
     count: 20
     color: 7
   - label: "data breaches"
-    count: 20
+    count: 19
     color: 8
   - label: "supply chain attack"
     count: 18
     color: 9
   - label: "ransomware"
-    count: 16
+    count: 15
     color: 10
   - label: "clickfix"
     count: 14
@@ -95,7 +95,6 @@ label_colors:
   "amnesiastealer": 8
   "amos": 6
   "amos stealer": 2
-  "analog devices": 11
   "android": 9
   "android apk": 11
   "android banking trojan": 11
@@ -155,7 +154,6 @@ label_colors:
   "bandook": 10
   "bank": 4
   "bank of america impersonation": 5
-  "banking credentials": 12
   "banking trojan": 4
   "base64": 3
   "base64 obfuscation": 6
@@ -207,7 +205,6 @@ label_colors:
   "chaotic eclipse": 12
   "charged": 4
   "charity": 12
-  "chatgpt": 1
   "chatgpt abuse": 3
   "chatgpt atlas": 4
   "china": 5
@@ -231,7 +228,6 @@ label_colors:
   "citrix": 11
   "cl0p": 3
   "clamav": 8
-  "claude code": 9
   "claude desktop": 12
   "clickfix": 11
   "clickfix campaign": 9
@@ -269,7 +265,6 @@ label_colors:
   "cryptocurrency theft": 3
   "cryptocurrency wallet theft": 2
   "cryptocurrency-stealer": 7
-  "cryptomining": 1
   "custom tcp protocol": 8
   "cve-2007-3010": 7
   "cve-2016-6277": 9
@@ -319,13 +314,11 @@ label_colors:
   "exploited": 6
   "exposure management": 4
   "extortion": 12
-  "fake government notices": 3
   "fake lock screen": 6
   "fake security scan": 12
   "fake tax documents": 4
   "fakecaptcha": 7
   "firefox": 3
-  "forensic evasion": 12
   "fortinet": 7
   "fraud & identity theft": 11
   "frontier ai": 3
@@ -3582,27 +3575,3 @@ items:
     date: 2026-07-30T13:00:00Z
     kind: news
     labels: ["cybercrime", "malware", "nation-state"]
-  - title: "Semiconductor Firm Analog Devices Discloses Data Breach"
-    url: "https://www.securityweek.com/semiconductor-firm-analog-devices-discloses-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-07-30T11:16:23Z
-    kind: news
-    labels: ["analog devices", "data breaches", "ransomware", "semiconductor"]
-  - title: "Tax Season, Open Season: Phishing and Malware Campaigns Targeting Indian Taxpayers"
-    url: "https://www.cloudsek.com/blog/tax-season-open-season-phishing-and-malware-campaigns-targeting-indian-taxpayers"
-    source: "AlienVault"
-    date: 2026-07-30T10:18:37Z
-    kind: research
-    labels: ["banking credentials", "fake government notices", "india", "infostealer", "otp theft", "phishing", "tax season", "whatsapp delivery"]
-  - title: "XMRig Covert Ops: The Cryptomining Campaign That Abuses Trusted Access and Deploys Forensic Smokescreens"
-    url: "https://otx.alienvault.com/pulse/6a6b24fc4e9307c078956d75"
-    source: "AlienVault"
-    date: 2026-07-30T10:18:36Z
-    kind: research
-    labels: ["cryptomining", "forensic evasion", "linux", "memory-resident", "monero", "pam abuse", "self-unlinking binary", "trusted third-party compromise", "xmrig", "xmrig botnet"]
-  - title: "Chinese-Speaking Threat Actor Harnesses AI Models for Autonomous Cyberattacks"
-    url: "https://unit42.paloaltonetworks.com/autonomous-ai-cyber-attack-campaign/"
-    source: "Palo Alto Networks"
-    date: 2026-07-30T10:00:52Z
-    kind: research
-    labels: ["chatgpt", "claude code", "cves", "deepseek", "exploitation", "hermes agent", "threat research", "vulnerabilities"]
