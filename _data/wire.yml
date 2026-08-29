@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T08:01:42Z
+generated_at: 2026-08-29T10:00:12Z
 window_days: 30
 counts:
-  total: 533
-  research: 198
-  news: 335
+  total: 529
+  research: 196
+  news: 333
 topics:
   - label: "vulnerabilities"
-    count: 67
+    count: 66
     color: 1
   - label: "cybercrime"
     count: 55
@@ -23,7 +23,7 @@ topics:
     count: 28
     color: 4
   - label: "artificial intelligence"
-    count: 26
+    count: 25
     color: 5
   - label: "exploited"
     count: 24
@@ -38,7 +38,7 @@ topics:
     count: 18
     color: 9
   - label: "ransomware"
-    count: 17
+    count: 16
     color: 10
   - label: "clickfix"
     count: 14
@@ -145,7 +145,6 @@ label_colors:
   "azure": 1
   "babadeda": 2
   "babadedaloader": 11
-  "babuk": 7
   "back-to-school": 4
   "backconnect infrastructure": 12
   "backdoor": 11
@@ -161,7 +160,6 @@ label_colors:
   "base64": 3
   "base64 obfuscation": 6
   "beacon": 6
-  "bearlyfy": 10
   "bec campaign": 10
   "beijing institute of technology": 12
   "binary ninja": 5
@@ -233,7 +231,6 @@ label_colors:
   "citrix": 11
   "cl0p": 3
   "clamav": 8
-  "claroty": 10
   "claude code": 9
   "claude desktop": 12
   "clickfix": 11
@@ -355,7 +352,6 @@ label_colors:
   "high profile threats": 2
   "honeymyte": 10
   "hugging face": 6
-  "humans of talos": 8
   "ics": 3
   "ics patch tuesday": 12
   "ics/ot": 1
@@ -415,7 +411,6 @@ label_colors:
   "rce": 10
   "ruby": 6
   "ruby on rails": 12
-  "ruflo": 8
   "salesforce": 3
   "sap": 8
   "scam": 10
@@ -3611,27 +3606,3 @@ items:
     date: 2026-07-30T10:00:52Z
     kind: research
     labels: ["chatgpt", "claude code", "cves", "deepseek", "exploitation", "hermes agent", "threat research", "vulnerabilities"]
-  - title: "Black Hat special: Rewind and revisit"
-    url: "https://blog.talosintelligence.com/black-hat-special-rewind-and-revisit/"
-    source: "Cisco Talos"
-    date: 2026-07-30T10:00:08Z
-    kind: research
-    labels: ["humans of talos"]
-  - title: "Critical Ruflo Flaw Lets Attackers Spawn Rogue AI Swarms"
-    url: "https://www.securityweek.com/critical-ruflo-flaw-lets-attackers-spawn-rogue-ai-swarms/"
-    source: "SecurityWeek"
-    date: 2026-07-30T09:56:10Z
-    kind: news
-    labels: ["artificial intelligence", "ruflo", "rufroot", "vulnerabilities"]
-  - title: "Toy Ghouls’ new toy: the GenieLocker ransomware"
-    url: "https://otx.alienvault.com/pulse/6a6b1c3ea08dbc663eb8f4c0"
-    source: "AlienVault"
-    date: 2026-07-30T09:41:18Z
-    kind: research
-    labels: ["babuk", "bearlyfy", "encryption", "esxi", "genielocker", "labubu", "libsodium", "lockbit", "manufacturing", "mimikatz", "ransomware", "redalert", "russian federation", "xchacha20-poly1305"]
-  - title: "1 in 5 Data Center Assets Are Within Easy Reach of Attackers"
-    url: "https://www.securityweek.com/1-in-5-data-center-assets-are-within-easy-reach-of-attackers/"
-    source: "SecurityWeek"
-    date: 2026-07-30T09:28:37Z
-    kind: news
-    labels: ["claroty", "data center", "ics/ot", "ot", "report"]
