@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T12:02:52Z
+generated_at: 2026-08-29T14:01:22Z
 window_days: 30
 counts:
-  total: 525
-  research: 193
-  news: 332
+  total: 520
+  research: 190
+  news: 330
 topics:
   - label: "vulnerabilities"
     count: 65
     color: 1
   - label: "cybercrime"
-    count: 55
+    count: 53
     color: 2
   - label: "government"
-    count: 28
+    count: 27
     color: 3
   - label: "malware"
-    count: 28
+    count: 27
     color: 4
   - label: "artificial intelligence"
     count: 25
@@ -32,7 +32,7 @@ topics:
     count: 20
     color: 7
   - label: "data breaches"
-    count: 19
+    count: 20
     color: 8
   - label: "supply chain attack"
     count: 18
@@ -337,6 +337,7 @@ label_colors:
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
+  "hasbro": 1
   "head mare": 3
   "healthcare": 11
   "heights financial": 1
@@ -425,6 +426,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Hasbro Data Breach Exposed Employee Personal Information"
+    url: "https://www.securityweek.com/hasbro-data-breach-exposed-employee-personal-information/"
+    source: "SecurityWeek"
+    date: 2026-08-29T11:55:00Z
+    kind: news
+    labels: ["data breaches", "hasbro"]
   - title: "TerminalFix campaign deploys a reverse tunnel through multistage intrusion"
     url: "https://www.microsoft.com/en-us/security/blog/2026/08/28/terminalfix-campaign-deploys-reverse-tunnel-through-multistage-intrusion/"
     source: "Microsoft"
@@ -3539,39 +3546,3 @@ items:
     date: 2026-07-30T15:12:25Z
     kind: news
     labels: []
-  - title: "After the Break-In: What Attackers Do Once They're Already Inside"
-    url: "https://www.bleepingcomputer.com/news/security/after-the-break-in-what-attackers-do-once-theyre-already-inside/"
-    source: "BleepingComputer"
-    date: 2026-07-30T14:01:11Z
-    kind: news
-    labels: []
-  - title: "The July 2026 Apple Security Update Review"
-    url: "https://www.thezdi.com/blog/2026/7/29/the-july-2026-apple-security-update-review"
-    source: "Zero Day Initiative"
-    date: 2026-07-30T14:00:00Z
-    kind: research
-    labels: ["blog post"]
-  - title: "North Korea’s Lazarus Group sharing tools with ransomware hackers, South Korean agencies warn"
-    url: "https://therecord.media/north-korea-hackers-ransomware"
-    source: "Recorded Future"
-    date: 2026-07-30T14:00:00Z
-    kind: news
-    labels: ["cybercrime", "government", "nation-state"]
-  - title: "Batten Down Your Packages: Mitigation Guidance for Supply Chain Compromise"
-    url: "https://cloud.google.com/blog/topics/threat-intelligence/mitigation-guidance-for-supply-chain-compromise/"
-    source: "Google"
-    date: 2026-07-30T14:00:00Z
-    kind: research
-    labels: ["threat intelligence"]
-  - title: "OctLurk and SilkLurk: new Backdoors in Central Asia"
-    url: "https://otx.alienvault.com/pulse/6a6b4b97df5f9df74333adfa"
-    source: "AlienVault"
-    date: 2026-07-30T13:03:19Z
-    kind: research
-    labels: ["central asia", "credential harvesting", "cyber-espionage", "fscan", "government targeting", "impacket", "lurkproxy", "octlurk", "plugx", "silklurk"]
-  - title: "North Korean hackers behind major open-source supply chain attacks, Amazon says"
-    url: "https://therecord.media/north-korea-hackers-amazon-malware"
-    source: "Recorded Future"
-    date: 2026-07-30T13:00:00Z
-    kind: news
-    labels: ["cybercrime", "malware", "nation-state"]
