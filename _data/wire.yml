@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T18:02:42Z
+generated_at: 2026-08-29T20:00:51Z
 window_days: 30
 counts:
-  total: 516
+  total: 514
   research: 189
-  news: 327
+  news: 325
 topics:
   - label: "vulnerabilities"
     count: 65
     color: 1
   - label: "cybercrime"
-    count: 53
+    count: 52
     color: 2
   - label: "government"
     count: 27
@@ -3510,15 +3510,3 @@ items:
     date: 2026-07-30T22:18:36Z
     kind: news
     labels: ["ics/ot"]
-  - title: "Semiconductor chip titan Analog Devices reports data breach"
-    url: "https://therecord.media/analog-devices-semiconductor-company-data-breach"
-    source: "Recorded Future"
-    date: 2026-07-30T19:10:00Z
-    kind: news
-    labels: ["cybercrime", "industry"]
-  - title: "Amazon links Debug, Chalk NPM supply-chain attacks to North Korean hackers"
-    url: "https://www.bleepingcomputer.com/news/security/amazon-links-debug-chalk-npm-supply-chain-attacks-to-north-korean-hackers/"
-    source: "BleepingComputer"
-    date: 2026-07-30T18:13:24Z
-    kind: news
-    labels: []
