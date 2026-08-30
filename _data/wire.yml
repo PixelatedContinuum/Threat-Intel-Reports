@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-30T20:02:02Z
+generated_at: 2026-08-30T22:03:02Z
 window_days: 30
 counts:
-  total: 500
-  research: 187
-  news: 313
+  total: 497
+  research: 186
+  news: 311
 topics:
   - label: "vulnerabilities"
     count: 63
@@ -19,20 +19,20 @@ topics:
   - label: "government"
     count: 26
     color: 3
-  - label: "malware"
-    count: 25
-    color: 4
   - label: "exploited"
+    count: 24
+    color: 4
+  - label: "malware"
     count: 24
     color: 5
   - label: "artificial intelligence"
     count: 22
     color: 6
-  - label: "credential theft"
-    count: 19
-    color: 7
   - label: "data breaches"
     count: 19
+    color: 7
+  - label: "credential theft"
+    count: 18
     color: 8
   - label: "supply chain attack"
     count: 18
@@ -40,11 +40,11 @@ topics:
   - label: "ransomware"
     count: 15
     color: 10
-  - label: "clickfix"
-    count: 14
-    color: 11
   - label: "microsoft"
     count: 14
+    color: 11
+  - label: "clickfix"
+    count: 13
     color: 12
 label_colors:
   ".net downloader": 4
@@ -63,7 +63,6 @@ label_colors:
   "administrative access": 12
   "adobe": 1
   "adversary-in-the-middle": 9
-  "adversary-in-the-middle (aitm)": 1
   "aerospace targeting": 10
   "aeternum": 11
   "aeza group": 2
@@ -229,7 +228,7 @@ label_colors:
   "cl0p": 3
   "clamav": 8
   "claude desktop": 12
-  "clickfix": 11
+  "clickfix": 12
   "clickfix campaign": 9
   "clipper": 3
   "cloud": 7
@@ -253,7 +252,7 @@ label_colors:
   "crat": 2
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 7
+  "credential theft": 8
   "credential-based attacks": 12
   "credential-harvesting": 1
   "critical infrastructure": 4
@@ -284,7 +283,7 @@ label_colors:
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
-  "data breaches": 8
+  "data breaches": 7
   "data center": 7
   "data leak": 9
   "data-exfiltration": 12
@@ -311,7 +310,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 5
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "fake lock screen": 6
@@ -369,10 +368,10 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 4
+  "malware": 5
   "meta": 5
   "metabase": 6
-  "microsoft": 12
+  "microsoft": 11
   "miniorange": 5
   "mlflow": 1
   "mobile": 4
@@ -3407,21 +3406,3 @@ items:
     date: 2026-07-31T22:16:42Z
     kind: news
     labels: []
-  - title: "Arch Linux disables AUR package adoption to stop malware flood"
-    url: "https://www.bleepingcomputer.com/news/security/arch-linux-disables-aur-package-adoption-to-stop-malware-flood/"
-    source: "BleepingComputer"
-    date: 2026-07-31T21:38:08Z
-    kind: news
-    labels: []
-  - title: "Online ad firm Adform’s script compromised to steal cryptocurrency"
-    url: "https://www.bleepingcomputer.com/news/security/online-ad-firm-adforms-script-compromised-to-steal-cryptocurrency/"
-    source: "BleepingComputer"
-    date: 2026-07-31T21:09:25Z
-    kind: news
-    labels: ["cryptocurrency"]
-  - title: "CaptiveCrunch: Midnight Blizzard targets travelers worldwide for malware delivery and credential theft"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/07/31/captivecrunch-midnight-blizzard-targets-travelers-worldwide-for-malware-delivery-and-credential-theft/"
-    source: "Microsoft"
-    date: 2026-07-31T21:01:37Z
-    kind: research
-    labels: ["adversary-in-the-middle (aitm)", "clickfix", "credential theft", "cyberespionage", "malware", "midnight blizzard (nobelium)", "social engineering", "state-sponsored threat actor", "storm", "token theft", "windows"]
