@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-30T08:01:52Z
+generated_at: 2026-08-30T10:01:02Z
 window_days: 30
 counts:
-  total: 508
-  research: 188
-  news: 320
+  total: 506
+  research: 187
+  news: 319
 topics:
   - label: "vulnerabilities"
     count: 64
@@ -20,16 +20,16 @@ topics:
     count: 27
     color: 3
   - label: "malware"
-    count: 27
+    count: 26
     color: 4
   - label: "artificial intelligence"
-    count: 25
+    count: 24
     color: 5
   - label: "exploited"
     count: 24
     color: 6
   - label: "credential theft"
-    count: 20
+    count: 19
     color: 7
   - label: "data breaches"
     count: 19
@@ -3462,15 +3462,3 @@ items:
     date: 2026-07-31T10:28:45Z
     kind: news
     labels: ["artificial intelligence", "chrome", "google", "vulnerabilities"]
-  - title: "The Xcode Assassin Returns: A Deep Dive Into the Latest XCSSET Version"
-    url: "https://unit42.paloaltonetworks.com/xcsset-v40-malware-analysis/"
-    source: "Palo Alto Networks"
-    date: 2026-07-31T10:00:18Z
-    kind: research
-    labels: ["browser hijacking", "credential theft", "data exfiltration", "infection chain", "malware", "obfuscation", "threat research", "xcsset malware"]
-  - title: "Prompted by OpenAI Disclosure, Anthropic Finds Its Own Models Hacked 3 Organizations"
-    url: "https://www.securityweek.com/after-openai-disclosure-anthropic-finds-its-own-models-hacked-3-organizations/"
-    source: "SecurityWeek"
-    date: 2026-07-31T09:39:57Z
-    kind: news
-    labels: ["artificial intelligence", "anthropic", "claude"]
