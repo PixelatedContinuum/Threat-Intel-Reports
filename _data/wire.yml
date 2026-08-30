@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-30T00:00:12Z
+generated_at: 2026-08-30T02:02:01Z
 window_days: 30
 counts:
-  total: 511
+  total: 510
   research: 188
-  news: 323
+  news: 322
 topics:
   - label: "vulnerabilities"
     count: 65
@@ -3486,9 +3486,3 @@ items:
     date: 2026-07-31T06:50:30Z
     kind: news
     labels: ["jetbrains", "patch", "teamcity", "vulnerabilities"]
-  - title: "Anthropic's Claude breached 3 orgs, uploaded PyPI malware during tests"
-    url: "https://www.bleepingcomputer.com/news/security/anthropics-claude-breached-3-orgs-uploaded-pypi-malware-during-tests/"
-    source: "BleepingComputer"
-    date: 2026-07-31T00:57:25Z
-    kind: news
-    labels: []
