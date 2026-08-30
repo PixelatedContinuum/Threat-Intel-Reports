@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-30T10:01:02Z
+generated_at: 2026-08-30T12:02:31Z
 window_days: 30
 counts:
-  total: 506
+  total: 505
   research: 187
-  news: 319
+  news: 318
 topics:
   - label: "vulnerabilities"
-    count: 64
+    count: 63
     color: 1
   - label: "cybercrime"
     count: 52
@@ -22,11 +22,11 @@ topics:
   - label: "malware"
     count: 26
     color: 4
-  - label: "artificial intelligence"
-    count: 24
-    color: 5
   - label: "exploited"
     count: 24
+    color: 5
+  - label: "artificial intelligence"
+    count: 23
     color: 6
   - label: "credential theft"
     count: 19
@@ -124,7 +124,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 5
+  "artificial intelligence": 6
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -311,7 +311,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 6
+  "exploited": 5
   "exposure management": 4
   "extortion": 12
   "fake lock screen": 6
@@ -3456,9 +3456,3 @@ items:
     date: 2026-07-31T12:15:00Z
     kind: news
     labels: []
-  - title: "Google AI Uncovers 13-Year-Old Chrome Flaw Amid Record Patching Pace"
-    url: "https://www.securityweek.com/googles-ai-agent-uncovers-13-year-old-chrome-flaw-amid-record-patching-pace/"
-    source: "SecurityWeek"
-    date: 2026-07-31T10:28:45Z
-    kind: news
-    labels: ["artificial intelligence", "chrome", "google", "vulnerabilities"]
