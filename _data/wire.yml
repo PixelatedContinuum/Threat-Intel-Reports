@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-29T22:01:01Z
+generated_at: 2026-08-30T00:00:12Z
 window_days: 30
 counts:
-  total: 514
-  research: 189
-  news: 325
+  total: 511
+  research: 188
+  news: 323
 topics:
   - label: "vulnerabilities"
     count: 65
@@ -3492,21 +3492,3 @@ items:
     date: 2026-07-31T00:57:25Z
     kind: news
     labels: []
-  - title: "Exploring the Hugging Face Breach: mapping AI agent tactics to Elastic Defend"
-    url: "https://www.elastic.co/security-labs/ai-agent-attack-detection-hugging-face-breach"
-    source: "Elastic"
-    date: 2026-07-31T00:00:00Z
-    kind: research
-    labels: ["security-labs"]
-  - title: "South Korea fines telco giant KT $39 million for customer data breach"
-    url: "https://www.bleepingcomputer.com/news/security/south-korea-fines-telco-giant-kt-39-million-for-customer-data-breach/"
-    source: "BleepingComputer"
-    date: 2026-07-30T22:28:30Z
-    kind: news
-    labels: []
-  - title: "CISA Urges Water Sector to Protect OT After Coordinated Attacks on PLCs"
-    url: "https://www.securityweek.com/cisa-urges-water-sector-to-protect-ot-after-coordinated-attacks-on-plcs/"
-    source: "SecurityWeek"
-    date: 2026-07-30T22:18:36Z
-    kind: news
-    labels: ["ics/ot"]
