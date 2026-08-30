@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-30T06:00:52Z
+generated_at: 2026-08-30T08:01:52Z
 window_days: 30
 counts:
-  total: 510
+  total: 508
   research: 188
-  news: 322
+  news: 320
 topics:
   - label: "vulnerabilities"
-    count: 65
+    count: 64
     color: 1
   - label: "cybercrime"
     count: 52
@@ -32,7 +32,7 @@ topics:
     count: 20
     color: 7
   - label: "data breaches"
-    count: 20
+    count: 19
     color: 8
   - label: "supply chain attack"
     count: 18
@@ -3474,15 +3474,3 @@ items:
     date: 2026-07-31T09:39:57Z
     kind: news
     labels: ["artificial intelligence", "anthropic", "claude"]
-  - title: "CareCloud Data Breach Impacts Over 350,000"
-    url: "https://www.securityweek.com/carecloud-data-breach-impacts-over-350000/"
-    source: "SecurityWeek"
-    date: 2026-07-31T07:51:43Z
-    kind: news
-    labels: ["carecloud", "data breaches", "healthcare"]
-  - title: "Critical Code Execution Vulnerability Patched in TeamCity"
-    url: "https://www.securityweek.com/critical-code-execution-vulnerability-patched-in-teamcity/"
-    source: "SecurityWeek"
-    date: 2026-07-31T06:50:30Z
-    kind: news
-    labels: ["jetbrains", "patch", "teamcity", "vulnerabilities"]
