@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-30T12:02:31Z
+generated_at: 2026-08-30T14:02:42Z
 window_days: 30
 counts:
-  total: 505
+  total: 503
   research: 187
-  news: 318
+  news: 316
 topics:
   - label: "vulnerabilities"
     count: 63
@@ -3444,15 +3444,3 @@ items:
     date: 2026-07-31T15:17:41Z
     kind: news
     labels: ["iran", "malware", "minnesota", "water"]
-  - title: "ESET tracks rise in malicious AI skills and adaptable malware"
-    url: "https://www.bleepingcomputer.com/news/security/eset-tracks-rise-in-malicious-ai-skills-and-adaptable-malware/"
-    source: "BleepingComputer"
-    date: 2026-07-31T14:01:11Z
-    kind: news
-    labels: []
-  - title: "Anthropic says its AI hacked real-world companies in three incidents"
-    url: "https://therecord.media/anthropic-ai-hacked-three-real-companies"
-    source: "Recorded Future"
-    date: 2026-07-31T12:15:00Z
-    kind: news
-    labels: []
