@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-31T08:01:12Z
+generated_at: 2026-08-31T10:00:52Z
 window_days: 30
 counts:
-  total: 496
-  research: 185
-  news: 311
+  total: 499
+  research: 187
+  news: 312
 topics:
   - label: "vulnerabilities"
     count: 64
@@ -29,7 +29,7 @@ topics:
     count: 22
     color: 6
   - label: "data breaches"
-    count: 19
+    count: 20
     color: 7
   - label: "credential theft"
     count: 18
@@ -38,13 +38,13 @@ topics:
     count: 18
     color: 9
   - label: "ransomware"
-    count: 15
+    count: 16
     color: 10
-  - label: "microsoft"
+  - label: "clickfix"
     count: 14
     color: 11
-  - label: "clickfix"
-    count: 13
+  - label: "microsoft"
+    count: 14
     color: 12
 label_colors:
   ".net downloader": 4
@@ -58,6 +58,7 @@ label_colors:
   "account trafficking": 3
   "account-enumeration": 7
   "active directory compromise": 7
+  "active directory reconnaissance": 1
   "adblocker": 3
   "adcs exploitation": 11
   "administrative access": 12
@@ -159,8 +160,10 @@ label_colors:
   "beacon": 6
   "bec campaign": 10
   "beijing institute of technology": 12
+  "berlin": 6
   "binary ninja": 5
   "bindcloak": 3
+  "binding.gyp": 1
   "bitcoin": 2
   "bixby": 2
   "black hat": 6
@@ -228,7 +231,7 @@ label_colors:
   "cl0p": 3
   "clamav": 8
   "claude desktop": 12
-  "clickfix": 12
+  "clickfix": 11
   "clickfix campaign": 9
   "clipper": 3
   "cloud": 7
@@ -326,6 +329,7 @@ label_colors:
   "geoserver": 2
   "ghostdesk": 6
   "ghostjacking": 2
+  "github actions": 6
   "gitlab": 3
   "gms": 3
   "google": 7
@@ -371,7 +375,7 @@ label_colors:
   "malware": 5
   "meta": 5
   "metabase": 6
-  "microsoft": 11
+  "microsoft": 12
   "miniorange": 5
   "mlflow": 1
   "mobile": 4
@@ -424,12 +428,30 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Real-time Open Source Software Supply Chain Security"
+    url: "https://safedep.io/mini-shai-hulud-openapi-react-query-codegen-compromised/"
+    source: "AlienVault"
+    date: 2026-08-31T09:00:33Z
+    kind: research
+    labels: ["binding.gyp", "github actions", "mini shai-hulud", "node-gyp", "npm", "obfuscation", "oidc publishing", "supply-chain"]
+  - title: "Berlin Won’t Pay Extortion Group Claiming Data Theft"
+    url: "https://www.securityweek.com/berlin-wont-pay-extortion-group-claiming-data-theft/"
+    source: "SecurityWeek"
+    date: 2026-08-31T08:49:36Z
+    kind: news
+    labels: ["berlin", "data breaches", "ransomware", "rhysida"]
   - title: "More Details Emerge on Exploited PaperCut Vulnerabilities"
     url: "https://www.securityweek.com/more-details-emerge-on-exploited-papercut-vulnerabilities/"
     source: "SecurityWeek"
     date: 2026-08-31T06:51:31Z
     kind: news
     labels: ["exploited", "papercut", "vulnerabilities", "zero-day"]
+  - title: "Campaign deploys a reverse tunnel through multistage intrusion"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/08/28/terminalfix-campaign-deploys-reverse-tunnel-through-multistage-intrusion/"
+    source: "AlienVault"
+    date: 2026-08-31T00:14:29Z
+    kind: research
+    labels: ["active directory reconnaissance", "clickfix", "dll sideloading", "fake captcha", "powershell execution", "reverse tunnel", "steganography", "terminalfix"]
   - title: "FulcrumSec claims Manchester Airports hack, theft of 86 GB of data"
     url: "https://www.bleepingcomputer.com/news/security/fulcrumsec-claims-manchester-airports-hack-theft-of-86-gb-of-data/"
     source: "BleepingComputer"
