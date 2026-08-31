@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-31T06:01:32Z
+generated_at: 2026-08-31T08:01:12Z
 window_days: 30
 counts:
-  total: 495
+  total: 496
   research: 185
-  news: 310
+  news: 311
 topics:
   - label: "vulnerabilities"
-    count: 63
+    count: 64
     color: 1
   - label: "cybercrime"
     count: 51
@@ -20,7 +20,7 @@ topics:
     count: 26
     color: 3
   - label: "exploited"
-    count: 24
+    count: 25
     color: 4
   - label: "malware"
     count: 24
@@ -424,6 +424,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "More Details Emerge on Exploited PaperCut Vulnerabilities"
+    url: "https://www.securityweek.com/more-details-emerge-on-exploited-papercut-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-08-31T06:51:31Z
+    kind: news
+    labels: ["exploited", "papercut", "vulnerabilities", "zero-day"]
   - title: "FulcrumSec claims Manchester Airports hack, theft of 86 GB of data"
     url: "https://www.bleepingcomputer.com/news/security/fulcrumsec-claims-manchester-airports-hack-theft-of-86-gb-of-data/"
     source: "BleepingComputer"
