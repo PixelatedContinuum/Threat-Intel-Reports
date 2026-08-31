@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-31T14:02:12Z
+generated_at: 2026-08-31T16:02:12Z
 window_days: 30
 counts:
-  total: 506
-  research: 190
-  news: 316
+  total: 512
+  research: 193
+  news: 319
 topics:
   - label: "vulnerabilities"
-    count: 64
+    count: 66
     color: 1
   - label: "cybercrime"
-    count: 51
+    count: 52
     color: 2
   - label: "government"
-    count: 27
+    count: 28
     color: 3
   - label: "exploited"
     count: 26
@@ -171,6 +171,7 @@ label_colors:
   "blackfile": 3
   "blackrock": 2
   "blockchain": 8
+  "blockchain abuse": 2
   "blockchain c2": 1
   "blog post": 6
   "bloodalchemy": 3
@@ -187,6 +188,7 @@ label_colors:
   "browser extensions": 4
   "browser hijacking": 12
   "browser password decryptor": 5
+  "browser theft": 3
   "browser-credentials": 9
   "browser-in-browser": 9
   "build-time execution": 10
@@ -199,6 +201,7 @@ label_colors:
   "camview": 6
   "canada revenue agency": 3
   "captive portal compromise": 6
+  "card-skimming": 8
   "carecloud": 10
   "castlestealer": 12
   "central asia": 5
@@ -267,6 +270,7 @@ label_colors:
   "crypto scam": 9
   "cryptocurrency": 12
   "cryptocurrency lure": 4
+  "cryptocurrency stealer": 4
   "cryptocurrency theft": 3
   "cryptocurrency wallet theft": 2
   "cryptocurrency-stealer": 7
@@ -305,6 +309,7 @@ label_colors:
   "dkom": 5
   "dll sideloading": 11
   "dns-tunneling": 8
+  "domain controller": 4
   "dprk-linked": 1
   "dropcatch": 4
   "edge device exploitation": 7
@@ -313,6 +318,7 @@ label_colors:
   "email security": 12
   "encrypted payload": 10
   "endlessdoors": 1
+  "endpoint security": 11
   "energy": 10
   "entra id": 5
   "ethereum": 5
@@ -381,6 +387,7 @@ label_colors:
   "meta": 5
   "metabase": 6
   "microsoft": 12
+  "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
   "mobile": 4
@@ -399,6 +406,7 @@ label_colors:
   "papercut": 8
   "patch": 10
   "patch tuesday": 11
+  "patched": 1
   "patches": 2
   "pdf attachment": 7
   "people": 7
@@ -416,6 +424,7 @@ label_colors:
   "scam": 10
   "securing ai": 4
   "security-labs": 3
+  "servicenow": 1
   "software": 5
   "sonicwall": 8
   "spring": 5
@@ -432,6 +441,42 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Skimming on the Blockchain: A Magecart Campaign That Uses EtherHiding, Found by Malvertising Scanning"
+    url: "https://otx.alienvault.com/pulse/6a9596d78e30aca83cac86db"
+    source: "AlienVault"
+    date: 2026-08-31T14:59:35Z
+    kind: research
+    labels: ["blockchain abuse", "card-skimming", "disposable domains", "e-commerce attacks", "ethereum smart contracts", "etherhiding", "payment skimming", "woocommerce compromise"]
+  - title: "Chinese Fire Ant hackers turn Cisco routers into spying platforms"
+    url: "https://www.bleepingcomputer.com/news/security/chinese-fire-ant-hackers-turn-cisco-routers-into-spying-platforms/"
+    source: "BleepingComputer"
+    date: 2026-08-31T14:52:03Z
+    kind: news
+    labels: []
+  - title: "Berlin says it won’t pay ransom after hackers steal government data"
+    url: "https://therecord.media/berlin-says-it-wont-pay-ransom-after-hackers-steal-gov-data"
+    source: "Recorded Future"
+    date: 2026-08-31T14:45:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "Nightmare Eclipse Drops ‘HardBreacher’ Kaspersky Product Exploit"
+    url: "https://www.securityweek.com/nightmare-eclipse-drops-hardbreacher-kaspersky-product-exploit/"
+    source: "SecurityWeek"
+    date: 2026-08-31T14:32:34Z
+    kind: news
+    labels: ["chaotic eclipse", "endpoint security", "hardbreacher", "kaspersky", "poc exploit", "security products", "vulnerabilities", "zero-day"]
+  - title: "Breaking the Seal: Static Deobfuscation of JSCeal's Compiled V8 Bytecode"
+    url: "https://otx.alienvault.com/pulse/6a9588f280b90b756f991401"
+    source: "AlienVault"
+    date: 2026-08-31T14:00:18Z
+    kind: research
+    labels: ["browser theft", "cryptocurrency stealer", "deobfuscation", "javascript-obfuscator", "jsceal", "mitm proxy", "node.js", "v8 bytecode"]
+  - title: "ServiceNow Patches 3 Critical Code Injection Vulnerabilities"
+    url: "https://www.securityweek.com/servicenow-patches-3-critical-code-injection-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-08-31T13:59:19Z
+    kind: news
+    labels: ["patched", "servicenow", "vulnerabilities"]
   - title: "Berlin confirms data theft after Rhysida ransomware attack claims"
     url: "https://www.bleepingcomputer.com/news/security/berlin-confirms-data-theft-after-rhysida-ransomware-attack-claims/"
     source: "BleepingComputer"
@@ -456,6 +501,12 @@ items:
     date: 2026-08-31T11:24:17Z
     kind: news
     labels: ["exploited", "ruby on rails", "vulnerabilities"]
+  - title: "An Inside Look at Voice Phishing Campaigns in Microsoft Teams"
+    url: "https://unit42.paloaltonetworks.com/spring-ring-voice-phishing-campaigns/"
+    source: "AlienVault"
+    date: 2026-08-31T11:06:36Z
+    kind: research
+    labels: ["domain controller", "microsoft teams", "ntlm relay", "petitpotam", "powershell rat", "rmm tools", "social engineering", "spring ring", "vishing", "voice phishing"]
   - title: "Extortion Group Claims Manchester Airports Group Data Breach"
     url: "https://www.securityweek.com/extortion-group-claims-manchester-airports-group-data-breach/"
     source: "SecurityWeek"
@@ -3462,9 +3513,3 @@ items:
     date: 2026-08-02T21:14:29Z
     kind: news
     labels: ["cryptocurrency"]
-  - title: "Rails patches critical Active Storage flaw with RCE potential"
-    url: "https://www.bleepingcomputer.com/news/security/rails-patches-critical-active-storage-flaw-with-rce-potential/"
-    source: "BleepingComputer"
-    date: 2026-08-01T14:20:30Z
-    kind: news
-    labels: []
