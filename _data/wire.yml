@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-30T22:03:02Z
+generated_at: 2026-08-31T00:01:41Z
 window_days: 30
 counts:
-  total: 497
-  research: 186
-  news: 311
+  total: 495
+  research: 185
+  news: 310
 topics:
   - label: "vulnerabilities"
     count: 63
@@ -3394,15 +3394,3 @@ items:
     date: 2026-08-01T11:15:00Z
     kind: news
     labels: ["ruby", "ruby on rails", "vulnerabilities"]
-  - title: "Elastic goes all-in on Hacker Summer Camp at Black Hat and DEF CON in Las Vegas"
-    url: "https://www.elastic.co/security-labs/elastic-security-black-hat-defcon-2026"
-    source: "Elastic"
-    date: 2026-07-31T23:59:59Z
-    kind: research
-    labels: ["security-labs"]
-  - title: "Amgen says cloud data breach exposed patient health, proprietary info"
-    url: "https://www.bleepingcomputer.com/news/security/amgen-says-cloud-data-breach-exposed-patient-health-proprietary-info/"
-    source: "BleepingComputer"
-    date: 2026-07-31T22:16:42Z
-    kind: news
-    labels: []
