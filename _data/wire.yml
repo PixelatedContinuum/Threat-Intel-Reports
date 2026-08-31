@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-31T18:02:52Z
+generated_at: 2026-08-31T20:00:38Z
 window_days: 30
 counts:
-  total: 514
+  total: 515
   research: 195
-  news: 319
+  news: 320
 topics:
   - label: "vulnerabilities"
     count: 66
@@ -443,6 +443,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Microsoft warns of TerminalFix attacks deploying reverse tunnels"
+    url: "https://www.bleepingcomputer.com/news/security/microsoft-warns-of-terminalfix-attacks-deploying-reverse-tunnels/"
+    source: "BleepingComputer"
+    date: 2026-08-31T18:51:04Z
+    kind: news
+    labels: []
   - title: "Toolkit: AI-Assisted Development and Persistent Threat Operations"
     url: "https://reliaquest.com/blog/threat-spotlight-gryxa-ai-built-toolkit"
     source: "AlienVault"
