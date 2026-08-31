@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-31T10:00:52Z
+generated_at: 2026-08-31T12:02:42Z
 window_days: 30
 counts:
-  total: 499
-  research: 187
-  news: 312
+  total: 503
+  research: 190
+  news: 313
 topics:
   - label: "vulnerabilities"
     count: 64
@@ -16,20 +16,20 @@ topics:
   - label: "cybercrime"
     count: 51
     color: 2
-  - label: "government"
+  - label: "exploited"
     count: 26
     color: 3
-  - label: "exploited"
-    count: 25
+  - label: "government"
+    count: 26
     color: 4
   - label: "malware"
-    count: 24
+    count: 25
     color: 5
   - label: "artificial intelligence"
     count: 22
     color: 6
   - label: "data breaches"
-    count: 20
+    count: 21
     color: 7
   - label: "credential theft"
     count: 18
@@ -38,7 +38,7 @@ topics:
     count: 18
     color: 9
   - label: "ransomware"
-    count: 16
+    count: 17
     color: 10
   - label: "clickfix"
     count: 14
@@ -87,6 +87,7 @@ label_colors:
   "ai-assisted-development": 9
   "ai-generated personas": 9
   "aikido security": 1
+  "airport": 9
   "aisuru": 7
   "aitm phishing": 5
   "akira": 2
@@ -234,10 +235,12 @@ label_colors:
   "clickfix": 11
   "clickfix campaign": 9
   "clipper": 3
+  "cloaked ursa": 2
   "cloud": 7
   "cloud & application security": 1
   "cloud credentials": 9
   "cloud security": 9
+  "cloudflare": 11
   "cloudflare captcha": 5
   "cloudflare tunnel": 9
   "cloudflare tunnels": 6
@@ -308,12 +311,14 @@ label_colors:
   "electron application": 2
   "electron framework": 12
   "email security": 12
+  "encrypted payload": 10
   "endlessdoors": 1
   "energy": 10
+  "entra id": 5
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 4
+  "exploited": 3
   "exposure management": 4
   "extortion": 12
   "fake lock screen": 6
@@ -336,7 +341,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 3
+  "government": 4
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -405,7 +410,6 @@ label_colors:
   "qilin": 11
   "ransomware": 10
   "rce": 10
-  "ruby": 6
   "ruby on rails": 12
   "salesforce": 3
   "sap": 8
@@ -428,6 +432,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Critical Ruby on Rails Vulnerability in Attackers’ Crosshairs"
+    url: "https://www.securityweek.com/critical-ruby-on-rails-vulnerability-in-attackers-crosshairs/"
+    source: "SecurityWeek"
+    date: 2026-08-31T11:24:17Z
+    kind: news
+    labels: ["exploited", "ruby on rails", "vulnerabilities"]
+  - title: "Extortion Group Claims Manchester Airports Group Data Breach"
+    url: "https://www.securityweek.com/extortion-group-claims-manchester-airports-group-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-08-31T10:29:10Z
+    kind: news
+    labels: ["airport", "data breaches", "ransomware"]
+  - title: "Spring Ring: An Inside Look at Voice Phishing Campaigns in Microsoft Teams"
+    url: "https://unit42.paloaltonetworks.com/spring-ring-voice-phishing-campaigns/"
+    source: "Palo Alto Networks"
+    date: 2026-08-31T10:00:36Z
+    kind: research
+    labels: ["cloaked ursa", "entra id", "malware", "microsoft teams", "payload", "powershell", "remote access trojan", "spoof", "threat research", "vishing"]
   - title: "Real-time Open Source Software Supply Chain Security"
     url: "https://safedep.io/mini-shai-hulud-openapi-react-query-codegen-compromised/"
     source: "AlienVault"
@@ -476,6 +498,18 @@ items:
     date: 2026-08-29T03:43:27Z
     kind: research
     labels: ["clickfix"]
+  - title: "Still Circling: Inside the Operator Behind the GitHub Loader"
+    url: "https://otx.alienvault.com/pulse/6a9226b8695b02a09a6160ef"
+    source: "AlienVault"
+    date: 2026-08-29T00:24:24Z
+    kind: research
+    labels: ["asyncrat", "autoit", "colombian phishing", "crypter services", "dcrat", "duckdns c2", "github loader", "infrastructure analysis", "rat deployment", "remcos", "stealer log", "xworm"]
+  - title: "Fake MP4 File Carries Malicious Payload"
+    url: "https://censys.com/blog/fake-mp4-file-carries-malicious-payload/"
+    source: "AlienVault"
+    date: 2026-08-29T00:24:24Z
+    kind: research
+    labels: ["cloudflare", "encrypted payload", "fake mp4", "iso-bmff", "netsupport", "netsupport manager", "powershell", "remote administration tool", "uuid box"]
   - title: "McKesson discloses breach after ShinyHunters claims patient data theft"
     url: "https://www.bleepingcomputer.com/news/security/mckesson-discloses-breach-after-shinyhunters-claims-patient-data-theft/"
     source: "BleepingComputer"
@@ -3416,9 +3450,3 @@ items:
     date: 2026-08-01T14:20:30Z
     kind: news
     labels: []
-  - title: "Ruby on Rails Patches Critical Vulnerability"
-    url: "https://www.securityweek.com/ruby-on-rails-patches-critical-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-08-01T11:15:00Z
-    kind: news
-    labels: ["ruby", "ruby on rails", "vulnerabilities"]
