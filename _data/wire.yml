@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-08-31T16:02:12Z
+generated_at: 2026-08-31T18:02:52Z
 window_days: 30
 counts:
-  total: 512
-  research: 193
+  total: 514
+  research: 195
   news: 319
 topics:
   - label: "vulnerabilities"
@@ -64,6 +64,7 @@ label_colors:
   "administrative access": 12
   "adobe": 1
   "adversary-in-the-middle": 9
+  "adware disguise": 5
   "aerospace targeting": 10
   "aeternum": 11
   "aeza group": 2
@@ -160,6 +161,7 @@ label_colors:
   "base64 obfuscation": 6
   "beacon": 6
   "bec campaign": 10
+  "behavior-based-detection": 12
   "beijing institute of technology": 12
   "berlin": 6
   "binary ninja": 5
@@ -441,6 +443,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Toolkit: AI-Assisted Development and Persistent Threat Operations"
+    url: "https://reliaquest.com/blog/threat-spotlight-gryxa-ai-built-toolkit"
+    source: "AlienVault"
+    date: 2026-08-31T15:39:24Z
+    kind: research
+    labels: ["ai-assisted-development", "behavior-based-detection", "gryxa", "persistence-mechanisms", "rmm-client", "scheduled-tasks", "toolkit", "windows-event-subscription"]
   - title: "Skimming on the Blockchain: A Magecart Campaign That Uses EtherHiding, Found by Malvertising Scanning"
     url: "https://otx.alienvault.com/pulse/6a9596d78e30aca83cac86db"
     source: "AlienVault"
@@ -501,6 +509,12 @@ items:
     date: 2026-08-31T11:24:17Z
     kind: news
     labels: ["exploited", "ruby on rails", "vulnerabilities"]
+  - title: "ValleyRAT is spreading disguised as adware"
+    url: "https://otx.alienvault.com/pulse/6a9561756240dfd1ccd91f80"
+    source: "AlienVault"
+    date: 2026-08-31T11:11:49Z
+    kind: research
+    labels: ["adware disguise", "backdoor", "china", "dll sideloading", "india", "qn wallpaper", "spyware", "valleyrat"]
   - title: "An Inside Look at Voice Phishing Campaigns in Microsoft Teams"
     url: "https://unit42.paloaltonetworks.com/spring-ring-voice-phishing-campaigns/"
     source: "AlienVault"
