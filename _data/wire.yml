@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T08:00:38Z
+generated_at: 2026-09-01T10:00:05Z
 window_days: 30
 counts:
-  total: 520
-  research: 197
-  news: 323
+  total: 528
+  research: 201
+  news: 327
 topics:
   - label: "vulnerabilities"
-    count: 67
+    count: 68
     color: 1
   - label: "cybercrime"
     count: 53
@@ -29,12 +29,12 @@ topics:
     count: 23
     color: 6
   - label: "data breaches"
-    count: 22
+    count: 23
     color: 7
-  - label: "credential theft"
-    count: 18
-    color: 8
   - label: "supply chain attack"
+    count: 19
+    color: 8
+  - label: "credential theft"
     count: 18
     color: 9
   - label: "ransomware"
@@ -66,10 +66,12 @@ label_colors:
   "adversary-in-the-middle": 9
   "adware disguise": 5
   "aerospace targeting": 10
+  "aesto health": 6
   "aeternum": 11
   "aeza group": 2
   "affiliate fraud": 7
   "agent-to-agent": 9
+  "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
   "ai api": 4
@@ -85,8 +87,10 @@ label_colors:
   "ai testing": 12
   "ai vishing": 6
   "ai voice phishing": 4
+  "ai-assisted malware": 8
   "ai-assisted-development": 9
   "ai-generated personas": 9
+  "ai-powered cybercrime": 12
   "aikido security": 1
   "airport": 9
   "aisuru": 7
@@ -156,6 +160,7 @@ label_colors:
   "bandook": 10
   "bank": 4
   "bank of america impersonation": 5
+  "banking software": 7
   "banking trojan": 4
   "base64": 3
   "base64 obfuscation": 6
@@ -261,11 +266,13 @@ label_colors:
   "coolclient": 8
   "crackerdrv": 3
   "crat": 2
+  "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 8
+  "credential theft": 9
   "credential-based attacks": 12
   "credential-harvesting": 1
+  "credential-theft": 5
   "critical infrastructure": 4
   "critical infrastructure targeting": 5
   "cross-platform malware": 7
@@ -343,6 +350,7 @@ label_colors:
   "ghostdesk": 6
   "ghostjacking": 2
   "github actions": 6
+  "github-actions": 9
   "gitlab": 3
   "gms": 3
   "google": 7
@@ -431,7 +439,7 @@ label_colors:
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
-  "supply chain attack": 9
+  "supply chain attack": 8
   "teamcity": 8
   "threat hunting & intel": 9
   "threat intelligence": 9
@@ -449,6 +457,36 @@ items:
     date: 2026-09-01T14:00:00Z
     kind: research
     labels: ["threat intelligence"]
+  - title: "Five Venezuelans plead guilty to ATM jackpotting attacks in US"
+    url: "https://www.bleepingcomputer.com/news/security/five-venezuelans-plead-guilty-to-atm-jackpotting-attacks-in-us/"
+    source: "BleepingComputer"
+    date: 2026-09-01T09:15:07Z
+    kind: news
+    labels: []
+  - title: "9.5 Million Impacted by Aesto Health Data Breach"
+    url: "https://www.securityweek.com/9-5-million-impacted-by-aesto-health-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-09-01T09:09:34Z
+    kind: news
+    labels: ["aesto health", "data breaches", "healthcare"]
+  - title: "WatchGuard Patches Critical Vulnerabilities"
+    url: "https://www.securityweek.com/watchguard-patches-critical-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-01T08:50:04Z
+    kind: news
+    labels: ["patch", "rce", "vulnerabilities", "watchguard"]
+  - title: "Recently patched PaperCut zero-days used in data theft attacks"
+    url: "https://www.bleepingcomputer.com/news/security/recently-patched-papercut-zero-days-used-in-data-theft-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-01T07:48:24Z
+    kind: news
+    labels: []
+  - title: "Financially Motivated Threat Actor Targets Brazil"
+    url: "https://otx.alienvault.com/pulse/6a9679441f068d4ee93916ae"
+    source: "AlienVault"
+    date: 2026-09-01T07:05:40Z
+    kind: research
+    labels: ["ai-assisted malware", "banking software", "boatbeam", "brazil financial fraud", "breeze comet", "cobaltspin", "compromised government sites", "kickplate", "latin america", "lightpaint", "mildfrost", "payment system manipulation", "pix targeting", "realbreeze", "xworm"]
   - title: "PaperCut Exploitation Escalates to Active Intrusions"
     url: "https://www.securityweek.com/papercut-exploitation-escalates-to-active-intrusions/"
     source: "SecurityWeek"
@@ -461,6 +499,12 @@ items:
     date: 2026-08-31T20:47:54Z
     kind: news
     labels: ["cryptocurrency"]
+  - title: "13 Malicious Packagist Themes Deliver iOS Spyware That Steals Crypto Wallet Seeds"
+    url: "https://otx.alienvault.com/pulse/6a95df86eed3f6fb54baef2d"
+    source: "AlienVault"
+    date: 2026-08-31T20:09:42Z
+    kind: research
+    labels: ["credential exfiltration", "cryptocurrency theft", "cve-2025-31277", "cve-2025-43529", "cve-2026-43655", "funnull infrastructure", "ios exploitation", "kernel escape", "packagist", "spyware", "supply chain attack", "webkit vulnerability"]
   - title: "Fraudsters steal $6 million from Tectonic crypto platform after inflating token price"
     url: "https://therecord.media/crypto-tectonic-hack-cronos"
     source: "Recorded Future"
@@ -473,12 +517,24 @@ items:
     date: 2026-08-31T18:51:04Z
     kind: news
     labels: []
+  - title: "Anatomy of BraZetsu: How Cybercriminals Fuel the Underground Ecosystem"
+    url: "https://www.group-ib.com/blog/brazetsu-ai-enhanced-iab-marketplace/"
+    source: "AlienVault"
+    date: 2026-08-31T15:42:36Z
+    kind: research
+    labels: ["agentev2", "ai-powered cybercrime", "brazetsu", "cnab", "cnabhunter", "financial remittance", "initial access broker", "latam", "ousaban", "python malware", "underground marketplace"]
   - title: "Toolkit: AI-Assisted Development and Persistent Threat Operations"
     url: "https://reliaquest.com/blog/threat-spotlight-gryxa-ai-built-toolkit"
     source: "AlienVault"
     date: 2026-08-31T15:39:24Z
     kind: research
     labels: ["ai-assisted-development", "behavior-based-detection", "gryxa", "persistence-mechanisms", "rmm-client", "scheduled-tasks", "toolkit", "windows-event-subscription"]
+  - title: "Shai-Hulud Trinitite Hits @7nohe/openapi-react-query-codegen"
+    url: "https://research.jfrog.com/post/shai-hulud-trinitite"
+    source: "AlienVault"
+    date: 2026-08-31T15:26:41Z
+    kind: research
+    labels: ["credential-theft", "github-actions", "mini shai-hulud", "npm", "oidc", "persistence", "shai-hulud", "supply-chain", "trinitite", "worm"]
   - title: "Skimming on the Blockchain: A Magecart Campaign That Uses EtherHiding, Found by Malvertising Scanning"
     url: "https://otx.alienvault.com/pulse/6a9596d78e30aca83cac86db"
     source: "AlienVault"
