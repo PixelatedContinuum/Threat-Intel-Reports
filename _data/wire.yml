@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T00:01:02Z
+generated_at: 2026-09-01T02:02:27Z
 window_days: 30
 counts:
-  total: 517
-  research: 195
+  total: 518
+  research: 196
   news: 322
 topics:
   - label: "vulnerabilities"
@@ -569,6 +569,12 @@ items:
     date: 2026-08-31T06:51:31Z
     kind: news
     labels: ["exploited", "papercut", "vulnerabilities", "zero-day"]
+  - title: "Agents of Chaos: A New $100K Agentic Security Challenge"
+    url: "https://www.crowdstrike.com/en-us/blog/agents-of-chaos-immersive-ai-security-challenge/"
+    source: "Crowdstrike"
+    date: 2026-08-31T04:00:00Z
+    kind: research
+    labels: ["securing ai"]
   - title: "Campaign deploys a reverse tunnel through multistage intrusion"
     url: "https://www.microsoft.com/en-us/security/blog/2026/08/28/terminalfix-campaign-deploys-reverse-tunnel-through-multistage-intrusion/"
     source: "AlienVault"
