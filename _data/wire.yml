@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T16:01:02Z
+generated_at: 2026-09-01T18:00:12Z
 window_days: 30
 counts:
-  total: 537
-  research: 202
-  news: 335
+  total: 539
+  research: 203
+  news: 336
 topics:
   - label: "vulnerabilities"
     count: 70
     color: 1
   - label: "cybercrime"
-    count: 54
+    count: 55
     color: 2
   - label: "exploited"
     count: 29
@@ -455,6 +455,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Healthcare facilities operator Nutex says patient, employee data stolen in August incident"
+    url: "https://therecord.media/nutex-health-data-breach"
+    source: "Recorded Future"
+    date: 2026-09-01T15:31:00Z
+    kind: news
+    labels: ["cybercrime", "industry"]
   - title: "Hackers push malicious Virtualizor update in BGP hijacking attack"
     url: "https://www.bleepingcomputer.com/news/security/hackers-push-malicious-virtualizor-update-in-bgp-hijacking-attack/"
     source: "BleepingComputer"
@@ -551,6 +557,12 @@ items:
     date: 2026-09-01T05:27:18Z
     kind: news
     labels: ["exploited", "papercut", "vulnerabilities", "zero-day"]
+  - title: "CrowdStrike Falcon Guardian Defines the Next Generation of AI Security"
+    url: "https://www.crowdstrike.com/en-us/blog/falcon-guardian-defines-next-generation-of-ai-security/"
+    source: "Crowdstrike"
+    date: 2026-09-01T04:00:00Z
+    kind: research
+    labels: ["securing ai"]
   - title: "Cronos blockchain restarts after $74 million Tectonic exploit"
     url: "https://www.bleepingcomputer.com/news/security/cronos-blockchain-restarts-after-74-million-tectonic-exploit/"
     source: "BleepingComputer"
