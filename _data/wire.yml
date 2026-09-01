@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T04:00:38Z
+generated_at: 2026-09-01T06:01:52Z
 window_days: 30
 counts:
-  total: 519
+  total: 520
   research: 197
-  news: 322
+  news: 323
 topics:
   - label: "vulnerabilities"
-    count: 66
+    count: 67
     color: 1
   - label: "cybercrime"
     count: 53
@@ -20,7 +20,7 @@ topics:
     count: 28
     color: 3
   - label: "exploited"
-    count: 26
+    count: 27
     color: 4
   - label: "malware"
     count: 26
@@ -449,6 +449,12 @@ items:
     date: 2026-09-01T14:00:00Z
     kind: research
     labels: ["threat intelligence"]
+  - title: "PaperCut Exploitation Escalates to Active Intrusions"
+    url: "https://www.securityweek.com/papercut-exploitation-escalates-to-active-intrusions/"
+    source: "SecurityWeek"
+    date: 2026-09-01T05:27:18Z
+    kind: news
+    labels: ["exploited", "papercut", "vulnerabilities", "zero-day"]
   - title: "Cronos blockchain restarts after $74 million Tectonic exploit"
     url: "https://www.bleepingcomputer.com/news/security/cronos-blockchain-restarts-after-74-million-tectonic-exploit/"
     source: "BleepingComputer"
