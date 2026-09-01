@@ -3,32 +3,32 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T10:00:05Z
+generated_at: 2026-09-01T12:02:11Z
 window_days: 30
 counts:
-  total: 528
+  total: 530
   research: 201
-  news: 327
+  news: 329
 topics:
   - label: "vulnerabilities"
-    count: 68
+    count: 69
     color: 1
   - label: "cybercrime"
     count: 53
     color: 2
-  - label: "government"
+  - label: "exploited"
     count: 28
     color: 3
-  - label: "exploited"
-    count: 27
+  - label: "government"
+    count: 28
     color: 4
   - label: "malware"
     count: 26
     color: 5
-  - label: "artificial intelligence"
-    count: 23
-    color: 6
   - label: "data breaches"
+    count: 24
+    color: 6
+  - label: "artificial intelligence"
     count: 23
     color: 7
   - label: "supply chain attack"
@@ -38,7 +38,7 @@ topics:
     count: 18
     color: 9
   - label: "ransomware"
-    count: 17
+    count: 18
     color: 10
   - label: "clickfix"
     count: 14
@@ -130,7 +130,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 6
+  "artificial intelligence": 7
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -302,7 +302,7 @@ label_colors:
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
-  "data breaches": 7
+  "data breaches": 6
   "data center": 7
   "data leak": 9
   "data-exfiltration": 12
@@ -333,7 +333,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 4
+  "exploited": 3
   "exposure management": 4
   "extortion": 12
   "fake lock screen": 6
@@ -346,6 +346,7 @@ label_colors:
   "frontier ai": 3
   "gaming": 5
   "gatesentinel": 7
+  "gentlemen": 1
   "geoserver": 2
   "ghostdesk": 6
   "ghostjacking": 2
@@ -357,7 +358,7 @@ label_colors:
   "google authenticator": 6
   "google chrome": 1
   "google sheets c2": 12
-  "government": 3
+  "government": 4
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -385,6 +386,7 @@ label_colors:
   "isolated-vm": 5
   "ivanti": 7
   "jetbrains": 6
+  "jfrog": 8
   "landing page top story": 2
   "leadership": 11
   "legal": 7
@@ -457,6 +459,18 @@ items:
     date: 2026-09-01T14:00:00Z
     kind: research
     labels: ["threat intelligence"]
+  - title: "Ransomware Gang Claims Nutex Health Data Breach"
+    url: "https://www.securityweek.com/ransomware-gang-claims-nutex-health-data-breach/"
+    source: "SecurityWeek"
+    date: 2026-09-01T10:47:47Z
+    kind: news
+    labels: ["data breaches", "gentlemen", "healthcare", "nutex", "ransomware"]
+  - title: "Critical JFrog Artifactory Vulnerability Reportedly Exploited in the Wild"
+    url: "https://www.securityweek.com/critical-jfrog-artifactory-vulnerability-reportedly-exploited-in-the-wild/"
+    source: "SecurityWeek"
+    date: 2026-09-01T09:59:44Z
+    kind: news
+    labels: ["exploited", "jfrog", "jfrog artifactory", "vulnerabilities"]
   - title: "Five Venezuelans plead guilty to ATM jackpotting attacks in US"
     url: "https://www.bleepingcomputer.com/news/security/five-venezuelans-plead-guilty-to-atm-jackpotting-attacks-in-us/"
     source: "BleepingComputer"
