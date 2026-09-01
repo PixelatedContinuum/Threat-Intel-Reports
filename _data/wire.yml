@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T12:02:11Z
+generated_at: 2026-09-01T14:02:42Z
 window_days: 30
 counts:
-  total: 530
+  total: 534
   research: 201
-  news: 329
+  news: 333
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 70
     color: 1
   - label: "cybercrime"
-    count: 53
+    count: 54
     color: 2
   - label: "exploited"
-    count: 28
+    count: 29
     color: 3
   - label: "government"
     count: 28
@@ -25,11 +25,11 @@ topics:
   - label: "malware"
     count: 26
     color: 5
+  - label: "artificial intelligence"
+    count: 25
+    color: 6
   - label: "data breaches"
     count: 24
-    color: 6
-  - label: "artificial intelligence"
-    count: 23
     color: 7
   - label: "supply chain attack"
     count: 19
@@ -40,10 +40,10 @@ topics:
   - label: "ransomware"
     count: 18
     color: 10
-  - label: "clickfix"
-    count: 14
-    color: 11
   - label: "microsoft"
+    count: 15
+    color: 11
+  - label: "clickfix"
     count: 14
     color: 12
 label_colors:
@@ -130,7 +130,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 7
+  "artificial intelligence": 6
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -242,7 +242,7 @@ label_colors:
   "cl0p": 3
   "clamav": 8
   "claude desktop": 12
-  "clickfix": 11
+  "clickfix": 12
   "clickfix campaign": 9
   "clipper": 3
   "cloaked ursa": 2
@@ -302,7 +302,7 @@ label_colors:
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
-  "data breaches": 6
+  "data breaches": 7
   "data center": 7
   "data leak": 9
   "data-exfiltration": 12
@@ -398,7 +398,7 @@ label_colors:
   "malware": 5
   "meta": 5
   "metabase": 6
-  "microsoft": 12
+  "microsoft": 11
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -459,6 +459,30 @@ items:
     date: 2026-09-01T14:00:00Z
     kind: research
     labels: ["threat intelligence"]
+  - title: "Nearly 22,000 Microsoft Exchange servers vulnerable to hijack attacks"
+    url: "https://www.bleepingcomputer.com/news/security/nearly-22-000-microsoft-exchange-servers-vulnerable-to-hijack-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-01T12:38:35Z
+    kind: news
+    labels: ["microsoft"]
+  - title: "Experiment: Porting a PLC Exploit With AI Takes Hours and Hundreds of Dollars"
+    url: "https://www.securityweek.com/experiment-porting-a-plc-exploit-with-ai-takes-hours-and-hundreds-of-dollars/"
+    source: "SecurityWeek"
+    date: 2026-09-01T12:37:15Z
+    kind: news
+    labels: ["artificial intelligence", "exploit", "ics", "ics/ot", "plc", "wago"]
+  - title: "Iranian cyber spies target aviation, fintech developers with new malware"
+    url: "https://therecord.media/iranian-cyber-spies-target-aviation-fintech-new-malware"
+    source: "Recorded Future"
+    date: 2026-09-01T12:33:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Hackers Start Exploiting Critical Langflow Vulnerability"
+    url: "https://www.securityweek.com/hackers-start-exploiting-critical-langflow-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-01T12:07:54Z
+    kind: news
+    labels: ["artificial intelligence", "exploited", "langflow", "vulnerabilities"]
   - title: "Ransomware Gang Claims Nutex Health Data Breach"
     url: "https://www.securityweek.com/ransomware-gang-claims-nutex-health-data-breach/"
     source: "SecurityWeek"
