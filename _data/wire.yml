@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T20:01:32Z
+generated_at: 2026-09-01T22:00:52Z
 window_days: 30
 counts:
-  total: 542
+  total: 543
   research: 203
-  news: 339
+  news: 340
 topics:
   - label: "vulnerabilities"
     count: 70
@@ -456,6 +456,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Hackers abuse Faronics Deploy admin tool to install ScreenConnect"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-abuse-faronics-deploy-admin-tool-to-install-screenconnect/"
+    source: "BleepingComputer"
+    date: 2026-09-01T20:53:23Z
+    kind: news
+    labels: []
+  - title: "China's 'Fire Ant' campaign used compromised Cisco routers as platform for more attacks"
+    url: "https://therecord.media/router-hacks-fire-ant-group-china"
+    source: "Recorded Future"
+    date: 2026-09-01T20:35:00Z
+    kind: news
+    labels: ["china"]
   - title: "Aesto Health says data breach affects over 9.5 million patients"
     url: "https://www.bleepingcomputer.com/news/security/aesto-health-says-data-breach-affects-over-95-million-patients/"
     source: "BleepingComputer"
@@ -3702,9 +3714,3 @@ items:
     date: 2026-08-03T00:00:00Z
     kind: research
     labels: ["security-labs"]
-  - title: "COLDCARD wallet RNG flaw likely linked to $88 million Bitcoin theft"
-    url: "https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/"
-    source: "BleepingComputer"
-    date: 2026-08-02T21:14:29Z
-    kind: news
-    labels: ["cryptocurrency"]
