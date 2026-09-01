@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T14:02:42Z
+generated_at: 2026-09-01T16:01:02Z
 window_days: 30
 counts:
-  total: 534
-  research: 201
-  news: 333
+  total: 537
+  research: 202
+  news: 335
 topics:
   - label: "vulnerabilities"
     count: 70
@@ -146,8 +146,10 @@ label_colors:
   "authentication": 6
   "authentication bypass": 4
   "autoit": 8
+  "aviation sector": 9
   "aws-secrets": 7
   "azure": 1
+  "azure infrastructure": 4
   "babadeda": 2
   "babadedaloader": 11
   "back-to-school": 4
@@ -453,6 +455,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Hackers push malicious Virtualizor update in BGP hijacking attack"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-push-malicious-virtualizor-update-in-bgp-hijacking-attack/"
+    source: "BleepingComputer"
+    date: 2026-09-01T14:45:06Z
+    kind: news
+    labels: []
+  - title: "Novocure data breach affects more than 1,400 cancer patients"
+    url: "https://www.bleepingcomputer.com/news/security/novocure-data-breach-affects-more-than-1-400-cancer-patients/"
+    source: "BleepingComputer"
+    date: 2026-09-01T14:28:40Z
+    kind: news
+    labels: ["healthcare"]
   - title: "Financially Motivated Threat Actor BREEZE COMET Targets Brazil"
     url: "https://cloud.google.com/blog/topics/threat-intelligence/financially-motivated-threat-actor-breeze-comet-targets-brazil/"
     source: "Google"
@@ -513,6 +527,12 @@ items:
     date: 2026-09-01T08:50:04Z
     kind: news
     labels: ["patch", "rce", "vulnerabilities", "watchguard"]
+  - title: "Switches to Node.js and JavaScript malware"
+    url: "https://otx.alienvault.com/pulse/6a96918b7f129c94fa473bb0"
+    source: "AlienVault"
+    date: 2026-09-01T08:49:15Z
+    kind: research
+    labels: ["aviation sector", "azure infrastructure", "cross-platform rat", "fintech targeting", "linkedin recruitment lure", "minifast", "noderabbit", "pollcat", "retrograde", "trojanized coding challenge"]
   - title: "Recently patched PaperCut zero-days used in data theft attacks"
     url: "https://www.bleepingcomputer.com/news/security/recently-patched-papercut-zero-days-used-in-data-theft-attacks/"
     source: "BleepingComputer"
