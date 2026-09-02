@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-02T18:02:02Z
+generated_at: 2026-09-02T20:00:38Z
 window_days: 30
 counts:
-  total: 552
+  total: 553
   research: 208
-  news: 344
+  news: 345
 topics:
   - label: "vulnerabilities"
     count: 72
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 57
     color: 2
   - label: "exploited"
     count: 28
@@ -23,7 +23,7 @@ topics:
     count: 28
     color: 4
   - label: "malware"
-    count: 27
+    count: 28
     color: 5
   - label: "artificial intelligence"
     count: 25
@@ -350,7 +350,6 @@ label_colors:
   "fortinet": 7
   "fraud & identity theft": 11
   "frontier ai": 3
-  "gaming": 5
   "gatesentinel": 7
   "gentlemen": 1
   "geoserver": 2
@@ -458,6 +457,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "WordPress backup plugin flaw exposes millions of sites to takeover attacks"
+    url: "https://www.bleepingcomputer.com/news/security/wordpress-backup-plugin-flaw-exposes-millions-of-sites-to-takeover-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-02T19:28:46Z
+    kind: news
+    labels: []
+  - title: "Russian national facing 20 years for malware campaign that infected 80,000 freelancers"
+    url: "https://therecord.media/russian-national-facing-20-years-malware-campaign"
+    source: "Recorded Future"
+    date: 2026-09-02T18:43:00Z
+    kind: news
+    labels: ["cybercrime", "malware"]
   - title: "Health data of more than 9.5 million people leaked from Aesto record system"
     url: "https://therecord.media/health-data-aesto-cyberattack-leak"
     source: "Recorded Future"
@@ -3764,9 +3775,3 @@ items:
     date: 2026-08-03T20:01:22Z
     kind: news
     labels: []
-  - title: "Fake Roblox Xeno script launcher pushes infostealer, RAT malware"
-    url: "https://www.bleepingcomputer.com/news/security/fake-roblox-xeno-script-launcher-pushes-infostealer-rat-malware/"
-    source: "BleepingComputer"
-    date: 2026-08-03T19:25:10Z
-    kind: news
-    labels: ["gaming"]
