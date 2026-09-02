@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-02T06:02:11Z
+generated_at: 2026-09-02T08:01:14Z
 window_days: 30
 counts:
-  total: 545
+  total: 546
   research: 203
-  news: 342
+  news: 343
 topics:
   - label: "vulnerabilities"
     count: 71
@@ -458,6 +458,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "SonicWall warns of actively exploited SMA1000 zero-day flaws"
+    url: "https://www.bleepingcomputer.com/news/security/sonicwall-warns-of-actively-exploited-sma1000-zero-day-flaws/"
+    source: "BleepingComputer"
+    date: 2026-09-02T06:39:29Z
+    kind: news
+    labels: []
   - title: "SonicWall Warns of Two SMA1000 Zero-Days Exploited in Attacks"
     url: "https://www.securityweek.com/sonicwall-warns-of-two-sma1000-zero-days-exploited-in-attacks/"
     source: "SecurityWeek"
