@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-02T16:02:02Z
+generated_at: 2026-09-02T18:02:02Z
 window_days: 30
 counts:
-  total: 547
-  research: 202
-  news: 345
+  total: 552
+  research: 208
+  news: 344
 topics:
   - label: "vulnerabilities"
     count: 72
@@ -16,14 +16,14 @@ topics:
   - label: "cybercrime"
     count: 56
     color: 2
-  - label: "government"
-    count: 29
-    color: 3
   - label: "exploited"
+    count: 28
+    color: 3
+  - label: "government"
     count: 28
     color: 4
   - label: "malware"
-    count: 26
+    count: 27
     color: 5
   - label: "artificial intelligence"
     count: 25
@@ -32,7 +32,7 @@ topics:
     count: 23
     color: 7
   - label: "credential theft"
-    count: 19
+    count: 20
     color: 8
   - label: "supply chain attack"
     count: 18
@@ -50,10 +50,12 @@ label_colors:
   ".net downloader": 4
   ".net loader": 4
   "2fa bypass": 1
+  "3snake": 7
   "a little sunshine": 6
   "abyssos": 10
   "academic lure": 1
   "accessibility abuse": 6
+  "accessibility services": 10
   "account farming": 5
   "account takeover": 2
   "account trafficking": 3
@@ -95,13 +97,16 @@ label_colors:
   "aikido security": 1
   "airport": 9
   "aisuru": 7
+  "aitm": 5
   "aitm phishing": 5
   "akira": 2
+  "alphaagent": 1
   "amatera stealer": 1
   "amd": 6
   "amnesiastealer": 8
   "amos": 6
   "amos stealer": 2
+  "amsi evasion": 1
   "android": 9
   "android apk": 11
   "android banking trojan": 11
@@ -200,6 +205,7 @@ label_colors:
   "browser theft": 3
   "browser-credentials": 9
   "browser-in-browser": 9
+  "build path attribution": 4
   "build-time execution": 10
   "byovd": 12
   "c2 infrastructure": 12
@@ -327,12 +333,13 @@ label_colors:
   "encrypted payload": 10
   "endlessdoors": 1
   "endpoint security": 11
+  "endpoint security & xdr": 11
   "energy": 10
   "entra id": 5
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 4
+  "exploited": 3
   "exposure management": 4
   "extortion": 12
   "fake lock screen": 6
@@ -355,7 +362,7 @@ label_colors:
   "gms": 3
   "google": 7
   "google sheets c2": 12
-  "government": 3
+  "government": 4
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -363,7 +370,6 @@ label_colors:
   "head mare": 3
   "healthcare": 12
   "heights financial": 1
-  "heptax": 12
   "hidden execution": 12
   "high profile threats": 2
   "honeymyte": 10
@@ -405,6 +411,7 @@ label_colors:
   "nation-state": 11
   "netscaler": 5
   "network security": 6
+  "next-gen identity security": 12
   "next-gen siem & log management": 11
   "npm": 7
   "nvidia": 3
@@ -451,6 +458,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Health data of more than 9.5 million people leaked from Aesto record system"
+    url: "https://therecord.media/health-data-aesto-cyberattack-leak"
+    source: "Recorded Future"
+    date: 2026-09-02T17:15:00Z
+    kind: news
+    labels: ["cybercrime", "malware", "privacy"]
   - title: "Hackers exploit critical JFrog Artifactory flaw to forge admin tokens"
     url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-jfrog-artifactory-flaw-to-forge-admin-tokens/"
     source: "BleepingComputer"
@@ -469,6 +482,24 @@ items:
     date: 2026-09-02T14:02:12Z
     kind: news
     labels: []
+  - title: "Gaming the system: how a Chinese-speaking actor turned Brazilian government sites into an SEO weapon"
+    url: "https://research.checkpoint.com/2026/gaming-the-system-how-a-chinese-speaking-actor-turned-brazilian-government-sites-into-an-seo-weapon/"
+    source: "AlienVault"
+    date: 2026-09-02T13:40:05Z
+    kind: research
+    labels: ["3snake", "alphaagent", "apache modules", "brazilian government", "bruteforcer", "chuser", "credential theft", "downpro", "earth berberoka", "gambling goblin", "linux toolkit", "orat", "passwordharvester", "phishing", "reconnaissance", "seo manipulation"]
+  - title: "Uncovering StreamRat: From Meta Ads to Full Device Takeover"
+    url: "https://otx.alienvault.com/pulse/6a9826f869eb70a6b15298ec"
+    source: "AlienVault"
+    date: 2026-09-02T13:39:04Z
+    kind: research
+    labels: ["accessibility services", "android", "banking trojan", "godfather", "maas", "mediaprojection", "meta advertisements", "mirax", "spain", "streamrat", "sturnus", "tiktok", "vnc"]
+  - title: "Inside Knight Office, a New M365 AiTM Phishing Kit"
+    url: "https://www.huntress.com/blog/inside-knight-office-m365-aitm-attack"
+    source: "AlienVault"
+    date: 2026-09-02T13:39:03Z
+    kind: research
+    labels: ["aitm", "credential harvesting", "device registration", "knight office", "oauth", "phishing kit", "session token theft", "windows hello for business"]
   - title: "Hackers expose donor data from Russian fundraisers for Ukrainians, political prisoners"
     url: "https://therecord.media/hackers-russia-fundraisers-ukraine"
     source: "Recorded Future"
@@ -547,6 +578,30 @@ items:
     date: 2026-09-02T05:04:52Z
     kind: news
     labels: ["exploited", "sma1000", "sonicwall", "vulnerabilities", "zero-day"]
+  - title: "CrowdStrike Extends Endpoint Security to Stop Software Supply Chain Attacks"
+    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-extends-endpoint-security-to-stop-supply-chain-attacks/"
+    source: "Crowdstrike"
+    date: 2026-09-02T04:00:00Z
+    kind: research
+    labels: ["endpoint security & xdr"]
+  - title: "CrowdStrike Delivers the Next Evolution of the Agentic SOC"
+    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-delivers-next-evolution-of-agentic-soc/"
+    source: "Crowdstrike"
+    date: 2026-09-02T04:00:00Z
+    kind: research
+    labels: ["agentic soc"]
+  - title: "CrowdStrike Announces Agentic Identity Provider"
+    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-announces-agentic-identity-provider/"
+    source: "Crowdstrike"
+    date: 2026-09-02T04:00:00Z
+    kind: research
+    labels: ["next-gen identity security"]
+  - title: "One leftover build path links an infostealer, a remote-access tool, and a ransomware family"
+    url: "https://www.vmray.com/news/one-leftover-build-path-links-an-infostealer-a-remote-access-tool-and-a-ransomware-family/"
+    source: "AlienVault"
+    date: 2026-09-01T22:50:50Z
+    kind: research
+    labels: ["amsi evasion", "build path attribution", "credential theft", "cross-platform", "enigma locker", "hvnc", "rust", "zer0day stealer"]
   - title: "Counterfeit installers to system compromise: Tracking a deceptive software download campaign"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/01/counterfeit-installers-system-compromise-tracking-deceptive-software-download-campaign/"
     source: "Microsoft"
@@ -3715,21 +3770,3 @@ items:
     date: 2026-08-03T19:25:10Z
     kind: news
     labels: ["gaming"]
-  - title: "Hackers steal 31,000 records identifying people behind Liechtenstein companies, foundations"
-    url: "https://therecord.media/hackers-steal-records-liechtenstein-companies-foundations"
-    source: "Recorded Future"
-    date: 2026-08-03T17:36:00Z
-    kind: news
-    labels: ["cybercrime", "government"]
-  - title: "N-able warns of N-central auth bypass flaw exploited in attacks"
-    url: "https://www.bleepingcomputer.com/news/security/n-able-warns-of-n-central-auth-bypass-flaw-exploited-in-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-03T17:00:56Z
-    kind: news
-    labels: []
-  - title: "Analysis of a Phishing Email Attack Case"
-    url: "https://otx.alienvault.com/pulse/6a70c6f0d15cdde2874f628e"
-    source: "AlienVault"
-    date: 2026-08-03T16:50:56Z
-    kind: research
-    labels: ["credential theft", "heptax", "keylogger", "larva-24009", "lnk", "nirsoft tools", "notifier", "phishing email", "powershell backdoor", "quasarrat", "ultravnc"]
