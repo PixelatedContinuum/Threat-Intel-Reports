@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-01T22:00:52Z
+generated_at: 2026-09-02T00:02:52Z
 window_days: 30
 counts:
-  total: 543
-  research: 203
-  news: 340
+  total: 545
+  research: 204
+  news: 341
 topics:
   - label: "vulnerabilities"
     count: 70
@@ -23,13 +23,13 @@ topics:
     count: 28
     color: 4
   - label: "malware"
-    count: 26
+    count: 27
     color: 5
   - label: "artificial intelligence"
     count: 25
     color: 6
   - label: "data breaches"
-    count: 24
+    count: 25
     color: 7
   - label: "supply chain attack"
     count: 19
@@ -50,6 +50,7 @@ label_colors:
   ".net downloader": 4
   ".net loader": 4
   "2fa bypass": 1
+  "a little sunshine": 6
   "abyssos": 10
   "academic lure": 1
   "accessibility abuse": 6
@@ -297,6 +298,7 @@ label_colors:
   "cve-2026-66747": 10
   "cve-2026-68820": 2
   "cyber-espionage": 3
+  "cybera": 2
   "cyberattacks": 8
   "cybercrime": 2
   "cyberwarfare": 9
@@ -456,6 +458,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Counterfeit installers to system compromise: Tracking a deceptive software download campaign"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/01/counterfeit-installers-system-compromise-tracking-deceptive-software-download-campaign/"
+    source: "Microsoft"
+    date: 2026-09-01T22:48:28Z
+    kind: research
+    labels: ["malware"]
+  - title: "FBI Probes Service Selling 153M+ Drivers Licenses"
+    url: "https://krebsonsecurity.com/2026/09/fbi-probes-service-selling-153m-drivers-licenses/"
+    source: "Krebs on Security"
+    date: 2026-09-01T22:40:28Z
+    kind: news
+    labels: ["a little sunshine", "cybera", "data breaches", "decryptads", "exploit", "hertz", "idscan.net", "jillian kossman", "larry baldwin", "nexus", "planet13", "the coming storm", "web fraud 2.0", "zach edwards"]
   - title: "Hackers abuse Faronics Deploy admin tool to install ScreenConnect"
     url: "https://www.bleepingcomputer.com/news/security/hackers-abuse-faronics-deploy-admin-tool-to-install-screenconnect/"
     source: "BleepingComputer"
@@ -3396,6 +3410,12 @@ items:
     date: 2026-08-05T08:15:06Z
     kind: research
     labels: ["ci/cd compromise", "cloud credentials", "credential theft", "developer targeting", "npm compromise", "package repository", "self-propagating worm", "supply chain attack"]
+  - title: "Benchmarking the Agentic SOC: How we evaluate LLMs for security workflows"
+    url: "https://www.elastic.co/security-labs/llm-benchmarking-agentic-soc"
+    source: "Elastic"
+    date: 2026-08-04T23:59:59Z
+    kind: research
+    labels: ["security-labs"]
   - title: "ChainDrop supply chain compromise: Anatomy of a self-propagating worm"
     url: "https://www.microsoft.com/en-us/security/blog/2026/08/04/chaindrop-supply-chain-compromise-anatomy-self-propagating-worm/"
     source: "Microsoft"
@@ -3708,9 +3728,3 @@ items:
     date: 2026-08-03T05:00:00Z
     kind: research
     labels: ["threat hunting & intel"]
-  - title: "Benchmarking the Agentic SOC: How we evaluate LLMs for security workflows"
-    url: "https://www.elastic.co/security-labs/llm-benchmarking-agentic-soc"
-    source: "Elastic"
-    date: 2026-08-03T00:00:00Z
-    kind: research
-    labels: ["security-labs"]
