@@ -3,27 +3,27 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-02T20:00:38Z
+generated_at: 2026-09-02T22:00:34Z
 window_days: 30
 counts:
-  total: 553
-  research: 208
-  news: 345
+  total: 551
+  research: 207
+  news: 344
 topics:
   - label: "vulnerabilities"
     count: 72
     color: 1
   - label: "cybercrime"
-    count: 57
+    count: 56
     color: 2
   - label: "exploited"
     count: 28
     color: 3
-  - label: "government"
-    count: 28
-    color: 4
   - label: "malware"
     count: 28
+    color: 4
+  - label: "government"
+    count: 27
     color: 5
   - label: "artificial intelligence"
     count: 25
@@ -177,7 +177,6 @@ label_colors:
   "beijing institute of technology": 12
   "berlin": 6
   "binary ninja": 5
-  "bindcloak": 3
   "binding.gyp": 1
   "bitcoin": 2
   "bixby": 2
@@ -361,7 +360,7 @@ label_colors:
   "gms": 3
   "google": 7
   "google sheets c2": 12
-  "government": 4
+  "government": 5
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -398,7 +397,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 5
+  "malware": 4
   "meta": 5
   "metabase": 6
   "microsoft": 4
@@ -457,6 +456,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Hackers exploit Sangoma Switchvox flaw to deploy reverse shells"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-sangoma-switchvox-flaw-to-deploy-reverse-shells/"
+    source: "BleepingComputer"
+    date: 2026-09-02T21:00:13Z
+    kind: news
+    labels: []
   - title: "WordPress backup plugin flaw exposes millions of sites to takeover attacks"
     url: "https://www.bleepingcomputer.com/news/security/wordpress-backup-plugin-flaw-exposes-millions-of-sites-to-takeover-attacks/"
     source: "BleepingComputer"
@@ -3755,23 +3760,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/new-pass-ta-key-attacks-let-malware-hijack-google-synced-passkeys/"
     source: "BleepingComputer"
     date: 2026-08-03T23:58:01Z
-    kind: news
-    labels: []
-  - title: "Targeted Attack on Government Entities in the Middle East | Part 2"
-    url: "https://otx.alienvault.com/pulse/6a710a5c190ae98a3d9c1be1"
-    source: "AlienVault"
-    date: 2026-08-03T21:38:36Z
-    kind: research
-    labels: ["backdoor", "bindcloak", "c2 communication", "east asia", "edr evasion", "energy sector", "government", "middle east", "mixedkey", "modular", "octlurk", "teleshim"]
-  - title: "Bitcoin hardware wallet maker destroys some inventory after more than $88 million stolen"
-    url: "https://therecord.media/bitcoin-theft-coldcard-cyberattack"
-    source: "Recorded Future"
-    date: 2026-08-03T20:15:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "New DOUBLECUP ClickFix service hides malware in browser cache images"
-    url: "https://www.bleepingcomputer.com/news/security/new-doublecup-clickfix-service-hides-malware-in-browser-cache-images/"
-    source: "BleepingComputer"
-    date: 2026-08-03T20:01:22Z
     kind: news
     labels: []
