@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-02T08:01:14Z
+generated_at: 2026-09-02T10:02:52Z
 window_days: 30
 counts:
-  total: 546
-  research: 203
-  news: 343
+  total: 545
+  research: 199
+  news: 346
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 72
     color: 1
   - label: "cybercrime"
     count: 55
@@ -31,19 +31,19 @@ topics:
   - label: "data breaches"
     count: 25
     color: 7
-  - label: "supply chain attack"
-    count: 19
-    color: 8
   - label: "credential theft"
     count: 18
-    color: 9
+    color: 8
   - label: "ransomware"
     count: 18
+    color: 9
+  - label: "supply chain attack"
+    count: 18
     color: 10
-  - label: "microsoft"
-    count: 15
-    color: 11
   - label: "clickfix"
+    count: 14
+    color: 11
+  - label: "healthcare"
     count: 14
     color: 12
 label_colors:
@@ -231,7 +231,6 @@ label_colors:
   "chisel": 4
   "chrome": 12
   "chrome extension": 7
-  "chrome hijacking": 12
   "ci compromise": 2
   "ci/cd compromise": 6
   "ci/cd pipeline exploitation": 4
@@ -245,7 +244,7 @@ label_colors:
   "cl0p": 3
   "clamav": 8
   "claude desktop": 12
-  "clickfix": 12
+  "clickfix": 11
   "clickfix campaign": 9
   "clipper": 3
   "cloaked ursa": 2
@@ -259,7 +258,6 @@ label_colors:
   "cloudflare tunnels": 6
   "cloudflare workers": 6
   "cloudflared": 7
-  "cobalt-strike": 4
   "code signing abuse": 10
   "command and control": 7
   "communicationuxtheme.dll": 10
@@ -267,12 +265,11 @@ label_colors:
   "contactless payment fraud": 3
   "control-flow flattening": 10
   "coolclient": 8
-  "crackerdrv": 3
   "crat": 2
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 9
+  "credential theft": 8
   "credential-based attacks": 12
   "credential-harvesting": 1
   "credential-theft": 5
@@ -293,7 +290,6 @@ label_colors:
   "cve-2021-27101": 2
   "cve-2023-34362": 11
   "cve-2023-49105": 4
-  "cve-2025-24813": 7
   "cve-2025-49113": 3
   "cve-2026-66747": 10
   "cve-2026-68820": 2
@@ -314,12 +310,11 @@ label_colors:
   "ddos engine": 12
   "dead drop resolver": 7
   "desktop capture": 2
-  "developer targeting": 7
   "device code phishing": 5
   "dgfip": 12
   "diplomatic targeting": 1
   "discord hijacking": 12
-  "dkom": 5
+  "disrupted": 8
   "dll sideloading": 11
   "dns-tunneling": 8
   "domain controller": 4
@@ -359,8 +354,6 @@ label_colors:
   "gitlab": 3
   "gms": 3
   "google": 7
-  "google authenticator": 6
-  "google chrome": 1
   "google sheets c2": 12
   "government": 4
   "hacker": 8
@@ -368,7 +361,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 11
+  "healthcare": 12
   "heights financial": 1
   "heptax": 12
   "hidden execution": 12
@@ -403,7 +396,7 @@ label_colors:
   "malware": 5
   "meta": 5
   "metabase": 6
-  "microsoft": 11
+  "microsoft": 4
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -433,7 +426,7 @@ label_colors:
   "poc": 2
   "privacy": 12
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 9
   "rce": 10
   "ruby on rails": 12
   "salesforce": 3
@@ -447,7 +440,7 @@ label_colors:
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
-  "supply chain attack": 8
+  "supply chain attack": 10
   "teamcity": 8
   "threat intelligence": 9
   "threat source newsletter": 6
@@ -458,6 +451,30 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Chrome and Firefox Updates Patch Dozens of Vulnerabilities"
+    url: "https://www.securityweek.com/chrome-and-firefox-updates-patch-dozens-of-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-02T09:12:29Z
+    kind: news
+    labels: ["chrome", "firefox", "mozilla", "patches", "vulnerabilities"]
+  - title: "US charges Russian for infecting 80,000 freelancers with malware"
+    url: "https://www.bleepingcomputer.com/news/security/us-charges-russian-for-infecting-80-000-freelancers-with-malware/"
+    source: "BleepingComputer"
+    date: 2026-09-02T09:06:48Z
+    kind: news
+    labels: []
+  - title: "23-Year-Old Sality P2P Botnet Disrupted"
+    url: "https://www.securityweek.com/23-year-old-sality-p2p-botnet-disrupted/"
+    source: "SecurityWeek"
+    date: 2026-09-02T08:38:00Z
+    kind: news
+    labels: ["botnet", "disrupted", "law enforcement", "malware", "sality", "tracking & law enforcement"]
+  - title: "Sality botnet infrastructure dismantled in joint global takedown"
+    url: "https://www.bleepingcomputer.com/news/security/sality-botnet-infrastructure-dismantled-in-joint-global-takedown/"
+    source: "BleepingComputer"
+    date: 2026-09-02T08:00:43Z
+    kind: news
+    labels: []
   - title: "SonicWall warns of actively exploited SMA1000 zero-day flaws"
     url: "https://www.bleepingcomputer.com/news/security/sonicwall-warns-of-actively-exploited-sma1000-zero-day-flaws/"
     source: "BleepingComputer"
@@ -3704,33 +3721,3 @@ items:
     date: 2026-08-03T10:39:41Z
     kind: news
     labels: ["exploited", "ransomware", "sonicwall", "vulnerabilities"]
-  - title: "Pass the Passkey: A Novel Attack Surface in Passwordless Authentication"
-    url: "https://unit42.paloaltonetworks.com/passwordless-authentication-security-risks/"
-    source: "Palo Alto Networks"
-    date: 2026-08-03T10:00:35Z
-    kind: research
-    labels: ["google authenticator", "google chrome", "google cloud", "identity", "key", "malware", "passkey", "passwordless", "threat research"]
-  - title: "A China-Nexus Campaign Against Government Infrastructure"
-    url: "https://otx.alienvault.com/pulse/6a706203d3aa16bfed001a51"
-    source: "AlienVault"
-    date: 2026-08-03T09:40:19Z
-    kind: research
-    labels: ["cobalt-strike", "cve-2025-24813", "gocs", "infrastructure", "loader", "meterpreter", "multi-platform", "neo-regeorg", "snowlight", "spray-and-check"]
-  - title: "Russian State APT Linked to Recent Public Wi-Fi Gateway Hacking"
-    url: "https://www.securityweek.com/russian-state-apt-linked-to-recent-public-wi-fi-gateway-hacking/"
-    source: "SecurityWeek"
-    date: 2026-08-03T09:17:37Z
-    kind: news
-    labels: ["apt", "microsoft", "midnight blizzard", "mobile & wireless", "phishing", "russia", "wi-fi"]
-  - title: "A Deep Dive Into the Latest XCSSET Version"
-    url: "https://unit42.paloaltonetworks.com/xcsset-v40-malware-analysis/"
-    source: "AlienVault"
-    date: 2026-08-03T09:05:16Z
-    kind: research
-    labels: ["chrome hijacking", "developer targeting", "fruitfly", "in-memory execution", "macos", "netwire", "osx.dubrobber", "polymorphic malware", "south asia", "supply chain attack", "telegram trojanizer", "xcode", "xcsset"]
-  - title: "Reversing a Windows Kernel Driver Rootkit"
-    url: "https://core-jmp.org/2026/07/sakdriver-reversing-kernel-driver-rootkit/"
-    source: "AlienVault"
-    date: 2026-08-03T09:04:41Z
-    kind: research
-    labels: ["crackerdrv", "dkom", "etw patching", "kernel rootkit", "minifilter driver", "nsi hooking", "registry callback c2", "sakdriver", "wfp manipulation"]
