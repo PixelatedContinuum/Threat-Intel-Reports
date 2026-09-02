@@ -3,42 +3,42 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-02T10:02:52Z
+generated_at: 2026-09-02T12:01:22Z
 window_days: 30
 counts:
-  total: 545
-  research: 199
-  news: 346
+  total: 546
+  research: 203
+  news: 343
 topics:
   - label: "vulnerabilities"
-    count: 72
+    count: 71
     color: 1
   - label: "cybercrime"
     count: 55
     color: 2
   - label: "exploited"
-    count: 30
+    count: 29
     color: 3
   - label: "government"
     count: 28
     color: 4
   - label: "malware"
-    count: 27
+    count: 26
     color: 5
   - label: "artificial intelligence"
     count: 25
     color: 6
   - label: "data breaches"
-    count: 25
+    count: 24
     color: 7
   - label: "credential theft"
-    count: 18
+    count: 19
     color: 8
-  - label: "ransomware"
-    count: 18
-    color: 9
   - label: "supply chain attack"
     count: 18
+    color: 9
+  - label: "ransomware"
+    count: 17
     color: 10
   - label: "clickfix"
     count: 14
@@ -151,6 +151,7 @@ label_colors:
   "aws-secrets": 7
   "azure": 1
   "azure infrastructure": 4
+  "azure table storage": 2
   "babadeda": 2
   "babadedaloader": 11
   "back-to-school": 4
@@ -188,10 +189,10 @@ label_colors:
   "bmc": 6
   "bot networks": 10
   "botnet": 6
+  "botnet takedown": 5
   "brand impersonation": 7
   "breadcrumbs": 10
   "bridgehead": 7
-  "brinks home": 12
   "brown health": 12
   "browser data theft": 1
   "browser extension campaign": 9
@@ -426,7 +427,7 @@ label_colors:
   "poc": 2
   "privacy": 12
   "qilin": 11
-  "ransomware": 9
+  "ransomware": 10
   "rce": 10
   "ruby on rails": 12
   "salesforce": 3
@@ -440,7 +441,7 @@ label_colors:
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
-  "supply chain attack": 10
+  "supply chain attack": 9
   "teamcity": 8
   "threat intelligence": 9
   "threat source newsletter": 6
@@ -451,6 +452,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "An AI-Assisted Cyber Attack: Inside a Unit 42 Investigation"
+    url: "https://unit42.paloaltonetworks.com/ai-assisted-cyber-attack-inside-a-unit-42-investigation/"
+    source: "Palo Alto Networks"
+    date: 2026-09-02T10:00:46Z
+    kind: research
+    labels: ["agentic ai", "frontier ai", "insights", "ransomware", "threat research"]
+  - title: "Hackers Weaponize Microsoft Teams Help Desk Calls for Malware and Network Lateral Movement"
+    url: "https://cybersecuritynews.com/hackers-weaponize-microsoft-teams/"
+    source: "AlienVault"
+    date: 2026-09-02T09:59:12Z
+    kind: research
+    labels: []
+  - title: "Sality's P2P Network Turned Against Itself, Cutting Off New Malware Payloads"
+    url: "https://otx.alienvault.com/pulse/6a97f2b0566cf1ccb1ec8fb4"
+    source: "AlienVault"
+    date: 2026-09-02T09:56:00Z
+    kind: research
+    labels: ["botnet takedown", "clipper", "cryptocurrency theft", "ddos campaigns", "eggjagger", "law enforcement operation", "p2p network", "peer list manipulation", "sality"]
   - title: "Chrome and Firefox Updates Patch Dozens of Vulnerabilities"
     url: "https://www.securityweek.com/chrome-and-firefox-updates-patch-dozens-of-vulnerabilities/"
     source: "SecurityWeek"
@@ -523,6 +542,12 @@ items:
     date: 2026-09-01T18:30:00Z
     kind: news
     labels: ["incident response"]
+  - title: "The Crypto Wallet That Never Opened: Tampered Exodus Installer Hides a Modular RAT"
+    url: "https://otx.alienvault.com/pulse/6a9715c1c854df8423e1092b"
+    source: "AlienVault"
+    date: 2026-09-01T18:13:21Z
+    kind: research
+    labels: ["azure table storage", "credential theft", "dll4_browser", "dll4_cmd", "dll4_fileman", "dll4_script", "dll4_socks", "dll4_vnc", "exodus wallet", "hidden vnc", "javascript dropper", "modular rat", "reflective loading", "socks proxy"]
   - title: "Critical Langflow flaw exploited to steal OpenAI and AWS keys"
     url: "https://www.bleepingcomputer.com/news/security/critical-langflow-flaw-exploited-to-steal-openai-and-aws-keys/"
     source: "BleepingComputer"
@@ -3703,21 +3728,3 @@ items:
     date: 2026-08-03T12:34:06Z
     kind: news
     labels: ["exploited", "n-able", "n-central", "vulnerabilities"]
-  - title: "Russian hackers hijack hotel Wi-Fi networks to spy on travelers, Microsoft says"
-    url: "https://therecord.media/russian-wifi-hackers-hotels"
-    source: "Recorded Future"
-    date: 2026-08-03T12:00:00Z
-    kind: news
-    labels: ["malware", "nation-state"]
-  - title: "Brinks Home Discloses Data Breach as Hackers Leak Files"
-    url: "https://www.securityweek.com/brinks-home-discloses-data-breach-as-hackers-leak-files/"
-    source: "SecurityWeek"
-    date: 2026-08-03T11:45:14Z
-    kind: news
-    labels: ["brinks home", "data breaches", "ransomware", "shinyhunters"]
-  - title: "Recent SonicWall Vulnerabilities Exploited in Ransomware Attacks"
-    url: "https://www.securityweek.com/recent-sonicwall-vulnerabilities-exploited-in-ransomware-attacks/"
-    source: "SecurityWeek"
-    date: 2026-08-03T10:39:41Z
-    kind: news
-    labels: ["exploited", "ransomware", "sonicwall", "vulnerabilities"]
