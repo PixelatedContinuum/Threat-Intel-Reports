@@ -38,11 +38,46 @@ test('an absent file is NOT CHECKED, never PASS', function () {
   assert.match(r.reason, /wire\.yml/);
 });
 
-test('a stale generated_at fails', function () {
-  // 10 hours old against the two-hourly timer: well past the eight-hour limit.
-  var r = CW.check(doc({ generated_at: '2026-08-19T02:00:00Z' }), SOURCES, NOW);
+/* An old local file is the trigger for the staleness question, not the answer.
+   These four pin the answer to what origin holds, because reading local age
+   alone accused a healthy generator on every session that opened a clone more
+   than eight hours old. */
+
+test('a stale local file fails only when origin is stale too', function () {
+  // 10 hours old against the two-hourly timer, and origin is no fresher: the
+  // timer really has stopped, which is the case this gate exists for.
+  var r = CW.check(doc({ generated_at: '2026-08-19T02:00:00Z' }), SOURCES, NOW,
+    { generated_at: '2026-08-19T02:00:00Z' });
   assert.equal(r.status, 'FAIL');
   assert.match(r.problems.join(' '), /stale/i);
+  assert.match(r.problems.join(' '), /LXC-102/);
+});
+
+test('a stale local file against a fresh origin is NOT CHECKED, never FAIL', function () {
+  // The everyday case: the generator pushed twelve times while this clone sat
+  // untouched. Accusing LXC-102 here is the false alarm that spent the alarm.
+  var r = CW.check(doc({ generated_at: '2026-08-19T02:00:00Z' }), SOURCES, NOW,
+    { generated_at: '2026-08-19T11:00:00Z' });
+  assert.equal(r.status, 'NOT CHECKED');
+  assert.match(r.reason, /behind/i);
+  assert.match(r.reason, /git pull/);
+  // It must not leave the reader thinking the generator is implicated.
+  assert.match(r.reason, /healthy/i);
+});
+
+test('a stale local file with origin unknown is NOT CHECKED, never PASS', function () {
+  // Offline, or no remote. The distinguishing fact is unavailable, so there is
+  // no verdict to give; the contract's third state is exactly this.
+  var r = CW.check(doc({ generated_at: '2026-08-19T02:00:00Z' }), SOURCES, NOW, null);
+  assert.equal(r.status, 'NOT CHECKED');
+  assert.match(r.reason, /git fetch/);
+});
+
+test('a fresh local file never consults origin', function () {
+  // Inside the limit nothing is in question, so a null remote must not turn a
+  // healthy clone into NOT CHECKED.
+  var r = CW.check(doc(), SOURCES, NOW, null);
+  assert.equal(r.status, 'PASS');
 });
 
 test('a transient run of misses still passes', function () {

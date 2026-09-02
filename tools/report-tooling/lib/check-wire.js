@@ -42,8 +42,21 @@ function normTitle(t) {
 
 /* `doc` is the parsed wire.yml, or null when it could not be read.
    `sources` is the parsed wire-sources.yml `sources` map, or null if absent.
-   `now` is epoch ms, injected so the staleness case is testable. */
-function check(doc, sources, now) {
+   `now` is epoch ms, injected so the staleness case is testable.
+   `remote` is `{ generated_at }` from origin's copy of wire.yml, or null when
+   origin's state could not be established. Injected for the same reason as
+   `now`, and it is what separates the two ways this file goes old.
+
+   Those two ways look identical from inside the working tree and are not the
+   same event. The generator pushes wire.yml straight to origin twelve times a
+   day, so a clone nobody has fetched falls behind by exactly as many hours as
+   it has sat there, while the live page stays current. Reading local age alone,
+   this gate called a three-day-old clone a dead timer and named LXC-102 as the
+   cause; measured over the ten days after the two-hourly cadence landed, the
+   timer had missed zero of its runs on every occasion it said so. An alarm that
+   fires on a healthy pipeline is spent, so the local file's age is now only the
+   trigger for the question, never the answer to it. */
+function check(doc, sources, now, remote) {
   if (!doc) {
     return verdict('NOT CHECKED', 'wire.yml is absent or unparseable. ' +
       'Run wire_export.py on LXC-102 to generate it.');
@@ -62,8 +75,34 @@ function check(doc, sources, now) {
   if (!gen) {
     problems.push('generated_at is missing or unparseable: ' + doc.generated_at);
   } else if ((now - gen) / 3600000 > STALE_HOURS) {
-    problems.push('stale: generated_at is ' + ((now - gen) / 3600000).toFixed(1) +
-      ' hours old, over the ' + STALE_HOURS + '-hour limit. The generator on ' +
+    var ageH = ((now - gen) / 3600000).toFixed(1);
+    var rgen = remote ? Date.parse(remote.generated_at || '') : NaN;
+
+    if (!rgen) {
+      /* Which of the two happened is exactly what origin would have told us,
+         so without it there is no verdict to give. Failing here would be the
+         old wrong answer with a hedge attached. */
+      return verdict('NOT CHECKED', 'the local wire.yml is ' + ageH + ' hours ' +
+        'old, past the ' + STALE_HOURS + '-hour limit, but origin could not be ' +
+        'read, so this run cannot tell a clone that needs pulling from a ' +
+        'generator that has stopped. Run `git fetch origin` and re-run.');
+    }
+
+    if ((now - rgen) / 3600000 <= STALE_HOURS) {
+      /* Origin is current, so the generator ran and this checkout simply did
+         not follow it. Nothing was verified about the published page, which is
+         NOT CHECKED rather than a pass, but nothing is wrong with it either. */
+      return verdict('NOT CHECKED', 'this clone is behind, and the generator is ' +
+        'healthy: the local wire.yml is ' + ageH + ' hours old while origin ' +
+        'holds one generated ' + remote.generated_at + '. Run `git pull` and ' +
+        're-run; nothing here says anything about LXC-102.');
+    }
+
+    /* Origin is stale too, so pulling would change nothing and the timer is
+       the thing that stopped. This is the case the gate was built for. */
+    problems.push('stale: generated_at is ' + ageH +
+      ' hours old, over the ' + STALE_HOURS + '-hour limit, and origin is no ' +
+      'fresher (' + remote.generated_at + '). The generator on ' +
       'LXC-102 has missed at least four consecutive runs.');
   }
 

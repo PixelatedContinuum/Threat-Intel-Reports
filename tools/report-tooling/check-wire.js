@@ -10,6 +10,7 @@
 
 var path = require('node:path');
 var fs = require('node:fs');
+var cp = require('node:child_process');
 
 var ROOT = path.join(__dirname, '..', '..');
 var WIRE = path.join(ROOT, '_data', 'wire.yml');
@@ -31,6 +32,33 @@ function load(p) {
   catch (e) { return null; }
 }
 
+/* What origin holds, which is the only thing that can say whether an old local
+   wire.yml means a stopped generator or just a checkout nobody pulled.
+
+   Always origin/main, never the current upstream: the generator pushes there
+   and nowhere else, so a publish worktree on its own branch still has to ask
+   main. Returns null on any failure, and null means unknown, never healthy.
+   Set WIRE_GATE_NO_FETCH=1 to read the ref already in the clone without going
+   to the network, which is what a CI job on a fresh clone wants. */
+function remoteWire() {
+  if (!process.env.WIRE_GATE_NO_FETCH) {
+    try {
+      cp.execFileSync('git', ['fetch', 'origin', 'main', '--quiet'],
+        { cwd: ROOT, stdio: 'ignore', timeout: 30000 });
+    } catch (e) {
+      return null; // offline, no remote, or an auth prompt: origin is unknown
+    }
+  }
+  try {
+    var out = cp.execFileSync('git', ['show', 'origin/main:_data/wire.yml'],
+      { cwd: ROOT, encoding: 'utf8', timeout: 30000, maxBuffer: 32 * 1024 * 1024 });
+    var m = /^generated_at:[ \t]*(\S+)/m.exec(out);
+    return m ? { generated_at: m[1] } : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 var doc = load(WIRE);
 var srcDoc = load(SOURCES);
 var sources = srcDoc && srcDoc.sources ? srcDoc.sources : null;
@@ -40,7 +68,7 @@ if (!srcDoc) {
     ', so unclassified sources cannot be reported');
 }
 
-var r = CW.check(doc, sources, Date.now());
+var r = CW.check(doc, sources, Date.now(), remoteWire());
 
 if (r.status === 'NOT CHECKED') {
   console.log('NOT CHECKED  ' + r.reason);
