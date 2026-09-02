@@ -5,7 +5,6 @@ layout: post
 permalink: /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/
 hide: true
 ---
-
 **Campaign:** WebLogicDeserialization-TelecomHarvester-13.140.145.210
 **Date:** 2026-08-17
 **Author:** The Hunters Ledger
@@ -21,7 +20,7 @@ This campaign is a single operator's bespoke intrusion toolkit, not a commodity 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
 | YARA | 6 | 2 | T1190, T1048.003, T1132.001, T1554, T1014, T1505.003, T1068, T1588.005 | 2 |
-| Sigma | 7 | 3 | T1059.001, T1059.004, T1003.002, T1021.002, T1021.006, T1014, T1543, T1098, T1222.002, T1572, T1105 | 2 |
+| Sigma | 8 | 3 | T1059.001, T1059.004, T1003.002, T1021.002, T1021.006, T1014, T1543, T1098, T1136.001, T1222.002, T1572, T1105 | 2 |
 | Suricata | 10 | 2 | T1190, T1048.003, T1041, T1210, T1572, T1505.003, T1555 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, built for scoping and threat-hunting. Expect to review the hits.
@@ -651,27 +650,39 @@ level: high
 
 **Linux Kernel LPE (Public Dirty Frag)**
 
-#### Content Change to /etc/passwd or /usr/bin/su Outside a Package Transaction
+#### Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool
 
 **Tier:** Detection
 **Robustness:** 3
 **ATT&CK Coverage:** T1098 (Account Manipulation), T1222.002 (Linux and Mac File and Directory Permissions Modification)
 **Confidence:** HIGH
-**False Positives:** A legitimate package-manager transaction updating `shadow-utils` or `coreutils`, which should be correlated and excluded before alerting
-**Blind Spots:** Misses privilege escalation that creates a new uid-0 account elsewhere in `/etc/passwd` rather than overwriting line 1, or that patches a different SUID binary instead of `/usr/bin/su`
-**Validation:** Overwrite `/usr/bin/su` or touch `/etc/passwd` on a test host; a confirmed `apt`/`yum`/`dnf` transaction updating `shadow-utils` or `coreutils` in the same maintenance window must NOT be treated as a true positive
-**Deployment:** Linux EDR / Sysmon for Linux / auditd, all hosts, prioritized on any host exposed to a page-cache-write kernel exploit
+**False Positives:** Legitimate account provisioning against `/etc/passwd` via `systemd-sysusers`, `useradd`, or `chfn` is excluded above (`filter_system_account_tools`); this closed 4 of 4 lifetime alerts, all reproduced legitimate provisioning. A package-manager transaction that patches `/usr/bin/su` by updating `coreutils` is NOT filtered and should still be correlated and excluded before alerting.
+**Blind Spots:** Misses privilege escalation that creates a new uid-0 account elsewhere in `/etc/passwd` rather than overwriting line 1, or that patches a different SUID binary instead of `/usr/bin/su`. `filter_system_account_tools` also recognizes the invoking tool by binary path, not whether a package manager actually triggered it: an attacker who runs the genuine `useradd`, `chfn`, or `systemd-sysusers` binary directly against `/etc/passwd`, with no package transaction involved at all, is now silently excluded here too. That gap is exactly what the companion process_creation rule below targets, by watching argument shapes and process ancestry rather than tool identity.
+**Validation:** Overwrite `/usr/bin/su` directly, or touch `/etc/passwd` from a process whose image path does not end in `/systemd-sysusers`, `/useradd`, or `/chfn`; both must fire. Run `systemd-sysusers`, `useradd`, or `chfn` against `/etc/passwd` (or trigger the pacman `20-systemd-sysusers.hook` or a dpkg `adduser --system` post-install path) and confirm it does NOT fire, while a parallel `/usr/bin/su` overwrite in the same test still fires, confirming the filter is scoped to the `/etc/passwd` arm only.
+**Deployment:** Linux EDR / Sysmon for Linux / auditd, all hosts, prioritized on any host exposed to a page-cache-write kernel exploit. Deploy alongside the companion process_creation rule below, which restores the direct-invocation coverage this rule's package-tool exclusion gives up.
+
+*Fixed 2026-09-02 (measured on `logs-endpoint.events.file-*` over the full 55-day retained window).* The rule's original title claimed detection "outside a package transaction", which the query never implemented: `selection` matched any write to `/etc/passwd` or `/usr/bin/su` with no correlation to package-manager activity at all, so every legitimate account-provisioning write also alerted. Measured lifetime: 4 of 4 alerts were legitimate provisioning, reproduced independently on two unrelated package ecosystems, pacman's `20-systemd-sysusers.hook` on one host and dpkg's `adduser --system` (invoking `useradd` and `chfn`) on another. A genuine package-transaction correlation is not achievable with this telemetry: Elastic Endpoint file events carry no `process.parent.name` or `process.parent.executable`, only an opaque `process.parent.entity_id`, and the cross-index join needed to resolve the invoking process returns zero hits on one host and only a generic `perl` interpreter on the other, neither of which identifies a package transaction. `filter_system_account_tools` therefore excludes by invoking-tool identity instead, scoped to `/etc/passwd` only so `/usr/bin/su` keeps full, unfiltered coverage. Measured 4 to 0, with a residual check confirming zero other `/etc/passwd` or `/usr/bin/su` events in the 55-day corpus. The coverage this costs, an attacker running the genuine account tools directly with no package transaction involved, is accepted deliberately and mitigated by the companion rule below (`ea34e2ee-aedb-4ead-a572-2fb6531e41a2`).
 
 ```yaml
-title: Content Change to /etc/passwd or /usr/bin/su Outside a Package Transaction
+title: Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool
 id: 9d64a8dc-f752-4455-9329-73ff8738d150
 status: experimental
 description: >-
-    Detects a file-write event against /etc/passwd or /usr/bin/su. Both are
-    the two overwrite targets of a public Linux kernel local-privilege-
-    escalation exploit chain that patches the page cache via IPsec/XFRM or
-    AF_RXRPC splice tricks to create a uid-0 account or a backdoored su
-    binary without any legitimate package installation.
+    Detects a file-write event against /etc/passwd or /usr/bin/su, excluding
+    writes to /etc/passwd made by the known account-provisioning tools
+    systemd-sysusers, useradd, and chfn. Both files are the two overwrite
+    targets of a public Linux kernel local-privilege-escalation exploit chain
+    that patches the page cache via IPsec/XFRM or AF_RXRPC splice tricks to
+    create a uid-0 account or a backdoored su binary without any legitimate
+    package installation. This rule recognizes the invoking tool by binary
+    path, not whether a package manager actually triggered it, so it does not
+    correlate with an actual package transaction: every /usr/bin/su write
+    still alerts regardless of what wrote it. See the companion
+    process_creation rule, Useradd or Usermod Setting a Root-Equivalent or
+    Duplicate UID Outside a Known Package Manager
+    (ea34e2ee-aedb-4ead-a572-2fb6531e41a2), for coverage of these same account
+    tools when an attacker invokes them directly rather than through a
+    package's post-install hook.
 references:
     - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
 author: The Hunters Ledger
@@ -690,12 +701,127 @@ detection:
         TargetFilename:
             - '/etc/passwd'
             - '/usr/bin/su'
-    condition: selection
+    filter_system_account_tools:
+        # sourced: measured 2026-09-02 on logs-endpoint.events.file-* over the full
+        # 55-day retained window - 4 of 4 lifetime alerts were legitimate account
+        # provisioning, reproduced independently via pacman's 20-systemd-sysusers.hook
+        # and dpkg's adduser --system (invoking useradd and chfn)
+        TargetFilename: '/etc/passwd'
+        Image|endswith:
+            - '/systemd-sysusers'
+            - '/useradd'
+            - '/chfn'
+    condition: selection and not filter_system_account_tools
 falsepositives:
-    - A legitimate package-manager transaction updating shadow-utils or coreutils, which should be correlated and excluded before alerting
+    - >-
+        A package-manager transaction that patches /usr/bin/su by updating coreutils.
+        This arm is NOT filtered above (the exclusion is scoped to /etc/passwd only)
+        and should still be correlated and excluded before alerting.
+    - >-
+        Legitimate account provisioning against /etc/passwd via systemd-sysusers,
+        useradd, or chfn is excluded above and should not appear as an alert; if one
+        does, confirm the invoking binary path actually matches one of the three
+        filtered tools.
 level: high
 ```
 **File name:** `file_event_lnx_passwd_su_privesc_tamper.yml`
+
+#### Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager
+
+**Tier:** Detection
+**Robustness:** 3
+**ATT&CK Coverage:** T1136.001 (Local Account), T1098 (Account Manipulation)
+**Confidence:** HIGH
+**False Positives:** A deliberately provisioned dual-root-equivalent service account documented as a business exception, for example a legacy appliance or application that requires `--non-unique` or `-u 0`. A configuration-management tool (Ansible, Puppet, Chef, cloud-init) that shells out to `useradd` or `usermod` directly instead of through a package manager, since the parent-image filter below only excludes package-manager parents, not provisioning frameworks.
+**Blind Spots:** Misses privilege escalation via `useradd`/`usermod` that avoids these specific flags entirely, for example `usermod -aG sudo` or `usermod -aG wheel` to add an existing account to a privileged group, or any route that edits `/etc/passwd`, `/etc/shadow`, or `/etc/sudoers` directly rather than going through these two tools; the companion file_event rule (`9d64a8dc-f752-4455-9329-73ff8738d150`) covers the direct-file-edit path for `/etc/passwd` and `/usr/bin/su` specifically. The package-manager parent filter is also a fixed list of known binaries, not a true transaction correlation: a configuration-management tool not on that list, or a bespoke provisioning script that itself shells out to `useradd`/`usermod`, is not distinguished from an attacker doing the same thing.
+**Validation:** Run `usermod -u 0 <existing-non-root-account>` or `useradd -o -u 0 backdoor` directly from an interactive shell on a test host; must fire. Trigger a real package installation whose postinst script calls `useradd` (for example a package that provisions a system account) and confirm it does NOT fire, because its parent resolves to the package manager.
+**Deployment:** Linux EDR / Sysmon for Linux / auditd (SYSCALL and EXECVE records correlated to a resolved parent), all hosts. Deploy alongside the companion file_event rule (`9d64a8dc-f752-4455-9329-73ff8738d150`), which covers the same technique from the file-write side and gives up direct-invocation coverage that this rule restores.
+
+*Authored 2026-09-02 to close the gap recorded against `9d64a8dc-f752-4455-9329-73ff8738d150`.* That rule's `filter_system_account_tools` exclusion recognizes `systemd-sysusers`, `useradd`, and `chfn` by binary path alone, with no way to confirm a package manager actually invoked them, because Elastic Endpoint file events carry no resolved parent-process field. An attacker who runs those same binaries directly, with a shell or an SSH session as the real parent, is therefore invisible to that rule. Process-creation telemetry does carry `ParentImage`, so this rule targets the same tools from that side instead: a high-signal argument shape that grants a root-equivalent or duplicate UID/GID, which fires unless the parent resolves to a known package manager.
+
+```yaml
+title: Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager
+id: ea34e2ee-aedb-4ead-a572-2fb6531e41a2
+status: experimental
+description: >-
+    Detects useradd or usermod invoked with a flag that grants a root-
+    equivalent or duplicate UID/GID (-o, -u 0, -g 0, --non-unique, or their
+    long-form equivalents), where the parent process is not a known package
+    manager. This is the direct-invocation counterpart to Content Change to
+    /etc/passwd or /usr/bin/su by a Non-Package Account Tool
+    (9d64a8dc-f752-4455-9329-73ff8738d150): that rule excludes writes to
+    /etc/passwd made by these same account tools so it does not re-alert on
+    routine package-driven provisioning, and by construction cannot see the
+    tools invoked directly by an attacker, because file-write telemetry alone
+    carries no reliable process-ancestry field. This rule uses process-
+    creation telemetry instead, which does carry ParentImage, to restore that
+    direct-invocation coverage.
+references:
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
+author: The Hunters Ledger
+date: 2026-09-02
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1136.001
+    - attack.t1098
+    - stp.4
+logsource:
+    category: process_creation
+    product: linux
+    definition: >-
+        Requires process-creation telemetry carrying both CommandLine and a
+        resolved ParentImage, for example Sysmon for Linux Event ID 1 or an
+        EDR agent process-creation event. Plain auditd EXECVE records alone
+        do not carry a resolved ParentImage field without additional PPID
+        correlation.
+detection:
+    selection_tool:
+        Image|endswith:
+            - '/useradd'
+            - '/usermod'
+    selection_privileged_flags:
+        CommandLine|contains:
+            - ' -o '
+            - ' -u 0'
+            - ' -u0'
+            - ' --uid 0'
+            - ' --uid=0'
+            - ' -g 0'
+            - ' -g0'
+            - ' --gid 0'
+            - ' --gid=0'
+            - '--non-unique'
+    filter_parent_pkgmgr:
+        # sourced: documented platform default - the standard Linux package-manager
+        # binaries (dpkg/apt on Debian-family, rpm/yum/dnf on RHEL-family, pacman on
+        # Arch-family) that legitimately invoke useradd/usermod from postinst or hook
+        # scripts during package installation
+        ParentImage|endswith:
+            - '/dpkg'
+            - '/apt'
+            - '/apt-get'
+            - '/rpm'
+            - '/yum'
+            - '/dnf'
+            - '/pacman'
+            - '/systemd-sysusers'
+    condition: selection_tool and selection_privileged_flags and not filter_parent_pkgmgr
+falsepositives:
+    - >-
+        A deliberately provisioned dual-root-equivalent service account on an
+        appliance or legacy application that documents a --non-unique or -u 0
+        requirement. Verify against change records before treating as a true
+        positive.
+    - >-
+        A configuration-management tool (Ansible, Puppet, Chef, cloud-init) that
+        shells out to useradd or usermod directly rather than through a package
+        manager. The parent-image filter above only excludes package-manager
+        parents, not provisioning frameworks, so an environment using one of
+        these should extend filter_parent_pkgmgr with its process name.
+level: high
+```
+**File name:** `proc_creation_lnx_useradd_usermod_uid0_privesc.yml`
 
 ### Hunting Rules
 

@@ -6,7 +6,6 @@ permalink: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.15
 thumbnail: /assets/images/cards/turkish-arpa-openclaw-state-insurer-209.38.205.158.png
 hide: true
 ---
-
 **Campaign:** Turkish-ARPA-OpenClaw-State-Insurer-UTA-2026-013-209.38.205.158
 **Date:** 2026-05-26
 **Author:** The Hunters Ledger
@@ -15,13 +14,13 @@ hide: true
 
 > **Scope note:** This file covers **Case 2 (Turkish ARPA Operator / the victim organization)** per-case detection signatures only. Cross-campaign and cross-operator signatures are in the parent file at `/hunting-detections/ai-agent-frameworks-2026-05-23-detections/`. Do not duplicate parent-file rules here.
 
-> **Operational sensitivity:** The insider user identifier (`[employee ID, suppressed]`) and operator residential IP (`31.223.97.87`) appear in indicators below. These are included because they are load-bearing for detection rules; they are suppressed from the public-facing report body per the disclosure-cascade protocol. Rules referencing these values should be treated as restricted-distribution until the victim-org coordination step is complete.
+> **Operational sensitivity:** The insider user identifier (`[employee ID — suppressed]`) and operator residential IP (`31.223.97.87`) appear in indicators below. These are included because they are load-bearing for detection rules; they are suppressed from the public-facing report body per the disclosure-cascade protocol. Rules referencing these values should be treated as restricted-distribution until the victim-org coordination step is complete.
 
 ---
 
 ## Detection Coverage Summary
 
-This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) into Detection / Hunting per the project's four-gate tiering rubric. One Sigma rule and five Suricata rules are pure atomics. A bare C2 IP or a bare ecosystem domain with no surviving behavioral discriminator once the literal is removed, and are retired as standalone rules; their literals are already present in the campaign's IOC feed. Two Suricata rules are cut outright (one pre-existing overbroad withdrawal, one redundant duplicate of a broader surviving rule). One Sigma rule (`Sigma Rule 7`) contained dead detection logic, an impossible same-event `AND` across four mutually-exclusive `EventSource` values that could never be true on a single log record, and has been corrected to a satisfiable single-event selection, consistent with this file's own established pattern (see `Sigma Rule 8`) of surfacing a per-event signal and documenting the SIEM-side correlation it requires in prose rather than inventing unsupported correlation syntax.
+This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) into Detection / Hunting per the project's four-gate tiering rubric. One Sigma rule and five Suricata rules are pure atomics — a bare C2 IP or a bare ecosystem domain with no surviving behavioral discriminator once the literal is removed — and are retired as standalone rules; their literals are already present in the campaign's IOC feed. Two Suricata rules are cut outright (one pre-existing overbroad withdrawal, one redundant duplicate of a broader surviving rule). One Sigma rule (`Sigma Rule 7`) contained dead detection logic — an impossible same-event `AND` across four mutually-exclusive `EventSource` values that could never be true on a single log record — and has been corrected to a satisfiable single-event selection, consistent with this file's own established pattern (see `Sigma Rule 8`) of surfacing a per-event signal and documenting the SIEM-side correlation it requires in prose rather than inventing unsupported correlation syntax.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
@@ -31,26 +30,26 @@ This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) i
 
 **Total:** 21 rules across 3 detection layers (14 Detection, 7 Hunting), plus 6 atomics already carried in the IOC feed and 2 rules cut outright.
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
 
 **Coverage approach (unchanged from original analysis):** Rules are organized by the three campaign surfaces:
-1. **Victim-side artifacts**, PowerShell collector deployed on the victim organization's hosts + insider reverse-tunnel tooling
-2. **Operator-side platform artifacts**, ARPA Python ETL platform, systemd service naming, AI service, Markdown ops notes
-3. **Network / infrastructure layer**, C2 ingestion endpoints, DNS, SSH tunnel patterns, Instana API abuse
+1. **Victim-side artifacts** — PowerShell collector deployed on the victim organization's hosts + insider reverse-tunnel tooling
+2. **Operator-side platform artifacts** — ARPA Python ETL platform, systemd service naming, AI service, Markdown ops notes
+3. **Network / infrastructure layer** — C2 ingestion endpoints, DNS, SSH tunnel patterns, Instana API abuse
 
 **Highest-confidence anchors:**
-- The operator's self-branded strings (`ARPA Korelasyon Motoru`, the dashboard footer, the versioned `correlation_v3.py` docstring), durable, near-zero FP; rebranding the entire platform is the only evasion path (YARA Detection).
-- The `arpa-*` systemd naming cluster and prefix pattern. Five observed unit names plus a durable directory+prefix pattern that also catches unnamed future units (YARA + Sigma Detection).
+- The operator's self-branded strings (`ARPA Korelasyon Motoru`, the dashboard footer, the versioned `correlation_v3.py` docstring) — durable, near-zero FP; rebranding the entire platform is the only evasion path (YARA Detection).
+- The `arpa-*` systemd naming cluster and prefix pattern — five observed unit names plus a durable directory+prefix pattern that also catches unnamed future units (YARA + Sigma Detection).
 - The Turkish-language insider-recruitment Markdown filename family (`GERCEK_API_BULUNDU`, `PUTTY_TUNNEL_DETAY`, `SSH_KEY_COZUM`, etc.) combined with the `ARPA_Tunnel` session name and `rca_key` artifacts (YARA + Sigma Detection).
 
-**Atomics routed to the IOC feed (already present, no new feed entries required):** the operator C2 IP `209.38.205.158` (with its documented ports 8090/8095/8096) and the OpenClaw ecosystem domains (`openclaw.ai`, `docs.openclaw.ai`, `lightmake.site`, the Tencent skill-marketplace CDN) were each the sole discriminator of a rule with no surviving behavior once the literal is removed. All are already present in [`turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json). No feed edits were made.
+**Atomics routed to the IOC feed (already present — no new feed entries required):** the operator C2 IP `209.38.205.158` (with its documented ports 8090/8095/8096) and the OpenClaw ecosystem domains (`openclaw.ai`, `docs.openclaw.ai`, `lightmake.site`, the Tencent skill-marketplace CDN) were each the sole discriminator of a rule with no surviving behavior once the literal is removed. All are already present in [`turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json) — no feed edits were made.
 
-**Victim-domain exception (Hunting, not atomic-routed):** two rules (Sigma Rule 2, Suricata Rule 1) key on the victim organization's own redacted Instana tenant hostname (`*.ocpinstana.[victim-domain].com.tr`) with no additional behavioral filter. Structurally this is an atomic pattern, but the underlying literal is the *victim's own asset* rather than attacker infrastructure, and the campaign's disclosure policy explicitly excludes victim infrastructure from the public IOC feed, so it cannot be routed there. Both rules are retained as **Hunting** tier for the victim organization's own internal/IR use (this file is already restricted-distribution per the Operational Sensitivity note above), not as general public-feed-eligible atomics. See Coverage Gaps for the full rationale.
+**Victim-domain exception (Hunting, not atomic-routed):** two rules (Sigma Rule 2, Suricata Rule 1) key on the victim organization's own redacted Instana tenant hostname (`*.ocpinstana.[victim-domain].com.tr`) with no additional behavioral filter. Structurally this is an atomic pattern, but the underlying literal is the *victim's own asset* rather than attacker infrastructure — and the campaign's disclosure policy explicitly excludes victim infrastructure from the public IOC feed, so it cannot be routed there. Both rules are retained as **Hunting** tier for the victim organization's own internal/IR use (this file is already restricted-distribution per the Operational Sensitivity note above), not as general public-feed-eligible atomics. See Coverage Gaps for the full rationale.
 
 **Calibration notes carried forward from original analysis:**
-- **Observability-Tool Reverse Pipeline TTP novelty:** maintained at high-MODERATE (top of MODERATE band) novelty confidence after full prior-art review. Closest adjacent documented case (UNC6395 OAuth-based CRM breach) is structurally distinct. One-time CRM exfiltration vs. sustained 4-source observability ETL. The Sigma rule targeting the multi-source cross-platform authentication pattern (Sigma Rule 7, corrected below) is Hunting-tier. It surfaces the qualifying per-event signal but still requires SIEM-side correlation to realize the full novel-TTP detection value.
+- **Observability-Tool Reverse Pipeline TTP novelty:** maintained at high-MODERATE (top of MODERATE band) novelty confidence after full prior-art review. Closest adjacent documented case (UNC6395 OAuth-based CRM breach) is structurally distinct — one-time CRM exfiltration vs. sustained 4-source observability ETL. The Sigma rule targeting the multi-source cross-platform authentication pattern (Sigma Rule 7, corrected below) is Hunting-tier — it surfaces the qualifying per-event signal but still requires SIEM-side correlation to realize the full novel-TTP detection value.
 - **AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials** (`ai_service.py` + `ai_assistant.db` pattern): CANDIDATE novel TTP at N=1. YARA Rule 5 targets this pattern specifically and is Hunting-tier pending N≥2 cross-operator validation.
-- **10-year Instana JWT governance defect:** the stolen JWT (`jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3`, exp ~2034-02) is a victim-side credential management defect. This is NOT an IBM Instana CVE. Sigma Rule 6 (long-lived JWT detection) is a Detection-tier governance baseline rule for Instana customers; IBM PSIRT coordination is a product-hardening recommendation, not a CVE-disclosure path.
+- **10-year Instana JWT governance defect:** the stolen JWT (`jti: 022a1b74-2332-4df5-a76b-60225ffa7ae3`, exp ~2034-02) is a victim-side credential management defect — this is NOT an IBM Instana CVE. Sigma Rule 6 (long-lived JWT detection) is a Detection-tier governance baseline rule for Instana customers; IBM PSIRT coordination is a product-hardening recommendation, not a CVE-disclosure path.
 
 ---
 
@@ -58,7 +57,7 @@ This backfill re-tiers the original 29-rule set (8 YARA, 12 Sigma, 9 Suricata) i
 
 ### Detection Rules
 
-#### Rule 1: PowerShell Instana Local Collector
+#### Rule 1 — PowerShell Instana Local Collector
 
 **Tier:** Detection
 **Robustness:** 2
@@ -104,7 +103,7 @@ rule MAL_PowerShell_Instana_Local_Collector_Family {
 }
 ```
 
-#### Rule 2: ARPA Observability Harvester Platform
+#### Rule 2 — ARPA Observability Harvester Platform
 
 **Tier:** Detection
 **Robustness:** 3
@@ -149,7 +148,7 @@ rule MAL_Python_ARPA_Observability_Harvester_Platform {
 }
 ```
 
-#### Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document
+#### Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document
 
 **Tier:** Detection
 **Robustness:** 3
@@ -190,7 +189,7 @@ rule MAL_PSScript_Insider_TunnelSetup_Turkish {
 }
 ```
 
-#### Rule 4: Multi-Source Observability Polling Python Script
+#### Rule 4 — Multi-Source Observability Polling Python Script
 
 **Tier:** Detection
 **Robustness:** 2
@@ -234,7 +233,7 @@ rule MAL_Python_Instana_SolarWinds_Zabbix_VMwareAria_Polling {
 }
 ```
 
-#### Rule 6: ARPA Cross-Source Correlation ETL Engine
+#### Rule 6 — ARPA Cross-Source Correlation ETL Engine
 
 **Tier:** Detection
 **Robustness:** 3
@@ -273,7 +272,7 @@ rule MAL_Python_ARPA_CrossSource_Correlation_ETL {
 }
 ```
 
-#### Rule 7: ARPA Operator Ops Notes Markdown Family
+#### Rule 7 — ARPA Operator Ops Notes Markdown Family
 
 **Tier:** Detection
 **Robustness:** 2
@@ -312,7 +311,7 @@ rule MAL_Markdown_ARPA_OperatorNote_Family {
 }
 ```
 
-#### Rule 8: ARPA Platform Systemd Service Units
+#### Rule 8 — ARPA Platform Systemd Service Units
 
 **Tier:** Detection
 **Robustness:** 3
@@ -353,7 +352,7 @@ rule MAL_SystemdUnit_ARPA_Platform_Services {
 
 ### Hunting Rules
 
-#### Rule 5: ARPA AI Service Natural-Language Query Interface
+#### Rule 5 — ARPA AI Service Natural-Language Query Interface
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -398,7 +397,7 @@ rule MAL_Python_ARPA_AI_Service_NaturalLanguage_Query {
 
 ### Detection Rules
 
-#### Sigma Rule 1: PowerShell Process Invoking Instana API with Stored JWT Bearer Token
+#### Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token
 
 **Tier:** Detection
 **Robustness:** 2
@@ -455,7 +454,7 @@ falsepositives:
 level: high
 ```
 
-#### Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern
+#### Sigma Rule 3 — Systemd Unit Creation Matching `arpa-*` Naming Pattern
 
 **Tier:** Detection
 **Robustness:** 3
@@ -503,7 +502,7 @@ falsepositives:
 level: high
 ```
 
-#### Sigma Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP
+#### Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP
 
 **Tier:** Detection
 **Robustness:** 3
@@ -565,7 +564,7 @@ falsepositives:
 level: high
 ```
 
-#### Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name
+#### Sigma Rule 5 — PuTTY Saved Session Created with Tunnel or ARPA Name
 
 **Tier:** Detection
 **Robustness:** 3
@@ -612,7 +611,7 @@ falsepositives:
 level: high
 ```
 
-#### Sigma Rule 6: Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)
+#### Sigma Rule 6 — Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)
 
 **Tier:** Detection
 **Robustness:** 2
@@ -667,7 +666,7 @@ falsepositives:
 level: high
 ```
 
-#### Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory
+#### Sigma Rule 9 — Operator-Supplied SSH Key File in User `.ssh` Directory
 
 **Tier:** Detection
 **Robustness:** 2
@@ -719,7 +718,7 @@ level: high
 
 ### Hunting Rules
 
-#### Sigma Rule 2: Outbound HTTPS to the Victim Organization Instana Tenant
+#### Sigma Rule 2 — Outbound HTTPS to the Victim Organization Instana Tenant
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -768,7 +767,7 @@ falsepositives:
 level: medium
 ```
 
-#### Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator)
+#### Sigma Rule 7 — Observability Platform Authentication Event (Cross-Source Burst Indicator)
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -827,7 +826,7 @@ falsepositives:
 level: low
 ```
 
-#### Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source
+#### Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -878,7 +877,7 @@ falsepositives:
 level: medium
 ```
 
-#### Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089
+#### Sigma Rule 10 — Non-Splunk Process Connecting to Localhost Port 8089
 
 **Tier:** Hunting
 **Robustness:** 1
@@ -886,17 +885,19 @@ level: medium
 **Confidence:** MODERATE — port 8089 is not uniquely operator-specific.
 **Rationale:** Keys on a single generic port literal (8089) with only a Splunk-process exclusion filter; other legitimate custom services can bind to the same port beyond just Splunk, which the original author already flagged as HIGH FP risk.
 **False Positives:** HIGH — Splunk uses port 8089 for its management API by default (excluded here), but custom internal web services or other monitoring agents commonly use 8089 as a secondary management port too.
-**Deployment:** Sysmon Event ID 3 (network connection); EDR network telemetry on Windows endpoints. Requires filtering for non-Splunk initiators; cross-reference hits against known internal services using this port before escalation.
+**Deployment:** Sysmon Event ID 3 (network connection), or equivalent EDR network telemetry, on Windows and Linux endpoints alike: the loopback-8089 discriminator carries no OS dependency, and the exclusion list now covers Splunk's Windows and Linux installation paths accordingly, even though `logsource.product` is still tagged `windows` (see the 2026-09-02 note below). Requires filtering for non-Splunk initiators; cross-reference hits against known internal services using this port before escalation.
 
 **FP remediation note (2026-08-20):** TCP/8089 is Splunk's conventional default, not an IANA reservation or an OS-enforced binding, so any locally installed software may use it. Naming only Splunk in the exclusion covered one instance of an unbounded behaviour class. Confirmed in production: 4,402 alerts over 14 days, 100 percent of them Razer App Engine, a signed vendor application shipped with consumer gaming peripherals and therefore present across ordinary Windows fleets rather than peculiar to any one network. Excluding it is a source fix and not a local tune, because every subscriber running this rule inherits the same collision. Measured 4,402 to 0 with no residual, over both a 14-day and a 90-day window. Both exclusions are directory-pinned rather than filename-pinned, so a binary of either name dropped elsewhere on disk still alerts. `level` moves to `low` to match the Robustness-1 tiering this rule already carried: a lone hit is a hunting lead, and priority belongs to hits that co-occur with the reverse-tunnel establishment covered by Sigma Rule 12 (`d49b3f9d-31e8-4ed8-8c62-87aba3aedd66`).
 
+**FP remediation note (2026-09-02):** The rule's discriminator, a loopback connection to port 8089, carries no OS dependency (neither T1572 nor T1021.004 is Windows-specific), but every exclusion had been a Windows path literal, so a Linux host running Splunk collided with the rule wholesale. `logsource.product` never becomes a runtime filter on this deploy chain: reading `convert_to_elastic.py` confirms its only per-rule rewrite is the EQL event-category anchor, so the `windows` tag does not scope which endpoints the compiled query actually runs against. Measured on `logs-endpoint.events.network-*`: adding the Linux Splunk paths leaves the count at 1 to 1 over both a 14-day and a 90-day window, because the one live hit is this network's own Vantage `python3.12` process rather than Splunk; that residual is being released to a local exception instead of folded into this rule. An alternative fix, gating on `host.os.type == windows`, was measured at 1 to 0 and rejected: it would permanently blind the rule on a fleet measured at 99.3 percent Linux by network-event volume over the same 90 days. `logsource.product: windows` is left as known-stale metadata rather than corrected here, because retagging it reroutes the conversion pipeline to a branch that has not itself been validated, and that is separate work not folded into this fix.
+
 ```yaml
-title: Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Windows Host
+title: Non-Splunk Process Connecting to Localhost Port 8089 on Enterprise Host
 id: 47e5169f-572c-4d87-9fda-578a23e58beb
 status: experimental
 description: >-
   Detects processes other than Splunk (which legitimately uses port 8089 for management)
-  initiating TCP connections to localhost port 8089 on enterprise Windows hosts. Port 8089
+  initiating TCP connections to localhost port 8089 on enterprise hosts. Port 8089
   is the insider-side tunnel bind point in the Turkish ARPA operator's reverse SSH tunnel
   architecture: traffic from localhost:8089 on the insider's machine is forwarded through
   the SSH reverse tunnel to the operator's listener on port 18080 at 209.38.205.158.
@@ -927,6 +928,10 @@ detection:
             - '\Splunk\bin\splunk.exe'
             - '\SplunkUniversalForwarder\bin\splunkd.exe'
             - '\SplunkUniversalForwarder\bin\splunk.exe'
+            - '/opt/splunk/bin/splunkd'
+            - '/opt/splunk/bin/splunk'
+            - '/opt/splunkforwarder/bin/splunkd'
+            - '/opt/splunkforwarder/bin/splunk'
     filter_razer:
         Image|contains: '\Razer\RazerAppEngine\'
         Image|endswith: '\razerappengine.exe'
@@ -949,7 +954,7 @@ falsepositives:
 level: low
 ```
 
-#### Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation
+#### Sigma Rule 12 — Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation
 
 **Tier:** Hunting
 **Robustness:** 2
@@ -1048,63 +1053,63 @@ alert dns $HOME_NET any -> any any (msg:"THL Turkish-ARPA-State-Insurer DNS Quer
 
 ## Coverage Gaps
 
-**Atomics routed to the IOC feed (already present, no feed edits made).** Six rules from the original file keyed solely on one hard-coded, rotation-prone literal with no surviving behavioral discriminator once that literal is removed:
-- **Sigma Rule 11** (`Outbound HTTP Connection to Turkish ARPA Platform Endpoints`), bare match on the operator IP `209.38.205.158` plus a fixed port list (8090/8095/8096). Both the IP and its ports are already documented in [`turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json) (`network_indicators.ipv4`).
-- **Suricata sid 9001002** (`HTTP Egress to ARPA Operator Platform`), matched the same operator IP plus a generic `/api/` URI substring, which adds no discriminating value on its own (it matches virtually any REST API traffic).
-- **Suricata sid 9001004** (`Outbound SSH Connection to ARPA Operator VPS`), matched the operator IP plus a bare port-22 SYN, with no application-layer discriminator (Suricata cannot inspect payload inside an encrypted SSH session).
-- **Suricata sids 9001006, 9001007, 9001008** (`HTTP/DNS Egress to OpenClaw Distribution Domains`), bare `content` matches on `openclaw.ai`, the Tencent skill-marketplace CDN, and `lightmake.site`. All three domains are already present in the feed's `network_indicators.domains` with `action: MONITOR`; the original author's own MODERATE confidence / MEDIUM-HIGH FP self-assessment ("OpenClaw domains alone don't prove malicious use") supports routing rather than retaining as standalone signatures.
+**Atomics routed to the IOC feed (already present — no feed edits made).** Six rules from the original file keyed solely on one hard-coded, rotation-prone literal with no surviving behavioral discriminator once that literal is removed:
+- **Sigma Rule 11** (`Outbound HTTP Connection to Turkish ARPA Platform Endpoints`) — bare match on the operator IP `209.38.205.158` plus a fixed port list (8090/8095/8096). Both the IP and its ports are already documented in [`turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json) (`network_indicators.ipv4`).
+- **Suricata sid 9001002** (`HTTP Egress to ARPA Operator Platform`) — matched the same operator IP plus a generic `/api/` URI substring, which adds no discriminating value on its own (it matches virtually any REST API traffic).
+- **Suricata sid 9001004** (`Outbound SSH Connection to ARPA Operator VPS`) — matched the operator IP plus a bare port-22 SYN, with no application-layer discriminator (Suricata cannot inspect payload inside an encrypted SSH session).
+- **Suricata sids 9001006, 9001007, 9001008** (`HTTP/DNS Egress to OpenClaw Distribution Domains`) — bare `content` matches on `openclaw.ai`, the Tencent skill-marketplace CDN, and `lightmake.site`. All three domains are already present in the feed's `network_indicators.domains` with `action: MONITOR`; the original author's own MODERATE confidence / MEDIUM-HIGH FP self-assessment ("OpenClaw domains alone don't prove malicious use") supports routing rather than retaining as standalone signatures.
 
-**Cut outright (not routed to feed, no residual detection value).**
-- **Suricata sid 9001003** (bundled under the original "Suricata Rule 2") duplicated the `/api/ingest/instana` URI-based POST detection with an unnecessary destination-IP restriction to `209.38.205.158`. The surviving Suricata Detection rule above (sid 9001005) implements the identical URI-based logic without that restriction and is therefore strictly broader, retaining both provided no additional coverage.
-- **Suricata sid 9001009** (`Long-Lived SSH Session from Internal Windows Host to External IP`) was already withdrawn by a prior edit (2026-06-19) as overbroad. A flow-only `$HOME_NET -> $EXTERNAL_NET:22` match fires on all outbound SSH, including legitimate git-over-SSH and administration. It remains commented out in the source; no further action taken here beyond confirming the withdrawal rationale still holds.
+**Cut outright (not routed to feed — no residual detection value).**
+- **Suricata sid 9001003** (bundled under the original "Suricata Rule 2") duplicated the `/api/ingest/instana` URI-based POST detection with an unnecessary destination-IP restriction to `209.38.205.158`. The surviving Suricata Detection rule above (sid 9001005) implements the identical URI-based logic without that restriction and is therefore strictly broader — retaining both provided no additional coverage.
+- **Suricata sid 9001009** (`Long-Lived SSH Session from Internal Windows Host to External IP`) was already withdrawn by a prior edit (2026-06-19) as overbroad — a flow-only `$HOME_NET -> $EXTERNAL_NET:22` match fires on all outbound SSH, including legitimate git-over-SSH and administration. It remains commented out in the source; no further action taken here beyond confirming the withdrawal rationale still holds.
 
-**Victim-domain exception: why Sigma Rule 2 and the Suricata DNS rule are Hunting rather than atomic-routed.** Both key on the victim organization's own redacted Instana tenant hostname (`*.ocpinstana.[victim-domain].com.tr`) with no additional behavioral filter, structurally the same "bare domain" pattern as the routed atomics above. The difference: this hostname is the *victim's own asset*, not attacker-controlled infrastructure, and the campaign's disclosure policy (see the IOC feed's `metadata.notes`) explicitly excludes victim infrastructure from the public feed. Cutting these rules entirely would discard real governance/access-anomaly value for the one audience this restricted-distribution, per-case file explicitly serves. The victim organization's own IR team. Both rules are retained as Hunting with an explicit false-positives note that designated Instana admin hosts will also match and require triage.
+**Victim-domain exception — why Sigma Rule 2 and the Suricata DNS rule are Hunting rather than atomic-routed.** Both key on the victim organization's own redacted Instana tenant hostname (`*.ocpinstana.[victim-domain].com.tr`) with no additional behavioral filter — structurally the same "bare domain" pattern as the routed atomics above. The difference: this hostname is the *victim's own asset*, not attacker-controlled infrastructure, and the campaign's disclosure policy (see the IOC feed's `metadata.notes`) explicitly excludes victim infrastructure from the public feed. Cutting these rules entirely would discard real governance/access-anomaly value for the one audience this restricted-distribution, per-case file explicitly serves — the victim organization's own IR team. Both rules are retained as Hunting with an explicit false-positives note that designated Instana admin hosts will also match and require triage.
 
 The following techniques and detection surfaces were observed in malware-analyst findings but could not be covered with high-confidence, production-ready rules due to data availability or structural detection limitations. Each gap is documented with the evidence that was present and what additional data would enable rule creation.
 
-### Gap 1: LLM Vendor-Side Detection (Moonshot AI / Kimi)
+### Gap 1 — LLM Vendor-Side Detection (Moonshot AI / Kimi)
 
 **Technique:** T1587 (Develop Capabilities), novel AI-augmented-operator pattern
 **Observed:** The operator uses Moonshot AI (Kimi) as the LLM backend per `IDENTITY.md` on the operator's host. All operator code shows the AI-Generated Code Signature (verbose docstrings, emoji-in-output bleed, indentation decay, version-numbered file persistence). The LLM vendor has unique visibility into the operator's prompt history.
 **Why rules cannot be created:** Moonshot AI prompt telemetry is entirely within the LLM vendor's infrastructure — outside standard SOC detection scope. No network-observable indicator specifically identifies which prompts are malicious vs. legitimate.
 **What would enable detection:** Moonshot AI vendor telemetry sharing (coordinated disclosure to Moonshot AI / Beijing Moonshot AI Technology Co., Ltd.); vendor-side abuse pattern analysis; cross-account correlation within the Moonshot AI platform.
 
-### Gap 2: Insider-Detection Inside Victim AD Environment
+### Gap 2 — Insider-Detection Inside Victim AD Environment
 
 **Technique:** T1199 (Trusted Relationship), T1078.002 (Domain Accounts), T1098.004 (SSH Authorized Keys)
 **Observed:** The operator recruited a specifically-named Windows AD user (`[employee ID — suppressed]`) at the victim organization. The insider's activities inside the victim network (file creation, SSH tool usage, registry changes) are detectable only from inside the victim's AD domain with adequate Sysmon/EDR coverage.
-**Why rules cannot be created at this stage:** Sigma Rules 4, 5, and 9 (Detection tier) and Sigma Rules 10 and 12 (Hunting tier) in this file cover the observable host-level indicators; however, the most valuable detection data (AD authentication logs, lateral movement inside the network, file access to internal resources) requires victim-org cooperation and access to their internal SIEM/EDR. External third-party detection of insider behavior is structurally limited to network-egress and DNS patterns. Both of which are covered in the Suricata rules.
+**Why rules cannot be created at this stage:** Sigma Rules 4, 5, and 9 (Detection tier) and Sigma Rules 10 and 12 (Hunting tier) in this file cover the observable host-level indicators; however, the most valuable detection data (AD authentication logs, lateral movement inside the network, file access to internal resources) requires victim-org cooperation and access to their internal SIEM/EDR. External third-party detection of insider behavior is structurally limited to network-egress and DNS patterns — both of which are covered in the Suricata rules.
 **What would enable detection:** Victim-org IR engagement; preservation and sharing of Windows AD audit logs for the `[employee ID — suppressed]` account (2026-03-01 → present); Sysmon deployment retrospective on the insider's workstation.
 
-### Gap 3: Cross-Source ETL Detection Prior to Export
+### Gap 3 — Cross-Source ETL Detection Prior to Export
 
 **Technique:** T1119 (Automated Collection), T1213 (Data from Information Repositories), novel Observability-Tool Reverse Pipeline TTP
 **Observed:** The operator's cross-source ETL ingests data from all four observability sources (Instana + SolarWinds + Zabbix + VMware Aria) and correlates them into `unified_cross_source_topology.json`. The export/exfiltration event is detectable via the Suricata Detection rule above (HTTP POST to the ARPA ingestion endpoint). However, the collection event within each platform (normal API calls using stolen credentials that look identical to legitimate admin calls) is undetectable without cross-platform correlation context.
 **Why rules cannot be created:** Individual API calls to each platform using valid stolen credentials are indistinguishable from legitimate admin access at the single-platform level. Detection requires cross-platform correlation that most victim orgs cannot execute without SIEM integration across all four observability platform audit feeds simultaneously. Sigma Rule 7 (Hunting tier, corrected in this backfill) surfaces the qualifying per-event building block but cannot itself express the cross-event, cross-platform correlation — that requires a SIEM-native rule counting distinct `EventSource` values per source IP within a time window, layered on top of Sigma Rule 7.
 **What would enable detection:** IBM Instana audit log integration to SIEM; SolarWinds Orion API audit log export; Zabbix audit log SIEM integration; VMware Aria audit event export. The cross-source authentication-burst correlation becomes operative once at least two of these feeds are integrated and a SIEM-native correlation rule is layered on top of Sigma Rule 7.
 
-### Gap 4: SolarWinds Orion Stolen-Credential Abuse Detection
+### Gap 4 — SolarWinds Orion Stolen-Credential Abuse Detection
 
 **Technique:** T1078 (Valid Accounts), T1046 (Network Service Discovery)
 **Observed:** The operator enumerated 784 nodes + 6,566 interfaces from SolarWinds Orion with stolen credentials. Last fetch captured was 2026-03-13 04:15:01. The operator had valid credentials for the SolarWinds Orion API.
 **Why rules cannot be created:** SolarWinds Orion API audit telemetry is not a standard SIEM integration target in most environments. Detection of stolen-credential abuse within SolarWinds Orion requires SolarWinds-native audit log review or direct T&S coordination.
 **What would enable detection:** SolarWinds Orion audit log export to SIEM; SolarWinds Trust & Safety coordination for tenant-level anomaly detection on the the victim organization Orion instance; baseline establishment of legitimate admin source IPs against which new source IPs (including the operator's DigitalOcean VPS) can be compared.
 
-### Gap 5: VMware Aria Stolen-Credential Abuse Detection
+### Gap 5 — VMware Aria Stolen-Credential Abuse Detection
 
 **Technique:** T1078 (Valid Accounts), T1119 (Automated Collection)
 **Observed:** The operator ingested 8,649 VMware Aria events in a single sampled window — the highest single-source event volume, suggesting Aria is the operator's deepest visibility layer (vCenter / ESXi lifecycle events, VM resource alerts).
 **Why rules cannot be created:** VMware Aria (formerly vRealize Operations) audit telemetry requires specific Broadcom/VMware enterprise audit export configuration to integrate with external SIEMs. Detection of API credential abuse within the Aria stack requires Broadcom T&S coordination or native Aria audit review.
 **What would enable detection:** Broadcom T&S coordination for the the victim organization VMware Aria instance; vRealize Log Insight or vRealize Operations audit export to SIEM; baseline of legitimate Aria admin source IPs with anomaly detection on new source authentication.
 
-### Gap 6: Operator Residential IP Attribution Actions
+### Gap 6 — Operator Residential IP Attribution Actions
 
 **Technique:** T1583.003 (Virtual Private Server — attribution infrastructure), novel insider-detection-first structural rarity
 **Observed:** The operator interactive session from `31.223.97.87` (TurkNet AS12735, Turkish residential/SMB ISP) was captured 2026-05-20 21:22-21:30 UTC. This IP is attribution evidence, not C2 infrastructure. It appears in the operator's own dashboard access logs.
 **Why rules cannot be created:** The operator residential IP should NOT be blocked (it is a residential ISP serving millions of legitimate Turkish users; blocking would cause collateral damage). Detection rules targeting this IP would have enormous FP rates and are inappropriate for third-party deployment.
 **What would enable better tracking:** Turkish law enforcement coordination (USOM → SECRD Cybercrime Combat Department) for TurkNet subscriber subpoena on `31.223.97.87`; TurkNet abuse desk notification for account review; passive monitoring of this IP's future HTTP access patterns via Hunt.io infrastructure monitoring.
 
-### Gap 7: AI-Augmented NLQ Operator-Side Session Detection
+### Gap 7 — AI-Augmented NLQ Operator-Side Session Detection
 
 **Technique:** Novel CANDIDATE TTP — "AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials" (N=1, needs N≥2)
 **Observed:** The operator built `ai_service.py` + `ai_assistant.db` as a natural-language query interface over stolen Instana monitoring data. The service is in a broken/dev state on the current deployment but the architecture is intact (events table populated with 50 rows from the victim organization Instana).

@@ -1894,7 +1894,7 @@
       rules: "Stage-5a Ransomware Payload (YARA, Detection)"
       count: 1
 "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections":
-  total: 22
+  total: 23
   tactics: 11
   unresolved: []
   rows:
@@ -1926,7 +1926,12 @@
     - tactic: "Persistence"
       id: "T1098"
       name: "Account Manipulation"
-      rules: "Content Change to /etc/passwd or /usr/bin/su Outside a Package Transaction (SIGMA, Detection)"
+      rules: "Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool (SIGMA, Detection); Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager (SIGMA, Detection)"
+      count: 2
+    - tactic: "Persistence"
+      id: "T1136.001"
+      name: "Local Account"
+      rules: "Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager (SIGMA, Detection)"
       count: 1
     - tactic: "Persistence"
       id: "T1505.003"
@@ -1961,7 +1966,7 @@
     - tactic: "Defense Impairment"
       id: "T1222.002"
       name: "Linux and Mac Permissions"
-      rules: "Content Change to /etc/passwd or /usr/bin/su Outside a Package Transaction (SIGMA, Detection)"
+      rules: "Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool (SIGMA, Detection)"
       count: 1
     - tactic: "Credential Access"
       id: "T1003.002"
@@ -2751,8 +2756,8 @@
     - tactic: "Initial Access"
       id: "T1190"
       name: "Exploit Public-Facing Application"
-      rules: "Zimbra Web Shell Decoy Banner (webshell_zimbra_security_monitor_jsp) (YARA, Detection); GIF89a-Polyglot PHP Web Shell (webshell_gif89a_php_polyglot) (YARA, Detection); Ivanti Connect Secure Auth-Bypass Path Traversal to System Information (SIGMA, Detection); Exchange ProxyLogon SSRF Cookie Header on Autodiscover (SIGMA, Detection); Tableau Server Vizportal SSRF via getViewThumbnail or fetchBinary (SIGMA, Detection); Moodle Managefiles Plugin Local File Inclusion Attempt (SIGMA, Detection); Zimbra JSP Web Shell Dropped via Amavis Cpio Path Traversal (SIGMA, Detection); Ivanti Connect Secure CVE-2023-46805 Auth-Bypass Path Traversal (SURICATA, Detection); Ivanti Connect Secure CVE-2024-21887 Command Injection via cac/status (SURICATA, Detection); Exchange ProxyLogon CVE-2021-26855 SSRF Cookie Header on Autodiscover (SURICATA, Detection)"
-      count: 10
+      rules: "Zimbra Web Shell Decoy Banner (webshell_zimbra_security_monitor_jsp) (YARA, Detection); GIF89a-Polyglot PHP Web Shell (webshell_gif89a_php_polyglot) (YARA, Detection); Ivanti Connect Secure Auth-Bypass Path Traversal to System Information (SIGMA, Detection); Exchange ProxyLogon SSRF Cookie Header on Autodiscover (SIGMA, Detection); Tableau Server Vizportal SSRF via getViewThumbnail or fetchBinary (SIGMA, Detection); GenAI Chatbot API SSRF to Cloud Instance Metadata Service (SIGMA, Detection); Moodle Managefiles Plugin Local File Inclusion Attempt (SIGMA, Detection); Zimbra JSP Web Shell Dropped via Amavis Cpio Path Traversal (SIGMA, Detection); Ivanti Connect Secure CVE-2023-46805 Auth-Bypass Path Traversal (SURICATA, Detection); Ivanti Connect Secure CVE-2024-21887 Command Injection via cac/status (SURICATA, Detection); Exchange ProxyLogon CVE-2021-26855 SSRF Cookie Header on Autodiscover (SURICATA, Detection)"
+      count: 11
     - tactic: "Execution"
       id: "T1053.003"
       name: "Cron"
@@ -2786,8 +2791,8 @@
     - tactic: "Credential Access"
       id: "T1552.005"
       name: "Cloud Instance Metadata API"
-      rules: "Tableau Server Vizportal SSRF via getViewThumbnail or fetchBinary (SIGMA, Detection); Outbound Connection to Cloud Instance Metadata Service Address (SIGMA, Hunting)"
-      count: 2
+      rules: "Tableau Server Vizportal SSRF via getViewThumbnail or fetchBinary (SIGMA, Detection); GenAI Chatbot API SSRF to Cloud Instance Metadata Service (SIGMA, Detection); Outbound Connection to Cloud Instance Metadata Service Address (SIGMA, Hunting)"
+      count: 3
     - tactic: "Command and Control"
       id: "T1090.002"
       name: "External Proxy"
@@ -3021,82 +3026,82 @@
     - tactic: "Resource Development"
       id: "T1587"
       name: "Develop Capabilities"
-      rules: "Rule 7: ARPA Operator Ops Notes Markdown Family (YARA, Detection)"
+      rules: "Rule 7 — ARPA Operator Ops Notes Markdown Family (YARA, Detection)"
       count: 1
     - tactic: "Execution"
       id: "T1059.001"
       name: "PowerShell"
-      rules: "Rule 1: PowerShell Instana Local Collector (YARA, Detection); Sigma Rule 1: PowerShell Process Invoking Instana API with Stored JWT Bearer Token (SIGMA, Detection)"
+      rules: "Rule 1 — PowerShell Instana Local Collector (YARA, Detection); Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token (SIGMA, Detection)"
       count: 2
     - tactic: "Execution"
       id: "T1059.006"
       name: "Python"
-      rules: "Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 4: Multi-Source Observability Polling Python Script (YARA, Detection); Rule 6: ARPA Cross-Source Correlation ETL Engine (YARA, Detection); Rule 5: ARPA AI Service Natural-Language Query Interface (YARA, Hunting)"
+      rules: "Rule 2 — ARPA Observability Harvester Platform (YARA, Detection); Rule 4 — Multi-Source Observability Polling Python Script (YARA, Detection); Rule 6 — ARPA Cross-Source Correlation ETL Engine (YARA, Detection); Rule 5 — ARPA AI Service Natural-Language Query Interface (YARA, Hunting)"
       count: 4
     - tactic: "Execution"
       id: "T1569.002"
       name: "Service Execution"
-      rules: "Rule 8: ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern (SIGMA, Detection)"
+      rules: "Rule 8 — ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3 — Systemd Unit Creation Matching `arpa-*` Naming Pattern (SIGMA, Detection)"
       count: 2
     - tactic: "Persistence"
       id: "T1098.004"
       name: "SSH Authorized Keys"
-      rules: "Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA, Detection); Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory (SIGMA, Detection)"
+      rules: "Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA, Detection); Sigma Rule 9 — Operator-Supplied SSH Key File in User `.ssh` Directory (SIGMA, Detection)"
       count: 3
     - tactic: "Persistence"
       id: "T1543.002"
       name: "Systemd Service"
-      rules: "Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 8: ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern (SIGMA, Detection)"
+      rules: "Rule 2 — ARPA Observability Harvester Platform (YARA, Detection); Rule 8 — ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3 — Systemd Unit Creation Matching `arpa-*` Naming Pattern (SIGMA, Detection)"
       count: 3
     - tactic: "Stealth"
       id: "T1078"
       name: "Valid Accounts"
-      rules: "Rule 4: Multi-Source Observability Polling Python Script (YARA, Detection); Sigma Rule 6: Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline) (SIGMA, Detection); Sigma Rule 2: Outbound HTTPS to the Victim Organization Instana Tenant (SIGMA, Hunting); Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator) (SIGMA, Hunting); DNS Query Egress to the Victim Organization Instana Tenant (SURICATA, Hunting)"
+      rules: "Rule 4 — Multi-Source Observability Polling Python Script (YARA, Detection); Sigma Rule 6 — Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline) (SIGMA, Detection); Sigma Rule 2 — Outbound HTTPS to the Victim Organization Instana Tenant (SIGMA, Hunting); Sigma Rule 7 — Observability Platform Authentication Event (Cross-Source Burst Indicator) (SIGMA, Hunting); DNS Query Egress to the Victim Organization Instana Tenant (SURICATA, Hunting)"
       count: 5
     - tactic: "Credential Access"
       id: "T1552.001"
       name: "Credentials In Files"
-      rules: "Rule 1: PowerShell Instana Local Collector (YARA, Detection); Rule 7: ARPA Operator Ops Notes Markdown Family (YARA, Detection); Sigma Rule 1: PowerShell Process Invoking Instana API with Stored JWT Bearer Token (SIGMA, Detection); Sigma Rule 6: Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline) (SIGMA, Detection)"
+      rules: "Rule 1 — PowerShell Instana Local Collector (YARA, Detection); Rule 7 — ARPA Operator Ops Notes Markdown Family (YARA, Detection); Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token (SIGMA, Detection); Sigma Rule 6 — Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline) (SIGMA, Detection)"
       count: 4
     - tactic: "Discovery"
       id: "T1046"
       name: "Network Service Discovery"
-      rules: "Rule 4: Multi-Source Observability Polling Python Script (YARA, Detection); Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator) (SIGMA, Hunting); Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source (SIGMA, Hunting)"
+      rules: "Rule 4 — Multi-Source Observability Polling Python Script (YARA, Detection); Sigma Rule 7 — Observability Platform Authentication Event (Cross-Source Burst Indicator) (SIGMA, Hunting); Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source (SIGMA, Hunting)"
       count: 3
     - tactic: "Lateral Movement"
       id: "T1021.004"
       name: "SSH"
-      rules: "Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA, Detection); Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name (SIGMA, Detection); Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089 (SIGMA, Hunting); Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation (SIGMA, Hunting)"
+      rules: "Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA, Detection); Sigma Rule 5 — PuTTY Saved Session Created with Tunnel or ARPA Name (SIGMA, Detection); Sigma Rule 10 — Non-Splunk Process Connecting to Localhost Port 8089 (SIGMA, Hunting); Sigma Rule 12 — Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation (SIGMA, Hunting)"
       count: 5
     - tactic: "Collection"
       id: "T1005"
       name: "Data from Local System"
-      rules: "Rule 6: ARPA Cross-Source Correlation ETL Engine (YARA, Detection)"
+      rules: "Rule 6 — ARPA Cross-Source Correlation ETL Engine (YARA, Detection)"
       count: 1
     - tactic: "Collection"
       id: "T1119"
       name: "Automated Collection"
-      rules: "Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 4: Multi-Source Observability Polling Python Script (YARA, Detection); Rule 6: ARPA Cross-Source Correlation ETL Engine (YARA, Detection); Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator) (SIGMA, Hunting); Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source (SIGMA, Hunting)"
+      rules: "Rule 2 — ARPA Observability Harvester Platform (YARA, Detection); Rule 4 — Multi-Source Observability Polling Python Script (YARA, Detection); Rule 6 — ARPA Cross-Source Correlation ETL Engine (YARA, Detection); Sigma Rule 7 — Observability Platform Authentication Event (Cross-Source Burst Indicator) (SIGMA, Hunting); Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source (SIGMA, Hunting)"
       count: 5
     - tactic: "Collection"
       id: "T1213"
       name: "Data from Information Repositories"
-      rules: "Rule 5: ARPA AI Service Natural-Language Query Interface (YARA, Hunting); Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source (SIGMA, Hunting)"
+      rules: "Rule 5 — ARPA AI Service Natural-Language Query Interface (YARA, Hunting); Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source (SIGMA, Hunting)"
       count: 2
     - tactic: "Command and Control"
       id: "T1071.001"
       name: "Web Protocols"
-      rules: "Rule 1: PowerShell Instana Local Collector (YARA, Detection); Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Sigma Rule 1: PowerShell Process Invoking Instana API with Stored JWT Bearer Token (SIGMA, Detection); Sigma Rule 2: Outbound HTTPS to the Victim Organization Instana Tenant (SIGMA, Hunting); HTTP POST to ARPA Instana Ingestion Endpoint (IP-Agnostic) (SURICATA, Detection); DNS Query Egress to the Victim Organization Instana Tenant (SURICATA, Hunting)"
+      rules: "Rule 1 — PowerShell Instana Local Collector (YARA, Detection); Rule 2 — ARPA Observability Harvester Platform (YARA, Detection); Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token (SIGMA, Detection); Sigma Rule 2 — Outbound HTTPS to the Victim Organization Instana Tenant (SIGMA, Hunting); HTTP POST to ARPA Instana Ingestion Endpoint (IP-Agnostic) (SURICATA, Detection); DNS Query Egress to the Victim Organization Instana Tenant (SURICATA, Hunting)"
       count: 6
     - tactic: "Command and Control"
       id: "T1572"
       name: "Protocol Tunneling"
-      rules: "Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA, Detection); Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name (SIGMA, Detection); Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory (SIGMA, Detection); Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089 (SIGMA, Hunting); Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation (SIGMA, Hunting)"
+      rules: "Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document (YARA, Detection); Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP (SIGMA, Detection); Sigma Rule 5 — PuTTY Saved Session Created with Tunnel or ARPA Name (SIGMA, Detection); Sigma Rule 9 — Operator-Supplied SSH Key File in User `.ssh` Directory (SIGMA, Detection); Sigma Rule 10 — Non-Splunk Process Connecting to Localhost Port 8089 (SIGMA, Hunting); Sigma Rule 12 — Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation (SIGMA, Hunting)"
       count: 6
     - tactic: "Exfiltration"
       id: "T1020"
       name: "Automated Exfiltration"
-      rules: "Rule 1: PowerShell Instana Local Collector (YARA, Detection); HTTP POST to ARPA Instana Ingestion Endpoint (IP-Agnostic) (SURICATA, Detection)"
+      rules: "Rule 1 — PowerShell Instana Local Collector (YARA, Detection); HTTP POST to ARPA Instana Ingestion Endpoint (IP-Agnostic) (SURICATA, Detection)"
       count: 2
     - tactic: "Exfiltration"
       id: "T1041"

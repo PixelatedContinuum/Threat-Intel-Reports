@@ -2699,7 +2699,7 @@ malware-analysis-houselet-detections:
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "ce51d332"
+    hash: "f9809d16"
     head: "title: Command Line Referencing Virtualization o"
     robustness: 2
     confidence: "MODERATE"
@@ -3555,19 +3555,28 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     robustness: 2
     confidence: "HIGH"
     attack: [T1021.002]
-  - name: "Content Change to /etc/passwd or /usr/bin/su Outside a Package Transaction"
+  - name: "Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool"
     engine: sigma
     tier: Detection
     fence: 14
-    hash: "426bae71"
+    hash: "dff7018f"
     head: "title: Content Change to /etc/passwd or /usr/bin"
     robustness: 3
     confidence: "HIGH"
     attack: [T1098, T1222.002]
+  - name: "Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager"
+    engine: sigma
+    tier: Detection
+    fence: 15
+    hash: "39f8d703"
+    head: "title: Useradd or Usermod Setting a Root-Equival"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1136.001, T1098]
   - name: "Chisel or PuTTY Plink Binary Written to Disk"
     engine: sigma
     tier: Hunting
-    fence: 15
+    fence: 16
     hash: "7e3c3198"
     head: "title: Chisel or PuTTY Plink Binary Written to D"
     robustness: 1
@@ -3576,7 +3585,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Content Change to a Core Process or Network Inspection Utility"
     engine: sigma
     tier: Hunting
-    fence: 16
+    fence: 17
     hash: "1479fb3b"
     head: "title: Content Change to a Core Process or Netwo"
     robustness: 1
@@ -3585,7 +3594,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Creation or Modification of the safe_pollRadiusLog Watchdog Script"
     engine: sigma
     tier: Hunting
-    fence: 17
+    fence: 18
     hash: "be7775fc"
     head: "title: Creation or Modification of the safe_poll"
     robustness: 1
@@ -3594,7 +3603,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS"
     engine: suricata
     tier: Detection
-    fence: 18
+    fence: 19
     hash: "66bcfe40"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 3
@@ -3603,7 +3612,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Cisco IOS-XE Double-Encoded WSMA Path Bypass (Operator Fingerprint)"
     engine: suricata
     tier: Detection
-    fence: 19
+    fence: 20
     hash: "27caebf3"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
@@ -3612,7 +3621,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass URI"
     engine: suricata
     tier: Detection
-    fence: 20
+    fence: 21
     hash: "dadc0302"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2
@@ -3621,7 +3630,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token"
     engine: suricata
     tier: Detection
-    fence: 21
+    fence: 22
     hash: "6d25fba2"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2
@@ -3630,7 +3639,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Cisco WSMA fileCopy Exfiltration Primitive to External dstURL"
     engine: suricata
     tier: Detection
-    fence: 22
+    fence: 23
     hash: "e3684e90"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
@@ -3639,7 +3648,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "WebLogic T3/IIOP JNDI OpaqueReference Injection"
     engine: suricata
     tier: Detection
-    fence: 23
+    fence: 24
     hash: "53be9bcd"
     head: "alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (m"
     robustness: 3
@@ -3648,7 +3657,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Malicious LDAP-JNDI Callback Response"
     engine: suricata
     tier: Detection
-    fence: 24
+    fence: 25
     hash: "906d7ab2"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 3
@@ -3657,7 +3666,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "GeoServer OGC-Filter RCE via valueReference exec()"
     engine: suricata
     tier: Detection
-    fence: 25
+    fence: 26
     hash: "018ab022"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
@@ -3666,7 +3675,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Non-Standard X-CMD Webshell Dispatch Header"
     engine: suricata
     tier: Detection
-    fence: 26
+    fence: 27
     hash: "e565987f"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 2
@@ -3675,7 +3684,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "PRTG Bulk Credential Extraction via getobjectproperty.htm"
     engine: suricata
     tier: Detection
-    fence: 27
+    fence: 28
     hash: "503973a6"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
@@ -3684,7 +3693,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake"
     engine: suricata
     tier: Hunting
-    fence: 28
+    fence: 29
     hash: "64693d40"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
@@ -3693,7 +3702,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
   - name: "PRTG Bulk Device Inventory Query via table.json"
     engine: suricata
     tier: Hunting
-    fence: 29
+    fence: 30
     hash: "b9d6798c"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 1
@@ -5159,10 +5168,19 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1190, T1552.005]
-  - name: "Moodle Managefiles Plugin Local File Inclusion Attempt"
+  - name: "GenAI Chatbot API SSRF to Cloud Instance Metadata Service"
     engine: sigma
     tier: Detection
     fence: 9
+    hash: "140039b9"
+    head: "title: GenAI Chatbot API SSRF to Cloud Instance "
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1190, T1552.005]
+  - name: "Moodle Managefiles Plugin Local File Inclusion Attempt"
+    engine: sigma
+    tier: Detection
+    fence: 10
     hash: "c6dddcb1"
     head: "title: Moodle Managefiles Plugin Local File Incl"
     robustness: 2
@@ -5171,7 +5189,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Redis Server Process Writing to SSH Authorized Keys File"
     engine: sigma
     tier: Detection
-    fence: 10
+    fence: 11
     hash: "eff35e88"
     head: "title: Redis Server Process Writing to SSH Autho"
     robustness: 3
@@ -5180,7 +5198,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Zimbra JSP Web Shell Dropped via Amavis Cpio Path Traversal"
     engine: sigma
     tier: Detection
-    fence: 11
+    fence: 12
     hash: "0da72371"
     head: "title: Zimbra JSP Web Shell Dropped via Amavis C"
     robustness: 3
@@ -5189,7 +5207,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Cron-Triggered Base64-Indirected Shell Execution With Output Suppression"
     engine: sigma
     tier: Detection
-    fence: 12
+    fence: 13
     hash: "5821c4db"
     head: "title: Cron-Triggered Base64-Indirected Shell Ex"
     robustness: 2
@@ -5198,7 +5216,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Known Second-Actor Daemon-Masquerade Implant Names Executing From User Home Directory"
     engine: sigma
     tier: Detection
-    fence: 13
+    fence: 14
     hash: "265ecf7b"
     head: "title: Known Second-Actor Daemon-Masquerade Impl"
     robustness: 2
@@ -5207,7 +5225,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Joomla Administrator Login Attempt Pattern"
     engine: sigma
     tier: Hunting
-    fence: 14
+    fence: 15
     hash: "c87fd242"
     head: "title: Joomla Administrator Login Attempt Patter"
     robustness: 1
@@ -5216,7 +5234,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Webmin Session Login Endpoint Access Pattern"
     engine: sigma
     tier: Hunting
-    fence: 15
+    fence: 16
     hash: "72248049"
     head: "title: Webmin Session Login Endpoint Access Patt"
     robustness: 1
@@ -5225,8 +5243,8 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Outbound Connection to Cloud Instance Metadata Service Address"
     engine: sigma
     tier: Hunting
-    fence: 16
-    hash: "f7c53270"
+    fence: 17
+    hash: "c6cd4f88"
     head: "title: Outbound Connection to Cloud Instance Met"
     robustness: 1
     confidence: "MODERATE"
@@ -5234,7 +5252,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Chisel Reverse Tunnel Client or Server Execution"
     engine: sigma
     tier: Hunting
-    fence: 17
+    fence: 18
     hash: "07529bcf"
     head: "title: Chisel Reverse Tunnel Client or Server Ex"
     robustness: 1
@@ -5243,7 +5261,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Joomla FTP-Staged Web Shell Filename Probe"
     engine: sigma
     tier: Hunting
-    fence: 18
+    fence: 19
     hash: "92547150"
     head: "title: Joomla FTP-Staged Web Shell Filename Prob"
     robustness: 1
@@ -5252,7 +5270,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Executable With System-Daemon-Style Name Running From User Home Directory"
     engine: sigma
     tier: Hunting
-    fence: 19
+    fence: 20
     hash: "bd379065"
     head: "title: Executable With System-Daemon-Style Name "
     robustness: 1
@@ -5261,7 +5279,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Ivanti Connect Secure CVE-2023-46805 Auth-Bypass Path Traversal"
     engine: suricata
     tier: Detection
-    fence: 20
+    fence: 21
     hash: "4c5084b3"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
@@ -5270,7 +5288,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Ivanti Connect Secure CVE-2024-21887 Command Injection via cac/status"
     engine: suricata
     tier: Detection
-    fence: 21
+    fence: 22
     hash: "ab938d87"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
@@ -5279,7 +5297,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Exchange ProxyLogon CVE-2021-26855 SSRF Cookie Header on Autodiscover"
     engine: suricata
     tier: Detection
-    fence: 22
+    fence: 23
     hash: "6f5a131c"
     head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
     robustness: 3
@@ -5288,7 +5306,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Second-Actor localroot.sbs Loader Domain DNS Query"
     engine: suricata
     tier: Detection
-    fence: 23
+    fence: 24
     hash: "587efc18"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL BLO"
     robustness: 2
@@ -5297,7 +5315,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "Second-Actor cat.sh Loader Payload Retrieval"
     engine: suricata
     tier: Detection
-    fence: 24
+    fence: 25
     hash: "88d8389c"
     head: "alert http $HOME_NET any -> any any (msg:\"THL BL"
     robustness: 2
@@ -5306,7 +5324,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "GSocket/THC GSRN Relay Pool Domain Query (both naming schemes)"
     engine: suricata
     tier: Hunting
-    fence: 25
+    fence: 26
     hash: "40d8036a"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 2
@@ -5315,7 +5333,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "GSocket/THC Relay gsocket.io Domain Query"
     engine: suricata
     tier: Hunting
-    fence: 26
+    fence: 27
     hash: "c1e482d3"
     head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 2
@@ -5324,7 +5342,7 @@ seasia-gov-exploitation-toolkit-144-172-106-236-detections:
   - name: "GSocket Deployment: gsocket.io Installer Retrieval TLS SNI"
     engine: suricata
     tier: Hunting
-    fence: 27
+    fence: 28
     hash: "f7112209"
     head: "alert tls $HOME_NET any -> any any (msg:\"THL HUN"
     robustness: 2
@@ -5694,7 +5712,7 @@ sliver-open-directory-detections:
     confidence: "MODERATE"
     attack: [T1036, T1036.005]
 turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
-  - name: "Rule 1: PowerShell Instana Local Collector"
+  - name: "Rule 1 — PowerShell Instana Local Collector"
     engine: yara
     tier: Detection
     fence: 0
@@ -5703,7 +5721,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.001, T1552.001, T1020, T1071.001]
-  - name: "Rule 2: ARPA Observability Harvester Platform"
+  - name: "Rule 2 — ARPA Observability Harvester Platform"
     engine: yara
     tier: Detection
     fence: 1
@@ -5712,7 +5730,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1059.006, T1119, T1543.002, T1071.001]
-  - name: "Rule 3: Insider Tunnel-Setup Turkish-Language Operator Document"
+  - name: "Rule 3 — Insider Tunnel-Setup Turkish-Language Operator Document"
     engine: yara
     tier: Detection
     fence: 2
@@ -5721,7 +5739,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1098.004, T1021.004]
-  - name: "Rule 4: Multi-Source Observability Polling Python Script"
+  - name: "Rule 4 — Multi-Source Observability Polling Python Script"
     engine: yara
     tier: Detection
     fence: 3
@@ -5730,7 +5748,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.006, T1046, T1119, T1078]
-  - name: "Rule 6: ARPA Cross-Source Correlation ETL Engine"
+  - name: "Rule 6 — ARPA Cross-Source Correlation ETL Engine"
     engine: yara
     tier: Detection
     fence: 4
@@ -5739,7 +5757,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1059.006, T1119, T1005]
-  - name: "Rule 7: ARPA Operator Ops Notes Markdown Family"
+  - name: "Rule 7 — ARPA Operator Ops Notes Markdown Family"
     engine: yara
     tier: Detection
     fence: 5
@@ -5748,7 +5766,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1587, T1552.001]
-  - name: "Rule 8: ARPA Platform Systemd Service Units"
+  - name: "Rule 8 — ARPA Platform Systemd Service Units"
     engine: yara
     tier: Detection
     fence: 6
@@ -5757,7 +5775,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1543.002, T1569.002]
-  - name: "Rule 5: ARPA AI Service Natural-Language Query Interface"
+  - name: "Rule 5 — ARPA AI Service Natural-Language Query Interface"
     engine: yara
     tier: Hunting
     fence: 7
@@ -5766,7 +5784,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "MODERATE — the AI service was observed in a broken/dev state on the single analyzed host; the pattern may not have replicated to other deployments."
     attack: [T1059.006, T1213]
-  - name: "Sigma Rule 1: PowerShell Process Invoking Instana API with Stored JWT Bearer Token"
+  - name: "Sigma Rule 1 — PowerShell Process Invoking Instana API with Stored JWT Bearer Token"
     engine: sigma
     tier: Detection
     fence: 8
@@ -5775,7 +5793,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.001, T1552.001, T1071.001]
-  - name: "Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern"
+  - name: "Sigma Rule 3 — Systemd Unit Creation Matching `arpa-*` Naming Pattern"
     engine: sigma
     tier: Detection
     fence: 9
@@ -5784,7 +5802,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1543.002, T1569.002]
-  - name: "Sigma Rule 4: Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP"
+  - name: "Sigma Rule 4 — Reverse SSH Tunnel Registration from Windows AD User Host to Operator IP"
     engine: sigma
     tier: Detection
     fence: 10
@@ -5793,7 +5811,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1021.004, T1098.004]
-  - name: "Sigma Rule 5: PuTTY Saved Session Created with Tunnel or ARPA Name"
+  - name: "Sigma Rule 5 — PuTTY Saved Session Created with Tunnel or ARPA Name"
     engine: sigma
     tier: Detection
     fence: 11
@@ -5802,7 +5820,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 3
     confidence: "HIGH"
     attack: [T1572, T1021.004]
-  - name: "Sigma Rule 6: Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)"
+  - name: "Sigma Rule 6 — Long-Lived Instana JWT Detected in Audit Logs (Governance Baseline)"
     engine: sigma
     tier: Detection
     fence: 12
@@ -5811,7 +5829,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH (for the specific stolen JWT); MODERATE (for the generic long-lived-token governance branch)"
     attack: [T1078, T1552.001]
-  - name: "Sigma Rule 9: Operator-Supplied SSH Key File in User `.ssh` Directory"
+  - name: "Sigma Rule 9 — Operator-Supplied SSH Key File in User `.ssh` Directory"
     engine: sigma
     tier: Detection
     fence: 13
@@ -5820,7 +5838,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1098.004, T1572]
-  - name: "Sigma Rule 2: Outbound HTTPS to the Victim Organization Instana Tenant"
+  - name: "Sigma Rule 2 — Outbound HTTPS to the Victim Organization Instana Tenant"
     engine: sigma
     tier: Hunting
     fence: 14
@@ -5829,7 +5847,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1071.001, T1078]
-  - name: "Sigma Rule 7: Observability Platform Authentication Event (Cross-Source Burst Indicator)"
+  - name: "Sigma Rule 7 — Observability Platform Authentication Event (Cross-Source Burst Indicator)"
     engine: sigma
     tier: Hunting
     fence: 15
@@ -5838,7 +5856,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE — requires SIEM correlation across multiple observability platform audit feeds to realize the full novel-TTP detection value."
     attack: [T1078, T1119, T1046]
-  - name: "Sigma Rule 8: Rapid Instana Topology API Enumeration from Single Source"
+  - name: "Sigma Rule 8 — Rapid Instana Topology API Enumeration from Single Source"
     engine: sigma
     tier: Hunting
     fence: 16
@@ -5847,16 +5865,16 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     robustness: 1
     confidence: "MODERATE — a single request is not by itself anomalous."
     attack: [T1046, T1213, T1119]
-  - name: "Sigma Rule 10: Non-Splunk Process Connecting to Localhost Port 8089"
+  - name: "Sigma Rule 10 — Non-Splunk Process Connecting to Localhost Port 8089"
     engine: sigma
     tier: Hunting
     fence: 17
-    hash: "dd2e8725"
+    hash: "571b7217"
     head: "title: Non-Splunk Process Connecting to Localhos"
     robustness: 1
     confidence: "MODERATE — port 8089 is not uniquely operator-specific."
     attack: [T1572, T1021.004]
-  - name: "Sigma Rule 12: Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation"
+  - name: "Sigma Rule 12 — Insider Deploying Outbound SSH Tunnel from Enterprise AD-Joined Workstation"
     engine: sigma
     tier: Hunting
     fence: 18
