@@ -62,6 +62,48 @@ function runCheck(c) {
   return { status: status, text: text };
 }
 
+// Every campaign slug the staged change set touches. The victim-naming gate is per-campaign
+// and lives in the other repo, so this is the only routing it needs.
+function stagedSlugs(paths) {
+  var out = {};
+  paths.forEach(function (p) {
+    var m = /^reports\/([^/]+)\/index\.md$/.exec(p)
+         || /^hunting-detections\/(.+)-detections\.md$/.exec(p)
+         || /^ioc-feeds\/(.+)-iocs\.json$/.exec(p)
+         || /^assets\/images\/([^/]+)\//.exec(p)
+         || /^stix\/(.+)\.json$/.exec(p);
+    if (m && m[1] !== 'hunters-ledger-stix-bundles') out[m[1]] = true;
+  });
+  return Object.keys(out).sort();
+}
+
+// The victim-naming gate, in --publish form: it decides rather than only reporting.
+// NOT installed as a fourth `CHECKS` entry because those spawn node inside this repo and
+// this one is a Python script in ~/ai-workflows, which is also why an absent interpreter or
+// an absent script is reported NOT CHECKED rather than passing quietly.
+var VICTIM_GATE = '/home/jharrison/ai-workflows/.claude/scripts/check_victim_naming.py';
+
+function checkVictimNaming(slugs) {
+  if (!slugs.length) return [];
+  if (!fs.existsSync(VICTIM_GATE)) {
+    return [{ label: 'victim naming', status: 'NOT CHECKED',
+      text: VICTIM_GATE + ' not found; no campaign was checked for victim naming.' }];
+  }
+  return slugs.map(function (slug) {
+    var r = cp.spawnSync('python3', [VICTIM_GATE, '--slug', slug, '--publish'],
+      { encoding: 'utf8' });
+    if (r.error) {
+      return { label: 'victim naming: ' + slug, status: 'NOT CHECKED',
+        text: 'could not run the gate: ' + r.error.message };
+    }
+    var text = ((r.stdout || '') + (r.stderr || '')).trim();
+    // --publish is a decision: 0 allows, anything else does not. There is no third exit to
+    // fold in here, because "could not check" is precisely what it refuses to allow.
+    return { label: 'victim naming: ' + slug,
+      status: r.status === 0 ? 'PASS' : 'FAIL', text: text };
+  });
+}
+
 function checkReports(files) {
   var CR;
   try {
@@ -143,7 +185,7 @@ function checkReports(files) {
 
   var p = SG.plan(staged.all, { existing: staged.existing });
 
-  if (!p.checks.length && !p.reports.length && !p.owed.length) {
+  if (!p.checks.length && !p.reports.length && !p.owed.length && !stagedSlugs(staged.all).length) {
     say('machinery gate  nothing staged that carries machinery (' +
       staged.all.length + ' path(s) checked against the routing rules)');
     process.exit(0);
@@ -155,6 +197,7 @@ function checkReports(files) {
     results.push({ label: c.label, status: r.status, text: r.text });
   });
   if (p.reports.length) results = results.concat(checkReports(p.reports));
+  results = results.concat(checkVictimNaming(stagedSlugs(staged.all)));
 
   var fails = results.filter(function (r) { return r.status === 'FAIL'; });
   var unk = results.filter(function (r) { return r.status === 'NOT CHECKED'; });
