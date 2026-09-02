@@ -3,23 +3,23 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-02T14:02:52Z
+generated_at: 2026-09-02T16:02:02Z
 window_days: 30
 counts:
   total: 547
-  research: 203
-  news: 344
+  research: 202
+  news: 345
 topics:
   - label: "vulnerabilities"
     count: 72
     color: 1
   - label: "cybercrime"
-    count: 55
+    count: 56
     color: 2
-  - label: "exploited"
-    count: 28
-    color: 3
   - label: "government"
+    count: 29
+    color: 3
+  - label: "exploited"
     count: 28
     color: 4
   - label: "malware"
@@ -238,7 +238,6 @@ label_colors:
   "cisco": 9
   "cisco talos antivirus": 7
   "cisco talos dns security": 7
-  "cisco talos incident response": 3
   "citrix": 11
   "cl0p": 3
   "clamav": 8
@@ -333,7 +332,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 3
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "fake lock screen": 6
@@ -356,7 +355,7 @@ label_colors:
   "gms": 3
   "google": 7
   "google sheets c2": 12
-  "government": 4
+  "government": 3
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -452,6 +451,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Hackers exploit critical JFrog Artifactory flaw to forge admin tokens"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-jfrog-artifactory-flaw-to-forge-admin-tokens/"
+    source: "BleepingComputer"
+    date: 2026-09-02T15:47:08Z
+    kind: news
+    labels: []
+  - title: "New pro-Ukraine hacker group targets Russian companies with custom ransomware"
+    url: "https://therecord.media/new-pro-ukraine-hacker-group-custom-ransomware-russia"
+    source: "Recorded Future"
+    date: 2026-09-02T15:07:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
+  - title: "Ransomware protection for MSPs: A 6-point checklist for faster recovery"
+    url: "https://www.bleepingcomputer.com/news/security/ransomware-protection-for-msps-a-6-point-checklist-for-faster-recovery/"
+    source: "BleepingComputer"
+    date: 2026-09-02T14:02:12Z
+    kind: news
+    labels: []
   - title: "Hackers expose donor data from Russian fundraisers for Ukrainians, political prisoners"
     url: "https://therecord.media/hackers-russia-fundraisers-ukraine"
     source: "Recorded Future"
@@ -3716,21 +3733,3 @@ items:
     date: 2026-08-03T16:50:56Z
     kind: research
     labels: ["credential theft", "heptax", "keylogger", "larva-24009", "lnk", "nirsoft tools", "notifier", "phishing email", "powershell backdoor", "quasarrat", "ultravnc"]
-  - title: "[Webinar] Tales from the Frontlines: An exclusive briefing on Q2 incidents"
-    url: "https://blog.talosintelligence.com/webinar-tales-from-the-frontlines-an-exclusive-briefing-on-q2-incidents/"
-    source: "Cisco Talos"
-    date: 2026-08-03T16:00:12Z
-    kind: research
-    labels: ["cisco talos incident response"]
-  - title: "ExfilSquad hackers leak info of over 100,000 UK police officers, staff"
-    url: "https://www.bleepingcomputer.com/news/security/exfilsquad-hackers-leak-info-of-over-100-000-uk-police-officers-staff/"
-    source: "BleepingComputer"
-    date: 2026-08-03T15:04:39Z
-    kind: news
-    labels: []
-  - title: "Inside the Underground Business of BTMOB RAT"
-    url: "https://www.bleepingcomputer.com/news/security/inside-the-underground-business-of-btmob-rat/"
-    source: "BleepingComputer"
-    date: 2026-08-03T14:45:55Z
-    kind: news
-    labels: []
