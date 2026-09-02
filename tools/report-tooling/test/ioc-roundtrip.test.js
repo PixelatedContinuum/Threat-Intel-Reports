@@ -71,7 +71,7 @@ test('no embargoed campaign appears anywhere in the committed index', function (
   // assertion against the real artefact, not a unit test of the generator.
   // 192-3-1-116 (MultiVector) was released 2026-08-20: CNCERT/CC confirmed action
   // on all three of its reports, and its 30-day hold elapsed.
-  var held = /13-140-145-210|157-180-101-47/;
+  var held = /157-180-101-47/;
   var badReports = Object.keys(idx.reports).filter(function (s) { return held.test(s); });
   assert.deepEqual(badReports, [], 'embargoed campaign in the reports table');
   var badHits = [];

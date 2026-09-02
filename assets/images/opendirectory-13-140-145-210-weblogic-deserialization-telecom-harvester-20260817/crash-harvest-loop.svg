@@ -59,7 +59,7 @@
     <text x="80" y="719" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 3</text>
     <text x="200" y="719" font-size="23" font-weight="600" fill="#111111">The device writes a core dump</text>
     <text x="80" y="774" font-size="21" fill="#ffffff">Each crash saves the process memory, and that memory holds live credential material.</text>
-    <text x="80" y="808" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">VERNAZA_GRAFIC_MATRIZ_RP_0_nginx_*.core.gz</text>
+    <text x="80" y="808" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">&lt;HOSTNAME&gt;_RP_0_nginx_*.core.gz</text>
     <text x="80" y="844" font-size="18" fill="#fb923c" font-weight="600">Detect: new nginx core dumps appearing on a network device</text>
   </g>
   <line x1="500" y1="888" x2="500" y2="928" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>

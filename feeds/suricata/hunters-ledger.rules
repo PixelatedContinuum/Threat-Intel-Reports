@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 98 rules from 33 campaigns. SIDs are STABLE across rebuilds (persistent
+# 110 rules from 34 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -284,6 +284,61 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL OpenDirectory-XiebroC2-C
 #   rate-limited
 #   FP: Any unrelated HTTP download whose URI happens to end in .xor (uncommon — .xor is not a standard web content type, but other XOR-encoded stagers could...
 alert http $HOME_NET any -> any any (msg:"THL OpenDirectory-94.103.1.13 XOR-Encoded Payload Staging Download via .xor URI Suffix (Loader Staging Indicator)"; flow:established,to_server; http.method; content:"GET"; http.uri; content:".xor"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500149; rev:1; metadata:author The_Hunters_Ledger, date 2026-04-23, reference https://the-hunters-ledger.com/hunting-detections/open-directory-94-103-1-13-20260423-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000001)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   rate-limited
+#   FP: None known. Legitimate Cisco IOS-XE devices do not PUT their own firmware, core dumps, or configuration files to arbitrary internet destinations...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarvester Network-Device Self-Exfiltration Outbound PUT UA cisco-IOS (WSMA Abuse)"; flow:established,to_server; content:"PUT"; http_method; content:"cisco-IOS"; http_user_agent; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500187; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000002)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   rate-limited
+#   FP: None known. This exact double-encoded string does not occur in legitimate WSMA client traffic or in the public CVE-2023-20198 proof-of-concept...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Cisco IOS-XE Double-Encoded WSMA Path Bypass (CVE-2023-20273 Operator Fingerprint)"; flow:established,to_server; content:"%2577eb%2575i_%2577sma_Http"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500188; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000003)
+#   TIER: Detection  |  robustness 2  |  confidence HIGH
+#   rate-limited
+#   FP: None known. This specific URI and query-string combination is the confirmed public CVE-2023-20198 auth-bypass confirmation path and does not occur in...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT GENERIC-CVE-2023-20198 Cisco IOS-XE WebUI Auth-Bypass Confirmation URI (Public Exploit Class, Not Operator-Specific)"; flow:established,to_server; content:"/webui/logoutconfirm.html"; http_uri; content:"logon_hash=1"; http_uri; threshold:type limit,track by_src,count 1,seconds 3600; classtype:web-application-attack; sid:3500189; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000004)
+#   TIER: Detection  |  robustness 2  |  confidence HIGH
+#   rate-limited
+#   FP: None known for a well-formed HTTP Authorization header. Legitimate clients always send a recognized auth scheme (Basic, Bearer, Digest, and similar)...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (Public Exploit Class)"; flow:established,to_server; content:"Authorization"; http_header; pcre:"/^Authorization:\s*[a-f0-9]{18}\s*$/mHi"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:web-application-attack; sid:3500190; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000005)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   rate-limited
+#   FP: None known. Legitimate WSMA fileCopy administrative usage targets a management host inside the operator's own infrastructure. This rule's combination...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Cisco WSMA fileCopy Exfiltration Primitive to External dstURL"; flow:established,to_server; content:"urn:cisco:wsma-filesystem"; http_client_body; content:"fileCopy"; http_client_body; content:"dstURL="; http_client_body; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500191; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000006)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   rate-limited
+#   FP: None known. Legitimate WebLogic T3/IIOP administrative traffic does not carry these specific JNDI reference class names; they are the...
+alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL HUNT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)"; flow:established,to_server; content:"OpaqueReference"; threshold:type limit,track by_src,count 1,seconds 3600; classtype:attempted-admin; sid:3500192; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000007)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   FP: None known. javaCodeBase as an LDAP-response attribute value is specific to the JNDI reference-injection technique; it does not appear in ordinary...
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarvester Malicious LDAP-JNDI Callback Response (javaCodeBase/javaSerializedData)"; flow:established,to_client; content:"javaCodeBase"; classtype:attempted-admin; sid:3500193; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000009)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   FP: None known. Legitimate GeoServer OGC-filter requests do not construct a valueReference value that invokes exec(
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester GeoServer OGC-Filter RCE via valueReference exec() (CVE-2024-36401)"; flow:established,to_server; content:"valueReference"; http_uri; content:"exec("; http_uri; classtype:web-application-attack; sid:3500194; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000010)
+#   TIER: Detection  |  robustness 2  |  confidence MODERATE
+#   FP: An internal API or proxy that legitimately uses a custom X-CMD header for an unrelated purpose. Uncommon, but the header name alone is not unique...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Non-Standard X-CMD Webshell Dispatch Header"; flow:established,to_server; content:"X-CMD|3a|"; http_header; classtype:trojan-activity; sid:3500195; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000011)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   FP: None known. This combination (the getobjectproperty.htm endpoint, an authenticated passhash= credential, and a request naming a stored-credential...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester PRTG Bulk Credential Extraction via getobjectproperty.htm"; flow:established,to_server; content:"getobjectproperty.htm"; http_uri; content:"passhash="; http_uri; classtype:attempted-recon; sid:3500196; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000008)
+#   TIER: Hunting  |  robustness 1  |  confidence LOW  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any legitimate application using WebSockets. Chat applications, live dashboards, monitoring tools, and many modern web apps use this same upgrade...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarvester Chisel-Style Reverse-Tunnel WebSocket Upgrade Handshake (Broad, Chisel Has Legitimate Uses)"; flow:established,to_server; content:"Upgrade|3a| websocket"; http_header; threshold:type limit,track by_src,count 1,seconds 3600; classtype:trojan-activity; sid:3500197; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
+# opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817 (orig sid:1000012)
+#   TIER: Hunting  |  robustness 1  |  confidence LOW  |  BROAD - triage before alerting
+#   FP: Legitimate bulk device-inventory queries are a normal part of PRTG dashboard usage, monitoring integrations, and reporting tools; this specific query...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester PRTG Bulk Device Inventory Query via table.json (Broad, Legitimate Bulk Queries Exist)"; flow:established,to_server; content:"table.json"; http_uri; content:"content=devices"; http_uri; content:"count=500"; http_uri; classtype:attempted-recon; sid:3500198; rev:1; metadata:author The_Hunters_Ledger, date 2026-08-17, reference https://the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/;)
 # opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517 (orig sid:9100101)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: Authorized penetration-test tooling (Burp Suite, Nuclei, Metasploit) replaying the public PoC against a cPanel/WHM host under an approved assessment.

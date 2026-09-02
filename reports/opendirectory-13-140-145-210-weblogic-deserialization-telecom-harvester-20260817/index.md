@@ -5,11 +5,11 @@ layout: post
 permalink: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
 thumbnail: /assets/images/cards/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.png
 hide: true
-unlisted: true
 category: "Telecom Intrusion Campaign"
 description: "An operator reached an Ecuadorian carrier's AAA and provisioning secrets through one small business customer's carrier-managed Cisco router, making the device upload 424,946,514 bytes of its own firmware, crash dumps and configuration files."
 detection_page: /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/
 ioc_feed: /ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json
+stix_bundle: /stix/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.json
 detection_sections:
   - label: "Detection Coverage Summary"
     anchor: "#detection-coverage-summary"
@@ -62,7 +62,7 @@ figure_nav:
 ---
 
 **Campaign Identifier:** WebLogicDeserialization-TelecomHarvester-13.140.145.210<br>
-**Last Updated:** August 18, 2026<br>
+**Last Updated:** September 1, 2026<br>
 **Threat Level:** HIGH
 
 ---
@@ -70,13 +70,13 @@ figure_nav:
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-An operator reached a national carrier's credential and provisioning material by taking over the internet-facing web management interface of one ordinary business customer's carrier-managed router, then instructing that router to upload its own firmware image, crash dumps and configuration files outbound, and finally mining the stolen configs for the carrier's authentication secrets. The customer was Vernaza Grafic Cía. Ltda., a 96-person printing and office-supplies firm in Quito. Nothing of that company's own business data was taken, and there was no lateral movement into its office LAN, even though the operator held an arbitrary-file-read primitive on a device sitting behind the company firewall. What they took was the device's own material, and their post-processing says why. The stolen configs were grepped for `tacacs`, `radius`, `acs`, `cwmp`, `tr069`, SNMP community strings and Cisco `key 7` and `key 5` encrypted passwords in a single pass.
+An operator reached a national carrier's credential and provisioning material by taking over the internet-facing web management interface of one ordinary business customer's carrier-managed router, then instructing that router to upload its own firmware image, crash dumps and configuration files outbound, and finally mining the stolen configs for the carrier's authentication secrets. The customer was a 96-person printing and office-supplies firm. Nothing of that company's own business data was taken, and there was no lateral movement into its office LAN, even though the operator held an arbitrary-file-read primitive on a device sitting behind the company firewall. What they took was the device's own material, and their post-processing says why. The stolen configs were grepped for `tacacs`, `radius`, `acs`, `cwmp`, `tr069`, SNMP community strings and Cisco `key 7` and `key 5` encrypted passwords in a single pass.
 
 That is the whole point of this case. The printing company was the route. The carrier's credential and provisioning plane was the objective.
 
 The anchor is a receipt, not an inference. On 2026-07-24 the victim router uploaded **424,946,514 bytes across 100 HTTP PUTs**, and it was the router itself making those requests, with `User-Agent: cisco-IOS` on every one. That total breaks down as the full 355,970,456-byte IOS-XE firmware image, 65 unique nginx core dumps, 3 ad-hoc core pulls and 19 configuration pulls including `cwmp_inventory`, the device's TR-069 provisioning record. All of it landed in the operator's own listener log, which two independent captures of the operator's exposed working directory later recovered. I claim compromise here because the evidence is victim-side, not because a script would have printed success if it worked.
 
-The rest of the campaign is broader than that one router. I recovered **169 unique operator files**, SHA256-verified, from a directory-listing web server the operator left open on the public internet at `13.140.145[.]210:8888`. Inside sit a hand-written Oracle WebLogic T3 and JNDI exploitation suite, a from-scratch four-mode LDAP exploitation server, a Cisco-shaped multi-port capture rig, tunnelling and post-exploitation scripts, three bespoke credential wordlists totalling roughly 2.7 MB, a userland rootkit's originals-backup, and the operator's own run logs. Beyond the router, a host inside Ecuador's state telecom CNT EP reached out and pulled the operator's tunnelling client from their staging server, which is a confirmed internal foothold in a national carrier. A WebLogic attack against a municipal government application failed outright. A monitoring-server credential harvest, a Windows post-exploitation chain and the rootkit install are all built, targeted and staged, with no captured victim-side outcome.
+The rest of the campaign is broader than that one router. I recovered **169 unique operator files**, SHA256-verified, from a directory-listing web server the operator left open on the public internet at `13.140.145[.]210:8888`. Inside sit a hand-written Oracle WebLogic T3 and JNDI exploitation suite, a from-scratch four-mode LDAP exploitation server, a Cisco-shaped multi-port capture rig, tunnelling and post-exploitation scripts, three bespoke credential wordlists totalling roughly 2.7 MB, a userland rootkit's originals-backup, and the operator's own run logs. Beyond the router, a host inside Ecuador's state telecom reached out and pulled the operator's tunnelling client from their staging server, which is a confirmed internal foothold in a national carrier. A WebLogic attack against a municipal government application failed outright. A monitoring-server credential harvest, a Windows post-exploitation chain and the rootkit install are all built, targeted and staged, with no captured victim-side outcome.
 
 I rate the campaign **HIGH**, on an overall risk score of **7.9/10** derived in Section 3. It is not CRITICAL because nothing in the 169 files encrypts, wipes, defaces or denies service, because the WebLogic leg against its named target failed with three independent confirmations, and because the credential-cracking step against the stolen crash dumps failed outright with 21 candidate passwords all rejected and zero authentication tokens recovered. Those failures matter to the rating and I state them as findings rather than burying them.
 
@@ -88,7 +88,9 @@ I cannot attribute this to a named threat actor, and I hold that at INSUFFICIENT
 
 The activity is espionage-shaped and the operator is unattributed, and those two statements belong in the same sentence so nobody separates them. What tips it is where their reconnaissance points. It scoped the carrier's signalling plane, the machinery that routes calls and tracks where subscribers are, and that is a collection objective rather than inventory a broker could sell on. So I lean espionage-flavoured collection over access-brokering at roughly 60/40, at LOW confidence, and a lean is all it is, because two artifacts in the corpus pull the other way and I never saw where the collected access went. Section 12.4 carries the discriminator in full, the counterweights, and the hypothesis testing behind that 60/40.
 
-The part that should worry a defender most is not the operator at all. Three victim sites remain observably exposed today, established entirely from third-party passive scan data without touching anything. The compromised router has had its management plane on the public internet since **October 2022**, had not rebooted in roughly 310 days as of 2026-08-15, and still serves the vulnerable web interface. The implant class used against it is memory-resident and does not survive a reboot, so anything placed in July is still sitting there. Nobody was watching that device for four years, and it is the reason the carrier's AAA and provisioning material for that device is now in somebody else's hands.
+The part that should worry a defender most is not the operator at all. Two of the three victim sites remain observably exposed, established entirely from third-party passive data without touching anything. The compromised router had its management plane on the public internet **continuously since October 2022**, had not rebooted in roughly 310 days as of 2026-08-15, and served the vulnerable web interface throughout the period this campaign was active. Nobody was watching that device for four years, and it is the reason the carrier's AAA and provisioning material for that device is now in somebody else's hands.
+
+That router has since stopped answering. As of 2026-09-01 it responds on none of the five ports it previously exposed, nor to ICMP. From outside I cannot separate a decommissioning from a readdressing from a device that is simply switched off, and the distinction carries real weight, because the implant class used against it is memory-resident and does not survive a reboot. A device that genuinely restarted has most likely shed whatever was placed on it in July. The exposure that allowed all of this is untouched by any of those readings.
 
 ---
 
@@ -124,7 +126,7 @@ I score this campaign **7.9/10, HIGH**. The score is driven by a confirmed large
 </thead>
 <tbody>
 <tr><td>Data Exfiltration</td><td>9/10</td><td>424,946,514 bytes confirmed out of one device in a single day, with the device as the transport. The operator held an arbitrary-file-read primitive on that router and used it to take the complete firmware image, 65 crash dumps and the TR-069 provisioning inventory, then mined the results for carrier AAA secrets. Not a 10 because the credential-recovery step against the stolen dumps failed and no subscriber or business data was taken.</td></tr>
-<tr><td>System Compromise</td><td>8/10</td><td>Privilege-15 equivalent control of a production edge router, confirmed. A confirmed internal foothold inside CNT EP where victim hosts pulled the operator's tunnelling client and connected back. A claimed root session on the carrier's RADIUS server, held at MODERATE because that claim rests on operator-side artifacts only.</td></tr>
+<tr><td>System Compromise</td><td>8/10</td><td>Privilege-15 equivalent control of a production edge router, confirmed. A confirmed internal foothold inside the state telecom, where victim hosts pulled the operator's tunnelling client and connected back. A claimed root session on the carrier's RADIUS server, held at MODERATE because that claim rests on operator-side artifacts only.</td></tr>
 <tr><td>Persistence Difficulty</td><td>7/10</td><td>The IOS-XE implant class is memory-resident and clears on reboot, which sounds easy until you notice the victim device had not rebooted in roughly 310 days. On the Linux side, the operator rewrote an AAA watchdog into a self-healing loop and backdated it, and staged a userland rootkit whose backup set covers the seven binaries an administrator would use to find it.</td></tr>
 <tr><td>Evasion Capability</td><td>8/10</td><td>A double-encoded request path that slips the router's own route filter, attack traffic from a rented in-country VPN exit while loot went to a different country, four separate anti-forensic mechanisms on victims, and a domain named to read as legitimate AAA infrastructure. Held at 8 rather than higher because the operator's own infrastructure hygiene is poor enough that this entire case exists.</td></tr>
 <tr><td>Lateral Movement</td><td>8/10</td><td>A chain built end to end from external exploit through reverse SOCKS tunnel and SSH jump host to internal web application and credential spray, confirmed as far as the jump host and unproven beyond it. The stated objective is reachability into the carrier's 172.x internal networks. The score is about what that chain gives the operator, not about a completed intrusion path. They move inward on credentials rather than exploits, and hold an SSH private key and monitoring-platform credentials acquired by a step that never appears in the evidence.</td></tr>
@@ -149,23 +151,23 @@ Nothing in 169 files encrypts, wipes, defaces, denies service or manipulates dat
 ## 4. Campaign Scope and the Victims Still Exposed
 {: .hl-tier-2}
 
-Every resolved target in this campaign is critical infrastructure or government, with one instrument and one foreign outlier. The operator worked Ecuador's state telecom CNT EP by name, a second carrier's customer edge, the cadastre of GAD Quinindé, the application estate of GAD Nabón, a Ministry of Education portal, and a Mexican bank's password-reset endpoint. One further government body appears in the table without being a target at all, because the CNT monitoring platform the operator built a harvest script against also monitors the Quito fire department. That is the scope, and it is what makes this a briefing for a national regulator rather than an incident report for one company.
+Every resolved target in this campaign is critical infrastructure or government, with one instrument and one foreign outlier. The operator worked Ecuador's state telecom by name, a second carrier's customer edge, one municipal cadastre, the application estate of a second municipality, a national education portal, and a Mexican bank's password-reset endpoint. One further government body appears in the table without being a target at all, because the carrier monitoring platform the operator built a harvest script against also monitors a metropolitan fire service. That is the scope, and it is what makes this a briefing for a national regulator rather than an incident report for one company.
 
 | Target | Sector | What happened | Evidence class |
 |---|---|---|---|
-| Vernaza Grafic Cía. Ltda. (Cisco ISR 1100 + Sophos XG, Otecel/Movistar AS19114) | Carrier-managed customer edge | **Compromised.** 424,946,514 bytes exfiltrated 2026-07-24, device as HTTP client | Victim-side, DEFINITE |
-| CNT EP hosts `200.107.12.110` and `200.107.12.93` (AS28006) | Communications, state telecom | **Internal foothold.** Both pulled operator tooling from the staging server; one became an SSH jump host | Victim-side, HIGH |
-| CNT EP `radius01` at `200.107.9.80` | Communications, carrier AAA | Reachability confirmed; a root session is claimed by operator tooling only | Mixed, MODERATE on root |
-| CNT EP PRTG server `181.112.150.104` | Communications, monitoring plane | Credential-harvest script built with working API credentials; no captured outcome | Operator-side, HIGH capability |
-| Cuerpo de Bomberos de Quito, surfaced by the PRTG server's TLS certificate `*.bomberosquito.gob.ec` | Government, emergency services | **Collateral only.** No operator action against it anywhere in the corpus; the platform staged for harvest happens to monitor the fire department, which is how it enters the picture | Certificate-derived, LOW |
-| GAD Municipal de Nabón application host `181.112.229.138` | Government, municipal | **Attack failed.** WebLogic RCE returned 401 and 404 with no callback on any listener | Victim-side, DEFINITE negative |
-| `CATASTRO` at internal `192.168.10.12`, the cadastre host of GAD Quinindé | Government, municipal cadastre | Two webshells and a credential-spray chain built against it; no captured outcome. The municipality is named from a municipality-derived string in the operator's own spray list, withheld here because it is a plausible working credential, together with captured internal reconnaissance, not from anything victim-side | Operator-side, HIGH capability; municipality named at MODERATE |
-| SEIBE / CESLI portal, Ministry of Education | Government, education | Landing page captured under the operator's own probe-oriented filename | Operator-side, targeted |
-| Citibanamex `bancanet.banamex.com` | Financial, Mexico | Password-reset endpoint iterated over real nine-digit customer-ID ranges | Operator-side, intent MODERATE |
+| A printing company's carrier-managed edge (Cisco ISR 1100 + Sophos XG, on the managing carrier's AS) | Carrier-managed customer edge | **Compromised.** 424,946,514 bytes exfiltrated 2026-07-24, device as HTTP client | Victim-side, DEFINITE |
+| Two state-telecom internal hosts | Communications, state telecom | **Internal foothold.** Both pulled operator tooling from the staging server; one became an SSH jump host | Victim-side, HIGH |
+| The state telecom's `radius01` AAA server | Communications, carrier AAA | Reachability confirmed; a root session is claimed by operator tooling only | Mixed, MODERATE on root |
+| The state telecom's PRTG monitoring server | Communications, monitoring plane | Credential-harvest script built with working API credentials; no captured outcome | Operator-side, HIGH capability |
+| A metropolitan fire service, surfaced by a TLS certificate on the carrier's monitoring server | Government, emergency services | **Collateral only.** No operator action against it anywhere in the corpus; the platform staged for harvest happens to monitor the fire department, which is how it enters the picture | Certificate-derived, LOW |
+| A municipal government's application host | Government, municipal | **Attack failed.** WebLogic RCE returned 401 and 404 with no callback on any listener | Victim-side, DEFINITE negative |
+| `CATASTRO` at internal `192.168.10.12`, a municipal cadastre host | Government, municipal cadastre | Two webshells and a credential-spray chain built against it; no captured outcome. The municipality is named from a municipality-derived string in the operator's own spray list, withheld here because it is a plausible working credential, together with captured internal reconnaissance, not from anything victim-side | Operator-side, HIGH capability; municipality named at MODERATE |
+| A national education ministry portal | Government, education | Landing page captured under the operator's own probe-oriented filename | Operator-side, targeted |
+| A Mexican retail bank's online-banking host | Financial, Mexico | Password-reset endpoint iterated over real nine-digit customer-ID ranges | Operator-side, intent MODERATE |
 
 ### 4.1 Objectives versus instruments
 
-Vernaza Grafic is an instrument, not an objective, and separating the two is what makes the rest of this case parse. A 96-person printing and office-supplies company founded in 1950 is not a strategic target. Its Telefónica-managed router is, because that router's own telnet banner identifies it as carrier-managed equipment and its configuration files carry the carrier's provisioning relationship.
+The printing company is an instrument, not an objective, and separating the two is what makes the rest of this case parse. A 96-person office-supplies business founded in 1950 is not a strategic target. Its carrier-managed router is, because that router's own telnet banner identifies it as carrier-managed equipment and its configuration files carry the carrier's provisioning relationship.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/instrument-versus-objective.svg" | relative_url }}" alt="Three-card vertical diagram separating the instrument from the objective. Card one, orange, labelled THE INSTRUMENT: one ordinary business customer, a 96-person printing and office-supplies company in Quito founded in 1950, whose carrier-managed edge router has had its management plane facing the internet since 2022, and which was pre-selected by name rather than found by chance. Card two, red, labelled WHAT WAS TAKEN: only the device's own material, namely the firmware image, the crash dumps, the configuration files and cwmp_inventory, with no business data, no documents and no lateral movement into the company network, despite the operator holding an arbitrary file-read primitive. Card three, deep red, labelled THE OBJECTIVE: the carrier's credential plane, with the stolen configuration files mined in a single pass for tacacs, radius, acs, cwmp, tr069, community, key 7 and key 5, covering device AAA secrets, SNMP communities, stored passwords and TR-069 provisioning data. The footer states that the interesting victim is not always the big one, and that an unremarkable customer's managed router is a route into the carrier that manages it.">
@@ -176,17 +178,21 @@ Two artifacts settle that reading from opposite directions. The operator deliber
 
 The operator's own wordlists say the same thing from the opposite direction, and Section 10.5 carries the counts, the seeds and the methodological caution that goes with them. What matters at this level is the conclusion those files support. They were built to crack this one router rather than this one company, they seed a telecom back-office vendor's name that only somebody reading the carrier's systems would think to include, and they contain nothing at all about any other victim in this campaign.
 
-Two things follow. The Vernaza operation was pre-selected rather than swept up opportunistically. And the entire carrier side of this campaign ran with no credential-guessing component whatsoever, which means one campaign carried two completely different access approaches, each saying something different about how the operator sized up the target in front of them.
+Two things follow. The customer-edge operation was pre-selected rather than swept up opportunistically. And the entire carrier side of this campaign ran with no credential-guessing component whatsoever, which means one campaign carried two completely different access approaches, each saying something different about how the operator sized up the target in front of them.
 
-### 4.2 Three sites are still exposed, and I established that without touching anything
+### 4.2 Two of the three sites are still exposed, and I established that without touching anything
 
 This is the part that matters to somebody, and all of it comes from third-party passive scan history rather than from any probe of my own.
 
-The compromised router's management plane has been on the public internet **continuously since October 2022**. It still served the IOS-XE web interface redirect on port 80 as of 2026-08-15, its SNMP engine time indicated no reboot in roughly 310 days, and the implant class used against it is memory-resident and does not survive a reboot. Read those two facts together and the conclusion is uncomfortable. Anything the operator placed in July 2026 is, on the balance of the evidence, still resident on that device today. The Sophos firewall standing beside it had its administrative console exposed for fifteen months.
+The compromised router's management plane has been on the public internet **continuously since October 2022**. It still served the IOS-XE web interface redirect on port 80 as of 2026-08-15, its SNMP engine time indicated no reboot in roughly 310 days, and the implant class used against it is memory-resident and does not survive a reboot. Read those two facts together and the conclusion was uncomfortable. Anything the operator placed in July 2026 was, on the evidence available then, still resident on that device.
 
-The GAD Nabón environment is a named municipal-government victim, identified from a `proxmox.nabon` cluster certificate rather than from anything the operator wrote down. It presents three internet-facing Java and Oracle application servers, a hypervisor management API and MikroTik Winbox, eleven open ports in total on the most recent passive data.
+That reading no longer holds, and it is worth saying so plainly rather than letting it stand. As of 2026-09-01 the router answers nothing, on any of the five ports it previously exposed or on ICMP, and the adjacent host in the same address block answers normally, so this is the device rather than the path to it. I cannot establish from outside which of decommissioning, readdressing or a power cycle explains it. Any of the three most likely takes the memory-resident implant with it, which makes this the second piece of good news in the case. What I will not do is keep asserting the implant is resident, because the fact that supported that claim has gone.
 
-The WebLogic attempt against Nabón failed, and it is the only confirmed successful defence anywhere in this case. I want that on the record, because negative results get dropped and this one is genuinely good news. It also reframes rather than closes the risk. Had the attack landed, the hop from a WebLogic virtual machine to the Proxmox API on the same subnet is short, and Proxmox is not one server in that environment, it is the environment. That is a near miss against a municipal government, not a footnote.
+The Sophos firewall standing beside it had its administrative console exposed for fifteen months, and still presents its administration portal.
+
+The third site is a municipal government environment, identified from a hypervisor cluster certificate rather than from anything the operator wrote down. It presents three internet-facing Java and Oracle application servers, a hypervisor management API and MikroTik Winbox, eleven open ports in total on the most recent passive data. Of the three sites, this is the one where the exposure is unchanged, and it is the best-supported still-exposed claim in this report as of 2026-09-01.
+
+The WebLogic attempt against that environment failed, and it is the only confirmed successful defence anywhere in this case. I want that on the record, because negative results get dropped and this one is genuinely good news. It also reframes rather than closes the risk. Had the attack landed, the hop from a WebLogic virtual machine to the Proxmox API on the same subnet is short, and Proxmox is not one server in that environment, it is the environment. That is a near miss against a municipal government, not a footnote.
 
 The router was also contested, which changes how any future forensic work on it has to be scoped. Crash traces preserved in the stolen dumps show five other clients hitting the same device between 2026-05-12 and 2026-07-24, all using the generic public exploitation URI rather than this operator's distinctive path. They are separate actors, they are explicitly not folded into this operator's infrastructure, and their existence means nobody should assume a single intruder when they go looking.
 
@@ -230,7 +236,7 @@ That is a collection lesson worth carrying past this case. Trusting either sourc
 ## 6. The Confirmed Compromise: 424 MB Out of a Customer's Router
 {: .hl-tier-2}
 
-The victim is a single Cisco 1100-series integrated services router running IOS-XE 16.6.4, a 2018 build that was never patched for the 2023 web-interface vulnerability. Its hostname is `VERNAZA_GRAFIC_MATRIZ`, which the crash-dump filename convention reveals without the operator ever writing it down. Its management address is `200.24.221[.]121`, its egress address is `200.24.221[.]122`, and the internal web backend that its nginx front end proxies to sits at `192.168.1.6:80`.
+The victim is a single Cisco 1100-series integrated services router running IOS-XE 16.6.4, a 2018 build that was never patched for the 2023 web-interface vulnerability. Its hostname embeds the customer's own company name and its head-office site, which the crash-dump filename convention reveals without the operator ever writing it down. Its management address and its egress address are adjacent addresses in the same carrier-assigned block, and the internal web backend that its nginx front end proxies to sits at `192.168.1.6:80`.
 
 The sequence reconstructs cleanly from three sources that agree, the operator's own listener logs, an independent raw capture of the same traffic, and the victim device's own error log recovered from the crash dumps the operator stole.
 
@@ -239,7 +245,7 @@ The sequence reconstructs cleanly from three sources that agree, the operator's 
 | 2026-07-24 01:59:05 | First attempt using a single-encoded path fails and crashes the router's Lua authentication parser, source `95.214.114[.]37` | Victim's own nginx error log, carved from a stolen core dump |
 | 2026-07-24 02:02:12 | Double-encoded path succeeds, request proxied upstream to the internal web backend, same source address | Same log, three minutes later |
 | Same session | Two small test files retrieved to prove the file-copy primitive works before running it in anger | Operator's listener log |
-| 2026-07-24, across the day | **100 HTTP PUTs totalling 424,946,514 bytes** arrive from `200.24.221[.]122` | Operator's listener log, corroborated by an independent raw capture carrying `User-Agent: cisco-IOS` |
+| 2026-07-24, across the day | **100 HTTP PUTs totalling 424,946,514 bytes** arrive from the customer-edge egress address | Operator's listener log, corroborated by an independent raw capture carrying `User-Agent: cisco-IOS` |
 | 2026-07-24 12:50:23 | Operator generates a self-signed TLS certificate for their own listeners, same day as the theft | Certificate material in the corpus |
 
 The three-minute gap between the failure and the success is the whole technique in miniature. The first request used the encoding form that public proof-of-concept code uses. It crashed the parser and got nothing. The second used a form with two separately double-encoded characters and different casing, and it went straight through.
@@ -269,7 +275,7 @@ This is the mechanism I would most want a network operator to understand, becaus
 The operator's malformed authorization header crashes the router's web interface authentication handler with an arithmetic-on-nil error at a specific line of a specific Lua file. Every crash writes a core dump. That core dump is a memory image of the process that had just been handling credential checks, and the operator knows it, which is why their post-processing greps the stolen dumps for authentication tokens. Exploitation manufactures the artifact that exploitation then harvests.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/crash-harvest-loop.svg" | relative_url }}" alt="Four-card vertical diagram with a dashed loop-back arrow, showing exploitation that manufactures its own loot. Card one, orange: the operator sends an Authorization header the parser cannot handle, with no scheme prefix. Card two, red: the Lua parser dies with an arithmetic-on-nil error in smgmt_parse_auth_hdr at smgmt2.lua line 336, killing the authentication handler mid-request. Card three, yellow: the device writes a core dump, saving process memory that holds live credential material, in files named VERNAZA_GRAFIC_MATRIZ_RP_0_nginx core archives. Card four, deep red: the operator steals the dumps using the same fileCopy primitive and mines them for credentials, though here all 21 candidates were rejected and no tokens were recovered. A dashed orange arrow loops from the final card back to the first, captioned that every retry restocks the shelf it is about to empty. The footer notes 65 dumps were taken spanning February to July 2026, so most predate this operator, with one directly attributable and the other 64 unresolved.">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/crash-harvest-loop.svg" | relative_url }}" alt="Four-card vertical diagram with a dashed loop-back arrow, showing exploitation that manufactures its own loot. Card one, orange: the operator sends an Authorization header the parser cannot handle, with no scheme prefix. Card two, red: the Lua parser dies with an arithmetic-on-nil error in smgmt_parse_auth_hdr at smgmt2.lua line 336, killing the authentication handler mid-request. Card three, yellow: the device writes a core dump, saving process memory that holds live credential material, in core archives named after the device hostname. Card four, deep red: the operator steals the dumps using the same fileCopy primitive and mines them for credentials, though here all 21 candidates were rejected and no tokens were recovered. A dashed orange arrow loops from the final card back to the first, captioned that every retry restocks the shelf it is about to empty. The footer notes 65 dumps were taken spanning February to July 2026, so most predate this operator, with one directly attributable and the other 64 unresolved.">
   <figcaption><em>Figure 2: The loop that feeds the credential theft. Each failed authentication attempt crashes the parser and writes a fresh core dump holding live credentials, so the exploitation manufactures the very artifact it then harvests. The mechanism is confirmed; the credential recovery it was aimed at failed.</em></figcaption>
 </figure>
 
@@ -355,10 +361,10 @@ On 2026-07-13 two hosts belonging to Ecuador's state telecom reached out to the 
 | 14:01:40 | Operator brings up a tunnelling server on port 443 in reverse mode |
 | 14:02:06 | A reverse SOCKS session is established to a local listener on port 1080 |
 | 19:50:30 | Operator fetches the Windows tunnelling client from their own staging server, a smoke test against themselves |
-| 19:51:21 | `200.107.12[.]110` requests the staging directory index |
-| 19:51:42 | `200.107.12[.]110` downloads the Windows tunnelling client |
-| 19:55:35 | `200.107.12[.]93` requests the SSH client, which is not staged yet and returns 404 |
-| 19:59:44 | `200.107.12[.]93` downloads the SSH client, now present |
+| 19:51:21 | Carrier host A requests the staging directory index |
+| 19:51:42 | Carrier host A downloads the Windows tunnelling client |
+| 19:55:35 | Carrier host B requests the SSH client, which is not staged yet and returns 404 |
+| 19:59:44 | Carrier host B downloads the SSH client, now present |
 | 20:03:51 | A second tunnelling server comes up on port 80, with SOCKS twenty seconds later |
 | 20:11:23 | A third server on port 80 carries two concurrent SOCKS sessions |
 
@@ -366,7 +372,7 @@ One host took the tunnelling client, the other took the SSH client. The operator
 
 I want to be as careful with that session as I am with the AAA server in the next subsection, because the two rest on different classes of evidence and it would be easy to let the stronger one carry the weaker. The foothold is victim-side. The carrier's own hosts fetched the tooling, and the SOCKS sessions that followed arrived inbound at the operator's listeners.
 
-The root level of that SSH session is not victim-side. It rests on the operator's own proxy-chain configuration files, which point at the local SOCKS listener and chain onward from there, and on what their scripts assume about the account they are running as. So the foothold is HIGH and root on the jump host is MODERATE, on exactly the reasoning I apply to `200.107.9[.]80` below.
+The root level of that SSH session is not victim-side. It rests on the operator's own proxy-chain configuration files, which point at the local SOCKS listener and chain onward from there, and on what their scripts assume about the account they are running as. So the foothold is HIGH and root on the jump host is MODERATE, on exactly the reasoning I apply to the RADIUS server below.
 
 Where that key came from is not in the evidence, and neither is where the monitoring-platform credentials came from. Both were sourced by a step that never appears in these 169 files, which means credential acquisition is happening outside everything I can see.
 
@@ -376,7 +382,7 @@ The reverse DNS captured in that scan reads as a carrier core-network map, with 
 
 ### 7.2 The AAA server, and a repair that was not a repair
 
-The single most prioritised target in the entire corpus is the carrier's RADIUS server at `200.107.9[.]80`. It appears across three unrelated tool families, as the only named single host in the internal scan while every other target gets a range sweep, hard-coded with labelled per-port probes in three separate Java scanners, and as a claimed root session driven from the operator's own console.
+The single most prioritised target in the entire corpus is the carrier's RADIUS server. It appears across three unrelated tool families, as the only named single host in the internal scan while every other target gets a range sweep, hard-coded with labelled per-port probes in three separate Java scanners, and as a claimed root session driven from the operator's own console.
 
 What the operator did there sounds almost helpful until you look at it properly. They killed every duplicate copy of the statistics daemon except one, then rewrote the watchdog script so that the daemon self-heals, wrapping the original polling loop in a background loop that restarts the daemon every 30 seconds if it dies. Then they backdated the modified file to 2010-10-07.
 
@@ -388,11 +394,11 @@ The root access itself is **MODERATE, not HIGH**, and the distinction is load-be
 
 ### 7.3 The attempt that failed
 
-The operator fired a WebLogic remote-code-execution chain at `181.112.229[.]138` on port 7001 and it did not work. Three independent confirmations, all victim-side, put that beyond doubt. The exploit's own output shows the callback cycled across LDAP, RMI and HTTP on six different ports with every listener reporting no connection. The captured server responses are a genuine Oracle WebLogic 401 and a genuine WebLogic 404. And the callback listener log records the listener starting and nothing ever arriving.
+The operator fired a WebLogic remote-code-execution chain at the municipal application host on port 7001 and it did not work. Three independent confirmations, all victim-side, put that beyond doubt. The exploit's own output shows the callback cycled across LDAP, RMI and HTTP on six different ports with every listener reporting no connection. The captured server responses are a genuine Oracle WebLogic 401 and a genuine WebLogic 404. And the callback listener log records the listener starting and nothing ever arriving.
 
 The captured bytes settle an earlier reading I had to withdraw. Those error pages are authentic Oracle WebLogic output, down to the HTML 4.0 draft doctype and a verbatim protocol block, and other application servers render differently. There really was a WebLogic on that port, and it refused them. Earlier suggestions that the target ran something else, or that the operator had made a fingerprinting error, are wrong and are retracted here.
 
-That address sits in the state telecom's address space with a hosting customer as the ISP of record, and the environment behind it belongs to GAD Municipal de Nabón. It is the only confirmed successful defence in this case.
+That address sits in the state telecom's address space with a hosting customer as the ISP of record, and the environment behind it belongs to a municipal government. It is the only confirmed successful defence in this case.
 
 ### 7.4 Built, aimed, and unproven
 
@@ -412,8 +418,8 @@ The Windows post-exploitation chain runs against an internal host the operator l
 ```
 operator VPS
   tunnelling server -> local SOCKS listener on 127.0.0.1:1080
-    ssh -i <operator key> root@200.107.12.110    (jump host, confirmed foothold; root operator-side)
-      recon -> 200.107.7.86, operator label "SYS-GAD"                     (no captured outcome)
+    ssh -i <operator key> root@<carrier host A>   (jump host, confirmed foothold; root operator-side)
+      recon -> carrier host C, operator label "SYS-GAD"                  (no captured outcome)
       192.168.10.12, operator label "CATASTRO" (WAMP stack, mapping server on :8080)
         code execution: unauthenticated OGC-filter RCE                   (no captured outcome)
         webshells written to the web root:                               (no captured outcome)
@@ -720,13 +726,13 @@ Three files totalling roughly 2.7 MB, and they are the sharpest targeting eviden
 <details markdown="1" class="hl-teardown">
 <summary>52,027 lines built to crack one router, and two seeds nobody could guess</summary>
 
-The three files run to 52,027, 55,576 and 77,360 lines. Whole-file case-insensitive counts put `vernaza` and `grafic` as the top two seeds across all three, ahead of `movistar`, `otecel` and `telefonica`.
+The three files run to 52,027, 55,576 and 77,360 lines. Whole-file case-insensitive counts put the customer's own company name as the top two seeds across all three, ahead of the managing carrier's three brand names.
 
 The variant set encodes precise prior knowledge rather than a scrape. The registered legal name appears in full. So does a compound of the company name, the city by its three-letter airport code, and the Spanish word for head office. There are 7,310 instances of the city code and 5,286 of the head-office token. Systematic single-letter prefix mutations around the company name show generation rather than a copied list.
 
 The list was built to crack a router, not a company. It carries `cisco` 1,184 times, and `enable` and `secret` 1,152 times each, which together are the two words of the IOS command that sets the privileged-mode password. The third file carries the platform name and `router` 405 times each.
 
-Two seeds are neither generic nor guessable, and this is the part I did not expect. `netcraker` and a variant appear 2,304 times each, naming a real telecom back-office vendor whose platform Telefónica Ecuador publicly runs. A second acronym appears 3,473 times combined, decorated with the same punctuation prefix as the rest, and I could not resolve what it expands to against Ecuadorian telecom sources. I am not going to guess it. Carrier back-office system names sitting inside a list built to crack one customer's router is the single detail in this corpus that most clearly says the customer was never the point.
+Two seeds are neither generic nor guessable, and this is the part I did not expect. `netcraker` and a variant appear 2,304 times each, naming a real telecom back-office vendor whose platform the managing carrier publicly runs in this market. A second acronym appears 3,473 times combined, decorated with the same punctuation prefix as the rest, and I could not resolve what it expands to against Ecuadorian telecom sources. I am not going to guess it. Carrier back-office system names sitting inside a list built to crack one customer's router is the single detail in this corpus that most clearly says the customer was never the point.
 
 The negative result is equally strong and easier to miss. These three router-cracking wordlists, a separate artifact from the lateral-movement script's hard-coded spray pairs in Section 7.4, contain **zero** occurrences of the state telecom, its ISP brand, either municipality, the cadastre label, the education portal, the mapping server, the monitoring platform, RADIUS, WebLogic or the fire department. Every other victim in this campaign is absent. These were built for one operation and no other, which also means the entire carrier side of the campaign ran with no credential-guessing component whatsoever. Two completely different access approaches in one campaign.
 
@@ -843,7 +849,7 @@ I assess an independent Spanish-speaking operator or very small team at MODERATE
 
 Team size sits at MODERATE, around 70 percent, and the picture is coherent rather than decisive. One server, one domain, one rented exit. A single consistent build environment across every observed service, matching the compiler toolchain used for the one native binary. One console design, one operational rhythm, no handoff conventions and no divergent coding styles between artifacts. But everything there is equally consistent with two or three people sharing a box and a style, and I have no artifact that separates those. A second operator working from different infrastructure would leave no trace in this corpus at all.
 
-Regional base is the weakest of the three, and I hold it at LOW, around 65 percent for Latin America with Ecuador-proximate as the best available narrowing. The strongest leg is the uniform Spanish. Supporting it are the exclusive focus on Ecuadorian infrastructure, verified knowledge of a specific Telefónica Ecuador back-office platform, and an attack-source exit that terminates in Ecuador. None of those legs is what it looks like at first glance, though. Language identifies the working language and Spanish spans two continents, target geography identifies the target and not the operator, and the Ecuadorian exit is a commercial VPN anybody can rent, which is exactly what a competent operator elsewhere would use to appear local. The hosting jurisdiction is France and carries no information about the operator whatsoever, only about a rental decision.
+Regional base is the weakest of the three, and I hold it at LOW, around 65 percent for Latin America with Ecuador-proximate as the best available narrowing. The strongest leg is the uniform Spanish. Supporting it are the exclusive focus on Ecuadorian infrastructure, verified knowledge of a specific carrier back-office platform in that market, and an attack-source exit that terminates in Ecuador. None of those legs is what it looks like at first glance, though. Language identifies the working language and Spanish spans two continents, target geography identifies the target and not the operator, and the Ecuadorian exit is a commercial VPN anybody can rent, which is exactly what a competent operator elsewhere would use to appear local. The hosting jurisdiction is France and carries no information about the operator whatsoever, only about a rental decision.
 
 ### 12.2 The trap in this case, and it is a teaching-grade one
 
@@ -883,7 +889,7 @@ What is missing is the only thing that would settle it. The destination of the c
 
 Formal hypothesis testing on motive comes out close rather than clean, and the closeness belongs on the page. Espionage-flavoured collection carries one inconsistency against the broker hypothesis at three, with the two remaining hypotheses at five and four. That gap is thinner than the counts make it look, because two of the rows I added under stress-testing lean on absence of evidence in a corpus that is only an open-directory snapshot caught mid-operation, and the counterweight above it, the fleet-wide monitoring-platform harvest, I scored as discriminating nothing at all rather than quietly left out.
 
-The lean survives on the quality of the evidence rather than on the count. The single inconsistency against espionage is the Banamex probe, one concrete but ambiguous data point that reads as easily as a capacity test as an enumeration oracle. The inconsistencies against brokering rest on a pattern repeated across several independent sources rather than on any single artifact. One ambiguous data point against a repeated multi-source pattern is not a tie, and it is not a settled call either, which is why the confidence sits where it does.
+The lean survives on the quality of the evidence rather than on the count. The single inconsistency against espionage is the retail-bank probe, one concrete but ambiguous data point that reads as easily as a capacity test as an enumeration oracle. The inconsistencies against brokering rest on a pattern repeated across several independent sources rather than on any single artifact. One ambiguous data point against a repeated multi-source pattern is not a tie, and it is not a settled call either, which is why the confidence sits where it does.
 
 The actor-type matrix is a separate question with a separate result, and I am not going to borrow its cleanliness for this one. There the independent Spanish-speaking operator hypothesis carries zero inconsistencies against a field of four, the nearest competitor carries three, and the Chinese-state-via-contractor hypothesis accumulates the most at five, which makes it unsupported rather than refuted. Every evidence row I added on that pass either supported the winner or damaged a competitor, which is precisely what did not happen on motive.
 
@@ -986,7 +992,9 @@ The corpus is 169 files, not 171. A filename-level pass read two duplicate captu
 
 The scanning API key may not be the operator's. I wrote it up as their own credential, which was an assumption rather than a finding, and correcting it turned a pure indicator into a possible third victim.
 
-And Vernaza Grafic is a printing company, not a telecom vendor. The lead that the best-evidenced victim might be a carrier contractor is dead, and killing it is what forced the objectives-versus-instruments framing that now carries this whole report.
+And the compromised customer is a printing company, not a telecom vendor. The lead that the best-evidenced victim might be a carrier contractor is dead, and killing it is what forced the objectives-versus-instruments framing that now carries this whole report.
+
+One further claim failed against time rather than against evidence, and it belongs in a different category from everything above. I wrote that anything the operator placed on the router in July was, on the balance of the evidence, still resident on it, resting that on the device not having rebooted in roughly 310 days. The router has since stopped answering altogether, and every explanation for that which involves it restarting also clears a memory-resident implant. The claim was sound when written and is not sound now. The rule it leaves behind is to date any present-tense claim to its observation window when the claim depends on a state that can change without anybody telling me, which is exactly what a device uptime is.
 
 ### 14.3 What is missing
 
@@ -1004,7 +1012,15 @@ Three ceilings are permanent and no further work removes them. The destination o
 
 ### 14.4 Disclosure
 
-Affected parties, hosting providers and the vendor whose API key appears in the operator's tooling were notified on 2026-08-17, with one notification dated later in the month. Replies are outstanding at the time of writing. A reply is victim-side evidence and outranks any inference in this report, so anything that comes back will be reflected here rather than argued with.
+Affected parties, hosting providers and the vendor whose API key appears in the operator's tooling were notified on 2026-08-17, and the hosting provider carrying the collection server on 2026-08-29. A reply is victim-side evidence and outranks any inference in this report, so anything that comes back will be reflected here rather than argued with. Nothing has come back so far.
+
+The infrastructure did change. Between 2026-08-30 and 2026-09-01 the collection server stopped answering on every port it had ever used and on ICMP, while the network path to it stayed clean all the way to the hosting provider's own edge, which is the shape of a machine that has been stopped rather than a route that has been withdrawn. The operator's VPN egress address stopped being routed at all in the same period. The registered domain that fronted the collection server now returns a gateway timeout from its own content-delivery layer, the response that layer gives when it cannot reach the origin behind it, though the registration itself is intact and has not lapsed.
+
+I put it at HIGH that the provider notification is what took the collection server down, and I read this as a disrupted operation rather than a relocated one. Three things carry that. The provider is the one notified party with direct control over the machine. The host had been continuously observable for 83 days, from 2026-06-08 through 2026-08-30, which makes a coincidental disappearance inside the three days after the report an expensive thing to believe. And the operator was still actively developing on that host as late as 2026-08-22, staging a fresh set of payloads on it, which is not how somebody behaves days before walking away from a machine by choice.
+
+The shape of the outage points the same way. The address stayed routed cleanly all the way to the provider's own network edge while the machine behind it stopped answering anything at all, including ICMP. That is what provider intervention looks like from outside, and it is not what an operator relocating their own infrastructure usually leaves behind, since they tend to keep the host and change what runs on it.
+
+What keeps this below the top of the scale is that the provider has not replied and nobody has confirmed an action, so it rests on timing and shape rather than on a documented takedown. Timing alone never establishes cause. I am comfortable saying the reporting disrupted this operation and not comfortable calling it a confirmed suspension, and those are different claims.
 
 ---
 
@@ -1024,7 +1040,6 @@ Each source below carries the tier rating I assigned it while researching this c
 - CISA, Alert AA25-266A, documenting the United States federal agency intrusion that began through CVE-2024-36401 on 2024-07-11.
 - CISA, NSA and FBI, Joint Cybersecurity Advisory AA24-038A on Volt Typhoon pre-positioning against United States critical infrastructure. I cite this in Section 12.2 as an illustrative threat-class comparison and nothing more.
 - United States Department of the Treasury, Office of Foreign Assets Control, January 2025 designation of Sichuan Juxinhe Network Technology, connecting Salt Typhoon infrastructure to China's Ministry of State Security. Also an illustrative comparison only, and reached through secondary reporting of the sanctions action rather than through the primary notice.
-- INCIBE-CERT (Spain), security bulletin on the July 2021 RansomEXX ransomware attack against CNT EP. Unrelated actor and unrelated infrastructure, cited only to establish CNT EP as a previously breached entity.
 
 ### 15.2 Tier 2, vendor research and named technical reporting
 
@@ -1047,9 +1062,8 @@ Each source below carries the tier rating I assigned it while researching this c
 ### 15.3 Tier 3, trade press, security journalism and public repositories
 
 - SEC Consult, "TR-069: IoT Before It Was Cool!". The provisioning-protocol exposure history behind the carrier-managed customer-premises argument in Section 4.1, corroborated by independent technical summaries of the protocol and by retrospectives on the November 2016 Deutsche Telekom incident.
-- Netcracker Technology press release of 2025-03-26, corroborated by BusinessWire, SDxCentral and Developing Telecoms. The extension of the Telefónica Ecuador full-stack BSS partnership, which is what makes the `netcraker` wordlist seed in Section 10.5 genuine carrier knowledge rather than a guess. Developing Telecoms is also the June 2025 source for Telefónica's pending sale of Otecel to Millicom, which had not closed as of the most recent reporting I found.
+- Netcracker Technology press release of 2025-03-26, corroborated by BusinessWire, SDxCentral and Developing Telecoms, on the extension of its full-stack BSS partnership with the carrier in this market. That partnership is what makes the `netcraker` wordlist seed in Section 10.5 genuine carrier knowledge rather than a guess. Developing Telecoms is also the June 2025 source for that carrier's pending divestment of its Ecuadorian mobile unit, which had not closed as of the most recent reporting I found. The sources name the parties; this report does not, since the carrier and its customer are victims here and naming them adds nothing a defender can act on.
 - The Hacker News, June 2026, reporting the CVE-2024-21182 catalog addition and noting that no public reports describe how the vulnerability is being exploited and that no threat actor is named in connection with it. The `dinosn/CVE-2024-21182` repository documentation is the source for the vulhub 12.2.1.3 container being the standard, publicly recommended build workaround rather than operator ingenuity.
-- BleepingComputer, corroborated by Heimdal Security, on the 2021 RansomEXX attack against CNT EP.
 
 ### 15.4 What could not be retrieved
 
