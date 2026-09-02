@@ -9,7 +9,7 @@ stix_bundle: /stix/evilsoul-engine-stealer-maas-144-172-103-98.json
 category: "MaaS Operation"
 description: "Server-side teardown of the EvilSoul-Engine stealer-builder — a Brazilian Malware-as-a-Service factory that mass-produces uniquely-packed Discord, browser, and crypto-theft payloads with a working Chrome App-Bound-Encryption bypass and Microsoft Defender timing evasion."
 detection_page: /hunting-detections/evilsoul-engine-stealer-maas-detections/
-ioc_feed: /ioc-feeds/evilsoul-engine-stealer-maas-iocs.json
+ioc_feed: /ioc-feeds/evilsoul-engine-stealer-maas/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

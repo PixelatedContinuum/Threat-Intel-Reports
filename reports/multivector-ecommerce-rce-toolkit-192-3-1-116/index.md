@@ -8,7 +8,7 @@ hide: true
 category: "PII Harvesting Operation"
 description: "An exposed staging directory shows how an ordinary operator now runs an intrusion campaign, with scores of probably-generated attack scripts, an off-the-shelf agentic-AI framework wired in as the console, and a defensive lesson in what actually stopped it."
 detection_page: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/
-ioc_feed: /ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json
+ioc_feed: /ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116/
 detection_sections:
   - label: "Detection Coverage Summary"
     anchor: "#detection-coverage-summary"

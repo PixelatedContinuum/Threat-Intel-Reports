@@ -8,7 +8,7 @@ hide: true
 category: "Post-Exploitation Toolkit"
 description: "A live single-host IIS/MSSQL post-exploitation staging operation pairing a bespoke Flask C2 beacon API with a sandbox-evading custom MSSQL CLR reverse-shell backdoor and a public SeImpersonate-to-Active-Directory escalation kit."
 detection_page: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections/
-ioc_feed: /ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json
+ioc_feed: /ioc-feeds/flaskc2-postex-toolkit-67-215-232-25/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

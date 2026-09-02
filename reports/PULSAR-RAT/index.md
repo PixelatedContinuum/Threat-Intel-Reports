@@ -2,7 +2,7 @@
 title: "PULSAR RAT (server.exe)"
 date: '2025-12-01'
 detection_page: /hunting-detections/PULSAR-RAT-detections/
-ioc_feed: /ioc-feeds/PULSAR-RAT.json
+ioc_feed: /ioc-feeds/PULSAR-RAT/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

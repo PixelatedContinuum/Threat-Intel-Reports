@@ -12,7 +12,7 @@ series_role: member
 series_order: 3
 description: "Technical analysis of an English-speaking Hybrid AI-augmented operator who combined Atlassian Rovodev AI co-authoring with a downstream Pandora-Mirai 11-architecture IoT botnet and a 13-attack-method Matrix C2 framework, productized as a Discord-fronted DDoS-as-a-Service. First publicly documented Rovodev offensive-use case; AI-Generated Offensive Code Structural Signature confirmed DEFINITE for its universal subset via cross-3-operator validation. UTA-2026-014 — first public attribution."
 detection_page: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/
-ioc_feed: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs.json
+ioc_feed: /ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

@@ -3,7 +3,7 @@ title: "ShinyHunters Data Leak Site at 91.215.85.22 — Infrastructure, Victims,
 date: '2026-04-17'
 last_updated: '2026-04-24'
 detection_page: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/
-ioc_feed: /ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json
+ioc_feed: /ioc-feeds/shinyhunters-dls-91-215-85-22-20260417/
 ioc_highlights:
   - value: "91[.]215[.]85[.]22"
     note: "ShinyHunters DLS clearnet host (nginx, AS200593 PROSPERO)"

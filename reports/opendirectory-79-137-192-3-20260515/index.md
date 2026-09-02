@@ -5,7 +5,7 @@ series: opendir-79-137-192-3
 series_role: parent
 series_order: 0
 detection_page: /hunting-detections/opendirectory-79-137-192-3-20260515-detections/
-ioc_feed: /ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json
+ioc_feed: /ioc-feeds/opendirectory-79-137-192-3-20260515/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

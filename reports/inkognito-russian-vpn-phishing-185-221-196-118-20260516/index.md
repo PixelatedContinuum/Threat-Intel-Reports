@@ -5,7 +5,7 @@ series: opendir-79-137-192-3
 series_role: member
 series_order: 2
 detection_page: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/
-ioc_feed: /ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json
+ioc_feed: /ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

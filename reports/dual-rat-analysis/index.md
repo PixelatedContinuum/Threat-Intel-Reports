@@ -2,7 +2,7 @@
 title: "Quasar RAT vs. NjRAT/XWorm — Technical Deep-Dive"
 date: '2025-12-06'
 detection_page: /hunting-detections/dual-rat-analysis-detections/
-ioc_feed: /ioc-feeds/dual-rat-analysis.json
+ioc_feed: /ioc-feeds/dual-rat-analysis/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

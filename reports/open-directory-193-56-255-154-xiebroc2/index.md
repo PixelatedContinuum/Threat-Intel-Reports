@@ -8,7 +8,7 @@ hide: true
 category: "C2 Framework"
 description: "An open directory at 193.56.255.154 exposed a multi-framework C2 toolkit — XiebroC2 v3.1 Go implant and two Covenant stager builds — with infrastructure pivoting identifying a probable second operator server at 92.60.75.103 serving a novel undocumented beacon."
 detection_page: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections/
-ioc_feed: /ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json
+ioc_feed: /ioc-feeds/opendirectory-193-56-255-154-20260403/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

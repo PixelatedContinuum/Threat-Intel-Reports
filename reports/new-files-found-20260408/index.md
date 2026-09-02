@@ -8,7 +8,7 @@ hide: true
 category: Custom RAT Toolkit
 description: 'Continued analysis of UTA-2026-004 open directory reveals 106 additional files including a complete cracked Cobalt Strike 4.9.1 installation, a four-generation custom implant evolution chain (OpenStrike), CovertVPN Layer 2 tunneling, and an EAX-redirect process hollowing variant that bypasses standard EDR detection logic.'
 detection_page: /hunting-detections/new-files-found-20260408-detections/
-ioc_feed: /ioc-feeds/new-files-found-20260408-iocs.json
+ioc_feed: /ioc-feeds/new-files-found-20260408/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

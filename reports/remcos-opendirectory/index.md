@@ -3,7 +3,7 @@ title: "Remcos OpenDirectory Campaign"
 date: '2026-02-04'
 last_updated: '2026-02-06'
 detection_page: /hunting-detections/remcos-opendirectory-detections/
-ioc_feed: /ioc-feeds/remcos-opendirectory-campaign.json
+ioc_feed: /ioc-feeds/remcos-opendirectory-campaign/
 ioc_highlights:
   - value: "203[.]159[.]90[.]147"
     note: "C2 server — open directory, payload delivery"

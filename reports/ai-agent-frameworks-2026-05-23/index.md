@@ -12,7 +12,7 @@ series_role: parent
 series_order: 0
 description: "Parent report of a six-report series documenting 8 independent threat operators integrating AI-agent CLIs (Gemini CLI, Claude Code, Atlassian Rovodev, OpenClaw, Cursor IDE) into offensive workflows, observed through open-directory exposures. Five novel TTPs, six UTA designations, one named-actor HIGH attribution (Vova75Rus), and a GitHub Trust & Safety Tier-0 disposition outcome."
 detection_page: /hunting-detections/ai-agent-frameworks-2026-05-23-detections/
-ioc_feed: /ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json
+ioc_feed: /ioc-feeds/ai-agent-frameworks-2026-05-23/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

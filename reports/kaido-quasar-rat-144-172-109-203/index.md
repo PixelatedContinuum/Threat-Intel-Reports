@@ -9,7 +9,7 @@ stix_bundle: /stix/kaido-quasar-rat-144-172-109-203.json
 category: "Remote Access Trojan"
 description: "KAIDO is a rebranded 64-bit Quasar RAT fork operated by a named Brazilian actor. Its Hidden-VNC module clones a victim's browser profile to drive their live, authenticated session on an invisible desktop — defeating device-trust and most 2FA. The C2 was live with May-2026 samples."
 detection_page: /hunting-detections/kaido-quasar-rat-detections/
-ioc_feed: /ioc-feeds/kaido-quasar-rat-iocs.json
+ioc_feed: /ioc-feeds/kaido-quasar-rat/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

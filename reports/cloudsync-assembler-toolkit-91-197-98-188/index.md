@@ -8,7 +8,7 @@ hide: true
 category: "Intrusion Toolkit"
 description: "A 22-file intrusion toolkit staged on a live open directory, built almost entirely from other people's tooling. Three named threat actors' tools sit in the kit, and the operator is none of them."
 detection_page: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections/
-ioc_feed: /ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json
+ioc_feed: /ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188/
 detection_sections:
   - label: "Detection Coverage Summary"
     anchor: "#detection-coverage-summary"

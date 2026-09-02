@@ -9,7 +9,7 @@ hide: true
 category: "Cybercrime Toolkit"
 description: "First public analysis of OpenStrike, a novel multi-implant C2 toolkit recovered from an open directory on 172.105.0.126 before any known compromise, featuring a tripwired Cobalt Strike DLL and cross-platform Python beacon sharing an identical RSA-2048 key."
 detection_page: /hunting-detections/open-directory-172-105-0-126-20260406-detections/
-ioc_feed: /ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json
+ioc_feed: /ioc-feeds/open-directory-172-105-0-126-20260406/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

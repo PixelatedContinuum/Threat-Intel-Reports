@@ -2,7 +2,7 @@
 title: "AdvancedRouterScanner — Global Router Exploitation"
 date: '2025-10-25'
 detection_page: /hunting-detections/AdvancedRouterScanner-detections/
-ioc_feed: /ioc-feeds/AdvancedRouterScanner.json
+ioc_feed: /ioc-feeds/AdvancedRouterScanner/
 detection_sections:
   - label: "Sigma Rules"
     anchor: "#sigma-rules"

@@ -12,7 +12,7 @@ series_role: member
 series_order: 4
 description: "Capsule sub-report (Case 4 of the AI-Agent-Frameworks investigation): a Korean-language operator's attacker-customized ~/.claude/settings.local.json permission allowlist that pre-approves the OpenClaw install-and-run chain, recovered from an open-directory exposure (221.150.15.104, Korea Telecom). UTA-2026-015."
 detection_page: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections/
-ioc_feed: /ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json
+ioc_feed: /ioc-feeds/korean-claude-openclaw-221.150.15.104/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

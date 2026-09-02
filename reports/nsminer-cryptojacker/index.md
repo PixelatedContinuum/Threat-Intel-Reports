@@ -2,7 +2,7 @@
 title: "NsMiner: Multi-Stage Operation"
 date: '2026-02-02'
 detection_page: /hunting-detections/nsminer-cryptojacker-detections/
-ioc_feed: /ioc-feeds/nsminer-cryptojacker.json
+ioc_feed: /ioc-feeds/nsminer-cryptojacker/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

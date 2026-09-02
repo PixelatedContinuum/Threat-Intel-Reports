@@ -8,7 +8,7 @@ hide: true
 category: Ransomware Toolkit
 description: 'Analysis of a private five-stage batch-to-PowerShell-.NET crypter delivering Chaos/TorBrowserTor ransomware from a bulletproof-adjacent open directory at 94.103.1.13. Documents four crypter behaviors with no located prior public reporting, including a Console.Title launch gate, tri-artifact anti-sandbox gate, cross-layer AES+XOR key reuse, and a Stage-5b UACME #41 UAC bypass with an 8/77 VT detection gap.'
 detection_page: /hunting-detections/open-directory-94-103-1-13-20260423-detections/
-ioc_feed: /ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json
+ioc_feed: /ioc-feeds/open-directory-94-103-1-13-20260423/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

@@ -5,7 +5,7 @@ series: opendir-79-137-192-3
 series_role: member
 series_order: 1
 detection_page: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/
-ioc_feed: /ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json
+ioc_feed: /ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

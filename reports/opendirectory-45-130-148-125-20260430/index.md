@@ -9,7 +9,7 @@ hide: true
 category: "C2 Framework"
 description: "An open directory on a Uzbekistani VPS exposed a complete AdaptixC2 operator toolkit — 30 attack artifacts covering the full intrusion kill chain — with recovered RC4 config, Linux build-environment fingerprints, and operator-specific indicators enabling cross-campaign tracking under UTA-2026-006."
 detection_page: /hunting-detections/opendirectory-45-130-148-125-20260430-detections/
-ioc_feed: /ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json
+ioc_feed: /ioc-feeds/opendirectory-45-130-148-125-20260430/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

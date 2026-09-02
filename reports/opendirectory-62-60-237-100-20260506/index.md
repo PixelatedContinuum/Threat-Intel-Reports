@@ -9,7 +9,7 @@ hide: true
 category: "MaaS Operation"
 description: "A Russian-speaking commodity-malware operator runs a live 15-month multi-vector phishing campaign delivering HijackLoader / Penguish / Rugmi into an AsyncRAT-class .NET RAT, staged from OFAC-sanctioned AS210644 infrastructure and beaconing to Spamhaus DROP-listed AS210558."
 detection_page: /hunting-detections/opendirectory-62-60-237-100-20260506-detections/
-ioc_feed: /ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json
+ioc_feed: /ioc-feeds/opendirectory-62-60-237-100-20260506/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

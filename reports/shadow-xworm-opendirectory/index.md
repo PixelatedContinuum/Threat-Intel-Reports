@@ -2,7 +2,7 @@
 title: "Shadow RAT & XWorm Open Directory Campaign"
 date: '2026-04-04'
 detection_page: /hunting-detections/shadow-xworm-opendirectory-detections/
-ioc_feed: /ioc-feeds/shadow-xworm-opendirectory-iocs.json
+ioc_feed: /ioc-feeds/shadow-xworm-opendirectory/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

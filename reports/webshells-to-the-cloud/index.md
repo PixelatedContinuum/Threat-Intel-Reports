@@ -2,7 +2,7 @@
 title: "From Webshells to the Cloud"
 date: '2025-10-20'
 detection_page: /hunting-detections/webshells-to-the-cloud-detections/
-ioc_feed: /ioc-feeds/webshells-to-the-cloud.json
+ioc_feed: /ioc-feeds/webshells-to-the-cloud/
 detection_sections:
   - label: "Sigma Rules"
     anchor: "#sigma-rules"

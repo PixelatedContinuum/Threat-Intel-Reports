@@ -3,7 +3,7 @@ title: "WebServer Compromise Kit — 91.236.230.250"
 date: '2026-02-08'
 last_updated: '2026-02-10'
 detection_page: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections/
-ioc_feed: /ioc-feeds/webserver-compromise-kit-91-236-230-250-iocs.json
+ioc_feed: /ioc-feeds/webserver-compromise-kit-91-236-230-250/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"

@@ -2,7 +2,7 @@
 title: QuasarRAT + Xworm + PowerShell Loader
 date: '2025-10-17'
 detection_page: /hunting-detections/quasar-xworm-powershell-detections/
-ioc_feed: /ioc-feeds/quasar-xworm-powershell.json
+ioc_feed: /ioc-feeds/quasar-xworm-powershell/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
