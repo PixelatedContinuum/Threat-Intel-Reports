@@ -3,21 +3,21 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-02T04:00:52Z
+generated_at: 2026-09-02T06:02:11Z
 window_days: 30
 counts:
   total: 545
-  research: 204
-  news: 341
+  research: 203
+  news: 342
 topics:
   - label: "vulnerabilities"
-    count: 70
+    count: 71
     color: 1
   - label: "cybercrime"
     count: 55
     color: 2
   - label: "exploited"
-    count: 29
+    count: 30
     color: 3
   - label: "government"
     count: 28
@@ -442,13 +442,13 @@ label_colors:
   "securing ai": 4
   "security-labs": 3
   "servicenow": 1
+  "sma1000": 2
   "software": 5
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
   "supply chain attack": 8
   "teamcity": 8
-  "threat hunting & intel": 9
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
@@ -458,6 +458,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "SonicWall Warns of Two SMA1000 Zero-Days Exploited in Attacks"
+    url: "https://www.securityweek.com/sonicwall-warns-of-two-sma1000-zero-days-exploited-in-attacks/"
+    source: "SecurityWeek"
+    date: 2026-09-02T05:04:52Z
+    kind: news
+    labels: ["exploited", "sma1000", "sonicwall", "vulnerabilities", "zero-day"]
   - title: "Counterfeit installers to system compromise: Tracking a deceptive software download campaign"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/01/counterfeit-installers-system-compromise-tracking-deceptive-software-download-campaign/"
     source: "Microsoft"
@@ -3722,9 +3728,3 @@ items:
     date: 2026-08-03T09:04:41Z
     kind: research
     labels: ["crackerdrv", "dkom", "etw patching", "kernel rootkit", "minifilter driver", "nsi hooking", "registry callback c2", "sakdriver", "wfp manipulation"]
-  - title: "CrowdStrike 2026 Threat Hunting Report: Exploitation Window Closes as AI Use Accelerates"
-    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-2026-threat-hunting-report/"
-    source: "Crowdstrike"
-    date: 2026-08-03T05:00:00Z
-    kind: research
-    labels: ["threat hunting & intel"]
