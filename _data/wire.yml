@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T08:00:38Z
+generated_at: 2026-09-03T10:03:02Z
 window_days: 30
 counts:
-  total: 549
-  research: 207
-  news: 342
+  total: 545
+  research: 205
+  news: 340
 topics:
   - label: "vulnerabilities"
-    count: 72
+    count: 71
     color: 1
   - label: "cybercrime"
     count: 56
@@ -26,10 +26,10 @@ topics:
     count: 27
     color: 5
   - label: "artificial intelligence"
-    count: 25
+    count: 24
     color: 6
   - label: "data breaches"
-    count: 23
+    count: 22
     color: 7
   - label: "credential theft"
     count: 20
@@ -38,12 +38,12 @@ topics:
     count: 18
     color: 9
   - label: "ransomware"
-    count: 16
+    count: 15
     color: 10
   - label: "clickfix"
     count: 14
     color: 11
-  - label: "healthcare"
+  - label: "microsoft"
     count: 14
     color: 12
 label_colors:
@@ -187,13 +187,11 @@ label_colors:
   "blockchain c2": 1
   "blog post": 6
   "bloodalchemy": 3
-  "bmc": 6
   "bot networks": 10
   "botnet": 6
   "botnet takedown": 5
   "brand impersonation": 7
   "breadcrumbs": 10
-  "bridgehead": 7
   "brown health": 12
   "browser data theft": 1
   "browser extension campaign": 9
@@ -216,7 +214,6 @@ label_colors:
   "captive portal compromise": 6
   "card-skimming": 8
   "carecloud": 10
-  "castlestealer": 12
   "central asia": 5
   "chacha20 encryption": 1
   "chaindrop": 8
@@ -249,7 +246,6 @@ label_colors:
   "claude desktop": 12
   "cleo": 7
   "clickfix": 11
-  "clickfix campaign": 9
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -307,7 +303,6 @@ label_colors:
   "darkhotel": 10
   "darklantern": 4
   "data breaches": 7
-  "data center": 7
   "data leak": 9
   "data-exfiltration": 12
   "dcrat": 12
@@ -368,7 +363,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 12
+  "healthcare": 11
   "heights financial": 1
   "hidden execution": 12
   "high profile threats": 2
@@ -401,7 +396,7 @@ label_colors:
   "malware": 4
   "meta": 5
   "metabase": 6
-  "microsoft": 4
+  "microsoft": 12
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -703,12 +698,6 @@ items:
     date: 2026-09-01T14:28:40Z
     kind: news
     labels: ["healthcare"]
-  - title: "Financially Motivated Threat Actor BREEZE COMET Targets Brazil"
-    url: "https://cloud.google.com/blog/topics/threat-intelligence/financially-motivated-threat-actor-breeze-comet-targets-brazil/"
-    source: "Google"
-    date: 2026-09-01T14:00:00Z
-    kind: research
-    labels: ["threat intelligence"]
   - title: "Nearly 22,000 Microsoft Exchange servers vulnerable to hijack attacks"
     url: "https://www.bleepingcomputer.com/news/security/nearly-22-000-microsoft-exchange-servers-vulnerable-to-hijack-attacks/"
     source: "BleepingComputer"
@@ -769,6 +758,12 @@ items:
     date: 2026-09-01T08:49:15Z
     kind: research
     labels: ["aviation sector", "azure infrastructure", "cross-platform rat", "fintech targeting", "linkedin recruitment lure", "minifast", "noderabbit", "pollcat", "retrograde", "trojanized coding challenge"]
+  - title: "Mirage Kitten targeting aviation and FinTech sectors across the Middle East and Africa with a new malware set"
+    url: "https://otx.alienvault.com/pulse/6a96918b7f129c94fa473bb0"
+    source: "AlienVault"
+    date: 2026-09-01T08:49:15Z
+    kind: research
+    labels: ["aviation sector", "azure infrastructure", "cross-platform rat", "fintech targeting", "linkedin recruitment lure", "minifast", "noderabbit", "pollcat", "retrograde", "trojanized coding challenge"]
   - title: "Recently patched PaperCut zero-days used in data theft attacks"
     url: "https://www.bleepingcomputer.com/news/security/recently-patched-papercut-zero-days-used-in-data-theft-attacks/"
     source: "BleepingComputer"
@@ -776,6 +771,12 @@ items:
     kind: news
     labels: []
   - title: "Financially Motivated Threat Actor Targets Brazil"
+    url: "https://otx.alienvault.com/pulse/6a9679441f068d4ee93916ae"
+    source: "AlienVault"
+    date: 2026-09-01T07:05:40Z
+    kind: research
+    labels: ["ai-assisted malware", "banking software", "boatbeam", "brazil financial fraud", "breeze comet", "cobaltspin", "compromised government sites", "kickplate", "latin america", "lightpaint", "mildfrost", "payment system manipulation", "pix targeting", "realbreeze", "xworm"]
+  - title: "Financially Motivated Threat Actor BREEZE COMET Targets Brazil"
     url: "https://otx.alienvault.com/pulse/6a9679441f068d4ee93916ae"
     source: "AlienVault"
     date: 2026-09-01T07:05:40Z
@@ -3721,33 +3722,3 @@ items:
     date: 2026-08-04T10:54:30Z
     kind: news
     labels: ["agent-to-agent", "artificial intelligence", "gemini", "vulnerabilities"]
-  - title: "“Keep going, bro. You’ve got this!” A data-driven look at how adversaries are weaponizing AI"
-    url: "https://blog.talosintelligence.com/keep-going-bro-youve-got-this-a-data-driven-look-at-how-adversaries-are-weaponizing-ai/"
-    source: "Cisco Talos"
-    date: 2026-08-04T10:00:11Z
-    kind: research
-    labels: ["artificial intelligence", "landing page top story", "threat spotlight", "threats", "top story"]
-  - title: "Decades-Old BMC Vulnerability Exposes Thousands of Data Centers to Attacks"
-    url: "https://www.securityweek.com/decades-old-bmc-vulnerability-exposes-thousands-of-data-centers-to-attacks/"
-    source: "SecurityWeek"
-    date: 2026-08-04T09:56:06Z
-    kind: news
-    labels: ["bmc", "data center", "vulnerabilities"]
-  - title: "NightLedger Backdoor Deployed in Espionage Campaign Targeting the Middle East and Africa"
-    url: "https://otx.alienvault.com/pulse/6a71aa488c89bfcbd2814692"
-    source: "AlienVault"
-    date: 2026-08-04T09:00:56Z
-    kind: research
-    labels: ["arcbridge", "bridgehead", "c2 infrastructure", "custom backdoor", "nightledger", "post-exploitation", "spear-phishing", "twostroke", "victim-specific malware"]
-  - title: "ClickFix-Themed Campaign Deploys Starland RAT and WLDR Framework"
-    url: "https://otx.alienvault.com/pulse/6a71a6ac7bd8297ea6d2093f"
-    source: "AlienVault"
-    date: 2026-08-04T08:45:32Z
-    kind: research
-    labels: ["castlestealer", "clickfix campaign", "cryptocurrency theft", "powershell framework", "remcos rat", "russian-speaking actor", "starland rat", "trojanized installers", "wldr", "wldr framework"]
-  - title: "150,000 Impacted by Madera Community Hospital Data Breach"
-    url: "https://www.securityweek.com/150000-impacted-by-madera-community-hospital-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-04T08:33:45Z
-    kind: news
-    labels: ["data breaches", "healthcare", "hospital", "madera hospital", "ransomware"]
