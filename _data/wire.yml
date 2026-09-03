@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T00:00:22Z
+generated_at: 2026-09-03T02:02:28Z
 window_days: 30
 counts:
   total: 549
-  research: 206
-  news: 343
+  research: 207
+  news: 342
 topics:
   - label: "vulnerabilities"
     count: 72
@@ -456,6 +456,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Impersonating IT support: how threat actors turn a remote session into enterprise-wide access"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/02/impersonating-it-support-threat-actors-turn-remote-session-into-enterprise-wide-access/"
+    source: "Microsoft"
+    date: 2026-09-02T22:51:18Z
+    kind: research
+    labels: []
   - title: "Hackers exploit Sangoma Switchvox flaw to deploy reverse shells"
     url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-sangoma-switchvox-flaw-to-deploy-reverse-shells/"
     source: "BleepingComputer"
@@ -3744,9 +3750,3 @@ items:
     date: 2026-08-04T05:00:00Z
     kind: research
     labels: ["securing ai"]
-  - title: "Hotel Wi-Fi attacks use custom malware to breach Microsoft 365 accounts"
-    url: "https://www.bleepingcomputer.com/news/security/hotel-wi-fi-attacks-use-custom-malware-to-breach-microsoft-365-accounts/"
-    source: "BleepingComputer"
-    date: 2026-08-04T00:17:15Z
-    kind: news
-    labels: []
