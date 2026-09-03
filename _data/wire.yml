@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T10:03:02Z
+generated_at: 2026-09-03T12:00:32Z
 window_days: 30
 counts:
-  total: 545
-  research: 205
-  news: 340
+  total: 547
+  research: 206
+  news: 341
 topics:
   - label: "vulnerabilities"
     count: 71
@@ -16,17 +16,17 @@ topics:
   - label: "cybercrime"
     count: 56
     color: 2
-  - label: "exploited"
-    count: 28
-    color: 3
   - label: "malware"
+    count: 29
+    color: 3
+  - label: "exploited"
     count: 28
     color: 4
   - label: "government"
     count: 27
     color: 5
   - label: "artificial intelligence"
-    count: 24
+    count: 23
     color: 6
   - label: "data breaches"
     count: 22
@@ -72,7 +72,6 @@ label_colors:
   "aeternum": 11
   "aeza group": 2
   "affiliate fraud": 7
-  "agent-to-agent": 9
   "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
@@ -221,6 +220,7 @@ label_colors:
   "chaotic eclipse": 12
   "charged": 4
   "charity": 12
+  "chatgpt": 1
   "chatgpt abuse": 3
   "chatgpt atlas": 4
   "china": 5
@@ -291,6 +291,8 @@ label_colors:
   "cve-2023-34362": 11
   "cve-2023-49105": 4
   "cve-2025-49113": 3
+  "cve-2026-19949": 8
+  "cve-2026-20354": 12
   "cve-2026-66747": 10
   "cve-2026-68820": 2
   "cyber-espionage": 3
@@ -335,7 +337,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 3
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "fake lock screen": 6
@@ -393,7 +395,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 4
+  "malware": 3
   "meta": 5
   "metabase": 6
   "microsoft": 12
@@ -404,12 +406,10 @@ label_colors:
   "mobile & wireless": 4
   "nation-state": 11
   "netscaler": 5
-  "network security": 6
   "next-gen identity security": 12
   "next-gen siem & log management": 11
   "npm": 7
   "nvidia": 3
-  "omada": 8
   "on the radar": 4
   "oracle": 12
   "oracle cspu": 1
@@ -452,6 +452,30 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Plex warns users to patch security vulnerabilities immediately"
+    url: "https://www.bleepingcomputer.com/news/security/plex-warns-users-to-patch-security-vulnerabilities-immediately/"
+    source: "BleepingComputer"
+    date: 2026-09-03T11:02:22Z
+    kind: news
+    labels: []
+  - title: "Over 3 Million WordPress Sites Affected by Migration Plugin Vulnerability"
+    url: "https://www.securityweek.com/over-3-million-wordpress-sites-affected-by-migration-plugin-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-03T10:40:00Z
+    kind: news
+    labels: ["cve-2026-19949", "vulnerabilities", "wordpress"]
+  - title: "Cisco Warns of Unpatched Secure Email Flaws, Patches Critical Switch Vulnerabilities"
+    url: "https://www.securityweek.com/cisco-warns-of-unpatched-secure-email-flaws-patches-critical-switch-vulnerabilities/"
+    source: "SecurityWeek"
+    date: 2026-09-03T10:30:00Z
+    kind: news
+    labels: ["cisco", "cve-2026-20354", "cve-2026-20355", "network security", "vulnerabilities"]
+  - title: "Attackers Expose Ongoing AI Tool Use Targeting Organizations in Latin America"
+    url: "https://unit42.paloaltonetworks.com/ai-tool-use-targeting-latam-orgs/"
+    source: "Palo Alto Networks"
+    date: 2026-09-03T10:00:58Z
+    kind: research
+    labels: ["agentic ai", "chatgpt", "cl-cri-1131", "cl-cri-1163", "claude code", "financial sector", "malware", "nextchat", "shipping and transportation", "socks5", "socktz", "threat research"]
   - title: "Fake Software Installers Disable Windows Update and Weaken Microsoft Defender"
     url: "https://thehackernews.com/2026/09/fake-software-installers-disable.html"
     source: "AlienVault"
@@ -3710,15 +3734,3 @@ items:
     date: 2026-08-04T12:45:00Z
     kind: news
     labels: ["government"]
-  - title: "TP-Link Omada ZTP Vulnerabilities Chain Into Full Network Takeover"
-    url: "https://www.securityweek.com/tp-link-omada-ztp-vulnerabilities-chain-into-full-network-takeover/"
-    source: "SecurityWeek"
-    date: 2026-08-04T12:00:00Z
-    kind: news
-    labels: ["network security", "omada", "router", "tp-link", "vulnerabilities"]
-  - title: "Gemini Agent-to-Agent Attack Method Exposed Secrets, Enabled Pull Request Tampering"
-    url: "https://www.securityweek.com/gemini-agent-to-agent-attack-exposed-secrets-enabled-pull-request-tampering/"
-    source: "SecurityWeek"
-    date: 2026-08-04T10:54:30Z
-    kind: news
-    labels: ["agent-to-agent", "artificial intelligence", "gemini", "vulnerabilities"]
