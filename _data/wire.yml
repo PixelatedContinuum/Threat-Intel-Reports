@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T18:02:22Z
+generated_at: 2026-09-03T20:00:38Z
 window_days: 30
 counts:
-  total: 549
-  research: 208
+  total: 542
+  research: 201
   news: 341
 topics:
   - label: "vulnerabilities"
@@ -32,10 +32,10 @@ topics:
     count: 22
     color: 7
   - label: "credential theft"
-    count: 20
+    count: 18
     color: 8
   - label: "supply chain attack"
-    count: 18
+    count: 17
     color: 9
   - label: "clickfix"
     count: 14
@@ -64,7 +64,6 @@ label_colors:
   "adaptixc2": 8
   "adblocker": 3
   "adcs exploitation": 11
-  "administrative access": 12
   "adobe": 1
   "adversary-in-the-middle": 9
   "adware disguise": 5
@@ -78,7 +77,6 @@ label_colors:
   "agentic soc": 2
   "ai api": 4
   "ai assistant exposure": 1
-  "ai developers": 3
   "ai fraud": 2
   "ai gateway": 6
   "ai guardrails": 8
@@ -166,11 +164,9 @@ label_colors:
   "badiis": 8
   "bait-and-switch": 5
   "bandook": 10
-  "bank of america impersonation": 5
   "banking software": 7
   "banking trojan": 4
   "base64": 3
-  "base64 obfuscation": 6
   "beacon": 6
   "bec campaign": 10
   "behavior-based-detection": 12
@@ -256,11 +252,9 @@ label_colors:
   "cloud security": 9
   "cloudflare": 11
   "cloudflare captcha": 5
-  "cloudflare tunnel": 9
   "cloudflare tunnels": 6
   "cloudflare workers": 6
   "cloudflared": 7
-  "code signing abuse": 10
   "communicationuxtheme.dll": 10
   "compile-time execution": 3
   "contactless payment fraud": 3
@@ -317,7 +311,6 @@ label_colors:
   "device code phishing": 5
   "dgfip": 12
   "diplomatic targeting": 1
-  "discord distribution": 8
   "discord hijacking": 12
   "disrupted": 8
   "dll sideloading": 11
@@ -454,6 +447,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "HPE patches critical ArubaOS-CX remote code execution flaw"
+    url: "https://www.bleepingcomputer.com/news/security/hpe-patches-critical-arubaos-cx-remote-code-execution-flaw/"
+    source: "BleepingComputer"
+    date: 2026-09-03T18:28:12Z
+    kind: news
+    labels: []
   - title: "The story behind the intelligence"
     url: "https://blog.talosintelligence.com/the-story-behind-the-intelligence/"
     source: "Cisco Talos"
@@ -3700,51 +3699,3 @@ items:
     date: 2026-08-04T20:15:00Z
     kind: news
     labels: ["cybercrime"]
-  - title: "New XCSSET variant targets macOS devs via compromised Xcode projects"
-    url: "https://www.bleepingcomputer.com/news/security/new-xcsset-variant-targets-macos-devs-via-compromised-xcode-projects/"
-    source: "BleepingComputer"
-    date: 2026-08-04T19:03:09Z
-    kind: news
-    labels: []
-  - title: "Security Update – August 2, 2026"
-    url: "https://otx.alienvault.com/pulse/6a722d8d3a70e4378b2ea51d"
-    source: "AlienVault"
-    date: 2026-08-04T18:21:01Z
-    kind: research
-    labels: ["administrative access", "cloudflare tunnel", "cve-2026-18556", "cve-2026-18577", "n-central vulnerability", "persistence mechanism", "remote access", "take control abuse", "zero-day exploitation"]
-  - title: "Fake AI Tools Deliver Infostealer"
-    url: "https://www.netskope.com/blog/developers-in-the-crosshairs-fake-ai-tools-deliver-infostealer"
-    source: "AlienVault"
-    date: 2026-08-04T18:21:01Z
-    kind: research
-    labels: ["ai developers", "blockchain c2", "etherhiding", "github impersonation", "infostealer", "lua obfuscator", "nodejs infostealer", "prometheus", "smartloader"]
-  - title: "Fake Xeno Roblox Cheats Deliver Powerful Java Stealer Through Discord and Forums"
-    url: "https://www.bitdefender.com/en-us/blog/labs/fake-xeno-roblox-discord-executor"
-    source: "AlienVault"
-    date: 2026-08-04T18:21:00Z
-    kind: research
-    labels: ["cryptocurrency theft", "discord distribution", "gaming forums", "java stealer", "powercat", "remote access trojan", "roblox", "webcam surveillance", "xeno"]
-  - title: "ScreenConnect RMM Abuse, Cloudflare Tunnels, and Trusted Software Lures Threat Intelligence, Threat Research, Threat Security"
-    url: "https://otx.alienvault.com/pulse/6a722d8bdafe1dfae681f87b"
-    source: "AlienVault"
-    date: 2026-08-04T18:20:59Z
-    kind: research
-    labels: ["cloudflare tunnels", "code signing abuse", "cross-platform", "phishing lures", "rmm abuse", "screenconnect", "vbscript dropper", "windows defender evasion", "wsgidav staging"]
-  - title: "RMM Abuse Analysis"
-    url: "https://otx.alienvault.com/pulse/6a722d8bdafe1dfae681f87b"
-    source: "AlienVault"
-    date: 2026-08-04T18:20:59Z
-    kind: research
-    labels: ["cloudflare tunnels", "code signing abuse", "cross-platform", "phishing lures", "rmm abuse", "screenconnect", "vbscript dropper", "windows defender evasion", "wsgidav staging"]
-  - title: "npm Packages Hijacked in Supply Chain Attack"
-    url: "https://www.wiz.io/blog/keyv-and-cacheable-npm-supply-chain-attack"
-    source: "AlienVault"
-    date: 2026-08-04T18:15:36Z
-    kind: research
-    labels: ["cacheable", "credential theft", "developer targeting", "ethereum smart contract", "github compromise", "keyv", "mini", "npm packages", "shai-hulud", "supply chain attack"]
-  - title: "Phishing Email Delivers ScreenConnect Malware"
-    url: "https://otx.alienvault.com/pulse/6a722c0bba9d9f436322ae56"
-    source: "AlienVault"
-    date: 2026-08-04T18:14:35Z
-    kind: research
-    labels: ["bank of america impersonation", "base64 obfuscation", "credential theft", "phishing", "privilege escalation", "rmm abuse", "screenconnect", "uac bypass"]
