@@ -634,7 +634,7 @@ level: medium
 **Deployment:** Perimeter IDS/IPS; inline NGFW; east-west network sensor in segmented environments.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL - AdaptixC2 Default Listener X-Beacon-Id Heartbeat Header Detected"; flow:established,to_server; http.header_names; content:"X-Beacon-Id"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001002; rev:1;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL - AdaptixC2 Default Listener X-Beacon-Id Heartbeat Header Detected"; flow:established,to_server; http.header_names; content:"X-Beacon-Id"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001002; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-03;)
 ```
 
 #### AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header
@@ -666,7 +666,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL AdaptixC2 Beacon Empty-B
 **Deployment:** Perimeter IDS/IPS; inline NGFW; edge network sensor.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL - AdaptixC2 Stock Listener URI Path with Firefox 20 UA"; flow:established,to_server; http.user_agent; content:"Mozilla/5.0 (Windows NT 6.2|3B| rv:20.0) Gecko/20121202 Firefox/20.0"; endswith; http.method; content:"POST"; http.uri; content:"/api/v1/status"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001003; rev:1;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL - AdaptixC2 Stock Listener URI Path with Firefox 20 UA"; flow:established,to_server; http.user_agent; content:"Mozilla/5.0 (Windows NT 6.2|3B| rv:20.0) Gecko/20121202 Firefox/20.0"; endswith; http.method; content:"POST"; http.uri; content:"/api/v1/status"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001003; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-03;)
 ```
 
 #### AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA
@@ -680,7 +680,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL - AdaptixC2 Stock Listen
 **Deployment:** Perimeter IDS/IPS; edge sensor; proxy with IDS inspection capability.
 
 ```
-alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL - AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA"; flow:established,to_server; http.user_agent; content:"Mozilla/5.0 (Windows NT 6.2|3B| rv:20.0) Gecko/20121202 Firefox/20.0"; endswith; http.method; content:"POST"; http.uri; content:"/jquery-3.3.1.min.js"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001004; rev:1;)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL - AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA"; flow:established,to_server; http.user_agent; content:"Mozilla/5.0 (Windows NT 6.2|3B| rv:20.0) Gecko/20121202 Firefox/20.0"; endswith; http.method; content:"POST"; http.uri; content:"/jquery-3.3.1.min.js"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/; classtype:trojan-activity; sid:5001004; rev:2; metadata:author The_Hunters_Ledger, date 2026-09-03;)
 ```
 
 #### AdaptixC2 Stock Listener Response Envelope (Server-Side)

@@ -2,12 +2,11 @@
   "sid_base": 3500000,
   "sid_last": 3500199,
   "sid_alloc_range": "3500000-3509999",
-  "total_rules": 98,
+  "total_rules": 110,
   "quarantined": 0,
   "lint_dropped": 0,
   "new_sid_assignments": 0,
   "skipped_unlisted": [
-    "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
     "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812"
   ],
   "campaigns": [
@@ -90,6 +89,10 @@
     {
       "slug": "open-directory-94-103-1-13-20260423",
       "rules": 1
+    },
+    {
+      "slug": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+      "rules": 12
     },
     {
       "slug": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",

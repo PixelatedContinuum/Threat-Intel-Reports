@@ -4093,7 +4093,7 @@ opendirectory-45-130-148-125-20260430-detections:
     engine: suricata
     tier: Detection
     fence: 12
-    hash: "e05e8084"
+    hash: "69d04e2f"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 3
     confidence: "HIGH"
@@ -4111,7 +4111,7 @@ opendirectory-45-130-148-125-20260430-detections:
     engine: suricata
     tier: Hunting
     fence: 14
-    hash: "20ef384b"
+    hash: "b9f28bfe"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
     confidence: "HIGH (current traffic); durability limited"
@@ -4120,7 +4120,7 @@ opendirectory-45-130-148-125-20260430-detections:
     engine: suricata
     tier: Hunting
     fence: 15
-    hash: "cb62170e"
+    hash: "6983c1fd"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
     confidence: "HIGH (current traffic); durability limited"
