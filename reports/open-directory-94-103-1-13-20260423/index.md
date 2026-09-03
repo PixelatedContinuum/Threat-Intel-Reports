@@ -31,7 +31,7 @@ stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 ---
 
 **Campaign Identifier:** Chaos-TorBrowserTor-MultiStageLoader-94.103.1.13<br>
-**Last Updated:** May 2, 2026 (addendum — see §12)<br>
+**Last Updated:** May 2, 2026 (addendum, see §12)<br>
 **Threat Level:** HIGH
 
 ---
@@ -39,20 +39,20 @@ stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 ## 1. BLUF / Bottom Line Up Front
 {: .hl-tier-1}
 
-An open directory discovered on the Russian-registered bulletproof-adjacent VPS **94.103.1.13** (AS209207 Digital Hosting Provider LLC, upstream AS48014 AlbaHost) is hosting a pre-production cybercrime staging kit whose terminal payload is a **Chaos ransomware builder variant** configured as `.torbrowsertor`. The kit is operated by a financially-motivated actor tracked internally as **UTA-2026-005** *(an internal tracking label used by The Hunters Ledger — see Section 7)*. Attribution to any publicly named threat actor is **INSUFFICIENT (0%)**; family-level identification of the Chaos builder lineage is **DEFINITE (97%)**.
+An open directory discovered on the Russian-registered bulletproof-adjacent VPS **94.103.1.13** (AS209207 Digital Hosting Provider LLC, upstream AS48014 AlbaHost) is hosting a pre-production cybercrime staging kit whose terminal payload is a **Chaos ransomware builder variant** configured as `.torbrowsertor`. The kit is operated by a financially-motivated actor tracked internally as **UTA-2026-005** *(an internal tracking label used by The Hunters Ledger, see Section 7)*. Attribution to any publicly named threat actor is **INSUFFICIENT (0%)**; family-level identification of the Chaos builder lineage is **DEFINITE (97%)**.
 
-The primary finding in this report is **not** the ransomware itself — the commodity Chaos builder is well documented. The primary finding is a **private five-stage batch-to-PowerShell-to-.NET crypter** (`mymain.bat` + `myfile.bat`) that the operator uses to deliver Chaos while evading static detection (VT 0/76 on both batch droppers at submission time) and sandbox analysis. That crypter exhibits four characteristics with **no located prior public reporting**:
+The primary finding in this report is **not** the ransomware itself. The commodity Chaos builder is well documented. The primary finding is a **private five-stage batch-to-PowerShell-to-.NET crypter** (`mymain.bat` + `myfile.bat`) that the operator uses to deliver Chaos while evading static detection (VT 0/76 on both batch droppers at submission time) and sandbox analysis. That crypter exhibits four characteristics with **no located prior public reporting**:
 
 1. A **Console.Title-based self-extraction** trick that uses the cmd.exe window title as a dynamic path locator and an implicit `.bat` execution guard.
-2. A **tri-artifact anti-sandbox gate** — the inverted conjunction `admin` (username) + `%TEMP%\VBE\` (directory) + `%TEMP%\mapping.csv` (file) — that causes the loader to exit if all three match, consistent with either an operator-convenience check against their own development host or an intentional decoy.
-3. **Cross-layer AES+XOR key reuse** — the same passphrase is used at three separate crypter layers within a build, and the same XOR key is reused at two layers, with per-build key rotation between builds.
+2. A **tri-artifact anti-sandbox gate**: the inverted conjunction `admin` (username) + `%TEMP%\VBE\` (directory) + `%TEMP%\mapping.csv` (file), that causes the loader to exit if all three match, consistent with either an operator-convenience check against their own development host or an intentional decoy.
+3. **Cross-layer AES+XOR key reuse**: the same passphrase is used at three separate crypter layers within a build, and the same XOR key is reused at two layers, with per-build key rotation between builds.
 4. A **Stage-5b AppInfo RPC UAC bypass** (UACME technique #41, `AiEnableDesktopRpcInterface` + `IColorDataProxy` + parent-PID spoof off elevated `taskmgr.exe`) delivered as a byte-identical pre-compiled PE across both builds with an **8/77 VT detection gap**.
 
-> **Why this report matters — the novel finding in one sentence.** Of the four behaviors above, the **Console.Title self-extraction trick (#1) is the single most distinctive** — a public-corpus survey could not locate any prior reporting of `Console.Title` being used as a dynamic dropper-path locator combined with batch-line self-extraction. The other three behaviors each have individual prior art, but they are not well-combined in public reporting, and the `Console.Title` wrinkle specifically is what most warrants being added to defender hunting playbooks. A detailed defender-facing breakdown of why this is distinctive, what it defeats, and how to hunt for it appears in **§5.5.1**. A consolidated novelty ranking for every technique in the kit appears in **§5.9**.
+> **Why this report matters: the novel finding in one sentence.** Of the four behaviors above, the **Console.Title self-extraction trick (#1) is the single most distinctive**. A public-corpus survey could not locate any prior reporting of `Console.Title` being used as a dynamic dropper-path locator combined with batch-line self-extraction. The other three behaviors each have individual prior art, but they are not well-combined in public reporting, and the `Console.Title` wrinkle specifically is what most warrants being added to defender hunting playbooks. A detailed defender-facing breakdown of why this is distinctive, what it defeats, and how to hunt for it appears in **§5.5.1**. A consolidated novelty ranking for every technique in the kit appears in **§5.9**.
 
 The delivered payload (Chaos/TorBrowserTor Stage-5a) is Rijndael-256 CFB + RSA-2048 OAEP ransomware with removable-drive propagation, Volume Shadow Copy / BCDEdit / backup-catalog destruction, and a BTC clipboard hijacker. A parallel **Orcus RAT v7 (Wardow crack)** path provides the RAT/C2 foothold. Real C2 is hidden behind a `127.0.0.1:20268` loopback tunnel (chisel/plink stack); the upstream endpoint is **UNKNOWN** from static analysis alone.
 
-This report documents the loader chain in defender-actionable detail and hands off a set of cross-build structural anchors — the Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`, the Stage-5b PE SHA256 `da302511…`, the cross-layer key-reuse pattern, and the tri-artifact gate — that future analysts can use to cluster additional UTA-2026-005 activity. Detection content is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/); IOCs are delivered separately in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json).
+This report documents the loader chain in defender-actionable detail and hands off a set of cross-build structural anchors (the Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`, the Stage-5b PE SHA256 `da302511…`, the cross-layer key-reuse pattern, and the tri-artifact gate) that future analysts can use to cluster additional UTA-2026-005 activity. Detection content is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/); IOCs are delivered separately in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json).
 
 ---
 
@@ -62,10 +62,10 @@ This report documents the loader chain in defender-actionable detail and hands o
 - **The loader, not the ransomware, is the novel story.** Chaos/TorBrowserTor is well-documented commodity ransomware; its clipboard wallets and Telegram handle (`@TorBrowserTor`) are **Chaos builder defaults** with zero operator-specific attribution value. The defender-actionable novelty lives in the **private five-stage batch loader** (`mymain.bat`, `myfile.bat`) that delivers it.
 - **Four crypter-chain behaviors have no located prior public reporting:** the Console.Title launch-gate trick, the inverted tri-artifact anti-sandbox gate (`admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv`), cross-layer AES+XOR key reuse as a builder fingerprint, and the specific Stage-5b UACME #41 AppInfo RPC bypass PE (byte-identical across both builds, 8/77 VT).
 - **Two cross-build invariants are the highest-value hunting anchors** this investigation produced: the Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339` and the Stage-5b UAC bypass SHA256 `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8`. Each has zero public hits prior to this publication and produces high-fidelity, zero-FP hunting queries.
-- **Attribution to a named actor is not possible.** Zero infrastructure overlaps, zero named-actor TTP matches, zero Tier-1/Tier-2 vendor attributions. The 2025 Cisco Talos "Chaos RaaS group" is **explicitly ruled out** as a distinct actor with a distinct codebase — do not conflate it with the 2021-origin Chaos builder this sample is built from. The operator is tracked internally as **UTA-2026-005**.
+- **Attribution to a named actor is not possible.** Zero infrastructure overlaps, zero named-actor TTP matches, zero Tier-1/Tier-2 vendor attributions. The 2025 Cisco Talos "Chaos RaaS group" is **explicitly ruled out** as a distinct actor with a distinct codebase: do not conflate it with the 2021-origin Chaos builder this sample is built from. The operator is tracked internally as **UTA-2026-005**.
 - **Stage-4 persistence is a Defender-masquerade dual-anchor:** a scheduled task literally named `\Microsoft Defender` at the task-scheduler root path (BOOT trigger, Hidden, RunLevel HIGHEST) plus a 1.4 MB encoded payload stashed at `HKLM\Software\Microsoft Defender\Payload`. This masquerade is the single most productive threat-hunt anchor for any defender with Sysmon EID 12/13 coverage.
 - **Stage-1 batch files are static-evasion optimized.** `mymain.bat` (VT 0/76) and `myfile.bat` are 2.6 MB+ DOSfuscated batch droppers that force 32-bit `SysWOW64\WindowsPowerShell` execution, decode two chunks via alphabet-substitution Base64, and hand off to Assembly.Load. Traditional signature-based AV does not see them. Behavioral detection is the only reliable mitigation.
-- **The kit is operator-scale, not single-campaign.** Two independent builds (`mymain.bat` and `myfile.bat`) compiled the same day (2026-03-31), sharing invariants but rotating keys and resource names — evidence the operator has tooling maturity to repeatedly rebuild, not just a single weaponized sample.
+- **The kit is operator-scale, not single-campaign.** Two independent builds (`mymain.bat` and `myfile.bat`) compiled the same day (2026-03-31), sharing invariants but rotating keys and resource names: evidence the operator has tooling maturity to repeatedly rebuild, not just a single weaponized sample.
 
 ---
 
@@ -76,11 +76,11 @@ This report documents the loader chain in defender-actionable detail and hands o
 
 Open-directory monitoring flagged `94.103.1.13` on 2026-04-17. The server was exposing directory listings for a mixed staging tree containing ~47 distinct samples: Stage-1 batch droppers, obfuscated PowerShell loaders, .NET Stage-4 and Stage-5 modules, an Orcus RAT v7 build, a custom PrintSpoofer-class privilege-escalation binary, a full Mimikatz suite, multiple GodPotato variants, PrintNightmare tooling (including the signed `mimispool.dll`), Chisel and Plink tunneling binaries, a Python tunnel-stub collection, and a second (parallel) pre-production campaign tree containing SnipeIT/SIP-PBX/Exim/CGMiner/OTP exploit scripts targeting seven IP addresses (four of them Ukrainian).
 
-Of the 47 samples, two were the loader chain that matters: the sibling batch droppers `mymain.bat` (2.6 MB, SHA256 `3b5d30e3…`, VT 0/76 at submission) and `myfile.bat` (2.65 MB, SHA256 `fb39fa0d…`). Both are heavily DOSfuscated and both carry two large Base64-alphabet-substituted blobs that decode into a five-stage loader chain terminating in Chaos/TorBrowserTor ransomware plus a pre-compiled UACME #41 UAC-bypass module. The two builds share the same builder pipeline and identical invariants (mutex GUID, Stage-5b PE) but rotate cryptographic keys and resource names — evidence that the crypter is a re-runnable builder rather than a one-off weaponization.
+Of the 47 samples, two were the loader chain that matters: the sibling batch droppers `mymain.bat` (2.6 MB, SHA256 `3b5d30e3…`, VT 0/76 at submission) and `myfile.bat` (2.65 MB, SHA256 `fb39fa0d…`). Both are heavily DOSfuscated and both carry two large Base64-alphabet-substituted blobs that decode into a five-stage loader chain terminating in Chaos/TorBrowserTor ransomware plus a pre-compiled UACME #41 UAC-bypass module. The two builds share the same builder pipeline and identical invariants (mutex GUID, Stage-5b PE) but rotate cryptographic keys and resource names, evidence that the crypter is a re-runnable builder rather than a one-off weaponization.
 
 ### Why This Threat Is Significant
 
-Commodity Chaos ransomware is well-catalogued by WatchGuard, Malpedia, Trend Micro, and Fortinet. What is **not** catalogued is the specific private crypter pipeline used by this operator. This report fills that gap with defender-actionable specifics: magic markers, passphrases, XOR keys, resource names, mutex GUIDs, Defender-masquerade persistence artifacts, the Console.Title self-extraction trick, and the tri-artifact anti-sandbox gate. None of these appear in any public source located as of 2026-04-23. The `.torbrowsertor` variant itself is approximately two weeks into public-reporting lifecycle (PCrisk and ITFunk Tier-3 writeups only) — this publication is among the earliest comprehensive technical writeups.
+Commodity Chaos ransomware is well-catalogued by WatchGuard, Malpedia, Trend Micro, and Fortinet. What is **not** catalogued is the specific private crypter pipeline used by this operator. This report fills that gap with defender-actionable specifics: magic markers, passphrases, XOR keys, resource names, mutex GUIDs, Defender-masquerade persistence artifacts, the Console.Title self-extraction trick, and the tri-artifact anti-sandbox gate. None of these appear in any public source located as of 2026-04-23. The `.torbrowsertor` variant itself is approximately two weeks into public-reporting lifecycle (PCrisk and ITFunk Tier-3 writeups only). This publication is among the earliest comprehensive technical writeups.
 
 ### Key Risk Factors
 
@@ -93,7 +93,7 @@ Commodity Chaos ransomware is well-catalogued by WatchGuard, Malpedia, Trend Mic
 | Lateral Movement Risk | 7/10 | Mimikatz credential dumping staged, chisel/plink tunnel stack, removable-drive propagation (`surprise.exe` / `Recieve please.exe`) |
 | Ransomware Impact | 9/10 | Rijndael-256 CFB + RSA-2048 OAEP file encryption, `.torbrowsertor` extension, VSS/BCDEdit/backup-catalog destruction, BTC clipboard hijacker |
 
-**Overall Risk Score: 8.2/10 (HIGH)** — commodity core + advanced custom crypter + 8/77-VT UAC bypass + layered privesc + ransomware + RAT foothold + lateral-movement tooling. The score is held below CRITICAL because (a) no confirmed victim telemetry has been observed, (b) the open directory was discovered in a pre-production state (second campaign only partially staged), and (c) the real C2 upstream is unknown so the actual operational reach cannot be assessed from static analysis alone.
+**Overall Risk Score: 8.2/10 (HIGH)**, commodity core + advanced custom crypter + 8/77-VT UAC bypass + layered privesc + ransomware + RAT foothold + lateral-movement tooling. The score is held below CRITICAL because (a) no confirmed victim telemetry has been observed, (b) the open directory was discovered in a pre-production state (second campaign only partially staged), and (c) the real C2 upstream is unknown so the actual operational reach cannot be assessed from static analysis alone.
 
 ### Threat Actor
 
@@ -103,10 +103,10 @@ Family-level identification is DEFINITE at 97 percent. This is the Chaos ransomw
 
 ### For Technical Teams
 
-1. **Deploy the cross-build anchors first.** Hunt the Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339` and the Stage-5b SHA256 `da302511…` across your estate — both are zero-false-positive anchors with zero public prior hits. See Section 5 and the linked detection file.
+1. **Deploy the cross-build anchors first.** Hunt the Stage-4 mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339` and the Stage-5b SHA256 `da302511…` across your estate: both are zero-false-positive anchors with zero public prior hits. See Section 5 and the linked detection file.
 2. **Check for the Defender-masquerade persistence pair.** Any scheduled task named `\Microsoft Defender` registered at the task-scheduler root path (not under `\Microsoft\Windows\Windows Defender`), combined with a >100 KB blob at `HKLM\Software\Microsoft Defender\Payload`, is diagnostic. See Section 4.
 3. **Baseline `powershell.exe` command-line length.** A 32-bit `SysWOW64\WindowsPowerShell\v1.0\powershell.exe -WindowStyle Hidden -NoProfile` invocation with a command-line exceeding 10,000 characters, launched as a child of `cmd.exe`, is a structural loader signature this builder shares across both builds.
-4. **Watch for `conhost.exe --headless` spawned by elevated `taskmgr.exe`.** This is the Stage-5b UAC-bypass tell — see Section 4 for the full AppInfo RPC chain and why it matters.
+4. **Watch for `conhost.exe --headless` spawned by elevated `taskmgr.exe`.** This is the Stage-5b UAC-bypass tell: see Section 4 for the full AppInfo RPC chain and why it matters.
 5. **Expand hunting to BTC-clipboard-hijacker behavior.** Processes registering `WM_CLIPBOARDUPDATE` and substituting clipboard content matching bech32 or P2PKH Bitcoin regex patterns are the clipboard-substitution behavior the Stage-5a ransomware implements.
 
 ---
@@ -118,29 +118,29 @@ This section synthesizes threat-intelligence research (research-analyst output, 
 
 ### Chaos Ransomware Family Context
 
-The Chaos ransomware builder is a publicly available builder first observed in 2021. Its lineage runs v1 through v5, with multiple ecosystem forks (Yashma, Chaos-C++, Frea) documented by WatchGuard (B1), Malpedia (B1), Trend Micro (B1), Fortinet (B1), and Acronis (B1). The builder takes operator-configured parameters — file extension, ransom note text, ransom wallet, Telegram/contact handle, VSS-deletion flag, removable-drive-spread flag — and compiles a .NET console application implementing Rijndael-256 CFB + RSA-2048 OAEP file encryption against a predefined set of target extensions and directories.
+The Chaos ransomware builder is a publicly available builder first observed in 2021. Its lineage runs v1 through v5, with multiple ecosystem forks (Yashma, Chaos-C++, Frea) documented by WatchGuard (B1), Malpedia (B1), Trend Micro (B1), Fortinet (B1), and Acronis (B1). The builder takes operator-configured parameters (file extension, ransom note text, ransom wallet, Telegram/contact handle, VSS-deletion flag, removable-drive-spread flag) and compiles a .NET console application implementing Rijndael-256 CFB + RSA-2048 OAEP file encryption against a predefined set of target extensions and directories.
 
 The Stage-5a sample is a **TorBrowserTor variant** of a Chaos v4/v5-era build. Confirming signatures (all DEFINITE at static analysis):
 
-- Namespace `ConsoleApplication7` — builder template artefact present in both observed builds.
-- Class `driveNotification` — clipboard-hijacker class name reused across builds.
+- Namespace `ConsoleApplication7`: builder template artefact present in both observed builds.
+- Class `driveNotification`: clipboard-hijacker class name reused across builds.
 - Encrypted file extension `.torbrowsertor`.
 - Ransom note filename `READ ME PLEASE.txt`.
 - Ransom note Telegram contact `@TorBrowserTor`.
 - Clipboard substitution wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` (bech32) and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` (legacy).
 - Stage-5a line-number-level source invariants (`namespace ConsoleApplication7` at line 1, `internal class Program` at line 18, `NativeMethods` at line 790, `driveNotification` class definition).
 
-All 14 canonical Chaos v4/v5 feature markers were confirmed across both builds — basis for DEFINITE (97%) family identification.
+All 14 canonical Chaos v4/v5 feature markers were confirmed across both builds, basis for DEFINITE (97%) family identification.
 
 ### Wallets & Telegram — Builder Defaults, LOW Operator Attribution
 
-> **Analyst note:** The bitcoin wallets and Telegram handle printed in the ransom note look like they should identify the actor. They don't. All three are **Chaos builder defaults** — hard-coded into the builder template and reused verbatim across many unrelated Chaos-family campaigns predating this investigation. Defenders should treat them as family-level indicators, not as operator fingerprints.
+> **Analyst note:** The bitcoin wallets and Telegram handle printed in the ransom note look like they should identify the actor. They don't. All three are **Chaos builder defaults**, hard-coded into the builder template and reused verbatim across many unrelated Chaos-family campaigns predating this investigation. Defenders should treat them as family-level indicators, not as operator fingerprints.
 
 Infrastructure analysis (via WalletExplorer clustering) confirms:
 
-- `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` — WalletExplorer cluster `19254d2b5d`, last activity 2025-09-29, associated with multiple unrelated Chaos-family campaigns predating this one.
-- `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` — WalletExplorer cluster `9210ad5446`, last activity 2023-03-22, same shared-default pattern.
-- `@TorBrowserTor` Telegram handle — shared across all TorBrowserTor-variant samples in public reporting (PCrisk C2, ITFunk C3).
+- `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg`: WalletExplorer cluster `19254d2b5d`, last activity 2025-09-29, associated with multiple unrelated Chaos-family campaigns predating this one.
+- `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV`: WalletExplorer cluster `9210ad5446`, last activity 2023-03-22, same shared-default pattern.
+- `@TorBrowserTor` Telegram handle: shared across all TorBrowserTor-variant samples in public reporting (PCrisk C2, ITFunk C3).
 
 **Attribution value: ZERO** for operator identity. Family-level indicator strength: HIGH (reliably flags Chaos-family activity).
 
@@ -152,24 +152,24 @@ See Section 7 for the mandatory reader-facing disambiguation blockquote. Short v
 
 The `myfile.exe` sample (SHA256 `f7a4fe18…`, 865 KB .NET assembly) is Orcus RAT v7 carrying three Wardow-crack family-wide signatures:
 
-- Hard-coded AES key `CrackedByWardow` — Wardow-crack signature, not a per-sample key.
-- Fixed AES-CBC IV `0sjufcjbsoyzube6` — Wardow-crack family-wide.
-- Keyleak-backdoor magic filename `e3c6cefd462d48f0b30a5ebcd238b5b1` — Wardow-crack family-wide.
+- Hard-coded AES key `CrackedByWardow`: Wardow-crack signature, not a per-sample key.
+- Fixed AES-CBC IV `0sjufcjbsoyzube6`: Wardow-crack family-wide.
+- Keyleak-backdoor magic filename `e3c6cefd462d48f0b30a5ebcd238b5b1`: Wardow-crack family-wide.
 
-> **Analyst note:** The Orcus RAT sample is **Costura.Fody bundled**, not conventionally packed. Automated vendor tooling often labels Costura-bundled assemblies as packed because embedded-resource assemblies inflate the payload and obscure the entry-point graph. This is a bundling technique (single-file .NET deployment), not a cryptographic packer — analysts can fully recover the embedded modules with a .NET decompiler by walking the assembly's resource stream.
+> **Analyst note:** The Orcus RAT sample is **Costura.Fody bundled**, not conventionally packed. Automated vendor tooling often labels Costura-bundled assemblies as packed because embedded-resource assemblies inflate the payload and obscure the entry-point graph. This is a bundling technique (single-file .NET deployment), not a cryptographic packer, analysts can fully recover the embedded modules with a .NET decompiler by walking the assembly's resource stream.
 
-Fody/Costura repository (B1), Microsoft .NET single-file-deployment documentation (A1), and hfiref0x UACME repository (B1) back the Costura identification. Wardow-crack attribution relies on community-known identifier framing — no Tier-1/Tier-2 vendor writeup has been located specifically on the Wardow-Orcus crack, so this is presented as a community-known identifier, not a vendor-sourced fact.
+Fody/Costura repository (B1), Microsoft .NET single-file-deployment documentation (A1), and hfiref0x UACME repository (B1) back the Costura identification. Wardow-crack attribution relies on community-known identifier framing. No Tier-1/Tier-2 vendor writeup has been located specifically on the Wardow-Orcus crack, so this is presented as a community-known identifier, not a vendor-sourced fact.
 
 ### Infrastructure Context — AS209207 Staging Server
 
-> **Analyst note:** This subsection explains what is unusual about the VPS hosting the open directory. The ASN is only three months old, its upstream is a single Albanian transit provider that has a history of announcing bogon networks, and the operator chose it specifically for abuse tolerance. AbuseIPDB shows 0 reports — the operator is under the community-reporting radar despite being flagged by a handful of security vendors. Passive DNS shows the host is **multi-tenant**: the same IP that hosts the Chaos distribution also hosts at least three concurrent parasitic campaigns with deliberate tradecraft (Cloudflare fronting, mixed registrars, aged-domain purchases). None of this proves "bulletproof hosting" in the formal sense, but it is consistent with operator intent to resist takedown and run parallel infrastructure.
+> **Analyst note:** This subsection explains what is unusual about the VPS hosting the open directory. The ASN is only three months old, its upstream is a single Albanian transit provider that has a history of announcing bogon networks, and the operator chose it specifically for abuse tolerance. AbuseIPDB shows 0 reports. The operator is under the community-reporting radar despite being flagged by a handful of security vendors. Passive DNS shows the host is **multi-tenant**: the same IP that hosts the Chaos distribution also hosts at least three concurrent parasitic campaigns with deliberate tradecraft (Cloudflare fronting, mixed registrars, aged-domain purchases). None of this proves "bulletproof hosting" in the formal sense, but it is consistent with operator intent to resist takedown and run parallel infrastructure.
 
-- **94.103.1.13**: the staging server — sits on **AS209207 (Digital Hosting Provider LLC)**, a Russian-registered ASN allocated **2026-01-19** (approximately 3 months old at the time of this writing). The ASN's own self-domain is `dhost.su` — a `.su` (Soviet-era) TLD still in operator-friendly use, reinforcing the RU-operator / NL-route jurisdictional split.
-- AS209207's single upstream is **AS48014 AlbaHost** — an Albanian transit provider with a history of announcing bogon prefixes.
+- **94.103.1.13**: the staging server, sits on **AS209207 (Digital Hosting Provider LLC)**, a Russian-registered ASN allocated **2026-01-19** (approximately 3 months old at the time of this writing). The ASN's own self-domain is `dhost.su`, a `.su` (Soviet-era) TLD still in operator-friendly use, reinforcing the RU-operator / NL-route jurisdictional split.
+- AS209207's single upstream is **AS48014 AlbaHost**: an Albanian transit provider with a history of announcing bogon prefixes.
 - Three separate data sources (BGP.he.net, IPinfo.io, BGPView) agree on the ASN/upstream relationship (HIGH confidence on the infrastructure facts).
-- **AbuseIPDB: 0 reports, 0% confidence** (manual browser fetch, 2026-04-23). The previous limitation of automated 403 bot-blocks is resolved — this IP genuinely has no public abuse reports despite being flagged by 5 of 94 VirusTotal vendors (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious, per session-8 lookup). An operator running under the community-reporting radar while accumulating limited-vendor detection coverage.
+- **AbuseIPDB: 0 reports, 0% confidence** (manual browser fetch, 2026-04-23). The previous limitation of automated 403 bot-blocks is resolved. This IP genuinely has no public abuse reports despite being flagged by 5 of 94 VirusTotal vendors (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious, per session-8 lookup). An operator running under the community-reporting radar while accumulating limited-vendor detection coverage.
 - **Bulletproof classification: SUSPECTED, not CONFIRMED.** The ASN is too new for a meaningful Spamhaus DROP/SBL listing history. No named-BPH-database entry was located. Threat intelligence feeds flag the upstream pattern as presumptively abuse-tolerant; no named institution is cited without a live source.
-- **Explicit retraction:** An earlier working hypothesis linked this server to Proton66 / "TheGentlemen" toolkit. This hypothesis is **retracted** — 94.103.1.13 is on AS209207, not AS198953; the Hunt.io "TheGentlemen" toolkit was observed on 176.120.22.127, a completely different IP and ASN.
+- **Explicit retraction:** An earlier working hypothesis linked this server to Proton66 / "TheGentlemen" toolkit. This hypothesis is **retracted**, 94.103.1.13 is on AS209207, not AS198953; the Hunt.io "TheGentlemen" toolkit was observed on 176.120.22.127, a completely different IP and ASN.
 
 #### Multi-Tenant Operator Host — Co-Tenancy Pattern
 
@@ -185,15 +185,15 @@ Historical resolution of `slayer.ktx.ro` (Romanian TLD) to 94.103.1.13 on 2025-1
 
 **Consistent tradecraft across all three active co-tenants:**
 - **Cloudflare-fronted DNS + CDN.** Every domain uses Cloudflare name servers (pair rotations observed: `fay/quinton` → `rob/nova`, `art/noor`, `dana/ethan` → `amber`). Operator-controlled Cloudflare accounts hide the `94.103.1.13` origin from passive scanners.
-- **Mixed-registrar strategy.** `forumrutor24.com` is registered via **Mat Bao Corporation** (Vietnamese registrar, IANA 1586 — an unusual choice that deliberately sidesteps RU and US registrar scrutiny); `gtanuncios.com` transferred to **Network Solutions** via an intermediate CN reseller identity; `bulgainme.pro` uses a minimal `.pro` gTLD registration. No single registrar chokepoint.
-- **Aged-domain purchase for reputation laundering** (gtanuncios.com). The domain was created 2015-05-16 (10+ years old), originally held by `Vikas` via PDR India, transferred to `xiang xiang fan` (CN reseller identity, Linfen Shanxi, phone +86 130 3255 6442, email `lc1393353@gmail.com`) on 2025-06-28, held dormant for ten months, then pivoted to 94.103.1.13 on 2026-04-11. Privacy-masking was applied to the WHOIS on 2026-04-24 00:39:01Z. This pattern — acquiring an aged domain with existing reputation and holding it dormant before pivoting to operator infrastructure — is documented attacker tradecraft against age-based reputation filters.
+- **Mixed-registrar strategy.** `forumrutor24.com` is registered via **Mat Bao Corporation** (Vietnamese registrar, IANA 1586, an unusual choice that deliberately sidesteps RU and US registrar scrutiny); `gtanuncios.com` transferred to **Network Solutions** via an intermediate CN reseller identity; `bulgainme.pro` uses a minimal `.pro` gTLD registration. No single registrar chokepoint.
+- **Aged-domain purchase for reputation laundering** (gtanuncios.com). The domain was created 2015-05-16 (10+ years old), originally held by `Vikas` via PDR India, transferred to `xiang xiang fan` (CN reseller identity, Linfen Shanxi, phone +86 130 3255 6442, email `lc1393353@gmail.com`) on 2025-06-28, held dormant for ten months, then pivoted to 94.103.1.13 on 2026-04-11. Privacy-masking was applied to the WHOIS on 2026-04-24 00:39:01Z. This pattern (acquiring an aged domain with existing reputation and holding it dormant before pivoting to operator infrastructure) is documented attacker tradecraft against age-based reputation filters.
 - **Concurrent setup bursts.** SSL cert churn on `bulgainme.pro` on 2026-04-10 (3 certs issued in a 2-minute window, 17:57-17:59 UTC), paired with the 2026-04-11 cutover of `gtanuncios.com` to the operator IP and mail-server activation on both domains, indicates a single operator standing up multi-domain infrastructure in a tight window.
 
 My assessment is that the operator's posture is mature, running parallel parasitic infrastructure rather than a single-campaign tool deployment. That reframes them from a Chaos ransomware distributor into a multi-campaign operator using Chaos as one of several concurrent monetization paths on the same host, and I hold it at HIGH.
 
 Defensively that means blocking only the Chaos-specific IOCs in this report will miss the operator's other campaigns on the same IP. Hunting teams should enumerate `forumrutor24.com`, `www.forumrutor24.com`, `gtanuncios.com`, `mail.gtanuncios.com`, `bulgainme.pro`, `mail.bulgainme.pro`, `94.103.1.13` and historical `slayer.ktx.ro` under the broader UTA-2026-005 cluster. The full set is published in the IOC feed.
 
-**VirusTotal refresh (2026-04-23) — Cloudflare fronting validated:**
+**VirusTotal refresh (2026-04-23): Cloudflare fronting validated:**
 
 The detection picture across this cluster is a clean demonstration of how Cloudflare CDN fronting protects operator-controlled co-tenant domains:
 
@@ -201,15 +201,15 @@ The detection picture across this cluster is a clean demonstration of how Cloudf
 |---|---|---|
 | `94.103.1.13` (backing IP) | **5/94 + 1 suspicious** | Flagged by Criminal IP, BitDefender (phishing), CRDF, CyRadar (phishing), ESET (suspicious) |
 | All 5 active co-tenant domains | **0/94** | Cloudflare edge hides the origin from automated scanners |
-| Mail subdomains (`mail.gtanuncios.com`, `mail.bulgainme.pro`) | NOT FOUND | Never indexed — operator-internal webmail |
-| `gtanuncios.com` traffic rank | **Alexa #267,012** | Aged domain retains legitimate historical traffic reputation — directly corroborates the reputation-laundering interpretation of the aged-domain purchase |
+| Mail subdomains (`mail.gtanuncios.com`, `mail.bulgainme.pro`) | NOT FOUND | Never indexed, operator-internal webmail |
+| `gtanuncios.com` traffic rank | **Alexa #267,012** | Aged domain retains legitimate historical traffic reputation, directly corroborates the reputation-laundering interpretation of the aged-domain purchase |
 | `dhost.su` (ASN self-domain) | 0/94 via **BEGET-SU** | Well-known low-cost Russian registrar commonly chosen by operators for the cheap + weak-KYC combination |
 
 The analytical takeaway is that this is not coincidence. Blocking the domains downstream of the CDN is ineffective, because 0/94 means they look clean to most security tooling, so blocking the IP, or hunting the cross-build structural IOCs, the mutex GUID, the Stage-5b hash and the cross-layer key-reuse anchors, is the effective posture. The operator's infrastructure choices are deliberate, since Cloudflare fronting plus mixed registrars plus aged-domain purchases combine into a cluster that evades all three common defensive triggers, domain reputation, CDN reputation and registrar reputation. The only layer where detection has broken through is the backing IP itself at 5/94, and the AS209207 ASN profile.
 
 ### Victim vs Operator Infrastructure — Critical Distinction
 
-The parallel pre-production campaign staged on 94.103.1.13 contains exploit scripts targeting seven IP addresses. **These are victim / target IPs, not operator C2.** Do not block them as malicious infrastructure — hunt them for signs of compromise.
+The parallel pre-production campaign staged on 94.103.1.13 contains exploit scripts targeting seven IP addresses. **These are victim / target IPs, not operator C2.** Do not block them as malicious infrastructure, hunt them for signs of compromise.
 
 | IP | Port | Target | Origin |
 |---|---|---|---|
@@ -220,12 +220,12 @@ The parallel pre-production campaign staged on 94.103.1.13 contains exploit scri
 | 192.227.108.142 | — | Neighbor host | Cloud South (US) |
 | 37.17.245.209 | — | Unknown target | Ukraine |
 
-Four of seven target IPs are on Ukrainian ASNs — consistent with opportunistic targeting rather than nation-state geographic focus. The operator's targeting is financially motivated (SIP fraud, asset-inventory pivoting, mining-rig hijacking, OTP/authentication bypass) rather than sector- or region-specific APT activity.
+Four of seven target IPs are on Ukrainian ASNs, consistent with opportunistic targeting rather than nation-state geographic focus. The operator's targeting is financially motivated (SIP fraud, asset-inventory pivoting, mining-rig hijacking, OTP/authentication bypass) rather than sector- or region-specific APT activity.
 
 ### Research Gaps Carried Into This Report
 
 - **Real Orcus C2 upstream is UNKNOWN.** The RAT connects to `127.0.0.1:20268` on the infected host; that loopback address is one end of a chisel or plink tunnel whose external egress cannot be recovered from static analysis alone. Dynamic detonation with egress capture is needed.
-- **Operator identity is still INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as the pre-masking registrant of `gtanuncios.com` is most plausibly a **CN domain-reseller inventory identity**, not the operator. The aged-domain-purchase pattern (10-year-old legitimate classifieds domain acquired from this reseller in 2025-06-28, dormant for 10 months, then pivoted to operator IP in 2026-04-11) is documented attacker tradecraft for reputation laundering. This evidence does NOT upgrade named-actor attribution above INSUFFICIENT, but it is recorded in UTA-2026-005 as a tracked signal — if the same reseller-inventory identity appears on another operator-pivoted domain in the future, that would be a clustering signal.
+- **Operator identity is still INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as the pre-masking registrant of `gtanuncios.com` is most plausibly a **CN domain-reseller inventory identity**, not the operator. The aged-domain-purchase pattern (10-year-old legitimate classifieds domain acquired from this reseller in 2025-06-28, dormant for 10 months, then pivoted to operator IP in 2026-04-11) is documented attacker tradecraft for reputation laundering. This evidence does NOT upgrade named-actor attribution above INSUFFICIENT, but it is recorded in UTA-2026-005 as a tracked signal: if the same reseller-inventory identity appears on another operator-pivoted domain in the future, that would be a clustering signal.
 - **Wardow-Orcus crack has no Tier-1/Tier-2 vendor writeup**: used as a community-known identifier, not a cited vendor claim.
 - **Console.Title launch gate and the specific tri-artifact conjunction have no located prior public reporting.** The corpus surveyed is not exhaustive; "no located prior public reporting" is used throughout rather than "first of its kind" to reflect that honest scope.
 - **TorBrowserTor variant is only ~2 weeks into its public-reporting lifecycle.** This publication is among the earliest comprehensive writeups.
@@ -260,11 +260,11 @@ Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 20
 
 ### 5.2 Stage 1 — Batch Dropper: The `mymain.bat` / `myfile.bat` Chain
 
-> **Analyst note:** Stage 1 is a heavily obfuscated Windows batch file that looks like random text to a casual viewer. What it actually does is force-launch 32-bit PowerShell with a command line over 10,000 characters long, carrying an encrypted .NET payload inline. The two sibling files (`mymain.bat` and `myfile.bat`) come from the same builder but use different encryption keys — a tell that this is a re-runnable crypter, not a one-off weapon.
+> **Analyst note:** Stage 1 is a heavily obfuscated Windows batch file that looks like random text to a casual viewer. What it actually does is force-launch 32-bit PowerShell with a command line over 10,000 characters long, carrying an encrypted .NET payload inline. The two sibling files (`mymain.bat` and `myfile.bat`) come from the same builder but use different encryption keys, a tell that this is a re-runnable crypter, not a one-off weapon.
 
 Both Stage-1 batch files open with a long block of DOSfuscation (`%foo:a=b%`-style string mutation, `^` escape chars, `%random%` variable munging) that resolves at runtime to approximately the same final command line. Structural anchors shared across both builds:
 
-- **Forced 32-bit PowerShell path:** `SysWOW64\WindowsPowerShell\v1.0\powershell.exe -WindowStyle Hidden -NoProfile` — used regardless of the host's bitness. This is a structural builder tell.
+- **Forced 32-bit PowerShell path:** `SysWOW64\WindowsPowerShell\v1.0\powershell.exe -WindowStyle Hidden -NoProfile`, used regardless of the host's bitness. This is a structural builder tell.
 - **Two Base64-like payload chunks per file**, separated by a single `\` byte, each carrying a 32-character magic marker prefix.
 - **Alphabet-substitution reversal** before `FromBase64`: `.Replace('@','A').Replace('#','/')`. The substituted alphabet is a simple static-evasion trick that defeats naive Base64 scanners.
 - **Console-title seeding** (see Stage 4 below): the batch file writes a unique string to the cmd.exe window title before the PowerShell hand-off. That title is later read back by a downstream .NET stage to locate the batch file on disk.
@@ -300,7 +300,7 @@ The PS1 loader is the first layer of decryption. Its structural anchors (identic
 
 One cross-layer key-reuse observation is worth a deep dive. The same passphrase used to derive the AES key for **chunk 0** is *also* used to derive the AES keys for **chunk 1** and for **Stage-4**. The builder hard-codes one passphrase per build and reuses it three times, and within each build the XOR key is similarly reused across chunk 1 and Stage-4. That intra-build reuse, combined with per-build key rotation, a different passphrase for mymain versus myfile, is the single most distinctive builder fingerprint recovered from the crypter chain, and the pattern is not located in any public research on .NET crypters.
 
-**Why this pattern is a load-bearing tracking anchor.** Most .NET crypter families observed in the wild either (a) derive independent per-layer keys from a master seed plus a layer index, which yields visibly different plaintext keys at each layer, or (b) rotate the key entirely between layers, which prevents recovering one layer's key from helping decrypt another. This builder does neither: it uses the *same* literal passphrase string across three layers in a build, and the *same* literal XOR key across two layers in a build. That is operationally simpler for the builder author to implement — and easier to debug — but it also produces a cross-layer signature that will be immediately recognizable to any future analyst who recovers even one layer's plaintext key. Any new sample in which an analyst recovers an AES passphrase and sees that same passphrase (a) SHA-256-hashed and truncated to 32 bytes for AES-256, (b) reused verbatim against AES-ECB rather than CBC, and (c) used at the outer PS1 layer and a subsequent `Assembly.Load` stage simultaneously, is very likely a build of this same crypter. That makes this pattern — not the specific string values, which rotate — the durable cross-campaign hunting anchor.
+**Why this pattern is a load-bearing tracking anchor.** Most .NET crypter families observed in the wild either (a) derive independent per-layer keys from a master seed plus a layer index, which yields visibly different plaintext keys at each layer, or (b) rotate the key entirely between layers, which prevents recovering one layer's key from helping decrypt another. This builder does neither: it uses the *same* literal passphrase string across three layers in a build, and the *same* literal XOR key across two layers in a build. That is operationally simpler for the builder author to implement, and easier to debug, but it also produces a cross-layer signature that will be immediately recognizable to any future analyst who recovers even one layer's plaintext key. Any new sample in which an analyst recovers an AES passphrase and sees that same passphrase (a) SHA-256-hashed and truncated to 32 bytes for AES-256, (b) reused verbatim against AES-ECB rather than CBC, and (c) used at the outer PS1 layer and a subsequent `Assembly.Load` stage simultaneously, is very likely a build of this same crypter. That makes this pattern (not the specific string values, which rotate) the durable cross-campaign hunting anchor.
 
 A second related signal is the AES-ECB mode choice. The ecosystem default for .NET crypters is AES-CBC with a random IV per block, because CBC is what every Stack Overflow answer demonstrates and every PowerShell .NET Framework tutorial uses. ECB is an unusual choice, losing the IV-based per-message randomization CBC provides, which the builder does not care about because each crypter layer's input is unique ciphertext anyway. That deliberate ECB choice, rather than the ordinary beginner CBC, is itself a builder-family fingerprint against the wider .NET crypter ecosystem, and it slots into the same tracking signature as the passphrase-reuse pattern above.
 
@@ -308,7 +308,7 @@ This matters for defenders because the plaintext key strings (`qDqHmNfeSyWJoyxDz
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/chunk-decryption-pipeline.png" | relative_url }}" alt="PowerShell console output showing Stage-3 chunk decryption for myfile.bat. Two sequential invocations produce myfile_chunk0_payload.stage (32,768 bytes) and myfile_chunk1_payload.stage (1,045,504 bytes), each verified by SHA256 and by the presence of the 4d5a90 MZ magic in the first four bytes. A final comparison block shows that chunk 1's SHA256 differs from myfile.exe's SHA256, proving chunk 1 is a nested crypter stage and not the Orcus payload directly.">
-  <figcaption><em>Figure 2: Stage-3 chunk decryption pipeline. AES-ECB decrypt, PKCS7 unpad, GZip decompress, then a MZ-magic check and SHA256 fingerprint on each chunk. The final comparison to myfile.exe's SHA256 is what disproved the early working hypothesis that chunk 1 was Orcus — chunk 1 is a nested crypter (Stage-4), not the final RAT. This established the multi-stage nature of the loader.</em></figcaption>
+  <figcaption><em>Figure 2: Stage-3 chunk decryption pipeline. AES-ECB decrypt, PKCS7 unpad, GZip decompress, then a MZ-magic check and SHA256 fingerprint on each chunk. The final comparison to myfile.exe's SHA256 is what disproved the early working hypothesis that chunk 1 was Orcus, chunk 1 is a nested crypter (Stage-4), not the final RAT. This established the multi-stage nature of the loader.</em></figcaption>
 </figure>
 
 ### 5.4 Stage 3 — Chunk 0: Anti-Sandbox Unhook Stub
@@ -321,20 +321,20 @@ Chunk 0 is a .NET assembly whose single job is environment validation and in-pro
 - **AMSI bypass**: patches `amsi.dll!AmsiScanBuffer` with a `mov eax, 0x80070057; ret` thunk so subsequent PowerShell/script content is never scanned.
 - **ETW bypass**: patches `ntdll.dll!EtwEventWrite` with `ret` so behavioral-analytics products lose telemetry visibility.
 - **User-mode ntdll unhook (Perun's Fart)**: reads a clean copy of `ntdll.dll` from disk, computes the delta against the in-process copy (where EDRs typically install user-mode hooks), and overwrites the hooked bytes with the clean ones. This neuters user-mode EDR hooks for the duration of the process.
-- **Tri-artifact anti-sandbox gate** (see 5.4.1 below) — the operator's signature anti-sandbox check.
+- **Tri-artifact anti-sandbox gate** (see 5.4.1 below): the operator's signature anti-sandbox check.
 
 #### 5.4.1 Tri-Artifact Anti-Sandbox Gate
 
-> **Analyst note:** This is a distinctive anti-sandbox check. The loader will exit if **all three** of the following are simultaneously true: the current user is named `admin`, the directory `%TEMP%\VBE\` exists, AND the file `%TEMP%\mapping.csv` exists. Any single-artifact mismatch lets execution continue. The gate is *inverted* — it stops on MATCH, not on mismatch, which is the opposite of conventional anti-VM checks. No prior public reporting of this specific triple has been located.
+> **Analyst note:** This is a distinctive anti-sandbox check. The loader will exit if **all three** of the following are simultaneously true: the current user is named `admin`, the directory `%TEMP%\VBE\` exists, AND the file `%TEMP%\mapping.csv` exists. Any single-artifact mismatch lets execution continue. The gate is *inverted*. It stops on MATCH, not on mismatch, which is the opposite of conventional anti-VM checks. No prior public reporting of this specific triple has been located.
 
-The gate is embedded in two places: line 24 of the batch dropper (as DOSfuscated string comparisons) and again in chunk 0 (as managed `Environment.UserName` / `Directory.Exists` / `File.Exists` calls). The duplication is defensive — the batch check stops sandbox detonation before any PowerShell spawns; the chunk-0 check stops in-memory execution if the batch check is bypassed.
+The gate is embedded in two places: line 24 of the batch dropper (as DOSfuscated string comparisons) and again in chunk 0 (as managed `Environment.UserName` / `Directory.Exists` / `File.Exists` calls). The duplication is defensive. The batch check stops sandbox detonation before any PowerShell spawns; the chunk-0 check stops in-memory execution if the batch check is bypassed.
 
 Two hypotheses for the inversion (operator exits on match):
 
-1. **Operator-convenience check against their own development host.** The operator's analysis-tooling environment produces those artifacts (`VBE\` is a common Visual Basic-analysis directory; `mapping.csv` may be output from a code-mapping/IR tool they use). Exiting on match prevents the loader from executing on the operator's own workstation — a safety against accidental self-infection.
+1. **Operator-convenience check against their own development host.** The operator's analysis-tooling environment produces those artifacts (`VBE\` is a common Visual Basic-analysis directory; `mapping.csv` may be output from a code-mapping/IR tool they use). Exiting on match prevents the loader from executing on the operator's own workstation: a safety against accidental self-infection.
 2. **Intentional decoy** to mislead researchers who flip the logic assuming a conventional anti-VM check.
 
-Static analysis alone cannot distinguish between these. The MODERATE-confidence interpretation is hypothesis 1 — operator convenience. Either way, the specific triple is a builder fingerprint.
+Static analysis alone cannot distinguish between these. The MODERATE-confidence interpretation is hypothesis 1, operator convenience. Either way, the specific triple is a builder fingerprint.
 
 This matters for defenders because none of these three artifacts should ever be present on a production endpoint. Their presence is a hunting anchor in its own right, since any host carrying an `admin` user plus `%TEMP%\VBE\` plus `%TEMP%\mapping.csv` is a candidate operator-analysis host, or a red-team lab. For threat hunting, treat the triple as a low-volume anomaly worth investigating.
 
@@ -348,32 +348,32 @@ Stage 4 is a ~1 MB decrypted .NET assembly (per-build; mymain `36dc7254…` = 1,
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-obfuscated-class-list.png" | relative_url }}" alt="Decompiler assembly-explorer view of the decrypted Stage-4 .NET assembly, showing its module tree with heavily obfuscated class names such as HQpmBSUELAUUTkvfFUDMffBkXlu, BIAefanEVukuBxcnUqBPQrZRaqIRILGzIOrWzffQLCNmnyIGK, and a dozen more generated-looking identifiers.">
-  <figcaption><em>Figure 3: Decrypted Stage-4 .NET assembly in a decompiler's assembly explorer. All class, method, and field names are renamed to generated-looking identifiers — a standard .NET string-obfuscation pattern consistent with a private crypter that does not aim to evade decompilation entirely, only to slow manual analysis.</em></figcaption>
+  <figcaption><em>Figure 3: Decrypted Stage-4 .NET assembly in a decompiler's assembly explorer. All class, method, and field names are renamed to generated-looking identifiers, a standard .NET string-obfuscation pattern consistent with a private crypter that does not aim to evade decompilation entirely, only to slow manual analysis.</em></figcaption>
 </figure>
 
 Its behaviors, in chronological order:
 
-1. **Mutex establishment.** Creates a named mutex with the GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`. This GUID is **identical across both builds** — a cross-build invariant and the highest-value hunting anchor produced by this investigation. Zero public hits prior to this publication.
-2. **Console.Title self-locate.** Reads `$host.UI.RawUI.WindowTitle` (PowerShell) / `Console.Title` (.NET) to recover the dropper batch file's path. The value was seeded by the Stage-1 batch file (see 5.2). Stage 4 then calls `File.ReadLines(dropper_path).Last()` to re-read the last line of the batch file and verify it matches an expected hash — an implicit `.bat` execution guard. If the running process was started by any means other than the original batch file (e.g., a researcher detonating the decrypted Stage-4 PE directly), this check fails and Stage 4 exits.
+1. **Mutex establishment.** Creates a named mutex with the GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`. This GUID is **identical across both builds**: a cross-build invariant and the highest-value hunting anchor produced by this investigation. Zero public hits prior to this publication.
+2. **Console.Title self-locate.** Reads `$host.UI.RawUI.WindowTitle` (PowerShell) / `Console.Title` (.NET) to recover the dropper batch file's path. The value was seeded by the Stage-1 batch file (see 5.2). Stage 4 then calls `File.ReadLines(dropper_path).Last()` to re-read the last line of the batch file and verify it matches an expected hash: an implicit `.bat` execution guard. If the running process was started by any means other than the original batch file (e.g., a researcher detonating the decrypted Stage-4 PE directly), this check fails and Stage 4 exits.
 3. **Payload staging.** Decompresses two internal resources (per-build names: `IazvXcueDgcoXWWL…` and `HxBTHTPGSMVbIZYM…` for mymain; `WxFRcVUEXpXaqKtl…` and `YEfOdElqPaWtqico…` for myfile) using the build's reused AES passphrase + reused XOR key + GZip. These decompress to Stage-5a (the Chaos ransomware) and Stage-5b (the UAC bypass).
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-embedded-resources.png" | relative_url }}" alt="Decompiler resource listing for the decrypted Stage-4 assembly showing two embedded resources: WxFRcVUEXpXaqKtlEAsEPXMbLojPupIDbXtnSnvqGuhCmEkgNMxYgJZyk at 11,856 bytes and YEfOdElqPaWtqicoMQkYFXLbzFsKebrGyBZYN at 983,872 bytes. Both are flagged as Embedded, Public.">
-  <figcaption><em>Figure 4: Two Stage-4 embedded resources. Their sizes — 11,856 bytes and 983,872 bytes — match byte-for-byte between the mymain and myfile builds, establishing the first cross-build size invariant. After decryption, the 11,856-byte resource becomes Stage-5a (the Chaos ransomware, 25,088 bytes plaintext) and the 983,872-byte resource becomes Stage-5b (the UAC bypass PE, SHA256 `da302511…` — byte-identical across both builds).</em></figcaption>
+  <figcaption><em>Figure 4: Two Stage-4 embedded resources. Their sizes, 11,856 bytes and 983,872 bytes, match byte-for-byte between the mymain and myfile builds, establishing the first cross-build size invariant. After decryption, the 11,856-byte resource becomes Stage-5a (the Chaos ransomware, 25,088 bytes plaintext) and the 983,872-byte resource becomes Stage-5b (the UAC bypass PE, SHA256 `da302511…`, byte-identical across both builds).</em></figcaption>
 </figure>
 
-4. **Registry-blob persistence write.** Writes a ~1.4 MB encoded blob to `HKLM\Software\Microsoft Defender\Payload` (note: **NOT** `HKLM\Software\Microsoft\Windows Defender` — the masquerade path is deliberately adjacent to a legitimate Microsoft key to evade casual inspection). This blob contains the entire Stage-4 chain, ready to be re-run by a boot re-loader.
+4. **Registry-blob persistence write.** Writes a ~1.4 MB encoded blob to `HKLM\Software\Microsoft Defender\Payload` (note: **NOT** `HKLM\Software\Microsoft\Windows Defender`: the masquerade path is deliberately adjacent to a legitimate Microsoft key to evade casual inspection). This blob contains the entire Stage-4 chain, ready to be re-run by a boot re-loader.
 5. **Scheduled task installation.** Creates a scheduled task literally named `\Microsoft Defender` at the task-scheduler **root path** (not under `\Microsoft\Windows\Windows Defender`), with `Hidden = true`, `RunLevel = HIGHEST`, and a BOOT trigger. The task runs `cmd.exe` with a long command-line that reads the HKLM registry blob, decodes it, and re-executes the Stage-4 chain.
-6. **Debug logfile write.** Writes to `C:\cmd_log.txt` from the boot re-loader stub — a developer debugging artifact that should not exist on a polished production build. Its presence is a hunting indicator on any host suspected to be post-reboot infected.
+6. **Debug logfile write.** Writes to `C:\cmd_log.txt` from the boot re-loader stub: a developer debugging artifact that should not exist on a polished production build. Its presence is a hunting indicator on any host suspected to be post-reboot infected.
 7. **Stage-5a and Stage-5b dispatch.** Loads Stage-5a (Chaos/TorBrowserTor ransomware) and Stage-5b (UACME #41 UAC bypass) via `Assembly.Load` on the decrypted byte arrays.
 
-**Why the "Console.Title + File.ReadLines batch-line" trick matters.** This mechanism defeats manual researcher detonation of Stage-4 in isolation. It also defeats automated sandbox submission of the decrypted Stage-4 PE — a researcher who extracts the payload and uploads it to a sandbox will see the mutex, the resources, and nothing else. The chain will not self-extract because the console title is not seeded. Automated memory-dump collection platforms that preserve the original command-line context will still trigger it; isolated PE sandboxing will not.
+**Why the "Console.Title + File.ReadLines batch-line" trick matters.** This mechanism defeats manual researcher detonation of Stage-4 in isolation. It also defeats automated sandbox submission of the decrypted Stage-4 PE, a researcher who extracts the payload and uploads it to a sandbox will see the mutex, the resources, and nothing else. The chain will not self-extract because the console title is not seeded. Automated memory-dump collection platforms that preserve the original command-line context will still trigger it; isolated PE sandboxing will not.
 
 The Defender masquerade matters most of all. The dual anchor, a task named `\Microsoft Defender` at ROOT plus `HKLM\Software\Microsoft Defender\Payload`, is the single most productive threat-hunt query this investigation surfaces. Real Microsoft Defender tasks live under `\Microsoft\Windows\Windows Defender` and the real registry key is `HKLM\Software\Microsoft\Windows Defender`. The masquerade path is **adjacent but not identical**, so a defender who does not know the real path by heart will let it pass. Any Sysmon-EID-12/13-capable SIEM can trivially hunt the masquerade pair.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-defender-persistence-reloader.png" | relative_url }}" alt="Deobfuscated PowerShell arg-blob reloader showing a chain of Replace-based DOSfuscation tokens and a visible hardcoded registry path HKLM:\\Software\\Microsoft Defender and Payload value name, alongside a cmd_log.txt redirect target at the bottom.">
-  <figcaption><em>Figure 5: The Stage-4 arg-blob reloader, deobfuscated from its outer Replace-chain DOSfuscation. Visible in plaintext: the Defender-masquerade persistence path `HKLM:\Software\Microsoft Defender` with value name `Payload`, and the reloader's debug-output file `C:\cmd_log.txt`. The reloader reads the registry blob on every boot, decodes it, and re-executes the full loader chain — the fileless persistence mechanism documented in this section.</em></figcaption>
+  <figcaption><em>Figure 5: The Stage-4 arg-blob reloader, deobfuscated from its outer Replace-chain DOSfuscation. Visible in plaintext: the Defender-masquerade persistence path `HKLM:\Software\Microsoft Defender` with value name `Payload`, and the reloader's debug-output file `C:\cmd_log.txt`. The reloader reads the registry blob on every boot, decodes it, and re-executes the full loader chain, the fileless persistence mechanism documented in this section.</em></figcaption>
 </figure>
 
 #### 5.5.1 The Console.Title Trick — Why It Is Distinctive
@@ -383,8 +383,8 @@ The Defender masquerade matters most of all. The dual anchor, a task named `\Mic
 `Console.Title` is the text displayed in the title bar of a Windows console window. It is a native Windows property readable by any process attached to that console, via the .NET `Console.Title` property or the Win32 `GetConsoleTitle` API. Three facts about it are load-bearing for understanding the trick:
 
 1. **cmd.exe automatically sets the title to the path of the batch file it is running.** When a user double-clicks `C:\Users\victim\Downloads\mymain.bat`, cmd.exe writes that full path into the window title with no help from the batch file itself. The operator gets this behavior for free from Windows.
-2. **The title is inherited by child processes that attach to the same console.** When `mymain.bat` spawns PowerShell, and PowerShell uses `Assembly.Load` to execute Stage 4 in-memory, Stage 4 reads the *original* title — still the batch file's path — because it shares the cmd.exe console.
-3. **EDR and SIEM telemetry almost never capture the console title.** Process name, command line, parent PID, integrity level, loaded DLLs — all routinely logged. Console title is not. There is no Sysmon event for it, no standard EDR field for it, and no ATT&CK technique that singles it out.
+2. **The title is inherited by child processes that attach to the same console.** When `mymain.bat` spawns PowerShell, and PowerShell uses `Assembly.Load` to execute Stage 4 in-memory, Stage 4 reads the *original* title (still the batch file's path) because it shares the cmd.exe console.
+3. **EDR and SIEM telemetry almost never capture the console title.** Process name, command line, parent PID, integrity level, loaded DLLs: all routinely logged. Console title is not. There is no Sysmon event for it, no standard EDR field for it, and no ATT&CK technique that singles it out.
 
 Stage 4 uses it in a `Main()` sequence that deobfuscates structurally to:
 
@@ -400,13 +400,13 @@ Registry.LocalMachine
 InstallScheduledTask(cmdline_blob_xor91);    // (D) Boot reloader via schtask
 ```
 
-Four things happen in that short sequence. (A) If the title does not contain `.bat`, Stage 4 exits silently — a free anti-analysis guard (see "what this defeats" below). (B) If it does, the title *is* the full path to the dropper batch file, and Stage 4 reads the last line of that file, which contains the ~1.4 MB encrypted payload blob. (C) Stage 4 writes that blob directly into the registry under the Defender-masquerade path. (D) Stage 4 registers a boot scheduled task whose job at every reboot is to read the registry blob and re-detonate the full loader chain — no on-disk malware required.
+Four things happen in that short sequence. (A) If the title does not contain `.bat`, Stage 4 exits silently, a free anti-analysis guard (see "what this defeats" below). (B) If it does, the title *is* the full path to the dropper batch file, and Stage 4 reads the last line of that file, which contains the ~1.4 MB encrypted payload blob. (C) Stage 4 writes that blob directly into the registry under the Defender-masquerade path. (D) Stage 4 registers a boot scheduled task whose job at every reboot is to read the registry blob and re-detonate the full loader chain, no on-disk malware required.
 
 This is cleverer than the alternatives. Most malware needing to find its own dropper does one of four things, and each has weaknesses `Console.Title` side-steps:
 
 | Conventional approach | Why malware uses it | Why it is worse than Console.Title |
 |---|---|---|
-| `Assembly.GetExecutingAssembly().Location` | Standard .NET idiom for self-location | Returns empty string when the assembly is loaded via `Assembly.Load(byte[])` — which is exactly how Stage 4 arrives. Does not work for in-memory .NET stages. |
+| `Assembly.GetExecutingAssembly().Location` | Standard .NET idiom for self-location | Returns empty string when the assembly is loaded via `Assembly.Load(byte[])`, which is exactly how Stage 4 arrives. Does not work for in-memory .NET stages. |
 | `System.Environment.CommandLine` | Exposes the invocation of the current process | The command line of `powershell.exe` running Stage 4 contains the (enormous) PowerShell blob, not the batch file's path. Also: command lines *are* logged by EDR, making them a hot telemetry field. |
 | `Process.GetCurrentProcess().MainModule.FileName` | Returns the host executable's path | Returns `powershell.exe`, not the batch dropper. Wrong answer. |
 | Hardcoded path (`C:\Users\...\Downloads\mymain.bat`) | Simple to code | Brittle (breaks the moment the user renames or relocates the file); also creates a stable string for YARA to key on. |
@@ -419,9 +419,9 @@ This is cleverer than the alternatives. Most malware needing to find its own dro
 - **Debugger detonation.** When Stage 4 is run under a debugger, the console title reflects the debugger's own window, or `cmd.exe`, rather than `.bat`. Persistence install is skipped. An analyst who only runs the sample under a debugger will never observe the Defender-masquerade persistence write.
 - **Any automated pipeline that loses cmd.exe parent context.** Memory-dump replay tools, binary instrumentation frameworks, and PE sandboxes that execute the `.exe` without preserving the original cmd.exe session will all trip the guard. The sample appears inert.
 
-The only analysis paths that *do* trigger the full behavior are (a) running the original `.bat` end-to-end on a controlled host, or (b) setting the console title manually to something containing `.bat` before detonating the decrypted PE. Both require knowing the trick already — which is exactly the obscurity the operator is buying.
+The only analysis paths that *do* trigger the full behavior are (a) running the original `.bat` end-to-end on a controlled host, or (b) setting the console title manually to something containing `.bat` before detonating the decrypted PE. Both require knowing the trick already, which is exactly the obscurity the operator is buying.
 
-**Why this is distinctive (honest novelty framing).** `Console.Title` reads in malware are not new — they appear in a handful of red-team loaders and pentesting tools where they are used to plant a banner or confirm the execution environment. What has not been located in public reporting is this **specific** combination: `Console.Title` used as a dynamic dropper-path locator paired with `File.ReadLines(title).Last()` batch-line self-extraction, all on top of a fileless registry-blob persistence mechanism that requires the batch file's path to complete the install. Individually, each element has prior art. In combination, no documented public prior reporting has been found. The corpus survey is not exhaustive; a paywalled vendor report or APT-kit disclosure may cover it. Defenders should treat the technique as **uncommon and worth hunting for**, not as globally unprecedented.
+**Why this is distinctive (honest novelty framing).** `Console.Title` reads in malware are not new. They appear in a handful of red-team loaders and pentesting tools where they are used to plant a banner or confirm the execution environment. What has not been located in public reporting is this **specific** combination: `Console.Title` used as a dynamic dropper-path locator paired with `File.ReadLines(title).Last()` batch-line self-extraction, all on top of a fileless registry-blob persistence mechanism that requires the batch file's path to complete the install. Individually, each element has prior art. In combination, no documented public prior reporting has been found. The corpus survey is not exhaustive; a paywalled vendor report or APT-kit disclosure may cover it. Defenders should treat the technique as **uncommon and worth hunting for**, not as globally unprecedented.
 
 This matters beyond this specific kit. The value of documenting the technique is not just hunting UTA-2026-005, because the pattern ports trivially to any malware family that runs a .NET stage underneath a `cmd.exe` host, and any operator reading public writeups can copy the idea. Defenders who build a hunting rule for Console.Title-based self-extraction *generally*, rather than only for the specific IOCs in this kit, will catch future operators who borrow it. Specifically:
 
@@ -429,13 +429,13 @@ This matters beyond this specific kit. The value of documenting the technique is
 - **Hunt for `svchost.exe` → `cmd.exe` with a command line over 10,000 characters at boot.** This catches the boot reloader regardless of how the payload is obfuscated inside the blob.
 - **Baseline scheduled tasks with any `Arguments` length over 5,000 characters.** Legitimate enterprise tools do not ship this way. Anything matching should be escalated.
 
-Each of those three hunts catches the Console.Title persistence loop from a different angle — no single rule defeats it, but any one of the three will.
+Each of those three hunts catches the Console.Title persistence loop from a different angle. No single rule defeats it, but any one of the three will.
 
 ### 5.6 Stage 5a — Chaos/TorBrowserTor Ransomware Payload
 
-> **Analyst note:** Stage 5a is the commodity Chaos/TorBrowserTor ransomware. It encrypts files with **Rijndael (256-bit key, CFB mode — denoted `Rijndael-256` throughout this report; refers to the 256-bit key size, not a 256-bit block size)**, wraps the per-file key with RSA-2048 OAEP, appends `.torbrowsertor` to every encrypted filename, drops `READ ME PLEASE.txt` as the ransom note, deletes shadow copies and backups, installs clipboard-hijacking for bech32 and P2PKH Bitcoin addresses, and spreads to any attached USB drive. This section documents behaviors defenders should detect in memory or at runtime — not in the `.bat` file on disk.
+> **Analyst note:** Stage 5a is the commodity Chaos/TorBrowserTor ransomware. It encrypts files with **Rijndael (256-bit key, CFB mode, denoted `Rijndael-256` throughout this report; refers to the 256-bit key size, not a 256-bit block size)**, wraps the per-file key with RSA-2048 OAEP, appends `.torbrowsertor` to every encrypted filename, drops `READ ME PLEASE.txt` as the ransom note, deletes shadow copies and backups, installs clipboard-hijacking for bech32 and P2PKH Bitcoin addresses, and spreads to any attached USB drive. This section documents behaviors defenders should detect in memory or at runtime, not in the `.bat` file on disk.
 
-Stage-5a is a 25 KB .NET console application (25,088 bytes plaintext). Per-build hashes: mymain `06f6df0f…`, myfile `13665bd2…`. Both decompile to source that is line-number-identical at major class boundaries (`namespace ConsoleApplication7` line 1, `internal class Program` line 18, `NativeMethods` line 790, `driveNotification` class) — a source-code-level builder template identity.
+Stage-5a is a 25 KB .NET console application (25,088 bytes plaintext). Per-build hashes: mymain `06f6df0f…`, myfile `13665bd2…`. Both decompile to source that is line-number-identical at major class boundaries (`namespace ConsoleApplication7` line 1, `internal class Program` line 18, `NativeMethods` line 790, `driveNotification` class), a source-code-level builder template identity.
 
 Core behaviors:
 
@@ -447,11 +447,11 @@ Core behaviors:
   <figcaption><em>Figure 6: Hard-coded Stage-5a ransom messages including the `@TorBrowserTor` Telegram handle. This string is what brands the variant: "TorBrowserTor" is the builder-configuration label used across this Chaos v4/v5 variant family. Like the BTC wallets, it is a builder-default attribution anchor (HIGH family-level identification, LOW operator-attribution value).</em></figcaption>
 </figure>
 
-- **Shadow copy / backup destruction.** Issues `vssadmin delete shadows /all /quiet`, `wmic shadowcopy delete`, `bcdedit /set {default} bootstatuspolicy ignoreallfailures`, `bcdedit /set {default} recoveryenabled no`, and `wbadmin delete catalog -quiet` — the canonical Chaos VSS-kill sequence.
+- **Shadow copy / backup destruction.** Issues `vssadmin delete shadows /all /quiet`, `wmic shadowcopy delete`, `bcdedit /set {default} bootstatuspolicy ignoreallfailures`, `bcdedit /set {default} recoveryenabled no`, and `wbadmin delete catalog -quiet`: the canonical Chaos VSS-kill sequence.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-anti-recovery-flags.png" | relative_url }}" alt="Decompiled Stage-5a C# source excerpt showing nested if-blocks gated on Program.checkAdminPrivilage. Inside the admin branch, individual sub-flags gate calls to Program.deleteShadowCopies, Program.disableRecoveryMode, Program.deleteBackupCatalog, and Program.DisableTaskManager.">
-  <figcaption><em>Figure 7: Admin-gated anti-recovery sequence in Stage-5a source. Each destructive action (`deleteShadowCopies`, `disableRecoveryMode`, `deleteBackupCatalog`, `DisableTaskManager`) is individually toggleable via builder-set flags — the operator can choose which recovery paths to destroy per campaign. In this build all four flags are set to true.</em></figcaption>
+  <figcaption><em>Figure 7: Admin-gated anti-recovery sequence in Stage-5a source. Each destructive action (`deleteShadowCopies`, `disableRecoveryMode`, `deleteBackupCatalog`, `DisableTaskManager`) is individually toggleable via builder-set flags. The operator can choose which recovery paths to destroy per campaign. In this build all four flags are set to true.</em></figcaption>
 </figure>
 
 - **Clipboard hijacker (`driveNotification` class).** Registers a `WM_CLIPBOARDUPDATE` listener. On any clipboard change, applies bech32 and P2PKH Bitcoin regex patterns to the new clipboard content; if matched, replaces the content with one of the two builder-default wallets.
@@ -463,11 +463,11 @@ Core behaviors:
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-builder-default-btc-wallets.png" | relative_url }}" alt="Decompiled Stage-5a C# source excerpt showing four string field declarations: appMutexRun set to '7z459ajrk722yn8c5j4fg', appMutexRun2 set to '2X28tfRmWaPyPQgvoHV', appMutexStartup set to '1qw0ll8p9m8uezhqhyd', and appMutexStartup2 set to '17CqMQFeuB3NTzJ'. A fifth field droppedMessageTextbox is set to 'READ ME PLEASE.txt'.">
-  <figcaption><em>Figure 9: Hard-coded BTC wallet strings in Stage-5a (misnamed as mutex fields — a Chaos builder quirk). The four segments `7z459ajrk722yn8c5j4fg`, `2X28tfRmWaPyPQgvoHV`, `1qw0ll8p9m8uezhqhyd`, `17CqMQFeuB3NTzJ` reconstruct the two full BTC wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` that the clipboard hijacker above substitutes. WalletExplorer cross-references confirm both are Chaos builder-defaults reused across unrelated operators — LOW operator-attribution value.</em></figcaption>
+  <figcaption><em>Figure 9: Hard-coded BTC wallet strings in Stage-5a (misnamed as mutex fields, a Chaos builder quirk). The four segments `7z459ajrk722yn8c5j4fg`, `2X28tfRmWaPyPQgvoHV`, `1qw0ll8p9m8uezhqhyd`, `17CqMQFeuB3NTzJ` reconstruct the two full BTC wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` that the clipboard hijacker above substitutes. WalletExplorer cross-references confirm both are Chaos builder-defaults reused across unrelated operators, LOW operator-attribution value.</em></figcaption>
 </figure>
 
 - **USB spread.** Listens for `WM_DEVICECHANGE` events. On a new removable drive insertion, copies the Stage-5a binary to the drive root as `surprise.exe` (mymain) or `Recieve please.exe` (myfile), plus a small autorun helper file.
-- **HKCU Run persistence.** Writes the self-copy path to `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\Microsoft Store` (note the legitimate-sounding value name — another masquerade).
+- **HKCU Run persistence.** Writes the self-copy path to `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\Microsoft Store` (note the legitimate-sounding value name, another masquerade).
 - **DisableTaskMgr.** Sets `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableTaskMgr = 1` to frustrate victim process termination attempts.
 - **Self-copy.** Copies itself to `%APPDATA%\svchost.exe` (mymain) or `%APPDATA%\projectxx.exe` (myfile) before starting the encryption loop.
 
@@ -483,17 +483,17 @@ Per-build variation (useful for hunting):
 
 ### 5.7 Stage 5b — UACME #41 AppInfo RPC UAC Bypass
 
-> **Analyst note:** Stage 5b is the step that turns a regular user session into a full Administrator session without triggering the UAC consent dialog. It uses technique #41 from the open-source UACME catalogue — a specific RPC call against Windows's AppInfo service (`AiEnableDesktopRpcInterface`) combined with a trick called "parent-PID spoofing" that makes the newly elevated process appear to be a child of an already-elevated `taskmgr.exe`. The specific compiled PE this operator ships is byte-identical across both builds and has an 8/77 VT detection gap.
+> **Analyst note:** Stage 5b is the step that turns a regular user session into a full Administrator session without triggering the UAC consent dialog. It uses technique #41 from the open-source UACME catalogue, a specific RPC call against Windows's AppInfo service (`AiEnableDesktopRpcInterface`) combined with a trick called "parent-PID spoofing" that makes the newly elevated process appear to be a child of an already-elevated `taskmgr.exe`. The specific compiled PE this operator ships is byte-identical across both builds and has an 8/77 VT detection gap.
 
-Stage-5b is a ~986 KB .NET assembly (1,009,664 bytes). SHA256 `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8` — **byte-identical** across both builds (mymain and myfile ship the same compiled bytes). VT at analysis time: 8/77.
+Stage-5b is a ~986 KB .NET assembly (1,009,664 bytes). SHA256 `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8`, **byte-identical** across both builds (mymain and myfile ship the same compiled bytes). VT at analysis time: 8/77.
 
-The technique (UACME #41 — see hfiref0x UACME repository, B1):
+The technique (UACME #41, see hfiref0x UACME repository, B1):
 
 1. **Locate an already-elevated process.** The module enumerates processes looking for `taskmgr.exe` running at integrity level HIGH. If not found, it uses `ShellExecute` with the `runas` verb on `taskmgr.exe` (which triggers a single consent prompt that can be auto-accepted in some configurations, or waits for a predictable user pattern).
 2. **Obtain the AppInfo RPC interface.** Loads `NtApiDotNet` (bundled in the assembly) and calls `AiEnableDesktopRpcInterface` on the AppInfo service. This interface is normally reserved for Windows internal use; once enabled, it exposes the `IColorDataProxy` COM object.
 3. **Invoke `IColorDataProxy` via the elevated taskmgr's RPC context.** Because the RPC call is made through the already-elevated taskmgr process's token, the resulting COM activation runs at elevated integrity.
 4. **Parent-PID spoof via `CreateProcess` with `PROC_THREAD_ATTRIBUTE_PARENT_PROCESS`.** Sets the parent PID to the elevated taskmgr.exe's PID, so the newly spawned process inherits taskmgr's elevated token. The command executed is typically `conhost.exe --headless cmd.exe /c [path to Stage-4 re-invocation]`.
-5. **Result.** A high-integrity cmd.exe (or subsequent process) running with the operator's code — full UAC bypass, no consent prompt, no security event log entry for standard UAC elevation.
+5. **Result.** A high-integrity cmd.exe (or subsequent process) running with the operator's code: full UAC bypass, no consent prompt, no security event log entry for standard UAC elevation.
 
 **Cross-cutting detection tells:**
 - `conhost.exe --headless cmd.exe /c [path]` spawned as a child of `taskmgr.exe` running at integrity HIGH.
@@ -504,7 +504,7 @@ The 8/77 VT detection gap matters. Most vendors detect the generic AppInfo RPC b
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5b-decryption-sha256-proof.png" | relative_url }}" alt="PowerShell console output from the Stage-5 decryption script showing two sequential invocations. The second invocation decrypts stage4_resource_HxBTHTPGSMVbIZYM.gz into stage5b_payload and reports Plaintext SHA256 da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8, Plaintext size 1,009,664 bytes, first 8 bytes 4d5a9000... (the PE MZ magic), with Assembly check PE/MZ detected.">
-  <figcaption><em>Figure 10: Stage-5 decryption output establishing the Stage-5b SHA256 `da302511…` — byte-identical across both mymain and myfile builds. The screenshot captures the single most productive hunting anchor in this report: any file on a victim endpoint with this SHA256 confirms UTA-2026-005 infection with effectively zero false-positive risk (the 1,009,664-byte UAC bypass PE is specific to this operator's pre-compiled module).</em></figcaption>
+  <figcaption><em>Figure 10: Stage-5 decryption output establishing the Stage-5b SHA256 `da302511…`, byte-identical across both mymain and myfile builds. The screenshot captures the single most productive hunting anchor in this report: any file on a victim endpoint with this SHA256 confirms UTA-2026-005 infection with effectively zero false-positive risk (the 1,009,664-byte UAC bypass PE is specific to this operator's pre-compiled module).</em></figcaption>
 </figure>
 
 ### 5.8 Supporting Toolkit: Orcus RAT v7, Privilege Escalation Chain, Tunneling Stack
@@ -523,12 +523,12 @@ The 8/77 VT detection gap matters. Most vendors detect the generic AppInfo RPC b
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/orcus-wardow-crack-key.png" | relative_url }}" alt="Decompiled Orcus source showing a single line: 'public static string ENCRYPTIONKEY = \"CrackedByWardow\";' at token 0x040002C2. The string is clearly legible and comments above show it is a static string field.">
-  <figcaption><em>Figure 11: The hard-coded `ENCRYPTIONKEY = "CrackedByWardow"` string in the Orcus RAT Settings class. This string is a definitive identifier of the Wardow crack of Orcus v7 — the public-crack community tags each release with the cracker's handle in this field. A defender hunting for Orcus-Wardow specifically can YARA-match this exact string.</em></figcaption>
+  <figcaption><em>Figure 11: The hard-coded `ENCRYPTIONKEY = "CrackedByWardow"` string in the Orcus RAT Settings class. This string is a definitive identifier of the Wardow crack of Orcus v7, the public-crack community tags each release with the cracker's handle in this field. A defender hunting for Orcus-Wardow specifically can YARA-match this exact string.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/orcus-wardow-keyleak-backdoor.png" | relative_url }}" alt="Decompiled Orcus Initialize method source showing an if-block: if File.Exists combining Path.GetTempPath and a 32-character hex filename e3c6cefd462d48f0b30a5ebcd238b5b1, the code calls File.WriteAllText with the same path and Settings.ENCRYPTIONKEY as the text content.">
-  <figcaption><em>Figure 12: The Wardow-crack key-leak backdoor. On every Orcus startup, this routine writes the operator's encryption key to `%TEMP%\e3c6cefd462d48f0b30a5ebcd238b5b1` in plaintext. This is a well-known community backdoor Wardow shipped in the cracked builder — any operator who uses the Wardow crack is unknowingly leaking their own key to any party that can read `%TEMP%`. It is not a defensive feature; it is a backdoor against the operator by the cracker. Detection: any Orcus infection will leave this file on disk, so hunting `%TEMP%\e3c6cefd462d48f0b30a5ebcd238b5b1` is a reliable on-disk anchor.</em></figcaption>
+  <figcaption><em>Figure 12: The Wardow-crack key-leak backdoor. On every Orcus startup, this routine writes the operator's encryption key to `%TEMP%\e3c6cefd462d48f0b30a5ebcd238b5b1` in plaintext. This is a well-known community backdoor Wardow shipped in the cracked builder, any operator who uses the Wardow crack is unknowingly leaking their own key to any party that can read `%TEMP%`. It is not a defensive feature; it is a backdoor against the operator by the cracker. Detection: any Orcus infection will leave this file on disk, so hunting `%TEMP%\e3c6cefd462d48f0b30a5ebcd238b5b1` is a reliable on-disk anchor.</em></figcaption>
 </figure>
 
 - **Mutex:** `b12f3970cc224d0eb98b4030f9c2e753`.
@@ -537,20 +537,20 @@ The config can be decrypted offline. The Wardow-crack key leak combines with thr
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/orcus-rijndael-cbc-crypto-class.png" | relative_url }}" alt="Decompiled Orcus EncryptToBytes method source showing construction of a RijndaelManaged instance with CipherMode.CBC, a call to new PasswordDeriveBytes(passPhrase, null).GetBytes(32) for key derivation, and rijndaelManaged.CreateEncryptor(bytes2, AES.initVectorBytes) for the encryptor — passing a hardcoded IV from AES.initVectorBytes.">
-  <figcaption><em>Figure 13: Orcus config-encryption routine. Three weaknesses chained together enable offline decryption of any Orcus-Wardow config: (a) `RijndaelManaged` with `CipherMode.CBC` (single-key symmetric, recoverable from sample), (b) `PasswordDeriveBytes(passPhrase, null)` — the `null` salt parameter is the decisive flaw, reducing the KDF to a deterministic function of the passphrase alone, and (c) a hard-coded IV from `AES.initVectorBytes`. Combined with the Wardow-leaked key (Figure 12) these three let an analyst produce `myfile_decrypted_config.txt` without detonating the sample.</em></figcaption>
+  <figcaption><em>Figure 13: Orcus config-encryption routine. Three weaknesses chained together enable offline decryption of any Orcus-Wardow config: (a) `RijndaelManaged` with `CipherMode.CBC` (single-key symmetric, recoverable from sample), (b) `PasswordDeriveBytes(passPhrase, null)`. The `null` salt parameter is the decisive flaw, reducing the KDF to a deterministic function of the passphrase alone, and (c) a hard-coded IV from `AES.initVectorBytes`. Combined with the Wardow-leaked key (Figure 12) these three let an analyst produce `myfile_decrypted_config.txt` without detonating the sample.</em></figcaption>
 </figure>
 
 #### 5.8.2 Privilege Escalation Chain
 
 The open directory staged multiple privesc primitives, layered so that at least one succeeds on most Windows 10/11 builds:
 
-- `p.exe` (SHA256 `b9ffbeed…`) — custom 6.6 KB .NET PrintSpoofer-class SpoolSS coercion + named-pipe impersonation. Compiled 2026-03-31 17:00:09 UTC. Novel in the sense that the operator compiled their own rather than using the public PrintSpoofer binary — suggests operational preference for signature-deviation.
+- `p.exe` (SHA256 `b9ffbeed…`): custom 6.6 KB .NET PrintSpoofer-class SpoolSS coercion + named-pipe impersonation. Compiled 2026-03-31 17:00:09 UTC. Novel in the sense that the operator compiled their own rather than using the public PrintSpoofer binary, suggests operational preference for signature-deviation.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/p-exe-custom-printspoofer.png" | relative_url }}" alt="Decompiled p.exe source showing the PrintSpoofer-class coercion routine: construction of a random pipe path '\\.\pipe\testNNNN/pipe/spoolss', a Potato.CreateNamedPipe call, then a threaded Potato.OpenPrinter call that issues '[*] Triggering SpoolSS on ' + hostname. The command to execute is sourced from args or defaults to whoami.">
-  <figcaption><em>Figure 14: Custom `p.exe` PrintSpoofer-class source — operator-compiled 2026-03-31, 6.6 KB .NET x64. The core sequence (`CreateNamedPipe` → trigger SpoolSS coercion over `/pipe/spoolss` → `ImpersonateNamedPipeClient` → SYSTEM token) matches public PrintSpoofer, but the self-compiled binary produces a different hash than the public version, which is why operators bother to recompile. VT submission would show a `Backdoor.MSIL` heuristic flag — a known false-positive pattern for .NET token-manipulation tools.</em></figcaption>
+  <figcaption><em>Figure 14: Custom `p.exe` PrintSpoofer-class source, operator-compiled 2026-03-31, 6.6 KB .NET x64. The core sequence (`CreateNamedPipe` → trigger SpoolSS coercion over `/pipe/spoolss` → `ImpersonateNamedPipeClient` → SYSTEM token) matches public PrintSpoofer, but the self-compiled binary produces a different hash than the public version, which is why operators bother to recompile. VT submission would show a `Backdoor.MSIL` heuristic flag, a known false-positive pattern for .NET token-manipulation tools.</em></figcaption>
 </figure>
-- `gp_obf.exe` (SHA256 `38c5737b…`) — obfuscated GodPotato variant (internal name `SvcUtil.exe`, compiled 2026-04-02).
+- `gp_obf.exe` (SHA256 `38c5737b…`): obfuscated GodPotato variant (internal name `SvcUtil.exe`, compiled 2026-04-02).
 - Additional GodPotato variants (multiple compiled copies in the directory).
 - Public PrintSpoofer binary (unmodified).
 - PrintNightmare tooling including the signed `mimispool.dll` (CVE-2021-1675 / CVE-2021-34527).
@@ -560,40 +560,40 @@ The logic is layered, and the operator tries each in sequence, with any success 
 
 #### 5.8.3 Tunneling Stack
 
-- `chisel.exe` — a TCP-over-HTTP tunnel tool. Listens locally and forwards to a remote chisel server.
-- `plink.exe` — PuTTY's command-line SSH client, used as a secondary tunnel option.
-- Python stub scripts — lightweight tunnel-runners for the same purpose.
+- `chisel.exe`: a TCP-over-HTTP tunnel tool. Listens locally and forwards to a remote chisel server.
+- `plink.exe`: PuTTY's command-line SSH client, used as a secondary tunnel option.
+- Python stub scripts: lightweight tunnel-runners for the same purpose.
 
-The Orcus RAT connects to `127.0.0.1:20268`. That port is one end of a chisel or plink tunnel whose external egress is hidden. The real operator C2 endpoint is UNKNOWN from static analysis; recovering it requires dynamic detonation with egress capture — a gap carried into this report.
+The Orcus RAT connects to `127.0.0.1:20268`. That port is one end of a chisel or plink tunnel whose external egress is hidden. The real operator C2 endpoint is UNKNOWN from static analysis; recovering it requires dynamic detonation with egress capture. A gap carried into this report.
 
 ### 5.9 Novelty Assessment Summary
 
 > **Analyst note:** This subsection gives a single-table ranking of every observable technique in the kit, labeled by how much public prior art exists for each. The goal is to separate what is genuinely new and defender-actionable from what is commodity noise, so readers can calibrate hunting effort accordingly. "Distinctive" means a survey of the public corpus located no documented case of exactly this combination; it is an honest qualifier, not a claim of global first-sighting.
 
-The kit combines many techniques. Most are well-known commodity tradecraft; a small number are either uncommon in combination or — in two specific cases — appear to have no located prior public reporting at all. Treat the ranking below as the prioritized list of what defenders should train detection engineers on first:
+The kit combines many techniques. Most are well-known commodity tradecraft; a small number are either uncommon in combination or (in two specific cases) appear to have no located prior public reporting at all. Treat the ranking below as the prioritized list of what defenders should train detection engineers on first:
 
 | Technique | Layer | Novelty ranking | Hunting priority |
 |---|---|---|---|
-| `Console.Title` as dynamic dropper-path locator + `File.ReadLines(title).Last()` self-extraction | Stage 4 | **DISTINCTIVE — no located prior public reporting** | **HIGHEST** — see §5.5.1 |
-| Tri-artifact inverted anti-sandbox gate (`admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv`, exit on MATCH) | Stage 1 + Stage 3 | **DISTINCTIVE — no located prior public reporting of this specific triple in the inverted direction** | **HIGH** — see §5.4.1 |
-| Cross-layer AES + XOR key reuse (same passphrase at three crypter layers within a build; full rotation between builds) | Stage 2, Chunk 1, Stage 4 | **UNCOMMON — no located prior public reporting of this specific triple-reuse pattern as a crypter fingerprint** | HIGH — builder fingerprint for clustering |
-| Byte-identical pre-compiled Stage-5b UAC bypass PE across builds (SHA256 `da302511…`) with 8/77 VT detection gap | Stage 5b | UNCOMMON — pre-compiled modules reused across builds are a rarer operational choice than per-build recompilation | **HIGHEST** — zero-FP file hash hunt |
-| Builder pipeline constant set (Hamming-weight `1431655765U`, Murmur3 `3982152891U` / `2890668881U`, Collatz shape, xorshift) as a fingerprint | Stage 4 junk-math | UNCOMMON — specific constant set in one binary is a distinctive IL-level fingerprint | MEDIUM — IL-level YARA only |
-| String-obfuscation IL pattern: `new string((from b in Convert.FromBase64String(...Replace(...)) select (char)(b ^ key)).Reverse().ToArray())` | Stage 4 | UNCOMMON but visible — distinctive IL shape suitable for in-memory YARA | MEDIUM — defeats naive string-scan |
-| `NtApiDotNet` (James Forshaw / Google Project Zero) embedded in a commodity ransomware delivery kit | Stage 5b | UNCOMMON — professional-grade research library; rarely shipped in commodity RATs/ransomware | LOW as IOC; HIGH as operator sophistication signal |
-| AES-ECB mode choice (most crypter families use CBC) | Stage 2 | UNCOMMON — ECB is an identifying builder-family signal against the wider crypter ecosystem | LOW as IOC; MEDIUM as builder-family fingerprint |
-| Fileless registry-blob payload (~1.4 MB at `HKLM\Software\Microsoft Defender\Payload`) | Stage 4 | Known (Poweliks/KOVTER lineage) — not novel, but rare enough to hunt | HIGH — single-query detection |
-| Defender-masquerade scheduled task at task-scheduler root | Stage 4 | Known — commodity LOLBins-style naming trick | HIGH — zero-FP structural query |
-| C# `dynamic` DLR dispatch to hide COM interop references in IL | Stage 4 | UNCOMMON — frustrates static reference-table scanners | LOW |
-| AMSI + ETW patch + user-mode ntdll unhook ("Perun's Fart") | Stage 3 | Known — public technique since 2019 | MEDIUM |
-| 12-DLL al-khaser anti-sandbox sweep | Stage 3 | Known — direct borrow from public al-khaser project | LOW (structural only) |
-| UACME technique #41 (AppInfo RPC + parent-PID spoof) | Stage 5b | Known — documented in hfiref0x UACME repository | HIGH — hunt the specific pre-compiled PE |
-| Rijndael-256 CFB + RSA-2048 OAEP ransomware core | Stage 5a | Known — canonical Chaos v4/v5 builder template | LOW — commodity signal only |
-| BTC clipboard hijacker via `WM_CLIPBOARDUPDATE` + bech32/P2PKH regex substitution | Stage 5a | Known — Chaos builder default | LOW — family-level only |
+| `Console.Title` as dynamic dropper-path locator + `File.ReadLines(title).Last()` self-extraction | Stage 4 | **DISTINCTIVE, no located prior public reporting** | **HIGHEST**, see §5.5.1 |
+| Tri-artifact inverted anti-sandbox gate (`admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv`, exit on MATCH) | Stage 1 + Stage 3 | **DISTINCTIVE, no located prior public reporting of this specific triple in the inverted direction** | **HIGH**, see §5.4.1 |
+| Cross-layer AES + XOR key reuse (same passphrase at three crypter layers within a build; full rotation between builds) | Stage 2, Chunk 1, Stage 4 | **UNCOMMON, no located prior public reporting of this specific triple-reuse pattern as a crypter fingerprint** | HIGH, builder fingerprint for clustering |
+| Byte-identical pre-compiled Stage-5b UAC bypass PE across builds (SHA256 `da302511…`) with 8/77 VT detection gap | Stage 5b | UNCOMMON, pre-compiled modules reused across builds are a rarer operational choice than per-build recompilation | **HIGHEST**, zero-FP file hash hunt |
+| Builder pipeline constant set (Hamming-weight `1431655765U`, Murmur3 `3982152891U` / `2890668881U`, Collatz shape, xorshift) as a fingerprint | Stage 4 junk-math | UNCOMMON, specific constant set in one binary is a distinctive IL-level fingerprint | MEDIUM, IL-level YARA only |
+| String-obfuscation IL pattern: `new string((from b in Convert.FromBase64String(...Replace(...)) select (char)(b ^ key)).Reverse().ToArray())` | Stage 4 | UNCOMMON but visible, distinctive IL shape suitable for in-memory YARA | MEDIUM, defeats naive string-scan |
+| `NtApiDotNet` (James Forshaw / Google Project Zero) embedded in a commodity ransomware delivery kit | Stage 5b | UNCOMMON, professional-grade research library; rarely shipped in commodity RATs/ransomware | LOW as IOC; HIGH as operator sophistication signal |
+| AES-ECB mode choice (most crypter families use CBC) | Stage 2 | UNCOMMON, ECB is an identifying builder-family signal against the wider crypter ecosystem | LOW as IOC; MEDIUM as builder-family fingerprint |
+| Fileless registry-blob payload (~1.4 MB at `HKLM\Software\Microsoft Defender\Payload`) | Stage 4 | Known (Poweliks/KOVTER lineage), not novel, but rare enough to hunt | HIGH, single-query detection |
+| Defender-masquerade scheduled task at task-scheduler root | Stage 4 | Known, commodity LOLBins-style naming trick | HIGH, zero-FP structural query |
+| C# `dynamic` DLR dispatch to hide COM interop references in IL | Stage 4 | UNCOMMON, frustrates static reference-table scanners | LOW |
+| AMSI + ETW patch + user-mode ntdll unhook ("Perun's Fart") | Stage 3 | Known, public technique since 2019 | MEDIUM |
+| 12-DLL al-khaser anti-sandbox sweep | Stage 3 | Known, direct borrow from public al-khaser project | LOW (structural only) |
+| UACME technique #41 (AppInfo RPC + parent-PID spoof) | Stage 5b | Known, documented in hfiref0x UACME repository | HIGH, hunt the specific pre-compiled PE |
+| Rijndael-256 CFB + RSA-2048 OAEP ransomware core | Stage 5a | Known, canonical Chaos v4/v5 builder template | LOW, commodity signal only |
+| BTC clipboard hijacker via `WM_CLIPBOARDUPDATE` + bech32/P2PKH regex substitution | Stage 5a | Known, Chaos builder default | LOW, family-level only |
 
 Interpreting that ranking, the two DISTINCTIVE entries at the top, the Console.Title trick and the tri-artifact inverted gate, are the findings warranting explicit public callout and materially advancing public tradecraft documentation. The three UNCOMMON cross-layer fingerprints, the key reuse pattern, the Stage-5b pre-compiled PE and the builder constant set, are the highest-value *tracking* anchors, since they represent no new public knowledge but cluster this operator's builds together with high confidence and enable future cross-campaign attribution if the same anchors turn up elsewhere. The Known entries are commodity signal, useful for triage but not for differentiation.
 
-Documenting only the commodity layer — Chaos ransomware, UACME #41, Perun's Fart, Defender masquerade — would add little beyond what WatchGuard, Malpedia, and hfiref0x have already published. The defender-actionable novelty of this publication is concentrated in the two DISTINCTIVE rows, covered in dedicated subsections (§5.4.1, §5.5.1) rather than folded into general narrative.
+Documenting only the commodity layer (Chaos ransomware, UACME #41, Perun's Fart, Defender masquerade) would add little beyond what WatchGuard, Malpedia, and hfiref0x have already published. The defender-actionable novelty of this publication is concentrated in the two DISTINCTIVE rows, covered in dedicated subsections (§5.4.1, §5.5.1) rather than folded into general narrative.
 
 ---
 
@@ -647,7 +647,7 @@ Documenting only the commodity layer — Chaos ransomware, UACME #41, Perun's Fa
 ## 7. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-005 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-005 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
 ### 7.1 Attribution Conclusion
 
@@ -659,7 +659,7 @@ At operator level I track this as UTA-2026-005, a distinctive trackable cluster 
 
 ### 7.2 Chaos Builder vs Chaos RaaS Group (2025) — Mandatory Disambiguation
 
-> **Critical distinction — do not conflate these two:** The 2021-origin Chaos ransomware *builder* (from which this sample was built) is **distinct** from the 2025 Cisco Talos-reported "Chaos RaaS group." The builder is an open-source tool that has been used by many unrelated operators since 2021. The "Chaos RaaS group" is a specific named actor Talos reported as active from February 2025 onward, operating a *distinct codebase* with distinct TTPs. Talos explicitly distinguishes the two in its reporting. The analyzed sample is a build of the 2021-origin builder (configured as the TorBrowserTor variant) — it is NOT an artifact of the Talos-named RaaS actor. Readers searching for "Chaos ransomware" will surface Talos's RaaS reporting and may conflate the two; they should not.
+> **Critical distinction, do not conflate these two:** The 2021-origin Chaos ransomware *builder* (from which this sample was built) is **distinct** from the 2025 Cisco Talos-reported "Chaos RaaS group." The builder is an open-source tool that has been used by many unrelated operators since 2021. The "Chaos RaaS group" is a specific named actor Talos reported as active from February 2025 onward, operating a *distinct codebase* with distinct TTPs. Talos explicitly distinguishes the two in its reporting. The analyzed sample is a build of the 2021-origin builder (configured as the TorBrowserTor variant). It is NOT an artifact of the Talos-named RaaS actor. Readers searching for "Chaos ransomware" will surface Talos's RaaS reporting and may conflate the two; they should not.
 
 This distinction is load-bearing for several reasons:
 
@@ -675,8 +675,8 @@ H2 (the hypothesis that UTA-2026-005 is the Talos-named Chaos RaaS group) is the
 Three hypotheses were evaluated for the actor behind this activity:
 
 - **H1 (WINNER): Unattributed financially-motivated operator using the public Chaos builder with a private custom crypter.** Best fit for the evidence: private crypter with operator-specific builder fingerprints, commodity Chaos core, shared-default wallets and Telegram contact, broad-spectrum opportunistic targeting with financial motivation, no Tier-1/Tier-2 named-actor matches.
-- **H2 (RULED OUT): 2025 Talos Chaos RaaS group.** Ruled out on codebase grounds — Talos explicitly distinguishes the RaaS actor from the builder lineage, and no RaaS-specific TTPs (RMM compromise, affiliate indicators, specific phishing patterns) appear in recovered evidence.
-- **H3 (RUNNER-UP): False flag — another actor mimicking Chaos builder defaults.** Plausible but unnecessary: the Chaos builder is freely available, so genuine use by a new operator is a simpler explanation than false-flag mimicry. Occam's Razor favors H1.
+- **H2 (RULED OUT): 2025 Talos Chaos RaaS group.** Ruled out on codebase grounds, Talos explicitly distinguishes the RaaS actor from the builder lineage, and no RaaS-specific TTPs (RMM compromise, affiliate indicators, specific phishing patterns) appear in recovered evidence.
+- **H3 (RUNNER-UP): False flag, another actor mimicking Chaos builder defaults.** Plausible but unnecessary: the Chaos builder is freely available, so genuine use by a new operator is a simpler explanation than false-flag mimicry. Occam's Razor favors H1.
 
 Winner: **H1 (Unattributed financially-motivated operator)**, confidence MODERATE on the hypothesis itself, HIGH on the ruling-out of H2.
 
@@ -695,18 +695,18 @@ These are the evidence points the UTA-2026-005 cluster is built on. Any future s
 | `C:\cmd_log.txt` developer debug artifact | Operator debug signature | MODERATE |
 
 **Not operator fingerprints** (family-level defaults, ignore for attribution):
-- BTC wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` — Chaos builder defaults, LOW attribution value
-- Telegram handle `@TorBrowserTor` — Chaos builder default for this variant, LOW attribution value
-- `.torbrowsertor` extension — variant identifier, LOW attribution value
-- `ConsoleApplication7` namespace — Chaos builder template artefact, LOW attribution value
+- BTC wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV`, Chaos builder defaults, LOW attribution value
+- Telegram handle `@TorBrowserTor`: Chaos builder default for this variant, LOW attribution value
+- `.torbrowsertor` extension: variant identifier, LOW attribution value
+- `ConsoleApplication7` namespace: Chaos builder template artefact, LOW attribution value
 
 ### 7.5 Operator Infrastructure
 
-- **Staging server: 94.103.1.13** (AS209207, Russia-registered, Albania-routed via AS48014). HIGH confidence operator-controlled based on open-directory contents aligning with the loader chain. AbuseIPDB: 0 reports, 0% confidence (manual browser fetch, 2026-04-23) — operator is under community-reporting radar. VT 5/94 (session 8).
+- **Staging server: 94.103.1.13** (AS209207, Russia-registered, Albania-routed via AS48014). HIGH confidence operator-controlled based on open-directory contents aligning with the loader chain. AbuseIPDB: 0 reports, 0% confidence (manual browser fetch, 2026-04-23), operator is under community-reporting radar. VT 5/94 (session 8).
 - **Real Orcus C2: UNKNOWN.** Hidden behind `127.0.0.1:20268` loopback + chisel/plink tunnel. Dynamic egress analysis required.
-- **Multi-tenant operator host.** 94.103.1.13 concurrently serves at least three parallel parasitic campaigns alongside the Chaos distribution: `forumrutor24.com` (Russian forum theme, 34 days active), `gtanuncios.com` (aged 10-year classifieds domain acquired from a CN reseller, pivoted 2026-04-11), and `bulgainme.pro` (short-lived `.pro` with webmail). All three use Cloudflare fronting + mixed registrars + aged-domain-purchase tradecraft — see Section 4 Infrastructure Context subsection for full breakdown. This reframes the operator from a single-campaign Chaos distributor to a **multi-campaign operator** running parallel monetization paths on the same infrastructure.
-- **Historical operator rotation evidence.** `slayer.ktx.ro` resolved to 94.103.1.13 on 2025-12-18-19 (brief 36-minute burst, 8 resolutions) — the IP has been in operator rotation approximately four months before the Chaos campaign, establishing a months-long cadence for operator activity on this host.
-- **Possible secondary: 172.86.76.198.** LOW confidence operator-controlled; observed in tunnel-script artifacts but role is ambiguous. Could be a relay, a staging host, or an unrelated pivot point — evidence is not strong enough to mark HIGH.
+- **Multi-tenant operator host.** 94.103.1.13 concurrently serves at least three parallel parasitic campaigns alongside the Chaos distribution: `forumrutor24.com` (Russian forum theme, 34 days active), `gtanuncios.com` (aged 10-year classifieds domain acquired from a CN reseller, pivoted 2026-04-11), and `bulgainme.pro` (short-lived `.pro` with webmail). All three use Cloudflare fronting + mixed registrars + aged-domain-purchase tradecraft, see Section 4 Infrastructure Context subsection for full breakdown. This reframes the operator from a single-campaign Chaos distributor to a **multi-campaign operator** running parallel monetization paths on the same infrastructure.
+- **Historical operator rotation evidence.** `slayer.ktx.ro` resolved to 94.103.1.13 on 2025-12-18-19 (brief 36-minute burst, 8 resolutions): the IP has been in operator rotation approximately four months before the Chaos campaign, establishing a months-long cadence for operator activity on this host.
+- **Possible secondary: 172.86.76.198.** LOW confidence operator-controlled; observed in tunnel-script artifacts but role is ambiguous. Could be a relay, a staging host, or an unrelated pivot point, evidence is not strong enough to mark HIGH.
 - **Reseller-inventory identity (NOT operator attribution).** Pre-masking WHOIS for `gtanuncios.com` recorded registrant `xiang xiang fan`, email `lc1393353@gmail.com`, phone `+86 130 3255 6442`, city `lin fen` (Linfen, Shanxi, China). The ten-month dormant hold between domain transfer (2025-06-28) and operator pivot (2026-04-11) is consistent with CN domain-broker inventory rather than direct operator identity. This identity is **tracked in UTA-2026-005** for future cross-campaign correlation but does NOT elevate attribution above INSUFFICIENT.
 - **Bulletproof classification: SUSPECTED.** AS209207 is 3 months old (allocated 2026-01-19), Russia-registered, Albania-routed through a single upstream (AS48014 AlbaHost) with historical bogon announcements. The ASN's self-domain `dhost.su` uses a `.su` TLD typical of operator-friendly Russian-speaking hosting providers. Profile is consistent with bulletproof-adjacent hosting, but no named-BPH-database entry was located at the time of this writing.
 
@@ -729,7 +729,7 @@ Consolidated view of every major analytical claim in this report with its confid
 | Chaos ransomware builder family (TorBrowserTor variant, v4/v5 lineage) | **DEFINITE (97%)** | 14 of 14 canonical Chaos v4/v5 feature-set matches in decompiled Stage-5a; byte-identical Stage-5b module across two builds; builder-default BTC wallets confirmed via WalletExplorer clustering |
 | UTA-2026-005 is a single operator cluster | **MODERATE (72%)** | Six distinctive characteristics (five technical, one infrastructure) reach B2 Admiralty threshold; cannot rule out tightly-cooperating operator duo sharing tooling |
 | Named-actor attribution | **INSUFFICIENT (0%)** | Zero infrastructure overlaps with named actor clusters, zero Tier-1/Tier-2 vendor attributions, zero named-actor TTP matches |
-| 2025 Talos "Chaos RaaS group" — this activity | **RULED OUT** | Talos explicitly distinguishes the 2025 RaaS actor from the 2021-origin Chaos builder lineage; the sample is builder-variant, wrong codebase |
+| 2025 Talos "Chaos RaaS group", this activity | **RULED OUT** | Talos explicitly distinguishes the 2025 RaaS actor from the 2021-origin Chaos builder lineage; the sample is builder-variant, wrong codebase |
 | 94.103.1.13 is operator-controlled staging server | **HIGH** | Open directory contents directly align with loader chain artifacts (`t.ps1`/`t2.ps1`/`potato.ps1` hardcode this IP); multi-tenant co-tenancy pattern consistent with operator rotation |
 | 94.103.1.13 is bulletproof-hosting-adjacent | **SUSPECTED (not CONFIRMED)** | AS209207 is 3 months old, Russia-registered, single-upstream via AS48014 AlbaHost (historical bogon announcements), `.su` TLD self-domain; but no named-BPH-database entry located |
 | AbuseIPDB clean (0/0 reports) | **DEFINITE** | Manual browser fetch 2026-04-23 |
@@ -747,19 +747,19 @@ Consolidated view of every major analytical claim in this report with its confid
 ## 8. Detection & Response
 {: .hl-tier-2}
 
-This section covers the minimum defender orientation for the UTA-2026-005 kit. Detection content (YARA, Sigma, Suricata, EDR queries) is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/) — this report does not duplicate those rules. What follows is the prioritized hunting and response orientation.
+This section covers the minimum defender orientation for the UTA-2026-005 kit. Detection content (YARA, Sigma, Suricata, EDR queries) is delivered separately in [open-directory-94-103-1-13-20260423-detections.md](/hunting-detections/open-directory-94-103-1-13-20260423-detections/). This report does not duplicate those rules. What follows is the prioritized hunting and response orientation.
 
 ### 8.1 Detection Priorities (hunt these first)
 
 The two cross-build invariants are the highest-priority hunting anchors this investigation produced. Both are zero-false-positive, zero-public-prior-hit indicators:
 
-1. **File hash: Stage-5b UAC bypass SHA256 `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8`.** Byte-identical across both observed builds. Hunt via EDR file-hash query, SIEM PE-download logs, or VT Retrohunt. 8/77 VT at analysis time — most endpoint protection will NOT catch it on execution; hash-based hunting is required.
+1. **File hash: Stage-5b UAC bypass SHA256 `da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8`.** Byte-identical across both observed builds. Hunt via EDR file-hash query, SIEM PE-download logs, or VT Retrohunt. 8/77 VT at analysis time. Most endpoint protection will NOT catch it on execution; hash-based hunting is required.
 2. **Mutex GUID `9f67b5ed-6c10-4c53-818b-8d26be0d1339`.** Stage-4 cross-build invariant. Hunt via Sysmon EID 17/18 (mutex creation) or EDR handle-enumeration queries. Zero public prior hits.
 3. **Defender-masquerade persistence pair.** Scheduled task literally named `\Microsoft Defender` at the task-scheduler root path (NOT under `\Microsoft\Windows\Windows Defender`) + registry blob `HKLM\Software\Microsoft Defender\Payload` size > 100 KB. Single most productive behavioral query; trivial to deploy against any Sysmon EID 12/13-covered estate.
 
 ### 8.2 Persistence Targets (what to look for and remove)
 
-If incident response confirms a UTA-2026-005 infection, these are the artifacts defenders must enumerate and remediate. They are listed as *targets* — not as removal commands.
+If incident response confirms a UTA-2026-005 infection, these are the artifacts defenders must enumerate and remediate. They are listed as *targets*, not as removal commands.
 
 - Scheduled task `\Microsoft Defender` at task-scheduler root path (Hidden, RunLevel HIGHEST, BOOT trigger).
 - Registry value `HKLM\Software\Microsoft Defender\Payload` (the ~1.4 MB encoded blob).
@@ -767,28 +767,28 @@ If incident response confirms a UTA-2026-005 infection, these are the artifacts 
 - Registry value `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\Audio HD Driver` (Orcus persistence).
 - Scheduled task `Audio HD Driver` (Orcus persistence).
 - Registry value `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableTaskMgr` (set to 1 by Stage-5a).
-- File `%APPDATA%\svchost.exe` (mymain) or `%APPDATA%\projectxx.exe` (myfile) — Stage-5a self-copy.
-- File `%APPDATA%\Microsoft\Speech\AudioDriver.exe` — Orcus installation.
-- File `C:\cmd_log.txt` — boot re-loader debug artifact.
+- File `%APPDATA%\svchost.exe` (mymain) or `%APPDATA%\projectxx.exe` (myfile), Stage-5a self-copy.
+- File `%APPDATA%\Microsoft\Speech\AudioDriver.exe`: Orcus installation.
+- File `C:\cmd_log.txt`: boot re-loader debug artifact.
 - Any file with the `.torbrowsertor` extension (encrypted victim data; do not delete without forensic imaging).
-- Any removable drive with `surprise.exe` or `Recieve please.exe` at its root — USB-spread propagation artifact.
+- Any removable drive with `surprise.exe` or `Recieve please.exe` at its root, USB-spread propagation artifact.
 
 On remediation, the persistence mechanisms here are all user-space, registry plus scheduled tasks plus file-system, rather than kernel or firmware, so targeted remediation is viable *if* full persistence enumeration is completed and verified. If any of the above artifacts remain afterwards, assume re-infection on next boot and plan for a full rebuild. The Defender-masquerade pair is specifically designed to survive incomplete cleanup, so do not leave it behind.
 
 ### 8.3 Containment Categories
 
-Third-party perspective — these are action categories with rationale, not step-by-step procedures. See your internal IR playbook or dedicated IR vendor for execution.
+Third-party perspective: these are action categories with rationale, not step-by-step procedures. See your internal IR playbook or dedicated IR vendor for execution.
 
 - **Isolate affected hosts.** Network-quarantine while preserving volatile state for forensic capture.
-- **Block 94.103.1.13 at perimeter.** Egress block on the staging server IP. Do NOT block the victim/target IPs listed in Section 4 — those are attack targets, not operator infrastructure.
-- **Kill active tunnels.** Identify and terminate any `chisel.exe`, `plink.exe`, or Python tunnel-runner processes — these are the conduit for the real C2 beyond the loopback front.
+- **Block 94.103.1.13 at perimeter.** Egress block on the staging server IP. Do NOT block the victim/target IPs listed in Section 4: those are attack targets, not operator infrastructure.
+- **Kill active tunnels.** Identify and terminate any `chisel.exe`, `plink.exe`, or Python tunnel-runner processes: these are the conduit for the real C2 beyond the loopback front.
 - **Rotate exposed credentials.** Mimikatz was staged; assume credential exposure on any infected host. Prioritize accounts with elevated privileges or domain access.
 - **Preserve forensic evidence before remediation.** Volatile memory capture (to recover the plaintext AES passphrase and XOR key from decrypted Stage-4 memory), scheduled-task XML export, registry hive export, USB-drive imaging for propagation evidence.
 
 ### 8.4 Network-Side Detection
 
-- HTTP GET to `94.103.1.13:80` — any request to this IP is operator-controlled infrastructure.
-- `chisel.exe` or `plink.exe` process making outbound HTTP/HTTPS to unusual external hosts — tunnel-establishment signature.
+- HTTP GET to `94.103.1.13:80`: any request to this IP is operator-controlled infrastructure.
+- `chisel.exe` or `plink.exe` process making outbound HTTP/HTTPS to unusual external hosts, tunnel-establishment signature.
 - DNS queries for `forumrutor24.com` or `gtanuncios.com` from environments with no expected Russian/Spanish-language consumer web traffic.
 
 ---
@@ -802,7 +802,7 @@ No. See Section 7.2 for the full disambiguation. The 2021-origin Chaos ransomwar
 
 **Q2: Can I decrypt `.torbrowsertor` files without paying?**
 
-Not from static analysis alone. Stage-5a generates a random per-file 32-byte key, encrypts it with a hard-coded RSA-2048 OAEP public key, and appends the wrapped key to the ciphertext. Without the RSA private key (which is held by the operator), the per-file keys cannot be recovered. No current public decryptor exists for this TorBrowserTor variant as of 2026-04-23. Prevention, backup restoration, and endpoint hardening are the only reliable paths — do not pay the ransom.
+Not from static analysis alone. Stage-5a generates a random per-file 32-byte key, encrypts it with a hard-coded RSA-2048 OAEP public key, and appends the wrapped key to the ciphertext. Without the RSA private key (which is held by the operator), the per-file keys cannot be recovered. No current public decryptor exists for this TorBrowserTor variant as of 2026-04-23. Prevention, backup restoration, and endpoint hardening are the only reliable paths, do not pay the ransom.
 
 **Q3: What is the single highest-value hunting anchor if I only have time to deploy one?**
 
@@ -814,11 +814,11 @@ MODERATE confidence: operator-convenience check against their own development ho
 
 **Q5: How did the loader achieve VT 0/76 on the batch files?**
 
-Static signature-based AV scans for patterns in the file bytes. `mymain.bat` and `myfile.bat` are 2.6 MB of DOSfuscated text — no conventional PE structure, no embedded MZ/PE headers on the unprocessed file, no recognizable import names, no string patterns matching published YARA rules. The actual malicious content is two large Base64-alphabet-substituted blobs that only become recognizable after reversing the substitution, stripping the 32-character magic marker, AES-decrypting with a SHA256-derived key, and GZip-decompressing. Every one of those transformations must happen *in memory* before a scanner sees something it could match.
+Static signature-based AV scans for patterns in the file bytes. `mymain.bat` and `myfile.bat` are 2.6 MB of DOSfuscated text, no conventional PE structure, no embedded MZ/PE headers on the unprocessed file, no recognizable import names, no string patterns matching published YARA rules. The actual malicious content is two large Base64-alphabet-substituted blobs that only become recognizable after reversing the substitution, stripping the 32-character magic marker, AES-decrypting with a SHA256-derived key, and GZip-decompressing. Every one of those transformations must happen *in memory* before a scanner sees something it could match.
 
 **Q6: Is 94.103.1.13 a confirmed bulletproof hosting provider?**
 
-SUSPECTED, not CONFIRMED. AS209207 is three months old (allocated 2026-01-19), Russia-registered, Albania-routed through a single upstream (AS48014 AlbaHost) with a history of announcing bogon networks. The profile is consistent with bulletproof-adjacent hosting — abuse-tolerant, short-lived infrastructure, non-cooperative registration — but no named-BPH-database entry was located, and the ASN is too new for a meaningful Spamhaus DROP/SBL listing history. No named-institution attribution is cited without a live source.
+SUSPECTED, not CONFIRMED. AS209207 is three months old (allocated 2026-01-19), Russia-registered, Albania-routed through a single upstream (AS48014 AlbaHost) with a history of announcing bogon networks. The profile is consistent with bulletproof-adjacent hosting (abuse-tolerant, short-lived infrastructure, non-cooperative registration) but no named-BPH-database entry was located, and the ASN is too new for a meaningful Spamhaus DROP/SBL listing history. No named-institution attribution is cited without a live source.
 
 **Q7: What would change my attribution assessment from UTA-2026-005 to a named actor?**
 
@@ -826,11 +826,11 @@ SUSPECTED, not CONFIRMED. AS209207 is three months old (allocated 2026-01-19), R
 
 **Q8: The sample's BTC wallets appear in older campaigns. Does that mean UTA-2026-005 is responsible for those older campaigns?**
 
-No. The wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` are **Chaos builder defaults** — hard-coded into the builder template and reused verbatim by many unrelated operators who use the same builder. WalletExplorer clustering (different cluster IDs, activity predating this campaign) confirms the shared-default pattern. Treat these wallets as family-level indicators, not operator fingerprints. See Section 4 (Wallets & Telegram subsection) for the full explanation.
+No. The wallets `bc1qw0ll8p9m8uezhqhyd7z459ajrk722yn8c5j4fg` and `17CqMQFeuB3NTzJ2X28tfRmWaPyPQgvoHV` are **Chaos builder defaults**, hard-coded into the builder template and reused verbatim by many unrelated operators who use the same builder. WalletExplorer clustering (different cluster IDs, activity predating this campaign) confirms the shared-default pattern. Treat these wallets as family-level indicators, not operator fingerprints. See Section 4 (Wallets & Telegram subsection) for the full explanation.
 
 **Q9: What exactly is the Console.Title trick, and why does the report emphasize it so heavily?**
 
-Short version: Stage 4 of this loader needs to know the path of the batch file that launched it so it can read the last line of that file (the encrypted payload blob) and copy it into the registry for fileless persistence. Rather than using the conventional ways of self-locating (`Assembly.Location`, `Environment.CommandLine`, `Process.MainModule.FileName`, or hardcoded paths — each of which fails or leaves forensic traces), the operator reads `Console.Title`, which cmd.exe automatically populates with the batch file's full path the moment the user double-clicks it. The .NET stage inherits that title through the PowerShell intermediary and uses it as a one-line, trace-free self-locator. The same `Console.Title` read also doubles as an anti-analysis guard: if the title does not contain `.bat`, Stage 4 exits — which defeats submission of the decrypted PE to any sandbox, debugger, or analysis environment that does not preserve the original cmd.exe console context. Full technical breakdown with a comparison to the conventional alternatives is in §5.5.1. The report emphasizes this because (a) a public-corpus survey did not locate prior reporting of this specific combination, (b) console title contents are not captured by any mainstream EDR telemetry field, and (c) the technique is trivially portable to any future malware family built on the same .NET-after-cmd.exe pattern — meaning defenders who build a Console.Title-aware hunting rule now will catch tomorrow's copycat operators as well as this one.
+Short version: Stage 4 of this loader needs to know the path of the batch file that launched it so it can read the last line of that file (the encrypted payload blob) and copy it into the registry for fileless persistence. Rather than using the conventional ways of self-locating (`Assembly.Location`, `Environment.CommandLine`, `Process.MainModule.FileName`, or hardcoded paths, each of which fails or leaves forensic traces), the operator reads `Console.Title`, which cmd.exe automatically populates with the batch file's full path the moment the user double-clicks it. The .NET stage inherits that title through the PowerShell intermediary and uses it as a one-line, trace-free self-locator. The same `Console.Title` read also doubles as an anti-analysis guard: if the title does not contain `.bat`, Stage 4 exits, which defeats submission of the decrypted PE to any sandbox, debugger, or analysis environment that does not preserve the original cmd.exe console context. Full technical breakdown with a comparison to the conventional alternatives is in §5.5.1. The report emphasizes this because (a) a public-corpus survey did not locate prior reporting of this specific combination, (b) console title contents are not captured by any mainstream EDR telemetry field, and (c) the technique is trivially portable to any future malware family built on the same .NET-after-cmd.exe pattern, meaning defenders who build a Console.Title-aware hunting rule now will catch tomorrow's copycat operators as well as this one.
 
 ---
 
@@ -842,30 +842,30 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 ### 10.1 Confirmed Gaps
 
 - **Real Orcus C2 upstream: UNKNOWN.** The RAT connects to `127.0.0.1:20268`; the external endpoint behind the chisel/plink tunnel cannot be recovered from static analysis. Dynamic detonation with egress capture is required.
-- **Operator identity: INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as pre-masking registrant of `gtanuncios.com` is most plausibly a CN domain-reseller inventory identity, not direct operator — ten-month dormant hold between acquisition (2025-06-28) and operator pivot (2026-04-11) is documented aged-domain-purchase tradecraft. Tracked in UTA-2026-005 for future correlation, not elevated to attribution.
+- **Operator identity: INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as pre-masking registrant of `gtanuncios.com` is most plausibly a CN domain-reseller inventory identity, not direct operator, ten-month dormant hold between acquisition (2025-06-28) and operator pivot (2026-04-11) is documented aged-domain-purchase tradecraft. Tracked in UTA-2026-005 for future correlation, not elevated to attribution.
 - **Wardow-Orcus crack authoritative attribution.** No Tier-1/Tier-2 vendor writeup exists for this specific crack. Wardow-crack identifiers are used as community-known identifiers, not vendor-sourced claims.
 - **Console.Title launch gate prior art.** No public reporting has been located describing the Console.Title + File.ReadLines batch-line self-extraction combination. The corpus surveyed is not exhaustive; absence of reporting is not proof of novelty.
 - **Tri-artifact gate prior art.** Similarly, no prior public reporting has been located for the specific `admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv` conjunction. Combined multi-artifact gating in general is well-documented; this specific triple in the inverted direction is not.
-- **Second-victim telemetry.** The open directory was discovered in a pre-production state. No confirmed victim telemetry has been observed — targeting scope is inferred from the staged exploit scripts, not from attack outcomes.
+- **Second-victim telemetry.** The open directory was discovered in a pre-production state. No confirmed victim telemetry has been observed: targeting scope is inferred from the staged exploit scripts, not from attack outcomes.
 - **Language/locale artifacts in decompiled code.** No language, locale, or developer-environment strings were recovered from the decompiled code. Geographic attribution of the operator is therefore unconstrained beyond the hosting choice and the CN-reseller-registrar preference signal (which is LOW confidence per above).
-- **`otp2.py` / `otp_brute.py` direction.** Full source not reviewed; direction for 172.86.76.198 (operator-controlled vs target) remains ambiguous — flagged LOW confidence in infrastructure assessment.
+- **`otp2.py` / `otp_brute.py` direction.** Full source not reviewed; direction for 172.86.76.198 (operator-controlled vs target) remains ambiguous: flagged LOW confidence in infrastructure assessment.
 
 ### 10.2 Assumptions Made
 
 - **Both builds came from the same builder.** `mymain.bat` and `myfile.bat` are assessed as sibling builds from a single private crypter based on: shared structural anchors (forced 32-bit PowerShell path, alphabet-substitution Base64, magic-marker + Substring(32) idiom, Stage-4 `Assembly.Load` dispatch), cross-build invariants (Stage-4 mutex GUID, Stage-5b PE hash), and same-day compilation (2026-03-31). Per-build variation (keys, magic markers, resource names) is consistent with builder key-rotation, not with two independent codebases.
-- **Stage-5b is a pre-compiled module, not per-build compiled.** Byte-identical SHA256 across both builds is the direct evidence. The builder bundles a single compiled Stage-5b rather than recompiling it per campaign — an operational trade-off that reduces unique samples but produces a high-value cross-build invariant hash.
+- **Stage-5b is a pre-compiled module, not per-build compiled.** Byte-identical SHA256 across both builds is the direct evidence. The builder bundles a single compiled Stage-5b rather than recompiling it per campaign: an operational trade-off that reduces unique samples but produces a high-value cross-build invariant hash.
 - **The tri-artifact gate is an operator-convenience check.** MODERATE-confidence interpretation. Static analysis cannot prove it is not a decoy; hypothesis 1 (convenience) is more parsimonious given the operator must maintain and use these tools, and the probability of self-infection is real.
 - **Real Orcus C2 is operator-controlled.** Analysis assumes the upstream endpoint behind the loopback tunnel is a server the operator controls (either self-hosted or on a third-party VPS). This is a conventional assumption for RAT infrastructure but cannot be verified from static analysis alone.
-- **UTA-2026-005 is a single operator cluster.** MODERATE confidence (72% per UTA file, updated after the 2026-04-23 multi-tenant-host finding). The six distinctive characteristics — five technical (private crypter, cross-build mutex, cross-build Stage-5b, tri-artifact gate, operator-scale parallel builds) and one infrastructure/contextual (multi-tenant operator host with concurrent parasitic co-tenant campaigns) — collectively reach B2 Admiralty threshold, but two closely-cooperating operators sharing tooling cannot be ruled out. A second independent campaign would clarify.
+- **UTA-2026-005 is a single operator cluster.** MODERATE confidence (72% per UTA file, updated after the 2026-04-23 multi-tenant-host finding). The six distinctive characteristics: five technical (private crypter, cross-build mutex, cross-build Stage-5b, tri-artifact gate, operator-scale parallel builds) and one infrastructure/contextual (multi-tenant operator host with concurrent parasitic co-tenant campaigns), collectively reach B2 Admiralty threshold, but two closely-cooperating operators sharing tooling cannot be ruled out. A second independent campaign would clarify.
 
 ### 10.3 Evidence That Would Change the Assessment
 
 | Evidence | What it would change |
 |---|---|
 | A second sample with Stage-5b SHA256 `da302511…` | UTA-2026-005 confidence from MODERATE to HIGH |
-| A second sample with mutex GUID `9f67b5ed-…` | Same — cross-campaign cluster confirmed |
+| A second sample with mutex GUID `9f67b5ed-…` | Same, cross-campaign cluster confirmed |
 | A Tier-1/Tier-2 vendor writeup linking this kit to a named group | Named-actor attribution from INSUFFICIENT to MODERATE/HIGH |
-| Passive DNS history tying 94.103.1.13 to named-actor infrastructure | Same — enables named-actor attribution |
+| Passive DNS history tying 94.103.1.13 to named-actor infrastructure | Same, enables named-actor attribution |
 | Real Orcus C2 endpoint via dynamic detonation | Opens infrastructure pivot; may enable attribution if the endpoint matches known clusters |
 | A language/locale artifact in future decompiled builds | Enables geographic attribution |
 | Reappearance of the co-tenant triad (`forumrutor24.com` + `gtanuncios.com` + `bulgainme.pro`) on a different operator IP with Chaos-lineage samples | Establishes UTA-2026-005 continuity across infrastructure rotation |
@@ -884,39 +884,39 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 - Trend Micro: 2021 Chaos initial writeup.
 - Fortinet: 2025 Chaos-C++ writeup.
 - Acronis: Frea (Chaos fork) writeup.
-- Cisco Talos: April 2025 Chaos RaaS group reporting (distinct from the builder — see Section 7.2).
+- Cisco Talos: April 2025 Chaos RaaS group reporting (distinct from the builder, see Section 7.2).
 
 **UAC bypass / UACME:**
-- hfiref0x UACME repository (github.com/hfiref0x/UACME) — authoritative UACME catalogue including technique #41.
+- hfiref0x UACME repository (github.com/hfiref0x/UACME): authoritative UACME catalogue including technique #41.
 
 **.NET packing / bundling:**
-- Fody/Costura repository — authoritative reference for Costura.Fody single-file-deployment bundling.
-- Microsoft .NET single-file-deployment documentation (A1) — official Microsoft documentation.
+- Fody/Costura repository: authoritative reference for Costura.Fody single-file-deployment bundling.
+- Microsoft .NET single-file-deployment documentation (A1): official Microsoft documentation.
 
 **Anti-sandbox / anti-debug:**
-- al-khaser GitHub (LordNoteworthy) — the anti-sandbox DLL-sweep catalogue chunk 0 draws from.
+- al-khaser GitHub (LordNoteworthy): the anti-sandbox DLL-sweep catalogue chunk 0 draws from.
 
-**TorBrowserTor variant (C2–C3 corroboration only):**
+**TorBrowserTor variant (C2-C3 corroboration only):**
 - PCrisk TorBrowserTor writeup.
 - ITFunk TorBrowserTor writeup.
 
-**Shared-wallet corroboration (C1–C2):**
+**Shared-wallet corroboration (C1-C2):**
 - S2W Chaos Anatomy Medium article.
 - WalletExplorer cluster data (bech32 `19254d2b5d`, legacy `9210ad5446`).
 
 **Framework references:**
-- MITRE ATT&CK framework (A1) — technique definitions in Section 6.
+- MITRE ATT&CK framework (A1): technique definitions in Section 6.
 
 ---
 
 ## 12. Addendum — 2026-05-02 Follow-up
 {: .hl-tier-2}
 
-> **Analyst note:** This section was appended on 2026-05-02 to capture two developments since the original 2026-04-23 publication: (1) the staging server `94.103.1.13:7777` went globally offline, consistent with operator takedown after sustained external probing; (2) deeper analysis of `interact.py` — referenced but not fully decomposed in the original — yielded one new sample-level IOC (its SHA256), one new host-side persistence IOC (a hardcoded backdoor account credential pair), and one detection-relevant detail (the XOR key used to obfuscate the staged GodPotato payload). All three are now reflected in the IOC feed and detection content.
+> **Analyst note:** This section was appended on 2026-05-02 to capture two developments since the original 2026-04-23 publication: (1) the staging server `94.103.1.13:7777` went globally offline, consistent with operator takedown after sustained external probing; (2) deeper analysis of `interact.py` (referenced but not fully decomposed in the original) yielded one new sample-level IOC (its SHA256), one new host-side persistence IOC (a hardcoded backdoor account credential pair), and one detection-relevant detail (the XOR key used to obfuscate the staged GodPotato payload). All three are now reflected in the IOC feed and detection content.
 
 ### 12.1 Staging Infrastructure Status — Server Globally Offline
 
-The open directory at `http://94.103.1.13:7777/` was last successfully reached by The Hunters Ledger recrawl service at **2026-05-02 16:44 UTC**. From that point onward, all access attempts return TCP connection refused. To rule out a routing or proxy issue local to The Hunters Ledger, the host was probed externally from **eight independent network locations** (Spain, France, India ×2, Singapore, UK, US, Vietnam — all on different ASNs) via `check-host.net`. Every probe returned `Connection refused`. The IP itself remains advertised — the host is not null-routed — but no service is listening on port 7777.
+The open directory at `http://94.103.1.13:7777/` was last successfully reached by The Hunters Ledger recrawl service at **2026-05-02 16:44 UTC**. From that point onward, all access attempts return TCP connection refused. To rule out a routing or proxy issue local to The Hunters Ledger, the host was probed externally from **eight independent network locations** (Spain, France, India ×2, Singapore, UK, US, Vietnam, all on different ASNs) via `check-host.net`. Every probe returned `Connection refused`. The IP itself remains advertised (the host is not null-routed) but no service is listening on port 7777.
 
 This pattern is consistent with one of three operator actions:
 - **Voluntary takedown** following increased external attention (`94.103.1.13` had received sustained recrawls plus at least one third-party mass-download attempt on 2026-05-02 prior to the outage).
@@ -941,13 +941,13 @@ What was preserved is all 50 unique sample hashes captured during the active obs
 | First seen on VT | 2026-04-21 15:57:07 UTC |
 | VT vendor labels | `Trojan:Python/Multiverze!rfn` (Microsoft), `HEUR:Trojan-Downloader.PowerShell.Agent.gen` (Kaspersky), `Trojan.Gen.NPE` (Symantec) |
 
-`interact.py` is a small, operator-written automation script that drives a pre-existing reverse shell on the victim. It is not a stand-alone implant and does not establish initial access — it expects an existing TCP listener on `127.0.0.1:4444` (consistent with the loopback-tunnel pattern documented in §5.7 and the Orcus loopback C2 on port `127.0.0.1:20268`). The script automates three actions in sequence:
+`interact.py` is a small, operator-written automation script that drives a pre-existing reverse shell on the victim. It is not a stand-alone implant and does not establish initial access, it expects an existing TCP listener on `127.0.0.1:4444` (consistent with the loopback-tunnel pattern documented in §5.7 and the Orcus loopback C2 on port `127.0.0.1:20268`). The script automates three actions in sequence:
 
-**1. Connect to local listener (`127.0.0.1:4444`).** The connection is local-loopback, which is the same architectural pattern the Orcus RAT uses for its real C2 — an `ssh`/`chisel`/`plink` tunnel terminates on the victim, and the operator drives commands through the loopback endpoint. The 4444 listener is a parallel, separate tunnel than the Orcus 20268 listener, indicating the operator runs at minimum two concurrent loopback tunnels per victim.
+**1. Connect to local listener (`127.0.0.1:4444`).** The connection is local-loopback, which is the same architectural pattern the Orcus RAT uses for its real C2, an `ssh`/`chisel`/`plink` tunnel terminates on the victim, and the operator drives commands through the loopback endpoint. The 4444 listener is a parallel, separate tunnel than the Orcus 20268 listener, indicating the operator runs at minimum two concurrent loopback tunnels per victim.
 
-**2. AMSI bypass** via the canonical `[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiInitFailed","NonPublic,Static").SetValue(...)` pattern. This is publicly documented from approximately 2017 and remains effective on Windows hosts running PowerShell versions where the field is still present and writable. The version of `interact.py` retrieved from VirusTotal has all PowerShell `$variable` markers stripped — the call appears as `SetValue(,)` in the captured bytes — likely an artifact of the operator's template-generator tooling rather than a working deployed script. Functionally equivalent to `SetValue($null,$true)`. Maps to **T1685 — Disable or Modify Tools**.
+**2. AMSI bypass** via the canonical `[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiInitFailed","NonPublic,Static").SetValue(...)` pattern. This is publicly documented from approximately 2017 and remains effective on Windows hosts running PowerShell versions where the field is still present and writable. The version of `interact.py` retrieved from VirusTotal has all PowerShell `$variable` markers stripped. The call appears as `SetValue(,)` in the captured bytes, likely an artifact of the operator's template-generator tooling rather than a working deployed script. Functionally equivalent to `SetValue($null,$true)`. Maps to **T1685, Disable or Modify Tools**.
 
-**3. Staged GodPotato XOR-loader → SYSTEM → backdoor account.** The script downloads `http://94.103.1.13/gp.xor`, performs an in-memory single-byte XOR decode with key `0x42`, and reflectively loads the decoded bytes as a .NET assembly via `[Reflection.Assembly]::Load()`. The assembly's entry point is invoked with the argument string `-cmd "net user pentest Qwerty12345 /add"`. This is the GodPotato pattern — coerce a privileged service account, invoke `CreateProcessWithToken` as `NT AUTHORITY\SYSTEM`, and execute the command-line string as that token. The result is a local Administrator account `pentest` with password `Qwerty12345` created on the victim host. Maps to **T1620 — Reflective Code Loading**, **T1136.001 — Local Account**, and **T1078.003 — Local Accounts**.
+**3. Staged GodPotato XOR-loader → SYSTEM → backdoor account.** The script downloads `http://94.103.1.13/gp.xor`, performs an in-memory single-byte XOR decode with key `0x42`, and reflectively loads the decoded bytes as a .NET assembly via `[Reflection.Assembly]::Load()`. The assembly's entry point is invoked with the argument string `-cmd "net user pentest Qwerty12345 /add"`. This is the GodPotato pattern, coerce a privileged service account, invoke `CreateProcessWithToken` as `NT AUTHORITY\SYSTEM`, and execute the command-line string as that token. The result is a local Administrator account `pentest` with password `Qwerty12345` created on the victim host. Maps to **T1620, Reflective Code Loading**, **T1136.001, Local Account**, and **T1078.003, Local Accounts**.
 
 #### 12.2.1 New IOCs Added
 
@@ -967,4 +967,4 @@ A new Sigma rule has been added to the [companion detection page](/hunting-detec
 
 ---
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
