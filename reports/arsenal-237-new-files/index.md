@@ -20,14 +20,14 @@ stix_bundle: /stix/arsenal-237-new-files.json
 
 ---
 
-> **Part of series:** This is report 2 of 2 in the Arsenal-237 investigation. The original report — [Arsenal-237: Threat Actor R&D Repository Exposed](/reports/109.230.231.37-Executive-Overview/) — documents the first 16 samples found in the same open directory (109.230.231.37) and is the recommended starting point; this follow-up analyzes the 11 samples added after that discovery.
+> **Part of series:** This is report 2 of 2 in the Arsenal-237 investigation. The original report, [Arsenal-237: Threat Actor R&D Repository Exposed](/reports/109.230.231.37-Executive-Overview/), documents the first 16 samples found in the same open directory (109.230.231.37) and is the recommended starting point; this follow-up analyzes the 11 samples added after that discovery.
 
 ---
 
 ## Report Context: New Files from Arsenal-237 Directory
 {: .hl-tier-1}
 
-This report analyzes **11 new malware samples** added to the same open directory (109.230.231.37) documented in early January 2026. These samples represent a significant capability jump from the original 16: the new additions introduce BYOVD kernel driver abuse, a kernel-mode rootkit, a CrowdStrike-specific EDR terminator, and enterprise-grade Rust ransomware — capabilities absent from the first wave.
+This report analyzes **11 new malware samples** added to the same open directory (109.230.231.37) documented in early January 2026. These samples represent a significant capability jump from the original 16: the new additions introduce BYOVD kernel driver abuse, a kernel-mode rootkit, a CrowdStrike-specific EDR terminator, and enterprise-grade Rust ransomware, capabilities absent from the first wave.
 
 ---
 
@@ -155,9 +155,9 @@ PHASE 3: Impact - Ransomware Deployment
 ### Key Technical Characteristics
 
 **Cryptographic Foundation:**
-- **RSA-OAEP + ChaCha20 hybrid encryption** in advanced variants — decryption requires the operator's RSA private key
+- **RSA-OAEP + ChaCha20 hybrid encryption** in advanced variants: decryption requires the operator's RSA private key
 - **Per-victim key architecture** enabling the RaaS affiliate model
-- **Hardcoded keys in test variants** (67e6096a... in new_enc.exe; 1e0d8597... in dec_fixed.exe) — operational security lapses that distinguish test builds from deployment variants
+- **Hardcoded keys in test variants** (67e6096a... in new_enc.exe; 1e0d8597... in dec_fixed.exe): operational security lapses that distinguish test builds from deployment variants
 - **Different keys across samples** indicating builder/deployment tracking
 
 **Evasion Techniques:**
@@ -397,13 +397,13 @@ The attacker gains an initial foothold (phishing, RDP, supply chain) with user-l
 
 Seven observed characteristics mark Arsenal-237 as a mature, professionally developed operation:
 
-1. **Modular design** — components deploy independently and compose into a full kill chain
-2. **Product-specific variants** — killer_crowdstrike.dll targets CSFalconService.exe and csagent.exe by name, confirming prior EDR research
-3. **Hybrid cryptography** — RSA-OAEP + ChaCha20 in full_test_enc.exe reflects expert cryptographic implementation
-4. **Rust across the ransomware tier** — a consistent modern language choice across enc_c2.exe, new_enc.exe, and full_test_enc.exe
-5. **Per-victim key management** — dec_fixed.exe carries a key (1e0d8597...) distinct from all encryptors, proving the RaaS model (CONFIRMED)
-6. **Active beta iteration** — v0.5-beta designation in new_enc.exe and "test" designation in full_test_enc.exe show iterative pre-deployment testing
-7. **Hardcoded keys in test variants only** — the operational security lapse in new_enc.exe is absent from enc_c2.exe and full_test_enc.exe, indicating intentional separation of test and deployment builds
+1. **Modular design**: components deploy independently and compose into a full kill chain
+2. **Product-specific variants**: killer_crowdstrike.dll targets CSFalconService.exe and csagent.exe by name, confirming prior EDR research
+3. **Hybrid cryptography**: RSA-OAEP + ChaCha20 in full_test_enc.exe reflects expert cryptographic implementation
+4. **Rust across the ransomware tier**: a consistent modern language choice across enc_c2.exe, new_enc.exe, and full_test_enc.exe
+5. **Per-victim key management**: dec_fixed.exe carries a key (1e0d8597...) distinct from all encryptors, proving the RaaS model (CONFIRMED)
+6. **Active beta iteration**: v0.5-beta designation in new_enc.exe and "test" designation in full_test_enc.exe show iterative pre-deployment testing
+7. **Hardcoded keys in test variants only**: the operational security lapse in new_enc.exe is absent from enc_c2.exe and full_test_enc.exe, indicating intentional separation of test and deployment builds
 
 ---
 
@@ -493,15 +493,15 @@ Arsenal-237 encrypts critical data with cryptography that cannot be broken, disa
 
 **Recommended Strategic Actions:**
 
-1. **Treat this as a business continuity risk** — Arsenal-237 is an operational attack platform, not a single malware variant. Response requires cross-functional coordination between security, legal, and business leadership.
+1. **Treat this as a business continuity risk**: Arsenal-237 is an operational attack platform, not a single malware variant. Response requires cross-functional coordination between security, legal, and business leadership.
 
-2. **Prioritize offline backup capability** — if Arsenal-237 encrypts data, offline backups are the only recovery path that does not require ransom payment. Air-gapped or immutable-snapshot backup infrastructure must be isolated from production networks. Validate recovery procedures regularly.
+2. **Prioritize offline backup capability**: if Arsenal-237 encrypts data, offline backups are the only recovery path that does not require ransom payment. Air-gapped or immutable-snapshot backup infrastructure must be isolated from production networks. Validate recovery procedures regularly.
 
-3. **Validate the incident response plan** — IR plans should address ransomware-specific scenarios, define escalation authority, and include tabletop exercises that test decision-making under time pressure.
+3. **Validate the incident response plan**: IR plans should address ransomware-specific scenarios, define escalation authority, and include tabletop exercises that test decision-making under time pressure.
 
-4. **Review cyber insurance coverage** — confirm coverage addresses ransomware response, forensic investigation, and extortion threats.
+4. **Review cyber insurance coverage**: confirm coverage addresses ransomware response, forensic investigation, and extortion threats.
 
-5. **Prepare stakeholder communication plans** — a successful Arsenal-237 deployment triggers breach-notification obligations under applicable data protection regulations. Coordinate legal, PR, and compliance postures before an incident, not during one.
+5. **Prepare stakeholder communication plans**: a successful Arsenal-237 deployment triggers breach-notification obligations under applicable data protection regulations. Coordinate legal, PR, and compliance postures before an incident, not during one.
 
 ### For Security Leadership & CISOs
 
@@ -535,13 +535,13 @@ Arsenal-237 encrypts critical data with cryptography that cannot be broken, disa
 
 Individual component reports contain specific YARA signatures, Sigma rules, and hunting queries. Key detection areas:
 
-1. **BYOVD detection** (Phase 1, components 3-4) — monitor BdApiUtil64.sys loading; alert on kernel driver installation from non-system locations; track lpe.exe execution patterns
+1. **BYOVD detection** (Phase 1, components 3-4): monitor BdApiUtil64.sys loading; alert on kernel driver installation from non-system locations; track lpe.exe execution patterns
 
-2. **Security product termination** (Phase 1, components 1-2) — detect kernel-mode process termination targeting EDR/antivirus processes; flag IOCTL 0x800024B4 dispatch
+2. **Security product termination** (Phase 1, components 1-2): detect kernel-mode process termination targeting EDR/antivirus processes; flag IOCTL 0x800024B4 dispatch
 
-3. **Persistence indicators** (Phase 2, components 6-7) — detect nethost.dll in user-writable locations; monitor .NET processes loading unexpected DLLs; hunt for reflective DLL injection by chromelevator.exe
+3. **Persistence indicators** (Phase 2, components 6-7): detect nethost.dll in user-writable locations; monitor .NET processes loading unexpected DLLs; hunt for reflective DLL injection by chromelevator.exe
 
-4. **Ransomware behavior** (Phase 3, components 8-11) — alert on high-entropy bulk writes, file extension changes, and backup system read-ahead patterns; detect Tor traffic from non-Tor-user systems (enc_c2.exe C2)
+4. **Ransomware behavior** (Phase 3, components 8-11): alert on high-entropy bulk writes, file extension changes, and backup system read-ahead patterns; detect Tor traffic from non-Tor-user systems (enc_c2.exe C2)
 
 **Detection-to-response priorities:**
 
@@ -554,15 +554,15 @@ Individual component reports contain specific YARA signatures, Sigma rules, and 
 
 **Hunt Scenarios:**
 
-1. **BYOVD exploitation** — BdApiUtil64.sys loading from non-system paths; kernel callback registrations from unsigned or low-reputation drivers ([BdApiUtil64-sys.md](./BdApiUtil64-sys.md))
+1. **BYOVD exploitation**: BdApiUtil64.sys loading from non-system paths; kernel callback registrations from unsigned or low-reputation drivers ([BdApiUtil64-sys.md](./BdApiUtil64-sys.md))
 
-2. **Rootkit persistence** — process and thread enumeration gaps indicating hidden objects; kernel API hooking anomalies; driver installation from unexpected locations ([rootkit-dll.md](./rootkit-dll.md))
+2. **Rootkit persistence**: process and thread enumeration gaps indicating hidden objects; kernel API hooking anomalies; driver installation from unexpected locations ([rootkit-dll.md](./rootkit-dll.md))
 
-3. **DLL hijacking** — nethost.dll present outside system directories; .NET processes loading DLLs from user-writable paths; anomalous DLL version signatures ([nethost-dll.md](./nethost-dll.md))
+3. **DLL hijacking**: nethost.dll present outside system directories; .NET processes loading DLLs from user-writable paths; anomalous DLL version signatures ([nethost-dll.md](./nethost-dll.md))
 
-4. **Browser credential theft** — reflective DLL injection into browser processes; SQLite reads of Chrome/Edge credential stores via direct syscalls ([chromelevator-exe.md](./chromelevator-exe.md))
+4. **Browser credential theft**: reflective DLL injection into browser processes; SQLite reads of Chrome/Edge credential stores via direct syscalls ([chromelevator-exe.md](./chromelevator-exe.md))
 
-5. **Ransomware encryption** — bulk file access with high-entropy writes; file extension changes; backup system enumeration patterns (Phase 3 component reports)
+5. **Ransomware encryption**: bulk file access with high-entropy writes; file extension changes; backup system enumeration patterns (Phase 3 component reports)
 
 ---
 
@@ -573,7 +573,7 @@ Individual component reports contain specific YARA signatures, Sigma rules, and 
 
 **Q1: "How is Arsenal-237 different from other ransomware families?"**
 
-Arsenal-237 is a complete operational attack platform, not a ransomware-only tool. Most ransomware families focus on encryption. Arsenal-237 adds a kernel-mode rootkit (rootkit.dll) that operates below standard security tools, hiding malware from user-mode detection and making cleanup inadequate — affected systems require a full rebuild rather than a scan-and-remove approach.
+Arsenal-237 is a complete operational attack platform, not a ransomware-only tool. Most ransomware families focus on encryption. Arsenal-237 adds a kernel-mode rootkit (rootkit.dll) that operates below standard security tools, hiding malware from user-mode detection and making cleanup inadequate, affected systems require a full rebuild rather than a scan-and-remove approach.
 
 The operational sequence distinguishes Arsenal-237 further: security products are terminated before encryption begins, persistence survives reboots via DLL hijacking, and credentials are stolen for lateral movement before the ransomware stage. This makes it an end-to-end compromise platform rather than a standalone encryptor.
 
@@ -589,9 +589,9 @@ Recovery paths without the private key: offline backups, or law enforcement obta
 
 **Q3: "Does the hardcoded key in new_enc.exe mean we can decrypt those files?"**
 
-Possibly — but only if the attack used new_enc.exe specifically. The hardcoded ChaCha20 key (67e6096a...) is a test-variant operational security lapse: files encrypted by this build may be decryptable without ransom payment.
+Possibly, but only if the attack used new_enc.exe specifically. The hardcoded ChaCha20 key (67e6096a...) is a test-variant operational security lapse: files encrypted by this build may be decryptable without ransom payment.
 
-Important caveats: new_enc.exe is a v0.5-beta development build. Operational deployments likely use enc_c2.exe or full_test_enc.exe, which do not have hardcoded keys. Forensic analysis of encrypted files can confirm which variant was used — early-stage testing may have involved the beta build, but later deployments almost certainly did not.
+Important caveats: new_enc.exe is a v0.5-beta development build. Operational deployments likely use enc_c2.exe or full_test_enc.exe, which do not have hardcoded keys. Forensic analysis of encrypted files can confirm which variant was used, early-stage testing may have involved the beta build, but later deployments almost certainly did not.
 
 ---
 
@@ -605,7 +605,7 @@ For defenders, RaaS means: multiple affiliates with varied targeting patterns; p
 
 ---
 
-**Q5: "The reports mention 'test builds' — does this mean the threat isn't real yet?"**
+**Q5: "The reports mention 'test builds'. Does this mean the threat isn't real yet?"**
 
 No. Test builds indicate active development and imminent or recent operational deployment, not that the threat is theoretical. The v0.5-beta designation on new_enc.exe and "test version" on full_test_enc.exe confirm the toolkit is under active iteration. Multiple variants under simultaneous development suggest an operational timeline measured in weeks to months, not years. The threat is active (MODERATE confidence).
 
@@ -621,7 +621,7 @@ Immediate priorities on any Arsenal-237 detection: network isolation of affected
 
 **Q7: "Should we rebuild systems or attempt cleanup if Arsenal-237 is detected?"**
 
-Rebuild. rootkit.dll operates at the kernel level and hides itself from user-mode tools — cleanup cannot verify the rootkit was fully removed. Standard scan-and-remove approaches are inadequate for kernel-mode malware. A system rebuild from clean media is the only reliable remediation path for any system where Phase 1 components (rootkit.dll, BYOVD exploitation) are confirmed.
+Rebuild. rootkit.dll operates at the kernel level and hides itself from user-mode tools, cleanup cannot verify the rootkit was fully removed. Standard scan-and-remove approaches are inadequate for kernel-mode malware. A system rebuild from clean media is the only reliable remediation path for any system where Phase 1 components (rootkit.dll, BYOVD exploitation) are confirmed.
 
 ---
 
@@ -637,9 +637,9 @@ Offline backup means storage that is not accessible from the production network 
 
 Two categories of offline backup offer protection:
 
-1. **Air-gapped storage** — backup writes to external media that is physically disconnected after each job. Ransomware cannot reach storage that has no network path to it.
+1. **Air-gapped storage**: backup writes to external media that is physically disconnected after each job. Ransomware cannot reach storage that has no network path to it.
 
-2. **Immutable cloud snapshots** — cloud-provider snapshot policies that prevent modification or deletion after creation. Requires proper permission segregation so ransomware cannot reach backup management APIs.
+2. **Immutable cloud snapshots**: cloud-provider snapshot policies that prevent modification or deletion after creation. Requires proper permission segregation so ransomware cannot reach backup management APIs.
 
 Both strategies require periodic recovery testing to confirm the backups are actually usable. An untested backup strategy is not a recovery strategy.
 
@@ -647,7 +647,7 @@ Both strategies require periodic recovery testing to confirm the backups are act
 
 **Q10: "Can we detect Arsenal-237 before the ransomware phase?"**
 
-Yes — detection opportunities exist at every phase. Phase 1 offers the best window: BYOVD exploitation, kernel driver loading from non-system paths, privilege escalation activity, and security product termination are all observable with kernel-mode EDR visibility. Phase 2 offers DLL hijacking indicators and credential store access patterns. Phase 3 — file encryption and Tor C2 traffic — is the last opportunity before data loss.
+Yes, detection opportunities exist at every phase. Phase 1 offers the best window: BYOVD exploitation, kernel driver loading from non-system paths, privilege escalation activity, and security product termination are all observable with kernel-mode EDR visibility. Phase 2 offers DLL hijacking indicators and credential store access patterns. Phase 3, file encryption and Tor C2 traffic, is the last opportunity before data loss.
 
 Detection before Phase 3 depends on behavioral EDR with kernel-mode visibility, active threat hunting, and network monitoring for Tor traffic. Mature detection programs will identify Arsenal-237 at Phase 1 or Phase 2 (HIGH confidence).
 
@@ -659,10 +659,10 @@ Detection before Phase 3 depends on behavioral EDR with kernel-mode visibility, 
 
 A successful Arsenal-237 deployment affects organizations across four impact dimensions:
 
-1. **Ransom payment risk** — per-victim key architecture means ransom is the only decryption path without offline backups; the negotiated amount scales with organizational size and sector
-2. **Incident response burden** — forensic investigation, legal/compliance consultation, and breach notification require specialized resources and extended timelines
-3. **Operational disruption** — recovery from a full-kit deployment requires system rebuilds across affected infrastructure, with downtime duration proportional to environment size and backup posture
-4. **Regulatory and reputational consequences** — a successful deployment triggers breach-notification obligations under applicable data protection frameworks; contractual and regulatory consequences follow from confirmed data exposure
+1. **Ransom payment risk**: per-victim key architecture means ransom is the only decryption path without offline backups; the negotiated amount scales with organizational size and sector
+2. **Incident response burden**: forensic investigation, legal/compliance consultation, and breach notification require specialized resources and extended timelines
+3. **Operational disruption**: recovery from a full-kit deployment requires system rebuilds across affected infrastructure, with downtime duration proportional to environment size and backup posture
+4. **Regulatory and reputational consequences**: a successful deployment triggers breach-notification obligations under applicable data protection frameworks; contractual and regulatory consequences follow from confirmed data exposure
 
 The offline backup strategy is the largest single variable in business impact: organizations with validated offline backups can rebuild and restore; those without face the ransom payment decision.
 
@@ -677,12 +677,12 @@ It coordinates privilege escalation, kernel-mode defense disablement, persistenc
 ---
 
 **2. Offline backups are the only reliable recovery path.**
-full_test_enc.exe's RSA-OAEP + ChaCha20 hybrid encryption cannot be broken without the operator's private key. No external decryption service can help. Without validated offline backups, affected organizations face the ransom payment decision — with no third alternative. Backup strategy is the dominant variable in recovery outcome.
+full_test_enc.exe's RSA-OAEP + ChaCha20 hybrid encryption cannot be broken without the operator's private key. No external decryption service can help. Without validated offline backups, affected organizations face the ransom payment decision, with no third alternative. Backup strategy is the dominant variable in recovery outcome.
 
 ---
 
 **3. Detection at Phase 1 or Phase 2 prevents encryption.**
-Arsenal-237 exposes observable indicators at every phase. BYOVD exploitation, kernel driver loading, security product termination, and DLL hijacking are all detectable with behavioral EDR and kernel-mode visibility — hours to days before the ransomware stage. Detection programs that catch Phase 1 or Phase 2 activity avoid the data loss scenario entirely.
+Arsenal-237 exposes observable indicators at every phase. BYOVD exploitation, kernel driver loading, security product termination, and DLL hijacking are all detectable with behavioral EDR and kernel-mode visibility, hours to days before the ransomware stage. Detection programs that catch Phase 1 or Phase 2 activity avoid the data loss scenario entirely.
 
 ---
 
@@ -692,7 +692,7 @@ Enterprise backup targeting (new_enc.exe hitting Veritas Backup Exec and VSS), a
 ---
 
 **5. Technical compensating controls are non-negotiable.**
-BYOVD techniques abuse legitimately signed drivers that bypass signature-based detection. chromelevator.exe uses direct syscalls to defeat EDR hooks. rootkit.dll hides from user-mode tools entirely. User training addresses only one attack vector. Defense-in-depth — behavioral EDR, kernel-mode visibility, threat hunting, and network monitoring — is the required baseline against this toolkit.
+BYOVD techniques abuse legitimately signed drivers that bypass signature-based detection. chromelevator.exe uses direct syscalls to defeat EDR hooks. rootkit.dll hides from user-mode tools entirely. User training addresses only one attack vector. Defense-in-depth (behavioral EDR, kernel-mode visibility, threat hunting, and network monitoring) is the required baseline against this toolkit.
 
 ---
 
@@ -706,8 +706,8 @@ BYOVD techniques abuse legitimately signed drivers that bypass signature-based d
 - Arsenal-237 toolkit contains 11 distinct malware components
 - BYOVD exploitation using BdApiUtil64.sys confirmed
 - rootkit.dll hides processes, threads, and drivers at the kernel level
-- full_test_enc.exe uses RSA-OAEP + ChaCha20 hybrid encryption — decryption without the operator's private key is not possible
-- new_enc.exe contains a hardcoded ChaCha20 key (67e6096a...) — a test-variant operational security lapse
+- full_test_enc.exe uses RSA-OAEP + ChaCha20 hybrid encryption: decryption without the operator's private key is not possible
+- new_enc.exe contains a hardcoded ChaCha20 key (67e6096a...): a test-variant operational security lapse
 - dec_fixed.exe carries a distinct key (1e0d8597...) confirming per-victim key management
 - enc_c2.exe beacons to Tor C2 infrastructure
 - Rust implementation across enc_c2.exe, new_enc.exe, and full_test_enc.exe
@@ -716,21 +716,21 @@ BYOVD techniques abuse legitimately signed drivers that bypass signature-based d
 
 **HIGH confidence (Strong corroborating evidence)**
 
-- Arsenal-237 operates as a RaaS platform — per-victim key architecture and builder ID tracking in enc_c2.exe both support this
+- Arsenal-237 operates as a RaaS platform: per-victim key architecture and builder ID tracking in enc_c2.exe both support this
 - Active development underway: v0.5-beta and test-version designations confirm a pre-deployment iteration cycle
 - killer_crowdstrike.dll's product-specific targeting of CSFalconService.exe and csagent.exe indicates prior EDR research
 
 **MODERATE confidence (Reasonable inference)**
 
 - Multiple affiliates deploying the platform in decentralized campaigns
-- Enterprise organizations are primary targets — backup targeting in new_enc.exe and CrowdStrike-specific disabler both align with high-value enterprise environments
+- Enterprise organizations are primary targets: backup targeting in new_enc.exe and CrowdStrike-specific disabler both align with high-value enterprise environments
 - Tor infrastructure suggests sustained operations, not a single campaign
 - Operational deployment timeline: weeks to months from report date
 
 **LOW confidence (Analytical judgment, insufficient evidence)**
 
-- Attribution to a specific named threat actor group — INSUFFICIENT evidence across this sample set
-- Development team size estimation — not determinable from current evidence
+- Attribution to a specific named threat actor group: INSUFFICIENT evidence across this sample set
+- Development team size estimation: not determinable from current evidence
 
 ---
 
@@ -742,7 +742,7 @@ BYOVD techniques abuse legitimately signed drivers that bypass signature-based d
 **Immediate actions (any component detected):**
 - Network isolation of affected systems before any other action
 - Credential rotation for accounts on affected systems
-- Forensic preservation — do not reboot; begin memory and disk imaging
+- Forensic preservation: do not reboot; begin memory and disk imaging
 - Block identified C2 infrastructure at network perimeter
 - Activate incident response procedures
 
@@ -763,7 +763,7 @@ BYOVD techniques abuse legitimately signed drivers that bypass signature-based d
 
 | Factor | Rebuild | Cleanup |
 |---|---|---|
-| Kernel-mode rootkit confirmed | Mandatory | Inadequate — rootkit hides itself from cleanup tools |
+| Kernel-mode rootkit confirmed | Mandatory | Inadequate, rootkit hides itself from cleanup tools |
 | Phase 3 ransomware detected | Preferred | Higher risk; only if no rootkit confirmed |
 | Offline backups available | Rebuild + restore | Parallel option |
 | No backups available | Still recommended | Only option outside ransom payment |
@@ -814,4 +814,4 @@ Access detailed technical analysis for each toolkit component:
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
