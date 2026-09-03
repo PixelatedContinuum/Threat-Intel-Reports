@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T02:02:28Z
+generated_at: 2026-09-03T04:01:32Z
 window_days: 30
 counts:
   total: 549
