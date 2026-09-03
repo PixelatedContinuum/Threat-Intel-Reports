@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T14:00:02Z
+generated_at: 2026-09-03T16:00:38Z
 window_days: 30
 counts:
   total: 545
@@ -14,7 +14,7 @@ topics:
     count: 70
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 55
     color: 2
   - label: "exploited"
     count: 28
@@ -451,6 +451,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Critical Elementor Pro flaw exploited to take over WordPress sites"
+    url: "https://www.bleepingcomputer.com/news/security/critical-elementor-pro-flaw-exploited-to-take-over-wordpress-sites/"
+    source: "BleepingComputer"
+    date: 2026-09-03T14:52:20Z
+    kind: news
+    labels: []
+  - title: "Your Employee’s Password Appeared in an Infostealer Log. Now What?"
+    url: "https://www.bleepingcomputer.com/news/security/your-employees-password-appeared-in-an-infostealer-log-now-what/"
+    source: "BleepingComputer"
+    date: 2026-09-03T13:50:59Z
+    kind: news
+    labels: []
   - title: "US and Canadian court data exposed in Thomson Reuters breach"
     url: "https://therecord.media/thomson-reuters-cyberattack-data"
     source: "Recorded Future"
@@ -3709,15 +3721,3 @@ items:
     date: 2026-08-04T18:14:35Z
     kind: research
     labels: ["bank of america impersonation", "base64 obfuscation", "credential theft", "phishing", "privilege escalation", "rmm abuse", "screenconnect", "uac bypass"]
-  - title: "Polish convenience store chain Żabka hacked through third-party account"
-    url: "https://therecord.media/poland-convenience-store-chain-zabka-cyberattack"
-    source: "Recorded Future"
-    date: 2026-08-04T15:55:00Z
-    kind: news
-    labels: ["cybercrime", "industry"]
-  - title: "Massive ChainDrop npm supply-chain attack infects hundreds of packages"
-    url: "https://www.bleepingcomputer.com/news/security/massive-chaindrop-npm-supply-chain-attack-infects-hundreds-of-packages/"
-    source: "BleepingComputer"
-    date: 2026-08-04T15:24:35Z
-    kind: news
-    labels: []
