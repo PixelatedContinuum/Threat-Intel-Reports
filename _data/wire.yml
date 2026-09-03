@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T16:00:38Z
+generated_at: 2026-09-03T18:02:22Z
 window_days: 30
 counts:
-  total: 545
-  research: 205
-  news: 340
+  total: 549
+  research: 208
+  news: 341
 topics:
   - label: "vulnerabilities"
     count: 70
     color: 1
   - label: "cybercrime"
-    count: 55
+    count: 56
     color: 2
   - label: "exploited"
     count: 28
@@ -25,10 +25,10 @@ topics:
   - label: "government"
     count: 26
     color: 5
-  - label: "artificial intelligence"
-    count: 22
-    color: 6
   - label: "data breaches"
+    count: 23
+    color: 6
+  - label: "artificial intelligence"
     count: 22
     color: 7
   - label: "credential theft"
@@ -61,6 +61,7 @@ label_colors:
   "account-enumeration": 7
   "active directory compromise": 7
   "active directory reconnaissance": 1
+  "adaptixc2": 8
   "adblocker": 3
   "adcs exploitation": 11
   "administrative access": 12
@@ -133,11 +134,12 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 6
+  "artificial intelligence": 7
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
   "astroproxy": 1
+  "asukastealer": 5
   "asyncapi": 2
   "asyncrat": 11
   "atf": 7
@@ -303,7 +305,7 @@ label_colors:
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
-  "data breaches": 7
+  "data breaches": 6
   "data leak": 9
   "data-exfiltration": 12
   "dcrat": 12
@@ -436,6 +438,7 @@ label_colors:
   "security-labs": 3
   "servicenow": 1
   "sma1000": 2
+  "social engineering": 10
   "software": 5
   "sonicwall": 8
   "spring": 5
@@ -451,6 +454,24 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "The story behind the intelligence"
+    url: "https://blog.talosintelligence.com/the-story-behind-the-intelligence/"
+    source: "Cisco Talos"
+    date: 2026-09-03T18:00:13Z
+    kind: research
+    labels: ["threat source newsletter"]
+  - title: "ASCII smuggling crosses over from AI prompt injection to phishing evasion"
+    url: "https://www.microsoft.com/en-us/security/blog/2026/09/03/ascii-smuggling-crosses-over-from-ai-prompt-injection-to-phishing-evasion/"
+    source: "Microsoft"
+    date: 2026-09-03T16:00:00Z
+    kind: research
+    labels: ["phishing", "social engineering"]
+  - title: "Manchester Airports Group Data on 8.8 Million People Leaked After Ransom Refusal"
+    url: "https://www.securityweek.com/manchester-airports-group-data-on-8-8-million-people-leaked-after-ransom-refusal/"
+    source: "SecurityWeek"
+    date: 2026-09-03T15:35:19Z
+    kind: news
+    labels: ["cybercrime", "data breaches", "ransom"]
   - title: "Critical Elementor Pro flaw exploited to take over WordPress sites"
     url: "https://www.bleepingcomputer.com/news/security/critical-elementor-pro-flaw-exploited-to-take-over-wordpress-sites/"
     source: "BleepingComputer"
@@ -463,6 +484,12 @@ items:
     date: 2026-09-03T13:50:59Z
     kind: news
     labels: []
+  - title: "Node.js: Old Technique Makes a Comeback"
+    url: "https://otx.alienvault.com/pulse/6a996ed3562f794a642feaaf"
+    source: "AlienVault"
+    date: 2026-09-03T12:57:55Z
+    kind: research
+    labels: ["adaptixc2", "asukastealer", "clickfix technique", "cobalt strike", "etherhiding", "modelorat", "node.js abuse", "ransomware access broker"]
   - title: "US and Canadian court data exposed in Thomson Reuters breach"
     url: "https://therecord.media/thomson-reuters-cyberattack-data"
     source: "Recorded Future"
