@@ -102,7 +102,7 @@ The kit's only operator-written code is a 256 KB `beacon.ps1` PowerShell loader 
 
 Three factors make this exposure noteworthy. **First**, AdaptixC2 has shifted in the past twelve months from a niche open-source red-team tool to a workhorse post-exploitation platform now associated with at least four distinct cohort archetypes: Russian-speaking ransomware affiliates (Akira, Fog), the Tomiris APT, the Tropic Trooper APT, and the GOLD ENCOUNTER cluster (PayoutsKing operator). Defenders need detection coverage for the framework, not just for any single named campaign. **Second**, the operator's deployment leaks operational fingerprints — PDB paths, build timestamps, internal class names, a stock 2013-era Firefox 20 User-Agent left unmodified, and a leftover `proxy_port=3128` dev artifact — that enable defender pivoting and cross-campaign tracking under UTA-2026-006. **Third**, the static-since-discovery exposure window (80+ hours observed as of analysis) preserves a complete operator deployment package intact, providing intelligence that is rarely available outside post-incident DFIR.
 
-The gap this analysis fills: existing public reporting describes AdaptixC2 abstractly, but provides no IOC set, no operator fingerprints, and no actionable detection content tied specifically to a deployment captured during its staging phase. This report makes those artifacts public.
+The gap this analysis fills: existing public reporting describes AdaptixC2 abstractly, but provides no IOC set, no operator fingerprints, and no actionable detection content tied specifically to a deployment captured during its staging phase. I am publishing those artifacts here.
 
 ### Key Takeaways
 

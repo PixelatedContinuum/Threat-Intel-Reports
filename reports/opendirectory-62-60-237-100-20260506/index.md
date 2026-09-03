@@ -1253,7 +1253,7 @@ The sanctions context matters. AS210644 was sanctioned by the US Treasury Office
 
 AS210558 is **Spamhaus DROP-listed** — Spamhaus DROP is a list of presumed-malicious infrastructure that legitimate networks publish-and-block by policy. The listing means routine network-perimeter rules at most defenders' organizations would already be blocking traffic to/from this IP regardless of campaign-specific detection.
 
-The IP recurs across three Hunters Ledger investigations (this campaign and two prior). This recurrence does not by itself attribute the campaigns to a single operator — AS210558 is shared bulletproof hosting and multiple operators may co-tenant — but it is consistent with operator overlap at MODERATE confidence (per attribution-analyst's ACH analysis, Section 11).
+The IP recurs across three Hunters Ledger investigations (this campaign and two prior). This recurrence does not by itself attribute the campaigns to a single operator — AS210558 is shared bulletproof hosting and multiple operators may co-tenant — but it is consistent with operator overlap at MODERATE confidence (per the ACH analysis in Section 11).
 
 ### 8.3 Second-Stage Payload Server: 109.120.137.6 (H2nexus)
 
@@ -1418,7 +1418,7 @@ Defenders should assume a 43-second window from sample launch to first C2 beacon
 - LOW overall confidence (58%) that the distinct operator can be tracked as a single entity across the corpus
 - INSUFFICIENT confidence for any link to a publicly named actor
 
-The attribution-analyst's recommended language (`weak indicators suggest`) reflects the LOW confidence threshold per CLAUDE.md: at LOW (50–70%) confidence, the appropriate language is "weak indicators suggest" or "insufficient evidence for attribution," NOT "highly likely," "probable attribution to," or "possible attribution to."
+The language I use here (`weak indicators suggest`) reflects the LOW confidence threshold per CLAUDE.md: at LOW (50–70%) confidence, the appropriate language is "weak indicators suggest" or "insufficient evidence for attribution," NOT "highly likely," "probable attribution to," or "possible attribution to."
 
 ### 11.2 Named actors ruled out
 
