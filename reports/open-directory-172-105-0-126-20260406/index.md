@@ -19,13 +19,13 @@ detection_sections:
     anchor: "#suricata-signatures"
 ioc_highlights:
   - value: "172.105.0[.]126"
-    note: "C2 server — all beacon variants, port 8443"
+    note: "C2 server: all beacon variants, port 8443"
   - value: "7d6a17754f086b53ee294f5ccd60b0127f921520ce7b64fea0aebb47114fb5d2"
-    note: "beacon.exe — custom C beacon (SHA256)"
+    note: "beacon.exe: custom C beacon (SHA256)"
   - value: "7a1a7659ec4201ecbca782bcedf9d4079265137279a490368309df3bd39297a4"
-    note: "beacon_universal.py — Python beacon (SHA256)"
+    note: "beacon_universal.py: Python beacon (SHA256)"
   - value: "eed84220ed7365b87d504f7709bd89ba2e255159d52f214f40a435ff78696eb6"
-    note: "beacon_patched.x64.dll — CS DLL (SHA256)"
+    note: "beacon_patched.x64.dll: CS DLL (SHA256)"
 stix_bundle: /stix/open-directory-172-105-0-126-20260406.json
 ---
 
@@ -39,27 +39,27 @@ The investigation is ONGOING, with an expanded toolkit discovery still under ana
 ## Bottom Line Up Front
 {: .hl-tier-1}
 
-- **What it is:** A novel, previously undocumented multi-implant C2 toolkit self-named **"OpenStrike"** by its author (from source code docstrings, not an analyst designation) — three beacon variants (custom C, Python, cracked Cobalt Strike DLL), five shellcode loaders, and nine operator utility scripts — recovered from an open directory before any known compromise
-- **Risk level:** HIGH (7.5/10 overall) — no persistence, but evasion mechanisms create blind spots in GET-based exfil detection and standard CS injection defenses
+- **What it is:** A novel, previously undocumented multi-implant C2 toolkit self-named **"OpenStrike"** by its author (from source code docstrings, not an analyst designation), three beacon variants (custom C, Python, cracked Cobalt Strike DLL), five shellcode loaders, and nine operator utility scripts, recovered from an open directory before any known compromise
+- **Risk level:** HIGH (7.5/10 overall), no persistence, but evasion mechanisms create blind spots in GET-based exfil detection and standard CS injection defenses
 - **Deployment status:** No victims identified; toolkit recovered pre-compromise via infrastructure-first discovery
-- **Top hunt indicator:** `GET /qz99` on port 8443 — short, non-standard, minimal false-positive risk in enterprise proxy logs
+- **Top hunt indicator:** `GET /qz99` on port 8443, short, non-standard, minimal false-positive risk in enterprise proxy logs
 - **Immediate action:** Block `172.105.0.126` at perimeter (all ports, bidirectional); deploy YARA/Sigma rules from the detection file
-- **Investigation status:** ONGOING — 116 additional files (full CS deployment including Mimikatz, artifact kit, DNS/SMB beacons) discovered on April 7 and under analysis ([Section 13](#13-ongoing-investigation-expanded-toolkit-discovery))
+- **Investigation status:** ONGOING, 116 additional files (full CS deployment including Mimikatz, artifact kit, DNS/SMB beacons) discovered on April 7 and under analysis ([Section 13](#13-ongoing-investigation-expanded-toolkit-discovery))
 
 ---
 
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-This investigation documents a novel, previously undocumented multi-implant C2 toolkit called **"OpenStrike"** — a name chosen by the toolkit's author, not by this publication. The name appears in the Python beacon's source code docstring: `"OpenStrike Universal Beacon — Single-File Cross-Platform Implant"` and in the BOF executor module: `"OpenStrike BOF Executor"`. The toolkit was recovered from an open directory on a Linode VPS at `172.105.0.126`, had zero VirusTotal coverage at time of discovery, and its C2 protocol internals — an AES-128-CBC + HMAC-SHA256 cryptographic envelope shared across three distinct beacon variants via a single RSA-2048 key, here termed the "Trinity Protocol" — were not previously documented in public threat research. This report closes that gap, providing defenders with the first full technical analysis of OpenStrike's architecture, detection surface, and protocol internals.
+This investigation documents a novel, previously undocumented multi-implant C2 toolkit called **"OpenStrike"**, a name chosen by the toolkit's author, not by this publication. The name appears in the Python beacon's source code docstring: `"OpenStrike Universal Beacon — Single-File Cross-Platform Implant"` and in the BOF executor module: `"OpenStrike BOF Executor"`. The toolkit was recovered from an open directory on a Linode VPS at `172.105.0.126`, had zero VirusTotal coverage at time of discovery, and its C2 protocol internals, an AES-128-CBC + HMAC-SHA256 cryptographic envelope shared across three distinct beacon variants via a single RSA-2048 key, here termed the "Trinity Protocol", were not previously documented in public threat research. This report closes that gap, providing defenders with the first full technical analysis of OpenStrike's architecture, detection surface, and protocol internals.
 
 **What Was Found**
 
-A complete attacker operator kit recovered before any known compromise: three beacon implant variants (a custom C Windows beacon, a cross-platform Python implant, and a cracked Cobalt Strike 3.x DLL), five shellcode loaders forming a progressive development chain, and nine Python utility scripts covering EDR reconnaissance through beacon deployment. All seven binary samples share a single build environment (MinGW-w64 GCC 15, released April 2025), placing active development in late 2025 or early 2026. The discovery was made via [hunt.io](https://hunt.io/)'s open directory capture system — an infrastructure-first discovery method that identified the toolkit before any victim could be identified.
+A complete attacker operator kit recovered before any known compromise: three beacon implant variants (a custom C Windows beacon, a cross-platform Python implant, and a cracked Cobalt Strike 3.x DLL), five shellcode loaders forming a progressive development chain, and nine Python utility scripts covering EDR reconnaissance through beacon deployment. All seven binary samples share a single build environment (MinGW-w64 GCC 15, released April 2025), placing active development in late 2025 or early 2026. The discovery was made via [hunt.io](https://hunt.io/)'s open directory capture system, an infrastructure-first discovery method that identified the toolkit before any victim could be identified.
 
 **Why This Threat Is Significant**
 
-OpenStrike is notable for three reasons that create specific defender blind spots. First, the cracked Cobalt Strike DLL component has its `ReflectiveLoader` export patched to three bytes (`66 90 CC` — NOP + INT3), crashing every standard reflective injection tool that attempts to load it; this forces use of the operator's custom loader chain, which means standard CS injection defenses do not apply. Second, the DLL beacon routes all command output via HTTP GET requests through a 17-opcode Malleable C2 bytecode virtual machine — not via POST. Detection infrastructure tuned to "POST = data exfiltration" will silently miss this traffic. Third, all three implant variants share an identical RSA-2048 public key, meaning a single C2 server manages all beacon types simultaneously and memory-forensic session key recovery at documented offsets enables retroactive decryption of all captured traffic.
+OpenStrike is notable for three reasons that create specific defender blind spots. First, the cracked Cobalt Strike DLL component has its `ReflectiveLoader` export patched to three bytes (`66 90 CC`, NOP + INT3), crashing every standard reflective injection tool that attempts to load it; this forces use of the operator's custom loader chain, which means standard CS injection defenses do not apply. Second, the DLL beacon routes all command output via HTTP GET requests through a 17-opcode Malleable C2 bytecode virtual machine, not via POST. Detection infrastructure tuned to "POST = data exfiltration" will silently miss this traffic. Third, all three implant variants share an identical RSA-2048 public key, meaning a single C2 server manages all beacon types simultaneously and memory-forensic session key recovery at documented offsets enables retroactive decryption of all captured traffic.
 
 **Key Risk Factors**
 
@@ -90,7 +90,7 @@ OpenStrike is notable for three reasons that create specific defender blind spot
     <tr>
       <td><strong>Persistence Difficulty</strong></td>
       <td class="numeric medium">3.0/10</td>
-      <td>No persistence mechanisms observed across all samples; toolkit requires operator-controlled redeployment (favors defenders — beacon stops if host reboots)</td>
+      <td>No persistence mechanisms observed across all samples; toolkit requires operator-controlled redeployment (favors defenders, beacon stops if host reboots)</td>
     </tr>
     <tr>
       <td><strong>Detection Difficulty</strong></td>
@@ -105,15 +105,15 @@ OpenStrike is notable for three reasons that create specific defender blind spot
   </tbody>
 </table>
 
-**Overall Risk Score: 7.5/10 — HIGH**
+**Overall Risk Score: 7.5/10, HIGH**
 
 **Threat Actor**
 
-Attribution is INSUFFICIENT (<50% confidence). The operator is tracked internally as UTA-2026-004 *(an internal tracking label used by The Hunters Ledger — see [Section 7](#7-threat-actor-assessment))*. Technical behavioral indicators (cracked CS watermark=0, GCC 15.1 build environment, single shared RSA key, open directory OPSEC failure) are most consistent with an independent skilled developer or small private group, not a nation-state APT or MaaS operator.
+Attribution is INSUFFICIENT (<50% confidence). The operator is tracked internally as UTA-2026-004 *(an internal tracking label used by The Hunters Ledger, see [Section 7](#7-threat-actor-assessment))*. Technical behavioral indicators (cracked CS watermark=0, GCC 15.1 build environment, single shared RSA key, open directory OPSEC failure) are most consistent with an independent skilled developer or small private group, not a nation-state APT or MaaS operator.
 
 **For Technical Teams**
 
-- The most distinctive single indicator is the GET request to `/qz99` on port 8443 (shellcode staging endpoint) — hunt this in proxy and firewall logs first
+- The most distinctive single indicator is the GET request to `/qz99` on port 8443 (shellcode staging endpoint), hunt this in proxy and firewall logs first
 - The hardcoded AES IV `abcdefghijklmnop` (hex: `6162636465666768696a6b6c6d6e6f70`) is present in process memory of any active beacon and serves as a reliable in-memory hunt indicator
 - Session keys at documented offsets (`image_base + 0x40430` AES, `image_base + 0x40440` HMAC) enable retroactive decryption of all captured C2 traffic if memory is preserved prior to remediation
 - See [Section 10](#10-detection-rules--hunting-queries) for full detection rules (YARA, Sigma, Suricata) and [Section 9](#9-indicators-of-compromise) for the IOC feed
@@ -216,9 +216,9 @@ Five of the six EXEs carry PE overlays, 43 to 62 KB appended after the legitimat
 
 #### 2.2.1 beacon_patched.x64.dll — Cracked Cobalt Strike 3.x DLL Beacon
 
-> **Analyst note:** This section covers the Cobalt Strike DLL component — a pre-existing cracked implant that the OpenStrike operator sourced and then modified. Cobalt Strike is a legitimate commercial penetration testing framework (sold by Fortra) that is widely abused by cybercriminals and nation-state actors. Two critical structural modifications were made to this specific DLL: a tripwired export that crashes analysis tools, and a Malleable C2 bytecode interpreter that routes command output through HTTP GET rather than POST.
+> **Analyst note:** This section covers the Cobalt Strike DLL component, a pre-existing cracked implant that the OpenStrike operator sourced and then modified. Cobalt Strike is a legitimate commercial penetration testing framework (sold by Fortra) that is widely abused by cybercriminals and nation-state actors. Two critical structural modifications were made to this specific DLL: a tripwired export that crashes analysis tools, and a Malleable C2 bytecode interpreter that routes command output through HTTP GET rather than POST.
 
-**DEFINITE (config extraction via config extraction tool (1768.py)) — CS 3.x cracked beacon**
+**DEFINITE (config extraction via config extraction tool (1768.py)): CS 3.x cracked beacon**
 
 Extracted configuration via the config extraction tool:
 
@@ -233,7 +233,7 @@ Extracted configuration via the config extraction tool:
 | Watermark | `0` | Cracked/license-stripped identifier |
 | Config fields total | 10 of ~40 standard | Dramatically trimmed minimal config |
 | Spawn-to process | `%windir%\sysnative\rundll32.exe` | Standard CS post-exploitation masquerade |
-| User-Agent | `Mozilla/5.0 ... MALC` | "MALC" suffix — Malleable C2 profile marker |
+| User-Agent | `Mozilla/5.0 ... MALC` | "MALC" suffix, Malleable C2 profile marker |
 
 The watermark is 0. The CS license watermark uniquely identifies each licensed installation, and zero is the most commonly observed value in cracked deployments, reliably indicating a pirated or license-stripped build. That confirms the operator did not use a commercially licensed CS installation.
 
@@ -241,21 +241,21 @@ The config is trimmed. With only 10 config fields against the standard 25 to 40-
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-extraction.png" | relative_url }}" alt="Terminal output from the 1768.py config extraction tool showing the decoded Cobalt Strike 3.x configuration including watermark value zero, C2 server address 172.105.0.126 on port 8443, staging URI /updates, submission URI /submit, GET and POST verb assignments, Mozilla user-agent string, and license-id zero confirming a cracked build.">
-  <figcaption><em>Figure 1: Cobalt Strike configuration extracted via 1768.py showing watermark=0 (cracked), the /qz99 staging URI on port 8443, and the CS version 3 identifier. Only 10 of the standard 25-40+ config fields are populated — a deliberately trimmed configuration that reduces the beacon's detectable surface area.</em></figcaption>
+  <figcaption><em>Figure 1: Cobalt Strike configuration extracted via 1768.py showing watermark=0 (cracked), the /qz99 staging URI on port 8443, and the CS version 3 identifier. Only 10 of the standard 25-40+ config fields are populated, a deliberately trimmed configuration that reduces the beacon's detectable surface area.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-decoder-xor2e.png" | relative_url }}" alt="Decompilation showing the XOR 0x2E configuration decoding loop in beacon_patched.x64.dll, with highlighted memcpy calls copying decoded config fields from the XOR-encrypted blob into working memory structures used by the beacon at runtime.">
-  <figcaption><em>Figure 2: The XOR 0x2E configuration decoding loop inside the CS DLL. Each config field is XOR-decoded from the embedded blob at DLL initialization — this is the mechanism that produces the configuration values shown in Figure 1. The 0x2E key is a reliable CS 3.x version fingerprint.</em></figcaption>
+  <figcaption><em>Figure 2: The XOR 0x2E configuration decoding loop inside the CS DLL. Each config field is XOR-decoded from the embedded blob at DLL initialization. This is the mechanism that produces the configuration values shown in Figure 1. The 0x2E key is a reliable CS 3.x version fingerprint.</em></figcaption>
 </figure>
 
 #### The Tripwired ReflectiveLoader — DEFINITE
 
-> **Analyst note:** The ReflectiveLoader is a function exported from every Cobalt Strike DLL. Its purpose is to load the DLL's code directly into memory, bypassing the operating system's normal DLL loading mechanism. Dozens of security tools and attack frameworks automatically call this export when loading CS beacons. The OpenStrike operator replaced the export's target with three bytes that cause an immediate crash — trapping any tool that tries to use it.
+> **Analyst note:** The ReflectiveLoader is a function exported from every Cobalt Strike DLL. Its purpose is to load the DLL's code directly into memory, bypassing the operating system's normal DLL loading mechanism. Dozens of security tools and attack frameworks automatically call this export when loading CS beacons. The OpenStrike operator replaced the export's target with three bytes that cause an immediate crash, trapping any tool that tries to use it.
 
 <figure style="text-align: center; margin: 2em 0;">
- <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-symbol-tree-exports.png" | relative_url }}" alt="symbol tree panel showing the beacon_patched.x64.dll exports folder containing only two entries: the standard entry point and the ReflectiveLoader export — confirming that the DLL exposes the minimum possible attack surface with only the ReflectiveLoader available for external callers to invoke.">
- <figcaption><em>Figure 3: The CS DLL's export table — only two exports exist: the standard PE entry point and ReflectiveLoader. Every injection tool that attempts to load this DLL will call ReflectiveLoader, walking directly into the tripwire shown in Figure 4.</em></figcaption>
+ <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-symbol-tree-exports.png" | relative_url }}" alt="symbol tree panel showing the beacon_patched.x64.dll exports folder containing only two entries: the standard entry point and the ReflectiveLoader export, confirming that the DLL exposes the minimum possible attack surface with only the ReflectiveLoader available for external callers to invoke.">
+ <figcaption><em>Figure 3: The CS DLL's export table, only two exports exist: the standard PE entry point and ReflectiveLoader. Every injection tool that attempts to load this DLL will call ReflectiveLoader, walking directly into the tripwire shown in Figure 4.</em></figcaption>
 </figure>
 
 The operator modified the `ReflectiveLoader` DLL export via a single 4-byte edit to the PE export directory, redirecting the entry point to three existing bytes already in the PE:
@@ -265,12 +265,12 @@ The operator modified the `ReflectiveLoader` DLL export via a single 4-byte edit
 CC       ; int3          (software breakpoint — triggers EXCEPTION_BREAKPOINT)
 ```
 
-Any tool that calls `ReflectiveLoader` — including sRDI, Cobalt Strike's own reflective injection, Donut, and generic post-exploitation frameworks — triggers `EXCEPTION_BREAKPOINT` and crashes the host process.
+Any tool that calls `ReflectiveLoader` (including sRDI, Cobalt Strike's own reflective injection, Donut, and generic post-exploitation frameworks) triggers `EXCEPTION_BREAKPOINT` and crashes the host process.
 
 **Three compounding consequences:**
 
 1. The DLL cannot be loaded via any standard injection tool that honors the ReflectiveLoader convention
-2. All five custom loader EXEs are mandatory to load the DLL correctly — the tripwire enforces use of the operator's specific toolchain
+2. All five custom loader EXEs are mandatory to load the DLL correctly; the tripwire enforces use of the operator's specific toolchain
 3. `DllMain` on `PROCESS_ATTACH` only decodes the XOR config and returns; it does not spawn the beacon thread. This makes the loader EXEs mandatory for a second independent reason
 
 On disk, the byte sequence `66 90 CC` at the `ReflectiveLoader` export target is reliably detectable by YARA, both on disk and in memory. The detection file documents this.
@@ -278,21 +278,21 @@ On disk, the byte sequence `66 90 CC` at the `ReflectiveLoader` export target is
 On novelty, redirecting the export directory RVA to existing NOP and INT3 padding bytes, rather than writing new code, is not documented in public threat research as of 2026-04-06. It is a minimal-edit technique that leaves no new bytes in the PE.
 
 <figure style="text-align: center; margin: 2em 0;">
- <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-reflective-loader-tripwire.png" | relative_url }}" alt="Disassembly view showing the ReflectiveLoader export at address 0x1709c with the tripwire byte sequence: 66 90 (xchg ax,ax two-byte NOP) followed by CC (INT3 software breakpoint), alongside the decompiled view showing swi(3) — the representation of the INT3 instruction that crashes any tool attempting to call the export.">
- <figcaption><em>Figure 4: The tripwired ReflectiveLoader — disassembly showing the 3-byte sequence (66 90 CC) at the export target address. The decompiled swi(3) call confirms the INT3 breakpoint that crashes any standard reflective injection tool attempting to load this DLL.</em></figcaption>
+ <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-reflective-loader-tripwire.png" | relative_url }}" alt="Disassembly view showing the ReflectiveLoader export at address 0x1709c with the tripwire byte sequence: 66 90 (xchg ax,ax two-byte NOP) followed by CC (INT3 software breakpoint), alongside the decompiled view showing swi(3), the representation of the INT3 instruction that crashes any tool attempting to call the export.">
+ <figcaption><em>Figure 4: The tripwired ReflectiveLoader, disassembly showing the 3-byte sequence (66 90 CC) at the export target address. The decompiled swi(3) call confirms the INT3 breakpoint that crashes any standard reflective injection tool attempting to load this DLL.</em></figcaption>
 </figure>
 
 #### Malleable C2 Transform VM — DEFINITE
 
-> **Analyst note:** Cobalt Strike allows operators to customize their network traffic's appearance using a feature called Malleable C2. Operators write a "profile" describing how traffic should be formatted — which headers to include, how data should be encoded, whether to use GET or POST. This profile is compiled into a small bytecode program that runs inside the beacon. The beacon executes this program before sending any network request. Stage 1 analysis fully reversed this bytecode interpreter.
+> **Analyst note:** Cobalt Strike allows operators to customize their network traffic's appearance using a feature called Malleable C2. Operators write a "profile" describing how traffic should be formatted, which headers to include, how data should be encoded, whether to use GET or POST. This profile is compiled into a small bytecode program that runs inside the beacon. The beacon executes this program before sending any network request. Stage 1 analysis fully reversed this bytecode interpreter.
 
 Function `FUN_180015838` (2,188 bytes) in `beacon_patched.x64.dll` is a complete bytecode VM implementing the CS Malleable C2 transform system. It reads operator-configurable bytecode from the config blob and transforms HTTP request components (headers, URI, query parameters) per the profile.
 
-**17 opcodes identified** — publicly available reverse engineering has documented 7-8 opcodes from this VM (usualsuspect.re, Tier 3 / C2; cross-referenced with official CS documentation). The 17-opcode count represents extended documentation coverage for this component, derived from this analysis and not previously documented publicly.
+**17 opcodes identified**: publicly available reverse engineering has documented 7-8 opcodes from this VM (usualsuspect.re, Tier 3 / C2; cross-referenced with official CS documentation). The 17-opcode count represents extended documentation coverage for this component, derived from this analysis and not previously documented publicly.
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-transform-vm-dispatch.png" | relative_url }}" alt="Decompilation of the Malleable C2 transform VM dispatch function FUN_180015838 showing local variables for opcode processing, loop control structures, and the conditional branching that routes execution through 17 distinct opcode handlers for transforming HTTP request components.">
-  <figcaption><em>Figure 5: The 17-opcode Malleable C2 transform VM dispatch loop (FUN_180015838, 2,188 bytes). This bytecode interpreter reads operator-configurable transforms from the config blob and reshapes HTTP request components — enabling the GET-based exfiltration pattern that inverts standard CS detection assumptions.</em></figcaption>
+  <figcaption><em>Figure 5: The 17-opcode Malleable C2 transform VM dispatch loop (FUN_180015838, 2,188 bytes). This bytecode interpreter reads operator-configurable transforms from the config blob and reshapes HTTP request components, enabling the GET-based exfiltration pattern that inverts standard CS detection assumptions.</em></figcaption>
 </figure>
 
 The critical finding is GET-based exfiltration. The transform VM routes all command output through HTTP **GET** requests rather than POST. That is a documented CS capability, since Malleable C2 controls GET versus POST behavior, but it is not the default pattern analysts and detection tools expect.
@@ -313,11 +313,11 @@ Output accumulator ptr: image_base + 0x3F480  (pointer to 2 MB plaintext buffer)
 
 #### 2.2.2 beacon.exe — Custom C OpenStrike Beacon
 
-> **Analyst note:** Unlike the Cobalt Strike DLL, beacon.exe is entirely custom-written in C by the OpenStrike operator. It implements the same cryptographic protocol as the DLL but uses a simpler 11-command set. It is best understood as a lightweight reconnaissance and file transfer tool — it can run shell commands, list files and processes, and transfer files, but lacks the advanced post-exploitation capabilities of the full CS toolkit.
+> **Analyst note:** Unlike the Cobalt Strike DLL, beacon.exe is entirely custom-written in C by the OpenStrike operator. It implements the same cryptographic protocol as the DLL but uses a simpler 11-command set. It is best understood as a lightweight reconnaissance and file transfer tool. It can run shell commands, list files and processes, and transfer files, but lacks the advanced post-exploitation capabilities of the full CS toolkit.
 
-**DEFINITE (static analysis) — custom C implementation of the OpenStrike wire protocol**
+**DEFINITE (static analysis): custom C implementation of the OpenStrike wire protocol**
 
-Compiled with MinGW-w64 GCC 15, debug symbols partially intact (function names visible in the binary). Not a Cobalt Strike beacon — config extraction returns no valid CS structure.
+Compiled with MinGW-w64 GCC 15, debug symbols partially intact (function names visible in the binary). Not a Cobalt Strike beacon, config extraction returns no valid CS structure.
 
 **Command set (11 commands):**
 
@@ -335,7 +335,7 @@ Compiled with MinGW-w64 GCC 15, debug symbols partially intact (function names v
 | `0x27` | CMD_PWD | Return current working directory |
 | `0x35` | CMD_LS | Directory listing via FindFirstFileA / FindNextFileA |
 
-**Wire protocol (DEFINITE — fully reversed):**
+**Wire protocol (DEFINITE, fully reversed):**
 
 ```
 Frame structure:
@@ -357,7 +357,7 @@ Transmission:
 
 - `aes_cbc_encrypt`: Windows BCrypt API, AES-128-CBC, hardcoded IV `abcdefghijklmnop`, PKCS#7 padding
 - `hmac_sha256_trunc16`: Windows BCrypt HMAC-SHA256, output truncated to 16 bytes
-- `aes_encrypt_mac`: Encrypt-then-MAC composite — the more secure construction order
+- `aes_encrypt_mac`: Encrypt-then-MAC composite, the more secure construction order
 - `aes_decrypt_verify`: Verify-then-decrypt with non-constant-time 64-bit tag comparison (timing side-channel present; LOW practical risk over network)
 
 **Operational gaps indicating development/testing artifact:**
@@ -373,9 +373,9 @@ These gaps suggest `beacon.exe` is a development-phase artifact. The DLL beacon 
 
 #### 2.2.3 beacon_universal.py — Cross-Platform Python Implant
 
-> **Analyst note:** This Python script implements a full beacon that runs on Windows, Linux, and macOS without recompilation. It implements 23 commands — a superset of beacon.exe's capabilities — including a SOCKS4a proxy that enables network pivoting (routing the attacker's traffic through the compromised host to reach other internal systems) and a BOF executor that compiles C code on the target at runtime using the system's installed GCC compiler.
+> **Analyst note:** This Python script implements a full beacon that runs on Windows, Linux, and macOS without recompilation. It implements 23 commands, a superset of beacon.exe's capabilities, including a SOCKS4a proxy that enables network pivoting (routing the attacker's traffic through the compromised host to reach other internal systems) and a BOF executor that compiles C code on the target at runtime using the system's installed GCC compiler.
 
-**DEFINITE (source code analysis) — self-described "OpenStrike Universal Beacon"**
+**DEFINITE (source code analysis): self-described "OpenStrike Universal Beacon"**
 
 Source code self-identification: `"OpenStrike Universal Beacon — Single-File Cross-Platform Implant"`. 687 lines of Python. CS-protocol-compatible design by operator intent.
 
@@ -389,7 +389,7 @@ Task poll:     GET /updates?id=<beacon_id_hex8>
 Result post:   POST /submit?id=<beacon_id_hex8>
 ```
 
-SSL certificate verification is disabled (`verify=False`) — the Python beacon connects regardless of certificate validity.
+SSL certificate verification is disabled (`verify=False`). The Python beacon connects regardless of certificate validity.
 
 The crypto backend is dual. It supports both the `cryptography` and `pycryptodome` Python libraries with runtime detection and automatic fallback, which indicates an operator designing for operational reliability across varied target Python installations.
 
@@ -401,17 +401,17 @@ The crypto backend is dual. It supports both the `cryptography` and `pycryptodom
 
 **Forensic artifacts created:**
 
-- `bof_runner.c` — C source file written to disk in temporary directory
-- `bof_runner.dll` / `bof_runner.so` — compiled output files
-- `python.exe` → `gcc.exe` parent-child process chain (high-confidence detection indicator — unusual in standard environments)
+- `bof_runner.c`: C source file written to disk in temporary directory
+- `bof_runner.dll` / `bof_runner.so`: compiled output files
+- `python.exe` → `gcc.exe` parent-child process chain (high-confidence detection indicator, unusual in standard environments)
 
 ---
 
 ### 2.3 Trinity Protocol — Single-Operator Cryptographic Proof
 
-> **Analyst note:** RSA-2048 is a type of asymmetric encryption using paired keys: the public key (embedded in the beacon) encrypts data, and only the matching private key (on the C2 server) can decrypt it. Finding the identical public key embedded in three different beacon types — written in different programming languages with different compilers — is definitive evidence that a single entity operates all three.
+> **Analyst note:** RSA-2048 is a type of asymmetric encryption using paired keys: the public key (embedded in the beacon) encrypts data, and only the matching private key (on the C2 server) can decrypt it. Finding the identical public key embedded in three different beacon types (written in different programming languages with different compilers) is definitive evidence that a single entity operates all three.
 
-**DEFINITE (static analysis — cross-sample comparison)**
+**DEFINITE (static analysis, cross-sample comparison)**
 
 All three beacon variants embed the identical RSA-2048 public key modulus, beginning:
 
@@ -421,20 +421,20 @@ All three beacon variants embed the identical RSA-2048 public key modulus, begin
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-rsa-pubkey-modulus.png" | relative_url }}" alt="Hex dump view of the RSA-2048 public key bytes embedded in beacon.exe, with the modulus prefix 9f12c9cb6582f379088600e6cdb7ac80 highlighted in the raw byte array, confirming the key is stored as a contiguous 256-byte big-endian modulus in the .rdata section.">
-  <figcaption><em>Figure 6: RSA-2048 public key modulus bytes embedded in the C beacon (beacon.exe). The highlighted prefix 9f12c9cb... serves as the definitive cross-implant fingerprint — this identical modulus appears in all three beacon variants, proving single-operator control.</em></figcaption>
+  <figcaption><em>Figure 6: RSA-2048 public key modulus bytes embedded in the C beacon (beacon.exe). The highlighted prefix 9f12c9cb... serves as the definitive cross-implant fingerprint. This identical modulus appears in all three beacon variants, proving single-operator control.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/python-beacon-rsa-pubkey-source.png" | relative_url }}" alt="Python source code showing the RSA public key in PEM format embedded in the beacon_universal.py cross-platform implant, with the same RSA-2048 key present as a base64-encoded PEM block assigned to a variable used for session establishment.">
-  <figcaption><em>Figure 7: The identical RSA-2048 public key in PEM format within the Python beacon source (beacon_universal.py). Cross-referencing with Figure 6 confirms cryptographic unity across the C and Python implant families — the Trinity Protocol's single-operator proof.</em></figcaption>
+  <figcaption><em>Figure 7: The identical RSA-2048 public key in PEM format within the Python beacon source (beacon_universal.py). Cross-referencing with Figure 6 confirms cryptographic unity across the C and Python implant families, the Trinity Protocol's single-operator proof.</em></figcaption>
 </figure>
 
 **Operational implications:**
 
-1. A single operator controls all three implant types from one C2 server — the matching private key resides at `172.105.0.126`
+1. A single operator controls all three implant types from one C2 server; the matching private key resides at `172.105.0.126`
 2. The RSA modulus serves as a cross-implant attribution indicator: any beacon carrying this modulus is part of the OpenStrike toolkit
 3. Private key recovery (via server seizure or memory dump) enables retroactive decryption of all historic registration traffic
-4. Single-key architecture rules out MaaS operation — separate customers would require separate key pairs
+4. Single-key architecture rules out MaaS operation; separate customers would require separate key pairs
 
 The AES IV is hardcoded. The shared IV `abcdefghijklmnop` across all three implants makes AES-CBC encryption deterministic, so identical plaintext plus identical session key yields an identical first ciphertext block. That enables network IDS signature matching on first-block patterns once a session key is recovered, and it means every historically captured session can be retroactively decrypted.
 
@@ -442,21 +442,21 @@ The AES IV is hardcoded. The shared IV `abcdefghijklmnop` across all three impla
 
 ### 2.4 Loader Chain Analysis
 
-> **Analyst note:** The five loader executables form a development chain from the simplest possible shellcode runner to a full network-staged deployment system. Because the DLL beacon's ReflectiveLoader export is tripwired (Section 2.2.1), these loaders are not optional — they are the only mechanism that can correctly activate the DLL beacon.
+> **Analyst note:** The five loader executables form a development chain from the simplest possible shellcode runner to a full network-staged deployment system. Because the DLL beacon's ReflectiveLoader export is tripwired (Section 2.2.1), these loaders are not optional. They are the only mechanism that can correctly activate the DLL beacon.
 
-**DEFINITE (static analysis) — five loaders, single build environment**
+**DEFINITE (static analysis): five loaders, single build environment**
 
 | Stage | Filename | Technique | Key Feature |
 |---|---|---|---|
-| 1 — Simplest | `run.exe` | Direct call | File → RWX alloc → call rax; zero instrumentation |
-| 2 — Mid-tier | `sc_loader.exe` | SEH exception handling | CreateThread + SEH crash dump + 30 s timeout |
-| 3 — Advanced | `veh_loader.exe` | VEH (Vectored Exception Handling) | VEH crash handler + module resolution + 30 s timeout |
-| 4 — Specialized | `dbg_loader.exe` | INT3 entry-point discovery | Scans 50 bytes for `FF D0` → patches to `CC` → reads RAX from VEH crash record |
-| 5 — Production | `stager.exe` | Network delivery | `GET /qz99` → growable RWX buffer → CreateThread(INFINITE) |
+| 1: Simplest | `run.exe` | Direct call | File → RWX alloc → call rax; zero instrumentation |
+| 2: Mid-tier | `sc_loader.exe` | SEH exception handling | CreateThread + SEH crash dump + 30 s timeout |
+| 3: Advanced | `veh_loader.exe` | VEH (Vectored Exception Handling) | VEH crash handler + module resolution + 30 s timeout |
+| 4: Specialized | `dbg_loader.exe` | INT3 entry-point discovery | Scans 50 bytes for `FF D0` → patches to `CC` → reads RAX from VEH crash record |
+| 5: Production | `stager.exe` | Network delivery | `GET /qz99` → growable RWX buffer → CreateThread(INFINITE) |
 
 #### VEH and SEH-Based Shellcode Execution
 
-> **Analyst note:** Windows provides two error-handling systems: SEH (Structured Exception Handling, per-thread) and VEH (Vectored Exception Handling, process-wide). Malware abuses both by deliberately triggering errors so that malicious code runs inside the error-handler — a context that some security tools do not monitor as closely as normal code execution. VEH fires before SEH and covers the entire process, making it the more powerful technique.
+> **Analyst note:** Windows provides two error-handling systems: SEH (Structured Exception Handling, per-thread) and VEH (Vectored Exception Handling, process-wide). Malware abuses both by deliberately triggering errors so that malicious code runs inside the error-handler, a context that some security tools do not monitor as closely as normal code execution. VEH fires before SEH and covers the entire process, making it the more powerful technique.
 
 `veh_loader.exe` registers a Vectored Exception Handler before executing shellcode. If shellcode crashes, the VEH handler catches the exception and logs full crash context including register values and loaded module list. This doubles as a development diagnostic for debugging the beacon loading sequence.
 
@@ -466,12 +466,12 @@ VEH registration followed by RWX shellcode execution is a detectable behavioral 
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/veh-loader-exception-handler.png" | relative_url }}" alt="Decompilation of veh_loader.exe showing the AddVectoredExceptionHandler API call registering a custom exception handler, followed by conditional logic that loads shellcode from the hardcoded path C:\\cs_final.dat when no command-line argument is provided, or from a user-specified path otherwise.">
-  <figcaption><em>Figure 8: veh_loader.exe — the VEH registration call and hardcoded payload path "C:\\cs_final.dat". The default path reveals the operator's local development convention: shellcode payloads are staged at the filesystem root with a descriptive name indicating Cobalt Strike final-stage shellcode.</em></figcaption>
+  <figcaption><em>Figure 8: veh_loader.exe, the VEH registration call and hardcoded payload path "C:\\cs_final.dat". The default path reveals the operator's local development convention: shellcode payloads are staged at the filesystem root with a descriptive name indicating Cobalt Strike final-stage shellcode.</em></figcaption>
 </figure>
 
 #### Entry-Point Discovery via CALL RAX Patching — `dbg_loader.exe`
 
-> **Analyst note:** When a DLL beacon is converted to shellcode for delivery, it loses the named exports that normally indicate where to start execution. dbg_loader.exe solves this problem automatically by scanning shellcode for the CPU instruction "call rax" (which jumps to the address stored in the RAX register), replacing it with a breakpoint instruction, running the shellcode, and then reading the RAX value from the resulting crash — revealing the actual beacon entry point.
+> **Analyst note:** When a DLL beacon is converted to shellcode for delivery, it loses the named exports that normally indicate where to start execution. dbg_loader.exe solves this problem automatically by scanning shellcode for the CPU instruction "call rax" (which jumps to the address stored in the RAX register), replacing it with a breakpoint instruction, running the shellcode, and then reading the RAX value from the resulting crash, revealing the actual beacon entry point.
 
 Automated entry-point discovery algorithm:
 
@@ -491,12 +491,12 @@ This automation combines VEH crash handling, INT3 breakpoint injection, and regi
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/dbg-loader-int3-patch.png" | relative_url }}" alt="Decompilation of dbg_loader.exe showing the INT3 patching logic: a loop scanning the first 50 bytes of loaded shellcode for the FF D0 opcode (CALL RAX), patching the found byte to CC (INT3 breakpoint), then executing the shellcode and reading the RAX register value from the VEH exception context to discover the beacon entry point.">
-  <figcaption><em>Figure 9: dbg_loader.exe INT3 patching logic — the code scans loaded shellcode for the CALL RAX (FF D0) opcode, patches it to INT3 (CC), and reads the RAX value from the resulting VEH crash record. This automated entry-point discovery solves the problem of locating the beacon's start address in position-independent shellcode without requiring an attached debugger.</em></figcaption>
+  <figcaption><em>Figure 9: dbg_loader.exe INT3 patching logic. The code scans loaded shellcode for the CALL RAX (FF D0) opcode, patches it to INT3 (CC), and reads the RAX value from the resulting VEH crash record. This automated entry-point discovery solves the problem of locating the beacon's start address in position-independent shellcode without requiring an attached debugger.</em></figcaption>
 </figure>
 
 #### Network Stager — `stager.exe` (Production Delivery)
 
-> **Analyst note:** stager.exe is the "production" loader — the one that would be deployed to a real target. Instead of reading a shellcode file from disk, it downloads the beacon payload over an encrypted HTTPS connection from the C2 server. The /qz99 URI it requests is the single most distinctive network indicator in the entire toolkit.
+> **Analyst note:** stager.exe is the "production" loader, the one that would be deployed to a real target. Instead of reading a shellcode file from disk, it downloads the beacon payload over an encrypted HTTPS connection from the C2 server. The /qz99 URI it requests is the single most distinctive network indicator in the entire toolkit.
 
 ```
 1. HTTPS connect to 172.105.0.126:8443 (SSL verification disabled)
@@ -508,22 +508,22 @@ This automation combines VEH crash handling, INT3 breakpoint injection, and regi
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/stager-winhttp-c2-chain.png" | relative_url }}" alt="Decompilation of stager.exe showing the complete WinHTTP C2 connection chain: WinHttpOpen with Mozilla/5.0 user-agent string, WinHttpConnect to the hardcoded IP address 172.105.0.126 on port 0x20FB (8443 decimal), WinHttpOpenRequest to the /qz99 staging URI, followed by WinHttpSendRequest, WinHttpReceiveResponse, and VirtualAlloc for payload memory allocation.">
- <figcaption><em>Figure 10: The stager.exe production delivery chain — decompilation showing the complete WinHTTP sequence with the hardcoded C2 address 172.105.0.126:8443 and the /qz99 staging URI. This is the network stager that would be deployed to real targets, downloading the beacon payload over HTTPS with SSL verification disabled.</em></figcaption>
+ <figcaption><em>Figure 10: The stager.exe production delivery chain, decompilation showing the complete WinHTTP sequence with the hardcoded C2 address 172.105.0.126:8443 and the /qz99 staging URI. This is the network stager that would be deployed to real targets, downloading the beacon payload over HTTPS with SSL verification disabled.</em></figcaption>
 </figure>
 
-The `/qz99` URI is the highest-priority network IOC in the toolkit — short, non-standard, and with negligible false-positive risk in enterprise proxy logs.
+The `/qz99` URI is the highest-priority network IOC in the toolkit, short, non-standard, and with negligible false-positive risk in enterprise proxy logs.
 
 ---
 
 ### 2.5 Python Utility Script Suite
 
-> **Analyst note:** Beyond the beacons and loaders, the open directory contained a complete operator toolbox. The most security-significant of these is check_ntdll.py — a pre-deployment reconnaissance script that checks whether the target system's security software has modified Windows system libraries to intercept API calls. An operator who uses this script before deploying the main beacon gains intelligence about what security monitoring is in place.
+> **Analyst note:** Beyond the beacons and loaders, the open directory contained a complete operator toolbox. The most security-significant of these is check_ntdll.py, a pre-deployment reconnaissance script that checks whether the target system's security software has modified Windows system libraries to intercept API calls. An operator who uses this script before deploying the main beacon gains intelligence about what security monitoring is in place.
 
 #### check_ntdll.py — EDR Hook Detection
 
 **HIGH confidence (code analysis)**
 
-`check_ntdll.py` reads `C:\Windows\System32\ntdll.dll` directly from disk using a raw file handle (not via LoadLibrary) at RVA `0x316FE`, then compares the bytes to the memory-mapped version of ntdll loaded in the current process. Modified bytes indicate EDR inline hooks — typically 5-byte JMP instructions patched by security software to redirect Windows API calls through the EDR's monitoring layer.
+`check_ntdll.py` reads `C:\Windows\System32\ntdll.dll` directly from disk using a raw file handle (not via LoadLibrary) at RVA `0x316FE`, then compares the bytes to the memory-mapped version of ntdll loaded in the current process. Modified bytes indicate EDR inline hooks, typically 5-byte JMP instructions patched by security software to redirect Windows API calls through the EDR's monitoring layer.
 
 In the operator's workflow this is a pre-deployment reconnaissance tool. They check for EDR hooks before deploying the main beacon, then adjust approach based on the results, so detecting this script's access pattern gives early warning of operator pre-positioning.
 
@@ -538,7 +538,7 @@ The indicator to watch is `python.exe` opening `C:\Windows\System32\ntdll.dll` w
 
 ### 3.1 Session Establishment (RSA-2048 Handshake)
 
-**DEFINITE (static analysis — all three beacon variants)**
+**DEFINITE (static analysis, all three beacon variants)**
 
 ```
 Beacon → Server:
@@ -554,11 +554,11 @@ Metadata blob format:
   [codepage: variable]
 ```
 
-The `0x0000BEEF` magic is a beacon-protocol frame identifier detectable in memory. RSA-2048 PKCS#1 v1.5 is used for key establishment — a classical but not modern approach. The practical risk of Bleichenbacher-style attacks against this implementation is LOW (custom C2 servers typically discard invalid messages without distinguishable error responses).
+The `0x0000BEEF` magic is a beacon-protocol frame identifier detectable in memory. RSA-2048 PKCS#1 v1.5 is used for key establishment, a classical but not modern approach. The practical risk of Bleichenbacher-style attacks against this implementation is LOW (custom C2 servers typically discard invalid messages without distinguishable error responses).
 
 ### 3.2 Symmetric Encryption Envelope
 
-**DEFINITE (static analysis — all three beacon variants)**
+**DEFINITE (static analysis, all three beacon variants)**
 
 ```
 Plaintext → AES-128-CBC(session_key, IV="abcdefghijklmnop") → ciphertext
@@ -568,19 +568,19 @@ Wire format: [ciphertext || MAC]
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-aes-hardcoded-iv.png" | relative_url }}" alt="Decompilation of the AES-CBC encryption function in beacon.exe showing memcpy calls that copy the hardcoded initialization vector abcdefghijklmnop into the encryption context, with the IV string highlighted in green boxes alongside the BCRYPT_BLOCK_LENGTH and BCRYPT_KEY_HANDLE constants.">
-  <figcaption><em>Figure 11: Hardcoded AES-128-CBC initialization vector in the C beacon — the string "abcdefghijklmnop" (highlighted) is copied into the encryption context via memcpy. This static IV makes AES-CBC deterministic: identical plaintext with the same session key always produces identical ciphertext, enabling network-level signature matching once a session key is recovered.</em></figcaption>
+  <figcaption><em>Figure 11: Hardcoded AES-128-CBC initialization vector in the C beacon, the string "abcdefghijklmnop" (highlighted) is copied into the encryption context via memcpy. This static IV makes AES-CBC deterministic: identical plaintext with the same session key always produces identical ciphertext, enabling network-level signature matching once a session key is recovered.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/c-beacon-hmac-sha256-truncated.png" | relative_url }}" alt="Decompilation showing the HMAC-SHA256 implementation using BCryptOpenAlgorithmProvider with the SHA256 algorithm identifier, BCryptCreateHash, BCryptHashData, and BCryptFinishHash writing a 0x20 (32 byte) digest to local_38, followed by truncation where only 0x10 (16 bytes) are used as the MAC tag.">
-  <figcaption><em>Figure 12: HMAC-SHA256 MAC computation in the C beacon using the Windows BCrypt API. The full 32-byte SHA256 digest (0x20) is computed via BCryptFinishHash, then truncated to 16 bytes (0x10) for the wire format — a space-saving design that still provides adequate authentication strength for C2 traffic.</em></figcaption>
+  <figcaption><em>Figure 12: HMAC-SHA256 MAC computation in the C beacon using the Windows BCrypt API. The full 32-byte SHA256 digest (0x20) is computed via BCryptFinishHash, then truncated to 16 bytes (0x10) for the wire format, a space-saving design that still provides adequate authentication strength for C2 traffic.</em></figcaption>
 </figure>
 
-The encrypt-then-MAC construction (ciphertext authenticated before decryption) is the more secure ordering — it prevents chosen-ciphertext attacks by requiring MAC verification before any decryption occurs. The operator implemented this correctly while simultaneously undermining it with the hardcoded IV. This suggests intentional architectural choices around simplicity rather than ignorance of cryptographic principles.
+The encrypt-then-MAC construction (ciphertext authenticated before decryption) is the more secure ordering, it prevents chosen-ciphertext attacks by requiring MAC verification before any decryption occurs. The operator implemented this correctly while simultaneously undermining it with the hardcoded IV. This suggests intentional architectural choices around simplicity rather than ignorance of cryptographic principles.
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-key-derivation-sha256.png" | relative_url }}" alt="Decompilation of the CS DLL's key derivation function FUN_180018c60 showing SHA256 hash computation via PTR_s_sha256 reference, session key derivation from the RSA-decrypted handshake blob, and a swi(3) call that triggers the INT3 tripwire if the key installation path is reached through the ReflectiveLoader rather than the operator's custom loaders.">
-  <figcaption><em>Figure 13: SHA256 session key derivation in the CS DLL — the function computes session keys from the RSA handshake material using SHA256. The swi(3) call (INT3 tripwire) at the end of the derivation path provides a second layer of anti-analysis protection: even if an analyst bypasses the ReflectiveLoader trap, the key installation path contains its own crash trigger.</em></figcaption>
+  <figcaption><em>Figure 13: SHA256 session key derivation in the CS DLL, the function computes session keys from the RSA handshake material using SHA256. The swi(3) call (INT3 tripwire) at the end of the derivation path provides a second layer of anti-analysis protection: even if an analyst bypasses the ReflectiveLoader trap, the key installation path contains its own crash trigger.</em></figcaption>
 </figure>
 
 ### 3.3 HTTP Transport Layer
@@ -592,19 +592,19 @@ The encrypt-then-MAC construction (ciphertext authenticated before decryption) i
 | `/register` | GET (Cookie) | All three | Session establishment |
 | `/updates?id=XXXXXXXX` | GET | All three | Task polling (8 hex-char beacon ID) |
 | `/submit?id=XXXXXXXX` | POST | beacon.exe, Python | Result submission |
-| `/submit.php` | GET (via transform VM) | DLL beacon | Result submission — detection blind spot |
+| `/submit.php` | GET (via transform VM) | DLL beacon | Result submission, detection blind spot |
 | `/qz99` | GET | stager.exe | Shellcode download |
 
 The GET-based exfiltration from the DLL beacon is the critical detection gap: command output travels in GET request bodies transformed by the Malleable C2 VM. The 2 MB accumulator buffer produces a bimodal GET size pattern detectable via analytics but not by simple method-based rules.
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-output-accumulator.png" | relative_url }}" alt="Decompilation showing the CS DLL's output accumulator function with malloc and memcpy calls that build up command output in a growing memory buffer before flushing it through the HTTP transport layer, creating the bimodal GET size pattern described in the analysis.">
-  <figcaption><em>Figure 14: The CS DLL's output accumulator — command results are collected in a dynamically allocated memory buffer via malloc/memcpy before being flushed through the Malleable C2 transform VM. This buffering mechanism produces the bimodal GET size pattern (small heartbeat polls vs. large output flushes) that serves as a network-level detection opportunity.</em></figcaption>
+  <figcaption><em>Figure 14: The CS DLL's output accumulator, command results are collected in a dynamically allocated memory buffer via malloc/memcpy before being flushed through the Malleable C2 transform VM. This buffering mechanism produces the bimodal GET size pattern (small heartbeat polls vs. large output flushes) that serves as a network-level detection opportunity.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-encrypt-and-submit.png" | relative_url }}" alt="Decompilation of function FUN_18000ceb0 showing the encrypt-then-submit flow: the function checks the DAT_18003d004 beacon-ready flag, then calls the encryption function FUN_18000dac0 to encrypt the accumulated output, and conditionally submits it via FUN_18000e440 to the C2 server.">
-  <figcaption><em>Figure 15: The encrypt-and-submit function tying the cryptographic envelope to C2 transmission. The DAT_18003d004 beacon-ready flag (set during initialization, shown in §2.2.1) gates whether encrypted output is submitted — ensuring no data is transmitted before the beacon has fully initialized and established its session key.</em></figcaption>
+  <figcaption><em>Figure 15: The encrypt-and-submit function tying the cryptographic envelope to C2 transmission. The DAT_18003d004 beacon-ready flag (set during initialization, shown in §2.2.1) gates whether encrypted output is submitted, ensuring no data is transmitted before the beacon has fully initialized and established its session key.</em></figcaption>
 </figure>
 
 ---
@@ -635,7 +635,7 @@ The GET-based exfiltration from the DLL beacon is the critical detection gap: co
       <td>T1588.002</td>
       <td>Obtain Capabilities: Tool</td>
       <td class="confirmed">HIGH</td>
-      <td>Cracked CS 3.x DLL, watermark=0, MSVC 2012 toolchain — sourced from pre-existing cracked distribution</td>
+      <td>Cracked CS 3.x DLL, watermark=0, MSVC 2012 toolchain, sourced from pre-existing cracked distribution</td>
     </tr>
     <tr>
       <td>Execution</td>
@@ -828,7 +828,7 @@ The C beacon (`beacon.exe`) prints `"[*] OpenStrike Beacon starting..."` at init
 
 I verified this before publication. No public threat intelligence exists for "OpenStrike" as of 2026-04-07. I ran targeted searches across open-source threat intelligence feeds, vendor threat reports, malware repositories and security research publications. The exact string `"OpenStrike Universal Beacon"` returned zero results, searches for the custom sample SHA256 hashes matched nothing in any indexed database, and all seven binary samples were absent from VirusTotal at time of discovery. The tripwired ReflectiveLoader technique, with the export RVA redirected to `66 90 CC` NOP and INT3 padding bytes, is not documented in any prior public research on Cobalt Strike modifications, and the C2 protocol internals documented here are the first public documentation of this toolkit.
 
-**Classification confidence: HIGH (85%)** — Self-branded in source code and debug strings; novel architecture; zero prior TI footprint; GCC 15 build artifacts confirm development no earlier than late 2025.
+**Classification confidence: HIGH (85%)**. Self-branded in source code and debug strings; novel architecture; zero prior TI footprint; GCC 15 build artifacts confirm development no earlier than late 2025.
 
 For defenders, that means standard threat intelligence platforms and AV signatures will not identify OpenStrike. Behavioral and protocol-based detection, the `/qz99` URI, the AES IV `abcdefghijklmnop` in memory, and GET requests to port 8443 from non-browser processes, is the only reliable path until signatures propagate into vendor products.
 
@@ -840,9 +840,9 @@ The DLL beacon component is a cracked Cobalt Strike 3.x artifact. Cobalt Strike 
 
 **Key threat landscape facts relevant to this case:**
 
-- **Google Cloud Threat Intelligence (2022, Tier 2 / B1):** Identified 34 distinct cracked CS versions spanning CS 1.44 through CS 4.7 — confirming an active and persistent cracked distribution ecosystem
+- **Google Cloud Threat Intelligence (2022, Tier 2 / B1):** Identified 34 distinct cracked CS versions spanning CS 1.44 through CS 4.7, confirming an active and persistent cracked distribution ecosystem
 - **Operation Morpheus (June 2024):** Multi-government law enforcement operation across 27 countries disrupted 593 malicious CS servers. Continued post-operation activity confirms the cracked ecosystem was not eliminated
-- **Linode (AS63949) CS context:** Recorded Future's 2022 Adversary Infrastructure Report (Tier 2 / B2) documented 291 C2 servers on Linode infrastructure with Cobalt Strike as the top malware family — directly contextualizing the operator's choice of this provider
+- **Linode (AS63949) CS context:** Recorded Future's 2022 Adversary Infrastructure Report (Tier 2 / B2) documented 291 C2 servers on Linode infrastructure with Cobalt Strike as the top malware family, directly contextualizing the operator's choice of this provider
 
 The CS 3.x versus 4.x split is significant. CS 3.x reached end of life in 2019, and the MSVC 2012 compiler artifacts plus XOR 0x2E config encoding identify this DLL as coming from the older cracked distribution pool. Using a 3.x artifact rather than the more common 4.x cracked builds may reflect a preference for a known-stable artifact, operator familiarity with older builds, or simply no suitable 4.x crack being available, and I hold that at LOW.
 
@@ -860,24 +860,24 @@ The CS 3.x versus 4.x split is significant. CS 3.x reached end of life in 2019, 
 | C2 port status | Offline at analysis date | Shodan |
 | Bulletproof hosting | NOT DETECTED (0/6 indicators) | Infrastructure analysis |
 
-**Specific IP reputation: INSUFFICIENT** — No threat intelligence found for `172.105.0.126` specifically in open-source feeds. Consistent with a recently provisioned VPS aligned with GCC 15 build timing (late 2025–early 2026). Infrastructure pivoting not viable from open-source data: single IP, no domain layer, no SSL certificate data accessible (port offline).
+**Specific IP reputation: INSUFFICIENT**. No threat intelligence found for `172.105.0.126` specifically in open-source feeds. Consistent with a recently provisioned VPS aligned with GCC 15 build timing (late 2025-early 2026). Infrastructure pivoting not viable from open-source data: single IP, no domain layer, no SSL certificate data accessible (port offline).
 
 For hosting context, Linode is a legitimate commercial provider with a documented history of C2 abuse, driven by accessible pricing and easy provisioning. Recorded Future's 2022 data places Linode 8th globally among C2 hosting providers. The choice reflects a common pattern among commodity operators seeking low-cost, low-commitment infrastructure.
 
 #### Passive DNS History (DomainTools Iris, 2026-04-06)
 
-> **Analyst note:** Passive DNS records show every domain name that has pointed to an IP address over time. Because commercial cloud IPs are reassigned between tenants, passive DNS reveals the history of who else used this IP — helping establish whether the IP has prior malicious use history and how the current threat actor fits into that timeline.
+> **Analyst note:** Passive DNS records show every domain name that has pointed to an IP address over time. Because commercial cloud IPs are reassigned between tenants, passive DNS reveals the history of who else used this IP, helping establish whether the IP has prior malicious use history and how the current threat actor fits into that timeline.
 
-DomainTools Iris passive DNS export reveals this IP has been continuously allocated within Linode's Toronto pool since at least 2019-02-05, cycling through multiple independent tenants. The C2 operator used the raw IP address exclusively — no actor-registered domains point to this IP.
+DomainTools Iris passive DNS export reveals this IP has been continuously allocated within Linode's Toronto pool since at least 2019-02-05, cycling through multiple independent tenants. The C2 operator used the raw IP address exclusively. No actor-registered domains point to this IP.
 
 | Domain | Period | Duration | Assessment |
 |---|---|---|---|
-| li1953-126.members.linode.com | Feb 2019 – Feb 2022 | ~3 years | Linode default PTR — IP in pool since at least 2019 |
-| ceres.woodengatecider.ca | Oct 2023 – Sep 2024 | ~337 days | Canadian artisan cider brand — legitimate prior tenant |
-| cap03.ddns.net | May 2024 – Sep 2024 | ~85 days | Dynamic DNS (No-IP); purpose ambiguous from PDNS alone; prior tenant |
-| jessicahelpdesk.work | Apr 14, 2025 | 1 day | SUSPICIOUS — helpdesk social engineering lure pattern; prior tenant |
-| *.pr.edgegap.net (~30 entries) | May 12-20, 2025 | ~9 days | Edgegap game server routing pool — definitively benign prior tenant |
-| coolify.jbforge.ca | Dec 2025 – Apr 2, 2026 | ~99 days | SIGNIFICANT — see below |
+| li1953-126.members.linode.com | Feb 2019-Feb 2022 | ~3 years | Linode default PTR, IP in pool since at least 2019 |
+| ceres.woodengatecider.ca | Oct 2023-Sep 2024 | ~337 days | Canadian artisan cider brand, legitimate prior tenant |
+| cap03.ddns.net | May 2024-Sep 2024 | ~85 days | Dynamic DNS (No-IP); purpose ambiguous from PDNS alone; prior tenant |
+| jessicahelpdesk.work | Apr 14, 2025 | 1 day | SUSPICIOUS, helpdesk social engineering lure pattern; prior tenant |
+| *.pr.edgegap.net (~30 entries) | May 12-20, 2025 | ~9 days | Edgegap game server routing pool, definitively benign prior tenant |
+| coolify.jbforge.ca | Dec 2025-Apr 2, 2026 | ~99 days | SIGNIFICANT, see below |
 
 `coolify.jbforge.ca` held this IP from December 2025 to 2 April 2026, pointing at a self-hosted Coolify installation, Coolify being an open-source self-hosted PaaS developers use to manage application deployments, comparable to Heroku. The subdomain structure fits a Canadian developer using the handle "jbforge" exposing a Coolify admin panel on a personal subdomain. The domain was last seen 2026-04-02, four days before analysis. The most parsimonious reading is sequential tenancy, where the jbforge tenant's lease ended or they migrated and the threat actor subsequently rented the same IP. The alternative, that jbforge IS the threat actor using Coolify as a backend management interface, I assess as LOW likelihood given the open directory and debug-loader OPSEC failures seen throughout the kit. There is no direct attribution impact, and this is a separable OSINT lead, where WHOIS on `jbforge.ca` would confirm tenant distinctness.
 
@@ -885,7 +885,7 @@ DomainTools Iris passive DNS export reveals this IP has been continuously alloca
 
 In summary on timing, the C2 operator's tenancy on this IP began at an undated point before discovery and ended before or at analysis date, with port 8443 offline by 2026-04-06. The IP has been in continuous Linode allocation since at least 2019 with multiple sequential tenants, which is normal for commercial datacenter IP blocks. The threat actor registered no domains pointing to it, and the C2 operated exclusively over the raw IP address.
 
-**PDNS confidence: MODERATE** — DomainTools Iris provides a clear multi-year tenancy picture; the precise start and end of the threat actor's tenancy window remains undated from infrastructure data alone.
+**PDNS confidence: MODERATE**. DomainTools Iris provides a clear multi-year tenancy picture; the precise start and end of the threat actor's tenancy window remains undated from infrastructure data alone.
 
 ---
 
@@ -925,7 +925,7 @@ On the Python beacon's SOCKS4a proxy, that capability enables network pivoting, 
 ## 6. Discovery Method: hunt.io Open Directory Capture
 {: .hl-tier-2}
 
-[hunt.io](https://hunt.io/)'s AttackCapture system recovered the complete OpenStrike toolkit before any victim was identified — an infrastructure-first, pre-compromise discovery. AttackCapture continuously scans for misconfigured servers exposing directory listings and automatically downloads and indexes exposed files.
+[hunt.io](https://hunt.io/)'s AttackCapture system recovered the complete OpenStrike toolkit before any victim was identified, an infrastructure-first, pre-compromise discovery. AttackCapture continuously scans for misconfigured servers exposing directory listings and automatically downloads and indexes exposed files.
 
 The intelligence value is high. An open directory capture yielded artifacts post-compromise forensics rarely surfaces, development utilities (`dbg_loader.exe`), test harnesses, operator scripts, and debug-symbol-enabled binaries. Adversaries typically clean up operational components or deploy only those, and here the full kit was exposed before any deployment. The completeness of the recovery is a direct consequence of that exposure.
 
@@ -936,7 +936,7 @@ The open directory was almost certainly an operator error, a misconfigured web s
 ## 7. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
 The designation is UTA-2026-004.
 **Attribution Confidence: INSUFFICIENT (<50%)**
@@ -947,19 +947,19 @@ Attribution is not possible with available evidence. No infrastructure overlaps,
 
 | Hypothesis | Evidence Consistency | Assessment |
 |---|---|---|
-| H1: Independent skilled developer or small private group | HIGH — consistent with all evidence | Best fit |
-| H2: Nation-state APT | LOW — open directory OPSEC failure and cracked CS contradict nation-state resources and tradecraft | Ruled out |
-| H3: MaaS operator | LOW — single shared RSA key indicates single-operator control, inconsistent with multi-customer architecture | Ruled out |
+| H1: Independent skilled developer or small private group | HIGH, consistent with all evidence | Best fit |
+| H2: Nation-state APT | LOW, open directory OPSEC failure and cracked CS contradict nation-state resources and tradecraft | Ruled out |
+| H3: MaaS operator | LOW, single shared RSA key indicates single-operator control, inconsistent with multi-customer architecture | Ruled out |
 | H4: False flag / infrastructure reuse | INSUFFICIENT data | Cannot assess |
 
 **Operator profile (UTA-2026-004):**
 
 - **Build environment:** GCC 15.1 (MinGW), released April 25, 2025; activity window late 2025 onward
-- **Capability tier:** Advanced — custom bytecode VM, novel anti-analysis techniques, multi-language C2 architecture, BOF runtime compilation
+- **Capability tier:** Advanced, custom bytecode VM, novel anti-analysis techniques, multi-language C2 architecture, BOF runtime compilation
 - **Tooling:** Custom OpenStrike toolkit (C beacon + Python beacon) + cracked Cobalt Strike 3.x DLL
 - **Infrastructure:** Single commercial VPS (Linode AS63949), no domain layer, no bulletproof hosting
-- **OPSEC:** Poor — open directory exposure of the full toolkit
-- **Targeting:** Unknown — no victims identified
+- **OPSEC:** Poor, open directory exposure of the full toolkit
+- **Targeting:** Unknown, no victims identified
 
 In report language, the threat actor behind this toolkit cannot be attributed to any known named group. The operator profile is most consistent with an independent skilled developer or a small private group rather than a state-sponsored actor or a MaaS operator, but that characterization rests on behavioral indicators rather than confirmed identity, and attribution stays open pending additional evidence.
 
@@ -973,7 +973,7 @@ In report language, the threat actor behind this toolkit cannot be attributed to
 - All three beacon variants share RSA-2048 public key modulus `9f12c9cb6582f379...` (static analysis, cross-sample)
 - AES-128-CBC with hardcoded IV `abcdefghijklmnop` present in all three beacon variants (static analysis)
 - Encrypt-then-MAC construction (AES-128-CBC + 16-byte truncated HMAC-SHA256) across all implants (static analysis)
-- `ReflectiveLoader` export redirected to `66 90 CC` (NOP+INT3) — tripwire confirmed (static analysis of PE export directory)
+- `ReflectiveLoader` export redirected to `66 90 CC` (NOP+INT3), tripwire confirmed (static analysis of PE export directory)
 - CS 3.x DLL: watermark=0, XOR config key `0x2E`, C2 `172.105.0.126:8443` (config extraction via the config extraction tool)
 - beacon.exe CMD_SHELL uses `cmd.exe /c` via CreatePipe + CreateProcessA (static analysis)
 - stager.exe downloads payload from GET `/qz99` on port 8443 (static analysis)
@@ -990,7 +990,7 @@ In report language, the threat actor behind this toolkit cannot be attributed to
 - bof_executor.py runtime GCC compilation producing python.exe → gcc.exe chain and temporary files (code analysis)
 - dbg_loader.exe entry-point discovery via `FF D0 → CC` patch and RAX recovery from VEH context (code analysis)
 - PE overlays (43-62 KB) on loader EXEs contain COFF metadata/shellcode blobs (static analysis)
-- CS 3.x DLL sourced from pre-existing cracked distribution (MSVC 2012 toolchain — not GCC 15)
+- CS 3.x DLL sourced from pre-existing cracked distribution (MSVC 2012 toolchain, not GCC 15)
 - Development window: late 2025 or 2026 (GCC 15 release constraint)
 
 ### MODERATE (Reasonable Evidence, Notable Gaps)
@@ -1011,13 +1011,13 @@ In report language, the threat actor behind this toolkit cannot be attributed to
 
 The following assumptions underlie high-stakes conclusions in this report. Each is explicitly flagged because its failure would change the assessment:
 
-**Assumption 1 — GCC 15 compiler string is authentic (HIGH sensitivity)**
+**Assumption 1: GCC 15 compiler string is authentic (HIGH sensitivity)**
 The "late 2025 or early 2026" development window rests on the GCC 15.1 release date (April 25, 2025) appearing in PE compiler strings. If an actor spoofed these strings, the development timeline collapses. Evidence against spoofing: all six EXEs share identical compiler flags consistent with a real GCC 15 toolchain invocation; spoofing would require fabricating matching build artifacts across multiple binaries. Assessment: authentic with HIGH confidence.
 
-**Assumption 2 — Single shared RSA key means single-operator control (HIGH sensitivity)**
+**Assumption 2: Single shared RSA key means single-operator control (HIGH sensitivity)**
 The Trinity Protocol conclusion (one operator controls all three beacon types) rests on a single shared RSA-2048 key. If the operator distributed this key as part of a builder kit, H3 (MaaS) would be revived. Evidence against kit distribution: no kit infrastructure, licensing system, or multi-customer design patterns are observed anywhere in the recovered files; the key is hardcoded directly into source. Assessment: single-operator with HIGH confidence, but MaaS cannot be definitively ruled out without additional evidence.
 
-**Assumption 3 — Watermark=0 indicates a cracked build (DEFINITE)**
+**Assumption 3: Watermark=0 indicates a cracked build (DEFINITE)**
 Watermark=0 in CS config reliably indicates a license-stripped build per NCC Group research (Tier 2 / B2). No legitimate CS licensing produces a zero watermark. This assumption is DEFINITE.
 
 **Alternative assessments considered but not adopted:**
@@ -1042,23 +1042,23 @@ The feed contains 13 file hashes (SHA256 / SHA1 / MD5 for 7 binaries including o
 
 | Indicator | Type | Hunt Priority | Detection Method |
 |---|---|---|---|
-| `GET /qz99` on port 8443 | Network URI | P1 — most distinctive | Proxy / firewall logs |
-| `abcdefghijklmnop` in process memory | AES IV string | P1 — in-memory beacon hunt | Memory scanning, YARA |
-| `0x0000BEEF` in network traffic | Protocol magic | P1 — wire-level | IDS / Suricata |
-| `172.105.0.126` on port 8443 | C2 IP | P1 — block immediately | Firewall, proxy |
-| GET `/updates?id=[0-9a-f]{8}` | URI pattern | P2 — beacon poll | Proxy / firewall logs |
-| `66 90 CC` at ReflectiveLoader export | Static DLL signature | P2 — file scan | YARA on disk |
-| `[*] OpenStrike Beacon starting...` | Debug string | P1 — family ID | YARA on disk / memory |
-| `GCC: (GNU) 15-win32` compiler string | Loader family | P3 — loader variant | YARA on disk |
-| Python → GCC parent-child chain | Process behavior | P2 — BOF executor | EDR process tree |
-| `python.exe` opening ntdll.dll as raw file | File access | P2 — pre-deploy recon | EDR file telemetry |
+| `GET /qz99` on port 8443 | Network URI | P1, most distinctive | Proxy / firewall logs |
+| `abcdefghijklmnop` in process memory | AES IV string | P1, in-memory beacon hunt | Memory scanning, YARA |
+| `0x0000BEEF` in network traffic | Protocol magic | P1, wire-level | IDS / Suricata |
+| `172.105.0.126` on port 8443 | C2 IP | P1, block immediately | Firewall, proxy |
+| GET `/updates?id=[0-9a-f]{8}` | URI pattern | P2, beacon poll | Proxy / firewall logs |
+| `66 90 CC` at ReflectiveLoader export | Static DLL signature | P2, file scan | YARA on disk |
+| `[*] OpenStrike Beacon starting...` | Debug string | P1, family ID | YARA on disk / memory |
+| `GCC: (GNU) 15-win32` compiler string | Loader family | P3, loader variant | YARA on disk |
+| Python → GCC parent-child chain | Process behavior | P2, BOF executor | EDR process tree |
+| `python.exe` opening ntdll.dll as raw file | File access | P2, pre-deploy recon | EDR file telemetry |
 
 ---
 
 ## 10. Detection Rules & Hunting Queries
 {: .hl-tier-2}
 
-Full detection rule set — YARA, Sigma, Suricata, EDR hunting queries — is available in the separate detection file:
+Full detection rule set (YARA, Sigma, Suricata, EDR hunting queries) is available in the separate detection file:
 
 The detection file is at [`/hunting-detections/open-directory-172-105-0-126-20260406-detections/`](/hunting-detections/open-directory-172-105-0-126-20260406-detections/) (`open-directory-172-105-0-126-20260406-detections.md`)
 
@@ -1074,10 +1074,10 @@ The detection file is at [`/hunting-detections/open-directory-172-105-0-126-2026
 
 **Detection gaps to address locally:**
 
-- GET-based exfiltration bimodal size pattern requires size distribution analytics — no single-rule detection possible. In practice, configure proxy or WAF logs to alert when GET request payload sizes to port 8443 alternate between small (<1 KB heartbeat) and large (>100 KB accumulator flush) within a sliding observation window
+- GET-based exfiltration bimodal size pattern requires size distribution analytics. No single-rule detection possible. In practice, configure proxy or WAF logs to alert when GET request payload sizes to port 8443 alternate between small (<1 KB heartbeat) and large (>100 KB accumulator flush) within a sliding observation window
 - Memory-resident AES key detection at fixed offsets requires EDR memory scanning capability
 - Runtime GCC compilation by Python process is detectable via parent-child process monitoring in EDR (`python.exe` → `gcc.exe`)
-- SOCKS4a proxy activation by the Python beacon produces unusual outbound connection patterns from the Python interpreter process — hunt for `python.exe` establishing connections to multiple internal hosts or non-standard ports in a short time window
+- SOCKS4a proxy activation by the Python beacon produces unusual outbound connection patterns from the Python interpreter process, hunt for `python.exe` establishing connections to multiple internal hosts or non-standard ports in a short time window
 
 ---
 
@@ -1086,13 +1086,13 @@ The detection file is at [`/hunting-detections/open-directory-172-105-0-126-2026
 
 - **Trinity Protocol proves single-operator control.** The identical RSA-2048 public key embedded across three beacon variants written in different languages and compiled by different toolchains is definitive evidence of single-operator control. Any beacon carrying the documented modulus (`9f12c9cb6582f379...`) belongs to this operator's infrastructure. This finding also rules out MaaS operation and enables retroactive traffic decryption if memory is preserved.
 
-- **The tripwired ReflectiveLoader is a structurally novel anti-analysis technique.** Redirecting the `ReflectiveLoader` export to existing `66 90 CC` padding bytes — rather than writing new code — crashes every standard CS injection tool that honors the export convention. This technique is not documented in public threat research as of 2026-04-06 and forces defenders to update their assumptions about CS DLL loading behavior.
+- **The tripwired ReflectiveLoader is a structurally novel anti-analysis technique.** Redirecting the `ReflectiveLoader` export to existing `66 90 CC` padding bytes (rather than writing new code) crashes every standard CS injection tool that honors the export convention. This technique is not documented in public threat research as of 2026-04-06 and forces defenders to update their assumptions about CS DLL loading behavior.
 
-- **GET-based exfiltration creates a silent blind spot in POST-focused detection.** The DLL beacon routes all command output through HTTP GET requests via a 17-opcode bytecode VM. Detection infrastructure tuned to "POST = exfiltration" will silently miss this traffic. The bimodal size pattern (small heartbeat GETs alternating with large accumulator-flush GETs) is the correct detection anchor, but requires size distribution analytics — not simple method-based rules.
+- **GET-based exfiltration creates a silent blind spot in POST-focused detection.** The DLL beacon routes all command output through HTTP GET requests via a 17-opcode bytecode VM. Detection infrastructure tuned to "POST = exfiltration" will silently miss this traffic. The bimodal size pattern (small heartbeat GETs alternating with large accumulator-flush GETs) is the correct detection anchor, but requires size distribution analytics, not simple method-based rules.
 
 - **Zero prior AV or threat intelligence coverage means no passive protection.** Every binary sample had zero VirusTotal coverage at discovery. Standard signature-based defenses provide no protection against OpenStrike. The only reliable detection paths are behavioral (the `/qz99` URI, the hardcoded AES IV in memory, the `66 90 CC` byte pattern) and protocol-level (the `0x0000BEEF` magic in network traffic).
 
-- **Cross-platform reach extends risk to Linux and macOS.** The Python beacon runs without recompilation on Windows, Linux, and macOS — environments where CS DLL beacons cannot run. Organizations with mixed operating system environments cannot limit their detection and response posture to Windows-only coverage.
+- **Cross-platform reach extends risk to Linux and macOS.** The Python beacon runs without recompilation on Windows, Linux, and macOS, environments where CS DLL beacons cannot run. Organizations with mixed operating system environments cannot limit their detection and response posture to Windows-only coverage.
 
 - **No persistence is the single most favorable characteristic for defenders.** No persistence mechanisms were observed across all samples. An active beacon stops if the host reboots or the operator disconnects. This significantly reduces dwell time risk compared to rootkit or firmware-level implants, and means containment (network block + host reboot) is a viable short-term response if an active beacon is detected before memory capture.
 
@@ -1103,7 +1103,7 @@ The detection file is at [`/hunting-detections/open-directory-172-105-0-126-2026
 ## 12. Response Orientation
 {: .hl-tier-2}
 
-**Detection priorities — hunt these first:**
+**Detection priorities, hunt these first:**
 
 - GET requests to `/qz99` on port 8443 in proxy and firewall logs (most distinctive indicator; minimal false-positive risk)
 - Outbound HTTPS to port 8443 from non-browser processes (Sysmon Event ID 3, image not in approved browser list)
@@ -1114,7 +1114,7 @@ The detection file is at [`/hunting-detections/open-directory-172-105-0-126-2026
 - No persistence mechanisms observed; toolkit requires operator-controlled redeployment
 - File artifacts: `C:\cs_final.dat`, `C:\payload.dat`, `C:\payload.bin` (shellcode staging paths)
 - BOF artifacts: `bof_runner.c`, `bof_runner.dll`, `bof_runner.so` in temporary directories
-- If beacon process identified: capture memory before termination — AES session keys recoverable at documented offsets
+- If beacon process identified: capture memory before termination, AES session keys recoverable at documented offsets
 
 **Containment categories:**
 
@@ -1132,7 +1132,7 @@ This strand is UNDER INVESTIGATION, discovered on 7 April 2026, with 116 additio
 
 
 
-On April 7, 2026 — one day after the initial discovery — a follow-up review of the open directory on `172.105.0.126` revealed a significant expansion of the exposed toolkit. The directory on port 8888 now contains **116 additional files** that were not present during the original analysis. Initial triage indicates this is a **complete Cobalt Strike operator deployment** including the full post-exploitation module suite, artifact kit, and multiple additional custom beacon builds.
+On April 7, 2026 (one day after the initial discovery) a follow-up review of the open directory on `172.105.0.126` revealed a significant expansion of the exposed toolkit. The directory on port 8888 now contains **116 additional files** that were not present during the original analysis. Initial triage indicates this is a **complete Cobalt Strike operator deployment** including the full post-exploitation module suite, artifact kit, and multiple additional custom beacon builds.
 
 This section documents what has been identified at a triage level. Full analysis of these files is ongoing, and this report will be updated with detailed findings as they become available.
 
@@ -1140,7 +1140,7 @@ This section documents what has been identified at a triage level. Full analysis
 
 **Additional custom OpenStrike beacons (7 files):**
 
-Seven new GCC-compiled beacon executables matching the original toolkit's MinGW-w64 build environment: `beacon_cs_debug.exe`, `beacon_debug.exe`, `beacon_ip.exe`, `beacon_min.exe`, `beacon_patched.exe`, `beacon_x64_patched.exe`, and `beacon_x64_sniff.exe`. The naming conventions suggest iterative development variants — debug builds, architecture-specific builds, and a network sniffing variant. These are high-priority for follow-up analysis as they may reveal additional OpenStrike capabilities beyond what was documented in Sections 2-3.
+Seven new GCC-compiled beacon executables matching the original toolkit's MinGW-w64 build environment: `beacon_cs_debug.exe`, `beacon_debug.exe`, `beacon_ip.exe`, `beacon_min.exe`, `beacon_patched.exe`, `beacon_x64_patched.exe`, and `beacon_x64_sniff.exe`. The naming conventions suggest iterative development variants, debug builds, architecture-specific builds, and a network sniffing variant. These are high-priority for follow-up analysis as they may reveal additional OpenStrike capabilities beyond what was documented in Sections 2-3.
 
 **Full Cobalt Strike beacon suite (36 DLLs across 6 protocol families):**
 
@@ -1157,7 +1157,7 @@ The `.rl0k` and `.rl100k` suffixes are standard Cobalt Strike naming for reflect
 
 **Complete CS artifact kit (12 executables):**
 
-The artifact kit is Cobalt Strike's payload generation framework — it produces the initial-access executables and DLLs that deliver the beacon. All 12 artifacts are GNU linker compiled (consistent with the OpenStrike build environment), covering 32-bit and 64-bit architectures in standard, big (staged payload embedded), and service (Windows service) variants.
+The artifact kit is Cobalt Strike's payload generation framework. It produces the initial-access executables and DLLs that deliver the beacon. All 12 artifacts are GNU linker compiled (consistent with the OpenStrike build environment), covering 32-bit and 64-bit architectures in standard, big (staged payload embedded), and service (Windows service) variants.
 
 **Post-exploitation modules (18 DLLs):**
 
@@ -1178,7 +1178,7 @@ The artifact kit is Cobalt Strike's payload generation framework — it produces
 | `powershell` | PowerShell execution | x86, x64 |
 | `covertvpn` | VPN pivoting (MSVC compiled) | x86 |
 
-This is a complete CS operator toolkit for post-compromise operations — credential theft, lateral movement, persistence escalation, and data collection.
+This is a complete CS operator toolkit for post-compromise operations, credential theft, lateral movement, persistence escalation, and data collection.
 
 **Operator scripts and templates (13 files):**
 
@@ -1186,13 +1186,13 @@ Delivery templates (`template.x64.ps1`, `template.x86.ps1`, `template.hint.x64.p
 
 **Additional loader and stager variants (8 files):**
 
-Small executables including `dll_exec.exe`, `dll_loader.exe`, `mini_beacon.exe`, `mini_beacon2.exe`, `stager_http_x64.exe` (1,024 bytes — a minimal staged payload), `stager_http_x64.ps1`, and a .NET `hello.exe` test binary.
+Small executables including `dll_exec.exe`, `dll_loader.exe`, `mini_beacon.exe`, `mini_beacon2.exe`, `stager_http_x64.exe` (1,024 bytes, a minimal staged payload), `stager_http_x64.ps1`, and a .NET `hello.exe` test binary.
 
 ### What This Means
 
-The expanded discovery transforms the assessment of this operator's capability. The original analysis documented a toolkit in development — custom beacons, loaders, and utility scripts. The 116 additional files reveal that this is a **fully operational deployment** with complete post-compromise capabilities: credential theft (Mimikatz), lateral movement (SMB pivot beacons, portscan, netview), privilege escalation (bypassuac), and data collection (keylogger, screenshot, browser pivoting).
+The expanded discovery transforms the assessment of this operator's capability. The original analysis documented a toolkit in development, custom beacons, loaders, and utility scripts. The 116 additional files reveal that this is a **fully operational deployment** with complete post-compromise capabilities: credential theft (Mimikatz), lateral movement (SMB pivot beacons, portscan, netview), privilege escalation (bypassuac), and data collection (keylogger, screenshot, browser pivoting).
 
-The presence of DNS and External C2 beacon variants indicates the operator has fallback communication channels beyond the HTTP/HTTPS beacons documented in this report — a capability that defenders should account for when deploying detection rules.
+The presence of DNS and External C2 beacon variants indicates the operator has fallback communication channels beyond the HTTP/HTTPS beacons documented in this report, a capability that defenders should account for when deploying detection rules.
 
 ### What Comes Next
 
@@ -1292,4 +1292,4 @@ Development path (dbg_loader.exe — entry-point discovery):
 
 ---
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
