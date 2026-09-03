@@ -34,7 +34,7 @@ stix_bundle: /stix/new-files-found-20260408.json
 
 ---
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
 ---
 
@@ -53,7 +53,7 @@ Continued monitoring of the open directory at `172.105.0.126:8888` surfaced 106 
 - An Artifact Kit service variant using EAX-redirect process hollowing
 - Six loader variants from a shared GCC 15 codebase
 
-72 of 98 samples submitted to VirusTotal had no prior submissions — none had been publicly reported before this investigation.
+72 of 98 samples submitted to VirusTotal had no prior submissions, none had been publicly reported before this investigation.
 
 **Why This Report Was Written**
 
@@ -103,7 +103,7 @@ The original April 6 report documented the existence of OpenStrike and confirmed
   </tbody>
 </table>
 
-**Overall Risk Score: 7.5/10 — HIGH**
+**Overall Risk Score: 7.5/10, HIGH**
 
 The threat actor is UTA-2026-004, maintained from the April 6 report, and no attribution upgrade is warranted, see Section 8 for the full assessment.
 
@@ -117,14 +117,14 @@ The threat actor is UTA-2026-004, maintained from the April 6 report, and no att
 
 **For Executives**
 
-No immediate incident response is required — this toolkit is assessed as pre-operational with no confirmed victim intrusions. Priority actions are detection deployment and extension of existing network blocks (documented in Section 13). Risk is elevated from the April 6 assessment because the expanded toolkit reveals capabilities (CovertVPN Layer 2 tunneling, EAX-redirect process injection) not visible in the original 7-sample analysis.
+No immediate incident response is required. This toolkit is assessed as pre-operational with no confirmed victim intrusions. Priority actions are detection deployment and extension of existing network blocks (documented in Section 13). Risk is elevated from the April 6 assessment because the expanded toolkit reveals capabilities (CovertVPN Layer 2 tunneling, EAX-redirect process injection) not visible in the original 7-sample analysis.
 
 ---
 
 ## 2. Relationship to April 6 Report
 {: .hl-tier-2}
 
-> **Analyst note:** This report is a continuation of the original OpenStrike analysis published April 6, 2026. Readers unfamiliar with the original report are strongly encouraged to read it first — it establishes the OpenStrike family name, the Trinity Protocol cryptographic architecture, and the initial infrastructure profile for 172.105.0.126. This report documents only what was new in the expanded file set.
+> **Analyst note:** This report is a continuation of the original OpenStrike analysis published April 6, 2026. Readers unfamiliar with the original report are strongly encouraged to read it first, it establishes the OpenStrike family name, the Trinity Protocol cryptographic architecture, and the initial infrastructure profile for 172.105.0.126. This report documents only what was new in the expanded file set.
 
 The April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)) documented 7 custom samples recovered from an open directory at `172.105.0.126:8888`. The investigation used an infrastructure-first discovery method that identified the toolkit before any victim could be confirmed. That report covered:
 
@@ -168,17 +168,17 @@ The April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/o
     <tr>
       <td><strong>Primary Family</strong></td>
       <td>OpenStrike (custom)</td>
-      <td class="confirmed">DEFINITE — banner string "[*] OpenStrike Beacon starting..."</td>
+      <td class="confirmed">DEFINITE, banner string "[*] OpenStrike Beacon starting..."</td>
     </tr>
     <tr>
       <td><strong>Secondary Family</strong></td>
       <td>Cobalt Strike 4.9.1 (cracked)</td>
-      <td class="confirmed">DEFINITE — cs_ts.log team server log "Pwn3rs" tag confirmed</td>
+      <td class="confirmed">DEFINITE, cs_ts.log team server log "Pwn3rs" tag confirmed</td>
     </tr>
     <tr>
       <td><strong>Tertiary Components</strong></td>
       <td>CS 3.x and 4.4 beacon DLLs</td>
-      <td class="confirmed">DEFINITE — config extraction, RSA key ecosystem analysis</td>
+      <td class="confirmed">DEFINITE, config extraction, RSA key ecosystem analysis</td>
     </tr>
     <tr>
       <td><strong>Type</strong></td>
@@ -188,22 +188,22 @@ The April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/o
     <tr>
       <td><strong>Sophistication</strong></td>
       <td>Intermediate</td>
-      <td class="likely">HIGH — custom crypto correct but WIP; intermediate CS internals knowledge</td>
+      <td class="likely">HIGH, custom crypto correct but WIP; intermediate CS internals knowledge</td>
     </tr>
     <tr>
       <td><strong>Build Environment</strong></td>
       <td>GCC 15/15.2.0 (custom tools), GCC 9.2 (Artifact Kit), MSVC VS2012 (CS DLLs)</td>
-      <td class="confirmed">DEFINITE — compiler signatures in PE headers</td>
+      <td class="confirmed">DEFINITE, compiler signatures in PE headers</td>
     </tr>
     <tr>
       <td><strong>Compiler Fingerprint</strong></td>
       <td>MinGW-w64 GCC 15.2.0 (gen-4 beacon)</td>
-      <td class="confirmed">DEFINITE — PE rich header analysis</td>
+      <td class="confirmed">DEFINITE, PE rich header analysis</td>
     </tr>
     <tr>
       <td><strong>Deployment Status</strong></td>
       <td>Pre-operational / capability staging</td>
-      <td class="likely">MODERATE — team server freshly deployed, gen-4 WIP, no victims identified</td>
+      <td class="likely">MODERATE, team server freshly deployed, gen-4 WIP, no victims identified</td>
     </tr>
   </tbody>
 </table>
@@ -229,7 +229,7 @@ The encrypted sleeve DLLs need a note. 56 of the 106 files are AES-128-CBC encry
 
 ### 4.1 The OpenStrike 4-Generation Implant Evolution
 
-> **Analyst note:** This section traces the development arc of a custom C2 implant built from scratch — progressing from a bare HTTP polling stub to a fully cryptographically implemented beacon. Each generation represents a discrete engineering milestone. Understanding this progression matters for defenders because it reveals an operator actively building toward an implant that would be independent of Cobalt Strike's RSA key infrastructure — and therefore invisible to CS-specific detection signatures.
+> **Analyst note:** This section traces the development arc of a custom C2 implant built from scratch, progressing from a bare HTTP polling stub to a fully cryptographically implemented beacon. Each generation represents a discrete engineering milestone. Understanding this progression matters for defenders because it reveals an operator actively building toward an implant that would be independent of Cobalt Strike's RSA key infrastructure, and therefore invisible to CS-specific detection signatures.
 
 The expanded file set exposed three generations of OpenStrike development that predated the gen-3 beacon documented in the April 6 report. Together, the four generations document the operator's entire development arc.
 
@@ -280,15 +280,15 @@ Gen-3: RSA-2048 Trinity Key A (imported from CS 3.x distribution)
 Gen-4: SHA256 symmetric — no RSA from any source
 ```
 
-The operator deliberately progressed through two CS RSA key ecosystems before abandoning RSA entirely. The key migration from CS 4.4's RSA-1024 (gen-2) to the Trinity RSA-2048 (gen-3) demonstrates the operator understood how to extract RSA keys from beacon DLLs and embed them in custom code — an intermediate CS internals skill. The elimination of RSA in gen-4 shows intentional architectural independence: the operator is designing a custom C2 that does not require a CS team server to function.
+The operator deliberately progressed through two CS RSA key ecosystems before abandoning RSA entirely. The key migration from CS 4.4's RSA-1024 (gen-2) to the Trinity RSA-2048 (gen-3) demonstrates the operator understood how to extract RSA keys from beacon DLLs and embed them in custom code, an intermediate CS internals skill. The elimination of RSA in gen-4 shows intentional architectural independence: the operator is designing a custom C2 that does not require a CS team server to function.
 
-If a gen-5 implementation resolves the missing key exchange mechanism, it would produce a fully functional custom beacon independent of all cracked CS infrastructure — and invisible to every CS-specific network and behavioral detection signature.
+If a gen-5 implementation resolves the missing key exchange mechanism, it would produce a fully functional custom beacon independent of all cracked CS infrastructure, and invisible to every CS-specific network and behavioral detection signature.
 
 ---
 
 ### 4.1.1 Gen-4 Full Technical Reversal: beacon_windows_x64.exe
 
-> **Analyst note:** This section documents the complete function-level reversal of the gen-4 custom beacon using a disassembler. Every function was reversed. The level of detail matters because gen-4 represents the operator's current development target — understanding its architecture now means defenders can build detection signatures before it becomes operational.
+> **Analyst note:** This section documents the complete function-level reversal of the gen-4 custom beacon using a disassembler. Every function was reversed. The level of detail matters because gen-4 represents the operator's current development target, understanding its architecture now means defenders can build detection signatures before it becomes operational.
 
 **File Properties:**
 
@@ -315,7 +315,7 @@ If a gen-5 implementation resolves the missing key exchange mechanism, it would 
 | `0x140001ee0` | `crypto_aes_decrypt` | AES-128-CBC decrypt, PKCS#7 unpad, reinit IV |
 | `0x1400014e0` | `crypto_encrypt_send` | Build TLV frame, encrypt, POST to /submit |
 | `0x1400026d0` | `http_session_init` | WinHTTP synchronous session setup |
-| `0x140002810` | `http_get_tasks` | GET /updates?id=%08x — 200 response gating |
+| `0x140002810` | `http_get_tasks` | GET /updates?id=%08x, 200 response gating |
 | `0x140002a60` | `http_post` | POST to /submit with application/octet-stream |
 | `0x1400016d0` | `cmd_shell` | cmd.exe /c via anonymous pipe, 30-second timeout |
 | `0x140001a70` | `cmd_ps` | Process listing: PID, PPID, process name |
@@ -325,21 +325,21 @@ If a gen-5 implementation resolves the missing key exchange mechanism, it would 
 
 | Cmd ID | Name | Implementation |
 |---|---|---|
-| `0x00` | NOP | Skip — no operation |
+| `0x00` | NOP | Skip, no operation |
 | `0x01` | Sleep | Update sleep_ms and jitter_pct in beacon config |
 | `0x02` | Shell | cmd.exe /c via CreatePipe with CREATE_NO_WINDOW (0x08000000) |
 | `0x03` | Exit | Send acknowledgment (callback type 0x0D), clear running flag |
 | `0x04` | CD | SetCurrentDirectoryA, falls through to PWD response |
 | `0x09` | Download | CreateFileA(GENERIC_READ) → ReadFile → encrypted POST |
 | `0x1B` | Whoami | ComputerName\\UserName via GetComputerNameA + GetUserNameA |
-| `0x20` | PS | CreateToolhelp32Snapshot — process list with PID/PPID/Name |
+| `0x20` | PS | CreateToolhelp32Snapshot, process list with PID/PPID/Name |
 | `0x21` | LS | FindFirstFileA directory enumeration |
 | `0x27` | PWD | GetCurrentDirectoryA response |
 | `0x2C` | Upload | Nested TLV: filename_len + filename + file data |
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-command-dispatch.png" | relative_url }}" alt="Decompiler output showing the gen-4 beacon's main command dispatch function with a switch-case structure routing ten command IDs to their respective handler functions including sleep, shell, exit, download, whoami, and process listing">
- <figcaption><em>Figure 1: Gen-4 beacon command dispatch table, showing the switch-case structure that routes incoming command IDs (0x00 through 0x2C) to individual handler functions — the architectural core of the implant's tasking system.</em></figcaption>
+ <figcaption><em>Figure 1: Gen-4 beacon command dispatch table, showing the switch-case structure that routes incoming command IDs (0x00 through 0x2C) to individual handler functions, the architectural core of the implant's tasking system.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -349,7 +349,7 @@ If a gen-5 implementation resolves the missing key exchange mechanism, it would 
 
 **Beacon ID Generation:**
 
-The beacon generates a deterministic host identifier using a djb2 hash variant (multiplier 0x1f = 31) of the host's ComputerName, XOR'd with the current process ID. Unlike gen-1's random PID-based ID, this is consistent across restarts — the same host will report the same beacon ID, enabling the operator to track reconstituted implants after host reboots.
+The beacon generates a deterministic host identifier using a djb2 hash variant (multiplier 0x1f = 31) of the host's ComputerName, XOR'd with the current process ID. Unlike gen-1's random PID-based ID, this is consistent across restarts. The same host will report the same beacon ID, enabling the operator to track reconstituted implants after host reboots.
 
 ```
 beacon_id = djb2(ComputerName, multiplier=31) XOR PID
@@ -381,7 +381,7 @@ Outbound (callback to server):
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-tlv-byteswap-parser.png" | relative_url }}" alt="Decompiler output showing the TLV parser function performing big-endian byte-swap operations on 4-byte command type and data length fields using shift and OR bitwise operations before dispatching to command handlers">
-  <figcaption><em>Figure 4: TLV (Type-Length-Value) parser performing big-endian byte-swap on the 4-byte command type and data length fields. The explicit byte-order conversion confirms this is a custom wire protocol — standard x86 programs use little-endian natively, so the big-endian encoding is a deliberate design choice inherited from network protocol conventions.</em></figcaption>
+  <figcaption><em>Figure 4: TLV (Type-Length-Value) parser performing big-endian byte-swap on the 4-byte command type and data length fields. The explicit byte-order conversion confirms this is a custom wire protocol, standard x86 programs use little-endian natively, so the big-endian encoding is a deliberate design choice inherited from network protocol conventions.</em></figcaption>
 </figure>
 
 ---
@@ -402,7 +402,7 @@ Outbound (callback to server):
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-sha256-key-derivation.png" | relative_url }}" alt="Decompiler output showing the crypto_derive_keys function calling BCryptOpenAlgorithmProvider with the string L SHA256, then BCryptDeriveKey to produce a 32-byte digest that is split into a 16-byte AES key and a 16-byte HMAC key">
-  <figcaption><em>Figure 5: Key derivation function calling BCryptOpenAlgorithmProvider with L"SHA256" to derive a 32-byte digest from the session nonce. The first 16 bytes become the AES-128 encryption key and the second 16 bytes become the HMAC-SHA256 authentication key — mirroring Cobalt Strike's documented key derivation pattern but eliminating the RSA dependency.</em></figcaption>
+  <figcaption><em>Figure 5: Key derivation function calling BCryptOpenAlgorithmProvider with L"SHA256" to derive a 32-byte digest from the session nonce. The first 16 bytes become the AES-128 encryption key and the second 16 bytes become the HMAC-SHA256 authentication key, mirroring Cobalt Strike's documented key derivation pattern but eliminating the RSA dependency.</em></figcaption>
 </figure>
 
 **Encryption (outbound traffic):**
@@ -415,12 +415,12 @@ Outbound (callback to server):
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-aes-cbc-iv-hardcoded.png" | relative_url }}" alt="Decompiler output showing the AES encryption setup with BCryptOpenAlgorithmProvider called with L AES string, BCryptSetProperty setting ChainingModeCBC, and the hardcoded 16-byte initialization vector string abcdefghijklmnop visible in the data reference">
-  <figcaption><em>Figure 6: AES-128-CBC encryption setup showing BCryptOpenAlgorithmProvider with L"AES", ChainingModeCBC mode selection, and the hardcoded initialization vector "abcdefghijklmnop" — a static IV that produces identical ciphertext blocks for identical plaintext headers across sessions, representing a cryptographic design weakness.</em></figcaption>
+  <figcaption><em>Figure 6: AES-128-CBC encryption setup showing BCryptOpenAlgorithmProvider with L"AES", ChainingModeCBC mode selection, and the hardcoded initialization vector "abcdefghijklmnop", a static IV that produces identical ciphertext blocks for identical plaintext headers across sessions, representing a cryptographic design weakness.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-hmac-sha256-truncated.png" | relative_url }}" alt="Decompiler output showing the HMAC-SHA256 computation chain using BCryptCreateHash, BCryptHashData over the ciphertext buffer, BCryptFinishHash producing a 32-byte digest, and truncation to the first 16 bytes for the authentication tag">
-  <figcaption><em>Figure 7: HMAC-SHA256 authentication tag computation showing the BCrypt hash chain (BCryptCreateHash → BCryptHashData → BCryptFinishHash) over the ciphertext buffer, with the resulting 32-byte digest truncated to 16 bytes. This truncation halves the tag length but still provides 128 bits of authentication strength — sufficient for integrity verification.</em></figcaption>
+  <figcaption><em>Figure 7: HMAC-SHA256 authentication tag computation showing the BCrypt hash chain (BCryptCreateHash → BCryptHashData → BCryptFinishHash) over the ciphertext buffer, with the resulting 32-byte digest truncated to 16 bytes. This truncation halves the tag length but still provides 128 bits of authentication strength, sufficient for integrity verification.</em></figcaption>
 </figure>
 
 **Decryption (inbound tasks):**
@@ -433,33 +433,33 @@ Outbound (callback to server):
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-decrypt-etm-verify.png" | relative_url }}" alt="Decompiler output showing the Encrypt-then-MAC verification function that splits the incoming buffer into ciphertext and authentication tag, recomputes HMAC-SHA256 over the ciphertext portion, and compares the result against the received tag using two 8-byte quadword equality checks before proceeding to AES-CBC decryption">
-  <figcaption><em>Figure 8: Encrypt-then-MAC verification in the decryption path — the function splits incoming data into ciphertext and HMAC tag, recomputes HMAC-SHA256 over the ciphertext, and performs a non-constant-time comparison (two 8-byte quadword == checks) before decrypting. The non-constant-time comparison is a theoretical timing oracle, though low practical risk over HTTP.</em></figcaption>
+  <figcaption><em>Figure 8: Encrypt-then-MAC verification in the decryption path, the function splits incoming data into ciphertext and HMAC tag, recomputes HMAC-SHA256 over the ciphertext, and performs a non-constant-time comparison (two 8-byte quadword == checks) before decrypting. The non-constant-time comparison is a theoretical timing oracle, though low practical risk over HTTP.</em></figcaption>
 </figure>
 
 The encrypt-then-MAC pattern is the cryptographically correct ordering, authenticating the ciphertext rather than the plaintext. Standard Cobalt Strike uses a similar split, SHA256 into an AES key and an HMAC key, as documented by Elastic Security Labs and Unit42. The operator replicated CS's key derivation pattern while eliminating the RSA dependency, which indicates study of CS internals, and I hold that MODERATE on architectural similarity to the documented CS crypto design.
 
 **Three Identified Crypto Weaknesses:**
 
-1. **Static IV** — `"abcdefghijklmnop"` is a 16-byte ASCII string used as the AES-CBC initialization vector for every session. Identical plaintext headers across sessions will produce identical ciphertext blocks. Partially mitigated by per-session random keys, but the static IV is a design flaw.
+1. **Static IV**: `"abcdefghijklmnop"` is a 16-byte ASCII string used as the AES-CBC initialization vector for every session. Identical plaintext headers across sessions will produce identical ciphertext blocks. Partially mitigated by per-session random keys, but the static IV is a design flaw.
 
-2. **Non-constant-time HMAC compare** — The MAC verification compares two 8-byte quadwords using the `==` operator. Theoretically exploitable as a timing oracle for HMAC forgery. Low practical risk over HTTP due to network jitter masking timing differences.
+2. **Non-constant-time HMAC compare**: The MAC verification compares two 8-byte quadwords using the `==` operator. Theoretically exploitable as a timing oracle for HMAC forgery. Low practical risk over HTTP due to network jitter masking timing differences.
 
-3. **No TLS enforcement** — `WINHTTP_FLAG_SECURE` is not set on the WinHTTP session. If port 8443 serves plain HTTP rather than HTTPS, the encrypted payload travels without outer TLS — leaving only the inner AES encryption.
+3. **No TLS enforcement**: `WINHTTP_FLAG_SECURE` is not set on the WinHTTP session. If port 8443 serves plain HTTP rather than HTTPS, the encrypted payload travels without outer TLS, leaving only the inner AES encryption.
 
-**The Fatal WIP Flaw — Missing Key Exchange:**
+**The Fatal WIP Flaw, Missing Key Exchange:**
 
 The session nonce is generated locally by `BCryptGenRandom` and never transmitted to the server. Without the nonce, the server cannot derive the AES and HMAC keys. No beacon session established by gen-4 can be successfully decrypted by the team server. This definitively marks gen-4 as a development artifact, not a deployed implant.
 
 <figure style="text-align: center; margin: 2em 0;">
- <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-encrypt-submit-no-nonce.png" | relative_url }}" alt="Decompiler output showing the encrypt-and-submit function constructing the URL string /submit?id=%08x with the beacon identifier, encrypting the payload buffer with AES-CBC, but with no code path transmitting the session nonce to the server — the nonce generated by BCryptGenRandom stays local">
-  <figcaption><em>Figure 9: The encrypt-and-submit function showing the L"/submit?id=%08x" URL construction and payload encryption — critically, the session nonce generated by BCryptGenRandom is never transmitted to the server. Without the nonce, the server cannot derive the AES/HMAC keys, making gen-4 unable to establish a functional encrypted session. This is the definitive evidence marking gen-4 as a work-in-progress.</em></figcaption>
+ <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-gen4-encrypt-submit-no-nonce.png" | relative_url }}" alt="Decompiler output showing the encrypt-and-submit function constructing the URL string /submit?id=%08x with the beacon identifier, encrypting the payload buffer with AES-CBC, but with no code path transmitting the session nonce to the server, the nonce generated by BCryptGenRandom stays local">
+  <figcaption><em>Figure 9: The encrypt-and-submit function showing the L"/submit?id=%08x" URL construction and payload encryption, critically, the session nonce generated by BCryptGenRandom is never transmitted to the server. Without the nonce, the server cannot derive the AES/HMAC keys, making gen-4 unable to establish a functional encrypted session. This is the definitive evidence marking gen-4 as a work-in-progress.</em></figcaption>
 </figure>
 
 ---
 
 ### 4.2 EAX-Redirect Process Hollowing: Artifact Kit Service Variant
 
-> **Analyst note:** This section explains a process injection technique that bypasses the detection mechanism most endpoint security (EDR) products use to catch the standard version of this attack. "Process hollowing" means launching a legitimate Windows program, then redirecting execution to malicious code so the malicious code runs inside the legitimate program's identity. Most security products watch for one specific API call — `NtUnmapViewOfSection` — that is characteristic of the classic technique. This variant never makes that call. It achieves the same end result through a different path, creating a detection blind spot that will persist until EDR vendors update their detection logic.
+> **Analyst note:** This section explains a process injection technique that bypasses the detection mechanism most endpoint security (EDR) products use to catch the standard version of this attack. "Process hollowing" means launching a legitimate Windows program, then redirecting execution to malicious code so the malicious code runs inside the legitimate program's identity. Most security products watch for one specific API call (`NtUnmapViewOfSection`) that is characteristic of the classic technique. This variant never makes that call. It achieves the same end result through a different path, creating a detection blind spot that will persist until EDR vendors update their detection logic.
 
 **Analyzed Files:**
 
@@ -468,7 +468,7 @@ The session nonce is generated locally by `BCryptGenRandom` and never transmitte
 | `artifact32svc.exe` | `701b4f60411a26abfb137f476c9328900843ee5a49780f2fcd23a5cb15498f16` | PE32 (x86) |
 | `artifact64svc.exe` | `6797ba96336c64648d6bcccdbead8d9ab6f18d77f0108239e31a063b32665770` | PE64 (x86-64) |
 
-Both are Cobalt Strike Artifact Kit service templates — stock components included in the CS Artifact Kit for generating custom payloads that execute as Windows services. The GCC 9.2 compiler signature (distinct from the operator's custom GCC 15 tooling) identifies these as stock CS components.
+Both are Cobalt Strike Artifact Kit service templates, stock components included in the CS Artifact Kit for generating custom payloads that execute as Windows services. The GCC 9.2 compiler signature (distinct from the operator's custom GCC 15 tooling) identifies these as stock CS components.
 
 **Full Execution Chain:**
 
@@ -522,12 +522,12 @@ Step 9: ResumeThread
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-rundll32-injection.png" | relative_url }}" alt="Decompiler output showing the process injection setup function calling CreateProcessA with rundll32.exe as the target, CREATE_SUSPENDED flag, followed by VirtualAllocEx and WriteProcessMemory to inject decoded shellcode into the suspended process memory space">
-  <figcaption><em>Figure 12: Injection setup (Steps 5-6) showing CreateProcessA spawning rundll32.exe with CREATE_SUSPENDED, followed by VirtualAllocEx(PAGE_READWRITE) and WriteProcessMemory to inject decoded shellcode. The target process is suspended — execution has not yet begun, and the original rundll32 image remains fully mapped.</em></figcaption>
+  <figcaption><em>Figure 12: Injection setup (Steps 5-6) showing CreateProcessA spawning rundll32.exe with CREATE_SUSPENDED, followed by VirtualAllocEx(PAGE_READWRITE) and WriteProcessMemory to inject decoded shellcode. The target process is suspended, execution has not yet begun, and the original rundll32 image remains fully mapped.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-eax-redirect-hijack.png" | relative_url }}" alt="Decompiler output showing the critical EAX-redirect sequence: GetThreadContext retrieves the suspended thread context, the Eax register field is overwritten with the shellcode base address parameter, SetThreadContext applies the modified context, and ResumeThread starts execution from the redirected address">
-  <figcaption><em>Figure 13: The EAX-redirect hijack (Steps 8-9) — the critical detection-evasion technique. GetThreadContext retrieves the suspended thread's register state, the Eax field is overwritten with the shellcode base address (param_6), SetThreadContext applies the modification, and ResumeThread starts execution from the redirected address. NtUnmapViewOfSection is never called — this is what defeats most T1055.012-focused EDR detections.</em></figcaption>
+  <figcaption><em>Figure 13: The EAX-redirect hijack (Steps 8-9), the critical detection-evasion technique. GetThreadContext retrieves the suspended thread's register state, the Eax field is overwritten with the shellcode base address (param_6), SetThreadContext applies the modification, and ResumeThread starts execution from the redirected address. NtUnmapViewOfSection is never called. This is what defeats most T1055.012-focused EDR detections.</em></figcaption>
 </figure>
 
 **The Critical Distinction from Classic Process Hollowing:**
@@ -543,8 +543,8 @@ Step 9: ResumeThread
   <tbody>
     <tr>
       <td><strong>NtUnmapViewOfSection</strong></td>
-      <td>Called — original PE is unmapped</td>
-      <td class="confirmed">Never called — original PE stays mapped</td>
+      <td>Called, original PE is unmapped</td>
+      <td class="confirmed">Never called, original PE stays mapped</td>
     </tr>
     <tr>
       <td><strong>Original process image</strong></td>
@@ -581,18 +581,18 @@ Step 9: ResumeThread
 
 **Why This Detection Gap Is Systematic:**
 
-The Cobalt Strike Artifact Kit service variant is a stock CS component — not a modification by UTA-2026-004. This means the EAX-redirect detection gap affects every CS deployment using the default Artifact Kit service template, not just this campaign. Organizations relying on NtUnmapViewOfSection monitoring for T1055.012 coverage should audit whether their EDR coverage extends to SetThreadContext-based variants.
+The Cobalt Strike Artifact Kit service variant is a stock CS component, not a modification by UTA-2026-004. This means the EAX-redirect detection gap affects every CS deployment using the default Artifact Kit service template, not just this campaign. Organizations relying on NtUnmapViewOfSection monitoring for T1055.012 coverage should audit whether their EDR coverage extends to SetThreadContext-based variants.
 
 The two-stage RW→RX memory protection sequence additionally defeats single-stage RWX allocation detection rules, which commonly flag `VirtualAllocEx` with `PAGE_EXECUTE_READWRITE` as high-confidence malicious. This variant never creates a RWX region.
 
 **How to Detect EAX-Redirect:**
 
-- Monitor `SetThreadContext` API calls targeting threads in a suspended state — especially when the calling process is a service binary and the target process is `rundll32.exe` with no command-line arguments
+- Monitor `SetThreadContext` API calls targeting threads in a suspended state, especially when the calling process is a service binary and the target process is `rundll32.exe` with no command-line arguments
 - Alert on the call chain: `VirtualAllocEx` → `WriteProcessMemory` → `VirtualProtectEx(RX)` → `SetThreadContext` all originating from the same PID within a short time window
-- Sysmon Event ID 10 (process access) catches the cross-process memory operations. Sysmon Event ID 8 (CreateRemoteThread) will NOT fire — this variant uses SetThreadContext, not CreateRemoteThread.
+- Sysmon Event ID 10 (process access) catches the cross-process memory operations. Sysmon Event ID 8 (CreateRemoteThread) will NOT fire. This variant uses SetThreadContext, not CreateRemoteThread.
 - Pre-execution indicators: service name `DceRpcSs` (Security Event 7045) and named pipe pattern `MSSE-*-server` (Sysmon Events 17/18) are reliable early warning signals
 
-**Named Pipe Default — Stock Indicator:**
+**Named Pipe Default, Stock Indicator:**
 
 The named pipe `\\.\pipe\MSSE-%d-server` (where `%d` = GetTickCount() % 9898) is a well-documented default Artifact Kit indicator. CS hunting guides describe this as a "dead giveaway" for operators who deploy the Artifact Kit without modifying default configurations. UTA-2026-004 has not changed this default.
 
@@ -600,7 +600,7 @@ The named pipe `\\.\pipe\MSSE-%d-server` (where `%d` = GetTickCount() % 9898) is
 
 ### 4.3 CovertVPN: Layer 2 Network Tunneling
 
-> **Analyst note:** CovertVPN is a Cobalt Strike module that creates a bridge between the attacker's machine and the victim's internal network, operating at the raw Ethernet frame level. Standard proxy pivoting (SOCKS) lets an attacker reach specific services. CovertVPN hands the attacker full Layer 2 network access — ARP scanning, raw protocol attacks, VLAN traversal, and any network capability routable through the victim host. It is a specialized capability that requires administrator access and silently installs a kernel-mode driver on the victim system.
+> **Analyst note:** CovertVPN is a Cobalt Strike module that creates a bridge between the attacker's machine and the victim's internal network, operating at the raw Ethernet frame level. Standard proxy pivoting (SOCKS) lets an attacker reach specific services. CovertVPN hands the attacker full Layer 2 network access, ARP scanning, raw protocol attacks, VLAN traversal, and any network capability routable through the victim host. It is a specialized capability that requires administrator access and silently installs a kernel-mode driver on the victim system.
 
 **File Properties:**
 
@@ -610,7 +610,7 @@ The named pipe `\\.\pipe\MSSE-%d-server` (where `%d` = GetTickCount() % 9898) is
 | SHA256 | `af688b120db0a3b324e2cd468cfead71b7895a3c815f4026d51ac7fca0cb8ab4` |
 | Size | ~556KB (including embedded WinPcap 4.1.3 stack) |
 | Type | Reflective DLL |
-| Config template | `"AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH"` — unpatched placeholder |
+| Config template | `"AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH"`, unpatched placeholder |
 
 **Five Transport Channels:**
 
@@ -647,7 +647,7 @@ Direction: Bidirectional — both ICMP echo request (client→server)
 
 **Embedded WinPcap 4.1.3 Deployment:**
 
-CovertVPN is self-contained — no WinPcap pre-installation is required. The DLL's `.data` section embeds the full WinPcap 4.1.3 package (x86 and amd64 `npf.sys` kernel driver, `wpcap.dll`, `Packet.dll`). An architecture-aware dropper selects the appropriate `npf.sys`, writes it to `%TEMP%\npf.sys`, and installs it as a kernel driver service via the Windows Service Control Manager. Administrator-level access is required.
+CovertVPN is self-contained. No WinPcap pre-installation is required. The DLL's `.data` section embeds the full WinPcap 4.1.3 package (x86 and amd64 `npf.sys` kernel driver, `wpcap.dll`, `Packet.dll`). An architecture-aware dropper selects the appropriate `npf.sys`, writes it to `%TEMP%\npf.sys`, and installs it as a kernel driver service via the Windows Service Control Manager. Administrator-level access is required.
 
 **Detection indicators for WinPcap deployment:**
 - Sysmon Event ID 6 (driver loaded) from path `%TEMP%\npf.sys`
@@ -662,7 +662,7 @@ The AES key placeholder string `"AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH"` at config of
 
 ### 4.4 Six Custom Loader Variants
 
-> **Analyst note:** A loader is a small program whose sole purpose is to load a larger malicious program into memory and execute it. The operator built six of these using a shared code template, each with a slightly different execution mechanism. Detecting the loader is often the first and best opportunity to catch an attack before the main payload runs — the loaders are simpler than the beacons and leave more predictable behavioral traces.
+> **Analyst note:** A loader is a small program whose sole purpose is to load a larger malicious program into memory and execute it. The operator built six of these using a shared code template, each with a slightly different execution mechanism. Detecting the loader is often the first and best opportunity to catch an attack before the main payload runs. The loaders are simpler than the beacons and leave more predictable behavioral traces.
 
 Five loaders share a common GCC 15 codebase with progressively specialized execution paths. A sixth uses a fundamentally different disk-based approach:
 
@@ -687,19 +687,19 @@ beacon_loader.exe (base — 6,048 bytes .text)
 dll_loader.exe (separate codebase — 30,720 bytes .text)
 ```
 
-**dll_loader.exe — The Disk-Based Outlier:**
+**dll_loader.exe, The Disk-Based Outlier:**
 
 `dll_loader.exe` writes a beacon DLL to the hardcoded path `C:\Windows\Temp\beacon.dll` and loads it via `LoadLibraryA`. An infinite `Sleep(60000)` loop maintains the host process as a keepalive for the loaded DLL. This is the simplest loader in the set and the easiest to detect via file system monitoring.
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-dll-loader-hardcoded-path.png" | relative_url }}" alt="Decompiler output showing dll_loader.exe with the hardcoded file path string C:\Windows\Temp\beacon.dll passed to LoadLibraryA, followed by an infinite Sleep(60000) loop that keeps the host process alive as a keepalive for the loaded beacon DLL">
-  <figcaption><em>Figure 14: dll_loader.exe showing the hardcoded path "C:\Windows\Temp\beacon.dll" passed to LoadLibraryA, followed by an infinite Sleep(60000) loop. This disk-based approach is the simplest and most detectable loader variant — file system monitoring for DLL writes to %WINDIR%\Temp\ followed by LoadLibraryA provides a high-confidence detection anchor.</em></figcaption>
+  <figcaption><em>Figure 14: dll_loader.exe showing the hardcoded path "C:\Windows\Temp\beacon.dll" passed to LoadLibraryA, followed by an infinite Sleep(60000) loop. This disk-based approach is the simplest and most detectable loader variant, file system monitoring for DLL writes to %WINDIR%\Temp\ followed by LoadLibraryA provides a high-confidence detection anchor.</em></figcaption>
 </figure>
 
 **Shared Behavioral Pattern (all five in-memory loaders):**
 
 All five share a detectable behavioral sequence:
-1. Single `VirtualAlloc(MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE)` — single-stage RWX allocation (contrast with Artifact Kit's two-stage approach)
+1. Single `VirtualAlloc(MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE)`, single-stage RWX allocation (contrast with Artifact Kit's two-stage approach)
 2. `memcpy` from `.data` section (embedded payload) into the RWX region
 3. Execution via indirect function call (three loaders) or `CreateThread` (two loaders)
 
@@ -707,7 +707,7 @@ The single-stage RWX allocation is detectable by EDR behavioral monitoring for `
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/openstrike-loader-virtualalloc-indirect-call.png" | relative_url }}" alt="Decompiler output showing the base loader pattern shared across five variants: VirtualAlloc called with MEM_COMMIT and PAGE_EXECUTE_READWRITE flags allocating a single RWX memory region, followed by memcpy copying the embedded payload from the .data section, and an indirect function call transferring execution to the shellcode">
-  <figcaption><em>Figure 15: Shared loader pattern across all five in-memory variants — VirtualAlloc(MEM_COMMIT | PAGE_EXECUTE_READWRITE) allocates a single RWX region, memcpy copies the embedded payload from the .data section, and an indirect call transfers execution. The single-stage RWX allocation (contrast with Artifact Kit's two-stage RW→RX approach in Section 4.2) is the primary behavioral detection anchor for this loader family.</em></figcaption>
+  <figcaption><em>Figure 15: Shared loader pattern across all five in-memory variants, VirtualAlloc(MEM_COMMIT | PAGE_EXECUTE_READWRITE) allocates a single RWX region, memcpy copies the embedded payload from the .data section, and an indirect call transfers execution. The single-stage RWX allocation (contrast with Artifact Kit's two-stage RW→RX approach in Section 4.2) is the primary behavioral detection anchor for this loader family.</em></figcaption>
 </figure>
 
 ---
@@ -733,7 +733,7 @@ Status:          Freshly deployed or recently wiped
 | B | `/ga.js` | `/submit.php` | 80 / 809 | Default | beacon_min.exe, beacon_cs_debug.exe, beacon_x64_sniff.exe |
 | C | `/en_US/all.js` | `/submit.php` | 80 | IE9 (BOIE9;ENUSSEM) | beacon80.dll |
 
-Profile C impersonates Google Analytics and Internet Explorer 9 — the `Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; BOIE9;ENUSSEM)` user-agent string is a distinctive detection indicator, as IE9 is no longer in active use.
+Profile C impersonates Google Analytics and Internet Explorer 9, the `Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; BOIE9;ENUSSEM)` user-agent string is a distinctive detection indicator, as IE9 is no longer in active use.
 
 **Stager Shellcode:**
 
@@ -742,11 +742,11 @@ Profile C impersonates Google Analytics and Internet Explorer 9 — the `Mozilla
 | `stager_http_x64.exe` | PE stager (~1KB) | `/au2U` | 80 | `86b581e40a9ff9...` |
 | `stager_http_x64.ps1` | PowerShell wrapper | `/msI4` | 80 | `f618c8073bbc1...` |
 
-Both implement standard CS HTTP reverse stager behavior: PEB-walk API resolution, `VirtualAlloc(RWX)`, `InternetReadFile` loop. The PowerShell stager uses `AllocHGlobal` + `GetDelegateForFunctionPointer` for shellcode execution — the standard PowerShell shellcode execution pattern.
+Both implement standard CS HTTP reverse stager behavior: PEB-walk API resolution, `VirtualAlloc(RWX)`, `InternetReadFile` loop. The PowerShell stager uses `AllocHGlobal` + `GetDelegateForFunctionPointer` for shellcode execution, the standard PowerShell shellcode execution pattern.
 
 **Social Engineering Kit (stock, undeployed):**
 
-Six JavaScript templates recovered: `analytics.js` (credential harvester), `keylogger.js` (browser keypress capture with obfuscated variables), `deployJava.js` (Java plugin detection), `reader.js` (PDF reader detection), `redirect.js`, `stay.js`. All contain unsubstituted template placeholders — not customized for deployment.
+Six JavaScript templates recovered: `analytics.js` (credential harvester), `keylogger.js` (browser keypress capture with obfuscated variables), `deployJava.js` (Java plugin detection), `reader.js` (PDF reader detection), `redirect.js`, `stay.js`. All contain unsubstituted template placeholders, not customized for deployment.
 
 ---
 
@@ -773,15 +773,15 @@ For hosting context, this is Linode/Akamai Technologies (AS63949) under Canadian
 
 Two distinct RSA key ecosystems co-exist across 10 recovered beacon DLLs:
 
-**Key A — RSA-2048 "Trinity Protocol":**
+**Key A, RSA-2048 "Trinity Protocol":**
 - Modulus prefix: `9f12c9cb6582f379...`
 - Present in: CS 3.x beacon (watermark 0), CS 4.4 beacons (watermark 987654321)
-- Custom beacon import: gen-3 OpenStrike — byte-for-byte identical key
+- Custom beacon import: gen-3 OpenStrike, byte-for-byte identical key
 
-**Key B — RSA-1024:**
+**Key B, RSA-1024:**
 - Modulus prefix: `008cadd72dbf3cc108...`
 - Present in: CS 4.4 beacons (watermarks 0 and 987654321), 5 artifact-wrapped beacons
-- Custom beacon import: gen-2 OpenStrike (mini_beacon2.exe) — byte-for-byte identical
+- Custom beacon import: gen-2 OpenStrike (mini_beacon2.exe), byte-for-byte identical
 
 The operator extracted RSA keys from existing beacon DLLs and embedded them in custom implant code, then migrated from Key B → Key A → no RSA across the custom beacon generations. This demonstrates active tracking of and engagement with CS's internal key architecture.
 
@@ -789,7 +789,7 @@ The operator extracted RSA keys from existing beacon DLLs and embedded them in c
 
 The `.auth` file on the open directory does not match the private key corresponding to the CS 4.9.1 JAR's `authkey.pub` (RSA-2048, MD5: `8bb4df00c120881a1945a43e2bb2379e`). This mismatch prevents decryption of all 56 encrypted sleeve DLLs. The full Java key derivation chain (`Authorization`, `AuthCrypto`, `SleeveSecurity` classes) was reverse-engineered to confirm the mismatch mechanism.
 
-The mismatch is evidence of toolkit assembly from at least two different cracked distributions. This is an OPSEC failure pointing to opportunistic rather than systematic tool acquisition — an operator with a single trusted supply source would not produce this inconsistency.
+The mismatch is evidence of toolkit assembly from at least two different cracked distributions. This is an OPSEC failure pointing to opportunistic rather than systematic tool acquisition, an operator with a single trusted supply source would not produce this inconsistency.
 
 ---
 
@@ -803,22 +803,22 @@ The mismatch is evidence of toolkit assembly from at least two different cracked
 "Pwn3rs" / "Pwn3rzs" is the branding of the most widely distributed cracked CS 4.9/4.9.1 package currently in active use. Distribution documentation:
 
 - **Origin date:** Approximately 2023-10-09 via Telegram and Kanxue forum (bbs.kanxue.com threads 279166, 279348, 280276)
-- **SSL pivot:** Shodan query `ssl:"Pwn3rs Striked"` identifies active deployments sharing this distribution — documented by researcher Chris Duggan (@TLP_R3D, September 2024)
+- **SSL pivot:** Shodan query `ssl:"Pwn3rs Striked"` identifies active deployments sharing this distribution, documented by researcher Chris Duggan (@TLP_R3D, September 2024)
 - **Attribution status:** "Pwn3rs" is distribution branding, NOT an operator persona. Attributing this campaign to an actor named "Pwn3rs" would misrepresent the evidence.
 
 The infrastructure pivot closed empty. The specific SSL cert SHA256 `6e8efd85...` returned no hits in either open-source or paid threat intelligence platforms, with Shodan and Censys paid queries both yielding zero results. That confirms the team server was either not indexed by internet scanners before the April 6 discovery, actively blocked scan traffic, or the cert is unique to this single deployment. The pivot is closed, and no additional infrastructure was identified through certificate correlation.
 
 ### 6.2 CS Watermark 987654321 — Distribution-Level Indicator
 
-**Confidence: HIGH (88%) — distribution association, NOT operator identity**
+**Confidence: HIGH (88%), distribution association, NOT operator identity**
 
 Watermark 987654321 is a high-prevalence pirated CS watermark found in multiple independent hunting datasets. Key documented associations:
 
 - svch0st's beacon hunting study (2021): among the most common non-zero watermarks in threat hunting datasets alongside 666666666 (Tier 3 source)
-- Intel Dalal / Medium: identified on infrastructure pointing to Tencent API Gateway (`service-owedaeao-1304783326.gz.tencentapigw.com.cn/api/x`) — suggestive of Chinese-nexus origin (Tier 3 source)
-- CybersecurityNews (DFIR Report attribution, 2024): found alongside `红队版.zip` containing TaoWu, Landon (CS extension frameworks), and Viper C2 — characteristic of Chinese-language red team toolkit packaging
+- Intel Dalal / Medium: identified on infrastructure pointing to Tencent API Gateway (`service-owedaeao-1304783326.gz.tencentapigw.com.cn/api/x`), suggestive of Chinese-nexus origin (Tier 3 source)
+- CybersecurityNews (DFIR Report attribution, 2024): found alongside `红队版.zip` containing TaoWu, Landon (CS extension frameworks), and Viper C2, characteristic of Chinese-language red team toolkit packaging
 
-**Critical finding — You Dun attribution rejected:** The You Dun group has been documented using watermark 987654321. The infrastructure analyst explicitly assessed this attribution as INSUFFICIENT: Canadian Linode hosting (atypical for documented You Dun infrastructure), zero Chinese-language strings in 106 samples, no Chinese domestic C2 patterns, and no key overlaps with documented You Dun infrastructure. The shared watermark is explained by shared distribution availability, not operational linkage.
+**Critical finding, You Dun attribution rejected:** The You Dun group has been documented using watermark 987654321. The infrastructure analyst explicitly assessed this attribution as INSUFFICIENT: Canadian Linode hosting (atypical for documented You Dun infrastructure), zero Chinese-language strings in 106 samples, no Chinese domestic C2 patterns, and no key overlaps with documented You Dun infrastructure. The shared watermark is explained by shared distribution availability, not operational linkage.
 
 One caveat on prevalence. Watermark 987654321 appears in hundreds of active CS deployments, so its presence alone is not a clustering signal, and additional technical evidence is needed to link deployments sharing it.
 
@@ -826,7 +826,7 @@ One caveat on prevalence. Watermark 987654321 appears in hundreds of active CS d
 
 **Confidence: DEFINITE (95%) for technique classification**
 
-The EAX-redirect hollowing in the Artifact Kit service variant is stock CS behavior documented in Cobalt Strike's official blog ("Cobalt Strike's Process Injection: The Details"). The detection gap arises from the gap between what CS stock components do and what most EDR T1055.012 rules monitor — it is a systematic gap affecting all CS deployments using the Artifact Kit service template, not a UTA-2026-004-specific innovation.
+The EAX-redirect hollowing in the Artifact Kit service variant is stock CS behavior documented in Cobalt Strike's official blog ("Cobalt Strike's Process Injection: The Details"). The detection gap arises from the gap between what CS stock components do and what most EDR T1055.012 rules monitor. It is a systematic gap affecting all CS deployments using the Artifact Kit service template, not a UTA-2026-004-specific innovation.
 
 CrowdStrike's 2024 research on HijackLoader confirmed that EAX register redirect (SetThreadContext without NtUnmapViewOfSection) is observed in modern crimeware and remains a detection gap in endpoint products that rely on traditional API-based hollowing signatures.
 
@@ -852,7 +852,7 @@ There is a developer ecosystem risk. OpenStrike is an undocumented custom implan
 
 CS 3.x + 4.4 + 4.9.1 co-existence with two RSA key ecosystems is characteristic of multi-distribution toolkit assembly over time. When a CS distribution is cracked and distributed, each distribution defines its own auth file, watermark, and RSA key pair. Mixing artifacts from two distributions creates the observable keypair mismatch documented here.
 
-The inference: UTA-2026-004 accumulated artifacts from CS 3.x-era material (pre-2016 watermark 0), CS 4.4-era material (2021-era, watermark 987654321), and the 4.9.1 "Pwn3rs" team server (2023-era) — spanning participation in the cracked CS ecosystem over at least 2-3 years. The operator is a consumer of this ecosystem, not a producer.
+The inference: UTA-2026-004 accumulated artifacts from CS 3.x-era material (pre-2016 watermark 0), CS 4.4-era material (2021-era, watermark 987654321), and the 4.9.1 "Pwn3rs" team server (2023-era), spanning participation in the cracked CS ecosystem over at least 2-3 years. The operator is a consumer of this ecosystem, not a producer.
 
 ---
 
@@ -869,16 +869,16 @@ The inference: UTA-2026-004 accumulated artifacts from CS 3.x-era material (pre-
 | Encrypted sleeve DLLs (sampled) | 44 | 24 | 20 |
 | **Total** | **98** | **72 (73.5%)** | **26** |
 
-All 10 custom GCC 15 operator tools — including all four OpenStrike beacon generations — were first-reports. OpenStrike has no prior public threat intelligence. The 26 previously known files were primarily Artifact Kit templates and the gen-3 beacon from the April 6 report.
+All 10 custom GCC 15 operator tools (including all four OpenStrike beacon generations) were first-reports. OpenStrike has no prior public threat intelligence. The 26 previously known files were primarily Artifact Kit templates and the gen-3 beacon from the April 6 report.
 
 ---
 
 ## 8. Threat Actor Assessment: UTA-2026-004
 {: .hl-tier-2}
 
-> **Analyst note:** This section addresses who is behind this campaign and what we can and cannot determine about their identity. The short answer is: we cannot identify a specific named actor. The longer answer explains what the evidence does tell us — and why the evidence that might suggest a Chinese-linked actor is insufficient for that conclusion.
+> **Analyst note:** This section addresses who is behind this campaign and what we can and cannot determine about their identity. The short answer is: we cannot identify a specific named actor. The longer answer explains what the evidence does tell us, and why the evidence that might suggest a Chinese-linked actor is insufficient for that conclusion.
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-004 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
 I maintain the UTA-2026-004 attribution, with no upgrade warranted, and named-actor confidence stays INSUFFICIENT below 50 percent.
 
@@ -894,7 +894,7 @@ The "You Dun" attribution is INSUFFICIENT. The watermark 987654321 overlap with 
 |---|---|---|
 | H1: Pre-operational capability development | HIGH | WIP gen-4, 0 victims, fresh/wiped server, open directory OPSEC failure |
 | H2: Non-Chinese actor using Chinese-sourced tools | MODERATE | Canadian hosting, no Chinese strings, shared watermark widely available |
-| H3: Chinese-nexus actor | MODERATE | Watermark 987654321, Pwn3rs from Kanxue — but these are distribution indicators |
+| H3: Chinese-nexus actor | MODERATE | Watermark 987654321, Pwn3rs from Kanxue, but these are distribution indicators |
 | H4: Named APT (You Dun, other) | LOW | No credible technical overlaps beyond shared distribution |
 
 H1/H2/H3 cannot be distinguished with available evidence. The pre-operational assessment (H1) is the most consistent with the full evidence set.
@@ -905,13 +905,13 @@ Building on the April 6 profile, the following characteristics are now confirmed
 - CS 4.9.1 Pwn3rzs distribution as current team server
 - Second cracked CS distribution watermark 987654321 (CS 4.4 components)
 - GCC 15.2.0 as current build environment (newest toolchain observed)
-- 4-generation beacon evolution chain — began with CS key B, migrated to key A, now building RSA-independent
+- 4-generation beacon evolution chain: began with CS key B, migrated to key A, now building RSA-independent
 - Mixed cracked CS distribution assembly (auth/JAR keypair mismatch)
 - JAR authkey.pub MD5: `8bb4df00c120881a1945a43e2bb2379e`
 
 **What would increase attribution confidence:**
-- A second OpenStrike campaign sighting — even one reuse would enable actor clustering
-- SSL cert `6e8efd85...` pivot — searched in paid Shodan and Censys with no results (closed)
+- A second OpenStrike campaign sighting: even one reuse would enable actor clustering
+- SSL cert `6e8efd85...` pivot: searched in paid Shodan and Censys with no results (closed)
 - Language artifacts or operational timing analysis (UTC+8 window would be significant)
 - Victim identification or targeting pattern
 
@@ -932,7 +932,7 @@ Building on the April 6 profile, the following characteristics are now confirmed
 | Execution | T1569.002 | Service Execution | HIGH | artifact32svc.exe registers DceRpcSs service |
 | Persistence | T1543.003 | Windows Service | HIGH | DceRpcSs service; npf.sys kernel driver service |
 | Defense Evasion | T1055.002 | PE Injection | HIGH | VirtualAlloc(RWX) + memcpy + execute across 5 in-memory loaders |
-| Defense Evasion | T1055.012 | Process Hollowing | HIGH | EAX-redirect via SetThreadContext — no NtUnmapViewOfSection |
+| Defense Evasion | T1055.012 | Process Hollowing | HIGH | EAX-redirect via SetThreadContext, no NtUnmapViewOfSection |
 | Defense Evasion | T1036.004 | Masquerade Task or Service | HIGH | DceRpcSs mimics legitimate Windows RpcSs |
 | Defense Evasion | T1036.005 | Match Legitimate Name or Location | HIGH | C:\Windows\Temp\beacon.dll; rundll32.exe as hollowing target |
 | Defense Evasion | T1027 | Obfuscated Files or Information | HIGH | XOR-encoded shellcode in Artifact Kit; AES-encrypted sleeve DLLs |
@@ -941,26 +941,26 @@ Building on the April 6 profile, the following characteristics are now confirmed
 | Defense Evasion | T1218.011 | Rundll32 | HIGH | rundll32.exe spawned with no arguments as hollowing target |
 | Discovery | T1082 | System Information Discovery | HIGH | GetComputerNameA, GetUserNameA across all beacon generations |
 | Discovery | T1057 | Process Discovery | HIGH | CreateToolhelp32Snapshot in gen-4 cmd_ps (0x20) |
-| Discovery | T1033 | System Owner/User Discovery | HIGH | Whoami (0x1B) — ComputerName\\UserName |
+| Discovery | T1033 | System Owner/User Discovery | HIGH | Whoami (0x1B), ComputerName\\UserName |
 | Discovery | T1083 | File and Directory Discovery | HIGH | FindFirstFileA in gen-4 cmd_ls (0x21) |
-| Collection | T1005 | Data from Local System | HIGH | Download (0x09) — CreateFileA + ReadFile + encrypted POST |
+| Collection | T1005 | Data from Local System | HIGH | Download (0x09), CreateFileA + ReadFile + encrypted POST |
 | Command and Control | T1071.001 | Web Protocols | HIGH | HTTP GET/POST via WinHTTP (gen-4) and WinInet (CS DLLs) |
 | Command and Control | T1573.001 | Symmetric Cryptography | HIGH | AES-128-CBC + HMAC-SHA256 (gen-4); AES-128-CBC (CovertVPN) |
 | Command and Control | T1132.001 | Standard Encoding | HIGH | Base64 in PS1 stager; RSA ciphertext encoding in gen-2 |
 | Command and Control | T1095 | Non-Application Layer Protocol | HIGH | ICMP echo tunnel in CovertVPN (0xDD/0xCC frame markers) |
-| Command and Control | T1572 | Protocol Tunneling | HIGH | CovertVPN L2 bridge — Ethernet frames over ICMP/TCP/UDP/HTTP |
+| Command and Control | T1572 | Protocol Tunneling | HIGH | CovertVPN L2 bridge, Ethernet frames over ICMP/TCP/UDP/HTTP |
 | Command and Control | T1105 | Ingress Tool Transfer | HIGH | Stager downloads beacon via /au2U (EXE) and /msI4 (PS1) |
 | Exfiltration | T1041 | Exfiltration Over C2 Channel | HIGH | Download command sends file contents via encrypted POST /submit |
 | Execution | T1129 | Shared Modules | HIGH | dll_loader.exe LoadLibraryA(C:\Windows\Temp\beacon.dll) |
 
-*T1056.001 (Keylogging via keylogger.js) and T1112 (Registry modification via template.vbs) omitted — MODERATE confidence only, pending deployment evidence.*
+*T1056.001 (Keylogging via keylogger.js) and T1112 (Registry modification via template.vbs) omitted, MODERATE confidence only, pending deployment evidence.*
 
 ---
 
 ## 10. Indicators of Compromise
 {: .hl-tier-2}
 
-IOCs are provided in structured machine-readable format. This feed contains only new indicators from the April 8 expanded analysis — not duplicating the April 6 feed.
+IOCs are provided in structured machine-readable format. This feed contains only new indicators from the April 8 expanded analysis, not duplicating the April 6 feed.
 
 - **New IOC feed:** [/ioc-feeds/new-files-found-20260408-iocs.json](/ioc-feeds/new-files-found-20260408-iocs.json)
 - **Original IOC feed (April 6):** [/ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json](/ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json)
@@ -984,8 +984,8 @@ IOCs are provided in structured machine-readable format. This feed contains only
 
 | Indicator | Type | Action |
 |---|---|---|
-| `172.105.0.126` — extend block to ports 809/50050 | IPv4 | Block (already in April 6 feed) |
-| Service name `DceRpcSs` | Service | Hunt/alert — not a legitimate Windows service |
+| `172.105.0.126`, extend block to ports 809/50050 | IPv4 | Block (already in April 6 feed) |
+| Service name `DceRpcSs` | Service | Hunt/alert, not a legitimate Windows service |
 | `\\.\pipe\MSSE-*-server` | Named pipe | Alert on creation (Sysmon Event 17) |
 | `C:\Windows\Temp\beacon.dll` | File path | Alert on creation (Sysmon Event 11) |
 | `npf.sys` from `%TEMP%` | Driver load | Alert (Sysmon Event 6) |
@@ -1023,7 +1023,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 - CS 4.9.1 "Pwn3rs" team server (cs_ts.log direct evidence)
 - 4-generation implant evolution chain (gen-1 through gen-4)
 - Gen-4 complete function-level reversal
-- Gen-4 WIP status — nonce not transmitted, key exchange broken
+- Gen-4 WIP status: nonce not transmitted, key exchange broken
 - EAX-redirect technique classification (SetThreadContext, no NtUnmapViewOfSection)
 - Two RSA key ecosystems mapped across 10 beacon DLLs
 - Auth/JAR keypair mismatch confirmed (Java class reverse engineering)
@@ -1051,7 +1051,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 | Gap | Priority | Recommended Action |
 |---|---|---|
-| SSL cert `6e8efd85...` — no results in paid tools | CLOSED | Searched Shodan and Censys paid platforms — zero results. Cert is unique to this deployment or was never indexed. |
+| SSL cert `6e8efd85...`, no results in paid tools | CLOSED | Searched Shodan and Censys paid platforms, zero results. Cert is unique to this deployment or was never indexed. |
 | 172.105.0.126 infrastructure overview | CLOSED | Covered in the [April 6 report](/reports/open-directory-172-105-0-126-20260406/) infrastructure analysis. See original report Section 5 for full IP reputation and hosting details. |
 | Open directory current status | MEDIUM | Active probe or Shodan `ip:172.105.0.126 port:8888` |
 | Trinity RSA-2048 key origin distribution | MEDIUM | Compare modulus `9f12c9cb...` against known CS 3.x cracks |
@@ -1061,27 +1061,27 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 **ACH Runner-Ups by Conclusion Category**
 
-**Malware family classification (winner: H1 — Novel OpenStrike + cracked CS, DEFINITE confidence)**
+**Malware family classification (winner: H1, Novel OpenStrike + cracked CS, DEFINITE confidence)**
 
-- Runner-up: H2 — Previously known toolkit variant. Status: ELIMINATED. The OpenStrike banner string `[*] OpenStrike Beacon starting...` does not match any indexed malware family, all 10 custom GCC 15 tools were VirusTotal first-reports, and no public threat intelligence references this family name. The runner-up is eliminated rather than merely deferred.
+- Runner-up: H2, Previously known toolkit variant. Status: ELIMINATED. The OpenStrike banner string `[*] OpenStrike Beacon starting...` does not match any indexed malware family, all 10 custom GCC 15 tools were VirusTotal first-reports, and no public threat intelligence references this family name. The runner-up is eliminated rather than merely deferred.
 - Assumption underlying H1: The banner string is not a deliberate false flag planted to mislead investigators into labeling this a novel family. Sensitivity: LOW. No evidence suggests deliberate misdirection; the four-generation development chain is internally consistent and would not be necessary for a false-flag operation.
 
-**Threat actor motive (winner: H3 — Pre-operational capability development, MODERATE confidence)**
+**Threat actor motive (winner: H3, Pre-operational capability development, MODERATE confidence)**
 
-- Runner-up: H2 — Espionage preparation. Status: POSSIBLE but unresolvable with current data. CovertVPN (Layer 2 network pivoting) and a complete post-exploitation toolkit are consistent with both espionage and capability staging for any intrusion type. No specific espionage targeting indicators were observed, but the capability set exceeds what is typically assembled for opportunistic financial crime.
+- Runner-up: H2, Espionage preparation. Status: POSSIBLE but unresolvable with current data. CovertVPN (Layer 2 network pivoting) and a complete post-exploitation toolkit are consistent with both espionage and capability staging for any intrusion type. No specific espionage targeting indicators were observed, but the capability set exceeds what is typically assembled for opportunistic financial crime.
 - Evidence needed to distinguish: Victim identification, targeting pattern, or language/timing artifacts pointing to specific sector focus.
 
-**Threat actor attribution (winner: H1/H2 tied — Chinese-nexus or non-Chinese actor using Chinese-sourced tools, INSUFFICIENT confidence for any named actor)**
+**Threat actor attribution (winner: H1/H2 tied, Chinese-nexus or non-Chinese actor using Chinese-sourced tools, INSUFFICIENT confidence for any named actor)**
 
-- Runner-up: H4 — Named APT (You Dun or other). Status: LOW. Six specific technical dimensions contradict the You Dun linkage documented in Section 8. No Tier 1 or Tier 2 source attributes this campaign to any named actor.
+- Runner-up: H4, Named APT (You Dun or other). Status: LOW. Six specific technical dimensions contradict the You Dun linkage documented in Section 8. No Tier 1 or Tier 2 source attributes this campaign to any named actor.
 
 **Key Assumptions (KAC)**
 
 | Assumption | Stakes | Sensitivity | Evidence That Would Invalidate |
 |---|---|---|---|
-| Gen-4 nonce omission is a development bug, not intentional out-of-band key exchange | Gen-4 WIP assessment | HIGH — if wrong, gen-4 may already be deployable | Out-of-band key delivery mechanism (e.g., pre-shared config, SMS, separate channel not observed in samples) |
-| The Pwn3rzs distribution is widely available to any actor with Kanxue forum access | Attribution INSUFFICIENT status | HIGH — if distribution is restricted, operator pool is smaller | Evidence of access controls, subscriber vetting, or private-only distribution |
-| Custom OpenStrike toolchain is operator-authored, not a shared development within a small group | Actor profiling | MODERATE — if shared, the actor cluster is broader | Second campaign using identical banner string or GCC 15 fingerprint from a separate IP |
+| Gen-4 nonce omission is a development bug, not intentional out-of-band key exchange | Gen-4 WIP assessment | HIGH, if wrong, gen-4 may already be deployable | Out-of-band key delivery mechanism (e.g., pre-shared config, SMS, separate channel not observed in samples) |
+| The Pwn3rzs distribution is widely available to any actor with Kanxue forum access | Attribution INSUFFICIENT status | HIGH, if distribution is restricted, operator pool is smaller | Evidence of access controls, subscriber vetting, or private-only distribution |
+| Custom OpenStrike toolchain is operator-authored, not a shared development within a small group | Actor profiling | MODERATE, if shared, the actor cluster is broader | Second campaign using identical banner string or GCC 15 fingerprint from a separate IP |
 
 ---
 
@@ -1090,20 +1090,20 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 **Detection priorities (highest-fidelity behavioral indicators):**
 
-- EAX-redirect hollowing: `rundll32.exe` spawned with no command-line arguments by a service process, followed by cross-process `VirtualAllocEx` → `WriteProcessMemory` → `VirtualProtectEx(RX)` → `SetThreadContext`. Detection anchor must be `SetThreadContext`, NOT `NtUnmapViewOfSection` — the latter is never called.
-- Named pipe pattern: `\\.\pipe\MSSE-*-server` creation (Sysmon Event IDs 17/18) — stock Artifact Kit indicator the operator has not changed.
-- ICMP anomaly: echo request/reply with payload >128 bytes containing 0xDD or 0xCC markers — CovertVPN tunnel traffic.
+- EAX-redirect hollowing: `rundll32.exe` spawned with no command-line arguments by a service process, followed by cross-process `VirtualAllocEx` → `WriteProcessMemory` → `VirtualProtectEx(RX)` → `SetThreadContext`. Detection anchor must be `SetThreadContext`, NOT `NtUnmapViewOfSection`. The latter is never called.
+- Named pipe pattern: `\\.\pipe\MSSE-*-server` creation (Sysmon Event IDs 17/18), stock Artifact Kit indicator the operator has not changed.
+- ICMP anomaly: echo request/reply with payload >128 bytes containing 0xDD or 0xCC markers, CovertVPN tunnel traffic.
 
 **Persistence artifacts to locate and remove:**
 
-- Windows service `DceRpcSs` (masquerades as legitimate `RpcSs` — different name)
+- Windows service `DceRpcSs` (masquerades as legitimate `RpcSs`, different name)
 - Kernel driver service `npf` installed from `%TEMP%\npf.sys`
 - File at `C:\Windows\Temp\beacon.dll`
 - Active named pipe `\\.\pipe\MSSE-[0-9]+-server`
 
 **Containment categories:**
 
-- Block `172.105.0.126` at perimeter for all ports — extend existing April 6 block to ports 809 and 50050
+- Block `172.105.0.126` at perimeter for all ports: extend existing April 6 block to ports 809 and 50050
 - Alert or block SSL certificate SHA256 `6e8efd85110de376426cde809f25d50ffcbb1d0e39d11c82913757cb277e15dd` at TLS inspection points
 - Hunt for ICMP tunneling indicators on network egress monitoring
 - Deploy detection rules from [/hunting-detections/new-files-found-20260408-detections/](/hunting-detections/new-files-found-20260408-detections/)
@@ -1116,32 +1116,32 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 **Primary Sources (Tier 1):**
 
-- MITRE ATT&CK — T1055.012 (Process Hollowing), T1095 (Non-Application Layer Protocol), T1572 (Protocol Tunneling), T1543.003 (Windows Service): https://attack.mitre.org
+- MITRE ATT&CK: T1055.012 (Process Hollowing), T1095 (Non-Application Layer Protocol), T1572 (Protocol Tunneling), T1543.003 (Windows Service): https://attack.mitre.org
 - Cobalt Strike Official Documentation: "Covert VPN — Layer 2 Pivoting"; "Cobalt Strike's Process Injection: The Details"; "Why is rundll32.exe connecting to the internet?"
 - Microsoft Documentation: BCryptDeriveKey API reference: https://docs.microsoft.com/en-us/windows/win32/api/bcrypt/nf-bcrypt-bcryptderivekey
 
 **Threat Intelligence Research (Tier 2):**
 
-- Elastic Security Labs: "Extracting Cobalt Strike Beacon Configurations" — CS crypto architecture (SHA256 key split documentation)
-- Unit42 (Palo Alto Networks): "Cobalt Strike Analysis and Tutorial: CS Metadata Encryption and Decryption" — RSA + AES beacon crypto
-- [hunt.io](https://hunt.io/): "Rare Watermark Links Cobalt Strike 4.10 Team Servers to Ongoing Suspicious Activity" — watermark methodology
-- [hunt.io](https://hunt.io/): "Guide to Hunting Cobalt Strike, Part 1 (Open Directories)" — open directory hunting context
-- thedfirreport.com: "Cobalt Strike, a Defender's Guide" — named pipe and rundll32 detection
-- Recorded Future: "Multi-Method Approach to Identifying Rogue Cobalt Strike Servers" — SSL cert fingerprinting methodology
-- CrowdStrike: "HijackLoader Expands Techniques" (2024) — EAX redirect in modern malware
-- CybersecurityNews (DFIR Report attribution): "Chinese Hackers Toolkit Uncovered" (October 28, 2024) — watermark 987654321 and 红队版.zip case
+- Elastic Security Labs: "Extracting Cobalt Strike Beacon Configurations", CS crypto architecture (SHA256 key split documentation)
+- Unit42 (Palo Alto Networks): "Cobalt Strike Analysis and Tutorial: CS Metadata Encryption and Decryption", RSA + AES beacon crypto
+- [hunt.io](https://hunt.io/): "Rare Watermark Links Cobalt Strike 4.10 Team Servers to Ongoing Suspicious Activity", watermark methodology
+- [hunt.io](https://hunt.io/): "Guide to Hunting Cobalt Strike, Part 1 (Open Directories)", open directory hunting context
+- thedfirreport.com: "Cobalt Strike, a Defender's Guide", named pipe and rundll32 detection
+- Recorded Future: "Multi-Method Approach to Identifying Rogue Cobalt Strike Servers", SSL cert fingerprinting methodology
+- CrowdStrike: "HijackLoader Expands Techniques" (2024), EAX redirect in modern malware
+- CybersecurityNews (DFIR Report attribution): "Chinese Hackers Toolkit Uncovered" (October 28, 2024), watermark 987654321 and 红队版.zip case
 
 **Community Research (Tier 3):**
 
 - Chris Duggan (@TLP_R3D, Twitter/X, September 7, 2024): "Pwn3rs Striked" SSL cert Shodan pivot documentation
-- Intel Dalal / Medium: "Part 1: Digging into ASNs for Threat Hunting: Cobalt Strike" — watermark 987654321 infrastructure detail
-- svch0st / Medium: "Stats from Hunting Cobalt Strike Beacons" (2021) — watermark prevalence data
-- Cyphur Blog: "Hunting for Leaked Cobalt Strike v4.9" — Pwn3rzs leak origin documentation
-- Sidechannel.blog: "Cobalt Strike: Infrastructure Analysis" — mixed watermark operator patterns
+- Intel Dalal / Medium: "Part 1: Digging into ASNs for Threat Hunting: Cobalt Strike", watermark 987654321 infrastructure detail
+- svch0st / Medium: "Stats from Hunting Cobalt Strike Beacons" (2021), watermark prevalence data
+- Cyphur Blog: "Hunting for Leaked Cobalt Strike v4.9", Pwn3rzs leak origin documentation
+- Sidechannel.blog: "Cobalt Strike: Infrastructure Analysis", mixed watermark operator patterns
 
-**Forum Documentation (Tier 4 — distribution provenance only):**
+**Forum Documentation (Tier 4, distribution provenance only):**
 
-- bbs.kanxue.com threads 279166, 279348, 280276 — Pwn3rzs CS 4.9/4.9.1 distribution documentation (Chinese security forum, primary evidence of distribution origin date and channel)
+- bbs.kanxue.com threads 279166, 279348, 280276: Pwn3rzs CS 4.9/4.9.1 distribution documentation (Chinese security forum, primary evidence of distribution origin date and channel)
 
 ---
 
@@ -1154,4 +1154,4 @@ The original investigation established the OpenStrike family name, the Trinity P
 
 ---
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
