@@ -9,7 +9,10 @@
     "analyst": "The Hunters Ledger",
     "confidence": "HIGH",
     "tlp": "CLEAR",
-    "threat_level": "HIGH"
+    "threat_level": "HIGH",
+    "victim_names": [
+      "GetYourGroup"
+    ]
   },
   "file_hashes": {
     "sha256": [
@@ -360,6 +363,14 @@
       "type": "filename_pattern",
       "confidence": "HIGH",
       "context": "Operator-bespoke per-architecture botnet instance naming convention. Pattern observed in operator's IMPLEMENTATION_PLAN.txt + persistent_bot.sh deployment workflow."
+    },
+    {
+      "name": "GetYourGroup",
+      "value": "GetYourGroup",
+      "type": "victim_organization",
+      "confidence": "DEFINITE",
+      "context": "Compromised third party, NOT operator infrastructure. A German tourism business whose RunCloud-managed production VPS at 165.227.175.161 was planted with the parasitic Naku CNC daemon on TCP/23. Its sibling 188.166.194.243 serves the company's real websites and carries no CNC listener. Coordinate with the owner before any takedown, and do not blanket-block either address.",
+      "publication_note": "Name retained deliberately, and the retention is the point. This feed's operational value for these two addresses is that a defender must NOT blind-block them: 165.227.175.161 is a live tourism business's production server carrying a planted daemon, and 188.166.194.243 serves 28 of that company's customer-facing domains and carries no CNC at all. Stripping the name would leave two addresses sitting in a threat feed with nothing to say they belong to a victim, which inverts the outcome the no-victim-naming rule exists to produce. The campaign's finding that this operator parasitises legitimate business infrastructure cannot be stated without it either, and the infrastructure status log has classified both hosts as victim infrastructure since 2026-08-21."
     }
   ],
   "behavioral_indicators": [
@@ -397,7 +408,7 @@
       "value": "Selective inbound IP filtering on Naku CNC (drops Cloudflare WARP, accepts arbitrary residential/IoT source IPs)",
       "type": "opsec_pattern",
       "confidence": "MODERATE",
-      "context": "Operator-side firewall rule filtering known scanner sources. Vantage via Cloudflare WARP gets 'No route to host' while Hunt scanner sees host alive on same ports same day."
+      "context": "Operator-side firewall rule filtering known scanner sources. One scanning source gets 'No route to host' while a second sees the host alive on the same ports the same day, which is selective inbound source filtering rather than a closed port."
     },
     {
       "value": "JSON-over-TCP wire protocol on Matrix C2 (87.106.143.220:1337): '{\"type\":\"bot_register\",...}' + '{\"type\":\"heartbeat\",\"bot_id\":...}'",

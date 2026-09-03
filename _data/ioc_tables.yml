@@ -6980,7 +6980,7 @@
   report_url: "/reports/rovodev-mirai-matrix-c2-87.106.143.220/"
   detection_url: "/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections"
   total: 53
-  untyped: 64
+  untyped: 68
   counts:
     ipv4: 6
     path: 10

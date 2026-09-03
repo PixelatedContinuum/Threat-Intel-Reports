@@ -251,7 +251,7 @@ Naku and Pandora are the same thing, which I hold DEFINITE. VirusTotal's file in
 
 Most Mirai-fork operators use one key (typically changed from stock 0x22). Splitting per data class — three distinct keys — is sophisticated and defeats single-key XOR-decoding tools that try one key on the entire binary.
 
-**Length-prefixed-string CNC option-key protocol modification — high defender-relevance.** In stock Mirai and stock Sora-fork source, CNC command option keys are SINGLE-BYTE ENUM values: `ATK_OPT_PAYLOAD_SIZE=0`, `ATK_OPT_PAYLOAD_RAND=1`, and so on. In Naku, the recovered Ghidra decompilation of the option-parsing routine reads:
+**Length-prefixed-string CNC option-key protocol modification — high defender-relevance.** In stock Mirai and stock Sora-fork source, CNC command option keys are SINGLE-BYTE ENUM values: `ATK_OPT_PAYLOAD_SIZE=0`, `ATK_OPT_PAYLOAD_RAND=1`, and so on. In Naku, the recovered decompilation of the option-parsing routine reads:
 
 ```c
 uVar10 = (uint)pbVar16[2];           /* key LENGTH (1 byte)              */
@@ -585,7 +585,7 @@ The four-tier infrastructure architecture:
 
 ### 4.8 Naku.arm Static Reverse Engineering Findings
 
-> **Analyst note:** This subsection documents the byte-level reverse engineering findings from direct ARM ELF disassembly of Naku.arm using the Ghidra decompiler. The findings provide the technical evidence for the operator-bespoke modifications described in subsection 4.1 (triple-XOR-key obfuscation, length-prefixed-string CNC option keys, double Huawei scanner). Defender-relevance: the recovered constants and protocol-modification details are the source material for Naku-specific Suricata and YARA rules.
+> **Analyst note:** This subsection documents the byte-level reverse engineering findings from direct ARM ELF disassembly of Naku.arm using a decompiler. The findings provide the technical evidence for the operator-bespoke modifications described in subsection 4.1 (triple-XOR-key obfuscation, length-prefixed-string CNC option keys, double Huawei scanner). Defender-relevance: the recovered constants and protocol-modification details are the source material for Naku-specific Suricata and YARA rules.
 
 **CNC resolution — hardcoded inline as raw 32-bit constant in main().** Full main() decompilation reveals the CNC is hardcoded inline as a raw 32-bit constant in `main()`, NOT in `table_init()`:
 
@@ -606,8 +606,8 @@ FUN_00013e28(DAT_0001f938, &DAT_0001fca4, 0x10);  // connect(sockfd, &sockaddr_i
 `DAT_0001fca8 = 0xa1afe3a5` on little-endian ARM = bytes `a5 e3 af a1` in memory = IPv4 `165.227.175.161`. Port `0x0017` in network byte order = decimal 23.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/naku-arm-cnc-hardcoded-address.png" | relative_url }}" alt="Ghidra decompiled view of Naku.arm main() showing the CNC IPv4 address 0xa1afe3a5 (resolving to 165.227.175.161 in little-endian byte order) and port 0x0017 (decimal 23) hardcoded as raw 32-bit constants inline in main() rather than in the table_init obfuscated string table.">
-  <figcaption><em>Figure 8: Ghidra decompilation of Naku.arm's <code>main()</code> showing the parasitic CNC (<code>165.227.175.161:23</code>, on the compromised GetYourGroup tourism VPS) hardcoded inline as a raw 32-bit constant rather than through the operator's XOR-0x54 string-obfuscation pipeline. This is the byte-level proof of dual-channel C2 design — operator-owned IONOS infrastructure for customer interface alongside parasitic CNC on compromised legitimate infrastructure for bot propagation.</em></figcaption>
+ <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/naku-arm-cnc-hardcoded-address.png" | relative_url }}" alt="Decompiled view of Naku.arm main() showing the CNC IPv4 address 0xa1afe3a5 (resolving to 165.227.175.161 in little-endian byte order) and port 0x0017 (decimal 23) hardcoded as raw 32-bit constants inline in main() rather than in the table_init obfuscated string table.">
+ <figcaption><em>Figure 8: Decompilation of Naku.arm's <code>main()</code> showing the parasitic CNC (<code>165.227.175.161:23</code>, on the compromised GetYourGroup tourism VPS) hardcoded inline as a raw 32-bit constant rather than through the operator's XOR-0x54 string-obfuscation pipeline. This is the byte-level proof of dual-channel C2 design — operator-owned IONOS infrastructure for customer interface alongside parasitic CNC on compromised legitimate infrastructure for bot propagation.</em></figcaption>
 </figure>
 
 **Plaintext HTTP exploits in `.rodata` (NOT XOR-encoded).** Two plaintext HTTP exploit payloads kept readable for HTTP-parser compatibility:
@@ -779,19 +779,19 @@ The Naku.arm binary (SHA `64afc3b3a02706ffcf4255bda4519f8c1c66daaaf937a2641fd14a
 
 1. Strings extraction (`strings` Linux utility) — yields 31 strings, of which 22 are XOR-0x54 obfuscated
 2. XOR-0x54 deobfuscation — yields the 16-string Mirai-operational path table (Section 4.1)
-3. ARM ELF disassembly via the Ghidra (an open-source reverse engineering platform) decompiler — yields the inline CNC constant in `main()` and the option-key parsing routine
+3. ARM ELF disassembly via a decompiler — yields the inline CNC constant in `main()` and the option-key parsing routine
 4. Cross-architecture comparison — confirms the operator-bespoke constants (XOR keys, charset, `PandoraNet` botnet ID) are operator-permanent across all 11 architectures
-5. Ghidra paste-back for the multi-key XOR scheme — confirms the triple-key obfuscation (0x54 / 0x42 / 0x45)
+5. Decompiler paste-back for the multi-key XOR scheme — confirms the triple-key obfuscation (0x54 / 0x42 / 0x45)
 
 Key recovered findings from the ARM ELF analysis (all DEFINITE):
 
 - CNC IP `165.227.175.161` recovered as raw 32-bit constant `0xa1afe3a5` inline in `main()`
 - CNC port 23 recovered as `0x0017` in network byte order
-- Triple-XOR-key obfuscation scheme (0x54 general / 0x42 credentials / 0x45 duplicate prompt entry) confirmed via Ghidra disassembly of `table_init()`
-- Length-prefixed-string CNC option-key protocol modification confirmed via Ghidra disassembly of the option-parsing routine
-- Four parallel scanner thread launch confirmed via Ghidra disassembly of `main()` post-init code
-- Argv-based infection-source tagging confirmed via Ghidra disassembly of argv-processing block
-- Watchdog-disable persistence loop confirmed via Ghidra disassembly of post-init pre-CNC-connect code
+- Triple-XOR-key obfuscation scheme (0x54 general / 0x42 credentials / 0x45 duplicate prompt entry) confirmed via disassembly of `table_init()`
+- Length-prefixed-string CNC option-key protocol modification confirmed via disassembly of the option-parsing routine
+- Four parallel scanner thread launch confirmed via disassembly of `main()` post-init code
+- Argv-based infection-source tagging confirmed via disassembly of argv-processing block
+- Watchdog-disable persistence loop confirmed via disassembly of post-init pre-CNC-connect code
 
 ### 5.4 Credential Brute-List — XOR-0x42 Region
 
@@ -886,8 +886,8 @@ Buffer is bounded at 1024 bytes per command (the recv-loop check in `main()`).
 **Operator-bespoke modification (high-value for detection):** Option keys are LENGTH-PREFIXED STRINGS in this Naku variant, not single-byte enum values as in stock Mirai/Sora. Defenders using Mirai-protocol-aware IDS rules WILL miss this traffic — Naku-specific signatures are required.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/naku-arm-attack-parse-ghidra.png" | relative_url }}" alt="Ghidra decompilation of FUN_000082bc in Naku.arm, the operator's attack_parse() function, showing the modified CNC wire format with length-prefixed string option keys replacing stock Mirai's single-byte enum values — the operator-bespoke protocol modification that defeats Mirai-protocol-aware IDS rules.">
-  <figcaption><em>Figure 10: Ghidra decompilation of <code>FUN_000082bc</code> (Naku.arm's <code>attack_parse()</code> equivalent) showing the operator-bespoke CNC wire-format modification — option keys parsed as length-prefixed strings rather than stock Mirai's single-byte enum values. This single byte-level change is the highest-value detection differentiator for the Naku variant: published Mirai-protocol-aware IDS rules will silently miss this command-channel traffic, so Naku-specific Suricata signatures (Section 10) are required.</em></figcaption>
+ <img src="{{ "/assets/images/rovodev-mirai-matrix-c2-87.106.143.220/naku-arm-attack-parse-decompiled.png" | relative_url }}" alt="Decompilation of FUN_000082bc in Naku.arm, the operator's attack_parse() function, showing the modified CNC wire format with length-prefixed string option keys replacing stock Mirai's single-byte enum values — the operator-bespoke protocol modification that defeats Mirai-protocol-aware IDS rules.">
+ <figcaption><em>Figure 10: Decompilation of <code>FUN_000082bc</code> (Naku.arm's <code>attack_parse()</code> equivalent) showing the operator-bespoke CNC wire-format modification — option keys parsed as length-prefixed strings rather than stock Mirai's single-byte enum values. This single byte-level change is the highest-value detection differentiator for the Naku variant: published Mirai-protocol-aware IDS rules will silently miss this command-channel traffic, so Naku-specific Suricata signatures (Section 10) are required.</em></figcaption>
 </figure>
 
 ### 6.4 5-Vector Linux Persistence
@@ -1115,7 +1115,7 @@ This section organizes the report's findings by confidence level using the proje
 - Pandora-Mirai 11-architecture extension from Doctor Web September 2023 Android-TV scope (four-year evolution arc, no prior public characterization)
 - Operator-bespoke triple-XOR-key obfuscation scheme (0x54 / 0x42 / 0x45) across all 11 architectures
 - Operator-bespoke 22-character charset `1gba4cdom53nhp12ei0kfj` operator-permanent across all 11 architectures
-- Length-prefixed-string CNC option-key protocol modification (Ghidra-recovered byte-level evidence)
+- Length-prefixed-string CNC option-key protocol modification (byte-level evidence recovered by disassembly)
 - CNC IP `165.227.175.161` recovered as raw 32-bit constant `0xa1afe3a5` inline in Naku.arm main()
 - CNC port 23 recovered as `0x0017` in network byte order
 - Four parallel scanner threads launched by Naku bot post-init (two Huawei + Realtek + Telnet brute 128-concurrent)
@@ -1181,7 +1181,7 @@ Direct consequence of 12.1 above. The Matrix C2 framework's wire protocol (JSON-
 
 ### 12.3 Pandora 11-Arch IoT Evolution — No Prior Public Documentation
 
-Doctor Web's September 2023 Pandora-Mirai disclosure documented the family as Android-TV scope only. No prior public source documents the four-year evolution arc from Android-TV-only to broad IoT scope across eleven CPU architectures (arm/arm5/arm6/arm7/m68k/mips/mpsl/ppc/sh4/spc/x86). Based on the Tier 1-3 public-source sweep, this investigation is the first public characterization of the evolution arc (HIGH confidence on the sweep-completeness basis); the byte-level evidence (XOR-deobfuscated string tables, Ghidra-recovered main() disassembly, cross-architecture string-comparison tables across all 11 binaries) is documented at sufficient detail for downstream vendor consumption (Doctor Web notification recommended).
+Doctor Web's September 2023 Pandora-Mirai disclosure documented the family as Android-TV scope only. No prior public source documents the four-year evolution arc from Android-TV-only to broad IoT scope across eleven CPU architectures (arm/arm5/arm6/arm7/m68k/mips/mpsl/ppc/sh4/spc/x86). Based on the Tier 1-3 public-source sweep, this investigation is the first public characterization of the evolution arc (HIGH confidence on the sweep-completeness basis); the byte-level evidence (XOR-deobfuscated string tables, recovered main() disassembly, cross-architecture string-comparison tables across all 11 binaries) is documented at sufficient detail for downstream vendor consumption (Doctor Web notification recommended).
 
 ### 12.4 Parasitic-CNC-on-Legit-VPS OPSEC Pattern — No Mirai-Family Literature Precedent
 
