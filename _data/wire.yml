@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T20:00:38Z
+generated_at: 2026-09-03T22:02:52Z
 window_days: 30
 counts:
   total: 542
@@ -14,7 +14,7 @@ topics:
     count: 70
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 55
     color: 2
   - label: "exploited"
     count: 28
@@ -447,6 +447,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Coder's registry infrastructure compromised to push malicious modules"
+    url: "https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/"
+    source: "BleepingComputer"
+    date: 2026-09-03T20:04:24Z
+    kind: news
+    labels: []
+  - title: "Large group of Serbian opposition, activist figures targeted with spyware"
+    url: "https://therecord.media/serbia-spyware-pegasus-europe"
+    source: "Recorded Future"
+    date: 2026-09-03T19:30:41Z
+    kind: news
+    labels: ["privacy"]
   - title: "HPE patches critical ArubaOS-CX remote code execution flaw"
     url: "https://www.bleepingcomputer.com/news/security/hpe-patches-critical-arubaos-cx-remote-code-execution-flaw/"
     source: "BleepingComputer"
@@ -3687,15 +3699,3 @@ items:
     date: 2026-08-04T22:18:20Z
     kind: news
     labels: []
-  - title: "Phishing service spoofs RingCentral to steal Microsoft 365 accounts"
-    url: "https://www.bleepingcomputer.com/news/security/phishing-service-spoofs-ringcentral-to-steal-microsoft-365-accounts/"
-    source: "BleepingComputer"
-    date: 2026-08-04T21:45:36Z
-    kind: news
-    labels: []
-  - title: "OpenAI: Cambodian scam centers used ChatGPT to lure Indian nationals, conduct investment fraud"
-    url: "https://therecord.media/openai-chatgpt-cambodia-scam-centers-disruption"
-    source: "Recorded Future"
-    date: 2026-08-04T20:15:00Z
-    kind: news
-    labels: ["cybercrime"]
