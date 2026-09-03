@@ -3,30 +3,30 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T12:00:32Z
+generated_at: 2026-09-03T14:00:02Z
 window_days: 30
 counts:
-  total: 547
-  research: 206
-  news: 341
+  total: 545
+  research: 205
+  news: 340
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 70
     color: 1
   - label: "cybercrime"
     count: 56
     color: 2
-  - label: "malware"
-    count: 29
-    color: 3
   - label: "exploited"
+    count: 28
+    color: 3
+  - label: "malware"
     count: 28
     color: 4
   - label: "government"
-    count: 27
+    count: 26
     color: 5
   - label: "artificial intelligence"
-    count: 23
+    count: 22
     color: 6
   - label: "data breaches"
     count: 22
@@ -37,13 +37,13 @@ topics:
   - label: "supply chain attack"
     count: 18
     color: 9
-  - label: "ransomware"
-    count: 15
-    color: 10
   - label: "clickfix"
     count: 14
-    color: 11
+    color: 10
   - label: "microsoft"
+    count: 14
+    color: 11
+  - label: "ransomware"
     count: 14
     color: 12
 label_colors:
@@ -245,7 +245,7 @@ label_colors:
   "clamav": 8
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 11
+  "clickfix": 10
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -259,7 +259,6 @@ label_colors:
   "cloudflare workers": 6
   "cloudflared": 7
   "code signing abuse": 10
-  "command and control": 7
   "communicationuxtheme.dll": 10
   "compile-time execution": 3
   "contactless payment fraud": 3
@@ -279,6 +278,7 @@ label_colors:
   "crypto scam": 9
   "cryptocurrency": 12
   "cryptocurrency lure": 4
+  "cryptocurrency miner": 1
   "cryptocurrency stealer": 4
   "cryptocurrency theft": 3
   "cryptocurrency wallet theft": 2
@@ -300,7 +300,6 @@ label_colors:
   "cyberattacks": 8
   "cybercrime": 2
   "cyberwarfare": 9
-  "d2ip": 7
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
@@ -327,7 +326,6 @@ label_colors:
   "edge device exploitation": 7
   "electron application": 2
   "electron framework": 12
-  "email security": 12
   "encrypted payload": 10
   "endlessdoors": 1
   "endpoint security": 11
@@ -337,7 +335,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 4
+  "exploited": 3
   "exposure management": 4
   "extortion": 12
   "fake lock screen": 6
@@ -395,10 +393,10 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 3
+  "malware": 4
   "meta": 5
   "metabase": 6
-  "microsoft": 12
+  "microsoft": 11
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -427,8 +425,9 @@ label_colors:
   "poc exploit": 3
   "privacy": 12
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 12
   "rce": 10
+  "rmm abuse": 2
   "ruby on rails": 12
   "salesforce": 3
   "sap": 8
@@ -452,6 +451,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "US and Canadian court data exposed in Thomson Reuters breach"
+    url: "https://therecord.media/thomson-reuters-cyberattack-data"
+    source: "Recorded Future"
+    date: 2026-09-03T12:00:00Z
+    kind: news
+    labels: ["cybercrime", "privacy"]
   - title: "Plex warns users to patch security vulnerabilities immediately"
     url: "https://www.bleepingcomputer.com/news/security/plex-warns-users-to-patch-security-vulnerabilities-immediately/"
     source: "BleepingComputer"
@@ -476,6 +481,12 @@ items:
     date: 2026-09-03T10:00:58Z
     kind: research
     labels: ["agentic ai", "chatgpt", "cl-cri-1131", "cl-cri-1163", "claude code", "financial sector", "malware", "nextchat", "shipping and transportation", "socks5", "socktz", "threat research"]
+  - title: "Rogue ScreenConnect Installations Across Unrelated Hosts Suggest Worm-Like Activity"
+    url: "https://otx.alienvault.com/pulse/6a992d01f9c5b93e1a1c58b6"
+    source: "AlienVault"
+    date: 2026-09-03T08:17:05Z
+    kind: research
+    labels: ["cryptocurrency miner", "rmm abuse", "screenconnect", "social engineering", "vbscript loader", "xmrig"]
   - title: "Fake Software Installers Disable Windows Update and Weaken Microsoft Defender"
     url: "https://thehackernews.com/2026/09/fake-software-installers-disable.html"
     source: "AlienVault"
@@ -3710,27 +3721,3 @@ items:
     date: 2026-08-04T15:24:35Z
     kind: news
     labels: []
-  - title: "Weaponized Email AI Assistants Could Help Attackers Hijack Accounts"
-    url: "https://www.securityweek.com/weaponized-email-ai-assistants-could-help-attackers-hijack-accounts/"
-    source: "SecurityWeek"
-    date: 2026-08-04T13:54:13Z
-    kind: news
-    labels: ["cybercrime", "email security"]
-  - title: "The Frontier AI Vulnerability Burst: Industrializing Autonomous Zero-Day Discovery in Open-Source Software"
-    url: "https://unit42.paloaltonetworks.com/frontier-ai-vulnerability-burst/"
-    source: "Palo Alto Networks"
-    date: 2026-08-04T13:00:11Z
-    kind: research
-    labels: ["artificial intelligence", "frontier ai", "insights", "vulnerabilities", "vulnerability exploitation", "zero-day"]
-  - title: "Almost Half of Malware Samples Communicate Direct to IP"
-    url: "https://unit42.paloaltonetworks.com/malware-bypass-dns-direct-to-ip/"
-    source: "Palo Alto Networks"
-    date: 2026-08-04T12:50:53Z
-    kind: research
-    labels: ["command and control", "d2ip", "exfiltration", "iot botnets", "ip traffic", "malware", "mozi", "phorpiex", "ransomware", "sectoprat", "threat research", "zero trust ip", "zt-ip"]
-  - title: "Swiss IT agency hacked, 200 accounts compromised, SharePoint vulns suspected"
-    url: "https://therecord.media/swiss-bit-foitt-hacked-possibly-sharepoint-vulnerabilities"
-    source: "Recorded Future"
-    date: 2026-08-04T12:45:00Z
-    kind: news
-    labels: ["government"]
