@@ -14,6 +14,7 @@
     "analyst": "The Hunters Ledger",
     "confidence_overall": "HIGH",
     "tlp": "WHITE",
+    "victim_names": [],
     "confidence_note": "Confidence levels: HIGH (strong evidence with minor gaps), MODERATE (notable gaps), LOW (weak evidence). DEFINITE for direct evidence with no ambiguity.",
     "perspective": "Third-party threat intelligence, IOC feed for ingestion into SIEM/EDR/perimeter blocklists"
   },

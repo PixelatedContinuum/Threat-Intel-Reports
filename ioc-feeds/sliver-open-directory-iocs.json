@@ -7,6 +7,7 @@
     "analysis_source": "Exposed open directory at 45.94.31.220, attacker build workspace forensics",
     "analyst": "The Hunters Ledger",
     "tlp": "WHITE",
+    "victim_names": [],
     "confidence_overview": "HIGH, Direct analysis of recovered attacker build artifacts, source code, compiled binaries, and operational logs",
     "confidence_note": "DEFINITE indicators are from hardcoded values, recovered source code, or binary analysis; HIGH indicators are inferred from code logic with strong supporting evidence; MODERATE indicators involve assumptions not directly confirmed in execution; canary indicators are explicitly noted as non-malicious",
     "ioc_count_summary": {

@@ -43,7 +43,7 @@ I categorize this as cybercrime at HIGH confidence, 80 percent, and designate th
 **Threat Level:** MEDIUM — C2 infrastructure offline at analysis time; no confirmed victims; automated build pipeline means functionally equivalent beacons can be regenerated in approximately 8 minutes.
 The intelligence here is descriptive, covering what was built, and explanatory, covering how the evasion works. Anticipatory intelligence is a documented gap, because actual victim deployment and targeting remain unconfirmed.
 
-> This assessment is based on: direct analysis of recovered build artifacts (build.log, source code, compiled binaries), static analysis, three dynamic analysis sessions, a 305-second behavioral sandbox run, and memory forensics. Confidence levels throughout distinguish confirmed findings from analytical judgments.
+> This assessment is based on: direct analysis of recovered build artifacts (build.log, source code, compiled binaries), static analysis, behavioral sandbox analysis, and memory forensics. Confidence levels throughout distinguish confirmed findings from analytical judgments.
 
 > **Key caveat:** File hashes for the primary samples are specific to the 2026-02-14 build. The automated build pipeline can regenerate polymorphically distinct but functionally identical beacons in approximately 8 minutes. Certificate-based and behavioral IOCs are more durable than hash-based atomic indicators.
 
@@ -330,7 +330,7 @@ The loader function (61 KB, 2,558 sequential call instructions) decodes Sliver s
 
 **Sub-stage 5b — XZ Config Header Mode Dispatch:**
 
-The ScareCrow loader uses byte 7 of the XZ stream header as an injection mode selector. Go build metadata embedded in the binary confirms the `ulikunitz/xz` library is the XZ parsing dependency — directly linking the loader's XZ handling to its open-source origin. Confirmed by dynamic analysis Session 3:
+The ScareCrow loader uses byte 7 of the XZ stream header as an injection mode selector. Go build metadata embedded in the binary confirms the `ulikunitz/xz` library is the XZ parsing dependency — directly linking the loader's XZ handling to its open-source origin. Confirmed by dynamic analysis:
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/githublink.png" | relative_url }}" alt="Go build metadata extracted from OneDriveSync.exe showing the ulikunitz/xz GitHub library reference embedded in the binary">
@@ -393,7 +393,7 @@ Evidence for process hollowing having occurred:
 - `STATUS_CONFLICTING_ADDRESSES` (C0000018) in debugger — attempted allocation at target process base address
 - `SetEvent` and `RtlCopyMemory` in Donut call stack — hallmarks of suspended process + image write
 - Hollow target invisible in behavioral sandbox descendant tracking — PPID spoofing confirmed (DEFINITE)
-- Zero child processes attributed to OneDriveSync.exe PID 3488 in memory forensics tool `windows.pstree`
+- Zero child processes attributed to OneDriveSync.exe in memory forensics process-tree reconstruction
 
 The three-layer injection, ScareCrow to Donut to Sliver, means defenders face three distinct decryption and deobfuscation layers before reaching usable intelligence about the C2 configuration. The AES-128-CTR key material recovered from dynamic analysis provides a path to offline decryption of the Donut instance, which enables Sliver C2 IP recovery without needing a live C2 server.
 
@@ -403,7 +403,7 @@ The three-layer injection, ScareCrow to Donut to Sliver, means defenders face th
 
 > **Plain language:** Once established, the Sliver implant "phones home" to the attacker's server at regular intervals to receive instructions. The communication is encrypted and timed to look like normal background network traffic, making it difficult to distinguish from legitimate activity without specific behavioral detection.
 
-The C2 infrastructure is confirmed offline as of 2026-02-27. Three independent data sources agree, with no TCP SYN in the 305-second behavioral sandbox run, no external connections, and `windows.netscan` in the memory forensics tool showing zero results.
+The C2 infrastructure is confirmed offline as of 2026-02-27. Three independent data sources agree, with no TCP SYN observed during behavioral sandbox analysis, no external connections, and network-connection enumeration in memory forensics showing zero results.
 
 **Configured beacon behavior (from build artifacts, not live observation):**
 
@@ -430,7 +430,7 @@ Sleep masking is ScareCrow's. During the dormancy window the beacon's shellcode 
 
 Call stack spoofing lives in `stack_spoof.C`. Outbound calls appear to originate from `BaseThreadInitThunk`, `RtlUserThreadStart`, or `Sleep`, all legitimate Windows call origins, so EDR call-chain inspection sees a plausible-looking stack.
 
-There is no persistence, confirmed by the behavioral sandbox (zero registry writes by sample PID 3488 in a 305-second run) and by memory forensics (no persistence keys). Persistence is almost certainly an operator action taken interactively through the Sliver C2 channel after the first successful beacon rather than an automated one, and I hold that at 90 percent.
+There is no persistence, confirmed by behavioral sandbox analysis (zero registry writes by the sample) and by memory forensics (no persistence keys). Persistence is almost certainly an operator action taken interactively through the Sliver C2 channel after the first successful beacon rather than an automated one, and I hold that at 90 percent.
 
 ---
 
@@ -866,7 +866,7 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | Defense Evasion      | T1055.012    | Process Injection: Process Hollowing         | DEFINITE       | XZ mode byte 0x04; disassembly compare chain; hollowing handler dispatch confirmed; 3 sessions                                      |
 | Defense Evasion      | T1055.015    | Process Injection: Process Ghosting          | MODERATE (70%) | process_ghosting.c fully implemented; dynamic execution not confirmed (C2 offline)                                                  |
 | Defense Evasion      | T1055.008    | Process Injection: Module Stomping           | MODERATE (65%) | build.log declares capability; ScareCrow implements natively; active mode was hollowing                                             |
-| Defense Evasion      | T1134.004    | Parent PID Spoofing                          | DEFINITE       | Hollow target invisible in behavioral sandbox; absent from memory forensics tool pstree; 3 sessions confirm                                               |
+| Defense Evasion      | T1134.004    | Parent PID Spoofing                          | DEFINITE       | Hollow target invisible in behavioral sandbox; absent from memory forensics process-tree reconstruction; confirmed across independent analysis passes                                               |
 | Defense Evasion      | T1036.005    | Masquerading: Match Legitimate Name/Location | DEFINITE       | Beacon as update.exe; signed as VMware, Inc. Code Signing                                                                           |
 | Defense Evasion      | T1036        | Masquerading (PEB CommandLine)               | HIGH           | arg_spoof.C: PEB CommandLine overwritten to MicrosoftEdgeUpdate.exe identity                                                        |
 | Defense Evasion      | T1027.002    | Software Packing                             | DEFINITE       | UPX 5.0.2 (compressed.exe); ScareCrow 2,558-chunk polymorphic encoding (OneDriveSync.exe)                                           |
@@ -886,7 +886,7 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | Command and Control  | T1105        | Ingress Tool Transfer                        | DEFINITE       | stager DownloadFile from [hxxp[:]//45.94.31[.]220:8000/OneDriveSync[.]exe](hxxp://45.94.31[.]220:8000/OneDriveSync[.]exe) → %TEMP%\update.exe |
 
 
-On persistence, T1547.001 (Registry Run Keys) was assessed and NOT observed. The behavioral sandbox recorded zero registry writes by PID 3488 in a 305-second run, and memory forensics found no persistence keys. Persistence is operator-deployed after C2 establishment rather than loader-automated.
+On persistence, T1547.001 (Registry Run Keys) was assessed and NOT observed. Behavioral sandbox analysis recorded zero registry writes by the sample, and memory forensics found no persistence keys. Persistence is operator-deployed after C2 establishment rather than loader-automated.
 
 ---
 
@@ -977,7 +977,7 @@ update.exe → NtCreateThread()           (execution)
 
 A1 assumes `mailuxe.net` resolves to 45.94.31.220. If that is wrong, and `mailuxe.net` resolves to a separate, better-protected C2 server, then blocking `45.94.31.220` alone would not disrupt C2 communications. A passive DNS lookup is the resolution path.
 
-A2 concerns the actual C2 IP inside the Donut instance. I cannot confirm the C2 IP embedded in the AES-encrypted Donut section without offline decryption. The recovered AES-128-CTR key (`19 72 1F E6 E3 B0 CF 0C 32 0B 93 E0 C2 BE 91 1A`) and nonce (`EA 2A 1C 5A 8D E1 33 7B DA 31 47 65 40 51 D0 89`) enable offline decryption of the memory dump at VAD region `0x1f7f8e00000` to `0x1f7fa074fff` (PID 3488). **This is the highest-priority analytical gap.**
+A2 concerns the actual C2 IP inside the Donut instance. I cannot confirm the C2 IP embedded in the AES-encrypted Donut section without offline decryption. The recovered AES-128-CTR key (`19 72 1F E6 E3 B0 CF 0C 32 0B 93 E0 C2 BE 91 1A`) and nonce (`EA 2A 1C 5A 8D E1 33 7B DA 31 47 65 40 51 D0 89`) enable offline decryption of the memory dump at VAD region `0x1f7f8e00000` to `0x1f7fa074fff`. **This is the highest-priority analytical gap.**
 
 **A3 — Excel.exe shares the same payload core as OneDriveSync.exe:** Assessed as HIGH confidence (90%) based on identical ~33 MB file size and same build date, hash is the same. A second, uncharacterized C2 channel remains possible if Excel.exe uses a different configuration.
 
