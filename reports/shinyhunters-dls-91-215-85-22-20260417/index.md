@@ -38,7 +38,7 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-> **Update — April 24, 2026.** A re-scan of the DLS on 2026-04-24 identified
+> **Update: April 24, 2026.** A re-scan of the DLS on 2026-04-24 identified
 > **seven additional named victims** uploaded after this report's original
 > publication (Mytheresa, Canada Life, Pitney Bowes, 7-Eleven, Carnival
 > Corporation, Zara/Inditex, Marcus & Millichap), a **confirmed add-then-remove
@@ -46,7 +46,7 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 > from the DLS before this re-scan), and a concurrent **public reporting
 > disclosure** by Cybernews (republished by TechRadar on 2026-04-23) that
 > names the same victim cluster and corroborates the findings. Full details
-> in §4.7 — *Post-publication additions (April 21-24, 2026)*. The roster
+> in §4.7, *Post-publication additions (April 21-24, 2026)*. The roster
 > table in §4.1, disclosure summary in §4.2, and reference list in §14
 > reflect the state as of the original report's analysis cutoff (2026-04-16);
 > §4.7 is the authoritative source for post-cutoff activity. The cumulative
@@ -59,7 +59,7 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 
 ### BLUF
 
-`91.215.85.22` is an active ShinyHunters Data Leak Site publishing 1.1 TB of stolen data from **29 named victim organizations** — attribution **DEFINITE (96%)**, supported by two Tier-1 government advisories, six years of PGP key continuity, and 28 of 29 victims independently corroborated in mainstream press. One victim — **Alert360** — had no prior public reporting at analysis cutoff and was documented here first; responsible disclosure was filed across four channels before publication. The DLS runs on Russian bulletproof hosting (PROSPERO AS200593) with the actor identity page segmented onto DDoS-Guard (AS57724), making single-provider takedown ineffective. Detection leverage lies upstream in the vishing-to-Salesforce/Okta chain (§5), not at the DLS itself.
+`91.215.85.22` is an active ShinyHunters Data Leak Site publishing 1.1 TB of stolen data from **29 named victim organizations**, attribution **DEFINITE (96%)**, supported by two Tier-1 government advisories, six years of PGP key continuity, and 28 of 29 victims independently corroborated in mainstream press. One victim, **Alert360**, had no prior public reporting at analysis cutoff and was documented here first; responsible disclosure was filed across four channels before publication. The DLS runs on Russian bulletproof hosting (PROSPERO AS200593) with the actor identity page segmented onto DDoS-Guard (AS57724), making single-provider takedown ineffective. Detection leverage lies upstream in the vishing-to-Salesforce/Okta chain (§5), not at the DLS itself.
 
 ### Key Risk Factors
 
@@ -71,7 +71,7 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 | Takedown resistance | 8 | Russian bulletproof + DDoS-Guard fronting + 3-mirror Tor architecture; abuse contacts historically unresponsive |
 | Attribution defensibility | 10 | DEFINITE (96%) with two Tier-1 government advisories + cryptographic 6-year key lineage |
 | Operational disruption to victims | 4 | DLS does not encrypt or take systems offline; harm vector is data disclosure, not RCE |
-| **Overall** | **8.2 / 10 — HIGH** | Mass data-disclosure infrastructure with strong attribution; the absence of an operational-disruption vector is the only reason this is not CRITICAL |
+| **Overall** | **8.2 / 10, HIGH** | Mass data-disclosure infrastructure with strong attribution; the absence of an operational-disruption vector is the only reason this is not CRITICAL |
 
 ### Threat Actor
 
@@ -79,18 +79,18 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 
 ### For Technical Teams
 
-- **Block at perimeter:** `91.215.85.22`, `91.215.43.200`, `shinyhunte.rs`, the three `.onion` mirrors. Full IOC list — see Section 9 and the linked IOC feed.
+- **Block at perimeter:** `91.215.85.22`, `91.215.43.200`, `shinyhunte.rs`, the three `.onion` mirrors. Full IOC list, see Section 9 and the linked IOC feed.
 - **Hunt for the taunt-filename pattern** `(?i)should(ve|a).*paid.*ransom.*shinyhunters` across enterprise file shares, cloud-sync staging directories, and proxy logs (Section 3.2; full detection rules linked in Section 9).
-- **Detect the upstream chain.** This is not a malware infection — DLS appearance is the *terminal* event. The detectable upstream is help-desk vishing → MFA reset → anomalous Okta/Salesforce OAuth Connected App → bulk Data Loader export. See Section 5 (TTP Chain) and the linked detection file.
-- **Alert360 notification priority.** Alert360 had not acknowledged a breach as of report cutoff — partners and customers should treat this as priority-one notification intelligence.
+- **Detect the upstream chain.** This is not a malware infection. DLS appearance is the *terminal* event. The detectable upstream is help-desk vishing → MFA reset → anomalous Okta/Salesforce OAuth Connected App → bulk Data Loader export. See Section 5 (TTP Chain) and the linked detection file.
+- **Alert360 notification priority.** Alert360 had not acknowledged a breach as of report cutoff. Partners and customers should treat this as priority-one notification intelligence.
 - **Do not over-attribute OTX co-tenant correlations.** PLAY, Qilin, RansomHub, and various RATs that AlienVault OTX associates with this IP are shared-bulletproof-hosting artifacts, not ShinyHunters capabilities.
 
 ### Key Takeaways
 
-- **The site is live and actively maintained.** Four fresh victim archives were uploaded on 2026-04-15, one day before the investigation cutoff. This is not an abandoned dump server — it is a working part of an ongoing extortion operation.
+- **The site is live and actively maintained.** Four fresh victim archives were uploaded on 2026-04-15, one day before the investigation cutoff. This is not an abandoned dump server. It is a working part of an ongoing extortion operation.
 - **Attribution is as strong as open-source intelligence allows.** Two Tier-1 government sources (IC3, CERT-EU) name the actor and TTP cluster, two Tier-2 vendors (Google GTIG, Resecurity) corroborate, six years of unbroken cryptographic continuity runs through a dual-key cross-signed PGP rotation, and 28 of 29 victims map to independently-reported ShinyHunters operations. The 4% confidence gap to 100% reflects only the absence of a law-enforcement advisory naming the specific IP.
-- **One victim — Alert360 — is publicly identified here for the first time.** A US home and small-business alarm-monitoring provider with no prior coverage in any breach press, government bulletin, or crowdsourced tracker. The data class implied by its business model (home addresses, alarm configurations, disarm PINs) carries kinetic-harm risk that other victims on this DLS do not.
-- **Takedown is unusually difficult.** The operator deliberately splits the leak site across two Russian providers (PROSPERO for data, DDoS-Guard for identity) and maintains three Tor mirrors. No single takedown action — civil, criminal, or technical — collapses the operation; all five publication paths must be addressed.
+- **One victim (Alert360) is publicly identified here for the first time.** A US home and small-business alarm-monitoring provider with no prior coverage in any breach press, government bulletin, or crowdsourced tracker. The data class implied by its business model (home addresses, alarm configurations, disarm PINs) carries kinetic-harm risk that other victims on this DLS do not.
+- **Takedown is unusually difficult.** The operator deliberately splits the leak site across two Russian providers (PROSPERO for data, DDoS-Guard for identity) and maintains three Tor mirrors. No single takedown action (civil, criminal, or technical) collapses the operation; all five publication paths must be addressed.
 - **The leak site is the wrong place to look for detection leverage.** By the time an organization appears on the DLS, the breach is months old. The detectable upstream is help-desk vishing → MFA reset → anomalous Okta or Salesforce OAuth Connected App authorization → bulk Salesforce Data Loader exports. Defenders with SaaS log access should focus there.
 - **The campaign is expanding, not contracting.** Since the August 2025 merger, vendor tracking has identified new sub-clusters (UNC6671 Okta-direct vishing, Salesforce Aura misconfiguration exploitation, active female vishing-caller recruitment). Defenders should plan for continued TTP variation through 2026.
 - **Co-tenant correlations are not collaboration.** PLAY, Qilin, RansomHub, and various RATs that AlienVault OTX associates with `91.215.85.22` reflect the heterogeneous tenant base of a Russian bulletproof host, not ShinyHunters operational capability. Do not propagate these correlations as ShinyHunters attribution.
@@ -101,7 +101,7 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 ## 2. Infrastructure Overview
 {: .hl-tier-2}
 
-> **Analyst note:** This section describes the publication-side infrastructure — the servers and domains the operator uses to host stolen data and publish ransom communications. It does not describe how the operator initially compromised victims; that chain is covered in Section 5. The key takeaway is that ShinyHunters segments their leak site (data) from their identity page (PGP keys, communications) across two distinct Russian providers, which makes single-provider takedown ineffective.
+> **Analyst note:** This section describes the publication-side infrastructure. The servers and domains the operator uses to host stolen data and publish ransom communications. It does not describe how the operator initially compromised victims; that chain is covered in Section 5. The key takeaway is that ShinyHunters segments their leak site (data) from their identity page (PGP keys, communications) across two distinct Russian providers, which makes single-provider takedown ineffective.
 
 ### 2.1 The DLS host: 91.215.85.22
 
@@ -115,16 +115,16 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 | Geography | Russia |
 | Operator domain | `pro-spero.ru` |
 | Abuse contact | `abuse@pro-spero.ru` (community reports describe limited responsiveness) |
-| AbuseIPDB score (at investigation) | 0% (reputation signal suppressed — defender visibility gap) |
+| AbuseIPDB score (at investigation) | 0% (reputation signal suppressed, defender visibility gap) |
 
 The canonical content path is `GET /pay_or_leak/`, which returns an nginx autoindex listing approximately 30 archives. **Critical server quirk:** nginx at this host returns the same listing at virtually any URL path (`/assets/`, `/backup/`, `/files/`, `/uploads/`, etc.), which is a misconfiguration of `try_files`/`rewrite` fallthrough rather than a deliberate tarpit. This caused an initial crawler out-of-memory failure during open-directory enumeration (the trigger for this re-investigation at depth=2).
 
 Real subdirectories under `/pay_or_leak/`:
 
-- `/pay_or_leak/alert360/` — contains only `INFORMATION.txt`; **no archive present** (extortion-negotiation stage)
-- `/pay_or_leak/ameriprise/` — `INFORMATION.txt` only (extortion-negotiation stage)
-- `/pay_or_leak/odido/` — empty (archive withdrawn after victim refused ransom per public statement)
-- `/pay_or_leak/woflow/` — empty
+- `/pay_or_leak/alert360/`: contains only `INFORMATION.txt`; **no archive present** (extortion-negotiation stage)
+- `/pay_or_leak/ameriprise/`: `INFORMATION.txt` only (extortion-negotiation stage)
+- `/pay_or_leak/odido/`: empty (archive withdrawn after victim refused ransom per public statement)
+- `/pay_or_leak/woflow/`: empty
 
 ### 2.2 The actor identity page: shinyhunte.rs (91.215.43.200)
 
@@ -133,7 +133,7 @@ Real subdirectories under `/pay_or_leak/`:
 | Domain | `shinyhunte.rs` (`.rs` Serbia ccTLD; chosen for phonetic branding) |
 | Origin IPv4 | `91.215.43.200` |
 | ASN | `AS57724` DDoS-Guard |
-| Server banner | `nginx/1.22.1` (matches DLS — likely shared operator image) |
+| Server banner | `nginx/1.22.1` (matches DLS, likely shared operator image) |
 | Active since | At least 2025-10-12 (archive.org) |
 
 The identity page is **deliberately on a different provider** from the DLS. shinyhunte.rs does not host stolen data; it hosts the PGP-key rotation announcement, Tor mirror status table, and signed actor communications. This split is the single most distinctive OPSEC choice in the operation.
@@ -142,28 +142,28 @@ The identity page is **deliberately on a different provider** from the DLS. shin
 
 | Mirror | Operator-reported status | Notes |
 |---|---|---|
-| `shnyhntww34phqoa6dcgnvps2yu7dlwzmy5lkvejwjdo6z7bmgshzayd.onion` | UP — main website | Newest mirror; not in the on-DLS ransom note (operator did not synchronize) |
-| `shinypogk4jjniry5qi7247tznop6mxdrdte2k6pdu5cyo43vdzmrwid.onion` | UP — redirector | Listed in ransom note |
-| `toolatedhs5dtr2pv6h5kdraneak5gs3sxrecqhoufc5e45edior7mqd.onion` | DOWN — inactive | Listed in (stale) ransom note |
+| `shnyhntww34phqoa6dcgnvps2yu7dlwzmy5lkvejwjdo6z7bmgshzayd.onion` | UP, main website | Newest mirror; not in the on-DLS ransom note (operator did not synchronize) |
+| `shinypogk4jjniry5qi7247tznop6mxdrdte2k6pdu5cyo43vdzmrwid.onion` | UP, redirector | Listed in ransom note |
+| `toolatedhs5dtr2pv6h5kdraneak5gs3sxrecqhoufc5e45edior7mqd.onion` | DOWN, inactive | Listed in (stale) ransom note |
 
-The main `.onion` serves a queue-gate landing page (title: `[sh] access queue`) holding visitors approximately three minutes before forwarding — a traffic-smoothing / DDoS-absorption pattern common to busy criminal services. The three-mirror architecture (active main + active redirector + retired) is a deliberate takedown-resilience posture.
+The main `.onion` serves a queue-gate landing page (title: `[sh] access queue`) holding visitors approximately three minutes before forwarding, a traffic-smoothing / DDoS-absorption pattern common to busy criminal services. The three-mirror architecture (active main + active redirector + retired) is a deliberate takedown-resilience posture.
 
 ### 2.4 Architectural significance
 
-> **Analyst note:** A single Russian bulletproof host plus DDoS-Guard fronting plus three Tor mirrors gives this operation five independent publication paths. No single takedown — civil, criminal, or technical — collapses the entire site. This is investment-grade infrastructure, not a disposable drop site.
+> **Analyst note:** A single Russian bulletproof host plus DDoS-Guard fronting plus three Tor mirrors gives this operation five independent publication paths. No single takedown (civil, criminal, or technical) collapses the entire site. This is investment-grade infrastructure, not a disposable drop site.
 
-The infrastructure constitutes a five-node resilience architecture: DLS clearnet (PROSPERO) + two active Tor mirrors + identity page clearnet (DDoS-Guard) + identity page Tor reachability. Defeating this operation requires upstream-carrier pressure, multi-jurisdictional coordination, or operator-side compromise — none of which are achievable through routine abuse-reporting channels.
+The infrastructure constitutes a five-node resilience architecture: DLS clearnet (PROSPERO) + two active Tor mirrors + identity page clearnet (DDoS-Guard) + identity page Tor reachability. Defeating this operation requires upstream-carrier pressure, multi-jurisdictional coordination, or operator-side compromise, none of which are achievable through routine abuse-reporting channels.
 
 ---
 
 ## 3. Actor Operations
 {: .hl-tier-2}
 
-> **Analyst note:** This section documents how the operator brands and structures the leak site itself — the ransom note, the filename convention, the upload cadence, and the directory layout. These are the artifacts a defender will encounter when an organization discovers itself listed on the DLS, and they are the basis for the YARA filename rules in the linked detection file.
+> **Analyst note:** This section documents how the operator brands and structures the leak site itself, the ransom note, the filename convention, the upload cadence, and the directory layout. These are the artifacts a defender will encounter when an organization discovers itself listed on the DLS, and they are the basis for the YARA filename rules in the linked detection file.
 
 ### 3.1 The ransom note (`INFORMATION.txt`)
 
-`INFORMATION.txt` is the strongest attribution artifact on the host — explicit actor self-attribution by name, the victim-pressure model, two `.onion` mirrors, and a clearnet identity-page reference, all in a single file served from every directory on the DLS:
+`INFORMATION.txt` is the strongest attribution artifact on the host, explicit actor self-attribution by name, the victim-pressure model, two `.onion` mirrors, and a clearnet identity-page reference, all in a single file served from every directory on the DLS:
 
 ```
 This file has been downloaded from the ShinyHunters Data Leak Site (DLS).
@@ -178,7 +178,7 @@ http://web.archive.org/web/20260322033123/https://shinyhunte.rs/
 http://web.archive.org/web/20260322033217/https://shinyhunte.rs/newpgp
 ```
 
-The note is **stale** — the `toolated...onion` mirror has been retired and the new main mirror published on `shinyhunte.rs` was never added to the on-DLS copy. That divergence confirms the DLS and the identity page are maintained independently.
+The note is **stale**. The `toolated...onion` mirror has been retired and the new main mirror published on `shinyhunte.rs` was never added to the on-DLS copy. That divergence confirms the DLS and the identity page are maintained independently.
 
 ### 3.2 Filename branding convention
 
@@ -193,28 +193,28 @@ The note is **stale** — the `toolated...onion` mirror has been retired and the
 | `you_shouldve_paid_the_ransom_why_didnt_you_*_shinyhunters*` | `you_shouldve_paid_the_ransom_why_didnt_you_CFGI_shinyhunters.7z` | 1 |
 | **Canonical regex** | `(?i)should(ve\|a).*paid.*ransom.*shinyhunters` | matches 25/30 |
 
-Non-conformant filenames: `mercer_didnt_pay_the_ransom_shinyhunters.7z`, `canadagoose_shouldve_paid_the_ransom_SHINYHUNTERS.7z`, `europa.zip` (no actor branding — a notable anomaly discussed in Section 4.4), `bf_03_2026.sql.7z` (BreachForums v5 dump — no branding).
+Non-conformant filenames: `mercer_didnt_pay_the_ransom_shinyhunters.7z`, `canadagoose_shouldve_paid_the_ransom_SHINYHUNTERS.7z`, `europa.zip` (no actor branding, a notable anomaly discussed in Section 4.4), `bf_03_2026.sql.7z` (BreachForums v5 dump, no branding).
 
 The hunting value is that the convention is operationally unique. A file matching this regex appearing in an enterprise file share, a cloud-sync staging path, or a web-proxy log is a near-certain DLS-download or DLS-staging event. Detection rules built on that pattern are in the linked detection file.
 
 ### 3.3 Upload temporal pattern
 
-The upload cadence — a 23-minute bulk session on March 4 followed by every-3-to-7-day individual drops, with a fresh four-archive tranche the day before discovery — confirms this is a **live, actively-maintained operation**, not an orphan dump server. Upload dates derive from HTTP `Last-Modified` headers observed 2026-04-16 (UTC):
+The upload cadence, a 23-minute bulk session on March 4 followed by every-3-to-7-day individual drops, with a fresh four-archive tranche the day before discovery, confirms this is a **live, actively-maintained operation**, not an orphan dump server. Upload dates derive from HTTP `Last-Modified` headers observed 2026-04-16 (UTC):
 
 | Date | Files | Notes |
 |---|---:|---|
-| 2026-03-04 21:31-21:54 | **18** | Bulk-upload window — 18 archives in 23 minutes (single session) |
+| 2026-03-04 21:31-21:54 | **18** | Bulk-upload window, 18 archives in 23 minutes (single session) |
 | 2026-03-06 | 1 | Pathstone (15 GB) |
 | 2026-03-09 | 1 | CFGI (475 MB) |
 | 2026-03-15 | 1 | Aura (11.8 GB) |
 | 2026-03-24 | 1 | Berkadia (27.6 GB) |
 | 2026-03-25 | 1 | Infinite Campus (1.1 GB) |
-| 2026-03-27 | 1 | `bf_03_2026.sql.7z` (43 MB — BreachForums v5) |
-| 2026-03-28 | 1 | `europa.zip` (94 GB — European Commission) |
-| 2026-04-05 | 1 | **ZenBusiness (821 GB)** — single largest archive |
+| 2026-03-27 | 1 | `bf_03_2026.sql.7z` (43 MB, BreachForums v5) |
+| 2026-03-28 | 1 | `europa.zip` (94 GB, European Commission) |
+| 2026-04-05 | 1 | **ZenBusiness (821 GB)**, single largest archive |
 | 2026-04-11 | 1 | Hallmark (568 MB) |
 | 2026-04-13 | 1 | Rockstar Games (419 MB) |
-| 2026-04-15 15:55-17:31 | **4** | Fresh tranche (Abrigo, McGraw-Hill, Amtrak, Kemper) — 24 h before discovery |
+| 2026-04-15 15:55-17:31 | **4** | Fresh tranche (Abrigo, McGraw-Hill, Amtrak, Kemper), 24 h before discovery |
 
 The March 4 bulk window is consistent with initial DLS stand-up from a pre-staged backlog or migration from a prior host. Timestamp clustering at 15:00-22:00 UTC is directionally consistent with Russia-aligned operator hours but does not establish operator time zone on its own (uploads can be scripted).
 
@@ -229,14 +229,14 @@ Four PGP keys define the actor's cryptographic identity history:
 | December 2025 statement signer | `E80C 1308 A09E C1AD C418 C3F0 2578 988F 69BC A3FC` | ~2025-12 | Active (third internal key) |
 | Current (April 2026) | `F495 3411 767D E71B EDCD ABCB 76F4 E26F 7A20 978A` | ~2026-03 | Active; key body not independently recovered (`/newpgp` returned HTTP 404) |
 
-The two 2020 keys cross-signed the rotation handoff to the current key on 2026-03-17, then both self-revoked. Empire Market exit-scammed in August 2020; RaidForums was seized by the FBI in April 2022. Continuous PGP custody across both platforms since 2020 establishes **six-year operator continuity** through the current 2026 campaign — see Section 7 for the full attribution implication.
+The two 2020 keys cross-signed the rotation handoff to the current key on 2026-03-17, then both self-revoked. Empire Market exit-scammed in August 2020; RaidForums was seized by the FBI in April 2022. Continuous PGP custody across both platforms since 2020 establishes **six-year operator continuity** through the current 2026 campaign, see Section 7 for the full attribution implication.
 
 ---
 
 ## 4. Victim Inventory and Disclosure Status
 {: .hl-tier-2}
 
-> **Analyst note:** This section is the consolidated 29-victim roster derived from the DLS file inventory and subdirectory structure, cross-checked against public press, breach trackers (HIBP, ransomware.live), and class-action court filings. The single-most-important finding here is that twenty-eight of twenty-nine named victims have prior public reporting; one — Alert360 — does not.
+> **Analyst note:** This section is the consolidated 29-victim roster derived from the DLS file inventory and subdirectory structure, cross-checked against public press, breach trackers (HIBP, ransomware.live), and class-action court filings. The single-most-important finding here is that twenty-eight of twenty-nine named victims have prior public reporting; one (Alert360) does not.
 
 ### 4.1 Full roster
 
@@ -270,7 +270,7 @@ The two 2020 keys cross-signed the rotation handoff to the current key on 2026-0
 | 26 | Abrigo | AML / BSA fintech | 61 MB | 2026-04-15 | PARTIAL |
 | 27 | CarMax (KMX) | Used-car retail | 61 MB | 2026-03-04 | PARTIAL |
 | 28 | Ameriprise Financial (AMP) | Wealth / insurance | (subfolder only) | 2026-03-22 (claim) | PARTIAL |
-| 29 | **Alert360** | Home / SMB alarm monitoring | (subfolder only) | — | **UNKNOWN — no public reporting** |
+| 29 | **Alert360** | Home / SMB alarm monitoring | (subfolder only) | — | **UNKNOWN, no public reporting** |
 | — | Odido | Dutch telecom | (subfolder empty) | — | YES (ransom refused; archive withdrawn) |
 | — | Woflow | Merchant-data B2B | (subfolder empty) | — | PARTIAL |
 | — | `europa.zip` | European Commission (HIGH confidence) | 94 GB | 2026-03-28 | YES |
@@ -288,13 +288,13 @@ At the time of analysis (2026-04-16), ransomware.live tracked 28 of 29 victims o
 
 ### 4.3 Alert360 — the previously-unacknowledged victim (key finding)
 
-**What is Alert360?** A US home and small-business alarm-monitoring provider. The data class implied by its business model — home addresses, alarm-system configurations, disarm PINs, account-holder identity, and (potentially) absence patterns inferable from arming history — is among the most operationally dangerous on the DLS. Unlike the financial-services victims, the harm vector here is not identity theft or wire fraud; it is **direct kinetic enablement** (burglary, stalking, targeted physical entry). When overlaid with travel-window data inferable from the Amtrak archive (also on this DLS), the cross-victim aggregation risk is unusually high.
+**What is Alert360?** A US home and small-business alarm-monitoring provider. The data class implied by its business model, home addresses, alarm-system configurations, disarm PINs, account-holder identity, and (potentially) absence patterns inferable from arming history, is among the most operationally dangerous on the DLS. Unlike the financial-services victims, the harm vector here is not identity theft or wire fraud; it is **direct kinetic enablement** (burglary, stalking, targeted physical entry). When overlaid with travel-window data inferable from the Amtrak archive (also on this DLS), the cross-victim aggregation risk is unusually high.
 
 This matters for intelligence consumers. At the time of analysis, 2026-04-16, Alert360 was in the extortion-negotiation stage on this DLS, with its subdirectory holding only the `INFORMATION.txt` ransom note and no archive, and no breach press, vendor advisory, government bulletin or breach tracker had covered Alert360 as a ShinyHunters victim. This report is the first substantive public documentation of Alert360's presence on the DLS.
 
 **Subsequent public corroboration (ransomware.live, 2026-04-19).** Three days after The Hunters Ledger's responsible-disclosure outreach, the independent extortion-operations tracker ransomware.live listed Alert360 as a ShinyHunters victim. This closes the public-reporting gap and independently corroborates the finding.
 
-One factual correction worth noting: ransomware.live's Alert360 entry assigns an **estimated attack date of 2026-04-18**. That date is not consistent with the DLS evidence — the Alert360 subdirectory (and the `INFORMATION.txt` ransom note served from it) was directly observed during this investigation's crawl on **2026-04-16**. The actor-side listing therefore pre-dates the ransomware.live estimate by at least two days. Defenders and investigators using ransomware.live data for scope-of-impact or breach-timeline decisions should treat the 2026-04-18 estimate as a lower bound only — the actual compromise timeline is almost certainly earlier, and the DLS listing was active by 2026-04-16 at the latest.
+One factual correction worth noting: ransomware.live's Alert360 entry assigns an **estimated attack date of 2026-04-18**. That date is not consistent with the DLS evidence, the Alert360 subdirectory (and the `INFORMATION.txt` ransom note served from it) was directly observed during this investigation's crawl on **2026-04-16**. The actor-side listing therefore pre-dates the ransomware.live estimate by at least two days. Defenders and investigators using ransomware.live data for scope-of-impact or breach-timeline decisions should treat the 2026-04-18 estimate as a lower bound only. The actual compromise timeline is almost certainly earlier, and the DLS listing was active by 2026-04-16 at the latest.
 
 Some caveats apply. Presence on the DLS does not by itself prove the breach is real, since the actor could have published a subdirectory speculatively, as a negotiation tactic, or against a related third party. That said, every other empty or pre-archive subdirectory on this DLS, Ameriprise, Odido and Woflow, has subsequently been corroborated as a real victim. With ransomware.live now also listing Alert360, the base rate plus the second-source corroboration make a real Alert360 compromise highly probable. Alert360 itself has issued no public statement as of this report's publication.
 
@@ -302,11 +302,11 @@ Some caveats apply. Presence on the DLS does not by itself prove the breach is r
 
 | # | Channel | Recipient / route | Date | Outcome |
 |---|---|---|---|---|
-| 1 | FBI IC3 filing | https://www.ic3.gov/ — cyber-incident complaint filed with victim-organization context and DLS artefact references | 2026-04-16 | Filed. Confirmation receipt retained. No acknowledgment or routing confirmation received. |
+| 1 | FBI IC3 filing | https://www.ic3.gov/, cyber-incident complaint filed with victim-organization context and DLS artefact references | 2026-04-16 | Filed. Confirmation receipt retained. No acknowledgment or routing confirmation received. |
 | 2 | databreaches.net tip | Emailed to Dissent Doe (independent breach-journalism outlet with established track record of contacting under-reported victims) | 2026-04-16 | Delivered. No response or public coverage as of publication. |
 | 3 | LinkedIn outreach | Connection requests to Alert360 CEO and General Counsel accompanied by notification message | 2026-04-16 | Requests pending; neither account accepted the connection or replied. |
 | 4 | Corporate privacy email | `privacy@alert360.com` | 2026-04-16 | Email was rejected / blocked at the receiving mail gateway; message did not deliver. |
-| 5 | ransomware.live (third-party disclosure — not a Hunters Ledger action) | Public listing on https://www.ransomware.live/group/shinyhunters | 2026-04-19 | Alert360 added to tracker with estimated attack date 2026-04-18. Estimate is inconsistent with this report's direct DLS observation on 2026-04-16 (see above). |
+| 5 | ransomware.live (third-party disclosure, not a Hunters Ledger action) | Public listing on https://www.ransomware.live/group/shinyhunters | 2026-04-19 | Alert360 added to tracker with estimated attack date 2026-04-18. Estimate is inconsistent with this report's direct DLS observation on 2026-04-16 (see above). |
 
 No private channel produced a reply, and the corporate privacy address actively rejected mail. The FBI IC3 route remains the authoritative channel of record. With ransomware.live publicly listing Alert360 on 2026-04-19, the disclosure gap that drove the original publication hold is closed; this report is released with the pre-publication outreach record preserved in full for transparency. Any future Alert360 response will be appended to this report as an update.
 
@@ -323,7 +323,7 @@ No private channel produced a reply, and the corporate privacy address actively 
 | 1 | **Alert360** | Home addresses + alarm configs + PINs → direct burglary / stalking enablement; unique kinetic-harm profile |
 | 2 | **ZenBusiness** | SSN-on-EIN + LLC formation docs at scale → synthetic-identity / shell-company factory fuel |
 | 3 | **Ameriprise** | HNW/UHNW CRM + SharePoint (200 GB claimed) → best-in-class spear-phishing base |
-| 4 | **Pathstone** | UHNW family-office dossiers — highest per-record value; minor-children estate data |
+| 4 | **Pathstone** | UHNW family-office dossiers, highest per-record value; minor-children estate data |
 | 5 | **Odido** | 6.2M Dutch telecom subscribers → SIM-swap campaigns at national scale, banking-MFA bypass |
 
 ### 4.6 Regulatory exposure pattern
@@ -348,7 +348,7 @@ The aggregate victim set spans financial, healthcare, education, telecom, and co
 
 The upload-window pattern shows a bulk drop on 21 April. Five of the seven, Canada Life, Pitney Bowes, 7-Eleven, Carnival Corporation and Zara, were published inside a **66-minute window between 2026-04-21 18:18 and 19:24 UTC**. That batch-release pattern is consistent with an internal review cycle by the operators rather than opportunistic single-victim posting, and intrusion dates for these victims are almost certainly weeks to months earlier than the DLS upload.
 
-**Marcus & Millichap — uploaded during the re-scan window.** The Marcus & Millichap archive was uploaded at 2026-04-24 13:54 UTC, approximately 46 minutes before the re-scan's live HEAD at 14:40 UTC. The operation is publishing actively and continuously.
+**Marcus & Millichap: uploaded during the re-scan window.** The Marcus & Millichap archive was uploaded at 2026-04-24 13:54 UTC, approximately 46 minutes before the re-scan's live HEAD at 14:40 UTC. The operation is publishing actively and continuously.
 
 #### 4.7.2 Confirmed add-then-remove event — Medtronic
 
@@ -357,9 +357,9 @@ An independent Cybernews report published 2026-04-23 (and republished by TechRad
 Independent verification from this investigation:
 - Medtronic was **not observed** on the DLS in either of this investigation's direct snapshots (2026-04-16 and 2026-04-24 14:00 / 14:40 UTC).
 - Medtronic is **absent from the 2026-04-24 live listing** of `/pay_or_leak/`, consistent with the Cybernews "removed" claim.
-- Medtronic does not appear on the ransomware.live ShinyHunters group page at publication time — the volunteer-maintained tracker's polling cycle did not catch the add-remove event.
+- Medtronic does not appear on the ransomware.live ShinyHunters group page at publication time. The volunteer-maintained tracker's polling cycle did not catch the add-remove event.
 
-This is the **first documented add-then-remove event** on this DLS. It establishes empirically that the operators are willing to withdraw listings — whether as negotiation pressure, post-payment compliance, or operational re-packaging — and that absence of a victim from the clearnet DLS at a single point in time does **not** constitute evidence of non-compromise. Defenders investigating rumours that an organization "was on the DLS and is now gone" should treat the rumour as credible.
+This is the **first documented add-then-remove event** on this DLS. It establishes empirically that the operators are willing to withdraw listings (whether as negotiation pressure, post-payment compliance, or operational re-packaging) and that absence of a victim from the clearnet DLS at a single point in time does **not** constitute evidence of non-compromise. Defenders investigating rumours that an organization "was on the DLS and is now gone" should treat the rumour as credible.
 
 #### 4.7.3 Additional victim named by Cybernews but not observed on the clearnet DLS — Aman Resorts
 
@@ -367,9 +367,9 @@ Cybernews' 2026-04-23 report names **Aman Resorts** as one of the ~40 victim org
 
 Three non-exclusive hypotheses, ordered by plausibility:
 
-1. **Also removed** — same pattern as Medtronic (negotiation-in-progress or payment-completed).
-2. **Present on one of the Tor mirrors but not synchronized to the clearnet DLS** — the two active `.onion` mirrors (main + redirector) may carry victims that the clearnet operator chose not to expose via PROSPERO. This investigation does not reach Tor from its zero-risk observation posture.
-3. **Cybernews researcher conflation with `aura`** — the file `shouldve_paid-the_ransom_aura-shinyhunters.7z` (11 GB, 2026-03-15) is assigned to **Aura** (consumer identity protection) in §4.1 of this report. A Cybernews analyst examining the archive or its surrounding metadata could plausibly have mapped "aura" to Aman Resorts if partial evidence suggested that interpretation. This is considered the least likely of the three given Cybernews' normal editorial standards, but cannot be ruled out without access to the primary article.
+1. **Also removed**: same pattern as Medtronic (negotiation-in-progress or payment-completed).
+2. **Present on one of the Tor mirrors but not synchronized to the clearnet DLS**: the two active `.onion` mirrors (main + redirector) may carry victims that the clearnet operator chose not to expose via PROSPERO. This investigation does not reach Tor from its zero-risk observation posture.
+3. **Cybernews researcher conflation with `aura`**: the file `shouldve_paid-the_ransom_aura-shinyhunters.7z` (11 GB, 2026-03-15) is assigned to **Aura** (consumer identity protection) in §4.1 of this report. A Cybernews analyst examining the archive or its surrounding metadata could plausibly have mapped "aura" to Aman Resorts if partial evidence suggested that interpretation. This is considered the least likely of the three given Cybernews' normal editorial standards, but cannot be ruled out without access to the primary article.
 
 Aman Resorts is **not** added to §4.1's 29-victim roster on the strength of Cybernews' naming alone. It is recorded here as **public-reported, not directly observed**; a direct DLS observation or primary-source screenshot would be required to promote it to DEFINITE.
 
@@ -382,9 +382,9 @@ Aman Resorts is **not** added to §4.1's 29-victim roster on the strength of Cyb
 | `This_Is_Your_Fault_Odido.txt` | 2,367 B | 2026-03-27 02:06 |
 | `full_odido_shinyhunters.txt.7z` | 3 GB | 2026-03-05 01:49 |
 
-Both file `Last-Modified` timestamps *precede* the original investigation's 2026-04-16 crawl by weeks, so the files were present at that time. The original crawler's "empty" classification was incorrect — almost certainly the result of the nginx path-reuse tarpit behaviour documented in `Notes/tarpit_behavior.md` of the investigation evidence base, which caused the original open-directory enumeration to OOM and which this investigation subsequently mitigated with a depth-limiter. The `Odido` entry in §4.1's table should be read as "3 GB archive present since 2026-03-05; the 'archive withdrawn' note was incorrect."
+Both file `Last-Modified` timestamps *precede* the original investigation's 2026-04-16 crawl by weeks, so the files were present at that time. The original crawler's "empty" classification was incorrect, almost certainly the result of the nginx path-reuse tarpit behaviour documented in `Notes/tarpit_behavior.md` of the investigation evidence base, which caused the original open-directory enumeration to OOM and which this investigation subsequently mitigated with a depth-limiter. The `Odido` entry in §4.1's table should be read as "3 GB archive present since 2026-03-05; the 'archive withdrawn' note was incorrect."
 
-The corresponding "no archive present" claim for Odido in §2.1's subdirectory list should be similarly treated — the archive is present and has been present since at least 2026-03-05.
+The corresponding "no archive present" claim for Odido in §2.1's subdirectory list should be similarly treated. The archive is present and has been present since at least 2026-03-05.
 
 #### 4.7.5 Public reporting corroboration — Cybernews and TechRadar
 
@@ -392,14 +392,14 @@ Independent mainstream coverage by Cybernews (2026-04-23, primary) and TechRadar
 
 - ~40 organizations in total across the DLS cluster
 - ~38 million records in aggregate
-- "Earliest listing [is] January 23, 2026" — extends the publicly-reported campaign-start date of this specific DLS *backward* from this report's 2026-03-04 observation of the earliest on-site upload
+- "Earliest listing [is] January 23, 2026": extends the publicly-reported campaign-start date of this specific DLS *backward* from this report's 2026-03-04 observation of the earliest on-site upload
 - Newest addition at the time of Cybernews' writing: "earlier this week" (consistent with the 2026-04-21 bulk drop identified in §4.7.1)
 
 New actor quote attributed to ShinyHunters (via Cybernews):
 
 > "We will make sure every corner of the criminal underground world has your data and is abusing it."
 
-The operator's stated posture is that data will remain on the DLS "indefinitely," reinforcing the §10 guidance that victim notification is the salient response — takedown is not achievable from this observation vantage.
+The operator's stated posture is that data will remain on the DLS "indefinitely," reinforcing the §10 guidance that victim notification is the salient response, takedown is not achievable from this observation vantage.
 
 #### 4.7.6 Infrastructure and operational-state notes
 
@@ -412,11 +412,11 @@ The operator's stated posture is that data will remain on the DLS "indefinitely,
 ## 5. Campaign Context and TTP Chain
 {: .hl-tier-2}
 
-> **Analyst note:** This section steps back from the leak-site host itself to describe the campaign that produced its contents — how victims were initially compromised, how data moved from victim CRMs to the DLS, and how this fits into the broader Scattered LAPSUS$ Hunters cluster. This is the *cause* of which the DLS is the *consequence*; defenders looking for upstream detection opportunities should focus here.
+> **Analyst note:** This section steps back from the leak-site host itself to describe the campaign that produced its contents, how victims were initially compromised, how data moved from victim CRMs to the DLS, and how this fits into the broader Scattered LAPSUS$ Hunters cluster. This is the *cause* of which the DLS is the *consequence*; defenders looking for upstream detection opportunities should focus here.
 
 ### 5.1 The Scattered LAPSUS$ Hunters collective
 
-The **Scattered LAPSUS$ Hunters** collective (also "SLH" or "Trinity of Chaos") combines three previously-distinct groups — Scattered Spider runs the vishing front, LAPSUS$-era operators run the harassment playbook, and ShinyHunters owns the data theft and DLS custody (the role observed directly in this report). A Telegram-announced merger in **August 2025** formalized the banner:
+The **Scattered LAPSUS$ Hunters** collective (also "SLH" or "Trinity of Chaos") combines three previously-distinct groups. Scattered Spider runs the vishing front, LAPSUS$-era operators run the harassment playbook, and ShinyHunters owns the data theft and DLS custody (the role observed directly in this report). A Telegram-announced merger in **August 2025** formalized the banner:
 
 - **Scattered Spider (UNC3944)**: English-language vishing and social-engineering specialists
 - **LAPSUS$-aligned operators**: surviving members of the 2021-2022 LAPSUS$ extortion campaigns, contributors of the harassment / public-pressure playbook
@@ -432,7 +432,7 @@ In the first stage the operator selects targets and runs reconnaissance. They pi
 
 In the second stage they vish the help desk. The operator places a phone call, English-language and typically female-voiced, with Dataminr reporting active recruitment of paid female vishing operators in February 2026, impersonating an internal employee locked out of MFA. The dialogue script extracts an MFA reset or a temporary access credential.
 
-**Stage 3 — Victim-branded credential-harvesting site (optional).** Some sub-clusters route the vishing pretext to a victim-branded phishing landing page where the impersonated employee "resets" their own credentials, capturing them for the operator.
+**Stage 3: Victim-branded credential-harvesting site (optional).** Some sub-clusters route the vishing pretext to a victim-branded phishing landing page where the impersonated employee "resets" their own credentials, capturing them for the operator.
 
 In the fourth stage they authorize an OAuth Connected App. With a valid SSO session, the operator authorizes a malicious Connected App into the victim's Salesforce tenant, frequently a Data Loader clone, which bypasses many CRM-export rate limits and runs under legitimate user authority.
 
@@ -444,17 +444,17 @@ For detection priority, the most efficient upstream point for defenders is **sta
 
 ### 5.3 The Trivy supply-chain branch (europa.zip)
 
-The European Commission breach is the operational anomaly in this campaign. CERT-EU's 2026-04-03 attribution (Tier-1 source) identifies the chain as: a Trivy image-scanner supply-chain compromise attributed to **TeamPCP** delivered an extracted AWS API key, TruffleHog was used for lateral pivot in the EC AWS environment, new access keys were attached to existing users, and approximately 340 GB of uncompressed data was exfiltrated affecting up to 71 Europa web-hosting clients (42 EC internal + at least 29 other Union entities). ShinyHunters subsequently published a 94 GB compressed subset on this DLS on 2026-03-28 — exactly 24 hours after EC's first public disclosure.
+The European Commission breach is the operational anomaly in this campaign. CERT-EU's 2026-04-03 attribution (Tier-1 source) identifies the chain as: a Trivy image-scanner supply-chain compromise attributed to **TeamPCP** delivered an extracted AWS API key, TruffleHog was used for lateral pivot in the EC AWS environment, new access keys were attached to existing users, and approximately 340 GB of uncompressed data was exfiltrated affecting up to 71 Europa web-hosting clients (42 EC internal + at least 29 other Union entities). ShinyHunters subsequently published a 94 GB compressed subset on this DLS on 2026-03-28, exactly 24 hours after EC's first public disclosure.
 
-ShinyHunters told TechCrunch that they had stolen data TeamPCP had previously taken, demonstrating either cross-actor collaboration or commercial access-brokerage between the two groups. Either interpretation expands the 2026 ShinyHunters campaign's TTP envelope beyond the vishing chain — defenders cannot rely on Salesforce-specific or vishing-specific detection alone.
+ShinyHunters told TechCrunch that they had stolen data TeamPCP had previously taken, demonstrating either cross-actor collaboration or commercial access-brokerage between the two groups. Either interpretation expands the 2026 ShinyHunters campaign's TTP envelope beyond the vishing chain, defenders cannot rely on Salesforce-specific or vishing-specific detection alone.
 
 ### 5.4 Active-cluster expansion (January–March 2026)
 
 Since the August 2025 merger, the campaign has expanded:
 
-- **January 2026 — UNC6671 Okta-direct vishing.** Mandiant identified a sub-cluster vishing Okta customers directly (rather than via the Salesforce-tenant pathway). This generalizes the attack beyond Salesforce-specific defenses.
-- **February 2026 — Female-vishing-caller recruitment.** Dataminr reported active recruitment of paid female callers, indicating sustained operational scaling.
-- **March 2026 — Salesforce Aura misconfiguration.** Help Net Security reported exploitation of Salesforce Aura misconfigurations as a supplementary access vector in the campaign.
+- **January 2026: UNC6671 Okta-direct vishing.** Mandiant identified a sub-cluster vishing Okta customers directly (rather than via the Salesforce-tenant pathway). This generalizes the attack beyond Salesforce-specific defenses.
+- **February 2026: Female-vishing-caller recruitment.** Dataminr reported active recruitment of paid female callers, indicating sustained operational scaling.
+- **March 2026: Salesforce Aura misconfiguration.** Help Net Security reported exploitation of Salesforce Aura misconfigurations as a supplementary access vector in the campaign.
 
 On net assessment, the campaign cluster is *expanding* rather than contracting, so defenders should expect continued TTP variation across 2026 rather than a stable detection profile.
 
@@ -469,22 +469,22 @@ On net assessment, the campaign cluster is *expanding* rather than contracting, 
 
 PROSPERO is a Russia-based hosting provider repeatedly documented in mainstream security reporting as a bulletproof host. Krebs on Security (2025-02-28) identified PROSPERO as a notorious malware and spam host and reported its upstream routing through Kaspersky Lab networks (AS209030) since December 2024. Intrinsec (Tier-2) has linked PROSPERO infrastructure to the SecureHost and BEARHOST bulletproof brands marketed on Russian-language criminal forums and documented hosting of SocGholish, GootLoader, FakeBat, SpyNote, and multiple ransomware operations. Resecurity (Tier-2) has identified PROSPERO and its peer Proton66 as likely destinations for displaced tenants after the BEARHOST exit.
 
-**Bulletproof assessment for AS200593 — CONFIRMED (5 of 6 indicators):**
+**Bulletproof assessment for AS200593, CONFIRMED (5 of 6 indicators):**
 
 - Non-cooperative jurisdiction (Russia)
 - Named in credible Tier-2/Tier-3 research with publication dates (Krebs, Intrinsec, Resecurity)
 - Extensive abuse history with no provider action (multiple ransomware families, RATs, Android banking trojans across the ASN)
 - Abuse contact non-responsive (`abuse@pro-spero.ru`; single admin/tech contact ND7667-RIPE; no formal abuse team structure)
 - No RPKI validation; announces bogons per bgp.tools
-- (Not directly confirmed: cryptocurrency-payment / underground-forum advertisement URL — referenced in secondary sources but not verified to project citation standards)
+- (Not directly confirmed: cryptocurrency-payment / underground-forum advertisement URL, referenced in secondary sources but not verified to project citation standards)
 
 The network footprint is small. AS200593 announces three /24 prefixes, `91.215.85.0/24`, `91.202.233.0/24` and `193.24.123.0/24`, totalling 768 IPs. The entire AS is enumerable, and threat-intelligence feeds flag the network as presumptively malicious infrastructure. Block-level action against all three prefixes is defensible for organizations whose risk posture justifies it.
 
 ### 6.2 Neighbor-scan findings
 
-This investigation scanned 512 IPs across the two PROSPERO neighbor prefixes (`91.202.233.0/24` and `193.24.123.0/24`) to test for additional ShinyHunters infrastructure. **No additional ShinyHunters nodes were found** — the DLS at `91.215.85.22` is a single operational node within the AS. The neighbor scan did identify:
+This investigation scanned 512 IPs across the two PROSPERO neighbor prefixes (`91.202.233.0/24` and `193.24.123.0/24`) to test for additional ShinyHunters infrastructure. **No additional ShinyHunters nodes were found**. The DLS at `91.215.85.22` is a single operational node within the AS. The neighbor scan did identify:
 
-- 84 alive hosts in `91.202.233.0/24` with 4 Apache autoindex open directories (3 empty, 1 cPanel vhost listing) — none with ShinyHunters artifacts
+- 84 alive hosts in `91.202.233.0/24` with 4 Apache autoindex open directories (3 empty, 1 cPanel vhost listing), none with ShinyHunters artifacts
 - A 20-host cluster of Plesk Obsidian 18.0.76 control panels (build 1800260406.11; distinct instanceId values) representing PROSPERO commercial-hosting tenants, not a phishing fleet
 - Various unrelated tenants including a Ledger-wallet typosquat at `193.24.123.223` (`ledger-lives.io`) that is a separate investigation; mention here only to illustrate that PROSPERO's tenant base is heterogeneous
 
@@ -492,22 +492,22 @@ Co-tenancy is not collaboration. Unrelated criminal tenants on the same AS are a
 
 ### 6.3 DDoS-Guard (AS57724) — identity-page host
 
-DDoS-Guard is a Russia-based DDoS-protection and hosting provider operating approximately 803,874 domains across approximately 3,046 IPs per public BGP data. It is a legitimate commercial service (not a purpose-built criminal hosting provider in the PROSPERO sense), but its product model — origin-IP masking via DDoS-mitigation fronting — provides equivalent functional protection against Western takedown efforts and is widely abused by threat actors. ThreatSTOP documented historical abuse patterns in 2021. No Tier-2 2025-2026 primary research on DDoS-Guard was identified during this investigation; this is a documented research gap.
+DDoS-Guard is a Russia-based DDoS-protection and hosting provider operating approximately 803,874 domains across approximately 3,046 IPs per public BGP data. It is a legitimate commercial service (not a purpose-built criminal hosting provider in the PROSPERO sense), but its product model (origin-IP masking via DDoS-mitigation fronting) provides equivalent functional protection against Western takedown efforts and is widely abused by threat actors. ThreatSTOP documented historical abuse patterns in 2021. No Tier-2 2025-2026 primary research on DDoS-Guard was identified during this investigation; this is a documented research gap.
 
-**Bulletproof assessment for AS57724 — SUSPECTED (2 of 6 indicators):** non-cooperative jurisdiction; structural abuse tolerance via origin-masking. The remaining indicators (appearing in BPH databases, underground-forum advertisement) do not apply to a legitimate commercial DDoS-mitigation product.
+**Bulletproof assessment for AS57724, SUSPECTED (2 of 6 indicators):** non-cooperative jurisdiction; structural abuse tolerance via origin-masking. The remaining indicators (appearing in BPH databases, underground-forum advertisement) do not apply to a legitimate commercial DDoS-mitigation product.
 
 The architectural significance is real. Splitting the DLS payload on PROSPERO from the actor identity page on DDoS-Guard is the most distinctive infrastructure choice in this operation. Even if PROSPERO were taken down, the actor identity and PGP-key infrastructure would survive on DDoS-Guard, allowing rapid re-publication elsewhere. Conversely, even if DDoS-Guard suspended `shinyhunte.rs`, the DLS itself and its three Tor mirrors would stay reachable. That is intermediate-to-advanced operational planning, not opportunistic behavior.
 
 ### 6.4 Co-tenancy: a brief note on PROSPERO bulletproof-host neighborhood
 
-Neighbor-scan enumeration identified a Ledger hardware-wallet typosquat (`ledger-lives.io` at `193.24.123.223`) on a PROSPERO-adjacent prefix — unrelated to ShinyHunters and documented in a separate investigation. It illustrates how diverse PROSPERO's criminal tenant base is and why OTX co-tenancy correlations (PLAY, Qilin, RansomHub) are hosting-market artifacts, not ShinyHunters operational links.
+Neighbor-scan enumeration identified a Ledger hardware-wallet typosquat (`ledger-lives.io` at `193.24.123.223`) on a PROSPERO-adjacent prefix, unrelated to ShinyHunters and documented in a separate investigation. It illustrates how diverse PROSPERO's criminal tenant base is and why OTX co-tenancy correlations (PLAY, Qilin, RansomHub) are hosting-market artifacts, not ShinyHunters operational links.
 
 ---
 
 ## 7. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Analyst note:** This section presents the formal attribution conclusion and the evidence behind it. Attribution is DEFINITE at 96% confidence — the highest level used by this publication outside of direct law-enforcement attribution naming the specific IP. The 4% margin reflects the absence of an FBI / CISA / Five Eyes advisory naming `91.215.85.22` itself; everything else aligns. No Unattributed Threat Actor (UTA) designation is needed here because ShinyHunters is a publicly named actor with six years of documented operations.
+> **Analyst note:** This section presents the formal attribution conclusion and the evidence behind it. Attribution is DEFINITE at 96% confidence, the highest level used by this publication outside of direct law-enforcement attribution naming the specific IP. The 4% margin reflects the absence of an FBI / CISA / Five Eyes advisory naming `91.215.85.22` itself; everything else aligns. No Unattributed Threat Actor (UTA) designation is needed here because ShinyHunters is a publicly named actor with six years of documented operations.
 
 ### 7.1 Attribution statement
 
@@ -541,9 +541,9 @@ A direct FBI / CISA / Europol advisory naming `91.215.85.22` specifically would 
 
 H2, a copycat actor staging a false flag, I reject. A copycat could not have produced a properly cross-signed PGP rotation by both 2020 keys, which were never publicly leaked in usable private form, and could not have aligned 28 of 29 victims with independently-reported ShinyHunters operations.
 
-**H3 — Hostile takeover by the "James" faction post-December 2025 internal dispute.** Rejected as the ruling hypothesis. The December 2025 internal-doxx statement attributes James only to the Empire key (via the original custodian "Trihash"). Cross-signing the March 2026 rotation required custody of both 2020 keys; the surviving non-James faction therefore retained or regained both keys before the rotation. All 2026 uploads post-date the rotation. The faction dispute complicates handle-level attribution within ShinyHunters but does not undermine attribution of the DLS to ShinyHunters as an organization.
+**H3: Hostile takeover by the "James" faction post-December 2025 internal dispute.** Rejected as the ruling hypothesis. The December 2025 internal-doxx statement attributes James only to the Empire key (via the original custodian "Trihash"). Cross-signing the March 2026 rotation required custody of both 2020 keys; the surviving non-James faction therefore retained or regained both keys before the rotation. All 2026 uploads post-date the rotation. The faction dispute complicates handle-level attribution within ShinyHunters but does not undermine attribution of the DLS to ShinyHunters as an organization.
 
-**H4 — Different actor publishing under ShinyHunters' name.** Rejected. The 28-of-29 victim-set convergence with mainstream press attribution and the IC3 / CERT-EU government-level naming of the cluster are inconsistent with this hypothesis.
+**H4: Different actor publishing under ShinyHunters' name.** Rejected. The 28-of-29 victim-set convergence with mainstream press attribution and the IC3 / CERT-EU government-level naming of the cluster are inconsistent with this hypothesis.
 
 ### 7.5 Handle-level claims (handle attribution, not group attribution)
 
@@ -551,9 +551,9 @@ The December 2025 PGP-signed statement on `shinyhunte.rs` doxxed three claimed m
 
 | Claimed handle | Claimed initials | Claimed status | This report's confidence |
 |---|---|---|---|
-| **Yuro** | A.E. | Arrested pre-Dec 2025 | **LOW** — actor-on-actor doxx; no LE corroboration |
-| **Trihash** | R.L. | Arrested pre-Dec 2025; original Empire-key custodian | **LOW** — actor-on-actor doxx; no LE corroboration |
-| **James** | S.E. (alias X*K) | Ejected member; French; credited with WEMIX attack | **LOW** — actor-on-actor doxx with self-serving attribution-deflection motive; no LE corroboration |
+| **Yuro** | A.E. | Arrested pre-Dec 2025 | **LOW**, actor-on-actor doxx; no LE corroboration |
+| **Trihash** | R.L. | Arrested pre-Dec 2025; original Empire-key custodian | **LOW**, actor-on-actor doxx; no LE corroboration |
+| **James** | S.E. (alias X*K) | Ejected member; French; credited with WEMIX attack | **LOW**, actor-on-actor doxx with self-serving attribution-deflection motive; no LE corroboration |
 
 A claimed Telegram contact for "James" at `t.me/wokawoka10` is given. Treat all three identity claims as **pivot material, not ground truth**. The June 2025 Paris BL2C arrests of four French nationals (handles ShinyHunters / Hollow / Noct / Depressed) are timing-consistent with the December 2025 statement's claimed arrests but the LE-published handles do not map cleanly to Yuro / Trihash; no public indictment text has been located that would reconcile these. The faction-internal dynamics do not affect this report's group-level DEFINITE attribution.
 
@@ -586,12 +586,12 @@ A claimed Telegram contact for "James" at `t.me/wokawoka10` is given. Treat all 
 | Collection | T1213.002 | Data from Information Repositories: SharePoint | SharePoint harvest documented in Ameriprise (200 GB claimed) and several other large intrusions (Section 5.2 stage 5) |
 | Command and Control | T1090.003 | Proxy: Multi-hop Proxy | Three Tor `.onion` mirrors fronting the leak site (active main + active redirector + retired) provide Tor-based access path independent of clearnet takedown (Section 2.3) |
 | Command and Control | T1071.001 | Application Layer Protocol: Web Protocols | HTTP/80 nginx serving on both the DLS (`91.215.85.22`) and identity page (`91.215.43.200`) as the publication channel (Section 2) |
-| Exfiltration | T1567 | Exfiltration Over Web Service | Stolen archives uploaded to ShinyHunters-controlled clearnet web server for publication (~1.1 TB across 30 archives — Sections 3.3, 4) |
+| Exfiltration | T1567 | Exfiltration Over Web Service | Stolen archives uploaded to ShinyHunters-controlled clearnet web server for publication (~1.1 TB across 30 archives, Sections 3.3, 4) |
 | Exfiltration | T1567.002 | Exfiltration to Cloud Storage | Salesforce Data Loader bulk-export workflow exfiltrates CRM contents to operator-controlled cloud / endpoint (Section 5.2 stage 5) |
-| Impact | T1657 | Financial Theft | Pay-or-leak extortion model — ransom demanded under threat of public data publication; refusal results in archive upload with taunt-filename branding (Sections 3.1, 3.2) |
+| Impact | T1657 | Financial Theft | Pay-or-leak extortion model, ransom demanded under threat of public data publication; refusal results in archive upload with taunt-filename branding (Sections 3.1, 3.2) |
 | Impact | T1531 | Account Access Removal | Victim accounts can be locked out via SSO-session hijack and admin-credential changes during intrusion (inferred from Salesforce / Okta full-tenant access; observed indirectly via incident reporting) |
 
-*Coverage scope note.* Encryption-based impact (T1486 Data Encrypted for Impact) is **not** mapped here — ShinyHunters operations on this DLS are pure data-theft-and-extortion; no encryption of victim systems is observed or claimed. The functional analog is data-disclosure-as-coercion (T1657 Financial Theft + T1567 Exfiltration Over Web Service), which is captured above.
+*Coverage scope note.* Encryption-based impact (T1486 Data Encrypted for Impact) is **not** mapped here. ShinyHunters operations on this DLS are pure data-theft-and-extortion; no encryption of victim systems is observed or claimed. The functional analog is data-disclosure-as-coercion (T1657 Financial Theft + T1567 Exfiltration Over Web Service), which is captured above.
 
 ---
 
@@ -609,7 +609,7 @@ The most operationally valuable detections, in priority order:
 
 Full YARA, Sigma, and Suricata rules are published separately in [`shinyhunters-dls-91-215-85-22-20260417-detections.md`](/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/) (source file: `shinyhunters-dls-91-215-85-22-20260417-detections.md`).
 
-**Full validated IOC feed** — machine-readable JSON suitable for SIEM / EDR ingestion — is published at: [/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json](/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json).
+**Full validated IOC feed** (machine-readable JSON suitable for SIEM / EDR ingestion) is published at: [/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json](/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json).
 
 ---
 
@@ -666,27 +666,27 @@ This is a brief orientation for readers who need to know *what to address*, not 
 
 **Q1. Who operates 91.215.85.22, and what is the attribution confidence?**
 
-ShinyHunters operates `91.215.85.22` under the Scattered LAPSUS$ Hunters collective banner formed in August 2025. Attribution is **DEFINITE at 96% confidence** — the highest level this publication uses outside of direct law-enforcement attribution naming the specific IP. The evidence supporting that level is: a Tier-1 IC3 Joint Advisory (2025-09-12) and a Tier-1 CERT-EU attribution (2026-04-03) naming ShinyHunters and the underlying TTP cluster; two Tier-2 vendor concurrences (Google GTIG, Resecurity); on-server actor self-attribution in `INFORMATION.txt`; six years of unbroken PGP key continuity across Empire Market, RaidForums, and BreachForums platforms confirmed via dual-key cross-signed rotation on 2026-03-17; and 28 of 29 named DLS victims independently corroborated as ShinyHunters targets in mainstream security press. The 4% gap to 100% reflects only the absence of an FBI / CISA / Five Eyes advisory naming `91.215.85.22` itself.
+ShinyHunters operates `91.215.85.22` under the Scattered LAPSUS$ Hunters collective banner formed in August 2025. Attribution is **DEFINITE at 96% confidence**. The highest level this publication uses outside of direct law-enforcement attribution naming the specific IP. The evidence supporting that level is: a Tier-1 IC3 Joint Advisory (2025-09-12) and a Tier-1 CERT-EU attribution (2026-04-03) naming ShinyHunters and the underlying TTP cluster; two Tier-2 vendor concurrences (Google GTIG, Resecurity); on-server actor self-attribution in `INFORMATION.txt`; six years of unbroken PGP key continuity across Empire Market, RaidForums, and BreachForums platforms confirmed via dual-key cross-signed rotation on 2026-03-17; and 28 of 29 named DLS victims independently corroborated as ShinyHunters targets in mainstream security press. The 4% gap to 100% reflects only the absence of an FBI / CISA / Five Eyes advisory naming `91.215.85.22` itself.
 
 **Q2. How many victims are on this DLS, and are they all already publicly known?**
 
-Twenty-nine named victim organizations are present on the DLS (plus two unlabelled archives — a 94 GB European Commission dump and a 43 MB BreachForums v5 user database). Twenty-two victims are fully publicly reported with company acknowledgment. Nine victims are partially disclosed — actor-claimed but without formal company acknowledgment yet. **One victim — Alert360, a US home and small-business alarm-monitoring provider — has no prior public reporting in any tier** (mainstream press, government bulletins, or crowdsourced trackers including ransomware.live). This report is the first public documentation of Alert360's presence on the DLS. The Alert360 subdirectory currently contains only `INFORMATION.txt` (no archive yet), indicating an extortion-negotiation stage — historically consistent with negotiation behavior observed for Ameriprise, Odido, and Woflow on this same DLS.
+Twenty-nine named victim organizations are present on the DLS (plus two unlabelled archives, a 94 GB European Commission dump and a 43 MB BreachForums v5 user database). Twenty-two victims are fully publicly reported with company acknowledgment. Nine victims are partially disclosed, actor-claimed but without formal company acknowledgment yet. **One victim (Alert360, a US home and small-business alarm-monitoring provider) has no prior public reporting in any tier** (mainstream press, government bulletins, or crowdsourced trackers including ransomware.live). This report is the first public documentation of Alert360's presence on the DLS. The Alert360 subdirectory currently contains only `INFORMATION.txt` (no archive yet), indicating an extortion-negotiation stage, historically consistent with negotiation behavior observed for Ameriprise, Odido, and Woflow on this same DLS.
 
 **Q3. What is the relationship between ShinyHunters, Scattered Spider, and LAPSUS$?**
 
-In August 2025 a Telegram-announced merger combined three previously-distinct threat actor groups into the **Scattered LAPSUS$ Hunters** collective (also called "Trinity of Chaos" or "SLH"). ShinyHunters contributes the data-theft tradecraft and DLS custody — the role this report observes directly on `91.215.85.22`. Scattered Spider (UNC3944) contributes English-language vishing and social-engineering specialization, running the help-desk vishing front. LAPSUS$-aligned operators contribute the harassment / public-pressure playbook. The merger is documented by Resecurity (Tier-2) and SocRadar (Tier-3), and the self-branded "Scattered LAPSUS$ Hunters | DLS" page title is preserved on a 2025-10-12 archive.org snapshot of `shinyhunte.rs`. Operationally, an attack on a victim in this campaign almost certainly involves all three contributor groups in different stages — Scattered Spider in initial access, ShinyHunters in data theft and publication, LAPSUS$-era operators in extortion pressure.
+In August 2025 a Telegram-announced merger combined three previously-distinct threat actor groups into the **Scattered LAPSUS$ Hunters** collective (also called "Trinity of Chaos" or "SLH"). ShinyHunters contributes the data-theft tradecraft and DLS custody. The role this report observes directly on `91.215.85.22`. Scattered Spider (UNC3944) contributes English-language vishing and social-engineering specialization, running the help-desk vishing front. LAPSUS$-aligned operators contribute the harassment / public-pressure playbook. The merger is documented by Resecurity (Tier-2) and SocRadar (Tier-3), and the self-branded "Scattered LAPSUS$ Hunters | DLS" page title is preserved on a 2025-10-12 archive.org snapshot of `shinyhunte.rs`. Operationally, an attack on a victim in this campaign almost certainly involves all three contributor groups in different stages, Scattered Spider in initial access, ShinyHunters in data theft and publication, LAPSUS$-era operators in extortion pressure.
 
 **Q4. Is PROSPERO exclusive to ShinyHunters, or is the AS shared with other criminal tenants?**
 
-PROSPERO (AS200593) is a **shared Russian bulletproof-hosting environment**, not a ShinyHunters-dedicated provider. A 512-IP neighbor scan of the two adjacent PROSPERO prefixes (`91.202.233.0/24` and `193.24.123.0/24`) found no additional ShinyHunters infrastructure — `91.215.85.22` is a single operational node within the AS. The neighbor scan did identify unrelated criminal tenants including a Ledger hardware-wallet typosquat (`ledger-lives.io` at `193.24.123.223`) and a 20-host Plesk Obsidian commercial-hosting cluster, plus open-source reporting documents PROSPERO hosting SocGholish, GootLoader, FakeBat, SpyNote, and multiple ransomware operations across the broader ASN. **Important corollary:** AlienVault OTX correlates `91.215.85.22` with PLAY, Qilin, RansomHub, and various RAT families because they have all been hosted on the same AS at various times. **These co-tenancy correlations should NOT be propagated as ShinyHunters attribution** — they are shared-bulletproof-hosting artifacts, not evidence of operational linkage.
+PROSPERO (AS200593) is a **shared Russian bulletproof-hosting environment**, not a ShinyHunters-dedicated provider. A 512-IP neighbor scan of the two adjacent PROSPERO prefixes (`91.202.233.0/24` and `193.24.123.0/24`) found no additional ShinyHunters infrastructure, `91.215.85.22` is a single operational node within the AS. The neighbor scan did identify unrelated criminal tenants including a Ledger hardware-wallet typosquat (`ledger-lives.io` at `193.24.123.223`) and a 20-host Plesk Obsidian commercial-hosting cluster, plus open-source reporting documents PROSPERO hosting SocGholish, GootLoader, FakeBat, SpyNote, and multiple ransomware operations across the broader ASN. **Important corollary:** AlienVault OTX correlates `91.215.85.22` with PLAY, Qilin, RansomHub, and various RAT families because they have all been hosted on the same AS at various times. **These co-tenancy correlations should NOT be propagated as ShinyHunters attribution**. They are shared-bulletproof-hosting artifacts, not evidence of operational linkage.
 
 **Q5. What should defenders do if they find this DLS's ransom note (`INFORMATION.txt`) or a taunt-filename archive on internal file shares?**
 
-A `(?i)should(ve|a).*paid.*ransom.*shinyhunters` filename or a verbatim `INFORMATION.txt` ransom-note match on an enterprise file share, cloud-sync staging directory, or web-proxy log is a near-certain indicator of DLS-staging (an internal user downloaded the archive) or active intrusion progression. Priority response categories: (1) treat the host where the file was found as a forensic priority and preserve volatile state before remediation; (2) determine through proxy and DNS logs whether the file arrived from `91.215.85.22` directly or via one of the Tor mirrors; (3) determine whether the archive content names the affected organization or a third party (vendor, customer, partner) — both warrant follow-on action; (4) assess applicable regulatory notification obligations based on the affected data classes and jurisdictions; (5) review Salesforce and Okta logs for indicators consistent with the upstream chain in Section 5.2, particularly anomalous OAuth Connected App authorizations and bulk Data Loader exports in the preceding 90 days. The DLS appearance is the *terminal* event — by the time a file surfaces on internal infrastructure, the breach is months old, and the priority is scope determination, not prevention.
+A `(?i)should(ve|a).*paid.*ransom.*shinyhunters` filename or a verbatim `INFORMATION.txt` ransom-note match on an enterprise file share, cloud-sync staging directory, or web-proxy log is a near-certain indicator of DLS-staging (an internal user downloaded the archive) or active intrusion progression. Priority response categories: (1) treat the host where the file was found as a forensic priority and preserve volatile state before remediation; (2) determine through proxy and DNS logs whether the file arrived from `91.215.85.22` directly or via one of the Tor mirrors; (3) determine whether the archive content names the affected organization or a third party (vendor, customer, partner), both warrant follow-on action; (4) assess applicable regulatory notification obligations based on the affected data classes and jurisdictions; (5) review Salesforce and Okta logs for indicators consistent with the upstream chain in Section 5.2, particularly anomalous OAuth Connected App authorizations and bulk Data Loader exports in the preceding 90 days. The DLS appearance is the *terminal* event, by the time a file surfaces on internal infrastructure, the breach is months old, and the priority is scope determination, not prevention.
 
 **Q6. Is the DLS likely to be taken down, and how should defenders plan for its persistence?**
 
-Plan for persistence. The operator deliberately segments infrastructure across two Russian providers (PROSPERO for the DLS, DDoS-Guard for the identity page) and maintains three Tor mirrors. PROSPERO has an extensive prior abuse history with no provider action documented in Krebs, Intrinsec, or Resecurity reporting; the abuse contact at `abuse@pro-spero.ru` is community-reported as non-responsive. DDoS-Guard's product model (origin-IP masking via DDoS-mitigation fronting) provides equivalent functional protection against Western takedown. Even in an unlikely scenario where one provider were to suspend the relevant IP, the operator retains five publication paths (DLS clearnet + identity clearnet + three Tor mirrors). Defeating the operation requires multi-jurisdictional coordination, upstream-carrier pressure, or operator-side compromise — none of which are achievable through routine abuse-reporting channels. Defenders should treat the IOCs in the linked feed as durable and the campaign as expanding rather than declining (Section 5.4 documents January-March 2026 cluster expansion).
+Plan for persistence. The operator deliberately segments infrastructure across two Russian providers (PROSPERO for the DLS, DDoS-Guard for the identity page) and maintains three Tor mirrors. PROSPERO has an extensive prior abuse history with no provider action documented in Krebs, Intrinsec, or Resecurity reporting; the abuse contact at `abuse@pro-spero.ru` is community-reported as non-responsive. DDoS-Guard's product model (origin-IP masking via DDoS-mitigation fronting) provides equivalent functional protection against Western takedown. Even in an unlikely scenario where one provider were to suspend the relevant IP, the operator retains five publication paths (DLS clearnet + identity clearnet + three Tor mirrors). Defeating the operation requires multi-jurisdictional coordination, upstream-carrier pressure, or operator-side compromise, none of which are achievable through routine abuse-reporting channels. Defenders should treat the IOCs in the linked feed as durable and the campaign as expanding rather than declining (Section 5.4 documents January-March 2026 cluster expansion).
 
 ---
 
@@ -727,9 +727,9 @@ Plan for persistence. The operator deliberately segments infrastructure across t
 
 **Tier-3 sources (community / press)**
 
-- Cybernews (primary, 2026-04-23) — coverage of the DLS naming Mytheresa, Zara, Carnival, 7-Eleven, Pitney Bowes, Canada Life, Hallmark, Medtronic, Aman Resorts, Marcus & Millichap, "~40 organizations," ~38M records, earliest listing 2026-01-23. Primary source cited by the TechRadar republication; the underlying article on cybernews.com was not directly accessible from the research environment used for this report (Cloudflare-routed requests were declined).
+- Cybernews (primary, 2026-04-23): coverage of the DLS naming Mytheresa, Zara, Carnival, 7-Eleven, Pitney Bowes, Canada Life, Hallmark, Medtronic, Aman Resorts, Marcus & Millichap, "~40 organizations," ~38M records, earliest listing 2026-01-23. Primary source cited by the TechRadar republication; the underlying article on cybernews.com was not directly accessible from the research environment used for this report (Cloudflare-routed requests were declined).
 - TechRadar (secondary, 2026-04-23). "ShinyHunters exposes data on Mytheresa, Zara, Carnival, 7-Eleven — over 40 organizations tied up in new data trove which will stay up 'indefinitely'." https://www.techradar.com/pro/security/shinyhunters-exposes-data-on-mytheresa-zara-carnival-7-eleven-over-40-organizations-tied-up-in-new-data-trove-which-will-stay-up-indefinitely
-- TechRadar (2025-10-13). "Domains used by notorious hacking group ShinyHunters for Salesforce hacks disrupted in FBI takedown." https://www.techradar.com/pro/security/domains-used-by-notorious-hacking-group-shinyhunters-disrupted-in-fbi-takedown — establishes that a 2025-10 FBI + French-authorities seizure of `breachforums.hn` and an earlier Tor site preceded the 2026-03-16 PGP key rotation, providing context for the operator's subsequent "routine opsec rotation; no compromise or arrest has occurred" framing.
+- TechRadar (2025-10-13). "Domains used by notorious hacking group ShinyHunters for Salesforce hacks disrupted in FBI takedown." https://www.techradar.com/pro/security/domains-used-by-notorious-hacking-group-shinyhunters-disrupted-in-fbi-takedown, establishes that a 2025-10 FBI + French-authorities seizure of `breachforums.hn` and an earlier Tor site preceded the 2026-03-16 PGP key rotation, providing context for the operator's subsequent "routine opsec rotation; no compromise or arrest has occurred" framing.
 - Krebs on Security, "ShinyHunters Wage Broad Corporate Extortion Spree," 2025-10. https://krebsonsecurity.com/2025/10/shinyhunters-wage-broad-corporate-extortion-spree/
 - Krebs on Security, "Notorious Malware Spam Host Prospero Moves to Kaspersky Lab," 2025-02-28. https://krebsonsecurity.com/2025/02/notorious-malware-spam-host-prospero-moves-to-kaspersky-lab/
 - Krebs on Security, "Please Don't Feed the Scattered LAPSUS$ Shiny Hunters," 2026-02. https://krebsonsecurity.com/2026/02/please-dont-feed-the-scattered-lapsus-shiny-hunters/
@@ -747,4 +747,4 @@ Full investigation evidence (file inventory, victim tracker, ransom-note artifac
 
 ---
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
