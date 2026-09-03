@@ -18,7 +18,7 @@ permalink: /reports/PULSAR-RAT/
 thumbnail: /assets/images/cards/PULSAR-RAT.png
 category: "Remote Access Trojan"
 hide: true
-description: "A custom .NET remote access trojan distributed from an open directory at 185.208.159.182, rated CRITICAL at 9.2/10. Full static and dynamic analysis documents complete filesystem access, automated credential harvesting modules, and persistent remote control — the first in a two-part investigation that later uncovered Quasar RAT and NjRAT/XWorm on the same infrastructure."
+description: "A custom .NET remote access trojan distributed from an open directory at 185.208.159.182, rated CRITICAL at 9.2/10. Full static and dynamic analysis documents complete filesystem access, automated credential harvesting modules, and persistent remote control, the first in a two-part investigation that later uncovered Quasar RAT and NjRAT/XWorm on the same infrastructure."
 stix_bundle: /stix/PULSAR-RAT.json
 ---
 
@@ -33,7 +33,7 @@ stix_bundle: /stix/PULSAR-RAT.json
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
 
-**server.exe** is Pulsar RAT (9.2/10 CRITICAL) — a .NET remote access trojan distributed from an open directory at `hxxp://185[.]208[.]159[.]182/d/server[.]exe`. Static code analysis confirms complete remote control, automated credential harvesting across all major browsers, keylogging, HVNC covert desktop access, and BCrypt-encrypted C2 with a Pastebin dead-drop resolver. Multi-layered anti-analysis targets VMware, VirtualBox, QEMU, Hyper-V, and common debuggers. Registry RunOnce persistence is confirmed; recovery partition abuse capability is present in code and requires per-system verification. The infrastructure also hosts Quasar RAT and NjRAT/XWorm families — see the follow-up report [Dual-RAT Analysis]({{ "/reports/dual-rat-analysis/" | relative_url }}) for full campaign scope. Capabilities are detailed in Section 6; detection rules and IOCs are in the sidebar.
+**server.exe** is Pulsar RAT (9.2/10 CRITICAL), a .NET remote access trojan distributed from an open directory at `hxxp://185[.]208[.]159[.]182/d/server[.]exe`. Static code analysis confirms complete remote control, automated credential harvesting across all major browsers, keylogging, HVNC covert desktop access, and BCrypt-encrypted C2 with a Pastebin dead-drop resolver. Multi-layered anti-analysis targets VMware, VirtualBox, QEMU, Hyper-V, and common debuggers. Registry RunOnce persistence is confirmed; recovery partition abuse capability is present in code and requires per-system verification. The infrastructure also hosts Quasar RAT and NjRAT/XWorm families, see the follow-up report [Dual-RAT Analysis]({{ "/reports/dual-rat-analysis/" | relative_url }}) for full campaign scope. Capabilities are detailed in Section 6; detection rules and IOCs are in the sidebar.
 
 ### Business Impact Summary
 Pulsar RAT provides attackers with complete control over infected systems, enabling data theft, credential harvesting, and network-wide compromise. This represents a CRITICAL threat (9.2/10).
@@ -96,7 +96,7 @@ Pulsar RAT provides attackers with complete control over infected systems, enabl
 ### Organizational Guidance
 
 #### For Executive Leadership
-- **Incident Scope:** Treat any confirmed infection as a full-system compromise — all credentials and accessible data should be considered exposed
+- **Incident Scope:** Treat any confirmed infection as a full-system compromise. All credentials and accessible data should be considered exposed
 - **Regulatory Exposure:** Data breach notification obligations depend on jurisdiction and the nature of data accessible on affected systems; engage legal counsel to assess
 - **Remediation Decision:** System rebuild provides the highest assurance of clean state; cleanup carries residual risk, especially where recovery partition access cannot be forensically excluded
 
@@ -125,7 +125,7 @@ Capability detail sits in Section 6, detection coverage and the IOC feed are in 
 
 **server.exe** is Pulsar RAT, a .NET remote access trojan derived from the open-source Quasar RAT family. Static code analysis establishes the threat at **9.2/10 CRITICAL**. An attacker who executes this payload gains the equivalent of unrestricted physical access: complete filesystem control, automated credential harvesting from all major browsers, live keylogging, covert Hidden Virtual Network Computing (HVNC) desktop access invisible to the user, screen and webcam capture, microphone recording, clipboard hijacking targeting cryptocurrency addresses, and a SOCKS proxy module for lateral movement into network segments not directly reachable from the internet.
 
-**Infrastructure context:** `185[.]208[.]159[.]182` (AS42624, associated with "NOAVARAN SHABAKEH SABZ MEHREGAN Ltd." and "SETEL CONECTA S.L.") has been reported as an active C2 node for RedLine Stealer on port `1912`, a Quasar RAT distribution point, and hosts additional malware families documented in the follow-up investigation — [Dual-RAT Analysis]({{ "/reports/dual-rat-analysis/" | relative_url }}). Threat intelligence feeds flag the broader `185.208.15x.xxx` range for malicious activity across multiple platforms (HIGH confidence — OSINT correlation).
+**Infrastructure context:** `185[.]208[.]159[.]182` (AS42624, associated with "NOAVARAN SHABAKEH SABZ MEHREGAN Ltd." and "SETEL CONECTA S.L.") has been reported as an active C2 node for RedLine Stealer on port `1912`, a Quasar RAT distribution point, and hosts additional malware families documented in the follow-up investigation, [Dual-RAT Analysis]({{ "/reports/dual-rat-analysis/" | relative_url }}). Threat intelligence feeds flag the broader `185.208.15x.xxx` range for malicious activity across multiple platforms (HIGH confidence, OSINT correlation).
 
 For cross-references, the full technical detail is in Section 6 for capabilities, in Section 6's Evasion subsection for anti-analysis, and in Section 7 for incident response. The risk scores below are reproduced from the BLUF for convenience, and the scoring methodology is in Section 3.
 
@@ -354,7 +354,7 @@ Based on analysis of embedded strings and YARA rule matches, **server.exe** is c
 ### How Pulsar RAT Reaches Target Systems
 
 ### Executive Impact Summary
-> **Delivery Risk:** High — Multiple infection pathways identified
+> **Delivery Risk:** High. Multiple infection pathways identified
 > **User Interaction:** Required for initial execution in most observed delivery scenarios
 > **Key Takeaway:** Prevention at the delivery stage is the most effective control layer
 
@@ -964,13 +964,13 @@ AND NOT process_name:(chrome.exe OR firefox.exe OR msedge.exe)
 
 This mapping supports security control gap analysis:
 
-**Step 1: Control Mapping** — For each technique, document existing controls (prevention, detection, response).
+**Step 1: Control Mapping**. For each technique, document existing controls (prevention, detection, response).
 
-**Step 2: Gap Identification** — Identify techniques with no coverage, detection-only, or prevention-only coverage.
+**Step 2: Gap Identification**. Identify techniques with no coverage, detection-only, or prevention-only coverage.
 
-**Step 3: Risk Prioritization** — Rank gaps by business impact using the tactic coverage table above.
+**Step 3: Risk Prioritization**. Rank gaps by business impact using the tactic coverage table above.
 
-**Step 4: Remediation Planning** — Develop an implementation plan for critical-priority gaps, starting with Defense Evasion, Credential Access, and Persistence detection.
+**Step 4: Remediation Planning**. Develop an implementation plan for critical-priority gaps, starting with Defense Evasion, Credential Access, and Persistence detection.
 
 ---
 
@@ -980,9 +980,9 @@ This mapping supports security control gap analysis:
 > **Analyst note:** This section documents Pulsar RAT's functional modules as confirmed through static code analysis of `server.exe`. Each subsection leads with a confidence level and the specific code evidence that supports it. Defenders can use this detail to build targeted detection rules and evaluate which controls are directly tested by each capability.
 
 ### Executive Impact Summary
-> **Business Risk:** Critical — Complete system compromise possible
-> **Detection Difficulty:** High — Advanced evasion techniques present
-> **Remediation Complexity:** High — Multiple persistence mechanisms
+> **Business Risk:** Critical. Complete system compromise possible
+> **Detection Difficulty:** High. Advanced evasion techniques present
+> **Remediation Complexity:** High. Multiple persistence mechanisms
 > **Key Takeaway:** Well-engineered malware requiring comprehensive response
 
 ### Quick Reference: Pulsar RAT Capabilities Matrix
@@ -1026,12 +1026,12 @@ This mapping supports security control gap analysis:
 
 ### 6.1 PERSISTENCE MECHANISMS
 
-> **Analyst note:** Persistence mechanisms are the techniques malware uses to survive reboots and re-establish access after the user logs off. Pulsar implements two distinct persistence methods at different privilege levels — one standard (registry RunOnce) and one advanced (Windows Recovery Environment). The WinRE technique survives some OS reinstallation scenarios, which is why remediation decisions hinge on whether this method was activated.
+> **Analyst note:** Persistence mechanisms are the techniques malware uses to survive reboots and re-establish access after the user logs off. Pulsar implements two distinct persistence methods at different privilege levels, one standard (registry RunOnce) and one advanced (Windows Recovery Environment). The WinRE technique survives some OS reinstallation scenarios, which is why remediation decisions hinge on whether this method was activated.
 
 ### Executive Summary
-> **Persistence Risk:** High — Multiple mechanisms including advanced recovery partition abuse
-> **Detection Challenge:** Medium — Standard registry persistence is detectable; WinRE requires specialized analysis
-> **Remediation Impact:** High — May require complete system rebuild for assured removal
+> **Persistence Risk:** High. Multiple mechanisms including advanced recovery partition abuse
+> **Detection Challenge:** Medium. Standard registry persistence is detectable; WinRE requires specialized analysis
+> **Remediation Impact:** High. May require complete system rebuild for assured removal
 > **Business Impact:** Survives standard remediation in some scenarios, enabling long-term access
 
 I hold this HIGH, because the technique is present in the code, though verification is still required for specific systems.
@@ -1194,7 +1194,7 @@ Standard registry monitoring will catch this, and any competent EDR or endpoint 
 
 ### 6.3 SURVEILLANCE & DATA THEFT CAPABILITIES — Hidden Virtual Network Computing (HVNC)
 
-> **Analyst note:** HVNC creates an invisible second desktop session that the attacker controls while the user sees their normal screen. Unlike standard remote desktop tools, there are no visible indicators — no cursor movement, no window flicker. This subsection covers what HVNC is, why it matters for detection, and what limitations affect its real-world effectiveness.
+> **Analyst note:** HVNC creates an invisible second desktop session that the attacker controls while the user sees their normal screen. Unlike standard remote desktop tools, there are no visible indicators, no cursor movement, no window flicker. This subsection covers what HVNC is, why it matters for detection, and what limitations affect its real-world effectiveness.
 
 **CONFIDENCE LEVEL: HIGH** (code present; requires driver installation to function)
 
@@ -1484,7 +1484,7 @@ Internet → Infected Workstation (SOCKS Proxy) → Internal Database Server
 
 ### 6. EVASION & ANTI-ANALYSIS TECHNIQUES
 
-> **Analyst note:** Evasion techniques make malware harder to analyze in security research environments and harder to detect in production. When malware checks for virtual machines or debuggers before executing, automated sandbox reports may show it as benign — masking its actual capabilities. This section documents what Pulsar checks for and what it means for analysis validity.
+> **Analyst note:** Evasion techniques make malware harder to analyze in security research environments and harder to detect in production. When malware checks for virtual machines or debuggers before executing, automated sandbox reports may show it as benign, masking its actual capabilities. This section documents what Pulsar checks for and what it means for analysis validity.
 
 Pulsar includes multi-layered evasion targeting analysis environments, with the goal of hindering security research and extending operational lifespan on deployed systems.
 
@@ -1607,9 +1607,9 @@ The malware uses:
 ### 7. INCIDENT RESPONSE PROCEDURES
 
 ### Executive Impact Summary
-> **Response Urgency:** Critical — Immediate isolation required
-> **Business Disruption:** High — System rebuilds may be necessary
-> **Decision Complexity:** High — Rebuild vs. cleanup requires careful consideration
+> **Response Urgency:** Critical. Immediate isolation required
+> **Business Disruption:** High. System rebuilds may be necessary
+> **Decision Complexity:** High. Rebuild vs. cleanup requires careful consideration
 
 ### Quick Verification Guide
 
@@ -1641,9 +1641,9 @@ The malware uses:
 
 #### Alert Leadership
 
-1. **Notify security leadership** immediately — this is a critical security incident
-2. **Notify Legal** — potential data breach with regulatory implications
-3. **Establish incident command** — designate an incident commander and define roles
+1. **Notify security leadership** immediately: this is a critical security incident
+2. **Notify Legal**: potential data breach with regulatory implications
+3. **Establish incident command**: designate an incident commander and define roles
 
 **Why early leadership notification matters:**
 - RAT compromises often trigger breach notification obligations
@@ -1750,7 +1750,7 @@ Change passwords from a DIFFERENT, CLEAN system. Do not change them from the com
 5. **Regulatory impact assessment** - Determine if breach notification required
 
 **Breach Notification Triggers (varies by jurisdiction):**
-Confirmed data exfiltration may trigger notification obligations under applicable data protection regulations (personal data, health data, payment card data). Notification scope and timeline depend on jurisdiction and the categories of data accessible on affected systems — engage legal counsel to assess.
+Confirmed data exfiltration may trigger notification obligations under applicable data protection regulations (personal data, health data, payment card data). Notification scope and timeline depend on jurisdiction and the categories of data accessible on affected systems, engage legal counsel to assess.
 
 --- 
 
@@ -1913,7 +1913,7 @@ In practice most enterprise security teams default to rebuild for any RAT compro
 ### Executive Impact Summary
 > **Implementation Timeline:** Several weeks for initial EDR deployment
 > **Business Impact:** Some operational disruption during deployment
-> **Risk Reduction:** High — Prevents most commodity malware execution
+> **Risk Reduction:** High. Prevents most commodity malware execution
 
 ### Endpoint Security Enhancements
 
@@ -1963,7 +1963,7 @@ The business benefit is that even if one workstation is compromised, database se
 
 **DNS Filtering & Monitoring:**
 
-DNS filtering blocks known-malicious domains and reveals suspicious query patterns. Pulsar's paste site queries are visible in DNS logs even when HTTPS prevents content inspection — making DNS an effective detection layer for this specific C2 mechanism.
+DNS filtering blocks known-malicious domains and reveals suspicious query patterns. Pulsar's paste site queries are visible in DNS logs even when HTTPS prevents content inspection, making DNS an effective detection layer for this specific C2 mechanism.
 
 ---
 
@@ -2224,7 +2224,7 @@ Published incident response reports consistently show median dwell times measure
 
 ### 1. Complete System Compromise — Understand the Scope
 
-Pulsar RAT is not ransomware with a specific destructive purpose, nor spyware with a single objective. It is a universal remote control tool — attackers can do anything a user can do, plus administrative actions. Any infected system should be treated as if an attacker is at the keyboard.
+Pulsar RAT is not ransomware with a specific destructive purpose, nor spyware with a single objective. It is a universal remote control tool, attackers can do anything a user can do, plus administrative actions. Any infected system should be treated as if an attacker is at the keyboard.
 
 Practically, every credential used on the infected system is exposed, every data asset accessible to the compromised account is exposed, and every system reachable from that network location is at risk. Active MFA sessions during the compromise window may also have been bypassed.
 
@@ -2232,11 +2232,11 @@ Practically, every credential used on the infected system is exposed, every data
 
 Registry RunOnce persistence (CONFIRMED) survives reboots but not OS reinstallation and is detectable by EDR.
 
-WinRE persistence (HIGH confidence — code present) may survive standard OS reinstallation in some scenarios. It does not survive a complete disk wipe or full repartitioning. Effectiveness depends on the specific recovery procedures used. Assume the capability is present; verify on specific systems; default to rebuild where forensic exclusion is not possible. This technique is serious but not undefeatable with proper remediation. See Section 6.1 for the full scenario matrix.
+WinRE persistence (HIGH confidence, code present) may survive standard OS reinstallation in some scenarios. It does not survive a complete disk wipe or full repartitioning. Effectiveness depends on the specific recovery procedures used. Assume the capability is present; verify on specific systems; default to rebuild where forensic exclusion is not possible. This technique is serious but not undefeatable with proper remediation. See Section 6.1 for the full scenario matrix.
 
 ### 3. Professional Development — Not Casual Malware
 
-Pulsar's modular architecture, async/await patterns, Windows CNG cryptography, and HVNC implementation reflect organized development effort, not commodity assembly. The Quasar RAT open-source base means wide availability — professional build quality does not automatically imply APT attribution. Financial motivation aligns with the credential harvesting and clipboard hijacking capabilities observed (MODERATE confidence).
+Pulsar's modular architecture, async/await patterns, Windows CNG cryptography, and HVNC implementation reflect organized development effort, not commodity assembly. The Quasar RAT open-source base means wide availability, professional build quality does not automatically imply APT attribution. Financial motivation aligns with the credential harvesting and clipboard hijacking capabilities observed (MODERATE confidence).
 
 ### 4. Detection — Hard, But Not Impossible
 
@@ -2256,7 +2256,7 @@ Indirect costs cover productivity loss, regulatory notification obligations wher
 
 **Initial Response:**
 1. Isolate affected systems from the network (physical cable disconnect preferred over software disable)
-2. Do NOT shut down — preserve volatile memory evidence
+2. Do NOT shut down: preserve volatile memory evidence
 3. Alert security leadership immediately
 4. Document timeline and initial observations
 
@@ -2309,4 +2309,4 @@ Indirect costs cover productivity loss, regulatory notification obligations wher
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

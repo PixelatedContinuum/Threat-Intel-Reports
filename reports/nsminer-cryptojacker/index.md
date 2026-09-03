@@ -43,7 +43,7 @@ The dropper hijacks CPU and electrical resources for the attacker's cryptocurren
 
 **Key Findings:**
 *   **Attack Chain:** `IMG001.exe` establishes persistence under `%APPDATA%\NsMiner`, then extracts and runs `tftp.exe`, which fetches the final miner payload by credential-stuffing over a dozen FTP servers.
-*   **Final Payload:** `NsCpuCNMiner32.exe` and `NsCpuCNMiner64.exe` mine a CryptoNight-based currency — almost certainly Monero (XMR) — using the victim's CPU.
+*   **Final Payload:** `NsCpuCNMiner32.exe` and `NsCpuCNMiner64.exe` mine a CryptoNight-based currency, almost certainly Monero (XMR), using the victim's CPU.
 *   **C2 Infrastructure:** `tftp.exe` beacons to `hrtests.ru` over HTTP and cycles hardcoded FTP credentials against 18 target IPs. Servers that accept the credentials become secondary payload distribution points.
 *   **Evasion:** The miner binaries are packed with VMProtect (a commercial binary protector), defeating signature-based detection and complicating static analysis.
 
@@ -72,12 +72,12 @@ Risk level is HIGH.
 
 The NSIS installer dropper bundles malicious scripts and payloads inside a structure that resembles legitimate software packaging, lowering user suspicion at execution.
 
-`hrtests.ru` carries historical ties to miner activity dating to at least 2016, suggesting the actors reuse aging infrastructure or run a long-running operation. The hardcoded list of 18 FTP IPs with credential pairs reflects a **credential stuffing** strategy — the malware cycles through targets likely identified by prior scanning. Any server that accepts a credential pair becomes a payload distribution point for the miner binaries.
+`hrtests.ru` carries historical ties to miner activity dating to at least 2016, suggesting the actors reuse aging infrastructure or run a long-running operation. The hardcoded list of 18 FTP IPs with credential pairs reflects a **credential stuffing** strategy. The malware cycles through targets likely identified by prior scanning. Any server that accepts a credential pair becomes a payload distribution point for the miner binaries.
 
 ## 3. Technical Deep-Dive
 {: .hl-tier-3}
 
-> **Analyst note:** This section walks the three-stage infection chain — dropper, downloader, and miner. Each stage hands off to the next and adds a layer of resilience or evasion. Understanding all three is necessary to scope containment, because removing only the miner leaves `tftp.exe` active and able to re-fetch it.
+> **Analyst note:** This section walks the three-stage infection chain, dropper, downloader, and miner. Each stage hands off to the next and adds a layer of resilience or evasion. Understanding all three is necessary to scope containment, because removing only the miner leaves `tftp.exe` active and able to re-fetch it.
 
 ### 3.1. Initial Dropper: `IMG001.exe`
 
@@ -116,7 +116,7 @@ The NSIS installer dropper bundles malicious scripts and payloads inside a struc
   <figcaption><em>Figure 3: URLs discovered through custom static analysis script, showing C2 beacon endpoint</em></figcaption>
 </figure>
 
-2.  **FTP Credential Stuffing:** `tftp.exe` iterates through a hardcoded list of 18 FTP server IPs, cycling username/password combinations in a **credential stuffing** loop. Dynamic analysis shows the malware systematically testing different credential pairs against each IP — these are attack targets, not pre-compromised infrastructure.
+2.  **FTP Credential Stuffing:** `tftp.exe` iterates through a hardcoded list of 18 FTP server IPs, cycling username/password combinations in a **credential stuffing** loop. Dynamic analysis shows the malware systematically testing different credential pairs against each IP. These are attack targets, not pre-compromised infrastructure.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/nsminer/nsminer-ftp-credential-stuffing-small.png" | relative_url }}" alt="FTP Credential Stuffing - Small Sample">
@@ -256,4 +256,4 @@ url="*hrtests.ru/S.php*"
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

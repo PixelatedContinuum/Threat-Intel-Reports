@@ -9,7 +9,7 @@ series: arsenal-237
 series_role: parent
 series_order: 0
 hide: true
-description: "Initial discovery of 16 malware samples across a threat actor R&D open directory at 109.230.231.37, assessed as an active testing environment. Key findings include a 10-variant custom ransomware family with hand-coded ChaCha20+RSA-2048 hybrid cryptography and hardware-optimized AVX-512 encryption, alongside RATs, credential stealers, and privilege escalation tools — all pointing to organized, well-resourced development."
+description: "Initial discovery of 16 malware samples across a threat actor R&D open directory at 109.230.231.37, assessed as an active testing environment. Key findings include a 10-variant custom ransomware family with hand-coded ChaCha20+RSA-2048 hybrid cryptography and hardware-optimized AVX-512 encryption, alongside RATs, credential stealers, and privilege escalation tools, all pointing to organized, well-resourced development."
 stix_bundle: /stix/109.230.231.37-Executive-Overview.json
 ---
 
@@ -20,7 +20,7 @@ stix_bundle: /stix/109.230.231.37-Executive-Overview.json
 
 ---
 
-> **Series:** This is report 1 of 2 in the Arsenal-237 investigation — start here. The repository documented below kept growing after this analysis: [Arsenal-237 New Files: Advanced Toolkit Analysis](/reports/arsenal-237-new-files/) covers the 11 samples added to the same directory later in January 2026, including BYOVD EDR termination, a kernel-mode rootkit, and enterprise-grade Rust ransomware.
+> **Series:** This is report 1 of 2 in the Arsenal-237 investigation, start here. The repository documented below kept growing after this analysis: [Arsenal-237 New Files: Advanced Toolkit Analysis](/reports/arsenal-237-new-files/) covers the 11 samples added to the same directory later in January 2026, including BYOVD EDR termination, a kernel-mode rootkit, and enterprise-grade Rust ransomware.
 
 ---
 
@@ -31,11 +31,11 @@ stix_bundle: /stix/109.230.231.37-Executive-Overview.json
 
 This analysis identified **16 malware samples across 7 reports** distributed from an open web directory at **109.230.231.37**. The collection combines remote access trojans (RATs), **custom ransomware capabilities**, multi-layer persistence mechanisms, and credential theft in a coordinated ecosystem pointing to organized cybercrime operations.
 
-> **Analyst note:** The files' naming conventions, capability set, versioned builds, and testing utilities collectively indicate an active R&D environment rather than an operational deployment. The analysis treats this as a testing ground — new tools or combinations under active development. Full technical depth on the ransomware component is in [enc/dec Ransomware Family (10 variants)]({{ "/reports/enc-dec-ransomware-family/" | relative_url }}).
+> **Analyst note:** The files' naming conventions, capability set, versioned builds, and testing utilities collectively indicate an active R&D environment rather than an operational deployment. The analysis treats this as a testing ground, new tools or combinations under active development. Full technical depth on the ransomware component is in [enc/dec Ransomware Family (10 variants)]({{ "/reports/enc-dec-ransomware-family/" | relative_url }}).
 
 ### CRITICAL DISCOVERY: Custom Ransomware Toolkit
 
-The repository contains a **10-variant ransomware toolkit** — five encryptors and five decryptors — representing a purpose-built capability that pairs data theft with destructive impact.
+The repository contains a **10-variant ransomware toolkit** (five encryptors and five decryptors) representing a purpose-built capability that pairs data theft with destructive impact.
 
 **Key Findings:**
 - **Custom ChaCha20+RSA-2048 hybrid cryptography**: hand-coded implementation, not commodity ransomware
@@ -46,12 +46,12 @@ The repository contains a **10-variant ransomware toolkit** — five encryptors 
 Strategically, this toolkit enables a dual-threat model, silent data exfiltration followed by ransomware deployment that eliminates recovery through Volume Shadow Copy deletion.
 
 **WHAT WAS FOUND:**
-The Hunters Ledger analysis examined **16 malware samples across 7 reports** selected from an open directory containing 38 malicious executables. Samples include a Golang-compiled RAT, Xworm RAT versions 1 and 2.4.0, a **10-variant custom ransomware family (enc/dec toolkit)**, persistence droppers (FleetAgentAdvanced, FleetAgentFUD), and a UAC bypass proof-of-concept. All Xworm variants share C2 infrastructure at **109.230.231.37**, indicating centralized operations. FleetAgentAdvanced.exe implements **quadruple-redundant persistence** across Registry Run keys, Scheduled Tasks, and dual Startup folder shortcuts — designed to survive multiple cleanup attempts.
+The Hunters Ledger analysis examined **16 malware samples across 7 reports** selected from an open directory containing 38 malicious executables. Samples include a Golang-compiled RAT, Xworm RAT versions 1 and 2.4.0, a **10-variant custom ransomware family (enc/dec toolkit)**, persistence droppers (FleetAgentAdvanced, FleetAgentFUD), and a UAC bypass proof-of-concept. All Xworm variants share C2 infrastructure at **109.230.231.37**, indicating centralized operations. FleetAgentAdvanced.exe implements **quadruple-redundant persistence** across Registry Run keys, Scheduled Tasks, and dual Startup folder shortcuts, designed to survive multiple cleanup attempts.
 
 **BUSINESS IMPACT IF INFECTED:**
 Successful infection enables threat actors to establish persistent remote access, harvest credentials (browser passwords, saved authentication tokens, session cookies), exfiltrate sensitive data, **deploy custom ransomware for total data loss**, and use compromised machines as pivot points. Organizations facing compromise should anticipate multi-day to multi-week response efforts. Beyond the immediate technical compromise:
 
-- **Operational Disruption:** Credential theft and data exfiltration require intensive investigation to determine breach scope, followed by extended remediation — credential rotation, system rebuilds, and security control deployment. **Ransomware deployment compounds this: immediate business operation cessation, total data loss requiring the attacker's private key for recovery, and elimination of Volume Shadow Copy backups.** Hardware-optimized encryption (AVX-512) can process enterprise file servers at high speed; organizations without verified offline backups face complete data loss.
+- **Operational Disruption:** Credential theft and data exfiltration require intensive investigation to determine breach scope, followed by extended remediation, credential rotation, system rebuilds, and security control deployment. **Ransomware deployment compounds this: immediate business operation cessation, total data loss requiring the attacker's private key for recovery, and elimination of Volume Shadow Copy backups.** Hardware-optimized encryption (AVX-512) can process enterprise file servers at high speed; organizations without verified offline backups face complete data loss.
 
 - **Compliance Obligations:** Data exfiltration involving regulated personal or health information triggers breach-notification obligations in most jurisdictions. Organizations must assess whether protected health information, personally identifiable information, or payment card data was compromised. **Ransomware encryption adds a separate dimension**: unlike exfiltration where data remains accessible to the organization, encryption constitutes permanent data destruction and carries distinct notification requirements under most frameworks.
 
@@ -70,8 +70,8 @@ Successful infection enables threat actors to establish persistent remote access
 5. **VERIFY SYSTEM INTEGRITY (IF INFECTIONS FOUND):** The quadruple-redundant persistence in FleetAgentAdvanced and dual-layer persistence in agent.exe are designed to survive partial remediation, increasing residual risk. For confirmed infections, complete system rebuilds are preferred over incremental cleanup. **If ransomware executables are detected, isolate affected systems from the network immediately to limit encryption spread.**
 
 **RISK ASSESSMENT:**
-- **CURRENT RISK (No Action):** **CRITICAL (8.5/10)** — Open directory distribution enables widespread opportunistic infections; professional persistence mechanisms ensure long-term access; shared C2 infrastructure enables coordinated operations; **custom ransomware presents catastrophic unrecoverable data loss risk**; dual espionage + ransomware threat model.
-- **RESIDUAL RISK (After Mitigation):** **LOW (2.3/10)** — Network blocking severs C2 connectivity for Xworm variants; detection signatures identify infections before persistence establishes; threat hunting removes existing compromises; offline backup verification provides ransomware recovery capability.
+- **CURRENT RISK (No Action):** **CRITICAL (8.5/10)**. Open directory distribution enables widespread opportunistic infections; professional persistence mechanisms ensure long-term access; shared C2 infrastructure enables coordinated operations; **custom ransomware presents catastrophic unrecoverable data loss risk**; dual espionage + ransomware threat model.
+- **RESIDUAL RISK (After Mitigation):** **LOW (2.3/10)**. Network blocking severs C2 connectivity for Xworm variants; detection signatures identify infections before persistence establishes; threat hunting removes existing compromises; offline backup verification provides ransomware recovery capability.
 
 **ASSESSMENT BASIS:**
 This analysis covers seven publication-quality malware reports on 16 samples selected from 38 executables in the open directory. Methodology combined static analysis, dynamic behavioral monitoring, memory forensics, cryptographic reverse engineering (for the ransomware family), and threat intelligence research. Technical findings were verified across multiple independent analysis tools; confidence levels are documented in individual reports.
@@ -194,11 +194,11 @@ The key finding is CMSTPLUA COM and Fodhelper UAC bypass techniques, where the s
 
 Analysis of the open directory at **109.230.231.37** (38 malicious executables total, 16 examined in depth) reveals a multi-tier threat ecosystem combining remote access trojans, **custom ransomware capabilities**, multi-layer persistence droppers, and proof-of-concept exploitation tools. Shared C2 infrastructure, diverse malware families coordinated through centralized infrastructure, and deceptive Microsoft-themed naming ("WinDefenderSvc.exe", "Microsoft .NET Runtime Optimization") designed to blend with legitimate system processes all indicate organized operations.
 
-**The most significant discovery is the enc/dec ransomware family** — a 10-variant toolkit (5 encryptors, 5 decryptors) featuring custom ChaCha20+RSA-2048 hybrid cryptography, hardware-optimized encryption (AVX-512/AVX2/SSE runtime CPU dispatcher), per-victim key generation, and development indicators including versioned builds (enc_v2.exe, test_gui_enc_v2.exe) and testing utilities.
+**The most significant discovery is the enc/dec ransomware family**, a 10-variant toolkit (5 encryptors, 5 decryptors) featuring custom ChaCha20+RSA-2048 hybrid cryptography, hardware-optimized encryption (AVX-512/AVX2/SSE runtime CPU dispatcher), per-victim key generation, and development indicators including versioned builds (enc_v2.exe, test_gui_enc_v2.exe) and testing utilities.
 
 ### Technical Sophistication Spectrum
 
-Technical sophistication spans the Golang-compiled PoetRAT variant — with AES, ChaCha20, and RSA cryptographic capabilities and process injection potential — down to the lightweight 17 KB FleetAgentFUD.exe using WebSocket-based C2 with custom authentication headers. Xworm RAT variants carry hardcoded C2 authentication tokens (AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d), PowerShell-based reconnaissance, and **environment-aware activation** (dormancy mechanisms) designed to evade automated sandbox detection.
+Technical sophistication spans the Golang-compiled PoetRAT variant (with AES, ChaCha20, and RSA cryptographic capabilities and process injection potential) down to the lightweight 17 KB FleetAgentFUD.exe using WebSocket-based C2 with custom authentication headers. Xworm RAT variants carry hardcoded C2 authentication tokens (AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d), PowerShell-based reconnaissance, and **environment-aware activation** (dormancy mechanisms) designed to evade automated sandbox detection.
 
 ### Persistence Engineering Excellence
 
@@ -209,13 +209,13 @@ The most operationally significant persistence finding is **FleetAgentAdvanced.e
 3. **Startup Folder LNK (User Profile):** `%AppData%\Microsoft\Windows\Start Menu\Programs\Startup\Microsoft .NET Runtime Optimization.lnk`
 4. **Startup Folder LNK (Common Startup):** Duplicate shortcut in alternate Startup directory
 
-The malware deleted the scheduled task XML configuration file immediately after creation — an anti-forensic step indicating the operators anticipated security response.
+The malware deleted the scheduled task XML configuration file immediately after creation, an anti-forensic step indicating the operators anticipated security response.
 
 ### Network Infrastructure Patterns
 
 All Xworm variants share a single C2 server (**109.230.231.37**), providing defenders with a high-value blocking opportunity: one network indicator neutralizes multiple malware families simultaneously. Dynamic analysis identified active persistence establishment in agent.exe and FleetAgentAdvanced.exe; other samples exhibited dormant behavior, likely awaiting environmental conditions, time triggers, or successful C2 handshakes before activating.
 
-> **Analyst Assessment:** Multiple technical indicators suggest this infrastructure is a testing environment rather than an operational deployment. Unlike campaigns with C2 obfuscation (dynamic assignments, encryption), this repository uses static and sometimes hardcoded C2 addresses — consistent with development and QA operations rather than operationally security-conscious deployment.
+> **Analyst Assessment:** Multiple technical indicators suggest this infrastructure is a testing environment rather than an operational deployment. Unlike campaigns with C2 obfuscation (dynamic assignments, encryption), this repository uses static and sometimes hardcoded C2 addresses, consistent with development and QA operations rather than operationally security-conscious deployment.
 
 ---
 
@@ -229,37 +229,37 @@ Beyond the 7 reports, **32 additional malware samples** from the same open direc
 **Agent RAT Variants** (8 samples):
 - agent_anycpu.exe, agent_dotnet.exe, agent_dotnet_slim.exe, agent_dotnet_v2.exe, agent_dotnet_v3.exe, agent_fw.exe, agent_fw_x64.exe, agent_mem_x64.exe
 - **Common Characteristics:** .NET-compiled RAT variants with DNS capabilities, mutex implementations, and varying compilation targets (AnyCPU, x86, x64, memory-only execution)
-- **Threat Level:** MEDIUM to HIGH — same RAT family as the comprehensive agent.exe analysis, different compilation configurations
+- **Threat Level:** MEDIUM to HIGH, same RAT family as the comprehensive agent.exe analysis, different compilation configurations
 
 **FleetAgent Suite** (6 samples):
 - FleetAgent_MemoryOnly.exe, FleetAgentAdvanced.exe, FleetAgentAdvanced_embedded.exe, FleetAgentEDR.exe, FleetAgentFUD.exe, FleetAgentFull.exe
 - **Common Characteristics:** Malware-as-a-service suite with specialized variants for different evasion scenarios (memory-only, EDR evasion, fully-undetectable builds)
-- **Threat Level:** HIGH to CRITICAL — demonstrates toolkit diversity and operational maturity
+- **Threat Level:** HIGH to CRITICAL, demonstrates toolkit diversity and operational maturity
 
 **Encryption/Decryption Utilities** (10 samples):
 - **Encryptors (5):** enc.exe, enc_v2.exe, updated_enc.exe, enc_pervictim.exe, test_gui_enc_v2.exe
 - **Decryptors (5):** dec.exe, dec_fast.exe, dec_pc3.exe, dec_unique.exe, test_decryptor.exe
 - **Common Characteristics:** Ransomware toolkit with custom ChaCha20+RSA-2048 hybrid encryption, AVX-512 hardware optimization, and per-victim key generation
-- **Threat Level:** CRITICAL — active ransomware deployment capability
+- **Threat Level:** CRITICAL, active ransomware deployment capability
 - **Full Analysis:** See [enc/dec Ransomware Family comprehensive report]({{ "/reports/enc-dec-ransomware-family/" | relative_url }})
 
 **Test/Development Tools** (2 samples):
 - test_nopass.exe, test_pass.exe
 - **Common Characteristics:** Testing utilities for authentication/password functionality, likely part of the development and QA process
-- **Threat Level:** LOW — development artifacts, not weaponized malware
+- **Threat Level:** LOW, development artifacts, not weaponized malware
 - **Note:** test_decryptor.exe and test_gui_enc_v2.exe moved to Encryption/Decryption Utilities section
 
 **XWorm RAT Variants** (2 samples):
 - agent_xworm.exe, agent_xworm_v2.exe
 - **Analysis:** Covered in comprehensive reports (see [agent-xworm-exe.md](agent-xworm-exe.md) and [agent-xworm-v2-exe.md](agent-xworm-v2-exe.md))
-- **Threat Level:** HIGH — active C2 infrastructure, PowerShell execution, multi-malware deployment
+- **Threat Level:** HIGH, active C2 infrastructure, PowerShell execution, multi-malware deployment
 
 **Specialized Utilities** (4 samples):
 - ProtonVPN.exe, steal_browser.exe, uac_test.exe, agent.exe
 - **ProtonVPN.exe:** Legitimate VPN client or bundled/trojanized version (requires behavioral analysis for confirmation)
 - **steal_browser.exe** (8.09 MB): Large credential theft tool with anti-analysis capabilities (debugger detection, VM detection, PowerShell integration)
 - **uac_test.exe:** UAC bypass proof-of-concept (covered in comprehensive report uac-test-exe.md)
-- **Threat Level:** VARIABLE — steal_browser.exe is CRITICAL for credential theft, ProtonVPN requires context, uac_test.exe is LOW risk
+- **Threat Level:** VARIABLE, steal_browser.exe is CRITICAL for credential theft, ProtonVPN requires context, uac_test.exe is LOW risk
 
 ### Key Findings from AutomatedReports
 
@@ -296,7 +296,7 @@ On detection priority, automated signatures, YARA and file hashes, for all 32 sa
     <tr>
       <td><strong>Data Exfiltration of Sensitive Business Data</strong></td>
       <td class="critical">HIGH</td>
-      <td>RAT capabilities enable file system access, screenshot capture, and clipboard monitoring — facilitating exfiltration of intellectual property, financial records, customer data, and strategic business documents. Exfiltration of regulated data triggers mandatory breach notification obligations in most jurisdictions, resulting in regulatory scrutiny, potential enforcement actions, and customer notification requirements.</td>
+      <td>RAT capabilities enable file system access, screenshot capture, and clipboard monitoring, facilitating exfiltration of intellectual property, financial records, customer data, and strategic business documents. Exfiltration of regulated data triggers mandatory breach notification obligations in most jurisdictions, resulting in regulatory scrutiny, potential enforcement actions, and customer notification requirements.</td>
     </tr>
     <tr>
       <td><strong>Lateral Movement & Network-Wide Compromise</strong></td>
@@ -635,7 +635,7 @@ The timeline analysis provides a second-by-second execution chronology showing h
 
 This campaign reflects several trends in the current threat landscape:
 
-**1. Purpose-Built Ransomware Development (CRITICAL FINDING):** The custom ransomware toolkit demonstrates professional malware development practices with destructive capabilities for financial gain or dual-use scenarios. The custom cryptographic implementation (ChaCha20+RSA-2048 with AVX-512 optimization) reflects significant R&D investment — this is a purpose-built capability, not commodity ransomware.
+**1. Purpose-Built Ransomware Development (CRITICAL FINDING):** The custom ransomware toolkit demonstrates professional malware development practices with destructive capabilities for financial gain or dual-use scenarios. The custom cryptographic implementation (ChaCha20+RSA-2048 with AVX-512 optimization) reflects significant R&D investment. This is a purpose-built capability, not commodity ransomware.
 
 Second, advanced capabilities are being commoditized. Remote access trojan functionality, WebSocket-based C2 protocols and multi-layer persistence mechanisms are now accessible via open directories, which lowers barriers to entry for less experienced threat actors.
 
@@ -679,4 +679,4 @@ From the 38 executables in the open directory, **16 samples were selected for an
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

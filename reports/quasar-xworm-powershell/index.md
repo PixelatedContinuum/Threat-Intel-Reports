@@ -32,7 +32,7 @@ stix_bundle: /stix/quasar-xworm-powershell.json
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
 
-A VBScript stager fetches a PowerShell script disguised as `update.png`, executes it in memory, and uses it to disable Microsoft Defender across the entire `C:\` drive before deploying two commodity remote access trojans — QuasarRAT and XWorm — both communicating to `193[.]233[.]164[.]21` via `dns4up[.]duckdns[.]org`. Any victim where this chain ran has lost endpoint visibility and carries persistent, full-capability remote access. See the Technical Analysis section for the loader chain and RAT capabilities; see Detection & Response Guidance for immediate priorities.
+A VBScript stager fetches a PowerShell script disguised as `update.png`, executes it in memory, and uses it to disable Microsoft Defender across the entire `C:\` drive before deploying two commodity remote access trojans (QuasarRAT and XWorm) both communicating to `193[.]233[.]164[.]21` via `dns4up[.]duckdns[.]org`. Any victim where this chain ran has lost endpoint visibility and carries persistent, full-capability remote access. See the Technical Analysis section for the loader chain and RAT capabilities; see Detection & Response Guidance for immediate priorities.
 
 ### Key Risk Factors
 
@@ -75,11 +75,11 @@ A VBScript stager fetches a PowerShell script disguised as `update.png`, execute
 
 ### Overview
 
-This campaign delivers QuasarRAT and XWorm to the same victim in a single chain: a VBScript stager launches PowerShell, which fetches `update.png` from `193[.]233[.]164[.]21`, executes it in memory as a script block, disables Defender, then deploys both RAT binaries. The `.png` extension is deliberate misdirection — the payload is a PowerShell script, not an image.
+This campaign delivers QuasarRAT and XWorm to the same victim in a single chain: a VBScript stager launches PowerShell, which fetches `update.png` from `193[.]233[.]164[.]21`, executes it in memory as a script block, disables Defender, then deploys both RAT binaries. The `.png` extension is deliberate misdirection. The payload is a PowerShell script, not an image.
 
 ### Loader Chain
 
-> **Analyst note:** This section describes a multi-stage fileless loading technique. "Fileless" means the malicious script never touches disk as an executable — it runs entirely in memory, defeating security tools that scan files at rest. Each stage hands off to the next without writing a traditional binary.
+> **Analyst note:** This section describes a multi-stage fileless loading technique. "Fileless" means the malicious script never touches disk as an executable. It runs entirely in memory, defeating security tools that scan files at rest. Each stage hands off to the next without writing a traditional binary.
 
 - The VBScript stager constructs a PowerShell command string and invokes it.
 - PowerShell uses `.NET System.Net.Http.HttpClient` to fetch `update.png` from the remote server.
@@ -88,7 +88,7 @@ This campaign delivers QuasarRAT and XWorm to the same victim in a single chain:
 
 ### Defense Evasion
 
-> **Analyst note:** Before deploying the RATs, the loader surgically removes Windows' built-in antivirus coverage. The technique requires no exploits — it calls a legitimate Windows management API to tell Defender to ignore the entire system.
+> **Analyst note:** Before deploying the RATs, the loader surgically removes Windows' built-in antivirus coverage. The technique requires no exploits, it calls a legitimate Windows management API to tell Defender to ignore the entire system.
 
 The PowerShell payload calls `Add-MpPreference` to add Defender exclusions for:
 - The entire `C:\` drive
@@ -98,7 +98,7 @@ These exclusions blind Defender to all subsequent activity on the host.
 
 ### RAT Deployment
 
-> **Analyst note:** With Defender disabled, the loader drops two separate remote access trojans (RATs — malware that gives attackers full keyboard, file, and screen control of a victim machine). Running both provides redundancy: removing one does not restore security.
+> **Analyst note:** With Defender disabled, the loader drops two separate remote access trojans (RATs, malware that gives attackers full keyboard, file, and screen control of a victim machine). Running both provides redundancy: removing one does not restore security.
 
 Once exclusions are in place, the loader deploys:
 - **QuasarRAT**: a .NET-based remote access trojan, approximately 2-3 MB, with configs typically embedded in binary resources.
@@ -298,4 +298,4 @@ Some network monitoring systems inspect image-extension files less aggressively 
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

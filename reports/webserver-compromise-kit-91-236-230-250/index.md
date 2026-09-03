@@ -38,7 +38,7 @@ stix_bundle: /stix/webserver-compromise-kit-91-236-230-250.json
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
 
-A three-component post-exploitation kit hosted on an open directory at `91.236.230.250` provides everything an attacker needs to compromise an IIS/.NET web server: an ASP.NET reverse shell (`a.png`) for command execution, PrintSpoofer for escalation to NT AUTHORITY\SYSTEM, and revsocks (`rev.exe`) for persistent network pivoting. All three tools are publicly available red team utilities — none are modified — meaning technique-based detection takes priority over hash-based blocking. Block `91.236.230.250` immediately; deploy detection rules targeting IIS spawning command shells, PrintSpoofer named pipe creation, and anomalous outbound proxy traffic.
+A three-component post-exploitation kit hosted on an open directory at `91.236.230.250` provides everything an attacker needs to compromise an IIS/.NET web server: an ASP.NET reverse shell (`a.png`) for command execution, PrintSpoofer for escalation to NT AUTHORITY\SYSTEM, and revsocks (`rev.exe`) for persistent network pivoting. All three tools are publicly available red team utilities (none are modified) meaning technique-based detection takes priority over hash-based blocking. Block `91.236.230.250` immediately; deploy detection rules targeting IIS spawning command shells, PrintSpoofer named pipe creation, and anomalous outbound proxy traffic.
 
 ## Executive Summary
 {: .hl-tier-1}
@@ -67,7 +67,7 @@ Defensive priority is CRITICAL. Block the infrastructure at 91.236.230.250 immed
 ## Threat Intelligence Context
 {: .hl-tier-2}
 
-This campaign targets any internet-exposed IIS/.NET application, with no sector or geographic specificity — the toolkit's effectiveness depends on the prevalence of vulnerable web servers, not selective victim profiling.
+This campaign targets any internet-exposed IIS/.NET application, with no sector or geographic specificity, the toolkit's effectiveness depends on the prevalence of vulnerable web servers, not selective victim profiling.
 
 ### Campaign Overview
 
@@ -140,7 +140,7 @@ The reverse proxy capabilities (DNS tunneling, WebSocket encapsulation) indicate
 
 #### Technical Deep Dive
 
-> **Analyst note:** This section covers how the web shell bypasses .NET's managed runtime to call Windows APIs directly — a technique that defeats security tools scanning for standard .NET network activity. Understanding the API sequence explains why host-based heuristics miss this shell on detection.
+> **Analyst note:** This section covers how the web shell bypasses .NET's managed runtime to call Windows APIs directly, a technique that defeats security tools scanning for standard .NET network activity. Understanding the API sequence explains why host-based heuristics miss this shell on detection.
 
 **Evasion Technique: P/Invoke (Platform Invocation)**
 
@@ -237,7 +237,7 @@ This maps to T1134.001, Token Impersonation/Theft.
 
 #### Technical Deep Dive
 
-> **Analyst note:** This section details how PrintSpoofer tricks the Windows Print Spooler — a service running as SYSTEM — into connecting to an attacker-controlled pipe, then steals that SYSTEM-level identity. The three-stage sequence (named pipe trap, RPC coercion, token theft) is what converts a low-privileged IIS service account into full administrative control.
+> **Analyst note:** This section details how PrintSpoofer tricks the Windows Print Spooler (a service running as SYSTEM) into connecting to an attacker-controlled pipe, then steals that SYSTEM-level identity. The three-stage sequence (named pipe trap, RPC coercion, token theft) is what converts a low-privileged IIS service account into full administrative control.
 
 **Stage 1: Named Pipe Trap**
 
@@ -342,7 +342,7 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 ## Infrastructure Analysis
 {: .hl-tier-2}
 
-The entire kit — C2 listener and malware distribution — runs on a single commodity VPS at `91.236.230.250`, indicating a minimal, single-operator setup rather than resilient criminal infrastructure.
+The entire kit (C2 listener and malware distribution) runs on a single commodity VPS at `91.236.230.250`, indicating a minimal, single-operator setup rather than resilient criminal infrastructure.
 
 ### Malicious Infrastructure Profile
 
@@ -607,4 +607,4 @@ Set-Service Spooler -StartupType Disabled
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

@@ -135,7 +135,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 
 ### Phase 1: Initial Discovery (45.118.144[.]151)
 
-> **Analyst note:** This phase covers the attacker's first-stage implants: a backdoored PHP page that executes only attacker-signed payloads, a general-purpose command shell, and a traffic redirector. Understanding the RSA-keyed execution gate is key — it blocks any third party from reusing these backdoors against the same victims.
+> **Analyst note:** This phase covers the attacker's first-stage implants: a backdoored PHP page that executes only attacker-signed payloads, a general-purpose command shell, and a traffic redirector. Understanding the RSA-keyed execution gate is key, it blocks any third party from reusing these backdoors against the same victims.
 
 **File: pg-politica-de-privacidade.php**  
 - Trojanized Privacy Policy page.  
@@ -174,7 +174,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 
 ### Phase 2: Pivot & Exploitation (152.32.191[.]156)
 
-> **Analyst note:** This phase covers the exploit kits targeting CloudPanel — a web hosting control panel. The exploit chain forges an authentication cookie to bypass access controls, then creates and uploads a command shell. Attackers also create a persistent OS-level account as a fallback.
+> **Analyst note:** This phase covers the exploit kits targeting CloudPanel, a web hosting control panel. The exploit chain forges an authentication cookie to bypass access controls, then creates and uploads a command shell. Attackers also create a persistent OS-level account as a fallback.
 
 **Exploit Kits**  
 - Scripts: 测试.py, exploit.py, exploit2.py.  
@@ -198,7 +198,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 
 ### Phase 3: Exfiltration & Cloud Abuse
 
-> **Analyst note:** This phase covers the attacker's use of legitimate cloud storage APIs to move stolen data off the victim server. Because outbound traffic reaches real cloud provider endpoints (Dropbox, AWS), standard perimeter blocks are ineffective — detection depends on behavioral anomalies in the traffic volume and destination.
+> **Analyst note:** This phase covers the attacker's use of legitimate cloud storage APIs to move stolen data off the victim server. Because outbound traffic reaches real cloud provider endpoints (Dropbox, AWS), standard perimeter blocks are ineffective, detection depends on behavioral anomalies in the traffic volume and destination.
 
 **Modules**  
 - **Dropbox:** Client.php, AccessCodeValidator.php → API abuse for stealthy uploads.  
@@ -215,7 +215,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 
 ### Phase 4: Infrastructure Automation
 
-> **Analyst note:** This phase covers the attacker's toolkit for scaling compromised infrastructure — installing new web applications, standing up reverse proxies, and automating domain provisioning. This automation capability indicates the operator treats compromised servers as reusable attack nodes, not one-time footholds.
+> **Analyst note:** This phase covers the attacker's toolkit for scaling compromised infrastructure, installing new web applications, standing up reverse proxies, and automating domain provisioning. This automation capability indicates the operator treats compromised servers as reusable attack nodes, not one-time footholds.
 
 **Site Builder Framework (Site/ directory)**  
 - Installers: WordPressInstaller.php, PhpSite.php, NodejsSite.php, PythonSite.php.  
@@ -354,7 +354,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 
 ### Technical Questions
 **Q: What makes the RSA encryption backdoor particularly dangerous?**  
-A: It ensures exclusive attacker access — only payloads encrypted with the corresponding private key will execute, preventing other actors or security tools from reusing the backdoor.
+A: It ensures exclusive attacker access, only payloads encrypted with the corresponding private key will execute, preventing other actors or security tools from reusing the backdoor.
 
 **Q: How does cloud service abuse work in this campaign?**  
 A: Attackers abuse legitimate cloud APIs (Dropbox, AWS S3) for data exfiltration and infrastructure, making detection difficult because traffic reaches real cloud provider endpoints.
@@ -385,4 +385,4 @@ A: Cloud access monitoring, API security controls, regular access reviews, and l
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

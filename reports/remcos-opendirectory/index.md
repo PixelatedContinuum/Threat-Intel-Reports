@@ -6,11 +6,11 @@ detection_page: /hunting-detections/remcos-opendirectory-detections/
 ioc_feed: /ioc-feeds/remcos-opendirectory-campaign/
 ioc_highlights:
   - value: "203[.]159[.]90[.]147"
-    note: "C2 server — open directory, payload delivery"
+    note: "C2 server: open directory, payload delivery"
   - value: "04693af3b0a7c9788daba8e35f429ba6"
     note: "Remcos RAT main payload (MD5)"
   - value: "3d7b442573acf64c3aad17b23d224dc9"
-    note: "VB6 dropper — Payload.exe (MD5)"
+    note: "VB6 dropper: Payload.exe (MD5)"
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -38,7 +38,7 @@ stix_bundle: /stix/remcos-opendirectory.json
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
 
-An open directory at **203[.]159[.]90[.]147** hosts a two-stage Remcos RAT campaign: a Visual Basic 6 obfuscated dropper (Payload.exe, MD5 `3d7b442573acf64c3aad17b23d224dc9`) extracts and executes the Remcos payload (Backdoor.exe, MD5 `04693af3b0a7c9788daba8e35f429ba6`), which establishes five redundant persistence mechanisms, disables UAC system-wide, injects into explorer.exe and msedge.exe, and exfiltrates screenshots, audio recordings, keystrokes, clipboard contents, and browser credentials to the same IP. The threat actor consolidated distribution and Command and Control (C2) on a single IP — a poor-OPSEC pattern consistent with cybercriminal or initial access broker operations (MODERATE confidence). Overall risk: **9.5/10 CRITICAL**. Block 203[.]159[.]90[.]147 at the network perimeter immediately; see Section 9 for detection guidance and the [IOC feed](/ioc-feeds/remcos-opendirectory-campaign.json) for machine-readable indicators.
+An open directory at **203[.]159[.]90[.]147** hosts a two-stage Remcos RAT campaign: a Visual Basic 6 obfuscated dropper (Payload.exe, MD5 `3d7b442573acf64c3aad17b23d224dc9`) extracts and executes the Remcos payload (Backdoor.exe, MD5 `04693af3b0a7c9788daba8e35f429ba6`), which establishes five redundant persistence mechanisms, disables UAC system-wide, injects into explorer.exe and msedge.exe, and exfiltrates screenshots, audio recordings, keystrokes, clipboard contents, and browser credentials to the same IP. The threat actor consolidated distribution and Command and Control (C2) on a single IP, a poor-OPSEC pattern consistent with cybercriminal or initial access broker operations (MODERATE confidence). Overall risk: **9.5/10 CRITICAL**. Block 203[.]159[.]90[.]147 at the network perimeter immediately; see Section 9 for detection guidance and the [IOC feed](/ioc-feeds/remcos-opendirectory-campaign.json) for machine-readable indicators.
 
 ---
 
@@ -91,9 +91,9 @@ An open directory at **203[.]159[.]90[.]147** hosts a two-stage Remcos RAT campa
 
 ### Findings at a Glance
 
-This campaign deploys Remcos RAT through a two-stage chain: a VB6 obfuscated dropper extracts the RAT payload, which establishes five persistence mechanisms (including the rarely-seen Winlogon Userinit hijack), disables UAC system-wide, and launches continuous surveillance — keylogging, screenshot capture, microphone recording, clipboard monitoring, and browser credential theft. The RAT injects into explorer.exe and msedge.exe to blend C2 traffic with legitimate Windows activity. Attack chain details are in Section 2; persistence mechanisms in Section 3; surveillance capabilities in Section 4; evasion techniques in Section 5; C2 infrastructure in Section 6.
+This campaign deploys Remcos RAT through a two-stage chain: a VB6 obfuscated dropper extracts the RAT payload, which establishes five persistence mechanisms (including the rarely-seen Winlogon Userinit hijack), disables UAC system-wide, and launches continuous surveillance, keylogging, screenshot capture, microphone recording, clipboard monitoring, and browser credential theft. The RAT injects into explorer.exe and msedge.exe to blend C2 traffic with legitimate Windows activity. Attack chain details are in Section 2; persistence mechanisms in Section 3; surveillance capabilities in Section 4; evasion techniques in Section 5; C2 infrastructure in Section 6.
 
-The campaign's primary risk is complete, persistent access to every compromised endpoint. Credential theft targets Chrome and Firefox saved passwords and session cookies, enabling account takeover across corporate and personal services. The Userinit hijack survives Safe Mode and activates for every user account on the system — standard Run-key removal leaves the infection intact. Threat intelligence context is in Section 8; attribution assessment in Section 9.
+The campaign's primary risk is complete, persistent access to every compromised endpoint. Credential theft targets Chrome and Firefox saved passwords and session cookies, enabling account takeover across corporate and personal services. The Userinit hijack survives Safe Mode and activates for every user account on the system, standard Run-key removal leaves the infection intact. Threat intelligence context is in Section 8; attribution assessment in Section 9.
 
 Operationally, the threat actor's consolidation of distribution and C2 on a single IP creates a high-value blocking target. Blocking 203[.]159[.]90[.]147 disrupts both payload delivery and post-compromise tasking. Response guidance is in Section 10; YARA, Sigma, and network detection rules are in the [detection file](/hunting-detections/remcos-opendirectory/).
 
@@ -144,7 +144,7 @@ Open-directory malware distribution is a documented Remcos tactic since 2021. Th
 
 ### Global Context
 
-Remcos RAT remains a critical and actively exploited threat in 2025-2026. Security research attributed 11% of all infostealer incidents in Q3 2025 to Remcos (CyberProof Research), with nearly 150 organizations globally impacted in Shipping/Logistics, Manufacturing, Industry, and Energy sectors (Proofpoint). Active campaigns span multiple continents — Ukraine, Colombia, South Korea, Turkey, and South Asia — and the threat actor spectrum ranges from nation-state APT groups (UAC-0184/Hive0156, Gamaredon, SideWinder) to cybercriminal operations. The January 2026 SHADOW#REACTOR campaign demonstrates continued Remcos evolution, using evasive multi-stage chains with LOLBins (MSBuild.exe).
+Remcos RAT remains a critical and actively exploited threat in 2025-2026. Security research attributed 11% of all infostealer incidents in Q3 2025 to Remcos (CyberProof Research), with nearly 150 organizations globally impacted in Shipping/Logistics, Manufacturing, Industry, and Energy sectors (Proofpoint). Active campaigns span multiple continents (Ukraine, Colombia, South Korea, Turkey, and South Asia) and the threat actor spectrum ranges from nation-state APT groups (UAC-0184/Hive0156, Gamaredon, SideWinder) to cybercriminal operations. The January 2026 SHADOW#REACTOR campaign demonstrates continued Remcos evolution, using evasive multi-stage chains with LOLBins (MSBuild.exe).
 
 ---
 
@@ -206,7 +206,7 @@ Remcos RAT remains a critical and actively exploited threat in 2025-2026. Securi
 
 ### Stage 1: VB6 Dropper (Payload.exe)
 
-> **Analyst note:** This section covers the first stage of the attack — a Visual Basic 6 program that conceals the actual malware and installs it without triggering obvious alerts. Understanding how it hides itself explains why standard antivirus may not catch the infection at the point of entry.
+> **Analyst note:** This section covers the first stage of the attack, a Visual Basic 6 program that conceals the actual malware and installs it without triggering obvious alerts. Understanding how it hides itself explains why standard antivirus may not catch the infection at the point of entry.
 
 **File Metadata:**
 - Filename: Payload.exe
@@ -226,8 +226,8 @@ Remcos RAT remains a critical and actively exploited threat in 2025-2026. Securi
 5. **Self-Termination:** Exits immediately after payload execution to minimize forensic footprint
 
 **MITRE ATT&CK:**
-- T1027 (Obfuscated Files or Information) — Heavy string obfuscation
-- T1204.002 (User Execution: Malicious File) — Requires user to execute dropper
+- T1027 (Obfuscated Files or Information): Heavy string obfuscation
+- T1204.002 (User Execution: Malicious File): Requires user to execute dropper
 
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -236,11 +236,11 @@ Remcos RAT remains a critical and actively exploited threat in 2025-2026. Securi
 </figure>
 
 
-> **Analyst note:** Dynamic analysis confirmed that the dropped 0.dll shares the same file hash as Backdoor.exe — they are the same binary delivered under two different names. The dropper writes the payload to a `.dll` extension to reduce suspicion before executing it.
+> **Analyst note:** Dynamic analysis confirmed that the dropped 0.dll shares the same file hash as Backdoor.exe. They are the same binary delivered under two different names. The dropper writes the payload to a `.dll` extension to reduce suspicion before executing it.
 
 ### Stage 2: Remcos RAT Payload (Backdoor.exe)
 
-> **Analyst note:** Backdoor.exe is the Remcos RAT itself — the component that gives the attacker full, persistent control over the infected system. This section documents its installation sequence and post-installation behavior in the order observed during dynamic analysis.
+> **Analyst note:** Backdoor.exe is the Remcos RAT itself, the component that gives the attacker full, persistent control over the infected system. This section documents its installation sequence and post-installation behavior in the order observed during dynamic analysis.
 
 **File Metadata:**
 - Filename: Backdoor.exe (persists as remcos.exe)
@@ -274,7 +274,7 @@ Remcos RAT remains a critical and actively exploited threat in 2025-2026. Securi
 ## 3. PERSISTENCE MECHANISMS
 {: .hl-tier-3}
 
-> **Analyst note:** Persistence mechanisms are the techniques malware uses to survive a reboot and remain installed even after the user closes the application. This Remcos sample deploys five overlapping methods — removing only one leaves the infection active.
+> **Analyst note:** Persistence mechanisms are the techniques malware uses to survive a reboot and remain installed even after the user closes the application. This Remcos sample deploys five overlapping methods, removing only one leaves the infection active.
 
 ### Mechanism 1: UAC Bypass via EnableLUA Registry Modification
 
@@ -456,7 +456,7 @@ This maps to T1123, Audio Capture.
 
 ### Keylogging and Clipboard Monitoring
 
-> **Analyst note:** Keyloggers record every key a user presses — passwords, messages, search queries — and can also intercept the clipboard (the temporary memory used for copy-paste). A compromised clipboard can silently replace a password or bank account number the user copied before they paste it.
+> **Analyst note:** Keyloggers record every key a user presses (passwords, messages, search queries) and can also intercept the clipboard (the temporary memory used for copy-paste). A compromised clipboard can silently replace a password or bank account number the user copied before they paste it.
 
 **Keylogger Capabilities:**
 - Windows hooks via SetWindowsHookExA (global keyboard hook)
@@ -471,7 +471,7 @@ This maps to T1123, Audio Capture.
 - **SetClipboardData:** Can inject malicious content into clipboard
 - Logs clipboard activity with context
 
-> **Analyst note:** During dynamic analysis, clipboard operations (copy-paste) inside the analysis VM became non-functional once Backdoor.exe was running. Clipboard failure on an endpoint — especially when reported by users to a helpdesk — is a behavioral indicator of active Remcos infection worth investigating.
+> **Analyst note:** During dynamic analysis, clipboard operations (copy-paste) inside the analysis VM became non-functional once Backdoor.exe was running. Clipboard failure on an endpoint (especially when reported by users to a helpdesk) is a behavioral indicator of active Remcos infection worth investigating.
 
 **MITRE ATT&CK:**
 - T1056.001 (Input Capture: Keylogging)
@@ -525,7 +525,7 @@ Indicators:
 
 ### Process Injection
 
-> **Analyst note:** Process injection is a technique where malware inserts its own code into a legitimate running program — like Windows Explorer — so that its activity appears to come from that trusted program. This lets Remcos hide its network connections and file operations inside processes that security tools are configured to trust.
+> **Analyst note:** Process injection is a technique where malware inserts its own code into a legitimate running program (like Windows Explorer) so that its activity appears to come from that trusted program. This lets Remcos hide its network connections and file operations inside processes that security tools are configured to trust.
 
 The injection technique is process hollowing, or classic DLL injection.
 
@@ -544,7 +544,7 @@ Core Injection APIs:
 **Target Process Analysis:**
 
 **Target 1: explorer.exe (Windows Explorer)**
-- Long-running process (shell — always active)
+- Long-running process (shell, always active)
 - Highly trusted by security software
 - Network activity appears as Windows shell communication
 - Difficult to distinguish from legitimate file operations
@@ -565,7 +565,7 @@ I found it through desktop.ini file paths sitting on the stack during WriteProce
 </figure>
 
 
-> **Analyst note:** During analysis, desktop.ini files (Windows folder-customization markers) appeared scattered across the file system — from user directories like Music and Documents to system locations including System32. The injection hypothesis below is inferred from this observed behavior and the stack data captured at WriteProcessMemory calls.
+> **Analyst note:** During analysis, desktop.ini files (Windows folder-customization markers) appeared scattered across the file system, from user directories like Music and Documents to system locations including System32. The injection hypothesis below is inferred from this observed behavior and the stack data captured at WriteProcessMemory calls.
 
 **Hypothesis:**
 - Malware monitors explorer.exe file access operations to desktop.ini files
@@ -600,8 +600,8 @@ PROCEXPL
 
 **Detection Logic:**
 - Checks for VirtualBox ACPI signatures in registry
-- Detects process monitoring tool (PROCMON_WINDOW_CLASS window class) — behavioral analysis tool for Windows
-- Detects process exploration tool (PROCEXPL process) — real-time process viewer for Windows
+- Detects process monitoring tool (PROCMON_WINDOW_CLASS window class): behavioral analysis tool for Windows
+- Detects process exploration tool (PROCEXPL process): real-time process viewer for Windows
 - Likely alters behavior or terminates when a VM or analysis tool is detected
 
 This maps to T1497.001, Virtualization/Sandbox Evasion.
@@ -610,7 +610,7 @@ This maps to T1497.001, Virtualization/Sandbox Evasion.
 
 **Hidden Window Operations:**
 - Creates message-only window (class: "MsgWindowClass")
-- No visible GUI — background operations only
+- No visible GUI: background operations only
 - System tray icon created (likely hidden control interface)
 - GetStartupInfoA check for SW_HIDE flag
 
@@ -640,7 +640,7 @@ This maps to T1497.001, Virtualization/Sandbox Evasion.
 ## 6. COMMAND & CONTROL INFRASTRUCTURE
 {: .hl-tier-2}
 
-> **Analyst note:** Command and Control (C2) is the communication channel between the malware and the attacker — it is how the attacker issues new commands and receives stolen data. This section covers the C2 protocol observed in Remcos and the mechanisms it uses to exfiltrate captured material.
+> **Analyst note:** Command and Control (C2) is the communication channel between the malware and the attacker. It is how the attacker issues new commands and receives stolen data. This section covers the C2 protocol observed in Remcos and the mechanisms it uses to exfiltrate captured material.
 
 ### Primary C2 Server
 
@@ -718,7 +718,7 @@ Live C2 traffic was not captured during analysis: the malware was analyzed in an
 | Stealth / T1027 | Obfuscated Files or Information | VB6 string obfuscation throughout the dropper |
 | Stealth / T1055 | Process Injection | Injection into `explorer.exe` and `msedge.exe` |
 | Stealth / T1055.012 | Process Hollowing | Process hollowing of the injection target |
-| Stealth / T1070.004 | File Deletion | Melt technique — the dropper deletes itself after payload execution |
+| Stealth / T1070.004 | File Deletion | Melt technique, the dropper deletes itself after payload execution |
 | Stealth / T1497.001 | System Checks | VM detection; the sample terminates early under analysis |
 | Stealth / T1564.001 | Hidden Files and Directories | Payload written with a `.dll` extension and hidden attributes |
 | Credential Access / T1539 | Steal Web Session Cookie | Web session cookies stolen for session hijacking |
@@ -760,17 +760,17 @@ Threat severity is CRITICAL.
 2. Multi-stage loaders (VBScript/VB6 droppers, PowerShell downloaders)
 3. Steganography (bitmap images hiding malicious DLLs)
 4. Living-off-the-Land Binaries (MSBuild.exe, aspnet_compiler.exe)
-5. Open-directory staging (2021–present)
+5. Open-directory staging (2021-present)
 
 ### Threat Actor Spectrum
 
 **Nation-State APT Groups:**
-- UAC-0184 (Hive0156) — Russian APT targeting Ukraine
-- Gamaredon — Russian APT (active since 2014)
-- UAC-0050 — Ukrainian targeting APT (active since 2020)
-- Blind Eagle (APT-C-36) — Colombia targeting espionage/cybercrime
-- SideWinder — South Asian APT (Operation SouthNet)
-- Mysterious Elephant (APT-K-47) — South Asian government targeting
+- UAC-0184 (Hive0156): Russian APT targeting Ukraine
+- Gamaredon: Russian APT (active since 2014)
+- UAC-0050: Ukrainian targeting APT (active since 2020)
+- Blind Eagle (APT-C-36): Colombia targeting espionage/cybercrime
+- SideWinder: South Asian APT (Operation SouthNet)
+- Mysterious Elephant (APT-K-47): South Asian government targeting
 
 **Cybercrime Operations:**
 - Initial Access Brokers (IABs) obtaining footholds for ransomware operators
@@ -878,4 +878,4 @@ Manual remediation requires removing the Remcos executable from `C:\Users\[USERN
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

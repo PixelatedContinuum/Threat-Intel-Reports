@@ -10,7 +10,7 @@ ioc_highlights:
   - value: "185[.]38[.]150[.]7"
     note: "C2 / PoC host"
   - value: "176[.]65[.]137[.]13"
-    note: "Operator hub — exploitation launchpad"
+    note: "Operator hub: exploitation launchpad"
   - value: "107[.]189[.]4[.]201"
     note: "Reverse shell C2 server"
   - value: "bot[.]gribostress[.]pro"
@@ -34,7 +34,7 @@ stix_bundle: /stix/AdvancedRouterScanner.json
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
 
-AdvancedRouterScanner is a custom, semi-private exploitation framework targeting embedded network devices (primarily Huawei/Four-Faith OEM equipment) via exposed CGI endpoints and default credentials. Two open directories — a proof-of-concept (PoC) host at 185[.]38[.]150[.]7:9999 and an operational hub at 176[.]65[.]137[.]13:80 — confirm the campaign has transitioned from research into active botnet recruitment. Enrichment of ~65,000 targeted IPs resolves ~50,000 with ASN metadata, with 45.5% concentrated in Brazil. The tool is not publicly available and carries unique fingerprints that make every reappearance attributable to the same actor.
+AdvancedRouterScanner is a custom, semi-private exploitation framework targeting embedded network devices (primarily Huawei/Four-Faith OEM equipment) via exposed CGI endpoints and default credentials. Two open directories, a proof-of-concept (PoC) host at 185[.]38[.]150[.]7:9999 and an operational hub at 176[.]65[.]137[.]13:80, confirm the campaign has transitioned from research into active botnet recruitment. Enrichment of ~65,000 targeted IPs resolves ~50,000 with ASN metadata, with 45.5% concentrated in Brazil. The tool is not publicly available and carries unique fingerprints that make every reappearance attributable to the same actor.
 
 ### Key Risk Factors
 <table class="professional-table">
@@ -84,12 +84,12 @@ AdvancedRouterScanner is a custom, semi-private exploitation framework targeting
 
 AdvancedRouterScanner combines global opportunistic scanning with vendor-specific exploitation logic to compromise embedded network devices at scale. The campaign chains five stages: IP list aggregation, service enumeration, vendor fingerprinting, default-credential brute-forcing, and payload delivery for botnet recruitment. Two open directories provided direct access to operator tooling and logs, confirming active exploitation with payload delivery to at least the ARM architecture targets that returned HTTP 200 responses.
 
-The tool bears unique fingerprints — the `AdvancedRouterScanner` class name, `run_advanced_scan` function, a 60-dash output separator, and a specific Huawei endpoint trio — not found in any public repository. Its zero detections on VirusTotal on first submission reinforce that this is not commodity tooling. Geographic enrichment of the target list places 45.5% of resolved IPs in Brazil, with secondary concentrations in Vietnam, South Africa, Colombia, and Argentina. ASN analysis shows the campaign targets specific regional ISPs rather than spraying randomly. Detection guidance and IOCs are in the linked sidebar files.
+The tool bears unique fingerprints (the `AdvancedRouterScanner` class name, `run_advanced_scan` function, a 60-dash output separator, and a specific Huawei endpoint trio) not found in any public repository. Its zero detections on VirusTotal on first submission reinforce that this is not commodity tooling. Geographic enrichment of the target list places 45.5% of resolved IPs in Brazil, with secondary concentrations in Vietnam, South Africa, Colombia, and Argentina. ASN analysis shows the campaign targets specific regional ISPs rather than spraying randomly. Detection guidance and IOCs are in the linked sidebar files.
 
 ### Key Takeaways
 - AdvancedRouterScanner is a custom tool; its fingerprints make reappearance attributable to the same actor.
 - The campaign is global but disproportionately impacts Latin America, Southeast Asia, and parts of Africa.
-- The campaign has transitioned from PoC research to full operationalization — hub infrastructure, payload hosting, and reverse shells are all confirmed.
+- The campaign has transitioned from PoC research to full operationalization, hub infrastructure, payload hosting, and reverse shells are all confirmed.
 - The end goal is botnet recruitment, enabling DDoS, proxy abuse, and potential resale of access.
 - Blocking known infrastructure, auditing exposed devices, and monitoring for exploitation patterns are the immediate defensive priorities.
 
@@ -117,7 +117,7 @@ Note: This file was not found in VirusTotal and when uploaded, came back with no
 ## 3. Targeting (ips.txt)
 {: .hl-tier-2}
 
-> **Analyst note:** ips.txt is the master target list bundled with the tool. Its composition reveals how the operator aggregated targets — a mix of curated ISP ranges, automated scan dumps, and sloppy inclusions — which in turn signals operational intent.
+> **Analyst note:** ips.txt is the master target list bundled with the tool. Its composition reveals how the operator aggregated targets (a mix of curated ISP ranges, automated scan dumps, and sloppy inclusions) which in turn signals operational intent.
 
 Scope: Global, ~954 KB of IPs.  
 Regional Clusters:
@@ -139,7 +139,7 @@ Assessment: Aggregated from multiple sources (scan dumps, ISP sweeps, configs). 
 ## 4. Results Analysis
 {: .hl-tier-2}
 
-> **Analyst note:** The results files are the operator's own exploitation logs — recovered from the open directory. They show which devices responded to attacks and what access was gained, confirming the tool moved beyond scanning into active compromise.
+> **Analyst note:** The results files are the operator's own exploitation logs, recovered from the open directory. They show which devices responded to attacks and what access was gained, confirming the tool moved beyond scanning into active compromise.
 
 File 1: Huawei Exploitation  
 - Region: Vietnam (117.x.x.x ranges).  
@@ -194,7 +194,7 @@ Timeline Analysis
 - High‑Fidelity: AdvancedRouterScanner, run_advanced_scan, advanced_scan_, telecomadmin:admintelecom, Huawei endpoint trio.  
 - Medium‑Fidelity: Vendor combo (Huawei, ZTE, Raisecom), output format with 60‑dash separator.  
 - Broad Discovery: Vendor names alone, generic creds.  
-- Attribution Value: High — unique enough to track as a distinct campaign family.  
+- Attribution Value: High, unique enough to track as a distinct campaign family.  
 
 ---
 
@@ -255,7 +255,7 @@ Timeline Analysis
 - It combines global opportunistic scanning with vendor‑specific exploitation.  
 - Results confirm Huawei routers in Vietnam were compromised.  
 - Unique fingerprints (class names, results format, Huawei endpoint trio, Raisecom inclusion, rare creds) make this a high‑value pivot anchor.  
-- External searches confirm this is not commodity tooling — if seen again, it is almost certainly the same actor.  
+- External searches confirm this is not commodity tooling; if seen again, it is almost certainly the same actor.  
 
 ---
 
@@ -397,7 +397,7 @@ Defensively, monitor for CN `yuyu` and for RDP traffic, and block if observed.
 ## Additional Findings After Pivots (176[.]65[.]137[.]13)
 {: .hl-tier-2}
 
-> **Analyst note:** The second open directory exposed the operator's working environment — shell history, exploit logs, and staged payloads. This is operational intelligence recovered directly from attacker infrastructure, not inferred behavior.
+> **Analyst note:** The second open directory exposed the operator's working environment, shell history, exploit logs, and staged payloads. This is operational intelligence recovered directly from attacker infrastructure, not inferred behavior.
 
 The second exposed directory (176[.]65[.]137[.]13:80) revealed a more operationalized attacker hub compared to the PoC host.
 
@@ -663,4 +663,4 @@ A: Network segmentation, regular firmware updates, credential management, and co
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
