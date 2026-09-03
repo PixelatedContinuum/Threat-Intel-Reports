@@ -479,7 +479,7 @@ An earlier working hypothesis held that `0xK41` / `n_3_xl` is `@breakingupslow` 
 2. **Telegram account-age gap.** The KAIDO operator's Telegram account is roughly 2.7 billion numeric IDs newer than `@breakingupslow`'s, indicating a substantially later, distinct account registration.
 3. **Consistent cluster separation.** Public OSINT consistently treats the two as separate operators — `@breakingupslow` as the EvilSoul developer, `n_3_xl` as the KAIDO maldev/seller.
 
-The corrected model is two related-but-distinct Brazilian operators, connected by tooling lineage and a shared hosting ecosystem — not one operator running multiple brands. This report states the kit operator as `n_3_xl` / KAIDO and the tooling lineage as EvilSoul-Engine / `@breakingupslow`, and does not equate them. The real-name associations reported for the `@breakingupslow` cluster belong to that cluster and are not attributed to `n_3_xl`, who remains a persona-level attribution.
+The corrected model is two related-but-distinct Brazilian operators, connected by tooling lineage and a shared hosting ecosystem — not one operator running multiple brands. I identify the kit operator as `n_3_xl` / KAIDO and the tooling lineage as EvilSoul-Engine / `@breakingupslow`, and does not equate them. The real-name associations reported for the `@breakingupslow` cluster belong to that cluster and are not attributed to `n_3_xl`, who remains a persona-level attribution.
 
 ### 10.3 Confidence statement (project format)
 
