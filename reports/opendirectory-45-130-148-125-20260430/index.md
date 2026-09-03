@@ -337,7 +337,7 @@ Total: 303 bytes (= 0x12f) at .rdata offset 0
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-blob-getter-pair-ghidra.png" | relative_url }}" alt="Ghidra disassembly of two paired getter functions FUN_618c13a0 and FUN_618c13ad, each consisting of LEA RAX into the .rdata data segment followed by RET — these accessor pair functions return the encrypted blob's base address and its length to the AdaptixC2 RC4 decryptor">
+ <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-blob-getter-pair-decompiled.png" | relative_url }}" alt="Disassembly of two paired getter functions FUN_618c13a0 and FUN_618c13ad, each consisting of LEA RAX into the .rdata data segment followed by RET — these accessor pair functions return the encrypted blob's base address and its length to the AdaptixC2 RC4 decryptor">
   <figcaption><em>Figure 4: The encrypted blob's storage location is reachable through a pair of accessor functions `FUN_618c13a0` (returns blob base address) and `FUN_618c13ad` (returns blob length). Locating these getter functions is the first step in recovering the configuration: their cross-references identify the deserializer and the RC4 routine downstream.</em></figcaption>
 </figure>
 
@@ -347,7 +347,7 @@ Total: 303 bytes (= 0x12f) at .rdata offset 0
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-decrypt-function.png" | relative_url }}" alt="Ghidra decompiler view of FUN_618ccf39 with parameters (longlong param_1, int param_2, longlong param_3, int param_4) and a 256-byte local stack buffer 'local_108[256]' that calls FUN_618ccd40 (RC4 KSA — key scheduling) and FUN_618cce2a (RC4 PRGA — pseudo-random generator) — the canonical RC4 init+decrypt structure">
+ <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-rc4-decrypt-function.png" | relative_url }}" alt="Decompiler view of FUN_618ccf39 with parameters (longlong param_1, int param_2, longlong param_3, int param_4) and a 256-byte local stack buffer 'local_108[256]' that calls FUN_618ccd40 (RC4 KSA — key scheduling) and FUN_618cce2a (RC4 PRGA — pseudo-random generator) — the canonical RC4 init+decrypt structure">
   <figcaption><em>Figure 6: The AdaptixC2 RC4 decrypt routine `FUN_618ccf39`. The 256-byte stack buffer is the RC4 S-box; the two helper calls are the RC4 key-scheduling and pseudo-random-generator stages. Identifying this pair confirms RC4-128 is the framework's symmetric algorithm and allows offline decryption with the recovered key.</em></figcaption>
 </figure>
 

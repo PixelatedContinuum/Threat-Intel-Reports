@@ -297,7 +297,7 @@ C:/Users/admin/Desktop/code/XiebroC2-3.1/.../Helper/loader/createremotethread.go
 This is **DEFINITE** family identification — no ambiguity. The compile path additionally reveals the operator's username (`admin`) and staging approach (Desktop directory), consistent with compilation directly on the VPS or on a personal Windows workstation used as a build machine.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-source-path-family-id.png" | relative_url }}" alt="Ghidra disassembler output showing the recovered Go source path XiebroC2-3.1/Implant embedded in the binary's pclntab symbol table, confirming family identification">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-193-56-255-154-xiebroc2/xiebroc2-source-path-family-id.png" | relative_url }}" alt="Disassembler output showing the recovered Go source path XiebroC2-3.1/Implant embedded in the binary's pclntab symbol table, confirming family identification">
   <figcaption><em>Figure 2: The disassembler recovering the XiebroC2 v3.1 source path from the binary's pclntab — the Go runtime symbol table that preserves compilation metadata. This is the definitive family identification evidence.</em></figcaption>
 </figure>
 
