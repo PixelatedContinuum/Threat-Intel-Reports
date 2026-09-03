@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T06:02:28Z
+generated_at: 2026-09-03T08:00:38Z
 window_days: 30
 counts:
-  total: 548
-  research: 206
+  total: 549
+  research: 207
   news: 342
 topics:
   - label: "vulnerabilities"
@@ -57,7 +57,6 @@ label_colors:
   "accessibility abuse": 6
   "accessibility services": 10
   "account farming": 5
-  "account takeover": 2
   "account trafficking": 3
   "account-enumeration": 7
   "active directory compromise": 7
@@ -230,6 +229,7 @@ label_colors:
   "china": 5
   "china apt": 12
   "china-nexus": 11
+  "chinese threat cluster": 7
   "chinese-speaking operator": 4
   "chipmaker patch tuesday": 5
   "chisel": 4
@@ -313,6 +313,8 @@ label_colors:
   "dcrat": 12
   "ddos engine": 12
   "dead drop resolver": 7
+  "defender exclusions": 12
+  "defense sector": 12
   "desktop capture": 2
   "device code phishing": 5
   "dgfip": 12
@@ -393,7 +395,6 @@ label_colors:
   "leadership": 11
   "legal": 7
   "levi strauss": 5
-  "linked devices abuse": 2
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
@@ -456,6 +457,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Fake Software Installers Disable Windows Update and Weaken Microsoft Defender"
+    url: "https://thehackernews.com/2026/09/fake-software-installers-disable.html"
+    source: "AlienVault"
+    date: 2026-09-03T07:26:56Z
+    kind: research
+    labels: ["chinese threat cluster", "defender exclusions", "dll sideloading", "fake installers", "gh0st rat", "silver fox trojan", "spoofed websites", "valleyrat", "windows update tampering"]
   - title: "Impersonating IT support: how threat actors turn a remote session into enterprise-wide access"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/02/impersonating-it-support-threat-actors-turn-remote-session-into-enterprise-wide-access/"
     source: "Microsoft"
@@ -480,6 +487,12 @@ items:
     date: 2026-09-02T18:43:00Z
     kind: news
     labels: ["cybercrime", "malware"]
+  - title: "Inside The Gentlemen: Undisclosed TukTuk C2 Framework and EDR Neutralization Research"
+    url: "https://otx.alienvault.com/pulse/6a9869cb21bbf3f757424b7f"
+    source: "AlienVault"
+    date: 2026-09-02T18:24:11Z
+    kind: research
+    labels: ["byovd", "defense sector", "dll sideloading", "edr neutralization", "edrkiller", "gentlekiller", "greenshot", "iac compromise", "jira exfiltration", "tuktuk", "tuktuk c2", "unknownkiller", "vulnerable drivers", "warsawkiller"]
   - title: "Health data of more than 9.5 million people leaked from Aesto record system"
     url: "https://therecord.media/health-data-aesto-cyberattack-leak"
     source: "Recorded Future"
@@ -3738,9 +3751,3 @@ items:
     date: 2026-08-04T08:33:45Z
     kind: news
     labels: ["data breaches", "healthcare", "hospital", "madera hospital", "ransomware"]
-  - title: "WhatsApp account takeover scam asks you to \"vote for my friend\""
-    url: "https://www.malwarebytes.com/blog/scams/2026/08/whatsapp-account-takeover-scam-asks-you-to-vote-for-my-friend"
-    source: "AlienVault"
-    date: 2026-08-04T07:17:39Z
-    kind: research
-    labels: ["account takeover", "linked devices abuse", "messaging platform", "phishing", "qr code scam", "social engineering", "whatsapp"]
