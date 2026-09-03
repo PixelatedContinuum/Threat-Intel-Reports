@@ -322,7 +322,7 @@ The hardcoded string `MicrosoftEdgeUpdate.exe --update-check --silent` is a fixe
 
 > **Plain language:** An open-source tool bridges the loader to the final implant, running it entirely in memory without touching the hard drive.
 
-This is the most technically complex stage. Three interactive debugger (x64dbg) dynamic sessions and disassembler (Binary Ninja) static analysis characterize it as a two-stage injection architecture.
+This is the most technically complex stage. Interactive debugging and static disassembly characterize it as a two-stage injection architecture.
 
 **Sub-stage 5a — ScareCrow Polymorphic Loader:**
 

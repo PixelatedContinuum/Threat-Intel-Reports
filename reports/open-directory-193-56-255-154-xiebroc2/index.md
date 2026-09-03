@@ -626,7 +626,7 @@ Covenant (`github.com/cobbr/Covenant`) is an open-source .NET C2 framework creat
 
 > **Analyst note:** Before the attacker's server sends the actual implant code to the victim, the two computers go through a three-step security handshake to verify they're talking to the right server. This makes the payload delivery hard to intercept and means even if someone captures the network traffic, they can't read the implant code without the right keys.
 
-Static analysis of `GruntHTTP.exe` and the embedded payload in `GruntHTTP.ps1` using a .NET decompiler (dnSpy) revealed the following key exchange implementation. Covenant's key exchange provides forward secrecy — even if the pre-shared keys embedded in the stager are recovered (as they were in this analysis), past sessions cannot be decrypted because a unique session key is generated per connection:
+Static analysis of `GruntHTTP.exe` and the embedded payload in `GruntHTTP.ps1` using a .NET decompiler revealed the following key exchange implementation. Covenant's key exchange provides forward secrecy — even if the pre-shared keys embedded in the stager are recovered (as they were in this analysis), past sessions cannot be decrypted because a unique session key is generated per connection:
 
 ```
 Phase 0 — Registration (Message Type 0):

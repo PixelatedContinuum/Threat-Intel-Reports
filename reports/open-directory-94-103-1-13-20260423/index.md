@@ -156,7 +156,7 @@ The `myfile.exe` sample (SHA256 `f7a4fe18…`, 865 KB .NET assembly) is Orcus RA
 - Fixed AES-CBC IV `0sjufcjbsoyzube6` — Wardow-crack family-wide.
 - Keyleak-backdoor magic filename `e3c6cefd462d48f0b30a5ebcd238b5b1` — Wardow-crack family-wide.
 
-> **Analyst note:** The Orcus RAT sample is **Costura.Fody bundled**, not conventionally packed. Automated vendor tooling often labels Costura-bundled assemblies as packed because embedded-resource assemblies inflate the payload and obscure the entry-point graph. This is a bundling technique (single-file .NET deployment), not a cryptographic packer — analysts can fully recover the embedded modules with dnSpyEx or ILSpy by walking the assembly's resource stream.
+> **Analyst note:** The Orcus RAT sample is **Costura.Fody bundled**, not conventionally packed. Automated vendor tooling often labels Costura-bundled assemblies as packed because embedded-resource assemblies inflate the payload and obscure the entry-point graph. This is a bundling technique (single-file .NET deployment), not a cryptographic packer — analysts can fully recover the embedded modules with a .NET decompiler by walking the assembly's resource stream.
 
 Fody/Costura repository (B1), Microsoft .NET single-file-deployment documentation (A1), and hfiref0x UACME repository (B1) back the Costura identification. Wardow-crack attribution relies on community-known identifier framing — no Tier-1/Tier-2 vendor writeup has been located specifically on the Wardow-Orcus crack, so this is presented as a community-known identifier, not a vendor-sourced fact.
 
@@ -237,18 +237,12 @@ Four of seven target IPs are on Ukrainian ASNs — consistent with opportunistic
 
 The technical core of this report is the **five-stage private crypter chain** carried inside `mymain.bat` and `myfile.bat`. This section walks the chain in chronological order from the moment a user double-clicks the batch file through to Chaos/TorBrowserTor ransomware detonation. Each kill chain stage heading opens with an analyst-note blockquote for readers who want the high-level summary before the technical detail.
 
-Tools used across the analysis and referenced throughout this section:
-- **decompiler (dnSpyEx)** — .NET assembly decompilation for Stage-4, Stage-5a, Stage-5b, and the Orcus RAT sample.
-- **disassembler (Binary Ninja)** — native PE work on the custom PrintSpoofer-class binary and the signed PrintNightmare DLL.
-- **interactive debugger (x64dbg)** — Stage-5b AppInfo RPC bypass behavioral confirmation.
-- **malware analysis VM (FLARE-VM)** — static analysis environment; samples were never detonated on an internet-connected host.
-- **Behavioural sandbox** — baseline captures on selected stages with network egress blocked.
-
-Subsequent references in this section use the general category term (decompiler, disassembler, debugger, sandbox) per the plain-language accessibility convention.
+References throughout this section to a decompiler, disassembler, debugger, or sandbox use
+the general category term only.
 
 ### 5.1 Sample Inventory (Static Analysis)
 
-Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 2026-04-17 and submitted to VirusTotal on 2026-04-21 as part of a 47-sample batch upload. Decrypted intermediate payloads (Stage-4, Stage-5a, Stage-5b) were extracted on FLARE-VM during subsequent sessions; the cross-build-invariant Stage-5b was submitted to VT, while the per-build Stage-4 and Stage-5a artifacts were retained internally and not submitted (they are RE products, not files observed on the open directory).
+Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 2026-04-17 and submitted to VirusTotal on 2026-04-21 as part of a 47-sample batch upload. Decrypted intermediate payloads (Stage-4, Stage-5a, Stage-5b) were extracted through static reverse engineering; the cross-build-invariant Stage-5b was submitted to VT, while the per-build Stage-4 and Stage-5a artifacts were retained internally and not submitted (they are RE products, not files observed on the open directory).
 
 | Filename | SHA256 (truncated) | Size | VT detection | Compilation |
 |---|---|---|---|---|
@@ -313,8 +307,8 @@ A second related signal is the AES-ECB mode choice. The ecosystem default for .N
 This matters for defenders because the plaintext key strings (`qDqHmNfeSyWJoyxDzR`, `jttZjrlmkrBAtCBAMjkbThHsSjVNMjLLyONafxIj`) live in **decrypted memory** rather than on disk. On-disk YARA rules targeting the `.bat` file will never see them, so in-memory or unpacked .NET module YARA is required for those string anchors. On-disk YARA has to key instead on the structural anchors, the forced-32-bit path, the alphabet-substitution reversal, and the magic-marker plus `Substring(32)` idiom.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/chunk-decryption-pipeline.png" | relative_url }}" alt="PowerShell console output from FLARE-VM showing Stage-3 chunk decryption for myfile.bat. Two sequential invocations produce myfile_chunk0_payload.stage (32,768 bytes) and myfile_chunk1_payload.stage (1,045,504 bytes), each verified by SHA256 and by the presence of the 4d5a90 MZ magic in the first four bytes. A final comparison block shows that chunk 1's SHA256 differs from myfile.exe's SHA256, proving chunk 1 is a nested crypter stage and not the Orcus payload directly.">
-  <figcaption><em>Figure 2: Stage-3 chunk decryption pipeline (FLARE-VM). AES-ECB decrypt, PKCS7 unpad, GZip decompress, then a MZ-magic check and SHA256 fingerprint on each chunk. The final comparison to myfile.exe's SHA256 is what disproved the early working hypothesis that chunk 1 was Orcus — chunk 1 is a nested crypter (Stage-4), not the final RAT. This established the multi-stage nature of the loader.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/chunk-decryption-pipeline.png" | relative_url }}" alt="PowerShell console output showing Stage-3 chunk decryption for myfile.bat. Two sequential invocations produce myfile_chunk0_payload.stage (32,768 bytes) and myfile_chunk1_payload.stage (1,045,504 bytes), each verified by SHA256 and by the presence of the 4d5a90 MZ magic in the first four bytes. A final comparison block shows that chunk 1's SHA256 differs from myfile.exe's SHA256, proving chunk 1 is a nested crypter stage and not the Orcus payload directly.">
+  <figcaption><em>Figure 2: Stage-3 chunk decryption pipeline. AES-ECB decrypt, PKCS7 unpad, GZip decompress, then a MZ-magic check and SHA256 fingerprint on each chunk. The final comparison to myfile.exe's SHA256 is what disproved the early working hypothesis that chunk 1 was Orcus — chunk 1 is a nested crypter (Stage-4), not the final RAT. This established the multi-stage nature of the loader.</em></figcaption>
 </figure>
 
 ### 5.4 Stage 3 — Chunk 0: Anti-Sandbox Unhook Stub
@@ -353,8 +347,8 @@ The inversion is the distinctive part. The conventional anti-VM and anti-sandbox
 Stage 4 is a ~1 MB decrypted .NET assembly (per-build; mymain `36dc7254…` = 1,081,856 B, myfile `5b0f529d…` = 1,082,880 B).
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-obfuscated-class-list.png" | relative_url }}" alt="dnSpy Assembly Explorer view of the decrypted Stage-4 .NET assembly, showing its module tree with heavily obfuscated class names such as HQpmBSUELAUUTkvfFUDMffBkXlu, BIAefanEVukuBxcnUqBPQrZRaqIRILGzIOrWzffQLCNmnyIGK, and a dozen more generated-looking identifiers.">
-  <figcaption><em>Figure 3: Decrypted Stage-4 .NET assembly in decompiler (dnSpy) Assembly Explorer. All class, method, and field names are renamed to generated-looking identifiers — a standard .NET string-obfuscation pattern consistent with a private crypter that does not aim to evade decompilation entirely, only to slow manual analysis.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-obfuscated-class-list.png" | relative_url }}" alt="Decompiler assembly-explorer view of the decrypted Stage-4 .NET assembly, showing its module tree with heavily obfuscated class names such as HQpmBSUELAUUTkvfFUDMffBkXlu, BIAefanEVukuBxcnUqBPQrZRaqIRILGzIOrWzffQLCNmnyIGK, and a dozen more generated-looking identifiers.">
+  <figcaption><em>Figure 3: Decrypted Stage-4 .NET assembly in a decompiler's assembly explorer. All class, method, and field names are renamed to generated-looking identifiers — a standard .NET string-obfuscation pattern consistent with a private crypter that does not aim to evade decompilation entirely, only to slow manual analysis.</em></figcaption>
 </figure>
 
 Its behaviors, in chronological order:
@@ -364,7 +358,7 @@ Its behaviors, in chronological order:
 3. **Payload staging.** Decompresses two internal resources (per-build names: `IazvXcueDgcoXWWL…` and `HxBTHTPGSMVbIZYM…` for mymain; `WxFRcVUEXpXaqKtl…` and `YEfOdElqPaWtqico…` for myfile) using the build's reused AES passphrase + reused XOR key + GZip. These decompress to Stage-5a (the Chaos ransomware) and Stage-5b (the UAC bypass).
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-embedded-resources.png" | relative_url }}" alt="dnSpy resource listing for the decrypted Stage-4 assembly showing two embedded resources: WxFRcVUEXpXaqKtlEAsEPXMbLojPupIDbXtnSnvqGuhCmEkgNMxYgJZyk at 11,856 bytes and YEfOdElqPaWtqicoMQkYFXLbzFsKebrGyBZYN at 983,872 bytes. Both are flagged as Embedded, Public.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage4-embedded-resources.png" | relative_url }}" alt="Decompiler resource listing for the decrypted Stage-4 assembly showing two embedded resources: WxFRcVUEXpXaqKtlEAsEPXMbLojPupIDbXtnSnvqGuhCmEkgNMxYgJZyk at 11,856 bytes and YEfOdElqPaWtqicoMQkYFXLbzFsKebrGyBZYN at 983,872 bytes. Both are flagged as Embedded, Public.">
   <figcaption><em>Figure 4: Two Stage-4 embedded resources. Their sizes — 11,856 bytes and 983,872 bytes — match byte-for-byte between the mymain and myfile builds, establishing the first cross-build size invariant. After decryption, the 11,856-byte resource becomes Stage-5a (the Chaos ransomware, 25,088 bytes plaintext) and the 983,872-byte resource becomes Stage-5b (the UAC bypass PE, SHA256 `da302511…` — byte-identical across both builds).</em></figcaption>
 </figure>
 
@@ -422,7 +416,7 @@ This is cleverer than the alternatives. Most malware needing to find its own dro
 **What this defeats (the detection implications).** The execution guard half of the trick (`if (!title.Contains(".bat")) return;`) is as important as the locator half, because it is what makes Stage 4 invisible to naïve dynamic analysis:
 
 - **Sandbox submission of the decrypted Stage-4 PE in isolation.** An analyst who extracts `stage4.exe` from memory and submits it to a public or commercial sandbox will see the mutex being created, the resources being enumerated, and then the process exiting. Persistence never installs. The ransomware never drops. The sandbox verdict comes back clean or "low-severity suspicious," and the analyst (reasonably) concludes the sample is benign or broken.
-- **dnSpy / debugger detonation.** When Stage 4 is run under a debugger, the console title is typically `dnSpy` or `cmd.exe` or whatever the debugger sets. Persistence install is skipped. An analyst who only runs the sample under a debugger will never observe the Defender-masquerade persistence write.
+- **Debugger detonation.** When Stage 4 is run under a debugger, the console title reflects the debugger's own window, or `cmd.exe`, rather than `.bat`. Persistence install is skipped. An analyst who only runs the sample under a debugger will never observe the Defender-masquerade persistence write.
 - **Any automated pipeline that loses cmd.exe parent context.** Memory-dump replay tools, binary instrumentation frameworks, and PE sandboxes that execute the `.exe` without preserving the original cmd.exe session will all trip the guard. The sample appears inert.
 
 The only analysis paths that *do* trigger the full behavior are (a) running the original `.bat` end-to-end on a controlled host, or (b) setting the console title manually to something containing `.bat` before detonating the decrypted PE. Both require the analyst to already know the trick — which is exactly the obscurity the operator is buying.
@@ -456,7 +450,7 @@ Core behaviors:
 - **Shadow copy / backup destruction.** Issues `vssadmin delete shadows /all /quiet`, `wmic shadowcopy delete`, `bcdedit /set {default} bootstatuspolicy ignoreallfailures`, `bcdedit /set {default} recoveryenabled no`, and `wbadmin delete catalog -quiet` — the canonical Chaos VSS-kill sequence.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-anti-recovery-flags.png" | relative_url }}" alt="Decompiled Stage-5a C# source excerpt from decompiler (dnSpy) showing nested if-blocks gated on Program.checkAdminPrivilage. Inside the admin branch, individual sub-flags gate calls to Program.deleteShadowCopies, Program.disableRecoveryMode, Program.deleteBackupCatalog, and Program.DisableTaskManager.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5a-anti-recovery-flags.png" | relative_url }}" alt="Decompiled Stage-5a C# source excerpt showing nested if-blocks gated on Program.checkAdminPrivilage. Inside the admin branch, individual sub-flags gate calls to Program.deleteShadowCopies, Program.disableRecoveryMode, Program.deleteBackupCatalog, and Program.DisableTaskManager.">
   <figcaption><em>Figure 7: Admin-gated anti-recovery sequence in Stage-5a source. Each destructive action (`deleteShadowCopies`, `disableRecoveryMode`, `deleteBackupCatalog`, `DisableTaskManager`) is individually toggleable via builder-set flags — the operator can choose which recovery paths to destroy per campaign. In this build all four flags are set to true.</em></figcaption>
 </figure>
 
@@ -509,8 +503,8 @@ The technique (UACME #41 — see hfiref0x UACME repository, B1):
 The 8/77 VT detection gap matters. Most vendors detect the generic AppInfo RPC bypass family, but this specific compiled PE, byte-identical across both observed builds, is under-detected. For defenders the SHA256 `da302511…` is the single most productive file hash to hunt, and a match confirms infection with extremely low false-positive risk, because the hash is specific to this operator's pre-compiled bypass module.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5b-decryption-sha256-proof.png" | relative_url }}" alt="FLARE-VM PowerShell console output from the Stage-5 decryption script showing two sequential invocations. The second invocation decrypts stage4_resource_HxBTHTPGSMVbIZYM.gz into stage5b_payload and reports Plaintext SHA256 da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8, Plaintext size 1,009,664 bytes, first 8 bytes 4d5a9000... (the PE MZ magic), with Assembly check PE/MZ detected.">
-  <figcaption><em>Figure 10: FLARE-VM Stage-5 decryption output establishing the Stage-5b SHA256 `da302511…` — byte-identical across both mymain and myfile builds. The screenshot captures the single most productive hunting anchor in this report: any file on a victim endpoint with this SHA256 confirms UTA-2026-005 infection with effectively zero false-positive risk (the 1,009,664-byte UAC bypass PE is specific to this operator's pre-compiled module).</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/open-directory-94-103-1-13-20260423/stage5b-decryption-sha256-proof.png" | relative_url }}" alt="PowerShell console output from the Stage-5 decryption script showing two sequential invocations. The second invocation decrypts stage4_resource_HxBTHTPGSMVbIZYM.gz into stage5b_payload and reports Plaintext SHA256 da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8, Plaintext size 1,009,664 bytes, first 8 bytes 4d5a9000... (the PE MZ magic), with Assembly check PE/MZ detected.">
+  <figcaption><em>Figure 10: Stage-5 decryption output establishing the Stage-5b SHA256 `da302511…` — byte-identical across both mymain and myfile builds. The screenshot captures the single most productive hunting anchor in this report: any file on a victim endpoint with this SHA256 confirms UTA-2026-005 infection with effectively zero false-positive risk (the 1,009,664-byte UAC bypass PE is specific to this operator's pre-compiled module).</em></figcaption>
 </figure>
 
 ### 5.8 Supporting Toolkit: Orcus RAT v7, Privilege Escalation Chain, Tunneling Stack

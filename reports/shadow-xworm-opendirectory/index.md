@@ -349,7 +349,7 @@ The production build enables 8 boolean feature flags (obfuscated names: `bool_2`
 
 `ShadowClient.exe` and `ShadoClient.exe` are .NET 4.7.2 executables compiled for AnyCPU (64-bit preferred), targeting CLR v4.0.30319. Both are packed with .NET Reactor (a commercial .NET code protection tool) and use Costura.Fody (an embedded resource loader) to bundle 28 dependent assemblies into a single deployable executable. This packaging approach results in high binary entropy (7.663) and makes static analysis significantly more difficult without first unpacking.
 
-A disassembler (Binary Ninja) with .NET Reactor Slayer (a .NET deobfuscation tool) was used to recover the 28 embedded assemblies, inline 2 obfuscated methods, and partially restore symbol names. The recovered assemblies confirm the full capability set through library fingerprinting:
+A disassembler paired with a .NET deobfuscation tool was used to recover the 28 embedded assemblies, inline 2 obfuscated methods, and partially restore symbol names. The recovered assemblies confirm the full capability set through library fingerprinting:
 
 | Library | Purpose |
 |---|---|
@@ -629,7 +629,7 @@ XWorm executes six anti-analysis checks in sequence at startup. All checks resul
 Queries `Win32_ComputerSystem` via WMI and inspects `Manufacturer` and `Model` values for strings associated with virtual machine platforms: VMware, VirtualBox, and Hyper-V. Standard hypervisor-based sandbox environments are detected by this check.
 
 **Check 2 & 3 — Debugger Detection:**
-`Debugger.IsAttached` (managed .NET property) and `Debugger.IsLogging()` detect .NET debuggers attached to the process. `CheckRemoteDebuggerPresent` (Windows API, called via P/Invoke) detects kernel-mode debuggers. Both an interactive debugger (x64dbg) — a tool used to step through binary code at runtime — and remote debugging sessions are targeted.
+`Debugger.IsAttached` (managed .NET property) and `Debugger.IsLogging()` detect .NET debuggers attached to the process. `CheckRemoteDebuggerPresent` (Windows API, called via P/Invoke) detects kernel-mode debuggers. Both an interactive debugger — a tool used to step through binary code at runtime — and remote debugging sessions are targeted.
 
 **Check 4 — Sandboxie Detection:**
 Checks for the presence of `SbieDll.dll` in the loaded module list. Sandboxie is a sandbox environment used by security researchers; this check specifically targets it.

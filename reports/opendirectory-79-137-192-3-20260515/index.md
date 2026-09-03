@@ -214,7 +214,7 @@ This framing controls the rest of the report. Clusters A, B, and C are presented
 Multiple independent confirmations converge:
 
 - **Microsoft Defender:** `Trojan:Win32/Rhadamanthys!ic` (the `!ic` suffix indicates ML-based identification, but the family designation matches the canonical Microsoft signature for Rhadamanthys).
-- **CAPE sandbox:** definitive `Rhadamanthys` classification with Procmon-confirmed registry write to `HKU\<SID>\Software\SibCode\sn` (the documented Rhadamanthys family marker for pre-v0.9.1 builds).
+- **CAPE sandbox:** definitive `Rhadamanthys` classification with a confirmed registry write to `HKU\<SID>\Software\SibCode\sn` (the documented Rhadamanthys family marker for pre-v0.9.1 builds).
 - **48/63 VirusTotal vendors converge** on Rhadamanthys family naming (variant names differ across vendors but the family is consistent).
 - **`.frontb` PE section** — Rhadamanthys family signature (the empty 701 KB pre-allocated runtime buffer for the decrypted Stage-2 payload).
 - **SibCode VCL artifacts** in the binary — consistent with documented Rhadamanthys vendor toolchain.
@@ -683,7 +683,7 @@ Total cumulative sleep ≈ 14 seconds. The denormal-sentinel check is calibrated
 
 ### 6.4 Stage-2 registry write to SibCode\sn
 
-The Stage-2's registry write to `HKU\<SID>\Software\SibCode\sn` was confirmed via CAPE Procmon trace. The value written is a Unix timestamp (the build's epoch time, hardcoded in the Stage-2). This is a per-build value — different Rhadamanthys builds write different timestamps. The `SID` is the current user's security identifier.
+The Stage-2's registry write to `HKU\<SID>\Software\SibCode\sn` was confirmed via registry-activity monitoring during detonation. The value written is a Unix timestamp (the build's epoch time, hardcoded in the Stage-2). This is a per-build value — different Rhadamanthys builds write different timestamps. The `SID` is the current user's security identifier.
 
 **Operational behavior:**
 - First-run write: the Stage-2 checks if the key exists; if not, writes the Unix timestamp value and proceeds with full credential theft
@@ -1046,7 +1046,7 @@ This section organizes the report's findings by confidence level for the higher-
 
 ### DEFINITE (95–100%) — Direct evidence, no ambiguity
 
-- **Cluster C Stage-2 family classification as Rhadamanthys** (97%) — Microsoft `Trojan:Win32/Rhadamanthys!ic` + CAPE `Rhadamanthys` + 48/63 VirusTotal vendors converge + `.frontb` PE section + SibCode VCL artifacts + `HKU\<SID>\Software\SibCode\sn` registry write per CAPE Procmon trace
+- **Cluster C Stage-2 family classification as Rhadamanthys** (97%) — Microsoft `Trojan:Win32/Rhadamanthys!ic` + CAPE `Rhadamanthys` + 48/63 VirusTotal vendors converge + `.frontb` PE section + SibCode VCL artifacts + `HKU\<SID>\Software\SibCode\sn` registry write confirmed during detonation
 - **Cluster C loader file identifiers** — SHA256 `5c38a5dd...`, MD5 `ae9991a0...`, imphash `1e5efd48...`, compile timestamp 2023-06-25 23:01:08 UTC, VS2022 v17.4 toolchain
 - **Cluster C Stage-2 file identifiers** — SHA256 `804f4548...`, MD5 `0e07ccda...`, VS2003 toolchain, 458,752 bytes
 - **Cluster A BellaMain panel + 7 kits** — full PHP source recovered; `Wadanz` developer pseudonym in `database/fonk.php`; bot token `6797512084:AAGbJVoC0zcKWYPbFG8oc_bACPn6gUEye_E` hardcoded in 6 `girislog.php` files

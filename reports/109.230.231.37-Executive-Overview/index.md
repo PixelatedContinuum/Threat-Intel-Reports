@@ -618,7 +618,7 @@ The timeline analysis provides a second-by-second execution chronology showing h
     <tr>
       <td><strong>Persistence Mechanisms</strong></td>
       <td class="confirmed">VERIFIED</td>
-      <td>Autoruns baseline comparison: 4 new entries (FleetAgentAdvanced), 2 entries (agent.exe)</td>
+      <td>Autostart-persistence baseline comparison: 4 new entries (FleetAgentAdvanced), 2 entries (agent.exe)</td>
     </tr>
     <tr>
       <td><strong>Detection Signatures</strong></td>
@@ -661,7 +661,7 @@ From the 38 executables in the open directory, **16 samples were selected for an
 
 **Multi-Stage Validation:**
 - Static analysis → Dynamic analysis → Memory forensics (three independent methodologies)
-- Cross-tool verification: IOCs validated across YARA, CAPA, memory forensics tool (Volatility), Autoruns, PE analysis tool (pestudio)
+- Cross-tool verification: IOCs validated across YARA, CAPA, memory forensics, autostart-persistence baselining, PE static analysis
 - Behavioral timeline verification: Process trees from memory forensics tool matched against process monitoring tool execution logs
 - Detection signature testing: YARA rules tested against samples (100% detection) + clean systems (zero false positives)
 

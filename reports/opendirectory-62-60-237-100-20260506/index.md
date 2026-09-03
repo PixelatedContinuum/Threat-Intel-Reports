@@ -888,7 +888,7 @@ These tools are genuine and signed (where applicable). They are not malicious in
   <figcaption><em>Figure 13: Carriers.exe process tree from the dynamic detonation. The chain runs 5 processes deep before branching at <code>CrystSupervisor32.exe (PID 9840)</code> — the persistent spawner — into the two endgame children: <code>WVault.exe</code> (the C2 process) and <code>Crisp.exe</code> (the persistence helper). Color stripe: <span style="color:#6b7280">grey</span> analyst harness · <span style="color:#eab308">yellow</span> dropper · <span style="color:#dc2626">red</span> operator code · <span style="color:#7f1d1d">deep red</span> endgame (C2 + persistence). Total elapsed launch-to-first-beacon: ~43 seconds.</em></figcaption>
 </figure>
 
-**Process timing chain (DEFINITE — Procmon Process Start events):**
+**Process timing chain (DEFINITE — process-start event timing):**
 
 ```
 07:26:26.43  Carriers.exe (PID 1908)         - original sample launches
@@ -1093,7 +1093,7 @@ For defenders the operational implication is that rules looking for specific env
 This delete-then-rewrite pattern is unusual — possibly anti-forensics (wipe + restore to clear forensic file IDs) OR state-reset between stages.
 
 **Recovery requires either:**
-1. Interactive debugger (x64dbg / WinDbg) attach to pe_03 mid-execution; breakpoint cipher function; capture live key state + decrypted bytes
+1. Interactive debugger attach to pe_03 mid-execution; breakpoint cipher function; capture live key state + decrypted bytes
 2. Memory-dump `WVault.exe` specifically (not full system); search post-decryption process memory for `4D 5A 90 00`
 3. External long-running sandbox (20+ minutes) with memory dump capability
 
@@ -1109,7 +1109,7 @@ This delete-then-rewrite pattern is unusual — possibly anti-forensics (wipe + 
 | JA3 | `07af4aa9e4d215a5ee63f9a0a277fbe3` | Suricata |
 | JA4 | `t10i060500_4dc025c38c38_1a3805c3aa63` | Suricata |
 | ClientHello cipher list | `49162-49161-49172-49171-53-47` | Suricata |
-| ClientHello length | 93 bytes outbound (every connection — stable IOC) | Procmon |
+| ClientHello length | 93 bytes outbound (every connection — stable IOC) | Packet capture |
 | Beacon interval | ~125 seconds (TCP flow timeout, immediate retry from new ephemeral port) | Sysmon EID 3 |
 | Beacon span (Sysmon-captured) | 33 minutes 21 seconds, 17 connections | Sysmon EID 3 |
 | C2 process | `WVault.exe` (PID 2596) | Behavioral sandbox Network Traffic block |

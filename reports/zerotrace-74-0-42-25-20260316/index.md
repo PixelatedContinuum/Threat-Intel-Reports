@@ -435,7 +435,7 @@ It is written in Embarcadero Delphi 12.0 Athens Enterprise, a commercial IDE tha
 
 - System survey beacon (opcode `0x49`) — hardware and software inventory
 - Keylogger — `GetAsyncKeyState(0x0D/0x01)` polling on Enter key and left mouse click
-  > **Important distinction:** This is a form-submission keylogger, not a full keystroke capture. It fires only on Enter key release (form submit) and left mouse button release (button click), then flushes whatever was typed into the accumulation buffer. Decompiled `TOThread.Execute` loop (disassembler (Binary Ninja) HLIL):
+  > **Important distinction:** This is a form-submission keylogger, not a full keystroke capture. It fires only on Enter key release (form submit) and left mouse button release (button click), then flushes whatever was typed into the accumulation buffer. Decompiled `TOThread.Execute` loop (high-level decompiler output):
   >
   > ```
   > while not TThread.Terminated:
