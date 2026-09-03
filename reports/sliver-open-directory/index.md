@@ -182,7 +182,7 @@ There is a third-party signing risk here. Anyone who downloaded `key.pem` from t
 ## 3. Kill Chain Analysis
 {: .hl-tier-3}
 
-The kill chain runs through four stages from delivery to C2 establishment. Because the C2 infrastructure was offline during dynamic analysis, Stages 5–6 are reconstructed from build artifacts and behavioral analysis rather than live observation. Each stage is presented chronologically with available defender telemetry.
+The kill chain runs through four stages from delivery to C2 establishment. Because the C2 infrastructure was offline during dynamic analysis, Stages 5-6 are reconstructed from build artifacts and behavioral analysis rather than live observation. Each stage is presented chronologically with available defender telemetry.
 
 ### Stage 0 — Attacker Build Pipeline (Pre-Victim)
 
@@ -414,7 +414,7 @@ The C2 infrastructure is confirmed offline as of 2026-02-27. Three independent d
 | Backup C2          | `mailmassange.duckdns.org:443` (HTTPS/mTLS)                 |
 | Fallback C2        | `mailuxe.net:8443` (HTTPS/mTLS)                             |
 | Selection          | Random — blocking one endpoint does not disrupt beaconing   |
-| Callback interval  | 300–900 seconds base; 70% jitter (effective 90–510 seconds) |
+| Callback interval  | 300-900 seconds base; 70% jitter (effective 90-510 seconds) |
 | Failure tolerance  | 100 consecutive failures before self-termination            |
 | Poll timeout       | 900 seconds (maximum wait for C2 server response per callback attempt) |
 | Reconnect interval | 120 seconds between attempts                                |
@@ -646,7 +646,7 @@ To detect it, the `XOR RAX,RAX; RET` pattern (`48 31 C0 C3`) on `AmsiScanBuffer`
 Implemented as a stub in `sleep.mask.C`. I hold it HIGH at 85 percent, ScareCrow-native, with sleep masking confirmed active by process analysis.
 
 
-During the effective 90–510 second dormancy window (300-second base, 70% jitter), ScareCrow encrypts the beacon's in-memory shellcode region. Memory scanners running during dormancy find no readable executable content in anonymous memory regions.
+During the effective 90-510 second dormancy window (300-second base, 70% jitter), ScareCrow encrypts the beacon's in-memory shellcode region. Memory scanners running during dormancy find no readable executable content in anonymous memory regions.
 
 To detect it, the beacon transitions between readable and non-readable memory states on a regular interval, which periodic memory scanning will catch. Open-source beacon hunting tools such as Hunt-Sleeping-Beacons and BeaconHunter identify threads in `WaitReason = DelayExecution` with suspicious call stacks. The effective dormancy range, 90 to 510 seconds with 70% jitter, means memory scanning at under 90-second intervals would catch the beacon in its active state.
 
@@ -728,9 +728,9 @@ The sources here are the IPinfo.io AS210558 record (Tier 1), PeeringDB AS210558 
 
 **Roles confirmed on this single IP:**
 
-- **Build server** — automated pipeline executed here (from build.log)
-- **Payload delivery server** — `hxxp[:]//45.94.31[.]220:8000/` served the entire workspace
-- **C2 listener** — Sliver teamserver (ports 443, 8443); MODERATE confidence (70%) — actual C2 may be on separate infrastructure if `mailuxe.net` resolves elsewhere
+- **Build server**: automated pipeline executed here (from build.log)
+- **Payload delivery server**: `hxxp[:]//45.94.31[.]220:8000/` served the entire workspace
+- **C2 listener**: Sliver teamserver (ports 443, 8443); MODERATE confidence (70%) — actual C2 may be on separate infrastructure if `mailuxe.net` resolves elsewhere
 
 This single-server architecture is a significant OPSEC failure. All forensic evidence concentrates at one point. A single network block disrupts build, delivery, and C2 simultaneously.
 
@@ -874,7 +874,7 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | Defense Evasion      | T1027.013    | Encrypted/Encoded File                       | DEFINITE       | AES-128-CTR Donut instance encryption; XOR 0x42 string encoding                                                                     |
 | Defense Evasion      | T1140        | Deobfuscate/Decode Files or Information      | DEFINITE       | Runtime XOR decoding (stack-allocated); Donut AES bootstrap at RIP base+0x59 confirmed                                              |
 | Defense Evasion      | T1497.001    | System Checks                                | DEFINITE       | vm_checks.C: dwNumberOfProcessors < 2 → exit; GetTickCount() < 600000 → exit                                                        |
-| Defense Evasion      | T1497.003    | Time-Based Evasion                           | DEFINITE       | GetTickCount uptime check; 70% jitter on 300s base callback (effective 90–510s window)                                              |
+| Defense Evasion      | T1497.003    | Time-Based Evasion                           | DEFINITE       | GetTickCount uptime check; 70% jitter on 300s base callback (effective 90-510s window)                                              |
 | Defense Evasion      | T1553.002    | Code Signing                                 | DEFINITE       | cert.pem serial 659EEB5AA4A489FB238993AF259D23F057F6D6D6; self-signed; applied to binaries                                          |
 | Defense Impairment      | T1685    | Disable or Modify Tools                      | DEFINITE       | stager: amsiInitFailed reflection; Set-MpPreference disable; ScareCrow: ETW + AMSI patches                                          |
 | Defense Evasion      | T1620        | Reflective Code Loading                      | DEFINITE       | 18.4 MB PRV region; Donut RIP at base+0x59; Sliver PE never written to disk                                                         |
@@ -926,10 +926,10 @@ Detection is organized by kill chain stage. Because the build pipeline can regen
 
 **Structural detection anchors that survive polymorphic rebuilds:**
 
-- **Certificate serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6`** — every binary from this build pipeline carries this serial. Binary signed by `VMware, Inc. Code Signing` where issuer = subject (self-signed) is a high-fidelity anomaly; any code-signing cert with `CA:TRUE` is definitively scripted/fraudulent.
+- **Certificate serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6`**: every binary from this build pipeline carries this serial. Binary signed by `VMware, Inc. Code Signing` where issuer = subject (self-signed) is a high-fidelity anomaly; any code-signing cert with `CA:TRUE` is definitively scripted/fraudulent.
 - **SysWhispers3 hash seed** `\x94\x8D\xEA\x9D` (little-endian `0x9DEA8D94`) — compiled constant present in any binary using this SysWhispers3 configuration; YARA rule with this four-byte sequence and 600-entry sorted array structure identifies SysWhispers3 across polymorphic builds.
 - **Hardcoded PEB spoofing string** `MicrosoftEdgeUpdate.exe --update-check --silent` — present in every build from this pipeline; detectable via process argument monitoring.
-- **Path mismatch** — process claiming `MicrosoftEdgeUpdate.exe` identity running from `%TEMP%\update.exe` is a high-confidence indicator; EDR comparison of claimed vs. actual binary path.
+- **Path mismatch**: process claiming `MicrosoftEdgeUpdate.exe` identity running from `%TEMP%\update.exe` is a high-confidence indicator; EDR comparison of claimed vs. actual binary path.
 
 **Behavioral API sequence fingerprint (EDR telemetry):** The sandbox-environment-check immediately preceding injection is a high-confidence, low-noise behavioral pattern detectable in EDR API call logs. The specific chain:
 
@@ -949,12 +949,12 @@ update.exe → NtCreateThread()           (execution)
 
 **Process hollowing and injection indicators:**
 
-- **18–19 MB anonymous private memory region** (`PAGE_EXECUTE_READWRITE`, VadS tag) in any process — the Donut staging region size and protection are distinctive. Memory region scanner (malfind plugin) and EDR memory scanning detect this.
+- **18-19 MB anonymous private memory region** (`PAGE_EXECUTE_READWRITE`, VadS tag) in any process — the Donut staging region size and protection are distinctive. Memory region scanner (malfind plugin) and EDR memory scanning detect this.
 - **NOP sled followed by `0x9A` (CALLF)** at allocation base+0x59 — Donut VEH bootstrap entry pattern; confirmed by memory forensics tool hexdump.
 - `**STATUS_CONFLICTING_ADDRESSES` (C0000018)** in process LastStatus — injection precursor; observed across multiple debugger sessions.
 - **Process Ghosting five-step chain**: `CreateFile` with `DELETE_ON_CLOSE` → `SetFileInformationByHandle(FileDispositionInfo)` → `NtCreateSection(SEC_IMAGE)` → `NtCreateProcessEx` — unusual and specific sequence detectable via kernel-level ETW callbacks.
-- **Process with no resolvable on-disk image path** — Process Ghosting artifact; detectable via Process Explorer, EDR, or memory forensics tool.
-- **ETW silence anomaly** — `sihost.exe` post-injection producing zero ETW events despite active network behavior is a high-confidence signal. A process that is active but produces no telemetry is itself the detection.
+- **Process with no resolvable on-disk image path**: Process Ghosting artifact; detectable via Process Explorer, EDR, or memory forensics tool.
+- **ETW silence anomaly**: `sihost.exe` post-injection producing zero ETW events despite active network behavior is a high-confidence signal. A process that is active but produces no telemetry is itself the detection.
 
 #### C2 Communication Stage
 
@@ -962,11 +962,11 @@ update.exe → NtCreateThread()           (execution)
 
 - Block and monitor `mailuxe.net`, `mailmassange.duckdns.org`, and `45.94.31.220` at network egress.
 - Monitor `sihost.exe` for any outbound network connections to non-Microsoft addresses — legitimate sihost.exe connections are well-profiled and predominantly inbound/local; any outbound connection to an external IP is anomalous.
-- **Certificate serial TLS detection** — monitor for TLS connections where the server certificate carries serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6`. This is the most durable C2 detection anchor.
+- **Certificate serial TLS detection**: monitor for TLS connections where the server certificate carries serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6`. This is the most durable C2 detection anchor.
 - Monitor for periodic DNS queries to `*.duckdns.org` from internal hosts at regular intervals.
 - **JARM fingerprinting** for the Sliver teamserver — Microsoft MSTIC documented Sliver-specific JARM hashes; the C2 server may be fingerprint-able even if the implant is not.
 - Sliver mTLS with randomized certificates presents less-signatured TLS traffic than Cobalt Strike's well-documented profiles, but Go binary runtime characteristics (static compilation, memory allocation patterns, HTTP header combinations) remain detectable hunting targets per Microsoft MSTIC research.
-- **Consistent POST request size (proxy/firewall log hunting):** Sliver beacon callbacks exhibit near-identical POST request sizes on each check-in cycle. Proxy and firewall logs showing consistent POST byte sizes (reference traffic from this campaign: ~1842 bytes) from a background process to an external host at irregular but bounded intervals (matching the 90–510 second callback window) are a beaconing fingerprint detectable without TLS inspection. Consistent byte-count POST traffic from a system process (`sihost.exe`) to a non-Microsoft external IP or domain at variable-but-bounded intervals is a viable SIEM hunting rule in environments without SSL inspection capability.
+- **Consistent POST request size (proxy/firewall log hunting):** Sliver beacon callbacks exhibit near-identical POST request sizes on each check-in cycle. Proxy and firewall logs showing consistent POST byte sizes (reference traffic from this campaign: ~1842 bytes) from a background process to an external host at irregular but bounded intervals (matching the 90-510 second callback window) are a beaconing fingerprint detectable without TLS inspection. Consistent byte-count POST traffic from a system process (`sihost.exe`) to a non-Microsoft external IP or domain at variable-but-bounded intervals is a viable SIEM hunting rule in environments without SSL inspection capability.
 
 ---
 

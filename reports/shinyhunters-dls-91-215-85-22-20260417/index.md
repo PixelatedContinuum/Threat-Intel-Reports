@@ -46,7 +46,7 @@ stix_bundle: /stix/shinyhunters-dls-91-215-85-22-20260417.json
 > from the DLS before this re-scan), and a concurrent **public reporting
 > disclosure** by Cybernews (republished by TechRadar on 2026-04-23) that
 > names the same victim cluster and corroborates the findings. Full details
-> in §4.7 — *Post-publication additions (April 21–24, 2026)*. The roster
+> in §4.7 — *Post-publication additions (April 21-24, 2026)*. The roster
 > table in §4.1, disclosure summary in §4.2, and reference list in §14
 > reflect the state as of the original report's analysis cutoff (2026-04-16);
 > §4.7 is the authoritative source for post-cutoff activity. The cumulative
@@ -203,7 +203,7 @@ The upload cadence — a 23-minute bulk session on March 4 followed by every-3-t
 
 | Date | Files | Notes |
 |---|---:|---|
-| 2026-03-04 21:31–21:54 | **18** | Bulk-upload window — 18 archives in 23 minutes (single session) |
+| 2026-03-04 21:31-21:54 | **18** | Bulk-upload window — 18 archives in 23 minutes (single session) |
 | 2026-03-06 | 1 | Pathstone (15 GB) |
 | 2026-03-09 | 1 | CFGI (475 MB) |
 | 2026-03-15 | 1 | Aura (11.8 GB) |
@@ -214,9 +214,9 @@ The upload cadence — a 23-minute bulk session on March 4 followed by every-3-t
 | 2026-04-05 | 1 | **ZenBusiness (821 GB)** — single largest archive |
 | 2026-04-11 | 1 | Hallmark (568 MB) |
 | 2026-04-13 | 1 | Rockstar Games (419 MB) |
-| 2026-04-15 15:55–17:31 | **4** | Fresh tranche (Abrigo, McGraw-Hill, Amtrak, Kemper) — 24 h before discovery |
+| 2026-04-15 15:55-17:31 | **4** | Fresh tranche (Abrigo, McGraw-Hill, Amtrak, Kemper) — 24 h before discovery |
 
-The March 4 bulk window is consistent with initial DLS stand-up from a pre-staged backlog or migration from a prior host. Timestamp clustering at 15:00–22:00 UTC is directionally consistent with Russia-aligned operator hours but does not establish operator time zone on its own (uploads can be scripted).
+The March 4 bulk window is consistent with initial DLS stand-up from a pre-staged backlog or migration from a prior host. Timestamp clustering at 15:00-22:00 UTC is directionally consistent with Russia-aligned operator hours but does not establish operator time zone on its own (uploads can be scripted).
 
 ### 3.4 PGP-key identity infrastructure
 
@@ -282,7 +282,7 @@ As of **2026-04-20** (post-outreach window close):
 
 - **22 victims fully publicly reported** (named in mainstream security press with company acknowledgment)
 - **9 victims partially disclosed** (actor-claimed without formal company acknowledgment): Berkadia, Ameriprise, Woflow, Abrigo, CFGI, Kemper, Amtrak, ZenBusiness, CarMax, Edmunds
-- **Alert360** — added to ransomware.live on **2026-04-19** (three days after The Hunters Ledger's pre-publication disclosure outreach). No mainstream security-press coverage as of this report's release, and no statement from Alert360 itself.
+- **Alert360**: added to ransomware.live on **2026-04-19** (three days after The Hunters Ledger's pre-publication disclosure outreach). No mainstream security-press coverage as of this report's release, and no statement from Alert360 itself.
 
 At the time of analysis (2026-04-16), ransomware.live tracked 28 of 29 victims on this DLS, leaving Alert360 as the sole novel entry. ransomware.live's subsequent 2026-04-19 listing of Alert360 closes that public-reporting gap.
 
@@ -418,9 +418,9 @@ The operator's stated posture is that data will remain on the DLS "indefinitely,
 
 The **Scattered LAPSUS$ Hunters** collective (also "SLH" or "Trinity of Chaos") combines three previously-distinct groups — Scattered Spider runs the vishing front, LAPSUS$-era operators run the harassment playbook, and ShinyHunters owns the data theft and DLS custody (the role observed directly in this report). A Telegram-announced merger in **August 2025** formalized the banner:
 
-- **Scattered Spider (UNC3944)** — English-language vishing and social-engineering specialists
-- **LAPSUS$-aligned operators** — surviving members of the 2021–2022 LAPSUS$ extortion campaigns, contributors of the harassment / public-pressure playbook
-- **ShinyHunters** — long-running database-theft and dark-web-sale operation, contributors of the data-theft tradecraft and DLS custody
+- **Scattered Spider (UNC3944)**: English-language vishing and social-engineering specialists
+- **LAPSUS$-aligned operators**: surviving members of the 2021-2022 LAPSUS$ extortion campaigns, contributors of the harassment / public-pressure playbook
+- **ShinyHunters**: long-running database-theft and dark-web-sale operation, contributors of the data-theft tradecraft and DLS custody
 
 Both Resecurity (Tier-2) and SocRadar (Tier-3) have published merger profiles; the self-branded "Scattered LAPSUS$ Hunters | DLS" page title is preserved on a 2025-10-12 archive.org snapshot of `shinyhunte.rs`.
 
@@ -492,7 +492,7 @@ Co-tenancy is not collaboration. Unrelated criminal tenants on the same AS are a
 
 ### 6.3 DDoS-Guard (AS57724) — identity-page host
 
-DDoS-Guard is a Russia-based DDoS-protection and hosting provider operating approximately 803,874 domains across approximately 3,046 IPs per public BGP data. It is a legitimate commercial service (not a purpose-built criminal hosting provider in the PROSPERO sense), but its product model — origin-IP masking via DDoS-mitigation fronting — provides equivalent functional protection against Western takedown efforts and is widely abused by threat actors. ThreatSTOP documented historical abuse patterns in 2021. No Tier-2 2025–2026 primary research on DDoS-Guard was identified during this investigation; this is a documented research gap.
+DDoS-Guard is a Russia-based DDoS-protection and hosting provider operating approximately 803,874 domains across approximately 3,046 IPs per public BGP data. It is a legitimate commercial service (not a purpose-built criminal hosting provider in the PROSPERO sense), but its product model — origin-IP masking via DDoS-mitigation fronting — provides equivalent functional protection against Western takedown efforts and is widely abused by threat actors. ThreatSTOP documented historical abuse patterns in 2021. No Tier-2 2025-2026 primary research on DDoS-Guard was identified during this investigation; this is a documented research gap.
 
 **Bulletproof assessment for AS57724 — SUSPECTED (2 of 6 indicators):** non-cooperative jurisdiction; structural abuse tolerance via origin-masking. The remaining indicators (appearing in BPH databases, underground-forum advertisement) do not apply to a legitimate commercial DDoS-mitigation product.
 
@@ -559,9 +559,9 @@ A claimed Telegram contact for "James" at `t.me/wokawoka10` is given. Treat all 
 
 ### 7.6 Related actors
 
-- **TeamPCP** — Initial-access partner / supplier on the European Commission breach via Trivy supply-chain compromise (CERT-EU attribution). Relationship is either collaborative or commercial access-brokerage; insufficient evidence to determine which.
-- **Scattered Spider (UNC3944)** — Listed by the operator as a constituent of the Scattered LAPSUS$ Hunters collective. Vishing front specialist contribution.
-- **LAPSUS$ (historical)** — Listed by the operator as a constituent of the collective. Harassment-playbook and public-pressure tradecraft contribution.
+- **TeamPCP**: Initial-access partner / supplier on the European Commission breach via Trivy supply-chain compromise (CERT-EU attribution). Relationship is either collaborative or commercial access-brokerage; insufficient evidence to determine which.
+- **Scattered Spider (UNC3944)**: Listed by the operator as a constituent of the Scattered LAPSUS$ Hunters collective. Vishing front specialist contribution.
+- **LAPSUS$ (historical)**: Listed by the operator as a constituent of the collective. Harassment-playbook and public-pressure tradecraft contribution.
 
 ---
 
@@ -581,7 +581,7 @@ A claimed Telegram contact for "James" at `t.me/wokawoka10` is given. Treat all 
 | Credential Access | T1528 | Steal Application Access Token | Malicious OAuth Connected App (frequently a Data Loader clone) authorized into victim Salesforce tenant under legitimate-user authority (Section 5.2 stage 4) |
 | Credential Access | T1606 | Forge Web Credentials | Victim-branded credential-harvesting landing pages used by some sub-clusters to capture self-reset credentials (Section 5.2 stage 3) |
 | Credential Access | T1552.001 | Unsecured Credentials: Credentials In Files | TruffleHog used to extract additional AWS access keys from EC environment after Trivy-derived initial key (Section 5.3) |
-| Discovery | T1538 | Cloud Service Dashboard | Salesforce / Okta admin interfaces and AWS console enumeration once SSO foothold is established (Section 5.2 stages 4–5) |
+| Discovery | T1538 | Cloud Service Dashboard | Salesforce / Okta admin interfaces and AWS console enumeration once SSO foothold is established (Section 5.2 stages 4-5) |
 | Collection | T1530 | Data from Cloud Storage | Bulk Salesforce CRM export via Data Loader; SharePoint and document-store harvest in larger intrusions (ZenBusiness 821 GB, Ameriprise 200 GB claimed); Snowflake-via-Anodot harvest in Rockstar Games breach per Mitiga (Section 5.2 stage 5) |
 | Collection | T1213.002 | Data from Information Repositories: SharePoint | SharePoint harvest documented in Ameriprise (200 GB claimed) and several other large intrusions (Section 5.2 stage 5) |
 | Command and Control | T1090.003 | Proxy: Multi-hop Proxy | Three Tor `.onion` mirrors fronting the leak site (active main + active redirector + retired) provide Tor-based access path independent of clearnet takedown (Section 2.3) |
@@ -686,7 +686,7 @@ A `(?i)should(ve|a).*paid.*ransom.*shinyhunters` filename or a verbatim `INFORMA
 
 **Q6. Is the DLS likely to be taken down, and how should defenders plan for its persistence?**
 
-Plan for persistence. The operator deliberately segments infrastructure across two Russian providers (PROSPERO for the DLS, DDoS-Guard for the identity page) and maintains three Tor mirrors. PROSPERO has an extensive prior abuse history with no provider action documented in Krebs, Intrinsec, or Resecurity reporting; the abuse contact at `abuse@pro-spero.ru` is community-reported as non-responsive. DDoS-Guard's product model (origin-IP masking via DDoS-mitigation fronting) provides equivalent functional protection against Western takedown. Even in an unlikely scenario where one provider were to suspend the relevant IP, the operator retains five publication paths (DLS clearnet + identity clearnet + three Tor mirrors). Defeating the operation requires multi-jurisdictional coordination, upstream-carrier pressure, or operator-side compromise — none of which are achievable through routine abuse-reporting channels. Defenders should treat the IOCs in the linked feed as durable and the campaign as expanding rather than declining (Section 5.4 documents January–March 2026 cluster expansion).
+Plan for persistence. The operator deliberately segments infrastructure across two Russian providers (PROSPERO for the DLS, DDoS-Guard for the identity page) and maintains three Tor mirrors. PROSPERO has an extensive prior abuse history with no provider action documented in Krebs, Intrinsec, or Resecurity reporting; the abuse contact at `abuse@pro-spero.ru` is community-reported as non-responsive. DDoS-Guard's product model (origin-IP masking via DDoS-mitigation fronting) provides equivalent functional protection against Western takedown. Even in an unlikely scenario where one provider were to suspend the relevant IP, the operator retains five publication paths (DLS clearnet + identity clearnet + three Tor mirrors). Defeating the operation requires multi-jurisdictional coordination, upstream-carrier pressure, or operator-side compromise — none of which are achievable through routine abuse-reporting channels. Defenders should treat the IOCs in the linked feed as durable and the campaign as expanding rather than declining (Section 5.4 documents January-March 2026 cluster expansion).
 
 ---
 
@@ -697,7 +697,7 @@ Plan for persistence. The operator deliberately segments infrastructure across t
 - **Current PGP key body.** Full key body for `F4953411767DE71BEDCDABCB76F4E26F7A20978A` not independently recovered (`/newpgp` returned HTTP 404 at investigation time; pastebin mirror at `https://pastebin.com/raw/sb7aB9eU` not verified as still resolvable during this investigation). Resolution path: direct keyserver query against `keyserver.ubuntu.com`, `keys.openpgp.org`, or SKS network mirrors for fingerprint `F4953411767DE71BEDCDABCB76F4E26F7A20978A`.
 - **Paris June 2025 arrests vs December 2025 doxx handles.** Public LE-named handles (ShinyHunters / Hollow / Noct / Depressed) do not map cleanly to actor-claimed Yuro / Trihash. No public indictment text located.
 - **TeamPCP profile.** Limited public profile literature on the TeamPCP cluster; precise nature of the ShinyHunters-TeamPCP relationship (collaboration vs commercial access-brokerage) is unresolved.
-- **DDoS-Guard 2025–2026 Tier-2 primary research.** No recent named-actor research on AS57724 located during this investigation.
+- **DDoS-Guard 2025-2026 Tier-2 primary research.** No recent named-actor research on AS57724 located during this investigation.
 - **shinyhunte.rs WHOIS / registration date.** Not recovered (Serbia ccTLD registry privacy).
 - **Tor mirror reachability.** Not independently verified during this investigation; reliance on operator self-report.
 

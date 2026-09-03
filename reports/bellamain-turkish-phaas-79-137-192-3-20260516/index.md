@@ -91,7 +91,7 @@ figure_nav:
 
 > **Note on UTA identifiers:** This activity is tracked by The Hunters Ledger under the internal designation **UTA-2026-008** *(an internal tracking label used by The Hunters Ledger — see Section 9)*. UTA-2026-008 was originally created by the 2026-05-15 parent multi-cluster investigation and is **extended** by this standalone report — no new identity artifacts surfaced beyond the parent UTA's set; the contribution is section-depth coverage of operator tradecraft rather than new signal.
 
-This report is the **first public disclosure** of BellaMain as a named PhaaS family. The panel ZIP (`BellaMain.zip`, SHA256 `f791fae4...`) has never been submitted to VirusTotal. No prior Tier 1, Tier 2, or Tier 3 source documents BellaMain, the `Wadanz` developer pseudonym, or the `@AresRS34` operator Telegram alias as a recognized PhaaS service, panel, or operator. The seven kit RARs have circulated since at least 2024-04-18 (VT first-seen) but detection across all of them is near-zero (0–2 / 62 across all seven archives). Operators deploying BellaMain have, until now, had no reason to assume defenders knew the panel's internal command vocabulary, database schema, or anti-forensic capabilities. This investigation closes that gap.
+This report is the **first public disclosure** of BellaMain as a named PhaaS family. The panel ZIP (`BellaMain.zip`, SHA256 `f791fae4...`) has never been submitted to VirusTotal. No prior Tier 1, Tier 2, or Tier 3 source documents BellaMain, the `Wadanz` developer pseudonym, or the `@AresRS34` operator Telegram alias as a recognized PhaaS service, panel, or operator. The seven kit RARs have circulated since at least 2024-04-18 (VT first-seen) but detection across all of them is near-zero (0-2 / 62 across all seven archives). Operators deploying BellaMain have, until now, had no reason to assume defenders knew the panel's internal command vocabulary, database schema, or anti-forensic capabilities. This investigation closes that gap.
 
 ### What Was Found
 
@@ -99,9 +99,9 @@ The open directory at `79.137.192.3` exposed a complete operator backend (`Bella
 
 - A **PhaaS admin panel** at `BellaMain/` with an obfuscated 12-character admin directory `V5VgjLU0jsDe/` containing `manager.php` (12-command admin Telegram bot), `backup.php` (mysqldump-to-Telegram exfil), `usmcheck.php` (USOM blocklist monitor), and `cekimbot.php` (withdrawal-approval Telegram webhook).
 - **Seven brand-impersonation kits** packaged as RAR archives — Dolap (`Dolap.rar`), Letgo (`Letgo.rar`), PTT AVM (`Pttavm.rar`), Sahibinden (`sahibinden.rar`), Shopier (`shopier.rar`), Turkcell (`turkcell.rar`), and Yurtiçi Kargo (`Kargo.rar`) — all sharing the same hardcoded MySQL credentials (`jakartaxdw` / `dbjakartaxdw` / `W!@25#8Tb2gxq15`) and the same hardcoded canary Telegram bot (`6797512084:AAGbJVoC...`, since **REVOKED**) in every kit's `girislog.php` and the panel's `dashboard.php`.
-- **A multi-operator licensing model** — `signup.php` requires a valid referral code consumed from the `refkodlari` table (DELETE-on-use); referral codes are minted by the admin via the Telegram `/refkod` command. New operators self-register, get their own dashboard, and earn 70% of approved hits — the panel administrator retains 30%.
+- **A multi-operator licensing model**: `signup.php` requires a valid referral code consumed from the `refkodlari` table (DELETE-on-use); referral codes are minted by the admin via the Telegram `/refkod` command. New operators self-register, get their own dashboard, and earn 70% of approved hits — the panel administrator retains 30%.
 - **Operator identity artifacts** unique to this codebase — the `Wadanz` developer pseudonym embedded as a function-name suffix on the panel's session-encryption helpers (`sifreleWadanz()` / `sifrecozWadanz()`), the `@AresRS34` operator Telegram alias embedded in an anti-researcher Turkish-profanity canary string in all six kits' `girislog.php`, two authorized-withdrawal-approver Telegram UIDs (`5606327063`, `6594066326`), and two operator Telegram group IDs (`-1002104835510` canary exfil group, `-1001817323952` operator announcement group).
-- **A CryptOne fake-exchange front** — staging at `79.137.192.3/cryptone/`, production at the Cloudflare-fronted domain `cryptone.bot` (created 2026-02-28, 0/92 VT detections as of the evidence cutoff). The same operator developed this fake-exchange component on the BellaMain staging server; full content analysis of the live production domain was out of scope for this report.
+- **A CryptOne fake-exchange front**: staging at `79.137.192.3/cryptone/`, production at the Cloudflare-fronted domain `cryptone.bot` (created 2026-02-28, 0/92 VT detections as of the evidence cutoff). The same operator developed this fake-exchange component on the BellaMain staging server; full content analysis of the live production domain was out of scope for this report.
 
 ### Why This Threat Is Significant
 
@@ -124,7 +124,7 @@ Because this is a first public disclosure, the IOCs and detection signatures in 
 | Capability sophistication | 7/10 | Operator-grade tradecraft at the source layer — USOM monitor, multi-bot Telegram role separation, TRUNCATE anti-forensics, MySQL backup-as-exfil, obfuscated admin path, invite-only operator gating with one-time-consume referral codes, live Binance rate conversion for payouts. PHP code quality itself is workmanlike; sophistication is concentrated at the operations and anti-takedown layer. |
 | Data-theft impact | 8/10 | Captures Turkish national identity numbers (TC Kimlik — 11-digit equivalent of US SSN), full PAN + expiry + CVV payment cards, marketplace login credentials, phone numbers, and victim-uploaded bank-statement images. A single victim through the full funnel yields a complete identity-theft + payment-fraud package. |
 | Active-campaign evidence | 8/10 | Panel + 7 kits + CryptOne staging live on `79.137.192.3` as of 2026-05-07. HTTP port 80 newly opened in re-triage, indicating ongoing operator development. `BellaMain.zip` packaged March 2026 — under two months before this analysis. Kits in circulation since at least 2024-04-18. |
-| Detection difficulty | 7/10 | Near-zero VT coverage across all kit RARs (0–2/62); panel ZIP not in VT at all. Aeza-hosted; standard abuse takedown channels are unlikely to succeed. Multi-tenant bulletproof co-tenancy creates false-positive risk on IP-blocking. Operator-fingerprint signatures (Wadanz functions, V5VgjLU0jsDe path, specific Telegram bot URI) are detectable with purposeful hunting. |
+| Detection difficulty | 7/10 | Near-zero VT coverage across all kit RARs (0-2/62); panel ZIP not in VT at all. Aeza-hosted; standard abuse takedown channels are unlikely to succeed. Multi-tenant bulletproof co-tenancy creates false-positive risk on IP-blocking. Operator-fingerprint signatures (Wadanz functions, V5VgjLU0jsDe path, specific Telegram bot URI) are detectable with purposeful hunting. |
 | Defender actionability | 8/10 | Concrete operator IP and 8 file hashes available for block lists; high-fidelity YARA/Sigma/Suricata signatures available in the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/); first-class single-string hunts (`V5VgjLU0jsDe`, `sifreleWadanz`, the hardcoded canary bot URI) with vanishingly low FP probability. |
 
 **Overall Risk Score: 7.6 / 10 — HIGH**
@@ -135,11 +135,11 @@ Because this is a first public disclosure, the IOCs and detection signatures in 
 
 ### For Technical Teams — Immediate Priorities
 
-- **Hunt web-access logs for URI path component `/V5VgjLU0jsDe/`** — the 12-character random admin directory name is the single most BellaMain-specific indicator. Any HTTP request containing this path on a non-BellaMain host is a high-fidelity hit. See [Section 5.2](#52-usom-blocklist-self-monitoring-the-distinctive-turkish-targeting-tradecraft) and the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/) for the Sigma rule.
+- **Hunt web-access logs for URI path component `/V5VgjLU0jsDe/`**: the 12-character random admin directory name is the single most BellaMain-specific indicator. Any HTTP request containing this path on a non-BellaMain host is a high-fidelity hit. See [Section 5.2](#52-usom-blocklist-self-monitoring-the-distinctive-turkish-targeting-tradecraft) and the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/) for the Sigma rule.
 - **Hunt any PHP corpus and open-directory archives for the function-name pair `sifreleWadanz` + `sifrecozWadanz`** — the developer pseudonym signature. Each external hit is potentially another panel by the same developer; cross-sample author pivots are the strongest forward-looking attribution lead.
 - **Block 79.137.192.3 and AS216246 Aeza space at the perimeter** and add the eight SHA256 file hashes (one panel ZIP + seven kit RARs) to EDR / mail-gateway file blocklists. See the [separate IOC feed](/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json) for the complete machine-readable inventory.
 - **Add the operator Telegram identity artifacts to any Telegram-aware threat intelligence feed** — the two operator group IDs (`-1002104835510`, `-1001817323952`) and the two admin Telegram UIDs (`5606327063`, `6594066326`) are operator pivots, not defensive controls; they enable cross-incident correlation if any partner platform can resolve Telegram UIDs to accounts.
-- **For US-regulated entities**, treat outbound connections to Aeza Group AS216246 (and the historical AS204603) as potentially OFAC-reportable per the July 1, 2025 SDN designation of Aeza Group LLC. The BellaMain panel was operating on already-sanctioned infrastructure throughout the April–May 2026 investigation window.
+- **For US-regulated entities**, treat outbound connections to Aeza Group AS216246 (and the historical AS204603) as potentially OFAC-reportable per the July 1, 2025 SDN designation of Aeza Group LLC. The BellaMain panel was operating on already-sanctioned infrastructure throughout the April-May 2026 investigation window.
 
 ---
 
@@ -178,7 +178,7 @@ Three findings from the parent investigation made BellaMain worth promoting to s
 ## 3. Business Risk Assessment
 {: .hl-tier-1}
 
-> **What this section is for.** Translating the technical findings in Sections 4–8 into the risk language a business reader needs: what data is at risk, who is at risk, and what the realistic impact looks like. This is not a generic threat-landscape overview — every claim below ties back to a specific BellaMain feature documented elsewhere in this report.
+> **What this section is for.** Translating the technical findings in Sections 4-8 into the risk language a business reader needs: what data is at risk, who is at risk, and what the realistic impact looks like. This is not a generic threat-landscape overview — every claim below ties back to a specific BellaMain feature documented elsewhere in this report.
 
 BellaMain is a **financially-motivated Turkish consumer credential-theft operation**. The risk surface is bounded — this is not a ransomware operator, an ICS/OT threat, a healthcare-targeting actor, or an enterprise-network intruder. The victims are individual Turkish consumers using everyday e-commerce, cargo-tracking, mobile-billing, and second-hand-marketplace platforms; the secondary victims are the seven Turkish brands whose marketplaces are impersonated.
 
@@ -206,12 +206,12 @@ This is the *complete* identity-theft + payment-fraud package from a single vict
 
 ### 3.3 Realistic Impact Scenarios
 
-BellaMain enables rapid full-identity exploitation within minutes of victim conversion — from payment-card fraud within hours to identity-theft outcomes over weeks. The scenarios below are anchored to BellaMain features documented in Sections 4–8, not generic phishing landscape claims.
+BellaMain enables rapid full-identity exploitation within minutes of victim conversion — from payment-card fraud within hours to identity-theft outcomes over weeks. The scenarios below are anchored to BellaMain features documented in Sections 4-8, not generic phishing landscape claims.
 
 | Scenario | Likelihood | Explanation |
 |---|---|---|
 | Individual Turkish consumer suffers payment-card fraud and bank-account fraud within hours of victim conversion | HIGH | The four-bot Telegram architecture fires immediate alerts to operator-controlled channels at Stage 1 (national ID + name + phone) and on bank-statement upload. Operator can act on stolen card and identity data within minutes of capture. |
-| Same victim suffers identity-theft outcomes (loan opened, fake bank account, SIM swap) over weeks to months | MODERATE–HIGH | TC Kimlik + full name + phone + bank-statement combination is the minimum data set for SIM-swap and identity-theft operations targeting Turkish financial services. The operator's separation of identity data (`vergibot`) from card data (`dekontbot`) suggests these data streams are likely monetized to different downstream buyers. |
+| Same victim suffers identity-theft outcomes (loan opened, fake bank account, SIM swap) over weeks to months | MODERATE-HIGH | TC Kimlik + full name + phone + bank-statement combination is the minimum data set for SIM-swap and identity-theft operations targeting Turkish financial services. The operator's separation of identity data (`vergibot`) from card data (`dekontbot`) suggests these data streams are likely monetized to different downstream buyers. |
 | Impersonated Turkish brand absorbs sustained customer-support load from fraud-victim complaints | HIGH | Sahibinden removed 400,000+ fake listings in 2024; documented Dolap WhatsApp-redirect phishing patterns; PTT and Turkcell have issued public fraud warnings. BellaMain extends these patterns at toolkit scale. |
 | Same operator scales across multiple sub-operators via referral-code self-registration | HIGH | `signup.php` requires a one-time-consume referral code minted by admin via Telegram `/refkod`. The architecture supports many sub-operators running independent campaigns against the same panel administrator — a takedown of one operator does not stop the panel. |
 | Standard "seize the server" forensic response recovers an empty database | HIGH | The `/yedek` → `/hesapsil` + `/kartsil` + `/girislogsil` Telegram workflow (documented in [Section 5.4](#54-truncate-evidence-destruction-on-demand-anti-forensics)) wipes the credential, card, and victim-log tables on operator command after exfiltrating a private copy to Telegram. Operators can execute this from a phone. |
@@ -226,7 +226,7 @@ BellaMain does not target ICS/OT, healthcare, or enterprise networks, and deploy
 - **Not a healthcare or medical-device threat.** No DICOM, HL7, PACS, or medical-platform targeting. No hospital, clinic, or healthcare-billing impersonation in the seven-kit set.
 - **Not an enterprise-network intrusion threat.** No endpoint malware deployment, no lateral movement, no privilege escalation, no Active Directory targeting. BellaMain is browser-based phishing against individual consumers — there is no host-malware payload at any stage of the victim funnel.
 - **Not a ransomware or destructive-payload threat.** The only "destruction" is operator-initiated TRUNCATE on the operator's own panel database for anti-forensic purposes. Victims do not experience data destruction.
-- **Not a known-named-actor operation.** First-capture documentation; no Tier 1–3 sources name BellaMain, `Wadanz`, or `@AresRS34` as a known operator. Tracked as UTA-2026-008.
+- **Not a known-named-actor operation.** First-capture documentation; no Tier 1-3 sources name BellaMain, `Wadanz`, or `@AresRS34` as a known operator. Tracked as UTA-2026-008.
 
 ---
 
@@ -244,7 +244,7 @@ BellaMain does not target ICS/OT, healthcare, or enterprise networks, and deploy
 | **Targeting** | Turkish consumers — kits replicate 7 named Turkish marketplaces. Anti-researcher canary text is Turkish. `date_default_timezone_set('Europe/Istanbul')` is hardcoded. USOM polling targets Turkey's CERT. Strong Turkey-resident or Turkey-targeting operator profile. |
 | **Monetization** | Direct: stolen Turkish payment cards (PAN/Expiry/CVV) and Turkish national identity numbers (TC Kimlik Numarası, 11-digit equivalent of US SSN). Indirect: 70/30 revenue split between operator and panel administrator. Payout currency: TRX (TRON) at live Binance TRXTRY rate. |
 | **C2 substrate** | Public Telegram Bot API (4 operator-configured bots per deployment + 1 hardcoded canary bot) + public Binance API for live rate lookup. No operator-controlled C2 servers beyond the panel itself. |
-| **Detection coverage** | Near-zero. Panel ZIP not in VT; kit RARs 0–2/62 on VT. `cryptone.bot` 0/92. The `79.137.192.3` IP scores 9/92 (driven by co-tenancy with BriansClub/CRD Club, not BellaMain itself). |
+| **Detection coverage** | Near-zero. Panel ZIP not in VT; kit RARs 0-2/62 on VT. `cryptone.bot` 0/92. The `79.137.192.3` IP scores 9/92 (driven by co-tenancy with BriansClub/CRD Club, not BellaMain itself). |
 | **UTA designation** | UTA-2026-008 (existing — extended by this report) |
 
 ### 4.1 Why This Is a PhaaS, Not a Single Phishing Kit
@@ -357,9 +357,9 @@ These three commands are available **only via Telegram**, **only to the admin**.
 
 The anti-forensic workflow is what makes this matter. TRUNCATE alone would be useless to the operator, since they would lose the data they want to monetize. The combination with `/yedek` (see Section 5.5) is what makes it work, because the operator first ships a private copy of the entire MySQL database to Telegram via `/yedek`, then issues `/hesapsil`, `/kartsil` and `/girislogsil` to wipe the live tables. The result is:
 
-- **Live panel database is now empty** — a server seizure or forensic image yields no stolen credentials, cards, or victim logs.
+- **Live panel database is now empty**: a server seizure or forensic image yields no stolen credentials, cards, or victim logs.
 - **Operator retains a complete copy** in their private Telegram chat history — out of reach of physical server forensics.
-- **Workflow is mobile-friendly** — the operator can execute the full snapshot-and-wipe from a phone in under a minute.
+- **Workflow is mobile-friendly**: the operator can execute the full snapshot-and-wipe from a phone in under a minute.
 
 This is purpose-built tradecraft. It is not a generic admin feature repurposed; the `/hesapsil` / `/kartsil` / `/girislogsil` naming uses Turkish verb stems (*sil* = delete) and targets the panel's stolen-data tables specifically. The standard adversary playbook of "rotate domain, abandon server" works fine against most phishing kits — BellaMain adds an explicit on-demand data-destruction layer on top of that, anticipating that operators may face hostile forensic acquisition rather than just abandonment.
 
@@ -819,7 +819,7 @@ This report addresses Cluster A (BellaMain panel and seven Turkish-marketplace p
 
 ### 9.5 Why Named-Actor Attribution Remains INSUFFICIENT
 
-Per CLAUDE.md's `ATTRIBUTION CONFIDENCE SCALE`, MODERATE named-actor attribution requires either one Tier-2 vendor's named-actor attribution, OR 1–2 infrastructure overlaps with a known actor + TTP similarity, OR partial evidence with notable gaps. None of these conditions are met:
+Per CLAUDE.md's `ATTRIBUTION CONFIDENCE SCALE`, MODERATE named-actor attribution requires either one Tier-2 vendor's named-actor attribution, OR 1-2 infrastructure overlaps with a known actor + TTP similarity, OR partial evidence with notable gaps. None of these conditions are met:
 
 - **Zero Tier-1 sources** (government, FBI/CISA/USOM advisory) name BellaMain or its operator.
 - **Zero Tier-2 sources** (Mandiant, CrowdStrike, Microsoft, Kaspersky, Talos, Unit 42) name this panel or operator.
@@ -923,9 +923,9 @@ The IOC feed at [`/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.
 
 Two IOCs in the feed carry explicit FP context that defenders should review before deploying as blocking signatures:
 
-- **`evotoptan.com`** — Resolved to `79.137.192.3` for a 22-minute window on 2026-03-31; currently on Namecheap shared hosting which serves many unrelated sites. Treat as MODERATE confidence and combine with kit-landing-page URL patterns before blocking.
-- **`https://www.usom.gov.tr/url-list.txt`** — Legitimate Turkish security tooling, threat-intel platforms, and individual researchers fetch this URL. Detection signatures on this fetch must be combined with another BellaMain artifact on the same host (see [Section 5.2](#52-usom-blocklist-self-monitoring-the-distinctive-turkish-targeting-tradecraft)).
-- **`https://api.binance.com/api/v3/ticker/price?symbol=TRXTRY`** — Legitimate crypto/finance applications query this endpoint. Not useful as a detection signature in isolation.
+- **`evotoptan.com`**: Resolved to `79.137.192.3` for a 22-minute window on 2026-03-31; currently on Namecheap shared hosting which serves many unrelated sites. Treat as MODERATE confidence and combine with kit-landing-page URL patterns before blocking.
+- **`https://www.usom.gov.tr/url-list.txt`**: Legitimate Turkish security tooling, threat-intel platforms, and individual researchers fetch this URL. Detection signatures on this fetch must be combined with another BellaMain artifact on the same host (see [Section 5.2](#52-usom-blocklist-self-monitoring-the-distinctive-turkish-targeting-tradecraft)).
+- **`https://api.binance.com/api/v3/ticker/price?symbol=TRXTRY`**: Legitimate crypto/finance applications query this endpoint. Not useful as a detection signature in isolation.
 
 ---
 
@@ -938,9 +938,9 @@ The complete detection content (YARA + Sigma + Suricata) is published as a separ
 
 | Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
 |---|---|---|---|
-| YARA | 3 | T1505.003, T1027.013, T1070, T1056, T1119 | LOW–MEDIUM |
-| Sigma | 5 | T1505.003, T1070, T1071.001, T1102.002, T1560, T1518.001 | LOW–MEDIUM |
-| Suricata | 4 | T1505.003, T1071.001, T1518.001, T1102.002 | LOW–MEDIUM |
+| YARA | 3 | T1505.003, T1027.013, T1070, T1056, T1119 | LOW-MEDIUM |
+| Sigma | 5 | T1505.003, T1070, T1071.001, T1102.002, T1560, T1518.001 | LOW-MEDIUM |
+| Suricata | 4 | T1505.003, T1071.001, T1518.001, T1102.002 | LOW-MEDIUM |
 
 *Some BellaMain capabilities (USOM polling, Binance rate query, 70/30 revenue split) generate high-FP-context network traffic that does not support production-ready detection rules in isolation — these are covered by source-level YARA rules where applicable and documented in [§11.4 Coverage Gaps](#114-coverage-gaps).*
 
@@ -971,8 +971,8 @@ Each is a single-string match requiring no additional context — any hit is a h
 The detection set covers the published BellaMain surface but does not address:
 
 - **Operator-configured Telegram bot tokens** (`adminbot` / `dekontbot` / `cekimbot` / `vergibot`) — these live in the panel MySQL database, are operator-customizable per deployment, and cannot be enumerated from source. Detection on these requires either a panel-DB compromise or honeypot acquisition.
-- **CryptOne production origin IP** — Cloudflare-fronts the `cryptone.bot` production deployment; passive DNS does not reveal the origin. Detection on Cloudflare-fronted infrastructure is limited to DNS queries against the known fronted domain.
-- **Forked BellaMain deployments with re-keyed admin path** — A fork-er who replaces `V5VgjLU0jsDe` with their own random string defeats the path-based hunt. The `sifreleWadanz` PHP-corpus pivot survives re-keying as long as `database/fonk.php` is unmodified.
+- **CryptOne production origin IP**: Cloudflare-fronts the `cryptone.bot` production deployment; passive DNS does not reveal the origin. Detection on Cloudflare-fronted infrastructure is limited to DNS queries against the known fronted domain.
+- **Forked BellaMain deployments with re-keyed admin path**: A fork-er who replaces `V5VgjLU0jsDe` with their own random string defeats the path-based hunt. The `sifreleWadanz` PHP-corpus pivot survives re-keying as long as `database/fonk.php` is unmodified.
 
 ---
 
@@ -983,15 +983,15 @@ This section organizes findings by confidence level so readers can quickly asses
 
 ### 12.1 DEFINITE (Direct Evidence, No Ambiguity)
 
-- **File hashes and file structure of `BellaMain.zip` and the seven kit RARs** — full SHA256 / MD5 / SHA1 for each; structural inventory of 65 PHP files across 14 directories; per-kit RAR structure and impersonated-brand mapping.
-- **Panel IP, ASN, JARM, server header, open-directory exposure** — `79.137.192.3` on AS216246; JARM `2ad2ad0002ad2ad00042d42d00000000f78d2dc0ce6e5bbc5b8149a4872356`; Apache 2.4.58 Win64 OpenSSL/3.1.3 PHP/8.2.12; open-directory listing observable.
-- **MySQL credential triple `jakartaxdw` / `dbjakartaxdw` / `W!@25#8Tb2gxq15`** — hardcoded across panel and all seven kits' `database/connect.php`.
-- **Admin directory `V5VgjLU0jsDe`, session cookie `2tUgyO@H9E!4CuQ`** — direct source observation.
-- **Hardcoded canary Telegram bot token `6797512084:AAGbJVoC...`** — directly observed across all 6 kits and the panel `dashboard.php`; revocation status (HTTP 401 on `getMe`) directly tested.
+- **File hashes and file structure of `BellaMain.zip` and the seven kit RARs**: full SHA256 / MD5 / SHA1 for each; structural inventory of 65 PHP files across 14 directories; per-kit RAR structure and impersonated-brand mapping.
+- **Panel IP, ASN, JARM, server header, open-directory exposure**: `79.137.192.3` on AS216246; JARM `2ad2ad0002ad2ad00042d42d00000000f78d2dc0ce6e5bbc5b8149a4872356`; Apache 2.4.58 Win64 OpenSSL/3.1.3 PHP/8.2.12; open-directory listing observable.
+- **MySQL credential triple `jakartaxdw` / `dbjakartaxdw` / `W!@25#8Tb2gxq15`**: hardcoded across panel and all seven kits' `database/connect.php`.
+- **Admin directory `V5VgjLU0jsDe`, session cookie `2tUgyO@H9E!4CuQ`**: direct source observation.
+- **Hardcoded canary Telegram bot token `6797512084:AAGbJVoC...`**: directly observed across all 6 kits and the panel `dashboard.php`; revocation status (HTTP 401 on `getMe`) directly tested.
 - **Telegram operator group IDs `-1002104835510` and `-1001817323952` and admin UIDs `5606327063`, `6594066326`** — direct source observation.
 - **USOM polling, TRUNCATE commands, `/yedek` MySQL backup-as-exfil, 70/30 revenue split, four-bot architecture, referral-code-gated self-registration** — directly observed in PHP source.
-- **OFAC SDN designation of Aeza Group LLC (2025-07-01)** — Tier-1 government source.
-- **`BellaMain.zip` is not present in VirusTotal** — direct VT MCP query confirmed.
+- **OFAC SDN designation of Aeza Group LLC (2025-07-01)**: Tier-1 government source.
+- **`BellaMain.zip` is not present in VirusTotal**: direct VT MCP query confirmed.
 
 ### 12.2 HIGH (Strong Evidence, Minor Gaps)
 
@@ -1016,7 +1016,7 @@ This section organizes findings by confidence level so readers can quickly asses
 
 ### 12.5 INSUFFICIENT (Cannot Assess)
 
-- **Named-actor attribution.** First-capture documentation; no Tier 1–3 sources name BellaMain, `Wadanz`, or `@AresRS34`.
+- **Named-actor attribution.** First-capture documentation; no Tier 1-3 sources name BellaMain, `Wadanz`, or `@AresRS34`.
 - **Number and identity of downstream BellaMain operator-customers.** The multi-operator licensing model is observable in source, but the live `kullanicilar` table was not acquired.
 - **Operator-configured Telegram bot tokens.** Stored in the panel MySQL database; not recoverable from source.
 - **CryptOne fake-exchange production content.** Cloudflare-fronted; full DOM-level analysis was out of scope.

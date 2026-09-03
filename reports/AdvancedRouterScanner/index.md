@@ -154,7 +154,7 @@ File 2: Service Enumeration
 - Role: Likely Stage 1 mapping before exploitation.  
 
 Timeline Analysis  
-- Scan cadence: Entries logged every 1–2 seconds → consistent threaded scanning.  
+- Scan cadence: Entries logged every 1-2 seconds → consistent threaded scanning.  
 - Sequential IPs: Many consecutive IPs in 117.x.x.x exploited → confirms systemic ISP misconfiguration.  
 - Stage separation: One results file shows service enumeration only, another shows Huawei exploitation → suggests modular workflow.  
 

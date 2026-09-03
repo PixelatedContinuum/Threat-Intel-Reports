@@ -63,7 +63,7 @@ This matters because EvilSoul-Engine weaponizes current-generation credential th
 **What was found — at a glance.**
 
 - A complete server-side stealer factory (Section 4): a builder that injects a customer's configuration into a stealer template, runs a multi-layer packer over it, compiles an Electron executable, and pushes the result to multiple file-hosting services and a Telegram bot — logging each build to a database and notifying the operator.
-- Three tiers of built stealer payload (Sections 5–7): the Node.js `stealer.js` source; the `299a2e7f` Socket.IO variant, which adds a full real-time remote access trojan (live screen streaming, remote control, and destructive commands) on top of the stealer; and the Maploot and Tinarox Electron twins, two game-masquerading builds that share one exfiltration stack. The `299a2e7f` tier's V8 bytecode defeated static analysis; its runtime behavior and decrypted source were recovered from observed execution (Section 9).
+- Three tiers of built stealer payload (Sections 5-7): the Node.js `stealer.js` source; the `299a2e7f` Socket.IO variant, which adds a full real-time remote access trojan (live screen streaming, remote control, and destructive commands) on top of the stealer; and the Maploot and Tinarox Electron twins, two game-masquerading builds that share one exfiltration stack. The `299a2e7f` tier's V8 bytecode defeated static analysis; its runtime behavior and decrypted source were recovered from observed execution (Section 9).
 - Current-generation credential theft (Section 5): Discord account takeover including recovery codes and billing; browser passwords, cookies, autofills, and payment cards across roughly 25 Chromium forks plus Firefox; and two independent Chrome App-Bound-Encryption bypasses — a Chrome DevTools Protocol cookie-theft path and a process-token-impersonation decryptor.
 - A commodity supply-chain component (Section 8): the operation adopted a public red-team tool (xaitax "ChromElevator") for its App-Bound-Encryption bypass — not novel tradecraft, but a live example of criminal reuse of published offensive tooling.
 - A dead staging box, a live operator (Section 3): the recovered directory is a torn-down staging instance — all its channels are dead — but the operator is concurrently active on the KAIDO product line (see the companion report). Killing this infrastructure does not remove the threat.
@@ -139,7 +139,7 @@ Victim targeting is opportunistic and consumer-facing, not sector-specific or ge
 
 > **Analyst note:** EvilSoul-Engine is a productized stealer *factory*, not a single payload. The recovered open directory is the server side: a builder that injects a customer's configuration into a stealer template, runs a packer over it, compiles an executable, and auto-distributes the result across file hosts and a Telegram bot. This section describes the shape of the operation — its server-side components and the tiers of payload it produces — so the capability deep-dives that follow have a map to sit on. Offensive internals (injector code, exact packer routines) are summarized at capability altitude, not reproduced.
 
-EvilSoul-Engine is best understood as two things at once: a stealer-builder MaaS platform (the server-side factory that customers pay to use) and the family of stealer payloads that factory produces. The recovered open directory is the factory; the payloads analyzed in Sections 5–8 are its output, recovered from separate sources (a builder tarball, VirusTotal samples, and observed execution of two builds).
+EvilSoul-Engine is best understood as two things at once: a stealer-builder MaaS platform (the server-side factory that customers pay to use) and the family of stealer payloads that factory produces. The recovered open directory is the factory; the payloads analyzed in Sections 5-8 are its output, recovered from separate sources (a builder tarball, VirusTotal samples, and observed execution of two builds).
 
 | Attribute | Assessment |
 |---|---|
@@ -164,7 +164,7 @@ The recovered directory's orchestrator (`index.js`) forks four services that tog
 | Web panel (`panel.exe`, pkg-Node) | The operator control plane — MongoDB, desktop screenshotting, WebSocket, Windows credential-store access, Discord integration, and archiving. |
 | Sender + Telegram bot | Exfiltration intake plus build delivery and notification. |
 
-The four unrecovered `static/*.exe` files (~37–40 MB each) were the factory's *output* — customer builds. Everything recovered is the *factory* itself. This distinction matters for detection: the factory components are internal to the operator, while the built payloads are what land on victim endpoints.
+The four unrecovered `static/*.exe` files (~37-40 MB each) were the factory's *output* — customer builds. Everything recovered is the *factory* itself. This distinction matters for detection: the factory components are internal to the operator, while the built payloads are what land on victim endpoints.
 
 ### The product tiers
 
@@ -260,9 +260,9 @@ A reality check belongs here. These three mechanisms are not equally novel. Mech
 
 Beyond credentials, the stealer targets stored financial and gaming value:
 
-- **Exodus cryptocurrency wallet** — both session data and a brute-force path against the wallet.
-- **Steam** — a hardcoded Steam Web API key (`440D7F4D810EF9298D25EDDF37C1F902`) is embedded in the Electron builds and drives account enrichment.
-- **Minecraft and Roblox** — session and account theft.
+- **Exodus cryptocurrency wallet**: both session data and a brute-force path against the wallet.
+- **Steam**: a hardcoded Steam Web API key (`440D7F4D810EF9298D25EDDF37C1F902`) is embedded in the Electron builds and drives account enrichment.
+- **Minecraft and Roblox**: session and account theft.
 
 Cryptocurrency wallet theft is direct, irreversible financial loss; there is no chargeback on a drained wallet. Gaming accounts (Steam in particular) carry real resale value in criminal markets and often store payment methods. The hardcoded Steam API key is also a durable detection anchor — it is byte-identical across the Maploot and Tinarox builds (Section 7), which is part of what proves those two builds share one operator.
 
@@ -443,8 +443,8 @@ All times are relative to process launch (T+00:00).
 | Time | Event |
 |---|---|
 | T+00:00 | The process launches (PID 6032). |
-| T+00:00–00:05 | The process unpacks its embedded native modules to a temporary `pkg` cache — a DPAPI credential-decryption binding and a SQLite database binding, both later used for browser-credential theft. |
-| T+00:05–00:10 | The process queries the Windows registry for the machine's cryptographic GUID (`REG QUERY … MachineGuid`) via a spawned `cmd.exe` child — the host-fingerprinting step behind the sample's machine-ID generation. |
+| T+00:00-00:05 | The process unpacks its embedded native modules to a temporary `pkg` cache — a DPAPI credential-decryption binding and a SQLite database binding, both later used for browser-credential theft. |
+| T+00:05-00:10 | The process queries the Windows registry for the machine's cryptographic GUID (`REG QUERY … MachineGuid`) via a spawned `cmd.exe` child — the host-fingerprinting step behind the sample's machine-ID generation. |
 | T+00:10+ | The sample opens a Socket.IO connection to `evilsoul[.]cc:80`. |
 | T+00:10+ (on connect) | The sample attempts its Defender/firewall/antivirus-suppression routine, writes a Startup-folder persistence script, and creates the hidden VBS/LNK watchdog chain described in Section 5.5. |
 | T+ (undetermined) | The sample attempts to resolve its exfiltration webhook by POSTing its license key to the relay endpoint (`198.1.195[.]210:3000/tralalero`, Section 6.2). |
@@ -525,7 +525,7 @@ Two caveats bound the attribution honestly. First, the primary public source for
 | Defense Evasion / T1036.004 | Masquerade Task or Service | `sc config` service masquerade; `Microsoft Corporation` hidden task |
 | Defense Evasion / T1564.001 | Hidden Files and Directories | `attrib +h` on `updatesystem.cmd`, `watcher.vbs`, startup `.lnk` |
 | Defense Evasion / T1027 | Obfuscated Files or Information | js-confuser → AES-GCM → XOR → base64; V8 bytecode (pkg-Node) |
-| Defense Evasion / T1497 | Virtualization/Sandbox Evasion | ~230-UUID `WMIC csproduct UUID` blocklist + anti-emulation stall + Defender 7–10 min timing delay (`stealer.js`) |
+| Defense Evasion / T1497 | Virtualization/Sandbox Evasion | ~230-UUID `WMIC csproduct UUID` blocklist + anti-emulation stall + Defender 7-10 min timing delay (`stealer.js`) |
 | Defense Evasion / T1055.012 | Process Hollowing | xaitax ABE tool: direct-syscall reflective hollowing (DEFINITE) |
 | Defense Evasion / T1620 | Reflective Code Loading | ABE tool ReflectiveLoader (no `LoadLibrary`) |
 | Credential Access / T1555.003 | Web Browsers | DPAPI + SQLite across ~25 Chromium forks + Firefox; CDP + ABE-v20 bypass (DEFINITE) |
@@ -636,12 +636,12 @@ The feed is formatted for direct ingestion into SIEM and EDR tooling (no defangi
 
 For a defender triaging quickly, these are the discriminating indicators — chosen because they are durable across the factory's per-build repacking:
 
-- **Operator-signature packer constant** — `see-you-in-the-hellwizard-1082@239$328927bA` (survives js-confuser; near-zero false-positive across all tiers).
-- **`299a2e7f` args-file suffix** — `evilsoulblockkstarjkjaksghjhsjkahjskjak81929ijsahsjkj` (near-zero false-positive; unique to the Socket.IO tier).
-- **Relay endpoint** — `198.1.195[.]210:3000/tralalero` (fixed webhook-resolution point).
-- **Backend domains** — `evilsoul[.]cc` (Socket.IO C2), `evilsoul[.]xyz` (Maploot/Tinarox backend).
-- **ABE-tool drop path** — `%TEMP%\executor\chromelevator.exe` and `chrome_decrypt.dll`.
-- **Shared Steam API key** — `440D7F4D810EF9298D25EDDF37C1F902` (byte-identical across Maploot/Tinarox).
+- **Operator-signature packer constant**: `see-you-in-the-hellwizard-1082@239$328927bA` (survives js-confuser; near-zero false-positive across all tiers).
+- **`299a2e7f` args-file suffix**: `evilsoulblockkstarjkjaksghjhsjkahjskjak81929ijsahsjkj` (near-zero false-positive; unique to the Socket.IO tier).
+- **Relay endpoint**: `198.1.195[.]210:3000/tralalero` (fixed webhook-resolution point).
+- **Backend domains**: `evilsoul[.]cc` (Socket.IO C2), `evilsoul[.]xyz` (Maploot/Tinarox backend).
+- **ABE-tool drop path**: `%TEMP%\executor\chromelevator.exe` and `chrome_decrypt.dll`.
+- **Shared Steam API key**: `440D7F4D810EF9298D25EDDF37C1F902` (byte-identical across Maploot/Tinarox).
 
 For reproduction, the SHA256 for the `299a2e7f` Socket.IO WebPanel tier is `299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c`, for Maploot it is `763303b69ad589bef248b66d1db93d5e567d9d60f95511806289289ff42a548e`, and for Tinarox it is `fe55908030318879f08b185b9c5b6e6f9d6f691154c361d60cce80162d844212`. The full set, with per-indicator confidence and recommended action of `BLOCK` or `HUNT`, is in the feed.
 
@@ -680,8 +680,8 @@ Two behaviors define this stage. First, the hardware-UUID and username checks ag
 
 The two anchor behaviors, both build-independent:
 
-- **CDP browser-relaunch cookie theft** — a browser binary spawned with `--remote-debugging-port`, `--headless`, and `--user-data-dir` (pointing at the real profile) by a non-browser, non-developer parent. This maps to Sysmon process-creation (Event ID 1) and network (Event ID 3) telemetry. It is the highest-value credential-access hunt because the parent-child and command-line combination is distinctive and does not vary between builds.
-- **Process-token-impersonation decryptor** — a Python process reading a script from standard input (`python -u -`), enabling the debug privilege, and opening a handle to `lsass.exe`. This maps to Sysmon process-creation (Event ID 1) plus process-access (Event ID 10). Because the script never touches disk, only the process-behavior chain catches it.
+- **CDP browser-relaunch cookie theft**: a browser binary spawned with `--remote-debugging-port`, `--headless`, and `--user-data-dir` (pointing at the real profile) by a non-browser, non-developer parent. This maps to Sysmon process-creation (Event ID 1) and network (Event ID 3) telemetry. It is the highest-value credential-access hunt because the parent-child and command-line combination is distinctive and does not vary between builds.
+- **Process-token-impersonation decryptor**: a Python process reading a script from standard input (`python -u -`), enabling the debug privilege, and opening a handle to `lsass.exe`. This maps to Sysmon process-creation (Event ID 1) plus process-access (Event ID 10). Because the script never touches disk, only the process-behavior chain catches it.
 
 Discord account theft produces a burst of `discord.com/api/v9/` enrichment requests from a non-browser process; browser theft produces direct reads of `Login Data`, `Cookies`, `Web Data`, and LevelDB stores (Sysmon Event ID 11 / file-access telemetry).
 
@@ -707,7 +707,7 @@ For teams deciding where to invest first, the report's five highest-value, most-
 4. **Microsoft-masquerade hidden scheduled task** — task authored as `Microsoft Corporation`, hidden, created by a non-system process (Windows EID 4698).
 5. **Operator-signature and relay network anchors** — the packer XOR constant in staged files (YARA); the `198.1.195[.]210:3000/tralalero` relay and `evilsoul[.]cc` Socket.IO handshake (network).
 
-The detection file's 6 Sigma rules and 6 Suricata signatures back these five priorities directly: Sigma covers hunts 2–4 (Defender/AV suppression, the LSASS-impersonation decryptor, and the Microsoft-masquerade scheduled task), and Suricata covers hunt 5's network anchors (the relay endpoint and the Socket.IO handshake).
+The detection file's 6 Sigma rules and 6 Suricata signatures back these five priorities directly: Sigma covers hunts 2-4 (Defender/AV suppression, the LSASS-impersonation decryptor, and the Microsoft-masquerade scheduled task), and Suricata covers hunt 5's network anchors (the relay endpoint and the Socket.IO handshake).
 
 ### 14.3 Confidence Summary
 
@@ -765,7 +765,7 @@ Section 16 details the four open research questions; this section lists the rema
 
 - **Dual scope.** The technical subject of this report is a *torn-down staging instance*; the actor assessment describes an *active operator* (the KAIDO product line is live — see the companion report). Both are true and are stated as such throughout.
 - **Two distinct actors.** The kit operator (`n_3_xl` / KAIDO, HIGH) and the tooling-lineage developer (`@breakingupslow` / EvilSoul-Engine, DEFINITE lineage) are separate people. The same-person equation was investigated and RETRACTED; it is not reintroduced here.
-- **No confirmed victims** — one operator test box, one unresolved possible-victim host (personal data redacted).
+- **No confirmed victims**: one operator test box, one unresolved possible-victim host (personal data redacted).
 - **Banking/PIX-fraud objective** is external-brand context for the KAIDO line, not a confirmed capability of the EvilSoul-Engine builds analyzed here.
 
 ---

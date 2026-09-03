@@ -825,54 +825,54 @@ This summary organizes every finding by confidence level, from DEFINITE down to 
 
 ### DEFINITE (Direct Evidence, No Ambiguity)
 
-- **GHOST kit identity and structure** — full kit captured from open directories on both customer hosts; kit-author self-identification in `ghost.sh` first-line comment.
+- **GHOST kit identity and structure**: full kit captured from open directories on both customer hosts; kit-author self-identification in `ghost.sh` first-line comment.
 - **libpam_cache.so byte-identical across customers** (MD5 296a800564111b0bad9fe63faf4e63ba). Single supply-chain root proof.
-- **27-string + 9-port hide-list inventory** — full enumeration from C source + binary string extraction.
-- **5-vector persistence chain** — all 5 vectors observed in `ghost.sh` `_install_persistence` function.
-- **`libpam_cache.so` is NOT a PAM module** — direct 98-line C source inspection refutes any PAM functionality (zero PAM symbols, zero authentication-flow code).
-- **Per-customer 17-byte config delta** — diff between Operator-A and Operator-B `ghost.sh` copies.
-- **OWNER Telegram bot 8415540095 baked into every customer deployment** — present in `min1.sh` on both customer hosts.
-- **Vova75Rus = GHOST kit author** — Hunt SQL pivot from `PIP_PAYLOAD_REPO` GitHub URL embedded in operator-B's Python scanner.
-- **Vova75Rus ≠ Operator-A** — wallet-match test (different cryptocurrencies, different pools, different destinations).
-- **GitHub T&S account-level suspension of Vova75Rus 2026-05-25** — 9 URLs return HTTP 404; Wayback Machine preserved.
-- **Operator-A is Russian-speaking** — 48 unique Cyrillic words in 1,472-line bash history.
-- **Operator-B is Russian-speaking** — 183 unique Cyrillic words in `New_scanner.py`.
-- **Operator-A owns MIRROR bot 8315596543** — token typed plaintext in bash history (OPSEC failure).
-- **AEZA Group AS210644 is OFAC/NCA sanctioned** — Tier-1 government source (2025-07-01 designation).
-- **min1.sh actively modified 2026-05-24** — 47 days post-Censys disclosure; live ongoing operations.
+- **27-string + 9-port hide-list inventory**: full enumeration from C source + binary string extraction.
+- **5-vector persistence chain**: all 5 vectors observed in `ghost.sh` `_install_persistence` function.
+- **`libpam_cache.so` is NOT a PAM module**: direct 98-line C source inspection refutes any PAM functionality (zero PAM symbols, zero authentication-flow code).
+- **Per-customer 17-byte config delta**: diff between Operator-A and Operator-B `ghost.sh` copies.
+- **OWNER Telegram bot 8415540095 baked into every customer deployment**: present in `min1.sh` on both customer hosts.
+- **Vova75Rus = GHOST kit author**: Hunt SQL pivot from `PIP_PAYLOAD_REPO` GitHub URL embedded in operator-B's Python scanner.
+- **Vova75Rus ≠ Operator-A**: wallet-match test (different cryptocurrencies, different pools, different destinations).
+- **GitHub T&S account-level suspension of Vova75Rus 2026-05-25**: 9 URLs return HTTP 404; Wayback Machine preserved.
+- **Operator-A is Russian-speaking**: 48 unique Cyrillic words in 1,472-line bash history.
+- **Operator-B is Russian-speaking**: 183 unique Cyrillic words in `New_scanner.py`.
+- **Operator-A owns MIRROR bot 8315596543**: token typed plaintext in bash history (OPSEC failure).
+- **AEZA Group AS210644 is OFAC/NCA sanctioned**: Tier-1 government source (2025-07-01 designation).
+- **min1.sh actively modified 2026-05-24**: 47 days post-Censys disclosure; live ongoing operations.
 
 ### HIGH (Strong Evidence, Minor Gaps)
 
 - **Vova75Rus NAMED-actor attribution (88%).** 8 evidence anchors covering coherent multi-year account history, Russian regional indicators, Censys corroboration, GitHub T&S action, and architectural fingerprints.
-- **4-tier supply chain model** — ruling result of ACH; alternatives refuted by wallet-match, OWNER/MIRROR architecture, byte-identical kit, and per-customer config delta.
-- **AEZA bulletproof hosting status** — OFAC Tier-1 source + 47-day post-disclosure unresponsiveness + multi-malware-family hosting pattern.
-- **Conflux 3-hop drain chain** — mining wallet → consolidator → exchange off-ramp; 106+ transactions; 6-month window.
-- **Operator-A consolidator → exchange off-ramp pattern** — 8 outgoing tx to single address with 781K total tx and 49M CFX seen.
-- **Operator-A wallet-rotation** — historical cfx:aasktcha... drains to same consolidator as current cfx:aaj5xb...
-- **PerformanceMonitor ComfyUI custom-node persistence** — kit-author Python framework component.
-- **Kit-sales business model** — OWNER bot + config delta + byte-identical binary + 5+ year kit-author GitHub presence.
+- **4-tier supply chain model**: ruling result of ACH; alternatives refuted by wallet-match, OWNER/MIRROR architecture, byte-identical kit, and per-customer config delta.
+- **AEZA bulletproof hosting status**: OFAC Tier-1 source + 47-day post-disclosure unresponsiveness + multi-malware-family hosting pattern.
+- **Conflux 3-hop drain chain**: mining wallet → consolidator → exchange off-ramp; 106+ transactions; 6-month window.
+- **Operator-A consolidator → exchange off-ramp pattern**: 8 outgoing tx to single address with 781K total tx and 49M CFX seen.
+- **Operator-A wallet-rotation**: historical cfx:aasktcha... drains to same consolidator as current cfx:aaj5xb...
+- **PerformanceMonitor ComfyUI custom-node persistence**: kit-author Python framework component.
+- **Kit-sales business model**: OWNER bot + config delta + byte-identical binary + 5+ year kit-author GitHub presence.
 
 ### MODERATE (Reasonable Evidence, Notable Gaps)
 
 - **Container-escape real-world execution success rate.** Code-level intent DEFINITE; runtime success depends on host configuration (cgroup version, Docker socket exposure, namespace isolation).
 - **Lateral movement / SSH** (T1021.004). Inferred from bash history `ssh` patterns; full lateral-movement chain not directly observed.
 - **Hysteria v2 bandwidth hijacking** (T1496.002). Capability present in code; primary observed use is C2-style covert remote access rather than bandwidth proxying.
-- **Operator-B reason for abandonment** — 4 alternatives (operator-quit, detection, kit-author intervention, pool-side payout failure); unresolved.
+- **Operator-B reason for abandonment**: 4 alternatives (operator-quit, detection, kit-author intervention, pool-side payout failure); unresolved.
 
 ### LOW (Weak Evidence)
 
 - **UTA-2026-016 / Operator-A attribution (LOW 65%).** Russian-speaking is DEFINITE; identity beyond Russian-speaking is INSUFFICIENT. Cannot link to real-world individual. Upgraded from LOW (60%) via four net-new sub-report evidence elements.
 - **UTA-2026-017 / Operator-B attribution (LOW 60%).** Same condition as Operator-A. Upgraded from LOW (55%) via the 183-Cyrillic-word finding.
-- **Zabaykalsky Krai geographic precision** — region indicator from handle "75" suffix matching Russian plate-code convention; coherent but low precision (a handle suffix is not a strong geographic anchor).
-- **Vova75Rus solo-vs-small-team discrimination** — coherent single-individual indicators present (1-follower account, personal-dedication page) but small-team hypothesis cannot be excluded from available evidence.
+- **Zabaykalsky Krai geographic precision**: region indicator from handle "75" suffix matching Russian plate-code convention; coherent but low precision (a handle suffix is not a strong geographic anchor).
+- **Vova75Rus solo-vs-small-team discrimination**: coherent single-individual indicators present (1-follower account, personal-dedication page) but small-team hypothesis cannot be excluded from available evidence.
 
 ### INSUFFICIENT (Not Enough Data to Assess)
 
-- **Hisana** — zero independent public threat intelligence; exists only via GHOST kit artifact references. Ecosystem context only.
-- **GHOST v6.0 "Domination Edition"** — referenced by Censys; no v6.0 sample captured in this investigation.
-- **ComfyUI exploitation specific CVE** — initial-access vector identified at the network/application surface level but the specific CVE / mechanism remains to be confirmed via detonation testing.
-- **Operator-A vs. Operator-B same-individual probability** — ~20% same-individual based on available evidence; UNRESOLVED at real-world identity level.
-- **Historical Customer C wallet (cfx:aasktcha...)** — ~80% probability Operator-A wallet rotation vs. ~20% distinct third customer; conclusive Conflux consolidator-behavior analysis pending.
+- **Hisana**: zero independent public threat intelligence; exists only via GHOST kit artifact references. Ecosystem context only.
+- **GHOST v6.0 "Domination Edition"**: referenced by Censys; no v6.0 sample captured in this investigation.
+- **ComfyUI exploitation specific CVE**: initial-access vector identified at the network/application surface level but the specific CVE / mechanism remains to be confirmed via detonation testing.
+- **Operator-A vs. Operator-B same-individual probability**: ~20% same-individual based on available evidence; UNRESOLVED at real-world identity level.
+- **Historical Customer C wallet (cfx:aasktcha...)**: ~80% probability Operator-A wallet rotation vs. ~20% distinct third customer; conclusive Conflux consolidator-behavior analysis pending.
 
 ---
 

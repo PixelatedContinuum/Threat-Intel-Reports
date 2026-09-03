@@ -125,7 +125,7 @@ This infrastructure consolidation represents a likely OPSEC failure by the threa
 
 **Historical Context:**
 
-Open-directory malware distribution is a documented Remcos tactic since 2021. Threat actors stage binaries on compromised servers, rotating infrastructure when defenders block it. Recent campaigns confirm ongoing use through 2025–2026.
+Open-directory malware distribution is a documented Remcos tactic since 2021. Threat actors stage binaries on compromised servers, rotating infrastructure when defenders block it. Recent campaigns confirm ongoing use through 2025-2026.
 
 ### Threat Level Assessment
 
@@ -144,7 +144,7 @@ Open-directory malware distribution is a documented Remcos tactic since 2021. Th
 
 ### Global Context
 
-Remcos RAT remains a critical and actively exploited threat in 2025–2026. Security research attributed 11% of all infostealer incidents in Q3 2025 to Remcos (CyberProof Research), with nearly 150 organizations globally impacted in Shipping/Logistics, Manufacturing, Industry, and Energy sectors (Proofpoint). Active campaigns span multiple continents — Ukraine, Colombia, South Korea, Turkey, and South Asia — and the threat actor spectrum ranges from nation-state APT groups (UAC-0184/Hive0156, Gamaredon, SideWinder) to cybercriminal operations. The January 2026 SHADOW#REACTOR campaign demonstrates continued Remcos evolution, using evasive multi-stage chains with LOLBins (MSBuild.exe).
+Remcos RAT remains a critical and actively exploited threat in 2025-2026. Security research attributed 11% of all infostealer incidents in Q3 2025 to Remcos (CyberProof Research), with nearly 150 organizations globally impacted in Shipping/Logistics, Manufacturing, Industry, and Energy sectors (Proofpoint). Active campaigns span multiple continents — Ukraine, Colombia, South Korea, Turkey, and South Asia — and the threat actor spectrum ranges from nation-state APT groups (UAC-0184/Hive0156, Gamaredon, SideWinder) to cybercriminal operations. The January 2026 SHADOW#REACTOR campaign demonstrates continued Remcos evolution, using evasive multi-stage chains with LOLBins (MSBuild.exe).
 
 ---
 
@@ -751,7 +751,7 @@ In total that is 27 distinct MITRE ATT&CK techniques across 10 tactics.
 Threat severity is CRITICAL.
 
 **Current Activity (2025-2026):**
-- **September–October 2025:** 11% of all infostealer incidents attributed to Remcos (CyberProof Research)
+- **September-October 2025:** 11% of all infostealer incidents attributed to Remcos (CyberProof Research)
 - **January 2026:** SHADOW#REACTOR campaign using evasive multi-stage chains with MSBuild.exe LOLBin
 - **Global Impact:** Nearly 150 organizations impacted in Shipping/Logistics, Manufacturing, Industry, and Energy sectors (Proofpoint)
 

@@ -105,7 +105,7 @@ The investigation surfaced a unified fraud business operating across six functio
 - A **brand-impersonation phishing library** of 467+ pre-staged subdomains under `inklens.ru` — Wells Fargo, AnyDesk (post-2024-breach brand), Outlook Web Access 2013, Jenkins CI, Microsoft Software Download Center, Apple Siri, Asana, Accenture, Tencent, Sina, Tele2, Adyen, and many more. All currently return 404; any one can be switched to a cloned login page in seconds.
 - An **apex chameleon decoy** at `inklens.co.uk` — the apex domain redirects to GitHub Pages then AmazonS3 so casual researchers see a benign cover, while operational subdomains (`fi1.`, `de1.`, `marzban.`, `api.`) resolve to operator-controlled Aeza Italy IP `185.221.196.118` and serve the actual back-office, VPN nodes, and admin panels.
 - A **fake crypto exchange (CryptOne)** at `cryptone.bot`, Cloudflare-fronted with Turnstile bot challenge — origin IP not recoverable from passive DNS.
-- **BEC burn-domain infrastructure** — three `.eu` domains (`vetcorbeanca.eu`, `vagtec.eu`, `petkovalegal.eu`) registered at Namecheap in a 14-day window in June 2023, each with self-served `mail.*`, `ns1.*`, `ns2.*` on Stark Industries Turkey, consistent `admin@<domain>.eu` SOA fingerprint, and operator-controlled periods of 6 days, ~12 months, and ~12 months respectively.
+- **BEC burn-domain infrastructure**: three `.eu` domains (`vetcorbeanca.eu`, `vagtec.eu`, `petkovalegal.eu`) registered at Namecheap in a 14-day window in June 2023, each with self-served `mail.*`, `ns1.*`, `ns2.*` on Stark Industries Turkey, consistent `admin@<domain>.eu` SOA fingerprint, and operator-controlled periods of 6 days, ~12 months, and ~12 months respectively.
 - **Centralized VPN/proxy fleet management** via a Marzban (Xray/V2Ray) admin panel at `marzban.inklens.co.uk` orchestrating regional VPN exit nodes (Finland, Germany, Greece) under multiple consumer brand fronts (Bikaf VPN, `bigass.monster`, unloki.ru with Outline VPN for Iran/RU/CN-targeted censorship circumvention).
 
 ### Why This Threat Is Significant
@@ -586,7 +586,7 @@ The progression — 2023 BEC burn domains → 2023 loader distribution → 2024 
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/inkognito-russian-vpn-phishing-185-221-196-118-20260516/inkognito-operator-timeline.svg" | relative_url }}" alt="10-event vertical timeline infographic spanning 2 years 11 months of operator activity from 2023-06-08 to 2026-04-17. Event 1 (orange origin band) 2023-06-08: vetcorbeanca.eu BEC burn domain first observed on Stark Industries TR 193.46.56.182, establishing the admin-at-domain.eu SOA fingerprint. Event 2 (orange) 2023-06-15 to 2024-06: vagtec.eu plus petkovalegal.eu added, all three same Namecheap registrar and Stark TR host, vagtec and petkovalegal operator-controlled for 12 months each. Event 3 (red long-term-anchor band) 2023-11-17: unloki.ru registered on the same Stark TR IP, beginning 2.5+ year IP stability. Event 4 (red) 2024-02-12: users.outline.unloki.ru live as censorship-circumvention Outline VPN. Event 5 (yellow regional-brand band) 2024-07-09: bigass.monster regional VPN brand front with Cloudflare apex and Aeza secondary host. Event 6 (red back-office-epoch band) 2025-05-17: 00000xtrading.ru EspoCRM back-office on dedicated Aeza Italy IP 185.221.196.118, survives July 2025 OFAC Aeza sanction. Event 7 (yellow) 2026-02-22: bikaf.ru first consumer-facing VPN MVP on Netts.ru then U1host DE. Event 8 (red Inkognito-brand-launch band) 2026-03-18: inklens.ru registered plus @inkconnectvpn Telegram channel first post on the same day. Event 9 (yellow back-office-rotation band) 2026-04-06 to 2026-04-07: fi1.inklens.co.uk takes over from 00000xtrading.ru with 30-hour overlap, both serving from the same Aeza IT IP, 00000xtrading.ru retired Apr 2026. Event 10 (deep red current-epoch band) 2026-04-17: inkconnect.ru registered with INK VPN site fully operational within 11 minutes, REGRU registrar then Let's Encrypt SSL then Timeweb 176.124.211.174 then Cloudflare front, Russian SBP T-Pay card payment integration live. Footer detection anchors: admin-at-domain.eu SOA pattern, X-Admin-Token header, unloki.ru to Stark TR 2.5y stability, Aeza IT 185.221.196.118 EspoCRM back-office.">
-  <figcaption><em>Figure 3: The full operator timeline reconstructed from passive DNS, WHOIS history, and reverse-IP data. The progression from BEC burn domains (orange, 2023) through long-term VPN anchors (red, 2023–2024) to back-office maturity (red, 2025) to flagship brand launch (deep red, 2026) shows a single operator's three-year evolution. Two key resilience moments — surviving the May 2025 Stark Industries EU sanction and the July 2025 OFAC Aeza Group designation without infrastructure migration — establish the operator's deliberate sanctions-evasion posture.</em></figcaption>
+  <figcaption><em>Figure 3: The full operator timeline reconstructed from passive DNS, WHOIS history, and reverse-IP data. The progression from BEC burn domains (orange, 2023) through long-term VPN anchors (red, 2023-2024) to back-office maturity (red, 2025) to flagship brand launch (deep red, 2026) shows a single operator's three-year evolution. Two key resilience moments — surviving the May 2025 Stark Industries EU sanction and the July 2025 OFAC Aeza Group designation without infrastructure migration — establish the operator's deliberate sanctions-evasion posture.</em></figcaption>
 </figure>
 
 ### 6.2 Apex chameleon-decoy tradecraft — `inklens.co.uk`
@@ -869,12 +869,12 @@ The following 10 identity artifacts are **fingerprints for cross-investigation t
 
 ### 9.5 What Would Upgrade Named-Actor Attribution
 
-- **Russian underground forum identity** — a known XSS / Exploit forum handle tied to the Inkognito brand or any operator pseudonyms. Resolution would require paid Russian-underground-forum TI access (KELA, Flashpoint, Intel 471, Recorded Future).
-- **SBP / T-Pay merchant ID lookup** — would resolve the legal entity behind the Inkognito brand portfolio. Russian payment-processor merchant search is the highest-value pivot.
+- **Russian underground forum identity**: a known XSS / Exploit forum handle tied to the Inkognito brand or any operator pseudonyms. Resolution would require paid Russian-underground-forum TI access (KELA, Flashpoint, Intel 471, Recorded Future).
+- **SBP / T-Pay merchant ID lookup**: would resolve the legal entity behind the Inkognito brand portfolio. Russian payment-processor merchant search is the highest-value pivot.
 - **Russian regulator action** naming Inkognito (Roskomnadzor / Russian MoI / federal financial-crime).
-- **Tier-2 vendor report** — a single Tier-2 vendor publication documenting the Inkognito brand portfolio would raise named-actor attribution to MODERATE.
+- **Tier-2 vendor report**: a single Tier-2 vendor publication documenting the Inkognito brand portfolio would raise named-actor attribution to MODERATE.
 - **Internet-wide host/service search engine favicon-hash pivot** from the Inkognito hooded-figure-with-eye logo PNG to other operator-controlled sites carrying the same favicon.
-- **Telegram identity recovery** — Telegram metadata correlation against the `@inkconnectvpn` channel admin is a candidate research path; resolution probability is unknown without attempting the lookup.
+- **Telegram identity recovery**: Telegram metadata correlation against the `@inkconnectvpn` channel admin is a candidate research path; resolution probability is unknown without attempting the lookup.
 
 **Key Assumptions Check — high-sensitivity assumptions underlying current confidence levels:**
 
@@ -939,7 +939,7 @@ Findings organized by confidence level (per CLAUDE.md CONFIDENCE LEVELS framewor
 
 ### 11.3 MODERATE (Reasonable Evidence)
 
-- **Distinct-actor (Inkognito-only) attribution at 78%** — qualitatively assessed via ACH; not DEFINITE because no legal-entity identification, no underground-forum cross-reference, no Tier-1/2/3 prior public TI on the Inkognito brand portfolio.
+- **Distinct-actor (Inkognito-only) attribution at 78%**: qualitatively assessed via ACH; not DEFINITE because no legal-entity identification, no underground-forum cross-reference, no Tier-1/2/3 prior public TI on the Inkognito brand portfolio.
 - `bigass.monster` operator-controlled status — drop-and-recapture pattern post-Aug-2025 lapse; post-recapture WHOIS is "REDACTED FOR PRIVACY" and could plausibly be a different actor. Aeza-hosted `ger.bigass.monster` sub-resolution is consistent with the operator pattern but not conclusive.
 - `divar-irantop.shop` linkage to the operator — brief Aeza co-residency evidence; naming theme strongly Iran-targeting but linkage is not conclusive.
 - T1584.001 (Compromise Infrastructure: Domains) — drop-catching documented but full chain-of-control proof for each drop-caught domain is incomplete.
@@ -953,7 +953,7 @@ Findings organized by confidence level (per CLAUDE.md CONFIDENCE LEVELS framewor
 
 ### 11.5 INSUFFICIENT (Cannot Assess)
 
-- **Named-actor attribution** — no public TI; first-capture documentation. Cannot attribute Inkognito to a publicly named actor at this time.
+- **Named-actor attribution**: no public TI; first-capture documentation. Cannot attribute Inkognito to a publicly named actor at this time.
 - Operator legal entity behind Russian SBP / T-Pay merchant account — would require Russian payment-processor merchant ID lookup.
 - CryptOne (`cryptone.bot`) origin IP — full Cloudflare fronting prevents passive DNS resolution. CT-log pre-fronting investigation not completed in this evidence cycle.
 - Specific spearphishing payloads from the June 2023 `.eu` BEC burn-domain campaign — infrastructure documented, but the actual email contents and victims are not recovered.
@@ -1027,22 +1027,22 @@ The operator's underground forum identity (if any) — alias on XSS, Exploit.in,
 
 ### 13.3 Tier-2 Vendor Reports
 
-- **TRM Labs (2025)** — "Aeza Group: OFAC Designation Analysis" — coverage of the July 1, 2025 Aeza OFAC sanctions.
-- **Recorded Future Insikt Group (2025)** — Stark Industries sanctions report covering the 12-day pre-announcement lead time and Worktitans rebrand mechanics.
-- **Silent Push (2024)** — FIN7 domain-aging analysis (~4,000 aged domains documented).
-- **SentinelOne / Validin (May 2025)** — FreeDrain report (~38,048 subdomains documented).
-- **Microsoft Security Blog (March 2026)** — Storm-2561 reporting documenting fake VPN installer abuse.
-- **Hunt.io** — Russian malicious infrastructure mapping (Timeweb AS9123 ranks highest by C2/phishing density per 90-day analysis with ~311 C2 servers).
-- **Cisco Talos** — Gamaredon network footprints (referenced for cross-comparison; not Inkognito-specific).
-- **GreyNoise (2025)** — Stark Industries "Shell Game" reporting on sanctions evasion via Worktitans rebrand.
-- **Proofpoint** — GitHub phishing abuse reporting (referenced for the GitHub Pages apex chameleon-decoy comparison).
+- **TRM Labs (2025)**: "Aeza Group: OFAC Designation Analysis" — coverage of the July 1, 2025 Aeza OFAC sanctions.
+- **Recorded Future Insikt Group (2025)**: Stark Industries sanctions report covering the 12-day pre-announcement lead time and Worktitans rebrand mechanics.
+- **Silent Push (2024)**: FIN7 domain-aging analysis (~4,000 aged domains documented).
+- **SentinelOne / Validin (May 2025)**: FreeDrain report (~38,048 subdomains documented).
+- **Microsoft Security Blog (March 2026)**: Storm-2561 reporting documenting fake VPN installer abuse.
+- **Hunt.io**: Russian malicious infrastructure mapping (Timeweb AS9123 ranks highest by C2/phishing density per 90-day analysis with ~311 C2 servers).
+- **Cisco Talos**: Gamaredon network footprints (referenced for cross-comparison; not Inkognito-specific).
+- **GreyNoise (2025)**: Stark Industries "Shell Game" reporting on sanctions evasion via Worktitans rebrand.
+- **Proofpoint**: GitHub phishing abuse reporting (referenced for the GitHub Pages apex chameleon-decoy comparison).
 
 ### 13.4 Tier-3 Sources
 
-- **KrebsOnSecurity (May 2024)** — "Stark Industries Iron Hammer" reporting on the original Stark Industries infrastructure.
-- **KrebsOnSecurity (September 2025)** — "Stark Industries Evades EU Sanctions" reporting on the Worktitans rebrand.
-- **BleepingComputer (January 2024)** — AnyDesk breach reporting (relevant context for `anydesk.inklens.ru` brand-impersonation targeting post-2024-breach).
-- **BleepingComputer (May 2025)** — EU sanctions Stark Industries reporting.
+- **KrebsOnSecurity (May 2024)**: "Stark Industries Iron Hammer" reporting on the original Stark Industries infrastructure.
+- **KrebsOnSecurity (September 2025)**: "Stark Industries Evades EU Sanctions" reporting on the Worktitans rebrand.
+- **BleepingComputer (January 2024)**: AnyDesk breach reporting (relevant context for `anydesk.inklens.ru` brand-impersonation targeting post-2024-breach).
+- **BleepingComputer (May 2025)**: EU sanctions Stark Industries reporting.
 
 ### 13.5 Open-Source Tooling Context
 

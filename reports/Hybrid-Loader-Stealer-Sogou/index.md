@@ -476,7 +476,7 @@ The PE analysis tool (peframe) provided additional context on the malware’s st
 - Port 443: HTTPS – Active, last seen 11/15/2025  
 - Port 993: TLS/IMAP – Active, last seen 11/16/2025  
 - Port 995: TLS/POP3 – Active, last seen 11/15/2025  
-- Ports 2082–2095: HTTP/TLS (Apache HTTPD / misc, cPanel-style ports) – Active, last seen 11/09–11/16/2025  
+- Ports 2082-2095: HTTP/TLS (Apache HTTPD / misc, cPanel-style ports) – Active, last seen 11/09-11/16/2025  
 - Port 5465: SSH (OpenBSD OpenSSH 7.4) – Active, last seen 11/14/2025  
 
 **Impact (149.50.136.243):**  
@@ -747,9 +747,9 @@ It acts as the initial dropper and staging ground.
 - Requests elevated permissions (admin rights).  
 - Establishes persistence via registry run keys and shortcut modification.  
 - Extracts and drops embedded files:  
-  - **SGDownload.exe** – downloader, file staging.  
-  - **beacon_sdk.dll** – loader DLL, packed/obfuscated, anti‑debugging.  
-  - **UserExportDll.dll** – export module, persistence routines.  
+  - **SGDownload.exe**: downloader, file staging.  
+  - **beacon_sdk.dll**: loader DLL, packed/obfuscated, anti‑debugging.  
+  - **UserExportDll.dll**: export module, persistence routines.  
 - Prepares environment for execution.  
 
 It ensures persistence and sets the stage for the main payload to run without interruption.  
@@ -765,9 +765,9 @@ This is the true malicious agent, a multi-purpose stealer and RAT.
 - Manipulates access tokens for privilege escalation.  
 - Establishes redundant persistence mechanisms (e.g., UserExportDll.dll registry/file manipulation).  
 - Initiates networking actions through:  
-  - **SGCurlHelper.dll** – networking helper, HTTP/WinHTTP APIs, proxy awareness.  
-  - **userNetSchedule.exe** – scheduler orchestrator, PKI manipulation, DigiCert endpoints.  
-  - **UrlSignatureV.dat** – signature database, Base64‑like encoded strings for URL validation/obfuscation.  
+  - **SGCurlHelper.dll**: networking helper, HTTP/WinHTTP APIs, proxy awareness.  
+  - **userNetSchedule.exe**: scheduler orchestrator, PKI manipulation, DigiCert endpoints.  
+  - **UrlSignatureV.dat**: signature database, Base64‑like encoded strings for URL validation/obfuscation.  
 - Exfiltrates stolen data to disposable domains/cloud IPs.  
 - Disguises traffic as certificate checks or Sogou updates.  
 - Maintains long‑term RAT‑like control.  
@@ -781,8 +781,8 @@ It reinforces legitimacy and lowers suspicion.
 
 **Key Behaviors:**
 - Deploys theme resources to mimic genuine software:  
-  - **pandorabox.cupf** – dialogs/buttons, Photoshop metadata.  
-  - **PersonalCenter.cupf** – larger UI package, branded “Personal Center” interface.  
+  - **pandorabox.cupf**: dialogs/buttons, Photoshop metadata.  
+  - **PersonalCenter.cupf**: larger UI package, branded “Personal Center” interface.  
 - Ensures user perceives installer as genuine software.  
 
 It strengthens the masquerade, making malicious activity look like normal application behavior.  

@@ -56,8 +56,8 @@ Each finding below names its home section, where the evidence and confidence lab
 
 - **A multi-component AI-augmented credential mill** built and operated by one Russian-native actor — the LLM password mutator, stolen-key validation pipeline, unauthenticated stdlib C2, paid breach-data integration, and Telegram IO bot are dissected in §4.
 - **A four-node GCP cloud overlay tied to a victim-named project.** Operator-owned project `[victim-named GCP project — redacted]` (named after the victim — a low-OPSEC tell of dedicated focus), three instances, and one service account linking them (§4.7).
-- **A Cloudflare Tunnel topology under operator-owned `tralalarkefe.com`** — operator-owned zone, captured full-admin API token, and six tunnel subdomains (two of them victim-side RDP/SSH) plus one ephemeral bootstrap tunnel (§4.5).
-- **Three AI Operator Handoff Documents** — operator-authored Markdown addressed to a Gemini CLI consumer, structurally distinct from the `GEMINI.md` jailbreak-persistence class Trend Micro documented (§4.2, §5.3).
+- **A Cloudflare Tunnel topology under operator-owned `tralalarkefe.com`**: operator-owned zone, captured full-admin API token, and six tunnel subdomains (two of them victim-side RDP/SSH) plus one ephemeral bootstrap tunnel (§4.5).
+- **Three AI Operator Handoff Documents**: operator-authored Markdown addressed to a Gemini CLI consumer, structurally distinct from the `GEMINI.md` jailbreak-persistence class Trend Micro documented (§4.2, §5.3).
 - **An active HIPAA-regulated US healthcare compromise** (US dental practice) with full local NTLM hash inventory, OpenDental MySQL root hash, and operator-controlled RDP+SSH tunnels operational at capture time (§4.6). HC3 plus direct practice notification is the Tier-0 disclosure path.
 
 ### Why This Threat Is Significant
@@ -112,7 +112,7 @@ Five immediate priorities for SOC analysts, threat hunters, and healthcare-secto
 4. **Hunt for the LLM credential mutation YARA signature.** YARA rule covers the `"Act as an expert red-team password analyst"` + Gemini API import + `AI_SNIPER_GOODS.txt` / `AI_ADMIN_MUTANTS.txt` output filename pattern. Endpoint AV/EDR file scan plus git-hook pre-commit scan on internal CI/CD pipelines (in case this tooling spreads).
 5. **Hunt for AI Operator Handoff Document YARA signature on developer workstations and server-class hosts.** YARA rule covers Markdown files with session-start load directive co-occurring with C2 endpoint references or credential-table indicators. Higher-risk locations: `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class Linux hosts.
 
-Sections 4–7 carry the technical depth (capabilities, static, dynamic, MITRE ATT&CK). Section 9 covers the cross-vendor naming reconciliation and four-axis operator profile; Section 13 documents the calibration notes and retractions, including the Trend Micro prior-art reframing.
+Sections 4-7 carry the technical depth (capabilities, static, dynamic, MITRE ATT&CK). Section 9 covers the cross-vendor naming reconciliation and four-axis operator profile; Section 13 documents the calibration notes and retractions, including the Trend Micro prior-art reframing.
 
 ---
 
@@ -448,11 +448,11 @@ The first platform is AEZA AS210644 at `213.165.51.115`, hosting the operator wo
 
 **Platform 2 — Google Cloud Platform (three instances + two projects):**
 
-- **Project `[victim-named GCP project — redacted]`** — operator-named-after-victim. Operator-controlled. The project name is the single largest OPSEC failure in the campaign — it ties the operator's GCP account directly to the specific victim.
-- **Project `elated-gizmo-491112-k0`** — operator's existing GCP project. The service account `geminicli@elated-gizmo-491112-k0.iam.gserviceaccount.com` is billing-account-associated and is the law enforcement attribution path via Google Cloud Trust & Safety.
-- **Instance `34.34.57.141` (NL — Ghost Proxy)** — Operator proxy. All GCP logging on this instance is explicitly disabled — deliberate OPSEC investment on a cloud instance, demonstrating operator awareness of cloud-provider telemetry as a defender resource.
-- **Instance `35.192.41.201` (US — Mailpit)** — Mail test instance.
-- **Instance `34.34.81.129` (NL — Windows C2)** — Windows-side C2 instance.
+- **Project `[victim-named GCP project — redacted]`**: operator-named-after-victim. Operator-controlled. The project name is the single largest OPSEC failure in the campaign — it ties the operator's GCP account directly to the specific victim.
+- **Project `elated-gizmo-491112-k0`**: operator's existing GCP project. The service account `geminicli@elated-gizmo-491112-k0.iam.gserviceaccount.com` is billing-account-associated and is the law enforcement attribution path via Google Cloud Trust & Safety.
+- **Instance `34.34.57.141` (NL — Ghost Proxy)**: Operator proxy. All GCP logging on this instance is explicitly disabled — deliberate OPSEC investment on a cloud instance, demonstrating operator awareness of cloud-provider telemetry as a defender resource.
+- **Instance `35.192.41.201` (US — Mailpit)**: Mail test instance.
+- **Instance `34.34.81.129` (NL — Windows C2)**: Windows-side C2 instance.
 
 **Platform 3 — Cloudflare (custom domain `tralalarkefe.com` + 6 tunnel subdomains + zone `6d415863...18f47af5` + full-admin API token):** Detailed in subsection 4.5. The operator-controlled API token provides Cloudflare PSIRT a single subpoena-grade lever.
 
@@ -491,7 +491,7 @@ I hold this DEFINITE, with the JWT captured, the nuclei tool and its custom temp
 **Commodity service 2 — nuclei (ProjectDiscovery):**
 
 - **38.7 MB nuclei mega-hunt log** captured in operator filesystem — covers ~30,000 WordPress sites scanned for `wp-login.php` accessibility and admin enumeration
-- **Operator-bespoke template `wp_admin_hunter.yaml`** — custom nuclei template authored by the operator (or sourced from a commodity template marketplace) targeting WordPress admin discovery and credential validation
+- **Operator-bespoke template `wp_admin_hunter.yaml`**: custom nuclei template authored by the operator (or sourced from a commodity template marketplace) targeting WordPress admin discovery and credential validation
 - **Why this matters:** nuclei is a legitimate open-source tool with extensive legitimate use cases; the operator's mega-hunt log size and the operator-bespoke template are the operational-context signals that distinguish offensive use from defensive use
 
 The third commodity service is downstream stealer logs. Operator scripts reference stealer-log market formats, the RedLine, Lumma and Meduza log directory conventions, consistent with the operator purchasing pre-stolen credential logs from infostealer markets as upstream input to the credential mill. The hybrid resource model layers those commodity logs into the LLM-personalized mutation pipeline, where stolen logs provide the `Most Recent Password from dump:` input, the LLM mutator generates the 20 current candidate mutations, and the WordPress validation rig tests them against roughly 30,000 sites.
@@ -645,12 +645,12 @@ I hold this DEFINITE, extracted from 122 Gemini CLI session JSONs in the Phase 1
 
 The operator's informal Russian idiom registers across handoff documents, source-code comments, and Gemini CLI session JSONs:
 
-- **`Бро`** — informal "Bro" (Russian Cyrillic register; not the English transliteration)
-- **`Братух`** — informal "Bro" diminutive, addressed to Gemini in handoff documents (the operator addresses the AI as a peer)
-- **`Погнали`** — "Let's go" idiom
-- **`тачка`** — informal "machine" / "computer" slang
-- **`Комп Доктора`** — "Doctor's computer" (the operator's reference to the healthcare-victim compromised host)
-- **`Формат: Имя тачки - Юзер - Пароль`** — "Format: machine name - user - password" — the operator's credential ledger format header, re-pasted across 4+ Gemini sessions
+- **`Бро`**: informal "Bro" (Russian Cyrillic register; not the English transliteration)
+- **`Братух`**: informal "Bro" diminutive, addressed to Gemini in handoff documents (the operator addresses the AI as a peer)
+- **`Погнали`**: "Let's go" idiom
+- **`тачка`**: informal "machine" / "computer" slang
+- **`Комп Доктора`**: "Doctor's computer" (the operator's reference to the healthcare-victim compromised host)
+- **`Формат: Имя тачки - Юзер - Пароль`**: "Format: machine name - user - password" — the operator's credential ledger format header, re-pasted across 4+ Gemini sessions
 - Cyrillic-English technical bilingualism throughout source comments
 
 These strings do not Google-Translate cleanly — the idiom register is consistent with a native Russian speaker rather than translated content. This is the basis for the DEFINITE confidence on the Russian-native attribution dimension (Section 9).
@@ -668,11 +668,11 @@ I hold this DEFINITE, with 122 session JSONs captured.
 
 The operator interacts with Gemini CLI in multi-turn, multi-hour, multi-thread sessions. Phase 11 analysis identified 122 distinct session JSONs spanning 2026-03-19 through 2026-03-30 with multiple operational threads:
 
-- **Credential mill development sessions** — operator iterating on `ai_sniper_brute.py` and `check_keys.py` with Gemini assistance
-- **C2 development sessions** — operator iterating on `c2_server.py` with Gemini assistance (this is where the `/api/v1/get_results` mismatch likely originated — operator added client-side call in one session, planned to implement server-side in next session, did not complete)
-- **Infrastructure operation sessions** — operator using Gemini for Cloudflare and GCP configuration changes
-- **Disinformation posting sessions** — operator using Gemini to draft `@americanpatriotus` channel content (Session 2026-03-25T18-27 captured with anti-fraud / JD-Vance themed content)
-- **Session handoff via Markdown documents** — operator uses the three AI Operator Handoff Documents to re-prime new sessions with prior operational state
+- **Credential mill development sessions**: operator iterating on `ai_sniper_brute.py` and `check_keys.py` with Gemini assistance
+- **C2 development sessions**: operator iterating on `c2_server.py` with Gemini assistance (this is where the `/api/v1/get_results` mismatch likely originated — operator added client-side call in one session, planned to implement server-side in next session, did not complete)
+- **Infrastructure operation sessions**: operator using Gemini for Cloudflare and GCP configuration changes
+- **Disinformation posting sessions**: operator using Gemini to draft `@americanpatriotus` channel content (Session 2026-03-25T18-27 captured with anti-fraud / JD-Vance themed content)
+- **Session handoff via Markdown documents**: operator uses the three AI Operator Handoff Documents to re-prime new sessions with prior operational state
 
 The session pattern is the **operator-runs-it-with-AI-assist** model — not the model where the AI runs autonomously without operator turn-by-turn guidance. The operator retains decision authority; the AI provides drafting, code-suggestion, and configuration-recommendation throughput.
 
@@ -856,8 +856,8 @@ The single highest-signal action for every environment is to block `*.tralalarke
 
 | Rule Type | Count | MITRE Techniques Covered | Overall FP Risk |
 |---|---|---|---|
-| YARA | 8 | T1587, T1059.006, T1027, T1071.001, T1547.001 | LOW–MEDIUM |
-| Sigma | 12 | T1071.001, T1547.001, T1090.004, T1110.003, T1555.005, T1003.002, T1041, T1102 | LOW–MEDIUM |
+| YARA | 8 | T1587, T1059.006, T1027, T1071.001, T1547.001 | LOW-MEDIUM |
+| Sigma | 12 | T1071.001, T1547.001, T1090.004, T1110.003, T1555.005, T1003.002, T1041, T1102 | LOW-MEDIUM |
 | Suricata | 6 | T1071.001, T1090.004, T1572, T1568 | LOW |
 
 **Total: 26 rules across 3 detection layers.**
@@ -905,13 +905,13 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 
 ### DEFINITE (Direct Evidence)
 
-- **Operator infrastructure inventory** — 4 IPs, 6 Cloudflare Tunnel subdomains, 2 GCP projects, 1 GCP service account, 1 Cloudflare full-admin API token, 1 GitHub PAT, AntiPublic.one JWT (`jti:44298` / `sub:31703`), 40+ Gemini API keys
-- **Operator-built tooling source code** — `c2_server.py`, `console.py`, `ai_sniper_brute.py`, `check_keys.py`, `mass_wp_mutator.py`, `quantum_patriot.py`
-- **Three AI Operator Handoff Documents on disk** — `C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`
+- **Operator infrastructure inventory**: 4 IPs, 6 Cloudflare Tunnel subdomains, 2 GCP projects, 1 GCP service account, 1 Cloudflare full-admin API token, 1 GitHub PAT, AntiPublic.one JWT (`jti:44298` / `sub:31703`), 40+ Gemini API keys
+- **Operator-built tooling source code**: `c2_server.py`, `console.py`, `ai_sniper_brute.py`, `check_keys.py`, `mass_wp_mutator.py`, `quantum_patriot.py`
+- **Three AI Operator Handoff Documents on disk**: `C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`
 - **`/api/v1/get_results` server-side non-implementation** (iterative-development evidence)
-- **The healthcare-victim environment inventory** — AD domain `[victim AD domain — redacted]`, 2 subnets, 6 local NTLM hashes, OpenDental MySQL root hash, 2 active Cloudflare Tunnel access subdomains
+- **The healthcare-victim environment inventory**: AD domain `[victim AD domain — redacted]`, 2 subnets, 6 local NTLM hashes, OpenDental MySQL root hash, 2 active Cloudflare Tunnel access subdomains
 - **GCP project `[victim-named GCP project — redacted]` operator-named-after-victim**
-- **Multi-source operator identification** — UTA-2026-012 = Trend Micro `bandcampro` cross-identification via 5-point IOC match (4-of-4 IPs + `@americanpatriotus` channel)
+- **Multi-source operator identification**: UTA-2026-012 = Trend Micro `bandcampro` cross-identification via 5-point IOC match (4-of-4 IPs + `@americanpatriotus` channel)
 - **Russian-native operator linguistic register** (Phase 11 analysis of 122 Gemini CLI session JSONs; informal idiom register; Cyrillic-English technical bilingualism)
 - **`@americanpatriotus` Telegram channel operator co-location** (same operator infrastructure)
 - **AEZA AS210644 hosting + OFAC sanction status** (2025-07-01 effective)
@@ -919,7 +919,7 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 
 ### HIGH (Strong Evidence, Minor Gaps)
 
-- **AI Operator Handoff Documents as novel artifact class** — three exemplars structurally distinct from `GEMINI.md` jailbreak persistence
+- **AI Operator Handoff Documents as novel artifact class**: three exemplars structurally distinct from `GEMINI.md` jailbreak persistence
 - **LLM-Personalized Credential Mutation as first source-code analysis with verbatim prompt** (operational pattern independently confirmed by Trend Micro)
 - **Operator-Built Unauthenticated Python-stdlib C2 with iterative-development evidence**
 - **Four-axis operator profile** (Russian-native DEFINITE; mid-tier selective sophistication HIGH; active campaign with concurrent R&D HIGH; hybrid resource model HIGH)
@@ -938,16 +938,16 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 
 ### LOW (Weak / Circumstantial Evidence)
 
-- **Operator team size** — solo vs. small criminal team (Trend Micro frames as "One Man" but cannot be definitive)
+- **Operator team size**: solo vs. small criminal team (Trend Micro frames as "One Man" but cannot be definitive)
 - **`@americanpatriotus` amplification network coordination** with documented Russian-operated Telegram conduit networks (DFRLab / OpenMinds catalog) — not analyzed in current report
 
 ### INSUFFICIENT (Cannot Assess from Current Evidence)
 
-- **Real-world identity of UTA-2026-012 / bandcampro** — bandcampro is a Trend Micro vendor tracking handle, not a real-name identification
+- **Real-world identity of UTA-2026-012 / bandcampro**: bandcampro is a Trend Micro vendor tracking handle, not a real-name identification
 - **Discrimination Russian-resident vs Russian-diaspora**
 - **Tier-1 government attribution**
 - **3+ Tier-2 vendor convergence** (currently 2)
-- **Named-actor attribution** — no publicly named individual is supportable from current evidence
+- **Named-actor attribution**: no publicly named individual is supportable from current evidence
 
 ---
 

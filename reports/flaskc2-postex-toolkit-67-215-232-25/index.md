@@ -196,9 +196,9 @@ A capability-detection tool (capa) summarizes the behavior cleanly: "act as TCP 
 The MSSQL SQL-CLR command-execution and reverse-shell technique is public and well documented; `cmd_exec.dll` is a custom *build* of it, not a new capability. The lineage is explicit in the public record:
 
 - **Metasploit `mssql_clr_payload` module** (Rapid7) — the canonical automated implementation: it builds a CLR assembly from hex-encoded DLL bytes, registers a stored procedure, and calls it to execute a payload [Source: github.com/rapid7/metasploit-framework, module `mssql_clr_payload`].
-- **NetSPI, "Attacking SQL Server CLR Assemblies"** — a comprehensive walkthrough of CLR assembly import, a `cmd_exec` stored-procedure deployment, `ALTER ASSEMBLY` persistence, and detection via `sys.assemblies` queries; the described `cmd_exec` implementation matches the operator's build's functionality exactly [Source: netspi.com/blog].
-- **`evi1ox/MSSQL_BackDoor`** — an open-source .NET CLR backdoor for MSSQL using hex-encoding for fileless deployment and the `UNSAFE` permission set [Source: github.com/evi1ox/MSSQL_BackDoor].
-- **HackingArticles, "MSSQL for Pentester: CLR Assembly"** — an operator-oriented walkthrough of CLR assembly deployment for RCE and persistence [Source: hackingarticles.in].
+- **NetSPI, "Attacking SQL Server CLR Assemblies"**: a comprehensive walkthrough of CLR assembly import, a `cmd_exec` stored-procedure deployment, `ALTER ASSEMBLY` persistence, and detection via `sys.assemblies` queries; the described `cmd_exec` implementation matches the operator's build's functionality exactly [Source: netspi.com/blog].
+- **`evi1ox/MSSQL_BackDoor`**: an open-source .NET CLR backdoor for MSSQL using hex-encoding for fileless deployment and the `UNSAFE` permission set [Source: github.com/evi1ox/MSSQL_BackDoor].
+- **HackingArticles, "MSSQL for Pentester: CLR Assembly"**: an operator-oriented walkthrough of CLR assembly deployment for RCE and persistence [Source: hackingarticles.in].
 
 The report's position, stated plainly: this component is **detection-valuable, not novel**. Its operator-specific banner string is a strong YARA anchor, and its architectural evasion is a genuine defender gap — but the underlying technique has been documented and tooled for years.
 
@@ -325,8 +325,8 @@ SeImpersonatePrivilege is granted by default to Windows service accounts, includ
 | JuicyPotato(NG) | DCOM CLSID manipulation | Native, prebuilt (hash-match) | Pre-Win10 1809 / Server 2016; the NG fork extends support |
 | PrintSpoofer | Print spooler named pipe | Native, prebuilt (hash-match) | Win10, Server 2016/2019 |
 | RoguePotato | NTLM relay via external OXID resolver | Native, prebuilt (hash-match) | Win10 1809+, Server 2019 |
-| EfsPotato | MS-EFSR coercion (EFS RPC pipes) | .NET, operator-recompiled | Win10 1803–22H2, Server 2019/2022 |
-| GodPotato | COM-based (IRemUnknown2) | .NET, operator-recompiled | Server 2012–2022, Win 8–11 |
+| EfsPotato | MS-EFSR coercion (EFS RPC pipes) | .NET, operator-recompiled | Win10 1803-22H2, Server 2019/2022 |
+| GodPotato | COM-based (IRemUnknown2) | .NET, operator-recompiled | Server 2012-2022, Win 8-11 |
 | SweetPotato | Combined Potato omnibus | .NET, operator-recompiled | Multiple Windows generations |
 
 The operator also staged the RoguePotato OXID-resolver helper (`RogueOxidResolver.exe`, native prebuilt), which RoguePotato requires. Staging all six variants plus the helper is consistent with targeting a range of Windows builds without knowing the target patch level in advance — GodPotato is the most current and broadly compatible option, but carrying the full set ensures a working variant on any target. Microsoft has progressively mitigated the print-spooler vector (degrading PrintSpoofer reliability on patched systems), while GodPotato, EfsPotato, and RoguePotato remain effective across current Windows versions per public community research (MODERATE — sourced from community documentation and repository update histories, not a formal vendor statement).
@@ -365,7 +365,7 @@ The operation runs on a **single host**, `67.215.232[.]25`, with no sibling infr
 
 The host is **IP-only** — VirusTotal records zero DNS resolutions, meaning no domain has ever pointed to it. IP-level blocking therefore fully covers the known infrastructure; DNS-layer blocking is neither required nor sufficient. The HTTP-only posture also eliminates the TLS, JARM, and certificate-transparency pivot dimensions entirely — this is a confirmed absence, not a gap in analysis.
 
-**Two service eras** appear in the host's port history. An earlier era (2025-11-21 to 2025-12-23) ran an apparent multi-port HTTP forward-proxy service across roughly 35 ports in the 5222–5455 range, all returning `407 Proxy Authentication Required`, plus a Prometheus exporter. The current campaign era (2026-03-09 onward) brought up the Flask listeners and, two days later, the open-directory toolkit. Whether the proxy-era tenant and the current operator are the same party is **LOW/INSUFFICIENT** and is deliberately excluded from the campaign IOCs — ColoCrossing recycles IPs across tenants, and the proxy-era ports (5222–5455) are excluded from the feed for that reason.
+**Two service eras** appear in the host's port history. An earlier era (2025-11-21 to 2025-12-23) ran an apparent multi-port HTTP forward-proxy service across roughly 35 ports in the 5222-5455 range, all returning `407 Proxy Authentication Required`, plus a Prometheus exporter. The current campaign era (2026-03-09 onward) brought up the Flask listeners and, two days later, the open-directory toolkit. Whether the proxy-era tenant and the current operator are the same party is **LOW/INSUFFICIENT** and is deliberately excluded from the campaign IOCs — ColoCrossing recycles IPs across tenants, and the proxy-era ports (5222-5455) are excluded from the feed for that reason.
 
 The operational tempo is telling. The infrastructure went live 2026-03-09 and the toolkit was staged by 2026-03-11, while the operator's .NET build cluster, EfsPotato on 03-20, `cmd_exec.dll` on 03-21 and Rubeus on 03-23, postdates the infrastructure standing up, which is a stand-up-then-tool workflow. The C2 has been **idle for the entire three-month observation window**, with `active_servers=0` and `completed_commands=0` as of 2026-06-12, and the operator made no observable opsec change after the 2026-04-09 public disclosure of the panel. The SSH host-key triplet, ed25519 `aa5372bf…`, RSA `0d244225…` and ECDSA `e9c481fe…`, is retained as a future monitoring anchor for operator infrastructure reuse rather than as a blocking IOC.
 
@@ -458,7 +458,7 @@ The indicator counts run to 15 SHA256 file hashes, 1 DEFINITE bespoke backdoor a
 | URL | `http://67.215.232[.]25:8080/api/report` · `…/api/heartbeat` | HIGH | Flask C2 POST-only beacon endpoints |
 | imphash | `f9a28c45…`, `545a8124…`, `959a8304…`, `576d6e02…`, `567531f0…` | HIGH | JuicyPotato / PrintSpoofer / RoguePotato / RogueOxidResolver / nc64 — survive renaming |
 
-**Deliberately excluded from the feed** (documented so the exclusion is auditable): the proxy-era ports 5222–5455 on this IP (Nov–Dec 2025 tenancy — different-tenant/reallocation risk); two benign VirusTotal downloaded files (`autodiscover.xml` and the `:1337` directory-index page); `inostage.ru` / `panel.inostage.ru` (public-tool co-host noise); and the generic .NET runtime imphashes (`f34d5f2d…`, `dae02f32…`, non-discriminating managed-PE stubs). The `Aatrox` and `Ghost小组` strings are included as detection anchors but carry an explicit note that they are commodity-reuse signals, not operator identity.
+**Deliberately excluded from the feed** (documented so the exclusion is auditable): the proxy-era ports 5222-5455 on this IP (Nov-Dec 2025 tenancy — different-tenant/reallocation risk); two benign VirusTotal downloaded files (`autodiscover.xml` and the `:1337` directory-index page); `inostage.ru` / `panel.inostage.ru` (public-tool co-host noise); and the generic .NET runtime imphashes (`f34d5f2d…`, `dae02f32…`, non-discriminating managed-PE stubs). The `Aatrox` and `Ghost小组` strings are included as detection anchors but carry an explicit note that they are commodity-reuse signals, not operator identity.
 
 ---
 
@@ -564,7 +564,7 @@ These are documented limits of passive, OSINT-and-static analysis of an idle hos
 - AlteredSecurity — BadSuccessor post-patch analysis. Tier 3.
 
 **Tooling and webshell context:**
-- GhostPack/Rubeus README (Will Schroeder); Splunk Security Content (Rubeus detection). Tier 2–3.
+- GhostPack/Rubeus README (Will Schroeder); Splunk Security Content (Rubeus detection). Tier 2-3.
 - itm4n — "PrintSpoofer" (2020). Tier 3.
 - HHS HC3 — "The Godzilla Webshell" analyst note (2024-11-12); Trend Micro Godzilla research; Malpedia Godzilla Webshell entry. Tier 2.
 - HackTricks — SeImpersonate / Potato suite documentation. Tier 3.

@@ -334,7 +334,7 @@ Host and behavioral anchors.
 |---|---|---|---|
 | File path | `%AppData%\<subdir>\svchost.exe` | HIGH | Install location (name masquerade). Hunt this path alongside parent-process lineage: legitimate `svchost.exe` runs only from `System32`/`SysWOW64` and is spawned only by `services.exe` — an `%AppData%` path or a non-`services.exe` parent is high-signal. |
 | Named pipe | `\\.\pipe\kaido_dxgi_<8 hex>` | HIGH | DXGI HVNC frame transport |
-| Behavior | Deletion of the file's own `:Zone.Identifier` stream within 2–3s of launch | DEFINITE | Mark-of-the-Web bypass (Sysmon Event ID 23) |
+| Behavior | Deletion of the file's own `:Zone.Identifier` stream within 2-3s of launch | DEFINITE | Mark-of-the-Web bypass (Sysmon Event ID 23) |
 | Cert (embedded) | Pinned client cert, SHA1 `0acd8c90641e6e8b085aaf5a541c7ac050a65a4a` | DEFINITE | Quasar authentication key, identical across all three builds |
 | Passive infra | `179.43.150[.]50` | MODERATE | Current `kaidoo[.]com[.]br` A-record; AS51852 Private Layer (CH) — passive only |
 
@@ -465,7 +465,7 @@ This report draws on the tiered source hierarchy defined in the project's source
 - Static reverse engineering and decompilation of three KAIDO RAT samples (`c7542e82…`, `385d20ca…`, `02294476…`) — namespace structure, embedded configuration, crypto parameters.
 - Behavioral analysis of sample `c7542e82…`, confirming beacon behavior, the Mark-of-the-Web self-deletion, and the command-and-control staging gate.
 
-**Tier 1–2 — structured platform data (queried directly during the investigation):**
+**Tier 1-2 — structured platform data (queried directly during the investigation):**
 
 - VirusTotal — file reports, detection counts, sibling-sample clustering, behavioral sandbox correlation.
 - Hunt.io — TLS-certificate and JARM/JA4X fleet enrichment (`certificates.inventory` SQL corpus), ASN/hosting attribution, threat-actor catalog check (zero entries for "KAIDO," "Quasar-fork," or the operator handles as of 2026-06-27).

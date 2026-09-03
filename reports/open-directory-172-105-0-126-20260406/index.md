@@ -229,7 +229,7 @@ Extracted configuration via the config extraction tool:
 | Staging URI | `/updates` (GET) | Task poll endpoint |
 | Submission URI | `/submit` (POST) | Bulk-data exfil endpoint |
 | Sleep interval | 5,000 ms | 5-second beacon interval |
-| Jitter | 10% | Effective range: 4,500–5,500 ms |
+| Jitter | 10% | Effective range: 4,500-5,500 ms |
 | Watermark | `0` | Cracked/license-stripped identifier |
 | Config fields total | 10 of ~40 standard | Dramatically trimmed minimal config |
 | Spawn-to process | `%windir%\sysnative\rundll32.exe` | Standard CS post-exploitation masquerade |
@@ -241,7 +241,7 @@ The config is trimmed. With only 10 config fields against the standard 25 to 40-
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-extraction.png" | relative_url }}" alt="Terminal output from the 1768.py config extraction tool showing the decoded Cobalt Strike 3.x configuration including watermark value zero, C2 server address 172.105.0.126 on port 8443, staging URI /updates, submission URI /submit, GET and POST verb assignments, Mozilla user-agent string, and license-id zero confirming a cracked build.">
-  <figcaption><em>Figure 1: Cobalt Strike configuration extracted via 1768.py showing watermark=0 (cracked), the /qz99 staging URI on port 8443, and the CS version 3 identifier. Only 10 of the standard 25–40+ config fields are populated — a deliberately trimmed configuration that reduces the beacon's detectable surface area.</em></figcaption>
+  <figcaption><em>Figure 1: Cobalt Strike configuration extracted via 1768.py showing watermark=0 (cracked), the /qz99 staging URI on port 8443, and the CS version 3 identifier. Only 10 of the standard 25-40+ config fields are populated — a deliberately trimmed configuration that reduces the beacon's detectable surface area.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -288,7 +288,7 @@ On novelty, redirecting the export directory RVA to existing NOP and INT3 paddin
 
 Function `FUN_180015838` (2,188 bytes) in `beacon_patched.x64.dll` is a complete bytecode VM implementing the CS Malleable C2 transform system. It reads operator-configurable bytecode from the config blob and transforms HTTP request components (headers, URI, query parameters) per the profile.
 
-**17 opcodes identified** — publicly available reverse engineering has documented 7–8 opcodes from this VM (usualsuspect.re, Tier 3 / C2; cross-referenced with official CS documentation). The 17-opcode count represents extended documentation coverage for this component, derived from this analysis and not previously documented publicly.
+**17 opcodes identified** — publicly available reverse engineering has documented 7-8 opcodes from this VM (usualsuspect.re, Tier 3 / C2; cross-referenced with official CS documentation). The 17-opcode count represents extended documentation coverage for this component, derived from this analysis and not previously documented publicly.
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-transform-vm-dispatch.png" | relative_url }}" alt="Decompilation of the Malleable C2 transform VM dispatch function FUN_180015838 showing local variables for opcode processing, loop control structures, and the conditional branching that routes execution through 17 distinct opcode handlers for transforming HTTP request components.">
@@ -677,14 +677,14 @@ The GET-based exfiltration from the DLL beacon is the critical detection gap: co
       <td>T1027.002</td>
       <td>Obfuscated Files: Software Packing</td>
       <td class="confirmed">HIGH</td>
-      <td>PE overlays (43–62 KB) on loader EXEs contain encoded shellcode blobs; XOR 0x2E config packing in DLL beacon (static analysis)</td>
+      <td>PE overlays (43-62 KB) on loader EXEs contain encoded shellcode blobs; XOR 0x2E config packing in DLL beacon (static analysis)</td>
     </tr>
     <tr>
       <td>Defense Evasion</td>
       <td>T1027.009</td>
       <td>Embedded Payloads</td>
       <td class="confirmed">HIGH</td>
-      <td>PE overlays (43–62 KB) appended to loader EXEs contain COFF metadata / shellcode blobs</td>
+      <td>PE overlays (43-62 KB) appended to loader EXEs contain COFF metadata / shellcode blobs</td>
     </tr>
     <tr>
       <td>Defense Evasion</td>
@@ -876,7 +876,7 @@ DomainTools Iris passive DNS export reveals this IP has been continuously alloca
 | ceres.woodengatecider.ca | Oct 2023 – Sep 2024 | ~337 days | Canadian artisan cider brand — legitimate prior tenant |
 | cap03.ddns.net | May 2024 – Sep 2024 | ~85 days | Dynamic DNS (No-IP); purpose ambiguous from PDNS alone; prior tenant |
 | jessicahelpdesk.work | Apr 14, 2025 | 1 day | SUSPICIOUS — helpdesk social engineering lure pattern; prior tenant |
-| *.pr.edgegap.net (~30 entries) | May 12–20, 2025 | ~9 days | Edgegap game server routing pool — definitively benign prior tenant |
+| *.pr.edgegap.net (~30 entries) | May 12-20, 2025 | ~9 days | Edgegap game server routing pool — definitively benign prior tenant |
 | coolify.jbforge.ca | Dec 2025 – Apr 2, 2026 | ~99 days | SIGNIFICANT — see below |
 
 `coolify.jbforge.ca` held this IP from December 2025 to 2 April 2026, pointing at a self-hosted Coolify installation, Coolify being an open-source self-hosted PaaS developers use to manage application deployments, comparable to Heroku. The subdomain structure fits a Canadian developer using the handle "jbforge" exposing a Coolify admin panel on a personal subdomain. The domain was last seen 2026-04-02, four days before analysis. The most parsimonious reading is sequential tenancy, where the jbforge tenant's lease ended or they migrated and the threat actor subsequently rented the same IP. The alternative, that jbforge IS the threat actor using Coolify as a backend management interface, I assess as LOW likelihood given the open directory and debug-loader OPSEC failures seen throughout the kit. There is no direct attribution impact, and this is a separable OSINT lead, where WHOIS on `jbforge.ca` would confirm tenant distinctness.
@@ -893,16 +893,16 @@ In summary on timing, the C2 operator's tenancy on this IP began at an undated p
 
 **Software targeted or abused:**
 
-- **Microsoft Windows** — primary platform for all custom EXEs and loader chain; all C-language components Windows-only
-- **Python runtime** — cross-platform beacon delivery vector; `beacon_universal.py` targets any Python 3.x installation (Windows, Linux, macOS)
-- **Windows BCrypt / CNG API** — cryptographic subsystem abused for AES-128-CBC and HMAC-SHA256 in beacon.exe
-- **Windows WinHTTP / WinInet** — HTTP transport stack used by the CS DLL beacon for C2 communication
-- **GCC/MinGW toolchain** — required on target for BOF runtime compilation via `bof_executor.py`; an unusual environmental dependency that constrains deployment to targets with developer tools installed
+- **Microsoft Windows**: primary platform for all custom EXEs and loader chain; all C-language components Windows-only
+- **Python runtime**: cross-platform beacon delivery vector; `beacon_universal.py` targets any Python 3.x installation (Windows, Linux, macOS)
+- **Windows BCrypt / CNG API**: cryptographic subsystem abused for AES-128-CBC and HMAC-SHA256 in beacon.exe
+- **Windows WinHTTP / WinInet**: HTTP transport stack used by the CS DLL beacon for C2 communication
+- **GCC/MinGW toolchain**: required on target for BOF runtime compilation via `bof_executor.py`; an unusual environmental dependency that constrains deployment to targets with developer tools installed
 
 **Provider risk:**
 
-- **Linode / Akamai Connected Cloud (AS63949)** — the C2 hosting provider; a legitimate mainstream commercial provider, not bulletproof. Formal abuse reporting is available at `linode.com/legal-abuse/`. The provider is subject to US and Canadian jurisdiction, both cooperative Five Eyes members, enabling law enforcement takedown requests.
-- **Port 8443** — non-standard HTTPS port that may bypass legacy proxy inspection rules or policies that only inspect traffic on port 443
+- **Linode / Akamai Connected Cloud (AS63949)**: the C2 hosting provider; a legitimate mainstream commercial provider, not bulletproof. Formal abuse reporting is available at `linode.com/legal-abuse/`. The provider is subject to US and Canadian jurisdiction, both cooperative Five Eyes members, enabling law enforcement takedown requests.
+- **Port 8443**: non-standard HTTPS port that may bypass legacy proxy inspection rules or policies that only inspect traffic on port 443
 
 There are no supply chain implications. No trojanized legitimate software was identified and no supply chain delivery vector is in evidence. The discovery method, an open directory found infrastructure-first, gives no visibility into intended delivery mechanisms.
 
@@ -989,7 +989,7 @@ In report language, the threat actor behind this toolkit cannot be attributed to
 - check_ntdll.py detects EDR hooks by reading raw ntdll.dll at RVA 0x316FE (code analysis)
 - bof_executor.py runtime GCC compilation producing python.exe → gcc.exe chain and temporary files (code analysis)
 - dbg_loader.exe entry-point discovery via `FF D0 → CC` patch and RAX recovery from VEH context (code analysis)
-- PE overlays (43–62 KB) on loader EXEs contain COFF metadata/shellcode blobs (static analysis)
+- PE overlays (43-62 KB) on loader EXEs contain COFF metadata/shellcode blobs (static analysis)
 - CS 3.x DLL sourced from pre-existing cracked distribution (MSVC 2012 toolchain — not GCC 15)
 - Development window: late 2025 or 2026 (GCC 15 release constraint)
 
@@ -1140,7 +1140,7 @@ This section documents what has been identified at a triage level. Full analysis
 
 **Additional custom OpenStrike beacons (7 files):**
 
-Seven new GCC-compiled beacon executables matching the original toolkit's MinGW-w64 build environment: `beacon_cs_debug.exe`, `beacon_debug.exe`, `beacon_ip.exe`, `beacon_min.exe`, `beacon_patched.exe`, `beacon_x64_patched.exe`, and `beacon_x64_sniff.exe`. The naming conventions suggest iterative development variants — debug builds, architecture-specific builds, and a network sniffing variant. These are high-priority for follow-up analysis as they may reveal additional OpenStrike capabilities beyond what was documented in Sections 2–3.
+Seven new GCC-compiled beacon executables matching the original toolkit's MinGW-w64 build environment: `beacon_cs_debug.exe`, `beacon_debug.exe`, `beacon_ip.exe`, `beacon_min.exe`, `beacon_patched.exe`, `beacon_x64_patched.exe`, and `beacon_x64_sniff.exe`. The naming conventions suggest iterative development variants — debug builds, architecture-specific builds, and a network sniffing variant. These are high-priority for follow-up analysis as they may reveal additional OpenStrike capabilities beyond what was documented in Sections 2-3.
 
 **Full Cobalt Strike beacon suite (36 DLLs across 6 protocol families):**
 
@@ -1286,7 +1286,7 @@ Development path (dbg_loader.exe — entry-point discovery):
 - DomainTools: Iris passive DNS export for 172.105.0.126 (2026-04-06)
 
 **Tier 3 (Community):**
-- usualsuspect.re: "Cobalt Strike's Malleable C2 Under the Hood" (7–8 opcodes documented; cross-referenced with official CS docs)
+- usualsuspect.re: "Cobalt Strike's Malleable C2 Under the Hood" (7-8 opcodes documented; cross-referenced with official CS docs)
 - [hunt.io](https://hunt.io/): AttackCapture system documentation
 - GBHackers: "Python-Based PyRAT Emerges as Cross-Platform Threat" (2025)
 

@@ -112,7 +112,7 @@ For ongoing monitoring, watch for reinfection via bulk ScreenConnect links, sinc
 | Family                     | Type                              | Samples                            | Confidence                  | C2                               |
 | -------------------------- | --------------------------------- | ---------------------------------- | --------------------------- | -------------------------------- |
 | **XWorm V5.6**             | RAT + Ransomware module           | 9 (7 stubs + builder + loader)     | DEFINITE                    | 185.49.126.140:5000              |
-| **PureRAT v4.1.9**         | MaaS RAT (ProtoBuf/TLS)           | 11 (9 Stage 1 + Stage 2 + Stage 3) | HIGH (88% — 11 signatures)  | 185.49.126.140:56001–56003       |
+| **PureRAT v4.1.9**         | MaaS RAT (ProtoBuf/TLS)           | 11 (9 Stage 1 + Stage 2 + Stage 3) | HIGH (88% — 11 signatures)  | 185.49.126.140:56001-56003       |
 | **PureHVNC stub**          | Hidden VNC                        | 2 (GUI + victim stub xh.exe)       | DEFINITE                    | 185.49.126.140:8000              |
 | **Raven RAT**              | Custom Delphi RAT (~60% complete) | 2 (stub template + operator panel) | DEFINITE                    | Template placeholder (port 8777) |
 | **ScreenConnect v23.2.9**  | Legitimate RMM — abused           | 3                                  | DEFINITE                    | adminxyzhosting.com:443/8041     |
@@ -204,7 +204,7 @@ I hold this DEFINITE, from static analysis, with `XClient.exe` fully decompiled 
 *Surveillance:*
 
 - Screenshot capture (256×156 JPEG → GZip → Base64 → C2)
-- Active window title + victim idle time sent every 10–15 seconds in beacon
+- Active window title + victim idle time sent every 10-15 seconds in beacon
 - Webcam detection via `avicap32.dll!capGetDriverDescriptionA`
 - Process keyword monitoring: fires alert to operator on keyword match in process titles
 - Built-in keylogger (offline stub present; runtime-configured)
@@ -248,13 +248,13 @@ This matters because the automated ransomware plugin is not a standard feature o
 
 I hold this DEFINITE, from static analysis, with `XwormLoader.exe` fully reverse-engineered.
 
-**File:** `XwormLoader.exe` | SHA256: `f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478` | 501,816 bytes | Native C++ (MSVC 15.00–16.00)
+**File:** `XwormLoader.exe` | SHA256: `f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478` | 501,816 bytes | Native C++ (MSVC 15.00-16.00)
 
 XwormLoader is an unusual finding in the XWorm ecosystem, which normally relies on pure .NET loading. It implements reflective PE loading (mapping an executable into memory without using the Windows loader) and then patches the process environment to erase its own forensic traces.
 
 **Loading sequence (11 stages):**
 
-1. `main()` calls `FreeConsole()` immediately — decoy strings ("random number generator", "This is garbage code #0–9") are permanently invisible even if run in a console
+1. `main()` calls `FreeConsole()` immediately — decoy strings ("random number generator", "This is garbage code #0-9") are permanently invisible even if run in a console
 2. 292,352 encrypted bytes located at file offset `0x426218`
 3. Decryption: `NOT(byte) - 0x3E` per byte (single-pass arithmetic)
 4. PE signature validation after decryption
@@ -375,7 +375,7 @@ The encoding stack: inline Base64 → `Convert.FromBase64String()` → GZip deco
 </figure>
 
 **C2 Protocol Architecture:**
-Raw TCP `\x04\x00\x00\x00` preamble → TLS (cert pinned to `CN=Ayzyqztcoa`) → 4-byte length-framed ProtoBuf messages. Approximately 84-type ProtoBuf discriminated union (published reports document 86 types — minor build-to-build variance). Random 20–40 second heartbeat interval — exact match to published behavioral signature (Derp.ca, Tier 3).
+Raw TCP `\x04\x00\x00\x00` preamble → TLS (cert pinned to `CN=Ayzyqztcoa`) → 4-byte length-framed ProtoBuf messages. Approximately 84-type ProtoBuf discriminated union (published reports document 86 types — minor build-to-build variance). Random 20-40 second heartbeat interval — exact match to published behavioral signature (Derp.ca, Tier 3).
 
 **Evidence Supporting HIGH Confidence (11 signatures matched):**
 
@@ -390,7 +390,7 @@ Raw TCP `\x04\x00\x00\x00` preamble → TLS (cert pinned to `CN=Ayzyqztcoa`) →
 | `NotAfter: 9999-12-31`                        | Check Point Research, Netresec          |
 | 4-byte little-endian length prefix            | Derp.ca                                 |
 | ~84-type ProtoBuf union                       | Derp.ca (86 types — minor variance)     |
-| 20–40 second random heartbeat                 | Derp.ca (exact match)                   |
+| 20-40 second random heartbeat                 | Derp.ca (exact match)                   |
 | .NET Reactor 6.x obfuscation                  | Check Point Research, Fortinet          |
 | Campaign tag defaulting to `"Default"`        | Derp.ca                                 |
 
@@ -418,7 +418,7 @@ This matters because the same IP (`185.49.126.140`) appears hardcoded across thr
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/xh_exe.png" | relative_url }}" alt="Decompiled xh.exe PureHVNC stub showing hardcoded C2 IP 185.49.126.140 and HVNC.StartHVNC call">
-  <figcaption><em>Figure 5: Decompiled <code>xh.exe</code> (the PureHVNC victim stub) with the hardcoded C2 address <code>185.49.126.140</code> highlighted. The same IP appears hardcoded across three separate binaries from different malware families — XWorm (port 5000), PureRAT (ports 56001–56003), and PureHVNC (port 8000) — directly confirming a single operator controls all three families through one consolidated C2 server. The <code>HVNC.StartHVNC()</code> call initiates the hidden desktop session using those hardcoded parameters.</em></figcaption>
+  <figcaption><em>Figure 5: Decompiled <code>xh.exe</code> (the PureHVNC victim stub) with the hardcoded C2 address <code>185.49.126.140</code> highlighted. The same IP appears hardcoded across three separate binaries from different malware families — XWorm (port 5000), PureRAT (ports 56001-56003), and PureHVNC (port 8000) — directly confirming a single operator controls all three families through one consolidated C2 server. The <code>HVNC.StartHVNC()</code> call initiates the hidden desktop session using those hardcoded parameters.</em></figcaption>
 </figure>
 
 ---
@@ -458,7 +458,7 @@ It is written in Embarcadero Delphi 12.0 Athens Enterprise, a commercial IDE tha
 - File upload and execute — opcode `0x55`: writes to `%TEMP%` via `GetTempPathW`, executes
 - Screenshot capture — on-demand PNG via GDI+ (PNG level 7 compression)
 - Hidden VNC (`THiddenVNC`/`THiddenVNCThread`/`THVNCInputThread`) via `CreateDesktop()`: creates isolated hidden Windows desktop; delta framing for bandwidth efficiency; callback port 6968
-- **Cryptocurrency wallet theft** — four named TEdit (form field) targets: **Exodus, Atomic Wallet, Guarda, Wasabi**
+- **Cryptocurrency wallet theft**: four named TEdit (form field) targets: **Exodus, Atomic Wallet, Guarda, Wasabi**
 - Persistence — writes `SOFTWARE\Microsoft\Windows\CurrentVersion\Run` key, value name `WindowsService`
 - SOCKS proxy — full `TIdSocksInfo` implementation
 - SSL/TLS — `TIdSSLIOHandlerSocketBase` compiled in
@@ -709,7 +709,7 @@ Operator runs `vicTest.exe` on their server (port 8777 listener) → compiled vi
 
 ### XWorm V5.6 Landscape Context
 
-XWorm was first documented in July 2022 (developer handle "XCoder"). Version 5.6 was the final officially released version before the developer ceased operations in late 2024. Cracked copies of V5.6 subsequently proliferated across underground forums, significantly lowering the deployment skill threshold. A CloudSEK (Tier 2) report documented over 18,000 device compromises from a trojanized version of the V5.6 builder distributed to inexperienced actors. As of 2025–2026, XWorm V5.6 is among the most frequently detected commodity RAT families globally, per Cofense and Trellix (Tier 2) reporting.
+XWorm was first documented in July 2022 (developer handle "XCoder"). Version 5.6 was the final officially released version before the developer ceased operations in late 2024. Cracked copies of V5.6 subsequently proliferated across underground forums, significantly lowering the deployment skill threshold. A CloudSEK (Tier 2) report documented over 18,000 device compromises from a trojanized version of the V5.6 builder distributed to inexperienced actors. As of 2025-2026, XWorm V5.6 is among the most frequently detected commodity RAT families globally, per Cofense and Trellix (Tier 2) reporting.
 
 The V5.6 sample in this campaign is consistent with the widely circulating cracked builder version. Port 5000 is operator-configured (not a default) — not a meaningful distinguishing indicator.
 
@@ -723,7 +723,7 @@ The developer operates as "PureCoder" and offers PureRAT as a subscription produ
 
 ### ConnectWise ScreenConnect Abuse Context
 
-ScreenConnect emerged as a frequently abused legitimate remote access tool in 2024–2025, documented across campaigns spoofing the US Social Security Administration (SSA), invoice-themed phishing, and fake IT support lures (CyberProof, Tier 2). The SSA-themed decoy PDF in `Attachment.vbs` is consistent with documented SSA impersonation patterns. The `/Bin/` directory download path and `?e=Access&y=Guest` URL parameter pattern are exact structural matches to documented ScreenConnect phishing campaigns.
+ScreenConnect emerged as a frequently abused legitimate remote access tool in 2024-2025, documented across campaigns spoofing the US Social Security Administration (SSA), invoice-themed phishing, and fake IT support lures (CyberProof, Tier 2). The SSA-themed decoy PDF in `Attachment.vbs` is consistent with documented SSA impersonation patterns. The `/Bin/` directory download path and `?e=Access&y=Guest` URL parameter pattern are exact structural matches to documented ScreenConnect phishing campaigns.
 
 ScreenConnect version 23.2.9 predates the February 2024 "SlashAndGrab" vulnerabilities (CVE-2024-1709 authentication bypass and CVE-2024-1708 path traversal RCE). These vulnerabilities are separate from the abuse pattern here — the actor is abusing ScreenConnect for legitimate remote access, not exploiting ScreenConnect server-side.
 (Confidence: HIGH — Tier 2: CyberProof; Tier 1 for CVE-2024-1709/1708)
@@ -914,7 +914,7 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 - PureHVNC family identification — internal name `PureHVNC_GUI` in config file
 - Raven RAT family identification — full source code recovered
 - ScreenConnect abuse — DomainTools Iris HTTP server header confirmed
-- `185.49.126.140` as active C2 for XWorm (port 5000), PureHVNC (port 8000), PureRAT (ports 56001–56003), ScreenConnect (ports 443/8041)
+- `185.49.126.140` as active C2 for XWorm (port 5000), PureHVNC (port 8000), PureRAT (ports 56001-56003), ScreenConnect (ports 443/8041)
 - `74.0.42.25` as open directory/staging server
 - Operator handle `Steffz` — hardcoded in `vicTest.exe` DFM
 - Panel build date 2025-04-13 — binary metadata
@@ -980,10 +980,10 @@ Legitimate ScreenConnect deployments connect to an organization's own relay serv
 
 ---
 
-**Q3: "The PureRAT C2 ports 56001–56003 are unusual. Can we just block these ports?"**
+**Q3: "The PureRAT C2 ports 56001-56003 are unusual. Can we just block these ports?"**
 Short answer: Yes — and doing so disrupts PureRAT entirely. But this is not sufficient alone.
 
-PureRAT strictly uses ports 56001–56003 for this build (tried in sequence on reconnect). Blocking these ports at the perimeter eliminates PureRAT C2 traffic from this build. However, XWorm uses port 5000, PureHVNC uses port 8000, and ScreenConnect uses ports 443 and 8041. The most efficient single action is blocking `185.49.126.140` entirely — which disrupts all four families simultaneously.
+PureRAT strictly uses ports 56001-56003 for this build (tried in sequence on reconnect). Blocking these ports at the perimeter eliminates PureRAT C2 traffic from this build. However, XWorm uses port 5000, PureHVNC uses port 8000, and ScreenConnect uses ports 443 and 8041. The most efficient single action is blocking `185.49.126.140` entirely — which disrupts all four families simultaneously.
 
 ---
 
@@ -1034,7 +1034,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 **High-Reliability Detection Anchors:**
 
 - `**5tK099W0Z6AMZVxQ`** — XWorm V5.6 mutex; plaintext in binary; also the AES key derivation seed; not user-configurable in V5.6
-- `**\x04\x00\x00\x00`** — PureRAT TCP preamble; appears before TLS handshake on ports 56001–56003; network-detectable before encryption
+- `**\x04\x00\x00\x00`** — PureRAT TCP preamble; appears before TLS handshake on ports 56001-56003; network-detectable before encryption
 - `**Faidowra.IO.ModelConfiguration`** — PureRAT v4.1.9 namespace; specific to this build's deobfuscation
 - `**Ayzyqztcoa`** — PureRAT TLS certificate CN; auto-generated per build; unique to this campaign instance
 - `**%TEMP%\test_debug.txt`** — ScreenConnect dropper debug artifact; contains timestamps and HTTP status codes; OPSEC failure indicator
@@ -1050,7 +1050,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 - **YARA rules:** File-based detection for XWorm V5.6 stubs, XwormLoader, PureRAT v4.1.9 (Faidowra.dll), Aspdkzb loader cluster, Raven RAT (vicTest.exe and RavenOriginalStub.exe), CVE-2025-30406 exploit kit
 - **Sigma rules:** Log-based behavioral detection for XWorm Registry writes, vlc_boxed.exe persistence, ScreenConnect silent install via wscript, PureRAT TCP preamble pattern, XwormLoader reflective load behaviors
-- **Suricata signatures:** Network detection for XWorm C2 traffic (port 5000, `<Xwormmm>` separator), PureRAT C2 (TCP preamble + TLS pattern on 56001–56003), ScreenConnect relay to `adminxyzhosting[.]com`
+- **Suricata signatures:** Network detection for XWorm C2 traffic (port 5000, `<Xwormmm>` separator), PureRAT C2 (TCP preamble + TLS pattern on 56001-56003), ScreenConnect relay to `adminxyzhosting[.]com`
 - **EDR queries:** Behavioral queries for registry-based persistence, wscript spawning msiexec, PowerShell fileless execution patterns, VirtualAlloc+CreateThread sequences
 - **SIEM queries:** Common SIEM platform queries for network connections to C2 infrastructure and behavioral indicators
 
@@ -1107,15 +1107,15 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 - Trellix (2025): XWorm V5.6 technical analysis — AES-256 ECB config, Telegram notification, ransomware module documentation
 - Cofense (2025): XWorm global detection volume and campaign tracking
-- CloudSEK (2024–2025): "XWorm V5.6 cracked builder distribution and supply-chain compromise" — documents 18,000+ device compromises from trojanized builder; cracked V5.6 proliferation post-developer departure
+- CloudSEK (2024-2025): "XWorm V5.6 cracked builder distribution and supply-chain compromise" — documents 18,000+ device compromises from trojanized builder; cracked V5.6 proliferation post-developer departure
 
 **PureRAT v4.1.9 / ResolverRAT:**
 
-- Netresec (August 2025): "PureRAT = ResolverRAT = PureHVNC" — `\x04\x00\x00\x00` TCP preamble, TLS `NotAfter: 9999-12-31`, ports 56001–56003, TLS 1.0 architecture
+- Netresec (August 2025): "PureRAT = ResolverRAT = PureHVNC" — `\x04\x00\x00\x00` TCP preamble, TLS `NotAfter: 9999-12-31`, ports 56001-56003, TLS 1.0 architecture
 - Check Point Research (2025): PureRAT v4.1.9 analysis — version string, Base64→GZip→ProtoBuf config, TLS cert pinning, .NET Reactor 6.x
 - Fortinet (2025): PureRAT technical analysis — config encoding, .NET Reactor obfuscation corroboration
 - Morphisec (April 2025): "ResolverRAT" — coins alias for same codebase; healthcare/pharmaceutical targeting
-- Derp.ca (community researcher blog — Tier 3): 86-type ProtoBuf union, 20–40 second heartbeat, 4-byte length prefix, campaign tag "Default"
+- Derp.ca (community researcher blog — Tier 3): 86-type ProtoBuf union, 20-40 second heartbeat, 4-byte length prefix, campaign tag "Default"
 
 **Raven RAT / ZeroTrace:**
 
@@ -1124,7 +1124,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 **ConnectWise ScreenConnect Abuse:**
 
-- CyberProof (2025): ScreenConnect documented as frequently abused legitimate remote tool in 2024–2025, appearing across active threat reports involving legitimate RMM/RAT abuse; SSA impersonation phishing pattern documentation
+- CyberProof (2025): ScreenConnect documented as frequently abused legitimate remote tool in 2024-2025, appearing across active threat reports involving legitimate RMM/RAT abuse; SSA impersonation phishing pattern documentation
 
 **CVE-2025-30406:**
 

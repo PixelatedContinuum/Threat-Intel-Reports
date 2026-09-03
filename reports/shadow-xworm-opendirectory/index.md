@@ -52,7 +52,7 @@ Shadow RAT (HIGH confidence: a private fork of Pulsar RAT, itself a Quasar RAT d
 
 The dual bypass chain (AMSI blinds .NET in-memory scanning; ETW silences EDR telemetry pipelines) fires before any RAT functionality loads, creating a detection gap that signatures and behavioral baselines alone cannot close. WinRE persistence — command-activated by the operator — elevates the remediation complexity beyond a standard RAT removal. Kematian exfiltrates credentials through Shadow RAT's encrypted C2 channel rather than a Discord webhook, reducing its forensic footprint.
 
-UTA-2026-003 is assessed with LOW confidence (55%) as an independent MaaS consumer, not a named organized group — confirmed by zero named-actor infrastructure overlaps and OPSEC failures (stable C2 IP for 80+ days, exposed RDP/SMB/WinRM ports, unpatched CVE-2020-0796) inconsistent with organized tradecraft. Technical detection priorities and persistence artifact locations are in Sections 5–6; the full detection rule set (7 YARA, 10 Sigma, 6 Suricata) is at the linked detection file.
+UTA-2026-003 is assessed with LOW confidence (55%) as an independent MaaS consumer, not a named organized group — confirmed by zero named-actor infrastructure overlaps and OPSEC failures (stable C2 IP for 80+ days, exposed RDP/SMB/WinRM ports, unpatched CVE-2020-0796) inconsistent with organized tradecraft. Technical detection priorities and persistence artifact locations are in Sections 5-6; the full detection rule set (7 YARA, 10 Sigma, 6 Suricata) is at the linked detection file.
 
 **Key Risk Factors**
 
@@ -611,7 +611,7 @@ A `FunStuff` namespace in `Shadow.Common.Messages` contains non-destructive hara
 
 ### 6.1 Static Analysis: File Characteristics
 
-`XWormClient.exe` and `XWormClient2.exe` are .NET executables written in VB.NET, compiled for x86 (32-bit), targeting CLR v4.0.30319. Unlike Shadow RAT, they are not packed with a commercial packer — protection relies entirely on obfuscated class and method names. File entropy is moderate (6.01–6.03), consistent with obfuscated .NET without compression.
+`XWormClient.exe` and `XWormClient2.exe` are .NET executables written in VB.NET, compiled for x86 (32-bit), targeting CLR v4.0.30319. Unlike Shadow RAT, they are not packed with a commercial packer — protection relies entirely on obfuscated class and method names. File entropy is moderate (6.01-6.03), consistent with obfuscated .NET without compression.
 
 The binary structure consists of three sections: `.text` (high entropy, obfuscated code), `.rsrc` (low entropy, standard resources), and `.reloc` (minimal relocation data). Entry classes follow a `Stub.` prefix naming pattern (`Stub.FiNjJdc7MwurRPek8XtW5lm` for build #1, a longer obfuscated string for build #2). The `<Xwormmm>` campaign group tag is embedded in plaintext as a builder-configured identifier.
 

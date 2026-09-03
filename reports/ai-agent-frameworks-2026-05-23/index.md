@@ -66,7 +66,7 @@ The eight active operator cases, each with its home section:
 - **[Case 3 — Rovodev/Pandora Mirai botnet](/reports/rovodev-mirai-matrix-c2-87.106.143.220/)** (UTA-2026-014, LOW 60%) — IONOS host, 11-architecture Mirai botnet, Rovodev session JSONs capturing AI authoring the attack framework. See §4.3.
 - **[Case 4 — Korean Claude+OpenClaw](/reports/korean-claude-openclaw-221.150.15.104/)** (UTA-2026-015, LOW 55%) — `~/.claude/settings.local.json` pre-approving an `openclaw.ai` installer in the Claude Code allowlist. See §4.4.
 - **[Case 9 — GHOST cryptojacker kit + 4-tier supply chain](/reports/ghost-cryptojacker-vova75rus-77.110.96.200/)** (Vova75Rus HIGH 88% / UTA-2026-016 / UTA-2026-017) — byte-identical `libpam_cache.so` LD_PRELOAD rootkit across two AEZA customer hosts; GitHub T&S Tier-0 action against kit author Vova75Rus on 2026-05-25. See §4.5.
-- **Cases 7, 8, 10** — capsule-depth captures (productivity-AI stack at 139.59.239.112; 60-second AI-orchestrated payment-API attack at 68.183.92.28; Sliver-derivative C2 staging at 5.230.201.54). INSUFFICIENT attribution but operationally-relevant TTPs. See §4.6–4.8.
+- **Cases 7, 8, 10**: capsule-depth captures (productivity-AI stack at 139.59.239.112; 60-second AI-orchestrated payment-API attack at 68.183.92.28; Sliver-derivative C2 staging at 5.230.201.54). INSUFFICIENT attribution but operationally-relevant TTPs. See §4.6-4.8.
 
 Two further hosts (Case 5, 173.249.2.23; Case 6, 66.94.120.32) were **demoted** to benign during analysis — a defensive-security consultant and a HuggingFace ML researcher. They anchor the campaign's central defender lesson: **AI tool presence on a host is not, by itself, a malicious indicator** (§4.11).
 
@@ -109,9 +109,9 @@ This is a **multi-actor** campaign. Attribution spans one named actor and six UT
 
 - **Vova75Rus** *(named, HIGH 88%)* — Case 9 GHOST kit author (separate identity from his customer operators).
 - **UTA-2026-012** *(an internal tracking label used by The Hunters Ledger — see Section 9)* — Case 1 Russian Gemini operator (MODERATE-HIGH 83%, cross-identified with Trend Micro's `bandcampro`).
-- **UTA-2026-013** — Case 2 Turkish ARPA operator (high-MODERATE 78%).
-- **UTA-2026-014** — Case 3 Rovodev/Pandora Mirai operator (LOW 60%).
-- **UTA-2026-015** — Case 4 Korean Claude+OpenClaw operator (LOW 55%).
+- **UTA-2026-013**: Case 2 Turkish ARPA operator (high-MODERATE 78%).
+- **UTA-2026-014**: Case 3 Rovodev/Pandora Mirai operator (LOW 60%).
+- **UTA-2026-015**: Case 4 Korean Claude+OpenClaw operator (LOW 55%).
 - **UTA-2026-016** / **UTA-2026-017** — Case 9 GHOST customers Operator-A (77.110.96.200, LOW 60%) and Operator-B (77.110.125.145, LOW 55%).
 
 Cases 7, 8, 10 are **INSUFFICIENT** for attribution at capsule depth. **No Tier-1 government attribution** applies to any operator.
@@ -165,7 +165,7 @@ This campaign matters to security leadership for three reasons a single-operator
 <tr><td>Commodity LD_PRELOAD libc-hook rootkit on Linux servers</td><td>HIGH</td><td>Case 9 GHOST kit is multi-tenant commodity. Byte-identical libpam_cache.so across 2 customer hosts means deployments are continuing whether or not we observe them. Standard remediation that does not enumerate /etc/ld.so.preload will leave the rootkit in place.</td></tr>
 <tr><td>Cloud GPU cryptojacking on your ML/AI infrastructure</td><td>MODERATE</td><td>Case 9 ComfyUI fake-node persistence (PerformanceMonitor + GPU Performance Monitor) targets ML platforms specifically. Cloud GPU compute is the high-margin target.</td></tr>
 <tr><td>11-architecture Mirai-family botnet recruitment of IoT</td><td>MODERATE</td><td>Case 3 Pandora variants span ARM, ARM5/6/7, MIPS, MIPS-LE, x86, x86_64, SH4, SuperH, PowerPC, SPARC — comprehensive IoT/embedded architecture coverage.</td></tr>
-<tr><td>State-aligned espionage data harvesting via insider recruitment</td><td>LOW–MODERATE</td><td>Case 2 insider-recruited Windows AD user [employee ID — suppressed] with operator-authored Turkish-language tunnel-setup documentation. Targeting model is sector-specific (a Turkish state-affiliated financial-sector ecosystem) not generic.</td></tr>
+<tr><td>State-aligned espionage data harvesting via insider recruitment</td><td>LOW-MODERATE</td><td>Case 2 insider-recruited Windows AD user [employee ID — suppressed] with operator-authored Turkish-language tunnel-setup documentation. Targeting model is sector-specific (a Turkish state-affiliated financial-sector ecosystem) not generic.</td></tr>
 <tr><td>Sliver-derivative C2 against your enterprise endpoints</td><td>LOW</td><td>Case 10 captured pre-victim (zero sessions / zero beacons in database). Active development (v30→v39 in one day) suggests imminent victim engagement, but no current victims observed.</td></tr>
 </tbody>
 </table>
@@ -174,11 +174,11 @@ This campaign matters to security leadership for three reasons a single-operator
 
 The following is a generic phase model — refer to Section 12 (Response Orientation) for the action-category guidance and engage your internal IR team for the actual response. The Hunters Ledger does not provide step-by-step IR procedures (third-party intelligence-provider perspective).
 
-- **Initial Phase** (first 24–48 hours after detection) — confirm scope, isolate affected hosts, preserve forensic state. Person-hours vary by infrastructure complexity.
-- **Investigation Phase** (days 2–14) — determine root cause, enumerate persistence mechanisms (especially `/etc/ld.so.preload` for Case 9 variants), determine credential exposure, determine victim data accessed. Multi-source observability data (if Case 2 applies) requires correlating stolen-token logs across SolarWinds/Zabbix/Instana/Aria.
-- **Remediation Phase** (weeks 2–6) — credential rotation (prioritize cloud-LLM API keys, observability platform tokens, GitHub PATs); persistence removal (kernel-level/rootkit cases typically require full rebuild — see Section 9); C2 infrastructure blocking at perimeter.
-- **Enhanced Monitoring Phase** (months 1–3) — deploy detection rules from the linked detection file, network-wide hunt for lateral-movement and persistence indicators, validate that all stolen-token usage has stopped.
-- **Ongoing** — quarterly review of AI-integration artifacts (`~/.gemini/`, `~/.rovodev/`, `~/.claude/settings.local.json`, `~/.openclaw/`) across server estate; quarterly review of LD_PRELOAD modifications on Linux estate; ongoing monitoring of upstream supply-chain channels for Vova75Rus re-hosting attempts post-GitHub-T&S suspension.
+- **Initial Phase** (first 24-48 hours after detection) — confirm scope, isolate affected hosts, preserve forensic state. Person-hours vary by infrastructure complexity.
+- **Investigation Phase** (days 2-14) — determine root cause, enumerate persistence mechanisms (especially `/etc/ld.so.preload` for Case 9 variants), determine credential exposure, determine victim data accessed. Multi-source observability data (if Case 2 applies) requires correlating stolen-token logs across SolarWinds/Zabbix/Instana/Aria.
+- **Remediation Phase** (weeks 2-6) — credential rotation (prioritize cloud-LLM API keys, observability platform tokens, GitHub PATs); persistence removal (kernel-level/rootkit cases typically require full rebuild — see Section 9); C2 infrastructure blocking at perimeter.
+- **Enhanced Monitoring Phase** (months 1-3) — deploy detection rules from the linked detection file, network-wide hunt for lateral-movement and persistence indicators, validate that all stolen-token usage has stopped.
+- **Ongoing**: quarterly review of AI-integration artifacts (`~/.gemini/`, `~/.rovodev/`, `~/.claude/settings.local.json`, `~/.openclaw/`) across server estate; quarterly review of LD_PRELOAD modifications on Linux estate; ongoing monitoring of upstream supply-chain channels for Vova75Rus re-hosting attempts post-GitHub-T&S suspension.
 
 ---
 
@@ -713,11 +713,11 @@ The investigation's attribution findings have two Tier-2 vendor corroborations:
 
 Reassess the campaign threat level (HIGH) under any of these conditions:
 
-- **Cloudflare PSIRT does not action `tralalarkefe.com`** — Case 1 Cloudflare Tunnel C2 remains active against the healthcare victim and any future victims using the operator's custom-domain model. Reassess to consider upgrading from HIGH.
-- **AEZA Group does not respond to the prepared disclosure package** — bulletproof status held at SUSPECTED pending AEZA response. If AEZA does not act, Cases 1 and 9 hosting remains available to operators.
-- **Vova75Rus re-hosts post-GitHub-T&S suspension** — track for new Vova75Rus-pattern accounts and re-hosted GHOST kit repositories. Defenders should monitor `Vova75Rus/*`, `UID 73169104` recreations, and similar naming patterns.
-- **the victim organization does not rotate stolen JWTs** — the 10-year IBM Instana JWT (iat 2024-03-06, jti 022a1b74-2332-4df5-a76b-60225ffa7ae3) remains valid until token rotation. If rotation does not occur, the operator retains read access to the victim organization observability.
-- **New customer operators of the GHOST kit are observed** — the 4-tier supply chain expands by one tier per confirmed new customer if Vova75Rus's distribution channel is reconstituted. Re-assess the supply-chain depth score when new customer operators are confirmed.
+- **Cloudflare PSIRT does not action `tralalarkefe.com`**: Case 1 Cloudflare Tunnel C2 remains active against the healthcare victim and any future victims using the operator's custom-domain model. Reassess to consider upgrading from HIGH.
+- **AEZA Group does not respond to the prepared disclosure package**: bulletproof status held at SUSPECTED pending AEZA response. If AEZA does not act, Cases 1 and 9 hosting remains available to operators.
+- **Vova75Rus re-hosts post-GitHub-T&S suspension**: track for new Vova75Rus-pattern accounts and re-hosted GHOST kit repositories. Defenders should monitor `Vova75Rus/*`, `UID 73169104` recreations, and similar naming patterns.
+- **the victim organization does not rotate stolen JWTs**: the 10-year IBM Instana JWT (iat 2024-03-06, jti 022a1b74-2332-4df5-a76b-60225ffa7ae3) remains valid until token rotation. If rotation does not occur, the operator retains read access to the victim organization observability.
+- **New customer operators of the GHOST kit are observed**: the 4-tier supply chain expands by one tier per confirmed new customer if Vova75Rus's distribution channel is reconstituted. Re-assess the supply-chain depth score when new customer operators are confirmed.
 
 ### 10.2 Detection Coverage Summary
 
@@ -733,9 +733,9 @@ The full detection file is at [`/hunting-detections/ai-agent-frameworks-2026-05-
 
 | Detection Layer | Count | MITRE Techniques Covered | Overall FP Risk |
 |---|---|---|---|
-| YARA | 8 rules | T1574.006, T1014, T1564.001, T1587, T1059.006, T1027, T1498 | LOW–MEDIUM |
-| Sigma | 12 rules | T1574.006, T1014, T1059.006, T1583.006, T1102, T1496.001, T1685, T1071.001, T1027 | LOW–HIGH (per rule) |
-| Suricata | 6 rules | T1583.006, T1102, T1496.001, T1071.001, T1573.001, T1090.004 | LOW–MEDIUM |
+| YARA | 8 rules | T1574.006, T1014, T1564.001, T1587, T1059.006, T1027, T1498 | LOW-MEDIUM |
+| Sigma | 12 rules | T1574.006, T1014, T1059.006, T1583.006, T1102, T1496.001, T1685, T1071.001, T1027 | LOW-HIGH (per rule) |
+| Suricata | 6 rules | T1583.006, T1102, T1496.001, T1071.001, T1573.001, T1090.004 | LOW-MEDIUM |
 | **Total** | **26 rules** | **Across 3 detection layers** | |
 
 **Priority breakdown:**
@@ -758,8 +758,8 @@ The investigation identifies these detection gaps not currently covered by the l
 - **AI Operator Handoff Documents** as a generic artifact class — the current YARA rule covers Cases 1 and 3 exemplars; novel handoff document formats are a known evolution risk (MODERATE confidence — the artifact format is operator-bespoke and varies between Cases 1 and 3 already observed).
 - **LLM-Personalized Credential Mutation** at the network-layer — DLP/proxy with body inspection required; not all environments deploy this. An operator pivot to TLS pinning would break body-inspection detection (HIGH confidence based on the typical adversary response to network-body inspection; treat as a planning assumption, not a forecast).
 - **Observability-token reverse pipeline** at the operator side — Sigma rules target the insider-side collector PowerShell but not the operator-side ingestion stack.
-- **AS200051 (Case 10) ownership clarity** — pending BGP cross-validation. Detection currently relies on combined-condition rules with JARM as one signal.
-- **Capsule-depth cases (7, 8, 10)** — limited detection coverage because operator-bespoke artifacts were not captured at depth.
+- **AS200051 (Case 10) ownership clarity**: pending BGP cross-validation. Detection currently relies on combined-condition rules with JARM as one signal.
+- **Capsule-depth cases (7, 8, 10)**: limited detection coverage because operator-bespoke artifacts were not captured at depth.
 
 ---
 
@@ -770,52 +770,52 @@ The investigation identifies these detection gaps not currently covered by the l
 
 ### DEFINITE Findings (Direct Evidence, No Ambiguity)
 
-- **GHOST kit byte-identical `libpam_cache.so` across 2 customer hosts** — DEFINITE supply-chain root (MD5 `296a800564111b0bad9fe63faf4e63ba` matches on both Operator-A and Operator-B hosts).
-- **LD_PRELOAD libc-hook rootkit architecture** — DEFINITE family-level signature (source code captured, ELF dynamic symbol exports confirmed).
-- **GitHub T&S account-level action against Vova75Rus 2026-05-25** — DEFINITE disposition outcome (all 9 repos HTTP 404; Wayback evidence preserved).
-- **Pandora-Mirai variant lineage** — DEFINITE (Doctor Web 2023 disclosure + VT consensus 43/66 + binary-level distribution URL embedding).
-- **LLM-Personalized Credential Mutation pipeline operational** — DEFINITE (source code captured: `russian-ai_sniper_brute.py` + 5.5 MB `AI_ADMIN_MUTANTS.txt` output artifact).
-- **5-vector persistence chain (Case 3)** — DEFINITE (auditd correlation captured all 5 vectors from same parent process within seconds).
+- **GHOST kit byte-identical `libpam_cache.so` across 2 customer hosts**: DEFINITE supply-chain root (MD5 `296a800564111b0bad9fe63faf4e63ba` matches on both Operator-A and Operator-B hosts).
+- **LD_PRELOAD libc-hook rootkit architecture**: DEFINITE family-level signature (source code captured, ELF dynamic symbol exports confirmed).
+- **GitHub T&S account-level action against Vova75Rus 2026-05-25**: DEFINITE disposition outcome (all 9 repos HTTP 404; Wayback evidence preserved).
+- **Pandora-Mirai variant lineage**: DEFINITE (Doctor Web 2023 disclosure + VT consensus 43/66 + binary-level distribution URL embedding).
+- **LLM-Personalized Credential Mutation pipeline operational**: DEFINITE (source code captured: `russian-ai_sniper_brute.py` + 5.5 MB `AI_ADMIN_MUTANTS.txt` output artifact).
+- **5-vector persistence chain (Case 3)**: DEFINITE (auditd correlation captured all 5 vectors from same parent process within seconds).
 - **AI-Generated Code structural signature DEFINITE across 3 operators** (Cases 1, 2, 3) — DEFINITE at signature-class level.
 - **MITRE techniques** marked DEFINITE in Section 7 table: T1574.006 (Dynamic Linker Hijacking), T1014 (Rootkit), T1564.001 (Hidden Files), T1057 (Process Discovery), T1071.001 (Web Protocols), T1496.001 (Compute Hijacking), T1110.003 (Password Spraying — via LLM-Personalized Credential Mutation).
-- **Multi-actor unrelated campaign hypothesis** — DEFINITE (ACH ruled with distinct IOCs/wallets/language/geography/targets/motivations/AI tools across all 8 cases).
+- **Multi-actor unrelated campaign hypothesis**: DEFINITE (ACH ruled with distinct IOCs/wallets/language/geography/targets/motivations/AI tools across all 8 cases).
 
 ### HIGH Findings (Strong Evidence, Minor Gaps)
 
-- **Vova75Rus attribution (88%)** — HIGH (5+ year GitHub history + region code + personal dedication + Censys ARC corroboration + supply-chain signature).
-- **Tier-0 disposition outcome significance** — HIGH (one report-batch disrupted upstream payload-distribution channel of the GHOST ecosystem).
-- **5 named tunnel hostnames + the healthcare victim routing (Case 1)** — HIGH (operator artifacts document tunnel-to-victim-machine routing directly).
-- **the victim organization multi-source observability theft (Case 2)** — HIGH (4 stolen sources, named victim, 73+ day dwell, insider recruitment artifact).
-- **AI Operator Handoff Documents** — HIGH confidence at signature-class level with cross-operator validation; MODERATE confidence at novelty claim pending academic conference proceedings search.
-- **Observability-Tool Reverse Pipeline novelty** — MODERATE-HIGH (no prior art found, novelty held below DEFINITE pending deeper prior-art search).
-- **AEZA hosting preference for Russian operators** — HIGH (Cases 1 and 9 share AEZA; OFAC-sanctioned July 2025; 4/5 bulletproof indicators met).
+- **Vova75Rus attribution (88%)**: HIGH (5+ year GitHub history + region code + personal dedication + Censys ARC corroboration + supply-chain signature).
+- **Tier-0 disposition outcome significance**: HIGH (one report-batch disrupted upstream payload-distribution channel of the GHOST ecosystem).
+- **5 named tunnel hostnames + the healthcare victim routing (Case 1)**: HIGH (operator artifacts document tunnel-to-victim-machine routing directly).
+- **the victim organization multi-source observability theft (Case 2)**: HIGH (4 stolen sources, named victim, 73+ day dwell, insider recruitment artifact).
+- **AI Operator Handoff Documents**: HIGH confidence at signature-class level with cross-operator validation; MODERATE confidence at novelty claim pending academic conference proceedings search.
+- **Observability-Tool Reverse Pipeline novelty**: MODERATE-HIGH (no prior art found, novelty held below DEFINITE pending deeper prior-art search).
+- **AEZA hosting preference for Russian operators**: HIGH (Cases 1 and 9 share AEZA; OFAC-sanctioned July 2025; 4/5 bulletproof indicators met).
 
 ### MODERATE Findings (Reasonable Evidence, Notable Gaps)
 
-- **UTA-2026-012 Case 1 attribution (83%)** — MODERATE-HIGH (Russian-language register + AEZA + forum activity + persona-priming + GitHub handle, plus independent Trend Micro corroboration; still no real-world identity).
-- **UTA-2026-013 Case 2 attribution (78%)** — high-MODERATE, top of the MODERATE band (70-85%) approaching HIGH (five converging axes + insider recruitment, but state-aligned-loose vs. political-factional sub-type INSUFFICIENT).
-- **Case 9 commercial-sale model for GHOST kit** — MODERATE (17-byte diff + OWNER Telegram bot pattern across 2 customers; competing hypotheses remain plausible — affiliate program or personal multi-operator architecture — and cannot be ruled out without operator-financial evidence).
-- **AI-democratized script-kiddie class as a threat type** — MODERATE (theoretical; no pure exemplar in this dataset; documented honestly).
-- **Bulletproof hosting designation for AEZA** — MODERATE (4/5 indicators met; held at SUSPECTED pending AEZA disclosure response).
+- **UTA-2026-012 Case 1 attribution (83%)**: MODERATE-HIGH (Russian-language register + AEZA + forum activity + persona-priming + GitHub handle, plus independent Trend Micro corroboration; still no real-world identity).
+- **UTA-2026-013 Case 2 attribution (78%)**: high-MODERATE, top of the MODERATE band (70-85%) approaching HIGH (five converging axes + insider recruitment, but state-aligned-loose vs. political-factional sub-type INSUFFICIENT).
+- **Case 9 commercial-sale model for GHOST kit**: MODERATE (17-byte diff + OWNER Telegram bot pattern across 2 customers; competing hypotheses remain plausible — affiliate program or personal multi-operator architecture — and cannot be ruled out without operator-financial evidence).
+- **AI-democratized script-kiddie class as a threat type**: MODERATE (theoretical; no pure exemplar in this dataset; documented honestly).
+- **Bulletproof hosting designation for AEZA**: MODERATE (4/5 indicators met; held at SUSPECTED pending AEZA disclosure response).
 
 ### LOW Findings (Weak/Circumstantial Evidence)
 
-- **UTA-2026-014 Case 3 attribution (60%)** — LOW (Discord ID only; no GitHub handle, no real-world identity, no geographic anchor beyond English-speaking signal).
-- **UTA-2026-015 Case 4 attribution (55%)** — LOW (Korea Telecom hosting + smoking-gun settings.local.json; no operator-identity artifacts).
-- **UTA-2026-016 Case 9 Operator-A attribution (60%)** — LOW (Russian-language signal in scripts + AEZA hosting + Telegram MIRROR bot).
-- **UTA-2026-017 Case 9 Operator-B attribution (55%)** — LOW (Russian-language signal inferred via kit-author + sibling-host evidence).
-- **Operator-A vs. Operator-B same-individual question** — LOW (MODERATE-LOW probability of same individual; UNRESOLVED at real-world identity level).
-- **AS200051 ownership for Case 10** — LOW (registered to individual "Rizki Abdul Azis" but BGP cross-validation incomplete).
+- **UTA-2026-014 Case 3 attribution (60%)**: LOW (Discord ID only; no GitHub handle, no real-world identity, no geographic anchor beyond English-speaking signal).
+- **UTA-2026-015 Case 4 attribution (55%)**: LOW (Korea Telecom hosting + smoking-gun settings.local.json; no operator-identity artifacts).
+- **UTA-2026-016 Case 9 Operator-A attribution (60%)**: LOW (Russian-language signal in scripts + AEZA hosting + Telegram MIRROR bot).
+- **UTA-2026-017 Case 9 Operator-B attribution (55%)**: LOW (Russian-language signal inferred via kit-author + sibling-host evidence).
+- **Operator-A vs. Operator-B same-individual question**: LOW (MODERATE-LOW probability of same individual; UNRESOLVED at real-world identity level).
+- **AS200051 ownership for Case 10**: LOW (registered to individual "Rizki Abdul Azis" but BGP cross-validation incomplete).
 
 ### INSUFFICIENT Findings (Cannot Assess)
 
-- **Case 7 attribution** — INSUFFICIENT (capsule depth; no operator-identity surface).
-- **Case 8 attribution + AI orchestration mechanism + LLM vendor** — INSUFFICIENT.
-- **Case 10 attribution** — INSUFFICIENT (pre-victim staging-phase capture).
-- **Solo vs. small-team discrimination for Case 1** — UNRESOLVED but NOT publication-gating.
-- **Specific (a) vs. (c) sub-type discrimination for Case 2** — INSUFFICIENT (requires Turkish-language doc full-read + OSINT pivot + political event correlation).
-- **Cloudflare PSIRT response status** — UNKNOWN as of publication.
-- **AEZA abuse desk response status** — NOT YET CONFIRMED RECEIVED.
+- **Case 7 attribution**: INSUFFICIENT (capsule depth; no operator-identity surface).
+- **Case 8 attribution + AI orchestration mechanism + LLM vendor**: INSUFFICIENT.
+- **Case 10 attribution**: INSUFFICIENT (pre-victim staging-phase capture).
+- **Solo vs. small-team discrimination for Case 1**: UNRESOLVED but NOT publication-gating.
+- **Specific (a) vs. (c) sub-type discrimination for Case 2**: INSUFFICIENT (requires Turkish-language doc full-read + OSINT pivot + political event correlation).
+- **Cloudflare PSIRT response status**: UNKNOWN as of publication.
+- **AEZA abuse desk response status**: NOT YET CONFIRMED RECEIVED.
 
 ---
 
@@ -846,11 +846,11 @@ The investigation identifies these detection gaps not currently covered by the l
 
 ### Containment Categories
 
-- **Isolate affected hosts** — preserve forensic state before remediation; capture volatile memory if rootkit persistence is suspected.
-- **Block C2 infrastructure at perimeter** — apply IOC-based blocks from Section 8; prioritize `tralalarkefe.com` (Case 1), `77.110.96.200`+`77.110.125.145` (Case 9), `87.106.143.220:1337` (Case 3).
-- **Rotate observability platform tokens** — IBM Instana, SolarWinds, Zabbix, VMware Aria; treat as Tier-1 secrets equivalent to cloud IAM credentials.
-- **Rotate LLM API credentials** — Gemini, Claude, OpenAI keys exposed on affected hosts; assume harvested.
-- **Network-wide hunt for lateral movement and persistence indicators** — deploy the linked detection file's 26 rules.
+- **Isolate affected hosts**: preserve forensic state before remediation; capture volatile memory if rootkit persistence is suspected.
+- **Block C2 infrastructure at perimeter**: apply IOC-based blocks from Section 8; prioritize `tralalarkefe.com` (Case 1), `77.110.96.200`+`77.110.125.145` (Case 9), `87.106.143.220:1337` (Case 3).
+- **Rotate observability platform tokens**: IBM Instana, SolarWinds, Zabbix, VMware Aria; treat as Tier-1 secrets equivalent to cloud IAM credentials.
+- **Rotate LLM API credentials**: Gemini, Claude, OpenAI keys exposed on affected hosts; assume harvested.
+- **Network-wide hunt for lateral movement and persistence indicators**: deploy the linked detection file's 26 rules.
 
 ---
 
@@ -940,7 +940,7 @@ The investigation exercised the following endpoint subset. Behavior is documente
 <tr><th>Endpoint</th><th>Behavior</th><th>Notes</th></tr>
 </thead>
 <tbody>
-<tr><td><code>attackcapture-host-summary</code></td><td>Reliable</td><td>Fast triage scope (item count, total size, first-seen date, download availability). Empty response (<code>totalItems: 0</code>) does not distinguish "never indexed" from "previously indexed, now cleaned" — relevant because operator hosts have short lifetimes (~1–2 weeks typical).</td></tr>
+<tr><td><code>attackcapture-host-summary</code></td><td>Reliable</td><td>Fast triage scope (item count, total size, first-seen date, download availability). Empty response (<code>totalItems: 0</code>) does not distinguish "never indexed" from "previously indexed, now cleaned" — relevant because operator hosts have short lifetimes (~1-2 weeks typical).</td></tr>
 <tr><td><code>attackcapture-host-files</code></td><td>Reliable</td><td>Returns per-file SHA256, file path, <code>malwareTags</code> array, and <code>aiBrief</code> (often empty at our tier). Response size on rich hosts (e.g., 77.110.96.200 at 143 items / 468 MB) can exceed the MCP token cap and must be saved to file + grep-extracted.</td></tr>
 <tr><td><code>attackcapture-host-ai-brief</code></td><td>Returns empty</td><td>Endpoint succeeds but <code>aiBrief</code> field is empty at our tier across all hosts queried.</td></tr>
 <tr><td><code>attackcapture-file-preview</code></td><td>Returns "not found"</td><td>Returned "Open directory file not found" for every file tested, including files that the same MCP's <code>host-files</code> endpoint had just confirmed exist. Almost certainly a tier-restriction surfaced as a confusing error rather than an explicit tier message. Workaround: out-of-band content access via Hunt.io web UI.</td></tr>
@@ -1018,23 +1018,23 @@ Each sub-report cross-references this parent report for cross-case context.
 
 ### 14.3 External Research and Tier-2 Vendor Sources
 
-- **Censys ARC** — Mark Ellzey, ComfyUI GHOST Campaign (April 2026). Tier 2 / Admiralty B2. Original kit-author research preceding this investigation by 6 weeks; corroborates Vova75Rus identity.
-- **Doctor Web** — Android.Pandora Disclosure (September 2023). Tier 2 / Admiralty B2. Pandora-Mirai variant lineage source for Case 3.
-- **Google GTIG** — AI Threat Tracker (November 2025). Tier 2 / Admiralty B2.
-- **Anthropic** — Misuse Report April 2025; Misuse Report August 2025; AI Espionage Disruption September 2025. Tier 2 / Admiralty B2.
-- **Proofpoint** — Cloudflare Tunnel RAT Delivery (August 2024). Tier 2 / Admiralty B2. Establishes Cloudflare Tunnel abuse tradecraft baseline.
-- **Securonix** — SERPENTINE#CLOUD campaign reporting. Tier 2 / Admiralty B2.
-- **IBM X-Force** — OpenClaw Security Analysis (2026). Tier 2 / Admiralty B2. Ecosystem context for Cases 2 and 4.
-- **Kaspersky Blog** — OpenClaw Vulnerabilities (2026). Tier 2 / Admiralty B2.
-- **NSFOCUS** — OpenClaw Attack Surface Analysis (2026). Tier 2 / Admiralty B3.
-- **Hunt.io AttackCapture Dataset** — GHOST cross-host search corroboration. Tier 2 / Admiralty B2.
-- **OFAC** — AEZA Group Sanctions (July 2025). Tier 1 / Admiralty A1.
-- **Public corporate-registry / sovereign-fund disclosures** — used to establish the victim organization's state-affiliation context. Tier 2 / Admiralty B1.
-- **Atlassian** — Rovodev CLI GA announcement (October 2025). Tier 2 / Admiralty B1.
-- **Netskope** — DigitalOcean Abuse (2023). Tier 2 / Admiralty B2.
-- **arXiv 2604.12601** — LLM-Guided Password Guessing (April 2026). Tier 3 / Admiralty C3. Differentiates from LLM-Personalized Credential Mutation.
-- **The Hacker News** — GHOST/ComfyUI syndication (April 2026). Tier 3 / Admiralty C2.
-- **BleepingComputer** — Pandora-Mirai 2023 coverage. Tier 3 / Admiralty C2.
+- **Censys ARC**: Mark Ellzey, ComfyUI GHOST Campaign (April 2026). Tier 2 / Admiralty B2. Original kit-author research preceding this investigation by 6 weeks; corroborates Vova75Rus identity.
+- **Doctor Web**: Android.Pandora Disclosure (September 2023). Tier 2 / Admiralty B2. Pandora-Mirai variant lineage source for Case 3.
+- **Google GTIG**: AI Threat Tracker (November 2025). Tier 2 / Admiralty B2.
+- **Anthropic**: Misuse Report April 2025; Misuse Report August 2025; AI Espionage Disruption September 2025. Tier 2 / Admiralty B2.
+- **Proofpoint**: Cloudflare Tunnel RAT Delivery (August 2024). Tier 2 / Admiralty B2. Establishes Cloudflare Tunnel abuse tradecraft baseline.
+- **Securonix**: SERPENTINE#CLOUD campaign reporting. Tier 2 / Admiralty B2.
+- **IBM X-Force**: OpenClaw Security Analysis (2026). Tier 2 / Admiralty B2. Ecosystem context for Cases 2 and 4.
+- **Kaspersky Blog**: OpenClaw Vulnerabilities (2026). Tier 2 / Admiralty B2.
+- **NSFOCUS**: OpenClaw Attack Surface Analysis (2026). Tier 2 / Admiralty B3.
+- **Hunt.io AttackCapture Dataset**: GHOST cross-host search corroboration. Tier 2 / Admiralty B2.
+- **OFAC**: AEZA Group Sanctions (July 2025). Tier 1 / Admiralty A1.
+- **Public corporate-registry / sovereign-fund disclosures**: used to establish the victim organization's state-affiliation context. Tier 2 / Admiralty B1.
+- **Atlassian**: Rovodev CLI GA announcement (October 2025). Tier 2 / Admiralty B1.
+- **Netskope**: DigitalOcean Abuse (2023). Tier 2 / Admiralty B2.
+- **arXiv 2604.12601**: LLM-Guided Password Guessing (April 2026). Tier 3 / Admiralty C3. Differentiates from LLM-Personalized Credential Mutation.
+- **The Hacker News**: GHOST/ComfyUI syndication (April 2026). Tier 3 / Admiralty C2.
+- **BleepingComputer**: Pandora-Mirai 2023 coverage. Tier 3 / Admiralty C2.
 
 ### 14.4 Appendix A — Identity Artifacts Inventory
 

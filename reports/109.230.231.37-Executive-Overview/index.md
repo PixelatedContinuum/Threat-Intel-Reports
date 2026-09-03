@@ -38,7 +38,7 @@ This analysis identified **16 malware samples across 7 reports** distributed fro
 The repository contains a **10-variant ransomware toolkit** — five encryptors and five decryptors — representing a purpose-built capability that pairs data theft with destructive impact.
 
 **Key Findings:**
-- **Custom ChaCha20+RSA-2048 hybrid cryptography** — hand-coded implementation, not commodity ransomware
+- **Custom ChaCha20+RSA-2048 hybrid cryptography**: hand-coded implementation, not commodity ransomware
 - **Hardware-optimized encryption:** runtime CPU dispatcher selects AVX-512/AVX2/SSE instruction sets for maximum throughput
 - **Per-victim key generation** with professional R&D indicators: versioned builds (v2), testing utilities (test_gui, test_decryptor)
 - **Mathematically unrecoverable encryption** without the attacker's RSA-2048 private key

@@ -60,9 +60,9 @@ figure_nav:
 A 3:00 AM read for the on-call SOC analyst, threat hunter, or detection engineer. Fuller narrative begins at Section 1.
 
 **Block at perimeter — `45.130.148.125`:**
-- **TCP/80** — AdaptixC2 victim-facing C2
-- **TCP/4444** — AdaptixC2 TeamServer (operator GUI)
-- **TCP/8888** — open-directory staging server
+- **TCP/80**: AdaptixC2 victim-facing C2
+- **TCP/4444**: AdaptixC2 TeamServer (operator GUI)
+- **TCP/8888**: open-directory staging server
 
 **Top three hunt strings (highest-fidelity, operator-specific, UTA-2026-006):**
 1. `/tmp/si_build/obj/Release/net472/si_build.pdb` — Linux-built .NET PDB path (HIGH confidence operator fingerprint)
@@ -129,7 +129,7 @@ The seven points below summarize what this report wants a reader to retain. They
 </thead>
 <tbody>
 <tr><td>Severity of capability</td><td>8/10</td><td>Complete kill-chain coverage from execution → C2 → AD enumeration → credential theft → LPE → lateral movement → Linux pivot. Missing only ransomware/data-destruction tooling.</td></tr>
-<tr><td>Detection difficulty</td><td>6/10</td><td>Three vendor families catch the AdaptixC2 beacon at the file level (Elastic / Kaspersky / Microsoft). PowerShell loader uses reflection-based AMSI bypass + in-memory load. RC4-encrypted config defeats string-based hunting. Aggressive 4–5 second beacon cadence creates very high-volume traffic that becomes highly visible if egress monitoring exists.</td></tr>
+<tr><td>Detection difficulty</td><td>6/10</td><td>Three vendor families catch the AdaptixC2 beacon at the file level (Elastic / Kaspersky / Microsoft). PowerShell loader uses reflection-based AMSI bypass + in-memory load. RC4-encrypted config defeats string-based hunting. Aggressive 4-5 second beacon cadence creates very high-volume traffic that becomes highly visible if egress monitoring exists.</td></tr>
 <tr><td>Operational maturity</td><td>5/10</td><td>Sub-mature OpSec hygiene (PDB paths leaked, build timestamps in plaintext, internal class names exposed, dev-leftover artifacts). Same-day dev-to-prod build cadence captured. NOT APT-level.</td></tr>
 <tr><td>Spread / lateral movement</td><td>7/10</td><td>Ligolo-ng v0.8.3 TUN-mode + chisel reverse-tunneling enables full internal-network access from a single foothold. AdaptixC2 Linux ELF agent + <code>linpeas.sh</code> enable Linux-host lateral movement.</td></tr>
 <tr><td>Active C2 status</td><td>UNKNOWN</td><td>C2 endpoint at <code>45.130.148.125:80</code> reachable at the time of analysis but no live traffic captured. Status pending +1 week Vantage rescan target 2026-05-06.</td></tr>
@@ -153,10 +153,10 @@ The seven points below summarize what this report wants a reader to retain. They
 
 This report is anchored to a single observable corpus rather than to general threat-landscape commentary, but four threat-intel facts shape how defenders should treat the findings:
 
-- **Framework attribution at DEFINITE confidence (98%+)** — three independent vendor labels (Elastic `Windows_Trojan_Adaptix_b2cda978`, Kaspersky `UDS:Backdoor.Win64.AdaptixC2.a`, Microsoft `Backdoor:Win64/AdaptixC2.MKB!MTB`) plus byte-for-byte architectural match against the AdaptixC2 framework's published source establish the family with no ambiguity. The Linux ELF agent carries a parallel set of vendor labels for the Gopher Linux variant.
-- **AdaptixC2 ecosystem footprint has densified since mid-2025** — Tier-1 vendor coverage of the framework (Unit 42, Silent Push, Hunt.io, Zscaler ThreatLabz, Kaspersky, Sophos) now covers four distinct cohort archetypes: Russian-speaking ransomware affiliates (Akira, Fog), Tomiris APT, Tropic Trooper APT, and GOLD ENCOUNTER / PayoutsKing. None of those named campaigns share infrastructure with `45.130.148.125`. Defender posture should target the framework rather than any single named actor (see Section 9 for the cohort taxonomy).
-- **Hosting posture sits in a low-cooperation jurisdiction** — AS35682 (Uzbekistan) is a regional commercial provider, not a formally sanctioned bulletproof AS, but Uzbekistan is not a Budapest Convention signatory and has no US MLAT coverage for cybercrime cooperation. This creates measurable Western law-enforcement-cooperation friction relative to EU/MLAT jurisdictions and aligns at population level with post-Soviet cybercrime hosting preferences.
-- **Cross-investigation linkage is open** — the operator's `/tmp/<name>_build/` PDB convention, MinGW-w64 + GNU ld 2.35 toolchain, and same-day dev-to-prod build cadence are durable build-environment fingerprints. If the same patterns appear in another investigation, build-environment-level operator clustering becomes viable. The complete UTA-2026-006 distinguishing characteristic list is in Section 8.4.
+- **Framework attribution at DEFINITE confidence (98%+)**: three independent vendor labels (Elastic `Windows_Trojan_Adaptix_b2cda978`, Kaspersky `UDS:Backdoor.Win64.AdaptixC2.a`, Microsoft `Backdoor:Win64/AdaptixC2.MKB!MTB`) plus byte-for-byte architectural match against the AdaptixC2 framework's published source establish the family with no ambiguity. The Linux ELF agent carries a parallel set of vendor labels for the Gopher Linux variant.
+- **AdaptixC2 ecosystem footprint has densified since mid-2025**: Tier-1 vendor coverage of the framework (Unit 42, Silent Push, Hunt.io, Zscaler ThreatLabz, Kaspersky, Sophos) now covers four distinct cohort archetypes: Russian-speaking ransomware affiliates (Akira, Fog), Tomiris APT, Tropic Trooper APT, and GOLD ENCOUNTER / PayoutsKing. None of those named campaigns share infrastructure with `45.130.148.125`. Defender posture should target the framework rather than any single named actor (see Section 9 for the cohort taxonomy).
+- **Hosting posture sits in a low-cooperation jurisdiction**: AS35682 (Uzbekistan) is a regional commercial provider, not a formally sanctioned bulletproof AS, but Uzbekistan is not a Budapest Convention signatory and has no US MLAT coverage for cybercrime cooperation. This creates measurable Western law-enforcement-cooperation friction relative to EU/MLAT jurisdictions and aligns at population level with post-Soviet cybercrime hosting preferences.
+- **Cross-investigation linkage is open**: the operator's `/tmp/<name>_build/` PDB convention, MinGW-w64 + GNU ld 2.35 toolchain, and same-day dev-to-prod build cadence are durable build-environment fingerprints. If the same patterns appear in another investigation, build-environment-level operator clustering becomes viable. The complete UTA-2026-006 distinguishing characteristic list is in Section 8.4.
 
 ---
 
@@ -201,7 +201,7 @@ Strong evidence indicates the operator builds from a **Linux dev host**:
 - **PDB path** in operator-written `injector.dll`: `/tmp/si_build/obj/Release/net472/si_build.pdb` (forward-slash Unix separators, `/tmp/` prefix, `dotnet build -c Release` standard output layout)
 - **Toolchain** for AdaptixC2 Windows beacon: MinGW-w64 GCC with GNU ld 2.35 (verified from PE imports and section layout)
 - **Build pipeline** for Ligolo binary: goreleaser (visible in embedded build metadata)
-- **Build cadence**: Same-day dev/prod iteration captured on 2026-04-23 — dev build at 07:39:46 UTC (`embedded_dll.bin`, build counter 4) → production cluster at 20:34:31–32 UTC (build counter 5, all three production files within one second of each other)
+- **Build cadence**: Same-day dev/prod iteration captured on 2026-04-23 — dev build at 07:39:46 UTC (`embedded_dll.bin`, build counter 4) → production cluster at 20:34:31-32 UTC (build counter 5, all three production files within one second of each other)
 - **AV detection at discovery**: 30/71 (cluster `agent.x64.dll`), 27/63 (`agent.x64.bin` shellcode form), 15/65 (Linux ELF `agent.bin`)
 
 ### 2.4 Framework provenance
@@ -214,8 +214,8 @@ One distinction matters for this report, that developer attribution is not opera
 
 AdaptixC2 framework reporting from Tier-1 vendors has been published since May 2025. Two pieces of existing public coverage are particularly relevant for any defender deploying detection content from this report:
 
-- **Unit 42 (Palo Alto Networks), May 2025** — *AdaptixC2: A New Open-Source Framework Leveraged in Real-World Attacks*. Primary technical anchor for the framework. Documents the RC4 config layout (`[length][ciphertext][16-byte key]`), publishes a Python config-extractor tool, releases three YARA rules (covering `FileTimeToUnixTimestamp` / `Proxyfire_RecvProxy` time routines, base64 size-calculation patterns, and Go beacon-specific functions like `GetProcesses` / `ConnRead`), and walks two attack chains (Microsoft Teams phishing + Quick Assist social-engineering, plus AI-generated PowerShell delivery). Documents the framework's default C2 listener as `172.16.196.1:4443` (HTTPS), default URI `/uri.php`, default header `X-Beacon-Id`. Source: see Section 14.
-- **Silent Push, August 2025** — *AdaptixC2's Ties to Russian Criminal Underworld*. Adds developer attribution to RalfHacker (above) and documents AdaptixC2 adoption by an unattributed initial-access broker via the CountLoader phishing chain. Source: see Section 14.
+- **Unit 42 (Palo Alto Networks), May 2025**: *AdaptixC2: A New Open-Source Framework Leveraged in Real-World Attacks*. Primary technical anchor for the framework. Documents the RC4 config layout (`[length][ciphertext][16-byte key]`), publishes a Python config-extractor tool, releases three YARA rules (covering `FileTimeToUnixTimestamp` / `Proxyfire_RecvProxy` time routines, base64 size-calculation patterns, and Go beacon-specific functions like `GetProcesses` / `ConnRead`), and walks two attack chains (Microsoft Teams phishing + Quick Assist social-engineering, plus AI-generated PowerShell delivery). Documents the framework's default C2 listener as `172.16.196.1:4443` (HTTPS), default URI `/uri.php`, default header `X-Beacon-Id`. Source: see Section 14.
+- **Silent Push, August 2025**: *AdaptixC2's Ties to Russian Criminal Underworld*. Adds developer attribution to RalfHacker (above) and documents AdaptixC2 adoption by an unattributed initial-access broker via the CountLoader phishing chain. Source: see Section 14.
 
 **Defenders should already have Unit 42's three YARA rules and the published config-extractor tool deployed.** The detection content released with this report is designed to *complement* that existing coverage — focusing on operator-specific UTA-2026-006 fingerprints and the operator's deviations from framework defaults — rather than duplicate it.
 
@@ -251,7 +251,7 @@ The campaign's loader chain is single-path: PowerShell delivery converges to an 
 | 3 | Shellcode build (31 chunked `$sr += '...'` concatenations) + base64 decode + byte-by-byte XOR `0xA7` decrypt | Distinctive long-base64 + chunked-concatenation pattern in ScriptBlock logging; tool-generated payload format |
 | 4 | Cross-process injection from `powershell.exe` into `explorer.exe`: `OpenProcess` → `VirtualAllocEx(RW)` → `WriteProcessMemory` → `VirtualProtectEx(RX)` → `CreateRemoteThread` | Sysmon Event ID 8 (CreateRemoteThread); Event ID 10 (ProcessAccess with `0x1FFFFF` granted access); the W^X allocation pattern (RW→RX, never RWX) is the operator's distinctive choice |
 | 5 | RDI bootstrap walks PE headers and reflectively maps the embedded AdaptixC2 beacon DLL inside `explorer.exe`, jumps to `GetVersions` export | No `LoadLibrary` event; new RX memory region in `explorer.exe` containing the AdaptixC2 beacon |
-| 6 | Beacon HTTP POST to `45.130.148.125:80` cycling four URIs, with `X-Beacon-Id` header + Firefox 20 UA, 4–5 second cadence, RC4-encrypted config | Outbound HTTP POST to fixed IP with the `X-Beacon-Id` + Firefox 20 UA combination — highest-fidelity AdaptixC2 framework signature |
+| 6 | Beacon HTTP POST to `45.130.148.125:80` cycling four URIs, with `X-Beacon-Id` header + Firefox 20 UA, 4-5 second cadence, RC4-encrypted config | Outbound HTTP POST to fixed IP with the `X-Beacon-Id` + Firefox 20 UA combination — highest-fidelity AdaptixC2 framework signature |
 | 7 | Operator drives the beacon interactively: AD recon (SharpHound, ADRecon, PowerView), credential theft (mimikatz, SharpDPAPI, lazagne, Rubeus), privilege escalation (GodPotato, PrintSpoofer, RunasCs, Certify) | Process tree from `explorer.exe` running commodity post-exploitation tooling; LSASS access events; AD enumeration LDAP queries |
 | 8 | Lateral pivot via Ligolo-ng v0.8.3 (TUN-mode) or chisel; once a Linux foothold is reachable, the AdaptixC2 Linux ELF Gopher agent and `linpeas.sh` extend the kill chain into Linux post-exploitation | Outbound TUN/TCP tunnel from compromised host; Linux-side process / network telemetry for the Gopher ELF agent (no Sysmon for Linux — auditd / Sysmon-for-Linux required) |
 
@@ -360,7 +360,7 @@ The encrypted blob is byte-identical between the dev (07:39 UTC) and production 
 | 0x00 | `agent_type` | `0xbe4c0149` | Server-assigned per-agent ID |
 | 0x04 | `kill_date` | 0 | None |
 | 0x08 | `working_time` | 0 | 24/7 |
-| **0x0c** | **`sleep_delay`** | **4 (dev) → 5 (prod) seconds** | Aggressive 4–5s callback cadence |
+| **0x0c** | **`sleep_delay`** | **4 (dev) → 5 (prod) seconds** | Aggressive 4-5s callback cadence |
 | 0x10 | `jitter_delay` | 0 | Deterministic timing |
 | 0x14 | `listener_type` | `0xcb4e6379` | Server-assigned per-listener ID |
 | 0x18 | `use_ssl` | 0 | HTTP plaintext, no TLS |
@@ -405,15 +405,15 @@ These RTTI strings (combined with `GetVersions`, `Mingw-w64 runtime failure:`, a
 
 **Block-by-block logic:**
 
-1. **AMSI bypass (lines 1–5).** The loader uses `$q='amsi'+'Con'+'text'` string concatenation to defeat source-text AV signatures that look for the literal string `amsiContext`. It then enumerates types in the current AppDomain via `[Ref].Assembly.GetTypes() | ?{$_.Name -like '*iUtils'}` to find the `AmsiUtils` class without naming it directly. It calls `SetValue($null, 0)` on the `NonPublic, Static` field `amsiContext`, zeroing the AMSI session context pointer. From that point onward, every call to `AmsiScanBuffer` no-ops silently. The lineage of this bypass is the well-documented Matt Graeber reflection technique.
+1. **AMSI bypass (lines 1-5).** The loader uses `$q='amsi'+'Con'+'text'` string concatenation to defeat source-text AV signatures that look for the literal string `amsiContext`. It then enumerates types in the current AppDomain via `[Ref].Assembly.GetTypes() | ?{$_.Name -like '*iUtils'}` to find the `AmsiUtils` class without naming it directly. It calls `SetValue($null, 0)` on the `NonPublic, Static` field `amsiContext`, zeroing the AMSI session context pointer. From that point onward, every call to `AmsiScanBuffer` no-ops silently. The lineage of this bypass is the well-documented Matt Graeber reflection technique.
 
-2. **Reflective .NET load (lines 7–9).** The loader has a `$dr` base64 blob (6,838 chars → ~5.1 KB raw) that decodes to an MZ header — a PE file. `[System.Reflection.Assembly]::Load([Convert]::FromBase64String($dr))` loads the assembly directly into PowerShell process memory. There is **no `Add-Type` call, no temp file, no on-disk artifact**. The loaded assembly exposes a class `SI` with a static method `Inject(uint32 pid, byte[] sc)`.
+2. **Reflective .NET load (lines 7-9).** The loader has a `$dr` base64 blob (6,838 chars → ~5.1 KB raw) that decodes to an MZ header — a PE file. `[System.Reflection.Assembly]::Load([Convert]::FromBase64String($dr))` loads the assembly directly into PowerShell process memory. There is **no `Add-Type` call, no temp file, no on-disk artifact**. The loaded assembly exposes a class `SI` with a static method `Inject(uint32 pid, byte[] sc)`.
 
-3. **Shellcode build (lines 11–42).** 31 chunked `$sr += '...'` concatenations build a ~250 KB base64 string. The chunked-concatenation form is a tool-generated payload format used by Cobalt Strike's Artifact Kit `psh` template, by Brute Ratel's PowerShell loader, and by several open-source loader generators — all designed to dodge AV signatures that look for long base64 strings.
+3. **Shellcode build (lines 11-42).** 31 chunked `$sr += '...'` concatenations build a ~250 KB base64 string. The chunked-concatenation form is a tool-generated payload format used by Cobalt Strike's Artifact Kit `psh` template, by Brute Ratel's PowerShell loader, and by several open-source loader generators — all designed to dodge AV signatures that look for long base64 strings.
 
-4. **Decrypt (lines 43–45).** `$enc = [Convert]::FromBase64String($sr)`, then a byte-by-byte XOR with `0xA7` produces the raw shellcode (~250 KB).
+4. **Decrypt (lines 43-45).** `$enc = [Convert]::FromBase64String($sr)`, then a byte-by-byte XOR with `0xA7` produces the raw shellcode (~250 KB).
 
-5. **Inject (lines 47–52).** `$ep = (Get-Process explorer ...).Id` selects the first `explorer.exe` PID found (no `SessionId` filter — accepts whichever explorer the loader sees first). `[SI]::Inject([uint32]$ep, $sc)` invokes the operator's `injector.dll` to perform the cross-process injection.
+5. **Inject (lines 47-52).** `$ep = (Get-Process explorer ...).Id` selects the first `explorer.exe` PID found (no `SessionId` filter — accepts whichever explorer the loader sees first). `[SI]::Inject([uint32]$ep, $sc)` invokes the operator's `injector.dll` to perform the cross-process injection.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/opendirectory-45-130-148-125-20260430/adaptixc2-uta2026-006-beacon-ps1-loader.png" | relative_url }}" alt="VS Code editor showing the operator-written beacon.ps1 loader source: AMSI bypass via $q='amsi'+'Con'+'text' string concatenation, [Ref].Assembly.GetTypes pipeline filtering on '*iUtils', SetValue($null,0); reflective .NET load via [System.Reflection.Assembly]::Load([Convert]::FromBase64String($dr)); chunked $sr += '...' base64 shellcode build; XOR 0xA7 byte-by-byte decrypt; Get-Process explorer with [SI]::Inject([uint32]$ep, $sc) invocation">
@@ -460,7 +460,7 @@ The W^X-aware allocation pattern is the **single defining tradecraft choice** in
 
 The XOR-decoded `$sr` shellcode (~185 KB) decomposes as:
 
-- **First 1,023 bytes (0x000–0x3FE):** A custom MinGW-w64 GCC-compiled Reflective DLL Injection bootstrap. Walks PE headers inline, with the GCC x64 register-save prologue `AWAVAUATUWVSH` and GCC alignment NOPs `66 2E 0F 1F 84 00 00 00 00 00`.
+- **First 1,023 bytes (0x000-0x3FE):** A custom MinGW-w64 GCC-compiled Reflective DLL Injection bootstrap. Walks PE headers inline, with the GCC x64 register-save prologue `AWAVAUATUWVSH` and GCC alignment NOPs `66 2E 0F 1F 84 00 00 00 00 00`.
 - **MZ at offset 0x3FF:** A plaintext embedded PE — the AdaptixC2 dev build (`embedded_dll.bin`, 184,832 B, build counter 4).
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -527,7 +527,7 @@ This is unmodified upstream Ligolo-ng. The detection-engineering note here is cr
 
 ### 4.5 Selective AV-evasion on commodity tools
 
-> **Analyst note:** "Entropy" measures how random a file's bytes look. A normal compiled program has entropy around 5–6.5; encrypted or compressed data sits at 7+. A high-entropy ratio across a binary (most chunks looking random) is the classic signal that a file has been packed or obfuscated to defeat signature-based AV. This subsection documents which commodity tools the operator chose to pack and which they left alone — the *pattern* of choice (heavy on some, none on others) is itself a tradecraft fingerprint.
+> **Analyst note:** "Entropy" measures how random a file's bytes look. A normal compiled program has entropy around 5-6.5; encrypted or compressed data sits at 7+. A high-entropy ratio across a binary (most chunks looking random) is the classic signal that a file has been packed or obfuscated to defeat signature-based AV. This subsection documents which commodity tools the operator chose to pack and which they left alone — the *pattern* of choice (heavy on some, none on others) is itself a tradecraft fingerprint.
 
 The operator wraps a **subset** of commodity tools with heavy obfuscation while leaving most others untouched. This is selective AV-evasion targeting the highest-signature targets, not blanket evasion — a tradecraft signal that is documented as Characteristic 7 of UTA-2026-006.
 
@@ -539,7 +539,7 @@ The operator wraps a **subset** of commodity tools with heavy obfuscation while 
 | Overall entropy | **7.91** | 5.33 – 6.58 |
 | High-entropy chunk ratio | **86%** (284 of 330 chunks) | 0% – 23% |
 
-86% high-entropy is well outside the range for a vanilla SharpHound .NET assembly (which should resemble the other commodity .NET tools at entropy 5.5–6.5). Plausible explanations: a .NET obfuscator (ConfuserEx, .NET Reactor, Eazfuscator), a Costura.Fody / merged-DLL build, or a trojanized variant. Confirmation requires lab-VM `de4dot` deobfuscation, which is out of scope for static analysis.
+86% high-entropy is well outside the range for a vanilla SharpHound .NET assembly (which should resemble the other commodity .NET tools at entropy 5.5-6.5). Plausible explanations: a .NET obfuscator (ConfuserEx, .NET Reactor, Eazfuscator), a Costura.Fody / merged-DLL build, or a trojanized variant. Confirmation requires lab-VM `de4dot` deobfuscation, which is out of scope for static analysis.
 
 **Finding 2 — `lazagne.exe` 10 MB variant is heavily packed (MODERATE confidence):**
 
@@ -603,7 +603,7 @@ The full IOC list with hashes, sizes, contexts, and confidence levels is documen
 | 5. Process injection into `explorer.exe` | T+0:02 | `(Get-Process explorer ...).Id` returns the first `explorer.exe` PID found. `[SI]::Inject([uint32]<PID>, $sc)` performs the cross-process write: `OpenProcess(PROCESS_ALL_ACCESS=0x1FFFFF)` → `VirtualAllocEx(RW=0x04, MEM_COMMIT\|RESERVE=0x3000, ~185 KB)` → `WriteProcessMemory` → `VirtualProtectEx(RX=0x20)` ← W^X flip, NOT RWX → `CreateRemoteThread(at allocation base)` → `WaitForSingleObject(3000 ms)` → `FlushInstructionCache` → `CloseHandle`. | Sysmon Event ID 8 (CreateRemoteThread) and Event ID 10 (ProcessAccess with `0x1FFFFF` granted access) capture the injection from `powershell.exe` into `explorer.exe`. The W^X allocation pattern (RW → RX, never RWX) is the operator's distinctive choice and the strongest host-side fingerprint. |
 | 6. RDI bootstrap and beacon execution | T+0:03 | Remote thread starts at allocation base — the first byte of the AdaptixC2 RDI bootstrap. Bootstrap walks the embedded PE headers, performs reflective DLL mapping, jumps to the `GetVersions` export. AdaptixC2 beacon is now running inside `explorer.exe` — long-lived, network-active, trusted-looking host process — with no on-disk DLL artifact and no `LoadLibrary` event. | New RX-paged memory region in `explorer.exe`. EDRs that look for `LoadLibrary` of unknown DLLs see nothing; in-memory module enumeration (e.g., memory-forensics carving of unbacked executable regions, Sysmon Event ID 7 with module-load filtering) is required to find the mapped DLL. |
 | 7. C2 communication established | T+0:05 onward | Beacon resolves WinHTTP / network APIs at runtime via `LoadLibrary` + `GetProcAddress`, RC4-decrypts its config, begins HTTP POSTs to `45.130.148.125:80`. Full C2 communication detail in Section 5.2. | Outbound HTTP POST from `explorer.exe` (anomalous parent for HTTP traffic) carrying the `X-Beacon-Id` header + Firefox 20 UA combination — the highest-fidelity AdaptixC2 framework signature. |
-| 8. Active C2 phase (operator-driven) | T+seconds–minutes | Operator interactively drives the beacon. Anticipated activity inferred from the bundled toolkit: AD reconnaissance (SharpHound + ADRecon.ps1 + PowerView.ps1); credential theft via mimikatz (LSASS, DCSync), SharpDPAPI (Credential Manager, browsers), lazagne (multi-source), SharpSecDump (SAM, NTDS), Rubeus (Kerberoasting, AS-REP Roasting); privilege escalation via GodPotato / PrintSpoofer (SeImpersonate abuse), RunasCs (token manipulation), Certify (AD CS abuse); lateral movement via Ligolo-ng v0.8.3 TUN tunnel or chisel; Linux pivot via the AdaptixC2 Linux ELF agent + `linpeas.sh` once a Linux foothold is reachable. | Process tree from `explorer.exe` running commodity post-exploitation tooling; LSASS access events; AD enumeration LDAP queries; LSASS handle-open events from non-system processes. |
+| 8. Active C2 phase (operator-driven) | T+seconds-minutes | Operator interactively drives the beacon. Anticipated activity inferred from the bundled toolkit: AD reconnaissance (SharpHound + ADRecon.ps1 + PowerView.ps1); credential theft via mimikatz (LSASS, DCSync), SharpDPAPI (Credential Manager, browsers), lazagne (multi-source), SharpSecDump (SAM, NTDS), Rubeus (Kerberoasting, AS-REP Roasting); privilege escalation via GodPotato / PrintSpoofer (SeImpersonate abuse), RunasCs (token manipulation), Certify (AD CS abuse); lateral movement via Ligolo-ng v0.8.3 TUN tunnel or chisel; Linux pivot via the AdaptixC2 Linux ELF agent + `linpeas.sh` once a Linux foothold is reachable. | Process tree from `explorer.exe` running commodity post-exploitation tooling; LSASS access events; AD enumeration LDAP queries; LSASS handle-open events from non-system processes. |
 | 9. Persistence (operator-deployed, not observed) | — | No persistence-installer artifact is present at the staging endpoint. The PowerShell loader is execution-time only; persistence would be operator-deployed via the C2 channel. AdaptixC2 supports persistence via BOFs and arbitrary command execution, with mechanism choice at operator discretion. The bundled `msupdate.dll` (beacon DLL renamed for sideload by a legitimate Windows binary that imports `msupdate.dll`) is a deployment artifact only — operator preparation for sideload-style execution, not a confirmed-as-executed persistence path. The intended host binary is not documented in the open directory. | None at staging endpoint. Hunting at active-victim hosts: Run-key drops, Scheduled Task creation, WMI subscription, COM hijack — all reachable via standard AdaptixC2 BOFs. |
 
 **Steps 2 through 7 are confirmed in execution (August 2026).** Running the recovered samples under control reproduces the chain exactly as described above. Three points are worth drawing out for detection.
@@ -634,7 +634,7 @@ One caveat matters for anyone reproducing this. The loader reads its target from
 | Working hours | 24/7 |
 | Kill date | None |
 
-A 4–5 second sleep is **aggressively fast** for a production beacon. Most real-world beacons run 30–60+ second sleeps. The plausible explanations are:
+A 4-5 second sleep is **aggressively fast** for a production beacon. Most real-world beacons run 30-60+ second sleeps. The plausible explanations are:
 
 - (a) The endpoint is still in test/staging and not yet live in operations
 - (b) Deliberately fast cadence for a short-engagement operation (quick AD harvest before withdrawal)
@@ -753,7 +753,7 @@ The kit covers **39 techniques across 9 ATT&CK tactics**:
 | Privilege Escalation / T1649 | Steal or Forge Authentication Certificates | Certify (Ghostpack) — AD CS template abuse (ESC1–ESC8) |
 | Lateral Movement / T1090.001 | Internal Proxy | Ligolo-ng v0.8.3 — TUN-mode reverse tunnel |
 | Lateral Movement / T1572 | Protocol Tunneling | Ligolo-ng + chisel — Go reverse tunnels |
-| Command and Control / T1071.001 | Web Protocols | Beacon HTTP POST `45.130.148.125:80`, 4 URIs, `X-Beacon-Id`, Firefox 20 UA, 4–5s sleep |
+| Command and Control / T1071.001 | Web Protocols | Beacon HTTP POST `45.130.148.125:80`, 4 URIs, `X-Beacon-Id`, Firefox 20 UA, 4-5s sleep |
 | Command and Control / T1573.001 | Symmetric Cryptography | RC4-128 on `.rdata` config (key `f443b9ce…` plaintext-adjacent) |
 | Command and Control / T1105 | Ingress Tool Transfer | Open directory `45.130.148.125:8888` hosts toolkit for delivery |
 
@@ -821,7 +821,7 @@ The complete infrastructure attribution evidence is therefore **MODERATE strengt
 | Event | Timestamp |
 |---|---|
 | First malicious activity (dev build compile) | 2026-04-23 07:39:46 UTC |
-| Production cluster compile timestamps | 2026-04-23 20:34:31–32 UTC (3 files within 1 second) |
+| Production cluster compile timestamps | 2026-04-23 20:34:31-32 UTC (3 files within 1 second) |
 | Open-directory first discovery | 2026-04-26 03:41:05 UTC |
 | Hours static since discovery (as of analysis) | 80+ |
 | Infrastructure changes detected | 0 |
@@ -847,7 +847,7 @@ The operator behind `45.130.148.125` cannot be tied to any publicly named threat
 | H1: Russian-speaking ransomware affiliate cohort (Akira / Fog / IAB-staged) | 2 | Closest named-cohort fit — population estimate only |
 | H2: Tropic Trooper APT | 6 | RULED OUT |
 | H3: Tomiris APT | 5 | RULED OUT |
-| H4: GOLD ENCOUNTER / PayoutsKing (Sophos STAC4713) | 2 | LOW confidence (50–60%) |
+| H4: GOLD ENCOUNTER / PayoutsKing (Sophos STAC4713) | 2 | LOW confidence (50-60%) |
 | H5: Unattributed opportunistic mid-tier red-team operator / commodity-cybercrime affiliate | 0 | Best-fit on the strict ACH inconsistency test — null hypothesis |
 
 On the H1 and H5 result, strict ACH discipline awards the best-fit verdict to the hypothesis with the lowest inconsistency count, which is H5 at zero inconsistencies. H1 is the closest *named-cohort* fit at 2 inconsistencies but does not survive the strict test. My earlier framing of H1 and H5 as tied was imprecise, since H5 wins the inconsistency comparison cleanly. The reason H5 still does not produce confident attribution is that "unattributed opportunistic mid-tier operator" is a null-hypothesis label rather than an actor identity. The technical evidence is fully consistent with H5 *and* with the H1 cohort framing at population level, and nothing disambiguates whether the operator sits inside the Russian-speaking ransomware affiliate cohort or simply runs the same commodity tooling without belonging to it. The conservative reading, and the one I adopt, is that named-actor attribution is INSUFFICIENT and the operator is tracked under UTA-2026-006 pending evidence that resolves H1 against H5.
@@ -858,7 +858,7 @@ On the H1 and H5 result, strict ACH discipline awards the best-fit verdict to th
 
 Tomiris is RULED OUT at 5 inconsistencies. Tomiris is polyglot, and Kaspersky's December 2025 Securelist report documented it deploying Havoc and AdaptixC2 simultaneously with C2 traffic routed through legitimate public services, the Telegram bot API and Discord webhooks. This operator uses AdaptixC2 only, with direct HTTP to a fixed IP and no platform-routed C2. Tomiris targets diplomatic ministries, and there is no diplomatic targeting evidence here. The single-protocol, single-platform architecture is fundamentally incompatible with Tomiris's polyglot tradecraft.
 
-**GOLD ENCOUNTER / PayoutsKing (LOW — 2 inconsistencies).** Sophos's STAC4713 cluster (April 2026) is defined by QEMU-based virtualization scaffolding for AV evasion plus stealthy beaconing. This operator has neither: no QEMU artifacts in the kit, and an aggressive 4–5 second beacon cadence inconsistent with patient stealth tradecraft. Insufficient positive evidence to elevate above LOW.
+**GOLD ENCOUNTER / PayoutsKing (LOW — 2 inconsistencies).** Sophos's STAC4713 cluster (April 2026) is defined by QEMU-based virtualization scaffolding for AV evasion plus stealthy beaconing. This operator has neither: no QEMU artifacts in the kit, and an aggressive 4-5 second beacon cadence inconsistent with patient stealth tradecraft. Insufficient positive evidence to elevate above LOW.
 
 ### 8.3 Why H1 is a population estimate, not attribution
 
@@ -898,7 +898,7 @@ The following actions would materially increase attribution confidence:
 - **Reappearance of the RC4 key `f443b9ce7e0658900f6a7ff0991cdee6`** in any future binary — this would link unambiguously to UTA-2026-006 at HIGH confidence
 - **DFIR forensics from a confirmed victim host** would surface language settings, keyboard layout, timezone, runtime command patterns, and operator handle correlation
 - **VirusTotal passive DNS** for `45.130.148.125` after quota reset (2026-05-01) — historical DNS may surface domain infrastructure not visible from the IP-only observation window
-- **Cross-investigation pivot** — if the `/tmp/<name>_build/` PDB pattern, MinGW-w64 GCC + GNU ld 2.35 toolchain, or the same-day dev-to-prod build cadence appears in another investigation, build-environment-level operator clustering becomes viable
+- **Cross-investigation pivot**: if the `/tmp/<name>_build/` PDB pattern, MinGW-w64 GCC + GNU ld 2.35 toolchain, or the same-day dev-to-prod build cadence appears in another investigation, build-environment-level operator clustering becomes viable
 
 ---
 
@@ -927,7 +927,7 @@ AdaptixC2 has shifted in the past twelve months from a niche open-source red-tea
 
 ### 9.4 GOLD ENCOUNTER / PayoutsKing (Sophos STAC4713)
 
-**Sophos (April 2026)** documented STAC4713 / GOLD ENCOUNTER / PayoutsKing operations using AdaptixC2 deployed inside QEMU-based virtualization scaffolding for AV evasion. The QEMU-isolation approach allows the AdaptixC2 implant to run inside a sandboxed VM on the victim host, evading host-based EDR. Beaconing is patient and stealthy — explicitly contrary to this operator's aggressive 4–5 second cadence.
+**Sophos (April 2026)** documented STAC4713 / GOLD ENCOUNTER / PayoutsKing operations using AdaptixC2 deployed inside QEMU-based virtualization scaffolding for AV evasion. The QEMU-isolation approach allows the AdaptixC2 implant to run inside a sandboxed VM on the victim host, evading host-based EDR. Beaconing is patient and stealthy — explicitly contrary to this operator's aggressive 4-5 second cadence.
 
 ### 9.5 What this means for this campaign
 
@@ -947,10 +947,10 @@ The complete detection rule set for this campaign is published as a separate fil
 **[Detection rules and hunting queries → /hunting-detections/opendirectory-45-130-148-125-20260430-detections/](/hunting-detections/opendirectory-45-130-148-125-20260430-detections/)**
 
 The package includes:
-- **YARA rules** — stock-AdaptixC2-framework detection (catches any operator running default-listener configuration) and operator-specific detection (UTA-2026-006 fingerprints — `si_build`, PDB path, RC4 key)
-- **Sigma rules** — PowerShell ScriptBlock logging (Event ID 4104) for the AMSI bypass + reflection.assembly.load + `[SI]::Inject` chain; Sysmon Event ID 8 (CreateRemoteThread) for the `powershell.exe → explorer.exe` injection
-- **Suricata signatures** — network-side detection of the AdaptixC2 stock-listener fingerprint (Firefox 20 UA + `X-Beacon-Id` header + URI rotation)
-- **EDR / SIEM hunting queries** — Splunk and Elastic queries for the loader chain and beacon callback patterns
+- **YARA rules**: stock-AdaptixC2-framework detection (catches any operator running default-listener configuration) and operator-specific detection (UTA-2026-006 fingerprints — `si_build`, PDB path, RC4 key)
+- **Sigma rules**: PowerShell ScriptBlock logging (Event ID 4104) for the AMSI bypass + reflection.assembly.load + `[SI]::Inject` chain; Sysmon Event ID 8 (CreateRemoteThread) for the `powershell.exe → explorer.exe` injection
+- **Suricata signatures**: network-side detection of the AdaptixC2 stock-listener fingerprint (Firefox 20 UA + `X-Beacon-Id` header + URI rotation)
+- **EDR / SIEM hunting queries**: Splunk and Elastic queries for the loader chain and beacon callback patterns
 
 ### 10.2 Detection priorities
 
@@ -1037,11 +1037,11 @@ The feed includes:
 
 The five operator-specific indicators below are the highest-fidelity for cross-campaign tracking under UTA-2026-006. Any single match links a sample or observation to this operator at HIGH confidence:
 
-- **`45.130.148.125`** — operator-controlled C2 IP. Block on TCP/80 (beacon C2), TCP/4444 (TeamServer), TCP/8888 (staging).
-- **`f443b9ce7e0658900f6a7ff0991cdee6`** — recovered RC4 listener key. DEFINITIVE identifier of *this* listener configuration; appears in the per-listener type ID derivation.
-- **`/tmp/si_build/obj/Release/net472/si_build.pdb`** — Linux-built .NET PDB path embedded in the operator-written `injector.dll`. Operator build-environment fingerprint.
-- **`0xbe4c0149` / `0xcb4e6379`** — per-listener `agent_type` and `listener_type` IDs from the RC4-decrypted configuration. Operator-specific values that persist across the dev/prod build pair; would change on a fresh listener generation.
-- **`[SI]::Inject(`** — operator's PowerShell-to-.NET injector invocation pattern. Ties any future `beacon.ps1`-style loader carrying this string to the matched `injector.dll` at HIGH confidence; the `SI` class name exists nowhere else in the public AdaptixC2 framework.
+- **`45.130.148.125`**: operator-controlled C2 IP. Block on TCP/80 (beacon C2), TCP/4444 (TeamServer), TCP/8888 (staging).
+- **`f443b9ce7e0658900f6a7ff0991cdee6`**: recovered RC4 listener key. DEFINITIVE identifier of *this* listener configuration; appears in the per-listener type ID derivation.
+- **`/tmp/si_build/obj/Release/net472/si_build.pdb`**: Linux-built .NET PDB path embedded in the operator-written `injector.dll`. Operator build-environment fingerprint.
+- **`0xbe4c0149` / `0xcb4e6379`**: per-listener `agent_type` and `listener_type` IDs from the RC4-decrypted configuration. Operator-specific values that persist across the dev/prod build pair; would change on a fresh listener generation.
+- **`[SI]::Inject(`**: operator's PowerShell-to-.NET injector invocation pattern. Ties any future `beacon.ps1`-style loader carrying this string to the matched `injector.dll` at HIGH confidence; the `SI` class name exists nowhere else in the public AdaptixC2 framework.
 
 For the full list (72 indicators with file sizes, hashes, false-positive flags, and machine-readable context), see the linked IOC feed.
 
@@ -1110,7 +1110,7 @@ Findings are organized below by the project-standard confidence framework. The l
 - Attacker-controlled infrastructure conclusion (HIGH from TeamServer co-location)
 - Selective AV-evasion finding for `SharpHound.exe` (86% high-entropy)
 - Anticipated kill chain steps based on bundled toolkit composition
-- UTA-2026-006 distinctive characteristic 1–7 documentation
+- UTA-2026-006 distinctive characteristic 1-7 documentation
 
 **MODERATE (reasonable evidence, notable gaps):**
 - Selective AV-evasion finding for `lazagne.exe` 10 MB variant (97% high-entropy + IsPacked + anti-debug — unconfirmed packer family without lab unpacking)
@@ -1121,9 +1121,9 @@ Findings are organized below by the project-standard confidence framework. The l
 
 **LOW / INSUFFICIENT (insufficient evidence to support specific claims):**
 - Named-actor attribution — INSUFFICIENT (<50%); ACH ruled out Tropic Trooper (6 inconsistencies) and Tomiris (5 inconsistencies); H5 (unattributed mid-tier operator) wins the inconsistency comparison with 0 inconsistencies; H1 (Russian-speaking ransomware affiliate cohort) remains a population-level estimate only at 2 inconsistencies
-- GOLD ENCOUNTER / PayoutsKing alternative hypothesis — LOW (50–60%, two inconsistencies)
+- GOLD ENCOUNTER / PayoutsKing alternative hypothesis — LOW (50-60%, two inconsistencies)
 - Active operations status of the staging endpoint — UNKNOWN; pending +1 week Vantage rescan
-- 172.105.0.126 OpenStrike cross-investigation pivot (UTA-2026-004) — LOW (30–40%, generic filename convention overlap only)
+- 172.105.0.126 OpenStrike cross-investigation pivot (UTA-2026-004) — LOW (30-40%, generic filename convention overlap only)
 
 ---
 
@@ -1205,21 +1205,21 @@ The following Tier-1 and Tier-2 sources informed this report's threat-landscape 
 - MITRE ATT&CK Framework — Enterprise Matrix (technique definitions)
 
 **Tier 2 (vendor research):**
-- **Unit 42 (Palo Alto Networks)** — AdaptixC2 framework primary technical reference
-- **Silent Push (August 2025)** — AdaptixC2 ties to Russian Criminal Underworld + CountLoader IAB chain
-- **The DFIR Report (November 2025)** — Bumblebee → AdaptixC2 → Akira chain (~44h time-to-ransomware)
-- **Sophos (April 2026)** — STAC4713 / GOLD ENCOUNTER / PayoutsKing QEMU + AdaptixC2 chain
-- **Kaspersky Securelist (December 2025)** — Tomiris APT with Havoc + AdaptixC2 + Telegram/Discord C2
-- **Zscaler ThreatLabz (March 2026)** — Tropic Trooper trojanized SumatraPDF + GitHub-Issues C2 AdaptixC2 listener
-- **Hunt.io** — Ligolo-ng + AdaptixC2 hunting analysis
-- **Recorded Future / The Record** — Russian cybercrime adoption framing
-- **Arctic Wolf** — Lorenz + chisel CVE-2022-29499 chain
-- **AdaptixC2 GitHub repository + GitBook** — `github.com/Adaptix-Framework/AdaptixC2` (open-source GPL-3.0 framework primary documentation)
-- **GhostPack / SpecterOps** — open-source post-exploitation tooling documentation
+- **Unit 42 (Palo Alto Networks)**: AdaptixC2 framework primary technical reference
+- **Silent Push (August 2025)**: AdaptixC2 ties to Russian Criminal Underworld + CountLoader IAB chain
+- **The DFIR Report (November 2025)**: Bumblebee → AdaptixC2 → Akira chain (~44h time-to-ransomware)
+- **Sophos (April 2026)**: STAC4713 / GOLD ENCOUNTER / PayoutsKing QEMU + AdaptixC2 chain
+- **Kaspersky Securelist (December 2025)**: Tomiris APT with Havoc + AdaptixC2 + Telegram/Discord C2
+- **Zscaler ThreatLabz (March 2026)**: Tropic Trooper trojanized SumatraPDF + GitHub-Issues C2 AdaptixC2 listener
+- **Hunt.io**: Ligolo-ng + AdaptixC2 hunting analysis
+- **Recorded Future / The Record**: Russian cybercrime adoption framing
+- **Arctic Wolf**: Lorenz + chisel CVE-2022-29499 chain
+- **AdaptixC2 GitHub repository + GitBook**: `github.com/Adaptix-Framework/AdaptixC2` (open-source GPL-3.0 framework primary documentation)
+- **GhostPack / SpecterOps**: open-source post-exploitation tooling documentation
 
 **Tier 3 (community / supporting):**
-- **Malpedia** — chisel and CountLoader family pages
-- **IPinfo + IPIP.NET + CAIDA AS Rank** — AS35682 reference
+- **Malpedia**: chisel and CountLoader family pages
+- **IPinfo + IPIP.NET + CAIDA AS Rank**: AS35682 reference
 - **The Hacker News, BleepingComputer, Dark Reading, SC Media, Infosecurity Magazine, Security Boulevard, eSecurity Planet, GBHackers, TechNadu, Cyberpress** — multi-vendor secondary press synthesis on the AdaptixC2 ecosystem
 
 ---

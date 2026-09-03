@@ -101,7 +101,7 @@ These exclusions blind Defender to all subsequent activity on the host.
 > **Analyst note:** With Defender disabled, the loader drops two separate remote access trojans (RATs — malware that gives attackers full keyboard, file, and screen control of a victim machine). Running both provides redundancy: removing one does not restore security.
 
 Once exclusions are in place, the loader deploys:
-- **QuasarRAT**: a .NET-based remote access trojan, approximately 2–3 MB, with configs typically embedded in binary resources.
+- **QuasarRAT**: a .NET-based remote access trojan, approximately 2-3 MB, with configs typically embedded in binary resources.
 - **XWorm**: a lightweight (~70 KB) commodity RAT with obfuscated strings.
 
 Both provide persistence, remote control, and data theft capabilities; both communicate to `dns4up[.]duckdns[.]org`.

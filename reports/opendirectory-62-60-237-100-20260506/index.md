@@ -113,9 +113,9 @@ What I found is a 32+ artifact open directory at `62.60.237[.]100/Documents/` (A
 - **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3` is the single highest-value durable detection signal in this campaign.** It fingerprints the malware's TLS client behavior independently of the C2 IP — IP rotation cannot defeat JA3 detection. Block at network perimeter immediately.
 - **DNS-based detection (RPZ, sinkholes, DGA detection) WILL NOT catch this campaign.** The C2 IP `185.241.208.129` is hardcoded in the loader/payload and never queried via DNS (49 DNS queries observed in the run, none point to operator infrastructure). Detection must be IP-based, JA3-based, or behavioral.
 - **Persistence uses legacy `.job` format that the standard Sysinternals autorunsc tool does NOT enumerate by default.** Defenders relying solely on autorunsc inventory will miss this. Hunt for `*.job` file creation in `C:\Windows\Tasks\` from non-system-installer parents OR enumerate `C:\Windows\System32\Tasks\watchermgmt` directly.
-- **The renamed-Qihoo-PromoUtil hollow-host pattern reuses across 8+ campaigns since 2025** — defenders should detect the PATTERN (orphaned `WVault.exe` or any renamed `PromoUtil.exe` with `clr.dll!CreateAssemblyNameObject` thread start addresses) rather than specific hashes. The hash rotates per campaign; the pattern is durable.
+- **The renamed-Qihoo-PromoUtil hollow-host pattern reuses across 8+ campaigns since 2025**: defenders should detect the PATTERN (orphaned `WVault.exe` or any renamed `PromoUtil.exe` with `clr.dll!CreateAssemblyNameObject` thread start addresses) rather than specific hashes. The hash rotates per campaign; the pattern is durable.
 - **Time-to-detect window is ~43 seconds from sample launch to first C2 beacon.** File-based blocking must act inside this window OR behavioral detection at the orphan-`WVault.exe` stage is required. SIEM/EDR latency over ~60 seconds is too slow for prevention; only detection-and-response is feasible.
-- **The operator shows selective depth** — high-tier work in chosen areas (multi-vendor camouflage, three-layer wrapping, per-host KDF, cross-campaign hollow-host TTP) and commodity choices in others (near-stock Inno Setup wrapper, commodity HijackLoader, commodity Rugmi.HP cert installer). This is more diagnostic than uniform high-tier work — the profile is a MaaS-customer + bundle-camouflage integrator, NOT a custom-RAT or loader developer.
+- **The operator shows selective depth**: high-tier work in chosen areas (multi-vendor camouflage, three-layer wrapping, per-host KDF, cross-campaign hollow-host TTP) and commodity choices in others (near-stock Inno Setup wrapper, commodity HijackLoader, commodity Rugmi.HP cert installer). This is more diagnostic than uniform high-tier work — the profile is a MaaS-customer + bundle-camouflage integrator, NOT a custom-RAT or loader developer.
 - **Attribution to a publicly named actor rests at LOW confidence (58%).** TAG-150 / GrayBravo and TA544 / Narwhal Spider are both ruled out at INSUFFICIENT confidence; Russian-speaking operator language attribution is HIGH confidence (90%); cross-vector operator-fingerprint cluster is MODERATE confidence (75%) for distinct-operator. Treat UTA-2026-007 as a tracking label, not a public actor identity.
 
 **Key Risk Factors.**
@@ -142,25 +142,25 @@ What I found is a 32+ artifact open directory at `62.60.237[.]100/Documents/` (A
 The campaign scores 7.5 out of 10 overall, which is HIGH. Detection is feasible, because the durable signals listed in Key Takeaways above, the TLS fingerprint, the persistence file pattern and the hollow-host process tree, give multiple non-overlapping options, and the full detection package is in Section 10. The risk lies in the multiplicity of evasion layers and in the operator's selective depth, high-tier work in chosen areas like camouflage, the KDF and the hollow host, alongside commodity choices elsewhere like the Inno Setup wrapper and the commodity loader. This is a MaaS-customer and bundle-camouflage integrator profile, not a script kiddie.
 
 The threat actor is **UTA-2026-007**, tracked at three confidence levels, with the full assessment in Section 11:
-- **Russian-speaking operator: HIGH confidence (90%)** — `VSEZBSRABOTAT.url` filename, Russian-language Kraken-exchange URL on second-stage IP, `busket/` Mega.io subdir typo (English-second-language tell), and SPecialiST RePack YARA hit on `NDA.doc`
-- **Distinct operator (not coincidental shared bulletproof tenancy): MODERATE confidence (75%)** — four cross-vector fingerprints stable across 15+ months and seven delivery vectors
-- **Publicly named actor link: LOW confidence (58%)** — TAG-150 / GrayBravo and TA544 / Narwhal Spider both ruled out at INSUFFICIENT confidence; treat UTA-2026-007 as a tracking label, not a public actor identity
+- **Russian-speaking operator: HIGH confidence (90%)**: `VSEZBSRABOTAT.url` filename, Russian-language Kraken-exchange URL on second-stage IP, `busket/` Mega.io subdir typo (English-second-language tell), and SPecialiST RePack YARA hit on `NDA.doc`
+- **Distinct operator (not coincidental shared bulletproof tenancy): MODERATE confidence (75%)**: four cross-vector fingerprints stable across 15+ months and seven delivery vectors
+- **Publicly named actor link: LOW confidence (58%)**: TAG-150 / GrayBravo and TA544 / Narwhal Spider both ruled out at INSUFFICIENT confidence; treat UTA-2026-007 as a tracking label, not a public actor identity
 
 **For technical teams (operational hooks complementing the Key Takeaways above):**
 - Hunt for any `*.job` file creation in `C:\Windows\Tasks\` from non-system-installer parents — the legacy `.job` format is an autorunsc enumeration blind spot and is the campaign's primary persistence mechanism (Section 6.4).
 - Investigate any orphaned `WVault.exe` or `PromoUtil.exe` with `clr.dll!CreateAssemblyNameObject` thread start addresses + outbound TLSv1 traffic on non-standard high ports — this catches the cross-campaign hollow-host TTP cluster (Section 6.3).
 - Detection content (six YARA rules, eight Sigma rules, four Suricata signatures) is published separately at `/hunting-detections/opendirectory-62-60-237-100-20260506-detections/` (raw file: `opendirectory-62-60-237-100-20260506-detections.md`).
 
-The remainder of this report walks the kill chain end-to-end (Section 3), documents the static and dynamic technical analysis (Sections 4–6), maps observed behaviors to MITRE ATT&CK (Section 7), summarizes the threat-actor assessment and the UTA-2026-007 designation (Section 11), and closes with the consolidated Detection & Response section (Section 10) and gap-and-assumption catalog (Section 15).
+The remainder of this report walks the kill chain end-to-end (Section 3), documents the static and dynamic technical analysis (Sections 4-6), maps observed behaviors to MITRE ATT&CK (Section 7), summarizes the threat-actor assessment and the UTA-2026-007 designation (Section 11), and closes with the consolidated Detection & Response section (Section 10) and gap-and-assumption catalog (Section 15).
 
 ### 1.1 Threat Intelligence Summary
 
 This report is anchored to a single observable corpus rather than to general threat-landscape commentary, but four threat-intel facts shape how defenders should treat the findings:
 
-- **Family identification at HIGH confidence (92%)** — Kaspersky `Trojan.Win32.Penguish.gun`, Microsoft `TrojanDownloader:Win64/Rugmi.HNL!MTB`, and Elastic Security's `Windows_Trojan_GhostPulse_caea316b` YARA all converge on the same loader family. HijackLoader / Penguish / Rugmi / GhostPulse / IDAT Loader / SHADOWLADDER are aliases for one commodity loader tracked by six vendors since July 2023 (see Section 2 for the full timeline).
-- **Final-stage class at HIGH confidence (88%)** — three independent VirusTotal IDS rules fire on the C2 SSL handshake (AsyncRAT/zgRAT SSL cert, DCRat C&C SSL cert, AsyncRAT JA3). Combined with `clr.dll!CreateAssemblyNameObject` thread start addresses in `WVault.exe`, the final stage is .NET AsyncRAT-class. Specific variant (AsyncRAT vs DCRat vs zgRAT vs heavily modified fork) is INSUFFICIENT — requires TLS MITM or memory dump.
-- **Infrastructure has dual-BPH posture** — AS210644 (AEZA) was OFAC-sanctioned in July 2025 with Five Eyes joint advisory; AS210558 (1337 Services) is Spamhaus DROP-listed. The operator stages on both with full awareness — the Stage 1 sample first appeared on VirusTotal eight months after AS210644 was sanctioned. This rules out cautious or low-skill operators (HIGH confidence) and is a strong signal of risk tolerance.
-- **Cross-campaign reuse at HIGH confidence** — VirusTotal `execution_parents` pivot identifies the renamed-Qihoo-PromoUtil-as-`WVault.exe` injection host pattern across 8+ distinct campaigns since 2025. Defenders detecting the PATTERN (orphaned legitimate Qihoo binary with .NET CLR thread start addresses) generalize across the cluster — not bound to specific hashes that the operator can rotate.
+- **Family identification at HIGH confidence (92%)**: Kaspersky `Trojan.Win32.Penguish.gun`, Microsoft `TrojanDownloader:Win64/Rugmi.HNL!MTB`, and Elastic Security's `Windows_Trojan_GhostPulse_caea316b` YARA all converge on the same loader family. HijackLoader / Penguish / Rugmi / GhostPulse / IDAT Loader / SHADOWLADDER are aliases for one commodity loader tracked by six vendors since July 2023 (see Section 2 for the full timeline).
+- **Final-stage class at HIGH confidence (88%)**: three independent VirusTotal IDS rules fire on the C2 SSL handshake (AsyncRAT/zgRAT SSL cert, DCRat C&C SSL cert, AsyncRAT JA3). Combined with `clr.dll!CreateAssemblyNameObject` thread start addresses in `WVault.exe`, the final stage is .NET AsyncRAT-class. Specific variant (AsyncRAT vs DCRat vs zgRAT vs heavily modified fork) is INSUFFICIENT — requires TLS MITM or memory dump.
+- **Infrastructure has dual-BPH posture**: AS210644 (AEZA) was OFAC-sanctioned in July 2025 with Five Eyes joint advisory; AS210558 (1337 Services) is Spamhaus DROP-listed. The operator stages on both with full awareness — the Stage 1 sample first appeared on VirusTotal eight months after AS210644 was sanctioned. This rules out cautious or low-skill operators (HIGH confidence) and is a strong signal of risk tolerance.
+- **Cross-campaign reuse at HIGH confidence**: VirusTotal `execution_parents` pivot identifies the renamed-Qihoo-PromoUtil-as-`WVault.exe` injection host pattern across 8+ distinct campaigns since 2025. Defenders detecting the PATTERN (orphaned legitimate Qihoo binary with .NET CLR thread start addresses) generalize across the cluster — not bound to specific hashes that the operator can rotate.
 
 Public reporting matches and gaps are inventoried in Section 2.2; the threat-actor assessment with full ACH alternatives is in Section 11.
 
@@ -248,7 +248,7 @@ The campaign is a multi-vector phishing kit converging on a single loader chain.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-kill-chain-overview.svg" | relative_url }}" alt="Vertical flowchart of the 11-stage HijackLoader / Penguish / Rugmi to AsyncRAT-class kill chain. Stages flow top-to-bottom with arrows. Stage 0 (orange) Initial Access, 8 parallel delivery vectors (.url, .lnk, .scr/.msi RTLO, macro Office, .xll, .msc GrimResource, .hta/.mht/.mhtml POCs, fake-PDF .exe). Stage 1 (amber) SFX Wrapper Carriers.exe Inno Setup 6.5+, Pascal Script InitializeSetup -> WinExec -> return False with silent installer abort. Stage 2 (red) Side-load Host CrystSupervisor32.exe (renamed Wondershare SlideShowEditor.exe) loads operator-modified ExceptionHandler.dll with Plowshare PDB and inline reflective loader. Stage 3 (purple) First DLL Hollow into Windows tapisrv.dll, reads shadermgr93.rc 27 KB config, copies 5808 bytes of stage-2 shellcode. Stage 4 (red) Stage-2 Shellcode 5808 bytes 8-phase architecture, X65599 hash table, anti-sandbox quadruple, reads networkspec17.log 2.6 MB and decodes through PNG-IDAT chunk walker, 4-byte XOR with key 0xE1D5B4A2, LZNT1 chunked to 3.75 MB. Stage 5 (purple) Second DLL Hollow into Windows input.dll. Stage 6 (cyan) Stage-3 PE Bundle 8 PEs split into 5 genuine signed binaries (Crisp Squirrel, Info-ZIP, two Google Updater PEs, Qihoo 360 PromoUtil) and 3 operator PEs (pe_03 HijackLoader proper, pe_06 GoProxy MITM CA installer, pe_07 bundle-cleanup helper). Stage 7 (red) Per-host KDF via ntdll!RtlHashUnicodeString, seed = X65599(GetComputerNameW()) XOR 0xa1b2d3b4 used as both PRNG seed and decryption key, resisted ~270 cipher recovery attempts. Stage 8 (purple) WVault.exe Hollow, genuine Qihoo PromoUtil dropped to C:\\ProgramData\\WVault.exe with parent process orphaned, .NET CLR thread start addresses visible (clr.dll!CreateAssemblyNameObject, GetIdentityAuthority). Cross-campaign TTP across 8+ campaigns since 2025. Stage 9 (dark red) Persistence + Defender Bypass + GoProxy CA cert install at thumbprint 0174E68C97DDF1E0EEEA415EA336A163D2B61AFD. Stage 10 (dark red) C2 Beacon TLSv1 to 185.241.208[.]129:56167 (hardcoded IP, no DNS), JA3 07af4aa9e4d215a5ee63f9a0a277fbe3 matches SSLBL AsyncRAT JA3, JA4 t10i060500_4dc025c38c38_1a3805c3aa63, ClientHello cipher list 49162-49161-49172-49171-53-47. Footer: total time from sample launch to first C2 beacon approximately 43 seconds, file-based blocking must act inside this window or behavioral detection at Stage 8 is required.">
-  <figcaption><em>Figure 1: HijackLoader / Penguish / Rugmi → AsyncRAT-class kill chain. The 11 stages flow from the eight initial-access lures down to the C2 beacon at the bottom. Color coding (mapped to the site's severity palette where applicable): <span style="color:#f97316">orange</span> initial access · <span style="color:#eab308">yellow</span> dropper · <span style="color:#dc2626">red</span> operator loader · <span style="color:#58a6ff">blue</span> hollowed Windows DLL · <span style="color:#a855f7">purple</span> PE bundle (mixed legit and malicious) · <span style="color:#7f1d1d">deep red</span> persistence and C2. Sample-launch to first C2 beacon ≈ 43 seconds — file-based blocking must act inside this window, otherwise behavioral detection at the orphan-<code>WVault.exe</code> stage is required. Sections 4–6 walk each stage in technical depth.</em></figcaption>
+  <figcaption><em>Figure 1: HijackLoader / Penguish / Rugmi → AsyncRAT-class kill chain. The 11 stages flow from the eight initial-access lures down to the C2 beacon at the bottom. Color coding (mapped to the site's severity palette where applicable): <span style="color:#f97316">orange</span> initial access · <span style="color:#eab308">yellow</span> dropper · <span style="color:#dc2626">red</span> operator loader · <span style="color:#58a6ff">blue</span> hollowed Windows DLL · <span style="color:#a855f7">purple</span> PE bundle (mixed legit and malicious) · <span style="color:#7f1d1d">deep red</span> persistence and C2. Sample-launch to first C2 beacon ≈ 43 seconds — file-based blocking must act inside this window, otherwise behavioral detection at the orphan-<code>WVault.exe</code> stage is required. Sections 4-6 walk each stage in technical depth.</em></figcaption>
 </figure>
 
 **Stage-by-stage detail at a glance:**
@@ -323,7 +323,7 @@ Three distribution-layer components carry the loader chain: `Carriers.exe` (the 
 | Inno Setup `DefaultDirName` | `Veteran` (operator codename) |
 | Inno Setup `AppId` GUID | `{1F2952E4-FC07-4482-B9E6-E795507DA7D2}` (campaign-unique) |
 
-> Hash and full IOC details — see `opendirectory-62-60-237-100-20260506-iocs.json` companion file (referenced in Section 14). All file-fact tables in Sections 4.7–4.10 follow the same convention: SHA256 prefixes are shown for orientation; full hashes and additional indicators are in the IOC feed, not embedded inline.
+> Hash and full IOC details — see `opendirectory-62-60-237-100-20260506-iocs.json` companion file (referenced in Section 14). All file-fact tables in Sections 4.7-4.10 follow the same convention: SHA256 prefixes are shown for orientation; full hashes and additional indicators are in the IOC feed, not embedded inline.
 
 `Carriers.exe` is a near-stock Inno Setup 6.5+ wrapper, NOT the operator's malicious heavy-lifter. The operator's only modifications are at three places: the Pascal Script `[Code]` section, the bundle contents, and the disguise (`Apophyge` `AppName`, `Veteran` `DefaultDirName`). The cryptographic primitives — ChaCha20, SHA-512, BLAKE2 — that show up in YARA hits are all stock Inno Setup 6.3+ ChaCha20 stack components, not operator code.
 
@@ -364,7 +364,7 @@ Setting `Result := False` makes the installer exit immediately. There is no wiza
 
 #### 4.1.2 The 17 dropped files — multi-vendor camouflage bundle
 
-The 17 files dropped by the Pascal Script into `%TEMP%\is-XXXXX.tmp\` form a multi-vendor camouflage bundle. The compile-timestamp distribution is the single discriminating diagnostic: 12 of the DLLs have 2005–2019 compile timestamps (genuine Wondershare / Microsoft camouflage); only `CrystSupervisor32.exe` (2025-02-25) and the operator artifacts (`networkspec17.log`, `shadermgr93.rc`) are 2025-built.
+The 17 files dropped by the Pascal Script into `%TEMP%\is-XXXXX.tmp\` form a multi-vendor camouflage bundle. The compile-timestamp distribution is the single discriminating diagnostic: 12 of the DLLs have 2005-2019 compile timestamps (genuine Wondershare / Microsoft camouflage); only `CrystSupervisor32.exe` (2025-02-25) and the operator artifacts (`networkspec17.log`, `shadermgr93.rc`) are 2025-built.
 
 | File | Size | Verdict | Role |
 |---|---|---|---|
@@ -515,7 +515,7 @@ The **anti-sandbox quadruple** (`ZwQueryInformationProcess` + `ZwDelayExecution`
 
 ### 4.5 networkspec17.log — Encrypted Stage-3 Carrier
 
-> **Analyst note:** This is the 2.6 MB file that contains the bulk of the loader chain — it gets decoded in three layers and unpacks into 3.75 MB of stage-3 content (eight embedded PE files, the path string for the next hollow target, and persistence-path strings). The first ~16 KB of the file is camouflaged to look like English text — that is a deliberate trick to make a defender opening the file in a text editor or `strings` dump dismiss it as benign log content. The body of the file is wrapped in fake PNG-IDAT chunks, then XOR'd with a 4-byte key that is stored in plaintext at file offset 4–7 of the file itself, then LZNT1-compressed in chunks. None of this is sophisticated cryptography — it's deliberate format-level camouflage at a level that automated triage and casual hex-editor inspection both miss.
+> **Analyst note:** This is the 2.6 MB file that contains the bulk of the loader chain — it gets decoded in three layers and unpacks into 3.75 MB of stage-3 content (eight embedded PE files, the path string for the next hollow target, and persistence-path strings). The first ~16 KB of the file is camouflaged to look like English text — that is a deliberate trick to make a defender opening the file in a text editor or `strings` dump dismiss it as benign log content. The body of the file is wrapped in fake PNG-IDAT chunks, then XOR'd with a 4-byte key that is stored in plaintext at file offset 4-7 of the file itself, then LZNT1-compressed in chunks. None of this is sophisticated cryptography — it's deliberate format-level camouflage at a level that automated triage and casual hex-editor inspection both miss.
 
 **File facts:**
 
@@ -525,7 +525,7 @@ The **anti-sandbox quadruple** (`ZwQueryInformationProcess` + `ZwDelayExecution`
 | SHA256 (prefix) | `7e2000ce…` (full hash in IOC feed) |
 | Size | 2,607,970 bytes (2.6 MB) |
 | Overall entropy | 7.879 |
-| Two-zone structure | Head 0x0000–0x4000 (printable, low entropy ~4.3) + Body 0x4000–end (high entropy ~7.5) |
+| Two-zone structure | Head 0x0000-0x4000 (printable, low entropy ~4.3) + Body 0x4000–end (high entropy ~7.5) |
 
 #### 4.5.1 Text-frequency-preserving camouflage cipher in head zone
 
@@ -543,9 +543,9 @@ The first layer is PNG IDAT chunk framing. The body zone at offset `0x4000` and 
 [c6 a5 79 ea] | [e1 d5 b4 a2] | [comp_sz_LE] | [uncomp_sz_LE]
 ```
 
-Where `c6 a5 79 ea` is the operator's first-chunk-type marker, `e1 d5 b4 a2` is the Layer-2 XOR key (stored in plaintext at file offset 4–7 — defender can read the key directly from the file), and `IDAT` (`49 44 41 54`) and `IEND` (`49 45 4e 44`) sentinels delimit each chunk. Stage-2's `walk_idat_chunks` function strips the framing.
+Where `c6 a5 79 ea` is the operator's first-chunk-type marker, `e1 d5 b4 a2` is the Layer-2 XOR key (stored in plaintext at file offset 4-7 — defender can read the key directly from the file), and `IDAT` (`49 44 41 54`) and `IEND` (`49 45 4e 44`) sentinels delimit each chunk. Stage-2's `walk_idat_chunks` function strips the framing.
 
-**Layer 2 — 4-byte rotating XOR with key `0xE1D5B4A2`.** After Layer-1 stripping, the operator XORs the resulting bytes with the 4-byte key `0xE1D5B4A2` (little-endian). The key is per-build but visible at file offset 4–7 of `networkspec17.log` itself — anyone parsing the format can recover it. **Note the divergence from canonical published HijackLoader analyses**, which document the key as `32 A3 49 B3` — this build uses a fork-specific XOR key.
+**Layer 2 — 4-byte rotating XOR with key `0xE1D5B4A2`.** After Layer-1 stripping, the operator XORs the resulting bytes with the 4-byte key `0xE1D5B4A2` (little-endian). The key is per-build but visible at file offset 4-7 of `networkspec17.log` itself — anyone parsing the format can recover it. **Note the divergence from canonical published HijackLoader analyses**, which document the key as `32 A3 49 B3` — this build uses a fork-specific XOR key.
 
 **Layer 3 — LZNT1 chunked decompression (3.75 MB output).** After Layer-2 XOR, the result is LZNT1-compressed in chunks. **Whole-buffer LZNT1 fails; only chunked LZNT1 succeeds.** Stage-2 calls `RtlDecompressBuffer` per chunk and concatenates outputs. Total decompressed: 3,751,936 of 3,752,455 bytes (99.99%).
 
@@ -985,7 +985,7 @@ Created by `Crisp.exe` (PID 10072) at `07:27:24.62`:
 - Path: `C:\Windows\Tasks\watchermgmt.job`
 - Format: legacy Windows scheduled task (binary `.job` format, predates Vista XML format)
 - Size: 262 bytes
-- **Autorunsc does NOT enumerate `.job` files in `C:\Windows\Tasks\` by default** — explains the "0 new entries" autoruns comparison
+- **Autorunsc does NOT enumerate `.job` files in `C:\Windows\Tasks\` by default**: explains the "0 new entries" autoruns comparison
 
 **Auto-migration to XML format** (within 90 ms of legacy `.job` write):
 - `svchost.exe` (Task Scheduler service, `-k netsvcs -s Schedule`) automatically creates the XML entry at `C:\Windows\System32\Tasks\watchermgmt`
@@ -1070,7 +1070,7 @@ Round 12 static analysis predicted per-host random env vars set by the loader. R
 | `JJZIUTSQYJMNTZ` | `%TEMP%\865FDFD.tmp` | CrystSupervisor32.exe (PID 9840) | Path to a SECOND encrypted payload |
 | `PBZULMYY` | `C:\ProgramData\adv_ctrl\CrystSupervisor32.exe` | CrystSupervisor32.exe (PID 9840) | Path to persistent loader |
 
-Observed lengths (8, 13, 14, 8 chars) match the Round 12 static-analysis predicted range (8–16 chars, uppercase ASCII A–Z, four random env vars per host, deterministic from hostname). **The PATTERN is byte-confirmed.** **The exact algorithm is NOT byte-confirmed** — no FLARE-derived seed produces `EUOJCZYGOUCUG` in 1M-seed brute force. The static reverse missed something material in the algorithm.
+Observed lengths (8, 13, 14, 8 chars) match the Round 12 static-analysis predicted range (8-16 chars, uppercase ASCII A-Z, four random env vars per host, deterministic from hostname). **The PATTERN is byte-confirmed.** **The exact algorithm is NOT byte-confirmed** — no FLARE-derived seed produces `EUOJCZYGOUCUG` in 1M-seed brute force. The static reverse missed something material in the algorithm.
 
 For defenders the operational implication is that rules looking for specific env var names, `EUOJCZYGOUCUG` for instance, will not catch other infections, because those names are per-host. Rules looking for the PATTERN, uppercase ASCII env var names of length 8 to 16 pointing at `%TEMP%\<hex>.tmp` files, will generalize.
 
@@ -1116,7 +1116,7 @@ This delete-then-rewrite pattern is unusual — possibly anti-forensics (wipe + 
 
 **ASN / hosting:**
 - AS210558 — **1337 Services GmbH** (Poland, RIPE NCC)
-- **Spamhaus DROP listed** — Suricata fired `ET DROP Spamhaus DROP Listed Traffic` (rule 2400036) on the flow
+- **Spamhaus DROP listed**: Suricata fired `ET DROP Spamhaus DROP Listed Traffic` (rule 2400036) on the flow
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-wvault-c2-tcp-connection.png" | relative_url }}" alt="Process-inspector Properties dialog for WVault.exe (PID 2596), TCP/IP tab. Two TCP rows shown: TCP from the infected host on port 10239 to www.inetsim.org:56167 in CLOSE_WAIT state (red highlight), TCP from the infected host on port 25744 to www.inetsim.org:56167 in ESTABLISHED state (green highlight). Resolve addresses checkbox is enabled. The destination shown is a sinkhole substitution from analysis; on a real victim host the same flow targets 185.241.208[.]129:56167.">
@@ -1325,10 +1325,10 @@ This IP serves the legitimate Wondershare DLL pack (`BugSplat.dll`, `COMSupport.
 | Process inspection | `clr.dll!CreateAssemblyNameObject` + `clr.dll!GetIdentityAuthority` thread start addresses in `WVault.exe` |
 
 **Most likely candidates** (all .NET-based, all match the SSL cert IDS hits):
-- **AsyncRAT** — public reports show Polish C2 infrastructure, TLSv1.0 with similar JA3
-- **DCRat** — known to use AS210558 hosting per public threat-intel
-- **zgRAT** — commodity, often paired with HijackLoader as final stage
-- **XWorm / Quasar / VenomRAT** — possible but less commonly paired with HijackLoader
+- **AsyncRAT**: public reports show Polish C2 infrastructure, TLSv1.0 with similar JA3
+- **DCRat**: known to use AS210558 hosting per public threat-intel
+- **zgRAT**: commodity, often paired with HijackLoader as final stage
+- **XWorm / Quasar / VenomRAT**: possible but less commonly paired with HijackLoader
 
 ### 9.2 What the cipher gap implies
 
@@ -1361,8 +1361,8 @@ The detection content for this campaign is published at:
 
 | Rule Type | Count | Key MITRE Techniques Covered | False-Positive Risk |
 |---|---|---|---|
-| YARA | 6 | T1027.009, T1027.013, T1204.002, T1574.001, T1055.012, T1055.002, T1620, T1480, T1036.005, T1218.014, T1059.005, T1105 | LOW–MEDIUM |
-| Sigma | 8 | T1204.002, T1036.005, T1055.012, T1055.002, T1574.001, T1053.005, T1059.005, T1112, T1685, T1218.014, T1480 | LOW–MEDIUM |
+| YARA | 6 | T1027.009, T1027.013, T1204.002, T1574.001, T1055.012, T1055.002, T1620, T1480, T1036.005, T1218.014, T1059.005, T1105 | LOW-MEDIUM |
+| Sigma | 8 | T1204.002, T1036.005, T1055.012, T1055.002, T1574.001, T1053.005, T1059.005, T1112, T1685, T1218.014, T1480 | LOW-MEDIUM |
 | Suricata | 4 | T1071.001, T1573.001, T1571, T1105, T1090.002 | LOW |
 
 ### 10.2 Priority deployment targets
@@ -1373,9 +1373,9 @@ The detection content for this campaign is published at:
 
 ### 10.3 Coverage gaps (intentional)
 
-- **No detection for the per-host random env vars by name** — values are deterministic per host; specific names like `EUOJCZYGOUCUG` would not catch other hosts. Sigma rule covers the PATTERN (env vars matching `^[A-Z]{8,16}$` set by non-system processes pointing at `%TEMP%\<8hex>.tmp`) instead.
-- **No detection for the Qihoo PromoUtil hash itself** — the hash is genuine signed Qihoo software. Sigma rule covers the BEHAVIORAL PATTERN (orphaned process with `clr.dll!CreateAssemblyNameObject` thread start addresses) instead.
-- **No detection rule for the cipher of `807D7B6.tmp`** — cipher unrecovered after 270 attempts; a content-based rule is impossible without knowing the algorithm. YARA rule covers the FILE-PATH PATTERN (`%TEMP%\<8hex>.tmp` referenced by per-host random env var names) instead.
+- **No detection for the per-host random env vars by name**: values are deterministic per host; specific names like `EUOJCZYGOUCUG` would not catch other hosts. Sigma rule covers the PATTERN (env vars matching `^[A-Z]{8,16}$` set by non-system processes pointing at `%TEMP%\<8hex>.tmp`) instead.
+- **No detection for the Qihoo PromoUtil hash itself**: the hash is genuine signed Qihoo software. Sigma rule covers the BEHAVIORAL PATTERN (orphaned process with `clr.dll!CreateAssemblyNameObject` thread start addresses) instead.
+- **No detection rule for the cipher of `807D7B6.tmp`**: cipher unrecovered after 270 attempts; a content-based rule is impossible without knowing the algorithm. YARA rule covers the FILE-PATH PATTERN (`%TEMP%\<8hex>.tmp` referenced by per-host random env var names) instead.
 
 Defenders should assume a 43-second window from sample launch to first C2 beacon. File-based detection has to act inside that window, or behavioral detection at the orphan-`WVault.exe` stage becomes necessary.
 
@@ -1418,7 +1418,7 @@ Defenders should assume a 43-second window from sample launch to first C2 beacon
 - LOW overall confidence (58%) that the distinct operator can be tracked as a single entity across the corpus
 - INSUFFICIENT confidence for any link to a publicly named actor
 
-The language I use here (`weak indicators suggest`) reflects the LOW confidence threshold per CLAUDE.md: at LOW (50–70%) confidence, the appropriate language is "weak indicators suggest" or "insufficient evidence for attribution," NOT "highly likely," "probable attribution to," or "possible attribution to."
+The language I use here (`weak indicators suggest`) reflects the LOW confidence threshold per CLAUDE.md: at LOW (50-70%) confidence, the appropriate language is "weak indicators suggest" or "insufficient evidence for attribution," NOT "highly likely," "probable attribution to," or "possible attribution to."
 
 ### 11.2 Named actors ruled out
 
@@ -1504,55 +1504,55 @@ The most operationally critical findings carry DEFINITE confidence; the outstand
 ### DEFINITE (Direct evidence, no ambiguity)
 
 - **C2 endpoint:** TLSv1 to `185.241.208.129:56167` — Suricata flow + behavioral sandbox TCP log + netstat samples (PID 2596 `WVault.exe`)
-- **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3`** — captured by Suricata; matches SSLBL AsyncRAT JA3 list
+- **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3`**: captured by Suricata; matches SSLBL AsyncRAT JA3 list
 - **Spamhaus DROP listing** of AS210558 — Suricata rule 2400036 fired during the run
 - **OFAC sanction** of AS210644 (AEZA GROUP LLC) — US Treasury SDN list, July 2025
 - **Process tree:** `Carriers.exe → Carriers.tmp → CrystSupervisor32.exe (temp) → CrystSupervisor32.exe (persistent) → WVault.exe + Crisp.exe` — Sysmon EID 1
 - **File hashes:** all artifact hashes in IOC feed (`opendirectory-62-60-237-100-20260506-iocs.json`) — captured directly
 - **Inno Setup wrapper:** `AppName = Apophyge`, `DefaultDirName = Veteran`, `AppId = {1F2952E4-FC07-4482-B9E6-E795507DA7D2}` — read directly from Inno Setup header
 - **PDB string:** `I:\CompanySource\Plowshare\Src\Symbol\Release\ExceptionHandler.pdb` — extracted directly from `ExceptionHandler.dll`
-- **Multi-layer encoding format of `networkspec17.log`:** PNG-IDAT framing + 4-byte XOR with key `0xE1D5B4A2` (key visible at file offset 4–7) + LZNT1 chunked decompression — byte-confirmed
+- **Multi-layer encoding format of `networkspec17.log`:** PNG-IDAT framing + 4-byte XOR with key `0xE1D5B4A2` (key visible at file offset 4-7) + LZNT1 chunked decompression — byte-confirmed
 - **Defender exclusion** of `C:\ProgramData\adv_ctrl` — Sysmon EID 13 RegistrySetValue from `MsMpEng.exe`
 - **Persistence:** legacy `.job` at `C:\Windows\Tasks\watchermgmt.job` + auto-migrated XML at `C:\Windows\System32\Tasks\watchermgmt`
-- **No DNS resolution for C2** — 49 DNS queries during run, none point to operator-controlled C2 infrastructure (Sysmon EID 22)
+- **No DNS resolution for C2**: 49 DNS queries during run, none point to operator-controlled C2 infrastructure (Sysmon EID 22)
 - **SPecialiST RePack YARA hit** on `NDA.doc` — VT YARA match
 
 ### HIGH (Strong evidence, minor gaps)
 
-- **Family identification: HijackLoader / Penguish / Rugmi / GhostPulse / IDAT Loader** — Kaspersky `Trojan.Win32.Penguish.gun`, Microsoft `TrojanDownloader:Win64/Rugmi.HNL!MTB`, Elastic `Windows_Trojan_GhostPulse_caea316b` YARA — three independent vendor classifications (~92% confidence)
-- **Final-stage family is AsyncRAT-class .NET RAT** — three independent VT IDS hits on the SSL handshake (`AsyncRAT/zgRAT SSL cert`, `DCRat SSL cert`, `AsyncRAT JA3`) plus `clr.dll!CreateAssemblyNameObject` thread start address in `WVault.exe` — variant inconclusive (88% confidence)
-- **Russian-speaking operator** — four independent first-language artifacts: `VSEZBSRABOTAT.url` filename, `mozhno-li-vyvesti-dengi-s-krakena.html` URL, `busket/` Mega.io subdir typo, SPecialiST RePack YARA hit (90% confidence)
-- **`WVault.exe` is renamed Qihoo 360 PromoUtil.exe with .NET injection** — PDB path matches; build-time string matches; `clr.dll!CreateAssemblyNameObject` thread; orphaned process pattern (95% confidence)
-- **Reflective loader `FUN_100024B0` in `ExceptionHandler.dll`** — PEB-walk API hash resolution + relocation step + memcpy + jump
-- **Stage-2 shellcode 8-phase architecture** — API hash table at offsets `+0x14` through `+0x13c`; X65599 hash multiplier; anti-sandbox quadruple
-- **pe_03 uses `ntdll!RtlHashUnicodeString` for API hash resolution** — under-documented TTP; algorithm byte-confirmed via PE Export Directory walk pattern
-- **Multi-vendor camouflage bundle** — 4 genuine vendor binaries (Crisp Squirrel + Info-ZIP + Google Updater + Qihoo 360) co-located with 3 malicious operator-controlled PEs
-- **Cross-campaign hollow-host TTP cluster** — 8+ campaigns since 2025 use the renamed-Qihoo-PromoUtil pattern (per VT execution_parents pivot)
-- **`watchermgmt` scheduled task** — XML content directly read; `CalendarTrigger` 1-hour interval, daily recurrence
-- **Pascal Script `InitializeSetup → WinExec → return False`** — bytecode decompiled via Inno Setup bytecode decompiler; behavioral pattern matches static prediction
-- **GoProxy MITM CA cert install** — VT C2AE behavioral confirmation; technique IS in pe_06 even though not observed in 5-min behavioral sandbox window
+- **Family identification: HijackLoader / Penguish / Rugmi / GhostPulse / IDAT Loader**: Kaspersky `Trojan.Win32.Penguish.gun`, Microsoft `TrojanDownloader:Win64/Rugmi.HNL!MTB`, Elastic `Windows_Trojan_GhostPulse_caea316b` YARA — three independent vendor classifications (~92% confidence)
+- **Final-stage family is AsyncRAT-class .NET RAT**: three independent VT IDS hits on the SSL handshake (`AsyncRAT/zgRAT SSL cert`, `DCRat SSL cert`, `AsyncRAT JA3`) plus `clr.dll!CreateAssemblyNameObject` thread start address in `WVault.exe` — variant inconclusive (88% confidence)
+- **Russian-speaking operator**: four independent first-language artifacts: `VSEZBSRABOTAT.url` filename, `mozhno-li-vyvesti-dengi-s-krakena.html` URL, `busket/` Mega.io subdir typo, SPecialiST RePack YARA hit (90% confidence)
+- **`WVault.exe` is renamed Qihoo 360 PromoUtil.exe with .NET injection**: PDB path matches; build-time string matches; `clr.dll!CreateAssemblyNameObject` thread; orphaned process pattern (95% confidence)
+- **Reflective loader `FUN_100024B0` in `ExceptionHandler.dll`**: PEB-walk API hash resolution + relocation step + memcpy + jump
+- **Stage-2 shellcode 8-phase architecture**: API hash table at offsets `+0x14` through `+0x13c`; X65599 hash multiplier; anti-sandbox quadruple
+- **pe_03 uses `ntdll!RtlHashUnicodeString` for API hash resolution**: under-documented TTP; algorithm byte-confirmed via PE Export Directory walk pattern
+- **Multi-vendor camouflage bundle**: 4 genuine vendor binaries (Crisp Squirrel + Info-ZIP + Google Updater + Qihoo 360) co-located with 3 malicious operator-controlled PEs
+- **Cross-campaign hollow-host TTP cluster**: 8+ campaigns since 2025 use the renamed-Qihoo-PromoUtil pattern (per VT execution_parents pivot)
+- **`watchermgmt` scheduled task**: XML content directly read; `CalendarTrigger` 1-hour interval, daily recurrence
+- **Pascal Script `InitializeSetup → WinExec → return False`**: bytecode decompiled via Inno Setup bytecode decompiler; behavioral pattern matches static prediction
+- **GoProxy MITM CA cert install**: VT C2AE behavioral confirmation; technique IS in pe_06 even though not observed in 5-min behavioral sandbox window
 
 ### MODERATE (Reasonable evidence, notable gaps)
 
 - **Per-host KDF structural pattern** (X65599 hostname-derived seed used as both PRNG seed and decryption key) — static reverse identified the structure; Round 13 dynamic data invalidated the exact byte-level algorithm (no FLARE-derived seed produces `EUOJCZYGOUCUG` in 1M-seed brute force)
-- **Distinct operator (UTA-2026-007)** — 75% confidence; four cross-vector fingerprints (busket/, Plowshare PDB, GoProxy cert, per-host KDF) collectively support, but no public actor link
-- **Operator role: MaaS-customer + bundle-camouflage integrator** — 78% confidence; based on commodity-loader use plus operator additions at the bundle layer
-- **AS210558 recurrence as operator-overlap signal** — 70%; shared bulletproof tenancy is plausible alternative explanation
+- **Distinct operator (UTA-2026-007)**: 75% confidence; four cross-vector fingerprints (busket/, Plowshare PDB, GoProxy cert, per-host KDF) collectively support, but no public actor link
+- **Operator role: MaaS-customer + bundle-camouflage integrator**: 78% confidence; based on commodity-loader use plus operator additions at the bundle layer
+- **AS210558 recurrence as operator-overlap signal**: 70%; shared bulletproof tenancy is plausible alternative explanation
 
 ### LOW (Weak / circumstantial evidence)
 
-- **UTA-2026-007 as a single trackable entity** — 58% confidence; no public actor link, no cross-investigation linkage of GoProxy cert thumbprint
+- **UTA-2026-007 as a single trackable entity**: 58% confidence; no public actor link, no cross-investigation linkage of GoProxy cert thumbprint
 - **Final-stage variant identification** (AsyncRAT vs DCRat vs zgRAT vs heavily modified) — cipher unrecovered after 270 attempts; runtime evidence required
-- **Exfiltration over C2 channel (T1041)** — capability inferred from .NET RAT family characteristics; not directly observed in 5-min run
+- **Exfiltration over C2 channel (T1041)**: capability inferred from .NET RAT family characteristics; not directly observed in 5-min run
 
 ### INSUFFICIENT (Cannot assess from current data)
 
-- **Specific RAT variant** — needs TLS MITM or memory dump
-- **Government attribution** — none has been published for this operator
+- **Specific RAT variant**: needs TLS MITM or memory dump
+- **Government attribution**: none has been published for this operator
 - **Cipher key derivation method** for `807D7B6.tmp` — runtime evidence required
-- **Sister samples on AS210558** — `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` not yet analyzed for campaign-clustering linkage
-- **Operator forum / dark-web identity** — not in public TI
-- **TAG-150 / GrayBravo and TA544 / Narwhal Spider** — both ruled out at INSUFFICIENT confidence; the absence of Castle-family components rules out TAG-150; AsyncRAT-class final stage rules out TA544
+- **Sister samples on AS210558**: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` not yet analyzed for campaign-clustering linkage
+- **Operator forum / dark-web identity**: not in public TI
+- **TAG-150 / GrayBravo and TA544 / Narwhal Spider**: both ruled out at INSUFFICIENT confidence; the absence of Castle-family components rules out TAG-150; AsyncRAT-class final stage rules out TA544
 
 ---
 

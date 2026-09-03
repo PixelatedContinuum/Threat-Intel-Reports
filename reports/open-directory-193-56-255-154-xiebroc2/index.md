@@ -39,7 +39,7 @@ stix_bundle: /stix/open-directory-193-56-255-154-xiebroc2.json
 
 An open directory at `193.56.255.154` (AS9009 / M247, Singapore) exposed a complete multi-framework C2 toolkit — three distinct attack payloads publicly accessible on a Windows Server 2025 VPS. XiebroC2 v3.1 (Go implant, 36 post-exploitation commands, TCP port 4444) and two Covenant GruntStager builds (HTTP on port 443) both call back to the same server, giving the operator redundant access that survives single-vector blocking. Infrastructure pivoting identified a probable second server at `92.60.75.103` (MODERATE confidence — see Section 7) hosting a novel undocumented DLL beacon. The operator is tracked as UTA-2026-002 *(an internal tracking label used by The Hunters Ledger — see Section 6)* at MODERATE confidence (72%); seven simultaneous OPSEC failures rule out sophisticated nation-state involvement.
 
-The hardcoded AES-128-ECB key `QWERt_CSDMAHUATW` lets defenders decrypt any captured XiebroC2 traffic offline. The shared Covenant session token `75db-99b1-25fe4e9afbe58696-320bea73` appears in every HTTP POST from either stager build — one network rule catches both delivery methods. Technical depth and detection coverage follow in Sections 4–9.
+The hardcoded AES-128-ECB key `QWERt_CSDMAHUATW` lets defenders decrypt any captured XiebroC2 traffic offline. The shared Covenant session token `75db-99b1-25fe4e9afbe58696-320bea73` appears in every HTTP POST from either stager build — one network rule catches both delivery methods. Technical depth and detection coverage follow in Sections 4-9.
 
 **Key Risk Factors:**
 
@@ -390,7 +390,7 @@ On every new connection, the implant sends a 15-field MessagePack registration p
 | 6 | Implant process ID |
 | 7 | Campaign tag (`"vps"`) |
 | 8 | OS category (`"10"` — Windows 10 build label) |
-| 9–10 | Operator-assigned annotation tags |
+| 9-10 | Operator-assigned annotation tags |
 | 11 | Admin privilege status (`IsAdmin()`) |
 | 12 | Installed .NET CLR version |
 | 13 | Group tag |
@@ -904,7 +904,7 @@ A secondary pivot from the historical phishing activity on `193.56.255.154` iden
 | 5985/tcp | WinRM | Leaks OS hostname and build without authentication |
 | 7443/tcp | Covenant admin panel | HTTP 200 — publicly accessible; **critical OPSEC failure** |
 | 47001/tcp | WinRM alt HTTP | WinRM doubly exposed |
-| 49664–49672/tcp | Dynamic RPC | Print Spooler on 49671 (PrintNightmare attack surface) |
+| 49664-49672/tcp | Dynamic RPC | Print Spooler on 49671 (PrintNightmare attack surface) |
 
 There is historical context on this IP. It hosted Canadian financial sector phishing, Desjardins and BMO impersonation domains, in 2023, confirmed by a Desjardins impersonation TLS certificate (SHA-1 `3a8c1f5edecf8c69df88d655d87dbc6d6decf258`) issued 2023-04-14. Whether the 2023 phishing operator and the 2026 C2 operator are the same entity stays unresolved. Passive DNS records show 27 total resolutions to this IP, including 13+ BMO and Desjardins phishing domains that expired through March 2026.
 
@@ -1168,14 +1168,14 @@ Structured IOCs in machine-readable JSON format:
 
 IOC summary:
 - **3 IPv4 network indicators** (193.56.255.154 on ports 80, 443, 4444)
-- **4 file hashes (MD5)** — GruntHTTP.exe, GruntHTTP.ps1, extracted payload, s.d
-- **3 file hashes (SHA1)** — GruntHTTP.exe, GruntHTTP.ps1, s.d
-- **4 file hashes (SHA256)** — GruntHTTP.exe, GruntHTTP.ps1, extracted payload, s.d (main.exe SHA256 not captured; see data gap note)
-- **3 C2 URLs** — Covenant staging paths
-- **1 User-Agent string** — hardcoded Chrome 41 UA
-- **5 behavioral/network patterns** — Covenant POST pattern, XiebroC2 TCP wire pattern, HTTP-on-443 anomaly
-- **3 cryptographic artifacts** — XiebroC2 AES-128-ECB key, Covenant pre-shared AES-256 keys (both builds)
-- **6 build artifacts** — session token, build ID, GUID prefixes, compile path, campaign tag, version typo string
+- **4 file hashes (MD5)**: GruntHTTP.exe, GruntHTTP.ps1, extracted payload, s.d
+- **3 file hashes (SHA1)**: GruntHTTP.exe, GruntHTTP.ps1, s.d
+- **4 file hashes (SHA256)**: GruntHTTP.exe, GruntHTTP.ps1, extracted payload, s.d (main.exe SHA256 not captured; see data gap note)
+- **3 C2 URLs**: Covenant staging paths
+- **1 User-Agent string**: hardcoded Chrome 41 UA
+- **5 behavioral/network patterns**: Covenant POST pattern, XiebroC2 TCP wire pattern, HTTP-on-443 anomaly
+- **3 cryptographic artifacts**: XiebroC2 AES-128-ECB key, Covenant pre-shared AES-256 keys (both builds)
+- **6 build artifacts**: session token, build ID, GUID prefixes, compile path, campaign tag, version typo string
 
 ## 9.3 Priority Hunt Targets
 {: .hl-tier-2}

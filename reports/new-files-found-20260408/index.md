@@ -111,7 +111,7 @@ The threat actor is UTA-2026-004, maintained from the April 6 report, and no att
 
 - The EAX-redirect hollowing detection gap (Section 4.2) is the highest-priority defensive finding: EDR rules anchored on `NtUnmapViewOfSection` will miss the Artifact Kit service variant entirely. Anchor detection on `SetThreadContext` called against suspended-state threads from service processes.
 - CovertVPN's ICMP tunnel is detectable by the 0xDD/0xCC frame markers in ICMP payloads >128 bytes (Section 4.3). Most perimeter monitoring tools will miss this without deep packet inspection.
-- The OpenStrike gen-4 beacon's C2 polling pattern (HTTP GET `/updates?id=%08x` every 4,500–5,500ms, POST `/submit?id=%08x`) is the highest-fidelity network detection for the custom implant family (Section 4.1).
+- The OpenStrike gen-4 beacon's C2 polling pattern (HTTP GET `/updates?id=%08x` every 4,500-5,500ms, POST `/submit?id=%08x`) is the highest-fidelity network detection for the custom implant family (Section 4.1).
 - IOC feed (new indicators only, not duplicating April 6 feed): [/ioc-feeds/new-files-found-20260408-iocs.json](/ioc-feeds/new-files-found-20260408-iocs.json)
 - Detection rules (YARA, Sigma, Suricata): [/hunting-detections/new-files-found-20260408-detections/](/hunting-detections/new-files-found-20260408-detections/)
 
@@ -138,7 +138,7 @@ The April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/o
 
 | Finding | April 6 Report | This Report |
 |---|---|---|
-| OpenStrike development chain | Gen-3 only | Gens 1–4 fully documented |
+| OpenStrike development chain | Gen-3 only | Gens 1-4 fully documented |
 | Gen-4 beacon | Not known | Fully reversed (20+ functions, 10 commands, SHA256 crypto) |
 | CS installation scope | Unknown | CS 4.9.1 "Pwn3rs" confirmed, all components mapped |
 | EAX-redirect process hollowing | Not present | Artifact Kit service variant fully analyzed |
@@ -375,7 +375,7 @@ Outbound (callback to server):
 ```
 
 **C2 Polling Pattern:**
-- HTTP GET to `/updates?id=%08x` approximately every 4,500–5,500ms (5,000ms base, 10% jitter via `GetTickCount()`)
+- HTTP GET to `/updates?id=%08x` approximately every 4,500-5,500ms (5,000ms base, 10% jitter via `GetTickCount()`)
 - Server must return HTTP 200; any other status code is ignored
 - POST to `/submit?id=%08x` with `Content-Type: application/octet-stream`
 
@@ -517,17 +517,17 @@ Step 9: ResumeThread
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-msse-pipe-staging.png" | relative_url }}" alt="Decompiler output showing the named pipe creation with the format string MSSE-%d-server where the numeric value is derived from GetTickCount modulo 9898, followed by CreateThread to start the server thread and a Sleep loop maintaining the pipe connection">
-  <figcaption><em>Figure 11: Named pipe staging (Steps 2–4) showing the pipe name format MSSE-%d-server (where %d = GetTickCount() % 9898), the server thread creation, and the Sleep-based keepalive loop. The pipe carries XOR-encoded shellcode between writer and reader threads, using the kernel pipe buffer to bypass some usermode AV hooks.</em></figcaption>
+  <figcaption><em>Figure 11: Named pipe staging (Steps 2-4) showing the pipe name format MSSE-%d-server (where %d = GetTickCount() % 9898), the server thread creation, and the Sleep-based keepalive loop. The pipe carries XOR-encoded shellcode between writer and reader threads, using the kernel pipe buffer to bypass some usermode AV hooks.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-rundll32-injection.png" | relative_url }}" alt="Decompiler output showing the process injection setup function calling CreateProcessA with rundll32.exe as the target, CREATE_SUSPENDED flag, followed by VirtualAllocEx and WriteProcessMemory to inject decoded shellcode into the suspended process memory space">
-  <figcaption><em>Figure 12: Injection setup (Steps 5–6) showing CreateProcessA spawning rundll32.exe with CREATE_SUSPENDED, followed by VirtualAllocEx(PAGE_READWRITE) and WriteProcessMemory to inject decoded shellcode. The target process is suspended — execution has not yet begun, and the original rundll32 image remains fully mapped.</em></figcaption>
+  <figcaption><em>Figure 12: Injection setup (Steps 5-6) showing CreateProcessA spawning rundll32.exe with CREATE_SUSPENDED, followed by VirtualAllocEx(PAGE_READWRITE) and WriteProcessMemory to inject decoded shellcode. The target process is suspended — execution has not yet begun, and the original rundll32 image remains fully mapped.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/new-files-found-20260408/artifact-kit-svc-eax-redirect-hijack.png" | relative_url }}" alt="Decompiler output showing the critical EAX-redirect sequence: GetThreadContext retrieves the suspended thread context, the Eax register field is overwritten with the shellcode base address parameter, SetThreadContext applies the modified context, and ResumeThread starts execution from the redirected address">
-  <figcaption><em>Figure 13: The EAX-redirect hijack (Steps 8–9) — the critical detection-evasion technique. GetThreadContext retrieves the suspended thread's register state, the Eax field is overwritten with the shellcode base address (param_6), SetThreadContext applies the modification, and ResumeThread starts execution from the redirected address. NtUnmapViewOfSection is never called — this is what defeats most T1055.012-focused EDR detections.</em></figcaption>
+  <figcaption><em>Figure 13: The EAX-redirect hijack (Steps 8-9) — the critical detection-evasion technique. GetThreadContext retrieves the suspended thread's register state, the Eax field is overwritten with the shellcode base address (param_6), SetThreadContext applies the modification, and ResumeThread starts execution from the redirected address. NtUnmapViewOfSection is never called — this is what defeats most T1055.012-focused EDR detections.</em></figcaption>
 </figure>
 
 **The Critical Distinction from Classic Process Hollowing:**
@@ -641,7 +641,7 @@ Direction: Bidirectional — both ICMP echo request (client→server)
 
 **Detection indicators for ICMP tunnel:**
 - ICMP echo request/reply packets with payload size exceeding 128 bytes
-- Bytes 0xDD or 0xCC appearing at payload offset 4–5
+- Bytes 0xDD or 0xCC appearing at payload offset 4-5
 - High-frequency ICMP exchange between the same endpoint pair (keepalive cadence)
 - Anomalously high total ICMP byte volume from a Windows workstation
 
@@ -852,7 +852,7 @@ There is a developer ecosystem risk. OpenStrike is an undocumented custom implan
 
 CS 3.x + 4.4 + 4.9.1 co-existence with two RSA key ecosystems is characteristic of multi-distribution toolkit assembly over time. When a CS distribution is cracked and distributed, each distribution defines its own auth file, watermark, and RSA key pair. Mixing artifacts from two distributions creates the observable keypair mismatch documented here.
 
-The inference: UTA-2026-004 accumulated artifacts from CS 3.x-era material (pre-2016 watermark 0), CS 4.4-era material (2021-era, watermark 987654321), and the 4.9.1 "Pwn3rs" team server (2023-era) — spanning participation in the cracked CS ecosystem over at least 2–3 years. The operator is a consumer of this ecosystem, not a producer.
+The inference: UTA-2026-004 accumulated artifacts from CS 3.x-era material (pre-2016 watermark 0), CS 4.4-era material (2021-era, watermark 987654321), and the 4.9.1 "Pwn3rs" team server (2023-era) — spanning participation in the cracked CS ecosystem over at least 2-3 years. The operator is a consumer of this ecosystem, not a producer.
 
 ---
 
