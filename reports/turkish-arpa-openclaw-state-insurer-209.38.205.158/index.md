@@ -10,7 +10,7 @@ category: "AI-Augmented Espionage"
 series: ai-agent-frameworks
 series_role: member
 series_order: 2
-description: "Technical analysis of an active compromise of a state-affiliated Turkish financial-sector organization: a Turkish-speaking operator weaponizes the OpenClaw AI agent platform into a custom analytics platform (ARPA) to harvest the victim's enterprise observability stack across four stolen sources (IBM Instana + SolarWinds Orion + Zabbix + VMware Aria), and authors Turkish-language insider-recruitment documentation to an in-network Windows AD user. UTA-2026-013 — first public attribution."
+description: "Technical analysis of an active compromise of a state-affiliated Turkish financial-sector organization: a Turkish-speaking operator weaponizes the OpenClaw AI agent platform into a custom analytics platform (ARPA) to harvest the victim's enterprise observability stack across four stolen sources (IBM Instana + SolarWinds Orion + Zabbix + VMware Aria), and authors Turkish-language insider-recruitment documentation to an in-network Windows AD user. UTA-2026-013, first public attribution."
 detection_page: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/
 ioc_feed: /ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158/
 detection_sections:
@@ -46,7 +46,7 @@ figure_nav:
 **Last Updated:** May 27, 2026<br>
 **Threat Level:** CRITICAL
 
-> **Part of series:** This is sub-report 3 of 6 in the parent investigation [AI-Agent-Frameworks-MultiActor-2026-05-23](/reports/ai-agent-frameworks-2026-05-23/). The parent report synthesizes the cross-case findings across eight operator cases; this sub-report provides the operator-specific technical deep-dive for **Case 2 — the Turkish-speaking operator weaponizing the OpenClaw AI agent platform against the victim organization's enterprise observability stack and recruiting a named insider via operator-authored Turkish-language tunnel-setup documentation.**
+> **Part of series:** This is sub-report 3 of 6 in the parent investigation [AI-Agent-Frameworks-MultiActor-2026-05-23](/reports/ai-agent-frameworks-2026-05-23/). The parent report synthesizes the cross-case findings across eight operator cases; this sub-report provides the operator-specific technical deep-dive for **Case 2, the Turkish-speaking operator weaponizing the OpenClaw AI agent platform against the victim organization's enterprise observability stack and recruiting a named insider via operator-authored Turkish-language tunnel-setup documentation.**
 
 > **Operational sensitivity (read first):** This report contains intentional redactions for operational-sensitivity reasons. Specific victim-side identifiers (insider Windows AD user ID, internal infrastructure detail beyond domain-level) and operator-side identifiers (operator residential IP precise value, operator GitHub repository URL) are **suppressed** from the public report body. The full identifiers are held in an offline evidence-handoff briefing for victim-organization IR coordination use only. Defenders or victim-org IR teams requiring the complete evidence package can request it via the USOM (TR-CERT) PGP-encrypted channel. The structured IOC feed contains every operator-side indicator at full fidelity for SIEM / EDR ingestion; the public report body redacts victim-PII only.
 
@@ -57,7 +57,7 @@ figure_nav:
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-A Turkish-speaking operator is actively running a custom intelligence-collection platform against a **state-affiliated Turkish financial-sector victim**, built entirely on stolen monitoring credentials. The operator weaponized the OpenClaw AI agent framework into a self-branded analytics platform — `ARPA Korelasyon Motoru` ("ARPA Correlation Engine") — that cross-correlates **four stolen enterprise observability sources** (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria) into a single 7,552-element view of the victim's internal infrastructure, and recruited a named in-network insider via operator-authored Turkish-language reverse-SSH-tunnel documentation. Every dimension is documented from primary-source artifacts pulled directly from the operator's open-directory-exposed VPS at `209.38.205.158` (DigitalOcean Frankfurt, AS14061) — not from downstream effects. This is an **active, named-victim, insider-in-chain** compromise: the credential-rotation timeline is the remediation timeline, and it is currently running.
+A Turkish-speaking operator is actively running a custom intelligence-collection platform against a **state-affiliated Turkish financial-sector victim**, built entirely on stolen monitoring credentials. The operator weaponized the OpenClaw AI agent framework into a self-branded analytics platform, `ARPA Korelasyon Motoru` ("ARPA Correlation Engine"), that cross-correlates **four stolen enterprise observability sources** (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria) into a single 7,552-element view of the victim's internal infrastructure, and recruited a named in-network insider via operator-authored Turkish-language reverse-SSH-tunnel documentation. Every dimension is documented from primary-source artifacts pulled directly from the operator's open-directory-exposed VPS at `209.38.205.158` (DigitalOcean Frankfurt, AS14061), not from downstream effects. This is an **active, named-victim, insider-in-chain** compromise: the credential-rotation timeline is the remediation timeline, and it is currently running.
 
 What is new about this case is the convergence: no public reporting documents a sustained four-source observability reverse-pipeline cross-correlated against a single named state-affiliated victim, paired with an operator-recruited insider surfaced by third-party detection before the victim's own. For cross-case campaign context, see the parent report (linked above); this sub-report owns the operator-specific forensic depth.
 
@@ -65,12 +65,12 @@ What is new about this case is the convergence: no public reporting documents a 
 
 Each finding below names the artifact and points to its home section; the deep analysis lives there.
 
-- **A four-source observability reverse-pipeline against one victim (§4.2, §4.5).** A 5-daemon production-grade Python ETL platform (TimescaleDB + Neo4j + Redis + SQLite) cross-correlates stolen Instana, SolarWinds Orion, Zabbix, and VMware Aria credentials into a 7,552-element unified topology graph spanning 1,859 victim hosts — HIGH confidence, derived from the operator's own export files.
-- **A 10-year IBM Instana JWT — the headline credential governance defect (§4.2).** jti `022a1b74-...-7ae3`, tenant `[victim-tenant]`, issued 2024-03-06, expiring approximately 2034-02. The unrotated lifetime is a customer-side governance failure, not an IBM Instana CVE.
+- **A four-source observability reverse-pipeline against one victim (§4.2, §4.5).** A 5-daemon production-grade Python ETL platform (TimescaleDB + Neo4j + Redis + SQLite) cross-correlates stolen Instana, SolarWinds Orion, Zabbix, and VMware Aria credentials into a 7,552-element unified topology graph spanning 1,859 victim hosts: HIGH confidence, derived from the operator's own export files.
+- **A 10-year IBM Instana JWT: the headline credential governance defect (§4.2).** jti `022a1b74-...-7ae3`, tenant `[victim-tenant]`, issued 2024-03-06, expiring approximately 2034-02. The unrotated lifetime is a customer-side governance failure, not an IBM Instana CVE.
 - **An operator-recruited insider with operator-deployed reverse-SSH tunnel (§4.4).** Eight Turkish-language Markdown documents instruct a named victim-organization Windows AD user (identifier suppressed) to deploy a reverse-SSH tunnel (operator VPS `:18080` → insider `localhost:8089`) using operator-supplied SSH keys and the `ARPA_Tunnel` PuTTY session. Whether the tunnel is currently active requires victim-side forensic access.
-- **An AI-augmented natural-language query interface over stolen telemetry — CANDIDATE novel TTP at N=1 (§4.6).** `ai_service.py` + `ai_assistant.db`, backed by Moonshot AI's Kimi rather than a Western LLM (a Trust-and-Safety-evasion choice). Architecturally documented; operational state is dev-stage.
+- **An AI-augmented natural-language query interface over stolen telemetry: CANDIDATE novel TTP at N=1 (§4.6).** `ai_service.py` + `ai_assistant.db`, backed by Moonshot AI's Kimi rather than a Western LLM (a Trust-and-Safety-evasion choice). Architecturally documented; operational state is dev-stage.
 - **A Turkish residential ISP source captured live (§4.8, §9).** The operator's interactive source IP (suppressed from this body; full value in the IOC feed) resolves to TurkNet AS12735, Istanbul area, captured 2026-05-20 21:22-21:30 UTC (00:22-00:30 local) with no VPN/Tor masking.
-- **Partner-ecosystem entities in notification scope, NOT separate compromises (§4.7).** Six partner entities plus one subsidiary appear as integration endpoints visible through the victim's own monitoring — including a disproportionate ~85 KB deep-dive on a sanctions-exposed major Turkish state bank. Mischaracterizing this as a 7-victim compromise would misdirect defender allocation.
+- **Partner-ecosystem entities in notification scope, NOT separate compromises (§4.7).** Six partner entities plus one subsidiary appear as integration endpoints visible through the victim's own monitoring: including a disproportionate ~85 KB deep-dive on a sanctions-exposed major Turkish state bank. Mischaracterizing this as a 7-victim compromise would misdirect defender allocation.
 
 ### Why This Threat Is Significant
 
@@ -78,13 +78,13 @@ Three findings distinguish this case from existing public reporting. Each is dis
 
 **The four-source Observability-Tool Reverse Pipeline has no documented prior art at this scale (§4.2, §13).** No published case documents an operator stealing credentials for four enterprise observability platforms and cross-correlating them against a single named victim with a production-grade ETL pipeline sustained 73+ days. SolarWinds Sunburst (a vendor supply-chain compromise) and UNC6395 (one-time OAuth CRM exfiltration) are structurally distinct. **Defender takeaway:** treat monitoring-platform credentials as crown-jewel-class secrets with domain-admin-grade rotation timelines. Detection: `Sigma rule 7` + `Suricata rule 2`.
 
-**Third-party detection of an operator-recruited insider before the victim's own is structurally rare (§4.4, §13).** The 2024-2026 insider-threat corpus contains internal-detection-first cases (Rippling/Deel, Coinbase) but none combining all four structural factors here: third-party open-directory scan surfaces the operator-to-insider artifacts, single state-affiliated corporate victim, named insider identifiable from operator documentation, and a 70+ day discovery-to-presumed-awareness gap. **Defender takeaway:** insider-recruitment artifacts authored externally never touch victim infrastructure until deployment, so victim-side detection is structurally hard — operator open-directory exposures are a primary-source attribution channel for them.
+**Third-party detection of an operator-recruited insider before the victim's own is structurally rare (§4.4, §13).** The 2024-2026 insider-threat corpus contains internal-detection-first cases (Rippling/Deel, Coinbase) but none combining all four structural factors here: third-party open-directory scan surfaces the operator-to-insider artifacts, single state-affiliated corporate victim, named insider identifiable from operator documentation, and a 70+ day discovery-to-presumed-awareness gap. **Defender takeaway:** insider-recruitment artifacts authored externally never touch victim infrastructure until deployment, so victim-side detection is structurally hard, operator open-directory exposures are a primary-source attribution channel for them.
 
 **The AI-augmented natural-language query interface over stolen telemetry is a CANDIDATE novel TTP at N=1 (§4.6, §13).** It is a fourth, distinct pattern alongside the parent campaign's three AI-offensive patterns (AI-generated code, AI workflow orchestration, AI permission-allowlist customization). Operational state is dev-stage, but the architecture is in the operator's workflow inventory. **Defender takeaway:** the LLM-as-intelligence-analyst-over-stolen-victim-telemetry class is straightforward to replicate; preparation is warranted now.
 
 ### Key Risk Factors
 
-The risk framing reflects what the campaign has currently configured — operator-controlled 10-year JWT, stolen credentials across four observability platforms, in-network insider with operator-deployed reverse-SSH tunnel — not abstract capability claims.
+The risk framing reflects what the campaign has currently configured, operator-controlled 10-year JWT, stolen credentials across four observability platforms, in-network insider with operator-deployed reverse-SSH tunnel, not abstract capability claims.
 
 <table>
 <colgroup>
@@ -96,75 +96,75 @@ The risk framing reflects what the campaign has currently configured — operato
 <tr><th>Risk Dimension</th><th>Score</th><th>Rationale</th></tr>
 </thead>
 <tbody>
-<tr><td>Active Victim Compromise</td><td>10/10</td><td>Stolen 10-year Instana JWT still valid (issued 2024-03-06, expiring approximately 2034-02 — the unrotated lifetime is the credential governance defect); stolen SolarWinds Orion, Zabbix, and VMware Aria credentials all confirmed in active operator code; 5 systemd daemons polling on a 5-minute cadence as of 2026-05-23 daily-topology log; insider reverse-SSH tunnel documentation operationally configured. A state-affiliated Turkish financial-sector victim, with ecosystem-partner integrations visible through the victim's own observability stack.</td></tr>
+<tr><td>Active Victim Compromise</td><td>10/10</td><td>Stolen 10-year Instana JWT still valid (issued 2024-03-06, expiring approximately 2034-02; the unrotated lifetime is the credential governance defect); stolen SolarWinds Orion, Zabbix, and VMware Aria credentials all confirmed in active operator code; 5 systemd daemons polling on a 5-minute cadence as of 2026-05-23 daily-topology log; insider reverse-SSH tunnel documentation operationally configured. A state-affiliated Turkish financial-sector victim, with ecosystem-partner integrations visible through the victim's own observability stack.</td></tr>
 <tr><td>Stolen Credential Persistence</td><td>10/10</td><td>The Instana JWT is the headline credential governance defect: a single token with a 10-year lifetime that the victim does not appear to have rotated since the operator obtained it. Three additional stolen credential sources (SolarWinds Orion, Zabbix, VMware Aria) each provide independent reverse-pipeline access. Credential rotation across four observability platforms is the most operationally complex remediation single dimension of this case.</td></tr>
 <tr><td>Insider-in-Chain Risk</td><td>9/10</td><td>Named victim-organization Windows AD user with operator-authored Turkish-language tunnel-setup documentation and operator-supplied SSH keys. Insider intent classification (cooperative / coerced / deceived / compromised-account) cannot be determined from external evidence; victim-side forensic access is required. The insider-in-chain dimension makes any victim-side investigation legally and operationally sensitive.</td></tr>
 <tr><td>Detection Evasion</td><td>6/10</td><td>The operator's tradecraft is selectively sophisticated: production-grade ETL platform plus discipline to avoid VPN-traceable infrastructure (residential ISP) plus deliberate non-Western LLM provider choice (Moonshot AI / Kimi). At the same time, OPSEC discipline is uneven: open-directory exposure on the operator VPS allowed all 780 file artifacts including the JWT to be enumerated externally; the operator's GitHub handle is a partial real-name match; the residential ISP source IP has no VPN / Tor masking. Net: detection evasion is sufficient against typical victim-side automated monitoring but is failing against external threat-intelligence open-directory surveillance.</td></tr>
 <tr><td>Cross-Source Correlation Capability</td><td>9/10</td><td>7,552-element unified-topology graph derived from four cross-correlated observability sources gives the operator a structural view of victim infrastructure at a granularity comparable to a privileged internal architecture diagram. Combined with the AI-augmented natural-language query interface (CANDIDATE novel TTP) and Isolation Forest / DBSCAN / LOF anomaly-detection modules over 1,859 victim hosts, the operator's intelligence-analysis throughput on stolen telemetry is meaningfully higher than commodity exfiltration-then-analyze baseline.</td></tr>
-<tr><td>Ecosystem Cascade Scope</td><td>7/10</td><td>Six ecosystem-partner entities (several regulated-sector partners) plus one subsidiary ([victim subsidiary]) appear in operator topology data via the victim organization integrations. These are partner-notification scope (not separate compromises) — but a selective, disproportionate deep-dive into one partner — a major Turkish state bank with sanctions-related geopolitical exposure — is consistent with geopolitical-leverage targeting interest.</td></tr>
+<tr><td>Ecosystem Cascade Scope</td><td>7/10</td><td>Six ecosystem-partner entities (several regulated-sector partners) plus one subsidiary ([victim subsidiary]) appear in operator topology data via the victim organization integrations. These are partner-notification scope (not separate compromises), but a selective, disproportionate deep-dive into one partner, a major Turkish state bank with sanctions-related geopolitical exposure, is consistent with geopolitical-leverage targeting interest.</td></tr>
 </tbody>
 </table>
 
-**Overall Campaign Risk Score: 9.5/10 — CRITICAL.** The campaign is rated CRITICAL based on the convergence of three concurrent CRITICAL-class factors: (1) an active stolen-credential compromise of a state-affiliated corporate victim with credentials that the victim has not rotated for 70+ days since third-party discovery; (2) an in-network insider with operator-authored documentation and operator-supplied SSH keys whose intent cannot be determined externally; (3) a publication-defining novel TTP set (Observability-Tool Reverse Pipeline + Insider Recruitment with operator-authored documentation + CANDIDATE AI-Augmented Reconnaissance) with no documented prior art at this combination. The threat level should be reassessed downward only after **all four stolen credential sources are rotated**, **the insider's account is segregated and forensically reviewed**, and **the operator VPS is taken down via DigitalOcean abuse coordination sequenced after USOM and victim notification**.
+**Overall Campaign Risk Score: 9.5/10, CRITICAL.** The campaign is rated CRITICAL based on the convergence of three concurrent CRITICAL-class factors: (1) an active stolen-credential compromise of a state-affiliated corporate victim with credentials that the victim has not rotated for 70+ days since third-party discovery; (2) an in-network insider with operator-authored documentation and operator-supplied SSH keys whose intent cannot be determined externally; (3) a publication-defining novel TTP set (Observability-Tool Reverse Pipeline + Insider Recruitment with operator-authored documentation + CANDIDATE AI-Augmented Reconnaissance) with no documented prior art at this combination. The threat level should be reassessed downward only after **all four stolen credential sources are rotated**, **the insider's account is segregated and forensically reviewed**, and **the operator VPS is taken down via DigitalOcean abuse coordination sequenced after USOM and victim notification**.
 
 ### Threat Actor Summary
 
-This is a **single-operator** case tracked as **UTA-2026-013** *(an internal tracking label used by The Hunters Ledger — see Section 9)*. This report is the first public attribution; no prior vendor coverage exists (full cross-vendor naming check in §9).
+This is a **single-operator** case tracked as **UTA-2026-013** *(an internal tracking label used by The Hunters Ledger, see Section 9)*. This report is the first public attribution; no prior vendor coverage exists (full cross-vendor naming check in §9).
 
-- **UTA-2026-013**: high-MODERATE 78% within the canonical MODERATE band (70-85%). Turkish-speaking, Turkish-located, intra-Turkey single-thread operator. Five-axis Turkish convergence (language + handle + self-branding + target + residential ISP) is the strongest single-dimension attribution evidence in the entire parent campaign. Espionage tradecraft pattern at HIGH confidence (85%) based on 73+ day patient dwell + 780-file zero-monetization sweep across all operator artifacts. Sub-type classification: state-aligned-loosely-controlled (~40%) and political/factional intelligence (~35%) are tied at the MODERATE high-end within the band; commercial / hire-for-spy / insurance-fraud-prep / criminal-opportunist are effectively ruled out by the zero-monetization sweep. Real-world identity remains **INSUFFICIENT** — the public GitHub handle (`MehmetARPA`) is preserved as a behavioral IOC only and is not a real-name identification. The handle's surname is a real Turkish surname, "Mehmet" is among the most common Turkish given names, and `ARPA` is the operator's self-branded codename for the analytics platform; three competing handle-interpretation hypotheses remain indistinguishable from current evidence.
+- **UTA-2026-013**: high-MODERATE 78% within the canonical MODERATE band (70-85%). Turkish-speaking, Turkish-located, intra-Turkey single-thread operator. Five-axis Turkish convergence (language + handle + self-branding + target + residential ISP) is the strongest single-dimension attribution evidence in the entire parent campaign. Espionage tradecraft pattern at HIGH confidence (85%) based on 73+ day patient dwell + 780-file zero-monetization sweep across all operator artifacts. Sub-type classification: state-aligned-loosely-controlled (~40%) and political/factional intelligence (~35%) are tied at the MODERATE high-end within the band; commercial / hire-for-spy / insurance-fraud-prep / criminal-opportunist are effectively ruled out by the zero-monetization sweep. Real-world identity remains **INSUFFICIENT**, the public GitHub handle (`MehmetARPA`) is preserved as a behavioral IOC only and is not a real-name identification. The handle's surname is a real Turkish surname, "Mehmet" is among the most common Turkish given names, and `ARPA` is the operator's self-branded codename for the analytics platform; three competing handle-interpretation hypotheses remain indistinguishable from current evidence.
 
 ### For Technical Teams
 
 Full detection-coverage map and response orientation are in §10 and the linked detection file. The highest-signal starting points:
 
-- **Detection:** the multi-platform cross-source authentication pattern (same source IP against ≥2 observability platforms in a short window) is the diagnostic signature of the Observability-Tool Reverse Pipeline TTP — `Sigma rule 7` + `Suricata rule 2`. Operator self-branding string `ARPA Korelasyon Motoru` is a near-zero-FP YARA detection (`YARA rule 1`).
+- **Detection:** the multi-platform cross-source authentication pattern (same source IP against ≥2 observability platforms in a short window) is the diagnostic signature of the Observability-Tool Reverse Pipeline TTP, `Sigma rule 7` + `Suricata rule 2`. Operator self-branding string `ARPA Korelasyon Motoru` is a near-zero-FP YARA detection (`YARA rule 1`).
 - **Hunt:** `/opt/ARPA/` filesystem tree; co-located `~/.openclaw/` + `~/.clawdbot/` (discriminator from legitimate OpenClaw dev environments); `arpa-*.service` unit files; JWT jti `022a1b74-2332-4df5-a76b-60225ffa7ae3` in any artifact; PowerShell `Invoke-RestMethod -SkipCertificateCheck` against `ocpinstana.[victim-domain].com.tr`.
 - **Victim mitigation:** rotate all four observability credential sources in parallel; segregate and forensically review the named insider account; block egress to `209.38.205.158` ports 22, 8089, 8090, 8095, 8096.
 - **Broader-customer governance:** audit long-lived monitoring API tokens (`Sigma rule 6` flags JWTs with `exp ≥ 1 year`); review audit logs for any source-IP authenticating against multiple observability platforms from outside the admin allow-list.
 
-For executives reading only this section: the ARPA platform is a textbook case of **stolen monitoring credentials weaponized as intelligence-collection infrastructure against the victim itself**. The takeaway is not "block AI" or "block observability" — both are legitimate tools — but **treat monitoring-platform credentials as crown-jewel-class secrets with admin-token-grade rotation and source-IP allow-listing**.
+For executives reading only this section: the ARPA platform is a textbook case of **stolen monitoring credentials weaponized as intelligence-collection infrastructure against the victim itself**. The takeaway is not "block AI" or "block observability" (both are legitimate tools) but **treat monitoring-platform credentials as crown-jewel-class secrets with admin-token-grade rotation and source-IP allow-listing**.
 
 ---
 
 ## 2. Business Risk Assessment
 {: .hl-tier-1}
 
-This is a sustained, multi-source observability-data exfiltration campaign against a state-affiliated Turkish corporate victim with an in-network insider configured at capture time — not a one-off incident. The risk is twofold: the **immediate-victim risk** (the victim's stolen-credential remediation timeline is actively running), and the **broader-class risk** for any organization with a comparable observability stack (IBM Instana on OCP + SolarWinds Orion + Zabbix + VMware Aria) lacking source-IP allow-listing and admin-token-grade rotation on monitoring credentials.
+This is a sustained, multi-source observability-data exfiltration campaign against a state-affiliated Turkish corporate victim with an in-network insider configured at capture time, not a one-off incident. The risk is twofold: the **immediate-victim risk** (the victim's stolen-credential remediation timeline is actively running), and the **broader-class risk** for any organization with a comparable observability stack (IBM Instana on OCP + SolarWinds Orion + Zabbix + VMware Aria) lacking source-IP allow-listing and admin-token-grade rotation on monitoring credentials.
 
 ### Understanding the Real-World Impact
 
 The captured arsenal tells defenders what the operator does with stolen credentials. Five outcomes are observable in the artifacts; each is dissected in §4:
 
-1. **Sustained four-platform observability theft, cross-correlated (§4.2, §4.5).** Five daemons poll Instana, SolarWinds Orion, Zabbix, and VMware Aria on a 5-minute cadence into a 7,552-element unified topology — a privileged-internal-architecture-grade view of the victim, running 73+ days continuously.
+1. **Sustained four-platform observability theft, cross-correlated (§4.2, §4.5).** Five daemons poll Instana, SolarWinds Orion, Zabbix, and VMware Aria on a 5-minute cadence into a 7,552-element unified topology: a privileged-internal-architecture-grade view of the victim, running 73+ days continuously.
 2. **Selective deep-dive on a sanctions-exposed ecosystem partner (§4.7).** A disproportionate ~85 KB Instana snapshot of one major Turkish state bank, within the 43-application set, is consistent with geopolitical-leverage targeting interest rather than ordinary financial crime.
 3. **AI-augmented internal intelligence consumption (§4.6).** Isolation Forest / DBSCAN / LOF anomaly detection over 1,859 hosts, plus a Kimi-backed natural-language query interface (`ai_service.py`) architecturally intended for English/Turkish questions over the stolen telemetry. Operational maturity is dev-stage.
 4. **In-network insider with operator-deployed reverse-SSH tunnel (§4.4).** A second access path independent of the stolen tokens: if the tokens are rotated, the tunnel persists; if the tunnel is severed, the tokens persist. Dual-path access is a deliberate tradecraft choice.
-5. **Partner-ecosystem visibility through the victim's own stack (§4.7).** Six partner entities plus one subsidiary appear as integration endpoints because they are integrated with the victim — notification scope, not compromise scope. Mischaracterizing them as separate compromises will misrepresent the campaign.
+5. **Partner-ecosystem visibility through the victim's own stack (§4.7).** Six partner entities plus one subsidiary appear as integration endpoints because they are integrated with the victim: notification scope, not compromise scope. Mischaracterizing them as separate compromises will misrepresent the campaign.
 
 ### Operational Impact Timeline (If Your Organization Is the Victim)
 
-Credential rotation across all four platforms leads the work; insider account segregation and tunnel disruption follow close behind. The phases below describe **categories of work** in priority order — no organization-specific procedures, vendor configurations, compliance timelines, or cost estimates, per The Hunters Ledger's third-party perspective; those belong to the responding organization's IR team and outside counsel.
+Credential rotation across all four platforms leads the work; insider account segregation and tunnel disruption follow close behind. The phases below describe **categories of work** in priority order, no organization-specific procedures, vendor configurations, compliance timelines, or cost estimates, per The Hunters Ledger's third-party perspective; those belong to the responding organization's IR team and outside counsel.
 
-- **Phase 1 — Credential rotation across all four platforms.** Rotate Instana, SolarWinds Orion, Zabbix, and VMware Aria credentials in parallel; sequential rotation gives the operator a window to re-establish access via the not-yet-rotated platform.
-- **Phase 2 — Insider account segregation and forensic review.** Segregate the named Windows AD account, forensically image the workstation (memory + disk + browser + SSH client artifacts), and assess intent classification. Coordinate through General Counsel and HR, not operational SOC channels, given the insider-in-chain risk and legal-evidentiary requirements.
-- **Phase 3 — Reverse-SSH tunnel disruption.** Block outbound SSH to `209.38.205.158:22`; audit internal SSH client configs for the `ARPA_Tunnel` saved session and `rca_key.ppk` / `rca_key.pem`; remove operator-supplied keys wherever they appear.
-- **Phase 4 — Forensic enumeration of operator-accessed scope.** Reconstruct the operator's access pattern across all four platforms (endpoints, time windows, data volumes), the unified-topology state, and the sanctions-exposed-partner deep-dive scope. Requires direct access to each platform's audit log.
-- **Phase 5 — Partner-ecosystem notification.** Notify the six partner entities and one subsidiary that they appear as integration endpoints in the operator-accessed topology. Sequence after victim-side rotation completes.
-- **Phase 6 — Monitoring credential governance audit.** Audit token lifetime (rotate any token with `exp ≥ 1 year`), source-IP allow-listing, and provisioning (verify no token was issued outside the documented admin operator).
-- **Phase 7 — Long-term observability-stack hardening.** Admin-token-grade rotation (≤90-day) for all monitoring credentials; source-IP allow-listing as default; multi-source cross-platform authentication as a standing SIEM correlation rule.
+- **Phase 1: Credential rotation across all four platforms.** Rotate Instana, SolarWinds Orion, Zabbix, and VMware Aria credentials in parallel; sequential rotation gives the operator a window to re-establish access via the not-yet-rotated platform.
+- **Phase 2: Insider account segregation and forensic review.** Segregate the named Windows AD account, forensically image the workstation (memory + disk + browser + SSH client artifacts), and assess intent classification. Coordinate through General Counsel and HR, not operational SOC channels, given the insider-in-chain risk and legal-evidentiary requirements.
+- **Phase 3: Reverse-SSH tunnel disruption.** Block outbound SSH to `209.38.205.158:22`; audit internal SSH client configs for the `ARPA_Tunnel` saved session and `rca_key.ppk` / `rca_key.pem`; remove operator-supplied keys wherever they appear.
+- **Phase 4: Forensic enumeration of operator-accessed scope.** Reconstruct the operator's access pattern across all four platforms (endpoints, time windows, data volumes), the unified-topology state, and the sanctions-exposed-partner deep-dive scope. Requires direct access to each platform's audit log.
+- **Phase 5: Partner-ecosystem notification.** Notify the six partner entities and one subsidiary that they appear as integration endpoints in the operator-accessed topology. Sequence after victim-side rotation completes.
+- **Phase 6: Monitoring credential governance audit.** Audit token lifetime (rotate any token with `exp ≥ 1 year`), source-IP allow-listing, and provisioning (verify no token was issued outside the documented admin operator).
+- **Phase 7: Long-term observability-stack hardening.** Admin-token-grade rotation (≤90-day) for all monitoring credentials; source-IP allow-listing as default; multi-source cross-platform authentication as a standing SIEM correlation rule.
 
 ### Impact Scenarios
 
-Each scenario below derives from observed operator capabilities and infrastructure — **observable** in the captured artifacts, not speculative.
+Each scenario below derives from observed operator capabilities and infrastructure, **observable** in the captured artifacts, not speculative.
 
 | Scenario | Likelihood | Explanation |
 |---|---|---|
 | Continued silent exfiltration of the victim organization observability data | HIGH | The five operator systemd daemons were polling on 5-minute cadence as of 2026-05-23. Until the four stolen credential sources are rotated and the insider tunnel is severed, exfiltration continues regardless of any other remediation action. |
-| Selective sanctions-exposed-partner intelligence collection via the victim-organization integration | HIGH | The operator's disproportionate deep-dive into one partner — a major Turkish state bank with well-documented, sanctions-related geopolitical exposure — is structurally selective; geopolitical-leverage targeting is the most plausible explanation. The defender implication: that partner's exposure as an integration endpoint to the victim organization carries downstream geopolitical-intelligence risk independent of its own security posture. |
+| Selective sanctions-exposed-partner intelligence collection via the victim-organization integration | HIGH | The operator's disproportionate deep-dive into one partner (a major Turkish state bank with well-documented, sanctions-related geopolitical exposure) is structurally selective; geopolitical-leverage targeting is the most plausible explanation. The defender implication: that partner's exposure as an integration endpoint to the victim organization carries downstream geopolitical-intelligence risk independent of its own security posture. |
 | Insider lateral movement under cover of legitimate AD activity | MODERATE | Operator-supplied SSH keys + reverse-SSH tunnel + insider account inside victim AD provides the operator with an alternative access path that can persist after stolen-token rotation. Whether the tunnel was actually deployed by the insider cannot be confirmed externally. |
 | Diffusion of the Observability-Tool Reverse Pipeline TTP to other operators | MODERATE | The TTP is now publicly documented (this report). The operator-side infrastructure is approximately one production-grade Python application (5 daemons + 4 databases). Adoption by other operators who steal observability tokens is plausible within months. Defender preparation for the broader class of multi-source observability-credential abuse is warranted. |
 | AI-Augmented Infrastructure Reconnaissance TTP reaching CONFIRMED novel status | MODERATE | Currently CANDIDATE at N=1 (this case). If a second independent operator is documented deploying an LLM-backed natural-language query interface over stolen victim telemetry, the TTP graduates to CONFIRMED. The architectural pattern is straightforward to replicate; cross-operator validation is the gating constraint, not technical complexity. |
-| Operator real-world identity disclosed via TurkNet subscriber-record subpoena | MODERATE | The TurkNet AS12735 capture window (2026-05-20 21:22-21:30 UTC) is sufficiently narrow for subpoena-grade subscriber-record disclosure if Turkish law enforcement (SECRD Cybercrime Combat Department) is engaged via USOM coordination. Specific operator residential IP value suppressed from this public report body — full value in the offline FULL briefing and the structured IOC feed. The 2025 TurkNet breach disclosure (2.8M records) creates a separate question about subscriber-record evidentiary integrity; that question is unresolved at investigation date. |
+| Operator real-world identity disclosed via TurkNet subscriber-record subpoena | MODERATE | The TurkNet AS12735 capture window (2026-05-20 21:22-21:30 UTC) is sufficiently narrow for subpoena-grade subscriber-record disclosure if Turkish law enforcement (SECRD Cybercrime Combat Department) is engaged via USOM coordination. Specific operator residential IP value suppressed from this public report body, full value in the offline FULL briefing and the structured IOC feed. The 2025 TurkNet breach disclosure (2.8M records) creates a separate question about subscriber-record evidentiary integrity; that question is unresolved at investigation date. |
 | the victim organization General Counsel litigation against the operator following identity disclosure | MODERATE | State-fund-portfolio companies have legal-action history when faced with documented external operator compromises. Civil action against a Turkish-resident identified operator is administratively feasible if real-world identity is confirmed. |
 
 ---
@@ -184,47 +184,47 @@ The ARPA platform is operator-built custom tooling, not a commodity malware fami
 <tr><th>Attribute</th><th>Value</th><th>Confidence / Evidence</th></tr>
 </thead>
 <tbody>
-<tr><td>Classification</td><td>Observability-data harvester platform + operator-recruited insider toolkit + custom analytics ETL</td><td>DEFINITE — self-branded by operator</td></tr>
-<tr><td>Family</td><td>ARPA Korelasyon Motoru (operator-built; not derivative)</td><td>DEFINITE — appears in `correlation_v3.py` docstring + dashboard footer + GitHub repository name + systemd unit naming</td></tr>
-<tr><td>Upstream substrate</td><td>OpenClaw AI agent framework</td><td>HIGH — `~/.openclaw/` and `~/.clawdbot/` directories present on operator host alongside ARPA-specific code</td></tr>
-<tr><td>Sophistication</td><td>Advanced</td><td>HIGH — production-grade Python application with 5 systemd daemons, 4-backend persistence, 7,552-element unified topology graph, AI-augmented query layer, AI/ML anomaly-detection modules</td></tr>
-<tr><td>Threat actor type</td><td>Single operator (individual or small team)</td><td>MODERATE — single-VPS no-diversity architecture + late-evening working hours + residential ISP source consistent with individual operator; state-aligned-vs-political-factional sub-type INSUFFICIENT</td></tr>
-<tr><td>Primary motivation</td><td>State-aligned-or-political espionage targeting state-affiliated financial-sector intelligence</td><td>MODERATE — 780-file zero-monetization sweep formally rules out commercial sub-types; sub-types (a) state-aligned-loosely-controlled (~40%) and (c) political/factional (~35%) tied at MODERATE high-end</td></tr>
-<tr><td>Target profile</td><td>A Turkish state-affiliated corporate observability stack with ecosystem-partner integration visibility</td><td>DEFINITE — the victim organization is state-affiliated + observable partner-integration endpoints in operator data</td></tr>
-<tr><td>Campaign active as of</td><td>2026-05-23 (most recent daily-topology log)</td><td>DEFINITE — daily-topology log generation date present in operator filesystem</td></tr>
-<tr><td>First seen (operator-side)</td><td>2026-03-14 (Hunt.io initial open-directory indexing)</td><td>HIGH — Hunt.io indexed the operator open-directory exposure</td></tr>
-<tr><td>Earliest fetch in operator data</td><td>2026-03-12 (Instana data with this fetch timestamp)</td><td>HIGH — observed in operator-captured Instana data, 2-day pre-indexing window suggests operator was operational before Hunt.io discovery</td></tr>
-<tr><td>Sample count</td><td>~780 file artifacts in operator open directory</td><td>DEFINITE — file enumeration from Hunt.io scan</td></tr>
+<tr><td>Classification</td><td>Observability-data harvester platform + operator-recruited insider toolkit + custom analytics ETL</td><td>DEFINITE, self-branded by operator</td></tr>
+<tr><td>Family</td><td>ARPA Korelasyon Motoru (operator-built; not derivative)</td><td>DEFINITE, appears in `correlation_v3.py` docstring + dashboard footer + GitHub repository name + systemd unit naming</td></tr>
+<tr><td>Upstream substrate</td><td>OpenClaw AI agent framework</td><td>HIGH, `~/.openclaw/` and `~/.clawdbot/` directories present on operator host alongside ARPA-specific code</td></tr>
+<tr><td>Sophistication</td><td>Advanced</td><td>HIGH, production-grade Python application with 5 systemd daemons, 4-backend persistence, 7,552-element unified topology graph, AI-augmented query layer, AI/ML anomaly-detection modules</td></tr>
+<tr><td>Threat actor type</td><td>Single operator (individual or small team)</td><td>MODERATE, single-VPS no-diversity architecture + late-evening working hours + residential ISP source consistent with individual operator; state-aligned-vs-political-factional sub-type INSUFFICIENT</td></tr>
+<tr><td>Primary motivation</td><td>State-aligned-or-political espionage targeting state-affiliated financial-sector intelligence</td><td>MODERATE, 780-file zero-monetization sweep formally rules out commercial sub-types; sub-types (a) state-aligned-loosely-controlled (~40%) and (c) political/factional (~35%) tied at MODERATE high-end</td></tr>
+<tr><td>Target profile</td><td>A Turkish state-affiliated corporate observability stack with ecosystem-partner integration visibility</td><td>DEFINITE, the victim organization is state-affiliated + observable partner-integration endpoints in operator data</td></tr>
+<tr><td>Campaign active as of</td><td>2026-05-23 (most recent daily-topology log)</td><td>DEFINITE, daily-topology log generation date present in operator filesystem</td></tr>
+<tr><td>First seen (operator-side)</td><td>2026-03-14 (Hunt.io initial open-directory indexing)</td><td>HIGH, Hunt.io indexed the operator open-directory exposure</td></tr>
+<tr><td>Earliest fetch in operator data</td><td>2026-03-12 (Instana data with this fetch timestamp)</td><td>HIGH, observed in operator-captured Instana data, 2-day pre-indexing window suggests operator was operational before Hunt.io discovery</td></tr>
+<tr><td>Sample count</td><td>~780 file artifacts in operator open directory</td><td>DEFINITE, file enumeration from Hunt.io scan</td></tr>
 </tbody>
 </table>
 
 ### File and Component Identifiers
 
-Twelve operator-authored Python modules form the core of the ARPA platform and anchor the IOC feed at DEFINITE confidence. The feed carries 13 SHA256 file hashes in total: those 12 modules plus 1 MODERATE-confidence ecosystem-template file (`SOUL.md`, a default Hermes/OpenClaw persona file present across developer environments — see feed for false-positive guidance), drawn from the roughly 780 artifacts in the operator's open directory. Hash inventory and per-file context are in the structured IOC feed at `/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`. The highest-confidence file artifacts are:
+Twelve operator-authored Python modules form the core of the ARPA platform and anchor the IOC feed at DEFINITE confidence. The feed carries 13 SHA256 file hashes in total: those 12 modules plus 1 MODERATE-confidence ecosystem-template file (`SOUL.md`, a default Hermes/OpenClaw persona file present across developer environments, see feed for false-positive guidance), drawn from the roughly 780 artifacts in the operator's open directory. Hash inventory and per-file context are in the structured IOC feed at `/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`. The highest-confidence file artifacts are:
 
-- `topology_mapper.py` — Instana topology collector (Turkish docstring + hardcoded JWT)
-- `instana_collector_v4.py` — event collector iteration v4 (same JWT)
-- `correlation_v3.py` — cross-source correlation engine v3 (operator self-branding docstring "ARPA Korelasyon Motoru v3 - Temporal Focus")
-- `api_correlation_routes.py` — Flask API routes for correlations / events (Turkish comments throughout)
-- `ai_service.py` — Moonshot AI / Kimi-backed natural-language query service (CANDIDATE novel TTP architectural anchor)
+- `topology_mapper.py`: Instana topology collector (Turkish docstring + hardcoded JWT)
+- `instana_collector_v4.py`: event collector iteration v4 (same JWT)
+- `correlation_v3.py`: cross-source correlation engine v3 (operator self-branding docstring "ARPA Korelasyon Motoru v3 - Temporal Focus")
+- `api_correlation_routes.py`: Flask API routes for correlations / events (Turkish comments throughout)
+- `ai_service.py`: Moonshot AI / Kimi-backed natural-language query service (CANDIDATE novel TTP architectural anchor)
 - The 5 systemd unit files (`arpa-autolearn.service`, `arpa-continuous.service`, `arpa-daemon.service`, `arpa-instana-api.service`, `arpa-parallel.service`)
-- The victim-side PowerShell collector script (`turkish-instana_local_collector.ps1` — designed for insider deployment, not bundled)
+- The victim-side PowerShell collector script (`turkish-instana_local_collector.ps1`, designed for insider deployment, not bundled)
 
 ### Sophistication Indicators
 
 Three observations justify the "Advanced" sophistication classification:
 
 1. **Production-grade multi-daemon architecture.** Five concurrent systemd daemons coordinating on shared TimescaleDB + Neo4j + Redis + SQLite stores demonstrate operator capability with production system administration, not just scripting. The systemd unit naming convention (`arpa-autolearn`, `arpa-continuous`, etc.) is consistent and intentional.
-2. **Cross-source ETL with 4-backend persistence stack.** TimescaleDB for time-series + Neo4j for topology graph + Redis for cache + SQLite for collector state is a deliberate 4-database architecture choice. The unified-topology graph spans 7,552 elements correlating events across all four observability sources — this is not commodity data-staging tooling.
-3. **AI/ML anomaly detection over 1,859 victim hosts.** Isolation Forest, DBSCAN, and Local Outlier Factor are implemented as anomaly-detection methods over the operator's stolen-telemetry corpus. The AI-augmented natural-language query interface (`ai_service.py` + `ai_assistant.db`) extends this with an LLM layer for interactive query — a CANDIDATE novel TTP.
+2. **Cross-source ETL with 4-backend persistence stack.** TimescaleDB for time-series + Neo4j for topology graph + Redis for cache + SQLite for collector state is a deliberate 4-database architecture choice. The unified-topology graph spans 7,552 elements correlating events across all four observability sources: this is not commodity data-staging tooling.
+3. **AI/ML anomaly detection over 1,859 victim hosts.** Isolation Forest, DBSCAN, and Local Outlier Factor are implemented as anomaly-detection methods over the operator's stolen-telemetry corpus. The AI-augmented natural-language query interface (`ai_service.py` + `ai_assistant.db`) extends this with an LLM layer for interactive query, a CANDIDATE novel TTP.
 
 Counter-evidence that limits the sophistication rating from reaching "Sophisticated / Nation-State":
 
-1. **Open-directory exposure was the discovery vector.** The operator failed to apply directory-listing-off configuration to the operator VPS — a basic OPSEC step. Hunt.io indexed the exposure on 2026-03-14 and the operator selectively closed port 8098 (code exposure) approximately the same date, but left ports 8090 and 8095 (dashboard + topology) open through 2026-05-23.
+1. **Open-directory exposure was the discovery vector.** The operator failed to apply directory-listing-off configuration to the operator VPS, a basic OPSEC step. Hunt.io indexed the exposure on 2026-03-14 and the operator selectively closed port 8098 (code exposure) approximately the same date, but left ports 8090 and 8095 (dashboard + topology) open through 2026-05-23.
 2. **Residential ISP source without VPN / Tor.** The captured operator session on 2026-05-20 originated from a TurkNet residential / SMB ISP IP with no VPN, Tor, or commercial proxy layer between operator and victim infrastructure. This is consistent with either OPSEC failure or non-professional individual operator pattern; it is inconsistent with disciplined state-intelligence tradecraft.
 3. **Public GitHub handle.** The operator's GitHub handle (`MehmetARPA`, attributed by self-branding match) is a partial real-name overlap with the project codename, which would not occur in disciplined cover-identity tradecraft.
 
-The net classification is **Advanced operator with selectively sophisticated platform engineering and selectively poor OPSEC discipline** — a profile consistent with state-adjacent or politically-motivated independent operator rather than professional state-intelligence unit.
+The net classification is **Advanced operator with selectively sophisticated platform engineering and selectively poor OPSEC discipline**, a profile consistent with state-adjacent or politically-motivated independent operator rather than professional state-intelligence unit.
 
 ---
 
@@ -235,7 +235,7 @@ The net classification is **Advanced operator with selectively sophisticated pla
 
 ### 4.1 ARPA Korelasyon Motoru Platform Architecture
 
-> **Analyst note:** This subsection describes the operator-built ARPA application — its five concurrent system daemons, its four data persistence backends, and its dashboard / API endpoints. Understanding the platform architecture matters because it is the substrate on which every other operator capability runs. The architecture is production-grade: it is not a script-kiddie pile of cron jobs but a coordinated multi-daemon Python application stack with persistent state across four database technologies.
+> **Analyst note:** This subsection describes the operator-built ARPA application, its five concurrent system daemons, its four data persistence backends, and its dashboard / API endpoints. Understanding the platform architecture matters because it is the substrate on which every other operator capability runs. The architecture is production-grade: it is not a script-kiddie pile of cron jobs but a coordinated multi-daemon Python application stack with persistent state across four database technologies.
 
 #### Deep Technical Analysis
 
@@ -264,7 +264,7 @@ Public-facing dashboard footer (string-confirmed in dashboard HTML response):
 ARPA © 2026 the victim organization | Read-Only Compliance | Mock Data: ❌
 ```
 
-The footer contains three operator-tradecraft signals: (1) explicit attribution to the victim organization in the operator-facing dashboard (self-evidence that the operator considers the platform "for" the named victim); (2) "Read-Only Compliance" framing — the operator presents the platform internally as a read-only analytics tool, consistent with a non-destructive intelligence-collection posture; (3) "Mock Data: ❌" (with the explicit emoji glyph) — operator emphasis on data realness, consistent with an internally-shared tool where other operators or customers would otherwise default to assuming the data is synthetic (MODERATE-confidence interpretation based on dashboard-footer convention).
+The footer contains three operator-tradecraft signals: (1) explicit attribution to the victim organization in the operator-facing dashboard (self-evidence that the operator considers the platform "for" the named victim); (2) "Read-Only Compliance" framing, the operator presents the platform internally as a read-only analytics tool, consistent with a non-destructive intelligence-collection posture; (3) "Mock Data: ❌" (with the explicit emoji glyph), operator emphasis on data realness, consistent with an internally-shared tool where other operators or customers would otherwise default to assuming the data is synthetic (MODERATE-confidence interpretation based on dashboard-footer convention).
 
 #### Executive Technical Context
 
@@ -276,16 +276,16 @@ To detect it, see `Sigma rule 7` and `Suricata rule 2` in the linked detection f
 
 ### 4.2 Observability-Tool Reverse Pipeline — Novel TTP at Maximalist Scale
 
-> **Analyst note:** This subsection covers the campaign's headline novel TTP. The operator did not steal one observability credential — the operator stole **four**, all from the same victim, and built a sustained ETL pipeline cross-correlating data across all four. The closest documented adjacent case (UNC6395 OAuth-based CRM breach against Salesforce in 2025) is structurally distinct: that case was one-time exfiltration affecting many tenants; this case is sustained ETL against a single named tenant. The SolarWinds Sunburst case is **not** comparable — Sunburst was a supply-chain compromise against the vendor's update infrastructure, not a stolen-credential reverse pipeline against the vendor's customer. After full prior-art review (Tier-1 vendor reports + Tier-2 vendor catalogs through 2024-2026), novelty is maintained at the top of the MODERATE band.
+> **Analyst note:** This subsection covers the campaign's headline novel TTP. The operator did not steal one observability credential, the operator stole **four**, all from the same victim, and built a sustained ETL pipeline cross-correlating data across all four. The closest documented adjacent case (UNC6395 OAuth-based CRM breach against Salesforce in 2025) is structurally distinct: that case was one-time exfiltration affecting many tenants; this case is sustained ETL against a single named tenant. The SolarWinds Sunburst case is **not** comparable. Sunburst was a supply-chain compromise against the vendor's update infrastructure, not a stolen-credential reverse pipeline against the vendor's customer. After full prior-art review (Tier-1 vendor reports + Tier-2 vendor catalogs through 2024-2026), novelty is maintained at the top of the MODERATE band.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/turkish-arpa-openclaw-state-insurer-209.38.205.158/arpa-observability-reverse-pipeline.svg" | relative_url }}" alt="Hybrid infographic showing the Observability-Tool Reverse Pipeline TTP. Four stolen credential source cards are arranged in a 2×2 grid at the top, each with a yellow side-rail. Top-left: IBM Instana — 10-year JWT (issued 2024-03-06, expires approximately 2034-02), JWT ID 022a1b74-2332-4df5-a76b-60225ffa7ae3, tenant [victim-tenant], endpoint ocpinstana.[victim-domain].com.tr, used by the operator for 73+ days continuous polling. Top-right: SolarWinds Orion — stolen service-account credential capturing 784 nodes and 6,566 interfaces in the snapshot solarwinds_topology_20260312_1015.json (NOT Sunburst — stolen-credential abuse against the vendor's customer, not supply-chain compromise against the vendor). Bottom-left: Zabbix — stolen admin or read-only token capturing 100 victim hosts in zabbix_topology_20260312_2058.json (token held in environment variables, not in the open-directory capture). Bottom-right: VMware Aria — vCenter and ESXi monitoring API access capturing 8,649 events spanning three internal-domain spaces (production AD, Linux estate, and a VMware-managed cluster; specific names suppressed). Convergence arrows from all four source cards point down into a single ARPA platform card with a red side-rail and deep-red border (the operator-built cross-source ETL): ARPA Korelasyon Motoru, a Python + TimescaleDB + Neo4j + Redis platform running 5 systemd daemons (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel) with a 5-minute polling cadence and a cross-source correlation layer linking Instana service-IDs to SolarWinds node-IDs to Zabbix host-IDs to VMware Aria VM-IDs, plus an AI-augmented natural-language query interface (ai_service.py + ai_assistant.db) flagged as a CANDIDATE novel TTP at N=1. The ARPA platform sits on operator-OWNED DigitalOcean infrastructure at 209.38.205.158 (Frankfurt), alive at investigation date 2026-05-24. A connector arrow continues down to an outcome card with a deep-red side-rail (endgame): a 7,552-element unified topology graph of the victim organization's internal infrastructure with 1,859 hosts cross-correlated and partner-ecosystem visibility across several regulated-sector partners (two state banks, a pension-fund operator, and three insurance-sector regulators) and the victim subsidiary. The outcome card emphasizes that the operator's view is comparable to a privileged internal admin without ever compromising a single victim endpoint, and that the credential-rotation timeline IS the remediation timeline. Footer detection anchor: multi-platform cross-source authentication from the same source IP within a short window is diagnostic for the TTP class (Sigma rule 7 + Suricata rule 2 in the linked detection file).">
-  <figcaption><em>Figure 1: Observability-Tool Reverse Pipeline — the headline novel TTP for Case 2 visualized. Four stolen monitoring credentials (IBM Instana 10-year JWT, SolarWinds Orion service account, Zabbix admin token, VMware Aria API access) converge into the operator's ARPA cross-source ETL platform, producing a 7,552-element unified topology graph of the victim organization's internal infrastructure with partner-ecosystem visibility. The TTP class is diagnostic via multi-platform cross-source authentication detection (Sigma rule 7 + Suricata rule 2) — defenders should treat monitoring-platform credentials as crown-jewel-class secrets.</em></figcaption>
+  <img src="{{ "/assets/images/turkish-arpa-openclaw-state-insurer-209.38.205.158/arpa-observability-reverse-pipeline.svg" | relative_url }}" alt="Hybrid infographic showing the Observability-Tool Reverse Pipeline TTP. Four stolen credential source cards are arranged in a 2×2 grid at the top, each with a yellow side-rail. Top-left: IBM Instana, 10-year JWT (issued 2024-03-06, expires approximately 2034-02), JWT ID 022a1b74-2332-4df5-a76b-60225ffa7ae3, tenant [victim-tenant], endpoint ocpinstana.[victim-domain].com.tr, used by the operator for 73+ days continuous polling. Top-right: SolarWinds Orion, stolen service-account credential capturing 784 nodes and 6,566 interfaces in the snapshot solarwinds_topology_20260312_1015.json (NOT Sunburst, stolen-credential abuse against the vendor's customer, not supply-chain compromise against the vendor). Bottom-left: Zabbix, stolen admin or read-only token capturing 100 victim hosts in zabbix_topology_20260312_2058.json (token held in environment variables, not in the open-directory capture). Bottom-right: VMware Aria, vCenter and ESXi monitoring API access capturing 8,649 events spanning three internal-domain spaces (production AD, Linux estate, and a VMware-managed cluster; specific names suppressed). Convergence arrows from all four source cards point down into a single ARPA platform card with a red side-rail and deep-red border (the operator-built cross-source ETL): ARPA Korelasyon Motoru, a Python + TimescaleDB + Neo4j + Redis platform running 5 systemd daemons (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel) with a 5-minute polling cadence and a cross-source correlation layer linking Instana service-IDs to SolarWinds node-IDs to Zabbix host-IDs to VMware Aria VM-IDs, plus an AI-augmented natural-language query interface (ai_service.py + ai_assistant.db) flagged as a CANDIDATE novel TTP at N=1. The ARPA platform sits on operator-OWNED DigitalOcean infrastructure at 209.38.205.158 (Frankfurt), alive at investigation date 2026-05-24. A connector arrow continues down to an outcome card with a deep-red side-rail (endgame): a 7,552-element unified topology graph of the victim organization's internal infrastructure with 1,859 hosts cross-correlated and partner-ecosystem visibility across several regulated-sector partners (two state banks, a pension-fund operator, and three insurance-sector regulators) and the victim subsidiary. The outcome card emphasizes that the operator's view is comparable to a privileged internal admin without ever compromising a single victim endpoint, and that the credential-rotation timeline IS the remediation timeline. Footer detection anchor: multi-platform cross-source authentication from the same source IP within a short window is diagnostic for the TTP class (Sigma rule 7 + Suricata rule 2 in the linked detection file).">
+  <figcaption><em>Figure 1: Observability-Tool Reverse Pipeline, the headline novel TTP for Case 2 visualized. Four stolen monitoring credentials (IBM Instana 10-year JWT, SolarWinds Orion service account, Zabbix admin token, VMware Aria API access) converge into the operator's ARPA cross-source ETL platform, producing a 7,552-element unified topology graph of the victim organization's internal infrastructure with partner-ecosystem visibility. The TTP class is diagnostic via multi-platform cross-source authentication detection (Sigma rule 7 + Suricata rule 2), defenders should treat monitoring-platform credentials as crown-jewel-class secrets.</em></figcaption>
 </figure>
 
 #### Deep Technical Analysis
 
-The operator stole credentials for four enterprise observability platforms — IBM Instana, SolarWinds Orion, Zabbix, and VMware Aria — and feeds all four into one pipeline; each source is documented below.
+The operator stole credentials for four enterprise observability platforms (IBM Instana, SolarWinds Orion, Zabbix, and VMware Aria) and feeds all four into one pipeline; each source is documented below.
 
 **Source 1: IBM Instana commercial APM (10-year JWT).**
 
@@ -296,24 +296,24 @@ The captured JWT carries:
 | `jti` (token ID) | `022a1b74-2332-4df5-a76b-60225ffa7ae3` | Unique token identifier; highest-signal YARA detection string |
 | `tenant` | `[victim-tenant]` | Victim identification anchor |
 | `iat` (issued at) | 2024-03-06 | Token issuance date |
-| `exp` (expiration) | approximately 2034-02 | 10-year token lifetime — the credential governance defect |
+| `exp` (expiration) | approximately 2034-02 | 10-year token lifetime, the credential governance defect |
 | Endpoint | `ocpinstana.[victim-domain].com.tr` | Victim's IBM-hosted OCP Instana tenant URL |
 
-Operator usage pattern (from `topology_mapper.py` and `instana_collector_v4.py`): HTTP GET against `https://ocpinstana.[victim-domain].com.tr/api/applications` with `Authorization: apiToken <REDACTED-JWT>` header, plus polling against `/api/events?from=<TS>&to=<TS>&limit=100` in a sliding-window pattern. PowerShell collector version (`turkish-instana_local_collector.ps1`) uses `Invoke-RestMethod -SkipCertificateCheck` — the TLS validation skip is consistent with an insider-deployed script targeting an internal endpoint (MODERATE-confidence interpretation: two plausible drivers are a self-signed internal certificate chain or operational concealment by suppressing TLS-validation-failure audit-log signals; both interpretations align with the script's insider-execution profile).
+Operator usage pattern (from `topology_mapper.py` and `instana_collector_v4.py`): HTTP GET against `https://ocpinstana.[victim-domain].com.tr/api/applications` with `Authorization: apiToken <REDACTED-JWT>` header, plus polling against `/api/events?from=<TS>&to=<TS>&limit=100` in a sliding-window pattern. PowerShell collector version (`turkish-instana_local_collector.ps1`) uses `Invoke-RestMethod -SkipCertificateCheck`. The TLS validation skip is consistent with an insider-deployed script targeting an internal endpoint (MODERATE-confidence interpretation: two plausible drivers are a self-signed internal certificate chain or operational concealment by suppressing TLS-validation-failure audit-log signals; both interpretations align with the script's insider-execution profile).
 
 The 10-year JWT lifetime is the central credential governance defect. IBM Instana does not enforce a maximum token lifetime by default; the customer (the victim organization in this case) is responsible for setting rotation policy. The captured JWT was issued in March 2024 and the operator obtained it at some unknown point between then and the campaign's first observed activity (March 2026). The token has not been rotated despite the operator using it continuously for 73+ days of documented activity. This is a customer-side governance failure, **not** an IBM Instana product CVE.
 
 **Source 2: SolarWinds Orion.**
 
-Captured topology data: 784 nodes, 6,566 interfaces, full network monitoring telemetry for the victim organization's network infrastructure. Filename in operator data: `solarwinds_topology_20260312_1015.json` (timestamp embedded indicates a 2026-03-12 capture). No evidence in captured files indicates a SolarWinds Sunburst supply-chain compromise — the operator's access pattern is stolen-service-account-credential abuse against a legitimate SolarWinds Orion deployment, not exploitation of a backdoored binary.
+Captured topology data: 784 nodes, 6,566 interfaces, full network monitoring telemetry for the victim organization's network infrastructure. Filename in operator data: `solarwinds_topology_20260312_1015.json` (timestamp embedded indicates a 2026-03-12 capture). No evidence in captured files indicates a SolarWinds Sunburst supply-chain compromise. The operator's access pattern is stolen-service-account-credential abuse against a legitimate SolarWinds Orion deployment, not exploitation of a backdoored binary.
 
 **Source 3: Zabbix.**
 
-Captured topology data: 100 victim hosts. Filename: `zabbix_topology_20260312_2058.json` (later same-day capture). Zabbix admin or read-only credential is the access vector; the exact credential value is not captured in operator code as cleartext (HIGH-confidence interpretation: token is held in environment variables or external config not enumerable from the open directory — consistent with the operator's pattern observed across the other three sources).
+Captured topology data: 100 victim hosts. Filename: `zabbix_topology_20260312_2058.json` (later same-day capture). Zabbix admin or read-only credential is the access vector; the exact credential value is not captured in operator code as cleartext (HIGH-confidence interpretation: token is held in environment variables or external config not enumerable from the open directory, consistent with the operator's pattern observed across the other three sources).
 
 **Source 4: VMware Aria (vCenter / ESXi monitoring).**
 
-Captured event volume in sampled window: 8,649 events. Captured cluster identification: events span three internal-domain spaces — a production Active Directory domain, a separate Linux-estate domain, and a likely VMware-managed cluster domain (specific internal-domain names suppressed from the public report body). Credential access likely via VMware Aria's API to vCenter; specific credential capture not in operator code as cleartext.
+Captured event volume in sampled window: 8,649 events. Captured cluster identification: events span three internal-domain spaces, a production Active Directory domain, a separate Linux-estate domain, and a likely VMware-managed cluster domain (specific internal-domain names suppressed from the public report body). Credential access likely via VMware Aria's API to vCenter; specific credential capture not in operator code as cleartext.
 
 **Cross-source unified topology graph.**
 
@@ -331,7 +331,7 @@ On novelty I maintain the Observability-Tool Reverse Pipeline claim at high-MODE
 
 ### 4.3 OpenClaw Weaponization (Chinese Commercial AI Platform → ARPA Harvester)
 
-> **Analyst note:** This subsection covers the operator's adoption of the OpenClaw AI agent platform as the upstream substrate for the ARPA harvester. OpenClaw is a Chinese commercial AI agent CLI similar to Anthropic's Claude Code or Atlassian's Rovodev. Understanding the OpenClaw connection matters because it shows the operator deliberately selected a non-Western AI tool — a Trust-and-Safety-evasion choice consistent with awareness that Western AI providers (Anthropic, OpenAI, Google) maintain abuse-detection programs and the operator's activity would likely trigger them.
+> **Analyst note:** This subsection covers the operator's adoption of the OpenClaw AI agent platform as the upstream substrate for the ARPA harvester. OpenClaw is a Chinese commercial AI agent CLI similar to Anthropic's Claude Code or Atlassian's Rovodev. Understanding the OpenClaw connection matters because it shows the operator deliberately selected a non-Western AI tool, a Trust-and-Safety-evasion choice consistent with awareness that Western AI providers (Anthropic, OpenAI, Google) maintain abuse-detection programs and the operator's activity would likely trigger them.
 
 #### Deep Technical Analysis
 
@@ -339,11 +339,11 @@ The operator host shows two co-located OpenClaw-related artifacts: `~/.openclaw/
 
 OpenClaw is documented in CrowdStrike enterprise analysis (Tier-2 source) and Red Canary's malicious AI detection blog as a Chinese AI agent CLI gaining adoption among threat actors who want LLM-augmented operational workflows but want to avoid Western-vendor Trust-and-Safety detection. Red Canary's framework "Living Off the AI Land" (LOTAIL) applies directly to this operator's pattern.
 
-The ARPA platform-specific OpenClaw integration is at the AI service layer (`ai_service.py` and `ai_assistant.db` — covered in detail in subsection 4.6) where the operator wires OpenClaw's natural-language interface over the unified-topology Instana event data. The LLM backend is Moonshot AI's Kimi rather than Anthropic / OpenAI / Google.
+The ARPA platform-specific OpenClaw integration is at the AI service layer (`ai_service.py` and `ai_assistant.db`, covered in detail in subsection 4.6) where the operator wires OpenClaw's natural-language interface over the unified-topology Instana event data. The LLM backend is Moonshot AI's Kimi rather than Anthropic / OpenAI / Google.
 
 Co-located offensive tooling that discriminates the operator host from legitimate OpenClaw developer environments: `arpa_*.sh` shell scripts and the full `/opt/ARPA/` filesystem tree. A legitimate OpenClaw developer environment would not co-locate `~/.openclaw/` with `arpa_*.sh` shell scripts and a custom 5-daemon production analytics platform.
 
-Case 4 ([Korean Claude+OpenClaw](/reports/korean-claude-openclaw-221.150.15.104/) §4.3) captures the same OpenClaw side-loading on a Korea Telecom host, pre-approved inside a Claude Code allowlist — shared tool, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
+Case 4 ([Korean Claude+OpenClaw](/reports/korean-claude-openclaw-221.150.15.104/) §4.3) captures the same OpenClaw side-loading on a Korea Telecom host, pre-approved inside a Claude Code allowlist, shared tool, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
 #### Executive Technical Context
 
@@ -381,7 +381,7 @@ SSH keys: rca_key.ppk (PuTTY format) + rca_key.pem (OpenSSH format)
 
 The tunnel allows the operator to reach an internal-network service running on `localhost:8089` of the insider's workstation by connecting to port 18080 on the operator VPS. The architecture preserves operator anonymity (the operator never directly connects to the victim network) and provides persistence independent of the four stolen observability credentials (if the credentials are rotated, the tunnel persists; if the tunnel is severed, the credentials persist).
 
-Operator-supplied SSH keys (`rca_key.ppk` for PuTTY use and `rca_key.pem` for ssh-client use) reference an earlier project naming convention — `rca` for "Root Cause Analysis," matching the operator's earlier `/opt/rca-platform/` project path. The key naming convention is internally consistent with the operator's project naming history.
+Operator-supplied SSH keys (`rca_key.ppk` for PuTTY use and `rca_key.pem` for ssh-client use) reference an earlier project naming convention, `rca` for "Root Cause Analysis," matching the operator's earlier `/opt/rca-platform/` project path. The key naming convention is internally consistent with the operator's project naming history.
 
 #### Executive Technical Context
 
@@ -394,9 +394,9 @@ The insider's intent, whether cooperative, coerced, deceived, or a compromised a
 - **Cooperative insider:** intentionally collaborating with the operator. This is the highest-severity scenario but is unprovable externally.
 - **Coerced insider:** under threat or duress from the operator. This requires the operator to have communicated threats; the captured Turkish-language documentation is purely operational with no coercive content visible.
 - **Deceived insider:** believes the operator is a legitimate vendor or consultant (the "Read-Only Compliance" framing in the ARPA dashboard footer would support this deception narrative).
-- **Compromised-account insider:** the named Windows AD account has been compromised by the operator and the human user associated with the account is unaware of the operator-controlled access. In this scenario, the documentation would have been authored for an operator-controlled session under the named user's identity (LOW-confidence scenario classification — requires victim-side forensic access to confirm or rule out, as listed in the next paragraph).
+- **Compromised-account insider:** the named Windows AD account has been compromised by the operator and the human user associated with the account is unaware of the operator-controlled access. In this scenario, the documentation would have been authored for an operator-controlled session under the named user's identity (LOW-confidence scenario classification, requires victim-side forensic access to confirm or rule out, as listed in the next paragraph).
 
-Determining which scenario applies requires victim-side forensic access — interviewing the named user, reviewing their workstation forensic state, reviewing their email and chat history for operator contact, and verifying whether they recognize the PuTTY session name or the SSH keys. This investigation must be handled with appropriate legal/HR coordination given the insider-in-chain sensitivity.
+Determining which scenario applies requires victim-side forensic access, interviewing the named user, reviewing their workstation forensic state, reviewing their email and chat history for operator contact, and verifying whether they recognize the PuTTY session name or the SSH keys. This investigation must be handled with appropriate legal/HR coordination given the insider-in-chain sensitivity.
 
 To detect it, see `Sigma rule 9`, covering Markdown files with the Turkish-language tunnel-setup naming convention in user-profile directories, and `Sigma rule 10`, covering a PuTTY saved session named `ARPA_Tunnel` or SSH outbound to `209.38.205.158:22`, both in the linked detection file.
 
@@ -404,14 +404,14 @@ The structural rarity is confirmed. I reviewed the 2024-2026 published corpus on
 
 ### 4.5 Cross-Source ETL + 7,552-Element Unified Topology
 
-> **Analyst note:** This subsection covers how the operator-built ETL pipeline merges data from the four stolen observability sources into a single unified topology graph. The technical depth matters because the unified graph is what makes the operator's intelligence-collection productive — without cross-source correlation, the operator would have four disconnected datasets; with cross-source correlation, the operator has an integrated view of the victim's internal infrastructure.
+> **Analyst note:** This subsection covers how the operator-built ETL pipeline merges data from the four stolen observability sources into a single unified topology graph. The technical depth matters because the unified graph is what makes the operator's intelligence-collection productive, without cross-source correlation, the operator would have four disconnected datasets; with cross-source correlation, the operator has an integrated view of the victim's internal infrastructure.
 
 #### Deep Technical Analysis
 
 The ETL pipeline runs continuously via `arpa-parallel.service` (parallel worker daemon) coordinating with `arpa-daemon.service` (primary collector orchestrator). Polling cadence is 5 minutes per source. Per-poll workflow:
 
-1. Each source-specific collector module (`topology_mapper.py` for Instana, plus the SolarWinds / Zabbix / VMware Aria collector modules — only the Instana module is fully recovered from open directory) authenticates with stolen credentials and pulls the source-specific data.
-2. Raw source data lands in TimescaleDB (time-series) and is normalized by the source-specific normalization layer (Turkish-language docstrings throughout — see `topology_mapper.py`: "Service label'ından host bilgisi çıkar" = "Extract host info from Service label").
+1. Each source-specific collector module (`topology_mapper.py` for Instana, plus the SolarWinds / Zabbix / VMware Aria collector modules, only the Instana module is fully recovered from open directory) authenticates with stolen credentials and pulls the source-specific data.
+2. Raw source data lands in TimescaleDB (time-series) and is normalized by the source-specific normalization layer (Turkish-language docstrings throughout, see `topology_mapper.py`: "Service label'ından host bilgisi çıkar" = "Extract host info from Service label").
 3. Cross-source correlation logic in `correlation_v3.py` ("ARPA Korelasyon Motoru v3 - Temporal Focus") merges per-source host records via host-identifier matching (FQDN normalization across the victim's internal AD, Linux-estate, and VMware-cluster domains) and writes the merged topology to Neo4j.
 4. The Neo4j unified-topology graph is exported on demand to `unified_cross_source_topology.json` and is the data backing for the dashboard at port 8090.
 
@@ -430,7 +430,7 @@ From a defender's perspective the unified topology IS the operator's intelligenc
 
 ### 4.6 AI-Augmented Infrastructure Reconnaissance Using Stolen APM Credentials (CANDIDATE Novel TTP, N=1)
 
-> **Analyst note:** This subsection covers the campaign's CANDIDATE novel TTP — an LLM-backed natural-language query interface over stolen victim telemetry. The architectural intent is documented in operator filesystem (`ai_service.py` + `ai_assistant.db`); the operational state at investigation time is best characterized as broken / development-stage rather than production. The TTP is CANDIDATE because it requires N≥2 cross-operator validation before upgrading to confirmed-novel status; the architectural pattern is straightforward to replicate, so confirmation is expected to arrive on a months-to-quarters horizon once the pattern enters public threat-intel awareness (MODERATE-confidence timeline projection based on the replicability of the LLM-over-stolen-telemetry architecture).
+> **Analyst note:** This subsection covers the campaign's CANDIDATE novel TTP, an LLM-backed natural-language query interface over stolen victim telemetry. The architectural intent is documented in operator filesystem (`ai_service.py` + `ai_assistant.db`); the operational state at investigation time is best characterized as broken / development-stage rather than production. The TTP is CANDIDATE because it requires N≥2 cross-operator validation before upgrading to confirmed-novel status; the architectural pattern is straightforward to replicate, so confirmation is expected to arrive on a months-to-quarters horizon once the pattern enters public threat-intel awareness (MODERATE-confidence timeline projection based on the replicability of the LLM-over-stolen-telemetry architecture).
 
 #### Deep Technical Analysis
 
@@ -471,7 +471,7 @@ Within the operator's 43-application Instana access set, the following partner-e
 
 | Entity | Snapshot evidence | Classification |
 |---|---|---|
-| A major Turkish state bank | ~85 KB application snapshot — disproportionately large for selective deep-dive | Ecosystem-partner integration; selective focus consistent with sanctions-related geopolitical-leverage targeting interest |
+| A major Turkish state bank | ~85 KB application snapshot, disproportionately large for selective deep-dive | Ecosystem-partner integration; selective focus consistent with sanctions-related geopolitical-leverage targeting interest |
 | A second major Turkish state bank | Application snapshot present in operator data | Ecosystem-partner integration via the victim organization payment / banking flows |
 | A Turkish pension-fund operator | Application snapshot present in operator data | Ecosystem-partner integration (pension fund) |
 | An insurance-data regulator | Application snapshot present in operator data | Turkish insurance regulatory data integration |
@@ -498,12 +498,12 @@ The partner targeting is selective. The disproportionate deep-dive into one part
 | Infrastructure | Provider / Detail | Role |
 |---|---|---|
 | Operator VPS | `209.38.205.158` on DigitalOcean Frankfurt (AS14061) | ARPA platform host; 5 systemd daemons; 4 data persistence backends; HTTP services on ports 8090 (dashboard), 8095 (unified-topology API), 8096 (Instana ingestion API), 8089 (reverse-SSH tunnel target) |
-| Operator source IP | TurkNet AS12735 (Turkish residential / SMB ISP, Istanbul area) — specific IP suppressed from public report body | Operator's interactive source captured during active session 2026-05-20 21:22-21:30 UTC = late-evening Turkish local time |
-| LLM provider | Moonshot AI / Kimi | Chinese-jurisdiction LLM provider chosen over Western LLMs (Anthropic, OpenAI, Google) — Trust-and-Safety-evasion tradecraft |
-| GitHub repository | Operator-controlled public GitHub repository (URL suppressed from public report body per operational-sensitivity protocol) | Public repository hosting ARPA-related code; **account suspended by GitHub T&S 2026-05-25** — repository no longer accessible |
+| Operator source IP | TurkNet AS12735 (Turkish residential / SMB ISP, Istanbul area), specific IP suppressed from public report body | Operator's interactive source captured during active session 2026-05-20 21:22-21:30 UTC = late-evening Turkish local time |
+| LLM provider | Moonshot AI / Kimi | Chinese-jurisdiction LLM provider chosen over Western LLMs (Anthropic, OpenAI, Google), Trust-and-Safety-evasion tradecraft |
+| GitHub repository | Operator-controlled public GitHub repository (URL suppressed from public report body per operational-sensitivity protocol) | Public repository hosting ARPA-related code; **account suspended by GitHub T&S 2026-05-25**, repository no longer accessible |
 | AI agent platform | OpenClaw | Chinese commercial AI agent CLI; substrate for the ARPA platform's AI service layer |
 
-DigitalOcean Frankfurt was likely selected for low-latency access from Istanbul (~40-60 ms RTT to Frankfurt) rather than for abuse tolerance — DigitalOcean is a legitimate Tier-1 commercial cloud provider with a cooperative abuse desk and published transparency reports. Takedown of `209.38.205.158` is administratively feasible via DigitalOcean's abuse desk.
+DigitalOcean Frankfurt was likely selected for low-latency access from Istanbul (~40-60 ms RTT to Frankfurt) rather than for abuse tolerance. DigitalOcean is a legitimate Tier-1 commercial cloud provider with a cooperative abuse desk and published transparency reports. Takedown of `209.38.205.158` is administratively feasible via DigitalOcean's abuse desk.
 
 TurkNet was likely the operator's home or workplace ISP rather than a deliberate jurisdictional choice. The lack of VPN / Tor masking is consistent with either OPSEC failure or non-professional individual operator pattern; subscriber-record disclosure via Turkish law enforcement (SECRD Cybercrime Combat Department) subpoena to TurkNet is operationally feasible if Turkish LE is engaged via USOM. The 2025 TurkNet breach disclosure (2.8M records affected) creates a separate question about subscriber-record evidentiary integrity that is unresolved at investigation date.
 
@@ -518,7 +518,7 @@ For cloud-provider abuse coordination, the defender takeaway is that the operato
 ## 5. Static Analysis
 {: .hl-tier-3}
 
-> **Analyst note:** This section walks through the static code analysis of the three artifact classes recovered from the operator's open directory: the victim-side PowerShell collector script (designed for insider deployment on a victim-organization workstation), the ARPA platform Python source code (the operator's analytics platform), and the Turkish-language Markdown operator notes (the insider-recruitment documentation). Static analysis means examining the code without running it — the goal is to extract the operator's intent and architectural decisions from what they wrote, not from what the code does at runtime.
+> **Analyst note:** This section walks through the static code analysis of the three artifact classes recovered from the operator's open directory: the victim-side PowerShell collector script (designed for insider deployment on a victim-organization workstation), the ARPA platform Python source code (the operator's analytics platform), and the Turkish-language Markdown operator notes (the insider-recruitment documentation). Static analysis means examining the code without running it. The goal is to extract the operator's intent and architectural decisions from what they wrote, not from what the code does at runtime.
 
 ### 5.1 PowerShell Collector Script (`turkish-instana_local_collector.ps1`)
 
@@ -531,7 +531,7 @@ The PowerShell collector is a single script designed for execution by the inside
 # (This script runs on local Windows machine and sends events to ARPA server)
 ```
 
-The Turkish header comment is itself an attribution-anchor signal — operator-authored Turkish-language documentation embedded in operational code intended for insider use. The phrase `ARPA sunucusuna` ("to the ARPA server") embeds the operator's self-branding into the victim-side artifact.
+The Turkish header comment is itself an attribution-anchor signal, operator-authored Turkish-language documentation embedded in operational code intended for insider use. The phrase `ARPA sunucusuna` ("to the ARPA server") embeds the operator's self-branding into the victim-side artifact.
 
 **Authentication block:**
 
@@ -560,8 +560,8 @@ while ($true) {
 
 Three operationally significant observations:
 
-1. **TLS validation skip (`-SkipCertificateCheck`).** Used when calling the victim's own Instana endpoint. The skip reduces risk-of-failure indicators in audit logs if the victim's internal certificate chain is unstable, but it is also a tell — legitimate the victim organization administrative PowerShell would normally validate the chain. Detection rule: PowerShell `Invoke-RestMethod` with `-SkipCertificateCheck` AND URL containing `ocpinstana.[victim-domain].com.tr` is a near-zero-FP signature (Sigma rule in linked detection file).
-2. **Cleartext HTTP egress to operator VPS.** The collector POSTs harvested events to `http://209.38.205.158:8096/api/ingest/instana` over **cleartext HTTP** — not HTTPS. This is a deliberate operator architectural choice (the ingestion endpoint is unauthenticated and uses HTTP-only; covered in dynamic analysis Section 6) and is detectable at the network egress layer.
+1. **TLS validation skip (`-SkipCertificateCheck`).** Used when calling the victim's own Instana endpoint. The skip reduces risk-of-failure indicators in audit logs if the victim's internal certificate chain is unstable, but it is also a tell. Legitimate the victim organization administrative PowerShell would normally validate the chain. Detection rule: PowerShell `Invoke-RestMethod` with `-SkipCertificateCheck` AND URL containing `ocpinstana.[victim-domain].com.tr` is a near-zero-FP signature (Sigma rule in linked detection file).
+2. **Cleartext HTTP egress to operator VPS.** The collector POSTs harvested events to `http://209.38.205.158:8096/api/ingest/instana` over **cleartext HTTP**, not HTTPS. This is a deliberate operator architectural choice (the ingestion endpoint is unauthenticated and uses HTTP-only; covered in dynamic analysis Section 6) and is detectable at the network egress layer.
 3. **5-minute polling cadence (`Start-Sleep -Seconds 300`).** Aligns with the operator-side 5-minute systemd daemon polling cadence. The combined effect is that observability data flows from victim → operator with at most 5 minutes of staleness.
 
 ### 5.2 ARPA Platform Python Source Code
@@ -574,7 +574,7 @@ The 12 DEFINITE-confidence SHA256-tracked files in the linked IOC feed are the m
 """ARPA Korelasyon Motoru v3 - Temporal Focus"""
 ```
 
-The opening docstring uses the operator's self-branded codename in the most prominent code position. The "v3" version marker and "Temporal Focus" qualifier indicate the operator has iterated this module through at least three major architectural revisions — consistent with sustained 73+ day development tempo. Detection rule: this docstring is a near-zero-FP YARA signature (YARA rule 1 in linked file).
+The opening docstring uses the operator's self-branded codename in the most prominent code position. The "v3" version marker and "Temporal Focus" qualifier indicate the operator has iterated this module through at least three major architectural revisions, consistent with sustained 73+ day development tempo. Detection rule: this docstring is a near-zero-FP YARA signature (YARA rule 1 in linked file).
 
 **`topology_mapper.py` Turkish docstring excerpt:**
 
@@ -583,7 +583,7 @@ The opening docstring uses the operator's self-branded codename in the most prom
 # (Extract host info from Service label)
 ```
 
-Turkish docstring embedded in operational Python code. The mixed-language register (Turkish operational comment + English-language API tokens) is a consistent operator signature — present across multiple modules.
+Turkish docstring embedded in operational Python code. The mixed-language register (Turkish operational comment + English-language API tokens) is a consistent operator signature, present across multiple modules.
 
 **`api_correlation_routes.py` endpoint dispatch:**
 
@@ -611,15 +611,15 @@ The `ai_service.py` module wires Moonshot AI / Kimi as the LLM backend rather th
 
 The five systemd unit files use a consistent `arpa-*.service` naming convention:
 
-- `arpa-autolearn.service` — AI/ML anomaly-detection runner
-- `arpa-continuous.service` — continuous-mode polling daemon
-- `arpa-daemon.service` — primary collector daemon
-- `arpa-instana-api.service` — HTTP API endpoint exposure
-- `arpa-parallel.service` — parallel cross-source ETL worker
+- `arpa-autolearn.service`: AI/ML anomaly-detection runner
+- `arpa-continuous.service`: continuous-mode polling daemon
+- `arpa-daemon.service`: primary collector daemon
+- `arpa-instana-api.service`: HTTP API endpoint exposure
+- `arpa-parallel.service`: parallel cross-source ETL worker
 
 The naming is internally consistent and operator-authored. Detection rule: creation of any systemd unit file matching `arpa-*.service` is a high-signal indicator (Sigma rule in linked detection file).
 
-The same AI-generated-code structural signature appears in Case 1 ([Russian Gemini](/reports/russian-gemini-credential-mill-213.165.51.115/)) and Case 3 ([Rovodev](/reports/rovodev-mirai-matrix-c2-87.106.143.220/) §4.5) — a shared AI-tool fingerprint, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
+The same AI-generated-code structural signature appears in Case 1 ([Russian Gemini](/reports/russian-gemini-credential-mill-213.165.51.115/)) and Case 3 ([Rovodev](/reports/rovodev-mirai-matrix-c2-87.106.143.220/) §4.5). A shared AI-tool fingerprint, not coordination (see the [parent](/reports/ai-agent-frameworks-2026-05-23/) §9.9).
 
 ### 5.3 Turkish-Language Operator Notes (Insider Recruitment Documentation)
 
@@ -629,7 +629,7 @@ The document walks the insider through PuTTY tunnel setup in numbered Turkish-la
 
 The document content is purely operational with no coercive language visible. The instructional register (numbered steps, screenshot annotations, troubleshooting tips) is consistent with operator-to-cooperating-insider documentation, but is also consistent with operator-to-deceived-insider (where the operator presents themselves as a legitimate vendor providing a "remote access tool" for compliance reasons). Insider intent classification cannot be determined from the documentation alone.
 
-The `SSH_KEY_COZUM.md` ("SSH Key Solution") document walks through SSH key troubleshooting — when the `rca_key.pem` file does not authenticate, the document instructs the insider on how to convert between PuTTY (`.ppk`) and OpenSSH (`.pem`) formats. The depth of troubleshooting documentation (eight separate documents) is consistent with sustained operator-to-insider interaction over multiple days or weeks.
+The `SSH_KEY_COZUM.md` ("SSH Key Solution") document walks through SSH key troubleshooting, when the `rca_key.pem` file does not authenticate, the document instructs the insider on how to convert between PuTTY (`.ppk`) and OpenSSH (`.pem`) formats. The depth of troubleshooting documentation (eight separate documents) is consistent with sustained operator-to-insider interaction over multiple days or weeks.
 
 The eight documents follow a Turkish-language uppercase naming convention (`PUTTY_TUNNEL_DETAY.md`, `TUNNEL_RESTART.md`, `WINDOWS_VPN_TUNNEL.md`, `SSH_KEY_COZUM.md`, plus four more). To hunt for it, Markdown file creation in user-profile directories matching the Turkish-language uppercase pattern `(GERCEK|PUTTY|SSH|TUNNEL|WINDOWS)_*.md` is a hunt-purposes signature, with the Sigma rule in the linked detection file.
 
@@ -644,9 +644,9 @@ The eight documents follow a Turkish-language uppercase naming convention (`PUTT
 
 The polling cycle is the operational heartbeat of the ARPA platform. Reconstructed sequence per 5-minute cycle:
 
-**T+0:00** — `arpa-daemon.service` orchestrator wakes and triggers the four per-source collector modules in parallel via `arpa-parallel.service`.
+**T+0:00**: `arpa-daemon.service` orchestrator wakes and triggers the four per-source collector modules in parallel via `arpa-parallel.service`.
 
-**T+0:00 to T+0:30** — Four parallel HTTP requests are issued from operator VPS:
+**T+0:00 to T+0:30**: Four parallel HTTP requests are issued from operator VPS:
 
 | Source | Endpoint | Authentication |
 |---|---|---|
@@ -657,19 +657,19 @@ The polling cycle is the operational heartbeat of the ARPA platform. Reconstruct
 
 The PowerShell collector on the insider workstation runs the same 5-minute cycle and POSTs to the operator's ingestion API on port 8096. This means Instana data flows in via **two paths** during each cycle: directly from operator-to-Instana (using the stolen JWT) and from insider-PowerShell-to-operator (using the same JWT relayed through the insider's workstation).
 
-**T+0:30 to T+1:00** — Per-source normalization layer transforms raw API responses into a common schema. Turkish-language docstrings in `topology_mapper.py` show the normalization logic ("Service label'ından host bilgisi çıkar"). Normalized records land in TimescaleDB (time-series) and feed the cross-source correlation logic in `correlation_v3.py`.
+**T+0:30 to T+1:00**: Per-source normalization layer transforms raw API responses into a common schema. Turkish-language docstrings in `topology_mapper.py` show the normalization logic ("Service label'ından host bilgisi çıkar"). Normalized records land in TimescaleDB (time-series) and feed the cross-source correlation logic in `correlation_v3.py`.
 
-**T+1:00 to T+1:30** — Cross-source correlation merges per-source host records via FQDN normalization across the victim's internal AD, Linux-estate, and VMware-cluster domains, and writes the merged topology to Neo4j. The unified-topology graph element count is updated.
+**T+1:00 to T+1:30**: Cross-source correlation merges per-source host records via FQDN normalization across the victim's internal AD, Linux-estate, and VMware-cluster domains, and writes the merged topology to Neo4j. The unified-topology graph element count is updated.
 
-**T+1:30 to T+2:00** — `arpa-autolearn.service` runs anomaly detection (Isolation Forest + DBSCAN + LOF + statistical methods) over the updated dataset and flags anomalous hosts or behaviors for operator review. Flagged results land in `/opt/ARPA/data/collector.db`.
+**T+1:30 to T+2:00**: `arpa-autolearn.service` runs anomaly detection (Isolation Forest + DBSCAN + LOF + statistical methods) over the updated dataset and flags anomalous hosts or behaviors for operator review. Flagged results land in `/opt/ARPA/data/collector.db`.
 
-**T+2:00 to T+5:00** — Idle wait until next cycle. The dashboard at port 8090 and the unified-topology API at port 8095 serve cached queries from the in-memory and Redis-cached views.
+**T+2:00 to T+5:00**: Idle wait until next cycle. The dashboard at port 8090 and the unified-topology API at port 8095 serve cached queries from the in-memory and Redis-cached views.
 
 The cycle then repeats. Daily-topology log generation occurs once per day at approximately operator-end-of-day, summarizing the day's data deltas and writing to `daily_topology_<YYYYMMDD>.log`. The most recent log is dated 2026-05-23.
 
 ### 6.2 Insider Reverse-SSH Tunnel Registration Behavior
 
-The insider establishes the reverse-SSH tunnel from a Windows workstation inside the victim network by loading a pre-configured PuTTY session. Because the tunnel originates inside that network, it is not observable externally — this sequence is reconstructed from the operator's Turkish-language documentation (Section 5.3) rather than from observed runtime behavior.
+The insider establishes the reverse-SSH tunnel from a Windows workstation inside the victim network by loading a pre-configured PuTTY session. Because the tunnel originates inside that network, it is not observable externally. This sequence is reconstructed from the operator's Turkish-language documentation (Section 5.3) rather than from observed runtime behavior.
 
 Sequence:
 
@@ -702,14 +702,14 @@ The operator's HTTP services on the open directory were observed externally duri
 
 - **Port 8090 (ARPA dashboard).** Returns HTML containing the operator self-branding footer "ARPA © 2026 the victim organization | Read-Only Compliance | Mock Data: ❌" plus the operator dashboard UI. Server header: `SimpleHTTP/0.6 Python/3.10.12` (consistent with Python `http.server.SimpleHTTPServer`). Detection signature: HTTP response from `209.38.205.158:8090` with the Python SimpleHTTP server header and the operator-branded body content (Suricata rule in linked detection file).
 - **Port 8095 (unified-topology API).** Returns JSON containing unified-topology graph extracts. Endpoint `/api/topology/unified` returns the cached unified-topology export.
-- **Port 8096 (Instana ingestion API).** Accepts POSTs from the insider PowerShell collector. Unauthenticated — no Authorization header required for ingestion.
+- **Port 8096 (Instana ingestion API).** Accepts POSTs from the insider PowerShell collector. Unauthenticated, no Authorization header required for ingestion.
 - **Port 8098 (code exposure).** Was open during early investigation phases (returning operator Python source code via directory listing); selectively closed approximately 2026-03-14 after Hunt.io indexing, but ports 8090 and 8095 remained open through 2026-05-23.
 
 ### 6.5 Operator Interactive Source IP Capture
 
 The operator's interactive source IP was captured from ARPA server logs on 2026-05-20 between 21:22 and 21:30 UTC. The capture window represents the operator actively connecting to and interacting with the ARPA dashboard during a normal operational session. The captured source IP resolves to **TurkNet AS12735** (Turkish residential / SMB ISP, Istanbul area). No VPN, Tor, or commercial proxy layer was interposed between operator and operator VPS during this session.
 
-Local Turkish time for the 21:22-21:30 UTC capture window is 00:22-00:30 (UTC+3 Turkish time). Late-evening / very-early-morning local working hours are consistent with non-professional individual operator pattern — they are inconsistent with the disciplined business-hours operational pattern of a professional state-intelligence unit.
+Local Turkish time for the 21:22-21:30 UTC capture window is 00:22-00:30 (UTC+3 Turkish time). Late-evening / very-early-morning local working hours are consistent with non-professional individual operator pattern. They are inconsistent with the disciplined business-hours operational pattern of a professional state-intelligence unit.
 
 ---
 
@@ -725,7 +725,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 ## 8. Indicators of Compromise
 {: .hl-tier-2}
 
-> **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion — it is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
+> **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion. It is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
 The full IOC feed is at [`/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
@@ -734,14 +734,14 @@ The full IOC feed is at [`/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-013 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports — it is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-013 is an internal tracking designation assigned by The Hunters Ledger to actors observed across analysis who cannot yet be linked to a publicly named threat group. This label will not appear in external threat intelligence feeds or vendor reports. It is specific to this publication. If future evidence links this activity to a known named actor, the designation will be retired and updated accordingly.
 
 ### Attribution Conclusion
 
 The threat actor is UTA-2026-013, a Turkish-speaking, Turkish-located, intra-Turkey single-thread operator. I hold that at MODERATE, 78 percent, which is high-MODERATE within the 70-85% band.
 
 - **Why this confidence:** Five-axis Turkish geographic convergence (language + handle + self-branding + target + residential ISP) is the strongest single-dimension attribution evidence in the entire parent campaign; 73+ day patient dwell + 780-file zero-monetization sweep across all operator artifacts; espionage tradecraft pattern at HIGH confidence (85%); operator residential IP captured during active session 2026-05-20 21:22-21:30 UTC = late-evening Turkish local time.
-- **What's missing:** Zero Tier-2 vendor corroboration at investigation date — this is the first public attribution; real-world identity remains INSUFFICIENT (three competing handle-interpretation hypotheses); state-aligned-vs-political-factional sub-type discrimination INSUFFICIENT (both at MODERATE high-end within band).
+- **What's missing:** Zero Tier-2 vendor corroboration at investigation date. This is the first public attribution; real-world identity remains INSUFFICIENT (three competing handle-interpretation hypotheses); state-aligned-vs-political-factional sub-type discrimination INSUFFICIENT (both at MODERATE high-end within band).
 - **What would increase confidence:** TurkNet subscriber-record disclosure via Turkish LE subpoena for the 2026-05-20 21:22-21:30 UTC capture window producing operator real-world identity; USOM / CERT-TR independent attribution corroboration; one or more Tier-2 vendor (Mandiant Turkey, Kaspersky, CrowdStrike) publishing independent attribution research on the same operator; the victim organization post-disclosure internal forensics naming an internal access path.
 
 ### First-Public-Attribution Status
@@ -750,13 +750,13 @@ This report is the **first public attribution** of this operator. Cross-vendor n
 
 | Vendor / Source | Coverage status |
 |---|---|
-| Trend Micro | NONE — no Trend Micro coverage at investigation date |
+| Trend Micro | NONE, no Trend Micro coverage at investigation date |
 | Mandiant | NONE |
 | CrowdStrike | NONE |
 | Kaspersky | NONE |
-| Hunt.io threat-actor catalog | NONE — confirmed via Hunt MCP query during investigation |
-| VirusTotal threat-actor associations | NONE — `209.38.205.158` is 0/91 clean with zero related threat actors; operator residential IP is also 0/91 clean |
-| MITRE ATT&CK Groups | NONE — no documented Turkish-government-aligned APT TTP-overlap (Sea Turtle / Teal Kurma / Marbled Dust have zero documented BFSI targeting and zero TTP overlap with this campaign) |
+| Hunt.io threat-actor catalog | NONE, confirmed via Hunt MCP query during investigation |
+| VirusTotal threat-actor associations | NONE, `209.38.205.158` is 0/91 clean with zero related threat actors; operator residential IP is also 0/91 clean |
+| MITRE ATT&CK Groups | NONE, no documented Turkish-government-aligned APT TTP-overlap (Sea Turtle / Teal Kurma / Marbled Dust have zero documented BFSI targeting and zero TTP overlap with this campaign) |
 
 **Publication-significance signal (not a confidence boost):** Sub-report 2 in this same parent series (Russian Gemini, UTA-2026-012) received Trend Micro Tier-2 corroboration three days before disclosure, which upgraded its attribution from MODERATE 75% to MODERATE 83%. This sub-report (Turkish ARPA, UTA-2026-013) has the opposite profile: zero prior public attribution exists. The absence of corroboration is a publication-significance signal (this is first-ever vendor attribution via UTA designation), **not** a confidence reduction relative to attribution-anchor evidence. Confidence remains at high-MODERATE 78% based on primary-source operator-filesystem evidence alone.
 
@@ -767,9 +767,9 @@ The strongest single-dimension attribution evidence in the entire parent campaig
 | Axis | Evidence |
 |---|---|
 | Turkish language | 8 Turkish-language operator-authored Markdown tunnel-setup documents + Turkish-language docstrings throughout ARPA Python source code + Turkish-language operator output strings (`=== SON 5 KORELASYON ===`) + Turkish-language PowerShell collector header comment |
-| Turkish GitHub handle | `MehmetARPA` (Mehmet is among most common Turkish given names; Arpa is a real Turkish surname; ARPA also matches the operator's self-branded codename — three competing interpretation hypotheses) |
+| Turkish GitHub handle | `MehmetARPA` (Mehmet is among most common Turkish given names; Arpa is a real Turkish surname; ARPA also matches the operator's self-branded codename, three competing interpretation hypotheses) |
 | Turkish self-branding | `ARPA Korelasyon Motoru` (Turkish: "ARPA Correlation Engine") in code docstrings, dashboard footer, GitHub repository name, systemd unit naming convention |
-| Turkish target | the victim organization — a state-affiliated Turkish financial-sector organization, with a selectively-targeted major-state-bank partner carrying sanctions-related geopolitical-leverage interest |
+| Turkish target | the victim organization, a state-affiliated Turkish financial-sector organization, with a selectively-targeted major-state-bank partner carrying sanctions-related geopolitical-leverage interest |
 | Turkish residential ISP source IP | TurkNet AS12735 captured 2026-05-20 21:22-21:30 UTC = late-evening Turkish local working hours; no VPN / Tor masking; consistent with operator-located-in-Turkey |
 
 ### Sub-Type Assessment
@@ -781,7 +781,7 @@ The 780-file zero-monetization sweep formally rules out the commercial sub-types
 | (a) State-aligned-loosely-controlled | ~40% | MODERATE high-end within band |
 | (b) Commercial / hire-for-spy | ~5% | Effectively ruled out by zero-monetization sweep |
 | (c) Political / factional intelligence | ~35% | MODERATE high-end within band |
-| (d) Pre-positioning destructive operation | ~15% | LOW — no destructive staging artifacts in operator filesystem |
+| (d) Pre-positioning destructive operation | ~15% | LOW, no destructive staging artifacts in operator filesystem |
 | (e) Insurance fraud preparation | ~5% | Effectively ruled out (wrong target data class) |
 | (f) Other criminal opportunist | ~5% | Effectively ruled out by zero-monetization sweep |
 
@@ -797,7 +797,7 @@ Three competing handle-interpretation hypotheses are indistinguishable from curr
 2. **Codename-after-codename adoption hypothesis.** The operator created a GitHub handle matching their self-branded project codename (`ARPA`) and chose `Mehmet` as a generic first-name prefix because Mehmet is among the most common Turkish given names.
 3. **Coincidental real-surname hypothesis.** The operator is some other individual whose real surname happens to be Arpa, who chose to incorporate their surname into a handle alongside their project codename.
 
-Damage-mitigation rationale for not naming: naming "Mehmet Arpa" as confirmed real-world actor would risk damaging an innocent person who shares the handle's surname. Mehmet is among the most common Turkish given names; Arpa is a real Turkish surname; the combination produces a non-trivial number of real Turkish individuals named Mehmet Arpa who have nothing to do with this operator. Real-name attribution requires evidence beyond handle matching — Turkish LE subpoena on TurkNet for the captured session window is the most plausible path.
+Damage-mitigation rationale for not naming: naming "Mehmet Arpa" as confirmed real-world actor would risk damaging an innocent person who shares the handle's surname. Mehmet is among the most common Turkish given names; Arpa is a real Turkish surname; the combination produces a non-trivial number of real Turkish individuals named Mehmet Arpa who have nothing to do with this operator. Real-name attribution requires evidence beyond handle matching, Turkish LE subpoena on TurkNet for the captured session window is the most plausible path.
 
 ### Insider Intent Classification
 
@@ -806,9 +806,9 @@ Insider intent confidence is INSUFFICIENT. The named victim-organization Windows
 - **Cooperative insider:** intentionally collaborating with operator. Highest-severity scenario but unprovable externally.
 - **Coerced insider:** under threat or duress. No coercive language visible in operator-authored documentation.
 - **Deceived insider:** believes operator is a legitimate vendor or consultant. The ARPA dashboard footer's "Read-Only Compliance" framing would support this deception narrative.
-- **Compromised-account insider:** the named Windows AD account has been compromised and the human user is unaware. In this scenario, the documentation would have been authored for an operator-controlled session under the named user's identity (LOW-confidence scenario classification — requires victim-side forensic access to confirm or rule out).
+- **Compromised-account insider:** the named Windows AD account has been compromised and the human user is unaware. In this scenario, the documentation would have been authored for an operator-controlled session under the named user's identity (LOW-confidence scenario classification, requires victim-side forensic access to confirm or rule out).
 
-Determining the correct classification requires victim-side forensic access — interviewing the named user, reviewing workstation forensic state, reviewing communications history, and verifying whether the user recognizes the PuTTY session name or the SSH keys. This investigation must be coordinated through General Counsel and HR because of the insider-in-chain risk and the legal-evidentiary requirements.
+Determining the correct classification requires victim-side forensic access, interviewing the named user, reviewing workstation forensic state, reviewing communications history, and verifying whether the user recognizes the PuTTY session name or the SSH keys. This investigation must be coordinated through General Counsel and HR because of the insider-in-chain risk and the legal-evidentiary requirements.
 
 ### Confidence Ceiling Analysis
 
@@ -822,7 +822,7 @@ Current attribution confidence ceiling is **high-MODERATE 78% within MODERATE ba
 ## 10. Risk and Detection
 {: .hl-tier-2}
 
-> **Analyst note:** This section orients defenders to the detection-coverage map for this campaign and references the linked detection file for the actual rule content. Detection rules are not embedded in this report — they are in the separate detection file that ships alongside this report and the structured IOC feed.
+> **Analyst note:** This section orients defenders to the detection-coverage map for this campaign and references the linked detection file for the actual rule content. Detection rules are not embedded in this report. They are in the separate detection file that ships alongside this report and the structured IOC feed.
 
 The authoritative structured detection coverage is at [`/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/`](/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/)
 
@@ -848,9 +848,9 @@ The detection file organizes rules by three campaign surfaces: victim-side artif
 For SOC analysts and threat hunters: the four detection rules below are the highest-signal rules in the file. Refer to the linked detection file for the full rule content with YARA / Sigma / Suricata syntax.
 
 1. **YARA rule 1: ARPA Korelasyon Motoru self-branding detection.** Targets the operator self-branded strings in any file. Near-zero false-positive risk because the operator's project codename does not occur in legitimate software.
-2. **Sigma rule 7: Multi-source observability cross-platform authentication.** Targets the diagnostic signature of the Observability-Tool Reverse Pipeline TTP — same source IP authenticating against ≥2 of {Instana, SolarWinds, Zabbix, Datadog, NewRelic, VMware Aria, Dynatrace, Prometheus} within a short time window. This rule covers a TTP with no existing published detection guidance.
-3. **Sigma rule 6: Long-lived observability JWT detection.** Governance baseline rule for Instana customers — flags JWTs with `exp` claim ≥ 1 year. Not a direct attack-detection rule but a governance hygiene rule that would have surfaced the victim organization 10-year JWT defect (HIGH-confidence assessment: the rule fires deterministically on the captured JWT's `exp` claim of approximately 2034-02, which exceeds any reasonable 1-year threshold by 9+ years) before the operator weaponized it.
-4. **Suricata rule 2: Multi-platform observability authentication egress.** Network-layer companion to Sigma rule 7 — detects outbound HTTPS to multiple observability platform domains from the same source IP within a short time window.
+2. **Sigma rule 7: Multi-source observability cross-platform authentication.** Targets the diagnostic signature of the Observability-Tool Reverse Pipeline TTP, same source IP authenticating against ≥2 of {Instana, SolarWinds, Zabbix, Datadog, NewRelic, VMware Aria, Dynatrace, Prometheus} within a short time window. This rule covers a TTP with no existing published detection guidance.
+3. **Sigma rule 6: Long-lived observability JWT detection.** Governance baseline rule for Instana customers, flags JWTs with `exp` claim ≥ 1 year. Not a direct attack-detection rule but a governance hygiene rule that would have surfaced the victim organization 10-year JWT defect (HIGH-confidence assessment: the rule fires deterministically on the captured JWT's `exp` claim of approximately 2034-02, which exceeds any reasonable 1-year threshold by 9+ years) before the operator weaponized it.
+4. **Suricata rule 2: Multi-platform observability authentication egress.** Network-layer companion to Sigma rule 7, detects outbound HTTPS to multiple observability platform domains from the same source IP within a short time window.
 
 ### Response Orientation (Brief)
 
@@ -871,7 +871,7 @@ Findings organized by confidence level for the higher-level view:
 
 - Operator self-identification as `ARPA Korelasyon Motoru` (code docstrings + dashboard footer + GitHub repository name + systemd unit naming convention)
 - Operator VPS infrastructure: `209.38.205.158` on DigitalOcean Frankfurt (AS14061)
-- 4-source observability harvest: Instana 10-year JWT + SolarWinds Orion + Zabbix + VMware Aria — all four stolen credential sources directly observed in operator code
+- 4-source observability harvest: Instana 10-year JWT + SolarWinds Orion + Zabbix + VMware Aria, all four stolen credential sources directly observed in operator code
 - 5 systemd daemons polling on 5-minute cadence (DEFINITE from systemd unit file inspection)
 - Victim identification: the victim organization (JWT tenant claim + endpoint URL + dashboard footer all confirm)
 - Stolen Instana JWT lifetime: issued 2024-03-06, expires approximately 2034-02 (10-year lifetime DEFINITE from JWT claim inspection)
@@ -910,7 +910,7 @@ Findings organized by confidence level for the higher-level view:
 - Late-evening Turkish local working hours (00:22-00:30) as a non-professional individual operator indicator (consistent with the pattern but a single captured window is a narrow sample)
 - Three competing `MehmetARPA` handle-interpretation hypotheses indistinguishable from current evidence
 - Whether the operator has used the AI-augmented natural-language query interface successfully against live data (sparse query history in `ai_assistant.db`)
-- Sub-type (d) pre-positioning destructive operation (~15% probability — weakly supported by absence of destructive staging artifacts; cannot fully rule out)
+- Sub-type (d) pre-positioning destructive operation (~15% probability, weakly supported by absence of destructive staging artifacts; cannot fully rule out)
 
 ### INSUFFICIENT (Cannot Assess)
 
@@ -921,8 +921,8 @@ Findings organized by confidence level for the higher-level view:
 - Whether reverse-SSH tunnel is currently established at investigation date
 - Operator account binding to Moonshot AI / Kimi (subscriber identity unknown)
 - Operator account binding to OpenClaw / Lightmake (subscriber identity unknown)
-- Cross-vendor Tier-2 vendor corroboration (NONE at investigation date — first public attribution)
-- Tier-1 government attribution (NONE at investigation date — FBI / CISA / USOM / MIT / Turkish LE)
+- Cross-vendor Tier-2 vendor corroboration (NONE at investigation date, first public attribution)
+- Tier-1 government attribution (NONE at investigation date, FBI / CISA / USOM / MIT / Turkish LE)
 - Whether the victim organization has internally detected the compromise during the 70+ day external-detection-to-presumed-internal-detection gap window
 
 ---
@@ -938,11 +938,11 @@ No Trend Micro, Mandiant, CrowdStrike, Kaspersky, or Hunt.io threat-actor catalo
 
 ### Classified / Paid-Corpus Prior Art Gap
 
-The Observability-Tool Reverse Pipeline TTP novelty claim is held at the top of the MODERATE band with an explicit "cannot exclude classified prior art" qualifier because Recorded Future Intelligence, Mandiant Advantage, and Intel471 paid intelligence platforms were not reviewed during prior-art research. **Closing the gap requires** access to those paid corpora — direct access by the research team or coordination with a customer of one of those platforms who can perform the query.
+The Observability-Tool Reverse Pipeline TTP novelty claim is held at the top of the MODERATE band with an explicit "cannot exclude classified prior art" qualifier because Recorded Future Intelligence, Mandiant Advantage, and Intel471 paid intelligence platforms were not reviewed during prior-art research. **Closing the gap requires** access to those paid corpora, direct access by the research team or coordination with a customer of one of those platforms who can perform the query.
 
 ### IBM Instana Turkish OCP Customer Base Gap
 
-The breadth of IBM Instana's Turkish OCP customer deployment is unknown. **Closing the gap requires** IBM PSIRT coordination. A PSIRT advisory to IBM Instana customers (not a CVE — this is a customer governance defect, not an Instana product vulnerability) would surface comparable defects in other deployments.
+The breadth of IBM Instana's Turkish OCP customer deployment is unknown. **Closing the gap requires** IBM PSIRT coordination. A PSIRT advisory to IBM Instana customers (not a CVE; this is a customer governance defect, not an Instana product vulnerability) would surface comparable defects in other deployments.
 
 ### TurkNet Subscriber-Record Integrity Gap
 
@@ -962,7 +962,7 @@ The CANDIDATE novel TTP is at N=1 (this case). **Closing the gap requires** a se
 
 ### Insider Forensic-Access Gap
 
-The named insider's intent classification, current employment status, workstation forensic state, and whether the reverse-SSH tunnel is currently active **cannot be determined from external evidence**. **Closing the gap requires** victim-side forensic access — controlled insider interview and workstation forensic imaging, handled with appropriate legal/HR coordination.
+The named insider's intent classification, current employment status, workstation forensic state, and whether the reverse-SSH tunnel is currently active **cannot be determined from external evidence**. **Closing the gap requires** victim-side forensic access, controlled insider interview and workstation forensic imaging, handled with appropriate legal/HR coordination.
 
 ### Operator Account Binding Gaps
 
@@ -981,7 +981,7 @@ I initially claimed the Observability-Tool Reverse Pipeline was a novel TTP with
 
 After a full prior-art review I maintain that at high-MODERATE, the top of the 70-85% band. The closest documented adjacent cases I reviewed were:
 
-- **SolarWinds Sunburst (MITRE Campaign C0024, December 2020):** structurally distinct. Sunburst is a supply-chain backdoor injection into the vendor's update infrastructure — code is compromised at compile time before customer deployment. ARPA is stolen-credential reverse pipeline against the vendor's customer — no vendor product is compromised. The two cases share only the word "SolarWinds" in their reporting; the structural attack pattern is categorically different.
+- **SolarWinds Sunburst (MITRE Campaign C0024, December 2020):** structurally distinct. Sunburst is a supply-chain backdoor injection into the vendor's update infrastructure, code is compromised at compile time before customer deployment. ARPA is stolen-credential reverse pipeline against the vendor's customer. No vendor product is compromised. The two cases share only the word "SolarWinds" in their reporting; the structural attack pattern is categorically different.
 - **UNC6395 OAuth-based Salesforce CRM breach (August 2025):** structurally distinct. UNC6395 stole OAuth tokens for Salesforce and conducted one-time mass exfiltration affecting approximately 700 customer tenants. ARPA steals API tokens for multiple observability platforms (Instana, SolarWinds, Zabbix, VMware Aria) and conducts sustained ETL against a single named tenant. The attack-target structure (single named tenant vs. 700-tenant mass exfiltration) and the sustained-vs-one-time dimension differentiate the cases.
 - **Other observability-platform-abuse cases (2024-2026 published corpus):** none documented a 4-source cross-correlated sustained ETL against a single named victim with a production-grade operator-built analytics platform.
 
@@ -1040,10 +1040,10 @@ Hunt strategies and hardening guidance for adjacent observability-platform custo
 - Aria credential audit: review all Aria credentials accessing vCenter / ESXi monitoring. Implement source-IP allow-listing.
 
 **Turkish state-sector defenders (general):**
-- The operator's 5-axis Turkish convergence indicates a Turkish-located operator with Turkish-state-sector targeting interest. Other state-affiliated Turkish corporates are plausibly in operator interest scope (MODERATE-confidence inference based on the 5-axis Turkish convergence pattern — Turkish operator location, Turkish language tradecraft, Turkish state-affiliated target selection, Turkish residential ISP, Turkish working-hours pattern — even though no additional victims are visible in the current operator-filesystem evidence).
+- The operator's 5-axis Turkish convergence indicates a Turkish-located operator with Turkish-state-sector targeting interest. Other state-affiliated Turkish corporates are plausibly in operator interest scope (MODERATE-confidence inference based on the 5-axis Turkish convergence pattern, Turkish operator location, Turkish language tradecraft, Turkish state-affiliated target selection, Turkish residential ISP, Turkish working-hours pattern, even though no additional victims are visible in the current operator-filesystem evidence).
 - Coordinate with USOM (TR-CERT) for sector-wide advisory on observability-platform credential governance.
 
 ---
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
 
