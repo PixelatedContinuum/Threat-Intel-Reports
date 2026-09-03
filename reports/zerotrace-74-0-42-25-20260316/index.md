@@ -40,18 +40,18 @@ stix_bundle: /stix/zerotrace-74-0-42-25-20260316.json
 ## 1. Executive Summary
 {: .hl-tier-1}
 
-ZeroTrace, a named threat actor corroborated by multiple independent security vendors, left their complete staging server open and accessible without authentication. The open directory at `74.0.42.25` exposed 4,750 files: four simultaneous RAT families, 9.1 million stolen credentials, 500 pre-staged phishing links, and an on-demand ransomware module — infrastructure active and undetected for 16+ months as of the analysis date (2026-03-16).
+ZeroTrace, a named threat actor corroborated by multiple independent security vendors, left their complete staging server open and accessible without authentication. The open directory at `74.0.42.25` exposed 4,750 files: four simultaneous RAT families, 9.1 million stolen credentials, 500 pre-staged phishing links, and an on-demand ransomware module, infrastructure active and undetected for 16+ months as of the analysis date (2026-03-16).
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/opendir1.png" | relative_url }}" alt="Hunt.io open directory listing at 74.0.42.25 showing 4,750 files totalling 4GB">
-  <figcaption><em>Figure 1: <a href="https://hunt.io/">Hunt.io</a> view of the open directory at 74.0.42.25 — 4,750 files totalling 4GB hosted on Layer7 Technologies (AS40662). The indexed file tree exposes the operator's complete staging environment: malware toolkit, credential databases, and operator tooling left accessible without authentication.</em></figcaption>
+  <figcaption><em>Figure 1: <a href="https://hunt.io/">Hunt.io</a> view of the open directory at 74.0.42.25, 4,750 files totalling 4GB hosted on Layer7 Technologies (AS40662). The indexed file tree exposes the operator's complete staging environment: malware toolkit, credential databases, and operator tooling left accessible without authentication.</em></figcaption>
 </figure>
 
 Overall the campaign scores 8.8 out of 10, which is HIGH. Full technical capabilities are dissected in §5, the risk table and business impact scenarios sit in §3, and attribution and the operator profile are in §8. The detection anchors, the XWorm mutex `5tK099W0Z6AMZVxQ` and the PureRAT TCP preamble `\x04\x00\x00\x00`, plus the full IOC feed, are in §14-15.
 
 The threat vector is email phishing. `Attachment.vbs` delivers ScreenConnect, which the operator uses for persistent remote access behind a Social Security Administration PDF decoy. From that foothold they can deploy XWorm for keylogging and ransomware, PureRAT for encrypted C2, or PureHVNC for hidden desktop sessions that make financial account takeover invisible. The BAK3R credential cracker tests the 9.1 million combo list against Office 365. All four C2 services converge on `185.49.126.140`, so blocking that single IP disrupts all four families at once.
 
-**The OPSEC failure created an intelligence windfall.** ZeroTrace accidentally exposed their own C2 panel, full Raven RAT source code, and identity-linked metadata, including operator handle `Steffz` and a Canva account linking to `Stefan Yosifov` (LOW confidence — single source). The operation remains active; 500 pre-generated phishing links have not been distributed as of discovery.
+**The OPSEC failure created an intelligence windfall.** ZeroTrace accidentally exposed their own C2 panel, full Raven RAT source code, and identity-linked metadata, including operator handle `Steffz` and a Canva account linking to `Stefan Yosifov` (LOW confidence, single source). The operation remains active; 500 pre-generated phishing links have not been distributed as of discovery.
 
 **Primary detection actions:** Block `185.49.126.140` (all ports) and `74.0.42.25`. Deploy detection rules from the [detection file]({{ "/hunting-detections/opendirectory-74-0-42-25-20260316-detections/" | relative_url }}). Full IOC feed: [ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json]({{ "/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json" | relative_url }}).
 
@@ -62,16 +62,16 @@ The threat vector is email phishing. `Attachment.vbs` delivers ScreenConnect, wh
 {: .hl-tier-1}
 
 **1. Four Remote Access Tools on one server: a double-edged sword**  
-The consolidation of XWorm, PureRAT, PureHVNC, and ScreenConnect C2 on a single IP (`185.49.126.140`) is an operational security failure by the operator — but it also means that blocking one IP simultaneously disrupts all four malware families. This is the highest-priority blocking action available to defenders.
+The consolidation of XWorm, PureRAT, PureHVNC, and ScreenConnect C2 on a single IP (`185.49.126.140`) is an operational security failure by the operator, but it also means that blocking one IP simultaneously disrupts all four malware families. This is the highest-priority blocking action available to defenders.
 
-**2. On-demand ransomware is present — and this is not typical XWorm behavior**
-Most commodity XWorm V5.6 deployments are RAT-only; the automated ransomware plugin is a premium-tier add-on not reliably present in cracked builds. Its presence here signals the actor obtained the full-capability builder, not a stripped baseline. The module is ready to push to any active victim with a single operator command — no additional staging required. Any confirmed XWorm infection on this C2 should be treated as a ransomware incident risk, not just a RAT infection.
+**2. On-demand ransomware is present, and this is not typical XWorm behavior**
+Most commodity XWorm V5.6 deployments are RAT-only; the automated ransomware plugin is a premium-tier add-on not reliably present in cracked builds. Its presence here signals the actor obtained the full-capability builder, not a stripped baseline. The module is ready to push to any active victim with a single operator command, no additional staging required. Any confirmed XWorm infection on this C2 should be treated as a ransomware incident risk, not just a RAT infection.
 
 **3. The specific samples delivering PureRAT are undocumented**  
-Two core PureRAT samples (`Faidowra.dll` and `Zvafsyattl.exe`) are absent from public sandbox databases, and the specific `Aspdkzb → Zvafsyattl → Faidowra` chain has not been documented in reviewed public research. The underlying technique — multi-stage ConfuserEx-obfuscated .NET loaders chaining via `Assembly.Load()` — is well established. What is novel is this particular sample set: these files had no prior public documentation. Hash-based detection will not catch them until the IOCs in this report are added to threat intelligence feeds.
+Two core PureRAT samples (`Faidowra.dll` and `Zvafsyattl.exe`) are absent from public sandbox databases, and the specific `Aspdkzb → Zvafsyattl → Faidowra` chain has not been documented in reviewed public research. The underlying technique (multi-stage ConfuserEx-obfuscated .NET loaders chaining via `Assembly.Load()`) is well established. What is novel is this particular sample set: these files had no prior public documentation. Hash-based detection will not catch them until the IOCs in this report are added to threat intelligence feeds.
 
-**4. The OPSEC failure created an intelligence windfall — but the operation remains active**
-The operator's accidental exposure of their C2 panel, full source code, 9.1 million credentials, and identity-linked metadata is a significant analytical opportunity. However, the operator appears unaware of this exposure as of the analysis date — the infrastructure remains active, and 500 pre-generated phishing links have not yet been distributed. The window for defensive action before those links are used is time-limited.
+**4. The OPSEC failure created an intelligence windfall, but the operation remains active**
+The operator's accidental exposure of their C2 panel, full source code, 9.1 million credentials, and identity-linked metadata is a significant analytical opportunity. However, the operator appears unaware of this exposure as of the analysis date. The infrastructure remains active, and 500 pre-generated phishing links have not yet been distributed. The window for defensive action before those links are used is time-limited.
 
 **5. The operator is intermediate-level, but the toolkit capability is professional-grade**
 The OPSEC failures (open directory, exposed C2 panel, debug logs in droppers) indicate an intermediate actor. However, the capabilities assembled through MaaS procurement (PureRAT subscription, XWorm cracked builder, ScreenConnect abuse) exceed what the operator could develop independently. The gap between the operator's skill level and the toolkit's capability is itself a threat intelligence signal: MaaS platforms enable actors of lower technical sophistication to deploy threats of higher capability.
@@ -86,7 +86,7 @@ The OPSEC failures (open directory, exposed C2 panel, debug logs in droppers) in
 | ------------------------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Ransomware deployment**                        | HIGH       | XWorm's ENC/DEC ransomware plugin is embedded in the builder and deployable to any active victim without additional staging. Ransom demands are operator-configurable and applied on a per-victim basis. No prior warning or additional infection step required.                                     |
 | **Business Email Compromise (BEC)**              | HIGH       | BAK3R credential cracker targets smtp.office365.com with 25 concurrent threads. The operator already has 9.1M credential pairs including a corporate-format 2M-entry list. Successful O365 account access enables wire transfer fraud, payroll diversion, and further phishing from trusted domains. |
-| **Invisible account takeover (banking/crypto)**  | HIGH       | PureHVNC and Raven RAT's HVNC operate hidden desktop sessions — the victim has no indication the operator is logged into their browser. Banking and cryptocurrency sessions can be initiated, transfers made, and the session closed with no visible trace to the victim.                            |
+| **Invisible account takeover (banking/crypto)**  | HIGH       | PureHVNC and Raven RAT's HVNC operate hidden desktop sessions. The victim has no indication the operator is logged into their browser. Banking and cryptocurrency sessions can be initiated, transfers made, and the session closed with no visible trace to the victim.                            |
 | **Cryptocurrency theft via clipboard hijacking** | HIGH       | XWorm's Clipper silently replaces BTC, ETH, and TRC20 wallet addresses when the victim copies them. Any cryptocurrency transaction the victim believes they are sending to a legitimate address is redirected to the operator's wallet.                                                              |
 | **Web server compromise via CVE-2025-30406**     | MEDIUM     | The exploit kit targets a specific named ASP.NET application where the operator already obtained the web.config. Organizations running Gladinet CentreStack (pre-patch) or any legacy ASP.NET application with exposed machineKey values face RCE risk.                                              |
 | **Lateral movement via USB propagation**         | MEDIUM     | XWorm copies itself as USB.exe to removable drives. In environments where USB drives are shared across workstations (manufacturing, healthcare, field operations), this enables infection spread without network access.                                                                             |
@@ -112,27 +112,27 @@ For ongoing monitoring, watch for reinfection via bulk ScreenConnect links, sinc
 | Family                     | Type                              | Samples                            | Confidence                  | C2                               |
 | -------------------------- | --------------------------------- | ---------------------------------- | --------------------------- | -------------------------------- |
 | **XWorm V5.6**             | RAT + Ransomware module           | 9 (7 stubs + builder + loader)     | DEFINITE                    | 185.49.126.140:5000              |
-| **PureRAT v4.1.9**         | MaaS RAT (ProtoBuf/TLS)           | 11 (9 Stage 1 + Stage 2 + Stage 3) | HIGH (88% — 11 signatures)  | 185.49.126.140:56001-56003       |
+| **PureRAT v4.1.9**         | MaaS RAT (ProtoBuf/TLS)           | 11 (9 Stage 1 + Stage 2 + Stage 3) | HIGH (88%, 11 signatures)  | 185.49.126.140:56001-56003       |
 | **PureHVNC stub**          | Hidden VNC                        | 2 (GUI + victim stub xh.exe)       | DEFINITE                    | 185.49.126.140:8000              |
 | **Raven RAT**              | Custom Delphi RAT (~60% complete) | 2 (stub template + operator panel) | DEFINITE                    | Template placeholder (port 8777) |
-| **ScreenConnect v23.2.9**  | Legitimate RMM — abused           | 3                                  | DEFINITE                    | adminxyzhosting.com:443/8041     |
+| **ScreenConnect v23.2.9**  | Legitimate RMM, abused           | 3                                  | DEFINITE                    | adminxyzhosting.com:443/8041     |
 | **Aspdkzb loader cluster** | Three-stage fileless loader       | 9 Stage 1 variants                 | HIGH                        | Delivers PureRAT v4.1.9          |
-| **vlc_boxed.exe**          | DGA-capable unknown family        | 1                                  | INSUFFICIENT (inner family) | DGA — domains not captured       |
+| **vlc_boxed.exe**          | DGA-capable unknown family        | 1                                  | INSUFFICIENT (inner family) | DGA, domains not captured       |
 
 
 The total sample inventory runs to 34 items, 32 binaries and 4 scripts.
 
-**File Identifier — Primary Analysis Samples:**
+**File Identifier, Primary Analysis Samples:**
 
 
 | Filename          | SHA256 (full)                                                      | Role                                                          |
 | ----------------- | ------------------------------------------------------------------ | ------------------------------------------------------------- |
-| `XClient.exe`     | `427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f` | XWorm V5.6 stub — full C2 config decrypted                    |
+| `XClient.exe`     | `427f818131c9beb7f8a487cb28fe13e2699db844ac3c9e9ae613fd35113fe77f` | XWorm V5.6 stub, full C2 config decrypted                    |
 | `Xworm_V5.6.exe`  | `90f58865f265722ab007abb25074b3fc4916e927402552c6be17ef9afac96405` | XWorm builder/server panel (14.8MB)                           |
 | `XwormLoader.exe` | `f5f14b9073f86da926a8ed319b3289b893442414d1511e45177f6915fb4e5478` | Native C++ 11-stage reflective PE loader                      |
-| `Aspdkzb.exe`     | `978ead9671e59772eeeb73344fc3b0c068c5168de7f67f738269f5b59e681a9a` | Stage 1 — ConfuserEx fileless loader                          |
-| `Faidowra.dll`    | `6b526c29a6961c1f03eeb1ec4ca3a0fdc5680e3f90db013dea8b27d8b63cce57` | Stage 3 — PureRAT v4.1.9 (novel; not in public sandboxes)     |
-| `vicTest.exe`     | `b34a0bb0c0ba24dae59b748f1e9dc70fc739c5d4300fe96e8ff66cf6166d3dd8` | Raven RAT C2 panel (operator console — accidentally uploaded) |
+| `Aspdkzb.exe`     | `978ead9671e59772eeeb73344fc3b0c068c5168de7f67f738269f5b59e681a9a` | Stage 1, ConfuserEx fileless loader                          |
+| `Faidowra.dll`    | `6b526c29a6961c1f03eeb1ec4ca3a0fdc5680e3f90db013dea8b27d8b63cce57` | Stage 3, PureRAT v4.1.9 (novel; not in public sandboxes)     |
+| `vicTest.exe`     | `b34a0bb0c0ba24dae59b748f1e9dc70fc739c5d4300fe96e8ff66cf6166d3dd8` | Raven RAT C2 panel (operator console, accidentally uploaded) |
 | `Attachment.vbs`  | `fdca9ee6e64d67795cd48c5740fa54f509b00bff3e2e94d5f7863e21b23da7f6` | Phishing VBScript dropper                                     |
 | `vlc_boxed.exe`   | `7a848e3509c5945f1104c0baa89032ac6e329a84844ca6bf4177b9308d98b2d3` | DGA-capable unknown family (Enigma VB)                        |
 
@@ -148,10 +148,10 @@ On sophistication I put this operator at intermediate. They assemble commodity a
 
 > **Executive Impact Summary:**
 >
-> - **Business Risk:** HIGH — on-demand ransomware, full remote control, credential theft, BEC-ready
-> - **Detection Difficulty:** HIGH — fileless loading, legitimate software abuse, sandbox evasion, ScreenConnect allow-listed by default
-> - **Remediation Complexity:** MODERATE — Registry Run persistence (user-space); ScreenConnect may be allow-listed; no firmware-level persistence identified
-> - **Key Takeaway:** The consolidation of four RAT C2 services on a single server is both an operational security failure by the threat actor and a defender's advantage — blocking one IP disrupts all four malware families simultaneously.
+> - **Business Risk:** HIGH, on-demand ransomware, full remote control, credential theft, BEC-ready
+> - **Detection Difficulty:** HIGH, fileless loading, legitimate software abuse, sandbox evasion, ScreenConnect allow-listed by default
+> - **Remediation Complexity:** MODERATE, Registry Run persistence (user-space); ScreenConnect may be allow-listed; no firmware-level persistence identified
+> - **Key Takeaway:** The consolidation of four RAT C2 services on a single server is both an operational security failure by the threat actor and a defender's advantage, blocking one IP disrupts all four malware families simultaneously.
 
 
 | Capability                                                                                             | Impact   | Detection Difficulty | Confidence                                |
@@ -173,7 +173,7 @@ On sophistication I put this operator at intermediate. They assemble commodity a
 
 ### 5a. XWorm V5.6 RAT 
 
-> **Analyst note:** XWorm is a commodity hacking tool distributed on underground forums in cracked form. It gives the attacker complete control of a victim's computer — reading keystrokes, taking screenshots, stealing browser passwords, and encrypting files on demand.
+> **Analyst note:** XWorm is a commodity hacking tool distributed on underground forums in cracked form. It gives the attacker complete control of a victim's computer, reading keystrokes, taking screenshots, stealing browser passwords, and encrypting files on demand.
 
 I hold this DEFINITE, from static analysis, with `XClient.exe` fully decompiled and the C2 config decrypted.
 
@@ -199,7 +199,7 @@ I hold this DEFINITE, from static analysis, with `XClient.exe` fully decompiled 
 - Hidden shell execution via `Interaction.Shell(cmd, Hide)`
 - URL download and execute via `WebClient.DownloadFile` → `Process.Start`
 - Drop and execute from C2: GZip payload → `%TEMP%\[random6][ext]` → `powershell -ExecutionPolicy Bypass`
-- **Fileless .NET execution** (`FM` command): `AppDomain.CurrentDomain.Load(bytes)` — zero disk footprint
+- **Fileless .NET execution** (`FM` command): `AppDomain.CurrentDomain.Load(bytes)`, zero disk footprint
 
 *Surveillance:*
 
@@ -211,12 +211,12 @@ I hold this DEFINITE, from static analysis, with `XClient.exe` fully decompiled 
 
 *Credential Theft:*
 
-- `RunRecovery` plugin method — browser credential and stored data recovery
+- `RunRecovery` plugin method: browser credential and stored data recovery
 
 *Destructive Capabilities:*
 
-- **Ransomware module** (`XWorm.Ransomware.resources` — 103,765 bytes embedded as resource)
-  - Delivered via ENC/DEC plugin interface pushed from C2 — operator deploys to any active victim at will
+- **Ransomware module** (`XWorm.Ransomware.resources`, 103,765 bytes embedded as resource)
+  - Delivered via ENC/DEC plugin interface pushed from C2: operator deploys to any active victim at will
   - Default ransom demand: $300 BTC (operator-configurable)
   - State machine prevents accidental double-encryption (`RS` flag)
 - **HTTP slow-POST DDoS** (`StartDDos`): 20 threads, `Content-Length: 5235` with no body, 2.5-second hold per connection, loops for operator-specified duration
@@ -225,26 +225,26 @@ I hold this DEFINITE, from static analysis, with `XClient.exe` fully decompiled 
 
 *Lateral Movement:*
 
-- USB.exe propagation via `Spread()` flag — copies to all removable drives
+- USB.exe propagation via `Spread()` flag: copies to all removable drives
 
 *Operator Configuration (runtime, stored at `HKCU\SOFTWARE\XWorm`):*
 
-- `BotToken`, `Botid` — Telegram victim notification (token not in binary; set at runtime)
-- `BTC`, `ETH`, `TRC20` — Clipper replacement wallet addresses (set at runtime)
-- Sandbox detection: queries `http://ip-api.com/line/?fields=hosting` — exits if running in a hosting/VM environment
+- `BotToken`, `Botid`: Telegram victim notification (token not in binary; set at runtime)
+- `BTC`, `ETH`, `TRC20`: Clipper replacement wallet addresses (set at runtime)
+- Sandbox detection: queries `http://ip-api.com/line/?fields=hosting`, exits if running in a hosting/VM environment
 
 This matters because the automated ransomware plugin is not a standard feature of commodity XWorm V5.6 builds, it is a premium-tier add-on absent from many cracked distributions. Its presence confirms the operator obtained the full-capability builder, which places them above the baseline skill threshold of typical XWorm deployments. The module needs no additional staging, because it is already embedded and can be pushed from the operator's panel to any active victim with a single click, so even a low-value initial infection can become a ransomware incident whenever the operator chooses. The AES key seed (`5tK099W0Z6AMZVxQ`) is the same string as the mutex, so the mutex alone in memory is enough to identify the key and decrypt intercepted C2 traffic.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/ransomware_capability.png" | relative_url }}" alt="Decompiled XWorm V5.6 ENC plugin handler showing Messages.RS state machine">
-  <figcaption><em>Figure 2: Decompiled ENC plugin handler from XWorm V5.6. The operator pushes the 103KB ransomware module to any active victim via a single panel command. The <code>Messages.RS</code> state machine (RS = 1 during encryption, RS = 2 when complete) prevents accidental double-encryption — confirming this is a deliberate, production-ready ransomware implementation embedded in the builder.</em></figcaption>
+  <figcaption><em>Figure 2: Decompiled ENC plugin handler from XWorm V5.6. The operator pushes the 103KB ransomware module to any active victim via a single panel command. The <code>Messages.RS</code> state machine (RS = 1 during encryption, RS = 2 when complete) prevents accidental double-encryption, confirming this is a deliberate, production-ready ransomware implementation embedded in the builder.</em></figcaption>
 </figure>
 
 ---
 
 ### 5b. XwormLoader — 11-Stage Reflective PE Loader 
 
-> **Analyst note:** XwormLoader is a native C++ binary that injects XWorm into memory without writing it to disk, then spoofs its own identity in the Windows process list to resemble a legitimate .NET Framework component — defeating both file-based antivirus and process-enumeration forensics.
+> **Analyst note:** XwormLoader is a native C++ binary that injects XWorm into memory without writing it to disk, then spoofs its own identity in the Windows process list to resemble a legitimate .NET Framework component, defeating both file-based antivirus and process-enumeration forensics.
 
 I hold this DEFINITE, from static analysis, with `XwormLoader.exe` fully reverse-engineered.
 
@@ -254,21 +254,21 @@ XwormLoader is an unusual finding in the XWorm ecosystem, which normally relies 
 
 **Loading sequence (11 stages):**
 
-1. `main()` calls `FreeConsole()` immediately — decoy strings ("random number generator", "This is garbage code #0-9") are permanently invisible even if run in a console
+1. `main()` calls `FreeConsole()` immediately. Decoy strings ("random number generator", "This is garbage code #0-9") are permanently invisible even if run in a console
 2. 292,352 encrypted bytes located at file offset `0x426218`
 3. Decryption: `NOT(byte) - 0x3E` per byte (single-pass arithmetic)
 4. PE signature validation after decryption
 5. Manual PE header and section mapping into allocated memory
-6. Base relocation processing — corrects absolute addresses for load address delta
-7. Import table resolution — `LoadLibraryA` + `GetProcAddress` for all dependencies
+6. Base relocation processing: corrects absolute addresses for load address delta
+7. Import table resolution: `LoadLibraryA` + `GetProcAddress` for all dependencies
 8. Memory page protection assignment per section (execute/read/write as appropriate)
-9. **PEB patching** — replaces `PEB->ImageBaseAddress` with injected PE base, masking the real loader
-10. **LDR module path spoofing** — writes fake `C:\Windows\Microsoft.NET\Framework\...` path to the loaded module list entry, making the injected module appear to be a legitimate .NET Framework component
+9. **PEB patching**: replaces `PEB->ImageBaseAddress` with injected PE base, masking the real loader
+10. **LDR module path spoofing**: writes fake `C:\Windows\Microsoft.NET\Framework\...` path to the loaded module list entry, making the injected module appear to be a legitimate .NET Framework component
 11. Thread launch via `CreateThread` on entry point; for .NET payload: temporarily injects a fake .NET Framework path to assist CLR initialization, restores after 100ms
 
 Zero disk writes at any stage. The embedded payload is confirmed .NET.
 
-**Key stages — decompiler evidence:**
+**Key stages, decompiler evidence:**
 
 Stage 1 decryption loop (decompiler output, VA `0x00401060`):
 
@@ -305,15 +305,15 @@ To detect it, use Sysmon Event ID 8 (CreateRemoteThread) or EDR API telemetry fo
 
 ### 5c. PureRAT v4.1.9 and the Aspdkzb Loader Chain 
 
-> **Analyst note:** PureRAT is a subscription RAT delivered here through a three-stage loader chain — each stage decrypts and reflectively loads the next entirely in memory, never touching the hard drive. The final payload communicates over TLS-encrypted ProtoBuf using a self-signed certificate pinned at build time.
+> **Analyst note:** PureRAT is a subscription RAT delivered here through a three-stage loader chain. Each stage decrypts and reflectively loads the next entirely in memory, never touching the hard drive. The final payload communicates over TLS-encrypted ProtoBuf using a self-signed certificate pinned at build time.
 
 I hold this HIGH at 88 percent, on 11 independent technical signatures matched against published reports from Netresec, Check Point Research, Fortinet and Derp.ca.
 
 **Novel findings (not in any reviewed public report):**
 
-- C2 IP `185.49.126.140` — not attributed to PureRAT in any reviewed public source
+- C2 IP `185.49.126.140`: not attributed to PureRAT in any reviewed public source
 - `Faidowra.dll` (Stage 3) and `Zvafsyattl.exe` (Stage 2) hashes not present in web-accessible sandbox databases at analysis date
-- Three-stage loader chain `Aspdkzb → Zvafsyattl → Faidowra` — these specific samples and their use as a PureRAT delivery chain are undocumented in public research; the underlying fileless .NET loading technique is well established
+- Three-stage loader chain `Aspdkzb → Zvafsyattl → Faidowra`: these specific samples and their use as a PureRAT delivery chain are undocumented in public research; the underlying fileless .NET loading technique is well established
 
 **Three-Stage Fileless Loader Chain:**
 
@@ -332,12 +332,12 @@ Stage 3: Faidowra.dll (PureRAT v4.1.9, .NET Reactor 6.x, 770KB)
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/extremedump.png" | relative_url }}" alt="ExtremeDumper output showing Zvafsyattl.exe and Faidowra.dll loaded in memory inside Aspdkzb-cleaned.exe">
-  <figcaption><em>Figure 3: A memory forensics tool (ExtremeDumper) attached to the running <code>Aspdkzb-cleaned.exe</code> (PID 7220) confirms all three stages of the loader chain operating simultaneously in memory — none written to disk at any point. <code>Zvafsyattl.exe</code> is identified at base address <code>0x0000000000000000</code> and <code>Faidowra.dll</code> appears at three separate load addresses (<code>0x572000</code>, <code>0x152FF0</code>, <code>0x42B050</code>). This is direct forensic evidence of the fileless chain: Aspdkzb decrypts and reflectively loads Zvafsyattl, which in turn loads multiple instances of Faidowra.dll entirely in managed memory.</em></figcaption>
+  <figcaption><em>Figure 3: A memory forensics tool (ExtremeDumper) attached to the running <code>Aspdkzb-cleaned.exe</code> (PID 7220) confirms all three stages of the loader chain operating simultaneously in memory, none written to disk at any point. <code>Zvafsyattl.exe</code> is identified at base address <code>0x0000000000000000</code> and <code>Faidowra.dll</code> appears at three separate load addresses (<code>0x572000</code>, <code>0x152FF0</code>, <code>0x42B050</code>). This is direct forensic evidence of the fileless chain: Aspdkzb decrypts and reflectively loads Zvafsyattl, which in turn loads multiple instances of Faidowra.dll entirely in managed memory.</em></figcaption>
 </figure>
 
 ConfuserEx is a public .NET obfuscation tool (obfuscator/packer). TEA (Tiny Encryption Algorithm) is a block cipher used in the inner decryption. The `.NET Reactor 6.x` protection on `Faidowra.dll` adds a further layer of commercial obfuscation.
 
-**Config blob — how it is embedded (decompiled C#, `Faidowra_Slayed.dll`):**
+**Config blob: how it is embedded (decompiled C#, `Faidowra_Slayed.dll`):**
 
 ```csharp
 private static void ConcatFilteredChain()
@@ -353,7 +353,7 @@ private static void ConcatFilteredChain()
 }
 ```
 
-The encoding stack: inline Base64 → `Convert.FromBase64String()` → GZip decompress → ProtoBuf deserialize → `DefinitionChooser` config object. The C2 IP, ports, and TLS certificate are all stored in this single blob — no hardcoded strings appear in plaintext IL.
+The encoding stack: inline Base64 → `Convert.FromBase64String()` → GZip decompress → ProtoBuf deserialize → `DefinitionChooser` config object. The C2 IP, ports, and TLS certificate are all stored in this single blob. No hardcoded strings appear in plaintext IL.
 
 **C2 Configuration (decoded from Base64 → GZip → ProtoBuf config blob):**
 
@@ -371,11 +371,11 @@ The encoding stack: inline Base64 → `Convert.FromBase64String()` → GZip deco
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/extractedC2_Ports.png" | relative_url }}" alt="Hex editor showing 185.49.126.140 in config_raw.bin alongside PowerShell ISE decoding ports 56001-56003">
-  <figcaption><em>Figure 4: Left — hex editor view of <code>config_raw.bin</code> (the GZip-decompressed ProtoBuf config blob from <code>Faidowra.dll</code>) showing <code>185.49.126.140</code> as plaintext in the raw bytes. Right — PowerShell ISE decoding the varint-encoded port values in the bytes immediately following the IP string. The script output confirms three sequential C2 ports: <code>56001</code>, <code>56002</code>, and <code>56003</code> — the complete C2 connection matrix for this build, extracted directly from the binary without any decryption key.</em></figcaption>
+  <figcaption><em>Figure 4: Left, hex editor view of <code>config_raw.bin</code> (the GZip-decompressed ProtoBuf config blob from <code>Faidowra.dll</code>) showing <code>185.49.126.140</code> as plaintext in the raw bytes. Right, PowerShell ISE decoding the varint-encoded port values in the bytes immediately following the IP string. The script output confirms three sequential C2 ports: <code>56001</code>, <code>56002</code>, and <code>56003</code>, the complete C2 connection matrix for this build, extracted directly from the binary without any decryption key.</em></figcaption>
 </figure>
 
 **C2 Protocol Architecture:**
-Raw TCP `\x04\x00\x00\x00` preamble → TLS (cert pinned to `CN=Ayzyqztcoa`) → 4-byte length-framed ProtoBuf messages. Approximately 84-type ProtoBuf discriminated union (published reports document 86 types — minor build-to-build variance). Random 20-40 second heartbeat interval — exact match to published behavioral signature (Derp.ca, Tier 3).
+Raw TCP `\x04\x00\x00\x00` preamble → TLS (cert pinned to `CN=Ayzyqztcoa`) → 4-byte length-framed ProtoBuf messages. Approximately 84-type ProtoBuf discriminated union (published reports document 86 types, minor build-to-build variance). Random 20-40 second heartbeat interval, exact match to published behavioral signature (Derp.ca, Tier 3).
 
 **Evidence Supporting HIGH Confidence (11 signatures matched):**
 
@@ -389,7 +389,7 @@ Raw TCP `\x04\x00\x00\x00` preamble → TLS (cert pinned to `CN=Ayzyqztcoa`) →
 | TLS self-signed cert pinning                  | Check Point Research, Netresec          |
 | `NotAfter: 9999-12-31`                        | Check Point Research, Netresec          |
 | 4-byte little-endian length prefix            | Derp.ca                                 |
-| ~84-type ProtoBuf union                       | Derp.ca (86 types — minor variance)     |
+| ~84-type ProtoBuf union                       | Derp.ca (86 types, minor variance)     |
 | 20-40 second random heartbeat                 | Derp.ca (exact match)                   |
 | .NET Reactor 6.x obfuscation                  | Check Point Research, Fortinet          |
 | Campaign tag defaulting to `"Default"`        | Derp.ca                                 |
@@ -403,14 +403,14 @@ This matters because the TLS certificate `NotBefore` date of 2024-11-21 establis
 
 ### 5d. PureHVNC — Hidden Desktop Control 
 
-> **Analyst note:** HVNC (Hidden Virtual Network Computing) creates an invisible second desktop on the victim's machine. The attacker logs into banking, cryptocurrency, and email accounts in this hidden session while the victim's visible screen remains undisturbed — no alert fires because the hidden desktop is a legitimate Windows component.
+> **Analyst note:** HVNC (Hidden Virtual Network Computing) creates an invisible second desktop on the victim's machine. The attacker logs into banking, cryptocurrency, and email accounts in this hidden session while the victim's visible screen remains undisturbed. No alert fires because the hidden desktop is a legitimate Windows component.
 
 I hold this DEFINITE, with `PureRAT.exe` carrying the internal name `PureHVNC_GUI` confirmed from the config file, and the `xh.exe` C2 address hardcoded.
 
 **Components:**
 
-- `PureRAT.exe` (82.9MB) — PureHVNC operator GUI (PureBasic outer shell, BoxedApp SDK virtual filesystem, DNGuard inner protection). The 75.9MB `.rsrc` section contains a virtual filesystem. Internal name: `PureHVNC_GUI`.
-- `xh.exe` (62,464 bytes) — VB.NET victim stub; C2 hardcoded to `185.49.126.140:8000`; references internal component `PHVNC.exe`
+- `PureRAT.exe` (82.9MB): PureHVNC operator GUI (PureBasic outer shell, BoxedApp SDK virtual filesystem, DNGuard inner protection). The 75.9MB `.rsrc` section contains a virtual filesystem. Internal name: `PureHVNC_GUI`.
+- `xh.exe` (62,464 bytes): VB.NET victim stub; C2 hardcoded to `185.49.126.140:8000`; references internal component `PHVNC.exe`
 
 BoxedApp SDK is a commercial virtual filesystem toolkit that bundles multiple executables and assets into a single binary. DNGuard is a .NET obfuscation/protection product.
 
@@ -418,14 +418,14 @@ This matters because the same IP (`185.49.126.140`) appears hardcoded across thr
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/xh_exe.png" | relative_url }}" alt="Decompiled xh.exe PureHVNC stub showing hardcoded C2 IP 185.49.126.140 and HVNC.StartHVNC call">
-  <figcaption><em>Figure 5: Decompiled <code>xh.exe</code> (the PureHVNC victim stub) with the hardcoded C2 address <code>185.49.126.140</code> highlighted. The same IP appears hardcoded across three separate binaries from different malware families — XWorm (port 5000), PureRAT (ports 56001-56003), and PureHVNC (port 8000) — directly confirming a single operator controls all three families through one consolidated C2 server. The <code>HVNC.StartHVNC()</code> call initiates the hidden desktop session using those hardcoded parameters.</em></figcaption>
+  <figcaption><em>Figure 5: Decompiled <code>xh.exe</code> (the PureHVNC victim stub) with the hardcoded C2 address <code>185.49.126.140</code> highlighted. The same IP appears hardcoded across three separate binaries from different malware families (XWorm (port 5000), PureRAT (ports 56001-56003), and PureHVNC (port 8000)) directly confirming a single operator controls all three families through one consolidated C2 server. The <code>HVNC.StartHVNC()</code> call initiates the hidden desktop session using those hardcoded parameters.</em></figcaption>
 </figure>
 
 ---
 
 ### 5e. Raven RAT — Custom Delphi C2 
 
-> **Analyst note:** Raven RAT is a custom C2 tool built by the operator in Delphi, approximately 60% complete. Despite its unfinished state it already implements keylogging, hidden desktop control, cryptocurrency wallet theft, and remote shell — alongside the operator's own C2 panel accidentally uploaded to the same server.
+> **Analyst note:** Raven RAT is a custom C2 tool built by the operator in Delphi, approximately 60% complete. Despite its unfinished state it already implements keylogging, hidden desktop control, cryptocurrency wallet theft, and remote shell, alongside the operator's own C2 panel accidentally uploaded to the same server.
 
 I hold this DEFINITE, with the full source code recovered from the open directory and the operator panel `vicTest.exe` accidentally uploaded alongside it.
 
@@ -433,8 +433,8 @@ It is written in Embarcadero Delphi 12.0 Athens Enterprise, a commercial IDE tha
 
 **Confirmed Capabilities (from source code + binary decompilation):**
 
-- System survey beacon (opcode `0x49`) — hardware and software inventory
-- Keylogger — `GetAsyncKeyState(0x0D/0x01)` polling on Enter key and left mouse click
+- System survey beacon (opcode `0x49`): hardware and software inventory
+- Keylogger: `GetAsyncKeyState(0x0D/0x01)` polling on Enter key and left mouse click
   > **Important distinction:** This is a form-submission keylogger, not a full keystroke capture. It fires only on Enter key release (form submit) and left mouse button release (button click), then flushes whatever was typed into the accumulation buffer. Decompiled `TOThread.Execute` loop (high-level decompiler output):
   >
   > ```
@@ -452,16 +452,16 @@ It is written in Embarcadero Delphi 12.0 Athens Enterprise, a commercial IDE tha
   >   sleep(1)
   > ```
   >
-  > This implementation avoids `SetWindowsHookEx WH_KEYBOARD_LL` — a commonly monitored API. `GetAsyncKeyState` is used legitimately by games and accessibility tools, generating no hook-registration events for security tools to observe.
-- Process manager — kills processes via `taskkill /f /im [name]` via `CreateProcessW(CREATE_NO_WINDOW)`
-- Remote shell — `CreateProcessW`
-- File upload and execute — opcode `0x55`: writes to `%TEMP%` via `GetTempPathW`, executes
-- Screenshot capture — on-demand PNG via GDI+ (PNG level 7 compression)
+  > This implementation avoids `SetWindowsHookEx WH_KEYBOARD_LL`, a commonly monitored API. `GetAsyncKeyState` is used legitimately by games and accessibility tools, generating no hook-registration events for security tools to observe.
+- Process manager: kills processes via `taskkill /f /im [name]` via `CreateProcessW(CREATE_NO_WINDOW)`
+- Remote shell: `CreateProcessW`
+- File upload and execute: opcode `0x55`: writes to `%TEMP%` via `GetTempPathW`, executes
+- Screenshot capture: on-demand PNG via GDI+ (PNG level 7 compression)
 - Hidden VNC (`THiddenVNC`/`THiddenVNCThread`/`THVNCInputThread`) via `CreateDesktop()`: creates isolated hidden Windows desktop; delta framing for bandwidth efficiency; callback port 6968
 - **Cryptocurrency wallet theft**: four named TEdit (form field) targets: **Exodus, Atomic Wallet, Guarda, Wasabi**
-- Persistence — writes `SOFTWARE\Microsoft\Windows\CurrentVersion\Run` key, value name `WindowsService`
-- SOCKS proxy — full `TIdSocksInfo` implementation
-- SSL/TLS — `TIdSSLIOHandlerSocketBase` compiled in
+- Persistence: writes `SOFTWARE\Microsoft\Windows\CurrentVersion\Run` key, value name `WindowsService`
+- SOCKS proxy: full `TIdSocksInfo` implementation
+- SSL/TLS: `TIdSSLIOHandlerSocketBase` compiled in
 
 **HVNC Implementation (from `HVNC.pas` source):**
 Creates a hidden Windows desktop via `CreateDesktop()` with `GENERIC_ALL` access. Chrome is launched into the hidden desktop with all rendering acceleration disabled to ensure compatibility in the off-screen context:
@@ -473,34 +473,34 @@ cmd.exe /c "start /max chrome.exe --no-sandbox --allow-no-sandbox-job
 
 Delta framing transmits only changed screen regions. Input relay accepts `0x69` (keystroke via `WM_KEYDOWN`), `0x71` (mouse click via `WM_LBUTTONDOWN/UP`), `0x67` (full frame request). Callback port `6968`. Requires Python 3.9.0 with Flask, requests, waitress for the relay server component.
 
-**Operator C2 Panel — `vicTest.exe` (Accidentally Uploaded):**
+**Operator C2 Panel, `vicTest.exe` (Accidentally Uploaded):**
 
 - Caption: `Raven Loader`; panel build date: `04-13-2025`
 - Server listen port: `8777`; HVNC callback port: `6968`
-- Operator handle: `Steffz` (hardcoded — "Welcome Back Steffz!")
+- Operator handle: `Steffz` (hardcoded, "Welcome Back Steffz!")
 - About section credits: `ZeroTrace / NeverTrace`
-- **Operator real name recovered:** `Stefan Yosifov` — recovered from `pdf:Author` XMP metadata embedded in `Main.dfm` source file (Canva account `UAGcXl67Or4`, document `DAGlzS2GcRU`, design title `Raven Botnet - 1`)
+- **Operator real name recovered:** `Stefan Yosifov`, recovered from `pdf:Author` XMP metadata embedded in `Main.dfm` source file (Canva account `UAGcXl67Or4`, document `DAGlzS2GcRU`, design title `Raven Botnet - 1`)
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/raven_loader_caption.png" | relative_url }}" alt="Main.dfm source from vicTest.exe showing Caption = 'Raven Loader' at line 7">
-  <figcaption><em>Figure 6: <code>Main.dfm</code> source from <code>vicTest.exe</code> — the accidentally uploaded Raven RAT operator panel. The window title <code>'Raven Loader'</code> at line 7 confirms this is the operator's own C2 control interface, not a victim stub.</em></figcaption>
+  <figcaption><em>Figure 6: <code>Main.dfm</code> source from <code>vicTest.exe</code>, the accidentally uploaded Raven RAT operator panel. The window title <code>'Raven Loader'</code> at line 7 confirms this is the operator's own C2 control interface, not a victim stub.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/operator_handle.png" | relative_url }}" alt="Main.dfm source showing Caption = 'Welcome Back Steffz!' hardcoded in the C2 panel">
-  <figcaption><em>Figure 7: <code>Main.dfm</code> source confirming the operator's handle — <code>'Welcome Back Steffz!'</code> hardcoded as a UI label in the C2 panel. This is DEFINITE-confidence identity evidence: the string is embedded in the panel's own source code, not extracted from a log or metadata field.</em></figcaption>
+  <figcaption><em>Figure 7: <code>Main.dfm</code> source confirming the operator's handle, <code>'Welcome Back Steffz!'</code> hardcoded as a UI label in the C2 panel. This is DEFINITE-confidence identity evidence: the string is embedded in the panel's own source code, not extracted from a log or metadata field.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/Zerotrace.png" | relative_url }}" alt="Main.dfm source showing Caption = 'Author ~ ZeroTrace / NeverTrace' in the About panel">
-  <figcaption><em>Figure 8: <code>Main.dfm</code> source showing the About panel caption <code>'Author ~ ZeroTrace / NeverTrace'</code> — the threat actor's self-identified brand embedded directly in the Raven RAT operator panel source code. This corroborates the ZeroTrace attribution recovered independently by CYFIRMA.</em></figcaption>
+  <figcaption><em>Figure 8: <code>Main.dfm</code> source showing the About panel caption <code>'Author ~ ZeroTrace / NeverTrace'</code>, the threat actor's self-identified brand embedded directly in the Raven RAT operator panel source code. This corroborates the ZeroTrace attribution recovered independently by CYFIRMA.</em></figcaption>
 </figure>
 
-> **Important caveat on "Stefan Yosifov":** This name is the value of the `pdf:Author` XMP field in the Canva account that created the Raven RAT logo. Delphi strips this metadata during compilation — it appears in the source file only, not in the compiled binary. This represents a lead for further investigation, not confirmed attribution to a real person. Confidence for this as a real-world identity: LOW — single source, no independent corroboration found in accessible OSINT.
+> **Important caveat on "Stefan Yosifov":** This name is the value of the `pdf:Author` XMP field in the Canva account that created the Raven RAT logo. Delphi strips this metadata during compilation. It appears in the source file only, not in the compiled binary. This represents a lead for further investigation, not confirmed attribution to a real person. Confidence for this as a real-world identity: LOW, single source, no independent corroboration found in accessible OSINT.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/author.png" | relative_url }}" alt="XMP metadata extraction output showing pdf:Author Stefan Yosifov and Canva document details">
-  <figcaption><em>Figure 9: XMP metadata extracted from the PNG logo embedded in <code>Main.dfm</code>. The <code>pdf:Author</code> field value <code>Stefan Yosifov</code>, Canva document <code>DAGlzS2GcRU</code>, and user account <code>UAGcXl67Or4</code> are confirmed artifact values. The document title <code>'Raven Botnet - 1'</code> confirms this logo was created specifically for the Raven RAT project. Real-world identity confidence: LOW — single source, no independent corroboration.</em></figcaption>
+  <figcaption><em>Figure 9: XMP metadata extracted from the PNG logo embedded in <code>Main.dfm</code>. The <code>pdf:Author</code> field value <code>Stefan Yosifov</code>, Canva document <code>DAGlzS2GcRU</code>, and user account <code>UAGcXl67Or4</code> are confirmed artifact values. The document title <code>'Raven Botnet - 1'</code> confirms this logo was created specifically for the Raven RAT project. Real-world identity confidence: LOW, single source, no independent corroboration.</em></figcaption>
 </figure>
 
 The accidental upload of the operator's C2 panel is the single biggest intelligence windfall in this campaign. It exposes the server architecture, the operator's handle, the product branding, and embedded metadata leading to a Canva account. Their use of a commercial Delphi IDE indicates financial investment in development tooling, which fits a financially motivated individual better than a casual actor using free tools.
@@ -509,18 +509,18 @@ The accidental upload of the operator's C2 panel is the single biggest intellige
 
 ### 5f. ConnectWise ScreenConnect Abuse
 
-> **Analyst note:** ConnectWise ScreenConnect is a legitimate IT remote support tool. The attacker abuses it by tricking victims into installing it via a fake domain — most security products allow-list ScreenConnect by default, so no malware alert fires and the attacker gains persistent remote access.
+> **Analyst note:** ConnectWise ScreenConnect is a legitimate IT remote support tool. The attacker abuses it by tricking victims into installing it via a fake domain. Most security products allow-list ScreenConnect by default, so no malware alert fires and the attacker gains persistent remote access.
 
 I hold this DEFINITE, with the DomainTools Iris HTTP server header confirmed on both operator domains, the `Attachment.vbs` delivery chain fully analyzed, and 500 pre-generated session links recovered.
 
 **Why ScreenConnect was chosen:**
 
-- Legitimately Authenticode-signed — passes binary reputation checks
+- Legitimately Authenticode-signed: passes binary reputation checks
 - Classified as remote support software, not malware, by most antivirus/EDR solutions
 - Permitted through corporate firewalls and allow-listed in many security policies
 - No user interaction required once installed silently
 
-**Delivery Chain — `Attachment.vbs` (SHA256: `fdca9ee6e64d67795cd48c5740fa54f509b00bff3e2e94d5f7863e21b23da7f6`, 2,187 bytes):**
+**Delivery Chain: `Attachment.vbs` (SHA256: `fdca9ee6e64d67795cd48c5740fa54f509b00bff3e2e94d5f7863e21b23da7f6`, 2,187 bytes):**
 
 1. VBScript requests UAC elevation via `Shell.Application.ShellExecute` with `runas` verb
 2. Downloads ScreenConnect MSI using `MSXML2.ServerXMLHTTP.6.0` with SSL certificate validation deliberately bypassed:
@@ -531,7 +531,7 @@ I hold this DEFINITE, with the DomainTools Iris HTTP server header confirmed on 
   ```
 3. Silent install: `msiexec /i [msi] /quiet ALLUSERS=2`
 4. Downloads and opens a real Social Security Administration PDF as victim decoy
-5. Writes debug log to `%TEMP%\test_debug.txt` (OPSEC failure — timestamps and HTTP status codes visible to forensic analysts)
+5. Writes debug log to `%TEMP%\test_debug.txt` (OPSEC failure, timestamps and HTTP status codes visible to forensic analysts)
 
 **500 Pre-Generated Session Links (`final_links.txt`):**
 Generated by `screen.py` (author: `@rockbelling`) via Chrome automation (Playwright) using the operator's admin panel. Each link contains a unique UUID session identifier. Critically, all 500 links share the same static RSA public key (2048-bit, documented in Section 10 investigation guidance), confirming single-operator deployment. These links are ready for distribution via phishing, SMS, or social engineering and have not been used yet as of discovery.
@@ -550,11 +550,11 @@ The CVE carries CVSS 9.0. It affects Gladinet CentreStack and Triofox, and more 
 
 **Components Found:**
 
-- `exploit.py` — Python exploit script
-- `ysoserial.exe` (SHA256: `3b62ba4040d0d470521dce089c13cd8491d1463acbcc8391a49923caa02c08e9`) — public .NET deserialization exploit generator (GitHub: `pwntester/ysoserial.net`)
-- `server.py` — HTTP listener to receive command output
-- `sctt.py` — auxiliary script
-- `README (2).md` — operator documentation
+- `exploit.py`: Python exploit script
+- `ysoserial.exe` (SHA256: `3b62ba4040d0d470521dce089c13cd8491d1463acbcc8391a49923caa02c08e9`), public .NET deserialization exploit generator (GitHub: `pwntester/ysoserial.net`)
+- `server.py`: HTTP listener to receive command output
+- `sctt.py`: auxiliary script
+- `README (2).md`: operator documentation
 
 **Hardcoded Victim-Specific Values:**
 
@@ -566,9 +566,9 @@ gadget chain:  TextFormattingRunProperties (.NET WPF deserialization)
 ```
 
 **Exploitation Mechanism:**
-The `generator` value `3FE2630A` is derived from the application's physical path on disk — it is mathematically unique to a single deployed application instance. Its presence in the exploit kit confirms the operator previously obtained the target's `web.config` file. This is a targeted follow-on attack against a partially compromised system, not opportunistic mass exploitation.
+The `generator` value `3FE2630A` is derived from the application's physical path on disk. It is mathematically unique to a single deployed application instance. Its presence in the exploit kit confirms the operator previously obtained the target's `web.config` file. This is a targeted follow-on attack against a partially compromised system, not opportunistic mass exploitation.
 
-The `TextFormattingRunProperties` gadget chain targets `Microsoft.VisualStudio.Text.Formatting.TextFormattingRunProperties`, which implements `ISerializable`. A malicious XAML payload in the `ForegroundBrush` property is parsed by `XamlReader.Parse()`, triggering `System.Diagnostics.Process.Start()` with attacker-controlled arguments — arbitrary OS command execution in the IIS worker process context.
+The `TextFormattingRunProperties` gadget chain targets `Microsoft.VisualStudio.Text.Formatting.TextFormattingRunProperties`, which implements `ISerializable`. A malicious XAML payload in the `ForegroundBrush` property is parsed by `XamlReader.Parse()`, triggering `System.Diagnostics.Process.Start()` with attacker-controlled arguments, arbitrary OS command execution in the IIS worker process context.
 
 One distinction matters. This exploit kit is NOT the Gladinet CentreStack mass-exploitation variant associated with the CL0P ransomware group, per Huntress reporting. The custom `generator` value confirms a non-Gladinet, non-mass-exploitation target, and I identified no overlap with CL0P TTPs or infrastructure.
 
@@ -595,7 +595,7 @@ There is evidence of active use. `BAD-BAK3R.txt`, holding 58 failed O365 authent
 
 ### 5i. PowerShell Fileless Droppers
 
-> **Analyst note:** `puf.ps1` and `sync.ps1` are 13-layer nested PowerShell droppers — each hex-decodes an embedded .NET PE and executes it via `Assembly.Load()` entirely in memory, writing nothing to disk. Standard antivirus file-scanning cannot detect a payload that never touches the hard drive.
+> **Analyst note:** `puf.ps1` and `sync.ps1` are 13-layer nested PowerShell droppers. Each hex-decodes an embedded .NET PE and executes it via `Assembly.Load()` entirely in memory, writing nothing to disk. Standard antivirus file-scanning cannot detect a payload that never touches the hard drive.
 
 I hold this DEFINITE for the scripts themselves, which were recovered and analyzed, and MODERATE that they deliver an Aspdkzb-family payload, on size correlation.
 
@@ -607,7 +607,7 @@ For anti-analysis they use 13 levels of nested `Try{} Catch{}` blocks, which mak
 
 1. Core function `onyx` hex-decodes the embedded PE (`$gsod` holds MZ/DOS header `4D5A9000...`)
 2. Embedded PE: 32-bit .NET assembly (~310KB), sections `.text`, `.rsrc`, `.reloc`
-3. `[System.Reflection.Assembly]::Load($bytes)` — in-memory execution, no disk write
+3. `[System.Reflection.Assembly]::Load($bytes)`, in-memory execution, no disk write
 4. Two different builds: `puf.ps1` PE timestamp `8FB8A667`; `sync.ps1` PE timestamp `AF4EE2DB`
 
 The size correlates with the Aspdkzb cluster. The decoded PE size of roughly 310KB lines up with the Aspdkzb Stage 1 files at 312-325KB, which puts me at MODERATE that these droppers deliver the same loader family.
@@ -616,7 +616,7 @@ The size correlates with the Aspdkzb cluster. The decoded PE size of roughly 310
 
 ### 5j. vlc_boxed.exe — DGA-Capable Unknown Family
 
-> **Analyst note:** `vlc_boxed.exe` masquerades as a VLC media player component and uses a domain generation algorithm (DGA) to contact C2 — automatically generating new domain names at runtime, making IP or domain blacklisting ineffective. The inner payload family remains unidentified because Enigma Virtual Box protection blocks static analysis.
+> **Analyst note:** `vlc_boxed.exe` masquerades as a VLC media player component and uses a domain generation algorithm (DGA) to contact C2, automatically generating new domain names at runtime, making IP or domain blacklisting ineffective. The inner payload family remains unidentified because Enigma Virtual Box protection blocks static analysis.
 
 I hold the DGA behavior HIGH, confirmed dynamically, and the inner payload family INSUFFICIENT, because Enigma Virtual Box protection prevents static analysis and the family stays unidentified.
 
@@ -624,11 +624,11 @@ I hold the DGA behavior HIGH, confirmed dynamically, and the inner payload famil
 
 **Dynamic Analysis Findings:**
 
-- T+1s: Anti-analysis probe — enumerated monitoring-tool artefact paths under `%UserProfile%`; environment-aware, confirming sandbox-detection capability (DEFINITE)
-- T+1s: Persistence established — `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\vlctask = %APPDATA%\vlcapp\vlc.exe`
-- Target binary `%APPDATA%\vlcapp\vlc.exe` NOT dropped — C2 gating; payload requires successful C2 contact before download
-- DNS queries issued via `svchost.exe` (Windows DNS Client) — the resolved DGA domains were not captured and remain available for future extraction
-- 8 virtual filesystem components extracted by Enigma VB at runtime: sizes 116KB, 184KB, 208KB, 460KB, 516KB, 1.7MB, **4.7MB** (`evb3489.tmp` — primary payload module candidate)
+- T+1s: Anti-analysis probe, enumerated monitoring-tool artefact paths under `%UserProfile%`; environment-aware, confirming sandbox-detection capability (DEFINITE)
+- T+1s: Persistence established, `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\vlctask = %APPDATA%\vlcapp\vlc.exe`
+- Target binary `%APPDATA%\vlcapp\vlc.exe` NOT dropped: C2 gating; payload requires successful C2 contact before download
+- DNS queries issued via `svchost.exe` (Windows DNS Client): the resolved DGA domains were not captured and remain available for future extraction
+- 8 virtual filesystem components extracted by Enigma VB at runtime: sizes 116KB, 184KB, 208KB, 460KB, 516KB, 1.7MB, **4.7MB** (`evb3489.tmp`, primary payload module candidate)
 - Process survived full 300-second analysis window; 2 threads only; no child processes
 
 One gap remains. The 4.7MB `evb3489.tmp` component needs unpacking in an isolated VM to identify the inner payload family, and the DGA domain names were not captured, so PCAP extraction is the recommended next step.
@@ -644,22 +644,22 @@ Enigma Virtual Box is a commercial application virtualization tool.
 
 ### Phase 1: Initial Access — Three Parallel Vectors
 
-> **Analyst note:** Three concurrent access vectors operate simultaneously — phishing email (VBScript dropper), bulk ScreenConnect link distribution, and a targeted server-side exploit (CVE-2025-30406). All three are documented with full technical evidence.
+> **Analyst note:** Three concurrent access vectors operate simultaneously: phishing email (VBScript dropper), bulk ScreenConnect link distribution, and a targeted server-side exploit (CVE-2025-30406). All three are documented with full technical evidence.
 
-**Vector A — Email Phishing via VBScript (ScreenConnect):**
+**Vector A: Email Phishing via VBScript (ScreenConnect):**
 Victim receives phishing email with `Attachment.vbs` → user double-clicks → Windows UAC prompt appears → user approves → `Attachment.vbs` silently downloads ScreenConnect MSI from `chainconnects[.]net/Bin/support.ClientSetup.msi?e=Access&y=Guest` (SSL validation deliberately bypassed) → `msiexec /i [msi] /quiet ALLUSERS=2` installs silently → ScreenConnect connects to `adminxyzhosting[.]com:8041` → SSA PDF decoy opens to distract victim → operator has persistent GUI remote access.
 
-**Vector B — Bulk Phishing Link Distribution (ScreenConnect):**
+**Vector B: Bulk Phishing Link Distribution (ScreenConnect):**
 `screen.py` (run from operator's Windows Administrator session) automates Chrome via Playwright to bulk-generate 500 unique ScreenConnect session links → links distributed via phishing email, SMS, or social engineering → victim clicks link → `Update.Client.exe` downloads from `adminxyzhosting[.]com` → connects to relay → operator has persistent access.
 
-**Vector C — Server-Side Exploitation (CVE-2025-30406):**
+**Vector C: Server-Side Exploitation (CVE-2025-30406):**
 Operator possesses victim web server's `web.config` (from prior access) → `exploit.py` + `ysoserial.exe` generates HMACSHA256-signed ViewState payload using stolen `validationKey` and path-derived `generator 3FE2630A` → HTTP POST to vulnerable ASP.NET endpoint → server deserializes payload → `TextFormattingRunProperties` gadget triggers `XamlReader.Parse()` → arbitrary OS command executes → output exfiltrated to `server.py` HTTP listener → full RCE on web server with IIS worker process privileges.
 
 ---
 
 ### Phase 2: Payload Staging (Post-Initial-Access)
 
-> **Analyst note:** After initial access via ScreenConnect or CVE RCE, the operator executes a PowerShell fileless dropper that chains through three loader stages entirely in memory — no disk writes at any stage, defeating file-based antivirus.
+> **Analyst note:** After initial access via ScreenConnect or CVE RCE, the operator executes a PowerShell fileless dropper that chains through three loader stages entirely in memory. No disk writes at any stage, defeating file-based antivirus.
 
 Once initial access is established (ScreenConnect or CVE RCE):
 
@@ -674,7 +674,7 @@ Sixth, PureRAT v4.1.9 initializes and connects to `185.49.126.140:56001`, fallin
 
 ### Phase 3: RAT Deployment and Persistence
 
-> **Analyst note:** The operator installs multiple RAT families in parallel — if one is detected and removed, the others maintain access. Registry Run key persistence ensures all survive reboots. ScreenConnect persists as a legitimate Windows service, which standard malware-removal tools may not uninstall.
+> **Analyst note:** The operator installs multiple RAT families in parallel, if one is detected and removed, the others maintain access. Registry Run key persistence ensures all survive reboots. ScreenConnect persists as a legitimate Windows service, which standard malware-removal tools may not uninstall.
 
 **XWorm path:**
 `XwormLoader.exe` → 11-stage reflective load (no disk write) → XWorm .NET stub active in memory → connects `185.49.126.140:5000` → full RAT active (keylogger, screenshot, credentials, HVNC, proxy, ransomware on-demand)
@@ -684,7 +684,7 @@ Operator runs `vicTest.exe` on their server (port 8777 listener) → compiled vi
 
 **Persistence mechanisms installed:**
 
-- `HKCU\SOFTWARE\XWorm` — XWorm runtime configuration storage
+- `HKCU\SOFTWARE\XWorm`: XWorm runtime configuration storage
 - `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\vlctask = %APPDATA%\vlcapp\vlc.exe` (vlc_boxed.exe)
 - `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsService` (Raven RAT)
 - ScreenConnect service installed as legitimate remote support software (persists as Windows service)
@@ -693,12 +693,12 @@ Operator runs `vicTest.exe` on their server (port 8777 listener) → compiled vi
 
 ### Phase 4: Credential Harvesting and Fraud
 
-> **Analyst note:** With access and persistence established, the operator runs four credential-theft and fraud channels in parallel — keylogger, browser credential recovery, HVNC hidden sessions for financial account takeover, and clipboard hijacking for cryptocurrency theft.
+> **Analyst note:** With access and persistence established, the operator runs four credential-theft and fraud channels in parallel: keylogger, browser credential recovery, HVNC hidden sessions for financial account takeover, and clipboard hijacking for cryptocurrency theft.
 
 - **XWorm keylogger:** Captures all keystrokes → transmitted to C2 every beacon cycle
 - **XWorm `RunRecovery` plugin:** Extracts saved browser passwords and stored credentials
 - **BAK3R cracker:** Tests 9.1M combo list against `smtp.office365.com:587` → valid O365 accounts → BEC capability, further network access
-- **PureHVNC hidden browser session:** Operator logs into banking/crypto/email accounts in hidden desktop — invisible to victim
+- **PureHVNC hidden browser session:** Operator logs into banking/crypto/email accounts in hidden desktop, invisible to victim
 - **Raven RAT wallet theft:** Four named TEdit form fields target Exodus, Atomic Wallet, Guarda, and Wasabi cryptocurrency wallets
 - **XWorm Clipper:** Monitors clipboard; replaces any BTC, ETH, or TRC20 address with operator's wallet address → all cryptocurrency transactions silently redirected
 
@@ -711,32 +711,32 @@ Operator runs `vicTest.exe` on their server (port 8777 listener) → compiled vi
 
 XWorm was first documented in July 2022 (developer handle "XCoder"). Version 5.6 was the final officially released version before the developer ceased operations in late 2024. Cracked copies of V5.6 subsequently proliferated across underground forums, significantly lowering the deployment skill threshold. A CloudSEK (Tier 2) report documented over 18,000 device compromises from a trojanized version of the V5.6 builder distributed to inexperienced actors. As of 2025-2026, XWorm V5.6 is among the most frequently detected commodity RAT families globally, per Cofense and Trellix (Tier 2) reporting.
 
-The V5.6 sample in this campaign is consistent with the widely circulating cracked builder version. Port 5000 is operator-configured (not a default) — not a meaningful distinguishing indicator.
+The V5.6 sample in this campaign is consistent with the widely circulating cracked builder version. Port 5000 is operator-configured (not a default), not a meaningful distinguishing indicator.
 
 XWorm reaching end of life has an implication. No security updates exist for V5.6, so the builder and stubs are static. Any XWorm V5.6 detection should be treated as a commodity cracked tool rather than a targeted nation-state capability.
-(Confidence: HIGH — Tier 2: CloudSEK, Trellix, Cofense)
+(Confidence: HIGH, Tier 2: CloudSEK, Trellix, Cofense)
 
 ### PureRAT / ResolverRAT Landscape Context
 
 The developer operates as "PureCoder" and offers PureRAT as a subscription product. The broader PureCoder ecosystem includes PureCrypter (obfuscator) and PureLogs (info-stealer). Morphisec researchers coined the name "ResolverRAT" in April 2025 for the same codebase. PureRAT activity was documented as significantly elevated through 2025, with targeting including healthcare and pharmaceutical sectors (Morphisec/Check Point Research, Tier 2), hospitality, and Russian enterprises. The version confirmed in this campaign (v4.1.9) matches all technical signatures published by Netresec (August 2025) and Check Point Research (2025).
-(Confidence: MODERATE for growth figures — vendor-reported; HIGH for version identification — 11 technical signatures matched)
+(Confidence: MODERATE for growth figures, vendor-reported; HIGH for version identification, 11 technical signatures matched)
 
 ### ConnectWise ScreenConnect Abuse Context
 
 ScreenConnect emerged as a frequently abused legitimate remote access tool in 2024-2025, documented across campaigns spoofing the US Social Security Administration (SSA), invoice-themed phishing, and fake IT support lures (CyberProof, Tier 2). The SSA-themed decoy PDF in `Attachment.vbs` is consistent with documented SSA impersonation patterns. The `/Bin/` directory download path and `?e=Access&y=Guest` URL parameter pattern are exact structural matches to documented ScreenConnect phishing campaigns.
 
-ScreenConnect version 23.2.9 predates the February 2024 "SlashAndGrab" vulnerabilities (CVE-2024-1709 authentication bypass and CVE-2024-1708 path traversal RCE). These vulnerabilities are separate from the abuse pattern here — the actor is abusing ScreenConnect for legitimate remote access, not exploiting ScreenConnect server-side.
-(Confidence: HIGH — Tier 2: CyberProof; Tier 1 for CVE-2024-1709/1708)
+ScreenConnect version 23.2.9 predates the February 2024 "SlashAndGrab" vulnerabilities (CVE-2024-1709 authentication bypass and CVE-2024-1708 path traversal RCE). These vulnerabilities are separate from the abuse pattern here. The actor is abusing ScreenConnect for legitimate remote access, not exploiting ScreenConnect server-side.
+(Confidence: HIGH, Tier 2: CyberProof; Tier 1 for CVE-2024-1709/1708)
 
 ### CVE-2025-30406 — Contextual Note
 
-CVE-2025-30406 (CVSS 9.0) was added to the CISA Known Exploited Vulnerabilities catalog in April 2025 (Tier 1). Huntress researchers documented at least seven distinct organization compromises via this vulnerability. The CL0P ransomware group exploited it in mass campaigns against Gladinet CentreStack. The exploit kit in this campaign is a different, targeted adaptation against a non-Gladinet ASP.NET application — confirmed by the custom `generator` value `3FE2630A`, which is path-derived and unique to a single application instance. No CL0P infrastructure or TTP overlap was identified.
-(Confidence: HIGH — Tier 1: CISA KEV; Tier 2: Huntress; HIGH for differentiation from CL0P)
+CVE-2025-30406 (CVSS 9.0) was added to the CISA Known Exploited Vulnerabilities catalog in April 2025 (Tier 1). Huntress researchers documented at least seven distinct organization compromises via this vulnerability. The CL0P ransomware group exploited it in mass campaigns against Gladinet CentreStack. The exploit kit in this campaign is a different, targeted adaptation against a non-Gladinet ASP.NET application, confirmed by the custom `generator` value `3FE2630A`, which is path-derived and unique to a single application instance. No CL0P infrastructure or TTP overlap was identified.
+(Confidence: HIGH, Tier 1: CISA KEV; Tier 2: Huntress; HIGH for differentiation from CL0P)
 
 ### ZeroTrace / Raven RAT Operator Context
 
 CYFIRMA (Tier 2) independently documented the ZeroTrace Team in 2025, confirming the Telegram handle `@ZeroTraceDevOfficial`, GitHub account `monroe31s`, and the handle `steffz` as artifacts in the ZeroTrace tool portfolio (specifically in Octalyn Stealer builder strings: `$name2 = "steffz"`). This cross-tool corroboration strengthens the linkage between the Raven RAT panel operator and the ZeroTrace development operation. CYFIRMA's coverage is of the Raven Stealer product line (a separate C++ infostealer); the Raven RAT (Delphi-based interactive C2 RAT) found in this campaign represents a separate, undocumented product in the ZeroTrace portfolio.
-(Confidence: HIGH — Tier 2: CYFIRMA)
+(Confidence: HIGH, Tier 2: CYFIRMA)
 
 ---
 
@@ -756,10 +756,10 @@ The threat actor is ZeroTrace. I hold the operating identity at HIGH, 88 percent
 
 | Artifact                          | Value                                        | Source                                                                        | Confidence                                |
 | --------------------------------- | -------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------- |
-| Operator handle                   | Steffz                                       | Raven RAT C2 panel — "Welcome Back Steffz!" hardcoded in DFM                  | DEFINITE                                  |
+| Operator handle                   | Steffz                                       | Raven RAT C2 panel, "Welcome Back Steffz!" hardcoded in DFM                  | DEFINITE                                  |
 | Telegram channel                  | @ZeroTraceDevOfficial                        | README.md in Raven RAT source; CYFIRMA independent corroboration              | HIGH                                      |
 | GitHub account                    | monroe31s (ZDev)                             | CYFIRMA confirmed; Raven-RAT repository; 7 stars, 5 forks; created 2025-05-01 | HIGH                                      |
-| Canva account name (XMP metadata) | Stefan Yosifov                               | Main.dfm XMP metadata (source file, not compiled binary)                      | LOW (real-world identity — single source) |
+| Canva account name (XMP metadata) | Stefan Yosifov                               | Main.dfm XMP metadata (source file, not compiled binary)                      | LOW (real-world identity, single source) |
 | Canva user/document ID            | UAGcXl67Or4 / DAGlzS2GcRU                    | Main.dfm XMP metadata                                                         | DEFINITE (artifact value)                 |
 | Panel build date                  | 2025-04-13                                   | vicTest.exe binary metadata                                                   | DEFINITE                                  |
 | Compiler                          | Embarcadero Delphi 12.0 Athens Enterprise    | Binary PE headers (commercial IDE)                                            | HIGH                                      |
@@ -770,7 +770,7 @@ The threat actor is ZeroTrace. I hold the operating identity at HIGH, 88 percent
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/telegram_handle_AI.png" | relative_url }}" alt="Raven RAT README.md showing @ZeroTraceDevOfficial Telegram link at line 10">
-  <figcaption><em>Figure 10: <code>README.md</code> recovered from the Raven RAT source directory on the open directory server. The <code>@ZeroTraceDevOfficial</code> Telegram link at line 10 is the primary digital identity anchor for ZeroTrace — independently corroborated by CYFIRMA. The feature list confirms all capabilities documented through binary analysis: HVNC, keylogger, process manager, and cryptocurrency wallet theft.</em></figcaption>
+  <figcaption><em>Figure 10: <code>README.md</code> recovered from the Raven RAT source directory on the open directory server. The <code>@ZeroTraceDevOfficial</code> Telegram link at line 10 is the primary digital identity anchor for ZeroTrace, independently corroborated by CYFIRMA. The feature list confirms all capabilities documented through binary analysis: HVNC, keylogger, process manager, and cryptocurrency wallet theft.</em></figcaption>
 </figure>
 
 ### Operator Profile
@@ -822,12 +822,12 @@ A false flag is LOW likelihood. Staging a realistic open directory with 32+ bina
 
 **Intelligence notes:**
 
-- `good.txt` contains Gawker (2010) and OMGPOP (2012) breach fingerprint signatures — confirms breach compilation origin; credentials likely reused across current services
-- `Corp_202M.txt` footer: `"Data provided by Immanuel Kant / A.K.A.Data Library / Telegram - @ddandt02 / Discord - datalibrary"` — data broker attribution
-- `US_Corp_sample.txt`: 396 entries sharing password `Welcome1` — default helpdesk credential cluster indicating Active Directory/enterprise origin
-- `180k_2B.txt`: `username:password` format (not `email:password`) — institutional/Active Directory credential format
+- `good.txt` contains Gawker (2010) and OMGPOP (2012) breach fingerprint signatures, confirms breach compilation origin; credentials likely reused across current services
+- `Corp_202M.txt` footer: `"Data provided by Immanuel Kant / A.K.A.Data Library / Telegram - @ddandt02 / Discord - datalibrary"`, data broker attribution
+- `US_Corp_sample.txt`: 396 entries sharing password `Welcome1`, default helpdesk credential cluster indicating Active Directory/enterprise origin
+- `180k_2B.txt`: `username:password` format (not `email:password`), institutional/Active Directory credential format
 
-- `NTUSER.DAT` registry hive files were also recovered from the staging server alongside the credential databases. NTUSER.DAT is a Windows user registry hive containing saved application credentials, browser data, and account settings from a specific user's machine. Their presence on the operator's staging server suggests active exfiltration of victim registry hives — credential harvesting that goes beyond bulk list usage. This is consistent with Initial Access Broker (IAB) behavior: gaining deep access to victim machines, harvesting identity material, and staging it for later monetization or resale.
+- `NTUSER.DAT` registry hive files were also recovered from the staging server alongside the credential databases. NTUSER.DAT is a Windows user registry hive containing saved application credentials, browser data, and account settings from a specific user's machine. Their presence on the operator's staging server suggests active exfiltration of victim registry hives, credential harvesting that goes beyond bulk list usage. This is consistent with Initial Access Broker (IAB) behavior: gaining deep access to victim machines, harvesting identity material, and staging it for later monetization or resale.
 
 The targeting profile centres on corporate O365 and BEC, cryptocurrency users (Coinbase 65k, crypto leads 135k), ISP subscribers (Comcast 151k), education and nonprofit (857k), Gmail (618k) and Yahoo (129k).
 
@@ -838,15 +838,15 @@ The targeting profile centres on corporate O365 and BEC, cryptocurrency users (C
 
 ### Priority 1: Immediate Containment
 
-**Isolate affected systems** — prevent lateral movement to other network resources while preserving forensic state for investigation. Avoid powering off systems with potential volatile memory evidence.
+**Isolate affected systems**: prevent lateral movement to other network resources while preserving forensic state for investigation. Avoid powering off systems with potential volatile memory evidence.
 
-**Block confirmed C2 infrastructure** — apply immediate network blocks for `185.49.126.140` on all ports, `74.0.42.25`, `74.0.42.162`, `74.0.42.44`, and `185.49.126.97`. Any connection to `185.49.126.140` on ports 5000, 8000, 8041, 443, 56001, 56002, or 56003 is confirmed malicious.
+**Block confirmed C2 infrastructure**: apply immediate network blocks for `185.49.126.140` on all ports, `74.0.42.25`, `74.0.42.162`, `74.0.42.44`, and `185.49.126.97`. Any connection to `185.49.126.140` on ports 5000, 8000, 8041, 443, 56001, 56002, or 56003 is confirmed malicious.
 
-**Block operator domains** — `adminxyzhosting[.]com`, `chainconnects[.]net`, and MODERATE-confidence domains `ziadxyzhosting[.]com`, `ziadverisontwo[.]com`, `wireon[.]work[.]gd`, `ledno[.]net`.
+**Block operator domains**: `adminxyzhosting[.]com`, `chainconnects[.]net`, and MODERATE-confidence domains `ziadxyzhosting[.]com`, `ziadverisontwo[.]com`, `wireon[.]work[.]gd`, `ledno[.]net`.
 
-**ScreenConnect audit** — enumerate all ScreenConnect sessions relaying through `adminxyzhosting[.]com:8041`. Any session connected to this relay represents confirmed attacker access. All 500 operator-generated session links share the same static RSA public key (2048-bit) — matching this key in ScreenConnect configuration identifies attacker-established sessions.
+**ScreenConnect audit**: enumerate all ScreenConnect sessions relaying through `adminxyzhosting[.]com:8041`. Any session connected to this relay represents confirmed attacker access. All 500 operator-generated session links share the same static RSA public key (2048-bit). Matching this key in ScreenConnect configuration identifies attacker-established sessions.
 
-**Credential rotation** — prioritize accounts with elevated privileges, domain administrator access, and any service accounts accessible from potentially affected systems.
+**Credential rotation**: prioritize accounts with elevated privileges, domain administrator access, and any service accounts accessible from potentially affected systems.
 
 ### Priority 2: Investigation
 
@@ -866,7 +866,7 @@ Conduct network-wide threat hunt for lateral movement and persistence indicators
 
 Determine the full extent of compromise: affected systems, data accessed, credentials potentially captured by keylogger or browser theft plugin, whether the XWorm ransomware module was deployed, whether PureHVNC established hidden browser sessions against financial or email accounts.
 
-Assess whether any of the 9.1M credential pairs in the operator's database include accounts from the affected environment — particularly Office 365 accounts.
+Assess whether any of the 9.1M credential pairs in the operator's database include accounts from the affected environment, particularly Office 365 accounts.
 
 ### Priority 4: Remediation Approach
 
@@ -910,56 +910,56 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 
 ### DEFINITE (Direct evidence, no ambiguity)
 
-- XWorm V5.6 family identification — full decompilation; C2 config decrypted
-- PureHVNC family identification — internal name `PureHVNC_GUI` in config file
-- Raven RAT family identification — full source code recovered
-- ScreenConnect abuse — DomainTools Iris HTTP server header confirmed
+- XWorm V5.6 family identification: full decompilation; C2 config decrypted
+- PureHVNC family identification: internal name `PureHVNC_GUI` in config file
+- Raven RAT family identification: full source code recovered
+- ScreenConnect abuse: DomainTools Iris HTTP server header confirmed
 - `185.49.126.140` as active C2 for XWorm (port 5000), PureHVNC (port 8000), PureRAT (ports 56001-56003), ScreenConnect (ports 443/8041)
 - `74.0.42.25` as open directory/staging server
-- Operator handle `Steffz` — hardcoded in `vicTest.exe` DFM
-- Panel build date 2025-04-13 — binary metadata
-- Canva account name `Stefan Yosifov` — XMP metadata value in `Main.dfm` (artifact value only; real-world identity not confirmed)
-- BAK3R attribution to `@BAK34_TMW` — source code attribution string
+- Operator handle `Steffz`: hardcoded in `vicTest.exe` DFM
+- Panel build date 2025-04-13: binary metadata
+- Canva account name `Stefan Yosifov`: XMP metadata value in `Main.dfm` (artifact value only; real-world identity not confirmed)
+- BAK3R attribution to `@BAK34_TMW`: source code attribution string
 - Ransomware module presence (103KB embedded resource in `Xworm_V5.6.exe`)
-- vlc_boxed.exe sandbox environment detection — `behavioral sandbox\dll_log.txt` path probe at T+1s
+- vlc_boxed.exe sandbox environment detection: `behavioral sandbox\dll_log.txt` path probe at T+1s
 
 ### HIGH (Strong evidence, minor gaps)
 
-- PureRAT v4.1.9 family identification — 88% (11 of 11 published signatures matched)
-- `@ZeroTraceDevOfficial` Telegram as operator channel — binary artifacts + CYFIRMA independent corroboration
-- `monroe31s` GitHub as operator account — CYFIRMA confirmed
-- AS40662 attribution for 74.0.42.x cluster — 3-source cross-validation, ROA-validated
-- `adminxyzhosting[.]com` WHOIS and PTR — retrieved and confirmed
-- Aspdkzb loader chain delivers PureRAT v4.1.9 — extraction chain confirmed
-- XwormLoader reflective loading of XWorm payload — full reverse engineering
-- `steffz` in ZeroTrace portfolio — CYFIRMA independent corroboration
-- Compiler: Embarcadero Delphi 12.0 Athens Enterprise — PE header analysis
-- PureRAT TLS cert `NotBefore: 2024-11-21` — certificate extracted from binary
-- CVE-2025-30406 exploit kit structure — consistent with CISA KEV and Huntress documentation
-- DGA behaviour in vlc_boxed.exe — dynamically confirmed via DNS queries
+- PureRAT v4.1.9 family identification: 88% (11 of 11 published signatures matched)
+- `@ZeroTraceDevOfficial` Telegram as operator channel: binary artifacts + CYFIRMA independent corroboration
+- `monroe31s` GitHub as operator account: CYFIRMA confirmed
+- AS40662 attribution for 74.0.42.x cluster: 3-source cross-validation, ROA-validated
+- `adminxyzhosting[.]com` WHOIS and PTR: retrieved and confirmed
+- Aspdkzb loader chain delivers PureRAT v4.1.9: extraction chain confirmed
+- XwormLoader reflective loading of XWorm payload: full reverse engineering
+- `steffz` in ZeroTrace portfolio: CYFIRMA independent corroboration
+- Compiler: Embarcadero Delphi 12.0 Athens Enterprise, PE header analysis
+- PureRAT TLS cert `NotBefore: 2024-11-21`, certificate extracted from binary
+- CVE-2025-30406 exploit kit structure: consistent with CISA KEV and Huntress documentation
+- DGA behaviour in vlc_boxed.exe: dynamically confirmed via DNS queries
 
 ### MODERATE (Reasonable evidence, notable gaps)
 
-- AS834/IPXO as C2 hosting provider — IPinfo + BGP.he.net agreement; AS199654 discrepancy noted and explained
-- Bulletproof hosting characterization for AS834 — 3 of 6 indicators present; not definitive
-- wireon.work.gd as PureRAT fallback domain — DNS timeline correlation
-- ziadxyzhosting.com and ziadverisontwo.com as actor-controlled — naming pattern match; WHOIS unavailable
-- puf.ps1/sync.ps1 payloads as Aspdkzb-family — size correlation; inner PE not extracted
-- Infrastructure attribution to ZeroTrace (72%) — digital identity artifacts + 1 Tier 2 source; ZeroTrace components confirmed, broader campaign scope inferred
-- "Two-person operation" (Steffz + Ziad) hypothesis — naming pattern evidence
+- AS834/IPXO as C2 hosting provider: IPinfo + BGP.he.net agreement; AS199654 discrepancy noted and explained
+- Bulletproof hosting characterization for AS834: 3 of 6 indicators present; not definitive
+- wireon.work.gd as PureRAT fallback domain: DNS timeline correlation
+- ziadxyzhosting.com and ziadverisontwo.com as actor-controlled: naming pattern match; WHOIS unavailable
+- puf.ps1/sync.ps1 payloads as Aspdkzb-family: size correlation; inner PE not extracted
+- Infrastructure attribution to ZeroTrace (72%): digital identity artifacts + 1 Tier 2 source; ZeroTrace components confirmed, broader campaign scope inferred
+- "Two-person operation" (Steffz + Ziad) hypothesis: naming pattern evidence
 
 ### LOW (Weak or circumstantial evidence)
 
-- Stefan Yosifov as real-world identity — single source (XMP metadata), no corroboration
-- ledno.net as actor-controlled domain — PTR function confirmed; direct C2 role unconfirmed
-- Raven RAT C2 IP as 185.49.126.140 (port 8777) — inferred from infrastructure pattern; unconfirmed
+- Stefan Yosifov as real-world identity: single source (XMP metadata), no corroboration
+- ledno.net as actor-controlled domain: PTR function confirmed; direct C2 role unconfirmed
+- Raven RAT C2 IP as 185.49.126.140 (port 8777): inferred from infrastructure pattern; unconfirmed
 
 ### INSUFFICIENT (Cannot assess with available evidence)
 
-- vlc_boxed.exe inner payload family — Enigma Virtual Box prevents static analysis; DGA domains not captured
-- PureRAT mutex name and persistence flag — ProtoBuf decode not completed
-- DGA domain names generated by vlc_boxed.exe — not captured; available for future extraction
-- Bulletproof hosting characterization for AS40662 — new ASN; no reputation history
+- vlc_boxed.exe inner payload family: Enigma Virtual Box prevents static analysis; DGA domains not captured
+- PureRAT mutex name and persistence flag: ProtoBuf decode not completed
+- DGA domain names generated by vlc_boxed.exe: not captured; available for future extraction
+- Bulletproof hosting characterization for AS40662: new ASN; no reputation history
 
 ---
 
@@ -967,9 +967,9 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 {: .hl-tier-2}
 
 **Q1: "Should we assume the XWorm ransomware module has already been deployed?"**
-Short answer: No — but the capability exists and there is no warning before deployment.
+Short answer: No, but the capability exists and there is no warning before deployment.
 
-The ransomware module is delivered via the ENC/DEC plugin interface from the operator's panel. The operator must manually push it. If XWorm is detected on a system, the priority is isolation before the operator notices — not waiting to confirm whether ransomware has been activated. The embedded module's presence (`XWorm.Ransomware.resources` as a binary resource in the builder) is confirmed; deployment to any individual victim is operator-dependent.
+The ransomware module is delivered via the ENC/DEC plugin interface from the operator's panel. The operator must manually push it. If XWorm is detected on a system, the priority is isolation before the operator notices, not waiting to confirm whether ransomware has been activated. The embedded module's presence (`XWorm.Ransomware.resources` as a binary resource in the builder) is confirmed; deployment to any individual victim is operator-dependent.
 
 ---
 
@@ -981,13 +981,13 @@ Legitimate ScreenConnect deployments connect to an organization's own relay serv
 ---
 
 **Q3: "The PureRAT C2 ports 56001-56003 are unusual. Can we just block these ports?"**
-Short answer: Yes — and doing so disrupts PureRAT entirely. But this is not sufficient alone.
+Short answer: Yes, and doing so disrupts PureRAT entirely. But this is not sufficient alone.
 
-PureRAT strictly uses ports 56001-56003 for this build (tried in sequence on reconnect). Blocking these ports at the perimeter eliminates PureRAT C2 traffic from this build. However, XWorm uses port 5000, PureHVNC uses port 8000, and ScreenConnect uses ports 443 and 8041. The most efficient single action is blocking `185.49.126.140` entirely — which disrupts all four families simultaneously.
+PureRAT strictly uses ports 56001-56003 for this build (tried in sequence on reconnect). Blocking these ports at the perimeter eliminates PureRAT C2 traffic from this build. However, XWorm uses port 5000, PureHVNC uses port 8000, and ScreenConnect uses ports 443 and 8041. The most efficient single action is blocking `185.49.126.140` entirely, which disrupts all four families simultaneously.
 
 ---
 
-**Q4: "The validationKey in the CVE-2025-30406 exploit kit — does this mean a specific environment was targeted?"**
+**Q4: "The validationKey in the CVE-2025-30406 exploit kit: does this mean a specific environment was targeted?"**
 Short answer: Only if the generator value `3FE2630A` matches a value in the target's web.config.
 
 The generator value is mathematically derived from the physical path of the web application on the server's filesystem. If an ASP.NET application's `web.config` produces a `generator` value of `3FE2630A`, that application is the specific target of this exploit kit. This value is unique to one application instance; most environments will not match it. Any organization operating Gladinet CentreStack or Triofox should patch regardless of this specific campaign.
@@ -995,7 +995,7 @@ The generator value is mathematically derived from the physical path of the web 
 ---
 
 **Q5: "The operator's name 'Stefan Yosifov' was found. Does this mean we can attribute this to a specific person?"**
-Short answer: No — treat it as an investigative lead, not confirmed attribution.
+Short answer: No. Treat it as an investigative lead, not confirmed attribution.
 
 The name was recovered as the `pdf:Author` XMP metadata field from a Canva account that created the Raven RAT logo. This is a single-source artifact with no independent corroboration in accessible open-source intelligence. The Canva metadata reflects the account name, not necessarily the actual developer's legal name. This should be treated as a lead for further OSINT investigation, not as a legal or definitive attribution. Confidence for this as a real-world identity: LOW.
 
@@ -1004,14 +1004,14 @@ The name was recovered as the `pdf:Author` XMP metadata field from a Canva accou
 **Q6: "The toolkit has been active for 16+ months. Why wasn't it detected earlier?"**
 Short answer: The combination of legitimate software abuse, fileless loading, and novel undocumented samples made detection difficult.
 
-Key factors: (1) ScreenConnect is a legitimate application — most security tools do not flag it as malicious. (2) The PureRAT samples (`Faidowra.dll`, `Zvafsyattl.exe`) were not in public sandbox databases at analysis date, meaning hash-based detection was unavailable. (3) The Aspdkzb three-stage loader chain was undocumented — no published signatures existed. (4) The C2 server `185.49.126.140` had no prior public intelligence, meaning IP reputation tools did not flag it. This underscores why behavioral detection and threat hunting are necessary complements to signature-based approaches.
+Key factors: (1) ScreenConnect is a legitimate application. Most security tools do not flag it as malicious. (2) The PureRAT samples (`Faidowra.dll`, `Zvafsyattl.exe`) were not in public sandbox databases at analysis date, meaning hash-based detection was unavailable. (3) The Aspdkzb three-stage loader chain was undocumented. No published signatures existed. (4) The C2 server `185.49.126.140` had no prior public intelligence, meaning IP reputation tools did not flag it. This underscores why behavioral detection and threat hunting are necessary complements to signature-based approaches.
 
 ---
 
 **Q7: "Should we report this to law enforcement?"**
 Short answer: That is an organizational decision outside the scope of this third-party report.
 
-This report documents confirmed malicious infrastructure and provides IOCs for defensive action. Decisions about law enforcement reporting involve legal, jurisdictional, and organizational considerations that are organization-specific. The evidence quality in this report — particularly the digital identity artifacts and infrastructure documentation — may be of investigative value.
+This report documents confirmed malicious infrastructure and provides IOCs for defensive action. Decisions about law enforcement reporting involve legal, jurisdictional, and organizational considerations that are organization-specific. The evidence quality in this report (particularly the digital identity artifacts and infrastructure documentation) may be of investigative value.
 
 ---
 
@@ -1033,11 +1033,11 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 **High-Reliability Detection Anchors:**
 
-- `**5tK099W0Z6AMZVxQ`** — XWorm V5.6 mutex; plaintext in binary; also the AES key derivation seed; not user-configurable in V5.6
-- `**\x04\x00\x00\x00`** — PureRAT TCP preamble; appears before TLS handshake on ports 56001-56003; network-detectable before encryption
-- `**Faidowra.IO.ModelConfiguration`** — PureRAT v4.1.9 namespace; specific to this build's deobfuscation
-- `**Ayzyqztcoa`** — PureRAT TLS certificate CN; auto-generated per build; unique to this campaign instance
-- `**%TEMP%\test_debug.txt`** — ScreenConnect dropper debug artifact; contains timestamps and HTTP status codes; OPSEC failure indicator
+- `**5tK099W0Z6AMZVxQ`**: XWorm V5.6 mutex; plaintext in binary; also the AES key derivation seed; not user-configurable in V5.6
+- `**\x04\x00\x00\x00`**: PureRAT TCP preamble; appears before TLS handshake on ports 56001-56003; network-detectable before encryption
+- `**Faidowra.IO.ModelConfiguration`**: PureRAT v4.1.9 namespace; specific to this build's deobfuscation
+- `**Ayzyqztcoa`**: PureRAT TLS certificate CN; auto-generated per build; unique to this campaign instance
+- `**%TEMP%\test_debug.txt`**: ScreenConnect dropper debug artifact; contains timestamps and HTTP status codes; OPSEC failure indicator
 
 ---
 
@@ -1085,7 +1085,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 | Discovery            | T1518.001    | Security Software Discovery                | XWorm Antivirus() WMI SecurityCenter2 query                          | HIGH       |
 | Collection           | T1113        | Screen Capture                             | XWorm $Cap; Raven GDI+ PNG; PureHVNC                                 | HIGH       |
 | Collection           | T1005        | Data from Local System                     | Raven wallet theft (Exodus/Atomic/Guarda/Wasabi)                     | HIGH       |
-| Collection           | T1115        | Clipboard Data                             | XWorm Clipper — crypto address replacement                           | HIGH       |
+| Collection           | T1115        | Clipboard Data                             | XWorm Clipper, crypto address replacement                           | HIGH       |
 | Command and Control  | T1219        | Remote Access Software                     | ScreenConnect ConnectWise v23.2.9 abuse                              | HIGH       |
 | Command and Control  | T1573.002    | Encrypted Channel: Asymmetric Cryptography | PureRAT 4096-bit RSA cert pinning; ScreenConnect RSA                 | HIGH       |
 | Command and Control  | T1568.002    | Dynamic Resolution: DGA                    | vlc_boxed.exe DGA behavior confirmed dynamically                     | HIGH       |
@@ -1093,9 +1093,9 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 | Lateral Movement     | T1091        | Replication Through Removable Media        | XWorm USB.exe spreading                                              | HIGH       |
 | Lateral Movement     | T1021.005    | Remote Services: VNC                       | PureHVNC; ScreenConnect RMM; Raven HVNC                              | HIGH       |
 | Exfiltration         | T1041        | Exfiltration Over C2 Channel               | XWorm screenshot/keylog/system data via C2                           | HIGH       |
-| Impact               | T1486        | Data Encrypted for Impact                  | XWorm ransomware module (ENC/DEC plugin — on-demand)                 | HIGH       |
+| Impact               | T1486        | Data Encrypted for Impact                  | XWorm ransomware module (ENC/DEC plugin, on-demand)                 | HIGH       |
 | Impact               | T1498.001    | Direct Network Flood                       | XWorm StartDDos HTTP slow-POST flood                                 | HIGH       |
-| Impact               | T1491.001    | Internal Defacement                        | XWorm Shosts — hosts file overwrite                                  | HIGH       |
+| Impact               | T1491.001    | Internal Defacement                        | XWorm Shosts, hosts file overwrite                                  | HIGH       |
 
 
 ---
@@ -1105,22 +1105,22 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 **XWorm V5.6:**
 
-- Trellix (2025): XWorm V5.6 technical analysis — AES-256 ECB config, Telegram notification, ransomware module documentation
+- Trellix (2025): XWorm V5.6 technical analysis, AES-256 ECB config, Telegram notification, ransomware module documentation
 - Cofense (2025): XWorm global detection volume and campaign tracking
-- CloudSEK (2024-2025): "XWorm V5.6 cracked builder distribution and supply-chain compromise" — documents 18,000+ device compromises from trojanized builder; cracked V5.6 proliferation post-developer departure
+- CloudSEK (2024-2025): "XWorm V5.6 cracked builder distribution and supply-chain compromise", documents 18,000+ device compromises from trojanized builder; cracked V5.6 proliferation post-developer departure
 
 **PureRAT v4.1.9 / ResolverRAT:**
 
-- Netresec (August 2025): "PureRAT = ResolverRAT = PureHVNC" — `\x04\x00\x00\x00` TCP preamble, TLS `NotAfter: 9999-12-31`, ports 56001-56003, TLS 1.0 architecture
-- Check Point Research (2025): PureRAT v4.1.9 analysis — version string, Base64→GZip→ProtoBuf config, TLS cert pinning, .NET Reactor 6.x
-- Fortinet (2025): PureRAT technical analysis — config encoding, .NET Reactor obfuscation corroboration
-- Morphisec (April 2025): "ResolverRAT" — coins alias for same codebase; healthcare/pharmaceutical targeting
-- Derp.ca (community researcher blog — Tier 3): 86-type ProtoBuf union, 20-40 second heartbeat, 4-byte length prefix, campaign tag "Default"
+- Netresec (August 2025): "PureRAT = ResolverRAT = PureHVNC", `\x04\x00\x00\x00` TCP preamble, TLS `NotAfter: 9999-12-31`, ports 56001-56003, TLS 1.0 architecture
+- Check Point Research (2025): PureRAT v4.1.9 analysis, version string, Base64→GZip→ProtoBuf config, TLS cert pinning, .NET Reactor 6.x
+- Fortinet (2025): PureRAT technical analysis, config encoding, .NET Reactor obfuscation corroboration
+- Morphisec (April 2025): "ResolverRAT", coins alias for same codebase; healthcare/pharmaceutical targeting
+- Derp.ca (community researcher blog, Tier 3): 86-type ProtoBuf union, 20-40 second heartbeat, 4-byte length prefix, campaign tag "Default"
 
 **Raven RAT / ZeroTrace:**
 
-- CYFIRMA (2025): "Raven Stealer Unmasked" — ZeroTrace Team identity, `@ZeroTraceDevOfficial`, `monroe31s`, `steffz` handle in Octalyn Stealer builder artifacts
-- GitHub: `monroe31s/Raven-RAT` — [github.com/monroe31s/Raven-RAT](https://github.com/monroe31s/Raven-RAT); created 2025-05-01; 7 stars, 5 forks; `@ZeroTraceDevOfficial` Telegram link confirmed
+- CYFIRMA (2025): "Raven Stealer Unmasked", ZeroTrace Team identity, `@ZeroTraceDevOfficial`, `monroe31s`, `steffz` handle in Octalyn Stealer builder artifacts
+- GitHub: `monroe31s/Raven-RAT`, [github.com/monroe31s/Raven-RAT](https://github.com/monroe31s/Raven-RAT); created 2025-05-01; 7 stars, 5 forks; `@ZeroTraceDevOfficial` Telegram link confirmed
 
 **ConnectWise ScreenConnect Abuse:**
 
@@ -1128,10 +1128,10 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 **CVE-2025-30406:**
 
-- CISA KEV Catalog (April 2025): CVE-2025-30406 added to Known Exploited Vulnerabilities — [cisa.gov/known-exploited-vulnerabilities-catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
-- NVD/CVE: CVE-2025-30406 — CVSS 9.0; Gladinet CentreStack and Triofox affected products
-- Huntress (April 2025): CVE-2025-30406 technical analysis — seven confirmed organizational compromises; CL0P ransomware group exploitation documented
-- ysoserial.net documentation: `pwntester/ysoserial.net` — `TextFormattingRunProperties` gadget chain documentation
+- CISA KEV Catalog (April 2025): CVE-2025-30406 added to Known Exploited Vulnerabilities, [cisa.gov/known-exploited-vulnerabilities-catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+- NVD/CVE: CVE-2025-30406, CVSS 9.0; Gladinet CentreStack and Triofox affected products
+- Huntress (April 2025): CVE-2025-30406 technical analysis, seven confirmed organizational compromises; CL0P ransomware group exploitation documented
+- ysoserial.net documentation: `pwntester/ysoserial.net`, `TextFormattingRunProperties` gadget chain documentation
 
 **Infrastructure:**
 
@@ -1144,4 +1144,4 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 ## License
 {: .hl-tier-2}
 
-© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
+© 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
