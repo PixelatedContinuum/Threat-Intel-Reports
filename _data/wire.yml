@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T04:01:32Z
+generated_at: 2026-09-03T06:02:28Z
 window_days: 30
 counts:
-  total: 549
-  research: 207
+  total: 548
+  research: 206
   news: 342
 topics:
   - label: "vulnerabilities"
@@ -3744,9 +3744,3 @@ items:
     date: 2026-08-04T07:17:39Z
     kind: research
     labels: ["account takeover", "linked devices abuse", "messaging platform", "phishing", "qr code scam", "social engineering", "whatsapp"]
-  - title: "Secure Agent Harness Execution: Preventing Escape"
-    url: "https://www.crowdstrike.com/en-us/blog/secure-agent-harness-execution-preventing-escape/"
-    source: "Crowdstrike"
-    date: 2026-08-04T05:00:00Z
-    kind: research
-    labels: ["securing ai"]
