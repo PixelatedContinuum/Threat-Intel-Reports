@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-04T16:01:42Z
+generated_at: 2026-09-04T18:02:02Z
 window_days: 30
 counts:
-  total: 539
+  total: 542
   research: 197
-  news: 342
+  news: 345
 topics:
   - label: "vulnerabilities"
     count: 72
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 57
     color: 2
   - label: "exploited"
     count: 27
     color: 3
   - label: "government"
-    count: 26
+    count: 27
     color: 4
   - label: "malware"
     count: 26
@@ -394,6 +394,7 @@ label_colors:
   "nation-state": 11
   "netch-gateway": 5
   "netscaler": 5
+  "network security": 6
   "next-gen identity security": 12
   "next-gen siem & log management": 11
   "nvidia": 3
@@ -445,6 +446,30 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "IDScan sued over alleged data breach affecting 153 million drivers"
+    url: "https://www.bleepingcomputer.com/news/security/idscan-sued-over-alleged-data-breach-affecting-153-million-drivers/"
+    source: "BleepingComputer"
+    date: 2026-09-04T16:56:45Z
+    kind: news
+    labels: ["legal"]
+  - title: "In Other News: Microsoft’s Cloud Patches, Hacked Dropbox Accounts, Guardio’s $1.1B Valuation"
+    url: "https://www.securityweek.com/in-other-news-microsofts-cloud-patches-hacked-dropbox-accounts-guardios-1-1b-valuation/"
+    source: "SecurityWeek"
+    date: 2026-09-04T16:18:30Z
+    kind: news
+    labels: ["in other news", "network security"]
+  - title: "HPE Patches Critical RCE Vulnerabilities in AOS-CX"
+    url: "https://www.securityweek.com/hpe-patches-critical-rce-vulnerabilities-in-aos-cx/"
+    source: "SecurityWeek"
+    date: 2026-09-04T16:11:06Z
+    kind: news
+    labels: ["network security"]
+  - title: "US, Britain to coordinate on scam center takedowns"
+    url: "https://therecord.media/scam-compounds-coordination-us-uk-memorandum"
+    source: "Recorded Future"
+    date: 2026-09-04T15:42:00Z
+    kind: news
+    labels: ["cybercrime", "government"]
   - title: "Critical Citrix NetScaler auth bypass now leveraged in attacks"
     url: "https://www.bleepingcomputer.com/news/security/hackers-target-critical-citrix-netscaler-auth-bypass-in-attacks/"
     source: "BleepingComputer"
@@ -3673,9 +3698,3 @@ items:
     date: 2026-08-05T18:53:15Z
     kind: research
     labels: ["amos", "atomic stealer", "clickfix", "fingerprinting", "infostealer", "macos", "macsync", "social engineering", "traffic distribution system"]
-  - title: "COLDCARD security audit phishing attack installs remote access tool"
-    url: "https://www.bleepingcomputer.com/news/security/coldcard-security-audit-phishing-attack-installs-remote-access-tool/"
-    source: "BleepingComputer"
-    date: 2026-08-05T17:49:41Z
-    kind: news
-    labels: []
