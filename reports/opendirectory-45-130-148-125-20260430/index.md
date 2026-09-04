@@ -75,7 +75,7 @@ A 3:00 AM read for the on-call SOC analyst, threat hunter, or detection engineer
 
 Active C2 status is UNKNOWN. The endpoint was reachable at analysis time but no live victim traffic was captured, so treat the capability scoring as an upper bound for now and revise after the one-week rescan target of 2026-05-06.
 
-**Detection rule package**: YARA, Sigma, Suricata, and EDR query content for the framework + operator fingerprints, plus coverage-gaps documentation:
+The detection package carries YARA, Sigma, Suricata and EDR query content for both the framework and the operator fingerprints, along with the coverage gaps:
 [/hunting-detections/opendirectory-45-130-148-125-20260430-detections/](/hunting-detections/opendirectory-45-130-148-125-20260430-detections/) (source file: `threat-intel-vault/hunting-detections/opendirectory-45-130-148-125-20260430-detections.md`).
 
 **IOC feed (full machine-readable list, 72 indicators):**
@@ -854,7 +854,9 @@ On the H1 and H5 result, strict ACH discipline awards the best-fit verdict to th
 
 ### 8.2 Why named actors are ruled out
 
-**Tropic Trooper (RULED OUT, 6 inconsistencies).** Tropic Trooper is currently the **only publicly documented APT that customizes AdaptixC2**. Zscaler ThreatLabz (March 2026) documented Tropic Trooper deploying AdaptixC2 with a custom GitHub-Issues-as-C2 transport listener layered on top of the framework. Every other publicly documented AdaptixC2 user (Akira / Fog ransomware affiliates, CountLoader operators, the unnamed initial-access broker described by Silent Push) runs the framework stock. UTA-2026-006 falls in the latter category, runs the framework 100% stock with default URI paths, default Firefox 20 UA, default `X-Beacon-Id` header, direct-IP HTTP. **This contrast is itself the analytical anchor for treating UTA-2026-006 as a "tool consumer, not customizer" profile**. The only documented customizer is APT-grade and very different from this operator. Tropic Trooper also delivers via trojanized SumatraPDF installers; this operator uses a PowerShell loader. Tropic Trooper targets Southeast Asian government entities; no targeting evidence is observed here.
+Tropic Trooper is ruled out on six inconsistencies, and it is worth saying why at length, because it is currently the **only publicly documented APT that customizes AdaptixC2**. Zscaler ThreatLabz (March 2026) documented Tropic Trooper deploying AdaptixC2 with a custom GitHub-Issues-as-C2 transport listener layered on top of the framework. Every other publicly documented AdaptixC2 user (Akira / Fog ransomware affiliates, CountLoader operators, the unnamed initial-access broker described by Silent Push) runs the framework stock. UTA-2026-006 falls in the latter category, runs the framework 100% stock with default URI paths, default Firefox 20 UA, default `X-Beacon-Id` header, direct-IP HTTP.
+
+**This contrast is itself the analytical anchor for treating UTA-2026-006 as a "tool consumer, not customizer" profile**. The only documented customizer is APT-grade and very different from this operator. Tropic Trooper also delivers via trojanized SumatraPDF installers; this operator uses a PowerShell loader. Tropic Trooper targets Southeast Asian government entities; no targeting evidence is observed here.
 
 Tomiris is RULED OUT at 5 inconsistencies. Tomiris is polyglot, and Kaspersky's December 2025 Securelist report documented it deploying Havoc and AdaptixC2 simultaneously with C2 traffic routed through legitimate public services, the Telegram bot API and Discord webhooks. This operator uses AdaptixC2 only, with direct HTTP to a fixed IP and no platform-routed C2. Tomiris targets diplomatic ministries, and there is no diplomatic targeting evidence here. The single-protocol, single-platform architecture is fundamentally incompatible with Tomiris's polyglot tradecraft.
 
@@ -915,7 +917,7 @@ AdaptixC2 has shifted in the past twelve months from a niche open-source red-tea
 
 **Silent Push (August 2025)** documented AdaptixC2 as the post-exploitation tool of choice for an initial-access broker (IAB) operating in the LockBit / BlackBasta / Qilin affiliate supply chain, framing the framework's adoption as evidence of integration into Russian criminal underground supply chains. The reporting included CountLoader as the staging component delivering AdaptixC2 beacons. Infrastructure was separate from `45.130.148.125`.
 
-**CISA AA24-109A (Akira ransomware)**: the official CISA advisory on Akira characterizes affiliate tradecraft as commodity post-exploitation tooling, AD enumeration, credential dumping, and lateral movement chains consistent with what is observed in this toolkit. CISA does not specifically name AdaptixC2 in this advisory.
+CISA's Akira advisory, AA24-109A, characterizes affiliate tradecraft as commodity post-exploitation tooling, AD enumeration, credential dumping, and lateral movement chains consistent with what is observed in this toolkit. CISA does not specifically name AdaptixC2 in this advisory.
 
 ### 9.2 Tomiris APT (diplomatic targeting)
 

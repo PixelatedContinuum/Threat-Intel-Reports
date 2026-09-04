@@ -462,7 +462,7 @@ To detect it, write a network-layer rule for HTTP traffic carrying `User-Agent: 
 - **Verdict:** NOT a threat actor. Researcher's open directory exposed ML quantization scripts and intermediate weights. Zero target lists, zero attacker prompts, zero exfil infrastructure.
 - **Defender lesson:** HuggingFace transformer weights and quantization scripts in an open directory are **not** an offensive indicator. Discriminator: look for victim-context (target lists, stolen tokens, named-victim artifact references) before classifying a host as offensive.
 
-**Hunt-Flagged Demoted Hosts**: Two additional hosts flagged by Hunt.io heuristics during Phase 11 mirror-and-demote analysis were similarly demoted. Both showed surface-level AI-tool presence (Claude session metadata) without offensive operator artifacts. Both demonstrate the same point as Cases 5 and 6.
+Two further hosts flagged by Hunt.io heuristics during Phase 11 mirror-and-demote analysis were similarly demoted. Both showed surface-level AI-tool presence (Claude session metadata) without offensive operator artifacts. Both demonstrate the same point as Cases 5 and 6.
 
 The combined lesson for defenders is about false-positive rate. My hunting heuristics produced 4 false positives among 12 initially-flagged hosts (8 confirmed, 2 demoted via Cases 5 and 6, 2 demoted via Hunt). That 33% initial-flag false-positive rate is honest characterization, and defenders deploying AI-tool-presence heuristics should expect similar rates and design their hunting workflows around fast-discriminator review (target-list presence, victim-context references, exfil infrastructure) rather than treating AI-tool presence as a high-fidelity indicator.
 
@@ -723,7 +723,7 @@ Reassess the campaign threat level (HIGH) under any of these conditions:
 
 The full detection file is at [`/hunting-detections/ai-agent-frameworks-2026-05-23-detections.md`](https://the-hunters-ledger.com/hunting-detections/ai-agent-frameworks-2026-05-23-detections/)
 
-**Per-case detection rules**: operator-specific coverage lives in each sub-report's detection deliverable:
+Operator-specific coverage lives in each sub-report's own detection deliverable:
 
 - [Case 1: Russian Gemini](https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections)
 - [Case 2: Turkish ARPA](https://the-hunters-ledger.com/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections)

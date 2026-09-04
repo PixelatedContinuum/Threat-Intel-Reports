@@ -838,15 +838,15 @@ The targeting profile centres on corporate O365 and BEC, cryptocurrency users (C
 
 ### Priority 1: Immediate Containment
 
-**Isolate affected systems**: prevent lateral movement to other network resources while preserving forensic state for investigation. Avoid powering off systems with potential volatile memory evidence.
+Isolating affected systems prevents lateral movement to other network resources while preserving forensic state for investigation. Avoid powering off systems with potential volatile memory evidence.
 
-**Block confirmed C2 infrastructure**: apply immediate network blocks for `185.49.126.140` on all ports, `74.0.42.25`, `74.0.42.162`, `74.0.42.44`, and `185.49.126.97`. Any connection to `185.49.126.140` on ports 5000, 8000, 8041, 443, 56001, 56002, or 56003 is confirmed malicious.
+Blocking the confirmed C2 infrastructure means immediate network blocks for `185.49.126.140` on all ports, `74.0.42.25`, `74.0.42.162`, `74.0.42.44`, and `185.49.126.97`. Any connection to `185.49.126.140` on ports 5000, 8000, 8041, 443, 56001, 56002, or 56003 is confirmed malicious.
 
-**Block operator domains**: `adminxyzhosting[.]com`, `chainconnects[.]net`, and MODERATE-confidence domains `ziadxyzhosting[.]com`, `ziadverisontwo[.]com`, `wireon[.]work[.]gd`, `ledno[.]net`.
+The operator domains to block are `adminxyzhosting[.]com`, `chainconnects[.]net`, and MODERATE-confidence domains `ziadxyzhosting[.]com`, `ziadverisontwo[.]com`, `wireon[.]work[.]gd`, `ledno[.]net`.
 
-**ScreenConnect audit**: enumerate all ScreenConnect sessions relaying through `adminxyzhosting[.]com:8041`. Any session connected to this relay represents confirmed attacker access. All 500 operator-generated session links share the same static RSA public key (2048-bit). Matching this key in ScreenConnect configuration identifies attacker-established sessions.
+A ScreenConnect audit enumerates all sessions relaying through `adminxyzhosting[.]com:8041`. Any session connected to this relay represents confirmed attacker access. All 500 operator-generated session links share the same static RSA public key (2048-bit). Matching this key in ScreenConnect configuration identifies attacker-established sessions.
 
-**Credential rotation**: prioritize accounts with elevated privileges, domain administrator access, and any service accounts accessible from potentially affected systems.
+Credential rotation should prioritize accounts with elevated privileges, domain administrator access, and any service accounts accessible from potentially affected systems.
 
 ### Priority 2: Investigation
 

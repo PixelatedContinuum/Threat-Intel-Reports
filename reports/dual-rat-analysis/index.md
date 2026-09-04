@@ -127,7 +127,7 @@ Quasar RAT is a professional-grade espionage tool associated with APT10 and soph
 - **Minimal persistence**: Single scheduled task reduces event log footprint
 
 ### Executive Risk Assessment
-**HIGH RISK**: Quasar RAT's professional development and APT10 association indicate targeted espionage operations. The combination of 134 capabilities and stealth-focused design creates HIGH risk for long-term compromise and intellectual property theft.
+Quasar RAT is the **higher risk** of the two. Its professional development and APT10 association indicate targeted espionage operations. The combination of 134 capabilities and stealth-focused design creates HIGH risk for long-term compromise and intellectual property theft.
 
 ---
 
@@ -339,7 +339,7 @@ NjRAT/XWorm is commodity malware optimized for mass deployment through aggressiv
 - **Process characteristics**: VB.NET processes with network activity are uncommon in most environments
 
 ### Executive Risk Assessment
-**HIGH RISK**: NjRAT/XWorm's aggressive persistence and real-time surveillance capabilities create HIGH risk for privacy violations and data theft. Its prevalence (18,459+ infections H1 2025) demonstrates widespread operational effectiveness despite commodity status.
+NjRAT/XWorm carries **high risk** of a different kind. Its aggressive persistence and real-time surveillance drive privacy violations and data theft. Its prevalence (18,459+ infections H1 2025) demonstrates widespread operational effectiveness despite commodity status.
 
 ---
 

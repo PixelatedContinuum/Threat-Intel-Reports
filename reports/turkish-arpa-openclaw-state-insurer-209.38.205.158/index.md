@@ -105,7 +105,7 @@ The risk framing reflects what the campaign has currently configured, operator-c
 </tbody>
 </table>
 
-**Overall Campaign Risk Score: 9.5/10, CRITICAL.** The campaign is rated CRITICAL based on the convergence of three concurrent CRITICAL-class factors: (1) an active stolen-credential compromise of a state-affiliated corporate victim with credentials that the victim has not rotated for 70+ days since third-party discovery; (2) an in-network insider with operator-authored documentation and operator-supplied SSH keys whose intent cannot be determined externally; (3) a publication-defining novel TTP set (Observability-Tool Reverse Pipeline + Insider Recruitment with operator-authored documentation + CANDIDATE AI-Augmented Reconnaissance) with no documented prior art at this combination. The threat level should be reassessed downward only after **all four stolen credential sources are rotated**, **the insider's account is segregated and forensically reviewed**, and **the operator VPS is taken down via DigitalOcean abuse coordination sequenced after USOM and victim notification**.
+I score the campaign 9.5 out of 10, which is CRITICAL, and that rests on the convergence of three concurrent CRITICAL-class factors: (1) an active stolen-credential compromise of a state-affiliated corporate victim with credentials that the victim has not rotated for 70+ days since third-party discovery; (2) an in-network insider with operator-authored documentation and operator-supplied SSH keys whose intent cannot be determined externally; (3) a publication-defining novel TTP set (Observability-Tool Reverse Pipeline + Insider Recruitment with operator-authored documentation + CANDIDATE AI-Augmented Reconnaissance) with no documented prior art at this combination. The threat level should be reassessed downward only after **all four stolen credential sources are rotated**, **the insider's account is segregated and forensically reviewed**, and **the operator VPS is taken down via DigitalOcean abuse coordination sequenced after USOM and victim notification**.
 
 ### Threat Actor Summary
 
@@ -644,9 +644,9 @@ The eight documents follow a Turkish-language uppercase naming convention (`PUTT
 
 The polling cycle is the operational heartbeat of the ARPA platform. Reconstructed sequence per 5-minute cycle:
 
-**T+0:00**: `arpa-daemon.service` orchestrator wakes and triggers the four per-source collector modules in parallel via `arpa-parallel.service`.
+At T+0:00 the `arpa-daemon.service` orchestrator wakes and triggers the four per-source collector modules in parallel via `arpa-parallel.service`.
 
-**T+0:00 to T+0:30**: Four parallel HTTP requests are issued from operator VPS:
+Through the first thirty seconds, four parallel HTTP requests go out from the operator VPS:
 
 | Source | Endpoint | Authentication |
 |---|---|---|
@@ -657,13 +657,13 @@ The polling cycle is the operational heartbeat of the ARPA platform. Reconstruct
 
 The PowerShell collector on the insider workstation runs the same 5-minute cycle and POSTs to the operator's ingestion API on port 8096. This means Instana data flows in via **two paths** during each cycle: directly from operator-to-Instana (using the stolen JWT) and from insider-PowerShell-to-operator (using the same JWT relayed through the insider's workstation).
 
-**T+0:30 to T+1:00**: Per-source normalization layer transforms raw API responses into a common schema. Turkish-language docstrings in `topology_mapper.py` show the normalization logic ("Service label'ından host bilgisi çıkar"). Normalized records land in TimescaleDB (time-series) and feed the cross-source correlation logic in `correlation_v3.py`.
+Between T+0:30 and T+1:00 the per-source normalization layer transforms raw API responses into a common schema. Turkish-language docstrings in `topology_mapper.py` show the normalization logic ("Service label'ından host bilgisi çıkar"). Normalized records land in TimescaleDB (time-series) and feed the cross-source correlation logic in `correlation_v3.py`.
 
-**T+1:00 to T+1:30**: Cross-source correlation merges per-source host records via FQDN normalization across the victim's internal AD, Linux-estate, and VMware-cluster domains, and writes the merged topology to Neo4j. The unified-topology graph element count is updated.
+Between T+1:00 and T+1:30 cross-source correlation merges per-source host records via FQDN normalization across the victim's internal AD, Linux-estate, and VMware-cluster domains, and writes the merged topology to Neo4j. The unified-topology graph element count is updated.
 
-**T+1:30 to T+2:00**: `arpa-autolearn.service` runs anomaly detection (Isolation Forest + DBSCAN + LOF + statistical methods) over the updated dataset and flags anomalous hosts or behaviors for operator review. Flagged results land in `/opt/ARPA/data/collector.db`.
+Between T+1:30 and T+2:00 the `arpa-autolearn.service` runs anomaly detection (Isolation Forest + DBSCAN + LOF + statistical methods) over the updated dataset and flags anomalous hosts or behaviors for operator review. Flagged results land in `/opt/ARPA/data/collector.db`.
 
-**T+2:00 to T+5:00**: Idle wait until next cycle. The dashboard at port 8090 and the unified-topology API at port 8095 serve cached queries from the in-memory and Redis-cached views.
+From T+2:00 to the end of the five minutes it idles. The dashboard at port 8090 and the unified-topology API at port 8095 serve cached queries from the in-memory and Redis-cached views.
 
 The cycle then repeats. Daily-topology log generation occurs once per day at approximately operator-end-of-day, summarizing the day's data deltas and writing to `daily_topology_<YYYYMMDD>.log`. The most recent log is dated 2026-05-23.
 

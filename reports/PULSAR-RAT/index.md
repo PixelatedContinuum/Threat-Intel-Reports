@@ -964,13 +964,13 @@ AND NOT process_name:(chrome.exe OR firefox.exe OR msedge.exe)
 
 This mapping supports security control gap analysis:
 
-**Step 1: Control Mapping**. For each technique, document existing controls (prevention, detection, response).
+Start by mapping controls: for each technique, document what already exists by way of prevention, detection and response.
 
-**Step 2: Gap Identification**. Identify techniques with no coverage, detection-only, or prevention-only coverage.
+The gaps then fall out of that map, the techniques with no coverage at all, and those covered on only one side.
 
-**Step 3: Risk Prioritization**. Rank gaps by business impact using the tactic coverage table above.
+Rank what is left by impact, using the tactic coverage table above.
 
-**Step 4: Remediation Planning**. Develop an implementation plan for critical-priority gaps, starting with Defense Evasion, Credential Access, and Persistence detection.
+Then plan against the critical-priority gaps first, which here means Defense Evasion, Credential Access and Persistence detection.
 
 ---
 

@@ -523,7 +523,7 @@ The first line self-identifies. Line 1 reads `# GHOST v5.1 (Anti-Hisana + Resurr
 
 **Persistence orchestration: `_install_persistence`**. Installs the 5-vector persistence chain documented in Section 4.5.
 
-**Hysteria v2 setup: `_setup_hysteria`**. Downloads Hysteria v2 binary, generates credentials, configures bing.com SNI masquerade, starts admin panel listener on TCP 3301.
+`_setup_hysteria` handles the Hysteria v2 setup. It downloads the binary, generates credentials, configures the bing.com SNI masquerade and starts the admin panel listener on TCP 3301.
 
 **Memfd_create fileless execution: `_memfd_launch`**. Uses the `memfd_create` syscall (T1620, Reflective Code Loading) to load and execute the miner binary from an anonymous in-memory file descriptor without writing to disk. SysV shm fallback for older systems where `memfd_create` is unavailable.
 

@@ -288,7 +288,7 @@ On novelty, redirecting the export directory RVA to existing NOP and INT3 paddin
 
 Function `FUN_180015838` (2,188 bytes) in `beacon_patched.x64.dll` is a complete bytecode VM implementing the CS Malleable C2 transform system. It reads operator-configurable bytecode from the config blob and transforms HTTP request components (headers, URI, query parameters) per the profile.
 
-**17 opcodes identified**: publicly available reverse engineering has documented 7-8 opcodes from this VM (usualsuspect.re, Tier 3 / C2; cross-referenced with official CS documentation). The 17-opcode count represents extended documentation coverage for this component, derived from this analysis and not previously documented publicly.
+I count 17 opcodes here, where publicly available reverse engineering has documented 7 or 8 from this VM (usualsuspect.re, Tier 3 / C2; cross-referenced with official CS documentation). The 17-opcode count represents extended documentation coverage for this component, derived from this analysis and not previously documented publicly.
 
 <figure style="text-align: center; margin: 2em 0;">
  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-transform-vm-dispatch.png" | relative_url }}" alt="Decompilation of the Malleable C2 transform VM dispatch function FUN_180015838 showing local variables for opcode processing, loop control structures, and the conditional branching that routes execution through 17 distinct opcode handlers for transforming HTTP request components.">
@@ -828,7 +828,7 @@ The C beacon (`beacon.exe`) prints `"[*] OpenStrike Beacon starting..."` at init
 
 I verified this before publication. No public threat intelligence exists for "OpenStrike" as of 2026-04-07. I ran targeted searches across open-source threat intelligence feeds, vendor threat reports, malware repositories and security research publications. The exact string `"OpenStrike Universal Beacon"` returned zero results, searches for the custom sample SHA256 hashes matched nothing in any indexed database, and all seven binary samples were absent from VirusTotal at time of discovery. The tripwired ReflectiveLoader technique, with the export RVA redirected to `66 90 CC` NOP and INT3 padding bytes, is not documented in any prior public research on Cobalt Strike modifications, and the C2 protocol internals documented here are the first public documentation of this toolkit.
 
-**Classification confidence: HIGH (85%)**. Self-branded in source code and debug strings; novel architecture; zero prior TI footprint; GCC 15 build artifacts confirm development no earlier than late 2025.
+I hold the classification at HIGH, around 85 percent. It is self-branded in source code and debug strings, the architecture is novel, there is no prior threat-intelligence footprint, and the GCC 15 build artifacts put development no earlier than late 2025.
 
 For defenders, that means standard threat intelligence platforms and AV signatures will not identify OpenStrike. Behavioral and protocol-based detection, the `/qz99` URI, the AES IV `abcdefghijklmnop` in memory, and GET requests to port 8443 from non-browser processes, is the only reliable path until signatures propagate into vendor products.
 
@@ -860,7 +860,7 @@ The CS 3.x versus 4.x split is significant. CS 3.x reached end of life in 2019, 
 | C2 port status | Offline at analysis date | Shodan |
 | Bulletproof hosting | NOT DETECTED (0/6 indicators) | Infrastructure analysis |
 
-**Specific IP reputation: INSUFFICIENT**. No threat intelligence found for `172.105.0.126` specifically in open-source feeds. Consistent with a recently provisioned VPS aligned with GCC 15 build timing (late 2025-early 2026). Infrastructure pivoting not viable from open-source data: single IP, no domain layer, no SSL certificate data accessible (port offline).
+On the specific IP I have INSUFFICIENT evidence to say anything. No threat intelligence exists for `172.105.0.126` in open-source feeds. Consistent with a recently provisioned VPS aligned with GCC 15 build timing (late 2025-early 2026). Infrastructure pivoting not viable from open-source data: single IP, no domain layer, no SSL certificate data accessible (port offline).
 
 For hosting context, Linode is a legitimate commercial provider with a documented history of C2 abuse, driven by accessible pricing and easy provisioning. Recorded Future's 2022 data places Linode 8th globally among C2 hosting providers. The choice reflects a common pattern among commodity operators seeking low-cost, low-commitment infrastructure.
 
@@ -885,7 +885,7 @@ DomainTools Iris passive DNS export reveals this IP has been continuously alloca
 
 In summary on timing, the C2 operator's tenancy on this IP began at an undated point before discovery and ended before or at analysis date, with port 8443 offline by 2026-04-06. The IP has been in continuous Linode allocation since at least 2019 with multiple sequential tenants, which is normal for commercial datacenter IP blocks. The threat actor registered no domains pointing to it, and the C2 operated exclusively over the raw IP address.
 
-**PDNS confidence: MODERATE**. DomainTools Iris provides a clear multi-year tenancy picture; the precise start and end of the threat actor's tenancy window remains undated from infrastructure data alone.
+I hold the passive-DNS reading at MODERATE. The tenancy picture across the years is clear, but the precise start and end of this operator's own window stays undated from infrastructure data alone.
 
 ---
 

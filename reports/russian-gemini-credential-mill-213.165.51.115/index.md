@@ -96,7 +96,7 @@ This is an active, actively-iterating, named-victim-confirmed credential mill ca
 </tbody>
 </table>
 
-**Overall Campaign Risk Score: 9.0/10, CRITICAL.** The CRITICAL rating (not HIGH) rests on the active HIPAA-regulated US healthcare compromise with operator-controlled persistent tunnels configured at capture time. The PHI breach timeline runs until Cloudflare PSIRT tears down the tunnels and the practice is notified. Once both happen, residual capability re-assesses to HIGH: the LLM-personalized mutation pipeline, the frontier-LLM key inventory, and the political IO track stay operational regardless of any single victim-side action.
+I score the campaign 9.0 out of 10, which is CRITICAL rather than HIGH, and that rests on the active HIPAA-regulated US healthcare compromise with operator-controlled persistent tunnels configured at capture time. The PHI breach timeline runs until Cloudflare PSIRT tears down the tunnels and the practice is notified. Once both happen, residual capability re-assesses to HIGH: the LLM-personalized mutation pipeline, the frontier-LLM key inventory, and the political IO track stay operational regardless of any single victim-side action.
 
 ### Threat Actor Summary
 
@@ -298,9 +298,9 @@ Each document follows a similar structural form:
 - Operational content block (C2 endpoint topology, tool path inventory, credential references)
 - Optional next-steps section for the AI consumer
 
-**Exemplar 1: `C2_INFRA_TRANSFER.md`**. The header carries the literal `**To:** Gemini CLI` and `**From:** Gemini CLI` strings. The body documents the operator's current C2 topology (the `tralalarkefe.com` tunnel inventory, the GCP instance roles, the AntiPublic.one integration endpoint). The intended use case is: operator opens a new Gemini CLI session, references this file in the first turn, and the AI is primed with full C2 state without the operator needing to re-explain context.
+The first exemplar is `C2_INFRA_TRANSFER.md`, whose header carries the literal `**To:** Gemini CLI` and `**From:** Gemini CLI` strings. The body documents the operator's current C2 topology (the `tralalarkefe.com` tunnel inventory, the GCP instance roles, the AntiPublic.one integration endpoint). The intended use case is: operator opens a new Gemini CLI session, references this file in the first turn, and the AI is primed with full C2 state without the operator needing to re-explain context.
 
-**Exemplar 2: `DEPLOYED_TOOLS.md`**. The session-start load directive `When starting a new session, refer to this file` is explicit. The body inventories the operator-built tooling (`ai_sniper_brute.py`, `check_keys.py`, `c2_server.py`, etc.) with file paths, purpose summaries, and operational notes (which targets each tool was last run against, which Gemini API key was last used).
+The second is `DEPLOYED_TOOLS.md`, where the session-start load directive `When starting a new session, refer to this file` is explicit. The body inventories the operator-built tooling (`ai_sniper_brute.py`, `check_keys.py`, `c2_server.py`, etc.) with file paths, purpose summaries, and operational notes (which targets each tool was last run against, which Gemini API key was last used).
 
 **Exemplar 3: `C2_MIGRATION_GUIDE.md`**, The body documents a planned C2 transport migration. The intended use case is forward-looking: operator wants to migrate transport, drafts the plan in Markdown with AI consultation, then refers to this document in future sessions to maintain plan continuity.
 
