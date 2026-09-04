@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-03T22:02:52Z
+generated_at: 2026-09-04T00:02:02Z
 window_days: 30
 counts:
-  total: 542
-  research: 201
+  total: 540
+  research: 199
   news: 341
 topics:
   - label: "vulnerabilities"
@@ -35,15 +35,15 @@ topics:
     count: 18
     color: 8
   - label: "supply chain attack"
-    count: 17
+    count: 16
     color: 9
   - label: "clickfix"
     count: 14
     color: 10
-  - label: "microsoft"
+  - label: "healthcare"
     count: 14
     color: 11
-  - label: "ransomware"
+  - label: "microsoft"
     count: 14
     color: 12
 label_colors:
@@ -391,7 +391,7 @@ label_colors:
   "malware": 4
   "meta": 5
   "metabase": 6
-  "microsoft": 11
+  "microsoft": 12
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -401,7 +401,6 @@ label_colors:
   "netscaler": 5
   "next-gen identity security": 12
   "next-gen siem & log management": 11
-  "npm": 7
   "nvidia": 3
   "on the radar": 4
   "oracle": 12
@@ -420,7 +419,6 @@ label_colors:
   "poc exploit": 3
   "privacy": 12
   "qilin": 11
-  "ransomware": 12
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -447,6 +445,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "French hospital fined €500,000 after breach exposes data of 727,000"
+    url: "https://www.bleepingcomputer.com/news/security/french-hospital-fined-500-000-after-breach-exposes-data-of-727-000/"
+    source: "BleepingComputer"
+    date: 2026-09-03T22:01:37Z
+    kind: news
+    labels: ["healthcare", "legal"]
   - title: "Coder's registry infrastructure compromised to push malicious modules"
     url: "https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/"
     source: "BleepingComputer"
@@ -3681,21 +3685,3 @@ items:
     date: 2026-08-05T08:15:06Z
     kind: research
     labels: ["ci/cd compromise", "cloud credentials", "credential theft", "developer targeting", "npm compromise", "package repository", "self-propagating worm", "supply chain attack"]
-  - title: "Benchmarking the Agentic SOC: How we evaluate LLMs for security workflows"
-    url: "https://www.elastic.co/security-labs/llm-benchmarking-agentic-soc"
-    source: "Elastic"
-    date: 2026-08-04T23:59:59Z
-    kind: research
-    labels: ["security-labs"]
-  - title: "ChainDrop supply chain compromise: Anatomy of a self-propagating worm"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/08/04/chaindrop-supply-chain-compromise-anatomy-self-propagating-worm/"
-    source: "Microsoft"
-    date: 2026-08-04T23:46:41Z
-    kind: research
-    labels: ["npm", "supply chain attack"]
-  - title: "TP-Link patches Omada ZTP flaws allowing hackers to breach networks"
-    url: "https://www.bleepingcomputer.com/news/security/tp-link-patches-omada-ztp-flaws-allowing-hackers-to-breach-networks/"
-    source: "BleepingComputer"
-    date: 2026-08-04T22:18:20Z
-    kind: news
-    labels: []
