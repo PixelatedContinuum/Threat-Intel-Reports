@@ -953,16 +953,16 @@ specific build are recoverable without contacting anyone. Confirming which build
 therefore the highest-value action available, and it is established from the encrypted files
 themselves rather than from the binary, which may no longer be present.
 
-**Hunt these first.** The pre-encryption behaviour, which is louder than the encryption:
+What to hunt is the pre-encryption behaviour, which is louder than the encryption:
 shadow-copy deletion and backup-agent termination both precede file writes and both are
 recoverable from ordinary endpoint logging. The manual, hands-on-keyboard deployment pattern
 means these actions arrive close together rather than on a schedule.
 
-**Where the artifacts sit.** Encrypted files carry the family marker; the excluded-directory
+Encrypted files carry the family marker; the excluded-directory
 list documented above explains what survived and why, and a system that still boots after
 encryption is a design outcome rather than a partial run.
 
-**Containment categories.** Isolate affected hosts and preserve encrypted samples before any
+For containment, isolate affected hosts and preserve encrypted samples before any
 rebuild, because build identification depends on them. Treat backup infrastructure as a
 target rather than a resource until its reachability from the affected host is established.
 Assume interactive operator access preceded the encryption stage, so the entry path and any

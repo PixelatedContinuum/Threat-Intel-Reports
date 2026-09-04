@@ -511,16 +511,16 @@ established, not that it was attempted. It reaches its command-and-control endpo
 about a minute of being loaded, and the host process terminates if it cannot, which means a
 crashed host process is itself a signal that the channel failed.
 
-**Hunt these first.** Outbound TCP to the endpoints listed in the IOC section, on port 53 but
+Hunt first for outbound TCP to the endpoints listed in the IOC section, on port 53 but
 carrying the toolkit's own protocol rather than DNS, which is what separates it from ordinary
 name resolution to the same address. Then the command surface it exposes once connected:
 PowerShell execution, process and service enumeration, and Base64-framed file transfer,
 described in full in the capability sections above.
 
-**Where the artifacts sit.** The DLL itself is on disk with the hash in the IOC section, and
+The DLL itself is on disk with the hash in the IOC section, and
 the host process that loads it is the more useful pivot, since the DLL does not run alone.
 
-**Containment categories.** Isolate hosts showing the command channel. Block and monitor the
+For containment, isolate hosts showing the command channel. Block and monitor the
 command-and-control endpoints at the perimeter, and treat port-53 traffic from processes that
 have no business resolving names as the anomaly rather than the destination address. Assume
 anything the channel could reach was reachable: it carries file transfer in both directions

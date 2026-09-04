@@ -26,7 +26,6 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
 
-
 ---
 
 ## BLUF - Bottom Line Up Front
@@ -1009,16 +1008,16 @@ SYSTEM, which means a detection here is a detection of the hinge between an ordi
 foothold and full control of the host. Whatever it was asked to run is the thing that
 mattered, and the command line is where that is recorded.
 
-**Hunt these first.** Process creation with an elevated integrity level whose parent is an
+Hunt first for process creation with an elevated integrity level whose parent is an
 ordinary user process, and the command line of the elevated child, which names the next stage
 directly. The escalation techniques compared above each leave their own trail, described in
 the technical sections.
 
-**Where the artifacts sit.** In process-creation logging with command lines captured. Without
+The artifacts sit in process-creation logging with command lines captured. Without
 command-line capture the wrapper looks like an ordinary short-lived process and the payload it
 launched is not recoverable from the event alone.
 
-**Containment categories.** Isolate hosts showing the escalation, and treat the elevated child
+For containment, isolate hosts showing the escalation, and treat the elevated child
 process named on the command line as the actual scope question. Assume SYSTEM-level access was
 obtained rather than attempted, so credentials cached on the host and any trust the host holds
 are in scope. Then look backwards: this component runs after initial access, so the foothold
@@ -1027,9 +1026,7 @@ that preceded it is still unaccounted for.
 
 ### Q1: "Can lpe.exe succeed if my system is fully patched?"
 
-**Short Answer**: Yes. Fully patched systems are still vulnerable to most lpe.exe techniques.
-
-**Detailed Explanation**:
+Yes. Fully patched systems are still vulnerable to most lpe.exe techniques.
 
 Windows security patches fix specific, documented vulnerabilities. However, most lpe.exe techniques exploit **design behaviors** rather than "vulnerabilities":
 
@@ -1044,9 +1041,7 @@ Patches address specific exploits (like CVE-2021-1675 Print Spooler RCE), but de
 
 ### Q2: "Will my antivirus detect lpe.exe?"
 
-**Short Answer**: Possibly, but not guaranteed.
-
-**Detailed Explanation**:
+Possibly, but not guaranteed.
 
 - **Signature-Based Detection**: If antivirus has lpe.exe SHA256 in its signature database, yes
 - **Heuristic Detection**: Rust-compiled binaries may evade heuristic rules due to code obfuscation
@@ -1059,9 +1054,7 @@ Patches address specific exploits (like CVE-2021-1675 Print Spooler RCE), but de
 
 ### Q3: "What if lpe.exe fails to escalate privileges?"
 
-**Short Answer**: The Arsenal-237 attack chain stalls. Ransomware deployment does not occur.
-
-**Detailed Explanation**:
+The Arsenal-237 attack chain stalls. Ransomware deployment does not occur.
 
 The attack chain depends entirely on successful privilege escalation:
 
@@ -1090,9 +1083,7 @@ In real-world environments, at least 1-2 techniques succeed unless the system ha
 
 ### Q4: "Can I detect lpe.exe just by looking at network traffic?"
 
-**Short Answer**: No. lpe.exe contains no network communication.
-
-**Detailed Explanation**:
+No. lpe.exe contains no network communication.
 
 lpe.exe operates entirely locally:
 - No outbound connections
@@ -1112,9 +1103,7 @@ Network detection becomes relevant only for the Arsenal-237 toolkit *staging* (c
 
 ### Q5: "How long does lpe.exe execution take?"
 
-**Short Answer**: 5-10 seconds total execution time.
-
-**Detailed Explanation**:
+5-10 seconds total execution time.
 
 Timing breakdown:
 - Privilege check: 1-2 seconds
@@ -1129,9 +1118,7 @@ Timing breakdown:
 
 ### Q6: "Will lpe.exe create obvious filesystem artifacts?"
 
-**Short Answer**: No, lpe.exe deliberately avoids creating persistent files.
-
-**Detailed Explanation**:
+No, lpe.exe deliberately avoids creating persistent files.
 
 - **No File Drops**: lpe.exe doesn't create files (except launching payload)
 - **Registry Cleanup**: Registry UAC bypass modifies and then cleans up registry entries
@@ -1144,9 +1131,7 @@ Timing breakdown:
 
 ### Q7: "What if my system doesn't allow command-line execution?"
 
-**Short Answer**: lpe.exe can still escalate; payload execution depends on application control configuration.
-
-**Detailed Explanation**:
+Lpe.exe can still escalate; payload execution depends on application control configuration.
 
 - **Escalation**: lpe.exe itself executes; this is independent of what payload it runs
 - **Payload Execution**: If AppLocker or Windows Defender Application Control blocks command-line scripts, the payload may not execute
@@ -1158,9 +1143,7 @@ Timing breakdown:
 
 ### Q8: "Can I disable UAC to prevent UAC bypass attacks?"
 
-**Short Answer**: No. Disabling UAC is a bad security decision that doesn't prevent these attacks.
-
-**Detailed Explanation**:
+No. Disabling UAC is a bad security decision that doesn't prevent these attacks.
 
 - **UAC Serves Multiple Purposes**: Not just elevation; it's also a security boundary
 - **These Attacks Don't Require UAC**: lpe.exe doesn't exploit UAC; it bypasses UAC as a secondary effect
@@ -1176,9 +1159,7 @@ Disabling UAC opens more attack surfaces than it closes.
 
 ### Q9: "Should I be concerned about all five escalation techniques?"
 
-**Short Answer**: Yes, but the registry UAC bypass (Technique C) and scheduled task (Technique D) are most reliable.
-
-**Detailed Explanation**:
+Yes, but the registry UAC bypass (Technique C) and scheduled task (Technique D) are most reliable.
 
 **Most Reliable** (highest success rate across environments):
 1. Registry UAC Bypass (fodhelper): ~95% success rate
@@ -1195,9 +1176,7 @@ Disabling UAC opens more attack surfaces than it closes.
 
 ### Q10: "Is Arsenal-237 exclusively ransomware?"
 
-**Short Answer**: Arsenal-237's current known usage is ransomware deployment, but the toolkit is more flexible.
-
-**Detailed Explanation**:
+Arsenal-237's current known usage is ransomware deployment, but the toolkit is more flexible.
 
 The Arsenal-237 toolkit consists of modular components:
 - **lpe.exe**: Privilege escalation (Stage 2)

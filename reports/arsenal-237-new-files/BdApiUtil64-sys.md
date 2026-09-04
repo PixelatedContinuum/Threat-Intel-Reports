@@ -28,7 +28,6 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
 
-
 ---
 
 ## BLUF (Bottom Line Up Front)
@@ -1581,17 +1580,17 @@ operator: it loads on a system that correctly enforces driver signing, and once 
 hands the caller kernel-level access that user-mode security controls cannot arbitrate. The
 vulnerability is in the driver, not in the system that accepted it.
 
-**Hunt these first.** The load event for this driver on a host with no reason to run the
+Hunt first for the load event for this driver on a host with no reason to run the
 antivirus product it belongs to, which is the highest-fidelity signal available and does not
 depend on anything the operator controls. Then the calls it services, catalogued above, which
 show up as kernel-level process termination and protected-data access with no corresponding
 user-mode API activity.
 
-**Where the artifacts sit.** The driver file itself carries the hash in the IOC section, and
+The driver file itself carries the hash in the IOC section, and
 the service or load entry that registered it is the more durable pivot, since the file can be
 deleted after the handle is open.
 
-**Containment categories.** Isolate hosts where the driver loaded. Block the driver by hash
+For containment, isolate hosts where the driver loaded. Block the driver by hash
 through the vulnerable-driver blocklist mechanism the platform already provides, which is the
 category of control this technique is defeated by. Assume every user-mode security control on
 the affected host was subject to interference from the moment the driver loaded, and treat
@@ -1600,9 +1599,7 @@ their telemetry from that point as unreliable rather than as evidence of a clean
 
 ### Q1: "Is BdApiUtil64.sys a legitimate Baidu driver that we should trust?"
 
-**Short Answer**: BdApiUtil64.sys is a legitimate Baidu driver component, but loading it outside of Baidu Antivirus is malicious and indicates compromise.
-
-**Detailed Explanation**:
+BdApiUtil64.sys is a legitimate Baidu driver component, but loading it outside of Baidu Antivirus is malicious and indicates compromise.
 
 Baidu Antivirus uses BdApiUtil64.sys as a kernel utility driver. The file itself is NOT inherently malicious-it's a legitimate component of legitimate security software. However, the context matters:
 
@@ -1630,9 +1627,7 @@ Baidu Antivirus uses BdApiUtil64.sys as a kernel utility driver. The file itself
 
 ### Q2: "Can we just disable the Bprotect service instead of rebuilding the entire system?"
 
-**Short Answer**: No. Disabling the service only removes one persistence mechanism; the driver and attacker credentials remain.
-
-**Detailed Explanation**:
+No. Disabling the service only removes one persistence mechanism; the driver and attacker credentials remain.
 
 Attacking Arsenal-237 establishes multiple redundant persistence mechanisms:
 
@@ -1675,9 +1670,7 @@ Aggressive cleanup -> Cannot guarantee complete removal (callbacks may prevent r
 
 ### Q3: "What should we tell our customers about potential data breach?"
 
-**Short Answer**: Assume data breach occurred; prepare customer notification.
-
-**Detailed Explanation**:
+Assume data breach occurred; prepare customer notification.
 
 BdApiUtil64.sys provides complete file system access via IOCTL 0x80002648. Arsenal-237's attack pattern includes credential harvesting:
 
@@ -1714,9 +1707,7 @@ BdApiUtil64.sys provides complete file system access via IOCTL 0x80002648. Arsen
 
 ### Q4: "How long will system rebuild take?"
 
-**Short Answer**: 2-4 hours for clean installation + EDR deployment; 8-16 hours including data restoration and verification.
-
-**Detailed Explanation**:
+2-4 hours for clean installation + EDR deployment; 8-16 hours including data restoration and verification.
 
 Rebuild Timeline:
 
@@ -1752,9 +1743,7 @@ Rebuild Timeline:
 
 ### Q5: "Can we use antivirus cleaning tools instead of rebuilding?"
 
-**Short Answer**: No. Antivirus tools operate in user-mode and cannot reliably remove kernel-level malware.
-
-**Detailed Explanation**:
+No. Antivirus tools operate in user-mode and cannot reliably remove kernel-level malware.
 
 Antivirus Cleaning Tools Limitations:
 
@@ -1800,9 +1789,7 @@ Kernel Driver: File remains, continues operation
 
 ### Q6: "How do we prevent BYOVD attacks in the future?"
 
-**Short Answer**: Deploy Microsoft Vulnerable Driver Blocklist, implement EDR with driver load monitoring, and maintain inventory of legitimate drivers.
-
-**Detailed Explanation**:
+Deploy Microsoft Vulnerable Driver Blocklist, implement EDR with driver load monitoring, and maintain inventory of legitimate drivers.
 
 **Prevention Strategy 1: Microsoft Vulnerable Driver Blocklist (MVDB)**
 

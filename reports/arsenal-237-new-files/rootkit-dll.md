@@ -1245,16 +1245,16 @@ list that looks ordinary, and a directory that appears empty are all consistent 
 component running successfully. Any assessment built on the affected host's own view of
 itself is unreliable while it is live.
 
-**Hunt these first.** The driver load that precedes it, since the hiding capability depends on
+Hunt first for the driver load that precedes it, since the hiding capability depends on
 the vulnerable signed driver documented above and that load is visible to kernel-level
 telemetry the component cannot suppress. Then security-product termination as an event in its
 own right: agents going silent across a set of hosts is the signal, and it is visible from the
 management console rather than from the endpoints.
 
-**Where the artifacts sit.** Off the host. A mounted image, a memory capture, or network
+The artifacts sit off the host. A mounted image, a memory capture, or network
 telemetry collected upstream all see what the live system hides.
 
-**Containment categories.** Isolate at the network rather than on the host, because host-based
+For containment, isolate at the network rather than on the host, because host-based
 controls are what this component defeats. Treat rebuild as the default rather than cleanup:
 verifying removal requires the same tooling the component blinds, so a clean result from that
 tooling proves nothing. Preserve a disk image before rebuilding if the incident needs to be

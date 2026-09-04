@@ -30,7 +30,6 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
 
-
 ---
 
 ## BLUF (Bottom Line Up Front)
@@ -920,15 +919,15 @@ to protect a per-file ChaCha20 key, so a file is recoverable only with the opera
 RSA key. There is no implementation weakness here to exploit, and the multi-threaded design
 means the window between first encryption and full coverage of reachable storage is short.
 
-**Hunt these first.** The encryption behaviour rather than the binary: bulk file writes at
+What to hunt is the encryption behaviour rather than the binary: bulk file writes at
 high entropy from a single process, the extension change applied across directories, and the
 parallel worker pattern described in the technical sections above. The file hashes in the IOC
 section are worth deploying but are the weakest anchor, since the toolkit rebuilds.
 
-**Where the artifacts sit.** Encrypted files carry the marker documented above, which is what
+Encrypted files carry the marker documented above, which is what
 confirms this family rather than another; the key material itself does not remain on the host.
 
-**Containment categories.** Isolate on first sign of bulk encryption rather than after
+For containment, isolate on the first sign of bulk encryption rather than after
 confirmation, because the difference is measured in minutes. Preserve encrypted samples and
 any ransom artifact before rebuilding, since they establish which variant ran. Treat backups
 as the only recovery path and verify they were not reachable from the affected host, because
@@ -1022,7 +1021,7 @@ This is **NOT BlackCat**, but is **INSPIRED BY BlackCat**:
 
 ### Q1: "Is this actually dangerous? It's just a test build."
 
-**Short answer:** Yes, extremely dangerous. Test builds often become production variants.
+Yes, extremely dangerous. Test builds often become production variants.
 
 **Detailed explanation:**
 
@@ -1044,7 +1043,7 @@ The "test" indicators are the development artifacts (verbose logging, debug stri
 
 ### Q2: "Without the private RSA key, is data really unrecoverable?"
 
-**Short answer:** Yes, absolutely unrecoverable without the private key.
+Yes, absolutely unrecoverable without the private key.
 
 **Detailed explanation:**
 
@@ -1074,7 +1073,7 @@ RSA-OAEP encryption is mathematically sound:
 
 ### Q3: "Could network filtering stop this ransomware?"
 
-**Short answer:** No, this specific sample cannot be stopped via network filtering.
+No, this specific sample cannot be stopped via network filtering.
 
 **Detailed explanation:**
 
@@ -1102,7 +1101,7 @@ This ransomware operates **offline**:
 
 ### Q4: "Can we just restore files from backup?"
 
-**Short answer:** Only if backup is isolated and encrypted files are deleted.
+Only if backup is isolated and encrypted files are deleted.
 
 **Detailed explanation:**
 
@@ -1147,7 +1146,7 @@ ELSE:
 
 ### Q5: "How fast can this malware encrypt a typical organization?"
 
-**Short answer:** Enterprise-wide encryption for typical mid-size organization could take a few hours depending on the amount of machines and volume of data on each. In my testing, it look around 10 to 20 minutes to encrypt my relatively low data volume sandbox machine.
+Enterprise-wide encryption for typical mid-size organization could take a few hours depending on the amount of machines and volume of data on each. In my testing, it look around 10 to 20 minutes to encrypt my relatively low data volume sandbox machine.
 
 **Why speed matters:**
 
@@ -1164,7 +1163,7 @@ ELSE:
 
 ### Q6: "Is this part of a broader Arsenal-237 campaign?"
 
-**Short answer:** UNKNOWN. No active campaign observed with this specific sample.
+UNKNOWN. No active campaign observed with this specific sample.
 
 **Detailed explanation:**
 

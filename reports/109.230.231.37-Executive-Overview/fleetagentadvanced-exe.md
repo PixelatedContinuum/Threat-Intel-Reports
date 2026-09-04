@@ -26,7 +26,6 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository
 
-
 ---
 
 # BLUF (Bottom Line Up Front)
@@ -1069,7 +1068,7 @@ EventID=8
 
 **Q: How do I know if my systems are infected with FleetAgentAdvanced.exe?**
 
-**A:** Hunt for these high-confidence indicators:
+Hunt for these high-confidence indicators:
 
 ```powershell
 # 1. Check for dropped payload
@@ -1094,7 +1093,7 @@ If **ANY** of these checks return results, the system is infected.
 
 **Q: Why didn't the malware make any network connections during analysis?**
 
-**A:** The complete network silence indicates **environment-aware or time-delayed activation**. Professional malware commonly uses one or more of these anti-sandbox techniques:
+The complete network silence indicates **environment-aware or time-delayed activation**. Professional malware commonly uses one or more of these anti-sandbox techniques:
 
 1. **Time Delay** - Sleep for 30+ minutes, 24 hours, or until specific date/time before activating C2
 2. **Environment Validation** - Check for domain membership, specific software, user activity patterns before activation
@@ -1105,7 +1104,7 @@ This dormancy means **network-based detection will miss this threat**. Rely on p
 
 **Q: How do I completely remove this malware?**
 
-**A:** You MUST remove ALL FOUR persistence mechanisms simultaneously. Two approaches:
+You MUST remove ALL FOUR persistence mechanisms simultaneously. Two approaches:
 
 **Option A - System Rebuild (RECOMMENDED):**
 - Wipe and reinstall OS from known-good media
@@ -1126,7 +1125,7 @@ This dormancy means **network-based detection will miss this threat**. Rely on p
 
 **Q: Should I rebuild or clean infected systems?**
 
-**A:** **REBUILD is strongly recommended** for the following reasons:
+**REBUILD is strongly recommended** for the following reasons:
 
 | Factor | Rebuild | Manual Cleanup |
 |--------|---------|----------------|
@@ -1145,7 +1144,7 @@ Rebuild is recommended unless:
 
 **Q: What is the business impact of this malware?**
 
-**A:** FleetAgentAdvanced.exe creates significant business risk. Sizing it is an
+FleetAgentAdvanced.exe creates significant business risk. Sizing it is an
 organization's own exercise, and it turns on how many hosts carry the four persistence
 mechanisms and what the dropped payload reaches once it activates:
 
@@ -1157,7 +1156,7 @@ mechanisms and what the dropped payload reaches once it activates:
 
 **Q: How long can this malware remain undetected?**
 
-**A:** Based on dormancy behavior and persistence sophistication: **Weeks to months** without proactive threat hunting.
+Based on dormancy behavior and persistence sophistication: **Weeks to months** without proactive threat hunting.
 
 **Detection Timeline Without Active Hunting:**
 - **Week 1-2**: Persistence established, no network activity, no alerts
@@ -1173,7 +1172,7 @@ mechanisms and what the dropped payload reaches once it activates:
 
 **Q: Should we pay for external incident response help?**
 
-**A:** Consider external IR if:
+Consider external IR if:
 - **Scope is large**: >50 infected systems suggests widespread compromise requiring specialized expertise
 - **Skills gap**: In-house team lacks .NET malware analysis, memory forensics, or advanced threat hunting experience
 - **Legal/Compliance concerns**: Data breach likely, requiring forensic-grade evidence collection
@@ -1187,7 +1186,7 @@ mechanisms and what the dropped payload reaches once it activates:
 
 **Q: What security investments would have prevented this?**
 
-**A:** Defense-in-depth approach prevents this malware:
+Defense-in-depth approach prevents this malware:
 
 **Primary Prevention:**
 1. **Email Security Gateway** - Blocks phishing attachments (likely infection vector)
@@ -1203,7 +1202,6 @@ mechanisms and what the dropped payload reaches once it activates:
 1. **Threat Hunting Program** - Proactive scanning for persistence indicators
 2. **Incident Response Playbooks** - Pre-defined procedures for multi-persistence malware
 3. **Forensic Capabilities** - Memory analysis, timeline reconstruction
-
 
 ---
 

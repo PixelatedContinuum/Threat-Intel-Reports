@@ -26,7 +26,6 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
 
-
 ---
 
 ## BLUF (Bottom Line Up Front)
@@ -171,7 +170,6 @@ If enc_c2.exe executes on your systems:
 Calculated as weighted average: Data Loss (20%) + Key Compromise (20%) + Operational Disruption (20%) + Detection Difficulty (15%) + Persistence (15%) + Lateral Movement (10%) = 8.8/10
 
 ---
-
 
 ## Quick Reference
 
@@ -957,16 +955,16 @@ the key locally, it sends it out over Tor, which means recovery depends entirely
 operator and no offline decryption is possible. It also means the outbound connection is a
 detection opportunity that exists before the files are gone.
 
-**Hunt these first.** Tor client behaviour from a host that has no reason to run it, arriving
+Hunt first for Tor client behaviour from a host that has no reason to run it, arriving
 shortly before or during bulk file writes. Then the encryption behaviour itself: high-entropy
 writes across directories from one process, and the anti-debugging checks documented above,
 which fire whether or not anyone is watching.
 
-**Where the artifacts sit.** Encrypted files carry the family marker documented above. The
+Encrypted files carry the family marker documented above. The
 key exists on the host only briefly, and the report's own analysis of that window is the
 honest limit of what a memory capture could recover.
 
-**Containment categories.** Isolate on the first sign of either the Tor connection or bulk
+For containment, isolate on the first sign of either the Tor connection or bulk
 encryption. Block Tor egress at the perimeter as a category rather than by address, since the
 entry-node set rotates. Preserve encrypted samples and any ransom artifact before rebuilding.
 Treat backups as the recovery path and confirm they were unreachable from the affected host.
@@ -1253,9 +1251,8 @@ All findings in this report include evidence-based confidence ratings. Here's wh
 
 **Q1: "Can we decrypt files without paying the attacker?"**
 
-**Short Answer:** Extremely unlikely; recovery requires offline backups or C2 beacon interception during live infection.
+Extremely unlikely; recovery requires offline backups or C2 beacon interception during live infection.
 
-**Detailed Explanation:**
 ChaCha20 encryption with a 256-bit key is cryptographically secure. Brute force requires 2^256 possible keys - computationally infeasible (estimated 10^57 years with current technology). Cryptanalysis has no known attacks better than exhaustive search. The only viable non-payment recovery paths are:
 
 1. **C2 Interception:** If encryption key captured from JSON beacon during C2 communication, independent decryption is possible
@@ -1268,9 +1265,8 @@ ChaCha20 encryption with a 256-bit key is cryptographically secure. Brute force 
 
 **Q2: "What does TEST_BUILD_001 mean?"**
 
-**Short Answer:** Indicates this is a beta/test variant; production versions may be more sophisticated.
+Indicates this is a beta/test variant; production versions may be more sophisticated.
 
-**Detailed Explanation:**
 The builder ID "TEST_BUILD_001" appears hardcoded in the binary as the default value. This suggests:
 - Development/testing phase rather than production deployment
 - Potential for debugging features, predictable key generation, or incomplete evasion
@@ -1282,9 +1278,8 @@ The builder ID "TEST_BUILD_001" appears hardcoded in the binary as the default v
 
 **Q3: "Can we just pay the ransom and recover the files?"**
 
-**Short Answer:** Possible but not guaranteed; involves significant risk and financial commitment.
+Possible but not guaranteed; involves significant risk and financial commitment.
 
-**Detailed Explanation:**
 Ransomware-as-a-service (RaaS) operators have financial incentive to honor payment agreements (reputation/repeat business), but guarantees are non-existent:
 - Decryption tools may not work (buggy implementation, corrupted key delivery)
 - Attacker may demand additional payment after initial ransom
@@ -1298,9 +1293,8 @@ Ransomware-as-a-service (RaaS) operators have financial incentive to honor payme
 
 **Q4: "Why would attackers exclude .exe files?"**
 
-**Short Answer:** Preserves system functionality; ensures victim can negotiate payment and access decryption tools.
+Preserves system functionality; ensures victim can negotiate payment and access decryption tools.
 
-**Detailed Explanation:**
 If all executable files encrypted, victim system becomes completely unusable:
 - Operating system would not boot
 - User could not run any applications
@@ -1316,9 +1310,8 @@ By excluding .exe files, attackers maintain victim system functionality while re
 
 **Q5: "Why use Tor for C2 instead of direct IP address?"**
 
-**Short Answer:** Anonymity and infrastructure resilience; enables long-term operations despite law enforcement.
+Anonymity and infrastructure resilience; enables long-term operations despite law enforcement.
 
-**Detailed Explanation:**
 Tor hidden services provide multiple advantages for attacker infrastructure:
 - **Anonymity:** Server IP address is hidden; attacker location unidentifiable
 - **Resilience:** Distributed Tor network means no single server to shut down
@@ -1331,9 +1324,8 @@ The tradeoff: .onion domains require Tor connectivity, which is detectable at ne
 
 **Q6: "Is this a state-sponsored attack?"**
 
-**Short Answer:** Unknown; no direct evidence points to nation-state actors.
+Unknown; no direct evidence points to nation-state actors.
 
-**Detailed Explanation:**
 Sophistication indicators (Rust language, ChaCha20 crypto, Tor C2) could indicate either:
 - **Professional Criminal Group:** Well-resourced cybercriminal organization (likely)
 - **State Sponsor:** Nation-state actor conducting financial motivation operations (less likely for pure ransomware)

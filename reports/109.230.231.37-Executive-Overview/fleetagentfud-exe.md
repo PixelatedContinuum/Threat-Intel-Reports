@@ -24,7 +24,6 @@ hide: true
 
 **Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository
 
-
 ---
 
 # BLUF (Bottom Line Up Front)
@@ -1050,7 +1049,7 @@ powershell.exe -ExecutionPolicy Bypass -File script.ps1
 
 **Q: How do I detect FleetAgentFUD.exe on my network?**
 
-**A:** Multi-layered detection required due to FUD evasion:
+Multi-layered detection required due to FUD evasion:
 
 **File Hash Detection:**
 ```powershell
@@ -1079,7 +1078,7 @@ foreach ($path in $searchPaths) {
 
 **Q: FleetAgentFUD.exe vs FleetAgentAdvanced.exe - What's the difference?**
 
-**A:** Distinctly different malware from same distribution infrastructure:
+Distinctly different malware from same distribution infrastructure:
 
 | Characteristic | FleetAgentAdvanced.exe | FleetAgentFUD.exe |
 |----------------|------------------------|-------------------|
@@ -1093,7 +1092,7 @@ foreach ($path in $searchPaths) {
 
 **Q: What happens if I just kill the FleetAgentFUD.exe process?**
 
-**A:** Process termination may be sufficient (unlike FleetAgentAdvanced.exe):
+Process termination may be sufficient (unlike FleetAgentAdvanced.exe):
 
 **GOOD NEWS:**
 - No observed persistence mechanisms (registry, scheduled tasks, startup folder)
@@ -1120,7 +1119,7 @@ foreach ($path in $searchPaths) {
 
 **Q: What is the business impact of FleetAgentFUD.exe infection?**
 
-**A:** **HIGH IMPACT**, because it combines complete remote access with credential theft.
+**HIGH IMPACT**, because it combines complete remote access with credential theft.
 Scoping and cost are an organization's own to work out; what the evidence sets is the
 shape of the exposure:
 
@@ -1133,7 +1132,7 @@ shape of the exposure:
 
 **Q: Should we rebuild systems or just remove the malware?**
 
-**A:** **REBUILD RECOMMENDED** for confirmed infections:
+**REBUILD RECOMMENDED** for confirmed infections:
 
 | Factor | Rebuild | Cleanup |
 |--------|---------|---------|
@@ -1158,7 +1157,7 @@ shape of the exposure:
 
 **Q: How long can this malware remain undetected?**
 
-**A:** Variable dwell time - 1 hour to several weeks:
+Variable dwell time - 1 hour to several weeks:
 
 **Best Case (Modern Security Controls):**
 ```

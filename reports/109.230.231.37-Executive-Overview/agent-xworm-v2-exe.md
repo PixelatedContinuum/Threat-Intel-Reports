@@ -558,14 +558,14 @@ code was present in memory during analysis. That is a finding about this build's
 the observed conditions, not a claim that the sample is inert, and the capability sections
 above describe what it carries regardless of whether it ran.
 
-**Hunt these first.** The static file anchors in the IOC section, since a build that did not
+Hunt the static file anchors in the IOC section first, since a build that did not
 reach its command channel leaves little behavioural trace to hunt. Then the persistence
 locations documented above, which are written independently of whether the channel succeeds.
 
-**Where the artifacts sit.** On disk, at the paths documented above, and in the persistence
+The artifacts sit on disk, at the paths documented above, and in the persistence
 mechanism rather than in network telemetry.
 
-**Containment categories.** Isolate hosts where the sample is found, and treat the absence of
+For containment, isolate hosts where the sample is found, and treat the absence of
 network activity as unconfirmed rather than as evidence the sample failed, since a command
 channel that was unreachable at one moment may not be at another. Remove the persistence entry
 along with the file, and hunt for the other components of the toolkit, which this sample is
