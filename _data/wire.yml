@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-04T18:02:02Z
+generated_at: 2026-09-04T20:01:32Z
 window_days: 30
 counts:
-  total: 542
-  research: 197
-  news: 345
+  total: 538
+  research: 195
+  news: 343
 topics:
   - label: "vulnerabilities"
-    count: 72
+    count: 71
     color: 1
   - label: "cybercrime"
     count: 57
@@ -37,14 +37,14 @@ topics:
   - label: "supply chain attack"
     count: 15
     color: 9
-  - label: "clickfix"
-    count: 14
-    color: 10
   - label: "microsoft"
     count: 14
-    color: 11
+    color: 10
   - label: "ransomware"
     count: 14
+    color: 11
+  - label: "clickfix"
+    count: 13
     color: 12
 label_colors:
   ".net downloader": 4
@@ -74,7 +74,6 @@ label_colors:
   "agentic ai": 9
   "agentic soc": 2
   "ai api": 4
-  "ai fraud": 2
   "ai gateway": 6
   "ai guardrails": 8
   "ai infrastructure": 11
@@ -141,7 +140,6 @@ label_colors:
   "atlassian": 8
   "atomic": 1
   "atomic macos stealer": 10
-  "atomic stealer": 5
   "audio surveillance": 7
   "australia": 10
   "authentication": 6
@@ -173,8 +171,6 @@ label_colors:
   "binary ninja": 5
   "binding.gyp": 1
   "bitcoin": 2
-  "bixby": 2
-  "black hat": 6
   "blackfile": 3
   "blackrock": 2
   "blockchain": 8
@@ -182,7 +178,6 @@ label_colors:
   "blockchain c2": 1
   "blog post": 6
   "bloodalchemy": 3
-  "bot networks": 10
   "botnet": 6
   "botnet takedown": 5
   "brand impersonation": 7
@@ -239,7 +234,7 @@ label_colors:
   "clamav": 8
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 10
+  "clickfix": 12
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -385,7 +380,7 @@ label_colors:
   "malware": 5
   "meta": 5
   "metabase": 6
-  "microsoft": 11
+  "microsoft": 10
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -417,7 +412,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 12
+  "ransomware": 11
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -3674,27 +3669,3 @@ items:
     date: 2026-08-05T20:15:00Z
     kind: news
     labels: ["cybercrime", "people"]
-  - title: "Hackers run khunt post-exploitation toolkit from Oracle database"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-run-khunt-post-exploitation-toolkit-from-oracle-database/"
-    source: "BleepingComputer"
-    date: 2026-08-05T19:55:25Z
-    kind: news
-    labels: []
-  - title: "How a $50,000 Exploit Chain Turned Bixby Against Samsung Phones"
-    url: "https://www.securityweek.com/how-a-50000-exploit-chain-turned-bixby-against-samsung-phones/"
-    source: "SecurityWeek"
-    date: 2026-08-05T19:40:00Z
-    kind: news
-    labels: ["bixby", "black hat", "mobile & wireless", "mobile security", "samsung", "vulnerabilities"]
-  - title: "How fake signups drive AI fraud"
-    url: "https://otx.alienvault.com/pulse/6a7386e5ce9f6bd78c7da52b"
-    source: "AlienVault"
-    date: 2026-08-05T18:54:29Z
-    kind: research
-    labels: ["ai fraud", "bot networks", "fake signups", "fraudulent registration", "gray market", "platform abuse", "startup credits", "token reselling"]
-  - title: "From open lures to cloaked gates: How a macOS ClickFix campaign learned to hide"
-    url: "https://www.microsoft.com/en-us/security/blog/2026/08/05/macos-clickfix-campaign-learned-hide"
-    source: "AlienVault"
-    date: 2026-08-05T18:53:15Z
-    kind: research
-    labels: ["amos", "atomic stealer", "clickfix", "fingerprinting", "infostealer", "macos", "macsync", "social engineering", "traffic distribution system"]
