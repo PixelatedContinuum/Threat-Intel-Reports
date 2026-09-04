@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-04T20:01:32Z
+generated_at: 2026-09-04T22:02:06Z
 window_days: 30
 counts:
-  total: 538
+  total: 536
   research: 195
-  news: 343
+  news: 341
 topics:
   - label: "vulnerabilities"
     count: 71
     color: 1
   - label: "cybercrime"
-    count: 57
+    count: 56
     color: 2
   - label: "exploited"
     count: 27
@@ -402,7 +402,6 @@ label_colors:
   "patched": 1
   "patches": 2
   "pdf attachment": 7
-  "people": 7
   "phishing": 10
   "phishing kit": 6
   "plugin": 7
@@ -3657,15 +3656,3 @@ items:
     date: 2026-08-05T23:00:50Z
     kind: news
     labels: []
-  - title: "Canadian pleads guilty to Snowflake cloud data-theft attacks"
-    url: "https://www.bleepingcomputer.com/news/security/canadian-pleads-guilty-to-snowflake-cloud-data-theft-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-05T21:53:26Z
-    kind: news
-    labels: []
-  - title: "Canadian man pleads guilty to Snowflake hacks that led to 165 breaches"
-    url: "https://therecord.media/guilty-plea-snowflake-hack-connor-riley-moucka"
-    source: "Recorded Future"
-    date: 2026-08-05T20:15:00Z
-    kind: news
-    labels: ["cybercrime", "people"]
