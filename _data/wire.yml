@@ -3,24 +3,24 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-04T08:02:12Z
+generated_at: 2026-09-04T10:02:53Z
 window_days: 30
 counts:
-  total: 540
-  research: 199
-  news: 341
+  total: 535
+  research: 196
+  news: 339
 topics:
   - label: "vulnerabilities"
-    count: 70
+    count: 69
     color: 1
   - label: "cybercrime"
     count: 55
     color: 2
   - label: "exploited"
-    count: 28
+    count: 27
     color: 3
   - label: "malware"
-    count: 28
+    count: 27
     color: 4
   - label: "government"
     count: 26
@@ -32,10 +32,10 @@ topics:
     count: 22
     color: 7
   - label: "credential theft"
-    count: 18
+    count: 17
     color: 8
   - label: "supply chain attack"
-    count: 16
+    count: 15
     color: 9
   - label: "clickfix"
     count: 14
@@ -118,7 +118,6 @@ label_colors:
   "antivirus removal": 7
   "anydesk": 9
   "apac attacks": 2
-  "apache tomcat": 6
   "apollo": 11
   "app password phishing": 8
   "apple": 12
@@ -227,7 +226,6 @@ label_colors:
   "chinese threat cluster": 7
   "chinese-speaking operator": 4
   "chipmaker patch tuesday": 5
-  "chisel": 4
   "chrome": 12
   "chrome extension": 7
   "ci compromise": 2
@@ -248,7 +246,7 @@ label_colors:
   "cloaked ursa": 2
   "cloud": 7
   "cloud & application security": 1
-  "cloud credentials": 9
+  "cloud credential theft": 3
   "cloud security": 9
   "cloudflare": 11
   "cloudflare captcha": 5
@@ -319,7 +317,6 @@ label_colors:
   "dprk-linked": 1
   "dropcatch": 4
   "edge device exploitation": 7
-  "electron application": 2
   "electron framework": 12
   "encrypted payload": 10
   "endlessdoors": 1
@@ -3523,6 +3520,12 @@ items:
     date: 2026-08-06T09:39:27Z
     kind: research
     labels: ["authentication bypass", "cloudflared", "cve-2026-18556", "cve-2026-18577", "msp compromise", "n-central", "remote access", "rmm", "take control"]
+  - title: "Supply Chain Compromise Affecting keyv and cacheable npm Packages"
+    url: "https://socket.dev/blog/popular-npm-packages-in-the-keyv-and-cacheable-namespaces-compromised-in-active-supply-chain"
+    source: "AlienVault"
+    date: 2026-08-06T09:04:56Z
+    kind: research
+    labels: ["cacheable", "cloud credential theft", "credential harvesting", "jaredwray account compromise", "keyv", "npm compromise", "self-propagating", "supply chain attack"]
   - title: "Cisco Patches Critical SD-WAN, IOS XE, FMC Vulnerabilities"
     url: "https://www.securityweek.com/cisco-patches-critical-sd-wan-ios-xe-fmc-vulnerabilities/"
     source: "SecurityWeek"
@@ -3649,39 +3652,3 @@ items:
     date: 2026-08-05T11:35:23Z
     kind: news
     labels: ["brown health", "data breaches", "healthcare"]
-  - title: "CISA Warns of Exploited Langflow, N-central, and Tomcat Vulnerabilities"
-    url: "https://www.securityweek.com/cisa-warns-of-exploited-langflow-n-central-and-tomcat-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-05T09:44:50Z
-    kind: news
-    labels: ["apache tomcat", "cisa kev", "exploited", "langflow", "n-central", "vulnerabilities"]
-  - title: "Over 400 NPM Packages Infected in ChainDrop Supply Chain Attack"
-    url: "https://www.securityweek.com/over-400-npm-packages-infected-in-chaindrop-supply-chain-attack/"
-    source: "SecurityWeek"
-    date: 2026-08-05T08:56:58Z
-    kind: news
-    labels: ["chaindrop", "malware", "mini shai-hulud", "npm", "shai-hulud", "supply chain attack", "supply chain security"]
-  - title: "QuickFox Supply Chain Attack Used to Deploy FDMTP Implant"
-    url: "https://otx.alienvault.com/pulse/6a72f492ee9dc3fc24d86c17"
-    source: "AlienVault"
-    date: 2026-08-05T08:30:10Z
-    kind: research
-    labels: ["dll sideloading", "electron application", "fdmtp", "fdmtp implant", "javascript loader", "process guardrails", "quickfox", "supply chain", "twill typhoon"]
-  - title: "ChainDrop: The Mini Shai Hulud npm worm's latest wave hits keyv and cacheable"
-    url: "https://expel.com/blog/chaindrop-the-mini-shai-hulud-npm-worms-latest-wave-hits-keyv-and-cacheable/"
-    source: "AlienVault"
-    date: 2026-08-05T08:28:38Z
-    kind: research
-    labels: ["chaindrop", "credential harvesting", "github compromise", "mini shai hulud", "node.js", "npm worm", "self-propagating", "shai hulud", "supply chain"]
-  - title: "The Gentlemen Affiliate Deploys EtherRAT Across Windows Networks Using Ethereum Smart Contract C2"
-    url: "https://hunt.io/blog/the-gentlemen-etherrat-ethereum-smart-contract-c2"
-    source: "AlienVault"
-    date: 2026-08-05T08:26:37Z
-    kind: research
-    labels: ["blockchain c2", "chisel", "credential dumping", "domain persistence", "etherrat", "lateral movement", "ligolo-ng", "mimikatz", "reverse tunnels", "scheduled tasks", "sliver"]
-  - title: "Supply Chain Compromise Affecting keyv and cacheable npm Packages"
-    url: "https://otx.alienvault.com/pulse/6a72f10a39d4c128ee7e2fa8"
-    source: "AlienVault"
-    date: 2026-08-05T08:15:06Z
-    kind: research
-    labels: ["ci/cd compromise", "cloud credentials", "credential theft", "developer targeting", "npm compromise", "package repository", "self-propagating worm", "supply chain attack"]
