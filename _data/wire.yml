@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-04T10:02:53Z
+generated_at: 2026-09-04T12:00:51Z
 window_days: 30
 counts:
-  total: 535
-  research: 196
+  total: 536
+  research: 197
   news: 339
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 70
     color: 1
   - label: "cybercrime"
     count: 55
@@ -25,10 +25,10 @@ topics:
   - label: "government"
     count: 26
     color: 5
-  - label: "data breaches"
-    count: 23
-    color: 6
   - label: "artificial intelligence"
+    count: 22
+    color: 6
+  - label: "data breaches"
     count: 22
     color: 7
   - label: "credential theft"
@@ -40,10 +40,10 @@ topics:
   - label: "clickfix"
     count: 14
     color: 10
-  - label: "healthcare"
+  - label: "microsoft"
     count: 14
     color: 11
-  - label: "microsoft"
+  - label: "ransomware"
     count: 14
     color: 12
 label_colors:
@@ -131,7 +131,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 7
+  "artificial intelligence": 6
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -188,7 +188,6 @@ label_colors:
   "botnet takedown": 5
   "brand impersonation": 7
   "breadcrumbs": 10
-  "brown health": 12
   "browser data theft": 1
   "browser extension campaign": 9
   "browser extensions": 4
@@ -297,7 +296,7 @@ label_colors:
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
-  "data breaches": 6
+  "data breaches": 7
   "data leak": 9
   "data-exfiltration": 12
   "dcrat": 12
@@ -388,7 +387,7 @@ label_colors:
   "malware": 4
   "meta": 5
   "metabase": 6
-  "microsoft": 12
+  "microsoft": 11
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -416,6 +415,7 @@ label_colors:
   "poc exploit": 3
   "privacy": 12
   "qilin": 11
+  "ransomware": 12
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -423,9 +423,11 @@ label_colors:
   "sap": 8
   "scam": 10
   "securing ai": 4
+  "security operations": 4
   "security-labs": 3
   "servicenow": 1
   "sma1000": 2
+  "soc": 9
   "social engineering": 10
   "software": 5
   "sonicwall": 8
@@ -442,6 +444,18 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Google Patches 6th Chrome Zero-Day of 2026"
+    url: "https://www.securityweek.com/google-patches-6th-chrome-zero-day-of-2026/"
+    source: "SecurityWeek"
+    date: 2026-09-04T11:31:52Z
+    kind: news
+    labels: ["chrome", "vulnerabilities", "zero-day"]
+  - title: "Data access: the hidden cost of security vendor lock-in"
+    url: "https://www.elastic.co/security-labs/blog/siem-data-export-comparison"
+    source: "Elastic"
+    date: 2026-09-04T00:00:00Z
+    kind: research
+    labels: ["security operations", "soc"]
   - title: "French hospital fined €500,000 after breach exposes data of 727,000"
     url: "https://www.bleepingcomputer.com/news/security/french-hospital-fined-500-000-after-breach-exposes-data-of-727-000/"
     source: "BleepingComputer"
@@ -3646,9 +3660,3 @@ items:
     date: 2026-08-05T12:48:49Z
     kind: news
     labels: ["google", "identity & access", "pass-ta-key", "passkey", "passwordless", "vulnerabilities"]
-  - title: "311,000 Impacted by Brown Health Medical Group-MA Data Breach"
-    url: "https://www.securityweek.com/311000-impacted-by-brown-health-medical-group-ma-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-05T11:35:23Z
-    kind: news
-    labels: ["brown health", "data breaches", "healthcare"]
