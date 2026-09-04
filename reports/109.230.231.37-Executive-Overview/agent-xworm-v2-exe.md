@@ -129,7 +129,7 @@ The threat landscape for XWorm has evolved significantly, with **XWorm v6.0** (r
 - **Version**: 2.4.0 (CONFIRMED - hardcoded version string)
 - **Distribution Source**: IP 109.230.231.37 (CONFIRMED - Open Directory)
 
-**Discovery Context**: Discovered on an open directory at 109.230.231.37, the same active malware distribution point serving agent.exe (PoetRAT) and agent_xworm.exe. The presence of multiple RAT variants with sequential naming ("agent", "agent_xworm", "agent_xworm_v2") suggests infrastructure reuse by organized threat actors operating a multi-malware distribution campaign.
+This sample was found on an open directory at 109.230.231.37, the same active distribution point serving agent.exe (PoetRAT) and agent_xworm.exe. Several RAT variants sitting there under sequential names ("agent", "agent_xworm", "agent_xworm_v2") point to infrastructure reuse by an organized actor running a multi-malware distribution campaign.
 
 ---
 
@@ -210,13 +210,13 @@ PROTOCOL: WebSocket (ws://)
 7. Execute via PowerShell → transmit results
 8. Auto-reconnect on failure
 
-**Business Impact**: Hardcoded IP (109.230.231.37) provides critical blocking opportunity. Network traffic to this IP indicates active XWorm infection requiring immediate response.
+The hardcoded IP 109.230.231.37 is the blocking opportunity here. Traffic to it means an active XWorm infection and calls for immediate response.
 
 ### Capabilities Analysis
 
 #### PowerShell Execution
 
-**Confirmed**: CAPA analysis + embedded command templates
+Capability analysis and the embedded command templates confirm this.
 
 **Implementation**:
 ```csharp
@@ -241,7 +241,7 @@ ProcessStartInfo {
 
 #### System Reconnaissance
 
-**Confirmed**: CAPA T1082, T1033, T1087, T1057, T1007
+Confirmed, mapping to T1082, T1033, T1087, T1057 and T1007.
 
 **Information Collected**:
 - OS version, architecture, .NET runtime (T1082)
@@ -252,11 +252,11 @@ ProcessStartInfo {
 - Running processes via Get-Process (T1057)
 - Running services via Get-Service (T1007)
 
-**Business Impact**: Enables targeted post-exploitation based on victim value assessment (domain membership + admin privileges = high priority target for further exploitation).
+That lets the operator pick post-exploitation targets by value, where domain membership plus administrator privileges marks a host out for further exploitation.
 
 #### File Download & Payload Delivery
 
-**Confirmed**: CAPA - `WebClient.DownloadFile`
+Confirmed through the `WebClient.DownloadFile` call.
 
 **Multi-Stage Attack Chain**:
 ```
@@ -282,7 +282,7 @@ LockBit Black ransomware (encryption + exfiltration)
 - ETW tampering (prevents Script Block Logging)
 - Process injection, DLL side-loading
 
-**Reality Check**: This v2.4.0 sample uses **basic stealth** suitable for mass distribution. Detectable by:
+This v2.4.0 sample carries **basic stealth**, which suits mass distribution. It is detectable by:
 - Modern EDR with .NET process monitoring
 - PowerShell Script Block Logging (if enabled)
 - Network analysis for WebSocket C2 to non-whitelisted destinations
@@ -301,7 +301,7 @@ LockBit Black ransomware (encryption + exfiltration)
 - **June 4, 2025**: XWorm v6.0 released - "fully re-coded, RCE-Fixed, AMSI bypass, ETW tampering"
 - **January 2026**: v2.4.0 sample discovered (this analysis) - mid-generation variant still actively deployed
 
-**Scale**: 18,459 devices compromised in single builder campaign (global threat)
+A single builder campaign compromised 18,459 devices worldwide.
 
 ### Delivery Mechanisms
 

@@ -37,7 +37,7 @@ hide: true
 
 **dec_fixed.exe** is a Rust-based ransomware decryptor tool from the Arsenal-237 campaign that provides **positive recovery capability for a specific ransomware victim**. This is NOT a malicious encryption tool-it's a recovery tool containing a hardcoded victim-specific decryption key. This decryptor represents **threat intelligence confirmation** of professional ransomware-as-a-service (RaaS) operational model, demonstrating per-victim key architecture and post-payment support mechanisms.
 
-**Critical Finding:** The hardcoded decryption key (`1e0d8597856270d1926cfcf252af1b14a776c20b3b50168df9311314202e73ba`) is victim-specific, NOT a universal master key. Analysis of related samples confirms per-victim key architecture-different keys found in encryptor samples (`67e6096a...`) and this decryptor (`1e0d8597...`) prove each victim receives a unique decryptor after ransom payment.
+The hardcoded decryption key (`1e0d8597856270d1926cfcf252af1b14a776c20b3b50168df9311314202e73ba`) is victim-specific, not a universal master key. Related samples confirm a per-victim key architecture, because the key carried by the encryptor samples (`67e6096a...`) differs from the one carried by this decryptor (`1e0d8597...`), so each victim receives a unique decryptor after paying.
 
 ---
 
@@ -123,7 +123,7 @@ If your organization encounters this file:
 
 ### Primary Threat Vector
 
-**Campaign Distribution**: Arsenal-237 ransomware campaign targeting businesses through unknown initial compromise vector (likely phishing, supply chain, or exploit). Victims receive this per-victim decryptor tool after ransom negotiation.
+The Arsenal-237 ransomware campaign targets businesses through an initial compromise vector that is not yet known, most likely phishing, supply chain or exploitation. Victims receive this per-victim decryptor after ransom negotiation.
 
 ---
 
@@ -392,21 +392,21 @@ Security Validation:
 ### Security Features - Why This Matters
 
 #### Constant-Time Authentication Verification
-**What It Does:** Compares Poly1305 authentication tag using fixed-time algorithm that takes identical time regardless of where bytes match or mismatch.
+The decryptor compares the Poly1305 authentication tag with a fixed-time algorithm that takes the same time regardless of where bytes match or mismatch.
 
-**Why It Matters:** Prevents timing-side-channel attacks where attackers could guess the key byte-by-byte by measuring response times. This demonstrates security-conscious development by Arsenal-237 developers.
+That prevents timing-side-channel attacks, where an attacker guesses the key byte by byte by measuring response times. It is a mark of security-conscious development by the Arsenal-237 authors.
 
-**Example Attack Prevented:** Attacker cannot exploit response time differences to deduce valid key bytes incrementally.
+An attacker cannot exploit response-time differences to deduce valid key bytes incrementally.
 
 #### Path Traversal Protection
-**What It Does:** Blocks filenames containing directory separators ('/' and '\') and relative path indicators ('.').
+It blocks filenames containing directory separators ('/' and '\') and relative path indicators ('.').
 
-**Why It Matters:** Prevents malicious filenames from escaping the target decryption directory. Example attack prevented: filename `../../../etc/passwd` would be rejected, preventing directory escape.
+That stops a malicious filename escaping the target decryption directory. A filename such as `../../../etc/passwd` is rejected rather than followed back out of it.
 
 #### Memory Zeroing
-**What It Does:** After decryption completion, clear the master key and sensitive temporary values from memory.
+Once decryption finishes, it clears the master key and the sensitive temporary values from memory.
 
-**Why It Matters:** Prevents forensic recovery of the victim key from memory dumps or crash dumps. Shows concern for long-term operational security even after decryption.
+That prevents forensic recovery of the victim key from a memory or crash dump, and shows concern for operational security even after the decryption is over.
 
 ---
 
@@ -463,7 +463,7 @@ root_directory/
      - If valid: Attempt decryption
      - If failed: Log error, continue to next file
 
-**Why A-Z Structure:** The Arsenal-237 encryptor organizes encrypted files alphabetically by first character of original filename, enabling efficient batch organization and decryption.
+The A-Z structure exists because the Arsenal-237 encryptor organizes encrypted files alphabetically by the first character of the original filename, which makes batch organization and decryption efficient.
 
 ### Ransom Note Cleanup
 
@@ -477,7 +477,7 @@ After each successful decryption:
   4. Silent failure if readme.txt missing (expected for partial recovery)
 ```
 
-**Operational Significance:** Cleanup of ransom notes indicates this is intended as a **legitimate recovery tool for paying victims**, not a test tool or development artifact.
+Cleaning up the ransom notes marks this out as a **recovery tool for paying victims** rather than a test tool or a development artifact.
 
 ---
 
@@ -524,11 +524,11 @@ After each successful decryption:
 
 ### Notable Mapping Considerations
 
-**T1622 (Debugger Evasion):** While present in code, this technique is **inherited from encryptor samples** rather than intentionally defensive in the decryptor itself. The decryptor isn't trying to hide-it's reusing shared codebase components.
+T1622 (Debugger Evasion) is present in the code, but it is **inherited from the encryptor samples** rather than deliberately defensive in the decryptor. The decryptor is not trying to hide, it is reusing shared codebase components.
 
-**T1486 (Data Encrypted for Impact) - REVERSAL:** This technique typically maps to malicious encryption. Here it represents the **REVERSAL** of encryption-file decryption for recovery. The classification is inverted: instead of "Impact," this enables **Impact Mitigation**.
+T1486 (Data Encrypted for Impact) normally maps to malicious encryption. Here it is the **reversal** of it, file decryption for recovery, so the classification inverts and what the technique enables is **impact mitigation**.
 
-**T1083 (File and Directory Discovery):** This is a **neutral technique** used to locate encrypted files for recovery, not for reconnaissance or lateral movement.
+T1083 (File and Directory Discovery) is a **neutral technique** here, used to locate encrypted files for recovery rather than for reconnaissance or lateral movement.
 
 ---
 

@@ -647,9 +647,9 @@ Once loaded, BdApiUtil64.sys operates at Ring-0 (kernel privilege level), enabli
 
 rootkit.dll's use of BdApiUtil64.sys is nearly identical to the standalone toolkit component, with one critical difference:
 
-**Standalone Deployment:** BdApiUtil64.sys deployed alone for basic process termination (simple BYOVD exploitation)
+Deployed on its own, BdApiUtil64.sys does basic process termination and nothing more, which is simple BYOVD exploitation.
 
-**rootkit.dll Integration:** BdApiUtil64.sys embedded within comprehensive evasion framework, providing Ring-0 foundation for multiple attack vectors (process termination + file hiding + API hooking + anti-forensics)
+Inside rootkit.dll the same driver is embedded in a comprehensive evasion framework, providing the Ring-0 foundation for several attack vectors at once (process termination, file hiding, API hooking and anti-forensics).
 
 This represents **escalation from standalone driver exploitation to integrated multi-vector attack framework**.
 
@@ -822,13 +822,13 @@ This evolution reflects **threat actor learning and optimization** over time. In
 
 ### Code Architecture Evolution
 
-**killer.dll Architecture:** Simple termination loop
+killer.dll is built as a simple termination loop.
 - Enumerate processes
 - Match against termination list
 - Use IOCTL to terminate
 - Exit
 
-**rootkit.dll Architecture:** Sophisticated multi-function dispatcher
+rootkit.dll is built as a sophisticated multi-function dispatcher.
 - Setup phase (driver deployment)
 - Dispatcher loop executing 6+ defense evasion functions
 - Parameter structures enabling flexible configuration
@@ -991,7 +991,7 @@ rule Arsenal237_rootkit_dll_FileProperties {
 }
 ```
 
-**Detection Strength:** CONFIRMED hash match = certain identification (Detection Confidence: DEFINITE)
+A confirmed hash match identifies the file with certainty, so this rule is DEFINITE.
 
 ### Behavioral Detection
 
@@ -1229,7 +1229,7 @@ rootkit.dll demonstrates **PROFESSIONAL-GRADE MALWARE DEVELOPMENT** indicating:
 | **APT Toolkits** | Lazarus, APT28 | Professional quality, but rootkit.dll commercial ransomware focus |
 | **Crimeware Kits** | Standard RAT + ransomware | rootkit.dll represents significant step above typical crimeware |
 
-**Conclusion:** rootkit.dll sophistication aligns with **TOP-TIER ORGANIZED CYBERCRIME OPERATIONS** with significant development resources and extensive operational experience.
+rootkit.dll's sophistication aligns it with **TOP-TIER ORGANIZED CYBERCRIME OPERATIONS** that have significant development resources and extensive operational experience behind them.
 
 ---
 

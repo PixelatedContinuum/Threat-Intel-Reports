@@ -122,7 +122,7 @@ If enc_c2.exe executes on your systems:
 4. **Within 5-10 minutes:** Ransom note (README.txt) appears in encrypted directories; attacker retains exclusive decryption capability
 5. **Outcome:** Complete data loss without offline backup or C2 interception; recovery requires attacker payment or successful encryption key capture during C2 communication
 
-**Why This Matters:** ChaCha20 is cryptographically secure - brute force or cryptanalysis is infeasible. The attacker's monopoly on the encryption key forces payment negotiation as the primary recovery path.
+ChaCha20 is cryptographically secure, so brute force and cryptanalysis are both infeasible. The attacker's monopoly on the encryption key is what pushes payment negotiation into being the primary recovery path.
 
 ### Infrastructure Analysis & OSINT Findings
 
@@ -354,7 +354,7 @@ Calculated as weighted average: Data Loss (20%) + Key Compromise (20%) + Operati
 
 ### Capability 1: ChaCha20 Stream Cipher File Encryption
 
-**Confidence Level:** CONFIRMED (Code inspection + library artifacts)
+Code inspection and the library artifacts put this at CONFIRMED.
 
 **Technical Details:**
 
@@ -432,7 +432,7 @@ If encryption key is successfully exfiltrated, file recovery is infeasible witho
 
 ### Capability 2: Encryption Key Exfiltration via Tor C2
 
-**Confidence Level:** CONFIRMED (Code inspection + static strings)
+Code inspection and the static strings put this at CONFIRMED.
 
 **Technical Details:**
 
@@ -512,7 +512,7 @@ The C2 communication is the critical interception point:
 
 ### Capability 3: TEB-Based Anti-Debugging Mechanism
 
-**Confidence Level:** CONFIRMED (Function decompilation)
+Decompiling the function puts this at CONFIRMED.
 
 **Technical Details:**
 
@@ -576,7 +576,7 @@ TEB validation is effective against automated dynamic analysis but easily bypass
 
 ### Capability 4: RaaS (Ransomware-as-a-Service) Builder Tracking
 
-**Confidence Level:** CONFIRMED (Static strings + argument parsing)
+The static strings and the argument parsing put this at CONFIRMED.
 
 **Technical Details:**
 
@@ -646,7 +646,7 @@ Builder ID harvesting from multiple samples enables:
 
 ### Capability 5: File System Operations & Selective Encryption
 
-**Confidence Level:** CONFIRMED (Code inspection)
+Code inspection puts this at CONFIRMED.
 
 **Technical Details:**
 
@@ -709,7 +709,7 @@ Content:
   [Contact information for ransom negotiation]
 ```
 
-**Deployment Timing:** README.txt created DURING or AFTER encryption in each affected directory, ensuring visibility to victim across multiple folders.
+README.txt is created during or after encryption in each affected directory, so the note is visible across every folder the victim opens.
 
 **Original File Handling:**
 
@@ -869,7 +869,7 @@ Thread Environment Block (TEB) contains thread metadata including stack pointers
 | **Emulation** (QEMU) | May have different stack initialization | Possible mismatch; depends on emulator accuracy |
 | **Automated Analysis** (Cuckoo, FLARE-VM) | Different stack allocation patterns | Likely triggers anti-debug check |
 
-**Effectiveness Rating:** MEDIUM (7/10)
+I rate the mechanism MEDIUM for effectiveness, 7 out of 10.
 - Delays analysis by requiring binary modification or TEB manipulation
 - Not a complete barrier; easily bypassed with modest reverse engineering effort
 - TEST_BUILD status suggests incomplete evasion suite
@@ -925,7 +925,7 @@ Tor hidden service (.onion domain) provides network-level anonymity for C2 infra
 
 ### Rust Compilation & Binary Obfuscation
 
-**Challenge:** Rust binaries are less familiar to analysts trained on C/C++/C# malware
+Rust binaries are less familiar to analysts trained on C, C++ and C# malware.
 
 **Effect on Detection:**
 
@@ -934,13 +934,13 @@ Tor hidden service (.onion domain) provides network-level anonymity for C2 infra
 - Call conventions and function prologue patterns differ from native C/C++
 - Library artifacts unique to Rust ecosystem (cargo, crates.io)
 
-**Effectiveness Rating:** LOW (4/10)
+I rate that LOW for effectiveness, 4 out of 10.
 - Rust compilation is not obfuscation; it's a language choice
 - Decompilers handle Rust code effectively
 - String analysis still identifies critical constants (ChaCha20, C2 URL, .onion domain)
 - Signature-based detection easily adapted to recognize Rust-compiled ransomware
 
-**Reality Check:** Rust language choice indicates sophistication but provides minimal evasion benefit against modern analysis tools.
+The choice of Rust indicates sophistication, but it buys almost no evasion against modern analysis.
 
 ---
 
@@ -1014,7 +1014,7 @@ Arsenal-237 is a collection of ransomware and post-exploitation tools used by mu
 - Customizable through builder tracking (TEST_BUILD_001)
 - Multi-stage deployment (pre-reconnaissance -> lateral movement -> ransom delivery)
 
-**Assessment:** MODERATE CONFIDENCE (70%) - enc_c2.exe shares architecture/capability patterns with known Arsenal-237 samples, but TEST_BUILD designation and unique C2 infrastructure prevent higher attribution confidence.
+I hold that at MODERATE, around 70 percent. enc_c2.exe shares architecture and capability patterns with known Arsenal-237 samples, but the TEST_BUILD designation and the unique C2 infrastructure stop me going higher.
 
 ### Ransomware Family Similarities
 
@@ -1037,7 +1037,7 @@ Rust adoption in ransomware is recent (2020+). Known families using Rust:
    - Differences: C/C++ compiled, different encryption choices
    - Assessment: enc_c2.exe extends proven RaaS model to Rust ecosystem
 
-**Assessment:** LOW-MODERATE CONFIDENCE (40-60%) for specific family attribution
+For a specific family attribution I sit between LOW and MODERATE, 40 to 60 percent.
 - Language and architecture overlap insufficient for definitive family identification
 - TEST_BUILD_001 unique but could be any actor's development designation
 - Requires: Additional samples, infrastructure correlation, victim telemetry for higher confidence
@@ -1259,7 +1259,7 @@ ChaCha20 encryption with a 256-bit key is cryptographically secure. Brute force 
 2. **Backup Restoration:** Restore from offline, pre-infection backups (removes encrypted files but recovers data from restoration point)
 3. **Nonce Vulnerability:** If malware implementation reused encryption nonces, cryptanalysis might enable decryption (unlikely with aead-0.5.2 library)
 
-**For YOUR organization:** Test offline backup restoration procedures today; this is your actual recovery plan.
+Tested offline backup restoration is the only recovery path that does not run through the attacker.
 
 ---
 
@@ -1272,7 +1272,7 @@ The builder ID "TEST_BUILD_001" appears hardcoded in the binary as the default v
 - Potential for debugging features, predictable key generation, or incomplete evasion
 - Active development - production variants may address current limitations
 
-**Implication:** Continue threat hunting; assume additional variants circulating. Each new sample may have enhanced capabilities (better anti-analysis, faster encryption, lateral movement).
+Further variants should be assumed to be circulating, so hunting for them is worth continuing. Each new sample may carry enhanced capabilities, whether better anti-analysis, faster encryption or lateral movement.
 
 ---
 
@@ -1287,7 +1287,7 @@ Ransomware-as-a-service (RaaS) operators have financial incentive to honor payme
 - Payment may not be tax-deductible (consult legal/accounting counsel)
 - Payment enables future attacker operations (indirect support for criminals)
 
-**Recommendation:** Consult cyber insurance, legal counsel, and law enforcement before ransom negotiation. Many jurisdictions have guidance on ransomware payment legality and risks.
+Ransom negotiation carries legal exposure as well as financial exposure, and many jurisdictions publish guidance on the legality and the risk of paying.
 
 ---
 
@@ -1335,7 +1335,7 @@ Sophistication indicators (Rust language, ChaCha20 crypto, Tor C2) could indicat
 - **Against State Sponsor:** No evidence of data exfiltration beyond encryption key, no strategic/espionage motivation indicators
 - **Neutral Indicators:** Modern development practices (Rust), sophisticated architecture (both criminal and state actors do this)
 
-**Assessment:** LIKELY (70%) this is organized criminal group rather than state sponsor. Arsenal-237 toolkit design (multi-sample, RaaS builder tracking) indicates profit-focused operation.
+I read this as an organized criminal group rather than a state sponsor, at around 70 percent. The Arsenal-237 toolkit design, multi-sample with RaaS builder tracking, points to a profit-focused operation.
 
 ---
 
