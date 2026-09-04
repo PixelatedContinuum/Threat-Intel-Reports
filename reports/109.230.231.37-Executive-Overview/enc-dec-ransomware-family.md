@@ -704,12 +704,11 @@ A: **NOT RECOMMENDED**. Rationale:
 - Without confirmed attribution, payment may create legal exposure if threat actor falls under sanctions regimes
 - Offline backup restoration is the only cryptographically-independent recovery method
 
-**Q: What are the compliance implications of an Arsenal-237 ransomware incident?**
-A: Significant regulatory obligations:
-- **GDPR (EU)**: 72-hour breach notification if customer data encrypted, potential fines up to 4% global annual revenue
-- **HIPAA (Healthcare)**: 60-day notification requirement if PHI encrypted, potential fines up to $1.5M per violation category
-- **PCI DSS (Card Processing)**: 72-hour incident reporting to card brands, mandatory forensic investigation
-- **SOX (Publicly Traded)**: 8-K filing with SEC if material impact, internal controls assessment
+**Q: Does an incident like this carry regulatory consequences?**
+A: Very likely, and which ones depends entirely on the jurisdiction and the data involved.
+That question belongs with counsel rather than with a threat report. What the technical
+evidence establishes, and what such an assessment turns on, is that encryption here is
+preceded by data access, so an incident is not confined to availability.
 - **State Breach Laws**: Multi-state notification requirements, attorney general notification
 
 **Q: How can we detect Arsenal-237 ransomware if it evades automated sandboxes?**

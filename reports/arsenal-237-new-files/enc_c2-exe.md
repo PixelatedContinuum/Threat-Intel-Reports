@@ -938,7 +938,7 @@ Tor hidden service (.onion domain) provides network-level anonymity for C2 infra
 
 **Effectiveness Rating:** LOW (4/10)
 - Rust compilation is not obfuscation; it's a language choice
-- Decompilation tools (IDA, Ghidra) handle Rust code effectively
+- Decompilers handle Rust code effectively
 - String analysis still identifies critical constants (ChaCha20, C2 URL, .onion domain)
 - Signature-based detection easily adapted to recognize Rust-compiled ransomware
 
@@ -946,255 +946,30 @@ Tor hidden service (.onion domain) provides network-level anonymity for C2 infra
 
 ---
 
-## Section 5: Incident Response & Recovery Procedures
+## Section 5: Response Orientation
 
-### Priority 1: Immediate Response (CRITICAL)
+This is not an incident-response playbook. An organization facing this ransomware should run
+its own incident-response process; what follows is a third-party orientation to what the
+command channel changes about the situation.
 
-If enc_c2.exe suspected on your systems, take these actions:
+This variant differs from its siblings in one way that matters operationally. It does not keep
+the key locally, it sends it out over Tor, which means recovery depends entirely on the
+operator and no offline decryption is possible. It also means the outbound connection is a
+detection opportunity that exists before the files are gone.
 
-**Containment Actions:**
+**Hunt these first.** Tor client behaviour from a host that has no reason to run it, arriving
+shortly before or during bulk file writes. Then the encryption behaviour itself: high-entropy
+writes across directories from one process, and the anti-debugging checks documented above,
+which fire whether or not anyone is watching.
 
-- [ ] **Isolate Affected Systems** URGENTLY
-  - Disconnect from network (unplug Ethernet cable or disable Wi-Fi)
-  - Do NOT force shutdown (risks incomplete forensic artifact preservation)
-  - Rationale: Prevents malware from connecting to C2 for potential additional commands or lateral movement
+**Where the artifacts sit.** Encrypted files carry the family marker documented above. The
+key exists on the host only briefly, and the report's own analysis of that window is the
+honest limit of what a memory capture could recover.
 
-- [ ] **Verify Infection Status**
-  - Check for .locked files in Documents, Desktop, Downloads folders
-  - Search for README.txt ransom notes
-  - Query process list for enc_c2.exe process (may have already terminated)
-  - Rationale: Confirms scope and determines if infection still active
-
-- [ ] **Preserve Evidence BEFORE Any Cleanup**
-  - Create forensic image of affected drive (bit-by-bit clone)
-  - Capture memory dump if malware process still running
-  - Document timeline: When did files start appearing with .locked extension?
-  - Rationale: Enables forensic analysis and potential law enforcement involvement
-
-- [ ] **Alert Leadership & Security Team**
-  - Notify CISO/Security Team (not IT helpdesk initially)
-  - Activate incident response procedures
-  - Assess whether breach notification requirements triggered
-  - Rationale: Enables coordinated response and ensures proper escalation
-
-- [ ] **Block C2 Infrastructure at Network Perimeter**
-  - Configure firewall to block outbound connections to rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion
-  - Block all Tor connectivity (port 443 to known Tor entry nodes)
-  - Block common Tor SOCKS proxy ports (9050, 9150) from any process
-  - Rationale: Prevents additional key exfiltration or secondary command delivery
-
-- [ ] **Credential Rotation - CRITICAL**
-  - Reset passwords for all accounts on affected systems (LOCAL and DOMAIN)
-  - Change credentials for administrative accounts, service accounts, shared accounts
-  - Update credentials for systems the compromised user accessed (lateral movement prevention)
-  - Rationale: Compromised systems may have been used to capture keystroke or session data
-
----
-
-### Priority 2: Investigation Phase
-
-**Scope Assessment:**
-
-- [ ] **Identify All Affected Systems**
-  - Search for enc_c2.exe file (SHA256: 613d4d0f...) across network
-  - Query file hash in SIEM/EDR logs (check multiple weeks of history)
-  - Check for .locked files in shared drives, network shares, backup systems
-  - Search dark web / paste sites for references to TEST_BUILD_001 or stolen data
-  - Rationale: Determines breadth of infection and data loss scope
-
-- [ ] **Recover C2 Communication Artifacts**
-  - Check firewall logs for connections to .onion domains or Tor entry nodes
-  - Query DNS logs for "onion" domain queries (may not exist if using SOCKS proxy)
-  - Monitor for any outbound HTTP POST requests to unknown destinations
-  - **CRITICAL:** If C2 beacon captured, extract encryption key from packet payload (JSON field "encryption_key")
-  - Rationale: Captured encryption key enables independent file decryption
-
-- [ ] **Analyze File Timeline & Encryption Patterns**
-  - Determine when encryption occurred (check file modification timestamps on encrypted files)
-  - Identify which directories/file types were targeted
-  - Check if exclusion rules followed expected patterns (.exe files spared, others encrypted)
-  - Rationale: Confirms malware behavior and helps predict additional affected areas
-
-- [ ] **Threat Hunt for Additional Artifacts**
-  - Search for compressed archives containing stolen files (common exfiltration pattern)
-  - Check for additional malware samples or scripts (pre-stage, post-exploitation)
-  - Monitor for lateral movement indicators (unusual domain admin activity, remote access tools)
-  - Rationale: Arsenal-237 may have deployed pre-requisites (backdoors, credentials, etc.)
-
-- [ ] **Review Breach Notification Triggers**
-  - Determine if encryption scope includes personal data (triggers GDPR, CCPA, etc.)
-  - Identify regulated data types affected (PII, PHI, financial data, trade secrets)
-  - Assess customer notification requirements and notification timelines
-  - Rationale: Legal/compliance compliance; breach notification timelines are often 30-90 days
-
----
-
-### Priority 3: Remediation Decision Framework
-
-**CRITICAL DECISION: Rebuild vs. Aggressive Cleanup**
-
-This is the most important decision of the incident response. Choose carefully based on threat assessment.
-
-**Option A: Complete System Rebuild (STRONGLY RECOMMENDED)**
-
-**When This Is MANDATORY:**
-
-- [ ] Malware gained administrative access (potential persistence mechanisms unknown)
-- [ ] Multiple malware samples discovered (indicates pre-staging for lateral movement)
-- [ ] Evidence of credential harvesting or keylogger installation
-- [ ] Arsenal-237 historical infrastructure is sophisticated; unknown capabilities likely
-- [ ] Any doubt about completeness of cleanup
-
-**When This Is RECOMMENDED:**
-
-- [ ] Affected system is critical infrastructure or high-value data repository
-- [ ] System lacks comprehensive EDR coverage to verify cleanup
-- [ ] TEST_BUILD status suggests incomplete evasion; production variants may have hidden components
-- [ ] Offline backup strategy is strong (can restore to known-good state quickly)
-
-**Rebuild Process:**
-
-1. **Isolate affected system** (done in Priority 1)
-2. **Create forensic image** (preservation for investigation; done in Priority 1)
-3. **Wipe system drive completely** (secure erase or fresh OS installation)
-4. **Reinstall OS from trusted media** (not from backup; patch to current version)
-5. **Restore data from pre-infection offline backups** (offline archives, not cloud sync)
-6. **Verify restoration integrity** (spot-check file content, verify no .locked files)
-7. **Reconnect to network** (only after verification complete)
-8. **Deploy enhanced monitoring** (EDR, network detection, host-based IDS)
-
-**Resource Intensity:** HIGH | **Technical Complexity:** MEDIUM-HIGH
-
-**Risk Level:** MINIMAL (complete system rebuild is highest-confidence recovery)
-
----
-
-**Option B: Aggressive Cleanup (HIGHER RESIDUAL RISK)**
-
-**ONLY Consider When:**
-
-- [ ] Offline backup restoration would cause >24 hours of business disruption
-- [ ] Critical system must be operational with minimal downtime
-- [ ] System has comprehensive EDR coverage for verification
-- [ ] Technical resources available for deep forensic analysis
-
-**STRONG WARNING:** Research (MITRE, SANS, CrowdStrike) shows cleanup-based recovery has 40-60% re-infection rates. The rebuilt system is always the safer path.
-
-**Aggressive Cleanup Procedure (If Unavoidable):**
-
-1. **System Isolation** (no network, no external media, no user access)
-2. **EDR/YARA Verification**
-   - Deploy advanced endpoint detection and response (EDR) agent
-   - Run comprehensive YARA rule scan for enc_c2.exe variants
-   - Verify no processes matching malware signatures
-   - Execute threat hunting for behavioral indicators (file encryption, Tor connections)
-
-3. **Credential Rotation** (all accounts on system)
-
-4. **Aggressive Artifact Removal**
-   - Delete .locked files (OR attempt recovery if created by encryption - forensic analysis required)
-   - Remove README.txt ransom notes
-   - Clear Windows temporary files (C:\Temp, %AppData%\Temp)
-   - Clean browser cache and history (potential malware delivery vector)
-   - Remove suspicious scheduled tasks, startup registry keys, services
-   - Execute `cipher /w:C:` to overwrite free space (removes deleted file artifacts)
-
-5. **System Hardening**
-   - Disable unused services and protocols
-   - Enable Windows Defender Real-Time Protection (if not already active)
-   - Apply latest security patches and OS updates
-   - Configure host-based firewall to block Tor ports (9050, 9150)
-   - Deploy YARA rules for enc_c2.exe detection
-
-6. **Enhanced Monitoring Deployment**
-   - Install EDR agent with continuous monitoring
-   - Configure alerts for:
-     - Process creation with suspicious characteristics
-     - File write operations with .locked extension
-     - Outbound connections to .onion domains or Tor entry nodes
-     - Elevated privilege usage
-
-7. **Verification & Testing**
-   - Run full system scan with multiple AV engines
-   - Execute threat hunting queries for behavioral indicators
-   - Monitor for 72 hours for re-infection signs
-   - Document all remediation steps for audit trail
-
-**Residual Risk Assessment:**
-
-Even with aggressive cleanup:
-- **Unknown Components:** May remain undetected components from Arsenal-237 (TEST_BUILD suggests incomplete development)
-- **Privilege Escalation:** If malware achieved admin access, cleanup cannot guarantee removal of sophisticated persistence
-- **Lateral Movement:** If credentials compromised, attacker may maintain access through other systems
-- **Re-staging:** Attacker may have cached payloads in system for re-execution
-
-**Recommendation:** If cleanup chosen, increase monitoring and conduct follow-up threat hunting at 1-week and 1-month intervals.
-
----
-
-### Priority 4: Recovery Decision Matrix
-
-Use this framework to decide rebuild vs. cleanup:
-
-<table class="professional-table">
-  <thead>
-    <tr>
-      <th>Factor</th>
-      <th>Rebuild Preferred</th>
-      <th>Cleanup Acceptable</th>
-      <th>Score Weight</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>EDR Coverage</strong></td>
-      <td>Partial or absent (rebuild eliminates unknowns)</td>
-      <td>Comprehensive EDR with threat hunting capability</td>
-      <td>20%</td>
-    </tr>
-    <tr>
-      <td><strong>Data Sensitivity</strong></td>
-      <td>High-value, regulated, customer data</td>
-      <td>Low-sensitivity, internal use only</td>
-      <td>20%</td>
-    </tr>
-    <tr>
-      <td><strong>Offline Backup Availability</strong></td>
-      <td>Clean backups within 24 hours (rebuild is fast)</td>
-      <td>Backups >24 hours old (restore involves significant data loss)</td>
-      <td>20%</td>
-    </tr>
-    <tr>
-      <td><strong>System Criticality</strong></td>
-      <td>Downtime acceptable (can afford >8 hours offline)</td>
-      <td>High-availability requirement (<2 hours downtime maximum)</td>
-      <td>15%</td>
-    </tr>
-    <tr>
-      <td><strong>Sophistication Indicators</strong></td>
-      <td>TEST_BUILD, unknown capabilities (rebuild safer)</td>
-      <td>Confirmed, simple infection (cleanup feasible)</td>
-      <td>15%</td>
-    </tr>
-    <tr>
-      <td><strong>Technical Resources</strong></td>
-      <td>Minimal forensic/IR expertise available</td>
-      <td>Experienced incident response team available</td>
-      <td>10%</td>
-    </tr>
-  </tbody>
-</table>
-
-**Scoring:**
-- Assign 0 points if "Cleanup" column applies
-- Assign 1 point if "Rebuild" column applies
-- Calculate percentage: (points x weight) / total weight
-- **>70%:** Strongly favor rebuild
-- **50-70%:** Rebuild recommended unless justified otherwise
-- **<50%:** Cleanup acceptable with enhanced monitoring
-
----
-
+**Containment categories.** Isolate on the first sign of either the Tor connection or bulk
+encryption. Block Tor egress at the perimeter as a category rather than by address, since the
+entry-node set rotates. Preserve encrypted samples and any ransom artifact before rebuilding.
+Treat backups as the recovery path and confirm they were unreachable from the affected host.
 ## Section 6: Threat Intelligence & Attribution Context
 
 ### Development Environment Analysis
@@ -1474,52 +1249,6 @@ All findings in this report include evidence-based confidence ratings. Here's wh
 
 ---
 
-## Section 10: Recommended Immediate Actions
-
-### Response Timeline & Prioritization
-
-**IF CONFIRMED INFECTION DETECTED:**
-
-**Resource Intensity: CRITICAL | Urgency: URGENT**
-- Isolate affected systems immediately
-- Activate incident response team
-- Preserve forensic evidence
-- Execute Priority 1 containment procedures (see Incident Response section)
-- Estimated resource requirement: 3-5 full-time incident responders for 48+ hours
-
-**IF PROACTIVE THREAT HUNTING (No confirmed infection):**
-
-**TODAY** (Immediate actions):
-- [ ] Deploy Tor connectivity monitoring to network perimeter
-- [ ] Search for enc_c2.exe file hash (SHA256: 613d4d0f...) in current logs
-- [ ] Query SIEM for .onion domain access attempts
-- [ ] Test offline backup restoration procedures
-- **Resource Intensity:** LOW | **Estimated Time:** 2-4 hours of senior security staff
-
-**THIS WEEK** (Short-term improvements):
-- [ ] Deploy YARA/Sigma rules to EDR and SIEM systems
-- [ ] Implement KQL/Splunk queries for behavioral detection (file encryption patterns)
-- [ ] Conduct network segment assessment for Tor blocking capability
-- [ ] Review and update incident response playbook
-- **Resource Intensity:** MEDIUM | **Estimated Time:** 8-16 hours over team
-
-**THIS MONTH** (Medium-term initiatives):
-- [ ] Network-wide threat hunt for TEST_BUILD_001 strings and builder IDs
-- [ ] EDR tuning for ransomware behavioral patterns
-- [ ] Backup restoration testing (ensure RTO/RPO alignment with business requirements)
-- [ ] Security awareness training focused on ransomware distribution vectors
-- **Resource Intensity:** MEDIUM-HIGH | **Estimated Time:** 20-40 hours over team
-
-**THIS QUARTER** (Strategic enhancements):
-- [ ] Implement comprehensive network segmentation strategy
-- [ ] Deploy advanced threat detection (behavioral analytics, ML-based anomaly detection)
-- [ ] Establish threat intelligence sharing with industry peers (ransomware IOC feeds)
-- [ ] Develop and practice ransomware incident response playbook (tabletop exercises)
-- [ ] Assess cyber insurance coverage and ransom negotiation policies
-- **Resource Intensity:** HIGH | **Estimated Time:** 60+ hours with external resources
-
----
-
 ## Section 11: FAQ - Addressing Common Questions
 
 **Q1: "Can we decrypt files without paying the attacker?"**
@@ -1618,7 +1347,7 @@ Sophistication indicators (Rust language, ChaCha20 crypto, Tor C2) could indicat
 
 ---
 
-## Section 12: Final Assessment & Recommendations
+## Section 12: Final Assessment
 
 ### Threat Summary
 
@@ -1634,60 +1363,6 @@ enc_c2.exe represents a **CRITICAL** threat combining modern cryptographic imple
 
 **Operational Urgency:**
 If enc_c2.exe is present in your environment, every minute of delay increases data loss scope. Detection window is narrow (encryption occurs in minutes to hours); prevention and early detection are the only viable strategies.
-
----
-
-### Strategic Recommendations
-
-**Defense-in-Depth Approach:**
-
-1. **Prevention (Highest Priority)**
-   - Endpoint protection: Deploy EDR with behavioral detection for ransomware patterns
-   - Email filtering: Block enc_c2.exe as file attachment and suspicious executable downloads
-   - Network segmentation: Isolate high-value data directories with restricted access controls
-   - Privilege management: Limit administrative access; use credential vaulting for service accounts
-
-2. **Detection (Critical)**
-   - Tor connectivity monitoring: Alert on outbound connections to known Tor infrastructure
-   - Network file activity: Monitor for bulk file modifications with extension changes
-   - Process monitoring: Alert on suspicious process behavior (file encryption patterns, SOCKS proxy connections)
-   - Behavioral analytics: Train models on normal file access patterns; alert on anomalies
-
-3. **Response (Foundational)**
-   - Offline backup validation: Test restoration procedures monthly; verify backup integrity
-   - Incident response playbook: Document enc_c2.exe-specific procedures and decision trees
-   - Forensic readiness: Maintain imaging capability and forensic tools for rapid evidence preservation
-   - Business continuity planning: Establish RTO/RPO targets and recovery resources
-
----
-
-### Metrics for Success
-
-Track these indicators to measure effectiveness of ransomware defense:
-
-| Metric | Target | Measurement Method |
-|--------|--------|-------------------|
-| **Detection Latency** | <5 minutes from infection start | EDR alert timestamps vs. file modification timestamps |
-| **Tor Blocking Effectiveness** | 100% block rate on known Tor entry nodes | Firewall rule verification; test threat hunt |
-| **Offline Backup RPO** | <24 hours (data loss acceptable) | Backup schedule + encryption check |
-| **Incident Response Time to Isolation** | <15 minutes from alert to network isolation | Incident response runbook execution time |
-| **EDR Coverage** | >95% of endpoints with behavioral detection | EDR agent deployment inventory |
-| **Threat Hunt Frequency** | Monthly scans for enc_c2.exe IOCs | Scheduled SIEM searches + dark web monitoring |
-
----
-
-### Conclusion
-
-enc_c2.exe is a professional-grade ransomware threat requiring comprehensive, multi-layered defense. Success depends on:
-
-1. **Prevention:** Stop malware execution before encryption begins
-2. **Early Detection:** Identify infections within minutes of start (narrow response window)
-3. **Offline Backups:** Maintain recovery capability independent of attacker cooperation
-4. **Incident Response:** Execute containment and remediation procedures efficiently
-
-Organizations with strong offline backup strategies and comprehensive endpoint monitoring have clear advantage. Those reliant on cloud-synced data or weak backup procedures face significant operational disruption risk.
-
-**The strategic imperative is clear:** Ransomware threats are inevitable; organizational resilience depends on recovery capability. Invest in offline backup infrastructure and incident response readiness today.
 
 ---
 

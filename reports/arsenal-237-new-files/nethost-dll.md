@@ -500,320 +500,31 @@ As detailed in Environmental Awareness section, the malware conditionally alters
 
 ---
 
-## Incident Response Procedures
-
-### Priority 1: Immediate Response (CRITICAL)
-
-**IF nethost.dll is CONFIRMED on an endpoint:**
-
-- [ ] **URGENT: Isolate Affected System** - Disconnect from network (physically or via VLAN isolation) to prevent C2 communication. Retain network connection for forensic visibility if organization has network monitoring capability.
-
-- [ ] **URGENT: Halt Routine Operations** - Inform relevant teams that system is being investigated; prevent normal business operations from proceeding on potentially compromised system.
-
-- [ ] **URGENT: Alert Security Leadership** - This finding indicates active post-compromise state; notify incident response team lead and relevant business stakeholders urgently.
-
-- [ ] **URGENT: Preserve Evidence** - Initiate forensic image collection:
-  - Take full system image (physical memory via Belkasoft/Magnet RAM Capturer, or VSS snapshot)
-  - Capture volatile memory on running system if applicable
-  - Preserve log files (Windows Event Log, network logs, firewall logs)
-  - Document chain of custody
-
-- [ ] **HIGH: Block C2 Infrastructure** - Implement network-level blocking:
-  - Add 8.8.8.8:53 to firewall block rules (note: impacts legitimate Google DNS if used)
-  - Add 127.0.0.1:53 to firewall block rules (prevents local proxy communication)
-  - Review network logs for any successful connections to these addresses
-
-- [ ] **HIGH: Reset Credentials** - If system is domain-joined or accessed external resources:
-  - Reset password for affected user account
-  - Reset service account credentials if applicable
-  - Consider broader credential reset if attack scope unclear
-
-### Priority 2: Investigation Phase
-
-- [ ] **Deploy Detection Signatures** - Activate YARA rules and detection signatures (see Detections section) across all endpoints to identify additional infections
-
-- [ ] **Hunt for Related Indicators** - Search for additional Arsenal-237 components:
-  - killer.dll (SHA1: [reference previous reports])
-  - lpe.exe (SHA1: [reference previous reports])
-  - rootkit.dll (SHA1: [reference previous reports])
-  - BdApiUtil64.sys (SHA1: [reference previous reports])
-
-- [ ] **Review Network Logs** - Analyze firewall/proxy logs for:
-  - Any connections to 8.8.8.8:53 or 127.0.0.1:53 (even if blocked)
-  - Lateral movement attempts from affected system
-  - Unusual outbound connections (high data transfer, suspicious protocols)
-
-- [ ] **Analyze Event Logs** - Review Windows Event Log for:
-  - DLL injection events (parent process spawning nethost.dll)
-  - Process creation events (esp. powershell.exe children of suspicious parents)
-  - Network connection events
-  - Service modification events
-
-- [ ] **Establish Scope** - Determine:
-  - How many systems are affected
-  - When was malware first observed
-  - What user/account is affected
-  - What data could be accessed from infected system
-
-### Priority 3: Remediation Phase
-
-**Two Paths: Complete Rebuild vs. Aggressive Cleanup**
-
----
-
-### Remediation Decision Framework
-
-#### Path A: Complete System Rebuild (RECOMMENDED)
-
-**When MANDATORY:**
-- [ ] Malware persists after standard malware removal
-- [ ] Kernel-level rootkit components detected (BdApiUtil64.sys confirmed)
-- [ ] Data exfiltration already occurred (assumption in ransomware pre-staging)
-- [ ] System holds critical credentials or high-value data
-- [ ] Multiple Arsenal-237 components detected on system
-
-**When STRONGLY RECOMMENDED:**
-- [ ] Single endpoint in high-security environment
-- [ ] System accessed by privileged users (administrator, domain admin)
-- [ ] System is domain-joined and central to business operations
-- [ ] Organization has existing rebuild/imaging capability
-
-**Complete Rebuild Procedure:**
-
-1. **Backup Non-Malware Data** (if business continuity requires):
-   - Identify clean backups from BEFORE suspected infection date
-   - Restore application/user data ONLY; never restore system/OS files
-   - Restore to clean/patched system (see step 3)
-
-2. **Baseline Document & System Configuration**:
-   - Document all critical applications and dependencies
-   - Export security baselines, GPO settings, registry configurations
-   - Document network configuration, static routes, printers
-
-3. **Clean OS Installation**:
-   - Perform complete OS reinstall from verified media
-   - Apply all security patches to new OS
-   - Restore configurations from step 2 (NOT from potentially compromised backups)
-
-4. **Restore Business Applications**:
-   - Reinstall from clean installation media
-   - Apply all vendor patches and updates
-   - Restore application data from clean backups
-
-5. **Restore User Data**:
-   - Restore user documents from clean backups (pre-infection)
-   - Monitor restored data for malware indicators using detection tools
-   - Consider isolated restoration if data sensitivity is high
-
-6. **Re-harden System**:
-   - Apply endpoint security agent
-   - Enable logging and monitoring
-   - Configure firewall rules
-   - Return to production network
-
-**Business Impact:** 4-8 hours downtime per system; higher for critical systems
-
----
-
-#### Path B: Aggressive Malware Cleanup (HIGHER RESIDUAL RISK)
-
-**IMPORTANT DISCLAIMER:** Research indicates complete cleanup of sophisticated malware is rarely achievable. This path carries SIGNIFICANT RESIDUAL RISK and should only be considered when rebuild is impossible.
-
-**ONLY CONSIDER IF:**
-- [ ] System rebuild is impossible due to business criticality/legacy application dependencies
-- [ ] Organization accepts residual compromise risk
-- [ ] Continuous enhanced monitoring is implemented post-cleanup
-- [ ] System is in isolated network segment with restricted access
-
-**Prerequisites - MANDATORY:**
-- [ ] Complete forensic image taken (backup for post-cleanup verification)
-- [ ] Extended monitoring period (minimum 30 days) established
-- [ ] Organization has incident response expertise available
-
-**Cleanup Procedure (if proceeding despite risks):**
-
-1. **Boot into Safe Mode**:
-   - Restart system in Safe Mode with Networking
-   - Prevents malware auto-start mechanisms
-
-2. **Terminate Malicious Processes**:
-   - Kill any processes identified in investigation phase
-   - Disable suspicious services
-   - Uninstall suspicious applications
-
-3. **Remove Malware Files**:
-   - Delete identified Arsenal-237 components:
-     - nethost.dll (and any copies in %TEMP%, AppData, etc.)
-     - Associated components (killer.dll, lpe.exe, rootkit.dll if found)
-   - Search system for additional copies using detection signatures
-
-4. **Clean Registry**:
-   - Remove persistence mechanisms identified in malware analysis
-   - Remove RunOnce, Run, CurrentVersion/Run entries
-   - Restore standard scheduled task settings
-
-5. **Verify Cleanup**:
-   - Scan with updated antivirus
-   - Run YARA scans for malware signatures
-   - Restart in Normal Mode
-   - Monitor for auto-removal/re-execution
-
-6. **Enhanced Monitoring**:
-   - Deploy advanced endpoint detection (EDR)
-   - Increase log collection verbosity
-   - Implement threat hunting procedures
-   - Schedule daily threat analysis
-
-**Residual Risk Assessment:**
-
-Even after aggressive cleanup:
-- Kernel-level persistence may remain undetected (BdApiUtil64.sys may be pre-installed)
-- Backup mechanisms may have triggered malware restoration
-- Attacker may retain compromised credentials for re-infection
-
-**Recommendation:** This path should ONLY be selected if complete business impact of rebuild exceeds acceptable risk threshold.
-
----
-
-### Long-Term Defensive Strategy
-
-#### Technology Enhancements
-
-**1. Network-Level Detection & Blocking**
-
-**Capability:** Identify and block outbound C2 connections at network perimeter before they reach attackers.
-
-**Implementation:**
-- Deploy next-generation firewall (Palo Alto, Fortinet, Check Point)
-- Implement DNS sinkhole for known malicious domains
-- Deploy proxies with SSL/TLS inspection for HTTPS C2 detection
-- Monitor for connections to high-risk IPs (bulletproof hosts, known proxy networks)
-
-**Cost vs. Benefit:**
-- Investment: Moderate (hardware and licensing costs)
-- Benefit: Detects encrypted C2 that host-based tools miss
-- Deployment Complexity: Moderate
-
----
-
-**2. Endpoint Detection & Response (EDR)**
-
-**Capability:** Detect malware behavior on endpoints in real-time, enabling rapid response before full compromise.
-
-**Implementation:**
-- Deploy EDR solution (CrowdStrike, Microsoft Defender for Endpoint, SentinelOne, Elastic)
-- Configure behavioral detection for:
-  - Suspicious DLL injection patterns
-  - PowerShell execution from suspicious parents
-  - Abnormal network connections
-  - Process execution from %TEMP%, %APPDATA%
-
-**Cost vs. Benefit:**
-- Investment: Moderate to High (per-endpoint licensing)
-- Benefit: Real-time malware behavior detection with automated response capability
-- Deployment Complexity: Low to Moderate
-
-**Specific Detection Rules for nethost.dll:**
-- Monitor for DLL loads with filename patterns: "*nethost*", "*dll*" from suspicious locations
-- Alert on TCP socket creation followed by immediate connection attempts
-- Flag PowerShell execution with encoding/template parameters
-
----
-
-**3. Application Control / Whitelisting**
-
-**Capability:** Prevent execution of unapproved DLLs and applications, eliminating nethost.dll entirely if not on whitelist.
-
-**Implementation:**
-- Deploy application control solution (Windows Defender Application Control, CyberArk, ThreatLocker)
-- Create whitelist of approved applications and libraries
-- Restrict DLL loading to trusted paths (%System32%, %Program Files%)
-- Monitor for whitelisting bypasses
-
-**Cost vs. Benefit:**
-- Investment: Low to Moderate (per-endpoint licensing)
-- Benefit: Prevents entire class of DLL-based malware if properly configured
-- Deployment Complexity: Moderate (requires application inventory)
-
----
-
-**4. Credential Protection & Access Control**
-
-**Capability:** Prevent attackers from using stolen credentials for lateral movement and persistence.
-
-**Implementation:**
-- Deploy privileged access management (PAM) solution
-- Implement multi-factor authentication (MFA) for all remote access
-- Monitor for credential spray attacks and unusual authentication patterns
-- Restrict PowerShell execution to approved administrators
-
-**Cost vs. Benefit:**
-- Investment: Moderate to High (infrastructure and implementation)
-- Benefit: Prevents lateral movement using credentials harvested by malware
-- Deployment Complexity: High (organizational change complexity)
-
----
-
-#### Process Improvements
-
-**1. Threat Monitoring & Detection**
-
-- Implement 24/7 security monitoring capability or contract SOC services
-- Deploy SIEM (Splunk, Elastic, Microsoft Sentinel) with correlation rules
-- Establish baseline for normal system behavior; alert on deviations
-- Implement DNS query logging and analysis
-
-**2. SIEM Rules for C2 Detection**
-
-Example Splunk rule for detecting nethost.dll C2 activity:
-```
-index=network destination IN (8.8.8.8, 127.0.0.1) destination_port=53
-| stats count by src_ip, dest_ip, dest_port, process
-| where count > 2
-| alert
-```
-
----
-
-**3. Threat Hunting Procedures**
-
-- Schedule weekly threat hunts for:
-  - Suspicious DLL injection events
-  - Unexpected PowerShell execution
-  - Unusual network connections
-  - Registry persistence mechanisms
-- Maintain hunting playbook for Arsenal-237 indicators
-
----
-
-#### Organizational Measures
-
-**1. User Awareness & Training**
-
-**Content Focus:**
-- Phishing email recognition (Arsenal-237 often deployed via stolen credentials + email)
-- Password hygiene and credential protection
-- Social engineering techniques
-- Ransomware prevention behaviors
-
-**Implementation:**
-- Quarterly security awareness training mandatory for all users
-- Monthly phishing simulations with feedback to failed recipients
-- Targeted training for high-risk groups (executives, finance, HR)
-
-**Expected Impact:** 20-40% reduction in successful phishing/credential compromise
-
----
-
-**2. Security Culture Development**
-
-- Establish "security-first" mindset in organization
-- Reward identification of security issues (bug bounty program)
-- Make security failures learning opportunities, not punitive events
-- Involve executive leadership in security strategy communications
-
----
-
+## Response Orientation
+
+This is not an incident-response playbook. An organization with a live nethost.dll detection
+should run its own incident-response process; what follows is a third-party orientation to
+what this component means and where its evidence sits.
+
+The component is the toolkit's command channel, so a detection here says remote control was
+established, not that it was attempted. It reaches its command-and-control endpoints within
+about a minute of being loaded, and the host process terminates if it cannot, which means a
+crashed host process is itself a signal that the channel failed.
+
+**Hunt these first.** Outbound TCP to the endpoints listed in the IOC section, on port 53 but
+carrying the toolkit's own protocol rather than DNS, which is what separates it from ordinary
+name resolution to the same address. Then the command surface it exposes once connected:
+PowerShell execution, process and service enumeration, and Base64-framed file transfer,
+described in full in the capability sections above.
+
+**Where the artifacts sit.** The DLL itself is on disk with the hash in the IOC section, and
+the host process that loads it is the more useful pivot, since the DLL does not run alone.
+
+**Containment categories.** Isolate hosts showing the command channel. Block and monitor the
+command-and-control endpoints at the perimeter, and treat port-53 traffic from processes that
+have no business resolving names as the anomaly rather than the destination address. Assume
+anything the channel could reach was reachable: it carries file transfer in both directions
+and arbitrary command execution, so credential exposure and data movement are both in scope.
 ## FAQ - Addressing Common Questions
 
 **Q1: "We detected nethost.dll on one endpoint. Does this mean we're ransomed?"**
@@ -1031,109 +742,41 @@ This is equivalent to remote shell access for all practical purposes.
 
 ---
 
-## Response Timeline - Recommended Actions
-
-### If You've Identified nethost.dll (CONFIRMED Infection)
-
-**Initial Response (Urgent Priority):**
-- [ ] Isolate affected system from network
-- [ ] Notify incident response team and relevant business stakeholders
-- [ ] Initiate forensic evidence collection
-- [ ] Begin Winsock log review for C2 connection attempts
-
-**Response Phase 1 (Hours 1-8):**
-- [ ] Deploy detection signatures to all other endpoints
-- [ ] Hunt for additional Arsenal-237 components
-- [ ] Determine scope (how many systems affected)
-- [ ] Review network logs for lateral movement evidence
-- [ ] Document all findings with timestamps
-
-**Response Phase 2 (Hours 8-24):**
-- [ ] Make rebuild vs. aggressive cleanup decision
-- [ ] If rebuild: Prepare baseline documentation, clean installation media, backup strategy
-- [ ] If cleanup: Execute cleanup procedure with extended monitoring plan
-- [ ] Reset all credentials with potential exposure
-- [ ] Notify relevant business units of compromise
-
-**Response Phase 3 (Days 2-7):**
-- [ ] Complete remediation (rebuild or cleanup)
-- [ ] Return system to service with enhanced monitoring
-- [ ] Conduct threat hunting across all systems
-- [ ] Implement long-term defensive improvements
-- [ ] Document lessons learned
-
-**Enhanced Monitoring Phase (Ongoing - 30+ days):**
-- [ ] Monitor affected system for malware re-appearance
-- [ ] Hunt for persistence mechanisms
-- [ ] Track for additional compromise indicators
-- [ ] Prepare incident report for relevant stakeholders
-
----
-
-### If You're Doing Proactive Threat Hunting (NO Confirmed Infection)
-
-**TODAY - Immediate Threat Hunting:**
-- [ ] Scan all endpoints with YARA rules for nethost.dll signature
-- [ ] Query network logs for connections to 8.8.8.8:53, 127.0.0.1:53
-- [ ] Review for other Arsenal-237 components (killer.dll, lpe.exe, rootkit.dll)
-- [ ] Query event logs for PowerShell execution anomalies
-
-**THIS WEEK - Short-Term Improvements:**
-- [ ] Deploy Sigma detection rules for suspicious DLL injection
-- [ ] Activate PowerShell execution logging and alerting
-- [ ] Review EDR/antivirus detection rules for malware variants
-- [ ] Establish baseline for normal process behavior
-
-**THIS MONTH - Medium-Term Initiatives:**
-- [ ] Implement EDR solution if not already deployed
-- [ ] Deploy DNS sinkhole for known C2 domains
-- [ ] Establish threat hunting procedures
-- [ ] Create incident response playbook for ransomware pre-staging
-
-**THIS QUARTER - Strategic Enhancements:**
-- [ ] Deploy next-generation firewall with C2 detection
-- [ ] Implement application control/whitelisting
-- [ ] Establish 24/7 security monitoring capability
-- [ ] Conduct security awareness training for all users
-- [ ] Implement MFA for all remote access
-
----
-
 ## Confidence Levels Summary
 
 ### CONFIRMED (Highest Confidence - Direct Observation)
 
-- [ ] PE64 x64 DLL file format
-- [ ] Rust compiler artifacts and runtime
-- [ ] Winsock 2.2 initialization (WSASocketW, connect APIs)
-- [ ] Hardcoded C2 targets: 8.8.8.8:53 and 127.0.0.1:53
-- [ ] C2 command parsing and dispatch (16+ commands identified)
-- [ ] PowerShell integration templates
-- [ ] Base64 encoding for file uploads
-- [ ] TCP socket creation and connection attempts
-- [ ] Environmental variable queries (COMPUTERNAME, USERNAME)
-- [ ] Process termination on Winsock failure
+- PE64 x64 DLL file format
+- Rust compiler artifacts and runtime
+- Winsock 2.2 initialization (WSASocketW, connect APIs)
+- Hardcoded C2 targets: 8.8.8.8:53 and 127.0.0.1:53
+- C2 command parsing and dispatch (16+ commands identified)
+- PowerShell integration templates
+- Base64 encoding for file uploads
+- TCP socket creation and connection attempts
+- Environmental variable queries (COMPUTERNAME, USERNAME)
+- Process termination on Winsock failure
 
 ### HIGHLY CONFIDENT (80-95% - Strong Evidence)
 
-- [ ] **Integration with Arsenal-237 Toolkit (90%)**: Rust implementation, command capabilities, and network architecture match Arsenal-237 profile from previous reports
-- [ ] **Financial Motivation - Ransomware (85%)**: Arsenal-237 toolkit exclusively used for ransomware; command set aligns with ransomware pre-staging operations
-- [ ] **Organized Threat Actor (85%)**: Professional Rust implementation, modular architecture, multi-target failover strategy
-- [ ] **Network Resilience Planning (85%)**: Multiple hardcoded targets with sequential failover indicates deliberate redundancy design
-- [ ] **Sophisticated Development (80%)**: Templating system, synchronization primitives, robust error handling
+- **Integration with Arsenal-237 Toolkit (90%)**: Rust implementation, command capabilities, and network architecture match Arsenal-237 profile from previous reports
+- **Financial Motivation - Ransomware (85%)**: Arsenal-237 toolkit exclusively used for ransomware; command set aligns with ransomware pre-staging operations
+- **Organized Threat Actor (85%)**: Professional Rust implementation, modular architecture, multi-target failover strategy
+- **Network Resilience Planning (85%)**: Multiple hardcoded targets with sequential failover indicates deliberate redundancy design
+- **Sophisticated Development (80%)**: Templating system, synchronization primitives, robust error handling
 
 ### LIKELY (60-80% - Reasonable Inference)
 
-- [ ] **8.8.8.8 Proxy Endpoint (70%)**: Address unlikely to be targeted directly; probable attacker-controlled proxy masquerading as Google DNS
-- [ ] **Additional C2 Infrastructure Hidden (70%)**: Conditional execution paths based on environmental checks likely contain alternative C2 addresses
-- [ ] **Local Proxy Installation Expected (65%)**: 127.0.0.1:53 connection suggests attacker pre-installed tunnel/proxy infrastructure
-- [ ] **Data Exfiltration Intent (70%)**: File upload capability combined with disk enumeration suggests data theft before encryption
-- [ ] **Additional Arsenal-237 Components Present (70%)**: If nethost.dll deployed, lpe.exe, killer.dll, rootkit.dll likely present or incoming
+- **8.8.8.8 Proxy Endpoint (70%)**: Address unlikely to be targeted directly; probable attacker-controlled proxy masquerading as Google DNS
+- **Additional C2 Infrastructure Hidden (70%)**: Conditional execution paths based on environmental checks likely contain alternative C2 addresses
+- **Local Proxy Installation Expected (65%)**: 127.0.0.1:53 connection suggests attacker pre-installed tunnel/proxy infrastructure
+- **Data Exfiltration Intent (70%)**: File upload capability combined with disk enumeration suggests data theft before encryption
+- **Additional Arsenal-237 Components Present (70%)**: If nethost.dll deployed, lpe.exe, killer.dll, rootkit.dll likely present or incoming
 
 ### POSSIBLE (40-60% - Analytical Assessment)
 
-- [ ] **Test/Honeypot Evasion (50%)**: Environmental checks could be designed to avoid analysis environments (requires POSSIBLE confidence due to limited visibility into conditional code paths)
-- [ ] **UEFI/Firmware Persistence (40%)**: BdApiUtil64.sys suggests kernel-level capabilities; UEFI implant possible but unconfirmed
+- **Test/Honeypot Evasion (50%)**: Environmental checks could be designed to avoid analysis environments (requires POSSIBLE confidence due to limited visibility into conditional code paths)
+- **UEFI/Firmware Persistence (40%)**: BdApiUtil64.sys suggests kernel-level capabilities; UEFI implant possible but unconfirmed
 
 ---
 

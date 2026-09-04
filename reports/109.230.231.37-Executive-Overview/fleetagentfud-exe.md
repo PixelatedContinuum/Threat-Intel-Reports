@@ -365,11 +365,6 @@ CRITICAL Severity
 - Confidential Data Leakage: Business secrets, PII, financial data
 - Regulatory Compliance: GDPR, HIPAA, PCI-DSS violations
 
-Financial Impact (500-user enterprise, 50% infection rate):
-- Credential reset cost: $62,500/week
-- Data breach investigation: $50,000-$150,000
-- Regulatory fines: $100,000-$1,000,000+
-- Total Potential Cost: $212,500-$1,312,500+
 ```
 
 **Detection:**
@@ -551,17 +546,15 @@ Impact: Reconnaissance multiplies attack success rate by 2.5-4x
 Initial Infection: Single workstation
 
 With Reconnaissance:
-- Identifies: 5,000-user enterprise, 50TB file servers, no EDR
-- Attacker deploys ransomware across entire domain
-- Demand: $5,000,000
-- Company faces: $5,000,000 total loss (recovery + downtime)
+- Operator learns the environment: user count, file-server volume,
+  whether endpoint detection is deployed
+- Ransomware is deployed across the domain, and the demand is sized to the target
 
 Without Reconnaissance:
-- Single workstation encrypted
-- Demand: $5,000
-- Company restores from backup, minimal impact
+- A single workstation is encrypted
+- Restoration from backup is straightforward and the demand is priced blind
 
-Impact Multiplier: 1000x increase in damage due to reconnaissance
+The reconnaissance is what turns one host into the whole estate.
 ```
 
 ### Memory Protection Manipulation
@@ -920,7 +913,7 @@ Protocol: TCP
 
 **Detection:**
 - Entropy analysis (5-7 range = moderate obfuscation)
-- .NET metadata inspection (dnSpy decompilation)
+- .NET metadata inspection via decompilation
 - YARA rules targeting Base64 + .NET APIs
 - Behavioral sandbox execution
 
@@ -1127,30 +1120,9 @@ foreach ($path in $searchPaths) {
 
 **Q: What is the business impact of FleetAgentFUD.exe infection?**
 
-**A:** **HIGH IMPACT** - Complete remote system access with credential theft:
-
-**Immediate Costs (Per Infected System):**
-```
-Investigation & Response:
-- Forensic analysis: $600-$2,400
-- System rebuild: $600-$1,800
-- User downtime: $200-$600
-- Credential rotation: $100-$300
-Total Per System: $1,500-$5,100
-```
-
-**Organizational Impact (50 Infected Systems):**
-```
-Direct Costs:
-- System remediation: $75,000-$255,000
-- Credential rotation: $25,000
-- Enhanced monitoring (90 days): $10,000-$20,000
-
-Potential Data Breach:
-- Ransomware deployment: $500,000-$5,000,000
-- Regulatory fines (GDPR, HIPAA): $50,000-$1,000,000+
-Total Potential Cost: $760,000-$7,000,000+
-```
+**A:** **HIGH IMPACT**, because it combines complete remote access with credential theft.
+Scoping and cost are an organization's own to work out; what the evidence sets is the
+shape of the exposure:
 
 **Business Risks:**
 - Credential Theft: Clipboard monitoring captures passwords, MFA tokens
@@ -1168,7 +1140,6 @@ Total Potential Cost: $760,000-$7,000,000+
 | **Certainty of Removal** | 100% clean | 70-85% confidence |
 | **Time Required** | 4-6 hours | 2-4 hours + 48-hour validation |
 | **Reinfection Risk** | 0% | 15-30% |
-| **Cost Per System** | $1,500-$3,000 | $800-$1,500 |
 | **Residual Risk** | NONE | MEDIUM |
 
 **Rebuild Recommended:**

@@ -489,7 +489,6 @@ A: **Rebuild approach**:
 - Remediation (1-3 days): Rebuild, credential rotation (ALL users), secondary malware hunting
 - Validation (3-14 days): Reinfection monitoring, cleanup verification
 
-**Cost**: $100K-$400K per incident (labor, tools, disruption, potential ransomware)
 
 ---
 

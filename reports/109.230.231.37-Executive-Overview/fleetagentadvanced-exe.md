@@ -298,7 +298,7 @@ C:\Users\[username]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startu
 
 #### Persistence Mechanism #4: Scheduled Task
 
-**Confidence:** CONFIRMED (Direct observation: schtasks.exe spawned at 15:28:04.684)
+**Confidence:** CONFIRMED (Direct observation: schtasks.exe spawned at T+0.684s)
 
 **Technical Implementation:**
 ```
@@ -325,8 +325,8 @@ Created:    Via schtasks.exe /create with temporary task.xml configuration file
 **Dynamic Analysis Evidence:**
 ```
 Timeline:
-15:28:04.684 (T+0.684s) - FleetAgentAdvanced.exe spawned schtasks.exe
-15:28:04.804 (T+0.804s) - Deleted task.xml (anti-forensics)
+T+0.684s - FleetAgentAdvanced.exe spawned schtasks.exe
+T+0.804s - Deleted task.xml (anti-forensics)
 ```
 
 **Detection & Removal:**
@@ -359,19 +359,11 @@ Timeline:
 
 ### Dynamic Behavior Timeline
 
-**Analysis Period**: 26 minutes (15:26:00 - 15:52:00 UTC)
-**Methodology**: Controlled dynamic analysis with Autoruns monitoring, Volatility memory forensics, and system state comparison
-
-This timeline provides **chronological, step-by-step reconstruction** of FleetAgentAdvanced.exe's execution behavior based on forensic artifacts, process tree analysis, and real-time monitoring.
-
-#### Pre-Execution Baseline
-**15:27:59** - **System baseline captured via Autoruns**
-- Autoruns entries: 1,554 total autostart locations recorded
-- System state: Clean baseline established for comparison
-- Telemetry: process, file, registry and network monitoring active
+Timings below are offsets from launch. The host carried 1,554 autostart entries before
+execution, which is what makes the four the sample adds measurable.
 
 #### Initial Execution Phase
-**15:28:04** - **FleetAgentAdvanced.exe executed (PID 8832)**
+**T+0s** - **FleetAgentAdvanced.exe executed**
 - **User context**: Standard user privileges (no UAC bypass observed)
 - **Executed as**: `FleetAgentAdvanced.exe`
 - **Process characteristics**:
@@ -380,14 +372,14 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
   - .NET CLR runtime loaded successfully
 
 #### Rapid Deployment Sequence (1.3-second window)
-**15:28:04.670** (T+0.670s) - **Dropped RuntimeOptimization.exe**
+**T+0.670s** - **Dropped RuntimeOptimization.exe**
 - **Action**: Created `%APPDATA%\Microsoft\CLR\RuntimeOptimization.exe`
 - **File size**: 27,648 bytes (27 KB)
 - **Purpose**: Secondary persistent payload
 - **Technique**: File system write to user-writable AppData location
 - **Directory creation**: Created `%AppData%\Microsoft\CLR\` parent directory (mimicking legitimate .NET Framework structure)
 
-**15:28:04.673** (T+0.673s) - **Created Startup Folder LNK Shortcuts (×2)**
+**T+0.673s** - **Created Startup Folder LNK Shortcuts (×2)**
 - **Action**: Created TWO `.lnk` shortcut files in Startup folder
 - **Files**: `Microsoft .NET Runtime Optimization.lnk` (duplicate entries for redundancy)
 - **Target**: `%APPDATA%\Microsoft\CLR\RuntimeOptimization.exe`
@@ -395,7 +387,7 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
 - **Purpose**: Persistence Mechanisms #2 & #3 - Execute on user login via Startup folder
 - **Technique**: Registry Run Keys / Startup Folder (MITRE T1547.001)
 
-**15:28:04.684** (T+0.684s) - **Executed schtasks.exe for Scheduled Task Creation (PID 3580)**
+**T+0.684s** - **Executed schtasks.exe for Scheduled Task Creation**
 - **Action**: Spawned `schtasks.exe` child process
 - **Command**: Created scheduled task via XML configuration file
 - **Task name**: `Microsoft\Windows\.NET Runtime Optimization`
@@ -405,7 +397,7 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
 - **Technique**: Scheduled Task/Job (MITRE T1053.005)
 - **Process lifecycle**: schtasks.exe exited immediately after task creation (0.120s execution time)
 
-**15:28:04.804** (T+0.804s) - **Deleted task.xml (Anti-Forensics)**
+**T+0.804s** - **Deleted task.xml (Anti-Forensics)**
 - **Action**: Removed temporary `task.xml` configuration file
 - **Location**: Likely `%TEMP%\task.xml` or working directory
 - **Purpose**: Evidence destruction, hinder forensic analysis and incident response
@@ -413,7 +405,7 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
 - **Significance**: Demonstrates operational security awareness and professional malware development
 - **Impact**: Prevents easy recovery of scheduled task configuration details
 
-**15:28:05.301** (T+1.301s) - **Persistence Deployment Complete**
+**T+1.301s** - **Persistence Deployment Complete**
 - **Total deployment time**: 1.301 seconds from execution to full persistence establishment
 - **Mechanisms created**: 4 distinct persistence mechanisms
 - **Files created**: RuntimeOptimization.exe + 2 LNK shortcuts
@@ -421,7 +413,7 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
 - **Scheduled tasks**: 1 task in Microsoft namespace
 
 #### Extended Dormancy Phase
-**15:28:05 - 15:45:52** (17 minutes, 47 seconds) - **Complete Network Silence**
+**T+1.3s onward, for the next 17 minutes** - **Complete Network Silence**
 - **Network behavior**: ZERO network activity observed
   - No DNS queries initiated
   - No outbound TCP/UDP connections
@@ -429,7 +421,7 @@ This timeline provides **chronological, step-by-step reconstruction** of FleetAg
   - No data exfiltration observed
   - No local network scanning
   - No localhost connections
-- **Process behavior**: FleetAgentAdvanced.exe (PID 8832) remained active but completely dormant
+- **Process behavior**: FleetAgentAdvanced.exe remained active but completely dormant
 - **Network**: no outbound traffic observed despite active monitoring
 
 **Assessment - Why No Network Activity?**
@@ -459,27 +451,25 @@ This complete network silence is **HIGHLY UNUSUAL** for typical malware and sugg
 
 **Business Impact**: Organizations cannot rely on network-based detection to identify this threat. Systems may be infected for weeks/months without showing obvious network indicators, making proactive threat hunting based on persistence artifacts essential.
 
-#### Detection & Verification Phase
-**15:45:52** - **Autoruns Scan Executed (Post-Infection)**
-- **Action**: Second Autoruns scan conducted for baseline comparison
-- **Detected changes**: **4 NEW autostart entries** identified (Autoruns comparison report)
+#### Persistence Verification
+**T+17m** - **Autostart inventory re-checked**
+- **Detected changes**: **4 NEW autostart entries**
 - **Entry details**:
   - 2× entries under `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\Startup`
   - Entries pointing to: `Microsoft .NET Runtime Optimization.lnk` → `%APPDATA%\Microsoft\CLR\RuntimeOptimization.exe`
   - Duplicate entries confirm dual LNK file creation for redundancy
 - **Confirmation**: All four persistence mechanisms successfully created and active
-- **Autoruns entries increase**: 1,554 baseline → 1,558 post-infection (+4 entries)
+- **Autostart entries**: 1,554 before execution → 1,558 after (+4 entries)
 
-**15:52:00** - **Analysis Period Concluded**
-- **Total observation time**: 26 minutes
-- **Network activity**: NONE observed throughout entire period (confirmed)
-- **System stability**: No crashes, no obvious system degradation, no performance impact
-- **Persistence status**: ALL four mechanisms confirmed functional via Autoruns
-- **Payload status**: RuntimeOptimization.exe dropped successfully, not yet executed (awaiting reboot/login)
+**End state**
+- **Network activity**: none, throughout
+- **System stability**: no crashes, no obvious degradation, no performance impact
+- **Persistence status**: all four mechanisms present and active
+- **Payload status**: RuntimeOptimization.exe dropped, not yet executed (awaiting reboot or login)
 
 ### Key Timeline Observations
 
-**Speed of Execution**: The entire persistence deployment occurs within **1.3 seconds** of initial execution (15:28:04.000 - 15:28:05.301), demonstrating:
+**Speed of Execution**: The entire persistence deployment occurs within **1.3 seconds** of initial execution, demonstrating:
 - **Pre-programmed, automated deployment sequence** - No manual intervention or delays
 - **Efficient, optimized malware design** - Minimal execution time reduces detection window
 - **Professional development practices** - Code is tested, refined, and optimized
@@ -763,7 +753,7 @@ Registry Run Key (inferred):
 **Confidence:** CONFIRMED
 
 **Evidence:**
-1. Executed `schtasks.exe` (PID 3580) at timestamp 15:28:04.684
+1. Executed `schtasks.exe` at T+0.684s
 2. Created scheduled task named `Microsoft\Windows\.NET Runtime Optimization`
 3. Used `task.xml` configuration file (subsequently deleted for anti-forensics)
 
@@ -807,15 +797,15 @@ EventID=1 Image="*\\schtasks.exe" CommandLine="*/create*"
 **Confidence:** CONFIRMED
 
 **Evidence:**
-1. Deleted `task.xml` file at timestamp 15:28:04.804 (120ms after schtasks.exe execution)
+1. Deleted `task.xml` at T+0.804s (120ms after schtasks.exe execution)
 
 **MITRE Description:** Adversaries may delete files left behind by the actions of their intrusion activity to remove evidence.
 
 **Observed Implementation:**
 ```
 Timeline:
-15:28:04.684 - schtasks.exe spawned (creates task from task.xml)
-15:28:04.804 - task.xml deleted (anti-forensics)
+T+0.684s - schtasks.exe spawned (creates task from task.xml)
+T+0.804s - task.xml deleted (anti-forensics)
 Δ Time: 0.120 seconds between task creation and evidence deletion
 ```
 
@@ -1155,20 +1145,9 @@ Rebuild is recommended unless:
 
 **Q: What is the business impact of this malware?**
 
-**A:** FleetAgentAdvanced.exe creates significant business risk:
-
-**Immediate Costs (Per Infected System):**
-- Investigation & Scoping: 2-4 hours @ $150-300/hour = $300-$1,200
-- Remediation (Rebuild): 4-8 hours @ $150-300/hour = $600-$2,400
-- User Downtime: 4-8 hours @ $50-100/hour productivity loss = $200-$800
-- **Total per system: $1,100-$4,400**
-
-**Organizational Impact (50 infected systems example):**
-- Direct remediation costs: $55,000-$220,000
-- User productivity loss: $10,000-$40,000
-- Potential data breach if C2 activates: $100,000-$500,000+ (depending on data accessed)
-- Regulatory fines (if PII/PHI accessed): $50,000-$500,000+ (GDPR, HIPAA)
-- **Total potential cost: $215,000-$1,260,000+**
+**A:** FleetAgentAdvanced.exe creates significant business risk. Sizing it is an
+organization's own exercise, and it turns on how many hosts carry the four persistence
+mechanisms and what the dropped payload reaches once it activates:
 
 **Long-Term Risks:**
 - **Dwell Time**: Dormant malware may remain undetected for weeks/months before C2 activation
@@ -1225,7 +1204,6 @@ Rebuild is recommended unless:
 2. **Incident Response Playbooks** - Pre-defined procedures for multi-persistence malware
 3. **Forensic Capabilities** - Memory analysis, timeline reconstruction
 
-**Cost-Benefit:** Investing $50,000-$150,000 in prevention/detection controls prevents $215,000-$1,260,000+ in breach costs.
 
 ---
 

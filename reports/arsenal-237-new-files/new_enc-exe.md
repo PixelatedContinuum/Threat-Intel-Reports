@@ -147,7 +147,7 @@ new_enc.exe is deployed **manually by threat actors** following successful syste
 
 **Data Sources**
 - Sample hash verification: MD5, SHA1, SHA256 confirmed
-- Binary analysis: IDA Pro disassembly and code cross-referencing
+- Binary analysis: disassembly and code cross-referencing
 - YARA rules: Crypto constant identification, anti-analysis technique detection
 - Threat intelligence: Arsenal-237 family relationship assessment
 
@@ -787,55 +787,6 @@ index=main sourcetype=WinEventLog:System (GxVss OR GxBlr OR GxFWD OR GxCVD OR Gx
 process.name:("new_enc.exe" OR "enc*.exe") AND memory.strings:"67e6096a85ae67bb"
 ```
 
-### Incident Response Procedures
-
-**PRIORITY 1 - IMMEDIATE ACTIONS (Critical Priority)**
-
-Critical actions if new_enc.exe confirmed on any system:
-
-- [ ] **Isolate Infected System** - Disconnect from network immediately (physical network disconnect if possible)
-  - *Rationale:* Prevent lateral movement or backup infrastructure attacks from infected host
-
-- [ ] **Alert Executive Leadership & Legal** - Notify executive team of potential ransomware incident
-  - *Rationale:* Enables business continuity planning and legal response coordination
-
-- [ ] **Check Backup System Status** - Verify Veritas Backup Exec and Veeam services running on backup systems
-  - *Rationale:* Determine if backup infrastructure compromised or if recovery options remain viable
-
-- [ ] **Preserve Evidence** - Create forensic image of infected system (do not allow further execution)
-  - *Rationale:* Enables forensic analysis and potential law enforcement cooperation
-
-- [ ] **Assess Encryption Scope** - Identify all systems that may have been compromised and deployed this ransomware
-  - *Rationale:* Determines incident scope and recovery requirements
-
-**PRIORITY 2 - INVESTIGATION PHASE (High Priority)**
-
-- [ ] **Deploy Detection Signatures** - Apply YARA rules and behavioral signatures across infrastructure
-  - *Rationale:* Identify all additional affected systems
-
-- [ ] **Network Threat Hunting** - Execute detection queries for VSS deletion, Veritas termination, scheduled task creation
-  - *Rationale:* Comprehensive detection of all infection instances
-
-- [ ] **Log Analysis** - Review Windows Event Logs for service termination sequences, scheduled task creation
-  - *Rationale:* Establish timeline and determine other affected systems
-
-- [ ] **Backup Verification** - Confirm offline backup integrity and recoverability
-  - *Rationale:* Assess data recovery feasibility without ransom payment
-
-**PRIORITY 3 - REMEDIATION DECISION (High Priority)**
-
-Decision point: **Complete System Rebuild vs. Aggressive Cleanup** (See Section 9)
-
-**PRIORITY 4 - RECOVERY EXECUTION (Medium Priority)**
-
-- [ ] **Credential Reset** - Change all passwords for compromised systems and related accounts
-
-- [ ] **Network Segmentation Review** - Assess and improve network segmentation to prevent similar lateral movement
-
-- [ ] **Endpoint Protection Update** - Deploy EDR/AV definitions for new_enc.exe and Arsenal-237 family
-
----
-
 ## Section 9: Recovery Path Analysis
 
 ### Encryption Key Recovery Scenario
@@ -899,83 +850,6 @@ Organizations with offline backups face significantly better recovery prospects:
 - Online backups inaccessible
 - **Timeline:** Ransom payment or months of data loss
 - **Cost:** Ransom payment + operational disruption
-
-### Decision Framework: Rebuild vs. Cleanup
-
-**IMPORTANT:** No prescriptive timelines provided; decisions depend on organizational risk tolerance and recovery capabilities.
-
-#### Option A: Complete System Rebuild (RECOMMENDED)
-
-**When MANDATORY:**
-- [ ] System is business-critical (database server, domain controller, backup server)
-- [ ] Encryption confirms execution occurred
-- [ ] No offline backup recovery viable
-- [ ] System contains sensitive credentials
-- [ ] Enterprise backup targeting detected
-
-**Process Outline:**
-1. Forensic imaging of current system state
-2. Hardware inventory and baseline documentation
-3. OS installation from secure media
-4. Application installation from original/clean sources
-5. Configuration restoration from clean backups
-6. User data restoration from offline backups (if available)
-7. Security hardening and EDR deployment
-8. System testing and validation
-
-**Residual Risk After Rebuild:** MINIMAL (assumes clean installation media and offline backups)
-
-#### Option B: Aggressive Cleanup (HIGHER RISK - NOT RECOMMENDED)
-
-**ONLY consider if:**
-- System is non-critical (development, test environment)
-- No encrypted files confirmed
-- Complete offline backups exist for user data
-- Extensive log analysis confirms no other compromise
-
-**Risk Assessment:** Even with aggressive cleanup, potential for residual malware persists. Scheduled task remains hidden unless specifically discovered. System trust is fundamentally compromised.
-
-**Cleanup Procedure (If Proceeding Despite Risks):**
-
-1. **Isolate System** - Disconnect from network and all backup systems
-
-2. **Threat Hunting** - Execute comprehensive process/registry/file scans
-   - YARA scan entire filesystem
-   - Check running processes for new_enc.exe
-   - Search registry for RustRansomNoteTask
-
-3. **Scheduled Task Removal**
-   ```powershell
-   schtasks.exe /delete /tn "RustRansomNoteTask" /f
-   ```
-
-4. **VSS Restoration** (If possible)
-   - Restore VSS snapshots from backup
-   - Or restore Volume Shadow Copy Service if disabled
-
-5. **Service Restoration**
-   - Restart Veritas Backup Exec services
-   - Restart Veeam services
-   - Verify database services functioning
-
-6. **Malware Removal**
-   - Boot from clean recovery media
-   - Scan with offline antivirus tools
-   - Remove quarantined files
-
-7. **System Testing**
-   - Full system integrity scan
-   - Application functionality testing
-   - Backup system testing
-
-8. **Residual Risk Monitoring**
-   - Enhanced EDR logging
-   - Behavioral analysis
-   - Network isolation for 7-14 days observation
-
-**Post-Cleanup Verification:** System trust remains questionable. Residual risk of undetected malware remains significant.
-
----
 
 ## Section 10: Threat Assessment & Attribution
 
@@ -1067,66 +941,32 @@ Command-line interface (--pass, --folder, --file) indicates new_enc.exe is a pos
 
 ---
 
-## Section 12: Recommended Actions
+## Section 12: Response Orientation
 
-### Immediate Actions (Urgent Priority)
+This is not an incident-response playbook. An organization facing this ransomware should run
+its own incident-response process; what follows is a third-party orientation to the one
+finding here that changes what is possible.
 
-**1. Validate Backup System Integrity**
-- Verify Veritas Backup Exec and Veeam services operational
-- Confirm offline backup accessibility and recoverability
-- Test backup restoration procedures on test system
+This variant carries a hardcoded ChaCha20 key, documented in the analysis above. That is a
+test-build lapse rather than the operator's intent, and it means files encrypted by this
+specific build are recoverable without contacting anyone. Confirming which build ran is
+therefore the highest-value action available, and it is established from the encrypted files
+themselves rather than from the binary, which may no longer be present.
 
-**2. Deploy Detection Signatures**
-- Implement YARA rules for new_enc.exe file hash and hardcoded key
-- Deploy behavioral detection for VSS deletion commands
-- Create alerts for RustRansomNoteTask scheduled task creation
+**Hunt these first.** The pre-encryption behaviour, which is louder than the encryption:
+shadow-copy deletion and backup-agent termination both precede file writes and both are
+recoverable from ordinary endpoint logging. The manual, hands-on-keyboard deployment pattern
+means these actions arrive close together rather than on a schedule.
 
-**3. Activate Threat Hunting**
-- Execute detection queries across infrastructure for Arsenal-237 indicators
-- Hunt for VSS deletion commands in event logs
-- Identify any systems with RustRansomNoteTask scheduled task
+**Where the artifacts sit.** Encrypted files carry the family marker; the excluded-directory
+list documented above explains what survived and why, and a system that still boots after
+encryption is a design outcome rather than a partial run.
 
-**4. Harden Backup Infrastructure**
-- Implement network segmentation preventing direct access to backup systems from workstations
-- Enable immutable backup settings (if not already configured)
-- Require multi-factor authentication for backup system access
-
-### Short-Term Improvements (This Week)
-
-**5. EDR Deployment Review**
-- Verify Endpoint Detection & Response coverage on critical systems
-- Test EDR detection of ransomware behaviors (service termination, VSS deletion)
-- Enable behavioral analysis if not currently active
-
-**6. Incident Response Plan Activation**
-- Review and test incident response procedures
-- Ensure external cybersecurity incident response team contacts established
-- Verify law enforcement coordination procedures in place
-
-**7. Credential Security Hardening**
-- Review and strengthen password policies
-- Implement privileged account management (PAM) solutions
-- Enable multi-factor authentication for remote access
-
-### Medium-Term Strategic Initiatives (This Month)
-
-**8. Network Segmentation Implementation**
-- Segment backup systems from general workstations
-- Isolate database servers from user-accessible networks
-- Implement network access controls preventing lateral movement
-
-**9. Backup Strategy Review**
-- Evaluate offline backup frequency and storage security
-- Implement immutable backups preventing encryption
-- Test backup restoration procedures quarterly
-
-**10. Security Awareness Training**
-- Educate users on phishing indicators (initial compromise vector)
-- Conduct tabletop exercises for ransomware response
-- Establish security reporting procedures
-
----
-
+**Containment categories.** Isolate affected hosts and preserve encrypted samples before any
+rebuild, because build identification depends on them. Treat backup infrastructure as a
+target rather than a resource until its reachability from the affected host is established.
+Assume interactive operator access preceded the encryption stage, so the entry path and any
+credentials used along it are in scope independently of the ransomware itself.
 ## Section 13: Confidence Levels Summary
 
 ### CONFIRMED (95-100% Confidence)

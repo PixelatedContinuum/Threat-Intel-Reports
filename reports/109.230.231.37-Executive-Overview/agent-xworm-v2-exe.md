@@ -479,7 +479,7 @@ XWorm RAT → AsyncRAT → LockBit Black ransomware
 5. **Resource Utilization**: Minimal CPU and memory footprint (<5MB RAM, <1% CPU)
 
 **Network Activity**:
-- **NO network connections established** (Volatility netscan.txt confirms empty network state)
+- **NO network connections established** (memory forensics confirms an empty network state)
 - **Analysis**: C2 server `109.230.231.37` was unreachable during analysis
 - **Expected Behavior**: Outbound WebSocket connection attempt to ws://109.230.231.37
 - **Implication**: Malware has no fallback C2 domains (single point of failure)
@@ -493,7 +493,7 @@ XWorm RAT → AsyncRAT → LockBit Black ransomware
 - **NO registry modifications detected**
 - Standard .NET Framework configuration queries observed (normal for .NET applications)
 
-**Memory Analysis (Volatility)**:
+**Memory analysis**:
 - Process visible in memory (PID 6428, parent cmd.exe PID 1804)
 - No injected code or hollowed processes detected
 - Clean process tree structure
@@ -547,45 +547,29 @@ Get-WmiObject Win32_ComputerSystem
 
 ---
 
-## Incident Response Procedures
+## Response Orientation
 
-### Priority 1: Immediate Response (0-4 hours)
+This is not an incident-response playbook. An organization with a live detection for this
+sample should run its own incident-response process; what follows is a third-party
+orientation to what the evidence supports.
 
-**CRITICAL Actions**:
-1. **ISOLATE** infected systems (disable network adapter, preserve memory)
-2. **BLOCK** C2 IP 109.230.231.37 at network perimeter - MANDATORY
-3. **PRESERVE** evidence (memory dumps, disk images, network pcaps)
-4. **ALERT** leadership (CISO, IT Director) of CRITICAL XWorm RAT infection
-5. **HUNT** enterprise-wide for file hashes and C2 connections
+The observed behaviour was limited: no network connections were established and no injected
+code was present in memory during analysis. That is a finding about this build's behaviour in
+the observed conditions, not a claim that the sample is inert, and the capability sections
+above describe what it carries regardless of whether it ran.
 
-### Priority 2: Investigation (4-24 hours)
+**Hunt these first.** The static file anchors in the IOC section, since a build that did not
+reach its command channel leaves little behavioural trace to hunt. Then the persistence
+locations documented above, which are written independently of whether the channel succeeds.
 
-**Threat Hunting**:
-- Search all endpoints for SHA256 hash
-- Review firewall logs for connections to 109.230.231.37
-- Search PowerShell logs for reconnaissance patterns
-- Identify all users on infected systems during infection window
+**Where the artifacts sit.** On disk, at the paths documented above, and in the persistence
+mechanism rather than in network telemetry.
 
-**Credential Rotation Scope**:
-- ALL users who authenticated to infected systems (MANDATORY)
-- Service accounts accessible from infected systems
-- Privileged accounts enterprise-wide (if infected system had admin access)
-
-### Priority 3: Remediation Decision
-
-**REBUILD STRONGLY RECOMMENDED**:
-- Complete system wipe and clean OS installation from trusted media
-- Restore user data from pre-infection backups (after malware scanning)
-- MANDATORY credential rotation for all affected users
-- Deploy enhanced monitoring for 30 days post-rebuild
-
-**Cleanup NOT RECOMMENDED** due to:
-- XWorm modular architecture (unknown plugins may have loaded)
-- 78% multi-malware campaign rate (AsyncRAT, LockBit indicators required)
-- 10-20% residual risk of hidden persistence mechanisms
-
----
-
+**Containment categories.** Isolate hosts where the sample is found, and treat the absence of
+network activity as unconfirmed rather than as evidence the sample failed, since a command
+channel that was unreachable at one moment may not be at another. Remove the persistence entry
+along with the file, and hunt for the other components of the toolkit, which this sample is
+part of rather than separate from.
 ## Frequently Asked Questions
 
 ### Q: Why is the C2 server offline?
