@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-04T12:00:51Z
+generated_at: 2026-09-04T14:02:52Z
 window_days: 30
 counts:
-  total: 536
-  research: 197
-  news: 339
+  total: 540
+  research: 199
+  news: 341
 topics:
   - label: "vulnerabilities"
-    count: 70
+    count: 72
     color: 1
   - label: "cybercrime"
     count: 55
@@ -20,10 +20,10 @@ topics:
     count: 27
     color: 3
   - label: "malware"
-    count: 27
+    count: 26
     color: 4
   - label: "government"
-    count: 26
+    count: 25
     color: 5
   - label: "artificial intelligence"
     count: 22
@@ -56,8 +56,6 @@ label_colors:
   "academic lure": 1
   "accessibility abuse": 6
   "accessibility services": 10
-  "account farming": 5
-  "account trafficking": 3
   "account-enumeration": 7
   "active directory compromise": 7
   "active directory reconnaissance": 1
@@ -87,6 +85,7 @@ label_colors:
   "ai testing": 12
   "ai vishing": 6
   "ai voice phishing": 4
+  "ai-assisted intrusions": 3
   "ai-assisted malware": 8
   "ai-assisted-development": 9
   "ai-generated personas": 9
@@ -286,6 +285,8 @@ label_colors:
   "cve-2025-49113": 3
   "cve-2026-19949": 8
   "cve-2026-20354": 12
+  "cve-2026-59346": 5
+  "cve-2026-6471": 10
   "cve-2026-66747": 10
   "cve-2026-68820": 2
   "cyber-espionage": 3
@@ -329,10 +330,12 @@ label_colors:
   "exploited": 3
   "exposure management": 4
   "extortion": 12
+  "fake job interview": 1
   "fake lock screen": 6
   "fake security scan": 12
   "fake tax documents": 4
   "fakecaptcha": 7
+  "fengtai government": 3
   "firefox": 3
   "fortinet": 7
   "fraud & identity theft": 11
@@ -364,7 +367,6 @@ label_colors:
   "ics patch tuesday": 12
   "ics/ot": 1
   "identity": 8
-  "identity & access": 10
   "identity theft": 7
   "in other news": 8
   "incident response": 7
@@ -394,6 +396,7 @@ label_colors:
   "mobile": 4
   "mobile & wireless": 4
   "nation-state": 11
+  "netch-gateway": 5
   "netscaler": 5
   "next-gen identity security": 12
   "next-gen siem & log management": 11
@@ -413,7 +416,9 @@ label_colors:
   "plugin": 7
   "poc": 2
   "poc exploit": 3
+  "postgresql": 12
   "privacy": 12
+  "proxy abuse": 6
   "qilin": 11
   "ransomware": 12
   "rce": 10
@@ -444,18 +449,60 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Sangoma Switchvox Vulnerabilities Exploited in the Wild"
+    url: "https://www.securityweek.com/sangoma-switchvox-vulnerabilities-exploited-in-the-wild/"
+    source: "SecurityWeek"
+    date: 2026-09-04T13:23:12Z
+    kind: news
+    labels: ["vulnerabilities"]
+  - title: "New CrowdStrike 'FalconFlank' zero-day grants SYSTEM privileges"
+    url: "https://www.bleepingcomputer.com/news/security/new-crowdstrike-falconflank-zero-day-grants-system-privileges/"
+    source: "BleepingComputer"
+    date: 2026-09-04T13:22:01Z
+    kind: news
+    labels: []
+  - title: "12-Year-Old PostgreSQL Vulnerability Enables Database, Server Takeover"
+    url: "https://www.securityweek.com/12-year-old-postgresql-vulnerability-enables-database-server-takeover/"
+    source: "SecurityWeek"
+    date: 2026-09-04T12:06:13Z
+    kind: news
+    labels: ["cve-2026-6471", "postgresql", "vulnerabilities"]
+  - title: "Google warns of new Chrome zero-day flaw exploited in attacks"
+    url: "https://www.bleepingcomputer.com/news/security/google-warns-of-new-chrome-zero-day-flaw-exploited-in-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-04T11:48:17Z
+    kind: news
+    labels: []
+  - title: "VMware Workstation and Fusion Updates Patch Critical Vulnerability"
+    url: "https://www.securityweek.com/vmware-workstation-and-fusion-updates-patch-critical-vulnerability/"
+    source: "SecurityWeek"
+    date: 2026-09-04T11:42:55Z
+    kind: news
+    labels: ["cve-2026-59346", "vmware", "vulnerabilities"]
   - title: "Google Patches 6th Chrome Zero-Day of 2026"
     url: "https://www.securityweek.com/google-patches-6th-chrome-zero-day-of-2026/"
     source: "SecurityWeek"
     date: 2026-09-04T11:31:52Z
     kind: news
     labels: ["chrome", "vulnerabilities", "zero-day"]
+  - title: "Attack Cases in Korea Involving the Installation of Radmin and UltraVNC"
+    url: "https://otx.alienvault.com/pulse/6a9a78c9a7a8e20715261f8c"
+    source: "AlienVault"
+    date: 2026-09-04T07:52:40Z
+    kind: research
+    labels: ["netch-gateway", "proxy abuse", "radmin", "softether vpn", "ultravnc"]
   - title: "Data access: the hidden cost of security vendor lock-in"
     url: "https://www.elastic.co/security-labs/blog/siem-data-export-comparison"
     source: "Elastic"
     date: 2026-09-04T00:00:00Z
     kind: research
     labels: ["security operations", "soc"]
+  - title: "Contagious Interview steps outside the developer workflow"
+    url: "https://www.jamf.com/blog/contagious-interview-trojanized-macos-installers/"
+    source: "AlienVault"
+    date: 2026-09-03T22:07:29Z
+    kind: research
+    labels: ["fake job interview", "macos", "ottercookie", "trojanized installers"]
   - title: "French hospital fined €500,000 after breach exposes data of 727,000"
     url: "https://www.bleepingcomputer.com/news/security/french-hospital-fined-500-000-after-breach-exposes-data-of-727-000/"
     source: "BleepingComputer"
@@ -486,6 +533,12 @@ items:
     date: 2026-09-03T18:00:13Z
     kind: research
     labels: ["threat source newsletter"]
+  - title: "Chinese-Speaking Operator Uses AI Agents to Target Government and Education Systems Across Asia"
+    url: "https://hunt.io/blog/chinese-operator-secflow-claude-qwen-deepseek-asia"
+    source: "AlienVault"
+    date: 2026-09-03T17:26:22Z
+    kind: research
+    labels: ["ai-assisted intrusions", "fengtai government", "glutton", "glutton webshells", "secbox", "secflow framework", "steganographic payloads"]
   - title: "ASCII smuggling crosses over from AI prompt injection to phishing evasion"
     url: "https://www.microsoft.com/en-us/security/blog/2026/09/03/ascii-smuggling-crosses-over-from-ai-prompt-injection-to-phishing-evasion/"
     source: "Microsoft"
@@ -3636,27 +3689,3 @@ items:
     date: 2026-08-05T14:36:05Z
     kind: research
     labels: ["cve-2026-66747", "endlessdoors", "iot compromise", "pre-installed implant", "rctl", "router backdoor", "supply chain", "zbtlink"]
-  - title: "How AI-powered phishing killed blocklists for good"
-    url: "https://www.bleepingcomputer.com/news/security/how-ai-powered-phishing-killed-blocklists-for-good/"
-    source: "BleepingComputer"
-    date: 2026-08-05T14:01:11Z
-    kind: news
-    labels: []
-  - title: "SecuritySnack - Account Farmers and Sellers"
-    url: "https://otx.alienvault.com/pulse/6a7336a104e4148eaba5ac26"
-    source: "AlienVault"
-    date: 2026-08-05T13:12:01Z
-    kind: research
-    labels: ["account farming", "account trafficking", "cloud infrastructure abuse", "fraudulent accounts", "kyc bypass", "mfa evasion", "payment fraud", "social media abuse"]
-  - title: "Anthropic AI agent faked identities, phished real developers in UK government hacking test"
-    url: "https://therecord.media/anthropic-ai-hacking-uk"
-    source: "Recorded Future"
-    date: 2026-08-05T13:00:00Z
-    kind: news
-    labels: ["government", "malware"]
-  - title: "New Attack Methods Enable Malware to Hijack Passkey-Protected Accounts"
-    url: "https://www.securityweek.com/new-attack-methods-enable-malware-to-hijack-passkey-protected-accounts/"
-    source: "SecurityWeek"
-    date: 2026-08-05T12:48:49Z
-    kind: news
-    labels: ["google", "identity & access", "pass-ta-key", "passkey", "passwordless", "vulnerabilities"]
