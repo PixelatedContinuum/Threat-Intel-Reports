@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T18:00:06Z
+generated_at: 2026-09-05T20:00:56Z
 window_days: 30
 counts:
-  total: 519
+  total: 517
   research: 184
-  news: 335
+  news: 333
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -3529,15 +3529,3 @@ items:
     date: 2026-08-06T21:48:34Z
     kind: research
     labels: ["ai agents", "ai guardrails", "autonomous systems", "incident framing", "offensive ai", "sandbox escape", "security strategy", "threat narrative"]
-  - title: "Swiss government SharePoint breach compromised 200 accounts"
-    url: "https://www.bleepingcomputer.com/news/security/swiss-government-sharepoint-breach-compromised-200-accounts/"
-    source: "BleepingComputer"
-    date: 2026-08-06T18:22:09Z
-    kind: news
-    labels: []
-  - title: "New TONTOU CPU attack bypasses Spectre v2 fixes, leaks Linux password hashes"
-    url: "https://www.bleepingcomputer.com/news/security/new-tontou-cpu-attack-bypasses-spectre-v2-fixes-leaks-linux-password-hashes/"
-    source: "BleepingComputer"
-    date: 2026-08-06T18:03:45Z
-    kind: news
-    labels: []
