@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T08:01:16Z
+generated_at: 2026-09-05T10:00:06Z
 window_days: 30
 counts:
-  total: 531
-  research: 193
-  news: 338
+  total: 526
+  research: 189
+  news: 337
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -25,14 +25,14 @@ topics:
   - label: "malware"
     count: 26
     color: 5
-  - label: "artificial intelligence"
-    count: 22
-    color: 6
   - label: "data breaches"
     count: 22
+    color: 6
+  - label: "artificial intelligence"
+    count: 21
     color: 7
   - label: "credential theft"
-    count: 17
+    count: 16
     color: 8
   - label: "microsoft"
     count: 14
@@ -40,10 +40,10 @@ topics:
   - label: "ransomware"
     count: 14
     color: 10
-  - label: "supply chain attack"
-    count: 14
-    color: 11
   - label: "clickfix"
+    count: 13
+    color: 11
+  - label: "healthcare"
     count: 13
     color: 12
 label_colors:
@@ -128,7 +128,7 @@ label_colors:
   "armenia": 5
   "arrayref": 8
   "arrested": 2
-  "artificial intelligence": 6
+  "artificial intelligence": 7
   "asia-pacific": 6
   "asiogate": 3
   "astral-pe": 3
@@ -143,10 +143,8 @@ label_colors:
   "audio surveillance": 7
   "australia": 10
   "authentication": 6
-  "authentication bypass": 4
   "autoit": 8
   "aviation sector": 9
-  "aws-secrets": 7
   "azure": 1
   "azure infrastructure": 4
   "azure table storage": 2
@@ -196,7 +194,6 @@ label_colors:
   "c2 infrastructure": 12
   "c2 relay": 2
   "c2looper": 2
-  "cacheable": 2
   "camera": 3
   "camview": 6
   "canada revenue agency": 3
@@ -220,7 +217,6 @@ label_colors:
   "chipmaker patch tuesday": 5
   "chrome": 12
   "chrome extension": 7
-  "ci compromise": 2
   "ci/cd compromise": 6
   "ci/cd pipeline exploitation": 4
   "cisa": 6
@@ -233,18 +229,16 @@ label_colors:
   "clamav": 8
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 12
+  "clickfix": 11
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
   "cloud & application security": 1
-  "cloud credential theft": 3
   "cloud security": 9
   "cloudflare": 11
   "cloudflare captcha": 5
   "cloudflare tunnels": 6
   "cloudflare workers": 6
-  "cloudflared": 7
   "communicationuxtheme.dll": 10
   "compile-time execution": 3
   "contactless payment fraud": 3
@@ -290,7 +284,7 @@ label_colors:
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
-  "data breaches": 7
+  "data breaches": 6
   "data leak": 9
   "data-exfiltration": 12
   "dcrat": 12
@@ -347,7 +341,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 11
+  "healthcare": 12
   "heights financial": 1
   "hidden execution": 12
   "high profile threats": 2
@@ -376,7 +370,6 @@ label_colors:
   "living-off-the-land": 1
   "macos": 11
   "malware": 5
-  "meta": 5
   "metabase": 6
   "microsoft": 9
   "microsoft teams": 10
@@ -427,7 +420,7 @@ label_colors:
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
-  "supply chain attack": 11
+  "supply chain attack": 6
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
@@ -3593,33 +3586,3 @@ items:
     date: 2026-08-06T10:00:49Z
     kind: research
     labels: ["ai api", "ai gateway", "api keys", "malware", "npm packages", "obfuscation", "threat research", "token jacking", "transfer stations"]
-  - title: "Meta AI Hacked External Systems During Cybersecurity Testing"
-    url: "https://www.securityweek.com/meta-ai-hacked-external-systems-during-cybersecurity-testing/"
-    source: "SecurityWeek"
-    date: 2026-08-06T09:56:26Z
-    kind: news
-    labels: ["artificial intelligence", "meta", "meta ai", "rogue ai"]
-  - title: "Here We Go Again - JavaScript Payload Analysis"
-    url: "https://otx.alienvault.com/pulse/6a745746ff40fa3e996fe0ec"
-    source: "AlienVault"
-    date: 2026-08-06T09:43:34Z
-    kind: research
-    labels: ["ci compromise", "credential theft", "github actions", "kubernetes", "npm package compromise", "shai-hulud", "supply chain attack", "vault secrets"]
-  - title: "Major Shai Hulud campaign strikes npm again, affecting keyv and 400+ packages"
-    url: "https://otx.alienvault.com/pulse/6a74570cf5cc7a08cd8e9903"
-    source: "AlienVault"
-    date: 2026-08-06T09:42:36Z
-    kind: research
-    labels: ["aws-secrets", "cacheable", "claude-hooks", "github-compromise", "keyv", "npm-registry", "shai-hulud", "token-theft", "trusted-publishing", "vault-harvesting", "vs-code-hooks"]
-  - title: "Authentication Bypass Vulnerability in N-central Exploited In-The-Wild"
-    url: "https://www.rapid7.com/blog/post/etr-cve-2026-18577-n-able-n-central-authentication-bypass-exploited-in-the-wild/"
-    source: "AlienVault"
-    date: 2026-08-06T09:39:27Z
-    kind: research
-    labels: ["authentication bypass", "cloudflared", "cve-2026-18556", "cve-2026-18577", "msp compromise", "n-central", "remote access", "rmm", "take control"]
-  - title: "Supply Chain Compromise Affecting keyv and cacheable npm Packages"
-    url: "https://socket.dev/blog/popular-npm-packages-in-the-keyv-and-cacheable-namespaces-compromised-in-active-supply-chain"
-    source: "AlienVault"
-    date: 2026-08-06T09:04:56Z
-    kind: research
-    labels: ["cacheable", "cloud credential theft", "credential harvesting", "jaredwray account compromise", "keyv", "npm compromise", "self-propagating", "supply chain attack"]
