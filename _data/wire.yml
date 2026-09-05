@@ -3,18 +3,18 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T12:01:37Z
+generated_at: 2026-09-05T14:01:46Z
 window_days: 30
 counts:
-  total: 526
-  research: 189
-  news: 337
+  total: 522
+  research: 186
+  news: 336
 topics:
   - label: "vulnerabilities"
     count: 69
     color: 1
   - label: "cybercrime"
-    count: 56
+    count: 55
     color: 2
   - label: "exploited"
     count: 27
@@ -23,16 +23,16 @@ topics:
     count: 27
     color: 4
   - label: "malware"
-    count: 25
+    count: 24
     color: 5
   - label: "data breaches"
     count: 22
     color: 6
   - label: "artificial intelligence"
-    count: 21
+    count: 20
     color: 7
   - label: "credential theft"
-    count: 17
+    count: 15
     color: 8
   - label: "microsoft"
     count: 14
@@ -73,7 +73,6 @@ label_colors:
   "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
-  "ai api theft": 7
   "ai guardrails": 8
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
@@ -118,6 +117,7 @@ label_colors:
   "app password phishing": 8
   "apple": 12
   "apple activation lock": 5
+  "application security": 6
   "apt": 5
   "apt28": 3
   "apt29": 2
@@ -207,7 +207,6 @@ label_colors:
   "charity": 12
   "chatgpt": 1
   "chatgpt abuse": 3
-  "chatgpt atlas": 4
   "china": 5
   "china apt": 12
   "china-nexus": 11
@@ -243,7 +242,6 @@ label_colors:
   "contactless payment fraud": 3
   "control-flow flattening": 10
   "coolclient": 8
-  "crat": 2
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
@@ -429,6 +427,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Elementor Pro WordPress Plugin Vulnerability Exploited to Hack Sites"
+    url: "https://www.securityweek.com/elementor-pro-wordpress-plugin-vulnerability-exploited-to-hack-sites/"
+    source: "SecurityWeek"
+    date: 2026-09-05T13:00:28Z
+    kind: news
+    labels: ["application security", "vulnerabilities", "wordpress"]
   - title: "IDScan sued over alleged data breach affecting 153 million drivers"
     url: "https://www.bleepingcomputer.com/news/security/idscan-sued-over-alleged-data-breach-affecting-153-million-drivers/"
     source: "BleepingComputer"
@@ -3501,6 +3505,12 @@ items:
     date: 2026-08-06T22:26:39Z
     kind: research
     labels: ["blockchain", "chaindrop", "claude code", "developer tooling", "github", "high profile threats", "malware"]
+  - title: "UNC6671 Rebrands: Multi-Brand Vishing Extortion Targets Financial Services and Enterprise Cloud Environments"
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/unc6671-targets-financial-services-and-enterprise-cloud-environments"
+    source: "AlienVault"
+    date: 2026-08-06T22:15:43Z
+    kind: research
+    labels: ["adversary-in-the-middle", "blackfile", "credential-harvesting", "data-theft-extortion", "helix", "phishing-resistant-mfa", "pink", "redact", "saas-exfiltration", "vishing"]
   - title: "Multi-Brand Vishing Extortion Targets Financial Services and Enterprise Cloud Environments"
     url: "https://cloud.google.com/blog/topics/threat-intelligence/unc6671-targets-financial-services-and-enterprise-cloud-environments"
     source: "AlienVault"
@@ -3549,39 +3559,3 @@ items:
     date: 2026-08-06T14:56:31Z
     kind: news
     labels: ["cybercrime", "hacker", "plead guilty", "snowflake"]
-  - title: "UNC6671 Rebrands: Multi-Brand Vishing Extortion Targets Financial Services and Enterprise Cloud Environments"
-    url: "https://cloud.google.com/blog/topics/threat-intelligence/unc6671-targets-financial-services-and-enterprise-cloud-environments/"
-    source: "Google"
-    date: 2026-08-06T14:00:00Z
-    kind: research
-    labels: ["threat intelligence"]
-  - title: "Belarusian cybercriminal behind Ransom Cartel gets 16-year prison sentence"
-    url: "https://therecord.media/belarus-hacker-ransomware-sentenced"
-    source: "Recorded Future"
-    date: 2026-08-06T13:15:00Z
-    kind: news
-    labels: ["cybercrime", "malware"]
-  - title: "ChainDrop npm Attack Compromises Hundreds of Packages"
-    url: "https://op-c.net/blog/chaindrop-npm-supply-chain-attack/"
-    source: "AlienVault"
-    date: 2026-08-06T12:57:28Z
-    kind: research
-    labels: ["chaindrop", "credential theft", "developer infrastructure", "github actions", "npm", "self-propagating worm", "shai-hulud", "supply chain"]
-  - title: "Zero-Click AI Browser Hacking: Claude and ChatGPT Atlas Hijacked via Emails, X Posts"
-    url: "https://www.securityweek.com/zero-click-ai-browser-hacking-claude-and-chatgpt-atlas-hijacked-via-emails-x-posts/"
-    source: "SecurityWeek"
-    date: 2026-08-06T12:54:09Z
-    kind: news
-    labels: ["artificial intelligence", "chatgpt atlas", "claude", "vulnerabilities"]
-  - title: "Token Jacking: Cybercriminals Could Be Stealing Your AI Resources"
-    url: "https://otx.alienvault.com/pulse/6a748055b6dd0f782e3470ff"
-    source: "AlienVault"
-    date: 2026-08-06T12:38:45Z
-    kind: research
-    labels: ["ai api theft", "credential theft", "gray-market ai", "llm abuse", "miasma", "npm supply chain", "shai-hulud", "token jacking", "transfer stations"]
-  - title: "Analysis of the Connection Between Xctdoor and Past CRAT Attack Cases"
-    url: "https://otx.alienvault.com/pulse/6a748055fc990bd246b92b6c"
-    source: "AlienVault"
-    date: 2026-08-06T12:38:45Z
-    kind: research
-    labels: ["backdoor", "crat", "cve-2017-8291", "dll side-loading", "hansom", "hansom ransomware", "ngrok", "north korea", "spear phishing", "threatneedle", "xcloader", "xctdoor"]
