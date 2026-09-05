@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T20:00:56Z
+generated_at: 2026-09-05T22:00:27Z
 window_days: 30
 counts:
-  total: 517
-  research: 184
+  total: 516
+  research: 183
   news: 333
 topics:
   - label: "vulnerabilities"
@@ -72,7 +72,6 @@ label_colors:
   "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
-  "ai agents": 8
   "ai guardrails": 8
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
@@ -3523,9 +3522,3 @@ items:
     date: 2026-08-06T22:15:43Z
     kind: research
     labels: ["adversary-in-the-middle", "blackfile", "credential-harvesting", "data-theft-extortion", "helix", "phishing-resistant-mfa", "pink", "redact", "saas-exfiltration", "vishing"]
-  - title: "Why metaphor may dictate your security strategy"
-    url: "https://otx.alienvault.com/pulse/6a75013260afaffe65ed6d6a"
-    source: "AlienVault"
-    date: 2026-08-06T21:48:34Z
-    kind: research
-    labels: ["ai agents", "ai guardrails", "autonomous systems", "incident framing", "offensive ai", "sandbox escape", "security strategy", "threat narrative"]
