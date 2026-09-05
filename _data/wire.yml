@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T14:01:46Z
+generated_at: 2026-09-05T16:02:06Z
 window_days: 30
 counts:
   total: 522
@@ -14,7 +14,7 @@ topics:
     count: 69
     color: 1
   - label: "cybercrime"
-    count: 55
+    count: 54
     color: 2
   - label: "exploited"
     count: 27
@@ -427,6 +427,12 @@ label_colors:
   "vulnerabilities": 1
   "zoom": 7
 items:
+  - title: "Over 5,400 hacked sites serve ClickFix payloads stored on the blockchain"
+    url: "https://www.bleepingcomputer.com/news/security/over-5-400-hacked-sites-serve-clickfix-payloads-stored-on-the-blockchain/"
+    source: "BleepingComputer"
+    date: 2026-09-05T14:29:13Z
+    kind: news
+    labels: []
   - title: "Elementor Pro WordPress Plugin Vulnerability Exploited to Hack Sites"
     url: "https://www.securityweek.com/elementor-pro-wordpress-plugin-vulnerability-exploited-to-hack-sites/"
     source: "SecurityWeek"
@@ -3553,9 +3559,3 @@ items:
     date: 2026-08-06T16:11:39Z
     kind: news
     labels: []
-  - title: "Snowflake Hacker Pleads Guilty in US Court"
-    url: "https://www.securityweek.com/snowflake-hacker-pleads-guilty-in-us-court/"
-    source: "SecurityWeek"
-    date: 2026-08-06T14:56:31Z
-    kind: news
-    labels: ["cybercrime", "hacker", "plead guilty", "snowflake"]
