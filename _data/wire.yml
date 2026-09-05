@@ -3,7 +3,7 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T10:00:06Z
+generated_at: 2026-09-05T12:01:37Z
 window_days: 30
 counts:
   total: 526
@@ -23,7 +23,7 @@ topics:
     count: 27
     color: 4
   - label: "malware"
-    count: 26
+    count: 25
     color: 5
   - label: "data breaches"
     count: 22
@@ -32,7 +32,7 @@ topics:
     count: 21
     color: 7
   - label: "credential theft"
-    count: 16
+    count: 17
     color: 8
   - label: "microsoft"
     count: 14
@@ -73,8 +73,7 @@ label_colors:
   "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
-  "ai api": 4
-  "ai gateway": 6
+  "ai api theft": 7
   "ai guardrails": 8
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
@@ -3574,15 +3573,15 @@ items:
     date: 2026-08-06T12:54:09Z
     kind: news
     labels: ["artificial intelligence", "chatgpt atlas", "claude", "vulnerabilities"]
+  - title: "Token Jacking: Cybercriminals Could Be Stealing Your AI Resources"
+    url: "https://otx.alienvault.com/pulse/6a748055b6dd0f782e3470ff"
+    source: "AlienVault"
+    date: 2026-08-06T12:38:45Z
+    kind: research
+    labels: ["ai api theft", "credential theft", "gray-market ai", "llm abuse", "miasma", "npm supply chain", "shai-hulud", "token jacking", "transfer stations"]
   - title: "Analysis of the Connection Between Xctdoor and Past CRAT Attack Cases"
     url: "https://otx.alienvault.com/pulse/6a748055fc990bd246b92b6c"
     source: "AlienVault"
     date: 2026-08-06T12:38:45Z
     kind: research
     labels: ["backdoor", "crat", "cve-2017-8291", "dll side-loading", "hansom", "hansom ransomware", "ngrok", "north korea", "spear phishing", "threatneedle", "xcloader", "xctdoor"]
-  - title: "Token Jacking: Cybercriminals Could Be Stealing Your AI Resources"
-    url: "https://unit42.paloaltonetworks.com/ai-token-jacking/"
-    source: "Palo Alto Networks"
-    date: 2026-08-06T10:00:49Z
-    kind: research
-    labels: ["ai api", "ai gateway", "api keys", "malware", "npm packages", "obfuscation", "threat research", "token jacking", "transfer stations"]
