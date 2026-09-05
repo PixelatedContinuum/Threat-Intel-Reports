@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T16:02:06Z
+generated_at: 2026-09-05T18:00:06Z
 window_days: 30
 counts:
-  total: 522
-  research: 186
-  news: 336
+  total: 519
+  research: 184
+  news: 335
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -40,10 +40,10 @@ topics:
   - label: "ransomware"
     count: 14
     color: 10
-  - label: "clickfix"
+  - label: "healthcare"
     count: 13
     color: 11
-  - label: "healthcare"
+  - label: "zero-day"
     count: 13
     color: 12
 label_colors:
@@ -68,11 +68,11 @@ label_colors:
   "aerospace targeting": 10
   "aesto health": 6
   "aeternum": 11
-  "aeza group": 2
   "affiliate fraud": 7
   "agentev2": 6
   "agentic ai": 9
   "agentic soc": 2
+  "ai agents": 8
   "ai guardrails": 8
   "ai infrastructure": 11
   "ai infrastructure targeting": 6
@@ -227,7 +227,7 @@ label_colors:
   "clamav": 8
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 11
+  "clickfix": 3
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -258,7 +258,6 @@ label_colors:
   "cryptocurrency miner": 1
   "cryptocurrency stealer": 4
   "cryptocurrency theft": 3
-  "cryptocurrency wallet theft": 2
   "cryptocurrency-stealer": 7
   "custom tcp protocol": 8
   "cve-2007-3010": 7
@@ -338,7 +337,7 @@ label_colors:
   "hardware": 6
   "hasbro": 1
   "head mare": 3
-  "healthcare": 12
+  "healthcare": 11
   "heights financial": 1
   "hidden execution": 12
   "high profile threats": 2
@@ -425,6 +424,7 @@ label_colors:
   "uncategorized": 10
   "vmware": 2
   "vulnerabilities": 1
+  "zero-day": 12
   "zoom": 7
 items:
   - title: "Over 5,400 hacked sites serve ClickFix payloads stored on the blockchain"
@@ -3523,6 +3523,12 @@ items:
     date: 2026-08-06T22:15:43Z
     kind: research
     labels: ["adversary-in-the-middle", "blackfile", "credential-harvesting", "data-theft-extortion", "helix", "phishing-resistant-mfa", "pink", "redact", "saas-exfiltration", "vishing"]
+  - title: "Why metaphor may dictate your security strategy"
+    url: "https://otx.alienvault.com/pulse/6a75013260afaffe65ed6d6a"
+    source: "AlienVault"
+    date: 2026-08-06T21:48:34Z
+    kind: research
+    labels: ["ai agents", "ai guardrails", "autonomous systems", "incident framing", "offensive ai", "sandbox escape", "security strategy", "threat narrative"]
   - title: "Swiss government SharePoint breach compromised 200 accounts"
     url: "https://www.bleepingcomputer.com/news/security/swiss-government-sharepoint-breach-compromised-200-accounts/"
     source: "BleepingComputer"
@@ -3533,29 +3539,5 @@ items:
     url: "https://www.bleepingcomputer.com/news/security/new-tontou-cpu-attack-bypasses-spectre-v2-fixes-leaks-linux-password-hashes/"
     source: "BleepingComputer"
     date: 2026-08-06T18:03:45Z
-    kind: news
-    labels: []
-  - title: "Why metaphor may dictate your security strategy"
-    url: "https://blog.talosintelligence.com/why-metaphor-may-dictate-your-security-strategy/"
-    source: "Cisco Talos"
-    date: 2026-08-06T18:00:01Z
-    kind: research
-    labels: ["threat source newsletter"]
-  - title: "Mac Malware Drains Crypto Wallets Via Fake CAPTCHA Scam"
-    url: "https://www.huntress.com/blog/mac-crypto-draining-malware"
-    source: "AlienVault"
-    date: 2026-08-06T17:35:59Z
-    kind: research
-    labels: ["aeza group", "clickfix", "credential harvesting", "cryptocurrency theft", "mach-o", "macos", "macsync", "social engineering", "stealer"]
-  - title: "Dissecting Vanta Stealer, a Python-Based Cross-Platform Information Theft Malware"
-    url: "https://www.pointwild.com/threat-intelligence/point-wild-exclusive-dissecting-vanta-stealer-a-python-based-cross-platform-information-theft-malware"
-    source: "AlienVault"
-    date: 2026-08-06T17:04:55Z
-    kind: research
-    labels: ["credential harvesting", "cryptocurrency wallet theft", "discord token theft", "gaming platform targeting", "modular architecture", "pyarmor obfuscation", "python-based stealer", "vanta stealer"]
-  - title: "Meta AI model hacked a company during misconfigured cyber test"
-    url: "https://www.bleepingcomputer.com/news/security/meta-ai-model-hacked-a-company-during-misconfigured-cyber-test/"
-    source: "BleepingComputer"
-    date: 2026-08-06T16:11:39Z
     kind: news
     labels: []
