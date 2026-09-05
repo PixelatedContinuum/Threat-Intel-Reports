@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-04T22:02:06Z
+generated_at: 2026-09-05T00:01:15Z
 window_days: 30
 counts:
-  total: 536
-  research: 195
-  news: 341
+  total: 534
+  research: 194
+  news: 340
 topics:
   - label: "vulnerabilities"
     count: 71
@@ -34,13 +34,13 @@ topics:
   - label: "credential theft"
     count: 17
     color: 8
-  - label: "supply chain attack"
-    count: 15
-    color: 9
   - label: "microsoft"
     count: 14
-    color: 10
+    color: 9
   - label: "ransomware"
+    count: 14
+    color: 10
+  - label: "supply chain attack"
     count: 14
     color: 11
   - label: "clickfix"
@@ -206,7 +206,6 @@ label_colors:
   "central asia": 5
   "chacha20 encryption": 1
   "chaindrop": 8
-  "chaindrop worm": 3
   "chaotic eclipse": 12
   "charged": 4
   "charity": 12
@@ -380,7 +379,7 @@ label_colors:
   "malware": 5
   "meta": 5
   "metabase": 6
-  "microsoft": 10
+  "microsoft": 9
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -411,7 +410,7 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 11
+  "ransomware": 10
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
@@ -429,7 +428,7 @@ label_colors:
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
-  "supply chain attack": 9
+  "supply chain attack": 11
   "teamcity": 8
   "threat intelligence": 9
   "threat source newsletter": 6
@@ -3644,15 +3643,3 @@ items:
     date: 2026-08-06T05:00:00Z
     kind: research
     labels: ["securing ai"]
-  - title: "Shai-Hulud strikes again: CHAINDROP worm hits 400+ npm packages"
-    url: "https://www.elastic.co/security-labs/shai-hulud-chaindrop-npm-supply-chain"
-    source: "AlienVault"
-    date: 2026-08-05T23:44:04Z
-    kind: research
-    labels: ["chaindrop", "chaindrop worm", "credential harvesting", "ethereum c2", "javascript obfuscation", "npm compromise", "preinstall hook", "self-propagating", "supply chain attack"]
-  - title: "Ransom Cartel ransomware creator sentenced to 16 years in prison"
-    url: "https://www.bleepingcomputer.com/news/security/ransom-cartel-ransomware-creator-sentenced-to-16-years-in-prison/"
-    source: "BleepingComputer"
-    date: 2026-08-05T23:00:50Z
-    kind: news
-    labels: []
