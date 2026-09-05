@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T04:01:16Z
+generated_at: 2026-09-05T06:02:36Z
 window_days: 30
 counts:
-  total: 534
-  research: 194
+  total: 533
+  research: 193
   news: 340
 topics:
   - label: "vulnerabilities"
@@ -3637,9 +3637,3 @@ items:
     date: 2026-08-06T06:37:44Z
     kind: news
     labels: ["jetbrains", "teamcity", "vulnerabilities"]
-  - title: "Expanding AI Benchmarks in Cybersecurity Beyond Vulnerability Discovery"
-    url: "https://www.crowdstrike.com/en-us/blog/expanding-cybersecurity-ai-benchmarks-beyond-vulnerability-discovery/"
-    source: "Crowdstrike"
-    date: 2026-08-06T05:00:00Z
-    kind: research
-    labels: ["securing ai"]
