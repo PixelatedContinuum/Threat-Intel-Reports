@@ -3,15 +3,15 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-05T06:02:36Z
+generated_at: 2026-09-05T08:01:16Z
 window_days: 30
 counts:
-  total: 533
+  total: 531
   research: 193
-  news: 340
+  news: 338
 topics:
   - label: "vulnerabilities"
-    count: 71
+    count: 69
     color: 1
   - label: "cybercrime"
     count: 56
@@ -367,7 +367,6 @@ label_colors:
   "insights": 5
   "isolated-vm": 5
   "ivanti": 7
-  "jetbrains": 6
   "jfrog": 8
   "landing page top story": 2
   "leadership": 11
@@ -429,7 +428,6 @@ label_colors:
   "spring": 5
   "supply chain": 8
   "supply chain attack": 11
-  "teamcity": 8
   "threat intelligence": 9
   "threat source newsletter": 6
   "threat spotlight": 2
@@ -3625,15 +3623,3 @@ items:
     date: 2026-08-06T09:04:56Z
     kind: research
     labels: ["cacheable", "cloud credential theft", "credential harvesting", "jaredwray account compromise", "keyv", "npm compromise", "self-propagating", "supply chain attack"]
-  - title: "Cisco Patches Critical SD-WAN, IOS XE, FMC Vulnerabilities"
-    url: "https://www.securityweek.com/cisco-patches-critical-sd-wan-ios-xe-fmc-vulnerabilities/"
-    source: "SecurityWeek"
-    date: 2026-08-06T07:20:20Z
-    kind: news
-    labels: ["cisco", "poc", "vulnerabilities"]
-  - title: "Hackers Start Exploiting Recent JetBrains TeamCity Vulnerability"
-    url: "https://www.securityweek.com/hackers-start-exploiting-recent-jetbrains-teamcity-vulnerability/"
-    source: "SecurityWeek"
-    date: 2026-08-06T06:37:44Z
-    kind: news
-    labels: ["jetbrains", "teamcity", "vulnerabilities"]
