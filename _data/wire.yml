@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-06T14:01:32Z
+generated_at: 2026-09-06T16:00:27Z
 window_days: 30
 counts:
-  total: 500
+  total: 498
   research: 174
-  news: 326
+  news: 324
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -24,14 +24,14 @@ topics:
   - label: "government"
     count: 27
     color: 4
-  - label: "malware"
-    count: 22
-    color: 5
   - label: "data breaches"
+    count: 21
+    color: 5
+  - label: "malware"
     count: 21
     color: 6
   - label: "artificial intelligence"
-    count: 20
+    count: 19
     color: 7
   - label: "credential theft"
     count: 15
@@ -275,7 +275,7 @@ label_colors:
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
-  "data breaches": 6
+  "data breaches": 5
   "data leak": 9
   "data-exfiltration": 12
   "dcrat": 12
@@ -360,7 +360,7 @@ label_colors:
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 5
+  "malware": 6
   "metabase": 6
   "microsoft": 9
   "microsoft teams": 10
@@ -421,6 +421,12 @@ label_colors:
   "zero-day": 11
   "zoom": 7
 items:
+  - title: "Attackers conceal phishing lures using invisible Unicode characters"
+    url: "https://www.bleepingcomputer.com/news/security/attackers-conceal-phishing-lures-using-invisible-unicode-characters/"
+    source: "BleepingComputer"
+    date: 2026-09-06T14:23:46Z
+    kind: news
+    labels: []
   - title: "Over 5,400 hacked sites serve ClickFix payloads stored on the blockchain"
     url: "https://www.bleepingcomputer.com/news/security/over-5-400-hacked-sites-serve-clickfix-payloads-stored-on-the-blockchain/"
     source: "BleepingComputer"
@@ -3403,21 +3409,3 @@ items:
     date: 2026-08-07T19:30:41Z
     kind: news
     labels: ["healthcare"]
-  - title: "Levi Strauss & Co. says hackers stole corporate data in cyberattack"
-    url: "https://www.bleepingcomputer.com/news/security/levi-strauss-and-co-says-hackers-stole-corporate-data-in-cyberattack/"
-    source: "BleepingComputer"
-    date: 2026-08-07T15:48:20Z
-    kind: news
-    labels: []
-  - title: "Irregular, firm behind AI hacking incidents, won't say if there were more"
-    url: "https://therecord.media/irregular-ai-security-company-incidents"
-    source: "Recorded Future"
-    date: 2026-08-07T15:00:00Z
-    kind: news
-    labels: []
-  - title: "In Other News: AI Slop Limits Apple Bounties, North Carolina Port Attacks, Hackers Target Wall Street"
-    url: "https://www.securityweek.com/in-other-news-ai-slop-limits-apple-bounties-north-carolina-port-attacks-hackers-target-wall-street/"
-    source: "SecurityWeek"
-    date: 2026-08-07T14:26:42Z
-    kind: news
-    labels: ["artificial intelligence", "in other news", "malware"]
