@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-06T20:01:47Z
+generated_at: 2026-09-06T22:00:32Z
 window_days: 30
 counts:
-  total: 497
-  research: 174
-  news: 323
+  total: 495
+  research: 173
+  news: 322
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -290,7 +290,6 @@ label_colors:
   "discord hijacking": 12
   "disrupted": 8
   "dll sideloading": 11
-  "dns-tunneling": 8
   "domain controller": 4
   "dprk-linked": 1
   "dropcatch": 4
@@ -348,7 +347,6 @@ label_colors:
   "industry": 8
   "infection chain": 8
   "information stealer": 6
-  "infostealer": 8
   "insights": 5
   "isolated-vm": 5
   "ivanti": 7
@@ -406,7 +404,6 @@ label_colors:
   "sma1000": 2
   "soc": 9
   "social engineering": 10
-  "software": 5
   "sonicwall": 8
   "spring": 5
   "supply chain": 8
@@ -3391,15 +3388,3 @@ items:
     date: 2026-08-07T23:00:01Z
     kind: research
     labels: ["artificial intelligence", "identity", "inside the modern soc", "insights", "social engineering", "unit 42 incident response report"]
-  - title: "Russian AI Slopsquatting Publishes 700+ Malicious NPM Packages"
-    url: "https://opensourcemalware.com/blog/russian-ai-slopsquatting-npm-campaign"
-    source: "AlienVault"
-    date: 2026-08-07T21:42:54Z
-    kind: research
-    labels: ["dns-tunneling", "infostealer", "npm", "nul1dropper", "sliver", "typosquatting"]
-  - title: "Metabase SQLi zero-day exploited in customer data-theft attacks"
-    url: "https://www.bleepingcomputer.com/news/security/framework-tally-disclose-metabase-data-theft-attacks/"
-    source: "BleepingComputer"
-    date: 2026-08-07T20:14:46Z
-    kind: news
-    labels: ["software"]
