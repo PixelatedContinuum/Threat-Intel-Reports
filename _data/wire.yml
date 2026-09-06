@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-06T06:00:38Z
+generated_at: 2026-09-06T08:02:17Z
 window_days: 30
 counts:
-  total: 509
-  research: 177
-  news: 332
+  total: 506
+  research: 176
+  news: 330
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 68
     color: 1
   - label: "cybercrime"
     count: 54
@@ -28,7 +28,7 @@ topics:
     count: 23
     color: 5
   - label: "data breaches"
-    count: 22
+    count: 21
     color: 6
   - label: "artificial intelligence"
     count: 20
@@ -42,14 +42,13 @@ topics:
   - label: "ransomware"
     count: 14
     color: 10
-  - label: "healthcare"
-    count: 13
-    color: 11
   - label: "zero-day"
     count: 13
+    color: 11
+  - label: "clickfix"
+    count: 12
     color: 12
 label_colors:
-  ".net downloader": 4
   ".net loader": 4
   "2fa bypass": 1
   "3snake": 7
@@ -225,7 +224,7 @@ label_colors:
   "clamav": 8
   "claude desktop": 12
   "cleo": 7
-  "clickfix": 3
+  "clickfix": 12
   "clipper": 3
   "cloaked ursa": 2
   "cloud": 7
@@ -249,7 +248,6 @@ label_colors:
   "credential-theft": 5
   "critical infrastructure": 4
   "critical infrastructure targeting": 5
-  "cross-platform malware": 7
   "crypto scam": 9
   "cryptocurrency": 12
   "cryptocurrency lure": 4
@@ -421,7 +419,7 @@ label_colors:
   "uncategorized": 10
   "vmware": 2
   "vulnerabilities": 1
-  "zero-day": 12
+  "zero-day": 11
   "zoom": 7
 items:
   - title: "Over 5,400 hacked sites serve ClickFix payloads stored on the blockchain"
@@ -3460,21 +3458,3 @@ items:
     date: 2026-08-07T10:23:00Z
     kind: research
     labels: ["browser password decryptor", "central asia", "chinese-speaking threat actor", "cyber espionage", "destroyrat", "fscan", "in-memory execution", "kaba", "korplug", "lurkproxy", "middle east", "modular backdoor", "octlurk", "pandora rc", "plugx", "secretsdump", "silklurk", "sogu", "thoper", "tvt", "victim-specific decryption"]
-  - title: "3.8 Million Impacted by Unlimited Technology Systems Data Breach"
-    url: "https://www.securityweek.com/3-8-million-impacted-by-unlimited-technology-systems-data-breach/"
-    source: "SecurityWeek"
-    date: 2026-08-07T07:22:05Z
-    kind: news
-    labels: ["data breaches", "healthcare", "unlimited technology systems"]
-  - title: "Fake Zoom Installer Delivers Overlord RAT on macOS"
-    url: "https://www.jamf.com/blog/fake-zoom-installer-delivers-overlord-rat-macos/"
-    source: "AlienVault"
-    date: 2026-08-07T07:15:31Z
-    kind: research
-    labels: [".net downloader", "cross-platform malware", "fake zoom installer", "flexibleferret", "go obfuscation", "launchagent persistence", "macos threats", "overlord", "overlord rat", "websocket c2"]
-  - title: "Critical Vulnerabilities Patched With Chrome 151 Update"
-    url: "https://www.securityweek.com/critical-vulnerabilities-patched-with-chrome-151-update/"
-    source: "SecurityWeek"
-    date: 2026-08-07T06:56:56Z
-    kind: news
-    labels: ["chrome", "patch", "vulnerabilities"]
