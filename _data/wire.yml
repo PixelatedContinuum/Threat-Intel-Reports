@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-06T10:00:56Z
+generated_at: 2026-09-06T12:02:06Z
 window_days: 30
 counts:
-  total: 506
-  research: 176
-  news: 330
+  total: 502
+  research: 174
+  news: 328
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 68
     color: 1
   - label: "cybercrime"
-    count: 54
+    count: 52
     color: 2
   - label: "exploited"
     count: 27
@@ -25,7 +25,7 @@ topics:
     count: 27
     color: 4
   - label: "malware"
-    count: 23
+    count: 22
     color: 5
   - label: "data breaches"
     count: 21
@@ -180,7 +180,6 @@ label_colors:
   "browser extension campaign": 9
   "browser extensions": 4
   "browser hijacking": 12
-  "browser password decryptor": 5
   "browser theft": 3
   "browser-credentials": 9
   "browser-in-browser": 9
@@ -3434,27 +3433,3 @@ items:
     date: 2026-08-07T13:35:00Z
     kind: news
     labels: ["cybercrime", "industry"]
-  - title: "French rugby club Stade Français restores systems after cyberattack, probes data leak"
-    url: "https://therecord.media/french-rugby-club-restores-systems-after-cyberattack"
-    source: "Recorded Future"
-    date: 2026-08-07T12:00:00Z
-    kind: news
-    labels: ["cybercrime"]
-  - title: "Vishing Extortion Group UNC6671 Rebrands After Making Millions"
-    url: "https://www.securityweek.com/vishing-extortion-group-unc6671-rebrands-after-making-millions/"
-    source: "SecurityWeek"
-    date: 2026-08-07T11:06:01Z
-    kind: news
-    labels: ["cybercrime", "malware", "unc6671", "vishing"]
-  - title: "Inside a Self-Propagating npm Worm"
-    url: "https://otx.alienvault.com/pulse/6a75b2f415506d0a2374398b"
-    source: "AlienVault"
-    date: 2026-08-07T10:27:00Z
-    kind: research
-    labels: ["blockchain c2", "chaindrop", "developer credentials", "ethereum smart contract", "github actions", "npm worm", "self-propagating", "supply chain attack"]
-  - title: "Analysis of a Modular Cyber Espionage Framework"
-    url: "https://otx.alienvault.com/pulse/6a75b204c9420179df545451"
-    source: "AlienVault"
-    date: 2026-08-07T10:23:00Z
-    kind: research
-    labels: ["browser password decryptor", "central asia", "chinese-speaking threat actor", "cyber espionage", "destroyrat", "fscan", "in-memory execution", "kaba", "korplug", "lurkproxy", "middle east", "modular backdoor", "octlurk", "pandora rc", "plugx", "secretsdump", "silklurk", "sogu", "thoper", "tvt", "victim-specific decryption"]
