@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-06T18:00:47Z
+generated_at: 2026-09-06T20:01:47Z
 window_days: 30
 counts:
-  total: 498
+  total: 497
   research: 174
-  news: 324
+  news: 323
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -3403,9 +3403,3 @@ items:
     date: 2026-08-07T20:14:46Z
     kind: news
     labels: ["software"]
-  - title: "Unlimited Technology Systems breach impacts 3.8 million people"
-    url: "https://www.bleepingcomputer.com/news/security/unlimited-technology-systems-breach-impacts-38-million-people/"
-    source: "BleepingComputer"
-    date: 2026-08-07T19:30:41Z
-    kind: news
-    labels: ["healthcare"]
