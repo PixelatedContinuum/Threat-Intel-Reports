@@ -3,12 +3,14 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-06T04:01:47Z
+generated_at: 2026-09-06T06:00:38Z
 window_days: 30
 counts:
-  total: 510
-  research: 178
+  total: 509
+  research: 177
   news: 332
+unclassified_sources:
+  - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
     count: 69
@@ -374,7 +376,6 @@ label_colors:
   "netscaler": 5
   "network security": 6
   "next-gen identity security": 12
-  "next-gen siem & log management": 11
   "nvidia": 3
   "on the radar": 4
   "oracle": 12
@@ -3477,9 +3478,3 @@ items:
     date: 2026-08-07T06:56:56Z
     kind: news
     labels: ["chrome", "patch", "vulnerabilities"]
-  - title: "CrowdStrike Threat Hunts for Shell Command Obfuscation on VMware ESX"
-    url: "https://www.crowdstrike.com/en-us/blog/crowdstrike-hunts-for-shell-command-obfuscation-vmware-esx/"
-    source: "Crowdstrike"
-    date: 2026-08-07T05:00:00Z
-    kind: research
-    labels: ["next-gen siem & log management"]
