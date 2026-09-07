@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-07T16:01:57Z
+generated_at: 2026-09-07T18:02:37Z
 window_days: 30
 counts:
-  total: 510
+  total: 512
   research: 179
-  news: 331
+  news: 333
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -434,6 +434,18 @@ label_colors:
   "zero-day": 9
   "zoom": 7
 items:
+  - title: "Magento StyleSmuggler zero-day exploited to deploy Linux backdoor"
+    url: "https://www.bleepingcomputer.com/news/security/magento-stylesmuggler-zero-day-exploited-to-deploy-linux-backdoor/"
+    source: "BleepingComputer"
+    date: 2026-09-07T16:50:29Z
+    kind: news
+    labels: []
+  - title: "BigBear Microsoft 365 phishing service bypassed MFA at 258 organizations"
+    url: "https://www.bleepingcomputer.com/news/security/bigbear-microsoft-365-phishing-service-bypassed-mfa-at-258-organizations/"
+    source: "BleepingComputer"
+    date: 2026-09-07T15:39:51Z
+    kind: news
+    labels: []
   - title: "Mathspace discloses data breach affecting over 1 million people"
     url: "https://www.bleepingcomputer.com/news/security/mathspace-discloses-data-breach-affecting-over-1-million-people/"
     source: "BleepingComputer"
