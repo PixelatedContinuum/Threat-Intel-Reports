@@ -5,6 +5,9 @@ tiers:
     price_note: "Per Month"
     intro_price: "New sponsors: first 3 months $300/mo"
     annual_price: "$5,000"
+    annual_note: "per year, paid up front"
+    annual_saving: "Two months free, a $1,000 saving (17% off)"
+    billing_note: "Monthly or annual, whichever suits your budget cycle. Annual prepay is 17% cheaper and locks your rate for the term."
     description: "Flagship, always-on presence, and the strongest value per dollar. Standing brand presence across the whole site, for as long as you sponsor."
     benefits:
       - "Logo and tagline in the left-margin Sponsors panel on every page and report, a standing, high-visibility placement"
@@ -23,7 +26,11 @@ tiers:
     price_note: "New Report"
     intro_price: "New sponsors: first report $100"
     catalog_price: "$115"
-    catalog_price_note: "From the Catalog (25% off the new-report rate)"
+    catalog_price_note: "From the Catalog (23% off the new-report rate)"
+    annual_price: "$1,300"
+    annual_note: "Year of Reports, 12 new reports across 12 months"
+    annual_saving: "A $500 saving (28% off the new-report rate)"
+    billing_note: "Buy one at a time, bundle 3 or 6, or take a full year at the deepest rate. Bundle pricing is against the new-report rate; catalog reports are $115 each whenever you buy them."
     description: "Exclusive single-report placement, one sponsor per report, no competing logos. Pick a new report at $150 or a catalog report at $115; catalog reports keep drawing search traffic long after publication."
     benefits:
       - "Sole Sponsored-by banner at the top of the report, exclusive, no competing logos"
@@ -32,7 +39,7 @@ tiers:
       - "The report's launch post credits you (LinkedIn, X, and subscriber email)"
       - "Early access to your report before it goes public"
       - "Topic alignment, so you choose a report on a threat relevant to your product"
-      - "Bundle &amp; save: 3 reports $375 &middot; 6 reports $675 (any mix of new or catalog)"
+      - "Bundle &amp; save on new reports: 3 for $375 &middot; 6 for $675 &middot; 12 for $1,300 across a full year. Catalog reports stay $115 each, bundled or not"
     best_fit: "Sponsors who want exclusive association with a specific report or research topic, with sole placement, permanent for its life."
     slots: 3
 

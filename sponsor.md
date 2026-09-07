@@ -90,8 +90,14 @@ hide: true
     <div class="hl-tier-card__price">{{ tier.price }}</div>
     {% if tier.price_note %}<div class="hl-tier-card__price-note">{{ tier.price_note }}</div>{% endif %}
     {% if tier.intro_price %}<div class="hl-tier-card__price-extra" style="color: var(--acc); font-weight: 600;">{{ tier.intro_price }}</div>{% endif %}
-    {% if tier.annual_price %}<div class="hl-tier-card__price-extra">or {{ tier.annual_price }} / year</div>{% endif %}
     {% if tier.catalog_price %}<div class="hl-tier-card__price-extra">or {{ tier.catalog_price }} {{ tier.catalog_price_note }}</div>{% endif %}
+    {% if tier.annual_price %}
+    <div class="hl-tier-card__annual">
+      <span class="hl-tier-card__annual-label">Or pay annually</span>
+      <span class="hl-tier-card__annual-price">{{ tier.annual_price }}{% if tier.annual_note %} <span class="hl-tier-card__annual-unit">{{ tier.annual_note }}</span>{% endif %}</span>
+      {% if tier.annual_saving %}<span class="hl-tier-card__annual-saving">{{ tier.annual_saving }}</span>{% endif %}
+    </div>
+    {% endif %}
     {% endif %}
     <div class="hl-tier-card__desc">{{ tier.description }}</div>
     {% if tier.benefits %}
@@ -113,11 +119,39 @@ hide: true
       {% assign remaining = tier.slots | minus: filled %}
       {% if filled > 0 and remaining > 0 %}<div class="hl-tier-card__placeholder">{{ remaining }} slot{% if remaining > 1 %}s{% endif %} open →</div>{% endif %}
     </div>
+    {% if tier.billing_note %}
+    <div class="hl-tier-card__billing">{{ tier.billing_note }}</div>
+    {% endif %}
     {% if tier.best_fit %}
     <div class="hl-tier-card__best-fit"><strong>Best fit:</strong> {{ tier.best_fit }}</div>
     {% endif %}
   </div>
   {% endfor %}
+</div>
+
+{% include section-header.html label="Monthly or Annual" accent="#4ade80" %}
+
+<div class="hl-panel" style="--acc: #4ade80;">
+  <p class="hl-panel__body" style="margin-bottom: 14px;">Both work, and I genuinely do not mind which you pick. Take whichever suits your budget cycle. Annual prepay is cheaper because it is worth something to me to plan a year ahead, so the saving is passed straight back to you rather than held as a negotiating chip.</p>
+
+  <table>
+    <colgroup>
+      <col style="width: 22%;">
+      <col style="width: 39%;">
+      <col style="width: 39%;">
+    </colgroup>
+    <thead>
+      <tr><th>How you pay</th><th>Monthly Sponsor</th><th>Report Sponsor</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>As you go</td><td>$500 per month</td><td>$150 per new report, $115 from the catalog (any age, bundled or not)</td></tr>
+      <tr><td>Bundled</td><td>Not applicable</td><td>3 new reports $375 (17% off), 6 for $675 (25% off)</td></tr>
+      <tr><td><strong>Annual</strong></td><td><strong>$5,000 per year.</strong> Two months free, a $1,000 saving, 17% off</td><td><strong>$1,300 for 12 new reports</strong> across the year, a $500 saving, 28% off</td></tr>
+      <tr><td>First time</td><td>First 3 months at $300 per month</td><td>First report $100</td></tr>
+    </tbody>
+  </table>
+
+  <p class="hl-panel__body" style="margin-top: 14px; margin-bottom: 0;">Two things worth knowing before you choose. An annual commitment <strong>locks your rate for the full term</strong>, so a published price rise cannot reach you mid term, and it carries first right of renewal at that locked rate. Monthly stays flexible and can be stopped at the end of any billing month. Either way the placements, the benefits, and the editorial independence below are identical, and the intro rate can be combined with a move to annual once it ends.</p>
 </div>
 
 {% include section-header.html label="Editorial Independence" accent="#58a6ff" %}
@@ -140,15 +174,21 @@ hide: true
   <ul class="hl-panel__body" style="margin: 0; padding-left: 18px; line-height: 1.7;">
     <li><strong>Newsletter mention</strong>, <span style="color: #b8902f; font-weight: 600;">$50</span>. One-off sponsored mention in a subscriber email send.</li>
     <li><strong>Extra LinkedIn or X post</strong>, <span style="color: #b8902f; font-weight: 600;">$50</span>. A single dedicated sponsored post about your capability or content.</li>
-    <li><strong>Sponsor-suggested research topic</strong>, <span style="color: #b8902f; font-weight: 600;">$500+</span>. Choose a topic your organization needs intel about and I'll do the rest: original research and a published report on it. A new investigation, distinct from the topic alignment already included with a Report sponsorship; editorial independence preserved.</li>
   </ul>
+</div>
+
+{% include section-header.html label="Commissioned Research" accent="#c084fc" %}
+
+<div class="hl-panel" style="--acc: #c084fc;">
+  <p class="hl-panel__body" style="margin-bottom: 12px;">Name a threat your organization needs intelligence on and I will go and get it: original investigation, full technical analysis, working detections, and a published report, held to exactly the same evidence standards and the same editorial independence as everything else here. This is a new investigation commissioned by you, distinct from the topic alignment already included with a Report sponsorship.</p>
+  <p class="hl-panel__body" style="margin-bottom: 0;">Priced on scope, because scope varies enormously. A single host or one open directory is a very different piece of work from a fifty-address infrastructure cluster with a malware family sitting behind it. Tell me what you want to know and I will come back with a defined scope and a fixed price before any work starts, so there are no surprises in either direction.</p>
 </div>
 
 {% include section-header.html label="Pricing Sheet" accent="#b8902f" %}
 
 <div class="hl-panel" style="--acc: #b8902f;">
   <p class="hl-panel__body" style="margin-bottom: 14px;">The full sponsorship pricing sheet is available as a printable PDF for circulation within your team or procurement process.</p>
-  <a href="/assets/files/Hunters-Ledger-Sponsorship-Pricing.pdf?v=20260602b" class="hl-cta hl-cta--ghost" style="--acc: #b8902f;" target="_blank" rel="noopener noreferrer">
+  <a href="/assets/files/Hunters-Ledger-Sponsorship-Pricing.pdf?v=20260907" class="hl-cta hl-cta--ghost" style="--acc: #b8902f;" target="_blank" rel="noopener noreferrer">
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     Download Pricing Sheet (PDF)
   </a>

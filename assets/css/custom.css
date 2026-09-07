@@ -2335,6 +2335,60 @@ button,
   margin-bottom: 14px;
 }
 
+/* Annual option block: the discounted alternative to the headline rate.
+   Deliberately louder than __price-extra, so a sponsor scanning the card sees
+   there IS a cheaper way to buy rather than reading past it in grey. */
+.hl-tier-card__annual {
+  display: block;
+  margin: 10px 0 12px;
+  padding: 9px 11px;
+  border: 1px solid color-mix(in srgb, var(--acc) 34%, transparent);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--acc) 8%, transparent);
+}
+
+.hl-tier-card__annual-label {
+  display: block;
+  color: var(--hl-text-muted);
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.hl-tier-card__annual-price {
+  display: block;
+  color: var(--hl-text-primary);
+  font-family: var(--hl-font-display);
+  font-size: 1.18em;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.hl-tier-card__annual-unit {
+  color: var(--hl-text-secondary);
+  font-family: inherit;
+  font-size: 0.6em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hl-tier-card__annual-saving {
+  display: block;
+  color: var(--acc);
+  font-size: 0.78em;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.hl-tier-card__billing {
+  color: var(--hl-text-muted);
+  font-size: 0.77em;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+
 .hl-tier-card__desc {
   color: var(--hl-text-secondary);
   font-size: 0.84em;
