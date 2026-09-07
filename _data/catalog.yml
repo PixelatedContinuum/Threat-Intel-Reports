@@ -5,6 +5,15 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
+  # ===== PENDING GO-LIVE — Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17 (uncomment at launch) =====
+  #  - title: "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17"
+  #    date: 2026-09-07
+  #    severity: high
+  #    tags: [Sliver, Post-Exploitation, EtherHiding, Blockchain C2]
+  #    report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
+  #    detection_url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
+  #    ioc_url: /ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json
+  # ==============================================================================================
   - title: "Carrier Credential Harvesting Through a Customer's Router"
     date: 2026-08-18
     severity: high

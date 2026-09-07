@@ -2948,6 +2948,106 @@
       name: "Financial Theft"
       rules: "ShinyHunters DLS Ransom Note (INFORMATION.txt) (YARA, Detection); ShinyHunters Taunt-Filename Naming Convention (YARA, Detection); ShinyHunters Actor Identity: Domain + Collective Name (YARA, Hunting); ShinyHunters DLS: Web Proxy Hit on DLS Content Path (SIGMA, Hunting); ShinyHunters DLS: HTTP Host Header shinyhunte.rs (SURICATA, Detection); ShinyHunters DLS: TLS SNI shinyhunte.rs (SURICATA, Detection); ShinyHunters DLS: HTTP Request to DLS Content Path (pay_or_leak) (SURICATA, Detection)"
       count: 7
+"sliver-c2-windows-postex-staging-193-233-202-17-detections":
+  total: 19
+  tactics: 8
+  unresolved: ["T1562", "T1562.001"]
+  rows:
+    - tactic: "Execution"
+      id: "T1053.005"
+      name: "Scheduled Task"
+      rules: "Weekly Scheduled Task Re-Pulling Attack Chain Via IEX WebClient DownloadString As SYSTEM (SIGMA, Detection)"
+      count: 1
+    - tactic: "Persistence"
+      id: "T1098"
+      name: "Account Manipulation"
+      rules: "Operator AD Deployment Script Success Markers, The Gentlemen-Linked Toolkit (YARA, Hunting); Rapid Addition Of An Account To The Domain Admins Group (SIGMA, Detection)"
+      count: 2
+    - tactic: "Persistence"
+      id: "T1136.002"
+      name: "Domain Account"
+      rules: "Operator AD Deployment Script Success Markers, The Gentlemen-Linked Toolkit (YARA, Hunting); Rapid Addition Of An Account To The Domain Admins Group (SIGMA, Detection)"
+      count: 2
+    - tactic: "Persistence"
+      id: "T1547.001"
+      name: "Registry Run Keys / Startup Folder"
+      rules: "EtherRAT Bot Run Key Launching node.exe Headless With A .bak Argument (SIGMA, Detection)"
+      count: 1
+    - tactic: "Privilege Escalation"
+      id: "T1548.002"
+      name: "Bypass User Account Control"
+      rules: "RDP, UAC Or Token-Filter Registry Value Weakened (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Stealth"
+      id: "T1027"
+      name: "Obfuscated Files or Information"
+      rules: "Reflective .NET Assembly Load From A Base64-Encoded PowerShell String (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Stealth"
+      id: "T1036.005"
+      name: "Match Legitimate Resource Name or Location"
+      rules: "Suspicious svchost.log File Created In Roaming AppData (SIGMA, Detection); node.exe Executing From A Vendor-Named LOCALAPPDATA Directory (SIGMA, Detection)"
+      count: 2
+    - tactic: "Stealth"
+      id: "T1620"
+      name: "Reflective Code Loading"
+      rules: "Reflective .NET Assembly Load From A Base64-Encoded PowerShell String (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Defense Impairment"
+      id: "T1112"
+      name: "Modify Registry"
+      rules: "RDP, UAC Or Token-Filter Registry Value Weakened (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Defense Impairment"
+      id: "T1685"
+      name: "Disable or Modify Tools"
+      rules: "Multiple Endpoint Protection Services Stopped In A Short Window (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1003.001"
+      name: "LSASS Memory"
+      rules: "LSASS Memory Access With A Dump-Capable Access Mask (SIGMA, Detection)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1003.002"
+      name: "Security Account Manager"
+      rules: "Operator AD Deployment Script Success Markers, The Gentlemen-Linked Toolkit (YARA, Hunting); Registry Hive Save Of SAM, SYSTEM Or SECURITY To ProgramData (SIGMA, Detection)"
+      count: 2
+    - tactic: "Credential Access"
+      id: "T1003.004"
+      name: "LSA Secrets"
+      rules: "Registry Hive Save Of SAM, SYSTEM Or SECURITY To ProgramData (SIGMA, Detection)"
+      count: 1
+    - tactic: "Lateral Movement"
+      id: "T1021.001"
+      name: "Remote Desktop Protocol"
+      rules: "RDP, UAC Or Token-Filter Registry Value Weakened (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Lateral Movement"
+      id: "T1570"
+      name: "Lateral Tool Transfer"
+      rules: "certutil Or WMIC-Invoked certutil Downloading From A Bare IP High Port (SIGMA, Detection)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1071.001"
+      name: "Web Protocols"
+      rules: "Sliver Beacon Canonical Import Path In Process Memory (YARA, Detection); Sliver Operator Build Artifacts, 193.233.202.17 Campaign (YARA, Detection); EtherRAT-class Node.js Bot Configuration Constants (YARA, Detection); HTTP POST To A Minified-Static-Asset-Shaped Path With A Single-Letter Query Parameter (SURICATA, Detection); HTTP Client Claims A Non-Existent Chrome 108 Build (SURICATA, Detection)"
+      count: 5
+    - tactic: "Command and Control"
+      id: "T1102.001"
+      name: "Dead Drop Resolver"
+      rules: "Sliver Beacon Canonical Import Path In Process Memory (YARA, Detection); EtherRAT-class Node.js Bot Configuration Constants (YARA, Detection)"
+      count: 2
+    - tactic: "Command and Control"
+      id: "T1105"
+      name: "Ingress Tool Transfer"
+      rules: "certutil Or WMIC-Invoked certutil Downloading From A Bare IP High Port (SIGMA, Detection); Node.js Runtime Fetched And Extracted On A Host With No Development Toolchain (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Command and Control"
+      id: "T1132.001"
+      name: "Standard Encoding"
+      rules: "HTTP POST To A Minified-Static-Asset-Shaped Path With A Single-Letter Query Parameter (SURICATA, Detection)"
+      count: 1
 "sliver-open-directory-detections":
   total: 13
   tactics: 4
