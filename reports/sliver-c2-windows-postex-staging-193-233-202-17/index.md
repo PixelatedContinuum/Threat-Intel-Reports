@@ -25,7 +25,7 @@ ioc_highlights:
   - value: "bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2"
     note: "svchost_update.exe, the Sliver beacon payload (SHA-256)"
 thumbnail: /assets/images/cards/sliver-c2-windows-postex-staging-193-233-202-17.png
-unlisted: true
+stix_bundle: /stix/sliver-c2-windows-postex-staging-193-233-202-17.json
 ---
 
 **Campaign Identifier:** Sliver-C2-Windows-PostEx-Staging-193.233.202.17<br>

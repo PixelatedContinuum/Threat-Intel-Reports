@@ -1,10 +1,9 @@
 ---
-title: "Detection Rules for Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17"
+title: "Detection Rules — Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17"
 date: '2026-09-06'
 layout: post
 permalink: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/
 hide: true
-unlisted: true
 ---
 
 **Campaign:** Sliver-C2-Windows-PostEx-Staging-193.233.202.17

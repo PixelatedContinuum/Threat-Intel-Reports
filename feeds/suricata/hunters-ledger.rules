@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 110 rules from 34 campaigns. SIDs are STABLE across rebuilds (persistent
+# 112 rules from 35 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -487,6 +487,15 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - TLS SN
 #   rate-limited
 #   FP: None known — the path token is a distinctive multi-word string; coincidental collision with unrelated infrastructure is extremely unlikely.
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL ShinyHunters DLS - HTTP Request to DLS Content Path pay_or_leak"; flow:established,to_server; http.uri; content:"/pay_or_leak/"; classtype:trojan-activity; threshold:type limit,track by_src,count 1,seconds 300; sid:3500105; rev:2; metadata:author The_Hunters_Ledger, date 2026-04-17, reference https://the-hunters-ledger.com/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections/, attack_target Client_Endpoint, mitre_tactic_id TA0040, mitre_technique_id T1657;)
+# sliver-c2-windows-postex-staging-193-233-202-17 (orig sid:1000001)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   rate-limited
+#   FP: None known. A real minified JavaScript or PHP static asset is fetched with GET, never POST; the method mismatch alone is the anomaly, and the...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Sliver-C2-WinPostEx-193-233-202-17 POST To Minified-Asset-Shaped Path With Single-Letter Query Parameter (C2 Beacon Check-in)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"="; pcre:"/^\/(?:script|scripts|bundle|bundles|javascript|javascripts|route|array)(?:\/[a-z]+){0,3}(?:\.(?:min\.js|min\.php|js|php))?\?[a-z]=[A-Za-z0-9]+$/"; threshold:type limit,track by_src,count 1,seconds 60; classtype:trojan-activity; sid:3500200; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-06, reference https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/;)
+# sliver-c2-windows-postex-staging-193-233-202-17 (orig sid:1000002)
+#   TIER: Detection  |  robustness 3  |  confidence HIGH
+#   FP: None known. Chrome/108.0.6602.492 is internally impossible: real Chrome 108 stable builds are versioned 108.0.5359.x, so no genuine Chrome...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL Sliver-C2-WinPostEx-193-233-202-17 HTTP Client Claims Non-Existent Chrome 108 Build (Beacon User-Agent)"; flow:established,to_server; http.user_agent; content:"Chrome/108.0.6602.492"; classtype:trojan-activity; sid:3500201; rev:1; metadata:author The_Hunters_Ledger, date 2026-09-06, reference https://the-hunters-ledger.com/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/;)
 # turkish-arpa-openclaw-state-insurer-209.38.205.158 (orig sid:9001005)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known — the /api/ingest/instana URI path is operator-coined and not used by legitimate IBM Instana products (IBM's own ingestion endpoints use a...

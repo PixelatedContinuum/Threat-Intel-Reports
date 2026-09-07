@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-07T15:23:03Z",
+ "generated_at": "2026-09-07T16:27:15Z",
  "counts": {
-  "indicators": 1878,
-  "reports": 56,
-  "multi_report": 143,
-  "suppressed_benign": 134
+  "indicators": 2225,
+  "reports": 57,
+  "multi_report": 150,
+  "suppressed_benign": 135
  },
  "coverage": {
   "indexed": [
@@ -59,6 +59,7 @@
    "seasia-gov-exploitation-toolkit-144-172-106-236-iocs.json",
    "shadow-xworm-opendirectory-iocs.json",
    "shinyhunters-dls-91-215-85-22-20260417-iocs.json",
+   "sliver-c2-windows-postex-staging-193-233-202-17-iocs.json",
    "sliver-open-directory-iocs.json",
    "turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json",
    "uac-test-exe.json",
@@ -66,8 +67,7 @@
    "webshells-to-the-cloud.json"
   ],
   "embargoed": [
-   "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json",
-   "sliver-c2-windows-postex-staging-193-233-202-17-iocs.json"
+   "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json"
   ],
   "unknown": [],
   "empty": []
@@ -481,6 +481,14 @@
    "report_url": "/reports/shinyhunters-dls-91-215-85-22-20260417/",
    "detection_url": "/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections",
    "ioc_url": "/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json"
+  },
+  "sliver-c2-windows-postex-staging-193-233-202-17": {
+   "title": "Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17",
+   "date": "2026-09-07",
+   "severity": "high",
+   "report_url": "/reports/sliver-c2-windows-postex-staging-193-233-202-17/",
+   "detection_url": "/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections",
+   "ioc_url": "/ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json"
   },
   "sliver-open-directory": {
    "title": "Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)",
@@ -2205,6 +2213,10 @@
    {
     "report": "cloudsync-assembler-toolkit-91-197-98-188",
     "role": "CloudSync config-only variant of client.exe; C2 91.92.43.221:5001"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
    }
   ],
   "sha256:6bd0366372b7d765e76c5a888d68a4991ad04ee614bdb589a20ffbe433db58fc": [
@@ -3163,6 +3175,10 @@
    {
     "report": "opendirectory-45-130-148-125-20260430",
     "role": "Commodity Windows local privilege escalation tool, .NET v4."
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Stock GodPotato, .NET x86"
    }
   ],
   "sha256:602dbcf4008c585582d5e5d5c8ddb1932fdee07a14308e9cbf937904f31df1f7": [
@@ -3173,6 +3189,10 @@
   "filename:jp.exe": [
    {
     "report": "flaskc2-postex-toolkit-67-215-232-25"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Stock JuicyPotato, compiled 2018-08-10"
    }
   ],
   "sha256:8524fbc0d73e711e69d60c64f1f1b7bef35c986705880643dd4d5e17779e586d": [
@@ -3186,6 +3206,10 @@
    {
     "report": "opendirectory-45-130-148-125-20260430",
     "role": "Commodity Windows print-spooler local privilege escalation tool."
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Stock PrintSpoofer"
    },
    {
     "report": "webserver-compromise-kit-91-236-230-250"
@@ -6031,6 +6055,10 @@
    {
     "report": "open-directory-94-103-1-13-20260423",
     "role": "Standard GodPotato, labeled in version info"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Stock GodPotato, .NET x86"
    }
   ],
   "sha256:f90fd97e5cdc1dd6262df9f56068b6ccb753268eaea5a06178856c35f57eeaad": [
@@ -6062,6 +6090,10 @@
    },
    {
     "report": "opendirectory-45-130-148-125-20260430"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Stock mimikatz, compiled 2022-09-19"
    }
   ],
   "filename:mimikatz.exe": [
@@ -6146,6 +6178,10 @@
    {
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236",
     "role": "PE32+ Go executable"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Chisel v1.11.5 Windows PE client"
    }
   ],
   "filename:chisel.exe": [
@@ -6159,6 +6195,10 @@
    {
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236",
     "role": "PE32+ Go executable"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Chisel v1.11.5 Linux ELF, the operator-side tunnel server"
    }
   ],
   "sha256:929cc7bcdff39d5ba305603b475cde8d86c2f6b69532cde8e27ea7e3710efbaa": [
@@ -10593,6 +10633,9 @@
   "md5:f26c3cd4209492b699131d29b76d941a": [
    {
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
    }
   ],
   "md5:d96d4e7bc25704e48576ee7667d424aa": [
@@ -10613,6 +10656,9 @@
   "sha1:c787636df481e1075db49c96d696de8dc6198e26": [
    {
     "report": "seasia-gov-exploitation-toolkit-144-172-106-236"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
    }
   ],
   "sha1:c640fed8c76802f2bea562ff08a0643d8f033771": [
@@ -11125,6 +11171,1944 @@
     "role": "DDoS-Guard authoritative NS for shinyhunte.rs"
    }
   ],
+  "sha256:06e29cf9ac468976f04208ea5e5563ce57f67ba42093750e967c87a14dad0978": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Token-impersonation AD enumeration and SMB share probing, iteration 2"
+   }
+  ],
+  "filename:ccenum2.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Token-impersonation AD enumeration and SMB share probing, iteration 2"
+   }
+  ],
+  "sha256:0f56c703e9b7ddeb90646927bac05a5c6d95308c8e13b88e5d4f4b572423e036": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Stock JuicyPotato, compiled 2018-08-10"
+   }
+  ],
+  "sha256:0f56ff5ce9d6732eaa67688af2c94a8f320fb85bf4cb04ba372b735858b9d49c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:ws_shell52500.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:136dd810f217c0dd70f8352328c2ea6c43865f8ef79713d77d68c1d9bdbf822d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Fileless reflective .NET loader, downloads gp.b64 and loads in memory"
+   }
+  ],
+  "filename:gp_reflect.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Fileless reflective .NET loader, downloads gp.b64 and loads in memory"
+   }
+  ],
+  "sha256:1411edc3a80165e4f2bffaa126d7389dfc978f54760c90d6e8fd5a04b69e258a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Operator-built Go netcat clone, source /tmp/build_nc/main.go"
+   }
+  ],
+  "filename:nc64.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Operator-built Go netcat clone, source /tmp/build_nc/main.go"
+   }
+  ],
+  "sha256:15f69ef1918db303ca2f92eec7f99768adf1195e6f6fe56492fae37cc735216a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Three-technique LPE chain incl. CVE-2016-0099, launches netcat reverse shell"
+   }
+  ],
+  "filename:ms16032.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Three-technique LPE chain incl. CVE-2016-0099, launches netcat reverse shell"
+   }
+  ],
+  "sha256:16d465948fed0a2cdf75aa0478d2f4038852e6cc07f3fac3b78ac0bb2eca8ff0": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Operator-written Go EfsPotato implementation"
+   }
+  ],
+  "filename:efspot.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Operator-written Go EfsPotato implementation"
+   }
+  ],
+  "sha256:173994299ea7cdf873fbbe1ec42953b8b45995f519f14bc702d0a7b9338efc32": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Creates an AD account and adds it to Domain Admins"
+   }
+  ],
+  "filename:adduser.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Creates an AD account and adds it to Domain Admins"
+   }
+  ],
+  "sha256:201bcb3d98923856227ed102b5f92c5ebd268e715a9bfc2e62ba1fe7faa0bc5f": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Plants an internal A record for the operator domain"
+   }
+  ],
+  "filename:add_dns_publisherres.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Plants an internal A record for the operator domain"
+   }
+  ],
+  "sha256:204affae86fda4fea1ceb24f3e95cd7ab457169d36e9df0f05775f123de2b31e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Plants an internal A record for the operator domain, hardened variant"
+   }
+  ],
+  "filename:add_publisherresolution.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Plants an internal A record for the operator domain, hardened variant"
+   }
+  ],
+  "sha256:28fad4e208ca97ba16180157bf7a565e1f6a40ebcb5900c0bda5a8947bafe66d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:rragent.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:294043345ec46527acf4c56635de6f781036aff1a1dbdc3925ba4525372633ee": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:da_shell_36.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:2c8df3fdb19ea1884d32457a10049cb6ca80498e0e162b3b34977ad2b82fe6ed": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Plants an internal A record for the operator domain, third variant"
+   }
+  ],
+  "filename:dns_add_publisherres.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Plants an internal A record for the operator domain, third variant"
+   }
+  ],
+  "sha256:2fc083274c15d5c87b3d769e797498f36e43dede21f48a21b53422c90d960f21": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Base64 batch script creating a remote SYSTEM msiexec scheduled task"
+   }
+  ],
+  "sha256:31332d7417c777e7e52bd4d9c491cb6213c97ab16e051bf29eaf8b2a18c06ef4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Reads beacon shellcode from the victim file server over SMB and injects it"
+   }
+  ],
+  "filename:inject_from_fs01.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Reads beacon shellcode from the victim file server over SMB and injects it"
+   }
+  ],
+  "sha256:318bb406f9cf61cf310c84706f090bdaad29d481a783a37be185bf709a791b4c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Disables UAC and enables remote admin with local credentials"
+   }
+  ],
+  "filename:fix_uac.bat": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Disables UAC and enables remote admin with local credentials"
+   }
+  ],
+  "sha256:3467dd1d846b46ab41dfc1111960f1a7ec54cf75d4a6339929d8448c477b0d35": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:35c419760696d9013b31dafc5b05682e38ffa5190f631d3a3c5f1c3a1ad85b61": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:pb161_new.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:37a28e5532cf7de88af570cdcbf6dc0db96b14c37ff84d285d89e6635ad91c05": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "LSASS minidump via MiniDumpWriteDump to C:\\Windows\\Temp\\ls.dmp"
+   }
+  ],
+  "filename:ld.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "LSASS minidump via MiniDumpWriteDump to C:\\Windows\\Temp\\ls.dmp"
+   }
+  ],
+  "sha256:3953b770e1da9816e876e8df6b11e1e020e2f5cdad016da1d191e095ea628d80": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Whitelists operator domain through the DNS-filter appliance admin API"
+   }
+  ],
+  "filename:webtitan_whitelist.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Whitelists operator domain through the DNS-filter appliance admin API"
+   }
+  ],
+  "sha256:39be3938eb198ab57802edcf67554dad007f01dd9148dadee39279bfd09cfee2": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:da_shell_12.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:3d531def7ecef3f29b4542eb28db21e7ebae4da29c77cd762147135f5a014f87": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:ws37.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:4104ed9fe73c3b582f8366751ad7c496c2b0f7a4a6b3f069802b5af9b5bd44ba": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via Copy-Item with an explicit PSCredential"
+   }
+  ],
+  "filename:dep.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via Copy-Item with an explicit PSCredential"
+   }
+  ],
+  "sha256:42d5fc0c36977e0a4ad40ba0771b3cdc9bdd9c73c89d68844bc8e510c0657226": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "DNS-filter whitelist plus DNS plant, discovers the API from the appliance JavaScript"
+   }
+  ],
+  "filename:wt_whitelist.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "DNS-filter whitelist plus DNS plant, discovers the API from the appliance JavaScript"
+   }
+  ],
+  "sha256:4352ad707e262d4913d690bc95eb3d38c72ff43100c9a7a96ce4cefa6705dabd": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "MSI deployment with SMB then WMI plus certutil fallback"
+   }
+  ],
+  "filename:deploy.cmd": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "MSI deployment with SMB then WMI plus certutil fallback"
+   }
+  ],
+  "sha256:467cb247fc8545a5b6be227853252b46984f94a54e8c4260932573304d61f6ce": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Weekly SYSTEM scheduled task, fileless re-pull of the capstone script"
+   }
+  ],
+  "filename:task39_archive.xml": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Weekly SYSTEM scheduled task, fileless re-pull of the capstone script"
+   }
+  ],
+  "sha256:6016d1a56674d621dc8206c7162e3e30959f9bec930f30db2accf3601779bc9a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:sys37.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:607e0456e7022e5f9f4829b0a2c658f0834fb642be3ab7ce68ed009b01e06f97": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Token-impersonation AD enumeration and SMB share probing"
+   }
+  ],
+  "filename:ccenum.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Token-impersonation AD enumeration and SMB share probing"
+   }
+  ],
+  "sha256:61252f5123b38cf4db37f9171d94779013cdcdc553564b10a33ad9e3f1a75926": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go stub, no hardcoded address recovered"
+   }
+  ],
+  "filename:getsys.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go stub, no hardcoded address recovered"
+   }
+  ],
+  "sha256:6172a5128528ee34147a9683f17192921c1059d8bddc66fbce46de8ddc33b556": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task definition, SYSTEM, forged author, backdated trigger"
+   }
+  ],
+  "filename:task39_past.xml": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task definition, SYSTEM, forged author, backdated trigger"
+   }
+  ],
+  "filename:mimi64.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Stock mimikatz, compiled 2022-09-19"
+   }
+  ],
+  "sha256:68675be7d0b110878c4fd7682e2e72911c66a9c2b43df91266a0e647067d4954": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "DNS-filter appliance reconnaissance, PostgreSQL probe and API mapping"
+   }
+  ],
+  "filename:wt_pg_whitelist.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "DNS-filter appliance reconnaissance, PostgreSQL probe and API mapping"
+   }
+  ],
+  "sha256:689036d2dc675b3d95a4139b8097685f6e2e5c8520e7a5a615801aba00a8b85a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:ws35.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:69cd12d92acf261c7f738c92d09e39dbcf60ec6ad66b261924b3dc93178b5ed3": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Implant deployment via certutil to an internal host list"
+   }
+  ],
+  "filename:deploy_all.bat": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Implant deployment via certutil to an internal host list"
+   }
+  ],
+  "sha256:6a7d945fccd3f739e3f54efd5624240c9a1b80de81b859756bb2207f4d044003": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task definition, SYSTEM, forged author"
+   }
+  ],
+  "filename:task39_exec.xml": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task definition, SYSTEM, forged author"
+   }
+  ],
+  "sha256:728c38979cdda97d5e82ece602698bf5132725f9f28b8cc0bc5fbd2316c9a044": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Chisel reverse SOCKS launcher, csvc.exe client <C2>:22673 R:socks"
+   }
+  ],
+  "filename:run_chisel.bat": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Chisel reverse SOCKS launcher, csvc.exe client <C2>:22673 R:socks"
+   }
+  ],
+  "sha256:731c9bfeb6816b6acb79cabf7edfeee3b7177c5f3dc76803c5907d7bf8cee808": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:da_shell_39.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:756c2096f54c5497110c9d854625c3ed592873e566d532077cd7adb4d10d4add": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:ws_3srv.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:79bb633438d8e9c67b0ee55925d5fa2e81880ddb872c89f957935b001c56a9a4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task form of the backdoor account creation"
+   }
+  ],
+  "filename:task_useradd.xml": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task form of the backdoor account creation"
+   }
+  ],
+  "sha256:7a1b0508afe806ce7f0ace0894cf46d159466f6874d5271a39e2c149c6ec4b9f": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via xcopy, byte-identical to dep4/5/6/7"
+   }
+  ],
+  "filename:dep3.bat": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via xcopy, byte-identical to dep4/5/6/7"
+   }
+  ],
+  "sha256:7f91141bba37457b09088b039e21d82abe420bdc3b585970dba71dfe5cbeb25d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go stub with hardcoded C2 on 443, TLS-capable, 28 capability rules"
+   }
+  ],
+  "filename:s443tls.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go stub with hardcoded C2 on 443, TLS-capable, 28 capability rules"
+   }
+  ],
+  "sha256:81d5debff647121e47913098757214ddd163710a240224fa92a03af9623ecf81": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via xcopy, CRLF line endings"
+   }
+  ],
+  "filename:dep8.bat": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via xcopy, CRLF line endings"
+   }
+  ],
+  "filename:ps64.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Stock PrintSpoofer"
+   }
+  ],
+  "sha256:8823f98a6774b1dc812687476e0866f31b1601f4c42b880bd9a7f57a309d27b4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Plants the internal A record remotely over WinRM"
+   }
+  ],
+  "filename:add_dns_from_37.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Plants the internal A record remotely over WinRM"
+   }
+  ],
+  "sha256:88ad6a37051cbaef75de8c6e3fe22351df40ba064677a6a3f53d4cc156ad1eb6": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:da_shell_37.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:921376cf81f2a5eca3d9b44cdb6ff2df0a1a685bf47518d5f86e45576c997b60": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:arc39_new.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:978c9818e766f1df9c3e7b4ad3a3f2df4ef204524b9ad8e45154311148b057db": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:ws_new31847.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:97c90575e9d2209d40e38a31d2aafd543a9f09d52b2e329c1e2206472886a895": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task definition, SYSTEM, forged author"
+   }
+  ],
+  "filename:task39.xml": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task definition, SYSTEM, forged author"
+   }
+  ],
+  "sha256:9bc742d339a08ff88ae26363bd9b73cf027762f1856e0e7f30d86feccfb5c3ef": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:da_shell_173.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:9e5f7294234e21b3be083bb875d27f51514cf158e507ae11594459d9cc879f58": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:s443.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:a2363e2f464694cb4bb8f487d33ea378764790a1c742bce98a03db5f52f4cd06": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PE executable"
+   }
+  ],
+  "filename:svcload.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PE executable"
+   }
+  ],
+  "sha256:a53150f1214665cf8122a3fa2f953c863be2f5c0f81a0d25f603a91689f713eb": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:da_shell_35.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:a95da28fd2c077f7bbafe536b3821efd55f7d73ade8a8b5337327f11c5ef44ca": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "EfsPotato, calls EfsRpcEncryptFileSrv, .NET x86"
+   }
+  ],
+  "filename:svcefs.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "EfsPotato, calls EfsRpcEncryptFileSrv, .NET x86"
+   }
+  ],
+  "sha256:aaec49b549aecf2119e1d20bf6dd7efbd74cd2ed2f6aaefed39e780e0815b5d4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "MSI deployment to a host subset via certutil and msiexec"
+   }
+  ],
+  "filename:deploy2.cmd": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "MSI deployment to a host subset via certutil and msiexec"
+   }
+  ],
+  "sha256:acfe23f94e5b98a217a93bf414c8f1a99d0463b1d143fff7a3ab5dae436fe19c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Second iteration of the SMB-sourced shellcode injector"
+   }
+  ],
+  "filename:inject_fs_v2.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Second iteration of the SMB-sourced shellcode injector"
+   }
+  ],
+  "sha256:b0e31e430faecdb65f1df82502506f4b155e11c2f2bf53e5014ffb5ce1ed8f75": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:ws36.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:b5c056a04d77c781b06dd3f2c8cbc13fadcdd9d78644755d82f322d3b7806f70": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:pb39_new.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Sliver beacon implant, symbol-obfuscated Go PE64"
+   }
+  ],
+  "filename:svchost_update.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Sliver beacon implant, symbol-obfuscated Go PE64"
+   }
+  ],
+  "sha256:c115b1a69fe49cab4826a3f05ec5e37c693c135e8ea8c5f6492c0bc8c475f1b3": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Pre-staged reflective .NET loader, reads gp.b64 from disk"
+   }
+  ],
+  "filename:gp_run.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Pre-staged reflective .NET loader, reads gp.b64 from disk"
+   }
+  ],
+  "sha256:c1761a1b640f2bb1a0140923e255f26ad9b79a9005475ff1551e9a297a48811c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Generic downloader from the operator staging port"
+   }
+  ],
+  "filename:download_and_exec.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Generic downloader from the operator staging port"
+   }
+  ],
+  "sha256:cef3e10ae4735a7017b3fe982d7385e3c3ce0cde286fb7572dbf885df73f8041": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Base64 transport encoding of gp.exe"
+   }
+  ],
+  "sha256:d13c5f858a8add3ff968a382a85f2dbe8e9fb0283086163d27b69178e4d5ee36": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Token-impersonation AD enumeration hunting adminCount=1 accounts"
+   }
+  ],
+  "filename:acl_enum.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Token-impersonation AD enumeration hunting adminCount=1 accounts"
+   }
+  ],
+  "sha256:d546e500ef662b2c0def984b233e37c4b11de28bf5280df24d1d3300a7fa7b84": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Chisel v1.11.5 Linux ELF, the operator-side tunnel server"
+   }
+  ],
+  "sha256:d7028280e815612b893c6f0620a4fa2ae63aa5c5bba9988b5223b81b7bf21798": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Ligolo-ng agent, Go 1.24.0"
+   }
+  ],
+  "filename:ligolo_agent.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Ligolo-ng agent, Go 1.24.0"
+   }
+  ],
+  "sha256:e122fb629f5f09789d83ef1b8b41238d329f7d8efd84d38080d01bef2bad5d8b": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:svc37.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:chisel_new.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Chisel v1.11.5 Windows PE client"
+   }
+  ],
+  "sha256:eaec6a177523f2effbabbba6159fe886d284e246e7b1464eb137ae9481ed65ca": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:upd443.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:ee6807a8abfabced22ee026e178a28da64d13cc3408e224394ff6e5782fb9e1d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "MSI installer for the Node.js bot with Ethereum-resolved C2"
+   }
+  ],
+  "filename:cons_c1.0.1.msi": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "MSI installer for the Node.js bot with Ethereum-resolved C2"
+   }
+  ],
+  "sha256:eee674bd0bcd2416367ad692e72122de31b710f13f35e2ceb8a52317920d00ca": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via xcopy"
+   }
+  ],
+  "filename:dep4.bat": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via xcopy"
+   }
+  ],
+  "sha256:f03e1d0951f4d0744939a0cc7da7730ab367ec9420c1a77cc7f97dc0932de652": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Downloads beacon shellcode and injects it, bypassing the configured proxy"
+   }
+  ],
+  "filename:inject_sliver.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Downloads beacon shellcode and injects it, bypassing the configured proxy"
+   }
+  ],
+  "sha256:f4c87a1df04274b7497cbf9a4619b946c915cf5210b6e2eaa2fee1629f4ff196": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:update.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:f609621698eaad8c4683750fe8bd0e242349be3eea408da593151ff877ed8ab6": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Script"
+   }
+  ],
+  "filename:task_39.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Script"
+   }
+  ],
+  "sha256:fa046adb30d00c56d640419a12deef8395ff5d40d6e083c1c8388ebd7b435ef4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via a mapped drive"
+   }
+  ],
+  "filename:dep2.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Deployment via a mapped drive"
+   }
+  ],
+  "sha256:fb94688ed37dfcb985a8a4d720230e5150956e1788d579b0a54b53a153fd2f2e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Raw Sliver beacon shellcode, entropy 7.9999"
+   }
+  ],
+  "filename:slv_beacon_sc.bin": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Raw Sliver beacon shellcode, entropy 7.9999"
+   }
+  ],
+  "sha256:fdf0fae99d3b8ddd21aac288c2b38b6ac8a0e0eff99706b82ed5e921db9ddb0e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "filename:assa161_new.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+   }
+  ],
+  "sha256:fe54dbceee81d09d3d2881136f8a702423f9c25acf4fd8fea44b36111134eaf4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task definition, SYSTEM, forged author"
+   }
+  ],
+  "filename:task39_now.xml": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Scheduled task definition, SYSTEM, forged author"
+   }
+  ],
+  "sha256:86881b8e9d197ac2f734792de48d5dfaebe7cafb6e35d49c5dd7fe6eb697230e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "JavaScript (Node.js)"
+   }
+  ],
+  "sha256:a332835be163d968d287f2c6ff566d75b087abcedc16021607403803b7b3416e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PE executable"
+   }
+  ],
+  "filename:bkshell.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PE executable"
+   }
+  ],
+  "sha256:bcf24d50ca3a2b4e74438537755a1778617bdf02273098b82a3ce5e89bf5724b": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PE executable"
+   }
+  ],
+  "filename:rtunnel2.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PE executable"
+   }
+  ],
+  "md5:a03253a991d34640f00c560b89011805": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:808502752ca0492aca995e9b620d507b": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:1e309fc39e9866edf6f44fa315fbdf70": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:999466cff181b66907c6fc2d80f5c8b3": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:0316840f7df8f75c4039909d55eb1549": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:0f25cb54d2dc89b414a14db202b06ba6": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:621db49ebc24092045d7181cf8690cf3": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:130b72b54799233f0aeb203f160ebc90": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:6776bfe983932598134e3eb1a2d99d14": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:f4f4467128df3962670243b5b0b99f8c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:efa54088ecb950d5ee152610ff5d636e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:d766a554e5ab46a43b848b0d22df65f1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:868f2d9f2ea65e6e0ed6a66133ec3468": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:04262ed28fd9b4f4691b2655b2f5c0ed": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:3c916891a76120c4e10ab4674a8d5720": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:1b62875e961999bd2157ac88de6e83de": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:a39eb85eb5622a28e0e368fefa9da939": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:6084305556def1a61dd69959884af971": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:33172fc2d6e7615b7ca75a493447b4ce": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:098989965749e8d42a314f5ae102b82a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:7ba3108234b3556a7b536bee391143a3": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:29ea4a5c24c739727d46941a471f80d2": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:ade6fecfa408be036364e2b9b15441ae": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:bf1e31c305f210ed15f2635ca1ae321e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:2000c9cd74d0770a4cfd97282cdc9abd": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:dd5c8c955b2fa584e2c7e17c6f4f1455": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:049002830b73321e8efce7899d4eaa92": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:49017561ae06882b7ff28d66783e2051": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:712da3dbc5ea34854345e71bb8d98ea8": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:f5639c56f86b715f6223c7a14c06d519": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:29efd64dd3c7fe1e2b022b7ad73a1ba5": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:90fe1319b8b05eb5e782fb334f5c2924": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:11553dc59be466f48fed7dbb436ff05f": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:57bc34640bc2d53d7e4d2a053d0bbea3": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:68608c531dd4240e7f5a5dd0cb2a3610": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:97b8693e32bfa03dd7eabd701849d972": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:b531927f303aed4fa98c9e42b9c5eca7": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:aa68d12c3135afbdc019739ef1d21358": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:5e7fc055d261c685d3aa05aca81e610f": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:3b8b9c081499c90e13e8916513bb8a28": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:f665292c392bffa3bebbe17dcec03e17": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:2df218a390e8fe1cf17797f2c5caec29": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:108da75de148145b8f056ec0827f1665": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   },
+   {
+    "report": "webserver-compromise-kit-91-236-230-250"
+   }
+  ],
+  "md5:02bcdf44e34cd9aca5abf617427d7bfb": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:dfdf55484962e2a70a6255868d91bc37": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:0b43d183fa64803608385806501750a7": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:4ff3ed6143b932a8760c32cb693905a9": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:c8a7a1e830d6850b2529471310d1c803": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:1fdb1dd742674d3939f636c3fc4b761f": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:71e5be231b66e94ab0cfc20be0b1e1ba": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:c6cd2ac9aaa07392b5a18cea0b465bf4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:4d9e61fe5d105e4d6d26ac67f7228742": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:3d77fc5aaab483e67053b416da222ccc": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:2e4fbb0e2472cb7a7e13cfc6fbb1905c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:4e52a44f01adf41d62bc8cae34dd788a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:c9ab81d0e67295058636f951f7ce4e3a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:8836546c46bf376ab009eb876bc3c793": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:d7359a6e562aa9c300c8af412f8f79ba": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:bd1eaea733425cd21a51a652c429951d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:7517f2c1b04183224e73c54789cf37d5": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:ab31b24a0f7c4d23ebc1ee2ac0140d68": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:791883be0daf24cdd0a01483e8474173": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:69b7f4ba9ce91a6e403270abcfd882ad": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:986f1db25b7d9ca73b002fa28cf09346": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:7fb996df101d57a8a41507df380d4983": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:5dec764af6862185aa56d3d6bffa736f": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:7875a8100de57420cc403ebc530c6764": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:d3a4a2df6a7d4e92bfc5d0d78fd9cd1a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:757c54783a367c7c490186fcf5bb35ce": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:0bae3972c232d6c174d5f68ced16319d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:1a9880cc5cf5a9301377e1734d211c38": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:f66a37432cc8698eb693d2d4dc46d51e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:61973b73a6366f58c8e90118af3da7ee": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:4b690f3ce585df982a042917b82642c8": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:a2baad151034951068e20dfdd742b36e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "md5:23a4301d524fccaef630e627fced1d94": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:36fb8d4021e3c755830be0f66ebe74d0d2eb3a37": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:668c40bb6c792b3502b4eefd0916febc8dbd5182": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:eaca979848b1c2ff6df166ea199b3cb6b7cb1f15": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:67d42931f48c5af1227585df1143bcdd7f7c9eac": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:88ec2a71225a1749383953596b7cae43a34c02ec": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:7fb5c46a90fb27b53ccea1b6fec486baaf63266c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:a2a8c85ae57521e1aa93d466b31096e217f4cd6f": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:e348c0567ef9a7aad7b4af3e1830f1a4c797bdcc": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:f70f8c4bb655f3570d78b717cc9945182d59c814": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:47183a554ea74f0bbd6271451e4a73bd41e9f362": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:8848b617942f71e87ab9c5e57d56550e9fb32e12": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:f0a955dc3c37a7da490b1b08a9b66b39abe6faf8": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:c213a67fd8dc8e3f29857bdab83083459bb6ab75": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:a5452c96f717af74228217db51a1b9e067b8c007": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:8562d55255f9cd3dc36eb0e247cccd931d592249": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:2c8fd002f768ff6dc23b334f09c753f7f57af372": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:2cfa3a3bbdb24d66e974bbeff2582e309c0ff830": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:e702d3147f76f5bdc4afd140e33dc7e3975c79cb": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:fb49bdcc5cd75b8eb7784f16ce8504fee637b39c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:ac819eaeac74f7cd8d39834ef3d1d1de399f03d0": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:c78da3566bb7a63b66216c7649187bf81ff9d462": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:4085fdd2fcfe3d722facf396990674dd14f80e67": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:5bf323cb53f3c67ba53ac04b0db264079dc5bc07": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:99b52013487a1b21e2031fffdbd9d5c7d5697a78": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:ab485c551144fc3b6f9692d13182ae92c6fb9848": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:b62cfa5cd03a0c4df831800f67291a93e981c883": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:a7f4141eaad1aa39594322b0b99dfca16c23390a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:4b7de21331c0a4154a951dc68c4386154575a04c": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:595fe7c5c382d096cbc3f798a405fa1bdff380b7": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:d32956610c9959e6085eb3c968b089974802fab0": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:e3b6ea8c46fa831cec6f235a5cf48b38a4ae8d69": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:29a0233b8ad76c4afa58c3762a44494f06ef8805": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:5ce92796599966aa6f566f91fbb74a2e428abe08": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:9280c50bb26fd0cc28c7a761acef5fc742edaf74": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:c70038b39594531d3b5f56b3553800687e6b3a51": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:703e5dc305008e8d1e462a8404bdc31e28f71da2": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:a176fce8809d0d75f6fb02dfc237e35884881502": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:33a09b40f8f3a647e2f1b26f075091e421e6419e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:a8ca03e0d328f9229db53a83620ee82db4eef873": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:db5e1ccaaa7ce6e73c67ea0fd037355205c8f361": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:4fee45e167d7e35710cfd2c3ff914851f830a427": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:d2490257d18fd28f57eed637ceaf348fa21db1e4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:188098b9caf3bc4d1b68dcad50d2e1cbd2e9d519": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   },
+   {
+    "report": "webserver-compromise-kit-91-236-230-250"
+   }
+  ],
+  "sha1:522e7674cd1f6ecd375166c3c1732414dbd64ce0": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:b3976255a0809b1985bb97a69deeb2cbb0644dfb": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:6c280d0312ce01fecfc0447bc6b1073a5473ce65": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:35ca77675b5a406c4900caa93337020d07eeff46": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:89b7e37d1c5c2c6bfbeb5e6978565910e998f237": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:c0408da553d905857ac4f559b0438b99316f1bda": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:2ac8c7101042720b11fe75bcb1a174ba9c07c3ac": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:ca7854a3a4e24370b31991fc6f599e6b26f9065b": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:56b91302fb68794db6bbebf320373fbbaa4cab2e": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:9cc91f37130b34354eab0a9af58cd4e81e2edd81": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:7d97faf46b4da1fbb5e534df025b22ccf41d955a": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:2e7efea9a0ecd10fcf5f6c3da70129a4e82c5430": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:6ae10f0e10e5f5d9a60be0f915e92c52c80d8e2b": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:54d18e7ee7502a343eab46fe8abcddc5815be062": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:b90fcdb8c9f3bb4620ec9d25bd8abc71033344e5": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:60285f6776cc3ff20872feeee7f2fd0b3b04410d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:02d2f00766fa45b914a5b32d6677f36c916203a0": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:d87a33503d3a48ad52a83744a6c8e1255f572d66": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:5a0f26f2a01111d983862047072be7375d6b623d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:25805ac7956fd0e51ba59934fb9a49d766f89545": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:0e7057a20a34462d03632c5550259a8959ed3149": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:12bc49435971a15c901ad71c7e0b15888098a480": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:90e66a19e668b77499b846ae10c58ef35117eed0": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:60c2decd1de6b5651b91367803baf87e23279ecd": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:3b93437edbc45206932e9562431b1b362fcacbf2": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:68b939dc7e5b9071e3b7f8a376ca3210809143b8": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:2f35ddac6482f18fc997f2f39075c68b90ca7311": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:ad564329de735b1a29ad772bc5bd62ff720cc6b4": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:b1cf4359f0a6385d680c70bdeaec08aacd1cd286": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:8d1ddc02460d80d50e13e5d5dadcfb192a6a2fab": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:9dd99bc68e60132f32fc33617deb9583c8cebb51": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:42234e5190e0e25a2893797754864299983642c0": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "sha1:8a82195b031e322a8fd69da3e3e1b0f01dc1af36": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "ipv4:193.233.202.17": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "ipv4:146.103.127.44": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "ipv4:38.110.228.125": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Resolved destination of the blockchain-resolved C2 domain"
+   }
+  ],
+  "domain:publisherresolution.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "domain:resumeacceptable.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Contract C2 value set at block 24980089. 17 of 90 malicious"
+   }
+  ],
+  "domain:simultaneouslypower.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Contract C2 value set at block 25302771. 18 of 90 malicious, reputation -11"
+   }
+  ],
+  "domain:wiselystarting.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Contract C2 value set at block 25345369. 20 of 90 malicious, reputation -11"
+   }
+  ],
+  "domain:itemrange.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "domain:www.itemrange.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Subdomain of the current C2 domain"
+   }
+  ],
+  "url:http://193.233.202.17:42718/task_39.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Fileless weekly re-pull target of the capstone SYSTEM scheduled task"
+   }
+  ],
+  "url:http://193.233.202.17:42718/gp.b64": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Base64 .NET assembly fetched for reflective in-memory loading"
+   }
+  ],
+  "url:http://193.233.202.17:42718/add_dns_from_37.ps1": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Script staging on the same operator port"
+   }
+  ],
+  "url:http://193.233.202.17:8088/slv_beacon_sc.bin": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "url:http://193.233.202.17:42099/ws_new31847.exe": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Implant staging for certutil-based mass deployment"
+   }
+  ],
+  "url:http://193.233.202.17:39287/cons_c1.0.1.msi": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "MSI staging for silent msiexec deployment"
+   }
+  ],
+  "url:http://193.233.202.17:44321/cons_c1.0.1.msi": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "The same MSI served on a second port, redundancy or rotation"
+   }
+  ],
+  "url:http://193.233.202.17:8080/": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "The open directory that served the 81-file toolkit"
+   }
+  ],
+  "url:http://193.233.202.17:8088/": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "The same directory served identically on a second port"
+   }
+  ],
+  "sha256:35a3dfd53d1a8f73165747555ea264f815fde2d75fbbab0b6b513793cb39868b": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Presented on the primary C2 host"
+   }
+  ],
+  "url:https://publisherresolution.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "url:https://resumeacceptable.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "url:https://simultaneouslypower.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "url:https://wiselystarting.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "url:https://itemrange.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17"
+   }
+  ],
+  "domain:bdqbs2lz6u.bak": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Node.js bot main script, launched from the Run key"
+   }
+  ],
+  "filename:yugkag9mvnkwylo.bin": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "JavaScript decryptor and installer from the MSI cabinet"
+   }
+  ],
+  "filename:jlfywzakn99jpgu.xml": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Encrypted bot payload, not XML despite the extension, entropy 7.97"
+   }
+  ],
+  "filename:jedb5rox.cmd": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "MSI CustomAction bootstrapper that fetches the Node runtime"
+   }
+  ],
+  "md5:c2d457ad8ac36fc9f18d45bffcd450c2": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "24 Group A files, Go 1.22.x, sizes 1.9 to 1.96 MB"
+   }
+  ],
+  "md5:f34d5f2d4577ed6d9ceec516c1f5a744": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "The two x86 .NET assemblies in the kit"
+   }
+  ],
+  "url:https://nodejs.org/dist/v18.17.0/node-v18.17.0-win-x64.zip": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "LEGITIMATE VENDOR DOWNLOAD"
+   }
+  ],
+  "domain:nodejs.org": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "LEGITIMATE VENDOR"
+   }
+  ],
+  "domain:mainnet.gateway.tenderly.co": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PUBLIC ETHEREUM RPC"
+   }
+  ],
+  "domain:rpc.flashbots.net": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PUBLIC ETHEREUM RPC"
+   }
+  ],
+  "domain:rpc.mevblocker.io": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PUBLIC ETHEREUM RPC"
+   }
+  ],
+  "domain:eth-mainnet.public.blastapi.io": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PUBLIC ETHEREUM RPC"
+   }
+  ],
+  "domain:ethereum-rpc.publicnode.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PUBLIC ETHEREUM RPC"
+   }
+  ],
+  "domain:eth.drpc.org": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PUBLIC ETHEREUM RPC"
+   }
+  ],
+  "domain:eth.merkle.io": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "PUBLIC ETHEREUM RPC"
+   }
+  ],
+  "ipv4:147.135.84.14": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "SHARED HOSTING"
+   }
+  ],
+  "ipv4:77.110.126.46": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "OPERATOR FALLBACK C2, UNDERLYING HOST OWNERSHIP NOT ESTABLISHED"
+   }
+  ],
+  "md5:2196848d251b217de8b2c037e356c11d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "ja3"
+   }
+  ],
+  "sha256:033729fe4f6aadc1ba38de00013f7b0e5e1bf5d540df00872931053488ed79bd": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "sha256"
+   }
+  ],
+  "domain:dcdivas.com": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "domain"
+   }
+  ],
+  "domain:gorus.space": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "domain"
+   }
+  ],
+  "domain:n8n-nether.nafer.ru": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "domain"
+   }
+  ],
+  "sha256:a84f6fe166a238c48c5ccebe5312bb63311476fbf14cd81883f3329c36b1362d": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "sha256"
+   }
+  ],
+  "sha256:0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5": [
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "sha256"
+   }
+  ],
   "sha256:e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b": [
    {
     "report": "sliver-open-directory",
@@ -11381,17 +13365,7 @@
     "report": "webserver-compromise-kit-91-236-230-250"
    }
   ],
-  "md5:108da75de148145b8f056ec0827f1665": [
-   {
-    "report": "webserver-compromise-kit-91-236-230-250"
-   }
-  ],
   "md5:032300082d8bc63b3d0a7f3f3f83f5d1": [
-   {
-    "report": "webserver-compromise-kit-91-236-230-250"
-   }
-  ],
-  "sha1:188098b9caf3bc4d1b68dcad50d2e1cbd2e9d519": [
    {
     "report": "webserver-compromise-kit-91-236-230-250"
    }
