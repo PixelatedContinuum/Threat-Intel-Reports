@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-07T00:00:27Z
+generated_at: 2026-09-07T02:02:07Z
 window_days: 30
 counts:
-  total: 493
-  research: 171
+  total: 494
+  research: 172
   news: 322
 unclassified_sources:
   - "The DFIR Report"
@@ -324,6 +324,7 @@ label_colors:
   "github-actions": 9
   "gitlab": 3
   "gms": 3
+  "google cloud": 8
   "google sheets c2": 12
   "government": 4
   "hacker": 8
@@ -346,6 +347,7 @@ label_colors:
   "industry": 8
   "infection chain": 8
   "information stealer": 6
+  "inside google cloud": 2
   "insights": 5
   "isolated-vm": 5
   "ivanti": 7
@@ -519,6 +521,12 @@ items:
     date: 2026-09-04T07:52:40Z
     kind: research
     labels: ["netch-gateway", "proxy abuse", "radmin", "softether vpn", "ultravnc"]
+  - title: "What’s new with Google Cloud"
+    url: "https://cloud.google.com/blog/topics/inside-google-cloud/whats-new-google-cloud/"
+    source: "Google"
+    date: 2026-09-04T07:00:00Z
+    kind: research
+    labels: ["google cloud", "inside google cloud"]
   - title: "Data access: the hidden cost of security vendor lock-in"
     url: "https://www.elastic.co/security-labs/blog/siem-data-export-comparison"
     source: "Elastic"
