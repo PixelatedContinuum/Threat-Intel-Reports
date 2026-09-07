@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-07T08:02:06Z
+generated_at: 2026-09-07T10:02:27Z
 window_days: 30
 counts:
-  total: 495
-  research: 172
+  total: 496
+  research: 173
   news: 323
 unclassified_sources:
   - "The DFIR Report"
@@ -114,6 +114,7 @@ label_colors:
   "apac attacks": 2
   "apollo": 11
   "app password phishing": 8
+  "app-bound-encryption": 6
   "apple": 12
   "apple activation lock": 5
   "application security": 6
@@ -431,6 +432,12 @@ items:
     date: 2026-09-06T14:23:46Z
     kind: news
     labels: []
+  - title: "REVSTEALER ramps up: analysis of up-and-coming infostealer"
+    url: "https://www.elastic.co/security-labs/threat-command/revstealer-credential-harvesting-infostealer"
+    source: "AlienVault"
+    date: 2026-09-06T12:08:52Z
+    kind: research
+    labels: ["app-bound-encryption", "credential-theft", "cryptocurrency-wallets", "gaming-platforms", "infostealer", "lockapphost", "polygon-blockchain", "promanager", "ref2859", "revstealer", "sandbox-evasion", "softmanager", "vmprotect", "winupdate", "xmrig"]
   - title: "Over 5,400 hacked sites serve ClickFix payloads stored on the blockchain"
     url: "https://www.bleepingcomputer.com/news/security/over-5-400-hacked-sites-serve-clickfix-payloads-stored-on-the-blockchain/"
     source: "BleepingComputer"
