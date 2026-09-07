@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-07T10:02:27Z
+generated_at: 2026-09-07T12:01:26Z
 window_days: 30
 counts:
-  total: 496
-  research: 173
-  news: 323
+  total: 501
+  research: 177
+  news: 324
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 68
+    count: 67
     color: 1
   - label: "cybercrime"
     count: 51
@@ -31,7 +31,7 @@ topics:
     count: 21
     color: 6
   - label: "artificial intelligence"
-    count: 18
+    count: 17
     color: 7
   - label: "credential theft"
     count: 15
@@ -43,7 +43,7 @@ topics:
     count: 14
     color: 10
   - label: "zero-day"
-    count: 13
+    count: 14
     color: 11
   - label: "clickfix"
     count: 12
@@ -64,6 +64,7 @@ label_colors:
   "adblocker": 3
   "adcs exploitation": 11
   "adobe": 1
+  "adobe commerce": 12
   "adversary-in-the-middle": 9
   "adware disguise": 5
   "aerospace targeting": 10
@@ -149,6 +150,7 @@ label_colors:
   "azure table storage": 2
   "babadeda": 2
   "babadedaloader": 11
+  "babuk": 7
   "back-to-school": 4
   "backconnect infrastructure": 12
   "backdoor": 11
@@ -167,6 +169,7 @@ label_colors:
   "binary ninja": 5
   "binding.gyp": 1
   "bitcoin": 2
+  "black hat seo": 5
   "blackrock": 2
   "blockchain": 8
   "blockchain abuse": 2
@@ -255,6 +258,7 @@ label_colors:
   "cryptocurrency stealer": 4
   "cryptocurrency theft": 3
   "cryptocurrency-stealer": 7
+  "curlrat": 3
   "custom tcp protocol": 8
   "cve-2007-3010": 7
   "cve-2016-6277": 9
@@ -292,6 +296,7 @@ label_colors:
   "disrupted": 8
   "dll sideloading": 11
   "domain controller": 4
+  "dprk apt": 2
   "dprk-linked": 1
   "dropcatch": 4
   "edge device exploitation": 7
@@ -316,6 +321,7 @@ label_colors:
   "fortinet": 7
   "fraud & identity theft": 11
   "frontier ai": 3
+  "garage2global": 10
   "gatesentinel": 7
   "gentlemen": 1
   "geoserver": 2
@@ -420,6 +426,18 @@ label_colors:
   "zero-day": 11
   "zoom": 7
 items:
+  - title: "Hackers exploit new MikroTik RouterOS flaws to hijack routers"
+    url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-new-mikrotik-routeros-flaws-to-hijack-routers/"
+    source: "BleepingComputer"
+    date: 2026-09-07T10:32:40Z
+    kind: news
+    labels: ["hardware"]
+  - title: "ConnectWise warns of new ScreenConnect flaw without patch"
+    url: "https://www.bleepingcomputer.com/news/security/connectwise-warns-of-new-screenconnect-flaw-without-patch/"
+    source: "BleepingComputer"
+    date: 2026-09-07T10:06:38Z
+    kind: news
+    labels: []
   - title: "N-able patches max severity N-central flaw amid ongoing attacks"
     url: "https://www.bleepingcomputer.com/news/security/n-able-patches-max-severity-n-central-flaw-amid-ongoing-attacks/"
     source: "BleepingComputer"
@@ -438,6 +456,18 @@ items:
     date: 2026-09-06T12:08:52Z
     kind: research
     labels: ["app-bound-encryption", "credential-theft", "cryptocurrency-wallets", "gaming-platforms", "infostealer", "lockapphost", "polygon-blockchain", "promanager", "ref2859", "revstealer", "sandbox-evasion", "softmanager", "vmprotect", "winupdate", "xmrig"]
+  - title: "BengalSEO Part 1: Anatomy of the Operation"
+    url: "https://thedfirreport.com/2026/08/24/bengalseo-part-1-anatomy-of-the-operation/"
+    source: "AlienVault"
+    date: 2026-09-06T07:32:55Z
+    kind: research
+    labels: ["black hat seo", "garage2global", "github infrastructure", "india", "matomo analytics", "mayabot", "seo poisoning", "tds", "tech support scam", "weconnect"]
+  - title: "StyleSmuggler: Magento and Adobe Commerce 0-day RCE under active attack"
+    url: "https://sansec.io/research/stylesmuggler"
+    source: "AlienVault"
+    date: 2026-09-05T20:33:07Z
+    kind: research
+    labels: ["adobe commerce", "backdoor", "graphql", "magento", "payment email", "remote code execution", "stylesmuggler", "zero-day"]
   - title: "Over 5,400 hacked sites serve ClickFix payloads stored on the blockchain"
     url: "https://www.bleepingcomputer.com/news/security/over-5-400-hacked-sites-serve-clickfix-payloads-stored-on-the-blockchain/"
     source: "BleepingComputer"
@@ -456,6 +486,12 @@ items:
     date: 2026-09-04T16:56:45Z
     kind: news
     labels: ["legal"]
+  - title: "DPRK APTs: Ted backdoor and curlRAT target South Korean media and automotive sectors"
+    url: "https://www.rapid7.com/blog/post/tr-dprk-apts-ted-backdoor-curlrat-target-south-korean-media-automotive-sectors"
+    source: "AlienVault"
+    date: 2026-09-04T16:53:57Z
+    kind: research
+    labels: ["curlrat", "dprk apt", "haproxy", "linux toolkit", "south korea", "ted backdoor", "trojanized binaries", "watering-hole"]
   - title: "In Other News: Microsoft’s Cloud Patches, Hacked Dropbox Accounts, Guardio’s $1.1B Valuation"
     url: "https://www.securityweek.com/in-other-news-microsofts-cloud-patches-hacked-dropbox-accounts-guardios-1-1b-valuation/"
     source: "SecurityWeek"
@@ -504,6 +540,12 @@ items:
     date: 2026-09-04T13:22:01Z
     kind: news
     labels: []
+  - title: "Angry Birds: Toy Ghouls’ new toys"
+    url: "https://securelist.com/toy-ghouls-new-hivemq-and-element-backdoors/121270/"
+    source: "AlienVault"
+    date: 2026-09-04T12:34:10Z
+    kind: research
+    labels: ["babuk", "backdoor", "element messenger", "financially motivated", "genielocker", "hivemq", "lockbit", "matrix protocol", "matrix-bird-agent", "mqtt", "mqtt-bird-agent", "toy ghouls", "winrm"]
   - title: "12-Year-Old PostgreSQL Vulnerability Enables Database, Server Takeover"
     url: "https://www.securityweek.com/12-year-old-postgresql-vulnerability-enables-database-server-takeover/"
     source: "SecurityWeek"
@@ -3390,9 +3432,3 @@ items:
     date: 2026-08-08T14:16:23Z
     kind: news
     labels: []
-  - title: "Critical One-Click Vulnerability in Atlassian’s Rovo AI Exposed Enterprise Data"
-    url: "https://www.securityweek.com/critical-one-click-vulnerability-in-atlassians-rovo-ai-exposed-enterprise-data/"
-    source: "SecurityWeek"
-    date: 2026-08-08T11:30:00Z
-    kind: news
-    labels: ["artificial intelligence", "atlassian", "data theft", "rovo", "vulnerabilities"]
