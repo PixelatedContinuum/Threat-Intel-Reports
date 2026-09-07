@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-07T06:01:26Z
+generated_at: 2026-09-07T08:02:06Z
 window_days: 30
 counts:
-  total: 494
+  total: 495
   research: 172
-  news: 322
+  news: 323
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -419,6 +419,12 @@ label_colors:
   "zero-day": 11
   "zoom": 7
 items:
+  - title: "N-able patches max severity N-central flaw amid ongoing attacks"
+    url: "https://www.bleepingcomputer.com/news/security/n-able-patches-max-severity-n-central-flaw-amid-ongoing-attacks/"
+    source: "BleepingComputer"
+    date: 2026-09-07T06:17:41Z
+    kind: news
+    labels: []
   - title: "Attackers conceal phishing lures using invisible Unicode characters"
     url: "https://www.bleepingcomputer.com/news/security/attackers-conceal-phishing-lures-using-invisible-unicode-characters/"
     source: "BleepingComputer"
