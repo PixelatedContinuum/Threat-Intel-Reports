@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-07T14:02:35Z
+generated_at: 2026-09-07T16:01:57Z
 window_days: 30
 counts:
-  total: 509
-  research: 177
-  news: 332
+  total: 510
+  research: 179
+  news: 331
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -85,6 +85,7 @@ label_colors:
   "ai-assisted intrusions": 3
   "ai-assisted malware": 8
   "ai-assisted-development": 9
+  "ai-generated decoys": 1
   "ai-generated personas": 9
   "ai-powered cybercrime": 12
   "aikido security": 1
@@ -182,6 +183,7 @@ label_colors:
   "brand impersonation": 7
   "breadcrumbs": 10
   "browser data theft": 1
+  "browser extension": 11
   "browser extension campaign": 9
   "browser extensions": 4
   "browser hijacking": 12
@@ -216,6 +218,7 @@ label_colors:
   "chipmaker patch tuesday": 5
   "chrome": 12
   "chrome extension": 7
+  "chrome rat": 5
   "ci/cd compromise": 6
   "ci/cd pipeline exploitation": 4
   "cisa": 6
@@ -361,6 +364,7 @@ label_colors:
   "isolated-vm": 5
   "ivanti": 7
   "jfrog": 8
+  "kimsuky": 1
   "landing page top story": 2
   "leadership": 11
   "legal": 7
@@ -436,6 +440,12 @@ items:
     date: 2026-09-07T13:05:11Z
     kind: news
     labels: []
+  - title: "PEEP: A Browser RAT Posing as a Chrome Extension"
+    url: "https://otx.alienvault.com/pulse/6a9eb13dfccfac432c46d96e"
+    source: "AlienVault"
+    date: 2026-09-07T12:42:37Z
+    kind: research
+    labels: ["browser extension", "chrome rat", "native messaging", "peep", "post-exploitation", "session hijacking"]
   - title: "Trezor data breach impact now reaches 81,000 customers"
     url: "https://www.bleepingcomputer.com/news/security/trezor-data-breach-impact-now-reaches-81-000-customers/"
     source: "BleepingComputer"
@@ -490,6 +500,12 @@ items:
     date: 2026-09-07T10:06:38Z
     kind: news
     labels: []
+  - title: "Kimsuky Uses the AI Agent 'opencode' to Create Decoys as Its GitHub PAT-Based LNK Attacks Evolve"
+    url: "https://otx.alienvault.com/pulse/6a9e70fd7eb74853a795cc57"
+    source: "AlienVault"
+    date: 2026-09-07T08:08:29Z
+    kind: research
+    labels: ["ai-generated decoys", "kimsuky", "opencode"]
   - title: "N-able patches max severity N-central flaw amid ongoing attacks"
     url: "https://www.bleepingcomputer.com/news/security/n-able-patches-max-severity-n-central-flaw-amid-ongoing-attacks/"
     source: "BleepingComputer"
@@ -3478,9 +3494,3 @@ items:
     date: 2026-08-10T08:55:44Z
     kind: news
     labels: ["data breaches", "levi strauss"]
-  - title: "Hackers breach TrueConf to trojanize client installers with backdoors"
-    url: "https://www.bleepingcomputer.com/news/security/hackers-breach-trueconf-to-trojanize-client-installers-with-backdoors/"
-    source: "BleepingComputer"
-    date: 2026-08-08T14:16:23Z
-    kind: news
-    labels: []
