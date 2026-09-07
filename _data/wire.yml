@@ -3,46 +3,46 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-07T12:01:26Z
+generated_at: 2026-09-07T14:02:35Z
 window_days: 30
 counts:
-  total: 501
+  total: 509
   research: 177
-  news: 324
+  news: 332
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 67
+    count: 69
     color: 1
   - label: "cybercrime"
-    count: 51
+    count: 52
     color: 2
+  - label: "government"
+    count: 28
+    color: 3
   - label: "exploited"
     count: 27
-    color: 3
-  - label: "government"
-    count: 27
     color: 4
-  - label: "data breaches"
-    count: 21
-    color: 5
   - label: "malware"
+    count: 24
+    color: 5
+  - label: "data breaches"
     count: 21
     color: 6
   - label: "artificial intelligence"
-    count: 17
+    count: 18
     color: 7
   - label: "credential theft"
     count: 15
     color: 8
+  - label: "zero-day"
+    count: 15
+    color: 9
   - label: "microsoft"
     count: 14
-    color: 9
-  - label: "ransomware"
-    count: 14
     color: 10
-  - label: "zero-day"
+  - label: "ransomware"
     count: 14
     color: 11
   - label: "clickfix"
@@ -140,6 +140,7 @@ label_colors:
   "atlassian": 8
   "atomic": 1
   "atomic macos stealer": 10
+  "attacks": 7
   "audio surveillance": 7
   "australia": 10
   "authentication": 6
@@ -251,6 +252,7 @@ label_colors:
   "credential-theft": 5
   "critical infrastructure": 4
   "critical infrastructure targeting": 5
+  "crowdstrike": 1
   "crypto scam": 9
   "cryptocurrency": 12
   "cryptocurrency lure": 4
@@ -280,7 +282,7 @@ label_colors:
   "dahua": 9
   "darkhotel": 10
   "darklantern": 4
-  "data breaches": 5
+  "data breaches": 6
   "data leak": 9
   "data-exfiltration": 12
   "dcrat": 12
@@ -309,7 +311,7 @@ label_colors:
   "ethereum": 5
   "ethereum c2": 6
   "exploit": 9
-  "exploited": 3
+  "exploited": 4
   "exposure management": 4
   "extortion": 12
   "fake job interview": 1
@@ -333,7 +335,7 @@ label_colors:
   "gms": 3
   "google cloud": 8
   "google sheets c2": 12
-  "government": 4
+  "government": 3
   "hacker": 8
   "hacker conversations": 8
   "hardware": 6
@@ -363,12 +365,13 @@ label_colors:
   "leadership": 11
   "legal": 7
   "levi strauss": 5
+  "linux": 2
   "litellm": 9
   "living-off-the-land": 1
   "macos": 11
-  "malware": 6
+  "malware": 5
   "metabase": 6
-  "microsoft": 9
+  "microsoft": 10
   "microsoft teams": 10
   "miniorange": 5
   "mlflow": 1
@@ -398,13 +401,14 @@ label_colors:
   "privacy": 12
   "proxy abuse": 6
   "qilin": 11
-  "ransomware": 10
+  "ransomware": 11
   "rce": 10
   "rmm abuse": 2
   "ruby on rails": 12
   "salesforce": 3
   "sap": 8
   "scam": 10
+  "screenconnect": 2
   "securing ai": 4
   "security operations": 4
   "security-labs": 3
@@ -423,9 +427,57 @@ label_colors:
   "uncategorized": 10
   "vmware": 2
   "vulnerabilities": 1
-  "zero-day": 11
+  "zero-day": 9
   "zoom": 7
 items:
+  - title: "Mathspace discloses data breach affecting over 1 million people"
+    url: "https://www.bleepingcomputer.com/news/security/mathspace-discloses-data-breach-affecting-over-1-million-people/"
+    source: "BleepingComputer"
+    date: 2026-09-07T13:05:11Z
+    kind: news
+    labels: []
+  - title: "Trezor data breach impact now reaches 81,000 customers"
+    url: "https://www.bleepingcomputer.com/news/security/trezor-data-breach-impact-now-reaches-81-000-customers/"
+    source: "BleepingComputer"
+    date: 2026-09-07T12:16:32Z
+    kind: news
+    labels: []
+  - title: "Nightmare Eclipse Drops CrowdStrike, Nvidia, Avast Zero-Day Exploits"
+    url: "https://www.securityweek.com/nightmare-eclipse-drops-crowdstrike-nvidia-avast-zero-day-exploits/"
+    source: "SecurityWeek"
+    date: 2026-09-07T12:15:57Z
+    kind: news
+    labels: ["crowdstrike", "exploit", "nvidia", "vulnerabilities", "zero-day"]
+  - title: "North Korean Hackers Deploy New Linux Espionage Toolkit"
+    url: "https://www.securityweek.com/north-korean-hackers-deploy-new-linux-espionage-toolkit/"
+    source: "SecurityWeek"
+    date: 2026-09-07T12:12:08Z
+    kind: news
+    labels: ["linux", "malware", "north korea"]
+  - title: "OpenAI Agents Hijack Another Victim Website"
+    url: "https://www.securityweek.com/openai-agents-hijack-another-victim-website/"
+    source: "SecurityWeek"
+    date: 2026-09-07T12:03:04Z
+    kind: news
+    labels: ["artificial intelligence", "attacks", "openai"]
+  - title: "Adobe Commerce Zero-Day Exploited to Backdoor Online Stores"
+    url: "https://www.securityweek.com/adobe-commerce-zero-day-exploited-to-backdoor-online-stores/"
+    source: "SecurityWeek"
+    date: 2026-09-07T11:58:37Z
+    kind: news
+    labels: ["vulnerabilities"]
+  - title: "Berlin investigates new data leak after hackers publish stolen login credentials"
+    url: "https://therecord.media/germany-berlin-second-data-breach-city-agencies"
+    source: "Recorded Future"
+    date: 2026-09-07T11:50:00Z
+    kind: news
+    labels: ["cybercrime", "government", "malware"]
+  - title: "Modified ScreenConnect Clients Used in Worm-Like Campaign"
+    url: "https://www.securityweek.com/modified-screenconnect-clients-used-in-worm-like-campaign/"
+    source: "SecurityWeek"
+    date: 2026-09-07T11:45:48Z
+    kind: news
+    labels: ["malware", "screenconnect"]
   - title: "Hackers exploit new MikroTik RouterOS flaws to hijack routers"
     url: "https://www.bleepingcomputer.com/news/security/hackers-exploit-new-mikrotik-routeros-flaws-to-hijack-routers/"
     source: "BleepingComputer"
