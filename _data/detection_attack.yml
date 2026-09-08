@@ -1246,7 +1246,7 @@
     - tactic: "Command and Control"
       id: "T1102.002"
       name: "Bidirectional Communication"
-      rules: "MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report (SURICATA, Hunting)"
+      rules: "MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); GHOST Cryptojacker Kit Telegram API Egress from Production Server — Covert Mining Report (SURICATA, Hunting)"
       count: 2
     - tactic: "Command and Control"
       id: "T1105"
@@ -1256,17 +1256,17 @@
     - tactic: "Command and Control"
       id: "T1571"
       name: "Non-Standard Port"
-      rules: "High-Frequency Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting)"
+      rules: "High-Frequency Ncat Listener Creation on Linux Host (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress — Known Operator Ports (SURICATA, Hunting)"
       count: 2
     - tactic: "Command and Control"
       id: "T1572"
       name: "Protocol Tunneling"
-      rules: "MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria V2 QUIC Proxy Process Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports (SURICATA, Hunting)"
+      rules: "MAL_Linux_GHOST_Hysteria_Operator_Wrapper (YARA, Hunting); Hysteria V2 QUIC Proxy Process Execution on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress — Known Operator Ports (SURICATA, Hunting)"
       count: 3
     - tactic: "Impact"
       id: "T1496.001"
       name: "Compute Hijacking"
-      rules: "MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report (SURICATA, Hunting)"
+      rules: "MAL_Linux_GHOST_min1_DualTelegram_Wrapper (YARA, Hunting); High-Frequency memfd_create Syscall from Non-JVM Process on Linux Server (SIGMA, Hunting); GHOST Cryptojacker Kit Telegram API Egress from Production Server — Covert Mining Report (SURICATA, Hunting)"
       count: 3
 "gocloud-multiservice-cryptojacking-149-28-112-221-detections":
   total: 18
@@ -2646,7 +2646,7 @@
     - tactic: "Resource Development"
       id: "T1587"
       name: "Develop Capabilities"
-      rules: "LLM-Personalized Credential Mutator Family (YARA, Detection); AI Operator Handoff Document Family (YARA, Detection); C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity) (YARA, Detection); Russian Operator Persona Strings (YARA, Hunting); AI Operator Handoff Document Bespoke Filename Created on Server Filesystem (SIGMA, Detection); Gemini CLI Directory Creation with Executable Contents on Server Host (SIGMA, Hunting); Gemini CLI Directory Tooling Filename Created on Server Host (SIGMA, Hunting)"
+      rules: "LLM-Personalized Credential Mutator Family (YARA, Detection); AI Operator Handoff Document Family (YARA, Detection); C2_INFRA_TRANSFER Explicit AI-to-AI Header (Narrow / Highest Fidelity) (YARA, Detection); Russian Operator Persona Strings (YARA, Hunting); AI Operator Handoff Document Bespoke Filename Created on Server Filesystem (SIGMA, Detection); Executable Script or Skill File Created in Gemini CLI Config Directory (SIGMA, Hunting); AI Operator Handoff Filename Created in Gemini CLI Config Directory (SIGMA, Hunting)"
       count: 7
     - tactic: "Execution"
       id: "T1059.001"
@@ -2656,7 +2656,7 @@
     - tactic: "Execution"
       id: "T1059.006"
       name: "Python"
-      rules: "LLM-Personalized Credential Mutator Family (YARA, Detection); Stolen LLM API Key Validator (YARA, Detection); A2A C2 Client Console / Exec Tool (YARA, Detection); Mass WordPress wp-login.php Credential Validation Rate Exceeded (Correlation) (SIGMA, Detection); Gemini CLI Directory Creation with Executable Contents on Server Host (SIGMA, Hunting); Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern) (SIGMA, Hunting)"
+      rules: "LLM-Personalized Credential Mutator Family (YARA, Detection); Stolen LLM API Key Validator (YARA, Detection); A2A C2 Client Console / Exec Tool (YARA, Detection); Mass WordPress wp-login.php Credential Validation Rate Exceeded (Correlation) (SIGMA, Detection); Executable Script or Skill File Created in Gemini CLI Config Directory (SIGMA, Hunting); Python HTTP Server on Non-Standard Port with UTF-16LE Encoding (A2A C2 Pattern) (SIGMA, Hunting)"
       count: 6
     - tactic: "Persistence"
       id: "T1547.001"

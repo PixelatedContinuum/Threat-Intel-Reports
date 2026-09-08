@@ -847,8 +847,8 @@ level: high
 **Robustness:** 2
 **ATT&CK Coverage:** T1685 (Impair Defenses)
 **Confidence:** MODERATE — the rule's own description states this is a hunting lead, not an alert
-**Rationale:** File-event telemetry cannot inspect file content, so a hit only means "this permissions file changed" — it cannot itself distinguish an operator pre-authorizing a curl-to-shell pattern from a routine, legitimate settings edit. *Tag fixes applied during retiering, verified against the real `sigma check` tool:* the original carried tactic-only tags with no technique; `attack.t1562.001` was tried first but the tool rejects it as invalid — MITRE renumbered Disable or Modify Tools to the top-level technique **T1685** (no longer a Defense Evasion sub-technique tree under T1685) — and the tool then required the new ATT&CK v19 `attack.defense-impairment` (TA0112) tactic tag alongside it, which has been added. An unpaired `attack.execution` tactic tag (unsupported by the file-modification-only logic) was dropped.
-**False Positives:** Routine or legitimate edits to Claude Code settings are common — review the added permission entries after the alert fires.
+**Rationale:** File-event telemetry cannot inspect file content, so a hit only means "this permissions file changed" — it cannot itself distinguish an operator pre-authorizing a curl-to-shell pattern from a routine, legitimate settings edit. *Tag fixes applied during retiering, verified against the real `sigma check` tool:* the original carried tactic-only tags with no technique; `attack.t1562.001` was tried first but the tool rejects it as invalid — MITRE renumbered Disable or Modify Tools to the top-level technique **T1685** (no longer a Defense Evasion sub-technique tree under T1685) — and the tool then required the new ATT&CK v19 `attack.defense-impairment` (TA0112) tactic tag alongside it, which has been added. An unpaired `attack.execution` tactic tag (unsupported by the file-modification-only logic) was dropped. *FP remediation (2026-09-07):* the deployed selector also matched inside third-party npm packages' own vendored `node_modules` trees and a Docker container's overlay diff (observed: `es-abstract`, `selfsigned`), none of which Claude Code ever reads as a settings file, so a `filter_vendor` exclusion on `node_modules` was added. Measured over a 14-day window against the rule's own source index: 50 events matched before the fix, 47 after, removing exactly those 3 vendored-tree/overlay matches and nothing else, at zero coverage cost. The `claude` and `git` writers that account for the remaining volume are deliberately NOT excluded here: a `claude`-driven write to its own settings file is indistinguishable at the file-event layer from a malicious one, which is precisely the T1685 scenario this rule exists to catch, and `git` checking out or removing the tracked `settings.json` during routine worktree lifecycle is specific to how heavily one environment uses git worktrees, not a defect in the rule. Both are handled as local Kibana exceptions scoped by `file.path` to the git-tracked `settings.json` only, because that file's content is independently reviewable via `git diff`/`git log` regardless of whether this rule fires, while the untracked `settings.local.json` has no such backstop, so every subscriber's rule, and this environment's own coverage of that file, is unchanged.
+**False Positives:** Routine or legitimate edits to Claude Code settings are common — review the added permission entries after the alert fires. Third-party npm packages occasionally ship a fixture file at this path fragment inside their own `node_modules` tree (observed: `es-abstract`, `selfsigned`); these have no effect on Claude Code's real configuration and are excluded via `filter_vendor`.
 **Deployment:** Linux/macOS file integrity monitoring (FIM) on developer and server hosts, auditd, Sysmon for Linux.
 
 ```yaml
@@ -866,6 +866,7 @@ references:
   - https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-09-07'
 tags:
   - attack.stealth
   - attack.persistence
@@ -880,13 +881,20 @@ detection:
     TargetFilename|contains:
       - /.claude/settings.local.json
       - /.claude/settings.json
-  condition: selection
+  filter_vendor:
+    TargetFilename|contains: /node_modules/
+  condition: selection and not filter_vendor
 falsepositives:
   - >-
     Routine or legitimate edits to Claude Code settings (common) — review the
     added permission entries. Investigate file content after alert — the
     curl-pipe-bash and npm-i-g-unfamiliar patterns are the high-confidence indicators
     within a triggered file modification.
+  - >-
+    Third-party npm packages occasionally ship a fixture file at a path fragment
+    matching this rule (observed: es-abstract, selfsigned) inside their own
+    node_modules tree. These have no effect on Claude Code's real configuration and
+    are excluded.
 level: medium
 ```
 

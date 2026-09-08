@@ -426,7 +426,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "46b10d69"
+    hash: "40cdfc58"
     head: "title: >- Claude Code settings.local.json or set"
     robustness: 2
     confidence: "MODERATE — the rule's own description states this is a hunting lead, not an alert"
@@ -2258,7 +2258,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1059.004, T1574.006, T1105]
-  - name: "GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress: Known Operator Ports"
+  - name: "GHOST Cryptojacker Kit Hysteria v2 QUIC Backdoor Egress — Known Operator Ports"
     engine: suricata
     tier: Hunting
     fence: 21
@@ -2267,7 +2267,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1572, T1571]
-  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server: Covert Mining Report"
+  - name: "GHOST Cryptojacker Kit Telegram API Egress from Production Server — Covert Mining Report"
     engine: suricata
     tier: Hunting
     fence: 22
@@ -5023,12 +5023,12 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     robustness: 2
     confidence: "HIGH"
     attack: [T1110.003, T1059.006]
-  - name: "Gemini CLI Directory Creation with Executable Contents on Server Host"
+  - name: "Executable Script or Skill File Created in Gemini CLI Config Directory"
     engine: sigma
     tier: Hunting
     fence: 12
-    hash: "6325d0c3"
-    head: "title: Gemini CLI Directory Creation with Execut"
+    hash: "9161558b"
+    head: "title: Executable Script or Skill File Created i"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1587, T1059.006]
@@ -5059,12 +5059,12 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     robustness: 1
     confidence: "MODERATE"
     attack: [T1071.001, T1132.001, T1059.006]
-  - name: "Gemini CLI Directory Tooling Filename Created on Server Host"
+  - name: "AI Operator Handoff Filename Created in Gemini CLI Config Directory"
     engine: sigma
     tier: Hunting
     fence: 16
-    hash: "0ff3ed42"
-    head: "title: Gemini CLI Directory Tooling Filename Cre"
+    hash: "8e36e4ad"
+    head: "title: AI Operator Handoff Filename Created in G"
     robustness: 1
     confidence: "MODERATE"
     attack: [T1587]

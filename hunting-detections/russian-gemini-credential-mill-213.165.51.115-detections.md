@@ -19,7 +19,7 @@ hide: true
 
 ## Detection Coverage Summary
 
-This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with a Gemini-CLI-augmented credential mill. Coverage below is reorganized by tier: **Detection** rules are precise/durable enough to alert on; **Hunting** rules are broader scoping leads that need analyst triage. Rules keyed solely on one of the operator's rotatable domains (or a third-party service domain being abused) are retired as standalone signatures. Those atomics already live in the campaign's IOC feed.
+This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with a Gemini-CLI-augmented credential mill. Coverage below is reorganized by tier: **Detection** rules are precise/durable enough to alert on; **Hunting** rules are broader scoping leads that need analyst triage. Rules keyed solely on one of the operator's rotatable domains (or a third-party service domain being abused) are retired as standalone signatures — those atomics already live in the campaign's IOC feed.
 
 | Rule Type | Detection | Hunting | MITRE Techniques Covered | Atomics → feed |
 |---|---|---|---|---|
@@ -27,13 +27,13 @@ This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with
 | Sigma | 4 | 6 | T1555.005, T1005, T1003.001, T1003.002, T1587, T1071.001, T1090.004, T1572, T1036.005, T1547.001, T1059.001, T1110.003 | 3 |
 | Suricata | 1 | 1 | T1071.001, T1132.001, T1041, T1090.004, T1572 | 4 |
 
-> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting. Expect to review the hits.
+> **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient — safe to alert on. *Hunting rules* are broader, for scoping and threat-hunting — expect to review the hits.
 
 **Highest-confidence anchors:**
-- The A2A C2 endpoint set (`/api/v1/update`, `/api/v1/interact`, `/api/v1/telemetry`) plus the operator-bespoke `X-Agent-ID` header, survives full domain/IP rotation, and anchors both a YARA rule and the Suricata Detection signature.
-- The LLM-personalized credential-mutation prompt fragments (`"Act as an expert red-team password analyst"`, `"generate exactly 20 likely current mutations"`) paired with operator-bespoke output filenames (`AI_SNIPER_GOODS`, `AI_ADMIN_MUTANTS`), first-publication signature for a novel TTP.
+- The A2A C2 endpoint set (`/api/v1/update`, `/api/v1/interact`, `/api/v1/telemetry`) plus the operator-bespoke `X-Agent-ID` header — survives full domain/IP rotation, and anchors both a YARA rule and the Suricata Detection signature.
+- The LLM-personalized credential-mutation prompt fragments (`"Act as an expert red-team password analyst"`, `"generate exactly 20 likely current mutations"`) paired with operator-bespoke output filenames (`AI_SNIPER_GOODS`, `AI_ADMIN_MUTANTS`) — first-publication signature for a novel TTP.
 
-**Atomics routed to the IOC feed:** `tralalarkefe.com` (and its `c2.` / `payloads.` / `windows_server.` / `gil_dr1.` / `catchall1.` / `10101.` subdomains), `generativelanguage.googleapis.com`, `antipublic.one`, and the `tenant-upcoming-great-descending.trycloudflare.com` bootstrap subdomain are transient indicators already carried in [`russian-gemini-credential-mill-213.165.51.115-iocs.json`](/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json). No feed edits were required for this backfill (all four domains were already present). 7 of the original file's rules (3 Sigma, 4 Suricata) each keyed solely on one of these domains with no distinguishing filter surviving its removal; they are retired as standalone signatures below and cross-referenced in Coverage Gaps.
+**Atomics routed to the IOC feed:** `tralalarkefe.com` (and its `c2.` / `payloads.` / `windows_server.` / `gil_dr1.` / `catchall1.` / `10101.` subdomains), `generativelanguage.googleapis.com`, `antipublic.one`, and the `tenant-upcoming-great-descending.trycloudflare.com` bootstrap subdomain are transient indicators already carried in [`russian-gemini-credential-mill-213.165.51.115-iocs.json`](/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json) — no feed edits were required for this backfill (all four domains were already present). 7 of the original file's rules (3 Sigma, 4 Suricata) each keyed solely on one of these domains with no distinguishing filter surviving its removal; they are retired as standalone signatures below and cross-referenced in Coverage Gaps.
 
 **Salvage note:** two originally single-object rules were split during tiering to separate a high-confidence, low-FP core from a broader, real-FP-bearing branch that was folded into the same `condition:` — see the AI Operator Handoff Document Sigma pair and the WordPress credential-mill rate rule (rewritten as a proper Sigma `event_count` correlation) below.
 
@@ -501,7 +501,7 @@ level: high
 **Confidence:** HIGH
 **Rationale:** **Salvage-split from the original combined rule** — the original `condition: selection_specific_names or selection_gemini_dir_context` OR'd this bespoke-filename branch together with a broader `~/.gemini/` + generic-tooling-filename branch that includes `GEMINI.md`/`SKILL.md` (the *standard* legitimate Gemini CLI config filenames). Splitting isolates the two bespoke, no-known-legitimate-collision filenames (`C2_MIGRATION_GUIDE.md`, `C2_INFRA_TRANSFER.md`) into a Detection-grade rule; the broader/generic branch is now its own Hunting rule below.
 **False Positives:** None known — these specific filenames are not used by any known legitimate software.
-**Blind Spots:** A rebuild that renames both exemplar filenames evades detection (the broader Hunting-tier companion rule below provides fallback coverage for the `~/.gemini/` directory context).
+**Blind Spots:** A rebuild that renames both exemplar filenames evades detection. Fallback coverage for the `~/.gemini/` directory context is provided by the **Executable Script or Skill File Created in Gemini CLI Config Directory** rule (`dca5d3c0`), not by the handoff-filename Hunting rule below: as of 2026-09-07 that rule's `SKILL.md` and `GEMINI.md` arms were removed as duplicates, so `dca5d3c0` is now the only directory-context fallback.
 **Validation:** Create a file named `C2_INFRA_TRANSFER.md` or `C2_MIGRATION_GUIDE.md` anywhere on a monitored filesystem — must match; creation of an unrelated Markdown file must NOT fire.
 **Deployment:** File integrity monitoring, Sysmon Event ID 11, EDR file-creation telemetry.
 
@@ -615,34 +615,36 @@ level: high
 
 ### Hunting Rules
 
-> **Tally note:** this subsection has 5 physical entries. A 6th Hunting-tallied object, the `wp-login.php` POST correlation *base* selection (id `c6ff58ec-caa8-43e8-a73d-7869abcae0eb`), is co-located with its correlation rule under Detection Rules above, per the correlation co-location convention, rather than duplicated here.
+> **Tally note:** this subsection has 5 physical entries. A 6th Hunting-tallied object — the `wp-login.php` POST correlation *base* selection (id `c6ff58ec-caa8-43e8-a73d-7869abcae0eb`) — is co-located with its correlation rule under Detection Rules above, per the correlation co-location convention, rather than duplicated here.
 
-#### Gemini CLI Directory Creation with Executable Contents on Server Host
+#### Executable Script or Skill File Created in Gemini CLI Config Directory
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
 **Confidence:** MODERATE
-**Rationale:** The `~/.gemini/` directory paired with executable content is a genuine operator-side installation signal, but the selection logic itself does not encode a server-vs-workstation distinction (that scoping is deployment guidance, not detection logic) — and `GEMINI.md`/`SKILL.md` are the *standard* filenames the legitimate Gemini CLI itself creates on any developer machine. Scored on the logic as written, not the title: this is a broad directory+extension combination with a real legitimate-tool collision, not a durable Detection anchor.
-**False Positives:** Legitimate Gemini CLI usage by developers on developer workstations — any project-init creates `GEMINI.md`; Google Cloud Workstations with Gemini CLI installed by default.
-**Deployment:** Sysmon (Linux), auditd, file-integrity monitoring. Scope to server-class hosts by asset group or IP range before treating hits as high-confidence.
+**Rationale:** The `~/.gemini/` directory paired with executable content is a genuine operator-side installation signal, but the original rule had no exclusions at all, so it matched the Gemini CLI's own vendor-managed skill and plugin trees. Revised 2026-09-07 after measurement against live telemetry: of 19 matching events over 14 days, **18 were vendor software writing vendor filenames into vendor directories**, and the `*SKILL.md` arm alone carried **14 of the 19**. The `*GEMINI.md` and `*.ps1` arms matched **nothing**. The fix excludes the vendor trees (`/.gemini/*/builtin/`, `/.gemini/*/plugins/`, `/.gemini/extensions/`) rather than removing the filename arms, so operator-authored `SKILL.md` and `GEMINI.md` outside those trees still match. Measured effect: 19 to 1 over the same window. The rule was also renamed. Its previous title asserted "on Server Host", which the selection logic never implemented, and a subscriber scanning a rule list reads the title.
+**False Positives:** Operator-authored hook scripts under the CLI's own hook directory, which is a supported feature. Allowlist the specific hook filenames in use. Also a filesystem-level copy, migration or restore of a home directory, which replays every path in the copied tree through file-creation telemetry, including a backup target such as `/mnt/.../@home/user/.gemini/...`.
+**Tested and rejected (do not re-argue these):** Scoping to `/root/.gemini/*` as a proxy for server-class hosts takes the rule from 19 matches to 0, and was rejected because it misses any operator running as a non-root user, which is the default on most modern VPS images. The hypothesis that periodic btrfs snapshots drive this was refuted on mechanism: a btrfs snapshot is a copy-on-write metadata operation producing one subvolume directory entry, not one event per file. The 119 `.gemini/` events attributed to `/usr/bin/btrfs` were a single one-day bulk copy during a 2026-08-28 drive migration, with zero on the other 89 days of a 90-day window.
+**Deployment:** Sysmon (Linux), auditd, file-integrity monitoring. There is no portable host-class field in Sigma or in ECS, so server-vs-workstation scoping remains a deployment decision made by asset group or IP range, and is deliberately no longer claimed in the title.
 
 ```yaml
-title: Gemini CLI Directory Creation with Executable Contents on Server Host
+title: Executable Script or Skill File Created in Gemini CLI Config Directory
 id: dca5d3c0-5b22-453e-a36f-7696d927a739
 status: experimental
 description: >-
-  Detects creation of ~/.gemini/ directory containing executable scripts (.sh, .py) or
-  AI-priming documents on server-class Linux hosts. The UTA-2026-012 operator stores C2
-  management skills (~/.gemini/skills/cf-c2-manager/SKILL.md), session handoff documents
-  (~/.gemini/GEMINI.md), and Gemini CLI session JSONs (~/.gemini/tmp/root/chats/) on the
-  C2 server itself. Legitimate Gemini CLI usage on servers is uncommon, but GEMINI.md and
-  SKILL.md are the tool's own standard config filenames created on any developer machine —
-  scope this rule to server-class infrastructure before treating hits as high-confidence.
+  Detects creation of executable scripts (.sh, .py, .ps1) or agent-priming documents
+  (GEMINI.md, SKILL.md) inside a Gemini CLI configuration directory, excluding the
+  vendor-managed skill and plugin trees the tool populates itself. The UTA-2026-012
+  operator stores C2 management skills (~/.gemini/skills/cf-c2-manager/SKILL.md), session
+  handoff documents (~/.gemini/GEMINI.md), and Gemini CLI session JSONs
+  (~/.gemini/tmp/root/chats/) on the C2 server itself. Operator-authored content lands
+  outside the vendor trees, which is what this rule keys on.
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-09-07'
 tags:
     - attack.resource-development
     - attack.t1587
@@ -652,6 +654,11 @@ tags:
 logsource:
     category: file_event
     product: linux
+    definition: >-
+      Requires file-creation telemetry on Linux carrying the full target path, such as
+      Elastic Defend file events, auditd watches on the user home, or Sysmon for Linux
+      FileCreate. Paths are matched verbatim, so a bulk filesystem copy or restore that
+      replays a home directory will produce matches for the copied tree.
 detection:
     selection_gemini_dir:
         TargetFilename|contains: '/.gemini/'
@@ -662,10 +669,19 @@ detection:
             - '.ps1'
             - 'GEMINI.md'
             - 'SKILL.md'
-    condition: selection_gemini_dir and selection_executable
+    filter_vendor_trees:
+        TargetFilename|contains:
+            - '/.gemini/*/builtin/'
+            - '/.gemini/*/plugins/'
+            - '/.gemini/extensions/'
+    condition: selection_gemini_dir and selection_executable and not filter_vendor_trees
 falsepositives:
-    - Legitimate Gemini CLI usage by developers on developer workstations — scope rule to server-class hosts only
-    - Google Cloud Workstations with Gemini CLI installed by default
+    - >-
+      Operator-authored hook scripts under the CLI's own hook directory, which is a
+      supported feature; allowlist the specific hook filenames in use
+    - >-
+      A filesystem-level copy, migration or restore of a home directory, which replays
+      every path in the copied tree through file-creation telemetry
 level: medium
 ```
 
@@ -819,33 +835,34 @@ falsepositives:
 level: low
 ```
 
-#### Gemini CLI Directory Tooling Filename Created on Server Host
+#### AI Operator Handoff Filename Created in Gemini CLI Config Directory
 
 **Tier:** Hunting
 **Robustness:** 1
 **ATT&CK Coverage:** T1587 (Develop Capabilities)
 **Confidence:** MODERATE
-**Rationale:** **Salvage-split from the original combined rule** (companion to the Detection-tier bespoke-filename rule above) — isolates the broader `~/.gemini/` directory-context branch, which matches `DEPLOYED_TOOLS.md`/`CLOUDFLARE_INFRA.md`/`SKILL.md`/`GEMINI.md`. `SKILL.md` and `GEMINI.md` are the Gemini CLI's own standard configuration filenames, created by any legitimate developer install — this branch carries meaningfully higher FP than the bespoke-filename Detection rule it was split from, so it is scoped here as a hunting lead requiring analyst review, with **level recalibrated from the original `high` to `medium`**.
-**False Positives:** `SKILL.md` and `GEMINI.md` in `~/.gemini/` — real collision with legitimate, authorized Gemini CLI developer installations; `DEPLOYED_TOOLS.md`/`CLOUDFLARE_INFRA.md` are more generic than the Detection-tier exemplars but still uncommon outside this operator's convention.
-**Deployment:** File integrity monitoring, Sysmon Event ID 11, EDR file-creation telemetry. Add an operator-side allowlist for authorized Gemini CLI developer installations before treating `SKILL.md`/`GEMINI.md` hits as investigation-worthy.
+**Rationale:** **Salvage-split from the original combined rule** (companion to the Detection-tier bespoke-filename rule above), isolating the operator's AI Operator Handoff Document naming convention inside the `~/.gemini/` directory context. Revised 2026-09-07 after measurement against live telemetry, which found the rule was **producing no unique detections at all**. Its `SKILL.md` and `GEMINI.md` arms were byte-identical to the same two arms in the companion `dca5d3c0` rule, so every event matching them fired both rules: over 14 days this rule matched 14 events, the intersection with `dca5d3c0` was also **14 of 14**, and its two unique arms (`DEPLOYED_TOOLS.md`, `CLOUDFLARE_INFRA.md`) matched **nothing**. Both vendor filename arms were therefore removed. Measured effect: 14 to 0 over the same window, at **zero coverage cost**, because operator-authored `SKILL.md` and `GEMINI.md` remain covered by `dca5d3c0`, which keeps both filenames and excludes only the vendor trees. The rule was also renamed: its previous title asserted "on Server Host", which the selection logic never implemented.
+**False Positives:** A project genuinely tracking deployed tooling or Cloudflare infrastructure notes under the agent config directory. Confirm the file content and author. The `SKILL.md` and `GEMINI.md` collision with legitimate Gemini CLI installations no longer applies, because those arms are gone.
+**Salvage-split lesson (worth keeping):** the original split moved the bespoke filenames into a Detection rule but left the broad arm duplicated in **both** halves rather than moved into one. That doubles alert volume per event while coverage stays flat, and it inflates every downstream false-positive count by exactly the duplication. Check for arm overlap whenever a rule is split.
+**Deployment:** File integrity monitoring, Sysmon Event ID 11, EDR file-creation telemetry. There is no portable host-class field in Sigma or in ECS, so server-vs-workstation scoping is a deployment decision and is deliberately no longer claimed in the title.
 
 ```yaml
-title: Gemini CLI Directory Tooling Filename Created on Server Host
+title: AI Operator Handoff Filename Created in Gemini CLI Config Directory
 id: b7d2e4f1-9a3c-4e58-b1d6-3f8a2c5e9d74
 status: experimental
 description: >-
-  Detects file creation events matching the UTA-2026-012 operator's broader AI Operator
-  Handoff Document naming conventions co-located in the ~/.gemini/ directory: DEPLOYED_TOOLS.md
-  (When starting a new session load directive), CLOUDFLARE_INFRA.md, SKILL.md, and GEMINI.md.
-  Split from the original combined rule during tiering because SKILL.md and GEMINI.md are
-  the Gemini CLI's own standard configuration filenames, created by any legitimate developer
-  installation — this branch carries real false-positive risk and is scoped as a hunting
-  lead requiring an operator-side allowlist, distinct from the no-known-collision bespoke
-  filenames covered by the companion Detection-tier rule.
+  Detects file creation matching the UTA-2026-012 operator's AI Operator Handoff Document
+  naming convention inside a Gemini CLI configuration directory: DEPLOYED_TOOLS.md (a
+  start-of-session load directive) and CLOUDFLARE_INFRA.md. The SKILL.md and GEMINI.md
+  arms were removed on 2026-09-07 because they are the tool's own standard filenames and
+  were byte-identical to the same arms in the companion executable-content rule, so they
+  produced duplicate alerts and no unique detections. Operator-authored SKILL.md and
+  GEMINI.md remain covered by that companion rule, which excludes the vendor trees.
 references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
 date: '2026-05-25'
+modified: '2026-09-07'
 tags:
     - attack.resource-development
     - attack.t1587
@@ -853,20 +870,21 @@ tags:
 logsource:
     category: file_event
     product: linux
+    definition: >-
+      Requires file-creation telemetry on Linux carrying the full target path, such as
+      Elastic Defend file events, auditd watches on the user home, or Sysmon for Linux
+      FileCreate.
 detection:
     selection_gemini_dir_context:
         TargetFilename|contains: '/.gemini/'
         TargetFilename|endswith:
             - 'DEPLOYED_TOOLS.md'
             - 'CLOUDFLARE_INFRA.md'
-            - 'SKILL.md'
-            - 'GEMINI.md'
     condition: selection_gemini_dir_context
 falsepositives:
     - >-
-      SKILL.md and GEMINI.md in ~/.gemini/ — real collision with legitimate, authorized
-      Gemini CLI developer installations; tune by adding an operator-side allowlist
-    - DEPLOYED_TOOLS.md and CLOUDFLARE_INFRA.md in ~/.gemini/ context — lower FP; investigate any match on server hosts
+      A project genuinely tracking deployed tooling or Cloudflare infrastructure notes
+      under the agent config directory; confirm the file content and author
 level: medium
 ```
 
@@ -914,37 +932,37 @@ alert udp $HOME_NET any -> $EXTERNAL_NET 7844 (msg:"THL - cloudflared Tunnel QUI
 
 ### Atomics Retired to the IOC Feed (7 rules: 3 Sigma, 4 Suricata)
 
-Every rule below keyed solely on one hard-coded domain, with no combinatorial or behavioral clause surviving its removal, per the routing test, these are IOC-feed entries, not standalone rules. All underlying domains were **already present** in [`russian-gemini-credential-mill-213.165.51.115-iocs.json`](/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json); no feed edits were required.
+Every rule below keyed solely on one hard-coded domain, with no combinatorial or behavioral clause surviving its removal — per the routing test, these are IOC-feed entries, not standalone rules. All underlying domains were **already present** in [`russian-gemini-credential-mill-213.165.51.115-iocs.json`](/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json); no feed edits were required.
 
-- **Sigma Gemini API Egress from Server-Class Infrastructure Host** (`173cf9ee-97c5-4d51-8487-856f63894ad5`): keyed on `generativelanguage.googleapis.com` (DestinationHostname match). The accompanying filter excluded, rather than isolated, the likely-Python accessing process, so it added no real precision beyond the bare domain match. The domain is preserved in the feed with a `MONITOR` action and an explicit `high` false-positive-risk note (it is Google's own legitimate API domain, abused rather than owned by the operator).
-- **Sigma Cloudflare Tunnel Registration to tralalarkefe.com Operator Infrastructure** (`1003c111-2038-43bc-b463-b5895cd6f408`): keyed on `tralalarkefe.com` in a `cloudflared` command line. Removing the domain leaves "any cloudflared execution," which is not malicious on its own. The durable, non-domain-specific version of this technique lead is retained as the Hunting-tier "Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname" rule above.
-- **Sigma Outbound HTTP to AntiPublic.one Credential Database API from Non-Research Host** (`163023b7-5615-4c9f-9e30-60af0bd2cd8e`): keyed on `antipublic.one` (DestinationHostname match). Preserved in the feed with a `MONITOR` action.
-- **Suricata DNS Query to \*.tralalarkefe.com** (sid `9000001`): keyed on the same root domain as the Sigma entry above; retired for the same reason.
-- **Suricata DNS Query to generativelanguage.googleapis.com from Server-Class Hosts** (sid `9000002`): keyed on the same domain as the Sigma entry above; retired for the same reason.
-- **Suricata HTTP Egress to antipublic.one /api/v2/search** (sid `9000004`): the `/api/v2/search` URI clause is a generic-sounding REST path with no specificity of its own once the `antipublic.one` host anchor is removed; retired for the same reason as the Sigma AntiPublic entry.
-- **Suricata trycloudflare.com Tunnel Bootstrap DNS from Server Hosts** (sid `9000005`): keyed on the bare `trycloudflare.com` suffix, Cloudflare's entire free quick-tunnel product surface, not an operator-specific atomic. The campaign's actual atomic (the specific bootstrap subdomain `tenant-upcoming-great-descending.trycloudflare.com`) is already in the feed; the bare-suffix version added no incremental value and would have been a needlessly broad new feed entry, so it was retired rather than generalized into a new block entry.
+- **Sigma — Gemini API Egress from Server-Class Infrastructure Host** (`173cf9ee-97c5-4d51-8487-856f63894ad5`): keyed on `generativelanguage.googleapis.com` (DestinationHostname match). The accompanying filter excluded, rather than isolated, the likely-Python accessing process, so it added no real precision beyond the bare domain match. The domain is preserved in the feed with a `MONITOR` action and an explicit `high` false-positive-risk note (it is Google's own legitimate API domain, abused rather than owned by the operator).
+- **Sigma — Cloudflare Tunnel Registration to tralalarkefe.com Operator Infrastructure** (`1003c111-2038-43bc-b463-b5895cd6f408`): keyed on `tralalarkefe.com` in a `cloudflared` command line. Removing the domain leaves "any cloudflared execution," which is not malicious on its own — the durable, non-domain-specific version of this technique lead is retained as the Hunting-tier "Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname" rule above.
+- **Sigma — Outbound HTTP to AntiPublic.one Credential Database API from Non-Research Host** (`163023b7-5615-4c9f-9e30-60af0bd2cd8e`): keyed on `antipublic.one` (DestinationHostname match). Preserved in the feed with a `MONITOR` action.
+- **Suricata — DNS Query to \*.tralalarkefe.com** (sid `9000001`): keyed on the same root domain as the Sigma entry above; retired for the same reason.
+- **Suricata — DNS Query to generativelanguage.googleapis.com from Server-Class Hosts** (sid `9000002`): keyed on the same domain as the Sigma entry above; retired for the same reason.
+- **Suricata — HTTP Egress to antipublic.one /api/v2/search** (sid `9000004`): the `/api/v2/search` URI clause is a generic-sounding REST path with no specificity of its own once the `antipublic.one` host anchor is removed; retired for the same reason as the Sigma AntiPublic entry.
+- **Suricata — trycloudflare.com Tunnel Bootstrap DNS from Server Hosts** (sid `9000005`): keyed on the bare `trycloudflare.com` suffix — Cloudflare's entire free quick-tunnel product surface, not an operator-specific atomic. The campaign's actual atomic (the specific bootstrap subdomain `tenant-upcoming-great-descending.trycloudflare.com`) is already in the feed; the bare-suffix version added no incremental value and would have been a needlessly broad new feed entry, so it was retired rather than generalized into a new block entry.
 
 ### Cut Rule
 
-**Telegram API Egress with Americanpatriotus Channel Reference** (original Sigma rule `8be13baf-aa35-422c-8757-9cfea720af53`). The rule's title and rationale describe detecting posting activity to the `@americanpatriotus` channel, but the YAML `detection:` logic never actually references that channel identifier anywhere. Sigma cannot inspect TLS-encrypted message bodies, so the channel name was never encodable in the first place. As written, the logic reduces to "`api.telegram.org` DNS/network match AND a Python process," which the original text itself acknowledged is common in legitimate bot deployments ("False Positive Risk: HIGH"). With the channel-specific claim removed, nothing distinguishing survives. This fires on ubiquitous, legitimate Telegram-bot activity with no pivot value, and does not clear the precision bar even for Hunting. **What would enable a rule:** TLS-inspecting proxy visibility into the message body, or a Telegram Bot API token/chat-ID specific to this operator's bot (neither was recovered from this investigation).
+**Telegram API Egress with Americanpatriotus Channel Reference** (original Sigma rule `8be13baf-aa35-422c-8757-9cfea720af53`). The rule's title and rationale describe detecting posting activity to the `@americanpatriotus` channel, but the YAML `detection:` logic never actually references that channel identifier anywhere — Sigma cannot inspect TLS-encrypted message bodies, so the channel name was never encodable in the first place. As written, the logic reduces to "`api.telegram.org` DNS/network match AND a Python process," which the original text itself acknowledged is common in legitimate bot deployments ("False Positive Risk: HIGH"). With the channel-specific claim removed, nothing distinguishing survives — this fires on ubiquitous, legitimate Telegram-bot activity with no pivot value, and does not clear the precision bar even for Hunting. **What would enable a rule:** TLS-inspecting proxy visibility into the message body, or a Telegram Bot API token/chat-ID specific to this operator's bot (neither was recovered from this investigation).
 
 ### Techniques Observed But Not Fully Covered
 
-**1. LLM-Vendor-Side Detection (Gemini API abuse telemetry).** The operator's `check_keys.py` validates 40+ stolen Gemini API keys against Google's model-listing endpoint with high key-diversity from a single source IP. Detecting this key-rotation pattern requires server-side telemetry from Google's Generative Language API, specifically, `/v1beta/models` calls where a single source IP cycles through >10 distinct `?key=` values within 60 seconds. This is beyond standard defender scope, and beyond what a domain-match Sigma/Suricata rule can encode (see the retired Gemini-egress entries above). **Coordination path:** Google Trust & Safety, with the operator's full key inventory.
+**1. LLM-Vendor-Side Detection (Gemini API abuse telemetry).** The operator's `check_keys.py` validates 40+ stolen Gemini API keys against Google's model-listing endpoint with high key-diversity from a single source IP. Detecting this key-rotation pattern requires server-side telemetry from Google's Generative Language API — specifically, `/v1beta/models` calls where a single source IP cycles through >10 distinct `?key=` values within 60 seconds. This is beyond standard defender scope, and beyond what a domain-match Sigma/Suricata rule can encode (see the retired Gemini-egress entries above). **Coordination path:** Google Trust & Safety, with the operator's full key inventory.
 
-**2. Telegram Disinformation Content Detection.** The `quantum_patriot.py` script posts AI-rewritten RSS content to `@americanpatriotus` via the Telegram Bot API. Distinguishing this channel's AI-generated content from organic political posting requires semantic content classification beyond standard SOC capability and beyond what any network-layer Sigma/Suricata rule can encode. See the Cut rule above. **Coordination path:** Telegram Trust & Safety for the `@americanpatriotus` channel, independently corroborated by Trend Micro (2026-05-22).
+**2. Telegram Disinformation Content Detection.** The `quantum_patriot.py` script posts AI-rewritten RSS content to `@americanpatriotus` via the Telegram Bot API. Distinguishing this channel's AI-generated content from organic political posting requires semantic content classification beyond standard SOC capability and beyond what any network-layer Sigma/Suricata rule can encode — see the Cut rule above. **Coordination path:** Telegram Trust & Safety for the `@americanpatriotus` channel, independently corroborated by Trend Micro (2026-05-22).
 
 **3. GitHub PAT Abuse Correlation.** The operator's GitHub PAT is used for repository management and potentially exfiltration of victim artifacts via GitHub as an exfil channel (T1567.002). Per-PAT API call correlation across GitHub infrastructure requires GitHub Trust & Safety coordination. **Coordination path:** GitHub Trust & Safety, with the operator's account identifiers.
 
 **4. Per-Victim Cloudflare Tunnel Access Detection.** The operator's `windows_server.tralalarkefe.com` and `gil_dr1.tralalarkefe.com` Cloudflare Tunnel endpoints provided persistent RDP and SSH access to the victim machines at capture time. Detecting specific victim-machine beacon activity on these tunnels from the defender's side requires either victim-side egress logs or Cloudflare PSIRT coordination. The domain-level DNS signal for these subdomains lives in the IOC feed rather than as a standalone rule (see Atomics Retired above); the port-based QUIC/7844 Hunting rule above provides a domain-independent fallback signal.
 
-**5. agent_final.ps1 PowerShell Beacon (Binary Not Captured).** The victim-side PowerShell beacon `agent_final.ps1` is referenced extensively in the operator's handoff documents, but the binary itself was not recovered. Rules for it are derived from the C2 server's endpoint-contract specification rather than direct code analysis. If the beacon is later recovered, the following indicators should enable high-confidence matching: `X-Agent-ID: HOSTNAME_username` header format, 5-second beacon interval to `/api/v1/update`, `Mozilla/5.0 (Windows NT 10.0; Win64; x64)` User-Agent, `base64(UTF-16LE)` body encoding on `/api/v1/telemetry` POST.
+**5. agent_final.ps1 PowerShell Beacon (Binary Not Captured).** The victim-side PowerShell beacon `agent_final.ps1` is referenced extensively in the operator's handoff documents, but the binary itself was not recovered — rules for it are derived from the C2 server's endpoint-contract specification rather than direct code analysis. If the beacon is later recovered, the following indicators should enable high-confidence matching: `X-Agent-ID: HOSTNAME_username` header format, 5-second beacon interval to `/api/v1/update`, `Mozilla/5.0 (Windows NT 10.0; Win64; x64)` User-Agent, `base64(UTF-16LE)` body encoding on `/api/v1/telemetry` POST.
 
 **6. WMI EventConsumer Fileless Persistence (stealth.ps1).** The operator's `C2_MIGRATION_GUIDE.md` references a `stealth.ps1` script providing WMI EventConsumer + EventFilter + FilterToConsumerBinding triplet persistence, in addition to the HKCU Registry Run key covered above. The `stealth.ps1` binary was not recovered; generic WMI subscription persistence detection (Sysmon Event ID 19/20/21 matching `\\.\root\subscription`) covers the technique pattern but cannot provide operator-specific file/value-name signatures without direct binary access.
 
-**7. NTLM Dump → Cloudflare Tunnel Exfiltration (Full Temporal Correlation).** The Detection-tier "Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask" Sigma rule above captures only the LSASS-access stage of the operator's documented two-stage sequence (dump, then exfiltrate via Cloudflare Tunnel within roughly 10 minutes). A full `temporal_ordered` Sigma correlation joining LSASS access to Cloudflare Tunnel/`trycloudflare.com` egress by host within a 10-minute window was not attempted in this backfill. The cross-event-type `group-by` field alignment (process-access telemetry vs. network-connection telemetry) needs validation against a live SIEM schema before publication. **What would enable this:** confirming the common host-identifier field name across both log sources in the target deployment.
+**7. NTLM Dump → Cloudflare Tunnel Exfiltration (Full Temporal Correlation).** The Detection-tier "Suspicious LSASS Process Access via High-Privilege GrantedAccess Mask" Sigma rule above captures only the LSASS-access stage of the operator's documented two-stage sequence (dump, then exfiltrate via Cloudflare Tunnel within roughly 10 minutes). A full `temporal_ordered` Sigma correlation joining LSASS access to Cloudflare Tunnel/`trycloudflare.com` egress by host within a 10-minute window was not attempted in this backfill — the cross-event-type `group-by` field alignment (process-access telemetry vs. network-connection telemetry) needs validation against a live SIEM schema before publication. **What would enable this:** confirming the common host-identifier field name across both log sources in the target deployment.
 
-**8. OpenDental MySQL Hash Reuse / Database Access.** The operator holds the OpenDental MySQL root hash from the primary named victim. Detection of unauthorized OpenDental database access would require MySQL audit logging at the victim's practice-management server, out of scope for a third-party detection provider. **Coordination path:** Direct victim notification (via HC3/HHS OCR HIPAA track).
+**8. OpenDental MySQL Hash Reuse / Database Access.** The operator holds the OpenDental MySQL root hash from the primary named victim. Detection of unauthorized OpenDental database access would require MySQL audit logging at the victim's practice-management server — out of scope for a third-party detection provider. **Coordination path:** Direct victim notification (via HC3/HHS OCR HIPAA track).
 
 ---
 
