@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-08T16:02:27Z
+generated_at: 2026-09-08T18:02:47Z
 window_days: 30
 counts:
-  total: 527
+  total: 530
   research: 184
-  news: 343
+  news: 346
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -16,7 +16,7 @@ topics:
     count: 72
     color: 1
   - label: "cybercrime"
-    count: 54
+    count: 56
     color: 2
   - label: "government"
     count: 28
@@ -445,6 +445,24 @@ label_colors:
   "zero-day": 8
   "zoom": 7
 items:
+  - title: "‘White hat’ hackers take $47 million bounty after $320 million crypto theft"
+    url: "https://therecord.media/liquid-network-blockstream-crypto-theft-hackers-keep-reward"
+    source: "Recorded Future"
+    date: 2026-09-08T17:00:00Z
+    kind: news
+    labels: ["cybercrime"]
+  - title: "Hackers Return $263 Million Stolen From Liquid Network"
+    url: "https://www.securityweek.com/hackers-return-263-million-stolen-from-liquid-network/"
+    source: "SecurityWeek"
+    date: 2026-09-08T16:35:54Z
+    kind: news
+    labels: ["bitcoin", "cybercrime"]
+  - title: "ShinyHunters hackers claim breach of Florida \"DAVID\" DMV database"
+    url: "https://www.bleepingcomputer.com/news/security/shinyhunters-hackers-claim-breach-of-florida-david-dmv-database/"
+    source: "BleepingComputer"
+    date: 2026-09-08T16:35:47Z
+    kind: news
+    labels: []
   - title: "SAP warns of maximum severity 'OVERPASS' kernel vulnerability"
     url: "https://www.bleepingcomputer.com/news/security/sap-warns-of-maximum-severity-overpass-kernel-vulnerability/"
     source: "BleepingComputer"
