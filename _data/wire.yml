@@ -3,17 +3,17 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-08T10:02:57Z
+generated_at: 2026-09-08T12:00:16Z
 window_days: 30
 counts:
-  total: 516
-  research: 182
-  news: 334
+  total: 520
+  research: 183
+  news: 337
 unclassified_sources:
   - "The DFIR Report"
 topics:
   - label: "vulnerabilities"
-    count: 69
+    count: 71
     color: 1
   - label: "cybercrime"
     count: 52
@@ -28,15 +28,15 @@ topics:
     count: 24
     color: 5
   - label: "data breaches"
-    count: 21
+    count: 22
     color: 6
   - label: "artificial intelligence"
     count: 18
     color: 7
-  - label: "credential theft"
-    count: 15
-    color: 8
   - label: "zero-day"
+    count: 16
+    color: 8
+  - label: "credential theft"
     count: 15
     color: 9
   - label: "microsoft"
@@ -228,6 +228,7 @@ label_colors:
   "cisco": 9
   "cisco talos antivirus": 7
   "cisco talos dns security": 7
+  "cisco talos malware protection": 8
   "cisco talos web filtering": 12
   "citrix": 11
   "cl0p": 3
@@ -252,7 +253,7 @@ label_colors:
   "credential exfiltration": 4
   "credential harvesting": 4
   "credential phishing": 9
-  "credential theft": 8
+  "credential theft": 9
   "credential-based attacks": 12
   "credential-harvesting": 1
   "credential-theft": 5
@@ -280,6 +281,7 @@ label_colors:
   "cve-2026-59346": 5
   "cve-2026-6471": 10
   "cve-2026-68820": 2
+  "cve-2026-86218": 9
   "cyber-espionage": 3
   "cybera": 2
   "cyberattacks": 8
@@ -378,13 +380,16 @@ label_colors:
   "living-off-the-land": 1
   "macos": 11
   "malware": 5
+  "mathspace": 4
   "metabase": 6
   "microsoft": 10
   "microsoft teams": 10
+  "mikrotik": 2
   "miniorange": 5
   "mlflow": 1
   "mobile": 4
   "mobile & wireless": 4
+  "n-central": 6
   "nation-state": 11
   "netch-gateway": 5
   "netscaler": 5
@@ -435,9 +440,33 @@ label_colors:
   "uncategorized": 10
   "vmware": 2
   "vulnerabilities": 1
-  "zero-day": 9
+  "zero-day": 8
   "zoom": 7
 items:
+  - title: "MikroTik Patches Critical Flaws Chained to Hack Routers"
+    url: "https://www.securityweek.com/mikrotik-patches-critical-flaws-chained-to-hack-routers/"
+    source: "SecurityWeek"
+    date: 2026-09-08T11:15:00Z
+    kind: news
+    labels: ["mikrotik", "network security", "vulnerabilities"]
+  - title: "Mathspace Data Breach Exposes Over 1 Million People"
+    url: "https://www.securityweek.com/mathspace-data-breach-exposes-over-1-million-people/"
+    source: "SecurityWeek"
+    date: 2026-09-08T10:47:36Z
+    kind: news
+    labels: ["data breaches", "mathspace"]
+  - title: "N-able Patches Critical Zero-Day in N-central"
+    url: "https://www.securityweek.com/n-able-patches-critical-zero-day-in-n-central/"
+    source: "SecurityWeek"
+    date: 2026-09-08T10:37:58Z
+    kind: news
+    labels: ["cve-2026-86218", "n-central", "vulnerabilities", "zero-day"]
+  - title: "ClearFake WebDAV infection chain delivers Amatera stealer, ZigCryptoStealer, and NetSupport Manager"
+    url: "https://blog.talosintelligence.com/clearfake-webdav-infection-chain/"
+    source: "Cisco Talos"
+    date: 2026-09-08T10:01:07Z
+    kind: research
+    labels: ["cisco talos antivirus", "cisco talos malware protection", "cisco talos network intrusion prevention", "threats"]
   - title: "ClickFix moves into the browser: Cryptocurrency theft with Google-hosted C2"
     url: "https://blog.talosintelligence.com/clickfix-moves-into-the-browser/"
     source: "Cisco Talos"
