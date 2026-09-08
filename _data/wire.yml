@@ -3,11 +3,11 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-08T04:00:32Z
+generated_at: 2026-09-08T06:00:32Z
 window_days: 30
 counts:
-  total: 512
-  research: 179
+  total: 514
+  research: 181
   news: 333
 unclassified_sources:
   - "The DFIR Report"
@@ -168,6 +168,8 @@ label_colors:
   "behavior-based-detection": 12
   "beijing institute of technology": 12
   "berlin": 6
+  "bigbear": 8
+  "bigbear 2.0": 8
   "binary ninja": 5
   "binding.gyp": 1
   "bitcoin": 2
@@ -337,6 +339,7 @@ label_colors:
   "gitlab": 3
   "gms": 3
   "google cloud": 8
+  "google infrastructure abuse": 8
   "google sheets c2": 12
   "government": 3
   "hacker": 8
@@ -434,6 +437,18 @@ label_colors:
   "zero-day": 9
   "zoom": 7
 items:
+  - title: "Bypassing the Gatekeepers: How a Global Phishing Campaign Turns Google's Infrastructure into a Trust Proxy"
+    url: "https://blog.knowbe4.com/bypassing-the-gatekeepers-how-a-global-phishing-campaign-turns-googles-infrastructure-into-a-trust-proxy"
+    source: "AlienVault"
+    date: 2026-09-07T17:27:35Z
+    kind: research
+    labels: ["credential harvesting", "google infrastructure abuse", "open redirect exploitation", "phishing"]
+  - title: "Tracking BigBear 2.0 Evilginx2 Phishing Campaign"
+    url: "https://otx.alienvault.com/pulse/6a9ef10da8f75f1218af678c"
+    source: "AlienVault"
+    date: 2026-09-07T17:14:53Z
+    kind: research
+    labels: ["bigbear", "bigbear 2.0", "evilginx2", "microsoft 365", "phishing-as-a-service"]
   - title: "Magento StyleSmuggler zero-day exploited to deploy Linux backdoor"
     url: "https://www.bleepingcomputer.com/news/security/magento-stylesmuggler-zero-day-exploited-to-deploy-linux-backdoor/"
     source: "BleepingComputer"
