@@ -143,5 +143,5 @@
     <text x="684" y="13" font-size="14" fill="#cccccc">live C2 / shared exfil</text>
   </g>
 
-  <text x="500" y="1234" text-anchor="middle" font-size="14" fill="#888888">299a2e7f pkg-Node is static-opaque; its network + behaviour came from VT sandbox — full source needs dynamic detonation.</text>
+  <text x="500" y="1234" text-anchor="middle" font-size="14" fill="#888888">299a2e7f pkg-Node is static-opaque. Its network and behaviour are known only from VT sandbox execution, not from source recovery.</text>
 </svg>
