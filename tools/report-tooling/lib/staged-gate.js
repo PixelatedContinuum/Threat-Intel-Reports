@@ -39,6 +39,12 @@ var CHECKS = {
     cmd: 'check-ioc-feeds.js',
     why: 'ioc-feeds/ is staged'
   },
+  'feed-attack': {
+    id: 'feed-attack',
+    label: 'feed ATT&CK IDs',
+    cmd: 'check-ioc-feeds-attack.js',
+    why: 'ioc-feeds/ is staged'
+  },
   'embargo-artifacts': {
     id: 'embargo-artifacts',
     label: 'embargoed-campaign artifacts',
@@ -104,6 +110,10 @@ function plan(paths, opts) {
     /* A feed edit is the only way an unblockable value reaches the published
        product, so it always routes to the safety gate. */
     if (/^ioc-feeds\/.+\.json$/.test(p)) want['feed-hygiene'] = true;
+    /* Same trigger as feed-hygiene: a feed edit is the only way a bare ATT&CK ID
+       reaches this corpus, and check-detection-attack.js never looks at ioc-feeds/
+       (it reads only the detection manifest), so nothing else routes here. */
+    if (/^ioc-feeds\/.+\.json$/.test(p)) want['feed-attack'] = true;
     /* Either half can create the exposure, so both route here: adding a feed for a campaign
        already under embargo, or flipping a report to embargo while its feed is still in the
        repo. This gate exists because on 2026-09-08 an embargoed campaign's IOC feed was found

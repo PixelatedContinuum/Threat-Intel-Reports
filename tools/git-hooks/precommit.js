@@ -68,17 +68,21 @@ function runCheck(c) {
 // test below can ask git what THIS campaign's own files changed rather than the whole commit.
 var SLUG_PATHS = {};
 
+// The slug-derivation logic itself lives in lib/staged-slugs.js so it can be unit-tested
+// against injected filesystem state instead of the real repo. Required in main(), alongside
+// SG, not here: a missing or broken lib file must not silently thin out which slugs get
+// found (that would fold a load failure into a clean "no campaign touched" result, exactly
+// what the gate-honesty rule forbids) -- it must fail the same visible way SG's own missing
+// require already does, machinery gate NOT CHECKED for the whole hook, commit still allowed.
+var SS;
+
 function stagedSlugs(paths) {
-  SLUG_PATHS = {};
-  paths.forEach(function (p) {
-    var m = /^reports\/([^/]+)\/index\.md$/.exec(p)
-         || /^hunting-detections\/(.+)-detections\.md$/.exec(p)
-         || /^ioc-feeds\/(.+)-iocs\.json$/.exec(p)
-         || /^assets\/images\/([^/]+)\//.exec(p)
-         || /^stix\/(.+)\.json$/.exec(p);
-    if (m && m[1] !== 'hunters-ledger-stix-bundles') {
-      (SLUG_PATHS[m[1]] = SLUG_PATHS[m[1]] || []).push(p);
-    }
+  var catalogText = null;
+  try { catalogText = fs.readFileSync(path.join(ROOT, '_data', 'catalog.yml'), 'utf8'); }
+  catch (e) { catalogText = null; }
+  SLUG_PATHS = SS.campaignSlugs(paths, {
+    exists: function (relPath) { return fs.existsSync(path.join(ROOT, relPath)); },
+    catalogText: catalogText
   });
   return Object.keys(SLUG_PATHS).sort();
 }
@@ -215,6 +219,7 @@ function checkReports(files) {
   var SG;
   try {
     SG = require(path.join(TOOLS, 'lib', 'staged-gate.js'));
+    SS = require(path.join(TOOLS, 'lib', 'staged-slugs.js'));
   } catch (e) {
     say('machinery gate  NOT CHECKED  ' + e.message);
     say('                the commit is allowed; nothing was verified.');

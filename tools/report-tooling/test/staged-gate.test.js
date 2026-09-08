@@ -40,7 +40,8 @@ test('an IOC feed edit routes to the index, the viewer tables AND the safety gat
     // A feed edit is the only way an unblockable value reaches the published
     // product, so it always routes to the blocklist-safety check.
     var p = SG.plan(['ioc-feeds/acme-iocs.json']);
-    assert.deepEqual(ids(p), ['feed-hygiene', 'ioc-index', 'ioc-tables']);
+    assert.deepEqual(ids(p),
+      ['embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index', 'ioc-tables']);
   });
 
 test('a catalog edit routes to both, because publication status gates both',
@@ -54,7 +55,7 @@ test('A REPORT EDIT ROUTES TO THE VIEWER TABLES, because front matter is half th
     // `unlisted: true` is the other half of the publication signal. A go-live that
     // flips only the front matter must still reach the gate that would notice.
     var p = SG.plan(['reports/acme/index.md'], { existing: ['reports/acme/index.md'] });
-    assert.deepEqual(ids(p), ['ioc-tables']);
+    assert.deepEqual(ids(p), ['embargo-artifacts', 'ioc-tables']);
   });
 
 test('a surviving viewer stub routes to its own gate', function () {
@@ -134,7 +135,8 @@ test('a mixed commit queues every check it touches, deduplicated', function () {
     'README.md'
   ], { existing: ['reports/one/index.md', 'reports/two/index.md'] });
   assert.deepEqual(ids(p),
-    ['detection-attack', 'feed-hygiene', 'ioc-index', 'ioc-tables', 'manifest', 'wire']);
+    ['detection-attack', 'embargo-artifacts', 'feed-attack', 'feed-hygiene', 'ioc-index',
+     'ioc-tables', 'manifest', 'wire']);
   assert.deepEqual(p.reports.sort(), ['reports/one/index.md', 'reports/two/index.md']);
   assert.equal(p.owed.length, 1);
 });
