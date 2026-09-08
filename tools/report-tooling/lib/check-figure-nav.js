@@ -217,10 +217,23 @@ function checkDom(doc, label) {
 
   var body = doc.querySelector('.hl-post-content') || doc.body;
 
+  /* A figure keys on its image when it has one and on data-figure-image when it
+     does not, and this list has to agree with BOTH the markdown path in
+     figureImages() and the shipped figuresFor() in assets/js/figure-nav.js.
+     Collecting only `figure img[src]` here made a component figure invisible to
+     validate() while the real renderer still bound its chips, which the
+     renderable-versus-rendered cross-check below then reported as a defect in
+     figure-nav.js. It was a defect in this list. */
   var images = [];
-  var imgs = body.querySelectorAll('figure img[src]');
-  for (var i = 0; i < imgs.length; i++) {
-    images.push(String(imgs[i].getAttribute('src')).split('#')[0].split('?')[0].split('/').pop());
+  var figs = body.querySelectorAll('figure');
+  for (var i = 0; i < figs.length; i++) {
+    var img = figs[i].querySelector('img[src]');
+    if (img) {
+      images.push(String(img.getAttribute('src')).split('#')[0].split('?')[0].split('/').pop());
+      continue;
+    }
+    var declared = figs[i].getAttribute('data-figure-image');
+    if (declared) images.push(declared);
   }
 
   var anchors = {};

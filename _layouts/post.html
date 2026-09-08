@@ -639,6 +639,12 @@ the coverage above is narrower than the rule set.</em></p>
   front-matter guard. Versioned as a pair with the toolbar markup it inserts.
 {%- endcomment -%}
 <script src="{{ '/assets/js/hl-attack-table.js' | relative_url }}?v=1" defer></script>
+{%- comment -%}
+  Enhances literal-heavy Field / Value tables in place. No front-matter guard:
+  it applies its own rubric and no-ops on a page with no qualifying table, the
+  same way the ATT&CK module does. Versioned as a pair with the markup it adds.
+{%- endcomment -%}
+<script src="{{ '/assets/js/hl-facts.js' | relative_url }}?v=1" defer></script>
 {% unless page.glossary == false %}
 <script type="application/json" id="hl-glossary-data">{{ site.data.glossary | jsonify }}</script>
 <script src="{{ '/assets/js/glossary.js' | relative_url }}" defer></script>

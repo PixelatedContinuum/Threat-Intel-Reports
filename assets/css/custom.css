@@ -4628,3 +4628,59 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   .hl-atk-tools { font-size: 0.75em; }
   .hl-atk-count { white-space: normal; }
 }
+
+/* ============================================================
+   FACT TABLES, INTERACTIVE
+   Paired with assets/js/hl-facts.js. Only literal-heavy Field | Value
+   tables get the class; prose-heavy ones are skipped by the script and
+   render exactly as authored. px and em only, never rem: the theme sets
+   body { font-size: 1.25em } while rem resolves against the 16px root.
+   ============================================================ */
+
+/* The shared copy button is absolutely positioned against a <pre>. Here it
+   sits inline after the value, where it cannot overlap the cell text. Only
+   position and spacing change, so the hover/focus reveal and the
+   (hover: none) touch rules above still apply unchanged. */
+.hl-facts .hl-facts-copy {
+  position: static;
+  display: inline-block;
+  margin-left: 8px;
+  vertical-align: baseline;
+}
+
+/* .hl-post-content a sets colour with !important, and an !important tie is
+   broken by specificity, so this has to carry it too. */
+.hl-facts .hl-facts-anchor {
+  margin-left: 0.4em;
+  font-size: 0.85em;
+  font-weight: 400;
+  text-decoration: none;
+  color: var(--hl-accent-blue) !important;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.hl-facts tr:hover .hl-facts-anchor,
+.hl-facts .hl-facts-anchor:focus { opacity: 1; }
+
+/* Beats .hl-post-content tr:nth-child(even) td, which otherwise repaints the
+   row it is meant to mark. */
+.hl-facts tr.is-linked td {
+  background: rgba(88, 166, 255, 0.10) !important;
+  box-shadow: inset 3px 0 0 var(--hl-accent-blue);
+}
+
+.hl-facts-status {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hl-facts .hl-facts-anchor { transition: none; }
+}
+@media (hover: none) {
+  /* No hover to reveal on, so the permalink stays visible and touchable. */
+  .hl-facts .hl-facts-anchor { opacity: 0.55; padding: 4px 6px; }
+}

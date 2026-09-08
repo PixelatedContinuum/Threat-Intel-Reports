@@ -254,3 +254,34 @@ test('an image path still wins over the data attribute in the same block', funct
     '<img src="/assets/images/s/a.svg"><figcaption>cap</figcaption></figure>';
   assert.deepStrictEqual(CFN.figureImages(md), ['a.svg']);
 });
+
+/* The three places that resolve a figure's key must agree: figureImages() on the
+   markdown, figuresFor() in the shipped module, and checkDom's own list. Missing
+   the third made a component figure invisible to validate() while the renderer
+   still bound its chips, which surfaced as a bogus "defect in figure-nav.js". */
+test('checkDom sees a figure that keys on data-figure-image', function () {
+  var d = new JSDOM('<div class="hl-post-content">' +
+    '<h2 id="one">One</h2><h2 id="two">Two</h2>' +
+    '<figure data-figure-image="tree.svg"><div>markup</div><figcaption>c</figcaption></figure>' +
+    '</div><script type="application/json" id="hl-figure-nav">' +
+    JSON.stringify([{ image: 'tree.svg', parts: [
+      { label: 'One', anchor: '#one' }, { label: 'Two', anchor: '#two' }] }]) +
+    '</script>').window.document;
+  var r = CFN.checkDom(d, 'live');
+  assert.strictEqual(r.status, 'PASS', r.problems.join(' | '));
+  assert.strictEqual(r.chips, 2);
+});
+
+test('an img-bearing figure still keys on its image, not on a stray data attribute', function () {
+  var d = new JSDOM('<div class="hl-post-content">' +
+    '<h2 id="one">One</h2><h2 id="two">Two</h2>' +
+    '<figure data-figure-image="tree.svg"><img src="/assets/images/s/a.svg">' +
+    '<figcaption>c</figcaption></figure></div>' +
+    '<script type="application/json" id="hl-figure-nav">' +
+    JSON.stringify([{ image: 'tree.svg', parts: [
+      { label: 'One', anchor: '#one' }, { label: 'Two', anchor: '#two' }] }]) +
+    '</script>').window.document;
+  var r = CFN.checkDom(d, 'live');
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /no figure on this page uses that image/);
+});
