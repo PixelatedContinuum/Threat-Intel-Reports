@@ -3,12 +3,12 @@
 # There is no description field, deliberately: the Wire aggregates by
 # headline and attribution only. tools/report-tooling/check-wire.js fails
 # the build if one appears.
-generated_at: 2026-09-08T06:00:32Z
+generated_at: 2026-09-08T08:01:06Z
 window_days: 30
 counts:
-  total: 514
+  total: 515
   research: 181
-  news: 333
+  news: 334
 unclassified_sources:
   - "The DFIR Report"
 topics:
@@ -437,6 +437,12 @@ label_colors:
   "zero-day": 9
   "zoom": 7
 items:
+  - title: "220 million traveler records exposed in Vietnam-linked APIS leak"
+    url: "https://www.bleepingcomputer.com/news/security/220-million-traveler-records-exposed-in-vietnam-linked-apis-leak/"
+    source: "BleepingComputer"
+    date: 2026-09-08T07:35:50Z
+    kind: news
+    labels: []
   - title: "Bypassing the Gatekeepers: How a Global Phishing Campaign Turns Google's Infrastructure into a Trust Proxy"
     url: "https://blog.knowbe4.com/bypassing-the-gatekeepers-how-a-global-phishing-campaign-turns-googles-infrastructure-into-a-trust-proxy"
     source: "AlienVault"
