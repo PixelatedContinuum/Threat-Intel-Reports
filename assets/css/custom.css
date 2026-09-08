@@ -3392,10 +3392,28 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-attack__chip[data-confidence="MODERATE"],
 .hl-attack__chip[data-confidence="LOW"] {
   background: rgba(128,128,128,0.14); border-color: rgba(128,128,128,0.4); }
+/* Confidence used to be carried by that background colour and nothing else, so a
+   MODERATE or LOW chip was distinguishable from HIGH only by being grey. That is a
+   WCAG 1.4.1 failure and it fails hardest for the readers this site is written for.
+   The word is now the channel and the colour is the redundant second one. Rendered
+   from the data-confidence attribute the chip already carries, so no script changes. */
+.hl-attack__chip[data-confidence="MODERATE"]::after,
+.hl-attack__chip[data-confidence="LOW"]::after {
+  content: " " attr(data-confidence);
+  margin-left: 6px; padding: 0 5px; border-radius: 2px;
+  font-size: 0.86em; letter-spacing: 0.04em;
+  background: rgba(255,255,255,0.10); }
 .hl-attack__unmapped { font-size: 0.76em; opacity: 0.7; margin: 0.7em 0 0; }
 @media (max-width: 640px) {
-  .hl-attack__seglabel { display: none; }
-  .hl-attack__bars { height: 46px; }
+  /* These labels used to be hidden here, which left a phone reader fifteen unlabelled
+     bars: the whole ATT&CK overview reduced to position and colour with no words. Made
+     small rather than hidden, since a label that is hard to read still beats one that
+     is not there. px and em only, never rem: this theme sets body to 1.25em while rem
+     resolves against a 16px root, so a rem value renders 22% small. */
+  .hl-attack__seglabel {
+    display: block; font-size: 9px; line-height: 1.15;
+    letter-spacing: 0; overflow-wrap: anywhere; }
+  .hl-attack__bars { height: auto; min-height: 46px; }
 }
 
 /* ---- Hover glossary (assets/js/glossary.js) ---- */
