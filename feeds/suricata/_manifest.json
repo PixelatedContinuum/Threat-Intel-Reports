@@ -1,11 +1,11 @@
 {
   "sid_base": 3500000,
-  "sid_last": 3500199,
+  "sid_last": 3500201,
   "sid_alloc_range": "3500000-3509999",
-  "total_rules": 110,
+  "total_rules": 112,
   "quarantined": 0,
   "lint_dropped": 0,
-  "new_sid_assignments": 0,
+  "new_sid_assignments": 2,
   "skipped_unlisted": [
     "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812"
   ],
@@ -133,6 +133,10 @@
     {
       "slug": "shinyhunters-dls-91-215-85-22-20260417",
       "rules": 3
+    },
+    {
+      "slug": "sliver-c2-windows-postex-staging-193-233-202-17",
+      "rules": 2
     },
     {
       "slug": "turkish-arpa-openclaw-state-insurer-209.38.205.158",
