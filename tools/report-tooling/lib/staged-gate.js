@@ -39,6 +39,12 @@ var CHECKS = {
     cmd: 'check-ioc-feeds.js',
     why: 'ioc-feeds/ is staged'
   },
+  'embargo-artifacts': {
+    id: 'embargo-artifacts',
+    label: 'embargoed-campaign artifacts',
+    cmd: 'check-embargo-artifacts.js',
+    why: 'a report front matter or ioc-feeds/ is staged'
+  },
   'ioc-tables': {
     id: 'ioc-tables',
     label: 'feed viewer tables',
@@ -98,6 +104,14 @@ function plan(paths, opts) {
     /* A feed edit is the only way an unblockable value reaches the published
        product, so it always routes to the safety gate. */
     if (/^ioc-feeds\/.+\.json$/.test(p)) want['feed-hygiene'] = true;
+    /* Either half can create the exposure, so both route here: adding a feed for a campaign
+       already under embargo, or flipping a report to embargo while its feed is still in the
+       repo. This gate exists because on 2026-09-08 an embargoed campaign's IOC feed was found
+       committed and served from this PUBLIC repo, and had been for four weeks. A static JSON
+       cannot be unlisted or noindexed, so obscurity was never the control it was described as. */
+    if (/^ioc-feeds\/.+\.json$/.test(p) || /^reports\/[^/]+\/index\.md$/.test(p)) {
+      want['embargo-artifacts'] = true;
+    }
     /* The viewer tables derive from the same two sources as the index, plus the
        report front matter that carries the other half of the publication signal,
        and the generated stubs themselves. A stub surviving after its campaign

@@ -9,6 +9,10 @@ description: "An operator-built SSH man-in-the-middle platform that steals other
 detection_page: /hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections/
 ioc_feed: /ioc-feeds/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json
 unlisted: true
+# Held pending the CERT-GOV-MD reply; 130 victims sit behind that channel. `embargo: true`
+# is enforced by tools/report-tooling/check-embargo-artifacts.js, which refuses to let this
+# campaign's IOC feed exist in this public repo until go-live.
+embargo: true
 detection_sections:
   - label: "Detection Coverage Summary"
     anchor: "#detection-coverage-summary"
